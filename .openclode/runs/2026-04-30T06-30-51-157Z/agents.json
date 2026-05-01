@@ -1,0 +1,8 @@
+[
+  {
+    "role": "coder",
+    "provider": "azure",
+    "model": "gpt-5.4-pro",
+    "durationMs": 91784
+  }
+]

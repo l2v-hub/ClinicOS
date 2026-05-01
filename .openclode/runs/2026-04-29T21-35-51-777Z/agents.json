@@ -1,0 +1,14 @@
+[
+  {
+    "role": "reviewer",
+    "provider": "azure",
+    "model": "gpt-5.4-pro",
+    "durationMs": 70009
+  },
+  {
+    "role": "reviewer",
+    "provider": "azure",
+    "model": "gpt-5.4-pro",
+    "durationMs": 76228
+  }
+]

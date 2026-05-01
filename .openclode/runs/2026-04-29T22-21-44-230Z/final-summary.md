@@ -1,0 +1,10 @@
+# Final Summary
+
+**Agents run:** 1
+**Dry-run:** false
+
+## Last agent output
+
+FILE: prisma/test.txt
+hello
+END FILE

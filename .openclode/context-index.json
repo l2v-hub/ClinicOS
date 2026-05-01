@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "files": [
+    "src\\components\\Layout.tsx",
+    "src\\pages\\DashboardPage.tsx",
+    "src\\pages\\PatientsPage.tsx",
+    "src\\pages\\AppointmentsPage.tsx",
+    "src\\App.tsx",
+    "package.json",
+    "docker-compose.yml",
+    "README.md",
+    "backend\\package.json",
+    "backend\\tsconfig.json",
+    "backend\\src\\server.ts",
+    "backend\\src\\app.ts",
+    "backend\\src\\routes\\health.ts",
+    "backend\\src\\routes\\patients.ts",
+    "prisma\\test.txt",
+    "prisma\\test.prisma",
+    "prisma\\schema.prisma",
+    ".env.example",
+    "backend\\src\\lib\\prisma.ts",
+    "frontend\\src\\App.tsx"
+  ],
+  "lastUpdated": "2026-05-01T07-42-37-757Z"
+}

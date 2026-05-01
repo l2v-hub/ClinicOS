@@ -1,0 +1,26 @@
+[
+  {
+    "role": "coder",
+    "provider": "compatible",
+    "model": "DeepSeek-V3.2",
+    "durationMs": 7515
+  },
+  {
+    "role": "reviewer",
+    "provider": "compatible",
+    "model": "DeepSeek-V3.2",
+    "durationMs": 12076
+  },
+  {
+    "role": "coder",
+    "provider": "compatible",
+    "model": "DeepSeek-V3.2",
+    "durationMs": 13911
+  },
+  {
+    "role": "reviewer",
+    "provider": "compatible",
+    "model": "DeepSeek-V3.2",
+    "durationMs": 12366
+  }
+]

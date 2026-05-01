@@ -1,0 +1,476 @@
+import type {
+  Operatore, Consegna, SlotAgenda,
+  RecordClinico, RecordTerapia, ParametroVitale, Allergia, Farmaco,
+  UtenteApp, Appuntamento, Camera, ScheduleOperatore, Nota,
+  GiornoSettimana, CartellaPaziente,
+} from './types';
+
+// ── Default clinical cartella factory ─────────────────────────────────────────
+
+export function createDefaultCartella(pazienteId: string, operatoreId = 'op1'): CartellaPaziente {
+  return {
+    pazienteId,
+    indirizzo: 'Via Roma 15, Milano 20121',
+    contattoEmergenzaNome: 'Contatto Emergenza',
+    contattoEmergenzaTel: '+39 340 1234567',
+    contattoEmergenzaRel: 'Familiare',
+    medicoCurante: 'Dr. A. Martínez',
+    codiceFiscale: '',
+    operatoreId,
+    cameraNumero: '',
+    lettoNumero: '',
+    repartoRicovero: 'Cardiologia',
+    statoRicovero: 'ambulatoriale',
+    dataRicovero: today(),
+    noteGenerali: '',
+    anamnesi: {
+      fisiologica: 'Nato a termine. Sviluppo psicomotorio nella norma.',
+      patologicaRemota: 'Ipertensione essenziale (2023). Episodio di dolore toracico (2024-08, risolto). Nessun intervento chirurgico.',
+      patologicaProssima: 'Ricovero per rivalutazione clinica e ottimizzazione terapia.',
+      familiare: 'Padre: cardiopatia ischemica. Madre: ipertensione arteriosa.',
+      lavorativa: 'Impiegato. Lavoro sedentario.',
+      abitudini: 'Non fumatore. Consumo moderato di alcool. Scarsa attività fisica.',
+      note: 'Aderenza alla terapia buona.',
+      updatedAt: today() + 'T08:00:00',
+      operatore: 'Dr. Marco Ferretti',
+    },
+    diagnosi: [
+      {
+        id: 'd1', codiceICD: 'I10', descrizione: 'Ipertensione arteriosa essenziale',
+        tipo: 'principale', stato: 'attiva', dataInsorgenza: '2023-05-09',
+        operatore: 'Dr. A. Martínez', note: 'PA non completamente controllata.', createdAt: '2023-05-09T00:00:00',
+      },
+      {
+        id: 'd2', codiceICD: 'E78.0', descrizione: 'Ipercolesterolemia',
+        tipo: 'secondaria', stato: 'attiva', dataInsorgenza: '2024-01-15',
+        operatore: 'Dr. Marco Ferretti', note: 'In terapia con statina.', createdAt: '2024-01-15T00:00:00',
+      },
+      {
+        id: 'd3', codiceICD: 'R07.4', descrizione: 'Dolore toracico NAS',
+        tipo: 'differenziale', stato: 'risolta', dataInsorgenza: '2024-08-03', dataRisoluzione: '2024-08-04',
+        operatore: 'Dr. R. Okonkwo', note: 'ECG e troponina negativi. Dimesso stabile.', createdAt: '2024-08-03T00:00:00',
+      },
+    ],
+    terapie: [
+      {
+        id: 't1', tipo: 'farmacologica', descrizione: 'Terapia antipertensiva combinata',
+        dataInizio: '2023-05-09', stato: 'attiva', operatore: 'Dr. A. Martínez',
+        note: 'Risposta soddisfacente. Monitoraggio mensile.', createdAt: '2023-05-09T00:00:00',
+      },
+      {
+        id: 't2', tipo: 'altra', descrizione: 'Intervento sullo stile di vita — dieta DASH, attività fisica',
+        dataInizio: '2023-05-09', stato: 'attiva', operatore: 'Dr. A. Martínez',
+        note: 'Sodio <2 g/die, aerobica 150 min/settimana.', createdAt: '2023-05-09T00:00:00',
+      },
+    ],
+    farmaci: [
+      { id: 'f1', nome: 'Losartan', dose: '50 mg', frequenza: '1×/die', via: 'orale', inizio: '2023-05-09', stato: 'attivo', prescrittoDA: 'Dr. A. Martínez', indicazione: 'Ipertensione arteriosa' },
+      { id: 'f2', nome: 'Amlodipina', dose: '5 mg', frequenza: '1×/die', via: 'orale', inizio: '2024-03-15', stato: 'attivo', prescrittoDA: 'Dr. A. Martínez', indicazione: 'Add-on antipertensivo' },
+      { id: 'f3', nome: 'Aspirina', dose: '75 mg', frequenza: '1×/die', via: 'orale', inizio: '2024-08-03', stato: 'attivo', prescrittoDA: 'Dr. R. Okonkwo', indicazione: 'Profilassi cardiovascolare' },
+      { id: 'f4', nome: 'Atorvastatina', dose: '20 mg', frequenza: '1×/die (sera)', via: 'orale', inizio: '2024-01-15', stato: 'attivo', prescrittoDA: 'Dr. Marco Ferretti', indicazione: 'Ipercolesterolemia' },
+    ],
+    allergie: [
+      { id: 'al1', allergene: 'Penicillina', reazione: 'Anafilassi', gravita: 'grave', documentato: '2020-03-14', documentatoDa: 'Dr. B. Conti', note: 'Evitare beta-lattamici.' },
+      { id: 'al2', allergene: 'FANS (Ibuprofene)', reazione: 'Ulcera gastrica', gravita: 'moderata', documentato: '2021-07-22', documentatoDa: 'Dr. A. Martínez' },
+      { id: 'al3', allergene: 'Lattice', reazione: 'Dermatite da contatto', gravita: 'lieve', documentato: '2022-01-05', documentatoDa: 'Dr. A. Martínez', note: 'Guanti latex-free.' },
+    ],
+    noteClinica: [
+      { id: 'nc1', tipo: 'clinica', contenuto: 'Paziente in buone condizioni generali. PA 138/86 mmHg. FC 74 bpm. Obiettività cardiopolmonare nella norma.', operatore: 'Dr. Marco Ferretti', createdAt: today() + 'T09:00:00' },
+      { id: 'nc2', tipo: 'nursing', contenuto: 'Paziente collaborante. Terapia mattutina assunta regolarmente. PA misurata 2 volte: 140/88 e 136/84.', operatore: 'Giulia Bianchi', createdAt: today() + 'T07:30:00' },
+    ],
+    visite: [
+      { id: 'v1', tipo: 'Visita cardiologica', data: today(), ora: '09:00', operatore: 'Dr. Marco Ferretti', descrizione: 'Rivalutazione ipertensione. Ottimizzazione terapia.', esito: 'Terapia confermata. Monitoraggio mensile.', followUp: 'Controllo tra 4 settimane.', createdAt: today() + 'T09:00:00' },
+      { id: 'v2', tipo: 'Accesso PS', data: '2024-08-03', ora: '22:30', operatore: 'Dr. R. Okonkwo', descrizione: 'Dolore toracico. ECG e troponina negativi.', esito: 'Dimesso. Causa cardiaca esclusa.', createdAt: '2024-08-03T22:30:00' },
+    ],
+    parametriVitali: [
+      { id: 'pv1', etichetta: 'Pressione Arteriosa', valore: '138/86', unita: 'mmHg', stato: 'attenzione', rilevato: today(), rilevatoDa: 'Giulia Bianchi' },
+      { id: 'pv2', etichetta: 'Frequenza Cardiaca', valore: '74', unita: 'bpm', stato: 'normale', rilevato: today(), rilevatoDa: 'Giulia Bianchi' },
+      { id: 'pv3', etichetta: 'SpO₂', valore: '97', unita: '%', stato: 'normale', rilevato: today(), rilevatoDa: 'Giulia Bianchi' },
+      { id: 'pv4', etichetta: 'Temperatura', valore: '36.8', unita: '°C', stato: 'normale', rilevato: today(), rilevatoDa: 'Giulia Bianchi' },
+      { id: 'pv5', etichetta: 'BMI', valore: '27.4', unita: 'kg/m²', stato: 'attenzione', rilevato: today(), rilevatoDa: 'Dr. Marco Ferretti' },
+      { id: 'pv6', etichetta: 'Glicemia', valore: '5.2', unita: 'mmol/L', stato: 'normale', rilevato: today(), rilevatoDa: 'Giulia Bianchi' },
+    ],
+    interventi: [
+      { id: 'int1', tipo: 'Ecocardiogramma', data: '2023-10-22', operatore: 'Dr. C. Nakamura', descrizione: 'Ecocardiogramma transtoracico di routine.', esito: 'FE 58%. Lieve rigurgito mitralico. Nessuna anomalia strutturale significativa.', note: '', createdAt: '2023-10-22T00:00:00' },
+    ],
+    pianoCura: {
+      obiettivi: 'Controllo PA <130/80. Riduzione rischio cardiovascolare. Miglioramento stile di vita.',
+      interventiPrevisti: 'Monitoraggio PA bisettimanale. Profilo lipidico tra 3 mesi.',
+      notePianificazione: 'Valutare programma di esercizio fisico strutturato.',
+      dataAggiornamento: today(),
+      operatore: 'Dr. Marco Ferretti',
+    },
+    indicatoriRischio: [
+      { id: 'r1', tipo: 'trombosi', livello: 'medio', descrizione: 'Score SCORE2 8%. Terapia antiplateletica in corso.', dataValutazione: today(), operatore: 'Dr. Marco Ferretti' },
+      { id: 'r2', tipo: 'caduta', livello: 'basso', descrizione: 'Deambulante autonomo. Nessun episodio precedente.', dataValutazione: today(), operatore: 'Giulia Bianchi' },
+    ],
+  };
+}
+
+// ── Today helpers ──────────────────────────────────────────────────────────────
+
+function today(offsetDays = 0): string {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  return d.toISOString().slice(0, 10);
+}
+
+// ── Auth ───────────────────────────────────────────────────────────────────────
+
+export const UTENTE_ADMIN: UtenteApp = {
+  id: 'admin1',
+  nome: 'Admin Sistema',
+  ruolo: 'admin',
+  iniziali: 'AS',
+  reparto: 'Amministrazione',
+};
+
+export const UTENTE_OPERATORE: UtenteApp = {
+  id: 'op1',
+  nome: 'Dr. Marco Ferretti',
+  ruolo: 'operatore',
+  iniziali: 'MF',
+  reparto: 'Cardiologia',
+};
+
+// ── Operatori ──────────────────────────────────────────────────────────────────
+
+export const MOCK_OPERATORI: Operatore[] = [
+  {
+    id: 'op1', nome: 'Marco', cognome: 'Ferretti', ruolo: 'medico',
+    email: 'marco.ferretti@clinicos.it', telefono: '+39 02 1234 5678',
+    reparto: 'Cardiologia', stato: 'attivo',
+    pazientiAssegnati: 12, appuntamentiOggi: 5, iniziali: 'MF',
+    colore: '#1A56DB',
+    note: 'Specialista in cardiologia interventistica.',
+  },
+  {
+    id: 'op2', nome: 'Sofia', cognome: 'Moretti', ruolo: 'medico',
+    email: 'sofia.moretti@clinicos.it', telefono: '+39 02 1234 5679',
+    reparto: 'Medicina Interna', stato: 'attivo',
+    pazientiAssegnati: 8, appuntamentiOggi: 4, iniziali: 'SM',
+    colore: '#0D9488',
+  },
+  {
+    id: 'op3', nome: 'Giulia', cognome: 'Bianchi', ruolo: 'infermiere',
+    email: 'giulia.bianchi@clinicos.it', telefono: '+39 02 1234 5680',
+    reparto: 'Reparto Generale', stato: 'attivo',
+    pazientiAssegnati: 15, appuntamentiOggi: 7, iniziali: 'GB',
+    colore: '#4338CA',
+  },
+  {
+    id: 'op4', nome: 'Luca', cognome: 'Esposito', ruolo: 'infermiere',
+    email: 'luca.esposito@clinicos.it', telefono: '+39 02 1234 5681',
+    reparto: 'Pronto Soccorso', stato: 'attivo',
+    pazientiAssegnati: 10, appuntamentiOggi: 3, iniziali: 'LE',
+    colore: '#D97706',
+  },
+  {
+    id: 'op5', nome: 'Alessandro', cognome: 'Ricci', ruolo: 'coordinatore',
+    email: 'alessandro.ricci@clinicos.it', telefono: '+39 02 1234 5682',
+    reparto: 'Oncologia', stato: 'inattivo',
+    pazientiAssegnati: 0, appuntamentiOggi: 0, iniziali: 'AR',
+    colore: '#8B5CF6',
+  },
+];
+
+// ── Consegne ───────────────────────────────────────────────────────────────────
+
+export const MOCK_CONSEGNE: Consegna[] = [
+  {
+    id: 'c1', pazienteId: '', pazienteNome: 'Rossi, Giovanni',
+    priorita: 'urgente', stato: 'aperta', tipo: 'Monitoraggio',
+    note: 'Monitorare PA ogni 2 ore. Se >180/110 chiamare il medico di guardia immediatamente.',
+    scadenza: today(), oraScadenza: '08:00',
+    operatoreAssegnato: 'Giulia Bianchi', creatoDA: 'Dr. Marco Ferretti',
+    createdAt: today() + 'T22:00:00',
+  },
+  {
+    id: 'c2', pazienteId: '', pazienteNome: 'Esposito, Maria',
+    priorita: 'alta', stato: 'aperta', tipo: 'Terapia',
+    note: 'Somministrazione antibiotico ore 14:00 e 22:00.',
+    scadenza: today(), oraScadenza: '14:00',
+    operatoreAssegnato: 'Luca Esposito', creatoDA: 'Dr.ssa Sofia Moretti',
+    createdAt: today() + 'T07:00:00',
+  },
+  {
+    id: 'c3', pazienteId: '', pazienteNome: 'Verdi, Luigi',
+    priorita: 'normale', stato: 'in_corso', tipo: 'Esami',
+    note: 'Richiedere esami ematici urgenti: emocromo, PCR, procalcitonina.',
+    scadenza: today(), oraScadenza: '16:00',
+    operatoreAssegnato: 'Dr. Marco Ferretti', creatoDA: 'Dr.ssa Sofia Moretti',
+    createdAt: today() + 'T08:30:00',
+  },
+  {
+    id: 'c4', pazienteId: '', pazienteNome: 'Neri, Carla',
+    priorita: 'alta', stato: 'in_corso', tipo: 'Dimissione',
+    note: 'Preparare lettera di dimissione e istruzioni per il paziente.',
+    scadenza: today(), oraScadenza: '17:00',
+    operatoreAssegnato: 'Dr. Marco Ferretti', creatoDA: 'Dr. Marco Ferretti',
+    createdAt: today() + 'T09:00:00',
+  },
+  {
+    id: 'c5', pazienteId: '', pazienteNome: 'Colombo, Piero',
+    priorita: 'normale', stato: 'completata', tipo: 'Medicazione',
+    note: 'Cambio medicazione ferita chirurgica. Eseguito alle 10:30.',
+    scadenza: today(), oraScadenza: '10:00',
+    operatoreAssegnato: 'Giulia Bianchi', creatoDA: 'Dr. Marco Ferretti',
+    createdAt: today(-1) + 'T20:00:00',
+  },
+  {
+    id: 'c6', pazienteId: '', pazienteNome: 'Ferrari, Anna',
+    priorita: 'urgente', stato: 'aperta', tipo: 'Consultazione',
+    note: 'Richiedere consulenza cardiologica urgente.',
+    scadenza: today(), oraScadenza: '11:00',
+    operatoreAssegnato: 'Dr. Marco Ferretti', creatoDA: 'Luca Esposito',
+    createdAt: today() + 'T10:00:00',
+  },
+  {
+    id: 'c7', pazienteId: '', pazienteNome: 'Romano, Marco',
+    priorita: 'normale', stato: 'aperta', tipo: 'Rivalutazione',
+    note: 'Rivalutazione clinica post-intervento.',
+    scadenza: today(1), oraScadenza: '09:00',
+    operatoreAssegnato: 'Dr.ssa Sofia Moretti', creatoDA: 'Dr. Marco Ferretti',
+    createdAt: today() + 'T11:00:00',
+  },
+];
+
+// ── Agenda slots (legacy, keep for operator dashboard widget) ──────────────────
+
+export const MOCK_AGENDA: SlotAgenda[] = [
+  { id: 'a1', ora: '08:30', pazienteNome: 'García, María',   motivo: 'Controllo post-operatorio',   stato: 'completato', operatoreId: 'op1' },
+  { id: 'a2', ora: '09:00', pazienteNome: 'López, Carlos',   motivo: 'Revisione ipertensione',      stato: 'completato', operatoreId: 'op1' },
+  { id: 'a3', ora: '09:30', pazienteNome: 'Martínez, Ana',   motivo: 'Visita annuale',              stato: 'in_corso',   operatoreId: 'op1' },
+  { id: 'a4', ora: '10:30', pazienteNome: 'Rodríguez, Juan', motivo: 'Valutazione dolore toracico', stato: 'programmato', operatoreId: 'op1' },
+  { id: 'a5', ora: '11:00', pazienteNome: null,              motivo: '',                             stato: 'libero'      },
+  { id: 'a6', ora: '14:00', pazienteNome: 'Sánchez, Elena',  motivo: 'Gestione diabete',            stato: 'programmato', operatoreId: 'op1' },
+  { id: 'a7', ora: '15:30', pazienteNome: 'Torres, Miguel',  motivo: 'ECG + Risultati analisi',     stato: 'programmato', operatoreId: 'op2' },
+];
+
+// ── Appuntamenti ───────────────────────────────────────────────────────────────
+
+export const MOCK_APPUNTAMENTI: Appuntamento[] = [
+  {
+    id: 'apt1', data: today(), ora: '08:30', durata: 30,
+    pazienteId: null, pazienteNome: 'García, María',
+    operatoreId: 'op1', operatoreNome: 'Ferretti Marco',
+    tipoIntervento: 'controllo', stato: 'completato', priorita: 'normale',
+    note: 'Controllo post-operatorio routine.',
+  },
+  {
+    id: 'apt2', data: today(), ora: '09:00', durata: 60,
+    pazienteId: null, pazienteNome: 'López, Carlos',
+    operatoreId: 'op1', operatoreNome: 'Ferretti Marco',
+    tipoIntervento: 'visita', stato: 'completato', priorita: 'normale',
+    note: 'Revisione ipertensione arteriosa.',
+  },
+  {
+    id: 'apt3', data: today(), ora: '10:30', durata: 30,
+    pazienteId: null, pazienteNome: 'Martínez, Ana',
+    operatoreId: 'op1', operatoreNome: 'Ferretti Marco',
+    tipoIntervento: 'follow-up', stato: 'in_corso', priorita: 'normale',
+    note: 'Visita annuale. Monitoraggio ECG.',
+  },
+  {
+    id: 'apt4', data: today(), ora: '09:00', durata: 60,
+    pazienteId: null, pazienteNome: 'Verdi, Luigi',
+    operatoreId: 'op2', operatoreNome: 'Moretti Sofia',
+    tipoIntervento: 'visita', stato: 'completato', priorita: 'normale',
+    note: '',
+  },
+  {
+    id: 'apt5', data: today(), ora: '11:00', durata: 30,
+    pazienteId: null, pazienteNome: 'Neri, Carla',
+    operatoreId: 'op2', operatoreNome: 'Moretti Sofia',
+    tipoIntervento: 'consulto', stato: 'programmato', priorita: 'alta',
+    note: 'Consulto pre-dimissione.',
+  },
+  {
+    id: 'apt6', data: today(), ora: '14:00', durata: 30,
+    pazienteId: null, pazienteNome: 'Rossi, Giovanni',
+    operatoreId: 'op3', operatoreNome: 'Bianchi Giulia',
+    tipoIntervento: 'procedura', stato: 'programmato', priorita: 'urgente',
+    note: 'Medicazione e monitoraggio PA.',
+  },
+  {
+    id: 'apt7', data: today(), ora: '15:00', durata: 60,
+    pazienteId: null, pazienteNome: 'Sánchez, Elena',
+    operatoreId: 'op1', operatoreNome: 'Ferretti Marco',
+    tipoIntervento: 'controllo', stato: 'programmato', priorita: 'normale',
+    note: 'Controllo diabete.',
+  },
+  {
+    id: 'apt8', data: today(1), ora: '09:00', durata: 30,
+    pazienteId: null, pazienteNome: 'Romano, Marco',
+    operatoreId: 'op1', operatoreNome: 'Ferretti Marco',
+    tipoIntervento: 'follow-up', stato: 'programmato', priorita: 'normale',
+    note: 'Rivalutazione post-intervento.',
+  },
+  {
+    id: 'apt9', data: today(1), ora: '10:00', durata: 60,
+    pazienteId: null, pazienteNome: 'Ferrari, Anna',
+    operatoreId: 'op4', operatoreNome: 'Esposito Luca',
+    tipoIntervento: 'urgenza', stato: 'programmato', priorita: 'urgente',
+    note: 'Valutazione dolore toracico.',
+  },
+  {
+    id: 'apt10', data: today(-1), ora: '09:30', durata: 30,
+    pazienteId: null, pazienteNome: 'Colombo, Piero',
+    operatoreId: 'op1', operatoreNome: 'Ferretti Marco',
+    tipoIntervento: 'visita', stato: 'completato', priorita: 'normale',
+    note: 'Visita di controllo.',
+  },
+];
+
+// ── Cameras e Letti ────────────────────────────────────────────────────────────
+
+export const MOCK_CAMERE: Camera[] = [
+  {
+    id: 'cam101', numero: '101', tipo: 'singola', piano: '1°', reparto: 'Cardiologia',
+    stato: 'attiva', note: 'Camera con monitoraggio continuo.',
+    letti: [
+      { id: 'l101a', numero: 1, stato: 'occupato', pazienteNome: 'Rossi, Giovanni', note: 'PA monitorata' },
+    ],
+  },
+  {
+    id: 'cam102', numero: '102', tipo: 'singola', piano: '1°', reparto: 'Cardiologia',
+    stato: 'attiva', note: '',
+    letti: [
+      { id: 'l102a', numero: 1, stato: 'libero' },
+    ],
+  },
+  {
+    id: 'cam201', numero: '201', tipo: 'doppia', piano: '2°', reparto: 'Medicina Interna',
+    stato: 'attiva', note: '',
+    letti: [
+      { id: 'l201a', numero: 1, stato: 'occupato', pazienteNome: 'Verdi, Luigi' },
+      { id: 'l201b', numero: 2, stato: 'libero' },
+    ],
+  },
+  {
+    id: 'cam202', numero: '202', tipo: 'doppia', piano: '2°', reparto: 'Medicina Interna',
+    stato: 'attiva', note: '',
+    letti: [
+      { id: 'l202a', numero: 1, stato: 'occupato', pazienteNome: 'Neri, Carla' },
+      { id: 'l202b', numero: 2, stato: 'occupato', pazienteNome: 'Esposito, Maria' },
+    ],
+  },
+  {
+    id: 'cam301', numero: '301', tipo: 'singola', piano: '3°', reparto: 'Oncologia',
+    stato: 'attiva', note: 'In attesa di manutenzione straordinaria.',
+    letti: [
+      { id: 'l301a', numero: 1, stato: 'manutenzione' },
+    ],
+  },
+  {
+    id: 'camPS01', numero: 'PS-01', tipo: 'singola', piano: 'PT', reparto: 'Pronto Soccorso',
+    stato: 'attiva', note: 'Camera isolamento PS.',
+    letti: [
+      { id: 'lPS01a', numero: 1, stato: 'occupato', pazienteNome: 'Ferrari, Anna', note: 'Urgenza cardiaca' },
+    ],
+  },
+];
+
+// ── Schedules ──────────────────────────────────────────────────────────────────
+
+const GIORNI_LAVORATIVI: GiornoSettimana[] = ['lunedi','martedi','mercoledi','giovedi','venerdi'];
+
+export const MOCK_SCHEDULES: ScheduleOperatore[] = [
+  {
+    id: 'sch1', operatoreId: 'op1', note: 'Disponibile per urgenze anche il sabato mattina.',
+    turni: GIORNI_LAVORATIVI.map(g => ({ giorno: g, oraInizio: '08:00', oraFine: '18:00', disponibile: true })),
+  },
+  {
+    id: 'sch2', operatoreId: 'op2', note: '',
+    turni: GIORNI_LAVORATIVI.map(g => ({ giorno: g, oraInizio: '09:00', oraFine: '17:00', disponibile: true })),
+  },
+  {
+    id: 'sch3', operatoreId: 'op3', note: 'Turno mattina.',
+    turni: (['lunedi','martedi','mercoledi','giovedi','venerdi','sabato'] as GiornoSettimana[])
+      .map(g => ({ giorno: g, oraInizio: '07:00', oraFine: '15:00', disponibile: true })),
+  },
+  {
+    id: 'sch4', operatoreId: 'op4', note: 'Turno pomeriggio/sera.',
+    turni: (['lunedi','martedi','mercoledi','giovedi','venerdi','sabato','domenica'] as GiornoSettimana[])
+      .map(g => ({ giorno: g, oraInizio: '15:00', oraFine: '23:00', disponibile: true })),
+  },
+];
+
+// ── Note/Messaggi ──────────────────────────────────────────────────────────────
+
+export const MOCK_NOTE: Nota[] = [
+  {
+    id: 'n1', autoreId: 'op1', autoreNome: 'Dr. Marco Ferretti',
+    destinatarioId: 'op3', destinatarioNome: 'Giulia Bianchi',
+    pazienteNome: 'Rossi, Giovanni', priorita: 'urgente', stato: 'non_letta',
+    messaggio: 'Monitorare PA ogni 2 ore. Se >180/110 chiamare immediatamente.',
+    createdAt: today() + 'T07:30:00',
+  },
+  {
+    id: 'n2', autoreId: 'op2', autoreNome: 'Dr.ssa Sofia Moretti',
+    destinatarioId: 'admin', destinatarioNome: 'Amministrazione',
+    priorita: 'alta', stato: 'letta',
+    messaggio: 'Richiedere consulenza cardiologica per paziente Martínez. Urgenza relativa.',
+    createdAt: today() + 'T08:15:00',
+  },
+  {
+    id: 'n3', autoreId: 'op4', autoreNome: 'Luca Esposito',
+    destinatarioId: 'tutti', destinatarioNome: 'Tutti gli operatori',
+    priorita: 'alta', stato: 'non_letta',
+    messaggio: 'Attenzione: aggiornare protocollo igienico reparto PS. Nuove disposizioni in vigore da oggi.',
+    createdAt: today() + 'T09:00:00',
+  },
+  {
+    id: 'n4', autoreId: 'op1', autoreNome: 'Dr. Marco Ferretti',
+    destinatarioId: 'op2', destinatarioNome: 'Dr.ssa Sofia Moretti',
+    pazienteNome: 'Neri, Carla', priorita: 'normale', stato: 'letta',
+    messaggio: 'Preparare lettera di dimissione per Neri, Carla. Da completare entro le 17:00.',
+    createdAt: today() + 'T10:30:00',
+  },
+  {
+    id: 'n5', autoreId: 'op3', autoreNome: 'Giulia Bianchi',
+    destinatarioId: 'admin', destinatarioNome: 'Amministrazione',
+    priorita: 'normale', stato: 'risolta',
+    messaggio: 'Richiesta fornitura materiale sterile reparto. Scorte in esaurimento.',
+    createdAt: today(-1) + 'T16:00:00',
+  },
+];
+
+// ── Cartella clinica ───────────────────────────────────────────────────────────
+
+export const MOCK_STORIA_CLINICA: RecordClinico[] = [
+  { data: '2024-11-12', tipo: 'Consulto', descrizione: 'Visita annuale. Paziente riferisce affaticamento e lieve dispnea da sforzo. PA elevata 142/90.', operatore: 'Dr. A. Martínez', stato: 'risolto' },
+  { data: '2024-08-03', tipo: 'Urgenza', descrizione: 'Valutazione dolore toracico. ECG nella norma. Troponina I negativa ×2. Dimesso stabile.', operatore: 'Dr. R. Okonkwo', stato: 'risolto' },
+  { data: '2024-03-15', tipo: 'Follow-up', descrizione: 'Revisione ipertensione. PA in miglioramento con terapia combinata. Aderenza confermata.', operatore: 'Dr. A. Martínez', stato: 'attivo' },
+  { data: '2023-10-22', tipo: 'Procedura', descrizione: 'Ecocardiogramma: FE 58%. Lieve rigurgito mitralico. Nessuna anomalia strutturale significativa.', operatore: 'Dr. C. Nakamura', stato: 'monitoraggio' },
+  { data: '2023-05-09', tipo: 'Diagnosi', descrizione: 'Ipertensione essenziale (I10) diagnosticata. Avviata counselling su modifiche dello stile di vita.', operatore: 'Dr. A. Martínez', stato: 'attivo' },
+];
+
+export const MOCK_STORIA_TERAPIA: RecordTerapia[] = [
+  { data: '2024-11-12', trattamento: 'Losartan', dosaggio: '50 mg 1×/die', note: 'Continuato. Risposta pressoria soddisfacente.', operatore: 'Dr. A. Martínez' },
+  { data: '2024-08-03', trattamento: 'Aspirina', dosaggio: '300 mg stat', note: 'Somministrata al PS durante accertamento per dolore toracico.', operatore: 'Dr. R. Okonkwo' },
+  { data: '2024-03-15', trattamento: 'Amlodipina', dosaggio: '5 mg 1×/die', note: 'Aggiunta per controllo pressorio insufficiente in monoterapia.', operatore: 'Dr. A. Martínez' },
+  { data: '2023-10-22', trattamento: 'Ecocardiogramma', note: 'Esame cardiologico per valutazione strutturale.', operatore: 'Dr. C. Nakamura' },
+  { data: '2023-05-09', trattamento: 'Intervento sullo stile di vita', note: 'Dieta DASH, sodio <2 g/die, attività aerobica 150 min/settimana.', operatore: 'Dr. A. Martínez' },
+];
+
+export const MOCK_PARAMETRI_VITALI: ParametroVitale[] = [
+  { etichetta: 'Pressione Arteriosa', valore: '138/86', unita: 'mmHg',  stato: 'attenzione', rilevato: '2024-11-12' },
+  { etichetta: 'Frequenza Cardiaca',  valore: '74',     unita: 'bpm',   stato: 'normale',    rilevato: '2024-11-12' },
+  { etichetta: 'SpO₂',               valore: '97',     unita: '%',     stato: 'normale',    rilevato: '2024-11-12' },
+  { etichetta: 'Temperatura',         valore: '36,8',   unita: '°C',    stato: 'normale',    rilevato: '2024-11-12' },
+  { etichetta: 'BMI',                 valore: '27,4',   unita: 'kg/m²', stato: 'attenzione', rilevato: '2024-11-12' },
+  { etichetta: 'Glicemia',            valore: '5,2',    unita: 'mmol/L',stato: 'normale',    rilevato: '2024-11-12' },
+];
+
+export const MOCK_ALLERGIE: Allergia[] = [
+  { allergene: 'Penicillina',       reazione: 'Anafilassi',            gravita: 'grave',    documentato: '2020-03-14' },
+  { allergene: 'FANS (Ibuprofene)', reazione: 'Ulcera gastrica',       gravita: 'moderata', documentato: '2021-07-22' },
+  { allergene: 'Lattice',           reazione: 'Dermatite da contatto', gravita: 'lieve',    documentato: '2022-01-05' },
+];
+
+export const MOCK_FARMACI: Farmaco[] = [
+  { nome: 'Losartan',   dose: '50 mg', frequenza: '1×/die', inizio: '2023-05-09' },
+  { nome: 'Amlodipina', dose: '5 mg',  frequenza: '1×/die', inizio: '2024-03-15' },
+  { nome: 'Aspirina',   dose: '75 mg', frequenza: '1×/die', inizio: '2024-08-03' },
+];
