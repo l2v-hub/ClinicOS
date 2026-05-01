@@ -16,7 +16,7 @@ const parsePort = (value: string | undefined): number => {
   return parsed;
 };
 
-const port = parsePort(process.env.PORT);
+const port = process.env.PORT || 3001;
 
 const server = app.listen(port, () => {
   console.log(`ClinicOS backend listening on port ${port}`);
