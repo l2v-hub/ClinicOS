@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
+import { API_URL } from './config';
 
 import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
@@ -121,7 +122,7 @@ export default function App() {
   useEffect(() => {
     if (!utente) return;
     setLoadingPazienti(true);
-    fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:3001'}/patients`)
+    fetch(`${API_URL}/patients`)
       .then(r => r.json())
       .then((data: Paziente[]) => setPazienti(data))
       .catch(() => setPazienti([]))

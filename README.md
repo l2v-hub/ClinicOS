@@ -195,7 +195,7 @@ npm run build && npx prisma migrate deploy
 
 | Variable       | Value                                   |
 |----------------|-----------------------------------------|
-| `VITE_API_URL` | `https://your-backend.railway.app`      |
+| `VITE_API_URL` | `https://clinicos-backend-production-df88.up.railway.app` |
 
 > Set this for **Production**, **Preview**, and **Development** environments as needed.
 
