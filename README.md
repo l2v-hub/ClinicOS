@@ -224,6 +224,7 @@ NODE_ENV=production
 FRONTEND_URL=https://your-app.vercel.app
 ```
 
+
 ---
 
 ### Migration commands
