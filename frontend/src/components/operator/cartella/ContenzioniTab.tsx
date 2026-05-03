@@ -126,12 +126,10 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
             ))}
           </div>
         ))}
-        {c?.altriPresidi && (
-          <div className="fm-inline" style={{ marginTop: 6 }}>
-            <span style={{ fontSize: '9pt', fontWeight: 600 }}>Altri presidi</span>
-            <span style={{ marginLeft: 8, fontSize: '9pt' }}>{c.altriPresidi}</span>
-          </div>
-        )}
+        <div className="fm-inline" style={{ marginTop: 6 }}>
+          <span style={{ fontSize: '9pt', fontWeight: 600, minWidth: 100 }}>Altri presidi</span>
+          <span style={{ marginLeft: 8, fontSize: '9pt', borderBottom: '1px dotted #999', flex: 1, minWidth: 200, minHeight: 16, display: 'inline-block' }}>{c?.altriPresidi ?? ''}</span>
+        </div>
       </div>
 
       {/* Note */}
