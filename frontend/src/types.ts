@@ -42,31 +42,44 @@ export interface Paziente {
 // ── Patient (local/new) ────────────────────────────────────────────────────────
 
 export interface NuovoPaziente {
+  // Anagrafica
   firstName: string;
   lastName: string;
   dateOfBirth: string;
   sex: string;
   codiceFiscale: string;
+  // Contatti
   phone: string;
   email: string;
   address: string;
+  comune: string;
+  provincia: string;
+  cap: string;
+  // Referente
   referenteNome: string;
   referenteTelefono: string;
   referenteRelazione: string;
   emergencyContact: string;
-  provenienza: 'accesso_diretto' | 'centro_medico' | 'altra_struttura' | 'dimissione_ospedaliera' | 'familiare_caregiver' | '';
+  // Ingresso
+  provenienza: 'accesso_diretto' | 'ospedale' | 'centro_medico' | 'altra_struttura' | 'familiare_caregiver' | '';
   centroInviante: string;
+  dataIngresso: string;
   motivoIngresso: string;
   condizioniIniziali: string;
+  // Assegnazione
   operatoreId: string;
   camera: string;
   letto: string;
   statoPaziente: 'ricoverato' | 'day_hospital' | 'ambulatoriale' | '';
+  priorita: 'normale' | 'alta' | 'urgente' | '';
+  alertOperativi: string;
+  // Note
   notaClinicaIniziale: string;
   noteIniziali: string;
   allergie: string;
   farmaci: string;
   alertClinici: string;
+  osservazioniLibere: string;
 }
 
 // ── Operator (mock) ────────────────────────────────────────────────────────────

@@ -59,6 +59,12 @@ const OPERATOR_NAV: NavItem[] = [
 export default function App() {
   const [utente, setUtente] = useState<UtenteApp | null>(null);
   const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 3500);
+  }
 
   // Search
   const [searchOpen, setSearchOpen] = useState(false);
@@ -291,6 +297,7 @@ export default function App() {
     if (Object.keys(cartellaInit).length > 0) {
       updateCartella(newP.id, cartellaInit);
     }
+    showToast('Paziente creato correttamente');
     // Open patient detail immediately
     selectPaziente(newP);
   }
@@ -350,6 +357,15 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      {toastMsg && (
+        <div className="app-toast app-toast--success" role="status">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>{toastMsg}</span>
+          <button className="app-toast__close" onClick={() => setToastMsg(null)} aria-label="Chiudi">×</button>
+        </div>
+      )}
 
       {/* Navigation Rail */}
       <aside className="nav-rail">
