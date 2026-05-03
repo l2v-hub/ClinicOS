@@ -109,7 +109,6 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
   function f<K extends keyof NuovoPaziente>(k: K) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
       setForm(p => ({ ...p, [k]: e.target.value }));
-      setTouched(prev => new Set(prev).add(k));
     };
   }
 
@@ -168,7 +167,7 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
             <NpmField label="Nome" required error={errors.firstName}>
               <input className={`npm-input${errors.firstName ? ' npm-input--error' : ''}`}
                 value={form.firstName} onChange={f('firstName')} onBlur={blur('firstName')}
-                placeholder="Mario" autoFocus autoComplete="given-name" />
+                placeholder="Mario" autoComplete="given-name" />
             </NpmField>
             <NpmField label="Cognome" required error={errors.lastName}>
               <input className={`npm-input${errors.lastName ? ' npm-input--error' : ''}`}
@@ -511,11 +510,11 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
               Compila i campi obbligatori: Nome, Cognome e Data di nascita (tab Anagrafica)
             </div>
           )}
-          {activeTab === 'anagrafica'   && <TabAnagrafica />}
-          {activeTab === 'ingresso'     && <TabIngresso />}
-          {activeTab === 'assegnazione' && <TabAssegnazione />}
-          {activeTab === 'note'         && <TabNote />}
-          {activeTab === 'documenti'    && <TabDocumenti />}
+          {activeTab === 'anagrafica'   && TabAnagrafica()}
+          {activeTab === 'ingresso'     && TabIngresso()}
+          {activeTab === 'assegnazione' && TabAssegnazione()}
+          {activeTab === 'note'         && TabNote()}
+          {activeTab === 'documenti'    && TabDocumenti()}
         </div>
 
         {/* ── Footer ── */}
