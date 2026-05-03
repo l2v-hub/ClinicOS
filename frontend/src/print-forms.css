@@ -409,9 +409,9 @@
 }
 .diario-modulo-table td.col-data { width: 70px; text-align: center; font-weight: 600; }
 .diario-modulo-table td.col-turno { width: 70px; text-align: center; }
-.diario-modulo-table td.col-testo { line-height: 1.7; white-space: pre-wrap; }
-.diario-modulo-table td.col-firma { width: 80px; vertical-align: bottom; border-bottom: 1px dotted #333; }
-.diario-modulo-table tr.empty-row td { height: 36px; }
+.diario-modulo-table td.col-testo { line-height: 1.8; white-space: pre-wrap; }
+.diario-modulo-table td.col-firma { width: 90px; vertical-align: bottom; border-bottom: 1px dotted #333; font-size: 9pt; }
+.diario-modulo-table tr.empty-row td { height: 48px; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PARAMETRI VITALI — griglia mensile

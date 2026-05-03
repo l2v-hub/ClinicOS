@@ -38,25 +38,18 @@ function initials(name: string): string {
 // ── Modulo infermieristico ────────────────────────────────────────────────────
 
 function DiarioInfModulo({ entries, paziente }: { entries: DiarioEntry[]; paziente: Paziente }) {
-  const EMPTY_ROWS = Math.max(0, 20 - entries.length);
+  const MIN_ROWS = 30;
+  const EMPTY_ROWS = Math.max(0, MIN_ROWS - entries.length);
   return (
     <div className="fm">
-      <div className="fm-title">DIARIO INFERMIERISTICO / CONSEGNE</div>
-      <div className="fm-patient-header cols-4">
+      <div className="fm-title">DIARIO INFERMIERISTICO</div>
+      <div className="fm-patient-header" style={{ gridTemplateColumns: '1fr 120px' }}>
         <div className="fm-patient-field">
           <span className="fm-patient-field__lbl">Cognome e Nome</span>
           <span className="fm-patient-field__val">{paziente.lastName} {paziente.firstName}</span>
         </div>
         <div className="fm-patient-field">
-          <span className="fm-patient-field__lbl">Tessera sanitaria</span>
-          <span className="fm-patient-field__val">{paziente.medicalRecordNumber}</span>
-        </div>
-        <div className="fm-patient-field">
           <span className="fm-patient-field__lbl">Camera</span>
-          <span className="fm-patient-field__val"></span>
-        </div>
-        <div className="fm-patient-field">
-          <span className="fm-patient-field__lbl">Letto</span>
           <span className="fm-patient-field__val"></span>
         </div>
       </div>
@@ -64,37 +57,26 @@ function DiarioInfModulo({ entries, paziente }: { entries: DiarioEntry[]; pazien
         <thead>
           <tr>
             <th style={{ width: 68 }}>DATA</th>
-            <th style={{ width: 42 }}>ORA</th>
-            <th style={{ width: 38 }}>TURNO</th>
-            <th style={{ width: 60 }}>PRIORITA'</th>
-            <th>ANNOTAZIONE / CONSEGNA</th>
-            <th style={{ width: 72 }}>STATO</th>
-            <th style={{ width: 44 }}>SIGLA</th>
+            <th style={{ width: 50 }}>TURNO</th>
+            <th>NOTA / CONSEGNA</th>
+            <th style={{ width: 90 }}>FIRMA</th>
           </tr>
         </thead>
         <tbody>
           {entries.map(e => (
             <tr key={e.id}>
               <td className="col-data">{e.data.split('-').reverse().join('/')}</td>
-              <td style={{ textAlign: 'center', fontSize: 11 }}>{e.ora}</td>
-              <td style={{ textAlign: 'center', fontWeight: 700 }}>{TURNO_LABEL[e.turno]}</td>
-              <td style={{ textAlign: 'center', fontSize: 10 }}>{e.priorita ?? 'normale'}</td>
-              <td className="col-testo">{e.testo}</td>
-              <td style={{ textAlign: 'center', fontSize: 10 }}>{e.stato ?? 'aperta'}</td>
-              <td style={{ textAlign: 'center', fontSize: 11, fontWeight: 700 }}>
-                {e.sigla ?? initials(e.operatore)}
-              </td>
+              <td style={{ textAlign: 'center', fontWeight: 700, fontSize: 12 }}>{TURNO_LABEL[e.turno]}</td>
+              <td className="col-testo" style={{ minHeight: 48, lineHeight: 1.8 }}>{e.testo}</td>
+              <td className="col-firma">{e.sigla ?? initials(e.operatore)}</td>
             </tr>
           ))}
           {Array.from({ length: EMPTY_ROWS }).map((_, i) => (
             <tr key={`empty-${i}`} className="empty-row">
               <td className="col-data"></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td style={{ height: 36 }}></td>
-              <td></td>
-              <td></td>
+              <td style={{ height: 48 }}></td>
+              <td className="col-firma"></td>
             </tr>
           ))}
         </tbody>
