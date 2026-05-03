@@ -46,14 +46,24 @@ export interface NuovoPaziente {
   lastName: string;
   dateOfBirth: string;
   sex: string;
+  codiceFiscale: string;
   phone: string;
   email: string;
   address: string;
+  referenteNome: string;
+  referenteTelefono: string;
   emergencyContact: string;
+  provenienza: 'accesso_diretto' | 'centro_medico' | 'altra_struttura' | 'dimissione_ospedaliera' | 'familiare_caregiver' | '';
+  centroInviante: string;
+  motivoIngresso: string;
+  condizioniIniziali: string;
+  operatoreId: string;
+  camera: string;
+  letto: string;
   notaClinicaIniziale: string;
+  noteIniziali: string;
   allergie: string;
   farmaci: string;
-  operatoreId: string;
 }
 
 // ── Operator (mock) ────────────────────────────────────────────────────────────

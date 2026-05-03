@@ -13,6 +13,7 @@ interface OperatorAgendaProps {
   appuntamenti: Appuntamento[];
   pazienti: Paziente[];
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => void;
+  onSelectPaziente?: (nome: string) => void;
 }
 
 const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {
@@ -56,7 +57,7 @@ const TIPO_LABEL: Record<string, string> = {
 };
 
 export function OperatorAgenda({
-  operatoreId, nomeOperatore, operatori, appuntamenti, pazienti, onAddAppuntamento,
+  operatoreId, nomeOperatore, operatori, appuntamenti, pazienti, onAddAppuntamento, onSelectPaziente,
 }: OperatorAgendaProps) {
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
@@ -161,7 +162,10 @@ export function OperatorAgenda({
                 {apt ? (
                   <div className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}>
                     <div className="agt-apt-card__row">
-                      <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
+                      {onSelectPaziente && apt.pazienteNome
+                        ? <button className="link-btn agt-apt-card__patient" onClick={e => { e.stopPropagation(); onSelectPaziente(apt.pazienteNome!); }}>{apt.pazienteNome}</button>
+                        : <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
+                      }
                       <div className="agt-apt-card__badges">
                         {apt.priorita === 'urgente' && <span className="agt-badge agt-badge--urgent">Urgente</span>}
                         <span className={`agt-badge agt-badge--${apt.stato}`}>{STATO_LABEL[apt.stato]}</span>
@@ -215,7 +219,10 @@ export function OperatorAgenda({
                       {apts.map(a => (
                         <div key={a.id} className={`agt-week-apt agt-apt-card--${a.stato}`}>
                           <span className="agt-week-apt__time">{a.ora}</span>
-                          <span className="agt-week-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
+                          {onSelectPaziente && a.pazienteNome
+                            ? <button className="link-btn agt-week-apt__name" onClick={e => { e.stopPropagation(); onSelectPaziente(a.pazienteNome!); }}>{a.pazienteNome.split(',')[0]}</button>
+                            : <span className="agt-week-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
+                          }
                           <span className={`agt-status-dot agt-status-dot--${a.stato}`} />
                         </div>
                       ))}
@@ -249,7 +256,10 @@ export function OperatorAgenda({
                     {apts.slice(0, 2).map(a => (
                       <div key={a.id} className={`agt-month-apt agt-apt-card--${a.stato}`}>
                         <span className="agt-month-apt__time">{a.ora}</span>
-                        <span className="agt-month-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
+                        {onSelectPaziente && a.pazienteNome
+                          ? <button className="link-btn agt-month-apt__name" onClick={e => { e.stopPropagation(); onSelectPaziente(a.pazienteNome!); }}>{a.pazienteNome.split(',')[0]}</button>
+                          : <span className="agt-month-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
+                        }
                       </div>
                     ))}
                     {apts.length > 2 && <span className="agt-month-more">+{apts.length - 2}</span>}

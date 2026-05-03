@@ -8,7 +8,9 @@
       "Bash(findstr :3001)",
       "Bash(taskkill:*)",
       "Bash(cmd:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(rtk tree:*)",
+      "Bash(rtk find:*)"
     ]
   },
   "enabledPlugins": {

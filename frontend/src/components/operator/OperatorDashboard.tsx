@@ -9,6 +9,7 @@ interface OperatorDashboardProps {
   totalePazienti: number;
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
+  onSelectPaziente?: (nome: string) => void;
 }
 
 const STATO_LABEL: Record<string, string> = {
@@ -20,7 +21,7 @@ const STATO_LABEL: Record<string, string> = {
 };
 
 export function OperatorDashboard({
-  utente, consegne, agenda, totalePazienti, loadingPazienti, onNavigate,
+  utente, consegne, agenda, totalePazienti, loadingPazienti, onNavigate, onSelectPaziente,
 }: OperatorDashboardProps) {
   const mieConsegne = consegne.filter(c =>
     c.operatoreAssegnato.includes(utente.nome.replace('Dr. ', '').replace('Dr.ssa ', '')) ||
@@ -92,7 +93,10 @@ export function OperatorDashboard({
           </div>
           <div className="next-appt-banner__content">
             <span className="next-appt-banner__time">{prossimoSlot.ora}</span>
-            <span className="next-appt-banner__patient">{prossimoSlot.pazienteNome}</span>
+            {onSelectPaziente && prossimoSlot.pazienteNome
+              ? <button className="link-btn next-appt-banner__patient" onClick={() => onSelectPaziente(prossimoSlot.pazienteNome!)}>{prossimoSlot.pazienteNome}</button>
+              : <span className="next-appt-banner__patient">{prossimoSlot.pazienteNome}</span>
+            }
             <span className="next-appt-banner__motivo">{prossimoSlot.motivo}</span>
             <span className={`agenda-stato-pill agenda-stato--${prossimoSlot.stato}`}>
               {STATO_LABEL[prossimoSlot.stato] ?? prossimoSlot.stato}
@@ -118,7 +122,9 @@ export function OperatorDashboard({
             <span className="agenda-day-slot__time">{slot.ora}</span>
             <div className="agenda-day-slot__info">
               {slot.pazienteNome
-                ? <span className="agenda-day-slot__patient">{slot.pazienteNome}</span>
+                ? (onSelectPaziente
+                    ? <button className="link-btn agenda-day-slot__patient" onClick={() => onSelectPaziente(slot.pazienteNome!)}>{slot.pazienteNome}</button>
+                    : <span className="agenda-day-slot__patient">{slot.pazienteNome}</span>)
                 : <span className="agenda-day-slot__free">Slot libero</span>
               }
               {slot.motivo && <span className="agenda-day-slot__motivo">{slot.motivo}</span>}
@@ -150,7 +156,10 @@ export function OperatorDashboard({
                   <span className="consegna-tipo">{c.tipo}</span>
                   {c.oraScadenza && <span className="consegna-scadenza">⏰ {c.oraScadenza}</span>}
                 </div>
-                <span className="consegna-paziente">{c.pazienteNome}</span>
+                {onSelectPaziente && c.pazienteNome
+                  ? <button className="link-btn consegna-paziente" onClick={() => onSelectPaziente(c.pazienteNome!)} style={{ fontWeight: 600 }}>{c.pazienteNome}</button>
+                  : <span className="consegna-paziente">{c.pazienteNome}</span>
+                }
                 <p className="consegna-note">{c.note}</p>
               </div>
             ))}
