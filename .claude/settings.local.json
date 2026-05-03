@@ -23,7 +23,8 @@
       "Bash(wsl chmod:*)",
       "Bash(wsl bash:*)",
       "Bash(wsl.exe:*)",
-      "Bash(grep -v \"^$\")"
+      "Bash(grep -v \"^$\")",
+      "Bash(rtk git:*)"
     ]
   },
   "enabledPlugins": {
