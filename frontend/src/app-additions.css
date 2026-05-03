@@ -3032,7 +3032,7 @@
 .terapia-section__body { border: 1px solid #DDE3ED; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
 .terapia-row {
   display: grid;
-  grid-template-columns: 80px 1fr 70px 40px 40px 40px 40px 40px 80px auto;
+  grid-template-columns: 80px 65px 1fr 60px 40px 40px 40px 40px 40px 70px 65px 90px auto;
   gap: 0;
   border-bottom: 1px solid #F0F4F8;
   align-items: center;

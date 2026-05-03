@@ -517,6 +517,7 @@
 .terapia-modulo-table td.col-medico { width: 60px; font-size: 8pt; }
 .terapia-modulo-table td.col-time { width: 36px; text-align: center; }
 .terapia-modulo-table td.col-fine { width: 65px; font-size: 8pt; }
+.terapia-modulo-table td.col-note { font-size: 7.5pt; }
 .terapia-modulo-table tr.empty-row td { min-height: 20px; height: 20px; }
 .terapia-modulo-allegies {
   display: flex;

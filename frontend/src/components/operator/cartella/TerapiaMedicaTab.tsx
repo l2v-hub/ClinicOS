@@ -80,6 +80,7 @@ function TerapiaSezione({ title, farmaci, storici, onAdd, onEdit, onDelete }: Se
         {farmaci.length > 0 && (
           <div className="terapia-row terapia-row--header">
             <div>STATO</div>
+            <div>INIZIO</div>
             <div>FARMACO / DOSE</div>
             <div>VIA</div>
             <div>08</div>
@@ -88,6 +89,8 @@ function TerapiaSezione({ title, farmaci, storici, onAdd, onEdit, onDelete }: Se
             <div>18</div>
             <div>20</div>
             <div>MEDICO</div>
+            <div>FINE</div>
+            <div>NOTE</div>
             <div></div>
           </div>
         )}
@@ -97,11 +100,11 @@ function TerapiaSezione({ title, farmaci, storici, onAdd, onEdit, onDelete }: Se
             <div>
               <span className={`badge ${STATO_BADGE[f.stato]}`}>{f.stato}</span>
             </div>
+            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.inizio}</div>
             <div>
               <div className="terapia-nome">{f.nome}</div>
               <div className="terapia-dose">{f.dose}{f.frequenza ? ` — ${f.frequenza}` : ''}</div>
               {f.indicazione && <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{f.indicazione}</div>}
-              {f.inizio && <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{f.inizio}{f.fine ? ` → ${f.fine}` : ''}</div>}
             </div>
             <div style={{ textAlign: 'center', fontSize: 11 }}>{f.via ?? ''}</div>
             {TIME_COLS.map(tc => (
@@ -110,6 +113,8 @@ function TerapiaSezione({ title, farmaci, storici, onAdd, onEdit, onDelete }: Se
               </div>
             ))}
             <div style={{ fontSize: 11, textAlign: 'center' }}>{f.prescrittoDA?.split(' ').map(p => p[0]).join('.') ?? ''}</div>
+            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.fine ?? ''}</div>
+            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.note ?? ''}</div>
             <div style={{ display: 'flex', gap: 4 }}>
               <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => onEdit(f)}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -130,16 +135,18 @@ function TerapiaSezione({ title, farmaci, storici, onAdd, onEdit, onDelete }: Se
             {showStorico && storici.map(f => (
               <div key={f.id} className={`terapia-row terapia-row--${f.stato}`} style={{ opacity: 0.7 }}>
                 <div><span className={`badge ${STATO_BADGE[f.stato]}`}>{f.stato}</span></div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.inizio}</div>
                 <div>
                   <div className="terapia-nome">{f.nome}</div>
                   <div className="terapia-dose">{f.dose}{f.frequenza ? ` — ${f.frequenza}` : ''}</div>
-                  {f.inizio && <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{f.inizio}{f.fine ? ` → ${f.fine}` : ''}</div>}
                 </div>
                 <div style={{ textAlign: 'center', fontSize: 11 }}>{f.via ?? ''}</div>
                 {TIME_COLS.map(tc => (
                   <div key={tc.key} className="terapia-orario">{(f[tc.key] as string | undefined) ?? ''}</div>
                 ))}
                 <div style={{ fontSize: 11, textAlign: 'center' }}>{f.prescrittoDA?.split(' ').map(p => p[0]).join('.') ?? ''}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.fine ?? ''}</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.note ?? ''}</div>
                 <div>
                   <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => onDelete(f.id)}>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
