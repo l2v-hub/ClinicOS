@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CartellaPaziente, MedicazioneRecord, EssudatoLivello, Paziente } from '../../../types';
+import type { CartellaPaziente, MedicazioneRecord, EssudatoLivello, Paziente, FollowUpMedicazione } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, PrintButton } from './shared';
 
 interface Props {
@@ -302,6 +302,122 @@ function MedicazioneModulo({ meds, paziente }: { meds: MedicazioneRecord[]; pazi
   );
 }
 
+const MOTIVO_LABEL: Record<FollowUpMedicazione['motivoSostituzione'], string> = {
+  termine: 'Termine programmato',
+  bagnata: 'Bagnata',
+  sporca: 'Sporca',
+};
+
+type FuForm = { data: string; siglaOperatore: string; motivoSostituzione: FollowUpMedicazione['motivoSostituzione']; note: string };
+const EMPTY_FU: FuForm = { data: todayStr(), siglaOperatore: '', motivoSostituzione: 'termine', note: '' };
+
+function FollowUpSection({
+  med, onSave,
+}: {
+  med: MedicazioneRecord;
+  onSave: (updated: MedicazioneRecord) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [fuForm, setFuForm] = useState<FuForm>({ ...EMPTY_FU });
+  const followUps = med.followUps ?? [];
+
+  function setFu(f: Partial<typeof fuForm>) { setFuForm(p => ({ ...p, ...f })); }
+
+  function handleSave() {
+    if (!fuForm.siglaOperatore) return;
+    const fu: FollowUpMedicazione = {
+      id: uid(), data: fuForm.data, siglaOperatore: fuForm.siglaOperatore,
+      motivoSostituzione: fuForm.motivoSostituzione, note: fuForm.note,
+      createdAt: nowISO(),
+    };
+    onSave({ ...med, followUps: [...followUps, fu] });
+    setFuForm({ ...EMPTY_FU }); setShowAdd(false);
+  }
+
+  function handleDelete(id: string) {
+    onSave({ ...med, followUps: followUps.filter(f => f.id !== id) });
+  }
+
+  return (
+    <div style={{ borderTop: '1px solid var(--border)', paddingTop: 8, marginTop: 6 }}>
+      <button
+        className="btn-secondary btn-sm"
+        onClick={() => setOpen(o => !o)}
+        style={{ fontSize: '12px' }}
+      >
+        {open ? '▲' : '▼'} Follow-up medicazione ({followUps.length})
+      </button>
+
+      {open && (
+        <div style={{ marginTop: 10 }}>
+          {followUps.length > 0 && (
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 10, fontSize: '13px' }}>
+              <thead>
+                <tr style={{ background: 'var(--surface-2)' }}>
+                  <th style={{ padding: '4px 8px', textAlign: 'left', fontSize: '11px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>Data</th>
+                  <th style={{ padding: '4px 8px', textAlign: 'left', fontSize: '11px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>Sigla</th>
+                  <th style={{ padding: '4px 8px', textAlign: 'left', fontSize: '11px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>Motivo sostituzione</th>
+                  <th style={{ padding: '4px 8px', textAlign: 'left', fontSize: '11px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>Note</th>
+                  <th style={{ border: '1px solid var(--border)', width: 32 }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {followUps.map(fu => (
+                  <tr key={fu.id}>
+                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)' }}>{fmtDate(fu.data)}</td>
+                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)', fontWeight: 600 }}>{fu.siglaOperatore}</td>
+                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)' }}>{MOTIVO_LABEL[fu.motivoSostituzione]}</td>
+                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)', color: 'var(--text-muted)' }}>{fu.note}</td>
+                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)', textAlign: 'center' }}>
+                      <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => handleDelete(fu.id)} title="Elimina">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {showAdd ? (
+            <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+                <div className="form-row">
+                  <label className="form-label">Data</label>
+                  <input type="date" className="form-input" value={fuForm.data} onChange={e => setFu({ data: e.target.value })} />
+                </div>
+                <div className="form-row">
+                  <label className="form-label">Sigla operatore</label>
+                  <input type="text" className="form-input" value={fuForm.siglaOperatore} onChange={e => setFu({ siglaOperatore: e.target.value })} placeholder="es. M.F." />
+                </div>
+                <div className="form-row">
+                  <label className="form-label">Sostituzione per</label>
+                  <select className="form-input" value={fuForm.motivoSostituzione} onChange={e => setFu({ motivoSostituzione: e.target.value as FollowUpMedicazione['motivoSostituzione'] })}>
+                    <option value="termine">Termine programmato</option>
+                    <option value="bagnata">Bagnata</option>
+                    <option value="sporca">Sporca</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-row" style={{ marginBottom: 10 }}>
+                <label className="form-label">Note</label>
+                <input type="text" className="form-input" value={fuForm.note} onChange={e => setFu({ note: e.target.value })} />
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button className="btn-secondary btn-sm" onClick={() => setShowAdd(false)}>Annulla</button>
+                <button className="btn-primary btn-sm" onClick={handleSave} disabled={!fuForm.siglaOperatore}>Salva follow-up</button>
+              </div>
+            </div>
+          ) : (
+            <button className="btn-primary btn-sm" onClick={() => setShowAdd(true)}>+ Aggiungi follow-up</button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 
 export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
@@ -537,6 +653,10 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                   <span className="cr-meta">Operatore: {m.operatore}</span>
                   {m.sigla && <span className="cr-meta"> — Sigla: {m.sigla}</span>}
                 </div>
+                <FollowUpSection
+                  med={m}
+                  onSave={updated => onUpdate({ medicazioniFerite: meds.map(x => x.id === updated.id ? updated : x) })}
+                />
               </div>
             ))}
           </div>

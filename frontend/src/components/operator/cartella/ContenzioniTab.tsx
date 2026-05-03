@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CartellaPaziente, Contenzione, TipoContenzione, Paziente } from '../../../types';
+import type { CartellaPaziente, Contenzione, TipoContenzione, FrequenzaContenzione, Paziente } from '../../../types';
 import { uid, todayStr, nowISO, nowTime, fmtDate, PrintButton } from './shared';
 
 interface Props {
@@ -17,10 +17,26 @@ const TIPO_LABEL: Record<TipoContenzione, string> = {
   altro: 'Altro',
 };
 
+const FREQ_OPTIONS: FrequenzaContenzione[] = ['sempre', 'notturna', 'diurna', 'altro'];
+const FREQ_LABEL: Record<FrequenzaContenzione, string> = {
+  sempre: 'Sempre', notturna: 'Notturna', diurna: 'Diurna', altro: 'Altro',
+};
+
 const EMPTY_FORM = {
   dataInizio: todayStr(), oraInizio: nowTime(), tipo: 'spondina' as TipoContenzione,
   motivoClinico: '', autorizzazioneMedico: false, autorizzazioneTutore: false,
   intervalloRivalutazione: 4, dataFine: '', oraFine: '', note: '',
+  // Extended
+  camera: '', letto: '', firmaMedicoInizio: '', firmaMedicoFine: '',
+  spondineAttive: false, spondineFrequenza: 'sempre' as FrequenzaContenzione, spondineAltro: '',
+  cinturaCarrozzina: false, cinturaCarrozzinaFreq: 'sempre' as FrequenzaContenzione,
+  cinturaPoltrona: false, cinturaPoltronaFreq: 'sempre' as FrequenzaContenzione,
+  cinturaSedia: false, cinturaSediaFreq: 'sempre' as FrequenzaContenzione,
+  cinturaLetto: false, cinturaLettoFreq: 'sempre' as FrequenzaContenzione,
+  carrozzinaConTavolino: false, altriPresidi: '',
+  motivAgitazione: false, motivConfusionale: false, motivCadute: false,
+  motivAutoEtero: false, motivInconsapevolezza: false, motivAltro: '',
+  firmaPazienteReferente: '', firmaParente: '',
 };
 
 // ── Modulo paper view (fedele al template 05 contenzioni) ─────────────────
@@ -34,16 +50,13 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
   );
 
   const motivazioni = [
-    { key: 'agitazione', label: 'Agitazione psicomotoria', checked: c?.motivoClinico?.toLowerCase().includes('agitaz') ?? false },
-    { key: 'stato_confusionale', label: 'Stato confusionale', checked: c?.motivoClinico?.toLowerCase().includes('confus') ?? false },
-    { key: 'cadute', label: 'Cadute ricorrenti / Instabilità posturale', checked: c?.motivoClinico?.toLowerCase().includes('cadut') ?? false },
-    { key: 'etero', label: 'Auto/eterolesionismo', checked: c?.motivoClinico?.toLowerCase().includes('lesion') ?? false },
-    { key: 'inconsapev', label: 'Inconsapevolezza dei propri limiti', checked: false },
-    { key: 'altro', label: 'Altro', checked: false },
+    { key: 'agitazione', label: 'Agitazione psicomotoria', checked: c?.motivAgitazione ?? c?.motivoClinico?.toLowerCase().includes('agitaz') ?? false },
+    { key: 'confusionale', label: 'Stato confusionale', checked: c?.motivConfusionale ?? c?.motivoClinico?.toLowerCase().includes('confus') ?? false },
+    { key: 'cadute', label: 'Cadute ricorrenti / Instabilità posturale', checked: c?.motivCadute ?? c?.motivoClinico?.toLowerCase().includes('cadut') ?? false },
+    { key: 'etero', label: 'Auto/eterolesionismo', checked: c?.motivAutoEtero ?? c?.motivoClinico?.toLowerCase().includes('lesion') ?? false },
+    { key: 'inconsapev', label: 'Inconsapevolezza dei propri limiti', checked: c?.motivInconsapevolezza ?? false },
+    { key: 'altro', label: c?.motivAltro ? `Altro: ${c.motivAltro}` : 'Altro', checked: !!c?.motivAltro },
   ];
-
-  const isSpondina = c?.tipo === 'spondina' || !c;
-  const isCintura = c?.tipo === 'cintura' || c?.tipo === 'polsino' || !c;
 
   return (
     <div className="fm contenzione-modulo">
@@ -56,11 +69,11 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
         </div>
         <div className="fm-patient-field">
           <span className="fm-patient-field__lbl">Camera</span>
-          <span className="fm-patient-field__val"></span>
+          <span className="fm-patient-field__val">{c?.camera ?? ''}</span>
         </div>
         <div className="fm-patient-field">
           <span className="fm-patient-field__lbl">Letto</span>
-          <span className="fm-patient-field__val"></span>
+          <span className="fm-patient-field__val">{c?.letto ?? ''}</span>
         </div>
       </div>
 
@@ -71,7 +84,7 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
         </div>
         <div className="fm-inline__item">
           <span className="fm-inline__lbl">firma medico</span>
-          <span className="fm-inline__val fm-inline__val--wide"></span>
+          <span className="fm-inline__val fm-inline__val--wide">{c?.firmaMedicoInizio ?? ''}</span>
         </div>
       </div>
       <div className="fm-inline" style={{ marginBottom: 10 }}>
@@ -81,46 +94,48 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
         </div>
         <div className="fm-inline__item">
           <span className="fm-inline__lbl">firma medico</span>
-          <span className="fm-inline__val fm-inline__val--wide"></span>
+          <span className="fm-inline__val fm-inline__val--wide">{c?.firmaMedicoFine ?? ''}</span>
         </div>
       </div>
 
-      {/* Protezione */}
+      {/* Protezione — Sponde */}
       <div className="fm-cb-section" style={{ border: '1px solid #999', padding: '6px 10px', marginBottom: 8 }}>
         <div className="fm-cb-section__title" style={{ fontWeight: 700, textDecoration: 'underline', marginBottom: 6, fontSize: '9pt' }}>Tipologia e modalità mezzo di protezione prescritto</div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <span style={{ fontWeight: 700, fontSize: '9pt', minWidth: 120 }}>Sponde al letto</span>
-          <Cb checked={isSpondina} label="sempre" />
-          <Cb checked={false} label="notturna" />
-          <Cb checked={false} label="diurna" />
-          <span style={{ fontSize: '9pt' }}>altro <span className="fm-fill-line" style={{ minWidth: 100, display: 'inline-block' }}></span></span>
+          {FREQ_OPTIONS.map(f => (
+            <Cb key={f} checked={(c?.spondineAttive ?? c?.tipo === 'spondina') && (c?.spondineFrequenza ?? 'sempre') === f} label={FREQ_LABEL[f]} />
+          ))}
         </div>
       </div>
 
-      {/* Contenzione */}
+      {/* Contenzione — tipologie */}
       <div className="fm-cb-section" style={{ border: '1px solid #999', padding: '6px 10px', marginBottom: 8 }}>
         <div className="fm-cb-section__title" style={{ fontWeight: 700, textDecoration: 'underline', marginBottom: 6, fontSize: '9pt' }}>Tipologia e modalità mezzo di contenzione prescritto</div>
-        {[
-          { label: 'Cintura — Carrozzina', checked: c?.tipo === 'cintura' },
-          { label: 'Cintura — Poltrona', checked: false },
-          { label: 'Cintura — Sedia', checked: false },
-          { label: 'Cintura — Letto', checked: isCintura && c?.tipo !== 'spondina' },
-          { label: 'Carrozzina con tavolino', checked: false },
-          { label: 'Polsino al polso', checked: c?.tipo === 'polsino' },
-          { label: 'Guanto protettivo', checked: c?.tipo === 'guanto' },
-        ].map(({ label, checked }) => (
+        {([
+          { label: 'Cintura — Carrozzina', active: c?.cinturaCarrozzina ?? false, freq: c?.cinturaCarrozzinaFreq },
+          { label: 'Cintura — Poltrona', active: c?.cinturaPoltrona ?? false, freq: c?.cinturaPoltronaFreq },
+          { label: 'Cintura — Sedia', active: c?.cinturaSedia ?? false, freq: c?.cinturaSediaFreq },
+          { label: 'Cintura — Letto', active: c?.cinturaLetto ?? false, freq: c?.cinturaLettoFreq },
+          { label: 'Carrozzina con tavolino', active: c?.carrozzinaConTavolino ?? false, freq: undefined },
+          { label: 'Polsino al polso', active: c?.tipo === 'polsino', freq: undefined },
+          { label: 'Guanto protettivo', active: c?.tipo === 'guanto', freq: undefined },
+        ] as { label: string; active: boolean; freq?: FrequenzaContenzione }[]).map(({ label, active, freq }) => (
           <div key={label} style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 4, flexWrap: 'wrap' }}>
             <span style={{ fontWeight: 600, fontSize: '9pt', minWidth: 160 }}>{label}</span>
-            <Cb checked={checked} label="sempre" />
-            <Cb checked={false} label="notturna" />
-            <Cb checked={false} label="diurna" />
-            <span style={{ fontSize: '9pt' }}>altro <span style={{ borderBottom: '1px dotted #999', minWidth: 80, display: 'inline-block' }}></span></span>
+            {freq !== undefined ? FREQ_OPTIONS.map(f => (
+              <Cb key={f} checked={active && freq === f} label={FREQ_LABEL[f]} />
+            )) : (
+              <Cb checked={active} label="attivo" />
+            )}
           </div>
         ))}
-        <div className="fm-inline" style={{ marginTop: 6 }}>
-          <span style={{ fontSize: '9pt', fontWeight: 600 }}>Altri presidi</span>
-          <span className="fm-inline__val fm-inline__val--wide" style={{ marginLeft: 8 }}>{c?.tipo === 'altro' ? c.note : ''}</span>
-        </div>
+        {c?.altriPresidi && (
+          <div className="fm-inline" style={{ marginTop: 6 }}>
+            <span style={{ fontSize: '9pt', fontWeight: 600 }}>Altri presidi</span>
+            <span style={{ marginLeft: 8, fontSize: '9pt' }}>{c.altriPresidi}</span>
+          </div>
+        )}
       </div>
 
       {/* Note */}
@@ -151,17 +166,16 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
         compreso e condiviso le necessità e le conseguenze di tale pratica e presta il consenso
         <span className="fm-cb" style={{ margin: '0 8px' }}><span className="fm-cb__box"></span> Paziente</span>
         <span className="fm-cb"><span className="fm-cb__box"></span> Tutore legale/amministratore di sostegno con poteri specifici</span>
-        <span className="fm-fill-line" style={{ minWidth: 200, display: 'inline-block', marginLeft: 8 }}></span>
       </div>
 
       <div className="fm-signature-row" style={{ marginTop: 16 }}>
         <div className="fm-signature">
           <span className="fm-signature__lbl">Firma paziente / referente</span>
-          <div className="fm-signature__line"></div>
+          <div className="fm-signature__line">{c?.firmaPazienteReferente ?? ''}</div>
         </div>
         <div className="fm-signature">
           <span className="fm-signature__lbl">Eventuale firma parente (presa visione)</span>
-          <div className="fm-signature__line"></div>
+          <div className="fm-signature__line">{c?.firmaParente ?? ''}</div>
         </div>
       </div>
 
@@ -203,13 +217,43 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
       autorizzazioneTutore: form.autorizzazioneTutore, intervalloRivalutazione: form.intervalloRivalutazione,
       dataFine: form.dataFine, oraFine: form.oraFine, attiva: !form.dataFine,
       operatore: operatoreNome, note: form.note, createdAt: nowISO(),
+      camera: form.camera, letto: form.letto,
+      firmaMedicoInizio: form.firmaMedicoInizio, firmaMedicoFine: form.firmaMedicoFine,
+      spondineAttive: form.spondineAttive, spondineFrequenza: form.spondineFrequenza, spondineAltro: form.spondineAltro,
+      cinturaCarrozzina: form.cinturaCarrozzina, cinturaCarrozzinaFreq: form.cinturaCarrozzinaFreq,
+      cinturaPoltrona: form.cinturaPoltrona, cinturaPoltronaFreq: form.cinturaPoltronaFreq,
+      cinturaSedia: form.cinturaSedia, cinturaSediaFreq: form.cinturaSediaFreq,
+      cinturaLetto: form.cinturaLetto, cinturaLettoFreq: form.cinturaLettoFreq,
+      carrozzinaConTavolino: form.carrozzinaConTavolino, altriPresidi: form.altriPresidi,
+      motivAgitazione: form.motivAgitazione, motivConfusionale: form.motivConfusionale,
+      motivCadute: form.motivCadute, motivAutoEtero: form.motivAutoEtero,
+      motivInconsapevolezza: form.motivInconsapevolezza, motivAltro: form.motivAltro,
+      firmaPazienteReferente: form.firmaPazienteReferente, firmaParente: form.firmaParente,
     };
     onUpdate({ contenzioni: editId ? list.map(x => x.id === editId ? c : x) : [c, ...list] });
     setShowAdd(false); setEditId(null); setForm({ ...EMPTY_FORM });
   }
 
   function startEdit(c: Contenzione) {
-    setForm({ dataInizio: c.dataInizio, oraInizio: c.oraInizio, tipo: c.tipo, motivoClinico: c.motivoClinico, autorizzazioneMedico: c.autorizzazioneMedico, autorizzazioneTutore: c.autorizzazioneTutore, intervalloRivalutazione: c.intervalloRivalutazione, dataFine: c.dataFine, oraFine: c.oraFine, note: c.note });
+    setForm({
+      dataInizio: c.dataInizio, oraInizio: c.oraInizio, tipo: c.tipo,
+      motivoClinico: c.motivoClinico, autorizzazioneMedico: c.autorizzazioneMedico,
+      autorizzazioneTutore: c.autorizzazioneTutore, intervalloRivalutazione: c.intervalloRivalutazione,
+      dataFine: c.dataFine, oraFine: c.oraFine, note: c.note,
+      camera: c.camera ?? '', letto: c.letto ?? '',
+      firmaMedicoInizio: c.firmaMedicoInizio ?? '', firmaMedicoFine: c.firmaMedicoFine ?? '',
+      spondineAttive: c.spondineAttive ?? false,
+      spondineFrequenza: c.spondineFrequenza ?? 'sempre', spondineAltro: c.spondineAltro ?? '',
+      cinturaCarrozzina: c.cinturaCarrozzina ?? false, cinturaCarrozzinaFreq: c.cinturaCarrozzinaFreq ?? 'sempre',
+      cinturaPoltrona: c.cinturaPoltrona ?? false, cinturaPoltronaFreq: c.cinturaPoltronaFreq ?? 'sempre',
+      cinturaSedia: c.cinturaSedia ?? false, cinturaSediaFreq: c.cinturaSediaFreq ?? 'sempre',
+      cinturaLetto: c.cinturaLetto ?? false, cinturaLettoFreq: c.cinturaLettoFreq ?? 'sempre',
+      carrozzinaConTavolino: c.carrozzinaConTavolino ?? false, altriPresidi: c.altriPresidi ?? '',
+      motivAgitazione: c.motivAgitazione ?? false, motivConfusionale: c.motivConfusionale ?? false,
+      motivCadute: c.motivCadute ?? false, motivAutoEtero: c.motivAutoEtero ?? false,
+      motivInconsapevolezza: c.motivInconsapevolezza ?? false, motivAltro: c.motivAltro ?? '',
+      firmaPazienteReferente: c.firmaPazienteReferente ?? '', firmaParente: c.firmaParente ?? '',
+    });
     setEditId(c.id); setShowAdd(true);
   }
 
@@ -246,6 +290,8 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
         {showAdd && (
           <div className="cr-inline-form">
             <div className="cr-form-section__title">{editId ? 'Modifica' : 'Nuova contenzione / protezione'}</div>
+
+            {/* Date + camera/letto */}
             <div className="form-row-3col">
               <div className="form-row">
                 <label className="form-label">Data inizio</label>
@@ -256,18 +302,99 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                 <input type="time" className="form-input" value={form.oraInizio} onChange={e => set({ oraInizio: e.target.value })} />
               </div>
               <div className="form-row">
-                <label className="form-label">Tipo</label>
-                <select className="form-input" value={form.tipo} onChange={e => set({ tipo: e.target.value as TipoContenzione })}>
-                  {(Object.keys(TIPO_LABEL) as TipoContenzione[]).map(k => (
-                    <option key={k} value={k}>{TIPO_LABEL[k]}</option>
-                  ))}
-                </select>
+                <label className="form-label">Firma medico inizio</label>
+                <input type="text" className="form-input" value={form.firmaMedicoInizio} onChange={e => set({ firmaMedicoInizio: e.target.value })} />
               </div>
             </div>
+            <div className="form-row-3col">
+              <div className="form-row">
+                <label className="form-label">Camera</label>
+                <input type="text" className="form-input" value={form.camera} onChange={e => set({ camera: e.target.value })} />
+              </div>
+              <div className="form-row">
+                <label className="form-label">Letto</label>
+                <input type="text" className="form-input" value={form.letto} onChange={e => set({ letto: e.target.value })} />
+              </div>
+            </div>
+
+            {/* Sponde al letto */}
+            <div style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', marginBottom: 10 }}>
+              <div style={{ fontWeight: 700, fontSize: '12px', marginBottom: 8 }}>Sponde al letto</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={form.spondineAttive} onChange={e => set({ spondineAttive: e.target.checked })} />
+                  <span style={{ fontSize: '13px' }}>Attive</span>
+                </label>
+                {form.spondineAttive && (
+                  <select className="form-input" style={{ width: 'auto' }} value={form.spondineFrequenza} onChange={e => set({ spondineFrequenza: e.target.value as FrequenzaContenzione })}>
+                    {FREQ_OPTIONS.map(f => <option key={f} value={f}>{FREQ_LABEL[f]}</option>)}
+                  </select>
+                )}
+              </div>
+            </div>
+
+            {/* Contenzioni specifiche */}
+            <div style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', marginBottom: 10 }}>
+              <div style={{ fontWeight: 700, fontSize: '12px', marginBottom: 8 }}>Mezzi di contenzione</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                {([
+                  { key: 'cinturaCarrozzina', freqKey: 'cinturaCarrozzinaFreq', label: 'Cintura carrozzina' },
+                  { key: 'cinturaPoltrona', freqKey: 'cinturaPoltronaFreq', label: 'Cintura poltrona' },
+                  { key: 'cinturaSedia', freqKey: 'cinturaSediaFreq', label: 'Cintura sedia' },
+                  { key: 'cinturaLetto', freqKey: 'cinturaLettoFreq', label: 'Cintura letto' },
+                ] as { key: keyof typeof form; freqKey: keyof typeof form; label: string }[]).map(({ key, freqKey, label }) => (
+                  <div key={String(key)} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', minWidth: 160 }}>
+                      <input type="checkbox" checked={form[key] as boolean} onChange={e => set({ [key]: e.target.checked } as Partial<typeof form>)} />
+                      <span style={{ fontSize: '13px' }}>{label}</span>
+                    </label>
+                    {form[key] && (
+                      <select className="form-input" style={{ width: 'auto', fontSize: '12px' }} value={form[freqKey] as string} onChange={e => set({ [freqKey]: e.target.value } as Partial<typeof form>)}>
+                        {FREQ_OPTIONS.map(f => <option key={f} value={f}>{FREQ_LABEL[f]}</option>)}
+                      </select>
+                    )}
+                  </div>
+                ))}
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={form.carrozzinaConTavolino} onChange={e => set({ carrozzinaConTavolino: e.target.checked })} />
+                  <span style={{ fontSize: '13px' }}>Carrozzina con tavolino</span>
+                </label>
+              </div>
+              <div className="form-row" style={{ marginTop: 10 }}>
+                <label className="form-label">Altri presidi</label>
+                <input type="text" className="form-input" value={form.altriPresidi} onChange={e => set({ altriPresidi: e.target.value })} placeholder="descrizione presidi aggiuntivi" />
+              </div>
+            </div>
+
+            {/* Motivazioni */}
+            <div style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', marginBottom: 10 }}>
+              <div style={{ fontWeight: 700, fontSize: '12px', marginBottom: 8 }}>Motivazioni</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                {([
+                  { key: 'motivAgitazione', label: 'Agitazione psicomotoria' },
+                  { key: 'motivConfusionale', label: 'Stato confusionale' },
+                  { key: 'motivCadute', label: 'Cadute ricorrenti / Instabilità posturale' },
+                  { key: 'motivAutoEtero', label: 'Auto/eterolesionismo' },
+                  { key: 'motivInconsapevolezza', label: 'Inconsapevolezza dei propri limiti' },
+                ] as { key: keyof typeof form; label: string }[]).map(({ key, label }) => (
+                  <label key={String(key)} style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+                    <input type="checkbox" checked={form[key] as boolean} onChange={e => set({ [key]: e.target.checked } as Partial<typeof form>)} />
+                    <span style={{ fontSize: '13px' }}>{label}</span>
+                  </label>
+                ))}
+              </div>
+              <div className="form-row" style={{ marginTop: 10 }}>
+                <label className="form-label">Altro (specificare)</label>
+                <input type="text" className="form-input" value={form.motivAltro} onChange={e => set({ motivAltro: e.target.value })} />
+              </div>
+            </div>
+
+            {/* Motivo clinico */}
             <div className="form-row">
-              <label className="form-label">Motivo clinico</label>
+              <label className="form-label">Descrizione clinica</label>
               <textarea className="form-input" rows={3} value={form.motivoClinico} onChange={e => set({ motivoClinico: e.target.value })} placeholder="Descrizione del motivo clinico per l'applicazione…" />
             </div>
+
             <div className="form-row-2col">
               <div className="form-row">
                 <label className="form-label">Intervallo rivalutazione (ore)</label>
@@ -284,6 +411,22 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                 </label>
               </div>
             </div>
+
+            {/* Consenso */}
+            <div style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', marginBottom: 10 }}>
+              <div style={{ fontWeight: 700, fontSize: '12px', marginBottom: 8 }}>Consenso</div>
+              <div className="form-row-2col">
+                <div className="form-row">
+                  <label className="form-label">Firma paziente / referente</label>
+                  <input type="text" className="form-input" value={form.firmaPazienteReferente} onChange={e => set({ firmaPazienteReferente: e.target.value })} />
+                </div>
+                <div className="form-row">
+                  <label className="form-label">Firma parente (presa visione)</label>
+                  <input type="text" className="form-input" value={form.firmaParente} onChange={e => set({ firmaParente: e.target.value })} />
+                </div>
+              </div>
+            </div>
+
             <div className="form-row-2col">
               <div className="form-row">
                 <label className="form-label">Data fine (se applicabile)</label>
@@ -294,6 +437,12 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                 <input type="time" className="form-input" value={form.oraFine} onChange={e => set({ oraFine: e.target.value })} />
               </div>
             </div>
+            {form.dataFine && (
+              <div className="form-row">
+                <label className="form-label">Firma medico fine</label>
+                <input type="text" className="form-input" value={form.firmaMedicoFine} onChange={e => set({ firmaMedicoFine: e.target.value })} />
+              </div>
+            )}
             <div className="form-row">
               <label className="form-label">Note</label>
               <textarea className="form-input" rows={2} value={form.note} onChange={e => set({ note: e.target.value })} />

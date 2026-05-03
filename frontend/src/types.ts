@@ -554,6 +554,15 @@ export interface ParametriMensili {
 
 export type EssudatoLivello = 'assente' | 'scarso' | 'moderato' | 'abbondante';
 
+export interface FollowUpMedicazione {
+  id: string;
+  data: string;
+  siglaOperatore: string;
+  motivoSostituzione: 'termine' | 'bagnata' | 'sporca';
+  note: string;
+  createdAt: string;
+}
+
 export interface MedicazioneRecord {
   id: string;
   data: string;
@@ -574,11 +583,13 @@ export interface MedicazioneRecord {
   operatore: string;
   note: string;
   createdAt: string;
+  followUps?: FollowUpMedicazione[];
 }
 
 // ── Contenzione / Protezione ───────────────────────────────────────────────────
 
 export type TipoContenzione = 'cintura' | 'polsino' | 'guanto' | 'spondina' | 'altro';
+export type FrequenzaContenzione = 'sempre' | 'notturna' | 'diurna' | 'altro';
 
 export interface Contenzione {
   id: string;
@@ -595,6 +606,36 @@ export interface Contenzione {
   operatore: string;
   note: string;
   createdAt: string;
+  // Extended fields
+  camera?: string;
+  letto?: string;
+  firmaMedicoInizio?: string;
+  firmaMedicoFine?: string;
+  // Sponde al letto
+  spondineAttive?: boolean;
+  spondineFrequenza?: FrequenzaContenzione;
+  spondineAltro?: string;
+  // Contenzioni specifiche
+  cinturaCarrozzina?: boolean;
+  cinturaCarrozzinaFreq?: FrequenzaContenzione;
+  cinturaPoltrona?: boolean;
+  cinturaPoltronaFreq?: FrequenzaContenzione;
+  cinturaSedia?: boolean;
+  cinturaSediaFreq?: FrequenzaContenzione;
+  cinturaLetto?: boolean;
+  cinturaLettoFreq?: FrequenzaContenzione;
+  carrozzinaConTavolino?: boolean;
+  altriPresidi?: string;
+  // Motivazioni
+  motivAgitazione?: boolean;
+  motivConfusionale?: boolean;
+  motivCadute?: boolean;
+  motivAutoEtero?: boolean;
+  motivInconsapevolezza?: boolean;
+  motivAltro?: string;
+  // Consenso
+  firmaPazienteReferente?: string;
+  firmaParente?: string;
 }
 
 // ── Scala Braden ───────────────────────────────────────────────────────────────
@@ -630,6 +671,67 @@ export interface DimissioneInfermieristica {
   operatore: string;
   note: string;
   compilatoAt: string;
+  // Respirazione
+  respAutonomo?: boolean;
+  respO2Terapia?: boolean;
+  respO2LitriMin?: string;
+  respCannulaTracheale?: boolean;
+  respUltimaSostituzione?: string;
+  // Alimentazione
+  alimentAutonomo?: boolean;
+  alimentAssistito?: boolean;
+  alimentDieta?: string;
+  alimentSNG?: string;
+  alimentPEG?: string;
+  // Eliminazione
+  elimContinente?: boolean;
+  elimParzialmenteIncontinente?: boolean;
+  elimIncontinenzaFeci?: boolean;
+  elimIncontinenzaUrine?: boolean;
+  elimDataUltimaEvacuazione?: string;
+  elimCatetereVescicale?: string;
+  elimStomia?: boolean;
+  // Mobilizzazione
+  mobAutonomo?: boolean;
+  mobAllettato?: boolean;
+  mobAssistitoCon?: string;
+  mobRischioCaduta?: boolean;
+  mobContenzione?: string;
+  // Igiene e vestizione
+  igieneAutonomo?: boolean;
+  igieneDipendente?: boolean;
+  igieneParzialmenteDipendente?: boolean;
+  // Lesioni da pressione
+  lesioniNo?: boolean;
+  lesioniSi?: boolean;
+  lesioniSede?: string;
+  lesioniGrado?: string;
+  lesioniTipoMedicazione?: string;
+  lesioniFrequenza?: string;
+  lesioniNote?: string;
+  // Giro medicazione
+  giroMedicazioneFrequenza?: string;
+  // Disturbi del sonno
+  sonnoNo?: boolean;
+  sonnoSi?: boolean;
+  sonnoNote?: string;
+  // Uso farmaci
+  farmaciNo?: boolean;
+  farmaciSi?: boolean;
+  farmaciDettaglio?: string;
+  // Comunicazione / Orientamento
+  commOrientato?: boolean;
+  commParzialmenteOrientato?: boolean;
+  commDisorientato?: boolean;
+  commAlterazioniSensoriali?: string;
+  commComunicaSi?: boolean;
+  commComunicaNo?: boolean;
+  commDifficolta?: string;
+  // Servizi territoriali
+  servizioSocialeSi?: boolean;
+  servizioSocialeNo?: boolean;
+  servizioDomiciliareSi?: boolean;
+  servizioDomiciliareNo?: boolean;
 }
 
 // ── Liberatoria di Uscita ──────────────────────────────────────────────────────
@@ -644,4 +746,9 @@ export interface Liberatoria {
   operatore: string;
   note: string;
   compilatoAt: string;
+  // Extended fields
+  referenteNome?: string;
+  referenteDataNascita?: string;
+  referenteRapporto?: string;
+  soloUscitaParenti?: boolean;
 }
