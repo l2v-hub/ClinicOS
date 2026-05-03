@@ -10,7 +10,20 @@
       "Bash(cmd:*)",
       "Bash(powershell:*)",
       "Bash(rtk tree:*)",
-      "Bash(rtk find:*)"
+      "Bash(rtk find:*)",
+      "Bash(tmux -V)",
+      "Bash(wt.exe --version)",
+      "Bash(wsl --version)",
+      "Bash(wsl which:*)",
+      "Bash(wt.exe --help)",
+      "Bash(where wt.exe)",
+      "Bash(wsl ls:*)",
+      "Bash(wsl pwd:*)",
+      "Bash(wsl tmux:*)",
+      "Bash(wsl chmod:*)",
+      "Bash(wsl bash:*)",
+      "Bash(wsl.exe:*)",
+      "Bash(grep -v \"^$\")"
     ]
   },
   "enabledPlugins": {

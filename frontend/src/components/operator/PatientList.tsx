@@ -112,7 +112,7 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
                 <th>Paziente</th>
                 <th>MRN</th>
                 <th>Data di nascita</th>
-                <th>Sesso</th>
+                <th>Camera / Letto</th>
                 <th>Contatti</th>
                 <th>Consegne</th>
                 <th></th>
@@ -127,7 +127,7 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
                 <tr key={p.id} className="table-row--clickable" onClick={() => onSelect(p)}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div className="op-avatar-sm">{p.firstName[0]}{p.lastName[0]}</div>
+                      <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
                       <div>
                         <div className="cell--name">{p.lastName}, {p.firstName}</div>
                         <div className="cell--muted" style={{ fontSize: 12 }}>{calcAge(p.dateOfBirth)} anni</div>
@@ -136,7 +136,7 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
                   </td>
                   <td><span className="mrn-tag">{p.medicalRecordNumber}</span></td>
                   <td className="cell--muted">{new Date(p.dateOfBirth).toLocaleDateString('it-IT')}</td>
-                  <td className="cell--muted">{p.sex ?? '—'}</td>
+                  <td className="cell--muted" style={{ fontSize: 12 }}>—</td>
                   <td className="cell--muted" style={{ fontSize: 12 }}>
                     <div>{p.email ?? '—'}</div>
                     <div>{p.phone ?? '—'}</div>
@@ -161,7 +161,7 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
         <div className="pt-card-list">
           {filtrati.map(p => (
             <div key={p.id} className="pt-list-card" onClick={() => onSelect(p)}>
-              <div className="pt-list-card__avatar op-avatar-sm">{p.firstName[0]}{p.lastName[0]}</div>
+              <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
               <div className="pt-list-card__info">
                 <span className="pt-list-card__name">{p.lastName}, {p.firstName}</span>
                 <span className="pt-list-card__meta">

@@ -369,6 +369,8 @@ export default function App() {
                 className={`nav-rail__item${isActive ? ' active' : ''}`}
                 onClick={() => navigate(item.key)}
                 title={item.label}
+                aria-label={item.label}
+                aria-current={isActive ? 'page' : undefined}
               >
                 <span className="nav-rail__icon">{item.icon}</span>
                 <span className="nav-rail__label">{item.label}</span>
@@ -379,7 +381,7 @@ export default function App() {
         </nav>
 
         <div className="nav-rail__footer">
-          <div className="nav-rail__avatar" title={`${utente.nome} — ${utente.reparto}`}>
+          <div className="nav-rail__avatar" title={`${utente.nome} — ${utente.reparto}`} aria-hidden="true">
             {utente.iniziali}
           </div>
           <button className="nav-rail__logout" onClick={handleLogout} title="Esci">
@@ -431,7 +433,7 @@ export default function App() {
                     <li key={p.id}>
                       <button className="search-modal__result-item"
                         onClick={() => { selectPaziente(p); setSearchOpen(false); setSearchQuery(''); }}>
-                        <span className="op-avatar-sm" style={{ width: 32, height: 32, fontSize: 12 }}>
+                        <span className="op-avatar-sm" style={{ width: 32, height: 32, fontSize: 12 }} aria-hidden="true">
                           {p.firstName[0]}{p.lastName[0]}
                         </span>
                         <div>

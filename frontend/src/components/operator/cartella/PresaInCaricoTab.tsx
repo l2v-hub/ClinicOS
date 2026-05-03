@@ -1,5 +1,22 @@
 import { useState } from 'react';
 import type { CartellaPaziente, PresaInCarico, Paziente } from '../../../types';
+
+type SectionKey = 'ingresso' | 'condizioni' | 'funzionale' | 'documenti';
+const ALL_OPEN: Record<SectionKey, boolean> = { ingresso: true, condizioni: true, funzionale: true, documenti: true };
+
+function AccSection({ title, open, onToggle, children }: {
+  title: string; open: boolean; onToggle: () => void; children: React.ReactNode;
+}) {
+  return (
+    <div className={`pic-acc${open ? ' pic-acc--open' : ''}`}>
+      <button type="button" className="pic-acc__hdr" onClick={onToggle} aria-expanded={open}>
+        <span className="pic-acc__title">{title}</span>
+        <span className="pic-acc__chevron" aria-hidden="true">{open ? '▲' : '▼'}</span>
+      </button>
+      {open && <div className="pic-acc__body">{children}</div>}
+    </div>
+  );
+}
 import { PrintButton, EmptyState, todayStr, nowTime, nowISO } from './shared';
 
 interface Props {
@@ -79,8 +96,10 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
   const pic = cartella.presaInCarico;
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<PresaInCarico>(pic ?? { ...EMPTY, operatore: operatoreNome });
+  const [openSec, setOpenSec] = useState<Record<SectionKey, boolean>>(ALL_OPEN);
 
   function set(f: Partial<PresaInCarico>) { setForm(p => ({ ...p, ...f })); }
+  function toggleSec(k: SectionKey) { setOpenSec(p => ({ ...p, [k]: !p[k] })); }
 
   function handleSave() {
     onUpdate({ presaInCarico: { ...form, compilatoAt: nowISO() } });
@@ -89,6 +108,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
 
   function startEdit() {
     setForm(pic ?? { ...EMPTY, operatore: operatoreNome });
+    setOpenSec(ALL_OPEN);
     setEditing(true);
   }
 
@@ -119,11 +139,9 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       )}
 
       {editing ? (
-        <div className="cr-form-grid">
+        <div className="pic-edit-form">
 
-          {/* Section: Dati di ingresso */}
-          <div className="cr-form-section">
-            <div className="cr-form-section__title">Dati di ingresso</div>
+          <AccSection title="Dati di ingresso" open={openSec.ingresso} onToggle={() => toggleSec('ingresso')}>
             <div className="form-row-2col">
               <div className="form-row">
                 <label className="form-label">Data presa in carico</label>
@@ -167,12 +185,12 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
                 <label className="form-label">Operatore responsabile</label>
                 <input type="text" className="form-input" value={form.operatoreResponsabile ?? ''} onChange={e => set({ operatoreResponsabile: e.target.value })} placeholder="Nome operatore…" />
               </div>
-              <div className="form-row" style={{ display: 'flex', gap: 8 }}>
-                <div style={{ flex: 1 }}>
+              <div className="form-row-2col" style={{ gap: 10 }}>
+                <div className="form-row">
                   <label className="form-label">Camera</label>
                   <input type="text" className="form-input" value={form.camera ?? ''} onChange={e => set({ camera: e.target.value })} placeholder="es. 12" />
                 </div>
-                <div style={{ flex: 1 }}>
+                <div className="form-row">
                   <label className="form-label">Letto / posto</label>
                   <input type="text" className="form-input" value={form.letto ?? ''} onChange={e => set({ letto: e.target.value })} placeholder="es. A" />
                 </div>
@@ -180,13 +198,11 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
             </div>
             <div className="form-row">
               <label className="form-label">Motivo dell'ingresso</label>
-              <textarea className="form-input" rows={3} value={form.motivoIngresso} onChange={e => set({ motivoIngresso: e.target.value })} />
+              <textarea className="form-input" rows={4} value={form.motivoIngresso} onChange={e => set({ motivoIngresso: e.target.value })} placeholder="Descrivere il motivo del ricovero / accesso…" />
             </div>
-          </div>
+          </AccSection>
 
-          {/* Section: Condizioni iniziali */}
-          <div className="cr-form-section">
-            <div className="cr-form-section__title">Condizioni iniziali</div>
+          <AccSection title="Condizioni iniziali" open={openSec.condizioni} onToggle={() => toggleSec('condizioni')}>
             <div className="form-row-2col">
               <div className="form-row">
                 <label className="form-label">Condizioni generali</label>
@@ -209,18 +225,16 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
               </div>
             </div>
             <div className="form-row">
-              <label className="form-label">Condizioni iniziali (descrizione)</label>
-              <textarea className="form-input" rows={3} value={form.condizioniIniziali ?? ''} onChange={e => set({ condizioniIniziali: e.target.value })} placeholder="Descrizione condizioni al momento dell'ingresso…" />
+              <label className="form-label">Descrizione condizioni all'ingresso</label>
+              <textarea className="form-input" rows={4} value={form.condizioniIniziali ?? ''} onChange={e => set({ condizioniIniziali: e.target.value })} placeholder="Descrizione condizioni al momento dell'ingresso…" />
             </div>
             <div className="form-row">
               <label className="form-label">Note iniziali</label>
-              <textarea className="form-input" rows={2} value={form.noteIniziali ?? ''} onChange={e => set({ noteIniziali: e.target.value })} />
+              <textarea className="form-input" rows={3} value={form.noteIniziali ?? ''} onChange={e => set({ noteIniziali: e.target.value })} placeholder="Note aggiuntive sull'accesso…" />
             </div>
-          </div>
+          </AccSection>
 
-          {/* Section: Valutazione funzionale */}
-          <div className="cr-form-section">
-            <div className="cr-form-section__title">Valutazione funzionale</div>
+          <AccSection title="Valutazione funzionale" open={openSec.funzionale} onToggle={() => toggleSec('funzionale')}>
             <div className="form-row-2col">
               <div className="form-row">
                 <label className="form-label">Orientamento</label>
@@ -293,22 +307,20 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
                 </div>
               )}
             </div>
-          </div>
+          </AccSection>
 
-          {/* Section: Documenti */}
-          <div className="cr-form-section">
-            <div className="cr-form-section__title">Documenti e firma</div>
+          <AccSection title="Documenti e firma" open={openSec.documenti} onToggle={() => toggleSec('documenti')}>
             <div className="form-row">
               <label className="form-label">Documenti ricevuti</label>
-              <textarea className="form-input" rows={2} value={form.documentiRicevuti ?? ''} onChange={e => set({ documentiRicevuti: e.target.value })} placeholder="Elenco documenti ricevuti all'ingresso…" />
+              <textarea className="form-input" rows={3} value={form.documentiRicevuti ?? ''} onChange={e => set({ documentiRicevuti: e.target.value })} placeholder="Elenco documenti ricevuti all'ingresso…" />
             </div>
             <div className="form-row">
               <label className="form-label">Documenti mancanti</label>
-              <textarea className="form-input" rows={2} value={form.documentiMancanti ?? ''} onChange={e => set({ documentiMancanti: e.target.value })} placeholder="Documenti da richiedere…" />
+              <textarea className="form-input" rows={3} value={form.documentiMancanti ?? ''} onChange={e => set({ documentiMancanti: e.target.value })} placeholder="Documenti ancora da richiedere…" />
             </div>
             <div className="form-row">
-              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
-                <input type="checkbox" checked={form.materialeConsegnato} onChange={e => set({ materialeConsegnato: e.target.checked })} />
+              <label style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}>
+                <input type="checkbox" style={{ width: 18, height: 18 }} checked={form.materialeConsegnato} onChange={e => set({ materialeConsegnato: e.target.checked })} />
                 <span className="form-label" style={{ margin: 0 }}>Materiale informativo consegnato al paziente / familiare</span>
               </label>
             </div>
@@ -324,13 +336,13 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
             </div>
             <div className="form-row">
               <label className="form-label">Note</label>
-              <textarea className="form-input" rows={3} value={form.note} onChange={e => set({ note: e.target.value })} />
+              <textarea className="form-input" rows={4} value={form.note} onChange={e => set({ note: e.target.value })} placeholder="Note libere…" />
             </div>
-          </div>
+          </AccSection>
 
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}>
-            <button className="btn-secondary btn-sm" onClick={() => setEditing(false)}>Annulla</button>
-            <button className="btn-primary btn-sm" onClick={handleSave}>Salva Presa in Carico</button>
+          <div className="pic-form-actions">
+            <button className="btn-secondary" onClick={() => setEditing(false)}>Annulla</button>
+            <button className="btn-primary" onClick={handleSave}>Salva Presa in Carico</button>
           </div>
         </div>
       ) : pic ? (

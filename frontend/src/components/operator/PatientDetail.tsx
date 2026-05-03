@@ -613,15 +613,21 @@ export function PatientDetail({
 
   function renderAnamnesi() {
     const a = editAnamnesi ? anamnesiForm : cartella.anamnesi;
-    const sections: { key: keyof typeof a; label: string; rows?: number }[] = [
-      { key: 'patologicaProssima', label: 'Anamnesi patologica prossima (motivo ricovero)', rows: 5 },
-      { key: 'patologicaRemota',   label: 'Anamnesi patologica remota', rows: 4 },
-      { key: 'familiare',          label: 'Anamnesi familiare', rows: 3 },
-      { key: 'fisiologica',        label: 'Anamnesi fisiologica', rows: 3 },
-      { key: 'lavorativa',         label: 'Anamnesi lavorativa / sociale', rows: 3 },
-      { key: 'abitudini',          label: 'Abitudini e stile di vita', rows: 3 },
-      { key: 'note',               label: 'Note aggiuntive', rows: 3 },
+
+    type ASection = { key: keyof typeof a; label: string; rows?: number; placeholder?: string };
+    const sections: ASection[] = [
+      { key: 'patologicaProssima', label: 'Anamnesi generale', rows: 5, placeholder: 'Motivo del ricovero, storia recente della malattia…' },
+      { key: 'patologicaRemota',   label: 'Patologie note e interventi pregressi', rows: 4, placeholder: 'Patologie croniche, interventi chirurgici, ricoveri precedenti…' },
+      { key: 'familiare',          label: 'Anamnesi familiare', rows: 3, placeholder: 'Patologie familiari rilevanti…' },
+      { key: 'fisiologica',        label: 'Stato funzionale', rows: 3, placeholder: 'Condizioni basali, autonomia, funzioni vitali di base…' },
+      { key: 'lavorativa',         label: 'Contesto lavorativo e sociale', rows: 3, placeholder: 'Professione, situazione familiare, rete di supporto…' },
+      { key: 'abitudini',          label: 'Abitudini e stile di vita', rows: 3, placeholder: 'Fumo, alcol, attività fisica, alimentazione…' },
+      { key: 'note',               label: 'Note aggiuntive', rows: 3, placeholder: 'Informazioni aggiuntive non categorizzate…' },
     ];
+
+    const hasAllergie = cartella.allergie.length > 0;
+    const allergieGravi = cartella.allergie.filter(al => al.gravita === 'grave');
+
     return (
       <div className="cr-tab-content">
         <div className="cr-section-header">
@@ -643,8 +649,28 @@ export function PatientDetail({
             )}
           </div>
         </div>
+
         <div className="cr-anamnesi-cards">
-          {sections.map(({ key, label, rows = 4 }) => {
+          {/* Allergie — read-only, sempre visibile */}
+          <div className={`cr-anamnesi-card${allergieGravi.length > 0 ? ' cr-anamnesi-card--allergie-grave' : hasAllergie ? ' cr-anamnesi-card--allergie' : ''}`}>
+            <div className="cr-anamnesi-card__label">Allergie</div>
+            {hasAllergie ? (
+              <div className="cr-anamnesi-allergie-list">
+                {cartella.allergie.map((al, i) => (
+                  <div key={i} className="cr-anamnesi-allergia">
+                    <span className="cr-anamnesi-allergia__nome">{al.allergene}</span>
+                    {al.reazione && <span className="cr-anamnesi-allergia__reazione">{al.reazione}</span>}
+                    <span className={`badge ${al.gravita === 'grave' ? 'badge--red' : al.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{al.gravita}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="cr-anamnesi-card__text muted">Nessuna allergia registrata. Gestisci dal tab Diagnosi.</p>
+            )}
+          </div>
+
+          {/* Sezioni anamnesi modificabili */}
+          {sections.map(({ key, label, rows = 4, placeholder }) => {
             const val = String(a[key] ?? '');
             const isEmpty = !val;
             return (
@@ -656,7 +682,7 @@ export function PatientDetail({
                     rows={rows}
                     value={val}
                     onChange={e => setAnamnesiForm(prev => ({ ...prev, [key]: e.target.value }))}
-                    placeholder={`Inserire ${label.toLowerCase()}…`}
+                    placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
                   />
                 ) : (
                   <p className={`cr-anamnesi-card__text${isEmpty ? ' muted' : ''}`}>
@@ -667,6 +693,7 @@ export function PatientDetail({
             );
           })}
         </div>
+
         {cartella.anamnesi.updatedAt && !editAnamnesi && (
           <p className="cr-update-info">Aggiornato: {fmtDateTime(cartella.anamnesi.updatedAt)} — {cartella.anamnesi.operatore}</p>
         )}
