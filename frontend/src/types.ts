@@ -52,6 +52,7 @@ export interface NuovoPaziente {
   address: string;
   referenteNome: string;
   referenteTelefono: string;
+  referenteRelazione: string;
   emergencyContact: string;
   provenienza: 'accesso_diretto' | 'centro_medico' | 'altra_struttura' | 'dimissione_ospedaliera' | 'familiare_caregiver' | '';
   centroInviante: string;
@@ -60,10 +61,12 @@ export interface NuovoPaziente {
   operatoreId: string;
   camera: string;
   letto: string;
+  statoPaziente: 'ricoverato' | 'day_hospital' | 'ambulatoriale' | '';
   notaClinicaIniziale: string;
   noteIniziali: string;
   allergie: string;
   farmaci: string;
+  alertClinici: string;
 }
 
 // ── Operator (mock) ────────────────────────────────────────────────────────────

@@ -275,7 +275,7 @@ export default function App() {
     const cartellaInit: Partial<CartellaPaziente> = {};
     if (np.camera) cartellaInit.cameraNumero = np.camera;
     if (np.letto) cartellaInit.lettoNumero = np.letto;
-    if (np.condizioniIniziali || np.motivoIngresso || np.notaClinicaIniziale || np.allergie || np.farmaci) {
+    if (np.condizioniIniziali || np.motivoIngresso || np.notaClinicaIniziale || np.allergie || np.farmaci || np.alertClinici) {
       cartellaInit.anamnesi = {
         fisiologica: np.condizioniIniziali || '',
         patologicaRemota: '',
@@ -283,7 +283,7 @@ export default function App() {
         familiare: '',
         lavorativa: '',
         abitudini: '',
-        note: [np.notaClinicaIniziale, np.noteIniziali, np.allergie ? `Allergie: ${np.allergie}` : '', np.farmaci ? `Farmaci: ${np.farmaci}` : ''].filter(Boolean).join('\n'),
+        note: [np.alertClinici, np.notaClinicaIniziale, np.noteIniziali, np.allergie ? `Allergie: ${np.allergie}` : '', np.farmaci ? `Farmaci: ${np.farmaci}` : ''].filter(Boolean).join('\n'),
         updatedAt: new Date().toISOString(),
         operatore: np.operatoreId,
       };
