@@ -2985,3 +2985,75 @@
   margin: 0;
   white-space: pre-wrap;
 }
+
+/* ── Phase 3: Diario enhanced ─────────────────────────────────────────────── */
+.diario-entry--urgente .diario-entry__header { border-left: 3px solid var(--red, #DC2626); padding-left: 8px; }
+.diario-entry--alta .diario-entry__header { border-left: 3px solid var(--amber, #D97706); padding-left: 8px; }
+.diario-entry__collegamento { font-size: 11px; color: var(--text-muted); font-style: italic; }
+.diario-entry__prescrizione { margin-top: 6px; padding: 6px 10px; background: #EEF2FF; border-radius: 4px; font-size: 13px; }
+.diario-entry__evoluzione { margin-top: 6px; padding: 6px 10px; background: #F0FDFA; border-radius: 4px; font-size: 13px; }
+.diario-entry__allegati { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.diario-medico-table th, .diario-medico-table td { vertical-align: top; }
+.diario-medico-table td.col-nota { min-width: 220px; }
+.diario-medico-table td.col-prescrizione { min-width: 140px; }
+
+/* ── Phase 3: Parametri mensili grid ──────────────────────────────────────── */
+.parametri-grid-wrapper { overflow-x: auto; }
+.parametri-mensili-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.parametri-mensili-table th {
+  background: #1A3357; color: white; padding: 5px 4px;
+  font-size: 9pt; text-align: center; white-space: nowrap; border: 1px solid #0d1f3a;
+}
+.parametri-mensili-table td {
+  padding: 3px 4px; border: 1px solid #DDE3ED; text-align: center;
+  cursor: pointer; min-width: 52px; font-size: 11px;
+}
+.parametri-mensili-table td:first-child { font-weight: 700; background: #F5F8FB; cursor: default; min-width: 28px; }
+.parametri-mensili-table tr:hover td { background: #EEF2FF; }
+.parametri-mensili-table tr:hover td:first-child { background: #E0E7FF; }
+.parametri-mensili-table td.has-data { background: #DBEAFE; font-weight: 600; }
+.parametri-day-form {
+  background: var(--surface); border: 2px solid var(--blue, #1A56DB);
+  border-radius: var(--radius); padding: 16px; margin: 12px 0;
+}
+.parametri-day-form__title { font-weight: 700; color: var(--blue, #1A56DB); margin-bottom: 12px; font-size: 14px; }
+.parametri-day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+
+/* ── Phase 3: Terapia medica ──────────────────────────────────────────────── */
+.terapia-flags { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; padding: 10px 0; }
+.terapia-flag { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.terapia-flag input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--blue, #1A56DB); cursor: pointer; }
+.terapia-section { margin-bottom: 20px; }
+.terapia-section__header {
+  background: #1A3357; color: white; font-weight: 700; font-size: 12px;
+  padding: 6px 12px; letter-spacing: 1px; border-radius: 4px 4px 0 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.terapia-section__body { border: 1px solid #DDE3ED; border-top: none; border-radius: 0 0 4px 4px; overflow: hidden; }
+.terapia-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 70px 40px 40px 40px 40px 40px 80px auto;
+  gap: 0;
+  border-bottom: 1px solid #F0F4F8;
+  align-items: center;
+  font-size: 12px;
+  min-height: 40px;
+}
+.terapia-row:last-child { border-bottom: none; }
+.terapia-row > * { padding: 6px 8px; border-right: 1px solid #F0F4F8; }
+.terapia-row > *:last-child { border-right: none; }
+.terapia-row--header { background: #F5F8FB; font-weight: 700; font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+.terapia-row--attivo { background: #F0FDF4; }
+.terapia-row--sospeso { background: #FFFBEB; }
+.terapia-row--completato { background: #F9FAFB; opacity: 0.75; }
+.terapia-nome { font-weight: 700; font-size: 13px; }
+.terapia-dose { font-size: 11px; color: var(--text-muted); }
+.terapia-orario { font-weight: 700; color: var(--blue, #1A56DB); text-align: center; font-size: 13px; }
+.terapia-storico { margin-top: 8px; }
+.terapia-storico__toggle { background: none; border: none; cursor: pointer; font-size: 12px; color: var(--text-muted); padding: 4px 0; }
+.terapia-patologia { padding: 8px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; }
+.terapia-info-header { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; }
+.terapia-info-header__row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+.terapia-info-header__field { display: flex; flex-direction: column; gap: 2px; }
+.terapia-info-header__label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.4px; }
+.terapia-info-header__value { font-size: 13px; font-weight: 600; color: var(--text); }

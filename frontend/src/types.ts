@@ -300,6 +300,11 @@ export interface FarmacoItem {
   prescrittoDA: string;
   indicazione?: string;
   note?: string;
+  h08?: string;
+  h12?: string;
+  h16?: string;
+  h18?: string;
+  h20?: string;
 }
 
 export interface AllergiaItem {
@@ -374,6 +379,11 @@ export interface PianoCura {
 
 export interface CartellaPaziente {
   pazienteId: string;
+  parametriMensili?: ParametriMensili[];
+  diabetico?: boolean;
+  ipertensione?: boolean;
+  terapiaTriturata?: boolean;
+  patologiaIngresso?: string;
   // Extended personal info
   indirizzo?: string;
   contattoEmergenzaNome?: string;
@@ -503,6 +513,40 @@ export interface DiarioEntry {
   tipo: TipoDiarioEntry;
   testo: string;
   operatore: string;
+  createdAt: string;
+  // Infermieristico extras
+  priorita?: 'normale' | 'alta' | 'urgente';
+  stato?: 'aperta' | 'in_corso' | 'completata';
+  sigla?: string;
+  collegamento?: string;
+  // Medico extras
+  prescrizione?: string;
+  evoluzione?: string;
+  firmaMedico?: string;
+  allegati?: string;
+}
+
+export interface ParametroGiorno {
+  giorno: number;
+  pa?: string;
+  fc?: string;
+  spo2?: string;
+  temperatura?: string;
+  dtx08?: string;
+  dtx12?: string;
+  dtx18?: string;
+  evacuazione?: string;
+  catetere?: string;
+  firmaIpM?: string;
+  firmaIpP?: string;
+  note?: string;
+}
+
+export interface ParametriMensili {
+  id: string;
+  mese: number;
+  anno: number;
+  giorni: ParametroGiorno[];
   createdAt: string;
 }
 

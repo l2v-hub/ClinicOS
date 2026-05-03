@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import type {
   Paziente, Consegna, Operatore, Camera, CartellaPaziente,
-  Diagnosi, TerapiaItem, FarmacoItem, AllergiaItem, NotaClinica,
-  VisitaRecord, VitaleItem, Intervento, IndicatoreRischio,
+  Diagnosi, NotaClinica,
+  VisitaRecord, IndicatoreRischio,
   PrioritaConsegna,
 } from '../../types';
 import {
@@ -17,8 +17,8 @@ import { MedicazioniTab } from './cartella/MedicazioniTab';
 import { ContenzioniTab } from './cartella/ContenzioniTab';
 import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
-import { ParametriModuloView } from './cartella/ParametriModuloView';
-import { TerapieModuloView } from './cartella/TerapieModuloView';
+import { ParametriTab } from './cartella/ParametriTab';
+import { TerapiaMedicaTab } from './cartella/TerapiaMedicaTab';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -67,17 +67,11 @@ function uid(): string { return crypto.randomUUID(); }
 function nowISO(): string { return new Date().toISOString(); }
 function todayStr(): string { return new Date().toISOString().slice(0, 10); }
 
-const GRAVITA_CLASS: Record<string, string> = {
-  grave: 'badge--red', moderata: 'badge--amber', lieve: 'badge--gray',
-};
 const RISCHIO_CLASS: Record<string, string> = {
   critico: 'badge--red', alto: 'badge--amber', medio: 'badge--blue', basso: 'badge--gray',
 };
 const STATO_DIAG_CLASS: Record<string, string> = {
   attiva: 'badge--blue', risolta: 'badge--green', monitoraggio: 'badge--amber', sospetta: 'badge--gray',
-};
-const STATO_FARMACO_CLASS: Record<string, string> = {
-  attivo: 'badge--green', sospeso: 'badge--amber', completato: 'badge--gray',
 };
 const STATO_VITALE_CLASS: Record<string, string> = {
   normale: 'vital-card--normale', attenzione: 'vital-card--attenzione', critico: 'vital-card--critico',
@@ -157,21 +151,6 @@ export function PatientDetail({
   const [editRiskId, setEditRiskId] = useState<string | null>(null);
   const [riskForm, setRiskForm] = useState<Partial<IndicatoreRischio>>({});
 
-  // Terapie
-  const [showAddTer, setShowAddTer] = useState(false);
-  const [editTerId, setEditTerId] = useState<string | null>(null);
-  const [terForm, setTerForm] = useState<Partial<TerapiaItem>>({});
-
-  // Farmaci
-  const [showAddFarm, setShowAddFarm] = useState(false);
-  const [editFarmId, setEditFarmId] = useState<string | null>(null);
-  const [farmForm, setFarmForm] = useState<Partial<FarmacoItem>>({});
-
-  // Allergie
-  const [showAddAll, setShowAddAll] = useState(false);
-  const [editAllId, setEditAllId] = useState<string | null>(null);
-  const [allForm, setAllForm] = useState<Partial<AllergiaItem>>({});
-
   // Note cliniche
   const [showAddNota, setShowAddNota] = useState(false);
   const [editNotaId, setEditNotaId] = useState<string | null>(null);
@@ -181,23 +160,6 @@ export function PatientDetail({
   const [showAddVisita, setShowAddVisita] = useState(false);
   const [editVisitaId, setEditVisitaId] = useState<string | null>(null);
   const [visitaForm, setVisitaForm] = useState<Partial<VisitaRecord>>({});
-
-  // Vitali
-  const [showAddVitale, setShowAddVitale] = useState(false);
-  const [vitaleForm, setVitaleForm] = useState<Partial<VitaleItem>>({});
-
-  // Interventi
-  const [showAddInt, setShowAddInt] = useState(false);
-  const [editIntId, setEditIntId] = useState<string | null>(null);
-  const [intForm, setIntForm] = useState<Partial<Intervento>>({});
-
-  // Piano cura
-  const [editPiano, setEditPiano] = useState(false);
-  const [pianoForm, setPianoForm] = useState(cartella.pianoCura);
-
-  // Modulo views
-  const [moduloParametri, setModuloParametri] = useState(false);
-  const [moduloTerapie, setModuloTerapie] = useState(false);
 
   // Consegne
   const [showAddConsegna, setShowAddConsegna] = useState(false);
@@ -244,45 +206,6 @@ export function PatientDetail({
   }
   function deleteRischio(id: string) { saveRischi(cartella.indicatoriRischio.filter(r => r.id !== id)); }
 
-  // Terapie
-  function saveTerapie(list: TerapiaItem[]) { upd({ terapie: list }); }
-  function addTerapia() {
-    if (!terForm.descrizione) return;
-    saveTerapie([{ id: uid(), tipo: 'altra', descrizione: '', dataInizio: todayStr(), stato: 'attiva', operatore: operatoreNome, note: '', createdAt: nowISO(), ...terForm } as TerapiaItem, ...cartella.terapie]);
-    setShowAddTer(false); setTerForm({});
-  }
-  function updateTerapia(id: string) {
-    saveTerapie(cartella.terapie.map(t => t.id === id ? { ...t, ...terForm } : t));
-    setEditTerId(null); setTerForm({});
-  }
-  function deleteTerapia(id: string) { saveTerapie(cartella.terapie.filter(t => t.id !== id)); }
-
-  // Farmaci
-  function saveFarmaci(list: FarmacoItem[]) { upd({ farmaci: list }); }
-  function addFarmaco() {
-    if (!farmForm.nome) return;
-    saveFarmaci([{ id: uid(), nome: '', dose: '', frequenza: '', inizio: todayStr(), stato: 'attivo', prescrittoDA: operatoreNome, ...farmForm } as FarmacoItem, ...cartella.farmaci]);
-    setShowAddFarm(false); setFarmForm({});
-  }
-  function updateFarmaco(id: string) {
-    saveFarmaci(cartella.farmaci.map(f => f.id === id ? { ...f, ...farmForm } : f));
-    setEditFarmId(null); setFarmForm({});
-  }
-  function deleteFarmaco(id: string) { saveFarmaci(cartella.farmaci.filter(f => f.id !== id)); }
-
-  // Allergie
-  function saveAllergie(list: AllergiaItem[]) { upd({ allergie: list }); }
-  function addAllergia() {
-    if (!allForm.allergene) return;
-    saveAllergie([{ id: uid(), allergene: '', reazione: '', gravita: 'lieve', documentato: todayStr(), documentatoDa: operatoreNome, ...allForm } as AllergiaItem, ...cartella.allergie]);
-    setShowAddAll(false); setAllForm({});
-  }
-  function updateAllergia(id: string) {
-    saveAllergie(cartella.allergie.map(a => a.id === id ? { ...a, ...allForm } : a));
-    setEditAllId(null); setAllForm({});
-  }
-  function deleteAllergia(id: string) { saveAllergie(cartella.allergie.filter(a => a.id !== id)); }
-
   // Note cliniche
   function saveNoteClinica(list: NotaClinica[]) { upd({ noteClinica: list }); }
   function addNota() {
@@ -308,33 +231,6 @@ export function PatientDetail({
     setEditVisitaId(null); setVisitaForm({});
   }
   function deleteVisita(id: string) { saveVisite(cartella.visite.filter(v => v.id !== id)); }
-
-  // Vitali
-  function addVitale() {
-    if (!vitaleForm.etichetta || !vitaleForm.valore) return;
-    const newV: VitaleItem = { id: uid(), etichetta: '', valore: '', unita: '', stato: 'normale', rilevato: todayStr(), rilevatoDa: operatoreNome, ...vitaleForm } as VitaleItem;
-    upd({ parametriVitali: [newV, ...cartella.parametriVitali] });
-    setShowAddVitale(false); setVitaleForm({});
-  }
-
-  // Interventi
-  function saveInterventi(list: Intervento[]) { upd({ interventi: list }); }
-  function addIntervento() {
-    if (!intForm.descrizione) return;
-    saveInterventi([{ id: uid(), tipo: 'Procedura', data: todayStr(), operatore: operatoreNome, descrizione: '', esito: '', note: '', createdAt: nowISO(), ...intForm } as Intervento, ...cartella.interventi]);
-    setShowAddInt(false); setIntForm({});
-  }
-  function updateIntervento(id: string) {
-    saveInterventi(cartella.interventi.map(i => i.id === id ? { ...i, ...intForm } : i));
-    setEditIntId(null); setIntForm({});
-  }
-  function deleteIntervento(id: string) { saveInterventi(cartella.interventi.filter(i => i.id !== id)); }
-
-  // Piano cura
-  function savePiano() {
-    upd({ pianoCura: { ...pianoForm, dataAggiornamento: todayStr(), operatore: operatoreNome } });
-    setEditPiano(false);
-  }
 
   // Profilo
   function saveProfiloHandler() {
@@ -825,187 +721,7 @@ export function PatientDetail({
     );
   }
 
-  function renderTerapie() {
-    return (
-      <div className={`cr-tab-content${moduloTerapie ? ' mode-modulo' : ''}`}>
-        {/* Modulo view */}
-        <div className="modulo-content">
-          <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
-            <button className="btn-secondary btn-sm" onClick={() => setModuloTerapie(false)}>← Vista operativa</button>
-            <button className="btn-secondary btn-sm" onClick={() => window.print()}>🖨️ Stampa</button>
-          </div>
-          <TerapieModuloView cartella={cartella} paziente={paziente} />
-        </div>
-        {/* Web view */}
-        <div className="web-content">
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
-          <button className="btn-secondary btn-sm" onClick={() => setModuloTerapie(true)} title="Vista modulo cartaceo">📋 Vista modulo</button>
-        </div>
-        {/* Terapie */}
-        <SectionHeader title="Terapie e Trattamenti" onAdd={() => { setTerForm({}); setShowAddTer(true); }} />
-        {showAddTer && (
-          <InlineForm onSave={addTerapia} onCancel={() => { setShowAddTer(false); setTerForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field"><label className="form-label">Tipo</label>
-                <select className="form-select" value={terForm.tipo ?? 'altra'} onChange={e => setTerForm(p => ({ ...p, tipo: e.target.value as TerapiaItem['tipo'] }))}>
-                  <option value="farmacologica">Farmacologica</option><option value="chirurgica">Chirurgica</option>
-                  <option value="riabilitativa">Riabilitativa</option><option value="palliativa">Palliativa</option><option value="altra">Altra</option>
-                </select></div>
-              <div className="form-field"><label className="form-label">Stato</label>
-                <select className="form-select" value={terForm.stato ?? 'attiva'} onChange={e => setTerForm(p => ({ ...p, stato: e.target.value as TerapiaItem['stato'] }))}>
-                  <option value="attiva">Attiva</option><option value="completata">Completata</option><option value="sospesa">Sospesa</option>
-                </select></div>
-              <div className="form-field"><label className="form-label">Data inizio</label>
-                <input className="form-input" type="date" value={terForm.dataInizio ?? todayStr()} onChange={e => setTerForm(p => ({ ...p, dataInizio: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Data fine</label>
-                <input className="form-input" type="date" value={terForm.dataFine ?? ''} onChange={e => setTerForm(p => ({ ...p, dataFine: e.target.value }))} /></div>
-            </div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione *</label>
-              <input className="form-input" value={terForm.descrizione ?? ''} onChange={e => setTerForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Note</label>
-              <textarea className="form-input" rows={2} value={terForm.note ?? ''} onChange={e => setTerForm(p => ({ ...p, note: e.target.value }))} /></div>
-          </InlineForm>
-        )}
-        <div className="cr-list">
-          {cartella.terapie.length === 0 && <p className="cr-empty">Nessuna terapia registrata.</p>}
-          {cartella.terapie.map(t => editTerId === t.id ? (
-            <InlineForm key={t.id} onSave={() => updateTerapia(t.id)} onCancel={() => { setEditTerId(null); setTerForm({}); }}>
-              <div className="op-form-grid">
-                <div className="form-field"><label className="form-label">Tipo</label>
-                  <select className="form-select" value={terForm.tipo ?? t.tipo} onChange={e => setTerForm(p => ({ ...p, tipo: e.target.value as TerapiaItem['tipo'] }))}>
-                    <option value="farmacologica">Farmacologica</option><option value="chirurgica">Chirurgica</option>
-                    <option value="riabilitativa">Riabilitativa</option><option value="palliativa">Palliativa</option><option value="altra">Altra</option>
-                  </select></div>
-                <div className="form-field"><label className="form-label">Stato</label>
-                  <select className="form-select" value={terForm.stato ?? t.stato} onChange={e => setTerForm(p => ({ ...p, stato: e.target.value as TerapiaItem['stato'] }))}>
-                    <option value="attiva">Attiva</option><option value="completata">Completata</option><option value="sospesa">Sospesa</option>
-                  </select></div>
-              </div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione</label>
-                <input className="form-input" value={terForm.descrizione ?? t.descrizione} onChange={e => setTerForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Note</label>
-                <textarea className="form-input" rows={2} value={terForm.note ?? t.note} onChange={e => setTerForm(p => ({ ...p, note: e.target.value }))} /></div>
-            </InlineForm>
-          ) : (
-            <ItemRow key={t.id} onEdit={() => { setEditTerId(t.id); setTerForm({ ...t }); }} onDelete={() => deleteTerapia(t.id)}>
-              <div className="cr-terapia-row">
-                <div className="cr-terapia-main">
-                  <span className="badge badge--gray">{t.tipo}</span>
-                  <span className="cr-terapia-desc">{t.descrizione}</span>
-                  <span className={`badge ${t.stato === 'attiva' ? 'badge--green' : t.stato === 'sospesa' ? 'badge--amber' : 'badge--gray'}`}>{t.stato}</span>
-                </div>
-                {t.note && <p className="cr-diag-note">{t.note}</p>}
-                <span className="cr-diag-meta">{fmtDate(t.dataInizio)}{t.dataFine ? ` → ${fmtDate(t.dataFine)}` : ''} · {t.operatore}</span>
-              </div>
-            </ItemRow>
-          ))}
-        </div>
-
-        {/* Farmaci */}
-        <SectionHeader title="Farmaci" onAdd={() => { setFarmForm({}); setShowAddFarm(true); }} />
-        {showAddFarm && (
-          <InlineForm onSave={addFarmaco} onCancel={() => { setShowAddFarm(false); setFarmForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field"><label className="form-label">Nome *</label>
-                <input className="form-input" value={farmForm.nome ?? ''} onChange={e => setFarmForm(p => ({ ...p, nome: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Dose</label>
-                <input className="form-input" value={farmForm.dose ?? ''} placeholder="50 mg" onChange={e => setFarmForm(p => ({ ...p, dose: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Frequenza</label>
-                <input className="form-input" value={farmForm.frequenza ?? ''} placeholder="1×/die" onChange={e => setFarmForm(p => ({ ...p, frequenza: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Via</label>
-                <input className="form-input" value={farmForm.via ?? ''} placeholder="orale, ev…" onChange={e => setFarmForm(p => ({ ...p, via: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Stato</label>
-                <select className="form-select" value={farmForm.stato ?? 'attivo'} onChange={e => setFarmForm(p => ({ ...p, stato: e.target.value as FarmacoItem['stato'] }))}>
-                  <option value="attivo">Attivo</option><option value="sospeso">Sospeso</option><option value="completato">Completato</option>
-                </select></div>
-              <div className="form-field"><label className="form-label">Data inizio</label>
-                <input className="form-input" type="date" value={farmForm.inizio ?? todayStr()} onChange={e => setFarmForm(p => ({ ...p, inizio: e.target.value }))} /></div>
-            </div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Indicazione</label>
-              <input className="form-input" value={farmForm.indicazione ?? ''} onChange={e => setFarmForm(p => ({ ...p, indicazione: e.target.value }))} /></div>
-          </InlineForm>
-        )}
-        <div className="cr-list">
-          {cartella.farmaci.length === 0 && <p className="cr-empty">Nessun farmaco registrato.</p>}
-          {cartella.farmaci.map(f => editFarmId === f.id ? (
-            <InlineForm key={f.id} onSave={() => updateFarmaco(f.id)} onCancel={() => { setEditFarmId(null); setFarmForm({}); }}>
-              <div className="op-form-grid">
-                <div className="form-field"><label className="form-label">Nome</label><input className="form-input" value={farmForm.nome ?? f.nome} onChange={e => setFarmForm(p => ({ ...p, nome: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Dose</label><input className="form-input" value={farmForm.dose ?? f.dose} onChange={e => setFarmForm(p => ({ ...p, dose: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Frequenza</label><input className="form-input" value={farmForm.frequenza ?? f.frequenza} onChange={e => setFarmForm(p => ({ ...p, frequenza: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Stato</label>
-                  <select className="form-select" value={farmForm.stato ?? f.stato} onChange={e => setFarmForm(p => ({ ...p, stato: e.target.value as FarmacoItem['stato'] }))}>
-                    <option value="attivo">Attivo</option><option value="sospeso">Sospeso</option><option value="completato">Completato</option>
-                  </select></div>
-                <div className="form-field"><label className="form-label">Fine</label><input className="form-input" type="date" value={farmForm.fine ?? ''} onChange={e => setFarmForm(p => ({ ...p, fine: e.target.value }))} /></div>
-              </div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Note</label>
-                <input className="form-input" value={farmForm.note ?? ''} onChange={e => setFarmForm(p => ({ ...p, note: e.target.value }))} /></div>
-            </InlineForm>
-          ) : (
-            <ItemRow key={f.id} onEdit={() => { setEditFarmId(f.id); setFarmForm({ ...f }); }} onDelete={() => deleteFarmaco(f.id)}>
-              <div className="cr-farmaco-row">
-                <div className="cr-farmaco-main">
-                  <span className="cr-farmaco-nome">{f.nome}</span>
-                  <span className="cr-farmaco-dose">{f.dose}</span>
-                  <span className="cr-farmaco-freq">{f.frequenza}</span>
-                  {f.via && <span className="cr-farmaco-via">{f.via}</span>}
-                  <span className={`badge ${STATO_FARMACO_CLASS[f.stato]}`}>{f.stato}</span>
-                </div>
-                {f.indicazione && <p className="cr-diag-note">{f.indicazione}</p>}
-                <span className="cr-diag-meta">Dal {fmtDate(f.inizio)}{f.fine ? ` al ${fmtDate(f.fine)}` : ''} · {f.prescrittoDA}</span>
-              </div>
-            </ItemRow>
-          ))}
-        </div>
-
-        {/* Allergie */}
-        <SectionHeader title="Allergie" onAdd={() => { setAllForm({}); setShowAddAll(true); }} />
-        {showAddAll && (
-          <InlineForm onSave={addAllergia} onCancel={() => { setShowAddAll(false); setAllForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field"><label className="form-label">Allergene *</label>
-                <input className="form-input" value={allForm.allergene ?? ''} onChange={e => setAllForm(p => ({ ...p, allergene: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Reazione</label>
-                <input className="form-input" value={allForm.reazione ?? ''} onChange={e => setAllForm(p => ({ ...p, reazione: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Gravità</label>
-                <select className="form-select" value={allForm.gravita ?? 'lieve'} onChange={e => setAllForm(p => ({ ...p, gravita: e.target.value as AllergiaItem['gravita'] }))}>
-                  <option value="lieve">Lieve</option><option value="moderata">Moderata</option><option value="grave">Grave</option>
-                </select></div>
-            </div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Note</label>
-              <input className="form-input" value={allForm.note ?? ''} onChange={e => setAllForm(p => ({ ...p, note: e.target.value }))} /></div>
-          </InlineForm>
-        )}
-        <div className="cr-list">
-          {cartella.allergie.length === 0 && <p className="cr-empty">Nessuna allergia registrata.</p>}
-          {cartella.allergie.map(a => editAllId === a.id ? (
-            <InlineForm key={a.id} onSave={() => updateAllergia(a.id)} onCancel={() => { setEditAllId(null); setAllForm({}); }}>
-              <div className="op-form-grid">
-                <div className="form-field"><label className="form-label">Allergene</label><input className="form-input" value={allForm.allergene ?? a.allergene} onChange={e => setAllForm(p => ({ ...p, allergene: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Reazione</label><input className="form-input" value={allForm.reazione ?? a.reazione} onChange={e => setAllForm(p => ({ ...p, reazione: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Gravità</label>
-                  <select className="form-select" value={allForm.gravita ?? a.gravita} onChange={e => setAllForm(p => ({ ...p, gravita: e.target.value as AllergiaItem['gravita'] }))}>
-                    <option value="lieve">Lieve</option><option value="moderata">Moderata</option><option value="grave">Grave</option>
-                  </select></div>
-              </div>
-            </InlineForm>
-          ) : (
-            <ItemRow key={a.id} onEdit={() => { setEditAllId(a.id); setAllForm({ ...a }); }} onDelete={() => deleteAllergia(a.id)}>
-              <div className="cr-allergia-row">
-                <span className={`badge ${GRAVITA_CLASS[a.gravita]}`}>{a.gravita}</span>
-                <span className="cr-allergia-nome">{a.allergene}</span>
-                <span className="cr-allergia-reaz">{a.reazione}</span>
-                {a.note && <span className="cr-diag-note">{a.note}</span>}
-                <span className="cr-diag-meta">Doc. {fmtDate(a.documentato)} · {a.documentatoDa}</span>
-              </div>
-            </ItemRow>
-          ))}
-        </div>
-        </div>{/* /web-content */}
-      </div>
-    );
-  }
+  // renderTerapie replaced by TerapiaMedicaTab component
 
   function renderNote() {
     return (
@@ -1105,123 +821,7 @@ export function PatientDetail({
     );
   }
 
-  function renderParametri() {
-    return (
-      <div className={`cr-tab-content${moduloParametri ? ' mode-modulo' : ''}`}>
-        {/* Modulo view */}
-        <div className="modulo-content">
-          <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
-            <button className="btn-secondary btn-sm" onClick={() => setModuloParametri(false)}>← Vista operativa</button>
-            <button className="btn-secondary btn-sm" onClick={() => window.print()}>🖨️ Stampa</button>
-          </div>
-          <ParametriModuloView cartella={cartella} paziente={paziente} />
-        </div>
-        {/* Web view */}
-        <div className="web-content">
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
-          <button className="btn-secondary btn-sm" onClick={() => setModuloParametri(true)} title="Vista modulo cartaceo">📋 Vista modulo</button>
-        </div>
-        {/* Add vital */}
-        <SectionHeader title="Parametri Vitali" onAdd={() => { setVitaleForm({}); setShowAddVitale(true); }} />
-        {showAddVitale && (
-          <InlineForm onSave={addVitale} onCancel={() => { setShowAddVitale(false); setVitaleForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field"><label className="form-label">Parametro *</label>
-                <input className="form-input" value={vitaleForm.etichetta ?? ''} placeholder="Pressione Arteriosa" onChange={e => setVitaleForm(p => ({ ...p, etichetta: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Valore *</label>
-                <input className="form-input" value={vitaleForm.valore ?? ''} placeholder="120/80" onChange={e => setVitaleForm(p => ({ ...p, valore: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Unità</label>
-                <input className="form-input" value={vitaleForm.unita ?? ''} placeholder="mmHg" onChange={e => setVitaleForm(p => ({ ...p, unita: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Stato</label>
-                <select className="form-select" value={vitaleForm.stato ?? 'normale'} onChange={e => setVitaleForm(p => ({ ...p, stato: e.target.value as VitaleItem['stato'] }))}>
-                  <option value="normale">Normale</option><option value="attenzione">Attenzione</option><option value="critico">Critico</option>
-                </select></div>
-              <div className="form-field"><label className="form-label">Data</label>
-                <input className="form-input" type="date" value={vitaleForm.rilevato ?? todayStr()} onChange={e => setVitaleForm(p => ({ ...p, rilevato: e.target.value }))} /></div>
-            </div>
-          </InlineForm>
-        )}
-        <div className="vitals-grid">
-          {cartella.parametriVitali.length === 0 && <p className="cr-empty">Nessun parametro vitale.</p>}
-          {cartella.parametriVitali.map(v => (
-            <div key={v.id} className={`vital-card ${STATO_VITALE_CLASS[v.stato]}`}>
-              <span className="vital-label">{v.etichetta}</span>
-              <span className="vital-value">{v.valore} <span className="vital-unit">{v.unita}</span></span>
-              <span className="vital-date">{fmtDate(v.rilevato)} · {v.rilevatoDa}</span>
-              {v.note && <span className="vital-date">{v.note}</span>}
-            </div>
-          ))}
-        </div>
-
-        {/* Piano di cura */}
-        <SectionHeader title="Piano di Cura"
-          onAdd={editPiano ? undefined : () => { setPianoForm({ ...cartella.pianoCura }); setEditPiano(true); }}
-          addLabel="Modifica"
-        />
-        {editPiano ? (
-          <InlineForm onSave={savePiano} onCancel={() => setEditPiano(false)}>
-            <div className="form-field"><label className="form-label">Obiettivi</label>
-              <textarea className="form-input" rows={3} value={pianoForm.obiettivi ?? ''} onChange={e => setPianoForm(p => ({ ...p, obiettivi: e.target.value }))} /></div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Interventi previsti</label>
-              <textarea className="form-input" rows={3} value={pianoForm.interventiPrevisti ?? ''} onChange={e => setPianoForm(p => ({ ...p, interventiPrevisti: e.target.value }))} /></div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Note pianificazione</label>
-              <textarea className="form-input" rows={2} value={pianoForm.notePianificazione ?? ''} onChange={e => setPianoForm(p => ({ ...p, notePianificazione: e.target.value }))} /></div>
-          </InlineForm>
-        ) : (
-          <div className="cr-piano-view">
-            <div className="cr-piano-section"><span className="cr-piano-label">Obiettivi</span><p>{cartella.pianoCura.obiettivi || '—'}</p></div>
-            <div className="cr-piano-section"><span className="cr-piano-label">Interventi previsti</span><p>{cartella.pianoCura.interventiPrevisti || '—'}</p></div>
-            {cartella.pianoCura.notePianificazione && <div className="cr-piano-section"><span className="cr-piano-label">Note</span><p>{cartella.pianoCura.notePianificazione}</p></div>}
-            {cartella.pianoCura.dataAggiornamento && <p className="cr-update-info">Aggiornato: {fmtDate(cartella.pianoCura.dataAggiornamento)} · {cartella.pianoCura.operatore}</p>}
-          </div>
-        )}
-
-        {/* Interventi */}
-        <SectionHeader title="Storico Interventi" onAdd={() => { setIntForm({}); setShowAddInt(true); }} />
-        {showAddInt && (
-          <InlineForm onSave={addIntervento} onCancel={() => { setShowAddInt(false); setIntForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field"><label className="form-label">Tipo</label>
-                <input className="form-input" value={intForm.tipo ?? ''} placeholder="Ecografia, Biopsia…" onChange={e => setIntForm(p => ({ ...p, tipo: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Data</label>
-                <input className="form-input" type="date" value={intForm.data ?? todayStr()} onChange={e => setIntForm(p => ({ ...p, data: e.target.value }))} /></div>
-            </div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione *</label>
-              <textarea className="form-input" rows={3} value={intForm.descrizione ?? ''} onChange={e => setIntForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Esito</label>
-              <textarea className="form-input" rows={2} value={intForm.esito ?? ''} onChange={e => setIntForm(p => ({ ...p, esito: e.target.value }))} /></div>
-          </InlineForm>
-        )}
-        <div className="cr-list">
-          {cartella.interventi.length === 0 && <p className="cr-empty">Nessun intervento registrato.</p>}
-          {cartella.interventi.map(i => editIntId === i.id ? (
-            <InlineForm key={i.id} onSave={() => updateIntervento(i.id)} onCancel={() => { setEditIntId(null); setIntForm({}); }}>
-              <div className="op-form-grid">
-                <div className="form-field"><label className="form-label">Tipo</label><input className="form-input" value={intForm.tipo ?? i.tipo} onChange={e => setIntForm(p => ({ ...p, tipo: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Data</label><input className="form-input" type="date" value={intForm.data ?? i.data} onChange={e => setIntForm(p => ({ ...p, data: e.target.value }))} /></div>
-              </div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione</label>
-                <textarea className="form-input" rows={3} value={intForm.descrizione ?? i.descrizione} onChange={e => setIntForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Esito</label>
-                <textarea className="form-input" rows={2} value={intForm.esito ?? i.esito} onChange={e => setIntForm(p => ({ ...p, esito: e.target.value }))} /></div>
-            </InlineForm>
-          ) : (
-            <ItemRow key={i.id} onEdit={() => { setEditIntId(i.id); setIntForm({ ...i }); }} onDelete={() => deleteIntervento(i.id)}>
-              <div className="cr-visita-row">
-                <div className="cr-visita-header">
-                  <span className="cr-visita-tipo">{i.tipo}</span>
-                  <span className="cr-diag-meta">{fmtDate(i.data)} · {i.operatore}</span>
-                </div>
-                <p className="cr-nota-text">{i.descrizione}</p>
-                {i.esito && <p className="cr-visita-esito">{i.esito}</p>}
-              </div>
-            </ItemRow>
-          ))}
-        </div>
-        </div>{/* /web-content */}
-      </div>
-    );
-  }
+  // renderParametri replaced by ParametriTab component
 
   function renderConsegne() {
     return (
@@ -1352,9 +952,13 @@ export function PatientDetail({
       {tab === 'profilo'         && renderProfilo()}
       {tab === 'anamnesi'        && renderAnamnesi()}
       {tab === 'diagnosi'        && renderDiagnosi()}
-      {tab === 'terapie'         && renderTerapie()}
+      {tab === 'terapie'         && (
+        <TerapiaMedicaTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
       {tab === 'note'            && renderNote()}
-      {tab === 'parametri'       && renderParametri()}
+      {tab === 'parametri'       && (
+        <ParametriTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
       {tab === 'consegne'        && renderConsegne()}
       {tab === 'presa-in-carico' && (
         <PresaInCaricoTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
