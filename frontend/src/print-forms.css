@@ -414,8 +414,16 @@
 .diario-modulo-table tr.empty-row td { height: 48px; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   PARAMETRI VITALI — griglia mensile
+   PARAMETRI VITALI — griglia mensile (A4 landscape)
 ═══════════════════════════════════════════════════════════════════════════ */
+
+.fm--landscape {
+  max-width: 1060px;
+}
+
+.parametri-modulo-wrap {
+  overflow-x: auto;
+}
 
 .parametri-modulo-table {
   width: 100%;
@@ -428,23 +436,40 @@
   padding: 2px 3px;
   text-align: center;
   vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .parametri-modulo-table th {
   background: #d0d0d0;
   font-size: 7.5pt;
   font-weight: 700;
-}
-.parametri-modulo-table th.hdr-firma {
-  background: #1A3357;
-  color: white;
+  line-height: 1.2;
 }
 .parametri-modulo-table td.col-day {
   background: #f0f0f0;
   font-weight: 700;
-  width: 22px;
+  font-size: 8pt;
 }
-.parametri-modulo-table td { min-height: 18px; height: 18px; }
-.parametri-modulo-table td.has-value { font-weight: 600; background: #f0f8ff; }
+.parametri-modulo-table td { height: 17px; }
+.parametri-modulo-table tbody tr:nth-child(even) td { background: #f9f9f9; }
+.parametri-modulo-table tbody tr:nth-child(even) td.col-day { background: #e8e8e8; }
+.parametri-modulo-table td.has-value { font-weight: 600; background: #eef5ff; }
+
+@media print {
+  .parametri-modulo-wrap {
+    overflow-x: visible;
+  }
+  .fm--landscape {
+    max-width: 100%;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  @page {
+    size: A4 landscape;
+    margin: 10mm 12mm;
+  }
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    TERAPIA MEDICA — griglia oraria
