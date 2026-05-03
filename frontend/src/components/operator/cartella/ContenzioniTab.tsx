@@ -60,7 +60,7 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
 
   return (
     <div className="fm contenzione-modulo">
-      <div className="fm-title">Consenso informato contenzione meccanica parziale</div>
+      <div className="fm-title">Consenso informato contenzione/protezione</div>
 
       <div className="fm-patient-header cols-4">
         <div className="fm-patient-field" style={{ gridColumn: '1 / 3' }}>
@@ -100,7 +100,7 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
 
       {/* Protezione — Sponde */}
       <div className="fm-cb-section" style={{ border: '1px solid #999', padding: '6px 10px', marginBottom: 8 }}>
-        <div className="fm-cb-section__title" style={{ fontWeight: 700, textDecoration: 'underline', marginBottom: 6, fontSize: '9pt' }}>Tipologia e modalità mezzo di protezione prescritto</div>
+        <div className="fm-cb-section__title" style={{ fontWeight: 700, textDecoration: 'underline', marginBottom: 6, fontSize: '9pt' }}>Mezzo di protezione prescritto</div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <span style={{ fontWeight: 700, fontSize: '9pt', minWidth: 120 }}>Sponde al letto</span>
           {FREQ_OPTIONS.map(f => (
@@ -111,23 +111,19 @@ function ContenzioneModulo({ c, paziente }: { c: Contenzione | null; paziente: P
 
       {/* Contenzione — tipologie */}
       <div className="fm-cb-section" style={{ border: '1px solid #999', padding: '6px 10px', marginBottom: 8 }}>
-        <div className="fm-cb-section__title" style={{ fontWeight: 700, textDecoration: 'underline', marginBottom: 6, fontSize: '9pt' }}>Tipologia e modalità mezzo di contenzione prescritto</div>
+        <div className="fm-cb-section__title" style={{ fontWeight: 700, textDecoration: 'underline', marginBottom: 6, fontSize: '9pt' }}>Mezzo di contenzione prescritto</div>
         {([
-          { label: 'Cintura — Carrozzina', active: c?.cinturaCarrozzina ?? false, freq: c?.cinturaCarrozzinaFreq },
-          { label: 'Cintura — Poltrona', active: c?.cinturaPoltrona ?? false, freq: c?.cinturaPoltronaFreq },
-          { label: 'Cintura — Sedia', active: c?.cinturaSedia ?? false, freq: c?.cinturaSediaFreq },
-          { label: 'Cintura — Letto', active: c?.cinturaLetto ?? false, freq: c?.cinturaLettoFreq },
-          { label: 'Carrozzina con tavolino', active: c?.carrozzinaConTavolino ?? false, freq: undefined },
-          { label: 'Polsino al polso', active: c?.tipo === 'polsino', freq: undefined },
-          { label: 'Guanto protettivo', active: c?.tipo === 'guanto', freq: undefined },
-        ] as { label: string; active: boolean; freq?: FrequenzaContenzione }[]).map(({ label, active, freq }) => (
+          { label: 'Cintura carrozzina', active: c?.cinturaCarrozzina ?? false, freq: c?.cinturaCarrozzinaFreq ?? 'sempre' as FrequenzaContenzione },
+          { label: 'Cintura poltrona', active: c?.cinturaPoltrona ?? false, freq: c?.cinturaPoltronaFreq ?? 'sempre' as FrequenzaContenzione },
+          { label: 'Cintura sedia', active: c?.cinturaSedia ?? false, freq: c?.cinturaSediaFreq ?? 'sempre' as FrequenzaContenzione },
+          { label: 'Cintura letto', active: c?.cinturaLetto ?? false, freq: c?.cinturaLettoFreq ?? 'sempre' as FrequenzaContenzione },
+          { label: 'Carrozzina con tavolino', active: c?.carrozzinaConTavolino ?? false, freq: 'sempre' as FrequenzaContenzione },
+        ] as { label: string; active: boolean; freq: FrequenzaContenzione }[]).map(({ label, active, freq }) => (
           <div key={label} style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 4, flexWrap: 'wrap' }}>
             <span style={{ fontWeight: 600, fontSize: '9pt', minWidth: 160 }}>{label}</span>
-            {freq !== undefined ? FREQ_OPTIONS.map(f => (
+            {FREQ_OPTIONS.map(f => (
               <Cb key={f} checked={active && freq === f} label={FREQ_LABEL[f]} />
-            )) : (
-              <Cb checked={active} label="attivo" />
-            )}
+            ))}
           </div>
         ))}
         {c?.altriPresidi && (
