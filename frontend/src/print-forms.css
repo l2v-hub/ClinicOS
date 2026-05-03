@@ -1,0 +1,661 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CLINICOS — Print / Modulo Forms CSS
+   Stile modulo sanitario cartaceo italiano, A4-compatibile
+   Usato sia per @media print sia per modalità "Vista modulo" a schermo
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Toggle logic ─────────────────────────────────────────────────────────── */
+
+.modulo-content { display: none; }
+
+.mode-modulo .web-content     { display: none !important; }
+.mode-modulo .modulo-content  { display: block !important; }
+
+.modulo-toggle-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.modulo-toggle-bar .btn-modulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+.modulo-toggle-bar .btn-modulo:hover,
+.modulo-toggle-bar .btn-modulo.active {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
+}
+
+@media print {
+  .web-content    { display: none !important; }
+  .modulo-content { display: block !important; }
+  .modulo-toggle-bar { display: none !important; }
+  .cr-tab-header  { display: none !important; }
+  .no-print       { display: none !important; }
+  .print-only     { display: block !important; }
+  .nav-rail, .app-shell__sidebar { display: none !important; }
+  .cr-header, .cr-tab-bar { display: none !important; }
+  body { background: white; margin: 0; }
+  .patient-record-view { padding: 0; }
+  @page { margin: 15mm; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODULO BASE — container e intestazione paziente
+═══════════════════════════════════════════════════════════════════════════ */
+
+.fm {
+  font-family: Arial, 'Arial Narrow', Helvetica, sans-serif;
+  font-size: 10pt;
+  color: #111;
+  background: #fff;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 20px 24px 30px;
+  border: 1px solid #aaa;
+  border-radius: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* Title bar */
+.fm-title {
+  text-align: center;
+  font-size: 13pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid #111;
+  padding: 6px 12px;
+  margin-bottom: 14px;
+}
+
+/* Patient header */
+.fm-patient-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0;
+  border: 1px solid #333;
+  margin-bottom: 16px;
+}
+.fm-patient-header.cols-4 {
+  grid-template-columns: 1fr 1fr 120px 80px;
+}
+.fm-patient-field {
+  border-right: 1px solid #333;
+  padding: 4px 8px;
+  min-height: 34px;
+}
+.fm-patient-field:last-child { border-right: none; }
+.fm-patient-field__lbl {
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+  color: #444;
+}
+.fm-patient-field__val {
+  font-size: 11pt;
+  font-weight: 600;
+  min-height: 18px;
+  border-bottom: 1px dotted #aaa;
+  display: block;
+  padding-bottom: 2px;
+}
+
+/* ── Section label ── */
+.fm-section {
+  margin-bottom: 14px;
+}
+.fm-section-title {
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: #e8e8e8;
+  border: 1px solid #999;
+  padding: 3px 8px;
+  margin-bottom: 0;
+}
+
+/* ── Field row (label: value line) ── */
+.fm-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  border-bottom: 1px solid #ccc;
+  min-height: 26px;
+  padding: 3px 6px;
+}
+.fm-row__lbl {
+  font-size: 9pt;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.fm-row__val {
+  flex: 1;
+  font-size: 10pt;
+  border-bottom: 1px dotted #999;
+  min-height: 18px;
+  padding-bottom: 1px;
+}
+
+/* ── Inline fields ── */
+.fm-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  padding: 4px 6px;
+  border-bottom: 1px solid #ccc;
+  min-height: 26px;
+  align-items: flex-end;
+}
+.fm-inline__item {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.fm-inline__lbl {
+  font-size: 9pt;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.fm-inline__val {
+  border-bottom: 1px dotted #999;
+  min-width: 80px;
+  min-height: 16px;
+  font-size: 10pt;
+  padding-bottom: 1px;
+}
+.fm-inline__val--wide { min-width: 160px; }
+.fm-inline__val--sm   { min-width: 50px; }
+
+/* ── Checkbox ── */
+.fm-cb-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  padding: 4px 6px;
+  border-bottom: 1px solid #ccc;
+  min-height: 26px;
+  align-items: center;
+}
+.fm-cb-row {
+  display: flex;
+  gap: 4px 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.fm-cb {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9pt;
+  white-space: nowrap;
+}
+.fm-cb__box {
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid #333;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9pt;
+  flex-shrink: 0;
+  background: white;
+}
+.fm-cb__box--checked::after { content: '✓'; font-weight: 700; }
+.fm-cb__box--x::after { content: 'X'; font-weight: 700; }
+
+/* ── Signature area ── */
+.fm-signature-row {
+  display: flex;
+  gap: 20px;
+  margin-top: 12px;
+  padding-top: 4px;
+}
+.fm-signature {
+  flex: 1;
+}
+.fm-signature__lbl {
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: block;
+}
+.fm-signature__line {
+  border-bottom: 1px solid #333;
+  min-height: 20px;
+}
+
+/* ── General bordered table ── */
+.fm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+}
+.fm-table th,
+.fm-table td {
+  border: 1px solid #333;
+  padding: 4px 6px;
+  vertical-align: top;
+}
+.fm-table th {
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #e0e0e0;
+  text-align: center;
+}
+.fm-table td { min-height: 24px; }
+.fm-table tr:nth-child(even) td { background: #f9f9f9; }
+
+/* ── Notes area ── */
+.fm-notes {
+  border: 1px solid #999;
+  min-height: 60px;
+  padding: 6px;
+  margin-top: 10px;
+  font-size: 10pt;
+}
+.fm-notes__lbl {
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* ── Footer ── */
+.fm-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 20px;
+  border-top: 1px solid #999;
+  padding-top: 8px;
+}
+
+/* ── Spazio compilazione ── */
+.fm-fill-line {
+  border-bottom: 1px dotted #999;
+  min-height: 22px;
+  display: block;
+  width: 100%;
+  font-size: 10pt;
+  padding-bottom: 2px;
+}
+.fm-fill-block {
+  border: 1px solid #ccc;
+  min-height: 60px;
+  padding: 6px;
+  font-size: 10pt;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCALA BRADEN — griglia colorata (fedele al cartaceo)
+═══════════════════════════════════════════════════════════════════════════ */
+
+.braden-modulo {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.braden-modulo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+}
+.braden-modulo-table th,
+.braden-modulo-table td {
+  border: 1.5px solid #333;
+  padding: 6px 8px;
+  vertical-align: middle;
+  text-align: center;
+}
+.braden-modulo-table .col-indicator {
+  background: #1A3357;
+  color: white;
+  font-weight: 700;
+  font-size: 9pt;
+  text-align: left;
+  padding: 8px 12px;
+  width: 110px;
+}
+.braden-modulo-table .col-score-hdr {
+  background: #4CAF50;
+  color: white;
+  font-size: 12pt;
+  font-weight: 700;
+  width: 130px;
+}
+.braden-modulo-table .score-cell {
+  background: #fff;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 9pt;
+  cursor: default;
+  line-height: 1.3;
+}
+.braden-modulo-table .score-cell.selected {
+  background: #c8e6c9;
+  font-weight: 700;
+  border: 2px solid #388E3C;
+  position: relative;
+}
+.braden-modulo-table .score-cell.selected::before {
+  content: '✓ ';
+  color: #2E7D32;
+  font-weight: 900;
+}
+.braden-modulo-table .totale-row td {
+  background: #f5f5f5;
+  font-weight: 700;
+}
+.braden-modulo-table .totale-box {
+  font-size: 16pt;
+  font-weight: 700;
+  text-align: center;
+  border: 2px solid #333;
+}
+.braden-legend {
+  margin-top: 12px;
+  font-size: 8.5pt;
+  line-height: 1.8;
+  border-top: 1px solid #ccc;
+  padding-top: 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DIARIO INFERMIERISTICO / MEDICO — foglio rigato
+═══════════════════════════════════════════════════════════════════════════ */
+
+.diario-modulo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+}
+.diario-modulo-table th {
+  background: #c0c0c0;
+  border: 1.5px solid #333;
+  padding: 5px 8px;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+}
+.diario-modulo-table td {
+  border: 1px solid #999;
+  padding: 5px 8px;
+  vertical-align: top;
+  min-height: 36px;
+}
+.diario-modulo-table td.col-data { width: 70px; text-align: center; font-weight: 600; }
+.diario-modulo-table td.col-turno { width: 70px; text-align: center; }
+.diario-modulo-table td.col-testo { line-height: 1.7; white-space: pre-wrap; }
+.diario-modulo-table td.col-firma { width: 80px; vertical-align: bottom; border-bottom: 1px dotted #333; }
+.diario-modulo-table tr.empty-row td { height: 36px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PARAMETRI VITALI — griglia mensile
+═══════════════════════════════════════════════════════════════════════════ */
+
+.parametri-modulo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8pt;
+}
+.parametri-modulo-table th,
+.parametri-modulo-table td {
+  border: 1px solid #555;
+  padding: 2px 3px;
+  text-align: center;
+  vertical-align: middle;
+}
+.parametri-modulo-table th {
+  background: #d0d0d0;
+  font-size: 7.5pt;
+  font-weight: 700;
+}
+.parametri-modulo-table th.hdr-firma {
+  background: #1A3357;
+  color: white;
+}
+.parametri-modulo-table td.col-day {
+  background: #f0f0f0;
+  font-weight: 700;
+  width: 22px;
+}
+.parametri-modulo-table td { min-height: 18px; height: 18px; }
+.parametri-modulo-table td.has-value { font-weight: 600; background: #f0f8ff; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TERAPIA MEDICA — griglia oraria
+═══════════════════════════════════════════════════════════════════════════ */
+
+.terapia-modulo {
+  font-family: Arial, sans-serif;
+  font-size: 9pt;
+}
+.terapia-modulo-section {
+  margin-bottom: 16px;
+}
+.terapia-modulo-section__title {
+  background: #333;
+  color: white;
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  text-align: center;
+}
+.terapia-modulo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+}
+.terapia-modulo-table th,
+.terapia-modulo-table td {
+  border: 1px solid #555;
+  padding: 3px 5px;
+  vertical-align: top;
+}
+.terapia-modulo-table th {
+  background: #bdbdbd;
+  font-weight: 700;
+  text-align: center;
+  font-size: 8pt;
+}
+.terapia-modulo-table th.time-hdr {
+  width: 36px;
+  background: #9e9e9e;
+}
+.terapia-modulo-table td.col-inizio { width: 65px; font-size: 8pt; }
+.terapia-modulo-table td.col-farmaco { font-weight: 600; }
+.terapia-modulo-table td.col-medico { width: 60px; font-size: 8pt; }
+.terapia-modulo-table td.col-time { width: 36px; text-align: center; }
+.terapia-modulo-table td.col-fine { width: 65px; font-size: 8pt; }
+.terapia-modulo-table tr.empty-row td { min-height: 20px; height: 20px; }
+.terapia-modulo-allegies {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  border: 1px solid #999;
+  padding: 5px 8px;
+  margin-bottom: 10px;
+  font-size: 9pt;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MEDICAZIONI LESIONI — tabella wound
+═══════════════════════════════════════════════════════════════════════════ */
+
+.med-modulo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+}
+.med-modulo-table th,
+.med-modulo-table td {
+  border: 1px solid #444;
+  padding: 4px 6px;
+  vertical-align: top;
+}
+.med-modulo-table th {
+  background: #ccc;
+  font-size: 8pt;
+  font-weight: 700;
+  text-align: center;
+}
+.med-modulo-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 8pt;
+}
+.med-modulo-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.6;
+}
+.med-modulo-cb {
+  width: 11px;
+  height: 11px;
+  border: 1px solid #333;
+  display: inline-block;
+  flex-shrink: 0;
+  position: relative;
+}
+.med-modulo-cb.checked::after { content: '×'; position: absolute; top: -2px; left: 1px; font-weight: 700; font-size: 11px; }
+
+/* Followup log table (template 02) */
+.med-followup-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+  margin-top: 16px;
+}
+.med-followup-table th,
+.med-followup-table td {
+  border: 1px solid #444;
+  padding: 4px 6px;
+}
+.med-followup-table th { background: #ccc; font-weight: 700; font-size: 8pt; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTENZIONE CONSENSO — modulo consenso informato
+═══════════════════════════════════════════════════════════════════════════ */
+
+.contenzione-modulo .fm-cb-section {
+  border: 1px solid #999;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+}
+.contenzione-modulo .fm-cb-section__title {
+  font-size: 9pt;
+  font-weight: 700;
+  text-decoration: underline;
+  margin-bottom: 6px;
+}
+.contenzione-modulo .cb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 20px;
+}
+.contenzione-modulo .cb-row-modes {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+}
+.contenzione-modulo .declaration-text {
+  font-size: 8.5pt;
+  line-height: 1.7;
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin: 12px 0;
+  background: #fafafa;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DIMISSIONE INFERMIERISTICA — scheda checkout
+═══════════════════════════════════════════════════════════════════════════ */
+
+.dimissione-modulo .fm-dim-section {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0;
+  border-bottom: 1px solid #ccc;
+  min-height: 28px;
+  align-items: center;
+}
+.dimissione-modulo .fm-dim-section__label {
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-right: 1px solid #ccc;
+}
+.dimissione-modulo .fm-dim-section__content {
+  padding: 4px 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  align-items: center;
+  font-size: 9pt;
+}
+.dimissione-modulo .dim-fill-line {
+  border-bottom: 1px dotted #999;
+  min-width: 120px;
+  display: inline-block;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LIBERATORIA — dichiarazione liberatoria
+═══════════════════════════════════════════════════════════════════════════ */
+
+.liberatoria-modulo .lib-declaration {
+  font-size: 9.5pt;
+  line-height: 1.8;
+  border: 1px solid #ccc;
+  padding: 14px;
+  margin: 12px 0;
+  background: #fafafa;
+}
+.liberatoria-modulo .lib-declaration p {
+  margin: 0 0 8px;
+}
+.liberatoria-modulo .lib-fill {
+  border-bottom: 1px dotted #999;
+  display: inline-block;
+  min-width: 200px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Responsive: modulo su tablet
+═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 700px) {
+  .fm { padding: 12px 10px 20px; }
+  .fm-patient-header,
+  .fm-patient-header.cols-4 { grid-template-columns: 1fr 1fr; }
+  .braden-modulo-table { font-size: 8pt; }
+  .diario-modulo-table { font-size: 8pt; }
+}

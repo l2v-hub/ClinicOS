@@ -1,5 +1,392 @@
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   PRINT STYLES
+═══════════════════════════════════════════════════════════════════════════ */
+
+@media print {
+  * { -webkit-print-color-adjust: exact; color-adjust: exact; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .nav-rail,
+  .app-shell__sidebar,
+  .cr-header,
+  .cr-tab-bar { display: none !important; }
+  .patient-record-view { padding: 0; background: white; }
+  .cr-tab-content { padding: 16px 24px; }
+  body { background: white; }
+  .badge { border: 1px solid #ccc; }
+}
+
+.print-only { display: none; }
+
+.print-form-header {
+  margin-bottom: 20px;
+  border-bottom: 2px solid #333;
+  padding-bottom: 12px;
+}
+.print-form-header__title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.print-form-header__patient {
+  font-size: 13px;
+  color: #555;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB SHARED HEADER
+═══════════════════════════════════════════════════════════════════════════ */
+
+.cr-tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.cr-tab-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FORM GRIDS (2col / 3col)
+═══════════════════════════════════════════════════════════════════════════ */
+
+.cr-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.cr-form-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.cr-form-section__title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--divider);
+}
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.form-row-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .form-row-2col,
+  .form-row-3col { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRESA IN CARICO — pic-*
+═══════════════════════════════════════════════════════════════════════════ */
+
+.pic-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--divider);
+  font-size: 14px;
+}
+.pic-row:last-child { border-bottom: none; }
+.pic-row__lbl {
+  min-width: 160px;
+  color: var(--text-muted);
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.pic-row__val {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DOCUMENTI CONSEGNATI
+═══════════════════════════════════════════════════════════════════════════ */
+
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.doc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+.doc-item__icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.doc-item__body { flex: 1; }
+.doc-item__title { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+.doc-item__meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DIARIO — diario-*
+═══════════════════════════════════════════════════════════════════════════ */
+
+.diario-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.filter-chip {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+.filter-chip.active,
+.filter-chip:hover {
+  background: var(--blue);
+  color: white;
+  border-color: var(--blue);
+}
+.diario-entries { display: flex; flex-direction: column; gap: 12px; }
+.diario-entry {
+  display: flex;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+.diario-entry--segnalazione { border-left-color: var(--amber); }
+.diario-entry--urgente { border-left-color: var(--red); }
+.diario-entry__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.diario-entry__date { font-size: 13px; font-weight: 600; text-align: center; }
+.diario-entry__time { font-size: 12px; color: var(--text-muted); }
+.diario-entry__body { flex: 1; }
+.diario-entry__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.diario-entry__text {
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MEDICAZIONI — med-*
+═══════════════════════════════════════════════════════════════════════════ */
+
+.med-list { display: flex; flex-direction: column; gap: 12px; }
+.med-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.med-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--divider);
+}
+.med-card__date { font-weight: 700; font-size: 14px; }
+.med-card__sede { font-weight: 600; font-size: 14px; color: var(--blue); }
+.med-card__details {
+  padding: 12px 14px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.5;
+}
+.med-card__footer {
+  padding: 8px 14px;
+  border-top: 1px solid var(--divider);
+  background: var(--surface-raised);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTENZIONI — contenzione-*
+═══════════════════════════════════════════════════════════════════════════ */
+
+.contenzione-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.contenzione-card--attiva {
+  border-left: 4px solid var(--red);
+}
+.contenzione-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--divider);
+}
+.contenzione-card__body {
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCALA BRADEN — braden-*
+═══════════════════════════════════════════════════════════════════════════ */
+
+.braden-form { max-width: 100%; }
+.braden-field {
+  margin-bottom: 20px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.braden-field__label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.braden-field__options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.braden-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.braden-option:hover { background: var(--hover); }
+.braden-option.selected { background: var(--blue-dim); }
+.braden-option input[type="radio"] { margin-top: 2px; flex-shrink: 0; }
+.braden-option__content { display: flex; align-items: flex-start; gap: 10px; }
+.braden-option__score {
+  min-width: 28px;
+  height: 28px;
+  background: var(--navy);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.braden-option.selected .braden-option__score { background: var(--blue); }
+.braden-option__title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.braden-option__desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+.braden-score-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+.braden-score-preview__val {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+}
+.braden-score-preview__label { font-size: 12px; color: var(--text-muted); }
+.braden-score-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--navy);
+  color: white;
+  border-radius: var(--radius);
+  font-size: 15px;
+  margin: 8px 0;
+}
+.braden-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.braden-table th,
+.braden-table td {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+.braden-table th {
+  background: var(--surface-raised);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.braden-table tr:hover td { background: var(--hover); }
+.braden-history { margin-bottom: 24px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MISSING BADGE VARIANTS
+═══════════════════════════════════════════════════════════════════════════ */
+
+.badge--teal { background: var(--teal-bg); color: var(--teal); }
+.badge--indigo { background: var(--indigo-bg); color: var(--indigo); }
+.badge--green { background: var(--emerald-bg); color: var(--emerald); }
+
+/* cr-meta utility */
+.cr-meta { font-size: 12px; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
    AGENDA — agt-* redesign
    White/light cards, operator-color accent borders, professional & readable
 ═══════════════════════════════════════════════════════════════════════════ */

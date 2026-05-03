@@ -104,6 +104,15 @@ export function createDefaultCartella(pazienteId: string, operatoreId = 'op1'): 
       { id: 'r1', tipo: 'trombosi', livello: 'medio', descrizione: 'Score SCORE2 8%. Terapia antiplateletica in corso.', dataValutazione: today(), operatore: 'Dr. Marco Ferretti' },
       { id: 'r2', tipo: 'caduta', livello: 'basso', descrizione: 'Deambulante autonomo. Nessun episodio precedente.', dataValutazione: today(), operatore: 'Giulia Bianchi' },
     ],
+    presaInCarico: undefined,
+    documentiConsegnati: [],
+    diarioInfermieristico: [],
+    diarioMedico: [],
+    medicazioniFerite: [],
+    contenzioni: [],
+    valutazioniBraden: [],
+    dimissione: undefined,
+    liberatoria: undefined,
   };
 }
 

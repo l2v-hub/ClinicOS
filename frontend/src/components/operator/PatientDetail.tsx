@@ -8,12 +8,25 @@ import type {
 import {
   IcoChevronLeft, IcoEdit, IcoCheck, IcoX, IcoPlus,
   IcoWarning, IcoActivity, IcoPill, IcoShield, IcoConsegne, IcoBed,
-  IcoCartelle,
+  IcoCartelle, IcoDashboard,
 } from '../../icons';
+import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
+import { DocumentiTab } from './cartella/DocumentiTab';
+import { DiarioTab } from './cartella/DiarioTab';
+import { MedicazioniTab } from './cartella/MedicazioniTab';
+import { ContenzioniTab } from './cartella/ContenzioniTab';
+import { ScalaBradenTab } from './cartella/ScalaBradenTab';
+import { DimissioneTab } from './cartella/DimissioneTab';
+import { ParametriModuloView } from './cartella/ParametriModuloView';
+import { TerapieModuloView } from './cartella/TerapieModuloView';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type TabId = 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapie' | 'note' | 'parametri' | 'consegne';
+type TabId =
+  | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapie'
+  | 'note' | 'parametri' | 'consegne'
+  | 'presa-in-carico' | 'documenti' | 'diario-inf' | 'diario-med'
+  | 'medicazioni' | 'contenzioni' | 'braden' | 'dimissione';
 
 interface PatientDetailProps {
   paziente: Paziente;
@@ -181,6 +194,10 @@ export function PatientDetail({
   // Piano cura
   const [editPiano, setEditPiano] = useState(false);
   const [pianoForm, setPianoForm] = useState(cartella.pianoCura);
+
+  // Modulo views
+  const [moduloParametri, setModuloParametri] = useState(false);
+  const [moduloTerapie, setModuloTerapie] = useState(false);
 
   // Consegne
   const [showAddConsegna, setShowAddConsegna] = useState(false);
@@ -810,7 +827,20 @@ export function PatientDetail({
 
   function renderTerapie() {
     return (
-      <div className="cr-tab-content">
+      <div className={`cr-tab-content${moduloTerapie ? ' mode-modulo' : ''}`}>
+        {/* Modulo view */}
+        <div className="modulo-content">
+          <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
+            <button className="btn-secondary btn-sm" onClick={() => setModuloTerapie(false)}>← Vista operativa</button>
+            <button className="btn-secondary btn-sm" onClick={() => window.print()}>🖨️ Stampa</button>
+          </div>
+          <TerapieModuloView cartella={cartella} paziente={paziente} />
+        </div>
+        {/* Web view */}
+        <div className="web-content">
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+          <button className="btn-secondary btn-sm" onClick={() => setModuloTerapie(true)} title="Vista modulo cartaceo">📋 Vista modulo</button>
+        </div>
         {/* Terapie */}
         <SectionHeader title="Terapie e Trattamenti" onAdd={() => { setTerForm({}); setShowAddTer(true); }} />
         {showAddTer && (
@@ -972,6 +1002,7 @@ export function PatientDetail({
             </ItemRow>
           ))}
         </div>
+        </div>{/* /web-content */}
       </div>
     );
   }
@@ -1076,7 +1107,20 @@ export function PatientDetail({
 
   function renderParametri() {
     return (
-      <div className="cr-tab-content">
+      <div className={`cr-tab-content${moduloParametri ? ' mode-modulo' : ''}`}>
+        {/* Modulo view */}
+        <div className="modulo-content">
+          <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
+            <button className="btn-secondary btn-sm" onClick={() => setModuloParametri(false)}>← Vista operativa</button>
+            <button className="btn-secondary btn-sm" onClick={() => window.print()}>🖨️ Stampa</button>
+          </div>
+          <ParametriModuloView cartella={cartella} paziente={paziente} />
+        </div>
+        {/* Web view */}
+        <div className="web-content">
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+          <button className="btn-secondary btn-sm" onClick={() => setModuloParametri(true)} title="Vista modulo cartaceo">📋 Vista modulo</button>
+        </div>
         {/* Add vital */}
         <SectionHeader title="Parametri Vitali" onAdd={() => { setVitaleForm({}); setShowAddVitale(true); }} />
         {showAddVitale && (
@@ -1174,6 +1218,7 @@ export function PatientDetail({
             </ItemRow>
           ))}
         </div>
+        </div>{/* /web-content */}
       </div>
     );
   }
@@ -1233,14 +1278,22 @@ export function PatientDetail({
   // ── Tab config ─────────────────────────────────────────────────────────────
 
   const TABS: { id: TabId; label: string; icon?: React.ReactNode; badge?: number }[] = [
-    { id: 'riepilogo', label: 'Riepilogo', icon: <IcoDashboard /> },
-    { id: 'profilo',   label: 'Profilo' },
-    { id: 'anamnesi',  label: 'Anamnesi' },
-    { id: 'diagnosi',  label: 'Diagnosi', badge: diagnosiAttive.length },
-    { id: 'terapie',   label: 'Terapie & Farmaci', badge: farmaciAttivi.length },
-    { id: 'note',      label: 'Note & Visite' },
-    { id: 'parametri', label: 'Parametri & Piano' },
-    { id: 'consegne',  label: 'Consegne', badge: mieConsegne.filter(c => c.stato !== 'completata').length, icon: <IcoConsegne /> },
+    { id: 'riepilogo',       label: 'Riepilogo', icon: <IcoDashboard /> },
+    { id: 'profilo',         label: 'Profilo' },
+    { id: 'presa-in-carico', label: 'Presa in Carico' },
+    { id: 'anamnesi',        label: 'Anamnesi' },
+    { id: 'diagnosi',        label: 'Diagnosi', badge: diagnosiAttive.length },
+    { id: 'terapie',         label: 'Terapie & Farmaci', badge: farmaciAttivi.length },
+    { id: 'diario-inf',      label: 'Diario Infermieristico', badge: (cartella.diarioInfermieristico ?? []).length || undefined },
+    { id: 'diario-med',      label: 'Diario Medico', badge: (cartella.diarioMedico ?? []).length || undefined },
+    { id: 'parametri',       label: 'Parametri Vitali' },
+    { id: 'medicazioni',     label: 'Medicazioni', badge: (cartella.medicazioniFerite ?? []).length || undefined },
+    { id: 'contenzioni',     label: 'Contenzioni', badge: (cartella.contenzioni ?? []).filter(c => c.attiva).length || undefined },
+    { id: 'braden',          label: 'Scala Braden' },
+    { id: 'note',            label: 'Note & Visite' },
+    { id: 'documenti',       label: 'Documenti', badge: (cartella.documentiConsegnati ?? []).length || undefined },
+    { id: 'dimissione',      label: 'Dimissione' },
+    { id: 'consegne',        label: 'Consegne', badge: mieConsegne.filter(c => c.stato !== 'completata').length, icon: <IcoConsegne /> },
   ];
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -1295,24 +1348,39 @@ export function PatientDetail({
       </div>
 
       {/* Tab content */}
-      {tab === 'riepilogo'  && renderRiepilogo()}
-      {tab === 'profilo'    && renderProfilo()}
-      {tab === 'anamnesi'   && renderAnamnesi()}
-      {tab === 'diagnosi'   && renderDiagnosi()}
-      {tab === 'terapie'    && renderTerapie()}
-      {tab === 'note'       && renderNote()}
-      {tab === 'parametri'  && renderParametri()}
-      {tab === 'consegne'   && renderConsegne()}
+      {tab === 'riepilogo'       && renderRiepilogo()}
+      {tab === 'profilo'         && renderProfilo()}
+      {tab === 'anamnesi'        && renderAnamnesi()}
+      {tab === 'diagnosi'        && renderDiagnosi()}
+      {tab === 'terapie'         && renderTerapie()}
+      {tab === 'note'            && renderNote()}
+      {tab === 'parametri'       && renderParametri()}
+      {tab === 'consegne'        && renderConsegne()}
+      {tab === 'presa-in-carico' && (
+        <PresaInCaricoTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
+      {tab === 'documenti' && (
+        <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
+      {tab === 'diario-inf' && (
+        <DiarioTab cartella={cartella} paziente={paziente} tipo="infermieristico" onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
+      {tab === 'diario-med' && (
+        <DiarioTab cartella={cartella} paziente={paziente} tipo="medico" onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
+      {tab === 'medicazioni' && (
+        <MedicazioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
+      {tab === 'contenzioni' && (
+        <ContenzioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
+      {tab === 'braden' && (
+        <ScalaBradenTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
+      {tab === 'dimissione' && (
+        <DimissioneTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+      )}
     </div>
   );
 }
 
-// dummy icon for riepilogo tab (reuse IcoDashboard-like)
-function IcoDashboard() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14 }}>
-      <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
-      <rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>
-    </svg>
-  );
-}
