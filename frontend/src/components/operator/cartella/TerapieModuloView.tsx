@@ -74,7 +74,7 @@ function SectionTable({ title, farmaci, emptyRows = 4 }: SectionTableProps) {
               <td className="col-medico" style={{ textAlign: 'center' }}>
                 {f.prescrittoDA ? medicoSigla(f.prescrittoDA) : ''}
               </td>
-              {TIME_KEYS.map((k, i) => (
+              {TIME_KEYS.map((k) => (
                 <td key={k} className="col-time">
                   {(f[k] as string | undefined) ?? ''}
                 </td>

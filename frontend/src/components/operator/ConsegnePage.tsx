@@ -36,10 +36,10 @@ export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdate
       if (filtroPriorita !== 'tutte' && c.priorita !== filtroPriorita) return false;
       if (ricerca) {
         const q = ricerca.toLowerCase();
-        return c.pazienteNome.toLowerCase().includes(q) ||
-          c.tipo.toLowerCase().includes(q) ||
-          c.note.toLowerCase().includes(q) ||
-          c.operatoreAssegnato.toLowerCase().includes(q);
+        return (c.pazienteNome ?? '').toLowerCase().includes(q) ||
+          (c.tipo ?? '').toLowerCase().includes(q) ||
+          (c.note ?? '').toLowerCase().includes(q) ||
+          (c.operatoreAssegnato ?? '').toLowerCase().includes(q);
       }
       return true;
     })

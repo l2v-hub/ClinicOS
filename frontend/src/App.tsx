@@ -99,7 +99,8 @@ export default function App() {
   // Restore nav from hash on mount + listen to popstate
   useEffect(() => {
     const hash = window.location.hash.replace('#/', '');
-    if (hash) {
+    // Don't restore dettaglio-paziente from hash: patient data is in-memory only
+    if (hash && hash !== 'dettaglio-paziente' && hash !== 'login') {
       const k = hash as NavKey;
       setNavKey(k);
     }
@@ -486,6 +487,12 @@ export default function App() {
               loading={loadingPazienti}
               onSelect={selectPaziente}
             />
+          )}
+          {navKey === 'dettaglio-paziente' && !pazienteSelezionato && (
+            <div style={{ padding: '48px 32px', textAlign: 'center', color: 'var(--text-muted)' }}>
+              <p style={{ fontSize: 16, marginBottom: 16 }}>Nessun paziente selezionato.</p>
+              <button className="btn-primary" onClick={() => navigate('pazienti')}>Vai alla lista pazienti</button>
+            </div>
           )}
           {navKey === 'dettaglio-paziente' && pazienteSelezionato && (
             <PatientDetail

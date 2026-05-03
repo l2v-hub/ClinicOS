@@ -55,11 +55,16 @@ function calcAge(dob: string): number {
 }
 
 function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('it-IT');
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString('it-IT');
 }
 
 function fmtDateTime(iso: string): string {
+  if (!iso) return '—';
   const d = new Date(iso);
+  if (isNaN(d.getTime())) return '—';
   return d.toLocaleDateString('it-IT') + ' ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
 }
 
