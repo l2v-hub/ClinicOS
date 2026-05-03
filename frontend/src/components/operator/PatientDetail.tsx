@@ -8,7 +8,7 @@ import type {
 import {
   IcoChevronLeft, IcoEdit, IcoCheck, IcoX, IcoPlus,
   IcoWarning, IcoActivity, IcoPill, IcoShield, IcoConsegne, IcoBed,
-  IcoCartelle, IcoDashboard,
+  IcoCartelle,
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
 import { DocumentiTab } from './cartella/DocumentiTab';
@@ -27,6 +27,63 @@ type TabId =
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario-inf' | 'diario-med'
   | 'medicazioni' | 'contenzioni' | 'braden' | 'dimissione';
+
+type TabGroup = 'panoramica' | 'clinica' | 'diario' | 'moduli' | 'documenti';
+
+interface TabGroupDef {
+  id: TabGroup;
+  label: string;
+  tabs: { id: TabId; label: string }[];
+}
+
+const TAB_GROUPS: TabGroupDef[] = [
+  {
+    id: 'panoramica', label: 'Panoramica',
+    tabs: [
+      { id: 'riepilogo',  label: 'Riepilogo' },
+      { id: 'profilo',    label: 'Profilo' },
+      { id: 'consegne',   label: 'Consegne' },
+    ],
+  },
+  {
+    id: 'clinica', label: 'Clinica',
+    tabs: [
+      { id: 'presa-in-carico', label: 'Presa in Carico' },
+      { id: 'anamnesi',        label: 'Anamnesi' },
+      { id: 'diagnosi',        label: 'Diagnosi' },
+      { id: 'terapie',         label: 'Terapie & Farmaci' },
+      { id: 'parametri',       label: 'Parametri Vitali' },
+      { id: 'note',            label: 'Note & Visite' },
+    ],
+  },
+  {
+    id: 'diario', label: 'Diario',
+    tabs: [
+      { id: 'diario-inf', label: 'Infermieristico' },
+      { id: 'diario-med', label: 'Medico' },
+    ],
+  },
+  {
+    id: 'moduli', label: 'Moduli',
+    tabs: [
+      { id: 'medicazioni', label: 'Medicazioni' },
+      { id: 'contenzioni', label: 'Contenzioni' },
+      { id: 'braden',      label: 'Scala Braden' },
+      { id: 'dimissione',  label: 'Dimissione' },
+    ],
+  },
+  {
+    id: 'documenti', label: 'Documenti',
+    tabs: [{ id: 'documenti', label: 'Documenti' }],
+  },
+];
+
+function findGroupForTab(tabId: TabId): TabGroup {
+  for (const g of TAB_GROUPS) {
+    if (g.tabs.some(t => t.id === tabId)) return g.id;
+  }
+  return 'panoramica';
+}
 
 interface PatientDetailProps {
   paziente: Paziente;
@@ -137,6 +194,22 @@ export function PatientDetail({
   operatoreNome,
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>('riepilogo');
+  const [tabGroup, setTabGroup] = useState<TabGroup>('panoramica');
+
+  function switchTab(tabId: TabId) {
+    setTab(tabId);
+    setTabGroup(findGroupForTab(tabId));
+  }
+
+  function switchGroup(groupId: TabGroup) {
+    setTabGroup(groupId);
+    const group = TAB_GROUPS.find(g => g.id === groupId);
+    if (!group) return;
+    // Keep current tab if it's in the group, else go to first tab
+    if (!group.tabs.some(t => t.id === tab)) {
+      setTab(group.tabs[0].id);
+    }
+  }
 
   // ── Per-section CRUD state ─────────────────────────────────────────────────
 
@@ -273,14 +346,14 @@ export function PatientDetail({
         {/* Alerts */}
         {hasAllergie && (
           <div className="allergy-alert-strip">
-            <IcoWarning />
+            <span className="cr-alert-ico"><IcoWarning /></span>
             <strong>ALLERGIE GRAVI:</strong>{' '}
             {allergieGravi.map(a => a.allergene).join(', ')}
           </div>
         )}
         {rischioAlto.length > 0 && (
           <div className="coverage-alert" style={{ borderColor: 'var(--amber)' }}>
-            <IcoWarning />
+            <span className="cr-alert-ico"><IcoWarning /></span>
             <span>
               <strong>Rischi attivi:</strong>{' '}
               {rischioAlto.map(r => `${r.tipo.replace('_', ' ')} (${r.livello})`).join(' · ')}
@@ -540,46 +613,59 @@ export function PatientDetail({
 
   function renderAnamnesi() {
     const a = editAnamnesi ? anamnesiForm : cartella.anamnesi;
-    const sections: { key: keyof typeof a; label: string }[] = [
-      { key: 'patologicaProssima', label: 'Anamnesi patologica prossima (motivo ricovero)' },
-      { key: 'patologicaRemota',   label: 'Anamnesi patologica remota' },
-      { key: 'familiare',          label: 'Anamnesi familiare' },
-      { key: 'fisiologica',        label: 'Anamnesi fisiologica' },
-      { key: 'lavorativa',         label: 'Anamnesi lavorativa / sociale' },
-      { key: 'abitudini',          label: 'Abitudini e stile di vita' },
-      { key: 'note',               label: 'Note aggiuntive' },
+    const sections: { key: keyof typeof a; label: string; rows?: number }[] = [
+      { key: 'patologicaProssima', label: 'Anamnesi patologica prossima (motivo ricovero)', rows: 5 },
+      { key: 'patologicaRemota',   label: 'Anamnesi patologica remota', rows: 4 },
+      { key: 'familiare',          label: 'Anamnesi familiare', rows: 3 },
+      { key: 'fisiologica',        label: 'Anamnesi fisiologica', rows: 3 },
+      { key: 'lavorativa',         label: 'Anamnesi lavorativa / sociale', rows: 3 },
+      { key: 'abitudini',          label: 'Abitudini e stile di vita', rows: 3 },
+      { key: 'note',               label: 'Note aggiuntive', rows: 3 },
     ];
     return (
       <div className="cr-tab-content">
         <div className="cr-section-header">
           <span className="cr-section-title">Anamnesi</span>
-          {!editAnamnesi && (
-            <button className="btn-secondary btn-sm" onClick={() => { setAnamnesiForm({ ...cartella.anamnesi }); setEditAnamnesi(true); }}>
-              <IcoEdit /> Modifica
-            </button>
-          )}
-          {editAnamnesi && (
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button className="btn-secondary btn-sm" onClick={() => setEditAnamnesi(false)}>Annulla</button>
-              <button className="btn-primary btn-sm" onClick={() => {
-                upd({ anamnesi: { ...anamnesiForm, updatedAt: nowISO(), operatore: operatoreNome } });
-                setEditAnamnesi(false);
-              }}><IcoCheck /> Salva</button>
-            </div>
-          )}
+          <div style={{ display: 'flex', gap: 8 }}>
+            {!editAnamnesi && (
+              <button className="btn-secondary btn-sm" onClick={() => { setAnamnesiForm({ ...cartella.anamnesi }); setEditAnamnesi(true); }}>
+                <IcoEdit /> Modifica
+              </button>
+            )}
+            {editAnamnesi && (
+              <>
+                <button className="btn-secondary btn-sm" onClick={() => setEditAnamnesi(false)}>Annulla</button>
+                <button className="btn-primary btn-sm" onClick={() => {
+                  upd({ anamnesi: { ...anamnesiForm, updatedAt: nowISO(), operatore: operatoreNome } });
+                  setEditAnamnesi(false);
+                }}><IcoCheck /> Salva</button>
+              </>
+            )}
+          </div>
         </div>
-        <div className="cr-anamnesi-sections">
-          {sections.map(({ key, label }) => (
-            <div key={key} className="cr-anamnesi-section">
-              <label className="cr-anamnesi-label">{label}</label>
-              {editAnamnesi ? (
-                <textarea className="form-input" rows={4} value={String(a[key] ?? '')}
-                  onChange={e => setAnamnesiForm(prev => ({ ...prev, [key]: e.target.value }))} />
-              ) : (
-                <p className="cr-anamnesi-text">{String(a[key] ?? '') || <em className="cr-empty-inline">Non compilato</em>}</p>
-              )}
-            </div>
-          ))}
+        <div className="cr-anamnesi-cards">
+          {sections.map(({ key, label, rows = 4 }) => {
+            const val = String(a[key] ?? '');
+            const isEmpty = !val;
+            return (
+              <div key={key} className={`cr-anamnesi-card${editAnamnesi ? ' editing' : ''}${isEmpty && !editAnamnesi ? ' empty' : ''}`}>
+                <div className="cr-anamnesi-card__label">{label}</div>
+                {editAnamnesi ? (
+                  <textarea
+                    className="form-input cr-anamnesi-card__textarea"
+                    rows={rows}
+                    value={val}
+                    onChange={e => setAnamnesiForm(prev => ({ ...prev, [key]: e.target.value }))}
+                    placeholder={`Inserire ${label.toLowerCase()}…`}
+                  />
+                ) : (
+                  <p className={`cr-anamnesi-card__text${isEmpty ? ' muted' : ''}`}>
+                    {isEmpty ? 'Non compilato' : val}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
         {cartella.anamnesi.updatedAt && !editAnamnesi && (
           <p className="cr-update-info">Aggiornato: {fmtDateTime(cartella.anamnesi.updatedAt)} — {cartella.anamnesi.operatore}</p>
@@ -880,26 +966,27 @@ export function PatientDetail({
     );
   }
 
-  // ── Tab config ─────────────────────────────────────────────────────────────
+  // ── Tab badges ─────────────────────────────────────────────────────────────
 
-  const TABS: { id: TabId; label: string; icon?: React.ReactNode; badge?: number }[] = [
-    { id: 'riepilogo',       label: 'Riepilogo', icon: <IcoDashboard /> },
-    { id: 'profilo',         label: 'Profilo' },
-    { id: 'presa-in-carico', label: 'Presa in Carico' },
-    { id: 'anamnesi',        label: 'Anamnesi' },
-    { id: 'diagnosi',        label: 'Diagnosi', badge: diagnosiAttive.length },
-    { id: 'terapie',         label: 'Terapie & Farmaci', badge: farmaciAttivi.length },
-    { id: 'diario-inf',      label: 'Diario Infermieristico', badge: (cartella.diarioInfermieristico ?? []).length || undefined },
-    { id: 'diario-med',      label: 'Diario Medico', badge: (cartella.diarioMedico ?? []).length || undefined },
-    { id: 'parametri',       label: 'Parametri Vitali' },
-    { id: 'medicazioni',     label: 'Medicazioni', badge: (cartella.medicazioniFerite ?? []).length || undefined },
-    { id: 'contenzioni',     label: 'Contenzioni', badge: (cartella.contenzioni ?? []).filter(c => c.attiva).length || undefined },
-    { id: 'braden',          label: 'Scala Braden' },
-    { id: 'note',            label: 'Note & Visite' },
-    { id: 'documenti',       label: 'Documenti', badge: (cartella.documentiConsegnati ?? []).length || undefined },
-    { id: 'dimissione',      label: 'Dimissione' },
-    { id: 'consegne',        label: 'Consegne', badge: mieConsegne.filter(c => c.stato !== 'completata').length, icon: <IcoConsegne /> },
-  ];
+  const TAB_BADGES: Partial<Record<TabId, number>> = {
+    diagnosi:    diagnosiAttive.length,
+    terapie:     farmaciAttivi.length,
+    'diario-inf': (cartella.diarioInfermieristico ?? []).length || 0,
+    'diario-med': (cartella.diarioMedico ?? []).length || 0,
+    medicazioni: (cartella.medicazioniFerite ?? []).length || 0,
+    contenzioni: (cartella.contenzioni ?? []).filter(c => c.attiva).length || 0,
+    documenti:   (cartella.documentiConsegnati ?? []).length || 0,
+    consegne:    mieConsegne.filter(c => c.stato !== 'completata').length,
+  };
+
+  // Group badges: sum of badges within group
+  function groupBadge(gId: TabGroup): number {
+    const g = TAB_GROUPS.find(x => x.id === gId);
+    if (!g) return 0;
+    return g.tabs.reduce((sum, t) => sum + (TAB_BADGES[t.id] ?? 0), 0);
+  }
+
+  const activeGroup = TAB_GROUPS.find(g => g.id === tabGroup) ?? TAB_GROUPS[0];
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
@@ -909,7 +996,7 @@ export function PatientDetail({
       <div className="cr-header">
         <button className="btn-back" onClick={onBack}><IcoChevronLeft /> Pazienti</button>
         <div className="cr-header__patient">
-          <div className="op-avatar-lg" style={{ flexShrink: 0 }}>
+          <div className="cr-pt-avatar" aria-hidden="true">
             {paziente.firstName[0]}{paziente.lastName[0]}
           </div>
           <div className="cr-header__info">
@@ -918,11 +1005,14 @@ export function PatientDetail({
               <span className="mrn-tag">{paziente.medicalRecordNumber}</span>
               <span>{calcAge(paziente.dateOfBirth)} anni · {paziente.sex ?? '—'}</span>
               {cartella.cameraNumero && (
-                <span className="cr-room-tag"><IcoBed /> Camera {cartella.cameraNumero}{cartella.lettoNumero ? `/L.${cartella.lettoNumero}` : ''}</span>
+                <span className="cr-room-tag"><IcoBed /> Cam. {cartella.cameraNumero}{cartella.lettoNumero ? ` / L.${cartella.lettoNumero}` : ''}</span>
               )}
               <span className={`stato-pill stato-pill--${cartella.statoRicovero === 'ricoverato' ? 'attivo' : 'inattivo'}`}>
                 {cartella.statoRicovero.replace('_', ' ')}
               </span>
+              {mieConsegne.some(c => c.stato !== 'completata' && c.priorita === 'urgente') && (
+                <span className="badge badge--red" style={{ fontSize: 11 }}>Consegna urgente</span>
+              )}
             </div>
             {hasAllergie && (
               <div className="cr-header__allergy-chips">
@@ -936,20 +1026,39 @@ export function PatientDetail({
         </div>
       </div>
 
-      {/* Tab bar */}
-      <div className="cr-tab-bar">
-        {TABS.map(t => (
-          <button key={t.id}
-            className={`cr-tab-btn${tab === t.id ? ' active' : ''}`}
-            onClick={() => setTab(t.id)}>
-            {t.label}
-            {t.badge !== undefined && t.badge > 0 && (
-              <span className={`cr-tab-badge${t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata') ? ' urgent' : ''}`}>
-                {t.badge}
-              </span>
-            )}
-          </button>
-        ))}
+      {/* Grouped nav */}
+      <div className="cr-nav-groups no-print">
+        {TAB_GROUPS.map(g => {
+          const gb = groupBadge(g.id);
+          return (
+            <button
+              key={g.id}
+              className={`cr-nav-group-btn${tabGroup === g.id ? ' active' : ''}`}
+              onClick={() => switchGroup(g.id)}
+            >
+              {g.label}
+              {gb > 0 && <span className="cr-tab-badge">{gb}</span>}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Sub-tab bar */}
+      <div className="cr-tab-bar no-print">
+        {activeGroup.tabs.map(t => {
+          const badge = TAB_BADGES[t.id] ?? 0;
+          const isUrgentConsegne = t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
+          return (
+            <button key={t.id}
+              className={`cr-tab-btn${tab === t.id ? ' active' : ''}`}
+              onClick={() => switchTab(t.id)}>
+              {t.label}
+              {badge > 0 && (
+                <span className={`cr-tab-badge${isUrgentConsegne ? ' urgent' : ''}`}>{badge}</span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Tab content */}
