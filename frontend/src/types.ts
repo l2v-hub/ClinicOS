@@ -46,14 +46,24 @@ export interface NuovoPaziente {
   lastName: string;
   dateOfBirth: string;
   sex: string;
+  codiceFiscale: string;
   phone: string;
   email: string;
   address: string;
+  referenteNome: string;
+  referenteTelefono: string;
   emergencyContact: string;
+  provenienza: 'accesso_diretto' | 'centro_medico' | 'altra_struttura' | 'dimissione_ospedaliera' | 'familiare_caregiver' | '';
+  centroInviante: string;
+  motivoIngresso: string;
+  condizioniIniziali: string;
+  operatoreId: string;
+  camera: string;
+  letto: string;
   notaClinicaIniziale: string;
+  noteIniziali: string;
   allergie: string;
   farmaci: string;
-  operatoreId: string;
 }
 
 // ── Operator (mock) ────────────────────────────────────────────────────────────
@@ -300,6 +310,11 @@ export interface FarmacoItem {
   prescrittoDA: string;
   indicazione?: string;
   note?: string;
+  h08?: string;
+  h12?: string;
+  h16?: string;
+  h18?: string;
+  h20?: string;
 }
 
 export interface AllergiaItem {
@@ -374,6 +389,11 @@ export interface PianoCura {
 
 export interface CartellaPaziente {
   pazienteId: string;
+  parametriMensili?: ParametriMensili[];
+  diabetico?: boolean;
+  ipertensione?: boolean;
+  terapiaTriturata?: boolean;
+  patologiaIngresso?: string;
   // Extended personal info
   indirizzo?: string;
   contattoEmergenzaNome?: string;
@@ -400,4 +420,345 @@ export interface CartellaPaziente {
   interventi: Intervento[];
   pianoCura: PianoCura;
   indicatoriRischio: IndicatoreRischio[];
+  // Extended clinical modules
+  presaInCarico?: PresaInCarico;
+  documentiConsegnati: DocumentoConsegnato[];
+  diarioInfermieristico: DiarioEntry[];
+  diarioMedico: DiarioEntry[];
+  medicazioniFerite: MedicazioneRecord[];
+  contenzioni: Contenzione[];
+  valutazioniBraden: ScalaBradenValutazione[];
+  dimissione?: DimissioneInfermieristica;
+  liberatoria?: Liberatoria;
+}
+
+// ── Presa in Carico ────────────────────────────────────────────────────────────
+
+export interface PresaInCarico {
+  dataIngresso: string;
+  oraIngresso: string;
+  provenienza: 'accesso_diretto' | 'centro_medico' | 'altra_struttura' | 'dimissione_ospedaliera' | 'familiare_caregiver';
+  centroInviante?: string;
+  modalitaIngresso: 'ambulante' | 'barella' | 'sedia_rotelle';
+  accompagnatoDa: string;
+  motivoIngresso: string;
+  operatoreResponsabile?: string;
+  condizioniGenerali: 'buone' | 'discrete' | 'scadenti' | 'critiche';
+  condizioniIniziali?: string;
+  noteIniziali?: string;
+  camera?: string;
+  letto?: string;
+  documentiRicevuti?: string;
+  documentiMancanti?: string;
+  sigla?: string;
+  statoCoscienza: 'vigile' | 'confuso' | 'soporoso' | 'stuporoso' | 'comatoso';
+  orientamento: 'orientato' | 'disorientato' | 'parzialmente_orientato';
+  autonomia: 'autonomo' | 'parzialmente_autonomo' | 'non_autonomo' | 'allettato';
+  comunicazione: string;
+  udito: string;
+  vista: string;
+  dentizione: string;
+  alimentazione: string;
+  eliminazioneUrinaria: string;
+  eliminazioneIntestinale: string;
+  mobilita: string;
+  cuteIntegrita: string;
+  dolore: 'assente' | 'presente';
+  doloreLivello: number;
+  materialeConsegnato: boolean;
+  operatore: string;
+  note: string;
+  compilatoAt: string;
+}
+
+// ── Documenti Consegnati ───────────────────────────────────────────────────────
+
+export type TipoDocumento =
+  | 'documento_identita'
+  | 'tessera_sanitaria'
+  | 'consenso_privacy'
+  | 'consenso_trattamento'
+  | 'invio_centro_medico'
+  | 'lettera_dimissione'
+  | 'referto'
+  | 'prescrizione'
+  | 'delega'
+  | 'liberatoria_uscita'
+  | 'consenso_contenzioni'
+  | 'documentazione_medicazioni'
+  | 'consenso_informato'
+  | 'privacy'
+  | 'regolamento'
+  | 'carta_servizi'
+  | 'modulo_allergie'
+  | 'piano_terapeutico'
+  | 'altro';
+
+export type StatoDocumento = 'ricevuto' | 'mancante' | 'da_verificare' | 'firmato' | 'scaduto';
+
+export interface DocumentoConsegnato {
+  id: string;
+  tipo: TipoDocumento;
+  descrizione: string;
+  dataConsegna: string;
+  firmatoDA: string;
+  operatore: string;
+  note: string;
+  stato?: StatoDocumento;
+  provenienza?: string;
+  scadenza?: string;
+  archiviato?: boolean;
+}
+
+// ── Diario Clinico ─────────────────────────────────────────────────────────────
+
+export type TurnoDiario = 'mattina' | 'pomeriggio' | 'notte';
+export type TipoDiarioEntry = 'ordinario' | 'segnalazione' | 'urgente';
+
+export interface DiarioEntry {
+  id: string;
+  data: string;
+  ora: string;
+  turno: TurnoDiario;
+  tipo: TipoDiarioEntry;
+  testo: string;
+  operatore: string;
+  createdAt: string;
+  // Infermieristico extras
+  priorita?: 'normale' | 'alta' | 'urgente';
+  stato?: 'aperta' | 'in_corso' | 'completata';
+  sigla?: string;
+  collegamento?: string;
+  // Medico extras
+  prescrizione?: string;
+  evoluzione?: string;
+  firmaMedico?: string;
+  allegati?: string;
+}
+
+export interface ParametroGiorno {
+  giorno: number;
+  pa?: string;
+  fc?: string;
+  spo2?: string;
+  temperatura?: string;
+  dtx08?: string;
+  dtx12?: string;
+  dtx18?: string;
+  evacuazione?: string;
+  catetere?: string;
+  firmaIpM?: string;
+  firmaIpP?: string;
+  note?: string;
+}
+
+export interface ParametriMensili {
+  id: string;
+  mese: number;
+  anno: number;
+  giorni: ParametroGiorno[];
+  createdAt: string;
+}
+
+// ── Medicazione Ferite ─────────────────────────────────────────────────────────
+
+export type EssudatoLivello = 'assente' | 'scarso' | 'moderato' | 'abbondante';
+
+export interface FollowUpMedicazione {
+  id: string;
+  data: string;
+  siglaOperatore: string;
+  motivoSostituzione: 'termine' | 'bagnata' | 'sporca';
+  note: string;
+  createdAt: string;
+}
+
+export interface MedicazioneRecord {
+  id: string;
+  data: string;
+  dataFine?: string;
+  sede: string;
+  tipoLesione: string;
+  grado?: string;
+  tipoMedicazione: string;
+  materiale: string;
+  aspettoLesione: string;
+  dimensioni: string;
+  odore: boolean;
+  essudato: EssudatoLivello;
+  cutePerilisionale: string;
+  prossimaMedicazione: string;
+  desutura?: string;
+  sigla?: string;
+  operatore: string;
+  note: string;
+  createdAt: string;
+  followUps?: FollowUpMedicazione[];
+}
+
+// ── Contenzione / Protezione ───────────────────────────────────────────────────
+
+export type TipoContenzione = 'cintura' | 'polsino' | 'guanto' | 'spondina' | 'altro';
+export type FrequenzaContenzione = 'sempre' | 'notturna' | 'diurna' | 'altro';
+
+export interface Contenzione {
+  id: string;
+  dataInizio: string;
+  oraInizio: string;
+  tipo: TipoContenzione;
+  motivoClinico: string;
+  autorizzazioneMedico: boolean;
+  autorizzazioneTutore: boolean;
+  intervalloRivalutazione: number;
+  dataFine: string;
+  oraFine: string;
+  attiva: boolean;
+  operatore: string;
+  note: string;
+  createdAt: string;
+  // Extended fields
+  camera?: string;
+  letto?: string;
+  firmaMedicoInizio?: string;
+  firmaMedicoFine?: string;
+  // Sponde al letto
+  spondineAttive?: boolean;
+  spondineFrequenza?: FrequenzaContenzione;
+  spondineAltro?: string;
+  // Contenzioni specifiche
+  cinturaCarrozzina?: boolean;
+  cinturaCarrozzinaFreq?: FrequenzaContenzione;
+  cinturaPoltrona?: boolean;
+  cinturaPoltronaFreq?: FrequenzaContenzione;
+  cinturaSedia?: boolean;
+  cinturaSediaFreq?: FrequenzaContenzione;
+  cinturaLetto?: boolean;
+  cinturaLettoFreq?: FrequenzaContenzione;
+  carrozzinaConTavolino?: boolean;
+  altriPresidi?: string;
+  // Motivazioni
+  motivAgitazione?: boolean;
+  motivConfusionale?: boolean;
+  motivCadute?: boolean;
+  motivAutoEtero?: boolean;
+  motivInconsapevolezza?: boolean;
+  motivAltro?: string;
+  // Consenso
+  firmaPazienteReferente?: string;
+  firmaParente?: string;
+}
+
+// ── Scala Braden ───────────────────────────────────────────────────────────────
+
+export interface ScalaBradenValutazione {
+  id: string;
+  data: string;
+  percezioneSensoriale: 1 | 2 | 3 | 4;
+  umidita: 1 | 2 | 3 | 4;
+  attivita: 1 | 2 | 3 | 4;
+  mobilita: 1 | 2 | 3 | 4;
+  nutrizione: 1 | 2 | 3 | 4;
+  frizione: 1 | 2 | 3;
+  operatore: string;
+  note: string;
+  createdAt: string;
+}
+
+// ── Dimissione Infermieristica ─────────────────────────────────────────────────
+
+export interface DimissioneInfermieristica {
+  data: string;
+  ora: string;
+  condizioni: 'buone' | 'discrete' | 'scadenti' | 'stabili';
+  autonomiaResidua: string;
+  pianoCuraConsegnato: boolean;
+  istruzioni: string;
+  controlliProgrammati: string;
+  personaAccompagna: string;
+  mezzoTrasporto: string;
+  destinazione: 'domicilio' | 'altra_struttura' | 'hospice' | 'ospedale';
+  materialeConsegnato: string;
+  operatore: string;
+  note: string;
+  compilatoAt: string;
+  // Respirazione
+  respAutonomo?: boolean;
+  respO2Terapia?: boolean;
+  respO2LitriMin?: string;
+  respCannulaTracheale?: boolean;
+  respUltimaSostituzione?: string;
+  // Alimentazione
+  alimentAutonomo?: boolean;
+  alimentAssistito?: boolean;
+  alimentDieta?: string;
+  alimentSNG?: string;
+  alimentPEG?: string;
+  // Eliminazione
+  elimContinente?: boolean;
+  elimParzialmenteIncontinente?: boolean;
+  elimIncontinenzaFeci?: boolean;
+  elimIncontinenzaUrine?: boolean;
+  elimDataUltimaEvacuazione?: string;
+  elimCatetereVescicale?: string;
+  elimStomia?: boolean;
+  // Mobilizzazione
+  mobAutonomo?: boolean;
+  mobAllettato?: boolean;
+  mobAssistitoCon?: string;
+  mobRischioCaduta?: boolean;
+  mobContenzione?: string;
+  // Igiene e vestizione
+  igieneAutonomo?: boolean;
+  igieneDipendente?: boolean;
+  igieneParzialmenteDipendente?: boolean;
+  // Lesioni da pressione
+  lesioniNo?: boolean;
+  lesioniSi?: boolean;
+  lesioniSede?: string;
+  lesioniGrado?: string;
+  lesioniTipoMedicazione?: string;
+  lesioniFrequenza?: string;
+  lesioniNote?: string;
+  // Giro medicazione
+  giroMedicazioneFrequenza?: string;
+  // Disturbi del sonno
+  sonnoNo?: boolean;
+  sonnoSi?: boolean;
+  sonnoNote?: string;
+  // Uso farmaci
+  farmaciNo?: boolean;
+  farmaciSi?: boolean;
+  farmaciDettaglio?: string;
+  // Comunicazione / Orientamento
+  commOrientato?: boolean;
+  commParzialmenteOrientato?: boolean;
+  commDisorientato?: boolean;
+  commAlterazioniSensoriali?: string;
+  commComunicaSi?: boolean;
+  commComunicaNo?: boolean;
+  commDifficolta?: string;
+  // Servizi territoriali
+  servizioSocialeSi?: boolean;
+  servizioSocialeNo?: boolean;
+  servizioDomiciliareSi?: boolean;
+  servizioDomiciliareNo?: boolean;
+}
+
+// ── Liberatoria di Uscita ──────────────────────────────────────────────────────
+
+export interface Liberatoria {
+  data: string;
+  ora: string;
+  controParereMedico: boolean;
+  consapevoleRischi: boolean;
+  firmaPatient: string;
+  firmaTestimone: string;
+  operatore: string;
+  note: string;
+  compilatoAt: string;
+  // Extended fields
+  referenteNome?: string;
+  referenteDataNascita?: string;
+  referenteRapporto?: string;
+  soloUscitaParenti?: boolean;
 }

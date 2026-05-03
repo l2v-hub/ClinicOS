@@ -9,6 +9,7 @@ interface ConsegnePageProps {
   onAdd: (c: Omit<Consegna, 'id' | 'createdAt'>) => void;
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
+  onSelectPaziente?: (nome: string) => void;
 }
 
 const PRIORITA_ORDER: Record<PrioritaConsegna, number> = { urgente: 0, alta: 1, normale: 2 };
@@ -23,7 +24,7 @@ const FORM_VUOTO = {
   operatoreAssegnato: '',
 };
 
-export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdateStato, onDelete }: ConsegnePageProps) {
+export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdateStato, onDelete, onSelectPaziente }: ConsegnePageProps) {
   const [filtroStato, setFiltroStato] = useState<'tutte' | Consegna['stato']>('tutte');
   const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>('tutte');
   const [ricerca, setRicerca] = useState('');
@@ -36,10 +37,10 @@ export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdate
       if (filtroPriorita !== 'tutte' && c.priorita !== filtroPriorita) return false;
       if (ricerca) {
         const q = ricerca.toLowerCase();
-        return c.pazienteNome.toLowerCase().includes(q) ||
-          c.tipo.toLowerCase().includes(q) ||
-          c.note.toLowerCase().includes(q) ||
-          c.operatoreAssegnato.toLowerCase().includes(q);
+        return (c.pazienteNome ?? '').toLowerCase().includes(q) ||
+          (c.tipo ?? '').toLowerCase().includes(q) ||
+          (c.note ?? '').toLowerCase().includes(q) ||
+          (c.operatoreAssegnato ?? '').toLowerCase().includes(q);
       }
       return true;
     })
@@ -179,7 +180,7 @@ export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdate
           <h3 className="consegne-section__title consegne-section__title--urgente">Urgenti</h3>
           <div className="consegne-list">
             {urgenti.map(c => (
-              <ConsegnaCard key={c.id} consegna={c} onUpdateStato={onUpdateStato} onDelete={onDelete} isAdmin={isAdmin} />
+              <ConsegnaCard key={c.id} consegna={c} onUpdateStato={onUpdateStato} onDelete={onDelete} isAdmin={isAdmin} onSelectPaziente={onSelectPaziente} />
             ))}
           </div>
         </div>
@@ -190,18 +191,19 @@ export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdate
         {altre.length === 0 && urgenti.length === 0 ? (
           <div className="empty-state-card">Nessuna consegna trovata.</div>
         ) : altre.map(c => (
-          <ConsegnaCard key={c.id} consegna={c} onUpdateStato={onUpdateStato} onDelete={onDelete} isAdmin={isAdmin} />
+          <ConsegnaCard key={c.id} consegna={c} onUpdateStato={onUpdateStato} onDelete={onDelete} isAdmin={isAdmin} onSelectPaziente={onSelectPaziente} />
         ))}
       </div>
     </div>
   );
 }
 
-function ConsegnaCard({ consegna: c, onUpdateStato, onDelete, isAdmin }: {
+function ConsegnaCard({ consegna: c, onUpdateStato, onDelete, isAdmin, onSelectPaziente }: {
   consegna: Consegna;
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
   isAdmin: boolean;
+  onSelectPaziente?: (nome: string) => void;
 }) {
   return (
     <div className={`consegna-card consegna-card--${c.priorita}${c.stato === 'completata' ? ' consegna-card--done' : ''}`}>
@@ -213,7 +215,13 @@ function ConsegnaCard({ consegna: c, onUpdateStato, onDelete, isAdmin }: {
         {c.oraScadenza && <span className="consegna-scadenza">⏰ {c.oraScadenza}</span>}
         <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{c.stato.replace('_', ' ')}</span>
       </div>
-      <span className="consegna-paziente">{c.pazienteNome}</span>
+      {onSelectPaziente && c.pazienteNome ? (
+        <button className="link-btn consegna-paziente" onClick={() => onSelectPaziente(c.pazienteNome!)} style={{ fontWeight: 600 }}>
+          {c.pazienteNome}
+        </button>
+      ) : (
+        <span className="consegna-paziente">{c.pazienteNome}</span>
+      )}
       <p className="consegna-note">{c.note}</p>
       <div className="consegna-card__footer">
         <div>

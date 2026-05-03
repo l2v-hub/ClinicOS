@@ -12,6 +12,7 @@ interface AdminAgendaProps {
   pazienti: Paziente[];
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => void;
   onAddPaziente: (nome: string) => void;
+  onSelectPaziente?: (nome: string) => void;
 }
 
 const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {
@@ -61,7 +62,7 @@ function occInfo(pct: number): { label: string; cls: string } {
   return { label: 'Sovraccarico', cls: 'agt-occ--overloaded' };
 }
 
-export function AdminAgenda({ operatori, appuntamenti, pazienti, onAddAppuntamento, onAddPaziente }: AdminAgendaProps) {
+export function AdminAgenda({ operatori, appuntamenti, pazienti, onAddAppuntamento, onAddPaziente, onSelectPaziente }: AdminAgendaProps) {
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
   const [filtroOpId, setFiltroOpId] = useState('tutti');
@@ -195,7 +196,10 @@ export function AdminAgenda({ operatori, appuntamenti, pazienti, onAddAppuntamen
                         {apt ? (
                           <div className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}>
                             <div className="agt-apt-card__row">
-                              <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
+                              {onSelectPaziente && apt.pazienteNome
+                                ? <button className="link-btn agt-apt-card__patient" onClick={e => { e.stopPropagation(); onSelectPaziente(apt.pazienteNome!); }}>{apt.pazienteNome}</button>
+                                : <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
+                              }
                               <span className={`agt-badge agt-badge--${apt.stato}`}>
                                 {STATO_LABEL[apt.stato]}
                               </span>
@@ -257,7 +261,10 @@ export function AdminAgenda({ operatori, appuntamenti, pazienti, onAddAppuntamen
                         return (
                           <div key={a.id} className={`agt-week-apt agt-apt-card--${a.stato}`} style={{ borderLeftColor: op?.colore ?? '#888' }}>
                             <span className="agt-week-apt__time">{a.ora}</span>
-                            <span className="agt-week-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
+                            {onSelectPaziente && a.pazienteNome
+                              ? <button className="link-btn agt-week-apt__name" onClick={e => { e.stopPropagation(); onSelectPaziente(a.pazienteNome!); }}>{a.pazienteNome.split(',')[0]}</button>
+                              : <span className="agt-week-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
+                            }
                             {op && <span className="agt-op-dot agt-op-dot--sm" style={{ background: op.colore }} />}
                           </div>
                         );
@@ -294,7 +301,10 @@ export function AdminAgenda({ operatori, appuntamenti, pazienti, onAddAppuntamen
                       return (
                         <div key={a.id} className={`agt-month-apt agt-apt-card--${a.stato}`} style={{ borderLeftColor: op?.colore ?? '#888' }}>
                           <span className="agt-month-apt__time">{a.ora}</span>
-                          <span className="agt-month-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
+                          {onSelectPaziente && a.pazienteNome
+                            ? <button className="link-btn agt-month-apt__name" onClick={e => { e.stopPropagation(); onSelectPaziente(a.pazienteNome!); }}>{a.pazienteNome.split(',')[0]}</button>
+                            : <span className="agt-month-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
+                          }
                         </div>
                       );
                     })}

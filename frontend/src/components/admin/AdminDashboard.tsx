@@ -8,6 +8,7 @@ interface AdminDashboardProps {
   totalePazienti: number;
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
+  onSelectPaziente?: (nome: string) => void;
 }
 
 function WorkloadBar({ value, max, color }: { value: number; max: number; color?: string }) {
@@ -21,7 +22,7 @@ function WorkloadBar({ value, max, color }: { value: number; max: number; color?
 }
 
 export function AdminDashboard({
-  operatori, consegne, camere, totalePazienti, loadingPazienti, onNavigate,
+  operatori, consegne, camere, totalePazienti, loadingPazienti, onNavigate, onSelectPaziente,
 }: AdminDashboardProps) {
   const attivi = operatori.filter(o => o.stato === 'attivo');
   const urgenti = consegne.filter(c => c.priorita === 'urgente' && c.stato !== 'completata');
@@ -253,7 +254,10 @@ export function AdminDashboard({
                   <span className="consegna-tipo">{c.tipo}</span>
                   {c.oraScadenza && <span className="consegna-scadenza">⏰ {c.oraScadenza}</span>}
                 </div>
-                <span className="consegna-paziente">{c.pazienteNome}</span>
+                {onSelectPaziente && c.pazienteNome
+                  ? <button className="link-btn consegna-paziente" onClick={() => onSelectPaziente(c.pazienteNome!)} style={{ fontWeight: 600 }}>{c.pazienteNome}</button>
+                  : <span className="consegna-paziente">{c.pazienteNome}</span>
+                }
                 <p className="consegna-note">{c.note}</p>
                 <span className="consegna-assegnato">→ {c.operatoreAssegnato}</span>
               </div>

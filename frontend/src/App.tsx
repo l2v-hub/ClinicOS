@@ -5,7 +5,7 @@ import { API_URL } from './config';
 import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
   Appuntamento, Camera, Letto, ScheduleOperatore, Nota, StatoNota,
-  CartellaPaziente,
+  CartellaPaziente, NuovoPaziente,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
@@ -99,7 +99,8 @@ export default function App() {
   // Restore nav from hash on mount + listen to popstate
   useEffect(() => {
     const hash = window.location.hash.replace('#/', '');
-    if (hash) {
+    // Don't restore dettaglio-paziente from hash: patient data is in-memory only
+    if (hash && hash !== 'dettaglio-paziente' && hash !== 'login') {
       const k = hash as NavKey;
       setNavKey(k);
     }
@@ -256,6 +257,57 @@ export default function App() {
     setPazienti(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
   }
 
+  // ── Add patient (frontend-only) ─────────────────────────────────────────────
+
+  function addPaziente(np: NuovoPaziente) {
+    const newP: Paziente = {
+      id: crypto.randomUUID(),
+      medicalRecordNumber: `MRN-${Date.now()}`,
+      firstName: np.firstName.trim(),
+      lastName: np.lastName.trim(),
+      dateOfBirth: np.dateOfBirth,
+      sex: np.sex || null,
+      email: np.email.trim() || null,
+      phone: np.phone.trim() || null,
+    };
+    setPazienti(prev => [...prev, newP]);
+    // Seed initial cartella data from form
+    const cartellaInit: Partial<CartellaPaziente> = {};
+    if (np.camera) cartellaInit.cameraNumero = np.camera;
+    if (np.letto) cartellaInit.lettoNumero = np.letto;
+    if (np.condizioniIniziali || np.motivoIngresso || np.notaClinicaIniziale || np.allergie || np.farmaci) {
+      cartellaInit.anamnesi = {
+        fisiologica: np.condizioniIniziali || '',
+        patologicaRemota: '',
+        patologicaProssima: np.motivoIngresso || '',
+        familiare: '',
+        lavorativa: '',
+        abitudini: '',
+        note: [np.notaClinicaIniziale, np.noteIniziali, np.allergie ? `Allergie: ${np.allergie}` : '', np.farmaci ? `Farmaci: ${np.farmaci}` : ''].filter(Boolean).join('\n'),
+        updatedAt: new Date().toISOString(),
+        operatore: np.operatoreId,
+      };
+    }
+    if (Object.keys(cartellaInit).length > 0) {
+      updateCartella(newP.id, cartellaInit);
+    }
+    // Open patient detail immediately
+    selectPaziente(newP);
+  }
+
+  // ── Navigate to patient by name ─────────────────────────────────────────────
+
+  function goToPazienteByNome(nome: string) {
+    if (!nome) return;
+    const q = nome.toLowerCase().trim();
+    const found = pazienti.find(p =>
+      `${p.lastName}, ${p.firstName}`.toLowerCase() === q ||
+      `${p.firstName} ${p.lastName}`.toLowerCase() === q ||
+      `${p.lastName} ${p.firstName}`.toLowerCase() === q
+    );
+    if (found) selectPaziente(found);
+  }
+
   // ── Note CRUD ───────────────────────────────────────────────────────────────
 
   function addNota(n: Omit<Nota, 'id' | 'createdAt'>) {
@@ -410,6 +462,7 @@ export default function App() {
               totalePazienti={pazienti.length}
               loadingPazienti={loadingPazienti}
               onNavigate={navigate}
+              onSelectPaziente={goToPazienteByNome}
             />
           )}
           {isAdmin && navKey === 'gestione-operatori' && (
@@ -427,6 +480,7 @@ export default function App() {
               pazienti={pazienti}
               onAddAppuntamento={addAppuntamento}
               onAddPaziente={() => {}}
+              onSelectPaziente={goToPazienteByNome}
             />
           )}
           {isAdmin && navKey === 'posti-letto' && (
@@ -454,6 +508,7 @@ export default function App() {
               onAdd={addConsegna}
               onUpdateStato={updateConsegnaStato}
               onDelete={deleteConsegna}
+              onSelectPaziente={goToPazienteByNome}
             />
           )}
           {navKey === 'note' && (
@@ -477,15 +532,25 @@ export default function App() {
               totalePazienti={pazienti.length}
               loadingPazienti={loadingPazienti}
               onNavigate={navigate}
+              onSelectPaziente={goToPazienteByNome}
             />
           )}
           {!isAdmin && navKey === 'pazienti' && (
             <PatientList
               pazienti={pazienti}
               consegne={consegne}
+              operatori={operatori}
+              camere={camere}
               loading={loadingPazienti}
               onSelect={selectPaziente}
+              onAddPaziente={addPaziente}
             />
+          )}
+          {navKey === 'dettaglio-paziente' && !pazienteSelezionato && (
+            <div style={{ padding: '48px 32px', textAlign: 'center', color: 'var(--text-muted)' }}>
+              <p style={{ fontSize: 16, marginBottom: 16 }}>Nessun paziente selezionato.</p>
+              <button className="btn-primary" onClick={() => navigate('pazienti')}>Vai alla lista pazienti</button>
+            </div>
           )}
           {navKey === 'dettaglio-paziente' && pazienteSelezionato && (
             <PatientDetail
@@ -511,6 +576,7 @@ export default function App() {
               appuntamenti={appuntamenti}
               pazienti={pazienti}
               onAddAppuntamento={addAppuntamento}
+              onSelectPaziente={goToPazienteByNome}
             />
           )}
         </main>
