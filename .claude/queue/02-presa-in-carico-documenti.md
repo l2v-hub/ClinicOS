@@ -1,157 +1,66 @@
-Template 2 — Scheda medicazioni / lesioni
+Implementa la Fase 1: miglioramento Presa in carico / Registrazione paziente.
 
-Deve somigliare a un modulo clinico a tabella.
+Obiettivo:
+La registrazione paziente deve rappresentare una vera “presa in carico”.
 
-Layout:
-- intestazione paziente:
-  - Cognome
-  - Nome
-  - Camera
-- sezione “Sede della lesione”
-- riquadro corpo umano / body map placeholder
-- tabella principale con colonne:
-  - Data e sigla inizio
-  - Tipo di lesione
-  - Grado
-  - Descrizione
-  - Detersione / disinfezione
-  - Trattamento
-  - Data e sigla fine
+Non modificare backend o Prisma.
+Lavora frontend first.
+Mantieni tutto in italiano.
+Esegui npm run build e correggi errori.
 
-Campi tipo lesione:
-- Ferita chirurgica
-- FLC
-- Lesione trofica
-- LDP
-- PEG
+La presa in carico deve includere:
 
-Campi grado:
-- 1°
-- 2°
-- 3°
-- 4°
-- Escara
+1. Dati anagrafici paziente
+- nome
+- cognome
+- data di nascita
+- sesso
+- codice fiscale
+- telefono
+- email
+- indirizzo
 
-Descrizione con checkbox:
-- Eritema
-- Flittene
-- Detersa
-- Granuleggiante
-- Fibrina
-- Necrosi
-- Essudato
-- Infetta
-- Flogosi
-- Punti sutura
-- Macerata
-- Sanguinante
-- Deiscenza
-- Altro
+2. Contatti parenti / familiari
+- referente principale
+- rapporto con il paziente
+- telefono referente
+- contatto emergenza
+- note referente
 
-Detersione/disinfezione:
-- Soluzione fisiologica
-- Iodopovidone
-- Clorexidina
-- Altro
-
-Trattamento:
-- Mepilex
-- Inadine
-- Comfeel
-- Alginato
-- Nu-gel
-- Iruxol
-- Bionect
-- Adaptic garza
-- Connettivina garze
-- Film poliuretano
-- Cerotto TNT
-- Garze sterili
-- Olio
-- Zinco
-- Sofargen
-- Altro
-
-In basso:
-- Esecuzione ogni
-- Desutura il
-- Sigla
-
-La stampa deve essere simile a una scheda A4 tabellare.
-
-Questa è una evoluzione della cartella clinica già esistente.
-Non riscrivere l’app.
-Integra i nuovi moduli nella sezione Operatore / Paziente.
-
-1. Presa in carico
-L’operatore deve poter creare e modificare una presa in carico del paziente.
-
-Campi:
-- provenienza:
-  - accesso diretto
-  - centro medico
-  - altra struttura
-  - dimissione ospedaliera
-  - familiare/caregiver
+3. Provenienza paziente
+- accesso diretto
+- ospedale
+- centro medico
+- altra struttura
+- familiare / caregiver
 - centro inviante
-- data presa in carico
-- ora presa in carico
-- operatore responsabile
+- modalità di arrivo
 - motivo ingresso
-- condizioni iniziali
-- note iniziali
+
+4. Camera e assegnazione
 - camera
-- letto/posto letto
-- documenti ricevuti
-- documenti mancanti
-- sigla/firma operatore
-- stampa presa in carico
+- letto / posto letto
+- operatore assegnato
+- stato paziente
+- priorità / alert iniziali
 
-2. Documenti paziente
-L’operatore deve poter registrare tutti i documenti consegnati dal paziente, dal familiare, da un centro medico o da altra struttura.
-
-Campi documento:
-- tipo documento
-- stato:
-  - ricevuto
-  - mancante
-  - da verificare
-  - firmato
-  - scaduto
-- data ricezione
-- provenienza
-- scadenza
-- note
-- allegato placeholder
-- azioni:
-  - aggiungi
-  - modifica
-  - archivia
-  - stampa elenco documenti
-
-Tipi documento:
-- documento identità
-- tessera sanitaria
-- consenso privacy
-- consenso trattamento
-- invio centro medico
-- lettera dimissione
-- referto
-- prescrizione
-- delega
-- liberatoria di uscita
-- consenso contenzioni
-- documentazione medicazioni
-- altro
+5. Diagnosi e condizioni di ingresso
+- diagnosi di ingresso
+- patologie pregresse
+- valutazioni funzionali iniziali
+- condizioni attuali del paziente
+- note iniziali
 
 UX:
-- evidenzia documenti mancanti
-- evidenzia documenti da verificare
-- rendi veloce l’inserimento da tablet
-- integra la sezione nella Cartella Clinica Paziente
-- ogni sezione deve essere editabile e stampabile
+- usa tab o sezioni chiare
+- i form devono essere ampi e facilmente compilabili
+- input e textarea devono essere touch-friendly
+- la modale/pagina non deve essere compressa
+- le sezioni devono essere evidenziate con card, ombre leggere o sfondo leggermente più scuro
+- niente scroll orizzontale
+- niente layout rotto su tablet
 
-Usa stato locale frontend.
-Non modificare backend.
-Non modificare Prisma.
-Esegui npm run build e correggi errori.
+Dopo creazione paziente:
+- aggiungi il paziente alla lista
+- apri automaticamente la scheda paziente
+- mostra feedback “Paziente creato correttamente”

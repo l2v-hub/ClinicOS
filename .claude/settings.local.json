@@ -24,7 +24,9 @@
       "Bash(wsl bash:*)",
       "Bash(wsl.exe:*)",
       "Bash(grep -v \"^$\")",
-      "Bash(rtk git:*)"
+      "Bash(rtk git:*)",
+      "Bash(railway --version)",
+      "Bash(railway whoami:*)"
     ]
   },
   "enabledPlugins": {

@@ -44,7 +44,9 @@ _Status: complete_
 ---
 
 ## QA/Test Reviewer — Findings
-_Status: complete_
+_Status: complete (Phase 1 + Phase 4 build verification 2026-05-04)_
+
+### Phase 1 Audit (original)
 
 **[HIGH] Form labels not linked to inputs** — ALL forms (`NewPatientModal`, `PatientDetail`, `AppointmentForm`, all cartella tabs). No `htmlFor`/`id` association. Screen readers broken. Clicking label doesn't focus input.
 
@@ -64,15 +66,36 @@ _Status: complete_
 
 **[LOW] Dead CSS `#social .button-icon`** — `index.css:48-50`. Vite template leftover.
 
+### Phase 4 Build Verification (2026-05-04)
+
+**BUILD STATUS: PASS** — `npm run build` clean, 0 TypeScript errors, 0 lint errors.
+- Bundle: 664 kB JS (172 kB gzip), 127 kB CSS. Single chunk — no code splitting. Acceptable for current scope.
+- Warning: chunk > 500 kB threshold. Not a blocker but flag for future lazy-loading of cartella tabs.
+
+**NEW FINDINGS (from fresh audit)**
+
+**[HIGH] `firstName[0]`/`lastName[0]` unguarded on empty string** — `App.tsx:453`, `PatientDetail.tsx:1027`. If a patient has `firstName=''` or `lastName=''` (possible from API), `[0]` returns `undefined`, renders empty avatar silently — but could crash if coerced. `PatientList.tsx:130,164` has same pattern but `aria-hidden` already set there. Fix: use `(firstName[0] ?? '?')`.
+- Test case: seed a patient with blank firstName via API, navigate to patient list.
+
+**[MED] `DiarioTab` delete has `window.confirm` guard** — VERIFIED at `DiarioTab.tsx:269`. This was listed as missing in UI/UX LOW — it IS implemented. Cross off that item.
+
+**[MED] No `aria-label` on nav rail logout button** — `App.tsx:403`. Has `title="Esci"` but no `aria-label`. Inconsistent with nav items which do have `aria-label`.
+- Test case: tab to logout button with screen reader.
+
+**[LOW] `app-additions.css` is 4031 lines** — single file for all component CSS. Not a bug but high collision risk when multiple agents edit simultaneously. Coordinate via file lock.
+
+**[LOW] Bundle size regression risk** — adding new clinical sections (fisioterapia, PS, scale di valutazione) will push bundle past 800 kB. Consider lazy imports for cartella tabs before adding more.
+
 ### High-Risk Files (do not touch without full read + plan approval)
 | File | Reason |
 |------|--------|
-| `PatientDetail.tsx` | ~1050 lines, 16 tabs, 20+ state vars, all clinical CRUD |
+| `PatientDetail.tsx` | ~1130 lines, 16 tabs, 20+ state vars, all clinical CRUD |
 | `App.tsx` | Central state + routing — changes ripple everywhere |
 | `types.ts` | Interface changes cascade to all cartella tabs |
 | `TerapiaMedicaTab.tsx` | Dual interactive/print view, type casting |
 | `DimissioneTab.tsx` | 50+ boolean optional fields, print correctness critical |
 | `ContenzioniTab.tsx` | Legal document printing, complex extended form |
+| `app-additions.css` | 4031 lines, all component styles — concurrent edit risk |
 
 ---
 

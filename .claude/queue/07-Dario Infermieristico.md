@@ -1,26 +1,46 @@
-Template 7 — Diario infermieristico
+Implementa la Fase 6: Scale di valutazione e contenzioni.
 
-Deve sembrare un registro a righe.
+Obiettivo:
+Gestire le scale e le schede di contenzione nella Cartella Clinica.
 
-Layout:
-- titolo: Diario infermieristico
-- intestazione:
-  - Cognome e nome
-  - Camera
-- tabella con colonne:
-  - Data
-  - Turno
-  - Nota / consegna
-  - Firma
+Non modificare backend o Prisma.
+Usa stato locale frontend.
+Mantieni tutto in italiano.
+Esegui npm run build.
 
-Turni:
-- M
-- P
-- N
-oppure:
-- Mattina
-- Pomeriggio
-- Notte
+Scale da prevedere:
+- Scala Braden
+- Tinetti
+- NRS
+- altre scale future
 
-La nota deve essere ampia.
-La stampa deve avere molte righe, come un diario clinico cartaceo.
+Ogni scala deve avere:
+- data compilazione
+- operatore
+- punteggi
+- totale
+- esito/rischio
+- note
+- stampa
+
+Contenzioni:
+La scheda contenzione deve prevedere:
+- tipo contenzione/protezione
+- motivazione
+- data inizio
+- data fine
+- medico
+- consenso
+- note
+- firma parente/tutore
+
+Firma:
+Per ora implementa una soluzione frontend:
+- campo “Firma parente/tutore”
+- modalità firma placeholder
+- eventuale area firma disegnabile se semplice
+- bottone “Cancella firma”
+- bottone “Conferma firma”
+
+Nota:
+La firma è funzionale per il prototipo, non dichiarare valore legale.

@@ -1,8 +1,7 @@
 {
-   "env": {
+  "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
-  "teammateMode": "tmux",
   "permissions": {
     "allow": [
       "Read(*)",
@@ -33,6 +32,8 @@
     ]
   },
   "enabledPlugins": {
-    "frontend-design@claude-plugins-official": true
-  }
+    "frontend-design@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "teammateMode": "tmux"
 }
