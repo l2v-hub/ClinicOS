@@ -15,7 +15,7 @@ $prompts = @(
 foreach ($promptFile in $prompts) {
   Write-Host ""
   Write-Host "================================================="
-  Write-Host "Running Claude task file: $promptFile"
+  Write-Host "Running Claude prompt: $promptFile"
   Write-Host "================================================="
 
   if (-not (Test-Path $promptFile)) {
@@ -23,25 +23,26 @@ foreach ($promptFile in $prompts) {
     break
   }
 
-  # Converte eventuali backslash Windows in slash WSL
-  $wslPromptFile = $promptFile -replace "\\", "/"
+  $phaseName = [System.IO.Path]::GetFileNameWithoutExtension($promptFile)
+  $logDir = ".claude\logs"
+  $logFile = "$logDir\$phaseName.log"
 
-  # Avvia lo swarm interattivo passando il file prompt.
-  # Lo script resta aperto finché tu non fai detach/exit da tmux.
-  wsl --cd /mnt/c/Workspace/DG_SE_DEV/ClinicOS bash -lc ".claude/team/start-team-interactive.sh --file '$wslPromptFile'"
+  New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 
+  $prompt = Get-Content $promptFile -Raw
+
+claude.exe -p "$prompt" `
+  --allowedTools "Read,Edit,Write,Glob,Grep,Bash(npm run build),Bash(git diff),Bash(git status)" `
+  --output-format text `
+  --verbose 2>&1 | Tee-Object -FilePath $logFile
+  
   Write-Host ""
-  Write-Host "Claude team session ended/detached. Running build..." -ForegroundColor Cyan
+  Write-Host "Claude log saved to: $logFile" -ForegroundColor Cyan
 
   npm run build
 
-  Write-Host ""
-  Write-Host "Git status:" -ForegroundColor Cyan
   git status
-
   git add .
-
-  $phaseName = [System.IO.Path]::GetFileNameWithoutExtension($promptFile)
   git commit -m "Claude phase: $phaseName" --allow-empty
 
   $answer = Read-Host "Continue with next phase? Type YES to continue"

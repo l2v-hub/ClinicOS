@@ -18,16 +18,16 @@ BASE_CMD="cd $PROJECT && export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 && claude
 
 # Avvio pannelli Claude interattivi
 p0=$(tmux new-session -d -s "$SESSION" -n "team" -P -F "#{pane_id}" "bash -lc '$BASE_CMD; echo LEAD exited; read'")
-tmux select-pane -t "$p0" -T "LEAD" C-m
+tmux select-pane -t "$p0" -T "LEAD"
 
 p1=$(tmux split-window -h -t "$p0" -P -F "#{pane_id}" "bash -lc '$BASE_CMD; echo UIUX exited; read'")
-tmux select-pane -t "$p1" -T "UIUX" C-m
+tmux select-pane -t "$p1" -T "UIUX"
 
 p2=$(tmux split-window -v -t "$p0" -P -F "#{pane_id}" "bash -lc '$BASE_CMD; echo IMPLEMENTER exited; read'")
-tmux select-pane -t "$p2" -T "IMPLEMENTER" C-m
+tmux select-pane -t "$p2" -T "IMPLEMENTER"
 
 p3=$(tmux split-window -v -t "$p1" -P -F "#{pane_id}" "bash -lc '$BASE_CMD; echo QA exited; read'")
-tmux select-pane -t "$p3" -T "QA" C-m
+tmux select-pane -t "$p3" -T "QA"
 
 tmux select-layout -t "$SESSION:0" tiled
 tmux set-option -t "$SESSION" pane-border-status top
