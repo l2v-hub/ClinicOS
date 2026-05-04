@@ -1,7 +1,6 @@
 $ErrorActionPreference = "Stop"
 
 $prompts = @(
-  ".claude/queue/02-presa-in-carico-documenti.md",
   ".claude/queue/03-diario-parametri-terapie.md",
   ".claude/queue/04-moduli-avanzati.md",
   ".claude/queue/05-Contenzioni.md",
@@ -45,9 +44,4 @@ claude.exe -p "$prompt" `
   git add .
   git commit -m "Claude phase: $phaseName" --allow-empty
 
-  $answer = Read-Host "Continue with next phase? Type YES to continue"
-  if ($answer -ne "YES") {
-    Write-Host "Stopped by user."
-    break
-  }
 }
