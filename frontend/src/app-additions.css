@@ -4029,3 +4029,323 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
     padding: 16px 12px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Multi-Patient Parameters — mpp-*
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Page shell ── */
+.mpp-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px 28px;
+  max-width: 100%;
+}
+
+/* ── Header ── */
+.mpp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.mpp-header__left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mpp-header__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.mpp-header__date {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.mpp-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mpp-header__count {
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--divider);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ── Hint ── */
+.mpp-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--blue-glow);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ── List ── */
+.mpp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Single patient row ── */
+.mpp-row {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+.mpp-row--dirty {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1), var(--shadow-card);
+}
+
+.mpp-row--saved {
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.08), var(--shadow-card);
+}
+
+/* ── Row head (patient name + status) ── */
+.mpp-row__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--divider);
+  background: var(--surface-raised);
+}
+
+.mpp-paziente-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.15s;
+}
+
+.mpp-paziente-link:hover {
+  opacity: 0.8;
+}
+
+.mpp-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--blue-dim);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.mpp-paziente-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mpp-paziente-nome {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.mpp-paziente-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.mpp-row__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Badges ── */
+.mpp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.mpp-badge svg {
+  width: 13px;
+  height: 13px;
+}
+
+.mpp-badge--dirty {
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+}
+
+.mpp-badge--saved {
+  background: var(--emerald-bg);
+  color: var(--emerald);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+/* ── Fields grid ── */
+.mpp-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px 16px;
+  padding: 16px 18px;
+}
+
+.mpp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mpp-field--wide {
+  grid-column: span 2;
+}
+
+.mpp-field__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.mpp-field__unit {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-xmuted);
+  text-transform: none;
+}
+
+.mpp-input {
+  height: 44px;
+  padding: 0 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-size: 14px;
+  font-family: var(--font-ui);
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mpp-input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: var(--shadow-focus);
+  background: var(--surface);
+}
+
+.mpp-input::placeholder {
+  color: var(--text-xmuted);
+}
+
+/* ── Row actions ── */
+.mpp-row__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px 14px;
+  border-top: 1px solid var(--divider);
+  background: var(--surface-raised);
+}
+
+.mpp-btn-salva,
+.mpp-btn-annulla {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 0 16px;
+  height: 38px;
+}
+
+.mpp-btn-salva svg,
+.mpp-btn-annulla svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ── Empty / loading state ── */
+.mpp-empty {
+  padding: 64px 32px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* ── Responsive: tablet (≤900px) ── */
+@media (max-width: 900px) {
+  .mpp-page {
+    padding: 16px 12px;
+  }
+
+  .mpp-fields {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 12px;
+    padding: 14px 14px;
+  }
+
+  .mpp-field--wide {
+    grid-column: 1 / -1;
+  }
+
+  .mpp-row__head {
+    padding: 12px 14px 10px;
+  }
+
+  .mpp-row__actions {
+    padding: 10px 14px 12px;
+    flex-wrap: wrap;
+  }
+}
+
+/* ── Responsive: small (≤480px) ── */
+@media (max-width: 480px) {
+  .mpp-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .mpp-field--wide {
+    grid-column: 1;
+  }
+}

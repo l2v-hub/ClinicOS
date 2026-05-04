@@ -26,10 +26,11 @@ import { PatientDetail } from './components/operator/PatientDetail';
 import { ConsegnePage } from './components/operator/ConsegnePage';
 import { OperatorAgenda } from './components/operator/OperatorAgenda';
 import { NotesPage } from './components/shared/NotesPage';
+import { MultiPatientParametri } from './components/operator/MultiPatientParametri';
 
 import {
   IcoDashboard, IcoPazienti, IcoCalendar, IcoConsegne, IcoOperatori,
-  IcoBed, IcoClock, IcoMessage, IcoLogout, IcoSearch, IcoX,
+  IcoBed, IcoClock, IcoMessage, IcoLogout, IcoSearch, IcoX, IcoActivity,
 } from './icons';
 
 // ── Navigation helpers ─────────────────────────────────────────────────────────
@@ -47,11 +48,12 @@ const ADMIN_NAV: NavItem[] = [
 ];
 
 const OPERATOR_NAV: NavItem[] = [
-  { key: 'operator-dashboard', label: 'Dashboard',        icon: <IcoDashboard /> },
-  { key: 'pazienti',           label: 'Pazienti',         icon: <IcoPazienti /> },
-  { key: 'consegne',           label: 'Consegne',         icon: <IcoConsegne /> },
-  { key: 'agenda-operatore',   label: 'Agenda',           icon: <IcoCalendar /> },
-  { key: 'note',               label: 'Note',             icon: <IcoMessage /> },
+  { key: 'operator-dashboard',       label: 'Dashboard',  icon: <IcoDashboard /> },
+  { key: 'pazienti',                 label: 'Pazienti',   icon: <IcoPazienti /> },
+  { key: 'parametri-multipaziente',  label: 'Parametri',  icon: <IcoActivity /> },
+  { key: 'consegne',                 label: 'Consegne',   icon: <IcoConsegne /> },
+  { key: 'agenda-operatore',         label: 'Agenda',     icon: <IcoCalendar /> },
+  { key: 'note',                     label: 'Note',       icon: <IcoMessage /> },
 ];
 
 // ── App ────────────────────────────────────────────────────────────────────────
@@ -584,6 +586,16 @@ export default function App() {
               onUpdatePaziente={updatePaziente}
               operatoreNome={utente.nome}
               operatoreId={utenteId}
+            />
+          )}
+          {!isAdmin && navKey === 'parametri-multipaziente' && (
+            <MultiPatientParametri
+              pazienti={pazienti}
+              cartelle={cartelle}
+              operatoreNome={utente.nome}
+              loading={loadingPazienti}
+              onSelectPaziente={selectPaziente}
+              onUpdateCartella={updateCartella}
             />
           )}
           {!isAdmin && navKey === 'agenda-operatore' && (
