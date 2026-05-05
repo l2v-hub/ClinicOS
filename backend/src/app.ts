@@ -5,26 +5,57 @@ import patientsRouter from './routes/patients.js';
 
 const app = express();
 
-// Build allowed origins list from env
-const allowedOrigins: string[] = ['http://localhost:5173'];
+// ── CORS configuration ─────────────────────────────────────────────────────
+//
+// Allowed origins:
+//  1. Localhost variants for local development
+//  2. FRONTEND_URL env var (single URL)
+//  3. FRONTEND_URLS env var (comma-separated list)
+//  4. Any *.vercel.app URL containing 'clinicos' (prototype/preview support)
+//
+// In Railway, set:
+//   FRONTEND_URL=https://clinicos-eosin.vercel.app
+//   FRONTEND_URLS=https://clinicos-eosin.vercel.app,https://clinicos-el91lyszt-lucalavia-2482s-projects.vercel.app
+
+const staticAllowed = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+];
+
+const envAllowed: string[] = [];
+
 if (process.env.FRONTEND_URL) {
-  allowedOrigins.push(process.env.FRONTEND_URL);
+  envAllowed.push(process.env.FRONTEND_URL.trim());
 }
 if (process.env.FRONTEND_URLS) {
-  process.env.FRONTEND_URLS.split(',').map(u => u.trim()).filter(Boolean).forEach(u => {
-    if (!allowedOrigins.includes(u)) allowedOrigins.push(u);
-  });
+  process.env.FRONTEND_URLS.split(',')
+    .map(u => u.trim())
+    .filter(Boolean)
+    .forEach(u => envAllowed.push(u));
+}
+
+const allowedOrigins = Array.from(new Set([...staticAllowed, ...envAllowed]));
+
+console.log('CORS allowed origins:', allowedOrigins);
+
+function isAllowed(origin: string): boolean {
+  if (allowedOrigins.includes(origin)) return true;
+  // Allow any Vercel preview/production URL for this project
+  if (origin.endsWith('.vercel.app') && origin.includes('clinicos')) return true;
+  return false;
 }
 
 app.use(cors({
   origin: (origin, callback) => {
-    // allow requests with no origin (curl, Postman, server-to-server)
+    // Allow requests with no origin (curl, Postman, server-to-server)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
+    if (isAllowed(origin)) return callback(null, true);
+    console.warn(`CORS blocked origin: ${origin}`);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
   credentials: true,
-}))
+}));
 
 app.use(express.json());
 
