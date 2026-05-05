@@ -2336,9 +2336,9 @@
 
 .cr-header {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 20px 10px;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 28px 16px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
@@ -2361,7 +2361,7 @@
 }
 
 .cr-header__name {
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 700;
   color: var(--text);
   margin: 0;
@@ -3075,13 +3075,13 @@
 
 /* ── Patient avatar in header (compact, discrete) ── */
 .cr-pt-avatar {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
   border-radius: 8px;
   background: linear-gradient(135deg, var(--blue, #1A56DB) 0%, #4338CA 100%);
   color: #fff;
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -3102,8 +3102,8 @@
 .cr-nav-groups {
   display: flex;
   gap: 0;
-  padding: 0 20px;
-  background: #F1F5F9;
+  padding: 0 28px;
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
   overflow-x: auto;
@@ -3115,19 +3115,19 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 7px 14px;
-  font-size: 11.5px;
-  font-weight: 700;
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text-muted);
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   margin-bottom: -1px;
   cursor: pointer;
   white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  text-transform: none;
+  letter-spacing: 0;
+  transition: color 0.15s, border-color 0.15s;
 }
 .cr-nav-group-btn:hover {
   color: var(--text);
@@ -3136,16 +3136,16 @@
 .cr-nav-group-btn.active {
   color: var(--blue, #1A56DB);
   border-bottom-color: var(--blue, #1A56DB);
-  background: #fff;
+  background: transparent;
 }
 
 /* ── Sub-tab bar ── */
 .cr-tab-bar {
   background: #fff;
-  padding: 0 16px;
+  padding: 0 28px;
 }
 .cr-tab-btn {
-  padding: 7px 13px;
+  padding: 9px 16px;
   font-size: 13px;
 }
 
@@ -3321,7 +3321,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 
 /* ── Tab content more breathing room ── */
 .cr-tab-content {
-  padding: 20px 24px;
+  padding: 24px 28px;
   gap: 20px;
 }
 
@@ -3354,13 +3354,13 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 
 /* Ensure patient-record-view fills the content area cleanly */
 .page-content .patient-record-view {
-  margin: -24px -24px -48px;
-  height: calc(100% + 72px);
+  margin: 0;
+  height: 100%;
 }
 @media (max-width: 640px) {
   .page-content .patient-record-view {
-    margin: -16px -14px -40px;
-    height: calc(100% + 56px);
+    margin: 0;
+    height: 100%;
   }
 }
 
@@ -4348,4 +4348,65 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   .mpp-field--wide {
     grid-column: 1;
   }
+}
+
+/* ── Patient header refinements ── */
+.cr-breadcrumb-btn {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 2px 0;
+  opacity: 0.8;
+}
+.cr-breadcrumb-btn:hover { opacity: 1; color: var(--blue); }
+
+.cr-header__name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cr-header__name-row .cr-header__name {
+  margin: 0;
+  white-space: normal;
+}
+
+.cr-meta-sep {
+  color: var(--border);
+  font-weight: 300;
+  user-select: none;
+}
+
+.cr-badge-sm {
+  font-size: 11px !important;
+  padding: 2px 7px !important;
+}
+
+.cr-header__allergy-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cr-header__allergy-inline svg {
+  width: 12px;
+  height: 12px;
+  color: var(--red);
+  flex-shrink: 0;
+}
+
+/* ── Overflow prevention ── */
+.patient-record-view {
+  overflow-x: hidden;
+}
+
+.cr-tab-content {
+  overflow-x: hidden;
+}
+
+/* No horizontal scroll anywhere in patient detail */
+.cr-header, .cr-nav-groups, .cr-tab-bar {
+  max-width: 100%;
+  box-sizing: border-box;
 }

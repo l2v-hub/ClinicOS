@@ -1021,34 +1021,43 @@ export function PatientDetail({
     <div className="patient-record-view">
       {/* Header */}
       <div className="cr-header">
-        <button className="btn-back" onClick={onBack}><IcoChevronLeft /> Pazienti</button>
+        <button className="btn-back cr-breadcrumb-btn" onClick={onBack}><IcoChevronLeft /> Pazienti</button>
         <div className="cr-header__patient">
           <div className="cr-pt-avatar" aria-hidden="true">
             {paziente.firstName[0]}{paziente.lastName[0]}
           </div>
           <div className="cr-header__info">
-            <h2 className="cr-header__name">{paziente.lastName}, {paziente.firstName}</h2>
-            <div className="cr-header__meta">
-              <span className="mrn-tag">{paziente.medicalRecordNumber}</span>
-              <span>{calcAge(paziente.dateOfBirth)} anni · {paziente.sex ?? '—'}</span>
-              {cartella.cameraNumero && (
-                <span className="cr-room-tag"><IcoBed /> Cam. {cartella.cameraNumero}{cartella.lettoNumero ? ` / L.${cartella.lettoNumero}` : ''}</span>
-              )}
+            <div className="cr-header__name-row">
+              <h2 className="cr-header__name">{paziente.lastName}, {paziente.firstName}</h2>
               <span className={`stato-pill stato-pill--${cartella.statoRicovero === 'ricoverato' ? 'attivo' : 'inattivo'}`}>
                 {cartella.statoRicovero.replace('_', ' ')}
               </span>
               {mieConsegne.some(c => c.stato !== 'completata' && c.priorita === 'urgente') && (
-                <span className="badge badge--red" style={{ fontSize: 11 }}>Consegna urgente</span>
+                <span className="badge badge--red cr-badge-sm">Urgente</span>
               )}
             </div>
-            {hasAllergie && (
-              <div className="cr-header__allergy-chips">
-                <IcoShield />
-                {allergieGravi.map(a => (
-                  <span key={a.id} className="badge badge--red">{a.allergene}</span>
-                ))}
-              </div>
-            )}
+            <div className="cr-header__meta">
+              <span className="mrn-tag">{paziente.medicalRecordNumber}</span>
+              <span className="cr-meta-sep">·</span>
+              <span>{calcAge(paziente.dateOfBirth)} anni · {paziente.sex ?? '—'}</span>
+              {cartella.cameraNumero && (
+                <>
+                  <span className="cr-meta-sep">·</span>
+                  <span className="cr-room-tag"><IcoBed /> Cam. {cartella.cameraNumero}{cartella.lettoNumero ? ` / L.${cartella.lettoNumero}` : ''}</span>
+                </>
+              )}
+              {hasAllergie && (
+                <>
+                  <span className="cr-meta-sep">·</span>
+                  <span className="cr-header__allergy-inline">
+                    <IcoShield />
+                    {allergieGravi.map(a => (
+                      <span key={a.id} className="badge badge--red cr-badge-sm">{a.allergene}</span>
+                    ))}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
