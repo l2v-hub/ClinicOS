@@ -5,10 +5,13 @@ const router = Router();
 
 router.get('/', async (_req, res) => {
   try {
-    const patients = await prisma.patient.findMany();
+    const patients = await prisma.patient.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    console.log(`GET /patients → ${patients.length} record`);
     res.status(200).json(patients);
   } catch (error) {
-    console.error('Failed to fetch patients:', error);
+    console.error('GET /patients error:', error);
     res.status(500).json({ error: 'Failed to fetch patients' });
   }
 });
@@ -80,6 +83,7 @@ router.post('/', async (req, res) => {
 
   try {
     const patient = await prisma.patient.create({ data: buildData(`MRN-${Date.now()}`) });
+    console.log(`POST /patients → creato id=${patient.id} nome="${patient.firstName} ${patient.lastName}"`);
     res.status(201).json(patient);
   } catch (error: unknown) {
     const prismaError = error as { code?: string };
@@ -88,11 +92,14 @@ router.post('/', async (req, res) => {
         const patient = await prisma.patient.create({
           data: buildData(`MRN-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`),
         });
+        console.log(`POST /patients (retry) → creato id=${patient.id}`);
         res.status(201).json(patient);
-      } catch {
+      } catch (retryErr) {
+        console.error('POST /patients retry error:', retryErr);
         res.status(500).json({ error: 'Errore durante la creazione del paziente' });
       }
     } else {
+      console.error('POST /patients error:', error);
       res.status(500).json({ error: 'Errore durante la creazione del paziente' });
     }
   }
