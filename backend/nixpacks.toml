@@ -1,0 +1,11 @@
+[phases.install]
+cmds = ["npm install"]
+
+[phases.build]
+cmds = [
+  "npx prisma generate --schema=../prisma/schema.prisma",
+  "npm run build"
+]
+
+[start]
+cmd = "node dist/server.js"
