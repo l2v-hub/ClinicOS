@@ -341,19 +341,34 @@ export function PatientDetail({
 
   function renderRiepilogo() {
     const lastVitali = cartella.parametriVitali.slice(0, 4);
+    const diagnosiMostrate = diagnosiAttive.slice(0, 3);
+    const farmaciMostrati = farmaciAttivi.slice(0, 4);
+
+    function navTo(group: TabGroup, tabId: TabId) {
+      switchGroup(group);
+      switchTab(tabId);
+    }
+
     return (
       <div className="cr-tab-content">
-        {/* Alerts */}
+
+        {/* ── Alert allergie gravi ── */}
         {hasAllergie && (
-          <div className="allergy-alert-strip">
-            <span className="cr-alert-ico"><IcoWarning /></span>
-            <strong>ALLERGIE GRAVI:</strong>{' '}
-            {allergieGravi.map(a => a.allergene).join(', ')}
-          </div>
+          <button
+            className="cr-alert-strip cr-alert-strip--allergie"
+            onClick={() => navTo('clinica', 'anamnesi')}
+            title="Vai ad Anamnesi / Allergie"
+          >
+            <span className="cr-alert-strip__ico"><IcoWarning /></span>
+            <span><strong>ALLERGIE GRAVI:</strong> {allergieGravi.map(a => a.allergene).join(', ')}</span>
+            <span className="cr-alert-strip__link">Vedi →</span>
+          </button>
         )}
+
+        {/* ── Alert rischi ── */}
         {rischioAlto.length > 0 && (
-          <div className="coverage-alert" style={{ borderColor: 'var(--amber)' }}>
-            <span className="cr-alert-ico"><IcoWarning /></span>
+          <div className="cr-alert-strip cr-alert-strip--rischi">
+            <span className="cr-alert-strip__ico"><IcoWarning /></span>
             <span>
               <strong>Rischi attivi:</strong>{' '}
               {rischioAlto.map(r => `${r.tipo.replace('_', ' ')} (${r.livello})`).join(' · ')}
@@ -361,95 +376,116 @@ export function PatientDetail({
           </div>
         )}
 
-        {/* Quick stats row */}
+        {/* ── Quick stats row ── */}
         <div className="cr-quick-stats">
-          <div className="cr-quick-stat">
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => navTo('clinica', 'diagnosi')} title="Vai a Diagnosi">
             <span className="cr-quick-stat__val">{diagnosiAttive.length}</span>
             <span className="cr-quick-stat__lbl">Diagnosi attive</span>
-          </div>
-          <div className="cr-quick-stat">
+          </button>
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => navTo('clinica', 'terapie')} title="Vai a Terapia Medica">
             <span className="cr-quick-stat__val">{farmaciAttivi.length}</span>
             <span className="cr-quick-stat__lbl">Farmaci attivi</span>
-          </div>
-          <div className="cr-quick-stat">
+          </button>
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => navTo('clinica', 'anamnesi')} title="Vai ad Anamnesi">
             <span className="cr-quick-stat__val">{cartella.allergie.length}</span>
             <span className="cr-quick-stat__lbl">Allergie</span>
-          </div>
-          <div className="cr-quick-stat">
+          </button>
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => navTo('panoramica', 'consegne')} title="Vai a Consegne">
             <span className="cr-quick-stat__val">{mieConsegne.filter(c => c.stato !== 'completata').length}</span>
             <span className="cr-quick-stat__lbl">Consegne aperte</span>
-          </div>
+          </button>
           {cartella.cameraNumero && (
-            <div className="cr-quick-stat">
+            <button className="cr-quick-stat cr-quick-stat--clickable cr-quick-stat--camera" onClick={() => navTo('clinica', 'presa-in-carico')} title="Vai a Presa in Carico">
               <span className="cr-quick-stat__val">{cartella.cameraNumero}</span>
-              <span className="cr-quick-stat__lbl">Camera / L.{cartella.lettoNumero}</span>
-            </div>
+              <span className="cr-quick-stat__lbl">Camera{cartella.lettoNumero ? ` / L.${cartella.lettoNumero}` : ''}</span>
+            </button>
           )}
         </div>
 
+        {/* ── Main grid ── */}
         <div className="cr-riepilogo-grid">
-          {/* Active diagnoses */}
-          <div className="cr-riepilogo-card">
-            <div className="cr-riepilogo-card__title"><IcoCartelle /> Diagnosi attive</div>
-            {diagnosiAttive.length === 0 ? <p className="cr-empty">Nessuna diagnosi attiva.</p> : (
-              <ul className="cr-compact-list">
-                {diagnosiAttive.map(d => (
-                  <li key={d.id} className="cr-compact-item">
-                    <span className="cr-compact-item__main">{d.descrizione}</span>
-                    {d.codiceICD && <span className="cr-mono">{d.codiceICD}</span>}
-                    <span className={`badge ${STATO_DIAG_CLASS[d.stato]}`}>{d.tipo}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
 
-          {/* Active meds */}
-          <div className="cr-riepilogo-card">
-            <div className="cr-riepilogo-card__title"><IcoPill /> Farmaci attivi</div>
-            {farmaciAttivi.length === 0 ? <p className="cr-empty">Nessun farmaco attivo.</p> : (
-              <ul className="cr-compact-list">
-                {farmaciAttivi.map(f => (
-                  <li key={f.id} className="cr-compact-item">
-                    <span className="cr-compact-item__main">{f.nome} {f.dose}</span>
-                    <span className="cr-compact-item__sub">{f.frequenza}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {/* Vitals */}
-          <div className="cr-riepilogo-card">
-            <div className="cr-riepilogo-card__title"><IcoActivity /> Ultimi parametri</div>
-            <div className="vitals-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-              {lastVitali.map(v => (
-                <div key={v.id} className={`vital-card ${STATO_VITALE_CLASS[v.stato]}`}>
-                  <span className="vital-label">{v.etichetta}</span>
-                  <span className="vital-value">{v.valore} <span className="vital-unit">{v.unita}</span></span>
-                  <span className="vital-date">{fmtDate(v.rilevato)}</span>
-                </div>
-              ))}
+          {/* Diagnosi attive */}
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('clinica', 'diagnosi')}>
+            <div className="cr-riepilogo-card__title">
+              <IcoCartelle /> Diagnosi attive
+              {diagnosiAttive.length > 3 && <span className="cr-card-more">vedi tutte ({diagnosiAttive.length})</span>}
             </div>
-          </div>
+            {diagnosiMostrate.length === 0
+              ? <p className="cr-empty">Nessuna diagnosi attiva.</p>
+              : (
+                <ul className="cr-compact-list">
+                  {diagnosiMostrate.map(d => (
+                    <li key={d.id} className="cr-compact-item">
+                      <span className="cr-compact-item__main">{d.descrizione}</span>
+                      {d.codiceICD && <span className="cr-mono cr-mono--sm">{d.codiceICD}</span>}
+                      <span className={`badge ${STATO_DIAG_CLASS[d.stato]}`}>{d.tipo}</span>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+          </button>
 
-          {/* Open consegne */}
+          {/* Farmaci attivi */}
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('clinica', 'terapie')}>
+            <div className="cr-riepilogo-card__title">
+              <IcoPill /> Farmaci attivi
+              {farmaciAttivi.length > 4 && <span className="cr-card-more">vedi tutti ({farmaciAttivi.length})</span>}
+            </div>
+            {farmaciMostrati.length === 0
+              ? <p className="cr-empty">Nessun farmaco attivo.</p>
+              : (
+                <ul className="cr-compact-list">
+                  {farmaciMostrati.map(f => (
+                    <li key={f.id} className="cr-compact-item cr-compact-item--farmaco">
+                      <span className="cr-compact-item__main">{f.nome}</span>
+                      <span className="cr-compact-item__dose">{f.dose}</span>
+                      <span className="cr-compact-item__sub">{f.frequenza}</span>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+          </button>
+
+          {/* Ultimi parametri */}
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('clinica', 'parametri')}>
+            <div className="cr-riepilogo-card__title"><IcoActivity /> Ultimi parametri</div>
+            {lastVitali.length === 0
+              ? <p className="cr-empty">Nessun parametro rilevato.</p>
+              : (
+                <div className="vitals-grid vitals-grid--mini">
+                  {lastVitali.map(v => (
+                    <div key={v.id} className={`vital-card vital-card--mini ${STATO_VITALE_CLASS[v.stato]}`}>
+                      <span className="vital-label">{v.etichetta}</span>
+                      <span className="vital-value vital-value--mini">{v.valore} <span className="vital-unit">{v.unita}</span></span>
+                      <span className="vital-date">{fmtDate(v.rilevato)}</span>
+                    </div>
+                  ))}
+                </div>
+              )
+            }
+          </button>
+
+          {/* Consegne aperte */}
           {mieConsegne.filter(c => c.stato !== 'completata').length > 0 && (
-            <div className="cr-riepilogo-card">
+            <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('panoramica', 'consegne')}>
               <div className="cr-riepilogo-card__title"><IcoConsegne /> Consegne aperte</div>
-              <div className="consegne-list">
+              <div className="consegne-list consegne-list--mini">
                 {mieConsegne.filter(c => c.stato !== 'completata').slice(0, 3).map(c => (
-                  <div key={c.id} className={`consegna-card consegna-card--${c.priorita}`}>
+                  <div key={c.id} className={`consegna-card consegna-card--mini consegna-card--${c.priorita}`}>
                     <div className="consegna-card__top">
                       <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>{c.priorita}</span>
                       <span className="consegna-tipo">{c.tipo}</span>
                     </div>
-                    <p className="consegna-note">{c.note}</p>
+                    <p className="consegna-note consegna-note--clamp">{c.note}</p>
                   </div>
                 ))}
               </div>
-            </div>
+            </button>
           )}
+
         </div>
       </div>
     );
