@@ -10,7 +10,7 @@ interface PatientListProps {
   camere: Camera[];
   loading: boolean;
   onSelect: (p: Paziente) => void;
-  onAddPaziente: (p: NuovoPaziente) => void;
+  onAddPaziente: (p: NuovoPaziente) => Promise<void>;
 }
 
 function calcAge(dob: string): number {
@@ -42,9 +42,9 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
     return match && sessoMatch;
   });
 
-  function handleAddPaziente(np: NuovoPaziente) {
+  async function handleAddPaziente(np: NuovoPaziente) {
+    await onAddPaziente(np);
     setShowModal(false);
-    onAddPaziente(np);
   }
 
   return (

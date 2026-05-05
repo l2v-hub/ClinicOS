@@ -43,4 +43,59 @@ router.post('/seed', async (_req, res) => {
     res.status(500).json({ error: 'Failed to seed patients' });
   }
 });
+router.post('/', async (req, res) => {
+  const body = req.body as {
+    firstName?: string;
+    lastName?: string;
+    dateOfBirth?: string;
+    sex?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    emergencyContactName?: string;
+    emergencyContactPhone?: string;
+  };
+
+  if (
+    !body.firstName || typeof body.firstName !== 'string' || body.firstName.trim() === '' ||
+    !body.lastName || typeof body.lastName !== 'string' || body.lastName.trim() === '' ||
+    !body.dateOfBirth || typeof body.dateOfBirth !== 'string' || body.dateOfBirth.trim() === ''
+  ) {
+    res.status(400).json({ error: 'Nome, cognome e data di nascita sono obbligatori' });
+    return;
+  }
+
+  const buildData = (mrn: string) => ({
+    medicalRecordNumber: mrn,
+    firstName: body.firstName!.trim(),
+    lastName: body.lastName!.trim(),
+    dateOfBirth: new Date(body.dateOfBirth!),
+    ...(body.sex !== undefined && { sex: body.sex }),
+    ...(body.email !== undefined && { email: body.email }),
+    ...(body.phone !== undefined && { phone: body.phone }),
+    ...(body.address !== undefined && { address: body.address }),
+    ...(body.emergencyContactName !== undefined && { emergencyContactName: body.emergencyContactName }),
+    ...(body.emergencyContactPhone !== undefined && { emergencyContactPhone: body.emergencyContactPhone }),
+  });
+
+  try {
+    const patient = await prisma.patient.create({ data: buildData(`MRN-${Date.now()}`) });
+    res.status(201).json(patient);
+  } catch (error: unknown) {
+    const prismaError = error as { code?: string };
+    if (prismaError.code === 'P2002') {
+      try {
+        const patient = await prisma.patient.create({
+          data: buildData(`MRN-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`),
+        });
+        res.status(201).json(patient);
+      } catch {
+        res.status(500).json({ error: 'Errore durante la creazione del paziente' });
+      }
+    } else {
+      res.status(500).json({ error: 'Errore durante la creazione del paziente' });
+    }
+  }
+});
+
 export default router;

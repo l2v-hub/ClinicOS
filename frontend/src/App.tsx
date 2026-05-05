@@ -265,24 +265,43 @@ export default function App() {
     setPazienti(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
   }
 
-  // ── Add patient (frontend-only) ─────────────────────────────────────────────
+  // ── Add patient (backend-persisted) ────────────────────────────────────────
 
-  function addPaziente(np: NuovoPaziente) {
-    const newP: Paziente = {
-      id: crypto.randomUUID(),
-      medicalRecordNumber: `MRN-${Date.now()}`,
+  async function addPaziente(np: NuovoPaziente) {
+    const addressParts = [np.address, np.comune, np.provincia, np.cap].filter(Boolean);
+    const address = addressParts.length > 0 ? addressParts.join(', ') : undefined;
+
+    const payload: Record<string, string> = {
       firstName: np.firstName.trim(),
       lastName: np.lastName.trim(),
       dateOfBirth: np.dateOfBirth,
-      sex: np.sex || null,
-      email: np.email.trim() || null,
-      phone: np.phone.trim() || null,
     };
+    if (np.sex)                      payload.sex                  = np.sex;
+    if (np.email.trim())             payload.email                = np.email.trim();
+    if (np.phone.trim())             payload.phone                = np.phone.trim();
+    if (address)                     payload.address              = address;
+    if (np.referenteNome.trim())     payload.emergencyContactName = np.referenteNome.trim();
+    if (np.referenteTelefono.trim()) payload.emergencyContactPhone = np.referenteTelefono.trim();
+
+    const res = await fetch(`${API_URL}/patients`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json() as Record<string, unknown>;
+
+    if (!res.ok) {
+      throw new Error((data.error as string) || 'Errore durante la creazione del paziente');
+    }
+
+    const newP = data as unknown as Paziente;
     setPazienti(prev => [...prev, newP]);
-    // Seed initial cartella data from form
+
+    // Seed cartella from form fields not persisted in backend
     const cartellaInit: Partial<CartellaPaziente> = {};
     if (np.camera) cartellaInit.cameraNumero = np.camera;
-    if (np.letto) cartellaInit.lettoNumero = np.letto;
+    if (np.letto)  cartellaInit.lettoNumero  = np.letto;
     if (np.condizioniIniziali || np.motivoIngresso || np.notaClinicaIniziale || np.allergie || np.farmaci || np.alertClinici) {
       cartellaInit.anamnesi = {
         fisiologica: np.condizioniIniziali || '',
@@ -300,7 +319,6 @@ export default function App() {
       updateCartella(newP.id, cartellaInit);
     }
     showToast('Paziente creato correttamente');
-    // Open patient detail immediately
     selectPaziente(newP);
   }
 

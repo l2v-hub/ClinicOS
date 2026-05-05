@@ -283,7 +283,7 @@ export function OperatorAgenda({
       {showNewPaziente && (
         <NewPatientModal
           operatori={operatori}
-          onSave={() => setShowNewPaziente(false)}
+          onSave={async () => { setShowNewPaziente(false); }}
           onCancel={() => setShowNewPaziente(false)}
         />
       )}

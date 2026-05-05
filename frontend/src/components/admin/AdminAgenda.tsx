@@ -329,7 +329,7 @@ export function AdminAgenda({ operatori, appuntamenti, pazienti, onAddAppuntamen
       {showNewPaziente && (
         <NewPatientModal
           operatori={operatori}
-          onSave={p => { onAddPaziente(`${p.lastName}, ${p.firstName}`); setShowNewPaziente(false); }}
+          onSave={async p => { onAddPaziente(`${p.lastName}, ${p.firstName}`); setShowNewPaziente(false); }}
           onCancel={() => setShowNewPaziente(false)}
         />
       )}

@@ -90,7 +90,7 @@ function NpmField({ label, required, hint, span2, error, children }: {
 interface NewPatientModalProps {
   operatori: Operatore[];
   camere?: Camera[];
-  onSave: (p: NuovoPaziente) => void;
+  onSave: (p: NuovoPaziente) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -103,6 +103,8 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [touched, setTouched] = useState<Set<keyof NuovoPaziente>>(new Set());
   const [nuovoDocTipo, setNuovoDocTipo] = useState(TIPI_DOCUMENTO[0]);
+  const [isSaving, setIsSaving] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -127,13 +129,21 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
 
   const hasErrors = !form.firstName.trim() || !form.lastName.trim() || !form.dateOfBirth;
 
-  function salva() {
+  async function salva() {
     setSubmitAttempted(true);
     if (hasErrors) {
       setActiveTab('anagrafica');
       return;
     }
-    onSave(form);
+    setApiError(null);
+    setIsSaving(true);
+    try {
+      await onSave(form);
+    } catch (err) {
+      setApiError(err instanceof Error ? err.message : 'Errore durante la creazione del paziente');
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   // Document upload
@@ -519,12 +529,22 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
 
         {/* ── Footer ── */}
         <div className="npm-footer">
-          <span className="npm-footer__note">* Campi obbligatori</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+            <span className="npm-footer__note">* Campi obbligatori</span>
+            {apiError && (
+              <div className="npm-validation-banner" role="alert" style={{ marginTop: 0 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                {apiError}
+              </div>
+            )}
+          </div>
           <div className="npm-footer__actions">
-            <button className="btn-secondary" onClick={onCancel}>Annulla</button>
-            <button className="btn-primary" onClick={salva}
+            <button className="btn-secondary" onClick={onCancel} disabled={isSaving}>Annulla</button>
+            <button className="btn-primary" onClick={salva} disabled={isSaving}
               title={hasErrors && !submitAttempted ? 'Compila Nome, Cognome e Data di nascita' : undefined}>
-              <IcoCheck /> Crea paziente
+              {isSaving ? 'Salvataggio…' : <><IcoCheck /> Crea paziente</>}
             </button>
           </div>
         </div>
