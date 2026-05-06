@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { CartellaPaziente, Paziente, ParametriMensili, ParametroGiorno } from '../../../types';
 import { uid, todayStr, nowISO, PrintButton } from './shared';
 import { ParametriModuloView } from './ParametriModuloView';
+import { VitaleModal } from './VitaleModal';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -65,6 +66,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
   const [modulo, setModulo] = useState(false);
   const [editGiorno, setEditGiorno] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<ParametroGiorno>(emptyGiorno(1));
+  const [modalCol, setModalCol] = useState<{ colKey: keyof ParametroGiorno | null; colLabel: string; colSub?: string } | null>(null);
   const [showVitalePanel, setShowVitalePanel] = useState(false);
   const [vitaleForm, setVitaleForm] = useState<{ etichetta: string; valore: string; unita: string; stato: 'normale' | 'attenzione' | 'critico'; rilevato: string; note: string }>({
     etichetta: '', valore: '', unita: '', stato: 'normale', rilevato: todayStr(), note: '',
@@ -89,27 +91,25 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
     setEditGiorno(null);
   }
 
-  function openEdit(g: number) {
+  function openEdit(g: number, col?: { key: keyof ParametroGiorno; label: string; sub?: string }) {
     setEditGiorno(g);
     setEditForm({ ...giornoData(g), giorno: g });
+    setModalCol(col ? { colKey: col.key, colLabel: col.label, colSub: col.sub } : { colKey: null, colLabel: 'Tutti i parametri' });
   }
 
-  function saveEdit() {
+  function saveEdit(updated: ParametroGiorno) {
     if (editGiorno === null) return;
     const updatedGiorni = meseCorrente.giorni.filter(d => d.giorno !== editGiorno);
-    if (giornoHasData(editForm)) updatedGiorni.push(editForm);
+    if (giornoHasData(updated)) updatedGiorni.push(updated);
     updatedGiorni.sort((a, b) => a.giorno - b.giorno);
     const updatedMese: ParametriMensili = { ...meseCorrente, giorni: updatedGiorni };
     const otherMesi = mensili.filter(m => !(m.mese === viewMese && m.anno === viewAnno));
     onUpdate({ parametriMensili: [...otherMesi, updatedMese] });
     setEditGiorno(null);
+    setModalCol(null);
   }
 
-  function cancelEdit() { setEditGiorno(null); }
-
-  function setF(k: keyof ParametroGiorno, v: string) {
-    setEditForm(prev => ({ ...prev, [k]: v }));
-  }
+  function closeModal() { setEditGiorno(null); setModalCol(null); }
 
   function addVitale() {
     if (!vitaleForm.etichetta || !vitaleForm.valore) return;
@@ -205,7 +205,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
           </span>
           <button className="btn-secondary btn-sm" onClick={nextMese}>&#8250;</button>
           <span className="cr-meta" style={{ marginLeft: 8 }}>
-            Clicca su una riga per inserire i parametri del giorno
+            Clicca su un giorno per tutti i parametri, o su una cella per il singolo valore
           </span>
         </div>
 
@@ -226,18 +226,15 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
             <tbody>
               {Array.from({ length: numGiorni }, (_, i) => i + 1).map(g => {
                 const gd = giornoData(g);
-                const isEditing = editGiorno === g;
                 return (
-                  <tr
-                    key={g}
-                    onClick={() => { if (!isEditing) openEdit(g); }}
-                    style={{ background: isEditing ? '#EEF2FF' : undefined }}
-                  >
-                    <td>{g}</td>
+                  <tr key={g}>
+                    <td className="vitale-cell" onClick={() => openEdit(g)}>{g}</td>
                     {GRID_COLS.map(c => {
                       const val = gd[c.key] as string | undefined ?? '';
                       return (
-                        <td key={String(c.key)} className={val ? 'has-data' : ''}>
+                        <td key={String(c.key)}
+                          className={`vitale-cell${val ? ' has-data' : ''}`}
+                          onClick={e => { e.stopPropagation(); openEdit(g, c); }}>
                           {val ? (val.length > 8 ? val.slice(0, 8) + '…' : val) : ''}
                         </td>
                       );
@@ -249,32 +246,21 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
           </table>
         </div>
 
-        {/* ── Day edit panel ── */}
-        {editGiorno !== null && (
-          <div className="parametri-day-form">
-            <div className="parametri-day-form__title">
-              Giorno {editGiorno} — {MESI[viewMese - 1]} {viewAnno}
-            </div>
-            <div className="parametri-day-grid">
-              {GRID_COLS.map(c => (
-                <div key={String(c.key)} className="form-field">
-                  <label className="form-label">
-                    {c.label}{c.sub ? ` (${c.sub})` : ''}
-                  </label>
-                  <input
-                    className="form-input"
-                    value={(editForm[c.key] as string | undefined) ?? ''}
-                    onChange={e => setF(c.key, e.target.value)}
-                    placeholder={c.sub ?? ''}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="cr-inline-form__actions" style={{ marginTop: 12 }}>
-              <button className="btn-secondary btn-sm" onClick={cancelEdit}>Annulla</button>
-              <button className="btn-primary btn-sm" onClick={saveEdit}>Salva giorno</button>
-            </div>
-          </div>
+        {/* ── Vitale modal ── */}
+        {editGiorno !== null && modalCol !== null && (
+          <VitaleModal
+            paziente={paziente}
+            giorno={editGiorno}
+            mese={viewMese}
+            anno={viewAnno}
+            colKey={modalCol.colKey}
+            colLabel={modalCol.colLabel}
+            colSub={modalCol.colSub}
+            currentData={editForm}
+            operatoreNome={operatoreNome}
+            onSave={saveEdit}
+            onClose={closeModal}
+          />
         )}
       </div>
     </div>

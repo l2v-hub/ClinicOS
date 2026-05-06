@@ -3500,6 +3500,10 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
    NEW PATIENT MODAL — tabbed professional layout
 ═══════════════════════════════════════════════════════════════════════════ */
 
+.modal-box--vitale {
+  max-width: 520px;
+}
+
 .modal-box--patient {
   max-width: 1060px;
   max-height: 88vh;
@@ -4597,4 +4601,19 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
     min-width: 76px;
     padding: 8px 12px;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VitaleModal
+═══════════════════════════════════════════════════════════════════════════ */
+.modal-box--vitale {
+  max-width: 520px;
+  width: 100%;
+}
+.vitale-cell {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.vitale-cell:hover {
+  background: #EFF6FF;
 }
