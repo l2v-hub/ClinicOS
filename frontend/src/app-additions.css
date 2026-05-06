@@ -2337,8 +2337,8 @@
 .cr-header {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px 28px 16px;
+  gap: 6px;
+  padding: 10px 28px 12px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
@@ -2409,27 +2409,12 @@
 
 .cr-room-tag svg { width: 12px; height: 12px; }
 
-/* ── Tab bar ── */
-
-.cr-tab-bar {
-  display: flex;
-  gap: 0;
-  padding: 0 20px;
-  background: var(--surface);
-  border-bottom: none;
-  overflow-x: auto;
-  flex-shrink: 0;
-  scrollbar-width: none;
-}
-
-.cr-tab-bar::-webkit-scrollbar { display: none; }
+/* ── Tab bar (see also: grouped nav section below for overrides) ── */
 
 .cr-tab-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 14px;
-  font-size: 13px;
   font-weight: 500;
   color: var(--text-muted);
   background: none;
@@ -3143,10 +3128,16 @@
 
 /* ── Sub-tab bar ── */
 .cr-tab-bar {
+  display: flex;
+  gap: 0;
   background: #fff;
   padding: 0 28px;
   border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
 }
+.cr-tab-bar::-webkit-scrollbar { display: none; }
 .cr-tab-btn {
   padding: 9px 16px;
   font-size: 13px;
@@ -3322,9 +3313,9 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 /* ── Riepilogo card hover ── */
 .cr-riepilogo-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.09); }
 
-/* ── Tab content more breathing room ── */
+/* ── Tab content breathing room ── */
 .cr-tab-content {
-  padding: 24px 28px;
+  padding: 24px 28px 48px;
   gap: 20px;
 }
 
@@ -3349,22 +3340,17 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   .cr-inline-form { padding: 16px; }
 }
 
-/* ── Page content expanded for patient detail ── */
-.patient-record-view ~ * .page-content,
+/* ── Page content: patient detail fills viewport cleanly ── */
 .page-content:has(.patient-record-view) {
   padding: 0;
+  max-width: none;
+  height: calc(100svh - var(--header-h));
+  overflow: hidden;
 }
 
-/* Ensure patient-record-view fills the content area cleanly */
 .page-content .patient-record-view {
-  margin: 0;
-  height: 100%;
-}
-@media (max-width: 640px) {
-  .page-content .patient-record-view {
-    margin: 0;
-    height: 100%;
-  }
+  flex: 1;
+  min-height: 0;
 }
 
 /* Required field indicator */
@@ -4362,6 +4348,18 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   opacity: 0.8;
 }
 .cr-breadcrumb-btn:hover { opacity: 1; color: var(--blue); }
+
+/* Override btn-back inside header: reset touch-target size, it's a breadcrumb here */
+.cr-header .btn-back {
+  min-height: unset;
+  height: auto;
+  margin-bottom: 0;
+  padding: 0;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.cr-header .btn-back:hover { color: var(--blue); opacity: 1; }
 
 .cr-header__name-row {
   display: flex;
