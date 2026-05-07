@@ -47,7 +47,7 @@
   .no-print       { display: none !important; }
   .print-only     { display: block !important; }
   .nav-rail, .app-shell__sidebar { display: none !important; }
-  .cr-header, .cr-tab-bar { display: none !important; }
+  .cr-header, .cr-breadcrumb, .cr-tab-bar { display: none !important; }
   body { background: white; margin: 0; }
   .patient-record-view { padding: 0; }
   @page { margin: 15mm; }

@@ -1057,9 +1057,13 @@ export function PatientDetail({
 
   return (
     <div className="patient-record-view">
-      {/* Header */}
-      <div className="cr-header">
+      {/* Breadcrumb */}
+      <div className="cr-breadcrumb">
         <button className="btn-back cr-breadcrumb-btn" onClick={onBack}><IcoChevronLeft /> Pazienti</button>
+      </div>
+
+      {/* Patient Header Card */}
+      <div className="cr-header">
         <div className="cr-header__patient">
           <div className="cr-pt-avatar" aria-hidden="true">
             {paziente.firstName[0]}{paziente.lastName[0]}

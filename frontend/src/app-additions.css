@@ -10,6 +10,7 @@
   .nav-rail,
   .app-shell__sidebar,
   .cr-header,
+  .cr-breadcrumb,
   .cr-tab-bar { display: none !important; }
   .patient-record-view { padding: 0; background: white; }
   .cr-tab-content { padding: 16px 24px; }
@@ -2334,13 +2335,22 @@
 
 /* ── Header ── */
 
+/* ── Breadcrumb (above patient card) ── */
+.cr-breadcrumb {
+  padding: 12px 20px 0;
+  flex-shrink: 0;
+}
+
 .cr-header {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px 28px 16px;
+  gap: 0;
+  padding: 20px 24px;
   background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 2px 12px rgba(0,0,0,0.04);
+  margin: 10px 16px 0;
   flex-shrink: 0;
   min-height: 0;
 }
@@ -3150,13 +3160,16 @@
 /* ── L1: PageTabs ── */
 .page-tabs {
   display: flex;
-  gap: 0;
-  padding: 0 24px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  gap: 4px;
+  padding: 6px;
+  margin: 12px 16px 0;
+  background: var(--bg);
+  border-bottom: none;
+  border-radius: 14px;
   flex-shrink: 0;
   overflow-x: auto;
   scrollbar-width: none;
+  box-sizing: border-box;
 }
 .page-tabs::-webkit-scrollbar { display: none; }
 
@@ -3164,28 +3177,28 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 11px 20px;
+  padding: 8px 18px;
   font-size: 13.5px;
   font-weight: 600;
   font-family: var(--font-ui);
   color: var(--text-muted);
-  background: none;
+  background: transparent;
   border: none;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -1px;
+  border-bottom: none;
+  margin-bottom: 0;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
-  border-radius: 0;
+  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
+  border-radius: 10px;
 }
 .page-tabs__btn:hover {
   color: var(--text);
-  background: var(--hover);
+  background: rgba(255, 255, 255, 0.7);
 }
 .page-tabs__btn--active {
   color: var(--blue);
-  border-bottom-color: var(--blue);
-  background: var(--blue-glow);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
 }
 
 .page-tabs__badge {
@@ -3211,9 +3224,10 @@
 .section-tabs {
   display: flex;
   gap: 4px;
-  background: var(--bg);
-  padding: 6px 24px;
-  border-bottom: 1px solid var(--border);
+  background: transparent;
+  padding: 0 20px;
+  margin: 10px 0 0;
+  border-bottom: none;
   overflow-x: auto;
   flex-shrink: 0;
   scrollbar-width: none;
@@ -3225,8 +3239,8 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 14px;
-  font-size: 12.5px;
+  padding: 4px 12px;
+  font-size: 12px;
   font-weight: 500;
   font-family: var(--font-ui);
   color: var(--text-muted);
@@ -3236,17 +3250,17 @@
   cursor: pointer;
   white-space: nowrap;
   line-height: 1.4;
-  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
+  transition: color 0.15s, background 0.15s;
 }
 .section-tabs__btn:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(26, 86, 219, 0.06);
 }
 .section-tabs__btn--active {
   color: var(--blue);
-  background: var(--surface);
+  background: rgba(26, 86, 219, 0.09);
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(26, 86, 219, 0.10);
+  box-shadow: none;
 }
 
 .section-tabs__badge {
@@ -3319,8 +3333,12 @@
 
 /* ── Responsive: nav components ── */
 @media (max-width: 900px) {
-  .page-tabs__btn { padding: 9px 14px; font-size: 12.5px; }
-  .section-tabs__btn { padding: 4px 10px; font-size: 12px; }
+  .cr-header { margin: 8px 10px 0; padding: 16px 18px; }
+  .cr-breadcrumb { padding: 10px 14px 0; }
+  .page-tabs { margin: 8px 10px 0; padding: 5px; }
+  .page-tabs__btn { padding: 7px 12px; font-size: 12.5px; }
+  .section-tabs { padding: 0 14px; }
+  .section-tabs__btn { padding: 3px 10px; font-size: 11.5px; }
 }
 
 /* ── Card base improvements ── */
@@ -4528,8 +4546,8 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .cr-breadcrumb-btn:hover { color: var(--blue); }
 
-/* Override btn-back inside header: reset touch-target size, it's a breadcrumb here */
-.cr-header .btn-back {
+/* Override btn-back inside breadcrumb: reset touch-target size */
+.cr-breadcrumb .btn-back {
   min-height: unset;
   height: auto;
   margin-bottom: 0;
@@ -4540,7 +4558,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   opacity: 1;
   gap: 4px;
 }
-.cr-header .btn-back:hover { color: var(--blue); opacity: 1; }
+.cr-breadcrumb .btn-back:hover { color: var(--blue); opacity: 1; }
 
 .cr-header__name-row {
   display: flex;
@@ -4588,7 +4606,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 
 /* No horizontal scroll anywhere in patient detail */
-.cr-header, .cr-nav-groups, .cr-tab-bar, .page-tabs, .section-tabs {
+.cr-header, .cr-breadcrumb, .cr-nav-groups, .cr-tab-bar, .page-tabs, .section-tabs {
   max-width: 100%;
   box-sizing: border-box;
 }
