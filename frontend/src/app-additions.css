@@ -2337,8 +2337,8 @@
 .cr-header {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 10px 28px 12px;
+  gap: 10px;
+  padding: 14px 28px 16px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
@@ -2361,7 +2361,7 @@
 }
 
 .cr-header__name {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--text);
   margin: 0;
@@ -3062,11 +3062,11 @@
 
 /* ── Patient avatar in header (compact, discrete) ── */
 .cr-pt-avatar {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--blue, #1A56DB) 0%, #4338CA 100%);
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 10px;
+  background: linear-gradient(140deg, #1A56DB 0%, #4338CA 100%);
   color: #fff;
   font-size: 17px;
   font-weight: 700;
@@ -3075,7 +3075,7 @@
   justify-content: center;
   flex-shrink: 0;
   letter-spacing: 0.5px;
-  opacity: 0.9;
+  box-shadow: 0 2px 8px rgba(26, 86, 219, 0.25);
 }
 
 /* ── Alert icon size control ── */
@@ -3151,7 +3151,7 @@
 .page-tabs {
   display: flex;
   gap: 0;
-  padding: 0 28px;
+  padding: 0 24px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
@@ -3163,9 +3163,9 @@
 .page-tabs__btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 10px 18px;
-  font-size: 13px;
+  gap: 6px;
+  padding: 11px 20px;
+  font-size: 13.5px;
   font-weight: 600;
   font-family: var(--font-ui);
   color: var(--text-muted);
@@ -3175,16 +3175,17 @@
   margin-bottom: -1px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  border-radius: 0;
 }
 .page-tabs__btn:hover {
   color: var(--text);
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--hover);
 }
 .page-tabs__btn--active {
   color: var(--blue);
   border-bottom-color: var(--blue);
-  background: transparent;
+  background: var(--blue-glow);
 }
 
 .page-tabs__badge {
@@ -3199,61 +3200,76 @@
   border-radius: 9px;
   background: var(--divider);
   color: var(--text-muted);
+  transition: background 0.15s, color 0.15s;
+}
+.page-tabs__btn--active .page-tabs__badge {
+  background: var(--blue-dim);
+  color: var(--blue);
 }
 
-/* ── L2: SectionTabs ── */
+/* ── L2: SectionTabs (pill-style, subordinate to L1) ── */
 .section-tabs {
   display: flex;
-  gap: 0;
-  background: #fff;
-  padding: 0 28px;
+  gap: 4px;
+  background: var(--bg);
+  padding: 6px 24px;
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
   flex-shrink: 0;
   scrollbar-width: none;
+  align-items: center;
 }
 .section-tabs::-webkit-scrollbar { display: none; }
 
 .section-tabs__btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 16px;
-  font-size: 13px;
+  gap: 5px;
+  padding: 5px 14px;
+  font-size: 12.5px;
   font-weight: 500;
   font-family: var(--font-ui);
   color: var(--text-muted);
-  background: none;
+  background: transparent;
   border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
+  border-radius: 20px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s;
+  line-height: 1.4;
+  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
 }
-.section-tabs__btn:hover { color: var(--text); }
+.section-tabs__btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.75);
+}
 .section-tabs__btn--active {
   color: var(--blue);
-  border-bottom-color: var(--blue);
+  background: var(--surface);
   font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10), 0 0 0 1px rgba(26, 86, 219, 0.10);
 }
 
 .section-tabs__badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  font-size: 11px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 10px;
   font-weight: 700;
-  border-radius: 9px;
-  background: var(--divider);
-  color: var(--text-muted);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.12);
+  color: inherit;
+  transition: background 0.15s, color 0.15s;
+}
+.section-tabs__btn--active .section-tabs__badge {
+  background: var(--blue-dim);
+  color: var(--blue);
 }
 .section-tabs__badge--urgent {
-  background: var(--red);
-  color: #fff;
+  background: var(--red) !important;
+  color: #fff !important;
 }
 
 /* ── L3: SubSectionControl ── */
@@ -3303,8 +3319,8 @@
 
 /* ── Responsive: nav components ── */
 @media (max-width: 900px) {
-  .page-tabs__btn { padding: 8px 12px; font-size: 12px; }
-  .section-tabs__btn { padding: 8px 10px; font-size: 12px; }
+  .page-tabs__btn { padding: 9px 14px; font-size: 12.5px; }
+  .section-tabs__btn { padding: 4px 10px; font-size: 12px; }
 }
 
 /* ── Card base improvements ── */
@@ -4507,21 +4523,22 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .cr-breadcrumb-btn {
   font-size: 12px;
   font-weight: 500;
-  color: var(--text-muted);
+  color: var(--text-xmuted);
   padding: 2px 0;
-  opacity: 0.8;
 }
-.cr-breadcrumb-btn:hover { opacity: 1; color: var(--blue); }
+.cr-breadcrumb-btn:hover { color: var(--blue); }
 
 /* Override btn-back inside header: reset touch-target size, it's a breadcrumb here */
 .cr-header .btn-back {
   min-height: unset;
   height: auto;
   margin-bottom: 0;
-  padding: 0;
-  font-size: 12.5px;
+  padding: 2px 0;
+  font-size: 12px;
   font-weight: 500;
-  color: var(--text-muted);
+  color: var(--text-xmuted);
+  opacity: 1;
+  gap: 4px;
 }
 .cr-header .btn-back:hover { color: var(--blue); opacity: 1; }
 
