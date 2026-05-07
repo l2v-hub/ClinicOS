@@ -19,6 +19,8 @@ import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaMedicaTab } from './cartella/TerapiaMedicaTab';
+import { PageTabs, SectionTabs } from '../shared/NavComponents';
+import type { PageTab, SectionTab } from '../shared/NavComponents';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -1098,40 +1100,30 @@ export function PatientDetail({
         </div>
       </div>
 
-      {/* Grouped nav */}
-      <div className="cr-nav-groups no-print">
-        {TAB_GROUPS.map(g => {
-          const gb = groupBadge(g.id);
-          return (
-            <button
-              key={g.id}
-              className={`cr-nav-group-btn${tabGroup === g.id ? ' active' : ''}`}
-              onClick={() => switchGroup(g.id)}
-            >
-              {g.label}
-              {gb > 0 && <span className="cr-tab-badge">{gb}</span>}
-            </button>
-          );
-        })}
-      </div>
+      {/* Grouped nav (L1 — page tabs) */}
+      <PageTabs
+        tabs={TAB_GROUPS.map((g): PageTab => ({
+          id: g.id,
+          label: g.label,
+          badge: groupBadge(g.id) || undefined,
+        }))}
+        activeId={tabGroup}
+        onSelect={(id) => switchGroup(id as TabGroup)}
+        className="no-print"
+      />
 
-      {/* Sub-tab bar */}
-      <div className="cr-tab-bar no-print">
-        {activeGroup.tabs.map(t => {
-          const badge = TAB_BADGES[t.id] ?? 0;
-          const isUrgentConsegne = t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
-          return (
-            <button key={t.id}
-              className={`cr-tab-btn${tab === t.id ? ' active' : ''}`}
-              onClick={() => switchTab(t.id)}>
-              {t.label}
-              {badge > 0 && (
-                <span className={`cr-tab-badge${isUrgentConsegne ? ' urgent' : ''}`}>{badge}</span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+      {/* Sub-tab bar (L2 — section tabs) */}
+      <SectionTabs
+        tabs={activeGroup.tabs.map((t): SectionTab => ({
+          id: t.id,
+          label: t.label,
+          badge: TAB_BADGES[t.id] || undefined,
+          urgent: t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata'),
+        }))}
+        activeId={tab}
+        onSelect={(id) => switchTab(id as TabId)}
+        className="no-print"
+      />
 
       {/* Tab content */}
       {tab === 'riepilogo'       && renderRiepilogo()}
