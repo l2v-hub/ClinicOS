@@ -3147,7 +3147,7 @@
    REUSABLE NAV COMPONENTS — PageTabs (L1), SectionTabs (L2), SubSectionControl (L3)
 ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── PageTabs (L1) ── */
+/* ── L1: PageTabs ── */
 .page-tabs {
   display: flex;
   gap: 0;
@@ -3160,13 +3160,14 @@
 }
 .page-tabs::-webkit-scrollbar { display: none; }
 
-.page-tabs__item {
+.page-tabs__btn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   padding: 10px 18px;
   font-size: 13px;
   font-weight: 600;
+  font-family: var(--font-ui);
   color: var(--text-muted);
   background: none;
   border: none;
@@ -3176,15 +3177,16 @@
   white-space: nowrap;
   transition: color 0.15s, border-color 0.15s;
 }
-.page-tabs__item:hover {
+.page-tabs__btn:hover {
   color: var(--text);
-  background: rgba(0,0,0,0.04);
+  background: rgba(0, 0, 0, 0.04);
 }
-.page-tabs__item.active {
-  color: var(--blue, #1A56DB);
-  border-bottom-color: var(--blue, #1A56DB);
+.page-tabs__btn--active {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
   background: transparent;
 }
+
 .page-tabs__badge {
   display: inline-flex;
   align-items: center;
@@ -3192,15 +3194,14 @@
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  border-radius: 9px;
   font-size: 11px;
   font-weight: 700;
-  background: var(--blue, #1A56DB);
-  color: #fff;
-  line-height: 1;
+  border-radius: 9px;
+  background: var(--divider);
+  color: var(--text-muted);
 }
 
-/* ── SectionTabs (L2) ── */
+/* ── L2: SectionTabs ── */
 .section-tabs {
   display: flex;
   gap: 0;
@@ -3213,13 +3214,14 @@
 }
 .section-tabs::-webkit-scrollbar { display: none; }
 
-.section-tabs__item {
+.section-tabs__btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   padding: 9px 16px;
   font-size: 13px;
   font-weight: 500;
+  font-family: var(--font-ui);
   color: var(--text-muted);
   background: none;
   border: none;
@@ -3229,69 +3231,67 @@
   white-space: nowrap;
   transition: color 0.15s, border-color 0.15s;
 }
-.section-tabs__item:hover {
-  color: var(--text);
-  background: rgba(0,0,0,0.03);
-}
-.section-tabs__item.active {
-  color: var(--text);
-  border-bottom-color: var(--text);
+.section-tabs__btn:hover { color: var(--text); }
+.section-tabs__btn--active {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
   font-weight: 600;
 }
+
 .section-tabs__badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 8px;
-  font-size: 10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 11px;
   font-weight: 700;
-  background: var(--border);
+  border-radius: 9px;
+  background: var(--divider);
   color: var(--text-muted);
-  line-height: 1;
 }
-.section-tabs__badge.urgent {
-  background: var(--red, #dc2626);
+.section-tabs__badge--urgent {
+  background: var(--red);
   color: #fff;
 }
 
-/* ── SubSectionControl (L3) ── */
+/* ── L3: SubSectionControl ── */
 .subsection-ctrl {
   display: inline-flex;
-  gap: 0;
-  background: var(--bg, #f4f5f7);
   border: 1px solid var(--border);
   border-radius: 8px;
+  background: var(--surface-raised);
   padding: 3px;
-  flex-shrink: 0;
+  gap: 2px;
 }
-.subsection-ctrl__item {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: none;
-  border: none;
+
+.subsection-ctrl__option {
+  padding: 5px 14px;
   border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-ui);
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
+  transition: background 0.12s, color 0.12s;
 }
-.subsection-ctrl__item:hover {
+.subsection-ctrl__option:hover { color: var(--text); }
+.subsection-ctrl__option--active {
+  background: var(--surface);
   color: var(--text);
-  background: rgba(255,255,255,0.5);
-}
-.subsection-ctrl__item.active {
-  color: var(--text);
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   font-weight: 600;
+  box-shadow: var(--shadow-sm);
 }
+
+.subsection-ctrl--sm .subsection-ctrl__option {
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
 .subsection-ctrl__icon {
   display: inline-flex;
   align-items: center;
@@ -3302,12 +3302,9 @@
 }
 
 /* ── Responsive: nav components ── */
-@media (max-width: 640px) {
-  .page-tabs { padding: 0 12px; }
-  .page-tabs__item { padding: 8px 12px; font-size: 12px; }
-  .section-tabs { padding: 0 12px; }
-  .section-tabs__item { padding: 8px 10px; font-size: 12px; }
-  .subsection-ctrl__item { padding: 5px 10px; font-size: 11px; }
+@media (max-width: 900px) {
+  .page-tabs__btn { padding: 8px 12px; font-size: 12px; }
+  .section-tabs__btn { padding: 8px 10px; font-size: 12px; }
 }
 
 /* ── Card base improvements ── */

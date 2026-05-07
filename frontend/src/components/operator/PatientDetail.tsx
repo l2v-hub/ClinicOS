@@ -20,7 +20,7 @@ import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaMedicaTab } from './cartella/TerapiaMedicaTab';
 import { PageTabs, SectionTabs } from '../shared/NavComponents';
-import type { PageTab, SectionTab } from '../shared/NavComponents';
+import type { PageTabGroup, SectionTab } from '../shared/NavComponents';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -1102,13 +1102,13 @@ export function PatientDetail({
 
       {/* Grouped nav (L1 — page tabs) */}
       <PageTabs
-        tabs={TAB_GROUPS.map((g): PageTab => ({
+        groups={TAB_GROUPS.map((g): PageTabGroup => ({
           id: g.id,
           label: g.label,
           badge: groupBadge(g.id) || undefined,
         }))}
         activeId={tabGroup}
-        onSelect={(id) => switchGroup(id as TabGroup)}
+        onChange={(id) => switchGroup(id as TabGroup)}
         className="no-print"
       />
 
@@ -1121,7 +1121,7 @@ export function PatientDetail({
           urgent: t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata'),
         }))}
         activeId={tab}
-        onSelect={(id) => switchTab(id as TabId)}
+        onChange={(id) => switchTab(id as TabId)}
         className="no-print"
       />
 
