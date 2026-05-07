@@ -2490,10 +2490,10 @@
   padding: 10px 18px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
   min-width: 88px;
   gap: 2px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-card);
 }
 
 .cr-quick-stat__val {
@@ -2519,14 +2519,15 @@
 }
 
 .cr-riepilogo-card {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px 18px;
+  border-radius: var(--card-radius);
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.18s, border-color 0.18s, transform 0.14s;
 }
 
 .cr-riepilogo-card__title {
@@ -2612,11 +2613,12 @@
 .cr-profilo-group {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px 16px;
+  border-radius: var(--card-radius-sm);
+  padding: 14px 18px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  box-shadow: var(--shadow-card);
 }
 
 .cr-profilo-group--full {
@@ -3342,33 +3344,27 @@
 }
 
 /* ── Card base improvements ── */
-.cr-riepilogo-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 0 transparent;
-  transition: box-shadow 0.15s;
-}
+/* cr-riepilogo-card base defined above — hover only here */
 .cr-riepilogo-card:hover {
-  box-shadow: 0 3px 10px rgba(0,0,0,0.09);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .cr-form-section {
-  background: #fff;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-card);
 }
 
 .cr-item-row {
-  background: #fff;
-  border: 1px solid #E2E8F0;
-  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius-sm);
   padding: 12px 14px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-card);
   transition: box-shadow 0.15s;
 }
-.cr-item-row:hover { box-shadow: 0 3px 8px rgba(0,0,0,0.09); }
+.cr-item-row:hover { box-shadow: var(--shadow-card-hover); }
 
 /* ── Form field spacing improvements ── */
 .op-form-grid {
@@ -3446,17 +3442,17 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 
 .cr-anamnesi-card {
-  background: #fff;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius-sm);
   padding: 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  transition: box-shadow 0.15s;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.18s;
 }
-.cr-anamnesi-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
+.cr-anamnesi-card:hover { box-shadow: var(--shadow-card-hover); }
 .cr-anamnesi-card.editing {
   border-color: var(--blue, #1A56DB);
   box-shadow: 0 0 0 3px rgba(26,86,219,0.08);
@@ -3508,8 +3504,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   letter-spacing: 0.04em;
 }
 
-/* ── Riepilogo card hover ── */
-.cr-riepilogo-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.09); }
+/* ── Riepilogo card hover (consolidated above) ── */
 
 /* ── Tab content breathing room ── */
 .cr-tab-content {
@@ -4662,9 +4657,9 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   border: 1px solid var(--border);
 }
 .cr-quick-stat--clickable:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
-  border-color: var(--blue);
-  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(26, 86, 219, 0.35);
+  transform: translateY(-2px);
 }
 .cr-quick-stat--clickable:hover .cr-quick-stat__val {
   color: var(--blue);
@@ -4678,18 +4673,33 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   cursor: pointer;
   text-align: left;
   width: 100%;
-  transition: box-shadow 0.15s, border-color 0.15s, transform 0.1s;
-  border: 1px solid var(--border);
 }
 .cr-riepilogo-card--nav:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-  border-color: var(--blue);
-  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(26, 86, 219, 0.35);
+  transform: translateY(-2px);
 }
 .cr-riepilogo-card--nav .cr-riepilogo-card__title {
   color: var(--text);
 }
 .cr-riepilogo-card--nav:hover .cr-riepilogo-card__title {
+  color: var(--blue);
+}
+
+/* ── Nav hint arrow (shown on hover) ── */
+.card-nav-hint {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  width: 13px;
+  height: 13px;
+  color: var(--text-xmuted);
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.cr-riepilogo-card--nav:hover .card-nav-hint {
+  opacity: 1;
   color: var(--blue);
 }
 

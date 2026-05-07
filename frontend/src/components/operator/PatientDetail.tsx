@@ -8,7 +8,7 @@ import type {
 import {
   IcoChevronLeft, IcoEdit, IcoCheck, IcoX, IcoPlus,
   IcoWarning, IcoActivity, IcoPill, IcoShield, IcoConsegne, IcoBed,
-  IcoCartelle,
+  IcoCartelle, IcoArrow,
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
 import { DocumentiTab } from './cartella/DocumentiTab';
@@ -412,6 +412,7 @@ export function PatientDetail({
             <div className="cr-riepilogo-card__title">
               <IcoCartelle /> Diagnosi attive
               {diagnosiAttive.length > 3 && <span className="cr-card-more">vedi tutte ({diagnosiAttive.length})</span>}
+              <span className="card-nav-hint"><IcoArrow /></span>
             </div>
             {diagnosiMostrate.length === 0
               ? <p className="cr-empty">Nessuna diagnosi attiva.</p>
@@ -434,6 +435,7 @@ export function PatientDetail({
             <div className="cr-riepilogo-card__title">
               <IcoPill /> Farmaci attivi
               {farmaciAttivi.length > 4 && <span className="cr-card-more">vedi tutti ({farmaciAttivi.length})</span>}
+              <span className="card-nav-hint"><IcoArrow /></span>
             </div>
             {farmaciMostrati.length === 0
               ? <p className="cr-empty">Nessun farmaco attivo.</p>
@@ -453,7 +455,7 @@ export function PatientDetail({
 
           {/* Ultimi parametri */}
           <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('clinica', 'parametri')}>
-            <div className="cr-riepilogo-card__title"><IcoActivity /> Ultimi parametri</div>
+            <div className="cr-riepilogo-card__title"><IcoActivity /> Ultimi parametri<span className="card-nav-hint"><IcoArrow /></span></div>
             {lastVitali.length === 0
               ? <p className="cr-empty">Nessun parametro rilevato.</p>
               : (
@@ -473,7 +475,7 @@ export function PatientDetail({
           {/* Consegne aperte */}
           {mieConsegne.filter(c => c.stato !== 'completata').length > 0 && (
             <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('panoramica', 'consegne')}>
-              <div className="cr-riepilogo-card__title"><IcoConsegne /> Consegne aperte</div>
+              <div className="cr-riepilogo-card__title"><IcoConsegne /> Consegne aperte<span className="card-nav-hint"><IcoArrow /></span></div>
               <div className="consegne-list consegne-list--mini">
                 {mieConsegne.filter(c => c.stato !== 'completata').slice(0, 3).map(c => (
                   <div key={c.id} className={`consegna-card consegna-card--mini consegna-card--${c.priorita}`}>
