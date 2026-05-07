@@ -7,33 +7,106 @@
       "Read(*)",
       "Write(**)",
       "Edit(**)",
+      "Write(.claude/**)",
+      "Edit(.claude/**)",
       "Write(.openclode/**)",
       "Edit(.openclode/**)",
-      "Bash(npm run dev)",
-      "Bash(npm run build)",
-      "Bash(npm install)",
-      "Bash(npx prisma generate)",
-      "Bash(npx prisma migrate dev --name *)",
       "WebSearch",
-      "WebFetch(domain:stitch.withgoogle.com)",
-      "Bash(rtk gcloud:*)",
-      "Bash(rtk npx:*)",
-      "Bash(rtk ls:*)",
-      "Bash(rtk npm:*)",
-      "Bash(curl -s http://localhost:5173)",
-      "Bash(rtk tsc:*)",
-      "Bash(rtk curl:*)"
+      "WebFetch(domain:stitch.withgoogle.com)"
     ],
     "deny": [
       "Bash(rm -rf *)",
       "Bash(del /s *)",
       "Bash(git reset --hard *)",
-      "Bash(git clean -fd *)"
+      "Bash(git clean -fd *)",
+      "Bash(prisma migrate reset *)",
+      "Bash(npx prisma migrate reset *)",
+      "Bash(npx prisma db push --force-reset *)"
     ]
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "ralph-loop": true,
+    "compound-engineering@compound-engineering-plugin": true
   },
-  "teammateMode": "tmux"
+  "teammateMode": "tmux",
+  "agentTeam": {
+    "enabled": true,
+    "mode": "tmux",
+    "sessionName": "clinicos-team",
+    "workingDirectory": "C:\\Workspace\\DG_SE_DEV\\ClinicOS",
+    "wslWorkingDirectory": "/mnt/c/Workspace/DG_SE_DEV/ClinicOS",
+    "agents": [
+      {
+        "name": "LEAD",
+        "role": "orchestrator",
+        "promptFile": ".claude/team/lead.md",
+        "responsibilities": [
+          "analizza il requisito",
+          "divide il lavoro",
+          "coordina gli agenti",
+          "mantiene lo scope",
+          "decide quando eseguire build, test, commit e push"
+        ]
+      },
+      {
+        "name": "UIUX",
+        "role": "ui-ux-specialist",
+        "promptFile": ".claude/team/uiux.md",
+        "responsibilities": [
+          "migliora UX/UI",
+          "garantisce tablet-first",
+          "mantiene interfaccia italiana",
+          "verifica leggibilità, card, form, tab e navigazione"
+        ]
+      },
+      {
+        "name": "IMPLEMENTER",
+        "role": "frontend-implementer",
+        "promptFile": ".claude/team/implementer.md",
+        "responsibilities": [
+          "implementa modifiche React/Vite",
+          "mantiene VITE_API_URL",
+          "non reintroduce localhost hardcoded",
+          "non modifica backend o Prisma salvo richiesta esplicita"
+        ]
+      },
+      {
+        "name": "QA",
+        "role": "qa-build",
+        "promptFile": ".claude/team/qa.md",
+        "responsibilities": [
+          "esegue build",
+          "verifica errori runtime",
+          "controlla interazioni principali",
+          "segnala regressioni"
+        ]
+      }
+    ]
+  },
+  "agentLoop": {
+    "enabled": true,
+    "plugin": "ralph-loop",
+    "mode": "plan-implement-verify",
+    "maxIterations": 5,
+    "stopWhen": [
+      "npm run build succeeds",
+      "no critical runtime issues are reported",
+      "QA confirms the requested flow works"
+    ],
+    "requiredSteps": [
+      "LEAD writes a short plan",
+      "UIUX reviews usability impact",
+      "IMPLEMENTER applies the change",
+      "QA runs npm run build",
+      "LEAD summarizes result and next step"
+    ],
+    "checkpoints": [
+      "before code changes",
+      "after implementation",
+      "after build",
+      "before commit"
+    ]
+  }
 }

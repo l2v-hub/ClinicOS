@@ -1,14 +1,8 @@
 $ErrorActionPreference = "Stop"
 
 $prompts = @(
-  ".claude/queue/03-diario-parametri-terapie.md",
-  ".claude/queue/04-moduli-avanzati.md",
-  ".claude/queue/05-Contenzioni.md",
-  ".claude/queue/06-Scala Braden.md",
-  ".claude/queue/07-Dario Infermieristico.md",
-  ".claude/queue/08-Parametri Vitali.md",
-  ".claude/queue/09-Terapia Medica.md",
-  ".claude/queue/10-Finale.md"
+  ".claude/queue/01-cartella-clinica-base.md"
+ 
 )
 
 foreach ($promptFile in $prompts) {
