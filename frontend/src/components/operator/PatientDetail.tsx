@@ -3,12 +3,12 @@ import type {
   Paziente, Consegna, Operatore, Camera, CartellaPaziente,
   Diagnosi, NotaClinica,
   VisitaRecord, IndicatoreRischio,
-  PrioritaConsegna,
+  PrioritaConsegna, AllergiaItem, VitaleItem,
 } from '../../types';
 import {
   IcoChevronLeft, IcoEdit, IcoCheck, IcoX, IcoPlus,
   IcoWarning, IcoActivity, IcoPill, IcoShield, IcoConsegne, IcoBed,
-  IcoCartelle, IcoArrow,
+  IcoCartelle,
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
 import { DocumentiTab } from './cartella/DocumentiTab';
@@ -245,6 +245,30 @@ export function PatientDetail({
   const [showAddConsegna, setShowAddConsegna] = useState(false);
   const [consegnaForm, setConsegnaForm] = useState({ tipo: 'Monitoraggio', priorita: 'normale' as PrioritaConsegna, note: '', oraScadenza: '' });
 
+  // ── Card modals ─────────────────────────────────────────────────────────────
+  type CardModalType = 'diagnosi' | 'farmaci' | 'parametri' | 'consegne' | 'allergie' | 'camera' | null;
+  const [cardModal, setCardModal] = useState<CardModalType>(null);
+
+  // Diagnosi modal quick-add
+  const [modalDiagShow, setModalDiagShow] = useState(false);
+  const [modalDiagForm, setModalDiagForm] = useState<Partial<Diagnosi>>({});
+
+  // Allergie CRUD
+  const [modalAllergiaShow, setModalAllergiaShow] = useState(false);
+  const [allergiaForm, setAllergiaForm] = useState<Partial<AllergiaItem>>({});
+
+  // Parametri modal quick-add
+  const [modalVitaleShow, setModalVitaleShow] = useState(false);
+  const [vitaleForm, setVitaleForm] = useState<Partial<VitaleItem>>({});
+
+  // Consegne modal quick-add
+  const [modalConsegnaShow, setModalConsegnaShow] = useState(false);
+  const [modalConsegnaForm, setModalConsegnaForm] = useState({ tipo: 'Monitoraggio', priorita: 'normale' as PrioritaConsegna, note: '', oraScadenza: '' });
+
+  // Camera modal
+  const [cameraEditing, setCameraEditing] = useState(false);
+  const [cameraModalForm, setCameraModalForm] = useState<Partial<CartellaPaziente>>({});
+
   // ── Computed ───────────────────────────────────────────────────────────────
 
   const mieConsegne = consegne.filter(c => c.pazienteId === paziente.id);
@@ -339,17 +363,473 @@ export function PatientDetail({
     setConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
   }
 
+  // ── Card modal CRUD helpers ────────────────────────────────────────────────
+
+  // Diagnosi quick-add from modal
+  function addDiagnosiFromModal() {
+    if (!modalDiagForm.descrizione) return;
+    saveDiagnosi([{ id: uid(), descrizione: '', tipo: 'principale', stato: 'attiva', dataInsorgenza: todayStr(), operatore: operatoreNome, note: '', createdAt: nowISO(), ...modalDiagForm } as Diagnosi, ...cartella.diagnosi]);
+    setModalDiagShow(false); setModalDiagForm({});
+  }
+
+  // Allergie CRUD
+  function saveAllergie(list: AllergiaItem[]) { upd({ allergie: list }); }
+  function addAllergia() {
+    if (!allergiaForm.allergene) return;
+    saveAllergie([{ id: uid(), allergene: '', gravita: 'lieve', reazione: '', documentato: todayStr(), documentatoDa: operatoreNome, ...allergiaForm } as AllergiaItem, ...cartella.allergie]);
+    setModalAllergiaShow(false); setAllergiaForm({});
+  }
+  function deleteAllergia(id: string) { saveAllergie(cartella.allergie.filter(a => a.id !== id)); }
+
+  // Parametri quick-add from modal
+  function addVitaleFromModal() {
+    if (!vitaleForm.etichetta || !vitaleForm.valore) return;
+    const newV: VitaleItem = { id: uid(), etichetta: '', valore: '', unita: '', stato: 'normale', rilevato: nowISO(), rilevatoDa: operatoreNome, ...vitaleForm } as VitaleItem;
+    upd({ parametriVitali: [newV, ...cartella.parametriVitali] });
+    setModalVitaleShow(false); setVitaleForm({});
+  }
+
+  // Consegna quick-add from modal
+  function salvaConsegnaDaModal() {
+    if (!modalConsegnaForm.note.trim()) return;
+    onAddConsegna({
+      pazienteId: paziente.id,
+      pazienteNome: `${paziente.lastName}, ${paziente.firstName}`,
+      priorita: modalConsegnaForm.priorita,
+      stato: 'aperta',
+      tipo: modalConsegnaForm.tipo,
+      note: modalConsegnaForm.note,
+      scadenza: todayStr(),
+      oraScadenza: modalConsegnaForm.oraScadenza || undefined,
+      operatoreAssegnato: operatoreNome,
+      creatoDA: operatoreNome,
+    });
+    setModalConsegnaShow(false);
+    setModalConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
+  }
+
+  // Camera save from modal
+  function saveCameraFromModal() {
+    upd(cameraModalForm);
+    setCameraEditing(false);
+    setCameraModalForm({});
+  }
+
+  // ── Card modals rendering ──────────────────────────────────────────────────
+
+  const patientLabel = `${paziente.lastName}, ${paziente.firstName}`;
+
+  function renderDiagnosiModal() {
+    return (
+      <div className="modal-overlay" onClick={() => setCardModal(null)}>
+        <div className="modal-box modal-box--edit-card" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <div>
+              <h3 className="modal-title">Diagnosi e Problemi</h3>
+              <p className="modal-subtitle">{patientLabel}</p>
+            </div>
+            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}><IcoX /></button>
+          </div>
+          <div className="modal-body">
+            <div className="ec-modal-list">
+              {cartella.diagnosi.length === 0 && <p className="cr-empty">Nessuna diagnosi registrata.</p>}
+              {cartella.diagnosi.map(d => (
+                <div key={d.id} className="ec-modal-item">
+                  <div className="ec-modal-item__main">
+                    <span className="ec-modal-item__title">{d.descrizione}</span>
+                    {d.codiceICD && <span className="cr-mono cr-mono--sm">{d.codiceICD}</span>}
+                    <span className={`badge ${STATO_DIAG_CLASS[d.stato]}`}>{d.stato}</span>
+                    <span className="badge badge--gray">{d.tipo}</span>
+                  </div>
+                  <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => deleteDiagnosi(d.id)} title="Elimina"><IcoX /></button>
+                </div>
+              ))}
+            </div>
+            {modalDiagShow ? (
+              <div className="ec-modal-add-form">
+                <div className="op-form-grid">
+                  <div className="form-field">
+                    <label className="form-label">Descrizione *</label>
+                    <input className="form-input" value={modalDiagForm.descrizione ?? ''} onChange={e => setModalDiagForm(p => ({...p, descrizione: e.target.value}))} />
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Tipo</label>
+                    <select className="form-select" value={modalDiagForm.tipo ?? 'principale'} onChange={e => setModalDiagForm(p => ({...p, tipo: e.target.value as Diagnosi['tipo']}))}>
+                      <option value="principale">Principale</option><option value="secondaria">Secondaria</option>
+                      <option value="comorbidita">Comorbidità</option><option value="differenziale">Differenziale</option>
+                    </select>
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Stato</label>
+                    <select className="form-select" value={modalDiagForm.stato ?? 'attiva'} onChange={e => setModalDiagForm(p => ({...p, stato: e.target.value as Diagnosi['stato']}))}>
+                      <option value="attiva">Attiva</option><option value="monitoraggio">Monitoraggio</option>
+                      <option value="sospetta">Sospetta</option><option value="risolta">Risolta</option>
+                    </select>
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Codice ICD</label>
+                    <input className="form-input" value={modalDiagForm.codiceICD ?? ''} placeholder="I10, E11…" onChange={e => setModalDiagForm(p => ({...p, codiceICD: e.target.value}))} />
+                  </div>
+                </div>
+                <div className="form-field" style={{marginTop: 4}}>
+                  <label className="form-label">Note</label>
+                  <textarea className="form-input" rows={2} value={modalDiagForm.note ?? ''} onChange={e => setModalDiagForm(p => ({...p, note: e.target.value}))} />
+                </div>
+                <div className="ec-modal-add-form__actions">
+                  <button className="btn-secondary btn-sm" onClick={() => {setModalDiagShow(false); setModalDiagForm({});}}>Annulla</button>
+                  <button className="btn-primary btn-sm" onClick={addDiagnosiFromModal}><IcoCheck /> Salva</button>
+                </div>
+              </div>
+            ) : (
+              <button className="btn-secondary btn-sm" onClick={() => setModalDiagShow(true)}><IcoPlus /> Aggiungi diagnosi</button>
+            )}
+          </div>
+          <div className="modal-footer">
+            <div className="modal-footer__left">
+              <button className="btn-secondary" onClick={() => { setCardModal(null); switchGroup('clinica'); switchTab('diagnosi'); }}>Apri sezione completa</button>
+            </div>
+            <div className="modal-footer__right">
+              <button className="btn-primary" onClick={() => setCardModal(null)}>Chiudi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderFarmaciModal() {
+    return (
+      <div className="modal-overlay" onClick={() => setCardModal(null)}>
+        <div className="modal-box modal-box--edit-card" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <div>
+              <h3 className="modal-title">Farmaci Attivi</h3>
+              <p className="modal-subtitle">{patientLabel}</p>
+            </div>
+            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}><IcoX /></button>
+          </div>
+          <div className="modal-body">
+            <div className="ec-modal-list">
+              {farmaciAttivi.length === 0 && <p className="cr-empty">Nessun farmaco attivo.</p>}
+              {farmaciAttivi.map(f => (
+                <div key={f.id} className="ec-modal-item">
+                  <div className="ec-modal-item__main">
+                    <span className="ec-modal-item__title">{f.nome}</span>
+                    <span className="ec-modal-item__sub">{f.dose}</span>
+                    <span className="ec-modal-item__sub">{f.frequenza}</span>
+                    {f.via && <span className="badge badge--gray">{f.via}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="cr-empty" style={{marginTop: 4}}>Per aggiungere o modificare farmaci usa la sezione completa.</p>
+          </div>
+          <div className="modal-footer">
+            <div className="modal-footer__left">
+              <button className="btn-secondary" onClick={() => { setCardModal(null); switchGroup('clinica'); switchTab('terapie'); }}>Apri Terapia Medica</button>
+            </div>
+            <div className="modal-footer__right">
+              <button className="btn-primary" onClick={() => setCardModal(null)}>Chiudi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderParametriModal() {
+    const vitali = cartella.parametriVitali.slice(0, 8);
+    return (
+      <div className="modal-overlay" onClick={() => setCardModal(null)}>
+        <div className="modal-box modal-box--edit-card" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <div>
+              <h3 className="modal-title">Parametri Vitali</h3>
+              <p className="modal-subtitle">{patientLabel}</p>
+            </div>
+            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}><IcoX /></button>
+          </div>
+          <div className="modal-body">
+            <div className="ec-modal-list">
+              {vitali.length === 0 && <p className="cr-empty">Nessun parametro rilevato.</p>}
+              {vitali.map(v => (
+                <div key={v.id} className={`ec-modal-item`}>
+                  <div className="ec-modal-item__main">
+                    <span className="ec-modal-item__title">{v.etichetta}</span>
+                    <span className="ec-modal-item__sub">{v.valore} {v.unita}</span>
+                    <span className={`badge ${STATO_VITALE_CLASS[v.stato]?.replace('vital-card--', 'badge--') ?? 'badge--gray'}`}>{v.stato}</span>
+                    <span className="ec-modal-item__sub">{fmtDate(v.rilevato)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {modalVitaleShow ? (
+              <div className="ec-modal-add-form">
+                <div className="op-form-grid">
+                  <div className="form-field">
+                    <label className="form-label">Parametro *</label>
+                    <input className="form-input" placeholder="es. Pressione sistolica" value={vitaleForm.etichetta ?? ''} onChange={e => setVitaleForm(p => ({...p, etichetta: e.target.value}))} />
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Valore *</label>
+                    <input className="form-input" value={vitaleForm.valore ?? ''} onChange={e => setVitaleForm(p => ({...p, valore: e.target.value}))} />
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Unità</label>
+                    <input className="form-input" placeholder="mmHg, bpm…" value={vitaleForm.unita ?? ''} onChange={e => setVitaleForm(p => ({...p, unita: e.target.value}))} />
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Stato</label>
+                    <select className="form-select" value={vitaleForm.stato ?? 'normale'} onChange={e => setVitaleForm(p => ({...p, stato: e.target.value as VitaleItem['stato']}))}>
+                      <option value="normale">Normale</option><option value="attenzione">Attenzione</option><option value="critico">Critico</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="ec-modal-add-form__actions">
+                  <button className="btn-secondary btn-sm" onClick={() => {setModalVitaleShow(false); setVitaleForm({});}}>Annulla</button>
+                  <button className="btn-primary btn-sm" onClick={addVitaleFromModal}><IcoCheck /> Salva</button>
+                </div>
+              </div>
+            ) : (
+              <button className="btn-secondary btn-sm" onClick={() => setModalVitaleShow(true)}><IcoPlus /> Aggiungi rilevazione</button>
+            )}
+          </div>
+          <div className="modal-footer">
+            <div className="modal-footer__left">
+              <button className="btn-secondary" onClick={() => { setCardModal(null); switchGroup('clinica'); switchTab('parametri'); }}>Apri sezione completa</button>
+            </div>
+            <div className="modal-footer__right">
+              <button className="btn-primary" onClick={() => setCardModal(null)}>Chiudi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderConsegneModal() {
+    return (
+      <div className="modal-overlay" onClick={() => setCardModal(null)}>
+        <div className="modal-box modal-box--edit-card" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <div>
+              <h3 className="modal-title">Consegne Paziente</h3>
+              <p className="modal-subtitle">{patientLabel}</p>
+            </div>
+            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}><IcoX /></button>
+          </div>
+          <div className="modal-body">
+            <div className="ec-modal-list">
+              {mieConsegne.length === 0 && <p className="cr-empty">Nessuna consegna.</p>}
+              {mieConsegne.slice(0, 8).map(c => (
+                <div key={c.id} className="ec-modal-item">
+                  <div className="ec-modal-item__main">
+                    <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>{c.priorita}</span>
+                    <span className="ec-modal-item__title">{c.note}</span>
+                    <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{c.stato.replace('_', ' ')}</span>
+                  </div>
+                  {c.stato !== 'completata' && (
+                    <button className="btn-secondary btn-sm" onClick={() => onUpdateConsegnaStato(c.id, c.stato === 'aperta' ? 'in_corso' : 'completata')}>
+                      {c.stato === 'aperta' ? 'Prendi' : 'Chiudi'}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            {modalConsegnaShow ? (
+              <div className="ec-modal-add-form">
+                <div className="op-form-grid">
+                  <div className="form-field">
+                    <label className="form-label">Tipo</label>
+                    <select className="form-select" value={modalConsegnaForm.tipo} onChange={e => setModalConsegnaForm(p => ({...p, tipo: e.target.value}))}>
+                      {TIPO_CONSEGNA_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Priorità</label>
+                    <select className="form-select" value={modalConsegnaForm.priorita} onChange={e => setModalConsegnaForm(p => ({...p, priorita: e.target.value as PrioritaConsegna}))}>
+                      {PRIORITA_OPTIONS.map(p => <option key={p} value={p}>{p.charAt(0).toUpperCase()+p.slice(1)}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="form-field" style={{marginTop: 4}}>
+                  <label className="form-label">Note *</label>
+                  <textarea className="form-input" rows={2} value={modalConsegnaForm.note} onChange={e => setModalConsegnaForm(p => ({...p, note: e.target.value}))} />
+                </div>
+                <div className="ec-modal-add-form__actions">
+                  <button className="btn-secondary btn-sm" onClick={() => {setModalConsegnaShow(false); setModalConsegnaForm({tipo:'Monitoraggio',priorita:'normale',note:'',oraScadenza:''});}}>Annulla</button>
+                  <button className="btn-primary btn-sm" onClick={salvaConsegnaDaModal}><IcoCheck /> Salva</button>
+                </div>
+              </div>
+            ) : (
+              <button className="btn-secondary btn-sm" onClick={() => setModalConsegnaShow(true)}><IcoPlus /> Aggiungi consegna</button>
+            )}
+          </div>
+          <div className="modal-footer">
+            <div className="modal-footer__left">
+              <button className="btn-secondary" onClick={() => { setCardModal(null); switchGroup('panoramica'); switchTab('consegne'); }}>Apri sezione completa</button>
+            </div>
+            <div className="modal-footer__right">
+              <button className="btn-primary" onClick={() => setCardModal(null)}>Chiudi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderAllergieModal() {
+    return (
+      <div className="modal-overlay" onClick={() => setCardModal(null)}>
+        <div className="modal-box modal-box--edit-card" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <div>
+              <h3 className="modal-title">Allergie e Intolleranze</h3>
+              <p className="modal-subtitle">{patientLabel}</p>
+            </div>
+            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}><IcoX /></button>
+          </div>
+          <div className="modal-body">
+            <div className="ec-modal-list">
+              {cartella.allergie.length === 0 && <p className="cr-empty">Nessuna allergia registrata.</p>}
+              {cartella.allergie.map(a => (
+                <div key={a.id} className="ec-modal-item">
+                  <div className="ec-modal-item__main">
+                    <span className="ec-modal-item__title">{a.allergene}</span>
+                    {a.reazione && <span className="ec-modal-item__sub">{a.reazione}</span>}
+                    <span className={`badge ${a.gravita === 'grave' ? 'badge--red' : a.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{a.gravita}</span>
+                  </div>
+                  <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => deleteAllergia(a.id)} title="Elimina"><IcoX /></button>
+                </div>
+              ))}
+            </div>
+            {modalAllergiaShow ? (
+              <div className="ec-modal-add-form">
+                <div className="op-form-grid">
+                  <div className="form-field">
+                    <label className="form-label">Allergene *</label>
+                    <input className="form-input" value={allergiaForm.allergene ?? ''} onChange={e => setAllergiaForm(p => ({...p, allergene: e.target.value}))} />
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Gravità</label>
+                    <select className="form-select" value={allergiaForm.gravita ?? 'lieve'} onChange={e => setAllergiaForm(p => ({...p, gravita: e.target.value as AllergiaItem['gravita']}))}>
+                      <option value="lieve">Lieve</option><option value="moderata">Moderata</option><option value="grave">Grave</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-field" style={{marginTop: 4}}>
+                  <label className="form-label">Reazione</label>
+                  <input className="form-input" value={allergiaForm.reazione ?? ''} onChange={e => setAllergiaForm(p => ({...p, reazione: e.target.value}))} />
+                </div>
+                <div className="ec-modal-add-form__actions">
+                  <button className="btn-secondary btn-sm" onClick={() => {setModalAllergiaShow(false); setAllergiaForm({});}}>Annulla</button>
+                  <button className="btn-primary btn-sm" onClick={addAllergia}><IcoCheck /> Salva</button>
+                </div>
+              </div>
+            ) : (
+              <button className="btn-secondary btn-sm" onClick={() => setModalAllergiaShow(true)}><IcoPlus /> Aggiungi allergia</button>
+            )}
+          </div>
+          <div className="modal-footer">
+            <div className="modal-footer__right">
+              <button className="btn-primary" onClick={() => setCardModal(null)}>Chiudi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function renderCameraModal() {
+    const form = cameraEditing ? cameraModalForm : cartella;
+    return (
+      <div className="modal-overlay" onClick={() => { setCardModal(null); setCameraEditing(false); }}>
+        <div className="modal-box modal-box--edit-card" onClick={e => e.stopPropagation()}>
+          <div className="modal-header">
+            <div>
+              <h3 className="modal-title">Camera e Assegnazione</h3>
+              <p className="modal-subtitle">{patientLabel}</p>
+            </div>
+            <button className="icon-btn icon-btn--sm" onClick={() => { setCardModal(null); setCameraEditing(false); }}><IcoX /></button>
+          </div>
+          <div className="modal-body">
+            {!cameraEditing ? (
+              <div className="ec-modal-list">
+                <div className="ec-modal-item">
+                  <div className="ec-modal-item__main">
+                    <span className="ec-modal-item__title">Camera</span>
+                    <span className="ec-modal-item__sub">{cartella.cameraNumero ?? '—'}</span>
+                  </div>
+                </div>
+                <div className="ec-modal-item">
+                  <div className="ec-modal-item__main">
+                    <span className="ec-modal-item__title">Letto</span>
+                    <span className="ec-modal-item__sub">{cartella.lettoNumero ?? '—'}</span>
+                  </div>
+                </div>
+                <div className="ec-modal-item">
+                  <div className="ec-modal-item__main">
+                    <span className="ec-modal-item__title">Reparto</span>
+                    <span className="ec-modal-item__sub">{cartella.repartoRicovero ?? '—'}</span>
+                  </div>
+                </div>
+                <div className="ec-modal-item">
+                  <div className="ec-modal-item__main">
+                    <span className="ec-modal-item__title">Stato ricovero</span>
+                    <span className="ec-modal-item__sub">{cartella.statoRicovero.replace('_', ' ')}</span>
+                  </div>
+                </div>
+                <button className="btn-secondary btn-sm" style={{marginTop: 4}} onClick={() => { setCameraModalForm({ cameraNumero: cartella.cameraNumero, lettoNumero: cartella.lettoNumero, repartoRicovero: cartella.repartoRicovero, statoRicovero: cartella.statoRicovero }); setCameraEditing(true); }}>
+                  <IcoEdit /> Modifica assegnazione
+                </button>
+              </div>
+            ) : (
+              <div className="op-form-grid">
+                <div className="form-field">
+                  <label className="form-label">Camera</label>
+                  <select className="form-select" value={form.cameraNumero ?? ''} onChange={e => { const cam = camere.find(c => c.numero === e.target.value); setCameraModalForm(p => ({...p, cameraNumero: e.target.value, repartoRicovero: cam?.reparto ?? p.repartoRicovero})); }}>
+                    <option value="">— Nessuna —</option>
+                    {camere.filter(c => c.stato === 'attiva').map(c => <option key={c.id} value={c.numero}>{c.numero} — {c.reparto}</option>)}
+                  </select>
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Letto</label>
+                  <input className="form-input" value={cameraModalForm.lettoNumero ?? ''} onChange={e => setCameraModalForm(p => ({...p, lettoNumero: e.target.value}))} />
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Stato ricovero</label>
+                  <select className="form-select" value={cameraModalForm.statoRicovero ?? 'ambulatoriale'} onChange={e => setCameraModalForm(p => ({...p, statoRicovero: e.target.value as CartellaPaziente['statoRicovero']}))}>
+                    <option value="ricoverato">Ricoverato</option><option value="ambulatoriale">Ambulatoriale</option>
+                    <option value="day_hospital">Day Hospital</option><option value="dimesso">Dimesso</option>
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="modal-footer">
+            <div className="modal-footer__left" />
+            <div className="modal-footer__right">
+              {cameraEditing ? (
+                <>
+                  <button className="btn-secondary" onClick={() => setCameraEditing(false)}>Annulla</button>
+                  <button className="btn-primary" onClick={saveCameraFromModal}><IcoCheck /> Salva</button>
+                </>
+              ) : (
+                <button className="btn-primary" onClick={() => setCardModal(null)}>Chiudi</button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // ── Tab rendering ──────────────────────────────────────────────────────────
 
   function renderRiepilogo() {
     const lastVitali = cartella.parametriVitali.slice(0, 4);
     const diagnosiMostrate = diagnosiAttive.slice(0, 3);
     const farmaciMostrati = farmaciAttivi.slice(0, 4);
-
-    function navTo(group: TabGroup, tabId: TabId) {
-      switchGroup(group);
-      switchTab(tabId);
-    }
 
     return (
       <div className="cr-tab-content">
@@ -358,12 +838,11 @@ export function PatientDetail({
         {hasAllergie && (
           <button
             className="cr-alert-strip cr-alert-strip--allergie"
-            onClick={() => navTo('clinica', 'anamnesi')}
-            title="Vai ad Anamnesi / Allergie"
+            onClick={() => setCardModal('allergie')}
           >
             <span className="cr-alert-strip__ico"><IcoWarning /></span>
             <span><strong>ALLERGIE GRAVI:</strong> {allergieGravi.map(a => a.allergene).join(', ')}</span>
-            <span className="cr-alert-strip__link">Vedi →</span>
+            <span className="cr-alert-strip__link">Gestisci →</span>
           </button>
         )}
 
@@ -380,39 +859,36 @@ export function PatientDetail({
 
         {/* ── Quick stats row ── */}
         <div className="cr-quick-stats">
-          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => navTo('clinica', 'diagnosi')} title="Vai a Diagnosi">
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('diagnosi')}>
             <span className="cr-quick-stat__val">{diagnosiAttive.length}</span>
             <span className="cr-quick-stat__lbl">Diagnosi attive</span>
           </button>
-          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => navTo('clinica', 'terapie')} title="Vai a Terapia Medica">
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('farmaci')}>
             <span className="cr-quick-stat__val">{farmaciAttivi.length}</span>
             <span className="cr-quick-stat__lbl">Farmaci attivi</span>
           </button>
-          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => navTo('clinica', 'anamnesi')} title="Vai ad Anamnesi">
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('allergie')}>
             <span className="cr-quick-stat__val">{cartella.allergie.length}</span>
             <span className="cr-quick-stat__lbl">Allergie</span>
           </button>
-          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => navTo('panoramica', 'consegne')} title="Vai a Consegne">
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('consegne')}>
             <span className="cr-quick-stat__val">{mieConsegne.filter(c => c.stato !== 'completata').length}</span>
             <span className="cr-quick-stat__lbl">Consegne aperte</span>
           </button>
-          {cartella.cameraNumero && (
-            <button className="cr-quick-stat cr-quick-stat--clickable cr-quick-stat--camera" onClick={() => navTo('clinica', 'presa-in-carico')} title="Vai a Presa in Carico">
-              <span className="cr-quick-stat__val">{cartella.cameraNumero}</span>
-              <span className="cr-quick-stat__lbl">Camera{cartella.lettoNumero ? ` / L.${cartella.lettoNumero}` : ''}</span>
-            </button>
-          )}
+          <button className="cr-quick-stat cr-quick-stat--clickable cr-quick-stat--camera" onClick={() => setCardModal('camera')}>
+            <span className="cr-quick-stat__val">{cartella.cameraNumero ?? '—'}</span>
+            <span className="cr-quick-stat__lbl">Camera{cartella.lettoNumero ? ` / L.${cartella.lettoNumero}` : ''}</span>
+          </button>
         </div>
 
         {/* ── Main grid ── */}
         <div className="cr-riepilogo-grid">
 
           {/* Diagnosi attive */}
-          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('clinica', 'diagnosi')}>
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => setCardModal('diagnosi')}>
             <div className="cr-riepilogo-card__title">
               <IcoCartelle /> Diagnosi attive
-              {diagnosiAttive.length > 3 && <span className="cr-card-more">vedi tutte ({diagnosiAttive.length})</span>}
-              <span className="card-nav-hint"><IcoArrow /></span>
+              <span className="cr-card-edit-icon"><IcoEdit /></span>
             </div>
             {diagnosiMostrate.length === 0
               ? <p className="cr-empty">Nessuna diagnosi attiva.</p>
@@ -431,11 +907,10 @@ export function PatientDetail({
           </button>
 
           {/* Farmaci attivi */}
-          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('clinica', 'terapie')}>
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => setCardModal('farmaci')}>
             <div className="cr-riepilogo-card__title">
               <IcoPill /> Farmaci attivi
-              {farmaciAttivi.length > 4 && <span className="cr-card-more">vedi tutti ({farmaciAttivi.length})</span>}
-              <span className="card-nav-hint"><IcoArrow /></span>
+              <span className="cr-card-edit-icon"><IcoEdit /></span>
             </div>
             {farmaciMostrati.length === 0
               ? <p className="cr-empty">Nessun farmaco attivo.</p>
@@ -454,8 +929,11 @@ export function PatientDetail({
           </button>
 
           {/* Ultimi parametri */}
-          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('clinica', 'parametri')}>
-            <div className="cr-riepilogo-card__title"><IcoActivity /> Ultimi parametri<span className="card-nav-hint"><IcoArrow /></span></div>
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => setCardModal('parametri')}>
+            <div className="cr-riepilogo-card__title">
+              <IcoActivity /> Ultimi parametri
+              <span className="cr-card-edit-icon"><IcoEdit /></span>
+            </div>
             {lastVitali.length === 0
               ? <p className="cr-empty">Nessun parametro rilevato.</p>
               : (
@@ -472,23 +950,73 @@ export function PatientDetail({
             }
           </button>
 
-          {/* Consegne aperte */}
-          {mieConsegne.filter(c => c.stato !== 'completata').length > 0 && (
-            <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => navTo('panoramica', 'consegne')}>
-              <div className="cr-riepilogo-card__title"><IcoConsegne /> Consegne aperte<span className="card-nav-hint"><IcoArrow /></span></div>
-              <div className="consegne-list consegne-list--mini">
-                {mieConsegne.filter(c => c.stato !== 'completata').slice(0, 3).map(c => (
-                  <div key={c.id} className={`consegna-card consegna-card--mini consegna-card--${c.priorita}`}>
-                    <div className="consegna-card__top">
-                      <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>{c.priorita}</span>
-                      <span className="consegna-tipo">{c.tipo}</span>
+          {/* Consegne */}
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => setCardModal('consegne')}>
+            <div className="cr-riepilogo-card__title">
+              <IcoConsegne /> Consegne
+              <span className="cr-card-edit-icon"><IcoEdit /></span>
+            </div>
+            {mieConsegne.filter(c => c.stato !== 'completata').length === 0
+              ? <p className="cr-empty">Nessuna consegna aperta.</p>
+              : (
+                <div className="consegne-list consegne-list--mini">
+                  {mieConsegne.filter(c => c.stato !== 'completata').slice(0, 3).map(c => (
+                    <div key={c.id} className={`consegna-card consegna-card--mini consegna-card--${c.priorita}`}>
+                      <div className="consegna-card__top">
+                        <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>{c.priorita}</span>
+                        <span className="consegna-tipo">{c.tipo}</span>
+                      </div>
+                      <p className="consegna-note consegna-note--clamp">{c.note}</p>
                     </div>
-                    <p className="consegna-note consegna-note--clamp">{c.note}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              )
+            }
+          </button>
+
+          {/* Allergie */}
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => setCardModal('allergie')}>
+            <div className="cr-riepilogo-card__title">
+              <IcoWarning /> Allergie
+              <span className="cr-card-edit-icon"><IcoEdit /></span>
+            </div>
+            {cartella.allergie.length === 0
+              ? <p className="cr-empty">Nessuna allergia registrata.</p>
+              : (
+                <ul className="cr-compact-list">
+                  {cartella.allergie.slice(0, 3).map(a => (
+                    <li key={a.id} className="cr-compact-item">
+                      <span className="cr-compact-item__main">{a.allergene}</span>
+                      {a.reazione && <span className="cr-compact-item__sub">{a.reazione}</span>}
+                      <span className={`badge ${a.gravita === 'grave' ? 'badge--red' : a.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{a.gravita}</span>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+          </button>
+
+          {/* Camera */}
+          <button className="cr-riepilogo-card cr-riepilogo-card--nav" onClick={() => setCardModal('camera')}>
+            <div className="cr-riepilogo-card__title">
+              <IcoBed /> Camera
+              <span className="cr-card-edit-icon"><IcoEdit /></span>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:4}}>
+              <div className="cr-compact-item">
+                <span className="cr-compact-item__main">Camera</span>
+                <span className="cr-compact-item__sub">{cartella.cameraNumero ?? '—'}</span>
               </div>
-            </button>
-          )}
+              <div className="cr-compact-item">
+                <span className="cr-compact-item__main">Letto</span>
+                <span className="cr-compact-item__sub">{cartella.lettoNumero ?? '—'}</span>
+              </div>
+              <div className="cr-compact-item">
+                <span className="cr-compact-item__main">Stato</span>
+                <span className="cr-compact-item__sub">{cartella.statoRicovero.replace('_', ' ')}</span>
+              </div>
+            </div>
+          </button>
 
         </div>
       </div>
@@ -1168,6 +1696,13 @@ export function PatientDetail({
       {tab === 'dimissione' && (
         <DimissioneTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
       )}
+
+      {cardModal === 'diagnosi'  && renderDiagnosiModal()}
+      {cardModal === 'farmaci'   && renderFarmaciModal()}
+      {cardModal === 'parametri' && renderParametriModal()}
+      {cardModal === 'consegne'  && renderConsegneModal()}
+      {cardModal === 'allergie'  && renderAllergieModal()}
+      {cardModal === 'camera'    && renderCameraModal()}
     </div>
   );
 }
