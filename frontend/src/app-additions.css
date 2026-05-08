@@ -4654,13 +4654,13 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .cr-breadcrumb-btn:hover { color: var(--blue); }
 
-/* Override btn-back inside breadcrumb: reset touch-target size */
+/* Override btn-back inside breadcrumb: keep touch target for tablet */
 .cr-breadcrumb .btn-back {
-  min-height: unset;
+  min-height: 36px;
   height: auto;
   margin-bottom: 0;
-  padding: 2px 0;
-  font-size: 12px;
+  padding: 4px 8px 4px 4px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-xmuted);
   opacity: 1;

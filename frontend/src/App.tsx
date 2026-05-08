@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 import { API_URL } from './config';
 
@@ -37,6 +37,32 @@ import {
 
 interface NavItem { key: NavKey; label: string; icon: React.ReactNode; }
 
+const NAV_LABELS: Record<NavKey, string> = {
+  'login': 'Login',
+  'admin-dashboard': 'Dashboard',
+  'gestione-operatori': 'Operatori',
+  'agenda-admin': 'Agenda',
+  'posti-letto': 'Posti Letto',
+  'orari-operatori': 'Orari',
+  'note': 'Note',
+  'operator-dashboard': 'Dashboard',
+  'pazienti': 'Pazienti',
+  'dettaglio-paziente': 'Scheda Paziente',
+  'consegne': 'Consegne',
+  'agenda-operatore': 'Agenda',
+  'parametri-multipaziente': 'Parametri',
+};
+
+const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
+  'dettaglio-paziente': 'pazienti',
+  'parametri-multipaziente': 'operator-dashboard',
+  'gestione-operatori': 'admin-dashboard',
+  'posti-letto': 'admin-dashboard',
+  'orari-operatori': 'admin-dashboard',
+  'agenda-admin': 'admin-dashboard',
+  'agenda-operatore': 'operator-dashboard',
+};
+
 const ADMIN_NAV: NavItem[] = [
   { key: 'admin-dashboard',    label: 'Dashboard',        icon: <IcoDashboard /> },
   { key: 'gestione-operatori', label: 'Operatori',        icon: <IcoOperatori /> },
@@ -68,6 +94,10 @@ export default function App() {
     setTimeout(() => setToastMsg(null), 3500);
   }
 
+  // Navigation history tracking
+  const prevNavKeyRef = useRef<NavKey | null>(null);
+  const historyDepth = useRef(0);
+
   // Search
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -90,8 +120,10 @@ export default function App() {
   // ── History API navigation ─────────────────────────────────────────────────
 
   function pushNav(key: NavKey, paziente?: Paziente) {
+    prevNavKeyRef.current = navKey;
+    historyDepth.current += 1;
     const hash = `#/${key}`;
-    window.history.pushState({ navKey: key, pazienteId: paziente?.id }, '', hash);
+    window.history.pushState({ navKey: key, pazienteId: paziente?.id, prevNavKey: navKey }, '', hash);
     setNavKey(key);
     if (paziente) {
       setPazienteSelezionato(paziente);
@@ -104,6 +136,15 @@ export default function App() {
 
   function selectPaziente(p: Paziente) { pushNav('dettaglio-paziente', p); }
 
+  const goBack = useCallback((fallbackKey?: NavKey) => {
+    if (historyDepth.current > 0) {
+      window.history.back();
+    } else {
+      const target = fallbackKey ?? NAV_FALLBACK[navKey] ?? (utente?.ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard');
+      navigate(target);
+    }
+  }, [navKey, utente?.ruolo]);
+
   // Restore nav from hash on mount + listen to popstate
   useEffect(() => {
     const hash = window.location.hash.replace('#/', '');
@@ -114,7 +155,9 @@ export default function App() {
     }
 
     function onPopState(e: PopStateEvent) {
+      if (historyDepth.current > 0) historyDepth.current -= 1;
       if (e.state?.navKey) {
+        prevNavKeyRef.current = e.state.prevNavKey ?? null;
         setNavKey(e.state.navKey as NavKey);
         if (e.state.navKey !== 'dettaglio-paziente') {
           setPazienteSelezionato(null);
@@ -433,7 +476,9 @@ export default function App() {
           <div className="topbar__breadcrumb">
             {navKey === 'dettaglio-paziente' && pazienteSelezionato ? (
               <>
-                <button className="link-btn" onClick={() => navigate('pazienti')}>Pazienti</button>
+                <button className="link-btn" onClick={() => goBack('pazienti')}>
+                  {NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
+                </button>
                 <span className="topbar__sep">›</span>
                 <span>{pazienteSelezionato.lastName}, {pazienteSelezionato.firstName}</span>
               </>
@@ -590,7 +635,7 @@ export default function App() {
           {navKey === 'dettaglio-paziente' && !pazienteSelezionato && (
             <div style={{ padding: '48px 32px', textAlign: 'center', color: 'var(--text-muted)' }}>
               <p style={{ fontSize: 16, marginBottom: 16 }}>Nessun paziente selezionato.</p>
-              <button className="btn-primary" onClick={() => navigate('pazienti')}>Vai alla lista pazienti</button>
+              <button className="btn-primary" onClick={() => goBack('pazienti')}>Vai alla lista pazienti</button>
             </div>
           )}
           {navKey === 'dettaglio-paziente' && pazienteSelezionato && (
@@ -600,7 +645,8 @@ export default function App() {
               consegne={consegne}
               operatori={operatori}
               camere={camere}
-              onBack={() => navigate('pazienti')}
+              onBack={() => goBack('pazienti')}
+              backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
               onAddConsegna={addConsegna}
               onUpdateConsegnaStato={updateConsegnaStato}
               onUpdateCartella={updateCartella}

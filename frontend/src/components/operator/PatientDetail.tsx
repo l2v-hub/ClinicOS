@@ -94,6 +94,7 @@ interface PatientDetailProps {
   operatori: Operatore[];
   camere: Camera[];
   onBack: () => void;
+  backLabel?: string;
   onAddConsegna: (c: Omit<Consegna, 'id' | 'createdAt'>) => void;
   onUpdateConsegnaStato: (id: string, stato: Consegna['stato']) => void;
   onUpdateCartella: (pazienteId: string, updates: Partial<CartellaPaziente>) => void;
@@ -191,7 +192,7 @@ function ItemRow({ onEdit, onDelete, children }: { onEdit: () => void; onDelete:
 
 export function PatientDetail({
   paziente, cartella, consegne, operatori, camere,
-  onBack, onAddConsegna, onUpdateConsegnaStato,
+  onBack, backLabel = 'Pazienti', onAddConsegna, onUpdateConsegnaStato,
   onUpdateCartella, onUpdatePaziente,
   operatoreNome,
 }: PatientDetailProps) {
@@ -1589,7 +1590,7 @@ export function PatientDetail({
     <div className="patient-record-view">
       {/* Breadcrumb */}
       <div className="cr-breadcrumb">
-        <button className="btn-back cr-breadcrumb-btn" onClick={onBack}><IcoChevronLeft /> Pazienti</button>
+        <button className="btn-back cr-breadcrumb-btn" onClick={onBack} aria-label={`Torna a ${backLabel}`}><IcoChevronLeft /> {backLabel}</button>
       </div>
 
       {/* Patient Header Card */}
