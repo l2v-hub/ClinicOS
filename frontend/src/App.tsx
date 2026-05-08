@@ -313,7 +313,7 @@ export default function App() {
         });
       }
     } catch {
-      // Silently fail on load — will use default cartella
+      showToast('Impossibile caricare la cartella clinica');
     }
   }
 
