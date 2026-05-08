@@ -65,9 +65,19 @@ model Patient {
   registeredBy          Operator?        @relation("PatientRegisteredBy", fields: [registeredById], references: [id], onDelete: SetNull)
   clinicalRecords       ClinicalRecord[]
   appointments          Appointment[]
+  cartella              Cartella?
 
   @@index([lastName, firstName])
   @@index([registeredById])
+}
+
+model Cartella {
+  id        String   @id @default(cuid())
+  patientId String   @unique
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
 }
 
 model ClinicalRecord {

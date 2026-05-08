@@ -120,4 +120,94 @@ router.post('/', async (req, res) => {
   }
 });
 
+// ── PATCH /patients/:id — update patient demographics ─────────────────────
+
+router.patch('/:id', async (req, res) => {
+  const { id } = req.params;
+  const allowed = ['firstName', 'lastName', 'dateOfBirth', 'sex', 'email', 'phone',
+    'address', 'emergencyContactName', 'emergencyContactPhone'] as const;
+
+  const updates: Record<string, unknown> = {};
+  for (const key of allowed) {
+    if (req.body[key] !== undefined) {
+      updates[key] = key === 'dateOfBirth' ? new Date(req.body[key]) : req.body[key];
+    }
+  }
+
+  if (Object.keys(updates).length === 0) {
+    res.status(400).json({ error: 'Nessun campo da aggiornare' });
+    return;
+  }
+
+  try {
+    const patient = await prisma.patient.update({ where: { id }, data: updates });
+    console.log(`PATCH /patients/${id} → aggiornato`);
+    res.status(200).json(patient);
+  } catch (error: unknown) {
+    const prismaError = error as { code?: string };
+    if (prismaError.code === 'P2025') {
+      res.status(404).json({ error: 'Paziente non trovato' });
+    } else {
+      console.error('PATCH /patients/:id error:', error);
+      res.status(500).json({ error: 'Errore durante aggiornamento paziente' });
+    }
+  }
+});
+
+// ── GET /patients/:id/cartella — load clinical record ─────────────────────
+
+router.get('/:id/cartella', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const patient = await prisma.patient.findUnique({ where: { id } });
+    if (!patient) {
+      res.status(404).json({ error: 'Paziente non trovato' });
+      return;
+    }
+
+    const cartella = await prisma.cartella.findUnique({ where: { patientId: id } });
+    if (!cartella) {
+      res.status(200).json({ patientId: id, data: null });
+      return;
+    }
+
+    res.status(200).json({ patientId: id, data: cartella.data });
+  } catch (error) {
+    console.error('GET /patients/:id/cartella error:', error);
+    res.status(500).json({ error: 'Errore nel recupero della cartella clinica' });
+  }
+});
+
+// ── PUT /patients/:id/cartella — upsert clinical record ───────────────────
+
+router.put('/:id/cartella', async (req, res) => {
+  const { id } = req.params;
+  const { data } = req.body as { data?: unknown };
+
+  if (!data || typeof data !== 'object') {
+    res.status(400).json({ error: 'Campo "data" obbligatorio (oggetto JSON)' });
+    return;
+  }
+
+  try {
+    const patient = await prisma.patient.findUnique({ where: { id } });
+    if (!patient) {
+      res.status(404).json({ error: 'Paziente non trovato' });
+      return;
+    }
+
+    const cartella = await prisma.cartella.upsert({
+      where: { patientId: id },
+      create: { patientId: id, data: data as object },
+      update: { data: data as object },
+    });
+
+    console.log(`PUT /patients/${id}/cartella → salvata`);
+    res.status(200).json({ patientId: id, data: cartella.data });
+  } catch (error) {
+    console.error('PUT /patients/:id/cartella error:', error);
+    res.status(500).json({ error: 'Errore durante salvataggio cartella clinica' });
+  }
+});
+
 export default router;

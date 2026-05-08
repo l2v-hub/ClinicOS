@@ -134,7 +134,10 @@ export default function App() {
 
   function navigate(key: NavKey) { pushNav(key); }
 
-  function selectPaziente(p: Paziente) { pushNav('dettaglio-paziente', p); }
+  function selectPaziente(p: Paziente) {
+    pushNav('dettaglio-paziente', p);
+    loadCartella(p.id);
+  }
 
   const goBack = useCallback((fallbackKey?: NavKey) => {
     if (historyDepth.current > 0) {
@@ -290,22 +293,65 @@ export default function App() {
     });
   }
 
-  // ── Cartella CRUD ────────────────────────────────────────────────────────────
+  // ── Cartella CRUD (API-persisted) ─────────────────────────────────────────
 
   function getCartella(pazienteId: string): CartellaPaziente {
     return cartelle.find(c => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
   }
 
+  async function loadCartella(pazienteId: string): Promise<void> {
+    try {
+      const res = await fetch(`${API_URL}/patients/${pazienteId}/cartella`);
+      if (!res.ok) return;
+      const json = await res.json() as { patientId: string; data: CartellaPaziente | null };
+      if (json.data) {
+        setCartelle(prev => {
+          const idx = prev.findIndex(c => c.pazienteId === pazienteId);
+          const merged = { ...createDefaultCartella(pazienteId), ...json.data, pazienteId };
+          if (idx >= 0) return prev.map((c, i) => i === idx ? merged : c);
+          return [...prev, merged];
+        });
+      }
+    } catch {
+      // Silently fail on load — will use default cartella
+    }
+  }
+
   function updateCartella(pazienteId: string, updates: Partial<CartellaPaziente>) {
     setCartelle(prev => {
+      const existing = prev.find(c => c.pazienteId === pazienteId);
+      const updated = { ...(existing ?? createDefaultCartella(pazienteId)), ...updates };
       const idx = prev.findIndex(c => c.pazienteId === pazienteId);
-      if (idx >= 0) return prev.map((c, i) => i === idx ? { ...c, ...updates } : c);
-      return [...prev, { ...createDefaultCartella(pazienteId), ...updates }];
+      const next = idx >= 0 ? prev.map((c, i) => i === idx ? updated : c) : [...prev, updated];
+
+      // Persist to backend (fire-and-forget with toast feedback)
+      const { pazienteId: _pid, ...dataToSave } = updated;
+      fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: dataToSave }),
+      }).then(r => {
+        if (r.ok) showToast('Dati salvati correttamente');
+        else showToast('Impossibile salvare i dati');
+      }).catch(() => showToast('Impossibile salvare i dati'));
+
+      return next;
     });
   }
 
-  function updatePaziente(id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) {
+  async function updatePaziente(id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) {
     setPazienti(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    try {
+      const res = await fetch(`${API_URL}/patients/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      if (res.ok) showToast('Dati paziente aggiornati');
+      else showToast('Impossibile aggiornare il paziente');
+    } catch {
+      showToast('Impossibile aggiornare il paziente');
+    }
   }
 
   // ── Add patient (backend-persisted) ────────────────────────────────────────
