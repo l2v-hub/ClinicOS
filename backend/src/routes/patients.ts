@@ -16,6 +16,21 @@ router.get('/', async (_req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const patient = await prisma.patient.findUnique({ where: { id } });
+    if (!patient) {
+      res.status(404).json({ error: 'Paziente non trovato' });
+      return;
+    }
+    res.status(200).json(patient);
+  } catch (error) {
+    console.error('GET /patients/:id error:', error);
+    res.status(500).json({ error: 'Errore nel recupero del paziente' });
+  }
+});
+
 router.post('/seed', async (_req, res) => {
   try {
     const patients = await prisma.patient.createMany({

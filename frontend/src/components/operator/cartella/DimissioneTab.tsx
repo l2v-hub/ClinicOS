@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CartellaPaziente, DimissioneInfermieristica, Liberatoria, Paziente } from '../../../types';
+import type { CartellaPaziente, DimissioneInfermieristica, Liberatoria, UscitaLog, Paziente } from '../../../types';
 import { todayStr, nowISO, nowTime, PrintButton } from './shared';
 
 interface Props {
@@ -329,11 +329,36 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
   const [dimForm, setDimForm] = useState<DimissioneInfermieristica>(dim ?? { ...EMPTY_DIM, operatore: operatoreNome });
   const [editingLib, setEditingLib] = useState(false);
   const [libForm, setLibForm] = useState<Liberatoria>(lib ?? { ...EMPTY_LIB, operatore: operatoreNome });
+  const [showAddUscita, setShowAddUscita] = useState(false);
+  const [uscitaForm, setUscitaForm] = useState<Partial<UscitaLog>>({});
 
   function setDim(f: Partial<DimissioneInfermieristica>) { setDimForm(p => ({ ...p, ...f })); }
   function setLib(f: Partial<Liberatoria>) { setLibForm(p => ({ ...p, ...f })); }
   function saveDim() { onUpdate({ dimissione: { ...dimForm, compilatoAt: nowISO() } }); setEditingDim(false); }
   function saveLib() { onUpdate({ liberatoria: { ...libForm, compilatoAt: nowISO() } }); setEditingLib(false); }
+
+  function addUscita() {
+    if (!uscitaForm.data || !uscitaForm.ora) return;
+    const entry: UscitaLog = {
+      id: crypto.randomUUID(),
+      data: uscitaForm.data,
+      ora: uscitaForm.ora,
+      oraRientro: uscitaForm.oraRientro,
+      referenteNome: uscitaForm.referenteNome,
+      firma: uscitaForm.firma,
+      operatore: operatoreNome,
+      note: uscitaForm.note,
+    };
+    const existing = cartella.liberatoria ?? { ...EMPTY_LIB, operatore: operatoreNome };
+    onUpdate({ liberatoria: { ...existing, usciteLog: [...(existing.usciteLog ?? []), entry] } });
+    setUscitaForm({});
+    setShowAddUscita(false);
+  }
+
+  function deleteUscita(id: string) {
+    if (!cartella.liberatoria) return;
+    onUpdate({ liberatoria: { ...cartella.liberatoria, usciteLog: (cartella.liberatoria.usciteLog ?? []).filter(u => u.id !== id) } });
+  }
 
   return (
     <div className={`cr-tab-content${modulo ? ' mode-modulo' : ''}`}>
@@ -717,6 +742,79 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
           ) : (
             <p className="cr-empty">Liberatoria non compilata.</p>
           )}
+
+          {/* ── Log uscite temporanee ── */}
+          <div style={{ marginTop: 20 }}>
+            <div className="cr-section-header" style={{ marginBottom: 10 }}>
+              <span className="cr-section-title" style={{ fontSize: 13 }}>Registro Uscite Temporanee</span>
+              <button className="btn-secondary btn-sm" onClick={() => setShowAddUscita(v => !v)}>
+                {showAddUscita ? 'Annulla' : '+ Aggiungi uscita'}
+              </button>
+            </div>
+
+            {showAddUscita && (
+              <div className="cr-inline-form" style={{ marginBottom: 12 }}>
+                <div className="form-row-3col">
+                  <div className="form-row">
+                    <label className="form-label">Data uscita *</label>
+                    <input type="date" className="form-input" value={uscitaForm.data ?? ''} onChange={e => setUscitaForm(p => ({...p, data: e.target.value}))} />
+                  </div>
+                  <div className="form-row">
+                    <label className="form-label">Ora uscita *</label>
+                    <input type="time" className="form-input" value={uscitaForm.ora ?? ''} onChange={e => setUscitaForm(p => ({...p, ora: e.target.value}))} />
+                  </div>
+                  <div className="form-row">
+                    <label className="form-label">Ora rientro</label>
+                    <input type="time" className="form-input" value={uscitaForm.oraRientro ?? ''} onChange={e => setUscitaForm(p => ({...p, oraRientro: e.target.value}))} />
+                  </div>
+                </div>
+                <div className="form-row-2col">
+                  <div className="form-row">
+                    <label className="form-label">Accompagnato da</label>
+                    <input type="text" className="form-input" value={uscitaForm.referenteNome ?? ''} onChange={e => setUscitaForm(p => ({...p, referenteNome: e.target.value}))} />
+                  </div>
+                  <div className="form-row">
+                    <label className="form-label">Firma referente</label>
+                    <input type="text" className="form-input" value={uscitaForm.firma ?? ''} onChange={e => setUscitaForm(p => ({...p, firma: e.target.value}))} />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <label className="form-label">Note</label>
+                  <input type="text" className="form-input" value={uscitaForm.note ?? ''} onChange={e => setUscitaForm(p => ({...p, note: e.target.value}))} />
+                </div>
+                <div className="cr-inline-form__actions">
+                  <button className="btn-secondary btn-sm" onClick={() => { setShowAddUscita(false); setUscitaForm({}); }}>Annulla</button>
+                  <button className="btn-primary btn-sm" onClick={addUscita}>Registra uscita</button>
+                </div>
+              </div>
+            )}
+
+            {(cartella.liberatoria?.usciteLog?.length ?? 0) === 0 ? (
+              <p className="cr-empty">Nessuna uscita registrata.</p>
+            ) : (
+              <table className="cr-uscite-table">
+                <thead>
+                  <tr>
+                    <th>Data</th><th>Ora uscita</th><th>Rientro</th><th>Accompagnato da</th><th>Firma</th><th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(cartella.liberatoria?.usciteLog ?? []).map(u => (
+                    <tr key={u.id}>
+                      <td>{u.data.split('-').reverse().join('/')}</td>
+                      <td>{u.ora}</td>
+                      <td>{u.oraRientro ?? '—'}</td>
+                      <td>{u.referenteNome ?? '—'}</td>
+                      <td>{u.firma ?? '—'}</td>
+                      <td>
+                        <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => deleteUscita(u.id)} title="Elimina">✕</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -501,6 +501,7 @@ export default function App() {
               loadingPazienti={loadingPazienti}
               onNavigate={navigate}
               onSelectPaziente={goToPazienteByNome}
+              cartelle={cartelle}
             />
           )}
           {isAdmin && navKey === 'gestione-operatori' && (
@@ -571,6 +572,8 @@ export default function App() {
               loadingPazienti={loadingPazienti}
               onNavigate={navigate}
               onSelectPaziente={goToPazienteByNome}
+              cartelle={cartelle}
+              pazienti={pazienti}
             />
           )}
           {!isAdmin && navKey === 'pazienti' && (

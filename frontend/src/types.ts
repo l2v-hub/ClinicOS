@@ -763,6 +763,17 @@ export interface DimissioneInfermieristica {
 
 // ── Liberatoria di Uscita ──────────────────────────────────────────────────────
 
+export interface UscitaLog {
+  id: string;
+  data: string;
+  ora: string;
+  oraRientro?: string;
+  referenteNome?: string;
+  firma?: string;
+  operatore: string;
+  note?: string;
+}
+
 export interface Liberatoria {
   data: string;
   ora: string;
@@ -778,4 +789,5 @@ export interface Liberatoria {
   referenteDataNascita?: string;
   referenteRapporto?: string;
   soloUscitaParenti?: boolean;
+  usciteLog?: UscitaLog[];
 }

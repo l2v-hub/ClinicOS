@@ -1,5 +1,5 @@
-import type { Operatore, Consegna, Camera, NavKey } from '../../types';
-import { IcoArrow, IcoWarning, IcoOperatori, IcoConsegne, IcoCalendar, IcoBed } from '../../icons';
+import type { Operatore, Consegna, Camera, CartellaPaziente, NavKey } from '../../types';
+import { IcoArrow, IcoWarning, IcoOperatori, IcoConsegne, IcoCalendar, IcoBed, IcoActivity, IcoShield } from '../../icons';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -9,6 +9,7 @@ interface AdminDashboardProps {
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
   onSelectPaziente?: (nome: string) => void;
+  cartelle?: CartellaPaziente[];
 }
 
 function WorkloadBar({ value, max, color }: { value: number; max: number; color?: string }) {
@@ -23,10 +24,18 @@ function WorkloadBar({ value, max, color }: { value: number; max: number; color?
 
 export function AdminDashboard({
   operatori, consegne, camere, totalePazienti, loadingPazienti, onNavigate, onSelectPaziente,
+  cartelle = [],
 }: AdminDashboardProps) {
   const attivi = operatori.filter(o => o.stato === 'attivo');
   const urgenti = consegne.filter(c => c.priorita === 'urgente' && c.stato !== 'completata');
   const maxPazienti = Math.max(...operatori.map(o => o.pazientiAssegnati), 1);
+
+  // Clinical KPIs
+  const critici = cartelle.filter(c => c.parametriVitali.some(v => v.stato === 'critico')).length;
+  const rischiAlti = cartelle.filter(c => c.indicatoriRischio.some(r => r.livello === 'alto' || r.livello === 'critico')).length;
+  const dimessi = cartelle.filter(c => c.statoRicovero === 'dimesso').length;
+  const consegneAperte = consegne.filter(c => c.stato !== 'completata').length;
+  const consegneInCorso = consegne.filter(c => c.stato === 'in_corso').length;
 
   // Occupancy
   const totaleLetti = camere.flatMap(c => c.letti);
@@ -90,6 +99,36 @@ export function AdminDashboard({
           </button>
         </div>
       </div>
+
+      {/* Clinical KPIs */}
+      {cartelle.length > 0 && (
+        <>
+          <div className="section-header" style={{ marginTop: 28, marginBottom: 12 }}>
+            <h3 className="section-header__title">
+              <span className="section-header__ico"><IcoActivity /></span>
+              Situazione Clinica
+            </h3>
+          </div>
+          <div className="kpi-alert-grid">
+            <div className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`}>
+              <span className="kpi-alert-card__val">{critici}</span>
+              <span className="kpi-alert-card__lbl"><IcoActivity /> Parametri critici</span>
+            </div>
+            <div className={`kpi-alert-card${rischiAlti > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}>
+              <span className="kpi-alert-card__val">{rischiAlti}</span>
+              <span className="kpi-alert-card__lbl"><IcoShield /> Rischi alti/critici</span>
+            </div>
+            <div className="kpi-alert-card kpi-alert-card--blue">
+              <span className="kpi-alert-card__val">{consegneInCorso}/{consegneAperte}</span>
+              <span className="kpi-alert-card__lbl"><IcoConsegne /> Consegne in corso</span>
+            </div>
+            <div className="kpi-alert-card kpi-alert-card--green">
+              <span className="kpi-alert-card__val">{dimessi}</span>
+              <span className="kpi-alert-card__lbl">Dimessi in archivio</span>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Occupancy section */}
       <div className="section-header" style={{ marginTop: 32 }}>

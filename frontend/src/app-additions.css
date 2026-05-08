@@ -4935,3 +4935,66 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .vitale-cell:hover {
   background: #EFF6FF;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Uscite log table
+═══════════════════════════════════════════════════════════════════════════ */
+.cr-uscite-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.cr-uscite-table th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.cr-uscite-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--divider);
+  color: var(--text);
+}
+.cr-uscite-table tr:last-child td { border-bottom: none; }
+.cr-uscite-table tr:hover td { background: var(--hover-bg); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Dashboard clinical KPI cards
+═══════════════════════════════════════════════════════════════════════════ */
+.kpi-alert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.kpi-alert-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius-sm);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.kpi-alert-card--red   { border-left: 3px solid var(--red); }
+.kpi-alert-card--amber { border-left: 3px solid var(--amber); }
+.kpi-alert-card--blue  { border-left: 3px solid var(--blue); }
+.kpi-alert-card--green { border-left: 3px solid var(--emerald); }
+.kpi-alert-card__val {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+}
+.kpi-alert-card--red   .kpi-alert-card__val { color: var(--red); }
+.kpi-alert-card--amber .kpi-alert-card__val { color: var(--amber); }
+.kpi-alert-card__lbl {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}

@@ -1,5 +1,5 @@
-import type { UtenteApp, Consegna, SlotAgenda } from '../../types';
-import { IcoArrow, IcoWarning, IcoCalendar, IcoConsegne } from '../../icons';
+import type { UtenteApp, Consegna, SlotAgenda, CartellaPaziente, Paziente } from '../../types';
+import { IcoArrow, IcoWarning, IcoCalendar, IcoConsegne, IcoActivity, IcoShield } from '../../icons';
 import type { NavKey } from '../../types';
 
 interface OperatorDashboardProps {
@@ -10,6 +10,8 @@ interface OperatorDashboardProps {
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
   onSelectPaziente?: (nome: string) => void;
+  cartelle?: CartellaPaziente[];
+  pazienti?: Paziente[]; // reserved for future patient-level KPIs
 }
 
 const STATO_LABEL: Record<string, string> = {
@@ -22,6 +24,7 @@ const STATO_LABEL: Record<string, string> = {
 
 export function OperatorDashboard({
   utente, consegne, agenda, totalePazienti, loadingPazienti, onNavigate, onSelectPaziente,
+  cartelle = [],
 }: OperatorDashboardProps) {
   const mieConsegne = consegne.filter(c =>
     c.operatoreAssegnato.includes(utente.nome.replace('Dr. ', '').replace('Dr.ssa ', '')) ||
@@ -30,6 +33,12 @@ export function OperatorDashboard({
   const urgenti = mieConsegne.filter(c => c.priorita === 'urgente' && c.stato !== 'completata');
   const aperte = mieConsegne.filter(c => c.stato !== 'completata');
   const prossimoSlot = agenda.find(s => s.stato === 'programmato' || s.stato === 'in_corso');
+
+  // Clinical KPIs from cartelle
+  const critici = cartelle.filter(c => c.parametriVitali.some(v => v.stato === 'critico')).length;
+  const rischiAlti = cartelle.filter(c => c.indicatoriRischio.some(r => r.livello === 'alto' || r.livello === 'critico')).length;
+  const allergieGravi = cartelle.filter(c => c.allergie.some(a => a.gravita === 'grave')).length;
+  const pazientiRicoverati = cartelle.filter(c => c.statoRicovero === 'ricoverato').length;
 
   return (
     <div className="operator-dashboard">
@@ -84,6 +93,28 @@ export function OperatorDashboard({
           </button>
         </div>
       </div>
+
+      {/* Clinical KPI strip */}
+      {cartelle.length > 0 && (
+        <div className="kpi-alert-grid">
+          <div className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`}>
+            <span className="kpi-alert-card__val">{critici}</span>
+            <span className="kpi-alert-card__lbl"><IcoActivity /> Parametri critici</span>
+          </div>
+          <div className={`kpi-alert-card${rischiAlti > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}>
+            <span className="kpi-alert-card__val">{rischiAlti}</span>
+            <span className="kpi-alert-card__lbl"><IcoShield /> Rischi alti/critici</span>
+          </div>
+          <div className={`kpi-alert-card${allergieGravi > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}>
+            <span className="kpi-alert-card__val">{allergieGravi}</span>
+            <span className="kpi-alert-card__lbl"><IcoWarning /> Allergie gravi</span>
+          </div>
+          <div className="kpi-alert-card kpi-alert-card--blue">
+            <span className="kpi-alert-card__val">{pazientiRicoverati}</span>
+            <span className="kpi-alert-card__lbl">Ricoverati attivi</span>
+          </div>
+        </div>
+      )}
 
       {/* Prossimo appuntamento */}
       {prossimoSlot && (
