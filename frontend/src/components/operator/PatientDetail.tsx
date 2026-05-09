@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type {
   Paziente, Consegna, Operatore, Camera, CartellaPaziente,
   Diagnosi, NotaClinica,
@@ -180,8 +180,31 @@ export function PatientDetail({
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>('riepilogo');
 
+  // Sidebar accordion state — only active group expanded
+  const activeGroupId = TAB_GROUPS.find(g => g.tabs.some(t => t.id === tab))?.id ?? 'panoramica';
+  const [expandedGroups, setExpandedGroups] = useState<Set<TabGroup>>(() => new Set([activeGroupId]));
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // When tab changes, ensure its group is expanded (accordion behavior)
+  useEffect(() => {
+    const gId = TAB_GROUPS.find(g => g.tabs.some(t => t.id === tab))?.id;
+    if (gId && !expandedGroups.has(gId)) {
+      setExpandedGroups(new Set([gId]));
+    }
+  }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const toggleGroup = useCallback((gId: TabGroup) => {
+    setExpandedGroups(prev => {
+      const next = new Set(prev);
+      if (next.has(gId)) next.delete(gId);
+      else next.add(gId);
+      return next;
+    });
+  }, []);
+
   function switchTab(tabId: TabId) {
     setTab(tabId);
+    setDrawerOpen(false);
   }
 
   function switchGroup(groupId: TabGroup) {
@@ -1601,7 +1624,11 @@ export function PatientDetail({
     consegne:    mieConsegne.filter(c => c.stato !== 'completata').length,
   };
 
-  // groupBadge + activeGroup removed — sidebar shows all tabs directly
+  function groupBadgeSum(gId: TabGroup): number {
+    const g = TAB_GROUPS.find(x => x.id === gId);
+    if (!g) return 0;
+    return g.tabs.reduce((sum, t) => sum + (TAB_BADGES[t.id] ?? 0), 0);
+  }
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
@@ -1654,41 +1681,56 @@ export function PatientDetail({
         </div>
       </div>
 
-      {/* Mobile horizontal tab bar (visible < 768px) */}
-      <div className="cr-sidebar-nav--mobile no-print">
-        {TAB_GROUPS.flatMap(g => g.tabs).map(t => (
-          <button key={t.id} className={tab === t.id ? 'active' : ''} onClick={() => switchTab(t.id)}>
-            {t.label}
-            {(TAB_BADGES[t.id] ?? 0) > 0 && <span className="cr-sidebar-nav__badge" style={{ marginLeft: 4 }}>{TAB_BADGES[t.id]}</span>}
-          </button>
-        ))}
-      </div>
+      {/* Tablet portrait drawer toggle */}
+      <button className="cr-drawer-toggle no-print" onClick={() => setDrawerOpen(true)}>
+        <span className="cr-drawer-toggle__icon">☰</span>
+        <span className="cr-drawer-toggle__label">{TAB_GROUPS.flatMap(g => g.tabs).find(t => t.id === tab)?.label ?? 'Menu'}</span>
+      </button>
 
-      {/* Desktop: sidebar + content layout */}
+      {/* Drawer backdrop (tablet portrait) */}
+      {drawerOpen && <div className="cr-drawer-backdrop" onClick={() => setDrawerOpen(false)} />}
+
+      {/* Sidebar + content layout */}
       <div className="cr-detail-layout">
-        {/* Sidebar navigation */}
-        <nav className="cr-sidebar-nav no-print">
-          {TAB_GROUPS.map(g => (
-            <div key={g.id} className="cr-sidebar-nav__group">
-              <div className="cr-sidebar-nav__group-title">{g.label}</div>
-              {g.tabs.map(t => {
-                const badge = TAB_BADGES[t.id] ?? 0;
-                const isUrgent = t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
-                return (
-                  <button
-                    key={t.id}
-                    className={`cr-sidebar-nav__item${tab === t.id ? ' cr-sidebar-nav__item--active' : ''}`}
-                    onClick={() => switchTab(t.id)}
-                  >
-                    {t.label}
-                    {badge > 0 && (
-                      <span className={`cr-sidebar-nav__badge${isUrgent ? ' cr-sidebar-nav__badge--urgent' : ''}`}>{badge}</span>
+        {/* Sidebar navigation (desktop + tablet landscape fixed, tablet portrait drawer) */}
+        <nav className={`cr-sidebar-nav no-print${drawerOpen ? ' cr-sidebar-nav--drawer-open' : ''}`}>
+          {TAB_GROUPS.map(g => {
+            const isExpanded = expandedGroups.has(g.id);
+            const gBadge = groupBadgeSum(g.id);
+            return (
+              <div key={g.id} className="cr-sidebar-nav__group">
+                <button
+                  type="button"
+                  className="cr-sidebar-nav__group-title"
+                  onClick={() => toggleGroup(g.id)}
+                >
+                  <span>{g.label}</span>
+                  <span className="cr-sidebar-nav__group-right">
+                    {!isExpanded && gBadge > 0 && (
+                      <span className="cr-sidebar-nav__group-badge">{gBadge}</span>
                     )}
-                  </button>
-                );
-              })}
-            </div>
-          ))}
+                    <span className={`cr-sidebar-nav__chevron${isExpanded ? ' cr-sidebar-nav__chevron--open' : ''}`}>▼</span>
+                  </span>
+                </button>
+                {isExpanded && g.tabs.map(t => {
+                  const badge = TAB_BADGES[t.id] ?? 0;
+                  const isUrgent = t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
+                  return (
+                    <button
+                      key={t.id}
+                      className={`cr-sidebar-nav__item${tab === t.id ? ' cr-sidebar-nav__item--active' : ''}`}
+                      onClick={() => switchTab(t.id)}
+                    >
+                      {t.label}
+                      {badge > 0 && (
+                        <span className={`cr-sidebar-nav__badge${isUrgent ? ' cr-sidebar-nav__badge--urgent' : ''}`}>{badge}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })}
         </nav>
 
         {/* Content area */}
