@@ -5,13 +5,13 @@ import { API_URL } from './config';
 import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
   Appuntamento, Camera, Letto, ScheduleOperatore, Nota, StatoNota,
-  CartellaPaziente, NuovoPaziente,
+  CartellaPaziente, NuovoPaziente, TherapySlot, MotivoNonErogazione,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
   MOCK_OPERATORI, MOCK_CONSEGNE, MOCK_AGENDA,
   MOCK_APPUNTAMENTI, MOCK_CAMERE, MOCK_SCHEDULES, MOCK_NOTE,
-  createDefaultCartella,
+  createDefaultCartella, createMockTherapySlots,
 } from './mockData';
 
 import { Login } from './components/Login';
@@ -116,6 +116,9 @@ export default function App() {
   const [camere, setCamere] = useState<Camera[]>(MOCK_CAMERE);
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>(MOCK_SCHEDULES);
   const [note, setNote] = useState<Nota[]>(MOCK_NOTE);
+  const [therapySlots, setTherapySlots] = useState<TherapySlot[]>(() =>
+    createMockTherapySlots(new Date().toISOString().slice(0, 10))
+  );
 
   // ── History API navigation ─────────────────────────────────────────────────
 
@@ -434,6 +437,32 @@ export default function App() {
     setNote(prev => prev.map(n => n.id === id ? { ...n, stato } : n));
   }
 
+  // ── Therapy CRUD ──────────────────────────────────────────────────────────
+
+  function confirmTherapy(somministrazioneId: string) {
+    const now = new Date();
+    const oraConferma = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    setTherapySlots(prev => prev.map(slot => ({
+      ...slot,
+      somministrazioni: slot.somministrazioni.map(s =>
+        s.id === somministrazioneId
+          ? { ...s, stato: 'erogata' as const, operatoreConferma: utente?.nome ?? '', oraConferma }
+          : s
+      ),
+    })));
+  }
+
+  function notAdministeredTherapy(somministrazioneId: string, motivo: MotivoNonErogazione, noteText: string) {
+    setTherapySlots(prev => prev.map(slot => ({
+      ...slot,
+      somministrazioni: slot.somministrazioni.map(s =>
+        s.id === somministrazioneId
+          ? { ...s, stato: 'non_erogata' as const, motivoNonErogazione: motivo, noteNonErogazione: noteText }
+          : s
+      ),
+    })));
+  }
+
   // ── Search ──────────────────────────────────────────────────────────────────
 
   const searchResults = searchQuery.length > 1
@@ -720,6 +749,9 @@ export default function App() {
               pazienti={pazienti}
               onAddAppuntamento={addAppuntamento}
               onSelectPaziente={goToPazienteByNome}
+              therapySlots={therapySlots}
+              onConfirmTherapy={confirmTherapy}
+              onNotAdministeredTherapy={notAdministeredTherapy}
             />
           )}
         </main>

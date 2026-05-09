@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import type { Appuntamento, Operatore, Paziente } from '../../types';
-import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
+import type { Appuntamento, Operatore, Paziente, TherapySlot, MotivoNonErogazione } from '../../types';
+import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus, IcoPill } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
 import { NewPatientModal } from '../shared/NewPatientModal';
+import { TherapySlotModal } from './TherapySlotModal';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
@@ -14,6 +15,9 @@ interface OperatorAgendaProps {
   pazienti: Paziente[];
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => void;
   onSelectPaziente?: (nome: string) => void;
+  therapySlots?: TherapySlot[];
+  onConfirmTherapy?: (id: string) => void;
+  onNotAdministeredTherapy?: (id: string, motivo: MotivoNonErogazione, note: string) => void;
 }
 
 const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {
@@ -58,12 +62,21 @@ const TIPO_LABEL: Record<string, string> = {
 
 export function OperatorAgenda({
   operatoreId, nomeOperatore, operatori, appuntamenti, pazienti, onAddAppuntamento, onSelectPaziente,
+  therapySlots, onConfirmTherapy, onNotAdministeredTherapy,
 }: OperatorAgendaProps) {
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
   const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);
   const [showNewPaziente, setShowNewPaziente] = useState(false);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
+  const [selectedTherapySlot, setSelectedTherapySlot] = useState<TherapySlot | null>(null);
+
+  const therapySlotsMap = new Map<string, TherapySlot>();
+  if (therapySlots) {
+    for (const ts of therapySlots) {
+      therapySlotsMap.set(ts.ora, ts);
+    }
+  }
 
   const myOp = operatori.find(o => o.id === operatoreId);
   const opColor = myOp?.colore ?? 'var(--blue)';
@@ -156,42 +169,66 @@ export function OperatorAgenda({
       {view === 'giornaliero' && (
         <div className="agt-day-wrap">
           {TIME_SLOTS.map(ora => {
+            const tSlot = therapySlotsMap.get(ora);
             const apt = myApts(todayStr).find(a => a.ora === ora);
             const isHour = ora.endsWith(':00');
             const isSelected = apt?.id === selectedAptId;
+
             return (
-              <div key={ora}
-                className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${apt ? ' agt-slot--occ' : ' agt-slot--free'}`}
-                onClick={() => {
-                  if (apt) setSelectedAptId(isSelected ? null : apt.id);
-                  else setAptForm({ data: todayStr, ora });
-                }}>
-                <span className="agt-slot__time">{isHour ? ora : ''}</span>
-                {apt ? (
-                  <div className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}>
-                    <div className="agt-apt-card__row">
-                      {onSelectPaziente && apt.pazienteNome
-                        ? <button className="link-btn agt-apt-card__patient" onClick={e => { e.stopPropagation(); onSelectPaziente(apt.pazienteNome!); }}>{apt.pazienteNome}</button>
-                        : <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
-                      }
-                      <div className="agt-apt-card__badges">
-                        {apt.priorita === 'urgente' && <span className="agt-badge agt-badge--urgent">Urgente</span>}
-                        <span className={`agt-badge agt-badge--${apt.stato}`}>{STATO_LABEL[apt.stato]}</span>
+              <div key={ora}>
+                {/* Therapy slot card */}
+                {tSlot && (() => {
+                  const tErogate = tSlot.somministrazioni.filter(s => s.stato === 'erogata').length;
+                  const tTotal = tSlot.somministrazioni.length;
+                  const allDone = tErogate === tTotal;
+                  return (
+                    <div
+                      className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
+                      onClick={() => setSelectedTherapySlot(tSlot)}>
+                      <span className="agt-therapy-slot__icon"><IcoPill /></span>
+                      <span className="agt-therapy-slot__label">{tSlot.label}</span>
+                      <span className="agt-therapy-slot__count">{tTotal} pazienti</span>
+                      <span className="agt-therapy-slot__progress">
+                        {tErogate}/{tTotal} erogate
+                      </span>
+                    </div>
+                  );
+                })()}
+
+                {/* Regular time slot */}
+                <div
+                  className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${apt ? ' agt-slot--occ' : ' agt-slot--free'}`}
+                  onClick={() => {
+                    if (apt) setSelectedAptId(isSelected ? null : apt.id);
+                    else setAptForm({ data: todayStr, ora });
+                  }}>
+                  <span className="agt-slot__time">{isHour ? ora : ''}</span>
+                  {apt ? (
+                    <div className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}>
+                      <div className="agt-apt-card__row">
+                        {onSelectPaziente && apt.pazienteNome
+                          ? <button className="link-btn agt-apt-card__patient" onClick={e => { e.stopPropagation(); onSelectPaziente(apt.pazienteNome!); }}>{apt.pazienteNome}</button>
+                          : <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
+                        }
+                        <div className="agt-apt-card__badges">
+                          {apt.priorita === 'urgente' && <span className="agt-badge agt-badge--urgent">Urgente</span>}
+                          <span className={`agt-badge agt-badge--${apt.stato}`}>{STATO_LABEL[apt.stato]}</span>
+                        </div>
                       </div>
+                      <div className="agt-apt-card__meta">
+                        <span>{TIPO_LABEL[apt.tipoIntervento]}</span>
+                        <span className="agt-meta-sep">·</span>
+                        <span>{apt.durata ?? 30} min</span>
+                      </div>
+                      {apt.note && isSelected && <p className="agt-apt-card__note">{apt.note}</p>}
                     </div>
-                    <div className="agt-apt-card__meta">
-                      <span>{TIPO_LABEL[apt.tipoIntervento]}</span>
-                      <span className="agt-meta-sep">·</span>
-                      <span>{apt.durata ?? 30} min</span>
+                  ) : (
+                    <div className="agt-free-slot">
+                      <span className="agt-free-slot__plus"><IcoPlus /></span>
+                      <span className="agt-free-slot__label">Disponibile</span>
                     </div>
-                    {apt.note && isSelected && <p className="agt-apt-card__note">{apt.note}</p>}
-                  </div>
-                ) : (
-                  <div className="agt-free-slot">
-                    <span className="agt-free-slot__plus"><IcoPlus /></span>
-                    <span className="agt-free-slot__label">Disponibile</span>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             );
           })}
@@ -222,8 +259,21 @@ export function OperatorAgenda({
                   const apts = myApts(dStr).filter(a => a.ora === ora || a.ora === ora.replace(':00', ':30'));
                   return (
                     <div key={`${dStr}-${ora}`}
-                      className={`agt-week-cell${apts.length === 0 ? ' free' : ''}`}
+                      className={`agt-week-cell${apts.length === 0 && !therapySlotsMap.has(ora) ? ' free' : ''}`}
                       onClick={() => apts.length === 0 && setAptForm({ data: dStr, ora })}>
+                      {therapySlotsMap.has(ora) && (() => {
+                        const ts = therapySlotsMap.get(ora)!;
+                        const tErog = ts.somministrazioni.filter(s => s.stato === 'erogata').length;
+                        const allDone = tErog === ts.somministrazioni.length;
+                        return (
+                          <div
+                            className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
+                            title={`${ts.label}: ${tErog}/${ts.somministrazioni.length} erogate`}
+                            onClick={e => { e.stopPropagation(); setSelectedTherapySlot(ts); }}>
+                            <IcoPill />
+                          </div>
+                        );
+                      })()}
                       {apts.map(a => (
                         <div key={a.id} className={`agt-week-apt agt-apt-card--${a.stato}`}>
                           <span className="agt-week-apt__time">{a.ora}</span>
@@ -234,7 +284,7 @@ export function OperatorAgenda({
                           <span className={`agt-status-dot agt-status-dot--${a.stato}`} />
                         </div>
                       ))}
-                      {apts.length === 0 && <span className="agt-week-add"><IcoPlus /></span>}
+                      {apts.length === 0 && !therapySlotsMap.has(ora) && <span className="agt-week-add"><IcoPlus /></span>}
                     </div>
                   );
                 })}
@@ -293,6 +343,14 @@ export function OperatorAgenda({
           operatori={operatori}
           onSave={async () => { setShowNewPaziente(false); }}
           onCancel={() => setShowNewPaziente(false)}
+        />
+      )}
+      {selectedTherapySlot && onConfirmTherapy && onNotAdministeredTherapy && (
+        <TherapySlotModal
+          slot={selectedTherapySlot}
+          onClose={() => setSelectedTherapySlot(null)}
+          onConfirm={onConfirmTherapy}
+          onNotAdministered={onNotAdministeredTherapy}
         />
       )}
     </div>

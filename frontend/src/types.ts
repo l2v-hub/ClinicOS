@@ -791,3 +791,42 @@ export interface Liberatoria {
   soloUscitaParenti?: boolean;
   usciteLog?: UscitaLog[];
 }
+
+// ── Therapy Slot (Agenda) ────────────────────────────────────────────────────
+
+export type FasciaOrariaTerapia = 'mattina' | 'pranzo' | 'pomeriggio' | 'sera' | 'notte';
+
+export type StatoSomministrazione = 'da_erogare' | 'erogata' | 'non_erogata';
+
+export type MotivoNonErogazione =
+  | 'rifiutata_paziente'
+  | 'paziente_assente'
+  | 'sospesa_medico'
+  | 'farmaco_non_disponibile'
+  | 'impossibilita_clinica'
+  | 'altro';
+
+export interface SomministrazioneTerapia {
+  id: string;
+  pazienteId: string;
+  pazienteNome: string;
+  camera: string;
+  letto: string;
+  farmaco: string;
+  dose: string;
+  via: string;
+  orarioPrevisto: string;
+  stato: StatoSomministrazione;
+  operatoreConferma?: string;
+  oraConferma?: string;
+  motivoNonErogazione?: MotivoNonErogazione;
+  noteNonErogazione?: string;
+}
+
+export interface TherapySlot {
+  id: string;
+  fascia: FasciaOrariaTerapia;
+  label: string;
+  ora: string;
+  somministrazioni: SomministrazioneTerapia[];
+}

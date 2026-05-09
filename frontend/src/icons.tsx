@@ -78,8 +78,8 @@ export const IcoActivity = () => (
     <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
   </svg>
 );
-export const IcoPill = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+export const IcoPill = (props?: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <path d="M10.5 20H4a2 2 0 0 1-2-2v-2.5"/><path d="M2 8.5V4a2 2 0 0 1 2-2h2.5"/>
     <path d="M14 2h2.5A1.5 1.5 0 0 1 18 3.5V6"/><path d="M22 8.5V13a1.5 1.5 0 0 1-1.5 1.5H17"/>
     <path d="M2 13.5 13.5 2"/><circle cx="17" cy="17" r="5"/><path d="M14.5 19.5 19.5 14.5"/>
