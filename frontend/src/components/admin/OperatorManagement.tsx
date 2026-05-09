@@ -200,7 +200,8 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
 
       {/* Tabella desktop */}
       <div className="table-wrap table-wrap--desktop">
-        <table className="data-table">
+        <div className="clinicos-table-wrap">
+        <table className="clinicos-table">
           <thead>
             <tr>
               <th>Operatore</th>
@@ -253,6 +254,7 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Card list mobile */}

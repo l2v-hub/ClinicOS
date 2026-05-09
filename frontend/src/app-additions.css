@@ -4998,3 +4998,130 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   color: var(--text-muted);
   margin-top: 2px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNIFIED TABLE STYLE — .clinicos-table
+   Reference: Terapia Medica & Farmaci visual language
+═══════════════════════════════════════════════════════════════════════════ */
+.clinicos-table-wrap {
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.clinicos-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.clinicos-table thead th {
+  background: #1A3357;
+  color: white;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 10px;
+  text-align: left;
+  white-space: nowrap;
+  border: none;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.clinicos-table thead th:last-child { border-right: none; }
+.clinicos-table thead th.text-center { text-align: center; }
+.clinicos-table tbody td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #F0F4F8;
+  font-size: 12px;
+  vertical-align: middle;
+  min-height: 40px;
+  height: 40px;
+  color: var(--text);
+}
+.clinicos-table tbody td.text-center { text-align: center; }
+.clinicos-table tbody tr:last-child td { border-bottom: none; }
+.clinicos-table tbody tr:hover td { background: #EEF2FF; }
+.clinicos-table tbody tr.row--clickable { cursor: pointer; }
+.clinicos-table tbody tr.row--clickable:hover td { background: #E8EDFF; }
+.clinicos-table tbody td:first-child { font-weight: 600; }
+.clinicos-table tbody td .badge { font-size: 10px; }
+.clinicos-table .col-actions {
+  white-space: nowrap;
+  text-align: right;
+  width: 1%;
+}
+.clinicos-table .col-actions .icon-btn { margin-left: 4px; }
+
+/* ── Inline editable cell for Parametri Vitali ── */
+.vitale-inline-cell {
+  cursor: pointer;
+  transition: background 0.12s;
+  min-width: 52px;
+  text-align: center;
+  position: relative;
+  user-select: none;
+}
+.vitale-inline-cell:hover { background: #EFF6FF; }
+.vitale-inline-cell.has-data { background: #DBEAFE; font-weight: 600; }
+.vitale-inline-cell.is-editing {
+  padding: 2px;
+  background: #fff;
+}
+.vitale-inline-cell.was-modified {
+  background: #E0F2FE;
+}
+.vitale-inline-input {
+  width: 100%;
+  min-width: 44px;
+  max-width: 80px;
+  padding: 4px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  border: 2px solid var(--blue, #1A56DB);
+  border-radius: 4px;
+  outline: none;
+  background: #fff;
+  color: var(--text);
+  box-shadow: 0 0 0 3px rgba(26,86,219,0.12);
+}
+.vitale-inline-input:focus {
+  border-color: var(--blue, #1A56DB);
+  box-shadow: 0 0 0 3px rgba(26,86,219,0.2);
+}
+.vitale-inline-select {
+  width: 100%;
+  min-width: 44px;
+  max-width: 90px;
+  padding: 3px 4px;
+  font-size: 11px;
+  text-align: center;
+  border: 2px solid var(--blue, #1A56DB);
+  border-radius: 4px;
+  outline: none;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+.vitale-placeholder {
+  color: #CBD5E1;
+  font-size: 10px;
+}
+
+/* Parametri table day column */
+.parametri-day-col {
+  font-weight: 700;
+  background: #F5F8FB;
+  cursor: default;
+  text-align: center;
+  min-width: 28px;
+}
+
+/* ── Responsive: tablet-friendly vital cells ── */
+@media (max-width: 1024px) {
+  .vitale-inline-cell { min-height: 44px; min-width: 48px; }
+  .vitale-inline-input { min-width: 40px; padding: 6px 4px; font-size: 13px; }
+  .clinicos-table tbody td { padding: 8px 8px; min-height: 44px; height: 44px; }
+  .clinicos-table thead th { padding: 8px 8px; font-size: 10px; }
+}

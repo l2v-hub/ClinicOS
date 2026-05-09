@@ -106,7 +106,8 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
       {/* Tabella desktop */}
       {(loading || pazienti.length > 0) && (
         <div className="table-wrap table-wrap--desktop">
-          <table className="data-table">
+          <div className="clinicos-table-wrap">
+          <table className="clinicos-table">
             <thead>
               <tr>
                 <th>Paziente</th>
@@ -124,7 +125,7 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
               ) : filtrati.length === 0 ? (
                 <tr><td colSpan={7} className="empty-row">Nessun paziente trovato</td></tr>
               ) : filtrati.map(p => (
-                <tr key={p.id} className="table-row--clickable" onClick={() => onSelect(p)}>
+                <tr key={p.id} className="row--clickable" onClick={() => onSelect(p)}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
@@ -153,6 +154,7 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 

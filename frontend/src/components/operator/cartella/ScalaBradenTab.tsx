@@ -336,7 +336,8 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome }: 
           <div className="braden-history">
             <div className="cr-section-title" style={{ marginBottom: 12 }}>Storico valutazioni</div>
             <div style={{ overflowX: 'auto' }}>
-              <table className="braden-table">
+              <div className="clinicos-table-wrap">
+              <table className="clinicos-table">
                 <thead>
                   <tr>
                     <th>Data</th>
@@ -373,6 +374,7 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome }: 
                   })}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         )}

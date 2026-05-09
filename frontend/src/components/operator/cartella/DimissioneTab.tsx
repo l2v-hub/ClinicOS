@@ -792,7 +792,8 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
             {(cartella.liberatoria?.usciteLog?.length ?? 0) === 0 ? (
               <p className="cr-empty">Nessuna uscita registrata.</p>
             ) : (
-              <table className="cr-uscite-table">
+              <div className="clinicos-table-wrap">
+              <table className="clinicos-table">
                 <thead>
                   <tr>
                     <th>Data</th><th>Ora uscita</th><th>Rientro</th><th>Accompagnato da</th><th>Firma</th><th></th>
@@ -813,6 +814,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                   ))}
                 </tbody>
               </table>
+              </div>
             )}
           </div>
         </div>

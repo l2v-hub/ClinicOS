@@ -352,24 +352,25 @@ function FollowUpSection({
       {open && (
         <div style={{ marginTop: 10 }}>
           {followUps.length > 0 && (
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 10, fontSize: '13px' }}>
+            <div className="clinicos-table-wrap">
+            <table className="clinicos-table" style={{ marginBottom: 10, fontSize: '13px' }}>
               <thead>
-                <tr style={{ background: 'var(--surface-2)' }}>
-                  <th style={{ padding: '4px 8px', textAlign: 'left', fontSize: '11px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>Data</th>
-                  <th style={{ padding: '4px 8px', textAlign: 'left', fontSize: '11px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>Sigla</th>
-                  <th style={{ padding: '4px 8px', textAlign: 'left', fontSize: '11px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>Motivo sostituzione</th>
-                  <th style={{ padding: '4px 8px', textAlign: 'left', fontSize: '11px', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>Note</th>
-                  <th style={{ border: '1px solid var(--border)', width: 32 }}></th>
+                <tr>
+                  <th>Data</th>
+                  <th>Sigla</th>
+                  <th>Motivo sostituzione</th>
+                  <th>Note</th>
+                  <th className="col-actions" style={{ width: 32 }}></th>
                 </tr>
               </thead>
               <tbody>
                 {followUps.map(fu => (
                   <tr key={fu.id}>
-                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)' }}>{fmtDate(fu.data)}</td>
-                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)', fontWeight: 600 }}>{fu.siglaOperatore}</td>
-                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)' }}>{MOTIVO_LABEL[fu.motivoSostituzione]}</td>
-                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)', color: 'var(--text-muted)' }}>{fu.note}</td>
-                    <td style={{ padding: '4px 8px', border: '1px solid var(--border)', textAlign: 'center' }}>
+                    <td>{fmtDate(fu.data)}</td>
+                    <td style={{ fontWeight: 600 }}>{fu.siglaOperatore}</td>
+                    <td>{MOTIVO_LABEL[fu.motivoSostituzione]}</td>
+                    <td style={{ color: 'var(--text-muted)' }}>{fu.note}</td>
+                    <td className="col-actions">
                       <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => handleDelete(fu.id)} title="Elimina">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                       </button>
@@ -378,6 +379,7 @@ function FollowUpSection({
                 ))}
               </tbody>
             </table>
+            </div>
           )}
 
           {showAdd ? (
