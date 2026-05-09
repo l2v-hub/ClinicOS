@@ -97,19 +97,22 @@ export function OperatorDashboard({
       {/* Clinical KPI strip */}
       {cartelle.length > 0 && (
         <div className="kpi-alert-grid">
-          <div className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`}>
+          <div className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`} onClick={() => onNavigate('parametri-multipaziente')} title="Vai a Parametri">
             <span className="kpi-alert-card__val">{critici}</span>
             <span className="kpi-alert-card__lbl"><IcoActivity /> Parametri critici</span>
+            {critici === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
           </div>
-          <div className={`kpi-alert-card${rischiAlti > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}>
+          <div className={`kpi-alert-card${rischiAlti > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`} onClick={() => onNavigate('pazienti')} title="Vai a Pazienti">
             <span className="kpi-alert-card__val">{rischiAlti}</span>
             <span className="kpi-alert-card__lbl"><IcoShield /> Rischi alti/critici</span>
+            {rischiAlti === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
           </div>
-          <div className={`kpi-alert-card${allergieGravi > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}>
+          <div className={`kpi-alert-card${allergieGravi > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`} onClick={() => onNavigate('pazienti')} title="Vai a Pazienti">
             <span className="kpi-alert-card__val">{allergieGravi}</span>
             <span className="kpi-alert-card__lbl"><IcoWarning /> Allergie gravi</span>
+            {allergieGravi === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
           </div>
-          <div className="kpi-alert-card kpi-alert-card--blue">
+          <div className="kpi-alert-card kpi-alert-card--blue" onClick={() => onNavigate('pazienti')} title="Vai a Pazienti">
             <span className="kpi-alert-card__val">{pazientiRicoverati}</span>
             <span className="kpi-alert-card__lbl">Ricoverati attivi</span>
           </div>

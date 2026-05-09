@@ -2037,8 +2037,8 @@ body { margin: 0; background: var(--bg); }
 .icon-btn:hover { background: var(--hover); color: var(--text); }
 .icon-btn svg   { width: 16px; height: 16px; }
 
-.icon-btn--sm { width: 34px; height: 34px; }
-.icon-btn--sm svg { width: 14px; height: 14px; }
+.icon-btn--sm { width: 40px; height: 40px; }
+.icon-btn--sm svg { width: 15px; height: 15px; }
 
 .icon-btn--danger       { color: var(--red) !important; border-color: rgba(220,38,38,0.25); }
 .icon-btn--danger:hover { background: var(--red-bg); }

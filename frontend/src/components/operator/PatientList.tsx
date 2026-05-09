@@ -28,9 +28,11 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
   const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [showModal, setShowModal] = useState(false);
 
-  const consegneAperte = new Set(
-    consegne.filter(c => c.stato !== 'completata').map(c => c.pazienteId)
-  );
+  const consegneAperteMap = new Map<string, number>();
+  consegne.filter(c => c.stato !== 'completata').forEach(c => {
+    consegneAperteMap.set(c.pazienteId, (consegneAperteMap.get(c.pazienteId) ?? 0) + 1);
+  });
+  const consegneAperte = new Set(consegneAperteMap.keys());
 
   const filtrati = pazienti.filter(p => {
     const q = ricerca.toLowerCase();
@@ -145,11 +147,13 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
                       <div>{p.email ?? '--'}</div>
                       <div>{p.phone ?? '--'}</div>
                     </td>
-                    <td>
-                      {consegneAperte.has(p.id) && (
-                        <span className="consegna-alert-dot" title="Consegne aperte">
-                          <IcoAlert />
+                    <td className="text-center">
+                      {consegneAperteMap.has(p.id) ? (
+                        <span className="consegna-priorita-badge consegna-priorita-badge--alta" title={`${consegneAperteMap.get(p.id)} consegne aperte`}>
+                          {consegneAperteMap.get(p.id)}
                         </span>
+                      ) : (
+                        <span style={{ color: 'var(--text-xmuted)', fontSize: 11 }}>—</span>
                       )}
                     </td>
                     <td><span className="row-chevron"><IcoChevronRight /></span></td>

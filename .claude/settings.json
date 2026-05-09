@@ -28,8 +28,9 @@
     "frontend-design@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "ralph-loop": true,
-    "compound-engineering@compound-engineering-plugin": true
-  },
+    "compound-engineering@compound-engineering-plugin": true,
+    "ui-ux-pro-max": true,
+    "code-reviewer": true},
   "teammateMode": "tmux",
   "agentTeam": {
     "enabled": true,
@@ -43,11 +44,11 @@
         "role": "orchestrator",
         "promptFile": ".claude/team/lead.md",
         "responsibilities": [
-          "analizza il requisito",
-          "divide il lavoro",
-          "coordina gli agenti",
-          "mantiene lo scope",
-          "decide quando eseguire build, test, commit e push"
+          "analizza requisito e scrive piano con subtask",
+          "assegna file specifici a ciascun agent",
+          "previene conflitti file tra agent",
+          "gate finale: niente commit senza QA pass",
+          "riporta: file modificati, componenti, build result, commit hash"
         ]
       },
       {
@@ -55,10 +56,11 @@
         "role": "ui-ux-specialist",
         "promptFile": ".claude/team/uiux.md",
         "responsibilities": [
-          "migliora UX/UI",
-          "garantisce tablet-first",
-          "mantiene interfaccia italiana",
-          "verifica leggibilità, card, form, tab e navigazione"
+          "autorità design: ogni decisione visiva passa da UIUX",
+          "specifica valori CSS esatti, classi, spacing (non 'rendilo bello')",
+          "enforce design system: ClinicalTableSection, clinicos-table, badge",
+          "verifica tablet-first, touch target 44px, no overflow globale",
+          "approva risultato visivo prima del commit"
         ]
       },
       {
@@ -66,10 +68,11 @@
         "role": "frontend-implementer",
         "promptFile": ".claude/team/implementer.md",
         "responsibilities": [
-          "implementa modifiche React/Vite",
-          "mantiene VITE_API_URL",
-          "non reintroduce localhost hardcoded",
-          "non modifica backend o Prisma salvo richiesta esplicita"
+          "unico agent che edita frontend/src/",
+          "legge file PRIMA di editare, sempre",
+          "modifiche chirurgiche: solo ciò che serve",
+          "verifica tsc --noEmit dopo ogni edit",
+          "segue spec UIUX e piano LEAD esattamente"
         ]
       },
       {
@@ -77,10 +80,21 @@
         "role": "qa-build",
         "promptFile": ".claude/team/qa.md",
         "responsibilities": [
-          "esegue build",
-          "verifica errori runtime",
-          "controlla interazioni principali",
-          "segnala regressioni"
+          "esegue build e verifica TypeScript",
+          "controlla compliance design system",
+          "segnala regressioni con file:line esatti",
+          "approva o rifiuta con QA Report strutturato"
+        ]
+      },
+      {
+        "name": "BACKEND",
+        "role": "backend-api",
+        "promptFile": ".claude/team/backend.md",
+        "responsibilities": [
+          "crea e modifica endpoint REST Express",
+          "gestisce schema Prisma e migrazioni",
+          "garantisce integrità dati e error handling",
+          "fornisce contratto API all'IMPLEMENTER frontend"
         ]
       }
     ]

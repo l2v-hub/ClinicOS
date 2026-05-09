@@ -128,6 +128,14 @@ export function OperatorAgenda({
         </div>
       </div>
 
+      {/* ── Legend ── */}
+      <div className="agt-legend">
+        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#059669' }} />Completato</span>
+        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#1A56DB' }} />In corso</span>
+        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#D97706' }} />Programmato</span>
+        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#E5E7EB', border: '1px dashed #9DB7D5' }} />Disponibile</span>
+      </div>
+
       {/* ── Occupancy strip (daily) ── */}
       {view === 'giornaliero' && (
         <div className="agt-occ-strip">

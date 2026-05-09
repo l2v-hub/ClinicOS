@@ -17,9 +17,9 @@ const TIPO_BADGE: Record<TipoDiarioEntry, string> = { ordinario: 'badge--gray', 
 const TURNO_BADGE: Record<TurnoDiario, string> = { mattina: 'badge--blue', pomeriggio: 'badge--teal', notte: 'badge--indigo' };
 
 const PRIORITA_BADGE: Record<string, string> = {
-  normale: 'badge--gray',
-  alta: 'badge--amber',
-  urgente: 'badge--red',
+  normale: 'consegna-priorita-badge consegna-priorita-badge--normale',
+  alta: 'consegna-priorita-badge consegna-priorita-badge--alta',
+  urgente: 'consegna-priorita-badge consegna-priorita-badge--urgente',
 };
 const STATO_INF_BADGE: Record<string, string> = {
   aperta: 'badge--blue',
@@ -576,7 +576,7 @@ export function DiarioTab({ cartella, paziente, tipo, onUpdate, operatoreNome }:
                         <div className="diario-entry__header">
                           {tipo === 'infermieristico' ? (
                             <>
-                              <span className={`badge ${PRIORITA_BADGE[prio]}`}>{prio}</span>
+                              <span className={PRIORITA_BADGE[prio]}>{prio}</span>
                               {e.stato && (
                                 <span className={`badge ${STATO_INF_BADGE[e.stato] ?? 'badge--gray'}`}>{e.stato.replace('_', ' ')}</span>
                               )}
