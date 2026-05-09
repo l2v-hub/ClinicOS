@@ -383,9 +383,9 @@
    MISSING BADGE VARIANTS
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.badge--teal { background: var(--teal-bg); color: var(--teal); }
-.badge--indigo { background: var(--indigo-bg); color: var(--indigo); }
-.badge--green { background: var(--emerald-bg); color: var(--emerald); }
+.badge--teal { background: #0D9488; color: #FFFFFF; }
+.badge--indigo { background: #4338CA; color: #FFFFFF; }
+/* badge--green already set in App.css to #15803D white */
 
 /* cr-meta utility */
 .cr-meta { font-size: 12px; color: var(--text-muted); }
@@ -656,11 +656,11 @@
   white-space: nowrap;
 }
 
-.agt-badge--programmato { background: #EFF6FF; color: #1D4ED8; }
-.agt-badge--in_corso    { background: #FEF3C7; color: #92400E; }
-.agt-badge--completato  { background: #D1FAE5; color: #065F46; }
-.agt-badge--annullato   { background: var(--divider); color: var(--text-muted); }
-.agt-badge--urgent      { background: var(--red-bg); color: var(--red); }
+.agt-badge--programmato { background: #D97706; color: #FFFFFF; font-weight: 600; }
+.agt-badge--in_corso    { background: #1D4ED8; color: #FFFFFF; font-weight: 600; }
+.agt-badge--completato  { background: #16A34A; color: #FFFFFF; font-weight: 600; }
+.agt-badge--annullato   { background: #6B7280; color: #FFFFFF; font-weight: 600; }
+.agt-badge--urgent      { background: var(--red); color: #FFFFFF; font-weight: 600; }
 
 /* ── Status dot (weekly/monthly) ── */
 .agt-status-dot {
@@ -729,8 +729,8 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 11.5px;
-  color: var(--text-muted);
+  font-size: 12px;
+  color: #4B5563;
 }
 
 .agt-meta-sep { color: var(--divider); }
@@ -770,9 +770,9 @@
 .agt-slot__time {
   width: 56px;
   flex-shrink: 0;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  color: #4B5563;
   padding: 10px 8px 0 14px;
   line-height: 1;
   letter-spacing: 0.02em;
@@ -2501,7 +2501,7 @@
 }
 
 .cr-header__name {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--text);
   margin: 0;
@@ -2516,7 +2516,7 @@
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 
@@ -2634,10 +2634,11 @@
 }
 
 .cr-quick-stat__lbl {
-  font-size: 11px;
-  color: var(--text-muted);
+  font-size: 12px;
+  color: #374151;
   text-align: center;
   line-height: 1.3;
+  letter-spacing: 0.04em;
 }
 
 /* ── Riepilogo grid ── */
@@ -3172,7 +3173,7 @@
 .terapia-section__body { border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
 .terapia-row {
   display: grid;
-  grid-template-columns: 80px 65px 1fr 60px 40px 40px 40px 40px 40px 70px 65px 90px auto;
+  grid-template-columns: 80px 70px 1fr 60px 40px 40px 40px 40px 40px 70px 65px 90px auto;
   gap: 0;
   border-bottom: 1px solid #F0F4F8;
   align-items: center;
@@ -3180,14 +3181,14 @@
   min-height: 40px;
 }
 .terapia-row:last-child { border-bottom: none; }
-.terapia-row > * { padding: 6px 8px; border-right: 1px solid #F0F4F8; }
+.terapia-row > * { padding: 10px 8px; border-right: 1px solid #F0F4F8; }
 .terapia-row > *:last-child { border-right: none; }
-.terapia-row--header { background: #F5F8FB; font-weight: 700; font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+.terapia-row--header { background: #F5F8FB; font-weight: 700; font-size: 12px; color: #374151; text-transform: uppercase; letter-spacing: 0.08em; }
 .terapia-row--attivo { background: #F0FDF4; }
 .terapia-row--sospeso { background: #FFFBEB; }
 .terapia-row--completato { background: #F9FAFB; opacity: 0.75; }
-.terapia-nome { font-weight: 700; font-size: 13px; }
-.terapia-dose { font-size: 11px; color: var(--text-muted); }
+.terapia-nome { font-weight: 600; font-size: 15px; }
+.terapia-dose { font-size: 13px; color: #4B5563; }
 .terapia-orario { font-weight: 700; color: var(--blue, #1A56DB); text-align: center; font-size: 13px; }
 .terapia-storico { margin-top: 8px; }
 .terapia-storico__toggle { background: none; border: none; cursor: pointer; font-size: 12px; color: var(--text-muted); padding: 4px 0; }
@@ -4914,10 +4915,15 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 
 .cr-header__allergy-inline svg {
-  width: 12px;
-  height: 12px;
-  color: var(--red);
+  width: 14px;
+  height: 14px;
+  color: #B91C1C;
   flex-shrink: 0;
+}
+.cr-header__allergy-inline .badge--red {
+  background: #B91C1C;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 /* ── Overflow prevention ── */
@@ -5217,8 +5223,10 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .kpi-alert-card--amber .kpi-alert-card__val { color: var(--amber); }
 .kpi-alert-card__lbl {
   font-size: 12px;
-  color: var(--text-muted);
+  font-weight: 500;
+  color: #374151;
   margin-top: 2px;
+  letter-spacing: 0.04em;
 }
 .kpi-alert-card__lbl svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; }
 .kpi-alert-card__ok {
@@ -5242,34 +5250,36 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .clinicos-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 13px;
 }
 .clinicos-table thead th {
   background: #1A3357;
   color: white;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 8px 10px;
+  letter-spacing: 0.08em;
+  padding: 10px 10px;
   text-align: left;
   white-space: nowrap;
   border: none;
   border-right: 1px solid rgba(255,255,255,0.08);
+  color: #FFFFFF;
 }
 .clinicos-table thead th:last-child { border-right: none; }
 .clinicos-table thead th.text-center { text-align: center; }
 .clinicos-table tbody td {
-  padding: 6px 10px;
+  padding: 10px 10px;
   border-bottom: 1px solid #F0F4F8;
-  font-size: 12px;
+  font-size: 13px;
   vertical-align: middle;
-  min-height: 40px;
-  height: 40px;
+  min-height: 48px;
+  height: 48px;
   color: var(--text);
 }
 .clinicos-table tbody td.text-center { text-align: center; }
 .clinicos-table tbody tr:last-child td { border-bottom: none; }
+.clinicos-table tbody tr:nth-child(even) td { background: #F9FAFB; }
 .clinicos-table tbody tr:hover td { background: #EEF2FF; }
 .clinicos-table tbody tr.row--clickable { cursor: pointer; }
 .clinicos-table tbody tr.row--clickable:hover td { background: #E8EDFF; }
@@ -5461,4 +5471,33 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 @media (max-width: 1024px) {
   .cts__header { min-height: 44px; padding: 0 12px; }
   .cts__title { font-size: 11px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLET READABILITY — text sizes for ≥768px (ward use, 50-80cm distance)
+═══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 768px) {
+  /* Patient header: scannable in 1 second */
+  .cr-header__name { font-size: 24px; }
+  .cr-header__meta { font-size: 14px; }
+  .cr-header__meta .stato-pill { font-size: 12px; padding: 4px 10px; }
+
+  /* Table body text */
+  .clinicos-table { font-size: 14px; }
+  .clinicos-table tbody td { font-size: 14px; min-height: 56px; height: 56px; padding: 14px 10px; }
+  .clinicos-table thead th { font-size: 12px; letter-spacing: 0.08em; font-weight: 700; }
+
+  /* Terapia rows */
+  .terapia-row { min-height: 56px; font-size: 14px; }
+  .terapia-row > * { padding: 14px 8px; }
+
+  /* Sidebar items */
+  .cr-sidebar-nav__item { font-size: 15px; min-height: 48px; }
+
+  /* KPI stat labels */
+  .cr-quick-stat__lbl { font-size: 12px; letter-spacing: 0.08em; }
+  .kpi-alert-card__lbl { font-size: 13px; }
+
+  /* Badge sizes */
+  .badge { font-size: 11px; padding: 4px 10px; }
 }

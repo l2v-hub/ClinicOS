@@ -36,10 +36,10 @@
   --divider:            #F0F4F8;
   --hover:              #F5F8FB;
 
-  /* Text */
-  --text:               #1A2535;
-  --text-muted:         #64748B;
-  --text-xmuted:        #94A3B8;
+  /* Text — WCAG AA contrast on white: primary 16:1, muted 5.9:1, xmuted 3.4:1 */
+  --text:               #111827;
+  --text-muted:         #4B5563;
+  --text-xmuted:        #6B7280;
 
   /* Semantic accents */
   --teal:               #0D9488;
@@ -2930,19 +2930,19 @@ textarea.form-input {
 
 /* Badges */
 .badge {
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 2px 7px;
+  padding: 4px 10px;
   border-radius: 10px;
 }
 
-.badge--blue  { background: #DBEAFE; color: #1D4ED8; }
-.badge--green { background: #D1FAE5; color: #065F46; }
-.badge--amber { background: var(--amber-bg); color: var(--amber); }
-.badge--red   { background: var(--red-bg); color: var(--red); }
-.badge--gray  { background: var(--divider); color: var(--text-muted); }
+.badge--blue  { background: #1D4ED8; color: #FFFFFF; }
+.badge--green { background: #15803D; color: #FFFFFF; }
+.badge--amber { background: #92400E; color: #FFFFFF; }
+.badge--red   { background: var(--red); color: #FFFFFF; }
+.badge--gray  { background: #E5E7EB; color: #374151; }
 
 /* Vitals (new) */
 .vital-card {
