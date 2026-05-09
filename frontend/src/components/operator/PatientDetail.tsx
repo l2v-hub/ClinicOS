@@ -21,6 +21,7 @@ import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaMedicaTab } from './cartella/TerapiaMedicaTab';
 import { PageTabs, SectionTabs } from '../shared/NavComponents';
 import type { PageTabGroup, SectionTab } from '../shared/NavComponents';
+import { ClinicalTableSection } from './cartella/shared';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -1197,75 +1198,78 @@ export function PatientDetail({
     const hasAllergie = cartella.allergie.length > 0;
     const allergieGravi = cartella.allergie.filter(al => al.gravita === 'grave');
 
+    const anamnesiActions = (
+      <div style={{ display: 'flex', gap: 8 }}>
+        {!editAnamnesi && (
+          <button className="btn-sm" onClick={() => { setAnamnesiForm({ ...cartella.anamnesi }); setEditAnamnesi(true); }}>
+            <IcoEdit /> Modifica
+          </button>
+        )}
+        {editAnamnesi && (
+          <>
+            <button className="btn-sm" onClick={() => setEditAnamnesi(false)}>Annulla</button>
+            <button className="btn-sm" onClick={() => {
+              upd({ anamnesi: { ...anamnesiForm, updatedAt: nowISO(), operatore: operatoreNome } });
+              setEditAnamnesi(false);
+            }}><IcoCheck /> Salva</button>
+          </>
+        )}
+      </div>
+    );
+
     return (
       <div className="cr-tab-content">
-        <div className="cr-section-header">
-          <span className="cr-section-title">Anamnesi</span>
-          <div style={{ display: 'flex', gap: 8 }}>
-            {!editAnamnesi && (
-              <button className="btn-secondary btn-sm" onClick={() => { setAnamnesiForm({ ...cartella.anamnesi }); setEditAnamnesi(true); }}>
-                <IcoEdit /> Modifica
-              </button>
-            )}
-            {editAnamnesi && (
-              <>
-                <button className="btn-secondary btn-sm" onClick={() => setEditAnamnesi(false)}>Annulla</button>
-                <button className="btn-primary btn-sm" onClick={() => {
-                  upd({ anamnesi: { ...anamnesiForm, updatedAt: nowISO(), operatore: operatoreNome } });
-                  setEditAnamnesi(false);
-                }}><IcoCheck /> Salva</button>
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className="cr-anamnesi-cards">
-          {/* Allergie — read-only, sempre visibile */}
-          <div className={`cr-anamnesi-card${allergieGravi.length > 0 ? ' cr-anamnesi-card--allergie-grave' : hasAllergie ? ' cr-anamnesi-card--allergie' : ''}`}>
-            <div className="cr-anamnesi-card__label">Allergie</div>
-            {hasAllergie ? (
-              <div className="cr-anamnesi-allergie-list">
-                {cartella.allergie.map((al, i) => (
-                  <div key={i} className="cr-anamnesi-allergia">
-                    <span className="cr-anamnesi-allergia__nome">{al.allergene}</span>
-                    {al.reazione && <span className="cr-anamnesi-allergia__reazione">{al.reazione}</span>}
-                    <span className={`badge ${al.gravita === 'grave' ? 'badge--red' : al.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{al.gravita}</span>
+        <ClinicalTableSection title="Anamnesi" actions={anamnesiActions}>
+          <div className="cts__body--padded">
+            <div className="cr-anamnesi-cards">
+              {/* Allergie — read-only, sempre visibile */}
+              <div className={`cr-anamnesi-card${allergieGravi.length > 0 ? ' cr-anamnesi-card--allergie-grave' : hasAllergie ? ' cr-anamnesi-card--allergie' : ''}`}>
+                <div className="cr-anamnesi-card__label">Allergie</div>
+                {hasAllergie ? (
+                  <div className="cr-anamnesi-allergie-list">
+                    {cartella.allergie.map((al, i) => (
+                      <div key={i} className="cr-anamnesi-allergia">
+                        <span className="cr-anamnesi-allergia__nome">{al.allergene}</span>
+                        {al.reazione && <span className="cr-anamnesi-allergia__reazione">{al.reazione}</span>}
+                        <span className={`badge ${al.gravita === 'grave' ? 'badge--red' : al.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{al.gravita}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <p className="cr-anamnesi-card__text muted">Nessuna allergia registrata. Gestisci dal tab Diagnosi.</p>
-            )}
-          </div>
-
-          {/* Sezioni anamnesi modificabili */}
-          {sections.map(({ key, label, rows = 4, placeholder }) => {
-            const val = String(a[key] ?? '');
-            const isEmpty = !val;
-            return (
-              <div key={key} className={`cr-anamnesi-card${editAnamnesi ? ' editing' : ''}${isEmpty && !editAnamnesi ? ' empty' : ''}`}>
-                <div className="cr-anamnesi-card__label">{label}</div>
-                {editAnamnesi ? (
-                  <textarea
-                    className="form-input cr-anamnesi-card__textarea"
-                    rows={rows}
-                    value={val}
-                    onChange={e => setAnamnesiForm(prev => ({ ...prev, [key]: e.target.value }))}
-                    placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
-                  />
                 ) : (
-                  <p className={`cr-anamnesi-card__text${isEmpty ? ' muted' : ''}`}>
-                    {isEmpty ? 'Non compilato' : val}
-                  </p>
+                  <p className="cr-anamnesi-card__text muted">Nessuna allergia registrata. Gestisci dal tab Diagnosi.</p>
                 )}
               </div>
-            );
-          })}
-        </div>
 
-        {cartella.anamnesi.updatedAt && !editAnamnesi && (
-          <p className="cr-update-info">Aggiornato: {fmtDateTime(cartella.anamnesi.updatedAt)} — {cartella.anamnesi.operatore}</p>
-        )}
+              {/* Sezioni anamnesi modificabili */}
+              {sections.map(({ key, label, rows = 4, placeholder }) => {
+                const val = String(a[key] ?? '');
+                const isEmpty = !val;
+                return (
+                  <div key={key} className={`cr-anamnesi-card${editAnamnesi ? ' editing' : ''}${isEmpty && !editAnamnesi ? ' empty' : ''}`}>
+                    <div className="cr-anamnesi-card__label">{label}</div>
+                    {editAnamnesi ? (
+                      <textarea
+                        className="form-input cr-anamnesi-card__textarea"
+                        rows={rows}
+                        value={val}
+                        onChange={e => setAnamnesiForm(prev => ({ ...prev, [key]: e.target.value }))}
+                        placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
+                      />
+                    ) : (
+                      <p className={`cr-anamnesi-card__text${isEmpty ? ' muted' : ''}`}>
+                        {isEmpty ? 'Non compilato' : val}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {cartella.anamnesi.updatedAt && !editAnamnesi && (
+              <p className="cr-update-info">Aggiornato: {fmtDateTime(cartella.anamnesi.updatedAt)} — {cartella.anamnesi.operatore}</p>
+            )}
+          </div>
+        </ClinicalTableSection>
       </div>
     );
   }
@@ -1273,137 +1277,151 @@ export function PatientDetail({
   function renderDiagnosi() {
     return (
       <div className="cr-tab-content">
-        {/* Diagnosi */}
-        <SectionHeader title="Diagnosi / Lista Problemi" onAdd={() => { setDiagForm({}); setShowAddDiag(true); }} />
-        {showAddDiag && (
-          <InlineForm onSave={addDiagnosi} onCancel={() => { setShowAddDiag(false); setDiagForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field">
-                <label className="form-label">Descrizione *</label>
-                <input className="form-input" value={diagForm.descrizione ?? ''} onChange={e => setDiagForm(p => ({ ...p, descrizione: e.target.value }))} />
-              </div>
-              <div className="form-field">
-                <label className="form-label">Codice ICD</label>
-                <input className="form-input" value={diagForm.codiceICD ?? ''} placeholder="I10, E11…" onChange={e => setDiagForm(p => ({ ...p, codiceICD: e.target.value }))} />
-              </div>
-              <div className="form-field">
-                <label className="form-label">Tipo</label>
-                <select className="form-select" value={diagForm.tipo ?? 'principale'} onChange={e => setDiagForm(p => ({ ...p, tipo: e.target.value as Diagnosi['tipo'] }))}>
-                  <option value="principale">Principale</option><option value="secondaria">Secondaria</option>
-                  <option value="comorbidita">Comorbidità</option><option value="differenziale">Differenziale</option>
-                </select>
-              </div>
-              <div className="form-field">
-                <label className="form-label">Stato</label>
-                <select className="form-select" value={diagForm.stato ?? 'attiva'} onChange={e => setDiagForm(p => ({ ...p, stato: e.target.value as Diagnosi['stato'] }))}>
-                  <option value="attiva">Attiva</option><option value="monitoraggio">Monitoraggio</option>
-                  <option value="sospetta">Sospetta</option><option value="risolta">Risolta</option>
-                </select>
-              </div>
-              <div className="form-field">
-                <label className="form-label">Data insorgenza</label>
-                <input className="form-input" type="date" value={diagForm.dataInsorgenza ?? todayStr()} onChange={e => setDiagForm(p => ({ ...p, dataInsorgenza: e.target.value }))} />
-              </div>
-            </div>
-            <div className="form-field" style={{ marginTop: 8 }}>
-              <label className="form-label">Note</label>
-              <textarea className="form-input" rows={2} value={diagForm.note ?? ''} onChange={e => setDiagForm(p => ({ ...p, note: e.target.value }))} />
-            </div>
-          </InlineForm>
-        )}
-        <div className="cr-list">
-          {cartella.diagnosi.length === 0 && <p className="cr-empty">Nessuna diagnosi registrata.</p>}
-          {cartella.diagnosi.map(d => editDiagId === d.id ? (
-            <InlineForm key={d.id} onSave={() => updateDiagnosi(d.id)} onCancel={() => { setEditDiagId(null); setDiagForm({}); }}>
-              <div className="op-form-grid">
-                <div className="form-field"><label className="form-label">Descrizione</label>
-                  <input className="form-input" value={diagForm.descrizione ?? ''} onChange={e => setDiagForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Codice ICD</label>
-                  <input className="form-input" value={diagForm.codiceICD ?? ''} onChange={e => setDiagForm(p => ({ ...p, codiceICD: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Tipo</label>
-                  <select className="form-select" value={diagForm.tipo ?? d.tipo} onChange={e => setDiagForm(p => ({ ...p, tipo: e.target.value as Diagnosi['tipo'] }))}>
-                    <option value="principale">Principale</option><option value="secondaria">Secondaria</option>
-                    <option value="comorbidita">Comorbidità</option><option value="differenziale">Differenziale</option>
-                  </select></div>
-                <div className="form-field"><label className="form-label">Stato</label>
-                  <select className="form-select" value={diagForm.stato ?? d.stato} onChange={e => setDiagForm(p => ({ ...p, stato: e.target.value as Diagnosi['stato'] }))}>
-                    <option value="attiva">Attiva</option><option value="monitoraggio">Monitoraggio</option>
-                    <option value="sospetta">Sospetta</option><option value="risolta">Risolta</option>
-                  </select></div>
-                <div className="form-field"><label className="form-label">Data risoluzione</label>
-                  <input className="form-input" type="date" value={diagForm.dataRisoluzione ?? ''} onChange={e => setDiagForm(p => ({ ...p, dataRisoluzione: e.target.value }))} /></div>
-              </div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Note</label>
-                <textarea className="form-input" rows={2} value={diagForm.note ?? ''} onChange={e => setDiagForm(p => ({ ...p, note: e.target.value }))} /></div>
-            </InlineForm>
-          ) : (
-            <ItemRow key={d.id} onEdit={() => { setEditDiagId(d.id); setDiagForm({ ...d }); }} onDelete={() => deleteDiagnosi(d.id)}>
-              <div className="cr-diag-row">
-                <div className="cr-diag-main">
-                  <span className="cr-diag-desc">{d.descrizione}</span>
-                  {d.codiceICD && <span className="cr-mono cr-icd">{d.codiceICD}</span>}
-                  <span className={`badge ${STATO_DIAG_CLASS[d.stato]}`}>{d.stato}</span>
-                  <span className="badge badge--gray">{d.tipo}</span>
+        <ClinicalTableSection
+          title="Diagnosi / Lista Problemi"
+          count={cartella.diagnosi.length}
+          countLabel="diagnosi"
+          actions={<button className="btn-sm" onClick={() => { setDiagForm({}); setShowAddDiag(true); }}>+ Aggiungi</button>}
+        >
+          <div className="cts__body--padded">
+            {showAddDiag && (
+              <InlineForm onSave={addDiagnosi} onCancel={() => { setShowAddDiag(false); setDiagForm({}); }}>
+                <div className="op-form-grid">
+                  <div className="form-field">
+                    <label className="form-label">Descrizione *</label>
+                    <input className="form-input" value={diagForm.descrizione ?? ''} onChange={e => setDiagForm(p => ({ ...p, descrizione: e.target.value }))} />
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Codice ICD</label>
+                    <input className="form-input" value={diagForm.codiceICD ?? ''} placeholder="I10, E11…" onChange={e => setDiagForm(p => ({ ...p, codiceICD: e.target.value }))} />
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Tipo</label>
+                    <select className="form-select" value={diagForm.tipo ?? 'principale'} onChange={e => setDiagForm(p => ({ ...p, tipo: e.target.value as Diagnosi['tipo'] }))}>
+                      <option value="principale">Principale</option><option value="secondaria">Secondaria</option>
+                      <option value="comorbidita">Comorbidità</option><option value="differenziale">Differenziale</option>
+                    </select>
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Stato</label>
+                    <select className="form-select" value={diagForm.stato ?? 'attiva'} onChange={e => setDiagForm(p => ({ ...p, stato: e.target.value as Diagnosi['stato'] }))}>
+                      <option value="attiva">Attiva</option><option value="monitoraggio">Monitoraggio</option>
+                      <option value="sospetta">Sospetta</option><option value="risolta">Risolta</option>
+                    </select>
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label">Data insorgenza</label>
+                    <input className="form-input" type="date" value={diagForm.dataInsorgenza ?? todayStr()} onChange={e => setDiagForm(p => ({ ...p, dataInsorgenza: e.target.value }))} />
+                  </div>
                 </div>
-                {d.note && <p className="cr-diag-note">{d.note}</p>}
-                <span className="cr-diag-meta">{fmtDate(d.dataInsorgenza)} · {d.operatore}{d.dataRisoluzione ? ` → risolta ${fmtDate(d.dataRisoluzione)}` : ''}</span>
-              </div>
-            </ItemRow>
-          ))}
-        </div>
-
-        {/* Rischi */}
-        <SectionHeader title="Indicatori di Rischio" onAdd={() => { setRiskForm({}); setShowAddRisk(true); }} />
-        {showAddRisk && (
-          <InlineForm onSave={addRischio} onCancel={() => { setShowAddRisk(false); setRiskForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field"><label className="form-label">Tipo</label>
-                <select className="form-select" value={riskForm.tipo ?? 'altro'} onChange={e => setRiskForm(p => ({ ...p, tipo: e.target.value as IndicatoreRischio['tipo'] }))}>
-                  <option value="caduta">Caduta</option><option value="lesioni_pressione">Lesioni pressione</option>
-                  <option value="nutrizione">Nutrizione</option><option value="sepsi">Sepsi</option>
-                  <option value="trombosi">Trombosi</option><option value="dolore">Dolore</option><option value="altro">Altro</option>
-                </select></div>
-              <div className="form-field"><label className="form-label">Livello</label>
-                <select className="form-select" value={riskForm.livello ?? 'basso'} onChange={e => setRiskForm(p => ({ ...p, livello: e.target.value as IndicatoreRischio['livello'] }))}>
-                  <option value="basso">Basso</option><option value="medio">Medio</option>
-                  <option value="alto">Alto</option><option value="critico">Critico</option>
-                </select></div>
+                <div className="form-field" style={{ marginTop: 8 }}>
+                  <label className="form-label">Note</label>
+                  <textarea className="form-input" rows={2} value={diagForm.note ?? ''} onChange={e => setDiagForm(p => ({ ...p, note: e.target.value }))} />
+                </div>
+              </InlineForm>
+            )}
+            <div className="cr-list">
+              {cartella.diagnosi.length === 0 && <p className="cr-empty">Nessuna diagnosi registrata.</p>}
+              {cartella.diagnosi.map(d => editDiagId === d.id ? (
+                <InlineForm key={d.id} onSave={() => updateDiagnosi(d.id)} onCancel={() => { setEditDiagId(null); setDiagForm({}); }}>
+                  <div className="op-form-grid">
+                    <div className="form-field"><label className="form-label">Descrizione</label>
+                      <input className="form-input" value={diagForm.descrizione ?? ''} onChange={e => setDiagForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
+                    <div className="form-field"><label className="form-label">Codice ICD</label>
+                      <input className="form-input" value={diagForm.codiceICD ?? ''} onChange={e => setDiagForm(p => ({ ...p, codiceICD: e.target.value }))} /></div>
+                    <div className="form-field"><label className="form-label">Tipo</label>
+                      <select className="form-select" value={diagForm.tipo ?? d.tipo} onChange={e => setDiagForm(p => ({ ...p, tipo: e.target.value as Diagnosi['tipo'] }))}>
+                        <option value="principale">Principale</option><option value="secondaria">Secondaria</option>
+                        <option value="comorbidita">Comorbidità</option><option value="differenziale">Differenziale</option>
+                      </select></div>
+                    <div className="form-field"><label className="form-label">Stato</label>
+                      <select className="form-select" value={diagForm.stato ?? d.stato} onChange={e => setDiagForm(p => ({ ...p, stato: e.target.value as Diagnosi['stato'] }))}>
+                        <option value="attiva">Attiva</option><option value="monitoraggio">Monitoraggio</option>
+                        <option value="sospetta">Sospetta</option><option value="risolta">Risolta</option>
+                      </select></div>
+                    <div className="form-field"><label className="form-label">Data risoluzione</label>
+                      <input className="form-input" type="date" value={diagForm.dataRisoluzione ?? ''} onChange={e => setDiagForm(p => ({ ...p, dataRisoluzione: e.target.value }))} /></div>
+                  </div>
+                  <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Note</label>
+                    <textarea className="form-input" rows={2} value={diagForm.note ?? ''} onChange={e => setDiagForm(p => ({ ...p, note: e.target.value }))} /></div>
+                </InlineForm>
+              ) : (
+                <ItemRow key={d.id} onEdit={() => { setEditDiagId(d.id); setDiagForm({ ...d }); }} onDelete={() => deleteDiagnosi(d.id)}>
+                  <div className="cr-diag-row">
+                    <div className="cr-diag-main">
+                      <span className="cr-diag-desc">{d.descrizione}</span>
+                      {d.codiceICD && <span className="cr-mono cr-icd">{d.codiceICD}</span>}
+                      <span className={`badge ${STATO_DIAG_CLASS[d.stato]}`}>{d.stato}</span>
+                      <span className="badge badge--gray">{d.tipo}</span>
+                    </div>
+                    {d.note && <p className="cr-diag-note">{d.note}</p>}
+                    <span className="cr-diag-meta">{fmtDate(d.dataInsorgenza)} · {d.operatore}{d.dataRisoluzione ? ` → risolta ${fmtDate(d.dataRisoluzione)}` : ''}</span>
+                  </div>
+                </ItemRow>
+              ))}
             </div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione *</label>
-              <textarea className="form-input" rows={2} value={riskForm.descrizione ?? ''} onChange={e => setRiskForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-          </InlineForm>
-        )}
-        <div className="cr-list">
-          {cartella.indicatoriRischio.length === 0 && <p className="cr-empty">Nessun indicatore di rischio.</p>}
-          {cartella.indicatoriRischio.map(r => editRiskId === r.id ? (
-            <InlineForm key={r.id} onSave={() => updateRischio(r.id)} onCancel={() => { setEditRiskId(null); setRiskForm({}); }}>
-              <div className="op-form-grid">
-                <div className="form-field"><label className="form-label">Tipo</label>
-                  <select className="form-select" value={riskForm.tipo ?? r.tipo} onChange={e => setRiskForm(p => ({ ...p, tipo: e.target.value as IndicatoreRischio['tipo'] }))}>
-                    <option value="caduta">Caduta</option><option value="lesioni_pressione">Lesioni pressione</option>
-                    <option value="nutrizione">Nutrizione</option><option value="sepsi">Sepsi</option>
-                    <option value="trombosi">Trombosi</option><option value="dolore">Dolore</option><option value="altro">Altro</option>
-                  </select></div>
-                <div className="form-field"><label className="form-label">Livello</label>
-                  <select className="form-select" value={riskForm.livello ?? r.livello} onChange={e => setRiskForm(p => ({ ...p, livello: e.target.value as IndicatoreRischio['livello'] }))}>
-                    <option value="basso">Basso</option><option value="medio">Medio</option>
-                    <option value="alto">Alto</option><option value="critico">Critico</option>
-                  </select></div>
-              </div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione</label>
-                <textarea className="form-input" rows={2} value={riskForm.descrizione ?? ''} onChange={e => setRiskForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-            </InlineForm>
-          ) : (
-            <ItemRow key={r.id} onEdit={() => { setEditRiskId(r.id); setRiskForm({ ...r }); }} onDelete={() => deleteRischio(r.id)}>
-              <div className="cr-risk-row">
-                <span className={`badge ${RISCHIO_CLASS[r.livello]}`}>{r.livello.toUpperCase()}</span>
-                <span className="cr-risk-tipo">{r.tipo.replace('_', ' ')}</span>
-                <span className="cr-risk-desc">{r.descrizione}</span>
-                <span className="cr-diag-meta">{fmtDate(r.dataValutazione)} · {r.operatore}</span>
-              </div>
-            </ItemRow>
-          ))}
-        </div>
+          </div>
+        </ClinicalTableSection>
+
+        <ClinicalTableSection
+          title="Indicatori di Rischio"
+          count={cartella.indicatoriRischio.length}
+          countLabel="indicatori"
+          actions={<button className="btn-sm" onClick={() => { setRiskForm({}); setShowAddRisk(true); }}>+ Aggiungi</button>}
+        >
+          <div className="cts__body--padded">
+            {showAddRisk && (
+              <InlineForm onSave={addRischio} onCancel={() => { setShowAddRisk(false); setRiskForm({}); }}>
+                <div className="op-form-grid">
+                  <div className="form-field"><label className="form-label">Tipo</label>
+                    <select className="form-select" value={riskForm.tipo ?? 'altro'} onChange={e => setRiskForm(p => ({ ...p, tipo: e.target.value as IndicatoreRischio['tipo'] }))}>
+                      <option value="caduta">Caduta</option><option value="lesioni_pressione">Lesioni pressione</option>
+                      <option value="nutrizione">Nutrizione</option><option value="sepsi">Sepsi</option>
+                      <option value="trombosi">Trombosi</option><option value="dolore">Dolore</option><option value="altro">Altro</option>
+                    </select></div>
+                  <div className="form-field"><label className="form-label">Livello</label>
+                    <select className="form-select" value={riskForm.livello ?? 'basso'} onChange={e => setRiskForm(p => ({ ...p, livello: e.target.value as IndicatoreRischio['livello'] }))}>
+                      <option value="basso">Basso</option><option value="medio">Medio</option>
+                      <option value="alto">Alto</option><option value="critico">Critico</option>
+                    </select></div>
+                </div>
+                <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione *</label>
+                  <textarea className="form-input" rows={2} value={riskForm.descrizione ?? ''} onChange={e => setRiskForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
+              </InlineForm>
+            )}
+            <div className="cr-list">
+              {cartella.indicatoriRischio.length === 0 && <p className="cr-empty">Nessun indicatore di rischio.</p>}
+              {cartella.indicatoriRischio.map(r => editRiskId === r.id ? (
+                <InlineForm key={r.id} onSave={() => updateRischio(r.id)} onCancel={() => { setEditRiskId(null); setRiskForm({}); }}>
+                  <div className="op-form-grid">
+                    <div className="form-field"><label className="form-label">Tipo</label>
+                      <select className="form-select" value={riskForm.tipo ?? r.tipo} onChange={e => setRiskForm(p => ({ ...p, tipo: e.target.value as IndicatoreRischio['tipo'] }))}>
+                        <option value="caduta">Caduta</option><option value="lesioni_pressione">Lesioni pressione</option>
+                        <option value="nutrizione">Nutrizione</option><option value="sepsi">Sepsi</option>
+                        <option value="trombosi">Trombosi</option><option value="dolore">Dolore</option><option value="altro">Altro</option>
+                      </select></div>
+                    <div className="form-field"><label className="form-label">Livello</label>
+                      <select className="form-select" value={riskForm.livello ?? r.livello} onChange={e => setRiskForm(p => ({ ...p, livello: e.target.value as IndicatoreRischio['livello'] }))}>
+                        <option value="basso">Basso</option><option value="medio">Medio</option>
+                        <option value="alto">Alto</option><option value="critico">Critico</option>
+                      </select></div>
+                  </div>
+                  <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione</label>
+                    <textarea className="form-input" rows={2} value={riskForm.descrizione ?? ''} onChange={e => setRiskForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
+                </InlineForm>
+              ) : (
+                <ItemRow key={r.id} onEdit={() => { setEditRiskId(r.id); setRiskForm({ ...r }); }} onDelete={() => deleteRischio(r.id)}>
+                  <div className="cr-risk-row">
+                    <span className={`badge ${RISCHIO_CLASS[r.livello]}`}>{r.livello.toUpperCase()}</span>
+                    <span className="cr-risk-tipo">{r.tipo.replace('_', ' ')}</span>
+                    <span className="cr-risk-desc">{r.descrizione}</span>
+                    <span className="cr-diag-meta">{fmtDate(r.dataValutazione)} · {r.operatore}</span>
+                  </div>
+                </ItemRow>
+              ))}
+            </div>
+          </div>
+        </ClinicalTableSection>
       </div>
     );
   }
@@ -1413,97 +1431,111 @@ export function PatientDetail({
   function renderNote() {
     return (
       <div className="cr-tab-content">
-        {/* Note cliniche */}
-        <SectionHeader title="Note Cliniche" onAdd={() => { setNotaForm({}); setShowAddNota(true); }} />
-        {showAddNota && (
-          <InlineForm onSave={addNota} onCancel={() => { setShowAddNota(false); setNotaForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field"><label className="form-label">Tipo</label>
-                <select className="form-select" value={notaForm.tipo ?? 'clinica'} onChange={e => setNotaForm(p => ({ ...p, tipo: e.target.value as NotaClinica['tipo'] }))}>
-                  <option value="clinica">Clinica</option><option value="nursing">Nursing</option>
-                  <option value="dietetica">Dietetica</option><option value="psicologica">Psicologica</option>
-                  <option value="fisioterapia">Fisioterapia</option><option value="altra">Altra</option>
-                </select></div>
-            </div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Contenuto *</label>
-              <textarea className="form-input" rows={4} value={notaForm.contenuto ?? ''} onChange={e => setNotaForm(p => ({ ...p, contenuto: e.target.value }))} /></div>
-          </InlineForm>
-        )}
-        <div className="cr-list">
-          {cartella.noteClinica.length === 0 && <p className="cr-empty">Nessuna nota clinica.</p>}
-          {cartella.noteClinica.map(n => editNotaId === n.id ? (
-            <InlineForm key={n.id} onSave={() => updateNota(n.id)} onCancel={() => { setEditNotaId(null); setNotaForm({}); }}>
-              <div className="op-form-grid">
-                <div className="form-field"><label className="form-label">Tipo</label>
-                  <select className="form-select" value={notaForm.tipo ?? n.tipo} onChange={e => setNotaForm(p => ({ ...p, tipo: e.target.value as NotaClinica['tipo'] }))}>
-                    <option value="clinica">Clinica</option><option value="nursing">Nursing</option>
-                    <option value="dietetica">Dietetica</option><option value="psicologica">Psicologica</option>
-                    <option value="fisioterapia">Fisioterapia</option><option value="altra">Altra</option>
-                  </select></div>
-              </div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Contenuto</label>
-                <textarea className="form-input" rows={4} value={notaForm.contenuto ?? n.contenuto} onChange={e => setNotaForm(p => ({ ...p, contenuto: e.target.value }))} /></div>
-            </InlineForm>
-          ) : (
-            <ItemRow key={n.id} onEdit={() => { setEditNotaId(n.id); setNotaForm({ ...n }); }} onDelete={() => deleteNota(n.id)}>
-              <div className="cr-nota-row">
-                <div className="cr-nota-header">
-                  <span className="badge badge--gray">{n.tipo}</span>
-                  <span className="cr-diag-meta">{fmtDateTime(n.createdAt)} · {n.operatore}</span>
+        <ClinicalTableSection
+          title="Note Cliniche"
+          count={cartella.noteClinica.length}
+          countLabel="note"
+          actions={<button className="btn-sm" onClick={() => { setNotaForm({}); setShowAddNota(true); }}>+ Aggiungi</button>}
+        >
+          <div className="cts__body--padded">
+            {showAddNota && (
+              <InlineForm onSave={addNota} onCancel={() => { setShowAddNota(false); setNotaForm({}); }}>
+                <div className="op-form-grid">
+                  <div className="form-field"><label className="form-label">Tipo</label>
+                    <select className="form-select" value={notaForm.tipo ?? 'clinica'} onChange={e => setNotaForm(p => ({ ...p, tipo: e.target.value as NotaClinica['tipo'] }))}>
+                      <option value="clinica">Clinica</option><option value="nursing">Nursing</option>
+                      <option value="dietetica">Dietetica</option><option value="psicologica">Psicologica</option>
+                      <option value="fisioterapia">Fisioterapia</option><option value="altra">Altra</option>
+                    </select></div>
                 </div>
-                <p className="cr-nota-text">{n.contenuto}</p>
-              </div>
-            </ItemRow>
-          ))}
-        </div>
+                <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Contenuto *</label>
+                  <textarea className="form-input" rows={4} value={notaForm.contenuto ?? ''} onChange={e => setNotaForm(p => ({ ...p, contenuto: e.target.value }))} /></div>
+              </InlineForm>
+            )}
+            <div className="cr-list">
+              {cartella.noteClinica.length === 0 && <p className="cr-empty">Nessuna nota clinica.</p>}
+              {cartella.noteClinica.map(n => editNotaId === n.id ? (
+                <InlineForm key={n.id} onSave={() => updateNota(n.id)} onCancel={() => { setEditNotaId(null); setNotaForm({}); }}>
+                  <div className="op-form-grid">
+                    <div className="form-field"><label className="form-label">Tipo</label>
+                      <select className="form-select" value={notaForm.tipo ?? n.tipo} onChange={e => setNotaForm(p => ({ ...p, tipo: e.target.value as NotaClinica['tipo'] }))}>
+                        <option value="clinica">Clinica</option><option value="nursing">Nursing</option>
+                        <option value="dietetica">Dietetica</option><option value="psicologica">Psicologica</option>
+                        <option value="fisioterapia">Fisioterapia</option><option value="altra">Altra</option>
+                      </select></div>
+                  </div>
+                  <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Contenuto</label>
+                    <textarea className="form-input" rows={4} value={notaForm.contenuto ?? n.contenuto} onChange={e => setNotaForm(p => ({ ...p, contenuto: e.target.value }))} /></div>
+                </InlineForm>
+              ) : (
+                <ItemRow key={n.id} onEdit={() => { setEditNotaId(n.id); setNotaForm({ ...n }); }} onDelete={() => deleteNota(n.id)}>
+                  <div className="cr-nota-row">
+                    <div className="cr-nota-header">
+                      <span className="badge badge--gray">{n.tipo}</span>
+                      <span className="cr-diag-meta">{fmtDateTime(n.createdAt)} · {n.operatore}</span>
+                    </div>
+                    <p className="cr-nota-text">{n.contenuto}</p>
+                  </div>
+                </ItemRow>
+              ))}
+            </div>
+          </div>
+        </ClinicalTableSection>
 
-        {/* Visite */}
-        <SectionHeader title="Storico Visite" onAdd={() => { setVisitaForm({}); setShowAddVisita(true); }} />
-        {showAddVisita && (
-          <InlineForm onSave={addVisita} onCancel={() => { setShowAddVisita(false); setVisitaForm({}); }}>
-            <div className="op-form-grid">
-              <div className="form-field"><label className="form-label">Tipo visita</label>
-                <input className="form-input" value={visitaForm.tipo ?? ''} placeholder="Visita cardiologica…" onChange={e => setVisitaForm(p => ({ ...p, tipo: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Data</label>
-                <input className="form-input" type="date" value={visitaForm.data ?? todayStr()} onChange={e => setVisitaForm(p => ({ ...p, data: e.target.value }))} /></div>
-              <div className="form-field"><label className="form-label">Ora</label>
-                <input className="form-input" type="time" value={visitaForm.ora ?? ''} onChange={e => setVisitaForm(p => ({ ...p, ora: e.target.value }))} /></div>
-            </div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione *</label>
-              <textarea className="form-input" rows={3} value={visitaForm.descrizione ?? ''} onChange={e => setVisitaForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Esito</label>
-              <textarea className="form-input" rows={2} value={visitaForm.esito ?? ''} onChange={e => setVisitaForm(p => ({ ...p, esito: e.target.value }))} /></div>
-            <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Follow-up</label>
-              <input className="form-input" value={visitaForm.followUp ?? ''} onChange={e => setVisitaForm(p => ({ ...p, followUp: e.target.value }))} /></div>
-          </InlineForm>
-        )}
-        <div className="cr-list">
-          {cartella.visite.length === 0 && <p className="cr-empty">Nessuna visita registrata.</p>}
-          {cartella.visite.map(v => editVisitaId === v.id ? (
-            <InlineForm key={v.id} onSave={() => updateVisita(v.id)} onCancel={() => { setEditVisitaId(null); setVisitaForm({}); }}>
-              <div className="op-form-grid">
-                <div className="form-field"><label className="form-label">Tipo</label><input className="form-input" value={visitaForm.tipo ?? v.tipo} onChange={e => setVisitaForm(p => ({ ...p, tipo: e.target.value }))} /></div>
-                <div className="form-field"><label className="form-label">Data</label><input className="form-input" type="date" value={visitaForm.data ?? v.data} onChange={e => setVisitaForm(p => ({ ...p, data: e.target.value }))} /></div>
-              </div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione</label>
-                <textarea className="form-input" rows={3} value={visitaForm.descrizione ?? v.descrizione} onChange={e => setVisitaForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-              <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Esito</label>
-                <textarea className="form-input" rows={2} value={visitaForm.esito ?? v.esito} onChange={e => setVisitaForm(p => ({ ...p, esito: e.target.value }))} /></div>
-            </InlineForm>
-          ) : (
-            <ItemRow key={v.id} onEdit={() => { setEditVisitaId(v.id); setVisitaForm({ ...v }); }} onDelete={() => deleteVisita(v.id)}>
-              <div className="cr-visita-row">
-                <div className="cr-visita-header">
-                  <span className="cr-visita-tipo">{v.tipo}</span>
-                  <span className="cr-diag-meta">{fmtDate(v.data)}{v.ora ? ` ${v.ora}` : ''} · {v.operatore}</span>
+        <ClinicalTableSection
+          title="Storico Visite"
+          count={cartella.visite.length}
+          countLabel="visite"
+          actions={<button className="btn-sm" onClick={() => { setVisitaForm({}); setShowAddVisita(true); }}>+ Aggiungi</button>}
+        >
+          <div className="cts__body--padded">
+            {showAddVisita && (
+              <InlineForm onSave={addVisita} onCancel={() => { setShowAddVisita(false); setVisitaForm({}); }}>
+                <div className="op-form-grid">
+                  <div className="form-field"><label className="form-label">Tipo visita</label>
+                    <input className="form-input" value={visitaForm.tipo ?? ''} placeholder="Visita cardiologica…" onChange={e => setVisitaForm(p => ({ ...p, tipo: e.target.value }))} /></div>
+                  <div className="form-field"><label className="form-label">Data</label>
+                    <input className="form-input" type="date" value={visitaForm.data ?? todayStr()} onChange={e => setVisitaForm(p => ({ ...p, data: e.target.value }))} /></div>
+                  <div className="form-field"><label className="form-label">Ora</label>
+                    <input className="form-input" type="time" value={visitaForm.ora ?? ''} onChange={e => setVisitaForm(p => ({ ...p, ora: e.target.value }))} /></div>
                 </div>
-                <p className="cr-nota-text">{v.descrizione}</p>
-                {v.esito && <p className="cr-visita-esito">{v.esito}</p>}
-                {v.followUp && <p className="cr-diag-note">Follow-up: {v.followUp}</p>}
-              </div>
-            </ItemRow>
-          ))}
-        </div>
+                <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione *</label>
+                  <textarea className="form-input" rows={3} value={visitaForm.descrizione ?? ''} onChange={e => setVisitaForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
+                <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Esito</label>
+                  <textarea className="form-input" rows={2} value={visitaForm.esito ?? ''} onChange={e => setVisitaForm(p => ({ ...p, esito: e.target.value }))} /></div>
+                <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Follow-up</label>
+                  <input className="form-input" value={visitaForm.followUp ?? ''} onChange={e => setVisitaForm(p => ({ ...p, followUp: e.target.value }))} /></div>
+              </InlineForm>
+            )}
+            <div className="cr-list">
+              {cartella.visite.length === 0 && <p className="cr-empty">Nessuna visita registrata.</p>}
+              {cartella.visite.map(v => editVisitaId === v.id ? (
+                <InlineForm key={v.id} onSave={() => updateVisita(v.id)} onCancel={() => { setEditVisitaId(null); setVisitaForm({}); }}>
+                  <div className="op-form-grid">
+                    <div className="form-field"><label className="form-label">Tipo</label><input className="form-input" value={visitaForm.tipo ?? v.tipo} onChange={e => setVisitaForm(p => ({ ...p, tipo: e.target.value }))} /></div>
+                    <div className="form-field"><label className="form-label">Data</label><input className="form-input" type="date" value={visitaForm.data ?? v.data} onChange={e => setVisitaForm(p => ({ ...p, data: e.target.value }))} /></div>
+                  </div>
+                  <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Descrizione</label>
+                    <textarea className="form-input" rows={3} value={visitaForm.descrizione ?? v.descrizione} onChange={e => setVisitaForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
+                  <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Esito</label>
+                    <textarea className="form-input" rows={2} value={visitaForm.esito ?? v.esito} onChange={e => setVisitaForm(p => ({ ...p, esito: e.target.value }))} /></div>
+                </InlineForm>
+              ) : (
+                <ItemRow key={v.id} onEdit={() => { setEditVisitaId(v.id); setVisitaForm({ ...v }); }} onDelete={() => deleteVisita(v.id)}>
+                  <div className="cr-visita-row">
+                    <div className="cr-visita-header">
+                      <span className="cr-visita-tipo">{v.tipo}</span>
+                      <span className="cr-diag-meta">{fmtDate(v.data)}{v.ora ? ` ${v.ora}` : ''} · {v.operatore}</span>
+                    </div>
+                    <p className="cr-nota-text">{v.descrizione}</p>
+                    {v.esito && <p className="cr-visita-esito">{v.esito}</p>}
+                    {v.followUp && <p className="cr-diag-note">Follow-up: {v.followUp}</p>}
+                  </div>
+                </ItemRow>
+              ))}
+            </div>
+          </div>
+        </ClinicalTableSection>
       </div>
     );
   }
