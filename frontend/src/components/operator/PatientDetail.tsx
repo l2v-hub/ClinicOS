@@ -19,8 +19,7 @@ import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaMedicaTab } from './cartella/TerapiaMedicaTab';
-import { PageTabs, SectionTabs } from '../shared/NavComponents';
-import type { PageTabGroup, SectionTab } from '../shared/NavComponents';
+// NavComponents no longer used — sidebar nav replaces horizontal tabs
 import { ClinicalTableSection } from './cartella/shared';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -81,12 +80,7 @@ const TAB_GROUPS: TabGroupDef[] = [
   },
 ];
 
-function findGroupForTab(tabId: TabId): TabGroup {
-  for (const g of TAB_GROUPS) {
-    if (g.tabs.some(t => t.id === tabId)) return g.id;
-  }
-  return 'panoramica';
-}
+// findGroupForTab removed — sidebar nav doesn't need group tracking
 
 interface PatientDetailProps {
   paziente: Paziente;
@@ -185,18 +179,14 @@ export function PatientDetail({
   operatoreNome,
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>('riepilogo');
-  const [tabGroup, setTabGroup] = useState<TabGroup>('panoramica');
 
   function switchTab(tabId: TabId) {
     setTab(tabId);
-    setTabGroup(findGroupForTab(tabId));
   }
 
   function switchGroup(groupId: TabGroup) {
-    setTabGroup(groupId);
     const group = TAB_GROUPS.find(g => g.id === groupId);
     if (!group) return;
-    // Keep current tab if it's in the group, else go to first tab
     if (!group.tabs.some(t => t.id === tab)) {
       setTab(group.tabs[0].id);
     }
@@ -1611,14 +1601,7 @@ export function PatientDetail({
     consegne:    mieConsegne.filter(c => c.stato !== 'completata').length,
   };
 
-  // Group badges: sum of badges within group
-  function groupBadge(gId: TabGroup): number {
-    const g = TAB_GROUPS.find(x => x.id === gId);
-    if (!g) return 0;
-    return g.tabs.reduce((sum, t) => sum + (TAB_BADGES[t.id] ?? 0), 0);
-  }
-
-  const activeGroup = TAB_GROUPS.find(g => g.id === tabGroup) ?? TAB_GROUPS[0];
+  // groupBadge + activeGroup removed — sidebar shows all tabs directly
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
@@ -1671,68 +1654,83 @@ export function PatientDetail({
         </div>
       </div>
 
-      {/* Grouped nav (L1 — page tabs) */}
-      <PageTabs
-        groups={TAB_GROUPS.map((g): PageTabGroup => ({
-          id: g.id,
-          label: g.label,
-          badge: groupBadge(g.id) || undefined,
-        }))}
-        activeId={tabGroup}
-        onChange={(id) => switchGroup(id as TabGroup)}
-        className="no-print"
-      />
+      {/* Mobile horizontal tab bar (visible < 768px) */}
+      <div className="cr-sidebar-nav--mobile no-print">
+        {TAB_GROUPS.flatMap(g => g.tabs).map(t => (
+          <button key={t.id} className={tab === t.id ? 'active' : ''} onClick={() => switchTab(t.id)}>
+            {t.label}
+            {(TAB_BADGES[t.id] ?? 0) > 0 && <span className="cr-sidebar-nav__badge" style={{ marginLeft: 4 }}>{TAB_BADGES[t.id]}</span>}
+          </button>
+        ))}
+      </div>
 
-      {/* Sub-tab bar (L2 — section tabs) */}
-      <SectionTabs
-        tabs={activeGroup.tabs.map((t): SectionTab => ({
-          id: t.id,
-          label: t.label,
-          badge: TAB_BADGES[t.id] || undefined,
-          urgent: t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata'),
-        }))}
-        activeId={tab}
-        onChange={(id) => switchTab(id as TabId)}
-        className="no-print"
-      />
+      {/* Desktop: sidebar + content layout */}
+      <div className="cr-detail-layout">
+        {/* Sidebar navigation */}
+        <nav className="cr-sidebar-nav no-print">
+          {TAB_GROUPS.map(g => (
+            <div key={g.id} className="cr-sidebar-nav__group">
+              <div className="cr-sidebar-nav__group-title">{g.label}</div>
+              {g.tabs.map(t => {
+                const badge = TAB_BADGES[t.id] ?? 0;
+                const isUrgent = t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
+                return (
+                  <button
+                    key={t.id}
+                    className={`cr-sidebar-nav__item${tab === t.id ? ' cr-sidebar-nav__item--active' : ''}`}
+                    onClick={() => switchTab(t.id)}
+                  >
+                    {t.label}
+                    {badge > 0 && (
+                      <span className={`cr-sidebar-nav__badge${isUrgent ? ' cr-sidebar-nav__badge--urgent' : ''}`}>{badge}</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </nav>
 
-      {/* Tab content */}
-      {tab === 'riepilogo'       && renderRiepilogo()}
-      {tab === 'profilo'         && renderProfilo()}
-      {tab === 'anamnesi'        && renderAnamnesi()}
-      {tab === 'diagnosi'        && renderDiagnosi()}
-      {tab === 'terapie'         && (
-        <TerapiaMedicaTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'note'            && renderNote()}
-      {tab === 'parametri'       && (
-        <ParametriTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'consegne'        && renderConsegne()}
-      {tab === 'presa-in-carico' && (
-        <PresaInCaricoTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'documenti' && (
-        <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'diario-inf' && (
-        <DiarioTab cartella={cartella} paziente={paziente} tipo="infermieristico" onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'diario-med' && (
-        <DiarioTab cartella={cartella} paziente={paziente} tipo="medico" onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'medicazioni' && (
-        <MedicazioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'contenzioni' && (
-        <ContenzioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'braden' && (
-        <ScalaBradenTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
-      {tab === 'dimissione' && (
-        <DimissioneTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-      )}
+        {/* Content area */}
+        <div className="cr-detail-content">
+          {tab === 'riepilogo'       && renderRiepilogo()}
+          {tab === 'profilo'         && renderProfilo()}
+          {tab === 'anamnesi'        && renderAnamnesi()}
+          {tab === 'diagnosi'        && renderDiagnosi()}
+          {tab === 'terapie'         && (
+            <TerapiaMedicaTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'note'            && renderNote()}
+          {tab === 'parametri'       && (
+            <ParametriTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'consegne'        && renderConsegne()}
+          {tab === 'presa-in-carico' && (
+            <PresaInCaricoTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'documenti' && (
+            <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'diario-inf' && (
+            <DiarioTab cartella={cartella} paziente={paziente} tipo="infermieristico" onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'diario-med' && (
+            <DiarioTab cartella={cartella} paziente={paziente} tipo="medico" onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'medicazioni' && (
+            <MedicazioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'contenzioni' && (
+            <ContenzioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'braden' && (
+            <ScalaBradenTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'dimissione' && (
+            <DimissioneTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+        </div>
+      </div>
 
       {cardModal === 'diagnosi'  && renderDiagnosiModal()}
       {cardModal === 'farmaci'   && renderFarmaciModal()}
