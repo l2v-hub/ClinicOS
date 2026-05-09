@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CartellaPaziente, DimissioneInfermieristica, Liberatoria, UscitaLog, Paziente } from '../../../types';
-import { todayStr, nowISO, nowTime, PrintButton } from './shared';
+import { todayStr, nowISO, nowTime, PrintButton, ClinicalTableSection } from './shared';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -374,12 +374,13 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
 
       {/* ── Web view ── */}
       <div className="web-content">
-        <div className="cr-tab-header">
-          <h3 className="cr-tab-title">Dimissione Infermieristica</h3>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn-secondary btn-sm" onClick={() => setModulo(true)}>📋 Vista modulo</button>
-          </div>
-        </div>
+        <ClinicalTableSection
+          title="Dimissione Infermieristica"
+          actions={<>
+            <button className="btn-sm" onClick={() => setModulo(true)}>Vista modulo</button>
+          </>}
+        >
+        <div className="cts__body--padded">
 
         {/* ── Dimissione section ── */}
         <div className="cr-section-header" style={{ marginBottom: 12 }}>
@@ -818,6 +819,8 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
             )}
           </div>
         </div>
+        </div>
+        </ClinicalTableSection>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CartellaPaziente, DocumentoConsegnato, TipoDocumento, StatoDocumento, Paziente } from '../../../types';
-import { uid, todayStr, fmtDate, PrintButton } from './shared';
+import { uid, todayStr, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -133,15 +133,18 @@ export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
         </div>
       </div>
 
-      <div className="cr-tab-header no-print">
-        <h3 className="cr-tab-title">Documenti Paziente</h3>
-        <div style={{ display: 'flex', gap: 8 }}>
+      <ClinicalTableSection
+        title="Documenti Paziente"
+        count={docs.length}
+        countLabel="documenti"
+        actions={<>
           <PrintButton label="Stampa elenco" />
-          <button className="btn-primary btn-sm" onClick={() => { setEditId(null); setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>
+          <button className="btn-sm" onClick={() => { setEditId(null); setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>
             + Aggiungi
           </button>
-        </div>
-      </div>
+        </>}
+      >
+      <div className="cts__body--padded">
 
       {/* Alert banners */}
       {mancanti.length > 0 && (
@@ -314,6 +317,8 @@ export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
           )}
         </div>
       )}
+      </div>
+      </ClinicalTableSection>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 // Shared utilities for cartella clinica sub-tabs
+import { useState } from 'react';
 
 export function uid(): string { return crypto.randomUUID(); }
 export function nowISO(): string { return new Date().toISOString(); }
@@ -86,6 +87,45 @@ export function FormRow({ label, children }: { label: string; children: React.Re
     <div className="form-row">
       <label className="form-label">{label}</label>
       {children}
+    </div>
+  );
+}
+
+// ── Collapsible clinical section with blue header ────────────────────────────
+
+export function ClinicalTableSection({
+  title,
+  count,
+  countLabel,
+  defaultOpen = true,
+  actions,
+  children,
+}: {
+  title: string;
+  count?: number;
+  countLabel?: string;
+  defaultOpen?: boolean;
+  actions?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  const badge = count !== undefined
+    ? `${count} ${countLabel ?? (count === 1 ? 'elemento' : 'elementi')}`
+    : null;
+
+  return (
+    <div className={`cts${open ? ' cts--open' : ''}`}>
+      <button type="button" className="cts__header" onClick={() => setOpen(v => !v)}>
+        <div className="cts__header-left">
+          <span className="cts__chevron">{open ? '▼' : '▶'}</span>
+          <span className="cts__title">{title}</span>
+          {badge && <span className="cts__badge">{badge}</span>}
+        </div>
+        <div className="cts__header-right" onClick={e => e.stopPropagation()}>
+          {actions}
+        </div>
+      </button>
+      {open && <div className="cts__body">{children}</div>}
     </div>
   );
 }

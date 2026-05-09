@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CartellaPaziente, DiarioEntry, TurnoDiario, TipoDiarioEntry, Paziente } from '../../../types';
-import { uid, todayStr, nowISO, nowTime, fmtDate, PrintButton } from './shared';
+import { uid, todayStr, nowISO, nowTime, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -298,17 +298,20 @@ export function DiarioTab({ cartella, paziente, tipo, onUpdate, operatoreNome }:
 
       {/* ── Web view ── */}
       <div className="web-content">
-        <div className="cr-tab-header">
-          <h3 className="cr-tab-title">{titolo}</h3>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <button className="btn-secondary btn-sm" onClick={() => setModulo(true)} title="Vista modulo cartaceo">
+        <ClinicalTableSection
+          title={titolo}
+          count={entries.length}
+          countLabel="voci"
+          actions={<>
+            <button className="btn-sm" onClick={() => setModulo(true)} title="Vista modulo cartaceo">
               Vista modulo
             </button>
-            <button className="btn-primary btn-sm" onClick={() => setShowAdd(v => !v)}>
+            <button className="btn-sm" onClick={() => setShowAdd(v => !v)}>
               {showAdd ? 'Annulla' : '+ Nuova voce'}
             </button>
-          </div>
-        </div>
+          </>}
+        >
+        <div className="cts__body--padded">
 
         {/* ── Add form ── */}
         {showAdd && (
@@ -637,6 +640,8 @@ export function DiarioTab({ cartella, paziente, tipo, onUpdate, operatoreNome }:
             })}
           </div>
         )}
+        </div>
+        </ClinicalTableSection>
       </div>
     </div>
   );

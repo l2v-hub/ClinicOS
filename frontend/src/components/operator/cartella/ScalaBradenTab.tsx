@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CartellaPaziente, ScalaBradenValutazione, Paziente } from '../../../types';
-import { uid, todayStr, nowISO, fmtDate, PrintButton } from './shared';
+import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -315,21 +315,19 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome }: 
 
       {/* ── Web view ── */}
       <div className="web-content">
-        <div className="cr-tab-header">
-          <h3 className="cr-tab-title">Scala di Braden</h3>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button
-              className="btn-secondary btn-sm"
-              onClick={() => openModulo(null)}
-              title="Vista modulo cartaceo"
-            >
-              📋 Vista modulo
+        <ClinicalTableSection
+          title="Scala di Braden"
+          count={list.length}
+          countLabel="valutazioni"
+          actions={<>
+            <button className="btn-sm" onClick={() => openModulo(null)} title="Vista modulo cartaceo">
+              Vista modulo
             </button>
-            <button className="btn-primary btn-sm" onClick={() => { setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>
+            <button className="btn-sm" onClick={() => { setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>
               + Nuova valutazione
             </button>
-          </div>
-        </div>
+          </>}
+        >
 
         {/* Storico summary */}
         {list.length > 0 && !showAdd && (
@@ -434,6 +432,7 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome }: 
         {list.length === 0 && !showAdd && (
           <p className="cr-empty">Nessuna valutazione Braden registrata.</p>
         )}
+        </ClinicalTableSection>
       </div>
     </div>
   );

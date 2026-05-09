@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CartellaPaziente, MedicazioneRecord, EssudatoLivello, Paziente, FollowUpMedicazione } from '../../../types';
-import { uid, todayStr, nowISO, fmtDate, PrintButton } from './shared';
+import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -494,15 +494,18 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
 
       {/* ── Web view ── */}
       <div className="web-content">
-        <div className="cr-tab-header">
-          <h3 className="cr-tab-title">Medicazioni / Lesioni</h3>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn-secondary btn-sm" onClick={() => setModulo(true)}>📋 Vista modulo</button>
-            <button className="btn-primary btn-sm" onClick={() => { setEditId(null); setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>
+        <ClinicalTableSection
+          title="Medicazioni / Wound Care"
+          count={meds.filter(m => !m.dataFine).length}
+          countLabel="attive"
+          actions={<>
+            <button className="btn-sm" onClick={() => setModulo(true)}>Vista modulo</button>
+            <button className="btn-sm" onClick={() => { setEditId(null); setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>
               + Nuova medicazione
             </button>
-          </div>
-        </div>
+          </>}
+        >
+        <div className="cts__body--padded">
 
         {showAdd && (
           <div className="cr-inline-form">
@@ -663,6 +666,8 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
             ))}
           </div>
         )}
+        </div>
+        </ClinicalTableSection>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CartellaPaziente, Paziente, FarmacoItem } from '../../../types';
-import { uid, todayStr, PrintButton } from './shared';
+import { uid, todayStr, PrintButton, ClinicalTableSection } from './shared';
 import { TerapieModuloView } from './TerapieModuloView';
 
 interface Props {
@@ -289,12 +289,14 @@ export function TerapiaMedicaTab({ cartella, paziente, onUpdate, operatoreNome }
 
       {/* ── Web view ── */}
       <div className="web-content">
-        <div className="cr-tab-header">
-          <h3 className="cr-tab-title">Terapia Medica &amp; Farmaci</h3>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn-secondary btn-sm" onClick={() => setModulo(true)}>Vista modulo</button>
-          </div>
-        </div>
+        <ClinicalTableSection
+          title="Terapia Medica & Farmaci"
+          count={farmaci.filter(f => f.stato === 'attivo').length}
+          countLabel="farmaci attivi"
+          actions={<>
+            <button className="btn-sm" onClick={() => setModulo(true)}>Vista modulo</button>
+          </>}
+        >
 
         {/* ── Patient info header ── */}
         <div className="terapia-info-header">
@@ -465,6 +467,7 @@ export function TerapiaMedicaTab({ cartella, paziente, onUpdate, operatoreNome }
             />
           );
         })}
+        </ClinicalTableSection>
       </div>
     </div>
   );

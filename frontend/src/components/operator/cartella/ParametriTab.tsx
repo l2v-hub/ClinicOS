@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import type { CartellaPaziente, Paziente, ParametriMensili, ParametroGiorno } from '../../../types';
-import { uid, todayStr, nowISO, PrintButton } from './shared';
+import { uid, todayStr, nowISO, PrintButton, ClinicalTableSection } from './shared';
 import { ParametriModuloView } from './ParametriModuloView';
 
 interface Props {
@@ -267,13 +267,13 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
 
       {/* -- Web view -- */}
       <div className="web-content">
-        <div className="cr-tab-header">
-          <h3 className="cr-tab-title">Parametri Vitali Mensili</h3>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn-secondary btn-sm" onClick={() => setModulo(true)}>Vista modulo</button>
-            <button className="btn-primary btn-sm" onClick={() => setShowVitalePanel(v => !v)}>+ Parametro rapido</button>
-          </div>
-        </div>
+        <ClinicalTableSection
+          title="Parametri Vitali Mensili"
+          actions={<>
+            <button className="btn-sm" onClick={() => setModulo(true)}>Vista modulo</button>
+            <button className="btn-sm" onClick={() => setShowVitalePanel(v => !v)}>+ Parametro rapido</button>
+          </>}
+        >
 
         {/* -- Quick vital panel -- */}
         {showVitalePanel && (
@@ -358,6 +358,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
             </tbody>
           </table>
         </div>
+        </ClinicalTableSection>
       </div>
     </div>
   );

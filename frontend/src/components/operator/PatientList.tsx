@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente } from '../../types';
 import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus } from '../../icons';
 import { NewPatientModal } from '../shared/NewPatientModal';
+import { ClinicalTableSection } from './cartella/shared';
 
 interface PatientListProps {
   pazienti: Paziente[];
@@ -103,82 +104,83 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
         </div>
       )}
 
-      {/* Tabella desktop */}
+      {/* Table + cards wrapped in collapsible section */}
       {(loading || pazienti.length > 0) && (
-        <div className="table-wrap table-wrap--desktop">
-          <div className="clinicos-table-wrap">
-          <table className="clinicos-table">
-            <thead>
-              <tr>
-                <th>Paziente</th>
-                <th>MRN</th>
-                <th>Data di nascita</th>
-                <th>Camera / Letto</th>
-                <th>Contatti</th>
-                <th>Consegne</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr><td colSpan={7} className="empty-row">Caricamento…</td></tr>
-              ) : filtrati.length === 0 ? (
-                <tr><td colSpan={7} className="empty-row">Nessun paziente trovato</td></tr>
-              ) : filtrati.map(p => (
-                <tr key={p.id} className="row--clickable" onClick={() => onSelect(p)}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
-                      <div>
-                        <div className="cell--name">{p.lastName}, {p.firstName}</div>
-                        <div className="cell--muted" style={{ fontSize: 12 }}>{calcAge(p.dateOfBirth)} anni</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td><span className="mrn-tag">{p.medicalRecordNumber}</span></td>
-                  <td className="cell--muted">{new Date(p.dateOfBirth).toLocaleDateString('it-IT')}</td>
-                  <td className="cell--muted" style={{ fontSize: 12 }}>—</td>
-                  <td className="cell--muted" style={{ fontSize: 12 }}>
-                    <div>{p.email ?? '—'}</div>
-                    <div>{p.phone ?? '—'}</div>
-                  </td>
-                  <td>
-                    {consegneAperte.has(p.id) && (
-                      <span className="consegna-alert-dot" title="Consegne aperte">
-                        <IcoAlert />
-                      </span>
-                    )}
-                  </td>
-                  <td><span className="row-chevron"><IcoChevronRight /></span></td>
+        <ClinicalTableSection title="Pazienti" count={pazienti.length} countLabel="pazienti">
+          {/* Tabella desktop */}
+          <div className="table-wrap table-wrap--desktop">
+            <div className="clinicos-table-wrap">
+            <table className="clinicos-table">
+              <thead>
+                <tr>
+                  <th>Paziente</th>
+                  <th>MRN</th>
+                  <th>Data di nascita</th>
+                  <th>Camera / Letto</th>
+                  <th>Contatti</th>
+                  <th>Consegne</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
-        </div>
-      )}
-
-      {/* Card list mobile */}
-      {(loading || pazienti.length > 0) && (
-        <div className="pt-card-list">
-          {filtrati.map(p => (
-            <div key={p.id} className="pt-list-card" onClick={() => onSelect(p)}>
-              <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
-              <div className="pt-list-card__info">
-                <span className="pt-list-card__name">{p.lastName}, {p.firstName}</span>
-                <span className="pt-list-card__meta">
-                  {p.medicalRecordNumber} · {calcAge(p.dateOfBirth)} anni · {p.sex ?? '—'}
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                {consegneAperte.has(p.id) && (
-                  <span className="consegna-alert-dot"><IcoAlert /></span>
-                )}
-                <span className="pt-list-card__chevron"><IcoChevronRight /></span>
-              </div>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr><td colSpan={7} className="empty-row">Caricamento…</td></tr>
+                ) : filtrati.length === 0 ? (
+                  <tr><td colSpan={7} className="empty-row">Nessun paziente trovato</td></tr>
+                ) : filtrati.map(p => (
+                  <tr key={p.id} className="row--clickable" onClick={() => onSelect(p)}>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
+                        <div>
+                          <div className="cell--name">{p.lastName}, {p.firstName}</div>
+                          <div className="cell--muted" style={{ fontSize: 12 }}>{calcAge(p.dateOfBirth)} anni</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span className="mrn-tag">{p.medicalRecordNumber}</span></td>
+                    <td className="cell--muted">{new Date(p.dateOfBirth).toLocaleDateString('it-IT')}</td>
+                    <td className="cell--muted" style={{ fontSize: 12 }}>--</td>
+                    <td className="cell--muted" style={{ fontSize: 12 }}>
+                      <div>{p.email ?? '--'}</div>
+                      <div>{p.phone ?? '--'}</div>
+                    </td>
+                    <td>
+                      {consegneAperte.has(p.id) && (
+                        <span className="consegna-alert-dot" title="Consegne aperte">
+                          <IcoAlert />
+                        </span>
+                      )}
+                    </td>
+                    <td><span className="row-chevron"><IcoChevronRight /></span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
             </div>
-          ))}
-        </div>
+          </div>
+
+          {/* Card list mobile */}
+          <div className="pt-card-list">
+            {filtrati.map(p => (
+              <div key={p.id} className="pt-list-card" onClick={() => onSelect(p)}>
+                <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
+                <div className="pt-list-card__info">
+                  <span className="pt-list-card__name">{p.lastName}, {p.firstName}</span>
+                  <span className="pt-list-card__meta">
+                    {p.medicalRecordNumber} · {calcAge(p.dateOfBirth)} anni · {p.sex ?? '--'}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  {consegneAperte.has(p.id) && (
+                    <span className="consegna-alert-dot"><IcoAlert /></span>
+                  )}
+                  <span className="pt-list-card__chevron"><IcoChevronRight /></span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </ClinicalTableSection>
       )}
 
       {showModal && (

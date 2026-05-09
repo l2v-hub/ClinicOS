@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { CartellaPaziente, Contenzione, TipoContenzione, FrequenzaContenzione, Paziente } from '../../../types';
-import { uid, todayStr, nowISO, nowTime, fmtDate, PrintButton } from './shared';
+import { uid, todayStr, nowISO, nowTime, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -273,13 +273,16 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
 
       {/* ── Web view ── */}
       <div className="web-content">
-        <div className="cr-tab-header">
-          <h3 className="cr-tab-title">Contenzioni / Protezioni</h3>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn-secondary btn-sm" onClick={() => { setModuloTarget(null); setModulo(true); }}>📋 Vista modulo</button>
-            <button className="btn-primary btn-sm" onClick={() => { setEditId(null); setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>+ Aggiungi</button>
-          </div>
-        </div>
+        <ClinicalTableSection
+          title="Contenzioni / Protezioni"
+          count={list.length}
+          countLabel="contenzioni"
+          actions={<>
+            <button className="btn-sm" onClick={() => { setModuloTarget(null); setModulo(true); }}>Vista modulo</button>
+            <button className="btn-sm" onClick={() => { setEditId(null); setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>+ Aggiungi</button>
+          </>}
+        >
+        <div className="cts__body--padded">
 
         {showAdd && (
           <div className="cr-inline-form">
@@ -466,6 +469,8 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
             )}
           </>
         )}
+        </div>
+        </ClinicalTableSection>
       </div>
     </div>
   );
