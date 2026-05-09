@@ -146,20 +146,7 @@ const STATO_VITALE_CLASS: Record<string, string> = {
 const TIPO_CONSEGNA_OPTIONS = ['Monitoraggio', 'Terapia', 'Esami', 'Dimissione', 'Medicazione', 'Consultazione', 'Rivalutazione', 'Altro'];
 const PRIORITA_OPTIONS: PrioritaConsegna[] = ['normale', 'alta', 'urgente'];
 
-// ── Section header ─────────────────────────────────────────────────────────────
-
-function SectionHeader({ title, onAdd, addLabel = 'Aggiungi' }: { title: string; onAdd?: () => void; addLabel?: string }) {
-  return (
-    <div className="cr-section-header">
-      <span className="cr-section-title">{title}</span>
-      {onAdd && (
-        <button className="btn-primary btn-sm" onClick={onAdd}>
-          <IcoPlus /> {addLabel}
-        </button>
-      )}
-    </div>
-  );
-}
+// SectionHeader removed — all sections now use ClinicalTableSection
 
 // ── Inline form wrapper ────────────────────────────────────────────────────────
 
@@ -1029,27 +1016,34 @@ export function PatientDetail({
     const op = operatori.find(o => o.id === cartella.operatoreId);
     return (
       <div className="cr-tab-content">
-        <SectionHeader title="Dati e Contatti"
-          onAdd={editProfilo ? undefined : () => {
-            setProfiloForm({
-              indirizzo: cartella.indirizzo, codiceFiscale: cartella.codiceFiscale,
-              contattoEmergenzaNome: cartella.contattoEmergenzaNome,
-              contattoEmergenzaTel: cartella.contattoEmergenzaTel,
-              contattoEmergenzaRel: cartella.contattoEmergenzaRel,
-              medicoCurante: cartella.medicoCurante,
-              operatoreId: cartella.operatoreId,
-              cameraNumero: cartella.cameraNumero, lettoNumero: cartella.lettoNumero,
-              repartoRicovero: cartella.repartoRicovero,
-              statoRicovero: cartella.statoRicovero,
-              dataRicovero: cartella.dataRicovero,
-              noteGenerali: cartella.noteGenerali,
-              email: paziente.email ?? '', phone: paziente.phone ?? '',
-            });
-            setEditProfilo(true);
-          }}
-          addLabel="Modifica"
-        />
-
+        <ClinicalTableSection
+          title="Dati e Contatti"
+          actions={editProfilo ? (
+            <>
+              <button className="btn-sm" onClick={() => setEditProfilo(false)}>Annulla</button>
+              <button className="btn-sm" onClick={saveProfiloHandler}>Salva</button>
+            </>
+          ) : (
+            <button className="btn-sm" onClick={() => {
+              setProfiloForm({
+                indirizzo: cartella.indirizzo, codiceFiscale: cartella.codiceFiscale,
+                contattoEmergenzaNome: cartella.contattoEmergenzaNome,
+                contattoEmergenzaTel: cartella.contattoEmergenzaTel,
+                contattoEmergenzaRel: cartella.contattoEmergenzaRel,
+                medicoCurante: cartella.medicoCurante,
+                operatoreId: cartella.operatoreId,
+                cameraNumero: cartella.cameraNumero, lettoNumero: cartella.lettoNumero,
+                repartoRicovero: cartella.repartoRicovero,
+                statoRicovero: cartella.statoRicovero,
+                dataRicovero: cartella.dataRicovero,
+                noteGenerali: cartella.noteGenerali,
+                email: paziente.email ?? '', phone: paziente.phone ?? '',
+              });
+              setEditProfilo(true);
+            }}>Modifica</button>
+          )}
+        >
+        <div className="cts__body--padded">
         {editProfilo ? (
           <InlineForm onSave={saveProfiloHandler} onCancel={() => setEditProfilo(false)}>
             <div className="op-form-grid">
@@ -1177,6 +1171,8 @@ export function PatientDetail({
             )}
           </div>
         )}
+        </div>
+        </ClinicalTableSection>
       </div>
     );
   }
@@ -1545,7 +1541,13 @@ export function PatientDetail({
   function renderConsegne() {
     return (
       <div className="cr-tab-content">
-        <SectionHeader title="Consegne" onAdd={() => setShowAddConsegna(v => !v)} />
+        <ClinicalTableSection
+          title="Consegne"
+          count={mieConsegne.filter(c => c.stato !== 'completata').length}
+          countLabel="aperte"
+          actions={<button className="btn-sm" onClick={() => setShowAddConsegna(v => !v)}>+ Aggiungi</button>}
+        >
+        <div className="cts__body--padded">
         {showAddConsegna && (
           <InlineForm onSave={salvaConsegna} onCancel={() => setShowAddConsegna(false)}>
             <div className="op-form-grid">
@@ -1590,6 +1592,8 @@ export function PatientDetail({
             </div>
           ))}
         </div>
+        </div>
+        </ClinicalTableSection>
       </div>
     );
   }
