@@ -16,7 +16,8 @@
     "db:seed": "npm --prefix backend run prisma:seed",
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "npm --prefix frontend run build",
-    "build:backend": "npm --prefix backend run build"
+    "build:backend": "npm --prefix backend run build",
+    "test:e2e:full-patient:api": "tsx scripts/e2e-full-patient-api-test.ts"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
