@@ -869,6 +869,7 @@ export default function App() {
               therapySlots={therapySlots}
               onConfirmTherapy={confirmTherapy}
               onNotAdministeredTherapy={notAdministeredTherapy}
+              onLoadTherapySlots={loadTherapySlots}
             />
           )}
         </main>

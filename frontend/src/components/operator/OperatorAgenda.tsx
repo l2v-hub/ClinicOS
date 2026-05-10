@@ -18,6 +18,7 @@ interface OperatorAgendaProps {
   therapySlots?: TherapySlot[];
   onConfirmTherapy?: (id: string) => void;
   onNotAdministeredTherapy?: (id: string, motivo: MotivoNonErogazione, note: string) => void;
+  onLoadTherapySlots?: (date: string) => void;
 }
 
 const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {
@@ -62,7 +63,7 @@ const TIPO_LABEL: Record<string, string> = {
 
 export function OperatorAgenda({
   operatoreId, nomeOperatore, operatori, appuntamenti, pazienti, onAddAppuntamento, onSelectPaziente,
-  therapySlots, onConfirmTherapy, onNotAdministeredTherapy,
+  therapySlots, onConfirmTherapy, onNotAdministeredTherapy, onLoadTherapySlots,
 }: OperatorAgendaProps) {
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
@@ -88,9 +89,14 @@ export function OperatorAgenda({
   }
 
   function navigate(delta: number) {
-    if (view === 'giornaliero') setRefDate(d => addDays(d, delta));
-    else if (view === 'settimanale') setRefDate(d => addDays(d, delta * 7));
-    else setRefDate(d => { const r = new Date(d); r.setMonth(d.getMonth() + delta); return r; });
+    setRefDate(d => {
+      let next: Date;
+      if (view === 'giornaliero') next = addDays(d, delta);
+      else if (view === 'settimanale') next = addDays(d, delta * 7);
+      else { next = new Date(d); next.setMonth(d.getMonth() + delta); }
+      onLoadTherapySlots?.(isoDate(next));
+      return next;
+    });
   }
 
   function titleLabel(): string {
@@ -109,6 +115,11 @@ export function OperatorAgenda({
   const pct = Math.min(100, Math.round((usedMin / TOTAL_AVAIL_MIN) * 100));
   const occLabel = pct < 30 ? 'Basso' : pct < 60 ? 'Bilanciato' : pct < 85 ? 'Alto' : 'Sovraccarico';
   const occClass = pct < 30 ? 'agt-occ--low' : pct < 60 ? 'agt-occ--balanced' : pct < 85 ? 'agt-occ--high' : 'agt-occ--overloaded';
+
+  // Extract activeSlot OUTSIDE JSX — avoids React Compiler IIFE caching bug
+  const activeSlot = selectedTherapySlotId
+    ? (therapySlots ?? []).find(s => s.id === selectedTherapySlotId) ?? null
+    : null;
 
   return (
     <div className="agt-view">
@@ -400,18 +411,14 @@ export function OperatorAgenda({
           onCancel={() => setShowNewPaziente(false)}
         />
       )}
-      {selectedTherapySlotId && onConfirmTherapy && onNotAdministeredTherapy && (() => {
-        const activeSlot = therapySlots?.find(s => s.id === selectedTherapySlotId);
-        if (!activeSlot) return null;
-        return (
-          <TherapySlotModal
-            slot={activeSlot}
-            onClose={() => setSelectedTherapySlotId(null)}
-            onConfirm={onConfirmTherapy}
-            onNotAdministered={onNotAdministeredTherapy}
-          />
-        );
-      })()}
+      {activeSlot && onConfirmTherapy && onNotAdministeredTherapy && (
+        <TherapySlotModal
+          slot={activeSlot}
+          onClose={() => setSelectedTherapySlotId(null)}
+          onConfirm={onConfirmTherapy}
+          onNotAdministered={onNotAdministeredTherapy}
+        />
+      )}
     </div>
   );
 }
