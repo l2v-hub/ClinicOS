@@ -2,6 +2,7 @@
 import cors from 'cors';
 import express from 'express';
 import patientsRouter from './routes/patients.js';
+import therapyRouter from './routes/therapy.js';
 
 const app = express();
 
@@ -64,5 +65,6 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/patients', patientsRouter);
+app.use('/therapy-slots', therapyRouter);
 
 export default app;

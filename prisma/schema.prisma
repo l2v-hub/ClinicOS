@@ -66,6 +66,7 @@ model Patient {
   clinicalRecords       ClinicalRecord[]
   appointments          Appointment[]
   cartella              Cartella?
+  medicationAdministrations MedicationAdministration[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
@@ -136,4 +137,28 @@ model Appointment {
   @@index([operatorId, scheduledAt])
   @@index([createdByUserId])
   @@index([status, scheduledAt])
+}
+
+model MedicationAdministration {
+  id            String    @id @default(cuid())
+  patientId     String
+  farmacoNome   String
+  farmacoDose   String
+  farmacoVia    String    @default("orale")
+  date          String    // YYYY-MM-DD
+  fascia        String    // mattina, pranzo, pomeriggio, sera, notte
+  ora           String    // 08:00, 12:00, 16:00, 20:00, 22:00
+  stato         String    @default("da_erogare") // da_erogare, erogata, non_erogata
+  operatoreId   String?
+  operatoreNome String?
+  confirmedAt   DateTime?
+  motivo        String?
+  note          String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  patient       Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, farmacoNome, date, fascia])
+  @@index([date, fascia])
+  @@index([patientId])
 }

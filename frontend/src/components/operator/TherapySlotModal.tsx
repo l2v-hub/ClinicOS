@@ -21,6 +21,7 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [selectedMotivo, setSelectedMotivo] = useState<MotivoNonErogazione | null>(null);
   const [noteText, setNoteText] = useState('');
+  const [pendingId, setPendingId] = useState<string | null>(null);
 
   const erogate = slot.somministrazioni.filter(s => s.stato === 'erogata').length;
   const total = slot.somministrazioni.length;
@@ -102,13 +103,23 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                 <div className="therapy-actions">
                   {s.stato === 'da_erogare' && (
                     <>
-                      <button className="therapy-action-btn therapy-action-btn--confirm" onClick={() => onConfirm(s.id)}>
-                        Erogata
+                      <button
+                        className="therapy-action-btn therapy-action-btn--confirm"
+                        disabled={pendingId === s.id}
+                        style={{ opacity: pendingId === s.id ? 0.6 : 1 }}
+                        onClick={() => { setPendingId(s.id); onConfirm(s.id); }}>
+                        {pendingId === s.id ? 'Invio…' : 'Erogata'}
                       </button>
                       <button className="therapy-action-btn therapy-action-btn--reject" onClick={() => toggleExpand(s.id)}>
                         Non erogata
                       </button>
                     </>
+                  )}
+                  {s.stato === 'erogata' && (
+                    <span style={{ fontSize: 11, color: '#059669', fontWeight: 600 }}>✓ Confermata</span>
+                  )}
+                  {s.stato === 'non_erogata' && (
+                    <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 600 }}>Registrata</span>
                   )}
                 </div>
               </div>

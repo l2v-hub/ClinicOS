@@ -6,6 +6,7 @@ import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
   Appuntamento, Camera, Letto, ScheduleOperatore, Nota, StatoNota,
   CartellaPaziente, NuovoPaziente, TherapySlot, MotivoNonErogazione,
+  SomministrazioneTerapia,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
@@ -116,9 +117,7 @@ export default function App() {
   const [camere, setCamere] = useState<Camera[]>(MOCK_CAMERE);
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>(MOCK_SCHEDULES);
   const [note, setNote] = useState<Nota[]>(MOCK_NOTE);
-  const [therapySlots, setTherapySlots] = useState<TherapySlot[]>(() =>
-    createMockTherapySlots(new Date().toISOString().slice(0, 10))
-  );
+  const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
 
   // ── History API navigation ─────────────────────────────────────────────────
 
@@ -175,6 +174,23 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
+  // ── Load therapy slots (API with mock fallback) ─────────────────────────────
+
+  const loadTherapySlots = useCallback(async (date?: string) => {
+    const d = date || new Date().toISOString().slice(0, 10);
+    try {
+      const res = await fetch(`${API_URL}/therapy-slots?date=${d}`);
+      if (res.ok) {
+        const data = await res.json() as TherapySlot[];
+        setTherapySlots(data);
+      } else {
+        setTherapySlots(createMockTherapySlots(d));
+      }
+    } catch {
+      setTherapySlots(createMockTherapySlots(d));
+    }
+  }, []);
+
   // ── Fetch patients ──────────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -185,7 +201,8 @@ export default function App() {
       .then((data: Paziente[]) => setPazienti(data))
       .catch(() => setPazienti([]))
       .finally(() => setLoadingPazienti(false));
-  }, [utente]);
+    loadTherapySlots();
+  }, [utente, loadTherapySlots]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
 
@@ -437,9 +454,17 @@ export default function App() {
     setNote(prev => prev.map(n => n.id === id ? { ...n, stato } : n));
   }
 
-  // ── Therapy CRUD ──────────────────────────────────────────────────────────
+  // ── Therapy CRUD (API-persisted with optimistic update) ─────────────────────
 
-  function confirmTherapy(somministrazioneId: string) {
+  async function confirmTherapy(somministrazioneId: string) {
+    let target: SomministrazioneTerapia | undefined;
+    let targetSlot: TherapySlot | undefined;
+    for (const slot of therapySlots) {
+      const found = slot.somministrazioni.find(s => s.id === somministrazioneId);
+      if (found) { target = found; targetSlot = slot; break; }
+    }
+    if (!target || !targetSlot) return;
+
     const now = new Date();
     const oraConferma = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
     setTherapySlots(prev => prev.map(slot => ({
@@ -450,9 +475,50 @@ export default function App() {
           : s
       ),
     })));
+
+    try {
+      const res = await fetch(`${API_URL}/therapy-slots/confirm`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientId: target.pazienteId,
+          farmacoNome: target.farmaco,
+          farmacoDose: target.dose,
+          farmacoVia: target.via,
+          date: now.toISOString().slice(0, 10),
+          fascia: targetSlot.fascia,
+          ora: targetSlot.ora,
+          operatoreId: utente?.id ?? '',
+          operatoreNome: utente?.nome ?? '',
+        }),
+      });
+
+      if (res.status === 409) {
+        showToast('Terapia già erogata');
+        loadTherapySlots();
+        return;
+      }
+      if (res.ok) {
+        showToast('Somministrazione confermata');
+      } else {
+        showToast('Errore durante conferma');
+        loadTherapySlots();
+      }
+    } catch {
+      showToast('Errore di rete');
+      loadTherapySlots();
+    }
   }
 
-  function notAdministeredTherapy(somministrazioneId: string, motivo: MotivoNonErogazione, noteText: string) {
+  async function notAdministeredTherapy(somministrazioneId: string, motivo: MotivoNonErogazione, noteText: string) {
+    let target: SomministrazioneTerapia | undefined;
+    let targetSlot: TherapySlot | undefined;
+    for (const slot of therapySlots) {
+      const found = slot.somministrazioni.find(s => s.id === somministrazioneId);
+      if (found) { target = found; targetSlot = slot; break; }
+    }
+    if (!target || !targetSlot) return;
+
     setTherapySlots(prev => prev.map(slot => ({
       ...slot,
       somministrazioni: slot.somministrazioni.map(s =>
@@ -461,6 +527,36 @@ export default function App() {
           : s
       ),
     })));
+
+    try {
+      const res = await fetch(`${API_URL}/therapy-slots/not-administered`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientId: target.pazienteId,
+          farmacoNome: target.farmaco,
+          farmacoDose: target.dose,
+          farmacoVia: target.via,
+          date: new Date().toISOString().slice(0, 10),
+          fascia: targetSlot.fascia,
+          ora: targetSlot.ora,
+          operatoreId: utente?.id ?? '',
+          operatoreNome: utente?.nome ?? '',
+          motivo,
+          note: noteText,
+        }),
+      });
+
+      if (res.ok) {
+        showToast('Non somministrazione registrata');
+      } else {
+        showToast('Errore durante registrazione');
+        loadTherapySlots();
+      }
+    } catch {
+      showToast('Errore di rete');
+      loadTherapySlots();
+    }
   }
 
   // ── Search ──────────────────────────────────────────────────────────────────
