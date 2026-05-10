@@ -104,7 +104,11 @@
       "Bash(node -e \"const c=[]; process.stdin.on\\('data',d=>c.push\\(d\\)\\); process.stdin.on\\('end',\\(\\)=>{const p=JSON.parse\\(Buffer.concat\\(c\\).toString\\(\\)\\); console.log\\('start:', p.scripts?.start\\); console.log\\('build:', p.scripts?.build\\)}\\)\")",
       "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('build:backend:', p.scripts['build:backend']\\)\")",
       "Bash(node scripts/qa-verify-slots.mjs)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:KbcnjWSuTouRdBPGIhVrCgbXiIsDMUUb@switchyard.proxy.rlwy.net:16117/railway\" rtk prisma migrate dev --name add_rooms_beds_assignments --schema prisma/schema.prisma)",
+      "Bash(node -e \"const d=require\\('/tmp/therapy_slots.json'\\);d.forEach\\(s=>console.log\\(s.id,s.label+':',s.somministrazioni.length,'somministrazioni'\\)\\)\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);const d=JSON.parse\\(fs.readFileSync\\('C:/tmp/therapy_slots.json','utf8'\\)\\);d.forEach\\(s=>console.log\\(s.id,s.label+':',s.somministrazioni.length,'somministrazioni'\\)\\)\")",
+      "Bash(node:*)"
     ]
   },
   "enabledPlugins": {

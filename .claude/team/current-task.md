@@ -1,236 +1,224 @@
 ﻿Usa SEMPRE Agent Team Mode con tmux swarm.
 
-Agenti richiesti:
+Agenti:
 1. LEAD / Orchestrator
-2. Backend / Prisma Agent
+2. Backend / Prisma / Railway Agent
 3. Frontend Implementer
-4. QA / Build Reviewer
+4. QA / Regression Tester
 
 Task:
-Implementare nella Scheda Paziente la sezione “Terapia” completa con fasce orarie, periodicità, terapia una tantum e visibilità automatica in Agenda.
+Correggere regressione Agenda: la popup “Terapia mattina/pranzo/pomeriggio/sera/notte” non mostra più pazienti anche se i pazienti hanno terapie schedulate nelle fasce orarie.
+
+## Problema
+
+Dopo le ultime modifiche, cliccando sugli slot terapia in Agenda la popup si apre ma la lista pazienti è vuota.
+
+Questo è una regressione.
+
+I pazienti che hanno terapie programmate per mattina o altre fasce devono comparire nella popup dello slot corrispondente.
 
 ## Obiettivo
 
-Dentro la Scheda Paziente deve esserci una vera sezione “Terapia” dove l’operatore può inserire, modificare e consultare le terapie del paziente.
+Ripristinare il collegamento corretto:
 
-Ogni terapia deve poter essere:
+Terapia paziente schedulata → fascia oraria → slot Agenda → popup con lista pazienti/terapie.
 
-1. Periodica, default
-2. Una tantum
-3. Associata a una o più fasce orarie
-4. Attiva da una data di inizio
-5. Visibile automaticamente in Agenda dalla data di inizio in poi
+## Regole
 
-## Requisiti terapia paziente
+- Non lavorare su OCR o import documenti.
+- Non modificare funzionalità non collegate alla terapia/agenda.
+- Non usare mock.
+- Non usare local state come sorgente principale.
+- Non usare database locale.
+- Usare backend/API reali.
+- Non usare Podman.
+- Non usare migrate reset.
+- Non usare db push --force-reset.
+- Non cancellare dati.
+- Non rompere VITE_API_URL.
 
-Per ogni terapia devono essere gestiti almeno questi campi:
+## Ambiente online
 
-- nome farmaco / terapia
-- dosaggio
-- via di somministrazione
-- note
-- stato:
-  - attiva
-  - sospesa
-  - conclusa
-- tipo terapia:
-  - periodica
-  - una tantum
-- data inizio
-- data fine opzionale
-- fasce orarie:
-  - mattina
-  - pranzo
-  - pomeriggio
-  - sera
-  - notte
-  - orario specifico
-- orari specifici, esempio:
-  - 08:00
-  - 12:00
-  - 16:00
-  - 20:00
-- prescrittore / medico se disponibile
-- operatore che ha inserito la terapia se disponibile
+Railway project:
+glistening-friendship
 
-Default:
-- una nuova terapia deve essere “periodica”
-- una nuova terapia deve avere data inizio = oggi
-- se non viene scelta fascia, proporre “mattina” come default ma permettere modifica
+Service:
+clinicos-backend
 
-## Terapia periodica
+Backend:
+https://clinicos-backend-production-df88.up.railway.app
 
-Se la terapia è periodica:
-- deve comparire in Agenda a partire dalla data inizio
-- deve comparire negli slot terapia delle fasce orarie selezionate
-- deve continuare a comparire fino alla data fine, se presente
-- se non c’è data fine, resta attiva
+Wrapper Railway:
+.claude/team/railway-win.sh
 
-Esempio:
-Ramipril 5 mg, fascia mattina, data inizio 10/05/2026.
-Da quella data in poi deve comparire nello slot “Terapia mattina”.
+## Cose da controllare
 
-## Terapia una tantum
+### 1. Terapie paziente
 
-Se la terapia è una tantum:
-- deve comparire solo nel giorno/orario indicato
-- dopo quella data non deve più comparire come terapia da erogare
-- deve essere chiaramente etichettata come “Una tantum”
+Verifica che le terapie salvate abbiano campi coerenti:
 
-Campi specifici:
-- data somministrazione prevista
-- orario previsto
-- note
+- patientId
+- drugName / nome farmaco
+- dosage / dosaggio
+- therapyType: periodica oppure una tantum
+- status: attiva
+- startDate
+- endDate opzionale
+- timeSlot / fasciaOraria
+- scheduledTime / orario previsto
 
-## Agenda
+Controlla se il bug deriva da mismatch nomi campo, esempio:
+- timeSlot vs timeSlots
+- fascia vs fasciaOraria
+- mattina vs morning
+- active vs attiva
+- scheduledAt vs scheduledTime
+- startDate salvata come stringa ma confrontata male
 
-In Agenda devono comparire slot terapia per fasce orarie.
+### 2. Endpoint therapy slots
 
-Esempi:
+Verifica/correggi:
+
+GET /therapy-slots?date=YYYY-MM-DD
+
+Deve restituire slot con conteggi corretti:
 - Terapia mattina
 - Terapia pranzo
 - Terapia pomeriggio
 - Terapia sera
 - Terapia notte
 
-Ogni slot deve mostrare:
-- fascia/orario
-- totale terapie previste
-- numero erogate / totale
-- numero ancora da erogare
+Per ogni slot:
+- total
+- administeredCount
+- notAdministeredCount
+- pendingCount
 
-Esempio:
-“Terapia mattina”
-“3 / 8 erogate”
-“5 da erogare”
+### 3. Endpoint pazienti slot
 
-Quando clicco lo slot:
-- si apre modale/finestra scrollabile
-- mostra solo i pazienti con terapie previste per quella fascia e quella data
-- mostra nome, cognome, camera/letto, terapia, dosaggio, orario
-- permette “Erogata”
-- permette “Non erogata” con motivo
-- salva lo stato nel backend
+Verifica/correggi:
 
-## Persistenza backend
-
-Non deve essere solo grafica o local state.
-
-Backend:
-- controlla schema Prisma attuale
-- se esistono già modelli terapia/somministrazione, usali
-- se mancano, crea migration minima
-
-Modelli minimi suggeriti:
-- PatientTherapy
-- MedicationAdministration oppure TherapyAdministration
-- TherapyTimeSlot se necessario
-
-API minime richieste:
-
-GET /patients/:patientId/therapies
-POST /patients/:patientId/therapies
-PUT /patients/:patientId/therapies/:therapyId
-DELETE /patients/:patientId/therapies/:therapyId
-
-GET /therapy-slots?date=YYYY-MM-DD
 GET /therapy-slots/:slotId/patients
 
-POST /medication-administrations/:id/confirm
-POST /medication-administrations/:id/not-administered
+Deve restituire solo pazienti con terapie previste per quello slot.
 
-Regole:
-- non usare mock
-- non usare solo local state
-- non usare database locale se il task viene testato online
-- non usare migrate reset
-- non usare db push --force-reset
-- non cancellare dati
+Ogni riga deve contenere:
+- patientId
+- patientFirstName
+- patientLastName
+- room
+- bed
+- therapyId
+- administrationId se presente
+- drugName
+- dosage
+- timeSlot
+- scheduledTime
+- status
+- administeredAt
+- notAdministeredReason
+
+### 4. Matching fascia oraria
+
+Correggere il mapping tra terapia e slot.
+
+Mapping obbligatorio:
+
+- mattina → Terapia mattina
+- pranzo → Terapia pranzo
+- pomeriggio → Terapia pomeriggio
+- sera → Terapia sera
+- notte → Terapia notte
+
+Accettare anche alias se presenti:
+- morning → mattina
+- lunch → pranzo
+- afternoon → pomeriggio
+- evening → sera
+- night → notte
+- 08:00 → mattina
+- 12:00 → pranzo
+- 16:00 → pomeriggio
+- 20:00 → sera
+- 22:00 → notte
+
+### 5. Date
+
+Verifica che una terapia periodica compaia se:
+
+startDate <= data agenda
+
+e:
+
+endDate assente oppure endDate >= data agenda
+
+Una terapia una tantum deve comparire solo nel giorno previsto.
+
+Attenzione a timezone e confronto date.
+
+Usare normalizzazione YYYY-MM-DD.
 
 ## Frontend
 
-Aggiornare la Scheda Paziente:
+Verifica Agenda:
 
-Sezione “Terapia” deve mostrare una tabella/card coerente con lo stile “Terapia Medica & Farmaci”:
+- la popup deve chiamare davvero GET /therapy-slots/:slotId/patients
+- non deve filtrare ulteriormente in modo sbagliato
+- non deve aspettarsi campi diversi da quelli restituiti dal backend
+- se la risposta contiene pazienti, la UI deve mostrarli
+- se la risposta è vuota, mostra empty state solo reale
 
-- header blu flat
-- tabella uniforme
-- comprimibile / espandibile
-- pulsante “Aggiungi terapia”
-- pulsante modifica
-- stato terapia visibile
-- fasce orarie visibili
-- tipo terapia visibile: periodica / una tantum
+La popup deve:
+- mostrare lista pazienti
+- essere scrollabile internamente
+- mostrare nome, cognome, camera/letto, terapia, dosaggio
+- mantenere pulsanti Erogata / Non erogata
 
-Form “Aggiungi terapia”:
-- coerente con design system ClinicOS
-- tablet-friendly
-- nessun tooltip
-- input chiari
-- select fasce orarie
-- toggle o radio:
-  - periodica
-  - una tantum
-- data inizio obbligatoria
-- data fine opzionale
-- salvataggio reale tramite API
+## Debug richiesto
 
-## Dati di test
+QA deve verificare con curl:
 
-Per testare, aggiungi terapie fittizie per ogni paziente demo esistente.
+1. Lista pazienti:
+curl -s https://clinicos-backend-production-df88.up.railway.app/patients
 
-Esempi:
+2. Slot terapia:
+curl -s "https://clinicos-backend-production-df88.up.railway.app/therapy-slots?date=YYYY-MM-DD"
 
-Fabio Forlano:
-- Ramipril 5 mg, mattina, periodica, da oggi
-- Metformina 500 mg, pranzo e sera, periodica, da oggi
-- Paracetamolo 1000 mg, al bisogno / una tantum, oggi ore 18:00
+3. Pazienti slot mattina:
+curl -s "https://clinicos-backend-production-df88.up.railway.app/therapy-slots/mattina/patients?date=YYYY-MM-DD"
 
-Mario Ferrioli:
-- Lasix 25 mg, mattina, periodica
-- Cardioaspirina 100 mg, pranzo, periodica
+Adatta slotId se il backend usa un id diverso.
 
-Anna Martini:
-- Pantoprazolo 40 mg, mattina, periodica
-- Tachipirina 1000 mg, una tantum, oggi ore 20:00
+Se gli endpoint non esistono o rispondono vuoto:
+- correggere backend.
 
-Per ogni paziente demo:
-- almeno una terapia mattina
-- almeno una terapia sera oppure pranzo
-- almeno una terapia una tantum su alcuni pazienti
+Se gli endpoint rispondono dati ma la popup resta vuota:
+- correggere frontend mapping/rendering.
 
-Questi dati devono servire a testare Agenda e slot terapia.
+## Dati test
 
-## QA
+Assicurarsi che almeno 5 pazienti abbiano terapia schedulata oggi:
 
-Verifica:
+- almeno 2 mattina
+- almeno 1 pranzo
+- almeno 1 pomeriggio
+- almeno 1 sera
 
-1. Apri Scheda Paziente.
-2. Vai in Terapia.
-3. Aggiungi terapia periodica.
-4. Aggiungi terapia una tantum.
-5. Imposta fasce orarie.
-6. Salva.
-7. Refresh pagina.
-8. La terapia resta visibile.
-9. Apri Agenda.
-10. La terapia compare nello slot corretto dalla data inizio.
-11. Clic slot terapia.
-12. Vedi pazienti corretti per quella fascia.
-13. Clic Erogata.
-14. Refresh.
-15. Stato Erogata resta salvato.
-16. Non erogata richiede motivo.
-17. Conteggio slot erogate/totale si aggiorna.
-18. npm run build passa.
+Usare API reali, non mock.
 
-## Railway
+## Acceptance criteria
 
-Se serve test online usa:
+Il task è completato solo se:
 
-.claude/team/railway-win.sh
-
-Non stampare token o DATABASE_URL completo.
+1. una terapia schedulata mattina compare nello slot Terapia mattina
+2. una terapia schedulata pranzo compare nello slot Terapia pranzo
+3. una terapia schedulata sera compare nello slot Terapia sera
+4. la popup mostra pazienti e terapie
+5. la popup scrolla se ci sono molti pazienti
+6. i conteggi slot sono corretti
+7. Erogata / Non erogata restano funzionanti
+8. refresh pagina non perde gli stati
+9. npm run build passa
 
 ## Build
 
@@ -242,16 +230,15 @@ npm run build
 
 Solo dopo build riuscita fai commit:
 
-implement patient therapy schedule and agenda slots
+fix therapy slot patient list regression
 
 ## Output finale
 
 Riporta solo:
-- modelli/API creati o modificati
-- componenti frontend modificati
-- come si inserisce una terapia periodica
-- come si inserisce una terapia una tantum
-- come le fasce orarie alimentano l’Agenda
-- dati demo creati per test
+- causa della regressione
+- file modificati
+- endpoint corretti
+- mapping fascia oraria corretto
+- test API eseguiti
 - risultato npm run build
 - commit hash
