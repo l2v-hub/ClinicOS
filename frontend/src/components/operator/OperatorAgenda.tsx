@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import type { Appuntamento, Operatore, Paziente, TherapySlot, MotivoNonErogazione } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus, IcoPill } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
@@ -277,8 +277,8 @@ export function OperatorAgenda({
               );
             })}
             {HOUR_SLOTS.map(ora => (
-              <>
-                <div key={`th-${ora}`} className="agt-week-time">{ora}</div>
+              <Fragment key={`hr-${ora}`}>
+                <div className="agt-week-time">{ora}</div>
                 {getWeekDays(refDate).map(d => {
                   const dStr = isoDate(d);
                   const apts = myApts(dStr).filter(a => a.ora === ora || a.ora === ora.replace(':00', ':30'));
@@ -318,12 +318,12 @@ export function OperatorAgenda({
                     </div>
                   );
                 })}
-              </>
+              </Fragment>
             ))}
             {/* Extra therapy slots outside HOUR_SLOTS range (sera/notte) */}
             {therapySlots?.filter(ts => !HOUR_SLOTS.includes(ts.ora)).map(ts => (
-              <>
-                <div key={`th-extra-${ts.fascia}`} className="agt-week-time">{ts.ora}</div>
+              <Fragment key={`extra-${ts.fascia}`}>
+                <div className="agt-week-time">{ts.ora}</div>
                 {getWeekDays(refDate).map(d => {
                   const dStr = isoDate(d);
                   const isToday = dStr === isoDate(new Date());
@@ -342,7 +342,7 @@ export function OperatorAgenda({
                     </div>
                   );
                 })}
-              </>
+              </Fragment>
             ))}
           </div>
         </div>

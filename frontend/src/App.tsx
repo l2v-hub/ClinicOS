@@ -134,7 +134,10 @@ export default function App() {
     }
   }
 
-  function navigate(key: NavKey) { pushNav(key); }
+  function navigate(key: NavKey) {
+    pushNav(key);
+    if (key === 'agenda-operatore') loadTherapySlots();
+  }
 
   function selectPaziente(p: Paziente) {
     pushNav('dettaglio-paziente', p);
