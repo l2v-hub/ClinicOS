@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { TherapySlot, MotivoNonErogazione } from '../../types';
+import type { TherapySlot, SomministrazioneTerapia, MotivoNonErogazione } from '../../types';
 
 interface Props {
   slot: TherapySlot;
@@ -17,14 +17,48 @@ const MOTIVI: { value: MotivoNonErogazione; label: string }[] = [
   { value: 'altro',                    label: 'Altro' },
 ];
 
+// Normalize row data from any possible API field names
+function normalizeRow(raw: Record<string, unknown>): SomministrazioneTerapia {
+  return {
+    id: (raw.id ?? raw.administrationId ?? '') as string,
+    pazienteId: (raw.pazienteId ?? raw.patientId ?? '') as string,
+    pazienteNome: (raw.pazienteNome ?? raw.patientName ?? `${raw.patientLastName ?? ''}, ${raw.patientFirstName ?? ''}`.replace(/^, $/, '—')) as string,
+    camera: (raw.camera ?? raw.room ?? '—') as string,
+    letto: (raw.letto ?? raw.bed ?? '—') as string,
+    farmaco: (raw.farmaco ?? raw.drugName ?? '') as string,
+    dose: (raw.dose ?? raw.dosage ?? '') as string,
+    via: (raw.via ?? raw.route ?? 'orale') as string,
+    orarioPrevisto: (raw.orarioPrevisto ?? raw.scheduledTime ?? raw.timeSlot ?? '') as string,
+    stato: (raw.stato ?? raw.status ?? 'da_erogare') as SomministrazioneTerapia['stato'],
+    operatoreConferma: raw.operatoreConferma as string | undefined,
+    oraConferma: (raw.oraConferma ?? raw.administeredAt) as string | undefined,
+    motivoNonErogazione: (raw.motivoNonErogazione ?? raw.notAdministeredReason) as MotivoNonErogazione | undefined,
+    noteNonErogazione: raw.noteNonErogazione as string | undefined,
+  };
+}
+
 export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }: Props) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [selectedMotivo, setSelectedMotivo] = useState<MotivoNonErogazione | null>(null);
   const [noteText, setNoteText] = useState('');
   const [pendingId, setPendingId] = useState<string | null>(null);
 
-  const erogate = slot.somministrazioni.filter(s => s.stato === 'erogata').length;
-  const total = slot.somministrazioni.length;
+  // Defensive: normalize from any possible field name
+  const slotAny = slot as unknown as Record<string, unknown>;
+  const rawRows = (slot.somministrazioni
+    ?? (slotAny.patients as unknown as SomministrazioneTerapia[])
+    ?? (slotAny.items as unknown as SomministrazioneTerapia[])
+    ?? []) as unknown as Record<string, unknown>[];
+  const therapyRows: SomministrazioneTerapia[] = rawRows.map(r =>
+    typeof r === 'object' && r !== null && 'pazienteNome' in r
+      ? r as unknown as SomministrazioneTerapia
+      : normalizeRow(r)
+  );
+
+  const erogate = therapyRows.filter(s => s.stato === 'erogata').length;
+  const nonErogate = therapyRows.filter(s => s.stato === 'non_erogata').length;
+  const total = therapyRows.length;
+  const daErogare = total - erogate - nonErogate;
   const pctDone = total > 0 ? Math.round((erogate / total) * 100) : 0;
 
   function handleConfirmNonErogata(id: string) {
@@ -55,23 +89,34 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
         <div className="therapy-modal__header">
           <div>
             <h3>{slot.label} &mdash; {slot.ora}</h3>
-            <span className="therapy-modal__header-info">{erogate}/{total} erogate</span>
+            <span className="therapy-modal__header-info">
+              {erogate}/{total} erogate
+              {daErogare > 0 && <> &middot; {daErogare} da erogare</>}
+            </span>
           </div>
           <button className="therapy-modal__close" onClick={onClose} aria-label="Chiudi">&times;</button>
         </div>
 
         {/* Body */}
         <div className="therapy-modal__body">
-          <div className="therapy-header-row">
-            <span>Paziente</span>
-            <span>Camera/Letto</span>
-            <span>Terapia</span>
-            <span>Orario</span>
-            <span>Stato</span>
-            <span>Azioni</span>
-          </div>
+          {therapyRows.length > 0 && (
+            <div className="therapy-header-row">
+              <span>Paziente</span>
+              <span>Camera/Letto</span>
+              <span>Terapia</span>
+              <span>Orario</span>
+              <span>Stato</span>
+              <span>Azioni</span>
+            </div>
+          )}
 
-          {slot.somministrazioni.map(s => (
+          {therapyRows.length === 0 && (
+            <div style={{ padding: 24, textAlign: 'center', color: '#64748B', fontSize: 14 }}>
+              Nessuna terapia prevista per questa fascia.
+            </div>
+          )}
+
+          {therapyRows.map(s => (
             <div key={s.id}>
               <div className={`therapy-row${s.stato === 'erogata' ? ' therapy-row--erogata' : ''}${s.stato === 'non_erogata' ? ' therapy-row--non-erogata' : ''}`}>
                 <div className="therapy-row__patient">{s.pazienteNome}</div>
@@ -108,7 +153,7 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                         disabled={pendingId === s.id}
                         style={{ opacity: pendingId === s.id ? 0.6 : 1 }}
                         onClick={() => { setPendingId(s.id); onConfirm(s.id); }}>
-                        {pendingId === s.id ? 'Invio…' : 'Erogata'}
+                        {pendingId === s.id ? 'Invio\u2026' : 'Erogata'}
                       </button>
                       <button className="therapy-action-btn therapy-action-btn--reject" onClick={() => toggleExpand(s.id)}>
                         Non erogata

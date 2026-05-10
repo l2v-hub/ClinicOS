@@ -178,9 +178,10 @@ export function OperatorAgenda({
               <div key={ora}>
                 {/* Therapy slot card */}
                 {tSlot && (() => {
-                  const tErogate = tSlot.somministrazioni.filter(s => s.stato === 'erogata').length;
-                  const tNonErogate = tSlot.somministrazioni.filter(s => s.stato === 'non_erogata').length;
-                  const tTotal = tSlot.somministrazioni.length;
+                  const rows = tSlot.somministrazioni ?? [];
+                  const tErogate = rows.filter(s => s.stato === 'erogata').length;
+                  const tNonErogate = rows.filter(s => s.stato === 'non_erogata').length;
+                  const tTotal = rows.length;
                   const tPending = tTotal - tErogate - tNonErogate;
                   const allDone = tErogate === tTotal;
                   return (
