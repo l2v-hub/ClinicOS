@@ -830,3 +830,30 @@ export interface TherapySlot {
   ora: string;
   somministrazioni: SomministrazioneTerapia[];
 }
+
+// ── Patient Therapy (API) ──────────────────────────────────────────────────
+
+export interface PatientTherapyAPI {
+  id: string;
+  patientId: string;
+  farmacoNome: string;
+  dosaggio: string;
+  viaSomministrazione: string;
+  tipo: 'periodica' | 'una_tantum';
+  stato: 'attiva' | 'sospesa' | 'conclusa';
+  dataInizio: string;
+  dataFine: string | null;
+  fasceMattina: boolean;
+  fascePranzo: boolean;
+  fascePomeriggio: boolean;
+  fasceSera: boolean;
+  fasceNotte: boolean;
+  orarioSpecifico: string | null;
+  prescrittore: string | null;
+  operatoreInseritore: string | null;
+  note: string | null;
+  dataSomministrazione: string | null;
+  orarioSomministrazione: string | null;
+  createdAt: string;
+  updatedAt: string;
+}

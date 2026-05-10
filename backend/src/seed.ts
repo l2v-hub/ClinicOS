@@ -319,11 +319,63 @@ async function main() {
       })
     }
 
+    // ── 7. Patient Therapies ─────────────────────────────────────────────────
+    const today = new Date().toISOString().slice(0, 10);
+
+    const therapiesData = [
+      // Mario Ferrioli - SEED-PAZ-001
+      { id: 'SEED-THER-001', patientId: 'SEED-PAZ-001', farmacoNome: 'Lasix', dosaggio: '25 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: false, fasceNotte: false, prescrittore: 'Dr. Demo' },
+      { id: 'SEED-THER-002', patientId: 'SEED-PAZ-001', farmacoNome: 'Cardioaspirina', dosaggio: '100 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: false, fascePranzo: true, fascePomeriggio: false, fasceSera: false, fasceNotte: false, prescrittore: 'Dr. Demo' },
+
+      // Anna Martini - SEED-PAZ-002
+      { id: 'SEED-THER-003', patientId: 'SEED-PAZ-002', farmacoNome: 'Pantoprazolo', dosaggio: '40 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: false, fasceNotte: false, prescrittore: 'Dr. Demo' },
+      { id: 'SEED-THER-004', patientId: 'SEED-PAZ-002', farmacoNome: 'Tachipirina', dosaggio: '1000 mg', viaSomministrazione: 'orale', tipo: 'una_tantum', stato: 'attiva', dataInizio: today, fasceMattina: false, fascePranzo: false, fascePomeriggio: false, fasceSera: true, fasceNotte: false, dataSomministrazione: today, orarioSomministrazione: '20:00', prescrittore: 'Dr. Demo', note: 'Una tantum per febbre' },
+
+      // Giorgio Bassi - SEED-PAZ-003
+      { id: 'SEED-THER-005', patientId: 'SEED-PAZ-003', farmacoNome: 'Clexane', dosaggio: '4000 UI', viaSomministrazione: 'SC', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: false, fascePranzo: false, fascePomeriggio: false, fasceSera: true, fasceNotte: false, prescrittore: 'Dr. Demo', note: 'Profilassi TVP post-frattura' },
+      { id: 'SEED-THER-006', patientId: 'SEED-PAZ-003', farmacoNome: 'Paracetamolo', dosaggio: '1000 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: true, fasceNotte: false, prescrittore: 'Dr. Demo' },
+
+      // Teresa Lombardi - SEED-PAZ-004
+      { id: 'SEED-THER-007', patientId: 'SEED-PAZ-004', farmacoNome: 'Aspirina', dosaggio: '100 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: false, fasceNotte: false, prescrittore: 'Dr. Demo' },
+      { id: 'SEED-THER-008', patientId: 'SEED-PAZ-004', farmacoNome: 'Eparina', dosaggio: '5000 UI', viaSomministrazione: 'SC', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: false, fascePranzo: false, fascePomeriggio: false, fasceSera: true, fasceNotte: false, prescrittore: 'Dr. Demo' },
+
+      // Carlo Neri - SEED-PAZ-005
+      { id: 'SEED-THER-009', patientId: 'SEED-PAZ-005', farmacoNome: 'Ramipril', dosaggio: '10 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: false, fasceNotte: false, prescrittore: 'Dr. Demo' },
+      { id: 'SEED-THER-010', patientId: 'SEED-PAZ-005', farmacoNome: 'Amlodipina', dosaggio: '5 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: false, fascePranzo: false, fascePomeriggio: false, fasceSera: true, fasceNotte: false, prescrittore: 'Dr. Demo' },
+      { id: 'SEED-THER-011', patientId: 'SEED-PAZ-005', farmacoNome: 'Cortisone', dosaggio: '25 mg', viaSomministrazione: 'IM', tipo: 'una_tantum', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: false, fasceNotte: false, dataSomministrazione: today, orarioSomministrazione: '08:00', prescrittore: 'Dr. Demo', note: 'Una tantum per crisi ipertensiva' },
+
+      // Lucia Gatti - SEED-PAZ-006
+      { id: 'SEED-THER-012', patientId: 'SEED-PAZ-006', farmacoNome: 'Ibuprofene', dosaggio: '600 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: true, fascePomeriggio: false, fasceSera: true, fasceNotte: false, prescrittore: 'Dr. Demo' },
+
+      // Roberto Mancini - SEED-PAZ-007
+      { id: 'SEED-THER-013', patientId: 'SEED-PAZ-007', farmacoNome: 'Metformina', dosaggio: '500 mg', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: true, fasceNotte: false, prescrittore: 'Dr. Demo' },
+      { id: 'SEED-THER-014', patientId: 'SEED-PAZ-007', farmacoNome: 'Amoxicillina', dosaggio: '1g', viaSomministrazione: 'orale', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: true, fasceNotte: false, prescrittore: 'Dr. Demo', note: 'Antibioticoterapia piede diabetico' },
+
+      // Elena Moretti - SEED-PAZ-008
+      { id: 'SEED-THER-015', patientId: 'SEED-PAZ-008', farmacoNome: 'Cefazolina', dosaggio: '1g', viaSomministrazione: 'IV', tipo: 'periodica', stato: 'attiva', dataInizio: today, fasceMattina: true, fascePranzo: false, fascePomeriggio: false, fasceSera: true, fasceNotte: false, prescrittore: 'Dr. Demo', note: 'Profilassi post-appendicectomia' },
+      { id: 'SEED-THER-016', patientId: 'SEED-PAZ-008', farmacoNome: 'Ketorolac', dosaggio: '30 mg', viaSomministrazione: 'IM', tipo: 'una_tantum', stato: 'attiva', dataInizio: today, fasceMattina: false, fascePranzo: false, fascePomeriggio: true, fasceSera: false, fasceNotte: false, dataSomministrazione: today, orarioSomministrazione: '16:00', prescrittore: 'Dr. Demo', note: 'Dolore post-operatorio' },
+    ];
+
+    for (const t of therapiesData) {
+      await prisma.patientTherapy.upsert({
+        where: { id: t.id },
+        update: {
+          farmacoNome: t.farmacoNome,
+          dosaggio: t.dosaggio,
+          stato: t.stato,
+          dataInizio: t.dataInizio,
+        },
+        create: t,
+      });
+    }
+    console.log(`  ✓  therapies upserted: ${therapiesData.length}`);
+
     // ── Verifica finale ───────────────────────────────────────────────────────
     const totPazienti      = await prisma.patient.count()
     const totCartelle      = await prisma.clinicalRecord.count()
     const totNote          = await prisma.clinicalNote.count()
     const totAppuntamenti  = await prisma.appointment.count()
+    const totTherapies     = await prisma.patientTherapy.count()
 
     console.log(`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -332,6 +384,7 @@ async function main() {
   • Cartelle cliniche:     ${totCartelle}
   • Note cliniche:         ${totNote}
   • Appuntamenti:          ${totAppuntamenti}
+  • Terapie:               ${totTherapies}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 `)
 

@@ -5849,3 +5849,102 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   .dli-modal { max-width: 100%; }
   .dli-steps { overflow-x: auto; }
 }
+
+/* ── Terapia Schedule ────────────────────────────────────────────────────── */
+
+.terapia-sched-form {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  background: var(--surface, #f8fafc);
+  border-radius: 8px;
+  margin: 8px 12px;
+}
+
+.terapia-sched-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.terapia-sched-form .form-group--full {
+  grid-column: 1 / -1;
+}
+
+.terapia-sched-form label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.terapia-sched-form .form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+.fascia-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.fascia-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #e0ecff;
+  color: #1A3357;
+}
+
+.fascia-check {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fascia-check label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  text-transform: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.fascia-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.tipo-radio {
+  display: flex;
+  gap: 16px;
+}
+
+.tipo-radio label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  text-transform: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tipo-radio input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}

@@ -19,6 +19,7 @@ import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaMedicaTab } from './cartella/TerapiaMedicaTab';
+import { TerapiaScheduleTab } from './cartella/TerapiaScheduleTab';
 // NavComponents no longer used — sidebar nav replaces horizontal tabs
 import { ClinicalTableSection } from './cartella/shared';
 
@@ -26,6 +27,7 @@ import { ClinicalTableSection } from './cartella/shared';
 
 type TabId =
   | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapie'
+  | 'terapia-programmata'
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario-inf' | 'diario-med'
   | 'medicazioni' | 'contenzioni' | 'braden' | 'dimissione';
@@ -54,6 +56,7 @@ const TAB_GROUPS: TabGroupDef[] = [
       { id: 'anamnesi',        label: 'Anamnesi' },
       { id: 'diagnosi',        label: 'Diagnosi' },
       { id: 'terapie',         label: 'Terapie & Farmaci' },
+      { id: 'terapia-programmata', label: 'Terapia Programmata' },
       { id: 'parametri',       label: 'Parametri Vitali' },
       { id: 'note',            label: 'Note & Visite' },
     ],
@@ -1741,6 +1744,9 @@ export function PatientDetail({
           {tab === 'diagnosi'        && renderDiagnosi()}
           {tab === 'terapie'         && (
             <TerapiaMedicaTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'terapia-programmata' && (
+            <TerapiaScheduleTab paziente={paziente} operatoreNome={operatoreNome} />
           )}
           {tab === 'note'            && renderNote()}
           {tab === 'parametri'       && (

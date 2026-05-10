@@ -68,6 +68,7 @@ model Patient {
   cartella              Cartella?
   medicationAdministrations MedicationAdministration[]
   intakeDocuments           PatientIntakeDocument[]
+  therapies                 PatientTherapy[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
@@ -180,4 +181,34 @@ model PatientIntakeDocument {
 
   @@index([patientId])
   @@index([status])
+}
+
+model PatientTherapy {
+  id                   String   @id @default(cuid())
+  patientId            String
+  farmacoNome          String
+  dosaggio             String
+  viaSomministrazione  String   @default("orale")
+  tipo                 String   @default("periodica") // periodica | una_tantum
+  stato                String   @default("attiva")    // attiva | sospesa | conclusa
+  dataInizio           String   // YYYY-MM-DD
+  dataFine             String?  // YYYY-MM-DD optional
+  fasceMattina         Boolean  @default(false)
+  fascePranzo          Boolean  @default(false)
+  fascePomeriggio      Boolean  @default(false)
+  fasceSera            Boolean  @default(false)
+  fasceNotte           Boolean  @default(false)
+  orarioSpecifico      String?  // comma-separated specific times e.g. "08:00,12:00,16:00"
+  prescrittore         String?
+  operatoreInseritore  String?
+  note                 String?
+  // Una tantum specific
+  dataSomministrazione String?  // YYYY-MM-DD for una tantum
+  orarioSomministrazione String? // HH:MM for una tantum
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  patient              Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([tipo, stato])
 }

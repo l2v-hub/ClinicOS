@@ -138,6 +138,77 @@ router.get('/', async (req, res) => {
       };
     });
 
+    // Also get therapies from PatientTherapy model
+    const patientTherapies = await prisma.patientTherapy.findMany({
+      where: { stato: 'attiva' },
+      include: { patient: { include: { cartella: true } } },
+    });
+
+    // Map PatientTherapy records to somministrazioni per fascia
+    for (const pt of patientTherapies) {
+      // Skip if una_tantum and not for this date
+      if (pt.tipo === 'una_tantum') {
+        if (pt.dataSomministrazione !== date) continue;
+      } else {
+        // Periodica: check date range
+        if (pt.dataInizio > date) continue;
+        if (pt.dataFine && pt.dataFine < date) continue;
+      }
+
+      const cartData = pt.patient.cartella?.data as CartellaData | undefined;
+      const camera = cartData?.cameraNumero || '—';
+      const letto = cartData?.lettoNumero || '—';
+
+      const fasciaMap: Record<string, boolean> = {
+        mattina: pt.fasceMattina,
+        pranzo: pt.fascePranzo,
+        pomeriggio: pt.fascePomeriggio,
+        sera: pt.fasceSera,
+        notte: pt.fasceNotte,
+      };
+
+      for (const f of FASCE) {
+        if (!fasciaMap[f.fascia]) continue;
+
+        const key = `${pt.patientId}|${pt.farmacoNome}|${f.fascia}`;
+        const existing = adminMap.get(key);
+        const sommId = existing?.id || `pending-${pt.patientId}-${pt.farmacoNome}-${f.fascia}`;
+
+        // Find the slot and add
+        const slot = slots.find(s => s.fascia === f.fascia);
+        if (slot) {
+          // Check no duplicate
+          const alreadyExists = slot.somministrazioni.some(
+            s => s.pazienteId === pt.patientId && s.farmaco === pt.farmacoNome
+          );
+          if (!alreadyExists) {
+            slot.somministrazioni.push({
+              id: sommId,
+              pazienteId: pt.patientId,
+              pazienteNome: `${pt.patient.lastName}, ${pt.patient.firstName}`,
+              camera,
+              letto,
+              farmaco: pt.farmacoNome,
+              dose: pt.dosaggio,
+              via: pt.viaSomministrazione || 'orale',
+              orarioPrevisto: f.ora,
+              stato: existing?.stato || 'da_erogare',
+              ...(existing?.stato === 'erogata' && {
+                operatoreConferma: existing.operatoreNome || undefined,
+                oraConferma: existing.confirmedAt
+                  ? new Date(existing.confirmedAt).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+                  : undefined,
+              }),
+              ...(existing?.stato === 'non_erogata' && {
+                motivoNonErogazione: existing.motivo || undefined,
+                noteNonErogazione: existing.note || undefined,
+              }),
+            });
+          }
+        }
+      }
+    }
+
     // Filter out empty slots
     const nonEmptySlots = slots.filter(s => s.somministrazioni.length > 0);
 
