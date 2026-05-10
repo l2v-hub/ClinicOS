@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import type { NuovoPaziente, Operatore, Camera } from '../../types';
 import { IcoX, IcoCheck } from '../../icons';
+import { DischargeLetterImport } from './DischargeLetterImport';
 
 // ── Local types ───────────────────────────────────────────────────────────────
 
@@ -105,6 +106,7 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
   const [nuovoDocTipo, setNuovoDocTipo] = useState(TIPI_DOCUMENTO[0]);
   const [isSaving, setIsSaving] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [showImport, setShowImport] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -128,6 +130,19 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
     errors.dateOfBirth = 'Data di nascita obbligatoria';
 
   const hasErrors = !form.firstName.trim() || !form.lastName.trim() || !form.dateOfBirth;
+
+  function handleImportApply(data: Partial<NuovoPaziente>) {
+    setForm(prev => {
+      const updated = { ...prev };
+      for (const [key, value] of Object.entries(data)) {
+        if (value && typeof value === 'string' && value.trim()) {
+          (updated as Record<string, string>)[key] = value;
+        }
+      }
+      return updated;
+    });
+    setShowImport(false);
+  }
 
   async function salva() {
     setSubmitAttempted(true);
@@ -486,6 +501,15 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
             <p className="npm-header__subtitle">
               Registra anagrafica, ingresso, assegnazione e documenti del paziente
             </p>
+            <button type="button" className="npm-import-btn" onClick={() => setShowImport(true)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              Importa da lettera di dimissioni
+            </button>
           </div>
           <button className="icon-btn npm-close-btn" onClick={onCancel} aria-label="Chiudi">
             <IcoX />
@@ -548,6 +572,13 @@ export function NewPatientModal({ operatori, camere = [], onSave, onCancel }: Ne
             </button>
           </div>
         </div>
+
+        {showImport && (
+          <DischargeLetterImport
+            onApply={handleImportApply}
+            onClose={() => setShowImport(false)}
+          />
+        )}
 
       </div>
     </div>

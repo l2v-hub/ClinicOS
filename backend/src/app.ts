@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import patientsRouter from './routes/patients.js';
 import therapyRouter from './routes/therapy.js';
+import patientIntakeRouter from './routes/patient-intake.js';
 
 const app = express();
 
@@ -58,7 +59,7 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
@@ -66,5 +67,6 @@ app.get('/health', (_req, res) => {
 
 app.use('/patients', patientsRouter);
 app.use('/therapy-slots', therapyRouter);
+app.use('/patient-intake', patientIntakeRouter);
 
 export default app;

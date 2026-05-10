@@ -67,6 +67,7 @@ model Patient {
   appointments          Appointment[]
   cartella              Cartella?
   medicationAdministrations MedicationAdministration[]
+  intakeDocuments           PatientIntakeDocument[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
@@ -161,4 +162,22 @@ model MedicationAdministration {
   @@unique([patientId, farmacoNome, date, fascia])
   @@index([date, fascia])
   @@index([patientId])
+}
+
+model PatientIntakeDocument {
+  id            String   @id @default(cuid())
+  fileName      String
+  fileType      String
+  fileData      String   // base64 encoded file content
+  ocrText       String?  // extracted OCR text
+  extractedData Json?    // structured extracted data
+  status        String   @default("uploaded") // uploaded, ocr_complete, extracted, applied
+  patientId     String?
+  operatoreNome String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  patient       Patient? @relation(fields: [patientId], references: [id], onDelete: SetNull)
+
+  @@index([patientId])
+  @@index([status])
 }

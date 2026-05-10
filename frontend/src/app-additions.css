@@ -5690,3 +5690,161 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   /* Badge sizes */
   .badge { font-size: 11px; padding: 4px 10px; }
 }
+
+/* ── Discharge Letter Import ── */
+
+.dli-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1100; padding: 16px;
+}
+.dli-modal {
+  background: #fff; border-radius: 10px; width: 100%; max-width: 700px;
+  max-height: 90vh; display: flex; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;
+}
+.dli-header {
+  background: #1A3357; color: #fff; padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.dli-header h3 { margin: 0; font-size: 16px; font-weight: 600; }
+.dli-header__sub { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+.dli-close {
+  background: none; border: none; color: #fff; cursor: pointer;
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; font-size: 20px;
+}
+.dli-close:hover { background: rgba(255,255,255,0.15); }
+.dli-body { overflow-y: auto; padding: 20px; flex: 1; }
+.dli-footer {
+  padding: 12px 20px; border-top: 1px solid #E5E7EB;
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+  background: #F8FAFC; flex-shrink: 0;
+}
+
+/* Step indicator */
+.dli-steps {
+  display: flex; gap: 4px; padding: 12px 20px; background: #F8FAFC;
+  border-bottom: 1px solid #E5E7EB;
+}
+.dli-step {
+  display: flex; align-items: center; gap: 6px; font-size: 12px;
+  color: #94A3B8; padding: 4px 10px; border-radius: 12px;
+}
+.dli-step.active { color: #1A3357; font-weight: 600; background: #DBEAFE; }
+.dli-step.done { color: #059669; }
+.dli-step__num {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  background: #E5E7EB; color: #64748B;
+}
+.dli-step.active .dli-step__num { background: #1A3357; color: #fff; }
+.dli-step.done .dli-step__num { background: #059669; color: #fff; }
+
+/* Upload step */
+.dli-upload-btns {
+  display: flex; gap: 12px; margin-bottom: 16px;
+}
+.dli-upload-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; padding: 24px 16px; border: 2px dashed #CBD5E1; border-radius: 10px;
+  background: #F8FAFC; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  min-height: 100px; font-size: 13px; font-weight: 600; color: #334155;
+}
+.dli-upload-btn:hover { border-color: #1A3357; background: #EEF2FF; }
+.dli-upload-btn svg { width: 28px; height: 28px; color: #64748B; }
+
+.dli-preview {
+  margin-top: 12px; border: 1px solid #E5E7EB; border-radius: 8px;
+  overflow: hidden; max-height: 200px; display: flex; align-items: center; justify-content: center;
+  background: #F1F5F9;
+}
+.dli-preview img { max-width: 100%; max-height: 200px; object-fit: contain; }
+.dli-preview__name { padding: 8px 12px; font-size: 12px; color: #64748B; text-align: center; }
+
+/* Processing step */
+.dli-progress { margin: 32px 0; text-align: center; }
+.dli-progress__bar {
+  width: 100%; height: 8px; background: #E5E7EB; border-radius: 4px;
+  overflow: hidden; margin: 12px 0;
+}
+.dli-progress__fill {
+  height: 100%; background: #1A3357; border-radius: 4px;
+  transition: width 0.3s ease;
+}
+.dli-progress__text { font-size: 13px; color: #64748B; margin-top: 8px; }
+.dli-progress__pct { font-size: 24px; font-weight: 700; color: #1A3357; }
+
+/* Review step */
+.dli-review-grid { display: flex; flex-direction: column; gap: 8px; }
+.dli-field {
+  display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px;
+  border: 1px solid #E5E7EB; border-radius: 8px; background: #fff;
+}
+.dli-field__indicator {
+  width: 8px; height: 8px; border-radius: 50%; margin-top: 8px; flex-shrink: 0;
+}
+.dli-field__indicator--high { background: #059669; }
+.dli-field__indicator--medium { background: #D97706; }
+.dli-field__indicator--low { background: #DC2626; }
+.dli-field__indicator--none { background: #CBD5E1; }
+.dli-field__content { flex: 1; min-width: 0; }
+.dli-field__label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  color: #64748B; letter-spacing: 0.3px; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 6px;
+}
+.dli-field__confidence {
+  font-size: 10px; font-weight: 400; text-transform: none;
+  letter-spacing: 0; padding: 1px 6px; border-radius: 8px;
+}
+.dli-field__confidence--high { background: #D1FAE5; color: #065F46; }
+.dli-field__confidence--medium { background: #FEF3C7; color: #92400E; }
+.dli-field__confidence--low { background: #FEE2E2; color: #991B1B; }
+.dli-field__confidence--none { background: #F1F5F9; color: #64748B; }
+.dli-field__input {
+  width: 100%; padding: 6px 8px; border: 1px solid #E5E7EB; border-radius: 4px;
+  font-size: 13px; color: #1E293B; box-sizing: border-box;
+}
+.dli-field__input:focus { border-color: #1A3357; outline: none; box-shadow: 0 0 0 2px rgba(26,51,87,0.1); }
+.dli-field__input--textarea { resize: vertical; min-height: 44px; font-family: inherit; }
+.dli-field__empty { font-size: 12px; color: #94A3B8; font-style: italic; padding: 6px 0; }
+
+/* OCR text collapsible */
+.dli-ocr-toggle {
+  margin-top: 16px; padding: 8px 12px; background: #F1F5F9;
+  border: 1px solid #E5E7EB; border-radius: 6px; cursor: pointer;
+  font-size: 12px; color: #64748B; display: flex; align-items: center; gap: 6px;
+  width: 100%;
+}
+.dli-ocr-text {
+  margin-top: 8px; padding: 12px; background: #F8FAFC; border: 1px solid #E5E7EB;
+  border-radius: 6px; font-size: 12px; font-family: monospace; color: #334155;
+  max-height: 200px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;
+}
+
+/* Import button in NewPatientModal */
+.npm-import-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border: 1px dashed #7C3AED; border-radius: 8px;
+  background: #F5F3FF; color: #6D28D9; cursor: pointer;
+  font-size: 12px; font-weight: 600; transition: background 0.15s;
+  min-height: 44px; margin-top: 8px;
+}
+.npm-import-btn:hover { background: #EDE9FE; border-style: solid; }
+.npm-import-btn svg { flex-shrink: 0; }
+
+/* Error state */
+.dli-error {
+  padding: 12px 16px; background: #FEF2F2; border: 1px solid #FECACA;
+  border-radius: 8px; color: #991B1B; font-size: 13px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .dli-upload-btns { flex-direction: column; }
+  .dli-modal { max-width: 100%; }
+  .dli-steps { overflow-x: auto; }
+}
