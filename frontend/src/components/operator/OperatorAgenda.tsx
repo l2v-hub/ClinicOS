@@ -234,6 +234,29 @@ export function OperatorAgenda({
               </div>
             );
           })}
+
+          {/* Therapy slots outside regular time range (sera 20:00, notte 22:00) */}
+          {therapySlots?.filter(ts => !TIME_SLOTS.includes(ts.ora)).map(ts => {
+            const tErogate = ts.somministrazioni.filter(s => s.stato === 'erogata').length;
+            const tNonErogate = ts.somministrazioni.filter(s => s.stato === 'non_erogata').length;
+            const tTotal = ts.somministrazioni.length;
+            const tPending = tTotal - tErogate - tNonErogate;
+            const allDone = tErogate === tTotal;
+            return (
+              <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
+                <div
+                  className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
+                  onClick={() => setSelectedTherapySlotId(ts.id)}>
+                  <span className="agt-therapy-slot__icon"><IcoPill /></span>
+                  <span className="agt-therapy-slot__label">{ts.label}</span>
+                  <span className="agt-therapy-slot__count">{tErogate}/{tTotal} erogate</span>
+                  <span className="agt-therapy-slot__progress">
+                    {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}{tNonErogate > 0 && tPending > 0 ? ' · ' : ''}{tPending > 0 ? `${tPending} da erogare` : ''}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -292,6 +315,30 @@ export function OperatorAgenda({
                         </div>
                       ))}
                       {apts.length === 0 && !therapySlotsMap.has(ora) && <span className="agt-week-add"><IcoPlus /></span>}
+                    </div>
+                  );
+                })}
+              </>
+            ))}
+            {/* Extra therapy slots outside HOUR_SLOTS range (sera/notte) */}
+            {therapySlots?.filter(ts => !HOUR_SLOTS.includes(ts.ora)).map(ts => (
+              <>
+                <div key={`th-extra-${ts.fascia}`} className="agt-week-time">{ts.ora}</div>
+                {getWeekDays(refDate).map(d => {
+                  const dStr = isoDate(d);
+                  const isToday = dStr === isoDate(new Date());
+                  const tErog = ts.somministrazioni.filter(s => s.stato === 'erogata').length;
+                  const allDone = tErog === ts.somministrazioni.length && ts.somministrazioni.length > 0;
+                  return (
+                    <div key={`${dStr}-${ts.fascia}`} className="agt-week-cell">
+                      {isToday && ts.somministrazioni.length > 0 && (
+                        <div
+                          className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
+                          title={`${ts.label}: ${tErog}/${ts.somministrazioni.length} erogate`}
+                          onClick={e => { e.stopPropagation(); setSelectedTherapySlotId(ts.id); }}>
+                          <IcoPill />
+                        </div>
+                      )}
                     </div>
                   );
                 })}

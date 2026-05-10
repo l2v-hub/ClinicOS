@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { CartellaPaziente, Paziente, FarmacoItem } from '../../../types';
 import { uid, todayStr, PrintButton, ClinicalTableSection } from './shared';
 import { TerapieModuloView } from './TerapieModuloView';
+import { API_URL } from '../../../config';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -38,13 +39,21 @@ const STATO_BADGE: Record<string, string> = {
 
 const VIA_OPTIONS = ['orale', 'IM', 'SC', 'IV', 'insulina', 'al bisogno', 'sublinguale', 'topico', 'altro'];
 
-type FarmForm = Partial<FarmacoItem> & { nome: string; dose: string; frequenza: string; inizio: string; stato: 'attivo' | 'sospeso' | 'completato'; prescrittoDA: string };
+type FarmForm = Partial<FarmacoItem> & {
+  nome: string; dose: string; frequenza: string; inizio: string;
+  stato: 'attivo' | 'sospeso' | 'completato'; prescrittoDA: string;
+  fasceMattina: boolean; fascePranzo: boolean; fascePomeriggio: boolean;
+  fasceSera: boolean; fasceNotte: boolean;
+  tipo: 'periodica' | 'una_tantum';
+};
 
 function emptyForm(operatoreNome: string): FarmForm {
   return {
     nome: '', dose: '', frequenza: '', via: 'orale', inizio: todayStr(),
     fine: '', stato: 'attivo', prescrittoDA: operatoreNome,
     indicazione: '', note: '', h08: '', h12: '', h16: '', h18: '', h20: '',
+    fasceMattina: true, fascePranzo: false, fascePomeriggio: false,
+    fasceSera: false, fasceNotte: false, tipo: 'periodica',
   };
 }
 
@@ -191,8 +200,43 @@ export function TerapiaMedicaTab({ cartella, paziente, onUpdate, operatoreNome }
     setAddSezione(sezione);
   }
 
+  function persistToApi(form: FarmForm) {
+    const statoMap: Record<string, string> = { attivo: 'attiva', sospeso: 'sospesa', completato: 'conclusa' };
+    fetch(`${API_URL}/patients/${paziente.id}/therapies`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        farmacoNome: form.nome,
+        dosaggio: form.dose || '',
+        viaSomministrazione: form.via || 'orale',
+        tipo: form.tipo || 'periodica',
+        stato: statoMap[form.stato] || 'attiva',
+        dataInizio: form.inizio || todayStr(),
+        dataFine: form.fine || null,
+        fasceMattina: form.fasceMattina,
+        fascePranzo: form.fascePranzo,
+        fascePomeriggio: form.fascePomeriggio,
+        fasceSera: form.fasceSera,
+        fasceNotte: form.fasceNotte,
+        prescrittore: form.prescrittoDA || null,
+        operatoreInseritore: operatoreNome,
+        note: form.note || null,
+        ...(form.tipo === 'una_tantum' && {
+          dataSomministrazione: form.inizio || todayStr(),
+          orarioSomministrazione: form.h08 ? '08:00' : form.h12 ? '12:00' : form.h16 ? '16:00' : form.h18 ? '18:00' : form.h20 ? '20:00' : '08:00',
+        }),
+      }),
+    }).catch(() => { /* cartella save is primary, API is secondary persistence */ });
+  }
+
   function saveAdd() {
     if (!farmForm.nome?.trim()) return;
+    // Auto-fill hXX from fascia checkboxes if hXX fields are empty
+    const h08 = farmForm.h08 || (farmForm.fasceMattina ? '✓' : undefined);
+    const h12 = farmForm.h12 || (farmForm.fascePranzo ? '✓' : undefined);
+    const h16 = farmForm.h16 || (farmForm.fascePomeriggio ? '✓' : undefined);
+    const h18 = farmForm.h18 || (farmForm.fasceSera ? '✓' : undefined);
+    const h20 = farmForm.h20 || (farmForm.fasceSera ? '✓' : farmForm.fasceNotte ? '✓' : undefined);
     const f: FarmacoItem = {
       id: uid(),
       nome: farmForm.nome,
@@ -205,13 +249,10 @@ export function TerapiaMedicaTab({ cartella, paziente, onUpdate, operatoreNome }
       prescrittoDA: farmForm.prescrittoDA ?? operatoreNome,
       indicazione: farmForm.indicazione || undefined,
       note: farmForm.note || undefined,
-      h08: farmForm.h08 || undefined,
-      h12: farmForm.h12 || undefined,
-      h16: farmForm.h16 || undefined,
-      h18: farmForm.h18 || undefined,
-      h20: farmForm.h20 || undefined,
+      h08, h12, h16, h18, h20,
     };
     saveFarmaci([f, ...farmaci]);
+    persistToApi(farmForm);
     setAddSezione(null);
     setFarmForm(emptyForm(operatoreNome));
   }
@@ -219,16 +260,28 @@ export function TerapiaMedicaTab({ cartella, paziente, onUpdate, operatoreNome }
   function openEdit(f: FarmacoItem) {
     setEditFarmId(f.id);
     setAddSezione(null);
+    const hasVal = (v?: string) => !!v && v !== '' && v !== '-';
     setFarmForm({
       nome: f.nome, dose: f.dose, frequenza: f.frequenza, via: f.via, inizio: f.inizio,
       fine: f.fine ?? '', stato: f.stato, prescrittoDA: f.prescrittoDA,
       indicazione: f.indicazione ?? '', note: f.note ?? '',
       h08: f.h08 ?? '', h12: f.h12 ?? '', h16: f.h16 ?? '', h18: f.h18 ?? '', h20: f.h20 ?? '',
+      fasceMattina: hasVal(f.h08),
+      fascePranzo: hasVal(f.h12),
+      fascePomeriggio: hasVal(f.h16),
+      fasceSera: hasVal(f.h18) || hasVal(f.h20),
+      fasceNotte: false,
+      tipo: 'periodica',
     });
   }
 
   function saveEdit() {
     if (!editFarmId) return;
+    const h08 = farmForm.h08 || (farmForm.fasceMattina ? '✓' : undefined);
+    const h12 = farmForm.h12 || (farmForm.fascePranzo ? '✓' : undefined);
+    const h16 = farmForm.h16 || (farmForm.fascePomeriggio ? '✓' : undefined);
+    const h18 = farmForm.h18 || (farmForm.fasceSera ? '✓' : undefined);
+    const h20 = farmForm.h20 || (farmForm.fasceSera ? '✓' : farmForm.fasceNotte ? '✓' : undefined);
     saveFarmaci(farmaci.map(f => f.id === editFarmId ? {
       ...f,
       nome: farmForm.nome,
@@ -241,12 +294,9 @@ export function TerapiaMedicaTab({ cartella, paziente, onUpdate, operatoreNome }
       prescrittoDA: farmForm.prescrittoDA ?? f.prescrittoDA,
       indicazione: farmForm.indicazione || undefined,
       note: farmForm.note || undefined,
-      h08: farmForm.h08 || undefined,
-      h12: farmForm.h12 || undefined,
-      h16: farmForm.h16 || undefined,
-      h18: farmForm.h18 || undefined,
-      h20: farmForm.h20 || undefined,
+      h08, h12, h16, h18, h20,
     } : f));
+    persistToApi(farmForm);
     setEditFarmId(null);
     setFarmForm(emptyForm(operatoreNome));
   }
@@ -408,6 +458,14 @@ export function TerapiaMedicaTab({ cartella, paziente, onUpdate, operatoreNome }
                 </select>
               </div>
               <div className="form-field">
+                <label className="form-label">Tipo</label>
+                <select className="form-select" value={farmForm.tipo ?? 'periodica'}
+                  onChange={e => setFarmForm(p => ({ ...p, tipo: e.target.value as 'periodica' | 'una_tantum' }))}>
+                  <option value="periodica">Periodica</option>
+                  <option value="una_tantum">Una tantum</option>
+                </select>
+              </div>
+              <div className="form-field">
                 <label className="form-label">Data inizio</label>
                 <input className="form-input" type="date" value={farmForm.inizio ?? todayStr()}
                   onChange={e => setFarmForm(p => ({ ...p, inizio: e.target.value }))} />
@@ -421,6 +479,25 @@ export function TerapiaMedicaTab({ cartella, paziente, onUpdate, operatoreNome }
                 <label className="form-label">Prescritto da</label>
                 <input className="form-input" value={farmForm.prescrittoDA ?? ''}
                   onChange={e => setFarmForm(p => ({ ...p, prescrittoDA: e.target.value }))} />
+              </div>
+            </div>
+            <div style={{ marginTop: 10 }}>
+              <label className="form-label" style={{ marginBottom: 6, display: 'block' }}>Fasce orarie (per Agenda)</label>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                {([
+                  ['fasceMattina', 'Mattina (08:00)'],
+                  ['fascePranzo', 'Pranzo (12:00)'],
+                  ['fascePomeriggio', 'Pomeriggio (16:00)'],
+                  ['fasceSera', 'Sera (20:00)'],
+                  ['fasceNotte', 'Notte (22:00)'],
+                ] as const).map(([key, label]) => (
+                  <label key={key} className="terapia-flag" style={{ fontSize: 12 }}>
+                    <input type="checkbox"
+                      checked={farmForm[key as keyof FarmForm] as boolean}
+                      onChange={e => setFarmForm(p => ({ ...p, [key]: e.target.checked }))} />
+                    {label}
+                  </label>
+                ))}
               </div>
             </div>
             <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
