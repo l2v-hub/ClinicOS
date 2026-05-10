@@ -4,14 +4,14 @@ import { API_URL } from './config';
 
 import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
-  Appuntamento, Camera, Letto, ScheduleOperatore, Nota, StatoNota,
+  Appuntamento, Camera, ScheduleOperatore, Nota, StatoNota,
   CartellaPaziente, NuovoPaziente, TherapySlot, MotivoNonErogazione,
   SomministrazioneTerapia,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
   MOCK_OPERATORI, MOCK_CONSEGNE, MOCK_AGENDA,
-  MOCK_APPUNTAMENTI, MOCK_CAMERE, MOCK_SCHEDULES, MOCK_NOTE,
+  MOCK_APPUNTAMENTI, MOCK_SCHEDULES, MOCK_NOTE,
   createDefaultCartella, createMockTherapySlots,
 } from './mockData';
 
@@ -114,7 +114,7 @@ export default function App() {
   const [consegne, setConsegne] = useState<Consegna[]>(MOCK_CONSEGNE);
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>(MOCK_APPUNTAMENTI);
-  const [camere, setCamere] = useState<Camera[]>(MOCK_CAMERE);
+  const [camere, setCamere] = useState<Camera[]>([]);
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>(MOCK_SCHEDULES);
   const [note, setNote] = useState<Nota[]>(MOCK_NOTE);
   const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
@@ -202,6 +202,27 @@ export default function App() {
       .catch(() => setPazienti([]))
       .finally(() => setLoadingPazienti(false));
     loadTherapySlots();
+    // Load rooms from API for AdminDashboard
+    fetch(`${API_URL}/admin/rooms`)
+      .then(r => r.ok ? r.json() : [])
+      .then((rooms: Array<{ id: string; numero: string; tipo: string; piano: string; reparto: string; stato: string; note: string; beds: Array<{ id: string; label: string; stato: string; assignments: Array<{ patient: { firstName: string; lastName: string } }> }> }>) => {
+        setCamere(rooms.map(r => ({
+          id: r.id,
+          numero: r.numero,
+          tipo: r.tipo as Camera['tipo'],
+          piano: r.piano,
+          reparto: r.reparto,
+          stato: r.stato as Camera['stato'],
+          note: r.note,
+          letti: r.beds.map(b => ({
+            id: b.id,
+            numero: b.label === 'A' ? 1 : b.label === 'B' ? 2 : 3,
+            stato: (b.assignments.length > 0 ? 'occupato' : b.stato === 'manutenzione' ? 'manutenzione' : 'libero') as Camera['letti'][0]['stato'],
+            pazienteNome: b.assignments[0]?.patient ? `${b.assignments[0].patient.lastName}, ${b.assignments[0].patient.firstName}` : undefined,
+          })),
+        })));
+      })
+      .catch(() => { /* keep empty array */ });
   }, [utente, loadTherapySlots]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
@@ -287,21 +308,7 @@ export default function App() {
 
   // ── Camere CRUD ─────────────────────────────────────────────────────────────
 
-  function addCamera(c: Omit<Camera, 'id'>) {
-    setCamere(prev => [...prev, { ...c, id: crypto.randomUUID() }]);
-  }
-
-  function updateCamera(id: string, updates: Partial<Camera>) {
-    setCamere(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
-  }
-
-  function updateLetto(cameraId: string, lettoId: string, updates: Partial<Letto>) {
-    setCamere(prev => prev.map(c =>
-      c.id === cameraId
-        ? { ...c, letti: c.letti.map(l => l.id === lettoId ? { ...l, ...updates } : l) }
-        : c
-    ));
-  }
+  // Room CRUD now handled by RoomsManagement component directly via API
 
   // ── Schedules ───────────────────────────────────────────────────────────────
 
@@ -741,12 +748,7 @@ export default function App() {
             />
           )}
           {isAdmin && navKey === 'posti-letto' && (
-            <RoomsManagement
-              camere={camere}
-              onAddCamera={addCamera}
-              onUpdateCamera={updateCamera}
-              onUpdateLetto={updateLetto}
-            />
+            <RoomsManagement />
           )}
           {isAdmin && navKey === 'orari-operatori' && (
             <OperatorSchedule

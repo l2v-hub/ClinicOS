@@ -1,13 +1,51 @@
-import { useState } from 'react';
-import type { Camera, Letto, StatoLetto, TipoCamera } from '../../types';
+import { useState, useEffect, useCallback } from 'react';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';
+import { API_URL } from '../../config';
 
-interface RoomsManagementProps {
-  camere: Camera[];
-  onAddCamera: (c: Omit<Camera, 'id'>) => void;
-  onUpdateCamera: (id: string, updates: Partial<Camera>) => void;
-  onUpdateLetto: (cameraId: string, lettoId: string, updates: Partial<Letto>) => void;
+/* ── API types ─────────────────────────────────────────── */
+
+interface AssignmentAPI {
+  id: string;
+  patientId: string;
+  startDate: string;
+  endDate: string | null;
+  patient: { firstName: string; lastName: string };
 }
+
+interface BedAPI {
+  id: string;
+  roomId: string;
+  label: string;
+  stato: string;
+  note: string;
+  assignments: AssignmentAPI[];
+}
+
+interface RoomAPI {
+  id: string;
+  numero: string;
+  tipo: 'singola' | 'doppia' | 'altra';
+  piano: string;
+  reparto: string;
+  stato: 'attiva' | 'inattiva' | 'manutenzione';
+  note: string;
+  beds: BedAPI[];
+}
+
+interface OccupancyAPI {
+  totalRooms: number;
+  totalBeds: number;
+  occupiedBeds: number;
+  freeBeds: number;
+  maintenanceBeds: number;
+  occupancyPct: number;
+}
+
+/* ── Helpers ───────────────────────────────────────────── */
+
+type StatoLetto = 'libero' | 'occupato' | 'manutenzione';
+type TipoCamera = 'singola' | 'doppia' | 'altra';
+type StatoCamera = 'attiva' | 'inattiva' | 'manutenzione';
 
 const STATO_LETTO_CLASS: Record<StatoLetto, string> = {
   libero: 'letto--libero',
@@ -16,111 +54,271 @@ const STATO_LETTO_CLASS: Record<StatoLetto, string> = {
 };
 
 const STATO_LETTO_LABEL: Record<StatoLetto, string> = {
-  libero: 'Libero', occupato: 'Occupato', manutenzione: 'Manutenzione',
+  libero: 'Libero',
+  occupato: 'Occupato',
+  manutenzione: 'Manutenzione',
 };
 
 const FORM_CAMERA_VUOTO = {
-  numero: '', tipo: 'singola' as TipoCamera, piano: '1°', reparto: '', stato: 'attiva' as Camera['stato'], note: '',
+  numero: '',
+  tipo: 'singola' as TipoCamera,
+  piano: '1°',
+  reparto: '',
+  stato: 'attiva' as StatoCamera,
+  note: '',
 };
 
-export function RoomsManagement({ camere, onAddCamera, onUpdateCamera, onUpdateLetto }: RoomsManagementProps) {
+function bedIsOccupied(bed: BedAPI): boolean {
+  const today = new Date().toISOString().slice(0, 10);
+  return bed.assignments.some(
+    a => a.endDate === null || a.endDate >= today,
+  );
+}
+
+function bedStatoDisplay(bed: BedAPI): StatoLetto {
+  if (bed.stato === 'manutenzione') return 'manutenzione';
+  if (bedIsOccupied(bed)) return 'occupato';
+  return 'libero';
+}
+
+function bedPatientName(bed: BedAPI): string | null {
+  const today = new Date().toISOString().slice(0, 10);
+  const active = bed.assignments.find(
+    a => a.endDate === null || a.endDate >= today,
+  );
+  if (!active) return null;
+  return `${active.patient.lastName}, ${active.patient.firstName}`;
+}
+
+/* ── Component ─────────────────────────────────────────── */
+
+export function RoomsManagement() {
+  const [rooms, setRooms] = useState<RoomAPI[]>([]);
+  const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [formAperto, setFormAperto] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState(FORM_CAMERA_VUOTO);
-  const [lettoEdit, setLettoEdit] = useState<{ cameraId: string; lettoId: string } | null>(null);
-  const [lettoForm, setLettoForm] = useState<{ stato: StatoLetto; pazienteNome: string; note: string }>({
-    stato: 'libero', pazienteNome: '', note: '',
+  const [saving, setSaving] = useState(false);
+
+  const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);
+  const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({
+    stato: 'libero',
+    note: '',
   });
+
   const [filtroReparto, setFiltroReparto] = useState('tutti');
 
-  const reparti = ['tutti', ...Array.from(new Set(camere.map(c => c.reparto)))];
+  /* ── Data loading ─────────────────────────────────────── */
 
-  const camereFiltrate = filtroReparto === 'tutti'
-    ? camere
-    : camere.filter(c => c.reparto === filtroReparto);
-
-  // Stats
-  const totaleLetti = camere.flatMap(c => c.letti);
-  const lettiOccupati = totaleLetti.filter(l => l.stato === 'occupato').length;
-  const lettiLiberi = totaleLetti.filter(l => l.stato === 'libero').length;
-  const occupancyPct = totaleLetti.length > 0 ? Math.round((lettiOccupati / totaleLetti.length) * 100) : 0;
-
-  function salvaCamera() {
-    if (!form.numero.trim()) return;
-    const numLetti = form.tipo === 'singola' ? 1 : 2;
-    const letti: Letto[] = Array.from({ length: numLetti }, (_, i) => ({
-      id: crypto.randomUUID(), numero: i + 1, stato: 'libero',
-    }));
-    if (editId) {
-      onUpdateCamera(editId, { numero: form.numero, tipo: form.tipo, piano: form.piano, reparto: form.reparto, stato: form.stato, note: form.note });
-    } else {
-      onAddCamera({ ...form, letti });
+  const loadData = useCallback(async () => {
+    try {
+      const [roomsRes, occRes] = await Promise.all([
+        fetch(`${API_URL}/admin/rooms`),
+        fetch(`${API_URL}/admin/rooms/occupancy`),
+      ]);
+      if (roomsRes.ok) setRooms(await roomsRes.json());
+      if (occRes.ok) setOccupancy(await occRes.json());
+    } catch {
+      /* silently fail, keep existing data */
+    } finally {
+      setLoading(false);
     }
-    setFormAperto(false);
-    setEditId(null);
-    setForm(FORM_CAMERA_VUOTO);
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  /* ── Derived data ─────────────────────────────────────── */
+
+  const reparti = ['tutti', ...Array.from(new Set(rooms.map(r => r.reparto).filter(Boolean)))];
+
+  const roomsFiltrate = filtroReparto === 'tutti'
+    ? rooms
+    : rooms.filter(r => r.reparto === filtroReparto);
+
+  /* ── Room CRUD ────────────────────────────────────────── */
+
+  async function salvaCamera() {
+    if (!form.numero.trim()) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const url = editId
+        ? `${API_URL}/admin/rooms/${editId}`
+        : `${API_URL}/admin/rooms`;
+      const method = editId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          numero: form.numero,
+          tipo: form.tipo,
+          piano: form.piano,
+          reparto: form.reparto,
+          stato: form.stato,
+          note: form.note,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || `Errore nel ${editId ? 'salvataggio' : 'creazione'} della camera`);
+        return;
+      }
+      setFormAperto(false);
+      setEditId(null);
+      setForm(FORM_CAMERA_VUOTO);
+      await loadData();
+    } catch {
+      setError('Errore di rete durante il salvataggio');
+    } finally {
+      setSaving(false);
+    }
   }
 
-  function apriModificaCamera(c: Camera) {
-    setEditId(c.id);
-    setForm({ numero: c.numero, tipo: c.tipo, piano: c.piano, reparto: c.reparto, stato: c.stato, note: c.note });
+  async function eliminaCamera(roomId: string) {
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, { method: 'DELETE' });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 409) {
+          setError(data.error || 'Impossibile eliminare: ci sono assegnazioni attive');
+        } else {
+          setError(data.error || 'Errore durante l\'eliminazione');
+        }
+        return;
+      }
+      await loadData();
+    } catch {
+      setError('Errore di rete durante l\'eliminazione');
+    }
+  }
+
+  function apriModificaCamera(room: RoomAPI) {
+    setEditId(room.id);
+    setForm({
+      numero: room.numero,
+      tipo: room.tipo,
+      piano: room.piano,
+      reparto: room.reparto,
+      stato: room.stato,
+      note: room.note,
+    });
     setFormAperto(true);
   }
 
-  function apriLettoEdit(cameraId: string, letto: Letto) {
-    setLettoEdit({ cameraId, lettoId: letto.id });
-    setLettoForm({ stato: letto.stato, pazienteNome: letto.pazienteNome ?? '', note: letto.note ?? '' });
+  /* ── Bed edit ─────────────────────────────────────────── */
+
+  function apriLettoEdit(bed: BedAPI) {
+    setLettoEdit({ bedId: bed.id });
+    setLettoForm({ stato: bed.stato, note: bed.note ?? '' });
   }
 
-  function salvaLetto() {
+  async function salvaLetto() {
     if (!lettoEdit) return;
-    onUpdateLetto(lettoEdit.cameraId, lettoEdit.lettoId, {
-      stato: lettoForm.stato,
-      pazienteNome: lettoForm.pazienteNome || undefined,
-      note: lettoForm.note || undefined,
-    });
-    setLettoEdit(null);
+    setError(null);
+    try {
+      const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          stato: lettoForm.stato,
+          note: lettoForm.note || undefined,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || 'Errore nel salvataggio del letto');
+        return;
+      }
+      setLettoEdit(null);
+      await loadData();
+    } catch {
+      setError('Errore di rete durante il salvataggio del letto');
+    }
   }
+
+  /* ── Render ───────────────────────────────────────────── */
+
+  if (loading) {
+    return (
+      <div className="rooms-view" style={{ display: 'flex', justifyContent: 'center', padding: 48 }}>
+        <span>Caricamento...</span>
+      </div>
+    );
+  }
+
+  const occ = occupancy;
 
   return (
     <div className="rooms-view">
       <div className="view-header">
         <div>
           <h2 className="view-header__title">Posti Letto</h2>
-          <p className="view-header__sub">{camere.length} camere · {totaleLetti.length} letti</p>
+          <p className="view-header__sub">
+            {occ ? `${occ.totalRooms} camere · ${occ.totalBeds} letti` : `${rooms.length} camere`}
+          </p>
         </div>
-        <button className="btn-primary" onClick={() => { setFormAperto(v => !v); setEditId(null); setForm(FORM_CAMERA_VUOTO); }}>
+        <button
+          className="btn-primary"
+          style={{ minHeight: 44 }}
+          onClick={() => {
+            setFormAperto(v => !v);
+            setEditId(null);
+            setForm(FORM_CAMERA_VUOTO);
+          }}
+        >
           <IcoPlus /> Nuova camera
         </button>
       </div>
 
+      {/* Error alert */}
+      {error && (
+        <div className="alert alert--error" style={{ marginBottom: 16, padding: '10px 16px', background: 'var(--red-bg, #fef2f2)', border: '1px solid var(--red, #ef4444)', borderRadius: 8, color: 'var(--red, #ef4444)', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ flex: 1 }}>{error}</span>
+          <button className="icon-btn" onClick={() => setError(null)}><IcoX /></button>
+        </div>
+      )}
+
       {/* Occupancy stats */}
       <div className="occupancy-stats">
         <div className="occ-stat">
-          <span className="occ-stat__val" style={{ color: 'var(--red)' }}>{lettiOccupati}</span>
+          <span className="occ-stat__val" style={{ color: 'var(--red)' }}>{occ?.occupiedBeds ?? 0}</span>
           <span className="occ-stat__lbl">Occupati</span>
         </div>
         <div className="occ-stat">
-          <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>{lettiLiberi}</span>
+          <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>{occ?.freeBeds ?? 0}</span>
           <span className="occ-stat__lbl">Liberi</span>
         </div>
         <div className="occ-stat">
-          <span className="occ-stat__val">{totaleLetti.filter(l => l.stato === 'manutenzione').length}</span>
+          <span className="occ-stat__val">{occ?.maintenanceBeds ?? 0}</span>
           <span className="occ-stat__lbl">Manutenzione</span>
         </div>
         <div className="occ-stat">
-          <span className="occ-stat__val">{occupancyPct}%</span>
+          <span className="occ-stat__val">{occ?.occupancyPct ?? 0}%</span>
           <span className="occ-stat__lbl">Tasso occupazione</span>
           <div className="workload-bar-track" style={{ marginTop: 6 }}>
-            <div className="workload-bar-fill" style={{
-              width: `${occupancyPct}%`,
-              background: occupancyPct >= 90 ? 'var(--red)' : occupancyPct >= 70 ? 'var(--amber)' : 'var(--emerald)',
-            }} />
+            <div
+              className="workload-bar-fill"
+              style={{
+                width: `${occ?.occupancyPct ?? 0}%`,
+                background:
+                  (occ?.occupancyPct ?? 0) >= 90
+                    ? 'var(--red)'
+                    : (occ?.occupancyPct ?? 0) >= 70
+                      ? 'var(--amber)'
+                      : 'var(--emerald)',
+              }}
+            />
           </div>
         </div>
       </div>
 
-      {/* Form nuova/modifica camera */}
+      {/* Room form */}
       {formAperto && (
         <div className="op-form-panel">
           <div className="op-form-panel__header">
@@ -130,49 +328,75 @@ export function RoomsManagement({ camere, onAddCamera, onUpdateCamera, onUpdateL
           <div className="op-form-grid">
             <div className="form-field">
               <label className="form-label">N° camera *</label>
-              <input className="form-input" value={form.numero}
-                onChange={e => setForm(p => ({ ...p, numero: e.target.value }))} placeholder="es. 101, PS-02" />
+              <input
+                className="form-input"
+                value={form.numero}
+                onChange={e => setForm(p => ({ ...p, numero: e.target.value }))}
+                placeholder="es. 101, PS-02"
+              />
             </div>
             <div className="form-field">
               <label className="form-label">Tipo</label>
-              <select className="form-select" value={form.tipo}
-                onChange={e => setForm(p => ({ ...p, tipo: e.target.value as TipoCamera }))}>
+              <select
+                className="form-select"
+                value={form.tipo}
+                onChange={e => setForm(p => ({ ...p, tipo: e.target.value as TipoCamera }))}
+              >
                 <option value="singola">Singola</option>
                 <option value="doppia">Doppia</option>
+                <option value="altra">Altra</option>
               </select>
             </div>
             <div className="form-field">
               <label className="form-label">Piano</label>
-              <input className="form-input" value={form.piano}
-                onChange={e => setForm(p => ({ ...p, piano: e.target.value }))} placeholder="1°, PT…" />
+              <input
+                className="form-input"
+                value={form.piano}
+                onChange={e => setForm(p => ({ ...p, piano: e.target.value }))}
+                placeholder="1°, PT…"
+              />
             </div>
             <div className="form-field">
               <label className="form-label">Reparto</label>
-              <input className="form-input" value={form.reparto}
-                onChange={e => setForm(p => ({ ...p, reparto: e.target.value }))} placeholder="Cardiologia…" />
+              <input
+                className="form-input"
+                value={form.reparto}
+                onChange={e => setForm(p => ({ ...p, reparto: e.target.value }))}
+                placeholder="Cardiologia…"
+              />
             </div>
             <div className="form-field">
               <label className="form-label">Stato</label>
-              <select className="form-select" value={form.stato}
-                onChange={e => setForm(p => ({ ...p, stato: e.target.value as Camera['stato'] }))}>
+              <select
+                className="form-select"
+                value={form.stato}
+                onChange={e => setForm(p => ({ ...p, stato: e.target.value as StatoCamera }))}
+              >
                 <option value="attiva">Attiva</option>
                 <option value="inattiva">Inattiva</option>
+                <option value="manutenzione">Manutenzione</option>
               </select>
             </div>
           </div>
           <div className="form-field" style={{ marginTop: 8 }}>
             <label className="form-label">Note</label>
-            <input className="form-input" value={form.note}
-              onChange={e => setForm(p => ({ ...p, note: e.target.value }))} placeholder="Note sulla camera…" />
+            <input
+              className="form-input"
+              value={form.note}
+              onChange={e => setForm(p => ({ ...p, note: e.target.value }))}
+              placeholder="Note sulla camera…"
+            />
           </div>
           <div className="op-form-panel__actions">
-            <button className="btn-secondary" onClick={() => setFormAperto(false)}>Annulla</button>
-            <button className="btn-primary" onClick={salvaCamera}><IcoCheck /> {editId ? 'Salva modifiche' : 'Crea camera'}</button>
+            <button className="btn-secondary" style={{ minHeight: 44 }} onClick={() => setFormAperto(false)}>Annulla</button>
+            <button className="btn-primary" style={{ minHeight: 44 }} onClick={salvaCamera} disabled={saving}>
+              <IcoCheck /> {saving ? 'Salvataggio…' : editId ? 'Salva modifiche' : 'Crea camera'}
+            </button>
           </div>
         </div>
       )}
 
-      {/* Letto edit modal */}
+      {/* Bed edit modal */}
       {lettoEdit && (
         <div className="modal-overlay" onClick={() => setLettoEdit(null)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
@@ -184,31 +408,29 @@ export function RoomsManagement({ camere, onAddCamera, onUpdateCamera, onUpdateL
               <div className="op-form-grid">
                 <div className="form-field">
                   <label className="form-label">Stato</label>
-                  <select className="form-select" value={lettoForm.stato}
-                    onChange={e => setLettoForm(p => ({ ...p, stato: e.target.value as StatoLetto }))}>
+                  <select
+                    className="form-select"
+                    value={lettoForm.stato}
+                    onChange={e => setLettoForm(p => ({ ...p, stato: e.target.value }))}
+                  >
                     <option value="libero">Libero</option>
                     <option value="occupato">Occupato</option>
                     <option value="manutenzione">Manutenzione</option>
                   </select>
                 </div>
-                {lettoForm.stato === 'occupato' && (
-                  <div className="form-field">
-                    <label className="form-label">Paziente</label>
-                    <input className="form-input" value={lettoForm.pazienteNome}
-                      onChange={e => setLettoForm(p => ({ ...p, pazienteNome: e.target.value }))}
-                      placeholder="Cognome, Nome" />
-                  </div>
-                )}
                 <div className="form-field">
                   <label className="form-label">Note</label>
-                  <input className="form-input" value={lettoForm.note}
-                    onChange={e => setLettoForm(p => ({ ...p, note: e.target.value }))} />
+                  <input
+                    className="form-input"
+                    value={lettoForm.note}
+                    onChange={e => setLettoForm(p => ({ ...p, note: e.target.value }))}
+                  />
                 </div>
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn-secondary" onClick={() => setLettoEdit(null)}>Annulla</button>
-              <button className="btn-primary" onClick={salvaLetto}><IcoCheck /> Salva</button>
+              <button className="btn-secondary" style={{ minHeight: 44 }} onClick={() => setLettoEdit(null)}>Annulla</button>
+              <button className="btn-primary" style={{ minHeight: 44 }} onClick={salvaLetto}><IcoCheck /> Salva</button>
             </div>
           </div>
         </div>
@@ -217,55 +439,91 @@ export function RoomsManagement({ camere, onAddCamera, onUpdateCamera, onUpdateL
       {/* Filtro reparto */}
       <div className="filter-chips" style={{ marginBottom: 16 }}>
         {reparti.map(r => (
-          <button key={r}
+          <button
+            key={r}
             className={`filter-chip${filtroReparto === r ? ' active' : ''}`}
-            onClick={() => setFiltroReparto(r)}>
+            style={{ minHeight: 44 }}
+            onClick={() => setFiltroReparto(r)}
+          >
             {r === 'tutti' ? 'Tutti i reparti' : r}
           </button>
         ))}
       </div>
 
-      {/* Camere grid */}
+      {/* Rooms grid */}
       <div className="rooms-grid">
-        {camereFiltrate.map(cam => {
-          const occupati = cam.letti.filter(l => l.stato === 'occupato').length;
+        {roomsFiltrate.map(room => {
+          const occupati = room.beds.filter(b => bedStatoDisplay(b) === 'occupato').length;
           return (
-            <div key={cam.id} className={`room-card${cam.stato === 'inattiva' ? ' room-card--inactive' : ''}`}>
+            <div
+              key={room.id}
+              className={`room-card${room.stato === 'inattiva' ? ' room-card--inactive' : ''}${room.stato === 'manutenzione' ? ' room-card--inactive' : ''}`}
+            >
               <div className="room-card__header">
                 <div className="room-number-badge">
                   <IcoBed />
-                  <span>{cam.numero}</span>
+                  <span>{room.numero}</span>
                 </div>
                 <div className="room-card__info">
-                  <span className="room-tipo">{cam.tipo}</span>
-                  <span className="room-piano">{cam.piano} · {cam.reparto}</span>
+                  <span className="room-tipo">{room.tipo}</span>
+                  <span className="room-piano">{room.piano} · {room.reparto}</span>
                 </div>
                 <div className="room-occupancy-indicator">
-                  <span style={{ color: occupati === cam.letti.length ? 'var(--red)' : 'var(--emerald)', fontWeight: 700 }}>
-                    {occupati}/{cam.letti.length}
+                  <span
+                    style={{
+                      color: occupati === room.beds.length ? 'var(--red)' : 'var(--emerald)',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {occupati}/{room.beds.length}
                   </span>
                 </div>
-                <button className="icon-btn icon-btn--sm" onClick={() => apriModificaCamera(cam)} title="Modifica camera">
+                <button
+                  className="icon-btn icon-btn--sm"
+                  style={{ minHeight: 44, minWidth: 44 }}
+                  onClick={() => apriModificaCamera(room)}
+                  title="Modifica camera"
+                >
                   <IcoEdit />
+                </button>
+                <button
+                  className="icon-btn icon-btn--sm"
+                  style={{ minHeight: 44, minWidth: 44, color: 'var(--red)' }}
+                  onClick={() => eliminaCamera(room.id)}
+                  title="Elimina camera"
+                >
+                  <IcoX />
                 </button>
               </div>
 
-              {cam.note && <p className="room-note">{cam.note}</p>}
+              {room.note && <p className="room-note">{room.note}</p>}
+              {room.stato === 'manutenzione' && (
+                <p className="room-note" style={{ color: 'var(--amber)', fontWeight: 600 }}>In manutenzione</p>
+              )}
 
               <div className="letti-list">
-                {cam.letti.map(letto => (
-                  <div key={letto.id} className={`letto-row ${STATO_LETTO_CLASS[letto.stato]}`}>
-                    <span className="letto-num">Letto {letto.numero}</span>
-                    <span className={`letto-stato-badge letto-stato--${letto.stato}`}>
-                      {STATO_LETTO_LABEL[letto.stato]}
-                    </span>
-                    {letto.pazienteNome && <span className="letto-paziente">{letto.pazienteNome}</span>}
-                    {letto.note && <span className="letto-note">{letto.note}</span>}
-                    <button className="icon-btn icon-btn--sm" onClick={() => apriLettoEdit(cam.id, letto)} title="Modifica letto">
-                      <IcoEdit />
-                    </button>
-                  </div>
-                ))}
+                {room.beds.map(bed => {
+                  const stato = bedStatoDisplay(bed);
+                  const patientName = bedPatientName(bed);
+                  return (
+                    <div key={bed.id} className={`letto-row ${STATO_LETTO_CLASS[stato]}`}>
+                      <span className="letto-num">{bed.label}</span>
+                      <span className={`letto-stato-badge letto-stato--${stato}`}>
+                        {STATO_LETTO_LABEL[stato]}
+                      </span>
+                      {patientName && <span className="letto-paziente">{patientName}</span>}
+                      {bed.note && <span className="letto-note">{bed.note}</span>}
+                      <button
+                        className="icon-btn icon-btn--sm"
+                        style={{ minHeight: 44, minWidth: 44 }}
+                        onClick={() => apriLettoEdit(bed)}
+                        title="Modifica letto"
+                      >
+                        <IcoEdit />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );

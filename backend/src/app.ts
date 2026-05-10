@@ -1,6 +1,7 @@
 
 import cors from 'cors';
 import express from 'express';
+import { adminRouter as adminRoomsRouter, patientAssignmentRouter } from './routes/admin-rooms.js';
 import patientTherapiesRouter from './routes/patient-therapies.js';
 import patientsRouter from './routes/patients.js';
 import therapyRouter from './routes/therapy.js';
@@ -66,6 +67,8 @@ app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+app.use('/admin', adminRoomsRouter);
+app.use('/patients', patientAssignmentRouter);
 app.use('/patients', patientTherapiesRouter);
 app.use('/patients', patientsRouter);
 app.use('/therapy-slots', therapyRouter);

@@ -69,6 +69,7 @@ model Patient {
   medicationAdministrations MedicationAdministration[]
   intakeDocuments           PatientIntakeDocument[]
   therapies                 PatientTherapy[]
+  roomAssignments           PatientRoomAssignment[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
@@ -211,4 +212,65 @@ model PatientTherapy {
 
   @@index([patientId])
   @@index([tipo, stato])
+}
+
+// ── Rooms & Beds ───────────────────────────────────────────────────────────
+
+enum RoomType {
+  singola
+  doppia
+  altra
+}
+
+enum RoomStatus {
+  attiva
+  inattiva
+  manutenzione
+}
+
+model Room {
+  id        String     @id @default(cuid())
+  numero    String     @unique
+  tipo      RoomType   @default(singola)
+  piano     String     @default("")
+  reparto   String     @default("")
+  stato     RoomStatus @default(attiva)
+  note      String     @default("")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  beds      Bed[]
+}
+
+model Bed {
+  id          String                @id @default(cuid())
+  roomId      String
+  label       String                // "A", "B", "C"
+  stato       String                @default("libero") // libero, manutenzione (occupato is calculated)
+  note        String                @default("")
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  room        Room                  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  assignments PatientRoomAssignment[]
+
+  @@unique([roomId, label])
+  @@index([roomId])
+}
+
+model PatientRoomAssignment {
+  id          String    @id @default(cuid())
+  patientId   String
+  roomId      String
+  bedId       String
+  startDate   String    // YYYY-MM-DD
+  endDate     String?   // YYYY-MM-DD, null = still assigned
+  note        String    @default("")
+  createdById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  patient     Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  bed         Bed       @relation(fields: [bedId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([bedId])
+  @@index([startDate, endDate])
 }
