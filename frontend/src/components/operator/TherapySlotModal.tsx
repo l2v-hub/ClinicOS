@@ -23,12 +23,13 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
   const [noteText, setNoteText] = useState('');
   const [pendingId, setPendingId] = useState<string | null>(null);
 
-  // DIRECT access — no intermediate variable, no helper function
-  // This prevents React Compiler from caching an empty result
-  const somm = slot.somministrazioni;
-  const total = somm ? somm.length : 0;
-  const erogate = somm ? somm.filter(s => s.stato === 'erogata').length : 0;
-  const nonErogate = somm ? somm.filter(s => s.stato === 'non_erogata').length : 0;
+  // === ROWS: exact spec ===
+  const rows = Array.isArray(slot?.somministrazioni) ? slot.somministrazioni : [];
+
+  // === COUNTS: only from rows ===
+  const total = rows.length;
+  const erogate = rows.filter(r => r.stato === 'erogata').length;
+  const nonErogate = rows.filter(r => r.stato === 'non_erogata').length;
   const daErogare = total - erogate - nonErogate;
   const pctDone = total > 0 ? Math.round((erogate / total) * 100) : 0;
 
@@ -42,25 +43,24 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
             <h3>{slot.label} &mdash; {slot.ora}</h3>
             <span className="therapy-modal__header-info">
               {erogate}/{total} erogate
-              {daErogare > 0 && <> &middot; {daErogare} da erogare</>}
+              {daErogare > 0 ? ` \u00b7 ${daErogare} da erogare` : ''}
             </span>
           </div>
           <button className="therapy-modal__close" onClick={onClose} aria-label="Chiudi">&times;</button>
         </div>
 
-        {/* Body — scrollable */}
+        {/* Body */}
         <div className="therapy-modal__body">
 
-          {/* DEBUG: visible indicator — remove after fix confirmed */}
+          {/* DEBUG visible — remove after fix confirmed */}
           <div style={{ padding: '4px 16px', fontSize: 11, color: '#94A3B8', background: '#F8FAFC', borderBottom: '1px solid #E5E7EB' }}>
-            Debug righe terapia: {total}
-            {total === 0 && <> — slot keys: {Object.keys(slot).join(', ')}</>}
-            {total === 0 && somm === undefined && <> — somministrazioni: undefined</>}
-            {total === 0 && somm !== undefined && <> — somministrazioni: array vuoto</>}
+            Debug righe terapia: {rows.length}
+            {rows.length === 0 && ` | slot keys: ${Object.keys(slot).join(', ')}`}
+            {rows.length === 0 && ` | somministrazioni is ${slot.somministrazioni === undefined ? 'undefined' : Array.isArray(slot.somministrazioni) ? 'empty array' : typeof slot.somministrazioni}`}
           </div>
 
-          {/* Table header */}
-          {total > 0 && (
+          {/* Table header — only if rows exist */}
+          {rows.length > 0 && (
             <div className="therapy-header-row">
               <span>Paziente</span>
               <span>Camera/Letto</span>
@@ -71,119 +71,109 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
             </div>
           )}
 
-          {/* Rows — rendered DIRECTLY from slot.somministrazioni */}
-          {somm && somm.length > 0 && somm.map(s => {
-            const nome = s.pazienteNome || '—';
-            const camera = s.camera || '—';
-            const letto = s.letto || '—';
-            const farmaco = s.farmaco || '—';
-            const dose = s.dose || '—';
-            const via = s.via || 'orale';
-            const orario = s.orarioPrevisto || '—';
-            const stato = s.stato || 'da_erogare';
-
-            return (
-              <div key={s.id}>
-                <div className={`therapy-row${stato === 'erogata' ? ' therapy-row--erogata' : ''}${stato === 'non_erogata' ? ' therapy-row--non-erogata' : ''}`}>
-                  <div className="therapy-row__patient">{nome}</div>
-                  <div className="therapy-row__room">Cam. {camera} / L. {letto}</div>
-                  <div>
-                    <div className="therapy-row__med">{farmaco}</div>
-                    <div className="therapy-row__med-dose">{dose} &middot; {via}</div>
-                  </div>
-                  <div className="therapy-row__time">{orario}</div>
-                  <div className="therapy-row__status">
-                    {stato === 'erogata' && (
-                      <>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
-                        <div className="therapy-row__confirm-info">
-                          {s.operatoreConferma} {s.oraConferma}
-                        </div>
-                      </>
-                    )}
-                    {stato === 'non_erogata' && (
-                      <span style={{ color: '#DC2626', fontSize: 12, fontWeight: 600 }}>
-                        Non erogata
-                        {s.motivoNonErogazione && <span style={{ fontWeight: 400 }}> &mdash; {MOTIVI.find(m => m.value === s.motivoNonErogazione)?.label}</span>}
-                      </span>
-                    )}
-                    {stato === 'da_erogare' && (
-                      <span style={{ color: '#D97706', fontSize: 12 }}>Da erogare</span>
-                    )}
-                  </div>
-                  <div className="therapy-actions">
-                    {stato === 'da_erogare' && (
-                      <>
-                        <button
-                          className="therapy-action-btn therapy-action-btn--confirm"
-                          disabled={pendingId === s.id}
-                          style={{ opacity: pendingId === s.id ? 0.6 : 1 }}
-                          onClick={() => { setPendingId(s.id); onConfirm(s.id); }}>
-                          {pendingId === s.id ? 'Invio\u2026' : 'Erogata'}
-                        </button>
-                        <button className="therapy-action-btn therapy-action-btn--reject" onClick={() => {
-                          if (expandedId === s.id) {
-                            setExpandedId(null);
-                            setSelectedMotivo(null);
-                            setNoteText('');
-                          } else {
-                            setExpandedId(s.id);
-                            setSelectedMotivo(null);
-                            setNoteText('');
-                          }
-                        }}>
-                          Non erogata
-                        </button>
-                      </>
-                    )}
-                    {stato === 'erogata' && (
-                      <span style={{ fontSize: 11, color: '#059669', fontWeight: 600 }}>✓ Confermata</span>
-                    )}
-                    {stato === 'non_erogata' && (
-                      <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 600 }}>Registrata</span>
-                    )}
-                  </div>
+          {/* Patient rows */}
+          {rows.map(row => (
+            <div key={row.id}>
+              <div className={`therapy-row${row.stato === 'erogata' ? ' therapy-row--erogata' : ''}${row.stato === 'non_erogata' ? ' therapy-row--non-erogata' : ''}`}>
+                <div className="therapy-row__patient">{row.pazienteNome || '\u2014'}</div>
+                <div className="therapy-row__room">{'Cam. ' + (row.camera || '\u2014') + ' / L. ' + (row.letto || '\u2014')}</div>
+                <div>
+                  <div className="therapy-row__med">{row.farmaco || '\u2014'}</div>
+                  <div className="therapy-row__med-dose">{(row.dose || '\u2014') + ' \u00b7 ' + (row.via || 'orale')}</div>
                 </div>
-
-                {expandedId === s.id && (
-                  <div className="therapy-nonadmin-expand">
-                    <div className="therapy-motivi-grid">
-                      {MOTIVI.map(m => (
-                        <button key={m.value}
-                          className={`therapy-motivo-btn${selectedMotivo === m.value ? ' selected' : ''}`}
-                          onClick={() => setSelectedMotivo(m.value)}>
-                          {m.label}
-                        </button>
-                      ))}
-                    </div>
-                    {selectedMotivo === 'altro' && (
-                      <input
-                        className="therapy-note-input"
-                        placeholder="Specifica il motivo..."
-                        value={noteText}
-                        onChange={e => setNoteText(e.target.value)}
-                      />
-                    )}
-                    <button
-                      className="therapy-action-btn therapy-action-btn--confirm"
-                      disabled={!selectedMotivo}
-                      style={{ opacity: selectedMotivo ? 1 : 0.5 }}
-                      onClick={() => {
-                        if (!selectedMotivo) return;
-                        onNotAdministered(s.id, selectedMotivo, noteText);
-                        setExpandedId(null);
-                        setSelectedMotivo(null);
-                        setNoteText('');
+                <div className="therapy-row__time">{row.orarioPrevisto || '\u2014'}</div>
+                <div className="therapy-row__status">
+                  {row.stato === 'erogata' && (
+                    <>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+                      <div className="therapy-row__confirm-info">
+                        {row.operatoreConferma} {row.oraConferma}
+                      </div>
+                    </>
+                  )}
+                  {row.stato === 'non_erogata' && (
+                    <span style={{ color: '#DC2626', fontSize: 12, fontWeight: 600 }}>
+                      {'Non erogata'}
+                      {row.motivoNonErogazione && <span style={{ fontWeight: 400 }}>{' \u2014 ' + (MOTIVI.find(m => m.value === row.motivoNonErogazione)?.label || '')}</span>}
+                    </span>
+                  )}
+                  {row.stato === 'da_erogare' && (
+                    <span style={{ color: '#D97706', fontSize: 12 }}>Da erogare</span>
+                  )}
+                </div>
+                <div className="therapy-actions">
+                  {row.stato === 'da_erogare' && (
+                    <>
+                      <button
+                        className="therapy-action-btn therapy-action-btn--confirm"
+                        disabled={pendingId === row.id}
+                        style={{ opacity: pendingId === row.id ? 0.6 : 1 }}
+                        onClick={() => { setPendingId(row.id); onConfirm(row.id); }}>
+                        {pendingId === row.id ? 'Invio\u2026' : 'Erogata'}
+                      </button>
+                      <button className="therapy-action-btn therapy-action-btn--reject" onClick={() => {
+                        if (expandedId === row.id) {
+                          setExpandedId(null);
+                          setSelectedMotivo(null);
+                          setNoteText('');
+                        } else {
+                          setExpandedId(row.id);
+                          setSelectedMotivo(null);
+                          setNoteText('');
+                        }
                       }}>
-                      Conferma
-                    </button>
-                  </div>
-                )}
+                        Non erogata
+                      </button>
+                    </>
+                  )}
+                  {row.stato === 'erogata' && (
+                    <span style={{ fontSize: 11, color: '#059669', fontWeight: 600 }}>{'\u2713 Confermata'}</span>
+                  )}
+                  {row.stato === 'non_erogata' && (
+                    <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 600 }}>Registrata</span>
+                  )}
+                </div>
               </div>
-            );
-          })}
 
-          {total === 0 && (
+              {expandedId === row.id && (
+                <div className="therapy-nonadmin-expand">
+                  <div className="therapy-motivi-grid">
+                    {MOTIVI.map(m => (
+                      <button key={m.value}
+                        className={`therapy-motivo-btn${selectedMotivo === m.value ? ' selected' : ''}`}
+                        onClick={() => setSelectedMotivo(m.value)}>
+                        {m.label}
+                      </button>
+                    ))}
+                  </div>
+                  {selectedMotivo === 'altro' && (
+                    <input
+                      className="therapy-note-input"
+                      placeholder="Specifica il motivo..."
+                      value={noteText}
+                      onChange={e => setNoteText(e.target.value)}
+                    />
+                  )}
+                  <button
+                    className="therapy-action-btn therapy-action-btn--confirm"
+                    disabled={!selectedMotivo}
+                    style={{ opacity: selectedMotivo ? 1 : 0.5 }}
+                    onClick={() => {
+                      if (!selectedMotivo) return;
+                      onNotAdministered(row.id, selectedMotivo, noteText);
+                      setExpandedId(null);
+                      setSelectedMotivo(null);
+                      setNoteText('');
+                    }}>
+                    Conferma
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Empty state — ONLY if rows truly empty */}
+          {rows.length === 0 && (
             <div style={{ padding: 24, textAlign: 'center', color: '#64748B', fontSize: 14 }}>
               Nessuna terapia prevista per questa fascia.
             </div>

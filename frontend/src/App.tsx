@@ -185,11 +185,20 @@ export default function App() {
       const res = await fetch(`${API_URL}/therapy-slots?date=${d}`);
       if (res.ok) {
         const raw = await res.json();
-        // Normalize: ensure somministrazioni is always an array
-        const data = (Array.isArray(raw) ? raw : []).map((slot: Record<string, unknown>) => ({
-          ...slot,
-          somministrazioni: (slot.somministrazioni ?? slot.patients ?? slot.items ?? []) as TherapySlot['somministrazioni'],
-        })) as TherapySlot[];
+        const slots = Array.isArray(raw) ? raw : [];
+        const data: TherapySlot[] = slots.map((s: Record<string, unknown>) => ({
+          id: s.id as string,
+          fascia: s.fascia as TherapySlot['fascia'],
+          label: s.label as string,
+          ora: s.ora as string,
+          somministrazioni: Array.isArray(s.somministrazioni)
+            ? s.somministrazioni
+            : Array.isArray(s.patients)
+              ? s.patients
+              : Array.isArray(s.items)
+                ? s.items
+                : [],
+        }));
         setTherapySlots(data);
       } else {
         setTherapySlots(createMockTherapySlots(d));
