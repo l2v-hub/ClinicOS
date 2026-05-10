@@ -69,7 +69,7 @@ export function OperatorAgenda({
   const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);
   const [showNewPaziente, setShowNewPaziente] = useState(false);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
-  const [selectedTherapySlot, setSelectedTherapySlot] = useState<TherapySlot | null>(null);
+  const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
 
   const therapySlotsMap = new Map<string, TherapySlot>();
   if (therapySlots) {
@@ -179,17 +179,19 @@ export function OperatorAgenda({
                 {/* Therapy slot card */}
                 {tSlot && (() => {
                   const tErogate = tSlot.somministrazioni.filter(s => s.stato === 'erogata').length;
+                  const tNonErogate = tSlot.somministrazioni.filter(s => s.stato === 'non_erogata').length;
                   const tTotal = tSlot.somministrazioni.length;
+                  const tPending = tTotal - tErogate - tNonErogate;
                   const allDone = tErogate === tTotal;
                   return (
                     <div
                       className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
-                      onClick={() => setSelectedTherapySlot(tSlot)}>
+                      onClick={() => setSelectedTherapySlotId(tSlot.id)}>
                       <span className="agt-therapy-slot__icon"><IcoPill /></span>
                       <span className="agt-therapy-slot__label">{tSlot.label}</span>
-                      <span className="agt-therapy-slot__count">{tTotal} pazienti</span>
+                      <span className="agt-therapy-slot__count">{tErogate}/{tTotal} erogate</span>
                       <span className="agt-therapy-slot__progress">
-                        {tErogate}/{tTotal} erogate
+                        {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}{tNonErogate > 0 && tPending > 0 ? ' · ' : ''}{tPending > 0 ? `${tPending} da erogare` : ''}
                       </span>
                     </div>
                   );
@@ -264,12 +266,17 @@ export function OperatorAgenda({
                       {therapySlotsMap.has(ora) && (() => {
                         const ts = therapySlotsMap.get(ora)!;
                         const tErog = ts.somministrazioni.filter(s => s.stato === 'erogata').length;
+                        const tNonErog = ts.somministrazioni.filter(s => s.stato === 'non_erogata').length;
+                        const tDaErog = ts.somministrazioni.filter(s => s.stato === 'da_erogare').length;
                         const allDone = tErog === ts.somministrazioni.length;
+                        const titleParts = [`${tErog}/${ts.somministrazioni.length} erogate`];
+                        if (tNonErog > 0) titleParts.push(`${tNonErog} non erogate`);
+                        if (tDaErog > 0) titleParts.push(`${tDaErog} da erogare`);
                         return (
                           <div
                             className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
-                            title={`${ts.label}: ${tErog}/${ts.somministrazioni.length} erogate`}
-                            onClick={e => { e.stopPropagation(); setSelectedTherapySlot(ts); }}>
+                            title={`${ts.label}: ${titleParts.join(' · ')}`}
+                            onClick={e => { e.stopPropagation(); setSelectedTherapySlotId(ts.id); }}>
                             <IcoPill />
                           </div>
                         );
@@ -345,14 +352,18 @@ export function OperatorAgenda({
           onCancel={() => setShowNewPaziente(false)}
         />
       )}
-      {selectedTherapySlot && onConfirmTherapy && onNotAdministeredTherapy && (
-        <TherapySlotModal
-          slot={selectedTherapySlot}
-          onClose={() => setSelectedTherapySlot(null)}
-          onConfirm={onConfirmTherapy}
-          onNotAdministered={onNotAdministeredTherapy}
-        />
-      )}
+      {selectedTherapySlotId && onConfirmTherapy && onNotAdministeredTherapy && (() => {
+        const activeSlot = therapySlots?.find(s => s.id === selectedTherapySlotId);
+        if (!activeSlot) return null;
+        return (
+          <TherapySlotModal
+            slot={activeSlot}
+            onClose={() => setSelectedTherapySlotId(null)}
+            onConfirm={onConfirmTherapy}
+            onNotAdministered={onNotAdministeredTherapy}
+          />
+        );
+      })()}
     </div>
   );
 }

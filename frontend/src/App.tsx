@@ -500,6 +500,7 @@ export default function App() {
       }
       if (res.ok) {
         showToast('Somministrazione confermata');
+        loadTherapySlots();
       } else {
         showToast('Errore durante conferma');
         loadTherapySlots();
@@ -549,6 +550,7 @@ export default function App() {
 
       if (res.ok) {
         showToast('Non somministrazione registrata');
+        loadTherapySlots();
       } else {
         showToast('Errore durante registrazione');
         loadTherapySlots();
