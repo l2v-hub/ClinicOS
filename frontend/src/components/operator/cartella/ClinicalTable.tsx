@@ -23,6 +23,7 @@ interface ClinicalTableProps<T extends Record<string, any> = Record<string, any>
   emptyMessage?: string;
   keyField?: string;
   rowClassName?: (row: T) => string;
+  noWrapper?: boolean;
 }
 
 type SortDir = 'asc' | 'desc' | null;
@@ -76,6 +77,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
   emptyMessage = 'Nessun dato.',
   keyField = 'id',
   rowClassName,
+  noWrapper = false,
 }: ClinicalTableProps<T>) {
   const [sort, setSort] = useState<SortState>({ key: '', dir: null });
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -120,6 +122,94 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
     </>
   );
 
+  const tableContent = (
+    <div className="clinicos-table-wrap">
+      <table className="clinicos-table">
+        <thead>
+          <tr>
+            {columns.map(col => (
+              <th key={col.key} style={col.width ? { width: col.width } : undefined}>
+                <div className="cdt__th-inner">
+                  {col.sortable ? (
+                    <button
+                      type="button"
+                      className="cdt__sort-btn"
+                      onClick={() => handleSort(col.key)}
+                    >
+                      {col.label}
+                      <span className="cdt__sort-icon">
+                        {sort.key === col.key && sort.dir === 'asc' ? '▲' : sort.key === col.key && sort.dir === 'desc' ? '▼' : '⇅'}
+                      </span>
+                    </button>
+                  ) : (
+                    col.label
+                  )}
+                  {col.filterable && showFilters && (
+                    <div className="cdt__filter">
+                      {col.filterType === 'select' ? (
+                        <select
+                          className="cdt__filter-select"
+                          value={filters[col.key] ?? ''}
+                          onChange={e => setFilter(col.key, e.target.value)}
+                        >
+                          <option value="">Tutti</option>
+                          {(col.options ?? []).map(o => (
+                            <option key={o.value} value={o.value}>{o.label}</option>
+                          ))}
+                        </select>
+                      ) : col.filterType === 'date' ? (
+                        <input
+                          type="date"
+                          className="cdt__filter-input"
+                          value={filters[col.key] ?? ''}
+                          onChange={e => setFilter(col.key, e.target.value)}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          className="cdt__filter-input"
+                          placeholder="Filtra…"
+                          value={filters[col.key] ?? ''}
+                          onChange={e => setFilter(col.key, e.target.value)}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {displayData.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length}>
+                <div className="cdt__empty">{emptyMessage}</div>
+              </td>
+            </tr>
+          ) : (
+            displayData.map((row, idx) => (
+              <tr
+                key={row[keyField] ?? idx}
+                className={rowClassName ? rowClassName(row) : undefined}
+              >
+                {columns.map(col => (
+                  <td key={col.key}>
+                    {col.render ? col.render(row[col.key], row) : (row[col.key] ?? '')}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  if (noWrapper) {
+    return tableContent;
+  }
+
   return (
     <ClinicalTableSection
       title={title}
@@ -128,87 +218,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
       defaultOpen={defaultOpen}
       actions={sectionActions}
     >
-      <div className="clinicos-table-wrap">
-        <table className="clinicos-table">
-          <thead>
-            <tr>
-              {columns.map(col => (
-                <th key={col.key} style={col.width ? { width: col.width } : undefined}>
-                  <div className="cdt__th-inner">
-                    {col.sortable ? (
-                      <button
-                        type="button"
-                        className="cdt__sort-btn"
-                        onClick={() => handleSort(col.key)}
-                      >
-                        {col.label}
-                        <span className="cdt__sort-icon">
-                          {sort.key === col.key && sort.dir === 'asc' ? '▲' : sort.key === col.key && sort.dir === 'desc' ? '▼' : '⇅'}
-                        </span>
-                      </button>
-                    ) : (
-                      col.label
-                    )}
-                    {col.filterable && showFilters && (
-                      <div className="cdt__filter">
-                        {col.filterType === 'select' ? (
-                          <select
-                            className="cdt__filter-select"
-                            value={filters[col.key] ?? ''}
-                            onChange={e => setFilter(col.key, e.target.value)}
-                          >
-                            <option value="">Tutti</option>
-                            {(col.options ?? []).map(o => (
-                              <option key={o.value} value={o.value}>{o.label}</option>
-                            ))}
-                          </select>
-                        ) : col.filterType === 'date' ? (
-                          <input
-                            type="date"
-                            className="cdt__filter-input"
-                            value={filters[col.key] ?? ''}
-                            onChange={e => setFilter(col.key, e.target.value)}
-                          />
-                        ) : (
-                          <input
-                            type="text"
-                            className="cdt__filter-input"
-                            placeholder="Filtra…"
-                            value={filters[col.key] ?? ''}
-                            onChange={e => setFilter(col.key, e.target.value)}
-                          />
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {displayData.length === 0 ? (
-              <tr>
-                <td colSpan={columns.length}>
-                  <div className="cdt__empty">{emptyMessage}</div>
-                </td>
-              </tr>
-            ) : (
-              displayData.map((row, idx) => (
-                <tr
-                  key={row[keyField] ?? idx}
-                  className={rowClassName ? rowClassName(row) : undefined}
-                >
-                  {columns.map(col => (
-                    <td key={col.key}>
-                      {col.render ? col.render(row[col.key], row) : (row[col.key] ?? '')}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      {tableContent}
     </ClinicalTableSection>
   );
 }

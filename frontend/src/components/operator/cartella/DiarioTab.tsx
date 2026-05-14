@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CartellaPaziente, DiarioEntry, TurnoDiario, TipoDiarioEntry, Paziente } from '../../../types';
 import { uid, todayStr, nowISO, nowTime, fmtDate, PrintButton, ClinicalTableSection } from './shared';
+import { ClinicalTable, type ColumnDef } from './ClinicalTable';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -20,11 +21,6 @@ const PRIORITA_BADGE: Record<string, string> = {
   normale: 'consegna-priorita-badge consegna-priorita-badge--normale',
   alta: 'consegna-priorita-badge consegna-priorita-badge--alta',
   urgente: 'consegna-priorita-badge consegna-priorita-badge--urgente',
-};
-const STATO_INF_BADGE: Record<string, string> = {
-  aperta: 'badge--blue',
-  in_corso: 'badge--amber',
-  completata: 'badge--green',
 };
 
 function fieldKey(tipo: 'infermieristico' | 'medico'): 'diarioInfermieristico' | 'diarioMedico' {
@@ -461,185 +457,221 @@ export function DiarioTab({ cartella, paziente, tipo, onUpdate, operatoreNome }:
           </div>
         </div>
 
-        {/* ── Entries ── */}
-        {filtered.length === 0 ? (
-          <p className="cr-empty">Nessuna voce nel diario.</p>
-        ) : (
-          <div className="diario-entries">
-            {filtered.map(e => {
-              const prio = e.priorita ?? 'normale';
-              const isEditing = editId === e.id;
-              return (
-                <div key={e.id} className={`diario-entry diario-entry--${e.tipo} diario-entry--${prio}${e.stato === 'completata' ? ' diario-entry--completata' : ''}`}>
-                  {isEditing ? (
-                    /* ── Inline edit form ── */
-                    <div className="diario-entry__edit-form">
-                      <div className="form-row-3col">
-                        <div className="form-row">
-                          <label className="form-label">Data</label>
-                          <input type="date" className="form-input" value={editForm.data} onChange={e2 => setEdit({ data: e2.target.value })} />
-                        </div>
-                        <div className="form-row">
-                          <label className="form-label">Ora</label>
-                          <input type="time" className="form-input" value={editForm.ora} onChange={e2 => setEdit({ ora: e2.target.value })} />
-                        </div>
-                        {tipo === 'infermieristico' && (
-                          <div className="form-row">
-                            <label className="form-label">Turno</label>
-                            <select className="form-input" value={editForm.turno} onChange={e2 => setEdit({ turno: e2.target.value as TurnoDiario })}>
-                              <option value="mattina">Mattina</option>
-                              <option value="pomeriggio">Pomeriggio</option>
-                              <option value="notte">Notte</option>
-                            </select>
-                          </div>
-                        )}
-                      </div>
-                      <div className="form-row">
-                        <label className="form-label">{tipo === 'infermieristico' ? 'Annotazione / Consegna' : 'Nota clinica'}</label>
-                        <textarea className="form-input diario-edit-textarea" rows={5} value={editForm.testo} onChange={e2 => setEdit({ testo: e2.target.value })} />
-                      </div>
-                      {tipo === 'infermieristico' && (
-                        <div className="form-row-3col">
-                          <div className="form-row">
-                            <label className="form-label">Priorita'</label>
-                            <select className="form-input" value={editForm.priorita} onChange={e2 => setEdit({ priorita: e2.target.value as typeof editForm.priorita })}>
-                              <option value="normale">Normale</option>
-                              <option value="alta">Alta</option>
-                              <option value="urgente">Urgente</option>
-                            </select>
-                          </div>
-                          <div className="form-row">
-                            <label className="form-label">Stato</label>
-                            <select className="form-input" value={editForm.stato} onChange={e2 => setEdit({ stato: e2.target.value as typeof editForm.stato })}>
-                              <option value="aperta">Aperta</option>
-                              <option value="in_corso">In corso</option>
-                              <option value="completata">Completata</option>
-                            </select>
-                          </div>
-                          <div className="form-row">
-                            <label className="form-label">Collegamento</label>
-                            <select className="form-input" value={editForm.collegamento} onChange={e2 => setEdit({ collegamento: e2.target.value })}>
-                              <option value="">Nessuno</option>
-                              <option value="terapia">Terapia</option>
-                              <option value="medicazione">Medicazione</option>
-                              <option value="parametro">Parametro</option>
-                              <option value="evento">Evento</option>
-                              <option value="appuntamento">Appuntamento</option>
-                            </select>
-                          </div>
-                        </div>
-                      )}
-                      {tipo === 'medico' && (
-                        <>
-                          <div className="form-row">
-                            <label className="form-label">Prescrizione</label>
-                            <textarea className="form-input" rows={3} value={editForm.prescrizione} onChange={e2 => setEdit({ prescrizione: e2.target.value })} />
-                          </div>
-                          <div className="form-row">
-                            <label className="form-label">Evoluzione clinica</label>
-                            <textarea className="form-input" rows={3} value={editForm.evoluzione} onChange={e2 => setEdit({ evoluzione: e2.target.value })} />
-                          </div>
-                          <div className="form-row-3col">
-                            <div className="form-row">
-                              <label className="form-label">Firma medico</label>
-                              <input className="form-input" value={editForm.firmaMedico} onChange={e2 => setEdit({ firmaMedico: e2.target.value })} />
-                            </div>
-                            <div className="form-row">
-                              <label className="form-label">Allegati</label>
-                              <input className="form-input" value={editForm.allegati} onChange={e2 => setEdit({ allegati: e2.target.value })} />
-                            </div>
-                          </div>
-                        </>
-                      )}
-                      {tipo === 'infermieristico' && (
-                        <div className="form-row" style={{ maxWidth: 160 }}>
-                          <label className="form-label">Sigla operatore</label>
-                          <input className="form-input" value={editForm.sigla} onChange={e2 => setEdit({ sigla: e2.target.value })} />
-                        </div>
-                      )}
-                      <div className="cr-inline-form__actions">
-                        <button className="btn-secondary btn-sm" onClick={handleEditCancel}>Annulla</button>
-                        <button className="btn-primary btn-sm" onClick={handleEditSave}>Salva</button>
-                      </div>
-                    </div>
-                  ) : (
-                    /* ── Normal view ── */
-                    <>
-                      <div className="diario-entry__aside">
-                        <div className="diario-entry__date">{fmtDate(e.data)}</div>
-                        <div className="diario-entry__time">{e.ora}</div>
-                        {tipo === 'infermieristico' && (
-                          <span className={`badge ${TURNO_BADGE[e.turno]}`} style={{ fontSize: 11 }}>{TURNO_LABEL_FULL[e.turno]}</span>
-                        )}
-                      </div>
-                      <div className="diario-entry__body">
-                        <div className="diario-entry__header">
-                          {tipo === 'infermieristico' ? (
-                            <>
-                              <span className={PRIORITA_BADGE[prio]}>{prio}</span>
-                              {e.stato && (
-                                <span className={`badge ${STATO_INF_BADGE[e.stato] ?? 'badge--gray'}`}>{e.stato.replace('_', ' ')}</span>
-                              )}
-                            </>
-                          ) : (
-                            <span className={`badge ${TIPO_BADGE[e.tipo]}`}>{TIPO_LABEL[e.tipo]}</span>
-                          )}
-                          <span className="cr-meta">{e.operatore}</span>
-                          {tipo === 'infermieristico' && e.sigla && (
-                            <span className="badge badge--gray" style={{ fontFamily: 'monospace' }}>{e.sigla}</span>
-                          )}
-                          <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
-                            <button
-                              className="icon-btn icon-btn--sm"
-                              onClick={() => handleEditStart(e)}
-                              title="Modifica"
-                            >
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                              </svg>
-                            </button>
-                            <button
-                              className="icon-btn icon-btn--sm icon-btn--danger"
-                              onClick={() => handleDelete(e.id)}
-                              title="Elimina"
-                            >
-                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                              </svg>
-                            </button>
-                          </div>
-                        </div>
-
-                        {e.collegamento && tipo === 'infermieristico' && (
-                          <div className="diario-entry__collegamento">Collegamento: {e.collegamento}</div>
-                        )}
-
-                        <div className="diario-entry__text">{e.testo}</div>
-
-                        {tipo === 'medico' && e.prescrizione && (
-                          <div className="diario-entry__prescrizione">
-                            <strong>Prescrizione:</strong> {e.prescrizione}
-                          </div>
-                        )}
-                        {tipo === 'medico' && e.evoluzione && (
-                          <div className="diario-entry__evoluzione">
-                            <strong>Evoluzione:</strong> {e.evoluzione}
-                          </div>
-                        )}
-                        {tipo === 'medico' && e.firmaMedico && (
-                          <div className="cr-meta" style={{ marginTop: 4 }}>Firma: {e.firmaMedico}</div>
-                        )}
-                        {tipo === 'medico' && e.allegati && (
-                          <div className="diario-entry__allegati">Allegati: {e.allegati}</div>
-                        )}
-                      </div>
-                    </>
-                  )}
+        {/* ── Inline edit panel ── */}
+        {editId !== null && (
+          <div className="cr-inline-form">
+            <div className="form-row-3col">
+              <div className="form-row">
+                <label className="form-label">Data</label>
+                <input type="date" className="form-input" value={editForm.data} onChange={e2 => setEdit({ data: e2.target.value })} />
+              </div>
+              <div className="form-row">
+                <label className="form-label">Ora</label>
+                <input type="time" className="form-input" value={editForm.ora} onChange={e2 => setEdit({ ora: e2.target.value })} />
+              </div>
+              {tipo === 'infermieristico' && (
+                <div className="form-row">
+                  <label className="form-label">Turno</label>
+                  <select className="form-input" value={editForm.turno} onChange={e2 => setEdit({ turno: e2.target.value as TurnoDiario })}>
+                    <option value="mattina">Mattina</option>
+                    <option value="pomeriggio">Pomeriggio</option>
+                    <option value="notte">Notte</option>
+                  </select>
                 </div>
-              );
-            })}
+              )}
+            </div>
+            <div className="form-row">
+              <label className="form-label">{tipo === 'infermieristico' ? 'Annotazione / Consegna' : 'Nota clinica'}</label>
+              <textarea className="form-input diario-edit-textarea" rows={5} value={editForm.testo} onChange={e2 => setEdit({ testo: e2.target.value })} />
+            </div>
+            {tipo === 'infermieristico' && (
+              <div className="form-row-3col">
+                <div className="form-row">
+                  <label className="form-label">Priorita'</label>
+                  <select className="form-input" value={editForm.priorita} onChange={e2 => setEdit({ priorita: e2.target.value as typeof editForm.priorita })}>
+                    <option value="normale">Normale</option>
+                    <option value="alta">Alta</option>
+                    <option value="urgente">Urgente</option>
+                  </select>
+                </div>
+                <div className="form-row">
+                  <label className="form-label">Stato</label>
+                  <select className="form-input" value={editForm.stato} onChange={e2 => setEdit({ stato: e2.target.value as typeof editForm.stato })}>
+                    <option value="aperta">Aperta</option>
+                    <option value="in_corso">In corso</option>
+                    <option value="completata">Completata</option>
+                  </select>
+                </div>
+                <div className="form-row">
+                  <label className="form-label">Collegamento</label>
+                  <select className="form-input" value={editForm.collegamento} onChange={e2 => setEdit({ collegamento: e2.target.value })}>
+                    <option value="">Nessuno</option>
+                    <option value="terapia">Terapia</option>
+                    <option value="medicazione">Medicazione</option>
+                    <option value="parametro">Parametro</option>
+                    <option value="evento">Evento</option>
+                    <option value="appuntamento">Appuntamento</option>
+                  </select>
+                </div>
+              </div>
+            )}
+            {tipo === 'medico' && (
+              <>
+                <div className="form-row">
+                  <label className="form-label">Prescrizione</label>
+                  <textarea className="form-input" rows={3} value={editForm.prescrizione} onChange={e2 => setEdit({ prescrizione: e2.target.value })} />
+                </div>
+                <div className="form-row">
+                  <label className="form-label">Evoluzione clinica</label>
+                  <textarea className="form-input" rows={3} value={editForm.evoluzione} onChange={e2 => setEdit({ evoluzione: e2.target.value })} />
+                </div>
+                <div className="form-row-3col">
+                  <div className="form-row">
+                    <label className="form-label">Firma medico</label>
+                    <input className="form-input" value={editForm.firmaMedico} onChange={e2 => setEdit({ firmaMedico: e2.target.value })} />
+                  </div>
+                  <div className="form-row">
+                    <label className="form-label">Allegati</label>
+                    <input className="form-input" value={editForm.allegati} onChange={e2 => setEdit({ allegati: e2.target.value })} />
+                  </div>
+                </div>
+              </>
+            )}
+            {tipo === 'infermieristico' && (
+              <div className="form-row" style={{ maxWidth: 160 }}>
+                <label className="form-label">Sigla operatore</label>
+                <input className="form-input" value={editForm.sigla} onChange={e2 => setEdit({ sigla: e2.target.value })} />
+              </div>
+            )}
+            <div className="cr-inline-form__actions">
+              <button className="btn-secondary btn-sm" onClick={handleEditCancel}>Annulla</button>
+              <button className="btn-primary btn-sm" onClick={handleEditSave}>Salva</button>
+            </div>
           </div>
         )}
+
+        {/* ── Entries table ── */}
+        {(() => {
+          const columns: ColumnDef<DiarioEntry>[] = [
+            {
+              key: 'data',
+              label: 'Data / Ora',
+              sortable: true,
+              render: (_, e) => (
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 12 }}>{fmtDate(e.data)}</div>
+                  <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{e.ora}</div>
+                </div>
+              ),
+            },
+            ...(tipo === 'infermieristico' ? [{
+              key: 'turno',
+              label: 'Turno',
+              sortable: true,
+              filterable: true,
+              filterType: 'select' as const,
+              options: [
+                { value: 'mattina', label: 'Mattina' },
+                { value: 'pomeriggio', label: 'Pomeriggio' },
+                { value: 'notte', label: 'Notte' },
+              ],
+              render: (_: any, e: DiarioEntry) => <span className={`badge ${TURNO_BADGE[e.turno]}`}>{TURNO_LABEL_FULL[e.turno]}</span>,
+            }] : []),
+            {
+              key: 'tipo',
+              label: tipo === 'infermieristico' ? 'Priorità' : 'Tipo',
+              sortable: true,
+              filterable: true,
+              filterType: 'select' as const,
+              options: tipo === 'infermieristico'
+                ? [
+                    { value: 'normale', label: 'Normale' },
+                    { value: 'alta', label: 'Alta' },
+                    { value: 'urgente', label: 'Urgente' },
+                  ]
+                : [
+                    { value: 'ordinario', label: 'Ordinario' },
+                    { value: 'segnalazione', label: 'Segnalazione' },
+                    { value: 'urgente', label: 'Urgente' },
+                  ],
+              render: (_: any, e: DiarioEntry) => tipo === 'infermieristico'
+                ? <span className={PRIORITA_BADGE[e.priorita ?? 'normale']}>{e.priorita ?? 'normale'}</span>
+                : <span className={`badge ${TIPO_BADGE[e.tipo]}`}>{TIPO_LABEL[e.tipo]}</span>,
+            },
+            {
+              key: 'testo',
+              label: tipo === 'infermieristico' ? 'Annotazione' : 'Nota clinica',
+              sortable: false,
+              render: (_: any, e: DiarioEntry) => (
+                <div>
+                  <div style={{ fontSize: 12, lineHeight: 1.5 }}>{e.testo}</div>
+                  {tipo === 'medico' && e.prescrizione && (
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+                      <strong>Presc:</strong> {e.prescrizione}
+                    </div>
+                  )}
+                  {tipo === 'medico' && e.evoluzione && (
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+                      <strong>Evol:</strong> {e.evoluzione}
+                    </div>
+                  )}
+                  {tipo === 'infermieristico' && e.collegamento && (
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+                      Coll: {e.collegamento}
+                    </div>
+                  )}
+                </div>
+              ),
+            },
+            {
+              key: 'operatore',
+              label: 'Operatore',
+              sortable: true,
+              filterable: true,
+              filterType: 'text' as const,
+              render: (_: any, e: DiarioEntry) => (
+                <div>
+                  <div style={{ fontSize: 12 }}>{e.operatore}</div>
+                  {tipo === 'infermieristico' && e.sigla && (
+                    <span className="badge badge--gray" style={{ fontFamily: 'monospace', fontSize: 10 }}>{e.sigla}</span>
+                  )}
+                </div>
+              ),
+            },
+            {
+              key: 'id',
+              label: 'Azioni',
+              sortable: false,
+              width: '80px',
+              render: (_: any, e: DiarioEntry) => (
+                <div style={{ display: 'flex', gap: 4 }}>
+                  <button className="icon-btn icon-btn--sm" onClick={() => handleEditStart(e)} title="Modifica">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => handleDelete(e.id)} title="Elimina">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <line x1="18" y1="6" x2="6" y2="18"/>
+                      <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                </div>
+              ),
+            },
+          ];
+          return (
+            <ClinicalTable<DiarioEntry>
+              noWrapper
+              title=""
+              columns={columns}
+              data={filtered}
+              keyField="id"
+              emptyMessage="Nessuna voce nel diario."
+            />
+          );
+        })()}
         </div>
         </ClinicalTableSection>
       </div>

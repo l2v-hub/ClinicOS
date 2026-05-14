@@ -3,6 +3,7 @@ import type { CartellaPaziente, Paziente, FarmacoItem } from '../../../types';
 import { uid, todayStr, PrintButton, ClinicalTableSection } from './shared';
 import { TerapieModuloView } from './TerapieModuloView';
 import { API_URL } from '../../../config';
+import { ClinicalTable, type ColumnDef } from './ClinicalTable';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -69,6 +70,105 @@ interface SezioneProps {
 function TerapiaSezione({ title, farmaci, storici, onAdd, onEdit, onDelete }: SezioneProps) {
   const [showStorico, setShowStorico] = useState(false);
 
+  const columns: ColumnDef<FarmacoItem>[] = [
+    {
+      key: 'stato',
+      label: 'Stato',
+      sortable: true,
+      filterable: true,
+      filterType: 'select',
+      options: [
+        { value: 'attivo', label: 'Attivo' },
+        { value: 'sospeso', label: 'Sospeso' },
+        { value: 'completato', label: 'Completato' },
+      ],
+      width: '70px',
+      render: (v: string) => <span className={`badge ${STATO_BADGE[v] ?? 'badge--gray'}`}>{v}</span>,
+    },
+    {
+      key: 'inizio',
+      label: 'Inizio',
+      sortable: true,
+      filterable: true,
+      filterType: 'date',
+      width: '85px',
+      render: (v: string) => <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{v}</span>,
+    },
+    {
+      key: 'nome',
+      label: 'Farmaco / Dose',
+      sortable: true,
+      filterable: true,
+      filterType: 'text',
+      render: (_: any, f: FarmacoItem) => (
+        <div>
+          <div className="terapia-nome">{f.nome}</div>
+          <div className="terapia-dose">{f.dose}{f.frequenza ? ` — ${f.frequenza}` : ''}</div>
+          {f.indicazione && <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{f.indicazione}</div>}
+        </div>
+      ),
+    },
+    {
+      key: 'via',
+      label: 'Via',
+      sortable: true,
+      width: '60px',
+      render: (v: string) => <span style={{ textAlign: 'center', fontSize: 11, display: 'block' }}>{v ?? ''}</span>,
+    },
+    { key: 'h08', label: '08', width: '36px', render: (v: string) => <span className="terapia-orario">{v ?? ''}</span> },
+    { key: 'h12', label: '12', width: '36px', render: (v: string) => <span className="terapia-orario">{v ?? ''}</span> },
+    { key: 'h16', label: '16', width: '36px', render: (v: string) => <span className="terapia-orario">{v ?? ''}</span> },
+    { key: 'h18', label: '18', width: '36px', render: (v: string) => <span className="terapia-orario">{v ?? ''}</span> },
+    { key: 'h20', label: '20', width: '36px', render: (v: string) => <span className="terapia-orario">{v ?? ''}</span> },
+    {
+      key: 'prescrittoDA',
+      label: 'Medico',
+      width: '70px',
+      render: (v: string) => <span style={{ fontSize: 11, textAlign: 'center', display: 'block' }}>{v?.split(' ').map((p: string) => p[0]).join('.') ?? ''}</span>,
+    },
+    {
+      key: 'fine',
+      label: 'Fine',
+      sortable: true,
+      width: '85px',
+      render: (v: string) => <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{v ?? ''}</span>,
+    },
+    {
+      key: 'note',
+      label: 'Note',
+      render: (v: string) => <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{v ?? ''}</span>,
+    },
+    {
+      key: 'id',
+      label: '',
+      width: '64px',
+      render: (_: any, f: FarmacoItem) => (
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => onEdit(f)}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => onDelete(f.id)}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const storiciColumns: ColumnDef<FarmacoItem>[] = [
+    ...columns.slice(0, columns.length - 1),
+    {
+      key: 'id',
+      label: '',
+      width: '36px',
+      render: (_: any, f: FarmacoItem) => (
+        <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => onDelete(f.id)}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      ),
+    },
+  ];
+
   return (
     <div className="terapia-section">
       <div className="terapia-section__header">
@@ -85,84 +185,33 @@ function TerapiaSezione({ title, farmaci, storici, onAdd, onEdit, onDelete }: Se
           <div style={{ padding: '10px 12px', fontSize: 13, color: 'var(--text-muted)' }}>Nessun farmaco in questa sezione.</div>
         )}
 
-        {/* Header row */}
         {farmaci.length > 0 && (
-          <div className="terapia-row terapia-row--header">
-            <div>STATO</div>
-            <div>INIZIO</div>
-            <div>FARMACO / DOSE</div>
-            <div>VIA</div>
-            <div>08</div>
-            <div>12</div>
-            <div>16</div>
-            <div>18</div>
-            <div>20</div>
-            <div>MEDICO</div>
-            <div>FINE</div>
-            <div>NOTE</div>
-            <div></div>
-          </div>
+          <ClinicalTable<FarmacoItem>
+            noWrapper
+            title=""
+            columns={columns}
+            data={farmaci}
+            keyField="id"
+            rowClassName={(f) => `terapia-row--${f.stato}`}
+            emptyMessage="Nessun farmaco attivo."
+          />
         )}
 
-        {farmaci.map(f => (
-          <div key={f.id} className={`terapia-row terapia-row--${f.stato}`}>
-            <div>
-              <span className={`badge ${STATO_BADGE[f.stato]}`}>{f.stato}</span>
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.inizio}</div>
-            <div>
-              <div className="terapia-nome">{f.nome}</div>
-              <div className="terapia-dose">{f.dose}{f.frequenza ? ` — ${f.frequenza}` : ''}</div>
-              {f.indicazione && <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{f.indicazione}</div>}
-            </div>
-            <div style={{ textAlign: 'center', fontSize: 11 }}>{f.via ?? ''}</div>
-            {TIME_COLS.map(tc => (
-              <div key={tc.key} className="terapia-orario">
-                {(f[tc.key] as string | undefined) ?? ''}
-              </div>
-            ))}
-            <div style={{ fontSize: 11, textAlign: 'center' }}>{f.prescrittoDA?.split(' ').map(p => p[0]).join('.') ?? ''}</div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.fine ?? ''}</div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.note ?? ''}</div>
-            <div style={{ display: 'flex', gap: 4 }}>
-              <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => onEdit(f)}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              </button>
-              <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => onDelete(f.id)}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
-            </div>
-          </div>
-        ))}
-
-        {/* Storico */}
         {storici.length > 0 && (
           <div className="terapia-storico">
             <button className="terapia-storico__toggle" onClick={() => setShowStorico(v => !v)}>
               {showStorico ? '▲' : '▼'} Storico ({storici.length} farmaco/i)
             </button>
-            {showStorico && storici.map(f => (
-              <div key={f.id} className={`terapia-row terapia-row--${f.stato}`} style={{ opacity: 0.7 }}>
-                <div><span className={`badge ${STATO_BADGE[f.stato]}`}>{f.stato}</span></div>
-                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.inizio}</div>
-                <div>
-                  <div className="terapia-nome">{f.nome}</div>
-                  <div className="terapia-dose">{f.dose}{f.frequenza ? ` — ${f.frequenza}` : ''}</div>
-                </div>
-                <div style={{ textAlign: 'center', fontSize: 11 }}>{f.via ?? ''}</div>
-                {TIME_COLS.map(tc => (
-                  <div key={tc.key} className="terapia-orario">{(f[tc.key] as string | undefined) ?? ''}</div>
-                ))}
-                <div style={{ fontSize: 11, textAlign: 'center' }}>{f.prescrittoDA?.split(' ').map(p => p[0]).join('.') ?? ''}</div>
-                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.fine ?? ''}</div>
-                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{f.note ?? ''}</div>
-                <div>
-                  <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => onDelete(f.id)}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                  </button>
-                </div>
-              </div>
-            ))}
+            {showStorico && (
+              <ClinicalTable<FarmacoItem>
+                noWrapper
+                title=""
+                columns={storiciColumns}
+                data={storici}
+                keyField="id"
+                emptyMessage=""
+              />
+            )}
           </div>
         )}
       </div>
