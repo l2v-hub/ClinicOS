@@ -95,8 +95,8 @@ router.get('/', async (req, res) => {
           return true;
         });
         const cartData = patient.cartella?.data as CartDataFallback | undefined;
-        const room = activeAssignment?.bed?.room?.numero ?? cartData?.cameraNumero ?? 'Non assegnato';
-        const bed  = activeAssignment?.bed?.label      ?? cartData?.lettoNumero    ?? 'Non assegnato';
+        const room = activeAssignment?.bed?.room?.numero || cartData?.cameraNumero || 'Non assegnato';
+        const bed  = activeAssignment?.bed?.label      || cartData?.lettoNumero    || 'Non assegnato';
 
         // Resolve administration record
         const key      = `${pt.patientId}|${pt.farmacoNome}|${f.fascia}`;
