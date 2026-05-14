@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { CartellaPaziente, ScalaBradenValutazione, Paziente } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
+import { ClinicalTable } from './ClinicalTable';
+import type { ColumnDef } from './ClinicalTable';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -258,6 +260,95 @@ const EMPTY_FORM: BradenFormState = {
   attivita: 0, mobilita: 0, nutrizione: 0, frizione: 0, note: '',
 };
 
+// ── Braden history ClinicalTable ─────────────────────────────────────────────
+
+function BradenHistoryTable({
+  list,
+  onOpenModulo,
+  onDelete,
+}: {
+  list: ScalaBradenValutazione[];
+  onOpenModulo: (id: string) => void;
+  onDelete: (id: string) => void;
+}) {
+  type Row = ScalaBradenValutazione & { _score: number; _rischio: string; _rischioClass: string };
+
+  const rows: Row[] = list.map(v => {
+    const s = calcScore(v);
+    const rv = rischio(s);
+    return { ...v, _score: s, _rischio: rv.label, _rischioClass: rv.cls };
+  });
+
+  const columns: ColumnDef<Row>[] = [
+    {
+      key: 'data',
+      label: 'Data',
+      sortable: true,
+      filterable: true,
+      filterType: 'date',
+      render: (_v, row) => fmtDate(row.data),
+    },
+    ...BRADEN_ROWS.map(br => ({
+      key: br.key as string,
+      label: br.label.replace('\n', ' '),
+      sortable: true,
+      render: (_v: any, row: Row) => <span style={{ textAlign: 'center', display: 'block' }}>{String(row[br.key as keyof ScalaBradenValutazione])}</span>,
+    } as ColumnDef<Row>)),
+    {
+      key: '_score',
+      label: 'Punteggio',
+      sortable: true,
+      render: (_v, row) => <span style={{ fontWeight: 700, display: 'block', textAlign: 'center' }}>{row._score}</span>,
+    },
+    {
+      key: '_rischio',
+      label: 'Rischio',
+      sortable: true,
+      filterable: true,
+      filterType: 'select',
+      options: [
+        { value: 'Nessun rischio', label: 'Nessun rischio' },
+        { value: 'Rischio basso', label: 'Rischio basso' },
+        { value: 'Rischio moderato', label: 'Rischio moderato' },
+        { value: 'Rischio alto', label: 'Rischio alto' },
+        { value: 'Rischio molto alto', label: 'Rischio molto alto' },
+      ],
+      render: (_v, row) => <span className={`badge ${row._rischioClass}`}>{row._rischio}</span>,
+    },
+    {
+      key: 'operatore',
+      label: 'Operatore',
+      sortable: true,
+      filterable: true,
+      filterType: 'text',
+    },
+    {
+      key: '_actions',
+      label: '',
+      width: '64px',
+      render: (_v, row) => (
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button className="icon-btn icon-btn--sm" onClick={() => onOpenModulo(row.id)} title="Vista modulo">📋</button>
+          <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => onDelete(row.id)} title="Elimina">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <ClinicalTable<Row>
+      title="Storico valutazioni"
+      columns={columns}
+      data={rows}
+      count={rows.length}
+      countLabel="valutazioni"
+      emptyMessage="Nessuna valutazione Braden registrata."
+    />
+  );
+}
+
 export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
   const list = cartella.valutazioniBraden ?? [];
   const [showAdd, setShowAdd] = useState(false);
@@ -332,48 +423,11 @@ export function ScalaBradenTab({ cartella, paziente, onUpdate, operatoreNome }: 
         {/* Storico summary */}
         {list.length > 0 && !showAdd && (
           <div className="braden-history">
-            <div className="cr-section-title" style={{ marginBottom: 12 }}>Storico valutazioni</div>
-            <div style={{ overflowX: 'auto' }}>
-              <div className="clinicos-table-wrap">
-              <table className="clinicos-table">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    {BRADEN_ROWS.map(r => <th key={r.key} style={{ textTransform: 'capitalize', whiteSpace: 'pre-line' }}>{r.label}</th>)}
-                    <th>Punteggio</th>
-                    <th>Rischio</th>
-                    <th>Operatore</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {list.map(v => {
-                    const s = calcScore(v);
-                    const rv = rischio(s);
-                    return (
-                      <tr key={v.id}>
-                        <td>{fmtDate(v.data)}</td>
-                        {BRADEN_ROWS.map(r => (
-                          <td key={r.key} style={{ textAlign: 'center' }}>{String(v[r.key])}</td>
-                        ))}
-                        <td style={{ textAlign: 'center', fontWeight: 700 }}>{s}</td>
-                        <td><span className={`badge ${rv.cls}`}>{rv.label}</span></td>
-                        <td className="cr-meta">{v.operatore}</td>
-                        <td>
-                          <div style={{ display: 'flex', gap: 4 }}>
-                            <button className="icon-btn icon-btn--sm" onClick={() => openModulo(v.id)} title="Vista modulo">📋</button>
-                            <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => handleDelete(v.id)} title="Elimina">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-              </div>
-            </div>
+            <BradenHistoryTable
+              list={list}
+              onOpenModulo={openModulo}
+              onDelete={handleDelete}
+            />
           </div>
         )}
 

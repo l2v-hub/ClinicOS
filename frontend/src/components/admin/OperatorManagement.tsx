@@ -2,7 +2,8 @@ import { useState } from 'react';
 import type { Operatore, RuoloOperatore, StatoOperatore } from '../../types';
 import { OPERATOR_COLOR_PALETTE } from '../../types';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoSearch, IcoChevronRight } from '../../icons';
-import { ClinicalTableSection } from '../operator/cartella/shared';
+import { ClinicalTable } from '../operator/cartella/ClinicalTable';
+import type { ColumnDef } from '../operator/cartella/ClinicalTable';
 
 interface OperatorManagementProps {
   operatori: Operatore[];
@@ -22,6 +23,96 @@ const FORM_VUOTO = {
   colore: OPERATOR_COLOR_PALETTE[0],
   note: '',
 };
+
+function operatoriColumns(
+  ruoloLabel: Record<RuoloOperatore, string>,
+  apriModifica: (op: Operatore) => void,
+  onToggleStato: (id: string) => void,
+): ColumnDef<Operatore>[] {
+  return [
+    {
+      key: 'cognome',
+      label: 'Operatore',
+      sortable: true,
+      filterable: true,
+      filterType: 'text',
+      render: (_v, op) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="op-avatar-sm" style={{ background: op.colore }}>{op.iniziali}</div>
+          <div className="cell--name">{op.cognome} {op.nome}</div>
+        </div>
+      ),
+    },
+    {
+      key: 'ruolo',
+      label: 'Ruolo',
+      sortable: true,
+      filterable: true,
+      filterType: 'select',
+      options: [
+        { value: 'medico', label: 'Medico' },
+        { value: 'infermiere', label: 'Infermiere' },
+        { value: 'coordinatore', label: 'Coordinatore' },
+      ],
+      render: (v) => <span className="cell--muted">{ruoloLabel[v as RuoloOperatore]}</span>,
+    },
+    {
+      key: 'reparto',
+      label: 'Reparto',
+      sortable: true,
+      filterable: true,
+      filterType: 'text',
+      render: (v) => <span className="cell--muted">{v}</span>,
+    },
+    {
+      key: 'email',
+      label: 'Contatti',
+      render: (_v, op) => (
+        <div className="cell--muted" style={{ fontSize: 12 }}>
+          <div>{op.email}</div>
+          <div>{op.telefono}</div>
+        </div>
+      ),
+    },
+    {
+      key: 'pazientiAssegnati',
+      label: 'Pazienti',
+      sortable: true,
+      render: (v) => <span className="cell--muted">{v}</span>,
+    },
+    {
+      key: 'stato',
+      label: 'Stato',
+      sortable: true,
+      filterable: true,
+      filterType: 'select',
+      options: [
+        { value: 'attivo', label: 'Attivo' },
+        { value: 'inattivo', label: 'Inattivo' },
+      ],
+      render: (v) => <span className={`stato-pill stato-pill--${v}`}>{v}</span>,
+    },
+    {
+      key: 'id',
+      label: 'Azioni',
+      width: '72px',
+      render: (_v, op) => (
+        <div className="table-actions">
+          <button className="icon-btn icon-btn--sm" onClick={() => apriModifica(op)} title="Modifica">
+            <IcoEdit />
+          </button>
+          <button
+            className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
+            onClick={() => onToggleStato(op.id)}
+            title={op.stato === 'attivo' ? 'Disattiva' : 'Riattiva'}
+          >
+            {op.stato === 'attivo' ? <IcoX /> : <IcoCheck />}
+          </button>
+        </div>
+      ),
+    },
+  ];
+}
 
 export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }: OperatorManagementProps) {
   const [ricerca, setRicerca] = useState('');
@@ -199,91 +290,39 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
         </div>
       </div>
 
-      {/* Table + cards wrapped in collapsible section */}
-      <ClinicalTableSection title="Operatori" count={operatori.length} countLabel="operatori">
-        {/* Tabella desktop */}
-        <div className="table-wrap table-wrap--desktop">
-          <div className="clinicos-table-wrap">
-          <table className="clinicos-table">
-            <thead>
-              <tr>
-                <th>Operatore</th>
-                <th>Ruolo</th>
-                <th>Reparto</th>
-                <th>Contatti</th>
-                <th>Pazienti</th>
-                <th>Stato</th>
-                <th>Azioni</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtrati.length === 0 ? (
-                <tr><td colSpan={7} className="empty-row">Nessun operatore trovato</td></tr>
-              ) : filtrati.map(op => (
-                <tr key={op.id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div className="op-avatar-sm" style={{ background: op.colore }}>{op.iniziali}</div>
-                      <div>
-                        <div className="cell--name">{op.cognome} {op.nome}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="cell--muted">{ruoloLabel[op.ruolo]}</td>
-                  <td className="cell--muted">{op.reparto}</td>
-                  <td className="cell--muted" style={{ fontSize: 12 }}>
-                    <div>{op.email}</div>
-                    <div>{op.telefono}</div>
-                  </td>
-                  <td className="cell--muted">{op.pazientiAssegnati}</td>
-                  <td>
-                    <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>
-                  </td>
-                  <td>
-                    <div className="table-actions">
-                      <button className="icon-btn icon-btn--sm" onClick={() => apriModifica(op)} title="Modifica">
-                        <IcoEdit />
-                      </button>
-                      <button
-                        className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
-                        onClick={() => onToggleStato(op.id)}
-                        title={op.stato === 'attivo' ? 'Disattiva' : 'Riattiva'}
-                      >
-                        {op.stato === 'attivo' ? <IcoX /> : <IcoCheck />}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
-        </div>
+      {/* Table wrapped in collapsible ClinicalTable */}
+      <ClinicalTable<Operatore>
+        title="Operatori"
+        count={operatori.length}
+        countLabel="operatori"
+        columns={operatoriColumns(ruoloLabel, apriModifica, onToggleStato)}
+        data={filtrati}
+        emptyMessage="Nessun operatore trovato."
+      />
 
-        {/* Card list mobile */}
-        <div className="pt-card-list">
-          {filtrati.map(op => (
-            <div key={op.id} className="pt-list-card" style={{ cursor: 'default' }}>
-              <div className="op-avatar-sm" style={{ background: op.colore }}>{op.iniziali}</div>
-              <div className="pt-list-card__info">
-                <span className="pt-list-card__name">{op.cognome} {op.nome}</span>
-                <span className="pt-list-card__meta">{ruoloLabel[op.ruolo]} · {op.reparto}</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}>
-                <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>
-                <div className="table-actions">
-                  <button className="icon-btn icon-btn--sm" onClick={() => apriModifica(op)}><IcoEdit /></button>
-                  <button className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
-                    onClick={() => onToggleStato(op.id)}>
-                    {op.stato === 'attivo' ? <IcoX /> : <IcoCheck />}
-                  </button>
-                </div>
-              </div>
-              <span className="pt-list-card__chevron"><IcoChevronRight /></span>
+      {/* Card list mobile */}
+      <div className="pt-card-list">
+        {filtrati.map(op => (
+          <div key={op.id} className="pt-list-card" style={{ cursor: 'default' }}>
+            <div className="op-avatar-sm" style={{ background: op.colore }}>{op.iniziali}</div>
+            <div className="pt-list-card__info">
+              <span className="pt-list-card__name">{op.cognome} {op.nome}</span>
+              <span className="pt-list-card__meta">{ruoloLabel[op.ruolo]} · {op.reparto}</span>
             </div>
-          ))}
-        </div>
-      </ClinicalTableSection>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}>
+              <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>
+              <div className="table-actions">
+                <button className="icon-btn icon-btn--sm" onClick={() => apriModifica(op)}><IcoEdit /></button>
+                <button className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
+                  onClick={() => onToggleStato(op.id)}>
+                  {op.stato === 'attivo' ? <IcoX /> : <IcoCheck />}
+                </button>
+              </div>
+            </div>
+            <span className="pt-list-card__chevron"><IcoChevronRight /></span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
