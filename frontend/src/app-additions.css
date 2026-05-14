@@ -6043,3 +6043,50 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   align-items: center;
   flex-shrink: 0;
 }
+
+/* ── Terapia Farmacologica sub-tabs ── */
+.tf-subtabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #E5E7EB;
+  margin-bottom: 0;
+  padding: 0 16px;
+  overflow-x: auto;
+}
+.tf-subtab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted, #6B7280);
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tf-subtab:hover {
+  color: #1A3357;
+}
+.tf-subtab--active {
+  color: #1A3357;
+  border-bottom-color: #1A3357;
+  font-weight: 600;
+}
+.tf-subtab__badge {
+  background: #1A3357;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 10px;
+  min-width: 16px;
+  text-align: center;
+}
+.tf-subtab--active .tf-subtab__badge {
+  background: #2563EB;
+}

@@ -18,16 +18,14 @@ import { ContenzioniTab } from './cartella/ContenzioniTab';
 import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
-import { TerapiaMedicaTab } from './cartella/TerapiaMedicaTab';
-import { TerapiaScheduleTab } from './cartella/TerapiaScheduleTab';
+import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
 // NavComponents no longer used — sidebar nav replaces horizontal tabs
 import { ClinicalTableSection } from './cartella/shared';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 type TabId =
-  | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapie'
-  | 'terapia-programmata'
+  | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario-inf' | 'diario-med'
   | 'medicazioni' | 'contenzioni' | 'braden' | 'dimissione';
@@ -55,8 +53,7 @@ const TAB_GROUPS: TabGroupDef[] = [
       { id: 'presa-in-carico', label: 'Presa in Carico' },
       { id: 'anamnesi',        label: 'Anamnesi' },
       { id: 'diagnosi',        label: 'Diagnosi' },
-      { id: 'terapie',         label: 'Terapie & Farmaci' },
-      { id: 'terapia-programmata', label: 'Terapia Programmata' },
+      { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
       { id: 'parametri',       label: 'Parametri Vitali' },
       { id: 'note',            label: 'Note & Visite' },
     ],
@@ -531,7 +528,7 @@ export function PatientDetail({
           </div>
           <div className="modal-footer">
             <div className="modal-footer__left">
-              <button className="btn-secondary" onClick={() => { setCardModal(null); switchGroup('clinica'); switchTab('terapie'); }}>Apri Terapia Medica</button>
+              <button className="btn-secondary" onClick={() => { setCardModal(null); switchGroup('clinica'); switchTab('terapia-farmacologica'); }}>Apri Terapia Farmacologica</button>
             </div>
             <div className="modal-footer__right">
               <button className="btn-primary" onClick={() => setCardModal(null)}>Chiudi</button>
@@ -1618,7 +1615,7 @@ export function PatientDetail({
 
   const TAB_BADGES: Partial<Record<TabId, number>> = {
     diagnosi:    diagnosiAttive.length,
-    terapie:     farmaciAttivi.length,
+    'terapia-farmacologica': farmaciAttivi.length,
     'diario-inf': (cartella.diarioInfermieristico ?? []).length || 0,
     'diario-med': (cartella.diarioMedico ?? []).length || 0,
     medicazioni: (cartella.medicazioniFerite ?? []).length || 0,
@@ -1742,11 +1739,8 @@ export function PatientDetail({
           {tab === 'profilo'         && renderProfilo()}
           {tab === 'anamnesi'        && renderAnamnesi()}
           {tab === 'diagnosi'        && renderDiagnosi()}
-          {tab === 'terapie'         && (
-            <TerapiaMedicaTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
-          )}
-          {tab === 'terapia-programmata' && (
-            <TerapiaScheduleTab paziente={paziente} operatoreNome={operatoreNome} />
+          {tab === 'terapia-farmacologica' && (
+            <TerapiaFarmacologicaTab paziente={paziente} operatoreNome={operatoreNome} />
           )}
           {tab === 'note'            && renderNote()}
           {tab === 'parametri'       && (

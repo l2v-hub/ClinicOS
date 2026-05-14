@@ -154,4 +154,33 @@ router.delete('/:patientId/therapies/:therapyId', async (req, res) => {
   }
 });
 
+// GET /patients/:patientId/medication-administrations
+router.get('/:patientId/medication-administrations', async (req, res) => {
+  const { patientId } = req.params;
+  const date = req.query.date as string | undefined;
+  const limit = parseInt(req.query.limit as string) || 100;
+
+  try {
+    const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+    if (!patient) {
+      res.status(404).json({ error: 'Paziente non trovato' });
+      return;
+    }
+
+    const where: { patientId: string; date?: string } = { patientId };
+    if (date) where.date = date;
+
+    const administrations = await prisma.medicationAdministration.findMany({
+      where,
+      orderBy: [{ date: 'desc' }, { createdAt: 'desc' }],
+      take: limit,
+    });
+
+    res.status(200).json(administrations);
+  } catch (error) {
+    console.error('GET /patients/:patientId/medication-administrations error:', error);
+    res.status(500).json({ error: 'Errore nel recupero storico somministrazioni' });
+  }
+});
+
 export default router;
