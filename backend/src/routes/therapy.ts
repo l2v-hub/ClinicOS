@@ -3,214 +3,158 @@ import { Router } from 'express';
 
 const router = Router();
 
-// Fascia mapping
+// Fascia definitions
 const FASCE = [
-  { fascia: 'mattina',     ora: '08:00', label: 'Terapia Mattina',     hKeys: ['h08'] },
-  { fascia: 'pranzo',      ora: '12:00', label: 'Terapia Pranzo',      hKeys: ['h12'] },
-  { fascia: 'pomeriggio',  ora: '16:00', label: 'Terapia Pomeriggio',  hKeys: ['h16'] },
-  { fascia: 'sera',        ora: '20:00', label: 'Terapia Sera',        hKeys: ['h18', 'h20'] },
-  { fascia: 'notte',       ora: '22:00', label: 'Terapia Notte',       hKeys: [] },
-];
+  { fascia: 'mattina',    ora: '08:00', label: 'Terapia Mattina',    flagField: 'fasceMattina'    },
+  { fascia: 'pranzo',     ora: '12:00', label: 'Terapia Pranzo',     flagField: 'fascePranzo'     },
+  { fascia: 'pomeriggio', ora: '16:00', label: 'Terapia Pomeriggio', flagField: 'fascePomeriggio' },
+  { fascia: 'sera',       ora: '20:00', label: 'Terapia Sera',       flagField: 'fasceSera'       },
+  { fascia: 'notte',      ora: '22:00', label: 'Terapia Notte',      flagField: 'fasceNotte'      },
+] as const;
 
-interface CartellaFarmaco {
-  id: string;
-  nome: string;
-  dose: string;
-  frequenza: string;
-  via?: string;
-  stato: string;
-  h08?: string;
-  h12?: string;
-  h16?: string;
-  h18?: string;
-  h20?: string;
-  [key: string]: unknown;
-}
+type FlagField = typeof FASCE[number]['flagField'];
 
-interface CartellaData {
+interface CartDataFallback {
   cameraNumero?: string;
   lettoNumero?: string;
-  farmaci?: CartellaFarmaco[];
   [key: string]: unknown;
 }
 
 // GET /therapy-slots?date=YYYY-MM-DD
-// Builds therapy slots from patient cartelle + medication administration records
+// Returns slots grouped by patient, sourced exclusively from PatientTherapy.
 router.get('/', async (req, res) => {
   const date = (req.query.date as string) || new Date().toISOString().slice(0, 10);
 
   try {
-    // Get all patients with cartella
-    const patients = await prisma.patient.findMany({
-      include: { cartella: true },
+    // 1. Fetch all active PatientTherapy with patient + active room assignment
+    const therapies = await prisma.patientTherapy.findMany({
+      where: { stato: 'attiva' },
+      include: {
+        patient: {
+          include: {
+            cartella: true,
+            roomAssignments: {
+              include: { bed: { include: { room: true } } },
+            },
+          },
+        },
+      },
     });
 
-    // Get all medication administrations for this date
-    const administrations = await prisma.medicationAdministration.findMany({
-      where: { date },
+    // 2. Filter therapies valid for the requested date
+    const validTherapies = therapies.filter(pt => {
+      if (!pt.patient) {
+        console.error('Skipping invalid/orphan therapy: missing patient for therapyId', pt.id);
+        return false;
+      }
+      if (pt.tipo === 'una_tantum') return pt.dataSomministrazione === date;
+      if (pt.dataInizio > date) return false;
+      if (pt.dataFine && pt.dataFine < date) return false;
+      return true;
     });
 
-    // Build administration lookup: key = `${patientId}|${farmacoNome}|${fascia}`
-    const adminMap = new Map<string, typeof administrations[0]>();
-    for (const a of administrations) {
-      adminMap.set(`${a.patientId}|${a.farmacoNome}|${a.fascia}`, a);
-    }
+    // 3. Fetch MedicationAdministration records for this date
+    const administrations = await prisma.medicationAdministration.findMany({ where: { date } });
+    const adminMap = new Map<string, typeof administrations[0]>(
+      administrations.map(a => [`${a.patientId}|${a.farmacoNome}|${a.fascia}`, a]),
+    );
 
-    // Build slots
+    // 4. Build slots grouped by patient
     const slots = FASCE.map(f => {
-      const somministrazioni: {
-        id: string;
-        pazienteId: string;
-        pazienteNome: string;
-        camera: string;
-        letto: string;
-        farmaco: string;
-        dose: string;
-        via: string;
-        orarioPrevisto: string;
-        stato: string;
-        operatoreConferma?: string;
-        oraConferma?: string;
-        motivoNonErogazione?: string;
-        noteNonErogazione?: string;
-      }[] = [];
+      // Filter therapies scheduled for this fascia
+      const fasciaTherapies = validTherapies.filter(pt => pt[f.flagField as FlagField] === true);
 
-      for (const patient of patients) {
-        if (!patient.cartella) continue;
-        const cartData = patient.cartella.data as CartellaData;
-        if (!cartData?.farmaci) continue;
+      // Group by patientId
+      const patientMap = new Map<string, {
+        patientId: string;
+        firstName: string;
+        lastName: string;
+        room: string;
+        bed: string;
+        administrations: {
+          administrationId: string | null;
+          therapyId: string;
+          drugName: string;
+          dosage: string;
+          route: string;
+          scheduledTime: string;
+          status: 'pending' | 'administered' | 'not_administered';
+          administeredAt: string | null;
+          administeredBy: string | null;
+          notAdministeredReason: string | null;
+        }[];
+      }>();
 
-        for (const farmaco of cartData.farmaci) {
-          if (farmaco.stato !== 'attivo') continue;
+      for (const pt of fasciaTherapies) {
+        const patient = pt.patient;
 
-          // Check if this farmaco belongs to this fascia
-          let belongsToFascia = false;
-          if (f.hKeys.length === 0) {
-            // notte — check if frequenza mentions notte or 22
-            const freq = (farmaco.frequenza || '').toLowerCase();
-            belongsToFascia = freq.includes('notte') || freq.includes('22');
-          } else {
-            belongsToFascia = f.hKeys.some(hk => {
-              const val = farmaco[hk];
-              return val && val !== '' && val !== '-';
-            });
-          }
+        // Resolve room/bed from active assignment, fallback to cartella JSON
+        const activeAssignment = patient.roomAssignments.find(ra => {
+          if (ra.startDate > date) return false;
+          if (ra.endDate && ra.endDate < date) return false;
+          return true;
+        });
+        const cartData = patient.cartella?.data as CartDataFallback | undefined;
+        const room = activeAssignment?.bed?.room?.numero ?? cartData?.cameraNumero ?? 'Non assegnato';
+        const bed  = activeAssignment?.bed?.label      ?? cartData?.lettoNumero    ?? 'Non assegnato';
 
-          if (!belongsToFascia) continue;
+        // Resolve administration record
+        const key      = `${pt.patientId}|${pt.farmacoNome}|${f.fascia}`;
+        const existing = adminMap.get(key);
 
-          // Check if there's an existing administration record
-          const key = `${patient.id}|${farmaco.nome}|${f.fascia}`;
-          const existing = adminMap.get(key);
+        let status: 'pending' | 'administered' | 'not_administered' = 'pending';
+        if (existing?.stato === 'erogata')     status = 'administered';
+        if (existing?.stato === 'non_erogata') status = 'not_administered';
 
-          const sommId = existing?.id || `pending-${patient.id}-${farmaco.nome}-${f.fascia}`;
+        const administrationEntry = {
+          administrationId:      existing?.id ?? null,
+          therapyId:             pt.id,
+          drugName:              pt.farmacoNome,
+          dosage:                pt.dosaggio,
+          route:                 pt.viaSomministrazione || 'orale',
+          scheduledTime:         f.ora,
+          status,
+          administeredAt:        existing?.confirmedAt ? new Date(existing.confirmedAt).toISOString() : null,
+          administeredBy:        existing?.operatoreNome ?? null,
+          notAdministeredReason: existing?.motivo ?? null,
+        };
 
-          somministrazioni.push({
-            id: sommId,
-            pazienteId: patient.id,
-            pazienteNome: `${patient.lastName}, ${patient.firstName}`,
-            camera: (cartData.cameraNumero || '—'),
-            letto: (cartData.lettoNumero || '—'),
-            farmaco: farmaco.nome,
-            dose: farmaco.dose,
-            via: farmaco.via || 'orale',
-            orarioPrevisto: f.ora,
-            stato: existing?.stato || 'da_erogare',
-            ...(existing?.stato === 'erogata' && {
-              operatoreConferma: existing.operatoreNome || undefined,
-              oraConferma: existing.confirmedAt
-                ? new Date(existing.confirmedAt).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
-                : undefined,
-            }),
-            ...(existing?.stato === 'non_erogata' && {
-              motivoNonErogazione: existing.motivo || undefined,
-              noteNonErogazione: existing.note || undefined,
-            }),
+        if (!patientMap.has(pt.patientId)) {
+          patientMap.set(pt.patientId, {
+            patientId: pt.patientId,
+            firstName: patient.firstName,
+            lastName:  patient.lastName,
+            room,
+            bed,
+            administrations: [],
           });
         }
+        patientMap.get(pt.patientId)!.administrations.push(administrationEntry);
       }
+
+      const patients = Array.from(patientMap.values());
+
+      // Summary counters
+      const allAdmins = patients.flatMap(p => p.administrations);
+      const summary = {
+        total:           allAdmins.length,
+        administered:    allAdmins.filter(a => a.status === 'administered').length,
+        notAdministered: allAdmins.filter(a => a.status === 'not_administered').length,
+        pending:         allAdmins.filter(a => a.status === 'pending').length,
+      };
 
       return {
-        id: `ts-${f.fascia}`,
-        fascia: f.fascia,
-        label: f.label,
-        ora: f.ora,
-        somministrazioni,
+        id:      `ts-${f.fascia}`,
+        fascia:  f.fascia,
+        label:   f.label,
+        ora:     f.ora,
+        summary,
+        patients,
       };
     });
 
-    // Also get therapies from PatientTherapy model
-    const patientTherapies = await prisma.patientTherapy.findMany({
-      where: { stato: 'attiva' },
-      include: { patient: { include: { cartella: true } } },
-    });
-
-    // Map PatientTherapy records to somministrazioni per fascia
-    for (const pt of patientTherapies) {
-      // Skip if una_tantum and not for this date
-      if (pt.tipo === 'una_tantum') {
-        if (pt.dataSomministrazione !== date) continue;
-      } else {
-        // Periodica: check date range
-        if (pt.dataInizio > date) continue;
-        if (pt.dataFine && pt.dataFine < date) continue;
-      }
-
-      const cartData = pt.patient.cartella?.data as CartellaData | undefined;
-      const camera = cartData?.cameraNumero || '—';
-      const letto = cartData?.lettoNumero || '—';
-
-      const fasciaMap: Record<string, boolean> = {
-        mattina: pt.fasceMattina,
-        pranzo: pt.fascePranzo,
-        pomeriggio: pt.fascePomeriggio,
-        sera: pt.fasceSera,
-        notte: pt.fasceNotte,
-      };
-
-      for (const f of FASCE) {
-        if (!fasciaMap[f.fascia]) continue;
-
-        const key = `${pt.patientId}|${pt.farmacoNome}|${f.fascia}`;
-        const existing = adminMap.get(key);
-        const sommId = existing?.id || `pending-${pt.patientId}-${pt.farmacoNome}-${f.fascia}`;
-
-        // Find the slot and add
-        const slot = slots.find(s => s.fascia === f.fascia);
-        if (slot) {
-          // Check no duplicate
-          const alreadyExists = slot.somministrazioni.some(
-            s => s.pazienteId === pt.patientId && s.farmaco === pt.farmacoNome
-          );
-          if (!alreadyExists) {
-            slot.somministrazioni.push({
-              id: sommId,
-              pazienteId: pt.patientId,
-              pazienteNome: `${pt.patient.lastName}, ${pt.patient.firstName}`,
-              camera,
-              letto,
-              farmaco: pt.farmacoNome,
-              dose: pt.dosaggio,
-              via: pt.viaSomministrazione || 'orale',
-              orarioPrevisto: f.ora,
-              stato: existing?.stato || 'da_erogare',
-              ...(existing?.stato === 'erogata' && {
-                operatoreConferma: existing.operatoreNome || undefined,
-                oraConferma: existing.confirmedAt
-                  ? new Date(existing.confirmedAt).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
-                  : undefined,
-              }),
-              ...(existing?.stato === 'non_erogata' && {
-                motivoNonErogazione: existing.motivo || undefined,
-                noteNonErogazione: existing.note || undefined,
-              }),
-            });
-          }
-        }
-      }
-    }
-
-    // Filter out empty slots
-    const nonEmptySlots = slots.filter(s => s.somministrazioni.length > 0);
+    // 5. Return only non-empty slots
+    const nonEmptySlots = slots.filter(s => s.patients.length > 0);
 
     res.status(200).json(nonEmptySlots);
   } catch (error) {
@@ -220,11 +164,14 @@ router.get('/', async (req, res) => {
 });
 
 // POST /therapy-slots/confirm
-// Body: { somministrazioneId, patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora, operatoreId, operatoreNome }
+// Body: { patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora, operatoreId, operatoreNome, therapyId? }
 router.post('/confirm', async (req, res) => {
   const {
     patientId, farmacoNome, farmacoDose, farmacoVia,
     date, fascia, ora, operatoreId, operatoreNome,
+    // therapyId accepted for forward-compat; not stored in DB yet
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    therapyId: _therapyId,
   } = req.body as {
     patientId: string;
     farmacoNome: string;
@@ -235,6 +182,7 @@ router.post('/confirm', async (req, res) => {
     ora: string;
     operatoreId: string;
     operatoreNome: string;
+    therapyId?: string;
   };
 
   if (!patientId || !farmacoNome || !date || !fascia) {
@@ -267,22 +215,22 @@ router.post('/confirm', async (req, res) => {
         patientId,
         farmacoNome,
         farmacoDose: farmacoDose || '',
-        farmacoVia: farmacoVia || 'orale',
+        farmacoVia:  farmacoVia  || 'orale',
         date,
         fascia,
-        ora: ora || '',
-        stato: 'erogata',
-        operatoreId: operatoreId || null,
+        ora:          ora          || '',
+        stato:        'erogata',
+        operatoreId:  operatoreId  || null,
         operatoreNome: operatoreNome || null,
-        confirmedAt: new Date(),
+        confirmedAt:  new Date(),
       },
       update: {
-        stato: 'erogata',
-        operatoreId: operatoreId || null,
+        stato:        'erogata',
+        operatoreId:  operatoreId  || null,
         operatoreNome: operatoreNome || null,
-        confirmedAt: new Date(),
-        motivo: null,
-        note: null,
+        confirmedAt:  new Date(),
+        motivo:       null,
+        note:         null,
       },
     });
 
@@ -294,12 +242,15 @@ router.post('/confirm', async (req, res) => {
 });
 
 // POST /therapy-slots/not-administered
-// Body: { patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora, operatoreId, operatoreNome, motivo, note }
+// Body: { patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora, operatoreId, operatoreNome, motivo, note, therapyId? }
 router.post('/not-administered', async (req, res) => {
   const {
     patientId, farmacoNome, farmacoDose, farmacoVia,
     date, fascia, ora, operatoreId, operatoreNome,
     motivo, note: noteText,
+    // therapyId accepted for forward-compat; not stored in DB yet
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    therapyId: _therapyId,
   } = req.body as {
     patientId: string;
     farmacoNome: string;
@@ -312,6 +263,7 @@ router.post('/not-administered', async (req, res) => {
     operatoreNome: string;
     motivo: string;
     note: string;
+    therapyId?: string;
   };
 
   if (!patientId || !farmacoNome || !date || !fascia || !motivo) {
@@ -326,23 +278,23 @@ router.post('/not-administered', async (req, res) => {
         patientId,
         farmacoNome,
         farmacoDose: farmacoDose || '',
-        farmacoVia: farmacoVia || 'orale',
+        farmacoVia:  farmacoVia  || 'orale',
         date,
         fascia,
-        ora: ora || '',
-        stato: 'non_erogata',
-        operatoreId: operatoreId || null,
+        ora:          ora          || '',
+        stato:        'non_erogata',
+        operatoreId:  operatoreId  || null,
         operatoreNome: operatoreNome || null,
         motivo,
-        note: noteText || null,
+        note:         noteText || null,
       },
       update: {
-        stato: 'non_erogata',
+        stato:        'non_erogata',
         motivo,
-        note: noteText || null,
-        operatoreId: operatoreId || null,
+        note:         noteText || null,
+        operatoreId:  operatoreId  || null,
         operatoreNome: operatoreNome || null,
-        confirmedAt: null,
+        confirmedAt:  null,
       },
     });
 

@@ -3,7 +3,7 @@ import type {
   RecordClinico, RecordTerapia, ParametroVitale, Allergia, Farmaco,
   UtenteApp, Appuntamento, Camera, ScheduleOperatore, Nota,
   GiornoSettimana, CartellaPaziente,
-  TherapySlot, SomministrazioneTerapia, StatoSomministrazione,
+  TherapySlot, TherapySlotPatient,
 } from './types';
 
 // ── Default clinical cartella factory ─────────────────────────────────────────
@@ -488,102 +488,118 @@ export const MOCK_FARMACI: Farmaco[] = [
 // ── Therapy Slots (Agenda) ───────────────────────────────────────────────────
 
 export function createMockTherapySlots(_data: string): TherapySlot[] {
-  const pazienti: { nome: string; camera: string; letto: string; id: string }[] = [
-    { id: 'tp1', nome: 'Rossi, Giovanni',   camera: '101', letto: '1' },
-    { id: 'tp2', nome: 'Esposito, Maria',   camera: '202', letto: '2' },
-    { id: 'tp3', nome: 'Verdi, Luigi',      camera: '201', letto: '1' },
-    { id: 'tp4', nome: 'Neri, Carla',       camera: '202', letto: '1' },
-    { id: 'tp5', nome: 'Ferrari, Anna',     camera: 'PS-01', letto: '1' },
-    { id: 'tp6', nome: 'Colombo, Piero',    camera: '102', letto: '1' },
-    { id: 'tp7', nome: 'Romano, Marco',     camera: '201', letto: '2' },
-    { id: 'tp8', nome: 'Bianchi, Lucia',    camera: '301', letto: '1' },
+  const mockPatients: TherapySlotPatient[] = [
+    {
+      patientId: 'tp1',
+      firstName: 'Giovanni',
+      lastName: 'Rossi',
+      room: '101',
+      bed: '1',
+      administrations: [
+        { administrationId: 'a1', therapyId: 'th1', drugName: 'Losartan', dosage: '50 mg', route: 'orale', scheduledTime: '08:00', status: 'administered', administeredAt: _data + 'T08:05:00', administeredBy: 'Giulia Bianchi', notAdministeredReason: null },
+        { administrationId: 'a2', therapyId: 'th2', drugName: 'Aspirina', dosage: '100 mg', route: 'orale', scheduledTime: '08:00', status: 'pending', administeredAt: null, administeredBy: null, notAdministeredReason: null },
+      ],
+    },
+    {
+      patientId: 'tp2',
+      firstName: 'Maria',
+      lastName: 'Esposito',
+      room: '202',
+      bed: '2',
+      administrations: [
+        { administrationId: 'a3', therapyId: 'th3', drugName: 'Amlodipina', dosage: '5 mg', route: 'orale', scheduledTime: '08:00', status: 'administered', administeredAt: _data + 'T08:10:00', administeredBy: 'Giulia Bianchi', notAdministeredReason: null },
+        { administrationId: null, therapyId: 'th4', drugName: 'Atorvastatina', dosage: '20 mg', route: 'orale', scheduledTime: '08:00', status: 'not_administered', administeredAt: null, administeredBy: null, notAdministeredReason: 'rifiutata_paziente' },
+      ],
+    },
+    {
+      patientId: 'tp3',
+      firstName: 'Luigi',
+      lastName: 'Verdi',
+      room: '201',
+      bed: '1',
+      administrations: [
+        { administrationId: null, therapyId: 'th5', drugName: 'Furosemide', dosage: '25 mg', route: 'ev', scheduledTime: '08:00', status: 'pending', administeredAt: null, administeredBy: null, notAdministeredReason: null },
+      ],
+    },
   ];
 
-  const farmaci: { farmaco: string; dose: string; via: string }[] = [
-    { farmaco: 'Losartan',      dose: '50 mg',    via: 'orale' },
-    { farmaco: 'Amlodipina',    dose: '5 mg',     via: 'orale' },
-    { farmaco: 'Aspirina',      dose: '100 mg',   via: 'orale' },
-    { farmaco: 'Atorvastatina', dose: '20 mg',    via: 'orale' },
-    { farmaco: 'Furosemide',    dose: '25 mg',    via: 'ev' },
-    { farmaco: 'Insulina',      dose: '10 UI',    via: 'sc' },
-    { farmaco: 'Enoxaparina',   dose: '4000 UI',  via: 'sc' },
-    { farmaco: 'Paracetamolo',  dose: '1000 mg',  via: 'orale' },
-    { farmaco: 'Omeprazolo',    dose: '20 mg',    via: 'orale' },
-    { farmaco: 'Metformina',    dose: '500 mg',   via: 'orale' },
+  const pranzoPatients: TherapySlotPatient[] = [
+    {
+      patientId: 'tp1',
+      firstName: 'Giovanni',
+      lastName: 'Rossi',
+      room: '101',
+      bed: '1',
+      administrations: [
+        { administrationId: null, therapyId: 'th6', drugName: 'Insulina', dosage: '10 UI', route: 'sc', scheduledTime: '12:00', status: 'pending', administeredAt: null, administeredBy: null, notAdministeredReason: null },
+      ],
+    },
+    {
+      patientId: 'tp3',
+      firstName: 'Luigi',
+      lastName: 'Verdi',
+      room: '201',
+      bed: '1',
+      administrations: [
+        { administrationId: null, therapyId: 'th7', drugName: 'Metformina', dosage: '500 mg', route: 'orale', scheduledTime: '12:00', status: 'pending', administeredAt: null, administeredBy: null, notAdministeredReason: null },
+      ],
+    },
   ];
 
-  function makeSomm(
-    slotId: string, pIdx: number, fIdx: number, ora: string, stato: StatoSomministrazione,
-    conferma?: { op: string; oraC: string },
-  ): SomministrazioneTerapia {
-    const p = pazienti[pIdx % pazienti.length];
-    const f = farmaci[fIdx % farmaci.length];
-    const s: SomministrazioneTerapia = {
-      id: `${slotId}-s${pIdx}-${fIdx}`,
-      pazienteId: p.id,
-      pazienteNome: p.nome,
-      camera: p.camera,
-      letto: p.letto,
-      farmaco: f.farmaco,
-      dose: f.dose,
-      via: f.via,
-      orarioPrevisto: ora,
-      stato,
-    };
-    if (conferma) {
-      s.operatoreConferma = conferma.op;
-      s.oraConferma = conferma.oraC;
-    }
-    if (stato === 'non_erogata') {
-      s.motivoNonErogazione = 'rifiutata_paziente';
-      s.noteNonErogazione = 'Paziente ha rifiutato la somministrazione.';
-    }
-    return s;
-  }
+  const pomeriggioPatientsData: TherapySlotPatient[] = [
+    {
+      patientId: 'tp2',
+      firstName: 'Maria',
+      lastName: 'Esposito',
+      room: '202',
+      bed: '2',
+      administrations: [
+        { administrationId: null, therapyId: 'th8', drugName: 'Omeprazolo', dosage: '20 mg', route: 'orale', scheduledTime: '16:00', status: 'pending', administeredAt: null, administeredBy: null, notAdministeredReason: null },
+        { administrationId: null, therapyId: 'th9', drugName: 'Enoxaparina', dosage: '4000 UI', route: 'sc', scheduledTime: '16:00', status: 'pending', administeredAt: null, administeredBy: null, notAdministeredReason: null },
+      ],
+    },
+  ];
 
   return [
     {
-      id: 'ts-mattina', fascia: 'mattina', label: 'Terapia Mattina', ora: '08:00',
-      somministrazioni: [
-        makeSomm('ts-mattina', 0, 0, '08:00', 'erogata', { op: 'Giulia Bianchi', oraC: '08:05' }),
-        makeSomm('ts-mattina', 1, 1, '08:00', 'erogata', { op: 'Giulia Bianchi', oraC: '08:10' }),
-        makeSomm('ts-mattina', 2, 2, '08:00', 'da_erogare'),
-        makeSomm('ts-mattina', 3, 3, '08:00', 'da_erogare'),
-        makeSomm('ts-mattina', 4, 4, '08:00', 'non_erogata'),
-      ],
+      id: 'ts-mattina',
+      fascia: 'mattina',
+      label: 'Terapia Mattina',
+      ora: '08:00',
+      summary: { total: 5, administered: 2, notAdministered: 1, pending: 2 },
+      patients: mockPatients,
     },
     {
-      id: 'ts-pranzo', fascia: 'pranzo', label: 'Terapia Pranzo', ora: '12:00',
-      somministrazioni: [
-        makeSomm('ts-pranzo', 0, 5, '12:00', 'da_erogare'),
-        makeSomm('ts-pranzo', 2, 6, '12:00', 'da_erogare'),
-        makeSomm('ts-pranzo', 5, 8, '12:00', 'da_erogare'),
-      ],
+      id: 'ts-pranzo',
+      fascia: 'pranzo',
+      label: 'Terapia Pranzo',
+      ora: '12:00',
+      summary: { total: 2, administered: 0, notAdministered: 0, pending: 2 },
+      patients: pranzoPatients,
     },
     {
-      id: 'ts-pomeriggio', fascia: 'pomeriggio', label: 'Terapia Pomeriggio', ora: '16:00',
-      somministrazioni: [
-        makeSomm('ts-pomeriggio', 1, 0, '16:00', 'da_erogare'),
-        makeSomm('ts-pomeriggio', 3, 7, '16:00', 'da_erogare'),
-        makeSomm('ts-pomeriggio', 6, 9, '16:00', 'da_erogare'),
-        makeSomm('ts-pomeriggio', 7, 1, '16:00', 'da_erogare'),
-      ],
+      id: 'ts-pomeriggio',
+      fascia: 'pomeriggio',
+      label: 'Terapia Pomeriggio',
+      ora: '16:00',
+      summary: { total: 2, administered: 0, notAdministered: 0, pending: 2 },
+      patients: pomeriggioPatientsData,
     },
     {
-      id: 'ts-sera', fascia: 'sera', label: 'Terapia Sera', ora: '20:00',
-      somministrazioni: [
-        makeSomm('ts-sera', 0, 3, '20:00', 'da_erogare'),
-        makeSomm('ts-sera', 1, 8, '20:00', 'da_erogare'),
-        makeSomm('ts-sera', 4, 6, '20:00', 'da_erogare'),
-      ],
+      id: 'ts-sera',
+      fascia: 'sera',
+      label: 'Terapia Sera',
+      ora: '20:00',
+      summary: { total: 0, administered: 0, notAdministered: 0, pending: 0 },
+      patients: [],
     },
     {
-      id: 'ts-notte', fascia: 'notte', label: 'Terapia Notte', ora: '22:00',
-      somministrazioni: [
-        makeSomm('ts-notte', 2, 5, '22:00', 'da_erogare'),
-        makeSomm('ts-notte', 5, 7, '22:00', 'da_erogare'),
-        makeSomm('ts-notte', 7, 9, '22:00', 'da_erogare'),
-      ],
+      id: 'ts-notte',
+      fascia: 'notte',
+      label: 'Terapia Notte',
+      ora: '22:00',
+      summary: { total: 0, administered: 0, notAdministered: 0, pending: 0 },
+      patients: [],
     },
   ];
 }

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { TherapySlot, MotivoNonErogazione } from '../../types';
+import type { TherapySlot, TherapySlotPatient, TherapyAdministration, MotivoNonErogazione } from '../../types';
 
 interface Props {
   slot: TherapySlot;
   onClose: () => void;
-  onConfirm: (id: string) => void;
-  onNotAdministered: (id: string, motivo: MotivoNonErogazione, note: string) => void;
+  onConfirm: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }) => void;
+  onNotAdministered: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }, motivo: MotivoNonErogazione, note: string) => void;
 }
 
 const MOTIVI: { value: MotivoNonErogazione; label: string }[] = [
@@ -18,18 +18,25 @@ const MOTIVI: { value: MotivoNonErogazione; label: string }[] = [
 ];
 
 export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }: Props) {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const [selectedMotivo, setSelectedMotivo] = useState<MotivoNonErogazione | null>(null);
   const [noteText, setNoteText] = useState('');
-  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
 
-  const rows = Array.isArray(slot?.somministrazioni) ? slot.somministrazioni : [];
+  const { summary, patients } = slot;
+  const pctDone = summary.total > 0 ? Math.round((summary.administered / summary.total) * 100) : 0;
 
-  const total = rows.length;
-  const erogate = rows.filter(r => r.stato === 'erogata').length;
-  const nonErogate = rows.filter(r => r.stato === 'non_erogata').length;
-  const daErogare = total - erogate - nonErogate;
-  const pctDone = total > 0 ? Math.round((erogate / total) * 100) : 0;
+  function buildInfo(p: TherapySlotPatient, a: TherapyAdministration) {
+    return {
+      patientId: p.patientId,
+      therapyId: a.therapyId,
+      drugName: a.drugName,
+      dosage: a.dosage,
+      route: a.route,
+      fascia: slot.fascia,
+      ora: slot.ora,
+    };
+  }
 
   return (
     <div className="therapy-modal-overlay" onClick={onClose}>
@@ -40,8 +47,8 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
           <div>
             <h3>{slot.label} &mdash; {slot.ora}</h3>
             <span className="therapy-modal__header-info">
-              {erogate}/{total} erogate
-              {daErogare > 0 ? ` · ${daErogare} da erogare` : ''}
+              {summary.administered}/{summary.total} erogate
+              {summary.pending > 0 ? ` · ${summary.pending} da erogare` : ''}
             </span>
           </div>
           <button className="therapy-modal__close" onClick={onClose} aria-label="Chiudi">&times;</button>
@@ -49,127 +56,122 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
 
         {/* Body */}
         <div className="therapy-modal__body">
-
-          {/* Debug line — remove after confirmed working */}
-          <div style={{ padding: '4px 16px', fontSize: 11, color: '#94A3B8', background: '#F8FAFC', borderBottom: '1px solid #E5E7EB' }}>
-            Debug righe terapia: {rows.length}
-            {rows.length === 0 && ` | slot keys: ${Object.keys(slot).join(', ')}`}
-            {rows.length === 0 && ` | somministrazioni: ${slot.somministrazioni === undefined ? 'undefined' : Array.isArray(slot.somministrazioni) ? 'empty array' : typeof slot.somministrazioni}`}
-          </div>
-
-          {rows.length === 0 ? (
+          {patients.length === 0 ? (
             <div className="therapy-modal__empty">Nessuna terapia prevista per questa fascia.</div>
           ) : (
-            <div className="therapy-modal__rows">
-              {rows.map((r) => (
-                <div key={r.id}>
-                  <div className="therapy-modal__row">
-                    <div className="therapy-modal__row-patient">
-                      <strong>{r.pazienteNome || '—'}</strong>
-                      <span>Camera {r.camera || '-'} · Letto {r.letto || '-'}</span>
-                    </div>
-                    <div className="therapy-modal__row-drug">
-                      <strong>{r.farmaco || '—'}</strong>
-                      <span>{r.dose || '—'} · {r.via || 'orale'} · {r.orarioPrevisto || '—'}</span>
-                    </div>
-                    <div className="therapy-modal__row-stato">
-                      {r.stato === 'erogata' && (
-                        <span style={{ color: '#059669', fontWeight: 600, fontSize: 12 }}>✓ Erogata</span>
-                      )}
-                      {r.stato === 'non_erogata' && (
-                        <span style={{ color: '#DC2626', fontWeight: 600, fontSize: 12 }}>
-                          Non erogata
-                          {r.motivoNonErogazione && (
-                            <span style={{ fontWeight: 400 }}>
-                              {' — ' + (MOTIVI.find(m => m.value === r.motivoNonErogazione)?.label || r.motivoNonErogazione)}
+            patients.map(p => (
+              <div key={p.patientId}>
+                {/* Patient header */}
+                <div className="therapy-patient-header">
+                  {p.lastName.toUpperCase()}, {p.firstName}
+                  <span className="therapy-patient-header__sub">
+                    Camera {p.room} / Letto {p.bed}
+                  </span>
+                </div>
+
+                {/* Drug rows */}
+                {p.administrations.map(a => {
+                  const key = `${p.patientId}|${a.therapyId}`;
+                  const isPending = pendingKeys.has(key);
+                  return (
+                    <div key={key}>
+                      <div className="therapy-drug-row">
+                        <div className="therapy-drug-row__info">
+                          <span className="therapy-drug-row__name">{a.drugName}</span>
+                          <span className="therapy-drug-row__meta">{a.dosage} · {a.route} · {a.scheduledTime}</span>
+                        </div>
+                        <div className="therapy-drug-row__actions">
+                          {a.status === 'administered' && (
+                            <span style={{ color: '#059669', fontWeight: 600, fontSize: 12 }}>
+                              ✓ Erogata{a.administeredBy ? ` (${a.administeredBy})` : ''}
                             </span>
                           )}
-                        </span>
-                      )}
-                      {r.stato === 'da_erogare' && (
-                        <span style={{ color: '#D97706', fontSize: 12 }}>Da erogare</span>
-                      )}
-                    </div>
-                    <div className="therapy-modal__row-actions">
-                      {r.stato === 'da_erogare' && (
-                        <>
+                          {a.status === 'not_administered' && (
+                            <span style={{ color: '#DC2626', fontWeight: 600, fontSize: 12 }}>
+                              Non erogata
+                              {a.notAdministeredReason && (
+                                <span style={{ fontWeight: 400 }}> — {a.notAdministeredReason}</span>
+                              )}
+                            </span>
+                          )}
+                          {a.status === 'pending' && (
+                            <>
+                              <button
+                                className="therapy-action-btn therapy-action-btn--confirm"
+                                disabled={isPending}
+                                style={{ opacity: isPending ? 0.6 : 1 }}
+                                onClick={() => {
+                                  setPendingKeys(prev => new Set(prev).add(key));
+                                  onConfirm(buildInfo(p, a));
+                                }}>
+                                {isPending ? 'Invio…' : 'Erogata'}
+                              </button>
+                              <button
+                                className="therapy-action-btn therapy-action-btn--reject"
+                                onClick={() => {
+                                  if (expandedKey === key) {
+                                    setExpandedKey(null);
+                                    setSelectedMotivo(null);
+                                    setNoteText('');
+                                  } else {
+                                    setExpandedKey(key);
+                                    setSelectedMotivo(null);
+                                    setNoteText('');
+                                  }
+                                }}>
+                                Non erogata
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      {expandedKey === key && (
+                        <div className="therapy-nonadmin-expand">
+                          <div className="therapy-motivi-grid">
+                            {MOTIVI.map(m => (
+                              <button
+                                key={m.value}
+                                className={`therapy-motivo-btn${selectedMotivo === m.value ? ' selected' : ''}`}
+                                onClick={() => setSelectedMotivo(m.value)}>
+                                {m.label}
+                              </button>
+                            ))}
+                          </div>
+                          {selectedMotivo === 'altro' && (
+                            <input
+                              className="therapy-note-input"
+                              placeholder="Specifica il motivo..."
+                              value={noteText}
+                              onChange={e => setNoteText(e.target.value)}
+                            />
+                          )}
                           <button
                             className="therapy-action-btn therapy-action-btn--confirm"
-                            disabled={pendingId === r.id}
-                            style={{ opacity: pendingId === r.id ? 0.6 : 1 }}
-                            onClick={() => { setPendingId(r.id); onConfirm(r.id); }}>
-                            {pendingId === r.id ? 'Invio…' : 'Erogata'}
-                          </button>
-                          <button
-                            className="therapy-action-btn therapy-action-btn--reject"
+                            disabled={!selectedMotivo}
+                            style={{ opacity: selectedMotivo ? 1 : 0.5 }}
                             onClick={() => {
-                              if (expandedId === r.id) {
-                                setExpandedId(null);
-                                setSelectedMotivo(null);
-                                setNoteText('');
-                              } else {
-                                setExpandedId(r.id);
-                                setSelectedMotivo(null);
-                                setNoteText('');
-                              }
+                              if (!selectedMotivo) return;
+                              onNotAdministered(buildInfo(p, a), selectedMotivo, noteText);
+                              setExpandedKey(null);
+                              setSelectedMotivo(null);
+                              setNoteText('');
                             }}>
-                            Non erogata
+                            Conferma
                           </button>
-                        </>
-                      )}
-                      {r.stato === 'erogata' && (
-                        <span style={{ fontSize: 11, color: '#059669', fontWeight: 600 }}>✓ Confermata</span>
-                      )}
-                      {r.stato === 'non_erogata' && (
-                        <span style={{ fontSize: 11, color: '#DC2626', fontWeight: 600 }}>Registrata</span>
+                        </div>
                       )}
                     </div>
-                  </div>
-
-                  {expandedId === r.id && (
-                    <div className="therapy-nonadmin-expand">
-                      <div className="therapy-motivi-grid">
-                        {MOTIVI.map(m => (
-                          <button key={m.value}
-                            className={`therapy-motivo-btn${selectedMotivo === m.value ? ' selected' : ''}`}
-                            onClick={() => setSelectedMotivo(m.value)}>
-                            {m.label}
-                          </button>
-                        ))}
-                      </div>
-                      {selectedMotivo === 'altro' && (
-                        <input
-                          className="therapy-note-input"
-                          placeholder="Specifica il motivo..."
-                          value={noteText}
-                          onChange={e => setNoteText(e.target.value)}
-                        />
-                      )}
-                      <button
-                        className="therapy-action-btn therapy-action-btn--confirm"
-                        disabled={!selectedMotivo}
-                        style={{ opacity: selectedMotivo ? 1 : 0.5 }}
-                        onClick={() => {
-                          if (!selectedMotivo) return;
-                          onNotAdministered(r.id, selectedMotivo, noteText);
-                          setExpandedId(null);
-                          setSelectedMotivo(null);
-                          setNoteText('');
-                        }}>
-                        Conferma
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+                  );
+                })}
+              </div>
+            ))
           )}
         </div>
 
         {/* Footer */}
         <div className="therapy-modal__footer">
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span className="therapy-modal__footer-progress">{erogate}/{total} erogate</span>
+            <span className="therapy-modal__footer-progress">{summary.administered}/{summary.total} erogate</span>
             <span className="therapy-modal__footer-bar">
               <span className="therapy-modal__footer-fill" style={{ width: `${pctDone}%` }} />
             </span>

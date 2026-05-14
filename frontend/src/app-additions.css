@@ -5993,3 +5993,53 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   height: 16px;
   cursor: pointer;
 }
+
+/* ── Therapy Slot Modal: grouped patient view ──────────────────────────────── */
+
+.therapy-patient-header {
+  padding: 8px 16px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A3357;
+  background: #F0F4F8;
+  border-bottom: 1px solid #E5E7EB;
+  border-top: 1px solid #E5E7EB;
+  margin-top: 8px;
+}
+.therapy-patient-header:first-child {
+  margin-top: 0;
+}
+.therapy-patient-header__sub {
+  font-size: 11px;
+  font-weight: 400;
+  color: #6B7280;
+  margin-left: 8px;
+}
+.therapy-drug-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #F3F4F6;
+}
+.therapy-drug-row__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.therapy-drug-row__name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+}
+.therapy-drug-row__meta {
+  font-size: 11px;
+  color: #6B7280;
+}
+.therapy-drug-row__actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}

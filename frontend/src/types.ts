@@ -806,21 +806,33 @@ export type MotivoNonErogazione =
   | 'impossibilita_clinica'
   | 'altro';
 
-export interface SomministrazioneTerapia {
-  id: string;
-  pazienteId: string;
-  pazienteNome: string;
-  camera: string;
-  letto: string;
-  farmaco: string;
-  dose: string;
-  via: string;
-  orarioPrevisto: string;
-  stato: StatoSomministrazione;
-  operatoreConferma?: string;
-  oraConferma?: string;
-  motivoNonErogazione?: MotivoNonErogazione;
-  noteNonErogazione?: string;
+export interface TherapyAdministration {
+  administrationId: string | null;
+  therapyId: string;
+  drugName: string;
+  dosage: string;
+  route: string;
+  scheduledTime: string;
+  status: 'pending' | 'administered' | 'not_administered';
+  administeredAt: string | null;
+  administeredBy: string | null;
+  notAdministeredReason: string | null;
+}
+
+export interface TherapySlotPatient {
+  patientId: string;
+  firstName: string;
+  lastName: string;
+  room: string;
+  bed: string;
+  administrations: TherapyAdministration[];
+}
+
+export interface TherapySlotSummary {
+  total: number;
+  administered: number;
+  notAdministered: number;
+  pending: number;
 }
 
 export interface TherapySlot {
@@ -828,7 +840,8 @@ export interface TherapySlot {
   fascia: FasciaOrariaTerapia;
   label: string;
   ora: string;
-  somministrazioni: SomministrazioneTerapia[];
+  summary: TherapySlotSummary;
+  patients: TherapySlotPatient[];
 }
 
 // ── Patient Therapy (API) ──────────────────────────────────────────────────

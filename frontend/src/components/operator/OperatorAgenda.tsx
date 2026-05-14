@@ -16,8 +16,8 @@ interface OperatorAgendaProps {
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => void;
   onSelectPaziente?: (nome: string) => void;
   therapySlots?: TherapySlot[];
-  onConfirmTherapy?: (id: string) => void;
-  onNotAdministeredTherapy?: (id: string, motivo: MotivoNonErogazione, note: string) => void;
+  onConfirmTherapy?: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }) => void;
+  onNotAdministeredTherapy?: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }, motivo: MotivoNonErogazione, note: string) => void;
   onLoadTherapySlots?: (date: string) => void;
 }
 
@@ -189,12 +189,8 @@ export function OperatorAgenda({
               <div key={ora}>
                 {/* Therapy slot card */}
                 {tSlot && (() => {
-                  const rows = tSlot.somministrazioni ?? [];
-                  const tErogate = rows.filter(s => s.stato === 'erogata').length;
-                  const tNonErogate = rows.filter(s => s.stato === 'non_erogata').length;
-                  const tTotal = rows.length;
-                  const tPending = tTotal - tErogate - tNonErogate;
-                  const allDone = tErogate === tTotal;
+                  const { administered: tErogate, notAdministered: tNonErogate, pending: tPending, total: tTotal } = tSlot.summary;
+                  const allDone = tTotal > 0 && tErogate === tTotal;
                   return (
                     <div
                       className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
@@ -203,7 +199,9 @@ export function OperatorAgenda({
                       <span className="agt-therapy-slot__label">{tSlot.label}</span>
                       <span className="agt-therapy-slot__count">{tErogate}/{tTotal} erogate</span>
                       <span className="agt-therapy-slot__progress">
-                        {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}{tNonErogate > 0 && tPending > 0 ? ' · ' : ''}{tPending > 0 ? `${tPending} da erogare` : ''}
+                        {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}
+                        {tNonErogate > 0 && tPending > 0 ? ' · ' : ''}
+                        {tPending > 0 ? `${tPending} da erogare` : ''}
                       </span>
                     </div>
                   );
@@ -249,11 +247,8 @@ export function OperatorAgenda({
 
           {/* Therapy slots outside regular time range (sera 20:00, notte 22:00) */}
           {therapySlots?.filter(ts => !TIME_SLOTS.includes(ts.ora)).map(ts => {
-            const tErogate = ts.somministrazioni.filter(s => s.stato === 'erogata').length;
-            const tNonErogate = ts.somministrazioni.filter(s => s.stato === 'non_erogata').length;
-            const tTotal = ts.somministrazioni.length;
-            const tPending = tTotal - tErogate - tNonErogate;
-            const allDone = tErogate === tTotal;
+            const { administered: tErogate, notAdministered: tNonErogate, pending: tPending, total: tTotal } = ts.summary;
+            const allDone = tTotal > 0 && tErogate === tTotal;
             return (
               <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
                 <div
@@ -263,7 +258,9 @@ export function OperatorAgenda({
                   <span className="agt-therapy-slot__label">{ts.label}</span>
                   <span className="agt-therapy-slot__count">{tErogate}/{tTotal} erogate</span>
                   <span className="agt-therapy-slot__progress">
-                    {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}{tNonErogate > 0 && tPending > 0 ? ' · ' : ''}{tPending > 0 ? `${tPending} da erogare` : ''}
+                    {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}
+                    {tNonErogate > 0 && tPending > 0 ? ' · ' : ''}
+                    {tPending > 0 ? `${tPending} da erogare` : ''}
                   </span>
                 </div>
               </div>
@@ -300,11 +297,9 @@ export function OperatorAgenda({
                       onClick={() => apts.length === 0 && setAptForm({ data: dStr, ora })}>
                       {therapySlotsMap.has(ora) && (() => {
                         const ts = therapySlotsMap.get(ora)!;
-                        const tErog = ts.somministrazioni.filter(s => s.stato === 'erogata').length;
-                        const tNonErog = ts.somministrazioni.filter(s => s.stato === 'non_erogata').length;
-                        const tDaErog = ts.somministrazioni.filter(s => s.stato === 'da_erogare').length;
-                        const allDone = tErog === ts.somministrazioni.length;
-                        const titleParts = [`${tErog}/${ts.somministrazioni.length} erogate`];
+                        const { administered: tErog, notAdministered: tNonErog, pending: tDaErog, total } = ts.summary;
+                        const allDone = total > 0 && tErog === total;
+                        const titleParts = [`${tErog}/${total} erogate`];
                         if (tNonErog > 0) titleParts.push(`${tNonErog} non erogate`);
                         if (tDaErog > 0) titleParts.push(`${tDaErog} da erogare`);
                         return (
@@ -339,14 +334,14 @@ export function OperatorAgenda({
                 {getWeekDays(refDate).map(d => {
                   const dStr = isoDate(d);
                   const isToday = dStr === isoDate(new Date());
-                  const tErog = ts.somministrazioni.filter(s => s.stato === 'erogata').length;
-                  const allDone = tErog === ts.somministrazioni.length && ts.somministrazioni.length > 0;
+                  const { administered: tErog, total } = ts.summary;
+                  const allDone = total > 0 && tErog === total;
                   return (
                     <div key={`${dStr}-${ts.fascia}`} className="agt-week-cell">
-                      {isToday && ts.somministrazioni.length > 0 && (
+                      {isToday && total > 0 && (
                         <div
                           className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
-                          title={`${ts.label}: ${tErog}/${ts.somministrazioni.length} erogate`}
+                          title={`${ts.label}: ${tErog}/${total} erogate`}
                           onClick={e => { e.stopPropagation(); setSelectedTherapySlotId(ts.id); }}>
                           <IcoPill />
                         </div>

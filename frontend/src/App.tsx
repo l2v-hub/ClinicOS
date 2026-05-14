@@ -6,7 +6,7 @@ import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
   Appuntamento, Camera, ScheduleOperatore, Nota, StatoNota,
   CartellaPaziente, NuovoPaziente, TherapySlot, MotivoNonErogazione,
-  SomministrazioneTerapia,
+  TherapySlotPatient, TherapyAdministration,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
@@ -191,13 +191,8 @@ export default function App() {
           fascia: s.fascia as TherapySlot['fascia'],
           label: s.label as string,
           ora: s.ora as string,
-          somministrazioni: Array.isArray(s.somministrazioni)
-            ? s.somministrazioni
-            : Array.isArray(s.patients)
-              ? s.patients
-              : Array.isArray(s.items)
-                ? s.items
-                : [],
+          summary: (s.summary as TherapySlot['summary']) ?? { total: 0, administered: 0, notAdministered: 0, pending: 0 },
+          patients: Array.isArray(s.patients) ? (s.patients as TherapySlotPatient[]) : [],
         }));
         setTherapySlots(data);
       } else {
@@ -480,40 +475,54 @@ export default function App() {
 
   // ── Therapy CRUD (API-persisted with optimistic update) ─────────────────────
 
-  async function confirmTherapy(somministrazioneId: string) {
-    let target: SomministrazioneTerapia | undefined;
-    let targetSlot: TherapySlot | undefined;
-    for (const slot of therapySlots) {
-      const found = slot.somministrazioni.find(s => s.id === somministrazioneId);
-      if (found) { target = found; targetSlot = slot; break; }
-    }
-    if (!target || !targetSlot) return;
-
+  async function confirmTherapy(info: {
+    patientId: string;
+    therapyId: string;
+    drugName: string;
+    dosage: string;
+    route: string;
+    fascia: string;
+    ora: string;
+  }) {
     const now = new Date();
-    const oraConferma = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    setTherapySlots(prev => prev.map(slot => ({
-      ...slot,
-      somministrazioni: slot.somministrazioni.map(s =>
-        s.id === somministrazioneId
-          ? { ...s, stato: 'erogata' as const, operatoreConferma: utente?.nome ?? '', oraConferma }
-          : s
-      ),
-    })));
+    setTherapySlots(prev => prev.map(slot => {
+      if (slot.fascia !== info.fascia) return slot;
+      return {
+        ...slot,
+        summary: {
+          ...slot.summary,
+          administered: slot.summary.administered + 1,
+          pending: Math.max(0, slot.summary.pending - 1),
+        },
+        patients: slot.patients.map((p: TherapySlotPatient) => {
+          if (p.patientId !== info.patientId) return p;
+          return {
+            ...p,
+            administrations: p.administrations.map((a: TherapyAdministration) =>
+              a.therapyId === info.therapyId
+                ? { ...a, status: 'administered' as const, administeredAt: now.toISOString(), administeredBy: utente?.nome ?? '' }
+                : a
+            ),
+          };
+        }),
+      };
+    }));
 
     try {
       const res = await fetch(`${API_URL}/therapy-slots/confirm`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          patientId: target.pazienteId,
-          farmacoNome: target.farmaco,
-          farmacoDose: target.dose,
-          farmacoVia: target.via,
+          patientId: info.patientId,
+          farmacoNome: info.drugName,
+          farmacoDose: info.dosage,
+          farmacoVia: info.route,
           date: now.toISOString().slice(0, 10),
-          fascia: targetSlot.fascia,
-          ora: targetSlot.ora,
+          fascia: info.fascia,
+          ora: info.ora,
           operatoreId: utente?.id ?? '',
           operatoreNome: utente?.nome ?? '',
+          therapyId: info.therapyId,
         }),
       });
 
@@ -535,38 +544,58 @@ export default function App() {
     }
   }
 
-  async function notAdministeredTherapy(somministrazioneId: string, motivo: MotivoNonErogazione, noteText: string) {
-    let target: SomministrazioneTerapia | undefined;
-    let targetSlot: TherapySlot | undefined;
-    for (const slot of therapySlots) {
-      const found = slot.somministrazioni.find(s => s.id === somministrazioneId);
-      if (found) { target = found; targetSlot = slot; break; }
-    }
-    if (!target || !targetSlot) return;
-
-    setTherapySlots(prev => prev.map(slot => ({
-      ...slot,
-      somministrazioni: slot.somministrazioni.map(s =>
-        s.id === somministrazioneId
-          ? { ...s, stato: 'non_erogata' as const, motivoNonErogazione: motivo, noteNonErogazione: noteText }
-          : s
-      ),
-    })));
+  async function notAdministeredTherapy(
+    info: {
+      patientId: string;
+      therapyId: string;
+      drugName: string;
+      dosage: string;
+      route: string;
+      fascia: string;
+      ora: string;
+    },
+    motivo: MotivoNonErogazione,
+    noteText: string,
+  ) {
+    const now = new Date();
+    setTherapySlots(prev => prev.map(slot => {
+      if (slot.fascia !== info.fascia) return slot;
+      return {
+        ...slot,
+        summary: {
+          ...slot.summary,
+          notAdministered: slot.summary.notAdministered + 1,
+          pending: Math.max(0, slot.summary.pending - 1),
+        },
+        patients: slot.patients.map((p: TherapySlotPatient) => {
+          if (p.patientId !== info.patientId) return p;
+          return {
+            ...p,
+            administrations: p.administrations.map((a: TherapyAdministration) =>
+              a.therapyId === info.therapyId
+                ? { ...a, status: 'not_administered' as const, notAdministeredReason: motivo }
+                : a
+            ),
+          };
+        }),
+      };
+    }));
 
     try {
       const res = await fetch(`${API_URL}/therapy-slots/not-administered`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          patientId: target.pazienteId,
-          farmacoNome: target.farmaco,
-          farmacoDose: target.dose,
-          farmacoVia: target.via,
-          date: new Date().toISOString().slice(0, 10),
-          fascia: targetSlot.fascia,
-          ora: targetSlot.ora,
+          patientId: info.patientId,
+          farmacoNome: info.drugName,
+          farmacoDose: info.dosage,
+          farmacoVia: info.route,
+          date: now.toISOString().slice(0, 10),
+          fascia: info.fascia,
+          ora: info.ora,
           operatoreId: utente?.id ?? '',
           operatoreNome: utente?.nome ?? '',
+          therapyId: info.therapyId,
           motivo,
           note: noteText,
         }),
