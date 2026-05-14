@@ -108,7 +108,9 @@
       "Bash(DATABASE_URL=\"postgresql://postgres:KbcnjWSuTouRdBPGIhVrCgbXiIsDMUUb@switchyard.proxy.rlwy.net:16117/railway\" rtk prisma migrate dev --name add_rooms_beds_assignments --schema prisma/schema.prisma)",
       "Bash(node -e \"const d=require\\('/tmp/therapy_slots.json'\\);d.forEach\\(s=>console.log\\(s.id,s.label+':',s.somministrazioni.length,'somministrazioni'\\)\\)\")",
       "Bash(node -e \"const fs=require\\('fs'\\);const d=JSON.parse\\(fs.readFileSync\\('C:/tmp/therapy_slots.json','utf8'\\)\\);d.forEach\\(s=>console.log\\(s.id,s.label+':',s.somministrazioni.length,'somministrazioni'\\)\\)\")",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); slot=data[0]; print\\('Slot keys:', list\\(slot.keys\\(\\)\\)\\); print\\('Slot ora:', slot.get\\('ora'\\)\\); somm=slot.get\\('somministrazioni',[]\\); print\\('Somministrazioni count:', len\\(somm\\)\\); print\\('First somm keys:', list\\(somm[0].keys\\(\\)\\) if somm else 'EMPTY'\\); print\\('First somm:', json.dumps\\(somm[0], indent=2\\) if somm else 'NONE'\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); s=d[0] if d else {}; print\\('Keys:', list\\(s.keys\\(\\)\\)\\); print\\('Slots:', len\\(d\\)\\)\")"
     ]
   },
   "enabledPlugins": {
