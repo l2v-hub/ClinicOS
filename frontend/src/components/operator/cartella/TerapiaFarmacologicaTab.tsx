@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { ClinicalTableSection } from './shared';
+import { ClinicalTable } from './ClinicalTable';
+import type { ColumnDef } from './ClinicalTable';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -130,6 +132,23 @@ function formToPayload(form: TherapyForm, patientId: string, operatoreNome: stri
     orarioSomministrazione: form.tipo === 'una_tantum' && form.orarioSomministrazione ? form.orarioSomministrazione : null,
   };
 }
+
+// ── Daily admin row type ───────────────────────────────────────────────────────
+
+type DailyAdminRow = {
+  therapyId: string;
+  drugName: string;
+  dosage: string;
+  route: string;
+  fascia: string;
+  scheduledTime: string;
+  status: string;
+  administeredBy?: string | null;
+  administeredAt?: string | null;
+  notAdministeredReason?: string | null;
+  slotLabel?: string;
+  [key: string]: unknown;
+};
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -287,7 +306,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const inattive = therapies.filter(t => t.stato !== 'attiva');
 
   // Filter daily slots for this patient
-  const patientDailyAdmins = dailySlots.flatMap(slot =>
+  const patientDailyAdmins: DailyAdminRow[] = dailySlots.flatMap(slot =>
     (slot.patients ?? [])
       .filter(p => p.patientId === paziente.id)
       .flatMap(p => p.administrations.map(a => ({ ...a, slotLabel: slot.label, fascia: slot.fascia, ora: slot.ora })))
@@ -301,6 +320,208 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     { id: 'giornaliere',    label: 'Somministrazioni giornaliere' },
     { id: 'storico',        label: 'Storico',                     count: history.length },
     { id: 'sospese',        label: 'Sospese/concluse',            count: inattive.length },
+  ];
+
+  // ── Column definitions ────────────────────────────────────────────────────────
+
+  const attiviColumns: ColumnDef<PatientTherapyAPI>[] = [
+    {
+      key: 'farmacoNome', label: 'Farmaco', sortable: true, filterable: true, filterType: 'text',
+      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+    },
+    { key: 'dosaggio', label: 'Dosaggio', sortable: true },
+    { key: 'viaSomministrazione', label: 'Via', sortable: true },
+    {
+      key: 'tipo', label: 'Tipo', sortable: true, filterable: true, filterType: 'select',
+      options: [{ value: 'periodica', label: 'Periodica' }, { value: 'una_tantum', label: 'Una tantum' }],
+      render: (v: string) => <span className={`badge ${TIPO_BADGE[v] ?? 'badge--gray'}`}>{v === 'una_tantum' ? 'una tantum' : v}</span>,
+    },
+    {
+      key: 'fasceMattina', label: 'Fasce orarie', sortable: false,
+      render: (_: unknown, t: PatientTherapyAPI) => (
+        <div className="fascia-chips">
+          {FASCE_LABELS.filter(f => t[f.boolKey] as boolean).map(f => (
+            <span key={f.key} className="fascia-chip">{f.label}</span>
+          ))}
+          {t.orarioSpecifico && <span className="fascia-chip">{t.orarioSpecifico}</span>}
+        </div>
+      ),
+    },
+    { key: 'dataInizio', label: 'Inizio', sortable: true, filterable: true, filterType: 'date', render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span> },
+    { key: 'dataFine', label: 'Fine', sortable: true, render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span> },
+    { key: 'prescrittore', label: 'Prescrittore', sortable: true, render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span> },
+    {
+      key: 'id', label: '', width: '90px',
+      render: (_: unknown, t: PatientTherapyAPI) => (
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => openEdit(t)}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button className="icon-btn icon-btn--sm icon-btn--danger" title="Sospendi" onClick={() => handleSospendi(t)}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+            </svg>
+          </button>
+          <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => handleDelete(t.id)}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const programmazioneColumns: ColumnDef<PatientTherapyAPI>[] = [
+    {
+      key: 'farmacoNome', label: 'Farmaco', sortable: true, filterable: true, filterType: 'text',
+      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+    },
+    { key: 'dosaggio', label: 'Dosaggio', sortable: true },
+    { key: 'viaSomministrazione', label: 'Via', sortable: true },
+    {
+      key: 'stato', label: 'Stato', sortable: true, filterable: true, filterType: 'select',
+      options: [{ value: 'attiva', label: 'Attiva' }, { value: 'sospesa', label: 'Sospesa' }, { value: 'conclusa', label: 'Conclusa' }],
+      render: (v: string) => <span className={`badge ${STATO_BADGE[v] ?? 'badge--gray'}`}>{v}</span>,
+    },
+    {
+      key: 'tipo', label: 'Tipo', sortable: true, filterable: true, filterType: 'select',
+      options: [{ value: 'periodica', label: 'Periodica' }, { value: 'una_tantum', label: 'Una tantum' }],
+      render: (v: string) => <span className={`badge ${TIPO_BADGE[v] ?? 'badge--gray'}`}>{v === 'una_tantum' ? 'una tantum' : v}</span>,
+    },
+    { key: 'dataInizio', label: 'Inizio', sortable: true, filterable: true, filterType: 'date', render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span> },
+    {
+      key: 'fasceMattina', label: 'Fasce', sortable: false,
+      render: (_: unknown, t: PatientTherapyAPI) => (
+        <div className="fascia-chips">
+          {FASCE_LABELS.filter(f => t[f.boolKey] as boolean).map(f => (
+            <span key={f.key} className="fascia-chip">{f.label}</span>
+          ))}
+        </div>
+      ),
+    },
+    {
+      key: 'id', label: '', width: '64px',
+      render: (_: unknown, t: PatientTherapyAPI) => (
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => openEdit(t)}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => handleDelete(t.id)}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const giornaliereColumns: ColumnDef<DailyAdminRow>[] = [
+    {
+      key: 'drugName', label: 'Farmaco', sortable: true, filterable: true, filterType: 'text',
+      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+    },
+    { key: 'dosage', label: 'Dosaggio' },
+    { key: 'route', label: 'Via' },
+    {
+      key: 'fascia', label: 'Fascia', sortable: true, filterable: true, filterType: 'select',
+      options: [
+        { value: 'mattina', label: 'Mattina' }, { value: 'pranzo', label: 'Pranzo' },
+        { value: 'pomeriggio', label: 'Pomeriggio' }, { value: 'sera', label: 'Sera' },
+        { value: 'notte', label: 'Notte' },
+      ],
+      render: (_: unknown, a: DailyAdminRow) => <span>{a.slotLabel ?? a.fascia}</span>,
+    },
+    { key: 'scheduledTime', label: 'Orario', sortable: true },
+    {
+      key: 'status', label: 'Stato', sortable: true, filterable: true, filterType: 'select',
+      options: [
+        { value: 'administered', label: 'Erogata' },
+        { value: 'not_administered', label: 'Non erogata' },
+        { value: 'pending', label: 'Da erogare' },
+      ],
+      render: (v: string) => (
+        <span className={`badge ${v === 'administered' ? 'badge--green' : v === 'not_administered' ? 'badge--red' : 'badge--amber'}`}>
+          {v === 'administered' ? 'Erogata' : v === 'not_administered' ? 'Non erogata' : 'Da erogare'}
+        </span>
+      ),
+    },
+    { key: 'administeredBy', label: 'Operatore', sortable: true, render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span> },
+    {
+      key: 'administeredAt', label: 'Ora conferma', sortable: true,
+      render: (v: string) => <span style={{ fontSize: 12 }}>{v ? new Date(v).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) : '—'}</span>,
+    },
+    { key: 'notAdministeredReason', label: 'Motivo', render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span> },
+  ];
+
+  const storicoColumns: ColumnDef<MedAdmin>[] = [
+    { key: 'date', label: 'Data', sortable: true, filterable: true, filterType: 'date', render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span> },
+    {
+      key: 'farmacoNome', label: 'Farmaco', sortable: true, filterable: true, filterType: 'text',
+      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+    },
+    { key: 'farmacoDose', label: 'Dose' },
+    { key: 'farmacoVia', label: 'Via' },
+    {
+      key: 'fascia', label: 'Fascia', sortable: true, filterable: true, filterType: 'select',
+      options: [
+        { value: 'mattina', label: 'Mattina' }, { value: 'pranzo', label: 'Pranzo' },
+        { value: 'pomeriggio', label: 'Pomeriggio' }, { value: 'sera', label: 'Sera' },
+        { value: 'notte', label: 'Notte' },
+      ],
+    },
+    {
+      key: 'stato', label: 'Stato', sortable: true, filterable: true, filterType: 'select',
+      options: [
+        { value: 'erogata', label: 'Erogata' },
+        { value: 'non_erogata', label: 'Non erogata' },
+      ],
+      render: (v: string) => (
+        <span className={`badge ${v === 'erogata' ? 'badge--green' : v === 'non_erogata' ? 'badge--red' : 'badge--amber'}`}>
+          {v === 'erogata' ? 'Erogata' : v === 'non_erogata' ? 'Non erogata' : 'Da erogare'}
+        </span>
+      ),
+    },
+    { key: 'operatoreNome', label: 'Operatore', sortable: true, render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span> },
+    { key: 'motivo', label: 'Motivo', render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span> },
+  ];
+
+  const sospeseColumns: ColumnDef<PatientTherapyAPI>[] = [
+    {
+      key: 'farmacoNome', label: 'Farmaco', sortable: true, filterable: true, filterType: 'text',
+      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+    },
+    { key: 'dosaggio', label: 'Dosaggio' },
+    { key: 'viaSomministrazione', label: 'Via' },
+    {
+      key: 'stato', label: 'Stato', sortable: true, filterable: true, filterType: 'select',
+      options: [{ value: 'sospesa', label: 'Sospesa' }, { value: 'conclusa', label: 'Conclusa' }],
+      render: (v: string) => <span className={`badge ${STATO_BADGE[v] ?? 'badge--gray'}`}>{v}</span>,
+    },
+    { key: 'dataInizio', label: 'Inizio', sortable: true, render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span> },
+    { key: 'dataFine', label: 'Fine', sortable: true, render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span> },
+    {
+      key: 'note', label: 'Note',
+      render: (v: string) => <span style={{ fontSize: 12, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{v ?? ''}</span>,
+    },
+    {
+      key: 'id', label: '', width: '44px',
+      render: (_: unknown, t: PatientTherapyAPI) => (
+        <button className="icon-btn icon-btn--sm" title="Riattiva" onClick={() => handleRiattiva(t)}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </button>
+      ),
+    },
   ];
 
   // ── Render ─────────────────────────────────────────────────────────────────────
@@ -342,58 +563,14 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         ) : attive.length === 0 ? (
           <p className="cr-empty">Nessun farmaco attivo. <button className="link-btn" onClick={openAdd}>+ Aggiungi</button></p>
         ) : (
-          <div className="clinicos-table-wrap">
-            <table className="clinicos-table">
-              <thead>
-                <tr>
-                  <th>Farmaco</th><th>Dosaggio</th><th>Via</th><th>Tipo</th>
-                  <th>Fasce orarie</th><th>Inizio</th><th>Fine</th>
-                  <th>Prescrittore</th><th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {attive.map(t => (
-                  <tr key={t.id}>
-                    <td style={{ fontWeight: 600 }}>{t.farmacoNome}</td>
-                    <td>{t.dosaggio}</td>
-                    <td>{t.viaSomministrazione}</td>
-                    <td><span className={`badge ${TIPO_BADGE[t.tipo] ?? 'badge--gray'}`}>{t.tipo === 'una_tantum' ? 'una tantum' : t.tipo}</span></td>
-                    <td>
-                      <div className="fascia-chips">
-                        {FASCE_LABELS.filter(f => t[f.boolKey] as boolean).map(f => (
-                          <span key={f.key} className="fascia-chip">{f.label}</span>
-                        ))}
-                        {t.orarioSpecifico && <span className="fascia-chip">{t.orarioSpecifico}</span>}
-                      </div>
-                    </td>
-                    <td style={{ fontSize: 12 }}>{t.dataInizio}</td>
-                    <td style={{ fontSize: 12 }}>{t.dataFine ?? '—'}</td>
-                    <td style={{ fontSize: 12 }}>{t.prescrittore ?? '—'}</td>
-                    <td>
-                      <div style={{ display: 'flex', gap: 4 }}>
-                        <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => openEdit(t)}>
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                          </svg>
-                        </button>
-                        <button className="icon-btn icon-btn--sm icon-btn--danger" title="Sospendi" onClick={() => handleSospendi(t)}>
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
-                          </svg>
-                        </button>
-                        <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => handleDelete(t.id)}>
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                          </svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ClinicalTable<PatientTherapyAPI>
+            noWrapper
+            title=""
+            keyField="id"
+            data={attive}
+            emptyMessage="Nessun farmaco attivo."
+            columns={attiviColumns}
+          />
         )
       )}
 
@@ -500,53 +677,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               <button className="btn-primary btn-sm" style={{ marginBottom: 12 }} onClick={openAdd}>+ Nuova terapia</button>
               {loading ? (
                 <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Caricamento...</p>
-              ) : therapies.length === 0 ? (
-                <p className="cr-empty">Nessuna terapia programmata.</p>
               ) : (
-                <div className="clinicos-table-wrap">
-                  <table className="clinicos-table">
-                    <thead>
-                      <tr>
-                        <th>Farmaco</th><th>Dosaggio</th><th>Via</th><th>Stato</th>
-                        <th>Tipo</th><th>Inizio</th><th>Fasce</th><th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {therapies.map(t => (
-                        <tr key={t.id}>
-                          <td style={{ fontWeight: 600 }}>{t.farmacoNome}</td>
-                          <td>{t.dosaggio}</td>
-                          <td>{t.viaSomministrazione}</td>
-                          <td><span className={`badge ${STATO_BADGE[t.stato] ?? 'badge--gray'}`}>{t.stato}</span></td>
-                          <td><span className={`badge ${TIPO_BADGE[t.tipo] ?? 'badge--gray'}`}>{t.tipo === 'una_tantum' ? 'una tantum' : t.tipo}</span></td>
-                          <td style={{ fontSize: 12 }}>{t.dataInizio}</td>
-                          <td>
-                            <div className="fascia-chips">
-                              {FASCE_LABELS.filter(f => t[f.boolKey] as boolean).map(f => (
-                                <span key={f.key} className="fascia-chip">{f.label}</span>
-                              ))}
-                            </div>
-                          </td>
-                          <td>
-                            <div style={{ display: 'flex', gap: 4 }}>
-                              <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => openEdit(t)}>
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                </svg>
-                              </button>
-                              <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => handleDelete(t.id)}>
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                                </svg>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <ClinicalTable<PatientTherapyAPI>
+                  noWrapper
+                  title=""
+                  keyField="id"
+                  data={therapies}
+                  emptyMessage="Nessuna terapia programmata."
+                  columns={programmazioneColumns}
+                />
               )}
             </>
           )}
@@ -568,41 +707,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
           </div>
           {dailyLoading ? (
             <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Caricamento...</p>
-          ) : patientDailyAdmins.length === 0 ? (
-            <p className="cr-empty">Nessuna somministrazione prevista per questa data.</p>
           ) : (
-            <div className="clinicos-table-wrap">
-              <table className="clinicos-table">
-                <thead>
-                  <tr>
-                    <th>Farmaco</th><th>Dosaggio</th><th>Via</th>
-                    <th>Fascia</th><th>Orario</th><th>Stato</th>
-                    <th>Operatore</th><th>Ora conferma</th><th>Motivo</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {patientDailyAdmins.map((a, i) => (
-                    <tr key={`${a.therapyId}-${i}`}>
-                      <td style={{ fontWeight: 600 }}>{a.drugName}</td>
-                      <td>{a.dosage}</td>
-                      <td>{a.route}</td>
-                      <td>{(a as { slotLabel?: string }).slotLabel ?? a.fascia}</td>
-                      <td>{a.scheduledTime}</td>
-                      <td>
-                        <span className={`badge ${a.status === 'administered' ? 'badge--green' : a.status === 'not_administered' ? 'badge--red' : 'badge--amber'}`}>
-                          {a.status === 'administered' ? 'Erogata' : a.status === 'not_administered' ? 'Non erogata' : 'Da erogare'}
-                        </span>
-                      </td>
-                      <td style={{ fontSize: 12 }}>{a.administeredBy ?? '—'}</td>
-                      <td style={{ fontSize: 12 }}>
-                        {a.administeredAt ? new Date(a.administeredAt).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) : '—'}
-                      </td>
-                      <td style={{ fontSize: 12 }}>{a.notAdministeredReason ?? '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <ClinicalTable<DailyAdminRow>
+              noWrapper
+              title=""
+              keyField="therapyId"
+              data={patientDailyAdmins}
+              emptyMessage="Nessuna somministrazione prevista per questa data."
+              columns={giornaliereColumns}
+            />
           )}
         </div>
       )}
@@ -611,37 +724,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       {subTab === 'storico' && (
         historyLoading ? (
           <p style={{ padding: '16px', color: 'var(--text-muted)', fontSize: 13 }}>Caricamento storico...</p>
-        ) : history.length === 0 ? (
-          <p className="cr-empty">Nessuna somministrazione registrata.</p>
         ) : (
-          <div className="clinicos-table-wrap">
-            <table className="clinicos-table">
-              <thead>
-                <tr>
-                  <th>Data</th><th>Farmaco</th><th>Dose</th><th>Via</th>
-                  <th>Fascia</th><th>Stato</th><th>Operatore</th><th>Motivo</th>
-                </tr>
-              </thead>
-              <tbody>
-                {history.map(h => (
-                  <tr key={h.id}>
-                    <td style={{ fontSize: 12 }}>{h.date}</td>
-                    <td style={{ fontWeight: 600 }}>{h.farmacoNome}</td>
-                    <td>{h.farmacoDose}</td>
-                    <td>{h.farmacoVia}</td>
-                    <td>{h.fascia}</td>
-                    <td>
-                      <span className={`badge ${h.stato === 'erogata' ? 'badge--green' : h.stato === 'non_erogata' ? 'badge--red' : 'badge--amber'}`}>
-                        {h.stato === 'erogata' ? 'Erogata' : h.stato === 'non_erogata' ? 'Non erogata' : 'Da erogare'}
-                      </span>
-                    </td>
-                    <td style={{ fontSize: 12 }}>{h.operatoreNome ?? '—'}</td>
-                    <td style={{ fontSize: 12 }}>{h.motivo ?? '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ClinicalTable<MedAdmin>
+            noWrapper
+            title=""
+            keyField="id"
+            data={history}
+            emptyMessage="Nessuna somministrazione registrata."
+            columns={storicoColumns}
+          />
         )
       )}
 
@@ -649,39 +740,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       {subTab === 'sospese' && (
         loading ? (
           <p style={{ padding: '16px', color: 'var(--text-muted)', fontSize: 13 }}>Caricamento...</p>
-        ) : inattive.length === 0 ? (
-          <p className="cr-empty">Nessuna terapia sospesa o conclusa.</p>
         ) : (
-          <div className="clinicos-table-wrap">
-            <table className="clinicos-table">
-              <thead>
-                <tr>
-                  <th>Farmaco</th><th>Dosaggio</th><th>Via</th><th>Stato</th>
-                  <th>Inizio</th><th>Fine</th><th>Note</th><th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {inattive.map(t => (
-                  <tr key={t.id}>
-                    <td style={{ fontWeight: 600 }}>{t.farmacoNome}</td>
-                    <td>{t.dosaggio}</td>
-                    <td>{t.viaSomministrazione}</td>
-                    <td><span className={`badge ${STATO_BADGE[t.stato] ?? 'badge--gray'}`}>{t.stato}</span></td>
-                    <td style={{ fontSize: 12 }}>{t.dataInizio}</td>
-                    <td style={{ fontSize: 12 }}>{t.dataFine ?? '—'}</td>
-                    <td style={{ fontSize: 12, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.note ?? ''}</td>
-                    <td>
-                      <button className="icon-btn icon-btn--sm" title="Riattiva" onClick={() => handleRiattiva(t)}>
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                          <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ClinicalTable<PatientTherapyAPI>
+            noWrapper
+            title=""
+            keyField="id"
+            data={inattive}
+            emptyMessage="Nessuna terapia sospesa o conclusa."
+            columns={sospeseColumns}
+          />
         )
       )}
     </ClinicalTableSection>
