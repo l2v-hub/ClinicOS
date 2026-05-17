@@ -6,6 +6,7 @@ import patientTherapiesRouter from './routes/patient-therapies.js';
 import patientsRouter from './routes/patients.js';
 import therapyRouter from './routes/therapy.js';
 import patientIntakeRouter from './routes/patient-intake.js';
+import patientDiaryRouter from './routes/patient-diary.js';
 
 const app = express();
 
@@ -70,6 +71,7 @@ app.get('/health', (_req, res) => {
 app.use('/admin', adminRoomsRouter);
 app.use('/patients', patientAssignmentRouter);
 app.use('/patients', patientTherapiesRouter);
+app.use('/patients', patientDiaryRouter);
 app.use('/patients', patientsRouter);
 app.use('/therapy-slots', therapyRouter);
 app.use('/patient-intake', patientIntakeRouter);

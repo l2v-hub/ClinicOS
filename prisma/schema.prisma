@@ -70,6 +70,7 @@ model Patient {
   intakeDocuments           PatientIntakeDocument[]
   therapies                 PatientTherapy[]
   roomAssignments           PatientRoomAssignment[]
+  diaryEntries              PatientDiaryEntry[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
@@ -273,4 +274,24 @@ model PatientRoomAssignment {
   @@index([patientId])
   @@index([bedId])
   @@index([startDate, endDate])
+}
+
+model PatientDiaryEntry {
+  id            String   @id @default(cuid())
+  patientId     String
+  authorType    String   // medico | infermiere | oss | fisioterapista | operatore | altro
+  authorName    String
+  title         String?
+  content       String
+  priority      String   @default("normale")  // normale | importante | urgente
+  status        String   @default("aperta")   // aperta | completata | da_rivedere
+  entryDateTime String   // ISO datetime string YYYY-MM-DDTHH:mm
+  category      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([authorType])
+  @@index([entryDateTime])
 }

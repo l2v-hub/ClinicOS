@@ -12,7 +12,7 @@ import {
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
 import { DocumentiTab } from './cartella/DocumentiTab';
-import { DiarioTab } from './cartella/DiarioTab';
+import { DiarioPazienteTab } from './cartella/DiarioPazienteTab';
 import { MedicazioniTab } from './cartella/MedicazioniTab';
 import { ContenzioniTab } from './cartella/ContenzioniTab';
 import { ScalaBradenTab } from './cartella/ScalaBradenTab';
@@ -27,7 +27,7 @@ import { ClinicalTableSection } from './cartella/shared';
 type TabId =
   | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
-  | 'presa-in-carico' | 'documenti' | 'diario-inf' | 'diario-med'
+  | 'presa-in-carico' | 'documenti' | 'diario'
   | 'medicazioni' | 'contenzioni' | 'braden' | 'dimissione';
 
 type TabGroup = 'panoramica' | 'clinica' | 'diario' | 'moduli' | 'documenti';
@@ -61,8 +61,7 @@ const TAB_GROUPS: TabGroupDef[] = [
   {
     id: 'diario', label: 'Diario',
     tabs: [
-      { id: 'diario-inf', label: 'Infermieristico' },
-      { id: 'diario-med', label: 'Medico' },
+      { id: 'diario', label: 'Diario Paziente' },
     ],
   },
   {
@@ -1616,8 +1615,7 @@ export function PatientDetail({
   const TAB_BADGES: Partial<Record<TabId, number>> = {
     diagnosi:    diagnosiAttive.length,
     'terapia-farmacologica': farmaciAttivi.length,
-    'diario-inf': (cartella.diarioInfermieristico ?? []).length || 0,
-    'diario-med': (cartella.diarioMedico ?? []).length || 0,
+    'diario': ((cartella.diarioInfermieristico ?? []).length + (cartella.diarioMedico ?? []).length) || 0,
     medicazioni: (cartella.medicazioniFerite ?? []).length || 0,
     contenzioni: (cartella.contenzioni ?? []).filter(c => c.attiva).length || 0,
     documenti:   (cartella.documentiConsegnati ?? []).length || 0,
@@ -1753,11 +1751,13 @@ export function PatientDetail({
           {tab === 'documenti' && (
             <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
-          {tab === 'diario-inf' && (
-            <DiarioTab cartella={cartella} paziente={paziente} tipo="infermieristico" onUpdate={upd} operatoreNome={operatoreNome} />
-          )}
-          {tab === 'diario-med' && (
-            <DiarioTab cartella={cartella} paziente={paziente} tipo="medico" onUpdate={upd} operatoreNome={operatoreNome} />
+          {tab === 'diario' && (
+            <DiarioPazienteTab
+              pazienteId={paziente.id}
+              operatoreNome={operatoreNome}
+              legacyInfermieristico={cartella.diarioInfermieristico}
+              legacyMedico={cartella.diarioMedico}
+            />
           )}
           {tab === 'medicazioni' && (
             <MedicazioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />

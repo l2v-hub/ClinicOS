@@ -553,6 +553,25 @@ export interface DiarioEntry {
   allegati?: string;
 }
 
+// ── Diario Paziente (unified API) ──────────────────────────────────────────────
+
+export type DiarioAuthorType = 'medico' | 'infermiere' | 'oss' | 'fisioterapista' | 'operatore' | 'altro';
+
+export interface DiarioPazienteEntry {
+  id: string;
+  patientId: string;
+  authorType: DiarioAuthorType;
+  authorName: string;
+  title: string | null;
+  content: string;
+  priority: 'normale' | 'importante' | 'urgente';
+  status: 'aperta' | 'completata' | 'da_rivedere';
+  entryDateTime: string;  // ISO YYYY-MM-DDTHH:mm
+  category: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ParametroGiorno {
   giorno: number;
   pa?: string;
