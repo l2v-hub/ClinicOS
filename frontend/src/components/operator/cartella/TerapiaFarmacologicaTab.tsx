@@ -23,7 +23,7 @@ const STATO_BADGE: Record<string, string> = {
 };
 
 const TIPO_BADGE: Record<string, string> = {
-  periodica: 'badge--blue', una_tantum: 'badge--gray',
+  periodica: 'badge--blue', una_tantum: 'badge--gray', al_bisogno: 'badge--amber',
 };
 
 const STATO_ORDER: Record<string, number> = { attiva: 0, sospesa: 1, conclusa: 2 };
@@ -58,7 +58,7 @@ interface TherapyForm {
   farmacoNome: string;
   dosaggio: string;
   viaSomministrazione: string;
-  tipo: 'periodica' | 'una_tantum';
+  tipo: 'periodica' | 'una_tantum' | 'al_bisogno';
   stato: 'attiva' | 'sospesa' | 'conclusa';
   dataInizio: string;
   dataFine: string;
@@ -333,8 +333,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     { key: 'viaSomministrazione', label: 'Via', sortable: true },
     {
       key: 'tipo', label: 'Tipo', sortable: true, filterable: true, filterType: 'select',
-      options: [{ value: 'periodica', label: 'Periodica' }, { value: 'una_tantum', label: 'Una tantum' }],
-      render: (v: string) => <span className={`badge ${TIPO_BADGE[v] ?? 'badge--gray'}`}>{v === 'una_tantum' ? 'una tantum' : v}</span>,
+      options: [{ value: 'periodica', label: 'Periodica' }, { value: 'una_tantum', label: 'Una tantum' }, { value: 'al_bisogno', label: 'Al bisogno' }],
+      render: (v: string) => <span className={`badge ${TIPO_BADGE[v] ?? 'badge--gray'}`}>{v === 'una_tantum' ? 'una tantum' : v === 'al_bisogno' ? 'al bisogno' : v}</span>,
     },
     {
       key: 'fasceMattina', label: 'Fasce orarie', sortable: false,
@@ -389,8 +389,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     },
     {
       key: 'tipo', label: 'Tipo', sortable: true, filterable: true, filterType: 'select',
-      options: [{ value: 'periodica', label: 'Periodica' }, { value: 'una_tantum', label: 'Una tantum' }],
-      render: (v: string) => <span className={`badge ${TIPO_BADGE[v] ?? 'badge--gray'}`}>{v === 'una_tantum' ? 'una tantum' : v}</span>,
+      options: [{ value: 'periodica', label: 'Periodica' }, { value: 'una_tantum', label: 'Una tantum' }, { value: 'al_bisogno', label: 'Al bisogno' }],
+      render: (v: string) => <span className={`badge ${TIPO_BADGE[v] ?? 'badge--gray'}`}>{v === 'una_tantum' ? 'una tantum' : v === 'al_bisogno' ? 'al bisogno' : v}</span>,
     },
     { key: 'dataInizio', label: 'Inizio', sortable: true, filterable: true, filterType: 'date', render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span> },
     {
@@ -610,6 +610,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                 <div className="tipo-radio">
                   <label><input type="radio" name="tf-tipo" value="periodica" checked={form.tipo === 'periodica'} onChange={() => updateForm({ tipo: 'periodica' })} /> Periodica</label>
                   <label><input type="radio" name="tf-tipo" value="una_tantum" checked={form.tipo === 'una_tantum'} onChange={() => updateForm({ tipo: 'una_tantum' })} /> Una tantum</label>
+                  <label><input type="radio" name="tf-tipo" value="al_bisogno" checked={form.tipo === 'al_bisogno'} onChange={() => updateForm({ tipo: 'al_bisogno' })} /> Al bisogno</label>
                 </div>
               </div>
               <div className="form-group">
@@ -638,18 +639,20 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                   </div>
                 </>
               )}
-              <div className="form-group form-group--full">
-                <label>Fasce orarie</label>
-                <div className="fascia-check">
-                  {FASCE_LABELS.map(f => (
-                    <label key={f.key}>
-                      <input type="checkbox" checked={form[f.boolKey as keyof TherapyForm] as boolean}
-                        onChange={e => updateForm({ [f.boolKey]: e.target.checked })} />
-                      {f.label}
-                    </label>
-                  ))}
+              {form.tipo !== 'al_bisogno' && (
+                <div className="form-group form-group--full">
+                  <label>Fasce orarie</label>
+                  <div className="fascia-check">
+                    {FASCE_LABELS.map(f => (
+                      <label key={f.key}>
+                        <input type="checkbox" checked={form[f.boolKey as keyof TherapyForm] as boolean}
+                          onChange={e => updateForm({ [f.boolKey]: e.target.checked })} />
+                        {f.label}
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="form-group">
                 <label>Orario specifico</label>
                 <input className="form-input" type="time" value={form.orarioSpecifico}
