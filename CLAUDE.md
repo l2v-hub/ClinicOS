@@ -43,3 +43,8 @@ Development rules:
 - Do not change Prisma schema unless explicitly asked.
 - Do not remove working /patients integration.
 - Do not use heavy UI frameworks.
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->

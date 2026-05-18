@@ -1,244 +1,111 @@
-﻿Usa SEMPRE Agent Team Mode con tmux swarm.
-
-Agenti:
-1. LEAD / Orchestrator
-2. Backend / Prisma / Railway Agent
-3. Frontend Implementer
-4. QA / Regression Tester
-
-Task:
-Correggere regressione Agenda: la popup “Terapia mattina/pranzo/pomeriggio/sera/notte” non mostra più pazienti anche se i pazienti hanno terapie schedulate nelle fasce orarie.
-
-## Problema
-
-Dopo le ultime modifiche, cliccando sugli slot terapia in Agenda la popup si apre ma la lista pazienti è vuota.
-
-Questo è una regressione.
-
-I pazienti che hanno terapie programmate per mattina o altre fasce devono comparire nella popup dello slot corrispondente.
+# Task: Unifica Tabelle con ClinicalTable
 
 ## Obiettivo
+Creare componente `ClinicalTable` riutilizzabile con filtri per colonna e ordinamento.
+Migrare TUTTE le tabelle dell'app a questo componente unico.
 
-Ripristinare il collegamento corretto:
+## Componente da creare
 
-Terapia paziente schedulata → fascia oraria → slot Agenda → popup con lista pazienti/terapie.
+File: `frontend/src/components/operator/cartella/ClinicalTable.tsx`
 
-## Regole
+### ColumnDef interface
+```typescript
+export interface ColumnDef<T = any> {
+  key: string;
+  label: string;
+  sortable?: boolean;
+  filterable?: boolean;
+  filterType?: 'text' | 'select' | 'date';
+  options?: { value: string; label: string }[];
+  render?: (value: any, row: T) => React.ReactNode;
+  width?: string;
+}
+```
 
-- Non lavorare su OCR o import documenti.
-- Non modificare funzionalità non collegate alla terapia/agenda.
-- Non usare mock.
-- Non usare local state come sorgente principale.
-- Non usare database locale.
-- Usare backend/API reali.
-- Non usare Podman.
-- Non usare migrate reset.
-- Non usare db push --force-reset.
-- Non cancellare dati.
-- Non rompere VITE_API_URL.
+### Props
+- title: string
+- columns: ColumnDef<T>[]
+- data: T[]
+- count?: number
+- countLabel?: string
+- defaultOpen?: boolean
+- actions?: ReactNode
+- emptyMessage?: string
+- keyField?: string (default: 'id')
 
-## Ambiente online
+### Comportamento
+- Wrap in ClinicalTableSection (blue header, collapsible)
+- Sort: click header → asc → desc → reset
+- Filtri: pulsante "Filtri" in header actions mostra/nasconde riga filtri sotto intestazioni
+- Filtro text: input testuale
+- Filtro select: dropdown con options
+- Filtro date: input type="date"
+- Empty state via <td colSpan>
+- Ordinamento: testo (localeCompare it), numeri, date (string compare YYYY-MM-DD)
 
-Railway project:
-glistening-friendship
+## CSS da aggiungere in app-additions.css
 
-Service:
-clinicos-backend
+```css
+/* ── ClinicalTable (CDT) ──────────────────────────────────────── */
+.cdt__th-inner { display: flex; flex-direction: column; gap: 2px; }
+.cdt__sort-btn {
+  background: none; border: none; cursor: pointer;
+  color: inherit; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: 4px;
+  padding: 0; white-space: nowrap;
+}
+.cdt__sort-btn:hover { color: #a8d4f8; }
+.cdt__sort-icon { font-size: 10px; opacity: 0.7; }
+.cdt__filter { margin-top: 4px; }
+.cdt__filter-input, .cdt__filter-select {
+  width: 100%; font-size: 11px; padding: 2px 4px; border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.15); color: #fff;
+}
+.cdt__filter-input::placeholder { color: rgba(255,255,255,0.5); }
+.cdt__filter-input:focus, .cdt__filter-select:focus {
+  outline: none; border-color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.25);
+}
+.cdt__empty {
+  text-align: center; padding: 32px 16px;
+  color: var(--text-muted, #8898AA); font-style: italic; font-size: 13px;
+}
+```
 
-Backend:
-https://clinicos-backend-production-df88.up.railway.app
+## Tabelle da migrare
 
-Wrapper Railway:
-.claude/team/railway-win.sh
+1. PatientList.tsx — tabella pazienti desktop
+2. TerapiaMedicaTab.tsx — tabella farmaci (mantieni render prop per azioni + stile righe attivo/sospeso)
+3. TerapiaFarmacologicaTab.tsx — tabella terapia farmacologica
+4. TerapiaScheduleTab.tsx — se ha tabelle
+5. DiarioTab.tsx — lista voci diario
+6. DocumentiTab.tsx — lista documenti
+7. MedicazioniTab.tsx — lista medicazioni/lesioni
+8. ScalaBradenTab.tsx — storico scale
+9. ContenzioniTab.tsx — lista contenzioni
+10. PresaInCaricoTab.tsx — farmaci correnti / allergie
+11. DimissioneTab.tsx — se ha tabelle
+12. ParametriTab.tsx — SOLO lista storico misurazioni, NON la griglia inline editing
+13. OperatorManagement.tsx — lista operatori
+14. RoomsManagement.tsx — lista camere/letti
+15. ConsegnePage.tsx — lista consegne
+16. AdminAgenda.tsx — se ha tabelle
 
-## Cose da controllare
+## Vincoli HARD
 
-### 1. Terapie paziente
-
-Verifica che le terapie salvate abbiano campi coerenti:
-
-- patientId
-- drugName / nome farmaco
-- dosage / dosaggio
-- therapyType: periodica oppure una tantum
-- status: attiva
-- startDate
-- endDate opzionale
-- timeSlot / fasciaOraria
-- scheduledTime / orario previsto
-
-Controlla se il bug deriva da mismatch nomi campo, esempio:
-- timeSlot vs timeSlots
-- fascia vs fasciaOraria
-- mattina vs morning
-- active vs attiva
-- scheduledAt vs scheduledTime
-- startDate salvata come stringa ma confrontata male
-
-### 2. Endpoint therapy slots
-
-Verifica/correggi:
-
-GET /therapy-slots?date=YYYY-MM-DD
-
-Deve restituire slot con conteggi corretti:
-- Terapia mattina
-- Terapia pranzo
-- Terapia pomeriggio
-- Terapia sera
-- Terapia notte
-
-Per ogni slot:
-- total
-- administeredCount
-- notAdministeredCount
-- pendingCount
-
-### 3. Endpoint pazienti slot
-
-Verifica/correggi:
-
-GET /therapy-slots/:slotId/patients
-
-Deve restituire solo pazienti con terapie previste per quello slot.
-
-Ogni riga deve contenere:
-- patientId
-- patientFirstName
-- patientLastName
-- room
-- bed
-- therapyId
-- administrationId se presente
-- drugName
-- dosage
-- timeSlot
-- scheduledTime
-- status
-- administeredAt
-- notAdministeredReason
-
-### 4. Matching fascia oraria
-
-Correggere il mapping tra terapia e slot.
-
-Mapping obbligatorio:
-
-- mattina → Terapia mattina
-- pranzo → Terapia pranzo
-- pomeriggio → Terapia pomeriggio
-- sera → Terapia sera
-- notte → Terapia notte
-
-Accettare anche alias se presenti:
-- morning → mattina
-- lunch → pranzo
-- afternoon → pomeriggio
-- evening → sera
-- night → notte
-- 08:00 → mattina
-- 12:00 → pranzo
-- 16:00 → pomeriggio
-- 20:00 → sera
-- 22:00 → notte
-
-### 5. Date
-
-Verifica che una terapia periodica compaia se:
-
-startDate <= data agenda
-
-e:
-
-endDate assente oppure endDate >= data agenda
-
-Una terapia una tantum deve comparire solo nel giorno previsto.
-
-Attenzione a timezone e confronto date.
-
-Usare normalizzazione YYYY-MM-DD.
-
-## Frontend
-
-Verifica Agenda:
-
-- la popup deve chiamare davvero GET /therapy-slots/:slotId/patients
-- non deve filtrare ulteriormente in modo sbagliato
-- non deve aspettarsi campi diversi da quelli restituiti dal backend
-- se la risposta contiene pazienti, la UI deve mostrarli
-- se la risposta è vuota, mostra empty state solo reale
-
-La popup deve:
-- mostrare lista pazienti
-- essere scrollabile internamente
-- mostrare nome, cognome, camera/letto, terapia, dosaggio
-- mantenere pulsanti Erogata / Non erogata
-
-## Debug richiesto
-
-QA deve verificare con curl:
-
-1. Lista pazienti:
-curl -s https://clinicos-backend-production-df88.up.railway.app/patients
-
-2. Slot terapia:
-curl -s "https://clinicos-backend-production-df88.up.railway.app/therapy-slots?date=YYYY-MM-DD"
-
-3. Pazienti slot mattina:
-curl -s "https://clinicos-backend-production-df88.up.railway.app/therapy-slots/mattina/patients?date=YYYY-MM-DD"
-
-Adatta slotId se il backend usa un id diverso.
-
-Se gli endpoint non esistono o rispondono vuoto:
-- correggere backend.
-
-Se gli endpoint rispondono dati ma la popup resta vuota:
-- correggere frontend mapping/rendering.
-
-## Dati test
-
-Assicurarsi che almeno 5 pazienti abbiano terapia schedulata oggi:
-
-- almeno 2 mattina
-- almeno 1 pranzo
-- almeno 1 pomeriggio
-- almeno 1 sera
-
-Usare API reali, non mock.
-
-## Acceptance criteria
-
-Il task è completato solo se:
-
-1. una terapia schedulata mattina compare nello slot Terapia mattina
-2. una terapia schedulata pranzo compare nello slot Terapia pranzo
-3. una terapia schedulata sera compare nello slot Terapia sera
-4. la popup mostra pazienti e terapie
-5. la popup scrolla se ci sono molti pazienti
-6. i conteggi slot sono corretti
-7. Erogata / Non erogata restano funzionanti
-8. refresh pagina non perde gli stati
-9. npm run build passa
+- NON modificare ParametriTab griglia inline editing (vitale-inline-cell/vitale-inline-input)
+- NON toccare file di stampa: ParametriModuloView.tsx, TerapieModuloView.tsx, print-forms.css
+- NON toccare backend o Prisma
+- NON hardcodare localhost
+- Tutti i label/placeholder in italiano
+- Mantenere tutti i render/action button esistenti via render prop
 
 ## Build
 
-Esegui:
-
-npm run build
+Dopo implementazione: `cd frontend && npx tsc --noEmit` poi `npm run build`
 
 ## Commit
 
-Solo dopo build riuscita fai commit:
-
-fix therapy slot patient list regression
-
-## Output finale
-
-Riporta solo:
-- causa della regressione
-- file modificati
-- endpoint corretti
-- mapping fascia oraria corretto
-- test API eseguiti
-- risultato npm run build
-- commit hash
+Solo se build passa: `unify tables with filters and sorting`
