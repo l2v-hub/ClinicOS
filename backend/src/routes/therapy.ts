@@ -47,6 +47,7 @@ router.get('/', async (req, res) => {
         console.error('Skipping invalid/orphan therapy: missing patient for therapyId', pt.id);
         return false;
       }
+      if (pt.tipo === 'al_bisogno') return false;
       if (pt.tipo === 'una_tantum') return pt.dataSomministrazione === date;
       if (pt.dataInizio > date) return false;
       if (pt.dataFine && pt.dataFine < date) return false;
