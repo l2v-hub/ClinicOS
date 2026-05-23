@@ -3655,6 +3655,21 @@
   overflow-y: auto;
 }
 
+/* ── No-sidebar layout (horizontal tabs replace sidebar) ── */
+.cr-detail-layout--no-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.cr-detail-layout--no-sidebar .cr-detail-content {
+  flex: 1;
+  overflow-y: auto;
+  min-width: 0;
+  width: 100%;
+}
+
 /* ── Drawer toggle (hidden on desktop/landscape) ── */
 .cr-drawer-toggle { display: none; }
 .cr-drawer-backdrop { display: none; }
@@ -3719,10 +3734,6 @@
   .cr-sidebar-nav { width: 240px; min-width: 240px; }
   .cr-sidebar-nav__item { font-size: 14px; min-height: 44px; padding: 10px 14px; }
 }
-
-/* ── L1: PageTabs (kept for other pages, hidden on patient detail) ── */
-.patient-record-view .page-tabs,
-.patient-record-view .section-tabs { display: none; }
 
 /* ── L1: PageTabs ── */
 .page-tabs {
