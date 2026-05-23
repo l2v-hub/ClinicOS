@@ -106,7 +106,7 @@ periodiche/una_tantum attive e valide. Al_bisogno mai visibile in Agenda.
 **Purpose**: Build pulito e golden path verificato.
 
 - [x] T008 [P] Run build check: `npm run build` da root del monorepo — verificare 0 errori TypeScript in frontend e backend. Fix eventuali errori di compilazione (es. import di TerapiaMedicaTab residui, tipo al_bisogno non gestito).
-- [ ] T009 [P] Manual golden path test per `specs/001-terapia-farmacologica-agenda/quickstart.md` — eseguire tutti i 12 step del quickstart e verificare che ogni step passi.
+- [x] T009 [P] Manual golden path test per `specs/001-terapia-farmacologica-agenda/quickstart.md` — eseguire tutti i 12 step del quickstart e verificare che ogni step passi.
 
 ---
 
