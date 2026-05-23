@@ -2487,7 +2487,7 @@
 ═══════════════════════════════════════════════════════════════════════════ */
 
 .nav-rail {
-  width: 96px;
+  width: 64px;
   flex-shrink: 0;
   background: #1A2233;
   display: flex;
@@ -2510,7 +2510,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px 0 10px;
+  padding: 10px 0 8px;
   border-bottom: 1px solid var(--navy-border);
   flex-shrink: 0;
   gap: 4px;
@@ -2551,8 +2551,8 @@
 /* Nav item */
 .nav-rail__item {
   position: relative;
-  width: 80px;
-  min-height: 64px;
+  width: 52px;
+  min-height: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2564,7 +2564,7 @@
   color: rgba(255, 255, 255, 0.48);
   cursor: pointer;
   transition: background 0.13s, color 0.13s;
-  padding: 10px 6px 8px;
+  padding: 8px 4px;
   font-family: var(--font-ui);
   overflow: visible;
 }
@@ -2575,7 +2575,7 @@
 }
 
 .nav-rail__item.active {
-  background: rgba(26, 86, 219, 0.22);
+  background: rgba(26, 86, 219, 0.35);
   color: #fff;
 }
 
@@ -2583,11 +2583,11 @@
 .nav-rail__item.active::before {
   content: '';
   position: absolute;
-  left: -8px;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
   width: 3px;
-  height: 26px;
+  height: 36px;
   background: #5B9CF6;
   border-radius: 0 3px 3px 0;
 }
@@ -2609,12 +2609,12 @@
 
 /* Label */
 .nav-rail__label {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.01em;
   white-space: normal;
   word-break: break-word;
-  max-width: 76px;
+  max-width: 56px;
   text-align: center;
   line-height: 1.25;
 }
@@ -2700,22 +2700,23 @@
 
 /* ── Header ── */
 
-/* ── Breadcrumb (above patient card) ── */
+/* ── Breadcrumb (above patient card) — hidden; back button is inside cr-header ── */
 .cr-breadcrumb {
-  padding: 12px 20px 0;
-  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  display: none;
 }
 
 .cr-header {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 20px 24px;
+  padding: 10px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 2px 12px rgba(0,0,0,0.04);
-  margin: 10px 16px 0;
+  margin: 6px 12px 0;
   flex-shrink: 0;
   min-height: 0;
 }
@@ -2723,7 +2724,7 @@
 .cr-header__patient {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
   min-width: 0;
 }
@@ -2736,7 +2737,7 @@
 }
 
 .cr-header__name {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
   margin: 0;
@@ -2749,10 +2750,11 @@
 .cr-header__meta {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-wrap: wrap;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
+  margin-top: 2px;
 }
 
 .cr-header__allergy-chips {
@@ -2760,7 +2762,7 @@
   align-items: center;
   gap: 5px;
   flex-wrap: wrap;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .cr-header__allergy-chips svg {
@@ -2834,7 +2836,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 20px 24px 48px;
+  padding: 12px 24px 48px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -3735,15 +3737,15 @@
   .cr-sidebar-nav__item { font-size: 14px; min-height: 44px; padding: 10px 14px; }
 }
 
-/* ── L1: PageTabs ── */
+/* ── L2: PageTabs — DOMINANT navigation bar ── */
 .page-tabs {
   display: flex;
-  gap: 4px;
-  padding: 6px;
-  margin: 12px 16px 0;
-  background: var(--bg);
-  border-bottom: none;
-  border-radius: 14px;
+  gap: 0;
+  padding: 0 12px;
+  margin: 0;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  border-radius: 0;
   flex-shrink: 0;
   overflow-x: auto;
   scrollbar-width: none;
@@ -3755,28 +3757,32 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 18px;
-  font-size: 13.5px;
+  padding: 12px 24px;
+  font-size: 15px;
   font-weight: 600;
   font-family: var(--font-ui);
   color: var(--text-muted);
   background: transparent;
   border: none;
-  border-bottom: none;
-  margin-bottom: 0;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
-  border-radius: 10px;
+  transition: color 0.15s, border-color 0.15s;
+  border-radius: 0;
+  min-height: 46px;
 }
 .page-tabs__btn:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.7);
+  border-bottom-color: var(--border);
+  background: transparent;
 }
 .page-tabs__btn--active {
   color: var(--blue);
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  border-bottom-color: var(--blue);
+  font-weight: 700;
+  background: transparent;
+  box-shadow: none;
 }
 
 .page-tabs__badge {
@@ -3798,13 +3804,13 @@
   color: var(--blue);
 }
 
-/* ── L2: SectionTabs (pill-style, subordinate to L1) ── */
+/* ── L3: SectionTabs (pill-style, clearly subordinate to L2 PageTabs) ── */
 .section-tabs {
   display: flex;
-  gap: 4px;
-  background: transparent;
-  padding: 0 20px;
-  margin: 10px 0 0;
+  gap: 3px;
+  background: var(--bg);
+  padding: 4px 16px 6px;
+  margin: 2px 0 0;
   border-bottom: none;
   overflow-x: auto;
   flex-shrink: 0;
@@ -3817,8 +3823,9 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 12px;
-  font-size: 12px;
+  padding: 4px 13px;
+  min-height: 44px;
+  font-size: 11.5px;
   font-weight: 500;
   font-family: var(--font-ui);
   color: var(--text-muted);
@@ -3836,7 +3843,7 @@
 }
 .section-tabs__btn--active {
   color: var(--blue);
-  background: rgba(26, 86, 219, 0.09);
+  background: rgba(26, 86, 219, 0.10);
   font-weight: 600;
   box-shadow: none;
 }
@@ -3911,11 +3918,10 @@
 
 /* ── Responsive: nav components ── */
 @media (max-width: 900px) {
-  .cr-header { margin: 8px 10px 0; padding: 16px 18px; }
-  .cr-breadcrumb { padding: 10px 14px 0; }
-  .page-tabs { margin: 8px 10px 0; padding: 5px; }
-  .page-tabs__btn { padding: 7px 12px; font-size: 12.5px; }
-  .section-tabs { padding: 0 14px; }
+  .cr-header { margin: 6px 8px 0; padding: 10px 14px; }
+  .page-tabs { margin: 0; padding: 0 8px; }
+  .page-tabs__btn { padding: 10px 16px; font-size: 15px; }
+  .section-tabs { padding: 0 12px; }
   .section-tabs__btn { padding: 3px 10px; font-size: 11.5px; }
 }
 
@@ -5117,19 +5123,29 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .cr-breadcrumb-btn:hover { color: var(--blue); }
 
-/* Override btn-back inside breadcrumb: keep touch target for tablet */
-.cr-breadcrumb .btn-back {
-  min-height: 36px;
-  height: auto;
-  margin-bottom: 0;
-  padding: 4px 8px 4px 4px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-xmuted);
-  opacity: 1;
-  gap: 4px;
+/* Back button integrated inside cr-header */
+.cr-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.13s, color 0.13s, border-color 0.13s;
 }
-.cr-breadcrumb .btn-back:hover { color: var(--blue); opacity: 1; }
+.cr-back-btn:hover {
+  background: var(--bg);
+  color: var(--blue);
+  border-color: var(--blue);
+}
+.cr-back-btn svg { width: 16px; height: 16px; }
 
 .cr-header__name-row {
   display: flex;
@@ -5723,9 +5739,9 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
    TABLET READABILITY — text sizes for ≥768px (ward use, 50-80cm distance)
 ═══════════════════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
-  /* Patient header: scannable in 1 second */
-  .cr-header__name { font-size: 24px; }
-  .cr-header__meta { font-size: 14px; }
+  /* Patient header: compact, scannable */
+  .cr-header__name { font-size: 16px; }
+  .cr-header__meta { font-size: 12px; }
   .cr-header__meta .stato-pill { font-size: 12px; padding: 4px 10px; }
 
   /* Table body text */

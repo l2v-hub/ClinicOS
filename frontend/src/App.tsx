@@ -700,14 +700,8 @@ export default function App() {
         {/* Topbar */}
         <header className="topbar">
           <div className="topbar__breadcrumb">
-            {navKey === 'dettaglio-paziente' && pazienteSelezionato ? (
-              <>
-                <button className="link-btn" onClick={() => goBack('pazienti')}>
-                  {NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
-                </button>
-                <span className="topbar__sep">›</span>
-                <span>{pazienteSelezionato.lastName}, {pazienteSelezionato.firstName}</span>
-              </>
+            {navKey === 'dettaglio-paziente' ? (
+              <span className="topbar__page-title">Scheda Paziente</span>
             ) : (
               <span>{activeNav.label}</span>
             )}
