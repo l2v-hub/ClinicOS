@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import type {
   Paziente, Consegna, Operatore, Camera, CartellaPaziente,
   Diagnosi, NotaClinica,
@@ -19,7 +19,8 @@ import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
-// NavComponents no longer used — sidebar nav replaces horizontal tabs
+import { PageTabs, SectionTabs } from '../shared/NavComponents';
+import type { SectionTab } from '../shared/NavComponents';
 import { ClinicalTableSection } from './cartella/shared';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -178,37 +179,23 @@ export function PatientDetail({
   operatoreNome,
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>('riepilogo');
+  const [activeGroup, setActiveGroup] = useState<TabGroup>(
+    () => TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica'
+  );
 
-  // Sidebar accordion state — only active group expanded
-  const activeGroupId = TAB_GROUPS.find(g => g.tabs.some(t => t.id === tab))?.id ?? 'panoramica';
-  const [expandedGroups, setExpandedGroups] = useState<Set<TabGroup>>(() => new Set([activeGroupId]));
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // When tab changes, ensure its group is expanded (accordion behavior)
   useEffect(() => {
-    const gId = TAB_GROUPS.find(g => g.tabs.some(t => t.id === tab))?.id;
-    if (gId && !expandedGroups.has(gId)) {
-      setExpandedGroups(new Set([gId]));
-    }
-  }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const toggleGroup = useCallback((gId: TabGroup) => {
-    setExpandedGroups(prev => {
-      const next = new Set(prev);
-      if (next.has(gId)) next.delete(gId);
-      else next.add(gId);
-      return next;
-    });
-  }, []);
+    setTab('riepilogo');
+    setActiveGroup(TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica');
+  }, [paziente.id]);
 
   function switchTab(tabId: TabId) {
     setTab(tabId);
-    setDrawerOpen(false);
   }
 
   function switchGroup(groupId: TabGroup) {
     const group = TAB_GROUPS.find(g => g.id === groupId);
     if (!group) return;
+    setActiveGroup(groupId);
     if (!group.tabs.some(t => t.id === tab)) {
       setTab(group.tabs[0].id);
     }
@@ -1679,58 +1666,33 @@ export function PatientDetail({
         </div>
       </div>
 
-      {/* Tablet portrait drawer toggle */}
-      <button className="cr-drawer-toggle no-print" onClick={() => setDrawerOpen(true)}>
-        <span className="cr-drawer-toggle__icon">☰</span>
-        <span className="cr-drawer-toggle__label">{TAB_GROUPS.flatMap(g => g.tabs).find(t => t.id === tab)?.label ?? 'Menu'}</span>
-      </button>
+      {/* L2 — Navigazione orizzontale gruppi */}
+      <PageTabs
+        groups={TAB_GROUPS.map(g => ({ id: g.id, label: g.label, badge: groupBadgeSum(g.id) || undefined }))}
+        activeId={activeGroup}
+        onChange={id => switchGroup(id as TabGroup)}
+      />
+      {/* L3 — Sotto-tab del gruppo attivo (solo se gruppo ha più di 1 tab) */}
+      {(() => {
+        const grp = TAB_GROUPS.find(g => g.id === activeGroup);
+        if (!grp || grp.tabs.length <= 1) return null;
+        const urgentConsegna = mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
+        return (
+          <SectionTabs
+            tabs={grp.tabs.map(t => ({
+              id: t.id,
+              label: t.label,
+              badge: TAB_BADGES[t.id] || undefined,
+              urgent: t.id === 'consegne' && urgentConsegna,
+            } satisfies SectionTab))}
+            activeId={tab}
+            onChange={id => switchTab(id as TabId)}
+          />
+        );
+      })()}
 
-      {/* Drawer backdrop (tablet portrait) */}
-      {drawerOpen && <div className="cr-drawer-backdrop" onClick={() => setDrawerOpen(false)} />}
-
-      {/* Sidebar + content layout */}
-      <div className="cr-detail-layout">
-        {/* Sidebar navigation (desktop + tablet landscape fixed, tablet portrait drawer) */}
-        <nav className={`cr-sidebar-nav no-print${drawerOpen ? ' cr-sidebar-nav--drawer-open' : ''}`}>
-          {TAB_GROUPS.map(g => {
-            const isExpanded = expandedGroups.has(g.id);
-            const gBadge = groupBadgeSum(g.id);
-            return (
-              <div key={g.id} className="cr-sidebar-nav__group">
-                <button
-                  type="button"
-                  className="cr-sidebar-nav__group-title"
-                  onClick={() => toggleGroup(g.id)}
-                >
-                  <span>{g.label}</span>
-                  <span className="cr-sidebar-nav__group-right">
-                    {!isExpanded && gBadge > 0 && (
-                      <span className="cr-sidebar-nav__group-badge">{gBadge}</span>
-                    )}
-                    <span className={`cr-sidebar-nav__chevron${isExpanded ? ' cr-sidebar-nav__chevron--open' : ''}`}>▼</span>
-                  </span>
-                </button>
-                {isExpanded && g.tabs.map(t => {
-                  const badge = TAB_BADGES[t.id] ?? 0;
-                  const isUrgent = t.id === 'consegne' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
-                  return (
-                    <button
-                      key={t.id}
-                      className={`cr-sidebar-nav__item${tab === t.id ? ' cr-sidebar-nav__item--active' : ''}`}
-                      onClick={() => switchTab(t.id)}
-                    >
-                      {t.label}
-                      {badge > 0 && (
-                        <span className={`cr-sidebar-nav__badge${isUrgent ? ' cr-sidebar-nav__badge--urgent' : ''}`}>{badge}</span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </nav>
-
+      {/* Content layout */}
+      <div className="cr-detail-layout cr-detail-layout--no-sidebar">
         {/* Content area */}
         <div className="cr-detail-content">
           {tab === 'riepilogo'       && renderRiepilogo()}
