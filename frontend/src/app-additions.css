@@ -6131,3 +6131,13 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   color: var(--text-muted, #8898AA); font-style: italic; font-size: 13px;
 }
 /* ── end CDT ──────────────────────────────────────────────────── */
+
+/* === 003 CLEAN NAV: CONTENT TIGHTENING === */
+.main-area-clean .page-content,
+.main-area-clean .content-panel {
+  padding-top: 8px;
+}
+
+.main-area-clean .page-content > *:first-child {
+  margin-top: 0;
+}

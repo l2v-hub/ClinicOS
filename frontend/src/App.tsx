@@ -28,15 +28,11 @@ import { ConsegnePage } from './components/operator/ConsegnePage';
 import { OperatorAgenda } from './components/operator/OperatorAgenda';
 import { NotesPage } from './components/shared/NotesPage';
 import { MultiPatientParametri } from './components/operator/MultiPatientParametri';
+import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
 
-import {
-  IcoDashboard, IcoPazienti, IcoCalendar, IcoConsegne, IcoOperatori,
-  IcoBed, IcoClock, IcoMessage, IcoLogout, IcoSearch, IcoX, IcoActivity,
-} from './icons';
+import { IcoSearch, IcoX } from './icons';
 
 // ── Navigation helpers ─────────────────────────────────────────────────────────
-
-interface NavItem { key: NavKey; label: string; icon: React.ReactNode; }
 
 const NAV_LABELS: Record<NavKey, string> = {
   'login': 'Login',
@@ -63,25 +59,6 @@ const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
   'agenda-admin': 'admin-dashboard',
   'agenda-operatore': 'operator-dashboard',
 };
-
-const ADMIN_NAV: NavItem[] = [
-  { key: 'admin-dashboard',    label: 'Dashboard',        icon: <IcoDashboard /> },
-  { key: 'gestione-operatori', label: 'Operatori',        icon: <IcoOperatori /> },
-  { key: 'agenda-admin',       label: 'Agenda',           icon: <IcoCalendar /> },
-  { key: 'posti-letto',        label: 'Posti Letto',      icon: <IcoBed /> },
-  { key: 'orari-operatori',    label: 'Orari',            icon: <IcoClock /> },
-  { key: 'consegne',           label: 'Consegne',         icon: <IcoConsegne /> },
-  { key: 'note',               label: 'Note',             icon: <IcoMessage /> },
-];
-
-const OPERATOR_NAV: NavItem[] = [
-  { key: 'operator-dashboard',       label: 'Dashboard',  icon: <IcoDashboard /> },
-  { key: 'pazienti',                 label: 'Pazienti',   icon: <IcoPazienti /> },
-  { key: 'parametri-multipaziente',  label: 'Parametri',  icon: <IcoActivity /> },
-  { key: 'consegne',                 label: 'Consegne',   icon: <IcoConsegne /> },
-  { key: 'agenda-operatore',         label: 'Agenda',     icon: <IcoCalendar /> },
-  { key: 'note',                     label: 'Note',       icon: <IcoMessage /> },
-];
 
 // ── App ────────────────────────────────────────────────────────────────────────
 
@@ -639,9 +616,6 @@ export default function App() {
 
   if (!utente) return <Login onLogin={handleLogin} />;
 
-  const navItems = isAdmin ? ADMIN_NAV : OPERATOR_NAV;
-  const activeNav = navItems.find(n => n.key === navKey) ?? navItems[0];
-
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
@@ -656,72 +630,27 @@ export default function App() {
         </div>
       )}
 
-      {/* Navigation Rail */}
-      <aside className="nav-rail">
-        <div className="nav-rail__brand">
-          <span className="nav-rail__brand-icon">✚</span>
-          <span className="nav-rail__brand-abbr">OS</span>
-        </div>
-
-        <nav className="nav-rail__nav">
-          {navItems.map(item => {
-            const isActive = navKey === item.key ||
-              (navKey === 'dettaglio-paziente' && item.key === 'pazienti');
-            const badge = item.key === 'note' && unreadNotes > 0 ? unreadNotes : 0;
-            return (
-              <button
-                key={item.key}
-                className={`nav-rail__item${isActive ? ' active' : ''}`}
-                onClick={() => navigate(item.key)}
-                title={item.label}
-                aria-label={item.label}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                <span className="nav-rail__icon">{item.icon}</span>
-                <span className="nav-rail__label">{item.label}</span>
-                {badge > 0 && <span className="nav-rail__badge">{badge}</span>}
-              </button>
-            );
-          })}
-        </nav>
-
-        <div className="nav-rail__footer">
-          <div className="nav-rail__avatar" title={`${utente.nome} — ${utente.reparto}`} aria-hidden="true">
-            {utente.iniziali}
-          </div>
-          <button className="nav-rail__logout" onClick={handleLogout} title="Esci">
-            <IcoLogout />
-          </button>
-        </div>
-      </aside>
+      {/* Teams-style sidebar */}
+      <TeamsLikeSidebar
+        activeKey={navKey}
+        utente={utente}
+        onNavigate={(k) => navigate(k)}
+        onLogout={handleLogout}
+        unreadNotes={unreadNotes}
+      />
 
       {/* Main */}
-      <div className="main-area">
-        {/* Topbar */}
-        <header className="topbar">
-          <div className="topbar__breadcrumb">
-            {navKey === 'dettaglio-paziente' && pazienteSelezionato ? (
-              <>
-                <button className="link-btn" onClick={() => goBack('pazienti')}>
-                  {NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
-                </button>
-                <span className="topbar__sep">›</span>
-                <span>{pazienteSelezionato.lastName}, {pazienteSelezionato.firstName}</span>
-              </>
-            ) : (
-              <span>{activeNav.label}</span>
-            )}
-          </div>
-
-          <div className="topbar__right">
-            <button
-              className={`topbar__search-btn${searchOpen ? ' active' : ''}`}
-              onClick={() => setSearchOpen(v => !v)} title="Cerca (Ctrl+K)">
-              <IcoSearch />
-              <span className="topbar__search-hint">Ctrl+K</span>
-            </button>
-          </div>
-        </header>
+      <div className="main-area-clean">
+        {/* Compact Topbar */}
+        <div className="compact-topbar">
+          <button
+            className="icon-btn"
+            onClick={() => setSearchOpen(v => !v)}
+            title="Cerca (Ctrl+K)"
+          >
+            <IcoSearch />
+          </button>
+        </div>
 
         {/* Search overlay */}
         {searchOpen && (
@@ -760,7 +689,7 @@ export default function App() {
         )}
 
         {/* Page content */}
-        <main className="page-content">
+        <main className="page-content content-panel">
 
           {/* ── ADMIN ── */}
           {isAdmin && navKey === 'admin-dashboard' && (

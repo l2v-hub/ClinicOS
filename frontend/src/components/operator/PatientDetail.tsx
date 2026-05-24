@@ -6,8 +6,8 @@ import type {
   PrioritaConsegna, AllergiaItem, VitaleItem,
 } from '../../types';
 import {
-  IcoChevronLeft, IcoEdit, IcoCheck, IcoX, IcoPlus,
-  IcoWarning, IcoActivity, IcoPill, IcoShield, IcoConsegne, IcoBed,
+  IcoEdit, IcoCheck, IcoX, IcoPlus,
+  IcoWarning, IcoActivity, IcoPill, IcoConsegne, IcoBed,
   IcoCartelle,
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
@@ -21,6 +21,7 @@ import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
 import { PageTabs, SectionTabs } from '../shared/NavComponents';
 import type { SectionTab } from '../shared/NavComponents';
+import PatientCompactHeader from './PatientCompactHeader';
 import { ClinicalTableSection } from './cartella/shared';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -174,7 +175,7 @@ function ItemRow({ onEdit, onDelete, children }: { onEdit: () => void; onDelete:
 
 export function PatientDetail({
   paziente, cartella, consegne, operatori, camere,
-  onBack, backLabel = 'Pazienti', onAddConsegna, onUpdateConsegnaStato,
+  onBack, onAddConsegna, onUpdateConsegnaStato,
   onUpdateCartella, onUpdatePaziente,
   operatoreNome,
 }: PatientDetailProps) {
@@ -1619,52 +1620,12 @@ export function PatientDetail({
 
   return (
     <div className="patient-record-view">
-      {/* Breadcrumb */}
-      <div className="cr-breadcrumb">
-        <button className="btn-back cr-breadcrumb-btn" onClick={onBack} aria-label={`Torna a ${backLabel}`}><IcoChevronLeft /> {backLabel}</button>
-      </div>
-
-      {/* Patient Header Card */}
-      <div className="cr-header">
-        <div className="cr-header__patient">
-          <div className="cr-pt-avatar" aria-hidden="true">
-            {paziente.firstName[0]}{paziente.lastName[0]}
-          </div>
-          <div className="cr-header__info">
-            <div className="cr-header__name-row">
-              <h2 className="cr-header__name">{paziente.lastName}, {paziente.firstName}</h2>
-              <span className={`stato-pill stato-pill--${cartella.statoRicovero === 'ricoverato' ? 'attivo' : 'inattivo'}`}>
-                {cartella.statoRicovero.replace('_', ' ')}
-              </span>
-              {mieConsegne.some(c => c.stato !== 'completata' && c.priorita === 'urgente') && (
-                <span className="badge badge--red cr-badge-sm">Urgente</span>
-              )}
-            </div>
-            <div className="cr-header__meta">
-              <span className="mrn-tag">{paziente.medicalRecordNumber}</span>
-              <span className="cr-meta-sep">·</span>
-              <span>{calcAge(paziente.dateOfBirth)} anni · {paziente.sex ?? '—'}</span>
-              {cartella.cameraNumero && (
-                <>
-                  <span className="cr-meta-sep">·</span>
-                  <span className="cr-room-tag"><IcoBed /> Cam. {cartella.cameraNumero}{cartella.lettoNumero ? ` / L.${cartella.lettoNumero}` : ''}</span>
-                </>
-              )}
-              {hasAllergie && (
-                <>
-                  <span className="cr-meta-sep">·</span>
-                  <span className="cr-header__allergy-inline">
-                    <IcoShield />
-                    {allergieGravi.map(a => (
-                      <span key={a.id} className="badge badge--red cr-badge-sm">{a.allergene}</span>
-                    ))}
-                  </span>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Patient Compact Header */}
+      <PatientCompactHeader
+        paziente={paziente}
+        cartella={cartella}
+        onBack={onBack}
+      />
 
       {/* L2 — Navigazione orizzontale gruppi */}
       <PageTabs

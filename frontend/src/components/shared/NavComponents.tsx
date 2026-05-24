@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-// ── PageTabs (L1) ─────────────────────────────────────────────────────────────
+// ── MainHorizontalNav (L2) ────────────────────────────────────────────────────
 // Horizontal tab bar for page-level groups (e.g., Panoramica | Clinica | Diario)
 
 export interface PageTabGroup {
@@ -16,27 +16,30 @@ interface PageTabsProps {
   className?: string;
 }
 
-export function PageTabs({ groups, activeId, onChange, className }: PageTabsProps) {
+export function MainHorizontalNav({ groups, activeId, onChange, className }: PageTabsProps) {
   return (
-    <nav className={`page-tabs${className ? ` ${className}` : ''}`} role="tablist" aria-label="Page sections">
+    <nav className={`main-h-nav${className ? ` ${className}` : ''}`} role="tablist" aria-label="Page sections">
       {groups.map(g => (
         <button
           key={g.id}
           role="tab"
           aria-selected={activeId === g.id}
-          className={`page-tabs__btn${activeId === g.id ? ' page-tabs__btn--active' : ''}`}
+          className={`main-h-nav__tab${activeId === g.id ? ' active' : ''}`}
           onClick={() => onChange(g.id)}
         >
           {g.label}
-          {(g.badge ?? 0) > 0 && <span className="page-tabs__badge">{g.badge}</span>}
+          {(g.badge ?? 0) > 0 && <span className="main-h-nav__badge">{g.badge}</span>}
         </button>
       ))}
     </nav>
   );
 }
 
-// ── SectionTabs (L2) ──────────────────────────────────────────────────────────
-// Horizontal tab bar for section-level tabs within a group
+/** @deprecated use MainHorizontalNav */
+export const PageTabs = MainHorizontalNav;
+
+// ── ContextSubTabs (L3) ───────────────────────────────────────────────────────
+// Pill-shaped tab bar for section-level tabs within a group
 
 export interface SectionTab {
   id: string;
@@ -52,20 +55,20 @@ interface SectionTabsProps {
   className?: string;
 }
 
-export function SectionTabs({ tabs, activeId, onChange, className }: SectionTabsProps) {
+export function ContextSubTabs({ tabs, activeId, onChange, className }: SectionTabsProps) {
   return (
-    <nav className={`section-tabs${className ? ` ${className}` : ''}`} role="tablist" aria-label="Section tabs">
+    <nav className={`context-sub-tabs${className ? ` ${className}` : ''}`} role="tablist" aria-label="Section tabs">
       {tabs.map(t => (
         <button
           key={t.id}
           role="tab"
           aria-selected={activeId === t.id}
-          className={`section-tabs__btn${activeId === t.id ? ' section-tabs__btn--active' : ''}`}
+          className={`context-sub-tabs__pill${activeId === t.id ? ' active' : ''}${t.urgent ? ' urgent' : ''}`}
           onClick={() => onChange(t.id)}
         >
           {t.label}
           {(t.badge ?? 0) > 0 && (
-            <span className={`section-tabs__badge${t.urgent ? ' section-tabs__badge--urgent' : ''}`}>{t.badge}</span>
+            <span className="context-sub-tabs__badge">{t.badge}</span>
           )}
         </button>
       ))}
@@ -73,7 +76,10 @@ export function SectionTabs({ tabs, activeId, onChange, className }: SectionTabs
   );
 }
 
-// ── SubSectionControl (L3) ────────────────────────────────────────────────────
+/** @deprecated use ContextSubTabs */
+export const SectionTabs = ContextSubTabs;
+
+// ── SubSectionControl (L4) ────────────────────────────────────────────────────
 // Segmented control for deep navigation within a section
 
 export interface SubSectionOption {
