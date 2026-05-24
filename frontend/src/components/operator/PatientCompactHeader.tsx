@@ -9,7 +9,7 @@ interface PatientCompactHeaderProps {
 function calcAge(dob: string): string {
   if (!dob) return '';
   const years = Math.floor((Date.now() - new Date(dob).getTime()) / 31557600000);
-  return `${years}a`;
+  return years > 0 ? `${years}a` : '';
 }
 
 export default function PatientCompactHeader({ paziente, cartella, onBack }: PatientCompactHeaderProps) {
@@ -31,7 +31,7 @@ export default function PatientCompactHeader({ paziente, cartella, onBack }: Pat
       {paziente.medicalRecordNumber && (
         <>
           <span className="patient-compact-header__sep">·</span>
-          <span className="patient-compact-header__meta">MRN: {paziente.medicalRecordNumber}</span>
+          <span className="patient-compact-header__meta">Scheda: {paziente.medicalRecordNumber}</span>
         </>
       )}
 

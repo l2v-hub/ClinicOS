@@ -1,7 +1,7 @@
 import type { UtenteApp, NavKey } from '../../types';
 import {
   IcoDashboard, IcoPazienti, IcoCalendar, IcoConsegne, IcoMessage,
-  IcoLogout, IcoOperatori, IcoBed, IcoActivity,
+  IcoLogout, IcoOperatori, IcoBed, IcoActivity, IcoClock,
 } from '../../icons';
 
 interface TeamsLikeSidebarProps {
@@ -26,6 +26,7 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
       { key: 'gestione-operatori', label: 'Operatori', icon: <IcoOperatori /> },
       { key: 'agenda-admin', label: 'Agenda', icon: <IcoCalendar /> },
       { key: 'posti-letto', label: 'Posti Letto', icon: <IcoBed /> },
+      { key: 'orari-operatori', label: 'Orari', icon: <IcoClock /> },
       { key: 'consegne', label: 'Consegne', icon: <IcoConsegne /> },
       { key: 'note', label: 'Note', icon: <IcoMessage />, badge: unreadNotes },
     ];
