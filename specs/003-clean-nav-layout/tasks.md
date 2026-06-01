@@ -114,9 +114,9 @@
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T017 [P] In `frontend/src/App.css`: clean up any conflicting old CSS rules — if `.nav-rail` and `.teams-sidebar` coexist, ensure `.nav-rail` is marked `display: none` when `.teams-sidebar` is present (add `.app-shell--clean .nav-rail { display: none; }` or just remove the old nav-rail JSX from App.tsx entirely if T011 was completed). Verify no duplicate sidebar renders.
+- [X] T017 [P] In `frontend/src/App.css`: clean up any conflicting old CSS rules — if `.nav-rail` and `.teams-sidebar` coexist, ensure `.nav-rail` is marked `display: none` when `.teams-sidebar` is present (add `.app-shell--clean .nav-rail { display: none; }` or just remove the old nav-rail JSX from App.tsx entirely if T011 was completed). Verify no duplicate sidebar renders.
 
-- [ ] T018 [P] In `frontend/src/App.css` and `frontend/src/app-additions.css`: scan for any `margin-top` > 16px on the first element after nav containers. Reduce to ≤8px. This catches any remaining vertical waste above clinical content.
+- [X] T018 [P] In `frontend/src/App.css` and `frontend/src/app-additions.css`: scan for any `margin-top` > 16px on the first element after nav containers. Reduce to ≤8px. This catches any remaining vertical waste above clinical content.
 
 - [ ] T019 Final visual sanity check: open `http://localhost:5173` at 1024x768. Verify: (1) sidebar 64px dark rail with icons, (2) topbar single row ~36px, (3) patient header compact row ~56px, (4) L2 tabs prominent 44px blue-on-active, (5) L3 pills compact ~26px, (6) clinical content starts within 16px of L3 bar, (7) no horizontal overflow. Run `npm run build` — must pass.
 
