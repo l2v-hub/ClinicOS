@@ -1632,14 +1632,10 @@ export function PatientDetail({
 
   return (
     <div className="patient-record-view">
-      {/* Breadcrumb */}
-      <div className="cr-breadcrumb">
-        <button className="btn-back cr-breadcrumb-btn" onClick={onBack} aria-label={`Torna a ${backLabel}`}><IcoChevronLeft /> {backLabel}</button>
-      </div>
-
-      {/* Patient Header Card */}
+      {/* Patient Header Card — back button integrated */}
       <div className="cr-header">
         <div className="cr-header__patient">
+          <button className="btn-back cr-back-btn" onClick={onBack} aria-label={`Torna a ${backLabel}`}><IcoChevronLeft /></button>
           <div className="cr-pt-avatar" aria-hidden="true">
             {paziente.firstName[0]}{paziente.lastName[0]}
           </div>

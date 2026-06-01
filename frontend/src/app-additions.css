@@ -2018,7 +2018,7 @@
    ROOMS MANAGEMENT
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.rooms-view { width: 100%; }
+.rooms-view { max-width: 1100px; }
 
 .rooms-grid {
   display: grid;
@@ -2487,7 +2487,7 @@
 ═══════════════════════════════════════════════════════════════════════════ */
 
 .nav-rail {
-  width: 80px;
+  width: 64px;
   flex-shrink: 0;
   background: #1A2233;
   display: flex;
@@ -2510,29 +2510,29 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px 0 10px;
+  padding: 10px 0 8px;
   border-bottom: 1px solid var(--navy-border);
   flex-shrink: 0;
   gap: 4px;
 }
 
 .nav-rail__brand-icon {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   background: var(--blue);
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: #fff;
 }
 
 .nav-rail__brand-abbr {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.4);
 }
@@ -2548,20 +2548,20 @@
   gap: 1px;
 }
 
-/* Nav item (icon + label stacked vertically; Constitution II: visible labels) */
+/* Nav item */
 .nav-rail__item {
   position: relative;
-  width: 100%;
+  width: 52px;
   min-height: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   border: none;
-  border-radius: 0;
+  border-radius: 10px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.48);
   cursor: pointer;
   transition: background 0.13s, color 0.13s;
   padding: 8px 4px;
@@ -2570,27 +2570,26 @@
 }
 
 .nav-rail__item:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .nav-rail__item.active {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(26, 86, 219, 0.35);
   color: #fff;
 }
 
-/* Active indicator bar (4px left accent) */
+/* Active indicator bar */
 .nav-rail__item.active::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 8px;
-  bottom: 8px;
-  width: 4px;
-  background: #fff;
-  border-radius: 0 2px 2px 0;
-  transform: none;
-  height: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 36px;
+  background: #5B9CF6;
+  border-radius: 0 3px 3px 0;
 }
 
 /* Icon */
@@ -2608,17 +2607,16 @@
   height: 22px;
 }
 
-/* Label (visible per Constitution II — labels must not be hidden behind tooltips) */
+/* Label */
 .nav-rail__label {
   font-size: 10px;
-  line-height: 1.2;
-  margin-top: 4px;
-  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 56px;
   text-align: center;
-  max-width: 72px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.25;
 }
 
 /* Badge */
@@ -2702,10 +2700,11 @@
 
 /* ── Header ── */
 
-/* ── Breadcrumb (above patient card) ── */
+/* ── Breadcrumb (above patient card) — hidden; back button is inside cr-header ── */
 .cr-breadcrumb {
-  padding: 4px 16px 0;
-  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  display: none;
 }
 
 .cr-header {
@@ -2717,15 +2716,15 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 2px 12px rgba(0,0,0,0.04);
-  margin: 6px 16px 0;
+  margin: 6px 12px 0;
   flex-shrink: 0;
-  min-height: 48px;
+  min-height: 0;
 }
 
 .cr-header__patient {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
   min-width: 0;
 }
@@ -2738,7 +2737,7 @@
 }
 
 .cr-header__name {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
   margin: 0;
@@ -2751,10 +2750,11 @@
 .cr-header__meta {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-wrap: wrap;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
+  margin-top: 2px;
 }
 
 .cr-header__allergy-chips {
@@ -2762,7 +2762,7 @@
   align-items: center;
   gap: 5px;
   flex-wrap: wrap;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
 .cr-header__allergy-chips svg {
@@ -2836,7 +2836,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 20px 24px 48px;
+  padding: 12px 24px 48px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -3737,62 +3737,52 @@
   .cr-sidebar-nav__item { font-size: 14px; min-height: 44px; padding: 10px 14px; }
 }
 
-/* ── L2: PageTabs (animated underline) ── */
+/* ── L2: PageTabs — DOMINANT navigation bar ── */
 .page-tabs {
   display: flex;
-  gap: 2px;
-  padding: 0 16px;
-  margin: 8px 0 0;
-  background: transparent;
-  border-bottom: 1px solid var(--border);
+  gap: 0;
+  padding: 0 12px;
+  margin: 0;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  border-radius: 0;
   flex-shrink: 0;
   overflow-x: auto;
   scrollbar-width: none;
   box-sizing: border-box;
-  align-items: stretch;
 }
 .page-tabs::-webkit-scrollbar { display: none; }
 
 .page-tabs__btn {
-  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: var(--l2-h);
-  padding: 10px 14px;
-  font-size: var(--l2-font);
-  font-weight: 500;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
   font-family: var(--font-ui);
   color: var(--text-muted);
   background: transparent;
   border: none;
-  border-radius: 4px 4px 0 0;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, background 0.15s;
+  transition: color 0.15s, border-color 0.15s;
+  border-radius: 0;
+  min-height: 46px;
 }
-.page-tabs__btn::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 0;
-  height: var(--l2-underline-h);
-  background: var(--l2-underline-color);
-  transition: width var(--tab-transition-duration) var(--tab-transition-easing);
-}
-.page-tabs__btn:hover:not(.page-tabs__btn--active) {
+.page-tabs__btn:hover {
   color: var(--text);
-  background: rgba(0, 0, 0, 0.04);
+  border-bottom-color: var(--border);
+  background: transparent;
 }
 .page-tabs__btn--active {
   color: var(--blue);
+  border-bottom-color: var(--blue);
+  font-weight: 700;
   background: transparent;
   box-shadow: none;
-  font-weight: 600;
-}
-.page-tabs__btn--active::after {
-  width: 100%;
 }
 
 .page-tabs__badge {
@@ -3814,19 +3804,17 @@
   color: var(--blue);
 }
 
-/* ── L3: SectionTabs (scrollable compact pills, subordinate to L2) ── */
+/* ── L3: SectionTabs (pill-style, clearly subordinate to L2 PageTabs) ── */
 .section-tabs {
   display: flex;
-  gap: 4px;
-  background: transparent;
-  padding: 0 16px;
-  margin: 6px 0 0;
+  gap: 3px;
+  background: var(--bg);
+  padding: 4px 16px 6px;
+  margin: 2px 0 0;
   border-bottom: none;
   overflow-x: auto;
   flex-shrink: 0;
-  white-space: nowrap;
   scrollbar-width: none;
-  -ms-overflow-style: none;
   align-items: center;
 }
 .section-tabs::-webkit-scrollbar { display: none; }
@@ -3835,15 +3823,15 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  height: var(--l3-h);
-  padding: 4px 12px;
-  font-size: var(--l3-font);
+  padding: 4px 13px;
+  min-height: 44px;
+  font-size: 11.5px;
   font-weight: 500;
   font-family: var(--font-ui);
   color: var(--text-muted);
   background: transparent;
   border: none;
-  border-radius: 16px;
+  border-radius: 20px;
   cursor: pointer;
   white-space: nowrap;
   line-height: 1.4;
@@ -3851,11 +3839,11 @@
 }
 .section-tabs__btn:hover {
   color: var(--text);
-  background: var(--hover, #F5F8FB);
+  background: rgba(26, 86, 219, 0.06);
 }
 .section-tabs__btn--active {
   color: var(--blue);
-  background: var(--hover, #F5F8FB);
+  background: rgba(26, 86, 219, 0.10);
   font-weight: 600;
   box-shadow: none;
 }
@@ -3930,11 +3918,10 @@
 
 /* ── Responsive: nav components ── */
 @media (max-width: 900px) {
-  .cr-header { margin: 8px 10px 0; padding: 16px 18px; }
-  .cr-breadcrumb { padding: 10px 14px 0; }
-  .page-tabs { margin: 8px 10px 0; padding: 5px; }
-  .page-tabs__btn { padding: 7px 12px; font-size: 12.5px; }
-  .section-tabs { padding: 0 14px; }
+  .cr-header { margin: 6px 8px 0; padding: 10px 14px; }
+  .page-tabs { margin: 0; padding: 0 8px; }
+  .page-tabs__btn { padding: 10px 16px; font-size: 15px; }
+  .section-tabs { padding: 0 12px; }
   .section-tabs__btn { padding: 3px 10px; font-size: 11.5px; }
 }
 
@@ -5136,19 +5123,29 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .cr-breadcrumb-btn:hover { color: var(--blue); }
 
-/* Override btn-back inside breadcrumb: keep touch target for tablet */
-.cr-breadcrumb .btn-back {
-  min-height: 36px;
-  height: auto;
-  margin-bottom: 0;
-  padding: 4px 8px 4px 4px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-xmuted);
-  opacity: 1;
-  gap: 4px;
+/* Back button integrated inside cr-header */
+.cr-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.13s, color 0.13s, border-color 0.13s;
 }
-.cr-breadcrumb .btn-back:hover { color: var(--blue); opacity: 1; }
+.cr-back-btn:hover {
+  background: var(--bg);
+  color: var(--blue);
+  border-color: var(--blue);
+}
+.cr-back-btn svg { width: 16px; height: 16px; }
 
 .cr-header__name-row {
   display: flex;
@@ -5742,9 +5739,9 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
    TABLET READABILITY — text sizes for ≥768px (ward use, 50-80cm distance)
 ═══════════════════════════════════════════════════════════════════════════ */
 @media (min-width: 768px) {
-  /* Patient header: scannable in 1 second */
-  .cr-header__name { font-size: 24px; }
-  .cr-header__meta { font-size: 14px; }
+  /* Patient header: compact, scannable */
+  .cr-header__name { font-size: 16px; }
+  .cr-header__meta { font-size: 12px; }
   .cr-header__meta .stato-pill { font-size: 12px; padding: 4px 10px; }
 
   /* Table body text */
