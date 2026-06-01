@@ -2018,7 +2018,7 @@
    ROOMS MANAGEMENT
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.rooms-view { max-width: 1100px; }
+.rooms-view { width: 100%; }
 
 .rooms-grid {
   display: grid;
@@ -2487,7 +2487,7 @@
 ═══════════════════════════════════════════════════════════════════════════ */
 
 .nav-rail {
-  width: 96px;
+  width: 80px;
   flex-shrink: 0;
   background: #1A2233;
   display: flex;
@@ -2517,22 +2517,22 @@
 }
 
 .nav-rail__brand-icon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   background: var(--blue);
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
 }
 
 .nav-rail__brand-abbr {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.4);
 }
@@ -2548,48 +2548,49 @@
   gap: 1px;
 }
 
-/* Nav item */
+/* Nav item (icon + label stacked vertically; Constitution II: visible labels) */
 .nav-rail__item {
   position: relative;
-  width: 80px;
-  min-height: 64px;
+  width: 100%;
+  min-height: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
   border: none;
-  border-radius: 10px;
+  border-radius: 0;
   background: transparent;
-  color: rgba(255, 255, 255, 0.48);
+  color: rgba(255, 255, 255, 0.55);
   cursor: pointer;
   transition: background 0.13s, color 0.13s;
-  padding: 10px 6px 8px;
+  padding: 8px 4px;
   font-family: var(--font-ui);
   overflow: visible;
 }
 
 .nav-rail__item:hover {
-  background: rgba(255, 255, 255, 0.09);
-  color: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .nav-rail__item.active {
-  background: rgba(26, 86, 219, 0.22);
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
 }
 
-/* Active indicator bar */
+/* Active indicator bar (4px left accent) */
 .nav-rail__item.active::before {
   content: '';
   position: absolute;
-  left: -8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 26px;
-  background: #5B9CF6;
-  border-radius: 0 3px 3px 0;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  background: #fff;
+  border-radius: 0 2px 2px 0;
+  transform: none;
+  height: auto;
 }
 
 /* Icon */
@@ -2607,16 +2608,17 @@
   height: 22px;
 }
 
-/* Label */
+/* Label (visible per Constitution II — labels must not be hidden behind tooltips) */
 .nav-rail__label {
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  white-space: normal;
-  word-break: break-word;
-  max-width: 76px;
+  font-size: 10px;
+  line-height: 1.2;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.85);
   text-align: center;
-  line-height: 1.25;
+  max-width: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Badge */
@@ -2702,7 +2704,7 @@
 
 /* ── Breadcrumb (above patient card) ── */
 .cr-breadcrumb {
-  padding: 12px 20px 0;
+  padding: 4px 16px 0;
   flex-shrink: 0;
 }
 
@@ -2710,14 +2712,14 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 20px 24px;
+  padding: 10px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 2px 12px rgba(0,0,0,0.04);
-  margin: 10px 16px 0;
+  margin: 6px 16px 0;
   flex-shrink: 0;
-  min-height: 0;
+  min-height: 48px;
 }
 
 .cr-header__patient {
@@ -3735,48 +3737,62 @@
   .cr-sidebar-nav__item { font-size: 14px; min-height: 44px; padding: 10px 14px; }
 }
 
-/* ── L1: PageTabs ── */
+/* ── L2: PageTabs (animated underline) ── */
 .page-tabs {
   display: flex;
-  gap: 4px;
-  padding: 6px;
-  margin: 12px 16px 0;
-  background: var(--bg);
-  border-bottom: none;
-  border-radius: 14px;
+  gap: 2px;
+  padding: 0 16px;
+  margin: 8px 0 0;
+  background: transparent;
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
   overflow-x: auto;
   scrollbar-width: none;
   box-sizing: border-box;
+  align-items: stretch;
 }
 .page-tabs::-webkit-scrollbar { display: none; }
 
 .page-tabs__btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 18px;
-  font-size: 13.5px;
-  font-weight: 600;
+  min-height: var(--l2-h);
+  padding: 10px 14px;
+  font-size: var(--l2-font);
+  font-weight: 500;
   font-family: var(--font-ui);
   color: var(--text-muted);
   background: transparent;
   border: none;
-  border-bottom: none;
-  margin-bottom: 0;
+  border-radius: 4px 4px 0 0;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
-  border-radius: 10px;
+  transition: color 0.15s, background 0.15s;
 }
-.page-tabs__btn:hover {
+.page-tabs__btn::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: var(--l2-underline-h);
+  background: var(--l2-underline-color);
+  transition: width var(--tab-transition-duration) var(--tab-transition-easing);
+}
+.page-tabs__btn:hover:not(.page-tabs__btn--active) {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.04);
 }
 .page-tabs__btn--active {
   color: var(--blue);
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  background: transparent;
+  box-shadow: none;
+  font-weight: 600;
+}
+.page-tabs__btn--active::after {
+  width: 100%;
 }
 
 .page-tabs__badge {
@@ -3798,17 +3814,19 @@
   color: var(--blue);
 }
 
-/* ── L2: SectionTabs (pill-style, subordinate to L1) ── */
+/* ── L3: SectionTabs (scrollable compact pills, subordinate to L2) ── */
 .section-tabs {
   display: flex;
   gap: 4px;
   background: transparent;
-  padding: 0 20px;
-  margin: 10px 0 0;
+  padding: 0 16px;
+  margin: 6px 0 0;
   border-bottom: none;
   overflow-x: auto;
   flex-shrink: 0;
+  white-space: nowrap;
   scrollbar-width: none;
+  -ms-overflow-style: none;
   align-items: center;
 }
 .section-tabs::-webkit-scrollbar { display: none; }
@@ -3817,14 +3835,15 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  height: var(--l3-h);
   padding: 4px 12px;
-  font-size: 12px;
+  font-size: var(--l3-font);
   font-weight: 500;
   font-family: var(--font-ui);
   color: var(--text-muted);
   background: transparent;
   border: none;
-  border-radius: 20px;
+  border-radius: 16px;
   cursor: pointer;
   white-space: nowrap;
   line-height: 1.4;
@@ -3832,11 +3851,11 @@
 }
 .section-tabs__btn:hover {
   color: var(--text);
-  background: rgba(26, 86, 219, 0.06);
+  background: var(--hover, #F5F8FB);
 }
 .section-tabs__btn--active {
   color: var(--blue);
-  background: rgba(26, 86, 219, 0.09);
+  background: var(--hover, #F5F8FB);
   font-weight: 600;
   box-shadow: none;
 }
