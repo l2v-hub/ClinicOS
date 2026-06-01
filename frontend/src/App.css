@@ -66,6 +66,24 @@
   --sidebar-w:          240px;
   --sidebar-w-collapsed:60px;
   --header-h:           60px;
+  --topbar-h:           32px;
+
+  /* Content padding (tablet → desktop) */
+  --content-px:         16px;
+  --content-px-lg:      24px;
+  --content-px-xl:      32px;
+
+  /* L2 / L3 navigation tokens */
+  --l2-h:               44px;
+  --l2-font:            14px;
+  --l3-h:               32px;
+  --l3-font:            11.5px;
+  --l2-underline-color: var(--blue, #1A56DB);
+  --l2-underline-h:     2px;
+
+  /* Tab transitions */
+  --tab-transition-duration: 180ms;
+  --tab-transition-easing: ease-out;
 
   /* Touch / interaction */
   --touch-target:       48px;
@@ -89,14 +107,33 @@
 *, *::before, *::after { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); }
 
+/* ── Tab content transition (R05) ─────────────────────────────────────────── */
+.tab-panel-transition {
+  animation: tabPanelEnter var(--tab-transition-duration) var(--tab-transition-easing) both;
+}
+
+@keyframes tabPanelEnter {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel-transition { animation: none; }
+  .page-tabs__btn::after { transition: none; }
+  .page-tabs__btn,
+  .section-tabs__btn { transition: none; }
+}
+
 /* ── App shell ────────────────────────────────────────────────────────────── */
 .app-shell {
   display: flex;
+  width: 100%;
   min-height: 100svh;
   font-family: var(--font-ui);
   font-size: 14px;
   color: var(--text);
   background: var(--bg);
+  overflow-x: hidden;
 }
 
 
@@ -378,7 +415,7 @@ body { margin: 0; background: var(--bg); }
    DASHBOARD
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.dashboard { max-width: 1040px; }
+.dashboard { width: 100%; }
 
 .dashboard__date {
   font-size: 13px;
@@ -611,7 +648,7 @@ body { margin: 0; background: var(--bg); }
    PATIENTS VIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patients-view { max-width: 1040px; }
+.patients-view { width: 100%; }
 
 .view-header {
   display: flex;
@@ -849,7 +886,7 @@ body { margin: 0; background: var(--bg); }
    PATIENT DETAIL
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-detail { max-width: 1100px; }
+.patient-detail { width: 100%; }
 
 /* Breadcrumb */
 .detail-breadcrumb {
@@ -1960,12 +1997,23 @@ body { margin: 0; background: var(--bg); }
 
 .page-content {
   flex: 1;
-  padding: 24px 24px 48px;
+  padding: 12px var(--content-px) 16px;
   overflow-y: auto;
-  max-width: 1200px;
+  width: 100%;
+  min-width: 0;
 }
 
 @media (max-width: 640px) { .page-content { padding: 16px 14px 40px; } }
+
+/* Large tablet: 1180px–1365px */
+@media (min-width: 1180px) {
+  .page-content { padding: 12px var(--content-px-lg) 16px; }
+}
+
+/* Desktop: 1366px+ */
+@media (min-width: 1366px) {
+  .page-content { padding: 16px var(--content-px-xl) 20px; }
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    COMMON COMPONENTS
@@ -2245,8 +2293,8 @@ textarea.form-input {
    ADMIN DASHBOARD
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.admin-dashboard  { max-width: 1040px; }
-.operator-dashboard { max-width: 1040px; }
+.admin-dashboard  { width: 100%; }
+.operator-dashboard { width: 100%; }
 
 .dashboard__date {
   font-size: 13px;
@@ -2402,7 +2450,7 @@ textarea.form-input {
    OPERATOR MANAGEMENT
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.op-management { max-width: 1040px; }
+.op-management { width: 100%; }
 
 .op-form-panel {
   background: var(--surface);
@@ -2444,7 +2492,7 @@ textarea.form-input {
    ADMIN AGENDA
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.agenda-admin-view { max-width: 1100px; }
+.agenda-admin-view { width: 100%; }
 
 .agenda-admin-controls {
   display: flex;
@@ -2558,7 +2606,7 @@ textarea.form-input {
    CONSEGNE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.consegne-page { max-width: 900px; }
+.consegne-page { width: 100%; }
 
 .consegne-list {
   display: flex;
@@ -2784,7 +2832,7 @@ textarea.form-input {
    PATIENT DETAIL — NEW CLASSES
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-detail-view { max-width: 1100px; }
+.patient-detail-view { width: 100%; }
 
 .detail-header {
   margin-bottom: 18px;
@@ -3009,7 +3057,7 @@ textarea.form-input {
    PATIENT LIST VIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-list-view { max-width: 1040px; }
-.operator-agenda-view { max-width: 900px; }
-.consegne-page { max-width: 900px; }
+.patient-list-view { width: 100%; }
+.operator-agenda-view { width: 100%; }
+.consegne-page { width: 100%; }
 
