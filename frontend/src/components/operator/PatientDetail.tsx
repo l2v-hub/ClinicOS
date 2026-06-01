@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import type {
   Paziente, Consegna, Operatore, Camera, CartellaPaziente,
   Diagnosi, NotaClinica,
@@ -6,8 +6,8 @@ import type {
   PrioritaConsegna, AllergiaItem, VitaleItem,
 } from '../../types';
 import {
-  IcoChevronLeft, IcoEdit, IcoCheck, IcoX, IcoPlus,
-  IcoWarning, IcoActivity, IcoPill, IcoShield, IcoConsegne, IcoBed,
+  IcoEdit, IcoCheck, IcoX, IcoPlus,
+  IcoWarning, IcoActivity, IcoPill, IcoConsegne, IcoBed,
   IcoCartelle,
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
@@ -21,6 +21,7 @@ import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
 import { PageTabs, SectionTabs } from '../shared/NavComponents';
 import type { SectionTab } from '../shared/NavComponents';
+import PatientCompactHeader from './PatientCompactHeader';
 import { ClinicalTableSection } from './cartella/shared';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -174,7 +175,7 @@ function ItemRow({ onEdit, onDelete, children }: { onEdit: () => void; onDelete:
 
 export function PatientDetail({
   paziente, cartella, consegne, operatori, camere,
-  onBack, backLabel = 'Pazienti', onAddConsegna, onUpdateConsegnaStato,
+  onBack, onAddConsegna, onUpdateConsegnaStato,
   onUpdateCartella, onUpdatePaziente,
   operatoreNome,
 }: PatientDetailProps) {
@@ -187,19 +188,6 @@ export function PatientDetail({
     setTab('riepilogo');
     setActiveGroup(TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica');
   }, [paziente.id]);
-
-  // Tab content ref: re-trigger CSS animation on tab switch WITHOUT remounting
-  // heavy children (prevents fetch storm in TerapiaFarmacologicaTab and state
-  // loss in ParametriTab / DiarioPazienteTab).
-  const contentRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-    el.classList.remove('tab-panel-transition');
-    // Force reflow so removing then re-adding the class restarts the animation.
-    void el.offsetWidth;
-    el.classList.add('tab-panel-transition');
-  }, [activeGroup, tab]);
 
   function switchTab(tabId: TabId) {
     setTab(tabId);
@@ -1632,48 +1620,12 @@ export function PatientDetail({
 
   return (
     <div className="patient-record-view">
-      {/* Patient Header Card — back button integrated */}
-      <div className="cr-header">
-        <div className="cr-header__patient">
-          <button className="btn-back cr-back-btn" onClick={onBack} aria-label={`Torna a ${backLabel}`}><IcoChevronLeft /></button>
-          <div className="cr-pt-avatar" aria-hidden="true">
-            {paziente.firstName[0]}{paziente.lastName[0]}
-          </div>
-          <div className="cr-header__info">
-            <div className="cr-header__name-row">
-              <h2 className="cr-header__name">{paziente.lastName}, {paziente.firstName}</h2>
-              <span className={`stato-pill stato-pill--${cartella.statoRicovero === 'ricoverato' ? 'attivo' : 'inattivo'}`}>
-                {cartella.statoRicovero.replace('_', ' ')}
-              </span>
-              {mieConsegne.some(c => c.stato !== 'completata' && c.priorita === 'urgente') && (
-                <span className="badge badge--red cr-badge-sm">Urgente</span>
-              )}
-            </div>
-            <div className="cr-header__meta">
-              <span className="mrn-tag">{paziente.medicalRecordNumber}</span>
-              <span className="cr-meta-sep">·</span>
-              <span>{calcAge(paziente.dateOfBirth)} anni · {paziente.sex ?? '—'}</span>
-              {cartella.cameraNumero && (
-                <>
-                  <span className="cr-meta-sep">·</span>
-                  <span className="cr-room-tag"><IcoBed /> Cam. {cartella.cameraNumero}{cartella.lettoNumero ? ` / L.${cartella.lettoNumero}` : ''}</span>
-                </>
-              )}
-              {hasAllergie && (
-                <>
-                  <span className="cr-meta-sep">·</span>
-                  <span className="cr-header__allergy-inline">
-                    <IcoShield />
-                    {allergieGravi.map(a => (
-                      <span key={a.id} className="badge badge--red cr-badge-sm">{a.allergene}</span>
-                    ))}
-                  </span>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Patient Compact Header */}
+      <PatientCompactHeader
+        paziente={paziente}
+        cartella={cartella}
+        onBack={onBack}
+      />
 
       {/* L2 — Navigazione orizzontale gruppi */}
       <PageTabs
@@ -1703,10 +1655,7 @@ export function PatientDetail({
       {/* Content layout */}
       <div className="cr-detail-layout cr-detail-layout--no-sidebar">
         {/* Content area */}
-        <div
-          ref={contentRef}
-          className="cr-detail-content tab-panel-transition"
-        >
+        <div className="cr-detail-content">
           {tab === 'riepilogo'       && renderRiepilogo()}
           {tab === 'profilo'         && renderProfilo()}
           {tab === 'anamnesi'        && renderAnamnesi()}

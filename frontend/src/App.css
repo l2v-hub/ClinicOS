@@ -63,27 +63,9 @@
   --card-radius-sm:     12px;
 
   /* Layout */
-  --sidebar-w:          64px;
+  --sidebar-w:          240px;
   --sidebar-w-collapsed:60px;
   --header-h:           60px;
-  --topbar-h:           32px;
-
-  /* Content padding (tablet → desktop) */
-  --content-px:         16px;
-  --content-px-lg:      24px;
-  --content-px-xl:      32px;
-
-  /* L2 / L3 navigation tokens */
-  --l2-h:               44px;
-  --l2-font:            14px;
-  --l3-h:               32px;
-  --l3-font:            11.5px;
-  --l2-underline-color: var(--blue, #1A56DB);
-  --l2-underline-h:     2px;
-
-  /* Tab transitions */
-  --tab-transition-duration: 180ms;
-  --tab-transition-easing: ease-out;
 
   /* Touch / interaction */
   --touch-target:       48px;
@@ -107,33 +89,407 @@
 *, *::before, *::after { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); }
 
-/* ── Tab content transition (R05) ─────────────────────────────────────────── */
-.tab-panel-transition {
-  animation: tabPanelEnter var(--tab-transition-duration) var(--tab-transition-easing) both;
+/* === 003 CLEAN NAV: SIDEBAR === */
+:root {
+  --sidebar-w: 64px;
+  --topbar-h: 36px;
+  --l2-h: 44px;
+  --l3-h: 36px;
+  --l2-font: 14px;
+  --l3-font: 11.5px;
 }
 
-@keyframes tabPanelEnter {
-  from { opacity: 0; transform: translateX(8px); }
-  to   { opacity: 1; transform: translateX(0); }
+.teams-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: #0C1E35;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex-shrink: 0;
+  z-index: 100;
+  overflow: hidden;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tab-panel-transition { animation: none; }
-  .page-tabs__btn::after { transition: none; }
-  .page-tabs__btn,
-  .section-tabs__btn { transition: none; }
+.teams-sidebar__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.teams-sidebar__brand-dot {
+  width: 28px;
+  height: 28px;
+  background: #1A56DB;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.teams-sidebar__nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.teams-sidebar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.55);
+  gap: 3px;
+  border-left: 3px solid transparent;
+  font-size: 10px;
+  user-select: none;
+  transition: background 0.1s, color 0.1s;
+  padding: 0 4px;
+  position: relative;
+}
+
+.teams-sidebar__item:hover:not(.active) {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.85);
+}
+
+.teams-sidebar__item.active {
+  color: #fff;
+  border-left-color: #1A56DB;
+  background: rgba(255,255,255,0.1);
+}
+
+.teams-sidebar__item-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.teams-sidebar__item-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.teams-sidebar__item-label {
+  font-size: 10px;
+  letter-spacing: 0.1px;
+  line-height: 1;
+  text-align: center;
+}
+
+.teams-sidebar__badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #DC2626;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 4px;
+  min-width: 16px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.teams-sidebar__footer {
+  padding: 8px 0 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.teams-sidebar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1A56DB;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.teams-sidebar__logout {
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.teams-sidebar__logout:hover {
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.06);
+}
+
+/* === 003 CLEAN NAV: TOPBAR === */
+.compact-topbar {
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+/* === 003 CLEAN NAV: L2 MAIN TABS === */
+.main-h-nav {
+  display: flex;
+  align-items: stretch;
+  height: var(--l2-h);
+  background: #fff;
+  border-bottom: 2px solid #E5E7EB;
+  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.main-h-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.main-h-nav__tab {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-size: var(--l2-font);
+  font-weight: 500;
+  color: #6B7280;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  user-select: none;
+  transition: color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.main-h-nav__tab:hover:not(.active) {
+  color: #111827;
+  background: #F9FAFB;
+}
+
+.main-h-nav__tab.active {
+  color: #1A56DB;
+  border-bottom-color: #1A56DB;
+  font-weight: 600;
+}
+
+.main-h-nav__badge {
+  background: #DC2626;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 5px;
+  min-width: 16px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* === 003 CLEAN NAV: L3 PILLS === */
+.context-sub-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  min-height: 44px;    /* tablet touch target for the row */
+  background: #EEF2F7;
+  border-bottom: 1px solid #E5E7EB;
+  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  min-height: var(--l3-h);
+}
+
+.context-sub-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.context-sub-tabs__pill {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;        /* 32px visual; container row provides >= 44px tap area */
+  padding: 0 12px;
+  border-radius: 16px;
+  font-size: var(--l3-font);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  color: #6B7280;
+  background: transparent;
+  border: 1px solid transparent;
+  user-select: none;
+  transition: all 0.12s;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.context-sub-tabs__pill:hover:not(.active) {
+  background: #fff;
+  border-color: #D1D5DB;
+  color: #111827;
+}
+
+.context-sub-tabs__pill.active {
+  background: #1A56DB;
+  color: #fff;
+  border-color: #1A56DB;
+}
+
+.context-sub-tabs__pill.urgent {
+  color: #DC2626;
+}
+
+.context-sub-tabs__pill.active.urgent {
+  background: #DC2626;
+  border-color: #DC2626;
+  color: #fff;
+}
+
+.context-sub-tabs__badge {
+  background: #DC2626;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 4px;
+  min-width: 14px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* === 003 CLEAN NAV: PATIENT COMPACT HEADER === */
+.patient-compact-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  min-height: 56px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.patient-compact-header__back {
+  color: #6B7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;     /* ≥44px touch target */
+  min-height: 44px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: background 0.1s;
+}
+
+.patient-compact-header__back:hover {
+  background: #F3F4F6;
+  color: #111827;
+}
+
+.patient-compact-header__name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  flex-shrink: 1;
+}
+
+.patient-compact-header__sep {
+  color: #D1D5DB;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.patient-compact-header__meta {
+  font-size: 12px;
+  color: #6B7280;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.patient-compact-header__badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.patient-compact-header__badge--allergy {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+
+.patient-compact-header__badge--status {
+  background: #EEF2F7;
+  color: #374151;
+}
+
+/* === 003 CLEAN NAV: MAIN AREA LAYOUT === */
+.main-area-clean {
+  margin-left: var(--sidebar-w);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.content-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px 16px;
+  min-height: 0;
 }
 
 /* ── App shell ────────────────────────────────────────────────────────────── */
 .app-shell {
   display: flex;
-  width: 100%;
   min-height: 100svh;
   font-family: var(--font-ui);
   font-size: 14px;
   color: var(--text);
   background: var(--bg);
-  overflow-x: hidden;
 }
 
 
@@ -415,7 +771,7 @@ body { margin: 0; background: var(--bg); }
    DASHBOARD
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.dashboard { width: 100%; }
+.dashboard { max-width: 1040px; }
 
 .dashboard__date {
   font-size: 13px;
@@ -648,7 +1004,7 @@ body { margin: 0; background: var(--bg); }
    PATIENTS VIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patients-view { width: 100%; }
+.patients-view { max-width: 1040px; }
 
 .view-header {
   display: flex;
@@ -886,7 +1242,7 @@ body { margin: 0; background: var(--bg); }
    PATIENT DETAIL
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-detail { width: 100%; }
+.patient-detail { max-width: 1100px; }
 
 /* Breadcrumb */
 .detail-breadcrumb {
@@ -1816,12 +2172,14 @@ body { margin: 0; background: var(--bg); }
    SHELL — NEW SIDEBAR CLASSES
 ═══════════════════════════════════════════════════════════════════════════ */
 
+/* OLD NAV — kept for backward compat, replaced by .main-area-clean */
 .main-area {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
   min-height: 100svh;
+  /* margin-left: OLD NAV — removed, .main-area-clean handles offset */
 }
 
 
@@ -1997,23 +2355,12 @@ body { margin: 0; background: var(--bg); }
 
 .page-content {
   flex: 1;
-  padding: 12px var(--content-px) 16px;
+  padding: 24px 24px 48px;
   overflow-y: auto;
-  width: 100%;
-  min-width: 0;
+  max-width: 1200px;
 }
 
 @media (max-width: 640px) { .page-content { padding: 16px 14px 40px; } }
-
-/* Large tablet: 1180px–1365px */
-@media (min-width: 1180px) {
-  .page-content { padding: 12px var(--content-px-lg) 16px; }
-}
-
-/* Desktop: 1366px+ */
-@media (min-width: 1366px) {
-  .page-content { padding: 16px var(--content-px-xl) 20px; }
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    COMMON COMPONENTS
@@ -2293,8 +2640,8 @@ textarea.form-input {
    ADMIN DASHBOARD
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.admin-dashboard  { width: 100%; }
-.operator-dashboard { width: 100%; }
+.admin-dashboard  { max-width: 1040px; }
+.operator-dashboard { max-width: 1040px; }
 
 .dashboard__date {
   font-size: 13px;
@@ -2450,7 +2797,7 @@ textarea.form-input {
    OPERATOR MANAGEMENT
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.op-management { width: 100%; }
+.op-management { max-width: 1040px; }
 
 .op-form-panel {
   background: var(--surface);
@@ -2492,7 +2839,7 @@ textarea.form-input {
    ADMIN AGENDA
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.agenda-admin-view { width: 100%; }
+.agenda-admin-view { max-width: 1100px; }
 
 .agenda-admin-controls {
   display: flex;
@@ -2606,7 +2953,7 @@ textarea.form-input {
    CONSEGNE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.consegne-page { width: 100%; }
+.consegne-page { max-width: 900px; }
 
 .consegne-list {
   display: flex;
@@ -2832,7 +3179,7 @@ textarea.form-input {
    PATIENT DETAIL — NEW CLASSES
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-detail-view { width: 100%; }
+.patient-detail-view { max-width: 1100px; }
 
 .detail-header {
   margin-bottom: 18px;
@@ -3057,7 +3404,28 @@ textarea.form-input {
    PATIENT LIST VIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-list-view { width: 100%; }
-.operator-agenda-view { width: 100%; }
-.consegne-page { width: 100%; }
+.patient-list-view { max-width: 1040px; }
+.operator-agenda-view { max-width: 900px; }
+.consegne-page { max-width: 900px; }
+
+/* === 003 CLEAN NAV: RESPONSIVE === */
+@media (max-width: 1023px) {
+  .teams-sidebar {
+    display: none;
+  }
+  .main-area-clean {
+    margin-left: 0;
+  }
+}
+
+.app-shell,
+.main-area-clean {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.main-h-nav,
+.context-sub-tabs {
+  -webkit-overflow-scrolling: touch;
+}
 
