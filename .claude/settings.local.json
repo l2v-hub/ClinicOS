@@ -117,14 +117,55 @@
       "Bash(specify --version)",
       "Bash(specify-cli --version)",
       "Bash(python3 -c \"import sys,json; pkg=json.load\\(sys.stdin\\); print\\(pkg.get\\('bin',{}\\)\\)\")",
-      "Bash(spec:*)"
+      "Bash(spec:*)",
+      "Skill(speckit-git-initialize)",
+      "Skill(speckit-specify)",
+      "Skill(speckit-git-feature)",
+      "Skill(speckit-plan)",
+      "Skill(speckit-git-commit)",
+      "Bash(git checkout *)",
+      "Bash(git merge 001-terapia-farmacologica-agenda --no-ff -m ' *)",
+      "Skill(caveman:caveman-commit)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Workspace\\\\DG_SE_DEV\\\\ClinicOS\" -Recurse -Directory -Name)",
+      "Bash(Select-Object -First 30)",
+      "Skill(speckit-implement)",
+      "Skill(superpowers:brainstorming)",
+      "Bash(rtk git *)",
+      "Bash(git merge *)",
+      "Bash(git commit *)",
+      "mcp__plugin_railway_railway__whoami",
+      "mcp__plugin_railway_railway__list_projects",
+      "Bash(gh auth *)",
+      "Bash(rtk gh *)",
+      "Bash(gh api *)",
+      "Bash(.specify/extensions/git/scripts/bash/create-new-feature.sh --json --short-name \"nav-l2-l3-hierarchy\" \"Redesign professionale navigazione livello 2 e livello 3\")",
+      "Bash(.specify/scripts/bash/setup-plan.sh --json)",
+      "Bash(sed -i 's|specs/003-clean-nav-layout/plan.md|specs/009-nav-l2-l3-hierarchy/plan.md|' CLAUDE.md)",
+      "Bash(sed -n '47,52p' CLAUDE.md)",
+      "Bash(.specify/scripts/bash/setup-tasks.sh --json)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks)",
+      "Bash(rtk proxy *)",
+      "Bash(git ls-remote *)",
+      "Bash(.specify/extensions/git/scripts/bash/create-new-feature.sh --json --short-name \"patient-section-coherence\" \"Uniformare navigazione L2/L3 e layout sezioni cliniche Scheda Paziente\")",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/spec010.md C:/Workspace/DG_SE_DEV/ClinicOS/specs/010-patient-section-coherence/spec.md)",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/requirements010.md C:/Workspace/DG_SE_DEV/ClinicOS/specs/010-patient-section-coherence/checklists/requirements.md)",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/feature010.json C:/Workspace/DG_SE_DEV/ClinicOS/.specify/feature.json)",
+      "Bash(.specify/extensions/git/scripts/bash/create-new-feature.sh --json --short-name \"parametri-quick-entry\" \"Layout rapido per compilazione Parametri Pazienti\")",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/spec011.md C:/Workspace/DG_SE_DEV/ClinicOS/specs/011-parametri-quick-entry/spec.md)",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/requirements011.md C:/Workspace/DG_SE_DEV/ClinicOS/specs/011-parametri-quick-entry/checklists/requirements.md)",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/feature011.json C:/Workspace/DG_SE_DEV/ClinicOS/.specify/feature.json)",
+      "Bash(.specify/extensions/git/scripts/bash/create-new-feature.sh --json --short-name \"remove-back-link\" \"Rimuovere breadcrumb back duplicato Scheda Paziente\")",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/spec012.md C:/Workspace/DG_SE_DEV/ClinicOS/specs/012-remove-back-link/spec.md)",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/requirements012.md C:/Workspace/DG_SE_DEV/ClinicOS/specs/012-remove-back-link/checklists/requirements.md)",
+      "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/feature012.json C:/Workspace/DG_SE_DEV/ClinicOS/.specify/feature.json)",
+      "Bash(cmd.exe *)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "stitch"
   ],
   "enabledPlugins": {
     "ralph-loop@claude-plugins-official": true
-  },
-  "enableAllProjectMcpServers": true
+  }
 }

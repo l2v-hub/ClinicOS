@@ -32,6 +32,7 @@
     "ui-ux-pro-max": true,
     "code-reviewer": true},
   "teammateMode": "tmux",
+  "worktree": { "bgIsolation": "none" },
   "agentTeam": {
     "enabled": true,
     "mode": "tmux",
