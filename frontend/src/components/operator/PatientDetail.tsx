@@ -23,6 +23,7 @@ import { PageTabs, SectionTabs } from '../shared/NavComponents';
 import type { SectionTab } from '../shared/NavComponents';
 import PatientCompactHeader from './PatientCompactHeader';
 import { ClinicalTableSection } from './cartella/shared';
+import { ClinicalCard } from '../shared/ClinicalCard';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -207,8 +208,12 @@ export function PatientDetail({
   // Profilo edit
   const [editProfilo, setEditProfilo] = useState(false);
   const [profiloForm, setProfiloForm] = useState<Partial<CartellaPaziente & Pick<Paziente, 'email' | 'phone'>>>({});
+  // Feature 010: L3 sub-tabs for Profilo (FR-005)
+  const [profiloL3, setProfiloL3] = useState<'anagrafica' | 'contatti' | 'emergenza' | 'assegnazione'>('anagrafica');
   const [editAnamnesi, setEditAnamnesi] = useState(false);
   const [anamnesiForm, setAnamnesiForm] = useState(cartella.anamnesi);
+  // Feature 010: per-card edit state for renderAnamnesi
+  const [editingAnamnesiCard, setEditingAnamnesiCard] = useState<string | null>(null);
 
   // Diagnosi
   const [showAddDiag, setShowAddDiag] = useState(false);
@@ -1133,43 +1138,64 @@ export function PatientDetail({
             </div>
           </InlineForm>
         ) : (
-          <div className="cr-profilo-grid">
-            <div className="cr-profilo-group">
-              <div className="cr-profilo-group__title">Dati anagrafici</div>
-              <div className="cr-profilo-row"><span>Nome</span><strong>{paziente.firstName} {paziente.lastName}</strong></div>
-              <div className="cr-profilo-row"><span>Data nascita</span><strong>{fmtDate(paziente.dateOfBirth)} · {calcAge(paziente.dateOfBirth)} anni</strong></div>
-              <div className="cr-profilo-row"><span>Sesso</span><strong>{paziente.sex ?? '—'}</strong></div>
-              <div className="cr-profilo-row"><span>Codice Fiscale</span><strong className="cr-mono">{cartella.codiceFiscale ?? '—'}</strong></div>
-              <div className="cr-profilo-row"><span>MRN</span><strong className="cr-mono">{paziente.medicalRecordNumber}</strong></div>
+          <>
+            {/* Feature 010: L3 sub-tabs (FR-005) */}
+            <SectionTabs
+              tabs={[
+                { id: 'anagrafica',   label: 'Anagrafica' },
+                { id: 'contatti',     label: 'Contatti' },
+                { id: 'emergenza',    label: 'Contatto emergenza' },
+                { id: 'assegnazione', label: 'Assegnazione clinica' },
+              ]}
+              activeId={profiloL3}
+              onChange={(id) => setProfiloL3(id as typeof profiloL3)}
+            />
+            <div className="cr-profilo-grid" style={{ marginTop: 12 }}>
+              {profiloL3 === 'anagrafica' && (
+                <div className="cr-profilo-group">
+                  <div className="cr-profilo-group__title">Anagrafica</div>
+                  <div className="cr-profilo-row"><span>Nome</span><strong>{paziente.firstName} {paziente.lastName}</strong></div>
+                  <div className="cr-profilo-row"><span>Data nascita</span><strong>{fmtDate(paziente.dateOfBirth)} · {calcAge(paziente.dateOfBirth)} anni</strong></div>
+                  <div className="cr-profilo-row"><span>Sesso</span><strong>{paziente.sex ?? '—'}</strong></div>
+                  <div className="cr-profilo-row"><span>Codice Fiscale</span><strong className="cr-mono">{cartella.codiceFiscale ?? '—'}</strong></div>
+                  <div className="cr-profilo-row"><span>MRN</span><strong className="cr-mono">{paziente.medicalRecordNumber}</strong></div>
+                </div>
+              )}
+              {profiloL3 === 'contatti' && (
+                <div className="cr-profilo-group">
+                  <div className="cr-profilo-group__title">Contatti</div>
+                  <div className="cr-profilo-row"><span>Email</span><strong>{paziente.email ?? '—'}</strong></div>
+                  <div className="cr-profilo-row"><span>Telefono</span><strong>{paziente.phone ?? '—'}</strong></div>
+                  <div className="cr-profilo-row"><span>Indirizzo</span><strong>{cartella.indirizzo ?? '—'}</strong></div>
+                </div>
+              )}
+              {profiloL3 === 'emergenza' && (
+                <div className="cr-profilo-group">
+                  <div className="cr-profilo-group__title">Contatto emergenza</div>
+                  <div className="cr-profilo-row"><span>Nome</span><strong>{cartella.contattoEmergenzaNome ?? '—'}</strong></div>
+                  <div className="cr-profilo-row"><span>Telefono</span><strong>{cartella.contattoEmergenzaTel ?? '—'}</strong></div>
+                  <div className="cr-profilo-row"><span>Relazione</span><strong>{cartella.contattoEmergenzaRel ?? '—'}</strong></div>
+                </div>
+              )}
+              {profiloL3 === 'assegnazione' && (
+                <div className="cr-profilo-group">
+                  <div className="cr-profilo-group__title">Assegnazione clinica</div>
+                  <div className="cr-profilo-row"><span>Stato</span><span className={`stato-pill stato-pill--${cartella.statoRicovero === 'ricoverato' ? 'attivo' : 'inattivo'}`}>{cartella.statoRicovero.replace('_', ' ')}</span></div>
+                  <div className="cr-profilo-row"><span>Reparto</span><strong>{cartella.repartoRicovero ?? '—'}</strong></div>
+                  <div className="cr-profilo-row"><span>Camera / Letto</span><strong>{cartella.cameraNumero ?? '—'} {cartella.lettoNumero ? `/ L.${cartella.lettoNumero}` : ''}</strong></div>
+                  <div className="cr-profilo-row"><span>Operatore</span><strong>{op ? `${op.cognome} ${op.nome}` : '—'}</strong></div>
+                  <div className="cr-profilo-row"><span>Medico curante</span><strong>{cartella.medicoCurante ?? '—'}</strong></div>
+                  {cartella.dataRicovero && <div className="cr-profilo-row"><span>Data ricovero</span><strong>{fmtDate(cartella.dataRicovero)}</strong></div>}
+                </div>
+              )}
+              {cartella.noteGenerali && (
+                <div className="cr-profilo-group cr-profilo-group--full">
+                  <div className="cr-profilo-group__title">Note generali</div>
+                  <p className="cr-note-text">{cartella.noteGenerali}</p>
+                </div>
+              )}
             </div>
-            <div className="cr-profilo-group">
-              <div className="cr-profilo-group__title">Contatti</div>
-              <div className="cr-profilo-row"><span>Email</span><strong>{paziente.email ?? '—'}</strong></div>
-              <div className="cr-profilo-row"><span>Telefono</span><strong>{paziente.phone ?? '—'}</strong></div>
-              <div className="cr-profilo-row"><span>Indirizzo</span><strong>{cartella.indirizzo ?? '—'}</strong></div>
-            </div>
-            <div className="cr-profilo-group">
-              <div className="cr-profilo-group__title">Contatto emergenza</div>
-              <div className="cr-profilo-row"><span>Nome</span><strong>{cartella.contattoEmergenzaNome ?? '—'}</strong></div>
-              <div className="cr-profilo-row"><span>Telefono</span><strong>{cartella.contattoEmergenzaTel ?? '—'}</strong></div>
-              <div className="cr-profilo-row"><span>Relazione</span><strong>{cartella.contattoEmergenzaRel ?? '—'}</strong></div>
-            </div>
-            <div className="cr-profilo-group">
-              <div className="cr-profilo-group__title">Assegnazione clinica</div>
-              <div className="cr-profilo-row"><span>Stato</span><span className={`stato-pill stato-pill--${cartella.statoRicovero === 'ricoverato' ? 'attivo' : 'inattivo'}`}>{cartella.statoRicovero.replace('_', ' ')}</span></div>
-              <div className="cr-profilo-row"><span>Reparto</span><strong>{cartella.repartoRicovero ?? '—'}</strong></div>
-              <div className="cr-profilo-row"><span>Camera / Letto</span><strong>{cartella.cameraNumero ?? '—'} {cartella.lettoNumero ? `/ L.${cartella.lettoNumero}` : ''}</strong></div>
-              <div className="cr-profilo-row"><span>Operatore</span><strong>{op ? `${op.cognome} ${op.nome}` : '—'}</strong></div>
-              <div className="cr-profilo-row"><span>Medico curante</span><strong>{cartella.medicoCurante ?? '—'}</strong></div>
-              {cartella.dataRicovero && <div className="cr-profilo-row"><span>Data ricovero</span><strong>{fmtDate(cartella.dataRicovero)}</strong></div>}
-            </div>
-            {cartella.noteGenerali && (
-              <div className="cr-profilo-group cr-profilo-group--full">
-                <div className="cr-profilo-group__title">Note generali</div>
-                <p className="cr-note-text">{cartella.noteGenerali}</p>
-              </div>
-            )}
-          </div>
+          </>
         )}
         </div>
         </ClinicalTableSection>
@@ -1180,34 +1206,44 @@ export function PatientDetail({
   function renderAnamnesi() {
     const a = editAnamnesi ? anamnesiForm : cartella.anamnesi;
 
-    type ASection = { key: keyof typeof a; label: string; rows?: number; placeholder?: string };
+    type ASection = { id: string; key: keyof typeof a; label: string; rows?: number; placeholder?: string };
     const sections: ASection[] = [
-      { key: 'patologicaProssima', label: 'Anamnesi generale', rows: 5, placeholder: 'Motivo del ricovero, storia recente della malattia…' },
-      { key: 'patologicaRemota',   label: 'Patologie note e interventi pregressi', rows: 4, placeholder: 'Patologie croniche, interventi chirurgici, ricoveri precedenti…' },
-      { key: 'familiare',          label: 'Anamnesi familiare', rows: 3, placeholder: 'Patologie familiari rilevanti…' },
-      { key: 'fisiologica',        label: 'Stato funzionale', rows: 3, placeholder: 'Condizioni basali, autonomia, funzioni vitali di base…' },
-      { key: 'lavorativa',         label: 'Contesto lavorativo e sociale', rows: 3, placeholder: 'Professione, situazione familiare, rete di supporto…' },
-      { key: 'abitudini',          label: 'Abitudini e stile di vita', rows: 3, placeholder: 'Fumo, alcol, attività fisica, alimentazione…' },
-      { key: 'note',               label: 'Note aggiuntive', rows: 3, placeholder: 'Informazioni aggiuntive non categorizzate…' },
+      { id: 'patologicaProssima', key: 'patologicaProssima', label: 'Anamnesi generale', rows: 5, placeholder: 'Motivo del ricovero, storia recente della malattia…' },
+      { id: 'patologicaRemota',   key: 'patologicaRemota',   label: 'Patologie note e interventi pregressi', rows: 4, placeholder: 'Patologie croniche, interventi chirurgici, ricoveri precedenti…' },
+      { id: 'familiare',          key: 'familiare',          label: 'Anamnesi familiare', rows: 3, placeholder: 'Patologie familiari rilevanti…' },
+      { id: 'fisiologica',        key: 'fisiologica',        label: 'Stato funzionale', rows: 3, placeholder: 'Condizioni basali, autonomia, funzioni vitali di base…' },
+      { id: 'lavorativa',         key: 'lavorativa',         label: 'Contesto lavorativo e sociale', rows: 3, placeholder: 'Professione, situazione familiare, rete di supporto…' },
+      { id: 'abitudini',          key: 'abitudini',          label: 'Abitudini e stile di vita', rows: 3, placeholder: 'Fumo, alcol, attività fisica, alimentazione…' },
+      { id: 'note',               key: 'note',               label: 'Note aggiuntive', rows: 3, placeholder: 'Informazioni aggiuntive non categorizzate…' },
     ];
 
     const hasAllergie = cartella.allergie.length > 0;
     const allergieGravi = cartella.allergie.filter(al => al.gravita === 'grave');
 
+    function startCardEdit(cardId: string) {
+      setAnamnesiForm({ ...cartella.anamnesi });
+      setEditingAnamnesiCard(cardId);
+      setEditAnamnesi(true);
+    }
+
+    function saveCard() {
+      upd({ anamnesi: { ...anamnesiForm, updatedAt: nowISO(), operatore: operatoreNome } });
+      setEditingAnamnesiCard(null);
+      setEditAnamnesi(false);
+    }
+
+    function cancelCard() {
+      setEditingAnamnesiCard(null);
+      setEditAnamnesi(false);
+    }
+
+    // Global fallback actions retained for legacy compatibility (FR-008).
     const anamnesiActions = (
       <div style={{ display: 'flex', gap: 8 }}>
-        {!editAnamnesi && (
-          <button className="btn-sm" onClick={() => { setAnamnesiForm({ ...cartella.anamnesi }); setEditAnamnesi(true); }}>
-            <IcoEdit /> Modifica
-          </button>
-        )}
-        {editAnamnesi && (
+        {editAnamnesi && editingAnamnesiCard === null && (
           <>
-            <button className="btn-sm" onClick={() => setEditAnamnesi(false)}>Annulla</button>
-            <button className="btn-sm" onClick={() => {
-              upd({ anamnesi: { ...anamnesiForm, updatedAt: nowISO(), operatore: operatoreNome } });
-              setEditAnamnesi(false);
-            }}><IcoCheck /> Salva</button>
+            <button className="btn-sm" onClick={cancelCard}>Annulla</button>
+            <button className="btn-sm" onClick={saveCard}><IcoCheck /> Salva</button>
           </>
         )}
       </div>
@@ -1217,10 +1253,9 @@ export function PatientDetail({
       <div className="cr-tab-content">
         <ClinicalTableSection title="Anamnesi" actions={anamnesiActions}>
           <div className="cts__body--padded">
-            <div className="cr-anamnesi-cards">
-              {/* Allergie — read-only, sempre visibile */}
-              <div className={`cr-anamnesi-card${allergieGravi.length > 0 ? ' cr-anamnesi-card--allergie-grave' : hasAllergie ? ' cr-anamnesi-card--allergie' : ''}`}>
-                <div className="cr-anamnesi-card__label">Allergie</div>
+            {/* Allergie — read-only ClinicalCard (no onEdit: allergies are managed via the dedicated modal flow elsewhere in the app, not inline) */}
+            <ClinicalCard title="Allergie" defaultExpanded={true}>
+              <div className={hasAllergie ? (allergieGravi.length > 0 ? 'cr-anamnesi-card cr-anamnesi-card--allergie-grave' : 'cr-anamnesi-card cr-anamnesi-card--allergie') : 'cr-anamnesi-card'}>
                 {hasAllergie ? (
                   <div className="cr-anamnesi-allergie-list">
                     {cartella.allergie.map((al, i) => (
@@ -1235,15 +1270,22 @@ export function PatientDetail({
                   <p className="cr-anamnesi-card__text muted">Nessuna allergia registrata. Gestisci dal tab Diagnosi.</p>
                 )}
               </div>
+            </ClinicalCard>
 
-              {/* Sezioni anamnesi modificabili */}
-              {sections.map(({ key, label, rows = 4, placeholder }) => {
-                const val = String(a[key] ?? '');
-                const isEmpty = !val;
-                return (
-                  <div key={key} className={`cr-anamnesi-card${editAnamnesi ? ' editing' : ''}${isEmpty && !editAnamnesi ? ' empty' : ''}`}>
-                    <div className="cr-anamnesi-card__label">{label}</div>
-                    {editAnamnesi ? (
+            {/* Sezioni anamnesi modificabili — ognuna in una ClinicalCard */}
+            {sections.map(({ id, key, label, rows = 4, placeholder }) => {
+              const val = String(a[key] ?? '');
+              const isEmpty = !val;
+              const isEditingThisCard = editingAnamnesiCard === id;
+              return (
+                <ClinicalCard
+                  key={id}
+                  title={label}
+                  defaultExpanded={true}
+                  onEdit={() => startCardEdit(id)}
+                >
+                  {isEditingThisCard ? (
+                    <>
                       <textarea
                         className="form-input cr-anamnesi-card__textarea"
                         rows={rows}
@@ -1251,15 +1293,19 @@ export function PatientDetail({
                         onChange={e => setAnamnesiForm(prev => ({ ...prev, [key]: e.target.value }))}
                         placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
                       />
-                    ) : (
-                      <p className={`cr-anamnesi-card__text${isEmpty ? ' muted' : ''}`}>
-                        {isEmpty ? 'Non compilato' : val}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                      <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}>
+                        <button className="btn-secondary btn-sm" onClick={cancelCard}>Annulla</button>
+                        <button className="btn-primary btn-sm" onClick={saveCard}>Salva</button>
+                      </div>
+                    </>
+                  ) : (
+                    <p className={`cr-anamnesi-card__text${isEmpty ? ' muted' : ''}`}>
+                      {isEmpty ? 'Non compilato' : val}
+                    </p>
+                  )}
+                </ClinicalCard>
+              );
+            })}
 
             {cartella.anamnesi.updatedAt && !editAnamnesi && (
               <p className="cr-update-info">Aggiornato: {fmtDateTime(cartella.anamnesi.updatedAt)} — {cartella.anamnesi.operatore}</p>
@@ -1600,13 +1646,20 @@ export function PatientDetail({
 
   // ── Tab badges ─────────────────────────────────────────────────────────────
 
+  // Feature 010 (FR-014/015): each badge documented; counts match in-tab views.
   const TAB_BADGES: Partial<Record<TabId, number>> = {
+    // badge = active diagnoses
     diagnosi:    diagnosiAttive.length,
+    // badge = active drugs (farmaciAttivi)
     'terapia-farmacologica': farmaciAttivi.length,
-    'diario': ((cartella.diarioInfermieristico ?? []).length + (cartella.diarioMedico ?? []).length) || 0,
-    medicazioni: (cartella.medicazioniFerite ?? []).length || 0,
+    // diario: badge removed (FR-015) — legacy sum does not match DiarioPazienteTab visible count
+    // badge = active medications (matches MedicazioniTab in-page filter: !dataFine)
+    medicazioni: (cartella.medicazioniFerite ?? []).filter(m => !m.dataFine).length || 0,
+    // badge = active contentions
     contenzioni: (cartella.contenzioni ?? []).filter(c => c.attiva).length || 0,
+    // badge = documents delivered (documentiConsegnati)
     documenti:   (cartella.documentiConsegnati ?? []).length || 0,
+    // badge = mie consegne non completate
     consegne:    mieConsegne.filter(c => c.stato !== 'completata').length,
   };
 

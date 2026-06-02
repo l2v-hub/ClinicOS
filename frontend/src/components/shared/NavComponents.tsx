@@ -28,7 +28,7 @@ export function MainHorizontalNav({ groups, activeId, onChange, className }: Pag
           onClick={() => onChange(g.id)}
         >
           {g.label}
-          {(g.badge ?? 0) > 0 && <span className="page-tabs__badge">{g.badge}</span>}
+          {(g.badge ?? 0) > 0 && <span className="page-tabs__badge">{(g.badge ?? 0) > 99 ? '99+' : g.badge}</span>}
         </button>
       ))}
     </nav>
@@ -68,7 +68,7 @@ export function ContextSubTabs({ tabs, activeId, onChange, className }: SectionT
         >
           {t.label}
           {(t.badge ?? 0) > 0 && (
-            <span className="section-tabs__badge">{t.badge}</span>
+            <span className="section-tabs__badge">{(t.badge ?? 0) > 99 ? '99+' : t.badge}</span>
           )}
         </button>
       ))}
