@@ -12,7 +12,7 @@ import {
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
 import { DocumentiTab } from './cartella/DocumentiTab';
-import { DiarioPazienteTab } from './cartella/DiarioPazienteTab';
+import { DiarioPazienteTab, DIARIO_AUTHOR_FILTERS } from './cartella/DiarioPazienteTab';
 import { MedicazioniTab } from './cartella/MedicazioniTab';
 import { ContenzioniTab } from './cartella/ContenzioniTab';
 import { ScalaBradenTab } from './cartella/ScalaBradenTab';
@@ -184,10 +184,12 @@ export function PatientDetail({
   const [activeGroup, setActiveGroup] = useState<TabGroup>(
     () => TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica'
   );
+  const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
 
   useEffect(() => {
     setTab('riepilogo');
     setActiveGroup(TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica');
+    setDiarioFilter('tutti');
   }, [paziente.id]);
 
   function switchTab(tabId: TabId) {
@@ -1695,8 +1697,17 @@ export function PatientDetail({
         activeId={activeGroup}
         onChange={id => switchGroup(id as TabGroup)}
       />
-      {/* L3 — Sotto-tab del gruppo attivo (solo se gruppo ha più di 1 tab) */}
+      {/* L3 — Sotto-tab del gruppo attivo */}
       {(() => {
+        if (activeGroup === 'diario') {
+          return (
+            <SectionTabs
+              tabs={DIARIO_AUTHOR_FILTERS.map(f => ({ id: f.id, label: f.label }))}
+              activeId={diarioFilter}
+              onChange={id => setDiarioFilter(id)}
+            />
+          );
+        }
         const grp = TAB_GROUPS.find(g => g.id === activeGroup);
         if (!grp || grp.tabs.length <= 1) return null;
         const urgentConsegna = mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
@@ -1742,6 +1753,7 @@ export function PatientDetail({
               operatoreNome={operatoreNome}
               legacyInfermieristico={cartella.diarioInfermieristico}
               legacyMedico={cartella.diarioMedico}
+              filterBy={diarioFilter}
             />
           )}
           {tab === 'medicazioni' && (

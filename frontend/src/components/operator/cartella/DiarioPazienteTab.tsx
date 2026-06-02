@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../../types';
-import { ContextSubTabs } from '../../shared/NavComponents';
 import { ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
@@ -51,7 +50,7 @@ const STATUS_LABELS: Record<string, string> = {
   da_rivedere: 'Da rivedere',
 };
 
-const FILTER_CHIPS: { id: DiarioAuthorType | 'tutti'; label: string }[] = [
+export const DIARIO_AUTHOR_FILTERS: { id: string; label: string }[] = [
   { id: 'tutti', label: 'Tutti' },
   { id: 'medico', label: 'Medico' },
   { id: 'infermiere', label: 'Infermiere' },
@@ -138,15 +137,15 @@ interface Props {
   operatoreNome: string;
   legacyInfermieristico?: DiarioEntry[];
   legacyMedico?: DiarioEntry[];
+  filterBy?: string;
 }
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieristico, legacyMedico }: Props) {
+export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieristico, legacyMedico, filterBy }: Props) {
   const [entries, setEntries] = useState<DiarioPazienteEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeFilter, setActiveFilter] = useState<DiarioAuthorType | 'tutti'>('tutti');
   const [showAdd, setShowAdd] = useState(false);
   const [editEntry, setEditEntry] = useState<DiarioPazienteEntry | null>(null);
   const [saving, setSaving] = useState(false);
@@ -167,18 +166,19 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
   const [editForm, setEditForm] = useState<DiarioForm>(emptyForm);
 
   const fetchEntries = useCallback(async () => {
+    const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
     setLoading(true);
     setError('');
     try {
       const params = new URLSearchParams();
-      if (activeFilter !== 'tutti') params.set('authorType', activeFilter);
+      if (resolvedFilter !== 'tutti') params.set('authorType', resolvedFilter);
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary?${params}`);
       if (!res.ok) throw new Error('Risposta non valida');
       const data = await res.json() as { entries: DiarioPazienteEntry[] };
       let allEntries = data.entries ?? [];
 
       // Backward compat: show legacy data if API returns nothing and no filter active
-      if (allEntries.length === 0 && activeFilter === 'tutti') {
+      if (allEntries.length === 0 && resolvedFilter === 'tutti') {
         const legacyEntries = convertLegacyEntries(legacyInfermieristico, legacyMedico);
         allEntries = legacyEntries;
       }
@@ -189,7 +189,7 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
     } finally {
       setLoading(false);
     }
-  }, [pazienteId, activeFilter, legacyInfermieristico, legacyMedico]);
+  }, [pazienteId, filterBy, legacyInfermieristico, legacyMedico]);
 
   useEffect(() => { fetchEntries(); }, [fetchEntries]);
 
@@ -518,13 +518,6 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
 
   return (
     <div>
-      {/* Filter L3 nav */}
-      <ContextSubTabs
-        tabs={FILTER_CHIPS.map(chip => ({ id: chip.id, label: chip.label }))}
-        activeId={activeFilter}
-        onChange={id => setActiveFilter(id as DiarioAuthorType | 'tutti')}
-      />
-
       {/* Error message */}
       {error && (
         <div style={{
