@@ -1,3 +1,4 @@
+// Note: feature 010 reference baseline for clinical sub-menu gap = --clinical-submenu-gap (16px); applied via TerapiaFarmacologicaTab.tsx
 import { useState, useRef, useCallback } from 'react';
 import type { CartellaPaziente, Paziente, ParametriMensili, ParametroGiorno } from '../../../types';
 import { uid, todayStr, nowISO, PrintButton, ClinicalTableSection } from './shared';
@@ -322,8 +323,8 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
           </div>
         )}
 
-        {/* -- Month selector -- */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+        {/* -- Month selector -- (clinical sub-menu spacing per FR-013) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 'var(--clinical-submenu-gap, 16px)', marginBottom: 14 }}>
           <button className="btn-secondary btn-sm" onClick={prevMese}>&#8249;</button>
           <span style={{ fontWeight: 700, fontSize: 15, minWidth: 160, textAlign: 'center' }}>
             {MESI[viewMese - 1]} {viewAnno}

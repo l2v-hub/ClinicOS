@@ -108,6 +108,14 @@ body { margin: 0; background: var(--bg); }
   --content-px: 16px;
   --content-px-lg: 24px;
   --content-px-xl: 32px;
+  --clinical-submenu-gap: 16px;
+  --clinical-card-radius: 8px;
+  --card-header-h: 40px;
+  --card-padding-x: 16px;
+  --card-padding-y: 12px;
+  --card-border-color: var(--border-subtle);
+  --card-bg: var(--surface, #fff);
+  --card-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 
 .teams-sidebar {
@@ -3426,6 +3434,81 @@ textarea.form-input {
   -webkit-overflow-scrolling: touch;
 }
 
+/* ───── 010 CLINICAL CARDS ───── */
+.clinical-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--clinical-card-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.clinical-card + .clinical-card { margin-top: 12px; }
+.clinical-card__header {
+  height: var(--card-header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--card-padding-x);
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+.clinical-card__header:focus-visible {
+  outline: 2px solid var(--primary, var(--blue));
+  outline-offset: -2px;
+}
+.clinical-card__title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-strong, currentColor);
+  margin: 0;
+}
+.clinical-card__actions { display: inline-flex; align-items: center; gap: 8px; }
+.clinical-card__edit {
+  font-size: 13px;
+  color: var(--primary, var(--blue));
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.clinical-card__edit:hover { background: rgba(26,86,219,0.08); }
+.clinical-card__toggle {
+  width: 24px; height: 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-soft, currentColor);
+  transition: transform var(--tab-transition-duration) var(--tab-transition-easing);
+}
+.clinical-card--collapsed .clinical-card__toggle { transform: rotate(-90deg); }
+.clinical-card__content {
+  overflow: hidden;
+  transition: height var(--tab-transition-duration) var(--tab-transition-easing);
+}
+.clinical-card--collapsed .clinical-card__content { height: 0 !important; }
+.clinical-card__content-inner {
+  padding: var(--card-padding-y) var(--card-padding-x);
+}
+
+/* sub-menu spacing token applied to consumers via clinical-section-title wrapper */
+.clinical-section-title + .section-tabs,
+.clinical-section-title + .section-sub-menu,
+.clinical-section-title + .tf-subtabs {
+  margin-top: var(--clinical-submenu-gap);
+}
+/* ───── end 010 ───── */
+
 /* === 009 NAV L2/L3 HIERARCHY: TAB PANEL TRANSITION === */
 .tab-panel-transition {
   animation: tabPanelEnter var(--tab-transition-duration) var(--tab-transition-easing) both;
@@ -3439,7 +3522,9 @@ textarea.form-input {
   .page-tabs__btn::after,
   .section-tabs__btn::after,
   .page-tabs__btn,
-  .section-tabs__btn {
+  .section-tabs__btn,
+  .clinical-card__content,
+  .clinical-card__toggle {
     animation: none !important;
     transition: none !important;
   }

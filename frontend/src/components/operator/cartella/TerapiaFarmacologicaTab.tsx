@@ -541,8 +541,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         </div>
       )}
 
-      {/* Sub-tab navigation */}
-      <div className="tf-subtabs">
+      {/* Sub-tab navigation — Feature 010 (FR-013): clinical sub-menu gap */}
+      <div className="tf-subtabs" style={{ marginTop: 'var(--clinical-submenu-gap, 16px)' }}>
         {SUB_TABS.map(st => (
           <button
             key={st.id}
