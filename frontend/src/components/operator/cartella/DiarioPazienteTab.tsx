@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../../types';
+import { ContextSubTabs } from '../../shared/NavComponents';
 import { ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
@@ -517,18 +518,12 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
 
   return (
     <div>
-      {/* Filter chips */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
-        {FILTER_CHIPS.map(chip => (
-          <button
-            key={chip.id}
-            className={`filter-chip${activeFilter === chip.id ? ' active' : ''}`}
-            onClick={() => setActiveFilter(chip.id)}
-          >
-            {chip.label}
-          </button>
-        ))}
-      </div>
+      {/* Filter L3 nav */}
+      <ContextSubTabs
+        tabs={FILTER_CHIPS.map(chip => ({ id: chip.id, label: chip.label }))}
+        activeId={activeFilter}
+        onChange={id => setActiveFilter(id as DiarioAuthorType | 'tutti')}
+      />
 
       {/* Error message */}
       {error && (
