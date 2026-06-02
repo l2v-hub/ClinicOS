@@ -3,7 +3,6 @@ import type {
   Paziente, CartellaPaziente,
   ParametriMensili, ParametroGiorno,
 } from '../../types';
-import { IcoCheck, IcoX } from '../../icons';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -77,10 +76,6 @@ function rigaToParametroGiorno(r: RigaEditabile): ParametroGiorno {
   };
 }
 
-function rigaHasData(r: RigaEditabile): boolean {
-  return !!(r.pa || r.fc || r.spo2 || r.temperatura || r.dtx || r.evacuazione || r.note);
-}
-
 // ── Props ──────────────────────────────────────────────────────────────────────
 
 interface Props {
@@ -98,188 +93,176 @@ interface RigaProps {
   paziente: Paziente;
   cartella: CartellaPaziente;
   operatoreNome: string;
+  isNoteOpen: boolean;
+  onToggleNote: (open: boolean) => void;
   onClickPaziente: () => void;
-  onSalva: (pazienteId: string, riga: RigaEditabile) => void;
+  onSalva: (pazienteId: string, riga: RigaEditabile) => void | Promise<void>;
 }
 
-function RigaPaziente({ paziente, cartella, operatoreNome, onClickPaziente, onSalva }: RigaProps) {
+function RigaPaziente({
+  paziente, cartella, operatoreNome,
+  isNoteOpen, onToggleNote,
+  onClickPaziente, onSalva,
+}: RigaProps) {
   const { giorno } = meseCorrente();
   const existing = getParametroOggi(cartella);
-  const initialRiga = existing
+  const initialRiga: RigaEditabile = existing
     ? parametroToRiga(existing, giorno)
     : { ...emptyRow(giorno), operatore: operatoreNome };
 
   const [riga, setRiga] = useState<RigaEditabile>(initialRiga);
-  const [dirty, setDirty] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Ricava camera/letto dalla cartella
+  const hasSavedNote = Boolean((existing?.note && existing.note.trim().length > 0) || (riga.note && riga.note.trim().length > 0));
+  const initials = ((paziente.firstName?.[0] ?? '') + (paziente.lastName?.[0] ?? '')).toUpperCase();
+
   const cameraInfo = (() => {
     const cam = cartella.cameraNumero || '';
     const let_ = cartella.lettoNumero || '';
-    if (cam && let_) return `Cam ${cam} - L${let_}`;
-    if (cam) return `Cam ${cam}`;
-    return '—';
+    if (cam && let_) return `Camera ${cam} - L${let_}`;
+    if (cam) return `Camera ${cam}`;
+    return 'Camera —';
   })();
 
-  function set(field: keyof RigaEditabile, value: string) {
-    setRiga(prev => ({ ...prev, [field]: value }));
-    setDirty(true);
-    setSaved(false);
+  function update<K extends keyof RigaEditabile>(k: K, v: RigaEditabile[K]) {
+    setRiga(r => ({ ...r, [k]: v }));
   }
 
-  function handleSalva() {
-    onSalva(paziente.id, riga);
-    setDirty(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+  async function handleSave() {
+    if (saving) return;
+    if (!operatoreNome) {
+      setErrorMessage('Sessione scaduta — accedi di nuovo');
+      return;
+    }
+    setSaving(true);
+    const oraAuto = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    try {
+      await Promise.resolve(
+        onSalva(paziente.id, { ...riga, ora: oraAuto, operatore: operatoreNome })
+      );
+      setErrorMessage(null);
+      onToggleNote(false);
+    } catch {
+      setErrorMessage('Salvataggio fallito — riprova');
+    } finally {
+      setSaving(false);
+    }
   }
 
-  function handleAnnulla() {
-    setRiga(initialRiga);
-    setDirty(false);
-    setSaved(false);
+  function onEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSave();
+    }
   }
 
-  const rowClass = `mpp-row${dirty ? ' mpp-row--dirty' : ''}${saved ? ' mpp-row--saved' : ''}`;
+  const rowClass = 'qe-row' + (isNoteOpen ? ' qe-row--has-note-open' : '');
 
   return (
-    <div className={rowClass}>
-      {/* Intestazione paziente */}
-      <div className="mpp-row__head">
-        <button className="mpp-paziente-link" onClick={onClickPaziente} title="Apri scheda paziente">
-          <span className="mpp-avatar">{paziente.firstName[0]}{paziente.lastName[0]}</span>
-          <div className="mpp-paziente-info">
-            <span className="mpp-paziente-nome">{paziente.lastName}, {paziente.firstName}</span>
-            <span className="mpp-paziente-sub">{cameraInfo}</span>
-          </div>
-        </button>
-        <div className="mpp-row__status">
-          {saved && <span className="mpp-badge mpp-badge--saved"><IcoCheck /> Salvato</span>}
-          {dirty && <span className="mpp-badge mpp-badge--dirty">Modificato</span>}
+    <div className={rowClass} role="group" aria-label={`Parametri ${paziente.firstName} ${paziente.lastName}`}>
+      <div
+        className="qe-row__patient"
+        role="button"
+        tabIndex={0}
+        onClick={onClickPaziente}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClickPaziente(); } }}
+        aria-label={`Apri scheda ${paziente.firstName} ${paziente.lastName}`}
+      >
+        <div className="qe-row__avatar">{initials}</div>
+        <div style={{ overflow: 'hidden' }}>
+          <div className="qe-row__name">{paziente.lastName}, {paziente.firstName}</div>
+          <div className="qe-row__room">{cameraInfo}</div>
         </div>
       </div>
 
-      {/* Griglia parametri */}
-      <div className="mpp-fields">
-        <label className="mpp-field">
-          <span className="mpp-field__label">PA <span className="mpp-field__unit">mmHg</span></span>
-          <input
-            className="mpp-input"
-            type="text"
-            placeholder="es. 120/80"
-            value={riga.pa}
-            onChange={e => set('pa', e.target.value)}
-          />
-        </label>
+      <input
+        className="qe-row__input qe-row__input--wide"
+        placeholder="PA"
+        inputMode="text"
+        value={riga.pa}
+        onChange={e => update('pa', e.target.value)}
+        onKeyDown={onEnter}
+      />
+      <input
+        className="qe-row__input"
+        placeholder="SpO2 %"
+        inputMode="decimal"
+        value={riga.spo2}
+        onChange={e => update('spo2', e.target.value)}
+        onKeyDown={onEnter}
+      />
+      <input
+        className="qe-row__input"
+        placeholder="FC bpm"
+        inputMode="decimal"
+        value={riga.fc}
+        onChange={e => update('fc', e.target.value)}
+        onKeyDown={onEnter}
+      />
+      <input
+        className="qe-row__input"
+        placeholder="TC °C"
+        inputMode="decimal"
+        value={riga.temperatura}
+        onChange={e => update('temperatura', e.target.value)}
+        onKeyDown={onEnter}
+      />
+      <input
+        className="qe-row__input"
+        placeholder="DTX"
+        inputMode="decimal"
+        value={riga.dtx}
+        onChange={e => update('dtx', e.target.value)}
+        onKeyDown={onEnter}
+      />
+      <input
+        className="qe-row__input qe-row__input--wide"
+        placeholder="Evac."
+        inputMode="text"
+        value={riga.evacuazione}
+        onChange={e => update('evacuazione', e.target.value)}
+        onKeyDown={onEnter}
+      />
 
-        <label className="mpp-field">
-          <span className="mpp-field__label">SpO₂ <span className="mpp-field__unit">%</span></span>
-          <input
-            className="mpp-input"
-            type="text"
-            placeholder="es. 98"
-            value={riga.spo2}
-            onChange={e => set('spo2', e.target.value)}
-          />
-        </label>
+      <button
+        type="button"
+        className={'qe-row__note-btn' + (hasSavedNote ? ' qe-row__note-btn--has-note' : '')}
+        aria-label={isNoteOpen ? 'Chiudi note' : 'Apri note'}
+        aria-expanded={isNoteOpen}
+        tabIndex={isNoteOpen ? 0 : -1}
+        onClick={() => onToggleNote(!isNoteOpen)}
+        title="Note"
+      >
+        <span aria-hidden="true">📝</span>
+        <span className="qe-row__note-btn-label">Note</span>
+      </button>
 
-        <label className="mpp-field">
-          <span className="mpp-field__label">FC <span className="mpp-field__unit">bpm</span></span>
-          <input
-            className="mpp-input"
-            type="text"
-            placeholder="es. 72"
-            value={riga.fc}
-            onChange={e => set('fc', e.target.value)}
-          />
-        </label>
+      <button
+        type="button"
+        className="qe-row__save"
+        disabled={saving}
+        aria-busy={saving}
+        onClick={handleSave}
+      >
+        {saving ? '...' : 'Salva'}
+      </button>
 
-        <label className="mpp-field">
-          <span className="mpp-field__label">TC <span className="mpp-field__unit">°C</span></span>
-          <input
-            className="mpp-input"
-            type="text"
-            placeholder="es. 36.5"
-            value={riga.temperatura}
-            onChange={e => set('temperatura', e.target.value)}
-          />
-        </label>
-
-        <label className="mpp-field">
-          <span className="mpp-field__label">DTX/Gli <span className="mpp-field__unit">mg/dl</span></span>
-          <input
-            className="mpp-input"
-            type="text"
-            placeholder="es. 110"
-            value={riga.dtx}
-            onChange={e => set('dtx', e.target.value)}
-          />
-        </label>
-
-        <label className="mpp-field">
-          <span className="mpp-field__label">Evacuazione</span>
-          <input
-            className="mpp-input"
-            type="text"
-            placeholder="es. Sì / No"
-            value={riga.evacuazione}
-            onChange={e => set('evacuazione', e.target.value)}
-          />
-        </label>
-
-        <label className="mpp-field mpp-field--wide">
-          <span className="mpp-field__label">Note rapide</span>
-          <input
-            className="mpp-input"
-            type="text"
-            placeholder="Osservazioni veloci…"
+      {isNoteOpen && (
+        <div className="qe-row__note-input">
+          <textarea
             value={riga.note}
-            onChange={e => set('note', e.target.value)}
+            rows={2}
+            placeholder="Note rapide"
+            onChange={e => update('note', e.target.value)}
+            onKeyDown={e => { if (e.key === 'Escape') onToggleNote(false); }}
           />
-        </label>
+        </div>
+      )}
 
-        <label className="mpp-field">
-          <span className="mpp-field__label">Ora rilevazione</span>
-          <input
-            className="mpp-input"
-            type="time"
-            value={riga.ora}
-            onChange={e => set('ora', e.target.value)}
-          />
-        </label>
-
-        <label className="mpp-field">
-          <span className="mpp-field__label">Operatore</span>
-          <input
-            className="mpp-input"
-            type="text"
-            placeholder="Sigla / Nome"
-            value={riga.operatore}
-            onChange={e => set('operatore', e.target.value)}
-          />
-        </label>
-      </div>
-
-      {/* Azioni riga */}
-      <div className="mpp-row__actions">
-        <button
-          className="btn-primary mpp-btn-salva"
-          onClick={handleSalva}
-          disabled={!dirty && !rigaHasData(riga)}
-          title="Salva questa riga"
-        >
-          <IcoCheck /> Salva riga
-        </button>
-        <button
-          className="btn-secondary mpp-btn-annulla"
-          onClick={handleAnnulla}
-          disabled={!dirty}
-          title="Annulla modifiche"
-        >
-          <IcoX /> Annulla
-        </button>
-      </div>
+      {errorMessage && (
+        <div className="qe-row__error" role="alert">{errorMessage}</div>
+      )}
     </div>
   );
 }
@@ -291,6 +274,7 @@ export function MultiPatientParametri({
   operatoreNome, loading,
   onSelectPaziente, onUpdateCartella,
 }: Props) {
+  const [noteOpenForPazienteId, setNoteOpenForPazienteId] = useState<string | null>(null);
 
   function getCartella(pazienteId: string): CartellaPaziente {
     return cartelle.find(c => c.pazienteId === pazienteId) ?? createEmptyCartella(pazienteId);
@@ -359,19 +343,28 @@ export function MultiPatientParametri({
         </div>
       </div>
 
-      {/* Istruzione */}
-      <p className="mpp-hint">
-        Compila i parametri vitali per ogni paziente. Clicca sul nome per aprire la scheda. Salva ogni riga individualmente.
-      </p>
-
-      {/* Lista righe pazienti */}
-      <div className="mpp-list">
+      {/* Lista righe pazienti compatte */}
+      <div className="qe-list">
+        {/* Column headers */}
+        <div className="qe-row qe-row--header" role="presentation" aria-hidden="true">
+          <div className="qe-row__patient"><span className="qe-row__col-label">Paziente</span></div>
+          <span className="qe-row__col-label qe-row__col-label--wide">PA</span>
+          <span className="qe-row__col-label">SpO2</span>
+          <span className="qe-row__col-label">FC</span>
+          <span className="qe-row__col-label">TC</span>
+          <span className="qe-row__col-label">DTX</span>
+          <span className="qe-row__col-label qe-row__col-label--wide">Evac.</span>
+          <span className="qe-row__col-label">Note</span>
+          <span className="qe-row__col-label">Salva</span>
+        </div>
         {pazienti.map(paziente => (
           <RigaPaziente
             key={paziente.id}
             paziente={paziente}
             cartella={getCartella(paziente.id)}
             operatoreNome={operatoreNome}
+            isNoteOpen={noteOpenForPazienteId === paziente.id}
+            onToggleNote={(open: boolean) => setNoteOpenForPazienteId(open ? paziente.id : null)}
             onClickPaziente={() => onSelectPaziente(paziente)}
             onSalva={salvaRiga}
           />
