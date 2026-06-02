@@ -18,17 +18,17 @@ interface PageTabsProps {
 
 export function MainHorizontalNav({ groups, activeId, onChange, className }: PageTabsProps) {
   return (
-    <nav className={`main-h-nav${className ? ` ${className}` : ''}`} role="tablist" aria-label="Page sections">
+    <nav className={`page-tabs${className ? ` ${className}` : ''}`} role="tablist" aria-label="Sezioni principali">
       {groups.map(g => (
         <button
           key={g.id}
           role="tab"
           aria-selected={activeId === g.id}
-          className={`main-h-nav__tab${activeId === g.id ? ' active' : ''}`}
+          className={`page-tabs__btn${activeId === g.id ? ' page-tabs__btn--active' : ''}`}
           onClick={() => onChange(g.id)}
         >
           {g.label}
-          {(g.badge ?? 0) > 0 && <span className="main-h-nav__badge">{g.badge}</span>}
+          {(g.badge ?? 0) > 0 && <span className="page-tabs__badge">{g.badge}</span>}
         </button>
       ))}
     </nav>
@@ -57,18 +57,18 @@ interface SectionTabsProps {
 
 export function ContextSubTabs({ tabs, activeId, onChange, className }: SectionTabsProps) {
   return (
-    <nav className={`context-sub-tabs${className ? ` ${className}` : ''}`} role="tablist" aria-label="Section tabs">
+    <nav className={`section-tabs${className ? ` ${className}` : ''}`} role="tablist" aria-label="Sotto-sezioni">
       {tabs.map(t => (
         <button
           key={t.id}
           role="tab"
           aria-selected={activeId === t.id}
-          className={`context-sub-tabs__pill${activeId === t.id ? ' active' : ''}${t.urgent ? ' urgent' : ''}`}
+          className={`section-tabs__btn${activeId === t.id ? ' section-tabs__btn--active' : ''}${t.urgent ? ' section-tabs__btn--urgent' : ''}`}
           onClick={() => onChange(t.id)}
         >
           {t.label}
           {(t.badge ?? 0) > 0 && (
-            <span className="context-sub-tabs__badge">{t.badge}</span>
+            <span className="section-tabs__badge">{t.badge}</span>
           )}
         </button>
       ))}

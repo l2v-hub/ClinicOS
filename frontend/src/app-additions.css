@@ -3737,139 +3737,8 @@
   .cr-sidebar-nav__item { font-size: 14px; min-height: 44px; padding: 10px 14px; }
 }
 
-/* ── L2: PageTabs — DOMINANT navigation bar ── */
-.page-tabs {
-  display: flex;
-  gap: 0;
-  padding: 0 12px;
-  margin: 0;
-  background: var(--surface);
-  border-bottom: 2px solid var(--border);
-  border-radius: 0;
-  flex-shrink: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-  box-sizing: border-box;
-}
-.page-tabs::-webkit-scrollbar { display: none; }
-
-.page-tabs__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: var(--font-ui);
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s;
-  border-radius: 0;
-  min-height: 46px;
-}
-.page-tabs__btn:hover {
-  color: var(--text);
-  border-bottom-color: var(--border);
-  background: transparent;
-}
-.page-tabs__btn--active {
-  color: var(--blue);
-  border-bottom-color: var(--blue);
-  font-weight: 700;
-  background: transparent;
-  box-shadow: none;
-}
-
-.page-tabs__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 9px;
-  background: var(--divider);
-  color: var(--text-muted);
-  transition: background 0.15s, color 0.15s;
-}
-.page-tabs__btn--active .page-tabs__badge {
-  background: var(--blue-dim);
-  color: var(--blue);
-}
-
-/* ── L3: SectionTabs (pill-style, clearly subordinate to L2 PageTabs) ── */
-.section-tabs {
-  display: flex;
-  gap: 3px;
-  background: var(--bg);
-  padding: 4px 16px 6px;
-  margin: 2px 0 0;
-  border-bottom: none;
-  overflow-x: auto;
-  flex-shrink: 0;
-  scrollbar-width: none;
-  align-items: center;
-}
-.section-tabs::-webkit-scrollbar { display: none; }
-
-.section-tabs__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 13px;
-  min-height: 44px;
-  font-size: 11.5px;
-  font-weight: 500;
-  font-family: var(--font-ui);
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  white-space: nowrap;
-  line-height: 1.4;
-  transition: color 0.15s, background 0.15s;
-}
-.section-tabs__btn:hover {
-  color: var(--text);
-  background: rgba(26, 86, 219, 0.06);
-}
-.section-tabs__btn--active {
-  color: var(--blue);
-  background: rgba(26, 86, 219, 0.10);
-  font-weight: 600;
-  box-shadow: none;
-}
-
-.section-tabs__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.12);
-  color: inherit;
-  transition: background 0.15s, color 0.15s;
-}
-.section-tabs__btn--active .section-tabs__badge {
-  background: var(--blue-dim);
-  color: var(--blue);
-}
-.section-tabs__badge--urgent {
-  background: var(--red) !important;
-  color: #fff !important;
-}
+/* ── L2/L3 nav components: canonical rules live in App.css (feature 009).
+   Only retain rules here that have no equivalent in App.css. ── */
 
 /* ── L3: SubSectionControl ── */
 .subsection-ctrl {
@@ -3916,13 +3785,9 @@
   height: 14px;
 }
 
-/* ── Responsive: nav components ── */
+/* ── Responsive: nav components (cr-header only; page-tabs/section-tabs are canonical) ── */
 @media (max-width: 900px) {
   .cr-header { margin: 6px 8px 0; padding: 10px 14px; }
-  .page-tabs { margin: 0; padding: 0 8px; }
-  .page-tabs__btn { padding: 10px 16px; font-size: 15px; }
-  .section-tabs { padding: 0 12px; }
-  .section-tabs__btn { padding: 3px 10px; font-size: 11.5px; }
 }
 
 /* ── Card base improvements ── */
@@ -4101,7 +3966,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   gap: 8px;
 }
 
-/* ── Print: hide grouped nav too ── */
+/* FR-008: print hides nav chrome so paper output focuses on content */
 @media print {
   .cr-nav-groups, .page-tabs, .section-tabs { display: none !important; }
 }
@@ -5197,7 +5062,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   overflow-x: hidden;
 }
 
-/* No horizontal scroll anywhere in patient detail */
+/* FR-008: defensive width clamp at clinical-record context (no horizontal scroll) */
 .cr-header, .cr-breadcrumb, .cr-nav-groups, .cr-tab-bar, .page-tabs, .section-tabs {
   max-width: 100%;
   box-sizing: border-box;

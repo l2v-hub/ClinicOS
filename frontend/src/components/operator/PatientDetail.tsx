@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type {
   Paziente, Consegna, Operatore, Camera, CartellaPaziente,
   Diagnosi, NotaClinica,
@@ -1618,6 +1618,15 @@ export function PatientDetail({
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
+  const contentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    el.classList.remove('tab-panel-transition');
+    void el.offsetWidth;
+    el.classList.add('tab-panel-transition');
+  }, [activeGroup, tab]);
+
   return (
     <div className="patient-record-view">
       {/* Patient Compact Header */}
@@ -1655,7 +1664,7 @@ export function PatientDetail({
       {/* Content layout */}
       <div className="cr-detail-layout cr-detail-layout--no-sidebar">
         {/* Content area */}
-        <div className="cr-detail-content">
+        <div ref={contentRef} className="cr-detail-content tab-panel-transition">
           {tab === 'riepilogo'       && renderRiepilogo()}
           {tab === 'profilo'         && renderProfilo()}
           {tab === 'anamnesi'        && renderAnamnesi()}

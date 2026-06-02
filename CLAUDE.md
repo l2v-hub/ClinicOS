@@ -47,5 +47,5 @@ Development rules:
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at `specs/003-clean-nav-layout/plan.md`.
+at `specs/009-nav-l2-l3-hierarchy/plan.md`.
 <!-- SPECKIT END -->
