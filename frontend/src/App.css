@@ -116,6 +116,15 @@ body { margin: 0; background: var(--bg); }
   --card-border-color: var(--border-subtle);
   --card-bg: var(--surface, #fff);
   --card-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  --qe-row-h: 56px;
+  --qe-row-vpad: 8px;
+  --qe-row-hpad: 12px;
+  --qe-input-h: 36px;
+  --qe-input-w-narrow: 64px;
+  --qe-input-w-wide: 96px;
+  --qe-patient-col-w: 220px;
+  --qe-row-gap: 8px;
+  --qe-divider-color: var(--border-subtle);
 }
 
 .teams-sidebar {
@@ -3508,6 +3517,157 @@ textarea.form-input {
   margin-top: var(--clinical-submenu-gap);
 }
 /* ───── end 010 ───── */
+
+/* ───── 011 PARAMETRI QUICK-ENTRY ───── */
+.qe-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+.qe-row {
+  display: grid;
+  grid-template-columns: var(--qe-patient-col-w) repeat(6, auto) auto auto;
+  gap: var(--qe-row-gap);
+  align-items: center;
+  min-height: var(--qe-row-h);
+  padding: var(--qe-row-vpad) var(--qe-row-hpad);
+  border-bottom: 1px solid var(--qe-divider-color);
+  box-sizing: border-box;
+  transition: background 120ms ease-out;
+}
+.qe-row:hover { background: rgba(0,0,0,0.02); }
+.qe-row__patient {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.qe-row__avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--primary, var(--blue));
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex: 0 0 32px;
+}
+.qe-row__name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-strong, currentColor);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.qe-row__room {
+  font-size: 12px;
+  color: var(--text-soft, currentColor);
+  white-space: nowrap;
+}
+.qe-row__input {
+  width: var(--qe-input-w-narrow);
+  height: var(--qe-input-h);
+  padding: 0 8px;
+  font-size: 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  background: var(--surface, #fff);
+  box-sizing: border-box;
+}
+.qe-row__input--wide { width: var(--qe-input-w-wide); }
+.qe-row__input:focus-visible {
+  outline: 2px solid var(--primary, var(--blue));
+  outline-offset: 2px;
+  border-color: var(--primary, var(--blue));
+}
+.qe-row__note-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text-soft, currentColor);
+  white-space: nowrap;
+}
+.qe-row__note-btn--has-note {
+  background: rgba(26,86,219,0.12);
+  border-color: var(--primary, var(--blue));
+  color: var(--primary, var(--blue));
+}
+.qe-row__save {
+  height: var(--qe-input-h);
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  background: var(--primary, var(--blue));
+  color: #fff;
+  cursor: pointer;
+  min-width: 56px;
+}
+.qe-row__save[disabled] { opacity: 0.6; cursor: not-allowed; }
+.qe-row__note-input {
+  grid-column: 1 / -1;
+  padding: 8px 0 0;
+}
+.qe-row__note-input textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 56px;
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  background: var(--surface, #fff);
+}
+.qe-row--has-note-open { min-height: auto; }
+.qe-row__error {
+  grid-column: 1 / -1;
+  padding: 4px 0 0;
+  color: #DC2626;
+  font-size: 12px;
+}
+.qe-row--header {
+  min-height: 28px;
+  padding: 4px var(--qe-row-hpad);
+  background: rgba(0,0,0,0.02);
+  border-bottom: 1px solid var(--qe-divider-color);
+}
+.qe-row--header:hover { background: rgba(0,0,0,0.02); }
+.qe-row__col-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-soft, currentColor);
+  width: var(--qe-input-w-narrow);
+  text-align: left;
+}
+.qe-row__col-label--wide { width: var(--qe-input-w-wide); }
+.qe-row__note-btn-label {
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+@media (max-width: 1180px) {
+  .qe-row { grid-template-columns: 180px repeat(6, auto) auto auto; }
+}
+/* ───── end 011 ───── */
 
 /* === 009 NAV L2/L3 HIERARCHY: TAB PANEL TRANSITION === */
 .tab-panel-transition {
