@@ -3,6 +3,7 @@ import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente } from '../..
 import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus } from '../../icons';
 import { NewPatientModal } from '../shared/NewPatientModal';
 import { ClinicalTableSection } from './cartella/shared';
+import { PageHeader } from '../shared/PageHeader';
 
 interface PatientListProps {
   pazienti: Paziente[];
@@ -52,15 +53,16 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
 
   return (
     <div className="patient-list-view">
-      <div className="view-header">
-        <div>
-          <h2 className="view-header__title">Pazienti</h2>
-          <p className="view-header__sub">{pazienti.length} pazienti totali</p>
-        </div>
-        <button className="btn-primary" onClick={() => setShowModal(true)}>
-          <IcoPlus /> Nuovo paziente
-        </button>
-      </div>
+      <PageHeader
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Pazienti' }]}
+        title="Pazienti"
+        subtitle={`${pazienti.length} pazienti totali`}
+        actions={
+          <button className="btn-primary" onClick={() => setShowModal(true)}>
+            <IcoPlus /> Nuovo paziente
+          </button>
+        }
+      />
 
       {/* Toolbar */}
       <div className="toolbar">

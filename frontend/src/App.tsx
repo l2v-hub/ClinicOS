@@ -29,6 +29,7 @@ import { OperatorAgenda } from './components/operator/OperatorAgenda';
 import { NotesPage } from './components/shared/NotesPage';
 import { MultiPatientParametri } from './components/operator/MultiPatientParametri';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
+import { AIAssistantButton } from './components/shared/AIAssistantButton';
 
 import { IcoSearch, IcoX } from './icons';
 
@@ -48,6 +49,7 @@ const NAV_LABELS: Record<NavKey, string> = {
   'consegne': 'Consegne',
   'agenda-operatore': 'Agenda',
   'parametri-multipaziente': 'Parametri',
+  'ai-assistant': 'AI Assistant',
 };
 
 const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
@@ -66,6 +68,8 @@ export default function App() {
   const [utente, setUtente] = useState<UtenteApp | null>(null);
   const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiOpenTrigger, setAiOpenTrigger] = useState(0);
 
   function showToast(msg: string) {
     setToastMsg(msg);
@@ -112,6 +116,11 @@ export default function App() {
   }
 
   function navigate(key: NavKey) {
+    if (key === 'ai-assistant') {
+      setAiOpen(true);
+      setAiOpenTrigger(t => t + 1);
+      return;
+    }
     pushNav(key);
     if (key === 'agenda-operatore') loadTherapySlots();
   }
@@ -832,6 +841,12 @@ export default function App() {
           )}
         </main>
       </div>
+
+      <AIAssistantButton
+        key={aiOpenTrigger}
+        forceOpen={aiOpen}
+        onClose={() => setAiOpen(false)}
+      />
     </div>
   );
 }

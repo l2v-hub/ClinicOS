@@ -25,7 +25,8 @@ export type NavKey =
   | 'dettaglio-paziente'
   | 'consegne'
   | 'agenda-operatore'
-  | 'parametri-multipaziente';
+  | 'parametri-multipaziente'
+  | 'ai-assistant';
 
 // ── Patient (API) ──────────────────────────────────────────────────────────────
 
