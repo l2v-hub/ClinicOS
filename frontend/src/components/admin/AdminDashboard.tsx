@@ -1,5 +1,6 @@
 import type { Operatore, Consegna, Camera, CartellaPaziente, NavKey } from '../../types';
 import { IcoArrow, IcoWarning, IcoOperatori, IcoConsegne, IcoCalendar, IcoBed, IcoActivity, IcoShield } from '../../icons';
+import { PageHeader } from '../shared/PageHeader';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -44,11 +45,15 @@ export function AdminDashboard({
   const occupancyPct = totaleLetti.length > 0 ? Math.round((lettiOccupati / totaleLetti.length) * 100) : 0;
   const camereOccupate = camere.filter(c => c.letti.every(l => l.stato === 'occupato')).length;
 
+  const todayStr = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
   return (
     <div className="admin-dashboard">
-      <div className="dashboard__date">
-        {new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-      </div>
+      <PageHeader
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Dashboard' }]}
+        title="Dashboard"
+        subtitle={todayStr}
+      />
 
       {/* Alert urgenti */}
       {urgenti.length > 0 && (

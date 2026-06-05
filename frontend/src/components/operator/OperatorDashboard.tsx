@@ -1,6 +1,7 @@
 import type { UtenteApp, Consegna, SlotAgenda, CartellaPaziente, Paziente } from '../../types';
 import { IcoArrow, IcoWarning, IcoCalendar, IcoConsegne, IcoActivity, IcoShield } from '../../icons';
 import type { NavKey } from '../../types';
+import { PageHeader } from '../shared/PageHeader';
 
 interface OperatorDashboardProps {
   utente: UtenteApp;
@@ -40,18 +41,20 @@ export function OperatorDashboard({
   const allergieGravi = cartelle.filter(c => c.allergie.some(a => a.gravita === 'grave')).length;
   const pazientiRicoverati = cartelle.filter(c => c.statoRicovero === 'ricoverato').length;
 
+  const todayStr = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
   return (
     <div className="operator-dashboard">
-      <div className="dashboard__date">
-        {new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-      </div>
-      <div className="op-welcome">
-        <div className="op-avatar-lg">{utente.iniziali}</div>
-        <div>
-          <h2 className="op-welcome__name">Benvenuto, {utente.nome}</h2>
-          <p className="op-welcome__dept">{utente.reparto}</p>
-        </div>
-      </div>
+      <PageHeader
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Dashboard' }]}
+        title={`Benvenuto, ${utente.nome}`}
+        subtitle={`${utente.reparto} — ${todayStr}`}
+        actions={
+          <button className="btn-ghost-outline" onClick={() => onNavigate('pazienti')}>
+            <IcoArrow /> Vedi pazienti
+          </button>
+        }
+      />
 
       {/* Alert urgente */}
       {urgenti.length > 0 && (

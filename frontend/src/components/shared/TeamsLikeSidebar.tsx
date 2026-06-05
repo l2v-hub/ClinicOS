@@ -1,7 +1,7 @@
 import type { UtenteApp, NavKey } from '../../types';
 import {
   IcoDashboard, IcoPazienti, IcoCalendar, IcoConsegne, IcoMessage,
-  IcoLogout, IcoOperatori, IcoBed, IcoActivity, IcoClock,
+  IcoLogout, IcoOperatori, IcoBed, IcoActivity, IcoClock, IcoAI,
 } from '../../icons';
 
 interface TeamsLikeSidebarProps {
@@ -29,6 +29,7 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
       { key: 'orari-operatori', label: 'Orari', icon: <IcoClock /> },
       { key: 'consegne', label: 'Consegne', icon: <IcoConsegne /> },
       { key: 'note', label: 'Note', icon: <IcoMessage />, badge: unreadNotes },
+      { key: 'ai-assistant', label: 'AI', icon: <IcoAI /> },
     ];
   }
   return [
@@ -38,6 +39,7 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
     { key: 'consegne', label: 'Consegne', icon: <IcoConsegne /> },
     { key: 'agenda-operatore', label: 'Agenda', icon: <IcoCalendar /> },
     { key: 'note', label: 'Note', icon: <IcoMessage />, badge: unreadNotes },
+    { key: 'ai-assistant', label: 'AI', icon: <IcoAI /> },
   ];
 }
 

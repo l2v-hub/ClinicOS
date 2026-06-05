@@ -1,0 +1,13 @@
+backend
+node_modules
+**/node_modules
+.git
+specs
+.specify
+.claude
+.remember
+memory
+*.log
+dist
+frontend/dist
+frontend/node_modules

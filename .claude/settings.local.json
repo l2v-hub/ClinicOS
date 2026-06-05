@@ -158,7 +158,11 @@
       "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/spec012.md C:/Workspace/DG_SE_DEV/ClinicOS/specs/012-remove-back-link/spec.md)",
       "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/requirements012.md C:/Workspace/DG_SE_DEV/ClinicOS/specs/012-remove-back-link/checklists/requirements.md)",
       "Bash(cp C:/Users/llavia/.claude/jobs/5e47e1ab/feature012.json C:/Workspace/DG_SE_DEV/ClinicOS/.specify/feature.json)",
-      "Bash(cmd.exe *)"
+      "Bash(cmd.exe *)",
+      "Bash(vercel --prod --yes)",
+      "Bash(git -C C:/Workspace/DG_SE_DEV/ClinicOS remote -v)",
+      "Bash(git -C C:/Workspace/DG_SE_DEV/ClinicOS rev-parse HEAD origin/main)",
+      "Bash(git -C C:/Workspace/DG_SE_DEV/ClinicOS checkout -b 013-redesign-shell-nav)"
     ]
   },
   "enableAllProjectMcpServers": true,
