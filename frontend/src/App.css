@@ -499,6 +499,7 @@ body { margin: 0; background: var(--bg); }
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  min-width: 0;            /* 014: prevent wide content forcing global horizontal scroll */
 }
 
 .content-panel {
