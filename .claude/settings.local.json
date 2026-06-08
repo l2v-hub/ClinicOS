@@ -162,7 +162,8 @@
       "Bash(vercel --prod --yes)",
       "Bash(git -C C:/Workspace/DG_SE_DEV/ClinicOS remote -v)",
       "Bash(git -C C:/Workspace/DG_SE_DEV/ClinicOS rev-parse HEAD origin/main)",
-      "Bash(git -C C:/Workspace/DG_SE_DEV/ClinicOS checkout -b 013-redesign-shell-nav)"
+      "Bash(git -C C:/Workspace/DG_SE_DEV/ClinicOS checkout -b 013-redesign-shell-nav)",
+      "Bash(.specify/extensions/git/scripts/bash/create-new-feature.sh *)"
     ]
   },
   "enableAllProjectMcpServers": true,
