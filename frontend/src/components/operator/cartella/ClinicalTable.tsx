@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { ClinicalTableSection } from './shared';
 
 export interface ColumnDef<T = any> {
@@ -10,6 +10,7 @@ export interface ColumnDef<T = any> {
   options?: { value: string; label: string }[];
   render?: (value: any, row: T) => React.ReactNode;
   width?: string;
+  align?: 'left' | 'center' | 'right';
 }
 
 interface ClinicalTableProps<T extends Record<string, any> = Record<string, any>> {
@@ -23,6 +24,7 @@ interface ClinicalTableProps<T extends Record<string, any> = Record<string, any>
   emptyMessage?: string;
   keyField?: string;
   rowClassName?: (row: T) => string;
+  onRowClick?: (row: T) => void;
   noWrapper?: boolean;
   /** When set, rows are paginated with a footer (items-per-page + page range).
    *  When omitted, all rows are shown (legacy behavior). */
@@ -80,6 +82,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
   emptyMessage = 'Nessun dato.',
   keyField = 'id',
   rowClassName,
+  onRowClick,
   noWrapper = false,
   pageSize,
 }: ClinicalTableProps<T>) {
@@ -87,7 +90,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [showFilters, setShowFilters] = useState(false);
   const [perPage, setPerPage] = useState<number>(pageSize ?? 0);
-  const [page, setPage] = useState(1);
+  const [rawPage, setPage] = useState(1);
 
   const filterableCount = columns.filter(c => c.filterable).length;
   const activeFilterCount = Object.values(filters).filter(Boolean).length;
@@ -114,11 +117,8 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
   const paginate = perPage > 0;
   const totalRows = displayData.length;
   const totalPages = paginate ? Math.max(1, Math.ceil(totalRows / perPage)) : 1;
-
-  // Keep current page within range when data/filters/perPage change.
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages);
-  }, [page, totalPages]);
+  // Clamp during render (no effect) so a shrinking dataset never strands the page.
+  const page = Math.min(rawPage, totalPages);
 
   const pageData = useMemo(() => {
     if (!paginate) return displayData;
@@ -149,7 +149,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
         <thead>
           <tr>
             {columns.map(col => (
-              <th key={col.key} style={col.width ? { width: col.width } : undefined}>
+              <th key={col.key} style={{ ...(col.width ? { width: col.width } : {}), ...(col.align ? { textAlign: col.align } : {}) }}>
                 <div className="cdt__th-inner">
                   {col.sortable ? (
                     <button
@@ -212,10 +212,11 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
             pageData.map((row, idx) => (
               <tr
                 key={row[keyField] ?? idx}
-                className={rowClassName ? rowClassName(row) : undefined}
+                className={`${rowClassName ? rowClassName(row) : ''}${onRowClick ? ' row--clickable' : ''}`.trim() || undefined}
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
               >
                 {columns.map(col => (
-                  <td key={col.key}>
+                  <td key={col.key} style={col.align ? { textAlign: col.align } : undefined}>
                     {col.render ? col.render(row[col.key], row) : (row[col.key] ?? '')}
                   </td>
                 ))}

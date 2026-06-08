@@ -3,6 +3,7 @@ import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente } from '../..
 import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus } from '../../icons';
 import { NewPatientModal } from '../shared/NewPatientModal';
 import { ClinicalTableSection } from './cartella/shared';
+import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
 
 interface PatientListProps {
@@ -111,59 +112,67 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
       {/* Table + cards wrapped in collapsible section */}
       {(loading || pazienti.length > 0) && (
         <ClinicalTableSection title="Pazienti" count={pazienti.length} countLabel="pazienti">
-          {/* Tabella desktop */}
+          {/* Tabella desktop — shared ClinicalTable */}
           <div className="table-wrap table-wrap--desktop">
-            <div className="clinicos-table-wrap">
-            <table className="clinicos-table">
-              <thead>
-                <tr>
-                  <th>Paziente</th>
-                  <th>MRN</th>
-                  <th>Data di nascita</th>
-                  <th>Camera / Letto</th>
-                  <th>Contatti</th>
-                  <th>Consegne</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={7} className="empty-row">Caricamento…</td></tr>
-                ) : filtrati.length === 0 ? (
-                  <tr><td colSpan={7} className="empty-row">Nessun paziente trovato</td></tr>
-                ) : filtrati.map(p => (
-                  <tr key={p.id} className="row--clickable" onClick={() => onSelect(p)}>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
-                        <div>
-                          <div className="cell--name">{p.lastName}, {p.firstName}</div>
-                          <div className="cell--muted" style={{ fontSize: 12 }}>{calcAge(p.dateOfBirth)} anni</div>
-                        </div>
+            <ClinicalTable<Paziente>
+              title="Pazienti"
+              noWrapper
+              keyField="id"
+              data={loading ? [] : filtrati}
+              onRowClick={onSelect}
+              emptyMessage={loading ? 'Caricamento…' : 'Nessun paziente trovato'}
+              columns={[
+                {
+                  key: 'lastName', label: 'Paziente', sortable: true,
+                  render: (_v, p) => (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
+                      <div>
+                        <div className="cell--name">{p.lastName}, {p.firstName}</div>
+                        <div className="cell--muted" style={{ fontSize: 12 }}>{calcAge(p.dateOfBirth)} anni</div>
                       </div>
-                    </td>
-                    <td><span className="mrn-tag">{p.medicalRecordNumber}</span></td>
-                    <td className="cell--muted">{new Date(p.dateOfBirth).toLocaleDateString('it-IT')}</td>
-                    <td className="cell--muted" style={{ fontSize: 12 }}>--</td>
-                    <td className="cell--muted" style={{ fontSize: 12 }}>
+                    </div>
+                  ),
+                },
+                {
+                  key: 'medicalRecordNumber', label: 'MRN', sortable: true,
+                  render: (_v, p) => <span className="mrn-tag">{p.medicalRecordNumber}</span>,
+                },
+                {
+                  key: 'dateOfBirth', label: 'Data di nascita', sortable: true, filterType: 'date',
+                  render: (_v, p) => <span className="cell--muted">{new Date(p.dateOfBirth).toLocaleDateString('it-IT')}</span>,
+                },
+                {
+                  key: 'cameraLetto', label: 'Camera / Letto',
+                  render: () => <span className="cell--muted" style={{ fontSize: 12 }}>--</span>,
+                },
+                {
+                  key: 'contatti', label: 'Contatti',
+                  render: (_v, p) => (
+                    <div className="cell--muted" style={{ fontSize: 12 }}>
                       <div>{p.email ?? '--'}</div>
                       <div>{p.phone ?? '--'}</div>
-                    </td>
-                    <td className="text-center">
-                      {consegneAperteMap.has(p.id) ? (
-                        <span className="consegna-priorita-badge consegna-priorita-badge--alta" title={`${consegneAperteMap.get(p.id)} consegne aperte`}>
-                          {consegneAperteMap.get(p.id)}
-                        </span>
-                      ) : (
-                        <span style={{ color: 'var(--text-xmuted)', fontSize: 11 }}>—</span>
-                      )}
-                    </td>
-                    <td><span className="row-chevron"><IcoChevronRight /></span></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </div>
+                    </div>
+                  ),
+                },
+                {
+                  key: 'consegne', label: 'Consegne', align: 'center',
+                  render: (_v, p) => (
+                    consegneAperteMap.has(p.id) ? (
+                      <span className="consegna-priorita-badge consegna-priorita-badge--alta" title={`${consegneAperteMap.get(p.id)} consegne aperte`}>
+                        {consegneAperteMap.get(p.id)}
+                      </span>
+                    ) : (
+                      <span style={{ color: 'var(--text-xmuted)', fontSize: 11 }}>—</span>
+                    )
+                  ),
+                },
+                {
+                  key: 'chevron', label: '', align: 'right',
+                  render: () => <span className="row-chevron"><IcoChevronRight /></span>,
+                },
+              ]}
+            />
           </div>
 
           {/* Card list mobile */}

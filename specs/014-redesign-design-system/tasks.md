@@ -125,3 +125,37 @@ standalone, demonstrable increment.
 - Wave D (US3): {T022,T024,T025} parallel → T023.
 - Wave E (US4): T026 → {T027,T028} → T029.
 - Wave F (Polish): T030–T035 sequential, build gate at T033.
+
+---
+
+## Implementation Summary (2026-06-09)
+
+**Done this feature (build-verified, `npm run build` green):**
+- Foundational: medical-blue intent tokens; sidebar 64→80px + legibility + stronger active;
+  new `PageShell` + `StatusBadge`; `ClinicalTable` gains optional `pageSize` pagination footer,
+  `onRowClick`, and `align` column option; `.main-area-clean { min-width:0 }`.
+- US2: `PatientList` migrated from raw `.clinicos-table` to shared `ClinicalTable`
+  (`/patients` data flow unchanged — still props + `onSelect`).
+- US4: removed narrow content caps (`.page-content` + priority view containers `max-width:none`)
+  so desktop is full-width; `min-width:0` + `.main-area-clean{overflow-x:hidden}` prevent global
+  horizontal scroll on tablets.
+
+**Already done by prior specs (009/013) — verified, no change needed:**
+- L2 `MainHorizontalNav` + L3 `ContextSubTabs` shared and used everywhere.
+- **Diario already uses shared L3 `SectionTabs`** (`PatientDetail.tsx:1704`) — problem #4 resolved.
+- `OperatorManagement`, `TerapiaFarmacologicaTab`, `DocumentiTab` already use `ClinicalTable`.
+
+**Deviations from the literal task list (justified):**
+- `ClinicalDataTable` → canonical `ClinicalTable` (constitution; avoids rename churn).
+- T011 "remove `.filter-chip` CSS" NOT done — `.filter-chip` is used by 6 live pages
+  (PatientList/Rooms/Operatori/Consegne/Notes); only the dead `cartella/DiarioTab.tsx`
+  + its `.diario-filters` CSS are removable (left as optional cleanup).
+- `RoomsManagement` is a room→bed **card grid**, and `ParametriTab` is a monthly **editable
+  matrix** (spec 011) — both are NOT list tables, so they correctly stay specialized, not
+  forced into `ClinicalTable`.
+- US3 cards: priority pages already render sections via shared `ClinicalCard` /
+  `ClinicalTableSection`; no risky rewrites made.
+
+**Not executed in-session:** live multi-viewport browser QA (T029) — no browser driver/backend
+started here. Verification was `npm run build` (tsc strict + vite) + static CSS reasoning.
+Recommend a manual visual pass at 1024×768 / 1180×820 / 1366+ before release.
