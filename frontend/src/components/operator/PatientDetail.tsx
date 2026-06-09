@@ -19,8 +19,7 @@ import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
-import { PageTabs, SectionTabs } from '../shared/NavComponents';
-import type { SectionTab } from '../shared/NavComponents';
+import { TopNav } from '../navigation/TopNav';
 import PatientCompactHeader from './PatientCompactHeader';
 import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalCard } from '../shared/ClinicalCard';
@@ -1142,14 +1141,15 @@ export function PatientDetail({
         ) : (
           <>
             {/* Feature 010: L3 sub-tabs (FR-005) */}
-            <SectionTabs
-              tabs={[
-                { id: 'anagrafica',   label: 'Anagrafica' },
-                { id: 'contatti',     label: 'Contatti' },
-                { id: 'emergenza',    label: 'Contatto emergenza' },
-                { id: 'assegnazione', label: 'Assegnazione clinica' },
+            <TopNav
+              variant="level3"
+              items={[
+                { key: 'anagrafica',   label: 'Anagrafica' },
+                { key: 'contatti',     label: 'Contatti' },
+                { key: 'emergenza',    label: 'Contatto emergenza' },
+                { key: 'assegnazione', label: 'Assegnazione clinica' },
               ]}
-              activeId={profiloL3}
+              activeKey={profiloL3}
               onChange={(id) => setProfiloL3(id as typeof profiloL3)}
             />
             <div className="cr-profilo-grid" style={{ marginTop: 12 }}>
@@ -1691,35 +1691,32 @@ export function PatientDetail({
         onBack={onBack}
       />
 
-      {/* L2 — Navigazione orizzontale gruppi */}
-      <PageTabs
-        groups={TAB_GROUPS.map(g => ({ id: g.id, label: g.label, badge: groupBadgeSum(g.id) || undefined }))}
-        activeId={activeGroup}
+      {/* L2 — Navigazione orizzontale principale della pagina */}
+      <TopNav
+        variant="level2"
+        items={TAB_GROUPS.map(g => ({ key: g.id, label: g.label, badge: groupBadgeSum(g.id) || undefined }))}
+        activeKey={activeGroup}
         onChange={id => switchGroup(id as TabGroup)}
       />
-      {/* L3 — Sotto-tab del gruppo attivo */}
+      {/* L3 — Sotto-navigazione contestuale del gruppo attivo */}
       {(() => {
         if (activeGroup === 'diario') {
           return (
-            <SectionTabs
-              tabs={DIARIO_AUTHOR_FILTERS.map(f => ({ id: f.id, label: f.label }))}
-              activeId={diarioFilter}
+            <TopNav
+              variant="level3"
+              items={DIARIO_AUTHOR_FILTERS.map(f => ({ key: f.id, label: f.label }))}
+              activeKey={diarioFilter}
               onChange={id => setDiarioFilter(id)}
             />
           );
         }
         const grp = TAB_GROUPS.find(g => g.id === activeGroup);
         if (!grp || grp.tabs.length <= 1) return null;
-        const urgentConsegna = mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
         return (
-          <SectionTabs
-            tabs={grp.tabs.map(t => ({
-              id: t.id,
-              label: t.label,
-              badge: TAB_BADGES[t.id] || undefined,
-              urgent: t.id === 'consegne' && urgentConsegna,
-            } satisfies SectionTab))}
-            activeId={tab}
+          <TopNav
+            variant="level3"
+            items={grp.tabs.map(t => ({ key: t.id, label: t.label, badge: TAB_BADGES[t.id] || undefined }))}
+            activeKey={tab}
             onChange={id => switchTab(id as TabId)}
           />
         );
