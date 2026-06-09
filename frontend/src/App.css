@@ -503,6 +503,8 @@ body { margin: 0; background: var(--bg); }
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  flex: 1;                 /* fill remaining width after fixed sidebar (no empty right gap) */
+  width: 100%;
   min-width: 0;            /* 014: prevent wide content forcing global horizontal scroll */
 }
 
