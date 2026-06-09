@@ -91,13 +91,29 @@ body { margin: 0; background: var(--bg); }
 
 /* === 003 CLEAN NAV: SIDEBAR === */
 :root {
-  --sidebar-w: 64px;
+  --sidebar-w: 80px;
   --topbar-h: 36px;
   --l2-h: 44px;
   --l3-h: 32px;
   --l2-font: 14px;
   --l3-font: 11.5px;
   --primary: var(--blue);
+
+  /* === 014 DESIGN SYSTEM: intent tokens (medical blue) === */
+  --c-primary:          var(--blue);          /* #1A56DB */
+  --c-primary-hover:    #1748B8;
+  --c-primary-active:   #123A92;
+  --c-primary-bg:       #EBF1FE;
+  --c-success:          var(--emerald);
+  --c-success-bg:       var(--emerald-bg);
+  --c-warning:          var(--amber);
+  --c-warning-bg:       var(--amber-bg);
+  --c-danger:           var(--red);           /* clinical alerts / errors ONLY */
+  --c-danger-bg:        var(--red-bg);
+  --c-info:             var(--blue);
+  --c-neutral:          var(--text-xmuted);
+  --c-neutral-bg:       #F1F4F8;
+  --gutter:             20px;
   --border-subtle: rgba(0,0,0,0.08);
   --tab-transition-duration: 180ms;
   --tab-transition-easing: ease-out;
@@ -178,15 +194,15 @@ body { margin: 0; background: var(--bg); }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 56px;
+  height: 60px;
   cursor: pointer;
-  color: rgba(255,255,255,0.55);
-  gap: 3px;
+  color: rgba(255,255,255,0.68);
+  gap: 4px;
   border-left: 3px solid transparent;
-  font-size: 10px;
+  font-size: 11px;
   user-select: none;
   transition: background 0.1s, color 0.1s;
-  padding: 0 4px;
+  padding: 0 6px;
   position: relative;
 }
 
@@ -198,8 +214,11 @@ body { margin: 0; background: var(--bg); }
 .teams-sidebar__item.active {
   color: #fff;
   border-left-color: #1A56DB;
-  background: rgba(255,255,255,0.1);
+  background: rgba(26,86,219,0.28);
+  font-weight: 600;
 }
+
+.teams-sidebar__item.active .teams-sidebar__item-icon { color: #fff; }
 
 .teams-sidebar__item-icon {
   width: 20px;
@@ -215,9 +234,9 @@ body { margin: 0; background: var(--bg); }
 }
 
 .teams-sidebar__item-label {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1px;
-  line-height: 1;
+  line-height: 1.1;
   text-align: center;
 }
 
@@ -480,6 +499,7 @@ body { margin: 0; background: var(--bg); }
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  min-width: 0;            /* 014: prevent wide content forcing global horizontal scroll */
 }
 
 .content-panel {
@@ -3856,4 +3876,98 @@ textarea.form-input {
   .ai-drawer, .ai-drawer__scrim, .ai-fab { animation: none !important; transition: none !important; }
 }
 /* === end 013 === */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   014 DESIGN SYSTEM — PageShell + StatusBadge
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* PageShell: full-width content frame, gutter, overflow-safe */
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;            /* prevent wide children forcing global overflow */
+  flex: 1;
+}
+.page-shell__subnav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.page-shell__content {
+  min-width: 0;
+  padding: var(--gutter);
+}
+@media (max-width: 1024px) {
+  .page-shell__content { padding: 14px; }
+}
+
+/* StatusBadge: single shared badge vocabulary */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+.status-badge--success { color: var(--c-success); background: var(--c-success-bg); }
+.status-badge--warning { color: var(--c-warning); background: var(--c-warning-bg); }
+.status-badge--danger  { color: var(--c-danger);  background: var(--c-danger-bg); }
+.status-badge--info    { color: var(--c-info);    background: var(--c-primary-bg); }
+.status-badge--neutral { color: var(--c-neutral); background: var(--c-neutral-bg); }
+
+/* Full-width content (problems #6/#7): remove narrow centered caps on
+   priority pages so content fills the desktop. Gutter comes from the
+   content padding; wide tables scroll inside their own container. */
+.page-content { max-width: none; }
+.patient-list-view,
+.patients-view,
+.patient-detail,
+.patient-detail-view,
+.op-management,
+.operator-agenda-view,
+.agenda-admin-view,
+.admin-dashboard,
+.operator-dashboard,
+.consegne-page { max-width: none; }
+
+/* ClinicalTable pagination footer */
+.cdt__pagination {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.cdt__pagesize {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.cdt__pagesize select {
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0 6px;
+  font-size: 13px;
+}
+.cdt__pageinfo { margin-left: auto; }
+.cdt__pagenav {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.cdt__pagecur { color: var(--text); font-weight: 500; }
 

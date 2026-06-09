@@ -10,6 +10,7 @@ export interface ColumnDef<T = any> {
   options?: { value: string; label: string }[];
   render?: (value: any, row: T) => React.ReactNode;
   width?: string;
+  align?: 'left' | 'center' | 'right';
 }
 
 interface ClinicalTableProps<T extends Record<string, any> = Record<string, any>> {
@@ -23,7 +24,11 @@ interface ClinicalTableProps<T extends Record<string, any> = Record<string, any>
   emptyMessage?: string;
   keyField?: string;
   rowClassName?: (row: T) => string;
+  onRowClick?: (row: T) => void;
   noWrapper?: boolean;
+  /** When set, rows are paginated with a footer (items-per-page + page range).
+   *  When omitted, all rows are shown (legacy behavior). */
+  pageSize?: number;
 }
 
 type SortDir = 'asc' | 'desc' | null;
@@ -77,11 +82,15 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
   emptyMessage = 'Nessun dato.',
   keyField = 'id',
   rowClassName,
+  onRowClick,
   noWrapper = false,
+  pageSize,
 }: ClinicalTableProps<T>) {
   const [sort, setSort] = useState<SortState>({ key: '', dir: null });
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [showFilters, setShowFilters] = useState(false);
+  const [perPage, setPerPage] = useState<number>(pageSize ?? 0);
+  const [rawPage, setPage] = useState(1);
 
   const filterableCount = columns.filter(c => c.filterable).length;
   const activeFilterCount = Object.values(filters).filter(Boolean).length;
@@ -104,6 +113,18 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
     const sortCol = columns.find(c => c.key === sort.key);
     return sortRows(filtered, sort, sortCol);
   }, [data, filters, columns, sort]);
+
+  const paginate = perPage > 0;
+  const totalRows = displayData.length;
+  const totalPages = paginate ? Math.max(1, Math.ceil(totalRows / perPage)) : 1;
+  // Clamp during render (no effect) so a shrinking dataset never strands the page.
+  const page = Math.min(rawPage, totalPages);
+
+  const pageData = useMemo(() => {
+    if (!paginate) return displayData;
+    const start = (page - 1) * perPage;
+    return displayData.slice(start, start + perPage);
+  }, [displayData, paginate, page, perPage]);
 
   const filterBtn = filterableCount > 0 ? (
     <button
@@ -128,7 +149,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
         <thead>
           <tr>
             {columns.map(col => (
-              <th key={col.key} style={col.width ? { width: col.width } : undefined}>
+              <th key={col.key} style={{ ...(col.width ? { width: col.width } : {}), ...(col.align ? { textAlign: col.align } : {}) }}>
                 <div className="cdt__th-inner">
                   {col.sortable ? (
                     <button
@@ -181,20 +202,21 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
           </tr>
         </thead>
         <tbody>
-          {displayData.length === 0 ? (
+          {pageData.length === 0 ? (
             <tr>
               <td colSpan={columns.length}>
                 <div className="cdt__empty">{emptyMessage}</div>
               </td>
             </tr>
           ) : (
-            displayData.map((row, idx) => (
+            pageData.map((row, idx) => (
               <tr
                 key={row[keyField] ?? idx}
-                className={rowClassName ? rowClassName(row) : undefined}
+                className={`${rowClassName ? rowClassName(row) : ''}${onRowClick ? ' row--clickable' : ''}`.trim() || undefined}
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
               >
                 {columns.map(col => (
-                  <td key={col.key}>
+                  <td key={col.key} style={col.align ? { textAlign: col.align } : undefined}>
                     {col.render ? col.render(row[col.key], row) : (row[col.key] ?? '')}
                   </td>
                 ))}
@@ -203,6 +225,29 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
           )}
         </tbody>
       </table>
+      {paginate && (
+        <div className="cdt__pagination">
+          <label className="cdt__pagesize">
+            Righe
+            <select
+              value={perPage}
+              onChange={e => { setPerPage(Number(e.target.value)); setPage(1); }}
+            >
+              {[10, 25, 50, 100].map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+          </label>
+          <span className="cdt__pageinfo">
+            {totalRows === 0
+              ? '0 elementi'
+              : `${(page - 1) * perPage + 1}–${Math.min(page * perPage, totalRows)} di ${totalRows}`}
+          </span>
+          <div className="cdt__pagenav">
+            <button type="button" className="btn-secondary btn-sm" disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}>‹</button>
+            <span className="cdt__pagecur">Pagina {page} di {totalPages}</span>
+            <button type="button" className="btn-secondary btn-sm" disabled={page >= totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}>›</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 
