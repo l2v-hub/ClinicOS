@@ -77,3 +77,20 @@ For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
 at `specs/014-redesign-design-system/plan.md`.
 <!-- SPECKIT END -->
+
+## ClinicOS Requirements Queue
+
+When asked to process requirements, Claude must use:
+
+.claude/workflows/REQUIREMENTS_QUEUE.md
+
+GitHub Issues with label `clinicos-requirement` are the source of truth.
+
+Rules:
+- open issue = requirement to process
+- closed issue = completed and tested
+- blocked issue = add `status-blocked`, comment reason, do not close
+- process one issue at a time
+- run tests required by the issue
+- always run `npm run build`
+- close the issue only after acceptance criteria and tests pass
