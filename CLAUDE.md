@@ -94,3 +94,27 @@ Rules:
 - run tests required by the issue
 - always run `npm run build`
 - close the issue only after acceptance criteria and tests pass
+
+## Mandatory Requirement Deployment Rule
+
+A ClinicOS requirement is not finished when the code builds.
+
+A requirement is finished only when:
+
+- acceptance criteria are satisfied;
+- required tests pass;
+- `npm run build` passes;
+- code is committed;
+- code is pushed;
+- deployment has started.
+
+Claude must not close a GitHub Issue with label `clinicos-requirement` until the push succeeds and the deployment is triggered.
+
+Final required commands:
+
+git status
+git add .
+git commit -m "REQ-XXX implement <short title>"
+git push origin HEAD
+
+If deployment does not start, keep the issue open, add `status-deploy-failed`, and comment the reason.

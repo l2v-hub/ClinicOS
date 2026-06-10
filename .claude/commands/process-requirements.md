@@ -39,3 +39,37 @@ For each issue:
 8. move to next issue
 
 Stop when there are no more open processable issues.
+
+Additional mandatory deployment rule:
+
+A requirement is complete only after:
+1. acceptance criteria pass;
+2. required tests pass;
+3. npm run build passes;
+4. changes are committed;
+5. changes are pushed;
+6. deployment starts.
+
+After implementation and tests, run:
+
+git status
+git add .
+git commit -m "REQ-XXX implement <short title>"
+git push origin HEAD
+
+Then verify that deployment has started.
+
+Do not close the GitHub Issue if the push fails.
+Do not close the GitHub Issue if deployment does not start.
+If deployment fails or does not start, add label status-deploy-failed and comment the reason.
+
+When successful, comment the GitHub Issue with:
+- requirement number;
+- files changed;
+- tests executed;
+- npm run build result;
+- commit hash;
+- pushed branch;
+- deployment status.
+
+Only then close the issue.
