@@ -3,6 +3,9 @@ import type {
   Paziente, CartellaPaziente,
   ParametriMensili, ParametroGiorno,
 } from '../../types';
+import { IcoSearch, IcoX } from '../../icons';
+import { PageHeader } from '../shared/PageHeader';
+import { ClinicalTableSection } from './cartella/shared';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -275,6 +278,7 @@ export function MultiPatientParametri({
   onSelectPaziente, onUpdateCartella,
 }: Props) {
   const [noteOpenForPazienteId, setNoteOpenForPazienteId] = useState<string | null>(null);
+  const [ricerca, setRicerca] = useState('');
 
   function getCartella(pazienteId: string): CartellaPaziente {
     return cartelle.find(c => c.pazienteId === pazienteId) ?? createEmptyCartella(pazienteId);
@@ -314,62 +318,83 @@ export function MultiPatientParametri({
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 
-  if (loading) {
+  const filtrati = pazienti.filter(p => {
+    const q = ricerca.trim().toLowerCase();
+    if (!q) return true;
+    const cart = getCartella(p.id);
+    const room = `${cart.cameraNumero ?? ''} ${cart.lettoNumero ?? ''}`;
     return (
-      <div className="mpp-empty">
-        <p>Caricamento pazienti…</p>
-      </div>
+      `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
+      p.medicalRecordNumber.toLowerCase().includes(q) ||
+      room.toLowerCase().includes(q)
     );
-  }
-
-  if (pazienti.length === 0) {
-    return (
-      <div className="mpp-empty">
-        <p>Nessun paziente in elenco.</p>
-      </div>
-    );
-  }
+  });
 
   return (
-    <div className="mpp-page">
-      {/* Intestazione */}
-      <div className="mpp-header">
-        <div className="mpp-header__left">
-          <h1 className="mpp-header__title">Parametri pazienti</h1>
-          <span className="mpp-header__date">{oggi}</span>
-        </div>
-        <div className="mpp-header__actions">
-          <span className="mpp-header__count">{pazienti.length} pazienti</span>
+    <div className="patient-list-view">
+      <PageHeader
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Parametri' }]}
+        title="Parametri pazienti"
+        subtitle={oggi}
+      />
+
+      {/* Toolbar — coerente con pagina Pazienti */}
+      <div className="toolbar">
+        <div className="search-wrap">
+          <span className="search-wrap__ico"><IcoSearch /></span>
+          <input
+            className="search-input"
+            type="search"
+            placeholder="Cerca per nome, MRN, camera…"
+            value={ricerca}
+            onChange={e => setRicerca(e.target.value)}
+          />
+          {ricerca && (
+            <button className="search-clear-btn" onClick={() => setRicerca('')} aria-label="Cancella">
+              <IcoX />
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Lista righe pazienti compatte */}
-      <div className="qe-list">
-        {/* Column headers */}
-        <div className="qe-row qe-row--header" role="presentation" aria-hidden="true">
-          <div className="qe-row__patient"><span className="qe-row__col-label">Paziente</span></div>
-          <span className="qe-row__col-label qe-row__col-label--wide">PA</span>
-          <span className="qe-row__col-label">SpO2</span>
-          <span className="qe-row__col-label">FC</span>
-          <span className="qe-row__col-label">TC</span>
-          <span className="qe-row__col-label">DTX</span>
-          <span className="qe-row__col-label qe-row__col-label--wide">Evac.</span>
-          <span className="qe-row__col-label">Note</span>
-          <span className="qe-row__col-label">Salva</span>
+      {loading ? (
+        <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
+          <p style={{ color: 'var(--text-muted)' }}>Caricamento pazienti…</p>
         </div>
-        {pazienti.map(paziente => (
-          <RigaPaziente
-            key={paziente.id}
-            paziente={paziente}
-            cartella={getCartella(paziente.id)}
-            operatoreNome={operatoreNome}
-            isNoteOpen={noteOpenForPazienteId === paziente.id}
-            onToggleNote={(open: boolean) => setNoteOpenForPazienteId(open ? paziente.id : null)}
-            onClickPaziente={() => onSelectPaziente(paziente)}
-            onSalva={salvaRiga}
-          />
-        ))}
-      </div>
+      ) : pazienti.length === 0 ? (
+        <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
+          <p style={{ color: 'var(--text-muted)' }}>Nessun paziente in elenco.</p>
+        </div>
+      ) : (
+        <ClinicalTableSection title="Parametri" count={filtrati.length} countLabel="pazienti">
+          <div className="qe-list">
+            {/* Column headers */}
+            <div className="qe-row qe-row--header" role="presentation" aria-hidden="true">
+              <div className="qe-row__patient"><span className="qe-row__col-label">Paziente</span></div>
+              <span className="qe-row__col-label qe-row__col-label--wide">PA</span>
+              <span className="qe-row__col-label">SpO2</span>
+              <span className="qe-row__col-label">FC</span>
+              <span className="qe-row__col-label">TC</span>
+              <span className="qe-row__col-label">DTX</span>
+              <span className="qe-row__col-label qe-row__col-label--wide">Evac.</span>
+              <span className="qe-row__col-label">Note</span>
+              <span className="qe-row__col-label">Salva</span>
+            </div>
+            {filtrati.map(paziente => (
+              <RigaPaziente
+                key={paziente.id}
+                paziente={paziente}
+                cartella={getCartella(paziente.id)}
+                operatoreNome={operatoreNome}
+                isNoteOpen={noteOpenForPazienteId === paziente.id}
+                onToggleNote={(open: boolean) => setNoteOpenForPazienteId(open ? paziente.id : null)}
+                onClickPaziente={() => onSelectPaziente(paziente)}
+                onSalva={salvaRiga}
+              />
+            ))}
+          </div>
+        </ClinicalTableSection>
+      )}
     </div>
   );
 }
