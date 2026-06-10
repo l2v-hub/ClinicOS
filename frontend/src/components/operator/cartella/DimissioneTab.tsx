@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CartellaPaziente, DimissioneInfermieristica, Liberatoria, UscitaLog, Paziente } from '../../../types';
 import { todayStr, nowISO, nowTime, PrintButton, ClinicalTableSection } from './shared';
+import { ClinicalTable } from './ClinicalTable';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -790,33 +791,26 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
               </div>
             )}
 
-            {(cartella.liberatoria?.usciteLog?.length ?? 0) === 0 ? (
-              <p className="cr-empty">Nessuna uscita registrata.</p>
-            ) : (
-              <div className="clinicos-table-wrap">
-              <table className="clinicos-table">
-                <thead>
-                  <tr>
-                    <th>Data</th><th>Ora uscita</th><th>Rientro</th><th>Accompagnato da</th><th>Firma</th><th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(cartella.liberatoria?.usciteLog ?? []).map(u => (
-                    <tr key={u.id}>
-                      <td>{u.data.split('-').reverse().join('/')}</td>
-                      <td>{u.ora}</td>
-                      <td>{u.oraRientro ?? '—'}</td>
-                      <td>{u.referenteNome ?? '—'}</td>
-                      <td>{u.firma ?? '—'}</td>
-                      <td>
-                        <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => deleteUscita(u.id)} title="Elimina">✕</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              </div>
-            )}
+            <ClinicalTable<UscitaLog>
+              title="Registro Uscite Temporanee"
+              noWrapper
+              keyField="id"
+              emptyMessage="Nessuna uscita registrata."
+              data={cartella.liberatoria?.usciteLog ?? []}
+              columns={[
+                { key: 'data', label: 'Data', width: '110px', render: (_v, u) => u.data.split('-').reverse().join('/') },
+                { key: 'ora', label: 'Ora uscita', width: '100px', render: (_v, u) => u.ora },
+                { key: 'oraRientro', label: 'Rientro', width: '100px', render: (_v, u) => u.oraRientro ?? '—' },
+                { key: 'referenteNome', label: 'Accompagnato da', render: (_v, u) => u.referenteNome ?? '—' },
+                { key: 'firma', label: 'Firma', render: (_v, u) => u.firma ?? '—' },
+                {
+                  key: 'id', label: '', width: '40px', align: 'right',
+                  render: (_v, u) => (
+                    <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => deleteUscita(u.id)} title="Elimina">✕</button>
+                  ),
+                },
+              ]}
+            />
           </div>
         </div>
         </div>
