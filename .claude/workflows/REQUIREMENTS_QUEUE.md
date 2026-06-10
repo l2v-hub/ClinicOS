@@ -157,3 +157,153 @@ git commit -m "REQ-XXX implement <short title>"
 git push origin HEAD
 
 Then verify deployment trigger.
+
+## Mandatory REQ Traceability and Deployment Manifest Rule
+
+Every requirement must be traceable from GitHub Issue to code commit to deployment.
+
+A push itself has no title, therefore Claude must use:
+
+- branch name
+- commit message
+- issue comment
+- deployment manifest
+- deployment tag
+
+## Branch naming rule
+
+When processing a single requirement, use branch names like:
+
+req/REQ-001-card-table-uniform-ux
+
+When processing multiple requirements in one batch, use:
+
+req/batch-YYYYMMDD-clinicos-requirements
+
+## Commit message rule
+
+Every commit must start with the REQ id and short title.
+
+Format:
+
+REQ-XXX: short requirement title
+
+Example:
+
+REQ-001: Uniformare card e tabelle con collapse edit modal
+
+If a commit contains multiple requirements, the commit body must list all REQs:
+
+REQ-001: Uniformare card e tabelle
+REQ-002: Sistemare navigazione livello 2 e 3
+
+However, preferred rule is:
+one logical commit per requirement.
+
+## Issue traceability rule
+
+For every completed requirement, Claude must comment on the GitHub Issue with:
+
+- REQ id
+- issue number
+- files changed
+- commit hash
+- branch pushed
+- tests executed
+- npm run build result
+- deployment status
+- deployment manifest path
+- deployment tag if created
+
+## Deployment manifest rule
+
+Before closing any completed REQ, Claude must create or update a deployment manifest under:
+
+requirements/deployments/
+
+Manifest filename format:
+
+DEPLOY-YYYYMMDD-HHMM.md
+
+The manifest must include:
+
+# DEPLOY-YYYYMMDD-HHMM
+
+## Included requirements
+
+- REQ-XXX — title — GitHub Issue #N — commit hash
+
+## Branch
+
+...
+
+## Commits
+
+- ...
+
+## Areas changed
+
+- frontend
+- backend
+- prisma
+- documentation
+- requirements
+
+## Tests executed
+
+- ...
+
+## Build result
+
+- npm run build: PASS/FAIL
+
+## Deployment
+
+- frontend deployment: triggered/not triggered/not applicable
+- backend deployment: triggered/not triggered/not applicable
+- deploy provider: Vercel/Railway/GitHub
+- deploy URL if available
+
+## Notes
+
+...
+
+## Deployment tag rule
+
+After push and deploy trigger, create a git tag if appropriate:
+
+deploy-YYYYMMDD-HHMM
+
+The deployment tag must point to the commit that triggered the deployment.
+
+Command:
+
+git tag deploy-YYYYMMDD-HHMM
+git push origin deploy-YYYYMMDD-HHMM
+
+## Issue closing rule
+
+Claude must not close the GitHub Issue unless:
+
+- acceptance criteria are satisfied;
+- tests are executed;
+- npm run build passes;
+- commit exists with REQ id in the message;
+- git push succeeds;
+- deployment manifest is created/updated;
+- deployment is triggered or clearly marked not applicable;
+- issue comment includes commit hash and deployment manifest path.
+
+## Batch deployment rule
+
+If multiple REQs are included in the same deploy, the deployment manifest must list all of them.
+
+Claude must identify all included REQs by reading:
+
+git log --oneline
+
+and extracting commit messages starting with:
+
+REQ-
+
+The issue comment for every REQ must mention the same deployment manifest.

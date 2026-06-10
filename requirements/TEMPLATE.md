@@ -1,56 +1,43 @@
-﻿# REQ-XXX — Titolo requisito
+﻿# DEPLOY-YYYYMMDD-HHMM
 
-## Contesto / problema
+## Included requirements
+
+- REQ-XXX — Title — GitHub Issue #N — Commit HASH
+
+## Branch
 
 ...
 
-## Obiettivo
-
-...
-
-## Scope incluso
+## Commits
 
 - ...
 
-## Scope escluso
+## Areas changed
 
-- ...
+- [ ] frontend
+- [ ] backend
+- [ ] prisma
+- [ ] documentation
+- [ ] requirements
 
-## Acceptance criteria
-
-- [ ] ...
-- [ ] ...
-- [ ] ...
-
-## Test richiesti
-
-### Test funzionale
-
-- [ ] ...
-
-### Test UI/UX
-
-- [ ] ...
-
-### Test regressione
-
-- [ ] ...
-
-### Build
+## Tests executed
 
 - [ ] npm run build
+- [ ] UI/UX test
+- [ ] functional test
+- [ ] regression test
 
-## Priorità
+## Build result
 
-Alta / Media / Bassa
+npm run build: PASS / FAIL
 
-## Dipendenze
+## Deployment
 
-- ...
+Frontend deployment: triggered / not triggered / not applicable  
+Backend deployment: triggered / not triggered / not applicable  
+Provider: Vercel / Railway / GitHub  
+Deploy URL: ...
 
-## Output atteso da Claude
+## Notes
 
-- file modificati
-- comportamento implementato
-- test eseguiti
-- risultato build
+...

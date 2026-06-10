@@ -118,3 +118,18 @@ git commit -m "REQ-XXX implement <short title>"
 git push origin HEAD
 
 If deployment does not start, keep the issue open, add `status-deploy-failed`, and comment the reason.
+
+## REQ Traceability
+
+Every ClinicOS requirement must be traceable from requirement to deployment.
+
+Required trace:
+
+GitHub Issue -> commit message -> push -> deployment manifest -> deployment.
+
+Rules:
+- commit messages must start with `REQ-XXX:`
+- every completed REQ must be included in a deployment manifest under `requirements/deployments/`
+- every deployment manifest must list all REQs included in that deploy
+- GitHub Issues must not be closed without commit hash, build result and deployment manifest path
+- if several REQs are deployed together, all REQs must be listed in the same deploy manifest
