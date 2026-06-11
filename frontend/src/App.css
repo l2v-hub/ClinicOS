@@ -427,7 +427,8 @@ body { margin: 0; background: var(--bg); }
   gap: 10px;
   height: 56px;
   min-height: 56px;
-  padding: 0 16px;
+  /* REQ-003: align compact header content to the page gutter (same left axis as L2/L3 nav) */
+  padding: 0;
   background: #fff;
   border-bottom: 1px solid #E5E7EB;
   flex-shrink: 0;
@@ -3725,7 +3726,9 @@ textarea.form-input {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px var(--content-px-lg, 24px) 0;
+  /* REQ-003: no extra horizontal inset — align header to the page gutter so
+     title/tabs share the same left axis as body cards/tables and view-header pages */
+  padding: 16px 0 0;
   background: transparent;
   margin-bottom: 12px;
 }
