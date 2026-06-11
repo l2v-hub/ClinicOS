@@ -101,24 +101,28 @@
    PRESA IN CARICO — pic-*
 ═══════════════════════════════════════════════════════════════════════════ */
 
+/* REQ-005: clearer label -> value hierarchy in patient intake data cards */
 .pic-row {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 7px 0;
+  align-items: baseline;
+  gap: 16px;
+  padding: 9px 0;
   border-bottom: 1px solid var(--divider);
   font-size: 14px;
 }
 .pic-row:last-child { border-bottom: none; }
 .pic-row__lbl {
-  min-width: 160px;
-  color: var(--text-muted);
-  font-size: 13px;
+  min-width: 168px;
+  color: var(--text-xmuted);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   flex-shrink: 0;
 }
 .pic-row__val {
   color: var(--text);
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
