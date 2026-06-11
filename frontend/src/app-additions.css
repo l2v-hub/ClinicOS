@@ -5874,15 +5874,15 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   transition: color 0.15s, border-color 0.15s;
 }
 .tf-subtab:hover {
-  color: #1A3357;
+  color: var(--c-primary, #0F5FD7);
 }
 .tf-subtab--active {
-  color: #1A3357;
-  border-bottom-color: #1A3357;
+  color: var(--c-primary, #0F5FD7);
+  border-bottom-color: var(--c-primary, #0F5FD7);
   font-weight: 600;
 }
 .tf-subtab__badge {
-  background: #1A3357;
+  background: var(--c-neutral, #6B7280);
   color: white;
   font-size: 10px;
   font-weight: 700;
@@ -5892,7 +5892,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   text-align: center;
 }
 .tf-subtab--active .tf-subtab__badge {
-  background: #2563EB;
+  background: var(--c-primary, #0F5FD7);
 }
 
 /* ── ClinicalTable (CDT) ──────────────────────────────────────── */
