@@ -276,6 +276,25 @@ model PatientRoomAssignment {
   @@index([startDate, endDate])
 }
 
+model Consegna {
+  id                 String   @id @default(cuid())
+  pazienteId         String   @default("")
+  pazienteNome       String
+  priorita           String   @default("normale") // normale | alta | urgente
+  stato              String   @default("aperta")   // aperta | in_corso | completata
+  tipo               String   @default("Monitoraggio")
+  note               String
+  scadenza           String   // YYYY-MM-DD
+  oraScadenza        String?
+  operatoreAssegnato String
+  creatoDA           String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([stato])
+  @@index([priorita])
+}
+
 model PatientDiaryEntry {
   id            String   @id @default(cuid())
   patientId     String

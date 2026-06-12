@@ -227,6 +227,10 @@
 }
 .inline-edit-block--editing .inline-edit__actions { justify-content: flex-end; }
 
+/* REQ-009: editable consegna cards */
+.consegna-edit-btn { margin-left: auto; }
+.consegna-card__top { flex-wrap: wrap; }
+
 /* ═══════════════════════════════════════════════════════════════════════════
    DOCUMENTI CONSEGNATI
 ═══════════════════════════════════════════════════════════════════════════ */

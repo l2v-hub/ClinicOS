@@ -10,7 +10,7 @@ import type {
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
-  MOCK_OPERATORI, MOCK_CONSEGNE, MOCK_AGENDA,
+  MOCK_OPERATORI, MOCK_AGENDA,
   MOCK_APPUNTAMENTI, MOCK_SCHEDULES, MOCK_NOTE,
   createDefaultCartella, createMockTherapySlots,
 } from './mockData';
@@ -92,7 +92,7 @@ export default function App() {
 
   // Mock state
   const [operatori, setOperatori] = useState<Operatore[]>(MOCK_OPERATORI);
-  const [consegne, setConsegne] = useState<Consegna[]>(MOCK_CONSEGNE);
+  const [consegne, setConsegne] = useState<Consegna[]>([]);
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>(MOCK_APPUNTAMENTI);
   const [camere, setCamere] = useState<Camera[]>([]);
@@ -221,6 +221,11 @@ export default function App() {
         })));
       })
       .catch(() => { /* keep empty array */ });
+    // Load consegne from API (persisted handover cards)
+    fetch(`${API_URL}/consegne`)
+      .then(r => r.ok ? r.json() : [])
+      .then((data: Consegna[]) => setConsegne(data.map(c => ({ ...c, oraScadenza: c.oraScadenza ?? undefined }))))
+      .catch(() => { /* keep empty array */ });
   }, [utente, loadTherapySlots]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
@@ -286,16 +291,62 @@ export default function App() {
 
   // ── Consegne CRUD ───────────────────────────────────────────────────────────
 
-  function addConsegna(c: Omit<Consegna, 'id' | 'createdAt'>) {
-    setConsegne(prev => [{ ...c, id: crypto.randomUUID(), createdAt: new Date().toISOString() }, ...prev]);
+  // ── Consegne CRUD (API-persisted) ─────────────────────────────────────────
+
+  async function addConsegna(c: Omit<Consegna, 'id' | 'createdAt'>): Promise<boolean> {
+    try {
+      const res = await fetch(`${API_URL}/consegne`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(c),
+      });
+      if (!res.ok) { showToast('Impossibile creare la consegna'); return false; }
+      const created = await res.json() as Consegna;
+      setConsegne(prev => [{ ...created, oraScadenza: created.oraScadenza ?? undefined }, ...prev]);
+      showToast('Consegna creata');
+      return true;
+    } catch {
+      showToast('Impossibile creare la consegna');
+      return false;
+    }
   }
 
-  function updateConsegnaStato(id: string, stato: Consegna['stato']) {
-    setConsegne(prev => prev.map(c => c.id === id ? { ...c, stato } : c));
+  async function updateConsegna(id: string, patch: Partial<Consegna>): Promise<boolean> {
+    const snapshot = consegne;
+    // Optimistic update
+    setConsegne(prev => prev.map(c => c.id === id ? { ...c, ...patch } : c));
+    try {
+      const res = await fetch(`${API_URL}/consegne/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      });
+      if (!res.ok) { setConsegne(snapshot); showToast('Impossibile salvare la consegna'); return false; }
+      const updated = await res.json() as Consegna;
+      setConsegne(prev => prev.map(c => c.id === id ? { ...updated, oraScadenza: updated.oraScadenza ?? undefined } : c));
+      showToast('Consegna aggiornata');
+      return true;
+    } catch {
+      setConsegne(snapshot);
+      showToast('Impossibile salvare la consegna');
+      return false;
+    }
   }
 
-  function deleteConsegna(id: string) {
+  function updateConsegnaStato(id: string, stato: Consegna['stato']): Promise<boolean> {
+    return updateConsegna(id, { stato });
+  }
+
+  async function deleteConsegna(id: string): Promise<void> {
+    const snapshot = consegne;
     setConsegne(prev => prev.filter(c => c.id !== id));
+    try {
+      const res = await fetch(`${API_URL}/consegne/${id}`, { method: 'DELETE' });
+      if (!res.ok) { setConsegne(snapshot); showToast('Impossibile eliminare la consegna'); }
+    } catch {
+      setConsegne(snapshot);
+      showToast('Impossibile eliminare la consegna');
+    }
   }
 
   // ── Appuntamenti CRUD ───────────────────────────────────────────────────────
@@ -754,6 +805,7 @@ export default function App() {
               operatoreNome={utente.nome}
               isAdmin={isAdmin}
               onAdd={addConsegna}
+              onUpdate={updateConsegna}
               onUpdateStato={updateConsegnaStato}
               onDelete={deleteConsegna}
               onSelectPaziente={goToPazienteByNome}
