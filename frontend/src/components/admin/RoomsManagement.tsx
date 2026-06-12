@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';
 import { API_URL } from '../../config';
+import { ClinicalTableSection } from '../operator/cartella/shared';
 
 /* ── API types ─────────────────────────────────────────── */
 
@@ -451,6 +452,7 @@ export function RoomsManagement() {
       </div>
 
       {/* Rooms grid */}
+      <ClinicalTableSection title="Camere" count={roomsFiltrate.length} countLabel="camere">
       <div className="rooms-grid">
         {roomsFiltrate.map(room => {
           const occupati = room.beds.filter(b => bedStatoDisplay(b) === 'occupato').length;
@@ -529,6 +531,7 @@ export function RoomsManagement() {
           );
         })}
       </div>
+      </ClinicalTableSection>
     </div>
   );
 }

@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import type { Consegna, PrioritaConsegna } from '../../types';
-import { IcoPlus, IcoCheck, IcoX, IcoSearch } from '../../icons';
+import type { Consegna, PrioritaConsegna, StatoConsegna } from '../../types';
+import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit } from '../../icons';
+import { InlineEditableField } from '../shared/InlineEditableField';
 
 interface ConsegnePageProps {
   consegne: Consegna[];
   operatoreNome: string;
   isAdmin: boolean;
   onAdd: (c: Omit<Consegna, 'id' | 'createdAt'>) => void;
+  onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
   onSelectPaziente?: (nome: string) => void;
@@ -14,6 +16,8 @@ interface ConsegnePageProps {
 
 const PRIORITA_ORDER: Record<PrioritaConsegna, number> = { urgente: 0, alta: 1, normale: 2 };
 const TIPO_OPTIONS = ['Monitoraggio', 'Terapia', 'Esami', 'Dimissione', 'Medicazione', 'Consultazione', 'Rivalutazione', 'Altro'];
+const PRIORITA_LABEL: Record<PrioritaConsegna, string> = { normale: 'Normale', alta: 'Alta', urgente: 'Urgente' };
+const STATO_LABEL: Record<StatoConsegna, string> = { aperta: 'Aperta', in_corso: 'In corso', completata: 'Completata' };
 
 const FORM_VUOTO = {
   pazienteNome: '',
@@ -24,7 +28,7 @@ const FORM_VUOTO = {
   operatoreAssegnato: '',
 };
 
-export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdateStato, onDelete, onSelectPaziente }: ConsegnePageProps) {
+export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdate, onUpdateStato, onDelete, onSelectPaziente }: ConsegnePageProps) {
   const [filtroStato, setFiltroStato] = useState<'tutte' | Consegna['stato']>('tutte');
   const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>('tutte');
   const [ricerca, setRicerca] = useState('');
@@ -180,7 +184,7 @@ export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdate
           <h3 className="consegne-section__title consegne-section__title--urgente">Urgenti</h3>
           <div className="consegne-list">
             {urgenti.map(c => (
-              <ConsegnaCard key={c.id} consegna={c} onUpdateStato={onUpdateStato} onDelete={onDelete} isAdmin={isAdmin} onSelectPaziente={onSelectPaziente} />
+              <ConsegnaCard key={c.id} consegna={c} onUpdate={onUpdate} onUpdateStato={onUpdateStato} onDelete={onDelete} isAdmin={isAdmin} onSelectPaziente={onSelectPaziente} />
             ))}
           </div>
         </div>
@@ -191,29 +195,35 @@ export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdate
         {altre.length === 0 && urgenti.length === 0 ? (
           <div className="empty-state-card">Nessuna consegna trovata.</div>
         ) : altre.map(c => (
-          <ConsegnaCard key={c.id} consegna={c} onUpdateStato={onUpdateStato} onDelete={onDelete} isAdmin={isAdmin} onSelectPaziente={onSelectPaziente} />
+          <ConsegnaCard key={c.id} consegna={c} onUpdate={onUpdate} onUpdateStato={onUpdateStato} onDelete={onDelete} isAdmin={isAdmin} onSelectPaziente={onSelectPaziente} />
         ))}
       </div>
     </div>
   );
 }
 
-function ConsegnaCard({ consegna: c, onUpdateStato, onDelete, isAdmin, onSelectPaziente }: {
+function ConsegnaCard({ consegna: c, onUpdate, onUpdateStato, onDelete, isAdmin, onSelectPaziente }: {
   consegna: Consegna;
+  onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
   isAdmin: boolean;
   onSelectPaziente?: (nome: string) => void;
 }) {
+  const [editOpen, setEditOpen] = useState(false);
+
   return (
     <div className={`consegna-card consegna-card--${c.priorita}${c.stato === 'completata' ? ' consegna-card--done' : ''}`}>
       <div className="consegna-card__top">
         <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>
-          {c.priorita.charAt(0).toUpperCase() + c.priorita.slice(1)}
+          {PRIORITA_LABEL[c.priorita]}
         </span>
         <span className="consegna-tipo">{c.tipo}</span>
         {c.oraScadenza && <span className="consegna-scadenza">⏰ {c.oraScadenza}</span>}
-        <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{c.stato.replace('_', ' ')}</span>
+        <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{STATO_LABEL[c.stato]}</span>
+        <button className="icon-btn icon-btn--sm consegna-edit-btn" onClick={() => setEditOpen(true)} title="Modifica consegna" aria-label="Modifica consegna">
+          <IcoEdit />
+        </button>
       </div>
       {onSelectPaziente && c.pazienteNome ? (
         <button className="link-btn consegna-paziente" onClick={() => onSelectPaziente(c.pazienteNome!)} style={{ fontWeight: 600 }}>
@@ -222,7 +232,17 @@ function ConsegnaCard({ consegna: c, onUpdateStato, onDelete, isAdmin, onSelectP
       ) : (
         <span className="consegna-paziente">{c.pazienteNome}</span>
       )}
-      <p className="consegna-note">{c.note}</p>
+      <div className="consegna-note">
+        <InlineEditableField
+          variant="block"
+          label="Note consegna"
+          type="textarea"
+          value={c.note}
+          emptyText="Aggiungi note…"
+          placeholder="Istruzioni per il prossimo operatore…"
+          onSave={v => onUpdate(c.id, { note: v })}
+        />
+      </div>
       <div className="consegna-card__footer">
         <div>
           <span className="consegna-assegnato">→ {c.operatoreAssegnato}</span>
@@ -257,6 +277,107 @@ function ConsegnaCard({ consegna: c, onUpdateStato, onDelete, isAdmin, onSelectP
             <IcoX />
           </button>
         )}
+      </div>
+
+      {editOpen && (
+        <ConsegnaEditModal consegna={c} isAdmin={isAdmin} onUpdate={onUpdate} onClose={() => setEditOpen(false)} />
+      )}
+    </div>
+  );
+}
+
+function ConsegnaEditModal({ consegna: c, isAdmin, onUpdate, onClose }: {
+  consegna: Consegna;
+  isAdmin: boolean;
+  onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
+  onClose: () => void;
+}) {
+  const [form, setForm] = useState({
+    priorita: c.priorita,
+    stato: c.stato,
+    tipo: c.tipo,
+    oraScadenza: c.oraScadenza ?? '',
+    operatoreAssegnato: c.operatoreAssegnato,
+  });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function save() {
+    if (saving) return;
+    setSaving(true);
+    setError(null);
+    const ok = await onUpdate(c.id, {
+      priorita: form.priorita,
+      stato: form.stato,
+      tipo: form.tipo,
+      oraScadenza: form.oraScadenza || undefined,
+      operatoreAssegnato: form.operatoreAssegnato,
+    });
+    setSaving(false);
+    if (ok === false) setError('Salvataggio non riuscito. Riprova.');
+    else onClose();
+  }
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box modal-box--edit-card" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <div>
+            <h3 className="modal-title">Modifica consegna</h3>
+            <p className="modal-subtitle">{c.pazienteNome}</p>
+          </div>
+          <button className="icon-btn" onClick={onClose} aria-label="Chiudi"><IcoX /></button>
+        </div>
+        <div className="modal-body">
+          <div className="op-form-grid">
+            <div className="form-field">
+              <label className="form-label">Priorità</label>
+              <select className="form-select" value={form.priorita} disabled={saving}
+                onChange={e => setForm(p => ({ ...p, priorita: e.target.value as PrioritaConsegna }))}>
+                <option value="normale">Normale</option>
+                <option value="alta">Alta</option>
+                <option value="urgente">Urgente</option>
+              </select>
+            </div>
+            <div className="form-field">
+              <label className="form-label">Stato</label>
+              <select className="form-select" value={form.stato} disabled={saving}
+                onChange={e => setForm(p => ({ ...p, stato: e.target.value as StatoConsegna }))}>
+                <option value="aperta">Aperta</option>
+                <option value="in_corso">In corso</option>
+                <option value="completata">Completata</option>
+              </select>
+            </div>
+            <div className="form-field">
+              <label className="form-label">Tipo</label>
+              <select className="form-select" value={form.tipo} disabled={saving}
+                onChange={e => setForm(p => ({ ...p, tipo: e.target.value }))}>
+                {TIPO_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+            <div className="form-field">
+              <label className="form-label">Ora scadenza</label>
+              <input className="form-input" type="time" value={form.oraScadenza} disabled={saving}
+                onChange={e => setForm(p => ({ ...p, oraScadenza: e.target.value }))} />
+            </div>
+            {isAdmin && (
+              <div className="form-field">
+                <label className="form-label">Assegnata a</label>
+                <input className="form-input" value={form.operatoreAssegnato} disabled={saving}
+                  onChange={e => setForm(p => ({ ...p, operatoreAssegnato: e.target.value }))}
+                  placeholder="Nome operatore" />
+              </div>
+            )}
+          </div>
+          {error && <p className="inline-edit__error" style={{ margin: 0 }}>{error}</p>}
+        </div>
+        <div className="modal-footer">
+          <div className="modal-footer__left" />
+          <div className="modal-footer__right">
+            <button className="btn-secondary" onClick={onClose} disabled={saving}>Annulla</button>
+            <button className="btn-primary" onClick={save} disabled={saving}><IcoCheck /> Salva</button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CartellaPaziente, MedicazioneRecord, EssudatoLivello, Paziente, FollowUpMedicazione } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
+import { ClinicalTable } from './ClinicalTable';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -352,34 +353,26 @@ function FollowUpSection({
       {open && (
         <div style={{ marginTop: 10 }}>
           {followUps.length > 0 && (
-            <div className="clinicos-table-wrap">
-            <table className="clinicos-table" style={{ marginBottom: 10, fontSize: '13px' }}>
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Sigla</th>
-                  <th>Motivo sostituzione</th>
-                  <th>Note</th>
-                  <th className="col-actions" style={{ width: 32 }}></th>
-                </tr>
-              </thead>
-              <tbody>
-                {followUps.map(fu => (
-                  <tr key={fu.id}>
-                    <td>{fmtDate(fu.data)}</td>
-                    <td style={{ fontWeight: 600 }}>{fu.siglaOperatore}</td>
-                    <td>{MOTIVO_LABEL[fu.motivoSostituzione]}</td>
-                    <td style={{ color: 'var(--text-muted)' }}>{fu.note}</td>
-                    <td className="col-actions">
-                      <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => handleDelete(fu.id)} title="Elimina">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            </div>
+            <ClinicalTable<FollowUpMedicazione>
+              title="Follow-up medicazione"
+              noWrapper
+              keyField="id"
+              data={followUps}
+              columns={[
+                { key: 'data', label: 'Data', width: '110px', render: (_v, fu) => fmtDate(fu.data) },
+                { key: 'siglaOperatore', label: 'Sigla', width: '90px', render: (_v, fu) => <span style={{ fontWeight: 600 }}>{fu.siglaOperatore}</span> },
+                { key: 'motivoSostituzione', label: 'Motivo sostituzione', render: (_v, fu) => MOTIVO_LABEL[fu.motivoSostituzione] },
+                { key: 'note', label: 'Note', render: (_v, fu) => <span style={{ color: 'var(--text-muted)' }}>{fu.note}</span> },
+                {
+                  key: 'id', label: '', width: '40px', align: 'right',
+                  render: (_v, fu) => (
+                    <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => handleDelete(fu.id)} title="Elimina">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                  ),
+                },
+              ]}
+            />
           )}
 
           {showAdd ? (

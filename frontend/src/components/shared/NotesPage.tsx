@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Nota, PrioritaNota, StatoNota, Operatore } from '../../types';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoMessage } from '../../icons';
+import { InlineEditableField } from './InlineEditableField';
 
 interface NotesPageProps {
   note: Nota[];
@@ -9,6 +10,7 @@ interface NotesPageProps {
   isAdmin: boolean;
   operatori: Operatore[];
   onAdd: (n: Omit<Nota, 'id' | 'createdAt'>) => void;
+  onUpdate: (id: string, patch: Partial<Nota>) => void | Promise<boolean>;
   onUpdateStato: (id: string, stato: StatoNota) => void;
 }
 
@@ -29,7 +31,7 @@ const FORM_VUOTO = {
 };
 
 export function NotesPage({
-  note, utenteId, utenteNome, isAdmin, operatori, onAdd, onUpdateStato,
+  note, utenteId, utenteNome, isAdmin, operatori, onAdd, onUpdate, onUpdateStato,
 }: NotesPageProps) {
   const [filtro, setFiltro] = useState<'tutte' | 'ricevute' | 'inviate' | 'non_lette'>('tutte');
   const [ricerca, setRicerca] = useState('');
@@ -200,7 +202,17 @@ export function NotesPage({
               <span className="note-time">{fmtTime(n.createdAt)}</span>
               <span className={`stato-pill stato-pill--nota-${n.stato}`}>{STATO_LABEL[n.stato]}</span>
             </div>
-            <p className="note-message">{n.messaggio}</p>
+            <div className="note-message">
+              <InlineEditableField
+                variant="block"
+                label="Messaggio"
+                type="textarea"
+                value={n.messaggio}
+                placeholder="Scrivi il messaggio…"
+                disabled={n.autoreId !== utenteId}
+                onSave={v => onUpdate(n.id, { messaggio: v })}
+              />
+            </div>
             {n.stato !== 'risolta' && (
               <div className="note-card__actions">
                 {n.stato === 'non_letta' && (

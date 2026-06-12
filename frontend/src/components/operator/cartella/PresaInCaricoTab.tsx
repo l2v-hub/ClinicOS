@@ -2,13 +2,14 @@ import { useState } from 'react';
 import type { CartellaPaziente, PresaInCarico, Paziente } from '../../../types';
 import { PrintButton, EmptyState, todayStr, nowTime, nowISO, ClinicalTableSection } from './shared';
 import { ClinicalCard } from '../../shared/ClinicalCard';
+import { InlineEditableField, type InlineOption } from '../../shared/InlineEditableField';
 
 type EditId = 'dati' | 'cond' | 'valutazione' | 'docs' | null;
 
 interface Props {
   cartella: CartellaPaziente;
   paziente: Paziente;
-  onUpdate: (updates: Partial<CartellaPaziente>) => void;
+  onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   operatoreNome: string;
 }
 
@@ -57,6 +58,37 @@ const PROVENIENZA_LABEL: Record<PresaInCarico['provenienza'], string> = {
   familiare_caregiver: 'Familiare / Caregiver',
 };
 
+const PROVENIENZA_OPTS: InlineOption[] = (Object.entries(PROVENIENZA_LABEL) as [string, string][]).map(([value, label]) => ({ value, label }));
+const MODALITA_OPTS: InlineOption[] = [
+  { value: 'ambulante', label: 'Ambulante' },
+  { value: 'barella', label: 'Barella' },
+  { value: 'sedia_rotelle', label: 'Sedia a rotelle' },
+];
+const CONDGEN_OPTS: InlineOption[] = [
+  { value: 'buone', label: 'Buone' },
+  { value: 'discrete', label: 'Discrete' },
+  { value: 'scadenti', label: 'Scadenti' },
+  { value: 'critiche', label: 'Critiche' },
+];
+const COSCIENZA_OPTS: InlineOption[] = [
+  { value: 'vigile', label: 'Vigile' },
+  { value: 'confuso', label: 'Confuso' },
+  { value: 'soporoso', label: 'Soporoso' },
+  { value: 'stuporoso', label: 'Stuporoso' },
+  { value: 'comatoso', label: 'Comatoso' },
+];
+const ORIENT_OPTS: InlineOption[] = [
+  { value: 'orientato', label: 'Orientato' },
+  { value: 'parzialmente_orientato', label: 'Parzialmente orientato' },
+  { value: 'disorientato', label: 'Disorientato' },
+];
+const AUTON_OPTS: InlineOption[] = [
+  { value: 'autonomo', label: 'Autonomo' },
+  { value: 'parzialmente_autonomo', label: 'Parzialmente autonomo' },
+  { value: 'non_autonomo', label: 'Non autonomo' },
+  { value: 'allettato', label: 'Allettato' },
+];
+
 function Row({ label, value }: { label: string; value: string | boolean | number | undefined }) {
   if (!value && value !== 0 && value !== false) return null;
   const display = value === true ? 'Sì' : value === false ? 'No' : (value ?? '—');
@@ -100,6 +132,12 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
   }
 
   const safePic = pic ?? { ...EMPTY, operatore: operatoreNome };
+
+  // Persist a single field inline (used by InlineEditableField). Returns the
+  // save promise so the field can stay in edit mode and show an error on failure.
+  function saveField(patch: Partial<PresaInCarico>): void | Promise<boolean> {
+    return onUpdate({ presaInCarico: { ...safePic, ...patch, compilatoAt: nowISO() } });
+  }
 
   // ── Card 1: Dati di ingresso ─────────────────────────────────────────────────
   const datiEdit = (
@@ -172,13 +210,22 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
   const datiView = (
     <div className="cr-form-section">
       <RowAlways label="Data / Ora" value={`${safePic.dataIngresso.split('-').reverse().join('/')} ${safePic.oraIngresso}`} />
-      <RowAlways label="Provenienza" value={PROVENIENZA_LABEL[safePic.provenienza] ?? safePic.provenienza} />
-      <Row label="Centro inviante" value={safePic.centroInviante} />
-      <RowAlways label="Modalità ingresso" value={safePic.modalitaIngresso.replace('_', ' ')} />
-      <Row label="Accompagnato da" value={safePic.accompagnatoDa} />
-      <Row label="Operatore responsabile" value={safePic.operatoreResponsabile} />
-      <Row label="Camera / Letto" value={safePic.camera ? `${safePic.camera}${safePic.letto ? ' — ' + safePic.letto : ''}` : undefined} />
-      <RowAlways label="Motivo ingresso" value={safePic.motivoIngresso} />
+      <InlineEditableField
+        label="Provenienza" type="select" options={PROVENIENZA_OPTS}
+        value={safePic.provenienza}
+        display={PROVENIENZA_LABEL[safePic.provenienza] ?? safePic.provenienza}
+        onSave={v => saveField({ provenienza: v as PresaInCarico['provenienza'] })}
+      />
+      <InlineEditableField label="Centro inviante" value={safePic.centroInviante ?? ''} placeholder="Nome centro / struttura…" onSave={v => saveField({ centroInviante: v })} />
+      <InlineEditableField
+        label="Modalità ingresso" type="select" options={MODALITA_OPTS}
+        value={safePic.modalitaIngresso} display={safePic.modalitaIngresso.replace('_', ' ')}
+        onSave={v => saveField({ modalitaIngresso: v as PresaInCarico['modalitaIngresso'] })}
+      />
+      <InlineEditableField label="Accompagnato da" value={safePic.accompagnatoDa ?? ''} onSave={v => saveField({ accompagnatoDa: v })} />
+      <InlineEditableField label="Operatore responsabile" value={safePic.operatoreResponsabile ?? ''} placeholder="Nome operatore…" onSave={v => saveField({ operatoreResponsabile: v })} />
+      <RowAlways label="Camera / Letto" value={safePic.camera ? `${safePic.camera}${safePic.letto ? ' — ' + safePic.letto : ''}` : '—'} />
+      <InlineEditableField label="Motivo ingresso" type="textarea" value={safePic.motivoIngresso ?? ''} placeholder="Descrivere il motivo del ricovero / accesso…" onSave={v => saveField({ motivoIngresso: v })} />
     </div>
   );
 
@@ -223,10 +270,10 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
 
   const condView = (
     <div className="cr-form-section">
-      <RowAlways label="Condizioni generali" value={safePic.condizioniGenerali} />
-      <RowAlways label="Stato di coscienza" value={safePic.statoCoscienza} />
-      <Row label="Condizioni iniziali" value={safePic.condizioniIniziali} />
-      <Row label="Note iniziali" value={safePic.noteIniziali} />
+      <InlineEditableField label="Condizioni generali" type="select" options={CONDGEN_OPTS} value={safePic.condizioniGenerali} display={safePic.condizioniGenerali} onSave={v => saveField({ condizioniGenerali: v as PresaInCarico['condizioniGenerali'] })} />
+      <InlineEditableField label="Stato di coscienza" type="select" options={COSCIENZA_OPTS} value={safePic.statoCoscienza} display={safePic.statoCoscienza} onSave={v => saveField({ statoCoscienza: v as PresaInCarico['statoCoscienza'] })} />
+      <InlineEditableField label="Condizioni iniziali" type="textarea" value={safePic.condizioniIniziali ?? ''} placeholder="Descrizione condizioni al momento dell'ingresso…" onSave={v => saveField({ condizioniIniziali: v })} />
+      <InlineEditableField label="Note iniziali" type="textarea" value={safePic.noteIniziali ?? ''} placeholder="Note aggiuntive sull'accesso…" onSave={v => saveField({ noteIniziali: v })} />
     </div>
   );
 
@@ -314,17 +361,17 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
 
   const valutazioneView = (
     <div className="cr-form-section">
-      <RowAlways label="Orientamento" value={safePic.orientamento.replace('_', ' ')} />
-      <RowAlways label="Autonomia" value={safePic.autonomia.replace('_', ' ')} />
-      <RowAlways label="Comunicazione" value={safePic.comunicazione} />
-      <RowAlways label="Udito" value={safePic.udito} />
-      <RowAlways label="Vista" value={safePic.vista} />
-      <RowAlways label="Dentizione" value={safePic.dentizione} />
-      <RowAlways label="Alimentazione" value={safePic.alimentazione} />
-      <RowAlways label="Elim. urinaria" value={safePic.eliminazioneUrinaria} />
-      <RowAlways label="Elim. intestinale" value={safePic.eliminazioneIntestinale} />
-      <RowAlways label="Mobilità" value={safePic.mobilita} />
-      <RowAlways label="Cute / mucose" value={safePic.cuteIntegrita} />
+      <InlineEditableField label="Orientamento" type="select" options={ORIENT_OPTS} value={safePic.orientamento} display={safePic.orientamento.replace('_', ' ')} onSave={v => saveField({ orientamento: v as PresaInCarico['orientamento'] })} />
+      <InlineEditableField label="Autonomia" type="select" options={AUTON_OPTS} value={safePic.autonomia} display={safePic.autonomia.replace('_', ' ')} onSave={v => saveField({ autonomia: v as PresaInCarico['autonomia'] })} />
+      <InlineEditableField label="Comunicazione" value={safePic.comunicazione ?? ''} onSave={v => saveField({ comunicazione: v })} />
+      <InlineEditableField label="Udito" value={safePic.udito ?? ''} onSave={v => saveField({ udito: v })} />
+      <InlineEditableField label="Vista" value={safePic.vista ?? ''} onSave={v => saveField({ vista: v })} />
+      <InlineEditableField label="Dentizione" value={safePic.dentizione ?? ''} onSave={v => saveField({ dentizione: v })} />
+      <InlineEditableField label="Alimentazione" value={safePic.alimentazione ?? ''} onSave={v => saveField({ alimentazione: v })} />
+      <InlineEditableField label="Elim. urinaria" value={safePic.eliminazioneUrinaria ?? ''} onSave={v => saveField({ eliminazioneUrinaria: v })} />
+      <InlineEditableField label="Elim. intestinale" value={safePic.eliminazioneIntestinale ?? ''} onSave={v => saveField({ eliminazioneIntestinale: v })} />
+      <InlineEditableField label="Mobilità" value={safePic.mobilita ?? ''} onSave={v => saveField({ mobilita: v })} />
+      <InlineEditableField label="Cute / mucose" value={safePic.cuteIntegrita ?? ''} onSave={v => saveField({ cuteIntegrita: v })} />
       <RowAlways label="Dolore" value={safePic.dolore === 'presente' ? `Presente — NRS ${safePic.doloreLivello}/10` : 'Assente'} />
     </div>
   );
