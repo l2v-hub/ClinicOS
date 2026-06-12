@@ -1,0 +1,60 @@
+name: Deploy Backend to Railway
+
+# Deploys the backend to Railway on every push to main (and on demand).
+# GitHub-hosted runners can reach Railway's API, so this is more reliable than
+# Railway's GitHub auto-deploy (which on this project kept serving an old commit).
+#
+# Required GitHub secret:
+#   RAILWAY_TOKEN  -> a Railway *project* token scoped to the backend's project+environment
+#                     (Railway dashboard -> project -> Settings -> Tokens -> Create,
+#                      pick the Production environment).
+# Optional GitHub variable (Settings -> Secrets and variables -> Actions -> Variables):
+#   RAILWAY_SERVICE -> the backend service name, if the project has more than one service.
+#
+# `railway up` uploads the checked-out repo and builds it with railway.json
+# (npm install + prisma generate + build:backend), then runs the start command
+# `prisma migrate deploy && node backend/dist/server.js` — so migrations are applied
+# automatically on each deploy.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - 'prisma/**'
+      - 'railway.json'
+      - 'package.json'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch: {}
+
+concurrency:
+  group: railway-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "::error::RAILWAY_TOKEN secret is not set. Add it under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+          if [ -n "$RAILWAY_SERVICE" ]; then
+            railway up --ci --service "$RAILWAY_SERVICE"
+          else
+            railway up --ci
+          fi
