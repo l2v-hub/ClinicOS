@@ -125,6 +125,108 @@
   font-size: 14px;
 }
 
+/* REQ-006: uniform inline-editable fields (click value -> edit -> floppy save) */
+.inline-edit__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  padding: 2px 8px;
+  margin: -2px -8px;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.inline-edit__value:hover,
+.inline-edit__value:focus-visible {
+  background: var(--c-primary-soft, #EEF4FF);
+  border-color: var(--border, #D0D5DD);
+  outline: none;
+}
+.inline-edit__value:disabled {
+  cursor: default;
+  background: transparent;
+  border-color: transparent;
+}
+.inline-edit__value--empty { color: var(--text-xmuted); font-weight: 500; }
+.inline-edit__pencil {
+  display: inline-flex;
+  width: 13px;
+  height: 13px;
+  color: var(--c-primary, #0F5FD7);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.inline-edit__value:hover .inline-edit__pencil,
+.inline-edit__value:focus-visible .inline-edit__pencil { opacity: 0.85; }
+.inline-edit__pencil svg { width: 100%; height: 100%; }
+
+.pic-row--editing { align-items: flex-start; }
+.inline-edit__control {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.inline-edit__input {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+}
+.inline-edit__actions { display: flex; gap: 4px; flex-shrink: 0; }
+.inline-edit__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--border, #D0D5DD);
+  background: #fff;
+  cursor: pointer;
+  color: var(--text-muted, #667085);
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.inline-edit__btn svg { width: 16px; height: 16px; }
+.inline-edit__btn:disabled { opacity: 0.5; cursor: default; }
+.inline-edit__btn--save {
+  background: var(--c-primary, #0F5FD7);
+  border-color: var(--c-primary, #0F5FD7);
+  color: #fff;
+}
+.inline-edit__btn--save:not(:disabled):hover { background: var(--c-primary-active, #004FC4); border-color: var(--c-primary-active, #004FC4); }
+.inline-edit__btn--cancel:not(:disabled):hover { background: #F2F4F7; color: var(--text, #101828); }
+.inline-edit__error {
+  flex-basis: 100%;
+  margin-top: 4px;
+  color: var(--red, #DC2626);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* REQ-006: block variant — full-width free-text cards (e.g. Anamnesi) */
+.inline-edit-block { width: 100%; }
+.inline-edit-block__value {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  font-weight: 500;
+}
+.inline-edit-block__value > span:first-child { flex: 1; min-width: 0; }
+.inline-edit-block--editing .inline-edit__control {
+  flex-direction: column;
+  align-items: stretch;
+}
+.inline-edit-block--editing .inline-edit__actions { justify-content: flex-end; }
+
 /* ═══════════════════════════════════════════════════════════════════════════
    DOCUMENTI CONSEGNATI
 ═══════════════════════════════════════════════════════════════════════════ */

@@ -23,6 +23,7 @@ import { TopNav } from '../navigation/TopNav';
 import PatientCompactHeader from './PatientCompactHeader';
 import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalCard } from '../shared/ClinicalCard';
+import { InlineEditableField } from '../shared/InlineEditableField';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -93,7 +94,7 @@ interface PatientDetailProps {
   backLabel?: string;
   onAddConsegna: (c: Omit<Consegna, 'id' | 'createdAt'>) => void;
   onUpdateConsegnaStato: (id: string, stato: Consegna['stato']) => void;
-  onUpdateCartella: (pazienteId: string, updates: Partial<CartellaPaziente>) => void;
+  onUpdateCartella: (pazienteId: string, updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   onUpdatePaziente: (id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) => void;
   operatoreNome: string;
   operatoreId: string;
@@ -275,8 +276,8 @@ export function PatientDetail({
 
   // ── Update helpers ─────────────────────────────────────────────────────────
 
-  function upd(updates: Partial<CartellaPaziente>) {
-    onUpdateCartella(cartella.pazienteId, updates);
+  function upd(updates: Partial<CartellaPaziente>): void | Promise<boolean> {
+    return onUpdateCartella(cartella.pazienteId, updates);
   }
 
   // Diagnosi
@@ -1277,7 +1278,6 @@ export function PatientDetail({
             {/* Sezioni anamnesi modificabili — ognuna in una ClinicalCard */}
             {sections.map(({ id, key, label, rows = 4, placeholder }) => {
               const val = String(a[key] ?? '');
-              const isEmpty = !val;
               const isEditingThisCard = editingAnamnesiCard === id;
               return (
                 <ClinicalCard
@@ -1301,9 +1301,15 @@ export function PatientDetail({
                       </div>
                     </>
                   ) : (
-                    <p className={`cr-anamnesi-card__text${isEmpty ? ' muted' : ''}`}>
-                      {isEmpty ? 'Non compilato' : val}
-                    </p>
+                    <InlineEditableField
+                      variant="block"
+                      label={label}
+                      type="textarea"
+                      value={val}
+                      emptyText="Non compilato"
+                      placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
+                      onSave={v => upd({ anamnesi: { ...cartella.anamnesi, [key]: v, updatedAt: nowISO(), operatore: operatoreNome } })}
+                    />
                   )}
                 </ClinicalCard>
               );

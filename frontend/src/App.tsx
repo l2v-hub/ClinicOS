@@ -342,26 +342,31 @@ export default function App() {
     }
   }
 
-  function updateCartella(pazienteId: string, updates: Partial<CartellaPaziente>) {
-    setCartelle(prev => {
-      const existing = prev.find(c => c.pazienteId === pazienteId);
-      const updated = { ...(existing ?? createDefaultCartella(pazienteId)), ...updates };
-      const idx = prev.findIndex(c => c.pazienteId === pazienteId);
-      const next = idx >= 0 ? prev.map((c, i) => i === idx ? updated : c) : [...prev, updated];
+  async function updateCartella(pazienteId: string, updates: Partial<CartellaPaziente>): Promise<boolean> {
+    const existing = cartelle.find(c => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
+    const updated = { ...existing, ...updates };
 
-      // Persist to backend (fire-and-forget with toast feedback)
-      const { pazienteId: _pid, ...dataToSave } = updated;
-      fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
+    // Optimistic update
+    setCartelle(prev => {
+      const idx = prev.findIndex(c => c.pazienteId === pazienteId);
+      return idx >= 0 ? prev.map((c, i) => i === idx ? updated : c) : [...prev, updated];
+    });
+
+    // Persist to backend; return success so callers (e.g. inline edit) can react to failure.
+    const { pazienteId: _pid, ...dataToSave } = updated;
+    try {
+      const r = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: dataToSave }),
-      }).then(r => {
-        if (r.ok) showToast('Dati salvati correttamente');
-        else showToast('Impossibile salvare i dati');
-      }).catch(() => showToast('Impossibile salvare i dati'));
-
-      return next;
-    });
+      });
+      if (r.ok) { showToast('Dati salvati correttamente'); return true; }
+      showToast('Impossibile salvare i dati');
+      return false;
+    } catch {
+      showToast('Impossibile salvare i dati');
+      return false;
+    }
   }
 
   async function updatePaziente(id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) {
