@@ -8,6 +8,7 @@ import therapyRouter from './routes/therapy.js';
 import patientIntakeRouter from './routes/patient-intake.js';
 import patientDiaryRouter from './routes/patient-diary.js';
 import consegneRouter from './routes/consegne.js';
+import noteRouter from './routes/note.js';
 
 const app = express();
 
@@ -77,5 +78,6 @@ app.use('/patients', patientsRouter);
 app.use('/therapy-slots', therapyRouter);
 app.use('/patient-intake', patientIntakeRouter);
 app.use('/consegne', consegneRouter);
+app.use('/notes', noteRouter);
 
 export default app;

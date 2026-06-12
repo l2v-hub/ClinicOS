@@ -295,6 +295,24 @@ model Consegna {
   @@index([priorita])
 }
 
+model Nota {
+  id               String   @id @default(cuid())
+  autoreId         String
+  autoreNome       String
+  destinatarioId   String   // operatoreId | 'admin' | 'tutti'
+  destinatarioNome String
+  pazienteId       String?
+  pazienteNome     String?
+  priorita         String   @default("normale") // normale | alta | urgente
+  messaggio        String
+  stato            String   @default("non_letta") // non_letta | letta | risolta
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([stato])
+  @@index([destinatarioId])
+}
+
 model PatientDiaryEntry {
   id            String   @id @default(cuid())
   patientId     String

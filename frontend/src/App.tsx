@@ -11,7 +11,7 @@ import type {
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
   MOCK_OPERATORI, MOCK_AGENDA,
-  MOCK_APPUNTAMENTI, MOCK_SCHEDULES, MOCK_NOTE,
+  MOCK_APPUNTAMENTI, MOCK_SCHEDULES,
   createDefaultCartella, createMockTherapySlots,
 } from './mockData';
 
@@ -97,7 +97,7 @@ export default function App() {
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>(MOCK_APPUNTAMENTI);
   const [camere, setCamere] = useState<Camera[]>([]);
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>(MOCK_SCHEDULES);
-  const [note, setNote] = useState<Nota[]>(MOCK_NOTE);
+  const [note, setNote] = useState<Nota[]>([]);
   const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
 
   // ── History API navigation ─────────────────────────────────────────────────
@@ -225,6 +225,11 @@ export default function App() {
     fetch(`${API_URL}/consegne`)
       .then(r => r.ok ? r.json() : [])
       .then((data: Consegna[]) => setConsegne(data.map(c => ({ ...c, oraScadenza: c.oraScadenza ?? undefined }))))
+      .catch(() => { /* keep empty array */ });
+    // Load note/messaggi from API (persisted)
+    fetch(`${API_URL}/notes`)
+      .then(r => r.ok ? r.json() : [])
+      .then((data: Nota[]) => setNote(data.map(n => ({ ...n, pazienteId: n.pazienteId ?? undefined, pazienteNome: n.pazienteNome ?? undefined }))))
       .catch(() => { /* keep empty array */ });
   }, [utente, loadTherapySlots]);
 
@@ -507,12 +512,48 @@ export default function App() {
 
   // ── Note CRUD ───────────────────────────────────────────────────────────────
 
-  function addNota(n: Omit<Nota, 'id' | 'createdAt'>) {
-    setNote(prev => [{ ...n, id: crypto.randomUUID(), createdAt: new Date().toISOString() }, ...prev]);
+  // ── Note / Messaggi CRUD (API-persisted) ──────────────────────────────────
+
+  async function addNota(n: Omit<Nota, 'id' | 'createdAt'>): Promise<boolean> {
+    try {
+      const res = await fetch(`${API_URL}/notes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(n),
+      });
+      if (!res.ok) { showToast('Impossibile inviare la nota'); return false; }
+      const created = await res.json() as Nota;
+      setNote(prev => [{ ...created, pazienteId: created.pazienteId ?? undefined, pazienteNome: created.pazienteNome ?? undefined }, ...prev]);
+      showToast('Nota inviata');
+      return true;
+    } catch {
+      showToast('Impossibile inviare la nota');
+      return false;
+    }
   }
 
-  function updateNotaStato(id: string, stato: StatoNota) {
-    setNote(prev => prev.map(n => n.id === id ? { ...n, stato } : n));
+  async function updateNota(id: string, patch: Partial<Nota>): Promise<boolean> {
+    const snapshot = note;
+    setNote(prev => prev.map(n => n.id === id ? { ...n, ...patch } : n));
+    try {
+      const res = await fetch(`${API_URL}/notes/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      });
+      if (!res.ok) { setNote(snapshot); showToast('Impossibile salvare la nota'); return false; }
+      const updated = await res.json() as Nota;
+      setNote(prev => prev.map(n => n.id === id ? { ...updated, pazienteId: updated.pazienteId ?? undefined, pazienteNome: updated.pazienteNome ?? undefined } : n));
+      return true;
+    } catch {
+      setNote(snapshot);
+      showToast('Impossibile salvare la nota');
+      return false;
+    }
+  }
+
+  function updateNotaStato(id: string, stato: StatoNota): Promise<boolean> {
+    return updateNota(id, { stato });
   }
 
   // ── Therapy CRUD (API-persisted with optimistic update) ─────────────────────
@@ -819,6 +860,7 @@ export default function App() {
               isAdmin={isAdmin}
               operatori={operatori}
               onAdd={addNota}
+              onUpdate={updateNota}
               onUpdateStato={updateNotaStato}
             />
           )}
