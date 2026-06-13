@@ -12,6 +12,10 @@ const server = app.listen(0);
 await new Promise((r) => server.once('listening', r));
 const { port } = server.address() as { port: number };
 const base = `http://127.0.0.1:${port}/ai/extraction/jobs`;
+// REQ-019: import endpoints require an operator role header.
+const OP = { 'X-Operator-Id': 'op-smoke', 'X-Operator-Role': 'operatore' };
+const af = (url: string, opts: RequestInit = {}) =>
+  fetch(url, { ...opts, headers: { ...OP, ...(opts.headers as Record<string, string> ?? {}) } });
 
 function form(files: { name: string; buf: Buffer; type: string }[]) {
   const fd = new FormData();
@@ -21,7 +25,7 @@ function form(files: { name: string; buf: Buffer; type: string }[]) {
 
 try {
   // 1. Create job with PDF + JPG + a duplicate PDF + an EXE (rejected). 4 sent.
-  let res = await fetch(base, {
+  let res = await af(base, {
     method: 'POST',
     body: form([
       { name: 'dimissione.pdf', buf: PDF, type: 'application/pdf' },
@@ -42,19 +46,19 @@ try {
   assert.equal(body.job.fileCount, 2, 'two valid files; invalids did not lose the valid ones');
 
   // 2. Status reflects 2 docs, no patient data anywhere.
-  res = await fetch(`${base}/${jobId}`);
+  res = await af(`${base}/${jobId}`);
   body = await res.json();
   assert.equal(body.documents.length, 2);
   assert.ok(!JSON.stringify(body).includes('storagePath'), 'storagePath never exposed');
 
   // 3. Remove one document -> count drops, total recomputed.
   const docId = body.documents[0].id;
-  res = await fetch(`${base}/${jobId}/files/${docId}`, { method: 'DELETE' });
+  res = await af(`${base}/${jobId}/files/${docId}`, { method: 'DELETE' });
   body = await res.json();
   assert.equal(body.fileCount, 1, 'one doc after delete');
 
   // 4. Add a new file to the same job (mixed batches).
-  res = await fetch(`${base}/${jobId}/files`, {
+  res = await af(`${base}/${jobId}/files`, {
     method: 'POST',
     body: form([{ name: 'pagina2.png', buf: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2]), type: 'image/png' }]),
   });
@@ -62,10 +66,10 @@ try {
   assert.equal(body.job.fileCount, 2, 'add-more works on existing job');
 
   // 5. Process (REQ-015, mock provider) -> review_ready with a schema-valid result.
-  res = await fetch(`${base}/${jobId}/process`, { method: 'POST' });
+  res = await af(`${base}/${jobId}/process`, { method: 'POST' });
   body = await res.json();
   assert.equal(body.status, 'review_ready', `process -> review_ready (got ${body.status} / ${body.error ?? ''})`);
-  res = await fetch(`${base}/${jobId}/result`);
+  res = await af(`${base}/${jobId}/result`);
   const result = await res.json();
   assert.equal(result.status, 'review_ready', 'result status review_ready');
   // REQ-016 merged proposal shape: { _merge, anagrafica:{field:MergedField}, cartella:{...} }
@@ -76,7 +80,7 @@ try {
   assert.ok(result.resultData._merge.documents.length >= 1, 'provenance documents present');
 
   // 6. Cancel -> terminal + cleanup.
-  res = await fetch(`${base}/${jobId}/cancel`, { method: 'POST' });
+  res = await af(`${base}/${jobId}/cancel`, { method: 'POST' });
   body = await res.json();
   assert.equal(body.status, 'expired', 'cancel marks terminal');
   assert.equal(body.totalBytes, 0, 'bytes cleared on cancel');

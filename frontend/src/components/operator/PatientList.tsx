@@ -17,6 +17,9 @@ interface PatientListProps {
   onAddPaziente: (p: NuovoPaziente) => Promise<void>;
   /** REQ-018: refresh the list after an imported patient is created. */
   onImported?: () => void;
+  /** REQ-019: operator identity for import authorization. */
+  operatorId?: string;
+  operatorRole?: string;
 }
 
 function calcAge(dob: string): number {
@@ -28,7 +31,7 @@ function calcAge(dob: string): number {
   return age;
 }
 
-export function PatientList({ pazienti, consegne, operatori, camere, loading, onSelect, onAddPaziente, onImported }: PatientListProps) {
+export function PatientList({ pazienti, consegne, operatori, camere, loading, onSelect, onAddPaziente, onImported, operatorId, operatorRole }: PatientListProps) {
   const [ricerca, setRicerca] = useState('');
   const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [showModal, setShowModal] = useState(false);
@@ -63,7 +66,7 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
         subtitle={`${pazienti.length} pazienti totali`}
         actions={
           <>
-            <AIImportStatus onImported={onImported} />
+            <AIImportStatus onImported={onImported} operatorId={operatorId} operatorRole={operatorRole} />
             <button className="btn-primary" onClick={() => setShowModal(true)}>
               <IcoPlus /> Nuovo paziente
             </button>

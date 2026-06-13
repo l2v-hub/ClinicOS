@@ -32,6 +32,9 @@ interface Props {
   onClose: () => void;
   /** REQ-018: called after a patient is created so the list can refresh. */
   onImported?: () => void;
+  /** REQ-019: operator identity sent on every import request. */
+  operatorId?: string;
+  operatorRole?: string;
 }
 
 const JOBS_URL = `${API_URL}/ai/extraction/jobs`;
@@ -40,7 +43,13 @@ function fmtMB(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function DischargeImportModal({ open, onClose, onImported }: Props) {
+export function DischargeImportModal({ open, onClose, onImported, operatorId, operatorRole }: Props) {
+  // REQ-019: attach operator identity to every import request.
+  const opHeaders: Record<string, string> = {};
+  if (operatorId) opHeaders['X-Operator-Id'] = operatorId;
+  if (operatorRole) opHeaders['X-Operator-Role'] = operatorRole;
+  const apiFetch = (url: string, opts: RequestInit = {}) =>
+    fetch(url, { ...opts, headers: { ...opHeaders, ...(opts.headers as Record<string, string> ?? {}) } });
   const [job, setJob] = useState<Job | null>(null);
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
   const [busy, setBusy] = useState(false);
@@ -63,7 +72,7 @@ export function DischargeImportModal({ open, onClose, onImported }: Props) {
       const fd = new FormData();
       Array.from(files).forEach((f) => fd.append('files', f));
       const url = job ? `${JOBS_URL}/${job.id}/files` : JOBS_URL;
-      const res = await fetch(url, { method: 'POST', body: fd });
+      const res = await apiFetch(url, { method: 'POST', body: fd });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Upload non riuscito'); return; }
       setJob(data.job ?? data);
@@ -81,7 +90,7 @@ export function DischargeImportModal({ open, onClose, onImported }: Props) {
     if (!job) return;
     setBusy(true);
     try {
-      const res = await fetch(`${JOBS_URL}/${job.id}/files/${docId}`, { method: 'DELETE' });
+      const res = await apiFetch(`${JOBS_URL}/${job.id}/files/${docId}`, { method: 'DELETE' });
       const data = await res.json();
       if (res.ok) setJob(data);
     } finally { setBusy(false); }
@@ -96,7 +105,7 @@ export function DischargeImportModal({ open, onClose, onImported }: Props) {
     [ids[i], ids[j]] = [ids[j], ids[i]];
     setBusy(true);
     try {
-      const res = await fetch(`${JOBS_URL}/${job.id}/reorder`, {
+      const res = await apiFetch(`${JOBS_URL}/${job.id}/reorder`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ order: ids }),
       });
@@ -106,7 +115,7 @@ export function DischargeImportModal({ open, onClose, onImported }: Props) {
   }
 
   async function cancel() {
-    if (job) { try { await fetch(`${JOBS_URL}/${job.id}/cancel`, { method: 'POST' }); } catch { /* ignore */ } }
+    if (job) { try { await apiFetch(`${JOBS_URL}/${job.id}/cancel`, { method: 'POST' }); } catch { /* ignore */ } }
     onClose();
   }
 
@@ -114,13 +123,13 @@ export function DischargeImportModal({ open, onClose, onImported }: Props) {
     if (!job) return;
     setBusy(true); setError(null);
     try {
-      const res = await fetch(`${JOBS_URL}/${job.id}/process`, { method: 'POST' });
+      const res = await apiFetch(`${JOBS_URL}/${job.id}/process`, { method: 'POST' });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Avvio elaborazione non riuscito'); return; }
       setJob(data);
       if (data.status === 'review_ready') {
         // Fetch the merged proposal and move to the Revisione step (REQ-017).
-        const r = await fetch(`${JOBS_URL}/${job.id}/result`);
+        const r = await apiFetch(`${JOBS_URL}/${job.id}/result`);
         const result = await r.json();
         if (r.ok && result.resultData) { setProposal(result.resultData); setStep('review'); }
         else setError('Estrazione completata ma risultato non disponibile');
@@ -150,7 +159,7 @@ export function DischargeImportModal({ open, onClose, onImported }: Props) {
       },
       confirmDuplicate,
     });
-    const post = (dup: boolean) => fetch(`${JOBS_URL}/${job.id}/confirm`, {
+    const post = (dup: boolean) => apiFetch(`${JOBS_URL}/${job.id}/confirm`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body(dup)),
     });
     try {

@@ -888,6 +888,8 @@ export default function App() {
               loading={loadingPazienti}
               onSelect={selectPaziente}
               onAddPaziente={addPaziente}
+              operatorId={utente?.id}
+              operatorRole={utente?.ruolo}
               onImported={() => {
                 // REQ-018: refresh the patient list after an imported patient is created.
                 setLoadingPazienti(true);

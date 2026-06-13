@@ -15,6 +15,9 @@ import {
 } from '../ai/upload/job-service.js';
 import type { IncomingFile } from '../ai/upload/validation.js';
 import { confirmJob, type ConfirmPayload } from '../ai/upload/confirm-service.js';
+import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { importRateLimit, extractionCostGuard } from '../ai/rate-limit.js';
+import { recordAudit } from '../ai/audit.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // AI IMPORT JOBS — mounted at /ai/extraction/jobs (REQ-014)
@@ -31,6 +34,11 @@ const upload = multer({
 });
 
 const aiJobsRouter = Router();
+
+// REQ-019: every import endpoint requires a known operator role + is rate limited.
+// The /sweep maintenance route below also benefits from the gate (operator-only).
+aiJobsRouter.use(requireOperator);
+aiJobsRouter.use(importRateLimit);
 
 function toIncoming(files: Express.Multer.File[] | undefined): IncomingFile[] {
   return (files ?? []).map((f) => ({
@@ -55,10 +63,13 @@ function handleError(res: import('express').Response, err: unknown) {
 aiJobsRouter.post('/', upload.array('files'), async (req, res) => {
   try {
     const idempotencyKey = (req.header('Idempotency-Key') || req.body?.idempotencyKey || undefined) as string | undefined;
-    const job = await createJob({ idempotencyKey });
+    const op = (req as AuthedRequest).operator;
+    const job = await createJob({ idempotencyKey, createdById: op?.id });
+    await recordAudit(job.id, 'job_created', { operatorId: op?.id });
     const incoming = toIncoming(req.files as Express.Multer.File[]);
     if (incoming.length === 0) return res.status(201).json({ job, outcomes: [] });
     const result = await addFiles(job.id, incoming);
+    await recordAudit(job.id, 'files_added', { operatorId: op?.id, detail: `${incoming.length} file` });
     return res.status(201).json(result);
   } catch (err) {
     return handleError(res, err);
@@ -70,6 +81,7 @@ aiJobsRouter.post('/:id/files', upload.array('files'), async (req, res) => {
   try {
     const incoming = toIncoming(req.files as Express.Multer.File[]);
     const result = await addFiles(String(req.params.id), incoming);
+    await recordAudit(String(req.params.id), 'files_added', { operatorId: (req as AuthedRequest).operator?.id, detail: `${incoming.length} file` });
     return res.status(200).json(result);
   } catch (err) {
     return handleError(res, err);
@@ -112,6 +124,7 @@ aiJobsRouter.post('/:id/reorder', async (req, res) => {
 aiJobsRouter.post('/:id/cancel', async (req, res) => {
   try {
     const job = await cancelJob(String(req.params.id));
+    await recordAudit(String(req.params.id), 'job_cancelled', { operatorId: (req as AuthedRequest).operator?.id });
     return res.status(200).json(job);
   } catch (err) {
     return handleError(res, err);
@@ -119,11 +132,17 @@ aiJobsRouter.post('/:id/cancel', async (req, res) => {
 });
 
 // POST /ai/extraction/jobs/:id/process — explicit start of extraction (REQ-015).
-aiJobsRouter.post('/:id/process', async (req, res) => {
+// Cost guard: extraction is the expensive, model-backed path.
+aiJobsRouter.post('/:id/process', extractionCostGuard, async (req, res) => {
+  const jobId = String(req.params.id);
+  const op = (req as AuthedRequest).operator;
   try {
-    const job = await processJob(String(req.params.id));
+    await recordAudit(jobId, 'process_started', { operatorId: op?.id });
+    const job = await processJob(jobId);
+    await recordAudit(jobId, job.status === 'failed' ? 'process_failed' : 'process_completed', { operatorId: op?.id, detail: job.status });
     return res.status(200).json(job);
   } catch (err) {
+    await recordAudit(jobId, 'process_failed', { operatorId: op?.id });
     return handleError(res, err);
   }
 });

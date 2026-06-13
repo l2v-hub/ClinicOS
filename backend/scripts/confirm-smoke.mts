@@ -11,6 +11,10 @@ const server = app.listen(0);
 await new Promise((r) => server.once('listening', r));
 const { port } = server.address() as { port: number };
 const base = `http://127.0.0.1:${port}/ai/extraction/jobs`;
+// REQ-019: import endpoints require an operator role header.
+const OP = { 'X-Operator-Id': 'op-smoke', 'X-Operator-Role': 'operatore' };
+const af = (url: string, opts: RequestInit = {}) =>
+  fetch(url, { ...opts, headers: { ...OP, ...(opts.headers as Record<string, string> ?? {}) } });
 
 const createdPatientIds: string[] = [];
 const createdJobIds: string[] = [];
@@ -18,11 +22,11 @@ const createdJobIds: string[] = [];
 async function newReviewReadyJob(): Promise<string> {
   const fd = new FormData();
   fd.append('files', new Blob([PDF], { type: 'application/pdf' }), 'dimissione.pdf');
-  let res = await fetch(base, { method: 'POST', body: fd });
+  let res = await af(base, { method: 'POST', body: fd });
   const body = await res.json();
   const jobId = body.job.id as string;
   createdJobIds.push(jobId);
-  res = await fetch(`${base}/${jobId}/process`, { method: 'POST' });
+  res = await af(`${base}/${jobId}/process`, { method: 'POST' });
   const pj = await res.json();
   assert.equal(pj.status, 'review_ready', 'job review_ready');
   return jobId;
@@ -33,7 +37,7 @@ const PATIENT = { firstName: 'TestSint', lastName: 'Paziente', dateOfBirth: '195
 try {
   // 1. Confirm -> creates patient transactionally.
   const job1 = await newReviewReadyJob();
-  let res = await fetch(`${base}/${job1}/confirm`, {
+  let res = await af(`${base}/${job1}/confirm`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: PATIENT, cartella: { statoRicovero: 'ricoverato' } }),
   });
@@ -45,12 +49,12 @@ try {
   assert.ok(data.patient.medicalRecordNumber.startsWith('MRN-'), 'MRN assigned');
 
   // 2. Job is now confirmed + linked.
-  res = await fetch(`${base}/${job1}`);
+  res = await af(`${base}/${job1}`);
   let job = await res.json();
   assert.equal(job.status, 'confirmed', 'job confirmed after commit');
 
   // 3. Double confirm of the SAME job -> idempotent, no duplicate.
-  res = await fetch(`${base}/${job1}/confirm`, {
+  res = await af(`${base}/${job1}/confirm`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: PATIENT }),
   });
@@ -61,7 +65,7 @@ try {
 
   // 4. A NEW job with same name/dob -> duplicate flagged (409).
   const job2 = await newReviewReadyJob();
-  res = await fetch(`${base}/${job2}/confirm`, {
+  res = await af(`${base}/${job2}/confirm`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: PATIENT }),
   });
@@ -71,7 +75,7 @@ try {
   assert.equal(data.duplicate.id, pid, 'points at the existing patient');
 
   // 5. Override duplicate -> creates a second patient.
-  res = await fetch(`${base}/${job2}/confirm`, {
+  res = await af(`${base}/${job2}/confirm`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: PATIENT, confirmDuplicate: true }),
   });
@@ -88,7 +92,7 @@ try {
 
   // 7. Required-field validation rejects bad payload.
   const job3 = await newReviewReadyJob();
-  res = await fetch(`${base}/${job3}/confirm`, {
+  res = await af(`${base}/${job3}/confirm`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: { firstName: '', lastName: '', dateOfBirth: '' } }),
   });

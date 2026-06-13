@@ -16,9 +16,11 @@ interface AiStatus {
 interface Props {
   onStart?: () => void;
   onImported?: () => void;
+  operatorId?: string;
+  operatorRole?: string;
 }
 
-export function AIImportStatus({ onStart, onImported }: Props) {
+export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }: Props) {
   const [status, setStatus] = useState<AiStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -54,7 +56,8 @@ export function AIImportStatus({ onStart, onImported }: Props) {
         <span className={`ai-import-dot ${available ? 'is-on' : 'is-off'}`} aria-hidden="true" />
         Importa dimissione
       </button>
-      <DischargeImportModal open={open} onClose={() => setOpen(false)} onImported={onImported} />
+      <DischargeImportModal open={open} onClose={() => setOpen(false)} onImported={onImported}
+        operatorId={operatorId} operatorRole={operatorRole} />
     </>
   );
 }
