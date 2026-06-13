@@ -6051,3 +6051,12 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .main-area-clean .page-content > *:first-child {
   margin-top: 0;
 }
+
+/* ── AI import status / entry (REQ-013) ───────────────────────────────────── */
+.ai-import-btn { display: inline-flex; align-items: center; gap: 8px; }
+.ai-import-btn--disabled { opacity: .55; cursor: not-allowed; }
+.ai-import-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.ai-import-dot.is-on { background: #12B76A; box-shadow: 0 0 0 3px rgba(18,183,106,.15); }
+.ai-import-dot.is-off { background: #98A2B3; box-shadow: 0 0 0 3px rgba(152,162,179,.15); }
+.ai-import-badge { font-size: 13px; color: var(--muted, #667085); padding: 6px 10px; }
+.ai-import-badge--loading { opacity: .7; }

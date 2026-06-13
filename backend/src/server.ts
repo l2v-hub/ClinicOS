@@ -1,4 +1,5 @@
 import app from './app.js';
+import { publicStatus } from './ai/config.js';
 
 const DEFAULT_PORT = 3001;
 
@@ -21,6 +22,13 @@ const port = process.env.PORT || 3001;
 
 const server = app.listen(port, () => {
   console.log(`ClinicOS backend listening on port ${port}`);
+  // Controlled AI config validation at startup (secret-free).
+  const ai = publicStatus();
+  if (ai.available) {
+    console.log(`[ai] extraction ready: provider=${ai.provider} model=${ai.model}`);
+  } else {
+    console.warn(`[ai] extraction NOT available: ${ai.errors.join('; ')}`);
+  }
 });
 
 server.on('error', (error) => {
