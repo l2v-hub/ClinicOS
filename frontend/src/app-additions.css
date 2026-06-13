@@ -4093,7 +4093,13 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 
 /* ── Page content: patient detail fills viewport cleanly ── */
 .page-content:has(.patient-record-view) {
-  padding: 0;
+  /* REQ-003: do NOT zero the horizontal padding — keep the same left/right
+     gutter as every other page so the L2/L3 nav and the patient header align
+     to the shared content axis instead of sitting flush against the sidebar.
+     Only the vertical fill behaviour is overridden here; padding-left/right are
+     left to inherit the responsive .page-content gutter (24px / 32px). */
+  padding-top: 8px;
+  padding-bottom: 0;
   max-width: none;
   height: calc(100svh - var(--header-h));
   overflow: hidden;
