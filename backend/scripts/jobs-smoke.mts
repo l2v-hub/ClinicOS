@@ -68,9 +68,12 @@ try {
   res = await fetch(`${base}/${jobId}/result`);
   const result = await res.json();
   assert.equal(result.status, 'review_ready', 'result status review_ready');
-  assert.ok(result.resultData?.anagrafica && result.resultData?.cartella, 'result has anagrafica + cartella');
-  assert.equal(result.resultData.anagrafica.nome, '', 'no invented data (empty name)');
-  assert.ok(Array.isArray(result.resultData.cartella.diagnosi), 'diagnosi is an array');
+  // REQ-016 merged proposal shape: { _merge, anagrafica:{field:MergedField}, cartella:{...} }
+  assert.ok(result.resultData?._merge?.version, 'merged proposal has _merge.version');
+  assert.ok(result.resultData?.anagrafica?.nome?.status, 'anagrafica.nome is a MergedField');
+  assert.equal(result.resultData.anagrafica.nome.status, 'missing', 'mock -> empty -> missing, no invention');
+  assert.ok(result.resultData.cartella.diagnosi.items, 'diagnosi is a MergedList');
+  assert.ok(result.resultData._merge.documents.length >= 1, 'provenance documents present');
 
   // 6. Cancel -> terminal + cleanup.
   res = await fetch(`${base}/${jobId}/cancel`, { method: 'POST' });

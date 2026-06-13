@@ -37,6 +37,8 @@ export interface AiConfig {
   uploadDir: string;
   /** Minutes before an import job + its files expire and are swept (REQ-014/019). */
   jobRetentionMin: number;
+  /** Order conflict candidates most-recent-first on merge (still never auto-resolves) (REQ-016). */
+  mergePreferRecent: boolean;
   /** True only when the provider has everything it needs to run (e.g. API key present). */
   available: boolean;
   /** Human-readable reasons the service is unavailable (no secrets). */
@@ -108,6 +110,7 @@ export function loadAiConfig(force = false): AiConfig {
     maxTotalMb: intEnv('AI_MAX_TOTAL_MB', 25),
     uploadDir: process.env.AI_UPLOAD_DIR?.trim() || resolve(tmpdir(), 'clinicos-imports'),
     jobRetentionMin: intEnv('AI_JOB_RETENTION_MIN', 60),
+    mergePreferRecent: (process.env.AI_MERGE_PREFER_RECENT ?? 'true').trim().toLowerCase() !== 'false',
     available: errors.length === 0,
     errors,
     apiKey,
