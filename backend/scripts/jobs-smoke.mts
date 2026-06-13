@@ -65,6 +65,15 @@ try {
   body = await res.json();
   assert.equal(body.job.fileCount, 2, 'add-more works on existing job');
 
+  // 4b. Logical-doc grouping (REQ-014 residual): tag an item, verify it persists.
+  const someDoc = body.job.documents[0].id;
+  res = await af(`${base}/${jobId}/files/${someDoc}/logical`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ logicalDoc: 'Documento 1' }),
+  });
+  body = await res.json();
+  assert.equal(body.documents.find((d: { id: string; logicalDoc?: string }) => d.id === someDoc)?.logicalDoc, 'Documento 1', 'logicalDoc persisted');
+
   // 5. Process (REQ-015, mock provider) -> review_ready with a schema-valid result.
   res = await af(`${base}/${jobId}/process`, { method: 'POST' });
   body = await res.json();
