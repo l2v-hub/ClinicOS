@@ -1,25 +1,25 @@
 // One-off: verify REAL Gemma extraction against PROD with a SYNTHETIC discharge
 // letter (no real patient data). Creates a job, runs extraction, checks the merged
 // result, then cancels the job (cleanup). Never prints/handles the API key.
+import { buildSyntheticPdf } from './real-pdf.mjs';
 const API = 'https://clinicos-backend-production-df88.up.railway.app';
 const base = `${API}/ai/extraction/jobs`;
 const OP = { 'X-Operator-Id': 'op-prod-check', 'X-Operator-Role': 'operatore' };
 const af = (url, opts = {}) => fetch(url, { ...opts, headers: { ...OP, ...(opts.headers ?? {}) } });
 
-// Synthetic discharge letter — fake name/data only.
-const LETTER =
-  '%PDF-1.4\n' +
-  'LETTERA DI DIMISSIONE OSPEDALIERA\n' +
-  'Paziente: Mario Bianchi\n' +
-  'Data di nascita: 01/01/1950\n' +
-  'Sesso: M\n' +
-  'Diagnosi principale: Broncopneumopatia cronica ostruttiva (BPCO)\n' +
-  'Allergie: Penicillina\n' +
-  'Terapia alla dimissione: Salbutamolo 100 mcg per via inalatoria\n' +
-  '%%EOF';
+// Valid 1-page PDF with synthetic discharge-letter text (fake name/data only).
+const LETTER = buildSyntheticPdf([
+  'LETTERA DI DIMISSIONE OSPEDALIERA',
+  'Paziente: Mario Bianchi',
+  'Data di nascita: 01/01/1950',
+  'Sesso: M',
+  'Diagnosi principale: Broncopneumopatia cronica ostruttiva (BPCO)',
+  'Allergie: Penicillina',
+  'Terapia alla dimissione: Salbutamolo 100 mcg per via inalatoria',
+]);
 
 const fd = new FormData();
-fd.append('files', new Blob([Buffer.from(LETTER)], { type: 'application/pdf' }), 'dimissione-sintetica.pdf');
+fd.append('files', new Blob([LETTER], { type: 'application/pdf' }), 'dimissione-sintetica.pdf');
 
 let jobId;
 try {
