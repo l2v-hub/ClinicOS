@@ -351,13 +351,32 @@ model ImportJob {
   schemaVersion  String?
   promptVersion  String?
   createdById    String?
+  // REQ-018: set only after the reviewed patient is committed (audit linkage).
+  createdPatientId String?
+  confirmedAt    DateTime?
   expiresAt      DateTime
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   documents      ImportDocument[]
+  auditEvents    ImportAudit[]
 
   @@index([status])
   @@index([expiresAt])
+  @@index([createdPatientId])
+}
+
+// REQ-018: audit trail linking job ↔ patient ↔ documents. No clinical content.
+model ImportAudit {
+  id          String    @id @default(cuid())
+  jobId       String
+  patientId   String?
+  action      String    // confirm_started | patient_created | confirm_committed | duplicate_flagged | confirm_failed
+  detail      String?   // short, content-free note
+  createdAt   DateTime  @default(now())
+  job         ImportJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@index([patientId])
 }
 
 model ImportDocument {

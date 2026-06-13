@@ -888,6 +888,15 @@ export default function App() {
               loading={loadingPazienti}
               onSelect={selectPaziente}
               onAddPaziente={addPaziente}
+              onImported={() => {
+                // REQ-018: refresh the patient list after an imported patient is created.
+                setLoadingPazienti(true);
+                fetch(`${API_URL}/patients`)
+                  .then(r => r.json())
+                  .then((data: Paziente[]) => setPazienti(data))
+                  .catch(() => { /* keep current list */ })
+                  .finally(() => setLoadingPazienti(false));
+              }}
             />
           )}
           {navKey === 'dettaglio-paziente' && !pazienteSelezionato && (
