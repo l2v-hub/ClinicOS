@@ -5,6 +5,7 @@ import { NewPatientModal } from '../shared/NewPatientModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
+import { AIImportStatus } from '../shared/AIImportStatus';
 
 interface PatientListProps {
   pazienti: Paziente[];
@@ -59,9 +60,12 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
         title="Pazienti"
         subtitle={`${pazienti.length} pazienti totali`}
         actions={
-          <button className="btn-primary" onClick={() => setShowModal(true)}>
-            <IcoPlus /> Nuovo paziente
-          </button>
+          <>
+            <AIImportStatus />
+            <button className="btn-primary" onClick={() => setShowModal(true)}>
+              <IcoPlus /> Nuovo paziente
+            </button>
+          </>
         }
       />
 
