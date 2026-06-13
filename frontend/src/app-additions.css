@@ -6078,3 +6078,41 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .import-modal__empty { color: var(--muted, #667085); font-size: 13px; padding: 16px; text-align: center; }
 .import-modal__status { font-size: 13px; margin: 0; }
 .import-modal__foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+
+/* ── Import review step (REQ-017) ─────────────────────────────────────────── */
+.import-modal__steps { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0 0 8px; font-size: 12px; }
+.import-modal__steps li { color: var(--muted, #667085); padding: 4px 8px; border-radius: 6px; background: #F2F4F7; }
+.import-modal__steps li.is-active { color: #fff; background: var(--c-primary, #0F5FD7); }
+.import-modal__steps li.is-done { color: var(--c-primary, #0F5FD7); }
+.import-review { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+.import-review__summary { display: flex; gap: 6px; flex-wrap: wrap; }
+.ir-pill { font-size: 12px; padding: 3px 8px; border-radius: 999px; background: #F2F4F7; color: #344054; }
+.ir-pill--ok { background: #ECFDF3; color: #027A48; }
+.ir-pill--warn { background: #FFFAEB; color: #B54708; }
+.ir-pill--conflict { background: #FEF3F2; color: #B42318; }
+.import-review__sec { font-size: 14px; margin: 6px 0 0; color: var(--text, #101828); }
+.import-review__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ir-field { display: flex; flex-direction: column; gap: 4px; }
+.ir-field__label { font-size: 12px; color: var(--muted, #667085); display: flex; align-items: center; gap: 6px; }
+.ir-req { color: var(--red, #DC2626); }
+.ir-field__input { padding: 7px 9px; border: 1px solid var(--border, #D0D5DD); border-radius: 7px; font-size: 14px; }
+.ir-badge { font-size: 10px; padding: 1px 6px; border-radius: 999px; background: #EAECF0; color: #475467; text-transform: uppercase; letter-spacing: .02em; }
+.ir-badge--extracted { background: #ECFDF3; color: #027A48; }
+.ir-badge--missing { background: #FFFAEB; color: #B54708; }
+.ir-badge--conflict { background: #FEF3F2; color: #B42318; }
+.ir-badge--modified { background: #EFF4FF; color: #0F5FD7; }
+.ir-src-btn { font-size: 11px; background: none; border: none; color: var(--c-primary, #0F5FD7); cursor: pointer; padding: 0; text-decoration: underline; }
+.ir-conflict { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.ir-conflict__hint { font-size: 11px; color: #B42318; }
+.ir-cand { font-size: 12px; padding: 3px 8px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; background: #fff; cursor: pointer; }
+.ir-cand.is-sel { border-color: var(--c-primary, #0F5FD7); background: #EFF4FF; }
+.ir-cand em { color: var(--muted, #667085); font-style: normal; font-size: 11px; }
+.ir-prov { list-style: none; margin: 2px 0 0; padding: 6px 8px; background: #F9FAFB; border-radius: 6px; font-size: 11px; color: #475467; }
+.ir-clinic { border: 1px solid var(--border, #D0D5DD); border-radius: 8px; padding: 8px 10px; }
+.ir-clinic__head { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+.ir-clinic__list { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.ir-clinic__list li { display: flex; gap: 8px; align-items: center; }
+.ir-clinic__list li.is-conflict { color: #B42318; }
+.ir-src-inline { font-size: 11px; color: var(--muted, #667085); margin-left: auto; }
+.ir-docs { list-style: none; margin: 0; padding: 0; font-size: 13px; color: #344054; display: flex; flex-direction: column; gap: 3px; }
+@media (max-width: 760px) { .import-review__grid { grid-template-columns: 1fr; } }

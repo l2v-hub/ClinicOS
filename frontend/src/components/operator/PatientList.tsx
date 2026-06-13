@@ -61,7 +61,7 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
         subtitle={`${pazienti.length} pazienti totali`}
         actions={
           <>
-            <AIImportStatus />
+            <AIImportStatus onCreatePatient={onAddPaziente} />
             <button className="btn-primary" onClick={() => setShowModal(true)}>
               <IcoPlus /> Nuovo paziente
             </button>
