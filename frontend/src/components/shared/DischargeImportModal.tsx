@@ -30,8 +30,8 @@ interface Outcome { filename: string; status: string; message?: string }
 interface Props {
   open: boolean;
   onClose: () => void;
-  /** REQ-017: create the reviewed patient (maps to existing patient-create). */
-  onCreatePatient?: (np: NuovoPaziente) => Promise<void>;
+  /** REQ-018: called after a patient is created so the list can refresh. */
+  onImported?: () => void;
 }
 
 const JOBS_URL = `${API_URL}/ai/extraction/jobs`;
@@ -40,7 +40,7 @@ function fmtMB(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function DischargeImportModal({ open, onClose, onCreatePatient }: Props) {
+export function DischargeImportModal({ open, onClose, onImported }: Props) {
   const [job, setJob] = useState<Job | null>(null);
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
   const [busy, setBusy] = useState(false);
@@ -132,14 +132,44 @@ export function DischargeImportModal({ open, onClose, onCreatePatient }: Props) 
     } finally { setBusy(false); }
   }
 
+  // REQ-018: transactional, idempotent, duplicate-checked confirm.
   async function handleCreate(np: NuovoPaziente) {
-    if (!onCreatePatient) { onClose(); return; }
+    if (!job) return;
     setBusy(true); setError(null);
+    const body = (confirmDuplicate: boolean) => ({
+      patient: {
+        firstName: np.firstName, lastName: np.lastName, dateOfBirth: np.dateOfBirth,
+        sex: np.sex, email: np.email, phone: np.phone, address: np.address,
+        emergencyContactName: np.referenteNome, emergencyContactPhone: np.referenteTelefono,
+        codiceFiscale: np.codiceFiscale,
+      },
+      cartella: {
+        statoRicovero: np.statoPaziente, dataRicovero: np.dataIngresso,
+        patologiaIngresso: np.motivoIngresso, noteGenerali: np.noteIniziali,
+        allergieText: np.allergie, farmaciText: np.farmaci, diagnosiText: np.notaClinicaIniziale,
+      },
+      confirmDuplicate,
+    });
+    const post = (dup: boolean) => fetch(`${JOBS_URL}/${job.id}/confirm`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body(dup)),
+    });
     try {
-      await onCreatePatient(np);
+      let res = await post(false);
+      if (res.status === 409) {
+        const d = await res.json();
+        const dp = d.duplicate;
+        const proceed = window.confirm(
+          `Possibile duplicato: ${dp.firstName} ${dp.lastName} (${dp.medicalRecordNumber}). Creare comunque un nuovo paziente?`,
+        );
+        if (!proceed) { setBusy(false); return; }
+        res = await post(true);
+      }
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || 'Creazione paziente non riuscita'); return; }
+      onImported?.();
       onClose();
     } catch {
-      setError('Creazione paziente non riuscita');
+      setError('Errore di rete durante la conferma');
     } finally { setBusy(false); }
   }
 

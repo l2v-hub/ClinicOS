@@ -14,6 +14,7 @@ import {
   sweepExpiredJobs,
 } from '../ai/upload/job-service.js';
 import type { IncomingFile } from '../ai/upload/validation.js';
+import { confirmJob, type ConfirmPayload } from '../ai/upload/confirm-service.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // AI IMPORT JOBS — mounted at /ai/extraction/jobs (REQ-014)
@@ -122,6 +123,21 @@ aiJobsRouter.post('/:id/process', async (req, res) => {
   try {
     const job = await processJob(String(req.params.id));
     return res.status(200).json(job);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// POST /ai/extraction/jobs/:id/confirm — transactional patient creation (REQ-018).
+// Body: { patient, cartella?, idempotencyKey?, confirmDuplicate? }.
+aiJobsRouter.post('/:id/confirm', async (req, res) => {
+  try {
+    const payload = (req.body ?? {}) as ConfirmPayload;
+    const result = await confirmJob(String(req.params.id), payload);
+    if (result.status === 'duplicate') {
+      return res.status(409).json(result); // client re-submits with confirmDuplicate:true
+    }
+    return res.status(result.status === 'idempotent' ? 200 : 201).json(result);
   } catch (err) {
     return handleError(res, err);
   }
