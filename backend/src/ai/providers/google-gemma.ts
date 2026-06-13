@@ -153,6 +153,15 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
     if (lastData !== null) {
       throw new AiExtractionError('schema_validation', 'Output non conforme allo schema dopo i retry di correzione');
     }
-    throw new AiExtractionError('provider_error', 'Estrazione fallita dopo i retry');
+    // Surface the real (redacted) provider cause so failures are diagnosable.
+    const rawCause = lastErr instanceof Error ? lastErr.message : String(lastErr ?? '');
+    const cause = truncateForLog(
+      rawCause
+        .replace(/AIza[\w-]+/g, 'AIza***')
+        .replace(/key=[\w.-]+/gi, 'key=***')
+        .replace(/Bearer\s+[\w.-]+/gi, 'Bearer ***'),
+      240,
+    );
+    throw new AiExtractionError('provider_error', `Estrazione fallita: ${cause || 'dopo i retry'}`);
   }
 }
