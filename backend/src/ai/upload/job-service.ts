@@ -4,10 +4,12 @@
 // and manages job lifecycle. NO Patient data is written here — confirmation and
 // persistence are REQ-018; extraction is REQ-015.
 
+import { readFile } from 'node:fs/promises';
 import { prisma } from '../../lib/prisma.js';
-import { loadAiConfig, type AiConfig } from '../config.js';
+import { loadAiConfig, loadExtractionPrompt, loadExtractionSchema, type AiConfig } from '../config.js';
 import { createExtractionProvider } from '../provider-factory.js';
-import { AiExtractionError } from '../types.js';
+import { validateExtraction } from '../extraction-validate.js';
+import { AiExtractionError, type ExtractionFile } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
 
@@ -194,9 +196,10 @@ export async function cancelJob(jobId: string): Promise<PublicJob> {
 }
 
 /**
- * Explicit start of processing (REQ-014: only on user confirmation).
- * REQ-014 transitions state and, when a provider is available, runs extraction
- * (mock in CI). Full extraction + schema validation is REQ-015.
+ * Explicit start of processing (only on user confirmation).
+ * REQ-015: sends the job's files to the configured model, validates the output
+ * against the ClinicOS schema (AJV), and stores the validated result on the job.
+ * Raw model response is never persisted or logged.
  */
 export async function processJob(jobId: string): Promise<PublicJob> {
   const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: true } });
@@ -208,15 +211,55 @@ export async function processJob(jobId: string): Promise<PublicJob> {
   try {
     const cfg = loadAiConfig();
     const provider = createExtractionProvider(cfg); // throws controlled error if google+no key
+
+    // Load file bytes from disk for the model.
+    const files: ExtractionFile[] = [];
+    for (const d of usable) {
+      const data = await readFile(d.storagePath);
+      files.push({ id: d.id, filename: d.filename, mimeType: d.mimeType, data });
+    }
+
+    const result = await provider.extract({
+      jobId,
+      files,
+      schema: loadExtractionSchema(cfg),
+      prompt: loadExtractionPrompt(cfg),
+    });
+
+    // Final server-side gate — never trust the provider's own `valid` flag alone.
+    const check = validateExtraction(result.data);
+    if (!check.valid) {
+      throw new AiExtractionError('schema_validation', `Output non conforme: ${check.errors.slice(0, 5).join('; ')}`);
+    }
+
     await prisma.importJob.update({
       where: { id: jobId },
-      data: { status: 'review_ready', model: provider.model },
+      data: {
+        status: 'review_ready',
+        model: result.model,
+        schemaVersion: result.schemaVersion,
+        promptVersion: result.promptVersion,
+        resultData: result.data as object,
+        error: null,
+      },
     });
   } catch (err) {
+    // Distinguish provider/config errors from schema errors; no clinical content in the message.
+    const kind = err instanceof AiExtractionError ? err.kind : 'provider_error';
     const message = err instanceof Error ? err.message : 'Errore elaborazione';
-    await prisma.importJob.update({ where: { id: jobId }, data: { status: 'failed', error: message } });
+    await prisma.importJob.update({ where: { id: jobId }, data: { status: 'failed', error: `[${kind}] ${message}` } });
   }
   return (await getJob(jobId))!;
+}
+
+/** Extraction result for review (REQ-015 → consumed by REQ-016/017). */
+export async function getJobResult(jobId: string): Promise<{ status: JobStatus; model: string | null; resultData: unknown } | null> {
+  const job = await prisma.importJob.findUnique({
+    where: { id: jobId },
+    select: { status: true, model: true, resultData: true },
+  });
+  if (!job) return null;
+  return { status: job.status as JobStatus, model: job.model, resultData: job.resultData };
 }
 
 /** Sweep expired jobs (DB rows + on-disk dirs). Safe to call periodically. */

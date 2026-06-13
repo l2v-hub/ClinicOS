@@ -6,6 +6,7 @@
 
 import { EXTRACTION_PROMPT_VERSION, EXTRACTION_SCHEMA_VERSION } from '../version.js';
 import { truncateForLog } from '../redact.js';
+import { validateExtraction } from '../extraction-validate.js';
 import {
   AiExtractionError,
   type AiExtractionProvider,
@@ -63,11 +64,14 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
     return new GoogleGenAI({ apiKey: this.opts.apiKey });
   }
 
-  private buildContents(request: ExtractionRequest) {
+  private buildContents(request: ExtractionRequest, correction?: string) {
     const parts: any[] = [
       { text: request.prompt },
       { text: `SCHEMA:\n${JSON.stringify(request.schema)}` },
     ];
+    if (correction) {
+      parts.push({ text: `CORREGGI: l'output precedente non era conforme. ${correction} Rispondi solo con JSON valido.` });
+    }
     for (const file of request.files) {
       parts.push({
         inlineData: { mimeType: file.mimeType, data: file.data.toString('base64') },
@@ -76,9 +80,9 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
     return [{ role: 'user', parts }];
   }
 
-  private async callOnce(request: ExtractionRequest): Promise<string> {
+  private async callOnce(request: ExtractionRequest, correction?: string): Promise<string> {
     const ai = await this.client();
-    const contents = this.buildContents(request);
+    const contents = this.buildContents(request, correction);
 
     const timeout = new Promise<never>((_, reject) => {
       setTimeout(
@@ -99,30 +103,40 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
   async extract(request: ExtractionRequest): Promise<ExtractionResult> {
     const warnings: ExtractionResult['warnings'] = [];
     let lastErr: unknown;
+    let correction: string | undefined;
+    let lastData: unknown = null;
 
     for (let attempt = 0; attempt <= this.opts.maxRetries; attempt++) {
       try {
-        const raw = await this.callOnce(request);
+        const raw = await this.callOnce(request, correction);
+        // Models may wrap JSON in code fences; strip a leading/trailing fence.
+        const cleaned = raw.replace(/^```(?:json)?/i, '').replace(/```$/i, '').trim();
+
         let data: unknown;
-        let valid = false;
         try {
-          // Models may wrap JSON in code fences; strip a leading/trailing fence.
-          const cleaned = raw.replace(/^```(?:json)?/i, '').replace(/```$/i, '').trim();
           data = JSON.parse(cleaned);
-          valid = true; // full schema validation is REQ-015
         } catch {
-          warnings.push({ code: 'invalid_json', message: 'Output non JSON; validazione schema in REQ-015' });
-          data = null;
+          correction = 'Output non era JSON parseabile.';
+          warnings.push({ code: 'invalid_json', message: 'Output non JSON; nuovo tentativo di correzione' });
+          continue; // retry with correction
         }
-        return {
-          jobId: request.jobId,
-          model: this.model,
-          schemaVersion: EXTRACTION_SCHEMA_VERSION,
-          promptVersion: EXTRACTION_PROMPT_VERSION,
-          data,
-          warnings,
-          valid,
-        };
+
+        lastData = data;
+        const check = validateExtraction(data);
+        if (check.valid) {
+          return {
+            jobId: request.jobId,
+            model: this.model,
+            schemaVersion: EXTRACTION_SCHEMA_VERSION,
+            promptVersion: EXTRACTION_PROMPT_VERSION,
+            data,
+            warnings,
+            valid: true,
+          };
+        }
+        // Non-conforming: feed errors back for a correction attempt.
+        correction = `Errori schema: ${check.errors.slice(0, 8).join('; ')}.`;
+        warnings.push({ code: 'schema_invalid', message: `Output non conforme allo schema (tentativo ${attempt + 1})` });
       } catch (err) {
         lastErr = err;
         if (err instanceof AiExtractionError && err.kind === 'provider_unavailable') throw err;
@@ -133,7 +147,12 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
         );
       }
     }
+
     if (lastErr instanceof AiExtractionError) throw lastErr;
+    // Retries exhausted with non-conforming output: distinguishable schema error.
+    if (lastData !== null) {
+      throw new AiExtractionError('schema_validation', 'Output non conforme allo schema dopo i retry di correzione');
+    }
     throw new AiExtractionError('provider_error', 'Estrazione fallita dopo i retry');
   }
 }

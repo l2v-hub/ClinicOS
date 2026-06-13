@@ -16,6 +16,7 @@ const BACKEND_ROOT = resolve(HERE, '..', '..');
 const DEFAULT_ASSET_DIR = resolve(BACKEND_ROOT, 'ai-assets');
 const DEFAULT_SCHEMA_PATH = resolve(DEFAULT_ASSET_DIR, 'clinicos-extraction.it.json');
 const DEFAULT_PROMPT_PATH = resolve(DEFAULT_ASSET_DIR, 'extraction-prompt.it.txt');
+const DEFAULT_OUTPUT_SCHEMA_PATH = resolve(DEFAULT_ASSET_DIR, 'clinicos-extraction.schema.json');
 
 export type AiProvider = 'google' | 'mock';
 
@@ -26,6 +27,8 @@ export interface AiConfig {
   structuredModel?: string;
   schemaPath: string;
   promptPath: string;
+  /** JSON Schema used to validate extraction OUTPUT (REQ-015). */
+  outputSchemaPath: string;
   timeoutMs: number;
   maxRetries: number;
   maxFiles: number;
@@ -60,6 +63,7 @@ export function loadAiConfig(force = false): AiConfig {
   const structuredModel = process.env.AI_STRUCTURED_MODEL?.trim() || undefined;
   const schemaPath = process.env.AI_EXTRACTION_SCHEMA_PATH?.trim() || DEFAULT_SCHEMA_PATH;
   const promptPath = process.env.AI_EXTRACTION_PROMPT_PATH?.trim() || DEFAULT_PROMPT_PATH;
+  const outputSchemaPath = process.env.AI_EXTRACTION_OUTPUT_SCHEMA_PATH?.trim() || DEFAULT_OUTPUT_SCHEMA_PATH;
   const apiKey = process.env.GEMINI_API_KEY?.trim() || undefined;
 
   const errors: string[] = [];
@@ -80,6 +84,11 @@ export function loadAiConfig(force = false): AiConfig {
   } catch {
     errors.push(`Prompt di estrazione non leggibile: ${promptPath}`);
   }
+  try {
+    JSON.parse(readFileSync(outputSchemaPath, 'utf8'));
+  } catch {
+    errors.push(`Schema di validazione output non leggibile: ${outputSchemaPath}`);
+  }
 
   // Secret only required for the real google provider.
   if (provider === 'google' && !apiKey) {
@@ -92,6 +101,7 @@ export function loadAiConfig(force = false): AiConfig {
     structuredModel,
     schemaPath,
     promptPath,
+    outputSchemaPath,
     timeoutMs: intEnv('AI_TIMEOUT_MS', 60_000),
     maxRetries: intEnv('AI_MAX_RETRIES', 2),
     maxFiles: intEnv('AI_MAX_FILES', 10),
@@ -103,6 +113,11 @@ export function loadAiConfig(force = false): AiConfig {
     apiKey,
   };
   return cached;
+}
+
+/** Load the JSON Schema used to validate extraction output (REQ-015). */
+export function loadOutputSchema(cfg = loadAiConfig()): object {
+  return JSON.parse(readFileSync(cfg.outputSchemaPath, 'utf8'));
 }
 
 /** Load the versioned extraction schema asset. */

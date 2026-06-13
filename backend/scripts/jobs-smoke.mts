@@ -61,13 +61,24 @@ try {
   body = await res.json();
   assert.equal(body.job.fileCount, 2, 'add-more works on existing job');
 
-  // 5. Cancel -> terminal + cleanup.
+  // 5. Process (REQ-015, mock provider) -> review_ready with a schema-valid result.
+  res = await fetch(`${base}/${jobId}/process`, { method: 'POST' });
+  body = await res.json();
+  assert.equal(body.status, 'review_ready', `process -> review_ready (got ${body.status} / ${body.error ?? ''})`);
+  res = await fetch(`${base}/${jobId}/result`);
+  const result = await res.json();
+  assert.equal(result.status, 'review_ready', 'result status review_ready');
+  assert.ok(result.resultData?.anagrafica && result.resultData?.cartella, 'result has anagrafica + cartella');
+  assert.equal(result.resultData.anagrafica.nome, '', 'no invented data (empty name)');
+  assert.ok(Array.isArray(result.resultData.cartella.diagnosi), 'diagnosi is an array');
+
+  // 6. Cancel -> terminal + cleanup.
   res = await fetch(`${base}/${jobId}/cancel`, { method: 'POST' });
   body = await res.json();
   assert.equal(body.status, 'expired', 'cancel marks terminal');
   assert.equal(body.totalBytes, 0, 'bytes cleared on cancel');
 
-  console.log('REQ-014 jobs-smoke: ALL ASSERTIONS PASS');
+  console.log('REQ-014/015 jobs-smoke: ALL ASSERTIONS PASS');
 } finally {
   server.close();
   const { prisma } = await import('../src/lib/prisma.js');

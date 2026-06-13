@@ -7,6 +7,7 @@ import {
   cancelJob,
   createJob,
   getJob,
+  getJobResult,
   processJob,
   removeDocument,
   reorder,
@@ -116,11 +117,22 @@ aiJobsRouter.post('/:id/cancel', async (req, res) => {
   }
 });
 
-// POST /ai/extraction/jobs/:id/process — explicit start of extraction (REQ-015 fills result).
+// POST /ai/extraction/jobs/:id/process — explicit start of extraction (REQ-015).
 aiJobsRouter.post('/:id/process', async (req, res) => {
   try {
     const job = await processJob(String(req.params.id));
     return res.status(200).json(job);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// GET /ai/extraction/jobs/:id/result — validated extraction result (REQ-015).
+aiJobsRouter.get('/:id/result', async (req, res) => {
+  try {
+    const result = await getJobResult(String(req.params.id));
+    if (!result) return res.status(404).json({ error: 'Job non trovato' });
+    return res.status(200).json(result);
   } catch (err) {
     return handleError(res, err);
   }

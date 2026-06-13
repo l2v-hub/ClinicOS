@@ -23,14 +23,33 @@ export class MockExtractionProvider implements AiExtractionProvider {
   }
 
   async extract(request: ExtractionRequest): Promise<ExtractionResult> {
+    // Schema-valid, empty instance: no data is invented (REQ-015 acceptance).
+    const data = {
+      anagrafica: { nome: '', cognome: '', dataNascita: '', sesso: '' },
+      cartella: {
+        statoRicovero: '',
+        codiceFiscale: '',
+        anamnesi: {},
+        diagnosi: [],
+        allergie: [],
+        farmaci: [],
+        terapie: [],
+        parametriVitali: [],
+        diarioMedico: [],
+        indicatoriRischio: [],
+        noteClinica: [],
+        pianoCura: {},
+        presaInCarico: {},
+      },
+    };
     return {
       jobId: request.jobId,
       model: this.model,
       schemaVersion: EXTRACTION_SCHEMA_VERSION,
       promptVersion: EXTRACTION_PROMPT_VERSION,
-      data: request.schema, // shape-only echo; REQ-015 replaces with real extraction
+      data,
       warnings: [
-        { code: 'mock_provider', message: 'Provider mock attivo: nessuna estrazione reale eseguita.' },
+        { code: 'mock_provider', message: 'Provider mock attivo: estrazione vuota, nessun dato inventato.' },
       ],
       valid: true,
     };
