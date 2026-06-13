@@ -9,6 +9,7 @@ import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionPrompt, loadExtractionSchema, type AiConfig } from '../config.js';
 import { createExtractionProvider } from '../provider-factory.js';
 import { validateExtraction } from '../extraction-validate.js';
+import { mergeExtractions, type DocResult } from '../merge.js';
 import { AiExtractionError, type ExtractionFile } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
@@ -211,35 +212,47 @@ export async function processJob(jobId: string): Promise<PublicJob> {
   try {
     const cfg = loadAiConfig();
     const provider = createExtractionProvider(cfg); // throws controlled error if google+no key
+    const schema = loadExtractionSchema(cfg);
+    const prompt = loadExtractionPrompt(cfg);
 
-    // Load file bytes from disk for the model.
-    const files: ExtractionFile[] = [];
+    // Extract each document SEPARATELY so the merge keeps per-document provenance (REQ-016).
+    const docResults: DocResult[] = [];
+    let modelUsed = provider.model;
+    let schemaVersion = '';
+    let promptVersion = '';
     for (const d of usable) {
       const data = await readFile(d.storagePath);
-      files.push({ id: d.id, filename: d.filename, mimeType: d.mimeType, data });
+      const file: ExtractionFile = { id: d.id, filename: d.filename, mimeType: d.mimeType, data };
+      const result = await provider.extract({ jobId, files: [file], schema, prompt });
+
+      // Validate EACH per-document extraction against the ClinicOS schema.
+      const check = validateExtraction(result.data);
+      if (!check.valid) {
+        throw new AiExtractionError('schema_validation', `Documento ${d.filename}: output non conforme — ${check.errors.slice(0, 4).join('; ')}`);
+      }
+      modelUsed = result.model;
+      schemaVersion = result.schemaVersion;
+      promptVersion = result.promptVersion;
+      const out = result.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> };
+      docResults.push({
+        docId: d.id,
+        filename: d.filename,
+        model: result.model,
+        data: { anagrafica: out.anagrafica, cartella: out.cartella },
+      });
     }
 
-    const result = await provider.extract({
-      jobId,
-      files,
-      schema: loadExtractionSchema(cfg),
-      prompt: loadExtractionPrompt(cfg),
-    });
-
-    // Final server-side gate — never trust the provider's own `valid` flag alone.
-    const check = validateExtraction(result.data);
-    if (!check.valid) {
-      throw new AiExtractionError('schema_validation', `Output non conforme: ${check.errors.slice(0, 5).join('; ')}`);
-    }
+    // Deterministic multi-document merge with provenance + explicit conflicts (REQ-016).
+    const merged = mergeExtractions(docResults, { preferRecent: cfg.mergePreferRecent });
 
     await prisma.importJob.update({
       where: { id: jobId },
       data: {
         status: 'review_ready',
-        model: result.model,
-        schemaVersion: result.schemaVersion,
-        promptVersion: result.promptVersion,
-        resultData: result.data as object,
+        model: modelUsed,
+        schemaVersion,
+        promptVersion,
+        resultData: merged as unknown as object,
         error: null,
       },
     });
