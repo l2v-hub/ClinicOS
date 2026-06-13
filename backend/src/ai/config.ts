@@ -5,6 +5,7 @@
 
 import 'dotenv/config';
 import { readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { EXTRACTION_PROMPT_VERSION, EXTRACTION_SCHEMA_VERSION } from './version.js';
@@ -29,6 +30,10 @@ export interface AiConfig {
   maxRetries: number;
   maxFiles: number;
   maxTotalMb: number;
+  /** Temp storage dir for uploaded import files (REQ-014). */
+  uploadDir: string;
+  /** Minutes before an import job + its files expire and are swept (REQ-014/019). */
+  jobRetentionMin: number;
   /** True only when the provider has everything it needs to run (e.g. API key present). */
   available: boolean;
   /** Human-readable reasons the service is unavailable (no secrets). */
@@ -91,6 +96,8 @@ export function loadAiConfig(force = false): AiConfig {
     maxRetries: intEnv('AI_MAX_RETRIES', 2),
     maxFiles: intEnv('AI_MAX_FILES', 10),
     maxTotalMb: intEnv('AI_MAX_TOTAL_MB', 25),
+    uploadDir: process.env.AI_UPLOAD_DIR?.trim() || resolve(tmpdir(), 'clinicos-imports'),
+    jobRetentionMin: intEnv('AI_JOB_RETENTION_MIN', 60),
     available: errors.length === 0,
     errors,
     apiKey,

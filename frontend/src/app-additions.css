@@ -6060,3 +6060,21 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .ai-import-dot.is-off { background: #98A2B3; box-shadow: 0 0 0 3px rgba(152,162,179,.15); }
 .ai-import-badge { font-size: 13px; color: var(--muted, #667085); padding: 6px 10px; }
 .ai-import-badge--loading { opacity: .7; }
+
+/* ── Discharge import modal (REQ-014) ─────────────────────────────────────── */
+.import-modal { width: min(560px, 94vw); max-height: 88vh; display: flex; flex-direction: column; gap: 12px; padding: 20px; }
+.import-modal__head { display: flex; align-items: center; justify-content: space-between; }
+.import-modal__head h2 { font-size: 18px; margin: 0; color: var(--text, #101828); }
+.import-modal__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.import-modal__limits { font-size: 13px; color: var(--muted, #667085); margin: 0; }
+.import-modal__error { color: var(--red, #DC2626); font-size: 13px; margin: 0; }
+.import-modal__rejected { list-style: none; padding: 8px 10px; margin: 0; background: #FEF3F2; border-radius: 8px; font-size: 12px; color: #B42318; }
+.import-modal__list { list-style: none; padding: 0; margin: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.import-modal__item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border, #D0D5DD); border-radius: 8px; }
+.import-modal__idx { width: 20px; height: 20px; border-radius: 50%; background: var(--c-primary, #0F5FD7); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.import-modal__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.import-modal__size { font-size: 12px; color: var(--muted, #667085); flex: 0 0 auto; }
+.import-modal__ctrls { display: inline-flex; gap: 2px; flex: 0 0 auto; }
+.import-modal__empty { color: var(--muted, #667085); font-size: 13px; padding: 16px; text-align: center; }
+.import-modal__status { font-size: 13px; margin: 0; }
+.import-modal__foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }

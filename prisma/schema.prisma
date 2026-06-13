@@ -332,3 +332,49 @@ model PatientDiaryEntry {
   @@index([authorType])
   @@index([entryDateTime])
 }
+
+// ── AI discharge-letter import (REQ-014) ──────────────────────────────────────
+// Temporary, pre-patient document import. No Patient data is written here:
+// confirmation/persistence is REQ-018. File bytes live on disk (storagePath),
+// only metadata + hash are stored in the DB.
+model ImportJob {
+  id             String           @id @default(cuid())
+  // uploaded | validating | processing | review_ready | failed | expired | confirmed
+  status         String           @default("uploaded")
+  idempotencyKey String?          @unique
+  maxFiles       Int
+  maxTotalBytes  Int
+  totalBytes     Int              @default(0)
+  error          String?
+  resultData     Json?            // populated by extraction (REQ-015)
+  model          String?
+  schemaVersion  String?
+  promptVersion  String?
+  createdById    String?
+  expiresAt      DateTime
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  documents      ImportDocument[]
+
+  @@index([status])
+  @@index([expiresAt])
+}
+
+model ImportDocument {
+  id           String    @id @default(cuid())
+  jobId        String
+  filename     String
+  mimeType     String
+  sizeBytes    Int
+  sha256       String
+  storagePath  String
+  sortOrder    Int       @default(0)
+  logicalDoc   String?   // group multiple photos into one logical document
+  status       String    @default("uploaded") // uploaded | duplicate | rejected
+  rejectReason String?
+  createdAt    DateTime  @default(now())
+  job          ImportJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, sha256])
+  @@index([jobId])
+}

@@ -10,6 +10,7 @@ import patientDiaryRouter from './routes/patient-diary.js';
 import consegneRouter from './routes/consegne.js';
 import noteRouter from './routes/note.js';
 import aiExtractionRouter from './routes/ai-extraction.js';
+import aiJobsRouter from './routes/ai-jobs.js';
 
 const app = express();
 
@@ -80,6 +81,7 @@ app.use('/therapy-slots', therapyRouter);
 app.use('/patient-intake', patientIntakeRouter);
 app.use('/consegne', consegneRouter);
 app.use('/notes', noteRouter);
+app.use('/ai/extraction/jobs', aiJobsRouter);
 app.use('/ai/extraction', aiExtractionRouter);
 
 export default app;

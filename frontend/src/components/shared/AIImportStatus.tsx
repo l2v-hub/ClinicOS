@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { API_URL } from '../../config';
+import { DischargeImportModal } from './DischargeImportModal';
 
 // REQ-013: surfaces whether the backend AI extraction service is configured and
 // usable, without ever knowing the API key (key is backend-only). Doubles as the
@@ -19,6 +20,7 @@ interface Props {
 export function AIImportStatus({ onStart }: Props) {
   const [status, setStatus] = useState<AiStatus | null>(null);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -39,16 +41,19 @@ export function AIImportStatus({ onStart }: Props) {
     : `Servizio AI non disponibile${status?.errors?.length ? ': ' + status.errors.join('; ') : ''}`;
 
   return (
-    <button
-      type="button"
-      className={`btn-secondary ai-import-btn${available ? '' : ' ai-import-btn--disabled'}`}
-      disabled={!available}
-      title={title}
-      aria-label={title}
-      onClick={available && onStart ? onStart : undefined}
-    >
-      <span className={`ai-import-dot ${available ? 'is-on' : 'is-off'}`} aria-hidden="true" />
-      Importa dimissione
-    </button>
+    <>
+      <button
+        type="button"
+        className={`btn-secondary ai-import-btn${available ? '' : ' ai-import-btn--disabled'}`}
+        disabled={!available}
+        title={title}
+        aria-label={title}
+        onClick={available ? () => { onStart?.(); setOpen(true); } : undefined}
+      >
+        <span className={`ai-import-dot ${available ? 'is-on' : 'is-off'}`} aria-hidden="true" />
+        Importa dimissione
+      </button>
+      <DischargeImportModal open={open} onClose={() => setOpen(false)} />
+    </>
   );
 }
