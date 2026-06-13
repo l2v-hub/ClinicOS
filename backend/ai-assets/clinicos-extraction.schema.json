@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://clinicos/extraction/output.schema.json",
+  "title": "ClinicOS extraction output",
+  "description": "Strict-ish JSON Schema for the structured output of the discharge-letter extraction. Missing data must be empty string/array, never invented. Unknown extra keys are tolerated; types and enums are enforced.",
+  "type": "object",
+  "required": ["anagrafica", "cartella"],
+  "additionalProperties": true,
+  "properties": {
+    "anagrafica": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "nome": { "type": "string" },
+        "cognome": { "type": "string" },
+        "dataNascita": { "type": "string" },
+        "sesso": { "type": "string", "enum": ["", "M", "F"] },
+        "email": { "type": "string" },
+        "telefono": { "type": "string" },
+        "indirizzo": { "type": "string" },
+        "contattoEmergenzaNome": { "type": "string" },
+        "contattoEmergenzaTel": { "type": "string" }
+      }
+    },
+    "cartella": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "statoRicovero": { "type": "string" },
+        "cameraNumero": { "type": "string" },
+        "lettoNumero": { "type": "string" },
+        "codiceFiscale": { "type": "string" },
+        "patologiaIngresso": { "type": "string" },
+        "diabetico": { "type": "boolean" },
+        "ipertensione": { "type": "boolean" },
+        "terapiaTriturata": { "type": "boolean" },
+        "dataRicovero": { "type": "string" },
+        "noteGenerali": { "type": "string" },
+        "medicoCurante": { "type": "string" },
+        "anamnesi": { "type": "object", "additionalProperties": true },
+        "diagnosi": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "codiceICD": { "type": "string" },
+              "descrizione": { "type": "string" },
+              "tipo": { "type": "string", "enum": ["", "principale", "comorbidita"] },
+              "stato": { "type": "string", "enum": ["", "attiva", "risolta"] }
+            }
+          }
+        },
+        "allergie": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "allergene": { "type": "string" },
+              "reazione": { "type": "string" },
+              "gravita": { "type": "string", "enum": ["", "lieve", "moderata", "grave"] }
+            }
+          }
+        },
+        "farmaci": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "nome": { "type": "string" },
+              "dose": { "type": "string" },
+              "frequenza": { "type": "string" },
+              "via": { "type": "string", "enum": ["", "orale", "sc", "im", "ev"] },
+              "stato": { "type": "string", "enum": ["", "attivo", "sospeso"] }
+            }
+          }
+        },
+        "terapie": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "tipo": { "type": "string", "enum": ["", "farmacologica", "riabilitativa", "altra"] },
+              "descrizione": { "type": "string" },
+              "stato": { "type": "string", "enum": ["", "attiva", "sospesa", "conclusa"] }
+            }
+          }
+        },
+        "parametriVitali": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "etichetta": { "type": "string" },
+              "valore": { "type": "string" },
+              "unita": { "type": "string" },
+              "stato": { "type": "string", "enum": ["", "normale", "attenzione", "critico"] }
+            }
+          }
+        },
+        "diarioMedico": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+        "indicatoriRischio": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+        "noteClinica": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+        "pianoCura": { "type": "object", "additionalProperties": true },
+        "presaInCarico": { "type": "object", "additionalProperties": true }
+      }
+    }
+  }
+}
