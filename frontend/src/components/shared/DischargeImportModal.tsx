@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../config';
+import { ImportReview } from './ImportReview';
+import type { NuovoPaziente } from '../../types';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
 // Files are added to a backend job (no patient record is created here).
 // Processing starts ONLY on explicit confirmation.
+// REQ-017: after processing, a Revisione step prefills the Nuovo Paziente form.
 
 interface JobDoc {
   id: string;
@@ -27,6 +30,8 @@ interface Outcome { filename: string; status: string; message?: string }
 interface Props {
   open: boolean;
   onClose: () => void;
+  /** REQ-017: create the reviewed patient (maps to existing patient-create). */
+  onCreatePatient?: (np: NuovoPaziente) => Promise<void>;
 }
 
 const JOBS_URL = `${API_URL}/ai/extraction/jobs`;
@@ -35,16 +40,18 @@ function fmtMB(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function DischargeImportModal({ open, onClose }: Props) {
+export function DischargeImportModal({ open, onClose, onCreatePatient }: Props) {
   const [job, setJob] = useState<Job | null>(null);
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [step, setStep] = useState<'upload' | 'review'>('upload');
+  const [proposal, setProposal] = useState<unknown>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const cameraInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!open) { setJob(null); setOutcomes([]); setError(null); }
+    if (!open) { setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); }
   }, [open]);
 
   if (!open) return null;
@@ -109,7 +116,30 @@ export function DischargeImportModal({ open, onClose }: Props) {
     try {
       const res = await fetch(`${JOBS_URL}/${job.id}/process`, { method: 'POST' });
       const data = await res.json();
-      if (res.ok) setJob(data); else setError(data.error || 'Avvio elaborazione non riuscito');
+      if (!res.ok) { setError(data.error || 'Avvio elaborazione non riuscito'); return; }
+      setJob(data);
+      if (data.status === 'review_ready') {
+        // Fetch the merged proposal and move to the Revisione step (REQ-017).
+        const r = await fetch(`${JOBS_URL}/${job.id}/result`);
+        const result = await r.json();
+        if (r.ok && result.resultData) { setProposal(result.resultData); setStep('review'); }
+        else setError('Estrazione completata ma risultato non disponibile');
+      } else if (data.status === 'failed') {
+        setError(`Elaborazione fallita: ${data.error ?? ''}. Puoi compilare manualmente senza perdere i file.`);
+      }
+    } catch {
+      setError('Errore di rete in elaborazione');
+    } finally { setBusy(false); }
+  }
+
+  async function handleCreate(np: NuovoPaziente) {
+    if (!onCreatePatient) { onClose(); return; }
+    setBusy(true); setError(null);
+    try {
+      await onCreatePatient(np);
+      onClose();
+    } catch {
+      setError('Creazione paziente non riuscita');
     } finally { setBusy(false); }
   }
 
@@ -119,14 +149,31 @@ export function DischargeImportModal({ open, onClose }: Props) {
   const maxTotalBytes = job?.maxTotalBytes ?? 25 * 1024 * 1024;
   const rejected = outcomes.filter((o) => o.status !== 'accepted');
 
+  const isReview = step === 'review' && proposal != null;
+
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Importa lettera di dimissione">
       <div className="modal-card import-modal">
         <header className="import-modal__head">
-          <h2>Importa lettera di dimissione</h2>
+          <h2>{isReview ? 'Revisione — Nuovo paziente' : 'Importa lettera di dimissione'}</h2>
           <button className="icon-btn" onClick={cancel} aria-label="Chiudi">✕</button>
         </header>
 
+        <ol className="import-modal__steps" aria-hidden="true">
+          <li className={!isReview ? 'is-active' : 'is-done'}>1. Caricamento</li>
+          <li className={isReview ? 'is-active' : ''}>2. Revisione</li>
+        </ol>
+
+        {isReview ? (
+          <ImportReview
+            proposal={proposal as Parameters<typeof ImportReview>[0]['proposal']}
+            documents={job?.documents ?? []}
+            busy={busy}
+            onBack={() => setStep('upload')}
+            onCreate={handleCreate}
+          />
+        ) : (
+        <>
         <div className="import-modal__actions">
           <button className="btn-secondary" disabled={busy} onClick={() => fileInput.current?.click()}>
             Seleziona file
@@ -177,9 +224,11 @@ export function DischargeImportModal({ open, onClose }: Props) {
         <footer className="import-modal__foot">
           <button className="btn-ghost" onClick={cancel}>Annulla</button>
           <button className="btn-primary" disabled={busy || count === 0} onClick={startProcessing}>
-            Avvia elaborazione
+            {busy ? 'Elaborazione…' : 'Avvia elaborazione'}
           </button>
         </footer>
+        </>
+        )}
       </div>
     </div>
   );

@@ -15,9 +15,10 @@ interface AiStatus {
 
 interface Props {
   onStart?: () => void;
+  onCreatePatient?: (np: import('../../types').NuovoPaziente) => Promise<void>;
 }
 
-export function AIImportStatus({ onStart }: Props) {
+export function AIImportStatus({ onStart, onCreatePatient }: Props) {
   const [status, setStatus] = useState<AiStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -53,7 +54,7 @@ export function AIImportStatus({ onStart }: Props) {
         <span className={`ai-import-dot ${available ? 'is-on' : 'is-off'}`} aria-hidden="true" />
         Importa dimissione
       </button>
-      <DischargeImportModal open={open} onClose={() => setOpen(false)} />
+      <DischargeImportModal open={open} onClose={() => setOpen(false)} onCreatePatient={onCreatePatient} />
     </>
   );
 }
