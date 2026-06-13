@@ -188,6 +188,15 @@ export async function reorder(jobId: string, orderedDocIds: string[]): Promise<P
   return (await getJob(jobId))!;
 }
 
+/** Assign a logical-document label to a single item (group multiple photos as one doc). */
+export async function setLogicalDoc(jobId: string, docId: string, logicalDoc: string): Promise<PublicJob> {
+  const doc = await prisma.importDocument.findFirst({ where: { id: docId, jobId } });
+  if (!doc) throw new AiExtractionError('config', 'Documento non trovato');
+  const value = logicalDoc.trim().slice(0, 80) || null;
+  await prisma.importDocument.update({ where: { id: doc.id }, data: { logicalDoc: value } });
+  return (await getJob(jobId))!;
+}
+
 /** Cancel a job: delete files on disk and mark terminal. */
 export async function cancelJob(jobId: string): Promise<PublicJob> {
   await removeJobDir(jobId);

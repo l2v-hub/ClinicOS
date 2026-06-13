@@ -6116,3 +6116,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .ir-src-inline { font-size: 11px; color: var(--muted, #667085); margin-left: auto; }
 .ir-docs { list-style: none; margin: 0; padding: 0; font-size: 13px; color: #344054; display: flex; flex-direction: column; gap: 3px; }
 @media (max-width: 760px) { .import-review__grid { grid-template-columns: 1fr; } }
+
+/* ── Import: logical-doc grouping input (REQ-014 residual) ─────────────────── */
+.import-modal__logical { width: 64px; flex: 0 0 auto; font-size: 12px; padding: 3px 6px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; }
+.import-modal__logical:focus { border-color: var(--c-primary, #0F5FD7); outline: none; }

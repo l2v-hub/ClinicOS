@@ -15,6 +15,7 @@ interface JobDoc {
   sizeBytes: number;
   sortOrder: number;
   status: string;
+  logicalDoc?: string | null;
 }
 interface Job {
   id: string;
@@ -94,6 +95,25 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
       const data = await res.json();
       if (res.ok) setJob(data);
     } finally { setBusy(false); }
+  }
+
+  // REQ-014: rifare una singola foto = rimuovi + riapri fotocamera.
+  async function retake(docId: string) {
+    await removeDoc(docId);
+    cameraInput.current?.click();
+  }
+
+  // REQ-014: assegna più foto allo stesso documento logico.
+  async function setLogical(docId: string, logicalDoc: string) {
+    if (!job) return;
+    try {
+      const res = await apiFetch(`${JOBS_URL}/${job.id}/files/${docId}/logical`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ logicalDoc }),
+      });
+      const data = await res.json();
+      if (res.ok) setJob(data);
+    } catch { /* ignore */ }
   }
 
   async function move(docId: string, dir: -1 | 1) {
@@ -245,10 +265,21 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
             <li key={d.id} className="import-modal__item">
               <span className="import-modal__idx">{idx + 1}</span>
               <span className="import-modal__name">{d.filename}</span>
+              <input
+                className="import-modal__logical"
+                defaultValue={d.logicalDoc ?? ''}
+                placeholder="Doc."
+                title="Documento logico (raggruppa più foto)"
+                disabled={busy}
+                onBlur={(e) => { if ((e.target.value || '') !== (d.logicalDoc ?? '')) setLogical(d.id, e.target.value); }}
+              />
               <span className="import-modal__size">{fmtMB(d.sizeBytes)}</span>
               <span className="import-modal__ctrls">
                 <button className="icon-btn" disabled={busy || idx === 0} onClick={() => move(d.id, -1)} aria-label="Su">↑</button>
                 <button className="icon-btn" disabled={busy || idx === job.documents.length - 1} onClick={() => move(d.id, 1)} aria-label="Giù">↓</button>
+                {d.mimeType.startsWith('image/') && (
+                  <button className="icon-btn" disabled={busy} onClick={() => retake(d.id)} aria-label="Rifai foto" title="Rifai foto">📷</button>
+                )}
                 <button className="icon-btn" disabled={busy} onClick={() => removeDoc(d.id)} aria-label="Rimuovi">🗑</button>
               </span>
             </li>

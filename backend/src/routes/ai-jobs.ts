@@ -11,6 +11,7 @@ import {
   processJob,
   removeDocument,
   reorder,
+  setLogicalDoc,
   sweepExpiredJobs,
 } from '../ai/upload/job-service.js';
 import type { IncomingFile } from '../ai/upload/validation.js';
@@ -114,6 +115,17 @@ aiJobsRouter.post('/:id/reorder', async (req, res) => {
   try {
     const order: string[] = Array.isArray(req.body?.order) ? req.body.order : [];
     const job = await reorder(String(req.params.id), order);
+    return res.status(200).json(job);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// POST /ai/extraction/jobs/:id/files/:docId/logical — group photos into one logical document.
+aiJobsRouter.post('/:id/files/:docId/logical', async (req, res) => {
+  try {
+    const logicalDoc = typeof req.body?.logicalDoc === 'string' ? req.body.logicalDoc : '';
+    const job = await setLogicalDoc(String(req.params.id), String(req.params.docId), logicalDoc);
     return res.status(200).json(job);
   } catch (err) {
     return handleError(res, err);
