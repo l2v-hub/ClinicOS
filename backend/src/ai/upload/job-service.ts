@@ -13,7 +13,7 @@ import { loadAiConfig, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
-import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
+import { removeFile, removeJobDir, storeFile, sweepEhxpiredDirs } from './storage.js';
 
 export type JobStatus =
   | 'created' | 'uploaded' | 'queued' | 'uploading_to_google' | 'waiting_for_model'
@@ -242,7 +242,7 @@ export async function addFiles(jobId: string, files: IncomingFile[]): Promise<{ 
       continue;
     }
 
-    const storagePath = await storeFile(jobId, vf);
+    const storagePath = await storeFile(jobId, vf.sha256, incoming.data);
     const doc = await prisma.importDocument.create({
       data: {
         jobId,
@@ -309,7 +309,7 @@ export async function getJob(jobId: string): Promise<PublicJob | null> {
 }
 
 /** Remove a single document from a job (before processing). */
-export async function removeDoc(jobId: string, docId: string): Promise<PublicJob> {
+export async function removeDocument(jobId: string, docId: string): Promise<PublicJob> {
   const doc = await prisma.importDocument.findFirst({ where: { id: docId, jobId } });
   if (!doc) throw new AiExtractionError('config', 'Documento non trovato');
   if (doc.storagePath) await removeFile(doc.storagePath);
