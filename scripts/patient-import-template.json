@@ -1,0 +1,298 @@
+{
+  "paziente": {
+    "firstName": "",
+    "lastName": "",
+    "dateOfBirth": "YYYY-MM-DD",
+    "sex": "",
+    "email": "",
+    "phone": "",
+    "address": "",
+    "emergencyContactName": "",
+    "emergencyContactPhone": ""
+  },
+  "cartella": {
+    "statoRicovero": "ricoverato",
+    "cameraNumero": "",
+    "lettoNumero": "",
+    "codiceFiscale": "",
+    "contattoEmergenzaNome": "",
+    "contattoEmergenzaTel": "",
+    "contattoEmergenzaRel": "",
+    "patologiaIngresso": "",
+    "diabetico": false,
+    "ipertensione": false,
+    "terapiaTriturata": false,
+    "dataRicovero": "YYYY-MM-DD",
+    "noteGenerali": "",
+    "medicoCurante": "",
+
+    "anamnesi": {
+      "fisiologica": "",
+      "patologicaRemota": "",
+      "patologicaProssima": "",
+      "familiare": "",
+      "lavorativa": "",
+      "abitudini": "",
+      "note": "",
+      "operatore": ""
+    },
+
+    "diagnosi": [
+      {
+        "codiceICD": "",
+        "descrizione": "",
+        "tipo": "principale | comorbidita",
+        "stato": "attiva | risolta",
+        "dataInsorgenza": "YYYY-MM-DD",
+        "operatore": "",
+        "note": ""
+      }
+    ],
+
+    "allergie": [
+      {
+        "allergene": "",
+        "reazione": "",
+        "gravita": "lieve | moderata | grave",
+        "documentato": "YYYY-MM-DD",
+        "documentatoDa": "",
+        "note": ""
+      }
+    ],
+
+    "farmaci": [
+      {
+        "nome": "",
+        "dose": "",
+        "frequenza": "",
+        "via": "orale | sc | im | ev",
+        "inizio": "YYYY-MM-DD",
+        "stato": "attivo | sospeso",
+        "prescrittoDA": "",
+        "indicazione": "",
+        "h08": "",
+        "h12": "",
+        "h16": "",
+        "h20": "",
+        "h22": ""
+      }
+    ],
+
+    "terapie": [
+      {
+        "tipo": "farmacologica | riabilitativa | altra",
+        "descrizione": "",
+        "dataInizio": "YYYY-MM-DD",
+        "stato": "attiva | sospesa | conclusa",
+        "operatore": "",
+        "note": ""
+      }
+    ],
+
+    "parametriVitali": [
+      {
+        "etichetta": "PA | FC | SpO2 | TC | DTX",
+        "valore": "",
+        "unita": "",
+        "stato": "normale | attenzione | critico",
+        "rilevato": "YYYY-MM-DD",
+        "rilevatoDa": ""
+      }
+    ],
+
+    "parametriMensili": [
+      {
+        "mese": 0,
+        "anno": 0,
+        "giorni": [
+          {
+            "giorno": 0,
+            "pa": "",
+            "fc": "",
+            "spo2": "",
+            "temperatura": "",
+            "dtx08": "",
+            "dtx12": "",
+            "dtx18": "",
+            "evacuazione": "Sì | No",
+            "note": ""
+          }
+        ]
+      }
+    ],
+
+    "diarioInfermieristico": [
+      {
+        "data": "YYYY-MM-DD",
+        "ora": "HH:MM",
+        "turno": "mattina | pomeriggio | notte",
+        "tipo": "ordinario | urgente | segnalazione",
+        "testo": "",
+        "operatore": "",
+        "priorita": "normale | alta | urgente",
+        "stato": "aperta | completata"
+      }
+    ],
+
+    "diarioMedico": [
+      {
+        "data": "YYYY-MM-DD",
+        "ora": "HH:MM",
+        "turno": "mattina | pomeriggio | notte",
+        "tipo": "ordinario | urgente",
+        "testo": "",
+        "operatore": "",
+        "prescrizione": "",
+        "evoluzione": "",
+        "firmaMedico": ""
+      }
+    ],
+
+    "medicazioniFerite": [
+      {
+        "data": "YYYY-MM-DD",
+        "sede": "",
+        "tipoLesione": "LDP | ulcera | ferita chirurgica | altra",
+        "grado": "",
+        "tipoMedicazione": "",
+        "materiale": "",
+        "aspettoLesione": "",
+        "dimensioni": "",
+        "odore": false,
+        "essudato": "assente | scarso | moderato | abbondante",
+        "cutePerilisionale": "",
+        "prossimaMedicazione": "",
+        "operatore": "",
+        "note": "",
+        "followUps": [
+          {
+            "data": "YYYY-MM-DD",
+            "siglaOperatore": "",
+            "motivoSostituzione": "",
+            "note": ""
+          }
+        ]
+      }
+    ],
+
+    "documentiConsegnati": [
+      {
+        "tipo": "documento_identita | tessera_sanitaria | consenso_privacy | lettera_dimissione | prescrizione",
+        "descrizione": "",
+        "dataConsegna": "YYYY-MM-DD",
+        "firmatoDA": "",
+        "operatore": "",
+        "note": "",
+        "stato": "ricevuto | firmato | mancante"
+      }
+    ],
+
+    "valutazioniBraden": [
+      {
+        "data": "YYYY-MM-DD",
+        "percezioneSensoriale": 0,
+        "umidita": 0,
+        "attivita": 0,
+        "mobilita": 0,
+        "nutrizione": 0,
+        "frizione": 0,
+        "operatore": "",
+        "note": ""
+      }
+    ],
+
+    "contenzioni": [
+      {
+        "dataInizio": "YYYY-MM-DD",
+        "oraInizio": "HH:MM",
+        "tipo": "spondina | cintura | altra",
+        "motivoClinico": "",
+        "autorizzazioneMedico": false,
+        "autorizzazioneTutore": false,
+        "intervalloRivalutazione": 24,
+        "dataFine": "",
+        "oraFine": "",
+        "attiva": false,
+        "operatore": "",
+        "note": "",
+        "spondineAttive": false,
+        "spondineFrequenza": "",
+        "motivCadute": false,
+        "firmaPazienteReferente": ""
+      }
+    ],
+
+    "indicatoriRischio": [
+      {
+        "tipo": "caduta | lesioni_pressione | nutrizionale | altro",
+        "livello": "basso | medio | alto",
+        "descrizione": "",
+        "dataValutazione": "YYYY-MM-DD",
+        "operatore": ""
+      }
+    ],
+
+    "pianoCura": {
+      "obiettivi": "",
+      "interventiPrevisti": "",
+      "notePianificazione": "",
+      "dataAggiornamento": "YYYY-MM-DD",
+      "operatore": ""
+    },
+
+    "noteClinica": [
+      {
+        "tipo": "clinica | nursing",
+        "contenuto": "",
+        "operatore": ""
+      }
+    ],
+
+    "visite": [
+      {
+        "tipo": "Visita medica | Fisioterapia | Specialistica | altra",
+        "data": "YYYY-MM-DD",
+        "ora": "HH:MM",
+        "operatore": "",
+        "descrizione": "",
+        "esito": "",
+        "followUp": ""
+      }
+    ],
+
+    "interventi": [],
+
+    "presaInCarico": {
+      "dataIngresso": "YYYY-MM-DD",
+      "oraIngresso": "HH:MM",
+      "provenienza": "dimissione_ospedaliera | domicilio | altra_struttura",
+      "centroInviante": "",
+      "modalitaIngresso": "ambulante | barella | carrozzina",
+      "accompagnatoDa": "",
+      "motivoIngresso": "",
+      "operatoreResponsabile": "",
+      "condizioniGenerali": "buone | discrete | scadute",
+      "condizioniIniziali": "",
+      "noteIniziali": "",
+      "camera": "",
+      "letto": "",
+      "statoCoscienza": "vigile | soporoso | non_responsivo",
+      "orientamento": "orientato | disorientato",
+      "autonomia": "autonomo | parzialmente_autonomo | dipendente",
+      "comunicazione": "",
+      "udito": "",
+      "vista": "",
+      "dentizione": "",
+      "alimentazione": "",
+      "eliminazioneUrinaria": "",
+      "eliminazioneIntestinale": "",
+      "mobilita": "",
+      "cuteIntegrita": "",
+      "dolore": "assente | presente",
+      "doloreLivello": 0,
+      "materialeConsegnato": false,
+      "operatore": "",
+      "note": ""
+    }
+  }
+}

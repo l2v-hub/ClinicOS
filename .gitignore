@@ -33,3 +33,6 @@ backend/.env.local
 *.sw?
 
 .vercel
+
+# Claude local settings (may contain tokens) — never commit
+.claude/settings.local.json
