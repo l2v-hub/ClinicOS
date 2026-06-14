@@ -25,6 +25,10 @@ export interface AiConfig {
   model: string;
   /** Optional separate model for structured output (REQ-015 fallback). */
   structuredModel?: string;
+  /** Function-calling model for the ExtractionAgent loop (REQ-021). */
+  agentModel: string;
+  /** Use the agent-native extraction loop (default true); false = legacy pipeline. */
+  useAgent: boolean;
   schemaPath: string;
   promptPath: string;
   /** JSON Schema used to validate extraction OUTPUT (REQ-015). */
@@ -63,6 +67,8 @@ export function loadAiConfig(force = false): AiConfig {
   const provider = (process.env.AI_PROVIDER ?? 'google').trim().toLowerCase() as AiProvider;
   const model = (process.env.AI_MODEL ?? 'gemma-4-31b-it').trim();
   const structuredModel = process.env.AI_STRUCTURED_MODEL?.trim() || undefined;
+  const agentModel = process.env.AI_AGENT_MODEL?.trim() || 'gemini-2.0-flash';
+  const useAgent = (process.env.AI_USE_AGENT ?? 'true').trim().toLowerCase() !== 'false';
   const schemaPath = process.env.AI_EXTRACTION_SCHEMA_PATH?.trim() || DEFAULT_SCHEMA_PATH;
   const promptPath = process.env.AI_EXTRACTION_PROMPT_PATH?.trim() || DEFAULT_PROMPT_PATH;
   const outputSchemaPath = process.env.AI_EXTRACTION_OUTPUT_SCHEMA_PATH?.trim() || DEFAULT_OUTPUT_SCHEMA_PATH;
@@ -101,6 +107,8 @@ export function loadAiConfig(force = false): AiConfig {
     provider: provider === 'mock' ? 'mock' : 'google',
     model,
     structuredModel,
+    agentModel,
+    useAgent,
     schemaPath,
     promptPath,
     outputSchemaPath,

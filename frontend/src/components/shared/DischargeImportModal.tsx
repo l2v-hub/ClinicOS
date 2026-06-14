@@ -161,11 +161,14 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     } finally { setBusy(false); }
   }
 
-  // REQ-018: transactional, idempotent, duplicate-checked confirm.
+  // REQ-018/021: transactional confirm — create new OR update existing patient.
   async function handleCreate(np: NuovoPaziente) {
     if (!job) return;
     setBusy(true); setError(null);
+    const target = (proposal as { _target?: { mode?: string; patientId?: string } } | null)?._target;
     const body = (confirmDuplicate: boolean) => ({
+      mode: target?.mode === 'existing' ? 'existing' : 'new',
+      patientId: target?.mode === 'existing' ? target?.patientId : undefined,
       patient: {
         firstName: np.firstName, lastName: np.lastName, dateOfBirth: np.dateOfBirth,
         sex: np.sex, email: np.email, phone: np.phone, address: np.address,

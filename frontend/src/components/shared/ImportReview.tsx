@@ -11,10 +11,12 @@ interface Candidate { value: unknown; sources: Provenance[] }
 interface MergedField { status: string; value: unknown; candidates?: Candidate[]; sources: Provenance[] }
 interface MergedItem { key: string; value: Record<string, unknown>; status: string; candidates?: Candidate[]; sources: Provenance[] }
 interface MergedList { status: string; items: MergedItem[]; duplicatesRemoved: number }
+interface TargetDecision { mode: 'new' | 'existing'; patientId?: string; patientLabel?: string; medicalRecordNumber?: string; reason?: string }
 interface MergedProposal {
   _merge: { version: string; report: { filled: number; missing: number; conflict: number; duplicate: number }; documents: Provenance[] };
   anagrafica: Record<string, MergedField>;
   cartella: Record<string, MergedField | MergedList>;
+  _target?: TargetDecision;
 }
 
 interface JobDoc { id: string; filename: string; sizeBytes: number }
@@ -117,8 +119,18 @@ export function ImportReview({ proposal, documents, busy, onCreate, onBack }: Pr
     { key: 'motivoIngresso', label: 'Motivo ingresso', field: asField(proposal.cartella.patologiaIngresso) },
   ];
 
+  const target = proposal._target;
+  const isExisting = target?.mode === 'existing';
+
   return (
     <div className="import-review">
+      {target && (
+        <div className={`import-review__target ${isExisting ? 'is-existing' : 'is-new'}`}>
+          {isExisting
+            ? <>↻ <strong>Aggiorna paziente esistente</strong>{target.patientLabel ? `: ${target.patientLabel}` : ''}{target.medicalRecordNumber ? ` (${target.medicalRecordNumber})` : ''}{target.reason ? ` — ${target.reason}` : ''}</>
+            : <>＋ <strong>Nuovo paziente</strong>{target.reason ? ` — ${target.reason}` : ''}</>}
+        </div>
+      )}
       <div className="import-review__summary">
         <span className="ir-pill ir-pill--ok">{report.filled} compilati</span>
         <span className="ir-pill ir-pill--warn">{report.missing} mancanti</span>
@@ -201,7 +213,7 @@ export function ImportReview({ proposal, documents, busy, onCreate, onBack }: Pr
       {error && <p className="import-modal__error">{error}</p>}
       <footer className="import-modal__foot">
         <button className="btn-ghost" disabled={busy} onClick={onBack}>Indietro</button>
-        <button className="btn-primary" disabled={busy} onClick={submit}>Crea paziente</button>
+        <button className="btn-primary" disabled={busy} onClick={submit}>{isExisting ? 'Aggiorna paziente' : 'Crea paziente'}</button>
       </footer>
     </div>
   );

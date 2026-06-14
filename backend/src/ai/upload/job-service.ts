@@ -10,6 +10,9 @@ import { loadAiConfig, loadExtractionPrompt, loadExtractionSchema, type AiConfig
 import { createExtractionProvider } from '../provider-factory.js';
 import { validateExtraction } from '../extraction-validate.js';
 import { mergeExtractions, type DocResult } from '../merge.js';
+import { createAgentProvider } from '../agent/factory.js';
+import { buildAgentProposal, proposalToExtractionData } from '../agent/tools.js';
+import { recordAudit } from '../audit.js';
 import { AiExtractionError, type ExtractionFile } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
@@ -220,9 +223,35 @@ export async function processJob(jobId: string): Promise<PublicJob> {
   await prisma.importJob.update({ where: { id: jobId }, data: { status: 'processing', error: null } });
   try {
     const cfg = loadAiConfig();
-    const provider = createExtractionProvider(cfg); // throws controlled error if google+no key
     const schema = loadExtractionSchema(cfg);
     const prompt = loadExtractionPrompt(cfg);
+
+    // ── Agent-native path (REQ-021): an agent loop with tools decides new vs
+    //    existing patient and produces the proposal. Persistence stays gated.
+    if (cfg.useAgent) {
+      const files: ExtractionFile[] = [];
+      for (const d of usable) {
+        files.push({ id: d.id, filename: d.filename, mimeType: d.mimeType, data: await readFile(d.storagePath) });
+      }
+      const agent = createAgentProvider(cfg);
+      const result = await agent.run({ jobId, files, schema, prompt });
+
+      // Validate the agent's extraction against the ClinicOS schema (final gate).
+      const check = validateExtraction(proposalToExtractionData(result.input));
+      if (!check.valid) {
+        throw new AiExtractionError('schema_validation', `Proposta agente non conforme: ${check.errors.slice(0, 4).join('; ')}`);
+      }
+      const proposal = buildAgentProposal(result.input, result.model, files.map((f) => f.filename));
+      await prisma.importJob.update({
+        where: { id: jobId },
+        data: { status: 'review_ready', model: result.model, resultData: proposal as unknown as object, error: null },
+      });
+      await recordAudit(jobId, 'process_completed', { detail: `agent target=${proposal._target.mode} tools=${result.toolTrace.join(',')}` });
+      return (await getJob(jobId))!;
+    }
+
+    // ── Legacy pipeline (per-document extract + deterministic merge) ──────────
+    const provider = createExtractionProvider(cfg); // throws controlled error if google+no key
 
     // Extract each document SEPARATELY so the merge keeps per-document provenance (REQ-016).
     const docResults: DocResult[] = [];
