@@ -5,6 +5,7 @@
 import assert from 'node:assert/strict';
 import app from '../src/app.js';
 import { prisma } from '../src/lib/prisma.js';
+import { runJob } from '../src/ai/upload/job-service.js';
 
 const PDF = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.from('synthetic confirm test')]);
 const server = app.listen(0);
@@ -27,7 +28,9 @@ async function newReviewReadyJob(): Promise<string> {
   const jobId = body.job.id as string;
   createdJobIds.push(jobId);
   res = await af(`${base}/${jobId}/process`, { method: 'POST' });
-  const pj = await res.json();
+  assert.equal(res.status, 202, 'process 202 async');
+  await runJob(jobId);
+  const pj = await (await af(`${base}/${jobId}`)).json();
   assert.equal(pj.status, 'review_ready', 'job review_ready');
   return jobId;
 }

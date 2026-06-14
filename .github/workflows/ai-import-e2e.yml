@@ -64,6 +64,8 @@ jobs:
         run: node node_modules/tsx/dist/cli.mjs e2e/agent-smoke.mjs
         env:
           AI_USE_AGENT: "true"
+      - name: Async import E2E (REQ-022, 202 + worker + reclaim + retry)
+        run: node node_modules/tsx/dist/cli.mjs e2e/async-smoke.mjs
 
   browser-e2e:
     runs-on: ubuntu-latest

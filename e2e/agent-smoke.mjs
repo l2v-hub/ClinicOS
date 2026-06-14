@@ -5,6 +5,7 @@
 import assert from 'node:assert/strict';
 import app from '../backend/src/app.js';
 import { prisma } from '../backend/src/lib/prisma.js';
+import { runJob } from '../backend/src/ai/upload/job-service.js';
 
 const OP = { 'X-Operator-Id': 'op-agent', 'X-Operator-Role': 'operatore' };
 const server = app.listen(0);
@@ -23,7 +24,9 @@ async function reviewReadyJob() {
   const b = await r.json();
   jobs.push(b.job.id);
   r = await af(`${base}/${b.job.id}/process`, { method: 'POST' });
-  const pj = await r.json();
+  assert.equal(r.status, 202, 'process 202 async');
+  await runJob(b.job.id);
+  const pj = await (await af(`${base}/${b.job.id}`)).json();
   assert.equal(pj.status, 'review_ready', `review_ready (got ${pj.status}/${pj.error ?? ''})`);
   const res = await (await af(`${base}/${b.job.id}/result`)).json();
   return { jobId: b.job.id, proposal: res.resultData };

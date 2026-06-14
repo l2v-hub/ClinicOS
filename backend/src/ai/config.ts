@@ -29,6 +29,10 @@ export interface AiConfig {
   agentModel: string;
   /** Use the agent-native extraction loop (default true); false = legacy pipeline. */
   useAgent: boolean;
+  /** Async worker (REQ-022): per-request model timeout, overall job cap, poll interval. */
+  requestTimeoutMs: number;
+  jobMaxDurationMs: number;
+  jobPollIntervalMs: number;
   schemaPath: string;
   promptPath: string;
   /** JSON Schema used to validate extraction OUTPUT (REQ-015). */
@@ -119,6 +123,9 @@ export function loadAiConfig(force = false): AiConfig {
     uploadDir: process.env.AI_UPLOAD_DIR?.trim() || resolve(tmpdir(), 'clinicos-imports'),
     jobRetentionMin: intEnv('AI_JOB_RETENTION_MIN', 60),
     mergePreferRecent: (process.env.AI_MERGE_PREFER_RECENT ?? 'true').trim().toLowerCase() !== 'false',
+    requestTimeoutMs: intEnv('AI_REQUEST_TIMEOUT_MS', 300_000),
+    jobMaxDurationMs: intEnv('AI_JOB_MAX_DURATION_MS', 900_000),
+    jobPollIntervalMs: intEnv('AI_JOB_POLL_INTERVAL_MS', 2_000),
     available: errors.length === 0,
     errors,
     apiKey,

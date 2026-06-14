@@ -18,7 +18,11 @@ import { validateFile, type IncomingFile, type RejectReason } from './validation
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
 
 export type JobStatus =
-  | 'uploaded' | 'validating' | 'processing' | 'review_ready' | 'failed' | 'expired' | 'confirmed';
+  | 'created' | 'uploaded' | 'queued' | 'uploading_to_google' | 'waiting_for_model'
+  | 'validating_response' | 'repairing_response' | 'review_ready' | 'retryable_error'
+  | 'failed' | 'expired' | 'cancelled' | 'confirmed'
+  // legacy transient kept for backward compatibility
+  | 'validating' | 'processing';
 
 export interface FileOutcome {
   filename: string;
@@ -43,6 +47,14 @@ export interface PublicDocument {
 export interface PublicJob {
   id: string;
   status: JobStatus;
+  // REQ-022 async progress
+  stage: string | null;
+  completedFiles: number;
+  totalFiles: number;
+  currentFileName: string | null;
+  elapsedSeconds: number;
+  canRetry: boolean;
+  canCancel: boolean;
   maxFiles: number;
   maxTotalBytes: number;
   totalBytes: number;
@@ -53,6 +65,9 @@ export interface PublicJob {
   createdAt: string;
   documents: PublicDocument[];
 }
+
+const TERMINAL: JobStatus[] = ['review_ready', 'failed', 'expired', 'cancelled', 'confirmed'];
+const ACTIVE: JobStatus[] = ['queued', 'uploading_to_google', 'waiting_for_model', 'validating_response', 'repairing_response', 'processing'];
 
 function expiry(cfg: AiConfig): Date {
   return new Date(Date.now() + cfg.jobRetentionMin * 60_000);
@@ -144,9 +159,20 @@ export async function getJob(jobId: string): Promise<PublicJob | null> {
     include: { documents: { orderBy: { sortOrder: 'asc' } } },
   });
   if (!job) return null;
+  const status = job.status as JobStatus;
+  const totalFiles = job.documents.filter((d) => d.status !== 'duplicate' && d.status !== 'rejected').length;
+  const completedFiles = job.documents.filter((d) => d.status === 'completed' || d.status === 'uploaded').length;
+  const elapsedSeconds = job.startedAt ? Math.max(0, Math.round((Date.now() - job.startedAt.getTime()) / 1000)) : 0;
   return {
     id: job.id,
-    status: job.status as JobStatus,
+    status,
+    stage: job.stage,
+    completedFiles,
+    totalFiles,
+    currentFileName: job.currentFileName,
+    elapsedSeconds,
+    canRetry: status === 'retryable_error' || status === 'failed',
+    canCancel: ACTIVE.includes(status) || status === 'uploaded',
     maxFiles: job.maxFiles,
     maxTotalBytes: job.maxTotalBytes,
     totalBytes: job.totalBytes,
@@ -208,19 +234,47 @@ export async function cancelJob(jobId: string): Promise<PublicJob> {
   return (await getJob(jobId))!;
 }
 
-/**
- * Explicit start of processing (only on user confirmation).
- * REQ-015: sends the job's files to the configured model, validates the output
- * against the ClinicOS schema (AJV), and stores the validated result on the job.
- * Raw model response is never persisted or logged.
- */
-export async function processJob(jobId: string): Promise<PublicJob> {
+/** Enqueue a job for async processing (REQ-022): returns immediately; the worker runs it. */
+export async function enqueueJob(jobId: string): Promise<PublicJob> {
   const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: true } });
   if (!job) throw new AiExtractionError('config', 'Job non trovato');
-  const usable = job.documents.filter((d) => d.status === 'uploaded');
-  if (usable.length === 0) throw new AiExtractionError('config', 'Nessun documento valido da elaborare');
+  if (job.status === 'review_ready' || job.status === 'confirmed') return (await getJob(jobId))!;
+  if (job.documents.filter((d) => d.status === 'uploaded').length === 0) {
+    throw new AiExtractionError('config', 'Nessun documento valido da elaborare');
+  }
+  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'queued', stage: 'queued', error: null, errorCode: null } });
+  await recordAudit(jobId, 'process_started', { detail: 'queued' });
+  return (await getJob(jobId))!;
+}
 
-  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'processing', error: null } });
+/** Re-queue a failed/retryable job WITHOUT re-uploading documents (REQ-022). */
+export async function retryJob(jobId: string): Promise<PublicJob> {
+  const job = await prisma.importJob.findUnique({ where: { id: jobId } });
+  if (!job) throw new AiExtractionError('config', 'Job non trovato');
+  if (!['retryable_error', 'failed'].includes(job.status)) {
+    throw new AiExtractionError('config', `Job non ritentabile nello stato ${job.status}`);
+  }
+  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'queued', stage: 'queued', error: null, errorCode: null } });
+  await recordAudit(jobId, 'process_started', { detail: 'retry → queued' });
+  return (await getJob(jobId))!;
+}
+
+async function setState(jobId: string, status: JobStatus, extra: Record<string, unknown> = {}): Promise<void> {
+  await prisma.importJob.update({ where: { id: jobId }, data: { status, ...extra } });
+}
+
+/**
+ * Worker entrypoint (REQ-022): run a CLAIMED job through the extraction state
+ * machine. The model's raw response is never persisted or logged. Timeout/provider
+ * failures become retryable_error (documents kept); schema/config errors are terminal.
+ */
+export async function runJob(jobId: string): Promise<void> {
+  const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: true } });
+  if (!job) return;
+  const usable = job.documents.filter((d) => d.status === 'uploaded');
+  if (usable.length === 0) { await setState(jobId, 'failed', { error: 'Nessun documento valido', errorCode: 'no_documents', stage: 'error' }); return; }
+
+  await setState(jobId, 'uploading_to_google', { stage: 'uploading_files', startedAt: new Date(), error: null, errorCode: null, attempts: { increment: 1 } });
   try {
     const cfg = loadAiConfig();
     const schema = loadExtractionSchema(cfg);
@@ -236,20 +290,19 @@ export async function processJob(jobId: string): Promise<PublicJob> {
         for (const d of usable) {
           files.push({ id: d.id, filename: d.filename, mimeType: d.mimeType, data: await readFile(d.storagePath) });
         }
+        await setState(jobId, 'waiting_for_model', { stage: 'model_processing' });
         const agent = createAgentProvider(cfg);
         const result = await agent.run({ jobId, files, schema, prompt });
 
+        await setState(jobId, 'validating_response', { stage: 'validating', model: result.model });
         const check = validateExtraction(proposalToExtractionData(result.input));
         if (!check.valid) {
           throw new AiExtractionError('schema_validation', `Proposta agente non conforme: ${check.errors.slice(0, 4).join('; ')}`);
         }
         const proposal = buildAgentProposal(result.input, result.model, files.map((f) => f.filename));
-        await prisma.importJob.update({
-          where: { id: jobId },
-          data: { status: 'review_ready', model: result.model, resultData: proposal as unknown as object, error: null },
-        });
+        await setState(jobId, 'review_ready', { stage: 'completed', model: result.model, resultData: proposal as unknown as object, error: null, errorCode: null });
         await recordAudit(jobId, 'process_completed', { detail: `agent target=${proposal._target.mode} tools=${result.toolTrace.join(',')}` });
-        return (await getJob(jobId))!;
+        return;
       } catch (agentErr) {
         const msg = agentErr instanceof Error ? agentErr.message : String(agentErr);
         console.warn(`[ai] agent path failed, falling back to legacy pipeline: ${msg.slice(0, 160)}`);
@@ -259,6 +312,7 @@ export async function processJob(jobId: string): Promise<PublicJob> {
     }
 
     // ── Legacy pipeline (per-document extract + deterministic merge) ──────────
+    await setState(jobId, 'waiting_for_model', { stage: 'model_processing' });
     const provider = createExtractionProvider(cfg); // throws controlled error if google+no key
 
     // Extract each document SEPARATELY so the merge keeps per-document provenance (REQ-016).
@@ -267,6 +321,7 @@ export async function processJob(jobId: string): Promise<PublicJob> {
     let schemaVersion = '';
     let promptVersion = '';
     for (const d of usable) {
+      await prisma.importJob.update({ where: { id: jobId }, data: { currentFileName: d.filename } }).catch(() => {});
       const data = await readFile(d.storagePath);
       const file: ExtractionFile = { id: d.id, filename: d.filename, mimeType: d.mimeType, data };
       const result = await provider.extract({ jobId, files: [file], schema, prompt });
@@ -288,27 +343,22 @@ export async function processJob(jobId: string): Promise<PublicJob> {
       });
     }
 
+    await setState(jobId, 'validating_response', { stage: 'validating' });
     // Deterministic multi-document merge with provenance + explicit conflicts (REQ-016).
     const merged = mergeExtractions(docResults, { preferRecent: cfg.mergePreferRecent });
-
-    await prisma.importJob.update({
-      where: { id: jobId },
-      data: {
-        status: 'review_ready',
-        model: modelUsed,
-        schemaVersion,
-        promptVersion,
-        resultData: merged as unknown as object,
-        error: null,
-      },
+    await setState(jobId, 'review_ready', {
+      stage: 'completed', model: modelUsed, schemaVersion, promptVersion, currentFileName: null,
+      resultData: merged as unknown as object, error: null, errorCode: null,
     });
+    await recordAudit(jobId, 'process_completed', { detail: 'legacy' });
   } catch (err) {
-    // Distinguish provider/config errors from schema errors; no clinical content in the message.
     const kind = err instanceof AiExtractionError ? err.kind : 'provider_error';
     const message = err instanceof Error ? err.message : 'Errore elaborazione';
-    await prisma.importJob.update({ where: { id: jobId }, data: { status: 'failed', error: `[${kind}] ${message}` } });
+    // timeout/provider issues are retryable (documents kept); schema/config are terminal.
+    const retryable = kind === 'timeout' || kind === 'provider_error' || kind === 'provider_unavailable';
+    await setState(jobId, retryable ? 'retryable_error' : 'failed', { stage: 'error', error: `[${kind}] ${message}`, errorCode: kind });
+    await recordAudit(jobId, 'process_failed', { detail: kind });
   }
-  return (await getJob(jobId))!;
 }
 
 /** Extraction result for review (REQ-015 → consumed by REQ-016/017). */

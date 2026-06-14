@@ -6,6 +6,7 @@
 import assert from 'node:assert/strict';
 import app from '../backend/src/app.js';
 import { prisma } from '../backend/src/lib/prisma.js';
+import { runJob } from '../backend/src/ai/upload/job-service.js';
 import { FIXTURES } from './fixtures.mjs';
 
 const OP = { 'X-Operator-Id': 'op-e2e', 'X-Operator-Role': 'operatore' };
@@ -45,9 +46,11 @@ try {
   assert.equal(body.job.fileCount, 2, 'two valid files');
   assert.ok(body.outcomes.find((o) => o.filename === 'non-ammesso.pdf')?.status === 'rejected', 'invalid rejected');
 
-  // 2. Extract (mock) -> review_ready, merged proposal with provenance.
+  // 2. Extract (REQ-022 async): enqueue 202 -> worker -> review_ready.
   res = await af(`${base}/${jobId}/process`, { method: 'POST' });
-  body = await res.json();
+  assert.equal(res.status, 202, 'process 202 (async)');
+  await runJob(jobId);
+  body = await (await af(`${base}/${jobId}`)).json();
   assert.equal(body.status, 'review_ready', 'review_ready after extraction');
   res = await af(`${base}/${jobId}/result`);
   const result = await res.json();
