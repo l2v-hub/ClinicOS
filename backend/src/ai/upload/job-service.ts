@@ -9,7 +9,7 @@
 
 import { readFile } from 'node:fs/promises';
 import { prisma } from '../../lib/prisma.js';
-import { loadAiConfig, type AiConfig } from '../config.js';
+import { loadAiConfig, loadExtractionSchema, loadExtractionPrompt, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
@@ -84,8 +84,30 @@ interface RuntimeJobStatus {
 }
 
 interface RuntimeJobResult {
-  result_data: unknown;
+  data: unknown;
   model?: string | null;
+  warnings?: string[];
+}
+
+/** Build the runtime create-job body matching the neutral contract (REQ-023 §3).
+ *  Exported for contract testing. Field names MUST match clinicos_ai/domain/contracts.py. */
+export function buildRuntimeCreateBody(
+  jobId: string,
+  documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
+  schema: unknown,
+  prompt: string,
+) {
+  return {
+    external_job_id: jobId,
+    files: documents.map((d, i) => ({
+      filename: d.filename,
+      mime_type: d.mimeType,
+      content_base64: d.data.toString('base64'),
+      sort_order: i,
+    })),
+    schema,
+    prompt,
+  };
 }
 
 function getRuntimeUrl(): string {
@@ -115,29 +137,28 @@ async function runtimeFetch(path: string, options: RequestInit = {}): Promise<Re
 }
 
 /** POST /v1/document-jobs — create a runtime job */
-async function runtimeCreateJob(jobId: string, documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>): Promise<string> {
-  const body = {
-    clinicos_job_id: jobId,
-    documents: documents.map(d => ({
-      id: d.id,
-      filename: d.filename,
-      mime_type: d.mimeType,
-      // send base64-encoded content
-      content_b64: d.data.toString('base64'),
-    })),
-  };
+async function runtimeCreateJob(
+  jobId: string,
+  documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
+  schema: unknown,
+  prompt: string,
+): Promise<string> {
+  const body = buildRuntimeCreateBody(jobId, documents, schema, prompt);
   const res = await runtimeFetch('/v1/document-jobs', { method: 'POST', body: JSON.stringify(body) });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
     throw new AiExtractionError('provider_error', `Runtime createJob failed: ${res.status} ${text}`);
   }
-  const json = await res.json() as { id: string };
-  return json.id;
+  const json = await res.json() as { job_id: string };
+  return json.job_id;
 }
 
 /** POST /v1/document-jobs/:id/run — trigger async processing */
 async function runtimeRunJob(runtimeJobId: string): Promise<void> {
-  const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}/run`, { method: 'POST' });
+  const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}/run`, {
+    method: 'POST',
+    body: JSON.stringify({ mode: 'extraction' }),
+  });
   if (!res.ok && res.status !== 202) {
     const text = await res.text().catch(() => '');
     throw new AiExtractionError('provider_error', `Runtime runJob failed: ${res.status} ${text}`);
@@ -165,7 +186,7 @@ async function runtimeGetResult(runtimeJobId: string): Promise<RuntimeJobResult>
 }
 
 /** Map runtime status string to ClinicOS JobStatus */
-function mapRuntimeStatus(runtimeStatus: string): { jobStatus: JobStatus; isTerminal: boolean } {
+export function mapRuntimeStatus(runtimeStatus: string): { jobStatus: JobStatus; isTerminal: boolean } {
   const terminalOk = ['completed', 'review_ready'];
   const terminalFail = ['failed', 'cancelled'];
   const retryable = ['retryable_error'];
@@ -391,6 +412,11 @@ export async function runJob(jobId: string): Promise<void> {
   await setState(jobId, 'uploading_to_google', { stage: 'uploading_files', startedAt: new Date(), error: null });
 
   try {
+    // 0. Load the extraction schema + prompt the runtime should target (REQ-023 §3).
+    const cfg = loadAiConfig();
+    const schema = loadExtractionSchema(cfg);
+    const prompt = loadExtractionPrompt(cfg);
+
     // 1. Read files from disk
     const docFiles = await Promise.all(
       usable.map(async (d) => ({
@@ -403,7 +429,7 @@ export async function runJob(jobId: string): Promise<void> {
 
     // 2. Create runtime job
     await setState(jobId, 'uploading_to_google', { stage: 'uploading_files' });
-    const runtimeJobId = await runtimeCreateJob(jobId, docFiles);
+    const runtimeJobId = await runtimeCreateJob(jobId, docFiles, schema, prompt);
     await recordAudit(jobId, 'process_started', { detail: `runtime_job=${runtimeJobId}` });
 
     // 3. Trigger processing
@@ -434,7 +460,7 @@ export async function runJob(jobId: string): Promise<void> {
             data: {
               status: 'review_ready',
               stage: 'completed',
-              resultData: resultPayload.result_data as object,
+              resultData: resultPayload.data as object,
               model: resultPayload.model ?? rStatus.model ?? null,
             },
           });
