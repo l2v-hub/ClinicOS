@@ -13,7 +13,7 @@ import { loadAiConfig, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
-import { removeFile, removeJobDir, storeFile, sweepEhxpiredDirs } from './storage.js';
+import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
 
 export type JobStatus =
   | 'created' | 'uploaded' | 'queued' | 'uploading_to_google' | 'waiting_for_model'
