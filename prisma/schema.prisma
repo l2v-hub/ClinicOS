@@ -339,8 +339,16 @@ model PatientDiaryEntry {
 // only metadata + hash are stored in the DB.
 model ImportJob {
   id             String           @id @default(cuid())
-  // uploaded | validating | processing | review_ready | failed | expired | confirmed
+  // created|uploaded|queued|uploading_to_google|waiting_for_model|validating_response|
+  // repairing_response|review_ready|retryable_error|failed|cancelled|confirmed (REQ-022)
   status         String           @default("uploaded")
+  // Coarse stage for the UI (uploading_files | model_processing | completed | error).
+  stage          String?
+  currentFileName String?
+  errorCode      String?
+  attempts       Int              @default(0)
+  // When the worker started processing (for elapsedSeconds).
+  startedAt      DateTime?
   idempotencyKey String?          @unique
   maxFiles       Int
   maxTotalBytes  Int
@@ -389,8 +397,11 @@ model ImportDocument {
   storagePath  String
   sortOrder    Int       @default(0)
   logicalDoc   String?   // group multiple photos into one logical document
-  status       String    @default("uploaded") // uploaded | duplicate | rejected
+  // pending|uploading|uploaded|processing|completed|retryable_error|failed|duplicate|rejected
+  status       String    @default("uploaded")
   rejectReason String?
+  errorCode    String?
+  errorMessage String?
   createdAt    DateTime  @default(now())
   job          ImportJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
 

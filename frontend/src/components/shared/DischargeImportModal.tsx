@@ -20,12 +20,30 @@ interface JobDoc {
 interface Job {
   id: string;
   status: string;
+  stage?: string | null;
+  completedFiles?: number;
+  totalFiles?: number;
+  currentFileName?: string | null;
+  elapsedSeconds?: number;
+  canRetry?: boolean;
+  canCancel?: boolean;
   maxFiles: number;
   maxTotalBytes: number;
   totalBytes: number;
   fileCount: number;
+  error?: string | null;
   documents: JobDoc[];
 }
+
+const ACTIVE_STATUSES = ['queued', 'uploading_to_google', 'waiting_for_model', 'validating_response', 'repairing_response', 'processing'];
+const STAGE_LABEL: Record<string, string> = {
+  queued: 'In coda…',
+  uploading_files: 'Caricamento documenti…',
+  model_processing: 'Analisi AI in corso…',
+  validating: 'Validazione risposta…',
+  completed: 'Completato',
+  error: 'Errore',
+};
 interface Outcome { filename: string; status: string; message?: string }
 
 interface Props {
@@ -57,12 +75,44 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'upload' | 'review'>('upload');
   const [proposal, setProposal] = useState<unknown>(null);
+  const [processing, setProcessing] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const cameraInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!open) { setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); }
+    if (!open) { setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); setProcessing(false); }
   }, [open]);
+
+  // REQ-022: poll the job status while it is being processed asynchronously.
+  const jobId = job?.id;
+  useEffect(() => {
+    if (!processing || !jobId) return;
+    let alive = true;
+    const tick = async () => {
+      try {
+        const r = await apiFetch(`${JOBS_URL}/${jobId}`);
+        const j = await r.json();
+        if (!alive) return;
+        setJob(j);
+        if (j.status === 'review_ready') {
+          setProcessing(false);
+          const rr = await apiFetch(`${JOBS_URL}/${jobId}/result`);
+          const result = await rr.json();
+          if (rr.ok && result.resultData) { setProposal(result.resultData); setStep('review'); }
+          else setError('Estrazione completata ma risultato non disponibile');
+        } else if (['failed', 'retryable_error', 'cancelled'].includes(j.status)) {
+          setProcessing(false);
+          setError(j.status === 'retryable_error'
+            ? 'Errore temporaneo durante l’elaborazione. I documenti sono conservati: puoi riprovare.'
+            : 'Elaborazione non riuscita. Puoi compilare manualmente o riprovare senza perdere i file.');
+        }
+      } catch { /* transient network error — keep polling */ }
+    };
+    tick();
+    const id = setInterval(tick, 2000);
+    return () => { alive = false; clearInterval(id); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [processing, jobId]);
 
   if (!open) return null;
 
@@ -139,6 +189,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     onClose();
   }
 
+  // REQ-022: enqueue (202) then poll for status; never blocks on the model.
   async function startProcessing() {
     if (!job) return;
     setBusy(true); setError(null);
@@ -146,18 +197,25 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
       const res = await apiFetch(`${JOBS_URL}/${job.id}/process`, { method: 'POST' });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Avvio elaborazione non riuscito'); return; }
-      setJob(data);
-      if (data.status === 'review_ready') {
-        // Fetch the merged proposal and move to the Revisione step (REQ-017).
-        const r = await apiFetch(`${JOBS_URL}/${job.id}/result`);
-        const result = await r.json();
-        if (r.ok && result.resultData) { setProposal(result.resultData); setStep('review'); }
-        else setError('Estrazione completata ma risultato non disponibile');
-      } else if (data.status === 'failed') {
-        setError(`Elaborazione fallita: ${data.error ?? ''}. Puoi compilare manualmente senza perdere i file.`);
-      }
+      setJob(data);          // status: queued
+      setProcessing(true);   // start polling
     } catch {
       setError('Errore di rete in elaborazione');
+    } finally { setBusy(false); }
+  }
+
+  // REQ-022: retry a failed/retryable job without re-uploading the documents.
+  async function retry() {
+    if (!job) return;
+    setBusy(true); setError(null);
+    try {
+      const res = await apiFetch(`${JOBS_URL}/${job.id}/retry`, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || 'Nuovo tentativo non riuscito'); return; }
+      setJob(data);
+      setProcessing(true);
+    } catch {
+      setError('Errore di rete');
     } finally { setBusy(false); }
   }
 
@@ -290,14 +348,28 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
           {count === 0 && <li className="import-modal__empty">Nessun documento. Aggiungi file o scatta una foto.</li>}
         </ol>
 
-        {job && job.status !== 'uploaded' && (
-          <p className="import-modal__status">Stato job: <strong>{job.status}</strong></p>
+        {job && (processing || ACTIVE_STATUSES.includes(job.status)) && (
+          <div className="import-modal__progress" role="status" aria-live="polite">
+            <span className="import-modal__spinner" aria-hidden="true" />
+            <span className="import-modal__progress-txt">
+              {STAGE_LABEL[job.stage ?? ''] ?? STAGE_LABEL[job.status] ?? 'Elaborazione…'}
+              {(job.totalFiles ?? 0) > 0 && job.stage === 'uploading_files' && ` (${job.completedFiles ?? 0}/${job.totalFiles})`}
+              {job.currentFileName ? ` · ${job.currentFileName}` : ''}
+              {(job.elapsedSeconds ?? 0) > 0 ? ` · ${job.elapsedSeconds}s` : ''}
+            </span>
+          </div>
+        )}
+
+        {job?.canRetry && !processing && (
+          <div className="import-modal__retry">
+            <button className="btn-secondary" disabled={busy} onClick={retry}>↻ Riprova senza ricaricare</button>
+          </div>
         )}
 
         <footer className="import-modal__foot">
           <button className="btn-ghost" onClick={cancel}>Annulla</button>
-          <button className="btn-primary" disabled={busy || count === 0} onClick={startProcessing}>
-            {busy ? 'Elaborazione…' : 'Avvia elaborazione'}
+          <button className="btn-primary" disabled={busy || count === 0 || processing} onClick={startProcessing}>
+            {processing ? 'Elaborazione in corso…' : 'Avvia elaborazione'}
           </button>
         </footer>
         </>

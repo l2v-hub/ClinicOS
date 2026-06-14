@@ -1,6 +1,7 @@
 import app from './app.js';
 import { publicStatus } from './ai/config.js';
 import { sweepExpiredJobs } from './ai/upload/job-service.js';
+import { startWorker } from './ai/upload/worker.js';
 
 const DEFAULT_PORT = 3001;
 
@@ -35,6 +36,11 @@ const server = app.listen(port, () => {
   setInterval(() => {
     sweepExpiredJobs().catch(() => { /* DB may be unavailable; ignore */ });
   }, SWEEP_MS).unref();
+  // Async import worker (REQ-022): processes queued jobs in the background.
+  // Disable in-process with AI_WORKER_INLINE=false when running a separate worker service.
+  if ((process.env.AI_WORKER_INLINE ?? 'true').toLowerCase() !== 'false') {
+    startWorker();
+  }
 });
 
 server.on('error', (error) => {

@@ -8,7 +8,8 @@ import {
   createJob,
   getJob,
   getJobResult,
-  processJob,
+  enqueueJob,
+  retryJob,
   removeDocument,
   reorder,
   setLogicalDoc,
@@ -143,18 +144,28 @@ aiJobsRouter.post('/:id/cancel', async (req, res) => {
   }
 });
 
-// POST /ai/extraction/jobs/:id/process — explicit start of extraction (REQ-015).
-// Cost guard: extraction is the expensive, model-backed path.
+// POST /ai/extraction/jobs/:id/process — ENQUEUE for async processing (REQ-022).
+// Returns 202 immediately; the worker runs extraction. Poll GET /:id for status.
 aiJobsRouter.post('/:id/process', extractionCostGuard, async (req, res) => {
   const jobId = String(req.params.id);
   const op = (req as AuthedRequest).operator;
   try {
-    await recordAudit(jobId, 'process_started', { operatorId: op?.id });
-    const job = await processJob(jobId);
-    await recordAudit(jobId, job.status === 'failed' ? 'process_failed' : 'process_completed', { operatorId: op?.id, detail: job.status });
-    return res.status(200).json(job);
+    const job = await enqueueJob(jobId);
+    await recordAudit(jobId, 'process_started', { operatorId: op?.id, detail: 'enqueued' });
+    return res.status(202).json({ ...job, message: 'Elaborazione avviata' });
   } catch (err) {
-    await recordAudit(jobId, 'process_failed', { operatorId: op?.id });
+    return handleError(res, err);
+  }
+});
+
+// POST /ai/extraction/jobs/:id/retry — re-queue a failed/retryable job, files kept (REQ-022).
+aiJobsRouter.post('/:id/retry', extractionCostGuard, async (req, res) => {
+  const jobId = String(req.params.id);
+  try {
+    const job = await retryJob(jobId);
+    await recordAudit(jobId, 'process_started', { operatorId: (req as AuthedRequest).operator?.id, detail: 'retry' });
+    return res.status(202).json({ ...job, message: 'Nuovo tentativo avviato' });
+  } catch (err) {
     return handleError(res, err);
   }
 });

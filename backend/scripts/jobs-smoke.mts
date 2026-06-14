@@ -3,6 +3,7 @@
 // Run: node ../node_modules/tsx/dist/cli.mjs scripts/jobs-smoke.mts
 import assert from 'node:assert/strict';
 import app from '../src/app.js';
+import { runJob } from '../src/ai/upload/job-service.js';
 
 const PDF = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.from('synthetic discharge letter A')]);
 const JPG = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 1, 2, 3, 4, 5, 6, 7, 8]);
@@ -74,10 +75,14 @@ try {
   body = await res.json();
   assert.equal(body.documents.find((d: { id: string; logicalDoc?: string }) => d.id === someDoc)?.logicalDoc, 'Documento 1', 'logicalDoc persisted');
 
-  // 5. Process (REQ-015, mock provider) -> review_ready with a schema-valid result.
+  // 5. Process (REQ-022 async): enqueue -> 202, then run the worker step, -> review_ready.
   res = await af(`${base}/${jobId}/process`, { method: 'POST' });
   body = await res.json();
-  assert.equal(body.status, 'review_ready', `process -> review_ready (got ${body.status} / ${body.error ?? ''})`);
+  assert.equal(res.status, 202, 'process returns 202 (async)');
+  assert.equal(body.status, 'queued', 'job queued');
+  await runJob(jobId);
+  body = await (await af(`${base}/${jobId}`)).json();
+  assert.equal(body.status, 'review_ready', `worker -> review_ready (got ${body.status} / ${body.error ?? ''})`);
   res = await af(`${base}/${jobId}/result`);
   const result = await res.json();
   assert.equal(result.status, 'review_ready', 'result status review_ready');

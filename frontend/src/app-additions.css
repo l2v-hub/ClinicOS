@@ -6125,3 +6125,11 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .import-review__target { font-size: 13px; padding: 8px 10px; border-radius: 8px; }
 .import-review__target.is-new { background: #ECFDF3; color: #027A48; }
 .import-review__target.is-existing { background: #EFF4FF; color: #0F5FD7; }
+
+/* ── Async import progress (REQ-022) ──────────────────────────────────────── */
+.import-modal__progress { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #EFF4FF; border-radius: 8px; font-size: 13px; color: #0F5FD7; }
+.import-modal__progress-txt { font-weight: 500; }
+.import-modal__spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #BCD2FF; border-top-color: #0F5FD7; animation: ir-spin 0.8s linear infinite; flex: 0 0 auto; }
+@keyframes ir-spin { to { transform: rotate(360deg); } }
+.import-modal__retry { display: flex; justify-content: center; }
+@media (prefers-reduced-motion: reduce) { .import-modal__spinner { animation: none; } }
