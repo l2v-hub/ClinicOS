@@ -1,19 +1,17 @@
-// Import job orchestration (REQ-014).
+// Import job orchestration (REQ-014/REQ-023).
 //
 // Receives multiple documents/photos, validates + dedups + stores them as a job,
 // and manages job lifecycle. NO Patient data is written here — confirmation and
 // persistence are REQ-018; extraction is REQ-015.
+//
+// REQ-023: extraction is delegated to the AI Runtime service via neutral HTTP contract.
+// The backend has NO Google/provider imports — only AI_RUNTIME_URL + AI_RUNTIME_SERVICE_TOKEN.
 
 import { readFile } from 'node:fs/promises';
 import { prisma } from '../../lib/prisma.js';
-import { loadAiConfig, loadExtractionPrompt, loadExtractionSchema, type AiConfig } from '../config.js';
-import { createExtractionProvider } from '../provider-factory.js';
-import { validateExtraction } from '../extraction-validate.js';
-import { mergeExtractions, type DocResult } from '../merge.js';
-import { createAgentProvider } from '../agent/factory.js';
-import { buildAgentProposal, proposalToExtractionData } from '../agent/tools.js';
+import { loadAiConfig, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
-import { AiExtractionError, type ExtractionFile } from '../types.js';
+import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
 
@@ -73,6 +71,122 @@ function expiry(cfg: AiConfig): Date {
   return new Date(Date.now() + cfg.jobRetentionMin * 60_000);
 }
 
+// ---------------------------------------------------------------------------
+// AI Runtime HTTP client (REQ-023) — no provider SDK imported here.
+// ---------------------------------------------------------------------------
+
+interface RuntimeJobStatus {
+  id: string;
+  status: string;
+  stage?: string | null;
+  error?: string | null;
+  model?: string | null;
+}
+
+interface RuntimeJobResult {
+  result_data: unknown;
+  model?: string | null;
+}
+
+function getRuntimeUrl(): string {
+  const url = process.env.AI_RUNTIME_URL;
+  if (!url) throw new AiExtractionError('config', 'AI_RUNTIME_URL not configured');
+  return url.replace(/\/$/, '');
+}
+
+function getRuntimeToken(): string {
+  const token = process.env.AI_RUNTIME_SERVICE_TOKEN;
+  if (!token) throw new AiExtractionError('config', 'AI_RUNTIME_SERVICE_TOKEN not configured');
+  return token;
+}
+
+async function runtimeFetch(path: string, options: RequestInit = {}): Promise<Response> {
+  const url = getRuntimeUrl() + path;
+  const token = getRuntimeToken();
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      ...(options.headers ?? {}),
+    },
+  });
+  return res;
+}
+
+/** POST /v1/document-jobs — create a runtime job */
+async function runtimeCreateJob(jobId: string, documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>): Promise<string> {
+  const body = {
+    clinicos_job_id: jobId,
+    documents: documents.map(d => ({
+      id: d.id,
+      filename: d.filename,
+      mime_type: d.mimeType,
+      // send base64-encoded content
+      content_b64: d.data.toString('base64'),
+    })),
+  };
+  const res = await runtimeFetch('/v1/document-jobs', { method: 'POST', body: JSON.stringify(body) });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new AiExtractionError('provider_error', `Runtime createJob failed: ${res.status} ${text}`);
+  }
+  const json = await res.json() as { id: string };
+  return json.id;
+}
+
+/** POST /v1/document-jobs/:id/run — trigger async processing */
+async function runtimeRunJob(runtimeJobId: string): Promise<void> {
+  const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}/run`, { method: 'POST' });
+  if (!res.ok && res.status !== 202) {
+    const text = await res.text().catch(() => '');
+    throw new AiExtractionError('provider_error', `Runtime runJob failed: ${res.status} ${text}`);
+  }
+}
+
+/** GET /v1/document-jobs/:id — poll status */
+async function runtimeGetJob(runtimeJobId: string): Promise<RuntimeJobStatus> {
+  const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}`);
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new AiExtractionError('provider_error', `Runtime getJob failed: ${res.status} ${text}`);
+  }
+  return res.json() as Promise<RuntimeJobStatus>;
+}
+
+/** GET /v1/document-jobs/:id/result — fetch extraction result */
+async function runtimeGetResult(runtimeJobId: string): Promise<RuntimeJobResult> {
+  const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}/result`);
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new AiExtractionError('provider_error', `Runtime getResult failed: ${res.status} ${text}`);
+  }
+  return res.json() as Promise<RuntimeJobResult>;
+}
+
+/** Map runtime status string to ClinicOS JobStatus */
+function mapRuntimeStatus(runtimeStatus: string): { jobStatus: JobStatus; isTerminal: boolean } {
+  const terminalOk = ['completed', 'review_ready'];
+  const terminalFail = ['failed', 'cancelled'];
+  const retryable = ['retryable_error'];
+  if (terminalOk.includes(runtimeStatus)) return { jobStatus: 'review_ready', isTerminal: true };
+  if (retryable.includes(runtimeStatus)) return { jobStatus: 'retryable_error', isTerminal: true };
+  if (terminalFail.includes(runtimeStatus)) return { jobStatus: 'failed', isTerminal: true };
+  // in-progress
+  const stageMap: Record<string, JobStatus> = {
+    uploading_files: 'uploading_to_google',
+    ocr_running: 'waiting_for_model',
+    extraction_running: 'waiting_for_model',
+    validating: 'validating_response',
+    repairing: 'repairing_response',
+  };
+  return { jobStatus: stageMap[runtimeStatus] ?? 'waiting_for_model', isTerminal: false };
+}
+
+// ---------------------------------------------------------------------------
+// Job lifecycle functions
+// ---------------------------------------------------------------------------
+
 /** Create a new (empty) import job. Idempotent on idempotencyKey. */
 export async function createJob(opts: { idempotencyKey?: string; createdById?: string } = {}): Promise<PublicJob> {
   const cfg = loadAiConfig();
@@ -128,20 +242,19 @@ export async function addFiles(jobId: string, files: IncomingFile[]): Promise<{ 
       continue;
     }
 
+    const storagePath = await storeFile(jobId, vf);
     const doc = await prisma.importDocument.create({
       data: {
         jobId,
-        filename: vf.safeName,
+        filename: vf.filename,
         mimeType: vf.mimeType,
         sizeBytes: vf.sizeBytes,
         sha256: vf.sha256,
-        storagePath: '',
+        storagePath,
         sortOrder: acceptedCount,
         status: 'uploaded',
       },
     });
-    const path = await storeFile(jobId, doc.id, incoming.data);
-    await prisma.importDocument.update({ where: { id: doc.id }, data: { storagePath: path } });
 
     seen.add(vf.sha256);
     acceptedCount++;
@@ -195,8 +308,8 @@ export async function getJob(jobId: string): Promise<PublicJob | null> {
   };
 }
 
-/** Remove a single document (file + row) and recompute the running total. */
-export async function removeDocument(jobId: string, docId: string): Promise<PublicJob> {
+/** Remove a single document from a job (before processing). */
+export async function removeDoc(jobId: string, docId: string): Promise<PublicJob> {
   const doc = await prisma.importDocument.findFirst({ where: { id: docId, jobId } });
   if (!doc) throw new AiExtractionError('config', 'Documento non trovato');
   if (doc.storagePath) await removeFile(doc.storagePath);
@@ -234,27 +347,26 @@ export async function cancelJob(jobId: string): Promise<PublicJob> {
   return (await getJob(jobId))!;
 }
 
-/** Enqueue a job for async processing (REQ-022): returns immediately; the worker runs it. */
+/** Enqueue a job for async processing (REQ-022): Returns immediately; the worker runs it. */
 export async function enqueueJob(jobId: string): Promise<PublicJob> {
-  const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: true } });
+  const job = await prisma.importJob.findUnique({ where: { id: jobId } });
   if (!job) throw new AiExtractionError('config', 'Job non trovato');
-  if (job.status === 'review_ready' || job.status === 'confirmed') return (await getJob(jobId))!;
-  if (job.documents.filter((d) => d.status === 'uploaded').length === 0) {
-    throw new AiExtractionError('config', 'Nessun documento valido da elaborare');
+  if (!['uploaded', 'validating'].includes(job.status)) {
+    throw new AiExtractionError('config', `Job non accodabile nello stato ${job.status}`);
   }
-  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'queued', stage: 'queued', error: null, errorCode: null } });
-  await recordAudit(jobId, 'process_started', { detail: 'queued' });
+  await setState(jobId, 'queued', { stage: 'queued', error: null, errorCode: null } as Record<string, unknown>);
+  await recordAudit(jobId, 'process_started', { detail: 'enqueue → queued' });
   return (await getJob(jobId))!;
 }
 
-/** Re-queue a failed/retryable job WITHOUT re-uploading documents (REQ-022). */
+/** Retry a failed/retryable job. */
 export async function retryJob(jobId: string): Promise<PublicJob> {
   const job = await prisma.importJob.findUnique({ where: { id: jobId } });
   if (!job) throw new AiExtractionError('config', 'Job non trovato');
   if (!['retryable_error', 'failed'].includes(job.status)) {
     throw new AiExtractionError('config', `Job non ritentabile nello stato ${job.status}`);
   }
-  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'queued', stage: 'queued', error: null, errorCode: null } });
+  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'queued', stage: 'queued', error: null } });
   await recordAudit(jobId, 'process_started', { detail: 'retry → queued' });
   return (await getJob(jobId))!;
 }
@@ -264,99 +376,91 @@ async function setState(jobId: string, status: JobStatus, extra: Record<string, 
 }
 
 /**
- * Worker entrypoint (REQ-022): run a CLAIMED job through the extraction state
- * machine. The model's raw response is never persisted or logged. Timeout/provider
- * failures become retryable_error (documents kept); schema/config errors are terminal.
+ * Worker entrypoint (REQ-022/REQ-023): run a CLAIMED job through the AI Runtime.
+ * Calls the neutral HTTP contract: POST /v1/document-jobs → POST :id/run → poll GET :id → GET :id/result.
+ * Maps runtime status into the existing job state machine (REQ-022).
+ * No provider SDK is imported — only AI_RUNTIME_URL and AI_RUNTIME_SERVICE_TOKEN are used.
  */
 export async function runJob(jobId: string): Promise<void> {
   const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: true } });
   if (!job) return;
+
   const usable = job.documents.filter((d) => d.status === 'uploaded');
-  if (usable.length === 0) { await setState(jobId, 'failed', { error: 'Nessun documento valido', errorCode: 'no_documents', stage: 'error' }); return; }
+  if (usable.length === 0) { await setState(jobId, 'failed', { error: 'Nessun documento valido', stage: 'error' }); return; }
 
-  await setState(jobId, 'uploading_to_google', { stage: 'uploading_files', startedAt: new Date(), error: null, errorCode: null, attempts: { increment: 1 } });
+  await setState(jobId, 'uploading_to_google', { stage: 'uploading_files', startedAt: new Date(), error: null });
+
   try {
-    const cfg = loadAiConfig();
-    const schema = loadExtractionSchema(cfg);
-    const prompt = loadExtractionPrompt(cfg);
-
-    // ── Agent-native path (REQ-021): an agent loop with tools decides new vs
-    //    existing patient and produces the proposal. Persistence stays gated.
-    //    On ANY agent failure (e.g. provider quota/429) we GRACEFULLY DEGRADE to
-    //    the deterministic legacy pipeline so import keeps working.
-    if (cfg.useAgent) {
-      try {
-        const files: ExtractionFile[] = [];
-        for (const d of usable) {
-          files.push({ id: d.id, filename: d.filename, mimeType: d.mimeType, data: await readFile(d.storagePath) });
-        }
-        await setState(jobId, 'waiting_for_model', { stage: 'model_processing' });
-        const agent = createAgentProvider(cfg);
-        const result = await agent.run({ jobId, files, schema, prompt });
-
-        await setState(jobId, 'validating_response', { stage: 'validating', model: result.model });
-        const check = validateExtraction(proposalToExtractionData(result.input));
-        if (!check.valid) {
-          throw new AiExtractionError('schema_validation', `Proposta agente non conforme: ${check.errors.slice(0, 4).join('; ')}`);
-        }
-        const proposal = buildAgentProposal(result.input, result.model, files.map((f) => f.filename));
-        await setState(jobId, 'review_ready', { stage: 'completed', model: result.model, resultData: proposal as unknown as object, error: null, errorCode: null });
-        await recordAudit(jobId, 'process_completed', { detail: `agent target=${proposal._target.mode} tools=${result.toolTrace.join(',')}` });
-        return;
-      } catch (agentErr) {
-        const msg = agentErr instanceof Error ? agentErr.message : String(agentErr);
-        console.warn(`[ai] agent path failed, falling back to legacy pipeline: ${msg.slice(0, 160)}`);
-        await recordAudit(jobId, 'process_started', { detail: 'agent fallback → legacy' });
-        // fall through to the legacy pipeline below
-      }
-    }
-
-    // ── Legacy pipeline (per-document extract + deterministic merge) ──────────
-    await setState(jobId, 'waiting_for_model', { stage: 'model_processing' });
-    const provider = createExtractionProvider(cfg); // throws controlled error if google+no key
-
-    // Extract each document SEPARATELY so the merge keeps per-document provenance (REQ-016).
-    const docResults: DocResult[] = [];
-    let modelUsed = provider.model;
-    let schemaVersion = '';
-    let promptVersion = '';
-    for (const d of usable) {
-      await prisma.importJob.update({ where: { id: jobId }, data: { currentFileName: d.filename } }).catch(() => {});
-      const data = await readFile(d.storagePath);
-      const file: ExtractionFile = { id: d.id, filename: d.filename, mimeType: d.mimeType, data };
-      const result = await provider.extract({ jobId, files: [file], schema, prompt });
-
-      // Validate EACH per-document extraction against the ClinicOS schema.
-      const check = validateExtraction(result.data);
-      if (!check.valid) {
-        throw new AiExtractionError('schema_validation', `Documento ${d.filename}: output non conforme — ${check.errors.slice(0, 4).join('; ')}`);
-      }
-      modelUsed = result.model;
-      schemaVersion = result.schemaVersion;
-      promptVersion = result.promptVersion;
-      const out = result.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> };
-      docResults.push({
-        docId: d.id,
+    // 1. Read files from disk
+    const docFiles = await Promise.all(
+      usable.map(async (d) => ({
+        id: d.id,
         filename: d.filename,
-        model: result.model,
-        data: { anagrafica: out.anagrafica, cartella: out.cartella },
+        mimeType: d.mimeType,
+        data: await readFile(d.storagePath),
+      })),
+    );
+
+    // 2. Create runtime job
+    await setState(jobId, 'uploading_to_google', { stage: 'uploading_files' });
+    const runtimeJobId = await runtimeCreateJob(jobId, docFiles);
+    await recordAudit(jobId, 'process_started', { detail: `runtime_job=${runtimeJobId}` });
+
+    // 3. Trigger processing
+    await runtimeRunJob(runtimeJobId);
+    await setState(jobId, 'waiting_for_model', { stage: 'ocr_running' });
+
+    // 4. Poll until terminal
+    const maxPollMs = 30 * 60 * 1000; // 30 min
+    const pollIntervalMs = 3000;
+    const deadline = Date.now() + maxPollMs;
+
+    while (Date.now() < deadline) {
+      await new Promise((r) => setTimeout(r, pollIntervalMs));
+      const rStatus = await runtimeGetJob(runtimeJobId);
+      const { jobStatus, isTerminal } = mapRuntimeStatus(rStatus.status);
+
+      await setState(jobId, jobStatus, {
+        stage: rStatus.stage ?? null,
+        ...(rStatus.model ? { model: rStatus.model } : {}),
       });
+
+      if (isTerminal) {
+        if (jobStatus === 'review_ready') {
+          // 5. Fetch result and persist
+          const resultPayload = await runtimeGetResult(runtimeJobId);
+          await prisma.importJob.update({
+            where: { id: jobId },
+            data: {
+              status: 'review_ready',
+              stage: 'completed',
+              resultData: resultPayload.result_data as object,
+              model: resultPayload.model ?? rStatus.model ?? null,
+            },
+          });
+          await recordAudit(jobId, 'process_completed', { detail: 'runtime extraction ok' });
+        } else {
+          // failed / retryable_error
+          const retryable = jobStatus === 'retryable_error';
+          await setState(jobId, retryable ? 'retryable_error' : 'failed', {
+            stage: 'error',
+            error: rStatus.error ?? 'Extraction failed',
+          });
+          await recordAudit(jobId, 'process_failed', { detail: rStatus.error ?? jobStatus });
+        }
+        return;
+      }
     }
 
-    await setState(jobId, 'validating_response', { stage: 'validating' });
-    // Deterministic multi-document merge with provenance + explicit conflicts (REQ-016).
-    const merged = mergeExtractions(docResults, { preferRecent: cfg.mergePreferRecent });
-    await setState(jobId, 'review_ready', {
-      stage: 'completed', model: modelUsed, schemaVersion, promptVersion, currentFileName: null,
-      resultData: merged as unknown as object, error: null, errorCode: null,
-    });
-    await recordAudit(jobId, 'process_completed', { detail: 'legacy' });
+    // Timeout
+    await setState(jobId, 'retryable_error', { stage: 'error', error: 'Runtime timeout' });
+    await recordAudit(jobId, 'process_failed', { detail: 'timeout' });
+
   } catch (err) {
     const kind = err instanceof AiExtractionError ? err.kind : 'provider_error';
     const message = err instanceof Error ? err.message : 'Errore elaborazione';
-    // timeout/provider issues are retryable (documents kept); schema/config are terminal.
     const retryable = kind === 'timeout' || kind === 'provider_error' || kind === 'provider_unavailable';
-    await setState(jobId, retryable ? 'retryable_error' : 'failed', { stage: 'error', error: `[${kind}] ${message}`, errorCode: kind });
+    await setState(jobId, retryable ? 'retryable_error' : 'failed', { stage: 'error', error: `[${kind}] ${message}` });
     await recordAudit(jobId, 'process_failed', { detail: kind });
   }
 }
