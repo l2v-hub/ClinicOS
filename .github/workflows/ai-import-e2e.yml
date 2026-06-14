@@ -56,8 +56,14 @@ jobs:
         run: npm run build
       - name: Backend unit tests
         run: npm --prefix backend test
-      - name: Mock E2E (API, deterministic)
+      - name: Mock E2E (API, deterministic, legacy pipeline)
         run: node node_modules/tsx/dist/cli.mjs e2e/import-e2e.mjs
+        env:
+          AI_USE_AGENT: "false"
+      - name: Agent E2E (REQ-021, new vs existing patient)
+        run: node node_modules/tsx/dist/cli.mjs e2e/agent-smoke.mjs
+        env:
+          AI_USE_AGENT: "true"
 
   browser-e2e:
     runs-on: ubuntu-latest

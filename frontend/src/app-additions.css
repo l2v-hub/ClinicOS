@@ -6120,3 +6120,8 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 /* ── Import: logical-doc grouping input (REQ-014 residual) ─────────────────── */
 .import-modal__logical { width: 64px; flex: 0 0 auto; font-size: 12px; padding: 3px 6px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; }
 .import-modal__logical:focus { border-color: var(--c-primary, #0F5FD7); outline: none; }
+
+/* ── Import review target banner (REQ-021 new vs existing) ─────────────────── */
+.import-review__target { font-size: 13px; padding: 8px 10px; border-radius: 8px; }
+.import-review__target.is-new { background: #ECFDF3; color: #027A48; }
+.import-review__target.is-existing { background: #EFF4FF; color: #0F5FD7; }

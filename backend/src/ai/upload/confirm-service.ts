@@ -28,6 +28,9 @@ export interface ConfirmPayload {
   idempotencyKey?: string;
   /** Proceed even when a likely duplicate exists. */
   confirmDuplicate?: boolean;
+  /** REQ-021: 'existing' updates an existing patient's cartella instead of creating. */
+  mode?: 'new' | 'existing';
+  patientId?: string;
 }
 
 export interface DuplicateInfo {
@@ -38,9 +41,26 @@ export interface DuplicateInfo {
 }
 
 export interface ConfirmResult {
-  status: 'created' | 'idempotent' | 'duplicate';
+  status: 'created' | 'updated' | 'idempotent' | 'duplicate';
   patient?: { id: string; firstName: string; lastName: string; medicalRecordNumber: string };
   duplicate?: DuplicateInfo;
+}
+
+/** Merge reviewed cartella into an existing one: non-empty scalars win, arrays concat+dedup. */
+function mergeCartella(existing: Record<string, unknown>, incoming: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...existing };
+  for (const [k, v] of Object.entries(incoming)) {
+    if (Array.isArray(v)) {
+      const prev = Array.isArray(out[k]) ? (out[k] as unknown[]) : [];
+      const seen = new Set(prev.map((x) => JSON.stringify(x)));
+      out[k] = [...prev, ...v.filter((x) => !seen.has(JSON.stringify(x)))];
+    } else if (v && typeof v === 'object') {
+      out[k] = mergeCartella((out[k] as Record<string, unknown>) ?? {}, v as Record<string, unknown>);
+    } else if (v !== '' && v != null) {
+      out[k] = v;
+    }
+  }
+  return out;
 }
 
 function mrn(): string {
@@ -81,6 +101,31 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
   }
 
   await audit(jobId, 'confirm_started');
+
+  // ── REQ-021: update an EXISTING patient's cartella (no new patient created) ──
+  if (payload.mode === 'existing' && payload.patientId) {
+    const existing = await prisma.patient.findUnique({ where: { id: payload.patientId } });
+    if (!existing) throw new AiExtractionError('config', 'Paziente esistente non trovato');
+    const updated = await prisma.$transaction(async (tx) => {
+      const cur = await tx.cartella.findUnique({ where: { patientId: existing.id } });
+      const merged = mergeCartella(
+        (cur?.data as Record<string, unknown>) ?? {},
+        { ...(payload.cartella ?? {}), ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}), _lastImportJob: jobId },
+      );
+      await tx.cartella.upsert({
+        where: { patientId: existing.id },
+        create: { patientId: existing.id, data: merged as object },
+        update: { data: merged as object },
+      });
+      await tx.importJob.update({ where: { id: jobId }, data: { status: 'confirmed', createdPatientId: existing.id, confirmedAt: new Date() } });
+      return existing;
+    });
+    await audit(jobId, 'confirm_committed', updated.id, 'existing patient cartella updated');
+    return {
+      status: 'updated',
+      patient: { id: updated.id, firstName: updated.firstName, lastName: updated.lastName, medicalRecordNumber: updated.medicalRecordNumber },
+    };
+  }
 
   // Duplicate detection by name + date of birth (codiceFiscale lives in cartella Json).
   const dupes = await prisma.patient.findMany({

@@ -168,7 +168,8 @@ aiJobsRouter.post('/:id/confirm', async (req, res) => {
     if (result.status === 'duplicate') {
       return res.status(409).json(result); // client re-submits with confirmDuplicate:true
     }
-    return res.status(result.status === 'idempotent' ? 200 : 201).json(result);
+    // created -> 201; updated/idempotent -> 200
+    return res.status(result.status === 'created' ? 201 : 200).json(result);
   } catch (err) {
     return handleError(res, err);
   }
