@@ -1,0 +1,48 @@
+name: Railway Set Backend Variable
+
+# Sets a NON-SECRET environment variable on the backend Railway service and
+# triggers a redeploy. GitHub-hosted runners can reach Railway's API (the sandbox
+# cannot, due to TLS interception), so variable changes go through here.
+#
+# SECURITY: workflow_dispatch inputs are visible in the run UI/logs. NEVER set a
+# secret (e.g. GEMINI_API_KEY) this way — use the Railway dashboard for secrets.
+#
+# Required: secret RAILWAY_TOKEN (project token). Optional: variable RAILWAY_SERVICE.
+
+on:
+  workflow_dispatch:
+    inputs:
+      key:
+        description: 'Variable name (NON-SECRET only)'
+        required: true
+        type: string
+      value:
+        description: 'Variable value'
+        required: true
+        type: string
+
+jobs:
+  set-var:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject obvious secrets
+        run: |
+          case "${{ inputs.key }}" in
+            *API_KEY*|*TOKEN*|*SECRET*|*PASSWORD*|GEMINI_*)
+              echo "::error::Refusing to set '${{ inputs.key }}' here — secrets must be set in the Railway dashboard."
+              exit 1 ;;
+          esac
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Set variable
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then echo "::error::RAILWAY_TOKEN not set"; exit 1; fi
+          if [ -n "$RAILWAY_SERVICE" ]; then
+            railway variables --set "${{ inputs.key }}=${{ inputs.value }}" --service "$RAILWAY_SERVICE"
+          else
+            railway variables --set "${{ inputs.key }}=${{ inputs.value }}"
+          fi
+          echo "Set ${{ inputs.key }} on backend (redeploy triggered)."
