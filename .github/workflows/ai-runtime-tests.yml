@@ -1,0 +1,29 @@
+name: AI Runtime Tests
+
+on:
+  push:
+    branches: [main]
+    paths: ['clinicos-ai-runtime/**']
+  pull_request:
+    paths: ['clinicos-ai-runtime/**']
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: clinicos-ai-runtime } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Core tests (stdlib, no provider SDKs)
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+      - name: Compile-check all modules
+        run: python -m py_compile $(find clinicos_ai -name "*.py")
+      - name: Guard — no provider SDK imports outside models/providers
+        run: |
+          if grep -rnE "import (agno|google\.generativeai|openai|anthropic)|from (agno|openai|anthropic)" clinicos_ai \
+             --include="*.py" | grep -v "models/providers/"; then
+            echo "::error::Provider SDK imported outside models/providers/*"; exit 1
+          fi
+          echo "Provider SDK isolation OK."

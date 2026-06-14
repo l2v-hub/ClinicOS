@@ -1,0 +1,9 @@
+# ClinicOS AI Runtime (REQ-023/024)
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+agno>=1.0
+# Provider SDKs — install only those for the providers you configure:
+google-genai>=1.0
+# openai>=1.30
+# anthropic>=0.30
