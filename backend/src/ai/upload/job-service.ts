@@ -236,6 +236,58 @@ async function runtimeTranscribe(
   return '';
 }
 
+// Focused second pass for the clinical LISTS (REQ-015 tuning). gemma omits these from
+// the big monolithic schema, but handles a small, directive, list-only task. Best-effort:
+// merged into the main extraction only when it finds items; never blocks the import.
+const CLINICAL_LISTS_SCHEMA = {
+  diagnosi: [{ codiceICD: '', descrizione: '', tipo: '', stato: '' }],
+  allergie: [{ allergene: '', reazione: '', gravita: '' }],
+  farmaci: [{ nome: '', dose: '', frequenza: '', via: '' }],
+  terapie: [{ tipo: '', descrizione: '' }],
+};
+const CLINICAL_LISTS_PROMPT =
+  'Sei un estrattore clinico. Dai documenti allegati estrai TUTTE le diagnosi, allergie, ' +
+  'farmaci e terapie presenti. Per OGNI voce trovata inserisci un oggetto nell\'array ' +
+  'corrispondente (es. due allergie => due oggetti in "allergie"). Se una categoria è ' +
+  'assente, usa []. Non inventare. Restituisci SOLO JSON valido conforme allo schema fornito.';
+const CLINICAL_LIST_KEYS = ['diagnosi', 'allergie', 'farmaci', 'terapie'] as const;
+
+async function runtimeClinicalLists(
+  jobId: string,
+  documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
+): Promise<Record<string, unknown>> {
+  const rid = await runtimeCreateJob(jobId, documents, CLINICAL_LISTS_SCHEMA, CLINICAL_LISTS_PROMPT);
+  await runtimeRunJob(rid);
+  const deadline = Date.now() + 10 * 60 * 1000;
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 3000));
+    const s = await runtimeGetJob(rid);
+    const { jobStatus, isTerminal } = mapRuntimeStatus(s.status);
+    if (isTerminal) {
+      if (jobStatus !== 'review_ready') return {};
+      const r = await runtimeGetResult(rid);
+      return (r.data as Record<string, unknown> | null) ?? {};
+    }
+  }
+  return {};
+}
+
+/** Overlay focused clinical lists onto the main extraction when they found items. */
+function applyClinicalLists(
+  raw: { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null,
+  lists: Record<string, unknown>,
+): { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } {
+  const base = raw ?? {};
+  const cartella = { ...(base.cartella ?? {}) };
+  for (const k of CLINICAL_LIST_KEYS) {
+    const v = lists[k];
+    if (Array.isArray(v) && v.some((it) => it && typeof it === 'object' && Object.values(it).some((x) => x !== '' && x != null))) {
+      cartella[k] = v;
+    }
+  }
+  return { ...base, cartella };
+}
+
 /** Map runtime status string to ClinicOS JobStatus */
 export function mapRuntimeStatus(runtimeStatus: string): { jobStatus: JobStatus; isTerminal: boolean } {
   const terminalOk = ['completed', 'review_ready'];
@@ -509,8 +561,15 @@ export async function runJob(jobId: string): Promise<void> {
           //    AND the full raw extraction (_full, lossless — every schema field) plus a
           //    best-effort integral transcription (rawText) for the full review editor.
           const resultPayload = await runtimeGetResult(runtimeJobId);
-          const raw = resultPayload.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null;
+          let raw = resultPayload.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null;
           const modelUsed = resultPayload.model ?? rStatus.model ?? 'runtime';
+          // Focused clinical-lists pass (best-effort) — gemma fills these better alone.
+          try {
+            const lists = await runtimeClinicalLists(jobId, docFiles);
+            raw = applyClinicalLists(raw, lists);
+          } catch {
+            /* best-effort; keep the main extraction */
+          }
           const merged = wrapRuntimeResult(
             raw,
             usable.map((d) => ({ id: d.id, filename: d.filename })),
