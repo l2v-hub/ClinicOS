@@ -35,6 +35,15 @@ def capabilities_for(spec: ModelSpec) -> ModelCapabilities:
             streaming=True, async_execution=True,
         )
 
+    if p == "mistral":
+        # Mistral Document AI (OCR): native PDF + image, returns markdown + structured
+        # annotation via JSON Schema. No tool-calling needed for the OCR pipeline.
+        return ModelCapabilities(
+            text_input=True, image_input=True, pdf_input=True, file_upload=True,
+            json_mode=True, native_structured_output=True, tool_calling=False,
+            streaming=False, async_execution=True,
+        )
+
     if p == "anthropic":
         return ModelCapabilities(
             text_input=True, image_input=True, pdf_input=True, file_upload=False,

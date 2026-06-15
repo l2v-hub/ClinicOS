@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from .errors import ConfigError
 
 # Providers the runtime knows how to build (SDK adapters live in models/providers/*).
-SUPPORTED_PROVIDERS = {"google", "openai", "anthropic", "azure", "openai-like", "mock"}
+SUPPORTED_PROVIDERS = {"google", "openai", "anthropic", "azure", "openai-like", "mistral", "mock"}
 
 
 @dataclass(frozen=True)

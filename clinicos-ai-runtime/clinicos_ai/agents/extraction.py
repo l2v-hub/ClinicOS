@@ -32,11 +32,17 @@ async def run_extraction(registry: ModelRegistry, prompt: str, schema: dict,
                          attachments: list[Attachment]) -> ExtractionOutput:
     warnings: list[str] = []
     built = registry.build("extraction")  # capability-checked, fallback-aware
-    full_prompt = (
-        f"{prompt}\n\nSCHEMA (compila i valori, non inventare):\n{json.dumps(schema)}\n"
-        "Rispondi SOLO con JSON valido."
-    )
-    raw = await built.runner.run(full_prompt, attachments)
+    # Structured-output adapters (e.g. Mistral Document AI) take the JSON Schema directly
+    # and return JSON; chat adapters get the schema embedded in the prompt.
+    runner = built.runner
+    if hasattr(runner, "run_structured"):
+        raw = await runner.run_structured(prompt, schema, attachments)
+    else:
+        full_prompt = (
+            f"{prompt}\n\nSCHEMA (compila i valori, non inventare):\n{json.dumps(schema)}\n"
+            "Rispondi SOLO con JSON valido."
+        )
+        raw = await runner.run(full_prompt, attachments)
     cleaned = _strip_fences(raw)
 
     try:
