@@ -173,7 +173,14 @@ async function runtimeGetJob(runtimeJobId: string): Promise<RuntimeJobStatus> {
     const text = await res.text().catch(() => '');
     throw new AiExtractionError('provider_error', `Runtime getJob failed: ${res.status} ${text}`);
   }
-  return res.json() as Promise<RuntimeJobStatus>;
+  const j = (await res.json()) as RuntimeJobStatus & { error?: unknown };
+  // The runtime returns a normalized error OBJECT {kind,message}; coerce to a string
+  // so it can be stored (job.error is a String column) and shown to the operator.
+  if (j.error && typeof j.error === 'object') {
+    const e = j.error as { kind?: string; message?: string };
+    j.error = `[${e.kind ?? 'error'}] ${e.message ?? ''}`.trim();
+  }
+  return j as RuntimeJobStatus;
 }
 
 /** GET /v1/document-jobs/:id/result — fetch extraction result */
