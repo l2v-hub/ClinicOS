@@ -66,7 +66,7 @@ const SLOTS: { key: string; label: string }[] = [
 ];
 
 // Keys rendered by dedicated sections (so the generic grid skips them).
-const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci', 'parametriVitali', 'anamnesi', 'presaInCarico']);
+const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci', 'parametriVitali', 'anamnesi', 'presaInCarico', 'diarioMedico', 'pianoCura']);
 const VITALE_STATI = ['normale', 'attenzione', 'critico'];
 // Free-text fields rendered as textareas (so they read like the patient record).
 const LONG_FIELDS = new Set([
@@ -163,6 +163,31 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
   const diagnosi = cart('diagnosi');
   const farmaci = cart('farmaci');
   const parametri = cart('parametriVitali');
+
+  // Diario medico — timeline-style entry cards like the patient record.
+  function renderDiario() {
+    const tmpl = ((cartSchema.diarioMedico as SchemaList)?._template ?? {}) as Record<string, SchemaLeaf>;
+    const items = cart('diarioMedico');
+    const blank = () => Object.fromEntries(Object.keys(tmpl).filter((k) => !k.startsWith('_')).map((k) => [k, '']));
+    const rl = (k: string, i: number) => (tmpl[k] ? renderLeaf(tmpl[k], k, ['cartella', 'diarioMedico', i, k]) : null);
+    return (
+      <section className="irf-sec" key="diarioMedico">
+        <div className="irf-sec__head"><h3>Diario medico ({items.length})</h3>
+          <button type="button" className="irf-add" disabled={busy} onClick={() => update(['cartella', 'diarioMedico'], [...items, blank()])}>+ Voce</button></div>
+        {items.length === 0 && <p className="irf-empty">Nessuna voce di diario</p>}
+        {items.map((_, i) => (
+          <div className="irf-diary" key={i}>
+            <div className="irf-diary__head">
+              {rl('data', i)}{rl('ora', i)}{rl('turno', i)}{rl('tipo', i)}
+              <button type="button" className="irf-del" disabled={busy} onClick={() => delRow('diarioMedico', i)}>✕</button>
+            </div>
+            {rl('testo', i)}
+            <div className="irf-grid irf-grid--3">{rl('operatore', i)}{rl('prescrizione', i)}{rl('evoluzione', i)}</div>
+          </div>
+        ))}
+      </section>
+    );
+  }
 
   // Render a nested object (anamnesi / presaInCarico) as an open, labeled section
   // like the patient record — selects for enum fields, textareas for free text.
@@ -280,6 +305,12 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
 
       {/* Presa in carico — come nella scheda paziente */}
       {renderOpenGroup('Presa in carico', 'presaInCarico', 3)}
+
+      {/* Diario medico — come nella scheda paziente */}
+      {renderDiario()}
+
+      {/* Piano di cura — come nella scheda paziente */}
+      {renderOpenGroup('Piano di cura', 'pianoCura', 2)}
 
       {/* Resto della cartella — sezioni espandibili */}
       <section className="irf-sec">

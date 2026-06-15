@@ -6186,6 +6186,11 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .irf-table th { text-align: left; font-size: 11px; color: var(--muted, #667085); font-weight: 600; padding: 4px 6px; border-bottom: 1px solid var(--border, #D0D5DD); text-transform: uppercase; letter-spacing: .02em; }
 .irf-table td { padding: 4px 6px; border-bottom: 1px solid #EAECF0; vertical-align: middle; }
 .irf-table th.irf-slot, .irf-table td.irf-slot { text-align: center; width: 64px; }
+/* diario medico entry cards */
+.irf-diary { border: 1px solid var(--border, #D0D5DD); border-left: 3px solid var(--c-primary, #0F5FD7); border-radius: 8px; padding: 10px 12px; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.irf-diary__head { display: grid; grid-template-columns: 1fr 0.7fr 1fr 1fr 28px; gap: 8px; align-items: end; }
+@media (max-width: 760px) { .irf-diary__head { grid-template-columns: 1fr 1fr; } }
+
 .irf-cell { width: 100%; box-sizing: border-box; padding: 6px 8px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; font-size: 13px; }
 .irf-cell:focus { border-color: var(--c-primary, #0F5FD7); outline: none; }
 /* vital-sign status coloring (mirrors the patient record) */
