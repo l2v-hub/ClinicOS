@@ -6187,6 +6187,12 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .irf-table th.irf-slot, .irf-table td.irf-slot { text-align: center; width: 64px; }
 .irf-cell { width: 100%; box-sizing: border-box; padding: 6px 8px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; font-size: 13px; }
 .irf-cell:focus { border-color: var(--c-primary, #0F5FD7); outline: none; }
+/* vital-sign status coloring (mirrors the patient record) */
+.irf-vit td:first-child { border-left: 3px solid transparent; }
+.irf-vit--normale td:first-child { border-left-color: #12B76A; }
+.irf-vit--attenzione td:first-child { border-left-color: #F79009; }
+.irf-vit--critico td:first-child { border-left-color: var(--red, #DC2626); }
+.irf-vit--critico td:first-child input { color: var(--red, #DC2626); font-weight: 600; }
 
 /* ── Import: logical-doc grouping input (REQ-014 residual) ─────────────────── */
 .import-modal__logical { width: 64px; flex: 0 0 auto; font-size: 12px; padding: 3px 6px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; }

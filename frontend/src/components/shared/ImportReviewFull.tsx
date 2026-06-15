@@ -66,7 +66,8 @@ const SLOTS: { key: string; label: string }[] = [
 ];
 
 // Keys rendered by dedicated sections (so the generic grid skips them).
-const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci']);
+const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci', 'parametriVitali']);
+const VITALE_STATI = ['normale', 'attenzione', 'critico'];
 
 export function ImportReviewFull({ schema, full, rawText, documents, busy, onConfirm, onBack }: Props) {
   const anagSchema = (schema.anagrafica ?? {}) as Json;
@@ -155,6 +156,7 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
   const allergie = cart('allergie');
   const diagnosi = cart('diagnosi');
   const farmaci = cart('farmaci');
+  const parametri = cart('parametriVitali');
 
   function submit() {
     setError(null);
@@ -231,6 +233,24 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
             <td><button type="button" className="irf-del" disabled={busy} onClick={() => delRow('farmaci', i)}>✕</button></td></tr>))}
           {farmaci.length === 0 && <tr><td colSpan={SLOTS.length + 4} className="irf-empty">Nessun farmaco</td></tr>}</tbody></table>
         <p className="irf-note">Le fasce orarie (Mattina/Pranzo/Pomeriggio/Sera/Notte) diventano la terapia somministrabile del paziente.</p>
+      </section>
+
+      {/* Parametri vitali — come nella scheda paziente (Parametro · Valore · Unità · Stato) */}
+      <section className="irf-sec">
+        <div className="irf-sec__head"><h3>Parametri vitali ({parametri.length})</h3>
+          <button type="button" className="irf-add" disabled={busy} onClick={() => addRow('parametriVitali', { etichetta: '', valore: '', unita: '', stato: 'normale' })}>+ Parametro</button></div>
+        <table className="irf-table"><thead><tr><th>Parametro</th><th>Valore</th><th>Unità</th><th>Stato</th><th></th></tr></thead>
+          <tbody>{parametri.map((row, i) => (<tr key={i} className={`irf-vit irf-vit--${String(row.stato || 'normale')}`}>
+            <td>{cellInput('parametriVitali', i, 'etichetta', 'es. PA, FC, SpO2')}</td>
+            <td>{cellInput('parametriVitali', i, 'valore', 'es. 130/85')}</td>
+            <td>{cellInput('parametriVitali', i, 'unita', 'mmHg')}</td>
+            <td>
+              <select className="irf-cell" value={String(row.stato || 'normale')} onChange={(e) => update(['cartella', 'parametriVitali', i, 'stato'], e.target.value)}>
+                {VITALE_STATI.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+              </select>
+            </td>
+            <td><button type="button" className="irf-del" disabled={busy} onClick={() => delRow('parametriVitali', i)}>✕</button></td></tr>))}
+          {parametri.length === 0 && <tr><td colSpan={5} className="irf-empty">Nessun parametro rilevato</td></tr>}</tbody></table>
       </section>
 
       {/* Resto della cartella — sezioni espandibili */}
