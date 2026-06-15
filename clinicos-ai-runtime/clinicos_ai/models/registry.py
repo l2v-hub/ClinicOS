@@ -21,6 +21,7 @@ PROVIDER_CREDENTIAL_ENV: dict[str, tuple[str, ...]] = {
     "anthropic": ("ANTHROPIC_API_KEY",),
     "azure": ("AZURE_OPENAI_API_KEY",),
     "openai-like": ("OPENAI_LIKE_API_KEY",),
+    "mistral": ("MISTRAL_API_KEY",),
     "mock": (),  # no credentials needed
 }
 
