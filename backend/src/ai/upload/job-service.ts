@@ -12,6 +12,7 @@ import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionPrompt, loadOutputSchema, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { mergeExtractions, type DocResult, type MergedProposal } from '../merge.js';
+import { buildSectionsRequest, postProcessSections, type SectionsResult } from '../sections/index.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
@@ -293,6 +294,34 @@ function applyClinicalLists(
     }
   }
   return { ...base, cartella };
+}
+
+// Faithful clinical-sections pass (REQ-026). Best-effort, opt-in via AI_SECTIONS_PASS.
+// Adds one model call per import; never blocks the import. Output is post-processed
+// (annotations reconciled, single block per section, allergy status) before storage.
+async function runtimeSections(
+  jobId: string,
+  documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
+): Promise<SectionsResult | null> {
+  const { schema, prompt } = buildSectionsRequest();
+  const rid = await runtimeCreateJob(jobId, documents, schema, prompt);
+  await runtimeRunJob(rid);
+  const deadline = Date.now() + 10 * 60 * 1000;
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 3000));
+    const s = await runtimeGetJob(rid);
+    const { jobStatus, isTerminal } = mapRuntimeStatus(s.status);
+    if (isTerminal) {
+      if (jobStatus !== 'review_ready') return null;
+      const r = await runtimeGetResult(rid);
+      try {
+        return postProcessSections(r.data);
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
 }
 
 /** Map runtime status string to ClinicOS JobStatus */
@@ -598,12 +627,22 @@ export async function runJob(jobId: string): Promise<void> {
               /* transcription is best-effort; never block the import */
             }
           }
+          // Faithful clinical-sections + semantic tags (REQ-026). Opt-in; best-effort.
+          let sections: SectionsResult | null = null;
+          if (process.env.AI_SECTIONS_PASS === 'true') {
+            try {
+              await setState(jobId, 'waiting_for_model', { stage: 'sectioning' });
+              sections = await runtimeSections(jobId, docFiles);
+            } catch {
+              /* sectioning is best-effort; never block the import */
+            }
+          }
           await prisma.importJob.update({
             where: { id: jobId },
             data: {
               status: 'review_ready',
               stage: 'completed',
-              resultData: { ...merged, _full: raw ?? {}, rawText } as object,
+              resultData: { ...merged, _full: raw ?? {}, rawText, _sections: sections } as object,
               model: modelUsed,
             },
           });

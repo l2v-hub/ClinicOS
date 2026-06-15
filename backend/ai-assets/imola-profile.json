@@ -1,0 +1,83 @@
+{
+  "profileId": "imola",
+  "label": "Profilo documentale Imola — lettera di dimissione",
+  "description": "Mappa i titoli del documento sulle sezioni cliniche canoniche ClinicOS. Editabile lato backend senza toccare il codice frontend: aggiungere/rimuovere alias o sezioni qui e ridistribuire il backend.",
+  "version": 1,
+  "sections": [
+    {
+      "key": "PATIENT_DEMOGRAPHICS",
+      "label": "Dati anagrafici",
+      "aliases": ["Dati anagrafici", "Anagrafica", "Dati paziente", "Generalità", "Paziente"]
+    },
+    {
+      "key": "ALLERGIES",
+      "label": "Allergie",
+      "aliases": ["Allergie", "Allergie note", "Intolleranze", "Allergie e intolleranze"]
+    },
+    {
+      "key": "DISCHARGE_DIAGNOSIS",
+      "label": "Diagnosi di dimissione",
+      "aliases": ["Diagnosi di dimissione", "Diagnosi alla dimissione", "Diagnosi conclusiva", "Diagnosi"]
+    },
+    {
+      "key": "ANAMNESIS",
+      "label": "Anamnesi",
+      "aliases": ["Anamnesi", "Anamnesi patologica remota", "Anamnesi patologica recente", "Anamnesi patologica prossima", "Anamnesi fisiologica", "Anamnesi familiare", "APR", "APP"]
+    },
+    {
+      "key": "HOSPITAL_COURSE",
+      "label": "Decorso ospedaliero",
+      "aliases": ["Decorso ospedaliero", "Decorso clinico", "Decorso della degenza", "Decorso"]
+    },
+    {
+      "key": "CONSULTATIONS",
+      "label": "Consulenze",
+      "aliases": ["Consulenze", "Consulti specialistici", "Consulti", "Pareri specialistici"]
+    },
+    {
+      "key": "IMAGING_DIAGNOSTICS",
+      "label": "Diagnostica per immagini",
+      "aliases": ["Diagnostica per immagini", "Esami radiologici", "Imaging", "Esami strumentali", "Radiologia"]
+    },
+    {
+      "key": "PROCEDURES_AND_INTERVENTIONS",
+      "label": "Prestazioni e interventi",
+      "aliases": ["Prestazioni e interventi", "Procedure", "Interventi eseguiti", "Interventi", "Prestazioni"]
+    },
+    {
+      "key": "HOSPITAL_THERAPY",
+      "label": "Terapia ospedaliera",
+      "aliases": ["Terapia ospedaliera", "Terapia in reparto", "Terapia durante il ricovero", "Terapia praticata"]
+    },
+    {
+      "key": "DISCHARGE_HOME_THERAPY",
+      "label": "Terapia domiciliare",
+      "aliases": ["Terapia domiciliare", "Terapia alla dimissione", "Terapia consigliata", "Terapia da proseguire a domicilio", "TD"]
+    },
+    {
+      "key": "ADVICE_AND_FOLLOW_UP",
+      "label": "Consigli e controlli",
+      "aliases": ["Consigli", "Indicazioni", "Controlli", "Follow-up", "Follow up", "Consigli e controlli", "Indicazioni alla dimissione"]
+    },
+    {
+      "key": "UNMAPPED_CONTENT",
+      "label": "Contenuto non mappato",
+      "aliases": []
+    }
+  ],
+  "tags": [
+    "SECTION_TITLE",
+    "SUBSECTION_TITLE",
+    "DATE",
+    "TIME",
+    "TEMPORAL_MARKER",
+    "MEDICATION_NAME",
+    "DOSE",
+    "SCHEDULE",
+    "FREQUENCY",
+    "ALLERGY_CRITICAL",
+    "WARNING_TEXT"
+  ],
+  "allergyStatuses": ["present", "explicitly_absent", "conflicting", "not_documented", "unclear"],
+  "medicationSections": ["HOSPITAL_THERAPY", "DISCHARGE_HOME_THERAPY"]
+}

@@ -1,0 +1,4 @@
+REQ-026 data smoke AFTER - Mon Jun 15 21:57:07 UTC 2026
+GET /patients -> HTTP 200
+patient count: 19
+Note: backend changes are opt-in (AI_SECTIONS_PASS) and not yet deployed; count must equal BEFORE (19).
