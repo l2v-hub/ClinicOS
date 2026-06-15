@@ -91,10 +91,12 @@ test('buildModelSchema renders lists as example arrays (so the model fills them)
   // nested group recursed
   assert.deepEqual(m.cartella.anamnesi.fisiologica, { valore: '', descrizione: 'F' });
 
-  // list -> array with ONE example item built from the template (no _ keys)
+  // list -> array with ONE FLAT example item (option hints kept, no nested {valore})
   assert.ok(Array.isArray(m.cartella.diagnosi), 'diagnosi must be an array');
   assert.equal(m.cartella.diagnosi.length, 1);
   assert.deepEqual(Object.keys(m.cartella.diagnosi[0]).sort(), ['codiceICD', 'descrizione']);
+  assert.equal(m.cartella.diagnosi[0].codiceICD, '', 'list item fields must be flat values');
+  assert.ok(!(m.cartella.diagnosi[0].codiceICD && typeof m.cartella.diagnosi[0].codiceICD === 'object'));
 });
 
 test('runtime status maps to ClinicOS job states', () => {
