@@ -52,10 +52,17 @@ try {
     const result = await res.json();
     const rd = result.resultData ?? {};
     const anag = rd.anagrafica ?? {};
-    console.log('--- extraction proposal ---');
-    console.log('nome:', JSON.stringify(anag.nome), '| cognome:', JSON.stringify(anag.cognome), '| dataNascita:', JSON.stringify(anag.dataNascita));
+    const hasMerge = !!rd._merge;                                  // ImportReview needs this
+    const nome = anag.nome?.value;                                 // merged shape: {value,status}
+    const cognome = anag.cognome?.value;
+    const diagnosi = (rd.cartella?.diagnosi?.items ?? []).map((i) => i.value?.descrizione);
+    console.log('--- merged proposal (UI shape) ---');
+    console.log('_merge present:', hasMerge, '| report:', JSON.stringify(rd._merge?.report));
+    console.log('nome.value:', JSON.stringify(nome), '| cognome.value:', JSON.stringify(cognome), '| dataNascita.value:', JSON.stringify(anag.dataNascita?.value));
+    console.log('diagnosi items:', JSON.stringify(diagnosi));
     console.log('no AIza key in result:', !/AIza[0-9A-Za-z_-]{10,}/.test(JSON.stringify(result)));
-    console.log('\n✅ PASS — runtime extraction reached review_ready');
+    if (hasMerge && nome) console.log('\n✅ PASS — review_ready with UI-ready merged shape');
+    else console.log('\n❌ shape NOT UI-ready (missing _merge or anagrafica.value)');
   } else {
     console.log('\n❌ NOT review_ready — see error above');
   }

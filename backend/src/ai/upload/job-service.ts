@@ -11,6 +11,7 @@ import { readFile } from 'node:fs/promises';
 import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionSchema, loadExtractionPrompt, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
+import { mergeExtractions, type DocResult, type MergedProposal } from '../merge.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
@@ -183,6 +184,27 @@ async function runtimeGetResult(runtimeJobId: string): Promise<RuntimeJobResult>
     throw new AiExtractionError('provider_error', `Runtime getResult failed: ${res.status} ${text}`);
   }
   return res.json() as Promise<RuntimeJobResult>;
+}
+
+/**
+ * Wrap the runtime's RAW extraction ({anagrafica, cartella}) into the merged-proposal
+ * shape the review UI + confirm flow expect (REQ-016/017): `_merge`, anagrafica as
+ * MergedFields, cartella lists as MergedLists. Without this the runtime output is plain
+ * schema JSON and `ImportReview` crashes on `proposal._merge.report`. Exported for tests.
+ */
+export function wrapRuntimeResult(
+  raw: { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null | undefined,
+  documents: Array<{ id: string; filename: string }>,
+  model: string,
+  preferRecent: boolean,
+): MergedProposal {
+  const docResults: DocResult[] = [{
+    docId: documents[0]?.id ?? 'doc',
+    filename: documents.map((d) => d.filename).join(', ') || 'documento',
+    model,
+    data: { anagrafica: raw?.anagrafica, cartella: raw?.cartella },
+  }];
+  return mergeExtractions(docResults, { preferRecent });
 }
 
 /** Map runtime status string to ClinicOS JobStatus */
@@ -453,18 +475,25 @@ export async function runJob(jobId: string): Promise<void> {
 
       if (isTerminal) {
         if (jobStatus === 'review_ready') {
-          // 5. Fetch result and persist
+          // 5. Fetch result, wrap into the merged-proposal shape the UI/confirm need, persist.
           const resultPayload = await runtimeGetResult(runtimeJobId);
+          const modelUsed = resultPayload.model ?? rStatus.model ?? 'runtime';
+          const merged = wrapRuntimeResult(
+            resultPayload.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null,
+            usable.map((d) => ({ id: d.id, filename: d.filename })),
+            modelUsed,
+            cfg.mergePreferRecent,
+          );
           await prisma.importJob.update({
             where: { id: jobId },
             data: {
               status: 'review_ready',
               stage: 'completed',
-              resultData: resultPayload.data as object,
-              model: resultPayload.model ?? rStatus.model ?? null,
+              resultData: merged as object,
+              model: modelUsed,
             },
           });
-          await recordAudit(jobId, 'process_completed', { detail: 'runtime extraction ok' });
+          await recordAudit(jobId, 'process_completed', { detail: 'runtime extraction + merge ok' });
         } else {
           // failed / retryable_error
           const retryable = jobStatus === 'retryable_error';

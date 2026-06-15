@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildRuntimeCreateBody, mapRuntimeStatus } from '../upload/job-service.js';
+import { buildRuntimeCreateBody, mapRuntimeStatus, wrapRuntimeResult } from '../upload/job-service.js';
 
 // These field names MUST match clinicos-ai-runtime/clinicos_ai/domain/contracts.py
 // (CreateJobRequest / RuntimeFile). A drift here is exactly the bug that sent every
@@ -35,6 +35,35 @@ test('create body matches the runtime neutral contract', () => {
   assert.equal(f0.content_base64, Buffer.from('abc').toString('base64'));
   assert.equal(f0.sort_order, 0);
   assert.equal(body.files[1].sort_order, 1);
+});
+
+test('wrapRuntimeResult produces the merged-proposal shape the review UI needs', () => {
+  const raw = {
+    anagrafica: { nome: 'Mario', cognome: 'Bianchi', dataNascita: '1950-01-01' },
+    cartella: { diagnosi: [{ descrizione: 'BPCO', codiceICD: 'J44.9' }], allergie: [{ allergene: 'Penicillina' }] },
+  };
+  const m = wrapRuntimeResult(raw, [{ id: 'd1', filename: 'lettera.pdf' }], 'google:gemma-4-31b-it', true);
+
+  // _merge present (ImportReview reads proposal._merge.report — was crashing)
+  assert.ok(m._merge, '_merge must exist');
+  assert.equal(typeof m._merge.report.filled, 'number');
+
+  // anagrafica fields are MergedField {status, value, ...}, not bare strings
+  assert.equal(m.anagrafica.nome.value, 'Mario');
+  assert.equal(m.anagrafica.nome.status, 'extracted');
+  assert.equal(m.anagrafica.cognome.value, 'Bianchi');
+
+  // cartella clinical arrays become MergedList {items:[...]}
+  const diagnosi = m.cartella.diagnosi;
+  assert.ok('items' in diagnosi, 'diagnosi must be a MergedList');
+  assert.equal(diagnosi.items.length, 1);
+  assert.equal(diagnosi.items[0].value.descrizione, 'BPCO');
+});
+
+test('wrapRuntimeResult tolerates empty/missing extraction', () => {
+  const m = wrapRuntimeResult(null, [{ id: 'd1', filename: 'x.pdf' }], 'runtime', false);
+  assert.ok(m._merge);
+  assert.ok(m.anagrafica);
 });
 
 test('runtime status maps to ClinicOS job states', () => {
