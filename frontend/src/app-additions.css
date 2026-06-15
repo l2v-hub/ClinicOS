@@ -6062,7 +6062,10 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .ai-import-badge--loading { opacity: .7; }
 
 /* ── Discharge import modal (REQ-014) ─────────────────────────────────────── */
-.import-modal { width: min(560px, 94vw); max-height: 88vh; display: flex; flex-direction: column; gap: 12px; padding: 20px; }
+/* The card needs an opaque surface — `.modal-card` is not defined elsewhere, so
+   without this the popup is transparent over the overlay and unreadable. */
+.modal-card { background: var(--surface, #fff); border-radius: var(--card-radius, 12px); box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18)); }
+.import-modal { width: min(560px, 94vw); max-height: 88vh; display: flex; flex-direction: column; gap: 12px; padding: 20px; background: var(--surface, #fff); border-radius: var(--card-radius, 12px); box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18)); }
 .import-modal__head { display: flex; align-items: center; justify-content: space-between; }
 .import-modal__head h2 { font-size: 18px; margin: 0; color: var(--text, #101828); }
 .import-modal__actions { display: flex; gap: 10px; flex-wrap: wrap; }
