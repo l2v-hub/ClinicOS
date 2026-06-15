@@ -9,7 +9,7 @@
 
 import { readFile } from 'node:fs/promises';
 import { prisma } from '../../lib/prisma.js';
-import { loadAiConfig, loadExtractionSchema, loadExtractionPrompt, type AiConfig } from '../config.js';
+import { loadAiConfig, loadExtractionSchema, loadExtractionPrompt, buildModelSchema, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { mergeExtractions, type DocResult, type MergedProposal } from '../merge.js';
 import { AiExtractionError } from '../types.js';
@@ -463,9 +463,10 @@ export async function runJob(jobId: string): Promise<void> {
   await setState(jobId, 'uploading_to_google', { stage: 'uploading_files', startedAt: new Date(), error: null });
 
   try {
-    // 0. Load the extraction schema + prompt the runtime should target (REQ-023 §3).
+    // 0. Load the prompt + a MODEL-FRIENDLY schema (lists rendered as example arrays
+    //    so the model fills them instead of omitting them — REQ-015 tuning).
     const cfg = loadAiConfig();
-    const schema = loadExtractionSchema(cfg);
+    const schema = buildModelSchema(loadExtractionSchema(cfg));
     const prompt = loadExtractionPrompt(cfg);
 
     // 1. Read files from disk

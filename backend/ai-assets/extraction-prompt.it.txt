@@ -10,7 +10,21 @@ REGOLE OBBLIGATORIE
 - Non formulare diagnosi nuove: riporta solo diagnosi già scritte nei documenti.
 - Rispondi esclusivamente con un oggetto JSON conforme allo schema fornito, senza testo aggiuntivo.
 
+CAMPI ARRAY (MOLTO IMPORTANTE)
+Alcuni campi sono ARRAY (es. diagnosi, allergie, farmaci, terapie, parametriVitali,
+diarioMedico, indicatoriRischio, noteClinica). Nello schema sono mostrati come un array
+con UN oggetto d'esempio: quell'oggetto indica i campi di OGNI voce.
+- Inserisci un oggetto per OGNI voce trovata nel documento (due allergie -> due oggetti).
+- NON omettere mai questi campi: se non trovi nessuna voce usa un array vuoto [].
+- Esempio: "Diagnosi: BPCO (J44.1)" ->
+  "diagnosi": [ { "codiceICD": "J44.1", "descrizione": "BPCO", "tipo": "principale" } ]
+- Esempio: "Allergia: Penicillina" -> "allergie": [ { "allergene": "Penicillina" } ]
+- Estrai farmaci, dosi e vie nella lista "farmaci"; diagnosi e codici in "diagnosi";
+  allergie in "allergie"; terapie non farmacologiche in "terapie".
+
 Lo schema di estrazione (con le descrizioni di ogni campo) è fornito a parte.
-Compila i valori dei campi mantenendo la stessa struttura dello schema.
+Compila i valori mantenendo la struttura: oggetti restano oggetti, array restano array.
+Restituisci i valori in forma piatta (la stringa/numero/booleano direttamente, senza
+oggetti {valore: ...}).
 Se più documenti riguardano lo stesso paziente, considera tutte le pagine come
 un'unica fonte e riporta i valori trovati; eventuali conflitti verranno gestiti a valle.

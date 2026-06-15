@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { buildRuntimeCreateBody, mapRuntimeStatus, wrapRuntimeResult } from '../upload/job-service.js';
+import { buildModelSchema } from '../config.js';
 
 // These field names MUST match clinicos-ai-runtime/clinicos_ai/domain/contracts.py
 // (CreateJobRequest / RuntimeFile). A drift here is exactly the bug that sent every
@@ -64,6 +65,36 @@ test('wrapRuntimeResult tolerates empty/missing extraction', () => {
   const m = wrapRuntimeResult(null, [{ id: 'd1', filename: 'x.pdf' }], 'runtime', false);
   assert.ok(m._merge);
   assert.ok(m.anagrafica);
+});
+
+test('buildModelSchema renders lists as example arrays (so the model fills them)', () => {
+  const canonical = {
+    _descrizione: 'x',
+    anagrafica: { _nota: 'n', nome: { valore: '', descrizione: 'Nome' } },
+    cartella: {
+      statoRicovero: { valore: 'ricoverato | dimesso', descrizione: 'Stato' },
+      anamnesi: { _descrizione: 'a', fisiologica: { valore: '', descrizione: 'F' } },
+      diagnosi: {
+        _descrizione: 'd',
+        _template: { codiceICD: { valore: '', descrizione: 'ICD' }, descrizione: { valore: '', descrizione: 'Desc' } },
+        valori: [],
+      },
+    },
+  };
+  const m = buildModelSchema(canonical) as any;
+
+  // leaves kept (with descriptions), meta underscore keys dropped
+  assert.deepEqual(m.anagrafica.nome, { valore: '', descrizione: 'Nome' });
+  assert.ok(!('_nota' in m.anagrafica));
+  assert.ok(!('_descrizione' in m));
+
+  // nested group recursed
+  assert.deepEqual(m.cartella.anamnesi.fisiologica, { valore: '', descrizione: 'F' });
+
+  // list -> array with ONE example item built from the template (no _ keys)
+  assert.ok(Array.isArray(m.cartella.diagnosi), 'diagnosi must be an array');
+  assert.equal(m.cartella.diagnosi.length, 1);
+  assert.deepEqual(Object.keys(m.cartella.diagnosi[0]).sort(), ['codiceICD', 'descrizione']);
 });
 
 test('runtime status maps to ClinicOS job states', () => {

@@ -148,6 +148,34 @@ export function loadExtractionPrompt(cfg = loadAiConfig()): string {
   return readFileSync(cfg.promptPath, 'utf8');
 }
 
+/**
+ * Convert the verbose canonical schema into a MODEL-FRIENDLY shape (REQ-015 tuning).
+ * The model was OMITTING list fields because `{_template, valori:[]}` is not a clear
+ * output instruction. We render each list as an example array `[{...fields}]` so the
+ * model sees the array-of-objects shape and fills one item per finding. Leaves and
+ * nested groups (with their Italian descriptions) are kept — they already work.
+ * The canonical schema asset is untouched.
+ */
+export function buildModelSchema(schema: unknown): unknown {
+  const stripUnderscore = (o: Record<string, unknown>): Record<string, unknown> => {
+    const out: Record<string, unknown> = {};
+    for (const k of Object.keys(o)) if (!k.startsWith('_')) out[k] = walk(o[k]);
+    return out;
+  };
+  const walk = (node: unknown): unknown => {
+    if (node == null || typeof node !== 'object') return node;
+    if (Array.isArray(node)) return node.map(walk);
+    const obj = node as Record<string, unknown>;
+    // list field: { _template, valori } -> [ <one example item> ]
+    if ('_template' in obj) return [stripUnderscore(obj._template as Record<string, unknown>)];
+    // leaf field: { valore, descrizione } -> keep (model flattens to the value itself)
+    if ('valore' in obj) return obj;
+    // group / root: recurse, dropping underscore meta keys
+    return stripUnderscore(obj);
+  };
+  return walk(schema);
+}
+
 /** Public, secret-free view of the config for the status endpoint and logs. */
 export interface AiPublicStatus {
   available: boolean;
