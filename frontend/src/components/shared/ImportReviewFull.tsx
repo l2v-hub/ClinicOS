@@ -66,8 +66,14 @@ const SLOTS: { key: string; label: string }[] = [
 ];
 
 // Keys rendered by dedicated sections (so the generic grid skips them).
-const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci', 'parametriVitali']);
+const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci', 'parametriVitali', 'anamnesi', 'presaInCarico']);
 const VITALE_STATI = ['normale', 'attenzione', 'critico'];
+// Free-text fields rendered as textareas (so they read like the patient record).
+const LONG_FIELDS = new Set([
+  'note', 'noteGenerali', 'contenuto', 'testo', 'descrizione', 'obiettivi', 'interventiPrevisti',
+  'notePianificazione', 'fisiologica', 'patologicaRemota', 'patologicaProssima', 'familiare',
+  'lavorativa', 'abitudini', 'condizioniIniziali', 'noteIniziali', 'motivoIngresso',
+]);
 
 export function ImportReviewFull({ schema, full, rawText, documents, busy, onConfirm, onBack }: Props) {
   const anagSchema = (schema.anagrafica ?? {}) as Json;
@@ -92,7 +98,7 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
     const opts = options(node);
     const isBool = typeof node.valore === 'boolean';
     const isNum = typeof node.valore === 'number';
-    const longText = (node.descrizione?.length ?? 0) > 60 || ['note', 'noteGenerali', 'contenuto', 'testo', 'descrizione', 'obiettivi', 'interventiPrevisti', 'notePianificazione'].includes(key);
+    const longText = (node.descrizione?.length ?? 0) > 60 || LONG_FIELDS.has(key);
     return (
       <div className={`irf-field${longText ? ' irf-field--wide' : ''}`} key={path.join('.')}>
         <label className="irf-field__label">{label(node, key)}</label>
@@ -157,6 +163,22 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
   const diagnosi = cart('diagnosi');
   const farmaci = cart('farmaci');
   const parametri = cart('parametriVitali');
+
+  // Render a nested object (anamnesi / presaInCarico) as an open, labeled section
+  // like the patient record — selects for enum fields, textareas for free text.
+  function renderOpenGroup(title: string, groupKey: string, cols: 2 | 3) {
+    const group = cartSchema[groupKey] as Json | undefined;
+    if (!group || typeof group !== 'object') return null;
+    const keys = Object.keys(group).filter((k) => !k.startsWith('_'));
+    return (
+      <section className="irf-sec" key={groupKey}>
+        <h3>{title}</h3>
+        <div className={`irf-grid irf-grid--${cols}`}>
+          {keys.map((k) => renderNode((group as Json)[k] as SchemaNode, k, ['cartella', groupKey, k]))}
+        </div>
+      </section>
+    );
+  }
 
   function submit() {
     setError(null);
@@ -252,6 +274,12 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
             <td><button type="button" className="irf-del" disabled={busy} onClick={() => delRow('parametriVitali', i)}>✕</button></td></tr>))}
           {parametri.length === 0 && <tr><td colSpan={5} className="irf-empty">Nessun parametro rilevato</td></tr>}</tbody></table>
       </section>
+
+      {/* Anamnesi — come nella scheda paziente */}
+      {renderOpenGroup('Anamnesi', 'anamnesi', 2)}
+
+      {/* Presa in carico — come nella scheda paziente */}
+      {renderOpenGroup('Presa in carico', 'presaInCarico', 3)}
 
       {/* Resto della cartella — sezioni espandibili */}
       <section className="irf-sec">
