@@ -157,19 +157,6 @@ export function loadExtractionPrompt(cfg = loadAiConfig()): string {
  * The canonical schema asset is untouched.
  */
 export function buildModelSchema(schema: unknown): unknown {
-  // For list items: render each field FLAT (its value or option-hint string), not as a
-  // nested { valore, descrizione } — the nested form made the model omit the whole list.
-  const leafFlat = (leaf: unknown): unknown => {
-    const v = (leaf as { valore?: unknown })?.valore;
-    if (typeof v === 'boolean') return false;
-    if (typeof v === 'number') return 0;
-    return typeof v === 'string' ? v : ''; // keep "a | b" option hints
-  };
-  const flattenTemplate = (tmpl: Record<string, unknown>): Record<string, unknown> => {
-    const out: Record<string, unknown> = {};
-    for (const k of Object.keys(tmpl)) if (!k.startsWith('_')) out[k] = leafFlat(tmpl[k]);
-    return out;
-  };
   const stripUnderscore = (o: Record<string, unknown>): Record<string, unknown> => {
     const out: Record<string, unknown> = {};
     for (const k of Object.keys(o)) if (!k.startsWith('_')) out[k] = walk(o[k]);
@@ -179,8 +166,10 @@ export function buildModelSchema(schema: unknown): unknown {
     if (node == null || typeof node !== 'object') return node;
     if (Array.isArray(node)) return node.map(walk);
     const obj = node as Record<string, unknown>;
-    // list field: { _template, valori } -> [ <one FLAT example item> ]
-    if ('_template' in obj) return [flattenTemplate(obj._template as Record<string, unknown>)];
+    // list field: { _template, valori } -> [ <one example item> ] keeping the field
+    // { valore, descrizione } shape (flattening item fields to option-hint strings made
+    // the model emit an empty cartella — keep the descriptions that drive accuracy).
+    if ('_template' in obj) return [stripUnderscore(obj._template as Record<string, unknown>)];
     // leaf field: { valore, descrizione } -> keep (model flattens to the value itself)
     if ('valore' in obj) return obj;
     // group / root: recurse, dropping underscore meta keys
