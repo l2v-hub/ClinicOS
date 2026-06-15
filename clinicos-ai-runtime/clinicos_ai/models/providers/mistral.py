@@ -104,7 +104,10 @@ class _MistralOcrRunner:
             "include_image_base64": False,
         }
         if schema is not None and _is_json_schema(schema):
-            body["document_annotation_format"] = {"type": "json_schema", "json_schema": {"schema": schema}}
+            body["document_annotation_format"] = {
+                "type": "json_schema",
+                "json_schema": {"name": "clinicos_extraction", "schema": schema, "strict": False},
+            }
         res = self._post(url, key, body)
         pages = res.get("pages") or []
         markdown = "\n\n".join(str(p.get("markdown") or p.get("text") or "") for p in pages).strip()
