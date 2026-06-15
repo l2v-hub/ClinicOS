@@ -66,7 +66,7 @@ const SLOTS: { key: string; label: string }[] = [
 ];
 
 // Keys rendered by dedicated sections (so the generic grid skips them).
-const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci', 'parametriVitali', 'anamnesi', 'presaInCarico', 'diarioMedico', 'pianoCura']);
+const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci', 'parametriVitali', 'anamnesi', 'presaInCarico', 'diarioMedico', 'pianoCura', 'terapie', 'indicatoriRischio', 'noteClinica']);
 const VITALE_STATI = ['normale', 'attenzione', 'critico'];
 // Free-text fields rendered as textareas (so they read like the patient record).
 const LONG_FIELDS = new Set([
@@ -158,11 +158,32 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
   }
   function addRow(list: string, blank: Json) { update(['cartella', list], [...cart(list), blank]); }
   function delRow(list: string, idx: number) { update(['cartella', list], cart(list).filter((_, i) => i !== idx)); }
+  function tmplOptions(list: string, field: string): string[] {
+    const leaf = ((cartSchema[list] as SchemaList)?._template ?? {})[field] as SchemaLeaf | undefined;
+    return leaf ? (options(leaf) ?? []) : [];
+  }
+  function cellSelect(list: string, idx: number, field: string) {
+    const opts = tmplOptions(list, field);
+    return (
+      <select className="irf-cell" value={String((cart(list)[idx]?.[field] as string) ?? '')}
+        onChange={(e) => update(['cartella', list, idx, field], e.target.value)}>
+        <option value="">—</option>{opts.map((o) => <option key={o} value={o}>{o}</option>)}
+      </select>
+    );
+  }
+  function cellArea(list: string, idx: number, field: string, placeholder = '') {
+    return <textarea className="irf-cell irf-textarea" rows={2} placeholder={placeholder}
+      value={String((cart(list)[idx]?.[field] as string) ?? '')}
+      onChange={(e) => update(['cartella', list, idx, field], e.target.value)} />;
+  }
 
   const allergie = cart('allergie');
   const diagnosi = cart('diagnosi');
   const farmaci = cart('farmaci');
   const parametri = cart('parametriVitali');
+  const terapie = cart('terapie');
+  const rischi = cart('indicatoriRischio');
+  const noteCliniche = cart('noteClinica');
 
   // Diario medico — timeline-style entry cards like the patient record.
   function renderDiario() {
@@ -308,6 +329,47 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
 
       {/* Diario medico — come nella scheda paziente */}
       {renderDiario()}
+
+      {/* Terapie (non farmacologiche / schemi) — tabella */}
+      <section className="irf-sec">
+        <div className="irf-sec__head"><h3>Terapie ({terapie.length})</h3>
+          <button type="button" className="irf-add" disabled={busy} onClick={() => addRow('terapie', { tipo: '', descrizione: '', stato: '' })}>+ Terapia</button></div>
+        <table className="irf-table"><thead><tr><th>Tipo</th><th>Descrizione</th><th>Stato</th><th></th></tr></thead>
+          <tbody>{terapie.map((_, i) => (<tr key={i}>
+            <td>{cellSelect('terapie', i, 'tipo')}</td><td>{cellInput('terapie', i, 'descrizione', 'Descrizione/schema')}</td>
+            <td>{cellSelect('terapie', i, 'stato')}</td>
+            <td><button type="button" className="irf-del" disabled={busy} onClick={() => delRow('terapie', i)}>✕</button></td></tr>))}
+          {terapie.length === 0 && <tr><td colSpan={4} className="irf-empty">Nessuna terapia</td></tr>}</tbody></table>
+      </section>
+
+      {/* Indicatori di rischio — tabella con livello colorato */}
+      <section className="irf-sec">
+        <div className="irf-sec__head"><h3>Indicatori di rischio ({rischi.length})</h3>
+          <button type="button" className="irf-add" disabled={busy} onClick={() => addRow('indicatoriRischio', { tipo: '', livello: '', descrizione: '' })}>+ Rischio</button></div>
+        <table className="irf-table"><thead><tr><th>Tipo</th><th>Livello</th><th>Descrizione</th><th></th></tr></thead>
+          <tbody>{rischi.map((row, i) => (<tr key={i} className={`irf-lvl irf-lvl--${String(row.livello || '')}`}>
+            <td>{cellSelect('indicatoriRischio', i, 'tipo')}</td><td>{cellSelect('indicatoriRischio', i, 'livello')}</td>
+            <td>{cellInput('indicatoriRischio', i, 'descrizione', 'Descrizione')}</td>
+            <td><button type="button" className="irf-del" disabled={busy} onClick={() => delRow('indicatoriRischio', i)}>✕</button></td></tr>))}
+          {rischi.length === 0 && <tr><td colSpan={4} className="irf-empty">Nessun indicatore</td></tr>}</tbody></table>
+      </section>
+
+      {/* Note cliniche / nursing — card con contenuto */}
+      <section className="irf-sec">
+        <div className="irf-sec__head"><h3>Note cliniche ({noteCliniche.length})</h3>
+          <button type="button" className="irf-add" disabled={busy} onClick={() => addRow('noteClinica', { tipo: '', contenuto: '', operatore: '' })}>+ Nota</button></div>
+        {noteCliniche.length === 0 && <p className="irf-empty">Nessuna nota</p>}
+        {noteCliniche.map((_, i) => (
+          <div className="irf-note-card" key={i}>
+            <div className="irf-note-card__head">
+              {cellSelect('noteClinica', i, 'tipo')}
+              {cellInput('noteClinica', i, 'operatore', 'Operatore')}
+              <button type="button" className="irf-del" disabled={busy} onClick={() => delRow('noteClinica', i)}>✕</button>
+            </div>
+            {cellArea('noteClinica', i, 'contenuto', 'Contenuto della nota')}
+          </div>
+        ))}
+      </section>
 
       {/* Piano di cura — come nella scheda paziente */}
       {renderOpenGroup('Piano di cura', 'pianoCura', 2)}

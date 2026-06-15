@@ -6199,6 +6199,14 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .irf-vit--attenzione td:first-child { border-left-color: #F79009; }
 .irf-vit--critico td:first-child { border-left-color: var(--red, #DC2626); }
 .irf-vit--critico td:first-child input { color: var(--red, #DC2626); font-weight: 600; }
+/* risk-level coloring */
+.irf-lvl td:first-child { border-left: 3px solid transparent; }
+.irf-lvl--basso td:first-child { border-left-color: #12B76A; }
+.irf-lvl--medio td:first-child { border-left-color: #F79009; }
+.irf-lvl--alto td:first-child { border-left-color: var(--red, #DC2626); }
+/* clinical note cards */
+.irf-note-card { border: 1px solid var(--border, #D0D5DD); border-radius: 8px; padding: 10px 12px; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.irf-note-card__head { display: grid; grid-template-columns: 1fr 1fr 28px; gap: 8px; align-items: center; }
 
 /* ── Import: logical-doc grouping input (REQ-014 residual) ─────────────────── */
 .import-modal__logical { width: 64px; flex: 0 0 auto; font-size: 12px; padding: 3px 6px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; }
