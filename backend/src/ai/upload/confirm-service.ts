@@ -7,6 +7,7 @@
 
 import { prisma } from '../../lib/prisma.js';
 import { AiExtractionError } from '../types.js';
+import { normalizeDate } from '../extraction-validate.js';
 
 export interface ConfirmPatient {
   firstName: string;
@@ -95,7 +96,8 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
   if (!p?.firstName?.trim() || !p?.lastName?.trim() || !p?.dateOfBirth?.trim()) {
     throw new AiExtractionError('config', 'Nome, cognome e data di nascita sono obbligatori');
   }
-  const dob = new Date(p.dateOfBirth);
+  // Accept Italian dd/mm/yyyy (what the OCR model often returns) as well as ISO.
+  const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
   if (Number.isNaN(dob.getTime())) {
     throw new AiExtractionError('config', 'Data di nascita non valida');
   }

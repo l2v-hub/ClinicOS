@@ -6066,6 +6066,8 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
    without this the popup is transparent over the overlay and unreadable. */
 .modal-card { background: var(--surface, #fff); border-radius: var(--card-radius, 12px); box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18)); }
 .import-modal { width: min(560px, 94vw); max-height: 88vh; display: flex; flex-direction: column; gap: 12px; padding: 20px; background: var(--surface, #fff); border-radius: var(--card-radius, 12px); box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18)); }
+/* Review step uses the full screen width to mirror the patient record. */
+.import-modal--review { width: min(1180px, 97vw); max-height: 94vh; }
 .import-modal__head { display: flex; align-items: center; justify-content: space-between; }
 .import-modal__head h2 { font-size: 18px; margin: 0; color: var(--text, #101828); }
 .import-modal__actions { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -6158,6 +6160,33 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .irf-raw { border: 1px solid var(--border, #D0D5DD); border-radius: 8px; padding: 8px 10px; }
 .irf-raw__bar { display: flex; gap: 8px; align-items: center; }
 .irf-raw__text { margin: 8px 0 0; max-height: 300px; overflow: auto; background: #F9FAFB; border-radius: 6px; padding: 10px; font-size: 12px; white-space: pre-wrap; word-break: break-word; color: #344054; }
+
+/* ── Full review v2: patient-record-like layout (wide) ─────────────────────── */
+.irf2 { display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+.irf-sec { border: 1px solid var(--border, #D0D5DD); border-radius: 10px; padding: 14px 16px; }
+.irf-sec > h3 { font-size: 15px; margin: 0 0 10px; color: var(--text, #101828); }
+.irf-sec__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.irf-sec__head h3 { font-size: 15px; margin: 0; }
+.irf-grid--3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .irf-grid--3 { grid-template-columns: 1fr 1fr; } }
+.irf-field--wide { grid-column: 1 / -1; }
+.irf-note { font-size: 12px; color: var(--muted, #667085); margin: 8px 0 0; }
+
+/* allergie banner */
+.irf-alg { border-radius: 10px; padding: 12px 16px; }
+.irf-alg--present { background: var(--red-bg, #FEF3F2); border: 1px solid var(--red, #DC2626); }
+.irf-alg--none { background: #F2F4F7; border: 1px solid var(--border, #D0D5DD); }
+.irf-alg__head { display: flex; align-items: center; justify-content: space-between; }
+.irf-alg--present .irf-alg__head strong { color: var(--red, #DC2626); }
+.irf-alg__row { display: grid; grid-template-columns: 1.2fr 1.4fr 0.8fr 32px; gap: 8px; margin-top: 8px; align-items: center; }
+
+/* clinical tables */
+.irf-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.irf-table th { text-align: left; font-size: 11px; color: var(--muted, #667085); font-weight: 600; padding: 4px 6px; border-bottom: 1px solid var(--border, #D0D5DD); text-transform: uppercase; letter-spacing: .02em; }
+.irf-table td { padding: 4px 6px; border-bottom: 1px solid #EAECF0; vertical-align: middle; }
+.irf-table th.irf-slot, .irf-table td.irf-slot { text-align: center; width: 64px; }
+.irf-cell { width: 100%; box-sizing: border-box; padding: 6px 8px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; font-size: 13px; }
+.irf-cell:focus { border-color: var(--c-primary, #0F5FD7); outline: none; }
 
 /* ── Import: logical-doc grouping input (REQ-014 residual) ─────────────────── */
 .import-modal__logical { width: 64px; flex: 0 0 auto; font-size: 12px; padding: 3px 6px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; }

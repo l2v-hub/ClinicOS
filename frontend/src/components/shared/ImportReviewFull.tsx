@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react';
 
-// Full review editor (REQ-015): renders EVERY extraction field — anagrafica, all
-// cartella scalars, nested groups (anamnesi/pianoCura/presaInCarico) and clinical
-// lists (diagnosi/allergie/farmaci/…) — driven by the extraction SCHEMA so empty
-// fields show too and the operator can integrate missing data. Includes the integral
-// OCR transcription (rawText). Nothing persists until "Crea paziente".
+// Full review editor (REQ-015): mirrors the patient record layout. Shows EVERY field
+// the OCR recovered, grouped like the cartella — allergies as a prominent banner,
+// diagnoses + therapy as tables (therapy with morning/lunch/evening slots), the rest
+// in a wide grid, plus the integral OCR text. Nothing persists until "Crea paziente".
 
 type Json = Record<string, unknown>;
 interface SchemaLeaf { valore: unknown; descrizione?: string }
@@ -34,15 +33,21 @@ const label = (n: SchemaLeaf, key: string) => n.descrizione || key;
 const options = (n: SchemaLeaf): string[] | null =>
   typeof n.valore === 'string' && n.valore.includes('|') ? n.valore.split('|').map((s) => s.trim()).filter(Boolean) : null;
 
-/** deep clone + set value at a path */
+// gg/mm/aaaa -> aaaa-mm-gg for the date input; leave anything else untouched.
+function toIsoDate(v: string): string {
+  const m = /^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/.exec((v || '').trim());
+  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+  return v;
+}
+
 function setAt(obj: Json, path: (string | number)[], value: unknown): Json {
   const next: Json = Array.isArray(obj) ? ([...(obj as unknown[])] as unknown as Json) : { ...obj };
-  let cur: Json | unknown[] = next as Json;
+  let cur: Json = next;
   for (let i = 0; i < path.length - 1; i++) {
-    const k = path[i] as keyof typeof cur;
-    const child = (cur as Json)[k as string];
+    const k = path[i] as string;
+    const child = (cur as Json)[k];
     const clone = Array.isArray(child) ? [...(child as unknown[])] : { ...(child as Json) };
-    (cur as Json)[k as string] = clone;
+    (cur as Json)[k] = clone;
     cur = clone as Json;
   }
   (cur as Json)[path[path.length - 1] as string] = value;
@@ -54,11 +59,19 @@ function getAt(obj: unknown, path: (string | number)[]): unknown {
   return cur;
 }
 
+// Therapy administration slots map to the schema's hour flags.
+const SLOTS: { key: string; label: string }[] = [
+  { key: 'h08', label: 'Mattina' }, { key: 'h12', label: 'Pranzo' },
+  { key: 'h16', label: 'Pomerig.' }, { key: 'h20', label: 'Sera' }, { key: 'h22', label: 'Notte' },
+];
+
+// Keys rendered by dedicated sections (so the generic grid skips them).
+const SPECIAL = new Set(['allergie', 'diagnosi', 'farmaci']);
+
 export function ImportReviewFull({ schema, full, rawText, documents, busy, onConfirm, onBack }: Props) {
   const anagSchema = (schema.anagrafica ?? {}) as Json;
   const cartSchema = (schema.cartella ?? {}) as Json;
 
-  // Seed editable state from the raw extraction (lossless flat values).
   const [data, setData] = useState<{ anagrafica: Json; cartella: Json }>(() => ({
     anagrafica: { ...(full?.anagrafica ?? {}) },
     cartella: { ...(full?.cartella ?? {}) },
@@ -67,140 +80,177 @@ export function ImportReviewFull({ schema, full, rawText, documents, busy, onCon
   const [showRaw, setShowRaw] = useState(false);
   const [rawQuery, setRawQuery] = useState('');
 
-  const update = (path: (string | number)[], value: unknown) => setData((d) => setAt(d as Json, path, value) as { anagrafica: Json; cartella: Json });
+  const update = (path: (string | number)[], value: unknown) =>
+    setData((d) => setAt(d as Json, path, value) as { anagrafica: Json; cartella: Json });
 
+  const cart = (k: string) => (data.cartella[k] as Json[] | undefined) ?? [];
+
+  // ---- generic leaf renderer (used by the wide grid + groups) ----
   function renderLeaf(node: SchemaLeaf, key: string, path: (string | number)[]) {
     const raw = getAt(data, path);
     const opts = options(node);
     const isBool = typeof node.valore === 'boolean';
     const isNum = typeof node.valore === 'number';
-    const longText = (node.descrizione?.length ?? 0) > 48 || ['note', 'noteGenerali', 'contenuto', 'testo', 'descrizione', 'obiettivi', 'interventiPrevisti'].includes(key);
+    const longText = (node.descrizione?.length ?? 0) > 60 || ['note', 'noteGenerali', 'contenuto', 'testo', 'descrizione', 'obiettivi', 'interventiPrevisti', 'notePianificazione'].includes(key);
     return (
-      <div className="irf-field" key={path.join('.')}>
+      <div className={`irf-field${longText ? ' irf-field--wide' : ''}`} key={path.join('.')}>
         <label className="irf-field__label">{label(node, key)}</label>
         {isBool ? (
-          <label className="irf-check">
-            <input type="checkbox" checked={raw === true} onChange={(e) => update(path, e.target.checked)} /> Sì
-          </label>
+          <label className="irf-check"><input type="checkbox" checked={raw === true} onChange={(e) => update(path, e.target.checked)} /> Sì</label>
         ) : opts ? (
           <select className="irf-input" value={String(raw ?? '')} onChange={(e) => update(path, e.target.value)}>
-            <option value="">—</option>
-            {opts.map((o) => <option key={o} value={o}>{o}</option>)}
+            <option value="">—</option>{opts.map((o) => <option key={o} value={o}>{o}</option>)}
           </select>
         ) : longText ? (
           <textarea className="irf-input irf-textarea" value={String(raw ?? '')} onChange={(e) => update(path, e.target.value)} rows={2} />
         ) : (
-          <input className="irf-input" type={isNum ? 'number' : 'text'} value={String(raw ?? '')}
-            onChange={(e) => update(path, isNum ? Number(e.target.value) : e.target.value)} />
+          <input className="irf-input" type={isNum ? 'number' : 'text'} value={String(raw ?? '')} onChange={(e) => update(path, isNum ? Number(e.target.value) : e.target.value)} />
         )}
       </div>
     );
   }
 
-  function renderList(node: SchemaList, key: string, path: (string | number)[]) {
-    const items = (getAt(data, path) as Json[] | undefined) ?? [];
-    const tmplKeys = Object.keys(node._template).filter((k) => !k.startsWith('_'));
-    const blank = () => Object.fromEntries(tmplKeys.map((k) => [k, typeof node._template[k].valore === 'boolean' ? false : '']));
-    return (
-      <div className="irf-list" key={path.join('.')}>
-        <div className="irf-list__head">
-          <strong>{node._descrizione?.split('.')[0] || key}</strong>
-          <span className="irf-count">{items.length}</span>
-          <button type="button" className="irf-add" disabled={busy} onClick={() => update(path, [...items, blank()])}>+ Aggiungi</button>
-        </div>
-        {items.length === 0 && <p className="irf-empty">Nessuna voce — usa “Aggiungi” per inserirla.</p>}
-        {items.map((_, idx) => (
-          <div className="irf-item" key={idx}>
-            <div className="irf-item__head">
-              <span>{key} #{idx + 1}</span>
-              <button type="button" className="irf-del" disabled={busy}
-                onClick={() => update(path, items.filter((_, i) => i !== idx))}>Rimuovi</button>
-            </div>
-            <div className="irf-grid">
-              {tmplKeys.map((tk) => renderLeaf(node._template[tk], tk, [...path, idx, tk]))}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   function renderNode(node: SchemaNode, key: string, path: (string | number)[]) {
-    if (isList(node)) return renderList(node, key, path);
+    if (isList(node)) return renderGenericList(node, key, path);
     if (isLeaf(node)) return renderLeaf(node, key, path);
     if (isGroup(node)) {
       const childKeys = Object.keys(node).filter((k) => !k.startsWith('_'));
       return (
-        <details className="irf-group" key={path.join('.')} open>
+        <details className="irf-group" key={path.join('.')}>
           <summary>{(node._descrizione as string)?.split('.')[0] || key}</summary>
-          <div className="irf-grid">
-            {childKeys.map((ck) => renderNode((node as Json)[ck] as SchemaNode, ck, [...path, ck]))}
-          </div>
+          <div className="irf-grid">{childKeys.map((ck) => renderNode((node as Json)[ck] as SchemaNode, ck, [...path, ck]))}</div>
         </details>
       );
     }
     return null;
   }
 
-  const cartKeys = Object.keys(cartSchema).filter((k) => !k.startsWith('_'));
-  const anagKeys = Object.keys(anagSchema).filter((k) => !k.startsWith('_'));
-
-  function submit() {
-    setError(null);
-    const a = data.anagrafica;
-    const c = data.cartella;
-    const firstName = String(a.nome ?? '').trim();
-    const lastName = String(a.cognome ?? '').trim();
-    const dateOfBirth = String(a.dataNascita ?? '').trim();
-    if (!firstName || !lastName || !dateOfBirth) { setError('Nome, cognome e data di nascita sono obbligatori.'); return; }
-    onConfirm(
-      {
-        firstName, lastName, dateOfBirth,
-        sex: String(a.sesso ?? '').trim(),
-        email: String(a.email ?? '').trim(),
-        phone: String(a.telefono ?? '').trim(),
-        address: String(a.indirizzo ?? '').trim(),
-        emergencyContactName: String(a.contattoEmergenzaNome ?? '').trim(),
-        emergencyContactPhone: String(a.contattoEmergenzaTel ?? '').trim(),
-        codiceFiscale: String(c.codiceFiscale ?? '').trim(),
-      },
-      c,
+  function renderGenericList(node: SchemaList, key: string, path: (string | number)[]) {
+    const items = (getAt(data, path) as Json[] | undefined) ?? [];
+    const tmplKeys = Object.keys(node._template).filter((k) => !k.startsWith('_'));
+    const blank = () => Object.fromEntries(tmplKeys.map((k) => [k, typeof node._template[k].valore === 'boolean' ? false : '']));
+    return (
+      <details className="irf-group" key={path.join('.')}>
+        <summary>{node._descrizione?.split('.')[0] || key} ({items.length})</summary>
+        <button type="button" className="irf-add" disabled={busy} onClick={() => update(path, [...items, blank()])}>+ Aggiungi</button>
+        {items.map((_, idx) => (
+          <div className="irf-item" key={idx}>
+            <div className="irf-item__head"><span>#{idx + 1}</span>
+              <button type="button" className="irf-del" disabled={busy} onClick={() => update(path, items.filter((_, i) => i !== idx))}>Rimuovi</button></div>
+            <div className="irf-grid">{tmplKeys.map((tk) => renderLeaf(node._template[tk], tk, [...path, idx, tk]))}</div>
+          </div>
+        ))}
+      </details>
     );
   }
 
-  const rawLines = useMemo(() => {
+  // ---- specialized clinical tables ----
+  function cellInput(list: string, idx: number, field: string, placeholder = '') {
+    return <input className="irf-cell" value={String((cart(list)[idx]?.[field] as string) ?? '')} placeholder={placeholder}
+      onChange={(e) => update(['cartella', list, idx, field], e.target.value)} />;
+  }
+  function addRow(list: string, blank: Json) { update(['cartella', list], [...cart(list), blank]); }
+  function delRow(list: string, idx: number) { update(['cartella', list], cart(list).filter((_, i) => i !== idx)); }
+
+  const allergie = cart('allergie');
+  const diagnosi = cart('diagnosi');
+  const farmaci = cart('farmaci');
+
+  function submit() {
+    setError(null);
+    const a = data.anagrafica, c = data.cartella;
+    const firstName = String(a.nome ?? '').trim(), lastName = String(a.cognome ?? '').trim();
+    const dateOfBirth = toIsoDate(String(a.dataNascita ?? '').trim());
+    if (!firstName || !lastName || !dateOfBirth) { setError('Nome, cognome e data di nascita sono obbligatori.'); return; }
+    onConfirm({
+      firstName, lastName, dateOfBirth,
+      sex: String(a.sesso ?? '').trim(), email: String(a.email ?? '').trim(),
+      phone: String(a.telefono ?? '').trim(), address: String(a.indirizzo ?? '').trim(),
+      emergencyContactName: String(a.contattoEmergenzaNome ?? '').trim(),
+      emergencyContactPhone: String(a.contattoEmergenzaTel ?? '').trim(),
+      codiceFiscale: String(c.codiceFiscale ?? '').trim(),
+    }, { ...c, dataNascita: dateOfBirth });
+  }
+
+  const rawShown = useMemo(() => {
     const t = rawText ?? '';
     if (!rawQuery.trim()) return t;
     return t.split('\n').filter((l) => l.toLowerCase().includes(rawQuery.toLowerCase())).join('\n');
   }, [rawText, rawQuery]);
 
+  const anagKeys = Object.keys(anagSchema).filter((k) => !k.startsWith('_'));
+  const otherCartKeys = Object.keys(cartSchema).filter((k) => !k.startsWith('_') && !SPECIAL.has(k));
+
   return (
-    <div className="import-review irf">
-      <p className="irf-hint">Controlla e integra <strong>tutti</strong> i dati estratti. Niente viene salvato finché non premi “Crea paziente”.</p>
+    <div className="irf2">
+      <p className="irf-hint">Controlla e integra <strong>tutti</strong> i dati estratti dal documento. Niente viene salvato finché non premi “Crea paziente”.</p>
 
-      <h3 className="import-review__sec">Anagrafica</h3>
-      <div className="irf-grid">
-        {anagKeys.map((k) => renderNode(anagSchema[k] as SchemaNode, k, ['anagrafica', k]))}
-      </div>
-
-      <h3 className="import-review__sec">Cartella clinica</h3>
-      {cartKeys.map((k) => renderNode(cartSchema[k] as SchemaNode, k, ['cartella', k]))}
-
-      <h3 className="import-review__sec">Testo riconosciuto (OCR)</h3>
-      {rawText ? (
-        <div className="irf-raw">
-          <div className="irf-raw__bar">
-            <input className="irf-input" placeholder="Cerca nel testo…" value={rawQuery} onChange={(e) => setRawQuery(e.target.value)} />
-            <button type="button" className="irf-add" onClick={() => setShowRaw((s) => !s)}>{showRaw ? 'Nascondi' : 'Mostra'}</button>
-          </div>
-          {showRaw && <pre className="irf-raw__text">{rawLines || '(nessuna riga corrisponde)'}</pre>}
+      {/* Allergie — banner prominente */}
+      <section className={`irf-alg ${allergie.length ? 'irf-alg--present' : 'irf-alg--none'}`}>
+        <div className="irf-alg__head">
+          <strong>{allergie.length ? '⚠ ALLERGIE RILEVATE' : 'ALLERGIE NON DOCUMENTATE'}</strong>
+          <button type="button" className="irf-add" disabled={busy} onClick={() => addRow('allergie', { allergene: '', reazione: '', gravita: '' })}>+ Allergia</button>
         </div>
-      ) : (
-        <p className="irf-empty">Trascrizione integrale non disponibile per questo import.</p>
-      )}
+        {allergie.map((_, i) => (
+          <div className="irf-alg__row" key={i}>
+            {cellInput('allergie', i, 'allergene', 'Allergene')}
+            {cellInput('allergie', i, 'reazione', 'Reazione')}
+            {cellInput('allergie', i, 'gravita', 'Gravità')}
+            <button type="button" className="irf-del" disabled={busy} onClick={() => delRow('allergie', i)}>✕</button>
+          </div>
+        ))}
+      </section>
 
-      <h3 className="import-review__sec">Documenti ({documents.length})</h3>
-      <ul className="ir-docs">{documents.map((d) => <li key={d.id}>{d.filename}</li>)}</ul>
+      {/* Anagrafica — griglia larga */}
+      <section className="irf-sec">
+        <h3>Anagrafica</h3>
+        <div className="irf-grid irf-grid--3">{anagKeys.map((k) => renderNode(anagSchema[k] as SchemaNode, k, ['anagrafica', k]))}</div>
+      </section>
+
+      {/* Diagnosi — tabella */}
+      <section className="irf-sec">
+        <div className="irf-sec__head"><h3>Diagnosi ({diagnosi.length})</h3>
+          <button type="button" className="irf-add" disabled={busy} onClick={() => addRow('diagnosi', { codiceICD: '', descrizione: '', tipo: '', stato: '' })}>+ Diagnosi</button></div>
+        <table className="irf-table"><thead><tr><th>ICD</th><th>Descrizione</th><th>Tipo</th><th>Stato</th><th></th></tr></thead>
+          <tbody>{diagnosi.map((_, i) => (<tr key={i}>
+            <td>{cellInput('diagnosi', i, 'codiceICD', 'ICD')}</td><td>{cellInput('diagnosi', i, 'descrizione', 'Descrizione')}</td>
+            <td>{cellInput('diagnosi', i, 'tipo')}</td><td>{cellInput('diagnosi', i, 'stato')}</td>
+            <td><button type="button" className="irf-del" disabled={busy} onClick={() => delRow('diagnosi', i)}>✕</button></td></tr>))}
+          {diagnosi.length === 0 && <tr><td colSpan={5} className="irf-empty">Nessuna diagnosi</td></tr>}</tbody></table>
+      </section>
+
+      {/* Farmaci / Terapia — tabella con fasce orarie */}
+      <section className="irf-sec">
+        <div className="irf-sec__head"><h3>Terapia farmacologica ({farmaci.length})</h3>
+          <button type="button" className="irf-add" disabled={busy} onClick={() => addRow('farmaci', { nome: '', dose: '', via: '', frequenza: '' })}>+ Farmaco</button></div>
+        <table className="irf-table"><thead><tr><th>Farmaco</th><th>Dose</th><th>Via</th>{SLOTS.map((s) => <th key={s.key} className="irf-slot">{s.label}</th>)}<th></th></tr></thead>
+          <tbody>{farmaci.map((row, i) => (<tr key={i}>
+            <td>{cellInput('farmaci', i, 'nome', 'Nome')}</td><td>{cellInput('farmaci', i, 'dose', 'Dose')}</td><td>{cellInput('farmaci', i, 'via')}</td>
+            {SLOTS.map((s) => <td key={s.key} className="irf-slot">
+              <input type="checkbox" checked={!!(row[s.key]) && row[s.key] !== ''} onChange={(e) => update(['cartella', 'farmaci', i, s.key], e.target.checked ? '✓' : '')} /></td>)}
+            <td><button type="button" className="irf-del" disabled={busy} onClick={() => delRow('farmaci', i)}>✕</button></td></tr>))}
+          {farmaci.length === 0 && <tr><td colSpan={SLOTS.length + 4} className="irf-empty">Nessun farmaco</td></tr>}</tbody></table>
+        <p className="irf-note">Le fasce orarie (Mattina/Pranzo/Pomeriggio/Sera/Notte) diventano la terapia somministrabile del paziente.</p>
+      </section>
+
+      {/* Resto della cartella — sezioni espandibili */}
+      <section className="irf-sec">
+        <h3>Altri dati clinici</h3>
+        <div className="irf-grid">{otherCartKeys.map((k) => renderNode(cartSchema[k] as SchemaNode, k, ['cartella', k]))}</div>
+      </section>
+
+      {/* Testo OCR */}
+      <section className="irf-sec">
+        <div className="irf-sec__head"><h3>Testo riconosciuto (OCR)</h3>
+          {rawText && <button type="button" className="irf-add" onClick={() => setShowRaw((s) => !s)}>{showRaw ? 'Nascondi' : 'Mostra'}</button>}</div>
+        {rawText ? (showRaw && (<>
+          <input className="irf-input" placeholder="Cerca nel testo…" value={rawQuery} onChange={(e) => setRawQuery(e.target.value)} />
+          <pre className="irf-raw__text">{rawShown || '(nessuna riga corrisponde)'}</pre></>))
+          : <p className="irf-empty">Trascrizione non disponibile.</p>}
+      </section>
+
+      <section className="irf-sec"><h3>Documenti ({documents.length})</h3>
+        <ul className="ir-docs">{documents.map((d) => <li key={d.id}>{d.filename}</li>)}</ul></section>
 
       {error && <p className="import-modal__error">{error}</p>}
       <footer className="import-modal__foot">

@@ -276,7 +276,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
 
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Importa lettera di dimissione">
-      <div className="modal-card import-modal">
+      <div className={`modal-card import-modal${isReview ? ' import-modal--review' : ''}`}>
         <header className="import-modal__head">
           <h2>{isReview ? 'Revisione — Nuovo paziente' : 'Importa lettera di dimissione'}</h2>
           <button className="icon-btn" onClick={cancel} aria-label="Chiudi">✕</button>
