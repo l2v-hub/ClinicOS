@@ -563,12 +563,16 @@ export async function runJob(jobId: string): Promise<void> {
           const resultPayload = await runtimeGetResult(runtimeJobId);
           let raw = resultPayload.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null;
           const modelUsed = resultPayload.model ?? rStatus.model ?? 'runtime';
-          // Focused clinical-lists pass (best-effort) — gemma fills these better alone.
-          try {
-            const lists = await runtimeClinicalLists(jobId, docFiles);
-            raw = applyClinicalLists(raw, lists);
-          } catch {
-            /* best-effort; keep the main extraction */
+          // Focused clinical-lists pass (best-effort, opt-in). Adds one model call per
+          // import — disabled by default to protect constrained provider quota. Enable
+          // with AI_CLINICAL_LISTS_PASS=true once a capable/quota'd model is configured.
+          if (process.env.AI_CLINICAL_LISTS_PASS === 'true') {
+            try {
+              const lists = await runtimeClinicalLists(jobId, docFiles);
+              raw = applyClinicalLists(raw, lists);
+            } catch {
+              /* best-effort; keep the main extraction */
+            }
           }
           const merged = wrapRuntimeResult(
             raw,
@@ -576,12 +580,16 @@ export async function runJob(jobId: string): Promise<void> {
             modelUsed,
             cfg.mergePreferRecent,
           );
+          // Integral OCR transcription (best-effort). Adds one model call per import;
+          // disable with AI_OCR_TRANSCRIPTION=false to save provider quota.
           let rawText = '';
-          try {
-            await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
-            rawText = await runtimeTranscribe(jobId, docFiles);
-          } catch {
-            /* transcription is best-effort; never block the import */
+          if (process.env.AI_OCR_TRANSCRIPTION !== 'false') {
+            try {
+              await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
+              rawText = await runtimeTranscribe(jobId, docFiles);
+            } catch {
+              /* transcription is best-effort; never block the import */
+            }
           }
           await prisma.importJob.update({
             where: { id: jobId },
