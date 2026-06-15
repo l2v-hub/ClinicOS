@@ -30,8 +30,11 @@ try {
   console.log('status:', last.status);
   if (last.status === 'review_ready') {
     const rd = (await (await af(`${base}/${jobId}/result`)).json()).resultData ?? {};
-    console.log('\n=== _full.cartella (RAW from model) ===');
+    console.log('\n=== _full.anagrafica ===');
+    console.log(JSON.stringify(rd._full?.anagrafica ?? {}, null, 1));
+    console.log('=== _full.cartella ===');
     console.log(JSON.stringify(rd._full?.cartella ?? {}, null, 1));
+    console.log('=== rawText length ===', (rd.rawText ?? '').length);
   }
 } finally {
   if (jobId) await af(`${base}/${jobId}/cancel`, { method: 'POST' }).catch(() => {});
