@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { loadAiConfig, publicStatus } from '../ai/config.js';
+import { loadAiConfig, loadExtractionSchema, publicStatus } from '../ai/config.js';
 import { createExtractionProvider } from '../ai/provider-factory.js';
 
 const aiExtractionRouter = Router();
@@ -31,6 +31,17 @@ aiExtractionRouter.get('/capabilities', async (_req, res) => {
       available: false,
       error: err instanceof Error ? err.message : 'Errore configurazione AI',
     });
+  }
+});
+
+// GET /ai/extraction/schema — the extraction schema (fields + descriptions) so the
+// review UI can render EVERY field (even empty ones) for full review/integration.
+// No secrets: this is the versioned, in-repo schema asset.
+aiExtractionRouter.get('/schema', (_req, res) => {
+  try {
+    res.status(200).json(loadExtractionSchema());
+  } catch {
+    res.status(500).json({ error: 'Schema di estrazione non disponibile' });
   }
 });
 

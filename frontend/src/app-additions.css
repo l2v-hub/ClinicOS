@@ -6120,6 +6120,33 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .ir-docs { list-style: none; margin: 0; padding: 0; font-size: 13px; color: #344054; display: flex; flex-direction: column; gap: 3px; }
 @media (max-width: 760px) { .import-review__grid { grid-template-columns: 1fr; } }
 
+/* ── Full review editor (REQ-015): all fields editable + OCR text ──────────── */
+.irf { gap: 14px; }
+.irf-hint { font-size: 13px; color: var(--muted, #667085); margin: 0; }
+.irf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 760px) { .irf-grid { grid-template-columns: 1fr; } }
+.irf-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.irf-field__label { font-size: 12px; color: var(--muted, #667085); }
+.irf-input { padding: 7px 9px; border: 1px solid var(--border, #D0D5DD); border-radius: 7px; font-size: 14px; background: #fff; color: var(--text, #101828); width: 100%; box-sizing: border-box; }
+.irf-input:focus { border-color: var(--c-primary, #0F5FD7); outline: none; }
+.irf-textarea { resize: vertical; min-height: 38px; font-family: inherit; }
+.irf-check { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; padding: 6px 0; }
+.irf-group { border: 1px solid var(--border, #D0D5DD); border-radius: 8px; padding: 8px 10px; margin: 0 0 4px; }
+.irf-group > summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text, #101828); }
+.irf-group .irf-grid { margin-top: 8px; }
+.irf-list { border: 1px solid var(--border, #D0D5DD); border-radius: 8px; padding: 8px 10px; margin: 0 0 4px; }
+.irf-list__head { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.irf-count { background: var(--c-primary, #0F5FD7); color: #fff; font-size: 11px; padding: 1px 7px; border-radius: 999px; }
+.irf-add { margin-left: auto; font-size: 12px; padding: 4px 10px; border: 1px solid var(--c-primary, #0F5FD7); color: var(--c-primary, #0F5FD7); background: #fff; border-radius: 6px; cursor: pointer; }
+.irf-add:hover:not(:disabled) { background: #EFF4FF; }
+.irf-empty { font-size: 12px; color: var(--muted, #667085); margin: 6px 0 0; }
+.irf-item { border: 1px dashed var(--border, #D0D5DD); border-radius: 7px; padding: 8px; margin-top: 8px; }
+.irf-item__head { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--muted, #667085); margin-bottom: 6px; }
+.irf-del { font-size: 12px; padding: 2px 8px; border: 1px solid var(--border, #D0D5DD); background: #fff; border-radius: 6px; cursor: pointer; color: #B42318; }
+.irf-raw { border: 1px solid var(--border, #D0D5DD); border-radius: 8px; padding: 8px 10px; }
+.irf-raw__bar { display: flex; gap: 8px; align-items: center; }
+.irf-raw__text { margin: 8px 0 0; max-height: 300px; overflow: auto; background: #F9FAFB; border-radius: 6px; padding: 10px; font-size: 12px; white-space: pre-wrap; word-break: break-word; color: #344054; }
+
 /* ── Import: logical-doc grouping input (REQ-014 residual) ─────────────────── */
 .import-modal__logical { width: 64px; flex: 0 0 auto; font-size: 12px; padding: 3px 6px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; }
 .import-modal__logical:focus { border-color: var(--c-primary, #0F5FD7); outline: none; }

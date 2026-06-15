@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../config';
-import { ImportReview } from './ImportReview';
-import type { NuovoPaziente } from '../../types';
+import { ImportReviewFull, type ConfirmPatient } from './ImportReviewFull';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
 // Files are added to a backend job (no patient record is created here).
@@ -75,12 +74,23 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'upload' | 'review'>('upload');
   const [proposal, setProposal] = useState<unknown>(null);
+  const [schema, setSchema] = useState<Record<string, unknown> | null>(null);
   const [processing, setProcessing] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const cameraInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!open) { setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); setProcessing(false); }
+  }, [open]);
+
+  // Load the extraction schema once so the review can render EVERY field (REQ-015).
+  useEffect(() => {
+    if (!open || schema) return;
+    apiFetch(`${API_URL}/ai/extraction/schema`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((s) => { if (s) setSchema(s); })
+      .catch(() => { /* review falls back to extracted-only fields */ });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   // REQ-022: poll the job status while it is being processed asynchronously.
@@ -220,24 +230,17 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   }
 
   // REQ-018/021: transactional confirm — create new OR update existing patient.
-  async function handleCreate(np: NuovoPaziente) {
+  // The full reviewed cartella (every clinical field/list the operator edited) is sent
+  // verbatim so all data is persisted (REQ-015), not just a subset.
+  async function handleCreate(patient: ConfirmPatient, cartella: Record<string, unknown>) {
     if (!job) return;
     setBusy(true); setError(null);
     const target = (proposal as { _target?: { mode?: string; patientId?: string } } | null)?._target;
     const body = (confirmDuplicate: boolean) => ({
       mode: target?.mode === 'existing' ? 'existing' : 'new',
       patientId: target?.mode === 'existing' ? target?.patientId : undefined,
-      patient: {
-        firstName: np.firstName, lastName: np.lastName, dateOfBirth: np.dateOfBirth,
-        sex: np.sex, email: np.email, phone: np.phone, address: np.address,
-        emergencyContactName: np.referenteNome, emergencyContactPhone: np.referenteTelefono,
-        codiceFiscale: np.codiceFiscale,
-      },
-      cartella: {
-        statoRicovero: np.statoPaziente, dataRicovero: np.dataIngresso,
-        patologiaIngresso: np.motivoIngresso, noteGenerali: np.noteIniziali,
-        allergieText: np.allergie, farmaciText: np.farmaci, diagnosiText: np.notaClinicaIniziale,
-      },
+      patient,
+      cartella,
       confirmDuplicate,
     });
     const post = (dup: boolean) => apiFetch(`${JOBS_URL}/${job.id}/confirm`, {
@@ -285,12 +288,14 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
         </ol>
 
         {isReview ? (
-          <ImportReview
-            proposal={proposal as Parameters<typeof ImportReview>[0]['proposal']}
+          <ImportReviewFull
+            schema={schema ?? {}}
+            full={(proposal as { _full?: { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } } | null)?._full ?? null}
+            rawText={(proposal as { rawText?: string } | null)?.rawText ?? ''}
             documents={job?.documents ?? []}
             busy={busy}
             onBack={() => setStep('upload')}
-            onCreate={handleCreate}
+            onConfirm={handleCreate}
           />
         ) : (
         <>

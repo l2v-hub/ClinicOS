@@ -207,6 +207,35 @@ export function wrapRuntimeResult(
   return mergeExtractions(docResults, { preferRecent });
 }
 
+// Best-effort integral OCR transcription (REQ-015 "Testo riconosciuto"). Runs as a
+// SEPARATE runtime job so a long/truncated transcription can never break the
+// structured extraction. Returns '' on any failure.
+const TRANSCRIBE_PROMPT =
+  'Sei un sistema OCR clinico. Trascrivi INTEGRALMENTE e fedelmente tutto il testo ' +
+  'leggibile dei documenti allegati, mantenendo l\'ordine originale. Non riassumere, ' +
+  'non interpretare, non tradurre, non dedurre. Per parti illeggibili usa [ILLEGGIBILE]. ' +
+  'Restituisci SOLO JSON valido nel formato {"rawText": "<trascrizione integrale>"}.';
+
+async function runtimeTranscribe(
+  jobId: string,
+  documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
+): Promise<string> {
+  const rid = await runtimeCreateJob(jobId, documents, { rawText: '' }, TRANSCRIBE_PROMPT);
+  await runtimeRunJob(rid);
+  const deadline = Date.now() + 10 * 60 * 1000;
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 3000));
+    const s = await runtimeGetJob(rid);
+    const { jobStatus, isTerminal } = mapRuntimeStatus(s.status);
+    if (isTerminal) {
+      if (jobStatus !== 'review_ready') return '';
+      const r = await runtimeGetResult(rid);
+      return String((r.data as { rawText?: unknown } | null)?.rawText ?? '');
+    }
+  }
+  return '';
+}
+
 /** Map runtime status string to ClinicOS JobStatus */
 export function mapRuntimeStatus(runtimeStatus: string): { jobStatus: JobStatus; isTerminal: boolean } {
   const terminalOk = ['completed', 'review_ready'];
@@ -475,25 +504,35 @@ export async function runJob(jobId: string): Promise<void> {
 
       if (isTerminal) {
         if (jobStatus === 'review_ready') {
-          // 5. Fetch result, wrap into the merged-proposal shape the UI/confirm need, persist.
+          // 5. Fetch result. Persist BOTH the merged proposal (compat: report/conflicts)
+          //    AND the full raw extraction (_full, lossless — every schema field) plus a
+          //    best-effort integral transcription (rawText) for the full review editor.
           const resultPayload = await runtimeGetResult(runtimeJobId);
+          const raw = resultPayload.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null;
           const modelUsed = resultPayload.model ?? rStatus.model ?? 'runtime';
           const merged = wrapRuntimeResult(
-            resultPayload.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null,
+            raw,
             usable.map((d) => ({ id: d.id, filename: d.filename })),
             modelUsed,
             cfg.mergePreferRecent,
           );
+          let rawText = '';
+          try {
+            await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
+            rawText = await runtimeTranscribe(jobId, docFiles);
+          } catch {
+            /* transcription is best-effort; never block the import */
+          }
           await prisma.importJob.update({
             where: { id: jobId },
             data: {
               status: 'review_ready',
               stage: 'completed',
-              resultData: merged as object,
+              resultData: { ...merged, _full: raw ?? {}, rawText } as object,
               model: modelUsed,
             },
           });
-          await recordAudit(jobId, 'process_completed', { detail: 'runtime extraction + merge ok' });
+          await recordAudit(jobId, 'process_completed', { detail: 'runtime extraction + merge + transcription' });
         } else {
           // failed / retryable_error
           const retryable = jobStatus === 'retryable_error';
