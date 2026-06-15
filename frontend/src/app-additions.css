@@ -6120,6 +6120,18 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .ir-docs { list-style: none; margin: 0; padding: 0; font-size: 13px; color: #344054; display: flex; flex-direction: column; gap: 3px; }
 @media (max-width: 760px) { .import-review__grid { grid-template-columns: 1fr; } }
 
+/* ── Patient delete button (TEST-ONLY, hidden when disabled) ───────────────── */
+.pt-delete-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; padding: 0;
+  border: 1px solid var(--border, #D0D5DD); border-radius: 7px;
+  background: #fff; color: var(--red, #DC2626); cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.pt-delete-btn:hover:not(:disabled) { background: var(--red-bg, #FEF3F2); border-color: var(--red, #DC2626); }
+.pt-delete-btn:disabled { opacity: 0.5; cursor: default; }
+.pt-delete-btn svg { width: 16px; height: 16px; }
+
 /* ── Full review editor (REQ-015): all fields editable + OCR text ──────────── */
 .irf { gap: 14px; }
 .irf-hint { font-size: 13px; color: var(--muted, #667085); margin: 0; }

@@ -16,6 +16,12 @@ router.get('/', async (_req, res) => {
   }
 });
 
+// GET /patients/settings — UI capability flags (e.g. whether delete is enabled).
+// Defined BEFORE '/:id' so it is not captured as an id.
+router.get('/settings', (_req, res) => {
+  res.status(200).json({ deleteEnabled: (process.env.ALLOW_PATIENT_DELETE ?? 'true').trim().toLowerCase() !== 'false' });
+});
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -376,6 +382,40 @@ router.patch('/:id', async (req, res) => {
     } else {
       console.error('PATCH /patients/:id error:', error);
       res.status(500).json({ error: 'Errore durante aggiornamento paziente' });
+    }
+  }
+});
+
+// ── DELETE /patients/:id — remove a patient (TEST-ONLY) ───────────────────
+// Gated by ALLOW_PATIENT_DELETE (default enabled for testing). To permanently
+// forbid deletion later, set ALLOW_PATIENT_DELETE=false — no code change.
+// DB cascades clinical relations (cartella, records, appointments, therapies,
+// diary, room assignments); dangling import references are nulled first.
+
+function patientDeleteAllowed(): boolean {
+  return (process.env.ALLOW_PATIENT_DELETE ?? 'true').trim().toLowerCase() !== 'false';
+}
+
+router.delete('/:id', async (req, res) => {
+  if (!patientDeleteAllowed()) {
+    res.status(403).json({ error: 'Cancellazione paziente disabilitata' });
+    return;
+  }
+  const { id } = req.params;
+  try {
+    await prisma.$transaction([
+      prisma.importJob.updateMany({ where: { createdPatientId: id }, data: { createdPatientId: null } }),
+      prisma.patient.delete({ where: { id } }),
+    ]);
+    console.log(`DELETE /patients/${id} → cancellato`);
+    res.status(200).json({ deleted: id });
+  } catch (error: unknown) {
+    const prismaError = error as { code?: string };
+    if (prismaError.code === 'P2025') {
+      res.status(404).json({ error: 'Paziente non trovato' });
+    } else {
+      console.error('DELETE /patients/:id error:', error);
+      res.status(500).json({ error: 'Errore durante la cancellazione del paziente' });
     }
   }
 });

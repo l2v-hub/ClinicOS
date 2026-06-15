@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente } from '../../types';
-import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus } from '../../icons';
+import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus, IcoTrash } from '../../icons';
 import { NewPatientModal } from '../shared/NewPatientModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalTable } from './cartella/ClinicalTable';
@@ -35,6 +36,40 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
   const [ricerca, setRicerca] = useState('');
   const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [showModal, setShowModal] = useState(false);
+  // TEST-ONLY: patient deletion. Backend gates it via ALLOW_PATIENT_DELETE; we hide the
+  // button when disabled so production simply never shows it.
+  const [deleteEnabled, setDeleteEnabled] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`${API_URL}/patients/settings`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((s) => { if (s) setDeleteEnabled(!!s.deleteEnabled); })
+      .catch(() => { /* leave hidden */ });
+  }, []);
+
+  async function handleDelete(p: Paziente, e: React.MouseEvent) {
+    e.stopPropagation();
+    if (deletingId) return;
+    if (!window.confirm(`Eliminare definitivamente ${p.lastName}, ${p.firstName} (${p.medicalRecordNumber})? Verranno rimossi anche cartella e dati clinici. Azione di test.`)) return;
+    setDeletingId(p.id);
+    try {
+      const headers: Record<string, string> = {};
+      if (operatorId) headers['X-Operator-Id'] = operatorId;
+      if (operatorRole) headers['X-Operator-Role'] = operatorRole;
+      const res = await fetch(`${API_URL}/patients/${p.id}`, { method: 'DELETE', headers });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        alert(d.error || 'Eliminazione non riuscita');
+        return;
+      }
+      onImported?.();
+    } catch {
+      alert('Errore di rete durante l’eliminazione');
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   const consegneAperteMap = new Map<string, number>();
   consegne.filter(c => c.stato !== 'completata').forEach(c => {
@@ -176,6 +211,19 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
                     )
                   ),
                 },
+                ...(deleteEnabled ? [{
+                  key: 'elimina', label: '', align: 'center' as const,
+                  render: (_v: unknown, p: Paziente) => (
+                    <button
+                      className="pt-delete-btn"
+                      title="Elimina paziente (test)"
+                      disabled={deletingId === p.id}
+                      onClick={(e) => handleDelete(p, e)}
+                    >
+                      <IcoTrash />
+                    </button>
+                  ),
+                }] : []),
                 {
                   key: 'chevron', label: '', align: 'right',
                   render: () => <span className="row-chevron"><IcoChevronRight /></span>,
@@ -198,6 +246,11 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   {consegneAperte.has(p.id) && (
                     <span className="consegna-alert-dot"><IcoAlert /></span>
+                  )}
+                  {deleteEnabled && (
+                    <button className="pt-delete-btn" title="Elimina paziente (test)" disabled={deletingId === p.id} onClick={(e) => handleDelete(p, e)}>
+                      <IcoTrash />
+                    </button>
                   )}
                   <span className="pt-list-card__chevron"><IcoChevronRight /></span>
                 </div>
