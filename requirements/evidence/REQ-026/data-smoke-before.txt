@@ -1,0 +1,4 @@
+REQ-026 data smoke BEFORE - Mon Jun 15 21:49:12 UTC 2026
+GET /patients -> HTTP 200
+patient count: 19
+first record keys: id, medicalRecordNumber, firstName, lastName, dateOfBirth, sex, email, phone, address, emergencyContactName, emergencyContactPhone, registeredById, createdAt, updatedAt

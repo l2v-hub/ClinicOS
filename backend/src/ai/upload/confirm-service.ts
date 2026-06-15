@@ -8,6 +8,7 @@
 import { prisma } from '../../lib/prisma.js';
 import { AiExtractionError } from '../types.js';
 import { normalizeDate } from '../extraction-validate.js';
+import { isConfirmBlocked, type SectionsResult } from '../sections/index.js';
 
 export interface ConfirmPatient {
   firstName: string;
@@ -29,6 +30,8 @@ export interface ConfirmPayload {
   idempotencyKey?: string;
   /** Proceed even when a likely duplicate exists. */
   confirmDuplicate?: boolean;
+  /** REQ-026: proceed even when allergy information is contradictory (operator override). */
+  confirmAllergyConflict?: boolean;
   /** REQ-021: 'existing' updates an existing patient's cartella instead of creating. */
   mode?: 'new' | 'existing';
   patientId?: string;
@@ -90,6 +93,15 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
         patient: { id: existing.id, firstName: existing.firstName, lastName: existing.lastName, medicalRecordNumber: existing.medicalRecordNumber },
       };
     }
+  }
+
+  // REQ-026: allergies are top priority — a contradictory allergy reading blocks the
+  // confirmation until an operator explicitly overrides it. Only triggers when a
+  // sections pass produced a 'conflicting' status; otherwise this is a no-op.
+  const sections = (job.resultData as { _sections?: SectionsResult } | null)?._sections;
+  if (isConfirmBlocked(sections) && !payload.confirmAllergyConflict) {
+    await audit(jobId, 'allergy_conflict_blocked', undefined, 'allergie conflicting');
+    throw new AiExtractionError('config', 'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.');
   }
 
   const p = payload.patient;

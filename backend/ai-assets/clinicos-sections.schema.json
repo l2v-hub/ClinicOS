@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://clinicos/extraction/sections.schema.json",
+  "title": "ClinicOS faithful clinical sections (REQ-026)",
+  "description": "Model-agnostic contract: each canonical clinical section keeps one faithful rawText block plus semantic annotations (offsets only, never HTML). Missing data stays empty; nothing is summarised, rewritten or invented.",
+  "type": "object",
+  "required": ["sections"],
+  "additionalProperties": true,
+  "properties": {
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sectionKey", "rawText"],
+        "additionalProperties": true,
+        "properties": {
+          "sectionKey": {
+            "type": "string",
+            "enum": [
+              "PATIENT_DEMOGRAPHICS",
+              "ALLERGIES",
+              "DISCHARGE_DIAGNOSIS",
+              "ANAMNESIS",
+              "HOSPITAL_COURSE",
+              "CONSULTATIONS",
+              "IMAGING_DIAGNOSTICS",
+              "PROCEDURES_AND_INTERVENTIONS",
+              "HOSPITAL_THERAPY",
+              "DISCHARGE_HOME_THERAPY",
+              "ADVICE_AND_FOLLOW_UP",
+              "UNMAPPED_CONTENT"
+            ]
+          },
+          "detectedHeading": { "type": "string" },
+          "rawText": { "type": "string" },
+          "sourceRanges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "fileId": { "type": "string" },
+                "pageNumber": { "type": "integer" },
+                "startOffset": { "type": "integer" },
+                "endOffset": { "type": "integer" }
+              }
+            }
+          },
+          "annotations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["tag", "text", "startOffset", "endOffset"],
+              "additionalProperties": true,
+              "properties": {
+                "tag": {
+                  "type": "string",
+                  "enum": [
+                    "SECTION_TITLE",
+                    "SUBSECTION_TITLE",
+                    "DATE",
+                    "TIME",
+                    "TEMPORAL_MARKER",
+                    "MEDICATION_NAME",
+                    "DOSE",
+                    "SCHEDULE",
+                    "FREQUENCY",
+                    "ALLERGY_CRITICAL",
+                    "WARNING_TEXT"
+                  ]
+                },
+                "text": { "type": "string" },
+                "startOffset": { "type": "integer", "minimum": 0 },
+                "endOffset": { "type": "integer", "minimum": 0 }
+              }
+            }
+          },
+          "medications": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["exactText"],
+              "additionalProperties": true,
+              "properties": {
+                "medicationName": { "type": "string" },
+                "dose": { "type": "string" },
+                "schedule": { "type": "string" },
+                "frequency": { "type": "string" },
+                "route": { "type": "string" },
+                "duration": { "type": "string" },
+                "exactText": { "type": "string" },
+                "warnings": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "warnings": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "allergies": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["present", "explicitly_absent", "conflicting", "not_documented", "unclear"]
+        },
+        "rawText": { "type": "string" },
+        "sourceFileId": { "type": "string" },
+        "sourcePage": { "type": "integer" },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "demographics": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "dateOfBirth": { "type": "string" },
+        "placeOfBirth": { "type": "string" },
+        "sex": { "type": "string", "enum": ["", "M", "F"] },
+        "codiceFiscale": { "type": "string" },
+        "address": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "medicalRecordNumber": { "type": "string" }
+      }
+    }
+  }
+}
