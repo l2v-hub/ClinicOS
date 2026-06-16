@@ -12,7 +12,7 @@ import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionPrompt, loadOutputSchema, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { mergeExtractions, type DocResult, type MergedProposal } from '../merge.js';
-import { buildSectionsRequest, postProcessSections, type SectionsResult } from '../sections/index.js';
+import { buildSectionsRequest, postProcessSections, buildNarrativeDraft, type SectionsResult } from '../sections/index.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
@@ -637,12 +637,17 @@ export async function runJob(jobId: string): Promise<void> {
               /* sectioning is best-effort; never block the import */
             }
           }
+          // REQ-028: flat narrative draft (faithful text blocks, NO diagnoses[]/medications[]
+          // arrays) derived from the faithful sections. Present only when the sections pass ran.
+          const narrative = sections
+            ? buildNarrativeDraft(sections, usable.map((d) => ({ id: d.id, filename: d.filename })))
+            : null;
           await prisma.importJob.update({
             where: { id: jobId },
             data: {
               status: 'review_ready',
               stage: 'completed',
-              resultData: { ...merged, _full: raw ?? {}, rawText, _sections: sections } as object,
+              resultData: { ...merged, _full: raw ?? {}, rawText, _sections: sections, _narrative: narrative } as object,
               model: modelUsed,
             },
           });

@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://clinicos/extraction/discharge-narrative.schema.json",
+  "title": "ClinicOS discharge narrative draft (REQ-028)",
+  "description": "Flat, model-agnostic narrative contract for discharge-letter import. Each clinical section is ONE faithful text block (string) — never an array of structured entities. Missing sections are empty strings; semantic emphasis is carried by offset boldTags (no HTML/Markdown).",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "allergyStatus", "allergiesText",
+    "diagnosisText", "anamnesisText", "hospitalCourseText", "consultationsText",
+    "imagingDiagnosticsText", "proceduresAndInterventionsText", "therapyText",
+    "adviceAndFollowUpText", "unmappedText",
+    "boldTags", "sourceReferences", "missingSections", "warnings"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "clinicos-discharge-narrative-v1" },
+
+    "firstName": { "type": "string" },
+    "lastName": { "type": "string" },
+    "dateOfBirth": { "type": "string" },
+    "placeOfBirth": { "type": "string" },
+    "sex": { "type": "string" },
+    "fiscalCode": { "type": "string" },
+    "address": { "type": "string" },
+    "phone": { "type": "string" },
+    "email": { "type": "string" },
+
+    "allergyStatus": { "type": "string", "enum": ["present", "explicitly_absent", "not_documented", "unclear", "conflicting"] },
+    "allergiesText": { "type": "string" },
+
+    "diagnosisText": { "type": "string" },
+    "anamnesisText": { "type": "string" },
+    "hospitalCourseText": { "type": "string" },
+    "consultationsText": { "type": "string" },
+    "imagingDiagnosticsText": { "type": "string" },
+    "proceduresAndInterventionsText": { "type": "string" },
+    "therapyText": { "type": "string" },
+    "adviceAndFollowUpText": { "type": "string" },
+    "unmappedText": { "type": "string" },
+
+    "boldTags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sectionKey", "tagType", "text", "startOffset", "endOffset"],
+        "additionalProperties": true,
+        "properties": {
+          "sectionKey": { "type": "string" },
+          "tagType": {
+            "type": "string",
+            "enum": ["SECTION_TITLE", "SUBSECTION_TITLE", "DATE", "TIME", "TEMPORAL_MARKER", "ALLERGY_CRITICAL", "MEDICATION_NAME", "DOSE", "FREQUENCY", "SCHEDULE", "WARNING_TEXT"]
+          },
+          "text": { "type": "string" },
+          "startOffset": { "type": "integer", "minimum": 0 },
+          "endOffset": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "sourceReferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sectionKey"],
+        "additionalProperties": true,
+        "properties": {
+          "sectionKey": { "type": "string" },
+          "fileId": { "type": "string" },
+          "fileName": { "type": "string" },
+          "pageFrom": { "type": "integer" },
+          "pageTo": { "type": "integer" }
+        }
+      }
+    },
+    "missingSections": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}
