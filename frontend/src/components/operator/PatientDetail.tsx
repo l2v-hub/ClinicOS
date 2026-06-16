@@ -12,6 +12,7 @@ import {
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
 import { DocumentiTab } from './cartella/DocumentiTab';
+import { NarrativeSectionsTab } from './cartella/NarrativeSectionsTab';
 import { DiarioPazienteTab, DIARIO_AUTHOR_FILTERS } from './cartella/DiarioPazienteTab';
 import { MedicazioniTab } from './cartella/MedicazioniTab';
 import { ContenzioniTab } from './cartella/ContenzioniTab';
@@ -30,7 +31,7 @@ import { InlineEditableField } from '../shared/InlineEditableField';
 type TabId =
   | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
-  | 'presa-in-carico' | 'documenti' | 'diario'
+  | 'presa-in-carico' | 'documenti' | 'diario' | 'sezioni-narrative'
   | 'medicazioni' | 'contenzioni' | 'braden' | 'dimissione';
 
 type TabGroup = 'panoramica' | 'clinica' | 'diario' | 'moduli' | 'documenti';
@@ -54,6 +55,7 @@ const TAB_GROUPS: TabGroupDef[] = [
     id: 'clinica', label: 'Clinica',
     tabs: [
       { id: 'presa-in-carico', label: 'Presa in Carico' },
+      { id: 'sezioni-narrative', label: 'Sezioni Cliniche (testo)' },
       { id: 'anamnesi',        label: 'Anamnesi' },
       { id: 'diagnosi',        label: 'Diagnosi' },
       { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
@@ -1749,6 +1751,9 @@ export function PatientDetail({
           )}
           {tab === 'documenti' && (
             <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'sezioni-narrative' && (
+            <NarrativeSectionsTab patientId={paziente.id} />
           )}
           {tab === 'diario' && (
             <DiarioPazienteTab
