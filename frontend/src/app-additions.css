@@ -6342,3 +6342,21 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   .import-modal--review { width: 100vw; height: 100dvh; max-height: 100dvh; min-height: 0; border-radius: 0; }
   .doc-preview__counter { max-width: 110px; }
 }
+
+/* ── REQ-035 v2: imported documents + source side panel ──────────────────── */
+.imported-docs { border: 1px solid var(--border, #D0D5DD); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; background: var(--surface, #fff); }
+.imported-docs__list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.imported-docs__item { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border: 1px solid var(--border, #D0D5DD); border-radius: 8px; }
+.imported-docs__icon { font-size: 18px; }
+.imported-docs__name { font-weight: 600; color: var(--text, #101828); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 280px; }
+.imported-docs__meta { font-size: 12px; color: var(--muted, #667085); }
+.imported-docs__actions { margin-left: auto; display: flex; gap: 6px; }
+.imported-docs__actions a.srev-chip { text-decoration: none; }
+
+.doc-source-overlay { position: fixed; inset: 0; background: rgba(16,24,40,.45); z-index: 1200; display: flex; justify-content: flex-end; }
+.doc-source-panel { width: min(900px, 92vw); height: 100%; background: var(--surface, #fff); display: flex; flex-direction: column; box-shadow: -12px 0 32px rgba(16,24,40,.22); }
+.doc-source-panel__head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border, #D0D5DD); }
+.doc-source-panel__head h3 { margin: 0; font-size: 16px; color: var(--text, #101828); }
+.doc-source-panel__body { flex: 1; min-height: 0; display: flex; padding: 12px; }
+.doc-source-panel__text { max-height: 30%; overflow: auto; border-top: 1px solid var(--border, #D0D5DD); padding: 8px 16px 14px; }
+@media (max-width: 767px) { .doc-source-panel { width: 100vw; } }

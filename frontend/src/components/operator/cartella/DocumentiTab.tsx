@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CartellaPaziente, DocumentoConsegnato, TipoDocumento, StatoDocumento, Paziente } from '../../../types';
 import { uid, todayStr, fmtDate, PrintButton, ClinicalTableSection } from './shared';
+import { ImportedDocumentsList } from './ImportedDocumentsList';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -125,6 +126,7 @@ export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
 
   return (
     <div className="cr-tab-content">
+      <ImportedDocumentsList patientId={paziente.id} />
       {/* Print header */}
       <div className="print-only print-form-header">
         <div className="print-form-header__title">DOCUMENTI PAZIENTE</div>
