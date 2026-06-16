@@ -1,0 +1,3 @@
+REQ-033 data smoke - Tue Jun 16 13:09:10 UTC 2026
+GET /patients -> HTTP 200
+patients: 19
