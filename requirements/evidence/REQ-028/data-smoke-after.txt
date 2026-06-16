@@ -1,0 +1,4 @@
+REQ-028 data smoke AFTER - Tue Jun 16 07:51:48 UTC 2026
+GET /patients -> HTTP 200
+patients: 19
+Backend-only additive change; _narrative present only when AI_SECTIONS_PASS on.

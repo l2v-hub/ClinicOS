@@ -25,3 +25,4 @@ export function buildSectionsRequest(): { schema: object; prompt: string } {
 export * from './profile.js';
 export * from './prompt.js';
 export * from './validate.js';
+export * from './narrative.js';

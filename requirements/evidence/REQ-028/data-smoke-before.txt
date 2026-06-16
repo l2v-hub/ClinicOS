@@ -1,0 +1,3 @@
+REQ-028 data smoke BEFORE - Tue Jun 16 07:47:41 UTC 2026
+GET /patients -> HTTP 200
+patients: 19
