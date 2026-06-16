@@ -3,6 +3,7 @@ import { API_URL } from '../../config';
 import { ImportReviewFull, type ConfirmPatient } from './ImportReviewFull';
 import { ImportSectionsReview } from './sections/ImportSectionsReview';
 import type { SectionsResult } from './sections/types';
+import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
 // Files are added to a backend job (no patient record is created here).
@@ -78,11 +79,21 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const [proposal, setProposal] = useState<unknown>(null);
   const [schema, setSchema] = useState<Record<string, unknown> | null>(null);
   const [processing, setProcessing] = useState(false);
+  // REQ-032: wide two-panel review workspace state.
+  const [previews, setPreviews] = useState<PreviewDoc[]>([]);
+  const [layout, setLayout] = useState<'5050' | 'doc' | 'data'>('5050');
+  const [paneTab, setPaneTab] = useState<'doc' | 'data'>('doc'); // tablet/mobile single-pane
+  const [sourceTarget, setSourceTarget] = useState<{ fileName?: string; page?: number } | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const cameraInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!open) { setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); setProcessing(false); }
+    if (!open) {
+      previews.forEach((p) => URL.revokeObjectURL(p.url));
+      setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); setProcessing(false);
+      setPreviews([]); setLayout('5050'); setPaneTab('doc'); setSourceTarget(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   // Load the extraction schema once so the review can render EVERY field (REQ-015).
@@ -134,6 +145,9 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     try {
       const fd = new FormData();
       Array.from(files).forEach((f) => fd.append('files', f));
+      // REQ-032: keep object URLs so the review can preview the real documents (session-only).
+      const added: PreviewDoc[] = Array.from(files).map((f) => ({ name: f.name, type: f.type, url: URL.createObjectURL(f) }));
+      setPreviews((prev) => [...prev, ...added]);
       const url = job ? `${JOBS_URL}/${job.id}/files` : JOBS_URL;
       const res = await apiFetch(url, { method: 'POST', body: fd });
       const data = await res.json();
@@ -294,24 +308,50 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
           <li className={isReview ? 'is-active' : ''}>2. Revisione</li>
         </ol>
 
-        {isReview && hasSections ? (
-          <ImportSectionsReview
-            sections={sectionsData!}
-            documents={job?.documents ?? []}
-            busy={busy}
-            onBack={() => setStep('upload')}
-            onConfirm={handleCreate}
-          />
-        ) : isReview ? (
-          <ImportReviewFull
-            schema={schema ?? {}}
-            full={(proposal as { _full?: { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } } | null)?._full ?? null}
-            rawText={(proposal as { rawText?: string } | null)?.rawText ?? ''}
-            documents={job?.documents ?? []}
-            busy={busy}
-            onBack={() => setStep('upload')}
-            onConfirm={handleCreate}
-          />
+        {isReview ? (
+          <div className={`import-workspace import-workspace--${layout} pane-${paneTab}`}>
+            {/* REQ-032: layout controls (desktop presets + tablet/mobile pane tabs) */}
+            <div className="iw-toolbar">
+              <div className="iw-panetabs" role="tablist" aria-label="Pannello">
+                <button role="tab" className={`srev-chip${paneTab === 'doc' ? ' is-on' : ''}`} onClick={() => setPaneTab('doc')}>Documento</button>
+                <button role="tab" className={`srev-chip${paneTab === 'data' ? ' is-on' : ''}`} onClick={() => setPaneTab('data')}>Dati ClinicOS</button>
+              </div>
+              <div className="iw-presets">
+                <button className={`srev-chip${layout === 'doc' ? ' is-on' : ''}`} onClick={() => setLayout('doc')} title="Documento più grande">◧</button>
+                <button className={`srev-chip${layout === '5050' ? ' is-on' : ''}`} onClick={() => setLayout('5050')} title="Divisione 50/50">▣</button>
+                <button className={`srev-chip${layout === 'data' ? ' is-on' : ''}`} onClick={() => setLayout('data')} title="Dati più grandi">◨</button>
+              </div>
+            </div>
+            <div className="iw-doc" aria-label="Documento originale">
+              <DocumentPreview
+                documents={previews}
+                ocrText={(proposal as { rawText?: string } | null)?.rawText ?? ''}
+                sourceTarget={sourceTarget}
+              />
+            </div>
+            <div className="iw-data" aria-label="Dati ClinicOS">
+              {hasSections ? (
+                <ImportSectionsReview
+                  sections={sectionsData!}
+                  documents={job?.documents ?? []}
+                  busy={busy}
+                  onBack={() => setStep('upload')}
+                  onConfirm={handleCreate}
+                  onOpenSource={(fileName, page) => { setSourceTarget({ fileName, page }); setPaneTab('doc'); }}
+                />
+              ) : (
+                <ImportReviewFull
+                  schema={schema ?? {}}
+                  full={(proposal as { _full?: { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } } | null)?._full ?? null}
+                  rawText={(proposal as { rawText?: string } | null)?.rawText ?? ''}
+                  documents={job?.documents ?? []}
+                  busy={busy}
+                  onBack={() => setStep('upload')}
+                  onConfirm={handleCreate}
+                />
+              )}
+            </div>
+          </div>
         ) : (
         <>
         <div className="import-modal__actions">

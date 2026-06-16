@@ -6066,8 +6066,11 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
    without this the popup is transparent over the overlay and unreadable. */
 .modal-card { background: var(--surface, #fff); border-radius: var(--card-radius, 12px); box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18)); }
 .import-modal { width: min(560px, 94vw); max-height: 88vh; display: flex; flex-direction: column; gap: 12px; padding: 20px; background: var(--surface, #fff); border-radius: var(--card-radius, 12px); box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18)); }
-/* Review step uses the full screen width to mirror the patient record. */
-.import-modal--review { width: min(1180px, 97vw); max-height: 94vh; }
+/* REQ-032: review step is a wide two-panel document workspace. */
+.import-modal--review {
+  width: min(1600px, 96vw); height: min(940px, 94vh); max-height: 94vh;
+  min-width: min(1100px, 96vw); min-height: min(700px, 92vh);
+}
 .import-modal__head { display: flex; align-items: center; justify-content: space-between; }
 .import-modal__head h2 { font-size: 18px; margin: 0; color: var(--text, #101828); }
 .import-modal__actions { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -6287,3 +6290,49 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .narrative-empty { display: flex; align-items: center; gap: 12px; color: var(--muted, #667085); font-size: 14px; }
 .narrative-edit__actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 .btn-sm { font-size: 13px; padding: 5px 12px; }
+
+/* ── REQ-032: wide two-panel import/review workspace + DocumentPreview ────── */
+.import-workspace { flex: 1; min-height: 0; display: grid; grid-template-columns: 55fr 45fr; grid-template-rows: auto 1fr; gap: 12px; }
+.import-workspace--doc  { grid-template-columns: 70fr 30fr; }
+.import-workspace--data { grid-template-columns: 35fr 65fr; }
+.iw-toolbar { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.iw-panetabs { display: none; gap: 6px; } /* shown on tablet/mobile only */
+.iw-presets { display: flex; gap: 6px; margin-left: auto; }
+.iw-presets .srev-chip { font-size: 15px; line-height: 1; padding: 4px 10px; }
+.iw-doc { min-width: 480px; min-height: 0; display: flex; }
+.iw-data { min-width: 420px; min-height: 0; overflow-y: auto; padding-right: 4px; }
+
+.doc-preview { flex: 1; display: flex; flex-direction: column; min-height: 0; border: 1px solid var(--border, #D0D5DD); border-radius: 10px; background: #f4f6f9; overflow: hidden; }
+.doc-preview--empty { align-items: center; justify-content: center; color: var(--muted, #667085); }
+.doc-preview__toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 10px; background: var(--surface, #fff); border-bottom: 1px solid var(--border, #D0D5DD); }
+.doc-preview__nav, .doc-preview__zoom, .doc-preview__modes, .doc-preview__ocrtools { display: flex; align-items: center; gap: 6px; }
+.doc-preview__zoom { margin-left: auto; flex-wrap: wrap; }
+.doc-preview__counter { font-size: 12px; color: var(--muted, #667085); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.doc-preview__page, .doc-preview__zoomval { font-size: 12px; color: var(--text, #101828); min-width: 42px; text-align: center; }
+.doc-preview__search { font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--border, #D0D5DD); border-radius: 8px; }
+.doc-preview__stage { flex: 1; min-height: 0; overflow: auto; display: flex; align-items: flex-start; justify-content: center; background: #5a6473; }
+.doc-preview__pdf { width: 100%; height: 100%; border: 0; background: #fff; }
+.doc-preview__img { max-width: 100%; transform-origin: center top; user-select: none; transition: transform .05s linear; }
+.doc-preview__unsupported { color: #fff; display: flex; flex-direction: column; gap: 10px; align-items: center; margin: auto; }
+.doc-preview__ocr { width: 100%; height: 100%; background: #fff; overflow: auto; }
+.doc-preview__ocrsrc { font-size: 12px; color: var(--muted, #667085); font-style: italic; margin: 0; padding: 8px 12px 0; }
+.doc-preview__ocrtext { white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 1.55; color: var(--text, #101828); padding: 8px 12px 16px; margin: 0; font-family: inherit; user-select: text; }
+.ocr-hit { background: rgba(15,95,215,.22); border-radius: 3px; }
+.srev-chip--inline { margin-left: 8px; padding: 1px 8px; font-size: 11px; }
+.icon-btn:disabled { opacity: .4; cursor: default; }
+
+/* Tablet: single pane with Documento / Dati tabs. */
+@media (max-width: 1199px) {
+  .import-modal--review { min-width: 0; width: 96vw; }
+  .import-workspace { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .import-workspace .iw-presets { display: none; }
+  .import-workspace .iw-panetabs { display: flex; }
+  .import-workspace .iw-doc, .import-workspace .iw-data { min-width: 0; }
+  .import-workspace.pane-doc  .iw-data { display: none; }
+  .import-workspace.pane-data .iw-doc  { display: none; }
+}
+/* Mobile: full-screen review. */
+@media (max-width: 767px) {
+  .import-modal--review { width: 100vw; height: 100dvh; max-height: 100dvh; min-height: 0; border-radius: 0; }
+  .doc-preview__counter { max-width: 110px; }
+}

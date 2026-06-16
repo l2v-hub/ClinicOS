@@ -17,6 +17,8 @@ interface Props {
   busy?: boolean;
   onConfirm: (patient: ConfirmPatient, cartella: Record<string, unknown>, opts: { confirmAllergyConflict: boolean }) => void;
   onBack: () => void;
+  /** REQ-032: open the source document/page for a section in the preview panel. */
+  onOpenSource?: (fileName: string, page?: number) => void;
 }
 
 const ANAG_PREFILL: Array<[keyof ConfirmPatient, string]> = [
@@ -30,7 +32,7 @@ function toIso(v: string): string {
   return m ? `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}` : v;
 }
 
-export function ImportSectionsReview({ sections, documents, busy, onConfirm, onBack }: Props) {
+export function ImportSectionsReview({ sections, documents, busy, onConfirm, onBack, onOpenSource }: Props) {
   const docName = useMemo(() => {
     const map = new Map(documents.map((d) => [d.id, d.filename]));
     return (fileId?: string) => (fileId && map.get(fileId)) || documents[0]?.filename || 'documento';
@@ -149,7 +151,12 @@ export function ImportSectionsReview({ sections, documents, busy, onConfirm, onB
           />
         )}
         {(allergy.sourceFileId || allergySection) && (
-          <p className="srev-source">{allergy.sourceFileId ? `Fonte: ${docName(allergy.sourceFileId)}${allergy.sourcePage != null ? ` — pagina ${allergy.sourcePage}` : ''}` : sourceLabel(sourcesFor(allergySection!))}</p>
+          <p className="srev-source">
+            {allergy.sourceFileId ? `Fonte: ${docName(allergy.sourceFileId)}${allergy.sourcePage != null ? ` — pagina ${allergy.sourcePage}` : ''}` : sourceLabel(sourcesFor(allergySection!))}
+            {onOpenSource && (
+              <button type="button" className="srev-chip srev-chip--inline" onClick={() => onOpenSource(allergy.sourceFileId ? docName(allergy.sourceFileId) : sourcesFor(allergySection!)[0]?.fileName, allergy.sourcePage ?? sourcesFor(allergySection!)[0]?.pageNumber)}>Vai alla fonte</button>
+            )}
+          </p>
         )}
         {allergyNeedsAck && (
           <label className="srev-ack">
@@ -180,7 +187,7 @@ export function ImportSectionsReview({ sections, documents, busy, onConfirm, onB
                 <button type="button" className={`srev-chip${st === 'accepted' ? ' is-on' : ''}`} disabled={busy} onClick={() => setSt(key, 'accepted')}>Accetta</button>
                 <button type="button" className={`srev-chip${st === 'modified' ? ' is-on' : ''}`} disabled={busy} onClick={() => setSt(key, 'modified')}>Modifica</button>
                 <button type="button" className={`srev-chip${st === 'excluded' ? ' is-on' : ''}`} disabled={busy} onClick={() => setSt(key, 'excluded')}>Escludi</button>
-                <button type="button" className="srev-chip" disabled={busy} onClick={() => setShowSource((p) => ({ ...p, [key]: !p[key] }))}>
+                <button type="button" className="srev-chip" disabled={busy} onClick={() => { setShowSource((p) => ({ ...p, [key]: !p[key] })); const f = srcs[0]; if (f && onOpenSource) onOpenSource(f.fileName, f.pageNumber); }}>
                   {showSource[key] ? 'Nascondi fonte' : 'Confronta con la fonte'}
                 </button>
               </span>
