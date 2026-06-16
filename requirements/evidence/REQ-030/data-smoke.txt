@@ -1,0 +1,4 @@
+REQ-030 data smoke - Tue Jun 16 08:29:20 UTC 2026
+GET /patients -> HTTP 200
+patients: 19
+Frontend-only; new patient tab consumes REQ-029 API read-only.
