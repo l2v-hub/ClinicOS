@@ -32,6 +32,8 @@ export interface NarrativeClinicalSectionProps {
   editable: boolean;
   reviewStatus?: string;
   onSave?: (reviewedText: string) => void | Promise<void>;
+  /** REQ-035 v2: open the source document side panel for this section. */
+  onCompareSource?: () => void;
   busy?: boolean;
 }
 
@@ -58,7 +60,7 @@ function sourceLabel(sources: SourceRef[]): string {
 }
 
 export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
-  const { sectionKey, title, originalText, reviewedText, annotations, sources, critical, editable, reviewStatus } = props;
+  const { sectionKey, title, originalText, reviewedText, annotations, sources, critical, editable, reviewStatus, onCompareSource } = props;
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
   const [showSource, setShowSource] = useState(false);
@@ -84,6 +86,9 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
         {reviewStatus && <span className={`narrative-status narrative-status--${reviewStatus}`}>{STATUS_LABEL[reviewStatus] ?? reviewStatus}</span>}
         {isModified && !editing && <span className="narrative-modified">Modificata</span>}
         <span className="narrative-section__actions">
+          {onCompareSource && !editing && (
+            <button type="button" className="srev-chip" onClick={onCompareSource}>Confronta con il documento</button>
+          )}
           {src && !editing && (
             <button type="button" className="srev-chip" onClick={() => setShowSource((s) => !s)}>
               {showSource ? 'Nascondi fonte' : 'Visualizza fonte'}

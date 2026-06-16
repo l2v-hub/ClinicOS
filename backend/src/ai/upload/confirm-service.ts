@@ -10,6 +10,7 @@ import { AiExtractionError } from '../types.js';
 import { normalizeDate } from '../extraction-validate.js';
 import { isConfirmBlocked, type SectionsResult } from '../sections/index.js';
 import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sections/index.js';
+import { persistImportDocuments } from './patient-documents.js';
 
 export interface ConfirmPatient {
   firstName: string;
@@ -135,6 +136,7 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
         update: { data: merged as object },
       });
       if (narrative) await persistNarrativeFromDraft(tx, existing.id, narrative, jobId);
+      await persistImportDocuments(tx, existing.id, jobId);
       await tx.importJob.update({ where: { id: jobId }, data: { status: 'confirmed', createdPatientId: existing.id, confirmedAt: new Date() } });
       return existing;
     });
@@ -196,6 +198,9 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
       // REQ-029: persist faithful narrative sections (originalText immutable) alongside the
       // legacy cartella — coexists, never replaces. Present only when REQ-028 _narrative ran.
       if (narrative) await persistNarrativeFromDraft(tx, patient.id, narrative, jobId);
+
+      // REQ-035 v2: permanently link the imported source documents to the patient (bytes in DB).
+      await persistImportDocuments(tx, patient.id, jobId);
 
       await tx.importJob.update({
         where: { id: jobId },

@@ -72,6 +72,7 @@ model Patient {
   roomAssignments           PatientRoomAssignment[]
   diaryEntries              PatientDiaryEntry[]
   narrativeSections         PatientNarrativeSection[]
+  documents                 PatientDocument[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
@@ -101,6 +102,28 @@ model PatientNarrativeSection {
   patient          Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
   @@unique([patientId, sectionKey])
+  @@index([patientId])
+}
+
+// ── Imported documents permanently linked to the patient (REQ-035 v2) ─────────
+// File bytes are kept IN Postgres (base64) like PatientIntakeDocument, so they survive
+// Railway redeploy/restart with no external object storage. onDelete: Cascade means deleting
+// the patient removes the documents (and their bytes) — no orphan storage to clean up.
+model PatientDocument {
+  id           String   @id @default(cuid())
+  patientId    String
+  importJobId  String?
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  sha256       String
+  dataBase64   String   // base64 file content (persistent, in-DB)
+  documentType String   @default("discharge_import")
+  sortOrder    Int      @default(0)
+  createdById  String?
+  createdAt    DateTime @default(now())
+  patient      Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
   @@index([patientId])
 }
 
