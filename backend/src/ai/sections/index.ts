@@ -26,3 +26,4 @@ export * from './profile.js';
 export * from './prompt.js';
 export * from './validate.js';
 export * from './narrative.js';
+export * from './patient-narrative.js';

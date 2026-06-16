@@ -1,0 +1,4 @@
+REQ-029 data smoke - Tue Jun 16 08:11:43 UTC 2026
+GET /patients -> HTTP 200
+patients: 19
+Additive table + new read/write endpoint; legacy data untouched.
