@@ -1,0 +1,58 @@
+{
+  "profileId": "AUSL_IMOLA_DISCHARGE_LETTER_V1",
+  "label": "AUSL Imola — Lettera di dimissione (v1)",
+  "identifiers": [
+    "Lettera di dimissione",
+    "AUSL",
+    "Imola",
+    "Azienda USL"
+  ],
+  "minConfidence": 0.5,
+  "headerPatterns": [
+    "^\\s*Azienda\\s+USL.*$",
+    "^\\s*AUSL.*Imola.*$",
+    "^\\s*Ospedale.*Imola.*$",
+    "^\\s*U\\.?O\\.?\\b.*$",
+    "^\\s*Lettera\\s+di\\s+dimissione\\s*$"
+  ],
+  "footerPatterns": [
+    "^\\s*Pagina\\s+\\d+\\s+di\\s+\\d+\\s*$",
+    "^\\s*Pag\\.?\\s*\\d+\\s*/\\s*\\d+\\s*$",
+    "^\\s*\\d+\\s*/\\s*\\d+\\s*$",
+    "^\\s*Pagina\\s+\\d+\\s*$",
+    "^\\s*Documento firmato digitalmente.*$"
+  ],
+  "pageNumberPatterns": [
+    "Pagina\\s+(\\d+)\\s+di\\s+(\\d+)",
+    "Pag\\.?\\s*(\\d+)\\s*/\\s*(\\d+)",
+    "\\b(\\d+)\\s*/\\s*(\\d+)\\b",
+    "Pagina\\s+(\\d+)"
+  ],
+  "clinicalSignalPatterns": [
+    "(?i)\\ballerg",
+    "(?i)\\bdiagnos",
+    "(?i)\\bterapia\\b",
+    "(?i)\\bfarmac",
+    "(?i)\\banamnesi\\b",
+    "(?i)\\bnato\\b|\\bnata\\b",
+    "(?i)codice\\s+fiscale",
+    "\\b\\d{1,2}[/-]\\d{1,2}[/-]\\d{4}\\b"
+  ],
+  "expectedSectionOrder": [
+    "PATIENT_DEMOGRAPHICS",
+    "ALLERGIES",
+    "DISCHARGE_DIAGNOSIS",
+    "ANAMNESIS",
+    "HOSPITAL_COURSE",
+    "CONSULTATIONS",
+    "IMAGING_DIAGNOSTICS",
+    "PROCEDURES_AND_INTERVENTIONS",
+    "HOSPITAL_THERAPY",
+    "DISCHARGE_HOME_THERAPY",
+    "ADVICE_AND_FOLLOW_UP"
+  ],
+  "tags": [
+    "SECTION_TITLE", "SUBSECTION_TITLE", "DATE", "TIME", "TEMPORAL_MARKER",
+    "MEDICATION_NAME", "DOSE", "SCHEDULE", "FREQUENCY", "ALLERGY_CRITICAL", "WARNING_TEXT"
+  ]
+}

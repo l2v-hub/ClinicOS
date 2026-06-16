@@ -1,0 +1,47 @@
+
+========================================================================
+1. PROFILE DETECTION (imola-profile-detected)
+========================================================================
+{
+  "profileId": "AUSL_IMOLA_DISCHARGE_LETTER_V1",
+  "confidence": 0.75,
+  "matchedIndicators": [
+    "Lettera di dimissione",
+    "Imola",
+    "Azienda USL"
+  ]
+}
+
+========================================================================
+2. PAGES BEFORE ORDERING (upload order 2,3,1)
+========================================================================
+upload order detectedPageNumber: [None, None, None] (numbers read during processing)
+
+========================================================================
+3. PAGES AFTER ORDERING (imola page number)
+========================================================================
+ordered detectedPageNumber: [1, 2, 3]
+sources: ['footer', 'footer', 'footer']
+
+========================================================================
+4. HEADER/FOOTER FILTERED (header-footer-filtered)
+========================================================================
+ORIGINAL (immutable):
+ "Azienda USL di Imola\nU.O. Cardiologia\nLettera di dimissione\ncontenuto pagina 1\nPagina 1 di 3"
+HEADER  : "Azienda USL di Imola\nU.O. Cardiologia\nLettera di dimissione"
+FOOTER  : "Pagina 1 di 3"
+CLEANED : "contenuto pagina 1"
+
+========================================================================
+5. MISSING PAGE WARNING (missing-page-warning)
+========================================================================
+warnings: ['MISSING_PAGE_NUMBER: 3']
+
+========================================================================
+6. UNRECOGNISED DOCUMENT -> GENERIC FALLBACK
+========================================================================
+{
+  "profileId": "GENERIC_DISCHARGE_LETTER",
+  "confidence": 0.0,
+  "matchedIndicators": []
+}
