@@ -9,6 +9,7 @@ import { prisma } from '../../lib/prisma.js';
 import { AiExtractionError } from '../types.js';
 import { normalizeDate } from '../extraction-validate.js';
 import { isConfirmBlocked, type SectionsResult } from '../sections/index.js';
+import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sections/index.js';
 
 export interface ConfirmPatient {
   firstName: string;
@@ -99,6 +100,8 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
   // confirmation until an operator explicitly overrides it. Only triggers when a
   // sections pass produced a 'conflicting' status; otherwise this is a no-op.
   const sections = (job.resultData as { _sections?: SectionsResult } | null)?._sections;
+  // REQ-029: faithful narrative draft persisted into PatientNarrativeSection on confirm.
+  const narrative = (job.resultData as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
   if (isConfirmBlocked(sections) && !payload.confirmAllergyConflict) {
     await audit(jobId, 'allergy_conflict_blocked', undefined, 'allergie conflicting');
     throw new AiExtractionError('config', 'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.');
@@ -131,6 +134,7 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
         create: { patientId: existing.id, data: merged as object },
         update: { data: merged as object },
       });
+      if (narrative) await persistNarrativeFromDraft(tx, existing.id, narrative, jobId);
       await tx.importJob.update({ where: { id: jobId }, data: { status: 'confirmed', createdPatientId: existing.id, confirmedAt: new Date() } });
       return existing;
     });
@@ -188,6 +192,10 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
         _importedFromJob: jobId,
       };
       await tx.cartella.create({ data: { patientId: patient.id, data: cartellaData as object } });
+
+      // REQ-029: persist faithful narrative sections (originalText immutable) alongside the
+      // legacy cartella — coexists, never replaces. Present only when REQ-028 _narrative ran.
+      if (narrative) await persistNarrativeFromDraft(tx, patient.id, narrative, jobId);
 
       await tx.importJob.update({
         where: { id: jobId },

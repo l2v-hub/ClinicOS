@@ -71,9 +71,37 @@ model Patient {
   therapies                 PatientTherapy[]
   roomAssignments           PatientRoomAssignment[]
   diaryEntries              PatientDiaryEntry[]
+  narrativeSections         PatientNarrativeSection[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
+}
+
+// ── Patient narrative clinical sections (REQ-029) ─────────────────────────────
+// Faithful narrative text per canonical clinical section (imported from a discharge
+// letter OR filled manually). originalText is immutable; operator edits go to
+// reviewedText. NOT a replacement for legacy structured data — coexists with it.
+model PatientNarrativeSection {
+  id               String   @id @default(cuid())
+  patientId        String
+  // ALLERGIES|DIAGNOSIS|ANAMNESIS|HOSPITAL_COURSE|CONSULTATIONS|IMAGING_DIAGNOSTICS|
+  // PROCEDURES_AND_INTERVENTIONS|THERAPY|ADVICE_AND_FOLLOW_UP|UNMAPPED_CONTENT
+  sectionKey       String
+  detectedHeading  String?
+  originalText     String   @default("")   // TEXT, immutable (as imported)
+  reviewedText     String?                 // TEXT, operator correction (display wins over original)
+  annotations      Json?                   // JSONB — semantic bold tags (offsets)
+  sourceReferences Json?                   // JSONB — file/page provenance
+  importJobId      String?
+  reviewStatus     String   @default("pending") // pending|reviewed|modified|absent|conflict
+  createdBy        String?
+  updatedBy        String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  patient          Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, sectionKey])
+  @@index([patientId])
 }
 
 model Cartella {
