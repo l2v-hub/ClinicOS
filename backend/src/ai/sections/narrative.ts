@@ -153,6 +153,15 @@ export function buildNarrativeDraft(
   return draft;
 }
 
+/** True when at least one clinical section carries text (used to choose the best source). */
+export function narrativeHasSectionText(d: DischargeNarrativeDraft): boolean {
+  return [
+    d.diagnosisText, d.anamnesisText, d.hospitalCourseText, d.consultationsText,
+    d.imagingDiagnosticsText, d.proceduresAndInterventionsText, d.therapyText,
+    d.adviceAndFollowUpText, d.allergiesText,
+  ].some((t) => (t || '').trim().length > 0);
+}
+
 /** Fallback narrative draft when the sections pass yields nothing: keep the integral OCR
  *  text (never re-split into clinical rows) + demographics. Guarantees `_narrative` is
  *  always present so the import never falls back to the legacy structured table (REQ-033). */

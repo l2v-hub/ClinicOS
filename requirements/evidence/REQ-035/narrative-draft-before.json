@@ -1,0 +1,8 @@
+{
+  "_comment": "Representative _narrative BEFORE the fix: section text empty despite rawText containing the markdown. The cards rendered title+source only; Modifica opened an empty textarea.",
+  "anamnesisText": "",
+  "diagnosisText": "",
+  "therapyText": "",
+  "allergiesText": "",
+  "missingSections": ["ANAMNESI","DIAGNOSI","..."]
+}

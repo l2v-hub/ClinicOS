@@ -12,7 +12,7 @@ import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionPrompt, loadOutputSchema, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { mergeExtractions, type DocResult, type MergedProposal } from '../merge.js';
-import { buildSectionsRequest, postProcessSections, buildNarrativeDraft, narrativeFromRawText, type SectionsResult } from '../sections/index.js';
+import { buildSectionsRequest, postProcessSections, buildNarrativeDraft, narrativeFromRawText, parseNarrativeFromMarkdown, narrativeHasSectionText, type SectionsResult } from '../sections/index.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
@@ -643,12 +643,20 @@ export async function runJob(jobId: string): Promise<void> {
           // arrays). ALWAYS present — derived from the sections when available, otherwise from
           // the integral OCR rawText, so the UI never falls back to the legacy structured table.
           const ana = (raw?.anagrafica ?? {}) as Record<string, unknown>;
-          const narrative = sections
-            ? buildNarrativeDraft(sections, usable.map((d) => ({ id: d.id, filename: d.filename })))
-            : narrativeFromRawText(rawText, {
-                firstName: ana.nome, lastName: ana.cognome, dateOfBirth: ana.dataNascita,
-                sex: ana.sesso, codiceFiscale: (raw?.cartella as Record<string, unknown> | undefined)?.codiceFiscale,
-              });
+          const demo = {
+            firstName: String(ana.nome ?? ''), lastName: String(ana.cognome ?? ''),
+            dateOfBirth: String(ana.dataNascita ?? ''), sex: String(ana.sesso ?? ''),
+            fiscalCode: String((raw?.cartella as Record<string, unknown> | undefined)?.codiceFiscale ?? ''),
+          };
+          // REQ-035: populate the narrative from the integral OCR markdown (rawText) — the model
+          // already produced the section text; just map it (no extra AI call). Prefer this when
+          // it found section text; otherwise fall back to the sections pass, then to raw text.
+          let narrative = parseNarrativeFromMarkdown(rawText, demo);
+          if (!narrativeHasSectionText(narrative)) {
+            narrative = sections
+              ? buildNarrativeDraft(sections, usable.map((d) => ({ id: d.id, filename: d.filename })))
+              : narrativeFromRawText(rawText, demo);
+          }
           await prisma.importJob.update({
             where: { id: jobId },
             data: {
@@ -685,6 +693,33 @@ export async function runJob(jobId: string): Promise<void> {
   }
 }
 
+/**
+ * REQ-035: idempotently (re)build the narrative draft for an already-processed job from its
+ * stored OCR markdown (rawText) — no new AI call. Returns the (possibly updated) resultData.
+ * Heals older jobs whose `_narrative` section text is empty even though rawText has content.
+ */
+export async function rebuildNarrativeDraftFromExistingExtraction(
+  jobId: string,
+  resultData: Record<string, unknown> | null,
+): Promise<Record<string, unknown> | null> {
+  if (!resultData) return resultData;
+  const rawText = typeof resultData.rawText === 'string' ? resultData.rawText : '';
+  const current = resultData._narrative as { allergiesText?: string } | null | undefined;
+  const hasText = !!current && narrativeHasSectionText(current as never);
+  if (hasText || !rawText.trim()) return resultData; // already populated, or nothing to parse
+  const ana = ((resultData._full as { anagrafica?: Record<string, unknown> } | undefined)?.anagrafica ?? {}) as Record<string, unknown>;
+  const rebuilt = parseNarrativeFromMarkdown(rawText, {
+    firstName: String(ana.nome ?? ''), lastName: String(ana.cognome ?? ''),
+    dateOfBirth: String(ana.dataNascita ?? ''), sex: String(ana.sesso ?? ''),
+  });
+  if (!narrativeHasSectionText(rebuilt)) return resultData; // no recognisable sections — leave as-is
+  const updated = { ...resultData, _narrative: rebuilt };
+  try {
+    await prisma.importJob.update({ where: { id: jobId }, data: { resultData: updated as object } });
+  } catch { /* read path must not fail on a heal-write error */ }
+  return updated;
+}
+
 /** Extraction result for review (REQ-015 → consumed by REQ-016/017). */
 export async function getJobResult(jobId: string): Promise<{ status: JobStatus; model: string | null; resultData: unknown } | null> {
   const job = await prisma.importJob.findUnique({
@@ -692,7 +727,9 @@ export async function getJobResult(jobId: string): Promise<{ status: JobStatus; 
     select: { status: true, model: true, resultData: true },
   });
   if (!job) return null;
-  return { status: job.status as JobStatus, model: job.model, resultData: job.resultData };
+  // REQ-035: self-heal legacy jobs whose narrative text was never populated from the markdown.
+  const resultData = await rebuildNarrativeDraftFromExistingExtraction(jobId, job.resultData as Record<string, unknown> | null);
+  return { status: job.status as JobStatus, model: job.model, resultData };
 }
 
 /** Sweep expired jobs (DB rows + on-disk dirs). Safe to call periodically. */
