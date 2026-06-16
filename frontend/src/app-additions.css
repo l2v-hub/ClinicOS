@@ -6224,3 +6224,49 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 @keyframes ir-spin { to { transform: rotate(360deg); } }
 .import-modal__retry { display: flex; justify-content: center; }
 @media (prefers-reduced-motion: reduce) { .import-modal__spinner { animation: none; } }
+
+/* ── REQ-027: canonical-sections import review + SemanticTaggedText ───────── */
+.sections-review { display: flex; flex-direction: column; gap: 14px; overflow-y: auto; padding: 4px 2px; }
+.srev-card { border: 1px solid var(--border, #D0D5DD); border-radius: 10px; padding: 14px 16px; background: var(--surface, #fff); }
+.srev-card__head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.srev-card__head h3 { font-size: 15px; margin: 0; color: var(--text, #101828); }
+.srev-area { font-size: 11px; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; color: var(--c-primary, #0F5FD7); background: rgba(15, 95, 215, .08); padding: 2px 8px; border-radius: 999px; }
+.srev-actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+.srev-chip { font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border, #D0D5DD); background: #fff; color: var(--muted, #667085); cursor: pointer; }
+.srev-chip.is-on { background: var(--c-primary, #0F5FD7); border-color: var(--c-primary, #0F5FD7); color: #fff; }
+.srev-chip:disabled { opacity: .5; cursor: default; }
+.srev-anag-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px 14px; }
+.srev-field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted, #667085); }
+.srev-field input { padding: 7px 9px; border: 1px solid var(--border, #D0D5DD); border-radius: 8px; font-size: 14px; color: var(--text, #101828); }
+.srev-source { font-size: 12px; color: var(--muted, #667085); margin: 8px 0 0; font-style: italic; }
+.srev-source-panel { margin-top: 8px; border-top: 1px dashed var(--border, #D0D5DD); padding-top: 8px; }
+.srev-textarea { width: 100%; box-sizing: border-box; font: inherit; padding: 10px; border: 1px solid var(--c-primary, #0F5FD7); border-radius: 8px; white-space: pre-wrap; }
+.srev-excluded-note { font-size: 13px; color: var(--muted, #667085); font-style: italic; margin: 0; }
+.srev-section.is-excluded { opacity: .55; }
+.srev-section--priority { border-left: 4px solid var(--c-primary, #0F5FD7); }
+.srev-foot { display: flex; justify-content: space-between; gap: 10px; padding-top: 6px; }
+
+/* Allergy card — always visible, status-coloured, conflict/illegible need ack. */
+.srev-allergy { border-left: 4px solid var(--red, #DC2626); }
+.srev-allergy--explicitly_absent { border-left-color: #16A34A; }
+.srev-allergy--not_documented { border-left-color: var(--muted, #667085); }
+.srev-allergy--present, .srev-allergy--conflicting, .srev-allergy--unclear { border-left-color: var(--red, #DC2626); }
+.srev-allergy .srev-area { color: var(--red, #DC2626); background: rgba(220, 38, 38, .08); }
+.srev-ack { display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; font-size: 13px; color: var(--text, #101828); background: rgba(220, 38, 38, .06); padding: 8px 10px; border-radius: 8px; }
+.srev-ack input { margin-top: 2px; }
+
+/* Home-therapy medication table. */
+.srev-med-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+.srev-med-table th, .srev-med-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border, #D0D5DD); }
+.srev-med-table th { color: var(--muted, #667085); font-weight: 600; }
+.srev-med-table tr.is-incomplete { background: rgba(245, 158, 11, .08); }
+.srev-med-raw { font-size: 13px; }
+.srev-med-flag { display: block; color: #B45309; font-weight: 600; margin-bottom: 4px; }
+.srev-med-raw code { font-family: inherit; background: #fff; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--border, #D0D5DD); }
+
+/* SemanticTaggedText — exact text, preserved newlines, selectable, no HTML. */
+.semantic-tagged-text { white-space: pre-wrap; word-break: break-word; font-size: 14px; line-height: 1.5; color: var(--text, #101828); user-select: text; }
+.semantic-tagged-text strong { font-weight: 700; }
+.stt-allergy-critical { color: var(--red, #DC2626); }
+.stt-date, .stt-time, .stt-temporal { color: var(--c-primary, #0F5FD7); }
+.stt-illegible { background: rgba(245, 158, 11, .25); color: #92400E; border-radius: 3px; padding: 0 2px; }
