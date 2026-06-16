@@ -105,7 +105,9 @@ export function ImportSectionsReview({ sections, documents, busy, onConfirm, onB
     const cartella: Record<string, unknown> = {
       _importSections: true,
       documentSections,
-      allergie: { status: allergy.status, rawText: allergy.rawText ?? allergySection?.rawText ?? '', acknowledged: allergyAck || !allergyNeedsAck },
+      // NOTE: do NOT write `allergie` here — that key is a structured Allergy[] in the patient
+      // record and an object would crash `.filter`. Narrative allergy lives in documentSections.
+      _allergyNarrative: { status: allergy.status, rawText: allergy.rawText ?? allergySection?.rawText ?? '', acknowledged: allergyAck || !allergyNeedsAck },
     };
     onConfirm(
       { ...patient, dateOfBirth: toIso(patient.dateOfBirth) },

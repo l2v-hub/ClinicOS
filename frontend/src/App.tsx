@@ -388,9 +388,18 @@ export default function App() {
       if (json.data) {
         setCartelle(prev => {
           const idx = prev.findIndex(c => c.pazienteId === pazienteId);
-          const merged = { ...createDefaultCartella(pazienteId), ...json.data, pazienteId };
-          if (idx >= 0) return prev.map((c, i) => i === idx ? merged : c);
-          return [...prev, merged];
+          const base = createDefaultCartella(pazienteId);
+          const baseRec = base as unknown as Record<string, unknown>;
+          const merged = { ...base, ...json.data, pazienteId } as unknown as Record<string, unknown>;
+          // Defensive: a clinical-list field stored as a non-array (e.g. an object written by an
+          // older import) must never reach the UI — coerce it back to the default array so
+          // `.filter`/`.map` never crash the patient record.
+          for (const k of Object.keys(baseRec)) {
+            if (Array.isArray(baseRec[k]) && !Array.isArray(merged[k])) merged[k] = baseRec[k];
+          }
+          const safe = merged as unknown as CartellaPaziente;
+          if (idx >= 0) return prev.map((c, i) => i === idx ? safe : c);
+          return [...prev, safe];
         });
       }
     } catch {
