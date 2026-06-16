@@ -153,6 +153,20 @@ export function buildNarrativeDraft(
   return draft;
 }
 
+/** Fallback narrative draft when the sections pass yields nothing: keep the integral OCR
+ *  text (never re-split into clinical rows) + demographics. Guarantees `_narrative` is
+ *  always present so the import never falls back to the legacy structured table (REQ-033). */
+export function narrativeFromRawText(rawText: string, demographics?: Record<string, unknown>): DischargeNarrativeDraft {
+  const sections: SectionsResult = {
+    sections: rawText.trim() ? [{ sectionKey: 'UNMAPPED_CONTENT', rawText }] : [],
+    allergies: { status: 'not_documented' },
+    demographics,
+  };
+  const draft = buildNarrativeDraft(sections);
+  if (rawText.trim()) draft.warnings = [...new Set([...draft.warnings, 'NARRATIVE_FALLBACK_FROM_RAWTEXT'])];
+  return draft;
+}
+
 // ── AJV validation against the flat contract ────────────────────────────────
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SCHEMA_PATH = resolve(HERE, '..', '..', '..', 'ai-assets', 'clinicos-discharge-narrative.schema.json');

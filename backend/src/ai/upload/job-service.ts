@@ -12,7 +12,7 @@ import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionPrompt, loadOutputSchema, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { mergeExtractions, type DocResult, type MergedProposal } from '../merge.js';
-import { buildSectionsRequest, postProcessSections, buildNarrativeDraft, type SectionsResult } from '../sections/index.js';
+import { buildSectionsRequest, postProcessSections, buildNarrativeDraft, narrativeFromRawText, type SectionsResult } from '../sections/index.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
@@ -627,21 +627,28 @@ export async function runJob(jobId: string): Promise<void> {
               /* transcription is best-effort; never block the import */
             }
           }
-          // Faithful clinical-sections + semantic tags (REQ-026). Opt-in; best-effort.
+          // REQ-033: faithful clinical-sections + narrative are now the DEFAULT import path
+          // (set AI_SECTIONS_PASS=false only to disable). The discharge letter is never
+          // rendered as structured diagnosis/therapy rows.
           let sections: SectionsResult | null = null;
-          if (process.env.AI_SECTIONS_PASS === 'true') {
+          if (process.env.AI_SECTIONS_PASS !== 'false') {
             try {
               await setState(jobId, 'waiting_for_model', { stage: 'sectioning' });
               sections = await runtimeSections(jobId, docFiles);
             } catch {
-              /* sectioning is best-effort; never block the import */
+              /* sectioning is best-effort; the narrative falls back to the integral OCR text */
             }
           }
-          // REQ-028: flat narrative draft (faithful text blocks, NO diagnoses[]/medications[]
-          // arrays) derived from the faithful sections. Present only when the sections pass ran.
+          // REQ-028/033: flat narrative draft (faithful text blocks, NO diagnoses[]/medications[]
+          // arrays). ALWAYS present — derived from the sections when available, otherwise from
+          // the integral OCR rawText, so the UI never falls back to the legacy structured table.
+          const ana = (raw?.anagrafica ?? {}) as Record<string, unknown>;
           const narrative = sections
             ? buildNarrativeDraft(sections, usable.map((d) => ({ id: d.id, filename: d.filename })))
-            : null;
+            : narrativeFromRawText(rawText, {
+                firstName: ana.nome, lastName: ana.cognome, dateOfBirth: ana.dataNascita,
+                sex: ana.sesso, codiceFiscale: (raw?.cartella as Record<string, unknown> | undefined)?.codiceFiscale,
+              });
           await prisma.importJob.update({
             where: { id: jobId },
             data: {

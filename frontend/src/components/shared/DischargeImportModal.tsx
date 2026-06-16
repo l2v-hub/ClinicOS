@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../config';
-import { ImportReviewFull, type ConfirmPatient } from './ImportReviewFull';
+import type { ConfirmPatient } from './ImportReviewFull';
 import { ImportSectionsReview } from './sections/ImportSectionsReview';
 import type { SectionsResult } from './sections/types';
+import { sectionsFromNarrative, type NarrativeDraft } from './sections/deriveSections';
 import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
@@ -77,7 +78,6 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'upload' | 'review'>('upload');
   const [proposal, setProposal] = useState<unknown>(null);
-  const [schema, setSchema] = useState<Record<string, unknown> | null>(null);
   const [processing, setProcessing] = useState(false);
   // REQ-032: wide two-panel review workspace state.
   const [previews, setPreviews] = useState<PreviewDoc[]>([]);
@@ -93,16 +93,6 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
       setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); setProcessing(false);
       setPreviews([]); setLayout('5050'); setPaneTab('doc'); setSourceTarget(null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
-
-  // Load the extraction schema once so the review can render EVERY field (REQ-015).
-  useEffect(() => {
-    if (!open || schema) return;
-    apiFetch(`${API_URL}/ai/extraction/schema`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((s) => { if (s) setSchema(s); })
-      .catch(() => { /* review falls back to extracted-only fields */ });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
@@ -290,10 +280,25 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const rejected = outcomes.filter((o) => o.status !== 'accepted');
 
   const isReview = step === 'review' && proposal != null;
-  // REQ-027: prefer the canonical-sections review when the backend produced `_sections`
-  // (opt-in AI_SECTIONS_PASS). Otherwise fall back to the full field-by-field editor.
+  // REQ-033: the discharge import ALWAYS reviews as narrative text blocks — never the legacy
+  // structured table. Prefer the rich `_sections`; otherwise derive an equivalent from the
+  // always-present flat `_narrative`. The legacy ImportReviewFull table is never rendered here.
   const sectionsData = (proposal as { _sections?: SectionsResult | null } | null)?._sections ?? null;
-  const hasSections = !!sectionsData && Array.isArray(sectionsData.sections) && sectionsData.sections.length > 0;
+  const narrativeDraft = (proposal as { _narrative?: NarrativeDraft | null } | null)?._narrative ?? null;
+  // Runtime assertion: the import contract must be narrative, never legacy arrays.
+  if (import.meta.env.DEV && narrativeDraft) {
+    for (const k of ['diagnoses', 'medications', 'consultations', 'examinations', 'procedures', 'allergies'] as const) {
+      if (k in (narrativeDraft as Record<string, unknown>)) {
+        throw new Error(`LEGACY_IMPORT_CONTRACT_DETECTED: ${k}[] is not allowed in the discharge import draft`);
+      }
+    }
+  }
+  const effectiveSections: SectionsResult =
+    (sectionsData && Array.isArray(sectionsData.sections) && sectionsData.sections.length > 0)
+      ? sectionsData
+      : narrativeDraft
+        ? sectionsFromNarrative(narrativeDraft)
+        : { sections: [], allergies: { status: 'not_documented' } };
 
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Importa lettera di dimissione">
@@ -330,26 +335,14 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
               />
             </div>
             <div className="iw-data" aria-label="Dati ClinicOS">
-              {hasSections ? (
-                <ImportSectionsReview
-                  sections={sectionsData!}
-                  documents={job?.documents ?? []}
-                  busy={busy}
-                  onBack={() => setStep('upload')}
-                  onConfirm={handleCreate}
-                  onOpenSource={(fileName, page) => { setSourceTarget({ fileName, page }); setPaneTab('doc'); }}
-                />
-              ) : (
-                <ImportReviewFull
-                  schema={schema ?? {}}
-                  full={(proposal as { _full?: { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } } | null)?._full ?? null}
-                  rawText={(proposal as { rawText?: string } | null)?.rawText ?? ''}
-                  documents={job?.documents ?? []}
-                  busy={busy}
-                  onBack={() => setStep('upload')}
-                  onConfirm={handleCreate}
-                />
-              )}
+              <ImportSectionsReview
+                sections={effectiveSections}
+                documents={job?.documents ?? []}
+                busy={busy}
+                onBack={() => setStep('upload')}
+                onConfirm={handleCreate}
+                onOpenSource={(fileName, page) => { setSourceTarget({ fileName, page }); setPaneTab('doc'); }}
+              />
             </div>
           </div>
         ) : (

@@ -1,0 +1,8 @@
+{
+  "_comment": "Representative LEGACY resultData shape that drove 'Diagnosi (36)' before REQ-033 (ImportReviewFull rendered _full.cartella.diagnosi[]). After REQ-033 the UI ignores these arrays and renders _narrative text blocks only.",
+  "_merge": { "report": { "conflict": 0 } },
+  "_full": { "anagrafica": { "nome": "Mario", "cognome": "Bianchi" }, "cartella": { "diagnosi": [ { "codiceICD": "J44.0", "descrizione": "...", "tipo": "principale", "stato": "attiva" }, "...(36 rows)..." ], "farmaci": [ "..." ] } },
+  "rawText": "AUSL Imola - Lettera di dimissione ...",
+  "_sections": null,
+  "_narrative": null
+}

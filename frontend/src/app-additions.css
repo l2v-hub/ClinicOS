@@ -6065,12 +6065,18 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 /* The card needs an opaque surface — `.modal-card` is not defined elsewhere, so
    without this the popup is transparent over the overlay and unreadable. */
 .modal-card { background: var(--surface, #fff); border-radius: var(--card-radius, 12px); box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18)); }
-.import-modal { width: min(560px, 94vw); max-height: 88vh; display: flex; flex-direction: column; gap: 12px; padding: 20px; background: var(--surface, #fff); border-radius: var(--card-radius, 12px); box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18)); }
-/* REQ-032: review step is a wide two-panel document workspace. */
-.import-modal--review {
-  width: min(1600px, 96vw); height: min(940px, 94vh); max-height: 94vh;
-  min-width: min(1100px, 96vw); min-height: min(700px, 92vh);
+/* REQ-033: the import popup is wide in BOTH steps (Caricamento as wide as Revisione). */
+.import-modal {
+  width: min(1600px, 96vw); max-width: 1600px; max-height: 94vh;
+  display: flex; flex-direction: column; gap: 12px; padding: 20px;
+  background: var(--surface, #fff); border-radius: var(--card-radius, 12px);
+  box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18));
 }
+/* Review step also takes most of the height for the two-panel workspace. */
+.import-modal--review {
+  height: min(940px, 94vh); min-width: min(1100px, 96vw); min-height: min(700px, 92vh);
+}
+@media (max-width: 767px) { .import-modal { width: 100vw; } }
 .import-modal__head { display: flex; align-items: center; justify-content: space-between; }
 .import-modal__head h2 { font-size: 18px; margin: 0; color: var(--text, #101828); }
 .import-modal__actions { display: flex; gap: 10px; flex-wrap: wrap; }
