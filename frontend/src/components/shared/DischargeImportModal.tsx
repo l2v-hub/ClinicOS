@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../config';
 import { ImportReviewFull, type ConfirmPatient } from './ImportReviewFull';
+import { ImportSectionsReview } from './sections/ImportSectionsReview';
+import type { SectionsResult } from './sections/types';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
 // Files are added to a backend job (no patient record is created here).
@@ -232,7 +234,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   // REQ-018/021: transactional confirm — create new OR update existing patient.
   // The full reviewed cartella (every clinical field/list the operator edited) is sent
   // verbatim so all data is persisted (REQ-015), not just a subset.
-  async function handleCreate(patient: ConfirmPatient, cartella: Record<string, unknown>) {
+  async function handleCreate(patient: ConfirmPatient, cartella: Record<string, unknown>, opts?: { confirmAllergyConflict?: boolean }) {
     if (!job) return;
     setBusy(true); setError(null);
     const target = (proposal as { _target?: { mode?: string; patientId?: string } } | null)?._target;
@@ -242,6 +244,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
       patient,
       cartella,
       confirmDuplicate,
+      confirmAllergyConflict: opts?.confirmAllergyConflict ?? false,
     });
     const post = (dup: boolean) => apiFetch(`${JOBS_URL}/${job.id}/confirm`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body(dup)),
@@ -273,6 +276,10 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const rejected = outcomes.filter((o) => o.status !== 'accepted');
 
   const isReview = step === 'review' && proposal != null;
+  // REQ-027: prefer the canonical-sections review when the backend produced `_sections`
+  // (opt-in AI_SECTIONS_PASS). Otherwise fall back to the full field-by-field editor.
+  const sectionsData = (proposal as { _sections?: SectionsResult | null } | null)?._sections ?? null;
+  const hasSections = !!sectionsData && Array.isArray(sectionsData.sections) && sectionsData.sections.length > 0;
 
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Importa lettera di dimissione">
@@ -287,7 +294,15 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
           <li className={isReview ? 'is-active' : ''}>2. Revisione</li>
         </ol>
 
-        {isReview ? (
+        {isReview && hasSections ? (
+          <ImportSectionsReview
+            sections={sectionsData!}
+            documents={job?.documents ?? []}
+            busy={busy}
+            onBack={() => setStep('upload')}
+            onConfirm={handleCreate}
+          />
+        ) : isReview ? (
           <ImportReviewFull
             schema={schema ?? {}}
             full={(proposal as { _full?: { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } } | null)?._full ?? null}
