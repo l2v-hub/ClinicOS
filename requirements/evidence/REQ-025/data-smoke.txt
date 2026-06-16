@@ -1,0 +1,4 @@
+REQ-025 data smoke - Tue Jun 16 06:48:42 UTC 2026
+GET /patients -> HTTP 200
+patients: 19
+Runtime-only change; patient flow unaffected.

@@ -1,0 +1,26 @@
+{
+  "profileId": "GENERIC_DISCHARGE_LETTER",
+  "label": "Lettera di dimissione generica",
+  "identifiers": [],
+  "minConfidence": 1.0,
+  "headerPatterns": [],
+  "footerPatterns": [
+    "^\\s*Pagina\\s+\\d+\\s+di\\s+\\d+\\s*$",
+    "^\\s*Pag\\.?\\s*\\d+\\s*/\\s*\\d+\\s*$",
+    "^\\s*\\d+\\s*/\\s*\\d+\\s*$",
+    "^\\s*Pagina\\s+\\d+\\s*$"
+  ],
+  "pageNumberPatterns": [
+    "Pagina\\s+(\\d+)\\s+di\\s+(\\d+)",
+    "Pag\\.?\\s*(\\d+)\\s*/\\s*(\\d+)",
+    "\\b(\\d+)\\s*/\\s*(\\d+)\\b",
+    "Pagina\\s+(\\d+)"
+  ],
+  "clinicalSignalPatterns": [
+    "(?i)\\ballerg",
+    "(?i)\\bdiagnos",
+    "(?i)\\bterapia\\b",
+    "(?i)\\bfarmac",
+    "\\b\\d{1,2}[/-]\\d{1,2}[/-]\\d{4}\\b"
+  ]
+}
