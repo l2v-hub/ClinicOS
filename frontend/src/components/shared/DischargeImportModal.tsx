@@ -293,12 +293,15 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
       }
     }
   }
+  // REQ-035: use whichever source actually carries section TEXT (the narrative built from the
+  // OCR markdown is the reliable one). Never show empty cards when the text exists elsewhere.
+  const narrativeSections = narrativeDraft ? sectionsFromNarrative(narrativeDraft) : null;
+  const hasText = (s: SectionsResult | null): boolean =>
+    !!s && Array.isArray(s.sections) && s.sections.some((x) => (x.rawText ?? '').trim().length > 0);
   const effectiveSections: SectionsResult =
-    (sectionsData && Array.isArray(sectionsData.sections) && sectionsData.sections.length > 0)
-      ? sectionsData
-      : narrativeDraft
-        ? sectionsFromNarrative(narrativeDraft)
-        : { sections: [], allergies: { status: 'not_documented' } };
+    hasText(narrativeSections) ? narrativeSections!
+      : hasText(sectionsData) ? sectionsData!
+        : narrativeSections ?? sectionsData ?? { sections: [], allergies: { status: 'not_documented' } };
 
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Importa lettera di dimissione">
