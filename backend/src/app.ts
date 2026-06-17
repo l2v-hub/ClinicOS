@@ -13,6 +13,7 @@ import consegneRouter from './routes/consegne.js';
 import noteRouter from './routes/note.js';
 import aiExtractionRouter from './routes/ai-extraction.js';
 import aiJobsRouter from './routes/ai-jobs.js';
+import internalAiRouter from './routes/internal-ai.js';
 
 const app = express();
 
@@ -87,5 +88,7 @@ app.use('/consegne', consegneRouter);
 app.use('/notes', noteRouter);
 app.use('/ai/extraction/jobs', aiJobsRouter);
 app.use('/ai/extraction', aiExtractionRouter);
+// REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
+app.use('/internal/ai', internalAiRouter);
 
 export default app;
