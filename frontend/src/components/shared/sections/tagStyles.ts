@@ -15,6 +15,7 @@ export const DEFAULT_TAG_STYLES: Record<SemanticTag, TagStyle> = {
   SECTION_TITLE: { bold: true, className: 'stt-title' },
   SUBSECTION_TITLE: { bold: true, className: 'stt-subtitle' },
   DATE: { bold: true, className: 'stt-date' },
+  DATE_PREFIX: { bold: true, className: 'stt-date-prefix' }, // REQ-038: bold the line/paragraph-initial date
   TIME: { bold: true, className: 'stt-time' },
   TEMPORAL_MARKER: { bold: true, className: 'stt-temporal' },
   MEDICATION_NAME: { bold: true, className: 'stt-med' },
