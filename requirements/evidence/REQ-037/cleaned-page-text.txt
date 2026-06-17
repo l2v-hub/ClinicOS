@@ -1,0 +1,17 @@
+Paziente: NOBILI DANIELA
+Nascita: 30/01/1944
+Residenza: IMOLA (BO)
+Codice Fiscale: NBLDNL44A70B032K
+Reparto: Cardiologia
+
+## Anamnesi Patologica Recente
+Inviata in PS in data 09/03 per dolore toracico.
+
+Proseguiva quindi il ricovero con stabilizzazione del quadro emodinamico.
+
+## Decorso ospedaliero
+Giorno 1: monitoraggio. Giorno 5: dimissione.
+
+## Terapia alla dimissione
+Ramipril 5 mg 1 cp/die.
+Furosemide 25 mg.
