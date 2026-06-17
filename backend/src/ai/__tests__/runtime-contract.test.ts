@@ -38,6 +38,18 @@ test('create body matches the runtime neutral contract', () => {
   assert.equal(body.files[1].sort_order, 1);
 });
 
+// REQ-036: the operator-defined order must reach the runtime. runJob now reads documents
+// ordered by sortOrder and passes them in that order; the body builder must preserve it so
+// that reordering actually changes the page sequence (sort_order) sent for extraction.
+test('REQ-036: reordered documents produce a reordered sort_order sequence', () => {
+  const reordered = [DOCS[1], DOCS[0]]; // operator moved foto.jpg before lettera.pdf
+  const body = buildRuntimeCreateBody('job-123', reordered, { type: 'object' }, 'estrai');
+  assert.equal(body.files[0].filename, 'foto.jpg');
+  assert.equal(body.files[0].sort_order, 0);
+  assert.equal(body.files[1].filename, 'lettera.pdf');
+  assert.equal(body.files[1].sort_order, 1);
+});
+
 test('wrapRuntimeResult produces the merged-proposal shape the review UI needs', () => {
   const raw = {
     anagrafica: { nome: 'Mario', cognome: 'Bianchi', dataNascita: '1950-01-01' },

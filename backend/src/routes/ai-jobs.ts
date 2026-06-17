@@ -9,6 +9,7 @@ import {
   getJob,
   getJobResult,
   enqueueJob,
+  reopenJob,
   retryJob,
   removeDocument,
   reorder,
@@ -153,6 +154,19 @@ aiJobsRouter.post('/:id/process', extractionCostGuard, async (req, res) => {
     const job = await enqueueJob(jobId);
     await recordAudit(jobId, 'process_started', { operatorId: op?.id, detail: 'enqueued' });
     return res.status(202).json({ ...job, message: 'Elaborazione avviata' });
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// POST /ai/extraction/jobs/:id/reopen — REQ-036: back to the editable "documents" phase.
+// Keeps files + OCR inputs, invalidates the derived draft. Does NOT auto-reprocess.
+aiJobsRouter.post('/:id/reopen', async (req, res) => {
+  const jobId = String(req.params.id);
+  try {
+    const job = await reopenJob(jobId);
+    await recordAudit(jobId, 'process_started', { operatorId: (req as AuthedRequest).operator?.id, detail: 'reopen' });
+    return res.status(200).json(job);
   } catch (err) {
     return handleError(res, err);
   }

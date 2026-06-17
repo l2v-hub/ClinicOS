@@ -6077,8 +6077,11 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   height: min(940px, 94vh); min-width: min(1100px, 96vw); min-height: min(700px, 92vh);
 }
 @media (max-width: 767px) { .import-modal { width: 100vw; } }
-.import-modal__head { display: flex; align-items: center; justify-content: space-between; }
+.import-modal__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .import-modal__head h2 { font-size: 18px; margin: 0; color: var(--text, #101828); }
+/* REQ-036: back-to-documents control. */
+.import-modal__back { font-size: 13px; font-weight: 600; color: var(--c-primary, #0F5FD7); padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
+.import-modal__back:hover:not(:disabled) { background: #EFF4FE; }
 .import-modal__actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .import-modal__limits { font-size: 13px; color: var(--muted, #667085); margin: 0; }
 .import-modal__error { color: var(--red, #DC2626); font-size: 13px; margin: 0; }

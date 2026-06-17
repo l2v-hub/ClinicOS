@@ -8,6 +8,7 @@
 // The backend has NO Google/provider imports — only AI_RUNTIME_URL + AI_RUNTIME_SERVICE_TOKEN.
 
 import { readFile } from 'node:fs/promises';
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionPrompt, loadOutputSchema, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
@@ -507,15 +508,42 @@ export async function cancelJob(jobId: string): Promise<PublicJob> {
   return (await getJob(jobId))!;
 }
 
-/** Enqueue a job for async processing (REQ-022): Returns immediately; the worker runs it. */
+/** Enqueue a job for async processing (REQ-022): Returns immediately; the worker runs it.
+ *  REQ-036: idempotent — a double press while the job is already queued/in-flight is a no-op
+ *  (never starts a second run, never resets an in-flight job back to `queued`). */
 export async function enqueueJob(jobId: string): Promise<PublicJob> {
   const job = await prisma.importJob.findUnique({ where: { id: jobId } });
   if (!job) throw new AiExtractionError('config', 'Job non trovato');
-  if (!['uploaded', 'validating'].includes(job.status)) {
-    throw new AiExtractionError('config', `Job non accodabile nello stato ${job.status}`);
+  const status = job.status as JobStatus;
+  // Already queued or actively processing → idempotent no-op (REQ-036 double-press guard).
+  if (status === 'queued' || ACTIVE.includes(status)) return (await getJob(jobId))!;
+  if (!['uploaded', 'validating'].includes(status)) {
+    throw new AiExtractionError('config', `Job non accodabile nello stato ${status}`);
   }
   await setState(jobId, 'queued', { stage: 'queued', error: null, errorCode: null } as Record<string, unknown>);
   await recordAudit(jobId, 'process_started', { detail: 'enqueue → queued' });
+  return (await getJob(jobId))!;
+}
+
+/**
+ * REQ-036: return a processed/failed job to the editable "Caricamento" phase so the operator can
+ * reorder, add or remove documents and then reprocess — WITHOUT re-uploading. The files and their
+ * on-disk OCR inputs are kept; only the derived draft is invalidated. Does NOT auto-reprocess.
+ * Allowed from a terminal-but-not-confirmed state OR from an in-flight state (cooperative abort:
+ * runJob notices the `uploaded` status and stops before persisting a stale result).
+ */
+export async function reopenJob(jobId: string): Promise<PublicJob> {
+  const job = await prisma.importJob.findUnique({ where: { id: jobId } });
+  if (!job) throw new AiExtractionError('config', 'Job non trovato');
+  const status = job.status as JobStatus;
+  if (status === 'confirmed') throw new AiExtractionError('config', 'Paziente già creato: job non riapribile');
+  if (status === 'expired' || status === 'cancelled') throw new AiExtractionError('config', `Job non riapribile nello stato ${status}`);
+  // Back to the editable phase; invalidate the derived draft, keep files + documents.
+  await prisma.importJob.update({
+    where: { id: jobId },
+    data: { status: 'uploaded', stage: null, error: null, errorCode: null, currentFileName: null, startedAt: null, resultData: Prisma.DbNull, model: null },
+  });
+  await recordAudit(jobId, 'process_started', { detail: 'reopen → uploaded (draft invalidated)' });
   return (await getJob(jobId))!;
 }
 
@@ -536,13 +564,26 @@ async function setState(jobId: string, status: JobStatus, extra: Record<string, 
 }
 
 /**
+ * REQ-036: a run is "superseded" when the operator reopened/cancelled the job mid-flight
+ * (status flipped back to `uploaded`, or to `cancelled`/`expired`). The in-flight runJob
+ * checks this cooperatively and aborts WITHOUT persisting a stale result, so the invalidated
+ * draft stays invalidated and the operator's new order/reprocess wins.
+ */
+async function runSuperseded(jobId: string): Promise<boolean> {
+  const j = await prisma.importJob.findUnique({ where: { id: jobId }, select: { status: true } });
+  return !j || j.status === 'uploaded' || j.status === 'cancelled' || j.status === 'expired';
+}
+
+/**
  * Worker entrypoint (REQ-022/REQ-023): run a CLAIMED job through the AI Runtime.
  * Calls the neutral HTTP contract: POST /v1/document-jobs → POST :id/run → poll GET :id → GET :id/result.
  * Maps runtime status into the existing job state machine (REQ-022).
  * No provider SDK is imported — only AI_RUNTIME_URL and AI_RUNTIME_SERVICE_TOKEN are used.
  */
 export async function runJob(jobId: string): Promise<void> {
-  const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: true } });
+  // REQ-036: documents MUST be read in the operator-defined order (sortOrder). The extraction
+  // (page merge, section continuity) depends on it; a wrong order splits Diagnosi/Anamnesi/Decorso.
+  const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: { orderBy: { sortOrder: 'asc' } } } });
   if (!job) return;
 
   const usable = job.documents.filter((d) => d.status === 'uploaded');
@@ -583,6 +624,9 @@ export async function runJob(jobId: string): Promise<void> {
 
     while (Date.now() < deadline) {
       await new Promise((r) => setTimeout(r, pollIntervalMs));
+      // REQ-036: operator reopened the job (back to documents) while we were running → abort
+      // quietly and DO NOT overwrite the now-editable state with a stale extraction result.
+      if (await runSuperseded(jobId)) { await recordAudit(jobId, 'process_failed', { detail: 'superseded by reopen' }); return; }
       const rStatus = await runtimeGetJob(runtimeJobId);
       const { jobStatus, isTerminal } = mapRuntimeStatus(rStatus.status);
 
@@ -657,6 +701,9 @@ export async function runJob(jobId: string): Promise<void> {
               ? buildNarrativeDraft(sections, usable.map((d) => ({ id: d.id, filename: d.filename })))
               : narrativeFromRawText(rawText, demo);
           }
+          // REQ-036: final supersede check — the operator may have reopened during the
+          // best-effort transcription/sections passes above. Never persist a stale draft.
+          if (await runSuperseded(jobId)) { await recordAudit(jobId, 'process_failed', { detail: 'superseded by reopen (pre-persist)' }); return; }
           await prisma.importJob.update({
             where: { id: jobId },
             data: {
