@@ -1,0 +1,17 @@
+using patient SEED-PAZ-008 Moretti
+  PASS no service token → 401
+  PASS missing user context → 401
+  PASS search/patients → 200 array
+  PASS every patient result has SourceReferences
+  PASS different tenant → 403 (isolation)
+  PASS patient outside allow-list → 403
+  PASS demographics within allow-list → 200 + source
+  PASS vital-signs → sourced envelope
+  PASS timeline → sourced envelope
+  PASS correlate → 200
+  PASS across-patients disabled by default → 403
+  PASS no SQL endpoint → 404
+  PASS SQL-injection-looking query is a harmless literal filter (200, no error)
+  PASS patients table intact after injection attempt
+
+REQ-039 gateway check: 14 passed, 0 failed
