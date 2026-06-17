@@ -19,6 +19,7 @@ export type SemanticTag =
   | 'SECTION_TITLE'
   | 'SUBSECTION_TITLE'
   | 'DATE'
+  | 'DATE_PREFIX'
   | 'TIME'
   | 'TEMPORAL_MARKER'
   | 'MEDICATION_NAME'

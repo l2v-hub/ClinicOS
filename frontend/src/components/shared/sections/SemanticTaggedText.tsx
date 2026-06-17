@@ -6,6 +6,7 @@
 
 import { buildSegments } from './segments';
 import { resolveStyles, type TagStyleMap } from './tagStyles';
+import { withDatePrefixes } from './datePrefix';
 import type { SemanticAnnotation } from './types';
 
 export interface SemanticTaggedTextProps {
@@ -16,11 +17,16 @@ export interface SemanticTaggedTextProps {
   /** Provenance shown as a tooltip on the whole block, when provided. */
   sourceTitle?: string;
   className?: string;
+  /** REQ-038: bold dates that open a line/paragraph. On by default for narrative blocks. */
+  datePrefix?: boolean;
 }
 
-export function SemanticTaggedText({ rawText, annotations, styleOverrides, sourceTitle, className }: SemanticTaggedTextProps) {
+export function SemanticTaggedText({ rawText, annotations, styleOverrides, sourceTitle, className, datePrefix = true }: SemanticTaggedTextProps) {
   const styles = resolveStyles(styleOverrides);
-  const segments = buildSegments(rawText, annotations, styles);
+  // REQ-038: date prefixes are detected at render time from the exact text (never persisted),
+  // so a manual edit recalculates them and the stored value stays plain.
+  const effective = datePrefix ? withDatePrefixes(rawText, annotations) : annotations;
+  const segments = buildSegments(rawText, effective, styles);
   return (
     <div
       className={`semantic-tagged-text${className ? ` ${className}` : ''}`}

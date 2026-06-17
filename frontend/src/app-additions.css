@@ -6281,6 +6281,8 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .semantic-tagged-text strong { font-weight: 700; }
 .stt-allergy-critical { color: var(--red, #DC2626); }
 .stt-date, .stt-time, .stt-temporal { color: var(--c-primary, #0F5FD7); }
+/* REQ-038: line/paragraph-initial date — bold (via <strong>) in the brand blue. */
+.stt-date-prefix { color: var(--c-primary, #0F5FD7); }
 .stt-illegible { background: rgba(245, 158, 11, .25); color: #92400E; border-radius: 3px; padding: 0 2px; }
 
 /* ── REQ-030: NarrativeClinicalSection + patient narrative tab ────────────── */
