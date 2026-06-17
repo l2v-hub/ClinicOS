@@ -1,0 +1,13 @@
+job cmqhsqn11000frgei3ws3raoo status uploaded files 3
+  PASS 3 files uploaded
+  PASS order persisted (first = reversed first)
+  PASS first process → 202
+  PASS second process (double-press) → 202 idempotent, not an error
+  PASS reopen → 200
+  PASS same job id (no duplicate job)
+  PASS status back to uploaded (was uploaded)
+  PASS files kept after reopen (no re-upload needed)
+  PASS previous draft invalidated (result.resultData empty)
+  PASS reprocess after reopen → 202 (no re-upload)
+
+REQ-036 API check: 10 passed, 0 failed

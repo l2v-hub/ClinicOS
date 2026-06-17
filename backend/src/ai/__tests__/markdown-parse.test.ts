@@ -95,3 +95,21 @@ test('NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc 
   const lost = detectSectionLoss(ANAMNESI_DOC, empty);
   assert.ok(lost.includes('ANAMNESI') && lost.includes('DIAGNOSI'));
 });
+
+// REQ-036: a section that begins on one page and continues (as plain prose, no new heading) on
+// the following page must stay in ONE block. The page boundary must NOT close the section.
+test('REQ-036: section spanning a page break stays in one block until a new canonical heading', () => {
+  const crossPage =
+    '## Anamnesi Patologica Recente\n\n' +            // page 2
+    'Inviata in PS in data 09/03 per dolore toracico.\n\n' +
+    'Proseguiva quindi il ricovero con stabilizzazione del quadro clinico.\n\n' + // page 3 (no heading)
+    '## Terapia alla dimissione\n\n' +
+    'Ramipril 5 mg.';
+  const d = parseNarrativeFromMarkdown(crossPage);
+  assert.ok(d.anamnesisText.includes('Inviata in PS in data 09/03'));
+  // continuation from the "next page" is part of the SAME anamnesis block
+  assert.ok(d.anamnesisText.includes('Proseguiva quindi il ricovero'));
+  // it did not bleed into the next section, and therapy starts cleanly
+  assert.ok(!d.anamnesisText.includes('Ramipril'));
+  assert.ok(d.therapyText.includes('Ramipril 5 mg.'));
+});

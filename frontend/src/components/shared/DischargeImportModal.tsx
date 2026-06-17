@@ -205,6 +205,33 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     onClose();
   }
 
+  // REQ-036: "← Torna ai documenti" — return to the editable Caricamento phase from Elaborazione
+  // or Revisione. The job is NOT cancelled: files stay, only the derived draft is invalidated.
+  // Reordering then reprocessing reuses the same job (no re-upload, no duplicate job).
+  async function reopenToDocuments() {
+    if (!job) return;
+    // A draft already exists → warn that the sections will be recomputed (files are kept).
+    if (proposal != null) {
+      const ok = window.confirm(
+        'Modificando l’ordine dei documenti sarà necessario ricalcolare le sezioni estratte.\n\n' +
+        'I file originali non verranno eliminati.',
+      );
+      if (!ok) return;
+    }
+    setBusy(true); setError(null);
+    try {
+      const res = await apiFetch(`${JOBS_URL}/${job.id}/reopen`, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || 'Ritorno ai documenti non riuscito'); return; }
+      setJob(data);
+      setProcessing(false);
+      setProposal(null);
+      setStep('upload');
+    } catch {
+      setError('Errore di rete');
+    } finally { setBusy(false); }
+  }
+
   // REQ-022: enqueue (202) then poll for status; never blocks on the model.
   async function startProcessing() {
     if (!job) return;
@@ -307,6 +334,12 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Importa lettera di dimissione">
       <div className={`modal-card import-modal${isReview ? ' import-modal--review' : ''}`}>
         <header className="import-modal__head">
+          {/* REQ-036: back to the editable documents phase — available in Elaborazione and Revisione. */}
+          {(isReview || processing) && (
+            <button className="btn-ghost import-modal__back" onClick={reopenToDocuments} disabled={busy} aria-label="Torna ai documenti">
+              ← Torna ai documenti
+            </button>
+          )}
           <h2>{isReview ? 'Revisione — Nuovo paziente' : 'Importa lettera di dimissione'}</h2>
           <button className="icon-btn" onClick={cancel} aria-label="Chiudi">✕</button>
         </header>
@@ -342,7 +375,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
                 sections={effectiveSections}
                 documents={job?.documents ?? []}
                 busy={busy}
-                onBack={() => setStep('upload')}
+                onBack={reopenToDocuments}
                 onConfirm={handleCreate}
                 onOpenSource={(fileName, page) => { setSourceTarget({ fileName, page }); setPaneTab('doc'); }}
               />

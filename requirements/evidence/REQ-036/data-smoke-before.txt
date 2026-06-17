@@ -1,0 +1,4 @@
+REQ-036 data smoke BEFORE — 2026-06-17T08:03:52Z
+HTTP: 200
+patient id occurrences: 19
+[{"id":"cmq96gsvl007n01nqbu33jwzv","medicalRecordNumber":"MRN-1781163008042","firstName":"NOBILI","lastName":"DANIELA","dateOfBirth":"1944-01-30T00:00:00.000Z","sex":"F","email":"YGYJYGJYY","phone":"33571103","address":"FFGHVVG, IMOLA, BO, 40026","emergencyContactName":null,"emergencyContactPhone":n
