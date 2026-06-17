@@ -14,6 +14,7 @@ import noteRouter from './routes/note.js';
 import aiExtractionRouter from './routes/ai-extraction.js';
 import aiJobsRouter from './routes/ai-jobs.js';
 import internalAiRouter from './routes/internal-ai.js';
+import assistantPublicRouter from './routes/ai-assistant-public.js';
 
 const app = express();
 
@@ -88,6 +89,8 @@ app.use('/consegne', consegneRouter);
 app.use('/notes', noteRouter);
 app.use('/ai/extraction/jobs', aiJobsRouter);
 app.use('/ai/extraction', aiExtractionRouter);
+// REQ-040: public operator-facing assistant (operator-auth; runs the gateway in-process, no token).
+app.use('/ai/assistant', assistantPublicRouter);
 // REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
 app.use('/internal/ai', internalAiRouter);
 
