@@ -49,7 +49,7 @@ const NAV_LABELS: Record<NavKey, string> = {
   'consegne': 'Consegne',
   'agenda-operatore': 'Agenda',
   'parametri-multipaziente': 'Parametri',
-  'ai-assistant': 'AI Assistant',
+  'ai-assistant': 'Assistente ClinicOS',
 };
 
 const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
@@ -965,6 +965,11 @@ export default function App() {
         key={aiOpenTrigger}
         forceOpen={aiOpen}
         onClose={() => setAiOpen(false)}
+        operatorId={utente?.id}
+        operatorRole={utente?.ruolo}
+        currentPatientId={navKey === 'dettaglio-paziente' ? pazienteSelezionato?.id : undefined}
+        currentPatientName={navKey === 'dettaglio-paziente' && pazienteSelezionato ? `${pazienteSelezionato.lastName ?? ''} ${pazienteSelezionato.firstName ?? ''}`.trim() : undefined}
+        onNavigate={(n) => { if (n.patientId) { const p = pazienti.find((x) => x.id === n.patientId); if (p) selectPaziente(p); } }}
       />
     </div>
   );
