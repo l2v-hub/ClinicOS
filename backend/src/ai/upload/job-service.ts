@@ -14,6 +14,7 @@ import { loadAiConfig, loadExtractionPrompt, loadOutputSchema, type AiConfig } f
 import { recordAudit } from '../audit.js';
 import { mergeExtractions, type DocResult, type MergedProposal } from '../merge.js';
 import { buildSectionsRequest, postProcessSections, buildNarrativeDraft, narrativeFromRawText, parseNarrativeFromMarkdown, narrativeHasSectionText, type SectionsResult } from '../sections/index.js';
+import { filterRepeatedHeaders } from '../sections/header-filter.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
@@ -692,14 +693,20 @@ export async function runJob(jobId: string): Promise<void> {
             dateOfBirth: String(ana.dataNascita ?? ''), sex: String(ana.sesso ?? ''),
             fiscalCode: String((raw?.cartella as Record<string, unknown> | undefined)?.codiceFiscale ?? ''),
           };
-          // REQ-035: populate the narrative from the integral OCR markdown (rawText) — the model
-          // already produced the section text; just map it (no extra AI call). Prefer this when
-          // it found section text; otherwise fall back to the sections pass, then to raw text.
-          let narrative = parseNarrativeFromMarkdown(rawText, demo);
+          // REQ-037: strip repetitive page headers/footers from the combined transcription BEFORE
+          // composing sections, so a per-page patient header can't break Anamnesi/Decorso/Terapia
+          // continuity or duplicate the anagraphic data. `rawText` (the integral OCR) is kept
+          // immutable for the document preview; `cleanedRawText` is what the parser consumes.
+          const hf = filterRepeatedHeaders(rawText);
+          const cleanedRawText = hf.cleanedText;
+          // REQ-035: populate the narrative from the (cleaned) OCR markdown — the model already
+          // produced the section text; just map it (no extra AI call). Prefer this when it found
+          // section text; otherwise fall back to the sections pass, then to raw text.
+          let narrative = parseNarrativeFromMarkdown(cleanedRawText, demo);
           if (!narrativeHasSectionText(narrative)) {
             narrative = sections
               ? buildNarrativeDraft(sections, usable.map((d) => ({ id: d.id, filename: d.filename })))
-              : narrativeFromRawText(rawText, demo);
+              : narrativeFromRawText(cleanedRawText, demo);
           }
           // REQ-036: final supersede check — the operator may have reopened during the
           // best-effort transcription/sections passes above. Never persist a stale draft.
@@ -709,7 +716,7 @@ export async function runJob(jobId: string): Promise<void> {
             data: {
               status: 'review_ready',
               stage: 'completed',
-              resultData: { ...merged, _full: raw ?? {}, rawText, _sections: sections, _narrative: narrative } as object,
+              resultData: { ...merged, _full: raw ?? {}, rawText, cleanedRawText, _headerFilter: { warnings: hf.warnings, removedHeaderBlocks: hf.removedHeaderBlocks, removedFooterLines: hf.removedFooterLines, detectedPageNumbers: hf.detectedPageNumbers, matchedLabels: hf.matchedLabels }, _sections: sections, _narrative: narrative } as object,
               model: modelUsed,
             },
           });
@@ -755,7 +762,11 @@ export async function rebuildNarrativeDraftFromExistingExtraction(
   const hasText = !!current && narrativeHasSectionText(current as never);
   if (hasText || !rawText.trim()) return resultData; // already populated, or nothing to parse
   const ana = ((resultData._full as { anagrafica?: Record<string, unknown> } | undefined)?.anagrafica ?? {}) as Record<string, unknown>;
-  const rebuilt = parseNarrativeFromMarkdown(rawText, {
+  // REQ-037: parse from the header/footer-cleaned text (reuse the stored cleaned text when present).
+  const cleaned = typeof resultData.cleanedRawText === 'string' && resultData.cleanedRawText.trim()
+    ? resultData.cleanedRawText
+    : filterRepeatedHeaders(rawText).cleanedText;
+  const rebuilt = parseNarrativeFromMarkdown(cleaned, {
     firstName: String(ana.nome ?? ''), lastName: String(ana.cognome ?? ''),
     dateOfBirth: String(ana.dataNascita ?? ''), sex: String(ana.sesso ?? ''),
   });

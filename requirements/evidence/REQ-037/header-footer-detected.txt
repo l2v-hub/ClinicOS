@@ -1,0 +1,6 @@
+REQ-037 header/footer detection
+removedHeaderBlocks: 2  (later duplicates of the patient header)
+removedFooterLines : 3
+detectedPageNumbers: [1,2,3]  (recovered BEFORE footer removal)
+matchedLabels      : ["paziente","nascita","residenza","codice fiscale","reparto"]
+warnings           : []
