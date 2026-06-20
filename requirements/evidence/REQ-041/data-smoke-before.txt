@@ -1,0 +1,4 @@
+REQ-041 data smoke BEFORE
+HTTP 200
+patients=22
+first-record-keys=id,medicalRecordNumber,firstName,lastName,dateOfBirth,sex,email,phone,address,emergencyContactName,emergencyContactPhone,registeredById,createdAt,updatedAt
