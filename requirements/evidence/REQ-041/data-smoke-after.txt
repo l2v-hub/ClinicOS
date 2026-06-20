@@ -1,0 +1,4 @@
+REQ-041 data smoke AFTER
+HTTP 200
+patients=22
+note: REQ-041 made NO production writes (execution verified via unit tests + mocked E2E)

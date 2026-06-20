@@ -2,6 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { requireOperator } from '../auth.js';
 import { importRateLimit } from '../rate-limit.js';
+import { canCrossPatientSearch } from '../gateway/context.js';
+import { ctxFromOperator } from '../../routes/ai-assistant-public.js';
 
 function mockReq(headers: Record<string, string>, ip = '1.2.3.4') {
   return {
@@ -56,6 +58,16 @@ test('requireOperator: admin/manager/operator casings accepted', () => {
     requireOperator(req as never, res as never, () => { nexted = true; });
     assert.equal(nexted, true, `role ${role} should pass`);
   }
+});
+
+test('public assistant: spoofed admin header cannot unlock cross-patient', () => {
+  // Attacker passes requireOperator by self-asserting a privileged role on the public route.
+  const req = mockReq({ 'X-Operator-Id': 'attacker', 'X-Operator-Role': 'admin' });
+  requireOperator(req as never, mockRes() as never, () => {});
+  assert.equal(req.operator?.role, 'admin'); // header trusted at the gate (audit) ...
+  // ... but the gateway context must be clamped: even with the env flag ON, cross-patient stays closed.
+  const ctx = ctxFromOperator(req as never);
+  assert.equal(canCrossPatientSearch(ctx, { AI_CROSS_PATIENT_SEARCH_ENABLED: 'true' } as never), false);
 });
 
 test('importRateLimit: 429 after the limit, keyed by operator', () => {

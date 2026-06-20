@@ -16,12 +16,20 @@ const assistantPublicRouter = Router();
 assistantPublicRouter.use(requireOperator);
 assistantPublicRouter.use(importRateLimit);
 
-function ctxFromOperator(req: AuthedRequest): UserContext {
+// Cross-patient search is privileged (manager/admin). On THIS public route the role is a
+// self-asserted, unauthenticated header (no IdP) — so it must never confer privilege, or anyone
+// could set X-Operator-Role: admin and dump data across patients. We pin the gateway role to a
+// non-privileged operator scope: single-patient operator access still works, but
+// canCrossPatientSearch() can never be unlocked from here. The real role stays on req.operator for
+// audit; restore it to the context only once operator identity is cryptographically verified.
+const NON_PRIVILEGED_ROLE = 'operatore';
+
+export function ctxFromOperator(req: AuthedRequest): UserContext {
   const op = req.operator!; // requireOperator guarantees it
   return {
     userId: op.id,
     tenantId: defaultTenant(),
-    roles: [String(op.role).toLowerCase()],
+    roles: [NON_PRIVILEGED_ROLE], // privilege never derives from a public header (see note above)
     permittedPatientIds: null, // operator scope within the single tenant
     requestId: `op-${op.id}-${req.header('X-Request-Id') ?? 'web'}`,
   };

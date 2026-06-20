@@ -15,6 +15,7 @@ import aiExtractionRouter from './routes/ai-extraction.js';
 import aiJobsRouter from './routes/ai-jobs.js';
 import internalAiRouter from './routes/internal-ai.js';
 import assistantPublicRouter from './routes/ai-assistant-public.js';
+import voiceRouter from './routes/ai-voice.js';
 
 const app = express();
 
@@ -91,6 +92,8 @@ app.use('/ai/extraction/jobs', aiJobsRouter);
 app.use('/ai/extraction', aiExtractionRouter);
 // REQ-040: public operator-facing assistant (operator-auth; runs the gateway in-process, no token).
 app.use('/ai/assistant', assistantPublicRouter);
+// REQ-041: operator-facing voice write-actions (transcript-only; audio stays client-side).
+app.use('/ai/voice', voiceRouter);
 // REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
 app.use('/internal/ai', internalAiRouter);
 
