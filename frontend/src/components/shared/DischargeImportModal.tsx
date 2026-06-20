@@ -3,7 +3,7 @@ import { API_URL } from '../../config';
 import type { ConfirmPatient } from './ImportReviewFull';
 import { ImportSectionsReview } from './sections/ImportSectionsReview';
 import type { SectionsResult } from './sections/types';
-import { sectionsFromNarrative, type NarrativeDraft } from './sections/deriveSections';
+import { sectionsFromNarrative, assertNoLegacyImportArrays, type NarrativeDraft } from './sections/deriveSections';
 import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
@@ -111,7 +111,20 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
           setProcessing(false);
           const rr = await apiFetch(`${JOBS_URL}/${jobId}/result`);
           const result = await rr.json();
-          if (rr.ok && result.resultData) { setProposal(result.resultData); setStep('review'); }
+          if (rr.ok && result.resultData) {
+            // BUG-050: runtime contract assertion — the discharge import must review as narrative
+            // (never legacy diagnoses[]/medications[] arrays). Runs in the real deployment too:
+            // fatal in DEV (fails tests/local), logged loudly in prod so a regression is visible.
+            const rd = result.resultData as { _narrative?: unknown; _sections?: unknown };
+            try {
+              assertNoLegacyImportArrays(rd._narrative as Record<string, unknown> | null | undefined);
+              assertNoLegacyImportArrays(rd._sections as Record<string, unknown> | null | undefined);
+            } catch (err) {
+              if (import.meta.env.DEV) throw err;
+              console.error('[ClinicOS] import contract violation:', err);
+            }
+            setProposal(result.resultData); setStep('review');
+          }
           else setError('Estrazione completata ma risultato non disponibile');
         } else if (['failed', 'retryable_error', 'cancelled'].includes(j.status)) {
           setProcessing(false);
@@ -312,14 +325,8 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   // always-present flat `_narrative`. The legacy ImportReviewFull table is never rendered here.
   const sectionsData = (proposal as { _sections?: SectionsResult | null } | null)?._sections ?? null;
   const narrativeDraft = (proposal as { _narrative?: NarrativeDraft | null } | null)?._narrative ?? null;
-  // Runtime assertion: the import contract must be narrative, never legacy arrays.
-  if (import.meta.env.DEV && narrativeDraft) {
-    for (const k of ['diagnoses', 'medications', 'consultations', 'examinations', 'procedures', 'allergies'] as const) {
-      if (k in (narrativeDraft as Record<string, unknown>)) {
-        throw new Error(`LEGACY_IMPORT_CONTRACT_DETECTED: ${k}[] is not allowed in the discharge import draft`);
-      }
-    }
-  }
+  // Runtime import-contract assertion runs once at result-load (see tick() above), in the real
+  // deployment too — not duplicated here on every render.
   // REQ-035: use whichever source actually carries section TEXT (the narrative built from the
   // OCR markdown is the reliable one). Never show empty cards when the text exists elsewhere.
   const narrativeSections = narrativeDraft ? sectionsFromNarrative(narrativeDraft) : null;

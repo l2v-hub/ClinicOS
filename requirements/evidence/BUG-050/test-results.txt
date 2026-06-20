@@ -1,0 +1,9 @@
+ok 1 - sectionsFromNarrative maps diagnosisText -> DISCHARGE_DIAGNOSIS block (no diagnoses[])
+ok 2 - all canonical sections kept (even empty, fillable); allergies surfaced first; empty unmapped dropped
+ok 3 - assertNoLegacyImportArrays throws on legacy contract, passes on narrative
+ok 4 - GUARD: the import modal never renders the legacy ImportReviewFull table
+ok 5 - assertNoLegacyImportArrays is a no-op on null/undefined (safe to call eagerly)
+ok 6 - BUG-050: import-contract assertion is wired into the result-load path (runs in prod)
+# tests 6
+# pass 6
+# fail 0

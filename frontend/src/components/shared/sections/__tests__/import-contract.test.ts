@@ -51,3 +51,22 @@ test('GUARD: the import modal never renders the legacy ImportReviewFull table', 
   assert.ok(!/<ImportReviewFull/.test(modal), 'DischargeImportModal must not render <ImportReviewFull> (legacy table)');
   assert.ok(/ImportSectionsReview/.test(modal), 'DischargeImportModal must render the narrative review');
 });
+
+test('assertNoLegacyImportArrays is a no-op on null/undefined (safe to call eagerly)', () => {
+  assert.doesNotThrow(() => assertNoLegacyImportArrays(null));
+  assert.doesNotThrow(() => assertNoLegacyImportArrays(undefined));
+  // a non-empty objects array is not a legacy CLINICAL array → allowed
+  assert.doesNotThrow(() => assertNoLegacyImportArrays({ sections: [{ sectionKey: 'ANAMNESIS', rawText: 'x' }] }));
+});
+
+// BUG-050: the runtime contract assertion must run in the REAL deployment, not only in DEV.
+// It is invoked at result-load and only DEV throws; prod logs — so the call itself is NOT
+// wrapped in an `if (import.meta.env.DEV)` gate.
+test('BUG-050: import-contract assertion is wired into the result-load path (runs in prod)', () => {
+  const modal = readFileSync(resolve(SHARED, 'DischargeImportModal.tsx'), 'utf8');
+  assert.ok(/assertNoLegacyImportArrays\(/.test(modal), 'modal must call assertNoLegacyImportArrays at runtime');
+  // the assertion call must not be the old DEV-only inline loop
+  assert.ok(!/import\.meta\.env\.DEV\s*&&\s*narrativeDraft/.test(modal), 'old DEV-only inline guard must be removed');
+  // prod path logs the violation rather than crashing the review
+  assert.ok(/console\.error\([^)]*import contract/i.test(modal) || /console\.error/.test(modal), 'prod must log contract violations');
+});
