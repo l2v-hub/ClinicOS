@@ -133,3 +133,23 @@ export function detectSectionLoss(rawText: string, draft: DischargeNarrativeDraf
   }
   return lost;
 }
+
+/** Thrown by {@link assertNoNarrativeSectionLoss} when content would be silently dropped. */
+export class NarrativeSectionContentLostError extends Error {
+  readonly lostSections: string[];
+  constructor(lost: string[]) {
+    super(`NARRATIVE_SECTION_CONTENT_LOST: ${lost.join(', ')}`);
+    this.name = 'NarrativeSectionContentLostError';
+    this.lostSections = lost;
+  }
+}
+
+/**
+ * BUG-051 confirm-time guard: block the save when a section detected with non-empty text in the
+ * source markdown would be persisted with an empty `originalText`. Prevents silently creating
+ * empty narrative blocks (editor opening blank) from a content-rich document. No AI call.
+ */
+export function assertNoNarrativeSectionLoss(rawText: string, draft: DischargeNarrativeDraft): void {
+  const lost = detectSectionLoss(rawText, draft);
+  if (lost.length > 0) throw new NarrativeSectionContentLostError(lost);
+}

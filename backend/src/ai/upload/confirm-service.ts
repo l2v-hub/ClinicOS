@@ -8,7 +8,7 @@
 import { prisma } from '../../lib/prisma.js';
 import { AiExtractionError } from '../types.js';
 import { normalizeDate } from '../extraction-validate.js';
-import { isConfirmBlocked, type SectionsResult } from '../sections/index.js';
+import { isConfirmBlocked, detectSectionLoss, type SectionsResult } from '../sections/index.js';
 import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sections/index.js';
 import { persistImportDocuments } from './patient-documents.js';
 
@@ -106,6 +106,20 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
   if (isConfirmBlocked(sections) && !payload.confirmAllergyConflict) {
     await audit(jobId, 'allergy_conflict_blocked', undefined, 'allergie conflicting');
     throw new AiExtractionError('config', 'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.');
+  }
+
+  // BUG-051: a section detected with non-empty text in the source must never be persisted with
+  // an empty originalText. Block the confirmation rather than silently create empty narrative
+  // blocks (editor opening blank). Checked against the same (header-cleaned) text the draft was
+  // built from. No AI re-run — the operator should reprocess the documents.
+  if (narrative) {
+    const rd = job.resultData as { cleanedRawText?: string; rawText?: string } | null;
+    const sourceText = rd?.cleanedRawText?.trim() ? rd.cleanedRawText : (rd?.rawText ?? '');
+    const lost = detectSectionLoss(sourceText, narrative);
+    if (lost.length > 0) {
+      await audit(jobId, 'narrative_content_lost_blocked', undefined, lost.join(','));
+      throw new AiExtractionError('config', `Importazione bloccata: testo clinico rilevato ma non importato per: ${lost.join(', ')}. Riprocessare i documenti.`);
+    }
   }
 
   const p = payload.patient;

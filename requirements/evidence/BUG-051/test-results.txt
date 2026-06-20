@@ -1,0 +1,24 @@
+ok 1 - parses markdown headings and maps to canonical fields
+ok 2 - anamnesis subtitles merge into ONE block, headings kept
+ok 3 - section ends at the next canonical heading
+ok 4 - plain (non-markdown) title line is recognised
+ok 5 - newlines and bullet lists are preserved
+ok 6 - multi-page-style continuation (blank lines) stays in the section
+ok 7 - imaging heading not swallowed by diagnosi alias
+ok 8 - allergies populate text + status present
+ok 9 - missingSections lists empty sections; populated ones excluded
+ok 10 - detectSectionLoss flags a section whose text was dropped
+ok 11 - NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc is detected
+ok 12 - BUG-051: anamnesis fixture populates ANAMNESIS.originalText through to the row
+ok 13 - BUG-051: assertNoNarrativeSectionLoss passes for a faithfully parsed draft
+ok 14 - BUG-051: assertNoNarrativeSectionLoss throws NarrativeSectionContentLostError on loss
+ok 15 - BUG-051: guard does NOT fire for unstructured text (no headings → UNMAPPED_CONTENT)
+ok 16 - REQ-036: section spanning a page break stays in one block until a new canonical heading
+# tests 16
+# pass 16
+# fail 0
+--- backend suite summary ---
+not ok 155 - execute: double confirmation does NOT duplicate (idempotent replay)
+# tests 162
+# pass 161
+# fail 1
