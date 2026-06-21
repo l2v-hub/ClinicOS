@@ -111,6 +111,28 @@ test('idempotent: re-running on cleaned text removes nothing further', () => {
   assert.equal(twice.removedFooterLines, 0);
 });
 
+// BUG-046 (#68) regression: a header packed as MULTIPLE "label: value" pairs on ONE row
+// (not one-label-per-line) must still be detected and de-duplicated. Reproduces the prod
+// multipage bleed where the repeated inline header landed inside the Anamnesi block.
+test('BUG-046: inline multi-label header row repeated across pages is removed from later pages', () => {
+  const INLINE = 'Paziente: ROSSI MARIO  Nascita: 01/01/1950  Sesso: M\nResidenza: Via di Prova 1  Codice Fiscale: RSSMRA50A01L000T  Cartella: TEST-0001';
+  const doc = [
+    INLINE, '', '## Anamnesi Patologica Recente:', 'Frase di prova pagina uno.', '',
+    INLINE, '', 'Frase di prova pagina due.', '',
+    '## Terapia alla dimissione:', 'Farmaco A 5 mg.',
+  ].join('\n');
+  const r = filterRepeatedHeaders(doc);
+  assert.ok(r.removedHeaderBlocks >= 1, 'the repeated inline header block is detected and removed');
+  // the two anamnesi fragments are now contiguous with no header label between them
+  const a = r.cleanedText.indexOf('pagina uno');
+  const b = r.cleanedText.indexOf('pagina due');
+  assert.ok(a >= 0 && b > a, 'anamnesi continuation preserved');
+  const between = r.cleanedText.slice(a, b);
+  assert.ok(!/Codice Fiscale/i.test(between) && !/Cartella/i.test(between), 'no header bleed inside the section');
+  // first occurrence kept (anagraphic data preserved)
+  assert.equal((r.cleanedText.match(/RSSMRA50A01L000T/g) || []).length, 1);
+});
+
 test('config: env threshold + label list are honoured', () => {
   const cfg = loadHeaderFilterConfig({ DOCUMENT_HEADER_CONFIDENCE_THRESHOLD: '0.5', DOCUMENT_HEADER_REQUIRED_MATCHES: '2', DOCUMENT_HEADER_LABELS: 'paziente,reparto' } as NodeJS.ProcessEnv);
   assert.equal(cfg.confidenceThreshold, 0.5);

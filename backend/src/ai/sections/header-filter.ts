@@ -87,6 +87,29 @@ function isValueLine(line: string): boolean {
   return t.length > 0 && t.length <= 40 && !/[.!?]/.test(t);
 }
 
+/** Distinct header labels that appear INLINE as "label:" anywhere in the line. Catches multi-pair
+ *  header rows like "Paziente: X  Nascita: Y  Sesso: Z" that the single-label (label-at-start,
+ *  short-value) detector misses — the common cause of a repeated header bleeding into a section. */
+function inlineLabels(line: string, labels: string[]): string[] {
+  const n = normalise(line);
+  if (!n) return [];
+  const found: string[] = [];
+  for (const lab of labels) {
+    const esc = lab.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (new RegExp(`(^|[^a-z])${esc}\\s*:`).test(n)) found.push(lab);
+  }
+  return Array.from(new Set(found));
+}
+
+/** Header labels carried by a line: a single label-at-start (label-above-value layout), or ≥2
+ *  inline "label:" pairs on one row. Returns null when the line is not header-like. */
+function headerLineLabels(line: string, cfg: HeaderFilterConfig): string[] | null {
+  const single = matchedLabel(line, cfg.labels);
+  if (single) return [single];
+  const inline = inlineLabels(line, cfg.labels);
+  return inline.length >= 2 ? inline : null;
+}
+
 /** A line that is ONLY a page-number marker. Returns {page,total} or null. */
 function pageNumberOnly(line: string): { page: number; total: number | null } | null {
   for (const re of PAGE_NUMBER_PATTERNS) {
@@ -122,14 +145,15 @@ function findHeaderBlocks(lines: string[], cfg: HeaderFilterConfig): Block[] {
   const blocks: Block[] = [];
   let i = 0;
   while (i < lines.length) {
-    if (matchedLabel(lines[i], cfg.labels)) {
-      const labels: string[] = [];
-      let j = i;
+    const first = headerLineLabels(lines[i], cfg);
+    if (first) {
+      const labels: string[] = [...first];
+      let j = i + 1;
       while (j < lines.length) {
-        const lab = matchedLabel(lines[j], cfg.labels);
-        if (lab) { labels.push(lab); j++; continue; }
+        const labs = headerLineLabels(lines[j], cfg);
+        if (labs) { labels.push(...labs); j++; continue; }
         // absorb a single value line that sits between two label lines (label-above-value layout)
-        if (isValueLine(lines[j]) && j + 1 < lines.length && matchedLabel(lines[j + 1], cfg.labels)) { j++; continue; }
+        if (isValueLine(lines[j]) && j + 1 < lines.length && headerLineLabels(lines[j + 1], cfg)) { j++; continue; }
         break;
       }
       const distinct = Array.from(new Set(labels));
