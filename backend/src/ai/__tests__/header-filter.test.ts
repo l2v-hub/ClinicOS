@@ -115,7 +115,12 @@ test('idempotent: re-running on cleaned text removes nothing further', () => {
 // (not one-label-per-line) must still be detected and de-duplicated. Reproduces the prod
 // multipage bleed where the repeated inline header landed inside the Anamnesi block.
 test('BUG-046: inline multi-label header row repeated across pages is removed from later pages', () => {
-  const INLINE = 'Paziente: ROSSI MARIO  Nascita: 01/01/1950  Sesso: M\nResidenza: Via di Prova 1  Codice Fiscale: RSSMRA50A01L000T  Cartella: TEST-0001';
+  // Real-OCR shape: the two header rows are separated by a BLANK line, and the 2nd row alone has
+  // only 2 labels (< requiredMatches). The scanner must still treat them as one header block.
+  const INLINE = [
+    'Paziente: ROSSI MARIO (PAZIENTE FITTIZIO) Nascita: 01/01/1950 Sesso: M', '',
+    'Residenza: Via di Prova 1, Testopoli Codice Fiscale: RSSMRA50A01L000T Cartella: TEST-0001',
+  ].join('\n');
   const doc = [
     INLINE, '', '## Anamnesi Patologica Recente:', 'Frase di prova pagina uno.', '',
     INLINE, '', 'Frase di prova pagina due.', '',

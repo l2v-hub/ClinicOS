@@ -49,6 +49,7 @@ try {
   const anamLoc = page.locator('[data-testid="srev-ANAMNESIS"]');
   if (await anamLoc.count()) await anamLoc.screenshot({ path: resolve(outDir, 'multipage-anamnesi.png') }).catch(() => {});
 
+  console.error('=== RAW ANAMNESI TEXT ===\n' + JSON.stringify(anam.slice(0, 900)));
   console.log(JSON.stringify({
     reached,
     anamnesi_hasPaginaUno: /pagina uno/i.test(anam),

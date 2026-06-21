@@ -152,8 +152,13 @@ function findHeaderBlocks(lines: string[], cfg: HeaderFilterConfig): Block[] {
       while (j < lines.length) {
         const labs = headerLineLabels(lines[j], cfg);
         if (labs) { labels.push(...labs); j++; continue; }
-        // absorb a single value line that sits between two label lines (label-above-value layout)
-        if (isValueLine(lines[j]) && j + 1 < lines.length && headerLineLabels(lines[j + 1], cfg)) { j++; continue; }
+        // absorb blank/value lines that sit BETWEEN header rows (OCR markdown separates the
+        // header rows with blank lines, and label-above-value layouts have short value lines).
+        if (lines[j].trim() === '' || isValueLine(lines[j])) {
+          let k = j;
+          while (k < lines.length && (lines[k].trim() === '' || isValueLine(lines[k]))) k++;
+          if (k < lines.length && headerLineLabels(lines[k], cfg)) { j = k; continue; }
+        }
         break;
       }
       const distinct = Array.from(new Set(labels));
