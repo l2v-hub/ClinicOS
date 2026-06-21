@@ -55,6 +55,31 @@ test('allergy conflict/unclear -> reviewStatus conflict (blocks silent save)', (
   assert.equal(unclear.find((r) => r.sectionKey === 'ALLERGIES')!.reviewStatus, 'conflict');
 });
 
+// BUG-040/041/042: a multi-line narrative diagnosis must stay ONE faithful text block —
+// never exploded into N structured rows, never given inferred type/status, never an ICD field.
+test('BUG-040/041/042: multi-line diagnosis -> ONE narrative block, no structured fields', () => {
+  const multiLine = [
+    'Scompenso cardiaco congestizio.',
+    'Ipertensione arteriosa.',
+    'Diabete mellito tipo 2.',
+    'Insufficienza renale cronica.',
+  ].join('\n');
+  const draft = buildNarrativeDraft(result({ sections: [{ sectionKey: 'DISCHARGE_DIAGNOSIS', rawText: multiLine }] }));
+  const rows = narrativeDraftToSectionRows(draft);
+  // exactly the 10 canonical narrative sections — NOT one row per diagnosis line (no "36 rows")
+  assert.equal(rows.length, 10);
+  const diag = rows.find((r) => r.sectionKey === 'DIAGNOSIS')!;
+  // the whole text is preserved verbatim in a single originalText block
+  assert.equal(diag.originalText, multiLine);
+  // no inferred clinical classification leaked onto the row (BUG-041) and no ICD field (BUG-042)
+  const keys = Object.keys(diag);
+  for (const forbidden of ['type', 'status', 'tipo', 'stato', 'icd', 'icdCode', 'priority']) {
+    assert.ok(!keys.includes(forbidden), `row must not carry inferred field "${forbidden}"`);
+  }
+  // the draft itself never carries a structured diagnoses array (BUG-040)
+  assert.equal((draft as Record<string, unknown>).diagnoses, undefined);
+});
+
 test('therapy combined block maps to THERAPY.originalText', () => {
   const draft = buildNarrativeDraft(result({
     sections: [

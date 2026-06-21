@@ -1,6 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseMarkdownSections, parseNarrativeFromMarkdown, detectSectionLoss } from '../sections/markdown-parse.js';
+import {
+  parseMarkdownSections, parseNarrativeFromMarkdown, detectSectionLoss,
+  assertNoNarrativeSectionLoss, NarrativeSectionContentLostError,
+} from '../sections/markdown-parse.js';
+import { narrativeDraftToSectionRows } from '../sections/patient-narrative.js';
 
 const ANAMNESI_DOC = `# Lettera di dimissione - AUSL Imola
 
@@ -94,6 +98,45 @@ test('NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc 
   const empty = parseNarrativeFromMarkdown('');
   const lost = detectSectionLoss(ANAMNESI_DOC, empty);
   assert.ok(lost.includes('ANAMNESI') && lost.includes('DIAGNOSI'));
+});
+
+// BUG-051: the issue's fixture (`## Anamnesi Patologica Recente:`) must flow through to a
+// persistence row with NON-EMPTY originalText, so the patient-detail editor opens populated.
+test('BUG-051: anamnesis fixture populates ANAMNESIS.originalText through to the row', () => {
+  const draft = parseNarrativeFromMarkdown(ANAMNESI_DOC);
+  const rows = narrativeDraftToSectionRows(draft);
+  const anam = rows.find((r) => r.sectionKey === 'ANAMNESIS')!;
+  assert.ok(anam.originalText.includes('## Anamnesi Patologica Recente:'));
+  assert.ok(anam.originalText.includes('Inviata in PS in data 09/03'));
+  assert.equal(anam.reviewStatus, 'pending'); // not 'absent' — content present
+  const diag = rows.find((r) => r.sectionKey === 'DIAGNOSIS')!;
+  assert.ok(diag.originalText.includes('Scompenso cardiaco congestizio.'));
+});
+
+// BUG-051: confirm-time guard must BLOCK a save when content was detected but dropped.
+test('BUG-051: assertNoNarrativeSectionLoss passes for a faithfully parsed draft', () => {
+  const draft = parseNarrativeFromMarkdown(ANAMNESI_DOC);
+  assert.doesNotThrow(() => assertNoNarrativeSectionLoss(ANAMNESI_DOC, draft));
+});
+
+test('BUG-051: assertNoNarrativeSectionLoss throws NarrativeSectionContentLostError on loss', () => {
+  const draft = parseNarrativeFromMarkdown(ANAMNESI_DOC);
+  const broken = { ...draft, anamnesisText: '', diagnosisText: '' };
+  assert.throws(
+    () => assertNoNarrativeSectionLoss(ANAMNESI_DOC, broken),
+    (err: unknown) => {
+      assert.ok(err instanceof NarrativeSectionContentLostError);
+      assert.ok(err.lostSections.includes('ANAMNESI'));
+      assert.ok(err.lostSections.includes('DIAGNOSI'));
+      return true;
+    },
+  );
+});
+
+test('BUG-051: guard does NOT fire for unstructured text (no headings → UNMAPPED_CONTENT)', () => {
+  const plain = 'Testo libero senza intestazioni di sezione riconoscibili.';
+  const draft = parseNarrativeFromMarkdown(plain);
+  assert.doesNotThrow(() => assertNoNarrativeSectionLoss(plain, draft));
 });
 
 // REQ-036: a section that begins on one page and continues (as plain prose, no new heading) on
