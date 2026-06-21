@@ -446,6 +446,9 @@ model ImportDocument {
   sizeBytes    Int
   sha256       String
   storagePath  String
+  // BUG-049: durable copy of the bytes in the DB so the import file survives Railway's ephemeral
+  // filesystem (container restart / sweep) and can still be persisted as a PatientDocument at confirm.
+  dataBase64   String?
   sortOrder    Int       @default(0)
   logicalDoc   String?   // group multiple photos into one logical document
   // pending|uploading|uploaded|processing|completed|retryable_error|failed|duplicate|rejected

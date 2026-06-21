@@ -37,17 +37,20 @@ export async function persistImportDocuments(
   let saved = 0;
   for (const d of docs) {
     try {
-      const buf = await readFile(d.storagePath);
+      // BUG-049: prefer the durable in-DB copy; fall back to disk for jobs created before the
+      // dataBase64 column existed. Only skip if neither source has the bytes.
+      let dataBase64 = d.dataBase64 ?? null;
+      if (!dataBase64) dataBase64 = (await readFile(d.storagePath)).toString('base64');
       await tx.patientDocument.create({
         data: {
           patientId, importJobId: jobId, originalName: d.filename, mimeType: d.mimeType,
-          sizeBytes: d.sizeBytes, sha256: d.sha256, dataBase64: buf.toString('base64'),
+          sizeBytes: d.sizeBytes, sha256: d.sha256, dataBase64,
           sortOrder: d.sortOrder, ...(createdById ? { createdById } : {}),
         },
       });
       saved++;
     } catch {
-      /* file no longer on disk (swept/redeploy) — skip; never block patient creation */
+      /* neither DB bytes nor on-disk file available — skip; never block patient creation */
     }
   }
   return saved;

@@ -100,6 +100,22 @@ test('NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc 
   assert.ok(lost.includes('ANAMNESI') && lost.includes('DIAGNOSI'));
 });
 
+// BUG-048 (#70): populated sections must carry a sourceReference to the document so the
+// "Confronta con la fonte" action has a file to open.
+test('BUG-048: documentInfo populates sourceReferences for each non-empty section', () => {
+  const d = parseNarrativeFromMarkdown(ANAMNESI_DOC, undefined, { id: 'doc1', filename: 'lettera.pdf' });
+  const keys = new Set(d.sourceReferences.map((r) => r.sectionKey));
+  assert.ok(keys.has('ANAMNESI') && keys.has('DIAGNOSI'), 'populated sections linked to the document');
+  assert.ok(d.sourceReferences.every((r) => r.fileName === 'lettera.pdf' && r.fileId === 'doc1'));
+  // empty sections (e.g. therapy) get no source ref
+  assert.ok(!keys.has('TERAPIA'));
+});
+
+test('BUG-048: without documentInfo sourceReferences stay empty (back-compat)', () => {
+  const d = parseNarrativeFromMarkdown(ANAMNESI_DOC);
+  assert.deepEqual(d.sourceReferences, []);
+});
+
 // BUG-051: the issue's fixture (`## Anamnesi Patologica Recente:`) must flow through to a
 // persistence row with NON-EMPTY originalText, so the patient-detail editor opens populated.
 test('BUG-051: anamnesis fixture populates ANAMNESIS.originalText through to the row', () => {

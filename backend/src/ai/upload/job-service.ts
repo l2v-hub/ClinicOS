@@ -413,6 +413,9 @@ export async function addFiles(jobId: string, files: IncomingFile[]): Promise<{ 
         sizeBytes: vf.sizeBytes,
         sha256: vf.sha256,
         storagePath,
+        // BUG-049: keep a durable in-DB copy too — disk is used for OCR processing, but the DB copy
+        // guarantees the file can still become a PatientDocument at confirm on ephemeral storage.
+        dataBase64: incoming.data.toString('base64'),
         sortOrder: acceptedCount,
         status: 'uploaded',
       },
@@ -702,7 +705,7 @@ export async function runJob(jobId: string): Promise<void> {
           // REQ-035: populate the narrative from the (cleaned) OCR markdown — the model already
           // produced the section text; just map it (no extra AI call). Prefer this when it found
           // section text; otherwise fall back to the sections pass, then to raw text.
-          let narrative = parseNarrativeFromMarkdown(cleanedRawText, demo);
+          let narrative = parseNarrativeFromMarkdown(cleanedRawText, demo, usable[0] ? { id: usable[0].id, filename: usable[0].filename } : undefined);
           if (!narrativeHasSectionText(narrative)) {
             narrative = sections
               ? buildNarrativeDraft(sections, usable.map((d) => ({ id: d.id, filename: d.filename })))

@@ -97,6 +97,7 @@ export function parseMarkdownSections(rawText: string): Map<DraftTextField, Pars
 export function parseNarrativeFromMarkdown(
   rawText: string,
   demographics?: Partial<Pick<DischargeNarrativeDraft, 'firstName' | 'lastName' | 'dateOfBirth' | 'placeOfBirth' | 'sex' | 'fiscalCode' | 'address' | 'phone' | 'email'>>,
+  documentInfo?: { id?: string; filename?: string },
 ): DischargeNarrativeDraft {
   const parsed = parseMarkdownSections(rawText);
   const text = (f: DraftTextField) => parsed.get(f)?.text ?? '';
@@ -120,6 +121,16 @@ export function parseNarrativeFromMarkdown(
   };
   for (const [field, italian] of Object.entries(FIELD_TO_ITALIAN)) {
     if (!(draft[field as DraftTextField] as string).trim()) missing.push(italian);
+  }
+  // BUG-048 (#70): the markdown path knows the source document but not the per-section page, so
+  // link every populated section to that document. "Confronta con la fonte" can then open it
+  // (pageFrom omitted — the viewer opens the document; exact page is best-effort for this path).
+  if (documentInfo && (documentInfo.id || documentInfo.filename)) {
+    for (const [field, italian] of Object.entries(FIELD_TO_ITALIAN)) {
+      if ((draft[field as DraftTextField] as string).trim()) {
+        draft.sourceReferences.push({ sectionKey: italian, fileId: documentInfo.id, fileName: documentInfo.filename });
+      }
+    }
   }
   return draft;
 }
