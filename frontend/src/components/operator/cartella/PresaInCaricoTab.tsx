@@ -88,6 +88,10 @@ const AUTON_OPTS: InlineOption[] = [
   { value: 'non_autonomo', label: 'Non autonomo' },
   { value: 'allettato', label: 'Allettato' },
 ];
+const DOLORE_OPTS: InlineOption[] = [
+  { value: 'assente', label: 'Assente' },
+  { value: 'presente', label: 'Presente' },
+];
 
 function Row({ label, value }: { label: string; value: string | boolean | number | undefined }) {
   if (!value && value !== 0 && value !== false) return null;
@@ -372,7 +376,18 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       <InlineEditableField label="Elim. intestinale" value={safePic.eliminazioneIntestinale ?? ''} onSave={v => saveField({ eliminazioneIntestinale: v })} />
       <InlineEditableField label="Mobilità" value={safePic.mobilita ?? ''} onSave={v => saveField({ mobilita: v })} />
       <InlineEditableField label="Cute / mucose" value={safePic.cuteIntegrita ?? ''} onSave={v => saveField({ cuteIntegrita: v })} />
-      <RowAlways label="Dolore" value={safePic.dolore === 'presente' ? `Presente — NRS ${safePic.doloreLivello}/10` : 'Assente'} />
+      <InlineEditableField
+        label="Dolore" type="select" options={DOLORE_OPTS}
+        value={safePic.dolore} display={safePic.dolore === 'presente' ? 'Presente' : 'Assente'}
+        onSave={v => saveField(v === 'presente' ? { dolore: 'presente' } : { dolore: 'assente', doloreLivello: 0 })}
+      />
+      {safePic.dolore === 'presente' && (
+        <InlineEditableField
+          label="Livello NRS (0–10)" type="number"
+          value={String(safePic.doloreLivello ?? 0)} display={`${safePic.doloreLivello ?? 0}/10`}
+          onSave={v => saveField({ doloreLivello: Math.max(0, Math.min(10, Math.round(Number(v) || 0))) })}
+        />
+      )}
     </div>
   );
 
