@@ -280,13 +280,13 @@ function ConsegnaCard({ consegna: c, onUpdate, onUpdateStato, onDelete, isAdmin,
       </div>
 
       {editOpen && (
-        <ConsegnaEditModal consegna={c} isAdmin={isAdmin} onUpdate={onUpdate} onClose={() => setEditOpen(false)} />
+        <ConsegnaEditInline consegna={c} isAdmin={isAdmin} onUpdate={onUpdate} onClose={() => setEditOpen(false)} />
       )}
     </div>
   );
 }
 
-function ConsegnaEditModal({ consegna: c, isAdmin, onUpdate, onClose }: {
+function ConsegnaEditInline({ consegna: c, isAdmin, onUpdate, onClose }: {
   consegna: Consegna;
   isAdmin: boolean;
   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
@@ -318,17 +318,15 @@ function ConsegnaEditModal({ consegna: c, isAdmin, onUpdate, onClose }: {
     else onClose();
   }
 
+  // BUG-065 (#103): render the edit form INLINE inside the card (no modal overlay) so it never
+  // overlaps the "Nuova consegna" panel or other cards, and entry stays fast.
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box modal-box--edit-card" onClick={e => e.stopPropagation()}>
-        <div className="modal-header">
-          <div>
-            <h3 className="modal-title">Modifica consegna</h3>
-            <p className="modal-subtitle">{c.pazienteNome}</p>
-          </div>
-          <button className="icon-btn" onClick={onClose} aria-label="Chiudi"><IcoX /></button>
-        </div>
-        <div className="modal-body">
+    <div className="consegna-edit-inline" style={{ marginTop: 10, padding: 12, border: '1px solid var(--border, #D0D5DD)', borderRadius: 8, background: '#F9FAFB' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <strong style={{ fontSize: 13 }}>Modifica consegna</strong>
+        <button className="icon-btn icon-btn--sm" onClick={onClose} aria-label="Chiudi"><IcoX /></button>
+      </div>
+      <div>
           <div className="op-form-grid">
             <div className="form-field">
               <label className="form-label">Priorità</label>
@@ -370,14 +368,10 @@ function ConsegnaEditModal({ consegna: c, isAdmin, onUpdate, onClose }: {
             )}
           </div>
           {error && <p className="inline-edit__error" style={{ margin: 0 }}>{error}</p>}
-        </div>
-        <div className="modal-footer">
-          <div className="modal-footer__left" />
-          <div className="modal-footer__right">
-            <button className="btn-secondary" onClick={onClose} disabled={saving}>Annulla</button>
-            <button className="btn-primary" onClick={save} disabled={saving}><IcoCheck /> Salva</button>
-          </div>
-        </div>
+      </div>
+      <div className="table-actions" style={{ justifyContent: 'flex-end', marginTop: 10 }}>
+        <button className="btn-secondary btn-sm" onClick={onClose} disabled={saving}>Annulla</button>
+        <button className="btn-primary btn-sm" onClick={save} disabled={saving}><IcoCheck /> Salva</button>
       </div>
     </div>
   );
