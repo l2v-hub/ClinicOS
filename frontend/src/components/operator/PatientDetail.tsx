@@ -21,6 +21,7 @@ import { ScalaTinettiTab } from './cartella/ScalaTinettiTab';
 import { ScalaNRSTab } from './cartella/ScalaNRSTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
+import { EsamiConsulenzeTab } from './cartella/EsamiConsulenzeTab';
 import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
 import { TopNav } from '../navigation/TopNav';
 import PatientCompactHeader from './PatientCompactHeader';
@@ -34,7 +35,8 @@ type TabId =
   | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario' | 'sezioni-narrative'
-  | 'medicazioni' | 'contenzioni' | 'braden' | 'tinetti' | 'nrs' | 'dimissione';
+  | 'medicazioni' | 'contenzioni' | 'braden' | 'tinetti' | 'nrs' | 'dimissione'
+  | 'esami-consulenze';
 
 type TabGroup = 'panoramica' | 'clinica' | 'diario' | 'moduli' | 'documenti';
 
@@ -63,6 +65,7 @@ const TAB_GROUPS: TabGroupDef[] = [
       { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
       { id: 'parametri',       label: 'Parametri Vitali' },
       { id: 'note',            label: 'Note & Visite' },
+      { id: 'esami-consulenze', label: 'Esami & Consulenze' },
     ],
   },
   {
@@ -1772,6 +1775,9 @@ export function PatientDetail({
           )}
           {tab === 'contenzioni' && (
             <ContenzioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'esami-consulenze' && (
+            <EsamiConsulenzeTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
           {tab === 'braden' && (
             <ScalaBradenTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />

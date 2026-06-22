@@ -354,6 +354,18 @@ export interface NotaClinica {
   updatedAt?: string;
 }
 
+export interface EsameClinicoRecord {
+  id: string;
+  data: string;
+  ora?: string;
+  descrizione: string;
+  esito: string;
+  allegati?: string;
+  operatore: string;
+  note?: string;
+  createdAt: string;
+}
+
 export interface VisitaRecord {
   id: string;
   tipo: string;
@@ -450,6 +462,10 @@ export interface CartellaPaziente {
   valutazioniNRS?: ScalaNRSValutazione[];
   dimissione?: DimissioneInfermieristica;
   liberatoria?: Liberatoria;
+  // Esami & Consulenze
+  esamiEmatici?: EsameClinicoRecord[];
+  esamiStrumentali?: EsameClinicoRecord[];
+  consulenze?: EsameClinicoRecord[];
 }
 
 // ── Presa in Carico ────────────────────────────────────────────────────────────
