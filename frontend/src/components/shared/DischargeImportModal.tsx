@@ -5,6 +5,7 @@ import { ImportSectionsReview } from './sections/ImportSectionsReview';
 import type { SectionsResult } from './sections/types';
 import { sectionsFromNarrative, assertNoLegacyImportArrays, type NarrativeDraft } from './sections/deriveSections';
 import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
+import { CameraCapture } from './CameraCapture';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
 // Files are added to a backend job (no patient record is created here).
@@ -85,13 +86,13 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const [paneTab, setPaneTab] = useState<'doc' | 'data'>('doc'); // tablet/mobile single-pane
   const [sourceTarget, setSourceTarget] = useState<{ fileName?: string; page?: number } | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
-  const cameraInput = useRef<HTMLInputElement>(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
 
   useEffect(() => {
     if (!open) {
       previews.forEach((p) => URL.revokeObjectURL(p.url));
       setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); setProcessing(false);
-      setPreviews([]); setLayout('5050'); setPaneTab('doc'); setSourceTarget(null);
+      setPreviews([]); setLayout('5050'); setPaneTab('doc'); setSourceTarget(null); setCameraOpen(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -142,7 +143,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
 
   if (!open) return null;
 
-  async function sendFiles(files: FileList | null) {
+  async function sendFiles(files: FileList | File[] | null) {
     if (!files || files.length === 0) return;
     setBusy(true); setError(null);
     try {
@@ -162,7 +163,6 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     } finally {
       setBusy(false);
       if (fileInput.current) fileInput.current.value = '';
-      if (cameraInput.current) cameraInput.current.value = '';
     }
   }
 
@@ -179,7 +179,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   // REQ-014: rifare una singola foto = rimuovi + riapri fotocamera.
   async function retake(docId: string) {
     await removeDoc(docId);
-    cameraInput.current?.click();
+    setCameraOpen(true);
   }
 
   // REQ-014: assegna più foto allo stesso documento logico.
@@ -394,15 +394,19 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
           <button className="btn-secondary" disabled={busy} onClick={() => fileInput.current?.click()}>
             Seleziona file
           </button>
-          <button className="btn-secondary" disabled={busy} onClick={() => cameraInput.current?.click()}>
+          <button className="btn-secondary" disabled={busy} onClick={() => setCameraOpen(true)} data-testid="scatta-foto">
             Scatta foto
           </button>
           <input ref={fileInput} type="file" multiple hidden
             accept=".pdf,.doc,.docx,.txt,image/*"
             onChange={(e) => sendFiles(e.target.files)} />
-          <input ref={cameraInput} type="file" hidden accept="image/*" capture="environment"
-            onChange={(e) => sendFiles(e.target.files)} />
         </div>
+        <CameraCapture
+          open={cameraOpen}
+          onClose={() => setCameraOpen(false)}
+          onCapture={(file) => { setCameraOpen(false); void sendFiles([file]); }}
+          onFallbackImport={() => { setCameraOpen(false); fileInput.current?.click(); }}
+        />
 
         <p className="import-modal__limits">
           {count}/{maxFiles} elementi · {fmtMB(totalBytes)} / {fmtMB(maxTotalBytes)} totali
