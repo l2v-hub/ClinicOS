@@ -646,7 +646,6 @@ export interface Contenzione {
   motivoClinico: string;
   autorizzazioneMedico: boolean;
   autorizzazioneTutore: boolean;
-  intervalloRivalutazione: number;
   dataFine: string;
   oraFine: string;
   attiva: boolean;
