@@ -21,9 +21,9 @@ and issues left **open** for the owner to close after a production deploy + prod
 | #103 | BUG-065 | Consegne: overlapping windows | ✅ Fixed + merged | #110 | E2E inline edit, no overlay |
 | #93  | BUG-055 | Therapy not set at admission | ⛔ Blocked (BE deploy + no local OCR) | — | fix plan documented |
 | #95  | BUG-057 | Therapy: fractional doses | ⛔ Blocked (Prisma migration + BE deploy) | — | fix plan documented |
-| #98  | BUG-060 | Add Tinetti + NRS scales | 📋 Planned, not implemented (FE) | — | plan posted |
-| #99  | BUG-061 | Separate Esami/RX/Consulenze windows | 📋 Planned, not implemented (FE) | — | plan posted |
-| #102 | BUG-064 | Invio in PS print window | 📋 Planned, not implemented (FE) | — | plan posted |
+| #98  | BUG-060 | Add Tinetti + NRS scales | ✅ Fixed + merged | #111 | build PASS; 17/17 scoring tests |
+| #99  | BUG-061 | Separate Esami/RX/Consulenze windows | ✅ Fixed + merged | #112 | build PASS; 7/7 sort tests |
+| #102 | BUG-064 | Invio in PS print window | ✅ Fixed + merged | #113 | build PASS; 9/9 tests + preview screenshot |
 
 ## Legend
 - ✅ Fixed + merged to `main`, locally verified, `status-tested`, **awaiting prod deploy** (open).
@@ -31,9 +31,24 @@ and issues left **open** for the owner to close after a production deploy + prod
 - ⛔ Blocked by infra (backend deploy) / schema migration — `status-blocked`, fix plan in issue.
 - 📋 Implementable FE work, not done this session — plan posted in issue (open).
 
+## Update — 2026-06-22 (later session)
+The three remaining FE bugs that were only *planned* are now **implemented + merged to `main`**
+(all front-end only — ride the existing cartella JSON / read-only therapy GET, no schema/backend change):
+- **#98** Tinetti + NRS scales — PR #111
+- **#99** Esami / RX / Consulenze separated sections — PR #112
+- **#102** Invio in PS print window — PR #113
+
+All build-PASS + unit-tested, labelled `status-tested`, left **open** pending prod deploy.
+Still `status-blocked` (need owner action): **#93** (therapy at admission — BE deploy + OCR) and
+**#95** (fractional doses ½/¼ — requires additive Prisma migration + BE deploy; NOT done because
+CLAUDE.md forbids schema changes without explicit authorization).
+
 ## Blockers to clear (owner action)
 1. **GitHub Actions billing** — restore so `deploy-backend.yml` (Railway) runs.
 2. **Vercel** — confirm build quota/billing; FE deploys stalled with no logs.
-3. After deploy: re-verify #68/#70/#71 (import E2E), #96 (persistence), and the merged FE fixes on prod, then close.
+3. After deploy: re-verify #68/#70/#71 (import E2E), #96 (persistence), and the merged FE fixes
+   (#91/#94/#101/#92/#97/#100/#103/#98/#99/#102) on prod, then close.
 4. Data hygiene: patients edited under the old buggy default may have fabricated clinical data
    persisted (see #101) — reset contaminated cartelle.
+5. **#95**: authorize the additive Prisma migration (`dosaggioConfezione` + `quantitaPrescritta`)
+   so fractional doses can be implemented properly; **#93**: needs BE deploy + a local OCR path.
