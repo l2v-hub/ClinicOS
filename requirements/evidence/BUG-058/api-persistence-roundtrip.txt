@@ -1,0 +1,10 @@
+BUG-058 — verifica persistenza Medicazioni/Contenzioni (backend prod, paziente sintetico DEMO-FULL-001)
+Endpoint: PUT/GET /patients/:id/cartella (blob JSON), data sintetici, 2026-06-23
+
+[1] GET cartella -> HTTP 200; medicazioni=2 contenzioni=2
+[2] PUT cartella (con 1 medicazione + 1 contenzione QA) -> HTTP 200
+[3] GET reload -> medicazione QA presente=True; contenzione QA presente=True  (=> salvata e riletta)
+[4] re-PUT identico (doppio invio) -> occorrenze qa-med=1, qa-con=1  (=> nessun duplicato)
+[5] cleanup dati QA -> HTTP 200
+
+RESULT: PASS
