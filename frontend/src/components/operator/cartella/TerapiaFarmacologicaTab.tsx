@@ -124,7 +124,7 @@ function formToPayload(form: TherapyForm, patientId: string, operatoreNome: stri
     fascePomeriggio: form.fascePomeriggio,
     fasceSera: form.fasceSera,
     fasceNotte: form.fasceNotte,
-    orarioSpecifico: form.orarioSpecifico || null,
+    orarioSpecifico: form.orarioSpecifico.split(',').map(s => s.trim()).filter(Boolean).join(',') || null,
     prescrittore: form.prescrittore || null,
     operatoreInseritore: operatoreNome,
     note: form.note || null,
@@ -343,7 +343,9 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
           {FASCE_LABELS.filter(f => t[f.boolKey] as boolean).map(f => (
             <span key={f.key} className="fascia-chip">{f.label}</span>
           ))}
-          {t.orarioSpecifico && <span className="fascia-chip">{t.orarioSpecifico}</span>}
+          {t.orarioSpecifico && t.orarioSpecifico.split(',').map(s => s.trim()).filter(Boolean).map(o => (
+            <span key={o} className="fascia-chip">{o}</span>
+          ))}
         </div>
       ),
     },
@@ -653,10 +655,20 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                   </div>
                 </div>
               )}
-              <div className="form-group">
-                <label>Orario specifico</label>
-                <input className="form-input" type="time" value={form.orarioSpecifico}
-                  onChange={e => updateForm({ orarioSpecifico: e.target.value })} />
+              <div className="form-group form-group--full">
+                <label>Orari specifici</label>
+                <div className="orari-specifici">
+                  {(form.orarioSpecifico === '' ? [] : form.orarioSpecifico.split(',')).map((t, i) => (
+                    <div key={i} className="orario-row" style={{ display: 'flex', gap: 6, marginBottom: 6, alignItems: 'center' }}>
+                      <input className="form-input" type="time" value={t.trim()}
+                        onChange={e => { const next = form.orarioSpecifico.split(','); next[i] = e.target.value; updateForm({ orarioSpecifico: next.join(',') }); }} />
+                      <button type="button" className="btn-secondary btn-sm" title="Rimuovi orario"
+                        onClick={() => { const next = form.orarioSpecifico.split(','); next.splice(i, 1); updateForm({ orarioSpecifico: next.join(',') }); }}>✕</button>
+                    </div>
+                  ))}
+                  <button type="button" className="btn-secondary btn-sm"
+                    onClick={() => { const next = form.orarioSpecifico === '' ? [] : form.orarioSpecifico.split(','); next.push('08:00'); updateForm({ orarioSpecifico: next.join(',') }); }}>+ Aggiungi orario</button>
+                </div>
               </div>
               <div className="form-group">
                 <label>Prescrittore</label>
