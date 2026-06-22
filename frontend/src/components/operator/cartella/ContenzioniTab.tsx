@@ -25,7 +25,7 @@ const FREQ_LABEL: Record<FrequenzaContenzione, string> = {
 const EMPTY_FORM = {
   dataInizio: todayStr(), oraInizio: nowTime(), tipo: 'spondina' as TipoContenzione,
   motivoClinico: '', autorizzazioneMedico: false, autorizzazioneTutore: false,
-  intervalloRivalutazione: 4, dataFine: '', oraFine: '', note: '',
+  dataFine: '', oraFine: '', note: '',
   // Extended
   camera: '', letto: '', firmaMedicoInizio: '', firmaMedicoFine: '',
   spondineAttive: false, spondineFrequenza: 'sempre' as FrequenzaContenzione, spondineAltro: '',
@@ -208,7 +208,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
       id: editId ?? uid(),
       dataInizio: form.dataInizio, oraInizio: form.oraInizio, tipo: form.tipo,
       motivoClinico: form.motivoClinico, autorizzazioneMedico: form.autorizzazioneMedico,
-      autorizzazioneTutore: form.autorizzazioneTutore, intervalloRivalutazione: form.intervalloRivalutazione,
+      autorizzazioneTutore: form.autorizzazioneTutore,
       dataFine: form.dataFine, oraFine: form.oraFine, attiva: !form.dataFine,
       operatore: operatoreNome, note: form.note, createdAt: nowISO(),
       camera: form.camera, letto: form.letto,
@@ -232,7 +232,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
     setForm({
       dataInizio: c.dataInizio, oraInizio: c.oraInizio, tipo: c.tipo,
       motivoClinico: c.motivoClinico, autorizzazioneMedico: c.autorizzazioneMedico,
-      autorizzazioneTutore: c.autorizzazioneTutore, intervalloRivalutazione: c.intervalloRivalutazione,
+      autorizzazioneTutore: c.autorizzazioneTutore,
       dataFine: c.dataFine, oraFine: c.oraFine, note: c.note,
       camera: c.camera ?? '', letto: c.letto ?? '',
       firmaMedicoInizio: c.firmaMedicoInizio ?? '', firmaMedicoFine: c.firmaMedicoFine ?? '',
@@ -393,10 +393,6 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
             </div>
 
             <div className="form-row-2col">
-              <div className="form-row">
-                <label className="form-label">Intervallo rivalutazione (ore)</label>
-                <input type="number" className="form-input" min={1} max={24} value={form.intervalloRivalutazione} onChange={e => set({ intervalloRivalutazione: Number(e.target.value) })} />
-              </div>
               <div className="form-row" style={{ paddingTop: 8 }}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', marginBottom: 8 }}>
                   <input type="checkbox" checked={form.autorizzazioneMedico} onChange={e => set({ autorizzazioneMedico: e.target.checked })} />
@@ -500,7 +496,6 @@ function ContenzioneCard({ c, onEdit, onDelete, onTermina, onModulo }: {
       <div className="contenzione-card__body">
         <div><strong>Motivo:</strong> {c.motivoClinico}</div>
         <div className="cr-meta" style={{ marginTop: 6 }}>
-          Rivalutazione ogni {c.intervalloRivalutazione}h ·
           {c.autorizzazioneMedico && ' Autorizzata dal medico ·'}
           {c.autorizzazioneTutore && ' Autorizzata da tutore ·'}
           Operatore: {c.operatore}
