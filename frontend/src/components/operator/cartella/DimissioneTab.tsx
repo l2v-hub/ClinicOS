@@ -33,7 +33,6 @@ const EMPTY_DIM: DimissioneInfermieristica = {
   // Lesioni
   lesioniNo: true, lesioniSi: false, lesioniSede: '', lesioniGrado: '',
   lesioniTipoMedicazione: '', lesioniFrequenza: '', lesioniNote: '',
-  giroMedicazioneFrequenza: '',
   // Sonno
   sonnoNo: true, sonnoSi: false, sonnoNote: '',
   // Farmaci
@@ -158,9 +157,6 @@ function DimissioneModulo({ dim, lib, paziente }: {
           <span style={{ fontSize: '9pt' }}>frequenza <span style={{ borderBottom: '1px dotted #999', minWidth: 80, display: 'inline-block' }}>{d.lesioniFrequenza}</span></span>
           {d.lesioniNote && <span style={{ fontSize: '9pt' }}>note {d.lesioniNote}</span>}
         </>}
-        {d?.giroMedicazioneFrequenza && (
-          <span style={{ fontSize: '9pt' }}>giro medicazione — frequenza <span style={{ borderBottom: '1px dotted #999', minWidth: 80, display: 'inline-block' }}>{d.giroMedicazioneFrequenza}</span></span>
-        )}
       </DimSection>
 
       <DimSection label="DISTURBI DEL SONNO">
@@ -533,10 +529,6 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                   </div>
                 </div>
               )}
-              <div className="form-row" style={{ marginTop: 8 }}>
-                <label className="form-label">Giro medicazione — frequenza</label>
-                <input type="text" className="form-input" value={dimForm.giroMedicazioneFrequenza ?? ''} onChange={e => setDim({ giroMedicazioneFrequenza: e.target.value })} placeholder="es. giornaliera, a giorni alterni…" style={{ maxWidth: 280 }} />
-              </div>
             </FormSection>
 
             {/* DISTURBI DEL SONNO */}
