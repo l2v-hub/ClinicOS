@@ -17,6 +17,8 @@ import { DiarioPazienteTab, DIARIO_AUTHOR_FILTERS } from './cartella/DiarioPazie
 import { MedicazioniTab } from './cartella/MedicazioniTab';
 import { ContenzioniTab } from './cartella/ContenzioniTab';
 import { ScalaBradenTab } from './cartella/ScalaBradenTab';
+import { ScalaTinettiTab } from './cartella/ScalaTinettiTab';
+import { ScalaNRSTab } from './cartella/ScalaNRSTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
 import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
@@ -32,7 +34,7 @@ type TabId =
   | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario' | 'sezioni-narrative'
-  | 'medicazioni' | 'contenzioni' | 'braden' | 'dimissione';
+  | 'medicazioni' | 'contenzioni' | 'braden' | 'tinetti' | 'nrs' | 'dimissione';
 
 type TabGroup = 'panoramica' | 'clinica' | 'diario' | 'moduli' | 'documenti';
 
@@ -75,6 +77,8 @@ const TAB_GROUPS: TabGroupDef[] = [
       { id: 'medicazioni', label: 'Medicazioni' },
       { id: 'contenzioni', label: 'Contenzioni' },
       { id: 'braden',      label: 'Scala Braden' },
+      { id: 'tinetti',     label: 'Scala Tinetti' },
+      { id: 'nrs',         label: 'Scala NRS' },
       { id: 'dimissione',  label: 'Dimissione' },
     ],
   },
@@ -1771,6 +1775,12 @@ export function PatientDetail({
           )}
           {tab === 'braden' && (
             <ScalaBradenTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'tinetti' && (
+            <ScalaTinettiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+          )}
+          {tab === 'nrs' && (
+            <ScalaNRSTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
           {tab === 'dimissione' && (
             <DimissioneTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />

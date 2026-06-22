@@ -446,6 +446,8 @@ export interface CartellaPaziente {
   medicazioniFerite: MedicazioneRecord[];
   contenzioni: Contenzione[];
   valutazioniBraden: ScalaBradenValutazione[];
+  valutazioniTinetti?: ScalaTinettiValutazione[];
+  valutazioniNRS?: ScalaNRSValutazione[];
   dimissione?: DimissioneInfermieristica;
   liberatoria?: Liberatoria;
 }
@@ -695,6 +697,53 @@ export interface ScalaBradenValutazione {
   mobilita: 1 | 2 | 3 | 4;
   nutrizione: 1 | 2 | 3 | 4;
   frizione: 1 | 2 | 3;
+  operatore: string;
+  note: string;
+  createdAt: string;
+}
+
+// ── Scala Tinetti ──────────────────────────────────────────────────────────────
+
+export interface ScalaTinettiValutazione {
+  id: string;
+  data: string;
+  // Equilibrio (balance) — max 16
+  equilibrioSeduto: 0 | 1;
+  alzarsi: 0 | 1 | 2;
+  tentativiAlzarsi: 0 | 1 | 2;
+  equilibrioImmediato: 0 | 1 | 2;
+  equilibrioProlungato: 0 | 1 | 2;
+  rombergSpinta: 0 | 1 | 2;
+  occhiChiusi: 0 | 1;
+  girarsi360Passi: 0 | 1;
+  girarsi360Stabilita: 0 | 1;
+  sedersi: 0 | 1 | 2;
+  // Andatura (gait) — max 12
+  iniziazione: 0 | 1;
+  lunghezzaPassoDx: 0 | 1;
+  altezzaPassoDx: 0 | 1;
+  lunghezzaPassoSx: 0 | 1;
+  altezzaPassoSx: 0 | 1;
+  simmetria: 0 | 1;
+  continuita: 0 | 1;
+  traiettoria: 0 | 1 | 2;
+  tronco: 0 | 1 | 2;
+  cammino: 0 | 1;
+  operatore: string;
+  note: string;
+  createdAt: string;
+}
+
+// ── Scala NRS ──────────────────────────────────────────────────────────────────
+
+export interface ScalaNRSValutazione {
+  id: string;
+  data: string;
+  ora?: string;
+  punteggio: number;   // 0..10
+  aRiposo?: number;    // optional 0..10
+  inMovimento?: number;// optional 0..10
+  sede?: string;
   operatore: string;
   note: string;
   createdAt: string;
