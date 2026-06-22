@@ -7,9 +7,9 @@ import { resolve } from 'node:path';
 const URL = process.env.PROD_URL ?? 'https://clinicos-eosin.vercel.app';
 const outDir = process.argv[2] ?? '.';
 const mode = process.argv[3] ?? 'fake';
-const args = mode === 'fake'
-  ? ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream']
-  : ['--use-fake-ui-for-media-stream']; // no fake device → getUserMedia finds no camera
+// fake = real fake stream; denied/unavailable = inject a getUserMedia rejection deterministically.
+const args = mode === 'fake' ? ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] : [];
+const injectError = mode === 'denied' ? 'NotAllowedError' : mode === 'unavailable' ? 'NotFoundError' : null;
 
 async function clickFirst(page, names) {
   for (const re of names) {
@@ -26,6 +26,13 @@ const report = { mode };
 try {
   const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
   page.on('dialog', (d) => d.accept());
+  if (injectError) {
+    await page.addInitScript((name) => {
+      if (navigator.mediaDevices) {
+        navigator.mediaDevices.getUserMedia = () => Promise.reject(Object.assign(new Error('mock'), { name }));
+      }
+    }, injectError);
+  }
   await page.goto(URL, { waitUntil: 'networkidle', timeout: 45000 });
   await page.waitForTimeout(800);
   await page.getByText('Operatore', { exact: true }).click();
@@ -62,11 +69,12 @@ try {
     report.photoAddedToList = /foto-documento-/.test(body);
     await card.screenshot({ path: resolve(outDir, 'camera-added-to-list.png') }).catch(() => {});
   } else {
-    // no camera device → unavailable fallback (NOT the file picker as primary)
-    await page.waitForTimeout(2000);
+    // injected getUserMedia rejection → explicit denied / unavailable fallback (NOT the file picker)
+    await page.waitForTimeout(1500);
     report.unavailableFallback = await page.locator('[data-testid="camera-unavailable"]').count() > 0;
     report.deniedShown = await page.locator('[data-testid="camera-denied"]').count() > 0;
-    await cam.screenshot({ path: resolve(outDir, 'camera-desktop-fallback.png') }).catch(() => {});
+    const shot = mode === 'denied' ? 'camera-permission-denied.png' : 'camera-desktop-fallback.png';
+    await cam.screenshot({ path: resolve(outDir, shot) }).catch(() => {});
   }
   await page.close();
 } finally { await browser.close(); }
