@@ -755,8 +755,6 @@ export interface DimissioneInfermieristica {
   lesioniTipoMedicazione?: string;
   lesioniFrequenza?: string;
   lesioniNote?: string;
-  // Giro medicazione
-  giroMedicazioneFrequenza?: string;
   // Disturbi del sonno
   sonnoNo?: boolean;
   sonnoSi?: boolean;
