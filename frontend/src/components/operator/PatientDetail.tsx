@@ -25,6 +25,7 @@ import { EsamiConsulenzeTab } from './cartella/EsamiConsulenzeTab';
 import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
 import { TopNav } from '../navigation/TopNav';
 import PatientCompactHeader from './PatientCompactHeader';
+import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalCard } from '../shared/ClinicalCard';
 import { InlineEditableField } from '../shared/InlineEditableField';
@@ -273,6 +274,9 @@ export function PatientDetail({
   // Camera modal
   const [cameraEditing, setCameraEditing] = useState(false);
   const [cameraModalForm, setCameraModalForm] = useState<Partial<CartellaPaziente>>({});
+
+  // Invio in PS modal
+  const [showInvioPS, setShowInvioPS] = useState(false);
 
   // ── Computed ───────────────────────────────────────────────────────────────
 
@@ -1703,6 +1707,7 @@ export function PatientDetail({
         paziente={paziente}
         cartella={cartella}
         onBack={onBack}
+        onInvioPS={() => setShowInvioPS(true)}
       />
 
       {/* L2 — Navigazione orizzontale principale della pagina */}
@@ -1800,6 +1805,13 @@ export function PatientDetail({
       {cardModal === 'consegne'  && renderConsegneModal()}
       {cardModal === 'allergie'  && renderAllergieModal()}
       {cardModal === 'camera'    && renderCameraModal()}
+      {showInvioPS && (
+        <InvioPSModal
+          paziente={paziente}
+          cartella={cartella}
+          onClose={() => setShowInvioPS(false)}
+        />
+      )}
     </div>
   );
 }
