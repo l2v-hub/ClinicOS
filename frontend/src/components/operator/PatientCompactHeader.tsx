@@ -4,6 +4,7 @@ interface PatientCompactHeaderProps {
   paziente: Paziente;
   cartella: CartellaPaziente | null;
   onBack: () => void;
+  onInvioPS?: () => void;
 }
 
 function calcAge(dob: string): string {
@@ -12,7 +13,7 @@ function calcAge(dob: string): string {
   return years > 0 ? `${years}a` : '';
 }
 
-export default function PatientCompactHeader({ paziente, cartella, onBack }: PatientCompactHeaderProps) {
+export default function PatientCompactHeader({ paziente, cartella, onBack, onInvioPS }: PatientCompactHeaderProps) {
   const fullName = `${paziente.lastName}, ${paziente.firstName}`.trim().replace(/^,\s*/, '');
   const age = calcAge(paziente.dateOfBirth || '');
   const sex = paziente.sex === 'M' ? 'M' : paziente.sex === 'F' ? 'F' : '';
@@ -53,6 +54,21 @@ export default function PatientCompactHeader({ paziente, cartella, onBack }: Pat
         <span className="patient-compact-header__badge patient-compact-header__badge--allergy">
           ⚠ Allergie
         </span>
+      )}
+
+      {onInvioPS && (
+        <button
+          className="btn-primary btn-sm no-print"
+          onClick={onInvioPS}
+          style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}
+          title="Invio in Pronto Soccorso"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          Invio in PS
+        </button>
       )}
     </div>
   );

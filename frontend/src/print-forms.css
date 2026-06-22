@@ -51,6 +51,29 @@
   body { background: white; margin: 0; }
   .patient-record-view { padding: 0; }
   @page { margin: 15mm; }
+
+  /* When Invio in PS modal is open, print only the modal document */
+  body:has(.invio-ps-overlay) .patient-record-view,
+  body:has(.invio-ps-overlay) .app-shell__sidebar,
+  body:has(.invio-ps-overlay) .teams-sidebar {
+    display: none !important;
+  }
+  body:has(.invio-ps-overlay) .invio-ps-overlay {
+    position: static !important;
+    background: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+  }
+  body:has(.invio-ps-overlay) .invio-ps-box {
+    box-shadow: none !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+  }
+  body:has(.invio-ps-overlay) .invio-ps-body {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
