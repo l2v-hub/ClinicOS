@@ -1215,9 +1215,8 @@ export function PatientDetail({
     const sections: ASection[] = [
       { id: 'patologicaProssima', key: 'patologicaProssima', label: 'Anamnesi generale', rows: 5, placeholder: 'Motivo del ricovero, storia recente della malattia…' },
       { id: 'patologicaRemota',   key: 'patologicaRemota',   label: 'Patologie note e interventi pregressi', rows: 4, placeholder: 'Patologie croniche, interventi chirurgici, ricoveri precedenti…' },
-      { id: 'familiare',          key: 'familiare',          label: 'Anamnesi familiare', rows: 3, placeholder: 'Patologie familiari rilevanti…' },
+      // BUG-054 (#92): "Anamnesi familiare" and "Contesto lavorativo e sociale" removed from intake.
       { id: 'fisiologica',        key: 'fisiologica',        label: 'Stato funzionale', rows: 3, placeholder: 'Condizioni basali, autonomia, funzioni vitali di base…' },
-      { id: 'lavorativa',         key: 'lavorativa',         label: 'Contesto lavorativo e sociale', rows: 3, placeholder: 'Professione, situazione familiare, rete di supporto…' },
       { id: 'abitudini',          key: 'abitudini',          label: 'Abitudini e stile di vita', rows: 3, placeholder: 'Fumo, alcol, attività fisica, alimentazione…' },
       { id: 'note',               key: 'note',               label: 'Note aggiuntive', rows: 3, placeholder: 'Informazioni aggiuntive non categorizzate…' },
     ];
