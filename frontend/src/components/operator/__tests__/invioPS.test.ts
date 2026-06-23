@@ -14,10 +14,26 @@ interface Paziente {
   phone: string | null;
 }
 
+interface AllergiaItem {
+  id: string;
+  allergene: string;
+  reazione: string;
+  gravita: 'lieve' | 'moderata' | 'grave';
+}
+
+interface Diagnosi {
+  descrizione: string;
+  stato: 'attiva' | 'risolta' | 'monitoraggio' | 'sospetta';
+}
+
 interface CartellaPaziente {
   pazienteId: string;
   cameraNumero?: string;
   lettoNumero?: string;
+  diabetico?: boolean;
+  ipertensione?: boolean;
+  terapiaTriturata?: boolean;
+  patologiaIngresso?: string;
   statoRicovero: 'ricoverato' | 'ambulatoriale' | 'day_hospital' | 'dimesso';
   dimissione?: {
     data: string;
@@ -37,10 +53,10 @@ interface CartellaPaziente {
   };
   // Minimal required fields for CartellaPaziente
   anamnesi: Record<string, unknown>;
-  diagnosi: unknown[];
+  diagnosi: Diagnosi[];
   terapie: unknown[];
   farmaci: unknown[];
-  allergie: unknown[];
+  allergie: AllergiaItem[];
   noteClinica: unknown[];
   visite: unknown[];
   parametriVitali: unknown[];
@@ -105,15 +121,32 @@ function calcAge(dob: string): string {
 
 function buildInvioPSModel(paziente: Paziente, cartella: CartellaPaziente, therapies: PatientTherapyAPI[]) {
   const cognomeNome = `${paziente.lastName} ${paziente.firstName}`.trim();
-  const camera = [cartella.cameraNumero, cartella.lettoNumero].filter(Boolean).join(' / ') || '—';
+
+  const allergie = (cartella.allergie || []).map(a => {
+    const reazione = a.reazione ? ` (${a.reazione})` : '';
+    return { testo: `${a.allergene}${reazione}`.trim(), grave: a.gravita === 'grave' };
+  }).filter(a => a.testo);
+
+  const diagnosi = (cartella.diagnosi || [])
+    .filter(d => d.stato === 'attiva' || d.stato === 'monitoraggio')
+    .map(d => d.descrizione)
+    .filter(Boolean);
+
+  const condizioniCroniche: string[] = [];
+  if (cartella.diabetico) condizioniCroniche.push('Diabete');
+  if (cartella.ipertensione) condizioniCroniche.push('Ipertensione');
+  if (cartella.terapiaTriturata) condizioniCroniche.push('Terapia triturata');
 
   const patient = {
     cognomeNome,
     mrn: paziente.medicalRecordNumber || '—',
     dataNascita: fmtDate(paziente.dateOfBirth || ''),
     sesso: paziente.sex || '—',
-    camera,
     dataStampa: new Date().toLocaleDateString('it-IT'),
+    allergie,
+    diagnosi,
+    condizioniCroniche,
+    patologiaIngresso: cartella.patologiaIngresso || '',
   };
 
   const age = calcAge(paziente.dateOfBirth || '');
@@ -317,14 +350,45 @@ test('(c) orarioSpecifico takes priority over fasce labels', () => {
   assert.equal(model.terapie[0].fasce, '08:00,20:00');
 });
 
-test('camera campo set from cameraNumero and lettoNumero', () => {
-  const cartella = makeCartella({ cameraNumero: '5', lettoNumero: 'B' });
+test('(d) allergie mapped with testo and grave flag', () => {
+  const cartella = makeCartella({
+    allergie: [
+      { id: 'a1', allergene: 'Penicillina', reazione: 'Shock anafilattico', gravita: 'grave' },
+      { id: 'a2', allergene: 'Lattosio', reazione: '', gravita: 'lieve' },
+    ],
+  });
   const model = buildInvioPSModel(PAZIENTE, cartella, []);
-  assert.equal(model.patient.camera, '5 / B');
+  assert.equal(model.patient.allergie.length, 2);
+  assert.equal(model.patient.allergie[0].testo, 'Penicillina (Shock anafilattico)');
+  assert.equal(model.patient.allergie[0].grave, true);
+  assert.equal(model.patient.allergie[1].testo, 'Lattosio');
+  assert.equal(model.patient.allergie[1].grave, false);
 });
 
-test('camera fallback to — when both are absent', () => {
-  const cartella = makeCartella({ cameraNumero: undefined, lettoNumero: undefined });
+test('(d) no allergie → empty array (renders "Nessuna allergia nota")', () => {
+  const model = buildInvioPSModel(PAZIENTE, makeCartella(), []);
+  assert.deepEqual(model.patient.allergie, []);
+});
+
+test('(d) only attive/monitoraggio diagnosi appear', () => {
+  const cartella = makeCartella({
+    diagnosi: [
+      { descrizione: 'Scompenso cardiaco', stato: 'attiva' },
+      { descrizione: 'Frattura femore', stato: 'monitoraggio' },
+      { descrizione: 'Polmonite risolta', stato: 'risolta' },
+    ],
+  });
   const model = buildInvioPSModel(PAZIENTE, cartella, []);
-  assert.equal(model.patient.camera, '—');
+  assert.deepEqual(model.patient.diagnosi, ['Scompenso cardiaco', 'Frattura femore']);
+});
+
+test('(d) condizioni croniche from boolean flags', () => {
+  const cartella = makeCartella({ diabetico: true, ipertensione: true, terapiaTriturata: false });
+  const model = buildInvioPSModel(PAZIENTE, cartella, []);
+  assert.deepEqual(model.patient.condizioniCroniche, ['Diabete', 'Ipertensione']);
+});
+
+test('(d) no camera field on model anymore', () => {
+  const model = buildInvioPSModel(PAZIENTE, makeCartella({ cameraNumero: '5', lettoNumero: 'B' }), []);
+  assert.equal('camera' in model.patient, false);
 });

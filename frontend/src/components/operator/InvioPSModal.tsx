@@ -15,13 +15,21 @@ const FASCE_LABELS: { boolKey: keyof PatientTherapyAPI; label: string }[] = [
 
 // ── Model types ────────────────────────────────────────────────────────────────
 
+export interface InvioPSAllergia {
+  testo: string;
+  grave: boolean;
+}
+
 export interface InvioPSPatient {
   cognomeNome: string;
   mrn: string;
   dataNascita: string;
   sesso: string;
-  camera: string;
   dataStampa: string;
+  allergie: InvioPSAllergia[];
+  diagnosi: string[];
+  condizioniCroniche: string[];
+  patologiaIngresso: string;
 }
 
 export interface InvioPSDimissione {
@@ -74,15 +82,32 @@ export function buildInvioPSModel(
   therapies: PatientTherapyAPI[],
 ): InvioPSModel {
   const cognomeNome = `${paziente.lastName} ${paziente.firstName}`.trim();
-  const camera = [cartella.cameraNumero, cartella.lettoNumero].filter(Boolean).join(' / ') || '—';
+
+  const allergie: InvioPSAllergia[] = (cartella.allergie || []).map(a => {
+    const reazione = a.reazione ? ` (${a.reazione})` : '';
+    return { testo: `${a.allergene}${reazione}`.trim(), grave: a.gravita === 'grave' };
+  }).filter(a => a.testo);
+
+  const diagnosi: string[] = (cartella.diagnosi || [])
+    .filter(d => d.stato === 'attiva' || d.stato === 'monitoraggio')
+    .map(d => d.descrizione)
+    .filter(Boolean);
+
+  const condizioniCroniche: string[] = [];
+  if (cartella.diabetico) condizioniCroniche.push('Diabete');
+  if (cartella.ipertensione) condizioniCroniche.push('Ipertensione');
+  if (cartella.terapiaTriturata) condizioniCroniche.push('Terapia triturata');
 
   const patient: InvioPSPatient = {
     cognomeNome,
     mrn: paziente.medicalRecordNumber || '—',
     dataNascita: fmtDate(paziente.dateOfBirth || ''),
     sesso: paziente.sex || '—',
-    camera,
     dataStampa: new Date().toLocaleDateString('it-IT'),
+    allergie,
+    diagnosi,
+    condizioniCroniche,
+    patologiaIngresso: cartella.patologiaIngresso || '',
   };
 
   // Age appended to sesso line for compactness
@@ -237,14 +262,57 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
             </div>
             <div className="fm-patient-header" style={{ gridTemplateColumns: '1fr 1fr' }}>
               <div className="fm-patient-field">
-                <span className="fm-patient-field__lbl">Camera / Letto</span>
-                <span className="fm-patient-field__val">{model.patient.camera}</span>
+                <span className="fm-patient-field__lbl">Diagnosi principale / Patologia di ingresso</span>
+                <span className="fm-patient-field__val">
+                  {model.patient.diagnosi[0] || model.patient.patologiaIngresso || '—'}
+                </span>
               </div>
               <div className="fm-patient-field">
                 <span className="fm-patient-field__lbl">Data stampa</span>
                 <span className="fm-patient-field__val">{model.patient.dataStampa}</span>
               </div>
             </div>
+
+            {/* ── Allergie (alert clinico) ── */}
+            <div className={`fm-allergie-box${model.patient.allergie.some(a => a.grave) ? ' fm-allergie-box--grave' : ''}`}>
+              <span className="fm-allergie-box__lbl">⚠ Allergie</span>
+              {model.patient.allergie.length === 0 ? (
+                <span className="fm-allergie-box__val">Nessuna allergia nota</span>
+              ) : (
+                <span className="fm-allergie-box__val">
+                  {model.patient.allergie.map((a, i) => (
+                    <span key={i} className={a.grave ? 'fm-allergene--grave' : undefined}>
+                      {a.testo}{i < model.patient.allergie.length - 1 ? '  ·  ' : ''}
+                    </span>
+                  ))}
+                </span>
+              )}
+            </div>
+
+            {/* ── Quadro clinico ── */}
+            {(model.patient.diagnosi.length > 0 || model.patient.condizioniCroniche.length > 0 || model.patient.patologiaIngresso) && (
+              <div className="fm-section">
+                <div className="fm-section-title">Quadro Clinico</div>
+                {model.patient.diagnosi.length > 0 && (
+                  <div className="fm-row">
+                    <span className="fm-row__lbl">Diagnosi attive:</span>
+                    <span className="fm-row__val">{model.patient.diagnosi.join('  ·  ')}</span>
+                  </div>
+                )}
+                {model.patient.patologiaIngresso && (
+                  <div className="fm-row">
+                    <span className="fm-row__lbl">Patologia di ingresso:</span>
+                    <span className="fm-row__val">{model.patient.patologiaIngresso}</span>
+                  </div>
+                )}
+                {model.patient.condizioniCroniche.length > 0 && (
+                  <div className="fm-row">
+                    <span className="fm-row__lbl">Condizioni croniche / note:</span>
+                    <span className="fm-row__val">{model.patient.condizioniCroniche.join('  ·  ')}</span>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* ── Sezione Dimissione ── */}
             <div className="fm-section">
