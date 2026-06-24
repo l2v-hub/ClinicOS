@@ -1,5 +1,6 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
 
 const router = Router();
 
@@ -30,6 +31,7 @@ router.get('/', async (req, res) => {
     const therapies = await prisma.patientTherapy.findMany({
       where: { stato: 'attiva' },
       include: {
+        schedules: true,
         patient: {
           include: {
             cartella: true,
@@ -77,6 +79,7 @@ router.get('/', async (req, res) => {
           therapyId: string;
           drugName: string;
           dosage: string;
+          quantityLabel: string | null;
           route: string;
           scheduledTime: string;
           status: 'pending' | 'administered' | 'not_administered';
@@ -107,13 +110,21 @@ router.get('/', async (req, res) => {
         if (existing?.stato === 'erogata')     status = 'administered';
         if (existing?.stato === 'non_erogata') status = 'not_administered';
 
+        // REQ-093: match the structured schedule for this fascia to surface the exact
+        // fractional quantity + mg equivalent and the precise administration time.
+        const sched = (pt.schedules as ScheduleInput[] | undefined)?.find(s => s.fascia === f.fascia);
+        const quantityLabel = sched
+          ? scheduleDoseLabel(sched, pt.commercialStrengthValue, pt.commercialStrengthUnit)
+          : null;
+
         const administrationEntry = {
           administrationId:      existing?.id ?? null,
           therapyId:             pt.id,
           drugName:              pt.farmacoNome,
-          dosage:                pt.dosaggio,
+          dosage:                quantityLabel ?? pt.dosaggio,
+          quantityLabel,
           route:                 pt.viaSomministrazione || 'orale',
-          scheduledTime:         f.ora,
+          scheduledTime:         sched?.time || f.ora,
           status,
           administeredAt:        existing?.confirmedAt ? new Date(existing.confirmedAt).toISOString() : null,
           administeredBy:        existing?.operatoreNome ?? null,

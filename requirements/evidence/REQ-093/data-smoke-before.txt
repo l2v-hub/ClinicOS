@@ -1,0 +1,7 @@
+REQ-093 data smoke — prod backend (Railway)
+endpoint: GET /patients
+HTTP: 200
+patients count: 23
+structure: JSON array of patient objects (id, medicalRecordNumber, firstName, lastName, dateOfBirth, sex, ...)
+timestamp: 2026-06-24
+Note: read-only; no production writes performed. Implementation + migration verified on LOCAL Podman DB only.

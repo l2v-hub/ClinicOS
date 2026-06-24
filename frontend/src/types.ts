@@ -893,6 +893,7 @@ export interface TherapyAdministration {
   therapyId: string;
   drugName: string;
   dosage: string;
+  quantityLabel?: string | null; // REQ-093: "1/2 compressa — equivalente a 50 mg"
   route: string;
   scheduledTime: string;
   status: 'pending' | 'administered' | 'not_administered';
@@ -928,13 +929,26 @@ export interface TherapySlot {
 
 // ── Patient Therapy (API) ──────────────────────────────────────────────────
 
+// REQ-093: per-administration-time prescribed quantity as an exact fraction.
+export interface TherapyScheduleAPI {
+  id: string;
+  therapyId: string;
+  time: string;                 // "HH:MM"
+  fascia: string;               // mattina|pranzo|pomeriggio|sera|notte
+  quantityNumerator: number;
+  quantityDenominator: number;
+  administrationUnit: string;   // compressa | ml | gocce | unità | bustina | ...
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface PatientTherapyAPI {
   id: string;
   patientId: string;
   farmacoNome: string;
   dosaggio: string;
   viaSomministrazione: string;
-  tipo: 'periodica' | 'una_tantum';
+  tipo: 'periodica' | 'una_tantum' | 'al_bisogno';
   stato: 'attiva' | 'sospesa' | 'conclusa';
   dataInizio: string;
   dataFine: string | null;
@@ -949,6 +963,13 @@ export interface PatientTherapyAPI {
   note: string | null;
   dataSomministrazione: string | null;
   orarioSomministrazione: string | null;
+  // REQ-093 structured fields
+  commercialStrengthValue?: number | null;
+  commercialStrengthUnit?: string | null;
+  pharmaceuticalForm?: string | null;
+  allowedFractions?: string | null;
+  drugPackageRef?: string | null;
+  schedules?: TherapyScheduleAPI[];
   createdAt: string;
   updatedAt: string;
 }
