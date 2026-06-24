@@ -3,20 +3,17 @@ import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
+import {
+  FRACTION_PRESETS, ADMIN_UNITS, DIVISIBLE_UNITS, PHARMA_FORMS, STRENGTH_UNITS,
+  formatFraction, parseQuantity, computeEquivalent, scheduleLabel, parseAllowedFractions,
+  type ScheduleRow,
+} from './therapyDose';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const VIA_OPTIONS = ['orale', 'IM', 'SC', 'IV', 'sublinguale', 'topico', 'al bisogno'];
-
-const FASCE_LABELS: { key: string; boolKey: keyof PatientTherapyAPI; label: string }[] = [
-  { key: 'mattina',    boolKey: 'fasceMattina',    label: 'Mattina'    },
-  { key: 'pranzo',     boolKey: 'fascePranzo',     label: 'Pranzo'     },
-  { key: 'pomeriggio', boolKey: 'fascePomeriggio', label: 'Pomeriggio' },
-  { key: 'sera',       boolKey: 'fasceSera',       label: 'Sera'       },
-  { key: 'notte',      boolKey: 'fasceNotte',      label: 'Notte'      },
-];
 
 const STATO_BADGE: Record<string, string> = {
   attiva: 'badge--green', sospesa: 'badge--amber', conclusa: 'badge--gray',
@@ -56,18 +53,16 @@ interface Props {
 
 interface TherapyForm {
   farmacoNome: string;
-  dosaggio: string;
+  pharmaceuticalForm: string;
+  commercialStrengthValue: string;
+  commercialStrengthUnit: string;
+  allowedFractions: string[];           // enabled fraction preset keys, e.g. ['1','1/2','1/4']
   viaSomministrazione: string;
   tipo: 'periodica' | 'una_tantum' | 'al_bisogno';
   stato: 'attiva' | 'sospesa' | 'conclusa';
   dataInizio: string;
   dataFine: string;
-  fasceMattina: boolean;
-  fascePranzo: boolean;
-  fascePomeriggio: boolean;
-  fasceSera: boolean;
-  fasceNotte: boolean;
-  orarioSpecifico: string;
+  schedules: ScheduleRow[];             // per-time exact-fraction quantities
   prescrittore: string;
   note: string;
   dataSomministrazione: string;
@@ -78,30 +73,57 @@ function todayStr(): string { return new Date().toISOString().slice(0, 10); }
 
 function emptyForm(): TherapyForm {
   return {
-    farmacoNome: '', dosaggio: '', viaSomministrazione: 'orale',
+    farmacoNome: '', pharmaceuticalForm: 'compressa',
+    commercialStrengthValue: '', commercialStrengthUnit: 'mg',
+    allowedFractions: ['1'], // not divisible by default — operator must enable fractions
+    viaSomministrazione: 'orale',
     tipo: 'periodica', stato: 'attiva', dataInizio: todayStr(), dataFine: '',
-    fasceMattina: true, fascePranzo: false, fascePomeriggio: false,
-    fasceSera: false, fasceNotte: false,
-    orarioSpecifico: '', prescrittore: '', note: '',
+    schedules: [{ time: '08:00', quantityNumerator: 1, quantityDenominator: 1, administrationUnit: 'compressa' }],
+    prescrittore: '', note: '',
     dataSomministrazione: todayStr(), orarioSomministrazione: '',
   };
+}
+
+// Build editable schedule rows from a loaded therapy: prefer structured schedules,
+// else synthesize from legacy orarioSpecifico, else from fascia booleans.
+function schedulesFromTherapy(t: PatientTherapyAPI): ScheduleRow[] {
+  const unit = t.pharmaceuticalForm && ADMIN_UNITS.includes(t.pharmaceuticalForm) ? t.pharmaceuticalForm : 'compressa';
+  if (t.schedules && t.schedules.length) {
+    return t.schedules
+      .map(s => ({
+        time: s.time,
+        quantityNumerator: s.quantityNumerator,
+        quantityDenominator: s.quantityDenominator,
+        administrationUnit: s.administrationUnit || unit,
+      }))
+      .sort((a, b) => a.time.localeCompare(b.time));
+  }
+  const times: string[] = [];
+  if (t.orarioSpecifico) times.push(...t.orarioSpecifico.split(',').map(s => s.trim()).filter(Boolean));
+  if (!times.length) {
+    if (t.fasceMattina) times.push('08:00');
+    if (t.fascePranzo) times.push('12:00');
+    if (t.fascePomeriggio) times.push('16:00');
+    if (t.fasceSera) times.push('20:00');
+    if (t.fasceNotte) times.push('22:00');
+  }
+  if (!times.length) times.push('08:00');
+  return times.map(time => ({ time, quantityNumerator: 1, quantityDenominator: 1, administrationUnit: unit }));
 }
 
 function therapyToForm(t: PatientTherapyAPI): TherapyForm {
   return {
     farmacoNome: t.farmacoNome,
-    dosaggio: t.dosaggio,
+    pharmaceuticalForm: t.pharmaceuticalForm ?? 'compressa',
+    commercialStrengthValue: t.commercialStrengthValue != null ? String(t.commercialStrengthValue) : '',
+    commercialStrengthUnit: t.commercialStrengthUnit ?? 'mg',
+    allowedFractions: Array.from(parseAllowedFractions(t.allowedFractions)),
     viaSomministrazione: t.viaSomministrazione,
     tipo: t.tipo,
     stato: t.stato,
     dataInizio: t.dataInizio,
     dataFine: t.dataFine ?? '',
-    fasceMattina: t.fasceMattina,
-    fascePranzo: t.fascePranzo,
-    fascePomeriggio: t.fascePomeriggio,
-    fasceSera: t.fasceSera,
-    fasceNotte: t.fasceNotte,
-    orarioSpecifico: t.orarioSpecifico ?? '',
+    schedules: schedulesFromTherapy(t),
     prescrittore: t.prescrittore ?? '',
     note: t.note ?? '',
     dataSomministrazione: t.dataSomministrazione ?? todayStr(),
@@ -110,21 +132,33 @@ function therapyToForm(t: PatientTherapyAPI): TherapyForm {
 }
 
 function formToPayload(form: TherapyForm, patientId: string, operatoreNome: string) {
+  const strengthValue = form.commercialStrengthValue.trim() ? Number(form.commercialStrengthValue) : null;
+  // Allowed fractions are stored ordered as they appear in presets (config persists per therapy/drug).
+  const allowed = FRACTION_PRESETS.filter(p => form.allowedFractions.includes(p.key)).map(p => p.key);
+  const schedules = form.tipo === 'periodica'
+    ? form.schedules
+        .filter(s => /^\d{1,2}:\d{2}$/.test(s.time))
+        .map(s => ({
+          time: s.time,
+          quantityNumerator: s.quantityNumerator,
+          quantityDenominator: s.quantityDenominator,
+          administrationUnit: s.administrationUnit,
+        }))
+    : [];
   return {
     patientId,
     farmacoNome: form.farmacoNome,
-    dosaggio: form.dosaggio,
+    dosaggio: '', // derived server-side from strength + form
     viaSomministrazione: form.viaSomministrazione,
     tipo: form.tipo,
     stato: form.stato,
     dataInizio: form.dataInizio,
     dataFine: form.tipo === 'periodica' && form.dataFine ? form.dataFine : null,
-    fasceMattina: form.fasceMattina,
-    fascePranzo: form.fascePranzo,
-    fascePomeriggio: form.fascePomeriggio,
-    fasceSera: form.fasceSera,
-    fasceNotte: form.fasceNotte,
-    orarioSpecifico: form.orarioSpecifico.split(',').map(s => s.trim()).filter(Boolean).join(',') || null,
+    commercialStrengthValue: strengthValue,
+    commercialStrengthUnit: form.commercialStrengthUnit || null,
+    pharmaceuticalForm: form.pharmaceuticalForm || null,
+    allowedFractions: allowed.length ? allowed.join(',') : '1',
+    schedules,
     prescrittore: form.prescrittore || null,
     operatoreInseritore: operatoreNome,
     note: form.note || null,
@@ -149,6 +183,30 @@ type DailyAdminRow = {
   slotLabel?: string;
   [key: string]: unknown;
 };
+
+// ── Schedule summary (REQ-093) ──────────────────────────────────────────────────
+
+function ScheduleSummary({ t }: { t: PatientTherapyAPI }) {
+  const rows = schedulesFromTherapy(t);
+  const hasStructured = (t.schedules && t.schedules.length > 0);
+  if (!rows.length) return <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>—</span>;
+  return (
+    <div className="sched-summary">
+      {rows.map((s, i) => {
+        const eq = hasStructured
+          ? computeEquivalent(s.quantityNumerator, s.quantityDenominator, t.commercialStrengthValue, t.commercialStrengthUnit)
+          : null;
+        return (
+          <span key={i} className="sched-pill" title={scheduleLabel(s, t.commercialStrengthValue, t.commercialStrengthUnit)}>
+            <strong>{s.time}</strong>
+            {hasStructured && <> · {formatFraction(s.quantityNumerator, s.quantityDenominator)} {s.administrationUnit}</>}
+            {eq && <span className="sched-pill__mg"> · {eq}</span>}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -232,7 +290,11 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const closeForm = () => { setShowForm(false); setEditId(null); setForm(emptyForm()); };
 
   const handleSave = async () => {
-    if (!form.farmacoNome.trim() || !form.dosaggio.trim() || !form.dataInizio) return;
+    if (!form.farmacoNome.trim() || !form.dataInizio) return;
+    if (form.tipo === 'periodica' && !form.schedules.some(s => /^\d{1,2}:\d{2}$/.test(s.time))) {
+      setError('Aggiungi almeno un orario di somministrazione.');
+      return;
+    }
     const payload = formToPayload(form, paziente.id, operatoreNome);
     try {
       setSaving(true);
@@ -300,6 +362,32 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   const updateForm = (patch: Partial<TherapyForm>) => setForm(prev => ({ ...prev, ...patch }));
 
+  // ── Schedule editor helpers (REQ-093) ──────────────────────────────────────────
+  const updateSchedule = (idx: number, patch: Partial<ScheduleRow>) =>
+    setForm(prev => ({ ...prev, schedules: prev.schedules.map((s, i) => i === idx ? { ...s, ...patch } : s) }));
+
+  const addSchedule = () =>
+    setForm(prev => ({
+      ...prev,
+      schedules: [...prev.schedules, {
+        time: '18:00', quantityNumerator: 1, quantityDenominator: 1,
+        administrationUnit: prev.pharmaceuticalForm && ADMIN_UNITS.includes(prev.pharmaceuticalForm) ? prev.pharmaceuticalForm : 'compressa',
+      }],
+    }));
+
+  const removeSchedule = (idx: number) =>
+    setForm(prev => ({ ...prev, schedules: prev.schedules.filter((_, i) => i !== idx) }));
+
+  const toggleAllowedFraction = (key: string) =>
+    setForm(prev => {
+      if (key === '1') return prev; // whole dose always allowed
+      const has = prev.allowedFractions.includes(key);
+      return { ...prev, allowedFractions: has ? prev.allowedFractions.filter(k => k !== key) : [...prev.allowedFractions, key] };
+    });
+
+  const [customQty, setCustomQty] = useState<Record<number, string>>({});
+  const strengthNum = form.commercialStrengthValue.trim() ? Number(form.commercialStrengthValue) : null;
+
   // ── Derived data ──────────────────────────────────────────────────────────────
 
   const attive = therapies.filter(t => t.stato === 'attiva');
@@ -337,17 +425,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       render: (v: string) => <span className={`badge ${TIPO_BADGE[v] ?? 'badge--gray'}`}>{v === 'una_tantum' ? 'una tantum' : v === 'al_bisogno' ? 'al bisogno' : v}</span>,
     },
     {
-      key: 'fasceMattina', label: 'Fasce orarie', sortable: false,
-      render: (_: unknown, t: PatientTherapyAPI) => (
-        <div className="fascia-chips">
-          {FASCE_LABELS.filter(f => t[f.boolKey] as boolean).map(f => (
-            <span key={f.key} className="fascia-chip">{f.label}</span>
-          ))}
-          {t.orarioSpecifico && t.orarioSpecifico.split(',').map(s => s.trim()).filter(Boolean).map(o => (
-            <span key={o} className="fascia-chip">{o}</span>
-          ))}
-        </div>
-      ),
+      key: 'fasceMattina', label: 'Orari e quantità', sortable: false,
+      render: (_: unknown, t: PatientTherapyAPI) => <ScheduleSummary t={t} />,
     },
     { key: 'dataInizio', label: 'Inizio', sortable: true, filterable: true, filterType: 'date', render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span> },
     { key: 'dataFine', label: 'Fine', sortable: true, render: (v: string) => <span style={{ fontSize: 12 }}>{v ?? '—'}</span> },
@@ -396,14 +475,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     },
     { key: 'dataInizio', label: 'Inizio', sortable: true, filterable: true, filterType: 'date', render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span> },
     {
-      key: 'fasceMattina', label: 'Fasce', sortable: false,
-      render: (_: unknown, t: PatientTherapyAPI) => (
-        <div className="fascia-chips">
-          {FASCE_LABELS.filter(f => t[f.boolKey] as boolean).map(f => (
-            <span key={f.key} className="fascia-chip">{f.label}</span>
-          ))}
-        </div>
-      ),
+      key: 'fasceMattina', label: 'Orari e quantità', sortable: false,
+      render: (_: unknown, t: PatientTherapyAPI) => <ScheduleSummary t={t} />,
     },
     {
       key: 'id', label: '', width: '64px',
@@ -430,7 +503,10 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'drugName', label: 'Farmaco', sortable: true, filterable: true, filterType: 'text',
       render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
     },
-    { key: 'dosage', label: 'Dosaggio' },
+    {
+      key: 'dosage', label: 'Quantità',
+      render: (_: unknown, a: DailyAdminRow) => <span>{(a.quantityLabel as string) || a.dosage}</span>,
+    },
     { key: 'route', label: 'Via' },
     {
       key: 'fascia', label: 'Fascia', sortable: true, filterable: true, filterType: 'select',
@@ -582,14 +658,53 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
           {showForm ? (
             <div className="terapia-sched-form">
               <div className="form-group">
-                <label>Nome farmaco *</label>
-                <input className="form-input" value={form.farmacoNome} placeholder="es. Paracetamolo"
+                <label>Prodotto medicinale *</label>
+                <input className="form-input" value={form.farmacoNome} placeholder="es. Kanrenol"
                   onChange={e => updateForm({ farmacoNome: e.target.value })} />
               </div>
               <div className="form-group">
-                <label>Dosaggio *</label>
-                <input className="form-input" value={form.dosaggio} placeholder="es. 500 mg"
-                  onChange={e => updateForm({ dosaggio: e.target.value })} />
+                <label>Forma farmaceutica</label>
+                <select className="form-select" value={form.pharmaceuticalForm}
+                  onChange={e => {
+                    const pf = e.target.value;
+                    updateForm({
+                      pharmaceuticalForm: pf,
+                      // keep schedule units in sync when they still match a form unit
+                      schedules: form.schedules.map(s => ADMIN_UNITS.includes(s.administrationUnit) && PHARMA_FORMS.includes(s.administrationUnit) ? { ...s, administrationUnit: ADMIN_UNITS.includes(pf) ? pf : s.administrationUnit } : s),
+                    });
+                  }}>
+                  {PHARMA_FORMS.map(v => <option key={v} value={v}>{v}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Dosaggio commerciale</label>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <input className="form-input" type="number" min="0" step="any" style={{ flex: 1 }}
+                    value={form.commercialStrengthValue} placeholder="es. 100"
+                    onChange={e => updateForm({ commercialStrengthValue: e.target.value })} />
+                  <select className="form-select" style={{ width: 90 }} value={form.commercialStrengthUnit}
+                    onChange={e => updateForm({ commercialStrengthUnit: e.target.value })}>
+                    {STRENGTH_UNITS.map(v => <option key={v} value={v}>{v}</option>)}
+                  </select>
+                </div>
+              </div>
+              <div className="form-group form-group--full">
+                <label>Frazioni consentite <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(la divisibilità va abilitata dall'operatore)</span></label>
+                <div className="fraction-allow">
+                  {FRACTION_PRESETS.map(p => {
+                    const active = form.allowedFractions.includes(p.key);
+                    const isWhole = p.key === '1';
+                    return (
+                      <button key={p.key} type="button"
+                        className={`frac-toggle${active ? ' frac-toggle--on' : ''}${isWhole ? ' frac-toggle--locked' : ''}`}
+                        disabled={isWhole}
+                        title={isWhole ? 'Dose intera sempre disponibile' : `${active ? 'Disabilita' : 'Abilita'} ${p.key}`}
+                        onClick={() => toggleAllowedFraction(p.key)}>
+                        {p.label} <span className="frac-toggle__sub">{p.key}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
               <div className="form-group">
                 <label>Via somministrazione</label>
@@ -641,35 +756,66 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                   </div>
                 </>
               )}
-              {form.tipo !== 'al_bisogno' && (
+              {form.tipo === 'periodica' && (
                 <div className="form-group form-group--full">
-                  <label>Fasce orarie</label>
-                  <div className="fascia-check">
-                    {FASCE_LABELS.map(f => (
-                      <label key={f.key}>
-                        <input type="checkbox" checked={form[f.boolKey as keyof TherapyForm] as boolean}
-                          onChange={e => updateForm({ [f.boolKey]: e.target.checked })} />
-                        {f.label}
-                      </label>
-                    ))}
+                  <label>Orari e quantità per somministrazione</label>
+                  <div className="sched-editor">
+                    {form.schedules.map((s, i) => {
+                      const divisible = DIVISIBLE_UNITS.has(s.administrationUnit);
+                      const eq = computeEquivalent(s.quantityNumerator, s.quantityDenominator, strengthNum, form.commercialStrengthUnit);
+                      const presetActive = (num: number, den: number) =>
+                        s.quantityNumerator === num && s.quantityDenominator === den;
+                      return (
+                        <div key={i} className="sched-row">
+                          <div className="sched-row__head">
+                            <input className="form-input sched-row__time" type="time" value={s.time}
+                              onChange={e => updateSchedule(i, { time: e.target.value })} />
+                            <select className="form-select sched-row__unit" value={s.administrationUnit}
+                              onChange={e => updateSchedule(i, { administrationUnit: e.target.value })}>
+                              {ADMIN_UNITS.map(u => <option key={u} value={u}>{u}</option>)}
+                            </select>
+                            <button type="button" className="btn-secondary btn-sm" title="Rimuovi orario"
+                              onClick={() => removeSchedule(i)}>✕</button>
+                          </div>
+                          <div className="sched-row__qty">
+                            {divisible ? (
+                              <>
+                                {FRACTION_PRESETS.filter(p => form.allowedFractions.includes(p.key)).map(p => (
+                                  <button key={p.key} type="button"
+                                    className={`qty-chip${presetActive(p.num, p.den) ? ' qty-chip--on' : ''}`}
+                                    onClick={() => { updateSchedule(i, { quantityNumerator: p.num, quantityDenominator: p.den }); setCustomQty(c => ({ ...c, [i]: '' })); }}>
+                                    {p.label}
+                                  </button>
+                                ))}
+                                <input className="form-input qty-chip__other" placeholder="Altro (es. 1/3, 0.5)"
+                                  value={customQty[i] ?? ''}
+                                  onChange={e => setCustomQty(c => ({ ...c, [i]: e.target.value }))}
+                                  onBlur={e => {
+                                    const parsed = parseQuantity(e.target.value);
+                                    if (parsed) updateSchedule(i, { quantityNumerator: parsed.num, quantityDenominator: parsed.den });
+                                  }} />
+                              </>
+                            ) : (
+                              <input className="form-input qty-chip__other" type="number" min="0" step="any"
+                                placeholder="Quantità"
+                                value={s.quantityDenominator === 1 ? String(s.quantityNumerator) : (s.quantityNumerator / s.quantityDenominator)}
+                                onChange={e => {
+                                  const parsed = parseQuantity(e.target.value);
+                                  if (parsed) updateSchedule(i, { quantityNumerator: parsed.num, quantityDenominator: parsed.den });
+                                }} />
+                            )}
+                          </div>
+                          <div className="sched-row__resolved">
+                            {s.time} — {formatFraction(s.quantityNumerator, s.quantityDenominator)} {s.administrationUnit}
+                            {eq && <> — <strong>equivalente a {eq}</strong></>}
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <button type="button" className="btn-secondary btn-sm" onClick={addSchedule}>+ Aggiungi orario</button>
                   </div>
                 </div>
               )}
-              <div className="form-group form-group--full">
-                <label>Orari specifici</label>
-                <div className="orari-specifici">
-                  {(form.orarioSpecifico === '' ? [] : form.orarioSpecifico.split(',')).map((t, i) => (
-                    <div key={i} className="orario-row" style={{ display: 'flex', gap: 6, marginBottom: 6, alignItems: 'center' }}>
-                      <input className="form-input" type="time" value={t.trim()}
-                        onChange={e => { const next = form.orarioSpecifico.split(','); next[i] = e.target.value; updateForm({ orarioSpecifico: next.join(',') }); }} />
-                      <button type="button" className="btn-secondary btn-sm" title="Rimuovi orario"
-                        onClick={() => { const next = form.orarioSpecifico.split(','); next.splice(i, 1); updateForm({ orarioSpecifico: next.join(',') }); }}>✕</button>
-                    </div>
-                  ))}
-                  <button type="button" className="btn-secondary btn-sm"
-                    onClick={() => { const next = form.orarioSpecifico === '' ? [] : form.orarioSpecifico.split(','); next.push('08:00'); updateForm({ orarioSpecifico: next.join(',') }); }}>+ Aggiungi orario</button>
-                </div>
-              </div>
               <div className="form-group">
                 <label>Prescrittore</label>
                 <input className="form-input" value={form.prescrittore} placeholder="Dr. ..."

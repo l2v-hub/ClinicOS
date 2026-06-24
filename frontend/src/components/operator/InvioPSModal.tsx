@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Paziente, CartellaPaziente, DimissioneInfermieristica, PatientTherapyAPI } from '../../types';
+import { formatFraction, computeEquivalent } from './cartella/therapyDose';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -143,18 +144,35 @@ export function buildInvioPSModel(
   const terapie: InvioPSTerapia[] = therapies
     .filter(t => t.stato === 'attiva')
     .map(t => {
-      const fasceLabelList = FASCE_LABELS
-        .filter(f => t[f.boolKey] === true)
-        .map(f => f.label);
-      const fasce = t.orarioSpecifico
-        ? t.orarioSpecifico
-        : fasceLabelList.length > 0
-          ? fasceLabelList.join(', ')
-          : '—';
+      // REQ-093: prefer structured schedules → "08:00 (1/2 compressa, 50 mg)" per time.
+      let fasce: string;
+      if (t.schedules && t.schedules.length) {
+        fasce = t.schedules
+          .slice()
+          .sort((a, b) => a.time.localeCompare(b.time))
+          .map(s => {
+            const frac = formatFraction(s.quantityNumerator, s.quantityDenominator);
+            const eq = computeEquivalent(s.quantityNumerator, s.quantityDenominator, t.commercialStrengthValue, t.commercialStrengthUnit);
+            return `${s.time} (${frac} ${s.administrationUnit}${eq ? `, ${eq}` : ''})`;
+          })
+          .join('; ');
+      } else {
+        const fasceLabelList = FASCE_LABELS
+          .filter(f => t[f.boolKey] === true)
+          .map(f => f.label);
+        fasce = t.orarioSpecifico
+          ? t.orarioSpecifico
+          : fasceLabelList.length > 0
+            ? fasceLabelList.join(', ')
+            : '—';
+      }
+      const dose = t.commercialStrengthValue != null && t.commercialStrengthUnit
+        ? `${t.commercialStrengthValue} ${t.commercialStrengthUnit}${t.pharmaceuticalForm ? ' ' + t.pharmaceuticalForm : ''}`
+        : t.dosaggio;
       return {
         id: t.id,
         farmaco: t.farmacoNome,
-        dose: t.dosaggio,
+        dose,
         via: t.viaSomministrazione,
         fasce,
         stato: t.stato,

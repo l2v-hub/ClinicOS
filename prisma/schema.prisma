@@ -258,12 +258,36 @@ model PatientTherapy {
   // Una tantum specific
   dataSomministrazione String?  // YYYY-MM-DD for una tantum
   orarioSomministrazione String? // HH:MM for una tantum
+  // ── REQ-093: structured drug/package + graphical fractional dosing (additive) ──
+  commercialStrengthValue Float?  // e.g. 100  → commercial strength of the selected package
+  commercialStrengthUnit  String? // e.g. "mg" → unit of the commercial strength
+  pharmaceuticalForm      String? // e.g. "compressa" | "capsula" | "fiala" | "flacone" | "bustina"
+  allowedFractions        String? // configurable allowed fractions, comma list e.g. "1,1/2,1/4". Null/"1" = whole only (not divisible)
+  drugPackageRef          String? // optional reference id to the drug/package in a formulary
+  schedules               TherapySchedule[]
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
   patient              Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
   @@index([patientId])
   @@index([tipo, stato])
+}
+
+// REQ-093: per-administration-time prescribed quantity, expressed as an EXACT fraction.
+// The same drug can have different quantities at different times without duplicating the therapy row.
+model TherapySchedule {
+  id                  String   @id @default(cuid())
+  therapyId           String
+  time                String   // HH:MM, e.g. "08:00"
+  fascia              String   // mattina | pranzo | pomeriggio | sera | notte (derived from time, used for administration keying)
+  quantityNumerator   Int      @default(1) // exact fraction numerator, e.g. 1
+  quantityDenominator Int      @default(1) // exact fraction denominator, e.g. 2 → 1/2. Never approximated to decimal.
+  administrationUnit  String   @default("compressa") // compressa | ml | gocce | unità | bustina | ...
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  therapy             PatientTherapy @relation(fields: [therapyId], references: [id], onDelete: Cascade)
+
+  @@index([therapyId])
 }
 
 // ── Rooms & Beds ───────────────────────────────────────────────────────────
