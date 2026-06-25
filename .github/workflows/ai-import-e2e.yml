@@ -131,19 +131,12 @@ jobs:
         run: node node_modules/playwright/cli.js install --with-deps chromium || npm i --no-save playwright && node node_modules/playwright/cli.js install --with-deps chromium
       - name: Install AI runtime deps
         run: pip install -r clinicos-ai-runtime/requirements.txt
-      - name: Start AI runtime (deterministic mock provider)
-        working-directory: clinicos-ai-runtime
+      - name: Start AI runtime + backend + frontend
+        # All three are backgrounded in ONE step so they share a lifetime and survive together
+        # into the browser step (a runtime started in a prior step can be reaped on step exit).
         run: |
-          PORT=8000 python -m clinicos_ai.main > /tmp/ai-runtime.log 2>&1 &
-          for i in $(seq 1 30); do
-            if curl -sf http://localhost:8000/v1/runtime/health > /dev/null; then
-              echo "AI runtime healthy"; exit 0
-            fi
-            sleep 1
-          done
-          echo "::error::AI runtime failed to start"; cat /tmp/ai-runtime.log; exit 1
-      - name: Start backend + frontend
-        run: |
+          ( cd clinicos-ai-runtime && PORT=8000 python -m clinicos_ai.main > /tmp/ai-runtime.log 2>&1 & )
+          for i in $(seq 1 30); do curl -sf http://localhost:8000/v1/runtime/health > /dev/null && { echo "AI runtime healthy"; break; }; sleep 1; done
           node backend/dist/server.js > /tmp/backend.log 2>&1 &
           npm --prefix frontend run preview -- --port 5173 --host > /tmp/frontend.log 2>&1 &
           npx --yes wait-on http://localhost:3001/health http://localhost:5173 || sleep 10
@@ -154,6 +147,8 @@ jobs:
         run: |
           echo "===== AI runtime ====="; tail -n 60 /tmp/ai-runtime.log || true
           echo "===== backend ====="; tail -n 120 /tmp/backend.log || true
+          echo "===== recent import jobs (status/stage/error) ====="
+          node -e "import('./backend/dist/lib/prisma.js').then(async m=>{const j=await m.prisma.importJob.findMany({orderBy:{createdAt:'desc'},take:4,select:{id:true,status:true,stage:true,error:true}});console.log(JSON.stringify(j,null,2));await m.prisma.\$disconnect()}).catch(e=>{console.error(String(e));process.exit(0)})" || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
