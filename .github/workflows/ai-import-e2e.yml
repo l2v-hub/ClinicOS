@@ -108,16 +108,40 @@ jobs:
       AI_PROVIDER: mock
       PORT: 3001
       NODE_OPTIONS: --max-old-space-size=4096
+      # Backend delegates extraction to the clinicos-ai-runtime service (started below with
+      # the mock provider) — same wiring as the gate job. Runtime is on :8000, backend on :3001.
+      AI_RUNTIME_URL: http://localhost:8000
+      AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+      AI_OCR_MODEL: mock:mock
+      AI_EXTRACTION_MODEL: mock:mock
+      AI_AGENT_MODEL: mock:mock
+      AI_REPAIR_MODEL: mock:mock
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - run: npm ci || npm install
       - run: node node_modules/prisma/build/index.js migrate deploy --schema=prisma/schema.prisma
       - run: node node_modules/prisma/build/index.js db seed --schema=prisma/schema.prisma || npm --prefix backend run db:seed || true
       - run: npm run build
       - name: Install Playwright Chromium
         run: node node_modules/playwright/cli.js install --with-deps chromium || npm i --no-save playwright && node node_modules/playwright/cli.js install --with-deps chromium
+      - name: Install AI runtime deps
+        run: pip install -r clinicos-ai-runtime/requirements.txt
+      - name: Start AI runtime (deterministic mock provider)
+        working-directory: clinicos-ai-runtime
+        run: |
+          PORT=8000 python -m clinicos_ai.main > /tmp/ai-runtime.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8000/v1/runtime/health > /dev/null; then
+              echo "AI runtime healthy"; exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::AI runtime failed to start"; cat /tmp/ai-runtime.log; exit 1
       - name: Start backend + frontend
         run: |
           node backend/dist/server.js &
