@@ -27,8 +27,6 @@ export interface AiConfig {
   structuredModel?: string;
   /** Function-calling model for the ExtractionAgent loop (REQ-021). */
   agentModel: string;
-  /** Use the agent-native extraction loop (default true); false = legacy pipeline. */
-  useAgent: boolean;
   /** Async worker (REQ-022): per-request model timeout, overall job cap, poll interval. */
   requestTimeoutMs: number;
   jobMaxDurationMs: number;
@@ -72,7 +70,6 @@ export function loadAiConfig(force = false): AiConfig {
   const model = (process.env.AI_MODEL ?? 'gemma-4-31b-it').trim();
   const structuredModel = process.env.AI_STRUCTURED_MODEL?.trim() || undefined;
   const agentModel = process.env.AI_AGENT_MODEL?.trim() || 'gemini-2.0-flash';
-  const useAgent = (process.env.AI_USE_AGENT ?? 'true').trim().toLowerCase() !== 'false';
   const schemaPath = process.env.AI_EXTRACTION_SCHEMA_PATH?.trim() || DEFAULT_SCHEMA_PATH;
   const promptPath = process.env.AI_EXTRACTION_PROMPT_PATH?.trim() || DEFAULT_PROMPT_PATH;
   const outputSchemaPath = process.env.AI_EXTRACTION_OUTPUT_SCHEMA_PATH?.trim() || DEFAULT_OUTPUT_SCHEMA_PATH;
@@ -112,7 +109,6 @@ export function loadAiConfig(force = false): AiConfig {
     model,
     structuredModel,
     agentModel,
-    useAgent,
     schemaPath,
     promptPath,
     outputSchemaPath,

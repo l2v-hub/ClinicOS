@@ -81,14 +81,10 @@ jobs:
           echo "::error::AI runtime failed to start"; cat /tmp/ai-runtime.log; exit 1
       - name: Backend unit tests
         run: npm --prefix backend test
-      - name: Mock E2E (API, deterministic, legacy pipeline)
+      - name: Import E2E (API, deterministic)
         run: node node_modules/tsx/dist/cli.mjs e2e/import-e2e.mjs
-        env:
-          AI_USE_AGENT: "false"
-      - name: Agent E2E (REQ-021, new vs existing patient)
-        run: node node_modules/tsx/dist/cli.mjs e2e/agent-smoke.mjs
-        env:
-          AI_USE_AGENT: "true"
+      - name: New/existing targeting E2E (REQ-021, confirm new vs existing)
+        run: node node_modules/tsx/dist/cli.mjs e2e/new-vs-existing-smoke.mjs
       - name: Async import E2E (REQ-022, 202 + worker + reclaim + retry)
         run: node node_modules/tsx/dist/cli.mjs e2e/async-smoke.mjs
 
