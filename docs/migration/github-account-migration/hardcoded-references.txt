@@ -1,0 +1,14 @@
+./.claude/commands/process-requirements.md:5:Processa automaticamente **tutte le GitHub Issue aperte** del repository `lucalavia/ClinicOS` il cui titolo inizia con:
+./.claude/commands/process-requirements.md:29:  --repo lucalavia/ClinicOS \
+./.claude/commands/process-requirements.md:325:https://raw.githubusercontent.com/lucalavia/ClinicOS/<SHA>/docs/qa/issues/<issue-number>/final/after.png
+./.claude/commands/process-requirements.md:462:  --repo lucalavia/ClinicOS \
+./.remember/today-2026-06-01.done.md:4:Spec+plan drafted (5 artifacts, 33 tasks gen'd, 7 phases, MVP=fluid layout); scope expanded (dashboard, L1-sidebar Teams, header reduction); await merge strategy; impl dispatched (--topbar-h 36â†’32px), 4 reviewers queued; complete (0 errors, 5 files); standards BLOCKING PS-001 labels-hidden (Principle II, visible needed), 3 pending; all 4 reviewers complete, 5 BLOCKING (PS-001, page-widths, #root, tab-remount, motion); fix agent dispatched; 5 fixes applied; static QA 12/12 PASS; mergedâ†’main (4df0156), pushed (new) lucalavia/ClinicOS.
+./.remember/today-2026-06-01.done.md:8:Impl 007-clean-nav-layout: App/app-additions/index CSS (fluid, L2 underline, L3 scroll, transitions); PatientDetail.tsx (animation); specs/; 5 fixes; merged 007 â†’ main, pushed lucalavia/ClinicOS (private); removed speckit-tasks-007 WT; consolidated 008+003 â†’ main (--theirs); cleaned WT/branches; build PASS
+./.remember/today-2026-06-02.done.md:5:Merged 007-clean-nav-layout (fluid layout, L2 underline, L3 scroll, no overflow; fixed 5 blockers: L1 visibility, page widths, root dupe, tab perf, reduced-motion); merged 003+008; pushed lucalavia/ClinicOS. Deploy brokenâ€”repo moved lucalavia/ClinicOS (llavial2v deleted), Vercel linked dead repo; webhook stale; offered relink options (dashboard/CLI/new). Added `frontend/vercel.json` (Vite config SPA rewrite, `72ea2c0`); webhook delivery blockedâ€”awaits manual relink.
+./CLAUDE_RESOLVE_CLINICOS_BUGS_MAX4.md:3:Lavora nel repository corrente `lucalavia/ClinicOS`.
+./CLAUDE_RESOLVE_CLINICOS_BUGS_MAX4.md:47:  --repo lucalavia/ClinicOS \
+./CLAUDE_RESOLVE_CLINICOS_BUGS_MAX4.md:161:https://raw.githubusercontent.com/lucalavia/ClinicOS/<SHA>/docs/qa/issues/<issue-number>/final/after.png
+./clinicos_handwritten_bugs_manifest.md:27:  -Repo "lucalavia/ClinicOS"
+./clinicos_handwritten_bugs_manifest.md:35:  -Repo "lucalavia/ClinicOS" `
+./create_clinicos_handwritten_bugs.ps1:2:  [string]$Repo = "lucalavia/ClinicOS",
+./docs/qa/requirement-processing-report.md:3:Batch run via `/process-requirements` over all open `REQ-`/`BUG-` issues in `lucalavia/ClinicOS`.
