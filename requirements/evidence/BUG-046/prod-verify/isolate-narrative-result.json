@@ -1,0 +1,12 @@
+{
+  "reached": true,
+  "anamnesi_full_textContent": "AnamnesiCartella clinicaAccettaModificaEscludiConfronta con la fonte## Anamnesi Patologica Recente:\n\nFrase di prova pagina uno: paziente fittizio con dolore toracico di prova, nessun dato reale.\n\nFrase di prova pagina due: prosecuzione del ricovero fittizio sulla pagina successiva senza nuovo titolo.Fonte: dimissione-multipagina-test.pdf",
+  "anamnesi_narrative_body": "## Anamnesi Patologica Recente:\n\nFrase di prova pagina uno: paziente fittizio con dolore toracico di prova, nessun dato reale.\n\nFrase di prova pagina due: prosecuzione del ricovero fittizio sulla pagina successiva senza nuovo titolo.",
+  "therapy_narrative_body": "## Terapia alla dimissione:\n\nFarmaco-di-prova A 5 mg 1 cp/die.",
+  "anamnesi_body_hasHeaderToken": false,
+  "therapy_body_hasHeaderToken": false,
+  "anamnesi_body_hasCodiceFiscaleValue": false,
+  "anamnesi_body_hasPatientName": false,
+  "anamnesi_body_hasBirthDate": false,
+  "anamnesi_mergedBothPages": true
+}

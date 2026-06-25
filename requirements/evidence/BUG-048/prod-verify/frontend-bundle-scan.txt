@@ -1,0 +1,23 @@
+BUG-048 frontend-fix-live string scan
+Bundle: https://clinicos-eosin.vercel.app/assets/index-CQEFE1oX.js
+Last-Modified: Mon, 22 Jun 2026 21:51:18 GMT  (size 876568 bytes)
+Captured: prod verification run, 2026-06-25
+
+String presence (occurrences):
+  [1] Confronta con il documento     <- patient-narrative compare button (NarrativeClinicalSection)
+  [1] Confronta con la fonte         <- import-review compare button (ImportSectionsReview)
+  [3] sourceReferences               <- consumed in deriveSections + NarrativeSectionsTab
+  [2] onCompareSource                <- prop wiring present
+  [1] Vai alla fonte                 <- allergy "go to source"
+  [1] Visualizza fonte
+  [4] narrative-sections
+  [0] DocumentSourcePanel            <- class name minified (not a string literal); logic present
+
+Consuming logic confirmed in minified bundle:
+  deriveSections:   let n=e.sourceReferences??[]; ... r.filter(r=>r.sectionKey===e).map(...{fileId:r.fileName,pageNumber:r.pageFrom})
+  NarrativeSectionsTab: let t=(e.sourceReferences??[])[0]; ... onCompareSource: t||(e.displayText||'').trim()?()=>u({fileName:t?.fileName,page:t?.pageFrom,...}):undefined
+  Button render: d&&!f&&<button className="srev-chip" onClick={d}>Confronta con il documento</button>
+
+Conclusion: the FE compare-panel logic (button + sourceReferences consumer) IS present in the
+deployed (stale-dated) bundle. BUG-048 was a backend DATA gap (empty sourceReferences), not a
+missing FE feature; the FE consumer predates the 22 Jun bundle. => frontend-fix-live: yes.

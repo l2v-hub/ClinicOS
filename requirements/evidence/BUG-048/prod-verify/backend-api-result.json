@@ -1,0 +1,74 @@
+{
+  "backend": "https://clinicos-backend-production-df88.up.railway.app",
+  "steps": [
+    {
+      "step": "create+upload",
+      "status": 201,
+      "jobId": "cmqtnpv7e003i01l3j11lech5",
+      "outcomes": [
+        {
+          "filename": "dimissione-sintetica-test.pdf",
+          "status": "accepted",
+          "documentId": "cmqtnpv7x003k01l3me8y16xi"
+        }
+      ]
+    },
+    {
+      "step": "process",
+      "status": 202,
+      "jobStatus": "queued"
+    },
+    {
+      "step": "poll-final",
+      "status": "review_ready",
+      "stage": "completed",
+      "error": null
+    }
+  ],
+  "resultStatus": 200,
+  "jobStatusInResult": "review_ready",
+  "model": "mistral:mistral-document-ai-2505",
+  "narrativePresent": true,
+  "sourceReferences": [
+    {
+      "fileId": "cmqtnpv7x003k01l3me8y16xi",
+      "fileName": "dimissione-sintetica-test.pdf",
+      "sectionKey": "DIAGNOSI"
+    },
+    {
+      "fileId": "cmqtnpv7x003k01l3me8y16xi",
+      "fileName": "dimissione-sintetica-test.pdf",
+      "sectionKey": "ANAMNESI"
+    },
+    {
+      "fileId": "cmqtnpv7x003k01l3me8y16xi",
+      "fileName": "dimissione-sintetica-test.pdf",
+      "sectionKey": "DECORSO_OSPEDALIERO"
+    },
+    {
+      "fileId": "cmqtnpv7x003k01l3me8y16xi",
+      "fileName": "dimissione-sintetica-test.pdf",
+      "sectionKey": "TERAPIA"
+    },
+    {
+      "fileId": "cmqtnpv7x003k01l3me8y16xi",
+      "fileName": "dimissione-sintetica-test.pdf",
+      "sectionKey": "CONSIGLI_E_CONTROLLI"
+    },
+    {
+      "fileId": "cmqtnpv7x003k01l3me8y16xi",
+      "fileName": "dimissione-sintetica-test.pdf",
+      "sectionKey": "ALLERGIE"
+    }
+  ],
+  "sourceReferencesCount": 6,
+  "populatedSections": [
+    "diagnosisText",
+    "anamnesisText",
+    "hospitalCourseText",
+    "therapyText",
+    "adviceAndFollowUpText",
+    "allergiesText"
+  ],
+  "documentsCount": 1
+}
