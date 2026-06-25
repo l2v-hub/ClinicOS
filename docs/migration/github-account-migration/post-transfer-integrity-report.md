@@ -29,3 +29,7 @@ Transfer: lucalavia/ClinicOS -> l2v-hub/ClinicOS (native GitHub transfer, accept
 | Branch protection / plan | MANUAL CHECK REQUIRED | l2v-hub plan capability (Section 19) |
 | Collaborator audit (remove lucalavia) | PENDING | checkpoint, after full verification (Section 21) |
 | Credential revocation | PENDING | checkpoint (Section 12) |
+
+## Update — plan & Railway (2026-06-25)
+- l2v-hub plan = FREE: rulesets + branch protection return HTTP 403 "Upgrade to GitHub Pro or make this repository public". Branch protection on main is a LOST feature on the private repo until l2v-hub upgrades to GitHub Pro. Repo security = NOT PASS (documented, decision required).
+- Railway: backend prod /health 200 and serves NEW code (schedules key present) after the GitHub reconnect by the user. Functional. Confirm Source=l2v-hub/ClinicOS in the Railway dashboard (Railway API unreachable from dev machine due to Zscaler).
