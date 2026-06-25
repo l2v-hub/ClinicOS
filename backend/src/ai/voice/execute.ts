@@ -49,6 +49,10 @@ export interface ExecuteOptions {
 export async function executeAction(plan: ActionPlan, opts: ExecuteOptions): Promise<ExecuteResult> {
   const { cfg, ctx, writer, store } = opts;
   const nowISO = opts.nowISO ?? new Date().toISOString();
+  // One clock for the whole call: the idempotency read AND write must use the same "now",
+  // otherwise an injected nowISO (deterministic tests) writes with one timestamp while the
+  // TTL read uses wall-clock, making a just-stored entry look expired and breaking dedup.
+  const nowMs = Date.parse(nowISO) || Date.now();
   const audit = (recordId: string | null, outcome: Parameters<typeof voiceAudit>[5]) =>
     voiceAudit(ctx, plan.actionType, plan.patientId, recordId, Object.keys(plan.fields), outcome, nowISO);
 
@@ -63,7 +67,7 @@ export async function executeAction(plan: ActionPlan, opts: ExecuteOptions): Pro
   }
 
   // idempotency: a replayed confirmation returns the original result, never a duplicate write.
-  const prior = store.get(plan.idempotencyKey);
+  const prior = store.get(plan.idempotencyKey, nowMs);
   if (prior) { audit(prior.recordId ?? null, 'deduped'); return prior; }
 
   const meta: WriteMeta = { operatorName: ctx.operatorName, operatorId: ctx.userId, nowISO };
@@ -82,7 +86,7 @@ export async function executeAction(plan: ActionPlan, opts: ExecuteOptions): Pro
   }
 
   const result: ExecuteResult = { ok: true, actionType: plan.actionType, recordId, message: SUCCESS_MESSAGE[plan.actionType], deduped: false };
-  store.put(plan.idempotencyKey, result, Date.parse(nowISO) || Date.now());
+  store.put(plan.idempotencyKey, result, nowMs);
   audit(recordId, 'ok');
   return result;
 }
