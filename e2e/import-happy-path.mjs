@@ -37,17 +37,29 @@ try {
       await page.waitForTimeout(1200);
       await page.screenshot({ path: resolve(outDir, `${tag}-1-upload.png`) });
 
-      // Extraction -> review.
+      // Extraction -> narrative sections review (ImportSectionsReview).
       await page.getByRole('button', { name: /Avvia elaborazione/i }).click();
-      await page.waitForTimeout(2500);
+      const demo = page.locator('[data-testid="srev-PATIENT_DEMOGRAPHICS"]');
+      // On narrow viewports the review is single-pane tabbed (Documento | Dati ClinicOS) and
+      // defaults to the document; the anagrafica form lives under "Dati ClinicOS". On wide
+      // viewports both panes show. Wait for the review, then activate the data pane if tabbed.
+      const dataTab = page.getByRole('tab', { name: /Dati ClinicOS/i });
+      await Promise.race([
+        demo.waitFor({ state: 'visible', timeout: 30000 }).catch(() => null),
+        dataTab.waitFor({ state: 'visible', timeout: 30000 }).catch(() => null),
+      ]);
+      if (!(await demo.isVisible().catch(() => false)) && (await dataTab.isVisible().catch(() => false))) {
+        await dataTab.click().catch(() => {});
+      }
+      await demo.waitFor({ state: 'visible', timeout: 30000 });
       await page.screenshot({ path: resolve(outDir, `${tag}-2-review.png`) });
 
-      // Modifica: fill required fields (synthetic).
-      const inputs = page.locator('.ir-field__input');
-      await inputs.nth(0).fill('E2E');           // Nome
-      await inputs.nth(1).fill(`Sintetico_${vp.name}`); // Cognome (unique per viewport)
-      await inputs.nth(2).fill('1955-09-09');    // Data di nascita
-      await page.waitForTimeout(400);
+      // Modifica: fill the required anagrafica fields (synthetic; the mock extraction is empty).
+      // Field order (ANAG_PREFILL): Nome, Cognome, Data di nascita(type=date), Sesso, ...
+      await demo.locator('input[type=text]').nth(0).fill('E2E');                  // Nome
+      await demo.locator('input[type=text]').nth(1).fill(`Sintetico_${vp.name}`); // Cognome (unique per viewport)
+      await demo.locator('input[type=date]').first().fill('1955-09-09');          // Data di nascita
+      await page.waitForTimeout(300);
       await page.screenshot({ path: resolve(outDir, `${tag}-3-prefilled.png`) });
 
       // Conferma -> paziente creato.
