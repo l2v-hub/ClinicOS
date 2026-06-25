@@ -43,17 +43,42 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/clinicos_test?schema=public
       AI_PROVIDER: mock
       NODE_OPTIONS: --max-old-space-size=4096
+      # The backend no longer extracts in-process: it delegates to the clinicos-ai-runtime
+      # service (started below) over HTTP. For the deterministic gate we run that runtime
+      # with the mock provider on every role, so the E2E flow is real but offline.
+      AI_RUNTIME_URL: http://localhost:8000
+      AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+      AI_OCR_MODEL: mock:mock
+      AI_EXTRACTION_MODEL: mock:mock
+      AI_AGENT_MODEL: mock:mock
+      AI_REPAIR_MODEL: mock:mock
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Install
         run: npm ci || npm install
       - name: Apply migrations
         run: node node_modules/prisma/build/index.js migrate deploy --schema=prisma/schema.prisma
       - name: Build (frontend + backend)
         run: npm run build
+      - name: Install AI runtime deps
+        run: pip install -r clinicos-ai-runtime/requirements.txt
+      - name: Start AI runtime (deterministic mock provider)
+        working-directory: clinicos-ai-runtime
+        run: |
+          PORT=8000 python -m clinicos_ai.main > /tmp/ai-runtime.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8000/v1/runtime/health > /dev/null; then
+              echo "AI runtime healthy"; exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::AI runtime failed to start"; cat /tmp/ai-runtime.log; exit 1
       - name: Backend unit tests
         run: npm --prefix backend test
       - name: Mock E2E (API, deterministic, legacy pipeline)
