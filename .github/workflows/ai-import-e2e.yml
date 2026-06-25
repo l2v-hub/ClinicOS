@@ -144,11 +144,16 @@ jobs:
           echo "::error::AI runtime failed to start"; cat /tmp/ai-runtime.log; exit 1
       - name: Start backend + frontend
         run: |
-          node backend/dist/server.js &
-          npm --prefix frontend run preview -- --port 5173 --host &
+          node backend/dist/server.js > /tmp/backend.log 2>&1 &
+          npm --prefix frontend run preview -- --port 5173 --host > /tmp/frontend.log 2>&1 &
           npx --yes wait-on http://localhost:3001/health http://localhost:5173 || sleep 10
       - name: Browser happy-path screenshots
         run: mkdir -p artifacts && node e2e/import-happy-path.mjs artifacts
+      - name: Dump server logs on failure
+        if: failure()
+        run: |
+          echo "===== AI runtime ====="; tail -n 60 /tmp/ai-runtime.log || true
+          echo "===== backend ====="; tail -n 120 /tmp/backend.log || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
