@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, MedicazioneRecord, EssudatoLivello, Paziente, FollowUpMedicazione } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
@@ -401,7 +402,7 @@ function FollowUpSection({
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button className="btn-secondary btn-sm" onClick={() => setShowAdd(false)}>Annulla</button>
-                <button className="btn-primary btn-sm" onClick={handleSave} disabled={!fuForm.siglaOperatore}>Salva follow-up</button>
+                <button className="btn-primary btn-sm" onClick={handleSave} disabled={!fuForm.siglaOperatore}><IcoCheck /> Salva follow-up</button>
               </div>
             </div>
           ) : (
@@ -609,7 +610,7 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
 
             <div className="cr-inline-form__actions">
               <button className="btn-secondary btn-sm" onClick={() => { setShowAdd(false); setEditId(null); }}>Annulla</button>
-              <button className="btn-primary btn-sm" onClick={handleSave}>Salva</button>
+              <button className="btn-primary btn-sm" onClick={handleSave}><IcoCheck /> Salva</button>
             </div>
           </div>
         )}

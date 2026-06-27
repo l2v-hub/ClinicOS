@@ -1,5 +1,6 @@
 // Note: feature 010 reference baseline for clinical sub-menu gap = --clinical-submenu-gap (16px); applied via TerapiaFarmacologicaTab.tsx
 import { useState, useRef, useCallback } from 'react';
+import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, Paziente, ParametriMensili, ParametroGiorno } from '../../../types';
 import { uid, todayStr, nowISO, PrintButton, ClinicalTableSection } from './shared';
 import { ParametriModuloView } from './ParametriModuloView';
@@ -318,7 +319,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
             </div>
             <div className="cr-inline-form__actions">
               <button className="btn-secondary btn-sm" onClick={() => setShowVitalePanel(false)}>Annulla</button>
-              <button className="btn-primary btn-sm" onClick={addVitale}>Salva</button>
+              <button className="btn-primary btn-sm" onClick={addVitale}><IcoCheck /> Salva</button>
             </div>
           </div>
         )}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, DimissioneInfermieristica, Liberatoria, UscitaLog, Paziente } from '../../../types';
 import { todayStr, nowISO, nowTime, PrintButton, ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
@@ -634,7 +635,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
 
             <div className="cr-inline-form__actions">
               <button className="btn-secondary btn-sm" onClick={() => setEditingDim(false)}>Annulla</button>
-              <button className="btn-primary btn-sm" onClick={saveDim}>Salva</button>
+              <button className="btn-primary btn-sm" onClick={saveDim}><IcoCheck /> Salva</button>
             </div>
           </div>
         ) : dim ? (
@@ -718,7 +719,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
               </div>
               <div className="cr-inline-form__actions">
                 <button className="btn-secondary btn-sm" onClick={() => setEditingLib(false)}>Annulla</button>
-                <button className="btn-primary btn-sm" onClick={saveLib}>Salva liberatoria</button>
+                <button className="btn-primary btn-sm" onClick={saveLib}><IcoCheck /> Salva liberatoria</button>
               </div>
             </div>
           ) : lib ? (

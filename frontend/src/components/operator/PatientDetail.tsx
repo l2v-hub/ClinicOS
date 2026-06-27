@@ -1309,7 +1309,7 @@ export function PatientDetail({
                       />
                       <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}>
                         <button className="btn-secondary btn-sm" onClick={cancelCard}>Annulla</button>
-                        <button className="btn-primary btn-sm" onClick={saveCard}>Salva</button>
+                        <button className="btn-primary btn-sm" onClick={saveCard}><IcoCheck /> Salva</button>
                       </div>
                     </>
                   ) : (

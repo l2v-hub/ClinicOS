@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, Contenzione, TipoContenzione, FrequenzaContenzione, Paziente } from '../../../types';
 import { uid, todayStr, nowISO, nowTime, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 
@@ -442,7 +443,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
             </div>
             <div className="cr-inline-form__actions">
               <button className="btn-secondary btn-sm" onClick={() => { setShowAdd(false); setEditId(null); }}>Annulla</button>
-              <button className="btn-primary btn-sm" onClick={handleSave}>Salva</button>
+              <button className="btn-primary btn-sm" onClick={handleSave}><IcoCheck /> Salva</button>
             </div>
           </div>
         )}

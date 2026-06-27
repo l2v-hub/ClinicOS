@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Paziente, ParametroGiorno } from '../../../types';
-import { IcoX } from '../../../icons';
+import { IcoCheck, IcoX } from '../../../icons';
 import { nowTime } from './shared';
 
 interface VitaleModalProps {
@@ -226,7 +226,7 @@ export function VitaleModal({
         <div className="npm-footer">
           <div className="npm-footer__actions">
             <button className="btn-secondary" onClick={onClose}>Annulla</button>
-            <button className="btn-primary" onClick={handleSave}>Salva parametro</button>
+            <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva parametro</button>
           </div>
         </div>
 

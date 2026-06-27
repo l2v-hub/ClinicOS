@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, PresaInCarico, Paziente } from '../../../types';
 import { PrintButton, EmptyState, todayStr, nowTime, nowISO, ClinicalTableSection } from './shared';
 import { ClinicalCard } from '../../shared/ClinicalCard';
@@ -206,7 +207,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       </div>
       <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
         <button className="btn-secondary" onClick={cancelEdit}>Annulla</button>
-        <button className="btn-primary" onClick={handleSave}>Salva</button>
+        <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva</button>
       </div>
     </div>
   );
@@ -267,7 +268,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       </div>
       <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
         <button className="btn-secondary" onClick={cancelEdit}>Annulla</button>
-        <button className="btn-primary" onClick={handleSave}>Salva</button>
+        <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva</button>
       </div>
     </div>
   );
@@ -358,7 +359,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       </div>
       <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
         <button className="btn-secondary" onClick={cancelEdit}>Annulla</button>
-        <button className="btn-primary" onClick={handleSave}>Salva</button>
+        <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva</button>
       </div>
     </div>
   );
@@ -424,7 +425,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       </div>
       <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
         <button className="btn-secondary" onClick={cancelEdit}>Annulla</button>
-        <button className="btn-primary" onClick={handleSave}>Salva</button>
+        <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva</button>
       </div>
     </div>
   );
