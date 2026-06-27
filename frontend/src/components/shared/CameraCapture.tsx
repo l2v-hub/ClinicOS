@@ -60,6 +60,18 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, restart]);
 
+  // BUG-067: attach the live stream once the <video> is actually mounted. getUserMedia
+  // resolves while phase is still 'requesting' (the <video> renders only in 'live'), so the
+  // srcObject assignment in the acquire effect runs against a null ref and the preview stays
+  // black. Re-attach here when phase flips to 'live' and the element exists.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (phase === 'live' && v && streamRef.current && v.srcObject !== streamRef.current) {
+      v.srcObject = streamRef.current;
+      void v.play().catch(() => {});
+    }
+  }, [phase]);
+
   // Clean up object URL + stream on unmount / close.
   useEffect(() => () => { stopStream(); if (photoUrl) URL.revokeObjectURL(photoUrl); }, [photoUrl]);
 
