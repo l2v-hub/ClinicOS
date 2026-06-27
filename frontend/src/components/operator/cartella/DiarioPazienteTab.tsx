@@ -517,7 +517,7 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
-    <div>
+    <div className="cr-tab-content">
       {/* Error message */}
       {error && (
         <div style={{

@@ -605,6 +605,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   // ── Render ─────────────────────────────────────────────────────────────────────
 
   return (
+    <div className="cr-tab-content">
     <ClinicalTableSection
       title="Terapia Farmacologica"
       count={attive.length}
@@ -913,5 +914,6 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         )
       )}
     </ClinicalTableSection>
+    </div>
   );
 }
