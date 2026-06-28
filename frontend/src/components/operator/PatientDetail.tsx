@@ -27,6 +27,7 @@ import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalCard } from '../shared/ClinicalCard';
 import { InlineEditableField } from '../shared/InlineEditableField';
 import { AllergiesEditor } from './sections/AllergiesEditor';
+import { AnamnesisEditor } from './sections/AnamnesisEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
 import { VitalSignsEditor } from './sections/VitalSignsEditor';
@@ -224,10 +225,6 @@ export function PatientDetail({
   const [profiloForm, setProfiloForm] = useState<Partial<CartellaPaziente & Pick<Paziente, 'email' | 'phone'>>>({});
   // Feature 010: L3 sub-tabs for Profilo (FR-005)
   const [profiloL3, setProfiloL3] = useState<'anagrafica' | 'contatti' | 'emergenza' | 'assegnazione'>('anagrafica');
-  const [editAnamnesi, setEditAnamnesi] = useState(false);
-  const [anamnesiForm, setAnamnesiForm] = useState(cartella.anamnesi);
-  // Feature 010: per-card edit state for renderAnamnesi
-  const [editingAnamnesiCard, setEditingAnamnesiCard] = useState<string | null>(null);
 
   // Rischi
   const [showAddRisk, setShowAddRisk] = useState(false);
@@ -1106,123 +1103,6 @@ export function PatientDetail({
     );
   }
 
-  function renderAnamnesi() {
-    const a = editAnamnesi ? anamnesiForm : cartella.anamnesi;
-
-    type ASection = { id: string; key: keyof typeof a; label: string; rows?: number; placeholder?: string };
-    const sections: ASection[] = [
-      { id: 'patologicaProssima', key: 'patologicaProssima', label: 'Anamnesi generale', rows: 5, placeholder: 'Motivo del ricovero, storia recente della malattia…' },
-      { id: 'patologicaRemota',   key: 'patologicaRemota',   label: 'Patologie note e interventi pregressi', rows: 4, placeholder: 'Patologie croniche, interventi chirurgici, ricoveri precedenti…' },
-      // BUG-054 (#92): "Anamnesi familiare" and "Contesto lavorativo e sociale" removed from intake.
-      { id: 'fisiologica',        key: 'fisiologica',        label: 'Stato funzionale', rows: 3, placeholder: 'Condizioni basali, autonomia, funzioni vitali di base…' },
-      { id: 'abitudini',          key: 'abitudini',          label: 'Abitudini e stile di vita', rows: 3, placeholder: 'Fumo, alcol, attività fisica, alimentazione…' },
-      { id: 'note',               key: 'note',               label: 'Note aggiuntive', rows: 3, placeholder: 'Informazioni aggiuntive non categorizzate…' },
-    ];
-
-    const hasAllergie = cartella.allergie.length > 0;
-    const allergieGravi = cartella.allergie.filter(al => al.gravita === 'grave');
-
-    function startCardEdit(cardId: string) {
-      setAnamnesiForm({ ...cartella.anamnesi });
-      setEditingAnamnesiCard(cardId);
-      setEditAnamnesi(true);
-    }
-
-    function saveCard() {
-      upd({ anamnesi: { ...anamnesiForm, updatedAt: nowISO(), operatore: operatoreNome } });
-      setEditingAnamnesiCard(null);
-      setEditAnamnesi(false);
-    }
-
-    function cancelCard() {
-      setEditingAnamnesiCard(null);
-      setEditAnamnesi(false);
-    }
-
-    // Global fallback actions retained for legacy compatibility (FR-008).
-    const anamnesiActions = (
-      <div style={{ display: 'flex', gap: 8 }}>
-        {editAnamnesi && editingAnamnesiCard === null && (
-          <>
-            <button className="btn-sm" onClick={cancelCard}>Annulla</button>
-            <button className="btn-sm" onClick={saveCard}><IcoCheck /> Salva</button>
-          </>
-        )}
-      </div>
-    );
-
-    return (
-      <div className="cr-tab-content">
-        <ClinicalTableSection title="Anamnesi" actions={anamnesiActions}>
-          <div className="cts__body--padded">
-            {/* Allergie — read-only ClinicalCard (no onEdit: allergies are managed via the dedicated modal flow elsewhere in the app, not inline) */}
-            <ClinicalCard title="Allergie" defaultExpanded={true}>
-              <div className={hasAllergie ? (allergieGravi.length > 0 ? 'cr-anamnesi-card cr-anamnesi-card--allergie-grave' : 'cr-anamnesi-card cr-anamnesi-card--allergie') : 'cr-anamnesi-card'}>
-                {hasAllergie ? (
-                  <div className="cr-anamnesi-allergie-list">
-                    {cartella.allergie.map((al, i) => (
-                      <div key={i} className="cr-anamnesi-allergia">
-                        <span className="cr-anamnesi-allergia__nome">{al.allergene}</span>
-                        {al.reazione && <span className="cr-anamnesi-allergia__reazione">{al.reazione}</span>}
-                        <span className={`badge ${al.gravita === 'grave' ? 'badge--red' : al.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{al.gravita}</span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="cr-anamnesi-card__text muted">Nessuna allergia registrata. Gestisci dal tab Diagnosi.</p>
-                )}
-              </div>
-            </ClinicalCard>
-
-            {/* Sezioni anamnesi modificabili — ognuna in una ClinicalCard */}
-            {sections.map(({ id, key, label, rows = 4, placeholder }) => {
-              const val = String(a[key] ?? '');
-              const isEditingThisCard = editingAnamnesiCard === id;
-              return (
-                <ClinicalCard
-                  key={id}
-                  title={label}
-                  defaultExpanded={true}
-                  onEdit={() => startCardEdit(id)}
-                >
-                  {isEditingThisCard ? (
-                    <>
-                      <textarea
-                        className="form-input cr-anamnesi-card__textarea"
-                        rows={rows}
-                        value={val}
-                        onChange={e => setAnamnesiForm(prev => ({ ...prev, [key]: e.target.value }))}
-                        placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
-                      />
-                      <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}>
-                        <button className="btn-secondary btn-sm" onClick={cancelCard}>Annulla</button>
-                        <button className="btn-primary btn-sm" onClick={saveCard}><IcoCheck /> Salva</button>
-                      </div>
-                    </>
-                  ) : (
-                    <InlineEditableField
-                      variant="block"
-                      label={label}
-                      type="textarea"
-                      value={val}
-                      emptyText="Non compilato"
-                      placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
-                      onSave={v => upd({ anamnesi: { ...cartella.anamnesi, [key]: v, updatedAt: nowISO(), operatore: operatoreNome } })}
-                    />
-                  )}
-                </ClinicalCard>
-              );
-            })}
-
-            {cartella.anamnesi.updatedAt && !editAnamnesi && (
-              <p className="cr-update-info">Aggiornato: {fmtDateTime(cartella.anamnesi.updatedAt)} — {cartella.anamnesi.operatore}</p>
-            )}
-          </div>
-        </ClinicalTableSection>
-      </div>
-    );
-  }
-
   function renderDiagnosi() {
     return (
       <div className="cr-tab-content">
@@ -1555,7 +1435,7 @@ export function PatientDetail({
         <div ref={contentRef} className="cr-detail-content tab-panel-transition">
           {tab === 'riepilogo'       && renderRiepilogo()}
           {tab === 'profilo'         && renderProfilo()}
-          {tab === 'anamnesi'        && renderAnamnesi()}
+          {tab === 'anamnesi'        && <AnamnesisEditor mode="patient-chart" value={cartella.anamnesi ?? {}} onChange={a => upd({ anamnesi: a })} operatoreNome={operatoreNome} />}
           {tab === 'diagnosi'        && renderDiagnosi()}
           {tab === 'terapia-farmacologica' && (
             <TherapyEditor mode="patient-chart" paziente={paziente} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />
