@@ -2,9 +2,7 @@ import { useState } from 'react';
 import type { AllergiaItem } from '../../../types';
 import type { SectionProps } from './types';
 import { IcoCheck, IcoX, IcoPlus } from '../../../icons';
-
-function uid(): string { return crypto.randomUUID(); }
-function todayStr(): string { return new Date().toISOString().slice(0, 10); }
+import { uid, todayStr } from '../cartella/shared';
 
 export function AllergiesEditor({ value, onChange, readOnly, operatoreNome }: SectionProps<AllergiaItem[]>) {
   const list = value ?? [];

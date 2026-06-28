@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type {
   Paziente, Consegna, Operatore, Camera, CartellaPaziente,
-  Diagnosi, NotaClinica,
+  NotaClinica,
   VisitaRecord, IndicatoreRischio,
   PrioritaConsegna, VitaleItem,
 } from '../../types';
@@ -30,6 +30,7 @@ import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalCard } from '../shared/ClinicalCard';
 import { InlineEditableField } from '../shared/InlineEditableField';
 import { AllergiesEditor } from './sections/AllergiesEditor';
+import { DiagnosisEditor } from './sections/DiagnosisEditor';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -228,11 +229,6 @@ export function PatientDetail({
   // Feature 010: per-card edit state for renderAnamnesi
   const [editingAnamnesiCard, setEditingAnamnesiCard] = useState<string | null>(null);
 
-  // Diagnosi
-  const [showAddDiag, setShowAddDiag] = useState(false);
-  const [editDiagId, setEditDiagId] = useState<string | null>(null);
-  const [diagForm, setDiagForm] = useState<Partial<Diagnosi>>({});
-
   // Rischi
   const [showAddRisk, setShowAddRisk] = useState(false);
   const [editRiskId, setEditRiskId] = useState<string | null>(null);
@@ -256,11 +252,8 @@ export function PatientDetail({
   type CardModalType = 'diagnosi' | 'farmaci' | 'parametri' | 'consegne' | 'allergie' | 'camera' | null;
   const [cardModal, setCardModal] = useState<CardModalType>(null);
 
-  // Diagnosi modal quick-add
-  const [modalDiagShow, setModalDiagShow] = useState(false);
-  const [modalDiagForm, setModalDiagForm] = useState<Partial<Diagnosi>>({});
-
   // Allergie CRUD — managed by AllergiesEditor (controlled)
+  // Diagnosi CRUD — managed by DiagnosisEditor (controlled)
 
   // Parametri modal quick-add
   const [modalVitaleShow, setModalVitaleShow] = useState(false);
@@ -291,19 +284,6 @@ export function PatientDetail({
   function upd(updates: Partial<CartellaPaziente>): void | Promise<boolean> {
     return onUpdateCartella(cartella.pazienteId, updates);
   }
-
-  // Diagnosi
-  function saveDiagnosi(list: Diagnosi[]) { upd({ diagnosi: list }); }
-  function addDiagnosi() {
-    if (!diagForm.descrizione) return;
-    saveDiagnosi([{ id: uid(), descrizione: '', tipo: 'principale', stato: 'attiva', dataInsorgenza: todayStr(), operatore: operatoreNome, note: '', createdAt: nowISO(), ...diagForm } as Diagnosi, ...cartella.diagnosi]);
-    setShowAddDiag(false); setDiagForm({});
-  }
-  function updateDiagnosi(id: string) {
-    saveDiagnosi(cartella.diagnosi.map(d => d.id === id ? { ...d, ...diagForm } : d));
-    setEditDiagId(null); setDiagForm({});
-  }
-  function deleteDiagnosi(id: string) { saveDiagnosi(cartella.diagnosi.filter(d => d.id !== id)); }
 
   // Rischi
   function saveRischi(list: IndicatoreRischio[]) { upd({ indicatoriRischio: list }); }
@@ -373,14 +353,8 @@ export function PatientDetail({
 
   // ── Card modal CRUD helpers ────────────────────────────────────────────────
 
-  // Diagnosi quick-add from modal
-  function addDiagnosiFromModal() {
-    if (!modalDiagForm.descrizione) return;
-    saveDiagnosi([{ id: uid(), descrizione: '', tipo: 'principale', stato: 'attiva', dataInsorgenza: todayStr(), operatore: operatoreNome, note: '', createdAt: nowISO(), ...modalDiagForm } as Diagnosi, ...cartella.diagnosi]);
-    setModalDiagShow(false); setModalDiagForm({});
-  }
-
   // Allergie CRUD — delegated to AllergiesEditor
+  // Diagnosi CRUD — delegated to DiagnosisEditor
 
   // Parametri quick-add from modal
   function addVitaleFromModal() {
@@ -432,58 +406,12 @@ export function PatientDetail({
             <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}><IcoX /></button>
           </div>
           <div className="modal-body">
-            <div className="ec-modal-list">
-              {cartella.diagnosi.length === 0 && <p className="cr-empty">Nessuna diagnosi registrata.</p>}
-              {cartella.diagnosi.map(d => (
-                <div key={d.id} className="ec-modal-item">
-                  <div className="ec-modal-item__main">
-                    <span className="ec-modal-item__title">{d.descrizione}</span>
-                    {d.codiceICD && <span className="cr-mono cr-mono--sm">{d.codiceICD}</span>}
-                    <span className={`badge ${STATO_DIAG_CLASS[d.stato]}`}>{d.stato}</span>
-                    <span className="badge badge--gray">{d.tipo}</span>
-                  </div>
-                  <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => deleteDiagnosi(d.id)} title="Elimina"><IcoX /></button>
-                </div>
-              ))}
-            </div>
-            {modalDiagShow ? (
-              <div className="ec-modal-add-form">
-                <div className="op-form-grid">
-                  <div className="form-field">
-                    <label className="form-label">Descrizione *</label>
-                    <input className="form-input" value={modalDiagForm.descrizione ?? ''} onChange={e => setModalDiagForm(p => ({...p, descrizione: e.target.value}))} />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Tipo</label>
-                    <select className="form-select" value={modalDiagForm.tipo ?? 'principale'} onChange={e => setModalDiagForm(p => ({...p, tipo: e.target.value as Diagnosi['tipo']}))}>
-                      <option value="principale">Principale</option><option value="secondaria">Secondaria</option>
-                      <option value="comorbidita">Comorbidità</option><option value="differenziale">Differenziale</option>
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Stato</label>
-                    <select className="form-select" value={modalDiagForm.stato ?? 'attiva'} onChange={e => setModalDiagForm(p => ({...p, stato: e.target.value as Diagnosi['stato']}))}>
-                      <option value="attiva">Attiva</option><option value="monitoraggio">Monitoraggio</option>
-                      <option value="sospetta">Sospetta</option><option value="risolta">Risolta</option>
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Codice ICD</label>
-                    <input className="form-input" value={modalDiagForm.codiceICD ?? ''} placeholder="I10, E11…" onChange={e => setModalDiagForm(p => ({...p, codiceICD: e.target.value}))} />
-                  </div>
-                </div>
-                <div className="form-field" style={{marginTop: 4}}>
-                  <label className="form-label">Note</label>
-                  <textarea className="form-input" rows={2} value={modalDiagForm.note ?? ''} onChange={e => setModalDiagForm(p => ({...p, note: e.target.value}))} />
-                </div>
-                <div className="ec-modal-add-form__actions">
-                  <button className="btn-secondary btn-sm" onClick={() => {setModalDiagShow(false); setModalDiagForm({});}}>Annulla</button>
-                  <button className="btn-primary btn-sm" onClick={addDiagnosiFromModal}><IcoCheck /> Salva</button>
-                </div>
-              </div>
-            ) : (
-              <button className="btn-secondary btn-sm" onClick={() => setModalDiagShow(true)}><IcoPlus /> Aggiungi diagnosi</button>
-            )}
+            <DiagnosisEditor
+              mode="patient-chart"
+              value={cartella.diagnosi ?? []}
+              onChange={list => upd({ diagnosi: list })}
+              operatoreNome={operatoreNome}
+            />
           </div>
           <div className="modal-footer">
             <div className="modal-footer__left">
@@ -1298,91 +1226,12 @@ export function PatientDetail({
   function renderDiagnosi() {
     return (
       <div className="cr-tab-content">
-        <ClinicalTableSection
-          title="Diagnosi / Lista Problemi"
-          count={cartella.diagnosi.length}
-          countLabel="diagnosi"
-          actions={<button className="btn-sm" onClick={() => { setDiagForm({}); setShowAddDiag(true); }}>+ Aggiungi</button>}
-        >
-          <div className="cts__body--padded">
-            {showAddDiag && (
-              <InlineForm onSave={addDiagnosi} onCancel={() => { setShowAddDiag(false); setDiagForm({}); }}>
-                <div className="op-form-grid">
-                  <div className="form-field">
-                    <label className="form-label">Descrizione *</label>
-                    <input className="form-input" value={diagForm.descrizione ?? ''} onChange={e => setDiagForm(p => ({ ...p, descrizione: e.target.value }))} />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Codice ICD</label>
-                    <input className="form-input" value={diagForm.codiceICD ?? ''} placeholder="I10, E11…" onChange={e => setDiagForm(p => ({ ...p, codiceICD: e.target.value }))} />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Tipo</label>
-                    <select className="form-select" value={diagForm.tipo ?? 'principale'} onChange={e => setDiagForm(p => ({ ...p, tipo: e.target.value as Diagnosi['tipo'] }))}>
-                      <option value="principale">Principale</option><option value="secondaria">Secondaria</option>
-                      <option value="comorbidita">Comorbidità</option><option value="differenziale">Differenziale</option>
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Stato</label>
-                    <select className="form-select" value={diagForm.stato ?? 'attiva'} onChange={e => setDiagForm(p => ({ ...p, stato: e.target.value as Diagnosi['stato'] }))}>
-                      <option value="attiva">Attiva</option><option value="monitoraggio">Monitoraggio</option>
-                      <option value="sospetta">Sospetta</option><option value="risolta">Risolta</option>
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Data insorgenza</label>
-                    <input className="form-input" type="date" value={diagForm.dataInsorgenza ?? todayStr()} onChange={e => setDiagForm(p => ({ ...p, dataInsorgenza: e.target.value }))} />
-                  </div>
-                </div>
-                <div className="form-field" style={{ marginTop: 8 }}>
-                  <label className="form-label">Note</label>
-                  <textarea className="form-input" rows={2} value={diagForm.note ?? ''} onChange={e => setDiagForm(p => ({ ...p, note: e.target.value }))} />
-                </div>
-              </InlineForm>
-            )}
-            <div className="cr-list">
-              {cartella.diagnosi.length === 0 && <p className="cr-empty">Nessuna diagnosi registrata.</p>}
-              {cartella.diagnosi.map(d => editDiagId === d.id ? (
-                <InlineForm key={d.id} onSave={() => updateDiagnosi(d.id)} onCancel={() => { setEditDiagId(null); setDiagForm({}); }}>
-                  <div className="op-form-grid">
-                    <div className="form-field"><label className="form-label">Descrizione</label>
-                      <input className="form-input" value={diagForm.descrizione ?? ''} onChange={e => setDiagForm(p => ({ ...p, descrizione: e.target.value }))} /></div>
-                    <div className="form-field"><label className="form-label">Codice ICD</label>
-                      <input className="form-input" value={diagForm.codiceICD ?? ''} onChange={e => setDiagForm(p => ({ ...p, codiceICD: e.target.value }))} /></div>
-                    <div className="form-field"><label className="form-label">Tipo</label>
-                      <select className="form-select" value={diagForm.tipo ?? d.tipo} onChange={e => setDiagForm(p => ({ ...p, tipo: e.target.value as Diagnosi['tipo'] }))}>
-                        <option value="principale">Principale</option><option value="secondaria">Secondaria</option>
-                        <option value="comorbidita">Comorbidità</option><option value="differenziale">Differenziale</option>
-                      </select></div>
-                    <div className="form-field"><label className="form-label">Stato</label>
-                      <select className="form-select" value={diagForm.stato ?? d.stato} onChange={e => setDiagForm(p => ({ ...p, stato: e.target.value as Diagnosi['stato'] }))}>
-                        <option value="attiva">Attiva</option><option value="monitoraggio">Monitoraggio</option>
-                        <option value="sospetta">Sospetta</option><option value="risolta">Risolta</option>
-                      </select></div>
-                    <div className="form-field"><label className="form-label">Data risoluzione</label>
-                      <input className="form-input" type="date" value={diagForm.dataRisoluzione ?? ''} onChange={e => setDiagForm(p => ({ ...p, dataRisoluzione: e.target.value }))} /></div>
-                  </div>
-                  <div className="form-field" style={{ marginTop: 8 }}><label className="form-label">Note</label>
-                    <textarea className="form-input" rows={2} value={diagForm.note ?? ''} onChange={e => setDiagForm(p => ({ ...p, note: e.target.value }))} /></div>
-                </InlineForm>
-              ) : (
-                <ItemRow key={d.id} onEdit={() => { setEditDiagId(d.id); setDiagForm({ ...d }); }} onDelete={() => deleteDiagnosi(d.id)}>
-                  <div className="cr-diag-row">
-                    <div className="cr-diag-main">
-                      <span className="cr-diag-desc">{d.descrizione}</span>
-                      {d.codiceICD && <span className="cr-mono cr-icd">{d.codiceICD}</span>}
-                      <span className={`badge ${STATO_DIAG_CLASS[d.stato]}`}>{d.stato}</span>
-                      <span className="badge badge--gray">{d.tipo}</span>
-                    </div>
-                    {d.note && <p className="cr-diag-note">{d.note}</p>}
-                    <span className="cr-diag-meta">{fmtDate(d.dataInsorgenza)} · {d.operatore}{d.dataRisoluzione ? ` → risolta ${fmtDate(d.dataRisoluzione)}` : ''}</span>
-                  </div>
-                </ItemRow>
-              ))}
-            </div>
-          </div>
-        </ClinicalTableSection>
+        <DiagnosisEditor
+          mode="patient-chart"
+          value={cartella.diagnosi ?? []}
+          onChange={list => upd({ diagnosi: list })}
+          operatoreNome={operatoreNome}
+        />
 
         <ClinicalTableSection
           title="Indicatori di Rischio"
