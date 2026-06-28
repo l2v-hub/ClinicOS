@@ -22,7 +22,6 @@ import { ScalaNRSTab } from './cartella/ScalaNRSTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { ParametriTab } from './cartella/ParametriTab';
 import { EsamiConsulenzeTab } from './cartella/EsamiConsulenzeTab';
-import { TerapiaFarmacologicaTab } from './cartella/TerapiaFarmacologicaTab';
 import { TopNav } from '../navigation/TopNav';
 import PatientCompactHeader from './PatientCompactHeader';
 import InvioPSModal from './InvioPSModal';
@@ -31,6 +30,7 @@ import { ClinicalCard } from '../shared/ClinicalCard';
 import { InlineEditableField } from '../shared/InlineEditableField';
 import { AllergiesEditor } from './sections/AllergiesEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
+import { TherapyEditor } from './sections/TherapyEditor';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -1558,7 +1558,7 @@ export function PatientDetail({
           {tab === 'anamnesi'        && renderAnamnesi()}
           {tab === 'diagnosi'        && renderDiagnosi()}
           {tab === 'terapia-farmacologica' && (
-            <TerapiaFarmacologicaTab paziente={paziente} operatoreNome={operatoreNome} />
+            <TherapyEditor mode="patient-chart" paziente={paziente} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />
           )}
           {tab === 'note'            && renderNote()}
           {tab === 'parametri'       && (
