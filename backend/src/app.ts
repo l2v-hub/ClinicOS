@@ -13,6 +13,7 @@ import consegneRouter from './routes/consegne.js';
 import noteRouter from './routes/note.js';
 import aiExtractionRouter from './routes/ai-extraction.js';
 import aiJobsRouter from './routes/ai-jobs.js';
+import intakeDraftsRouter from './routes/intake-drafts.js';
 import internalAiRouter from './routes/internal-ai.js';
 import assistantPublicRouter from './routes/ai-assistant-public.js';
 import voiceRouter from './routes/ai-voice.js';
@@ -88,6 +89,7 @@ app.use('/therapy-slots', therapyRouter);
 app.use('/patient-intake', patientIntakeRouter);
 app.use('/consegne', consegneRouter);
 app.use('/notes', noteRouter);
+app.use('/intake/drafts', intakeDraftsRouter);
 app.use('/ai/extraction/jobs', aiJobsRouter);
 app.use('/ai/extraction', aiExtractionRouter);
 // REQ-040: public operator-facing assistant (operator-auth; runs the gateway in-process, no token).
