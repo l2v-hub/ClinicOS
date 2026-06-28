@@ -116,7 +116,7 @@ async function materializePatient(tx: PrismaTx, { patient: p, cartellaData, narr
 
   await tx.cartella.create({ data: { patientId: created.id, data: cartellaData as object } });
 
-  if (narrative) await persistNarrativeFromDraft(tx, created.id, narrative, jobId ?? 'draft');
+  if (narrative) await persistNarrativeFromDraft(tx, created.id, narrative, jobId ?? null);
   if (jobId) await persistImportDocuments(tx, created.id, jobId);
 
   return created;
