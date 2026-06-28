@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { createDraft, getDraft, patchDraft, listDrafts } from '../intake/draft-service.js';
+import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
 
 // ── Intake Drafts Router — mounted at /intake/drafts (F3 EPIC #120 / #125) ───
 // Operator-gated CRUD + autosave endpoints for PatientIntakeDraft.
@@ -62,6 +63,22 @@ intakeDraftsRouter.patch('/:id', async (req, res) => {
     const patch = (req.body ?? {}) as Record<string, unknown>;
     const draft = await patchDraft(String(req.params.id), patch);
     return res.status(200).json(draft);
+  } catch (err) {
+    return handleError(res, err);
+  }
+});
+
+// POST /intake/drafts/:id/confirm — transactional patient creation from draft.
+// Body: { patient, cartella?, confirmDuplicate? }
+// 201 created / 200 idempotent|updated / 409 duplicate (mirrors ai-jobs.ts confirm).
+intakeDraftsRouter.post('/:id/confirm', async (req, res) => {
+  try {
+    const payload = (req.body ?? {}) as ConfirmPayload;
+    const result = await confirmDraft(String(req.params.id), payload);
+    if (result.status === 'duplicate') {
+      return res.status(409).json(result);
+    }
+    return res.status(result.status === 'created' ? 201 : 200).json(result);
   } catch (err) {
     return handleError(res, err);
   }

@@ -11,6 +11,7 @@ import { normalizeDate } from '../extraction-validate.js';
 import { isConfirmBlocked, detectSectionLoss, type SectionsResult } from '../sections/index.js';
 import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sections/index.js';
 import { persistImportDocuments } from './patient-documents.js';
+import { getDraft } from '../../intake/draft-service.js';
 
 export interface ConfirmPatient {
   firstName: string;
@@ -79,6 +80,131 @@ async function audit(jobId: string, action: string, patientId?: string, detail?:
     await prisma.importAudit.create({ data: { jobId, action, patientId, detail } });
   } catch {
     /* audit must never break the main flow */
+  }
+}
+
+// ── Shared materialization helper ─────────────────────────────────────────────
+// Called by both confirmJob and confirmDraft inside a prisma.$transaction.
+// Creates patient + cartella + (optional) narrative + (optional) linked documents.
+// Returns the created Patient row.
+interface MaterializeArgs {
+  patient: ConfirmPatient;
+  cartellaData: Record<string, unknown>;
+  narrative: DischargeNarrativeDraft | null;
+  /** When provided, links source documents from this import job to the new patient. */
+  jobId?: string;
+}
+
+type PrismaTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
+
+async function materializePatient(tx: PrismaTx, { patient: p, cartellaData, narrative, jobId }: MaterializeArgs) {
+  const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
+  const created = await tx.patient.create({
+    data: {
+      medicalRecordNumber: mrn(),
+      firstName: p.firstName.trim(),
+      lastName: p.lastName.trim(),
+      dateOfBirth: dob,
+      ...(p.sex ? { sex: p.sex } : {}),
+      ...(p.email ? { email: p.email } : {}),
+      ...(p.phone ? { phone: p.phone } : {}),
+      ...(p.address ? { address: p.address } : {}),
+      ...(p.emergencyContactName ? { emergencyContactName: p.emergencyContactName } : {}),
+      ...(p.emergencyContactPhone ? { emergencyContactPhone: p.emergencyContactPhone } : {}),
+    },
+  });
+
+  await tx.cartella.create({ data: { patientId: created.id, data: cartellaData as object } });
+
+  if (narrative) await persistNarrativeFromDraft(tx, created.id, narrative, jobId ?? 'draft');
+  if (jobId) await persistImportDocuments(tx, created.id, jobId);
+
+  return created;
+}
+
+// ── confirmDraft ───────────────────────────────────────────────────────────────
+// Transactional, idempotent patient creation from a PatientIntakeDraft.
+// If the draft is already confirmed, returns the existing patient (idempotent).
+// On success sets draft status='confirmed', confirmedPatientId, confirmedAt.
+// Full rollback if the transaction throws — draft stays 'draft'.
+export async function confirmDraft(draftId: string, payload: ConfirmPayload): Promise<ConfirmResult> {
+  const draft = await getDraft(draftId);
+  if (!draft) throw new AiExtractionError('config', 'Bozza non trovata');
+
+  // Idempotent: already confirmed -> return the same patient.
+  if (draft.status === 'confirmed' && draft.confirmedPatientId) {
+    const existing = await prisma.patient.findUnique({ where: { id: draft.confirmedPatientId } });
+    if (existing) {
+      return {
+        status: 'idempotent',
+        patient: { id: existing.id, firstName: existing.firstName, lastName: existing.lastName, medicalRecordNumber: existing.medicalRecordNumber },
+      };
+    }
+  }
+
+  const p = payload.patient;
+  if (!p?.firstName?.trim() || !p?.lastName?.trim() || !p?.dateOfBirth?.trim()) {
+    throw new AiExtractionError('config', 'Nome, cognome e data di nascita sono obbligatori');
+  }
+  const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
+  if (Number.isNaN(dob.getTime())) {
+    throw new AiExtractionError('config', 'Data di nascita non valida');
+  }
+
+  // Duplicate detection (same as confirmJob).
+  const dupes = await prisma.patient.findMany({
+    where: {
+      firstName: { equals: p.firstName.trim(), mode: 'insensitive' },
+      lastName: { equals: p.lastName.trim(), mode: 'insensitive' },
+      dateOfBirth: dob,
+    },
+    take: 1,
+  });
+  if (dupes.length > 0 && !payload.confirmDuplicate) {
+    const dup = dupes[0];
+    // Audit: best-effort using linked importJobId if available (ImportAudit FK requires a valid job).
+    if (draft.importJobId) await audit(draft.importJobId, 'duplicate_flagged', dup.id, `draft:${draftId}`);
+    return { status: 'duplicate', duplicate: { id: dup.id, firstName: dup.firstName, lastName: dup.lastName, medicalRecordNumber: dup.medicalRecordNumber } };
+  }
+
+  const cartellaData: Record<string, unknown> = {
+    ...(payload.cartella ?? {}),
+    ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}),
+    _importedFromDraft: draftId,
+    ...(draft.importJobId ? { _importedFromJob: draft.importJobId } : {}),
+  };
+
+  // Narrative from draft data if present (opt-in; skipped for manual drafts without narrative).
+  const narrative = (draft.data as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
+
+  try {
+    const created = await prisma.$transaction(async (tx) => {
+      const pat = await materializePatient(tx, {
+        patient: p,
+        cartellaData,
+        narrative,
+        jobId: draft.importJobId ?? undefined,
+      });
+
+      // Mark the draft confirmed within the same transaction for atomicity.
+      await tx.patientIntakeDraft.update({
+        where: { id: draftId },
+        data: { status: 'confirmed', confirmedPatientId: pat.id, confirmedAt: new Date() },
+      });
+
+      return pat;
+    });
+
+    // Best-effort audit: only when a linked import job exists (FK constraint).
+    if (draft.importJobId) await audit(draft.importJobId, 'patient_created', created.id, `draft:${draftId}`);
+
+    return {
+      status: 'created',
+      patient: { id: created.id, firstName: created.firstName, lastName: created.lastName, medicalRecordNumber: created.medicalRecordNumber },
+    };
+  } catch (err) {
+    if (draft.importJobId) await audit(draft.importJobId, 'confirm_failed', undefined, err instanceof Error ? err.message.slice(0, 120) : 'error');
+    throw err instanceof AiExtractionError ? err : new AiExtractionError('provider_error', 'Errore durante la conferma transazionale della bozza');
   }
 }
 
@@ -186,35 +312,16 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
         if (existing) return existing;
       }
 
-      const patient = await tx.patient.create({
-        data: {
-          medicalRecordNumber: mrn(),
-          firstName: p.firstName.trim(),
-          lastName: p.lastName.trim(),
-          dateOfBirth: dob,
-          ...(p.sex ? { sex: p.sex } : {}),
-          ...(p.email ? { email: p.email } : {}),
-          ...(p.phone ? { phone: p.phone } : {}),
-          ...(p.address ? { address: p.address } : {}),
-          ...(p.emergencyContactName ? { emergencyContactName: p.emergencyContactName } : {}),
-          ...(p.emergencyContactPhone ? { emergencyContactPhone: p.emergencyContactPhone } : {}),
-        },
-      });
-
-      // Clinical data goes into Cartella.data (same shape the app already uses).
-      const cartellaData = {
+      // Clinical data (cartella shape the app already uses).
+      const cartellaData: Record<string, unknown> = {
         ...(payload.cartella ?? {}),
         ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}),
         _importedFromJob: jobId,
       };
-      await tx.cartella.create({ data: { patientId: patient.id, data: cartellaData as object } });
 
-      // REQ-029: persist faithful narrative sections (originalText immutable) alongside the
-      // legacy cartella — coexists, never replaces. Present only when REQ-028 _narrative ran.
-      if (narrative) await persistNarrativeFromDraft(tx, patient.id, narrative, jobId);
-
-      // REQ-035 v2: permanently link the imported source documents to the patient (bytes in DB).
-      await persistImportDocuments(tx, patient.id, jobId);
+      // REQ-029: faithful narrative persisted when present.
+      // REQ-035 v2: permanently link imported source documents to the patient.
+      const patient = await materializePatient(tx, { patient: p, cartellaData, narrative, jobId });
 
       await tx.importJob.update({
         where: { id: jobId },
