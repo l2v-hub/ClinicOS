@@ -10,6 +10,10 @@ const intakeDraftsRouter = Router();
 intakeDraftsRouter.use(requireOperator);
 
 function handleError(res: import('express').Response, err: unknown) {
+  // Prisma "record not found" (e.g. patchDraft on a missing/confirmed draft) → 404, not 500.
+  if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2025') {
+    return res.status(404).json({ error: 'Bozza non trovata' });
+  }
   console.error('intake-drafts error:', err instanceof Error ? err.message : err);
   return res.status(500).json({ error: 'Errore interno bozza intake' });
 }
