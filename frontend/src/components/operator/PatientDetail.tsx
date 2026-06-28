@@ -3,7 +3,7 @@ import type {
   Paziente, Consegna, Operatore, Camera, CartellaPaziente,
   Diagnosi, NotaClinica,
   VisitaRecord, IndicatoreRischio,
-  PrioritaConsegna, AllergiaItem, VitaleItem,
+  PrioritaConsegna, VitaleItem,
 } from '../../types';
 import {
   IcoEdit, IcoCheck, IcoX, IcoPlus,
@@ -29,6 +29,7 @@ import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalCard } from '../shared/ClinicalCard';
 import { InlineEditableField } from '../shared/InlineEditableField';
+import { AllergiesEditor } from './sections/AllergiesEditor';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -259,9 +260,7 @@ export function PatientDetail({
   const [modalDiagShow, setModalDiagShow] = useState(false);
   const [modalDiagForm, setModalDiagForm] = useState<Partial<Diagnosi>>({});
 
-  // Allergie CRUD
-  const [modalAllergiaShow, setModalAllergiaShow] = useState(false);
-  const [allergiaForm, setAllergiaForm] = useState<Partial<AllergiaItem>>({});
+  // Allergie CRUD — managed by AllergiesEditor (controlled)
 
   // Parametri modal quick-add
   const [modalVitaleShow, setModalVitaleShow] = useState(false);
@@ -381,14 +380,7 @@ export function PatientDetail({
     setModalDiagShow(false); setModalDiagForm({});
   }
 
-  // Allergie CRUD
-  function saveAllergie(list: AllergiaItem[]) { upd({ allergie: list }); }
-  function addAllergia() {
-    if (!allergiaForm.allergene) return;
-    saveAllergie([{ id: uid(), allergene: '', gravita: 'lieve', reazione: '', documentato: todayStr(), documentatoDa: operatoreNome, ...allergiaForm } as AllergiaItem, ...cartella.allergie]);
-    setModalAllergiaShow(false); setAllergiaForm({});
-  }
-  function deleteAllergia(id: string) { saveAllergie(cartella.allergie.filter(a => a.id !== id)); }
+  // Allergie CRUD — delegated to AllergiesEditor
 
   // Parametri quick-add from modal
   function addVitaleFromModal() {
@@ -699,45 +691,12 @@ export function PatientDetail({
             <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}><IcoX /></button>
           </div>
           <div className="modal-body">
-            <div className="ec-modal-list">
-              {cartella.allergie.length === 0 && <p className="cr-empty">Nessuna allergia registrata.</p>}
-              {cartella.allergie.map(a => (
-                <div key={a.id} className="ec-modal-item">
-                  <div className="ec-modal-item__main">
-                    <span className="ec-modal-item__title">{a.allergene}</span>
-                    {a.reazione && <span className="ec-modal-item__sub">{a.reazione}</span>}
-                    <span className={`badge ${a.gravita === 'grave' ? 'badge--red' : a.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{a.gravita}</span>
-                  </div>
-                  <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => deleteAllergia(a.id)} title="Elimina"><IcoX /></button>
-                </div>
-              ))}
-            </div>
-            {modalAllergiaShow ? (
-              <div className="ec-modal-add-form">
-                <div className="op-form-grid">
-                  <div className="form-field">
-                    <label className="form-label">Allergene *</label>
-                    <input className="form-input" value={allergiaForm.allergene ?? ''} onChange={e => setAllergiaForm(p => ({...p, allergene: e.target.value}))} />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Gravità</label>
-                    <select className="form-select" value={allergiaForm.gravita ?? 'lieve'} onChange={e => setAllergiaForm(p => ({...p, gravita: e.target.value as AllergiaItem['gravita']}))}>
-                      <option value="lieve">Lieve</option><option value="moderata">Moderata</option><option value="grave">Grave</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-field" style={{marginTop: 4}}>
-                  <label className="form-label">Reazione</label>
-                  <input className="form-input" value={allergiaForm.reazione ?? ''} onChange={e => setAllergiaForm(p => ({...p, reazione: e.target.value}))} />
-                </div>
-                <div className="ec-modal-add-form__actions">
-                  <button className="btn-secondary btn-sm" onClick={() => {setModalAllergiaShow(false); setAllergiaForm({});}}>Annulla</button>
-                  <button className="btn-primary btn-sm" onClick={addAllergia}><IcoCheck /> Salva</button>
-                </div>
-              </div>
-            ) : (
-              <button className="btn-secondary btn-sm" onClick={() => setModalAllergiaShow(true)}><IcoPlus /> Aggiungi allergia</button>
-            )}
+            <AllergiesEditor
+              mode="patient-chart"
+              value={cartella.allergie ?? []}
+              onChange={list => upd({ allergie: list })}
+              operatoreNome={operatoreNome}
+            />
           </div>
           <div className="modal-footer">
             <div className="modal-footer__right">

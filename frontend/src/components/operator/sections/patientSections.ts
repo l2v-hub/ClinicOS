@@ -1,10 +1,11 @@
 import type { ComponentType } from 'react';
 import type { PatientSectionDefinition, SectionProps } from './types.js';
+import { AllergiesEditor } from './AllergiesEditor.js';
 
 const TODO: ComponentType<SectionProps<never>> = () => { throw new Error('section component not yet extracted'); };
 
 export const PATIENT_SECTIONS: PatientSectionDefinition[] = [
-  { sectionKey: 'allergie',   title: 'Allergie',            component: TODO, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: true,  permissions: ['operatore'] },
+  { sectionKey: 'allergie',   title: 'Allergie',            component: AllergiesEditor as ComponentType<SectionProps<never>>, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: true,  permissions: ['operatore'] },
   { sectionKey: 'anamnesi',   title: 'Anamnesi',            component: TODO, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: true,  permissions: ['operatore'] },
   { sectionKey: 'diagnosi',   title: 'Diagnosi',            component: TODO, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: true,  permissions: ['operatore'] },
   { sectionKey: 'terapia',    title: 'Terapia Farmacologica', component: TODO, availableDuringIntake: true, requiredDuringIntake: false, supportedByDocumentImport: true, permissions: ['operatore'] },
