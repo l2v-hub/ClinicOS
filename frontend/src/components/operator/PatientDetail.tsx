@@ -20,7 +20,6 @@ import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { ScalaTinettiTab } from './cartella/ScalaTinettiTab';
 import { ScalaNRSTab } from './cartella/ScalaNRSTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
-import { ParametriTab } from './cartella/ParametriTab';
 import { EsamiConsulenzeTab } from './cartella/EsamiConsulenzeTab';
 import { TopNav } from '../navigation/TopNav';
 import PatientCompactHeader from './PatientCompactHeader';
@@ -31,6 +30,7 @@ import { InlineEditableField } from '../shared/InlineEditableField';
 import { AllergiesEditor } from './sections/AllergiesEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
+import { VitalSignsEditor } from './sections/VitalSignsEditor';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -1562,7 +1562,7 @@ export function PatientDetail({
           )}
           {tab === 'note'            && renderNote()}
           {tab === 'parametri'       && (
-            <ParametriTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+            <VitalSignsEditor mode="patient-chart" cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />
           )}
           {tab === 'consegne'        && renderConsegne()}
           {tab === 'presa-in-carico' && (
