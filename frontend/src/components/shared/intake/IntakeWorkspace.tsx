@@ -191,7 +191,7 @@ export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, oper
           <button
             className="btn-primary"
             onClick={handleNext}
-            disabled={isLast || loading || !!error}
+            disabled={isLast || loading || !!error || (step === 1 && !anagraficaValid())}
           >
             {isLast ? 'Conferma' : 'Avanti →'}
           </button>
