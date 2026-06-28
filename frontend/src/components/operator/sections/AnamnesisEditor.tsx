@@ -38,16 +38,9 @@ export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome }: Se
   // OMIT the allergie ClinicalCard entirely — it is already rendered by AllergiesEditor
   // and is not part of `anamnesi` data.
 
-  // Global fallback actions (legacy FR-008 comment retained):
-  const anamnesiActions = (
-    <div style={{ display: 'flex', gap: 8 }}>
-      {/* no global edit button: each card has its own Modifica via onEdit */}
-    </div>
-  );
-
   return (
     <div className="cr-tab-content">
-      <ClinicalTableSection title="Anamnesi" actions={anamnesiActions}>
+      <ClinicalTableSection title="Anamnesi">
         <div className="cts__body--padded">
           {/* Sezioni anamnesi modificabili — ognuna in una ClinicalCard */}
           {SECTIONS.map(({ id, key, label, rows = 4, placeholder }) => {
@@ -82,6 +75,7 @@ export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome }: Se
                     value={val}
                     emptyText="Non compilato"
                     placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
+                    disabled={!!readOnly}
                     onSave={v => onChange({ ...value, [key]: v, updatedAt: nowISO(), operatore: operatoreNome ?? '' })}
                   />
                 )}
