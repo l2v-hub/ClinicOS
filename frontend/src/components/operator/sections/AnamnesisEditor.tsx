@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { SectionProps } from './types';
+import type { AllergiaItem } from '../../../types';
 import { nowISO, fmtDateTime, ClinicalTableSection } from '../cartella/shared';
 import { IcoCheck } from '../../../icons';
 import { ClinicalCard } from '../../shared/ClinicalCard';
@@ -15,7 +16,9 @@ const SECTIONS: ASection[] = [
   { id: 'note',               key: 'note',               label: 'Note aggiuntive',                         rows: 3, placeholder: 'Informazioni aggiuntive non categorizzate…' },
 ];
 
-export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome }: SectionProps<Record<string, unknown>>) {
+type AnamnesisEditorProps = SectionProps<Record<string, unknown>> & { allergie?: AllergiaItem[] };
+
+export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome, allergie = [] }: AnamnesisEditorProps) {
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [draft, setDraft] = useState<Record<string, unknown>>({});
 
@@ -33,15 +36,32 @@ export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome }: Se
     setEditingCard(null);
   }
 
-  // NOTE: The original renderAnamnesi() used `cartella.allergie` to render an allergie
-  // read-only card. This data is NOT in `value` (which is just cartella.anamnesi).
-  // OMIT the allergie ClinicalCard entirely — it is already rendered by AllergiesEditor
-  // and is not part of `anamnesi` data.
+  const hasAllergie = allergie.length > 0;
+  const allergieGravi = allergie.filter(al => al.gravita === 'grave');
 
   return (
     <div className="cr-tab-content">
       <ClinicalTableSection title="Anamnesi">
         <div className="cts__body--padded">
+          {/* Allergie — read-only ClinicalCard (no onEdit: allergies are managed via the dedicated modal flow elsewhere in the app, not inline) */}
+          <ClinicalCard title="Allergie" defaultExpanded={true}>
+            <div className={hasAllergie ? (allergieGravi.length > 0 ? 'cr-anamnesi-card cr-anamnesi-card--allergie-grave' : 'cr-anamnesi-card cr-anamnesi-card--allergie') : 'cr-anamnesi-card'}>
+              {hasAllergie ? (
+                <div className="cr-anamnesi-allergie-list">
+                  {allergie.map((al, i) => (
+                    <div key={i} className="cr-anamnesi-allergia">
+                      <span className="cr-anamnesi-allergia__nome">{al.allergene}</span>
+                      {al.reazione && <span className="cr-anamnesi-allergia__reazione">{al.reazione}</span>}
+                      <span className={`badge ${al.gravita === 'grave' ? 'badge--red' : al.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{al.gravita}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="cr-anamnesi-card__text muted">Nessuna allergia registrata. Gestisci dal tab Diagnosi.</p>
+              )}
+            </div>
+          </ClinicalCard>
+
           {/* Sezioni anamnesi modificabili — ognuna in una ClinicalCard */}
           {SECTIONS.map(({ id, key, label, rows = 4, placeholder }) => {
             const val = String(value[key] ?? '');

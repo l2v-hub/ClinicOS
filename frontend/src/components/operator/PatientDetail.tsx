@@ -1435,7 +1435,7 @@ export function PatientDetail({
         <div ref={contentRef} className="cr-detail-content tab-panel-transition">
           {tab === 'riepilogo'       && renderRiepilogo()}
           {tab === 'profilo'         && renderProfilo()}
-          {tab === 'anamnesi'        && <AnamnesisEditor mode="patient-chart" value={cartella.anamnesi ?? {}} onChange={a => upd({ anamnesi: a })} operatoreNome={operatoreNome} />}
+          {tab === 'anamnesi'        && <AnamnesisEditor mode="patient-chart" value={cartella.anamnesi ?? {}} onChange={a => upd({ anamnesi: a })} operatoreNome={operatoreNome} allergie={cartella.allergie ?? []} />}
           {tab === 'diagnosi'        && renderDiagnosi()}
           {tab === 'terapia-farmacologica' && (
             <TherapyEditor mode="patient-chart" paziente={paziente} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />
