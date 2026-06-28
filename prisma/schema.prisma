@@ -408,6 +408,25 @@ model PatientDiaryEntry {
   @@index([entryDateTime])
 }
 
+// ── Patient intake draft (F3 EPIC #120 / Issue #125) ─────────────────────────
+// Server-persisted draft that accumulates anagrafica + cartella data across
+// manual entry and import flows. Confirmed on commit; status drives the UI wizard.
+model PatientIntakeDraft {
+  id                 String   @id @default(cuid())
+  status             String   @default("draft") // draft | confirmed | abandoned
+  source             String   @default("manual") // manual | import
+  data               Json     @default("{}")     // accumulated sections (anagrafica + cartella shape)
+  importJobId        String?                      // link to extraction job when source = import
+  createdById        String?                      // operator id (audit)
+  confirmedPatientId String?                      // set on successful confirm
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  confirmedAt        DateTime?
+
+  @@index([status])
+  @@index([createdById])
+}
+
 // ── AI discharge-letter import (REQ-014) ──────────────────────────────────────
 // Temporary, pre-patient document import. No Patient data is written here:
 // confirmation/persistence is REQ-018. File bytes live on disk (storagePath),
