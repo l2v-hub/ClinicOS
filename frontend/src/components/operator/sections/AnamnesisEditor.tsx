@@ -103,7 +103,7 @@ export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome, alle
             );
           })}
 
-          {value.updatedAt && !editingCard && (
+          {!!value.updatedAt && !editingCard && (
             <p className="cr-update-info">Aggiornato: {fmtDateTime(String(value.updatedAt))} — {String(value.operatore ?? '')}</p>
           )}
         </div>

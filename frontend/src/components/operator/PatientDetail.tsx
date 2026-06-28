@@ -24,8 +24,6 @@ import { TopNav } from '../navigation/TopNav';
 import PatientCompactHeader from './PatientCompactHeader';
 import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
-import { ClinicalCard } from '../shared/ClinicalCard';
-import { InlineEditableField } from '../shared/InlineEditableField';
 import { AllergiesEditor } from './sections/AllergiesEditor';
 import { AnamnesisEditor } from './sections/AnamnesisEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
@@ -1435,7 +1433,7 @@ export function PatientDetail({
         <div ref={contentRef} className="cr-detail-content tab-panel-transition">
           {tab === 'riepilogo'       && renderRiepilogo()}
           {tab === 'profilo'         && renderProfilo()}
-          {tab === 'anamnesi'        && <AnamnesisEditor mode="patient-chart" value={cartella.anamnesi ?? {}} onChange={a => upd({ anamnesi: a })} operatoreNome={operatoreNome} allergie={cartella.allergie ?? []} />}
+          {tab === 'anamnesi'        && <AnamnesisEditor mode="patient-chart" value={(cartella.anamnesi ?? {}) as unknown as Record<string, unknown>} onChange={a => upd({ anamnesi: a as unknown as typeof cartella.anamnesi })} operatoreNome={operatoreNome} allergie={cartella.allergie ?? []} />}
           {tab === 'diagnosi'        && renderDiagnosi()}
           {tab === 'terapia-farmacologica' && (
             <TherapyEditor mode="patient-chart" paziente={paziente} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Diagnosi } from '../../../types';
 import type { SectionProps } from './types';
-import { IcoCheck, IcoEdit, IcoX, IcoPlus } from '../../../icons';
+import { IcoEdit, IcoX } from '../../../icons';
 import { uid, todayStr, nowISO, fmtDate, ClinicalTableSection, InlineForm } from '../cartella/shared';
 
 const STATO_DIAG_CLASS: Record<string, string> = {
