@@ -13,11 +13,14 @@ const STEPS = [
 interface IntakeWorkspaceProps {
   open: boolean;
   onClose: () => void;
-  onCreated: (patientId: string) => void;
+  onCreated?: (patientId: string) => void; // wired in Task 4 (Verifica step)
   operatoreNome?: string;
+  operatorId?: string;
+  operatorRole?: string;
 }
 
-export function IntakeWorkspace({ open, onClose, operatoreNome }: IntakeWorkspaceProps) {
+export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, operatorRole }: IntakeWorkspaceProps) {
+  const op = { operatorId, operatorRole };
   const [step, setStep] = useState(1);
   const [draftId, setDraftId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,7 +37,7 @@ export function IntakeWorkspace({ open, onClose, operatoreNome }: IntakeWorkspac
     if (draftId) return;
     setLoading(true);
     setError(null);
-    createDraft('manual')
+    createDraft('manual', op)
       .then((d) => setDraftId(d.id))
       .catch(() => setError('Impossibile aprire la bozza. Riprovare.'))
       .finally(() => setLoading(false));
