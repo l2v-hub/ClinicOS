@@ -18,7 +18,6 @@ import { MedicazioniTab } from './cartella/MedicazioniTab';
 import { ContenzioniTab } from './cartella/ContenzioniTab';
 import { ScalaBradenTab } from './cartella/ScalaBradenTab';
 import { ScalaTinettiTab } from './cartella/ScalaTinettiTab';
-import { ScalaNRSTab } from './cartella/ScalaNRSTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { EsamiConsulenzeTab } from './cartella/EsamiConsulenzeTab';
 import { TopNav } from '../navigation/TopNav';
@@ -31,6 +30,7 @@ import { AllergiesEditor } from './sections/AllergiesEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
 import { VitalSignsEditor } from './sections/VitalSignsEditor';
+import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -1599,7 +1599,7 @@ export function PatientDetail({
             <ScalaTinettiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
           {tab === 'nrs' && (
-            <ScalaNRSTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+            <PainAssessmentEditor mode="patient-chart" cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />
           )}
           {tab === 'dimissione' && (
             <DimissioneTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
