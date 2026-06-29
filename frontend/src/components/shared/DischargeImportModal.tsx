@@ -6,6 +6,8 @@ import type { SectionsResult } from './sections/types';
 import { sectionsFromNarrative, assertNoLegacyImportArrays, type NarrativeDraft } from './sections/deriveSections';
 import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
 import { CameraCapture } from './CameraCapture';
+import { createDraftFromImport } from './intake/intakeDraftApi';
+import { IntakeWorkspace } from './intake/IntakeWorkspace';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
 // Files are added to a backend job (no patient record is created here).
@@ -77,8 +79,10 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [step, setStep] = useState<'upload' | 'review'>('upload');
+  const [step, setStep] = useState<'upload' | 'review' | 'workspace'>('upload');
   const [proposal, setProposal] = useState<unknown>(null);
+  // F5 #124: import draft id seeded via createDraftFromImport, used to open IntakeWorkspace.
+  const [importDraftId, setImportDraftId] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   // REQ-032: wide two-panel review workspace state.
   const [previews, setPreviews] = useState<PreviewDoc[]>([]);
@@ -93,6 +97,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
       previews.forEach((p) => URL.revokeObjectURL(p.url));
       setJob(null); setOutcomes([]); setError(null); setStep('upload'); setProposal(null); setProcessing(false);
       setPreviews([]); setLayout('5050'); setPaneTab('doc'); setSourceTarget(null); setCameraOpen(false);
+      setImportDraftId(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -275,16 +280,17 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     } finally { setBusy(false); }
   }
 
-  // REQ-018/021: transactional confirm — create new OR update existing patient.
-  // The full reviewed cartella (every clinical field/list the operator edited) is sent
-  // verbatim so all data is persisted (REQ-015), not just a subset.
-  async function handleCreate(patient: ConfirmPatient, cartella: Record<string, unknown>, opts?: { confirmAllergyConflict?: boolean }) {
+  // REQ-018/021 (legacy mode='existing'): attach the extracted data to an existing patient.
+  // The full reviewed cartella is sent verbatim (REQ-015). Only this path still calls
+  // POST /ai/extraction/jobs/:id/confirm directly — the new-patient path now goes through
+  // IntakeWorkspace / confirmDraft (F5 #124).
+  async function handleAttachExisting(patient: ConfirmPatient, cartella: Record<string, unknown>, opts?: { confirmAllergyConflict?: boolean }) {
     if (!job) return;
     setBusy(true); setError(null);
     const target = (proposal as { _target?: { mode?: string; patientId?: string } } | null)?._target;
     const body = (confirmDuplicate: boolean) => ({
-      mode: target?.mode === 'existing' ? 'existing' : 'new',
-      patientId: target?.mode === 'existing' ? target?.patientId : undefined,
+      mode: 'existing',
+      patientId: target?.patientId,
       patient,
       cartella,
       confirmDuplicate,
@@ -305,12 +311,37 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
         res = await post(true);
       }
       const data = await res.json();
-      if (!res.ok) { setError(data.error || 'Creazione paziente non riuscita'); return; }
+      if (!res.ok) { setError(data.error || 'Aggiornamento paziente non riuscito'); return; }
       onImported?.();
       onClose();
     } catch {
       setError('Errore di rete durante la conferma');
     } finally { setBusy(false); }
+  }
+
+  // F5 #124: new-patient path — seed an intake draft from the extraction job, then hand off
+  // to IntakeWorkspace. Creation is transactional via confirmDraft (not the legacy confirm endpoint).
+  async function handleProceedToWorkspace() {
+    if (!job) return;
+    setBusy(true); setError(null);
+    try {
+      const draft = await createDraftFromImport(job.id, { operatorId, operatorRole });
+      setImportDraftId(draft.id);
+      setStep('workspace');
+    } catch {
+      setError('Impossibile preparare la scheda di intake. Riprovare.');
+    } finally { setBusy(false); }
+  }
+
+  // Router: called by ImportSectionsReview's "Crea paziente" button.
+  // mode='existing' → legacy attach path; everything else → new workspace handoff (F5 #124).
+  function handleReviewConfirm(patient: ConfirmPatient, cartella: Record<string, unknown>, opts: { confirmAllergyConflict: boolean }) {
+    const target = (proposal as { _target?: { mode?: string } } | null)?._target;
+    if (target?.mode === 'existing') {
+      void handleAttachExisting(patient, cartella, opts);
+    } else {
+      void handleProceedToWorkspace();
+    }
   }
 
   const count = job?.fileCount ?? 0;
@@ -320,6 +351,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   const rejected = outcomes.filter((o) => o.status !== 'accepted');
 
   const isReview = step === 'review' && proposal != null;
+  const isWorkspace = step === 'workspace' && importDraftId != null;
   // REQ-033: the discharge import ALWAYS reviews as narrative text blocks — never the legacy
   // structured table. Prefer the rich `_sections`; otherwise derive an equivalent from the
   // always-present flat `_narrative`. The legacy ImportReviewFull table is never rendered here.
@@ -336,6 +368,21 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     hasText(narrativeSections) ? narrativeSections!
       : hasText(sectionsData) ? sectionsData!
         : narrativeSections ?? sectionsData ?? { sections: [], allergies: { status: 'not_documented' } };
+
+  // F5 #124: workspace phase — IntakeWorkspace owns its own modal-overlay.
+  if (isWorkspace) {
+    return (
+      <IntakeWorkspace
+        open={true}
+        onClose={onClose}
+        onCreated={() => { onImported?.(); onClose(); }}
+        operatorId={operatorId}
+        operatorRole={operatorRole}
+        importDraftId={importDraftId!}
+        onBackToDocuments={() => setStep('review')}
+      />
+    );
+  }
 
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Importa lettera di dimissione">
@@ -383,7 +430,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
                 documents={job?.documents ?? []}
                 busy={busy}
                 onBack={reopenToDocuments}
-                onConfirm={handleCreate}
+                onConfirm={handleReviewConfirm}
                 onOpenSource={(fileName, page) => { setSourceTarget({ fileName, page }); setPaneTab('doc'); }}
               />
             </div>
