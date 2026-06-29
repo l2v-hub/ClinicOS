@@ -107,7 +107,16 @@ export function buildImportDraftData(
   }
 
   // 4. Allergie — AllergiesEditor reads value as AllergiaItem[].
-  if (narrative.allergiesText) {
+  //    CLINICAL SAFETY: only seed a real allergy row when the status affirmatively
+  //    indicates an allergy is present (or contradictory and needs operator review).
+  //    A "nessuna allergia nota" discharge document has allergiesText but
+  //    allergyStatus 'explicitly_absent' / 'not_documented' — seeding a row there
+  //    would create a FALSE allergy record. Status is always preserved in _narrative.
+  const ALLERGY_SEED_STATUSES: ReadonlyArray<DischargeNarrativeDraft['allergyStatus']> = [
+    'present',
+    'conflicting',
+  ];
+  if (narrative.allergiesText && ALLERGY_SEED_STATUSES.includes(narrative.allergyStatus)) {
     seeded.allergie = [
       {
         id: crypto.randomUUID(),
@@ -120,14 +129,17 @@ export function buildImportDraftData(
     ];
   }
 
-  // 5. Terapia — TherapyEditor in intake mode shows a placeholder; stash text for later.
-  //    No structured shape yet (no TherapyEditor intake support in this task).
+  // 5. Terapia — TherapyEditor in intake mode shows a placeholder (no structured intake
+  //    editor yet), so stash the raw therapy text under _terapiaText to avoid losing it.
+  if (narrative.therapyText) {
+    seeded._terapiaText = narrative.therapyText;
+  }
 
   // 6. Lossless provenance — preserved for confirmDraft + compare panel.
   seeded._narrative = narrative;
   seeded._sections = rawSections ?? null;
   seeded._importedFields = (
-    ['anagrafica', 'anamnesi', 'diagnosi', 'allergie'] as const
+    ['anagrafica', 'anamnesi', 'diagnosi', 'allergie', 'terapia'] as const
   ).filter((k) => seeded[k] !== undefined);
 
   return seeded;

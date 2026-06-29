@@ -67,21 +67,26 @@ test('seedDraftFromImport: creates draft seeded from narrative', async () => {
     assert.equal(ana.lastName, 'Rossi');
     assert.equal(ana.dateOfBirth, '1950-03-02');
 
-    // clinical sections are truthy
-    assert.ok(data.diagnosi, 'diagnosi should be truthy');
-    assert.ok(data.anamnesi, 'anamnesi should be truthy');
-    assert.ok(data.allergie, 'allergie should be truthy');
+    // diagnosi — DiagnosisEditor reads Diagnosi[]; assert exact descrizione.
+    const diagnosi = data.diagnosi as Array<Record<string, unknown>>;
+    assert.ok(Array.isArray(diagnosi) && diagnosi.length === 1, 'diagnosi is single-item array');
+    assert.equal(diagnosi[0].descrizione, 'Scompenso cardiaco');
+    assert.equal(diagnosi[0].tipo, 'principale');
+    assert.equal(diagnosi[0].stato, 'attiva');
 
-    // lossless narrative stashed for confirm-service
-    const narrative = data._narrative as Record<string, unknown>;
-    assert.equal(narrative.firstName, 'Mario');
-    assert.equal(narrative.diagnosisText, 'Scompenso cardiaco');
-    assert.equal(narrative.anamnesisText, 'Iperteso');
-    assert.equal(narrative.allergiesText, 'Penicillina');
-    assert.equal(narrative.allergyStatus, 'present');
-    assert.deepEqual(narrative.sourceReferences, []);
+    // anamnesi — AnamnesisEditor reads value[key]; assert the exact seeded key.
+    const anamnesi = data.anamnesi as Record<string, unknown>;
+    assert.equal(anamnesi.patologicaProssima, 'Iperteso');
 
-    // _importedFields lists seeded section keys
+    // allergie — AllergiesEditor reads AllergiaItem[]; assert exact allergene content.
+    const allergie = data.allergie as Array<Record<string, unknown>>;
+    assert.ok(Array.isArray(allergie) && allergie.length === 1, 'allergie is single-item array');
+    assert.equal(allergie[0].allergene, 'Penicillina');
+
+    // lossless narrative stashed verbatim for confirm-service.
+    assert.deepEqual(data._narrative, NARRATIVE);
+
+    // _importedFields lists seeded section keys.
     const imported = data._importedFields as string[];
     assert.ok(Array.isArray(imported));
     assert.ok(imported.includes('anagrafica'));
@@ -94,6 +99,41 @@ test('seedDraftFromImport: creates draft seeded from narrative', async () => {
     assert.equal(draft2.id, draft.id, 'second call must return same draft id (idempotent)');
   } finally {
     // Cleanup: delete draft (if any) then job.
+    await prisma.patientIntakeDraft.deleteMany({ where: { importJobId: job.id } }).catch(() => {});
+    await prisma.importJob.delete({ where: { id: job.id } }).catch(() => {});
+  }
+});
+
+test('seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent', async () => {
+  // A "nessuna allergia nota" discharge has allergiesText but status explicitly_absent.
+  // Seeding a real allergy row would create a FALSE clinical record — must be guarded.
+  const absentNarrative: DischargeNarrativeDraft = {
+    ...NARRATIVE,
+    allergyStatus: 'explicitly_absent',
+    allergiesText: 'Nessuna allergia nota',
+  };
+  const job = await prisma.importJob.create({
+    data: {
+      ...JOB_DEFAULTS,
+      status: 'extracted',
+      resultData: { _narrative: absentNarrative, _sections: null } as object,
+    },
+  });
+
+  try {
+    const draft = await seedDraftFromImport(job.id);
+    const data = draft.data as Record<string, unknown>;
+
+    // No allergy row seeded.
+    assert.equal(data.allergie, undefined, 'allergie must NOT be seeded when explicitly_absent');
+    const imported = data._importedFields as string[];
+    assert.ok(!imported.includes('allergie'), 'allergie must not be in _importedFields');
+
+    // But the status + text are still preserved verbatim in _narrative for the UI.
+    const narrative = data._narrative as Record<string, unknown>;
+    assert.equal(narrative.allergyStatus, 'explicitly_absent');
+    assert.equal(narrative.allergiesText, 'Nessuna allergia nota');
+  } finally {
     await prisma.patientIntakeDraft.deleteMany({ where: { importJobId: job.id } }).catch(() => {});
     await prisma.importJob.delete({ where: { id: job.id } }).catch(() => {});
   }
