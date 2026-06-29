@@ -43,7 +43,7 @@ function SourceComparePanel({ refs }: { refs: SourceReference[] }) {
   return (
     <div className="step-clinica__source-panel" role="complementary" aria-label="Fonte documento">
       {refs.map((r, i) => (
-        <p key={i} className="step-clinica__source-ref">
+        <p key={`${r.fileId ?? r.fileName ?? 'doc'}-${r.pageFrom ?? i}`} className="step-clinica__source-ref">
           {r.fileName
             ? `Fonte: ${r.fileName}${r.pageFrom != null ? ` — pagina ${r.pageFrom}` : ''}${r.pageTo != null && r.pageTo !== r.pageFrom ? `–${r.pageTo}` : ''}`
             : 'Fonte: documento importato'}
@@ -93,9 +93,10 @@ export function StepClinica({ data, onUpdateSection, operatoreNome, importedFiel
                   <button
                     type="button"
                     className="step-clinica__compare-btn"
+                    aria-expanded={!!showSource[sectionKey]}
                     onClick={() => setShowSource((p) => ({ ...p, [sectionKey]: !p[sectionKey] }))}
                   >
-                    {showSource[sectionKey] ? 'Nascondi fonte' : 'Confronta con la fonte'}
+                    Confronta con la fonte
                   </button>
                 )}
               </div>

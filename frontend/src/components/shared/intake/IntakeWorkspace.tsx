@@ -67,7 +67,11 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
   // Debounce timer ref for patchDraft calls
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Create draft on first open (or load an existing import draft)
+  // Create draft on first open (or load an existing import draft).
+  // Guard conditions ensure we fetch exactly once per (open, draft target):
+  //  - manual: fetch only when no draftId yet
+  //  - import: fetch only when the loaded draftId differs from the requested importDraftId
+  //    (so reopening for a *different* import draft re-loads the correct one).
   useEffect(() => {
     if (!open) {
       setStep(importDraftId ? 3 : 1);
@@ -80,12 +84,12 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       setDuplicateWarn(false);
       return;
     }
-    if (draftId) return;
-    setLoading(true);
-    setError(null);
     if (importDraftId) {
       // Import path: load the already-created draft and seed data from it.
-      getDraft(importDraftId, op)
+      if (draftId === importDraftId) return; // already loaded this draft
+      setLoading(true);
+      setError(null);
+      getDraft(importDraftId, { operatorId, operatorRole })
         .then((d) => {
           setDraftId(d.id);
           if (d.data && typeof d.data === 'object') {
@@ -96,8 +100,11 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
         .catch(() => setError('Impossibile caricare la bozza di importazione. Riprovare.'))
         .finally(() => setLoading(false));
     } else {
-      // Manual path: create a fresh draft.
-      createDraft('manual', op)
+      // Manual path: create a fresh draft (only once).
+      if (draftId) return;
+      setLoading(true);
+      setError(null);
+      createDraft('manual', { operatorId, operatorRole })
         .then((d) => {
           setDraftId(d.id);
           // Seed local data from the draft if the server returned any
@@ -108,8 +115,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
         .catch(() => setError('Impossibile aprire la bozza. Riprovare.'))
         .finally(() => setLoading(false));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, draftId]);
+  }, [open, draftId, importDraftId, operatorId, operatorRole]);
 
   if (!open) return null;
 
