@@ -76,6 +76,34 @@ export async function patchDraft(
   return res.json() as Promise<DraftResponse>;
 }
 
+export async function getDraft(id: string, op?: OperatorHeaders): Promise<DraftResponse> {
+  const res = await fetch(`${API_URL}/intake/drafts/${id}`, {
+    method: 'GET',
+    headers: buildHeaders(op),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error((err as { error?: string }).error ?? `getDraft failed: ${res.status}`);
+  }
+  return res.json() as Promise<DraftResponse>;
+}
+
+export async function createDraftFromImport(
+  importJobId: string,
+  op?: OperatorHeaders,
+): Promise<DraftResponse> {
+  const res = await fetch(`${API_URL}/intake/drafts/from-import`, {
+    method: 'POST',
+    headers: buildHeaders(op),
+    body: JSON.stringify({ importJobId }),
+  });
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error((e as { error?: string }).error ?? `import draft failed: ${res.status}`);
+  }
+  return res.json() as Promise<DraftResponse>;
+}
+
 export async function confirmDraft(
   id: string,
   payload: object,

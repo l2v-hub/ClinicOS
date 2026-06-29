@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { createDraft, patchDraft, confirmDraft } from './intakeDraftApi';
+import { createDraft, getDraft, patchDraft, confirmDraft } from './intakeDraftApi';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
@@ -42,11 +42,17 @@ interface IntakeWorkspaceProps {
   operatoreNome?: string;
   operatorId?: string;
   operatorRole?: string;
+  /** When set, skip createDraft and load this existing import draft prefilled at step 3. */
+  importDraftId?: string;
+  /** When provided, show a "Torna ai documenti" button in the footer. */
+  onBackToDocuments?: () => void;
 }
 
-export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, operatorId, operatorRole }: IntakeWorkspaceProps) {
+export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, operatorId, operatorRole, importDraftId, onBackToDocuments }: IntakeWorkspaceProps) {
   const op = { operatorId, operatorRole };
-  const [step, setStep] = useState(1);
+  // Import flow starts at step 3 (Clinica) — anagrafica is already prefilled.
+  const initialStep = importDraftId ? 3 : 1;
+  const [step, setStep] = useState(initialStep);
   const [draftId, setDraftId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,10 +67,10 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
   // Debounce timer ref for patchDraft calls
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Create draft on first open
+  // Create draft on first open (or load an existing import draft)
   useEffect(() => {
     if (!open) {
-      setStep(1);
+      setStep(importDraftId ? 3 : 1);
       setDraftId(null);
       setError(null);
       setData({});
@@ -77,16 +83,31 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
     if (draftId) return;
     setLoading(true);
     setError(null);
-    createDraft('manual', op)
-      .then((d) => {
-        setDraftId(d.id);
-        // Seed local data from the draft if the server returned any
-        if (d.data && typeof d.data === 'object') {
-          setData(d.data as DraftData);
-        }
-      })
-      .catch(() => setError('Impossibile aprire la bozza. Riprovare.'))
-      .finally(() => setLoading(false));
+    if (importDraftId) {
+      // Import path: load the already-created draft and seed data from it.
+      getDraft(importDraftId, op)
+        .then((d) => {
+          setDraftId(d.id);
+          if (d.data && typeof d.data === 'object') {
+            setData(d.data as DraftData);
+          }
+          setStep(3);
+        })
+        .catch(() => setError('Impossibile caricare la bozza di importazione. Riprovare.'))
+        .finally(() => setLoading(false));
+    } else {
+      // Manual path: create a fresh draft.
+      createDraft('manual', op)
+        .then((d) => {
+          setDraftId(d.id);
+          // Seed local data from the draft if the server returned any
+          if (d.data && typeof d.data === 'object') {
+            setData(d.data as DraftData);
+          }
+        })
+        .catch(() => setError('Impossibile aprire la bozza. Riprovare.'))
+        .finally(() => setLoading(false));
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, draftId]);
 
@@ -252,6 +273,8 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
                     data={data}
                     onUpdateSection={updateSection}
                     operatoreNome={operatoreNome}
+                    importedFields={(data._importedFields as string[] | undefined) ?? []}
+                    narrative={data._narrative as Record<string, unknown> | undefined}
                   />
                 </div>
               )}
@@ -294,7 +317,11 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
         </div>
 
         <footer className="import-modal__foot">
-          <button className="btn-ghost" onClick={onClose}>Annulla</button>
+          {onBackToDocuments ? (
+            <button className="btn-ghost" onClick={onBackToDocuments}>← Torna ai documenti</button>
+          ) : (
+            <button className="btn-ghost" onClick={onClose}>Annulla</button>
+          )}
           <button
             className="btn-secondary"
             onClick={handleBack}
