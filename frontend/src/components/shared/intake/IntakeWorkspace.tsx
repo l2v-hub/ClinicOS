@@ -5,6 +5,8 @@ import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
 import { StepClinica } from './StepClinica';
 import { StepVerifica } from './StepVerifica';
+import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
+import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
 
 const STEPS = [
   'Anagrafica',
@@ -33,6 +35,43 @@ interface DraftData {
   anagrafica?: AnagraficaData;
   ingresso?: IngressoData;
   [key: string]: unknown;
+}
+
+// ── Therapy mapper ─────────────────────────────────────────────────────────────
+// Mirrors TerapiaFarmacologicaTab.formToPayload minus patientId.
+// Produces a TherapyCreateInput object suitable for the confirmDraft payload.
+function therapyFormToInput(f: TherapyFormValue, operatoreNome?: string): Record<string, unknown> {
+  const allowed = FRACTION_PRESETS
+    .filter(p => f.allowedFractions.includes(p.key))
+    .map(p => p.key);
+  const schedules = f.tipo === 'periodica'
+    ? f.schedules
+        .filter(s => /^\d{1,2}:\d{2}$/.test(s.time))
+        .map(s => ({
+          time: s.time,
+          quantityNumerator: s.quantityNumerator,
+          quantityDenominator: s.quantityDenominator,
+          administrationUnit: s.administrationUnit,
+        }))
+    : [];
+  return {
+    farmacoNome: f.farmacoNome,
+    dataInizio: f.dataInizio,
+    ...(f.tipo === 'periodica' && f.dataFine ? { dataFine: f.dataFine } : {}),
+    viaSomministrazione: f.viaSomministrazione,
+    tipo: f.tipo,
+    stato: f.stato,
+    ...(f.commercialStrengthValue.trim() ? { commercialStrengthValue: Number(f.commercialStrengthValue) } : {}),
+    ...(f.commercialStrengthUnit ? { commercialStrengthUnit: f.commercialStrengthUnit } : {}),
+    ...(f.pharmaceuticalForm ? { pharmaceuticalForm: f.pharmaceuticalForm } : {}),
+    allowedFractions: allowed.length ? allowed.join(',') : '1',
+    schedules,
+    ...(f.prescrittore ? { prescrittore: f.prescrittore } : {}),
+    ...(operatoreNome ? { operatoreInseritore: operatoreNome } : {}),
+    ...(f.note ? { note: f.note } : {}),
+    ...(f.tipo === 'una_tantum' && f.dataSomministrazione ? { dataSomministrazione: f.dataSomministrazione } : {}),
+    ...(f.tipo === 'una_tantum' && f.orarioSomministrazione ? { orarioSomministrazione: f.orarioSomministrazione } : {}),
+  };
 }
 
 interface IntakeWorkspaceProps {
@@ -175,6 +214,16 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
     if (data.allergie !== undefined) cartella.allergie = data.allergie;
     if (data.diagnosi !== undefined) cartella.diagnosi = data.diagnosi;
     if (data.anamnesi !== undefined) cartella.anamnesi = data.anamnesi;
+    // Vitals: data.parametri is an OBJECT { parametriMensili?, parametriVitali? } (Task 5 shape)
+    if (data.parametri != null) {
+      const parametriObj = data.parametri as { parametriMensili?: unknown[]; parametriVitali?: unknown[] };
+      cartella.parametriMensili = parametriObj.parametriMensili ?? [];
+      cartella.parametriVitali = parametriObj.parametriVitali ?? [];
+    }
+    // Pain assessments
+    if (Array.isArray(data.dolore) && data.dolore.length) {
+      cartella.valutazioniNRS = data.dolore;
+    }
     // Carry imported therapy text (TherapyEditor intake mode is still a placeholder)
     // so it is persisted instead of dropped on confirm.
     if (typeof data._terapiaText === 'string' && data._terapiaText.trim()) {
@@ -186,6 +235,10 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       cartella,
       confirmDuplicate: force,
       ...(allergyConflictOverride ? { confirmAllergyConflict: true } : {}),
+      // Structured therapy items entered during intake → create PatientTherapy rows
+      ...(Array.isArray(data.terapia) && (data.terapia as TherapyFormValue[]).length > 0
+        ? { therapies: (data.terapia as TherapyFormValue[]).map(f => therapyFormToInput(f, operatoreNome)) }
+        : {}),
     };
 
     try {
