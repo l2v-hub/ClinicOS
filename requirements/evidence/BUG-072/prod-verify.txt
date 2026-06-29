@@ -1,0 +1,15 @@
+BUG-072 / EPIC #120 F5 — import documentale -> stessa bozza PatientIntakeDraft
+Verifica produzione 2026-06-29T02:20:04Z
+
+Commit:      66f7262 (main)
+Backend:     Railway clinicos-backend-production-df88 — /health = {"status":"ok"}
+Migration:   20260629040947_unique_intake_draft_import_job  (applied via Railway migrate deploy)
+Nuova route: POST /intake/drafts/from-import -> 401 senza header operatore (operator-gated, live; non 404)
+Frontend:    Vercel clinicos-eosin.vercel.app — bundle /assets/index-C4I6taTB.js (build tsc autoritativo OK)
+Test:        backend suite 175/175 verde (incl. seed-draft-from-import + confirm-draft-guards)
+Type-check:  backend tsc --noEmit clean ; frontend tsc -b 0 errori
+
+Sicurezza clinica verificata:
+- seed allergie solo con allergyStatus present/conflicting (no falso record da "nessuna allergia nota")
+- confirmDraft applica gli stessi blocchi di confirmJob: allergie contrastanti (REQ-026) + perdita sezioni (BUG-051), override esplicito via "Conferma comunque"
+- seed idempotente per job (findFirst + @unique importJobId + catch P2002): nessun secondo draft/paziente
