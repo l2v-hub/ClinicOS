@@ -4,16 +4,15 @@ import { ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
 import {
-  FRACTION_PRESETS, ADMIN_UNITS, DIVISIBLE_UNITS, PHARMA_FORMS, STRENGTH_UNITS,
-  formatFraction, parseQuantity, computeEquivalent, scheduleLabel, parseAllowedFractions,
+  FRACTION_PRESETS, ADMIN_UNITS,
+  formatFraction, computeEquivalent, scheduleLabel, parseAllowedFractions,
   type ScheduleRow,
 } from './therapyDose';
+import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-
-const VIA_OPTIONS = ['orale', 'IM', 'SC', 'IV', 'sublinguale', 'topico', 'al bisogno'];
 
 const STATO_BADGE: Record<string, string> = {
   attiva: 'badge--green', sospesa: 'badge--amber', conclusa: 'badge--gray',
@@ -51,38 +50,12 @@ interface Props {
 
 // ── Form helpers ──────────────────────────────────────────────────────────────
 
-interface TherapyForm {
-  farmacoNome: string;
-  pharmaceuticalForm: string;
-  commercialStrengthValue: string;
-  commercialStrengthUnit: string;
-  allowedFractions: string[];           // enabled fraction preset keys, e.g. ['1','1/2','1/4']
-  viaSomministrazione: string;
-  tipo: 'periodica' | 'una_tantum' | 'al_bisogno';
-  stato: 'attiva' | 'sospesa' | 'conclusa';
-  dataInizio: string;
-  dataFine: string;
-  schedules: ScheduleRow[];             // per-time exact-fraction quantities
-  prescrittore: string;
-  note: string;
-  dataSomministrazione: string;
-  orarioSomministrazione: string;
-}
+// TherapyForm is an alias for the shared TherapyFormValue — no duplication.
+type TherapyForm = TherapyFormValue;
 
 function todayStr(): string { return new Date().toISOString().slice(0, 10); }
 
-function emptyForm(): TherapyForm {
-  return {
-    farmacoNome: '', pharmaceuticalForm: 'compressa',
-    commercialStrengthValue: '', commercialStrengthUnit: 'mg',
-    allowedFractions: ['1'], // not divisible by default — operator must enable fractions
-    viaSomministrazione: 'orale',
-    tipo: 'periodica', stato: 'attiva', dataInizio: todayStr(), dataFine: '',
-    schedules: [{ time: '08:00', quantityNumerator: 1, quantityDenominator: 1, administrationUnit: 'compressa' }],
-    prescrittore: '', note: '',
-    dataSomministrazione: todayStr(), orarioSomministrazione: '',
-  };
-}
+const emptyForm = emptyTherapyForm;
 
 // Build editable schedule rows from a loaded therapy: prefer structured schedules,
 // else synthesize from legacy orarioSpecifico, else from fascia booleans.
@@ -360,34 +333,6 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     }
   };
 
-  const updateForm = (patch: Partial<TherapyForm>) => setForm(prev => ({ ...prev, ...patch }));
-
-  // ── Schedule editor helpers (REQ-093) ──────────────────────────────────────────
-  const updateSchedule = (idx: number, patch: Partial<ScheduleRow>) =>
-    setForm(prev => ({ ...prev, schedules: prev.schedules.map((s, i) => i === idx ? { ...s, ...patch } : s) }));
-
-  const addSchedule = () =>
-    setForm(prev => ({
-      ...prev,
-      schedules: [...prev.schedules, {
-        time: '18:00', quantityNumerator: 1, quantityDenominator: 1,
-        administrationUnit: prev.pharmaceuticalForm && ADMIN_UNITS.includes(prev.pharmaceuticalForm) ? prev.pharmaceuticalForm : 'compressa',
-      }],
-    }));
-
-  const removeSchedule = (idx: number) =>
-    setForm(prev => ({ ...prev, schedules: prev.schedules.filter((_, i) => i !== idx) }));
-
-  const toggleAllowedFraction = (key: string) =>
-    setForm(prev => {
-      if (key === '1') return prev; // whole dose always allowed
-      const has = prev.allowedFractions.includes(key);
-      return { ...prev, allowedFractions: has ? prev.allowedFractions.filter(k => k !== key) : [...prev.allowedFractions, key] };
-    });
-
-  const [customQty, setCustomQty] = useState<Record<number, string>>({});
-  const strengthNum = form.commercialStrengthValue.trim() ? Number(form.commercialStrengthValue) : null;
-
   // ── Derived data ──────────────────────────────────────────────────────────────
 
   const attive = therapies.filter(t => t.stato === 'attiva');
@@ -658,175 +603,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         <div className="cts__body--padded">
           {showForm ? (
             <div className="terapia-sched-form">
-              <div className="form-group">
-                <label>Prodotto medicinale *</label>
-                <input className="form-input" value={form.farmacoNome} placeholder="es. Kanrenol"
-                  onChange={e => updateForm({ farmacoNome: e.target.value })} />
-              </div>
-              <div className="form-group">
-                <label>Forma farmaceutica</label>
-                <select className="form-select" value={form.pharmaceuticalForm}
-                  onChange={e => {
-                    const pf = e.target.value;
-                    updateForm({
-                      pharmaceuticalForm: pf,
-                      // keep schedule units in sync when they still match a form unit
-                      schedules: form.schedules.map(s => ADMIN_UNITS.includes(s.administrationUnit) && PHARMA_FORMS.includes(s.administrationUnit) ? { ...s, administrationUnit: ADMIN_UNITS.includes(pf) ? pf : s.administrationUnit } : s),
-                    });
-                  }}>
-                  {PHARMA_FORMS.map(v => <option key={v} value={v}>{v}</option>)}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Dosaggio commerciale</label>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  <input className="form-input" type="number" min="0" step="any" style={{ flex: 1 }}
-                    value={form.commercialStrengthValue} placeholder="es. 100"
-                    onChange={e => updateForm({ commercialStrengthValue: e.target.value })} />
-                  <select className="form-select" style={{ width: 90 }} value={form.commercialStrengthUnit}
-                    onChange={e => updateForm({ commercialStrengthUnit: e.target.value })}>
-                    {STRENGTH_UNITS.map(v => <option key={v} value={v}>{v}</option>)}
-                  </select>
-                </div>
-              </div>
-              <div className="form-group form-group--full">
-                <label>Frazioni consentite <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>(la divisibilità va abilitata dall'operatore)</span></label>
-                <div className="fraction-allow">
-                  {FRACTION_PRESETS.map(p => {
-                    const active = form.allowedFractions.includes(p.key);
-                    const isWhole = p.key === '1';
-                    return (
-                      <button key={p.key} type="button"
-                        className={`frac-toggle${active ? ' frac-toggle--on' : ''}${isWhole ? ' frac-toggle--locked' : ''}`}
-                        disabled={isWhole}
-                        title={isWhole ? 'Dose intera sempre disponibile' : `${active ? 'Disabilita' : 'Abilita'} ${p.key}`}
-                        onClick={() => toggleAllowedFraction(p.key)}>
-                        {p.label} <span className="frac-toggle__sub">{p.key}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Via somministrazione</label>
-                <select className="form-select" value={form.viaSomministrazione}
-                  onChange={e => updateForm({ viaSomministrazione: e.target.value })}>
-                  {VIA_OPTIONS.map(v => <option key={v} value={v}>{v}</option>)}
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Stato</label>
-                <select className="form-select" value={form.stato}
-                  onChange={e => updateForm({ stato: e.target.value as TherapyForm['stato'] })}>
-                  <option value="attiva">Attiva</option>
-                  <option value="sospesa">Sospesa</option>
-                  <option value="conclusa">Conclusa</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Tipo terapia</label>
-                <div className="tipo-radio">
-                  <label><input type="radio" name="tf-tipo" value="periodica" checked={form.tipo === 'periodica'} onChange={() => updateForm({ tipo: 'periodica' })} /> Periodica</label>
-                  <label><input type="radio" name="tf-tipo" value="una_tantum" checked={form.tipo === 'una_tantum'} onChange={() => updateForm({ tipo: 'una_tantum' })} /> Una tantum</label>
-                  <label><input type="radio" name="tf-tipo" value="al_bisogno" checked={form.tipo === 'al_bisogno'} onChange={() => updateForm({ tipo: 'al_bisogno' })} /> Al bisogno</label>
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Data inizio *</label>
-                <input className="form-input" type="date" value={form.dataInizio}
-                  onChange={e => updateForm({ dataInizio: e.target.value })} />
-              </div>
-              {form.tipo === 'periodica' && (
-                <div className="form-group">
-                  <label>Data fine</label>
-                  <input className="form-input" type="date" value={form.dataFine}
-                    onChange={e => updateForm({ dataFine: e.target.value })} />
-                </div>
-              )}
-              {form.tipo === 'una_tantum' && (
-                <>
-                  <div className="form-group">
-                    <label>Data somministrazione</label>
-                    <input className="form-input" type="date" value={form.dataSomministrazione}
-                      onChange={e => updateForm({ dataSomministrazione: e.target.value })} />
-                  </div>
-                  <div className="form-group">
-                    <label>Orario</label>
-                    <input className="form-input" type="time" value={form.orarioSomministrazione}
-                      onChange={e => updateForm({ orarioSomministrazione: e.target.value })} />
-                  </div>
-                </>
-              )}
-              {form.tipo === 'periodica' && (
-                <div className="form-group form-group--full">
-                  <label>Orari e quantità per somministrazione</label>
-                  <div className="sched-editor">
-                    {form.schedules.map((s, i) => {
-                      const divisible = DIVISIBLE_UNITS.has(s.administrationUnit);
-                      const eq = computeEquivalent(s.quantityNumerator, s.quantityDenominator, strengthNum, form.commercialStrengthUnit);
-                      const presetActive = (num: number, den: number) =>
-                        s.quantityNumerator === num && s.quantityDenominator === den;
-                      return (
-                        <div key={i} className="sched-row">
-                          <div className="sched-row__head">
-                            <input className="form-input sched-row__time" type="time" value={s.time}
-                              onChange={e => updateSchedule(i, { time: e.target.value })} />
-                            <select className="form-select sched-row__unit" value={s.administrationUnit}
-                              onChange={e => updateSchedule(i, { administrationUnit: e.target.value })}>
-                              {ADMIN_UNITS.map(u => <option key={u} value={u}>{u}</option>)}
-                            </select>
-                            <button type="button" className="btn-secondary btn-sm" title="Rimuovi orario"
-                              onClick={() => removeSchedule(i)}>✕</button>
-                          </div>
-                          <div className="sched-row__qty">
-                            {divisible ? (
-                              <>
-                                {FRACTION_PRESETS.filter(p => form.allowedFractions.includes(p.key)).map(p => (
-                                  <button key={p.key} type="button"
-                                    className={`qty-chip${presetActive(p.num, p.den) ? ' qty-chip--on' : ''}`}
-                                    onClick={() => { updateSchedule(i, { quantityNumerator: p.num, quantityDenominator: p.den }); setCustomQty(c => ({ ...c, [i]: '' })); }}>
-                                    {p.label}
-                                  </button>
-                                ))}
-                                <input className="form-input qty-chip__other" placeholder="Altro (es. 1/3, 0.5)"
-                                  value={customQty[i] ?? ''}
-                                  onChange={e => setCustomQty(c => ({ ...c, [i]: e.target.value }))}
-                                  onBlur={e => {
-                                    const parsed = parseQuantity(e.target.value);
-                                    if (parsed) updateSchedule(i, { quantityNumerator: parsed.num, quantityDenominator: parsed.den });
-                                  }} />
-                              </>
-                            ) : (
-                              <input className="form-input qty-chip__other" type="number" min="0" step="any"
-                                placeholder="Quantità"
-                                value={s.quantityDenominator === 1 ? String(s.quantityNumerator) : (s.quantityNumerator / s.quantityDenominator)}
-                                onChange={e => {
-                                  const parsed = parseQuantity(e.target.value);
-                                  if (parsed) updateSchedule(i, { quantityNumerator: parsed.num, quantityDenominator: parsed.den });
-                                }} />
-                            )}
-                          </div>
-                          <div className="sched-row__resolved">
-                            {s.time} — {formatFraction(s.quantityNumerator, s.quantityDenominator)} {s.administrationUnit}
-                            {eq && <> — <strong>equivalente a {eq}</strong></>}
-                          </div>
-                        </div>
-                      );
-                    })}
-                    <button type="button" className="btn-secondary btn-sm" onClick={addSchedule}>+ Aggiungi orario</button>
-                  </div>
-                </div>
-              )}
-              <div className="form-group">
-                <label>Prescrittore</label>
-                <input className="form-input" value={form.prescrittore} placeholder="Dr. ..."
-                  onChange={e => updateForm({ prescrittore: e.target.value })} />
-              </div>
-              <div className="form-group form-group--full">
-                <label>Note</label>
-                <textarea className="form-input" rows={2} value={form.note}
-                  onChange={e => updateForm({ note: e.target.value })} />
-              </div>
+              <TherapyFormFields value={form} onChange={setForm} operatoreNome={operatoreNome} />
               <div className="form-actions">
                 <button className="btn-secondary btn-sm" onClick={closeForm}>Annulla</button>
                 <button className="btn-primary btn-sm" disabled={saving} onClick={handleSave}>
