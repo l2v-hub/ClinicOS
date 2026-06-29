@@ -65,11 +65,13 @@ function TherapyIntakeEditor({
   }
 
   function handleRemove(idx: number) {
-    onChange(items.filter((_, i) => i !== idx));
     if (editingIndex === idx) {
       setEditingIndex(null);
       setDraftItem(emptyTherapyForm());
+    } else if (editingIndex !== null && idx < editingIndex) {
+      setEditingIndex(editingIndex - 1);
     }
+    onChange(items.filter((_, i) => i !== idx));
   }
 
   function handleCancelEdit() {
@@ -105,12 +107,14 @@ function TherapyIntakeEditor({
 
       {items.length > 0 && (
         <div className="ec-modal-list" style={{ marginTop: 16 }}>
-          {items.map((item, idx) => (
+          {items.map((item, idx) => {
+            const ds = doseSummary(item);
+            return (
             <div key={idx} className="ec-modal-item">
               <div className="ec-modal-item__main">
                 <span className="ec-modal-item__title">{item.farmacoNome}</span>
-                {doseSummary(item) && (
-                  <span className="ec-modal-item__sub">{doseSummary(item)}</span>
+                {ds && (
+                  <span className="ec-modal-item__sub">{ds}</span>
                 )}
                 <span className="badge badge--gray">{item.stato}</span>
               </div>
@@ -132,7 +136,8 @@ function TherapyIntakeEditor({
                 </button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
