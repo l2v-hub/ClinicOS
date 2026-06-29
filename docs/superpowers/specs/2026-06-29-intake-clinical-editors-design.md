@@ -48,8 +48,8 @@ The operator fills therapy, vitals, and pain during intake. On "Crea paziente" t
 ## Data flow
 
 ```
-intake editors → draft.data.terapia: TherapyDraftItem[]
-               → draft.data.parametri: ParametriMensili[]
+intake editors → draft.data.terapia: TherapyFormValue[]
+               → draft.data.parametri: { parametriMensili: ParametriMensili[]; parametriVitali: ParametriVitale[] }   (object slice — ParametriTab has two mutation paths; the intake editor forwards the full patch so quick-vital adds are not dropped)
                → draft.data.dolore: ScalaNRSValutazione[]
 handleConfirm  → cartella.parametriMensili + cartella.valutazioniNRS
                → payload.therapies = data.terapia mapped to TherapyCreateInput[]
