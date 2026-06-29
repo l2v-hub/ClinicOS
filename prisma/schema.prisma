@@ -416,7 +416,7 @@ model PatientIntakeDraft {
   status             String   @default("draft") // draft | confirmed | abandoned
   source             String   @default("manual") // manual | import
   data               Json     @default("{}")     // accumulated sections (anagrafica + cartella shape)
-  importJobId        String?                      // link to extraction job when source = import
+  importJobId        String?  @unique             // link to extraction job when source = import (one draft per job)
   createdById        String?                      // operator id (audit)
   confirmedPatientId String?                      // set on successful confirm
   createdAt          DateTime @default(now())

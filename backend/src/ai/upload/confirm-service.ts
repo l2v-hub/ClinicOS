@@ -151,6 +151,38 @@ export async function confirmDraft(draftId: string, payload: ConfirmPayload): Pr
     throw new AiExtractionError('config', 'Data di nascita non valida');
   }
 
+  // Narrative from draft data if present (opt-in; skipped for manual drafts without narrative).
+  const narrative = (draft.data as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
+
+  // ── Clinical-safety guards (parity with confirmJob) ──────────────────────────
+  // Import-seeded drafts carry a linked importJob whose resultData holds the
+  // _sections pass + lossless raw text. Re-run the SAME two hard blocks the old
+  // import path enforces BEFORE the duplicate check / transaction. Manual drafts
+  // (no importJobId) have no narrative/sections and skip these — unchanged.
+  if (draft.importJobId) {
+    const job = await prisma.importJob.findUnique({ where: { id: draft.importJobId } });
+    const resultData = job?.resultData as
+      | { _sections?: SectionsResult; cleanedRawText?: string; rawText?: string }
+      | null;
+
+    // REQ-026: contradictory allergy reading blocks confirmation until operator override.
+    const sections = resultData?._sections;
+    if (isConfirmBlocked(sections) && !payload.confirmAllergyConflict) {
+      await audit(draft.importJobId, 'allergy_conflict_blocked', undefined, 'allergie conflicting');
+      throw new AiExtractionError('config', 'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.');
+    }
+
+    // BUG-051: clinical text detected in source but lost from the narrative blocks confirm.
+    if (narrative) {
+      const sourceText = resultData?.cleanedRawText?.trim() ? resultData.cleanedRawText : (resultData?.rawText ?? '');
+      const lost = detectSectionLoss(sourceText, narrative);
+      if (lost.length > 0) {
+        await audit(draft.importJobId, 'narrative_content_lost_blocked', undefined, lost.join(','));
+        throw new AiExtractionError('config', `Importazione bloccata: testo clinico rilevato ma non importato per: ${lost.join(', ')}. Riprocessare i documenti.`);
+      }
+    }
+  }
+
   // Duplicate detection (same as confirmJob).
   const dupes = await prisma.patient.findMany({
     where: {
@@ -173,9 +205,6 @@ export async function confirmDraft(draftId: string, payload: ConfirmPayload): Pr
     _importedFromDraft: draftId,
     ...(draft.importJobId ? { _importedFromJob: draft.importJobId } : {}),
   };
-
-  // Narrative from draft data if present (opt-in; skipped for manual drafts without narrative).
-  const narrative = (draft.data as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
 
   try {
     const created = await prisma.$transaction(async (tx) => {

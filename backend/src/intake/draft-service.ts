@@ -173,13 +173,24 @@ export async function seedDraftFromImport(
 
   const data = buildImportDraftData(narrative, resultData?._sections ?? null);
 
-  return prisma.patientIntakeDraft.create({
-    data: {
-      status: 'draft',
-      source: 'import',
-      importJobId: jobId,
-      createdById: opts.createdById,
-      data: data as Parameters<typeof prisma.patientIntakeDraft.create>[0]['data']['data'],
-    },
-  });
+  try {
+    return await prisma.patientIntakeDraft.create({
+      data: {
+        status: 'draft',
+        source: 'import',
+        importJobId: jobId,
+        createdById: opts.createdById,
+        data: data as Parameters<typeof prisma.patientIntakeDraft.create>[0]['data']['data'],
+      },
+    });
+  } catch (err) {
+    // Concurrency guard: a parallel POST /from-import for the same job may have created
+    // the draft between our findFirst and this create. The @unique on importJobId makes
+    // that a P2002 — re-read and return the existing draft instead of failing.
+    if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2002') {
+      const raced = await prisma.patientIntakeDraft.findFirst({ where: { importJobId: jobId } });
+      if (raced) return raced;
+    }
+    throw err;
+  }
 }

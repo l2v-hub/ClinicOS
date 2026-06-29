@@ -63,6 +63,9 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [duplicateWarn, setDuplicateWarn] = useState(false);
+  // Set when confirm is blocked by a contradictory allergy reading (REQ-026).
+  // Shows a "Conferma comunque" action that re-confirms with confirmAllergyConflict.
+  const [allergyConflictWarn, setAllergyConflictWarn] = useState(false);
 
   // Debounce timer ref for patchDraft calls
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -82,6 +85,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       setSubmitting(false);
       setSubmitError(null);
       setDuplicateWarn(false);
+      setAllergyConflictWarn(false);
       return;
     }
     if (importDraftId) {
@@ -142,11 +146,12 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
     return !!(a?.firstName?.trim() && a?.lastName?.trim() && a?.dateOfBirth);
   }
 
-  async function handleConfirm(force = false) {
+  async function handleConfirm(force = false, allergyConflictOverride = false) {
     if (!draftId) return;
     setSubmitting(true);
     setSubmitError(null);
     setDuplicateWarn(false);
+    if (!allergyConflictOverride) setAllergyConflictWarn(false);
 
     const a = data.anagrafica ?? {};
     const patient = {
@@ -170,8 +175,18 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
     if (data.allergie !== undefined) cartella.allergie = data.allergie;
     if (data.diagnosi !== undefined) cartella.diagnosi = data.diagnosi;
     if (data.anamnesi !== undefined) cartella.anamnesi = data.anamnesi;
+    // Carry imported therapy text (TherapyEditor intake mode is still a placeholder)
+    // so it is persisted instead of dropped on confirm.
+    if (typeof data._terapiaText === 'string' && data._terapiaText.trim()) {
+      cartella.terapiaImportText = data._terapiaText;
+    }
 
-    const payload = { patient, cartella, confirmDuplicate: force };
+    const payload = {
+      patient,
+      cartella,
+      confirmDuplicate: force,
+      ...(allergyConflictOverride ? { confirmAllergyConflict: true } : {}),
+    };
 
     try {
       const res = await confirmDraft(draftId, payload, op);
@@ -188,6 +203,10 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       const msg = err instanceof Error ? err.message : String(err);
       if (msg.toLowerCase().includes('duplicate') || msg.includes('409')) {
         setDuplicateWarn(true);
+      } else if (msg.includes('allergie contrastanti')) {
+        // REQ-026: confirm blocked by contradictory allergy reading. Offer an explicit override.
+        setAllergyConflictWarn(true);
+        setSubmitError(msg);
       } else {
         setSubmitError(msg || 'Errore durante la creazione del paziente.');
       }
@@ -310,10 +329,24 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
                       </button>
                     </div>
                   )}
+                  {allergyConflictWarn && (
+                    <div className="import-modal__warning" role="alert">
+                      <strong>Allergie contrastanti rilevate.</strong> {submitError}
+                      <br />
+                      <button
+                        className="btn-secondary"
+                        onClick={() => void handleConfirm(false, true)}
+                        disabled={submitting}
+                        style={{ marginTop: '0.5rem' }}
+                      >
+                        Conferma comunque
+                      </button>
+                    </div>
+                  )}
                   <StepVerifica
                     data={data}
                     busy={submitting}
-                    error={submitError}
+                    error={allergyConflictWarn ? null : submitError}
                     onConfirm={() => void handleConfirm(false)}
                   />
                 </div>

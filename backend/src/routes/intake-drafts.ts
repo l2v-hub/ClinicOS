@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { createDraft, getDraft, patchDraft, listDrafts, seedDraftFromImport } from '../intake/draft-service.js';
 import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
+import { AiExtractionError } from '../ai/types.js';
 
 // ── Intake Drafts Router — mounted at /intake/drafts (F3 EPIC #120 / #125) ───
 // Operator-gated CRUD + autosave endpoints for PatientIntakeDraft.
@@ -11,6 +12,11 @@ const intakeDraftsRouter = Router();
 intakeDraftsRouter.use(requireOperator);
 
 function handleError(res: import('express').Response, err: unknown) {
+  // Clinical-safety / validation blocks from confirmDraft (allergy conflict, section loss,
+  // invalid input) carry a specific Italian message the UI must surface — map like ai-jobs.
+  if (err instanceof AiExtractionError) {
+    return res.status(err.kind === 'config' ? 400 : 503).json({ error: err.message, kind: err.kind });
+  }
   // Prisma "record not found" (e.g. patchDraft on a missing/confirmed draft) → 404, not 500.
   if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2025') {
     return res.status(404).json({ error: 'Bozza non trovata' });
