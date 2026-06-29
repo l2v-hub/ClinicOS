@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
-import { createDraft, getDraft, patchDraft, listDrafts } from '../intake/draft-service.js';
+import { createDraft, getDraft, patchDraft, listDrafts, seedDraftFromImport } from '../intake/draft-service.js';
 import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
 
 // ── Intake Drafts Router — mounted at /intake/drafts (F3 EPIC #120 / #125) ───
@@ -18,6 +18,28 @@ function handleError(res: import('express').Response, err: unknown) {
   console.error('intake-drafts error:', err instanceof Error ? err.message : err);
   return res.status(500).json({ error: 'Errore interno bozza intake' });
 }
+
+// POST /intake/drafts/from-import — seed a draft from a completed AI extraction job.
+// Body: { importJobId: string }
+// Idempotent: if a draft already exists for the jobId, returns it (no duplicate).
+// Returns 201 { id, data } on create or idempotent return.
+intakeDraftsRouter.post('/from-import', async (req, res) => {
+  try {
+    const op = (req as AuthedRequest).operator;
+    const { importJobId } = req.body ?? {};
+    if (typeof importJobId !== 'string' || !importJobId.trim()) {
+      return res.status(400).json({ error: 'importJobId è obbligatorio' });
+    }
+    const draft = await seedDraftFromImport(importJobId.trim(), { createdById: op?.id });
+    return res.status(201).json({ id: draft.id, data: draft.data });
+  } catch (err) {
+    // Map "job not found" (Prisma P2025) → 404, missing _narrative → 422.
+    if (err instanceof Error && err.message.includes('_narrative')) {
+      return res.status(422).json({ error: err.message });
+    }
+    return handleError(res, err);
+  }
+});
 
 // POST /intake/drafts — create a new draft
 intakeDraftsRouter.post('/', async (req, res) => {
