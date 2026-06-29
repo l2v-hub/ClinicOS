@@ -12,6 +12,7 @@ import { isConfirmBlocked, detectSectionLoss, type SectionsResult } from '../sec
 import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sections/index.js';
 import { persistImportDocuments } from './patient-documents.js';
 import { getDraft } from '../../intake/draft-service.js';
+import { createTherapyInTx, type TherapyCreateInput } from '../../therapies/therapy-create.js';
 
 export interface ConfirmPatient {
   firstName: string;
@@ -38,6 +39,8 @@ export interface ConfirmPayload {
   /** REQ-021: 'existing' updates an existing patient's cartella instead of creating. */
   mode?: 'new' | 'existing';
   patientId?: string;
+  /** Therapies to persist transactionally alongside the new patient (intake confirm path). */
+  therapies?: TherapyCreateInput[];
 }
 
 export interface DuplicateInfo {
@@ -93,11 +96,13 @@ interface MaterializeArgs {
   narrative: DischargeNarrativeDraft | null;
   /** When provided, links source documents from this import job to the new patient. */
   jobId?: string;
+  /** Therapies to create transactionally alongside the new patient (intake confirm path only). */
+  therapies?: TherapyCreateInput[];
 }
 
 type PrismaTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
 
-async function materializePatient(tx: PrismaTx, { patient: p, cartellaData, narrative, jobId }: MaterializeArgs) {
+async function materializePatient(tx: PrismaTx, { patient: p, cartellaData, narrative, jobId, therapies }: MaterializeArgs) {
   const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
   const created = await tx.patient.create({
     data: {
@@ -115,6 +120,12 @@ async function materializePatient(tx: PrismaTx, { patient: p, cartellaData, narr
   });
 
   await tx.cartella.create({ data: { patientId: created.id, data: cartellaData as object } });
+
+  if (therapies?.length) {
+    for (const t of therapies) {
+      await createTherapyInTx(tx, created.id, t);
+    }
+  }
 
   if (narrative) await persistNarrativeFromDraft(tx, created.id, narrative, jobId ?? null);
   if (jobId) await persistImportDocuments(tx, created.id, jobId);
@@ -213,6 +224,7 @@ export async function confirmDraft(draftId: string, payload: ConfirmPayload): Pr
         cartellaData,
         narrative,
         jobId: draft.importJobId ?? undefined,
+        therapies: payload.therapies,
       });
 
       // Mark the draft confirmed within the same transaction for atomicity.
