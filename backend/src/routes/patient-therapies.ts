@@ -6,23 +6,9 @@ import {
   scheduleDoseShort,
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
+import { createTherapyInTx, type TherapyCreateInput } from '../therapies/therapy-create.js';
 
 const router = Router();
-
-// Build a legacy `dosaggio` summary string from structured data, used when the caller
-// doesn't pass an explicit dosaggio (keeps backward-compat displays populated).
-function deriveDosaggio(
-  explicit: string | undefined,
-  strengthValue: number | null,
-  strengthUnit: string | null,
-  form: string | null,
-): string {
-  if (explicit && explicit.trim()) return explicit.trim();
-  const parts: string[] = [];
-  if (strengthValue != null && strengthUnit) parts.push(`${strengthValue} ${strengthUnit}`);
-  if (form) parts.push(form);
-  return parts.join(' ').trim() || '—';
-}
 
 // GET /patients/:patientId/therapies  (includes structured schedules)
 router.get('/:patientId/therapies', async (req, res) => {
@@ -48,25 +34,6 @@ router.get('/:patientId/therapies', async (req, res) => {
 // POST /patients/:patientId/therapies
 router.post('/:patientId/therapies', async (req, res) => {
   const { patientId } = req.params;
-  const body = req.body as Record<string, unknown>;
-
-  const farmacoNome = typeof body.farmacoNome === 'string' ? body.farmacoNome.trim() : '';
-  const dataInizio = typeof body.dataInizio === 'string' ? body.dataInizio : '';
-  const schedules: ScheduleInput[] = normalizeSchedules(body.schedules);
-
-  // dosaggio is no longer strictly required when structured strength is provided
-  const strengthValue = body.commercialStrengthValue != null && body.commercialStrengthValue !== ''
-    ? Number(body.commercialStrengthValue) : null;
-  const strengthUnit = typeof body.commercialStrengthUnit === 'string' && body.commercialStrengthUnit.trim()
-    ? body.commercialStrengthUnit.trim() : null;
-  const form = typeof body.pharmaceuticalForm === 'string' && body.pharmaceuticalForm.trim()
-    ? body.pharmaceuticalForm.trim() : null;
-  const dosaggio = deriveDosaggio(body.dosaggio as string | undefined, strengthValue, strengthUnit, form);
-
-  if (!farmacoNome || !dataInizio) {
-    res.status(400).json({ error: 'Campi obbligatori: farmacoNome, dataInizio' });
-    return;
-  }
 
   try {
     const patient = await prisma.patient.findUnique({ where: { id: patientId } });
@@ -75,55 +42,18 @@ router.post('/:patientId/therapies', async (req, res) => {
       return;
     }
 
-    // Derive legacy fascia/orari from structured schedules (keeps slot pipeline working).
-    // When no schedules are supplied, fall back to legacy boolean flags from the body.
-    const derived = schedules.length
-      ? deriveLegacyFromSchedules(schedules)
-      : {
-          fasceMattina: (body.fasceMattina as boolean) ?? true,
-          fascePranzo: (body.fascePranzo as boolean) ?? false,
-          fascePomeriggio: (body.fascePomeriggio as boolean) ?? false,
-          fasceSera: (body.fasceSera as boolean) ?? false,
-          fasceNotte: (body.fasceNotte as boolean) ?? false,
-          orarioSpecifico: (body.orarioSpecifico as string) || null,
-        };
+    const therapy = await prisma.$transaction(tx =>
+      createTherapyInTx(tx, patientId, req.body as TherapyCreateInput),
+    );
 
-    const therapy = await prisma.patientTherapy.create({
-      data: {
-        patientId,
-        farmacoNome,
-        dosaggio,
-        viaSomministrazione: (body.viaSomministrazione as string) || 'orale',
-        tipo: (body.tipo as string) || 'periodica',
-        stato: (body.stato as string) || 'attiva',
-        dataInizio,
-        dataFine: (body.dataFine as string) || null,
-        fasceMattina: derived.fasceMattina,
-        fascePranzo: derived.fascePranzo,
-        fascePomeriggio: derived.fascePomeriggio,
-        fasceSera: derived.fasceSera,
-        fasceNotte: derived.fasceNotte,
-        orarioSpecifico: derived.orarioSpecifico,
-        prescrittore: (body.prescrittore as string) || null,
-        operatoreInseritore: (body.operatoreInseritore as string) || null,
-        note: (body.note as string) || null,
-        dataSomministrazione: (body.dataSomministrazione as string) || null,
-        orarioSomministrazione: (body.orarioSomministrazione as string) || null,
-        commercialStrengthValue: strengthValue,
-        commercialStrengthUnit: strengthUnit,
-        pharmaceuticalForm: form,
-        allowedFractions: typeof body.allowedFractions === 'string' && body.allowedFractions.trim()
-          ? body.allowedFractions.trim() : null,
-        drugPackageRef: typeof body.drugPackageRef === 'string' && body.drugPackageRef.trim()
-          ? body.drugPackageRef.trim() : null,
-        schedules: schedules.length ? { create: schedules } : undefined,
-      },
-      include: { schedules: { orderBy: { time: 'asc' } } },
-    });
-
-    console.log(`POST /patients/${patientId}/therapies → created id=${therapy.id} (${schedules.length} schedules)`);
+    console.log(`POST /patients/${patientId}/therapies → created id=${therapy.id} (${therapy.schedules.length} schedules)`);
     res.status(201).json(therapy);
   } catch (error) {
+    const msg = error instanceof Error ? error.message : '';
+    if (msg.includes('Campi obbligatori')) {
+      res.status(400).json({ error: msg });
+      return;
+    }
     console.error('POST /patients/:patientId/therapies error:', error);
     res.status(500).json({ error: 'Errore durante creazione terapia' });
   }
