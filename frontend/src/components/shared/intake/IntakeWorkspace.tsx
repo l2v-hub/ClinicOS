@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { createDraft, patchDraft } from './intakeDraftApi';
+import { createDraft, patchDraft, confirmDraft } from './intakeDraftApi';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
 import { StepClinica } from './StepClinica';
+import { StepVerifica } from './StepVerifica';
 
 const STEPS = [
   'Anagrafica',
@@ -18,6 +19,13 @@ interface AnagraficaData {
   firstName?: string;
   lastName?: string;
   dateOfBirth?: string;
+  sex?: string;
+  codiceFiscale?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
   [key: string]: unknown;
 }
 
@@ -30,13 +38,13 @@ interface DraftData {
 interface IntakeWorkspaceProps {
   open: boolean;
   onClose: () => void;
-  onCreated?: (patientId: string) => void; // wired in Task 4 (Verifica step)
+  onCreated?: (patientId: string) => void;
   operatoreNome?: string;
   operatorId?: string;
   operatorRole?: string;
 }
 
-export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, operatorRole }: IntakeWorkspaceProps) {
+export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, operatorId, operatorRole }: IntakeWorkspaceProps) {
   const op = { operatorId, operatorRole };
   const [step, setStep] = useState(1);
   const [draftId, setDraftId] = useState<string | null>(null);
@@ -44,6 +52,11 @@ export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, oper
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<DraftData>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  // Confirm / submit state
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [duplicateWarn, setDuplicateWarn] = useState(false);
 
   // Debounce timer ref for patchDraft calls
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -56,6 +69,9 @@ export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, oper
       setError(null);
       setData({});
       setSubmitAttempted(false);
+      setSubmitting(false);
+      setSubmitError(null);
+      setDuplicateWarn(false);
       return;
     }
     if (draftId) return;
@@ -99,6 +115,60 @@ export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, oper
     return !!(a?.firstName?.trim() && a?.lastName?.trim() && a?.dateOfBirth);
   }
 
+  async function handleConfirm(force = false) {
+    if (!draftId) return;
+    setSubmitting(true);
+    setSubmitError(null);
+    setDuplicateWarn(false);
+
+    const a = data.anagrafica ?? {};
+    const patient = {
+      firstName: a.firstName ?? '',
+      lastName: a.lastName ?? '',
+      dateOfBirth: a.dateOfBirth ?? '',
+      ...(a.sex !== undefined && { sex: a.sex }),
+      ...(a.codiceFiscale !== undefined && { codiceFiscale: a.codiceFiscale }),
+      ...(a.phone !== undefined && { phone: a.phone }),
+      ...(a.email !== undefined && { email: a.email }),
+      ...(a.address !== undefined && { address: a.address }),
+      ...(a.emergencyContactName !== undefined && { emergencyContactName: a.emergencyContactName }),
+      ...(a.emergencyContactPhone !== undefined && { emergencyContactPhone: a.emergencyContactPhone }),
+    };
+
+    const ingressoObj = data.ingresso ?? {};
+    const cartella: Record<string, unknown> = {
+      statoRicovero: 'ricoverato',
+      ...ingressoObj,
+    };
+    if (data.allergie !== undefined) cartella.allergie = data.allergie;
+    if (data.diagnosi !== undefined) cartella.diagnosi = data.diagnosi;
+    if (data.anamnesi !== undefined) cartella.anamnesi = data.anamnesi;
+
+    const payload = { patient, cartella, confirmDuplicate: force };
+
+    try {
+      const res = await confirmDraft(draftId, payload, op);
+      if (res.status === 'created' || res.status === 'idempotent') {
+        onCreated?.(res.patient?.id ?? '');
+        onClose();
+      } else if (res.status === 'duplicate') {
+        setDuplicateWarn(true);
+      } else {
+        setSubmitError('Errore imprevisto dal server. Riprovare.');
+      }
+    } catch (err: unknown) {
+      // confirmDraft throws on !ok (including 409). Inspect the message to detect duplicates.
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.toLowerCase().includes('duplicate') || msg.includes('409')) {
+        setDuplicateWarn(true);
+      } else {
+        setSubmitError(msg || 'Errore durante la creazione del paziente.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   function handleNext() {
     if (step === 1) {
       // Gate: require Nome + Cognome + Data di nascita before advancing
@@ -107,7 +177,12 @@ export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, oper
         return;
       }
     }
-    if (!isLast) setStep((s) => s + 1);
+    if (isLast) {
+      // On the last step the "Avanti" / "Conferma" footer button triggers confirm
+      void handleConfirm(false);
+      return;
+    }
+    setStep((s) => s + 1);
   }
 
   function handleBack() {
@@ -180,9 +255,38 @@ export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, oper
                   />
                 </div>
               )}
-              {step >= 4 && (
-                <div data-testid={`intake-step-${step}`} data-draft-id={draftId ?? undefined}>
-                  {/* Step {step} — {STEPS[step - 1]} — placeholder for Tasks 4+ */}
+              {step === 4 && (
+                <div data-testid="intake-step-4" data-draft-id={draftId ?? undefined}>
+                  <p className="cr-empty">Moduli configurabili — in arrivo.</p>
+                </div>
+              )}
+              {step === 5 && (
+                <div data-testid="intake-step-5" data-draft-id={draftId ?? undefined}>
+                  <p className="cr-empty">Importa documenti / Scatta foto — in arrivo (F5).</p>
+                </div>
+              )}
+              {step === 6 && (
+                <div data-draft-id={draftId ?? undefined}>
+                  {duplicateWarn && (
+                    <div className="import-modal__warning" role="alert">
+                      <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati potrebbe già esistere.
+                      <br />
+                      <button
+                        className="btn-secondary"
+                        onClick={() => void handleConfirm(true)}
+                        disabled={submitting}
+                        style={{ marginTop: '0.5rem' }}
+                      >
+                        Crea comunque
+                      </button>
+                    </div>
+                  )}
+                  <StepVerifica
+                    data={data}
+                    busy={submitting}
+                    error={submitError}
+                    onConfirm={() => void handleConfirm(false)}
+                  />
                 </div>
               )}
             </>
@@ -201,7 +305,7 @@ export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, oper
           <button
             className="btn-primary"
             onClick={handleNext}
-            disabled={isLast || loading || !!error || (step === 1 && !anagraficaValid())}
+            disabled={loading || !!error || (step === 1 && !anagraficaValid()) || (isLast && submitting)}
           >
             {isLast ? 'Conferma' : 'Avanti →'}
           </button>

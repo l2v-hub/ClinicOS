@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Appuntamento, Operatore, Paziente } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
-import { NewPatientModal } from '../shared/NewPatientModal';
+import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 
@@ -326,13 +326,12 @@ export function AdminAgenda({ operatori, appuntamenti, pazienti, onAddAppuntamen
           onNewPatient={() => setShowNewPaziente(true)}
         />
       )}
-      {showNewPaziente && (
-        <NewPatientModal
-          operatori={operatori}
-          onSave={async p => { onAddPaziente(`${p.lastName}, ${p.firstName}`); setShowNewPaziente(false); }}
-          onCancel={() => setShowNewPaziente(false)}
-        />
-      )}
+      {/* operatorId/operatorRole not available in AdminAgenda props — not passed */}
+      <IntakeWorkspace
+        open={showNewPaziente}
+        onClose={() => setShowNewPaziente(false)}
+        onCreated={(id) => { onAddPaziente(id); setShowNewPaziente(false); }}
+      />
     </div>
   );
 }

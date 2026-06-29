@@ -2,7 +2,7 @@ import { useState, Fragment } from 'react';
 import type { Appuntamento, Operatore, Paziente, TherapySlot, MotivoNonErogazione } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus, IcoPill } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
-import { NewPatientModal } from '../shared/NewPatientModal';
+import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { TherapySlotModal } from './TherapySlotModal';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
@@ -399,13 +399,14 @@ export function OperatorAgenda({
           onNewPatient={() => setShowNewPaziente(true)}
         />
       )}
-      {showNewPaziente && (
-        <NewPatientModal
-          operatori={operatori}
-          onSave={async () => { setShowNewPaziente(false); }}
-          onCancel={() => setShowNewPaziente(false)}
-        />
-      )}
+      {/* operatorRole not available in OperatorAgenda props — not passed */}
+      <IntakeWorkspace
+        open={showNewPaziente}
+        onClose={() => setShowNewPaziente(false)}
+        onCreated={() => setShowNewPaziente(false)}
+        operatoreNome={nomeOperatore}
+        operatorId={operatoreId}
+      />
       {activeSlot && onConfirmTherapy && onNotAdministeredTherapy && (
         <TherapySlotModal
           slot={activeSlot}

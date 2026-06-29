@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { API_URL } from '../../config';
 import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente } from '../../types';
 import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus, IcoTrash } from '../../icons';
-import { NewPatientModal } from '../shared/NewPatientModal';
+import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
@@ -32,7 +32,7 @@ function calcAge(dob: string): number {
   return age;
 }
 
-export function PatientList({ pazienti, consegne, operatori, camere, loading, onSelect, onAddPaziente, onImported, operatorId, operatorRole }: PatientListProps) {
+export function PatientList({ pazienti, consegne, loading, onSelect, onAddPaziente: _onAddPaziente, onImported, operatorId, operatorRole }: PatientListProps) {
   const [ricerca, setRicerca] = useState('');
   const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [showModal, setShowModal] = useState(false);
@@ -87,11 +87,6 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
     const sessoMatch = filtroSesso === 'tutti' || p.sex === filtroSesso;
     return match && sessoMatch;
   });
-
-  async function handleAddPaziente(np: NuovoPaziente) {
-    await onAddPaziente(np);
-    setShowModal(false);
-  }
 
   return (
     <div className="patient-list-view">
@@ -260,14 +255,13 @@ export function PatientList({ pazienti, consegne, operatori, camere, loading, on
         </ClinicalTableSection>
       )}
 
-      {showModal && (
-        <NewPatientModal
-          operatori={operatori}
-          camere={camere}
-          onSave={handleAddPaziente}
-          onCancel={() => setShowModal(false)}
-        />
-      )}
+      <IntakeWorkspace
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        onCreated={() => { setShowModal(false); onImported?.(); }}
+        operatorId={operatorId}
+        operatorRole={operatorRole}
+      />
     </div>
   );
 }
