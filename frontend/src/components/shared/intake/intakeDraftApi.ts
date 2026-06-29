@@ -86,6 +86,11 @@ export async function confirmDraft(
     headers: buildHeaders(op),
     body: JSON.stringify(payload),
   });
+  // 409 = duplicate patient: return the body so the caller handles the duplicate flow
+  // explicitly (status === 'duplicate') instead of relying on string-matching a thrown error.
+  if (res.status === 409) {
+    return res.json() as Promise<ConfirmResponse>;
+  }
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error((err as { error?: string }).error ?? `confirmDraft failed: ${res.status}`);
