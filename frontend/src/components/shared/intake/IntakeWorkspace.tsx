@@ -3,6 +3,7 @@ import { createDraft, patchDraft } from './intakeDraftApi';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
+import { StepClinica } from './StepClinica';
 
 const STEPS = [
   'Anagrafica',
@@ -170,9 +171,18 @@ export function IntakeWorkspace({ open, onClose, operatoreNome, operatorId, oper
                   />
                 </div>
               )}
-              {step >= 3 && (
+              {step === 3 && (
+                <div data-testid="intake-step-3" data-draft-id={draftId ?? undefined}>
+                  <StepClinica
+                    data={data}
+                    onUpdateSection={updateSection}
+                    operatoreNome={operatoreNome}
+                  />
+                </div>
+              )}
+              {step >= 4 && (
                 <div data-testid={`intake-step-${step}`} data-draft-id={draftId ?? undefined}>
-                  {/* Step {step} — {STEPS[step - 1]} — placeholder for Tasks 3-4 */}
+                  {/* Step {step} — {STEPS[step - 1]} — placeholder for Tasks 4+ */}
                 </div>
               )}
             </>
