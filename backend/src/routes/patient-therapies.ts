@@ -34,6 +34,16 @@ router.get('/:patientId/therapies', async (req, res) => {
 // POST /patients/:patientId/therapies
 router.post('/:patientId/therapies', async (req, res) => {
   const { patientId } = req.params;
+  const body = req.body as TherapyCreateInput;
+
+  // Validate required fields BEFORE the 404 existence check (preserves original
+  // 400-before-404 precedence: bad input → 400, then missing patient → 404).
+  const farmacoNome = typeof body.farmacoNome === 'string' ? body.farmacoNome.trim() : '';
+  const dataInizio = typeof body.dataInizio === 'string' ? body.dataInizio : '';
+  if (!farmacoNome || !dataInizio) {
+    res.status(400).json({ error: 'Campi obbligatori: farmacoNome, dataInizio' });
+    return;
+  }
 
   try {
     const patient = await prisma.patient.findUnique({ where: { id: patientId } });
@@ -43,7 +53,7 @@ router.post('/:patientId/therapies', async (req, res) => {
     }
 
     const therapy = await prisma.$transaction(tx =>
-      createTherapyInTx(tx, patientId, req.body as TherapyCreateInput),
+      createTherapyInTx(tx, patientId, body),
     );
 
     console.log(`POST /patients/${patientId}/therapies → created id=${therapy.id} (${therapy.schedules.length} schedules)`);
