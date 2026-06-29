@@ -425,6 +425,9 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
               />
             </div>
             <div className="iw-data" aria-label="Dati ClinicOS">
+              {/* F5 #124: a failed import-draft seed (handleProceedToWorkspace) keeps the user on
+                  the review step — surface the error here so it is visible, not just on upload. */}
+              {error && <p className="import-modal__error">{error}</p>}
               <ImportSectionsReview
                 sections={effectiveSections}
                 documents={job?.documents ?? []}
