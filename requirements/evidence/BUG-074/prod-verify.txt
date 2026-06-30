@@ -1,0 +1,21 @@
+BUG-074 v2 — popup intake ampia + corpo interno scrollabile
+Verifica produzione 2026-06-30T19:55:25Z
+
+Commit:    e03cdba (main)
+Frontend:  Vercel clinicos-eosin.vercel.app — bundle /assets/index-DHfeeHPy.js (build tsc autoritativo OK)
+Backend:   invariato (fix solo CSS+TSX frontend)
+
+Verifica automatica (Playwright, prod reale):
+- header + stepper + footer visibili e FISSI
+- body scrollabile: scrollHeight 1012 > clientHeight 515, overflow-y=auto
+- scroll del corpo: 497px → footer resta fermo (delta <2px), header resta fermo
+- pagina esterna NON scorre (window.scrollY 0→0)
+- nessuno scroll orizzontale globale
+- popup ampia: 722px (94vh) x 1311px (96vw)
+- tablet 1024x768: body 1012>515 overflow-y auto, nessun overflow orizzontale
+- PROD RESULT: PASS (1° tentativo solo cold-start Railway, form caricato al retry)
+
+Modifiche:
+- frontend/src/app-additions.css: .import-modal--intake height:94vh flex-column; head/steps/foot flex:0; .import-modal__body flex:1 + min-height:0 + overflow-y:auto (unica area di scroll). Scoped a --intake (manuale + import condividono la shell; --review non toccata).
+- frontend/src/components/shared/intake/IntakeWorkspace.tsx: testid patient-intake-{header,stepper,body,footer}; reset scroll corpo a 0 al cambio fase; body scroll-lock pagina mentre aperto.
+- e2e/intake-scroll.mjs: test Playwright obbligatorio (tutti i check PASS).
