@@ -108,6 +108,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
 
   // Debounce timer ref for patchDraft calls
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bodyRef = useRef<HTMLDivElement | null>(null);
 
   // Create draft on first open (or load an existing import draft).
   // Guard conditions ensure we fetch exactly once per (open, draft target):
@@ -159,6 +160,21 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
         .finally(() => setLoading(false));
     }
   }, [open, draftId, importDraftId, operatorId, operatorRole]);
+
+  // BUG-074: each phase shares the same scrollable body — reset it to the top when
+  // the phase changes so the operator starts at the beginning of the new section.
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0 });
+  }, [step]);
+
+  // BUG-074: lock the underlying page scroll while the workspace is open, so only the
+  // inner body scrolls (never the page behind the popup). Restored on close/unmount.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [open]);
 
   if (!open) return null;
 
@@ -291,7 +307,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Nuovo paziente — intake">
       <div className="modal-card import-modal import-modal--intake">
-        <header className="import-modal__head">
+        <header className="import-modal__head" data-testid="patient-intake-header">
           <h2>
             Nuovo paziente
             {operatoreNome ? ` — ${operatoreNome}` : ''}
@@ -300,7 +316,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
         </header>
 
         {/* 6-step stepper */}
-        <ol className="import-modal__steps" aria-label="Fasi di registrazione">
+        <ol className="import-modal__steps" aria-label="Fasi di registrazione" data-testid="patient-intake-stepper">
           {STEPS.map((label, i) => {
             const n = i + 1;
             const isDone = n < step;
@@ -317,8 +333,8 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
           })}
         </ol>
 
-        {/* Body */}
-        <div className="import-modal__body">
+        {/* Body — the only scrollable region (BUG-074) */}
+        <div className="import-modal__body" data-testid="patient-intake-body" ref={bodyRef}>
           {loading && (
             <div className="import-modal__progress" role="status" aria-live="polite">
               <span className="import-modal__spinner" aria-hidden="true" />
@@ -408,7 +424,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
           )}
         </div>
 
-        <footer className="import-modal__foot">
+        <footer className="import-modal__foot" data-testid="patient-intake-footer">
           {onBackToDocuments ? (
             <button className="btn-ghost" onClick={onBackToDocuments}>← Torna ai documenti</button>
           ) : (

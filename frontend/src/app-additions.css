@@ -6101,6 +6101,39 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .import-modal__steps li { color: var(--muted, #667085); padding: 4px 8px; border-radius: 6px; background: #F2F4F7; }
 .import-modal__steps li.is-active { color: #fff; background: var(--c-primary, #0F5FD7); }
 .import-modal__steps li.is-done { color: var(--c-primary, #0F5FD7); }
+
+/* ── BUG-074: intake workspace — keep the popup large, scroll only the inner body ──
+   The shell is a fixed-height flex column: header + stepper + footer stay pinned
+   (flex:0), the body takes the remaining height and scrolls. `min-height:0` is the
+   load-bearing rule — without it the flex child grows to its content height and
+   pushes the footer out of the popup instead of scrolling. Scoped to --intake so the
+   discharge upload/review modal (--review) is untouched; the import→workspace path
+   renders this same shell. Components are NOT shrunk — only the body scrolls. */
+.import-modal--intake {
+  width: min(1600px, 96vw);
+  max-width: 1600px;
+  height: 94vh;
+  max-height: 94vh;
+  min-height: 0;
+  overflow: hidden;
+}
+.import-modal--intake > .import-modal__head,
+.import-modal--intake > .import-modal__steps,
+.import-modal--intake > .import-modal__foot { flex: 0 0 auto; }
+.import-modal--intake > .import-modal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+/* Children fill the width and never force a global horizontal scroll. */
+.import-modal--intake > .import-modal__body > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
 .import-review { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
 .import-review__summary { display: flex; gap: 6px; flex-wrap: wrap; }
 .ir-pill { font-size: 12px; padding: 3px 8px; border-radius: 999px; background: #F2F4F7; color: #344054; }
