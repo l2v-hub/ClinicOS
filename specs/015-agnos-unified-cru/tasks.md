@@ -76,10 +76,10 @@
 
 **Independent Test**: attivare mic, dettare comando write, correggere trascrizione, confermare dalla stessa preview; risposta letta ad alta voce e interrompibile.
 
-- [ ] T019 [P] [US3] Estrarre `frontend/src/components/shared/agnos/useVoiceInput.ts` da `VoiceAssistant` (SpeechRecognition it-IT, stato registrazione visibile, gestione permesso negato con fallback testo)
-- [ ] T020 [P] [US3] Creare `frontend/src/components/shared/agnos/useSpeechOutput.ts`: speechSynthesis it-IT, toggle persistito in localStorage, `cancel()` su nuovo input/stop/chiusura, troncamento risposte lunghe, degrado pulito senza voci italiane
-- [ ] T021 [US3] Integrare mic + TTS in `AgnosPanel.tsx`: trascrizione nel campo testo modificabile prima dell'invio, `channel:'voce'`, controlli stop ascolto/riproduzione sempre visibili
-- [ ] T022 [US3] Rimuovere il FAB `VoiceAssistant` da `frontend/src/App.tsx` (il pannello unico lo sostituisce); nessun componente orfano residuo
+- [x] T019 [P] [US3] Estrarre `frontend/src/components/shared/agnos/useVoiceInput.ts` da `VoiceAssistant` (SpeechRecognition it-IT, stato registrazione visibile, gestione permesso negato con fallback testo)
+- [x] T020 [P] [US3] Creare `frontend/src/components/shared/agnos/useSpeechOutput.ts`: speechSynthesis it-IT, toggle persistito in localStorage, `cancel()` su nuovo input/stop/chiusura, troncamento risposte lunghe, degrado pulito senza voci italiane
+- [x] T021 [US3] Integrare mic + TTS in `AgnosPanel.tsx`: trascrizione nel campo testo modificabile prima dell'invio, `channel:'voce'`, controlli stop ascolto/riproduzione sempre visibili
+- [x] T022 [US3] Rimuovere il FAB `VoiceAssistant` da `frontend/src/App.tsx` (il pannello unico lo sostituisce); nessun componente orfano residuo
 
 **Checkpoint**: SC-008 — 0 differenze di comportamento testo vs voce.
 

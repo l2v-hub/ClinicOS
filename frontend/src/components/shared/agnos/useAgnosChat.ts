@@ -2,13 +2,17 @@ import { useCallback, useState } from 'react';
 import { API_URL } from '../../../config';
 import type { AssistantAnswer } from '../AIAssistantButton';
 
-// 015 AGNOS — unified text chatbot (read + CRU write actions, delete escluso).
+// 015 AGNOS — unified chatbot (read + CRU write actions, delete escluso).
 // Contract: specs/015-agnos-unified-cru/contracts/agnos-api.md
-//   POST /ai/actions/plan    { text, channel:'testo', currentPatientId }
-//   POST /ai/actions/execute { text, channel:'testo', patientId, idempotencyKey, confirmed:true }
+//   POST /ai/actions/plan    { text, channel:'testo'|'voce', currentPatientId }
+//   POST /ai/actions/execute { text, channel:'testo'|'voce', patientId, idempotencyKey, confirmed:true }
 // The plan is ALWAYS re-derived server-side from the text; the client only
 // carries the original text + a client-generated idempotencyKey (created at
 // preview time, so retrying "Conferma" never duplicates the write).
+// US3: a dictated command flows through the SAME path with channel:'voce';
+// the channel is captured at plan time and re-sent unchanged at execute time.
+
+export type AgnosChannel = 'testo' | 'voce';
 
 export interface AgnosPreview {
   title: string;
@@ -42,6 +46,8 @@ export interface AgnosTurn {
 export interface AgnosPending {
   /** Original command text — re-sent to /execute (plan re-derived server-side). */
   text: string;
+  /** Canale di origine del comando ('voce' se dettato): riusato invariato all'execute. */
+  channel: AgnosChannel;
   patientId: string | null;
   /** Generated at preview time so a retried confirm is deduped server-side. */
   idempotencyKey: string;
@@ -114,7 +120,7 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
     setError(null);
   }, [pending]);
 
-  const sendCommand = useCallback(async (rawText: string) => {
+  const sendCommand = useCallback(async (rawText: string, channel: AgnosChannel = 'testo') => {
     const text = rawText.trim();
     if (!text || busy) return;
     setBusy(true);
@@ -129,7 +135,7 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
       const res = await fetch(`${API_URL}/ai/actions/plan`, {
         method: 'POST',
         headers: headers(),
-        body: JSON.stringify({ text, channel: 'testo', currentPatientId }),
+        body: JSON.stringify({ text, channel, currentPatientId }),
       });
       const data = await res.json() as ApiError & {
         plan?: AgnosPlan;
@@ -169,6 +175,7 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
         patchTurn(agnosIndex, { status: 'in-conferma', preview, plan });
         setPending({
           text,
+          channel,
           patientId: plan?.patientId ?? currentPatientId ?? null,
           idempotencyKey: crypto.randomUUID(),
           turnIndex: agnosIndex,
@@ -191,12 +198,13 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
     if (!pending || busy) return;
     setBusy(true);
     setError(null);
-    const { text, patientId, idempotencyKey, turnIndex } = pending;
+    const { text, channel, patientId, idempotencyKey, turnIndex } = pending;
     try {
       const res = await fetch(`${API_URL}/ai/actions/execute`, {
         method: 'POST',
         headers: headers(),
-        body: JSON.stringify({ text, channel: 'testo', patientId, idempotencyKey, confirmed: true }),
+        // L'esecuzione confermata di un comando dettato resta channel:'voce'.
+        body: JSON.stringify({ text, channel, patientId, idempotencyKey, confirmed: true }),
       });
       const data = await res.json() as ApiError & { ok?: boolean; message?: string; deduped?: boolean };
       if (!res.ok || !data.ok) {
@@ -225,14 +233,13 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
   }, [pending, busy, headers, onExecuted]);
 
   /** "Modifica": drop the pending preview without the cancel message; caller refills the input. */
-  const dismissPendingForEdit = useCallback((): string | null => {
+  const dismissPendingForEdit = useCallback((): { text: string; channel: AgnosChannel } | null => {
     if (!pending) return null;
-    const idx = pending.turnIndex;
-    const originalText = pending.text;
-    setTurns((t) => markCancelled(t, idx));
+    const { text, channel, turnIndex } = pending;
+    setTurns((t) => markCancelled(t, turnIndex));
     setPending(null);
     setError(null);
-    return originalText;
+    return { text, channel };
   }, [pending]);
 
   return { turns, pending, busy, error, sendCommand, confirmPending, cancelPending, dismissPendingForEdit };

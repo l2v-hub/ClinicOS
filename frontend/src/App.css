@@ -4010,44 +4010,10 @@ textarea.form-input {
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   REQ-041 — Voice write-actions (mic FAB + command drawer)
+   REQ-041 — shared AI preview/confirm styles (nate col FAB vocale, oggi
+   riusate dal pannello unificato AgnosPanel — 015 US3 ha rimosso il FAB)
 ═══════════════════════════════════════════════════════════════════════════ */
-.voice-fab {
-  position: fixed; right: 20px; bottom: 80px;
-  width: 48px; height: 48px; border-radius: 50%;
-  background: var(--surface, #fff); color: var(--c-primary, var(--blue));
-  border: 1.5px solid var(--c-primary, var(--blue)); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 6px 20px rgba(15,95,215,0.18), 0 2px 6px rgba(0,0,0,0.10);
-  z-index: 90; transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
-}
-.voice-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(15,95,215,0.26); }
-
-.voice-drawer { }
-.voice-body { display: flex; flex-direction: column; gap: 12px; padding: 16px 18px; overflow-y: auto; }
-
-.voice-state { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;
-  color: var(--text-muted, #667085); }
-.voice-state__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border, #D0D5DD); }
-.voice-state--registrazione .voice-state__dot { background: var(--red, #DC2626); animation: voicePulse 1s infinite; }
-.voice-state--attesa-conferma .voice-state__dot,
-.voice-state--verifica .voice-state__dot { background: #F59E0B; }
-.voice-state--completato .voice-state__dot { background: #12B76A; }
-.voice-state--errore .voice-state__dot, .voice-state--permesso-negato .voice-state__dot { background: var(--red, #DC2626); }
 @keyframes voicePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-.voice-mic-row { display: flex; }
-.voice-rec { width: 100%; }
-.voice-rec.is-recording { background: var(--red, #DC2626); }
-
-.voice-transcript-label { font-size: 12px; font-weight: 600; color: var(--text-muted, #667085); }
-.voice-transcript { width: 100%; resize: vertical; border: 1px solid var(--border, #D0D5DD);
-  border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 14px; box-sizing: border-box; }
-.voice-transcript:focus { outline: none; border-color: var(--c-primary, var(--blue)); }
-.voice-interpret { width: 100%; }
-
-.voice-msg { font-size: 13px; margin: 0; color: var(--text-muted, #667085); }
-.voice-msg--error { color: var(--red, #DC2626); }
 
 .voice-preview { border: 1px solid var(--c-primary-bg, #EBF1FE); background: var(--surface-raised, #F4F7FB);
   border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
@@ -4058,21 +4024,13 @@ textarea.form-input {
 .voice-preview__row dt { color: var(--text-muted, #667085); margin: 0; }
 .voice-preview__row dd { margin: 0; font-weight: 600; color: var(--text, #101828); text-align: right; }
 
-.voice-diff { display: flex; flex-direction: column; gap: 6px; }
-.voice-diff__block { font-size: 12px; }
-.voice-diff__block > span { color: var(--text-muted, #667085); font-weight: 600; }
-.voice-diff__block pre { margin: 2px 0 0; padding: 6px 8px; background: #fff; border: 1px solid var(--border, #D0D5DD);
-  border-radius: 6px; white-space: pre-wrap; font: inherit; font-size: 13px; }
-.voice-diff__result pre { border-color: var(--c-primary, var(--blue)); background: var(--c-primary-bg, #EBF1FE); }
-
 .voice-warn { font-size: 13px; color: #B54708; margin: 0; }
 .voice-amb { font-size: 13px; color: var(--red, #DC2626); font-weight: 600; margin: 0; }
 
 .voice-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
-.voice-preview .btn-primary:disabled, .voice-interpret:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+.voice-preview .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 .voice-done { font-size: 14px; font-weight: 600; color: #027A48; background: #ECFDF3;
   border: 1px solid #A6F4C5; border-radius: 8px; padding: 10px 12px; }
-.voice-read { margin-top: 4px; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    015 AGNOS — unified text chatbot (extends REQ-040 .ai-asst__* + REQ-041
@@ -4101,6 +4059,48 @@ textarea.form-input {
   box-sizing: border-box; min-height: 40px; }
 .agnos-input:focus { outline: none; border-color: var(--c-primary, var(--blue)); }
 .agnos-input:disabled { background: var(--surface-raised, #F4F7FB); color: var(--text-muted, #667085); }
+
+/* — US3: voce nel pannello (mic accanto al campo testo + toggle TTS in header).
+   Il rosso è ammesso SOLO per lo stato registrazione attiva (alert). */
+.agnos-header-actions { display: flex; align-items: center; gap: 8px; }
+
+.agnos-tts--on {
+  color: var(--c-primary, var(--blue));
+  border-color: var(--c-primary, var(--blue));
+  background: var(--c-primary-bg, #EBF1FE);
+}
+.agnos-tts--on:hover { background: var(--c-primary-bg, #EBF1FE); color: var(--c-primary-active, #004FC4); }
+
+.agnos-mic { min-width: 44px; min-height: 44px; color: var(--c-primary, var(--blue)); }
+.agnos-mic--listening,
+.agnos-mic--listening:hover {
+  background: var(--red, #DC2626);
+  border-color: var(--red, #DC2626);
+  color: #fff;
+  animation: voicePulse 1s infinite;
+}
+.agnos-mic:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Barra stato voce/lettura: sopra il campo di composizione. */
+.agnos-voicebar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 8px 14px; border-top: 1px solid var(--border);
+  background: var(--surface-raised, #F4F7FB);
+}
+.agnos-voice-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--text, #101828);
+}
+.agnos-voice-status__dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--red, #DC2626); animation: voicePulse 1s infinite;
+}
+.agnos-voice-error { font-size: 13px; color: var(--red, #DC2626); }
+.agnos-stop-speech { min-height: 44px; white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .agnos-mic--listening, .agnos-voice-status__dot { animation: none !important; }
+}
 
 /* Tablet: full-height drawer already handled by .ai-drawer (min(420px,100vw)). */
 @media (max-width: 1023px) {

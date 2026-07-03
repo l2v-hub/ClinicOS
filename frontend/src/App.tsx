@@ -30,7 +30,6 @@ import { NotesPage } from './components/shared/NotesPage';
 import { MultiPatientParametri } from './components/operator/MultiPatientParametri';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
 import { AgnosPanel } from './components/shared/AgnosPanel';
-import { VoiceAssistant } from './components/shared/VoiceAssistant';
 
 import { IcoSearch, IcoX } from './icons';
 
@@ -973,15 +972,6 @@ export default function App() {
         currentPatientName={navKey === 'dettaglio-paziente' && pazienteSelezionato ? `${pazienteSelezionato.lastName ?? ''} ${pazienteSelezionato.firstName ?? ''}`.trim() : undefined}
         onExecuted={() => { if (pazienteSelezionato) loadCartella(pazienteSelezionato.id); }}
         onNavigate={(n) => { if (n.patientId) { const p = pazienti.find((x) => x.id === n.patientId); if (p) selectPaziente(p); } }}
-      />
-
-      <VoiceAssistant
-        operatorId={utente?.id}
-        operatorRole={utente?.ruolo}
-        operatorName={utente?.nome}
-        currentPatientId={navKey === 'dettaglio-paziente' ? pazienteSelezionato?.id : undefined}
-        currentPatientName={navKey === 'dettaglio-paziente' && pazienteSelezionato ? `${pazienteSelezionato.lastName ?? ''} ${pazienteSelezionato.firstName ?? ''}`.trim() : undefined}
-        onExecuted={() => { if (pazienteSelezionato) loadCartella(pazienteSelezionato.id); }}
       />
     </div>
   );
