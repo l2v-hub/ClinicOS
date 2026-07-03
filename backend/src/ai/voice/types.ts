@@ -40,6 +40,10 @@ export interface ActionPlan {
   readQuery?: string;
   /** Why a refusal happened (refuse_clinical / refuse_forbidden). */
   refusalReason?: string;
+  /** SPEC-015: set when the refusal is specifically a deletion attempt (CRU-only: delete has no AI path). */
+  refusalKind?: 'delete';
+  /** SPEC-015: input channel the command arrived on ('testo' | 'voce'); attached by the orchestrator. */
+  channel?: string;
 }
 
 // A human-readable, source-grounded preview shown before the operator confirms.
@@ -54,6 +58,8 @@ export interface ActionPreview {
   ambiguities: string[];
   canExecute: boolean;
   warnings: string[];
+  /** SPEC-015: refusal message (delete/clinical/forbidden) that points the operator to the traditional UI. */
+  refusal?: string;
 }
 
 export interface ExecuteResult {

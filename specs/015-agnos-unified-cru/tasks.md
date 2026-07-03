@@ -16,7 +16,7 @@
 
 **Purpose**: baseline verificabile prima di toccare il codice (nessuna nuova dipendenza npm).
 
-- [ ] T001 Verificare app avviabile end-to-end (backend :3001 + frontend :5173 + Postgres Podman) e suite esistente verde: `cd backend && npm test`, `cd frontend && npm run build` — baseline registrata
+- [x] T001 Verificare app avviabile end-to-end (backend :3001 + frontend :5173 + Postgres Podman) e suite esistente verde: `cd backend && npm test`, `cd frontend && npm run build` — baseline registrata
 - [ ] T002 [P] Misura performance PRIMA: conteggio richieste di rete su apertura agenda e dettaglio paziente via harness Playwright (`.claude/skills/run-clinicos/driver.mjs`), salvata in `requirements/evidence/SPEC-015/perf-before.json`
 
 ---
@@ -27,12 +27,12 @@
 
 **⚠️ CRITICAL**: nessuna story può iniziare prima del completamento di questa fase.
 
-- [ ] T003 Creare catalogo allowlist deny-by-default in `backend/src/ai/actions/catalog.ts`: tipo `AgnosActionKind = 'read'|'create'|'update'` (delete assente dal tipo), `AGNOS_ACTION_CATALOG` con 12 read + 6 write, `enabled`, override env `AI_DISABLED_ACTIONS`
-- [ ] T004 Creare orchestratore channel-agnostic in `backend/src/ai/actions/orchestrate.ts`: `planCommand()`/`executeCommand()` che generalizzano `ai/voice/plan.ts|preview.ts|execute.ts|idempotency.ts`, con `channel: 'testo'|'voce'` e guardie in ordine da contracts/agnos-api.md
-- [ ] T005 Estendere `backend/src/ai/voice/types.ts` con `channel` e actionType appuntamenti; planner voce riusato dall'orchestratore (nessuna duplicazione)
-- [ ] T006 Creare route `backend/src/routes/ai-actions.ts`: `POST /ai/actions/plan`, `POST /ai/actions/execute`, `GET /ai/actions/catalog` sotto `requireOperator` + rate-limit, errori `{error:{kind,message}}` come da contract
-- [ ] T007 Montare le route in `backend/src/app.ts` e convertire `backend/src/routes/ai-voice.ts` in wrapper deleganti verso l'orchestratore con `channel:'voce'` (contratto `/ai/voice/*` invariato — Constitution VI)
-- [ ] T008 Unit test orchestratore in `backend/src/ai/__tests__/actions.test.ts`: plan read/create/update, ambiguità bloccanti, idempotenza, guardie execute (not_in_catalog, ambiguous, confirmation_required), canale testo=voce a parità di input
+- [x] T003 Creare catalogo allowlist deny-by-default in `backend/src/ai/actions/catalog.ts`: tipo `AgnosActionKind = 'read'|'create'|'update'` (delete assente dal tipo), `AGNOS_ACTION_CATALOG` con 12 read + 6 write, `enabled`, override env `AI_DISABLED_ACTIONS`
+- [x] T004 Creare orchestratore channel-agnostic in `backend/src/ai/actions/orchestrate.ts`: `planCommand()`/`executeCommand()` che generalizzano `ai/voice/plan.ts|preview.ts|execute.ts|idempotency.ts`, con `channel: 'testo'|'voce'` e guardie in ordine da contracts/agnos-api.md
+- [x] T005 Estendere `backend/src/ai/voice/types.ts` con `channel` e actionType appuntamenti; planner voce riusato dall'orchestratore (nessuna duplicazione)
+- [x] T006 Creare route `backend/src/routes/ai-actions.ts`: `POST /ai/actions/plan`, `POST /ai/actions/execute`, `GET /ai/actions/catalog` sotto `requireOperator` + rate-limit, errori `{error:{kind,message}}` come da contract
+- [x] T007 Montare le route in `backend/src/app.ts` e convertire `backend/src/routes/ai-voice.ts` in wrapper deleganti verso l'orchestratore con `channel:'voce'` (contratto `/ai/voice/*` invariato — Constitution VI)
+- [x] T008 Unit test orchestratore in `backend/src/ai/__tests__/actions.test.ts`: plan read/create/update, ambiguità bloccanti, idempotenza, guardie execute (not_in_catalog, ambiguous, confirmation_required), canale testo=voce a parità di input
 
 **Checkpoint**: `POST /ai/actions/plan|execute` funzionanti via curl; `/ai/voice/*` retrocompatibile; test backend verdi.
 
@@ -44,10 +44,10 @@
 
 **Independent Test**: digitare comando creazione parametro vitale + nota diario; verificare preview, conferma, salvataggio, aggiornamento cartella senza reload, persistenza dopo refresh.
 
-- [ ] T009 [P] [US1] Creare hook stato conversazione `frontend/src/components/shared/agnos/useAgnosChat.ts`: messaggi, plan/execute verso `/ai/actions/*`, idempotencyKey per conferma, stati loading/errore
-- [ ] T010 [US1] Creare `frontend/src/components/shared/AgnosPanel.tsx`: pannello unico chat (sostituisce il pannello read-only di `AIAssistantButton.tsx`), rendering preview (titolo, paziente, righe campo→valore, warnings, ambiguità), pulsante "Conferma e salva" disabilitato su ambiguità
-- [ ] T011 [US1] Integrare AgnosPanel in `frontend/src/App.tsx` con contesto paziente corrente (`currentPatientId`) e stili in `frontend/src/App.css` (palette blu medicale, tablet-first)
-- [ ] T012 [US1] Sincronizzazione UI immediata post-esecuzione: refresh mirato dei dati toccati (cartella/parametri/diario) senza reload pagina (FR-020)
+- [x] T009 [P] [US1] Creare hook stato conversazione `frontend/src/components/shared/agnos/useAgnosChat.ts`: messaggi, plan/execute verso `/ai/actions/*`, idempotencyKey per conferma, stati loading/errore
+- [x] T010 [US1] Creare `frontend/src/components/shared/AgnosPanel.tsx`: pannello unico chat (sostituisce il pannello read-only di `AIAssistantButton.tsx`), rendering preview (titolo, paziente, righe campo→valore, warnings, ambiguità), pulsante "Conferma e salva" disabilitato su ambiguità
+- [x] T011 [US1] Integrare AgnosPanel in `frontend/src/App.tsx` con contesto paziente corrente (`currentPatientId`) e stili in `frontend/src/App.css` (palette blu medicale, tablet-first)
+- [x] T012 [US1] Sincronizzazione UI immediata post-esecuzione: refresh mirato dei dati toccati (cartella/parametri/diario) senza reload pagina (FR-020)
 - [ ] T013 [US1] Verifica manuale flusso pilota (vitali + diario) via harness: comando→preview→conferma→dato visibile→refresh persistente; screenshot in `requirements/evidence/SPEC-015/`
 
 **Checkpoint**: US1 completa e testabile indipendentemente — MVP.
@@ -62,7 +62,7 @@
 
 - [ ] T014 [P] [US2] Migrazione Prisma ADDITIVA: modello `AiAuditEvent` in `prisma/schema.prisma` (campi/indici da data-model.md, nessuna FK) + `npx prisma migrate dev` (mai reset)
 - [ ] T015 [US2] Creare `backend/src/ai/audit-store.ts`: `recordAuditEvent()` best-effort (fallimento DB non blocca, stdout resta); integrare in `backend/src/ai/voice/audit.ts` e `backend/src/ai/gateway/audit.ts`
-- [ ] T016 [P] [US2] Estendere refusal patterns nel planner (`backend/src/ai/voice/plan.ts`): elimina, cancella, rimuovi, togli, svuota, azzera, distruggi, butta, deleta + forme flesse; messaggio rifiuto che indirizza alla UI (FR-009)
+- [x] T016 [P] [US2] Estendere refusal patterns nel planner (`backend/src/ai/voice/plan.ts`): elimina, cancella, rimuovi, togli, svuota, azzera, distruggi, butta, deleta + forme flesse; messaggio rifiuto che indirizza alla UI (FR-009)
 - [ ] T017 [US2] Creare route `backend/src/routes/ai-audit.ts`: `GET /ai/audit?operatorId=&patientId=&outcome=&from=&to=&limit=` ruolo admin/manager, max 200, ordinati desc; montare in `app.ts`
 - [ ] T018 [US2] Unit test difesa in profondità in `backend/src/ai/__tests__/actions.test.ts`: (1) planner rifiuta ogni variante lessicale, (2) executor respinge kind ∉ {create,update}, (3) catalogo senza entry delete + azione fuori catalogo rifiutata, (4) audit riceve evento `refusal`
 

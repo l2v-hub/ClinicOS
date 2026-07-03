@@ -10,12 +10,14 @@ export interface VoiceAuditEntry {
   recordId: string | null;
   fields: string[];          // field NAMES only, no values
   source: 'VOICE';
+  /** SPEC-015: input channel — TESTO (typed) or VOCE (spoken). Legacy callers default to VOCE. */
+  channel: 'TESTO' | 'VOCE';
   outcome: 'ok' | 'denied' | 'error' | 'deduped';
   at: string;
 }
 
 export function voiceAudit(
-  ctx: { requestId: string; userId: string },
+  ctx: { requestId: string; userId: string; channel?: 'TESTO' | 'VOCE' },
   actionType: string,
   patientId: string | null,
   recordId: string | null,
@@ -31,6 +33,7 @@ export function voiceAudit(
     recordId,
     fields: fields.slice(0, 20),
     source: 'VOICE',
+    channel: ctx.channel ?? 'VOCE',
     outcome,
     at: now,
   };

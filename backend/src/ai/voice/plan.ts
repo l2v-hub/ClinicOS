@@ -10,7 +10,14 @@ import { matchVital, parseVitalValue, parseSpokenTime } from './vitals.js';
 const norm = (s: string) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 const WRITE_VERB = /\b(registra|aggiungi|aggiorna|modifica|cambia|sostituisci|imposta|inserisci|crea|prescriv|elimina|cancella|rimuovi)\b/;
-const DELETE_VERB = /\b(elimina|cancella|rimuovi)\b/;
+// SPEC-015 (FR-008/FR-009): every Italian deletion verb AND its inflections is refused outright,
+// on every channel, with or without another write verb. "deleta" is matched by explicit inflections
+// only, so legitimate words like "deleterio" never trigger a refusal.
+const DELETE_VERB = /\b(elimin\w*|cancell\w*|rimuov\w*|rimoss\w*|togli\w*|tolg\w*|tolt\w*|svuot\w*|azzer\w*|distrugg\w*|distrutt\w*|cestin\w*|delet(?:a|are|ando|at[oaie]|i|iamo))\b|\bbutt\w*\s+via\b/;
+
+/** SPEC-015: deletion is only ever possible from the traditional UI — never through Agnos. */
+export const DELETE_REFUSAL_MESSAGE =
+  'La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS.';
 const READ_VERB = /\b(mostra|mostrami|apri|cerca|trova|quali|chi|qual e|elenca|fammi vedere|visualizza|leggi)\b/;
 
 // Clinical judgement is refused outright (mirrors the read assistant's refusal set).
@@ -80,10 +87,11 @@ export function planAction(
     return make('refuse_clinical', { refusalReason: 'L’assistente non fornisce diagnosi, terapie o valutazioni cliniche.' });
   }
 
-  // 2) forbidden writes (v1): deletes, therapy changes, allergy changes
-  if (hasWriteVerb && DELETE_VERB.test(q)) {
-    return make('refuse_forbidden', { refusalReason: 'Le cancellazioni vocali sono disabilitate.' });
+  // 2) deletions are refused outright (SPEC-015: CRU-only — no write verb required, any inflection)
+  if (DELETE_VERB.test(q)) {
+    return make('refuse_forbidden', { refusalReason: DELETE_REFUSAL_MESSAGE, refusalKind: 'delete' });
   }
+  // 2b) other forbidden writes (v1): therapy changes, allergy changes
   if (hasWriteVerb && /\b(terapia|terapie|farmac|prescriv)\b/.test(q)) {
     return make('refuse_forbidden', { refusalReason: 'Le modifiche a terapie e farmaci richiedono una conferma rafforzata e non sono disponibili via voce.' });
   }

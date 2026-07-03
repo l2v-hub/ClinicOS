@@ -9,7 +9,10 @@ import type { VoiceConfig } from './config.js';
 import { IdempotencyStore } from './idempotency.js';
 import { voiceAudit } from './audit.js';
 
-export type VoiceErrorKind = 'feature_disabled' | 'writes_disabled' | 'not_executable' | 'ambiguous' | 'confirmation_required';
+export type VoiceErrorKind =
+  | 'feature_disabled' | 'writes_disabled' | 'not_executable' | 'ambiguous' | 'confirmation_required'
+  // SPEC-015 (Agnos orchestrator): allowlist violation and delete refusal at the execute boundary.
+  | 'not_in_catalog' | 'delete_forbidden';
 
 export class VoiceError extends Error {
   constructor(public kind: VoiceErrorKind, message: string) { super(message); this.name = 'VoiceError'; }
@@ -39,7 +42,7 @@ const SUCCESS_MESSAGE: Record<VoiceActionType, string> = {
 
 export interface ExecuteOptions {
   confirmed: boolean;
-  ctx: { requestId: string; userId: string; operatorName: string };
+  ctx: { requestId: string; userId: string; operatorName: string; channel?: 'TESTO' | 'VOCE' };
   cfg: VoiceConfig;
   writer: VoiceWriter;
   store: IdempotencyStore;

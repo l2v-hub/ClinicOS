@@ -4073,3 +4073,37 @@ textarea.form-input {
 .voice-done { font-size: 14px; font-weight: 600; color: #027A48; background: #ECFDF3;
   border: 1px solid #A6F4C5; border-radius: 8px; padding: 10px 12px; }
 .voice-read { margin-top: 4px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   015 AGNOS — unified text chatbot (extends REQ-040 .ai-asst__* + REQ-041
+   .voice-preview styles; no duplicated rules)
+═══════════════════════════════════════════════════════════════════════════ */
+.agnos-turn { display: flex; flex-direction: column; }
+.agnos-turn--utente { align-items: flex-end; }
+.agnos-turn--agnos { align-items: stretch; }
+
+/* Refusal: distinct from read-refusal (amber) — red accent, blocking. */
+.agnos-refusal { background: #FEF2F2; border: 1px solid #FECACA;
+  border-left: 3px solid var(--red, #DC2626); color: #991B1B;
+  padding: 10px 12px; border-radius: 8px; font-size: 14px; }
+.agnos-refusal__hint { display: block; margin-top: 6px; font-size: 12px; font-weight: 600; color: #B42318; }
+
+/* Write preview inside the chat: reuse .voice-preview, white card on chat bg. */
+.agnos-preview { background: var(--surface, #fff); }
+.agnos-preview--annullata { opacity: 0.6; }
+.agnos-preview__stato { font-size: 13px; font-weight: 600; color: var(--text-muted, #667085); margin-top: 4px; }
+.agnos-preview__stato--ok { color: #027A48; }
+
+/* Compose row: textarea (Invio invia, Maiusc+Invio a capo). */
+.agnos-compose { align-items: flex-end; }
+.agnos-input { flex: 1; resize: none; border: 1px solid var(--border, #D0D5DD);
+  border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 14px;
+  box-sizing: border-box; min-height: 40px; }
+.agnos-input:focus { outline: none; border-color: var(--c-primary, var(--blue)); }
+.agnos-input:disabled { background: var(--surface-raised, #F4F7FB); color: var(--text-muted, #667085); }
+
+/* Tablet: full-height drawer already handled by .ai-drawer (min(420px,100vw)). */
+@media (max-width: 1023px) {
+  .agnos-panel { width: min(460px, 100vw); }
+  .agnos-compose { padding: 10px 12px; }
+}

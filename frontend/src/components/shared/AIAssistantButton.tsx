@@ -127,7 +127,8 @@ export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole
   );
 }
 
-function AnswerView({ answer, onNavigate }: { answer: AssistantAnswer; onNavigate?: (n: AssistantNav) => void }) {
+// Exported for reuse by AgnosPanel (015): same read-answer rendering (results + sources).
+export function AnswerView({ answer, onNavigate }: { answer: AssistantAnswer; onNavigate?: (n: AssistantNav) => void }) {
   if (answer.refusal) return <div className="ai-asst__a ai-asst__refusal">{answer.refusal}</div>;
   if (answer.notFound) return <div className="ai-asst__a ai-asst__muted">Informazione non trovata.</div>;
   return (

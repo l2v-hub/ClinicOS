@@ -17,6 +17,7 @@ import intakeDraftsRouter from './routes/intake-drafts.js';
 import internalAiRouter from './routes/internal-ai.js';
 import assistantPublicRouter from './routes/ai-assistant-public.js';
 import voiceRouter from './routes/ai-voice.js';
+import aiActionsRouter from './routes/ai-actions.js';
 
 const app = express();
 
@@ -96,6 +97,8 @@ app.use('/ai/extraction', aiExtractionRouter);
 app.use('/ai/assistant', assistantPublicRouter);
 // REQ-041: operator-facing voice write-actions (transcript-only; audio stays client-side).
 app.use('/ai/voice', voiceRouter);
+// SPEC-015: unified Agnos orchestrator — text + voice commands, CRU-only allowlist (no delete).
+app.use('/ai/actions', aiActionsRouter);
 // REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
 app.use('/internal/ai', internalAiRouter);
 
