@@ -91,11 +91,11 @@
 
 **Independent Test**: creare e aggiornare appuntamento via chat; slot corretto popolato senza reload; persistenza dopo refresh; conflitto slot segnalato in preview.
 
-- [ ] T023 [US4] Creare `backend/src/services/appointment-service.ts`: list/create/update con controllo conflitto slot 30-min per operatore (modello `Appointment` esistente, schema invariato); delete esposto SOLO alla route UI
-- [ ] T024 [US4] Creare route REST `backend/src/routes/appointments.ts`: `GET /appointments?date=&operatorId=`, `POST` (201/409), `PATCH /:id` (200/409), `DELETE /:id` (204, solo pulsante UI); montare in `app.ts`
-- [ ] T025 [US4] Aggiungere azioni AI `create_appointment`/`update_appointment` a `catalog.ts` + planner appuntamenti in `backend/src/ai/actions/appointments.ts` (date/ore italiane, conflitto slot come ambiguità bloccante in preview); nessuna azione delete_appointment
-- [ ] T026 [US4] Frontend: sostituire `MOCK_APPUNTAMENTI` in `frontend/src/App.tsx` con fetch reale `/appointments`; `AppointmentForm.onSave` → POST/PATCH; delete agenda via pulsante UI → DELETE REST
-- [ ] T027 [US4] Test: unit appointment-service (conflitti) in `backend/src/ai/__tests__/` + verifica "modifica la terapia di Rossi" rifiutato (entità vietata)
+- [x] T023 [US4] Creare `backend/src/services/appointment-service.ts`: list/create/update con controllo conflitto slot 30-min per operatore (modello `Appointment` esistente, schema invariato); delete esposto SOLO alla route UI
+- [x] T024 [US4] Creare route REST `backend/src/routes/appointments.ts`: `GET /appointments?date=&operatorId=`, `POST` (201/409), `PATCH /:id` (200/409), `DELETE /:id` (204, solo pulsante UI); montare in `app.ts`
+- [x] T025 [US4] Aggiungere azioni AI `create_appointment`/`update_appointment` a `catalog.ts` + planner appuntamenti in `backend/src/ai/actions/appointments.ts` (date/ore italiane, conflitto slot come ambiguità bloccante in preview); nessuna azione delete_appointment
+- [x] T026 [US4] Frontend: sostituire `MOCK_APPUNTAMENTI` in `frontend/src/App.tsx` con fetch reale `/appointments`; `AppointmentForm.onSave` → POST/PATCH; delete agenda via pulsante UI → DELETE REST
+- [x] T027 [US4] Test: unit appointment-service (conflitti) in `backend/src/ai/__tests__/` + verifica "modifica la terapia di Rossi" rifiutato (entità vietata)
 
 **Checkpoint**: agenda persistita via API; pattern estensione catalogo dimostrato.
 

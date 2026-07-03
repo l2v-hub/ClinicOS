@@ -4,6 +4,7 @@ import express from 'express';
 import { adminRouter as adminRoomsRouter, patientAssignmentRouter } from './routes/admin-rooms.js';
 import patientTherapiesRouter from './routes/patient-therapies.js';
 import patientsRouter from './routes/patients.js';
+import appointmentsRouter from './routes/appointments.js';
 import therapyRouter from './routes/therapy.js';
 import patientIntakeRouter from './routes/patient-intake.js';
 import patientDiaryRouter from './routes/patient-diary.js';
@@ -87,6 +88,8 @@ app.use('/patients', patientDiaryRouter);
 app.use('/patients', narrativeSectionsRouter);
 app.use('/patients', patientDocumentsRouter);
 app.use('/patients', patientsRouter);
+// SPEC-015 (US4): real agenda appointments — same service as the Agnos AI actions; DELETE = UI only.
+app.use('/appointments', appointmentsRouter);
 app.use('/therapy-slots', therapyRouter);
 app.use('/patient-intake', patientIntakeRouter);
 app.use('/consegne', consegneRouter);

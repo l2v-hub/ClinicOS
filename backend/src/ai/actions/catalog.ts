@@ -51,6 +51,22 @@ export const AGNOS_ACTION_CATALOG: Record<string, AgnosCatalogEntry> = {
     enabled: true,
     description: 'Aggiunge una nota al diario del paziente.',
   },
+  // SPEC-015 US4: agenda appointments — create/update ONLY. delete_appointment does not exist and
+  // must never be added: la cancellazione appuntamenti è riservata al pulsante della UI (FR-010).
+  create_appointment: {
+    name: 'create_appointment',
+    kind: 'create',
+    entity: 'appointment',
+    enabled: true,
+    description: 'Crea un appuntamento in agenda (paziente, data, ora, tipologia) con controllo conflitti slot.',
+  },
+  update_appointment: {
+    name: 'update_appointment',
+    kind: 'update',
+    entity: 'appointment',
+    enabled: true,
+    description: 'Sposta o aggiorna un appuntamento esistente in agenda (nuovo orario) con controllo conflitti slot.',
+  },
 };
 
 function envDisabledNames(env: NodeJS.ProcessEnv): Set<string> {

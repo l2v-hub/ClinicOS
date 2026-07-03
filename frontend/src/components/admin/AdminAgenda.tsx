@@ -10,7 +10,7 @@ interface AdminAgendaProps {
   operatori: Operatore[];
   appuntamenti: Appuntamento[];
   pazienti: Paziente[];
-  onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => void;
+  onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onAddPaziente: (nome: string) => void;
   onSelectPaziente?: (nome: string) => void;
 }
@@ -321,7 +321,7 @@ export function AdminAgenda({ operatori, appuntamenti, pazienti, onAddAppuntamen
         <AppointmentForm
           data={aptForm.data} ora={aptForm.ora}
           operatoreId={aptForm.operatoreId} operatori={operatori} pazienti={pazienti}
-          onSave={apt => { onAddAppuntamento(apt); setAptForm(null); }}
+          onSave={async apt => { const err = await onAddAppuntamento(apt); if (!err) setAptForm(null); return err; }}
           onCancel={() => setAptForm(null)}
           onNewPatient={() => setShowNewPaziente(true)}
         />

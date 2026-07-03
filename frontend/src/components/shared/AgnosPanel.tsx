@@ -21,7 +21,8 @@ interface Props {
   operatorName?: string;
   currentPatientId?: string;
   currentPatientName?: string;
-  onExecuted?: () => void;
+  /** SPEC-015 US4: actionType dell'azione eseguita, per refresh mirato (cartella vs agenda). */
+  onExecuted?: (info: { actionType?: string }) => void;
   onNavigate?: (nav: AssistantNav) => void;
 }
 

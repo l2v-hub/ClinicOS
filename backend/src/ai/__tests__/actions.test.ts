@@ -28,6 +28,8 @@ function fakeWriter() {
     async updateDemographics() { calls.push('demo'); return 'rec-demo'; },
     async appendNarrative() { calls.push('narr'); return 'rec-narr'; },
     async addDiaryNote() { calls.push('diary'); return 'rec-diary'; },
+    async createAppointment() { calls.push('appt-create'); return 'rec-appt'; },
+    async updateAppointment() { calls.push('appt-update'); return 'rec-appt'; },
   };
   return { w, calls };
 }
@@ -287,5 +289,240 @@ test('T018d audit: tentativo delete → recordAuditEvent riceve kind refusal / r
     assert.equal(refusals[1].channel, 'voce');
   } finally {
     setAuditPersistence(null);
+  }
+});
+
+// ── T027 (US4) — APPUNTAMENTI AGENDA VIA AGNOS ──────────────────────────────
+
+import { matchAppointmentCommand } from '../actions/appointments.js';
+import type { AppointmentLookupDeps } from '../actions/appointments.js';
+
+const MORETTI = { id: 'pat-moretti', firstName: 'Elena', lastName: 'Moretti' };
+
+/** Injected lookups: no DB. Overrides let each test simulate conflicts / missing targets. */
+function apptLookup(overrides: Partial<AppointmentLookupDeps> = {}): AppointmentLookupDeps {
+  return {
+    searchPatients: async (q) => (/moretti/i.test(q) ? [MORETTI] : []),
+    getPatient: async (id) => (id === PID ? { id: PID, firstName: 'Mario', lastName: 'Rossi' } : null),
+    findConflict: async () => null,
+    findAppointmentAt: async () => ({ id: 'apt-1', operatorId: 'op-agenda' }),
+    ...overrides,
+  };
+}
+
+test('T027 matcher: crea appuntamento — tipologia, data relativa, ora e paziente dal testo', () => {
+  const p = matchAppointmentCommand('crea appuntamento fisioterapia domani alle 10:30 per Moretti', {}, { now: new Date('2026-07-04T08:00:00') });
+  assert.ok(p);
+  assert.equal(p.actionType, 'create_appointment');
+  assert.equal(p.fields.data, '2026-07-05');
+  assert.equal(p.fields.ora, '10:30');
+  assert.equal(p.fields.tipologia, 'fisioterapia');
+  assert.equal(p.fields.patientQuery, 'Moretti');
+  assert.deepEqual(p.ambiguities, []);
+  assert.equal(p.requiresConfirmation, true);
+});
+
+test('T027 matcher: varianti data/ora — dopodomani, "il GG/MM", "alle 9 e 30"', () => {
+  const now = new Date('2026-07-04T08:00:00');
+  const p1 = matchAppointmentCommand('fissa un appuntamento di controllo dopodomani alle ore 9 per Moretti', {}, { now });
+  assert.ok(p1);
+  assert.equal(p1.fields.data, '2026-07-06');
+  assert.equal(p1.fields.ora, '09:00');
+  assert.equal(p1.fields.tipologia, 'controllo');
+  const p2 = matchAppointmentCommand('prenota appuntamento il 12/08 alle 9 e 30 per Moretti', {}, { now });
+  assert.ok(p2);
+  assert.equal(p2.fields.data, '2026-08-12');
+  assert.equal(p2.fields.ora, '09:30');
+  assert.equal(p2.fields.tipologia, 'visita'); // nessuna tipologia esplicita → default
+});
+
+test('T027 matcher: data/ora mancanti e paziente assente = ambiguità bloccanti', () => {
+  const p = matchAppointmentCommand('crea appuntamento fisioterapia', {}, {});
+  assert.ok(p);
+  assert.equal(p.actionType, 'create_appointment');
+  assert.ok(p.ambiguities.some((a) => /data/i.test(a)));
+  assert.ok(p.ambiguities.some((a) => /orario/i.test(a)));
+  assert.ok(p.ambiguities.some((a) => /paziente/i.test(a)));
+});
+
+test('T027 matcher: sposta appuntamento — orario vecchio/nuovo, paziente dal contesto', () => {
+  const p = matchAppointmentCommand("sposta l'appuntamento delle 15 alle 16", { currentPatientId: PID }, { now: new Date('2026-07-04T08:00:00') });
+  assert.ok(p);
+  assert.equal(p.actionType, 'update_appointment');
+  assert.equal(p.fields.oldTime, '15:00');
+  assert.equal(p.fields.newTime, '16:00');
+  assert.equal(p.fields.data, '2026-07-04'); // senza data esplicita = oggi
+  assert.equal(p.patientId, PID);
+  assert.deepEqual(p.ambiguities, []);
+});
+
+test('T027 matcher: comandi non-appuntamento NON vengono intercettati', () => {
+  assert.equal(matchAppointmentCommand('registra pressione 130 su 80 alle 9', { currentPatientId: PID }), null);
+  assert.equal(matchAppointmentCommand('mostra gli appuntamenti di domani', { currentPatientId: PID }), null);
+  // "aggiorna la sezione anamnesi con: appuntamento cardiologo fissato" contiene "appuntament"
+  // ma nessun verbo appuntamento in forma valida (fissato ≠ fissa/fissare) → non intercettato.
+  assert.equal(matchAppointmentCommand('aggiorna la sezione anamnesi con: appuntamento cardiologo previsto', { currentPatientId: PID }), null);
+});
+
+test('T027 plan: crea appuntamento per Moretti → preview eseguibile con paziente risolto', async () => {
+  const r = await planCommand(
+    { text: 'crea appuntamento fisioterapia domani alle 10:30 per Moretti', channel: 'testo', operatorCtx },
+    { appointmentLookup: apptLookup() },
+  );
+  assert.equal(r.plan.actionType, 'create_appointment');
+  assert.equal(r.plan.channel, 'testo');
+  assert.equal(r.plan.patientId, MORETTI.id);
+  assert.equal(r.read, null);
+  assert.ok(r.preview);
+  assert.equal(r.preview.title, 'Crea appuntamento');
+  assert.equal(r.preview.canExecute, true);
+  assert.match(r.preview.patientName ?? '', /Moretti/);
+  assert.ok(r.preview.lines.some((l) => l.value === '10:30'));
+});
+
+test('T027 plan: conflitto slot → ambiguità BLOCCANTE in preview (conferma disabilitata)', async () => {
+  const r = await planCommand(
+    { text: 'crea appuntamento fisioterapia domani alle 10:30 per Moretti', channel: 'testo', operatorCtx },
+    { appointmentLookup: apptLookup({ findConflict: async () => ({ id: 'apt-busy' }) }) },
+  );
+  assert.equal(r.plan.actionType, 'create_appointment');
+  assert.equal(r.preview?.canExecute, false);
+  assert.ok(r.plan.ambiguities.some((a) => /conflitto slot/i.test(a)), r.plan.ambiguities.join(' | '));
+});
+
+test('T027 plan: paziente non trovato / ambiguo → conferma disabilitata', async () => {
+  const notFound = await planCommand(
+    { text: 'crea appuntamento domani alle 10 per Sconosciuto', channel: 'testo', operatorCtx },
+    { appointmentLookup: apptLookup() },
+  );
+  assert.equal(notFound.preview?.canExecute, false);
+  assert.ok(notFound.plan.ambiguities.some((a) => /non trovato/i.test(a)));
+  const multi = await planCommand(
+    { text: 'crea appuntamento domani alle 10 per Moretti', channel: 'testo', operatorCtx },
+    { appointmentLookup: apptLookup({ searchPatients: async () => [MORETTI, { id: 'p2', firstName: 'Stefano', lastName: 'Moretti' }] }) },
+  );
+  assert.equal(multi.preview?.canExecute, false);
+  assert.ok(multi.plan.ambiguities.some((a) => /più pazienti/i.test(a)));
+});
+
+test('T027 plan: sposta appuntamento → target risolto e preview con orari', async () => {
+  const r = await planCommand(
+    { text: "sposta l'appuntamento delle 15 alle 16", channel: 'testo', currentPatientId: PID, operatorCtx },
+    { appointmentLookup: apptLookup() },
+  );
+  assert.equal(r.plan.actionType, 'update_appointment');
+  assert.equal(r.plan.targetRecordId, 'apt-1');
+  assert.equal(r.preview?.canExecute, true);
+  assert.ok(r.preview?.lines.some((l) => l.label === 'Nuovo orario' && l.value === '16:00'));
+});
+
+test('T027 execute: crea appuntamento confermato → writer appuntamenti, idempotente al retry', async () => {
+  const { w, calls } = fakeWriter();
+  const deps = { ...execDeps(w), appointmentLookup: apptLookup() };
+  const input = {
+    text: 'crea appuntamento fisioterapia domani alle 10:30 per Moretti',
+    channel: 'testo' as const, idempotencyKey: 'k-appt', confirmed: true, operatorCtx,
+  };
+  const r1 = await executeCommand(input, deps);
+  assert.equal(r1.ok, true);
+  assert.equal(r1.actionType, 'create_appointment');
+  assert.equal(r1.recordId, 'rec-appt');
+  const r2 = await executeCommand(input, deps);
+  assert.equal(r2.deduped, true);
+  assert.deepEqual(calls, ['appt-create']); // una sola scrittura
+});
+
+test('T027 execute: retry dopo scrittura — lo slot appena creato NON blocca il replay (deduped)', async () => {
+  // Simula il mondo reale: dopo la prima esecuzione lo slot risulta occupato (dall'appuntamento
+  // appena creato). Il replay con la STESSA idempotencyKey deve restituire deduped, non conflitto.
+  const { w, calls } = fakeWriter();
+  let written = false;
+  const deps = {
+    ...execDeps(w),
+    appointmentLookup: apptLookup({ findConflict: async () => (written ? { id: 'rec-appt' } : null) }),
+  };
+  const input = {
+    text: 'crea appuntamento fisioterapia domani alle 10:30 per Moretti',
+    channel: 'testo' as const, idempotencyKey: 'k-appt-replay', confirmed: true, operatorCtx,
+  };
+  const r1 = await executeCommand(input, deps);
+  written = true;
+  assert.equal(r1.ok, true);
+  const r2 = await executeCommand(input, deps);
+  assert.equal(r2.ok, true);
+  assert.equal(r2.deduped, true);
+  assert.deepEqual(calls, ['appt-create']);
+});
+
+test('T027 execute: conflitto slot rilevato al re-grounding → ambiguous, writer MAI chiamato', async () => {
+  const { w, calls } = fakeWriter();
+  const deps = { ...execDeps(w), appointmentLookup: apptLookup({ findConflict: async () => ({ id: 'apt-busy' }) }) };
+  await assert.rejects(
+    () => executeCommand(
+      { text: 'crea appuntamento fisioterapia domani alle 10:30 per Moretti', channel: 'testo', idempotencyKey: 'k-appt-conf', confirmed: true, operatorCtx },
+      deps,
+    ),
+    (e: unknown) => e instanceof VoiceError && e.kind === 'ambiguous' && /conflitto slot/i.test(e.message),
+  );
+  assert.deepEqual(calls, []);
+});
+
+test('T027: "modifica la terapia di Rossi" → rifiuto entità vietata (non delete)', async () => {
+  const r = await planCommand(
+    { text: 'modifica la terapia di Rossi', channel: 'testo', currentPatientId: PID, operatorCtx },
+    noDb,
+  );
+  assert.equal(r.plan.actionType, 'refuse_forbidden');
+  assert.notEqual(r.plan.refusalKind, 'delete');
+  assert.match(r.preview?.refusal ?? '', /terapie/i);
+});
+
+test("T027: \"cancella l'appuntamento delle 15\" → refusalKind delete su plan ED execute", async () => {
+  const r = await planCommand(
+    { text: "cancella l'appuntamento delle 15", channel: 'testo', currentPatientId: PID, operatorCtx },
+    noDb,
+  );
+  assert.equal(r.plan.actionType, 'refuse_forbidden');
+  assert.equal(r.plan.refusalKind, 'delete');
+  assert.match(r.preview?.refusal ?? '', /interfaccia tradizionale/i);
+
+  const { w, calls } = fakeWriter();
+  await assert.rejects(
+    () => executeCommand(
+      { text: "elimina l'appuntamento delle 15", channel: 'voce', idempotencyKey: 'k-appt-del', confirmed: true, operatorCtx },
+      { ...execDeps(w), appointmentLookup: apptLookup() },
+    ),
+    (e: unknown) => e instanceof VoiceError && e.kind === 'delete_forbidden',
+  );
+  assert.deepEqual(calls, []);
+});
+
+test('T027 catalogo: create/update_appointment presenti, NESSUNA azione delete_appointment', () => {
+  assert.equal(AGNOS_ACTION_CATALOG.create_appointment?.kind, 'create');
+  assert.equal(AGNOS_ACTION_CATALOG.create_appointment?.entity, 'appointment');
+  assert.equal(AGNOS_ACTION_CATALOG.update_appointment?.kind, 'update');
+  assert.equal(AGNOS_ACTION_CATALOG.update_appointment?.entity, 'appointment');
+  assert.equal(AGNOS_ACTION_CATALOG['delete_appointment' as keyof typeof AGNOS_ACTION_CATALOG], undefined);
+  assert.equal(isActionAllowed('delete_appointment', emptyEnv), false);
+  // il catalogo resta CRU-only anche dopo l'estensione
+  for (const e of listCatalog(emptyEnv)) assert.notEqual(e.kind as string, 'delete', e.name);
+});
+
+test('T027 isolamento delete: nessun modulo sotto src/ai importa uiOnlyDeleteAppointment', async () => {
+  const { readdir, readFile } = await import('node:fs/promises');
+  const { join, dirname } = await import('node:path');
+  const { fileURLToPath } = await import('node:url');
+  const aiRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+  async function* walk(dir: string): AsyncGenerator<string> {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) yield* walk(full);
+      else if (entry.name.endsWith('.ts')) yield full;
+    }
+  }
+  for await (const file of walk(aiRoot)) {
+    if (file.endsWith('actions.test.ts')) continue; // questo file cita il nome solo nel test
+    const src = await readFile(file, 'utf8');
+    assert.ok(!src.includes('uiOnlyDeleteAppointment'), `delete UI-only importato da modulo AI: ${file}`);
   }
 });

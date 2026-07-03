@@ -16,6 +16,8 @@ function fakeWriter() {
     async updateDemographics() { calls.push('demo'); return 'rec-demo'; },
     async appendNarrative() { calls.push('narr'); return 'rec-narr'; },
     async addDiaryNote() { calls.push('diary'); return 'rec-diary'; },
+    async createAppointment() { calls.push('appt-create'); return 'rec-appt'; },
+    async updateAppointment() { calls.push('appt-update'); return 'rec-appt'; },
   };
   return { w, calls };
 }

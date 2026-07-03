@@ -9,6 +9,7 @@ import {
   getNarrativeSection, upsertNarrativeSection, pickDisplayText,
   NARRATIVE_SECTION_KEYS, type NarrativeSectionKey,
 } from '../sections/patient-narrative.js';
+import { createAppointment, updateAppointment } from '../../services/appointment-service.js';
 import type { VoiceWriter, WriteMeta } from './execute.js';
 
 const DEMOGRAPHIC_FIELDS = new Set(['phone', 'email', 'address', 'emergencyContactName', 'emergencyContactPhone']);
@@ -77,5 +78,28 @@ export const prismaVoiceWriter: VoiceWriter = {
       },
     });
     return entry.id;
+  },
+
+  // SPEC-015 US4: agenda appointments go through the SAME service as the UI routes (FR-007).
+  // The AI can only create/update — the service's delete is UI-only and never imported here.
+  async createAppointment(patientId, fields, meta) {
+    const dto = await createAppointment({
+      patientId,
+      operatorId: meta.operatorId,
+      operatorName: meta.operatorName,
+      data: String(fields.data ?? ''),
+      ora: String(fields.ora ?? ''),
+      tipologia: String(fields.tipologia ?? 'visita'),
+      note: fields.note !== undefined ? String(fields.note) : undefined,
+    });
+    return dto.id;
+  },
+
+  async updateAppointment(targetRecordId, fields, _meta) {
+    const dto = await updateAppointment(targetRecordId, {
+      data: fields.data !== undefined ? String(fields.data) : undefined,
+      ora: fields.newTime !== undefined ? String(fields.newTime) : undefined,
+    });
+    return dto.id;
   },
 };

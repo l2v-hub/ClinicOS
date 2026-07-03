@@ -60,7 +60,9 @@ interface UseAgnosChatOptions {
   operatorRole?: string;
   operatorName?: string;
   currentPatientId?: string;
-  onExecuted?: () => void;
+  /** SPEC-015 US4: receives the executed actionType so the app can refresh the right data
+   *  (cartella for clinical writes, agenda for create/update_appointment). */
+  onExecuted?: (info: { actionType?: string }) => void;
 }
 
 interface ApiError { error?: { kind?: string; message?: string } }
@@ -206,7 +208,7 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
         // L'esecuzione confermata di un comando dettato resta channel:'voce'.
         body: JSON.stringify({ text, channel, patientId, idempotencyKey, confirmed: true }),
       });
-      const data = await res.json() as ApiError & { ok?: boolean; message?: string; deduped?: boolean };
+      const data = await res.json() as ApiError & { ok?: boolean; message?: string; deduped?: boolean; actionType?: string };
       if (!res.ok || !data.ok) {
         const msg = errorMessage(data, 'Operazione non salvata.');
         setError(msg);
@@ -222,7 +224,7 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
         },
       ]);
       setPending(null);
-      onExecuted?.();
+      onExecuted?.({ actionType: data.actionType });
     } catch {
       const msg = 'Errore di rete: l’operazione non è stata salvata.';
       setError(msg);

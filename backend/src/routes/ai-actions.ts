@@ -9,6 +9,7 @@ import { importRateLimit } from '../ai/rate-limit.js';
 import { VoiceError } from '../ai/voice/execute.js';
 import { loadVoiceConfig } from '../ai/voice/config.js';
 import { GatewayError } from '../ai/gateway/types.js';
+import { SlotConflictError } from '../services/appointment-service.js';
 import { listCatalog } from '../ai/actions/catalog.js';
 import { planCommand, executeCommand, type AgnosChannel, type AgnosOperatorContext } from '../ai/actions/orchestrate.js';
 import { ctxFromOperator } from './ai-assistant-public.js';
@@ -34,6 +35,11 @@ const VOICE_ERROR_STATUS: Record<string, number> = {
 };
 
 function fail(res: Response, err: unknown) {
+  // SPEC-015 US4: slot re-checked inside the shared service at write time (race between preview
+  // and confirm) — surfaced with the same contract shape as the REST route.
+  if (err instanceof SlotConflictError) {
+    return res.status(409).json({ error: { kind: 'slot_conflict', message: err.message } });
+  }
   if (err instanceof VoiceError) {
     return res.status(VOICE_ERROR_STATUS[err.kind] ?? 400).json({ error: { kind: err.kind, message: err.message } });
   }

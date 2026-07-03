@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 import { API_URL } from './config';
+import { cachedGetJson, invalidateCachedGet } from './lib/cachedFetch';
 
 import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
   Appuntamento, Camera, ScheduleOperatore, Nota, StatoNota,
   CartellaPaziente, NuovoPaziente, TherapySlot, MotivoNonErogazione,
-  TherapySlotPatient, TherapyAdministration,
+  TherapySlotPatient, TherapyAdministration, TipoIntervento,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
-  MOCK_OPERATORI, MOCK_AGENDA,
-  MOCK_APPUNTAMENTI, MOCK_SCHEDULES,
+  MOCK_OPERATORI, MOCK_AGENDA, MOCK_SCHEDULES,
   createDefaultCartella, createMockTherapySlots,
 } from './mockData';
 
@@ -62,6 +62,36 @@ const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
   'agenda-operatore': 'operator-dashboard',
 };
 
+// ── Appuntamenti: mapping DTO backend → tipo Appuntamento della UI (SPEC-015 US4) ──
+//
+// Il backend espone il modello Prisma Appointment come { data, ora, durata, tipologia, note,
+// stato, patientName, operatorName }. La UI usa lo stesso vocabolario tranne: tipologia libera
+// (es. "fisioterapia" via Agnos) → tipoIntervento 'altro' con la tipologia riportata nelle note;
+// priorita/cameraId non sono persistiti dal modello → default.
+
+const TIPI_NOTI: readonly TipoIntervento[] = ['visita', 'controllo', 'procedura', 'urgenza', 'consulto', 'follow-up', 'altro'];
+
+function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {
+  const tipologia = String(r.tipologia ?? '');
+  const known = (TIPI_NOTI as readonly string[]).includes(tipologia);
+  const note = String(r.note ?? '');
+  const stato = String(r.stato ?? 'programmato');
+  return {
+    id: String(r.id ?? ''),
+    data: String(r.data ?? ''),
+    ora: String(r.ora ?? ''),
+    durata: Number(r.durata ?? 30),
+    pazienteId: r.patientId ? String(r.patientId) : null,
+    pazienteNome: r.patientName ? String(r.patientName) : null,
+    operatoreId: String(r.operatorId ?? ''),
+    operatoreNome: r.operatorName ? String(r.operatorName) : '',
+    tipoIntervento: (known ? tipologia : 'altro') as TipoIntervento,
+    stato: (['programmato', 'in_corso', 'completato', 'annullato'].includes(stato) ? stato : 'programmato') as Appuntamento['stato'],
+    priorita: 'normale',
+    note: known || !tipologia ? note : (note ? `${tipologia} — ${note}` : tipologia),
+  };
+}
+
 // ── App ────────────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -94,7 +124,7 @@ export default function App() {
   const [operatori, setOperatori] = useState<Operatore[]>(MOCK_OPERATORI);
   const [consegne, setConsegne] = useState<Consegna[]>([]);
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
-  const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>(MOCK_APPUNTAMENTI);
+  const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
   const [camere, setCamere] = useState<Camera[]>([]);
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>(MOCK_SCHEDULES);
   const [note, setNote] = useState<Nota[]>([]);
@@ -123,6 +153,8 @@ export default function App() {
     }
     pushNav(key);
     if (key === 'agenda-operatore') loadTherapySlots();
+    // SPEC-015 US4: agenda reale — refresh appuntamenti alla navigazione (come loadTherapySlots)
+    if (key === 'agenda-operatore' || key === 'agenda-admin') loadAppuntamenti();
   }
 
   function selectPaziente(p: Paziente) {
@@ -168,24 +200,34 @@ export default function App() {
   const loadTherapySlots = useCallback(async (date?: string) => {
     const d = date || new Date().toISOString().slice(0, 10);
     try {
-      const res = await fetch(`${API_URL}/therapy-slots?date=${d}`);
-      if (res.ok) {
-        const raw = await res.json();
-        const slots = Array.isArray(raw) ? raw : [];
-        const data: TherapySlot[] = slots.map((s: Record<string, unknown>) => ({
-          id: s.id as string,
-          fascia: s.fascia as TherapySlot['fascia'],
-          label: s.label as string,
-          ora: s.ora as string,
-          summary: (s.summary as TherapySlot['summary']) ?? { total: 0, administered: 0, notAdministered: 0, pending: 0 },
-          patients: Array.isArray(s.patients) ? (s.patients as TherapySlotPatient[]) : [],
-        }));
-        setTherapySlots(data);
-      } else {
-        setTherapySlots(createMockTherapySlots(d));
-      }
+      const raw = await cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${d}`);
+      const slots = Array.isArray(raw) ? raw : [];
+      const data: TherapySlot[] = slots.map((s: Record<string, unknown>) => ({
+        id: s.id as string,
+        fascia: s.fascia as TherapySlot['fascia'],
+        label: s.label as string,
+        ora: s.ora as string,
+        summary: (s.summary as TherapySlot['summary']) ?? { total: 0, administered: 0, notAdministered: 0, pending: 0 },
+        patients: Array.isArray(s.patients) ? (s.patients as TherapySlotPatient[]) : [],
+      }));
+      setTherapySlots(data);
     } catch {
       setTherapySlots(createMockTherapySlots(d));
+    }
+  }, []);
+
+  // ── Load appointments (API — SPEC-015 US4, sostituisce MOCK_APPUNTAMENTI) ──
+
+  const loadAppuntamenti = useCallback(async (date?: string) => {
+    try {
+      const qs = date ? `?date=${date}` : '';
+      const res = await fetch(`${API_URL}/appointments${qs}`);
+      if (!res.ok) return; // lista corrente invariata
+      const raw = await res.json();
+      const rows = Array.isArray(raw) ? raw : [];
+      setAppuntamenti(rows.map((r: Record<string, unknown>) => mapAppointmentDTO(r)));
+    } catch {
+      // rete assente: lista corrente invariata (nessun fallback mock)
     }
   }, []);
 
@@ -200,6 +242,7 @@ export default function App() {
       .catch(() => setPazienti([]))
       .finally(() => setLoadingPazienti(false));
     loadTherapySlots();
+    loadAppuntamenti(); // SPEC-015 US4: agenda persistita
     // Load rooms from API for AdminDashboard
     fetch(`${API_URL}/admin/rooms`)
       .then(r => r.ok ? r.json() : [])
@@ -231,7 +274,7 @@ export default function App() {
       .then(r => r.ok ? r.json() : [])
       .then((data: Nota[]) => setNote(data.map(n => ({ ...n, pazienteId: n.pazienteId ?? undefined, pazienteNome: n.pazienteNome ?? undefined }))))
       .catch(() => { /* keep empty array */ });
-  }, [utente, loadTherapySlots]);
+  }, [utente, loadTherapySlots, loadAppuntamenti]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
 
@@ -354,10 +397,36 @@ export default function App() {
     }
   }
 
-  // ── Appuntamenti CRUD ───────────────────────────────────────────────────────
+  // ── Appuntamenti CRUD (API-persisted — SPEC-015 US4) ───────────────────────
 
-  function addAppuntamento(apt: Omit<Appuntamento, 'id'>) {
-    setAppuntamenti(prev => [...prev, { ...apt, id: crypto.randomUUID() }]);
+  /** POST /appointments; ritorna il messaggio di errore (mostrato nel form) o null se salvato. */
+  async function addAppuntamento(apt: Omit<Appuntamento, 'id'>): Promise<string | null> {
+    if (!apt.pazienteId) return 'Seleziona un paziente per l’appuntamento.';
+    try {
+      const res = await fetch(`${API_URL}/appointments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patientId: apt.pazienteId,
+          operatorId: apt.operatoreId,
+          operatorName: apt.operatoreNome,
+          data: apt.data,
+          ora: apt.ora,
+          durata: apt.durata,
+          tipologia: apt.tipoIntervento,
+          note: apt.note,
+          stato: apt.stato,
+        }),
+      });
+      const body = await res.json().catch(() => ({})) as { error?: { kind?: string; message?: string } } & Record<string, unknown>;
+      if (res.status === 409) return body.error?.message ?? 'Slot già occupato: scegli un altro orario.';
+      if (!res.ok) return body.error?.message ?? 'Impossibile salvare l’appuntamento.';
+      setAppuntamenti(prev => [...prev, mapAppointmentDTO(body)]);
+      showToast('Appuntamento salvato');
+      return null;
+    } catch {
+      return 'Errore di rete: appuntamento non salvato.';
+    }
   }
 
   // ── Camere CRUD ─────────────────────────────────────────────────────────────
@@ -618,6 +687,7 @@ export default function App() {
         }),
       });
 
+      invalidateCachedGet(`${API_URL}/therapy-slots`); // mutazione: il prossimo load rilegge dal server
       if (res.status === 409) {
         showToast('Terapia già erogata');
         loadTherapySlots();
@@ -693,6 +763,7 @@ export default function App() {
         }),
       });
 
+      invalidateCachedGet(`${API_URL}/therapy-slots`); // mutazione: il prossimo load rilegge dal server
       if (res.ok) {
         showToast('Non somministrazione registrata');
         loadTherapySlots();
@@ -970,7 +1041,11 @@ export default function App() {
         operatorName={utente?.nome}
         currentPatientId={navKey === 'dettaglio-paziente' ? pazienteSelezionato?.id : undefined}
         currentPatientName={navKey === 'dettaglio-paziente' && pazienteSelezionato ? `${pazienteSelezionato.lastName ?? ''} ${pazienteSelezionato.firstName ?? ''}`.trim() : undefined}
-        onExecuted={() => { if (pazienteSelezionato) loadCartella(pazienteSelezionato.id); }}
+        onExecuted={(info) => {
+          if (pazienteSelezionato) loadCartella(pazienteSelezionato.id);
+          // SPEC-015 US4: un'azione Agnos sull'agenda aggiorna subito la lista appuntamenti (FR-020)
+          if (info?.actionType === 'create_appointment' || info?.actionType === 'update_appointment') loadAppuntamenti();
+        }}
         onNavigate={(n) => { if (n.patientId) { const p = pazienti.find((x) => x.id === n.patientId); if (p) selectPaziente(p); } }}
       />
     </div>
