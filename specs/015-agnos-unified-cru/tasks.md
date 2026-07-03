@@ -107,7 +107,7 @@
 
 **Independent Test**: misura richieste di rete prima/dopo (agenda −30%, 0 duplicati); ogni salvataggio mostra attesa/successo/errore.
 
-- [ ] T028 [P] [US5] Dedup `/therapy-slots` (App.tsx:172 vs TerapiaFarmacologicaTab.tsx:226) e `/patients/:id/therapies` (TerapiaFarmacologicaTab.tsx:211 vs InvioPSModal.tsx:204) via lift/prop in `frontend/src/App.tsx` e componenti coinvolti
+- [x] T028 [P] [US5] Dedup `/therapy-slots` (App.tsx:172 vs TerapiaFarmacologicaTab.tsx:226) e `/patients/:id/therapies` (TerapiaFarmacologicaTab.tsx:211 vs InvioPSModal.tsx:204) via lift/prop in `frontend/src/App.tsx` e componenti coinvolti
 - [x] T029 [P] [US5] `useMemo` su lista filtrata + `React.memo` su righe in `frontend/src/components/PatientList.tsx`
 - [x] T030 [P] [US5] Stato `saving` + pulsanti disabled + esito visibile su `NewPatientModal` e salvataggi `PatientDetail` (FR-018)
 - [x] T031 [US5] Eliminare catch silenziosi nei file toccati (PatientList.tsx:48, DiarioPazienteTab.tsx:230) con messaggio errore visibile condiviso

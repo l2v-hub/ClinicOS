@@ -7,6 +7,7 @@ import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
+import { cachedGetJson } from '../../lib/cachedFetch';
 
 interface PatientListProps {
   pazienti: Paziente[];
@@ -77,8 +78,7 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
   const [settingsError, setSettingsError] = useState('');
 
   useEffect(() => {
-    fetch(`${API_URL}/patients/settings`)
-      .then((r) => (r.ok ? r.json() : null))
+    cachedGetJson<{ deleteEnabled?: boolean } | null>(`${API_URL}/patients/settings`)
       .then((s) => { if (s) setDeleteEnabled(!!s.deleteEnabled); })
       .catch(() => { setSettingsError('Impossibile verificare le impostazioni della lista pazienti: alcune funzioni potrebbero non essere disponibili.'); });
   }, []);

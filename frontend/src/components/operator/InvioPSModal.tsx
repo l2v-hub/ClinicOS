@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Paziente, CartellaPaziente, DimissioneInfermieristica, PatientTherapyAPI } from '../../types';
 import { formatFraction, computeEquivalent } from './cartella/therapyDose';
+import { cachedGetJson } from '../../lib/cachedFetch';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -201,11 +202,7 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
     let cancelled = false;
     setLoading(true);
     setFetchError('');
-    fetch(`${API_URL}/patients/${paziente.id}/therapies`)
-      .then(r => {
-        if (!r.ok) throw new Error(`Errore ${r.status}`);
-        return r.json() as Promise<PatientTherapyAPI[]>;
-      })
+    cachedGetJson<PatientTherapyAPI[]>(`${API_URL}/patients/${paziente.id}/therapies`)
       .then(data => { if (!cancelled) { setTherapies(data); setLoading(false); } })
       .catch(err => {
         if (!cancelled) {
