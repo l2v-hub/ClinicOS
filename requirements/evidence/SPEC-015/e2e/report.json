@@ -1,0 +1,82 @@
+{
+  "ranAt": "2026-07-03T23:55:50.229Z",
+  "passed": 15,
+  "total": 15,
+  "results": [
+    {
+      "name": "1. UI tradizionale: nota diario creata",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "2. CREATE via chat: vitale confermato",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "3. READ via chat con risultati, senza conferma",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "4. UPDATE via chat: telefono aggiornato nel backend",
+      "pass": true,
+      "detail": "3337654321"
+    },
+    {
+      "name": "5a. Voce: trascrizione visibile e modificabile nel campo",
+      "pass": true,
+      "detail": "registra saturazione 97 alle 15"
+    },
+    {
+      "name": "5b. Voce: stesso percorso del testo, audit con channel=voce",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "6. Sync immediata: vitali visibili senza reload",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "7. Persistenza dopo refresh",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "8. Appuntamento creato via chat e persistito",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "9a. Delete via chat: tutte le varianti rifiutate",
+      "pass": true,
+      "detail": "6/6"
+    },
+    {
+      "name": "9b. Delete via voce: rifiutato",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "9c. Catalogo: 0 azioni delete su 7",
+      "pass": true,
+      "detail": "read:read, create_vital_sign:create, update_patient_demographics:update, update_narrative_section:update, add_diary_note:create, create_appointment:create, update_appointment:update"
+    },
+    {
+      "name": "9d. Audit: rifiuti delete persistiti (testo+voce)",
+      "pass": true,
+      "detail": "24 eventi refused_delete"
+    },
+    {
+      "name": "9e. Nessun dato cancellato dai tentativi",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "10. Delete via pulsante UI funziona",
+      "pass": true,
+      "detail": ""
+    }
+  ]
+}

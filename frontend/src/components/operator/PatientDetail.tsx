@@ -739,7 +739,10 @@ export function PatientDetail({
   // ── Tab rendering ──────────────────────────────────────────────────────────
 
   function renderRiepilogo() {
-    const lastVitali = cartella.parametriVitali.slice(0, 4);
+    // "Ultimi parametri" = i più recenti per data di rilevazione (l'array è in ordine di inserimento)
+    const lastVitali = [...cartella.parametriVitali]
+      .sort((a, b) => (b.rilevato ?? '').localeCompare(a.rilevato ?? ''))
+      .slice(0, 4);
     const diagnosiMostrate = diagnosiAttive.slice(0, 3);
     const farmaciMostrati = farmaciAttivi.slice(0, 4);
 

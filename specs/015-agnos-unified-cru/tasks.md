@@ -111,7 +111,7 @@
 - [x] T029 [P] [US5] `useMemo` su lista filtrata + `React.memo` su righe in `frontend/src/components/PatientList.tsx`
 - [x] T030 [P] [US5] Stato `saving` + pulsanti disabled + esito visibile su `NewPatientModal` e salvataggi `PatientDetail` (FR-018)
 - [x] T031 [US5] Eliminare catch silenziosi nei file toccati (PatientList.tsx:48, DiarioPazienteTab.tsx:230) con messaggio errore visibile condiviso
-- [ ] T032 [US5] Misura performance DOPO in `requirements/evidence/SPEC-015/perf-after.json` + confronto documentato (SC-005: −30% richieste agenda, 0 duplicati)
+- [x] T032 [US5] Misura performance DOPO in `requirements/evidence/SPEC-015/perf-after.json` + confronto documentato (SC-005: −30% richieste agenda, 0 duplicati)
 
 **Checkpoint**: benefici misurati prima/dopo — nessun refactoring senza beneficio verificabile.
 
@@ -121,10 +121,10 @@
 
 **Purpose**: suite Playwright end-to-end con evidenze, gate di build, tracciabilità deploy.
 
-- [ ] T033 Creare suite `e2e/agnos-cru.mjs` (pattern driver.mjs): flusso tradizionale, Create/Read/Update via chat, stessi flussi via voce simulata (iniezione trascrizione), sync immediata chatbot↔UI, persistenza post-refresh
-- [ ] T034 Suite no-delete in `e2e/agnos-cru.mjs`: tentativi cancellazione chat+voce (tutte le varianti lessicali) rifiutati al 100% + `GET /ai/actions/catalog` con 0 azioni delete + delete via pulsante UI funzionante (FR-010)
-- [ ] T035 Eseguire suite completa e archiviare evidenze (screenshot, trace, report, misure rete) in `requirements/evidence/SPEC-015/`
-- [ ] T036 Gate finali: `cd backend && npm test` verde, `cd frontend && npm run build` verde (tsc -b + vite build), zero errori lint
+- [x] T033 Creare suite `e2e/agnos-cru.mjs` (pattern driver.mjs): flusso tradizionale, Create/Read/Update via chat, stessi flussi via voce simulata (iniezione trascrizione), sync immediata chatbot↔UI, persistenza post-refresh
+- [x] T034 Suite no-delete in `e2e/agnos-cru.mjs`: tentativi cancellazione chat+voce (tutte le varianti lessicali) rifiutati al 100% + `GET /ai/actions/catalog` con 0 azioni delete + delete via pulsante UI funzionante (FR-010)
+- [x] T035 Eseguire suite completa e archiviare evidenze (screenshot, trace, report, misure rete) in `requirements/evidence/SPEC-015/`
+- [x] T036 Gate finali: `cd backend && npm test` verde, `cd frontend && npm run build` verde (tsc -b + vite build), zero errori lint
 - [ ] T037 Commit incrementali per fase + push + manifest deployment in `requirements/deployments/` con elenco REQ/spec inclusi
 
 ---

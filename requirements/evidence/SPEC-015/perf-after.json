@@ -1,0 +1,33 @@
+{
+  "measuredAt": "2026-07-03T23:45:38.689Z",
+  "flows": {
+    "avvio-dashboard": {
+      "total": 6,
+      "duplicates": [],
+      "requests": [
+        "GET http://localhost:3001/patients",
+        "GET http://localhost:3001/therapy-slots?date=2026-07-03",
+        "GET http://localhost:3001/appointments",
+        "GET http://localhost:3001/admin/rooms",
+        "GET http://localhost:3001/consegne",
+        "GET http://localhost:3001/notes"
+      ]
+    },
+    "apertura-agenda": {
+      "total": 1,
+      "duplicates": [],
+      "requests": [
+        "GET http://localhost:3001/appointments"
+      ]
+    },
+    "dettaglio-paziente": {
+      "total": 3,
+      "duplicates": [],
+      "requests": [
+        "GET http://localhost:3001/ai/extraction/status",
+        "GET http://localhost:3001/patients/settings",
+        "GET http://localhost:3001/patients/SEED-PAZ-008/cartella"
+      ]
+    }
+  }
+}
