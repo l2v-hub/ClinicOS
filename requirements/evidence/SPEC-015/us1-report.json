@@ -1,0 +1,40 @@
+{
+  "ranAt": "2026-07-03T23:06:39.303Z",
+  "results": [
+    {
+      "name": "preview vitale con conferma attiva",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "vitale eseguito",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "read risponde senza conferma",
+      "pass": true,
+      "detail": "(risposta contiene il parametro)"
+    },
+    {
+      "name": "delete rifiutato con rinvio alla UI",
+      "pass": true,
+      "detail": "La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita "
+    },
+    {
+      "name": "vitale persistito nel backend (cartella API)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "vitale visibile in UI senza reload",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "vitale persistito dopo refresh",
+      "pass": true,
+      "detail": ""
+    }
+  ]
+}

@@ -42,7 +42,7 @@ const SUCCESS_MESSAGE: Record<VoiceActionType, string> = {
 
 export interface ExecuteOptions {
   confirmed: boolean;
-  ctx: { requestId: string; userId: string; operatorName: string; channel?: 'TESTO' | 'VOCE' };
+  ctx: { requestId: string; userId: string; operatorName: string; channel?: 'TESTO' | 'VOCE'; operatorRole?: string };
   cfg: VoiceConfig;
   writer: VoiceWriter;
   store: IdempotencyStore;

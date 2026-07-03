@@ -17,7 +17,7 @@
 **Purpose**: baseline verificabile prima di toccare il codice (nessuna nuova dipendenza npm).
 
 - [x] T001 Verificare app avviabile end-to-end (backend :3001 + frontend :5173 + Postgres Podman) e suite esistente verde: `cd backend && npm test`, `cd frontend && npm run build` — baseline registrata
-- [ ] T002 [P] Misura performance PRIMA: conteggio richieste di rete su apertura agenda e dettaglio paziente via harness Playwright (`.claude/skills/run-clinicos/driver.mjs`), salvata in `requirements/evidence/SPEC-015/perf-before.json`
+- [x] T002 [P] Misura performance PRIMA: conteggio richieste di rete su apertura agenda e dettaglio paziente via harness Playwright (`.claude/skills/run-clinicos/driver.mjs`), salvata in `requirements/evidence/SPEC-015/perf-before.json`
 
 ---
 
@@ -48,7 +48,7 @@
 - [x] T010 [US1] Creare `frontend/src/components/shared/AgnosPanel.tsx`: pannello unico chat (sostituisce il pannello read-only di `AIAssistantButton.tsx`), rendering preview (titolo, paziente, righe campo→valore, warnings, ambiguità), pulsante "Conferma e salva" disabilitato su ambiguità
 - [x] T011 [US1] Integrare AgnosPanel in `frontend/src/App.tsx` con contesto paziente corrente (`currentPatientId`) e stili in `frontend/src/App.css` (palette blu medicale, tablet-first)
 - [x] T012 [US1] Sincronizzazione UI immediata post-esecuzione: refresh mirato dei dati toccati (cartella/parametri/diario) senza reload pagina (FR-020)
-- [ ] T013 [US1] Verifica manuale flusso pilota (vitali + diario) via harness: comando→preview→conferma→dato visibile→refresh persistente; screenshot in `requirements/evidence/SPEC-015/`
+- [x] T013 [US1] Verifica manuale flusso pilota (vitali + diario) via harness: comando→preview→conferma→dato visibile→refresh persistente; screenshot in `requirements/evidence/SPEC-015/`
 
 **Checkpoint**: US1 completa e testabile indipendentemente — MVP.
 
@@ -60,11 +60,11 @@
 
 **Independent Test**: varianti lessicali di cancellazione via chat rifiutate al 100%, evento in audit, dati invariati; catalogo ispezionabile con 0 azioni delete.
 
-- [ ] T014 [P] [US2] Migrazione Prisma ADDITIVA: modello `AiAuditEvent` in `prisma/schema.prisma` (campi/indici da data-model.md, nessuna FK) + `npx prisma migrate dev` (mai reset)
-- [ ] T015 [US2] Creare `backend/src/ai/audit-store.ts`: `recordAuditEvent()` best-effort (fallimento DB non blocca, stdout resta); integrare in `backend/src/ai/voice/audit.ts` e `backend/src/ai/gateway/audit.ts`
+- [x] T014 [P] [US2] Migrazione Prisma ADDITIVA: modello `AiAuditEvent` in `prisma/schema.prisma` (campi/indici da data-model.md, nessuna FK) + `npx prisma migrate dev` (mai reset)
+- [x] T015 [US2] Creare `backend/src/ai/audit-store.ts`: `recordAuditEvent()` best-effort (fallimento DB non blocca, stdout resta); integrare in `backend/src/ai/voice/audit.ts` e `backend/src/ai/gateway/audit.ts`
 - [x] T016 [P] [US2] Estendere refusal patterns nel planner (`backend/src/ai/voice/plan.ts`): elimina, cancella, rimuovi, togli, svuota, azzera, distruggi, butta, deleta + forme flesse; messaggio rifiuto che indirizza alla UI (FR-009)
-- [ ] T017 [US2] Creare route `backend/src/routes/ai-audit.ts`: `GET /ai/audit?operatorId=&patientId=&outcome=&from=&to=&limit=` ruolo admin/manager, max 200, ordinati desc; montare in `app.ts`
-- [ ] T018 [US2] Unit test difesa in profondità in `backend/src/ai/__tests__/actions.test.ts`: (1) planner rifiuta ogni variante lessicale, (2) executor respinge kind ∉ {create,update}, (3) catalogo senza entry delete + azione fuori catalogo rifiutata, (4) audit riceve evento `refusal`
+- [x] T017 [US2] Creare route `backend/src/routes/ai-audit.ts`: `GET /ai/audit?operatorId=&patientId=&outcome=&from=&to=&limit=` ruolo admin/manager, max 200, ordinati desc; montare in `app.ts`
+- [x] T018 [US2] Unit test difesa in profondità in `backend/src/ai/__tests__/actions.test.ts`: (1) planner rifiuta ogni variante lessicale, (2) executor respinge kind ∉ {create,update}, (3) catalogo senza entry delete + azione fuori catalogo rifiutata, (4) audit riceve evento `refusal`
 
 **Checkpoint**: US1+US2 indipendenti; SC-002/SC-003 dimostrabili.
 

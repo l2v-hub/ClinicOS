@@ -9,6 +9,7 @@ import { planCommand, executeCommand, type AgnosOperatorContext } from '../actio
 import { VoiceError, type VoiceWriter } from '../voice/execute.js';
 import { IdempotencyStore } from '../voice/idempotency.js';
 import { loadVoiceConfig } from '../voice/config.js';
+import { setAuditPersistence, type AiAuditEventInput } from '../audit-store.js';
 import type { UserContext } from '../gateway/types.js';
 import type { AssistantAnswer } from '../assistant/service.js';
 
@@ -195,4 +196,96 @@ test('executeCommand: confirmation still mandatory on the text channel', async (
     (e: unknown) => e instanceof VoiceError && e.kind === 'confirmation_required',
   );
   assert.deepEqual(calls, []);
+});
+
+// ── T018 (US2) — DEFENSE IN DEPTH ───────────────────────────────────────────
+
+// (a) Planner level: EVERY Italian deletion verb, base form AND at least one inflection each,
+// is refused with refusalKind 'delete' (T016 patterns).
+const DELETE_LEXICAL_VARIANTS = [
+  'elimina il parametro', 'eliminare la nota di ieri',
+  'cancella la nota', 'sto cancellando il diario',
+  'rimuovi il parametro', 'rimuovere la pressione delle 9',
+  'togli la nota dal diario', 'togliere il parametro sbagliato',
+  'svuota il diario', 'svuotare la lista dei parametri',
+  'azzera i parametri di oggi', 'azzerare il diario',
+  'distruggi la cartella', 'distruggere le note vecchie',
+  'butta via la nota di ieri', 'buttare via i vecchi parametri',
+  'deleta la nota', 'deletare il record',
+];
+
+test('T018a planner: ogni variante lessicale di cancellazione (base + flessa) → refusalKind delete', async () => {
+  for (const text of DELETE_LEXICAL_VARIANTS) {
+    const r = await planCommand({ text, channel: 'testo', currentPatientId: PID, operatorCtx }, noDb);
+    assert.equal(r.plan.actionType, 'refuse_forbidden', text);
+    assert.equal(r.plan.refusalKind, 'delete', text);
+    assert.equal(r.preview?.canExecute, false, text);
+    assert.match(r.preview?.refusal ?? '', /interfaccia tradizionale/i, text);
+  }
+});
+
+// (b) Executor level: an action whose kind is NOT create/update (read, unknown) is never executed.
+test('T018b executor: kind non-write (read/unknown) → not_executable, writer mai chiamato', async () => {
+  const nonWriteTexts = ['Quali sono gli ultimi parametri?', 'buongiorno a tutti'];
+  for (const text of nonWriteTexts) {
+    const { w, calls } = fakeWriter();
+    await assert.rejects(
+      () => executeCommand(
+        { text, channel: 'testo', patientId: PID, idempotencyKey: `k-nonwrite-${text}`, confirmed: true, operatorCtx },
+        execDeps(w),
+      ),
+      (e: unknown) => e instanceof VoiceError && e.kind === 'not_executable',
+      text,
+    );
+    assert.deepEqual(calls, [], `writer chiamato per: ${text}`);
+  }
+});
+
+// (c) Catalog level: NO entry has kind 'delete' (asserted on ALL entries, both the source map and
+// the inspectable listing) and an invented action is refused as not_in_catalog.
+test('T018c catalogo: nessuna entry delete su TUTTE le entry + azione inventata rifiutata', async () => {
+  for (const e of Object.values(AGNOS_ACTION_CATALOG)) {
+    assert.notEqual(e.kind as string, 'delete', `entry ${e.name} ha kind delete`);
+    assert.ok((['read', 'create', 'update'] as AgnosActionKind[]).includes(e.kind), `entry ${e.name}: kind ${e.kind}`);
+    assert.ok(!e.name.startsWith('delete'), `entry ${e.name} è un'azione di cancellazione`);
+  }
+  for (const listed of listCatalog(emptyEnv)) {
+    assert.notEqual(listed.kind as string, 'delete', `listCatalog: ${listed.name}`);
+  }
+  // invented / out-of-catalog action: deny-by-default
+  assert.equal(isActionAllowed('purge_everything', emptyEnv), false);
+  assert.equal(isActionAllowed('delete_diary_note', emptyEnv), false);
+});
+
+// (d) Audit level: a delete attempt produces a persistent audit event with kind 'refusal'
+// and actionType 'refused_delete' — captured via injected spy (no real DB).
+test('T018d audit: tentativo delete → recordAuditEvent riceve kind refusal / refused_delete', async () => {
+  const events: AiAuditEventInput[] = [];
+  setAuditPersistence(async (evt) => { events.push(evt); });
+  try {
+    // plan-time refusal (typed channel)
+    await planCommand({ text: 'cancella la nota', channel: 'testo', currentPatientId: PID, operatorCtx }, noDb);
+    // execute-time refusal (voice channel), even when "confirmed"
+    const { w } = fakeWriter();
+    await assert.rejects(
+      () => executeCommand(
+        { text: 'elimina il paziente', channel: 'voce', patientId: PID, idempotencyKey: 'k-audit-del', confirmed: true, operatorCtx },
+        execDeps(w),
+      ),
+      (e: unknown) => e instanceof VoiceError && e.kind === 'delete_forbidden',
+    );
+
+    const refusals = events.filter((e) => e.kind === 'refusal');
+    assert.equal(refusals.length, 2, JSON.stringify(events));
+    for (const evt of refusals) {
+      assert.equal(evt.actionType, 'refused_delete');
+      assert.equal(evt.outcome, 'denied');
+      assert.equal(evt.operatorId, 'op1');
+      assert.deepEqual(evt.fields, []); // PHI-safe: never values, and no field names on refusals
+    }
+    assert.equal(refusals[0].channel, 'testo');
+    assert.equal(refusals[1].channel, 'voce');
+  } finally {
+    setAuditPersistence(null);
+  }
 });

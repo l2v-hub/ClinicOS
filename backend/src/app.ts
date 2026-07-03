@@ -18,6 +18,7 @@ import internalAiRouter from './routes/internal-ai.js';
 import assistantPublicRouter from './routes/ai-assistant-public.js';
 import voiceRouter from './routes/ai-voice.js';
 import aiActionsRouter from './routes/ai-actions.js';
+import aiAuditRouter from './routes/ai-audit.js';
 
 const app = express();
 
@@ -99,6 +100,8 @@ app.use('/ai/assistant', assistantPublicRouter);
 app.use('/ai/voice', voiceRouter);
 // SPEC-015: unified Agnos orchestrator — text + voice commands, CRU-only allowlist (no delete).
 app.use('/ai/actions', aiActionsRouter);
+// SPEC-015 (US2): persistent AI audit consultation — admin/manager only.
+app.use('/ai/audit', aiAuditRouter);
 // REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
 app.use('/internal/ai', internalAiRouter);
 

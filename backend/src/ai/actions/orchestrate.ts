@@ -26,6 +26,14 @@ export type AgnosChannel = 'testo' | 'voce';
 
 const AUDIT_CHANNEL: Record<AgnosChannel, 'TESTO' | 'VOCE'> = { testo: 'TESTO', voce: 'VOCE' };
 
+/** SPEC-015 (data-model): audit actionType for refusals — delete ⇒ refused_delete,
+ *  clinical ⇒ refused_clinical, any other refusal ⇒ refused_forbidden. */
+function auditedActionType(plan: ActionPlan): string {
+  if (plan.actionType === 'refuse_clinical') return 'refused_clinical';
+  if (plan.actionType === 'refuse_forbidden') return plan.refusalKind === 'delete' ? 'refused_delete' : 'refused_forbidden';
+  return plan.actionType;
+}
+
 /** Operator identity + gateway context (already role-clamped by the route) for read delegation. */
 export interface AgnosOperatorContext {
   operatorId: string;
@@ -92,6 +100,20 @@ export async function planCommand(input: PlanCommandInput, deps: PlanCommandDeps
     return { plan, preview: null, read };
   }
 
+  // SPEC-015 (US2): a refusal at PLAN time (delete/clinical/forbidden) is an auditable event —
+  // logged AND persisted (kind 'refusal'), before the refusal preview is returned to the client.
+  if (plan.actionType === 'refuse_forbidden' || plan.actionType === 'refuse_clinical') {
+    voiceAudit(
+      {
+        requestId: input.operatorCtx.gatewayCtx.requestId,
+        userId: input.operatorCtx.operatorId,
+        operatorRole: input.operatorCtx.gatewayCtx.roles[0] ?? 'operatore',
+        channel: AUDIT_CHANNEL[input.channel],
+      },
+      auditedActionType(plan), plan.patientId, null, [], 'denied', new Date().toISOString(),
+    );
+  }
+
   const loadCtx = deps.loadPreviewContext ?? defaultLoadPreviewContext;
   const pctx = await loadCtx(plan);
   return { plan, preview: buildPreview(plan, pctx), read: null };
@@ -132,10 +154,11 @@ export async function executeCommand(input: ExecuteCommandInput, deps: ExecuteCo
     requestId: `${input.channel === 'voce' ? 'voice' : 'agnos'}-${input.operatorCtx.operatorId}`,
     userId: input.operatorCtx.operatorId,
     operatorName: input.operatorCtx.operatorName,
+    operatorRole: input.operatorCtx.gatewayCtx.roles[0] ?? 'operatore',
     channel: AUDIT_CHANNEL[input.channel],
   };
   const deny = (kind: VoiceError['kind'], message: string): never => {
-    voiceAudit(ctx, plan.actionType, plan.patientId, null, Object.keys(plan.fields), 'denied', nowISO);
+    voiceAudit(ctx, auditedActionType(plan), plan.patientId, null, Object.keys(plan.fields), 'denied', nowISO);
     throw new VoiceError(kind, message);
   };
 
