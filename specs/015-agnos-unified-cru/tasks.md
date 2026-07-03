@@ -108,9 +108,9 @@
 **Independent Test**: misura richieste di rete prima/dopo (agenda −30%, 0 duplicati); ogni salvataggio mostra attesa/successo/errore.
 
 - [ ] T028 [P] [US5] Dedup `/therapy-slots` (App.tsx:172 vs TerapiaFarmacologicaTab.tsx:226) e `/patients/:id/therapies` (TerapiaFarmacologicaTab.tsx:211 vs InvioPSModal.tsx:204) via lift/prop in `frontend/src/App.tsx` e componenti coinvolti
-- [ ] T029 [P] [US5] `useMemo` su lista filtrata + `React.memo` su righe in `frontend/src/components/PatientList.tsx`
-- [ ] T030 [P] [US5] Stato `saving` + pulsanti disabled + esito visibile su `NewPatientModal` e salvataggi `PatientDetail` (FR-018)
-- [ ] T031 [US5] Eliminare catch silenziosi nei file toccati (PatientList.tsx:48, DiarioPazienteTab.tsx:230) con messaggio errore visibile condiviso
+- [x] T029 [P] [US5] `useMemo` su lista filtrata + `React.memo` su righe in `frontend/src/components/PatientList.tsx`
+- [x] T030 [P] [US5] Stato `saving` + pulsanti disabled + esito visibile su `NewPatientModal` e salvataggi `PatientDetail` (FR-018)
+- [x] T031 [US5] Eliminare catch silenziosi nei file toccati (PatientList.tsx:48, DiarioPazienteTab.tsx:230) con messaggio errore visibile condiviso
 - [ ] T032 [US5] Misura performance DOPO in `requirements/evidence/SPEC-015/perf-after.json` + confronto documentato (SC-005: −30% richieste agenda, 0 duplicati)
 
 **Checkpoint**: benefici misurati prima/dopo — nessun refactoring senza beneficio verificabile.
