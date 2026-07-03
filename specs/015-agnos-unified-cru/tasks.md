@@ -125,7 +125,7 @@
 - [x] T034 Suite no-delete in `e2e/agnos-cru.mjs`: tentativi cancellazione chat+voce (tutte le varianti lessicali) rifiutati al 100% + `GET /ai/actions/catalog` con 0 azioni delete + delete via pulsante UI funzionante (FR-010)
 - [x] T035 Eseguire suite completa e archiviare evidenze (screenshot, trace, report, misure rete) in `requirements/evidence/SPEC-015/`
 - [x] T036 Gate finali: `cd backend && npm test` verde, `cd frontend && npm run build` verde (tsc -b + vite build), zero errori lint
-- [ ] T037 Commit incrementali per fase + push + manifest deployment in `requirements/deployments/` con elenco REQ/spec inclusi
+- [x] T037 Commit incrementali per fase + push + manifest deployment in `requirements/deployments/` con elenco REQ/spec inclusi
 
 ---
 
