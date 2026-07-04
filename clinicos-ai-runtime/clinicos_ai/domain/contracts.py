@@ -88,3 +88,18 @@ class AssistantPlanResponse(BaseModel):
     plan: dict[str, Any]
     model: str
     confidence: float = 0.0
+
+
+# 016 F2: assistant composer (results → discursive answer). Dati clinici solo verso host EU.
+class AssistantComposeRequest(BaseModel):
+    question: str = ""
+    results: list[dict[str, Any]] = Field(default_factory=list)
+    sources: list[dict[str, Any]] = Field(default_factory=list)
+    language: str = "it"
+    model: Optional[str] = None
+
+
+class AssistantComposeResponse(BaseModel):
+    answerText: str = ""
+    citedSources: list[str] = Field(default_factory=list)
+    model: str = ""

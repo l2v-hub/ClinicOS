@@ -10,7 +10,8 @@ import { GatewayError, type SourceReference, type UserContext } from '../gateway
 import { appointmentSource } from '../gateway/sources.js';
 import { planQuery, extractPatientName, pickResolvedPatient, type AssistantIntent, type PlanContext, type QueryPlan } from './plan.js';
 import { planQueryLLM } from './llm-planner.js';
-import { callPlanRuntime } from './runtime-client.js';
+import { composeAnswer } from './composer.js';
+import { callPlanRuntime, callComposeRuntime } from './runtime-client.js';
 import { loadAssistantLlmConfig } from './config.js';
 
 export interface NavAction { type: string; label: string; patientId?: string; sectionKey?: string; documentId?: string; recordId?: string; pageNumber?: number }
@@ -121,12 +122,23 @@ export async function assistantQuery(
     }
   }
   const navigation = dedupeNav(sources.slice(0, lim.maxResults).map(navFromSource));
+  const cappedSources = sources.slice(0, lim.maxResults);
+
+  // 016 F2: risposta discorsiva — solo se il composer è attivo e con dati recuperati; il post-check
+  // anti-invenzione scarta prosa non fondata (→ risposta strutturata). Dati clinici → modello EU.
+  let answerText: string | undefined;
+  let composed = false;
+  if (cfg.composeEnabled && cfg.composeModel && results.length > 0) {
+    const c = await composeAnswer(question, results, cappedSources, { callComposeRuntime: (req) => callComposeRuntime(req, cfg) });
+    if (c.composed) { answerText = c.answerText; composed = true; }
+  }
+
   return {
     intent: plan.intent, scope: plan.scope, plan,
-    results, sources: sources.slice(0, lim.maxResults), navigation,
+    results, sources: cappedSources, navigation,
     notFound: results.length === 0,
     truncated: results.length >= lim.maxResults,
-    mode, composed: false,
+    mode, answerText, composed,
   };
 }
 

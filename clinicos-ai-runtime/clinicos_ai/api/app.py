@@ -20,11 +20,14 @@ import uuid
 from fastapi import FastAPI, Header, HTTPException, status
 
 from ..agents.extraction import run_extraction
-from ..agents.assistant import run_assistant_plan
+from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..models.errors import RuntimeError_, ErrorKind
 from ..models.providers.base import Attachment
 from ..models.registry import ModelRegistry
-from ..domain.contracts import CreateJobRequest, RunRequest, AssistantPlanRequest, AssistantPlanResponse
+from ..domain.contracts import (
+    CreateJobRequest, RunRequest, AssistantPlanRequest, AssistantPlanResponse,
+    AssistantComposeRequest, AssistantComposeResponse,
+)
 
 app = FastAPI(title="ClinicOS AI Runtime", version="1.0.0")
 _REGISTRY = ModelRegistry()
@@ -98,6 +101,21 @@ async def assistant_plan(req: AssistantPlanRequest, authorization: str | None = 
         return AssistantPlanResponse(plan=out["plan"], model=out["model"], confidence=1.0)
     except RuntimeError_ as ex:
         raise HTTPException(status.HTTP_502_BAD_GATEWAY, ex.to_dict().get("message", "planner error"))
+    except Exception as ex:  # pragma: no cover
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(ex)[:200])
+
+
+# 016 F2: compose endpoint. Riceve i RISULTATI (dati clinici) e compone la prosa citando le fonti.
+# I dati clinici raggiungono il modello SOLO qui → attivare solo con host EU/self-hosted (gating
+# nel backend). Il backend applica comunque il post-check anti-invenzione sull'output.
+@app.post("/v1/assistant/compose", response_model=AssistantComposeResponse)
+async def assistant_compose(req: AssistantComposeRequest, authorization: str | None = Header(default=None)):
+    _auth(authorization)
+    try:
+        out = await run_assistant_compose(_REGISTRY, req.question, req.results, req.sources)
+        return AssistantComposeResponse(answerText=out["answerText"], citedSources=out["citedSources"], model=out["model"])
+    except RuntimeError_ as ex:
+        raise HTTPException(status.HTTP_502_BAD_GATEWAY, ex.to_dict().get("message", "compose error"))
     except Exception as ex:  # pragma: no cover
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(ex)[:200])
 
