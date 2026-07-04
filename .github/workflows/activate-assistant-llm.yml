@@ -1,0 +1,51 @@
+name: Activate Assistant LLM (backend flags)
+
+# One-shot: imposta i flag dell'interprete LLM delle letture (016) sul servizio backend
+# Railway e fa UN redeploy. Variabili NON segrete (i secret restano sul dashboard).
+# Il modello è quello del ruolo 'agent' del runtime (attualmente google:gemini-2.0-flash);
+# i valori *_MODEL qui sono il segnale di abilitazione lato backend.
+#
+# Per DISATTIVARE: rilanciare con enable=false.
+
+on:
+  workflow_dispatch:
+    inputs:
+      enable:
+        description: 'true = attiva planner+composer LLM; false = torna deterministico'
+        required: true
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+      model:
+        description: 'Modello (segnale abilitazione backend; il runtime usa il ruolo agent)'
+        required: false
+        default: 'google:gemini-2.0-flash'
+        type: string
+
+concurrency:
+  group: railway-backend
+  cancel-in-progress: false
+
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Set assistant flags + redeploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+          ENABLE: ${{ inputs.enable }}
+          MODEL: ${{ inputs.model }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then echo "::error::RAILWAY_TOKEN not set"; exit 1; fi
+          SVCFLAG=""
+          [ -n "$RAILWAY_SERVICE" ] && SVCFLAG="--service $RAILWAY_SERVICE"
+          railway variables $SVCFLAG \
+            --set "AI_ASSISTANT_LLM_ENABLED=$ENABLE" \
+            --set "AI_ASSISTANT_PLAN_ENABLED=$ENABLE" \
+            --set "AI_ASSISTANT_COMPOSE_ENABLED=$ENABLE" \
+            --set "AI_ASSISTANT_PLAN_MODEL=$MODEL" \
+            --set "AI_ASSISTANT_COMPOSE_MODEL=$MODEL"
+          echo "Assistant LLM enable=$ENABLE model=$MODEL"
