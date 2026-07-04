@@ -156,6 +156,26 @@ def resolve_extraction(env: Mapping[str, str]) -> tuple[RoleModelConfig | None, 
     return _resolve_role(env, "AI_EXTRACTION_PROVIDER", "AI_EXTRACTION_MODEL", default_provider="mistral", ambito="extraction")
 
 
+def resolve_repair(env: Mapping[str, str]) -> tuple[RoleModelConfig | None, list[str]]:
+    """Repair è un passo LLM lato reasoning: segue l'ambito Agnos.
+    - `AI_REPAIR_MODEL='provider:model'` → usato tale e quale (retrocompatibile);
+    - `AI_REPAIR_MODEL='deployment'` (nudo, es. nome deployment Azure) → prende il provider di Agnos;
+    - assente → eredita interamente il modello Agnos.
+    Così un deployment Azure nudo non richiede più il prefisso provider e non degrada il runtime."""
+    raw = _get(env, "AI_REPAIR_MODEL")
+    if raw and ":" in raw:
+        try:
+            return RoleModelConfig(ModelSpec.parse(raw), "env"), []
+        except ConfigError as ex:
+            return None, [f"AI_REPAIR_MODEL: {ex.message}"]
+    agnos, errs = resolve_agnos_llm(env)
+    if agnos is None:
+        return None, [f"AI_REPAIR_MODEL: manca la config Agnos da cui ereditare il provider ({'; '.join(errs)})"]
+    if raw:  # deployment nudo → provider di Agnos + model_id fornito
+        return RoleModelConfig(ModelSpec(provider=agnos.model.provider, model_id=raw), "env"), []
+    return RoleModelConfig(agnos.model, agnos.source), []
+
+
 # --- logging PHI/secret-safe -------------------------------------------------
 # Cosa è ammesso nei log: provider, model/deployment, source, outcome. MAI: API key,
 # endpoint, valori dei secret, prompt, dati paziente, risposte del modello, documenti.

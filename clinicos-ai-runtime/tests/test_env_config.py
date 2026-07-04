@@ -2,7 +2,7 @@
 import pathlib
 import unittest
 from clinicos_ai.models.env_config import (
-    resolve_agnos_llm, resolve_ocr, resolve_extraction, normalize_provider,
+    resolve_agnos_llm, resolve_ocr, resolve_extraction, resolve_repair, normalize_provider,
     safe_config_summary,
 )
 
@@ -103,6 +103,31 @@ class ExtractionTests(unittest.TestCase):
             ext, _ = resolve_extraction(env); ocr, _ = resolve_ocr(env)
             self.assertEqual(ext.model.provider, "mistral")
             self.assertEqual(ocr.model.provider, "mistral")
+
+
+class RepairTests(unittest.TestCase):
+    def test_repair_bare_model_rides_agnos_provider(self):
+        # deployment Azure = nome nudo → repair eredita il provider di Agnos (azure)
+        env = {"AGNOS_LLM_PROVIDER": "azure-openai", "AGNOS_LLM_MODEL": "gpt-5.4-mini",
+               "AZURE_OPENAI_ENDPOINT": "e", "AZURE_OPENAI_API_KEY": "k",
+               "AI_REPAIR_MODEL": "gpt-5.4-mini"}
+        cfg, errs = resolve_repair(env)
+        self.assertEqual(errs, [])
+        self.assertEqual((cfg.model.provider, cfg.model.model_id), ("azure", "gpt-5.4-mini"))
+
+    def test_repair_explicit_provider_model_kept(self):
+        # formato completo provider:model resta invariato (retrocompatibile)
+        cfg, errs = resolve_repair({"AGNOS_LLM_PROVIDER": "azure-openai", "AGNOS_LLM_MODEL": "gpt",
+                                    "AZURE_OPENAI_ENDPOINT": "e", "AZURE_OPENAI_API_KEY": "k",
+                                    "AI_REPAIR_MODEL": "google:gemma-4-31b-it"})
+        self.assertEqual(errs, [])
+        self.assertEqual((cfg.model.provider, cfg.model.model_id), ("google", "gemma-4-31b-it"))
+
+    def test_repair_missing_inherits_agnos(self):
+        # senza AI_REPAIR_MODEL, repair usa il modello Agnos
+        cfg, errs = resolve_repair({"AGNOS_LLM_PROVIDER": "google", "AGNOS_LLM_MODEL": "gemini-2.0-flash"})
+        self.assertEqual(errs, [])
+        self.assertEqual((cfg.model.provider, cfg.model.model_id), ("google", "gemini-2.0-flash"))
 
 
 class ProviderAliasTests(unittest.TestCase):

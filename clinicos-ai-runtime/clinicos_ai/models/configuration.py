@@ -13,13 +13,14 @@ from typing import Mapping
 from .capabilities import CapabilityRequirement, DEFAULT_ROLE_REQUIREMENTS
 from .errors import ConfigError
 from .spec import ModelSpec
-from .env_config import resolve_agnos_llm, resolve_ocr, resolve_extraction
+from .env_config import resolve_agnos_llm, resolve_ocr, resolve_extraction, resolve_repair
 
 ROLES = ("ocr", "extraction", "agent", "repair")
 
-# Resolver env-driven per ambito (i tre resolver separati mai incrociati fra loro).
-# 'repair' non ha un ambito dedicato: resta sul percorso legacy AI_REPAIR_MODEL.
-_ROLE_RESOLVERS = {"agent": resolve_agnos_llm, "ocr": resolve_ocr, "extraction": resolve_extraction}
+# Resolver env-driven per ambito (i tre ambiti separati mai incrociati fra loro).
+# 'repair' segue l'ambito Agnos (passo LLM): un deployment nudo eredita il provider di Agnos.
+_ROLE_RESOLVERS = {"agent": resolve_agnos_llm, "ocr": resolve_ocr,
+                   "extraction": resolve_extraction, "repair": resolve_repair}
 
 
 @dataclass(frozen=True)

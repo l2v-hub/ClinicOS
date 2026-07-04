@@ -57,6 +57,19 @@ Test unit: `clinicos-ai-runtime/tests/test_env_config.py` (16 test) + suite comp
 | Sicurezza | no-secret nei log (provider/model soltanto), no-secret nel frontend, errori senza secret | ✅ PASS | `boot_log_sanitized`, `clear_error_missing_var`, `test_11` |
 | Retrocompat. | OCR/Extraction Mistral invariati; legacy AI_AGENT_MODEL/formato `provider:model` come fallback | ✅ PASS | `legacy_fallback_only`, `ocr_legacy_provider_colon_model`, suite 55/55 |
 
+## Verifica in produzione (post-deploy)
+
+Primo deploy su prod ha rivelato una misconfig reale nelle variabili Railway: `AI_REPAIR_MODEL=gpt-5.4-mini`
+(nome deployment Azure **nudo**, senza prefisso `provider:`). Il ruolo `repair` era ancora sul percorso
+legacy strict → `health` restituiva `available:false` con errore chiaro
+`AI_REPAIR_MODEL: ... formato atteso 'provider:model_id'`. Gli altri ambiti erano corretti:
+`agent=azure:gpt-5.4-mini`, `ocr/extraction=mistral:mistral-document-ai-2505`.
+
+Fix (env-driven, TDD): `resolve_repair` — `repair` segue l'ambito Agnos. Un `AI_REPAIR_MODEL` nudo
+eredita il **provider di Agnos** (`gpt-5.4-mini` → `azure:gpt-5.4-mini`); un `provider:model` esplicito
+resta invariato; assente → eredita il modello Agnos. Simulazione config prod: `available=True`, tutti i
+ruoli risolti, `errors=[]`. Coerente col principio: deployment Azure nudo funziona senza toccare il codice.
+
 ## Limiti residui (onesto)
 1. **Non testato contro provider reali**: la validazione prova la *risoluzione* della config e
    la sanitizzazione dei log, non una chiamata live ad Azure/Mistral. La chiamata reale ad Azure
