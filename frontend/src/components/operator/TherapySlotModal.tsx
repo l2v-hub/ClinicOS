@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { TherapySlot, TherapySlotPatient, TherapyAdministration, MotivoNonErogazione } from '../../types';
+import { sortPazienti } from '../../lib/patientSort';
 
 interface Props {
   slot: TherapySlot;
@@ -23,7 +24,10 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
   const [noteText, setNoteText] = useState('');
   const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
 
-  const { summary, patients } = slot;
+  const { summary } = slot;
+  // Issue #129: il backend restituisce i pazienti in ordine di terapia — qui
+  // li mostriamo sempre in ordine alfabetico (cognome, nome).
+  const patients = sortPazienti(slot.patients);
   const pctDone = summary.total > 0 ? Math.round((summary.administered / summary.total) * 100) : 0;
 
   function buildInfo(p: TherapySlotPatient, a: TherapyAdministration) {

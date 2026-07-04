@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Consegna, PrioritaConsegna, StatoConsegna } from '../../types';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit } from '../../icons';
 import { InlineEditableField } from '../shared/InlineEditableField';
+import { comparePazientiNome } from '../../lib/patientSort';
 
 interface ConsegnePageProps {
   consegne: Consegna[];
@@ -49,6 +50,10 @@ export function ConsegnePage({ consegne, operatoreNome, isAdmin, onAdd, onUpdate
       return true;
     })
     .sort((a, b) => {
+      // Issue #129: pazienti in ordine alfabetico (cognome, nome); a parità di
+      // paziente prima le priorità più alte, poi le consegne più recenti.
+      const sn = comparePazientiNome(a.pazienteNome, b.pazienteNome);
+      if (sn !== 0) return sn;
       const sp = PRIORITA_ORDER[a.priorita] - PRIORITA_ORDER[b.priorita];
       if (sp !== 0) return sp;
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
