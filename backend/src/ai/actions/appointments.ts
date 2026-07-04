@@ -161,7 +161,8 @@ export interface AppointmentLookupDeps {
   findAppointmentAt?: (patientId: string, data: string, ora: string) => Promise<AppointmentHit | null>;
 }
 
-async function defaultSearchPatients(query: string): Promise<PatientHit[]> {
+// Exported for reuse by the consegne grounding (issue #130) — same lookup, no duplication.
+export async function defaultSearchPatients(query: string): Promise<PatientHit[]> {
   const { prisma } = await import('../../lib/prisma.js');
   const tokens = query.split(/\s+/).filter(Boolean);
   return prisma.patient.findMany({
@@ -178,7 +179,7 @@ async function defaultSearchPatients(query: string): Promise<PatientHit[]> {
   });
 }
 
-async function defaultGetPatient(id: string): Promise<PatientHit | null> {
+export async function defaultGetPatient(id: string): Promise<PatientHit | null> {
   const { prisma } = await import('../../lib/prisma.js');
   return prisma.patient.findUnique({ where: { id }, select: { id: true, firstName: true, lastName: true } });
 }

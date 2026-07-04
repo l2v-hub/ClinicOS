@@ -18,6 +18,7 @@ function fakeWriter() {
     async addDiaryNote() { calls.push('diary'); return 'rec-diary'; },
     async createAppointment() { calls.push('appt-create'); return 'rec-appt'; },
     async updateAppointment() { calls.push('appt-update'); return 'rec-appt'; },
+    async createConsegna() { calls.push('consegna'); return 'rec-consegna'; },
   };
   return { w, calls };
 }

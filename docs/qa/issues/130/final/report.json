@@ -1,0 +1,117 @@
+{
+  "ranAt": "2026-07-04T12:31:33.533Z",
+  "passed": 22,
+  "total": 22,
+  "results": [
+    {
+      "name": "setup: paziente pilota Moretti, Elena presente",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC1a. voce: trascrizione visibile e modificabile nel campo",
+      "pass": true,
+      "detail": "Aggiungi una consegna per Elena Moretti: controllare la pressione dopo cena"
+    },
+    {
+      "name": "AC1b. preview leggibile: titolo, paziente e testo consegna",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC1c. consegna salvata nel backend (stesso service della UI)",
+      "pass": true,
+      "detail": "cmr6ccl8n0000dsei3afk0ogj"
+    },
+    {
+      "name": "AC1d. consegna collegata al paziente giusto",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC1e. consegna visibile nella UI consegne senza reload",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC1f. consegna persistente dopo refresh",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC2a. voce: trascrizione diario nel campo",
+      "pass": true,
+      "detail": "Scrivi nel diario di Elena Moretti: paziente tranquillo, nessun dolore riferito"
+    },
+    {
+      "name": "AC2b. nota diario salvata e visibile nella sezione Diario",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC3a. voce: trascrizione parametri nel campo",
+      "pass": true,
+      "detail": "registra per Elena Moretti la pressione 120 su 80 alle 17"
+    },
+    {
+      "name": "AC3b. parametro 120/80 salvato nella cartella (persistito)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC3c. parametro visibile nella sezione corretta senza reload",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC4a. voce: trascrizione appuntamento nel campo",
+      "pass": true,
+      "detail": "crea appuntamento fisioterapia domani alle 09:30 per Elena Moretti"
+    },
+    {
+      "name": "AC4b. appuntamento creato e persistito in agenda",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC5. senza conferma esplicita non viene salvato nulla",
+      "pass": true,
+      "detail": "7 → 7"
+    },
+    {
+      "name": "AC6a. delete via VOCE rifiutato",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC6b. delete via CHAT rifiutato",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC6c. nessun dato cancellato dai tentativi",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC7a. catalogo: 0 azioni delete su 8",
+      "pass": true,
+      "detail": "read:read, create_vital_sign:create, update_patient_demographics:update, update_narrative_section:update, add_diary_note:create, create_appointment:create, update_appointment:update, create_consegna:create"
+    },
+    {
+      "name": "AC7b. create_consegna presente nel catalogo (kind create)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC7c. audit: create_consegna eseguita con channel=voce",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC7d. audit: rifiuti delete tracciati (refused_delete)",
+      "pass": true,
+      "detail": ""
+    }
+  ]
+}

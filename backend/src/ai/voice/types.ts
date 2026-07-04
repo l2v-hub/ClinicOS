@@ -12,6 +12,7 @@ export type VoiceActionType =
   | 'add_diary_note'
   | 'create_appointment'            // SPEC-015 US4: agenda slot via Agnos (create)
   | 'update_appointment'            // SPEC-015 US4: move an existing agenda slot (update)
+  | 'create_consegna'               // Issue #130: consegna (handover card) via Agnos (create)
   | 'refuse_clinical'               // diagnosis / therapy advice / prognosis
   | 'refuse_forbidden'              // deletes, therapy/allergy changes — disabled in v1
   | 'unknown';
@@ -19,7 +20,7 @@ export type VoiceActionType =
 // The only write tools enabled. Deletes and clinically-critical changes are intentionally absent.
 export const WRITE_ACTION_TYPES: readonly VoiceActionType[] = [
   'create_vital_sign', 'update_patient_demographics', 'update_narrative_section', 'add_diary_note',
-  'create_appointment', 'update_appointment',
+  'create_appointment', 'update_appointment', 'create_consegna',
 ] as const;
 
 export function isWriteAction(t: VoiceActionType): boolean {

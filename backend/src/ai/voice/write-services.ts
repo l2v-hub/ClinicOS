@@ -10,6 +10,7 @@ import {
   NARRATIVE_SECTION_KEYS, type NarrativeSectionKey,
 } from '../sections/patient-narrative.js';
 import { createAppointment, updateAppointment } from '../../services/appointment-service.js';
+import { createConsegna as createConsegnaService } from '../../services/consegna-service.js';
 import type { VoiceWriter, WriteMeta } from './execute.js';
 
 const DEMOGRAPHIC_FIELDS = new Set(['phone', 'email', 'address', 'emergencyContactName', 'emergencyContactPhone']);
@@ -101,5 +102,18 @@ export const prismaVoiceWriter: VoiceWriter = {
       ora: fields.newTime !== undefined ? String(fields.newTime) : undefined,
     });
     return dto.id;
+  },
+
+  // Issue #130: consegne go through the SAME service as the UI route POST /consegne (FR-007).
+  // The AI can only create — the route's delete is UI-only and never imported here.
+  async createConsegna(patientId, fields, meta) {
+    const created = await createConsegnaService({
+      pazienteId: patientId,
+      pazienteNome: String(fields.pazienteNome ?? ''),
+      note: String(fields.note ?? ''),
+      scadenza: meta.nowISO.slice(0, 10),
+      creatoDA: meta.operatorName,
+    });
+    return created.id;
   },
 };

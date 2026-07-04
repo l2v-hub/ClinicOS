@@ -34,6 +34,8 @@ export interface VoiceWriter {
   // the VoiceWriter has no delete method, by construction).
   createAppointment(patientId: string, fields: Record<string, unknown>, meta: WriteMeta): Promise<string>;
   updateAppointment(targetRecordId: string, fields: Record<string, unknown>, meta: WriteMeta): Promise<string>;
+  // Issue #130: consegne via the shared consegna-service (create ONLY — no delete, by construction).
+  createConsegna(patientId: string, fields: Record<string, unknown>, meta: WriteMeta): Promise<string>;
 }
 
 const SUCCESS_MESSAGE: Record<VoiceActionType, string> = {
@@ -43,6 +45,7 @@ const SUCCESS_MESSAGE: Record<VoiceActionType, string> = {
   add_diary_note: 'Nota aggiunta al diario.',
   create_appointment: 'Appuntamento creato in agenda.',
   update_appointment: 'Appuntamento aggiornato in agenda.',
+  create_consegna: 'Consegna creata.',
   read: '', refuse_clinical: '', refuse_forbidden: '', unknown: '',
 };
 
@@ -95,6 +98,8 @@ export async function executeAction(plan: ActionPlan, opts: ExecuteOptions): Pro
     case 'update_appointment':
       if (!plan.targetRecordId) { audit(null, 'denied'); throw new VoiceError('ambiguous', 'Appuntamento da modificare non identificato.'); }
       recordId = await writer.updateAppointment(plan.targetRecordId, plan.fields, meta); break;
+    case 'create_consegna':
+      recordId = await writer.createConsegna(plan.patientId, plan.fields, meta); break;
     default:
       throw new VoiceError('not_executable', 'Azione non supportata.');
   }

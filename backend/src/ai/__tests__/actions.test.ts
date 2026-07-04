@@ -30,6 +30,7 @@ function fakeWriter() {
     async addDiaryNote() { calls.push('diary'); return 'rec-diary'; },
     async createAppointment() { calls.push('appt-create'); return 'rec-appt'; },
     async updateAppointment() { calls.push('appt-update'); return 'rec-appt'; },
+    async createConsegna() { calls.push('consegna'); return 'rec-consegna'; },
   };
   return { w, calls };
 }
@@ -525,4 +526,161 @@ test('T027 isolamento delete: nessun modulo sotto src/ai importa uiOnlyDeleteApp
     const src = await readFile(file, 'utf8');
     assert.ok(!src.includes('uiOnlyDeleteAppointment'), `delete UI-only importato da modulo AI: ${file}`);
   }
+});
+
+// ── ISSUE #130 — CONSEGNE VIA AGNOS (voce+chat) ─────────────────────────────
+
+import { matchConsegnaCommand } from '../actions/consegne.js';
+import type { ConsegnaLookupDeps } from '../actions/consegne.js';
+
+/** Injected lookups: no DB. */
+function consegnaLookup(overrides: Partial<ConsegnaLookupDeps> = {}): ConsegnaLookupDeps {
+  return {
+    searchPatients: async (q) => (/moretti/i.test(q) ? [MORETTI] : []),
+    getPatient: async (id) => (id === PID ? { id: PID, firstName: 'Mario', lastName: 'Rossi' } : null),
+    ...overrides,
+  };
+}
+
+test('I130 matcher: consegna con paziente e testo dal comando', () => {
+  const p = matchConsegnaCommand('Aggiungi una consegna per Elena Moretti: controllare la pressione dopo cena');
+  assert.ok(p);
+  assert.equal(p.actionType, 'create_consegna');
+  assert.equal(p.fields.patientQuery, 'Elena Moretti');
+  assert.equal(p.fields.note, 'controllare la pressione dopo cena');
+  assert.deepEqual(p.ambiguities, []);
+  assert.equal(p.requiresConfirmation, true);
+});
+
+test('I130 matcher: varianti verbo e variante "consegna per X …" senza verbo', () => {
+  const p1 = matchConsegnaCommand('crea una consegna per Moretti: misurare la glicemia');
+  assert.ok(p1);
+  assert.equal(p1.fields.note, 'misurare la glicemia');
+  const p2 = matchConsegnaCommand('scrivi la consegna per Elena Moretti, controllare medicazione');
+  assert.ok(p2);
+  assert.equal(p2.fields.patientQuery, 'Elena Moretti');
+  assert.equal(p2.fields.note, 'controllare medicazione');
+  const p3 = matchConsegnaCommand('consegna per Moretti: idratazione ogni 2 ore');
+  assert.ok(p3);
+  assert.equal(p3.fields.patientQuery, 'Moretti');
+  assert.equal(p3.fields.note, 'idratazione ogni 2 ore');
+});
+
+test('I130 matcher: paziente dal contesto quando non indicato nel testo', () => {
+  const p = matchConsegnaCommand('aggiungi una consegna: controllare la ferita', { currentPatientId: PID });
+  assert.ok(p);
+  assert.equal(p.patientId, PID);
+  assert.equal(p.fields.note, 'controllare la ferita');
+  assert.deepEqual(p.ambiguities, []);
+});
+
+test('I130 matcher: testo vuoto e paziente assente = ambiguità bloccanti', () => {
+  const noText = matchConsegnaCommand('aggiungi una consegna per Elena Moretti');
+  assert.ok(noText);
+  assert.ok(noText.ambiguities.some((a) => /testo della consegna/i.test(a)));
+  const noPatient = matchConsegnaCommand('aggiungi una consegna: controllare la pressione', {});
+  assert.ok(noPatient);
+  assert.ok(noPatient.ambiguities.some((a) => /paziente non identificato/i.test(a)));
+});
+
+test('I130 matcher: comandi non-consegna NON vengono intercettati', () => {
+  assert.equal(matchConsegnaCommand('registra pressione 130 su 80 alle 9', { currentPatientId: PID }), null);
+  assert.equal(matchConsegnaCommand('mostra le consegne di oggi', { currentPatientId: PID }), null);
+  // il payload di una nota diario che cita "consegna" non è un comando consegna
+  assert.equal(matchConsegnaCommand('aggiungi una nota al diario con ha ricevuto la consegna dei documenti', { currentPatientId: PID }), null);
+});
+
+test('I130 plan: consegna per Moretti → preview eseguibile con paziente risolto', async () => {
+  const r = await planCommand(
+    { text: 'Aggiungi una consegna per Elena Moretti: controllare la pressione dopo cena', channel: 'voce', operatorCtx },
+    { consegnaLookup: consegnaLookup() },
+  );
+  assert.equal(r.plan.actionType, 'create_consegna');
+  assert.equal(r.plan.channel, 'voce');
+  assert.equal(r.plan.patientId, MORETTI.id);
+  assert.equal(r.read, null);
+  assert.ok(r.preview);
+  assert.equal(r.preview.title, 'Aggiungi consegna');
+  assert.equal(r.preview.canExecute, true);
+  assert.match(r.preview.patientName ?? '', /Moretti/);
+  assert.ok(r.preview.lines.some((l) => l.label === 'Testo' && /pressione dopo cena/.test(l.value)));
+});
+
+test('I130 plan: paziente non trovato → conferma disabilitata', async () => {
+  const r = await planCommand(
+    { text: 'aggiungi una consegna per Sconosciuto: controllare qualcosa', channel: 'testo', operatorCtx },
+    { consegnaLookup: consegnaLookup() },
+  );
+  assert.equal(r.preview?.canExecute, false);
+  assert.ok(r.plan.ambiguities.some((a) => /non trovato/i.test(a)));
+});
+
+test('I130 execute: consegna confermata → writer consegne, idempotente al retry', async () => {
+  const { w, calls } = fakeWriter();
+  const deps = { ...execDeps(w), consegnaLookup: consegnaLookup() };
+  const input = {
+    text: 'Aggiungi una consegna per Elena Moretti: controllare la pressione dopo cena',
+    channel: 'voce' as const, idempotencyKey: 'k-consegna', confirmed: true, operatorCtx,
+  };
+  const r1 = await executeCommand(input, deps);
+  assert.equal(r1.ok, true);
+  assert.equal(r1.actionType, 'create_consegna');
+  assert.equal(r1.recordId, 'rec-consegna');
+  const r2 = await executeCommand(input, deps);
+  assert.equal(r2.deduped, true);
+  assert.deepEqual(calls, ['consegna']); // una sola scrittura
+});
+
+test('I130 execute: senza conferma → confirmation_required, writer MAI chiamato', async () => {
+  // paziente dal contesto: il grounding (lookup per nome) avviene solo a comando confermato,
+  // ma la conferma resta comunque obbligatoria PRIMA di qualsiasi scrittura (AC5).
+  const { w, calls } = fakeWriter();
+  await assert.rejects(
+    () => executeCommand(
+      { text: 'aggiungi una consegna: controllare la pressione', channel: 'voce', patientId: PID, idempotencyKey: 'k-consegna-noconf', confirmed: false, operatorCtx },
+      { ...execDeps(w), consegnaLookup: consegnaLookup() },
+    ),
+    (e: unknown) => e instanceof VoiceError && e.kind === 'confirmation_required',
+  );
+  assert.deepEqual(calls, []);
+});
+
+test('I130: "cancella la consegna" → refusalKind delete su plan ED execute', async () => {
+  const r = await planCommand(
+    { text: 'cancella la consegna di Elena Moretti', channel: 'testo', currentPatientId: PID, operatorCtx },
+    noDb,
+  );
+  assert.equal(r.plan.actionType, 'refuse_forbidden');
+  assert.equal(r.plan.refusalKind, 'delete');
+  assert.match(r.preview?.refusal ?? '', /interfaccia tradizionale/i);
+
+  const { w, calls } = fakeWriter();
+  await assert.rejects(
+    () => executeCommand(
+      { text: 'elimina la consegna di Elena Moretti', channel: 'voce', idempotencyKey: 'k-consegna-del', confirmed: true, operatorCtx },
+      { ...execDeps(w), consegnaLookup: consegnaLookup() },
+    ),
+    (e: unknown) => e instanceof VoiceError && e.kind === 'delete_forbidden',
+  );
+  assert.deepEqual(calls, []);
+});
+
+test('I130 catalogo: create_consegna presente, NESSUNA azione delete_consegna, catalogo CRU-only', () => {
+  assert.equal(AGNOS_ACTION_CATALOG.create_consegna?.kind, 'create');
+  assert.equal(AGNOS_ACTION_CATALOG.create_consegna?.entity, 'consegna');
+  assert.equal(AGNOS_ACTION_CATALOG['delete_consegna' as keyof typeof AGNOS_ACTION_CATALOG], undefined);
+  assert.equal(isActionAllowed('delete_consegna', emptyEnv), false);
+  for (const e of listCatalog(emptyEnv)) assert.notEqual(e.kind as string, 'delete', e.name);
+});
+
+test('I130 diario: la frase esatta della issue («Scrivi nel diario di …: …») → add_diary_note', async () => {
+  const r = await planCommand(
+    { text: 'Scrivi nel diario di Elena Moretti: paziente tranquillo, nessun dolore riferito', channel: 'voce', currentPatientId: PID, operatorCtx },
+    noDb,
+  );
+  assert.equal(r.plan.actionType, 'add_diary_note');
+  assert.equal(r.plan.patientId, PID); // paziente dal contesto corrente
+  assert.equal(r.plan.fields.content, 'paziente tranquillo, nessun dolore riferito');
+  assert.deepEqual(r.plan.ambiguities, []);
+  assert.equal(r.preview?.canExecute, true);
 });

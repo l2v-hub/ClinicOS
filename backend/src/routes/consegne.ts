@@ -1,14 +1,14 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import { createConsegna, CONSEGNA_PRIORITA as PRIORITA, CONSEGNA_STATO as STATO } from '../services/consegna-service.js';
 
 const consegneRouter = Router();
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CONSEGNE (handover cards) CRUD — mounted at /consegne
+// Creazione delegata al servizio condiviso consegna-service (issue #130, FR-007):
+// stesso percorso applicativo per UI tradizionale e Agnos AI.
 // ═══════════════════════════════════════════════════════════════════════════
-
-const PRIORITA = ['normale', 'alta', 'urgente'];
-const STATO = ['aperta', 'in_corso', 'completata'];
 
 // GET /consegne
 consegneRouter.get('/', async (_req, res) => {
@@ -33,19 +33,17 @@ consegneRouter.post('/', async (req, res) => {
   }
 
   try {
-    const consegna = await prisma.consegna.create({
-      data: {
-        pazienteId: String(body.pazienteId ?? ''),
-        pazienteNome: String(body.pazienteNome),
-        priorita: PRIORITA.includes(String(body.priorita)) ? String(body.priorita) : 'normale',
-        stato: STATO.includes(String(body.stato)) ? String(body.stato) : 'aperta',
-        tipo: String(body.tipo ?? 'Monitoraggio'),
-        note: String(body.note),
-        scadenza: String(body.scadenza ?? new Date().toISOString().slice(0, 10)),
-        oraScadenza: body.oraScadenza ? String(body.oraScadenza) : null,
-        operatoreAssegnato: String(body.operatoreAssegnato ?? ''),
-        creatoDA: String(body.creatoDA ?? ''),
-      },
+    const consegna = await createConsegna({
+      pazienteId: body.pazienteId !== undefined ? String(body.pazienteId) : undefined,
+      pazienteNome: String(body.pazienteNome),
+      priorita: body.priorita !== undefined ? String(body.priorita) : undefined,
+      stato: body.stato !== undefined ? String(body.stato) : undefined,
+      tipo: body.tipo !== undefined ? String(body.tipo) : undefined,
+      note: String(body.note),
+      scadenza: body.scadenza !== undefined ? String(body.scadenza) : undefined,
+      oraScadenza: body.oraScadenza ? String(body.oraScadenza) : null,
+      operatoreAssegnato: body.operatoreAssegnato !== undefined ? String(body.operatoreAssegnato) : undefined,
+      creatoDA: body.creatoDA !== undefined ? String(body.creatoDA) : undefined,
     });
     console.log(`POST /consegne → created id=${consegna.id}`);
     res.status(201).json(consegna);

@@ -232,6 +232,19 @@ export default function App() {
     }
   }, []);
 
+  // ── Load consegne (API — riusata anche da Agnos dopo create_consegna, issue #130) ──
+
+  const loadConsegne = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_URL}/consegne`);
+      if (!res.ok) return; // lista corrente invariata
+      const data = await res.json() as Consegna[];
+      setConsegne(data.map(c => ({ ...c, oraScadenza: c.oraScadenza ?? undefined })));
+    } catch {
+      // rete assente: lista corrente invariata
+    }
+  }, []);
+
   // ── Load rooms (camere + letti con occupazione reale) ───────────────────────
 
   const loadCamere = useCallback(() => {
@@ -275,16 +288,13 @@ export default function App() {
     // Load rooms from API for AdminDashboard
     loadCamere();
     // Load consegne from API (persisted handover cards)
-    fetch(`${API_URL}/consegne`)
-      .then(r => r.ok ? r.json() : [])
-      .then((data: Consegna[]) => setConsegne(data.map(c => ({ ...c, oraScadenza: c.oraScadenza ?? undefined }))))
-      .catch(() => { /* keep empty array */ });
+    void loadConsegne();
     // Load note/messaggi from API (persisted)
     fetch(`${API_URL}/notes`)
       .then(r => r.ok ? r.json() : [])
       .then((data: Nota[]) => setNote(data.map(n => ({ ...n, pazienteId: n.pazienteId ?? undefined, pazienteNome: n.pazienteNome ?? undefined }))))
       .catch(() => { /* keep empty array */ });
-  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere]);
+  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
 
@@ -1126,6 +1136,8 @@ export default function App() {
           if (pazienteSelezionato) loadCartella(pazienteSelezionato.id);
           // SPEC-015 US4: un'azione Agnos sull'agenda aggiorna subito la lista appuntamenti (FR-020)
           if (info?.actionType === 'create_appointment' || info?.actionType === 'update_appointment') loadAppuntamenti();
+          // Issue #130: una consegna creata via Agnos appare subito nella UI consegne
+          if (info?.actionType === 'create_consegna') void loadConsegne();
         }}
         onNavigate={(n) => { if (n.patientId) { const p = pazienti.find((x) => x.id === n.patientId); if (p) selectPaziente(p); } }}
       />
