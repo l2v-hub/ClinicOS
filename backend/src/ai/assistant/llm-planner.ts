@@ -58,6 +58,11 @@ export async function planQueryLLM(question: string, ctx: PlanContext, deps: Pla
     });
     const validated = validatePlan(res?.plan, ctx);
     if (!validated) return fallback();
+    // F1 ≥ F0: se l'LLM non sa (piano vuoto/unknown) ma il deterministico ha un piano, usa quello.
+    if (validated.tools.length === 0 || validated.intent === 'unknown') {
+      const det = planQuery(question, ctx);
+      if (det.tools.length > 0) return { plan: det, mode: 'deterministic' };
+    }
     return { plan: validated, mode: 'llm' };
   } catch {
     return fallback(); // runtime assente/timeout/errore → deterministico, nessun errore utente
