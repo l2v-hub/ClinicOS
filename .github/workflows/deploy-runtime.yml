@@ -1,0 +1,45 @@
+name: Deploy AI Runtime to Railway
+
+# Deploys clinicos-ai-runtime to Railway via GitHub Actions (GitHub runners reach
+# Railway's API; the local sandbox cannot due to TLS interception). Mirrors
+# deploy-backend.yml — Railway's own GitHub auto-deploy is unreliable on this project
+# (the runtime kept serving an old commit without the /v1/assistant/* endpoints).
+#
+# Reuses the same project-scoped RAILWAY_TOKEN secret. The runtime service name is
+# 'clinicos-ai-runtime' (override with the RAILWAY_RUNTIME_SERVICE variable if different).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'clinicos-ai-runtime/**'
+      - '.github/workflows/deploy-runtime.yml'
+  workflow_dispatch: {}
+
+concurrency:
+  group: railway-runtime
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy runtime to Railway
+        working-directory: clinicos-ai-runtime
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_RUNTIME_SERVICE: ${{ vars.RAILWAY_RUNTIME_SERVICE }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "::error::RAILWAY_TOKEN secret is not set."
+            exit 1
+          fi
+          SVC="${RAILWAY_RUNTIME_SERVICE:-clinicos-ai-runtime}"
+          echo "Deploying runtime service: $SVC"
+          railway up --ci --service "$SVC"
