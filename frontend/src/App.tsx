@@ -232,6 +232,32 @@ export default function App() {
     }
   }, []);
 
+  // ── Load rooms (camere + letti con occupazione reale) ───────────────────────
+
+  const loadCamere = useCallback(() => {
+    fetch(`${API_URL}/admin/rooms`)
+      .then(r => r.ok ? r.json() : [])
+      .then((rooms: Array<{ id: string; numero: string; tipo: string; piano: string; reparto: string; stato: string; note: string; beds: Array<{ id: string; label: string; stato: string; assignments: Array<{ patientId: string; patient: { firstName: string; lastName: string } }> }> }>) => {
+        setCamere(rooms.map(r => ({
+          id: r.id,
+          numero: r.numero,
+          tipo: r.tipo as Camera['tipo'],
+          piano: r.piano,
+          reparto: r.reparto,
+          stato: r.stato as Camera['stato'],
+          note: r.note,
+          letti: r.beds.map(b => ({
+            id: b.id,
+            numero: b.label === 'A' ? 1 : b.label === 'B' ? 2 : 3,
+            stato: (b.assignments.length > 0 ? 'occupato' : b.stato === 'manutenzione' ? 'manutenzione' : 'libero') as Camera['letti'][0]['stato'],
+            pazienteId: b.assignments[0]?.patientId,
+            pazienteNome: b.assignments[0]?.patient ? `${b.assignments[0].patient.lastName}, ${b.assignments[0].patient.firstName}` : undefined,
+          })),
+        })));
+      })
+      .catch(() => { /* keep empty array */ });
+  }, []);
+
   // ── Fetch patients ──────────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -247,26 +273,7 @@ export default function App() {
     loadTherapySlots();
     loadAppuntamenti(); // SPEC-015 US4: agenda persistita
     // Load rooms from API for AdminDashboard
-    fetch(`${API_URL}/admin/rooms`)
-      .then(r => r.ok ? r.json() : [])
-      .then((rooms: Array<{ id: string; numero: string; tipo: string; piano: string; reparto: string; stato: string; note: string; beds: Array<{ id: string; label: string; stato: string; assignments: Array<{ patient: { firstName: string; lastName: string } }> }> }>) => {
-        setCamere(rooms.map(r => ({
-          id: r.id,
-          numero: r.numero,
-          tipo: r.tipo as Camera['tipo'],
-          piano: r.piano,
-          reparto: r.reparto,
-          stato: r.stato as Camera['stato'],
-          note: r.note,
-          letti: r.beds.map(b => ({
-            id: b.id,
-            numero: b.label === 'A' ? 1 : b.label === 'B' ? 2 : 3,
-            stato: (b.assignments.length > 0 ? 'occupato' : b.stato === 'manutenzione' ? 'manutenzione' : 'libero') as Camera['letti'][0]['stato'],
-            pazienteNome: b.assignments[0]?.patient ? `${b.assignments[0].patient.lastName}, ${b.assignments[0].patient.firstName}` : undefined,
-          })),
-        })));
-      })
-      .catch(() => { /* keep empty array */ });
+    loadCamere();
     // Load consegne from API (persisted handover cards)
     fetch(`${API_URL}/consegne`)
       .then(r => r.ok ? r.json() : [])
@@ -277,7 +284,7 @@ export default function App() {
       .then(r => r.ok ? r.json() : [])
       .then((data: Nota[]) => setNote(data.map(n => ({ ...n, pazienteId: n.pazienteId ?? undefined, pazienteNome: n.pazienteNome ?? undefined }))))
       .catch(() => { /* keep empty array */ });
-  }, [utente, loadTherapySlots, loadAppuntamenti]);
+  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
 
@@ -506,6 +513,67 @@ export default function App() {
     }
   }
 
+  // ── Issue #128: sincronizza l'assegnazione camera reale (letti/PatientRoomAssignment) ──
+  // La cartella (JSON) conserva solo cameraNumero/lettoNumero visuali: l'occupazione
+  // vera vive nelle assegnazioni letto. Senza questa sync la camera restava "libera".
+  async function syncCameraAssignment(
+    pazienteId: string,
+    cameraNumero?: string,
+    lettoNumero?: string,
+  ): Promise<{ ok: boolean; lettoLabel?: string }> {
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const assignRes = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`);
+      const assignments: Array<{ id: string; bedId: string; endDate: string | null }> = assignRes.ok ? await assignRes.json() : [];
+      const active = assignments.find(a => a.endDate === null || a.endDate >= today);
+
+      // Camera rimossa → chiudi l'assegnazione attiva
+      if (!cameraNumero) {
+        if (active) {
+          await fetch(`${API_URL}/patients/${pazienteId}/room-assignments/${active.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ endDate: today }),
+          });
+          loadCamere();
+        }
+        return { ok: true };
+      }
+
+      const roomsRes = await fetch(`${API_URL}/admin/rooms`);
+      const rooms: Array<{ id: string; numero: string; beds: Array<{ id: string; label: string; stato: string; assignments: Array<{ patientId: string }> }> }> = roomsRes.ok ? await roomsRes.json() : [];
+      const room = rooms.find(r => r.numero === cameraNumero);
+      if (!room) { showToast(`Camera ${cameraNumero} non trovata`); return { ok: false }; }
+
+      const isFree = (bd: { stato: string; assignments: Array<{ patientId: string }> }) =>
+        bd.stato !== 'manutenzione' && bd.assignments.every(a => a.patientId === pazienteId);
+      const wanted = (lettoNumero ?? '').trim().toUpperCase();
+      const byIndex = /^\d+$/.test(wanted) ? 'ABCDEFGH'[parseInt(wanted, 10) - 1] : undefined;
+      let bed = room.beds.find(bd => bd.label.toUpperCase() === wanted || (byIndex !== undefined && bd.label === byIndex));
+      if (bed && !isFree(bed)) { showToast(`Letto ${bed.label} già occupato nella camera ${cameraNumero}`); return { ok: false }; }
+      if (!bed) bed = room.beds.find(isFree);
+      if (!bed) { showToast(`Camera ${cameraNumero} occupata: nessun letto libero`); return { ok: false }; }
+
+      if (active && active.bedId === bed.id) return { ok: true, lettoLabel: bed.label };
+
+      const res = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bedId: bed.id, startDate: today }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => null) as { error?: string } | null;
+        showToast(err?.error ?? 'Impossibile assegnare la camera');
+        return { ok: false };
+      }
+      loadCamere();
+      return { ok: true, lettoLabel: bed.label };
+    } catch {
+      showToast('Impossibile assegnare la camera');
+      return { ok: false };
+    }
+  }
+
   async function updatePaziente(id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) {
     setPazienti(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
     try {
@@ -557,8 +625,16 @@ export default function App() {
 
     // Seed cartella from form fields not persisted in backend
     const cartellaInit: Partial<CartellaPaziente> = {};
-    if (np.camera) cartellaInit.cameraNumero = np.camera;
-    if (np.letto)  cartellaInit.lettoNumero  = np.letto;
+    if (np.camera) {
+      // Issue #128: crea anche l'assegnazione letto reale, non solo il dato in cartella
+      const sync = await syncCameraAssignment(newP.id, np.camera, np.letto);
+      if (sync.ok) {
+        cartellaInit.cameraNumero = np.camera;
+        cartellaInit.lettoNumero = sync.lettoLabel ?? (np.letto || undefined);
+      }
+    } else if (np.letto) {
+      cartellaInit.lettoNumero = np.letto;
+    }
     if (np.condizioniIniziali || np.motivoIngresso || np.notaClinicaIniziale || np.allergie || np.farmaci || np.alertClinici) {
       cartellaInit.anamnesi = {
         fisiologica: np.condizioniIniziali || '',
@@ -1004,6 +1080,7 @@ export default function App() {
               onUpdateConsegnaStato={updateConsegnaStato}
               onUpdateCartella={updateCartella}
               onUpdatePaziente={updatePaziente}
+              onAssignCamera={syncCameraAssignment}
               operatoreNome={utente.nome}
               operatoreId={utenteId}
             />
