@@ -6,7 +6,7 @@ import type { SectionsResult } from './sections/types';
 import { sectionsFromNarrative, assertNoLegacyImportArrays, type NarrativeDraft } from './sections/deriveSections';
 import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
 import { CameraCapture } from './CameraCapture';
-import { createDraftFromImport } from './intake/intakeDraftApi';
+import { createDraftFromImport, patchDraft } from './intake/intakeDraftApi';
 import { IntakeWorkspace } from './intake/IntakeWorkspace';
 
 // REQ-014: multi-file / multi-photo upload for the discharge-letter import.
@@ -321,11 +321,31 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
 
   // F5 #124: new-patient path — seed an intake draft from the extraction job, then hand off
   // to IntakeWorkspace. Creation is transactional via confirmDraft (not the legacy confirm endpoint).
-  async function handleProceedToWorkspace() {
+  // #127: la bozza è seminata server-side dalla sola narrativa del job — l'anagrafica rivista
+  // (e corretta) dall'operatore nella Revisione va riportata nella bozza, altrimenti le
+  // correzioni si perdono e la Verifica blocca la creazione ("nome/cognome/data obbligatori").
+  async function handleProceedToWorkspace(patient?: ConfirmPatient) {
     if (!job) return;
     setBusy(true); setError(null);
     try {
       const draft = await createDraftFromImport(job.id, { operatorId, operatorRole });
+      if (patient) {
+        const seeded = (draft.data?.anagrafica ?? {}) as Record<string, unknown>;
+        const nonEmpty = (v?: string) => (v ?? '').trim() !== '';
+        const reviewed: Record<string, unknown> = {
+          ...(nonEmpty(patient.firstName) ? { firstName: patient.firstName } : {}),
+          ...(nonEmpty(patient.lastName) ? { lastName: patient.lastName } : {}),
+          ...(nonEmpty(patient.dateOfBirth) ? { dateOfBirth: patient.dateOfBirth } : {}),
+          ...(nonEmpty(patient.sex) ? { sex: patient.sex } : {}),
+          ...(nonEmpty(patient.codiceFiscale) ? { codiceFiscale: patient.codiceFiscale } : {}),
+          ...(nonEmpty(patient.phone) ? { phone: patient.phone } : {}),
+          ...(nonEmpty(patient.email) ? { email: patient.email } : {}),
+          ...(nonEmpty(patient.address) ? { address: patient.address } : {}),
+          ...(nonEmpty(patient.emergencyContactName) ? { referenteNome: patient.emergencyContactName } : {}),
+          ...(nonEmpty(patient.emergencyContactPhone) ? { referenteTelefono: patient.emergencyContactPhone } : {}),
+        };
+        await patchDraft(draft.id, { anagrafica: { ...seeded, ...reviewed } }, { operatorId, operatorRole });
+      }
       setImportDraftId(draft.id);
       setStep('workspace');
     } catch {
@@ -340,7 +360,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     if (target?.mode === 'existing') {
       void handleAttachExisting(patient, cartella, opts);
     } else {
-      void handleProceedToWorkspace();
+      void handleProceedToWorkspace(patient);
     }
   }
 

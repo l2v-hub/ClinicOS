@@ -22,8 +22,12 @@ export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome, alle
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [draft, setDraft] = useState<Record<string, unknown>>({});
 
+  // I draft intake possono non avere la chiave anamnesi (manuale: sempre; import: quando il
+  // documento non contiene anamnesi) — l'editor deve tollerare value assente (#127).
+  const anamnesi = value ?? {};
+
   function startCardEdit(cardId: string) {
-    setDraft({ ...value });
+    setDraft({ ...anamnesi });
     setEditingCard(cardId);
   }
 
@@ -64,7 +68,7 @@ export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome, alle
 
           {/* Sezioni anamnesi modificabili — ognuna in una ClinicalCard */}
           {SECTIONS.map(({ id, key, label, rows = 4, placeholder }) => {
-            const val = String(value[key] ?? '');
+            const val = String(anamnesi[key] ?? '');
             const isEditing = editingCard === id;
             return (
               <ClinicalCard
@@ -96,15 +100,15 @@ export function AnamnesisEditor({ value, onChange, readOnly, operatoreNome, alle
                     emptyText="Non compilato"
                     placeholder={placeholder ?? `Inserire ${label.toLowerCase()}…`}
                     disabled={!!readOnly}
-                    onSave={v => onChange({ ...value, [key]: v, updatedAt: nowISO(), operatore: operatoreNome ?? '' })}
+                    onSave={v => onChange({ ...anamnesi, [key]: v, updatedAt: nowISO(), operatore: operatoreNome ?? '' })}
                   />
                 )}
               </ClinicalCard>
             );
           })}
 
-          {!!value.updatedAt && !editingCard && (
-            <p className="cr-update-info">Aggiornato: {fmtDateTime(String(value.updatedAt))} — {String(value.operatore ?? '')}</p>
+          {!!anamnesi.updatedAt && !editingCard && (
+            <p className="cr-update-info">Aggiornato: {fmtDateTime(String(anamnesi.updatedAt))} — {String(anamnesi.operatore ?? '')}</p>
           )}
         </div>
       </ClinicalTableSection>
