@@ -67,8 +67,24 @@ legacy strict → `health` restituiva `available:false` con errore chiaro
 
 Fix (env-driven, TDD): `resolve_repair` — `repair` segue l'ambito Agnos. Un `AI_REPAIR_MODEL` nudo
 eredita il **provider di Agnos** (`gpt-5.4-mini` → `azure:gpt-5.4-mini`); un `provider:model` esplicito
-resta invariato; assente → eredita il modello Agnos. Simulazione config prod: `available=True`, tutti i
-ruoli risolti, `errors=[]`. Coerente col principio: deployment Azure nudo funziona senza toccare il codice.
+resta invariato; assente → eredita il modello Agnos. Coerente col principio: deployment Azure nudo
+funziona senza toccare il codice.
+
+**Verifica LIVE su prod dopo il redeploy** (`prod-health-after-deploy.json`,
+`GET /v1/runtime/health` — runtime `clinicos-ai-runtime-production.up.railway.app`):
+
+| Campo | Valore prod |
+|---|---|
+| `available` | **true** (prima: false) |
+| `errors` | `[]` |
+| `agent` | `azure:gpt-5.4-mini` · temp 0.2 · creds present ✅ |
+| `repair` | `azure:gpt-5.4-mini` · creds present ✅ |
+| `ocr` | `mistral:mistral-document-ai-2505` · creds present ✅ |
+| `extraction` | `mistral:mistral-document-ai-2505` · creds present ✅ |
+
+→ Config target Railway (Azure per Agnos, Mistral per OCR/Extraction) risolta correttamente in
+produzione, tre ambiti separati, credenziali presenti, nessun secret nei log. Deploy: GitHub Actions
+"Deploy AI Runtime to Railway" run 28722809881 (success), commit `1073f63`.
 
 ## Limiti residui (onesto)
 1. **Non testato contro provider reali**: la validazione prova la *risoluzione* della config e
