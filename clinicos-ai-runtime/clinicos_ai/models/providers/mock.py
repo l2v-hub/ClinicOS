@@ -28,6 +28,10 @@ class _MockRunner:
         # 016 F1: per le richieste del planner assistente ritorna un piano vuoto valido.
         if "ASSISTANT_PLAN_V1" in prompt:
             return json.dumps(EMPTY_PLAN)
+        # 016 F2: per la composizione ritorna una risposta NON fondata (vuota) — mai inventa;
+        # il post-check del backend la scarta e mostra la vista strutturata.
+        if "ASSISTANT_COMPOSE_V1" in prompt:
+            return json.dumps({"answerText": "", "citedSources": []})
         return json.dumps(EMPTY_EXTRACTION)
 
 

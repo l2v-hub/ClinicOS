@@ -47,3 +47,29 @@ async def run_assistant_plan(registry: ModelRegistry, question: str, tool_schema
         # output non parsabile → piano vuoto sicuro (il backend ricade sul deterministico)
         plan = {"intent": "unknown", "scope": "current_patient", "tools": [], "requiresCrossPatientAccess": False}
     return {"plan": plan, "model": str(built.spec)}
+
+
+COMPOSE_MARKER = "ASSISTANT_COMPOSE_V1"
+
+_COMPOSE_SYSTEM = (
+    f"{COMPOSE_MARKER}\n"
+    "Sei il compositore di risposte dell'assistente clinico ClinicOS. Rispondi in ITALIANO usando "
+    "SOLO i dati forniti; cita la fonte (recordId) di ogni informazione; se i dati sono vuoti dillo; "
+    "non fornire diagnosi/terapie/valutazioni. Rispondi SOLO con JSON: "
+    "{\"answerText\": string, \"citedSources\": [string]}."
+)
+
+
+async def run_assistant_compose(registry: ModelRegistry, question: str, results: list, sources: list) -> dict[str, Any]:
+    built = registry.build("agent")  # riusa il ruolo 'agent'; i dati clinici vanno solo qui (host EU)
+    prompt = (
+        f"{_COMPOSE_SYSTEM}\n\nDOMANDA:\n{question}\n\n"
+        f"RISULTATI:\n{json.dumps(results, ensure_ascii=False)[:8000]}\n\n"
+        f"FONTI (recordId):\n{json.dumps(sources, ensure_ascii=False)[:4000]}\n"
+    )
+    raw = await built.runner.run(prompt, [])
+    try:
+        out = json.loads(_strip_fences(raw))
+        return {"answerText": out.get("answerText", ""), "citedSources": out.get("citedSources", []), "model": str(built.spec)}
+    except json.JSONDecodeError:
+        return {"answerText": "", "citedSources": [], "model": str(built.spec)}  # non fondato → il backend userà la vista strutturata

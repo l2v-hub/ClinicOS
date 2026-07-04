@@ -17,3 +17,24 @@ export async function callPlanRuntime(req: LlmPlanRequest, cfg: AssistantLlmConf
   if (!res.ok) throw new Error(`assistant plan runtime HTTP ${res.status}`);
   return res.json() as Promise<LlmPlanResponse>;
 }
+
+import type { ComposeRuntimeResponse } from './composer.js';
+import type { SourceReference } from '../gateway/types.js';
+
+// 016 F2: client compose. Invia i risultati (dati clinici) al runtime SOLO se il modello è
+// configurato (host EU/self-hosted — gating a monte). Timeout esplicito → fallback strutturato.
+export async function callComposeRuntime(
+  req: { question: string; results: unknown[]; sources: SourceReference[] },
+  cfg: AssistantLlmConfig,
+): Promise<ComposeRuntimeResponse> {
+  const token = process.env.AI_RUNTIME_SERVICE_TOKEN;
+  if (!cfg.runtimeUrl || !token || !cfg.composeModel) throw new Error('assistant compose runtime not configured');
+  const res = await fetch(`${cfg.runtimeUrl.replace(/\/$/, '')}/v1/assistant/compose`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    body: JSON.stringify({ ...req, language: 'it', model: cfg.composeModel }),
+    signal: AbortSignal.timeout(cfg.timeoutMs),
+  });
+  if (!res.ok) throw new Error(`assistant compose runtime HTTP ${res.status}`);
+  return res.json() as Promise<ComposeRuntimeResponse>;
+}

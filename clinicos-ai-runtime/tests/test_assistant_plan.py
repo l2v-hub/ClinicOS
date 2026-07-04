@@ -32,3 +32,13 @@ class AssistantPlanTests(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AssistantComposeTests(unittest.IsolatedAsyncioTestCase):
+    async def test_mock_compose_returns_unfounded_empty(self):
+        from clinicos_ai.agents.assistant import run_assistant_compose
+        reg = ModelRegistry()
+        out = await run_assistant_compose(reg, "allergie?", [{"value": "Penicillina"}], [{"recordId": "s1"}])
+        # il mock non fonda mai la prosa → il backend userà la vista strutturata
+        self.assertEqual(out["answerText"], "")
+        self.assertEqual(out["citedSources"], [])
