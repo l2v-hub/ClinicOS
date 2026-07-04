@@ -6,6 +6,7 @@ import type {
 import { IcoSearch, IcoX } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
 import { ClinicalTableSection } from './cartella/shared';
+import { comparePazienti } from '../../lib/patientSort';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -318,6 +319,7 @@ export function MultiPatientParametri({
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
 
+  // Issue #129: ordinamento alfabetico stabile per cognome+nome, anche con filtri attivi.
   const filtrati = pazienti.filter(p => {
     const q = ricerca.trim().toLowerCase();
     if (!q) return true;
@@ -328,7 +330,7 @@ export function MultiPatientParametri({
       p.medicalRecordNumber.toLowerCase().includes(q) ||
       room.toLowerCase().includes(q)
     );
-  });
+  }).sort(comparePazienti);
 
   return (
     <div className="patient-list-view">

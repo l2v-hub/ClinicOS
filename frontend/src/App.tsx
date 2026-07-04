@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 import { API_URL } from './config';
 import { cachedGetJson, invalidateCachedGet } from './lib/cachedFetch';
+import { sortPazienti } from './lib/patientSort';
 
 import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
@@ -237,8 +238,10 @@ export default function App() {
     if (!utente) return;
     setLoadingPazienti(true);
     fetch(`${API_URL}/patients`)
+      // Issue #129: il backend ordina per createdAt — il roster va sempre
+      // tenuto in ordine alfabetico (cognome, nome) per tutte le viste.
       .then(r => r.json())
-      .then((data: Paziente[]) => setPazienti(data))
+      .then((data: Paziente[]) => setPazienti(sortPazienti(data)))
       .catch(() => setPazienti([]))
       .finally(() => setLoadingPazienti(false));
     loadTherapySlots();
@@ -549,7 +552,8 @@ export default function App() {
     }
 
     const newP = data as unknown as Paziente;
-    setPazienti(prev => [...prev, newP]);
+    // Issue #129 (AC5): il nuovo paziente entra già in posizione alfabetica.
+    setPazienti(prev => sortPazienti([...prev, newP]));
 
     // Seed cartella from form fields not persisted in backend
     const cartellaInit: Partial<CartellaPaziente> = {};
@@ -975,7 +979,7 @@ export default function App() {
                 setLoadingPazienti(true);
                 fetch(`${API_URL}/patients`)
                   .then(r => r.json())
-                  .then((data: Paziente[]) => setPazienti(data))
+                  .then((data: Paziente[]) => setPazienti(sortPazienti(data)))
                   .catch(() => { /* keep current list */ })
                   .finally(() => setLoadingPazienti(false));
               }}
