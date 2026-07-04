@@ -505,3 +505,24 @@ model ImportDocument {
   @@unique([jobId, sha256])
   @@index([jobId])
 }
+
+// SPEC-015 (US2): persistent audit of every Agnos AI action (read | create | update | refusal).
+// PHI-safe: `fields` holds field NAMES only, never clinical values. Intentionally NO foreign keys
+// to Patient/Operator — the audit trail must survive deletion of its referents (ids stay as strings).
+model AiAuditEvent {
+  id           String   @id @default(cuid())
+  requestId    String
+  operatorId   String
+  operatorRole String
+  patientId    String?
+  actionType   String   // catalog action name, or refused_delete | refused_clinical | refused_forbidden | unknown
+  kind         String   // read | create | update | refusal
+  channel      String   // testo | voce
+  fields       String[]
+  outcome      String   // ok | denied | error | deduped | empty
+  createdAt    DateTime @default(now())
+
+  @@index([operatorId, createdAt])
+  @@index([patientId, createdAt])
+  @@index([outcome])
+}

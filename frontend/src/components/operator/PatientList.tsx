@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { API_URL } from '../../config';
 import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente } from '../../types';
 import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus, IcoTrash } from '../../icons';
@@ -7,6 +7,7 @@ import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
+import { cachedGetJson } from '../../lib/cachedFetch';
 
 interface PatientListProps {
   pazienti: Paziente[];
@@ -32,6 +33,40 @@ function calcAge(dob: string): number {
   return age;
 }
 
+// Riga card mobile estratta e memoizzata: evita il ri-render completo delle righe
+// a ogni keystroke del filtro (SPEC-015 US5 / T029).
+const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, deleteEnabled, deleting, onSelect, onDelete }: {
+  p: Paziente;
+  hasConsegnaAperta: boolean;
+  deleteEnabled: boolean;
+  deleting: boolean;
+  onSelect: (p: Paziente) => void;
+  onDelete: (p: Paziente, e: React.MouseEvent) => void;
+}) {
+  return (
+    <div className="pt-list-card" onClick={() => onSelect(p)}>
+      <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
+      <div className="pt-list-card__info">
+        <span className="pt-list-card__name">{p.lastName}, {p.firstName}</span>
+        <span className="pt-list-card__meta">
+          {p.medicalRecordNumber} · {calcAge(p.dateOfBirth)} anni · {p.sex ?? '--'}
+        </span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {hasConsegnaAperta && (
+          <span className="consegna-alert-dot"><IcoAlert /></span>
+        )}
+        {deleteEnabled && (
+          <button className="pt-delete-btn" title="Elimina paziente (test)" disabled={deleting} onClick={(e) => onDelete(p, e)}>
+            <IcoTrash />
+          </button>
+        )}
+        <span className="pt-list-card__chevron"><IcoChevronRight /></span>
+      </div>
+    </div>
+  );
+});
+
 export function PatientList({ pazienti, consegne, loading, onSelect, onAddPaziente: _onAddPaziente, onImported, operatorId, operatorRole }: PatientListProps) {
   const [ricerca, setRicerca] = useState('');
   const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
@@ -40,15 +75,15 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
   // button when disabled so production simply never shows it.
   const [deleteEnabled, setDeleteEnabled] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [settingsError, setSettingsError] = useState('');
 
   useEffect(() => {
-    fetch(`${API_URL}/patients/settings`)
-      .then((r) => (r.ok ? r.json() : null))
+    cachedGetJson<{ deleteEnabled?: boolean } | null>(`${API_URL}/patients/settings`)
       .then((s) => { if (s) setDeleteEnabled(!!s.deleteEnabled); })
-      .catch(() => { /* leave hidden */ });
+      .catch(() => { setSettingsError('Impossibile verificare le impostazioni della lista pazienti: alcune funzioni potrebbero non essere disponibili.'); });
   }, []);
 
-  async function handleDelete(p: Paziente, e: React.MouseEvent) {
+  const handleDelete = useCallback(async (p: Paziente, e: React.MouseEvent) => {
     e.stopPropagation();
     if (deletingId) return;
     if (!window.confirm(`Eliminare definitivamente ${p.lastName}, ${p.firstName} (${p.medicalRecordNumber})? Verranno rimossi anche cartella e dati clinici. Azione di test.`)) return;
@@ -69,15 +104,17 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
     } finally {
       setDeletingId(null);
     }
-  }
+  }, [deletingId, operatorId, operatorRole, onImported]);
 
-  const consegneAperteMap = new Map<string, number>();
-  consegne.filter(c => c.stato !== 'completata').forEach(c => {
-    consegneAperteMap.set(c.pazienteId, (consegneAperteMap.get(c.pazienteId) ?? 0) + 1);
-  });
-  const consegneAperte = new Set(consegneAperteMap.keys());
+  const { consegneAperteMap, consegneAperte } = useMemo(() => {
+    const map = new Map<string, number>();
+    consegne.filter(c => c.stato !== 'completata').forEach(c => {
+      map.set(c.pazienteId, (map.get(c.pazienteId) ?? 0) + 1);
+    });
+    return { consegneAperteMap: map, consegneAperte: new Set(map.keys()) };
+  }, [consegne]);
 
-  const filtrati = pazienti.filter(p => {
+  const filtrati = useMemo(() => pazienti.filter(p => {
     const q = ricerca.toLowerCase();
     const match = !q ||
       `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
@@ -86,7 +123,7 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
       (p.phone ?? '').toLowerCase().includes(q);
     const sessoMatch = filtroSesso === 'tutti' || p.sex === filtroSesso;
     return match && sessoMatch;
-  });
+  }), [pazienti, ricerca, filtroSesso]);
 
   return (
     <div className="patient-list-view">
@@ -103,6 +140,16 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
           </>
         }
       />
+
+      {/* Errore verifica impostazioni (niente fallimenti silenziosi — FR-018) */}
+      {settingsError && (
+        <div role="alert" style={{
+          padding: '8px 12px', borderRadius: 6, background: 'var(--red-50, #fef2f2)',
+          color: 'var(--red-700, #b91c1c)', fontSize: '0.85rem', marginBottom: 12,
+        }}>
+          {settingsError}
+        </div>
+      )}
 
       {/* Toolbar */}
       <div className="toolbar">
@@ -230,26 +277,15 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
           {/* Card list mobile */}
           <div className="pt-card-list">
             {filtrati.map(p => (
-              <div key={p.id} className="pt-list-card" onClick={() => onSelect(p)}>
-                <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
-                <div className="pt-list-card__info">
-                  <span className="pt-list-card__name">{p.lastName}, {p.firstName}</span>
-                  <span className="pt-list-card__meta">
-                    {p.medicalRecordNumber} · {calcAge(p.dateOfBirth)} anni · {p.sex ?? '--'}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  {consegneAperte.has(p.id) && (
-                    <span className="consegna-alert-dot"><IcoAlert /></span>
-                  )}
-                  {deleteEnabled && (
-                    <button className="pt-delete-btn" title="Elimina paziente (test)" disabled={deletingId === p.id} onClick={(e) => handleDelete(p, e)}>
-                      <IcoTrash />
-                    </button>
-                  )}
-                  <span className="pt-list-card__chevron"><IcoChevronRight /></span>
-                </div>
-              </div>
+              <PatientListCard
+                key={p.id}
+                p={p}
+                hasConsegnaAperta={consegneAperte.has(p.id)}
+                deleteEnabled={deleteEnabled}
+                deleting={deletingId === p.id}
+                onSelect={onSelect}
+                onDelete={handleDelete}
+              />
             ))}
           </div>
         </ClinicalTableSection>

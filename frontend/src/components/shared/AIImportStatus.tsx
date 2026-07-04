@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { API_URL } from '../../config';
 import { DischargeImportModal } from './DischargeImportModal';
+import { cachedGetJson } from '../../lib/cachedFetch';
 
 // REQ-013: surfaces whether the backend AI extraction service is configured and
 // usable, without ever knowing the API key (key is backend-only). Doubles as the
@@ -27,9 +28,8 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
 
   useEffect(() => {
     let alive = true;
-    fetch(`${API_URL}/ai/extraction/status`)
-      .then(r => r.json())
-      .then((s: AiStatus) => { if (alive) { setStatus(s); setLoading(false); } })
+    cachedGetJson<AiStatus>(`${API_URL}/ai/extraction/status`)
+      .then((s) => { if (alive) { setStatus(s); setLoading(false); } })
       .catch(() => { if (alive) { setStatus(null); setLoading(false); } });
     return () => { alive = false; };
   }, []);

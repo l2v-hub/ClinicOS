@@ -4,6 +4,7 @@ import express from 'express';
 import { adminRouter as adminRoomsRouter, patientAssignmentRouter } from './routes/admin-rooms.js';
 import patientTherapiesRouter from './routes/patient-therapies.js';
 import patientsRouter from './routes/patients.js';
+import appointmentsRouter from './routes/appointments.js';
 import therapyRouter from './routes/therapy.js';
 import patientIntakeRouter from './routes/patient-intake.js';
 import patientDiaryRouter from './routes/patient-diary.js';
@@ -17,6 +18,8 @@ import intakeDraftsRouter from './routes/intake-drafts.js';
 import internalAiRouter from './routes/internal-ai.js';
 import assistantPublicRouter from './routes/ai-assistant-public.js';
 import voiceRouter from './routes/ai-voice.js';
+import aiActionsRouter from './routes/ai-actions.js';
+import aiAuditRouter from './routes/ai-audit.js';
 
 const app = express();
 
@@ -85,6 +88,8 @@ app.use('/patients', patientDiaryRouter);
 app.use('/patients', narrativeSectionsRouter);
 app.use('/patients', patientDocumentsRouter);
 app.use('/patients', patientsRouter);
+// SPEC-015 (US4): real agenda appointments — same service as the Agnos AI actions; DELETE = UI only.
+app.use('/appointments', appointmentsRouter);
 app.use('/therapy-slots', therapyRouter);
 app.use('/patient-intake', patientIntakeRouter);
 app.use('/consegne', consegneRouter);
@@ -96,6 +101,10 @@ app.use('/ai/extraction', aiExtractionRouter);
 app.use('/ai/assistant', assistantPublicRouter);
 // REQ-041: operator-facing voice write-actions (transcript-only; audio stays client-side).
 app.use('/ai/voice', voiceRouter);
+// SPEC-015: unified Agnos orchestrator — text + voice commands, CRU-only allowlist (no delete).
+app.use('/ai/actions', aiActionsRouter);
+// SPEC-015 (US2): persistent AI audit consultation — admin/manager only.
+app.use('/ai/audit', aiAuditRouter);
 // REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
 app.use('/internal/ai', internalAiRouter);
 

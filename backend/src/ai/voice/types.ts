@@ -10,13 +10,16 @@ export type VoiceActionType =
   | 'update_patient_demographics'
   | 'update_narrative_section'
   | 'add_diary_note'
+  | 'create_appointment'            // SPEC-015 US4: agenda slot via Agnos (create)
+  | 'update_appointment'            // SPEC-015 US4: move an existing agenda slot (update)
   | 'refuse_clinical'               // diagnosis / therapy advice / prognosis
   | 'refuse_forbidden'              // deletes, therapy/allergy changes — disabled in v1
   | 'unknown';
 
-// The only write tools enabled in v1. Deletes and clinically-critical changes are intentionally absent.
+// The only write tools enabled. Deletes and clinically-critical changes are intentionally absent.
 export const WRITE_ACTION_TYPES: readonly VoiceActionType[] = [
   'create_vital_sign', 'update_patient_demographics', 'update_narrative_section', 'add_diary_note',
+  'create_appointment', 'update_appointment',
 ] as const;
 
 export function isWriteAction(t: VoiceActionType): boolean {
@@ -40,6 +43,10 @@ export interface ActionPlan {
   readQuery?: string;
   /** Why a refusal happened (refuse_clinical / refuse_forbidden). */
   refusalReason?: string;
+  /** SPEC-015: set when the refusal is specifically a deletion attempt (CRU-only: delete has no AI path). */
+  refusalKind?: 'delete';
+  /** SPEC-015: input channel the command arrived on ('testo' | 'voce'); attached by the orchestrator. */
+  channel?: string;
 }
 
 // A human-readable, source-grounded preview shown before the operator confirms.
@@ -54,6 +61,8 @@ export interface ActionPreview {
   ambiguities: string[];
   canExecute: boolean;
   warnings: string[];
+  /** SPEC-015: refusal message (delete/clinical/forbidden) that points the operator to the traditional UI. */
+  refusal?: string;
 }
 
 export interface ExecuteResult {

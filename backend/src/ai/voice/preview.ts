@@ -68,6 +68,7 @@ export function buildPreview(plan: ActionPlan, pctx: PreviewContext = {}): Actio
       base.title = plan.actionType === 'refuse_clinical' || plan.actionType === 'refuse_forbidden'
         ? 'Azione non consentita' : 'Comando';
       base.lines = plan.refusalReason ? [{ label: 'Motivo', value: plan.refusalReason }] : [];
+      if (plan.refusalReason) base.refusal = plan.refusalReason; // SPEC-015: surfaced to the unified panel
       return base;
     }
   }

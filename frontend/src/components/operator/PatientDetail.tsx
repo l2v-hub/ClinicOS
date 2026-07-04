@@ -157,13 +157,13 @@ const PRIORITA_OPTIONS: PrioritaConsegna[] = ['normale', 'alta', 'urgente'];
 
 // ── Inline form wrapper ────────────────────────────────────────────────────────
 
-function InlineForm({ onSave, onCancel, children }: { onSave: () => void; onCancel: () => void; children: React.ReactNode }) {
+function InlineForm({ onSave, onCancel, saving = false, children }: { onSave: () => void; onCancel: () => void; saving?: boolean; children: React.ReactNode }) {
   return (
     <div className="cr-inline-form">
       {children}
       <div className="cr-inline-form__actions">
-        <button className="btn-secondary btn-sm" onClick={onCancel}>Annulla</button>
-        <button className="btn-primary btn-sm" onClick={onSave}><IcoCheck /> Salva</button>
+        <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>Annulla</button>
+        <button className="btn-primary btn-sm" onClick={onSave} disabled={saving}><IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}</button>
       </div>
     </div>
   );
@@ -276,55 +276,74 @@ export function PatientDetail({
 
   // ── Update helpers ─────────────────────────────────────────────────────────
 
+  // T030 (SPEC-015 US5 / FR-018): stato di salvataggio condiviso — disabilita i
+  // pulsanti Salva durante la richiesta ed evita il doppio submit. L'esito è
+  // visibile tramite il toast di App (successo/errore); in caso di errore i form
+  // restano aperti per riprovare.
+  const [saving, setSaving] = useState(false);
+
   function upd(updates: Partial<CartellaPaziente>): void | Promise<boolean> {
     return onUpdateCartella(cartella.pazienteId, updates);
   }
 
-  // Rischi
-  function saveRischi(list: IndicatoreRischio[]) { upd({ indicatoriRischio: list }); }
-  function addRischio() {
-    if (!riskForm.descrizione) return;
-    saveRischi([{ id: uid(), tipo: 'altro', livello: 'basso', descrizione: '', dataValutazione: todayStr(), operatore: operatoreNome, ...riskForm } as IndicatoreRischio, ...cartella.indicatoriRischio]);
-    setShowAddRisk(false); setRiskForm({});
+  async function updConEsito(updates: Partial<CartellaPaziente>): Promise<boolean> {
+    if (saving) return false;
+    setSaving(true);
+    try {
+      const res = await Promise.resolve(upd(updates));
+      return res !== false;
+    } catch {
+      return false;
+    } finally {
+      setSaving(false);
+    }
   }
-  function updateRischio(id: string) {
-    saveRischi(cartella.indicatoriRischio.map(r => r.id === id ? { ...r, ...riskForm } : r));
-    setEditRiskId(null); setRiskForm({});
+
+  // Rischi
+  function saveRischi(list: IndicatoreRischio[]) { return updConEsito({ indicatoriRischio: list }); }
+  async function addRischio() {
+    if (!riskForm.descrizione) return;
+    const ok = await saveRischi([{ id: uid(), tipo: 'altro', livello: 'basso', descrizione: '', dataValutazione: todayStr(), operatore: operatoreNome, ...riskForm } as IndicatoreRischio, ...cartella.indicatoriRischio]);
+    if (ok) { setShowAddRisk(false); setRiskForm({}); }
+  }
+  async function updateRischio(id: string) {
+    const ok = await saveRischi(cartella.indicatoriRischio.map(r => r.id === id ? { ...r, ...riskForm } : r));
+    if (ok) { setEditRiskId(null); setRiskForm({}); }
   }
   function deleteRischio(id: string) { saveRischi(cartella.indicatoriRischio.filter(r => r.id !== id)); }
 
   // Note cliniche
-  function saveNoteClinica(list: NotaClinica[]) { upd({ noteClinica: list }); }
-  function addNota() {
+  function saveNoteClinica(list: NotaClinica[]) { return updConEsito({ noteClinica: list }); }
+  async function addNota() {
     if (!notaForm.contenuto) return;
-    saveNoteClinica([{ id: uid(), tipo: 'clinica', contenuto: '', operatore: operatoreNome, createdAt: nowISO(), ...notaForm } as NotaClinica, ...cartella.noteClinica]);
-    setShowAddNota(false); setNotaForm({});
+    const ok = await saveNoteClinica([{ id: uid(), tipo: 'clinica', contenuto: '', operatore: operatoreNome, createdAt: nowISO(), ...notaForm } as NotaClinica, ...cartella.noteClinica]);
+    if (ok) { setShowAddNota(false); setNotaForm({}); }
   }
-  function updateNota(id: string) {
-    saveNoteClinica(cartella.noteClinica.map(n => n.id === id ? { ...n, ...notaForm, updatedAt: nowISO() } : n));
-    setEditNotaId(null); setNotaForm({});
+  async function updateNota(id: string) {
+    const ok = await saveNoteClinica(cartella.noteClinica.map(n => n.id === id ? { ...n, ...notaForm, updatedAt: nowISO() } : n));
+    if (ok) { setEditNotaId(null); setNotaForm({}); }
   }
   function deleteNota(id: string) { saveNoteClinica(cartella.noteClinica.filter(n => n.id !== id)); }
 
   // Visite
-  function saveVisite(list: VisitaRecord[]) { upd({ visite: list }); }
-  function addVisita() {
+  function saveVisite(list: VisitaRecord[]) { return updConEsito({ visite: list }); }
+  async function addVisita() {
     if (!visitaForm.descrizione) return;
-    saveVisite([{ id: uid(), tipo: 'Visita', data: todayStr(), operatore: operatoreNome, descrizione: '', esito: '', createdAt: nowISO(), ...visitaForm } as VisitaRecord, ...cartella.visite]);
-    setShowAddVisita(false); setVisitaForm({});
+    const ok = await saveVisite([{ id: uid(), tipo: 'Visita', data: todayStr(), operatore: operatoreNome, descrizione: '', esito: '', createdAt: nowISO(), ...visitaForm } as VisitaRecord, ...cartella.visite]);
+    if (ok) { setShowAddVisita(false); setVisitaForm({}); }
   }
-  function updateVisita(id: string) {
-    saveVisite(cartella.visite.map(v => v.id === id ? { ...v, ...visitaForm } : v));
-    setEditVisitaId(null); setVisitaForm({});
+  async function updateVisita(id: string) {
+    const ok = await saveVisite(cartella.visite.map(v => v.id === id ? { ...v, ...visitaForm } : v));
+    if (ok) { setEditVisitaId(null); setVisitaForm({}); }
   }
   function deleteVisita(id: string) { saveVisite(cartella.visite.filter(v => v.id !== id)); }
 
   // Profilo
-  function saveProfiloHandler() {
+  async function saveProfiloHandler() {
     const { email, phone, ...cartellaUpdates } = profiloForm;
     if (email !== undefined || phone !== undefined) onUpdatePaziente(paziente.id, { email, phone });
-    upd(cartellaUpdates);
-    setEditProfilo(false);
+    const ok = await updConEsito(cartellaUpdates);
+    if (ok) setEditProfilo(false);
   }
 
   // Consegna
@@ -352,11 +371,11 @@ export function PatientDetail({
   // Diagnosi CRUD — delegated to DiagnosisEditor
 
   // Parametri quick-add from modal
-  function addVitaleFromModal() {
+  async function addVitaleFromModal() {
     if (!vitaleForm.etichetta || !vitaleForm.valore) return;
     const newV: VitaleItem = { id: uid(), etichetta: '', valore: '', unita: '', stato: 'normale', rilevato: nowISO(), rilevatoDa: operatoreNome, ...vitaleForm } as VitaleItem;
-    upd({ parametriVitali: [newV, ...cartella.parametriVitali] });
-    setModalVitaleShow(false); setVitaleForm({});
+    const ok = await updConEsito({ parametriVitali: [newV, ...cartella.parametriVitali] });
+    if (ok) { setModalVitaleShow(false); setVitaleForm({}); }
   }
 
   // Consegna quick-add from modal
@@ -379,10 +398,12 @@ export function PatientDetail({
   }
 
   // Camera save from modal
-  function saveCameraFromModal() {
-    upd(cameraModalForm);
-    setCameraEditing(false);
-    setCameraModalForm({});
+  async function saveCameraFromModal() {
+    const ok = await updConEsito(cameraModalForm);
+    if (ok) {
+      setCameraEditing(false);
+      setCameraModalForm({});
+    }
   }
 
   // ── Card modals rendering ──────────────────────────────────────────────────
@@ -510,8 +531,8 @@ export function PatientDetail({
                   </div>
                 </div>
                 <div className="ec-modal-add-form__actions">
-                  <button className="btn-secondary btn-sm" onClick={() => {setModalVitaleShow(false); setVitaleForm({});}}>Annulla</button>
-                  <button className="btn-primary btn-sm" onClick={addVitaleFromModal}><IcoCheck /> Salva</button>
+                  <button className="btn-secondary btn-sm" onClick={() => {setModalVitaleShow(false); setVitaleForm({});}} disabled={saving}>Annulla</button>
+                  <button className="btn-primary btn-sm" onClick={addVitaleFromModal} disabled={saving}><IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}</button>
                 </div>
               </div>
             ) : (
@@ -702,8 +723,8 @@ export function PatientDetail({
             <div className="modal-footer__right">
               {cameraEditing ? (
                 <>
-                  <button className="btn-secondary" onClick={() => setCameraEditing(false)}>Annulla</button>
-                  <button className="btn-primary" onClick={saveCameraFromModal}><IcoCheck /> Salva</button>
+                  <button className="btn-secondary" onClick={() => setCameraEditing(false)} disabled={saving}>Annulla</button>
+                  <button className="btn-primary" onClick={saveCameraFromModal} disabled={saving}><IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}</button>
                 </>
               ) : (
                 <button className="btn-primary" onClick={() => setCardModal(null)}>Chiudi</button>
@@ -718,7 +739,10 @@ export function PatientDetail({
   // ── Tab rendering ──────────────────────────────────────────────────────────
 
   function renderRiepilogo() {
-    const lastVitali = cartella.parametriVitali.slice(0, 4);
+    // "Ultimi parametri" = i più recenti per data di rilevazione (l'array è in ordine di inserimento)
+    const lastVitali = [...cartella.parametriVitali]
+      .sort((a, b) => (b.rilevato ?? '').localeCompare(a.rilevato ?? ''))
+      .slice(0, 4);
     const diagnosiMostrate = diagnosiAttive.slice(0, 3);
     const farmaciMostrati = farmaciAttivi.slice(0, 4);
 
@@ -922,8 +946,8 @@ export function PatientDetail({
           title="Dati e Contatti"
           actions={editProfilo ? (
             <>
-              <button className="btn-sm" onClick={() => setEditProfilo(false)}>Annulla</button>
-              <button className="btn-sm" onClick={saveProfiloHandler}>Salva</button>
+              <button className="btn-sm" onClick={() => setEditProfilo(false)} disabled={saving}>Annulla</button>
+              <button className="btn-sm" onClick={saveProfiloHandler} disabled={saving}>{saving ? 'Salvataggio…' : 'Salva'}</button>
             </>
           ) : (
             <button className="btn-sm" onClick={() => {
@@ -947,7 +971,7 @@ export function PatientDetail({
         >
         <div className="cts__body--padded">
         {editProfilo ? (
-          <InlineForm onSave={saveProfiloHandler} onCancel={() => setEditProfilo(false)}>
+          <InlineForm onSave={saveProfiloHandler} onCancel={() => setEditProfilo(false)} saving={saving}>
             <div className="op-form-grid">
               <div className="form-field">
                 <label className="form-label">Email</label>
@@ -1119,7 +1143,7 @@ export function PatientDetail({
         >
           <div className="cts__body--padded">
             {showAddRisk && (
-              <InlineForm onSave={addRischio} onCancel={() => { setShowAddRisk(false); setRiskForm({}); }}>
+              <InlineForm onSave={addRischio} onCancel={() => { setShowAddRisk(false); setRiskForm({}); }} saving={saving}>
                 <div className="op-form-grid">
                   <div className="form-field"><label className="form-label">Tipo</label>
                     <select className="form-select" value={riskForm.tipo ?? 'altro'} onChange={e => setRiskForm(p => ({ ...p, tipo: e.target.value as IndicatoreRischio['tipo'] }))}>
@@ -1140,7 +1164,7 @@ export function PatientDetail({
             <div className="cr-list">
               {cartella.indicatoriRischio.length === 0 && <p className="cr-empty">Nessun indicatore di rischio.</p>}
               {cartella.indicatoriRischio.map(r => editRiskId === r.id ? (
-                <InlineForm key={r.id} onSave={() => updateRischio(r.id)} onCancel={() => { setEditRiskId(null); setRiskForm({}); }}>
+                <InlineForm key={r.id} onSave={() => updateRischio(r.id)} onCancel={() => { setEditRiskId(null); setRiskForm({}); }} saving={saving}>
                   <div className="op-form-grid">
                     <div className="form-field"><label className="form-label">Tipo</label>
                       <select className="form-select" value={riskForm.tipo ?? r.tipo} onChange={e => setRiskForm(p => ({ ...p, tipo: e.target.value as IndicatoreRischio['tipo'] }))}>
@@ -1187,7 +1211,7 @@ export function PatientDetail({
         >
           <div className="cts__body--padded">
             {showAddNota && (
-              <InlineForm onSave={addNota} onCancel={() => { setShowAddNota(false); setNotaForm({}); }}>
+              <InlineForm onSave={addNota} onCancel={() => { setShowAddNota(false); setNotaForm({}); }} saving={saving}>
                 <div className="op-form-grid">
                   <div className="form-field"><label className="form-label">Tipo</label>
                     <select className="form-select" value={notaForm.tipo ?? 'clinica'} onChange={e => setNotaForm(p => ({ ...p, tipo: e.target.value as NotaClinica['tipo'] }))}>
@@ -1203,7 +1227,7 @@ export function PatientDetail({
             <div className="cr-list">
               {cartella.noteClinica.length === 0 && <p className="cr-empty">Nessuna nota clinica.</p>}
               {cartella.noteClinica.map(n => editNotaId === n.id ? (
-                <InlineForm key={n.id} onSave={() => updateNota(n.id)} onCancel={() => { setEditNotaId(null); setNotaForm({}); }}>
+                <InlineForm key={n.id} onSave={() => updateNota(n.id)} onCancel={() => { setEditNotaId(null); setNotaForm({}); }} saving={saving}>
                   <div className="op-form-grid">
                     <div className="form-field"><label className="form-label">Tipo</label>
                       <select className="form-select" value={notaForm.tipo ?? n.tipo} onChange={e => setNotaForm(p => ({ ...p, tipo: e.target.value as NotaClinica['tipo'] }))}>
@@ -1238,7 +1262,7 @@ export function PatientDetail({
         >
           <div className="cts__body--padded">
             {showAddVisita && (
-              <InlineForm onSave={addVisita} onCancel={() => { setShowAddVisita(false); setVisitaForm({}); }}>
+              <InlineForm onSave={addVisita} onCancel={() => { setShowAddVisita(false); setVisitaForm({}); }} saving={saving}>
                 <div className="op-form-grid">
                   <div className="form-field"><label className="form-label">Tipo visita</label>
                     <input className="form-input" value={visitaForm.tipo ?? ''} placeholder="Visita cardiologica…" onChange={e => setVisitaForm(p => ({ ...p, tipo: e.target.value }))} /></div>
@@ -1258,7 +1282,7 @@ export function PatientDetail({
             <div className="cr-list">
               {cartella.visite.length === 0 && <p className="cr-empty">Nessuna visita registrata.</p>}
               {cartella.visite.map(v => editVisitaId === v.id ? (
-                <InlineForm key={v.id} onSave={() => updateVisita(v.id)} onCancel={() => { setEditVisitaId(null); setVisitaForm({}); }}>
+                <InlineForm key={v.id} onSave={() => updateVisita(v.id)} onCancel={() => { setEditVisitaId(null); setVisitaForm({}); }} saving={saving}>
                   <div className="op-form-grid">
                     <div className="form-field"><label className="form-label">Tipo</label><input className="form-input" value={visitaForm.tipo ?? v.tipo} onChange={e => setVisitaForm(p => ({ ...p, tipo: e.target.value }))} /></div>
                     <div className="form-field"><label className="form-label">Data</label><input className="form-input" type="date" value={visitaForm.data ?? v.data} onChange={e => setVisitaForm(p => ({ ...p, data: e.target.value }))} /></div>

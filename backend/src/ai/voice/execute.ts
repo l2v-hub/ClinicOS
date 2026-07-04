@@ -9,7 +9,10 @@ import type { VoiceConfig } from './config.js';
 import { IdempotencyStore } from './idempotency.js';
 import { voiceAudit } from './audit.js';
 
-export type VoiceErrorKind = 'feature_disabled' | 'writes_disabled' | 'not_executable' | 'ambiguous' | 'confirmation_required';
+export type VoiceErrorKind =
+  | 'feature_disabled' | 'writes_disabled' | 'not_executable' | 'ambiguous' | 'confirmation_required'
+  // SPEC-015 (Agnos orchestrator): allowlist violation and delete refusal at the execute boundary.
+  | 'not_in_catalog' | 'delete_forbidden';
 
 export class VoiceError extends Error {
   constructor(public kind: VoiceErrorKind, message: string) { super(message); this.name = 'VoiceError'; }
@@ -27,6 +30,10 @@ export interface VoiceWriter {
   updateDemographics(patientId: string, field: string, value: string, meta: WriteMeta): Promise<string>;
   appendNarrative(patientId: string, sectionKey: string, addedText: string, meta: WriteMeta): Promise<string>;
   addDiaryNote(patientId: string, content: string, meta: WriteMeta): Promise<string>;
+  // SPEC-015 US4: agenda appointments via the shared appointment-service (create/update ONLY —
+  // the VoiceWriter has no delete method, by construction).
+  createAppointment(patientId: string, fields: Record<string, unknown>, meta: WriteMeta): Promise<string>;
+  updateAppointment(targetRecordId: string, fields: Record<string, unknown>, meta: WriteMeta): Promise<string>;
 }
 
 const SUCCESS_MESSAGE: Record<VoiceActionType, string> = {
@@ -34,12 +41,14 @@ const SUCCESS_MESSAGE: Record<VoiceActionType, string> = {
   update_patient_demographics: 'Dato anagrafico aggiornato.',
   update_narrative_section: 'Sezione narrativa aggiornata.',
   add_diary_note: 'Nota aggiunta al diario.',
+  create_appointment: 'Appuntamento creato in agenda.',
+  update_appointment: 'Appuntamento aggiornato in agenda.',
   read: '', refuse_clinical: '', refuse_forbidden: '', unknown: '',
 };
 
 export interface ExecuteOptions {
   confirmed: boolean;
-  ctx: { requestId: string; userId: string; operatorName: string };
+  ctx: { requestId: string; userId: string; operatorName: string; channel?: 'TESTO' | 'VOCE'; operatorRole?: string };
   cfg: VoiceConfig;
   writer: VoiceWriter;
   store: IdempotencyStore;
@@ -81,6 +90,11 @@ export async function executeAction(plan: ActionPlan, opts: ExecuteOptions): Pro
       recordId = await writer.appendNarrative(plan.patientId, String(plan.sectionKey), String(plan.fields.addedText), meta); break;
     case 'add_diary_note':
       recordId = await writer.addDiaryNote(plan.patientId, String(plan.fields.content), meta); break;
+    case 'create_appointment':
+      recordId = await writer.createAppointment(plan.patientId, plan.fields, meta); break;
+    case 'update_appointment':
+      if (!plan.targetRecordId) { audit(null, 'denied'); throw new VoiceError('ambiguous', 'Appuntamento da modificare non identificato.'); }
+      recordId = await writer.updateAppointment(plan.targetRecordId, plan.fields, meta); break;
     default:
       throw new VoiceError('not_executable', 'Azione non supportata.');
   }

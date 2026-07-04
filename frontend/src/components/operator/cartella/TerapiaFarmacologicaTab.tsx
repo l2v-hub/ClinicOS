@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
+import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
 import { ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
@@ -204,13 +205,18 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   // ── Loaders ──────────────────────────────────────────────────────────────────
 
+  // Dedup (015 T028): stessa GET condivisa con App.tsx/InvioPSModal nello stesso flusso.
+  // Le mutazioni sotto invalidano prima di ricaricare.
+  const invalidateTherapies = useCallback(() => {
+    invalidateCachedGet(`${API_URL}/patients/${paziente.id}/therapies`);
+    invalidateCachedGet(`${API_URL}/therapy-slots`);
+  }, [paziente.id]);
+
   const loadTherapies = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
-      const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies`);
-      if (!res.ok) throw new Error(`Errore ${res.status}`);
-      const data: PatientTherapyAPI[] = await res.json();
+      const data = [...await cachedGetJson<PatientTherapyAPI[]>(`${API_URL}/patients/${paziente.id}/therapies`)];
       data.sort((a, b) => (STATO_ORDER[a.stato] ?? 9) - (STATO_ORDER[b.stato] ?? 9));
       setTherapies(data);
     } catch (err) {
@@ -223,9 +229,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const loadDaily = useCallback(async (date: string) => {
     try {
       setDailyLoading(true);
-      const res = await fetch(`${API_URL}/therapy-slots?date=${date}`);
-      if (!res.ok) throw new Error(`Errore ${res.status}`);
-      const slots: TherapySlot[] = await res.json();
+      const slots = await cachedGetJson<TherapySlot[]>(`${API_URL}/therapy-slots?date=${date}`);
       setDailySlots(slots);
     } catch {
       setDailySlots([]);
@@ -282,6 +286,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
       closeForm();
+      invalidateTherapies();
       await loadTherapies();
       setSubTab('attivi');
     } catch (err) {
@@ -297,6 +302,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       setError('');
       const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
+      invalidateTherapies();
       await loadTherapies();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore eliminazione');
@@ -312,6 +318,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         body: JSON.stringify({ stato: 'sospesa' }),
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
+      invalidateTherapies();
       await loadTherapies();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore sospensione');
@@ -327,6 +334,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         body: JSON.stringify({ stato: 'attiva' }),
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
+      invalidateTherapies();
       await loadTherapies();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore riattivazione');

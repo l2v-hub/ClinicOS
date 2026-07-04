@@ -8,7 +8,8 @@ interface AppointmentFormProps {
   operatoreId: string;
   operatori: Operatore[];
   pazienti: Paziente[];
-  onSave: (apt: Omit<Appuntamento, 'id'>) => void;
+  /** SPEC-015 US4: persists via REST — resolves with an error message, or null on success. */
+  onSave: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onCancel: () => void;
   onNewPatient: () => void;
 }
@@ -49,6 +50,9 @@ export function AppointmentForm({
 
   const [pazienteSearch, setPazienteSearch] = useState('');
   const [showPazSearch, setShowPazSearch] = useState(false);
+  // SPEC-015 US4 (FR-018): visible saving state + explicit error (e.g. slot conflict 409).
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const pazientiFiltrati = pazienteSearch.length > 1
     ? pazienti.filter(p =>
@@ -59,16 +63,20 @@ export function AppointmentForm({
 
   const operatoreSelezionato = operatori.find(o => o.id === form.operatoreId);
 
-  function salva() {
-    if (!form.operatoreId) return;
+  async function salva() {
+    if (!form.operatoreId || saving) return;
     const op = operatori.find(o => o.id === form.operatoreId);
-    onSave({
+    setSaving(true);
+    setSaveError(null);
+    const err = await onSave({
       ...form,
       operatoreNome: op ? `${op.cognome} ${op.nome}` : '',
       pazienteId: form.pazienteId || null,
       pazienteNome: form.pazienteNome || null,
       cameraId: form.cameraId || undefined,
     });
+    setSaving(false);
+    if (err) setSaveError(err); // il parent chiude il form solo in caso di successo
   }
 
   function selectPaziente(p: Paziente) {
@@ -195,8 +203,15 @@ export function AppointmentForm({
         </div>
 
         <div className="modal-footer">
-          <button className="btn-secondary" onClick={onCancel}>Annulla</button>
-          <button className="btn-primary" onClick={salva}><IcoCheck /> Salva appuntamento</button>
+          {saveError && (
+            <p className="form-error" role="alert" style={{ color: 'var(--red, #DC2626)', margin: '0 auto 0 0', fontSize: 13 }}>
+              {saveError}
+            </p>
+          )}
+          <button className="btn-secondary" onClick={onCancel} disabled={saving}>Annulla</button>
+          <button className="btn-primary" onClick={() => { void salva(); }} disabled={saving}>
+            <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva appuntamento'}
+          </button>
         </div>
       </div>
     </div>

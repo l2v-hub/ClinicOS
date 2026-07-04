@@ -13,7 +13,7 @@ interface OperatorAgendaProps {
   operatori: Operatore[];
   appuntamenti: Appuntamento[];
   pazienti: Paziente[];
-  onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => void;
+  onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onSelectPaziente?: (nome: string) => void;
   therapySlots?: TherapySlot[];
   onConfirmTherapy?: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }) => void;
@@ -394,7 +394,7 @@ export function OperatorAgenda({
         <AppointmentForm
           data={aptForm.data} ora={aptForm.ora}
           operatoreId={operatoreId} operatori={operatori} pazienti={pazienti}
-          onSave={apt => { onAddAppuntamento(apt); setAptForm(null); }}
+          onSave={async apt => { const err = await onAddAppuntamento(apt); if (!err) setAptForm(null); return err; }}
           onCancel={() => setAptForm(null)}
           onNewPatient={() => setShowNewPaziente(true)}
         />
