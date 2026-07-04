@@ -1,0 +1,65 @@
+// 016 F1: planner LLM per le letture. L'LLM (via runtime) PROPONE un piano; il backend lo VALIDA
+// contro l'allowlist di sola lettura e RICALCOLA server-side l'accesso cross-patient. Qualunque
+// problema (runtime assente/timeout, JSON/piano non valido, tool fuori allowlist) → fallback
+// deterministico, senza errori per l'utente. L'LLM non può mai produrre un tool eseguibile di
+// scrittura/cancellazione (non è nello schema né supera la validazione).
+
+import { planQuery, type PlanContext, type QueryPlan, type AssistantIntent } from './plan.js';
+import { isReadTool, READ_TOOL_SCHEMA } from './read-tools.js';
+
+export interface LlmPlanRequest {
+  question: string;
+  currentPatientId?: string;
+  roles: string[];
+  toolSchema: typeof READ_TOOL_SCHEMA;
+}
+export interface LlmPlanResponse { plan: unknown; confidence?: number }
+
+export interface PlanQueryLLMDeps {
+  /** Client del runtime LLM (iniettabile per i test). Assente ⇒ solo deterministico. */
+  callPlanRuntime?: (req: LlmPlanRequest) => Promise<LlmPlanResponse>;
+  roles?: string[];
+}
+
+export interface PlanResult { plan: QueryPlan; mode: 'llm' | 'deterministic' }
+
+// I tool che comportano accesso cross-patient: se il piano LLM ne usa uno, il server IMPONE cross.
+const CROSS_TOOLS = new Set(['search_across_patients', 'correlate_structured_data', 'query_appointments_today']);
+const INTENTS = new Set<AssistantIntent>(['allergies', 'therapies', 'vitals_range', 'vitals_recent', 'narrative_search', 'document_search', 'timeline', 'appointments', 'correlate', 'patient_search', 'refuse_clinical', 'unknown']);
+
+/** Valida la forma del piano LLM e i tool contro l'allowlist read. Ritorna null se non valido. */
+function validatePlan(raw: unknown, ctx: PlanContext): QueryPlan | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const p = raw as Record<string, unknown>;
+  if (!INTENTS.has(p.intent as AssistantIntent)) return null;
+  if (!Array.isArray(p.tools)) return null;
+  const tools: QueryPlan['tools'] = [];
+  for (const t of p.tools) {
+    if (!t || typeof t !== 'object') return null;
+    const name = (t as Record<string, unknown>).tool;
+    if (typeof name !== 'string' || !isReadTool(name)) return null; // deny-by-default
+    const args = ((t as Record<string, unknown>).args ?? {}) as Record<string, unknown>;
+    tools.push({ tool: name, args });
+  }
+  const scope: QueryPlan['scope'] = p.scope === 'cross_patient' || tools.some((t) => CROSS_TOOLS.has(t.tool))
+    ? 'cross_patient' : 'current_patient';
+  // requiresCrossPatientAccess RICALCOLATO server-side (mai fidato dall'LLM).
+  const requiresCrossPatientAccess = scope === 'cross_patient' || tools.some((t) => CROSS_TOOLS.has(t.tool));
+  return { intent: p.intent as AssistantIntent, scope, tools, requiresCrossPatientAccess };
+}
+
+/** Pianifica una lettura via LLM con validazione e fallback deterministico garantito. */
+export async function planQueryLLM(question: string, ctx: PlanContext, deps: PlanQueryLLMDeps = {}): Promise<PlanResult> {
+  const fallback = (): PlanResult => ({ plan: planQuery(question, ctx), mode: 'deterministic' });
+  if (!deps.callPlanRuntime) return fallback();
+  try {
+    const res = await deps.callPlanRuntime({
+      question, currentPatientId: ctx.currentPatientId, roles: deps.roles ?? [], toolSchema: READ_TOOL_SCHEMA,
+    });
+    const validated = validatePlan(res?.plan, ctx);
+    if (!validated) return fallback();
+    return { plan: validated, mode: 'llm' };
+  } catch {
+    return fallback(); // runtime assente/timeout/errore → deterministico, nessun errore utente
+  }
+}
