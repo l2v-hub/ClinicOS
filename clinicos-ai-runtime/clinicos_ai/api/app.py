@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import logging
 import os
 import time
 import uuid
@@ -22,6 +23,7 @@ from fastapi import FastAPI, Header, HTTPException, status
 from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..models.errors import RuntimeError_, ErrorKind
+from ..models.env_config import safe_config_summary
 from ..models.providers.base import Attachment
 from ..models.registry import ModelRegistry
 from ..domain.contracts import (
@@ -29,9 +31,17 @@ from ..domain.contracts import (
     AssistantComposeRequest, AssistantComposeResponse,
 )
 
+_log = logging.getLogger("clinicos_ai.runtime")
 app = FastAPI(title="ClinicOS AI Runtime", version="1.0.0")
 _REGISTRY = ModelRegistry()
 _JOBS: dict[str, dict] = {}
+
+
+@app.on_event("startup")
+def _log_model_config() -> None:
+    # Log PHI/secret-safe: solo provider+model+source per ambito. Mai chiavi/endpoint.
+    for line in safe_config_summary(os.environ):
+        _log.info("model-config %s", line)
 
 
 def _auth(authorization: str | None) -> None:

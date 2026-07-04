@@ -13,8 +13,13 @@ from typing import Mapping
 from .capabilities import CapabilityRequirement, DEFAULT_ROLE_REQUIREMENTS
 from .errors import ConfigError
 from .spec import ModelSpec
+from .env_config import resolve_agnos_llm, resolve_ocr, resolve_extraction
 
 ROLES = ("ocr", "extraction", "agent", "repair")
+
+# Resolver env-driven per ambito (i tre resolver separati mai incrociati fra loro).
+# 'repair' non ha un ambito dedicato: resta sul percorso legacy AI_REPAIR_MODEL.
+_ROLE_RESOLVERS = {"agent": resolve_agnos_llm, "ocr": resolve_ocr, "extraction": resolve_extraction}
 
 
 @dataclass(frozen=True)
@@ -91,15 +96,26 @@ def load_runtime_config(env: Mapping[str, str] | None = None) -> RuntimeConfig:
 
     for role in ROLES:
         up = role.upper()
-        model_raw = _get(e, f"AI_{up}_MODEL")
-        if not model_raw:
-            errors.append(f"AI_{up}_MODEL mancante (atteso 'provider:model_id')")
-            continue
-        try:
-            model = ModelSpec.parse(model_raw)
-        except ConfigError as ex:
-            errors.append(f"AI_{up}_MODEL: {ex.message}")
-            continue
+        resolver = _ROLE_RESOLVERS.get(role)
+        agnos_temperature: float | None = None
+        if resolver is not None:
+            cfg, role_errors = resolver(e)
+            if cfg is None:
+                errors.extend(role_errors)
+                continue
+            model = cfg.model
+            # la temperatura di Agnos viene dal suo ambito (AGNOS_LLM_TEMPERATURE / legacy)
+            agnos_temperature = getattr(cfg, "temperature", None)
+        else:
+            model_raw = _get(e, f"AI_{up}_MODEL")
+            if not model_raw:
+                errors.append(f"AI_{up}_MODEL mancante (atteso 'provider:model_id')")
+                continue
+            try:
+                model = ModelSpec.parse(model_raw)
+            except ConfigError as ex:
+                errors.append(f"AI_{up}_MODEL: {ex.message}")
+                continue
         # fallback supports both spellings: AI_<ROLE>_FALLBACK_MODEL and AI_FALLBACK_<ROLE>_MODEL
         try:
             fallback = ModelSpec.parse_optional(_get(e, f"AI_{up}_FALLBACK_MODEL", f"AI_FALLBACK_{up}_MODEL"))
@@ -120,7 +136,8 @@ def load_runtime_config(env: Mapping[str, str] | None = None) -> RuntimeConfig:
             role=role,
             model=model,
             fallback=fallback,
-            temperature=_float(e, f"AI_{up}_TEMPERATURE", "AI_TEMPERATURE", default=0.0),
+            temperature=agnos_temperature if agnos_temperature is not None
+            else _float(e, f"AI_{up}_TEMPERATURE", "AI_TEMPERATURE", default=0.0),
             timeout_seconds=_int(e, f"AI_{up}_TIMEOUT_SECONDS", "AI_PROVIDER_TIMEOUT_SECONDS", default=300),
             requirement=requirement,
         )

@@ -1,0 +1,63 @@
+{
+  "overall_pass": true,
+  "checks": {
+    "agnos_reads_agnos_llm_vars": {
+      "provider": "azure",
+      "model": "gpt-5.4-mini",
+      "source": "env",
+      "temperature": 0.2,
+      "max_tokens": 4096,
+      "timeout_seconds": 30,
+      "streaming": true,
+      "pass": true
+    },
+    "ocr_separate_from_agnos": {
+      "provider": "mistral",
+      "model": "mistral-document-ai-2505",
+      "pass": true
+    },
+    "extraction_separate": {
+      "provider": "mistral",
+      "model": "mistral-document-ai-2505",
+      "pass": true
+    },
+    "change_model_from_env_only": {
+      "agnos_model": "gpt-6-turbo",
+      "ocr_model": "mistral-ocr-2600",
+      "pass": true
+    },
+    "legacy_fallback_only": {
+      "legacy_source": "legacy",
+      "legacy_model": "gemma-4-31b-it",
+      "priority_source": "env",
+      "priority_model": "gemini-2.0-flash",
+      "pass": true
+    },
+    "clear_error_missing_var": {
+      "errors": [
+        "AZURE_OPENAI_ENDPOINT mancante (richiesto da provider azure-openai)"
+      ],
+      "pass": true
+    },
+    "boot_log_sanitized": {
+      "log": [
+        "model-config agnos_llm provider=azure model=gpt-5.4-mini source=env",
+        "model-config ocr provider=mistral model=mistral-document-ai-2505 source=env",
+        "model-config extraction provider=mistral model=mistral-document-ai-2505 source=env"
+      ],
+      "no_secret": true,
+      "has_provider_and_model": true,
+      "pass": true
+    },
+    "runtime_config_integration": {
+      "errors": [],
+      "available": true,
+      "agent_model": "gpt-5.4-mini",
+      "agent_provider": "azure",
+      "agent_temperature": 0.2,
+      "ocr_model": "mistral-document-ai-2505",
+      "extraction_model": "mistral-document-ai-2505",
+      "pass": true
+    }
+  }
+}
