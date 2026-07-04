@@ -1,34 +1,71 @@
-# ClinicOS — Requirement/Bug processing report (2026-06-23)
+# Requirement Processing Report — batch /process-requirment 2026-07-04
 
-Batch run via `/process-requirements` over all open `REQ-`/`BUG-` issues in `lucalavia/ClinicOS`.
+Repo: `l2v-hub/ClinicOS`. Fonte: GitHub Issues. Modalità: worktree isolati per issue
+(`.worktrees/issue-<n>`), Spec-Kit/agent-team, Playwright con evidenze, verifica runtime
+e deployment prima della chiusura.
 
-## Key discovery this run
-Contrary to the prior "dual deploy blocked" assumption, **both production services are live**:
-- **Frontend (Vercel `clinicos-eosin`)** — HTTP 200, but was serving a **stale bundle** (Vercel deploy is *manual*, not Git-auto). Ran `vercel deploy --prod --archive=tgz --yes` → new bundle `index-CQEFE1oX.js` now contains the merged features (verified by bundle-string scan).
-- **Backend (Railway `clinicos-backend-production-df88`)** — `/health` 200, `/patients` serving. BUT the Railway **management API** (`backboard.railway.com`) is unreachable from this network (corp TLS interception: `invalid peer certificate: UnknownIssuer`), so backend **deploy/verify is not possible from this environment**.
+## Coda iniziale (bug aperti a inizio batch)
 
-## Results
+4 bug (nessun titolo con prefisso letterale `REQ-`/`BUG-`; i bug usano il prefisso `Bug`):
+#127 (critico, frontend+backend), #128 (P1, frontend), #130 (P1, backend), #129 (P2, frontend+backend).
 
-| Issue | Type | Title | Iter | Outcome | PR | Verify | Deploy |
-| ----- | ---- | ----- | ---: | ------- | -- | ------ | ------ |
-| #98  | BUG-060 | Scala Tinetti + NRS | 1 | ✅ CLOSED | #111 | build, 17/17 scoring, synthetic shots | FE Vercel prod (bundle has `Tinetti`×11) |
-| #99  | BUG-061 | Esami/RX/Consulenze separated | 1 | ✅ CLOSED | #112 | build, 7/7 sort, synthetic shot | FE Vercel prod (`Esami & Consulenze`×2) |
-| #102 | BUG-064 | Invio in PS print window | 1 | ✅ CLOSED | #113 | build, 9/9, preview shot | FE Vercel prod (`Invio in Pronto Soccorso`×4) |
-| #90  | BUG-052 | Scatta Foto camera | 1 | ✅ CLOSED | (d716aa8) | bundle has `getUserMedia`/`facingMode`; flow shots | FE Vercel prod |
-| #96  | BUG-058 | Medicazioni/contenzioni not saved | 1 | ✅ CLOSED | — | **prod API round-trip PASS** (save/reload/idempotent) | BE Railway live + FE prod |
-| #68  | BUG-046 | Parser: repeated anagraphic header | — | ⛔ BLOCKED | (on main) | header-filter 15/15 (unit) | ✗ backend deploy/verify unreachable |
-| #70  | BUG-048 | Import source comparison | — | ⛔ BLOCKED | (996d41b) | markdown-parse 18/18 (unit) | ✗ backend deploy/verify unreachable |
-| #71  | BUG-049 | Import files persisted to Documents | — | ⛔ BLOCKED | (996d41b) | markdown-parse 18/18 (unit) | ✗ backend deploy/verify unreachable |
-| #93  | BUG-055 | Therapy set at admission | — | ⛔ BLOCKED | — | fix plan documented | ✗ needs BE change+deploy+OCR |
-| #95  | BUG-057 | Fractional doses ½/¼ | — | ⛔ BLOCKED | — | fix plan documented | ✗ needs Prisma migration (owner OK) + BE deploy |
+## Esito
 
-**Closed: 5 · Blocked (open): 5.**
+| Issue | Tipo | Titolo | Iter. | Esito | PR | Commit merge | Deployment | Screenshot |
+|---|---|---|---:|---|---|---|---|---|
+| #127 | BUG | Creazione paziente non funzionante (manuale + import) | 1/4 | ✅ PASS · CHIUSA | #132 | `bdd797f` | Vercel+Railway success | `docs/qa/issues/127/` |
+| #128 | BUG | Camera assegnata non risulta occupata | 1/4 | ✅ PASS · CHIUSA | #134 | `1132dcd` | Vercel+Railway success | `docs/qa/issues/128/` |
+| #129 | BUG | Ordinamento alfabetico pazienti non coerente | 1/4 | ✅ PASS · CHIUSA | #135 | `b443ce3` | Vercel+Railway success | `docs/qa/issues/129/` |
+| #130 | BUG | Comandi vocali consegne/diario/parametri/appuntamenti | 1/4 | ✅ PASS · CHIUSA | #136 | `43b2cc1` | Vercel+Railway success | `docs/qa/issues/130/` |
+| #133 | CI  | browser-e2e (req020) fallisce per drift ambientale runner | — | 🔵 APERTA (tracking infra, aperta durante il batch) | — | — | — | artifact CI |
+| #137 | BUG | Agnos non legge config LLM da env Railway | 0/4 | ⛔ BLOCCATA (needs-info) | — | — | — | prod status probe |
 
-## Blockers (owner action)
-1. **Railway management API unreachable from this network** (corp TLS interception) → cannot deploy or verify the backend here. The 5 blocked issues all need a backend deploy and/or the live OCR import stack. Run the backend deploy from the Railway dashboard or a non-intercepting network, then verify #68/#70/#71 with a synthetic import.
-2. **#95** additionally needs explicit authorization for an additive Prisma migration (`PatientTherapy.dosaggioConfezione` + `quantitaPrescritta`) — CLAUDE.md forbids schema changes without owner OK.
-3. **#93** needs a backend change (`persistTherapiesFromCartella`) + the OCR runtime to verify.
+**Chiuse: 4 · Aperte: 2 (#133 tracking-infra, #137 needs-info).**
 
-## Notes
-- All verification used synthetic data only (no PHI). The #96 prod API round-trip created/used the synthetic demo patient (`DEMO-FULL-001`) and cleaned up its QA records.
-- Evidence committed under `requirements/evidence/BUG-060|061|064|052|058/`. Repo is **private**, so screenshots are linked via GitHub blob URLs (inline raw embedding is not possible for private repos) — owner-authenticated viewing.
+## Dettaglio per issue
+
+### #127 — Creazione paziente (root cause doppia)
+1. `AnamnesisEditor` dereferenziava `value` undefined (draft manuali senza `data.anamnesi`;
+   import senza `anamnesisText`) → schermo bianco al passo Clinica, nessuna `POST /patients`.
+2. Flusso import: `handleProceedToWorkspace` scartava l'anagrafica corretta in Revisione.
+Fix frontend: editor null-tolerant + `patchDraft` dell'anagrafica dopo `createDraftFromImport`.
+E2E `e2e/issue-127-verify.mjs` 7/7 PASS.
+
+### #128 — Camera non occupata
+La cartella JSON scriveva `cameraNumero/lettoNumero` ma non creava la `PatientRoomAssignment`,
+unica fonte letta da `/admin/rooms` e dalle viste occupazione → letto sempre libero.
+Fix frontend: `syncCameraAssignment` (POST/PUT room-assignments) + select camere filtrate a
+letti liberi. E2E `e2e/issue-128-verify.mjs` 9/9 PASS (AC1-AC4 + refresh).
+
+### #129 — Ordinamento pazienti
+Nessun ordinamento client-side nelle 4 viste (consegne/parametri/pazienti presenti/terapia);
+ereditavano l'ordine `createdAt` del backend.
+Fix: utility condivisa `frontend/src/lib/patientSort.ts` (`Intl.Collator('it')`, cognome→nome,
+stabile) applicata alle 4 viste + roster. E2E `e2e/issue-129-verify.mjs` PASS su 4 viste + refresh.
+
+### #130 — Voce operativa
+Diario/parametri/appuntamenti + divieto Delete già coperti da SPEC-015. Gap reale: **consegne**
+(mancava `create_consegna`; verbo `scriv…` non riconosciuto).
+Fix: `backend/src/services/consegna-service.ts` condiviso UI+AI (FR-007), entry catalogo, matcher
+`backend/src/ai/actions/consegne.ts`. Backend 222/222; E2E `e2e/issue-130-verify.mjs` 22/22
+PASS (AC1-AC7; catalogo 8 azioni, **0 delete**).
+
+## Note di processo
+
+- **PR SPEC-015 #131** mergiata all'inizio del batch (base per #130: l'orchestratore Agnos CRU).
+  Il check advisory `browser-e2e` è risultato un **drift ambientale dei runner** (fallisce
+  identico su `main` liscio, runtime mock mai contattato) → aperta **#133** con analisi e fix
+  suggerito (`AI_RUNTIME_URL=http://127.0.0.1:8000`). Non blocca il merge: gate/secret-scan/real-provider verdi.
+- Le PR #134/#135/#136 sono state **rebasate** su main dopo i merge concorrenti (tutte toccano
+  `App.tsx`), con re-run E2E post-rebase prima del merge (rispettivamente 9/9, 4-viste, 22/22).
+- **#137** aperta a metà batch senza corpo né acceptance criteria; la premessa è contraddetta
+  dal probe di produzione (`GET /ai/extraction/status` → `available:true, provider:google, 0 errors`).
+  Marcata `status-blocked`/`needs-info`, nessun fix su premessa non riproducibile. Nota: l'orchestratore
+  Agnos è **deterministico per decisione del committente** (SPEC-015 D1) e non dipende da config LLM.
+- Verifica visiva del frontend di produzione (`clinicos-eosin.vercel.app`) non eseguibile da
+  questa postazione (proxy Zscaler blocca il dominio); fanno fede lo stato di deploy Vercel/Railway
+  via GitHub Deployments API e le evidenze E2E locali per ogni issue.
+
+## Deploy manifest
+
+`requirements/deployments/DEPLOY-20260704-bugbatch.md`
