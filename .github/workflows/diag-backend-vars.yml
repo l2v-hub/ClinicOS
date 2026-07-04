@@ -5,11 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: npm install -g @railway/cli
-      - name: List assistant vars + probe runtime assistant
+      - name: Probe runtime assistant plan with real token (token NOT printed)
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
         run: |
           SVCFLAG=""; [ -n "$RAILWAY_SERVICE" ] && SVCFLAG="--service $RAILWAY_SERVICE"
-          echo "=== AI_ASSISTANT / AI_RUNTIME vars sul backend ==="
-          railway variables $SVCFLAG | grep -iE "AI_ASSISTANT|AI_RUNTIME_URL" || echo "(nessuna AI_ASSISTANT trovata)"
+          # legge URL e token dal backend senza stamparli
+          RURL=$(railway variables $SVCFLAG --json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const v=JSON.parse(s);console.log(v.AI_RUNTIME_URL||"")})')
+          RTOK=$(railway variables $SVCFLAG --json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const v=JSON.parse(s);console.log(v.AI_RUNTIME_SERVICE_TOKEN||"")})')
+          echo "runtime url present: $([ -n "$RURL" ] && echo yes || echo no); token present: $([ -n "$RTOK" ] && echo yes || echo no)"
+          echo "=== chiamata reale /v1/assistant/plan (mostra se gemini produce un piano o erra) ==="
+          curl -s -w "\nHTTP=%{http_code}\n" -X POST "${RURL%/}/v1/assistant/plan" \
+            -H "Content-Type: application/json" -H "Authorization: Bearer $RTOK" \
+            -d '{"question":"mostra le allergie del paziente","toolSchema":[{"name":"get_patient_allergies","args":{"patientId":"string"}}]}' | head -c 800
