@@ -1,0 +1,34 @@
+name: Set Runtime Agent Model
+# Imposta AI_AGENT_MODEL sul servizio runtime (clinicos-ai-runtime) e ridistribuisce.
+# Serve a scegliere il modello LLM che alimenta planner/composer (016). Il ruolo 'agent'
+# è quello usato dall'assistant. Variabile NON segreta (le credenziali provider restano
+# secret sul dashboard). Redeploy via railway up dalla root (il servizio ha root-dir runtime).
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "provider:model_id (es. google:gemma-4-31b-it, azure:gpt-4o-mini)"
+        required: true
+        type: string
+concurrency:
+  group: railway-runtime
+  cancel-in-progress: false
+jobs:
+  set-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install -g @railway/cli
+      - name: Set AI_AGENT_MODEL on runtime + redeploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RUNTIME_SVC: ${{ vars.RAILWAY_RUNTIME_SERVICE }}
+          MODEL: ${{ inputs.model }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then echo "::error::RAILWAY_TOKEN not set"; exit 1; fi
+          SVC="${RUNTIME_SVC:-clinicos-ai-runtime}"
+          railway variables --service "$SVC" --set "AI_AGENT_MODEL=$MODEL"
+          echo "AI_AGENT_MODEL set to $MODEL on $SVC — redeploying"
+          railway up --ci --service "$SVC"
