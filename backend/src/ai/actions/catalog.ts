@@ -67,6 +67,15 @@ export const AGNOS_ACTION_CATALOG: Record<string, AgnosCatalogEntry> = {
     enabled: true,
     description: 'Sposta o aggiorna un appuntamento esistente in agenda (nuovo orario) con controllo conflitti slot.',
   },
+  // Issue #130: consegne (handover cards) — create ONLY. delete_consegna does not exist and must
+  // never be added: la cancellazione consegne è riservata al pulsante della UI tradizionale.
+  create_consegna: {
+    name: 'create_consegna',
+    kind: 'create',
+    entity: 'consegna',
+    enabled: true,
+    description: 'Crea una consegna operativa per un paziente (testo libero) con conferma obbligatoria.',
+  },
 };
 
 function envDisabledNames(env: NodeJS.ProcessEnv): Set<string> {

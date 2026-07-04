@@ -22,6 +22,9 @@ import { isActionAllowed } from './catalog.js';
 import {
   matchAppointmentCommand, groundAppointmentPlan, isAppointmentAction, type AppointmentLookupDeps,
 } from './appointments.js';
+import {
+  matchConsegnaCommand, groundConsegnaPlan, isConsegnaAction, type ConsegnaLookupDeps,
+} from './consegne.js';
 import type { UserContext } from '../gateway/types.js';
 import type { AssistantAnswer } from '../assistant/service.js';
 
@@ -54,7 +57,10 @@ function derivePlan(text: string, ctx: VoicePlanContext, genId?: () => string): 
   const voicePlan = genId ? planAction(text, ctx, genId) : planAction(text, ctx);
   if (voicePlan.actionType === 'refuse_forbidden' || voicePlan.actionType === 'refuse_clinical') return voicePlan;
   const appointmentPlan = matchAppointmentCommand(text, { currentPatientId: ctx.currentPatientId }, { genId });
-  return appointmentPlan ?? voicePlan;
+  // Issue #130: consegna matcher, same contract (explicit "consegna" verb form required, so reads
+  // and the other write actions are never hijacked).
+  const consegnaPlan = matchConsegnaCommand(text, { currentPatientId: ctx.currentPatientId }, { genId });
+  return appointmentPlan ?? consegnaPlan ?? voicePlan;
 }
 
 // ── planCommand ─────────────────────────────────────────────────────────────
@@ -78,6 +84,8 @@ export interface PlanCommandDeps {
   loadPreviewContext?: (plan: ActionPlan) => Promise<PreviewContext>;
   /** SPEC-015 US4: patient/slot lookups for appointment grounding (tests inject stubs, no DB). */
   appointmentLookup?: AppointmentLookupDeps;
+  /** Issue #130: patient lookups for consegna grounding (tests inject stubs, no DB). */
+  consegnaLookup?: ConsegnaLookupDeps;
 }
 
 async function defaultRunRead(query: string, ctx: UserContext, currentPatientId?: string): Promise<AssistantAnswer> {
@@ -137,6 +145,12 @@ export async function planCommand(input: PlanCommandInput, deps: PlanCommandDeps
     return { plan, preview, read: null };
   }
 
+  // Issue #130: consegna plans are grounded (patient by name or context) and build their own preview.
+  if (isConsegnaAction(plan.actionType)) {
+    const { preview } = await groundConsegnaPlan(plan, deps.consegnaLookup);
+    return { plan, preview, read: null };
+  }
+
   const loadCtx = deps.loadPreviewContext ?? defaultLoadPreviewContext;
   const pctx = await loadCtx(plan);
   return { plan, preview: buildPreview(plan, pctx), read: null };
@@ -162,6 +176,8 @@ export interface ExecuteCommandDeps {
   nowISO?: string;
   /** SPEC-015 US4: patient/slot lookups for appointment grounding (tests inject stubs, no DB). */
   appointmentLookup?: AppointmentLookupDeps;
+  /** Issue #130: patient lookups for consegna grounding (tests inject stubs, no DB). */
+  consegnaLookup?: ConsegnaLookupDeps;
 }
 
 /** Execute a CONFIRMED write command. The plan is ALWAYS re-derived server-side from the text
@@ -209,13 +225,14 @@ export async function executeCommand(input: ExecuteCommandInput, deps: ExecuteCo
   // plan.ambiguities and is rejected by the existing 'ambiguous' guard in executeAction.
   // Idempotent replay short-circuits BEFORE grounding: the write already applied, so its own slot
   // would read as a conflict — return the original result (deduped), same audit as executeAction.
-  if (isAppointmentAction(plan.actionType) && input.confirmed === true) {
+  if ((isAppointmentAction(plan.actionType) || isConsegnaAction(plan.actionType)) && input.confirmed === true) {
     const prior = store.get(plan.idempotencyKey, Date.parse(nowISO) || Date.now());
     if (prior) {
       voiceAudit(ctx, plan.actionType, plan.patientId, prior.recordId ?? null, Object.keys(plan.fields), 'deduped', nowISO);
       return prior;
     }
-    await groundAppointmentPlan(plan, input.operatorCtx.operatorId, deps.appointmentLookup);
+    if (isAppointmentAction(plan.actionType)) await groundAppointmentPlan(plan, input.operatorCtx.operatorId, deps.appointmentLookup);
+    else await groundConsegnaPlan(plan, deps.consegnaLookup); // issue #130: stesso re-grounding tamper-proof
   }
 
   // 4) existing execute.ts guards (ambiguity, confirmation, idempotency) + dispatch + audit

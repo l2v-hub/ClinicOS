@@ -9,7 +9,9 @@ import { matchVital, parseVitalValue, parseSpokenTime } from './vitals.js';
 
 const norm = (s: string) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
-const WRITE_VERB = /\b(registra|aggiungi|aggiorna|modifica|cambia|sostituisci|imposta|inserisci|crea|prescriv|elimina|cancella|rimuovi)\b/;
+// Issue #130: "scriv…" (scrivi/scrivere/scrivimi) added — the PO example «Scrivi nel diario di …»
+// must be recognized as a write command like the other Italian write verbs.
+const WRITE_VERB = /\b(registra|aggiungi|aggiorna|modifica|cambia|sostituisci|imposta|inserisci|crea|prescriv|scriv\w*|elimina|cancella|rimuovi)\b/;
 // SPEC-015 (FR-008/FR-009): every Italian deletion verb AND its inflections is refused outright,
 // on every channel, with or without another write verb. "deleta" is matched by explicit inflections
 // only, so legitimate words like "deleterio" never trigger a refusal.
