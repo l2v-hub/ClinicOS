@@ -86,8 +86,9 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
     const sysGt = /(pressione|sistolic|pa).*?(\d{2,3})/.exec(q);
     if (/pression|sistolic/.test(q) && sysGt) return base('vitals_range', [{ tool: 'get_patient_vital_signs', args: { patientId: pid, label: 'PA', systolicMin: parseInt(sysGt[2], 10) + 1 } }]);
     if (/timeline|sequenza temporale|cronologia/.test(q)) return base('timeline', [{ tool: 'get_patient_timeline', args: { patientId: pid } }]);
-    if (/appuntament|agenda/.test(q)) return base('appointments', [{ tool: 'get_patient_appointments', args: { patientId: pid } }]);
-    if (/terapia|farmac/.test(q)) return base('therapies', [{ tool: 'get_patient_therapies', args: { patientId: pid } }]);
+    if (/appuntament\w*|agenda/.test(q)) return base('appointments', [{ tool: 'get_patient_appointments', args: { patientId: pid } }]);
+    // 016 F0: plurali/sinonimi (terapia/terapie/farmaco/farmaci/prescriz…)
+    if (/terapi\w*|farmac\w*|prescriz\w*/.test(q)) return base('therapies', [{ tool: 'get_patient_therapies', args: { patientId: pid } }]);
     const sec = sectionKeyFor(q);
     if (/cerca|trova|consulenz|anamnes|decorso|documenti|sezione/.test(q)) {
       const phrase = searchPhrase(q, original);
@@ -114,4 +115,44 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   if (/paziente|cerca paziente|trova paziente/.test(q)) return base('patient_search', [{ tool: 'search_patients', args: { query: original.trim() } }], true);
 
   return base('unknown', []);
+}
+
+// 016 F0: risoluzione del paziente nominato nel testo. Il planner resta puro; la risoluzione
+// nome→id (che richiede il DB) è fatta da service.ts, che usa questo estrattore.
+// Parole capitalizzate note che NON sono nomi di paziente (evita falsi positivi a fine frase).
+const NAME_STOPWORDS = new Set([
+  'PA', 'SpO2', 'TC', 'FC', 'DTX', 'RX', 'TAC', 'RMN', 'ECG', 'PS', 'MRN',
+]);
+
+/**
+ * Estrae un nome paziente dalla domanda, se presente. Due euristiche:
+ *  1) dopo una preposizione esplicita: «…di/del/della/dei/per/al paziente <Nome [Cognome]>»
+ *  2) uno o due token capitalizzati in coda (non iniziali di frase), es. «…assume Rossi».
+ * Ritorna null quando nessun paziente è nominato (nessuna invenzione).
+ */
+export function extractPatientName(question: string): string | null {
+  const text = (question || '').trim();
+  if (!text) return null;
+  const NAME = "[A-ZÀ-Þ][a-zà-ÿ']+(?:\\s+[A-ZÀ-Þ][a-zà-ÿ']+)?";
+
+  const prep = new RegExp(`\\b(?:di|del|della|dei|delle|per|al|allo|alla|paziente)\\s+(${NAME})`).exec(text);
+  if (prep) return prep[1].trim();
+
+  // token capitalizzati in coda, ma non se sono la prima parola della frase (verbo iniziale).
+  const trailing = new RegExp(`(?:\\s)(${NAME})\\s*[?.!]*$`).exec(text);
+  if (trailing) {
+    const cand = trailing[1].trim();
+    if (!NAME_STOPWORDS.has(cand.split(/\s+/)[0])) return cand;
+  }
+  return null;
+}
+
+/** Decide l'esito della risoluzione a partire dai risultati di ricerca pazienti (puro).
+ *  Univoco ⇒ { patientId }; nessuno ⇒ 'none'; più di uno ⇒ 'ambiguous' (nessuna scelta arbitraria). */
+export function pickResolvedPatient(
+  matches: Array<{ patientId: string }>,
+): { patientId: string } | 'none' | 'ambiguous' {
+  if (matches.length === 0) return 'none';
+  if (matches.length > 1) return 'ambiguous';
+  return { patientId: matches[0].patientId };
 }

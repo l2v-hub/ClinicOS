@@ -9,7 +9,7 @@ import {
   assertPatientAllowed, assertTenant, canCrossPatientSearch, filterAllowedPatients,
 } from './context.js';
 import {
-  asCartella, filterVitals, matchAllergy, matchTherapy, textIncludes, type VitalItem,
+  asCartella, filterVitals, matchAllergy, matchTherapy, textIncludes, nameMatchesAllTokens, type VitalItem,
 } from './filters.js';
 import {
   appointmentSource, diarySource, documentSource, narrativeSource, patientFieldSource,
@@ -40,12 +40,15 @@ export async function searchPatients(input: PatientSearchInput, ctx: UserContext
   assertTenant(ctx);
   const limit = clampLimit(input.limit);
   const q = (input.query ?? '').trim();
-  const where = q
-    ? { OR: [
-        { firstName: { contains: q, mode: 'insensitive' as const } },
-        { lastName: { contains: q, mode: 'insensitive' as const } },
-        { medicalRecordNumber: { contains: q, mode: 'insensitive' as const } },
-      ] }
+  // 016 F0: match multi-token — ogni token deve comparire in nome/cognome/MRN (AND fra token),
+  // così «Elena Moretti» o «Moretti Elena» trovano il paziente pur avendo i campi separati.
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const where = tokens.length
+    ? { AND: tokens.map((t) => ({ OR: [
+        { firstName: { contains: t, mode: 'insensitive' as const } },
+        { lastName: { contains: t, mode: 'insensitive' as const } },
+        { medicalRecordNumber: { contains: t, mode: 'insensitive' as const } },
+      ] })) }
     : {};
   const rows = await prisma.patient.findMany({ where, orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }], take: 500 });
   const allowed = rows.filter((p) => filterAllowedPatients(ctx, [p.id]).length === 1);
@@ -55,7 +58,7 @@ export async function searchPatients(input: PatientSearchInput, ctx: UserContext
     if (results.length >= limit) break;
     const matching: string[] = [];
     const refs: SourceReference[] = [];
-    if (q && (textIncludes(p.firstName, q) || textIncludes(p.lastName, q) || textIncludes(p.medicalRecordNumber, q))) {
+    if (q && (nameMatchesAllTokens(p.firstName, p.lastName, q) || textIncludes(p.medicalRecordNumber, q))) {
       matching.push('name'); refs.push(patientFieldSource(p.id, 'name', displayName(p)));
     }
     // fiscalCode / allergy / therapy need the cartella

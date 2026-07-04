@@ -8,6 +8,14 @@ export function textIncludes(haystack: unknown, needle: string): boolean {
   return norm(haystack).includes(norm(needle));
 }
 
+/** 016 F0: ogni token della query deve comparire in nome o cognome (ordine indifferente).
+ *  Permette la risoluzione «Elena Moretti» / «Moretti Elena» / «Rossi» contro i campi separati. */
+export function nameMatchesAllTokens(firstName: unknown, lastName: unknown, query: string): boolean {
+  const tokens = (query || '').trim().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return false;
+  return tokens.every((t) => textIncludes(firstName, t) || textIncludes(lastName, t));
+}
+
 /** Numeric value of a vital. "PA 130/85" → systolic 130; plain "78" → 78; "36.5" → 36.5. */
 export function vitalNumericValue(etichetta: string, valore: string): { systolic?: number; diastolic?: number; value?: number } {
   const v = (valore ?? '').trim();

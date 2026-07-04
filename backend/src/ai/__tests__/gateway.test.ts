@@ -94,3 +94,20 @@ test('every source builder carries patientId + recordId + label', () => {
   const v = vitalSource('p1', 'rec2', 'PA', 'PA 160/95', '2026-03-09');
   assert.equal(v.sourceType, 'VITAL_SIGN'); assert.ok(v.label && v.recordId);
 });
+
+// ── 016 F0: match nome paziente multi-token (per risoluzione per nome) ─────────
+import { nameMatchesAllTokens } from '../gateway/filters.js';
+
+test('016 F0: nameMatchesAllTokens matches full name in either order', () => {
+  assert.equal(nameMatchesAllTokens('Elena', 'Moretti', 'Elena Moretti'), true);
+  assert.equal(nameMatchesAllTokens('Elena', 'Moretti', 'moretti elena'), true);
+});
+
+test('016 F0: nameMatchesAllTokens matches a single surname token', () => {
+  assert.equal(nameMatchesAllTokens('Mario', 'Rossi', 'Rossi'), true);
+});
+
+test('016 F0: nameMatchesAllTokens is false when a token is absent', () => {
+  assert.equal(nameMatchesAllTokens('Elena', 'Moretti', 'Elena Bianchi'), false);
+  assert.equal(nameMatchesAllTokens('Elena', 'Moretti', ''), false);
+});

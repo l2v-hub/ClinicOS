@@ -1,0 +1,30 @@
+{
+  "ranAt": "2026-07-04T14:38:38.054Z",
+  "results": [
+    {
+      "name": "1. paziente nominato risolto + parametri recuperati",
+      "pass": true,
+      "detail": "intent=vitals_recent results=12"
+    },
+    {
+      "name": "2. plurale \"terapie\" riconosciuto (intent therapies, non unknown)",
+      "pass": true,
+      "detail": "intent=therapies"
+    },
+    {
+      "name": "3. allergie: paziente nominato risolto (intent allergies, non unknown)",
+      "pass": true,
+      "detail": "intent=allergies"
+    },
+    {
+      "name": "4. domanda non pertinente → nessun dato inventato",
+      "pass": true,
+      "detail": "actionType=unknown"
+    },
+    {
+      "name": "5. rifiuto Delete invariato (SPEC-015)",
+      "pass": true,
+      "detail": ""
+    }
+  ]
+}
