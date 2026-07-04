@@ -1,0 +1,9 @@
+{
+  "read_allergie_ok": true,
+  "read_parametri_ok": true,
+  "read_has_sources": true,
+  "delete_chat_refused": true,
+  "delete_voce_refused": true,
+  "catalog_zero_delete": true,
+  "backend_health": true
+}
