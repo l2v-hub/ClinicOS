@@ -1,0 +1,15 @@
+name: Diag Backend Variables
+on: { workflow_dispatch: {} }
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm install -g @railway/cli
+      - name: List assistant vars + probe runtime assistant
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+        run: |
+          SVCFLAG=""; [ -n "$RAILWAY_SERVICE" ] && SVCFLAG="--service $RAILWAY_SERVICE"
+          echo "=== AI_ASSISTANT / AI_RUNTIME vars sul backend ==="
+          railway variables $SVCFLAG | grep -iE "AI_ASSISTANT|AI_RUNTIME_URL" || echo "(nessuna AI_ASSISTANT trovata)"
