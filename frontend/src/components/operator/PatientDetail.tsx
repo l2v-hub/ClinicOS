@@ -107,6 +107,7 @@ interface PatientDetailProps {
   onUpdateConsegnaStato: (id: string, stato: Consegna['stato']) => void;
   onUpdateCartella: (pazienteId: string, updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   onUpdatePaziente: (id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) => void;
+  onAssignCamera: (pazienteId: string, cameraNumero?: string, lettoNumero?: string) => Promise<{ ok: boolean; lettoLabel?: string }>;
   operatoreNome: string;
   operatoreId: string;
 }
@@ -188,7 +189,7 @@ function ItemRow({ onEdit, onDelete, children }: { onEdit: () => void; onDelete:
 export function PatientDetail({
   paziente, cartella, consegne, operatori, camere,
   onBack, onAddConsegna, onUpdateConsegnaStato,
-  onUpdateCartella, onUpdatePaziente,
+  onUpdateCartella, onUpdatePaziente, onAssignCamera,
   operatoreNome,
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>('riepilogo');
@@ -273,6 +274,10 @@ export function PatientDetail({
   const diagnosiAttive = cartella.diagnosi.filter(d => d.stato === 'attiva');
   const farmaciAttivi = cartella.farmaci.filter(f => f.stato === 'attivo');
   const rischioAlto = cartella.indicatoriRischio.filter(r => r.livello === 'alto' || r.livello === 'critico');
+  // Issue #128: proponi solo camere con almeno un letto libero (o già occupate da questo paziente)
+  const camereAssegnabili = camere.filter(c =>
+    c.stato === 'attiva' && c.letti.some(l => l.stato === 'libero' || l.pazienteId === paziente.id)
+  );
 
   // ── Update helpers ─────────────────────────────────────────────────────────
 
@@ -341,6 +346,14 @@ export function PatientDetail({
   // Profilo
   async function saveProfiloHandler() {
     const { email, phone, ...cartellaUpdates } = profiloForm;
+    // Issue #128: se la camera cambia, crea/chiude l'assegnazione letto reale
+    const cam = cartellaUpdates.cameraNumero || undefined;
+    if (cam !== (cartella.cameraNumero || undefined)) {
+      const res = await onAssignCamera(paziente.id, cam, cartellaUpdates.lettoNumero);
+      if (!res.ok) return;
+      cartellaUpdates.cameraNumero = cam;
+      cartellaUpdates.lettoNumero = cam ? (res.lettoLabel ?? cartellaUpdates.lettoNumero) : undefined;
+    }
     if (email !== undefined || phone !== undefined) onUpdatePaziente(paziente.id, { email, phone });
     const ok = await updConEsito(cartellaUpdates);
     if (ok) setEditProfilo(false);
@@ -398,8 +411,16 @@ export function PatientDetail({
   }
 
   // Camera save from modal
+  // Issue #128: prima crea/chiude l'assegnazione letto reale (occupazione), poi salva la cartella
   async function saveCameraFromModal() {
-    const ok = await updConEsito(cameraModalForm);
+    const cam = cameraModalForm.cameraNumero || undefined;
+    const res = await onAssignCamera(paziente.id, cam, cameraModalForm.lettoNumero);
+    if (!res.ok) return;
+    const ok = await updConEsito({
+      ...cameraModalForm,
+      cameraNumero: cam,
+      lettoNumero: cam ? (res.lettoLabel ?? cameraModalForm.lettoNumero) : undefined,
+    });
     if (ok) {
       setCameraEditing(false);
       setCameraModalForm({});
@@ -701,7 +722,7 @@ export function PatientDetail({
                   <label className="form-label">Camera</label>
                   <select className="form-select" value={form.cameraNumero ?? ''} onChange={e => { const cam = camere.find(c => c.numero === e.target.value); setCameraModalForm(p => ({...p, cameraNumero: e.target.value, repartoRicovero: cam?.reparto ?? p.repartoRicovero})); }}>
                     <option value="">— Nessuna —</option>
-                    {camere.filter(c => c.stato === 'attiva').map(c => <option key={c.id} value={c.numero}>{c.numero} — {c.reparto}</option>)}
+                    {camereAssegnabili.map(c => <option key={c.id} value={c.numero}>{c.numero} — {c.reparto}</option>)}
                   </select>
                 </div>
                 <div className="form-field">
@@ -1031,7 +1052,7 @@ export function PatientDetail({
                     setProfiloForm(p => ({ ...p, cameraNumero: e.target.value, repartoRicovero: cam?.reparto ?? p.repartoRicovero }));
                   }}>
                   <option value="">— Nessuna —</option>
-                  {camere.filter(c => c.stato === 'attiva').map(c => (
+                  {camereAssegnabili.map(c => (
                     <option key={c.id} value={c.numero}>{c.numero} — {c.reparto}</option>
                   ))}
                 </select>
