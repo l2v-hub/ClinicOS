@@ -23,7 +23,7 @@
 **Purpose**: strutture condivise a tutte le fasi. NON introduce ancora l'LLM.
 
 - [ ] T003 Definire l'allowlist esplicita dei 13 tool di sola lettura del gateway in `backend/src/ai/assistant/read-tools.ts` (nomi + schema args), riusata da validazione piano (F1) e da schema esposto all'LLM; nessun tool di scrittura presente
-- [ ] T004 Estendere il tipo `AssistantAnswer` in `backend/src/ai/assistant/service.ts` con i campi opzionali `answerText?`, `mode`, `composed` (retrocompatibili); `dispatch()`/executor INVARIATI
+- [x] T004 Estendere il tipo `AssistantAnswer` in `backend/src/ai/assistant/service.ts` con i campi opzionali `answerText?`, `mode`, `composed` (retrocompatibili); `dispatch()`/executor INVARIATI
 - [ ] T005 Introdurre i flag/config in `backend/src/ai/assistant/config.ts` (`AI_ASSISTANT_LLM_ENABLED`, `AI_ASSISTANT_PLAN_ENABLED`, `AI_ASSISTANT_COMPOSE_ENABLED`, `AI_ASSISTANT_PLAN_MODEL`, `AI_ASSISTANT_COMPOSE_MODEL`, `AI_ASSISTANT_TIMEOUT_MS`), default = motore deterministico
 
 **Checkpoint**: build/test verdi; nessun cambiamento di comportamento (flag off).
@@ -36,12 +36,12 @@
 
 **Independent Test**: senza paziente aperto «mostra le allergie di Elena Moretti» → risposta con fonti; con paziente aperto «quali terapie assume» → terapie; paziente inesistente → «non identificato».
 
-- [ ] T006 [US1] Estendere `backend/src/ai/assistant/plan.ts`: se la domanda nomina un paziente («di/per/del paziente <Nome [Cognome]>») e manca `currentPatientId`, pianificare `search_patients` e usarne l'id univoco come scope; ambiguo/assente → intent `unknown` con motivo «paziente non identificato» (nessuna invenzione)
-- [ ] T007 [US1] Estendere i pattern in `backend/src/ai/assistant/plan.ts` a plurali/sinonimi (`terapi\w*|farmac\w*`, `allerg\w*`, `parametr\w*|pressione|saturazione|temperatura|frequenza`, `appuntament\w*|agenda`, `document\w*`), rimuovendo i singolare-only
-- [ ] T008 [US1] Gestire in `backend/src/ai/assistant/service.ts` la risoluzione a due passi (search_patients → tool sul patientId risolto) mantenendo SOURCE_ONLY e i cap esistenti
-- [ ] T009 [P] [US1] Unit test in `backend/src/ai/__tests__/assistant-plan.test.ts`: risoluzione paziente per nome (univoco/ambiguo/assente), plurali/sinonimi, rifiuto clinico invariato; golden set (T002) verde
+- [x] T006 [US1] Estendere `backend/src/ai/assistant/plan.ts`: se la domanda nomina un paziente («di/per/del paziente <Nome [Cognome]>») e manca `currentPatientId`, pianificare `search_patients` e usarne l'id univoco come scope; ambiguo/assente → intent `unknown` con motivo «paziente non identificato» (nessuna invenzione)
+- [x] T007 [US1] Estendere i pattern in `backend/src/ai/assistant/plan.ts` a plurali/sinonimi (`terapi\w*|farmac\w*`, `allerg\w*`, `parametr\w*|pressione|saturazione|temperatura|frequenza`, `appuntament\w*|agenda`, `document\w*`), rimuovendo i singolare-only
+- [x] T008 [US1] Gestire in `backend/src/ai/assistant/service.ts` la risoluzione a due passi (search_patients → tool sul patientId risolto) mantenendo SOURCE_ONLY e i cap esistenti
+- [x] T009 [P] [US1] Unit test in `backend/src/ai/__tests__/assistant-plan.test.ts`: risoluzione paziente per nome (univoco/ambiguo/assente), plurali/sinonimi, rifiuto clinico invariato; golden set (T002) verde
 - [ ] T010 [US1] Rendere `answerText` nel pannello `frontend/src/components/shared/AgnosPanel.tsx` quando presente, altrimenti la vista strutturata attuale (in F0 resta strutturata); nessuna regressione UI
-- [ ] T011 [US1] E2E `e2e/agnos-llm-reads.mjs` sezione F0: domande con/senza paziente, nome nel testo, plurali → risposta con fonti; screenshot in `requirements/evidence/SPEC-016/`
+- [x] T011 [US1] E2E `e2e/agnos-llm-reads.mjs` sezione F0: domande con/senza paziente, nome nel testo, plurali → risposta con fonti; screenshot in `requirements/evidence/SPEC-016/`
 
 **Checkpoint**: il chatbot risponde alle domande comuni SENZA LLM (MVP + fallback per le fasi seguenti).
 
