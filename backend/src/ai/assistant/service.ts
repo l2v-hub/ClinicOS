@@ -8,7 +8,7 @@ import * as svc from '../gateway/services.js';
 import { canCrossPatientSearch } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
 import { appointmentSource } from '../gateway/sources.js';
-import { planQuery, type AssistantIntent, type PlanContext, type QueryPlan } from './plan.js';
+import { planQuery, extractPatientName, pickResolvedPatient, type AssistantIntent, type PlanContext, type QueryPlan } from './plan.js';
 
 export interface NavAction { type: string; label: string; patientId?: string; sectionKey?: string; documentId?: string; recordId?: string; pageNumber?: number }
 
@@ -22,6 +22,10 @@ export interface AssistantAnswer {
   notFound: boolean;
   refusal?: string;
   truncated: boolean;
+  // 016: modalità dell'interprete (F0 = deterministic) e risposta discorsiva opzionale (F2).
+  mode?: 'deterministic' | 'llm';
+  answerText?: string;
+  composed?: boolean;
 }
 
 function limits(env: NodeJS.ProcessEnv = process.env) {
@@ -55,9 +59,25 @@ export async function assistantQuery(
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<AssistantAnswer> {
   const lim = limits(env);
-  const plan = planQuery(question, planCtx);
+
+  // 016 F0: se nessun paziente è aperto ma la domanda ne nomina uno, risolverlo per nome
+  // riusando il tool gateway `search_patients` (authz applicata). Univoco ⇒ scope su quel paziente;
+  // ambiguo/assente ⇒ nessuna invenzione (si continua e l'intent cadrà su unknown/not-found).
+  let effectiveCtx = planCtx;
+  if (!planCtx.currentPatientId) {
+    const name = extractPatientName(question);
+    if (name) {
+      const matches = await svc.searchPatients({ query: name } as never, ctx);
+      const resolved = pickResolvedPatient(matches.map((m) => ({ patientId: m.patientId })));
+      if (resolved !== 'none' && resolved !== 'ambiguous') {
+        effectiveCtx = { ...planCtx, currentPatientId: resolved.patientId };
+      }
+    }
+  }
+
+  const plan = planQuery(question, effectiveCtx);
   const empty = (extra: Partial<AssistantAnswer> = {}): AssistantAnswer =>
-    ({ intent: plan.intent, scope: plan.scope, plan, results: [], sources: [], navigation: [], notFound: true, truncated: false, ...extra });
+    ({ intent: plan.intent, scope: plan.scope, plan, results: [], sources: [], navigation: [], notFound: true, truncated: false, mode: 'deterministic', composed: false, ...extra });
 
   if (plan.intent === 'refuse_clinical') {
     return empty({ notFound: false, refusal: 'L’assistente non fornisce diagnosi, terapie o valutazioni cliniche. Posso solo cercare e mostrare dati esistenti con la loro fonte.' });
@@ -93,6 +113,7 @@ export async function assistantQuery(
     results, sources: sources.slice(0, lim.maxResults), navigation,
     notFound: results.length === 0,
     truncated: results.length >= lim.maxResults,
+    mode: 'deterministic', composed: false,
   };
 }
 

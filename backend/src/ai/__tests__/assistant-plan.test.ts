@@ -89,3 +89,43 @@ test('an unrelated question is unknown (no tools, no invented answer)', () => {
   assert.equal(p.intent, 'unknown');
   assert.equal(p.tools.length, 0);
 });
+
+// ── 016 F0: plurali/sinonimi + estrazione nome paziente ───────────────────────
+import { extractPatientName } from '../assistant/plan.js';
+
+test('016 F0: plural "terapie" is recognized (not only singular)', () => {
+  const p = planQuery('quali terapie assume', { currentPatientId: P });
+  assert.equal(p.intent, 'therapies');
+  assert.equal(p.tools[0].tool, 'get_patient_therapies');
+});
+
+test('016 F0: plural "allergie" and synonym "farmaci" recognized', () => {
+  assert.equal(planQuery('mostra le allergie', { currentPatientId: P }).intent, 'allergies');
+  assert.equal(planQuery('quali farmaci prende', { currentPatientId: P }).intent, 'therapies');
+});
+
+test('016 F0: extractPatientName pulls "di <Nome Cognome>"', () => {
+  assert.equal(extractPatientName('mostra le allergie di Elena Moretti'), 'Elena Moretti');
+});
+
+test('016 F0: extractPatientName pulls a single surname after the verb', () => {
+  assert.equal(extractPatientName('quali terapie assume Rossi'), 'Rossi');
+});
+
+test('016 F0: extractPatientName returns null when no patient is named', () => {
+  assert.equal(extractPatientName('mostra gli ultimi parametri'), null);
+});
+
+import { pickResolvedPatient } from '../assistant/plan.js';
+
+test('016 F0: pickResolvedPatient resolves a unique match', () => {
+  assert.deepEqual(pickResolvedPatient([{ patientId: 'p1' }]), { patientId: 'p1' });
+});
+
+test('016 F0: pickResolvedPatient returns "none" when no match', () => {
+  assert.equal(pickResolvedPatient([]), 'none');
+});
+
+test('016 F0: pickResolvedPatient returns "ambiguous" for multiple matches', () => {
+  assert.equal(pickResolvedPatient([{ patientId: 'p1' }, { patientId: 'p2' }]), 'ambiguous');
+});
