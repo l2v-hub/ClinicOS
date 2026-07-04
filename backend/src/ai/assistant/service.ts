@@ -9,6 +9,9 @@ import { canCrossPatientSearch } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
 import { appointmentSource } from '../gateway/sources.js';
 import { planQuery, extractPatientName, pickResolvedPatient, type AssistantIntent, type PlanContext, type QueryPlan } from './plan.js';
+import { planQueryLLM } from './llm-planner.js';
+import { callPlanRuntime } from './runtime-client.js';
+import { loadAssistantLlmConfig } from './config.js';
 
 export interface NavAction { type: string; label: string; patientId?: string; sectionKey?: string; documentId?: string; recordId?: string; pageNumber?: number }
 
@@ -75,9 +78,19 @@ export async function assistantQuery(
     }
   }
 
-  const plan = planQuery(question, effectiveCtx);
+  // 016 F1: se il planner LLM è attivo e il runtime è configurato, l'LLM propone il piano
+  // (validato + fallback deterministico garantito); altrimenti percorso deterministico (default).
+  const cfg = loadAssistantLlmConfig(env);
+  let plan: QueryPlan;
+  let mode: 'deterministic' | 'llm';
+  if (cfg.planEnabled && cfg.runtimeUrl && cfg.planModel) {
+    const r = await planQueryLLM(question, effectiveCtx, { callPlanRuntime: (req) => callPlanRuntime(req, cfg), roles: ctx.roles });
+    plan = r.plan; mode = r.mode;
+  } else {
+    plan = planQuery(question, effectiveCtx); mode = 'deterministic';
+  }
   const empty = (extra: Partial<AssistantAnswer> = {}): AssistantAnswer =>
-    ({ intent: plan.intent, scope: plan.scope, plan, results: [], sources: [], navigation: [], notFound: true, truncated: false, mode: 'deterministic', composed: false, ...extra });
+    ({ intent: plan.intent, scope: plan.scope, plan, results: [], sources: [], navigation: [], notFound: true, truncated: false, mode, composed: false, ...extra });
 
   if (plan.intent === 'refuse_clinical') {
     return empty({ notFound: false, refusal: 'L’assistente non fornisce diagnosi, terapie o valutazioni cliniche. Posso solo cercare e mostrare dati esistenti con la loro fonte.' });
@@ -113,7 +126,7 @@ export async function assistantQuery(
     results, sources: sources.slice(0, lim.maxResults), navigation,
     notFound: results.length === 0,
     truncated: results.length >= lim.maxResults,
-    mode: 'deterministic', composed: false,
+    mode, composed: false,
   };
 }
 
