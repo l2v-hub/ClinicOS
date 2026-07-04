@@ -31,7 +31,6 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli
       - name: Deploy runtime to Railway
-        working-directory: clinicos-ai-runtime
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_RUNTIME_SERVICE: ${{ vars.RAILWAY_RUNTIME_SERVICE }}
@@ -42,4 +41,5 @@ jobs:
           fi
           SVC="${RAILWAY_RUNTIME_SERVICE:-clinicos-ai-runtime}"
           echo "Deploying runtime service: $SVC"
+          # dalla root: il servizio runtime ha la sua root directory (clinicos-ai-runtime) su Railway
           railway up --ci --service "$SVC"
