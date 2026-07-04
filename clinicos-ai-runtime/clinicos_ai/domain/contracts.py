@@ -73,3 +73,18 @@ class RuntimeHealth(BaseModel):
     available: bool
     errors: list[str] = Field(default_factory=list)
     roles: dict[str, Any] = Field(default_factory=dict)
+
+
+# 016 F1: assistant read-planner (question → typed read plan). Runtime sees only the QUESTION.
+class AssistantPlanRequest(BaseModel):
+    question: str = ""
+    currentPatientId: Optional[str] = None
+    roles: list[str] = Field(default_factory=list)
+    toolSchema: list[dict[str, Any]] = Field(default_factory=list)
+    model: Optional[str] = None  # informational; the runtime uses its 'agent' role
+
+
+class AssistantPlanResponse(BaseModel):
+    plan: dict[str, Any]
+    model: str
+    confidence: float = 0.0

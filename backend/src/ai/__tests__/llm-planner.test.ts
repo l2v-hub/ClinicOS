@@ -45,3 +45,17 @@ test('016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato 
   const r = await planQueryLLM('quali pazienti hanno allergia alla penicillina', {}, { callPlanRuntime: runtime });
   assert.equal(r.plan.requiresCrossPatientAccess, true);
 });
+
+test('016 F1: piano LLM VUOTO ma deterministico non-vuoto → preferisci deterministico (F1 >= F0)', async () => {
+  const runtime = async () => ({ plan: { intent: 'unknown', scope: 'current_patient', tools: [], requiresCrossPatientAccess: false }, confidence: 0.3 });
+  const r = await planQueryLLM('quali terapie assume', { currentPatientId: 'p1' }, { callPlanRuntime: runtime });
+  assert.equal(r.mode, 'deterministic');
+  assert.equal(r.plan.intent, 'therapies');
+});
+
+test('016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna invenzione)', async () => {
+  const runtime = async () => ({ plan: { intent: 'unknown', scope: 'current_patient', tools: [], requiresCrossPatientAccess: false }, confidence: 0.3 });
+  const r = await planQueryLLM('buongiorno', { currentPatientId: 'p1' }, { callPlanRuntime: runtime });
+  assert.equal(r.plan.tools.length, 0);
+  assert.equal(r.plan.intent, 'unknown');
+});
