@@ -1,6 +1,8 @@
 // 016 F3: validate an LLM-emitted query plan against the whitelist. Deny-by-default: any unknown
 // entity/field/relation/operator, malformed step, or over-limit plan → null (the caller falls back
 // to the deterministic path). Nothing here trusts the LLM; the engine additionally re-checks authz.
+// aggregate/groupBy/sort/bindFrom targets are restricted to single-hop SCALAR fields (relational
+// aggregation/sorting is not valid Prisma in v1) to avoid runtime crashes.
 
 import type { RawQueryPlan, RawStep, RawFilter, RawAggregate, RawRunIf, RawBindFrom, FilterOp } from './dsl.js';
 import { getEntity, resolveField } from './schema.js';
@@ -33,6 +35,8 @@ const PRED = new Set(['nonEmpty', 'empty', 'countGte']);
 // 'patient' is a reserved logical filter resolved server-side by the engine (name/"current" → id).
 const RESERVED_FILTER = new Set(['patient']);
 
+const scalar = (entityFrom: string, path: string): boolean => !path.includes('.') && !!resolveField(entityFrom, path);
+
 function validStep(raw: RawStep, priorIds: Set<string>): ValidatedStep | null {
   if (!raw || typeof raw.id !== 'string' || typeof raw.from !== 'string') return null;
   const entity = getEntity(raw.from);
@@ -51,15 +55,15 @@ function validStep(raw: RawStep, priorIds: Set<string>): ValidatedStep | null {
 
   if (raw.aggregate) {
     if (!AGG.has(raw.aggregate.op)) return null;
-    if (raw.aggregate.field && !resolveField(raw.from, raw.aggregate.field)) return null;
-    for (const g of raw.aggregate.groupBy ?? []) if (!resolveField(raw.from, g)) return null;
+    if (raw.aggregate.field && !scalar(raw.from, raw.aggregate.field)) return null;
+    for (const g of raw.aggregate.groupBy ?? []) if (!scalar(raw.from, g)) return null;
   }
 
   const select = raw.select ?? [];
   for (const s of select) if (!resolveField(raw.from, s)) return null;
 
   const sort = (raw.sort ?? []).map((s) => ({ field: s.field, dir: s.dir === 'desc' ? ('desc' as const) : ('asc' as const) }));
-  for (const s of sort) if (!resolveField(raw.from, s.field)) return null;
+  for (const s of sort) if (!scalar(raw.from, s.field)) return null;
 
   const limit = Math.min(typeof raw.limit === 'number' && raw.limit > 0 ? raw.limit : MAX_ROWS, MAX_ROWS);
 
@@ -72,6 +76,7 @@ function validStep(raw: RawStep, priorIds: Set<string>): ValidatedStep | null {
   let bindFrom: RawBindFrom | undefined;
   if (raw.bindFrom) {
     if (!priorIds.has(raw.bindFrom.step) || typeof raw.bindFrom.field !== 'string' || typeof raw.bindFrom.into !== 'string') return null;
+    if (!scalar(raw.from, raw.bindFrom.into)) return null; // 'into' must be a scalar field of THIS entity
     bindFrom = raw.bindFrom;
   }
 
