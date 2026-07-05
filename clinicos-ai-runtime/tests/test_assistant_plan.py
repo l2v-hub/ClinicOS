@@ -63,3 +63,14 @@ class AssistantComposeTests(unittest.IsolatedAsyncioTestCase):
         # il mock non fonda mai la prosa → il backend userà la vista strutturata
         self.assertEqual(out["answerText"], "")
         self.assertEqual(out["citedSources"], [])
+
+class SystemPromptContractTests(unittest.TestCase):
+    def test_prompt_enumerates_backend_intents(self):
+        # Guardia anti-regressione del bug F1: il prompt DEVE elencare gli intent enum
+        # attesi dal validatore backend (llm-planner.ts), altrimenti il modello risponde
+        # in prosa e OGNI piano LLM viene scartato (→ sempre deterministico).
+        from clinicos_ai.agents.assistant import _SYSTEM
+        for intent in ("allergies", "therapies", "vitals_range", "vitals_recent",
+                       "narrative_search", "document_search", "timeline", "appointments",
+                       "correlate", "patient_search", "unknown"):
+            self.assertIn(intent, _SYSTEM, f"intent '{intent}' mancante nel prompt planner")
