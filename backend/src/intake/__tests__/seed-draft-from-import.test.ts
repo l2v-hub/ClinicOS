@@ -4,7 +4,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { seedDraftFromImport } from '../draft-service.js';
+import { seedDraftFromImport, buildImportDraftData, deriveAllergens, isPlausibleAllergenText } from '../draft-service.js';
 import { prisma } from '../../lib/prisma.js';
 import type { DischargeNarrativeDraft } from '../../ai/sections/narrative.js';
 
@@ -159,4 +159,38 @@ test('seedDraftFromImport: throws when job has no _narrative', async () => {
   } finally {
     await prisma.importJob.delete({ where: { id: job.id } }).catch(() => {});
   }
+});
+
+// ── allergene sanitation (Sabbatani "tutti i dati in allergia" bug) ──────────
+const BLOB =
+  'DUBBIA REAZIONE ALLERGICA AL CEFTAZIDIME\nIVU DA PSEUDOMONAS\n\n' +
+  'Patologie associate\nA. Pat. Remota:\nIpertensione arteriosa\n\nTp domiciliare:\nEutirox 75 mcg';
+
+test('isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text', () => {
+  assert.equal(isPlausibleAllergenText(BLOB), false);
+  assert.equal(isPlausibleAllergenText('Penicillina'), true);
+  assert.equal(isPlausibleAllergenText('Penicillina; Lattice'), true);
+});
+
+test('deriveAllergens: [] for a blob; one entry per concise allergen otherwise', () => {
+  assert.deepEqual(deriveAllergens(BLOB), []);
+  assert.deepEqual(deriveAllergens('Penicillina'), ['Penicillina']);
+  assert.deepEqual(deriveAllergens('Penicillina\nLattice'), ['Penicillina', 'Lattice']);
+});
+
+test('buildImportDraftData: blob allergiesText does NOT seed a false allergy row', () => {
+  const nar = { ...NARRATIVE, allergyStatus: 'present' as const, allergiesText: BLOB };
+  const data = buildImportDraftData(nar, null);
+  assert.equal(data.allergie, undefined); // no false 1000-char allergen materialised
+  assert.equal((data._narrative as DischargeNarrativeDraft).allergiesText, BLOB); // preserved for review
+  assert.ok(!(data._importedFields as string[]).includes('allergie'));
+});
+
+test('buildImportDraftData: concise multi-allergen text → one row per allergen', () => {
+  const nar = { ...NARRATIVE, allergyStatus: 'present' as const, allergiesText: 'Penicillina\nLattice' };
+  const data = buildImportDraftData(nar, null);
+  const al = data.allergie as Array<Record<string, unknown>>;
+  assert.equal(al.length, 2);
+  assert.equal(al[0].allergene, 'Penicillina');
+  assert.equal(al[1].allergene, 'Lattice');
 });
