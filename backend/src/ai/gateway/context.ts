@@ -62,6 +62,13 @@ export function canCrossPatientSearch(ctx: UserContext, env: NodeJS.ProcessEnv =
   return enabled && privileged;
 }
 
+/** Facility/operational reads (rooms, beds, occupancy, facility-wide agenda) are a deployment-level
+ *  trust decision, independent of the (unverified, self-asserted) role header — so it is gated ONLY
+ *  by an env flag, never by role. Off by default (no regression). */
+export function canFacilityRead(env: NodeJS.ProcessEnv = process.env): boolean {
+  return (env.AI_FACILITY_QUERIES_ENABLED || 'false').trim() === 'true';
+}
+
 /** Restrict a candidate patient-id list to those the caller may see. */
 export function filterAllowedPatients(ctx: UserContext, ids: string[]): string[] {
   return ids.filter((id) => isPatientAllowed(ctx, id));

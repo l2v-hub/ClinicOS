@@ -13,6 +13,8 @@ import { planQueryLLM, injectPatientId } from './llm-planner.js';
 import { composeAnswer } from './composer.js';
 import { callPlanRuntime, callComposeRuntime } from './runtime-client.js';
 import { loadAssistantLlmConfig } from './config.js';
+import { validateQueryPlan } from '../gateway/query/validate.js';
+import { runQueryPlan } from '../gateway/query/engine.js';
 
 export interface NavAction { type: string; label: string; patientId?: string; sectionKey?: string; documentId?: string; recordId?: string; pageNumber?: number }
 
@@ -163,7 +165,24 @@ async function dispatch(tool: string, args: Record<string, unknown>, ctx: UserCo
     }
     case 'correlate_structured_data': { const r = await svc.correlate(args as never, ctx); return { data: r.data, sourceRefs: r.sourceRefs }; }
     case 'query_appointments_today': return await appointmentsToday(ctx);
+    case 'query_data': return await dispatchQueryData((args as { plan?: unknown }).plan, ctx);
     default: return { data: [], sourceRefs: [] };
+  }
+}
+
+/** 016 F3: run a composable query plan (query_data tool). Validates the LLM-emitted plan against the
+ *  whitelist and executes it via the trusted engine. Invalid plan → empty (composer degrades). A
+ *  bad_request (patient not resolved) → empty; forbidden/tenant errors propagate so assistantQuery
+ *  reports a clean refusal. */
+export async function dispatchQueryData(rawPlan: unknown, ctx: UserContext, env: NodeJS.ProcessEnv = process.env, currentPatientId?: string): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+  const validated = validateQueryPlan(rawPlan);
+  if (!validated) return { data: [], sourceRefs: [] };
+  try {
+    const out = await runQueryPlan(validated, ctx, env, currentPatientId);
+    return { data: out.rows, sourceRefs: out.sources };
+  } catch (e) {
+    if (e instanceof GatewayError && e.kind === 'bad_request') return { data: [], sourceRefs: [] };
+    throw e;
   }
 }
 

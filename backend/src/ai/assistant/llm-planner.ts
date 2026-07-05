@@ -44,7 +44,7 @@ export function injectPatientId(plan: QueryPlan, patientId?: string): QueryPlan 
   );
   return { ...plan, tools };
 }
-const INTENTS = new Set<AssistantIntent>(['allergies', 'therapies', 'vitals_range', 'vitals_recent', 'narrative_search', 'document_search', 'timeline', 'appointments', 'correlate', 'patient_search', 'refuse_clinical', 'unknown']);
+const INTENTS = new Set<AssistantIntent>(['allergies', 'therapies', 'vitals_range', 'vitals_recent', 'narrative_search', 'document_search', 'timeline', 'appointments', 'correlate', 'patient_search', 'refuse_clinical', 'data_query', 'unknown']);
 
 /** Valida la forma del piano LLM e i tool contro l'allowlist read. Ritorna null se non valido. */
 function validatePlan(raw: unknown, ctx: PlanContext): QueryPlan | null {

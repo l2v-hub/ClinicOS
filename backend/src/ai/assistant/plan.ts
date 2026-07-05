@@ -6,7 +6,7 @@
 export type AssistantIntent =
   | 'allergies' | 'therapies' | 'vitals_range' | 'vitals_recent' | 'narrative_search'
   | 'document_search' | 'timeline' | 'appointments' | 'correlate' | 'patient_search'
-  | 'refuse_clinical' | 'unknown';
+  | 'refuse_clinical' | 'data_query' | 'unknown';
 
 export type QueryScope = 'current_patient' | 'cross_patient';
 

@@ -105,3 +105,12 @@ test('016 F1: injectPatientId senza patientId noto → piano invariato', () => {
   const out = injectPatientId(plan, undefined);
   assert.equal(out.tools[0].args.patientId, undefined);
 });
+
+// ── 016 F3: query_data tool + data_query intent ────────────────────────────────
+test('016 F3: piano LLM con query_data + intent data_query è accettato (non cross-patient)', async () => {
+  const runtime = async () => ({ plan: { intent: 'data_query', scope: 'current_patient', tools: [{ tool: 'query_data', args: { plan: { steps: [{ id: 's1', from: 'roomAssignment', aggregate: { op: 'count' } }] } } }], requiresCrossPatientAccess: false }, confidence: 0.9 });
+  const r = await planQueryLLM('quante camere occupate', {}, { callPlanRuntime: runtime });
+  assert.equal(r.mode, 'llm');
+  assert.equal(r.plan.tools[0].tool, 'query_data');
+  assert.equal(r.plan.requiresCrossPatientAccess, false); // query_data non è un CROSS_TOOL
+});
