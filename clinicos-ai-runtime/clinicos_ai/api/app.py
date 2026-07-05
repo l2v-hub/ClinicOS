@@ -110,9 +110,12 @@ async def assistant_plan(req: AssistantPlanRequest, authorization: str | None = 
         out = await run_assistant_plan(_REGISTRY, req.question, req.toolSchema)
         return AssistantPlanResponse(plan=out["plan"], model=out["model"], confidence=1.0)
     except RuntimeError_ as ex:
+        _log.warning("assistant plan runtime error: %s", ex.to_dict().get("message", "planner error"))
         raise HTTPException(status.HTTP_502_BAD_GATEWAY, ex.to_dict().get("message", "planner error"))
     except Exception as ex:  # pragma: no cover
-        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(ex)[:200])
+        # sanitizzato: tipo + messaggio dell'eccezione (no prompt/PHI, no dati richiesta)
+        _log.error("assistant plan failed: %s: %s", type(ex).__name__, str(ex)[:300])
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, f"{type(ex).__name__}: {str(ex)[:200]}")
 
 
 # 016 F2: compose endpoint. Riceve i RISULTATI (dati clinici) e compone la prosa citando le fonti.
@@ -125,9 +128,11 @@ async def assistant_compose(req: AssistantComposeRequest, authorization: str | N
         out = await run_assistant_compose(_REGISTRY, req.question, req.results, req.sources)
         return AssistantComposeResponse(answerText=out["answerText"], citedSources=out["citedSources"], model=out["model"])
     except RuntimeError_ as ex:
+        _log.warning("assistant compose runtime error: %s", ex.to_dict().get("message", "compose error"))
         raise HTTPException(status.HTTP_502_BAD_GATEWAY, ex.to_dict().get("message", "compose error"))
     except Exception as ex:  # pragma: no cover
-        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, str(ex)[:200])
+        _log.error("assistant compose failed: %s: %s", type(ex).__name__, str(ex)[:300])
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, f"{type(ex).__name__}: {str(ex)[:200]}")
 
 
 @app.post("/v1/document-jobs", status_code=201)
