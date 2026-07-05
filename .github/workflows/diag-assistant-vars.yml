@@ -1,0 +1,33 @@
+name: Diag Assistant Vars (read-only)
+
+# READ-ONLY: stampa i valori delle variabili NON-SEGRETE dell'assistant LLM sul backend,
+# per diagnosticare perché il chatbot resta deterministico. Nessun secret viene stampato
+# (si filtrano solo i flag AI_ASSISTANT_* / AI_RUNTIME_URL, che non sono secret).
+
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: railway-backend
+  cancel-in-progress: false
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Print assistant flags (non-secret only)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then echo "::error::RAILWAY_TOKEN not set"; exit 1; fi
+          SVCFLAG=""
+          [ -n "$RAILWAY_SERVICE" ] && SVCFLAG="--service $RAILWAY_SERVICE"
+          echo "service=$RAILWAY_SERVICE"
+          railway variables $SVCFLAG --kv > /tmp/vars.txt 2>&1 || railway variables $SVCFLAG > /tmp/vars.txt 2>&1
+          echo "=== ASSISTANT / RUNTIME FLAGS (non-secret) ==="
+          grep -iE "AI_ASSISTANT_|AI_RUNTIME_URL|AI_RUNTIME=" /tmp/vars.txt || echo "NESSUN flag AI_ASSISTANT_* trovato sul service"
+          echo "=== conteggio totale variabili ==="
+          wc -l < /tmp/vars.txt
