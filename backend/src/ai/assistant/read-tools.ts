@@ -15,6 +15,7 @@ export const READ_TOOLS = [
   'search_across_patients',
   'correlate_structured_data',
   'query_appointments_today',
+  'query_data',
 ] as const;
 
 export type ReadTool = (typeof READ_TOOLS)[number];
@@ -39,4 +40,6 @@ export const READ_TOOL_SCHEMA: Array<{ name: string; args: Record<string, string
   { name: 'search_across_patients', args: { query: 'string?', systolicMin: 'number?' } },
   { name: 'correlate_structured_data', args: { allergy: 'string?' } },
   { name: 'query_appointments_today', args: {} },
+  // 016 F3: motore di query componibile — porta un piano DSL in args.plan (validato server-side).
+  { name: 'query_data', args: { plan: 'object' } },
 ];
