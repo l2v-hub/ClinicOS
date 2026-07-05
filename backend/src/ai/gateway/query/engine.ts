@@ -3,7 +3,7 @@
 // correlation (bindFrom), applies row limits, and returns SOURCE_ONLY results — every row carries a
 // SourceReference. Aggregate rows cite the filtered set (the filter is their provenance).
 
-import { prisma } from '../../lib/prisma.js';
+import { prisma } from '../../../lib/prisma.js';
 import { GatewayError, type UserContext, type SourceReference } from '../types.js';
 import { canFacilityRead, assertTenant, assertPatientAllowed } from '../context.js';
 import * as svc from '../services.js';
