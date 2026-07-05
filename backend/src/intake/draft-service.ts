@@ -1,5 +1,6 @@
 import { prisma } from '../lib/prisma.js';
 import type { DischargeNarrativeDraft } from '../ai/sections/narrative.js';
+import { parseDischargeTherapy } from './parse-discharge-therapy.js';
 
 // ── Allergene sanitation (import seeding) ────────────────────────────────────
 // CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
@@ -163,9 +164,12 @@ export function buildImportDraftData(
     }
   }
 
-  // 5. Terapia — TherapyEditor in intake mode shows a placeholder (no structured intake
-  //    editor yet), so stash the raw therapy text under _terapiaText to avoid losing it.
+  // 5. Terapia (#156) — parse the discharge therapy text into STRUCTURED rows, ONE per drug
+  //    (editable before save; incomplete lines kept as stato 'da_verificare', never dropped).
+  //    The raw text is still stashed under _terapiaText for lossless audit/reference.
   if (narrative.therapyText) {
+    const rows = parseDischargeTherapy(narrative.therapyText);
+    if (rows.length > 0) seeded.terapia = rows;
     seeded._terapiaText = narrative.therapyText;
   }
 
