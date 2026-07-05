@@ -164,12 +164,15 @@ export function buildImportDraftData(
     }
   }
 
-  // 5. Terapia (#156) — parse the discharge therapy text into STRUCTURED rows, ONE per drug
-  //    (editable before save; incomplete lines kept as stato 'da_verificare', never dropped).
-  //    The raw text is still stashed under _terapiaText for lossless audit/reference.
+  // 5. Terapia rilevata (#156) — parse the discharge therapy text into STRUCTURED rows, ONE per
+  //    drug, under a DEDICATED key `terapiaImport` (the "Terapie rilevate dalla lettera" review
+  //    section). It is intentionally NOT `data.terapia`: that key belongs to the manual
+  //    TherapyFormValue editor and its confirm mapper (therapyFormToInput) — putting a
+  //    ParsedTherapyRow there would break confirm. Incomplete lines keep stato 'da_verificare'
+  //    (never dropped); the raw text is stashed under _terapiaText for lossless audit.
   if (narrative.therapyText) {
     const rows = parseDischargeTherapy(narrative.therapyText);
-    if (rows.length > 0) seeded.terapia = rows;
+    if (rows.length > 0) seeded.terapiaImport = rows;
     seeded._terapiaText = narrative.therapyText;
   }
 
@@ -177,7 +180,7 @@ export function buildImportDraftData(
   seeded._narrative = narrative;
   seeded._sections = rawSections ?? null;
   seeded._importedFields = (
-    ['anagrafica', 'anamnesi', 'diagnosi', 'allergie', 'terapia'] as const
+    ['anagrafica', 'anamnesi', 'diagnosi', 'allergie', 'terapiaImport'] as const
   ).filter((k) => seeded[k] !== undefined);
 
   return seeded;
