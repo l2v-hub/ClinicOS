@@ -11,7 +11,20 @@ Parser deterministico e **generico** (nessun hardcoding di nomi farmaco) che tra
 
 **Regressione intercettata (prima del merge):** il confirm frontend (`IntakeWorkspace.handleConfirm`) mappa già `data.terapia` con `therapyFormToInput` (shape `TherapyFormValue`). Seminare le righe `ParsedTherapyRow` sotto `data.terapia` avrebbe **crashato il confirm** dell'import. Fix: chiave dedicata `terapiaImport` (sezione "Terapie rilevate", separata dall'editor manuale). Test aggiunto: `data.terapia === undefined` dopo il seed import.
 
-## Increment 2 — BLOCCHI reali (documentati, per Codex)
+## Increment 2 — frontend IMPLEMENTED + build-validato (gate verde)
+
+- `frontend/.../intake/dischargeTherapy.ts` — tipo `DischargeTherapyRow` + mapper `dischargeRowToTherapyInput` (orari→schedules, forma→pharmaceuticalForm, via OS→orale…, classe/giorni/quantità/originalText/flag→note; `dataInizio` fallback oggi). Nota: lo schema Prisma non ha un campo giorni-settimana → i giorni sono preservati in `note` (nessuna modifica schema, per vincolo CLAUDE.md).
+- `frontend/.../intake/DischargeTherapyReview.tsx` — tabella **editabile** "Terapie rilevate dalla lettera di dimissioni": una riga/farmaco, orari/giorni visibili, alert righe `da_verificare`, campi modificabili (AC7). Testid per E2E.
+- `StepClinica.tsx` — rende la tabella quando `data.terapiaImport` è presente.
+- `IntakeWorkspace.handleConfirm` — persiste le righe rilevate (eventualmente modificate): `terapiaImport → TherapyCreateInput[]` unite a quelle manuali → `confirmDraft` → `createTherapyInTx` → `PatientTherapy` (AC8/AC9).
+- `e2e/therapy-import.spec.ts` — Playwright spec (AC2/AC4/AC6/AC7/AC8/AC9) su stack live (skip senza `E2E_IMPORT_DRAFT_ID`).
+
+**Evidenza gate**: build frontend (`tsc -b && vite build`) + backend build/test **verdi** con tutti i file. AC7/AC8/AC9 coperti a livello di codice + spec E2E.
+
+## Increment 2 — residuo (per Codex)
+- Esecuzione E2E Playwright **in CI** con screenshot: richiede estendere il job `browser-e2e` per seminare un draft import con terapia e guidare il flusso (o run locale — bloccato in mode B). La spec è pronta; manca solo il wiring dell'harness/seed.
+
+## Blocchi terminali (governance)
 Il completamento end-to-end della skill /process-requirement (UI tabella + confirm persistenza + Playwright + screenshot + deploy + close) è **bloccato** in questo ambiente da:
 1. **Governance** (CLAUDE.md/AGENTS.md): Claude non fa merge su main, deploy prod, né chiude issue — spetta a Codex. I passi finali della skill sono quindi fuori dal mandato di Claude.
 2. **Ambiente (mode B)**: nessun run locale dell'app / Playwright / screenshot (macchina Zscaler, no worktree/Postgres locale). La verifica E2E/visuale può girare solo nel job `browser-e2e` del gate CI, non in locale.
