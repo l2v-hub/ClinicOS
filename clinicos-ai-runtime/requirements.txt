@@ -5,5 +5,5 @@ pydantic>=2.6
 agno>=1.0
 # Provider SDKs — install only those for the providers you configure:
 google-genai>=1.0
-# openai>=1.30
+openai>=1.30   # richiesto da Agno AzureOpenAI (agent Azure gpt-5.4-mini) e provider openai/openai-like
 # anthropic>=0.30
