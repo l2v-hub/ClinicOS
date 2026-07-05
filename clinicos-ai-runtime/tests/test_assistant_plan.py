@@ -74,3 +74,13 @@ class SystemPromptContractTests(unittest.TestCase):
                        "narrative_search", "document_search", "timeline", "appointments",
                        "correlate", "patient_search", "unknown"):
             self.assertIn(intent, _SYSTEM, f"intent '{intent}' mancante nel prompt planner")
+
+
+class DataQueryPromptTests(unittest.TestCase):
+    def test_prompt_teaches_query_data_dsl(self):
+        # 016 F3: il prompt deve insegnare il tool componibile e lo schema esposto, altrimenti
+        # il modello non emette mai un piano query_data valido (→ nessuna domanda gestionale).
+        from clinicos_ai.agents.assistant import _SYSTEM, _INTENTS
+        self.assertIn("data_query", _INTENTS)
+        for tok in ("query_data", "roomAssignment", "aggregate", "runIf", "dateWindow"):
+            self.assertIn(tok, _SYSTEM, f"token '{tok}' mancante nel prompt DSL")
