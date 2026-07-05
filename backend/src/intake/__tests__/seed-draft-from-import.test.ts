@@ -204,12 +204,13 @@ test('buildImportDraftData: therapyText parsed into structured terapia rows (one
     'PEVARYL POLVERE INGUINE SN X 1 AL DI';
   const nar = { ...NARRATIVE, therapyText };
   const data = buildImportDraftData(nar, null);
-  const ter = data.terapia as Array<Record<string, unknown>>;
-  assert.ok(Array.isArray(ter) && ter.length === 2, 'terapia has one row per drug line');
+  const ter = data.terapiaImport as Array<Record<string, unknown>>;
+  assert.ok(Array.isArray(ter) && ter.length === 2, 'terapiaImport has one row per drug line');
   assert.equal(ter[0].farmacoNome, 'KEPPRA');
   assert.deepEqual(ter[0].orari, ['08:00', '20:00']);
   assert.equal(ter[1].farmacoNome, 'PEVARYL');
   assert.equal(ter[1].stato, 'da_verificare');
   assert.equal(data._terapiaText, therapyText);
-  assert.ok((data._importedFields as string[]).includes('terapia'));
+  assert.ok((data._importedFields as string[]).includes('terapiaImport'));
+  assert.equal(data.terapia, undefined); // must NOT collide with the manual TherapyFormValue editor
 });
