@@ -1,6 +1,37 @@
 import { prisma } from '../lib/prisma.js';
 import type { DischargeNarrativeDraft } from '../ai/sections/narrative.js';
 
+// ── Allergene sanitation (import seeding) ────────────────────────────────────
+// CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
+// discharge letters sometimes make the allergies extraction over-capture the surrounding text
+// (anamnesi, patologie, home therapy). Seeding that blob verbatim creates one false 1000+ char
+// "allergy". These guards reject blobs and split a clean allergy text into individual allergen rows.
+
+const MAX_ALLERGEN_LEN = 120;
+// Headers that mark NON-allergy clinical sections — their presence means the text is a narrative dump.
+const NON_ALLERGY_MARKERS = /(patologie|anamnesi|a\.\s*(pat|familiare|fisiologica)|tp\s+domiciliare|terapia\s+domiciliare|ospite|diagnosi|ricover|decorso|dislipidemia|ipertensione)/i;
+
+/** True only when the text plausibly IS an allergen (concise, single block), not a narrative. */
+export function isPlausibleAllergenText(text: string): boolean {
+  const t = (text ?? '').trim();
+  if (!t) return false;
+  if (t.length > 400) return false;          // whole-narrative dump
+  if (/\n\s*\n/.test(t)) return false;       // blank-line-separated sections
+  if (NON_ALLERGY_MARKERS.test(t)) return false;
+  return true;
+}
+
+/** Concise allergy text → one allergen per line/`;`, trimmed + length-capped. [] for a blob. */
+export function deriveAllergens(text: string): string[] {
+  if (!isPlausibleAllergenText(text)) return [];
+  return (text ?? '')
+    .split(/[\n;]+/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .filter((s) => s.length <= MAX_ALLERGEN_LEN)
+    .slice(0, 10);
+}
+
 // ── Patient Intake Draft Service (F3 EPIC #120 / Issue #125) ─────────────────
 // CRUD + autosave for PatientIntakeDraft. patchDraft shallow-merges top-level
 // keys of `patch` into the stored `data` JSON (last-write-wins per section).
@@ -116,17 +147,20 @@ export function buildImportDraftData(
     'present',
     'conflicting',
   ];
+  //    Seed one row PER concise allergen; reject a narrative blob (deriveAllergens returns [] →
+  //    no false allergy row; the full text stays in _narrative below for operator review).
   if (narrative.allergiesText && ALLERGY_SEED_STATUSES.includes(narrative.allergyStatus)) {
-    seeded.allergie = [
-      {
+    const allergens = deriveAllergens(narrative.allergiesText);
+    if (allergens.length > 0) {
+      seeded.allergie = allergens.map((allergene) => ({
         id: crypto.randomUUID(),
-        allergene: narrative.allergiesText,
+        allergene,
         gravita: 'lieve' as const,
         reazione: '',
         documentato: '',
         documentatoDa: '',
-      },
-    ];
+      }));
+    }
   }
 
   // 5. Terapia — TherapyEditor in intake mode shows a placeholder (no structured intake
