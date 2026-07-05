@@ -17,7 +17,10 @@
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "npm --prefix frontend run build",
     "build:backend": "npm --prefix backend run build",
-    "test:e2e:full-patient:api": "tsx scripts/e2e-full-patient-api-test.ts"
+    "test:e2e:full-patient:api": "tsx scripts/e2e-full-patient-api-test.ts",
+    "quality-gate:start": "node scripts/quality-gate/create-task-contract.js",
+    "quality-gate:validate": "node scripts/quality-gate/validate-task-contract.js",
+    "quality-gate:check-closure": "node scripts/quality-gate/check-closure.js"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",

@@ -1,5 +1,33 @@
 # ClinicOS Claude Instructions
 
+## Quality Gate / Agent Loop (OBBLIGATORIO — precede tutto)
+
+Ogni richiesta di sviluppo, bugfix, refactoring, frontend, backend, Agnos AI, voice, OCR, database
+o configurazione deve seguire questo loop:
+
+```
+Task request → Task Contract → Impact Classification → Acceptance Criteria → Test Plan
+→ Implementation → Runtime Validation → Evidence → Final Decision
+```
+
+**Regole dure:**
+
+- Claude non può modificare codice applicativo finché non esiste:
+  `artifacts/task-validation/<task-slug>/task-contract.md` (valido).
+  Crealo con: `node scripts/quality-gate/create-task-contract.js "<titolo>"`.
+- Claude non può dichiarare "done", "fixed", "completato", "risolto", "chiuso" o simili finché non esiste:
+  `artifacts/task-validation/<task-slug>/validation-report.md` con `Final Decision: CLOSED — VERIFIED`.
+- In assenza di validazione, lo stato deve essere uno tra:
+  `IMPLEMENTED — NOT VERIFIED` · `FAILED VALIDATION` · `BLOCKED` · `PARTIAL` — **mai** "done".
+- La decisione finale deriva dai test eseguiti.
+
+Skill: `.claude/skills/agent-loop-quality-gate`. Enforcement: hook
+`.claude/hooks/quality-gate-preflight.js` (blocca modifiche senza contract) e
+`.claude/hooks/quality-gate-closure.js` (blocca "done" senza report verificato). Dettagli e limiti:
+`docs/quality-gate.md`. Complementare a `docs/validation-method.md`.
+
+---
+
 ClinicOS is a full-stack healthcare management app.
 
 Current architecture:
