@@ -2,6 +2,9 @@
 // security lives: only entities/fields/relations listed here are reachable by an LLM-emitted plan
 // (deny-by-default). Each entity carries an authz-class the engine enforces per step. Extending
 // coverage = adding rows here, with NO new executor code.
+//
+// Relations MUST match real Prisma relation fields. PatientRoomAssignment relates to `patient` and
+// `bed` only (NOT a direct `room`); the room is reached via a 2-step plan (resolve room → bind roomId).
 
 export type AuthzClass = 'public' | 'facility' | 'patient-scoped';
 
@@ -56,7 +59,6 @@ export const QUERY_SCHEMA: Record<string, EntityDef> = {
     relations: {
       patient: { target: 'patient', kind: 'toOne' },
       bed: { target: 'bed', kind: 'toOne' },
-      room: { target: 'room', kind: 'toOne' },
     },
   },
   appointment: {
