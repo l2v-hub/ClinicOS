@@ -198,11 +198,10 @@ test('buildImportDraftData: concise multi-allergen text → one row per allergen
 
 // ── #156: discharge therapy text -> structured therapy rows (one per drug) ────
 test('buildImportDraftData: therapyText parsed into structured terapia rows (one per drug)', () => {
-  const therapyText = [
-    'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00 e alle 20:00 dal 03/07/2026 (Classe A)',
-    'PEVARYL POLVERE INGUINE SN X 1 AL DI',
-  ].join('
-');
+  const therapyText =
+    'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00 e alle 20:00 dal 03/07/2026 (Classe A)' +
+    String.fromCharCode(10) +
+    'PEVARYL POLVERE INGUINE SN X 1 AL DI';
   const nar = { ...NARRATIVE, therapyText };
   const data = buildImportDraftData(nar, null);
   const ter = data.terapia as Array<Record<string, unknown>>;
