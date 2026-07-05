@@ -1,0 +1,25 @@
+name: Diag Runtime Logs (read-only)
+
+# READ-ONLY: dump degli ultimi log del servizio runtime per capire se le chiamate
+# /v1/assistant/plan arrivano e con quale esito. Nessun secret stampato (si filtra).
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Dump runtime logs (filtered)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then echo "::error::RAILWAY_TOKEN not set"; exit 1; fi
+          echo "=== runtime logs (best-effort) ==="
+          timeout 30 railway logs --service clinicos-ai-runtime > /tmp/rt.txt 2>&1 || true
+          echo "--- assistant/plan/compose/error/model-config lines ---"
+          grep -aiE "assistant|/v1/assistant|plan|compose|model-config|error|azure|traceback|exception|401|403|429|500|502" /tmp/rt.txt | tail -40 || echo "(nessuna riga corrispondente)"
+          echo "--- tail 15 raw ---"
+          tail -15 /tmp/rt.txt
