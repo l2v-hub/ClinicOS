@@ -11,7 +11,9 @@ export type SourceType =
   | 'DIARY_ENTRY'
   | 'DOCUMENT'
   | 'APPOINTMENT'
-  | 'THERAPY';
+  | 'THERAPY'
+  | 'ROOM'
+  | 'OCCUPANCY';
 
 /** A verifiable pointer back to the exact record a value came from. Never omit on a result. */
 export interface SourceReference {
