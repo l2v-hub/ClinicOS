@@ -1,0 +1,12 @@
+name: Diag RT Logs 2
+on: { workflow_dispatch: {} }
+jobs:
+  logs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: npm install -g @railway/cli
+      - env: { RAILWAY_TOKEN: "${{ secrets.RAILWAY_TOKEN }}" }
+        run: |
+          timeout 30 railway logs --service clinicos-ai-runtime > /tmp/rt.txt 2>&1 || true
+          echo "=== plan/compose status + errori ==="
+          grep -aiE "assistant (plan|compose) failed|/v1/assistant/(plan|compose) HTTP|404|500|azure|resource not found|tool|schema|validation|json" /tmp/rt.txt | tail -30
