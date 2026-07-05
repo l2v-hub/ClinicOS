@@ -7,6 +7,7 @@ import { StepClinica } from './StepClinica';
 import { StepVerifica } from './StepVerifica';
 import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
 import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
+import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
 
 const STEPS = [
   'Anagrafica',
@@ -246,15 +247,24 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       cartella.terapiaImportText = data._terapiaText;
     }
 
+    // Structured therapies to persist = manual TherapyFormValue rows + #156 discharge-detected rows
+    // (edited in the "Terapie rilevate" table, data.terapiaImport). Both map to TherapyCreateInput.
+    const manualTherapies = Array.isArray(data.terapia) && (data.terapia as TherapyFormValue[]).length > 0
+      ? (data.terapia as TherapyFormValue[]).map(f => therapyFormToInput(f, operatoreNome))
+      : [];
+    const importedTherapies = Array.isArray(data.terapiaImport)
+      ? (data.terapiaImport as DischargeTherapyRow[])
+          .filter(r => (r.farmacoNome || '').trim())
+          .map(r => dischargeRowToTherapyInput(r, operatoreNome))
+      : [];
+    const allTherapies = [...manualTherapies, ...importedTherapies];
+
     const payload = {
       patient,
       cartella,
       confirmDuplicate: force,
       ...(allergyConflictOverride ? { confirmAllergyConflict: true } : {}),
-      // Structured therapy items entered during intake → create PatientTherapy rows
-      ...(Array.isArray(data.terapia) && (data.terapia as TherapyFormValue[]).length > 0
-        ? { therapies: (data.terapia as TherapyFormValue[]).map(f => therapyFormToInput(f, operatoreNome)) }
-        : {}),
+      ...(allTherapies.length > 0 ? { therapies: allTherapies } : {}),
     };
 
     try {
