@@ -7,7 +7,15 @@
 Parser deterministico e **generico** (nessun hardcoding di nomi farmaco) che trasforma il testo terapia della lettera di dimissioni in **righe strutturate, una per farmaco**, con stato `ok`/`da_verificare`, e wiring nel seed del draft di import.
 
 - `backend/src/intake/parse-discharge-therapy.ts` — `parseDischargeTherapy(text) → ParsedTherapyRow[]`; estrae per riga: farmaco, forma, dosaggio, via, quantità, orari[], giorni[], dataInizio (ISO), classe, note, `originalText` (verbatim), `stato`.
-- `backend/src/intake/draft-service.ts` — `buildImportDraftData` ora semina `data.terapia` = righe strutturate (mantenendo `_terapiaText` grezzo per audit lossless); `'terapia'` compare in `_importedFields`.
+- `backend/src/intake/draft-service.ts` — `buildImportDraftData` ora semina **`data.terapiaImport`** = righe strutturate (mantenendo `_terapiaText` grezzo per audit lossless); `'terapiaImport'` compare in `_importedFields`.
+
+**Regressione intercettata (prima del merge):** il confirm frontend (`IntakeWorkspace.handleConfirm`) mappa già `data.terapia` con `therapyFormToInput` (shape `TherapyFormValue`). Seminare le righe `ParsedTherapyRow` sotto `data.terapia` avrebbe **crashato il confirm** dell'import. Fix: chiave dedicata `terapiaImport` (sezione "Terapie rilevate", separata dall'editor manuale). Test aggiunto: `data.terapia === undefined` dopo il seed import.
+
+## Increment 2 — BLOCCHI reali (documentati, per Codex)
+Il completamento end-to-end della skill /process-requirement (UI tabella + confirm persistenza + Playwright + screenshot + deploy + close) è **bloccato** in questo ambiente da:
+1. **Governance** (CLAUDE.md/AGENTS.md): Claude non fa merge su main, deploy prod, né chiude issue — spetta a Codex. I passi finali della skill sono quindi fuori dal mandato di Claude.
+2. **Ambiente (mode B)**: nessun run locale dell'app / Playwright / screenshot (macchina Zscaler, no worktree/Postgres locale). La verifica E2E/visuale può girare solo nel job `browser-e2e` del gate CI, non in locale.
+Increment 2 (frontend) è progettato e pronto da implementare via branch+CI: `DischargeTherapyReview` (tabella editabile su `data.terapiaImport`, orari/giorni, alert `da_verificare`), mapper `ParsedTherapyRow → TherapyCreateInput` in `handleConfirm` (orari→schedules, forma→pharmaceuticalForm, classe/giorni/originalText→note; `dataInizio` fallback oggi), Playwright spec.
 
 ## Evidenza (test automatici — gireranno nel gate `ai-import-e2e.yml`)
 
