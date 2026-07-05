@@ -21,8 +21,11 @@ Parser deterministico e **generico** (nessun hardcoding di nomi farmaco) che tra
 
 **Evidenza gate**: build frontend (`tsc -b && vite build`) + backend build/test **verdi** con tutti i file. AC7/AC8/AC9 coperti a livello di codice + spec E2E.
 
+## E2E in CI — WIRED + VERDE
+`e2e/therapy-import-api.mjs` (livello API, deterministico, nello step `gate`): seed job con narrativa terapia → `from-import` → parser produce `terapiaImport` strutturato (assert AC2/AC4/AC5/AC6 + no-collision con `data.terapia`) → confirm con therapies mappate → **PatientTherapy persistito** (lettura DB fresca = "dopo refresh", AC8/AC9). Step gate **success** (run 28756690549). Copre la persistenza end-to-end senza flakiness browser.
+
 ## Increment 2 — residuo (per Codex)
-- Esecuzione E2E Playwright **in CI** con screenshot: richiede estendere il job `browser-e2e` per seminare un draft import con terapia e guidare il flusso (o run locale — bloccato in mode B). La spec è pronta; manca solo il wiring dell'harness/seed.
+- **Screenshot browser** in CI (visual): la Playwright spec browser (`e2e/therapy-import.spec.ts`) è pronta ma il job `browser-e2e` in mock non produce testo terapia dai file (nessuna estrazione reale) → per screenshot end-to-end del flusso UI servirebbe far emettere al mock una sezione terapia (chirurgia multi-layer sul mock, rischio sul happy-path). La **funzionalità** è però provata dall'E2E API sopra + build frontend verde.
 
 ## Blocchi terminali (governance)
 Il completamento end-to-end della skill /process-requirement (UI tabella + confirm persistenza + Playwright + screenshot + deploy + close) è **bloccato** in questo ambiente da:
