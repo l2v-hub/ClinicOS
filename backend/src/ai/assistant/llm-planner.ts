@@ -60,10 +60,14 @@ function validatePlan(raw: unknown, ctx: PlanContext): QueryPlan | null {
     const args = ((t as Record<string, unknown>).args ?? {}) as Record<string, unknown>;
     tools.push({ tool: name, args });
   }
-  const scope: QueryPlan['scope'] = p.scope === 'cross_patient' || tools.some((t) => CROSS_TOOLS.has(t.tool))
-    ? 'cross_patient' : 'current_patient';
-  // requiresCrossPatientAccess RICALCOLATO server-side (mai fidato dall'LLM).
-  const requiresCrossPatientAccess = scope === 'cross_patient' || tools.some((t) => CROSS_TOOLS.has(t.tool));
+  // Cross-patient è determinato SOLO dai tool effettivamente usati (verità server-side), MAI
+  // dallo 'scope' dichiarato dall'LLM: il modello etichetta a volte "cross_patient" una domanda
+  // su un SINGOLO paziente (es. "allergie di Folli") solo perché va cercato per nome → falso
+  // positivo che la faceva rifiutare in modo non deterministico. Un piano con soli tool
+  // patient-scoped/lookup (search_patients) NON è cross-patient.
+  const usesCrossTool = tools.some((t) => CROSS_TOOLS.has(t.tool));
+  const scope: QueryPlan['scope'] = usesCrossTool ? 'cross_patient' : 'current_patient';
+  const requiresCrossPatientAccess = usesCrossTool;
   return { intent: p.intent as AssistantIntent, scope, tools, requiresCrossPatientAccess };
 }
 

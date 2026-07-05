@@ -39,6 +39,16 @@ test('016 F1: runtime che lancia/timeout → fallback deterministico (nessun err
   assert.equal(r.plan.intent, 'therapies');
 });
 
+test('016 F1: scope=cross dichiarato dall LLM su tool patient-scoped è IGNORATO (no falso rifiuto)', async () => {
+  // regressione non-determinismo: l'LLM etichetta a volte cross_patient una query su un solo
+  // paziente (cercato per nome). Con soli tool patient-scoped/lookup NON deve essere cross.
+  const runtime = async () => ({ plan: { intent: 'allergies', scope: 'cross_patient', tools: [{ tool: 'search_patients', args: { query: 'Folli' } }, { tool: 'get_patient_allergies', args: { patientId: 'x' } }], requiresCrossPatientAccess: true }, confidence: 0.9 });
+  const r = await planQueryLLM('allergie di Folli', { currentPatientId: 'p1' }, { callPlanRuntime: runtime });
+  assert.equal(r.mode, 'llm');
+  assert.equal(r.plan.requiresCrossPatientAccess, false);
+  assert.equal(r.plan.scope, 'current_patient');
+});
+
 test('016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato dall LLM', async () => {
   // l'LLM dichiara false, ma la domanda è cross-patient → il server deve imporre true
   const runtime = async () => ({ plan: { intent: 'correlate', scope: 'cross_patient', tools: [{ tool: 'correlate_structured_data', args: {} }], requiresCrossPatientAccess: false }, confidence: 0.9 });
