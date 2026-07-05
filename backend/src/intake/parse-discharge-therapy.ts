@@ -1,0 +1,104 @@
+// Bug #156: turn a discharge-letter therapy TEXT block into structured, editable therapy rows —
+// ONE per drug — never a single text blob. Deterministic and GENERIC (no hardcoded drug names):
+// it parses the common Italian discharge prescription line shape and degrades gracefully to a
+// "da_verificare" row when a line is incomplete (a line is never dropped, and the original text is
+// always preserved). PRIVACY: this module never logs; callers must log only counts/status, not text.
+
+export interface ParsedTherapyRow {
+  farmacoNome: string;          // drug name (first token), e.g. KEPPRA
+  forma: string;                // pharmaceutical form, e.g. "CPR RIV", "SCIR", "POLVERE"
+  dosaggio: string;             // strength, e.g. "500 MGR", "1GR/880UI", "10MG"
+  viaSomministrazione: string;  // route, e.g. OS, IM, EV
+  quantita: string;             // dose amount, e.g. "1 Cpr", "1/2 Dosi"
+  orari: string[];              // ["08:00","20:00"]
+  giorni: string[];             // ["Mar","Gio","Sab","Dom"]
+  dataInizio: string;           // ISO YYYY-MM-DD or ''
+  classe: string;               // "A", "C" or ''
+  note: string;                 // leftover free text
+  originalText: string;         // source line kept verbatim (audit / operator reference)
+  stato: 'ok' | 'da_verificare';
+}
+
+const ROUTES = ['OS', 'IM', 'EV', 'SC', 'SL', 'TD', 'INAL', 'TOP', 'RETT', 'OFT', 'OTO', 'NAS', 'VAG', 'IN'];
+const UNITS = 'Cpr|Cps|Cp|Dosi|Dose|Fl|Bs|Bust|ml|mL|gtt|gc|Puff|Fiala|Fiale|Supp|Cerotto|Cerotti';
+const DAYS = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+
+const ROUTE_RE = new RegExp(`\\(\\s*(${ROUTES.join('|')})\\s*\\)`, 'i');
+const QTY_RE = new RegExp(`\\b(\\d+(?:\\/\\d+)?)\\s+(${UNITS})\\b`, 'i');
+const DOSE_RE = /\b(\d+(?:[.,]\d+)?)\s?(MGR|MCG|MG|GR|G|UI|ML)\b(\s?\/\s?\d+(?:[.,]\d+)?\s?(?:UI|ML|MG|MGR|MCG|GR|G))?/i;
+const DAY_RE = new RegExp(`\\b(${DAYS.join('|')})\\b`, 'g');
+
+function toIsoDate(dmy: string | undefined): string {
+  const m = (dmy ?? '').match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!m) return '';
+  const [, d, mo, y] = m;
+  return `${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`;
+}
+
+/** Split a therapy text block into candidate prescription lines (headers/blank lines dropped). */
+export function splitTherapyLines(text: string): string[] {
+  return (text ?? '')
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0)
+    .filter((l) => !/^(terapia(\s+domiciliare)?|tp\.?|home therapy|hospital therapy)\s*:?\s*$/i.test(l));
+}
+
+/** Parse ONE prescription line into a structured row. Fields are extracted independently, so a
+ *  malformed segment never corrupts the others; missing structure → stato 'da_verificare'. */
+export function parseTherapyLine(line: string): ParsedTherapyRow {
+  const originalText = line.trim();
+
+  const classe = (originalText.match(/\(\s*classe\s*([A-Za-z]?)\s*\)/i)?.[1] ?? '').toUpperCase();
+  const dataInizio = toIsoDate(originalText.match(/\bdal\s+(\d{1,2}\/\d{1,2}\/\d{4})/i)?.[1]);
+  const giorni = [...new Set([...originalText.matchAll(DAY_RE)].map((m) => m[1]))];
+
+  const oreIdx = originalText.search(/\bore\b/i);
+  const orari = oreIdx >= 0
+    ? [...originalText.slice(oreIdx).matchAll(/\b(\d{1,2}:\d{2})\b/g)].map((m) => m[1])
+    : [];
+
+  const viaSomministrazione = (originalText.match(ROUTE_RE)?.[1] ?? '').toUpperCase();
+  const qtyM = originalText.match(QTY_RE);
+  const quantita = qtyM ? `${qtyM[1]} ${qtyM[2]}` : '';
+  const doseM = originalText.match(DOSE_RE);
+  const dosaggio = doseM ? doseM[0].replace(/\s+/g, ' ').trim() : '';
+  const farmacoNome = (originalText.match(/^([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9.\-]*)/)?.[1] ?? '').toUpperCase();
+
+  // forma = text between the drug name and the first structural marker (route / dosage / quantity).
+  const afterName = originalText.slice(farmacoNome.length);
+  const idxs = [
+    afterName.search(ROUTE_RE),
+    doseM ? afterName.indexOf(doseM[0]) : -1,
+    qtyM ? afterName.indexOf(qtyM[0]) : -1,
+  ].filter((i) => i >= 0);
+  const cut = idxs.length ? Math.min(...idxs) : afterName.length;
+  const forma = afterName.slice(0, cut).replace(/[*]/g, ' ').replace(/\s+/g, ' ').trim();
+
+  // note = anything after the last recognized structured token, minus date/class/times (best effort).
+  let note = originalText;
+  for (const seg of [forma, dosaggio, quantita, `(${viaSomministrazione})`].filter(Boolean)) note = note.replace(seg, ' ');
+  note = note
+    .replace(new RegExp(`^${farmacoNome}`, 'i'), ' ')
+    .replace(/\(\s*classe\s*[A-Za-z]?\s*\)/i, ' ')
+    .replace(/\bdal\s+\d{1,2}\/\d{1,2}\/\d{4}/i, ' ')
+    .replace(/\bore\b|\be\s+alle\b|\balle\b|\b\d{1,2}:\d{2}\b/gi, ' ')
+    .replace(DAY_RE, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  // A line is "ok" when it has a name AND at least two structured signals; otherwise operator-verify.
+  const signals = [dosaggio, orari.length ? 'x' : '', quantita, dataInizio].filter(Boolean).length;
+  const stato: ParsedTherapyRow['stato'] = farmacoNome && signals >= 2 ? 'ok' : 'da_verificare';
+
+  return { farmacoNome, forma, dosaggio, viaSomministrazione, quantita, orari, giorni, dataInizio, classe, note, originalText, stato };
+}
+
+/** Parse a whole therapy text block into structured rows (one per prescription line). */
+export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
+  return splitTherapyLines(text).map(parseTherapyLine);
+}
+
+/** Map days (Italian abbreviations) to the PatientTherapy weekly "fasce" booleans is intentionally
+ *  NOT done here (fasce are time-of-day, not weekdays). Weekday scheduling is carried on the row's
+ *  `giorni`; the confirm layer decides persistence. Kept separate to avoid a lossy mapping. */
