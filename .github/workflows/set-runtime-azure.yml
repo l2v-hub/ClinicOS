@@ -1,0 +1,52 @@
+name: Set Runtime Azure (endpoint/version)
+
+# Imposta variabili NON-SEGRETE Azure sul servizio RUNTIME (clinicos-ai-runtime) e redeploy.
+# Endpoint, deployment e api-version NON sono secret (la chiave resta sul dashboard).
+# Uso: workflow_dispatch con endpoint + api_version + deployment.
+
+on:
+  workflow_dispatch:
+    inputs:
+      endpoint:
+        description: 'AZURE_OPENAI_ENDPOINT (classico, es. https://<res>.openai.azure.com/)'
+        required: true
+        type: string
+      api_version:
+        description: 'AZURE_OPENAI_API_VERSION (es. 2024-10-21)'
+        required: true
+        default: '2024-10-21'
+        type: string
+      deployment:
+        description: 'AZURE_OPENAI_DEPLOYMENT / AGNOS_LLM_MODEL'
+        required: true
+        default: 'gpt-5.4-mini'
+        type: string
+
+concurrency:
+  group: railway-runtime
+  cancel-in-progress: false
+
+jobs:
+  set:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject secrets
+        run: |
+          case "${{ inputs.endpoint }}${{ inputs.deployment }}" in
+            *KEY*|*SECRET*|*PASSWORD*) echo "::error::valore sospetto di secret"; exit 1 ;;
+          esac
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Set Azure vars on runtime + redeploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          SVC: ${{ vars.RAILWAY_RUNTIME_SERVICE }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then echo "::error::RAILWAY_TOKEN not set"; exit 1; fi
+          SVC="${SVC:-clinicos-ai-runtime}"
+          railway variables --service "$SVC" \
+            --set "AZURE_OPENAI_ENDPOINT=${{ inputs.endpoint }}" \
+            --set "AZURE_OPENAI_API_VERSION=${{ inputs.api_version }}" \
+            --set "AZURE_OPENAI_DEPLOYMENT=${{ inputs.deployment }}" \
+            --set "AGNOS_LLM_MODEL=${{ inputs.deployment }}"
+          echo "Set Azure endpoint/version/deployment on $SVC (redeploy triggered)."
