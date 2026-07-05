@@ -69,10 +69,18 @@ test('016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped
   assert.equal(out.tools[0].args.patientId, 'p42');
 });
 
-test('016 F1: injectPatientId NON sovrascrive un patientId già presente', () => {
+test('016 F1: injectPatientId SOVRASCRIVE il patientId proposto dall LLM (paziente autoritativo)', () => {
+  // l'LLM non può scegliere il paziente: un id proposto da esso viene rimpiazzato dal currentPatientId (F0).
   const plan = { intent: 'therapies' as const, scope: 'current_patient' as const, tools: [{ tool: 'get_patient_therapies', args: { patientId: 'pX' } }], requiresCrossPatientAccess: false };
   const out = injectPatientId(plan, 'p42');
-  assert.equal(out.tools[0].args.patientId, 'pX');
+  assert.equal(out.tools[0].args.patientId, 'p42');
+});
+
+test('016 F1: injectPatientId sovrascrive un patientId PLACEHOLDER dell LLM', () => {
+  // regressione: il modello emette spesso un placeholder → deve essere sostituito, non eseguito.
+  const plan = { intent: 'allergies' as const, scope: 'current_patient' as const, tools: [{ tool: 'get_patient_allergies', args: { patientId: '<resolved_patientId>' } }], requiresCrossPatientAccess: false };
+  const out = injectPatientId(plan, 'p42');
+  assert.equal(out.tools[0].args.patientId, 'p42');
 });
 
 test('016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients)', () => {
