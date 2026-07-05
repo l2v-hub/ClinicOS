@@ -22,7 +22,7 @@ PLAN_MARKER = "ASSISTANT_PLAN_V1"
 # (→ fallback deterministico). Il modello va quindi vincolato a sceglierne ESATTAMENTE uno.
 _INTENTS = (
     "allergies, therapies, vitals_range, vitals_recent, narrative_search, document_search, "
-    "timeline, appointments, correlate, patient_search, refuse_clinical, unknown"
+    "timeline, appointments, correlate, patient_search, refuse_clinical, data_query, unknown"
 )
 
 _SYSTEM = (
@@ -37,6 +37,23 @@ _SYSTEM = (
     "cartella→narrative_search; documenti→document_search; cronologia→timeline; appuntamenti→"
     "appointments; correlazione o ricerca tra più pazienti→correlate; ricerca paziente→patient_search); "
     "se nessuno è applicabile usa unknown. "
+    "Per domande su NUMERI/ELENCHI/CORRELAZIONI di struttura o dati strutturati (camere, letti, "
+    "occupazione, appuntamenti della struttura, conteggi, andamenti, condizioni tra dati) usa intent "
+    "'data_query' e il tool 'query_data' con un piano in args.plan: {\"steps\":[{\"id\",\"from\","
+    "\"filter\":[{\"field\",\"op\",\"value\"}],\"relate\":[],\"aggregate\":{\"op\",\"field\",\"groupBy\"},"
+    "\"select\":[],\"runIf\":{\"step\",\"predicate\"},\"bindFrom\":{\"step\",\"field\",\"into\"}}],"
+    "\"answer\":{\"primaryStep\"}}. "
+    "Entita disponibili: roomAssignment(patientId,roomId,bedId,startDate,endDate; rel patient,bed), "
+    "room(numero,tipo,piano,reparto,stato), bed(label,stato,roomId; rel room), "
+    "appointment(patientId,scheduledAt,status,reason; rel patient), "
+    "patient(firstName,lastName,medicalRecordNumber,dateOfBirth,sex), "
+    "therapy(patientId,farmacoNome,stato,dataInizio,dataFine), "
+    "vitalSign(patientId,etichetta,valore,systolic,rilevato). "
+    "op: eq,in,lt,lte,gt,gte,isNull,contains,between,dateWindow (value {lastDays:N}|{day:'today'|'yesterday'}|{from,to}). "
+    "aggregate.op: count,countDistinct,min,max,avg,sum. Camera occupata = roomAssignment con endDate isNull. "
+    "Il paziente si indica col filtro field='patient' value=<nome> oppure 'current' (lo risolve il server, mai un id). "
+    "Per 'camera X occupata e da chi': step1 room filter numero=X select id; step2 roomAssignment filter endDate isNull, "
+    "bindFrom step1 field=id into=roomId, relate patient,bed, select patient.lastName,bed.label. "
     "Rispondi SOLO con JSON: {\"intent\": <uno dei valori sopra>, \"scope\": \"current_patient\"|\"cross_patient\", "
     "\"tools\": [{\"tool\": string, \"args\": object}], \"requiresCrossPatientAccess\": boolean}."
 )
