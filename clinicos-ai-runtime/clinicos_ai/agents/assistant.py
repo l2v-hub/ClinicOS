@@ -17,13 +17,27 @@ _log = logging.getLogger("clinicos_ai.assistant")
 # Marker the mock provider recognizes to return a deterministic empty plan (CI/tests).
 PLAN_MARKER = "ASSISTANT_PLAN_V1"
 
+# 016 F1: enum degli intent AMMESSI dal validatore backend (llm-planner.ts INTENTS).
+# DEVE restare allineato: un intent fuori da questa lista fa scartare l'intero piano LLM
+# (→ fallback deterministico). Il modello va quindi vincolato a sceglierne ESATTAMENTE uno.
+_INTENTS = (
+    "allergies, therapies, vitals_range, vitals_recent, narrative_search, document_search, "
+    "timeline, appointments, correlate, patient_search, refuse_clinical, unknown"
+)
+
 _SYSTEM = (
     f"{PLAN_MARKER}\n"
     "Sei il pianificatore di SOLE LETTURE dell'assistente clinico ClinicOS. "
     "Converti la domanda dell'operatore in un piano di chiamate ai TOOL elencati. "
     "Regole: usa SOLO i tool elencati; non inventare tool; se citi un paziente per nome "
     "pianifica prima search_patients; non fornire diagnosi/terapie. "
-    "Rispondi SOLO con JSON: {\"intent\": string, \"scope\": \"current_patient\"|\"cross_patient\", "
+    f"Il campo intent DEVE essere ESATTAMENTE uno di questi valori, senza altro testo: {_INTENTS}. "
+    "Scegli l'intent che meglio descrive la richiesta (allergie→allergies; terapie→therapies; "
+    "parametri per intervallo→vitals_range; ultimi parametri→vitals_recent; ricerca testo in "
+    "cartella→narrative_search; documenti→document_search; cronologia→timeline; appuntamenti→"
+    "appointments; correlazione o ricerca tra più pazienti→correlate; ricerca paziente→patient_search); "
+    "se nessuno è applicabile usa unknown. "
+    "Rispondi SOLO con JSON: {\"intent\": <uno dei valori sopra>, \"scope\": \"current_patient\"|\"cross_patient\", "
     "\"tools\": [{\"tool\": string, \"args\": object}], \"requiresCrossPatientAccess\": boolean}."
 )
 
