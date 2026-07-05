@@ -9,8 +9,29 @@ for _r in ("OCR", "EXTRACTION", "AGENT", "REPAIR"):
     os.environ.setdefault(f"AI_{_r}_MODEL", "mock:mock")
 
 from clinicos_ai.models.registry import ModelRegistry
-from clinicos_ai.agents.assistant import run_assistant_plan, PLAN_MARKER
+from clinicos_ai.agents.assistant import run_assistant_plan, PLAN_MARKER, parse_plan_json
 from clinicos_ai.models.providers.mock import EMPTY_PLAN
+
+
+class ParsePlanJsonTests(unittest.TestCase):
+    def test_pure_json(self):
+        p = parse_plan_json('{"intent":"allergies","scope":"current_patient","tools":[{"tool":"get_patient_allergies","args":{}}],"requiresCrossPatientAccess":false}')
+        self.assertEqual(p["intent"], "allergies")
+        self.assertEqual(p["tools"][0]["tool"], "get_patient_allergies")
+
+    def test_fenced_json(self):
+        p = parse_plan_json('```json\n{"intent":"therapies","scope":"current_patient","tools":[],"requiresCrossPatientAccess":false}\n```')
+        self.assertEqual(p["intent"], "therapies")
+
+    def test_prose_wrapped_json(self):
+        # il modello a volte antepone/postpone prosa: si estrae il blocco {...}
+        raw = 'Ecco il piano richiesto:\n{"intent":"allergies","scope":"current_patient","tools":[{"tool":"get_patient_allergies","args":{}}],"requiresCrossPatientAccess":false}\nSpero sia utile.'
+        p = parse_plan_json(raw)
+        self.assertEqual(p["intent"], "allergies")
+        self.assertEqual(len(p["tools"]), 1)
+
+    def test_unparsable_returns_none(self):
+        self.assertIsNone(parse_plan_json("non è un piano, mi dispiace"))
 
 
 class AssistantPlanTests(unittest.IsolatedAsyncioTestCase):

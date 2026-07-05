@@ -9,7 +9,7 @@ import { canCrossPatientSearch } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
 import { appointmentSource } from '../gateway/sources.js';
 import { planQuery, extractPatientName, pickResolvedPatient, type AssistantIntent, type PlanContext, type QueryPlan } from './plan.js';
-import { planQueryLLM } from './llm-planner.js';
+import { planQueryLLM, injectPatientId } from './llm-planner.js';
 import { composeAnswer } from './composer.js';
 import { callPlanRuntime, callComposeRuntime } from './runtime-client.js';
 import { loadAssistantLlmConfig } from './config.js';
@@ -90,6 +90,9 @@ export async function assistantQuery(
   } else {
     plan = planQuery(question, effectiveCtx); mode = 'deterministic';
   }
+  // Paziente autoritativo lato server: inietta il currentPatientId (risolto da F0) nei tool
+  // patient-scoped del piano — l'LLM propone i tool ma non sceglie il paziente.
+  plan = injectPatientId(plan, effectiveCtx.currentPatientId);
   const empty = (extra: Partial<AssistantAnswer> = {}): AssistantAnswer =>
     ({ intent: plan.intent, scope: plan.scope, plan, results: [], sources: [], navigation: [], notFound: true, truncated: false, mode, composed: false, ...extra });
 

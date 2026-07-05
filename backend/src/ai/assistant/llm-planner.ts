@@ -25,6 +25,25 @@ export interface PlanResult { plan: QueryPlan; mode: 'llm' | 'deterministic' }
 
 // I tool che comportano accesso cross-patient: se il piano LLM ne usa uno, il server IMPONE cross.
 const CROSS_TOOLS = new Set(['search_across_patients', 'correlate_structured_data', 'query_appointments_today']);
+
+// Tool vincolati a un singolo paziente: il patientId è AUTORITATIVO lato server (risolto da F0),
+// mai dedotto dall'LLM. Vi si inietta il currentPatientId quando manca.
+const PATIENT_SCOPED = new Set(['get_patient_allergies', 'get_patient_therapies', 'get_patient_vital_signs', 'get_patient_timeline', 'get_patient_appointments', 'search_clinical_sections']);
+
+/**
+ * Inietta il currentPatientId (risolto server-side) nei tool patient-scoped che non hanno un
+ * patientId valido. Il paziente resta autoritativo lato server: l'LLM propone i tool, ma non
+ * può scegliere/cambiare il paziente. No-op se il patientId non è noto o è già presente.
+ */
+export function injectPatientId(plan: QueryPlan, patientId?: string): QueryPlan {
+  if (!patientId) return plan;
+  const tools = plan.tools.map((t) => {
+    const has = typeof t.args?.patientId === 'string' && (t.args.patientId as string).length > 0;
+    if (PATIENT_SCOPED.has(t.tool) && !has) return { ...t, args: { ...t.args, patientId } };
+    return t;
+  });
+  return { ...plan, tools };
+}
 const INTENTS = new Set<AssistantIntent>(['allergies', 'therapies', 'vitals_range', 'vitals_recent', 'narrative_search', 'document_search', 'timeline', 'appointments', 'correlate', 'patient_search', 'refuse_clinical', 'unknown']);
 
 /** Valida la forma del piano LLM e i tool contro l'allowlist read. Ritorna null se non valido. */

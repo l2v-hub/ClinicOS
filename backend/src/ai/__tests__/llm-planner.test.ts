@@ -59,3 +59,31 @@ test('016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna in
   assert.equal(r.plan.tools.length, 0);
   assert.equal(r.plan.intent, 'unknown');
 });
+
+// ── injectPatientId: paziente autoritativo server-side nei tool patient-scoped ──
+import { injectPatientId } from '../assistant/llm-planner.js';
+
+test('016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped', () => {
+  const plan = { intent: 'allergies' as const, scope: 'current_patient' as const, tools: [{ tool: 'get_patient_allergies', args: {} }], requiresCrossPatientAccess: false };
+  const out = injectPatientId(plan, 'p42');
+  assert.equal(out.tools[0].args.patientId, 'p42');
+});
+
+test('016 F1: injectPatientId NON sovrascrive un patientId già presente', () => {
+  const plan = { intent: 'therapies' as const, scope: 'current_patient' as const, tools: [{ tool: 'get_patient_therapies', args: { patientId: 'pX' } }], requiresCrossPatientAccess: false };
+  const out = injectPatientId(plan, 'p42');
+  assert.equal(out.tools[0].args.patientId, 'pX');
+});
+
+test('016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients)', () => {
+  const plan = { intent: 'patient_search' as const, scope: 'current_patient' as const, tools: [{ tool: 'search_patients', args: { query: 'Rossi' } }], requiresCrossPatientAccess: false };
+  const out = injectPatientId(plan, 'p42');
+  assert.equal(out.tools[0].args.patientId, undefined);
+  assert.equal(out.tools[0].args.query, 'Rossi');
+});
+
+test('016 F1: injectPatientId senza patientId noto → piano invariato', () => {
+  const plan = { intent: 'allergies' as const, scope: 'current_patient' as const, tools: [{ tool: 'get_patient_allergies', args: {} }], requiresCrossPatientAccess: false };
+  const out = injectPatientId(plan, undefined);
+  assert.equal(out.tools[0].args.patientId, undefined);
+});
