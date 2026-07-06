@@ -517,7 +517,7 @@ model AiAuditEvent {
   patientId    String?
   actionType   String   // catalog action name, or refused_delete | refused_clinical | refused_forbidden | unknown
   kind         String   // read | create | update | refusal
-  channel      String   // testo | voce
+  channel      String   // testo | voce | ui
   fields       String[]
   outcome      String   // ok | denied | error | deduped | empty
   createdAt    DateTime @default(now())
