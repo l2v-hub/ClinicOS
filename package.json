@@ -18,6 +18,7 @@
     "build:frontend": "npm --prefix frontend run build",
     "build:backend": "npm --prefix backend run build",
     "test:e2e:full-patient:api": "tsx scripts/e2e-full-patient-api-test.ts",
+    "security:scan-frontend": "node scripts/security/scan-frontend-secrets.mjs frontend/src frontend/index.html",
     "quality-gate:start": "node scripts/quality-gate/create-task-contract.js",
     "quality-gate:validate": "node scripts/quality-gate/validate-task-contract.js",
     "quality-gate:check-closure": "node scripts/quality-gate/check-closure.js"
