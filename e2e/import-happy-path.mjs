@@ -71,6 +71,14 @@ try {
       const ok = body.includes(`Sintetico_${vp.name}`) || body.includes('E2E');
       console.log(`${tag}: created=${ok} consoleErrors=${errors.length}`);
       if (errors.length) { console.log(`${tag} first error:`, errors[0]); }
+      // #133 AC3/AC4: assert the import actually reached a created patient. A non-created outcome is a
+      // hard failure with an explicit diagnostic (synthetic fixtures only — no PHI), never a silent pass.
+      if (!ok) {
+        failures++;
+        const snippet = body.replace(/\s+/g, ' ').slice(0, 400);
+        console.log(`${tag} ASSERT FAILED: patient not created — import did not reach a successful review/confirm. Body snippet: ${snippet}`);
+        await page.screenshot({ path: resolve(outDir, `${tag}-FAIL-not-created.png`) }).catch(() => {});
+      }
     } catch (err) {
       failures++;
       console.log(`${tag} FAILED: ${err.message}`);
