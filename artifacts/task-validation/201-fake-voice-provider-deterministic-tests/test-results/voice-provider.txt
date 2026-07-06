@@ -1,0 +1,419 @@
+TAP version 13
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.745Z"}
+# [ai-audit] DATABASE_URL assente: persistenza audit su Postgres disattivata (resta il log su stdout)
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.747Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.747Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.747Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.747Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.747Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.747Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.748Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.748Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.748Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.754Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.755Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.755Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.755Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.755Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.755Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"read","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"unknown","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.756Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":null,"actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":null,"actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":null,"fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_forbidden","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.762Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.762Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# Subtest: catalog: zero delete actions, kinds are CRU-only by construction
+ok 1 - catalog: zero delete actions, kinds are CRU-only by construction
+  ---
+  duration_ms: 0.8114
+  ...
+# Subtest: catalog: deny-by-default and AI_DISABLED_ACTIONS kill-switch
+ok 2 - catalog: deny-by-default and AI_DISABLED_ACTIONS kill-switch
+  ---
+  duration_ms: 0.2618
+  ...
+# Subtest: planCommand testo: vital command → executable create_vital_sign preview
+ok 3 - planCommand testo: vital command → executable create_vital_sign preview
+  ---
+  duration_ms: 2.6898
+  ...
+# Subtest: planCommand: read question delegates to the assistant (preview null, read populated)
+ok 4 - planCommand: read question delegates to the assistant (preview null, read populated)
+  ---
+  duration_ms: 0.7194
+  ...
+# Subtest: planCommand: every delete variant → refusal pointing to the traditional UI
+ok 5 - planCommand: every delete variant → refusal pointing to the traditional UI
+  ---
+  duration_ms: 3.1464
+  ...
+# Subtest: executeCommand: delete variants are rejected even when confirmed — NO write happens
+ok 6 - executeCommand: delete variants are rejected even when confirmed — NO write happens
+  ---
+  duration_ms: 2.1953
+  ...
+# Subtest: executeCommand: delete refusal uses the dedicated delete_forbidden kind
+ok 7 - executeCommand: delete refusal uses the dedicated delete_forbidden kind
+  ---
+  duration_ms: 0.3236
+  ...
+# Subtest: executeCommand: action disabled via AI_DISABLED_ACTIONS → not_in_catalog, NO write
+ok 8 - executeCommand: action disabled via AI_DISABLED_ACTIONS → not_in_catalog, NO write
+  ---
+  duration_ms: 0.6226
+  ...
+# Subtest: executeCommand testo: add_diary_note happy path writes once
+ok 9 - executeCommand testo: add_diary_note happy path writes once
+  ---
+  duration_ms: 1.3556
+  ...
+# Subtest: executeCommand testo: replayed idempotency key does not duplicate the write
+ok 10 - executeCommand testo: replayed idempotency key does not duplicate the write
+  ---
+  duration_ms: 0.6955
+  ...
+# Subtest: executeCommand: confirmation still mandatory on the text channel
+ok 11 - executeCommand: confirmation still mandatory on the text channel
+  ---
+  duration_ms: 0.299
+  ...
+# Subtest: T018a planner: ogni variante lessicale di cancellazione (base + flessa) → refusalKind delete
+ok 12 - T018a planner: ogni variante lessicale di cancellazione (base + flessa) → refusalKind delete
+  ---
+  duration_ms: 1.1037
+  ...
+# Subtest: T018b executor: kind non-write (read/unknown) → not_executable, writer mai chiamato
+ok 13 - T018b executor: kind non-write (read/unknown) → not_executable, writer mai chiamato
+  ---
+  duration_ms: 0.4529
+  ...
+# Subtest: T018c catalogo: nessuna entry delete su TUTTE le entry + azione inventata rifiutata
+ok 14 - T018c catalogo: nessuna entry delete su TUTTE le entry + azione inventata rifiutata
+  ---
+  duration_ms: 0.2319
+  ...
+# Subtest: T018d audit: tentativo delete → recordAuditEvent riceve kind refusal / refused_delete
+ok 15 - T018d audit: tentativo delete → recordAuditEvent riceve kind refusal / refused_delete
+  ---
+  duration_ms: 0.4446
+  ...
+# Subtest: T027 matcher: crea appuntamento — tipologia, data relativa, ora e paziente dal testo
+ok 16 - T027 matcher: crea appuntamento — tipologia, data relativa, ora e paziente dal testo
+  ---
+  duration_ms: 0.6979
+  ...
+# Subtest: T027 matcher: varianti data/ora — dopodomani, "il GG/MM", "alle 9 e 30"
+ok 17 - T027 matcher: varianti data/ora — dopodomani, "il GG/MM", "alle 9 e 30"
+  ---
+  duration_ms: 0.5152
+  ...
+# Subtest: T027 matcher: data/ora mancanti e paziente assente = ambiguità bloccanti
+ok 18 - T027 matcher: data/ora mancanti e paziente assente = ambiguità bloccanti
+  ---
+  duration_ms: 0.3649
+  ...
+# Subtest: T027 matcher: sposta appuntamento — orario vecchio/nuovo, paziente dal contesto
+ok 19 - T027 matcher: sposta appuntamento — orario vecchio/nuovo, paziente dal contesto
+  ---
+  duration_ms: 0.3105
+  ...
+# Subtest: T027 matcher: comandi non-appuntamento NON vengono intercettati
+ok 20 - T027 matcher: comandi non-appuntamento NON vengono intercettati
+  ---
+  duration_ms: 0.137
+  ...
+# Subtest: T027 plan: crea appuntamento per Moretti → preview eseguibile con paziente risolto
+ok 21 - T027 plan: crea appuntamento per Moretti → preview eseguibile con paziente risolto
+  ---
+  duration_ms: 0.5918
+  ...
+# Subtest: T027 plan: conflitto slot → ambiguità BLOCCANTE in preview (conferma disabilitata)
+ok 22 - T027 plan: conflitto slot → ambiguità BLOCCANTE in preview (conferma disabilitata)
+  ---
+  duration_ms: 0.7931
+  ...
+# Subtest: T027 plan: paziente non trovato / ambiguo → conferma disabilitata
+ok 23 - T027 plan: paziente non trovato / ambiguo → conferma disabilitata
+  ---
+  duration_ms: 0.36
+  ...
+# Subtest: T027 plan: sposta appuntamento → target risolto e preview con orari
+ok 24 - T027 plan: sposta appuntamento → target risolto e preview con orari
+  ---
+  duration_ms: 0.2714
+  ...
+# Subtest: T027 execute: crea appuntamento confermato → writer appuntamenti, idempotente al retry
+ok 25 - T027 execute: crea appuntamento confermato → writer appuntamenti, idempotente al retry
+  ---
+  duration_ms: 0.4977
+  ...
+# Subtest: T027 execute: retry dopo scrittura — lo slot appena creato NON blocca il replay (deduped)
+ok 26 - T027 execute: retry dopo scrittura — lo slot appena creato NON blocca il replay (deduped)
+  ---
+  duration_ms: 0.3494
+  ...
+# Subtest: T027 execute: conflitto slot rilevato al re-grounding → ambiguous, writer MAI chiamato
+ok 27 - T027 execute: conflitto slot rilevato al re-grounding → ambiguous, writer MAI chiamato
+  ---
+  duration_ms: 0.5847
+  ...
+# Subtest: T027: "modifica la terapia di Rossi" → rifiuto entità vietata (non delete)
+ok 28 - T027: "modifica la terapia di Rossi" → rifiuto entità vietata (non delete)
+  ---
+  duration_ms: 0.3498
+  ...
+# Subtest: T027: "cancella l'appuntamento delle 15" → refusalKind delete su plan ED execute
+ok 29 - T027: "cancella l'appuntamento delle 15" → refusalKind delete su plan ED execute
+  ---
+  duration_ms: 0.3009
+  ...
+# Subtest: T027 catalogo: create/update_appointment presenti, NESSUNA azione delete_appointment
+ok 30 - T027 catalogo: create/update_appointment presenti, NESSUNA azione delete_appointment
+  ---
+  duration_ms: 0.0969
+  ...
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_consegna","recordId":"rec-consegna","fields":["note","patientQuery","pazienteNome"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"create_consegna","recordId":"rec-consegna","fields":["note","patientQuery"],"source":"VOICE","channel":"VOCE","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"create_consegna","recordId":null,"fields":["note"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-06T14:28:27.815Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# Subtest: T027 isolamento delete: nessun modulo sotto src/ai importa uiOnlyDeleteAppointment
+ok 31 - T027 isolamento delete: nessun modulo sotto src/ai importa uiOnlyDeleteAppointment
+  ---
+  duration_ms: 49.5173
+  ...
+# Subtest: I130 matcher: consegna con paziente e testo dal comando
+ok 32 - I130 matcher: consegna con paziente e testo dal comando
+  ---
+  duration_ms: 0.3798
+  ...
+# Subtest: I130 matcher: varianti verbo e variante "consegna per X …" senza verbo
+ok 33 - I130 matcher: varianti verbo e variante "consegna per X …" senza verbo
+  ---
+  duration_ms: 0.2292
+  ...
+# Subtest: I130 matcher: paziente dal contesto quando non indicato nel testo
+ok 34 - I130 matcher: paziente dal contesto quando non indicato nel testo
+  ---
+  duration_ms: 0.082
+  ...
+# Subtest: I130 matcher: testo vuoto e paziente assente = ambiguità bloccanti
+ok 35 - I130 matcher: testo vuoto e paziente assente = ambiguità bloccanti
+  ---
+  duration_ms: 0.1555
+  ...
+# Subtest: I130 matcher: comandi non-consegna NON vengono intercettati
+ok 36 - I130 matcher: comandi non-consegna NON vengono intercettati
+  ---
+  duration_ms: 0.0897
+  ...
+# Subtest: I130 plan: consegna per Moretti → preview eseguibile con paziente risolto
+ok 37 - I130 plan: consegna per Moretti → preview eseguibile con paziente risolto
+  ---
+  duration_ms: 0.3221
+  ...
+# Subtest: I130 plan: paziente non trovato → conferma disabilitata
+ok 38 - I130 plan: paziente non trovato → conferma disabilitata
+  ---
+  duration_ms: 0.1923
+  ...
+# Subtest: I130 execute: consegna confermata → writer consegne, idempotente al retry
+ok 39 - I130 execute: consegna confermata → writer consegne, idempotente al retry
+  ---
+  duration_ms: 0.3981
+  ...
+# Subtest: I130 execute: senza conferma → confirmation_required, writer MAI chiamato
+ok 40 - I130 execute: senza conferma → confirmation_required, writer MAI chiamato
+  ---
+  duration_ms: 0.2418
+  ...
+# Subtest: I130: "cancella la consegna" → refusalKind delete su plan ED execute
+ok 41 - I130: "cancella la consegna" → refusalKind delete su plan ED execute
+  ---
+  duration_ms: 0.2853
+  ...
+# Subtest: I130 catalogo: create_consegna presente, NESSUNA azione delete_consegna, catalogo CRU-only
+ok 42 - I130 catalogo: create_consegna presente, NESSUNA azione delete_consegna, catalogo CRU-only
+  ---
+  duration_ms: 0.0794
+  ...
+# Subtest: I130 diario: la frase esatta della issue («Scrivi nel diario di …: …») → add_diary_note
+ok 43 - I130 diario: la frase esatta della issue («Scrivi nel diario di …: …») → add_diary_note
+  ---
+  duration_ms: 0.1135
+  ...
+# Subtest: \#201 success: fake advertising required capabilities → available, not degraded
+ok 44 - \#201 success: fake advertising required capabilities → available, not degraded
+  ---
+  duration_ms: 1.1075
+  ...
+# Subtest: \#201 failure: fake rejecting → degraded with provider reason, never throws
+ok 45 - \#201 failure: fake rejecting → degraded with provider reason, never throws
+  ---
+  duration_ms: 0.3811
+  ...
+# Subtest: \#201 timeout: fake that never resolves → degraded with timeout reason
+ok 46 - \#201 timeout: fake that never resolves → degraded with timeout reason
+  ---
+  duration_ms: 22.0601
+  ...
+# Subtest: \#201 missing capabilities: success but incomplete set → degraded listing what is missing
+ok 47 - \#201 missing capabilities: success but incomplete set → degraded listing what is missing
+  ---
+  duration_ms: 0.3644
+  ...
+# Subtest: \#201 no model configured: degraded regardless of provider (no probe attempted)
+ok 48 - \#201 no model configured: degraded regardless of provider (no probe attempted)
+  ---
+  duration_ms: 0.145
+  ...
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-06-20T09:00:00.000Z"}
+# [ai-audit] DATABASE_URL assente: persistenza audit su Postgres disattivata (resta il log su stdout)
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-06-20T09:00:00.000Z"}
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"deduped","at":"2026-06-20T09:00:00.000Z"}
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-06T14:28:27.733Z"}
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-06T14:28:27.735Z"}
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-06T14:28:27.735Z"}
+# Subtest: vocal read: question routes to read intent
+ok 49 - vocal read: question routes to read intent
+  ---
+  duration_ms: 2.0859
+  ...
+# Subtest: vital PA 130/80 with time → executable plan
+ok 50 - vital PA 130/80 with time → executable plan
+  ---
+  duration_ms: 1.5216
+  ...
+# Subtest: temperature with decimal comma
+ok 51 - temperature with decimal comma
+  ---
+  duration_ms: 0.3808
+  ...
+# Subtest: vital without time → blocking ambiguity
+ok 52 - vital without time → blocking ambiguity
+  ---
+  duration_ms: 0.5917
+  ...
+# Subtest: ambiguous patient (no current patient) blocks the action
+ok 53 - ambiguous patient (no current patient) blocks the action
+  ---
+  duration_ms: 0.3467
+  ...
+# Subtest: demographics: phone
+ok 54 - demographics: phone
+  ---
+  duration_ms: 0.5834
+  ...
+# Subtest: demographics: address keeps original casing
+ok 55 - demographics: address keeps original casing
+  ---
+  duration_ms: 0.4519
+  ...
+# Subtest: narrative: append to Anamnesi
+ok 56 - narrative: append to Anamnesi
+  ---
+  duration_ms: 0.2929
+  ...
+# Subtest: forbidden: delete, therapy, allergy writes are refused
+ok 57 - forbidden: delete, therapy, allergy writes are refused
+  ---
+  duration_ms: 0.3417
+  ...
+# Subtest: clinical advice is refused
+ok 58 - clinical advice is refused
+  ---
+  duration_ms: 0.1629
+  ...
+# Subtest: out-of-range vital is flagged as warning, not auto-corrected
+ok 59 - out-of-range vital is flagged as warning, not auto-corrected
+  ---
+  duration_ms: 0.1841
+  ...
+# Subtest: execute: confirmed write applies once and returns recordId
+ok 60 - execute: confirmed write applies once and returns recordId
+  ---
+  duration_ms: 1.5058
+  ...
+# Subtest: execute: double confirmation does NOT duplicate (idempotent replay)
+ok 61 - execute: double confirmation does NOT duplicate (idempotent replay)
+  ---
+  duration_ms: 0.4149
+  ...
+# Subtest: execute: blocked when write actions disabled
+ok 62 - execute: blocked when write actions disabled
+  ---
+  duration_ms: 2.0273
+  ...
+# Subtest: execute: confirmation is mandatory
+ok 63 - execute: confirmation is mandatory
+  ---
+  duration_ms: 0.3491
+  ...
+# Subtest: execute: ambiguous plan can never run
+ok 64 - execute: ambiguous plan can never run
+  ---
+  duration_ms: 0.3014
+  ...
+# Subtest: STT degrades when no model configured
+ok 65 - STT degrades when no model configured
+  ---
+  duration_ms: 0.1097
+  ...
+# Subtest: STT available when model configured
+ok 66 - STT available when model configured
+  ---
+  duration_ms: 0.7338
+  ...
+# Subtest: audio retention defaults to 0 (delete after processing)
+ok 67 - audio retention defaults to 0 (delete after processing)
+  ---
+  duration_ms: 0.1662
+  ...
+# Subtest: preview shows patient + cannot execute while ambiguous
+ok 68 - preview shows patient + cannot execute while ambiguous
+  ---
+  duration_ms: 0.3306
+  ...
+1..68
+# tests 68
+# suites 0
+# pass 68
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 507.6314
