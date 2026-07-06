@@ -9,7 +9,9 @@
 // tests inject a spy via setAuditPersistence().
 
 export type AiAuditKind = 'read' | 'create' | 'update' | 'refusal';
-export type AiAuditChannel = 'testo' | 'voce';
+// 'ui' = operational action performed through the traditional REST/UI (issue #223), alongside the
+// Agnos channels 'testo'/'voce'. The DB column is a free String, so this needs no migration.
+export type AiAuditChannel = 'testo' | 'voce' | 'ui';
 export type AiAuditOutcome = 'ok' | 'denied' | 'error' | 'deduped' | 'empty';
 
 export interface AiAuditEventInput {
@@ -77,4 +79,45 @@ export function recordAuditEvent(evt: AiAuditEventInput): void {
   } catch (err) {
     logFailure(err);
   }
+}
+
+// ── Issue #223: standardized minimal, PHI-safe audit for operational UI/REST actions ─────────────
+//
+// PHI-safety is STRUCTURAL: this API accepts only ids, an action name and field NAMES — there is no
+// parameter through which a clinical value, free-text payload or secret could be passed. It records
+// actor / action / entity / outcome / timestamp (AC1) and forwards to the same best-effort sink.
+
+export interface OperationalAuditInput {
+  /** Correlation id for the request (defaults to a synthetic 'op-<time>' when omitted). */
+  requestId?: string;
+  /** WHO performed the action. */
+  actorId: string;
+  actorRole?: string;
+  /** WHAT: dotted "entity.verb", e.g. 'consegna.update', 'patient.update_contact'. */
+  action: string;
+  /** CRU classification of the action (default 'update'). */
+  kind?: Exclude<AiAuditKind, 'refusal'>;
+  /** Patient scope when the action is patient-related; null otherwise. */
+  patientId?: string | null;
+  /** Field NAMES touched — NEVER values (PHI-safe). Capped at 20 downstream. */
+  fields?: string[];
+  outcome?: AiAuditOutcome;
+  /** ISO timestamp; omitted ⇒ DB default now(). */
+  at?: string;
+}
+
+/** Best-effort, PHI-safe audit for an operational UI/REST action. Never throws, never blocks. */
+export function recordOperationalAudit(input: OperationalAuditInput): void {
+  recordAuditEvent({
+    requestId: input.requestId ?? `op-${input.action}`,
+    operatorId: input.actorId,
+    operatorRole: input.actorRole ?? 'operatore',
+    patientId: input.patientId ?? null,
+    actionType: input.action,
+    kind: input.kind ?? 'update',
+    channel: 'ui',
+    fields: (input.fields ?? []).slice(0, 20),
+    outcome: input.outcome ?? 'ok',
+    ...(input.at ? { createdAt: input.at } : {}),
+  });
 }
