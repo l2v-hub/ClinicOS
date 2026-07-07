@@ -1,17 +1,17 @@
-# Task Contract — #224 No secret frontend + scansione bundle
+# Task Contract — #186 Action registry Agnos
 
-- Issue: #224
-- Slug: 224-no-secret-frontend-bundle-scan
+- Issue: #186
+- Slug: 186-action-registry-agnos-per-gestione-routine-paziente
 - Date: 2026-07-07T06:35:18.344Z
 - Mode: Parallel Evidence Remediation (Codex QA gate). Claude produces objective evidence; Codex closes.
 
 ## Objective
-Produce objective Playwright evidence that #224 meets its acceptance criteria on the current code
+Produce objective Playwright evidence that #186 meets its acceptance criteria on the current code
 (real assertions, no console errors, no HTTP 4xx/5xx, persistence-after-reload where data changes;
 QA report surface for internal/no-UI features), saved under this folder.
 
 ## Scope of evidence
-Scanner: self-test OK, frontend/src 0 findings, secret finto → exit 1. CI scandisce anche il bundle.
+GET /ai/actions/catalog live: 8 azioni CRU, kinds {read,create,update}, zero delete.
 
 ## Acceptance
 - A dedicated Playwright test with real assertions runs green on the current stack.

@@ -1,7 +1,7 @@
 # Validation Report (Evidence Remediation) — #186 Action registry Agnos
 
 - Slug: 186-action-registry-agnos-per-gestione-routine-paziente
-- Date: 2026-07-06T15:57:37.209Z
+- Date: 2026-07-07T06:35:18.344Z
 - Ambiente: stack ClinicOS locale reale (Postgres Podman + backend :3001 + frontend :5173), dati sintetici seed.
 - Harness: @playwright/test (`qa-evidence/`), trace+video+screenshot+HTML report attivi.
 - Governance: Claude produce evidenza; **Codex** verifica e chiude. Claude NON chiude l'issue.

@@ -36,6 +36,32 @@ export function runBackendTest(relTestPath: string): { code: number; out: string
   return { ...r, pass, fail };
 }
 
+const BENIGN = /favicon|sourcemap|\.map\b|net::ERR_ABORTED|ResizeObserver/i;
+
+/** Wire console-error and HTTP-4xx/5xx guards on a page. Returns collectors + an assert helper.
+ *  Only backend (:3001) responses count as relevant HTTP errors; benign noise is filtered. */
+export function guard(page: Page) {
+  const consoleErrors: string[] = [];
+  const httpErrors: string[] = [];
+  page.on('console', (m) => {
+    if (m.type() === 'error' && !BENIGN.test(m.text())) consoleErrors.push(m.text().slice(0, 200));
+  });
+  page.on('response', (r) => {
+    const u = r.url();
+    if (r.status() >= 400 && u.includes('localhost:3001') && !BENIGN.test(u)) {
+      httpErrors.push(`${r.status()} ${u.slice(0, 120)}`);
+    }
+  });
+  return {
+    consoleErrors,
+    httpErrors,
+    assertClean() {
+      expect(consoleErrors, `console errors: ${JSON.stringify(consoleErrors)}`).toEqual([]);
+      expect(httpErrors, `HTTP 4xx/5xx: ${JSON.stringify(httpErrors)}`).toEqual([]);
+    },
+  };
+}
+
 /** Land on the SPA and click past the role-selection gate. */
 export async function enterAs(page: Page, role: 'Operatore' | 'Amministratore' = 'Operatore') {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
