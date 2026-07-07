@@ -2,7 +2,7 @@
 
 - Issue: #194
 - Slug: 194-conferma-obbligatoria-create-update-agnos
-- Date: 2026-07-07T07:00:15.234Z
+- Date: 2026-07-07T07:16:16.655Z
 - Mode: Parallel Evidence Remediation (Codex QA gate). Claude produces objective evidence; Codex closes.
 
 ## Objective

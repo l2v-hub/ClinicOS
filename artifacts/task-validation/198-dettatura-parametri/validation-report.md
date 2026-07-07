@@ -1,0 +1,24 @@
+# Validation Report (Evidence Remediation) — #198 Dettatura parametri
+
+- Slug: 198-dettatura-parametri
+- Date: 2026-07-07T07:16:16.655Z
+- Ambiente: stack ClinicOS locale reale (Postgres Podman + backend :3001 + frontend :5173), dati sintetici seed.
+- Harness: @playwright/test (`qa-evidence/`), trace+video+screenshot+HTML report attivi.
+- Governance: Claude produce evidenza; **Codex** verifica e chiude. Claude NON chiude l'issue.
+
+## Cosa è stato verificato
+Comando canale voce → plan create_vital_sign con conferma; dettatura vocale riconosciuta.
+
+## Evidenze oggettive (path reali)
+- Screenshot finale: `artifacts/task-validation/198-dettatura-parametri/final/after.png`
+- Playwright HTML report: `artifacts/task-validation/198-dettatura-parametri/playwright-report/index.html`
+- Trace: `artifacts/task-validation/198-dettatura-parametri/test-results/issue-198--198-dettatura-parametri-chromium/trace.zip` 
+- Video: `artifacts/task-validation/198-dettatura-parametri/test-results/issue-198--198-dettatura-parametri-chromium/` (*.webm)
+- Test-results: `artifacts/task-validation/198-dettatura-parametri/test-results/issue-198--198-dettatura-parametri-chromium/`
+- Spec Playwright: `qa-evidence/tests/issue-198.spec.ts`
+
+## Test Playwright
+1 test, esito PASS (vedi HTML report). Screenshot + trace + video allegati.
+
+## Decisione
+READY FOR CODEX QA — evidenze oggettive presenti (screenshot, trace, playwright-report, test-results, video).

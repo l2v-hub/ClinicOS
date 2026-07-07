@@ -1,7 +1,7 @@
 # Validation Report (Evidence Remediation) — #194 Conferma obbligatoria per Create/Update Agnos
 
 - Slug: 194-conferma-obbligatoria-create-update-agnos
-- Date: 2026-07-07T07:00:15.234Z
+- Date: 2026-07-07T07:16:16.655Z
 - Ambiente: stack ClinicOS locale reale (Postgres Podman + backend :3001 + frontend :5173), dati sintetici seed.
 - Harness: @playwright/test (`qa-evidence/`), trace+video+screenshot+HTML report attivi.
 - Governance: Claude produce evidenza; **Codex** verifica e chiude. Claude NON chiude l'issue.

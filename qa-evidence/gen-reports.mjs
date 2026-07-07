@@ -21,6 +21,12 @@ const EVID = {
   '190-registrazione-parametri-tramite-chatbot': ['#190 Registrazione parametri tramite chatbot', 'Chatbot: plan create_vital_sign → conferma → execute → valore poi visibile via lettura (persistenza).'],
   '193-rifiuto-delete-tramite-chatbot': ['#193 Rifiuto Delete tramite chatbot', 'Ogni variante delete rifiutata al plan (refuse_forbidden) e all\'execute (HTTP 4xx), nessuna scrittura.'],
   '194-conferma-obbligatoria-create-update-agnos': ['#194 Conferma obbligatoria per Create/Update Agnos', 'execute confirmed:false → HTTP 428; confirmed:true → ok + recordId. Plan ri-derivato server-side (tamper-proof).'],
+  '178-consegne-strutturate': ['#178 Consegne strutturate', 'GET /consegne: consegne con stato enum (aperta/in_corso/completata) + link paziente/operatore.'],
+  '175-terapie-da-somministrare': ['#175 Terapie da somministrare', 'GET /patients/:id/therapies 200: terapie del paziente disponibili.'],
+  '177-diario-clinico-assistenziale': ['#177 Diario clinico assistenziale', 'GET /patients/:id/diary 200: diario clinico leggibile per paziente.'],
+  '198-dettatura-parametri': ['#198 Dettatura parametri', 'Comando canale voce → plan create_vital_sign con conferma; dettatura vocale riconosciuta.'],
+  '195-infrastruttura-voce-agnos': ['#195 Infrastruttura voce Agnos', 'GET /ai/voice/stt: contratto STT capability/degradation; trascrizione Web Speech client-side.'],
+  '216-ordinamento-pazienti': ['#216 Ordinamento pazienti', 'UI Pazienti: lista ordinata (lib/patientSort) renderizzata; no console error, no HTTP 4xx.'],
 };
 
 function testResultsDir(slug) {

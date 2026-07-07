@@ -1,7 +1,7 @@
 # Validation Report (Evidence Remediation) — #224 No secret frontend + scansione bundle
 
 - Slug: 224-no-secret-frontend-bundle-scan
-- Date: 2026-07-07T07:00:15.234Z
+- Date: 2026-07-07T07:16:16.655Z
 - Ambiente: stack ClinicOS locale reale (Postgres Podman + backend :3001 + frontend :5173), dati sintetici seed.
 - Harness: @playwright/test (`qa-evidence/`), trace+video+screenshot+HTML report attivi.
 - Governance: Claude produce evidenza; **Codex** verifica e chiude. Claude NON chiude l'issue.

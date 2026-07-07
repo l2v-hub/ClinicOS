@@ -2,7 +2,7 @@
 
 - Issue: #186
 - Slug: 186-action-registry-agnos-per-gestione-routine-paziente
-- Date: 2026-07-07T07:00:15.234Z
+- Date: 2026-07-07T07:16:16.655Z
 - Mode: Parallel Evidence Remediation (Codex QA gate). Claude produces objective evidence; Codex closes.
 
 ## Objective
