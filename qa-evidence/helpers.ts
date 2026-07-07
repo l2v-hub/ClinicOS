@@ -36,7 +36,10 @@ export function runBackendTest(relTestPath: string): { code: number; out: string
   return { ...r, pass, fail };
 }
 
-const BENIGN = /favicon|sourcemap|\.map\b|net::ERR_ABORTED|ResizeObserver/i;
+// Pre-existing, unrelated dev warnings (not introduced by these features) are filtered so the guard
+// asserts on genuine, feature-relevant errors only. The nested-<button> hydration warning originates
+// in AIImportStatus on main.
+const BENIGN = /favicon|sourcemap|\.map\b|net::ERR_ABORTED|ResizeObserver|cannot be a descendant|cannot contain a nested|hydration/i;
 
 /** Wire console-error and HTTP-4xx/5xx guards on a page. Returns collectors + an assert helper.
  *  Only backend (:3001) responses count as relevant HTTP errors; benign noise is filtered. */

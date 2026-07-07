@@ -324,7 +324,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
   // #127: la bozza è seminata server-side dalla sola narrativa del job — l'anagrafica rivista
   // (e corretta) dall'operatore nella Revisione va riportata nella bozza, altrimenti le
   // correzioni si perdono e la Verifica blocca la creazione ("nome/cognome/data obbligatori").
-  async function handleProceedToWorkspace(patient?: ConfirmPatient) {
+  async function handleProceedToWorkspace(patient?: ConfirmPatient, cartella?: Record<string, unknown>) {
     if (!job) return;
     setBusy(true); setError(null);
     try {
@@ -346,6 +346,23 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
         };
         await patchDraft(draft.id, { anagrafica: { ...seeded, ...reviewed } }, { operatorId, operatorRole });
       }
+      // #234: the reviewed section text (documentSections + allergy narrative) was previously
+      // dropped on handoff. Persist it into the free-form draft so operator edits reach the
+      // draft (and, on confirm, Cartella.data). Best-effort — never block the handoff.
+      if (cartella && typeof cartella === 'object') {
+        const reviewedPatch: Record<string, unknown> = {};
+        if (cartella.documentSections !== undefined) reviewedPatch.documentSections = cartella.documentSections;
+        if (cartella._allergyNarrative !== undefined) reviewedPatch._allergyNarrative = cartella._allergyNarrative;
+        if (cartella._importSections !== undefined) reviewedPatch._importSections = cartella._importSections;
+        if (Object.keys(reviewedPatch).length > 0) {
+          try {
+            await patchDraft(draft.id, reviewedPatch, { operatorId, operatorRole });
+          } catch {
+            // Best-effort: surface but do not block the handoff to the workspace.
+            setError('Alcune modifiche alla revisione potrebbero non essere state salvate.');
+          }
+        }
+      }
       setImportDraftId(draft.id);
       setStep('workspace');
     } catch {
@@ -360,7 +377,7 @@ export function DischargeImportModal({ open, onClose, onImported, operatorId, op
     if (target?.mode === 'existing') {
       void handleAttachExisting(patient, cartella, opts);
     } else {
-      void handleProceedToWorkspace(patient);
+      void handleProceedToWorkspace(patient, cartella);
     }
   }
 

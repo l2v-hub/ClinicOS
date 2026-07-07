@@ -32,9 +32,16 @@ interface AnagraficaData {
   [key: string]: unknown;
 }
 
+interface AcceptedFlags {
+  demographics?: boolean;
+  therapy?: boolean;
+}
+
 interface DraftData {
   anagrafica?: AnagraficaData;
   ingresso?: IngressoData;
+  /** #235: explicit operator acceptance gates. Free-form draft key — survives reload. */
+  _accepted?: AcceptedFlags;
   [key: string]: unknown;
 }
 
@@ -98,6 +105,8 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<DraftData>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  // #234: autosave status for the debounced patchDraft (no longer swallowed silently).
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   // Confirm / submit state
   const [submitting, setSubmitting] = useState(false);
@@ -189,12 +198,26 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
 
     if (!draftId) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
+    setSaveState('saving');
     debounceRef.current = setTimeout(() => {
-      patchDraft(draftId, { [key]: value }, op).catch(() => {
-        // Autosave errors are silently swallowed — the user can still proceed;
-        // draft may be out of sync but we avoid disrupting the flow.
-      });
+      patchDraft(draftId, { [key]: value }, op)
+        .then(() => setSaveState('saved'))
+        .catch((err: unknown) => {
+          // #234: no longer swallowed — surface an error state (no PHI in the log).
+          setSaveState('error');
+          console.error('[ClinicOS] autosave bozza intake non riuscito:', err instanceof Error ? err.message : 'errore sconosciuto');
+        });
     }, 500);
+  }
+
+  function acceptedFlags(): AcceptedFlags {
+    return (data._accepted ?? {}) as AcceptedFlags;
+  }
+
+  /** #235: both explicit acceptances required before the patient can be created. */
+  function acceptanceComplete(): boolean {
+    const acc = acceptedFlags();
+    return acc.demographics === true && acc.therapy === true;
   }
 
   function anagraficaValid(): boolean {
@@ -204,6 +227,12 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
 
   async function handleConfirm(force = false, allergyConflictOverride = false) {
     if (!draftId) return;
+    // #235: acceptance gate — demographics + therapy must be explicitly accepted.
+    if (!acceptanceComplete()) {
+      setSubmitAttempted(true);
+      setSubmitError('Prima di creare il paziente accetta l’anagrafica e la terapia (vedi checklist).');
+      return;
+    }
     setSubmitting(true);
     setSubmitError(null);
     setDuplicateWarn(false);
@@ -427,6 +456,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
                     busy={submitting}
                     error={allergyConflictWarn ? null : submitError}
                     onConfirm={() => void handleConfirm(false)}
+                    onUpdateSection={updateSection}
                   />
                 </div>
               )}
@@ -435,6 +465,23 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
         </div>
 
         <footer className="import-modal__foot" data-testid="patient-intake-footer">
+          {/* #234: unobtrusive autosave status (accessible, muted; red only on error). */}
+          <span
+            className="import-modal__savestate"
+            role="status"
+            aria-live="polite"
+            data-state={saveState}
+            style={{
+              marginRight: 'auto',
+              alignSelf: 'center',
+              fontSize: '0.8125rem',
+              color: saveState === 'error' ? 'var(--red)' : 'var(--muted, #667085)',
+            }}
+          >
+            {saveState === 'saving' && 'Salvataggio…'}
+            {saveState === 'saved' && 'Salvato'}
+            {saveState === 'error' && 'Errore salvataggio — riprova'}
+          </span>
           {onBackToDocuments ? (
             <button className="btn-ghost" onClick={onBackToDocuments}>← Torna ai documenti</button>
           ) : (
@@ -450,7 +497,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
           <button
             className="btn-primary"
             onClick={handleNext}
-            disabled={loading || !!error || (step === 1 && !anagraficaValid()) || (isLast && submitting)}
+            disabled={loading || !!error || (step === 1 && !anagraficaValid()) || (isLast && (submitting || !acceptanceComplete()))}
           >
             {isLast ? 'Conferma' : 'Avanti →'}
           </button>
