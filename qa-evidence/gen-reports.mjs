@@ -16,6 +16,11 @@ const EVID = {
   '137-agnos-planner-llm': ['#137 Agnos planner LLM', 'Test llm-planner verde con provider fake controllato (mode=llm + fallback deterministico), nessuna credenziale live.'],
   '224-no-secret-frontend-bundle-scan': ['#224 No secret frontend + scansione bundle', 'Scanner: self-test OK, frontend/src 0 findings, secret finto → exit 1. CI scandisce anche il bundle.'],
   '133-ci-browser-e2e-runtime-mock-reachability': ['#133 CI browser-e2e runtime reachability', 'Fix statico verificato: workflow 127.0.0.1 (0 localhost residui), assert /v1/document-jobs, assert creazione, node --check OK.'],
+  '188-creazione-consegne-tramite-chatbot': ['#188 Creazione consegne tramite chatbot', 'Chatbot: plan create_consegna → conferma → execute → consegna persistita (trovata via GET /consegne).'],
+  '189-creazione-diario-tramite-chatbot': ['#189 Creazione diario tramite chatbot', 'Chatbot: plan add_diary_note → conferma obbligatoria → execute ok + recordId Prisma persistito.'],
+  '190-registrazione-parametri-tramite-chatbot': ['#190 Registrazione parametri tramite chatbot', 'Chatbot: plan create_vital_sign → conferma → execute → valore poi visibile via lettura (persistenza).'],
+  '193-rifiuto-delete-tramite-chatbot': ['#193 Rifiuto Delete tramite chatbot', 'Ogni variante delete rifiutata al plan (refuse_forbidden) e all\'execute (HTTP 4xx), nessuna scrittura.'],
+  '194-conferma-obbligatoria-create-update-agnos': ['#194 Conferma obbligatoria per Create/Update Agnos', 'execute confirmed:false → HTTP 428; confirmed:true → ok + recordId. Plan ri-derivato server-side (tamper-proof).'],
 };
 
 function testResultsDir(slug) {

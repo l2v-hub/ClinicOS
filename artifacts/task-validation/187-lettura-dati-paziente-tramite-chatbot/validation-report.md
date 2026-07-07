@@ -1,7 +1,7 @@
 # Validation Report (Evidence Remediation) — #187 Lettura dati paziente tramite chatbot
 
 - Slug: 187-lettura-dati-paziente-tramite-chatbot
-- Date: 2026-07-07T06:35:18.344Z
+- Date: 2026-07-07T07:00:15.234Z
 - Ambiente: stack ClinicOS locale reale (Postgres Podman + backend :3001 + frontend :5173), dati sintetici seed.
 - Harness: @playwright/test (`qa-evidence/`), trace+video+screenshot+HTML report attivi.
 - Governance: Claude produce evidenza; **Codex** verifica e chiude. Claude NON chiude l'issue.
