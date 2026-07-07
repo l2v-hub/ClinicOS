@@ -69,6 +69,12 @@ export function StepClinica({ data, onUpdateSection, operatoreNome, importedFiel
   }
 
   const terapiaImport = Array.isArray(data.terapiaImport) ? (data.terapiaImport as DischargeTherapyRow[]) : [];
+  const manualTerapia = Array.isArray(data.terapia) ? (data.terapia as unknown[]) : [];
+  // #235: therapy is "empty" when neither imported rows nor manual rows exist. The acceptance
+  // label adapts to distinguish "nessuna terapia" from "non ancora revisionata".
+  const therapyEmpty = terapiaImport.length === 0 && manualTerapia.length === 0;
+  const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
+  const therapyAccepted = accepted.therapy === true;
 
   return (
     <>
@@ -80,6 +86,21 @@ export function StepClinica({ data, onUpdateSection, operatoreNome, importedFiel
           />
         </div>
       )}
+      {/* #235: explicit therapy acceptance — required before the patient can be created. */}
+      <div className="step-clinica__section">
+        <label className="step-clinica__accept" data-testid="accept-therapy">
+          <input
+            type="checkbox"
+            checked={therapyAccepted}
+            onChange={(e) => onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })}
+          />
+          <span>
+            {therapyEmpty
+              ? 'Confermo: nessuna terapia da inserire'
+              : 'Confermo di aver revisionato la terapia proposta'}
+          </span>
+        </label>
+      </div>
       {sections.map((def) => {
         const { sectionKey, title, component: Editor } = def;
 
