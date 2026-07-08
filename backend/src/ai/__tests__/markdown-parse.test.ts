@@ -28,6 +28,28 @@ test('parses markdown headings and maps to canonical fields', () => {
   assert.ok(m.has('diagnosisText'));
 });
 
+test('#242 combined "Diagnosi e terapia" heading keeps pharmacological therapy OUT of diagnosis', () => {
+  const doc = `## Diagnosi e terapia alla dimissione
+Scompenso cardiaco congestizio.
+Ipertensione arteriosa.
+Terapia: Ramipril 5 mg 1 cp/die.
+Bisoprololo 2.5 mg.`;
+  const d = parseNarrativeFromMarkdown(doc);
+  // AC2: la terapia farmacologica NON compare nella diagnosi
+  assert.ok(!/ramipril|bisoprololo/i.test(d.diagnosisText), 'diagnosi non deve contenere farmaci');
+  // AC1/AC3: la diagnosi mantiene solo la diagnosi; la terapia va nella sezione terapia
+  assert.ok(/scompenso cardiaco/i.test(d.diagnosisText));
+  assert.ok(/ramipril/i.test(d.therapyText));
+  assert.ok(/bisoprololo/i.test(d.therapyText));
+});
+
+test('#242 inline "Terapia:" label starts a therapy block even after diagnosis lines', () => {
+  const m = parseMarkdownSections('## Diagnosi di dimissione\nScompenso.\nTerapia: Ramipril 5 mg.\nFurosemide 25 mg.');
+  assert.ok(!/ramipril|furosemide/i.test(m.get('diagnosisText')?.text ?? ''));
+  assert.ok(/ramipril/i.test(m.get('therapyText')?.text ?? ''));
+  assert.ok(/furosemide/i.test(m.get('therapyText')?.text ?? ''));
+});
+
 test('anamnesis subtitles merge into ONE block, headings kept', () => {
   const d = parseNarrativeFromMarkdown(ANAMNESI_DOC);
   assert.ok(d.anamnesisText.startsWith('## Anamnesi Patologica Recente:'));

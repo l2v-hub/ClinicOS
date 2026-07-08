@@ -37,9 +37,17 @@ const FIELD_TO_ITALIAN: Record<DraftTextField, string> = {
 const MD_HEADING = /^\s{0,3}#{1,6}\s+(.+?)\s*$/;
 
 /** Identify the canonical field for a heading line, or null if the line is not a section heading. */
+// #242: an inline pharmacological-therapy label (e.g. "Terapia:", "Terapia domiciliare:", "TD:")
+// starts a THERAPY block even mid-content and even when the first drug is on the same line. This
+// prevents a combined "Diagnosi e terapia …" heading from bucketing the whole drug list into DIAGNOSI
+// (diagnosi e terapia farmacologica devono restare separate).
+const THERAPY_LABEL = /^(terapi[ae][^:\n]{0,60}|t\.?d\.?)\s*:/i;
+
 function headingField(line: string): { field: DraftTextField; heading: string } | null {
   const trimmed = line.trim();
   if (!trimmed) return null;
+  const tl = THERAPY_LABEL.exec(trimmed);
+  if (tl) return { field: 'therapyText', heading: tl[1].trim() };
   const md = MD_HEADING.exec(line);
   let headingText: string;
   if (md) {
