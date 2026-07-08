@@ -1,6 +1,64 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import type { CartellaPaziente, EsameClinicoRecord, Paziente } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, ClinicalTableSection, InlineForm, EmptyState } from './shared';
+import { API_URL } from '../../../config';
+
+// #246: photo/scan attachments for exams/RX/consultations. Uses the device camera on mobile
+// (capture="environment") or a file picker on desktop; bytes are stored on PatientDocument.
+type SectionDocMeta = { id: string; originalName: string; mimeType: string; documentType: string; createdAt: string };
+
+function SectionPhotos({ patientId, documentType }: { patientId: string; documentType: string }) {
+  const [docs, setDocs] = useState<SectionDocMeta[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  function reload() {
+    fetch(`${API_URL}/patients/${patientId}/documents`)
+      .then(r => (r.ok ? r.json() : { documents: [] }))
+      .then(d => setDocs((Array.isArray(d.documents) ? d.documents : []).filter((x: SectionDocMeta) => x.documentType === documentType)))
+      .catch(() => { /* none */ });
+  }
+  useEffect(reload, [patientId, documentType]);
+
+  async function onFile(e: ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    e.target.value = '';
+    if (!f) return;
+    setBusy(true); setErr(null);
+    try {
+      const fd = new FormData();
+      fd.append('file', f);
+      fd.append('documentType', documentType);
+      const r = await fetch(`${API_URL}/patients/${patientId}/documents`, { method: 'POST', body: fd });
+      if (!r.ok) throw new Error(String(r.status));
+      reload();
+    } catch { setErr('Caricamento non riuscito'); }
+    finally { setBusy(false); }
+  }
+
+  return (
+    <div className="section-photos" data-testid={`photos-${documentType}`}>
+      <label className={`btn-secondary btn-sm ${busy ? 'is-busy' : ''}`} style={{ cursor: busy ? 'default' : 'pointer' }}>
+        📷 Aggiungi foto/allegato
+        <input type="file" accept="image/*,application/pdf" capture="environment" hidden disabled={busy} onChange={onFile} />
+      </label>
+      {busy && <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--c-muted,#667085)' }}>Caricamento…</span>}
+      {err && <span role="alert" style={{ marginLeft: 8, fontSize: 12, color: 'var(--red,#DC2626)' }}>{err}</span>}
+      {docs.length > 0 && (
+        <ul className="section-photos__list" style={{ listStyle: 'none', padding: 0, margin: '8px 0 0', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {docs.map(d => (
+            <li key={d.id}>
+              <a className="srev-chip" href={`${API_URL}/patients/${patientId}/documents/${d.id}/content`} target="_blank" rel="noreferrer">
+                {d.mimeType.includes('pdf') ? '📄' : '🖼️'} {d.originalName}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 interface Props {
   cartella: CartellaPaziente;
@@ -224,7 +282,7 @@ function EsameSection({
 
 // ── Main tab component ────────────────────────────────────────────────────────
 
-export function EsamiConsulenzeTab({ cartella, onUpdate, operatoreNome }: Props) {
+export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
   return (
     <div className="cr-tab-content">
       <div style={{ marginBottom: 8 }}>
@@ -241,6 +299,7 @@ export function EsamiConsulenzeTab({ cartella, onUpdate, operatoreNome }: Props)
         operatoreNome={operatoreNome}
         onChange={updated => onUpdate({ esamiEmatici: updated })}
       />
+      <SectionPhotos patientId={paziente.id} documentType="esame" />
 
       <div style={{ marginTop: 16 }}>
         <EsameSection
@@ -250,6 +309,7 @@ export function EsamiConsulenzeTab({ cartella, onUpdate, operatoreNome }: Props)
           operatoreNome={operatoreNome}
           onChange={updated => onUpdate({ esamiStrumentali: updated })}
         />
+        <SectionPhotos patientId={paziente.id} documentType="rx" />
       </div>
 
       <div style={{ marginTop: 16 }}>
@@ -260,6 +320,7 @@ export function EsamiConsulenzeTab({ cartella, onUpdate, operatoreNome }: Props)
           operatoreNome={operatoreNome}
           onChange={updated => onUpdate({ consulenze: updated })}
         />
+        <SectionPhotos patientId={paziente.id} documentType="consulenza" />
       </div>
     </div>
   );

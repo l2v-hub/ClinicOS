@@ -6,6 +6,7 @@
 
 import type { Prisma } from '@prisma/client';
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
 
 export interface PublicPatientDocument {
@@ -54,6 +55,40 @@ export async function persistImportDocuments(
     }
   }
   return saved;
+}
+
+/**
+ * #246: attach a photo/scan (or PDF) of an exam / RX / consultation to an EXISTING patient chart.
+ * Bytes are stored in Postgres base64 on PatientDocument (same durable store as imported documents),
+ * tagged with `documentType` (e.g. "esame" | "rx" | "consulenza"). No object storage, no public URL.
+ */
+export async function createPatientDocument(
+  patientId: string,
+  file: { originalname: string; mimetype: string; buffer: Buffer },
+  documentType: string,
+): Promise<PublicPatientDocument> {
+  const patient = await prisma.patient.findUnique({ where: { id: patientId }, select: { id: true } });
+  if (!patient) throw new Error('patient_not_found');
+  const buf = file.buffer;
+  const sha256 = createHash('sha256').update(buf).digest('hex');
+  const agg = await prisma.patientDocument.aggregate({ where: { patientId }, _max: { sortOrder: true } });
+  const row = await prisma.patientDocument.create({
+    data: {
+      patientId,
+      originalName: (file.originalname || 'foto.jpg').slice(0, 200),
+      mimeType: file.mimetype,
+      sizeBytes: buf.length,
+      sha256,
+      dataBase64: buf.toString('base64'),
+      documentType,
+      sortOrder: (agg._max.sortOrder ?? -1) + 1,
+    },
+    select: {
+      id: true, originalName: true, mimeType: true, sizeBytes: true, sha256: true,
+      documentType: true, sortOrder: true, importJobId: true, createdAt: true,
+    },
+  });
+  return { ...row, createdAt: row.createdAt.toISOString() };
 }
 
 /** Document metadata for the patient (never includes the base64 bytes). */
