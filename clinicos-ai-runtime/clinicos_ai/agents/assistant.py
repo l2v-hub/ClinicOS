@@ -8,11 +8,32 @@ from __future__ import annotations
 
 import json
 import logging
+import time
+import uuid
 from typing import Any
 
 from ..models.registry import ModelRegistry
 
 _log = logging.getLogger("clinicos_ai.assistant")
+
+
+async def _run_with_provider_log(built, prompt: str, stage: str, correlation_id: str | None) -> str:
+    """Invoca il provider misurando durata + esito e logga in modo SANITIZZATO (issue #239 #7):
+    provider / deployment / correlationId / durationMs / status. MAI prompt, risposta, PHI o secret."""
+    cid = correlation_id or uuid.uuid4().hex[:16]
+    t0 = time.monotonic()
+    status = "success"
+    try:
+        raw = await built.runner.run(prompt, [])
+        return raw
+    except Exception:
+        status = "failure"
+        raise
+    finally:
+        _log.info(
+            "agnos provider call stage=%s provider=%s deployment=%s correlationId=%s durationMs=%d status=%s",
+            stage, built.spec.provider, built.spec.model_id, cid, int((time.monotonic() - t0) * 1000), status,
+        )
 
 # Marker the mock provider recognizes to return a deterministic empty plan (CI/tests).
 PLAN_MARKER = "ASSISTANT_PLAN_V1"
@@ -118,13 +139,14 @@ def parse_plan_json(raw: str) -> dict[str, Any] | None:
     return None
 
 
-async def run_assistant_plan(registry: ModelRegistry, question: str, tool_schema: list[dict]) -> dict[str, Any]:
+async def run_assistant_plan(registry: ModelRegistry, question: str, tool_schema: list[dict],
+                             correlation_id: str | None = None) -> dict[str, Any]:
     built = registry.build("agent")  # riusa il ruolo 'agent' già configurato
     prompt = (
         f"{_SYSTEM}\n\nTOOL DISPONIBILI:\n{json.dumps(tool_schema, ensure_ascii=False)}\n\n"
         f"DOMANDA:\n{question}\n"
     )
-    raw = await built.runner.run(prompt, [])
+    raw = await _run_with_provider_log(built, prompt, "plan", correlation_id)
     plan = parse_plan_json(raw)
     if plan is None:
         # output non parsabile → piano vuoto sicuro (il backend ricade sul deterministico)
@@ -146,14 +168,15 @@ _COMPOSE_SYSTEM = (
 )
 
 
-async def run_assistant_compose(registry: ModelRegistry, question: str, results: list, sources: list) -> dict[str, Any]:
+async def run_assistant_compose(registry: ModelRegistry, question: str, results: list, sources: list,
+                                correlation_id: str | None = None) -> dict[str, Any]:
     built = registry.build("agent")  # riusa il ruolo 'agent'; i dati clinici vanno solo qui (host EU)
     prompt = (
         f"{_COMPOSE_SYSTEM}\n\nDOMANDA:\n{question}\n\n"
         f"RISULTATI:\n{json.dumps(results, ensure_ascii=False)[:8000]}\n\n"
         f"FONTI (recordId):\n{json.dumps(sources, ensure_ascii=False)[:4000]}\n"
     )
-    raw = await built.runner.run(prompt, [])
+    raw = await _run_with_provider_log(built, prompt, "compose", correlation_id)
     try:
         out = json.loads(_strip_fences(raw))
         return {"answerText": out.get("answerText", ""), "citedSources": out.get("citedSources", []), "model": str(built.spec)}

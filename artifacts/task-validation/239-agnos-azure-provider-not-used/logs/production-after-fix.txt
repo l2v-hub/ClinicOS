@@ -1,0 +1,7 @@
+=== PRODUCTION after fix (deploy 0371072f) ===
+Q='cerca il paziente Rossi'
+  HTTP 200 4502ms model=azure:gpt-5.5 intent=patient_search tools=['search_patients']
+Q='quante camere sono occupate oggi'
+  HTTP 200 7402ms model=azure:gpt-5.5 intent=data_query tools=['query_data']
+Q='Rispondi solo con OK-AZURE'
+  HTTP 200 4097ms model=azure:gpt-5.5 intent=unknown tools=[]

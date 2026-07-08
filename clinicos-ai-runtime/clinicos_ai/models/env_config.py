@@ -196,3 +196,72 @@ def safe_config_summary(env: Mapping[str, str]) -> list[str]:
         else:
             lines.append(f"{name} UNCONFIGURED errors={len(errs)}")
     return lines
+
+
+# Credenziale (env-key) per provider dell'ambito Agnos — SOLO per verificarne la PRESENZA,
+# mai il valore. Duplicato locale (evita import circolare con registry.py).
+_AGNOS_CREDENTIAL_ENV: dict[str, tuple[str, ...]] = {
+    "azure": ("AZURE_OPENAI_API_KEY",),
+    "google": ("GOOGLE_API_KEY", "GEMINI_API_KEY"),
+    "openai": ("OPENAI_API_KEY",),
+    "anthropic": ("ANTHROPIC_API_KEY",),
+    "mistral": ("MISTRAL_API_KEY",),
+    "openai-like": ("OPENAI_LIKE_API_KEY",),
+    "mock": (),
+}
+
+# Reverse degli alias: il provider interno 'azure' si mostra col nome env-facing 'azure-openai'.
+_PROVIDER_DISPLAY = {"azure": "azure-openai"}
+
+
+def _present(env: Mapping[str, str], *keys: str) -> bool:
+    """True se ALMENO una delle env-key è valorizzata. Non ritorna mai il valore."""
+    return any(bool((env.get(k) or "").strip()) for k in keys)
+
+
+def _display_provider(internal: str, env: Mapping[str, str]) -> str:
+    """Nome provider env-facing: eco di AGNOS_LLM_PROVIDER se impostato (es. 'azure-openai'),
+    altrimenti mappa l'interno ('azure'→'azure-openai')."""
+    raw = _get(env, "AGNOS_LLM_PROVIDER")
+    if raw:
+        return raw.strip().lower()
+    return _PROVIDER_DISPLAY.get(internal, internal)
+
+
+def llm_health_summary(env: Mapping[str, str]) -> dict:
+    """Health check LLM interno, SECRET-FREE (issue #239 AC3). Espone SOLO:
+    provider selezionato, deployment/model, se endpoint/api-key sono CONFIGURATI (bool),
+    provider OCR (ambito separato) e uno stato complessivo. Mai chiavi/endpoint/valori.
+    """
+    agnos, a_err = resolve_agnos_llm(env)
+    ocr, _ = resolve_ocr(env)
+    endpoint_configured = _present(env, "AZURE_OPENAI_ENDPOINT")
+
+    if agnos is not None:
+        provider = agnos.model.provider
+        deployment = agnos.model.model_id
+        agnos_provider = _display_provider(provider, env)
+        api_key_configured = _present(env, *_AGNOS_CREDENTIAL_ENV.get(provider, ())) \
+            if _AGNOS_CREDENTIAL_ENV.get(provider) else True
+    else:
+        provider = None
+        deployment = None
+        agnos_provider = _display_provider("", env) if _get(env, "AGNOS_LLM_PROVIDER") else None
+        api_key_configured = _present(env, "AZURE_OPENAI_API_KEY")
+
+    ok = agnos is not None and ocr is not None
+    if provider == "azure":
+        ok = ok and endpoint_configured and api_key_configured
+
+    out: dict = {
+        "agnosProvider": agnos_provider,
+        "deployment": deployment,
+        "endpointConfigured": endpoint_configured,
+        "apiKeyConfigured": api_key_configured,
+        "ocrProvider": ocr.model.provider if ocr is not None else None,
+        "status": "ok" if ok else "error",
+    }
+    if not ok:
+        # messaggi sanitizzati: nominano SOLO quale variabile manca, mai un valore.
+        out["errors"] = a_err
+    return out
