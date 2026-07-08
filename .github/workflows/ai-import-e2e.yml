@@ -87,6 +87,8 @@ jobs:
         run: node node_modules/tsx/dist/cli.mjs e2e/new-vs-existing-smoke.mjs
       - name: Async import E2E (REQ-022, 202 + worker + reclaim + retry)
         run: node node_modules/tsx/dist/cli.mjs e2e/async-smoke.mjs
+      - name: Therapy import E2E (#156, parser -> seed terapiaImport -> confirm -> PatientTherapy)
+        run: node node_modules/tsx/dist/cli.mjs e2e/therapy-import-api.mjs
 
   browser-e2e:
     runs-on: ubuntu-latest
