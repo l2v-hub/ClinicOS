@@ -1,0 +1,10 @@
+# BEFORE (bug riprodotto in produzione) — POST /ai/actions/plan (endpoint usato dal frontend)
+Q: "che terapie assume il paziente"
+→ plan.actionType = "unknown"
+→ ambiguities = ["Comando non riconosciuto"]
+→ read = null          ← la domanda NON raggiunge l'assistente Azure
+Il frontend mostra quindi "⛔ Comando non riconosciuto" per QUALSIASI domanda.
+
+# Causa: voice/plan.ts classifica come 'read' solo con READ_VERB stretto (mostra|cerca|quali|chi…)
+#   o testo che finisce con "?". "che/quante/quando/dove/come…" e domande senza "?" → 'unknown'.
+#   L'orchestratore delegava all'assistente SOLO per actionType==='read'.
