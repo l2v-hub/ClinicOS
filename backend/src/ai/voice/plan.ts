@@ -20,7 +20,10 @@ const DELETE_VERB = /\b(elimin\w*|cancell\w*|rimuov\w*|rimoss\w*|togli\w*|tolg\w
 /** SPEC-015: deletion is only ever possible from the traditional UI — never through Agnos. */
 export const DELETE_REFUSAL_MESSAGE =
   'La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS.';
-const READ_VERB = /\b(mostra|mostrami|apri|cerca|trova|quali|chi|qual e|elenca|fammi vedere|visualizza|leggi)\b/;
+// #239 chatbot: recognise natural Italian questions as reads (only ever checked when there is NO
+// write verb, so broadening cannot hijack a write command). Covers common interrogatives that
+// operators actually type ("che terapie…", "quante camere…", "com'è…", "dove…").
+const READ_VERB = /\b(mostra|mostrami|apri|cerca|trova|elenca|visualizza|leggi|dimmi|fammi vedere|quali|quale|quant\w*|che|cosa|chi|qual e|qual'?e|come|com'?e|quando|dove|perch\w*|c'?e|ci sono)\b/;
 
 // Clinical judgement is refused outright (mirrors the read assistant's refusal set).
 const CLINICAL_REFUSAL = [

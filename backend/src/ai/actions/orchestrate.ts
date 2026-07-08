@@ -118,7 +118,11 @@ export async function planCommand(input: PlanCommandInput, deps: PlanCommandDeps
   const planCtx: VoicePlanContext = { currentPatientId: input.currentPatientId };
   const plan: AgnosPlan = { ...derivePlan(text, planCtx), channel: input.channel };
 
-  if (plan.actionType === 'read') {
+  // #239 chatbot: a read query OR any text that is NOT a recognised write/refusal/appointment command
+  // is delegated to the read-only assistant (Azure-backed planner + SOURCE_ONLY answer). This prevents
+  // a natural question the deterministic verb-matcher didn't catch from dead-ending as
+  // "Comando non riconosciuto"; the assistant itself returns not-found / clinical-refusal as needed.
+  if (plan.actionType === 'read' || plan.actionType === 'unknown') {
     const runRead = deps.runRead ?? defaultRunRead;
     const read = await runRead(plan.readQuery ?? text, input.operatorCtx.gatewayCtx, input.currentPatientId);
     return { plan, preview: null, read };

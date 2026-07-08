@@ -98,6 +98,30 @@ test('planCommand: read question delegates to the assistant (preview null, read 
   assert.match(asked, /parametri/i);
 });
 
+test('#239 planCommand: a natural question without an explicit read verb ("che terapie…") delegates to the assistant', async () => {
+  const answer = { intent: 'therapies', results: [{}], sources: [], navigation: [], notFound: false, truncated: false } as unknown as AssistantAnswer;
+  let asked = '';
+  const r = await planCommand(
+    { text: 'che terapie assume il paziente', channel: 'testo', currentPatientId: PID, operatorCtx },
+    { runRead: async (q) => { asked = q; return answer; } },
+  );
+  assert.ok(r.read, 'la domanda deve raggiungere l’assistente (read popolato), non "Comando non riconosciuto"');
+  assert.equal(r.preview, null);
+  assert.match(asked, /terapie/i);
+});
+
+test('#239 planCommand: non-command text (unknown) falls back to the assistant, never dead-ends as "Comando non riconosciuto"', async () => {
+  const answer = { intent: 'unknown', results: [], sources: [], navigation: [], notFound: true, truncated: false } as unknown as AssistantAnswer;
+  let called = false;
+  const r = await planCommand(
+    { text: 'informazioni sul paziente', channel: 'testo', currentPatientId: PID, operatorCtx },
+    { runRead: async () => { called = true; return answer; } },
+  );
+  assert.ok(called, 'testo non-comando deve essere delegato all’assistente');
+  assert.ok(r.read !== null);
+  assert.equal(r.preview, null);
+});
+
 // ── DELETE: refused at plan AND at execute, on every variant ────────────────
 
 const DELETE_VARIANTS = [
