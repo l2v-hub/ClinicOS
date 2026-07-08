@@ -345,6 +345,10 @@ export interface AllergiaItem {
   note?: string;
 }
 
+// #244: explicit allergy status so an empty list is never ambiguous
+// ('presenti' = list has detail · 'assenti' = verified none · 'paziente_nega' = patient denies).
+export type AllergyStatus = 'presenti' | 'assenti' | 'paziente_nega';
+
 export interface NotaClinica {
   id: string;
   tipo: 'clinica' | 'nursing' | 'dietetica' | 'psicologica' | 'fisioterapia' | 'altra';
@@ -444,6 +448,7 @@ export interface CartellaPaziente {
   terapie: TerapiaItem[];
   farmaci: FarmacoItem[];
   allergie: AllergiaItem[];
+  allergieStatus?: AllergyStatus; // #244: explicit assenti / paziente_nega / presenti
   noteClinica: NotaClinica[];
   visite: VisitaRecord[];
   parametriVitali: VitaleItem[];

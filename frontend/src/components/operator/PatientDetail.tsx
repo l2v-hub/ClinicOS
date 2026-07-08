@@ -660,6 +660,8 @@ export function PatientDetail({
               mode="patient-chart"
               value={cartella.allergie ?? []}
               onChange={list => upd({ allergie: list })}
+              status={cartella.allergieStatus}
+              onStatusChange={s => upd({ allergieStatus: s })}
               operatoreNome={operatoreNome}
             />
           </div>
