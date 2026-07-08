@@ -1,0 +1,283 @@
+{
+  "generatedAt": "2026-07-04T21:32:44.729Z",
+  "backend": "https://clinicos-backend-production-df88.up.railway.app",
+  "cases": [
+    {
+      "case": "agnos_read_allergie",
+      "request": {
+        "text": "mostra le allergie di Ugo Folli"
+      },
+      "http": 200,
+      "response": {
+        "plan": {
+          "actionType": "read",
+          "patientId": null,
+          "targetRecordId": null,
+          "fields": {},
+          "sourceTranscript": "mostra le allergie di Ugo Folli",
+          "ambiguities": [],
+          "requiresConfirmation": false,
+          "idempotencyKey": "8c80834f-5bc9-4e84-bdb1-4434c63ad9cc",
+          "readQuery": "mostra le allergie di Ugo Folli",
+          "channel": "testo"
+        },
+        "preview": null,
+        "read": {
+          "intent": "allergies",
+          "scope": "current_patient",
+          "plan": {
+            "intent": "allergies",
+            "scope": "current_patient",
+            "tools": [
+              {
+                "tool": "get_patient_allergies",
+                "args": {
+                  "patientId": "cmr6iyiyx003101qg6p56b0ig"
+                }
+              }
+            ],
+            "requiresCrossPatientAccess": false
+          },
+          "results": [
+            {
+              "id": "c86f577e-a50f-46bb-93c7-86f1b4b2d773",
+              "gravita": "lieve",
+              "reazione": "gonfiore lingua",
+              "allergene": "crostacei",
+              "documentato": "2026-07-04",
+              "documentatoDa": ""
+            },
+            {
+              "id": "7018a883-f7e8-43d1-994c-6fb01d7a7653",
+              "gravita": "lieve",
+              "reazione": "rusch",
+              "allergene": "paracetamolo",
+              "documentato": "2026-07-04",
+              "documentatoDa": ""
+            }
+          ],
+          "sources": [
+            {
+              "sourceType": "PATIENT_FIELD",
+              "patientId": "cmr6iyiyx003101qg6p56b0ig",
+              "recordId": "cmr6iyiyx003101qg6p56b0ig",
+              "label": "allergie:crostacei",
+              "exactText": "crostacei"
+            },
+            {
+              "sourceType": "PATIENT_FIELD",
+              "patientId": "cmr6iyiyx003101qg6p56b0ig",
+              "recordId": "cmr6iyiyx003101qg6p56b0ig",
+              "label": "allergie:paracetamolo",
+              "exactText": "paracetamolo"
+            }
+          ],
+          "navigation": [
+            {
+              "type": "open_patient",
+              "label": "Apri paziente",
+              "patientId": "cmr6iyiyx003101qg6p56b0ig",
+              "recordId": "cmr6iyiyx003101qg6p56b0ig"
+            }
+          ],
+          "notFound": false,
+          "truncated": false,
+          "mode": "deterministic",
+          "composed": false
+        }
+      }
+    },
+    {
+      "case": "agnos_read_parametri",
+      "request": {
+        "text": "mostra gli ultimi parametri di Ugo Folli"
+      },
+      "http": 200,
+      "response": {
+        "plan": {
+          "actionType": "read",
+          "patientId": null,
+          "targetRecordId": null,
+          "fields": {},
+          "sourceTranscript": "mostra gli ultimi parametri di Ugo Folli",
+          "ambiguities": [],
+          "requiresConfirmation": false,
+          "idempotencyKey": "c4f48034-4fae-4af2-9866-fea793bd347b",
+          "readQuery": "mostra gli ultimi parametri di Ugo Folli",
+          "channel": "testo"
+        },
+        "preview": null,
+        "read": {
+          "intent": "vitals_recent",
+          "scope": "current_patient",
+          "plan": {
+            "intent": "vitals_recent",
+            "scope": "current_patient",
+            "tools": [
+              {
+                "tool": "get_patient_vital_signs",
+                "args": {
+                  "patientId": "cmr6iyiyx003101qg6p56b0ig"
+                }
+              }
+            ],
+            "requiresCrossPatientAccess": false
+          },
+          "results": [],
+          "sources": [],
+          "navigation": [],
+          "notFound": true,
+          "truncated": false,
+          "mode": "deterministic",
+          "composed": false
+        }
+      }
+    },
+    {
+      "case": "agnos_delete_refused",
+      "request": {
+        "text": "cancella la nota del diario"
+      },
+      "http": 200,
+      "response": {
+        "plan": {
+          "actionType": "refuse_forbidden",
+          "patientId": null,
+          "targetRecordId": null,
+          "fields": {},
+          "sourceTranscript": "cancella la nota del diario",
+          "ambiguities": [],
+          "requiresConfirmation": false,
+          "idempotencyKey": "845cc67d-11f4-41f1-9602-e01f6c57a7ab",
+          "refusalReason": "La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS.",
+          "refusalKind": "delete",
+          "channel": "testo"
+        },
+        "preview": {
+          "actionType": "refuse_forbidden",
+          "patientId": null,
+          "title": "Azione non consentita",
+          "lines": [
+            {
+              "label": "Motivo",
+              "value": "La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS."
+            }
+          ],
+          "ambiguities": [],
+          "canExecute": false,
+          "warnings": [],
+          "refusal": "La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS."
+        },
+        "read": null
+      }
+    },
+    {
+      "case": "agnos_delete_refused_voce",
+      "request": {
+        "text": "elimina il parametro delle 9",
+        "channel": "voce"
+      },
+      "http": 200,
+      "response": {
+        "plan": {
+          "actionType": "refuse_forbidden",
+          "patientId": null,
+          "targetRecordId": null,
+          "fields": {},
+          "sourceTranscript": "elimina il parametro delle 9",
+          "ambiguities": [],
+          "requiresConfirmation": false,
+          "idempotencyKey": "47cba98a-645b-43da-aadf-0469a3d19c73",
+          "refusalReason": "La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS.",
+          "refusalKind": "delete",
+          "channel": "voce"
+        },
+        "preview": {
+          "actionType": "refuse_forbidden",
+          "patientId": null,
+          "title": "Azione non consentita",
+          "lines": [
+            {
+              "label": "Motivo",
+              "value": "La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS."
+            }
+          ],
+          "ambiguities": [],
+          "canExecute": false,
+          "warnings": [],
+          "refusal": "La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS."
+        },
+        "read": null
+      }
+    },
+    {
+      "case": "catalog_zero_delete",
+      "http": 200,
+      "response": [
+        {
+          "name": "read",
+          "kind": "read",
+          "entity": "query",
+          "enabled": true,
+          "description": "Interroga i dati clinici esistenti (sola lettura, risposte sempre con fonte)."
+        },
+        {
+          "name": "create_vital_sign",
+          "kind": "create",
+          "entity": "vital_sign",
+          "enabled": true,
+          "description": "Registra un parametro vitale (pressione, temperatura, saturazione…) con orario esplicito."
+        },
+        {
+          "name": "update_patient_demographics",
+          "kind": "update",
+          "entity": "patient",
+          "enabled": true,
+          "description": "Aggiorna un dato anagrafico non clinico (telefono, email, indirizzo, contatto di emergenza)."
+        },
+        {
+          "name": "update_narrative_section",
+          "kind": "update",
+          "entity": "narrative_section",
+          "enabled": true,
+          "description": "Aggiunge testo a una sezione narrativa della cartella (solo append, mai sovrascrittura)."
+        },
+        {
+          "name": "add_diary_note",
+          "kind": "create",
+          "entity": "diary_entry",
+          "enabled": true,
+          "description": "Aggiunge una nota al diario del paziente."
+        },
+        {
+          "name": "create_appointment",
+          "kind": "create",
+          "entity": "appointment",
+          "enabled": true,
+          "description": "Crea un appuntamento in agenda (paziente, data, ora, tipologia) con controllo conflitti slot."
+        },
+        {
+          "name": "update_appointment",
+          "kind": "update",
+          "entity": "appointment",
+          "enabled": true,
+          "description": "Sposta o aggiorna un appuntamento esistente in agenda (nuovo orario) con controllo conflitti slot."
+        },
+        {
+          "name": "create_consegna",
+          "kind": "create",
+          "entity": "consegna",
+          "enabled": true,
+          "description": "Crea una consegna operativa per un paziente (testo libero) con conferma obbligatoria."
+        }
+      ]
+    },
+    {
+      "case": "backend_health",
+      "http": 200,
+      "response": {
+        "status": "ok"
+      }
+    }
+  ]
+}

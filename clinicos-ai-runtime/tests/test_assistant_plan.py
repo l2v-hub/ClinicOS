@@ -84,3 +84,22 @@ class DataQueryPromptTests(unittest.TestCase):
         self.assertIn("data_query", _INTENTS)
         for tok in ("query_data", "roomAssignment", "aggregate", "runIf", "dateWindow"):
             self.assertIn(tok, _SYSTEM, f"token '{tok}' mancante nel prompt DSL")
+
+
+class ProviderInvocationLogTests(unittest.IsolatedAsyncioTestCase):
+    """issue #239 #7: ogni invocazione del provider logga in modo SANITIZZATO."""
+
+    async def test_plan_logs_sanitized_provider_line(self):
+        reg = ModelRegistry()
+        secret_question = "allergie del paziente Mario Rossi CF RSSMRA80"
+        with self.assertLogs("clinicos_ai.assistant", level="INFO") as cm:
+            await run_assistant_plan(reg, secret_question, [], correlation_id="corr-test-123")
+        line = next((m for m in cm.output if "agnos provider call" in m), None)
+        self.assertIsNotNone(line, "manca la riga di log sanitizzata dell'invocazione provider")
+        # campi obbligatori richiesti dall'issue
+        for field in ("provider=", "deployment=", "correlationId=corr-test-123",
+                      "durationMs=", "status=success", "stage=plan"):
+            self.assertIn(field, line, f"campo '{field}' mancante nel log sanitizzato")
+        # MAI la domanda/PHI nel log
+        self.assertNotIn("Mario Rossi", line)
+        self.assertNotIn("RSSMRA80", line)

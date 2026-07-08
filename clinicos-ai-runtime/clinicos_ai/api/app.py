@@ -23,7 +23,7 @@ from fastapi import FastAPI, Header, HTTPException, status
 from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..models.errors import RuntimeError_, ErrorKind
-from ..models.env_config import safe_config_summary
+from ..models.env_config import safe_config_summary, llm_health_summary
 from ..models.providers.base import Attachment
 from ..models.registry import ModelRegistry
 from ..domain.contracts import (
@@ -99,6 +99,14 @@ def health():
 @app.get("/v1/runtime/capabilities")
 def capabilities():
     return _REGISTRY.public_status()
+
+
+# issue #239 AC3: health check LLM interno, SECRET-FREE. Mostra provider/deployment selezionati
+# e se endpoint/api-key sono configurati (bool), separazione OCR, stato. Nessun secret esposto,
+# nessuna auth necessaria (come /v1/runtime/health): non ritorna alcun valore sensibile.
+@app.get("/v1/assistant/llm-health")
+def llm_health():
+    return llm_health_summary(os.environ)
 
 
 # 016 F1: read-planner endpoint. Riceve SOLO la domanda (nessun dato clinico), ritorna un
