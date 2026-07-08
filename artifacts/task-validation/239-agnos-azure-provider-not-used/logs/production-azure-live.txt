@@ -1,0 +1,16 @@
+=== PROD runtime health (roles) ===
+  ocr         mistral:mistral-document-ai-2505 creds=True
+  extraction  mistral:mistral-document-ai-2505 creds=True
+  agent       azure:gpt-5.5              creds=True
+  repair      azure:gpt-5.4-mini         creds=True
+  available=True errors=[]
+=== live /v1/assistant/plan (REAL Azure calls) ===
+  Q='Rispondi solo con OK-AZURE'
+    HTTP 200 durationMs=1210 model=azure:gpt-5.5
+    plan={"intent": "unknown", "scope": "current_patient", "tools": [], "requiresCrossPatientAccess": false}
+  Q='quante camere sono occupate oggi'
+    HTTP 200 durationMs=1194 model=azure:gpt-5.5
+    plan={"intent": "unknown", "scope": "current_patient", "tools": [], "requiresCrossPatientAccess": false}
+  Q='cerca il paziente Rossi'
+    HTTP 200 durationMs=1241 model=azure:gpt-5.5
+    plan={"intent": "unknown", "scope": "current_patient", "tools": [], "requiresCrossPatientAccess": false}

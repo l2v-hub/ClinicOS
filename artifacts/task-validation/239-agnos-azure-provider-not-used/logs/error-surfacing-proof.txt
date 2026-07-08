@@ -1,0 +1,10 @@
+=== issue #239 observability fix: provider errors no longer swallowed ===
+Unit (tests/test_runner.py):
+test_error_status_raises_provider_error (tests.test_runner.RunnerErrorSurfacingTests.test_error_status_raises_provider_error) ... ok
+test_no_status_attr_returns_content (tests.test_runner.RunnerErrorSurfacingTests.test_no_status_attr_returns_content) ... ok
+test_ok_status_returns_content (tests.test_runner.RunnerErrorSurfacingTests.test_ok_status_returns_content) ... ok
+OK
+
+Real Azure 404 (forced broken endpoint) now surfaces end-to-end:
+  RESULT: surfaced kind=provider_error msg=Azure: Resource not found
+  -> app.py maps RuntimeError_ to HTTP 502 + sanitized log status=failure (was: silent empty plan, HTTP 200)

@@ -1,0 +1,25 @@
+E:\Workspace\DG_SE_DEV\ClinicOS\.wt-239\clinicos-ai-runtime\clinicos_ai\domain\contracts.py:33: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+  class CreateJobRequest(BaseModel):
+GET /v1/assistant/llm-health (env sintetico azure-openai) ->
+{
+  "agnosProvider": "azure-openai",
+  "deployment": "gpt-5.4-mini",
+  "endpointConfigured": true,
+  "apiKeyConfigured": true,
+  "ocrProvider": "mistral",
+  "status": "ok"
+}
+
+GET /v1/assistant/llm-health (azure ma endpoint/key MANCANTI) ->
+{
+  "agnosProvider": "azure-openai",
+  "deployment": null,
+  "endpointConfigured": false,
+  "apiKeyConfigured": false,
+  "ocrProvider": "mistral",
+  "status": "error",
+  "errors": [
+    "AZURE_OPENAI_ENDPOINT mancante (richiesto da provider azure-openai)",
+    "AZURE_OPENAI_API_KEY mancante (richiesto da provider azure-openai)"
+  ]
+}
