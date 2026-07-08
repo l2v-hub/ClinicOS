@@ -48,7 +48,7 @@ piano vuoto → runtime 200. Nessun 4xx/5xx visibile all'esterno.
 | AC4 Errore chiaro se env mancante | PASS | health `status:error` + errori che nominano la variabile; test `test_health_missing_azure_env_is_error_no_secret` |
 | AC5 Nessun secret frontend | PASS | test `test_11_no_secret_key_in_frontend` |
 | AC6 OCR separato (Mistral) | PASS | health `ocrProvider:mistral`; `provider-selection-proof.txt` |
-| AC7 Evidence runtime | PARTIAL | test + log + prod verification presenti; Playwright UI da eseguire (evidenza API prod già dimostra AC1/AC2) |
+| AC7 Evidence runtime | PASS | Playwright vs produzione: `screenshots/final-agnos-azure-provider.png`, `test-results/.../trace.zip`, `test-results/.../video.webm`, `playwright-report/index.html`, spec `tests/239.spec.ts` |
 
 ## Files Changed (osservabilità — additivi, non cambiano il fix di config)
 - `clinicos-ai-runtime/clinicos_ai/models/env_config.py` — `llm_health_summary()` secret-free (AC3/AC4).
@@ -66,7 +66,8 @@ piano vuoto → runtime 200. Nessun 4xx/5xx visibile all'esterno.
 | Health shape/secret-free (AC3/AC5) | PASS | `logs/health-endpoint-proof.txt` |
 | Sanitized log (#7) | PASS | test `ProviderInvocationLogTests` |
 | Production E2E post-fix (AC2) | PASS | `logs/production-after-fix.txt` |
-| Playwright UI (AC7) | PENDING | richiede stack completo; evidenza API prod già presente |
+| Provider error surfacing (#7/obs) | PASS | `logs/error-surfacing-proof.txt`; `tests/test_runner.py` |
+| Playwright vs produzione (AC7) | PASS | screenshot + trace.zip + video.webm + playwright-report/ |
 
 ## Runtime Evidence (produzione, dopo fix)
 ```
