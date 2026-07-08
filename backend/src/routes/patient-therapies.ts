@@ -89,7 +89,7 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
       'fasceSera', 'fasceNotte', 'orarioSpecifico', 'prescrittore',
       'operatoreInseritore', 'note', 'dataSomministrazione', 'orarioSomministrazione',
       'commercialStrengthValue', 'commercialStrengthUnit', 'pharmaceuticalForm',
-      'allowedFractions', 'drugPackageRef',
+      'allowedFractions', 'drugPackageRef', 'giorniSettimana',
     ];
 
     const updates: Record<string, unknown> = {};

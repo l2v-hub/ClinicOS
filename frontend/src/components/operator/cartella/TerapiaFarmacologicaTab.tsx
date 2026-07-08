@@ -98,6 +98,7 @@ function therapyToForm(t: PatientTherapyAPI): TherapyForm {
     dataInizio: t.dataInizio,
     dataFine: t.dataFine ?? '',
     schedules: schedulesFromTherapy(t),
+    giorniSettimana: t.giorniSettimana ? t.giorniSettimana.split(',').map(Number).filter(n => n >= 1 && n <= 7) : [],
     prescrittore: t.prescrittore ?? '',
     note: t.note ?? '',
     dataSomministrazione: t.dataSomministrazione ?? todayStr(),
@@ -132,6 +133,7 @@ function formToPayload(form: TherapyForm, patientId: string, operatoreNome: stri
     commercialStrengthUnit: form.commercialStrengthUnit || null,
     pharmaceuticalForm: form.pharmaceuticalForm || null,
     allowedFractions: allowed.length ? allowed.join(',') : '1',
+    giorniSettimana: form.tipo === 'periodica' && form.giorniSettimana.length ? form.giorniSettimana.join(',') : null,
     schedules,
     prescrittore: form.prescrittore || null,
     operatoreInseritore: operatoreNome,
@@ -178,6 +180,13 @@ function ScheduleSummary({ t }: { t: PatientTherapyAPI }) {
           </span>
         );
       })}
+      {t.giorniSettimana && t.giorniSettimana.trim() && (
+        <span className="sched-pill sched-pill--days" title="Giorni della settimana" data-testid="therapy-days-summary">
+          {t.giorniSettimana.split(',')
+            .map(n => ['', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'][Number(n.trim())])
+            .filter(Boolean).join(' ')}
+        </span>
+      )}
     </div>
   );
 }

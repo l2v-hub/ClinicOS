@@ -264,6 +264,9 @@ model PatientTherapy {
   pharmaceuticalForm      String? // e.g. "compressa" | "capsula" | "fiala" | "flacone" | "bustina"
   allowedFractions        String? // configurable allowed fractions, comma list e.g. "1,1/2,1/4". Null/"1" = whole only (not divisible)
   drugPackageRef          String? // optional reference id to the drug/package in a formulary
+  // #241: intermittent weekday posology. Comma list of ISO weekday numbers (Mon=1 … Sun=7);
+  // NULL/empty = every day (preserves prior behavior, fully backward-compatible).
+  giorniSettimana         String?
   schedules               TherapySchedule[]
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
