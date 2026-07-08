@@ -18,6 +18,17 @@ const STEPS = [
   'Verifica',
 ] as const;
 
+// #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
+// dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
+const CLINICAL_MODULES: ReadonlyArray<{ id: string; label: string; desc: string; available: boolean }> = [
+  { id: 'medicazioni', label: 'Medicazioni / Wound Care', desc: 'Registro medicazioni e lesioni', available: true },
+  { id: 'contenzioni', label: 'Contenzioni / Protezioni', desc: 'Registrazione contenzioni e consenso', available: true },
+  { id: 'braden', label: 'Scala Braden', desc: 'Rischio lesioni da pressione', available: true },
+  { id: 'tinetti', label: 'Scala Tinetti', desc: 'Equilibrio e andatura', available: true },
+  { id: 'nrs', label: 'Scala NRS', desc: 'Valutazione del dolore', available: true },
+  { id: 'dimissione', label: 'Dimissione', desc: 'Modulo di dimissione', available: true },
+];
+
 interface AnagraficaData {
   firstName?: string;
   lastName?: string;
@@ -413,7 +424,22 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
               )}
               {step === 4 && (
                 <div data-testid="intake-step-4" data-draft-id={draftId ?? undefined}>
-                  <p className="cr-empty">Moduli configurabili — in arrivo.</p>
+                  <p className="cr-empty" style={{ marginBottom: 12 }}>
+                    Moduli operativi disponibili nella sezione <strong>Moduli</strong> della scheda paziente dopo la presa in carico.
+                  </p>
+                  <div className="intake-modules-grid" role="list" data-testid="intake-modules-grid">
+                    {CLINICAL_MODULES.map((m) => (
+                      <div key={m.id} className="intake-module-card" role="listitem" data-testid={`intake-module-${m.id}`}>
+                        <div className="intake-module-card__head">
+                          <span className="intake-module-card__title">{m.label}</span>
+                          <span className={`status-badge status-badge--${m.available ? 'success' : 'neutral'}`}>
+                            {m.available ? 'Disponibile' : 'In arrivo'}
+                          </span>
+                        </div>
+                        <p className="intake-module-card__desc">{m.desc}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
               {step === 5 && (

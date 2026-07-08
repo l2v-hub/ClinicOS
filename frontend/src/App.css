@@ -3960,6 +3960,28 @@ textarea.form-input {
 .status-badge--info    { color: var(--c-info);    background: var(--c-primary-bg); }
 .status-badge--neutral { color: var(--c-neutral); background: var(--c-neutral-bg); }
 
+/* #243: intake "Moduli" step — grid of operational modules with status */
+.intake-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.intake-module-card {
+  border: 1px solid var(--c-border, #D0D5DD);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fff;
+}
+.intake-module-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.intake-module-card__title { font-weight: 600; color: var(--c-text, #101828); }
+.intake-module-card__desc { margin: 0; font-size: 13px; color: var(--c-muted, #667085); }
+
 /* Full-width content (problems #6/#7): remove narrow centered caps on
    priority pages so content fills the desktop. Gutter comes from the
    content padding; wide tables scroll inside their own container. */

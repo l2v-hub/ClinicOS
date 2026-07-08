@@ -1,0 +1,2 @@
+cd frontend && npm run build  →  tsc -b && vite build
+✓ built in 22.76s  (typecheck + bundle OK, nessun errore)
