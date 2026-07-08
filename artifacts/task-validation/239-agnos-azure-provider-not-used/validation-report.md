@@ -79,11 +79,12 @@ Q="Rispondi solo con OK-AZURE"       HTTP 200  azure:gpt-5.5  intent=unknown (co
 Solo log sanitizzati. Nessuna chiave/endpoint-host completo/PHI in questo bundle.
 
 ## Residual Risks / Recommendations
-- **Osservabilità (in scope)**: il runtime NON deve ingoiare gli errori provider — un 4xx/5xx Azure
-  dovrebbe emergere come `RuntimeError_(PROVIDER_ERROR)` → HTTP 502 + log `status=failure`, invece di
-  degradare a piano vuoto. Attualmente Agno cattura l'errore e lo restituisce come contenuto; una
-  hardening dedicata (rilevare la risposta d'errore) è consigliata ma richiede attenzione alla
-  versione di Agno (non forzata qui per non introdurre regressioni).
+- **Osservabilità (in scope) — IMPLEMENTATO**: il runner condiviso (`providers/_common.py`) ora rileva
+  `RunOutput.status == ERROR` (Agno cattura gli errori provider in una risposta invece di sollevarli)
+  ed emerge un `RuntimeError_(PROVIDER_ERROR)` → HTTP 502 + log `status=failure`. Una futura misconfig
+  Azure NON degrada più silenziosamente a piano vuoto. Verificato con 404 Azure reale
+  (`logs/error-surfacing-proof.txt`) + 3 test (`tests/test_runner.py`). Nessuna regressione sul path
+  felice (status != ERROR → comportamento invariato; il mock/risposte senza `status` restano invariati).
 - `AI_AGENT_MODEL=gpt-5.4-mini` (bare) resta sul servizio come legacy: ignorato quando
   `AGNOS_LLM_PROVIDER` è impostato; consigliabile rimuoverlo per chiarezza.
 
