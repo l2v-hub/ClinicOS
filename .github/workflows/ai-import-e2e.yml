@@ -46,7 +46,7 @@ jobs:
       # The backend no longer extracts in-process: it delegates to the clinicos-ai-runtime
       # service (started below) over HTTP. For the deterministic gate we run that runtime
       # with the mock provider on every role, so the E2E flow is real but offline.
-      AI_RUNTIME_URL: http://localhost:8000
+      AI_RUNTIME_URL: http://127.0.0.1:8000
       AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
       AI_OCR_MODEL: mock:mock
       AI_EXTRACTION_MODEL: mock:mock
@@ -73,7 +73,7 @@ jobs:
         run: |
           PORT=8000 python -m clinicos_ai.main > /tmp/ai-runtime.log 2>&1 &
           for i in $(seq 1 30); do
-            if curl -sf http://localhost:8000/v1/runtime/health > /dev/null; then
+            if curl -sf http://127.0.0.1:8000/v1/runtime/health > /dev/null; then
               echo "AI runtime healthy"; exit 0
             fi
             sleep 1
@@ -87,6 +87,8 @@ jobs:
         run: node node_modules/tsx/dist/cli.mjs e2e/new-vs-existing-smoke.mjs
       - name: Async import E2E (REQ-022, 202 + worker + reclaim + retry)
         run: node node_modules/tsx/dist/cli.mjs e2e/async-smoke.mjs
+      - name: Therapy import E2E (#156, parser -> seed terapiaImport -> confirm -> PatientTherapy)
+        run: node node_modules/tsx/dist/cli.mjs e2e/therapy-import-api.mjs
 
   browser-e2e:
     runs-on: ubuntu-latest
@@ -110,7 +112,7 @@ jobs:
       NODE_OPTIONS: --max-old-space-size=4096
       # Backend delegates extraction to the clinicos-ai-runtime service (started below with
       # the mock provider) — same wiring as the gate job. Runtime is on :8000, backend on :3001.
-      AI_RUNTIME_URL: http://localhost:8000
+      AI_RUNTIME_URL: http://127.0.0.1:8000
       AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
       AI_OCR_MODEL: mock:mock
       AI_EXTRACTION_MODEL: mock:mock
@@ -136,12 +138,24 @@ jobs:
         # into the browser step (a runtime started in a prior step can be reaped on step exit).
         run: |
           ( cd clinicos-ai-runtime && PORT=8000 python -m clinicos_ai.main > /tmp/ai-runtime.log 2>&1 & )
-          for i in $(seq 1 30); do curl -sf http://localhost:8000/v1/runtime/health > /dev/null && { echo "AI runtime healthy"; break; }; sleep 1; done
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8000/v1/runtime/health > /dev/null && { echo "AI runtime healthy"; break; }; sleep 1; done
           node backend/dist/server.js > /tmp/backend.log 2>&1 &
           npm --prefix frontend run preview -- --port 5173 --host > /tmp/frontend.log 2>&1 &
           npx --yes wait-on http://localhost:3001/health http://localhost:5173 || sleep 10
       - name: Browser happy-path screenshots
         run: mkdir -p artifacts && node e2e/import-happy-path.mjs artifacts
+      - name: Assert AI runtime mock received a document-job call
+        # #133 AC2: prove the backend actually reached the mock runtime (not just the health check).
+        # The runtime binds 0.0.0.0 (IPv4); the backend now connects via 127.0.0.1 to avoid Node's
+        # localhost -> ::1 resolution. uvicorn logs each request, so a document-jobs line must appear.
+        run: |
+          echo "===== AI runtime access log ====="; cat /tmp/ai-runtime.log || true
+          if grep -qE "/v1/document-jobs" /tmp/ai-runtime.log; then
+            echo "OK: mock runtime received a document-job request"
+          else
+            echo "::error::runtime mock never received a document-job call — backend could not reach it (only health checks seen)"
+            exit 1
+          fi
       - name: Dump server logs on failure
         if: failure()
         run: |

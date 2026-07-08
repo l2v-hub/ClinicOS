@@ -1,9 +1,10 @@
 """Env-driven model config — separazione Agnos LLM / OCR / Extraction (test obbligatori)."""
+import json
 import pathlib
 import unittest
 from clinicos_ai.models.env_config import (
     resolve_agnos_llm, resolve_ocr, resolve_extraction, resolve_repair, normalize_provider,
-    safe_config_summary,
+    safe_config_summary, llm_health_summary,
 )
 
 
@@ -172,6 +173,59 @@ class SecretSafetyTests(unittest.TestCase):
                 if token in text:
                     hits.append(f"{p.name}:{token}")
         self.assertEqual(hits, [], f"secret di provider referenziati nel frontend: {hits}")
+
+
+class LlmHealthTests(unittest.TestCase):
+    """issue #239 AC3: health check LLM interno, shape esatto e SECRET-FREE."""
+
+    SECRET_KEY = "sk-super-secret-value-123"
+    SECRET_ENDPOINT = "https://tenant-private.openai.azure.com"
+    AZURE_ENV = {
+        "AGNOS_LLM_PROVIDER": "azure-openai", "AGNOS_LLM_MODEL": "gpt-5.4-mini",
+        "AZURE_OPENAI_ENDPOINT": SECRET_ENDPOINT, "AZURE_OPENAI_API_KEY": SECRET_KEY,
+        "AI_OCR_MODEL": "mistral-document-ai-2505", "MISTRAL_API_KEY": "mk-secret-456",
+        "AI_EXTRACTION_MODEL": "mistral-document-ai-2505",
+    }
+
+    def test_health_shape_azure_ok(self):
+        h = llm_health_summary(self.AZURE_ENV)
+        self.assertEqual(h["agnosProvider"], "azure-openai")
+        self.assertEqual(h["deployment"], "gpt-5.4-mini")
+        self.assertIs(h["endpointConfigured"], True)
+        self.assertIs(h["apiKeyConfigured"], True)
+        self.assertEqual(h["ocrProvider"], "mistral")   # AC6: OCR resta separato/mistral
+        self.assertEqual(h["status"], "ok")
+        self.assertNotIn("errors", h)
+        # shape esatto richiesto dall'issue
+        self.assertEqual(set(h), {"agnosProvider", "deployment", "endpointConfigured",
+                                  "apiKeyConfigured", "ocrProvider", "status"})
+
+    def test_health_never_exposes_secret(self):
+        blob = json.dumps(llm_health_summary(self.AZURE_ENV))
+        self.assertNotIn(self.SECRET_KEY, blob)
+        self.assertNotIn(self.SECRET_ENDPOINT, blob)
+        self.assertNotIn("mk-secret-456", blob)
+
+    def test_health_missing_azure_env_is_error_no_secret(self):
+        # AC4: manca endpoint+key → status error + errori sanitizzati che NOMINANO la variabile
+        env = {"AGNOS_LLM_PROVIDER": "azure-openai", "AGNOS_LLM_MODEL": "gpt-5.4-mini",
+               "AI_OCR_MODEL": "mistral-ocr"}
+        h = llm_health_summary(env)
+        self.assertEqual(h["status"], "error")
+        self.assertIs(h["endpointConfigured"], False)
+        self.assertIs(h["apiKeyConfigured"], False)
+        joined = " ".join(h.get("errors", []))
+        self.assertIn("AZURE_OPENAI_ENDPOINT", joined)
+        self.assertIn("AZURE_OPENAI_API_KEY", joined)
+
+    def test_health_legacy_provider_shown(self):
+        # senza AGNOS_LLM_PROVIDER, fallback legacy AI_AGENT_MODEL → provider mostrato dall'interno
+        env = {"AI_AGENT_MODEL": "google:gemini-2.0-flash", "AI_OCR_MODEL": "mistral-ocr"}
+        h = llm_health_summary(env)
+        self.assertEqual(h["agnosProvider"], "google")
+        self.assertEqual(h["deployment"], "gemini-2.0-flash")
+        self.assertEqual(h["ocrProvider"], "mistral")
+        self.assertEqual(h["status"], "ok")
 
 
 if __name__ == "__main__":

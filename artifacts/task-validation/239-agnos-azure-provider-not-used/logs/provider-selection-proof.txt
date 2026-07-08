@@ -1,0 +1,15 @@
+=== AC1: AGNOS_LLM_PROVIDER=azure-openai (legacy AI_AGENT_MODEL=google:gemini also set) ===
+  role agent      -> azure:gpt-5.4-mini
+  role ocr        -> mistral:mistral-ocr-latest
+  role extraction -> mistral:mistral-doc
+  ASSERT agent==azure:gpt-5.4-mini      : True
+  ASSERT agent NOT google (no fallback) : True
+  ASSERT ocr stays mistral (AC6)        : True
+=== legacy fallback: AGNOS_LLM_PROVIDER unset -> AI_AGENT_MODEL ===
+  agnos model -> google:gemini-2.0-flash source= legacy
+=== AC4: azure-openai missing AZURE_OPENAI_* -> clear error, no secret ===
+  config -> None  errors -> ['AZURE_OPENAI_ENDPOINT mancante (richiesto da provider azure-openai)', 'AZURE_OPENAI_API_KEY mancante (richiesto da provider azure-openai)']
+=== safe_config_summary (log-safe, NO secret) ===
+  agnos_llm provider=azure model=gpt-5.4-mini source=env
+  ocr provider=mistral model=mistral-ocr-latest source=env
+  extraction provider=mistral model=mistral-doc source=env

@@ -1,0 +1,54 @@
+test_1_reads_agnos_llm_provider (tests.test_env_config.AgnosLlmTests.test_1_reads_agnos_llm_provider) ... ok
+test_2_reads_agnos_llm_model (tests.test_env_config.AgnosLlmTests.test_2_reads_agnos_llm_model) ... ok
+test_3_azure_only_when_provider_azure_openai (tests.test_env_config.AgnosLlmTests.test_3_azure_only_when_provider_azure_openai) ... ok
+test_3b_azure_missing_endpoint_is_clear_error (tests.test_env_config.AgnosLlmTests.test_3b_azure_missing_endpoint_is_clear_error) ... ok
+test_8_legacy_agent_model_only_as_fallback (tests.test_env_config.AgnosLlmTests.test_8_legacy_agent_model_only_as_fallback) ... ok
+test_9_missing_required_gives_clear_error (tests.test_env_config.AgnosLlmTests.test_9_missing_required_gives_clear_error) ... ok
+test_5_extraction_uses_ai_extraction_model_not_agnos (tests.test_env_config.ExtractionTests.test_5_extraction_uses_ai_extraction_model_not_agnos) ... ok
+test_6_mistral_separate_from_agnos (tests.test_env_config.ExtractionTests.test_6_mistral_separate_from_agnos) ... ok
+test_extraction_default_provider_mistral (tests.test_env_config.ExtractionTests.test_extraction_default_provider_mistral) ... ok
+test_health_legacy_provider_shown (tests.test_env_config.LlmHealthTests.test_health_legacy_provider_shown) ... ok
+test_health_missing_azure_env_is_error_no_secret (tests.test_env_config.LlmHealthTests.test_health_missing_azure_env_is_error_no_secret) ... ok
+test_health_never_exposes_secret (tests.test_env_config.LlmHealthTests.test_health_never_exposes_secret) ... ok
+test_health_shape_azure_ok (tests.test_env_config.LlmHealthTests.test_health_shape_azure_ok) ... ok
+test_4_ocr_uses_ai_ocr_model_not_agnos (tests.test_env_config.OcrTests.test_4_ocr_uses_ai_ocr_model_not_agnos) ... ok
+test_7_azure_separate_from_ocr (tests.test_env_config.OcrTests.test_7_azure_separate_from_ocr) ... ok
+test_ocr_default_provider_mistral (tests.test_env_config.OcrTests.test_ocr_default_provider_mistral) ... ok
+test_ocr_legacy_provider_colon_model (tests.test_env_config.OcrTests.test_ocr_legacy_provider_colon_model) ... ok
+test_normalize_azure_openai (tests.test_env_config.ProviderAliasTests.test_normalize_azure_openai) ... ok
+test_repair_bare_model_rides_agnos_provider (tests.test_env_config.RepairTests.test_repair_bare_model_rides_agnos_provider) ... ok
+test_repair_explicit_provider_model_kept (tests.test_env_config.RepairTests.test_repair_explicit_provider_model_kept) ... ok
+test_repair_missing_inherits_agnos (tests.test_env_config.RepairTests.test_repair_missing_inherits_agnos) ... ok
+test_10_no_secret_in_config_log (tests.test_env_config.SecretSafetyTests.test_10_no_secret_in_config_log) ... ok
+test_11_no_secret_key_in_frontend (tests.test_env_config.SecretSafetyTests.test_11_no_secret_key_in_frontend) ... ok
+test_met_capability_ok (tests.test_registry.CapabilityTests.test_met_capability_ok) ... ok
+test_unmet_capability_raises (tests.test_registry.CapabilityTests.test_unmet_capability_raises) ... ok
+test_all_roles_available (tests.test_registry.ConfigTests.test_all_roles_available) ... ok
+test_change_provider_via_env_only (tests.test_registry.ConfigTests.test_change_provider_via_env_only) ... ok
+test_fallback_both_spellings (tests.test_registry.ConfigTests.test_fallback_both_spellings) ... ok
+test_missing_role_model_is_error (tests.test_registry.ConfigTests.test_missing_role_model_is_error) ... ok
+test_temperature_and_timeout_per_role_and_global (tests.test_registry.ConfigTests.test_temperature_and_timeout_per_role_and_global) ... ok
+test_credentials_check (tests.test_registry.RegistryTests.test_credentials_check) ... ok
+test_public_status_has_no_secrets (tests.test_registry.RegistryTests.test_public_status_has_no_secrets) ... ok
+test_resolve_primary_then_fallback (tests.test_registry.RegistryTests.test_resolve_primary_then_fallback) ... ok
+test_usable_specs_filters_by_credentials (tests.test_registry.RegistryTests.test_usable_specs_filters_by_credentials) ... ok
+test_parse_openai_like (tests.test_registry.SpecTests.test_parse_openai_like) ... ok
+test_parse_rejects_empty (tests.test_registry.SpecTests.test_parse_rejects_empty) ... ok
+test_parse_rejects_unknown_provider (tests.test_registry.SpecTests.test_parse_rejects_unknown_provider) ... ok
+test_parse_requires_colon (tests.test_registry.SpecTests.test_parse_requires_colon) ... ok
+test_parse_valid (tests.test_registry.SpecTests.test_parse_valid) ... ok
+test_mock_compose_returns_unfounded_empty (tests.test_assistant_plan.AssistantComposeTests.test_mock_compose_returns_unfounded_empty) ... ok
+test_mock_recognizes_plan_marker (tests.test_assistant_plan.AssistantPlanTests.test_mock_recognizes_plan_marker) ... ok
+test_returns_valid_empty_plan_with_mock (tests.test_assistant_plan.AssistantPlanTests.test_returns_valid_empty_plan_with_mock) ... ok
+test_prompt_teaches_query_data_dsl (tests.test_assistant_plan.DataQueryPromptTests.test_prompt_teaches_query_data_dsl) ... ok
+test_fenced_json (tests.test_assistant_plan.ParsePlanJsonTests.test_fenced_json) ... ok
+test_prose_wrapped_json (tests.test_assistant_plan.ParsePlanJsonTests.test_prose_wrapped_json) ... ok
+test_pure_json (tests.test_assistant_plan.ParsePlanJsonTests.test_pure_json) ... ok
+test_unparsable_returns_none (tests.test_assistant_plan.ParsePlanJsonTests.test_unparsable_returns_none) ... ok
+test_plan_logs_sanitized_provider_line (tests.test_assistant_plan.ProviderInvocationLogTests.test_plan_logs_sanitized_provider_line) ... ok
+test_prompt_enumerates_backend_intents (tests.test_assistant_plan.SystemPromptContractTests.test_prompt_enumerates_backend_intents) ... ok
+
+----------------------------------------------------------------------
+Ran 49 tests in 0.051s
+
+OK
