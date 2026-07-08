@@ -25,7 +25,6 @@ import PatientCompactHeader from './PatientCompactHeader';
 import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
-import { AnamnesisEditor } from './sections/AnamnesisEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
 import { VitalSignsEditor } from './sections/VitalSignsEditor';
@@ -34,7 +33,7 @@ import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 type TabId =
-  | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
+  | 'riepilogo' | 'profilo' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario' | 'sezioni-narrative'
   | 'medicazioni' | 'contenzioni' | 'braden' | 'tinetti' | 'nrs' | 'dimissione'
@@ -62,7 +61,6 @@ const TAB_GROUPS: TabGroupDef[] = [
     tabs: [
       { id: 'presa-in-carico', label: 'Presa in Carico' },
       { id: 'sezioni-narrative', label: 'Sezioni Cliniche (testo)' },
-      { id: 'anamnesi',        label: 'Anamnesi' },
       { id: 'diagnosi',        label: 'Diagnosi' },
       { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
       { id: 'parametri',       label: 'Parametri Vitali' },
@@ -1478,7 +1476,6 @@ export function PatientDetail({
         <div ref={contentRef} className="cr-detail-content tab-panel-transition">
           {tab === 'riepilogo'       && renderRiepilogo()}
           {tab === 'profilo'         && renderProfilo()}
-          {tab === 'anamnesi'        && <AnamnesisEditor mode="patient-chart" value={(cartella.anamnesi ?? {}) as unknown as Record<string, unknown>} onChange={a => upd({ anamnesi: a as unknown as typeof cartella.anamnesi })} operatoreNome={operatoreNome} allergie={cartella.allergie ?? []} />}
           {tab === 'diagnosi'        && renderDiagnosi()}
           {tab === 'terapia-farmacologica' && (
             <TherapyEditor mode="patient-chart" paziente={paziente} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />
