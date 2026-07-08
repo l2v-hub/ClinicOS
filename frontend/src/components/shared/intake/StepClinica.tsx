@@ -6,6 +6,8 @@ import { useState, type ComponentType } from 'react';
 import type { SectionProps } from '../../operator/sections/types';
 import type { AllergiaItem } from '../../../types';
 import { intakeSections } from '../../operator/sections/patientSections';
+import { DischargeTherapyReview } from './DischargeTherapyReview';
+import type { DischargeTherapyRow } from './dischargeTherapy';
 
 // Maps lowercase intake section keys to the Italian uppercase keys used in sourceReferences.
 const SECTION_KEY_TO_ITALIAN: Record<string, string> = {
@@ -66,8 +68,39 @@ export function StepClinica({ data, onUpdateSection, operatoreNome, importedFiel
     return sourceRefs.filter((r) => r.sectionKey === italianKey);
   }
 
+  const terapiaImport = Array.isArray(data.terapiaImport) ? (data.terapiaImport as DischargeTherapyRow[]) : [];
+  const manualTerapia = Array.isArray(data.terapia) ? (data.terapia as unknown[]) : [];
+  // #235: therapy is "empty" when neither imported rows nor manual rows exist. The acceptance
+  // label adapts to distinguish "nessuna terapia" from "non ancora revisionata".
+  const therapyEmpty = terapiaImport.length === 0 && manualTerapia.length === 0;
+  const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
+  const therapyAccepted = accepted.therapy === true;
+
   return (
     <>
+      {terapiaImport.length > 0 && (
+        <div className="step-clinica__section">
+          <DischargeTherapyReview
+            rows={terapiaImport}
+            onChange={(v) => onUpdateSection('terapiaImport', v)}
+          />
+        </div>
+      )}
+      {/* #235: explicit therapy acceptance — required before the patient can be created. */}
+      <div className="step-clinica__section">
+        <label className="step-clinica__accept" data-testid="accept-therapy">
+          <input
+            type="checkbox"
+            checked={therapyAccepted}
+            onChange={(e) => onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })}
+          />
+          <span>
+            {therapyEmpty
+              ? 'Confermo: nessuna terapia da inserire'
+              : 'Confermo di aver revisionato la terapia proposta'}
+          </span>
+        </label>
+      </div>
       {sections.map((def) => {
         const { sectionKey, title, component: Editor } = def;
 

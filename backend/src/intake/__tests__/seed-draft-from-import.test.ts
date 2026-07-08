@@ -194,3 +194,23 @@ test('buildImportDraftData: concise multi-allergen text → one row per allergen
   assert.equal(al[0].allergene, 'Penicillina');
   assert.equal(al[1].allergene, 'Lattice');
 });
+
+
+// ── #156: discharge therapy text -> structured therapy rows (one per drug) ────
+test('buildImportDraftData: therapyText parsed into structured terapia rows (one per drug)', () => {
+  const therapyText =
+    'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00 e alle 20:00 dal 03/07/2026 (Classe A)' +
+    String.fromCharCode(10) +
+    'PEVARYL POLVERE INGUINE SN X 1 AL DI';
+  const nar = { ...NARRATIVE, therapyText };
+  const data = buildImportDraftData(nar, null);
+  const ter = data.terapiaImport as Array<Record<string, unknown>>;
+  assert.ok(Array.isArray(ter) && ter.length === 2, 'terapiaImport has one row per drug line');
+  assert.equal(ter[0].farmacoNome, 'KEPPRA');
+  assert.deepEqual(ter[0].orari, ['08:00', '20:00']);
+  assert.equal(ter[1].farmacoNome, 'PEVARYL');
+  assert.equal(ter[1].stato, 'da_verificare');
+  assert.equal(data._terapiaText, therapyText);
+  assert.ok((data._importedFields as string[]).includes('terapiaImport'));
+  assert.equal(data.terapia, undefined); // must NOT collide with the manual TherapyFormValue editor
+});
