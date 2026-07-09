@@ -1,45 +1,23 @@
-# Task Validation Report
+# Validation report — Issue #225 (Preparazione futuro backend Azure)
 
-## Task
-- Title: 225 Azure backend config principles
-- Slug: 225-azure-backend-config-principles
-- Commit:
-- Date: 2026-07-08
+**Final Decision: READY FOR CODEX QA**
 
-## Implementation Summary
+Tipo: **docs-only** (PR #251). Nessun codice runtime, schema, API, frontend o migration toccati. Deliverable: `docs/azure-backend-config-principles.md` (85 righe).
 
-## Files Changed
+## Esito acceptance criteria
 
-## Acceptance Criteria Result
+| AC | Esito | Evidenza |
+|----|-------|----------|
+| AC1 — modello env/secret documentato | ✅ § "1. Env / secret model (AC1)" (vars per dominio: AGNOS_LLM_*, AZURE_OPENAI_*, AI_OCR_*, AI_EXTRACTION_*; custodia segreti Railway→Key Vault) |
+| AC2 — dipendenze provider swappabili | ✅ § "2. Provider dependencies remain swappable (AC2)" (adapter env-driven) |
+| AC3 — nessun deploy in produzione | ✅ § "4. Future Azure migration checklist (no action now — AC3)"; **nessun deploy eseguito** |
+| Coerenza / no regressione | ✅ docs-only → build/type/lint invariati (nessun file di codice modificato) |
 
-| AC | Result | Evidence |
-|---|---:|---|
-| AC1 | FAIL | |
-| AC2 | FAIL | |
-| AC3 | FAIL | |
+## Evidenza
+- `screenshots/azure-principles-doc.png` — render del documento con le sezioni AC1/AC2/AC3 visibili.
+- Playwright non richiesto (issue esplicita: no UI/Agnos). L'evidenza applicabile per una issue docs-only è: documento presente e coerente + nessuna regressione (nulla di runtime cambiato) + nessun deploy.
 
-## Test Results
+## Artefatti
+`screenshots/azure-principles-doc.png` · `trace/trace.zip` · doc: `docs/azure-backend-config-principles.md`. Test render: `e2e/issue-225-shot.mjs`.
 
-| Test | Result | Evidence |
-|---|---:|---|
-| Unit | NA | |
-| Integration | NA | |
-| API | NA | |
-| Playwright | NA | |
-| Persistence | NA | |
-| Agnos AI | NA | |
-| Voice | NA | |
-| OCR | NA | |
-| Security/privacy | NA | |
-
-## Runtime Evidence
-
-## Logs
-
-Only sanitized logs are allowed.
-
-## Residual Risks
-
-## Final Decision
-
-IMPLEMENTED — NOT VERIFIED
+Claude non chiude, non mergia, non deploya. Codex resta l'unico QA Gatekeeper.
