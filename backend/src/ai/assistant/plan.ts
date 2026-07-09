@@ -6,6 +6,7 @@
 export type AssistantIntent =
   | 'allergies' | 'therapies' | 'vitals_range' | 'vitals_recent' | 'narrative_search'
   | 'document_search' | 'timeline' | 'appointments' | 'correlate' | 'patient_search'
+  | 'rooms_occupancy'
   | 'refuse_clinical' | 'unknown';
 
 export type QueryScope = 'current_patient' | 'cross_patient';
@@ -87,7 +88,7 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
     if (/pression|sistolic/.test(q) && sysGt) return base('vitals_range', [{ tool: 'get_patient_vital_signs', args: { patientId: pid, label: 'PA', systolicMin: parseInt(sysGt[2], 10) + 1 } }]);
     if (/timeline|sequenza temporale|cronologia/.test(q)) return base('timeline', [{ tool: 'get_patient_timeline', args: { patientId: pid } }]);
     if (/appuntament|agenda/.test(q)) return base('appointments', [{ tool: 'get_patient_appointments', args: { patientId: pid } }]);
-    if (/terapia|farmac/.test(q)) return base('therapies', [{ tool: 'get_patient_therapies', args: { patientId: pid } }]);
+    if (/terapi|farmac/.test(q)) return base('therapies', [{ tool: 'get_patient_therapies', args: { patientId: pid } }]);
     const sec = sectionKeyFor(q);
     if (/cerca|trova|consulenz|anamnes|decorso|documenti|sezione/.test(q)) {
       const phrase = searchPhrase(q, original);
@@ -104,6 +105,9 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   if (/quali pazienti|chi assume|chi ha\b|pazienti con/.test(q)) {
     const allergy = /allerg\w*\s+(?:a|al|alla|alle|ai)?\s*([a-zàèéìòù]+)/.exec(q)?.[1];
     return base('correlate', [{ tool: 'correlate_structured_data', args: { allergy } }], true);
+  }
+  if (/(camere?|stanze?|letti?).*(occupat|liber|disponibil|manutenzione)|occupazione.*(camere?|stanze?|letti?)/.test(q)) {
+    return base('rooms_occupancy', [{ tool: 'query_rooms_occupancy', args: {} }]);
   }
   if (/appuntamenti (di )?oggi|agenda oggi/.test(q)) return base('appointments', [{ tool: 'query_appointments_today', args: {} }], true);
   if (/cerca|trova/.test(q)) {

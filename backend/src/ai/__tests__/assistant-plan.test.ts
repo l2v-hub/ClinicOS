@@ -18,6 +18,13 @@ test('therapy question → therapies tool', () => {
   assert.equal(p.tools[0].tool, 'get_patient_therapies');
 });
 
+test('plural "terapie" on the patient page → therapies tool (issue #239 scenario 2)', () => {
+  const p = planQuery('che terapie assume il paziente', { currentPatientId: P });
+  assert.equal(p.intent, 'therapies');
+  assert.equal(p.scope, 'current_patient');
+  assert.equal(p.tools[0].tool, 'get_patient_therapies');
+});
+
 test('search inside Anamnesi → narrative search with sectionKey', () => {
   const p = planQuery('Cerca le consulenze cardiologiche in anamnesi', { currentPatientId: P });
   assert.equal(p.intent, 'narrative_search');
@@ -66,6 +73,13 @@ test('appointments today → cross tool', () => {
   const p = planQuery('Mostra gli appuntamenti di oggi', {});
   assert.equal(p.tools[0].tool, 'query_appointments_today');
   assert.equal(p.requiresCrossPatientAccess, true);
+});
+
+test('rooms occupancy question → rooms occupancy tool', () => {
+  const p = planQuery('Quante camere sono occupate oggi?', {});
+  assert.equal(p.intent, 'rooms_occupancy');
+  assert.equal(p.tools[0].tool, 'query_rooms_occupancy');
+  assert.equal(p.requiresCrossPatientAccess, false);
 });
 
 test('a diagnosis request is refused', () => {

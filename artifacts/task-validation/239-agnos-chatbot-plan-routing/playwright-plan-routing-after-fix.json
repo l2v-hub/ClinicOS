@@ -1,0 +1,120 @@
+{
+  "ranAt": "2026-07-09T14:35:56.148Z",
+  "frontend": "http://127.0.0.1:5173/",
+  "captured": [
+    {
+      "type": "request",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "method": "POST",
+      "postData": "{\"text\":\"quante camere sono occupate oggi\",\"channel\":\"testo\"}",
+      "headers": {
+        "x-operator-id": "op1",
+        "x-operator-role": "operatore"
+      }
+    },
+    {
+      "type": "response",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "status": 200,
+      "body": {
+        "plan": {
+          "actionType": "read",
+          "patientId": null,
+          "targetRecordId": null,
+          "fields": {},
+          "sourceTranscript": "quante camere sono occupate oggi",
+          "ambiguities": [],
+          "requiresConfirmation": false,
+          "idempotencyKey": "ada37662-72f4-4e86-8b02-e3846434cff1",
+          "readQuery": "quante camere sono occupate oggi",
+          "channel": "testo"
+        },
+        "preview": null,
+        "read": {
+          "intent": "rooms_occupancy",
+          "scope": "cross_patient",
+          "plan": {
+            "intent": "rooms_occupancy",
+            "scope": "cross_patient",
+            "tools": [
+              {
+                "tool": "query_rooms_occupancy",
+                "args": {}
+              }
+            ],
+            "requiresCrossPatientAccess": true
+          },
+          "results": [],
+          "sources": [],
+          "navigation": [],
+          "notFound": false,
+          "truncated": false,
+          "refusal": "Ricerca tra più pazienti non autorizzata per il tuo ruolo."
+        }
+      }
+    },
+    {
+      "type": "request",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "method": "POST",
+      "postData": "{\"text\":\"informazioni sul paziente\",\"channel\":\"testo\"}",
+      "headers": {
+        "x-operator-id": "op1",
+        "x-operator-role": "operatore"
+      }
+    },
+    {
+      "type": "response",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "status": 200,
+      "body": {
+        "plan": {
+          "actionType": "read",
+          "patientId": null,
+          "targetRecordId": null,
+          "fields": {},
+          "sourceTranscript": "informazioni sul paziente",
+          "ambiguities": [],
+          "requiresConfirmation": false,
+          "idempotencyKey": "2a31e453-49c6-4677-a9a6-b7cf217c1ae9",
+          "readQuery": "informazioni sul paziente",
+          "channel": "testo"
+        },
+        "preview": null,
+        "read": {
+          "intent": "patient_search",
+          "scope": "cross_patient",
+          "plan": {
+            "intent": "patient_search",
+            "scope": "cross_patient",
+            "tools": [
+              {
+                "tool": "search_patients",
+                "args": {
+                  "query": "informazioni sul paziente"
+                }
+              }
+            ],
+            "requiresCrossPatientAccess": true
+          },
+          "results": [],
+          "sources": [],
+          "navigation": [],
+          "notFound": false,
+          "truncated": false,
+          "refusal": "Ricerca tra più pazienti non autorizzata per il tuo ruolo."
+        }
+      }
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_NETWORK_ACCESS_DENIED",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "panelText": "Agnos\nTutti i pazienti autorizzati\nquante camere sono occupate oggi\nRicerca tra più pazienti non autorizzata per il tuo ruolo.\ninformazioni sul paziente\nRicerca tra più pazienti non autorizzata per il tuo ruolo.\nInvia"
+}

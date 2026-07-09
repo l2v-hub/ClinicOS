@@ -30,3 +30,7 @@ export function appointmentSource(patientId: string, recordId: string, label: st
 export function therapySource(patientId: string, recordId: string, label: string, exactText?: string, recordedAt?: string): SourceReference {
   return { sourceType: 'THERAPY', patientId, recordId, label, exactText, recordedAt };
 }
+
+export function roomOccupancySource(exactText?: string, recordedAt?: string): SourceReference {
+  return { sourceType: 'ROOM_OCCUPANCY', patientId: 'rooms', recordId: 'rooms-occupancy', label: 'Occupazione camere', exactText, recordedAt };
+}

@@ -1,0 +1,81 @@
+{
+  "ranAt": "2026-07-09T19:41:32.744Z",
+  "results": [
+    {
+      "name": "S1 request testo intatto verso /ai/actions/plan",
+      "pass": true,
+      "detail": "reqText=quante camere sono occupate oggi"
+    },
+    {
+      "name": "S1 HTTP 200",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "S1 plan.actionType == read (non unknown)",
+      "pass": true,
+      "detail": "actionType=read"
+    },
+    {
+      "name": "S1 read.intent == rooms_occupancy",
+      "pass": true,
+      "detail": "intent=rooms_occupancy"
+    },
+    {
+      "name": "S1 read.notFound == false",
+      "pass": true,
+      "detail": "notFound=false"
+    },
+    {
+      "name": "S1 occupiedBeds numerico",
+      "pass": true,
+      "detail": "occupiedBeds=1"
+    },
+    {
+      "name": "S1 nessun nome paziente nell aggregato camere",
+      "pass": true,
+      "detail": "phiLeak=false"
+    },
+    {
+      "name": "S1 UI senza \"Informazione non trovata\"",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S1 UI senza \"Comando non riconosciuto\"",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S2 arriva al backend (request registrata)",
+      "pass": true,
+      "detail": "hasReq=true"
+    },
+    {
+      "name": "S2 plan.actionType == read (non unknown)",
+      "pass": true,
+      "detail": "actionType=read"
+    },
+    {
+      "name": "S2 read.intent == therapies",
+      "pass": true,
+      "detail": "intent=therapies"
+    },
+    {
+      "name": "S3 comportamento esplicito (non fallimento silenzioso)",
+      "pass": true,
+      "detail": "actionType=read"
+    },
+    {
+      "name": "AFTER-REFRESH camere ancora read/rooms_occupancy",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Nessun console error di pagina",
+      "pass": true,
+      "detail": "errors=0"
+    }
+  ],
+  "consoleErrors": []
+}

@@ -1,0 +1,114 @@
+{
+  "ranAt": "2026-07-09T14:26:11.125Z",
+  "frontend": "http://127.0.0.1:5173/",
+  "captured": [
+    {
+      "type": "request",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "method": "POST",
+      "postData": "{\"text\":\"quante camere sono occupate oggi\",\"channel\":\"testo\"}",
+      "headers": {
+        "x-operator-id": "op1",
+        "x-operator-role": "operatore"
+      }
+    },
+    {
+      "type": "response",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "status": 200,
+      "body": {
+        "plan": {
+          "actionType": "read",
+          "patientId": null,
+          "targetRecordId": null,
+          "fields": {},
+          "sourceTranscript": "quante camere sono occupate oggi",
+          "ambiguities": [],
+          "requiresConfirmation": false,
+          "idempotencyKey": "e6da488c-f56e-4634-bf81-71d43dbd0df8",
+          "readQuery": "quante camere sono occupate oggi",
+          "channel": "testo"
+        },
+        "preview": null,
+        "read": {
+          "intent": "unknown",
+          "scope": "cross_patient",
+          "plan": {
+            "intent": "unknown",
+            "scope": "cross_patient",
+            "tools": [],
+            "requiresCrossPatientAccess": false
+          },
+          "results": [],
+          "sources": [],
+          "navigation": [],
+          "notFound": true,
+          "truncated": false
+        }
+      }
+    },
+    {
+      "type": "request",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "method": "POST",
+      "postData": "{\"text\":\"informazioni sul paziente\",\"channel\":\"testo\"}",
+      "headers": {
+        "x-operator-id": "op1",
+        "x-operator-role": "operatore"
+      }
+    },
+    {
+      "type": "response",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "status": 200,
+      "body": {
+        "plan": {
+          "actionType": "read",
+          "patientId": null,
+          "targetRecordId": null,
+          "fields": {},
+          "sourceTranscript": "informazioni sul paziente",
+          "ambiguities": [],
+          "requiresConfirmation": false,
+          "idempotencyKey": "f1974915-af74-43da-9e71-8be057a58fed",
+          "readQuery": "informazioni sul paziente",
+          "channel": "testo"
+        },
+        "preview": null,
+        "read": {
+          "intent": "patient_search",
+          "scope": "cross_patient",
+          "plan": {
+            "intent": "patient_search",
+            "scope": "cross_patient",
+            "tools": [
+              {
+                "tool": "search_patients",
+                "args": {
+                  "query": "informazioni sul paziente"
+                }
+              }
+            ],
+            "requiresCrossPatientAccess": true
+          },
+          "results": [],
+          "sources": [],
+          "navigation": [],
+          "notFound": false,
+          "truncated": false,
+          "refusal": "Ricerca tra più pazienti non autorizzata per il tuo ruolo."
+        }
+      }
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_NETWORK_ACCESS_DENIED",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "panelText": "Agnos\nTutti i pazienti autorizzati\nquante camere sono occupate oggi\nInformazione non trovata.\ninformazioni sul paziente\nRicerca tra più pazienti non autorizzata per il tuo ruolo.\nInvia"
+}

@@ -116,6 +116,16 @@ export async function planCommand(input: PlanCommandInput, deps: PlanCommandDeps
     return { plan, preview: null, read };
   }
 
+  if (plan.actionType === 'unknown') {
+    const runRead = deps.runRead ?? defaultRunRead;
+    const read = await runRead(text, input.operatorCtx.gatewayCtx, input.currentPatientId);
+    return {
+      plan: { ...plan, actionType: 'read', readQuery: text, ambiguities: [], requiresConfirmation: false },
+      preview: null,
+      read,
+    };
+  }
+
   // SPEC-015 (US2): a refusal at PLAN time (delete/clinical/forbidden) is an auditable event —
   // logged AND persisted (kind 'refusal'), before the refusal preview is returned to the client.
   if (plan.actionType === 'refuse_forbidden' || plan.actionType === 'refuse_clinical') {

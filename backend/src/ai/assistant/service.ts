@@ -7,7 +7,7 @@ import { prisma } from '../../lib/prisma.js';
 import * as svc from '../gateway/services.js';
 import { canCrossPatientSearch } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
-import { appointmentSource } from '../gateway/sources.js';
+import { appointmentSource, roomOccupancySource } from '../gateway/sources.js';
 import { planQuery, type AssistantIntent, type PlanContext, type QueryPlan } from './plan.js';
 
 export interface NavAction { type: string; label: string; patientId?: string; sectionKey?: string; documentId?: string; recordId?: string; pageNumber?: number }
@@ -36,6 +36,7 @@ function navFromSource(s: SourceReference): NavAction {
     case 'APPOINTMENT': return { type: 'open_appointment', label: 'Apri appuntamento', patientId: s.patientId, recordId: s.recordId };
     case 'VITAL_SIGN': return { type: 'open_parameter', label: `Apri parametro ${s.label}`, patientId: s.patientId, recordId: s.recordId };
     case 'THERAPY': return { type: 'open_therapy', label: 'Apri terapia', patientId: s.patientId, recordId: s.recordId };
+    case 'ROOM_OCCUPANCY': return { type: 'open_rooms', label: 'Apri camere', recordId: s.recordId };
     default: return { type: 'open_patient', label: 'Apri paziente', patientId: s.patientId, recordId: s.recordId };
   }
 }
@@ -45,6 +46,37 @@ async function appointmentsToday(ctx: UserContext): Promise<{ data: unknown[]; s
   const rows = await prisma.appointment.findMany({ where: { scheduledAt: { gte: from, lte: to } }, orderBy: { scheduledAt: 'asc' }, take: 200 });
   const allowed = rows.filter((a) => ctx.permittedPatientIds === null || ctx.permittedPatientIds.includes(a.patientId));
   return { data: allowed, sourceRefs: allowed.map((a) => appointmentSource(a.patientId, a.id, a.reason ?? 'appuntamento', a.scheduledAt.toISOString())) };
+}
+
+async function roomsOccupancy(): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+  const rooms = await prisma.room.findMany({
+    include: {
+      beds: {
+        include: {
+          assignments: {
+            where: { OR: [{ endDate: null }, { endDate: { gte: new Date().toISOString().slice(0, 10) } }] },
+          },
+        },
+      },
+    },
+  });
+  let totalBeds = 0;
+  let occupiedBeds = 0;
+  let maintenanceBeds = 0;
+  for (const room of rooms) {
+    for (const bed of room.beds) {
+      totalBeds++;
+      if (bed.assignments.length > 0) occupiedBeds++;
+      if (bed.stato === 'manutenzione') maintenanceBeds++;
+    }
+  }
+  const freeBeds = Math.max(0, totalBeds - occupiedBeds - maintenanceBeds);
+  const occupancyPct = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
+  const data = [{ totalRooms: rooms.length, totalBeds, occupiedBeds, freeBeds, maintenanceBeds, occupancyPct }];
+  return {
+    data,
+    sourceRefs: [roomOccupancySource(`${occupiedBeds}/${totalBeds} letti occupati; ${rooms.length} camere censite`, new Date().toISOString())],
+  };
 }
 
 /** Run the assistant for a question. Pure orchestration over the gateway; SOURCE_ONLY. */
@@ -114,6 +146,7 @@ async function dispatch(tool: string, args: Record<string, unknown>, ctx: UserCo
     }
     case 'correlate_structured_data': { const r = await svc.correlate(args as never, ctx); return { data: r.data, sourceRefs: r.sourceRefs }; }
     case 'query_appointments_today': return await appointmentsToday(ctx);
+    case 'query_rooms_occupancy': return await roomsOccupancy();
     default: return { data: [], sourceRefs: [] };
   }
 }

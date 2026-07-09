@@ -18,7 +18,7 @@ const DELETE_VERB = /\b(elimin\w*|cancell\w*|rimuov\w*|rimoss\w*|togli\w*|tolg\w
 /** SPEC-015: deletion is only ever possible from the traditional UI — never through Agnos. */
 export const DELETE_REFUSAL_MESSAGE =
   'La cancellazione dei dati non è possibile tramite l’assistente AI: è consentita solo dall’interfaccia tradizionale di ClinicOS.';
-const READ_VERB = /\b(mostra|mostrami|apri|cerca|trova|quali|chi|qual e|elenca|fammi vedere|visualizza|leggi)\b/;
+const READ_VERB = /\b(mostra|mostrami|apri|cerca|trova|quali?|quante?|quanti?|quanto|chi|che|cosa|quando|dove|come|qual e|elenca|fammi vedere|visualizza|leggi|informazioni?)\b/;
 
 // Clinical judgement is refused outright (mirrors the read assistant's refusal set).
 const CLINICAL_REFUSAL = [

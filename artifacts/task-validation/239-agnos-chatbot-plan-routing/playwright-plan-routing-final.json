@@ -1,0 +1,38 @@
+{
+  "ranAt": "2026-07-09T14:37:12.195Z",
+  "frontend": "http://127.0.0.1:5173/",
+  "captured": [
+    {
+      "type": "request",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "method": "POST",
+      "postData": "{\"text\":\"quante camere sono occupate oggi\",\"channel\":\"testo\"}",
+      "headers": {
+        "x-operator-id": "op1",
+        "x-operator-role": "operatore"
+      }
+    },
+    {
+      "type": "response",
+      "url": "http://localhost:3001/ai/actions/plan",
+      "status": 500,
+      "body": {
+        "error": {
+          "kind": "internal",
+          "message": "Errore assistente AI"
+        }
+      }
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_NETWORK_ACCESS_DENIED",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "panelText": "Agnos\nTutti i pazienti autorizzati\nquante camere sono occupate oggi\nErrore assistente AI\nInvia"
+}

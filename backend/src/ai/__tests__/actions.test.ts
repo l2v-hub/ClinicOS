@@ -97,6 +97,33 @@ test('planCommand: read question delegates to the assistant (preview null, read 
   assert.match(asked, /parametri/i);
 });
 
+test('planCommand: natural Italian read question without question mark delegates to assistant', async () => {
+  const answer = { intent: 'data_query', results: [{ value: 1 }], sources: [], navigation: [], notFound: false, truncated: false } as unknown as AssistantAnswer;
+  let asked = '';
+  const r = await planCommand(
+    { text: 'quante camere sono occupate oggi', channel: 'testo', currentPatientId: PID, operatorCtx },
+    { runRead: async (q) => { asked = q; return answer; } },
+  );
+  assert.equal(r.plan.actionType, 'read');
+  assert.equal(r.preview, null);
+  assert.equal(r.read?.intent, 'data_query');
+  assert.match(asked, /camere/i);
+});
+
+test('planCommand: unknown non-write text falls back to read assistant instead of command error', async () => {
+  const answer = { intent: 'timeline', results: [{ id: 'evt-1' }], sources: [], navigation: [], notFound: false, truncated: false } as unknown as AssistantAnswer;
+  let asked = '';
+  const r = await planCommand(
+    { text: 'informazioni sul paziente', channel: 'testo', currentPatientId: PID, operatorCtx },
+    { runRead: async (q) => { asked = q; return answer; } },
+  );
+  assert.equal(r.plan.actionType, 'read');
+  assert.equal(r.plan.requiresConfirmation, false);
+  assert.equal(r.preview, null);
+  assert.equal(r.read?.intent, 'timeline');
+  assert.equal(asked, 'informazioni sul paziente');
+});
+
 // ── DELETE: refused at plan AND at execute, on every variant ────────────────
 
 const DELETE_VARIANTS = [
