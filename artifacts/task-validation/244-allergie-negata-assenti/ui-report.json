@@ -1,0 +1,52 @@
+{
+  "ranAt": "2026-07-09T20:01:00.751Z",
+  "patient": "Moretti, Elena",
+  "results": [
+    {
+      "name": "selettore stato allergie visibile",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC2 stato \"paziente nega\" → badge allergy-denied",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC2 salvataggio persistito (PUT cartella)",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "AC4 \"paziente nega\" persiste dopo reload",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC1 stato \"assenti\" → badge allergy-none",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC1 salvataggio persistito (PUT cartella)",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "AC4 \"assenti\" persiste dopo reload",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC3 stato \"presenti\" selezionabile",
+      "pass": true,
+      "detail": "r3=200"
+    },
+    {
+      "name": "nessun console error",
+      "pass": true,
+      "detail": "errors=0"
+    }
+  ],
+  "consoleErrors": []
+}

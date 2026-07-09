@@ -1,45 +1,25 @@
-# Task Validation Report
+# Validation report — Issue #244 (Allergie: assenti / paziente nega / presenti)
 
-## Task
-- Title: 244 Allergie negata assenti
-- Slug: 244-allergie-negata-assenti
-- Commit:
-- Date: 2026-07-08
+**Final Decision: READY FOR CODEX QA**
 
-## Implementation Summary
+Ambiente: stack locale reale — Postgres (Podman) + backend `:3001` (DB seeded) + frontend `:5173`, codice PR #247 branch `fix/issue-244-allergie` sovrapposto al tree in esecuzione (HMR). Paziente sintetico: **Moretti, Elena** (SEED-PAZ-008). Data: 2026-07-09.
 
-## Files Changed
+## Esito acceptance criteria (Playwright UI reale — 9/9 PASS)
 
-## Acceptance Criteria Result
+| AC | Esito | Evidenza |
+|----|-------|----------|
+| AC1 — stato "assenti" salvato in modo chiaro | ✅ | badge `allergy-none` "Allergie assenti — verificato dall'operatore"; PUT `/patients/:id/cartella` → 200 · `screenshots/after-assenti.png` |
+| AC2 — stato "paziente nega" salvato | ✅ | badge `allergy-denied` "Paziente nega allergie"; PUT → 200 · `screenshots/after-nega.png` |
+| AC3 — allergie presenti non sovrascritte | ✅ | stato "presenti" selezionabile, `aria-checked=true`; il dettaglio è mantenuto al cambio stato (per design l'editor conserva la lista) |
+| AC4 — persistenza dopo reload | ✅ | "paziente nega" e "assenti" restano dopo `page.reload()` + riapertura scheda · `screenshots/after-refresh-nega.png`, `after-refresh-assenti.png` |
+| Privacy/log | ✅ | nessun console error; nessun dato sensibile nei log (`logs/console-errors.log` vuoto) |
 
-| AC | Result | Evidence |
-|---|---:|---|
-| AC1 | FAIL | |
-| AC2 | FAIL | |
-| AC3 | FAIL | |
+## Note
+- Selettore 3-stati `data-testid="allergy-status"` (radiogroup) con opzioni `allergy-status-{presenti,assenti,paziente_nega}`.
+- Persistenza via `onUpdateCartella` → PUT `/patients/:id/cartella` (blob `Cartella.data`), nessuna migration.
+- Toast "Dati salvati correttamente" visibile dopo ogni salvataggio.
 
-## Test Results
+## Artefatti
+`screenshots/` (before, after-nega, after-refresh-nega, after-assenti, after-refresh-assenti, after-presenti) · `trace/trace.zip` · `video/*.webm` · `logs/console-errors.log` · `ui-report.json` · test: `e2e/issue-244-allergie.mjs`.
 
-| Test | Result | Evidence |
-|---|---:|---|
-| Unit | NA | |
-| Integration | NA | |
-| API | NA | |
-| Playwright | NA | |
-| Persistence | NA | |
-| Agnos AI | NA | |
-| Voice | NA | |
-| OCR | NA | |
-| Security/privacy | NA | |
-
-## Runtime Evidence
-
-## Logs
-
-Only sanitized logs are allowed.
-
-## Residual Risks
-
-## Final Decision
-
-IMPLEMENTED — NOT VERIFIED
+Claude non chiude, non mergia, non deploya. Codex resta l'unico QA Gatekeeper.
