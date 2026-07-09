@@ -13,7 +13,12 @@ export type SourceType =
   | 'APPOINTMENT'
   | 'THERAPY'
   | 'ROOM'
-  | 'OCCUPANCY';
+  | 'OCCUPANCY'
+  | 'CONSEGNE'
+  | 'CLINICAL_SCORE'
+  | 'ROOM_OCCUPANCY'
+  | 'ROOM_OCCUPANTS'
+  | 'OPERATOR_SHIFT';
 
 /** A verifiable pointer back to the exact record a value came from. Never omit on a result. */
 export interface SourceReference {

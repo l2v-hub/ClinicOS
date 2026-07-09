@@ -6,14 +6,14 @@ import { prisma } from '../../lib/prisma.js';
 import { getNarrativeSections } from '../sections/patient-narrative.js';
 import { listPatientDocuments } from '../upload/patient-documents.js';
 import {
-  assertPatientAllowed, assertTenant, canCrossPatientSearch, filterAllowedPatients,
+  assertPatientAllowed, assertTenant, canCrossPatientSearch, canFacilityRead, filterAllowedPatients,
 } from './context.js';
 import {
   asCartella, filterVitals, matchAllergy, matchTherapy, textIncludes, nameMatchesAllTokens, type VitalItem,
 } from './filters.js';
 import {
-  appointmentSource, diarySource, documentSource, narrativeSource, patientFieldSource,
-  therapySource, vitalSource,
+  appointmentSource, clinicalScoreSource, consegnaSource, diarySource, documentSource, narrativeSource,
+  patientFieldSource, roomOccupancySource, roomOccupantsSource, therapySource, vitalSource,
 } from './sources.js';
 import { gatewayAudit } from './audit.js';
 import {
@@ -260,6 +260,135 @@ export async function searchAcrossPatients(input: ClinicalSectionSearchInput, ct
   assertTenant(ctx);
   if (!canCrossPatientSearch(ctx)) throw new GatewayError('cross_patient_disabled', 'Cross-patient search is disabled');
   return searchClinicalSections({ ...input, patientId: undefined }, ctx);
+}
+
+// ── Agnos KB (Task 2): camere (aggregato + occupanti), consegne, scale cliniche ──────────────
+// Occupazione attiva = PatientRoomAssignment con endDate === null. Il letto in manutenzione
+// (stato === 'manutenzione' e nessuna occupazione attiva) NON è conteggiato tra i liberi.
+// L'aggregato (RoomsAggregate) non deve MAI contenere nomi paziente (spec §2) — solo occupantRows
+// li espone, replicando la disclosure già presente nella UI attuale (assegnazione letti).
+
+export interface RoomsAggregate {
+  totalRooms: number; totalBeds: number; occupiedBeds: number; freeBeds: number;
+  maintenanceBeds: number; occupancyPct: number;
+}
+
+export interface RoomOccupantRow {
+  roomNumero: string; bedLabel: string; patientId: string; patientName: string; startDate: string;
+}
+
+type BedRow = {
+  id: string; stato: string; label: string; room: { numero: string };
+  active: { patientId: string; startDate: string; patient: { firstName: string; lastName: string } } | null;
+};
+
+export function aggregateRooms(totalRooms: number, beds: BedRow[]): RoomsAggregate {
+  const occupiedBeds = beds.filter((b) => b.active).length;
+  const maintenanceBeds = beds.filter((b) => !b.active && b.stato === 'manutenzione').length;
+  const totalBeds = beds.length;
+  const freeBeds = totalBeds - occupiedBeds - maintenanceBeds;
+  return {
+    totalRooms, totalBeds, occupiedBeds, freeBeds, maintenanceBeds,
+    occupancyPct: totalBeds ? Math.round((occupiedBeds / totalBeds) * 100) : 0,
+  };
+}
+
+export function occupantRows(beds: BedRow[], roomNumero?: string): RoomOccupantRow[] {
+  return beds
+    .filter((b) => b.active && (!roomNumero || b.room.numero === roomNumero))
+    .map((b) => ({
+      roomNumero: b.room.numero, bedLabel: b.label, patientId: b.active!.patientId,
+      patientName: `${b.active!.patient.lastName} ${b.active!.patient.firstName}`.trim(),
+      startDate: b.active!.startDate,
+    }));
+}
+
+async function loadBeds(): Promise<{ totalRooms: number; beds: BedRow[] }> {
+  const totalRooms = await prisma.room.count({ where: { stato: 'attiva' } });
+  const rows = await prisma.bed.findMany({
+    include: {
+      room: { select: { numero: true } },
+      assignments: { where: { endDate: null }, include: { patient: { select: { firstName: true, lastName: true } } }, take: 1 },
+    },
+  });
+  const beds: BedRow[] = rows.map((b) => ({
+    id: b.id, stato: b.stato, label: b.label, room: { numero: b.room.numero },
+    active: b.assignments[0]
+      ? { patientId: b.assignments[0].patientId, startDate: b.assignments[0].startDate, patient: b.assignments[0].patient }
+      : null,
+  }));
+  return { totalRooms, beds };
+}
+
+/** Facility-wide, aggregate-only (never names) — gated by AI_FACILITY_QUERIES_ENABLED like every
+ *  other room/bed/occupancy read in the gateway (see query/engine.ts canFacilityRead usage). */
+export async function queryRoomsOccupancy(ctx: UserContext): Promise<SourcedResult<[RoomsAggregate]>> {
+  assertTenant(ctx);
+  if (!canFacilityRead()) throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
+  const { totalRooms, beds } = await loadBeds();
+  const agg = aggregateRooms(totalRooms, beds);
+  const text = `${agg.occupiedBeds}/${agg.totalBeds} letti occupati; ${agg.totalRooms} camere censite`;
+  gatewayAudit(ctx, 'query_rooms_occupancy', [], 1, 'ok', nowIso());
+  return { data: [agg], sourceRefs: [roomOccupancySource('rooms-aggregate', text)] };
+}
+
+/** Per-camera occupant names — disclosure equivalent to the existing bed-assignment UI. Still
+ *  gated by facility read (rooms/beds are facility data) AND per-row patient permission. */
+export async function queryRoomOccupants(input: { roomNumero?: string }, ctx: UserContext): Promise<SourcedResult<RoomOccupantRow[]>> {
+  assertTenant(ctx);
+  if (!canFacilityRead()) throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
+  const { beds } = await loadBeds();
+  const rows = occupantRows(beds, input.roomNumero).filter(
+    (r) => ctx.permittedPatientIds === null || ctx.permittedPatientIds.includes(r.patientId),
+  );
+  gatewayAudit(ctx, 'query_room_occupants', rows.map((r) => r.patientId), rows.length, rows.length ? 'ok' : 'empty', nowIso());
+  return {
+    data: rows,
+    sourceRefs: rows.map((r) => roomOccupantsSource(r.patientId, `room-${r.roomNumero}-${r.bedLabel}`,
+      `Camera ${r.roomNumero} letto ${r.bedLabel}: ${r.patientName}`)),
+  };
+}
+
+export async function getConsegne(input: { patientId?: string; day?: string }, ctx: UserContext): Promise<SourcedResult<unknown[]>> {
+  assertTenant(ctx);
+  if (input.patientId) assertPatientAllowed(ctx, input.patientId);
+  const rows = await prisma.consegna.findMany({
+    where: {
+      ...(input.patientId ? { pazienteId: input.patientId } : {}),
+      ...(input.day ? { scadenza: input.day } : {}),
+      stato: { not: 'completata' },
+    },
+    orderBy: [{ scadenza: 'asc' }, { priorita: 'desc' }],
+    take: 50,
+  });
+  const allowed = rows.filter((c) => !c.pazienteId || ctx.permittedPatientIds === null || ctx.permittedPatientIds.includes(c.pazienteId));
+  gatewayAudit(ctx, 'get_consegne', allowed.map((c) => c.pazienteId).filter(Boolean), allowed.length, allowed.length ? 'ok' : 'empty', nowIso());
+  return {
+    data: allowed,
+    sourceRefs: allowed.map((c) => consegnaSource(c.pazienteId, c.id, c.tipo, `${c.tipo}: ${c.note}`, c.scadenza)),
+  };
+}
+
+const CLINICAL_SCALE_KEYS = {
+  braden: 'valutazioniBraden', tinetti: 'valutazioniTinetti', nrs: 'valutazioniNRS',
+  medicazioni: 'medicazioniFerite', contenzioni: 'contenzioni',
+} as const;
+type ClinicalScale = keyof typeof CLINICAL_SCALE_KEYS;
+
+export async function getClinicalScores(input: { patientId: string; scale?: ClinicalScale }, ctx: UserContext): Promise<SourcedResult<unknown[]>> {
+  assertTenant(ctx); assertPatientAllowed(ctx, input.patientId);
+  const { cartella, recordId } = await loadCartella(input.patientId);
+  const all: Record<string, unknown[]> = {};
+  for (const [scale, key] of Object.entries(CLINICAL_SCALE_KEYS)) {
+    all[scale] = (cartella[key] as unknown[] | undefined) ?? [];
+  }
+  const picked = input.scale ? { [input.scale]: all[input.scale] ?? [] } : all;
+  const data = Object.entries(picked).flatMap(([scale, rows]) => (rows ?? []).slice(-3).map((r) => ({ scale, ...(r as object) })));
+  gatewayAudit(ctx, 'get_clinical_scores', [input.patientId], data.length, data.length ? 'ok' : 'empty', nowIso());
+  return {
+    data,
+    sourceRefs: data.map((d, i) => clinicalScoreSource(input.patientId, `${recordId}-${i}`, (d as { scale: string }).scale, `Scala ${(d as { scale: string }).scale}`)),
+  };
 }
 
 function isAllowedPatient(ctx: UserContext, patientId: string): boolean {
