@@ -1,0 +1,62 @@
+{
+  "ranAt": "2026-07-09T21:09:07.686Z",
+  "patient": "Moretti, Elena",
+  "results": [
+    {
+      "name": "upload Esami → POST /documents 2xx",
+      "pass": true,
+      "detail": "status=201"
+    },
+    {
+      "name": "Esami: chip allegato visibile nella sezione",
+      "pass": true,
+      "detail": "chips=1"
+    },
+    {
+      "name": "upload RX → POST /documents 2xx",
+      "pass": true,
+      "detail": "status=201"
+    },
+    {
+      "name": "RX: chip allegato visibile nella sezione",
+      "pass": true,
+      "detail": "chips=1"
+    },
+    {
+      "name": "upload Consulenze → POST /documents 2xx",
+      "pass": true,
+      "detail": "status=201"
+    },
+    {
+      "name": "Consulenze: chip allegato visibile nella sezione",
+      "pass": true,
+      "detail": "chips=1"
+    },
+    {
+      "name": "AC4 Esami: allegato persiste nella sezione corretta dopo reload",
+      "pass": true,
+      "detail": "chips=1"
+    },
+    {
+      "name": "AC4 RX: allegato persiste nella sezione corretta dopo reload",
+      "pass": true,
+      "detail": "chips=1"
+    },
+    {
+      "name": "AC4 Consulenze: allegato persiste nella sezione corretta dopo reload",
+      "pass": true,
+      "detail": "chips=1"
+    },
+    {
+      "name": "nessun NUOVO console error",
+      "pass": true,
+      "detail": "err=4"
+    }
+  ],
+  "consoleErrors": [
+    "In HTML, %s cannot be a descendant of <%s>.\nThis will cause a hydration error.%s <button> button \n\n  <App>\n    <div className=\"app-shell\">\n      <TeamsLikeSidebar>\n      <div className=\"main-area-...\">\n        <div>\n        <main className=\"page-conte...\">\n          <PatientDetail paziente={{id:\"SEED-P...\", ...}} cartella={{...}} consegne={[...]} operatori={[...]} ...>\n            <div className=\"patient-re...\">\n              <PatientCompactHeader>\n              <TopNav>\n              <TopNav>\n              <div className=\"cr-detail-...\">\n                <div ref={{...}} className=\"cr-detail-...\">\n                  <PresaInCaricoTab cartella={{...}} paziente={{id:\"SEED-P...\", ...}} onUpdate={function upd} ...>\n                    <div className=\"cr-tab-con...\">\n                      <div>\n                      <ClinicalTableSection title=\"Presa in C...\" actions={<PrintButton>}>\n                        <div className=\"cts cts--open\">\n>                         <button type=\"button\" className=\"cts__header\" onClick={function t3}>\n                            <div>\n                            <div className=\"cts__heade...\" onClick={function _temp3}>\n                              <PrintButton>\n>                               <button\n>                                 className=\"btn-secondary btn-sm no-print\"\n>                                 onClick={function _temp}\n>                                 style={{display:\"flex\",alignItems:\"center\",gap:6}}\n>                               >\n                          ...\n      ...\n",
+    "<%s> cannot contain a nested %s.\nSee this log for the ancestor stack trace. button <button>",
+    "In HTML, %s cannot be a descendant of <%s>.\nThis will cause a hydration error.%s <button> button \n\n  <App>\n    <div className=\"app-shell\">\n      <TeamsLikeSidebar>\n      <div className=\"main-area-...\">\n        <div>\n        <main className=\"page-conte...\">\n          <PatientDetail paziente={{id:\"SEED-P...\", ...}} cartella={{...}} consegne={[...]} operatori={[...]} ...>\n            <div className=\"patient-re...\">\n              <PatientCompactHeader>\n              <TopNav>\n              <TopNav>\n              <div className=\"cr-detail-...\">\n                <div ref={{...}} className=\"cr-detail-...\">\n                  <PresaInCaricoTab cartella={{...}} paziente={{id:\"SEED-P...\", ...}} onUpdate={function upd} ...>\n                    <div className=\"cr-tab-con...\">\n                      <div>\n                      <ClinicalTableSection title=\"Presa in C...\" actions={<PrintButton>}>\n                        <div className=\"cts cts--open\">\n>                         <button type=\"button\" className=\"cts__header\" onClick={function t3}>\n                            <div>\n                            <div className=\"cts__heade...\" onClick={function _temp3}>\n                              <PrintButton>\n>                               <button\n>                                 className=\"btn-secondary btn-sm no-print\"\n>                                 onClick={function _temp}\n>                                 style={{display:\"flex\",alignItems:\"center\",gap:6}}\n>                               >\n                          ...\n      ...\n",
+    "<%s> cannot contain a nested %s.\nSee this log for the ancestor stack trace. button <button>"
+  ]
+}
