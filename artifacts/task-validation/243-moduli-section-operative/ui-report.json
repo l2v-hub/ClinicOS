@@ -1,0 +1,44 @@
+{
+  "ranAt": "2026-07-09T20:41:44.411Z",
+  "results": [
+    {
+      "name": "step 1 anagrafica compilata, wizard aperto",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "step 4 \"Moduli\" attivo",
+      "pass": true,
+      "detail": "active=4. Moduli"
+    },
+    {
+      "name": "AC1 nessun \"Moduli configurabili — in arrivo\"",
+      "pass": true,
+      "detail": "snippet=Moduli operativi disponibili nella sezione Moduli della sche"
+    },
+    {
+      "name": "AC2 griglia moduli visibile",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "AC2 tutte le 6 card moduli presenti",
+      "pass": true,
+      "detail": "card=6/6"
+    },
+    {
+      "name": "AC3 badge di stato per ogni modulo",
+      "pass": true,
+      "detail": "badge=6"
+    },
+    {
+      "name": "nessun console error",
+      "pass": true,
+      "detail": "errors=2"
+    }
+  ],
+  "consoleErrors": [
+    "In HTML, %s cannot be a descendant of <%s>.\nThis will cause a hydration error.%s <button> button \n\n  ...\n    <main className=\"page-conte...\">\n      <PatientList pazienti={[...]} consegne={[...]} operatori={[...]} camere={[...]} loading={false} ...>\n        <div className=\"patient-li...\">\n          <PageHeader>\n          <div>\n          <ClinicalTableSection>\n          <IntakeWorkspace open={true} onClose={function onClose} onCreated={function onCreated} operatorId=\"op1\" ...>\n            <div className=\"modal-overlay\" role=\"dialog\" aria-modal=\"true\" aria-label=\"Nuovo pazi...\">\n              <div className=\"modal-card...\">\n                <header>\n                <ol>\n                <div className=\"import-mod...\" data-testid=\"patient-in...\" ref={{...}}>\n                  <div data-testid=\"intake-step-3\" data-draft-id=\"cmrdz2j3b0...\">\n                    <StepClinica data={{...}} onUpdateSection={function updateSection} operatoreNome={undefined} ...>\n                      <div>\n                      <div>\n                      <div>\n                      <div className=\"step-clini...\">\n                        <div>\n                        <DiagnosisEditor mode=\"intake\" value={undefined} onChange={function onChange} ...>\n                          <ClinicalTableSection title=\"Diagnosi /...\" count={0} countLabel=\"diagnosi\" actions={<button>}>\n                            <div className=\"cts cts--open\">\n>                             <button type=\"button\" className=\"cts__header\" onClick={function t3}>\n                                <div>\n                                <div className=\"cts__heade...\" onClick={function _temp3}>\n>                                 <button className=\"btn-sm\" onClick={function onClick}>\n                              ...\n                      ...\n                ...\n",
+    "<%s> cannot contain a nested %s.\nSee this log for the ancestor stack trace. button <button>"
+  ]
+}
