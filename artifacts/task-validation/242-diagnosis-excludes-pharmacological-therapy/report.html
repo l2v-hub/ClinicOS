@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8">
+<body style="font:15px system-ui;padding:28px;color:#101828;max-width:1100px;margin:auto">
+<h1 style="color:#0F5FD7">#242 — La diagnosi di dimissione NON include la terapia farmacologica</h1>
+<p>Intestazione combinata <b>"Diagnosi e terapia alla dimissione"</b> con blocco <b>Terapia:</b> — il parser separa correttamente i due campi.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <section style="border:1px solid #D0D5DD;border-radius:8px;padding:14px">
+    <h2 style="color:#101828">Diagnosi (diagnosisText)</h2>
+    <div data-testid="diag" style="background:#F2F4F7;padding:10px;border-radius:6px">## Diagnosi e terapia alla dimissione<br>Scompenso cardiaco cronico in classe NYHA II.<br>Ipertensione arteriosa essenziale.</div>
+    <p style="color:#0E8A16;font-weight:700" data-testid="diag-verdict">Nessun farmaco nella diagnosi ✔</p>
+  </section>
+  <section style="border:1px solid #D0D5DD;border-radius:8px;padding:14px">
+    <h2 style="color:#101828">Terapia (therapyText)</h2>
+    <div data-testid="ther" style="background:#F2F4F7;padding:10px;border-radius:6px">Terapia:<br>- Ramipril 5 mg 1 cp/die<br>- Bisoprololo 2.5 mg 1 cp/die<br>- Furosemide 25 mg al bisogno</div>
+    <p style="color:#0E8A16;font-weight:700" data-testid="ther-verdict">Ramipril / Bisoprololo / Furosemide nella terapia ✔</p>
+  </section>
+</div>
+<h2>Esiti</h2>
+<table border="1" cellpadding="8" style="border-collapse:collapse">
+<tr><td>✅</td><td>AC2 la diagnosi NON contiene farmaci</td><td>farmaci in diagnosi: []</td></tr><tr><td>✅</td><td>AC1 la diagnosi contiene la diagnosi di dimissione</td><td>diag="## Diagnosi e terapia alla dimissione
+Scompenso cardiaco cro"</td></tr><tr><td>✅</td><td>AC4 i farmaci finiscono nella terapia</td><td>farmaci in terapia: [Ramipril, Bisoprololo, Furosemide]</td></tr>
+</table>
+<p id="verdict" style="font-weight:700;color:#0E8A16;font-size:18px">
+VERDICT: Diagnosi e terapia correttamente separate</p>
+</body>
