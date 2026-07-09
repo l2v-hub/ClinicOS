@@ -49,3 +49,25 @@ test('vitalsTrend 7gg: serie giornaliera con min/max/media e direzione', () => {
 test('vitalsTrend: etichetta assente → null (mai serie inventata)', () => {
   assert.equal(vitalsTrend(PA, 'SpO2', '2026-07-10', 7), null);
 });
+
+test('compareVitals: weeklyAvg calcolata sulla finestra 7gg e unit corretta', () => {
+  const c = compareVitals(PA, 'PA', '2026-07-10', '2026-07-09');
+  assert.equal(c!.unit, 'mmHg');
+  // media sistolica su 138,142,140,150 = 142.5
+  assert.equal(c!.weeklyAvg!.num, 142.5);
+});
+
+test('compareVitals: deviation true per scostamento SOLO diastolico oltre soglia', () => {
+  const entries = [
+    { etichetta: 'PA', valore: '140/60', rilevato: '2026-07-09T08:00:00.000Z' },
+    { etichetta: 'PA', valore: '142/85', rilevato: '2026-07-10T08:00:00.000Z' },
+  ];
+  const c = compareVitals(entries, 'PA', '2026-07-10', '2026-07-09');
+  assert.equal(c!.delta!.num2, 25);
+  assert.equal(c!.deviation, true);   // sistolica +2 sotto soglia, diastolica +25 sopra
+});
+
+test('threshold override via env AGNOS_DEV_PA', () => {
+  const c = compareVitals(PA, 'PA', '2026-07-10', '2026-07-09', { AGNOS_DEV_PA: '5' } as NodeJS.ProcessEnv);
+  assert.equal(c!.deviation, true);   // delta 10 > soglia override 5
+});

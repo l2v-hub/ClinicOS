@@ -67,7 +67,7 @@ export function compareVitals(entries: VitalEntry[], label: string, dayA: string
         ...(valA.num2 !== undefined && valB.num2 !== undefined ? { num2: Math.round((valA.num2 - valB.num2) * 10) / 10 } : {}) }
     : null;
   const avg = weeklyAvg(pts, dayA);
-  const deviation = !!delta && Math.abs(delta.num) > threshold(label, env);
+  const deviation = !!delta && (Math.abs(delta.num) > threshold(label, env) || (delta.num2 !== undefined && Math.abs(delta.num2) > threshold(label, env)));
   return { label, dayA, dayB, valA, valB, delta, unit: UNITS[normLabel(label)] ?? '', weeklyAvg: avg, deviation };
 }
 
