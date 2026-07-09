@@ -306,6 +306,7 @@ export function occupantRows(beds: BedRow[], roomNumero?: string): RoomOccupantR
 async function loadBeds(): Promise<{ totalRooms: number; beds: BedRow[] }> {
   const totalRooms = await prisma.room.count({ where: { stato: 'attiva' } });
   const rows = await prisma.bed.findMany({
+    where: { room: { stato: 'attiva' } },
     include: {
       room: { select: { numero: true } },
       assignments: { where: { endDate: null }, include: { patient: { select: { firstName: true, lastName: true } } }, take: 1 },
@@ -349,6 +350,19 @@ export async function queryRoomOccupants(input: { roomNumero?: string }, ctx: Us
   };
 }
 
+const CONSEGNA_SEVERITY: Record<string, number> = { urgente: 0, alta: 1, normale: 2 };
+
+/** Prisma orders only by scadenza (asc); priorita is NOT alphabetically sortable
+ *  (urgente > normale > alta would be wrong). Tiebreak here with an explicit severity map. */
+export function sortConsegne<T extends { scadenza: string; priorita: string }>(rows: T[]): T[] {
+  return [...rows].sort((a, b) => {
+    if (a.scadenza !== b.scadenza) return a.scadenza < b.scadenza ? -1 : 1;
+    const sa = CONSEGNA_SEVERITY[a.priorita] ?? 99;
+    const sb = CONSEGNA_SEVERITY[b.priorita] ?? 99;
+    return sa - sb;
+  });
+}
+
 export async function getConsegne(input: { patientId?: string; day?: string }, ctx: UserContext): Promise<SourcedResult<unknown[]>> {
   assertTenant(ctx);
   if (input.patientId) assertPatientAllowed(ctx, input.patientId);
@@ -358,10 +372,11 @@ export async function getConsegne(input: { patientId?: string; day?: string }, c
       ...(input.day ? { scadenza: input.day } : {}),
       stato: { not: 'completata' },
     },
-    orderBy: [{ scadenza: 'asc' }, { priorita: 'desc' }],
+    orderBy: [{ scadenza: 'asc' }],
     take: 50,
   });
-  const allowed = rows.filter((c) => !c.pazienteId || ctx.permittedPatientIds === null || ctx.permittedPatientIds.includes(c.pazienteId));
+  const sorted = sortConsegne(rows);
+  const allowed = sorted.filter((c) => !c.pazienteId || ctx.permittedPatientIds === null || ctx.permittedPatientIds.includes(c.pazienteId));
   gatewayAudit(ctx, 'get_consegne', allowed.map((c) => c.pazienteId).filter(Boolean), allowed.length, allowed.length ? 'ok' : 'empty', nowIso());
   return {
     data: allowed,
@@ -375,6 +390,12 @@ const CLINICAL_SCALE_KEYS = {
 } as const;
 type ClinicalScale = keyof typeof CLINICAL_SCALE_KEYS;
 
+/** Cartella arrays are written newest-first by the frontend ([newEntry, ...list]):
+ *  array newest-first (frontend prepend): slice(0,n) = più recenti. */
+export function latestScores<T>(rows: T[], n = 3): T[] {
+  return (rows ?? []).slice(0, n);
+}
+
 export async function getClinicalScores(input: { patientId: string; scale?: ClinicalScale }, ctx: UserContext): Promise<SourcedResult<unknown[]>> {
   assertTenant(ctx); assertPatientAllowed(ctx, input.patientId);
   const { cartella, recordId } = await loadCartella(input.patientId);
@@ -383,7 +404,7 @@ export async function getClinicalScores(input: { patientId: string; scale?: Clin
     all[scale] = (cartella[key] as unknown[] | undefined) ?? [];
   }
   const picked = input.scale ? { [input.scale]: all[input.scale] ?? [] } : all;
-  const data = Object.entries(picked).flatMap(([scale, rows]) => (rows ?? []).slice(-3).map((r) => ({ scale, ...(r as object) })));
+  const data = Object.entries(picked).flatMap(([scale, rows]) => latestScores(rows ?? []).map((r) => ({ scale, ...(r as object) })));
   gatewayAudit(ctx, 'get_clinical_scores', [input.patientId], data.length, data.length ? 'ok' : 'empty', nowIso());
   return {
     data,

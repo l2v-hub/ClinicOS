@@ -4,7 +4,7 @@
 // replica la disclosure già presente nella UI attuale (assegnazione letti).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { aggregateRooms, occupantRows } from '../gateway/services.js';
+import { aggregateRooms, occupantRows, latestScores, sortConsegne } from '../gateway/services.js';
 
 const beds = [
   { id: 'b1', stato: 'libero', room: { numero: '12' }, label: 'A', active: null },
@@ -29,4 +29,19 @@ test('occupantRows: righe con nome per il letto occupato, filtro per camera', ()
 
 test('occupantRows senza filtro: tutte le camere con occupante', () => {
   assert.equal(occupantRows(beds).length, 1);
+});
+
+test('latestScores: array newest-first (frontend prepend) — prende le 3 PIÙ RECENTI', () => {
+  const arr = ['v5', 'v4', 'v3', 'v2', 'v1'];
+  assert.deepEqual(latestScores(arr), ['v5', 'v4', 'v3']);
+});
+
+test('sortConsegne: urgente prima di alta prima di normale a parità di scadenza', () => {
+  const rows = [
+    { scadenza: '2026-07-10', priorita: 'normale', id: 'n' },
+    { scadenza: '2026-07-10', priorita: 'urgente', id: 'u' },
+    { scadenza: '2026-07-10', priorita: 'alta', id: 'a' },
+    { scadenza: '2026-07-09', priorita: 'normale', id: 'early' },
+  ];
+  assert.deepEqual(sortConsegne(rows as never).map((r: { id: string }) => r.id), ['early', 'u', 'a', 'n']);
 });
