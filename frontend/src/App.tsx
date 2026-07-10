@@ -301,16 +301,26 @@ export default function App() {
       const body = await res.json() as { shifts: OperatorShiftDTO[] };
       const rows = Array.isArray(body.shifts) ? body.shifts : [];
       if (rows.length === 0) return; // nessun turno salvato ancora: mantieni i MOCK come base
-      const byOperator = new Map<string, ScheduleOperatore>();
+      const apiByOperator = new Map<string, ScheduleOperatore>();
       for (const row of rows) {
         const giorno = CODE_TO_GIORNO[row.giorno];
         if (!giorno) continue;
         const turno = { giorno, oraInizio: row.oraInizio, oraFine: row.oraFine, disponibile: row.disponibile };
-        const existing = byOperator.get(row.operatoreId);
+        const existing = apiByOperator.get(row.operatoreId);
         if (existing) existing.turni.push(turno);
-        else byOperator.set(row.operatoreId, { id: row.operatoreId, operatoreId: row.operatoreId, note: '', turni: [turno] });
+        else apiByOperator.set(row.operatoreId, { id: row.operatoreId, operatoreId: row.operatoreId, note: '', turni: [turno] });
       }
-      setSchedules(Array.from(byOperator.values()));
+      // Merge sulla baseline MOCK_SCHEDULES: gli operatori con righe API sostituiscono
+      // la voce mock (mantenendo la nota mock se l'API non ne ha una — il backend non
+      // persiste ancora il campo note); gli operatori senza righe API restano invariati.
+      const merged = MOCK_SCHEDULES.map(mock => {
+        const apiEntry = apiByOperator.get(mock.operatoreId);
+        if (!apiEntry) return mock;
+        apiByOperator.delete(mock.operatoreId);
+        return { ...apiEntry, note: apiEntry.note || mock.note };
+      });
+      for (const extra of apiByOperator.values()) merged.push(extra);
+      setSchedules(merged);
     } catch {
       showToast('Turni non disponibili: mostro i dati di esempio');
     }
