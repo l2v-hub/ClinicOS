@@ -17,7 +17,13 @@ interface SectionDTO {
   reviewStatus: string;
 }
 
-export function NarrativeSectionsTab({ patientId }: { patientId: string }) {
+interface NarrativeSectionsTabProps {
+  patientId: string;
+  operatoreId?: string;
+  operatoreRole?: string;
+}
+
+export function NarrativeSectionsTab({ patientId, operatoreId, operatoreRole }: NarrativeSectionsTabProps) {
   const [sections, setSections] = useState<SectionDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -91,6 +97,8 @@ export function NarrativeSectionsTab({ patientId }: { patientId: string }) {
           sourceText={compare.sourceText}
           title={compare.title}
           onClose={() => setCompare(null)}
+          operatorId={operatoreId}
+          operatorRole={operatoreRole}
         />
       )}
     </div>

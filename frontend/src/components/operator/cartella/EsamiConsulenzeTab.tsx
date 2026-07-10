@@ -6,20 +6,31 @@ import { API_URL } from '../../../config';
 
 // #246: photo/scan attachments for exams/RX/consultations. Uses the device camera on mobile
 // (capture="environment") or a file picker on desktop; bytes are stored on PatientDocument.
+// #246 remediation: the backend now requires operator identity on every /documents call
+// (backend/src/routes/patient-documents.ts `requireOperator`), so every fetch below carries
+// X-Operator-Id/X-Operator-Role; the content endpoint is opened via an authenticated blob
+// fetch (a plain <a href>/<img src> cannot attach custom headers).
 type SectionDocMeta = { id: string; originalName: string; mimeType: string; documentType: string; createdAt: string };
 
-function SectionPhotos({ patientId, documentType }: { patientId: string; documentType: string }) {
+function opHeaders(operatorId?: string, operatorRole?: string): Record<string, string> {
+  const h: Record<string, string> = {};
+  if (operatorId) h['X-Operator-Id'] = operatorId;
+  if (operatorRole) h['X-Operator-Role'] = operatorRole;
+  return h;
+}
+
+function SectionPhotos({ patientId, documentType, operatorId, operatorRole }: { patientId: string; documentType: string; operatorId?: string; operatorRole?: string }) {
   const [docs, setDocs] = useState<SectionDocMeta[]>([]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   function reload() {
-    fetch(`${API_URL}/patients/${patientId}/documents`)
+    fetch(`${API_URL}/patients/${patientId}/documents`, { headers: opHeaders(operatorId, operatorRole) })
       .then(r => (r.ok ? r.json() : { documents: [] }))
       .then(d => setDocs((Array.isArray(d.documents) ? d.documents : []).filter((x: SectionDocMeta) => x.documentType === documentType)))
       .catch(() => { /* none */ });
   }
-  useEffect(reload, [patientId, documentType]);
+  useEffect(reload, [patientId, documentType, operatorId, operatorRole]);
 
   async function onFile(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
@@ -30,11 +41,24 @@ function SectionPhotos({ patientId, documentType }: { patientId: string; documen
       const fd = new FormData();
       fd.append('file', f);
       fd.append('documentType', documentType);
-      const r = await fetch(`${API_URL}/patients/${patientId}/documents`, { method: 'POST', body: fd });
+      const r = await fetch(`${API_URL}/patients/${patientId}/documents`, {
+        method: 'POST', body: fd, headers: opHeaders(operatorId, operatorRole),
+      });
       if (!r.ok) throw new Error(String(r.status));
       reload();
     } catch { setErr('Caricamento non riuscito'); }
     finally { setBusy(false); }
+  }
+
+  async function openDoc(d: SectionDocMeta) {
+    try {
+      const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, { headers: opHeaders(operatorId, operatorRole) });
+      if (!r.ok) throw new Error(String(r.status));
+      const blob = await r.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      window.open(objectUrl, '_blank', 'noreferrer');
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+    } catch { setErr('Apertura documento non riuscita'); }
   }
 
   return (
@@ -49,9 +73,9 @@ function SectionPhotos({ patientId, documentType }: { patientId: string; documen
         <ul className="section-photos__list" style={{ listStyle: 'none', padding: 0, margin: '8px 0 0', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {docs.map(d => (
             <li key={d.id}>
-              <a className="srev-chip" href={`${API_URL}/patients/${patientId}/documents/${d.id}/content`} target="_blank" rel="noreferrer">
+              <button type="button" className="srev-chip" onClick={() => openDoc(d)}>
                 {d.mimeType.includes('pdf') ? '📄' : '🖼️'} {d.originalName}
-              </a>
+              </button>
             </li>
           ))}
         </ul>
@@ -65,6 +89,8 @@ interface Props {
   paziente: Paziente;
   onUpdate: (updates: Partial<CartellaPaziente>) => void;
   operatoreNome: string;
+  operatoreId?: string;
+  operatoreRole?: string;
 }
 
 // ── Sort helper: chronological descending (most recent first) ────────────────
@@ -282,7 +308,7 @@ function EsameSection({
 
 // ── Main tab component ────────────────────────────────────────────────────────
 
-export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome, operatoreId, operatoreRole }: Props) {
   return (
     <div className="cr-tab-content">
       <div style={{ marginBottom: 8 }}>
@@ -299,7 +325,7 @@ export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome
         operatoreNome={operatoreNome}
         onChange={updated => onUpdate({ esamiEmatici: updated })}
       />
-      <SectionPhotos patientId={paziente.id} documentType="esame" />
+      <SectionPhotos patientId={paziente.id} documentType="esame" operatorId={operatoreId} operatorRole={operatoreRole} />
 
       <div style={{ marginTop: 16 }}>
         <EsameSection
@@ -309,7 +335,7 @@ export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome
           operatoreNome={operatoreNome}
           onChange={updated => onUpdate({ esamiStrumentali: updated })}
         />
-        <SectionPhotos patientId={paziente.id} documentType="rx" />
+        <SectionPhotos patientId={paziente.id} documentType="rx" operatorId={operatoreId} operatorRole={operatoreRole} />
       </div>
 
       <div style={{ marginTop: 16 }}>
@@ -320,7 +346,7 @@ export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome
           operatoreNome={operatoreNome}
           onChange={updated => onUpdate({ consulenze: updated })}
         />
-        <SectionPhotos patientId={paziente.id} documentType="consulenza" />
+        <SectionPhotos patientId={paziente.id} documentType="consulenza" operatorId={operatoreId} operatorRole={operatoreRole} />
       </div>
     </div>
   );

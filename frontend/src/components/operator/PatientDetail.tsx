@@ -110,6 +110,8 @@ interface PatientDetailProps {
   onAssignCamera: (pazienteId: string, cameraNumero?: string, lettoNumero?: string) => Promise<{ ok: boolean; lettoLabel?: string }>;
   operatoreNome: string;
   operatoreId: string;
+  /** #246: operator role, forwarded to the document-upload endpoints' auth gate (X-Operator-Role). */
+  operatoreRole?: string;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -190,7 +192,7 @@ export function PatientDetail({
   paziente, cartella, consegne, operatori, camere,
   onBack, onAddConsegna, onUpdateConsegnaStato,
   onUpdateCartella, onUpdatePaziente, onAssignCamera,
-  operatoreNome,
+  operatoreNome, operatoreId, operatoreRole,
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>('riepilogo');
   const [activeGroup, setActiveGroup] = useState<TabGroup>(
@@ -1492,10 +1494,10 @@ export function PatientDetail({
             <PresaInCaricoTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
           {tab === 'documenti' && (
-            <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+            <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} operatoreId={operatoreId} operatoreRole={operatoreRole} />
           )}
           {tab === 'sezioni-narrative' && (
-            <NarrativeSectionsTab patientId={paziente.id} />
+            <NarrativeSectionsTab patientId={paziente.id} operatoreId={operatoreId} operatoreRole={operatoreRole} />
           )}
           {tab === 'diario' && (
             <DiarioPazienteTab
@@ -1513,7 +1515,7 @@ export function PatientDetail({
             <ContenzioniTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
           {tab === 'esami-consulenze' && (
-            <EsamiConsulenzeTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
+            <EsamiConsulenzeTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} operatoreId={operatoreId} operatoreRole={operatoreRole} />
           )}
           {tab === 'braden' && (
             <ScalaBradenTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />

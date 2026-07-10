@@ -1093,6 +1093,7 @@ export default function App() {
               onAssignCamera={syncCameraAssignment}
               operatoreNome={utente.nome}
               operatoreId={utenteId}
+              operatoreRole={utente?.ruolo}
             />
           )}
           {!isAdmin && navKey === 'parametri-multipaziente' && (
