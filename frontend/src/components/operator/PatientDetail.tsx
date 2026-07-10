@@ -33,7 +33,9 @@ import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type TabId =
+// #243: exported so callers (App.tsx) can request an initial tab — e.g. landing on a
+// specific "Moduli" flow right after patient creation from the intake wizard.
+export type TabId =
   | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario' | 'sezioni-narrative'
@@ -110,6 +112,10 @@ interface PatientDetailProps {
   onAssignCamera: (pazienteId: string, cameraNumero?: string, lettoNumero?: string) => Promise<{ ok: boolean; lettoLabel?: string }>;
   operatoreNome: string;
   operatoreId: string;
+  /** #243: land on this tab (e.g. a "Moduli" module) the first time this patient is shown,
+   * instead of the default 'riepilogo'. Consumed once per mount/patient — subsequent patient
+   * switches while this component stays mounted still reset to the default tab. */
+  initialTab?: TabId;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -190,15 +196,28 @@ export function PatientDetail({
   paziente, cartella, consegne, operatori, camere,
   onBack, onAddConsegna, onUpdateConsegnaStato,
   onUpdateCartella, onUpdatePaziente, onAssignCamera,
-  operatoreNome,
+  operatoreNome, initialTab,
 }: PatientDetailProps) {
-  const [tab, setTab] = useState<TabId>('riepilogo');
-  const [activeGroup, setActiveGroup] = useState<TabGroup>(
-    () => TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica'
-  );
+  const [tab, setTab] = useState<TabId>(initialTab ?? 'riepilogo');
+  const [activeGroup, setActiveGroup] = useState<TabGroup>(() => {
+    const target = initialTab ?? 'riepilogo';
+    return TAB_GROUPS.find(g => g.tabs.some(t => t.id === target))?.id ?? 'panoramica';
+  });
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
 
+  // #243: this component mounts fresh each time the operator opens the patient chart (the
+  // caller conditionally renders it), so a ref seeded from `initialTab` on first render lets us
+  // tell "first paint for this patient" (honour initialTab) apart from "patient switched while
+  // still mounted" (e.g. search/Agnos navigation while already viewing another patient's chart —
+  // always reset to the default tab, initialTab only ever targets the patient it was requested for).
+  const initialTabPatientRef = useRef<string | null>(initialTab ? paziente.id : null);
+
   useEffect(() => {
+    if (initialTabPatientRef.current === paziente.id) {
+      initialTabPatientRef.current = paziente.id;
+      return;
+    }
+    initialTabPatientRef.current = paziente.id;
     setTab('riepilogo');
     setActiveGroup(TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica');
     setDiarioFilter('tutti');
