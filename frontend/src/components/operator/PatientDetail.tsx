@@ -26,7 +26,7 @@ import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
 import { deriveAllergySummary } from '../../lib/allergyStatusModel';
-import { AnamnesisEditor } from './sections/AnamnesisEditor';
+import { LegacyAnamnesisView } from './sections/LegacyAnamnesisView';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
 import { VitalSignsEditor } from './sections/VitalSignsEditor';
@@ -36,8 +36,10 @@ import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
 
 // #243: exported so callers (App.tsx) can request an initial tab — e.g. landing on a
 // specific "Moduli" flow right after patient creation from the intake wizard.
+// #245: 'anamnesi' rimosso — il tab editabile duplicato non esiste più (resta la sola
+// superficie narrativa 'sezioni-narrative' + LegacyAnamnesisView read-only).
 export type TabId =
-  | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
+  | 'riepilogo' | 'profilo' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario' | 'sezioni-narrative'
   | 'medicazioni' | 'contenzioni' | 'braden' | 'tinetti' | 'nrs' | 'dimissione'
@@ -65,7 +67,6 @@ const TAB_GROUPS: TabGroupDef[] = [
     tabs: [
       { id: 'presa-in-carico', label: 'Presa in Carico' },
       { id: 'sezioni-narrative', label: 'Sezioni Cliniche (testo)' },
-      { id: 'anamnesi',        label: 'Anamnesi' },
       { id: 'diagnosi',        label: 'Diagnosi' },
       { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
       { id: 'parametri',       label: 'Parametri Vitali' },
@@ -1509,7 +1510,6 @@ export function PatientDetail({
         <div ref={contentRef} className="cr-detail-content tab-panel-transition">
           {tab === 'riepilogo'       && renderRiepilogo()}
           {tab === 'profilo'         && renderProfilo()}
-          {tab === 'anamnesi'        && <AnamnesisEditor mode="patient-chart" value={(cartella.anamnesi ?? {}) as unknown as Record<string, unknown>} onChange={a => upd({ anamnesi: a as unknown as typeof cartella.anamnesi })} operatoreNome={operatoreNome} allergie={cartella.allergie ?? []} />}
           {tab === 'diagnosi'        && renderDiagnosi()}
           {tab === 'terapia-farmacologica' && (
             <TherapyEditor mode="patient-chart" paziente={paziente} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />
@@ -1526,7 +1526,10 @@ export function PatientDetail({
             <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
           {tab === 'sezioni-narrative' && (
-            <NarrativeSectionsTab patientId={paziente.id} />
+            <>
+              <LegacyAnamnesisView anamnesi={cartella.anamnesi} />
+              <NarrativeSectionsTab patientId={paziente.id} />
+            </>
           )}
           {tab === 'diario' && (
             <DiarioPazienteTab
