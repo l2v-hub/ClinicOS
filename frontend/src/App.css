@@ -4046,6 +4046,13 @@ textarea.form-input {
   padding: 10px 12px; border-radius: 8px; font-size: 14px; }
 .agnos-refusal__hint { display: block; margin-top: 6px; font-size: 12px; font-weight: 600; color: #B42318; }
 
+/* Agnos KB (Task 7): chip clarify cliccabili sotto un read notFound con suggestions. */
+.agnos-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.agnos-chip { border: 1px solid #D0D5DD; background: #fff; color: #0F5FD7; border-radius: 16px;
+  padding: 4px 12px; font-size: 13px; cursor: pointer; }
+.agnos-chip:hover { background: #E9EDF2; }
+.agnos-chip:disabled { opacity: .5; cursor: default; }
+
 /* Write preview inside the chat: reuse .voice-preview, white card on chat bg. */
 .agnos-preview { background: var(--surface, #fff); }
 .agnos-preview--annullata { opacity: 0.6; }

@@ -60,6 +60,8 @@ interface UseAgnosChatOptions {
   operatorRole?: string;
   operatorName?: string;
   currentPatientId?: string;
+  /** Agnos KB (Task 7): compila le chip `clarify` col nome reale del paziente in scheda. */
+  currentPatientName?: string;
   /** SPEC-015 US4: receives the executed actionType so the app can refresh the right data
    *  (cartella for clinical writes, agenda for create/update_appointment). */
   onExecuted?: (info: { actionType?: string }) => void;
@@ -95,7 +97,7 @@ function markCancelled(t: AgnosTurn[], index: number): AgnosTurn[] {
   return t.map((x, i) => (i === index && x.status === 'in-conferma' ? { ...x, status: 'annullato' as const } : x));
 }
 
-export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPatientId, onExecuted }: UseAgnosChatOptions) {
+export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPatientId, currentPatientName, onExecuted }: UseAgnosChatOptions) {
   const [turns, setTurns] = useState<AgnosTurn[]>([]);
   const [pending, setPending] = useState<AgnosPending | null>(null);
   const [busy, setBusy] = useState(false);
@@ -137,7 +139,7 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
       const res = await fetch(`${API_URL}/ai/actions/plan`, {
         method: 'POST',
         headers: headers(),
-        body: JSON.stringify({ text, channel, currentPatientId }),
+        body: JSON.stringify({ text, channel, currentPatientId, currentPatientName }),
       });
       const data = await res.json() as ApiError & {
         plan?: AgnosPlan;
@@ -194,7 +196,10 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
     } finally {
       setBusy(false);
     }
-  }, [busy, turns, pending, currentPatientId, headers, patchTurn]);
+  }, [busy, turns, pending, currentPatientId, currentPatientName, headers, patchTurn]);
+
+  /** Chip clarify (Task 7): invia il testo suggerito come nuovo turno testuale — riusa sendCommand. */
+  const sendText = useCallback((text: string) => sendCommand(text, 'testo'), [sendCommand]);
 
   const confirmPending = useCallback(async () => {
     if (!pending || busy) return;
@@ -244,5 +249,5 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
     return { text, channel };
   }, [pending]);
 
-  return { turns, pending, busy, error, sendCommand, confirmPending, cancelPending, dismissPendingForEdit };
+  return { turns, pending, busy, error, sendCommand, sendText, confirmPending, cancelPending, dismissPendingForEdit };
 }

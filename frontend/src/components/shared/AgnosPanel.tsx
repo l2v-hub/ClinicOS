@@ -39,7 +39,11 @@ function readSpokenSummary(read: AssistantAnswer): string {
 function spokenTextFor(turn: AgnosTurn): string | null {
   if (turn.role !== 'agnos') return null;
   if (turn.status === 'attesa' || turn.status === 'in-conferma') return null;
-  if (turn.read) return readSpokenSummary(turn.read);
+  if (turn.read) {
+    // Agnos KB (Task 7): esito `clarify` — legge SOLO la frase introduttiva, mai le chip.
+    if (turn.read.suggestions && turn.read.suggestions.length > 0) return turn.read.answerText || null;
+    return readSpokenSummary(turn.read);
+  }
   if (turn.text) return turn.text;
   return null;
 }
@@ -52,8 +56,8 @@ export function AgnosPanel({ forceOpen, onClose, operatorId, operatorRole, opera
   /** true se il testo in input proviene da dettatura (anche dopo modifica: FR-016 → channel:'voce'). */
   const dictatedRef = useRef(false);
 
-  const { turns, pending, busy, sendCommand, confirmPending, cancelPending, dismissPendingForEdit } =
-    useAgnosChat({ operatorId, operatorRole, operatorName, currentPatientId, onExecuted });
+  const { turns, pending, busy, sendCommand, sendText, confirmPending, cancelPending, dismissPendingForEdit } =
+    useAgnosChat({ operatorId, operatorRole, operatorName, currentPatientId, currentPatientName, onExecuted });
 
   const tts = useSpeechOutput();
   const voice = useVoiceInput({
@@ -97,6 +101,14 @@ export function AgnosPanel({ forceOpen, onClose, operatorId, operatorRole, opera
     dictatedRef.current = false;
     setInput('');
     void sendCommand(text, channel);
+  }
+
+  /** Chip clarify (Task 7): invia il suggerimento come nuovo turno testuale. */
+  function handleSuggestion(text: string) {
+    if (busy) return;
+    tts.stop(); // FR-017: nuovo invio interrompe la riproduzione
+    dictatedRef.current = false;
+    sendText(text);
   }
 
   function handleEdit() {
@@ -176,6 +188,7 @@ export function AgnosPanel({ forceOpen, onClose, operatorId, operatorRole, opera
                   onEdit={handleEdit}
                   onCancel={cancelPending}
                   onNavigate={onNavigate}
+                  onSuggestion={handleSuggestion}
                 />
               ))}
             </div>
@@ -242,9 +255,10 @@ interface TurnViewProps {
   onEdit: () => void;
   onCancel: () => void;
   onNavigate?: (nav: AssistantNav) => void;
+  onSuggestion: (text: string) => void;
 }
 
-function TurnView({ turn, isPending, busy, onConfirm, onEdit, onCancel, onNavigate }: TurnViewProps) {
+function TurnView({ turn, isPending, busy, onConfirm, onEdit, onCancel, onNavigate, onSuggestion }: TurnViewProps) {
   if (turn.role === 'utente') {
     return <div className="ai-asst__turn agnos-turn agnos-turn--utente"><div className="ai-asst__q">{turn.text}</div></div>;
   }
@@ -260,6 +274,16 @@ function TurnView({ turn, isPending, busy, onConfirm, onEdit, onCancel, onNaviga
       )}
       {turn.status === 'successo' && <div className="voice-done">✓ {turn.text}</div>}
       {turn.read && <AnswerView answer={turn.read} onNavigate={onNavigate} />}
+      {turn.read?.suggestions && turn.read.suggestions.length > 0 && (
+        <div className="agnos-chips" role="group" aria-label="Forse intendevi">
+          {turn.read.suggestions.map((s) => (
+            <button key={s} type="button" className="agnos-chip" data-testid="agnos-chip"
+              disabled={busy} onClick={() => onSuggestion(s)}>
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
       {turn.preview && (
         <div className={`voice-preview agnos-preview${turn.status === 'annullato' ? ' agnos-preview--annullata' : ''}`} role="group" aria-label="Operazione proposta">
           <div className="voice-preview__title">{turn.preview.title}</div>

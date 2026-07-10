@@ -17,6 +17,10 @@ export interface AssistantNav {
 export interface AssistantAnswer {
   intent: string; scope: string; results: unknown[]; sources: AssistantSource[];
   navigation: AssistantNav[]; notFound: boolean; refusal?: string;
+  // Agnos KB (Task 6/7): esito `clarify` — frase introduttiva + chip suggerite da catalogo
+  // statico (mai testo libero); popolate SOLO quando notFound=true e refusal assente.
+  answerText?: string;
+  suggestions?: string[];
 }
 interface Turn { question: string; answer?: AssistantAnswer; error?: string; loading?: boolean }
 
@@ -130,7 +134,9 @@ export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole
 // Exported for reuse by AgnosPanel (015): same read-answer rendering (results + sources).
 export function AnswerView({ answer, onNavigate }: { answer: AssistantAnswer; onNavigate?: (n: AssistantNav) => void }) {
   if (answer.refusal) return <div className="ai-asst__a ai-asst__refusal">{answer.refusal}</div>;
-  if (answer.notFound) return <div className="ai-asst__a ai-asst__muted">Informazione non trovata.</div>;
+  // Agnos KB (Task 7): esito `clarify` (notFound + answerText/suggestions) mostra la frase
+  // introduttiva anziché il generico "non trovato" — le chip sono renderizzate dal chiamante.
+  if (answer.notFound) return <div className="ai-asst__a ai-asst__muted">{answer.answerText || 'Informazione non trovata.'}</div>;
   return (
     <div className="ai-asst__a">
       <div className="ai-asst__count">{answer.results.length} risultat{answer.results.length === 1 ? 'o' : 'i'}</div>
