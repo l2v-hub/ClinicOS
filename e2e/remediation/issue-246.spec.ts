@@ -38,9 +38,9 @@ test.beforeAll(() => {
 });
 
 async function openEsamiConsulenze(page: import('@playwright/test').Page) {
-  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.locator('text="Operatore"').first().click();
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('domcontentloaded');
   await page.locator('text="Pazienti"').first().click();
   await page.waitForTimeout(500);
   await page.getByText(PATIENT_LABEL, { exact: false }).first().click();

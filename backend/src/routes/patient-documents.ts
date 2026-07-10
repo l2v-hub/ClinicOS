@@ -11,7 +11,10 @@ import { requireOperator } from '../ai/auth.js';
 import { listPatientDocuments, getPatientDocumentContent, createPatientDocument } from '../ai/upload/patient-documents.js';
 
 const router = Router();
-router.use(requireOperator);
+// #246 FIX: NON usare router.use(requireOperator). Questo router è montato su '/patients'
+// (app.ts) PRIMA del patientsRouter, quindi un middleware a livello di router intercetterebbe
+// l'INTERO namespace /patients — incluso il pubblico GET /patients (lista) → 401, app vuota.
+// L'auth va applicata SOLO alle 3 route documenti, come middleware per-route.
 
 // #246: photo/scan attachments for exams/RX/consultations. In-memory (bytes go to Postgres base64).
 export const MAX_UPLOAD_BYTES = 15 * 1024 * 1024;
@@ -45,7 +48,7 @@ export function sniffAllowedMime(buf: Buffer): string | null {
 }
 
 // POST /patients/:patientId/documents — attach a photo/scan to an existing patient chart.
-router.post('/:patientId/documents', upload.single('file'), async (req, res) => {
+router.post('/:patientId/documents', requireOperator, upload.single('file'), async (req, res) => {
   try {
     const file = (req as unknown as { file?: { originalname: string; mimetype: string; buffer: Buffer } }).file;
     if (!file) { res.status(400).json({ error: 'File mancante' }); return; }
@@ -67,7 +70,7 @@ router.post('/:patientId/documents', upload.single('file'), async (req, res) => 
 });
 
 // GET /patients/:patientId/documents — metadata of the patient's imported documents.
-router.get('/:patientId/documents', async (req, res) => {
+router.get('/:patientId/documents', requireOperator, async (req, res) => {
   try {
     const documents = await listPatientDocuments(String(req.params.patientId));
     res.status(200).json({ documents, total: documents.length });
@@ -77,7 +80,7 @@ router.get('/:patientId/documents', async (req, res) => {
 });
 
 // GET /patients/:patientId/documents/:documentId/content — the file bytes (ownership-checked).
-router.get('/:patientId/documents/:documentId/content', async (req, res) => {
+router.get('/:patientId/documents/:documentId/content', requireOperator, async (req, res) => {
   try {
     const doc = await getPatientDocumentContent(String(req.params.patientId), String(req.params.documentId));
     if (!doc) { res.status(404).json({ error: 'Documento non trovato' }); return; }
