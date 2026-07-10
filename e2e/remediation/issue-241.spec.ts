@@ -22,9 +22,10 @@ async function clickText(page: Page, t: string) {
 async function openTerapiaTab(page: Page) {
   await page.locator('text="Pazienti"').first().click();
   await page.getByText(PATIENT, { exact: false }).first().click();
-  await page.getByRole('button', { name: 'Clinica', exact: true }).first().click()
-    .catch(() => clickText(page, 'Clinica'));
-  await page.getByText('Terapia Farmacologica', { exact: false }).first().click();
+  // I tab L2/L3 sono role=tab e mostrano un badge conteggio ("Clinica 1"):
+  // regex ancorata tollerante al badge (pattern provato nella spec #242).
+  await page.getByRole('tab', { name: /^Clinica(\s+\d+)?$/ }).click();
+  await page.getByRole('tab', { name: /^Terapia Farmacologica(\s+\d+)?$/ }).click();
 }
 
 function pillText(page: Page) {
@@ -51,9 +52,15 @@ test('#241 PUT normalizes giorniSettimana on edit (regression for bypass)', asyn
 
   await openTerapiaTab(page);
 
-  // Open the "new therapy" form via the body link button (NOT the collapsible header button).
-  await page.locator('button.link-btn', { hasText: 'Aggiungi' }).first().click()
-    .catch(() => page.locator('button.btn-primary.btn-sm', { hasText: 'Aggiungi farmaco' }).first().click());
+  // Open the "new therapy" form: link nel corpo (stato vuoto) oppure bottone azioni
+  // nell'header (cts__header-right ha stopPropagation) quando esistono già terapie.
+  // NB: count() e non .catch() — il primo locator consumerebbe l'intero timeout.
+  const addBodyLink = page.locator('button.link-btn', { hasText: 'Aggiungi' });
+  if (await addBodyLink.count()) {
+    await addBodyLink.first().click();
+  } else {
+    await page.locator('.cts__header-right button', { hasText: 'Aggiungi farmaco' }).first().click();
+  }
   await page.waitForSelector('[data-testid="therapy-weekdays"]', { timeout: 8000 });
   await expect(page.locator('[data-testid="therapy-weekdays"]')).toBeVisible();
 
