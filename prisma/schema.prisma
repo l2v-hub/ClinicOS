@@ -526,3 +526,20 @@ model AiAuditEvent {
   @@index([patientId, createdAt])
   @@index([outcome])
 }
+
+// Agnos KB: turni operatori persistiti (decisione 2026-07-10). Additivo — sostituisce
+// MOCK_SCHEDULES lato frontend; usato anche dall'intent Agnos operators_on_duty (Task 4).
+model OperatorShift {
+  id            String   @id @default(cuid())
+  operatoreId   String
+  operatoreNome String
+  giorno        String   // lun | mar | mer | gio | ven | sab | dom
+  oraInizio     String   @default("08:00")
+  oraFine       String   @default("20:00")
+  disponibile   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([operatoreId, giorno])
+  @@index([giorno])
+}

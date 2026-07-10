@@ -6,7 +6,7 @@ import { sortPazienti } from './lib/patientSort';
 
 import type {
   UtenteApp, Paziente, Operatore, Consegna, NavKey,
-  Appuntamento, Camera, ScheduleOperatore, Nota, StatoNota,
+  Appuntamento, Camera, ScheduleOperatore, GiornoSettimana, Nota, StatoNota,
   CartellaPaziente, NuovoPaziente, TherapySlot, MotivoNonErogazione,
   TherapySlotPatient, TherapyAdministration, TipoIntervento,
 } from './types';
@@ -91,6 +91,27 @@ function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {
     priorita: 'normale',
     note: known || !tipologia ? note : (note ? `${tipologia} — ${note}` : tipologia),
   };
+}
+
+// ── Turni operatori: mapping giorno UI (lunedi..domenica) ↔ codice backend (lun..dom) ──
+// (Agnos KB Task 3: OperatorShift persistito, sostituisce MOCK_SCHEDULES.)
+
+const GIORNO_TO_CODE: Record<GiornoSettimana, string> = {
+  lunedi: 'lun', martedi: 'mar', mercoledi: 'mer', giovedi: 'gio',
+  venerdi: 'ven', sabato: 'sab', domenica: 'dom',
+};
+const CODE_TO_GIORNO: Record<string, GiornoSettimana> = {
+  lun: 'lunedi', mar: 'martedi', mer: 'mercoledi', gio: 'giovedi',
+  ven: 'venerdi', sab: 'sabato', dom: 'domenica',
+};
+
+interface OperatorShiftDTO {
+  operatoreId: string;
+  operatoreNome: string;
+  giorno: string;
+  oraInizio: string;
+  oraFine: string;
+  disponibile: boolean;
 }
 
 // ── App ────────────────────────────────────────────────────────────────────────
@@ -271,6 +292,30 @@ export default function App() {
       .catch(() => { /* keep empty array */ });
   }, []);
 
+  // ── Load operator shifts (API — Agnos KB Task 3, sostituisce MOCK_SCHEDULES) ──
+
+  const loadSchedules = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_URL}/operator-shifts`);
+      if (!res.ok) { showToast('Turni non disponibili: mostro i dati di esempio'); return; }
+      const body = await res.json() as { shifts: OperatorShiftDTO[] };
+      const rows = Array.isArray(body.shifts) ? body.shifts : [];
+      if (rows.length === 0) return; // nessun turno salvato ancora: mantieni i MOCK come base
+      const byOperator = new Map<string, ScheduleOperatore>();
+      for (const row of rows) {
+        const giorno = CODE_TO_GIORNO[row.giorno];
+        if (!giorno) continue;
+        const turno = { giorno, oraInizio: row.oraInizio, oraFine: row.oraFine, disponibile: row.disponibile };
+        const existing = byOperator.get(row.operatoreId);
+        if (existing) existing.turni.push(turno);
+        else byOperator.set(row.operatoreId, { id: row.operatoreId, operatoreId: row.operatoreId, note: '', turni: [turno] });
+      }
+      setSchedules(Array.from(byOperator.values()));
+    } catch {
+      showToast('Turni non disponibili: mostro i dati di esempio');
+    }
+  }, []);
+
   // ── Fetch patients ──────────────────────────────────────────────────────────
 
   useEffect(() => {
@@ -289,12 +334,14 @@ export default function App() {
     loadCamere();
     // Load consegne from API (persisted handover cards)
     void loadConsegne();
+    // Load operator shifts from API (persisted, fallback to MOCK_SCHEDULES on failure)
+    void loadSchedules();
     // Load note/messaggi from API (persisted)
     fetch(`${API_URL}/notes`)
       .then(r => r.ok ? r.json() : [])
       .then((data: Nota[]) => setNote(data.map(n => ({ ...n, pazienteId: n.pazienteId ?? undefined, pazienteNome: n.pazienteNome ?? undefined }))))
       .catch(() => { /* keep empty array */ });
-  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
+  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne, loadSchedules]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
 
@@ -455,12 +502,35 @@ export default function App() {
 
   // ── Schedules ───────────────────────────────────────────────────────────────
 
-  function saveSchedule(s: ScheduleOperatore) {
+  async function saveSchedule(s: ScheduleOperatore): Promise<void> {
+    const snapshot = schedules;
     setSchedules(prev => {
       const idx = prev.findIndex(x => x.operatoreId === s.operatoreId);
       if (idx >= 0) return prev.map((x, i) => i === idx ? s : x);
       return [...prev, s];
     });
+    const op = operatori.find(o => o.id === s.operatoreId);
+    const operatoreNome = op ? `${op.cognome} ${op.nome}` : s.operatoreId;
+    try {
+      const res = await fetch(`${API_URL}/operator-shifts/${s.operatoreId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          operatoreNome,
+          turni: s.turni.map(t => ({
+            giorno: GIORNO_TO_CODE[t.giorno],
+            oraInizio: t.oraInizio,
+            oraFine: t.oraFine,
+            disponibile: t.disponibile,
+          })),
+        }),
+      });
+      if (!res.ok) { setSchedules(snapshot); showToast('Impossibile salvare i turni'); return; }
+      showToast('Turni salvati');
+    } catch {
+      setSchedules(snapshot);
+      showToast('Impossibile salvare i turni: errore di rete');
+    }
   }
 
   // ── Cartella CRUD (API-persisted) ─────────────────────────────────────────

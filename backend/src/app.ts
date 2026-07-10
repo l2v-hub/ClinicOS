@@ -20,6 +20,7 @@ import assistantPublicRouter from './routes/ai-assistant-public.js';
 import voiceRouter from './routes/ai-voice.js';
 import aiActionsRouter from './routes/ai-actions.js';
 import aiAuditRouter from './routes/ai-audit.js';
+import operatorShiftsRouter from './routes/operator-shifts.js';
 
 const app = express();
 
@@ -94,6 +95,8 @@ app.use('/therapy-slots', therapyRouter);
 app.use('/patient-intake', patientIntakeRouter);
 app.use('/consegne', consegneRouter);
 app.use('/notes', noteRouter);
+// Agnos KB: turni operatori persistiti (sostituisce MOCK_SCHEDULES lato frontend).
+app.use('/operator-shifts', operatorShiftsRouter);
 app.use('/intake/drafts', intakeDraftsRouter);
 app.use('/ai/extraction/jobs', aiJobsRouter);
 app.use('/ai/extraction', aiExtractionRouter);
