@@ -1,0 +1,28 @@
+# Test log — integrated #256 (5f8445c)
+
+== backend suite (npm --prefix backend test) ==
+# tests 316
+# suites 0
+# pass 316
+# fail 0
+
+== backend/src/therapies/__tests__/giorni-settimana.test.ts ==
+# tests 3
+# pass 3
+# fail 0
+
+== backend/src/ai/__tests__/markdown-parse.test.ts ==
+# tests 20
+# pass 20
+# fail 0
+
+== frontend/src/lib/__tests__/allergyStatusModel.test.ts ==
+# tests 13
+# pass 13
+# fail 0
+
+== frontend/src/lib/__tests__/legacyAnamnesis.test.ts ==
+# tests 6
+# pass 6
+# fail 0
+

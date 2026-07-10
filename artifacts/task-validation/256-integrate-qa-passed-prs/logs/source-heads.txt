@@ -1,0 +1,9 @@
+# Source heads — issue #256 integration (7063f59)
+origin/main 7063f59049693c55085e26607c969e36eade4ec5
+#225 fix/issue-225-azure-principles -> b353115370796d225e23a614df5511434d45c8b1
+#241 fix/issue-241-giorni-settimana -> cce880c199abfec8bf2593ee9e9eaba784687708
+#242 fix/issue-242-diagnosi-terapia -> e6853b33c1213b4dd1dbc94a48674cb7f252917d
+#243 fix/issue-243-moduli -> 6f730bbe77d25e5dfc0b7cfef5800d3ed38337cc
+#244 fix/issue-244-allergie -> d51ffdbedc415bba991a337437b653472ca3c6e2
+#245 fix/issue-245-anamnesi -> fc8e2ccdc7c2bcf0e1d45196360a691810f1955c
+#246 fix/issue-246-foto(EXCLUDED) -> 584c836e8e45c929dd1250a31305648bd0695945

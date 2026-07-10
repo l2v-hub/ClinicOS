@@ -1,0 +1,11 @@
+# Build log — integrated #256 (5f8445c)
+
+== npm run db:generate (prisma client) ==
+✔ Generated Prisma Client (v7.8.0) to .\..\..\..\node_modules\@prisma\client in 236ms
+
+== backend build ==
+exit=0
+(no TS errors above = clean)
+
+== frontend build ==
+exit=0

@@ -1,0 +1,62 @@
+# Migration validation #241 — evidenza oggettiva (rigenerata 2026-07-11)
+# Nessun DATABASE_URL/password stampato. DB usa-e-getta creati da TEMPLATE template0 (pristine).
+# NOTA: la summary CLI di prisma ('N migration(s) deployed') e' fuorviante su questo runner;
+#       la prova e' lo STATO REALE del database (pre/post), indipendente dallo stdout di prisma.
+
+== 0) directory migration nel repo ==
+conteggio: 19 (atteso 19)
+
+== 1) DB VUOTO (clinicos_empty_1783723971, TEMPLATE template0) — STATO PRE-migrate ==
+tabelle public PRE-deploy: 0  (atteso 0 = database realmente vuoto)
+
+== 2) STATO POST 'prisma migrate deploy' ==
+migration registrate (finished): 19  (atteso 19)
+tabelle public POST-deploy: 25  (da 0 a 25: create dalle 19 migration)
+elenco delle 19 migration applicate (da _prisma_migrations, ordine di applicazione):
+  - 20260430121929_init
+  - 20260508180649_add_cartella_json
+  - 20260510120000_add_medication_administration
+  - 20260510140000_add_patient_intake_document
+  - 20260510160000_add_patient_therapy
+  - 20260510160953_add_rooms_beds_assignments
+  - 20260612090000_add_consegna
+  - 20260612091500_add_nota
+  - 20260613103741_add_import_jobs
+  - 20260613130207_add_import_confirm_audit
+  - 20260614091124_add_async_job_fields
+  - 20260616080000_add_patient_narrative_sections
+  - 20260616220000_add_patient_documents
+  - 20260621130000_add_importdocument_databytes
+  - 20260624090000_req093_therapy_schedules
+  - 20260628162637_add_patient_intake_draft
+  - 20260629040947_unique_intake_draft_import_job
+  - 20260703225843_ai_audit_event
+  - 20260708120000_therapy_giorni_settimana
+
+== 3) #241: giorniSettimana esiste ed e' NULLABLE ==
+  column_name|is_nullable|data_type
+  giorniSettimana|YES|text
+  (1 row)
+
+== 4) UPGRADE PATH — DB vuoto (clinicos_upgrade_1783724019, template0): migra PRE-#241, inserisci terapia, poi applica #241 ==
+  (migration #241 temporaneamente rimossa dalla dir)
+  migration applicate PRE-#241: 18  (atteso 18)
+  colonna giorniSettimana PRE-#241: 0  (atteso 0 = assente)
+  terapia storica sintetica (FarmacoStorico) inserita su DB pre-#241
+  (migration #241 ripristinata)
+  migration applicate POST-#241: 19  (atteso 19)
+  la terapia storica SOPRAVVIVE con giorniSettimana NULL (= ogni giorno, backward-compatible):
+     id   |  farmacoNome   | dosaggio | giorniSettimana | is_every_day 
+  --------+----------------+----------+-----------------+--------------
+   MIG-T1 | FarmacoStorico | 1 cp     |                 | t
+  (1 row)
+  
+
+== 5-6) canonicalizzazione create/PUT + filtro slot per giorno ISO ==
+  coperti dagli unit test backend (giorni-settimana.test.ts 3/3) e dallo Scenario Playwright A (#241):
+  create Lun/Mar/Gio/Dom -> stored '1,2,4,7'; PUT non-canonico -> ricanonicalizzato; slot assente il mercoledi'.
+
+== 7) rollback/redeploy senza perdita dati clinici ==
+  migration #241 additiva (ADD COLUMN nullable). 'prisma migrate deploy' non esegue auto-down.
+  Nessuna migration del set esegue DROP/ALTER distruttivo su tabelle esistenti.
+== cleanup DB usa-e-getta completato ==

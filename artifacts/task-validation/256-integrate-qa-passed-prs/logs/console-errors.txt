@@ -1,0 +1,3 @@
+# Console errors — integrated A-E suite (5f8445c)
+Le 5 spec registrano page.on('console') e falliscono su error type (esclusi warning React dev noti: descendant/nested/hydration).
+Esito run: 5/5 PASS → nessun NUOVO console error rilevante ha fatto fallire alcuna spec.
