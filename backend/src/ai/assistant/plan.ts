@@ -120,7 +120,9 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   // ── cross / organizzativi (Agnos KB Task 5): camere, consegne senza paziente, turni ──
   const roomNum = /camera\s*(\d+)/.exec(q)?.[1];
   if (roomNum && /(occupat|da chi|chi c'?e)/.test(q))
-    return base('rooms_occupants', [{ tool: 'query_room_occupants', args: { roomNumero: roomNum } }], true);
+    // spec §2: nomi occupanti visibili a entrambi i ruoli (stessa disclosure della UI);
+    // protezione = canFacilityRead + permittedPatientIds, NON il gate cross-patient.
+    return base('rooms_occupants', [{ tool: 'query_room_occupants', args: { roomNumero: roomNum } }]);
   if (/(camere?|stanze?|letti?).*(occupat|liber|disponibil|manutenzione)|occupazione.*(camere?|stanze?|letti?)/.test(q))
     return base('rooms_occupancy', [{ tool: 'query_rooms_occupancy', args: {} }]);
   if (/\bconsegn/.test(q))

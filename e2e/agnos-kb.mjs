@@ -8,12 +8,14 @@
 // per testo richiesta, assert su request/response + assert UI + screenshot, trace+video, PASS/FAIL
 // collector, exit 1 se qualche assert fallisce.
 //
-// IMPORTANTE (trasparenza): due scenari (rooms_occupants con nome paziente; operators_on_duty da
-// ADMIN con risultati) sono stati eseguiti e producono un RIFIUTO anche nelle condizioni attese dal
-// piano — non un fallimento del test, ma un comportamento reale del backend attualmente deployato,
-// con causa radice individuata e documentata (vedi commenti inline + validation-report.md). Questo
-// harness asserisce il comportamento REALE osservato, non quello desiderato dalla spec, cosi' la
-// evidenza resta onesta e verificabile.
+// IMPORTANTE (trasparenza): uno scenario (operators_on_duty da ADMIN con risultati) e' stato
+// eseguito e produce un RIFIUTO anche nelle condizioni attese dal piano — non un fallimento del
+// test, ma un comportamento reale del backend attualmente deployato, con causa radice individuata
+// e documentata (vedi commenti inline + validation-report.md). rooms_occupants (Gap 1) e' stato
+// risolto per allinearlo alla spec §2 (nomi visibili a entrambi i ruoli, gate = canFacilityRead +
+// permittedPatientIds, non il gate cross-patient) — vedi Scenario 2 sotto. Questo harness asserisce
+// il comportamento REALE osservato, non quello desiderato dalla spec quando ancora divergente, cosi'
+// la evidenza resta onesta e verificabile.
 //   node e2e/agnos-kb.mjs [outDir]
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -88,20 +90,21 @@ try {
     `request.text = ${s1?.reqText}\nresponse.read.results = ${JSON.stringify(r1?.results)}\nPHI (nome/cognome/name/patient) presente: ${s1phi}\n`);
 
   // ── Scenario 2: rooms_occupants — camera reale 102 (occupata, verificato via GET /admin/rooms/occupancy) ──
-  // NOTA (gap documentato): plan.ts marca rooms_occupants con requiresCrossPatientAccess=true, che
-  // instrada la richiesta sul gate canCrossPatientSearch() (ruolo admin/manager + env
-  // AI_CROSS_PATIENT_SEARCH_ENABLED) PRIMA che il tool raggiunga il proprio gate canFacilityRead()
-  // — diversamente da rooms_occupancy (stessa fonte, requiresCross=false). Risultato osservato: la
-  // richiesta viene SEMPRE rifiutata, anche se lo stesso dato (nome+camera) e' gia' mostrato a
-  // entrambi i ruoli nella UI stanze esistente (spec §2 "Nomi nelle risposte camere: Entrambi i
-  // ruoli"). Asseriamo il comportamento REALE (intent corretto + rifiuto), non quello atteso da spec.
+  // FIX (Gap 1 risolto, spec §2): rooms_occupants non porta più requiresCrossPatientAccess=true,
+  // quindi non passa dal gate canCrossPatientSearch() (ruolo admin/manager + env) — resta protetto
+  // da canFacilityRead() + filtro permittedPatientIds dentro queryRoomOccupants stesso, come
+  // rooms_occupancy. Lo stesso dato (nome+camera) è già mostrato a entrambi i ruoli nella UI stanze
+  // esistente (spec §2 "Nomi nelle risposte camere: Entrambi i ruoli"), quindi l'OPERATORE ora
+  // riceve risultati invece di un rifiuto.
   await ask('la camera 102 è occupata da chi?');
   const s2 = planByText.get('la camera 102 è occupata da chi?');
   const r2 = s2?.body?.read;
   ok('S2 HTTP 200', s2?.status === 200, `status=${s2?.status}`);
   ok('S2 intent == rooms_occupants (routing corretto)', r2?.intent === 'rooms_occupants', `intent=${r2?.intent}`);
   ok('S2 roomNumero estratto correttamente', r2?.plan?.tools?.[0]?.args?.roomNumero === '102', `args=${JSON.stringify(r2?.plan?.tools?.[0]?.args)}`);
-  ok('S2 [GAP DOCUMENTATO] rifiutato per requiresCrossPatientAccess (vedi validation-report.md)', typeof r2?.refusal === 'string' && r2.refusal.length > 0, `refusal=${r2?.refusal}`);
+  ok('S2 [GAP 1 RISOLTO] nessun rifiuto — spec §2 (entrambi i ruoli)', r2?.refusal === undefined, `refusal=${r2?.refusal}`);
+  ok('S2 notFound == false (occupante trovato in camera 102)', r2?.notFound === false, `notFound=${r2?.notFound}`);
+  ok('S2 results[0].patientName presente (disclosure UI equivalente)', typeof r2?.results?.[0]?.patientName === 'string' && r2.results[0].patientName.length > 0, `patientName=${r2?.results?.[0]?.patientName}`);
   await shot('02-rooms-occupants-camera-102.png');
 
   // ── Scenario 3: vitals_compare (paziente in scheda: Moretti, Elena — SEED-PAZ-008) ──

@@ -172,10 +172,10 @@ test('KB invariante: refuse_clinical vince sui nuovi intent', () => {
 });
 
 // ── KB fix (review findings): rooms_occupants cross-flag + ordine rami vitals ─
-test('KB fix: rooms_occupants richiede cross access (nomi = esposizione cross)', () => {
+test('KB spec §2: rooms_occupants NON richiede cross access (disclosure UI, gate facility+ACL)', () => {
   const p = planQuery('la camera 12 è occupata da chi?');
   assert.equal(p.intent, 'rooms_occupants');
-  assert.equal(p.requiresCrossPatientAccess, true);
+  assert.equal(p.requiresCrossPatientAccess, false);
 });
 test('KB fix: "andamento della pressione negli ultimi 7 giorni" → vitals_trend (non vitals_recent)', () => {
   const p = planQuery('andamento della pressione negli ultimi 7 giorni', { currentPatientId: P });

@@ -1,5 +1,5 @@
 {
-  "ranAt": "2026-07-10T02:25:57.849Z",
+  "ranAt": "2026-07-10T02:44:23.077Z",
   "results": [
     {
       "name": "S1 HTTP 200",
@@ -42,9 +42,19 @@
       "detail": "args={\"roomNumero\":\"102\"}"
     },
     {
-      "name": "S2 [GAP DOCUMENTATO] rifiutato per requiresCrossPatientAccess (vedi validation-report.md)",
+      "name": "S2 [GAP 1 RISOLTO] nessun rifiuto — spec §2 (entrambi i ruoli)",
       "pass": true,
-      "detail": "refusal=Ricerca tra più pazienti non autorizzata per il tuo ruolo."
+      "detail": "refusal=undefined"
+    },
+    {
+      "name": "S2 notFound == false (occupante trovato in camera 102)",
+      "pass": true,
+      "detail": "notFound=false"
+    },
+    {
+      "name": "S2 results[0].patientName presente (disclosure UI equivalente)",
+      "pass": true,
+      "detail": "patientName=Camera128 Verifica"
     },
     {
       "name": "S3 intent == vitals_compare",
