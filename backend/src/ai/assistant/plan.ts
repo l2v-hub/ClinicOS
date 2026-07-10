@@ -84,6 +84,13 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   // ── current-patient retrieval intents (need a patient in context) ──
   if (scope === 'current_patient' && pid) {
     if (/\ballerg/.test(q)) return base('allergies', [{ tool: 'get_patient_allergies', args: { patientId: pid } }]);
+    // Agnos KB (Task 5): confronti/andamento parametri — PRIMA di vitals_recent, altrimenti
+    // il regex generico "ultim|7|sette|giorni" di vitals_recent intercetta le domande di trend.
+    if (/(rispetto a|confronta.*con|vs\.?)\s*(ieri|luned|marted|mercoled|gioved|venerd|sabato|domenica|\d{4}-\d{2}-\d{2})/.test(q)
+        && /(pression|pa\b|frequenza|fc\b|temperatura|spo2|satur)/.test(q))
+      return base('vitals_compare', [{ tool: 'compare_patient_vitals', args: { patientId: pid, label: vitalLabel(q), dayB: refDay(q) } }]);
+    if (/(andamento|trend|ultim[ai] (7|sette) giorni|questa settimana)/.test(q) && /(pression|pa\b|frequenza|fc\b|temperatura|spo2|satur|parametr)/.test(q))
+      return base('vitals_trend', [{ tool: 'get_patient_vitals_trend', args: { patientId: pid, label: vitalLabel(q) } }]);
     if (/(parametri|pressione|pa\b|frequenza|spo2|temperatura).*(ultim|7|sette|giorni|recenti)/.test(q) || /ultimi parametri/.test(q))
       return base('vitals_recent', [{ tool: 'get_patient_vital_signs', args: { patientId: pid } }]);
     const sysGt = /(pressione|sistolic|pa).*?(\d{2,3})/.exec(q);
@@ -92,13 +99,6 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
     if (/appuntament\w*|agenda/.test(q)) return base('appointments', [{ tool: 'get_patient_appointments', args: { patientId: pid } }]);
     // 016 F0: plurali/sinonimi (terapia/terapie/farmaco/farmaci/prescriz…)
     if (/terapi\w*|farmac\w*|prescriz\w*/.test(q)) return base('therapies', [{ tool: 'get_patient_therapies', args: { patientId: pid } }]);
-    // Agnos KB (Task 5): confronti/andamento parametri, diario, scale cliniche, consegne del
-    // paziente in contesto — PRIMA del match generico cerca|trova.
-    if (/(rispetto a|confronta.*con|vs\.?)\s*(ieri|luned|marted|mercoled|gioved|venerd|sabato|domenica|\d{4}-\d{2}-\d{2})/.test(q)
-        && /(pression|pa\b|frequenza|fc\b|temperatura|spo2|satur)/.test(q))
-      return base('vitals_compare', [{ tool: 'compare_patient_vitals', args: { patientId: pid, label: vitalLabel(q), dayB: refDay(q) } }]);
-    if (/(andamento|trend|ultim[ai] (7|sette) giorni|questa settimana)/.test(q) && /(pression|pa\b|frequenza|fc\b|temperatura|spo2|satur|parametr)/.test(q))
-      return base('vitals_trend', [{ tool: 'get_patient_vitals_trend', args: { patientId: pid, label: vitalLabel(q) } }]);
     if (/\bdiario\b|\bnote\b.*\bscritt/.test(q) || /cosa .*scritto/.test(q))
       return base('diary_notes', [{ tool: 'get_patient_diary', args: { patientId: pid, ...dayWindow(q) } }]);
     if (/braden|tinetti|nrs|medicazion|contenzion|scala|punteggio/.test(q))
@@ -117,7 +117,7 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   // ── cross / organizzativi (Agnos KB Task 5): camere, consegne senza paziente, turni ──
   const roomNum = /camera\s*(\d+)/.exec(q)?.[1];
   if (roomNum && /(occupat|da chi|chi c'?e)/.test(q))
-    return base('rooms_occupants', [{ tool: 'query_room_occupants', args: { roomNumero: roomNum } }]);
+    return base('rooms_occupants', [{ tool: 'query_room_occupants', args: { roomNumero: roomNum } }], true);
   if (/(camere?|stanze?|letti?).*(occupat|liber|disponibil|manutenzione)|occupazione.*(camere?|stanze?|letti?)/.test(q))
     return base('rooms_occupancy', [{ tool: 'query_rooms_occupancy', args: {} }]);
   if (/\bconsegn/.test(q))

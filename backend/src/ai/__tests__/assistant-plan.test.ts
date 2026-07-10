@@ -33,7 +33,9 @@ test('document search → search_documents', () => {
 });
 
 test('recent vitals → vital signs tool', () => {
-  const p = planQuery('Quali parametri sono stati rilevati negli ultimi sette giorni?', { currentPatientId: P });
+  // Nota: "negli ultimi sette giorni" ora è correttamente vitals_trend (KB fix Finding 2);
+  // questa frase resta puramente "recenti" per non sovrapporsi al ramo trend.
+  const p = planQuery('Quali parametri sono stati rilevati ultimamente?', { currentPatientId: P });
   assert.equal(p.intent, 'vitals_recent');
   assert.equal(p.tools[0].tool, 'get_patient_vital_signs');
 });
@@ -167,4 +169,19 @@ test('KB: "chi è di turno oggi" → operators_on_duty', () => {
 });
 test('KB invariante: refuse_clinical vince sui nuovi intent', () => {
   assert.equal(planQuery('che terapia dovrei dare per la pressione alta?', { currentPatientId: P }).intent, 'refuse_clinical');
+});
+
+// ── KB fix (review findings): rooms_occupants cross-flag + ordine rami vitals ─
+test('KB fix: rooms_occupants richiede cross access (nomi = esposizione cross)', () => {
+  const p = planQuery('la camera 12 è occupata da chi?');
+  assert.equal(p.intent, 'rooms_occupants');
+  assert.equal(p.requiresCrossPatientAccess, true);
+});
+test('KB fix: "andamento della pressione negli ultimi 7 giorni" → vitals_trend (non vitals_recent)', () => {
+  const p = planQuery('andamento della pressione negli ultimi 7 giorni', { currentPatientId: P });
+  assert.equal(p.intent, 'vitals_trend');
+});
+test('KB fix: "ultimi parametri" resta vitals_recent (nessuna regressione)', () => {
+  const p = planQuery('mostrami gli ultimi parametri', { currentPatientId: P });
+  assert.equal(p.intent, 'vitals_recent');
 });
