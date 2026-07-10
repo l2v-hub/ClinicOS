@@ -13,8 +13,9 @@ import {
 } from './filters.js';
 import {
   appointmentSource, clinicalScoreSource, consegnaSource, diarySource, documentSource, narrativeSource,
-  patientFieldSource, roomOccupancySource, roomOccupantsSource, therapySource, vitalSource,
+  operatorShiftSource, patientFieldSource, roomOccupancySource, roomOccupantsSource, therapySource, vitalSource,
 } from './sources.js';
+import { onDuty, weekdayIt, type ShiftRow } from '../../routes/operator-shifts.js';
 import { gatewayAudit } from './audit.js';
 import {
   GatewayError, type ClinicalSectionMatch, type ClinicalSectionSearchInput, type CorrelateInput,
@@ -410,6 +411,35 @@ export async function getClinicalScores(input: { patientId: string; scale?: Clin
     data,
     sourceRefs: data.map((d, i) => clinicalScoreSource(input.patientId, `${recordId}-${i}`, (d as { scale: string }).scale, `Scala ${(d as { scale: string }).scale}`)),
   };
+}
+
+export interface OperatorDutyRow {
+  operatoreId: string; operatoreNome: string; oraInizio: string; oraFine: string; pazientiInCarico: number;
+}
+
+export function dutyRows(shifts: ShiftRow[], counts: Map<string, number>, giorno: string): OperatorDutyRow[] {
+  return onDuty(shifts, giorno).map((s) => ({
+    operatoreId: s.operatoreId, operatoreNome: s.operatoreNome,
+    oraInizio: s.oraInizio, oraFine: s.oraFine, pazientiInCarico: counts.get(s.operatoreId) ?? 0,
+  }));
+}
+
+/** SOLO ADMIN (spec §2): dato organizzativo (turni + carico pazienti per operatore). Il gate
+ *  ruolo è imposto qui, non a valle — nessun altro chiamante deve poter bypassarlo. */
+export async function queryOperators(input: { day?: string }, ctx: UserContext): Promise<SourcedResult<OperatorDutyRow[]>> {
+  assertTenant(ctx);
+  if (!ctx.roles.includes('admin')) {
+    throw new GatewayError('forbidden', 'Informazioni sui turni disponibili solo per il ruolo amministratore.');
+  }
+  const day = input.day ?? new Date().toISOString().slice(0, 10);
+  const shifts = await prisma.operatorShift.findMany();
+  // pazienti in carico ≈ appuntamenti odierni per operatore (fonte reale disponibile).
+  const from = new Date(`${day}T00:00:00.000Z`); const to = new Date(`${day}T23:59:59.999Z`);
+  const appts = await prisma.appointment.groupBy({ by: ['operatorId'], where: { scheduledAt: { gte: from, lte: to } }, _count: { _all: true } });
+  const counts = new Map(appts.map((a) => [a.operatorId, a._count._all]));
+  const rows = dutyRows(shifts as ShiftRow[], counts, weekdayIt(day));
+  gatewayAudit(ctx, 'query_operators', [], rows.length, rows.length ? 'ok' : 'empty', nowIso());
+  return { data: rows, sourceRefs: [operatorShiftSource(`duty-${day}`, `${rows.length} operatori disponibili ${day}`)] };
 }
 
 function isAllowedPatient(ctx: UserContext, patientId: string): boolean {

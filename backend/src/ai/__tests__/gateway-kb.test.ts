@@ -4,7 +4,7 @@
 // replica la disclosure già presente nella UI attuale (assegnazione letti).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { aggregateRooms, occupantRows, latestScores, sortConsegne } from '../gateway/services.js';
+import { aggregateRooms, occupantRows, latestScores, sortConsegne, dutyRows } from '../gateway/services.js';
 
 const beds = [
   { id: 'b1', stato: 'libero', room: { numero: '12' }, label: 'A', active: null },
@@ -44,4 +44,13 @@ test('sortConsegne: urgente prima di alta prima di normale a parità di scadenza
     { scadenza: '2026-07-09', priorita: 'normale', id: 'early' },
   ];
   assert.deepEqual(sortConsegne(rows as never).map((r: { id: string }) => r.id), ['early', 'u', 'a', 'n']);
+});
+
+test('dutyRows: solo disponibili del giorno, con conteggio pazienti in carico', () => {
+  const shifts = [
+    { operatoreId: 'o1', operatoreNome: 'Rossi', giorno: 'ven', oraInizio: '08:00', oraFine: '20:00', disponibile: true },
+    { operatoreId: 'o2', operatoreNome: 'Bianchi', giorno: 'ven', oraInizio: '08:00', oraFine: '20:00', disponibile: false },
+  ];
+  const rows = dutyRows(shifts, new Map([['o1', 7]]), 'ven');
+  assert.deepEqual(rows, [{ operatoreId: 'o1', operatoreNome: 'Rossi', oraInizio: '08:00', oraFine: '20:00', pazientiInCarico: 7 }]);
 });
