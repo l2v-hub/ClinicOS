@@ -30,3 +30,10 @@ export function appointmentSource(patientId: string, recordId: string, label: st
 export function therapySource(patientId: string, recordId: string, label: string, exactText?: string, recordedAt?: string): SourceReference {
   return { sourceType: 'THERAPY', patientId, recordId, label, exactText, recordedAt };
 }
+
+// issue #239: facility-level aggregate (no single patient owns this result — same convention the
+// composable query engine already uses for room/bed/roomAssignment rows: sourceType 'OCCUPANCY',
+// patientId '' when the record is not patient-owned).
+export function roomOccupancySource(exactText?: string, recordedAt?: string): SourceReference {
+  return { sourceType: 'OCCUPANCY', patientId: '', recordId: 'rooms-occupancy', label: 'Occupazione camere', exactText, recordedAt };
+}

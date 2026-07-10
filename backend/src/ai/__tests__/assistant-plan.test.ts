@@ -68,6 +68,13 @@ test('appointments today → cross tool', () => {
   assert.equal(p.requiresCrossPatientAccess, true);
 });
 
+test('issue #239: rooms occupancy question → aggregate rooms occupancy tool, no cross-patient access', () => {
+  const p = planQuery('Quante camere sono occupate oggi?', {});
+  assert.equal(p.intent, 'rooms_occupancy');
+  assert.equal(p.tools[0].tool, 'query_rooms_occupancy');
+  assert.equal(p.requiresCrossPatientAccess, false);
+});
+
 test('a diagnosis request is refused', () => {
   const p = planQuery('Che diagnosi ha questo paziente?', { currentPatientId: P });
   assert.equal(p.intent, 'refuse_clinical');
