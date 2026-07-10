@@ -76,7 +76,7 @@ test('legacy anamnesi stays reachable (read-only) after duplicate tab removal, s
     await page.waitForTimeout(500);
     await page.getByText(PATIENT_LABEL, { exact: false }).first().click();
     await page.waitForTimeout(800);
-    await page.getByText('Clinica', { exact: true }).first().click();
+    await page.getByRole('tab', { name: /^Clinica(\s+\d+)?$/ }).click();
     await page.waitForTimeout(500);
   }
 
@@ -88,7 +88,7 @@ test('legacy anamnesi stays reachable (read-only) after duplicate tab removal, s
   expect(l3Labels.some((t) => /Sezioni Cliniche/i.test(t))).toBe(true);
 
   // AC2 — the legacy structured value seeded via API is visible under "Sezioni Cliniche (testo)".
-  await page.getByText('Sezioni Cliniche (testo)', { exact: false }).first().click();
+  await page.getByRole('tab', { name: /^Sezioni Cliniche \(testo\)(\s+\d+)?$/ }).click();
   await page.waitForTimeout(800);
 
   const legacyPanel = page.locator('[data-testid="legacy-anamnesis"]');
@@ -98,7 +98,7 @@ test('legacy anamnesi stays reachable (read-only) after duplicate tab removal, s
   // Persistence proof — reload and re-navigate; the seeded value must still be visible
   // (proves the data lives in Cartella storage, not component-local state).
   await openPatientClinicaSezioniNarrative();
-  await page.getByText('Sezioni Cliniche (testo)', { exact: false }).first().click();
+  await page.getByRole('tab', { name: /^Sezioni Cliniche \(testo\)(\s+\d+)?$/ }).click();
   await page.waitForTimeout(800);
   const legacyPanelAfterReload = page.locator('[data-testid="legacy-anamnesis"]');
   await expect(legacyPanelAfterReload).toBeVisible();
