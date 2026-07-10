@@ -1118,6 +1118,7 @@ export default function App() {
               operatoreNome={utente.nome}
               operatoreId={utenteId}
               initialTab={pendingModuleTab}
+              operatoreRole={utente?.ruolo}
             />
           )}
           {!isAdmin && navKey === 'parametri-multipaziente' && (
