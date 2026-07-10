@@ -434,8 +434,10 @@ export async function queryOperators(input: { day?: string }, ctx: UserContext):
   const day = input.day ?? new Date().toISOString().slice(0, 10);
   const shifts = await prisma.operatorShift.findMany();
   // pazienti in carico ≈ appuntamenti odierni per operatore (fonte reale disponibile).
-  const from = new Date(`${day}T00:00:00.000Z`); const to = new Date(`${day}T23:59:59.999Z`);
-  const appts = await prisma.appointment.groupBy({ by: ['operatorId'], where: { scheduledAt: { gte: from, lte: to } }, _count: { _all: true } });
+  // Server-local day boundaries — consistent with appointmentsToday in assistant/service.ts
+  const from = new Date(`${day}T12:00:00`); from.setHours(0, 0, 0, 0);
+  const to = new Date(`${day}T12:00:00`); to.setHours(23, 59, 59, 999);
+  const appts = await prisma.appointment.groupBy({ by: ['operatorId'], where: { scheduledAt: { gte: from, lte: to }, status: { notIn: ['CANCELLED', 'NO_SHOW'] } }, _count: { _all: true } });
   const counts = new Map(appts.map((a) => [a.operatorId, a._count._all]));
   const rows = dutyRows(shifts as ShiftRow[], counts, weekdayIt(day));
   gatewayAudit(ctx, 'query_operators', [], rows.length, rows.length ? 'ok' : 'empty', nowIso());
