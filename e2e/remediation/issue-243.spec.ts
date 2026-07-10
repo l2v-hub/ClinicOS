@@ -42,7 +42,8 @@ test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazio
     if (status >= 400) httpErrors.push({ url: r.url(), status });
   });
 
-  const cognome = `Moduli243B`;
+  // Cognome unico per run: evita il rilevamento "paziente duplicato" da esecuzioni precedenti.
+  const cognome = `Moduli243B${Date.now().toString().slice(-6)}`;
   const nome = 'Test';
 
   // ── Login (Operatore) + Pazienti ────────────────────────────────────────────
@@ -115,6 +116,12 @@ test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazio
   const confirmBtn = page.locator('footer button.btn-primary');
   await expect(confirmBtn).toBeEnabled();
   await confirmBtn.click();
+  // Belt-and-braces: se emerge il banner "paziente duplicato", procedi comunque.
+  const creaComunque = page.getByRole('button', { name: /Crea comunque/i });
+  if (await creaComunque.isVisible().catch(() => false)) {
+    await creaComunque.click();
+    await page.getByRole('button', { name: /Crea paziente/i }).click().catch(() => {});
+  }
 
   // The intake modal closes once confirmDraft resolves and the app navigates.
   await page.waitForSelector('[data-testid="patient-intake-header"]', { state: 'detached', timeout: 20_000 });
@@ -126,7 +133,7 @@ test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazio
   await expect(l3Braden).toBeVisible({ timeout: 10_000 });
   await expect(l3Braden).toHaveAttribute('aria-selected', 'true');
   // Real module content rendered (ScalaBradenTab section), not just the tab highlighted.
-  await expect(page.getByText('Scala di Braden')).toBeVisible();
+  await expect(page.locator('.cts__title', { hasText: /scala di braden/i }).first()).toBeVisible();
   await page.screenshot({ path: join(RESULT_SCREENSHOT_DIR, '02-patient-chart-braden-flow.png'), fullPage: true });
 
   // ── Persistence after reload (full app reset — no client session storage) ──
@@ -145,7 +152,7 @@ test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazio
 
   const l3BradenAfterReload = page.getByRole('tab', { name: 'Scala Braden' });
   await expect(l3BradenAfterReload).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByText('Scala di Braden')).toBeVisible();
+  await expect(page.locator('.cts__title', { hasText: /scala di braden/i }).first()).toBeVisible();
 
   const finalShot = join(RESULT_SCREENSHOT_DIR, 'result.png');
   await page.screenshot({ path: finalShot, fullPage: true });
