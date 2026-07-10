@@ -1,0 +1,11 @@
+
+> @clinicos/backend@1.0.0 build
+> npx prisma generate --schema=../prisma/schema.prisma && tsc -p tsconfig.json
+
+Prisma schema loaded from ..\prisma\schema.prisma.
+
+✔ Generated Prisma Client (v7.8.0) to .\..\..\..\node_modules\@prisma\client in 388ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
