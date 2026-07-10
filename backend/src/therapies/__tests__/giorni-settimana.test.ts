@@ -22,6 +22,17 @@ function appearsOn(giorni: string | null, date: string): boolean {
   return giorni.split(',').map((s) => parseInt(s.trim(), 10)).includes(iso);
 }
 
+// #241 regression (PUT bypass): the PUT route (routes/patient-therapies.ts) now runs
+// updates.giorniSettimana through this same normalizer after the scalarAllowed copy loop,
+// mirroring what createTherapyInTx already does on POST. These cases prove PUT-shaped garbage
+// (duplicates, unsorted, all-7, empty) is canonicalized identically on both paths.
+test('#241 normalizeGiorniSettimana: PUT-shaped garbage canonicalized (regression for PUT bypass)', () => {
+  assert.equal(normalizeGiorniSettimana('9,9,x,2,2,1'), '1,2');       // dedup + drop invalid + sort
+  assert.equal(normalizeGiorniSettimana('7,1,3'), '1,3,7');           // unsorted → sorted
+  assert.equal(normalizeGiorniSettimana('1,2,3,4,5,6,7'), null);      // all 7 = every day
+  assert.equal(normalizeGiorniSettimana(''), null);                  // empty = every day
+});
+
 test('#241 weekday filter: drug on Lun/Mar/Gio/Dom absent on other days', () => {
   const g = '1,2,4,7';
   assert.equal(appearsOn(g, '2026-07-06'), true);  // Mon

@@ -6,7 +6,11 @@ import {
   scheduleDoseShort,
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
-import { createTherapyInTx, type TherapyCreateInput } from '../therapies/therapy-create.js';
+import {
+  createTherapyInTx,
+  normalizeGiorniSettimana,
+  type TherapyCreateInput,
+} from '../therapies/therapy-create.js';
 
 const router = Router();
 
@@ -98,6 +102,12 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     }
     if (updates.commercialStrengthValue === '' ) updates.commercialStrengthValue = null;
     if (updates.commercialStrengthValue != null) updates.commercialStrengthValue = Number(updates.commercialStrengthValue);
+    // #241: PUT must canonicalize giorniSettimana exactly like POST (createTherapyInTx), otherwise
+    // non-canonical/invalid CSV (duplicates, unsorted, non-collapsed "every day") can persist and
+    // silently suppress a therapy from days it should appear on.
+    if ('giorniSettimana' in updates) {
+      updates.giorniSettimana = normalizeGiorniSettimana(updates.giorniSettimana as string | null);
+    }
 
     // If schedules are provided, replace them atomically and re-derive legacy fascia/orari.
     const hasSchedules = body.schedules !== undefined;
