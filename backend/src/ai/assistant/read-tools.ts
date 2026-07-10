@@ -16,6 +16,15 @@ export const READ_TOOLS = [
   'correlate_structured_data',
   'query_appointments_today',
   'query_data',
+  // Agnos KB (Task 5): 8 nuovi tool di sola lettura.
+  'compare_patient_vitals',
+  'get_patient_vitals_trend',
+  'query_rooms_occupancy',
+  'query_room_occupants',
+  'get_consegne',
+  'get_patient_diary',
+  'get_clinical_scores',
+  'query_operators',
 ] as const;
 
 export type ReadTool = (typeof READ_TOOLS)[number];
@@ -42,4 +51,13 @@ export const READ_TOOL_SCHEMA: Array<{ name: string; args: Record<string, string
   { name: 'query_appointments_today', args: {} },
   // 016 F3: motore di query componibile — porta un piano DSL in args.plan (validato server-side).
   { name: 'query_data', args: { plan: 'object' } },
+  // Agnos KB (Task 5): 8 nuovi tool di sola lettura.
+  { name: 'compare_patient_vitals', args: { patientId: 'string', label: 'string', dayA: 'string?', dayB: 'string?' } },
+  { name: 'get_patient_vitals_trend', args: { patientId: 'string', label: 'string', giorni: 'number?' } },
+  { name: 'query_rooms_occupancy', args: {} },
+  { name: 'query_room_occupants', args: { roomNumero: 'string?' } },
+  { name: 'get_consegne', args: { patientId: 'string?', day: 'string?' } },
+  { name: 'get_patient_diary', args: { patientId: 'string', from: 'string?', to: 'string?' } },
+  { name: 'get_clinical_scores', args: { patientId: 'string', scale: 'string?' } },
+  { name: 'query_operators', args: { day: 'string?' } },
 ];

@@ -6,7 +6,10 @@
 export type AssistantIntent =
   | 'allergies' | 'therapies' | 'vitals_range' | 'vitals_recent' | 'narrative_search'
   | 'document_search' | 'timeline' | 'appointments' | 'correlate' | 'patient_search'
-  | 'refuse_clinical' | 'data_query' | 'unknown';
+  | 'refuse_clinical' | 'data_query' | 'unknown'
+  // Agnos KB (Task 5): 8 nuovi intent di lettura + 'clarify' (predisposto per Task 6).
+  | 'vitals_compare' | 'vitals_trend' | 'rooms_occupancy' | 'rooms_occupants' | 'consegne'
+  | 'diary_notes' | 'clinical_scores' | 'operators_on_duty' | 'clarify';
 
 export type QueryScope = 'current_patient' | 'cross_patient';
 
@@ -89,6 +92,20 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
     if (/appuntament\w*|agenda/.test(q)) return base('appointments', [{ tool: 'get_patient_appointments', args: { patientId: pid } }]);
     // 016 F0: plurali/sinonimi (terapia/terapie/farmaco/farmaci/prescriz…)
     if (/terapi\w*|farmac\w*|prescriz\w*/.test(q)) return base('therapies', [{ tool: 'get_patient_therapies', args: { patientId: pid } }]);
+    // Agnos KB (Task 5): confronti/andamento parametri, diario, scale cliniche, consegne del
+    // paziente in contesto — PRIMA del match generico cerca|trova.
+    if (/(rispetto a|confronta.*con|vs\.?)\s*(ieri|luned|marted|mercoled|gioved|venerd|sabato|domenica|\d{4}-\d{2}-\d{2})/.test(q)
+        && /(pression|pa\b|frequenza|fc\b|temperatura|spo2|satur)/.test(q))
+      return base('vitals_compare', [{ tool: 'compare_patient_vitals', args: { patientId: pid, label: vitalLabel(q), dayB: refDay(q) } }]);
+    if (/(andamento|trend|ultim[ai] (7|sette) giorni|questa settimana)/.test(q) && /(pression|pa\b|frequenza|fc\b|temperatura|spo2|satur|parametr)/.test(q))
+      return base('vitals_trend', [{ tool: 'get_patient_vitals_trend', args: { patientId: pid, label: vitalLabel(q) } }]);
+    if (/\bdiario\b|\bnote\b.*\bscritt/.test(q) || /cosa .*scritto/.test(q))
+      return base('diary_notes', [{ tool: 'get_patient_diary', args: { patientId: pid, ...dayWindow(q) } }]);
+    if (/braden|tinetti|nrs|medicazion|contenzion|scala|punteggio/.test(q))
+      return base('clinical_scores', [{ tool: 'get_clinical_scores', args: { patientId: pid, scale: scaleKey(q) } }]);
+    if (/\bconsegn/.test(q))
+      return base('consegne', [{ tool: 'get_consegne', args: { patientId: pid } }]);
+
     const sec = sectionKeyFor(q);
     if (/cerca|trova|consulenz|anamnes|decorso|documenti|sezione/.test(q)) {
       const phrase = searchPhrase(q, original);
@@ -96,6 +113,17 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
       return base('narrative_search', [{ tool: 'search_clinical_sections', args: { patientId: pid, sectionKey: sec, query: phrase ?? sec ?? '' } }]);
     }
   }
+
+  // ── cross / organizzativi (Agnos KB Task 5): camere, consegne senza paziente, turni ──
+  const roomNum = /camera\s*(\d+)/.exec(q)?.[1];
+  if (roomNum && /(occupat|da chi|chi c'?e)/.test(q))
+    return base('rooms_occupants', [{ tool: 'query_room_occupants', args: { roomNumero: roomNum } }]);
+  if (/(camere?|stanze?|letti?).*(occupat|liber|disponibil|manutenzione)|occupazione.*(camere?|stanze?|letti?)/.test(q))
+    return base('rooms_occupancy', [{ tool: 'query_rooms_occupancy', args: {} }]);
+  if (/\bconsegn/.test(q))
+    return base('consegne', [{ tool: 'get_consegne', args: { day: todayStrPlan() } }]);
+  if (/(chi e|chi è) di turno|turni (di )?oggi|operatori disponibili/.test(q))
+    return base('operators_on_duty', [{ tool: 'query_operators', args: {} }]);
 
   // ── cross-patient intents (role + env gated downstream) ──
   if (/valori? pressori? (superior|maggior|sopra).*?(\d{2,3})/.test(q) || /pressione.*(superiore a|>)\s*(\d{2,3})/.test(q)) {
@@ -155,4 +183,50 @@ export function pickResolvedPatient(
   if (matches.length === 0) return 'none';
   if (matches.length > 1) return 'ambiguous';
   return { patientId: matches[0].patientId };
+}
+
+// ── Agnos KB (Task 5): helper puri per i nuovi intent — nessun accesso a rete/DB, solo testo. ──
+
+/** Mappa la parola-chiave di parametro vitale nella domanda alla label canonica della cartella. */
+function vitalLabel(q: string): string {
+  if (/pression/.test(q)) return 'PA';
+  if (/frequenza|fc\b/.test(q)) return 'FC';
+  if (/temperatura/.test(q)) return 'TC';
+  if (/spo2|satur/.test(q)) return 'SPO2';
+  return 'PA';
+}
+
+/** Giorno di riferimento per il confronto (dayB): 'ieri'/giorno della settimana → sentinella
+ *  'yesterday' risolta dal dispatch (service.ts); una data esplicita AAAA-MM-GG è usata com'è. */
+function refDay(q: string): string {
+  const explicit = /\d{4}-\d{2}-\d{2}/.exec(q);
+  return explicit ? explicit[0] : 'yesterday';
+}
+
+/** Finestra temporale per la ricerca nel diario: 'ieri' → il giorno prima; default ultimi 3 giorni. */
+function dayWindow(q: string): { from?: string; to?: string } {
+  const toDay = (d: Date) => d.toISOString().slice(0, 10);
+  const today = new Date();
+  if (/\bieri\b/.test(q)) {
+    const y = new Date(today.getTime() - 86400000);
+    const d = toDay(y);
+    return { from: `${d}T00:00:00.000Z`, to: `${d}T23:59:59.999Z` };
+  }
+  const from = new Date(today.getTime() - 2 * 86400000);
+  return { from: `${toDay(from)}T00:00:00.000Z`, to: `${toDay(today)}T23:59:59.999Z` };
+}
+
+/** Scala clinica citata nella domanda, se riconoscibile (nessuna invenzione: undefined altrimenti). */
+function scaleKey(q: string): 'braden' | 'tinetti' | 'nrs' | 'medicazioni' | 'contenzioni' | undefined {
+  if (/braden/.test(q)) return 'braden';
+  if (/tinetti/.test(q)) return 'tinetti';
+  if (/\bnrs\b/.test(q)) return 'nrs';
+  if (/medicazion/.test(q)) return 'medicazioni';
+  if (/contenzion/.test(q)) return 'contenzioni';
+  return undefined;
+}
+
+/** Data odierna AAAA-MM-GG (server-local), per i tool organizzativi senza paziente in contesto. */
+function todayStrPlan(): string {
+  return new Date().toISOString().slice(0, 10);
 }

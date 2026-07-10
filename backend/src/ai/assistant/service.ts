@@ -7,7 +7,7 @@ import { prisma } from '../../lib/prisma.js';
 import * as svc from '../gateway/services.js';
 import { canCrossPatientSearch } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
-import { appointmentSource } from '../gateway/sources.js';
+import { appointmentSource, vitalSource } from '../gateway/sources.js';
 import { planQuery, extractPatientName, pickResolvedPatient, type AssistantIntent, type PlanContext, type QueryPlan } from './plan.js';
 import { planQueryLLM, injectPatientId } from './llm-planner.js';
 import { composeAnswer } from './composer.js';
@@ -15,6 +15,9 @@ import { callPlanRuntime, callComposeRuntime } from './runtime-client.js';
 import { loadAssistantLlmConfig } from './config.js';
 import { validateQueryPlan } from '../gateway/query/validate.js';
 import { runQueryPlan } from '../gateway/query/engine.js';
+// Agnos KB (Task 5): motore di confronto/andamento parametri — SEMPRE calcolato dal backend, mai
+// dall'LLM (che propone solo il tool; l'aritmetica resta qui, deterministica e testabile).
+import { compareVitals, vitalsTrend, type VitalValue } from './vitals-compare.js';
 
 export interface NavAction { type: string; label: string; patientId?: string; sectionKey?: string; documentId?: string; recordId?: string; pageNumber?: number }
 
@@ -166,8 +169,46 @@ async function dispatch(tool: string, args: Record<string, unknown>, ctx: UserCo
     case 'correlate_structured_data': { const r = await svc.correlate(args as never, ctx); return { data: r.data, sourceRefs: r.sourceRefs }; }
     case 'query_appointments_today': return await appointmentsToday(ctx);
     case 'query_data': return await dispatchQueryData((args as { plan?: unknown }).plan, ctx);
+    // Agnos KB (Task 5): 8 nuovi tool di sola lettura.
+    case 'compare_patient_vitals': {
+      const vit = await svc.getPatientVitalSigns({ patientId: pid }, ctx);
+      const today = new Date().toISOString().slice(0, 10);
+      const dayA = (args.dayA as string) ?? today;
+      const rawB = (args.dayB as string) ?? 'yesterday';
+      const dayB = rawB === 'yesterday' ? new Date(Date.now() - 86400000).toISOString().slice(0, 10) : rawB;
+      const cmp = compareVitals(vit.data, (args.label as string) ?? 'PA', dayA, dayB);
+      if (!cmp) return { data: [], sourceRefs: [] };
+      return {
+        data: [cmp],
+        sourceRefs: [vitalSource(pid, `cmp-${cmp.label}`, cmp.label,
+          `${cmp.label} ${dayA}: ${fmtVal(cmp.valA)} · ${dayB}: ${fmtVal(cmp.valB)} · Δ ${fmtVal(cmp.delta)} ${cmp.unit}`, dayA)],
+      };
+    }
+    case 'get_patient_vitals_trend': {
+      const vit = await svc.getPatientVitalSigns({ patientId: pid }, ctx);
+      const today = new Date().toISOString().slice(0, 10);
+      const giorni = typeof args.giorni === 'number' ? args.giorni : 7;
+      const trend = vitalsTrend(vit.data, (args.label as string) ?? 'PA', today, giorni);
+      if (!trend) return { data: [], sourceRefs: [] };
+      return {
+        data: [trend],
+        sourceRefs: [vitalSource(pid, `trend-${trend.label}`, trend.label,
+          `${trend.label} andamento ${giorni}gg: ${trend.direction}`, today)],
+      };
+    }
+    case 'query_rooms_occupancy': { const r = await svc.queryRoomsOccupancy(ctx); return r; }
+    case 'query_room_occupants': { const r = await svc.queryRoomOccupants(args as never, ctx); return r; }
+    case 'get_consegne': { const r = await svc.getConsegne(args as never, ctx); return r; }
+    case 'get_patient_diary': { const r = await svc.getPatientDiary(pid, ctx, args as never); return r; }
+    case 'get_clinical_scores': { const r = await svc.getClinicalScores(args as never, ctx); return r; }
+    case 'query_operators': { const r = await svc.queryOperators(args as never, ctx); return r; }
     default: return { data: [], sourceRefs: [] };
   }
+}
+
+/** Formatta un valore vitale per il testo del SourceReference (mai per calcoli/decisioni). */
+function fmtVal(v: VitalValue | null): string {
+  return v ? (v.num2 !== undefined ? `${v.num}/${v.num2}` : String(v.num)) : 'n/d';
 }
 
 /** 016 F3: run a composable query plan (query_data tool). Validates the LLM-emitted plan against the

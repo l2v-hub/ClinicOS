@@ -129,3 +129,42 @@ test('016 F0: pickResolvedPatient returns "none" when no match', () => {
 test('016 F0: pickResolvedPatient returns "ambiguous" for multiple matches', () => {
   assert.equal(pickResolvedPatient([{ patientId: 'p1' }, { patientId: 'p2' }]), 'ambiguous');
 });
+
+// ── Agnos KB (Task 5): 8 nuovi intent read + invariante refuse_clinical ───────
+
+test('KB: "com\'è la pressione rispetto a ieri" → vitals_compare (paziente in contesto)', () => {
+  const p = planQuery("com'è la pressione rispetto a ieri?", { currentPatientId: P });
+  assert.equal(p.intent, 'vitals_compare');
+  assert.equal(p.tools[0].tool, 'compare_patient_vitals');
+});
+test('KB: "andamento della temperatura questa settimana" → vitals_trend', () => {
+  const p = planQuery('andamento della temperatura questa settimana', { currentPatientId: P });
+  assert.equal(p.intent, 'vitals_trend');
+});
+test('KB: "quante camere sono occupate oggi" → rooms_occupancy aggregato, no cross access', () => {
+  const p = planQuery('quante camere sono occupate oggi');
+  assert.equal(p.intent, 'rooms_occupancy');
+  assert.equal(p.requiresCrossPatientAccess, false);
+});
+test('KB: "la camera 12 è occupata da chi" → rooms_occupants con roomNumero', () => {
+  const p = planQuery('la camera 12 è occupata da chi?');
+  assert.equal(p.intent, 'rooms_occupants');
+  assert.equal(p.tools[0].args.roomNumero, '12');
+});
+test('KB: "che consegne ci sono oggi" → consegne', () => {
+  assert.equal(planQuery('che consegne ci sono oggi').intent, 'consegne');
+});
+test('KB: "cosa è stato scritto ieri nel diario" → diary_notes', () => {
+  assert.equal(planQuery('cosa è stato scritto ieri nel diario?', { currentPatientId: P }).intent, 'diary_notes');
+});
+test('KB: "ultimo punteggio braden" → clinical_scores braden', () => {
+  const p = planQuery('ultimo punteggio Braden', { currentPatientId: P });
+  assert.equal(p.intent, 'clinical_scores');
+  assert.equal(p.tools[0].args.scale, 'braden');
+});
+test('KB: "chi è di turno oggi" → operators_on_duty', () => {
+  assert.equal(planQuery('chi è di turno oggi?').intent, 'operators_on_duty');
+});
+test('KB invariante: refuse_clinical vince sui nuovi intent', () => {
+  assert.equal(planQuery('che terapia dovrei dare per la pressione alta?', { currentPatientId: P }).intent, 'refuse_clinical');
+});

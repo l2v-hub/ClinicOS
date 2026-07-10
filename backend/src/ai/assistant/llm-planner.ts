@@ -24,11 +24,22 @@ export interface PlanQueryLLMDeps {
 export interface PlanResult { plan: QueryPlan; mode: 'llm' | 'deterministic' }
 
 // I tool che comportano accesso cross-patient: se il piano LLM ne usa uno, il server IMPONE cross.
-const CROSS_TOOLS = new Set(['search_across_patients', 'correlate_structured_data', 'query_appointments_today']);
+// Agnos KB (Task 5): query_room_occupants espone NOMI paziente oltre il paziente in contesto (stessa
+// disclosure di search_across_patients/correlate_structured_data) → trattato come cross-patient anche
+// se l'LLM non lo dichiara. query_rooms_occupancy (solo aggregato, MAI nomi) e query_operators (dato
+// organizzativo, gate ammesso solo al ruolo admin dentro il service) NON sono cross-patient: non
+// espongono/attraversano cartelle di più pazienti, quindi restano fuori — la loro autorizzazione è
+// già imposta a valle da canFacilityRead()/ruolo admin in gateway/services.ts, non dal gate cross.
+const CROSS_TOOLS = new Set(['search_across_patients', 'correlate_structured_data', 'query_appointments_today', 'query_room_occupants']);
 
 // Tool vincolati a un singolo paziente: il patientId è AUTORITATIVO lato server (risolto da F0),
 // mai dedotto dall'LLM. Vi si inietta il currentPatientId quando manca.
-const PATIENT_SCOPED = new Set(['get_patient_allergies', 'get_patient_therapies', 'get_patient_vital_signs', 'get_patient_timeline', 'get_patient_appointments', 'search_clinical_sections']);
+const PATIENT_SCOPED = new Set([
+  'get_patient_allergies', 'get_patient_therapies', 'get_patient_vital_signs', 'get_patient_timeline',
+  'get_patient_appointments', 'search_clinical_sections',
+  // Agnos KB (Task 5)
+  'compare_patient_vitals', 'get_patient_vitals_trend', 'get_patient_diary', 'get_clinical_scores',
+]);
 
 /**
  * Impone il currentPatientId (risolto server-side da F0) su OGNI tool patient-scoped. Il
@@ -44,7 +55,13 @@ export function injectPatientId(plan: QueryPlan, patientId?: string): QueryPlan 
   );
   return { ...plan, tools };
 }
-const INTENTS = new Set<AssistantIntent>(['allergies', 'therapies', 'vitals_range', 'vitals_recent', 'narrative_search', 'document_search', 'timeline', 'appointments', 'correlate', 'patient_search', 'refuse_clinical', 'data_query', 'unknown']);
+const INTENTS = new Set<AssistantIntent>([
+  'allergies', 'therapies', 'vitals_range', 'vitals_recent', 'narrative_search', 'document_search',
+  'timeline', 'appointments', 'correlate', 'patient_search', 'refuse_clinical', 'data_query', 'unknown',
+  // Agnos KB (Task 5): 8 nuovi intent di lettura + 'clarify' (predisposto per Task 6).
+  'vitals_compare', 'vitals_trend', 'rooms_occupancy', 'rooms_occupants', 'consegne',
+  'diary_notes', 'clinical_scores', 'operators_on_duty', 'clarify',
+]);
 
 /** Valida la forma del piano LLM e i tool contro l'allowlist read. Ritorna null se non valido. */
 function validatePlan(raw: unknown, ctx: PlanContext): QueryPlan | null {
@@ -71,9 +88,12 @@ function validatePlan(raw: unknown, ctx: PlanContext): QueryPlan | null {
   return { intent: p.intent as AssistantIntent, scope, tools, requiresCrossPatientAccess };
 }
 
-/** Pianifica una lettura via LLM con validazione e fallback deterministico garantito. */
+/** Pianifica una lettura via LLM con validazione e fallback deterministico garantito. Il
+ *  currentPatientId (autoritativo, risolto da F0) è iniettato QUI su ogni tool patient-scoped —
+ *  non solo a valle in service.ts — così planQueryLLM è già sicuro anche se chiamato in isolamento
+ *  (es. nei test): il paziente proposto dall'LLM non è MAI quello eseguito. */
 export async function planQueryLLM(question: string, ctx: PlanContext, deps: PlanQueryLLMDeps = {}): Promise<PlanResult> {
-  const fallback = (): PlanResult => ({ plan: planQuery(question, ctx), mode: 'deterministic' });
+  const fallback = (): PlanResult => ({ plan: injectPatientId(planQuery(question, ctx), ctx.currentPatientId), mode: 'deterministic' });
   if (!deps.callPlanRuntime) return fallback();
   try {
     const res = await deps.callPlanRuntime({
@@ -84,9 +104,9 @@ export async function planQueryLLM(question: string, ctx: PlanContext, deps: Pla
     // F1 ≥ F0: se l'LLM non sa (piano vuoto/unknown) ma il deterministico ha un piano, usa quello.
     if (validated.tools.length === 0 || validated.intent === 'unknown') {
       const det = planQuery(question, ctx);
-      if (det.tools.length > 0) return { plan: det, mode: 'deterministic' };
+      if (det.tools.length > 0) return { plan: injectPatientId(det, ctx.currentPatientId), mode: 'deterministic' };
     }
-    return { plan: validated, mode: 'llm' };
+    return { plan: injectPatientId(validated, ctx.currentPatientId), mode: 'llm' };
   } catch {
     return fallback(); // runtime assente/timeout/errore → deterministico, nessun errore utente
   }
