@@ -10,7 +10,7 @@ Branch `integration/issue-256-qa-closure` da `origin/main` @ `7063f59`. 6 PR QA-
 |----|-------|----------|
 | AC1 head integrati senza estranei | PASS | `merge-manifest.md`, `logs/source-heads.txt` (7/7 MATCH) |
 | AC2 PatientDetail: comportamenti coesistono | PASS | merge semantico + `tsc -b` No errors + A–E 5/5 |
-| AC3 migration #241 empty + upgrade | PASS | `logs/migration-241.txt`: empty 19 migration; upgrade → terapia storica intatta, `giorniSettimana=NULL` (ogni giorno) |
+| AC3 migration #241 empty + upgrade | PASS | `logs/migration-241.txt` (rigenerato 2026-07-11): DB da `TEMPLATE template0`, **PRE=0 tabelle → POST=19 migration applicate + 25 tabelle** (19 nomi elencati, incl. `20260708120000_therapy_giorni_settimana`); `giorniSettimana` NULLABLE; upgrade pre-#241 (18→19) → terapia storica intatta con `giorniSettimana=NULL` (ogni giorno). NB: la summary CLI di prisma `"N migration(s) deployed"` è fuorviante su questo runner — la prova è lo stato reale del DB, non lo stdout. |
 | AC4 build/test integrati | PASS | `logs/build.txt` (BE+FE exit 0); `logs/tests.txt` (backend 316/316 + giorni 3/3 + parse 20/20 + allergy 13/13 + legacy 6/6) |
 | AC5 Playwright A–E | PASS | **5/5** su stack integrato; `test-results/` (trace+video+screenshot), `playwright-report/` |
 | AC6 CI risolta o blocco esterno | PASS (blocco esterno documentato) | `logs/ci-disposition.md`: GitHub Actions **billing block** (steps=0), esterno, non repo-fixable; NON dichiarato verde |
