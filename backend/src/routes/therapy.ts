@@ -53,6 +53,14 @@ router.get('/', async (req, res) => {
       if (pt.tipo === 'una_tantum') return pt.dataSomministrazione === date;
       if (pt.dataInizio > date) return false;
       if (pt.dataFine && pt.dataFine < date) return false;
+      // #241: intermittent weekday posology — a drug with a giorniSettimana list must not appear on
+      // days outside it. Empty/null = every day (backward-compatible).
+      if (pt.giorniSettimana && pt.giorniSettimana.trim()) {
+        const jsDay = new Date(`${date}T00:00:00`).getDay(); // 0=Sun … 6=Sat
+        const isoDay = jsDay === 0 ? 7 : jsDay;               // 1=Mon … 7=Sun
+        const allowed = pt.giorniSettimana.split(',').map((s) => parseInt(s.trim(), 10));
+        if (!allowed.includes(isoDay)) return false;
+      }
       return true;
     });
 

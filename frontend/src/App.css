@@ -3960,6 +3960,63 @@ textarea.form-input {
 .status-badge--info    { color: var(--c-info);    background: var(--c-primary-bg); }
 .status-badge--neutral { color: var(--c-neutral); background: var(--c-neutral-bg); }
 
+/* #241: weekday posology selector + day pill */
+.weekday-toggle { display: flex; gap: 6px; flex-wrap: wrap; }
+.sched-pill--days { background: var(--c-primary-bg, #E8F0FE); color: var(--c-primary, #0F5FD7); font-weight: 600; }
+
+/* #243: intake "Moduli" step — grid of operational modules with status */
+.intake-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.intake-module-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  border: 1px solid var(--c-border, #D0D5DD);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.intake-module-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.intake-module-card:not(:disabled):hover {
+  border-color: var(--c-primary, #0F5FD7);
+}
+.intake-module-card:focus-visible {
+  outline: 2px solid var(--c-primary, #0F5FD7);
+  outline-offset: 2px;
+}
+.intake-module-card--selected {
+  border-color: var(--c-primary, #0F5FD7);
+  box-shadow: 0 0 0 1px var(--c-primary, #0F5FD7);
+  background: var(--c-primary-bg, #EFF4FD);
+}
+.intake-module-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.intake-module-card__title { font-weight: 600; color: var(--c-text, #101828); }
+.intake-module-card__desc { margin: 0; font-size: 13px; color: var(--c-muted, #667085); }
+.intake-module-card__hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-primary, #0F5FD7);
+}
+
+/* #244: allergy status selector (Presenti / Assenti / Paziente nega) */
+.allergy-status { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+
 /* Full-width content (problems #6/#7): remove narrow centered caps on
    priority pages so content fills the desktop. Gutter comes from the
    content padding; wide tables scroll inside their own container. */

@@ -23,6 +23,7 @@ export interface TherapyFormValue {
   dataInizio: string;
   dataFine: string;
   schedules: ScheduleRow[];
+  giorniSettimana: number[]; // #241: ISO weekdays 1=Lun … 7=Dom; empty = tutti i giorni
   prescrittore: string;
   note: string;
   dataSomministrazione: string;
@@ -33,6 +34,12 @@ export interface TherapyFormValue {
 
 function todayStr(): string { return new Date().toISOString().slice(0, 10); }
 
+// #241: ISO weekdays (1=Lun … 7=Dom) for the intermittent-posology selector.
+const WEEKDAYS: ReadonlyArray<{ n: number; l: string }> = [
+  { n: 1, l: 'Lun' }, { n: 2, l: 'Mar' }, { n: 3, l: 'Mer' }, { n: 4, l: 'Gio' },
+  { n: 5, l: 'Ven' }, { n: 6, l: 'Sab' }, { n: 7, l: 'Dom' },
+];
+
 export function emptyTherapyForm(): TherapyFormValue {
   return {
     farmacoNome: '', pharmaceuticalForm: 'compressa',
@@ -41,6 +48,7 @@ export function emptyTherapyForm(): TherapyFormValue {
     viaSomministrazione: 'orale',
     tipo: 'periodica', stato: 'attiva', dataInizio: todayStr(), dataFine: '',
     schedules: [{ time: '08:00', quantityNumerator: 1, quantityDenominator: 1, administrationUnit: 'compressa' }],
+    giorniSettimana: [],
     prescrittore: '', note: '',
     dataSomministrazione: todayStr(), orarioSomministrazione: '',
   };
@@ -244,6 +252,30 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
             })}
             <button type="button" className="btn-secondary btn-sm" onClick={addSchedule}>+ Aggiungi orario</button>
           </div>
+        </div>
+      )}
+      {value.tipo === 'periodica' && (
+        <div className="form-group form-group--full">
+          <label>Giorni della settimana</label>
+          <div className="weekday-toggle" role="group" aria-label="Giorni della settimana" data-testid="therapy-weekdays">
+            {WEEKDAYS.map(w => {
+              const on = value.giorniSettimana.includes(w.n);
+              return (
+                <button
+                  type="button" key={w.n} aria-pressed={on} data-testid={`weekday-${w.n}`}
+                  className={`btn-sm ${on ? 'btn-primary' : 'btn-secondary'}`}
+                  onClick={() => update({ giorniSettimana: on
+                    ? value.giorniSettimana.filter(x => x !== w.n)
+                    : [...value.giorniSettimana, w.n].sort((a, b) => a - b) })}
+                >{w.l}</button>
+              );
+            })}
+          </div>
+          <small className="form-hint">
+            {value.giorniSettimana.length === 0
+              ? 'Tutti i giorni'
+              : `Solo: ${value.giorniSettimana.map(n => WEEKDAYS.find(w => w.n === n)?.l).join(', ')}`}
+          </small>
         </div>
       )}
       <div className="form-group">

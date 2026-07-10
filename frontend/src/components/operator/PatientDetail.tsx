@@ -25,7 +25,8 @@ import PatientCompactHeader from './PatientCompactHeader';
 import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
-import { AnamnesisEditor } from './sections/AnamnesisEditor';
+import { deriveAllergySummary } from '../../lib/allergyStatusModel';
+import { LegacyAnamnesisView } from './sections/LegacyAnamnesisView';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
 import { VitalSignsEditor } from './sections/VitalSignsEditor';
@@ -33,8 +34,12 @@ import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type TabId =
-  | 'riepilogo' | 'profilo' | 'anamnesi' | 'diagnosi' | 'terapia-farmacologica'
+// #243: exported so callers (App.tsx) can request an initial tab — e.g. landing on a
+// specific "Moduli" flow right after patient creation from the intake wizard.
+// #245: 'anamnesi' rimosso — il tab editabile duplicato non esiste più (resta la sola
+// superficie narrativa 'sezioni-narrative' + LegacyAnamnesisView read-only).
+export type TabId =
+  | 'riepilogo' | 'profilo' | 'diagnosi' | 'terapia-farmacologica'
   | 'note' | 'parametri' | 'consegne'
   | 'presa-in-carico' | 'documenti' | 'diario' | 'sezioni-narrative'
   | 'medicazioni' | 'contenzioni' | 'braden' | 'tinetti' | 'nrs' | 'dimissione'
@@ -62,7 +67,6 @@ const TAB_GROUPS: TabGroupDef[] = [
     tabs: [
       { id: 'presa-in-carico', label: 'Presa in Carico' },
       { id: 'sezioni-narrative', label: 'Sezioni Cliniche (testo)' },
-      { id: 'anamnesi',        label: 'Anamnesi' },
       { id: 'diagnosi',        label: 'Diagnosi' },
       { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
       { id: 'parametri',       label: 'Parametri Vitali' },
@@ -110,6 +114,10 @@ interface PatientDetailProps {
   onAssignCamera: (pazienteId: string, cameraNumero?: string, lettoNumero?: string) => Promise<{ ok: boolean; lettoLabel?: string }>;
   operatoreNome: string;
   operatoreId: string;
+  /** #243: land on this tab (e.g. a "Moduli" module) the first time this patient is shown,
+   * instead of the default 'riepilogo'. Consumed once per mount/patient — subsequent patient
+   * switches while this component stays mounted still reset to the default tab. */
+  initialTab?: TabId;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -190,15 +198,28 @@ export function PatientDetail({
   paziente, cartella, consegne, operatori, camere,
   onBack, onAddConsegna, onUpdateConsegnaStato,
   onUpdateCartella, onUpdatePaziente, onAssignCamera,
-  operatoreNome,
+  operatoreNome, initialTab,
 }: PatientDetailProps) {
-  const [tab, setTab] = useState<TabId>('riepilogo');
-  const [activeGroup, setActiveGroup] = useState<TabGroup>(
-    () => TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica'
-  );
+  const [tab, setTab] = useState<TabId>(initialTab ?? 'riepilogo');
+  const [activeGroup, setActiveGroup] = useState<TabGroup>(() => {
+    const target = initialTab ?? 'riepilogo';
+    return TAB_GROUPS.find(g => g.tabs.some(t => t.id === target))?.id ?? 'panoramica';
+  });
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
 
+  // #243: this component mounts fresh each time the operator opens the patient chart (the
+  // caller conditionally renders it), so a ref seeded from `initialTab` on first render lets us
+  // tell "first paint for this patient" (honour initialTab) apart from "patient switched while
+  // still mounted" (e.g. search/Agnos navigation while already viewing another patient's chart —
+  // always reset to the default tab, initialTab only ever targets the patient it was requested for).
+  const initialTabPatientRef = useRef<string | null>(initialTab ? paziente.id : null);
+
   useEffect(() => {
+    if (initialTabPatientRef.current === paziente.id) {
+      initialTabPatientRef.current = paziente.id;
+      return;
+    }
+    initialTabPatientRef.current = paziente.id;
     setTab('riepilogo');
     setActiveGroup(TAB_GROUPS.find(g => g.tabs.some(t => t.id === 'riepilogo'))?.id ?? 'panoramica');
     setDiarioFilter('tutti');
@@ -271,6 +292,9 @@ export function PatientDetail({
   const mieConsegne = consegne.filter(c => c.pazienteId === paziente.id);
   const allergieGravi = cartella.allergie.filter(a => a.gravita === 'grave');
   const hasAllergie = allergieGravi.length > 0;
+  // #244: non-ambiguous allergy summary — same source of truth for the quick-stat and the
+  // riepilogo card, so neither can disagree with the AllergiesEditor modal about the state.
+  const allergySummary = deriveAllergySummary(cartella.allergie, cartella.allergieStatus);
   const diagnosiAttive = cartella.diagnosi.filter(d => d.stato === 'attiva');
   const farmaciAttivi = cartella.farmaci.filter(f => f.stato === 'attivo');
   const rischioAlto = cartella.indicatoriRischio.filter(r => r.livello === 'alto' || r.livello === 'critico');
@@ -660,6 +684,8 @@ export function PatientDetail({
               mode="patient-chart"
               value={cartella.allergie ?? []}
               onChange={list => upd({ allergie: list })}
+              status={cartella.allergieStatus}
+              onStatusChange={s => upd({ allergieStatus: s })}
               operatoreNome={operatoreNome}
             />
           </div>
@@ -803,8 +829,10 @@ export function PatientDetail({
             <span className="cr-quick-stat__val">{farmaciAttivi.length}</span>
             <span className="cr-quick-stat__lbl">Farmaci attivi</span>
           </button>
-          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('allergie')}>
-            <span className="cr-quick-stat__val">{cartella.allergie.length}</span>
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('allergie')} data-testid="allergy-summary-state">
+            <span className="cr-quick-stat__val">
+              {allergySummary.badge === 'count' ? allergySummary.count : `0 — ${allergySummary.label}`}
+            </span>
             <span className="cr-quick-stat__lbl">Allergie</span>
           </button>
           <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('consegne')}>
@@ -916,8 +944,12 @@ export function PatientDetail({
               <IcoWarning /> Allergie
               <span className="cr-card-edit-icon"><IcoEdit /></span>
             </div>
-            {cartella.allergie.length === 0
-              ? <p className="cr-empty">Nessuna allergia registrata.</p>
+            {allergySummary.badge !== 'count'
+              ? (
+                <p className="cr-empty">
+                  <span className={`status-badge status-badge--${allergySummary.badge}`}>{allergySummary.label}</span>
+                </p>
+              )
               : (
                 <ul className="cr-compact-list">
                   {cartella.allergie.slice(0, 3).map(a => (
@@ -1478,7 +1510,6 @@ export function PatientDetail({
         <div ref={contentRef} className="cr-detail-content tab-panel-transition">
           {tab === 'riepilogo'       && renderRiepilogo()}
           {tab === 'profilo'         && renderProfilo()}
-          {tab === 'anamnesi'        && <AnamnesisEditor mode="patient-chart" value={(cartella.anamnesi ?? {}) as unknown as Record<string, unknown>} onChange={a => upd({ anamnesi: a as unknown as typeof cartella.anamnesi })} operatoreNome={operatoreNome} allergie={cartella.allergie ?? []} />}
           {tab === 'diagnosi'        && renderDiagnosi()}
           {tab === 'terapia-farmacologica' && (
             <TherapyEditor mode="patient-chart" paziente={paziente} operatoreNome={operatoreNome} value={undefined as never} onChange={() => {}} />
@@ -1495,7 +1526,10 @@ export function PatientDetail({
             <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
           {tab === 'sezioni-narrative' && (
-            <NarrativeSectionsTab patientId={paziente.id} />
+            <>
+              <LegacyAnamnesisView anamnesi={cartella.anamnesi} />
+              <NarrativeSectionsTab patientId={paziente.id} />
+            </>
           )}
           {tab === 'diario' && (
             <DiarioPazienteTab

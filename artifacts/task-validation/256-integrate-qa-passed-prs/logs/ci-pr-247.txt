@@ -1,0 +1,65 @@
+CI INVESTIGATION — PR #247  (issue #256, read-only)
+Repo: l2v-hub/ClinicOS
+Generated: 2026-07-10 (sanitized — no tokens/secrets/PHI)
+
+=========================================================
+1. CHECK LIST (gh pr checks 247)
+=========================================================
+Build and Deploy Job      FAIL     2s   run 29081426267  (Azure Static Web Apps CI/CD)
+secret-scan               FAIL     2s   run 29081426263  (AI Import E2E Gate)
+Vercel Preview Comments   PASS     -    (external Vercel GitHub app)
+Close Pull Request Job    skipping -    run 29081426267
+browser-e2e               skipping -    run 29081426263
+gate                      skipping -    run 29081426263
+real-provider             skipping -    run 29081426263
+Vercel                    PASS     -    Deployment has completed (external Vercel)
+
+=========================================================
+2. FAILED JOB METADATA (steps / timing)
+=========================================================
+Run 29081426263 (AI Import E2E Gate):
+  secret-scan    conclusion=failure  started 08:57:15Z  completed 08:57:17Z  STEPS=0
+  gate           conclusion=skipped  STEPS=0   (needs: secret-scan)
+  browser-e2e    conclusion=skipped  STEPS=0   (needs: gate)
+  real-provider  conclusion=skipped  STEPS=0   (needs: gate)
+Run 29081426267 (Azure Static Web Apps CI/CD):
+  Build and Deploy Job   conclusion=failure  started 08:57:15Z  completed 08:57:17Z  STEPS=0
+  Close Pull Request Job conclusion=skipped  STEPS=0  (if: event.action == 'closed')
+
+A job with STEPS=0 that starts and completes within ~2s NEVER ran any of its
+defined steps. It failed at job STARTUP, before checkout/grep/build.
+
+=========================================================
+3. ROOT-CAUSE MESSAGE (gh run view)
+=========================================================
+Both runs 29081426263 and 29081426267 report at RUN level:
+  "The job was not started because recent account payments have failed or your
+   spending limit needs to be increased. Please check the 'Billing & plans'
+   section in your settings"
+
+Run URLs:
+  https://github.com/l2v-hub/ClinicOS/actions/runs/29081426263/job/86324924049  (secret-scan)
+  https://github.com/l2v-hub/ClinicOS/actions/runs/29081426267/job/86324923957  (Build and Deploy Job)
+
+=========================================================
+4. CAUSE CATEGORY
+=========================================================
+CATEGORY (b) — Missing GitHub Actions entitlement / BILLING BLOCK.
+This is an ACCOUNT/ORG-level condition, not workflow content and not code.
+
+NOT category (a) YAML error — the same YAML passes on main (historic runs OK).
+NOT category (f) genuine content failure — 0 steps executed; nothing was tested.
+
+secret-scan specifically: it did NOT scan anything. 0 steps = the grep for
+'AIza...' keys never ran. This failure is NOT evidence a secret was found, and
+it is NOT a pass. It is "runner never started".
+
+Vercel passes because Vercel is an external GitHub App, independent of the
+GitHub-hosted Actions runner/billing that blocks these jobs.
+
+=========================================================
+5. REPO-FIXABLE?
+=========================================================
+NO — EXTERNAL. No YAML/code change in the integration branch can start the
+runner. Required operator action: fix GitHub billing / raise the Actions
+spending limit in org "Billing & plans". After that, re-run the checks.

@@ -17,8 +17,10 @@ interface PatientListProps {
   loading: boolean;
   onSelect: (p: Paziente) => void;
   onAddPaziente: (p: NuovoPaziente) => Promise<void>;
-  /** REQ-018: refresh the list after an imported patient is created. */
-  onImported?: () => void;
+  /** REQ-018: refresh the list after an imported patient is created.
+   * #243: also carries the id of the just-created patient and (optionally) the "Moduli" tab
+   * the operator selected in the intake wizard, so the caller can navigate straight there. */
+  onImported?: (patientId?: string, moduleTabId?: string) => void;
   /** REQ-019: operator identity for import authorization. */
   operatorId?: string;
   operatorRole?: string;
@@ -294,7 +296,7 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
       <IntakeWorkspace
         open={showModal}
         onClose={() => setShowModal(false)}
-        onCreated={() => { setShowModal(false); onImported?.(); }}
+        onCreated={(patientId, moduleTabId) => { setShowModal(false); onImported?.(patientId, moduleTabId); }}
         operatorId={operatorId}
         operatorRole={operatorRole}
       />

@@ -49,7 +49,21 @@ export interface TherapyCreateInput {
   pharmaceuticalForm?: string;
   allowedFractions?: string;
   drugPackageRef?: string;
+  giorniSettimana?: string; // #241: comma list of ISO weekdays (1..7); empty/undefined = every day
   schedules?: unknown;
+}
+
+/**
+ * #241: normalize a weekday selection to a canonical comma string of ISO weekdays (1=Mon … 7=Sun),
+ * deduped + sorted. Accepts a comma string or an array. Returns null when empty OR all 7 days are
+ * selected (both mean "every day"), keeping prior every-day behavior fully backward-compatible.
+ */
+export function normalizeGiorniSettimana(raw: unknown): string | null {
+  if (raw == null) return null;
+  const parts = Array.isArray(raw) ? raw : String(raw).split(',');
+  const days = [...new Set(parts.map((p) => parseInt(String(p).trim(), 10)).filter((n) => n >= 1 && n <= 7))]
+    .sort((a, b) => a - b);
+  return days.length === 0 || days.length === 7 ? null : days.join(',');
 }
 
 // ---------------------------------------------------------------------------
@@ -164,6 +178,7 @@ export async function createTherapyInTx(
         typeof input.drugPackageRef === 'string' && input.drugPackageRef.trim()
           ? input.drugPackageRef.trim()
           : null,
+      giorniSettimana: normalizeGiorniSettimana(input.giorniSettimana),
       schedules: schedules.length ? { create: schedules } : undefined,
     },
     include: { schedules: { orderBy: { time: 'asc' } } },

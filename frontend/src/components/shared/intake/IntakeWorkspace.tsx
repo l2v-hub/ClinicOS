@@ -18,6 +18,30 @@ const STEPS = [
   'Verifica',
 ] as const;
 
+// #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
+// dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
+const CLINICAL_MODULES: ReadonlyArray<{ id: string; label: string; desc: string; available: boolean }> = [
+  { id: 'medicazioni', label: 'Medicazioni / Wound Care', desc: 'Registro medicazioni e lesioni', available: true },
+  { id: 'contenzioni', label: 'Contenzioni / Protezioni', desc: 'Registrazione contenzioni e consenso', available: true },
+  { id: 'braden', label: 'Scala Braden', desc: 'Rischio lesioni da pressione', available: true },
+  { id: 'tinetti', label: 'Scala Tinetti', desc: 'Equilibrio e andatura', available: true },
+  { id: 'nrs', label: 'Scala NRS', desc: 'Valutazione del dolore', available: true },
+  { id: 'dimissione', label: 'Dimissione', desc: 'Modulo di dimissione', available: true },
+];
+
+// #243 AC4: modulo selezionato in step 4 → tab della scheda paziente (gruppo "Moduli") su cui
+// atterrare subito dopo la creazione. Oggi è una mappa identità (gli id coincidono con i TabId
+// di PatientDetail) ma resta esplicita e colocata con CLINICAL_MODULES per non dipendere da
+// un'assunzione implicita se le label/id divergeranno in futuro.
+const MODULE_TO_TAB_ID: Record<string, string> = {
+  medicazioni: 'medicazioni',
+  contenzioni: 'contenzioni',
+  braden: 'braden',
+  tinetti: 'tinetti',
+  nrs: 'nrs',
+  dimissione: 'dimissione',
+};
+
 interface AnagraficaData {
   firstName?: string;
   lastName?: string;
@@ -85,7 +109,9 @@ function therapyFormToInput(f: TherapyFormValue, operatoreNome?: string): Record
 interface IntakeWorkspaceProps {
   open: boolean;
   onClose: () => void;
-  onCreated?: (patientId: string) => void;
+  /** #243: moduleTabId is the id of the module card selected in step 4 (Moduli), if any —
+   * lets the caller navigate the newly created patient straight to that module's flow. */
+  onCreated?: (patientId: string, moduleTabId?: string) => void;
   operatoreNome?: string;
   operatorId?: string;
   operatorRole?: string;
@@ -107,6 +133,9 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
   const [submitAttempted, setSubmitAttempted] = useState(false);
   // #234: autosave status for the debounced patchDraft (no longer swallowed silently).
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  // #243 AC4: modulo scelto nella griglia dello step 4 (opzionale) — usato solo per navigare
+  // al flusso reale del modulo dopo la creazione del paziente; non blocca la conferma.
+  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
 
   // Confirm / submit state
   const [submitting, setSubmitting] = useState(false);
@@ -136,6 +165,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       setSubmitError(null);
       setDuplicateWarn(false);
       setAllergyConflictWarn(false);
+      setSelectedModuleId(null);
       return;
     }
     if (importDraftId) {
@@ -299,7 +329,8 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
     try {
       const res = await confirmDraft(draftId, payload, op);
       if (res.status === 'created' || res.status === 'idempotent') {
-        onCreated?.(res.patient?.id ?? '');
+        const moduleTabId = selectedModuleId ? MODULE_TO_TAB_ID[selectedModuleId] : undefined;
+        onCreated?.(res.patient?.id ?? '', moduleTabId);
         onClose();
       } else if (res.status === 'duplicate') {
         setDuplicateWarn(true);
@@ -413,7 +444,40 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
               )}
               {step === 4 && (
                 <div data-testid="intake-step-4" data-draft-id={draftId ?? undefined}>
-                  <p className="cr-empty">Moduli configurabili — in arrivo.</p>
+                  <p className="cr-empty" style={{ marginBottom: 12 }}>
+                    Moduli operativi disponibili nella sezione <strong>Moduli</strong> della scheda paziente dopo la presa in carico.
+                    Seleziona (facoltativo) il modulo da aprire subito dopo la creazione del paziente.
+                  </p>
+                  <div className="intake-modules-grid" role="list" data-testid="intake-modules-grid">
+                    {CLINICAL_MODULES.map((m) => {
+                      const selected = selectedModuleId === m.id;
+                      return (
+                        <div key={m.id} role="listitem">
+                          <button
+                            type="button"
+                            className={`intake-module-card${selected ? ' intake-module-card--selected' : ''}`}
+                            data-testid={`intake-module-${m.id}`}
+                            aria-pressed={selected}
+                            disabled={!m.available}
+                            onClick={() => setSelectedModuleId((cur) => (cur === m.id ? null : m.id))}
+                          >
+                            <div className="intake-module-card__head">
+                              <span className="intake-module-card__title">{m.label}</span>
+                              <span className={`status-badge status-badge--${m.available ? 'success' : 'neutral'}`}>
+                                {m.available ? 'Disponibile' : 'In arrivo'}
+                              </span>
+                            </div>
+                            <p className="intake-module-card__desc">{m.desc}</p>
+                            {selected && (
+                              <p className="intake-module-card__hint" data-testid={`intake-module-${m.id}-hint`}>
+                                Si aprirà dopo la creazione del paziente
+                              </p>
+                            )}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
               {step === 5 && (

@@ -24,7 +24,7 @@ import { RoomsManagement } from './components/admin/RoomsManagement';
 import { OperatorSchedule } from './components/admin/OperatorSchedule';
 import { OperatorDashboard } from './components/operator/OperatorDashboard';
 import { PatientList } from './components/operator/PatientList';
-import { PatientDetail } from './components/operator/PatientDetail';
+import { PatientDetail, type TabId } from './components/operator/PatientDetail';
 import { ConsegnePage } from './components/operator/ConsegnePage';
 import { OperatorAgenda } from './components/operator/OperatorAgenda';
 import { NotesPage } from './components/shared/NotesPage';
@@ -35,6 +35,10 @@ import { AgnosPanel } from './components/shared/AgnosPanel';
 import { IcoSearch, IcoX } from './icons';
 
 // ── Navigation helpers ─────────────────────────────────────────────────────────
+
+// #243: valid "Moduli" tab ids a moduleTabId coming from the intake wizard may target —
+// guards against forwarding an unexpected string as an initialTab.
+const MODULE_TAB_IDS: TabId[] = ['medicazioni', 'contenzioni', 'braden', 'tinetti', 'nrs', 'dimissione'];
 
 const NAV_LABELS: Record<NavKey, string> = {
   'login': 'Login',
@@ -120,6 +124,9 @@ export default function App() {
   const [pazienti, setPazienti] = useState<Paziente[]>([]);
   const [loadingPazienti, setLoadingPazienti] = useState(false);
   const [pazienteSelezionato, setPazienteSelezionato] = useState<Paziente | null>(null);
+  // #243: "Moduli" tab to land on when opening pazienteSelezionato (set only right after a
+  // patient is created from the intake wizard with a module card selected in step 4).
+  const [pendingModuleTab, setPendingModuleTab] = useState<TabId | undefined>(undefined);
 
   // Mock state
   const [operatori, setOperatori] = useState<Operatore[]>(MOCK_OPERATORI);
@@ -158,9 +165,12 @@ export default function App() {
     if (key === 'agenda-operatore' || key === 'agenda-admin') loadAppuntamenti();
   }
 
-  function selectPaziente(p: Paziente) {
+  function selectPaziente(p: Paziente, moduleTabId?: TabId) {
     pushNav('dettaglio-paziente', p);
     loadCartella(p.id);
+    // Reset on every selection (not just when a module is passed) so a stale target from a
+    // previous intake-created patient never leaks into an unrelated navigation.
+    setPendingModuleTab(moduleTabId);
   }
 
   const goBack = useCallback((fallbackKey?: NavKey) => {
@@ -1060,12 +1070,26 @@ export default function App() {
               onAddPaziente={addPaziente}
               operatorId={utente?.id}
               operatorRole={utente?.ruolo}
-              onImported={() => {
+              onImported={(patientId, moduleTabId) => {
                 // REQ-018: refresh the patient list after an imported patient is created.
                 setLoadingPazienti(true);
                 fetch(`${API_URL}/patients`)
                   .then(r => r.json())
-                  .then((data: Paziente[]) => setPazienti(sortPazienti(data)))
+                  .then((data: Paziente[]) => {
+                    const sorted = sortPazienti(data);
+                    setPazienti(sorted);
+                    // #243 AC4: if the patient was just created from the intake wizard, land
+                    // on its chart — on the selected "Moduli" tab when the operator chose one.
+                    if (patientId) {
+                      const created = sorted.find(p => p.id === patientId);
+                      if (created) {
+                        const tab = moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
+                          ? (moduleTabId as TabId)
+                          : undefined;
+                        selectPaziente(created, tab);
+                      }
+                    }
+                  })
                   .catch(() => { /* keep current list */ })
                   .finally(() => setLoadingPazienti(false));
               }}
@@ -1093,6 +1117,7 @@ export default function App() {
               onAssignCamera={syncCameraAssignment}
               operatoreNome={utente.nome}
               operatoreId={utenteId}
+              initialTab={pendingModuleTab}
             />
           )}
           {!isAdmin && navKey === 'parametri-multipaziente' && (

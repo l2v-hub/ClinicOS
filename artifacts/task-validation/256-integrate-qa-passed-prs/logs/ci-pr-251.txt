@@ -1,0 +1,50 @@
+CI INVESTIGATION — PR #251  (issue #256, read-only)
+Repo: l2v-hub/ClinicOS
+Generated: 2026-07-10 (sanitized — no tokens/secrets/PHI)
+
+=========================================================
+1. CHECK LIST (gh pr checks 251)
+=========================================================
+Build and Deploy Job      FAIL     2s   run 29082349288  (Azure Static Web Apps CI/CD)
+secret-scan               FAIL     2s   run 29082349227  (AI Import E2E Gate)
+Vercel Preview Comments   PASS     -    (external Vercel GitHub app)
+Close Pull Request Job    skipping -    run 29082349288
+browser-e2e               skipping -    run 29082349227
+gate                      skipping -    run 29082349227
+real-provider             skipping -    run 29082349227
+Vercel                    PASS     -    Deployment has completed (external Vercel)
+
+=========================================================
+2. FAILED JOB METADATA (steps / timing)
+=========================================================
+Run 29082349288 (Azure):
+  Build and Deploy Job   failure  started 09:13:56Z  completed 09:13:58Z  STEPS=0
+  Close Pull Request Job skipped  STEPS=0
+Run 29082349227 (AI Import E2E Gate):
+  secret-scan    failure  started 09:13:56Z  completed 09:13:58Z  STEPS=0
+  gate/browser-e2e/real-provider  skipped  STEPS=0  (needs: chain)
+
+STEPS=0 within ~2s = job STARTUP failure, no step executed.
+
+=========================================================
+3. ROOT-CAUSE MESSAGE (gh run view)
+=========================================================
+  "The job was not started because recent account payments have failed or your
+   spending limit needs to be increased. Please check the 'Billing & plans'
+   section in your settings"
+
+Run URLs:
+  https://github.com/l2v-hub/ClinicOS/actions/runs/29082349227/job/86327902649  (secret-scan)
+  https://github.com/l2v-hub/ClinicOS/actions/runs/29082349288/job/86327902874  (Build and Deploy Job)
+
+=========================================================
+4. CAUSE CATEGORY
+=========================================================
+CATEGORY (b) — GitHub Actions BILLING BLOCK. secret-scan executed 0 steps: not
+a scan, not a pass, not proof of a leak. Azure deploy blocked identically.
+Downstream jobs skipped via `needs:`. Vercel unaffected (external app).
+
+=========================================================
+5. REPO-FIXABLE?
+=========================================================
+NO — EXTERNAL. Fix GitHub billing / spending limit, then re-run checks.

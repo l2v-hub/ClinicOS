@@ -1,0 +1,110 @@
+TAP version 13
+# Subtest: parses markdown headings and maps to canonical fields
+ok 1 - parses markdown headings and maps to canonical fields
+  ---
+  duration_ms: 1.2604
+  ...
+# Subtest: \#242 combined "Diagnosi e terapia" heading keeps pharmacological therapy OUT of diagnosis
+ok 2 - \#242 combined "Diagnosi e terapia" heading keeps pharmacological therapy OUT of diagnosis
+  ---
+  duration_ms: 0.3607
+  ...
+# Subtest: \#242 inline "Terapia:" label starts a therapy block even after diagnosis lines
+ok 3 - \#242 inline "Terapia:" label starts a therapy block even after diagnosis lines
+  ---
+  duration_ms: 0.1961
+  ...
+# Subtest: anamnesis subtitles merge into ONE block, headings kept
+ok 4 - anamnesis subtitles merge into ONE block, headings kept
+  ---
+  duration_ms: 0.292
+  ...
+# Subtest: section ends at the next canonical heading
+ok 5 - section ends at the next canonical heading
+  ---
+  duration_ms: 0.1623
+  ...
+# Subtest: plain (non-markdown) title line is recognised
+ok 6 - plain (non-markdown) title line is recognised
+  ---
+  duration_ms: 0.1047
+  ...
+# Subtest: newlines and bullet lists are preserved
+ok 7 - newlines and bullet lists are preserved
+  ---
+  duration_ms: 0.2947
+  ...
+# Subtest: multi-page-style continuation (blank lines) stays in the section
+ok 8 - multi-page-style continuation (blank lines) stays in the section
+  ---
+  duration_ms: 0.1393
+  ...
+# Subtest: imaging heading not swallowed by diagnosi alias
+ok 9 - imaging heading not swallowed by diagnosi alias
+  ---
+  duration_ms: 0.1685
+  ...
+# Subtest: allergies populate text + status present
+ok 10 - allergies populate text + status present
+  ---
+  duration_ms: 0.1056
+  ...
+# Subtest: missingSections lists empty sections; populated ones excluded
+ok 11 - missingSections lists empty sections; populated ones excluded
+  ---
+  duration_ms: 0.1081
+  ...
+# Subtest: detectSectionLoss flags a section whose text was dropped
+ok 12 - detectSectionLoss flags a section whose text was dropped
+  ---
+  duration_ms: 0.5288
+  ...
+# Subtest: NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc is detected
+ok 13 - NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc is detected
+  ---
+  duration_ms: 0.1572
+  ...
+# Subtest: BUG-048: documentInfo populates sourceReferences for each non-empty section
+ok 14 - BUG-048: documentInfo populates sourceReferences for each non-empty section
+  ---
+  duration_ms: 0.1966
+  ...
+# Subtest: BUG-048: without documentInfo sourceReferences stay empty (back-compat)
+ok 15 - BUG-048: without documentInfo sourceReferences stay empty (back-compat)
+  ---
+  duration_ms: 0.0946
+  ...
+# Subtest: BUG-051: anamnesis fixture populates ANAMNESIS.originalText through to the row
+ok 16 - BUG-051: anamnesis fixture populates ANAMNESIS.originalText through to the row
+  ---
+  duration_ms: 0.2014
+  ...
+# Subtest: BUG-051: assertNoNarrativeSectionLoss passes for a faithfully parsed draft
+ok 17 - BUG-051: assertNoNarrativeSectionLoss passes for a faithfully parsed draft
+  ---
+  duration_ms: 0.2
+  ...
+# Subtest: BUG-051: assertNoNarrativeSectionLoss throws NarrativeSectionContentLostError on loss
+ok 18 - BUG-051: assertNoNarrativeSectionLoss throws NarrativeSectionContentLostError on loss
+  ---
+  duration_ms: 0.4319
+  ...
+# Subtest: BUG-051: guard does NOT fire for unstructured text (no headings → UNMAPPED_CONTENT)
+ok 19 - BUG-051: guard does NOT fire for unstructured text (no headings → UNMAPPED_CONTENT)
+  ---
+  duration_ms: 0.1141
+  ...
+# Subtest: REQ-036: section spanning a page break stays in one block until a new canonical heading
+ok 20 - REQ-036: section spanning a page break stays in one block until a new canonical heading
+  ---
+  duration_ms: 0.0964
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 456.3317
