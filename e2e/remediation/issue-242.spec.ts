@@ -47,18 +47,20 @@ async function openPatient(page: Page) {
   await page.getByText('Moretti, Elena', { exact: false }).first().click();
 }
 
+// NB: i tab mostrano un badge conteggio dopo il salvataggio ("Diagnosi 1"),
+// quindi niente exact: si usa una regex ancorata che tollera il badge numerico.
 async function openClinicaGroup(page: Page) {
-  await page.getByRole('tab', { name: 'Clinica' }).click();
+  await page.getByRole('tab', { name: /^Clinica(\s+\d+)?$/ }).click();
 }
 
 async function openDiagnosiTab(page: Page) {
   await openClinicaGroup(page);
-  await page.getByRole('tab', { name: 'Diagnosi', exact: true }).click();
+  await page.getByRole('tab', { name: /^Diagnosi(\s+\d+)?$/ }).click();
 }
 
 async function openTerapiaTab(page: Page) {
   await openClinicaGroup(page);
-  await page.getByRole('tab', { name: 'Terapia Farmacologica', exact: true }).click();
+  await page.getByRole('tab', { name: /^Terapia Farmacologica(\s+\d+)?$/ }).click();
 }
 
 test.describe('#242 — diagnosi di dimissione esclude la terapia farmacologica (real UI flow)', () => {
@@ -82,32 +84,41 @@ test.describe('#242 — diagnosi di dimissione esclude la terapia farmacologica 
     await openPatient(page);
     await openDiagnosiTab(page);
 
-    await page.getByRole('button', { name: '+ Aggiungi' }).first().click();
-    await page.getByLabel('Descrizione *').fill(SYNTH_DIAGNOSIS);
+    // NB: getByRole('button', {name}) matcha per SOTTOSTRINGA → prenderebbe il bottone-header
+    // esterno (nome accessibile include il testo del figlio) e collasserebbe la sezione.
+    // Si clicca il bottone azioni INTERNO (cts__header-right ha stopPropagation).
+    const diagSection = page.locator('.cts', { hasText: 'DIAGNOSI / LISTA PROBLEMI' });
+    await diagSection.locator('.cts__header-right button', { hasText: '+ Aggiungi' }).click();
+    const diagForm = page.locator('.cr-inline-form');
+    await diagForm.waitFor({ state: 'visible', timeout: 5000 });
+    // La label "Descrizione *" non è associata all'input (nessun htmlFor):
+    // si usa il primo input del form inline.
+    await diagForm.locator('input.form-input').first().fill(SYNTH_DIAGNOSIS);
     await page.locator('.cr-inline-form__actions').getByRole('button', { name: 'Salva' }).click();
 
-    const diagnosiRow = page.locator('.cr-diag-desc', { hasText: SYNTH_DIAGNOSIS });
+    const diagnosiRow = page.locator('.cr-diag-desc', { hasText: SYNTH_DIAGNOSIS }).first();
     await expect(diagnosiRow).toBeVisible();
     await expect(diagnosiRow).toHaveText(SYNTH_DIAGNOSIS);
 
     // ── Step 2: go to Terapia Farmacologica, add the pharmacological therapy ──
     await openTerapiaTab(page);
 
-    const addFarmaco = page.getByRole('button', { name: '+ Aggiungi farmaco' });
-    const addFarmacoEmpty = page.getByRole('button', { name: '+ Aggiungi', exact: true });
-    if (await addFarmaco.count()) {
-      await addFarmaco.click();
+    // Stesso trap substring dei button annidati: si usa il link nel corpo (link-btn,
+    // presente nello stato vuoto) oppure il bottone azioni interno all'header.
+    const addBodyLink = page.locator('button.link-btn', { hasText: 'Aggiungi' });
+    if (await addBodyLink.count()) {
+      await addBodyLink.first().click();
     } else {
-      await addFarmacoEmpty.first().click();
+      await page.locator('.cts__header-right button', { hasText: 'Aggiungi farmaco' }).first().click();
     }
 
     await page.getByPlaceholder('es. Kanrenol').fill(SYNTH_DRUG);
 
     const [therapyResponse] = await Promise.all([
-      page.waitForResponse(res => res.url().includes('/therapies') && res.request().method() === 'POST'),
+      page.waitForResponse(res => /\/patients\/[^/]+\/therapies$/.test(res.url()) && res.request().method() === 'POST'),
       page.getByRole('button', { name: 'Salva terapia' }).click(),
     ]);
-    expect(therapyResponse.status()).toBe(201);
+    expect(therapyResponse.status(), `POST ${therapyResponse.url()}`).toBe(201);
 
     const therapyRow = page.locator('.clinicos-table, table').locator('text=' + SYNTH_DRUG).first();
     await expect(therapyRow).toBeVisible();
@@ -128,9 +139,11 @@ test.describe('#242 — diagnosi di dimissione esclude la terapia farmacologica 
     await page.screenshot({ path: path.join(SCREENSHOTS_DIR, '242-diagnosi-surface.png'), fullPage: true });
 
     // ── Step 4 (AC3): reload the page and re-verify BOTH persistence and separation ──
+    // Dopo il reload l'app torna al gate del ruolo: si rifà login + apertura paziente.
     await page.reload();
+    await openPatient(page);
     await openDiagnosiTab(page);
-    await expect(page.locator('.cr-diag-desc', { hasText: SYNTH_DIAGNOSIS })).toBeVisible();
+    await expect(page.locator('.cr-diag-desc', { hasText: SYNTH_DIAGNOSIS }).first()).toBeVisible();
     const drugAfterReloadOnDiagnosis = await page.locator('.cr-tab-content', { hasText: SYNTH_DRUG }).count();
     expect(drugAfterReloadOnDiagnosis, 'After reload: drug must still be absent from Diagnosi').toBe(0);
 
