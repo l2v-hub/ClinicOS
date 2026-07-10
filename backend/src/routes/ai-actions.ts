@@ -62,7 +62,10 @@ actionsRouter.get('/catalog', (_req, res) => {
 // (defense in depth: this only feeds the `clarify` chip text, never a query/authz decision).
 function sanitizePatientName(raw: unknown): string | undefined {
   if (typeof raw !== 'string') return undefined;
-  const trimmed = raw.trim().slice(0, 120);
+  // Strip control characters and newlines before trim/cap (defense in depth: this only feeds
+  // the `clarify` chip text, but a raw control char / CR-LF must never reach the response payload).
+  const stripped = raw.replace(/[\x00-\x1F\x7F]/g, ' ');
+  const trimmed = stripped.trim().slice(0, 120);
   return trimmed || undefined;
 }
 

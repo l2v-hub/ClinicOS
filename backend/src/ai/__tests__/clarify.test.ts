@@ -4,6 +4,21 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { suggestFor } from '../assistant/clarify.js';
 import { planQueryLLM } from '../assistant/llm-planner.js';
+import { assistantQuery } from '../assistant/service.js';
+import type { UserContext } from '../gateway/types.js';
+
+// Contesto minimo valido (campi reali di UserContext in gateway/types.ts) — nessun accesso DB
+// atteso per le domande scelte sotto (nessun nome paziente estraibile, nessun tool eseguito).
+const CTX: UserContext = {
+  userId: 'u1',
+  tenantId: 't1',
+  roles: ['operatore'],
+  permittedPatientIds: null,
+  requestId: 'test-req-1',
+};
+// Config LLM esplicitamente vuota: il planner deterministico resta l'unico percorso, i test
+// non dipendono da Azure/env reali (loadAssistantLlmConfig con env={} → llmEnabled=false).
+const NO_LLM_ENV: NodeJS.ProcessEnv = {};
 
 test('con scheda aperta: suggerimenti compilati col nome reale, tutti da catalogo template', () => {
   const s = suggestFor({ currentPatientId: 'p1', currentPatientName: 'Moretti Elena', roles: ['operatore'] });
@@ -33,4 +48,21 @@ test('piano LLM {intent: clarify, tools: []} è accettato, mode llm, nessun tool
   assert.equal(r.mode, 'llm');
   assert.equal(r.plan.intent, 'clarify');
   assert.deepEqual(r.plan.tools, []);
+});
+
+// Integrazione reale: assistantQuery end-to-end (nessun mock del gateway) col planner
+// deterministico (LLM disattivato via env vuoto) — la domanda non nomina un paziente, quindi
+// nessuna risoluzione nome→id tocca il DB, e non produce alcun tool nel piano.
+test('integrazione: domanda generica → clarify con suggestions (notFound senza refusal)', async () => {
+  const a = await assistantQuery('dammi i dati', CTX, {}, NO_LLM_ENV);
+  assert.equal(a.notFound, true);
+  assert.ok(!a.refusal);
+  assert.ok(a.suggestions && a.suggestions.length >= 2);
+  assert.match(a.answerText ?? '', /Forse intendevi/);
+});
+
+test('integrazione: rifiuto clinico NON riceve suggestions', async () => {
+  const a = await assistantQuery('che terapia dovrei prendere per la pressione alta?', CTX, {}, NO_LLM_ENV);
+  assert.ok(a.refusal);
+  assert.equal(a.suggestions, undefined);
 });

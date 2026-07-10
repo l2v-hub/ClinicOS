@@ -125,7 +125,9 @@ export async function assistantQuery(
   if (plan.intent === 'refuse_clinical') {
     return empty({ notFound: false, refusal: 'L’assistente non fornisce diagnosi, terapie o valutazioni cliniche. Posso solo cercare e mostrare dati esistenti con la loro fonte.' });
   }
-  if (plan.intent === 'unknown' || plan.tools.length === 0) {
+  // An explicit LLM plan {intent:'clarify', tools:[...]} must surface suggestions, not execute
+  // tools — the clarify short-circuit fires on intent alone, not just on an empty tool list.
+  if (plan.intent === 'unknown' || plan.intent === 'clarify' || plan.tools.length === 0) {
     return withClarify(empty({ refusal: undefined }));
   }
   // cross-patient access is role + env gated; a denied request is reported, not executed
