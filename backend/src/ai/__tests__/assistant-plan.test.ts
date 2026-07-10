@@ -185,3 +185,13 @@ test('KB fix: "ultimi parametri" resta vitals_recent (nessuna regressione)', () 
   const p = planQuery('mostrami gli ultimi parametri', { currentPatientId: P });
   assert.equal(p.intent, 'vitals_recent');
 });
+
+// Final review fix (I3): il trigger vitals_compare accettava anche i giorni della settimana, ma
+// refDay() sapeva risolvere solo 'ieri'/date ISO — una domanda su "lunedì" veniva silenziosamente
+// confrontata con IERI, una risposta sbagliata presentata con piena sicurezza. Il trigger ora
+// accetta solo 'ieri' o una data esplicita: una domanda sul giorno della settimana deve cadere su
+// 'unknown' (→ chip di chiarimento), mai indovinare un giorno diverso da quello nominato.
+test('KB fix (I3): "rispetto a lunedì" NON è vitals_compare (nessuna risposta silenziosa su ieri)', () => {
+  const p = planQuery("com'è la pressione rispetto a lunedì?", { currentPatientId: P });
+  assert.equal(p.intent, 'unknown');
+});

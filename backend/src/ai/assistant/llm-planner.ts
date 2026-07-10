@@ -26,10 +26,11 @@ export interface PlanResult { plan: QueryPlan; mode: 'llm' | 'deterministic' }
 // I tool che comportano accesso cross-patient: se il piano LLM ne usa uno, il server IMPONE cross.
 // spec §2: nomi occupanti visibili a entrambi i ruoli (stessa disclosure della UI); protezione =
 // canFacilityRead + permittedPatientIds, NON il gate cross-patient — query_room_occupants NON è
-// in questo set. Anche query_rooms_occupancy (solo aggregato, MAI nomi) e query_operators (dato
-// organizzativo, gate ammesso solo al ruolo admin dentro il service) restano fuori: non
-// espongono/attraversano cartelle di più pazienti oltre quanto già gestito a valle da
-// canFacilityRead()/ruolo admin in gateway/services.ts, non dal gate cross.
+// in questo set. Anche query_rooms_occupancy (solo aggregato, MAI nomi) e query_operators restano
+// fuori: non espongono/attraversano cartelle di più pazienti. query_operators espone un dato
+// organizzativo non clinico (turni operatore, nessun dato paziente) — decisione 2026-07-10: il
+// gate admin-only è stato RIMOSSO da queryOperators() in gateway/services.ts, quindi l'intent
+// operators_on_duty è disponibile a entrambi i ruoli, non solo admin.
 const CROSS_TOOLS = new Set(['search_across_patients', 'correlate_structured_data', 'query_appointments_today']);
 
 // Tool vincolati a un singolo paziente: il patientId è AUTORITATIVO lato server (risolto da F0),

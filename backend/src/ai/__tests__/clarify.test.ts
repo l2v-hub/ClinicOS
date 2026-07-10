@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { suggestFor } from '../assistant/clarify.js';
 import { planQueryLLM } from '../assistant/llm-planner.js';
-import { assistantQuery } from '../assistant/service.js';
+import { assistantQuery, clarifyAnswerText } from '../assistant/service.js';
 import type { UserContext } from '../gateway/types.js';
 
 // Contesto minimo valido (campi reali di UserContext in gateway/types.ts) — nessun accesso DB
@@ -32,9 +32,15 @@ test('admin senza scheda: include suggerimenti organizzativi (camere/turni)', ()
   assert.ok(s.some((x) => /turno/.test(x)));
 });
 
-test('operatore senza scheda: MAI suggerimento turni (role-gated)', () => {
+// Final review fix: this test asserted the OLD spec (turni = admin-only chip). 2026-07-10 decision:
+// operators_on_duty is organizational (non-clinical) data, executable by both roles — the
+// admin-only gate was removed from queryOperators (see gateway/services.ts). Suggestion parity
+// with authorization: an operator now sees the turni chip too, and it is actually executable
+// (spec §3 invariant: every chip must be executable — the old 'Appuntamenti di oggi' chip was not,
+// since it always required cross-patient access that operators never have).
+test('operatore senza scheda: include suggerimento turni (parità con l\'autorizzazione, 2026-07-10)', () => {
   const s = suggestFor({ roles: ['operatore'] });
-  assert.equal(s.some((x) => /turno/.test(x)), false);
+  assert.equal(s.some((x) => /turno/.test(x)), true);
 });
 
 // Un piano LLM esplicito {intent:'clarify', tools:[]} è valido (intent in INTENTS, tools vuoto
@@ -59,6 +65,21 @@ test('integrazione: domanda generica → clarify con suggestions (notFound senza
   assert.ok(!a.refusal);
   assert.ok(a.suggestions && a.suggestions.length >= 2);
   assert.match(a.answerText ?? '', /Forse intendevi/);
+});
+
+// Final review fix (I2): withClarify non deve mai dichiarare "non ho capito" su una domanda
+// RICONOSCIUTA (intent letto correttamente) che è semplicemente vuota — sarebbe una menzogna
+// (anti-allucinazione vale anche per il testo di cornice). Si testa la funzione pura esportata
+// (nessun accesso DB necessario): unknown/clarify → frase di non comprensione; qualunque altro
+// intent riconosciuto → frase neutra "nessun dato trovato".
+test('clarifyAnswerText: intent unknown → frase di non comprensione', () => {
+  assert.equal(clarifyAnswerText('unknown'), 'Non ho capito bene la domanda. Forse intendevi:');
+});
+test('clarifyAnswerText: intent clarify (esplicito da LLM) → frase di non comprensione', () => {
+  assert.equal(clarifyAnswerText('clarify'), 'Non ho capito bene la domanda. Forse intendevi:');
+});
+test('clarifyAnswerText: intent riconosciuto ma vuoto (es. vitals_recent) → frase neutra, mai "non capito"', () => {
+  assert.equal(clarifyAnswerText('vitals_recent'), 'Nessun dato trovato per questa richiesta. Forse cercavi:');
 });
 
 test('integrazione: rifiuto clinico NON riceve suggestions', async () => {

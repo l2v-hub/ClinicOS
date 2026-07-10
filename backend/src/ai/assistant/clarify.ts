@@ -11,10 +11,16 @@ const WITH_PATIENT = (nome: string) => [
   `Terapie attive di ${nome}`,                   // therapies
   `Consegne per ${nome}`,                        // consegne
 ];
+// 2026-07-10 decision: operators_on_duty ("Chi è di turno oggi?") is organizational data, not
+// clinical/PHI — available to both roles (gate admin-only removed from queryOperators). The old
+// 'Appuntamenti di oggi' chip routed to query_appointments_today, which always sets
+// requiresCrossPatientAccess:true — a role header is untrusted, so operators were always refused
+// (spec §3 invariant violated: every chip must be executable). Replaced with a chip that resolves
+// to operators_on_duty, which carries no cross-patient flag.
 const GENERIC_OPERATOR = [
   'Quante camere sono occupate?',                // rooms_occupancy
   'Consegne di oggi',                            // consegne
-  'Appuntamenti di oggi',                        // appointments
+  'Chi è di turno oggi?',                        // operators_on_duty
 ];
 const GENERIC_ADMIN = [
   'Quante camere sono occupate?',                // rooms_occupancy

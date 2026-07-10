@@ -43,6 +43,17 @@ export interface AssistantAnswer {
   suggestions?: string[];
 }
 
+// Final review fix (I2): pure, exported phrase-selection helper for the `clarify` outcome — kept
+// separate from withClarify (a closure) so it is unit-testable without touching the DB. An
+// understood intent (anything but 'unknown'/'clarify') that comes back empty must never claim
+// non-comprehension: the assistant read the question fine, it simply found no matching data.
+export function clarifyAnswerText(intent: AssistantIntent): string {
+  const understood = intent !== 'unknown' && intent !== 'clarify';
+  return understood
+    ? 'Nessun dato trovato per questa richiesta. Forse cercavi:'
+    : 'Non ho capito bene la domanda. Forse intendevi:';
+}
+
 function limits(env: NodeJS.ProcessEnv = process.env) {
   const int = (k: string, d: number) => { const n = parseInt(env[k] ?? '', 10); return Number.isFinite(n) ? n : d; };
   return { maxResults: int('AI_SEARCH_MAX_RESULTS', 50), maxToolCalls: int('AI_MAX_TOOL_CALLS', 12), maxPatients: int('AI_QUERY_MAX_PATIENTS', 100) };
@@ -109,6 +120,12 @@ export async function assistantQuery(
   // Agnos KB (Task 6): esito `clarify` — quando la risposta finale è notFound e NON è già un
   // rifiuto (clinico/authz), propone chip da catalogo statico invece di un "non trovato" muto.
   // Non tocca mai un rifiuto reale né una risposta con risultati (notFound è già false in quei casi).
+  // Final review fix (I2): la domanda può essere notFound per due motivi ben distinti — l'assistente
+  // non ha capito l'intento (intent 'unknown'/'clarify') oppure l'ha capito perfettamente ma i dati
+  // non esistono (un intent read RICONOSCIUTO, es. vitals_recent su un paziente senza parametri).
+  // Nel secondo caso claimare "non ho capito" sarebbe falso (anti-allucinazione vale anche per il
+  // testo di cornice, non solo per i dati): il messaggio deve restare onesto pur mantenendo le
+  // stesse chip suggerite come prossimo passo.
   const withClarify = (a: AssistantAnswer): AssistantAnswer => {
     if (!a.notFound || a.refusal) return a;
     return {
@@ -118,7 +135,7 @@ export async function assistantQuery(
         currentPatientName: effectiveCtx.currentPatientName,
         roles: ctx.roles,
       }),
-      answerText: 'Non ho capito bene la domanda. Forse intendevi:',
+      answerText: clarifyAnswerText(a.intent),
     };
   };
 

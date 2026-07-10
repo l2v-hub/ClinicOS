@@ -1,5 +1,5 @@
 {
-  "ranAt": "2026-07-10T05:54:58.626Z",
+  "ranAt": "2026-07-10T06:26:35.700Z",
   "results": [
     {
       "name": "S1 HTTP 200",
@@ -154,7 +154,7 @@
     {
       "name": "S9 intent == unknown + suggestions presenti (esito clarify)",
       "pass": true,
-      "detail": "intent=unknown suggestions=[\"Quante camere sono occupate?\",\"Consegne di oggi\",\"Appuntamenti di oggi\"]"
+      "detail": "intent=unknown suggestions=[\"Quante camere sono occupate?\",\"Consegne di oggi\",\"Chi è di turno oggi?\"]"
     },
     {
       "name": "S9 suggestions.length >= 2",

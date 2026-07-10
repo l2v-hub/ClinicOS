@@ -89,7 +89,12 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
     if (/\ballerg/.test(q)) return base('allergies', [{ tool: 'get_patient_allergies', args: { patientId: pid } }]);
     // Agnos KB (Task 5): confronti/andamento parametri — PRIMA di vitals_recent, altrimenti
     // il regex generico "ultim|7|sette|giorni" di vitals_recent intercetta le domande di trend.
-    if (/(rispetto a|confronta.*con|vs\.?)\s*(ieri|luned|marted|mercoled|gioved|venerd|sabato|domenica|\d{4}-\d{2}-\d{2})/.test(q)
+    // Final review fix (I3): weekday names ("lunedì", "martedì", …) were previously accepted here
+    // but refDay() below only ever resolved to 'ieri' (yesterday) or an explicit ISO date — a
+    // weekday comparison silently answered "yesterday" instead of the day actually named, a wrong
+    // answer presented with full confidence. Removed the weekday alternation: a weekday question
+    // now falls through to 'unknown' (→ clarify chips) instead of mis-answering.
+    if (/(rispetto a|confronta.*con|vs\.?)\s*(ieri|\d{4}-\d{2}-\d{2})/.test(q)
         && /(pression|pa\b|frequenza|fc\b|temperatura|spo2|satur)/.test(q))
       return base('vitals_compare', [{ tool: 'compare_patient_vitals', args: { patientId: pid, label: vitalLabel(q), dayB: refDay(q) } }]);
     if (/(andamento|trend|ultim[ai] (7|sette) giorni|questa settimana)/.test(q) && /(pression|pa\b|frequenza|fc\b|temperatura|spo2|satur|parametr)/.test(q))
@@ -201,8 +206,10 @@ function vitalLabel(q: string): string {
   return 'PA';
 }
 
-/** Giorno di riferimento per il confronto (dayB): 'ieri'/giorno della settimana → sentinella
- *  'yesterday' risolta dal dispatch (service.ts); una data esplicita AAAA-MM-GG è usata com'è. */
+/** Giorno di riferimento per il confronto (dayB): il trigger regex ora accetta solo 'ieri' o una
+ *  data esplicita AAAA-MM-GG (I3: i giorni della settimana sono stati rimossi dal trigger, quindi
+ *  non arrivano più qui) — 'ieri' → sentinella 'yesterday' risolta dal dispatch (service.ts); una
+ *  data esplicita è usata com'è. */
 function refDay(q: string): string {
   const explicit = /\d{4}-\d{2}-\d{2}/.exec(q);
   return explicit ? explicit[0] : 'yesterday';
