@@ -8,14 +8,15 @@
 // per testo richiesta, assert su request/response + assert UI + screenshot, trace+video, PASS/FAIL
 // collector, exit 1 se qualche assert fallisce.
 //
-// IMPORTANTE (trasparenza): uno scenario (operators_on_duty da ADMIN con risultati) e' stato
-// eseguito e produce un RIFIUTO anche nelle condizioni attese dal piano — non un fallimento del
-// test, ma un comportamento reale del backend attualmente deployato, con causa radice individuata
-// e documentata (vedi commenti inline + validation-report.md). rooms_occupants (Gap 1) e' stato
-// risolto per allinearlo alla spec §2 (nomi visibili a entrambi i ruoli, gate = canFacilityRead +
-// permittedPatientIds, non il gate cross-patient) — vedi Scenario 2 sotto. Questo harness asserisce
-// il comportamento REALE osservato, non quello desiderato dalla spec quando ancora divergente, cosi'
-// la evidenza resta onesta e verificabile.
+// IMPORTANTE (trasparenza): rooms_occupants (Gap 1) e' stato risolto per allinearlo alla spec §2
+// (nomi visibili a entrambi i ruoli, gate = canFacilityRead + permittedPatientIds, non il gate
+// cross-patient) — vedi Scenario 2 sotto. operators_on_duty (Gap 2) e' stato RISOLTO DA CAMBIO
+// SPEC (decisione utente 2026-07-10): i turni sono un dato organizzativo non clinico (nessun dato
+// paziente), quindi l'intent e' ora disponibile a entrambi i ruoli — il check `admin`-only in
+// queryOperators() e' stato rimosso (era strutturalmente morto per chiunque passasse dalla route
+// pubblica, che fissa sempre roles=['operatore'] per design: privilege never from public header).
+// Vedi Scenario 8 sotto e validation-report.md. Questo harness asserisce il comportamento REALE
+// osservato, cosi' la evidenza resta onesta e verificabile.
 //   node e2e/agnos-kb.mjs [outDir]
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -172,7 +173,9 @@ try {
   ok('S7 risultato include la valutazione Braden sintetica seedata', r7?.results?.[0]?.id === 'qa-braden-1', `id=${r7?.results?.[0]?.id}`);
   await shot('07-clinical-scores-braden.png');
 
-  // ── Scenario 8a: operators_on_duty da OPERATORE → rifiuto role-gated ──
+  // ── Scenario 8a: operators_on_duty da OPERATORE → RISULTATI (decisione 2026-07-10: turni =
+  // dato organizzativo non clinico, disponibile a entrambi i ruoli; era admin-only, gate rimosso
+  // in queryOperators()). Turno seedato 'ven' per op-qa-1 (Operatore QA), oggi = venerdì.
   await closePanel();
   await clickText('Pazienti');
   await page.waitForTimeout(500);
@@ -181,10 +184,10 @@ try {
   const s8a = planByText.get('chi è di turno oggi?');
   const r8a = s8a?.body?.read;
   ok('S8a intent == operators_on_duty (routing corretto)', r8a?.intent === 'operators_on_duty', `intent=${r8a?.intent}`);
-  ok('S8a rifiutato per OPERATORE (role-gate query_operators)', typeof r8a?.refusal === 'string' && r8a.refusal.length > 0, `refusal=${r8a?.refusal}`);
-  const t8a = await uiText();
-  ok('S8a UI mostra il rifiuto', /non autorizzat/i.test(t8a));
-  await shot('08a-operators-on-duty-operatore-refusal.png');
+  ok('S8a [GAP 2 RISOLTO DA SPEC] nessun rifiuto per OPERATORE — decisione 2026-07-10 (entrambi i ruoli)', r8a?.refusal === undefined, `refusal=${r8a?.refusal}`);
+  ok('S8a notFound == false (turno seedato op-qa-1 trovato per oggi/venerdì)', r8a?.notFound === false, `notFound=${r8a?.notFound}`);
+  ok('S8a results include il turno sintetico seedato (op-qa-1, ven)', (r8a?.results ?? []).some((o) => o.operatoreId === 'op-qa-1'), `results=${JSON.stringify(r8a?.results)}`);
+  await shot('08a-operators-on-duty-operatore-results.png');
 
   // ── Scenario 9: clarify — "dammi i dati" → chips → click prima chip → nuovo turno reale ──
   await ask('dammi i dati');
@@ -228,12 +231,15 @@ try {
   const s8b = planByText.get('chi è di turno oggi?'); // Map keyed by text: sovrascrive s8a con la risposta admin
   const r8b = s8b?.body?.read;
   ok('S8b (ADMIN via UI) intent == operators_on_duty (routing corretto)', r8b?.intent === 'operators_on_duty', `intent=${r8b?.intent}`);
-  ok('S8b [GAP DOCUMENTATO] ADMIN via UI riceve comunque un rifiuto (vedi validation-report.md)', typeof r8b?.refusal === 'string' && r8b.refusal.length > 0, `refusal=${r8b?.refusal}`);
-  await shot('12-operators-on-duty-admin-ui.png');
+  ok('S8b [GAP 2 RISOLTO DA SPEC] ADMIN via UI riceve risultati (decisione 2026-07-10, entrambi i ruoli)', r8b?.refusal === undefined, `refusal=${r8b?.refusal}`);
+  ok('S8b results include il turno sintetico seedato (op-qa-1, ven)', (r8b?.results ?? []).some((o) => o.operatoreId === 'op-qa-1'), `results=${JSON.stringify(r8b?.results)}`);
+  await shot('12-operators-on-duty-admin-ui-results.png');
 
   // Prova diretta server-side (fuori dal browser) col header self-asserted X-Operator-Role: admin —
-  // isola la causa radice dalla UI: e' il backend (ctxFromOperator pinna sempre ctx.roles=['operatore'],
-  // vedi routes/ai-assistant-public.ts + security.test.ts) a rifiutare, non un problema del pannello.
+  // isola la causa dalla UI: il backend (ctxFromOperator pinna sempre ctx.roles=['operatore'], vedi
+  // routes/ai-assistant-public.ts + security.test.ts) NON deriva privilegio dall'header self-asserted
+  // (invariato, decisione di sicurezza preesistente) — ma ora questo non produce più un rifiuto perché
+  // query_operators non richiede più 'admin' (decisione 2026-07-10): stesso esito per operatore/admin.
   const directAdminRes = await fetch(`${BACKEND}/ai/actions/plan`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-Operator-Id': 'qa-admin-direct', 'X-Operator-Role': 'admin' },
@@ -241,21 +247,22 @@ try {
   });
   const directAdminBody = await directAdminRes.json();
   ok('S8c prova diretta HTTP con X-Operator-Role:admin → intent risolto correttamente', directAdminBody?.read?.intent === 'operators_on_duty', `intent=${directAdminBody?.read?.intent}`);
-  ok('S8c [CAUSA RADICE CONFERMATA] rifiutato anche con header admin diretto (ruolo self-asserted non fa mai privilegio sulla route pubblica)', typeof directAdminBody?.read?.refusal === 'string' && directAdminBody.read.refusal.length > 0, `refusal=${directAdminBody?.read?.refusal}`);
+  ok('S8c [GAP 2 RISOLTO DA SPEC] nessun rifiuto anche con header admin diretto (turni = entrambi i ruoli)', directAdminBody?.read?.refusal === undefined, `refusal=${directAdminBody?.read?.refusal}`);
   writeFileSync(join(OUT, 'logs', 'operators-on-duty-role-gate-gap.log'),
     [
-      'Scenario 8 — operators_on_duty (spec §2: "solo admin" deve avere risultati)',
-      `operatore (UI): intent=${r8a?.intent} refusal=${r8a?.refusal}`,
-      `admin (UI): intent=${r8b?.intent} refusal=${r8b?.refusal}`,
+      'Scenario 8 — operators_on_duty (Gap 2 RISOLTO DA CAMBIO SPEC, decisione utente 2026-07-10)',
+      `operatore (UI): intent=${r8a?.intent} refusal=${r8a?.refusal} results=${JSON.stringify(r8a?.results)}`,
+      `admin (UI): intent=${r8b?.intent} refusal=${r8b?.refusal} results=${JSON.stringify(r8b?.results)}`,
       `admin (HTTP diretto, X-Operator-Role: admin): intent=${directAdminBody?.read?.intent} refusal=${directAdminBody?.read?.refusal}`,
       '',
-      'Causa radice: backend/src/routes/ai-assistant-public.ts ctxFromOperator() pinna SEMPRE',
+      'Storico: backend/src/routes/ai-assistant-public.ts ctxFromOperator() pinna SEMPRE',
       "ctx.roles=['operatore'] (NON_PRIVILEGED_ROLE) — commento nel file: \"privilege never derives",
       'from a public header\" — confermato anche da security.test.ts ("Attacker passes requireOperator',
-      'by self-asserting a privileged role"). gateway/services.ts queryOperators() richiede',
-      "ctx.roles.includes('admin'): condizione MAI vera tramite questa route pubblica, quindi",
-      "l'esito 'admin riceve risultati' della spec e' strutturalmente irraggiungibile senza un",
-      'meccanismo di identita verificata (fuori scope per Task 8, che e solo evidenza).',
+      'by self-asserting a privileged role"). Prima della decisione 2026-07-10, gateway/services.ts',
+      "queryOperators() richiedeva ctx.roles.includes('admin'): condizione strutturalmente mai vera",
+      "tramite questa route pubblica, quindi l'intent era di fatto morto per chiunque. Decisione utente",
+      '2026-07-10: i turni sono un dato organizzativo non clinico (nessun dato paziente) → il gate',
+      "admin-only e' stato rimosso in queryOperators(); l'intent ora funziona per entrambi i ruoli.",
     ].join('\n') + '\n');
 
   ok('Nessun console error NUOVO di pagina (filtrati i warning nested-button preesistenti)', consoleErrors.length === 0, `errors=${consoleErrors.length}`);

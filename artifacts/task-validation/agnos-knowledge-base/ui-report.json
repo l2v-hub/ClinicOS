@@ -1,5 +1,5 @@
 {
-  "ranAt": "2026-07-10T02:44:23.077Z",
+  "ranAt": "2026-07-10T05:54:58.626Z",
   "results": [
     {
       "name": "S1 HTTP 200",
@@ -137,14 +137,19 @@
       "detail": "intent=operators_on_duty"
     },
     {
-      "name": "S8a rifiutato per OPERATORE (role-gate query_operators)",
+      "name": "S8a [GAP 2 RISOLTO DA SPEC] nessun rifiuto per OPERATORE — decisione 2026-07-10 (entrambi i ruoli)",
       "pass": true,
-      "detail": "refusal=Accesso non autorizzato per questa richiesta."
+      "detail": "refusal=undefined"
     },
     {
-      "name": "S8a UI mostra il rifiuto",
+      "name": "S8a notFound == false (turno seedato op-qa-1 trovato per oggi/venerdì)",
       "pass": true,
-      "detail": ""
+      "detail": "notFound=false"
+    },
+    {
+      "name": "S8a results include il turno sintetico seedato (op-qa-1, ven)",
+      "pass": true,
+      "detail": "results=[{\"operatoreId\":\"op-qa-1\",\"operatoreNome\":\"Operatore QA\",\"oraInizio\":\"08:00\",\"oraFine\":\"20:00\",\"pazientiInCarico\":0}]"
     },
     {
       "name": "S9 intent == unknown + suggestions presenti (esito clarify)",
@@ -192,9 +197,14 @@
       "detail": "intent=operators_on_duty"
     },
     {
-      "name": "S8b [GAP DOCUMENTATO] ADMIN via UI riceve comunque un rifiuto (vedi validation-report.md)",
+      "name": "S8b [GAP 2 RISOLTO DA SPEC] ADMIN via UI riceve risultati (decisione 2026-07-10, entrambi i ruoli)",
       "pass": true,
-      "detail": "refusal=Accesso non autorizzato per questa richiesta."
+      "detail": "refusal=undefined"
+    },
+    {
+      "name": "S8b results include il turno sintetico seedato (op-qa-1, ven)",
+      "pass": true,
+      "detail": "results=[{\"operatoreId\":\"op-qa-1\",\"operatoreNome\":\"Operatore QA\",\"oraInizio\":\"08:00\",\"oraFine\":\"20:00\",\"pazientiInCarico\":0}]"
     },
     {
       "name": "S8c prova diretta HTTP con X-Operator-Role:admin → intent risolto correttamente",
@@ -202,9 +212,9 @@
       "detail": "intent=operators_on_duty"
     },
     {
-      "name": "S8c [CAUSA RADICE CONFERMATA] rifiutato anche con header admin diretto (ruolo self-asserted non fa mai privilegio sulla route pubblica)",
+      "name": "S8c [GAP 2 RISOLTO DA SPEC] nessun rifiuto anche con header admin diretto (turni = entrambi i ruoli)",
       "pass": true,
-      "detail": "refusal=Accesso non autorizzato per questa richiesta."
+      "detail": "refusal=undefined"
     },
     {
       "name": "Nessun console error NUOVO di pagina (filtrati i warning nested-button preesistenti)",

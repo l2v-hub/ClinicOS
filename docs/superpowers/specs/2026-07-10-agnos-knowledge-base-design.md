@@ -9,7 +9,7 @@ Espandere ciò che Agnos sa leggere e come pianifica le risposte, per operatori 
 
 1. Comparazione parametri vitali: oggi vs ieri, due date, trend 7gg, scostamenti (come dato, mai giudizio)
 2. Camere con occupanti per nome (role-gated: **entrambi i ruoli**, stessa disclosure della UI attuale)
-3. Nuove fonti interrogabili: consegne, diario+note, moduli clinici (scale), operatori/turni (solo admin)
+3. Nuove fonti interrogabili: consegne, diario+note, moduli clinici (scale), operatori/turni (entrambi i ruoli — decisione 2026-07-10)
 4. Planning **LLM-first** (approccio B scelto dall'utente) con guardie deterministiche e fallback
 5. Chiarimento guidato: domande generiche → suggerimenti cliccabili, mai risposte indovinate
 
@@ -54,7 +54,7 @@ Mitigazioni dell'approccio LLM-first:
 | `consegne` | "Consegne per Moretti / di oggi" | `get_consegne` → route `/consegne` | entrambi |
 | `diary_notes` | "Cosa è stato scritto ieri?" | `get_patient_diary` → `patient-diary` + note | entrambi, paziente in contesto |
 | `clinical_scores` | "Ultimo Braden / medicazioni attive" | `get_clinical_scores` → moduli `Cartella.data` | entrambi, paziente in contesto |
-| `operators_on_duty` | "Chi è di turno oggi?" | `query_operators` → turni/assegnazioni | **solo admin** |
+| `operators_on_duty` | "Chi è di turno oggi?" | `query_operators` → turni/assegnazioni | **entrambi** (decisione 2026-07-10, era solo-admin: la route pubblica non veicola privilegi admin) |
 
 Regole trasversali:
 - Fonte citata sempre; `SourceType` esteso: `CONSEGNE`, `DIARY`, `CLINICAL_SCORE`, `OPERATOR_SCHEDULE`, `ROOM_OCCUPANTS`
@@ -82,7 +82,7 @@ Composer: solo dati con fonte, es. *"PA oggi 150/90 (08:12) · ieri 140/85 · +1
 **Errori**
 - Azure giù/timeout/JSON invalido/piano invalido → fallback deterministico trasparente; log sanificato `planner=llm|fallback` (no PHI, no prompt integrali)
 - Paziente non risolvibile → `clarify` (mai esecuzione su paziente indovinato)
-- `operators_on_duty` da operatore → rifiuto con motivazione ruolo
+- `operators_on_duty` → disponibile a entrambi i ruoli (decisione 2026-07-10: dato organizzativo non clinico, nessun dato paziente; la route pubblica fissa comunque `roles=['operatore']` per design)
 - Tool nuovi: Prisma read-only; errore DB → messaggio di indisponibilità, mai stacktrace
 
 **Test**
@@ -102,6 +102,6 @@ Composer: solo dati con fonte, es. *"PA oggi 150/90 (08:12) · ieri 140/85 · +1
 | Planning | **B — LLM-first** con guardie+fallback deterministici | Scelta esplicita utente: robustezza linguistica da "vero assistente"; i rischi (latenza/costo/allucinazione) mitigati da validazione rigida, delta backend-only, fallback |
 | Nomi nelle risposte camere | Entrambi i ruoli | La UI attuale mostra già nome+camera a entrambi; Agnos non amplia la disclosure |
 | Confronti | Tutti e 4 i tipi | Richiesta utente; scostamenti come dato, mai giudizio |
-| Copertura KB | Consegne, diario+note, scale, operatori/turni | Richiesta utente; turni solo admin |
+| Copertura KB | Consegne, diario+note, scale, operatori/turni | Richiesta utente; turni disponibili a entrambi i ruoli (decisione 2026-07-10: dato organizzativo non clinico → admin-only rendeva l'intent morto per tutti, dato che la route pubblica fissa `roles=['operatore']` per design) |
 | Voce | Invariata (Web Speech) | Sufficiente per la fase; potenziamenti in spec separata |
 | Domande generiche | `clarify` con chips da template | Richiesta utente anti-allucinazione; template statici ⇒ chips sempre eseguibili |

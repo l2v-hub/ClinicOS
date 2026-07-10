@@ -424,13 +424,11 @@ export function dutyRows(shifts: ShiftRow[], counts: Map<string, number>, giorno
   }));
 }
 
-/** SOLO ADMIN (spec §2): dato organizzativo (turni + carico pazienti per operatore). Il gate
- *  ruolo è imposto qui, non a valle — nessun altro chiamante deve poter bypassarlo. */
+// Decisione 2026-07-10: turni = dato organizzativo non clinico (nessun dato paziente) → disponibile
+// a entrambi i ruoli. La route pubblica fissa roles=['operatore'] per design (privilege never from
+// public header).
 export async function queryOperators(input: { day?: string }, ctx: UserContext): Promise<SourcedResult<OperatorDutyRow[]>> {
   assertTenant(ctx);
-  if (!ctx.roles.includes('admin')) {
-    throw new GatewayError('forbidden', 'Informazioni sui turni disponibili solo per il ruolo amministratore.');
-  }
   const day = input.day ?? new Date().toISOString().slice(0, 10);
   const shifts = await prisma.operatorShift.findMany();
   // pazienti in carico ≈ appuntamenti odierni per operatore (fonte reale disponibile).
