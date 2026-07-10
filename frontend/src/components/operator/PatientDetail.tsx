@@ -25,6 +25,7 @@ import PatientCompactHeader from './PatientCompactHeader';
 import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
+import { deriveAllergySummary } from '../../lib/allergyStatusModel';
 import { AnamnesisEditor } from './sections/AnamnesisEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
@@ -271,6 +272,9 @@ export function PatientDetail({
   const mieConsegne = consegne.filter(c => c.pazienteId === paziente.id);
   const allergieGravi = cartella.allergie.filter(a => a.gravita === 'grave');
   const hasAllergie = allergieGravi.length > 0;
+  // #244: non-ambiguous allergy summary — same source of truth for the quick-stat and the
+  // riepilogo card, so neither can disagree with the AllergiesEditor modal about the state.
+  const allergySummary = deriveAllergySummary(cartella.allergie, cartella.allergieStatus);
   const diagnosiAttive = cartella.diagnosi.filter(d => d.stato === 'attiva');
   const farmaciAttivi = cartella.farmaci.filter(f => f.stato === 'attivo');
   const rischioAlto = cartella.indicatoriRischio.filter(r => r.livello === 'alto' || r.livello === 'critico');
@@ -805,8 +809,10 @@ export function PatientDetail({
             <span className="cr-quick-stat__val">{farmaciAttivi.length}</span>
             <span className="cr-quick-stat__lbl">Farmaci attivi</span>
           </button>
-          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('allergie')}>
-            <span className="cr-quick-stat__val">{cartella.allergie.length}</span>
+          <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('allergie')} data-testid="allergy-summary-state">
+            <span className="cr-quick-stat__val">
+              {allergySummary.badge === 'count' ? allergySummary.count : `0 — ${allergySummary.label}`}
+            </span>
             <span className="cr-quick-stat__lbl">Allergie</span>
           </button>
           <button className="cr-quick-stat cr-quick-stat--clickable" onClick={() => setCardModal('consegne')}>
@@ -918,8 +924,12 @@ export function PatientDetail({
               <IcoWarning /> Allergie
               <span className="cr-card-edit-icon"><IcoEdit /></span>
             </div>
-            {cartella.allergie.length === 0
-              ? <p className="cr-empty">Nessuna allergia registrata.</p>
+            {allergySummary.badge !== 'count'
+              ? (
+                <p className="cr-empty">
+                  <span className={`status-badge status-badge--${allergySummary.badge}`}>{allergySummary.label}</span>
+                </p>
+              )
               : (
                 <ul className="cr-compact-list">
                   {cartella.allergie.slice(0, 3).map(a => (

@@ -1,0 +1,75 @@
+TAP version 13
+# Subtest: deriveAllergySummary: non-empty list wins regardless of status (count)
+ok 1 - deriveAllergySummary: non-empty list wins regardless of status (count)
+  ---
+  duration_ms: 0.5608
+  ...
+# Subtest: deriveAllergySummary: non-empty list wins even if status contradicts it (legacy/edge data)
+ok 2 - deriveAllergySummary: non-empty list wins even if status contradicts it (legacy/edge data)
+  ---
+  duration_ms: 0.1109
+  ...
+# Subtest: deriveAllergySummary: empty list + status assenti -> success, verified-absent
+ok 3 - deriveAllergySummary: empty list + status assenti -> success, verified-absent
+  ---
+  duration_ms: 0.1003
+  ...
+# Subtest: deriveAllergySummary: empty list + status paziente_nega -> info, patient denies
+ok 4 - deriveAllergySummary: empty list + status paziente_nega -> info, patient denies
+  ---
+  duration_ms: 0.0564
+  ...
+# Subtest: deriveAllergySummary: undefined status + empty list -> warning, undocumented
+ok 5 - deriveAllergySummary: undefined status + empty list -> warning, undocumented
+  ---
+  duration_ms: 0.0535
+  ...
+# Subtest: deriveAllergySummary: empty list + undefined status (explicit []) -> warning, undocumented
+ok 6 - deriveAllergySummary: empty list + undefined status (explicit []) -> warning, undocumented
+  ---
+  duration_ms: 0.0438
+  ...
+# Subtest: deriveAllergySummary: status presenti but list emptied (edge case) -> falls back to undocumented
+ok 7 - deriveAllergySummary: status presenti but list emptied (edge case) -> falls back to undocumented
+  ---
+  duration_ms: 0.0853
+  ...
+# Subtest: canSetStatus: blocks "assenti" when the list has entries
+ok 8 - canSetStatus: blocks "assenti" when the list has entries
+  ---
+  duration_ms: 0.1098
+  ...
+# Subtest: canSetStatus: blocks "paziente_nega" when the list has entries
+ok 9 - canSetStatus: blocks "paziente_nega" when the list has entries
+  ---
+  duration_ms: 0.1062
+  ...
+# Subtest: canSetStatus: allows "presenti" even when the list has entries
+ok 10 - canSetStatus: allows "presenti" even when the list has entries
+  ---
+  duration_ms: 0.1251
+  ...
+# Subtest: canSetStatus: allows "assenti" when the list is empty
+ok 11 - canSetStatus: allows "assenti" when the list is empty
+  ---
+  duration_ms: 0.0603
+  ...
+# Subtest: canSetStatus: allows "paziente_nega" when the list is empty
+ok 12 - canSetStatus: allows "paziente_nega" when the list is empty
+  ---
+  duration_ms: 0.0499
+  ...
+# Subtest: canSetStatus: allows "assenti"/"paziente_nega" when list is undefined
+ok 13 - canSetStatus: allows "assenti"/"paziente_nega" when list is undefined
+  ---
+  duration_ms: 0.0481
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 280.0491

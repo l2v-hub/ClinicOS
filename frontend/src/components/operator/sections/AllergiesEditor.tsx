@@ -3,6 +3,7 @@ import type { AllergiaItem, AllergyStatus } from '../../../types';
 import type { SectionProps } from './types';
 import { IcoCheck, IcoX, IcoPlus } from '../../../icons';
 import { uid, todayStr } from '../cartella/shared';
+import { canSetStatus } from '../../../lib/allergyStatusModel';
 
 // #244: an empty allergy list is ambiguous. The operator can now set an explicit status
 // (Presenti / Assenti / Paziente nega). The detail list is kept even when status is not "presenti",
@@ -27,7 +28,17 @@ export function AllergiesEditor({ value, onChange, readOnly, operatoreNome, stat
   const effStatus: AllergyStatus | undefined = status ?? (list.length > 0 ? 'presenti' : undefined);
   const showList = effStatus === 'presenti';
 
+  // #244: 'assenti'/'paziente_nega' assert there are NO allergies — never allow setting
+  // either while the detail list still has entries (that was the contradictory state
+  // Codex flagged: modal says "nega" while the data proves otherwise). The reason is
+  // derived from the list itself (not from a click attempt) so the explanation and the
+  // disabled buttons are always in sync — a disabled button can't fire onClick, so a
+  // "toggle on click" message would never appear.
+  const lockReason = list.length > 0 ? (canSetStatus(list, 'assenti').reason ?? null) : null;
+
   function setStatus(s: AllergyStatus) {
+    const check = canSetStatus(list, s);
+    if (!check.ok) return; // belt-and-braces: buttons are already disabled in this state
     onStatusChange?.(s);
     if (s !== 'presenti') setShowForm(false);
   }
@@ -52,21 +63,32 @@ export function AllergiesEditor({ value, onChange, readOnly, operatoreNome, stat
     <>
       {/* #244: explicit allergy status selector */}
       <div className="allergy-status" role="radiogroup" aria-label="Stato allergie" data-testid="allergy-status">
-        {STATUS_OPTIONS.map(o => (
-          <button
-            key={o.key}
-            type="button"
-            role="radio"
-            aria-checked={effStatus === o.key}
-            disabled={readOnly}
-            data-testid={`allergy-status-${o.key}`}
-            className={`btn-sm ${effStatus === o.key ? 'btn-primary' : 'btn-secondary'}`}
-            onClick={() => setStatus(o.key)}
-          >
-            {o.label}
-          </button>
-        ))}
+        {STATUS_OPTIONS.map(o => {
+          const check = canSetStatus(list, o.key);
+          const disabled = readOnly || !check.ok;
+          return (
+            <button
+              key={o.key}
+              type="button"
+              role="radio"
+              aria-checked={effStatus === o.key}
+              disabled={disabled}
+              title={!check.ok ? check.reason : undefined}
+              data-testid={`allergy-status-${o.key}`}
+              className={`btn-sm ${effStatus === o.key ? 'btn-primary' : 'btn-secondary'}`}
+              onClick={() => setStatus(o.key)}
+            >
+              {o.label}
+            </button>
+          );
+        })}
       </div>
+
+      {lockReason && (
+        <p className="cr-empty" role="alert" data-testid="allergy-status-blocked">
+          <span className="status-badge status-badge--warning">Non consentito</span> {lockReason}
+        </p>
+      )}
 
       {effStatus === 'assenti' && (
         <p className="cr-empty" data-testid="allergy-none"><span className="status-badge status-badge--success">Allergie assenti</span> — verificato dall’operatore.</p>
