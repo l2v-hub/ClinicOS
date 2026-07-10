@@ -969,6 +969,7 @@ export interface PatientTherapyAPI {
   pharmaceuticalForm?: string | null;
   allowedFractions?: string | null;
   drugPackageRef?: string | null;
+  giorniSettimana?: string | null; // #241: comma list of ISO weekdays (1..7); null = every day
   schedules?: TherapyScheduleAPI[];
   createdAt: string;
   updatedAt: string;

@@ -3960,6 +3960,10 @@ textarea.form-input {
 .status-badge--info    { color: var(--c-info);    background: var(--c-primary-bg); }
 .status-badge--neutral { color: var(--c-neutral); background: var(--c-neutral-bg); }
 
+/* #241: weekday posology selector + day pill */
+.weekday-toggle { display: flex; gap: 6px; flex-wrap: wrap; }
+.sched-pill--days { background: var(--c-primary-bg, #E8F0FE); color: var(--c-primary, #0F5FD7); font-weight: 600; }
+
 /* Full-width content (problems #6/#7): remove narrow centered caps on
    priority pages so content fills the desktop. Gutter comes from the
    content padding; wide tables scroll inside their own container. */
