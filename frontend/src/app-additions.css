@@ -4043,6 +4043,37 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   min-height: 80px;
 }
 
+/* Issue #245 — legacy read-only anamnesi view (Sezioni Cliniche tab) */
+.cr-legacy-anamnesi-row {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border, #D0D5DD);
+}
+.cr-legacy-anamnesi-row:last-of-type {
+  border-bottom: none;
+}
+.cr-legacy-anamnesi-row__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.cr-legacy-anamnesi-row__value {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.65;
+  margin: 0;
+  white-space: pre-wrap;
+}
+.cr-legacy-anamnesi-note {
+  margin-top: 10px;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
 /* ── Section header improvements ── */
 .cr-section-header {
   display: flex;

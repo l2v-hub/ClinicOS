@@ -25,6 +25,7 @@ import PatientCompactHeader from './PatientCompactHeader';
 import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
+import { LegacyAnamnesisView } from './sections/LegacyAnamnesisView';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
 import { VitalSignsEditor } from './sections/VitalSignsEditor';
@@ -1492,7 +1493,10 @@ export function PatientDetail({
             <DocumentiTab cartella={cartella} paziente={paziente} onUpdate={upd} operatoreNome={operatoreNome} />
           )}
           {tab === 'sezioni-narrative' && (
-            <NarrativeSectionsTab patientId={paziente.id} />
+            <>
+              <LegacyAnamnesisView anamnesi={cartella.anamnesi} />
+              <NarrativeSectionsTab patientId={paziente.id} />
+            </>
           )}
           {tab === 'diario' && (
             <DiarioPazienteTab
