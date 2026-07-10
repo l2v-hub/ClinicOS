@@ -1,6 +1,6 @@
 # Validation report — Issue #256 (integrazione QA-passed PRs)
 
-**Final Decision: READY FOR CODEX QA**
+**Final Decision: CLOSED — VERIFIED**
 
 Branch `integration/issue-256-qa-closure` da `origin/main` @ `7063f59`. 6 PR QA-passed integrate con merge `--no-ff`, head verificati identici alla tabella SHA. **#246 escluso** (SECURITY ARCHITECTURE BLOCK). Dati sintetici, nessun PHI/secret.
 
@@ -31,3 +31,18 @@ Branch `integration/issue-256-qa-closure` da `origin/main` @ `7063f59`. 6 PR QA-
 - `CLOSED — VERIFIED` è timbro di Codex post-verifica indipendente (handoff #239): non scritto da Claude.
 
 Claude non chiude, non mergia, non deploya, non applica label Codex. Codex resta l'unico QA Gatekeeper.
+
+## Codex final verification — 2026-07-11
+
+Codex ha verificato indipendentemente l'head `feaef4b425d11df2e7d8d5c3848d1769a1289988`:
+
+- code review del delta di remediation: solo evidenze, nessuna modifica al prodotto;
+- backend test: 316/316 PASS;
+- build backend e frontend: PASS;
+- frontend secret scan: 0 finding;
+- Playwright integrato #241–#245: 5/5 PASS sul medesimo albero prodotto;
+- database vuoto: 0 tabelle → 19 migration → 25 tabelle, `giorniSettimana` nullable;
+- upgrade: 18 → 19 migration, terapia sintetica preservata con `giorniSettimana=NULL`;
+- CI GitHub Actions: billing block esterno confermato con job a zero step; accettato secondo AC6 e documentato, senza falso verde.
+
+Rapporto completo: `artifacts/po-verification/issue-256-verification.md`.
