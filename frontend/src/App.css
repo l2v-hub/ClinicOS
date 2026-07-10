@@ -4014,6 +4014,9 @@ textarea.form-input {
   color: var(--c-primary, #0F5FD7);
 }
 
+/* #244: allergy status selector (Presenti / Assenti / Paziente nega) */
+.allergy-status { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+
 /* Full-width content (problems #6/#7): remove narrow centered caps on
    priority pages so content fills the desktop. Gutter comes from the
    content padding; wide tables scroll inside their own container. */
