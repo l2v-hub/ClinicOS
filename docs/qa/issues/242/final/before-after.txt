@@ -1,0 +1,21 @@
+# #242 — before/after (input -> output) del parser markdown delle sezioni di dimissione
+
+Input (heading combinato, comune nelle lettere di dimissione Imola):
+  ## Diagnosi e terapia alla dimissione
+  Scompenso cardiaco congestizio.
+  Ipertensione arteriosa.
+  Terapia: Ramipril 5 mg 1 cp/die.
+  Bisoprololo 2.5 mg.
+
+PRIMA (bug):
+  diagnosisText = "## Diagnosi e terapia alla dimissione\nScompenso...\nIpertensione...\nTerapia: Ramipril 5 mg 1 cp/die.\nBisoprololo 2.5 mg."
+  therapyText   = ""
+  -> la TERAPIA FARMACOLOGICA (Ramipril, Bisoprololo) finiva nella DIAGNOSI. Viola AC2.
+
+DOPO (fix):
+  diagnosisText = "## Diagnosi e terapia alla dimissione\nScompenso cardiaco congestizio.\nIpertensione arteriosa."
+  therapyText   = "Terapia: Ramipril 5 mg 1 cp/die.\nBisoprololo 2.5 mg."
+  -> diagnosi contiene SOLO la diagnosi; i farmaci sono nella sezione terapia. AC1/AC2/AC3/AC4 OK.
+
+Regressione controllata (headings separati) invariata:
+  ## Diagnosi di dimissione: -> diagnosisText ; ## Terapia alla dimissione: -> therapyText
