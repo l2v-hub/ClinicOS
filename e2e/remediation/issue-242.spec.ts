@@ -22,8 +22,11 @@ import * as path from 'path';
 const EVIDENCE_DIR = path.resolve(__dirname, '../../artifacts/task-validation/242-diagnosis-excludes-pharmacological-therapy');
 const SCREENSHOTS_DIR = path.join(EVIDENCE_DIR, 'screenshots');
 
-const SYNTH_DIAGNOSIS = 'Scompenso cardiaco cronico (sintetico 242)';
-const SYNTH_DRUG = 'Ramipril242';
+// Nomi unici per run: nel DB condiviso (suite integrata #256) restano terapie/diagnosi
+// sintetiche di esecuzioni precedenti — un nome fisso causerebbe strict-mode (2 match).
+const RUN = Date.now().toString().slice(-6);
+const SYNTH_DIAGNOSIS = `Scompenso cardiaco cronico (sintetico 242-${RUN})`;
+const SYNTH_DRUG = `Ramipril242-${RUN}`;
 
 // Pre-existing noise this remediation batch is explicitly told to ignore (React dev warnings,
 // nested-DOM hydration chatter unrelated to #242).
@@ -125,7 +128,7 @@ test.describe('#242 — diagnosi di dimissione esclude la terapia farmacologica 
 
     // ── Step 3: verify separation BEFORE reload ──
     // Explicit positive/negative checks scoped to each surface (more reliable than a body-wide check):
-    await expect(page.getByText(SYNTH_DRUG)).toBeVisible(); // therapy surface shows the drug
+    await expect(page.getByText(SYNTH_DRUG).first()).toBeVisible(); // therapy surface shows the drug
     const diagnosisTextOnTherapySurface = await page.locator('.cr-tab-content', { hasText: SYNTH_DIAGNOSIS }).count();
     expect(diagnosisTextOnTherapySurface, 'Diagnosis text must NOT appear as a therapy row').toBe(0);
 
