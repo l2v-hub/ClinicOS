@@ -50,7 +50,10 @@ export function AllergiesEditor({ value, onChange, readOnly, operatoreNome, stat
       documentato: todayStr(), documentatoDa: operatoreNome ?? '', ...form,
     } as AllergiaItem;
     onChange([newItem, ...list]);
-    onStatusChange?.('presenti'); // adding an allergen implies "presenti"
+    // NON chiamare onStatusChange qui: due upd() consecutivi costruiscono i payload dalla
+    // stessa cartella e si sovrascrivono (lost update — l'allergene sparirebbe). Col modello
+    // #244 la lista non vuota È autoritativa: effStatus/deriveAllergySummary la trattano
+    // già come "presenti" senza bisogno di persistere lo status esplicito.
     setShowForm(false);
     setForm({});
   }

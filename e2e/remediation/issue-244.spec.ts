@@ -100,13 +100,23 @@ test('issue #244 — allergy status is unambiguous in the summary and cannot be 
 
   // ── Step 4: add an allergen → status flips to "presenti" ────────────────────
   await openAllergieModal();
+  // Con stato "paziente nega" la sezione lista è nascosta: si passa prima a "Presenti"
+  // (transizione lecita — la lista è vuota), che rende visibile "Aggiungi allergia".
+  await page.locator('[data-testid="allergy-status-presenti"]').click();
   await page.locator('button', { hasText: 'Aggiungi allergia' }).click();
-  await page.locator('.form-field .form-input').first().fill('Penicillina (test #244)');
+  // Scope al form del modale (.ec-modal-add-form): il primo .form-input della PAGINA
+  // può essere un altro campo; qui serve proprio "Allergene *".
+  const addForm = page.locator('.ec-modal-add-form');
+  await addForm.waitFor({ state: 'visible', timeout: 5000 });
+  await addForm.locator('.form-field .form-input').first().fill('Penicillina (test #244)');
   cartellaPutRequests.length = 0;
   await Promise.all([
     page.waitForResponse((r) => /\/patients\/.+\/cartella/.test(r.url()) && r.request().method() !== 'GET', { timeout: 8000 }),
-    page.locator('button', { hasText: 'Salva' }).click(),
+    addForm.locator('.ec-modal-add-form__actions button', { hasText: 'Salva' }).click(),
   ]);
+  // La riga deve comparire davvero (senza questo, la PUT catturata potrebbe essere
+  // quella del cambio stato precedente e il blocco al passo 5 non avrebbe senso).
+  await expect(page.getByText('Penicillina (test #244)').first()).toBeVisible();
   await expect(page.locator('[data-testid="allergy-status-presenti"]')).toHaveAttribute('aria-checked', 'true');
 
   // ── Step 5: attempt to set "Assenti" while the list is non-empty → BLOCKED ──
