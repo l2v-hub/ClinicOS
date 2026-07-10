@@ -18,6 +18,9 @@ import { runQueryPlan } from '../gateway/query/engine.js';
 // Agnos KB (Task 5): motore di confronto/andamento parametri — SEMPRE calcolato dal backend, mai
 // dall'LLM (che propone solo il tool; l'aritmetica resta qui, deterministica e testabile).
 import { compareVitals, vitalsTrend, type VitalValue } from './vitals-compare.js';
+// Agnos KB (Task 6): esito `clarify` — catalogo statico di chip suggerite quando la domanda non
+// produce risultati e non è già un rifiuto (clinico/authz). Anti-allucinazione: mai testo libero.
+import { suggestFor } from './clarify.js';
 
 export interface NavAction { type: string; label: string; patientId?: string; sectionKey?: string; documentId?: string; recordId?: string; pageNumber?: number }
 
@@ -35,6 +38,9 @@ export interface AssistantAnswer {
   mode?: 'deterministic' | 'llm';
   answerText?: string;
   composed?: boolean;
+  // Agnos KB (Task 6): chip cliccabili da catalogo statico, popolate SOLO sull'esito `clarify`
+  // (notFound senza refusal) — mai su un rifiuto o su una risposta con risultati reali.
+  suggestions?: string[];
 }
 
 function limits(env: NodeJS.ProcessEnv = process.env) {
@@ -100,12 +106,27 @@ export async function assistantQuery(
   plan = injectPatientId(plan, effectiveCtx.currentPatientId);
   const empty = (extra: Partial<AssistantAnswer> = {}): AssistantAnswer =>
     ({ intent: plan.intent, scope: plan.scope, plan, results: [], sources: [], navigation: [], notFound: true, truncated: false, mode, composed: false, ...extra });
+  // Agnos KB (Task 6): esito `clarify` — quando la risposta finale è notFound e NON è già un
+  // rifiuto (clinico/authz), propone chip da catalogo statico invece di un "non trovato" muto.
+  // Non tocca mai un rifiuto reale né una risposta con risultati (notFound è già false in quei casi).
+  const withClarify = (a: AssistantAnswer): AssistantAnswer => {
+    if (!a.notFound || a.refusal) return a;
+    return {
+      ...a,
+      suggestions: suggestFor({
+        currentPatientId: effectiveCtx.currentPatientId,
+        currentPatientName: effectiveCtx.currentPatientName,
+        roles: ctx.roles,
+      }),
+      answerText: 'Non ho capito bene la domanda. Forse intendevi:',
+    };
+  };
 
   if (plan.intent === 'refuse_clinical') {
     return empty({ notFound: false, refusal: 'L’assistente non fornisce diagnosi, terapie o valutazioni cliniche. Posso solo cercare e mostrare dati esistenti con la loro fonte.' });
   }
   if (plan.intent === 'unknown' || plan.tools.length === 0) {
-    return empty({ refusal: undefined });
+    return withClarify(empty({ refusal: undefined }));
   }
   // cross-patient access is role + env gated; a denied request is reported, not executed
   if (plan.requiresCrossPatientAccess && !canCrossPatientSearch(ctx, env)) {
@@ -141,13 +162,13 @@ export async function assistantQuery(
     if (c.composed) { answerText = c.answerText; composed = true; }
   }
 
-  return {
+  return withClarify({
     intent: plan.intent, scope: plan.scope, plan,
     results, sources: cappedSources, navigation,
     notFound: results.length === 0,
     truncated: results.length >= lim.maxResults,
     mode, answerText, composed,
-  };
+  });
 }
 
 async function dispatch(tool: string, args: Record<string, unknown>, ctx: UserContext): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {

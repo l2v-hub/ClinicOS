@@ -69,6 +69,9 @@ export interface PlanCommandInput {
   text: string;
   channel: AgnosChannel;
   currentPatientId?: string;
+  /** Task 6: display name of the patient above, when the UI has one open — used ONLY to compile
+   *  the `clarify` suggestion chips (never inferred; echoed from what the caller already knows). */
+  currentPatientName?: string;
   operatorCtx: AgnosOperatorContext;
 }
 
@@ -80,7 +83,7 @@ export interface PlanCommandResult {
 
 /** Injectable data access — defaults hit the real DB/assistant, tests pass stubs. */
 export interface PlanCommandDeps {
-  runRead?: (query: string, ctx: UserContext, currentPatientId?: string) => Promise<AssistantAnswer>;
+  runRead?: (query: string, ctx: UserContext, currentPatientId?: string, currentPatientName?: string) => Promise<AssistantAnswer>;
   loadPreviewContext?: (plan: ActionPlan) => Promise<PreviewContext>;
   /** SPEC-015 US4: patient/slot lookups for appointment grounding (tests inject stubs, no DB). */
   appointmentLookup?: AppointmentLookupDeps;
@@ -88,9 +91,9 @@ export interface PlanCommandDeps {
   consegnaLookup?: ConsegnaLookupDeps;
 }
 
-async function defaultRunRead(query: string, ctx: UserContext, currentPatientId?: string): Promise<AssistantAnswer> {
+async function defaultRunRead(query: string, ctx: UserContext, currentPatientId?: string, currentPatientName?: string): Promise<AssistantAnswer> {
   const { assistantQuery } = await import('../assistant/service.js');
-  return assistantQuery(query, ctx, { currentPatientId });
+  return assistantQuery(query, ctx, { currentPatientId, currentPatientName });
 }
 
 // Same grounded-preview lookups the voice route performed inline before SPEC-015.
@@ -124,7 +127,7 @@ export async function planCommand(input: PlanCommandInput, deps: PlanCommandDeps
   // "Comando non riconosciuto"; the assistant itself returns not-found / clinical-refusal as needed.
   if (plan.actionType === 'read' || plan.actionType === 'unknown') {
     const runRead = deps.runRead ?? defaultRunRead;
-    const read = await runRead(plan.readQuery ?? text, input.operatorCtx.gatewayCtx, input.currentPatientId);
+    const read = await runRead(plan.readQuery ?? text, input.operatorCtx.gatewayCtx, input.currentPatientId, input.currentPatientName);
     return { plan, preview: null, read };
   }
 

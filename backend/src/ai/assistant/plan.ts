@@ -64,6 +64,9 @@ function searchPhrase(q: string, original: string): string | undefined {
 export interface PlanContext {
   /** The patient currently open in the UI, if any (default scope on the patient page). */
   currentPatientId?: string;
+  /** Display name of the patient above (Task 6: compiles the `clarify` suggestion chips —
+   *  never inferred/guessed, only echoed from what the caller already knows). */
+  currentPatientName?: string;
 }
 
 /** Produce a typed, validated plan for a question. Never executes anything. */

@@ -58,7 +58,15 @@ actionsRouter.get('/catalog', (_req, res) => {
   res.status(200).json(listCatalog());
 });
 
-// POST /ai/actions/plan  { text, channel, currentPatientId? } → { plan, preview, read }
+// Task 6: sanitizes the optional patient display name from the request body — plain string, capped
+// (defense in depth: this only feeds the `clarify` chip text, never a query/authz decision).
+function sanitizePatientName(raw: unknown): string | undefined {
+  if (typeof raw !== 'string') return undefined;
+  const trimmed = raw.trim().slice(0, 120);
+  return trimmed || undefined;
+}
+
+// POST /ai/actions/plan  { text, channel, currentPatientId?, currentPatientName? } → { plan, preview, read }
 actionsRouter.post('/plan', async (req: AuthedRequest, res) => {
   try {
     const text = String(req.body?.text ?? '').trim();
@@ -67,8 +75,9 @@ actionsRouter.post('/plan', async (req: AuthedRequest, res) => {
       return res.status(403).json({ error: { kind: 'feature_disabled', message: 'Assistente AI disabilitato.' } });
     }
     const currentPatientId = req.body?.currentPatientId ? String(req.body.currentPatientId) : undefined;
+    const currentPatientName = sanitizePatientName(req.body?.currentPatientName);
     const result = await planCommand({
-      text, channel: parseChannel(req.body?.channel), currentPatientId, operatorCtx: agnosOperatorFrom(req),
+      text, channel: parseChannel(req.body?.channel), currentPatientId, currentPatientName, operatorCtx: agnosOperatorFrom(req),
     });
     return res.status(200).json(result);
   } catch (err) {
