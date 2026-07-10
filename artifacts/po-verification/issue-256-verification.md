@@ -1,7 +1,9 @@
 # Codex PO Verification — Issue #256 / PR #257
 
-**Verified head:** `feaef4b425d11df2e7d8d5c3848d1769a1289988`  
-**Date:** 2026-07-11  
+**Verified head:** `feaef4b425d11df2e7d8d5c3848d1769a1289988`
+
+**Date:** 2026-07-11
+
 **Final Decision:** `CLOSED — VERIFIED`
 
 | Check | Result | Evidence |
