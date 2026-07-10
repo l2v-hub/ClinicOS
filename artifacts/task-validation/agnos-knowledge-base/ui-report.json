@@ -1,0 +1,206 @@
+{
+  "ranAt": "2026-07-10T02:25:57.849Z",
+  "results": [
+    {
+      "name": "S1 HTTP 200",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "S1 intent == rooms_occupancy",
+      "pass": true,
+      "detail": "intent=rooms_occupancy"
+    },
+    {
+      "name": "S1 notFound == false",
+      "pass": true,
+      "detail": "notFound=false"
+    },
+    {
+      "name": "S1 occupiedBeds numerico",
+      "pass": true,
+      "detail": "occupiedBeds=1"
+    },
+    {
+      "name": "S1 nessun nome paziente nell aggregato camere (no-PHI)",
+      "pass": true,
+      "detail": "phiLeak=false"
+    },
+    {
+      "name": "S2 HTTP 200",
+      "pass": true,
+      "detail": "status=200"
+    },
+    {
+      "name": "S2 intent == rooms_occupants (routing corretto)",
+      "pass": true,
+      "detail": "intent=rooms_occupants"
+    },
+    {
+      "name": "S2 roomNumero estratto correttamente",
+      "pass": true,
+      "detail": "args={\"roomNumero\":\"102\"}"
+    },
+    {
+      "name": "S2 [GAP DOCUMENTATO] rifiutato per requiresCrossPatientAccess (vedi validation-report.md)",
+      "pass": true,
+      "detail": "refusal=Ricerca tra più pazienti non autorizzata per il tuo ruolo."
+    },
+    {
+      "name": "S3 intent == vitals_compare",
+      "pass": true,
+      "detail": "intent=vitals_compare"
+    },
+    {
+      "name": "S3 delta numerico (Δ sistolica +10)",
+      "pass": true,
+      "detail": "delta={\"num\":10,\"num2\":5}"
+    },
+    {
+      "name": "S3 valA/valB coerenti coi dati sintetici seed (150/90 vs 140/85)",
+      "pass": true,
+      "detail": "valA={\"num\":150,\"num2\":90} valB={\"num\":140,\"num2\":85}"
+    },
+    {
+      "name": "S4 intent == vitals_trend",
+      "pass": true,
+      "detail": "intent=vitals_trend"
+    },
+    {
+      "name": "S4 direction ∈ {salita, stabile, calo}",
+      "pass": true,
+      "detail": "direction=salita"
+    },
+    {
+      "name": "S4 direction == salita (coerente con seed crescente 120→128→140→150)",
+      "pass": true,
+      "detail": "direction=salita"
+    },
+    {
+      "name": "S5 intent == consegne",
+      "pass": true,
+      "detail": "intent=consegne"
+    },
+    {
+      "name": "S5 notFound == false (consegna sintetica di oggi trovata)",
+      "pass": true,
+      "detail": "notFound=false"
+    },
+    {
+      "name": "S5 risultato include la consegna sintetica seedata per oggi",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S6 intent == diary_notes",
+      "pass": true,
+      "detail": "intent=diary_notes"
+    },
+    {
+      "name": "S6 notFound == false (nota sintetica di oggi trovata)",
+      "pass": true,
+      "detail": "notFound=false"
+    },
+    {
+      "name": "S6 risultato include la nota di diario sintetica seedata",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S7 intent == clinical_scores",
+      "pass": true,
+      "detail": "intent=clinical_scores"
+    },
+    {
+      "name": "S7 risultato scala braden",
+      "pass": true,
+      "detail": "scale=braden"
+    },
+    {
+      "name": "S7 risultato include la valutazione Braden sintetica seedata",
+      "pass": true,
+      "detail": "id=qa-braden-1"
+    },
+    {
+      "name": "S8a intent == operators_on_duty (routing corretto)",
+      "pass": true,
+      "detail": "intent=operators_on_duty"
+    },
+    {
+      "name": "S8a rifiutato per OPERATORE (role-gate query_operators)",
+      "pass": true,
+      "detail": "refusal=Accesso non autorizzato per questa richiesta."
+    },
+    {
+      "name": "S8a UI mostra il rifiuto",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S9 intent == unknown + suggestions presenti (esito clarify)",
+      "pass": true,
+      "detail": "intent=unknown suggestions=[\"Quante camere sono occupate?\",\"Consegne di oggi\",\"Appuntamenti di oggi\"]"
+    },
+    {
+      "name": "S9 suggestions.length >= 2",
+      "pass": true,
+      "detail": "len=3"
+    },
+    {
+      "name": "S9 chips visibili nel DOM (>=2)",
+      "pass": true,
+      "detail": "chipCount=3"
+    },
+    {
+      "name": "S9 click sulla prima chip genera un nuovo turno reale verso /ai/actions/plan",
+      "pass": true,
+      "detail": "chipText=\"Quante camere sono occupate?\" hasReq=true"
+    },
+    {
+      "name": "S9 il nuovo turno NON è più un esito clarify (risposta eseguita)",
+      "pass": true,
+      "detail": "intent=rooms_occupancy"
+    },
+    {
+      "name": "S10 plan.actionType == refuse_forbidden (delete)",
+      "pass": true,
+      "detail": "actionType=refuse_forbidden"
+    },
+    {
+      "name": "S10 refusalKind == delete",
+      "pass": true,
+      "detail": "refusalKind=delete"
+    },
+    {
+      "name": "S10 UI mostra il rifiuto delete (non elimina mai)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "S8b (ADMIN via UI) intent == operators_on_duty (routing corretto)",
+      "pass": true,
+      "detail": "intent=operators_on_duty"
+    },
+    {
+      "name": "S8b [GAP DOCUMENTATO] ADMIN via UI riceve comunque un rifiuto (vedi validation-report.md)",
+      "pass": true,
+      "detail": "refusal=Accesso non autorizzato per questa richiesta."
+    },
+    {
+      "name": "S8c prova diretta HTTP con X-Operator-Role:admin → intent risolto correttamente",
+      "pass": true,
+      "detail": "intent=operators_on_duty"
+    },
+    {
+      "name": "S8c [CAUSA RADICE CONFERMATA] rifiutato anche con header admin diretto (ruolo self-asserted non fa mai privilegio sulla route pubblica)",
+      "pass": true,
+      "detail": "refusal=Accesso non autorizzato per questa richiesta."
+    },
+    {
+      "name": "Nessun console error NUOVO di pagina (filtrati i warning nested-button preesistenti)",
+      "pass": true,
+      "detail": "errors=0"
+    }
+  ],
+  "consoleErrors": []
+}
