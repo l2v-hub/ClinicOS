@@ -36,3 +36,7 @@ backend/.env.local
 
 # Claude local settings (may contain tokens) — never commit
 .claude/settings.local.json
+
+# Agent Team local runtime state and worktrees (never authoritative)
+/agent-team/.runtime/
+/agent-team/.worktrees/

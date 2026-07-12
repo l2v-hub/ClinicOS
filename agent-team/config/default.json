@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "repository": "l2v-hub/ClinicOS",
+  "baseBranch": "origin/main",
+  "pollIntervalMs": 15000,
+  "heartbeatTimeoutMs": 45000,
+  "leaseDurationMs": 300000,
+  "leaseRefreshMs": 60000,
+  "developmentConcurrency": 1,
+  "qaConcurrency": 1,
+  "noProgressLimit": 3,
+  "worktreeRoot": "agent-team/.worktrees",
+  "artifactRoot": "artifacts/task-validation",
+  "runtimeRoot": "agent-team/.runtime",
+  "commandTimeoutMs": 120000,
+  "maxOutputBytes": 1048576,
+  "labels": {
+    "readyForDev": "ready-for-dev",
+    "assignedToClaude": "assigned-to-claude",
+    "working": "agent-working",
+    "readyForQa": "ready-for-qa",
+    "qaPassed": "qa-passed",
+    "qaFailed": "qa-failed",
+    "blocked": "blocked"
+  }
+}
