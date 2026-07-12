@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "message_type": "artifact_manifest",
+  "message_id": "dev-263-1-manifest-39b5e495f1dc",
+  "correlation_id": "issue-263-attempt-1",
+  "producer_role": "claude-development",
+  "repository": "l2v-hub/ClinicOS",
+  "issue_number": 263,
+  "pull_request_number": 264,
+  "created_at": "2026-07-12T14:38:53.722Z",
+  "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42",
+  "artifacts": [
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/build.txt",
+      "media_type": "text/plain",
+      "sha256": "16fdd858861e508e9eaaf89d3fde431b2d1f51c73063e526cb48d409006f6479",
+      "git_blob_sha": "bbd7c87b125c2c393735b0a1a4cdde07486c55e3",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json",
+      "media_type": "application/json",
+      "sha256": "bbf0c5c136b7446da981512bf26bc7d662cc19abcac45cc1d73d781d8305a021",
+      "git_blob_sha": "eb260bf30152febf53f644df975688205b40a199",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt",
+      "media_type": "text/plain",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "git_blob_sha": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/node-check.txt",
+      "media_type": "text/plain",
+      "sha256": "627f88f21c1115c5873ee61a6a1748a4fd6b7a48808ee57c6eea88463a947f54",
+      "git_blob_sha": "719fc4070ebfcb0c31eb1c51468d7223ea39852c",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/prohibited-scan.txt",
+      "media_type": "text/plain",
+      "sha256": "dec0dc45161c3faad33f4ab2b3ef781e72580937410a43df17554567205849a9",
+      "git_blob_sha": "2eafe609592d015d9baca114c8dbea994cea1e81",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/cli-help/cli-interface-record.md",
+      "media_type": "text/markdown",
+      "sha256": "73df16170eb752ae8265ef84a01f02c1a13f426349370c5f85b880d8988dfc6b",
+      "git_blob_sha": "ad4600b4abcf0ca62d73d6b9c9d391786be4e041",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/task-contract.md",
+      "media_type": "text/markdown",
+      "sha256": "dd0b8987ca726615a4618fcf837cda23a0cb2bee729d7f277ce0ae5f047d7691",
+      "git_blob_sha": "5eae477b1e95d5d35ba3060d85404a3d9eae22bd",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap",
+      "media_type": "text/tap",
+      "sha256": "14d052694e92342b4b9d0152cd33c33428ad8616b3eb7e156dc93d092acbc430",
+      "git_blob_sha": "b3f4a26d8670d33f8136101023ac93c705cbbab2",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task1-config-green.txt",
+      "media_type": "text/plain",
+      "sha256": "0700f0139a0ea4d22c8b964eb8aa6605301528f112365346f509f3775c65b0f3",
+      "git_blob_sha": "70f33fe4a9d11f54be8506da695327f98ee23b16",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task1-config-red.txt",
+      "media_type": "text/plain",
+      "sha256": "5d8df5f96fe5014dd0f0731e3bb2c2d37005d9392b516f1a89e2fb127ac33cc1",
+      "git_blob_sha": "ae0756b9655232edf4cb260b6c092c92350ca00d",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task2-aggregate-green.txt",
+      "media_type": "text/plain",
+      "sha256": "156e4c120db91a047147f7d7e1812dbda71b52a25c21944c7b4983772fc2ed69",
+      "git_blob_sha": "d36746573f7aa9cfbc1246c6ae322422715971b3",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task2-green.txt",
+      "media_type": "text/plain",
+      "sha256": "e660b69c872365b5c60cff1509fcc962e06d7a666e2a7618b7ca77120509afba",
+      "git_blob_sha": "004e45446c1b51e6266b527227889a07f9b72dbb",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task2-red.txt",
+      "media_type": "text/plain",
+      "sha256": "f6a3db83a4a3d4d8322997b25a634776615e3f0fee1694d598cb6bf49c69d76e",
+      "git_blob_sha": "fb91cdc260d54222f69b93fb1f7d32f56f7d27d8",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task3-aggregate-green.txt",
+      "media_type": "text/plain",
+      "sha256": "84b48376778f071da35796d85a67c82ec31594871df0063799fb84e541499abf",
+      "git_blob_sha": "4c6774ae5353062f0c8f4aaebff1453a0945101f",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task3-green.txt",
+      "media_type": "text/plain",
+      "sha256": "2c55763c6b03ac64f21f1fb6b3f13b015cadf03c2f10226980fbf80f5a0989a7",
+      "git_blob_sha": "eaf180d709ca49346be5a8796b1e284c5775e2bb",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task3-red.txt",
+      "media_type": "text/plain",
+      "sha256": "7a2a531e52abd272d1be900fd8343cb2695f092449cee510e48e8585ee53fb5b",
+      "git_blob_sha": "52c6d1f0eb26cc2bc199d53a82ddce19bdf0c565",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task4-aggregate-green.txt",
+      "media_type": "text/plain",
+      "sha256": "70fa47a1c0054ed36169c030518d1e8ab23ecb39b6bc5f68a71d61c3dc833942",
+      "git_blob_sha": "0f0522e931fd9e68ecd465a3142e20b40489de49",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task4-green.txt",
+      "media_type": "text/plain",
+      "sha256": "43488d3b367e87ae4a114237e4defdd9bd005db71d12689eb73a50e5fab5488d",
+      "git_blob_sha": "f6dfef59bea762872e91de1a1a7f326b83cb16c2",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task4-red.txt",
+      "media_type": "text/plain",
+      "sha256": "77e26d94c24d315fd80293859763f6221e41885a8b7c92c12b37931def6c432b",
+      "git_blob_sha": "3f1fe2f73d837473c97d55e20411b21b634c3a0d",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task5-aggregate-green.txt",
+      "media_type": "text/plain",
+      "sha256": "e907f45d19f32127aa22c9e0202bc0ae537640968bc8e89dd704bedf74fe989b",
+      "git_blob_sha": "406e9c30a1924832b95685ad6b3778d26062cb7e",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task5-green.txt",
+      "media_type": "text/plain",
+      "sha256": "1783d0b30967bc27149ba43f99bfd89d26b0d2732feb6c9bdecc1be91c328380",
+      "git_blob_sha": "bb222996884dc7d1f84f1602ca7142bbdd8a3282",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task5-red.txt",
+      "media_type": "text/plain",
+      "sha256": "a75eabec76a97c9dd1f91e5eb70174d97e4963d36d3bab286e50ab2f5fe19303",
+      "git_blob_sha": "e3eb614fa708438ef7a478a13649fb35f09bbc5b",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task6-aggregate-green.txt",
+      "media_type": "text/plain",
+      "sha256": "2c3ab544868b3a9c60e2434068eda05ce26b274ad92fff28e2a975413294fe86",
+      "git_blob_sha": "e602be595a1d8d1f31d70dbbf1ff47215301c331",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task6-green.txt",
+      "media_type": "text/plain",
+      "sha256": "8ef0ed0e6130324e527a3038268145bb81f77e74de333e9b8427f29d988129ae",
+      "git_blob_sha": "c393a0c32422274e04d89b416d280ce8f31680bf",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task6-red.txt",
+      "media_type": "text/plain",
+      "sha256": "0b4a0f687a726c37554497c44ec403a8333aa337d2b8fd27dd13651ac8685aa7",
+      "git_blob_sha": "dafa43639d34e8d3785c8f003fbe365a77969af7",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task7-aggregate-green.txt",
+      "media_type": "text/plain",
+      "sha256": "b660f74bbd027482ae2192acb558f761f6fbe7bee418260072a64a7425fbb857",
+      "git_blob_sha": "131e0dfe93558aab78f0633136dcab406ba288d5",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task7-green.txt",
+      "media_type": "text/plain",
+      "sha256": "2990432c15a995b120b28c26cd726507f908c06074975e212f45ab351df06588",
+      "git_blob_sha": "516b42639a72a35798c337e453d0f50e56b587ca",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task7-red.txt",
+      "media_type": "text/plain",
+      "sha256": "9a8f6bb5b3a7e6c64bdea90981153e61e9e7e352386a5a5dab65fcf807b70e8e",
+      "git_blob_sha": "a7eed4b9c2d6ceee3655b17b901b1a422ac59529",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task8-aggregate-green.txt",
+      "media_type": "text/plain",
+      "sha256": "c230a72373a8faf9c5e4ce2402e48b4e245a62b9b6ed955a5eeb483b7ad57357",
+      "git_blob_sha": "c1506ff89b5725460b2af5e9240896dc6ec5c6f6",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task8-codex-stderr-green.txt",
+      "media_type": "text/plain",
+      "sha256": "1b33a480b2bcfda9bc583636a6f6c17974804ef726e844902c43f5b99ded10b7",
+      "git_blob_sha": "eab7774b53a69bbd95005d1b0b6847c1d978380b",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task8-codex-stderr-red.txt",
+      "media_type": "text/plain",
+      "sha256": "b1ae866c0efbc397ec964371c4c4e2a3e89510bf1a6fed0d6796e5b03e1c7465",
+      "git_blob_sha": "11a8ba9d2d33f35226960d32d8a3d6d2c0721a89",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task8-green.txt",
+      "media_type": "text/plain",
+      "sha256": "5c9f338aaf286864a5caca369419e41a1b371f3d82ec691604ee138faaa10b4a",
+      "git_blob_sha": "97aab45a2a52bbf57488dfb1f93c98d840858079",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task8-red.txt",
+      "media_type": "text/plain",
+      "sha256": "a11f22f91f60b4a4daca80be6e5571763aea1aad2504f9d04a4578fc073e12f4",
+      "git_blob_sha": "101229684582d8d79000305639e66d21b4e12b03",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap",
+      "media_type": "text/tap",
+      "sha256": "a29081be68702ed6441fda563567fe423dd9faa3bf105875f4a323cb1507a4dd",
+      "git_blob_sha": "8a410b1023df2704594e3c0c0d1d3231fb85f8cc",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/validation-report.md",
+      "media_type": "text/markdown",
+      "sha256": "061b15ff0ece61f9600b2cfd7d497b1da7d2aac13039fe232ecba7020bdb1e9f",
+      "git_blob_sha": "2b481f55ad40de49a22a8c5ce7ccbc709e1d86fc",
+      "producer_role": "claude-development",
+      "subject_sha": "39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42"
+    }
+  ]
+}
