@@ -75,4 +75,18 @@ worktree-only change set.
 - La stringa "CLOSED — VERIFIED" viene apposta da Codex dopo verifica indipendente, come da
   handoff #239 — non usata in questo report.
 
-Final Decision: READY FOR CODEX QA
+Final Decision: CLOSED — VERIFIED
+
+## Codex final gate — 2026-07-12
+
+| Check | Result | Evidence |
+|---|---:|---|
+| Acceptance criteria | PASS | Operational module navigation and patient switch behavior verified |
+| Code review | PASS | PR #248 integrated through verified PR #257 |
+| Tests | PASS | Build and integrated gate #256 |
+| Playwright | PASS | Integrated scenario #243 PASS |
+| Runtime validation | PASS | Combined stack validation #256 |
+| Persistence | NA | Navigation feature; no independent data mutation |
+| Privacy/security | NA | No new sensitive-data path |
+| Evidence complete | PASS | Canonical issue and #256 evidence bundles |
+| Final decision | CLOSED — VERIFIED | Integrated release candidate verified |

@@ -97,4 +97,18 @@ EXIT=0
 
 Claude non chiude, non mergia, non deploya. Codex resta l'unico QA Gatekeeper.
 
-**Final Decision: READY FOR CODEX QA**
+**Final Decision: CLOSED — VERIFIED**
+
+## Codex final gate — 2026-07-12
+
+| Check | Result | Evidence |
+|---|---:|---|
+| Acceptance criteria | PASS | Diagnosis/therapy separation verified after reload |
+| Code review | PASS | PR #247 integrated through verified PR #257 |
+| Tests | PASS | Parser/build checks and integrated gate #256 |
+| Playwright | PASS | Integrated scenario #242 PASS |
+| Runtime validation | PASS | Combined stack validation #256 |
+| Persistence | PASS | Separation persists after save/reload |
+| Privacy/security | PASS | Synthetic test data; no sensitive output |
+| Evidence complete | PASS | Canonical issue and #256 evidence bundles |
+| Final decision | CLOSED — VERIFIED | Integrated release candidate verified |

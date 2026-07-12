@@ -91,8 +91,22 @@ Solo log sanitizzati. Nessuna chiave/endpoint-host completo/PHI in questo bundle
 
 ## Final Decision
 
-READY FOR CODEX QA
+Final Decision: CLOSED — VERIFIED
 
 - Fix di produzione (config Railway) **APPLICATO e VERIFICATO live**.
 - Aggiunte di osservabilità (health + log + test) implementate, 49/49 test verdi, in PR verso main.
 - Claude non chiude l'issue: Codex resta l'unico QA Gatekeeper.
+
+## Codex final gate — 2026-07-12
+
+| Check | Result | Evidence |
+|---|---:|---|
+| Acceptance criteria | PASS | Azure provider live evidence plus `/ai/actions/plan` remediation |
+| Code review | PASS | Scoped PR #258 reviewed and merged as `57e90ef` |
+| Tests | PASS | 68/68 targeted routing/safety tests; backend/frontend builds PASS |
+| Playwright | PASS | Real Agnos UI, request routing, occupancy and therapies evidence |
+| Runtime validation | PASS | Live Azure evidence and DB-backed integrated UI evidence |
+| Persistence | NA | Read-only aggregate capability |
+| Privacy/security | PASS | Aggregate counts only; no patient identifiers or secrets |
+| Evidence complete | PASS | Screenshot, trace, video, report and test-results committed |
+| Final decision | CLOSED — VERIFIED | No blocking product finding remains |

@@ -1,6 +1,6 @@
 # Validation report — Issue #245 (Anamnesi duplicata → consolidata)
 
-**Final Decision: READY FOR CODEX QA**
+**Final Decision: CLOSED — VERIFIED**
 
 Ambiente: stack locale reale (Postgres Podman + backend :3001 seeded + frontend :5173), codice PR #252 branch `fix/issue-245-anamnesi` sovrapposto (HMR). Paziente: Moretti, Elena. Data: 2026-07-09.
 
@@ -21,3 +21,17 @@ La PR rimuove esclusivamente elementi di navigazione (voce tab, import `Anamnesi
 `screenshots/clinica-tabs.png`, `screenshots/sezioni-narrative.png` · `trace/trace.zip` · `video/*.webm` · `logs/console-errors.log` · `ui-report.json` · test `e2e/issue-245-anamnesi.mjs`.
 
 Claude non chiude, non mergia, non deploya. Codex resta l'unico QA Gatekeeper.
+
+## Codex final gate — 2026-07-12
+
+| Check | Result | Evidence |
+|---|---:|---|
+| Acceptance criteria | PASS | Duplicate tab removed and legacy data kept reachable |
+| Code review | PASS | PR #252 integrated through verified PR #257 |
+| Tests | PASS | Build and integrated gate #256 |
+| Playwright | PASS | Integrated scenario #245 PASS |
+| Runtime validation | PASS | Combined stack validation #256 |
+| Persistence | PASS | Legacy anamnesis remains after reload |
+| Privacy/security | PASS | Synthetic evidence; no sensitive logs |
+| Evidence complete | PASS | Issue artifact plus integrated #256 bundle |
+| Final decision | CLOSED — VERIFIED | Integrated release candidate verified |
