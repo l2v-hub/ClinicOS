@@ -1,0 +1,95 @@
+TAP version 13
+# Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+ok 1 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+  ---
+  duration_ms: 6.8132
+  ...
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+ok 2 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 10.1735
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+ok 3 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 0.7111
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 4 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 1.7615
+  ...
+# Subtest: doctor refuses a duplicate local supervisor
+ok 5 - doctor refuses a duplicate local supervisor
+  ---
+  duration_ms: 0.4224
+  ...
+# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
+ok 6 - GitHub adapter passes labels as argv and never constructs a shell string
+  ---
+  duration_ms: 1.9924
+  ...
+# Subtest: arbitration selects earliest created claim then lowest comment id
+ok 7 - arbitration selects earliest created claim then lowest comment id
+  ---
+  duration_ms: 1.3404
+  ...
+# Subtest: arbitration ignores expired claims
+ok 8 - arbitration ignores expired claims
+  ---
+  duration_ms: 0.1422
+  ...
+# Subtest: local supervisor lock is exclusive
+ok 9 - local supervisor lock is exclusive
+  ---
+  duration_ms: 11.9796
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 10 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 2.0269
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 11 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 9.9284
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 12 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 2.0807
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 13 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.4913
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 14 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 12.35
+  ...
+# Subtest: development requires both intake labels
+ok 15 - development requires both intake labels
+  ---
+  duration_ms: 1.3394
+  ...
+# Subtest: QA requires ready-for-qa and excludes terminal current states
+ok 16 - QA requires ready-for-qa and excludes terminal current states
+  ---
+  duration_ms: 0.1488
+  ...
+# Subtest: state machine rejects Claude to qa-passed
+ok 17 - state machine rejects Claude to qa-passed
+  ---
+  duration_ms: 0.4502
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 262.632

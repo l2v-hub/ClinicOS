@@ -1,0 +1,75 @@
+TAP version 13
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+ok 1 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 8.2572
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+ok 2 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 0.5485
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 3 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 1.4149
+  ...
+# Subtest: doctor refuses a duplicate local supervisor
+ok 4 - doctor refuses a duplicate local supervisor
+  ---
+  duration_ms: 0.3145
+  ...
+# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
+ok 5 - GitHub adapter passes labels as argv and never constructs a shell string
+  ---
+  duration_ms: 1.395
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 6 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.3675
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 7 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 6.8843
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 8 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 1.4366
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 9 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.4084
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 10 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 8.6231
+  ...
+# Subtest: development requires both intake labels
+ok 11 - development requires both intake labels
+  ---
+  duration_ms: 0.9323
+  ...
+# Subtest: QA requires ready-for-qa and excludes terminal current states
+ok 12 - QA requires ready-for-qa and excludes terminal current states
+  ---
+  duration_ms: 0.1127
+  ...
+# Subtest: state machine rejects Claude to qa-passed
+ok 13 - state machine rejects Claude to qa-passed
+  ---
+  duration_ms: 0.3338
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 161.033

@@ -1,0 +1,120 @@
+TAP version 13
+# Subtest: reconciler never launches development when doctor says Claude is unavailable
+ok 1 - reconciler never launches development when doctor says Claude is unavailable
+  ---
+  duration_ms: 1.9277
+  ...
+# Subtest: duplicate supervisor lock remains rejected
+ok 2 - duplicate supervisor lock remains rejected
+  ---
+  duration_ms: 12.2686
+  ...
+# Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+ok 3 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+  ---
+  duration_ms: 6.4902
+  ...
+# Subtest: Codex QA uses output schema and rejects a result for another SHA
+ok 4 - Codex QA uses output schema and rejects a result for another SHA
+  ---
+  duration_ms: 5.8443
+  ...
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+ok 5 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 9.4613
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+ok 6 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 0.8401
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 7 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 1.3088
+  ...
+# Subtest: doctor refuses a duplicate local supervisor
+ok 8 - doctor refuses a duplicate local supervisor
+  ---
+  duration_ms: 0.3036
+  ...
+# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
+ok 9 - GitHub adapter passes labels as argv and never constructs a shell string
+  ---
+  duration_ms: 1.5883
+  ...
+# Subtest: arbitration selects earliest created claim then lowest comment id
+ok 10 - arbitration selects earliest created claim then lowest comment id
+  ---
+  duration_ms: 1.0057
+  ...
+# Subtest: arbitration ignores expired claims
+ok 11 - arbitration ignores expired claims
+  ---
+  duration_ms: 0.1039
+  ...
+# Subtest: local supervisor lock is exclusive
+ok 12 - local supervisor lock is exclusive
+  ---
+  duration_ms: 10.076
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 13 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.6179
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 14 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 9.0926
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 15 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 1.4693
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 16 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.3342
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 17 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 8.6801
+  ...
+# Subtest: three equivalent failures without changed SHA become blocked
+ok 18 - three equivalent failures without changed SHA become blocked
+  ---
+  duration_ms: 0.9733
+  ...
+# Subtest: a changed SHA restarts remediation eligibility
+ok 19 - a changed SHA restarts remediation eligibility
+  ---
+  duration_ms: 0.1116
+  ...
+# Subtest: development requires both intake labels
+ok 20 - development requires both intake labels
+  ---
+  duration_ms: 0.9554
+  ...
+# Subtest: QA requires ready-for-qa and excludes terminal current states
+ok 21 - QA requires ready-for-qa and excludes terminal current states
+  ---
+  duration_ms: 0.11
+  ...
+# Subtest: state machine rejects Claude to qa-passed
+ok 22 - state machine rejects Claude to qa-passed
+  ---
+  duration_ms: 0.3191
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 210.6862

@@ -1,0 +1,110 @@
+TAP version 13
+# Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+ok 1 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+  ---
+  duration_ms: 6.9169
+  ...
+# Subtest: Codex QA uses output schema and rejects a result for another SHA
+ok 2 - Codex QA uses output schema and rejects a result for another SHA
+  ---
+  duration_ms: 4.5105
+  ...
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+ok 3 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 9.3775
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+ok 4 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 0.8373
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 5 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 1.277
+  ...
+# Subtest: doctor refuses a duplicate local supervisor
+ok 6 - doctor refuses a duplicate local supervisor
+  ---
+  duration_ms: 0.3051
+  ...
+# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
+ok 7 - GitHub adapter passes labels as argv and never constructs a shell string
+  ---
+  duration_ms: 1.5032
+  ...
+# Subtest: arbitration selects earliest created claim then lowest comment id
+ok 8 - arbitration selects earliest created claim then lowest comment id
+  ---
+  duration_ms: 0.924
+  ...
+# Subtest: arbitration ignores expired claims
+ok 9 - arbitration ignores expired claims
+  ---
+  duration_ms: 0.1161
+  ...
+# Subtest: local supervisor lock is exclusive
+ok 10 - local supervisor lock is exclusive
+  ---
+  duration_ms: 9.3915
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 11 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.3026
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 12 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 6.8818
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 13 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 1.3609
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 14 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.3269
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 15 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 8.8679
+  ...
+# Subtest: three equivalent failures without changed SHA become blocked
+ok 16 - three equivalent failures without changed SHA become blocked
+  ---
+  duration_ms: 1.0084
+  ...
+# Subtest: a changed SHA restarts remediation eligibility
+ok 17 - a changed SHA restarts remediation eligibility
+  ---
+  duration_ms: 0.0996
+  ...
+# Subtest: development requires both intake labels
+ok 18 - development requires both intake labels
+  ---
+  duration_ms: 0.9536
+  ...
+# Subtest: QA requires ready-for-qa and excludes terminal current states
+ok 19 - QA requires ready-for-qa and excludes terminal current states
+  ---
+  duration_ms: 0.1054
+  ...
+# Subtest: state machine rejects Claude to qa-passed
+ok 20 - state machine rejects Claude to qa-passed
+  ---
+  duration_ms: 0.3107
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 200.2213

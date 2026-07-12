@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 1 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 1.2355
+  ...
+# Subtest: doctor refuses a duplicate local supervisor
+ok 2 - doctor refuses a duplicate local supervisor
+  ---
+  duration_ms: 0.3079
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 3 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.2641
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 4 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 6.8229
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 118.2943

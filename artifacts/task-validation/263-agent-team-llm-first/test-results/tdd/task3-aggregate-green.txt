@@ -1,0 +1,55 @@
+TAP version 13
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+ok 1 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 6.402
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+ok 2 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 0.4983
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 3 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 1.3312
+  ...
+# Subtest: doctor refuses a duplicate local supervisor
+ok 4 - doctor refuses a duplicate local supervisor
+  ---
+  duration_ms: 0.3104
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 5 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.3141
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 6 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 6.7163
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 7 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 1.4091
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 8 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.3196
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 9 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 8.7322
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 145.8107
