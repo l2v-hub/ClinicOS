@@ -11,7 +11,8 @@ function authenticated(id, result) {
     // Prefer structured output when available; fall back to textual confirmation.
     try { return JSON.parse(result.stdout).loggedIn === true; } catch { return /logged in/i.test(result.stdout); }
   }
-  if (id === 'codex-auth') return /logged in/i.test(result.stdout);
+  // Codex CLI 0.144.x prints login status to stderr; accept either stream on exit 0.
+  if (id === 'codex-auth') return /logged in/i.test(`${result.stdout}\n${result.stderr}`);
   return true;
 }
 

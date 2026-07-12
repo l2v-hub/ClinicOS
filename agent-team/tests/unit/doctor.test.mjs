@@ -18,6 +18,20 @@ test('doctor marks development unavailable when Claude is unauthenticated', asyn
   assert.equal(doctor.ok, false);
 });
 
+test('doctor accepts Codex login confirmation printed to stderr', async () => {
+  // Real installed behavior (Codex CLI 0.144.x): `codex login status` exits 0 and
+  // writes "Logged in using ChatGPT" to stderr, not stdout.
+  const run = async ({ command, args }) => {
+    const key = `${command} ${args.join(' ')}`;
+    if (key === 'codex login status') return { ok: true, code: 0, stdout: '', stderr: 'Logged in using ChatGPT\n', error: null };
+    if (key === 'claude auth status') return result('{"loggedIn":true}');
+    return result(key.includes('remote get-url') ? 'https://github.com/l2v-hub/ClinicOS.git' : 'ok');
+  };
+  const doctor = await runDoctor({ config, run, isSupervisorLive: async () => false });
+  assert.equal(doctor.checks.find((check) => check.id === 'codex-auth').ok, true);
+  assert.equal(doctor.qaReady, true);
+});
+
 test('doctor refuses a duplicate local supervisor', async () => {
   const run = async () => result('{"loggedIn":true}');
   const doctor = await runDoctor({ config, run, isSupervisorLive: async () => true });
