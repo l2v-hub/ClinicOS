@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "clinic-os-agent-team artifact_manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "message_type", "message_id", "correlation_id", "producer_role", "repository", "issue_number", "pull_request_number", "created_at", "subject_sha", "artifacts"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "message_type": { "const": "artifact_manifest" },
+    "message_id": { "type": "string", "pattern": "^[A-Za-z0-9._:-]+$" },
+    "correlation_id": { "type": "string", "pattern": "^issue-[0-9]+-attempt-[0-9]+$" },
+    "producer_role": { "enum": ["claude-development", "codex-qa", "agent-team-supervisor"] },
+    "repository": { "const": "l2v-hub/ClinicOS" },
+    "issue_number": { "type": "integer" },
+    "pull_request_number": { "type": "integer" },
+    "created_at": { "type": "string" },
+    "subject_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "media_type", "sha256", "git_blob_sha", "producer_role", "subject_sha"],
+        "properties": { "path": { "type": "string" }, "media_type": { "type": "string" }, "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }, "git_blob_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }, "producer_role": { "enum": ["claude-development", "codex-qa"] }, "subject_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" } }
+      }
+    }
+  }
+}
