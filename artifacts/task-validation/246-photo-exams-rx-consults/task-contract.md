@@ -23,15 +23,15 @@
   `<iframe src>` — no operator identity is sent, matching (and depending on) the absence of a gate.
 
 ## Expected Behaviour (concrete)
-- All 3 document routes require a valid operator identity via the existing `requireOperator`
-  middleware (`backend/src/ai/auth.ts`, header-based role gate already used by
-  `backend/src/routes/ai-actions.ts`): anonymous → 401, unknown/forbidden role → 403.
+- All 3 document routes fail closed unless explicit non-production `AUTH_MODE=demo` is selected.
+  Demo headers are falsifiable QA hints, not a valid operator identity. `entra`, missing and
+  invalid configurations return an explicit safe error until #260 is implemented.
 - Ownership check already exists in `getPatientDocumentContent` (`findFirst({ id, patientId })`
   returns null → 404 route-side) — kept, now reachable only by an authenticated operator.
 - Upload sniffs the real file signature (magic bytes) and rejects (`415`) any mismatch between
   the declared/allowed MIME family and the actual bytes, **before** `createPatientDocument` is
   called (no bad bytes ever reach Postgres).
-- Frontend sends `X-Operator-Id` / `X-Operator-Role` on every call to these 3 endpoints; the
+- Frontend sends demo-only `X-Operator-Id` / `X-Operator-Role` / `X-Demo-Patient-Id`; the
   content endpoint (used for inline preview/open, which cannot carry custom headers via
   `<a>`/`<img>`/`<iframe>`) is fetched as an authenticated blob and opened/rendered via
   `URL.createObjectURL`, revoked after use.
@@ -58,7 +58,7 @@
 | Area | Impacted | Note |
 |---|---|---|
 | Frontend | yes | 3 files: `EsamiConsulenzeTab.tsx`, `ImportedDocumentsList.tsx`, `DocumentSourcePanel.tsx`, `NarrativeSectionsTab.tsx`, `DocumentiTab.tsx`, `PatientDetail.tsx`, `App.tsx` — thread `operatorId`/`operatorRole` down to every caller of the 3 document endpoints; blob-fetch for inline preview/open. |
-| Backend | yes | `backend/src/routes/patient-documents.ts` gains `requireOperator` + magic-byte sniffing before persistence. |
+| Backend | yes | `backend/src/routes/patient-documents.ts` gains explicit demo/fail-closed mode handling + magic-byte sniffing before persistence. |
 | DB | no | No schema/migration change; `PatientDocument` model untouched. |
 | API | yes | Same routes/shapes; new 401/403 (auth) and 415 (magic-byte mismatch) response paths. Existing 201/200/404/500 shapes unchanged. |
 | Privacy | yes | Closes an unauthenticated-access + cross-patient-access gap on clinical document bytes (PHI: photos/RX/consult scans). No logging of PHI added. |
@@ -68,7 +68,7 @@
 |---|---|
 | `backend/src/ai/__tests__/patient-documents-security.test.ts` (node:test) | Pure-logic coverage of the gate (401/403/pass, mirroring `security.test.ts` pattern) and of the exported `sniffAllowedMime` magic-byte function (PNG/JPEG/WEBP/PDF/HEIC positive, spoofed-PNG negative → null), since spinning a full Express+Prisma server in a unit test is out of scope/slow. |
 | `npx playwright test --config e2e/remediation/pw.config.246.ts --list` (parse-only now; controller executes later) | Confirms the authored spec is syntactically valid and matches the shared harness contract; the real stack isn't up in this worktree pass. |
-| Manual grep of route file post-edit | Confirms `requireOperator` sits before all 3 handlers and the sniff runs before `createPatientDocument`. |
+| Manual grep of route file post-edit | Confirms the mode-aware gate sits before all 3 handlers and the sniff runs before `createPatientDocument`. |
 
 ## Risks (concrete)
 - **Breaking existing previews**: `DocumentSourcePanel`/`ImportedDocumentsList`/`NarrativeSectionsTab`

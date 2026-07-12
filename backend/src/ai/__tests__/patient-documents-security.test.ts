@@ -1,7 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { requireOperator } from '../auth.js';
-import { sniffAllowedMime, MAX_UPLOAD_BYTES } from '../../routes/patient-documents.js';
+import {
+  documentAuthMode,
+  requirePatientDocumentAccess,
+  sniffAllowedMime,
+  MAX_UPLOAD_BYTES,
+} from '../../routes/patient-documents.js';
 
 // #246 remediation: negative-path security coverage for the patient-documents router.
 // Codex QA FAILED finding: "no backend API/security tests cover unauthenticated access,
@@ -12,10 +16,30 @@ import { sniffAllowedMime, MAX_UPLOAD_BYTES } from '../../routes/patient-documen
 function mockReq(headers: Record<string, string>) {
   return {
     header: (n: string) => headers[n] ?? headers[n.toLowerCase()],
+    params: { patientId: 'patient-a' },
     ip: '1.2.3.4',
     operator: undefined as { id: string; role: string } | undefined,
   };
 }
+
+function withAuthMode(mode: string | undefined, nodeEnv: string | undefined, run: () => void): void {
+  const previousMode = process.env.AUTH_MODE;
+  const previousNodeEnv = process.env.NODE_ENV;
+  if (mode === undefined) delete process.env.AUTH_MODE; else process.env.AUTH_MODE = mode;
+  if (nodeEnv === undefined) delete process.env.NODE_ENV; else process.env.NODE_ENV = nodeEnv;
+  try { run(); } finally {
+    if (previousMode === undefined) delete process.env.AUTH_MODE; else process.env.AUTH_MODE = previousMode;
+    if (previousNodeEnv === undefined) delete process.env.NODE_ENV; else process.env.NODE_ENV = previousNodeEnv;
+  }
+}
+
+test('AUTH_MODE is fail-closed when absent, invalid, entra-unimplemented, or demo in production', () => {
+  assert.equal(documentAuthMode({} as NodeJS.ProcessEnv), 'disabled');
+  assert.equal(documentAuthMode({ AUTH_MODE: 'unexpected' } as NodeJS.ProcessEnv), 'disabled');
+  assert.equal(documentAuthMode({ AUTH_MODE: 'entra' } as NodeJS.ProcessEnv), 'entra');
+  assert.equal(documentAuthMode({ AUTH_MODE: 'demo', NODE_ENV: 'production' } as NodeJS.ProcessEnv), 'disabled');
+  assert.equal(documentAuthMode({ AUTH_MODE: 'demo', NODE_ENV: 'test' } as NodeJS.ProcessEnv), 'demo');
+});
 function mockRes() {
   const out: { code?: number; body?: unknown } = {};
   return {
@@ -30,28 +54,48 @@ test('patient-documents gate: anonymous caller (no operator headers) -> 401', ()
   const req = mockReq({});
   const res = mockRes();
   let nexted = false;
-  requireOperator(req as never, res as never, () => { nexted = true; });
+  withAuthMode('demo', 'test', () => requirePatientDocumentAccess(req as never, res as never, () => { nexted = true; }));
   assert.equal(nexted, false);
   assert.equal(res._out.code, 401);
 });
 
 test('patient-documents gate: role "guest" -> 403', () => {
-  const req = mockReq({ 'X-Operator-Id': 'attacker', 'X-Operator-Role': 'guest' });
+  const req = mockReq({ 'X-Operator-Id': 'attacker', 'X-Operator-Role': 'guest', 'X-Demo-Patient-Id': 'patient-a' });
   const res = mockRes();
   let nexted = false;
-  requireOperator(req as never, res as never, () => { nexted = true; });
+  withAuthMode('demo', 'test', () => requirePatientDocumentAccess(req as never, res as never, () => { nexted = true; }));
   assert.equal(nexted, false);
   assert.equal(res._out.code, 403);
 });
 
 test('patient-documents gate: valid "operatore" role passes and is attached to the request', () => {
-  const req = mockReq({ 'X-Operator-Id': 'op-1', 'X-Operator-Role': 'operatore' });
+  const req = mockReq({ 'X-Operator-Id': 'op-1', 'X-Operator-Role': 'operatore', 'X-Demo-Patient-Id': 'patient-a' });
   const res = mockRes();
   let nexted = false;
-  requireOperator(req as never, res as never, () => { nexted = true; });
+  withAuthMode('demo', 'test', () => requirePatientDocumentAccess(req as never, res as never, () => { nexted = true; }));
   assert.equal(nexted, true);
   assert.equal(req.operator?.id, 'op-1');
   assert.equal(req.operator?.role, 'operatore');
+});
+
+test('patient-documents gate: demo request scoped to another patient -> 403', () => {
+  const req = mockReq({ 'X-Operator-Id': 'op-1', 'X-Operator-Role': 'operatore', 'X-Demo-Patient-Id': 'patient-b' });
+  const res = mockRes();
+  let nexted = false;
+  withAuthMode('demo', 'test', () => requirePatientDocumentAccess(req as never, res as never, () => { nexted = true; }));
+  assert.equal(nexted, false);
+  assert.equal(res._out.code, 403);
+});
+
+test('patient-documents gate: entra, missing and invalid modes return explicit 503 without fallback', () => {
+  for (const mode of ['entra', undefined, 'invalid']) {
+    const req = mockReq({ 'X-Operator-Id': 'op-1', 'X-Operator-Role': 'operatore', 'X-Demo-Patient-Id': 'patient-a' });
+    const res = mockRes();
+    let nexted = false;
+    withAuthMode(mode, 'test', () => requirePatientDocumentAccess(req as never, res as never, () => { nexted = true; }));
+    assert.equal(nexted, false);
+    assert.equal(res._out.code, 503);
+  }
 });
 
 test('sniffAllowedMime: recognises real signatures for every allowed family', () => {

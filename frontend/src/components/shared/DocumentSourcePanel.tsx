@@ -41,6 +41,7 @@ export function DocumentSourcePanel({ patientId, sourceTarget, sourceText, title
     const h: Record<string, string> = {};
     if (operatorId) h['X-Operator-Id'] = operatorId;
     if (operatorRole) h['X-Operator-Role'] = operatorRole;
+    h['X-Demo-Patient-Id'] = patientId;
     return h;
   }
 

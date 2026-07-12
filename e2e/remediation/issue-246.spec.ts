@@ -7,8 +7,8 @@ import { join } from 'node:path';
 // authentication/authorization at all (anyone who knew/guessed a patientId/documentId could
 // upload or read clinical document bytes) and trusted the client-declared MIME type instead of
 // the actual file signature. Fix: requireOperator gate (backend/src/routes/patient-documents.ts)
-// + magic-byte sniffing before persistence (sniffAllowedMime); frontend now sends
-// X-Operator-Id/X-Operator-Role on every call and opens document bytes via an authenticated
+// + magic-byte sniffing before persistence (sniffAllowedMime); in explicit AUTH_MODE=demo the
+// frontend sends falsifiable demo scope headers and opens document bytes via a gated
 // blob fetch instead of a plain <a href>/<img src>.
 //
 // This spec proves, against the real running stack:

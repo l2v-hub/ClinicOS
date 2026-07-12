@@ -72,4 +72,25 @@ infrastructure-side fix, not attributable to this change.
 La stringa "CLOSED — VERIFIED" viene apposta da Codex dopo verifica indipendente, come da
 handoff #239.
 
-Final Decision: READY FOR CODEX QA
+Final Decision: QA FAILED — FUNCTIONAL DEMO VERIFIED, PRODUCTION AUTH DEFERRED
+
+## Codex scope update — 2026-07-12
+
+The functional document flow remains accepted for synthetic QA in explicit `AUTH_MODE=demo` only. Production-grade authentication and operator-to-patient authorization are not accepted here and are tracked by #260.
+
+| Check | Result | Evidence |
+|---|---:|---|
+| Upload/list/open/download | PASS (demo) | Existing DB-backed Playwright 3/3 bundle |
+| Persistence after reload | PASS (demo) | Existing screenshot/trace/video evidence |
+| MIME and magic-byte validation | PASS | Unit/security tests |
+| Size limit and JSON 413 handling | PASS | Multer limit and explicit error handler |
+| Document-patient ownership | PASS | Compound `documentId + patientId` lookup |
+| Demo patient scope | PASS | 403 mismatch test |
+| Missing/invalid AUTH_MODE | PASS | Fail-closed test; no demo fallback |
+| AUTH_MODE=entra before implementation | PASS (safe failure) | Explicit 503 test |
+| Demo in production | PASS (safe failure) | Mode resolver rejects it |
+| Current Playwright rerun | BLOCKED | Configured DB unreachable; UI showed 0 patients; synthetic seed failed |
+| Production authentication/authz | FAIL/DEFERRED | #260 |
+| Final decision | QA FAILED | Issue remains open because server-verifiable identity is still explicit in its contract |
+
+The `X-Operator-*` and `X-Demo-Patient-Id` headers are falsifiable demo hints. They are not described or accepted as secure authentication.

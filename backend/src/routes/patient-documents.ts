@@ -1,13 +1,13 @@
 // Patient imported-documents API (REQ-035 v2). Mounted at /patients.
-// Files are served by the authenticated backend (never public URLs); ownership is verified.
+// Files are served by the backend (never public URLs); document↔patient ownership is verified.
 //
 // #246 remediation: these routes carry clinical document bytes (photos/RX/consult scans) and
 // were previously reachable by anyone who knew/guessed a patientId/documentId — gated behind the
-// same operator role-gate already used by the AI import/actions routes (backend/src/ai/auth.ts).
+// explicit demo-only role gate. It is falsifiable and must never be described as secure auth.
 
-import { Router } from 'express';
+import { Router, type NextFunction, type Request, type Response } from 'express';
 import multer from 'multer';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { listPatientDocuments, getPatientDocumentContent, createPatientDocument } from '../ai/upload/patient-documents.js';
 
 const router = Router();
@@ -27,6 +27,56 @@ const ALLOWED_DOC_TYPES = new Set(['esame', 'rx', 'consulenza', 'allegato']);
 // HEIC/HEIF share the ISOBMFF ('ftyp') container; either family may be declared for either brand.
 const MIME_FAMILY: Record<string, string> = { 'image/heif': 'image/heic' };
 function mimeFamily(m: string): string { return MIME_FAMILY[m] ?? m; }
+
+export type DocumentAuthMode = 'demo' | 'entra' | 'disabled';
+
+/** Fail closed: demo is explicit and non-production; Entra remains unavailable until #260. */
+export function documentAuthMode(env: NodeJS.ProcessEnv = process.env): DocumentAuthMode {
+  const raw = (env.AUTH_MODE || '').trim().toLowerCase();
+  if (raw === 'demo' && env.NODE_ENV !== 'production') return 'demo';
+  if (raw === 'entra') return 'entra';
+  return 'disabled';
+}
+
+/**
+ * DEMO-ONLY gate. These headers are falsifiable hints, not secure authentication. The explicit
+ * patient header prevents accidental cross-patient access in synthetic QA; real authz is #260.
+ */
+export function requirePatientDocumentAccess(req: AuthedRequest, res: Response, next: NextFunction): void {
+  res.setHeader('Cache-Control', 'private, no-store');
+  const mode = documentAuthMode();
+  if (mode !== 'demo') {
+    res.status(503).json({
+      error: mode === 'entra'
+        ? 'Autenticazione Entra non ancora disponibile per i documenti clinici'
+        : 'Endpoint documenti disabilitati: configurare esplicitamente AUTH_MODE',
+      code: 'document_auth_unavailable',
+    });
+    return;
+  }
+  requireOperator(req, res, () => {
+    const scopedPatientId = (req.header('X-Demo-Patient-Id') || '').trim();
+    if (!scopedPatientId || scopedPatientId !== String(req.params.patientId)) {
+      res.status(403).json({ error: 'Paziente fuori dallo scope demo', code: 'demo_patient_scope_denied' });
+      return;
+    }
+    next();
+  });
+}
+
+function receiveSingleFile(req: Request, res: Response, next: NextFunction): void {
+  upload.single('file')(req, res, (error: unknown) => {
+    if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+      res.status(413).json({ error: 'File troppo grande', code: 'file_too_large' });
+      return;
+    }
+    if (error) {
+      res.status(400).json({ error: 'Upload non valido', code: 'invalid_upload' });
+      return;
+    }
+    next();
+  });
+}
 
 /**
  * #246 remediation: verify the actual file BYTES match a known signature — never trust the
@@ -48,7 +98,7 @@ export function sniffAllowedMime(buf: Buffer): string | null {
 }
 
 // POST /patients/:patientId/documents — attach a photo/scan to an existing patient chart.
-router.post('/:patientId/documents', requireOperator, upload.single('file'), async (req, res) => {
+router.post('/:patientId/documents', requirePatientDocumentAccess, receiveSingleFile, async (req, res) => {
   try {
     const file = (req as unknown as { file?: { originalname: string; mimetype: string; buffer: Buffer } }).file;
     if (!file) { res.status(400).json({ error: 'File mancante' }); return; }
@@ -70,7 +120,7 @@ router.post('/:patientId/documents', requireOperator, upload.single('file'), asy
 });
 
 // GET /patients/:patientId/documents — metadata of the patient's imported documents.
-router.get('/:patientId/documents', requireOperator, async (req, res) => {
+router.get('/:patientId/documents', requirePatientDocumentAccess, async (req, res) => {
   try {
     const documents = await listPatientDocuments(String(req.params.patientId));
     res.status(200).json({ documents, total: documents.length });
@@ -80,7 +130,7 @@ router.get('/:patientId/documents', requireOperator, async (req, res) => {
 });
 
 // GET /patients/:patientId/documents/:documentId/content — the file bytes (ownership-checked).
-router.get('/:patientId/documents/:documentId/content', requireOperator, async (req, res) => {
+router.get('/:patientId/documents/:documentId/content', requirePatientDocumentAccess, async (req, res) => {
   try {
     const doc = await getPatientDocumentContent(String(req.params.patientId), String(req.params.documentId));
     if (!doc) { res.status(404).json({ error: 'Documento non trovato' }); return; }

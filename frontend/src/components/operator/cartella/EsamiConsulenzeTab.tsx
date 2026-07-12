@@ -6,16 +6,16 @@ import { API_URL } from '../../../config';
 
 // #246: photo/scan attachments for exams/RX/consultations. Uses the device camera on mobile
 // (capture="environment") or a file picker on desktop; bytes are stored on PatientDocument.
-// #246 remediation: the backend now requires operator identity on every /documents call
-// (backend/src/routes/patient-documents.ts `requireOperator`), so every fetch below carries
-// X-Operator-Id/X-Operator-Role; the content endpoint is opened via an authenticated blob
+// #246: explicit demo-only scope headers accompany every /documents call. They are falsifiable
+// QA hints, not secure authentication. The content endpoint is opened via a gated blob
 // fetch (a plain <a href>/<img src> cannot attach custom headers).
 type SectionDocMeta = { id: string; originalName: string; mimeType: string; documentType: string; createdAt: string };
 
-function opHeaders(operatorId?: string, operatorRole?: string): Record<string, string> {
+function opHeaders(patientId: string, operatorId?: string, operatorRole?: string): Record<string, string> {
   const h: Record<string, string> = {};
   if (operatorId) h['X-Operator-Id'] = operatorId;
   if (operatorRole) h['X-Operator-Role'] = operatorRole;
+  h['X-Demo-Patient-Id'] = patientId;
   return h;
 }
 
@@ -25,7 +25,7 @@ function SectionPhotos({ patientId, documentType, operatorId, operatorRole }: { 
   const [err, setErr] = useState<string | null>(null);
 
   function reload() {
-    fetch(`${API_URL}/patients/${patientId}/documents`, { headers: opHeaders(operatorId, operatorRole) })
+    fetch(`${API_URL}/patients/${patientId}/documents`, { headers: opHeaders(patientId, operatorId, operatorRole) })
       .then(r => (r.ok ? r.json() : { documents: [] }))
       .then(d => setDocs((Array.isArray(d.documents) ? d.documents : []).filter((x: SectionDocMeta) => x.documentType === documentType)))
       .catch(() => { /* none */ });
@@ -42,7 +42,7 @@ function SectionPhotos({ patientId, documentType, operatorId, operatorRole }: { 
       fd.append('file', f);
       fd.append('documentType', documentType);
       const r = await fetch(`${API_URL}/patients/${patientId}/documents`, {
-        method: 'POST', body: fd, headers: opHeaders(operatorId, operatorRole),
+        method: 'POST', body: fd, headers: opHeaders(patientId, operatorId, operatorRole),
       });
       if (!r.ok) throw new Error(String(r.status));
       reload();
@@ -52,7 +52,7 @@ function SectionPhotos({ patientId, documentType, operatorId, operatorRole }: { 
 
   async function openDoc(d: SectionDocMeta) {
     try {
-      const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, { headers: opHeaders(operatorId, operatorRole) });
+      const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, { headers: opHeaders(patientId, operatorId, operatorRole) });
       if (!r.ok) throw new Error(String(r.status));
       const blob = await r.blob();
       const objectUrl = URL.createObjectURL(blob);

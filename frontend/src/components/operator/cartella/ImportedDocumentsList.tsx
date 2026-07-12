@@ -27,6 +27,7 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
     const headers: Record<string, string> = {};
     if (operatorId) headers['X-Operator-Id'] = operatorId;
     if (operatorRole) headers['X-Operator-Role'] = operatorRole;
+    headers['X-Demo-Patient-Id'] = patientId;
     fetch(`${API_URL}/patients/${patientId}/documents`, { headers })
       .then((r) => (r.ok ? r.json() : { documents: [] }))
       .then((d) => { if (alive) setDocs(Array.isArray(d.documents) ? d.documents : []); })
@@ -39,6 +40,7 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
       const headers: Record<string, string> = {};
       if (operatorId) headers['X-Operator-Id'] = operatorId;
       if (operatorRole) headers['X-Operator-Role'] = operatorRole;
+      headers['X-Demo-Patient-Id'] = patientId;
       const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, { headers });
       if (!r.ok) throw new Error(String(r.status));
       const blob = await r.blob();

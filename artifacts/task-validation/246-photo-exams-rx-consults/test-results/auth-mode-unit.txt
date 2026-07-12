@@ -1,0 +1,10 @@
+Codex rerun 2026-07-12
+
+Command: node_modules/.bin/tsx --test backend/src/ai/__tests__/patient-documents-security.test.ts
+Result: PASS 10/10
+
+Covered: explicit demo mode, missing/invalid mode fail-closed, entra safe failure, demo rejected in production, anonymous 401, forbidden role 403, demo patient-scope mismatch 403, magic-byte families, spoof rejection, size constant.
+
+Backend build: PASS
+Frontend build: PASS
+Data: synthetic only; no document bytes, token, DB URL or clinical content recorded.
