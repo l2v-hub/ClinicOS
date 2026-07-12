@@ -1,6 +1,6 @@
 # Validation report — Issue #225 (Preparazione futuro backend Azure)
 
-**Final Decision: READY FOR CODEX QA**
+**Final Decision: CLOSED — VERIFIED**
 
 Tipo: **docs-only** (PR #251). Nessun codice runtime, schema, API, frontend o migration toccati. Deliverable: `docs/azure-backend-config-principles.md` (85 righe).
 
@@ -21,3 +21,17 @@ Tipo: **docs-only** (PR #251). Nessun codice runtime, schema, API, frontend o mi
 `screenshots/azure-principles-doc.png` · `trace/trace.zip` · doc: `docs/azure-backend-config-principles.md`. Test render: `e2e/issue-225-shot.mjs`.
 
 Claude non chiude, non mergia, non deploya. Codex resta l'unico QA Gatekeeper.
+
+## Codex final gate — 2026-07-12
+
+| Check | Result | Evidence |
+|---|---:|---|
+| Acceptance criteria | PASS | Documento Azure verificato; AC1–AC3 confermati |
+| Code review | PASS | Modifica docs-only integrata in `main` tramite PR #257/#251 |
+| Tests | PASS | Gate integrato #256: backend 316/316 e build frontend/backend |
+| Playwright | NA | Nessuna UI modificata |
+| Runtime validation | NA | Nessun runtime modificato e nessun deploy richiesto |
+| Persistence | NA | Nessuna modifica dati |
+| Privacy/security | PASS | Nessun secret o dato paziente nel documento |
+| Evidence complete | PASS | Artifact issue + verifica integrata #256 |
+| Final decision | CLOSED — VERIFIED | Integrazione `main` verificata da Codex |

@@ -28,3 +28,19 @@ Operatore → Pazienti → Moretti, Elena → Clinica → Terapia Farmacologica 
 `screenshots/` (before, weekdays-selected, after-save-days-pill, after-refresh-days-pill) · `trace/trace.zip` · `video/*.webm` · `logs/console-errors.log` · `ui-report.json` · test `e2e/issue-241-giorni-settimana.mjs`.
 
 Claude non chiude, non mergia, non deploya. Codex resta l'unico QA Gatekeeper.
+
+## Codex final gate — 2026-07-12
+
+Final Decision: CLOSED — VERIFIED
+
+| Check | Result | Evidence |
+|---|---:|---|
+| Acceptance criteria | PASS | Weekday selection, API normalization and filtering verified |
+| Code review | PASS | PR #250 integrated through verified PR #257 |
+| Tests | PASS | Gate #256; targeted weekday tests 3/3 |
+| Playwright | PASS | Integrated scenario #241 PASS |
+| Runtime validation | PASS | Combined stack validation #256 |
+| Persistence | PASS | 0→19 and 18→19 migration proofs; historical row preserved with NULL |
+| Privacy/security | PASS | Synthetic data only; no sensitive logs |
+| Evidence complete | PASS | Issue artifact plus integrated #256 bundle |
+| Final decision | CLOSED — VERIFIED | Integrated release candidate verified |

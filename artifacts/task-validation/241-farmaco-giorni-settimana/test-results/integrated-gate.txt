@@ -1,0 +1,1 @@
+Codex final gate 2026-07-12: PASS. Targeted weekday tests 3/3 and integrated scenario #241 PASS. See issue #256 evidence.
