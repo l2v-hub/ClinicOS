@@ -5,9 +5,9 @@
 
 import { prisma } from '../../lib/prisma.js';
 import * as svc from '../gateway/services.js';
-import { canCrossPatientSearch } from '../gateway/context.js';
+import { canCrossPatientSearch, canFacilityRead } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
-import { appointmentSource } from '../gateway/sources.js';
+import { appointmentSource, roomOccupancySource } from '../gateway/sources.js';
 import { planQuery, extractPatientName, pickResolvedPatient, type AssistantIntent, type PlanContext, type QueryPlan } from './plan.js';
 import { planQueryLLM, injectPatientId } from './llm-planner.js';
 import { composeAnswer } from './composer.js';
@@ -55,6 +55,43 @@ async function appointmentsToday(ctx: UserContext): Promise<{ data: unknown[]; s
   const rows = await prisma.appointment.findMany({ where: { scheduledAt: { gte: from, lte: to } }, orderBy: { scheduledAt: 'asc' }, take: 200 });
   const allowed = rows.filter((a) => ctx.permittedPatientIds === null || ctx.permittedPatientIds.includes(a.patientId));
   return { data: allowed, sourceRefs: allowed.map((a) => appointmentSource(a.patientId, a.id, a.reason ?? 'appuntamento', a.scheduledAt.toISOString())) };
+}
+
+/** issue #239: aggregate rooms/beds occupancy — counts only, NEVER patient names/identifiers.
+ *  Facility-level read (canFacilityRead), same "active assignment" convention already used by
+ *  the /admin/rooms/occupancy route (backend/src/routes/admin-rooms.ts): an assignment is active
+ *  when endDate is null OR still in the future (>= today) — a bed with a scheduled-but-not-yet-
+ *  ended stay must count as occupied here too, or the assistant's numbers would disagree with the
+ *  admin panel's. Maintenance beds are counted separately (never as free). */
+async function roomsOccupancy(env: NodeJS.ProcessEnv): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+  if (!canFacilityRead(env)) throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
+  const today = new Date().toISOString().slice(0, 10);
+  const rooms = await prisma.room.findMany({
+    include: {
+      beds: {
+        include: {
+          assignments: { where: { OR: [{ endDate: null }, { endDate: { gte: today } }] } },
+        },
+      },
+    },
+  });
+  let totalBeds = 0;
+  let occupiedBeds = 0;
+  let maintenanceBeds = 0;
+  for (const room of rooms) {
+    for (const bed of room.beds) {
+      totalBeds++;
+      if (bed.assignments.length > 0) occupiedBeds++;
+      if (bed.stato === 'manutenzione') maintenanceBeds++;
+    }
+  }
+  const freeBeds = Math.max(0, totalBeds - occupiedBeds - maintenanceBeds);
+  const occupancyPct = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
+  const data = [{ totalRooms: rooms.length, totalBeds, occupiedBeds, freeBeds, maintenanceBeds, occupancyPct }];
+  return {
+    data,
+    sourceRefs: [roomOccupancySource(`${occupiedBeds}/${totalBeds} letti occupati; ${rooms.length} camere censite`, new Date().toISOString())],
+  };
 }
 
 /** Run the assistant for a question. Pure orchestration over the gateway; SOURCE_ONLY. */
@@ -116,7 +153,7 @@ export async function assistantQuery(
     if (calls >= lim.maxToolCalls) break;
     calls++;
     try {
-      const r = await dispatch(call.tool, call.args, ctx);
+      const r = await dispatch(call.tool, call.args, ctx, env);
       for (const item of r.data) { if (results.length >= lim.maxResults) break; results.push(item); }
       sources.push(...r.sourceRefs);
     } catch (e) {
@@ -147,7 +184,7 @@ export async function assistantQuery(
   };
 }
 
-async function dispatch(tool: string, args: Record<string, unknown>, ctx: UserContext): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+async function dispatch(tool: string, args: Record<string, unknown>, ctx: UserContext, env: NodeJS.ProcessEnv = process.env): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
   const pid = String(args.patientId ?? '');
   switch (tool) {
     case 'get_patient_allergies': { const r = await svc.getPatientAllergies(pid, ctx); return r; }
@@ -165,6 +202,7 @@ async function dispatch(tool: string, args: Record<string, unknown>, ctx: UserCo
     }
     case 'correlate_structured_data': { const r = await svc.correlate(args as never, ctx); return { data: r.data, sourceRefs: r.sourceRefs }; }
     case 'query_appointments_today': return await appointmentsToday(ctx);
+    case 'query_rooms_occupancy': return await roomsOccupancy(env);
     case 'query_data': return await dispatchQueryData((args as { plan?: unknown }).plan, ctx);
     default: return { data: [], sourceRefs: [] };
   }

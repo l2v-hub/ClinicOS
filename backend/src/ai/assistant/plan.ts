@@ -6,6 +6,7 @@
 export type AssistantIntent =
   | 'allergies' | 'therapies' | 'vitals_range' | 'vitals_recent' | 'narrative_search'
   | 'document_search' | 'timeline' | 'appointments' | 'correlate' | 'patient_search'
+  | 'rooms_occupancy'
   | 'refuse_clinical' | 'data_query' | 'unknown';
 
 export type QueryScope = 'current_patient' | 'cross_patient';
@@ -105,6 +106,11 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   if (/quali pazienti|chi assume|chi ha\b|pazienti con/.test(q)) {
     const allergy = /allerg\w*\s+(?:a|al|alla|alle|ai)?\s*([a-zàèéìòù]+)/.exec(q)?.[1];
     return base('correlate', [{ tool: 'correlate_structured_data', args: { allergy } }], true);
+  }
+  // issue #239: aggregate rooms/beds occupancy (counts only, never patient names/identifiers —
+  // facility-level read, gated downstream by canFacilityRead, NOT a cross-patient PHI search).
+  if (/(camere?|stanze?|letti?).*(occupat|liber|disponibil|manutenzione)|occupazione.*(camere?|stanze?|letti?)/.test(q)) {
+    return base('rooms_occupancy', [{ tool: 'query_rooms_occupancy', args: {} }]);
   }
   if (/appuntamenti (di )?oggi|agenda oggi/.test(q)) return base('appointments', [{ tool: 'query_appointments_today', args: {} }], true);
   if (/cerca|trova/.test(q)) {
