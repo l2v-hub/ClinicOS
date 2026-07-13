@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "message_type": "qa_result",
+  "message_id": "codex-qa-263-attempt-1-69564a85",
+  "correlation_id": "issue-263-attempt-1",
+  "producer_role": "codex-qa",
+  "repository": "l2v-hub/ClinicOS",
+  "issue_number": 263,
+  "pull_request_number": 264,
+  "attempt": 1,
+  "created_at": "2026-07-12T18:09:04.003Z",
+  "subject_sha": "69564a85dd9f9dbd0852dad37275722329fc91bd",
+  "state_before": "ready-for-qa",
+  "state_after": "qa-failed",
+  "decision": "qa-failed",
+  "acceptance_criteria": [
+    { "id": "AC1", "status": "passed", "evidence_refs": ["agent-team/", "package.json"] },
+    { "id": "AC2", "status": "failed", "evidence_refs": ["QA-263-004"] },
+    { "id": "AC3", "status": "failed", "evidence_refs": ["QA-263-002"] },
+    { "id": "AC4", "status": "failed", "evidence_refs": ["QA-263-003"] },
+    { "id": "AC5", "status": "failed", "evidence_refs": ["QA-263-002"] },
+    { "id": "AC6", "status": "failed", "evidence_refs": ["QA-263-005", "QA-263-008"] },
+    { "id": "AC7", "status": "failed", "evidence_refs": ["QA-263-003", "QA-263-005"] },
+    { "id": "AC8", "status": "failed", "evidence_refs": ["QA-263-001"] },
+    { "id": "AC9", "status": "failed", "evidence_refs": ["QA-263-001"] },
+    { "id": "AC10", "status": "failed", "evidence_refs": ["QA-263-006"] },
+    { "id": "AC11", "status": "failed", "evidence_refs": ["QA-263-003", "QA-263-007"] },
+    { "id": "AC12", "status": "failed", "evidence_refs": ["QA-263-001", "QA-263-003", "QA-263-005", "QA-263-007"] },
+    { "id": "AC13", "status": "passed", "evidence_refs": ["agent-team/tests/integration/prohibited-actions.test.mjs"] }
+  ],
+  "findings": [
+    { "finding_id": "QA-263-001", "acceptance_criterion_id": "AC8", "severity": "critical", "category": "remediation-loop", "observed": "runtime always passes priorQaResult null and does not restore attempt or coordinates", "expected": "Claude receives unresolved Codex findings and reuses the same branch worktree and PR", "reproduction_command_ref": "rg -n priorQaResult agent-team/src/runtime.mjs", "evidence_refs": ["agent-team/src/runtime.mjs:39", "codex-qa-report.md"], "status": "open", "remediation_required": true, "fingerprint": "80b07ca7361f7dd9540ecd778c6825879cd2f2a091b8f00d25e2c2d80bbd1350" },
+    { "finding_id": "QA-263-002", "acceptance_criterion_id": "AC5", "severity": "critical", "category": "claude-worker", "observed": "worker omits scoped allowedTools and json-schema and uses a 120000ms total timeout", "expected": "doctor-validated safe headless Claude invocation can complete development and structured handoff", "reproduction_command_ref": "rg -n allowedTools|json-schema|commandTimeoutMs agent-team/src agent-team/config", "evidence_refs": ["agent-team/src/workers/claude-development-worker.mjs:9", "agent-team/config/default.json:15"], "status": "open", "remediation_required": true, "fingerprint": "0393d1e5486cdab822bdac0189648cbd56ce0e8301827c8a754d47ce2be2a4db" },
+    { "finding_id": "QA-263-003", "acceptance_criterion_id": "AC4", "severity": "high", "category": "github-lock", "observed": "leaseRefreshMs and editIssueComment are unused and claim messages bypass schema validation", "expected": "claim refresh release expiry recovery and schema validation are active", "reproduction_command_ref": "rg -n leaseRefreshMs|editIssueComment agent-team/src agent-team/config", "evidence_refs": ["agent-team/src/core/locks.mjs", "agent-team/src/runtime.mjs"], "status": "open", "remediation_required": true, "fingerprint": "4ac4517475c910af6fc8796f962ef898377bb1120208b7f0d790f5f35a7d75ce" },
+    { "finding_id": "QA-263-004", "acceptance_criterion_id": "AC2", "severity": "high", "category": "doctor", "observed": "doctor returns ready without validating labels config files writable ignored paths or worker permissions", "expected": "all hard prerequisites are checked and affected workers do not launch", "reproduction_command_ref": "npm run agent-team:doctor", "evidence_refs": ["agent-team/src/commands/doctor.mjs", "codex-qa-report.md"], "status": "open", "remediation_required": true, "fingerprint": "9733091e671814445993f5423fce6c818d18a2ca96bb1e5ec126216c27f008d4" },
+    { "finding_id": "QA-263-005", "acceptance_criterion_id": "AC6", "severity": "high", "category": "evidence-binding", "observed": "PR head is 69564a85 but committed manifest and handoff subject are 39b5e495", "expected": "authoritative envelope and every verified artifact are provably bound to the exact PR head", "reproduction_command_ref": "compare HEAD with artifact-manifest.json and development-handoff.json subject_sha", "evidence_refs": ["artifacts/task-validation/263-agent-team-llm-first/agent-team/artifact-manifest.json", "artifacts/task-validation/263-agent-team-llm-first/agent-team/development-handoff.json"], "status": "open", "remediation_required": true, "fingerprint": "a3612127858391f5074b64854fa5e0671656e80e1050ff7b50e12f56410c461c" },
+    { "finding_id": "QA-263-006", "acceptance_criterion_id": "AC10", "severity": "high", "category": "no-progress", "observed": "nextRemediationState is never called by runtime or QA worker", "expected": "three equivalent failures transition to blocked with structured reason", "reproduction_command_ref": "rg -n nextRemediationState agent-team/src", "evidence_refs": ["agent-team/src/core/remediation.mjs", "agent-team/src/workers/codex-qa-worker.mjs"], "status": "open", "remediation_required": true, "fingerprint": "0260ba64c6baf9d7d7c2947505b414af8146c80cb3175ce77a880513148172ca" },
+    { "finding_id": "QA-263-007", "acceptance_criterion_id": "AC11", "severity": "medium", "category": "supervisor-recovery", "observed": "status is local-only stop does not wait and restart does not rehydrate active claims", "expected": "GitHub-backed status graceful lease-safe stop and restart recovery", "reproduction_command_ref": "Get-Content agent-team/src/commands/status.mjs agent-team/src/commands/stop.mjs", "evidence_refs": ["agent-team/src/commands/status.mjs", "agent-team/src/commands/stop.mjs", "agent-team/src/commands/start.mjs"], "status": "open", "remediation_required": true, "fingerprint": "2b9c53514680e6abbe2bd1388ea59828ef5cdf07f1a3a22db9f58d8c4bc02001" },
+    { "finding_id": "QA-263-008", "acceptance_criterion_id": "AC6", "severity": "medium", "category": "ci-external", "observed": "two GitHub Actions jobs did not start because billing or spending limit is unavailable", "expected": "CI jobs execute on the remediation SHA and failures are analyzed", "reproduction_command_ref": "gh api repos/l2v-hub/ClinicOS/check-runs/86660865327/annotations", "evidence_refs": ["https://github.com/l2v-hub/ClinicOS/actions/runs/29196703898", "https://github.com/l2v-hub/ClinicOS/actions/runs/29196703886"], "status": "open", "remediation_required": false, "fingerprint": "1feb1cea04d6d53fdcfe70f3f38b0a4fba5aa10090fa99a249dad8c032ce9473" },
+    { "finding_id": "QA-263-009", "acceptance_criterion_id": "AC12", "severity": "low", "category": "evidence-reproducibility", "observed": "fresh git diff --check fails although the handoff declares exit 0", "expected": "captured evidence is sanitized and fresh diff check exits 0", "reproduction_command_ref": "git diff --check origin/main...HEAD", "evidence_refs": ["artifacts/task-validation/263-agent-team-llm-first/checks/build.txt", "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/task8-codex-stderr-red.txt"], "status": "open", "remediation_required": true, "fingerprint": "675b50ba7fffcb4e39c10c69b7d30c090a41a33fece876e512c94c741c26a468" }
+  ],
+  "commands": [
+    { "argv": ["node", "--test", "agent-team/tests/unit", "agent-team/tests/integration"], "cwd": "C:/tmp/ClinicOS-agent-team", "exit_code": 0, "started_at": "2026-07-12T18:00:00.000Z", "finished_at": "2026-07-12T18:00:02.000Z", "stdout_ref": "codex-qa-report.md", "stderr_ref": "codex-qa-report.md" },
+    { "argv": ["npm", "run", "agent-team:doctor"], "cwd": "C:/tmp/ClinicOS-agent-team", "exit_code": 0, "started_at": "2026-07-12T18:00:03.000Z", "finished_at": "2026-07-12T18:00:06.000Z", "stdout_ref": "codex-qa-report.md", "stderr_ref": "codex-qa-report.md" },
+    { "argv": ["npm", "run", "build"], "cwd": "C:/tmp/ClinicOS-agent-team", "exit_code": 0, "started_at": "2026-07-12T18:00:07.000Z", "finished_at": "2026-07-12T18:01:01.000Z", "stdout_ref": "codex-qa-report.md", "stderr_ref": "codex-qa-report.md" },
+    { "argv": ["git", "diff", "--check", "origin/main...HEAD"], "cwd": "C:/tmp/ClinicOS-agent-team", "exit_code": 1, "started_at": "2026-07-12T18:01:02.000Z", "finished_at": "2026-07-12T18:01:03.000Z", "stdout_ref": "codex-qa-report.md", "stderr_ref": "codex-qa-report.md" }
+  ],
+  "artifact_refs": [],
+  "next_actions": ["ready-for-dev", "assigned-to-claude"]
+}
