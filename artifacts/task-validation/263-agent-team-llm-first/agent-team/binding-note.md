@@ -1,21 +1,24 @@
-# Evidence binding note — issue #263, attempt 1
+# Evidence binding note — issue #263, attempt 2
 
-Three commit identities participate in the binding chain (a committed manifest cannot contain the
-SHA of the commit that introduces it):
+QA-263-005 remediation replaces the attempt-1 binding scheme with the non-circular authoritative
+envelope implemented in `agent-team/src/core/binding.mjs` (schema:
+`agent-team/protocol/schemas/evidence-binding.schema.json`).
 
-1. Implementation head `98e9251` — code state at which every unit/integration/doctor/build/syntax
-   check in `validation-report.md` was executed.
-2. Evidence commit `39b5e495f1dcf5d44e9e3dfb48ca05b060fc9d42` — commits all raw evidence files.
-   The committed `artifact-manifest.json` and `development-handoff.json` in this directory use it
-   as `subject_sha`, and every artifact entry carries the SHA-256 digest and git blob SHA as they
-   exist at that commit.
-3. Final PR head (the commit adding this directory's JSON files) — the published
-   `development_handoff` protocol comment on issue #263 and PR #264 is regenerated against this
-   head, so the comment's `subject_sha` equals the reviewed PR head SHA and its `artifact_refs`
-   re-verify (identical blob SHAs and digests, since the evidence files are unchanged between the
-   two commits).
+Chain:
 
-Codex QA verification path: take the PR head SHA from the protocol comment, run
-`verifyArtifactRefs({ repoRoot, subjectSha: <PR head>, refs: comment.artifact_refs })` — every
-referenced file must exist, stay inside the repository, match its SHA-256 digest, and carry the
-same `subject_sha` as the comment.
+1. Evidence commit `7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59` commits all attempt-2 evidence.
+2. The committed `artifact-manifest.json` / `development-handoff.json` in this directory use that
+   commit as `subject_sha`; every artifact entry carries SHA-256 and git blob SHA (70 artifacts,
+   including the preserved Codex QA artifacts attributed to `codex-qa`).
+3. The final PR head (the commit adding these two JSON files) is bound by the **evidence_binding
+   envelope**, generated after the final commit and published only as a protocol comment on issue
+   #263 and PR #264 — never committed, so no circular SHA dependency exists.
+4. `verifyEvidenceBinding` proves, reading exclusively committed state at the PR head: envelope
+   subject equals the PR head; the manifest blob and SHA-256 at the head equal the envelope's
+   declared values; the committed manifest's own subject equals the envelope's
+   `manifest_subject_sha`; and every artifact's git blob ID and committed content digest match the
+   manifest. Any disagreement (including tampering after manifest generation) is rejected — proven
+   by `agent-team/tests/integration/evidence-binding.test.mjs` against a real git repository.
+
+The dogfood verification of this very PR (envelope built and verified at the final head before
+publication) is recorded in the handoff comment and the attempt-2 validation report.
