@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "message_type": "development_handoff",
-  "message_id": "dev-263-2-handoff-5327210808ae",
-  "correlation_id": "issue-263-attempt-2",
+  "message_id": "dev-263-3-handoff-ab09899decb3",
+  "correlation_id": "issue-263-attempt-3",
   "producer_role": "claude-development",
   "repository": "l2v-hub/ClinicOS",
   "issue_number": 263,
   "pull_request_number": 264,
-  "attempt": 2,
-  "created_at": "2026-07-13T09:02:30.877Z",
-  "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba",
+  "attempt": 3,
+  "created_at": "2026-07-13T11:57:04.887Z",
+  "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58",
   "state_before": "agent-working",
   "state_after": "ready-for-qa",
   "acceptance_criteria": [
@@ -27,78 +27,77 @@
       "status": "passed",
       "evidence_refs": [
         "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r5-doctor-green.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r10-checkignore-green.txt"
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-2-tool-policy-green.txt",
+        "agent-team/src/core/worker-policy.mjs"
       ]
     },
     {
       "id": "AC3",
       "status": "passed",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r5-doctor-green.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
+        "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json"
       ]
     },
     {
       "id": "AC4",
       "status": "passed",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r4-claims-green.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-1-claim-release-green.txt",
+        "agent-team/tests/integration/remediation-loop.test.mjs"
       ]
     },
     {
       "id": "AC5",
       "status": "passed",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r2-operability-green.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/validation-report.md"
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-2-tool-policy-green.txt",
+        "agent-team/config/default.json",
+        "agent-team/src/core/worker-policy.mjs"
       ]
     },
     {
       "id": "AC6",
-      "status": "passed",
+      "status": "unresolved",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r6-binding-green.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/remediation-map.md"
+        "QA-263-008"
       ]
     },
     {
       "id": "AC7",
       "status": "passed",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r4-claims-green.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r7-loop-green.txt"
+        "agent-team/tests/integration/evidence-binding.test.mjs",
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
       ]
     },
     {
       "id": "AC8",
       "status": "passed",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r7-loop-green.txt"
+        "agent-team/tests/integration/remediation-loop.test.mjs",
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
       ]
     },
     {
       "id": "AC9",
       "status": "passed",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/remediation-map.md",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r1-history-green.txt"
+        "agent-team/tests/integration/remediation-loop.test.mjs"
       ]
     },
     {
       "id": "AC10",
       "status": "passed",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r7-loop-green.txt"
+        "agent-team/tests/integration/remediation-loop.test.mjs"
       ]
     },
     {
       "id": "AC11",
       "status": "passed",
       "evidence_refs": [
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/r8-lifecycle-green2.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json"
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-1-claim-release-green.txt",
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-2-tool-policy-green.txt"
       ]
     },
     {
@@ -106,32 +105,28 @@
       "status": "passed",
       "evidence_refs": [
         "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap",
+        "artifacts/task-validation/263-agent-team-llm-first/checks/command-log.jsonl"
       ]
     },
     {
       "id": "AC13",
       "status": "passed",
       "evidence_refs": [
+        "agent-team/tests/integration/prohibited-actions.test.mjs",
         "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
       ]
     }
   ],
   "resolved_findings": [
-    "QA-263-001",
-    "QA-263-002",
-    "QA-263-003",
-    "QA-263-004",
-    "QA-263-005",
-    "QA-263-006",
-    "QA-263-007",
-    "QA-263-009"
+    "QA-263-010",
+    "QA-263-011"
   ],
   "unresolved_findings": [
     {
       "finding_id": "QA-263-008",
       "status": "unresolved",
-      "reason": "GitHub Actions jobs do not start: account payment failed or the Actions spending limit must be increased. External billing condition; CI cannot be executed or faked from this repository. Fresh post-push check-run state is attached to the handoff comment.",
+      "reason": "GitHub Actions jobs do not start: account payment failed or the Actions spending limit must be increased. External billing condition owned by the repository owner; CI cannot be executed or faked from this repository. Fresh post-push check-run state is attached to the handoff comment.",
       "owner": "repository-owner"
     }
   ],
@@ -141,24 +136,25 @@
         "node",
         "--test",
         "--test-reporter=tap",
-        "agent-team/tests/unit/config.test.mjs",
-        "agent-team/tests/unit/process-runner.test.mjs",
-        "agent-team/tests/unit/doctor.test.mjs",
-        "agent-team/tests/unit/protocol.test.mjs",
-        "agent-team/tests/unit/state-machine.test.mjs",
-        "agent-team/tests/unit/github.test.mjs",
-        "agent-team/tests/unit/locks.test.mjs",
         "agent-team/tests/unit/claim-lifecycle.test.mjs",
         "agent-team/tests/unit/claude-development-worker.test.mjs",
         "agent-team/tests/unit/codex-qa-worker.test.mjs",
-        "agent-team/tests/unit/remediation.test.mjs",
+        "agent-team/tests/unit/config.test.mjs",
+        "agent-team/tests/unit/doctor.test.mjs",
+        "agent-team/tests/unit/github.test.mjs",
         "agent-team/tests/unit/history.test.mjs",
-        "agent-team/tests/unit/worker-operability.test.mjs"
+        "agent-team/tests/unit/locks.test.mjs",
+        "agent-team/tests/unit/process-runner.test.mjs",
+        "agent-team/tests/unit/protocol.test.mjs",
+        "agent-team/tests/unit/remediation.test.mjs",
+        "agent-team/tests/unit/state-machine.test.mjs",
+        "agent-team/tests/unit/worker-operability.test.mjs",
+        "agent-team/tests/unit/worker-policy.test.mjs"
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-13T08:50:14.285Z",
-      "finished_at": "2026-07-13T08:50:14.772Z",
+      "started_at": "2026-07-13T11:51:26.060Z",
+      "finished_at": "2026-07-13T11:51:28.722Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap"
     },
@@ -167,42 +163,44 @@
         "node",
         "--test",
         "--test-reporter=tap",
-        "agent-team/tests/integration/supervisor.test.mjs",
-        "agent-team/tests/integration/prohibited-actions.test.mjs",
         "agent-team/tests/integration/evidence-binding.test.mjs",
+        "agent-team/tests/integration/prohibited-actions.test.mjs",
         "agent-team/tests/integration/remediation-loop.test.mjs",
-        "agent-team/tests/integration/supervisor-lifecycle.test.mjs"
+        "agent-team/tests/integration/supervisor-lifecycle.test.mjs",
+        "agent-team/tests/integration/supervisor.test.mjs"
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-13T08:50:14.777Z",
-      "finished_at": "2026-07-13T08:50:17.942Z",
+      "started_at": "2026-07-13T11:51:28.728Z",
+      "finished_at": "2026-07-13T11:51:31.219Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
     },
     {
       "argv": [
-        "npm",
-        "run",
-        "agent-team:doctor"
+        "node",
+        "agent-team/src/cli.mjs",
+        "doctor"
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-13T08:50:17.953Z",
-      "finished_at": "2026-07-13T08:50:23.625Z",
+      "started_at": "2026-07-13T11:51:31.228Z",
+      "finished_at": "2026-07-13T11:51:35.636Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json"
     },
     {
       "argv": [
-        "npm",
-        "run",
-        "build"
+        "cmd",
+        "/d",
+        "/s",
+        "/c",
+        "npm run build"
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-13T08:50:23.631Z",
-      "finished_at": "2026-07-13T08:51:16.593Z",
+      "started_at": "2026-07-13T11:51:35.645Z",
+      "finished_at": "2026-07-13T11:52:30.240Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/build.txt",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/build.txt"
     },
@@ -215,36 +213,52 @@
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-13T08:51:16.606Z",
-      "finished_at": "2026-07-13T08:51:16.683Z",
+      "started_at": "2026-07-13T11:52:30.250Z",
+      "finished_at": "2026-07-13T11:52:30.366Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt"
     }
   ],
   "artifact_refs": [
     {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/agent-team/qa-result.json",
+      "path": "artifacts/task-validation/263-agent-team-llm-first/agent-team/qa-result-attempt-2.json",
       "media_type": "application/json",
-      "sha256": "567476d9ffd375a4f321edb6da9a79ecfd7fe02667a0474cf62d5890a64c795f",
-      "git_blob_sha": "5a5c1797e87776d1cc5466d8a667f7cf8b458f9f",
+      "sha256": "752c61cae14486f870ef12037b9b1632dedeb9a4fc78e91422c533711031c39f",
+      "git_blob_sha": "de12415ed54aa238133cce929a56f4d9a8af0575",
       "producer_role": "codex-qa",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/codex-qa-report.md",
+      "media_type": "text/markdown",
+      "sha256": "d9606f2d11a7cc76ae994e2cb4cfaa610aa37d6f42e29361f000601039b2744e",
+      "git_blob_sha": "eb16579bdfe41b79bc51a13e9941768d0808c053",
+      "producer_role": "codex-qa",
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/command-log.jsonl",
       "media_type": "application/json",
-      "sha256": "9a960e5d3a852a80e25af915c2802f595d0ed8bc8613c4d98a9cac97caf66a47",
-      "git_blob_sha": "13883168ef45c37293c119288339dd80b4277a1c",
+      "sha256": "f52321e28042da6caddf8a30588beac263ba6febcf900229789f7927731512ab",
+      "git_blob_sha": "0df50fb94a06de8f4146c285a27cfe40f768f006",
       "producer_role": "claude-development",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json",
       "media_type": "application/json",
-      "sha256": "353139dd0ac62fe6d4950575eba3b92302b60f71eeb1220f80cbaa15a693d72d",
-      "git_blob_sha": "ce9069357bd184b9a3ef8be4a1fc1a620b09ec65",
+      "sha256": "afa4bf1fb82cd8a1e0ad416d16bba34054d39ff5f66b35d20308ef28f08f2213",
+      "git_blob_sha": "93d2e7e2540ae38524254753ff6c8598a586b940",
       "producer_role": "claude-development",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/build.txt",
+      "media_type": "text/plain",
+      "sha256": "2ed266704d938335146bcc048fcc70f64b742b4af934a91810255b1816e05bb0",
+      "git_blob_sha": "e520319f2da569d291ae141e710968d3f3fc03e0",
+      "producer_role": "claude-development",
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt",
@@ -252,55 +266,71 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
       "producer_role": "claude-development",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
-    },
-    {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/codex-qa-report.md",
-      "media_type": "text/markdown",
-      "sha256": "9b751c14c02e845bc39ef9ed7faf6c093d22829f03f23bbafd6f1dff5ee8199f",
-      "git_blob_sha": "7899ed7e1a1c4abb21c84d5c85b7fb05e84763d3",
-      "producer_role": "codex-qa",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
-    },
-    {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/remediation-map.md",
-      "media_type": "text/markdown",
-      "sha256": "3810e7c1955d2367ecbdc473d8e062bf5dbc94b18931d3eb3fb9c5e36be91e5b",
-      "git_blob_sha": "09a1be590632fd51623800a4b658172f338ebb35",
-      "producer_role": "claude-development",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
-    },
-    {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/task-contract.md",
-      "media_type": "text/markdown",
-      "sha256": "dd0b8987ca726615a4618fcf837cda23a0cb2bee729d7f277ce0ae5f047d7691",
-      "git_blob_sha": "5eae477b1e95d5d35ba3060d85404a3d9eae22bd",
-      "producer_role": "claude-development",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
-    },
-    {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap",
-      "media_type": "text/tap",
-      "sha256": "44c9e617af32b8dd0c2685d554bbe645212a63b37763f65bf20b703dcc79d284",
-      "git_blob_sha": "7d55c3fdf431716697b2266b71cc190495dd1822",
-      "producer_role": "claude-development",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap",
-      "media_type": "text/tap",
-      "sha256": "98c7b7de0f1bbe7af953fd9c2586e26d99852693d4baeedc5cce8c971e81e9e2",
-      "git_blob_sha": "2feafb9ac3d1e1ae5e73bd30871b7e6ed9e4221b",
+      "media_type": "text/plain",
+      "sha256": "2f062a78013c369a1aa25c18391231559876c22ab48d3cb0cd7271d000930bd5",
+      "git_blob_sha": "57da90d23a4d3d3fd6eabac17ca5091ccd457f8d",
       "producer_role": "claude-development",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap",
+      "media_type": "text/plain",
+      "sha256": "044b736cc7494dcc2473c98a74178a935e48640f82477ff43292025ef5992257",
+      "git_blob_sha": "fa7591d1d6c4811f7ac9e8e2a91a1f159d2a213a",
+      "producer_role": "claude-development",
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-1-claim-release-red.txt",
+      "media_type": "text/plain",
+      "sha256": "d3630614deeac198fe78451c02d60294ffdce683c2dee5d3c242355940230f2b",
+      "git_blob_sha": "8e784a48a29e27db2c89c3d356776cc3d0ecf92b",
+      "producer_role": "claude-development",
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-1-claim-release-green.txt",
+      "media_type": "text/plain",
+      "sha256": "8f1a7314699df6290e84624540f23d3b75c9614c80dfb1261c5554c42d9eb289",
+      "git_blob_sha": "958d56bd5265018fbbeb40738b13486473f716d3",
+      "producer_role": "claude-development",
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-2-tool-policy-red.txt",
+      "media_type": "text/plain",
+      "sha256": "da37698f21b51c1c1a951ec6c039d206fcac1803ec31d9939e3339c3e9bfbf01",
+      "git_blob_sha": "3c0a8fc95a24332e4cdd7cfb0ed9385431e6f7ec",
+      "producer_role": "claude-development",
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a3-2-tool-policy-green.txt",
+      "media_type": "text/plain",
+      "sha256": "7e669d05289391fa885ec7668bbaf3740290d12cf76f3f0e2f9a6ff0079a9475",
+      "git_blob_sha": "c60442efb6d5043afce4370464160300f559b778",
+      "producer_role": "claude-development",
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/validation-report.md",
       "media_type": "text/markdown",
-      "sha256": "652015e7b5afc05e99565d90b4e15785fc671cd3d6740627dd864a56548a6bef",
-      "git_blob_sha": "0d2c4e4074a3aacba92a1f0bd209d468e7ab8f71",
+      "sha256": "7b148bb830ce807b89e729c7b28a78f1bcdf8cfcf4ee0f5d4fa1304c8b034e0b",
+      "git_blob_sha": "9fb9e8791402f039e0e67c22490537bd7062d0ff",
       "producer_role": "claude-development",
-      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/remediation-map.md",
+      "media_type": "text/markdown",
+      "sha256": "ceea8d6ab7d7a010c956dc96e4e1d4278be675cd005207e9362b9e0acf2266a8",
+      "git_blob_sha": "266009a373cfec71fdb094578f9892be5aec12ef",
+      "producer_role": "claude-development",
+      "subject_sha": "ab09899decb39d62c9343348c2bc1efedfbd8b58"
     }
   ],
   "next_actions": [
