@@ -17,7 +17,7 @@ dist/assets/index-BozKZKpF.js                    842.30 kB │ gzip: 226.02 kB
 > npx prisma generate --schema=../prisma/schema.prisma && tsc -p tsconfig.json
 ✔ Generated Prisma Client (v7.8.0) to .\..\node_modules\@prisma\client in 230ms
 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
-[33m[plugin builtin:vite-reporter] 
+[33m[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting

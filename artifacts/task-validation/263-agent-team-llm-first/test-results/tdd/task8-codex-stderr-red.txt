@@ -12,9 +12,9 @@ not ok 2 - doctor accepts Codex login confirmation printed to stderr
   failureType: 'testCodeFailure'
   error: |-
     Expected values to be strictly equal:
-    
+
     false !== true
-    
+
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected: true

@@ -1,0 +1,30 @@
+TAP version 13
+# Subtest: parseProtocolComments skips prose and invalid protocol payloads without throwing
+ok 1 - parseProtocolComments skips prose and invalid protocol payloads without throwing
+  ---
+  duration_ms: 1.5485
+  ...
+# Subtest: rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+ok 2 - rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+  ---
+  duration_ms: 0.4915
+  ...
+# Subtest: rebuildRemediationContext reports blocked after three equivalent failed attempts
+ok 3 - rebuildRemediationContext reports blocked after three equivalent failed attempts
+  ---
+  duration_ms: 0.2847
+  ...
+# Subtest: rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+ok 4 - rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+  ---
+  duration_ms: 0.1137
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 154.0562

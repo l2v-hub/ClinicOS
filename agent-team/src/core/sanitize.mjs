@@ -7,5 +7,7 @@ const RULES = [
 ];
 
 export function sanitizeText(text = '') {
-  return RULES.reduce((value, [pattern, replacement]) => value.replace(pattern, replacement), String(text));
+  const redacted = RULES.reduce((value, [pattern, replacement]) => value.replace(pattern, replacement), String(text));
+  // Deterministic hygiene: captured evidence must pass `git diff --check` (no trailing whitespace).
+  return redacted.replace(/[ \t]+(\r?\n)/g, '$1').replace(/[ \t]+$/, '');
 }

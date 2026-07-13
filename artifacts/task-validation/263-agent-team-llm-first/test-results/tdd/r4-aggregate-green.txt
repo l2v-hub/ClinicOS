@@ -1,0 +1,185 @@
+TAP version 13
+# Subtest: acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
+ok 1 - acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
+  ---
+  duration_ms: 6.1246
+  ...
+# Subtest: refreshGitHubClaim edits the same comment and extends the lease
+ok 2 - refreshGitHubClaim edits the same comment and extends the lease
+  ---
+  duration_ms: 0.9014
+  ...
+# Subtest: releaseGitHubClaim publishes a schema-valid work.claim_released message
+ok 3 - releaseGitHubClaim publishes a schema-valid work.claim_released message
+  ---
+  duration_ms: 0.9678
+  ...
+# Subtest: recoverActiveClaim returns my unexpired claim and null when expired
+ok 4 - recoverActiveClaim returns my unexpired claim and null when expired
+  ---
+  duration_ms: 0.5063
+  ...
+# Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+ok 5 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+  ---
+  duration_ms: 9.2947
+  ...
+# Subtest: Codex QA uses output schema and rejects a result for another SHA
+ok 6 - Codex QA uses output schema and rejects a result for another SHA
+  ---
+  duration_ms: 8.4252
+  ...
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+ok 7 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 12.3304
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+ok 8 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 0.751
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 9 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 2.1626
+  ...
+# Subtest: doctor accepts Codex login confirmation printed to stderr
+ok 10 - doctor accepts Codex login confirmation printed to stderr
+  ---
+  duration_ms: 0.4545
+  ...
+# Subtest: doctor refuses a duplicate local supervisor
+ok 11 - doctor refuses a duplicate local supervisor
+  ---
+  duration_ms: 1.1733
+  ...
+# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
+ok 12 - GitHub adapter passes labels as argv and never constructs a shell string
+  ---
+  duration_ms: 2.8596
+  ...
+# Subtest: parseProtocolComments skips prose and invalid protocol payloads without throwing
+ok 13 - parseProtocolComments skips prose and invalid protocol payloads without throwing
+  ---
+  duration_ms: 1.6167
+  ...
+# Subtest: rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+ok 14 - rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+  ---
+  duration_ms: 0.6021
+  ...
+# Subtest: rebuildRemediationContext reports blocked after three equivalent failed attempts
+ok 15 - rebuildRemediationContext reports blocked after three equivalent failed attempts
+  ---
+  duration_ms: 0.3215
+  ...
+# Subtest: rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+ok 16 - rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+  ---
+  duration_ms: 0.1447
+  ...
+# Subtest: arbitration selects earliest created claim then lowest comment id
+ok 17 - arbitration selects earliest created claim then lowest comment id
+  ---
+  duration_ms: 1.1948
+  ...
+# Subtest: arbitration ignores expired claims
+ok 18 - arbitration ignores expired claims
+  ---
+  duration_ms: 0.1402
+  ...
+# Subtest: local supervisor lock is exclusive
+ok 19 - local supervisor lock is exclusive
+  ---
+  duration_ms: 11.6936
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 20 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.6851
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 21 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 9.8911
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 22 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 2.4695
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 23 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.4994
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 24 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 12.287
+  ...
+# Subtest: three equivalent failures without changed SHA become blocked
+ok 25 - three equivalent failures without changed SHA become blocked
+  ---
+  duration_ms: 1.2183
+  ...
+# Subtest: a changed SHA restarts remediation eligibility
+ok 26 - a changed SHA restarts remediation eligibility
+  ---
+  duration_ms: 0.1628
+  ...
+# Subtest: development requires both intake labels
+ok 27 - development requires both intake labels
+  ---
+  duration_ms: 1.2598
+  ...
+# Subtest: QA requires ready-for-qa and excludes terminal current states
+ok 28 - QA requires ready-for-qa and excludes terminal current states
+  ---
+  duration_ms: 0.1452
+  ...
+# Subtest: state machine rejects Claude to qa-passed
+ok 29 - state machine rejects Claude to qa-passed
+  ---
+  duration_ms: 0.3933
+  ...
+# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+ok 30 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+  ---
+  duration_ms: 1.6046
+  ...
+# Subtest: config requires realistic development and QA timeouts above the command timeout
+ok 31 - config requires realistic development and QA timeouts above the command timeout
+  ---
+  duration_ms: 0.2353
+  ...
+# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
+ok 32 - Claude worker passes the scoped allowedTools policy and the development timeout
+  ---
+  duration_ms: 4.3774
+  ...
+# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+ok 33 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+  ---
+  duration_ms: 0.3691
+  ...
+# Subtest: Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+ok 34 - Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+  ---
+  duration_ms: 1.6146
+  ...
+# Subtest: Codex QA worker uses the dedicated QA timeout
+ok 35 - Codex QA worker uses the dedicated QA timeout
+  ---
+  duration_ms: 2.2268
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 315.4901

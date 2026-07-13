@@ -1,0 +1,216 @@
+TAP version 13
+# Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+not ok 1 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+  ---
+  duration_ms: 1.7421
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\claude-development-worker.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: 'claude development launch refused: allowedTools policy is empty or missing — configure a scoped permission policy before launching workers'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    runClaudeDevelopment (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/workers/claude-development-worker.mjs:7:11)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claude-development-worker.test.mjs:11:24)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    node:internal/test_runner/harness:255:12
+    node:internal/process/task_queues:140:7
+    AsyncResource.runInAsyncScope (node:async_hooks:206:9)
+    AsyncResource.runMicrotask (node:internal/process/task_queues:137:8)
+  ...
+# Subtest: Codex QA uses output schema and rejects a result for another SHA
+ok 2 - Codex QA uses output schema and rejects a result for another SHA
+  ---
+  duration_ms: 8.4279
+  ...
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+not ok 3 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 11.5781
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\config.test.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: 'missing config key: developmentTimeoutMs'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:9:64)
+    loadConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:32:18)
+    async TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/config.test.mjs:29:18)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+not ok 4 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 3.0852
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\config.test.mjs:35:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /leaseRefreshMs must be less than leaseDurationMs/. Input:
+
+    'Error: missing config key: developmentTimeoutMs'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+  error: 'missing config key: developmentTimeoutMs'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:9:64)
+    file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/config.test.mjs:37:23
+    getActual (node:assert:498:5)
+    Function.throws (node:assert:644:24)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/config.test.mjs:37:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/config.test.mjs:37:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 5 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 2.2782
+  ...
+# Subtest: doctor accepts Codex login confirmation printed to stderr
+ok 6 - doctor accepts Codex login confirmation printed to stderr
+  ---
+  duration_ms: 0.6746
+  ...
+# Subtest: doctor refuses a duplicate local supervisor
+ok 7 - doctor refuses a duplicate local supervisor
+  ---
+  duration_ms: 1.2226
+  ...
+# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
+ok 8 - GitHub adapter passes labels as argv and never constructs a shell string
+  ---
+  duration_ms: 3.0152
+  ...
+# Subtest: parseProtocolComments skips prose and invalid protocol payloads without throwing
+ok 9 - parseProtocolComments skips prose and invalid protocol payloads without throwing
+  ---
+  duration_ms: 1.3219
+  ...
+# Subtest: rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+ok 10 - rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+  ---
+  duration_ms: 0.6763
+  ...
+# Subtest: rebuildRemediationContext reports blocked after three equivalent failed attempts
+ok 11 - rebuildRemediationContext reports blocked after three equivalent failed attempts
+  ---
+  duration_ms: 0.3328
+  ...
+# Subtest: rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+ok 12 - rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+  ---
+  duration_ms: 0.2771
+  ...
+# Subtest: arbitration selects earliest created claim then lowest comment id
+ok 13 - arbitration selects earliest created claim then lowest comment id
+  ---
+  duration_ms: 2.0267
+  ...
+# Subtest: arbitration ignores expired claims
+ok 14 - arbitration ignores expired claims
+  ---
+  duration_ms: 0.2276
+  ...
+# Subtest: local supervisor lock is exclusive
+ok 15 - local supervisor lock is exclusive
+  ---
+  duration_ms: 12.6095
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 16 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.6376
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 17 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 11.3256
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 18 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 1.7051
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 19 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.3814
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 20 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 10.0441
+  ...
+# Subtest: three equivalent failures without changed SHA become blocked
+ok 21 - three equivalent failures without changed SHA become blocked
+  ---
+  duration_ms: 1.1706
+  ...
+# Subtest: a changed SHA restarts remediation eligibility
+ok 22 - a changed SHA restarts remediation eligibility
+  ---
+  duration_ms: 0.1225
+  ...
+# Subtest: development requires both intake labels
+ok 23 - development requires both intake labels
+  ---
+  duration_ms: 1.1503
+  ...
+# Subtest: QA requires ready-for-qa and excludes terminal current states
+ok 24 - QA requires ready-for-qa and excludes terminal current states
+  ---
+  duration_ms: 0.1448
+  ...
+# Subtest: state machine rejects Claude to qa-passed
+ok 25 - state machine rejects Claude to qa-passed
+  ---
+  duration_ms: 0.3744
+  ...
+# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+ok 26 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+  ---
+  duration_ms: 1.8964
+  ...
+# Subtest: config requires realistic development and QA timeouts above the command timeout
+ok 27 - config requires realistic development and QA timeouts above the command timeout
+  ---
+  duration_ms: 0.31
+  ...
+# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
+ok 28 - Claude worker passes the scoped allowedTools policy and the development timeout
+  ---
+  duration_ms: 5.242
+  ...
+# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+ok 29 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+  ---
+  duration_ms: 0.4468
+  ...
+# Subtest: Codex QA worker uses the dedicated QA timeout
+ok 30 - Codex QA worker uses the dedicated QA timeout
+  ---
+  duration_ms: 2.1145
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 27
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 276.4241

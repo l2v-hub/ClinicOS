@@ -1,0 +1,139 @@
+TAP version 13
+# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+not ok 1 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+  ---
+  duration_ms: 1.1165
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-operability.test.mjs:17:1'
+  failureType: 'testCodeFailure'
+  error: 'unknown config key: developmentTimeoutMs'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:8:73)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:18:16)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    node:internal/test_runner/harness:255:12
+    node:internal/process/task_queues:140:7
+    AsyncResource.runInAsyncScope (node:async_hooks:206:9)
+    AsyncResource.runMicrotask (node:internal/process/task_queues:137:8)
+  ...
+# Subtest: config requires realistic development and QA timeouts above the command timeout
+not ok 2 - config requires realistic development and QA timeouts above the command timeout
+  ---
+  duration_ms: 1.7195
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-operability.test.mjs:24:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /developmentTimeoutMs must exceed commandTimeoutMs/. Input:
+
+    'Error: unknown config key: developmentTimeoutMs'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+  error: 'unknown config key: developmentTimeoutMs'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:8:73)
+    file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:25:23
+    getActual (node:assert:498:5)
+    Function.throws (node:assert:644:24)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:25:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:25:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
+not ok 3 - Claude worker passes the scoped allowedTools policy and the development timeout
+  ---
+  duration_ms: 7.0768
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-operability.test.mjs:33:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:38:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+not ok 4 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+  ---
+  duration_ms: 1.7084
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-operability.test.mjs:44:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /claude development launch refused: allowedTools policy is empty or missing/. Input:
+
+    'Error: must not be invoked'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+  error: 'must not be invoked'
+  stack: |-
+    run (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:45:35)
+    runClaudeDevelopment (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/workers/claude-development-worker.mjs:9:24)
+    async waitForActual (node:assert:533:5)
+    async Function.rejects (node:assert:654:25)
+    async TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:46:3)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:46:3)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: Codex QA worker uses the dedicated QA timeout
+not ok 5 - Codex QA worker uses the dedicated QA timeout
+  ---
+  duration_ms: 2.7636
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-operability.test.mjs:52:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + 120000
+    - 3600000
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 3600000
+  actual: 120000
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:57:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 0
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 131.5949

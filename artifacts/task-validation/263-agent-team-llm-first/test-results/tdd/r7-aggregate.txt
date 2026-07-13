@@ -1,0 +1,275 @@
+TAP version 13
+# Subtest: evidence binding builds from and verifies against committed state at the PR head, rejecting tampering
+ok 1 - evidence binding builds from and verifies against committed state at the PR head, rejecting tampering
+  ---
+  duration_ms: 2042.8741
+  ...
+# Subtest: evidence binding rejects a schema-invalid envelope before touching git history
+ok 2 - evidence binding rejects a schema-invalid envelope before touching git history
+  ---
+  duration_ms: 0.6034
+  ...
+# Subtest: runtime source contains no prohibited automatic action or bypass invocation
+ok 3 - runtime source contains no prohibited automatic action or bypass invocation
+  ---
+  duration_ms: 14.2789
+  ...
+# Subtest: qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
+ok 4 - qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
+  ---
+  duration_ms: 21.9898
+  ...
+# Subtest: three equivalent qa-failed results block the issue with a structured reason and no Claude launch
+ok 5 - three equivalent qa-failed results block the issue with a structured reason and no Claude launch
+  ---
+  duration_ms: 5.9222
+  ...
+# Subtest: a failing Claude worker releases the claim with a schema-valid work.claim_released message
+ok 6 - a failing Claude worker releases the claim with a schema-valid work.claim_released message
+  ---
+  duration_ms: 7.031
+  ...
+# Subtest: reconciler never launches development when doctor says Claude is unavailable
+ok 7 - reconciler never launches development when doctor says Claude is unavailable
+  ---
+  duration_ms: 1.9654
+  ...
+# Subtest: duplicate supervisor lock remains rejected
+ok 8 - duplicate supervisor lock remains rejected
+  ---
+  duration_ms: 14.4975
+  ...
+# Subtest: acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
+ok 9 - acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
+  ---
+  duration_ms: 5.1635
+  ...
+# Subtest: refreshGitHubClaim edits the same comment and extends the lease
+ok 10 - refreshGitHubClaim edits the same comment and extends the lease
+  ---
+  duration_ms: 0.5977
+  ...
+# Subtest: releaseGitHubClaim publishes a schema-valid work.claim_released message
+ok 11 - releaseGitHubClaim publishes a schema-valid work.claim_released message
+  ---
+  duration_ms: 0.6182
+  ...
+# Subtest: recoverActiveClaim returns my unexpired claim and null when expired
+ok 12 - recoverActiveClaim returns my unexpired claim and null when expired
+  ---
+  duration_ms: 0.4155
+  ...
+# Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+ok 13 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+  ---
+  duration_ms: 7.1151
+  ...
+# Subtest: Codex QA uses output schema and rejects a result for another SHA
+ok 14 - Codex QA uses output schema and rejects a result for another SHA
+  ---
+  duration_ms: 6.0697
+  ...
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+ok 15 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 10.5133
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+ok 16 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 0.9604
+  ...
+# Subtest: doctor passes every contract prerequisite on a healthy workstation
+ok 17 - doctor passes every contract prerequisite on a healthy workstation
+  ---
+  duration_ms: 3.2957
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 18 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 0.5661
+  ...
+# Subtest: doctor accepts Codex login confirmation printed to stderr
+ok 19 - doctor accepts Codex login confirmation printed to stderr
+  ---
+  duration_ms: 0.5254
+  ...
+# Subtest: doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+ok 20 - doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+  ---
+  duration_ms: 0.472
+  ...
+# Subtest: doctor fails closed when a required GitHub label is missing
+ok 21 - doctor fails closed when a required GitHub label is missing
+  ---
+  duration_ms: 0.9088
+  ...
+# Subtest: doctor fails closed without push permission on the repository
+ok 22 - doctor fails closed without push permission on the repository
+  ---
+  duration_ms: 1.3507
+  ...
+# Subtest: doctor blocks development when claude help lacks a required worker option
+ok 23 - doctor blocks development when claude help lacks a required worker option
+  ---
+  duration_ms: 0.7346
+  ...
+# Subtest: doctor blocks QA when codex exec help lacks a required option
+ok 24 - doctor blocks QA when codex exec help lacks a required option
+  ---
+  duration_ms: 0.5344
+  ...
+# Subtest: doctor fails closed when referenced prompt or schema files are missing
+ok 25 - doctor fails closed when referenced prompt or schema files are missing
+  ---
+  duration_ms: 0.5951
+  ...
+# Subtest: doctor blocks development on an empty worker permission policy
+ok 26 - doctor blocks development on an empty worker permission policy
+  ---
+  duration_ms: 0.4604
+  ...
+# Subtest: doctor fails closed on unrealistic worker timeouts
+ok 27 - doctor fails closed on unrealistic worker timeouts
+  ---
+  duration_ms: 0.4018
+  ...
+# Subtest: doctor fails closed when the runtime root is not writable
+ok 28 - doctor fails closed when the runtime root is not writable
+  ---
+  duration_ms: 0.5554
+  ...
+# Subtest: doctor fails closed when runtime or worktree roots are not git-ignored
+ok 29 - doctor fails closed when runtime or worktree roots are not git-ignored
+  ---
+  duration_ms: 0.7687
+  ...
+# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
+ok 30 - GitHub adapter passes labels as argv and never constructs a shell string
+  ---
+  duration_ms: 2.8319
+  ...
+# Subtest: parseProtocolComments skips prose and invalid protocol payloads without throwing
+ok 31 - parseProtocolComments skips prose and invalid protocol payloads without throwing
+  ---
+  duration_ms: 1.4809
+  ...
+# Subtest: rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+ok 32 - rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+  ---
+  duration_ms: 0.6049
+  ...
+# Subtest: rebuildRemediationContext reports blocked after three equivalent failed attempts
+ok 33 - rebuildRemediationContext reports blocked after three equivalent failed attempts
+  ---
+  duration_ms: 0.3591
+  ...
+# Subtest: rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+ok 34 - rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+  ---
+  duration_ms: 0.1279
+  ...
+# Subtest: arbitration selects earliest created claim then lowest comment id
+ok 35 - arbitration selects earliest created claim then lowest comment id
+  ---
+  duration_ms: 1.3269
+  ...
+# Subtest: arbitration ignores expired claims
+ok 36 - arbitration ignores expired claims
+  ---
+  duration_ms: 0.1458
+  ...
+# Subtest: local supervisor lock is exclusive
+ok 37 - local supervisor lock is exclusive
+  ---
+  duration_ms: 13.168
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 38 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.6269
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 39 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 9.7398
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 40 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 1.7126
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 41 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.3894
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 42 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 10.5225
+  ...
+# Subtest: three equivalent failures without changed SHA become blocked
+ok 43 - three equivalent failures without changed SHA become blocked
+  ---
+  duration_ms: 1.1885
+  ...
+# Subtest: a changed SHA restarts remediation eligibility
+ok 44 - a changed SHA restarts remediation eligibility
+  ---
+  duration_ms: 0.1688
+  ...
+# Subtest: development requires both intake labels
+ok 45 - development requires both intake labels
+  ---
+  duration_ms: 1.2475
+  ...
+# Subtest: QA requires ready-for-qa and excludes terminal current states
+ok 46 - QA requires ready-for-qa and excludes terminal current states
+  ---
+  duration_ms: 0.1543
+  ...
+# Subtest: state machine rejects Claude to qa-passed
+ok 47 - state machine rejects Claude to qa-passed
+  ---
+  duration_ms: 0.7295
+  ...
+# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+ok 48 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+  ---
+  duration_ms: 1.6812
+  ...
+# Subtest: config requires realistic development and QA timeouts above the command timeout
+ok 49 - config requires realistic development and QA timeouts above the command timeout
+  ---
+  duration_ms: 0.8489
+  ...
+# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
+ok 50 - Claude worker passes the scoped allowedTools policy and the development timeout
+  ---
+  duration_ms: 4.2953
+  ...
+# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+ok 51 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+  ---
+  duration_ms: 0.3971
+  ...
+# Subtest: Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+ok 52 - Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+  ---
+  duration_ms: 1.8078
+  ...
+# Subtest: Codex QA worker uses the dedicated QA timeout
+ok 53 - Codex QA worker uses the dedicated QA timeout
+  ---
+  duration_ms: 2.0591
+  ...
+1..53
+# tests 53
+# suites 0
+# pass 53
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2205.0527

@@ -10,6 +10,10 @@ test('sanitizeText removes credentials and authorization values', () => {
   assert.equal(value.includes('12345'), false);
 });
 
+test('sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check', () => {
+  assert.equal(sanitizeText('line one   \nline two\t\t\r\nline three \n'), 'line one\nline two\r\nline three\n');
+});
+
 test('runProcess reports a missing executable without throwing', async () => {
   const result = await runProcess({ command: 'definitely-missing-clinicos-cli', args: [], cwd: process.cwd(), timeoutMs: 1000, maxOutputBytes: 1024 });
   assert.equal(result.ok, false);

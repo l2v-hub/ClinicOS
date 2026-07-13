@@ -1,0 +1,181 @@
+TAP version 13
+# Subtest: doctor passes every contract prerequisite on a healthy workstation
+not ok 1 - doctor passes every contract prerequisite on a healthy workstation
+  ---
+  duration_ms: 2.4678
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:37:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    check labels-exist must exist and pass
+    + actual - expected
+
+    + undefined
+    - true
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:40:12)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 2 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 0.3801
+  ...
+# Subtest: doctor accepts Codex login confirmation printed to stderr
+ok 3 - doctor accepts Codex login confirmation printed to stderr
+  ---
+  duration_ms: 0.2153
+  ...
+# Subtest: doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+not ok 4 - doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+  ---
+  duration_ms: 0.2119
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:58:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'heartbeatTimeoutMs')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:62:25)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor fails closed when a required GitHub label is missing
+not ok 5 - doctor fails closed when a required GitHub label is missing
+  ---
+  duration_ms: 0.2321
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:65:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:68:74)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor fails closed without push permission on the repository
+not ok 6 - doctor fails closed without push permission on the repository
+  ---
+  duration_ms: 0.1907
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:73:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:75:76)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor blocks development when claude help lacks a required worker option
+not ok 7 - doctor blocks development when claude help lacks a required worker option
+  ---
+  duration_ms: 0.2365
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:78:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:81:22)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor blocks QA when codex exec help lacks a required option
+not ok 8 - doctor blocks QA when codex exec help lacks a required option
+  ---
+  duration_ms: 0.1764
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:87:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:89:72)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor fails closed when referenced prompt or schema files are missing
+not ok 9 - doctor fails closed when referenced prompt or schema files are missing
+  ---
+  duration_ms: 1.0058
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:94:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:96:66)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor blocks development on an empty worker permission policy
+not ok 10 - doctor blocks development on an empty worker permission policy
+  ---
+  duration_ms: 0.3534
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:100:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:102:78)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor fails closed on unrealistic worker timeouts
+not ok 11 - doctor fails closed on unrealistic worker timeouts
+  ---
+  duration_ms: 0.1939
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:106:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:108:72)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor fails closed when the runtime root is not writable
+not ok 12 - doctor fails closed when the runtime root is not writable
+  ---
+  duration_ms: 0.1874
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:111:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:113:75)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor fails closed when runtime or worktree roots are not git-ignored
+not ok 13 - doctor fails closed when runtime or worktree roots are not git-ignored
+  ---
+  duration_ms: 0.2188
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:116:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'ok')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:118:67)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 2
+# fail 11
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 120.3017

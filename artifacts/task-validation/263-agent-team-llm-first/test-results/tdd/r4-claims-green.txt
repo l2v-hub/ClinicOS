@@ -1,0 +1,60 @@
+TAP version 13
+# Subtest: acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
+ok 1 - acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
+  ---
+  duration_ms: 2.9523
+  ...
+# Subtest: refreshGitHubClaim edits the same comment and extends the lease
+ok 2 - refreshGitHubClaim edits the same comment and extends the lease
+  ---
+  duration_ms: 0.308
+  ...
+# Subtest: releaseGitHubClaim publishes a schema-valid work.claim_released message
+ok 3 - releaseGitHubClaim publishes a schema-valid work.claim_released message
+  ---
+  duration_ms: 0.7744
+  ...
+# Subtest: recoverActiveClaim returns my unexpired claim and null when expired
+ok 4 - recoverActiveClaim returns my unexpired claim and null when expired
+  ---
+  duration_ms: 0.1951
+  ...
+# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+ok 5 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+  ---
+  duration_ms: 1.4426
+  ...
+# Subtest: config requires realistic development and QA timeouts above the command timeout
+ok 6 - config requires realistic development and QA timeouts above the command timeout
+  ---
+  duration_ms: 0.2961
+  ...
+# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
+ok 7 - Claude worker passes the scoped allowedTools policy and the development timeout
+  ---
+  duration_ms: 4.7194
+  ...
+# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+ok 8 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+  ---
+  duration_ms: 0.3553
+  ...
+# Subtest: Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+ok 9 - Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+  ---
+  duration_ms: 1.6777
+  ...
+# Subtest: Codex QA worker uses the dedicated QA timeout
+ok 10 - Codex QA worker uses the dedicated QA timeout
+  ---
+  duration_ms: 2.0782
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 133.3011
