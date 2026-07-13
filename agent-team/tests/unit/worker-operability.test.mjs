@@ -1,0 +1,58 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { validateConfig } from '../../src/core/config.mjs';
+import { runClaudeDevelopment } from '../../src/workers/claude-development-worker.mjs';
+import { runCodexQa } from '../../src/workers/codex-qa-worker.mjs';
+
+const baseConfig = {
+  schemaVersion: 1, repository: 'l2v-hub/ClinicOS', baseBranch: 'origin/main', pollIntervalMs: 15000,
+  heartbeatTimeoutMs: 45000, leaseDurationMs: 300000, leaseRefreshMs: 60000, developmentConcurrency: 1,
+  qaConcurrency: 1, noProgressLimit: 3, worktreeRoot: 'agent-team/.worktrees', artifactRoot: 'artifacts/task-validation',
+  runtimeRoot: 'agent-team/.runtime', commandTimeoutMs: 120000, maxOutputBytes: 1048576,
+  developmentTimeoutMs: 5400000, qaTimeoutMs: 3600000,
+  allowedTools: ['Read', 'Edit', 'Write', 'Glob', 'Grep', 'Bash(git *)', 'Bash(gh *)', 'Bash(node *)', 'Bash(npm run *)'],
+  labels: { readyForDev: 'ready-for-dev', assignedToClaude: 'assigned-to-claude', working: 'agent-working', readyForQa: 'ready-for-qa', qaPassed: 'qa-passed', qaFailed: 'qa-failed', blocked: 'blocked' }
+};
+
+test('config requires a non-empty scoped allowedTools policy without wildcards or bypass flags', () => {
+  assert.equal(validateConfig({ ...baseConfig }).allowedTools.length, 9);
+  assert.throws(() => validateConfig({ ...baseConfig, allowedTools: [] }), /allowedTools must be a non-empty array/);
+  assert.throws(() => validateConfig({ ...baseConfig, allowedTools: ['*'] }), /allowedTools entry must be a scoped tool rule/);
+  assert.throws(() => validateConfig({ ...baseConfig, allowedTools: ['Bash(claude --dangerously-skip-permissions *)'] }), /allowedTools entry must not reference bypass options/);
+});
+
+test('config requires realistic development and QA timeouts above the command timeout', () => {
+  assert.throws(() => validateConfig({ ...baseConfig, developmentTimeoutMs: 120000 }), /developmentTimeoutMs must exceed commandTimeoutMs/);
+  assert.throws(() => validateConfig({ ...baseConfig, qaTimeoutMs: 60000 }), /qaTimeoutMs must exceed commandTimeoutMs/);
+});
+
+const worktree = { prepareIssueWorktree: async () => ({ path: 'C:/tmp/issue-263', branch: 'codex/agent-team', pullRequestNumber: 264 }), headSha: async () => 'a'.repeat(40) };
+const githubFake = { addIssueComment: async () => ({ id: 1 }), addPullRequestComment: async () => {}, addLabels: async () => {}, removeLabels: async () => {} };
+const handoff = { schema_version: 1, message_type: 'development_handoff', issue_number: 263, pull_request_number: 264, attempt: 2, subject_sha: 'a'.repeat(40), acceptance_criteria: [], resolved_findings: [], commands: [], artifact_refs: [], next_actions: ['ready-for-qa'] };
+
+test('Claude worker passes the scoped allowedTools policy and the development timeout', async () => {
+  const calls = [];
+  const run = async (call) => { calls.push(call); return { ok: true, code: 0, stdout: JSON.stringify({ structured_output: handoff }), stderr: '', error: null }; };
+  await runClaudeDevelopment({ issue: { number: 263, title: 't', body: 'b' }, attempt: 2, config: baseConfig, github: githubFake, git: worktree, run, schema: { type: 'object' }, priorQaResult: null });
+  const argv = calls[0].args;
+  assert.equal(argv.includes('--allowedTools'), true);
+  assert.equal(argv[argv.indexOf('--allowedTools') + 1], baseConfig.allowedTools.join(','));
+  assert.equal(calls[0].timeoutMs, baseConfig.developmentTimeoutMs);
+  assert.equal(argv.some((arg) => arg.includes('dangerously')), false);
+});
+
+test('Claude worker refuses to launch with an empty permission policy and a precise diagnostic', async () => {
+  const run = async () => { throw new Error('must not be invoked'); };
+  await assert.rejects(
+    () => runClaudeDevelopment({ issue: { number: 263, title: 't', body: 'b' }, attempt: 2, config: { ...baseConfig, allowedTools: [] }, github: githubFake, git: worktree, run, schema: { type: 'object' }, priorQaResult: null }),
+    /claude development launch refused: allowedTools policy is empty or missing/
+  );
+});
+
+test('Codex QA worker uses the dedicated QA timeout', async () => {
+  const calls = [];
+  const qa = { schema_version: 1, message_type: 'qa_result', issue_number: 263, pull_request_number: 264, attempt: 2, subject_sha: 'a'.repeat(40), decision: 'qa-passed', acceptance_criteria: [], findings: [], commands: [], artifact_refs: [], next_actions: ['qa-passed'] };
+  const run = async (call) => { calls.push(call); return { ok: true, code: 0, stdout: '', stderr: '', error: null, finalMessage: JSON.stringify(qa) }; };
+  await runCodexQa({ issue: { number: 263 }, pullRequest: { number: 264, headRefOid: 'a'.repeat(40) }, config: { ...baseConfig, runtimeRoot: (await import('node:os')).tmpdir() }, github: githubFake, run, schema: { type: 'object' }, worktreePath: 'C:/tmp/issue-263' });
+  assert.equal(calls[0].timeoutMs, baseConfig.qaTimeoutMs);
+});

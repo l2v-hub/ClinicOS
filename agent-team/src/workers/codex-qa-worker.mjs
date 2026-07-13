@@ -7,7 +7,7 @@ export async function runCodexQa({ issue, pullRequest, config, github, run, sche
   const outputPath = path.join(config.runtimeRoot, `qa-${issue.number}-${pullRequest.headRefOid}.json`);
   const prompt = await readFile(path.join(process.cwd(), 'agent-team', 'prompts', 'codex-qa.md'), 'utf8');
   const context = { repository: config.repository, issue, pull_request: pullRequest, required_schema: schema };
-  const result = await run({ command: 'codex', args: ['exec', '--sandbox', 'workspace-write', '--cd', worktreePath, '--output-schema', path.join(process.cwd(), 'agent-team', 'protocol', 'schemas', 'qa-result.schema.json'), '--output-last-message', outputPath, '-'], cwd: worktreePath, input: `${prompt}\n<task-data>${JSON.stringify(context)}</task-data>`, timeoutMs: config.commandTimeoutMs, maxOutputBytes: config.maxOutputBytes });
+  const result = await run({ command: 'codex', args: ['exec', '--sandbox', 'workspace-write', '--cd', worktreePath, '--output-schema', path.join(process.cwd(), 'agent-team', 'protocol', 'schemas', 'qa-result.schema.json'), '--output-last-message', outputPath, '-'], cwd: worktreePath, input: `${prompt}\n<task-data>${JSON.stringify(context)}</task-data>`, timeoutMs: config.qaTimeoutMs ?? config.commandTimeoutMs, maxOutputBytes: config.maxOutputBytes });
   if (!result.ok) throw new Error(result.error || result.stderr || 'Codex QA failed');
   const qaResult = result.finalMessage ? JSON.parse(result.finalMessage) : JSON.parse(await readFile(outputPath, 'utf8'));
   if (qaResult.subject_sha !== pullRequest.headRefOid) throw new Error('QA subject SHA mismatch');

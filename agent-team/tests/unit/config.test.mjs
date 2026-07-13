@@ -24,6 +24,9 @@ test('loadConfig loads versioned defaults and resolves repository paths', async 
     runtimeRoot: 'agent-team/.runtime',
     commandTimeoutMs: 120000,
     maxOutputBytes: 1048576,
+    developmentTimeoutMs: 5400000,
+    qaTimeoutMs: 3600000,
+    allowedTools: ['Read', 'Edit', 'Bash(git *)'],
     labels: { readyForDev: 'ready-for-dev', assignedToClaude: 'assigned-to-claude', working: 'agent-working', readyForQa: 'ready-for-qa', qaPassed: 'qa-passed', qaFailed: 'qa-failed', blocked: 'blocked' }
   }));
   const config = await loadConfig({ repoRoot, env: {} });
@@ -39,6 +42,7 @@ test('validateConfig fails closed for unknown keys and unsafe relationships', ()
     heartbeatTimeoutMs: 1000, leaseDurationMs: 5000, leaseRefreshMs: 5000, developmentConcurrency: 1,
     qaConcurrency: 1, noProgressLimit: 3, worktreeRoot: 'agent-team/.worktrees', artifactRoot: 'artifacts/task-validation',
     runtimeRoot: 'agent-team/.runtime', commandTimeoutMs: 1000, maxOutputBytes: 1000,
+    developmentTimeoutMs: 5400000, qaTimeoutMs: 3600000, allowedTools: ['Read'],
     labels: { readyForDev: 'ready-for-dev', assignedToClaude: 'assigned-to-claude', working: 'agent-working', readyForQa: 'ready-for-qa', qaPassed: 'qa-passed', qaFailed: 'qa-failed', blocked: 'blocked' }
   }), /leaseRefreshMs must be less than leaseDurationMs/);
 });

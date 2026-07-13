@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "repository", "baseBranch", "pollIntervalMs", "heartbeatTimeoutMs", "leaseDurationMs", "leaseRefreshMs", "developmentConcurrency", "qaConcurrency", "noProgressLimit", "worktreeRoot", "artifactRoot", "runtimeRoot", "commandTimeoutMs", "maxOutputBytes", "labels"],
+  "required": ["schemaVersion", "repository", "baseBranch", "pollIntervalMs", "heartbeatTimeoutMs", "leaseDurationMs", "leaseRefreshMs", "developmentConcurrency", "qaConcurrency", "noProgressLimit", "worktreeRoot", "artifactRoot", "runtimeRoot", "commandTimeoutMs", "maxOutputBytes", "developmentTimeoutMs", "qaTimeoutMs", "allowedTools", "labels"],
   "properties": {
     "schemaVersion": { "const": 1 },
     "repository": { "type": "string", "pattern": "^[^/]+/[^/]+$" },
@@ -19,6 +19,9 @@
     "runtimeRoot": { "type": "string" },
     "commandTimeoutMs": { "type": "integer", "minimum": 1000 },
     "maxOutputBytes": { "type": "integer", "minimum": 1024 },
+    "developmentTimeoutMs": { "type": "integer", "minimum": 300000 },
+    "qaTimeoutMs": { "type": "integer", "minimum": 300000 },
+    "allowedTools": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*(\\(.+\\))?$" } },
     "labels": { "type": "object", "additionalProperties": false, "required": ["readyForDev", "assignedToClaude", "working", "readyForQa", "qaPassed", "qaFailed", "blocked"] }
   }
 }
