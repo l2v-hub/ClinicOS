@@ -17,9 +17,9 @@ not ok 3 - a successful development handoff releases its claim after publishing 
   failureType: 'testCodeFailure'
   error: |-
     a successful development run must publish a schema-valid claim release
-    
+
     0 !== 1
-    
+
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected: 1
@@ -49,7 +49,7 @@ not ok 6 - status projection reports no active claim once a matching release exi
   error: |-
     a released claim must not be projected as active before lease expiry
     + actual - expected
-    
+
     + {
     +   attempt: 2,
     +   comment_id: 1,
@@ -120,9 +120,9 @@ not ok 14 - a released claim no longer competes in acquire arbitration
   failureType: 'testCodeFailure'
   error: |-
     a released but unexpired claim must not defeat the next live claim
-    
+
     false !== true
-    
+
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected: true
@@ -142,7 +142,7 @@ not ok 15 - recoverActiveClaim ignores my claim once a matching release exists
   error: |-
     a released claim must never be recovered as active work
     + actual - expected
-    
+
     + {
     +   attempt: 2,
     +   comment_id: 100,

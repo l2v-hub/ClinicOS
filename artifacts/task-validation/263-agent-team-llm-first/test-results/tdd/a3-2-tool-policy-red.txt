@@ -1,0 +1,463 @@
+TAP version 13
+# Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+ok 1 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+  ---
+  duration_ms: 6.91
+  ...
+# Subtest: Claude worker passes the exact safe argv: restricted tool surface, allow rules, and nested-execution denies (QA-263-011)
+not ok 2 - Claude worker passes the exact safe argv: restricted tool surface, allow rules, and nested-execution denies (QA-263-011)
+  ---
+  duration_ms: 4.9702
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\claude-development-worker.test.mjs:35:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected ... Lines skipped
+
+      [
+        '--print',
+    ...
+        '--permission-mode',
+        'acceptEdits',
+    +   '--allowedTools',
+    +   'Read,Edit,Bash(git *)'
+    -   '--tools',
+    -   'Read,Edit,Write,Glob,Grep,Bash',
+    -   '--allowedTools',
+    -   'Read,Edit,Bash(git *)',
+    -   '--disallowedTools',
+    -   'Task,Agent,Bash(claude),Bash(claude *),Bash(claude.exe),Bash(claude.exe *),Bash(npx claude),Bash(npx claude *),Bash(npx @anthropic-ai/claude-code),Bash(npx @anthropic-ai/claude-code *)'
+      ]
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: '--print'
+    1: '--output-format'
+    2: 'json'
+    3: '--permission-mode'
+    4: 'acceptEdits'
+    5: '--tools'
+    6: 'Read,Edit,Write,Glob,Grep,Bash'
+    7: '--allowedTools'
+    8: 'Read,Edit,Bash(git *)'
+    9: '--disallowedTools'
+    10: 'Task,Agent,Bash(claude),Bash(claude *),Bash(claude.exe),Bash(claude.exe *),Bash(npx claude),Bash(npx claude *),Bash(npx @anthropic-ai/claude-code),Bash(npx @anthropic-ai/claude-code *)'
+  actual:
+    0: '--print'
+    1: '--output-format'
+    2: 'json'
+    3: '--permission-mode'
+    4: 'acceptEdits'
+    5: '--allowedTools'
+    6: 'Read,Edit,Bash(git *)'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claude-development-worker.test.mjs:42:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: Claude worker refuses to launch when the policy would allow nested Claude agents
+not ok 3 - Claude worker refuses to launch when the policy would allow nested Claude agents
+  ---
+  duration_ms: 2.0446
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\claude-development-worker.test.mjs:51:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /claude development launch refused: .*nested-agent/. Input:
+
+    'Error: worktree must not be prepared'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+  error: 'worktree must not be prepared'
+  stack: |-
+    Object.prepareIssueWorktree (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claude-development-worker.test.mjs:53:59)
+    runClaudeDevelopment (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/workers/claude-development-worker.mjs:10:33)
+    file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claude-development-worker.test.mjs:56:11
+    waitForActual (node:assert:519:21)
+    Function.rejects (node:assert:654:31)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claude-development-worker.test.mjs:55:16)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claude-development-worker.test.mjs:55:3)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+not ok 4 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 8.8012
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\config.test.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: 'unknown config key: tools'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:8:73)
+    loadConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:32:18)
+    async TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/config.test.mjs:34:18)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+not ok 5 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 1.678
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\config.test.mjs:42:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /leaseRefreshMs must be less than leaseDurationMs/. Input:
+
+    'Error: unknown config key: tools'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+  error: 'unknown config key: tools'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:8:73)
+    file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/config.test.mjs:44:23
+    getActual (node:assert:498:5)
+    Function.throws (node:assert:644:24)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/config.test.mjs:44:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/config.test.mjs:44:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor passes every contract prerequisite on a healthy workstation
+ok 6 - doctor passes every contract prerequisite on a healthy workstation
+  ---
+  duration_ms: 3.2416
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 7 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 0.4566
+  ...
+# Subtest: doctor accepts Codex login confirmation printed to stderr
+ok 8 - doctor accepts Codex login confirmation printed to stderr
+  ---
+  duration_ms: 0.4563
+  ...
+# Subtest: doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+ok 9 - doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+  ---
+  duration_ms: 0.3529
+  ...
+# Subtest: doctor fails closed when a required GitHub label is missing
+ok 10 - doctor fails closed when a required GitHub label is missing
+  ---
+  duration_ms: 1.1918
+  ...
+# Subtest: doctor fails closed without push permission on the repository
+ok 11 - doctor fails closed without push permission on the repository
+  ---
+  duration_ms: 0.3486
+  ...
+# Subtest: doctor blocks development when claude help lacks a required worker option
+ok 12 - doctor blocks development when claude help lacks a required worker option
+  ---
+  duration_ms: 0.3334
+  ...
+# Subtest: doctor blocks QA when codex exec help lacks a required option
+ok 13 - doctor blocks QA when codex exec help lacks a required option
+  ---
+  duration_ms: 0.3632
+  ...
+# Subtest: doctor fails closed when referenced prompt or schema files are missing
+ok 14 - doctor fails closed when referenced prompt or schema files are missing
+  ---
+  duration_ms: 0.5273
+  ...
+# Subtest: doctor blocks development on an empty worker permission policy
+ok 15 - doctor blocks development on an empty worker permission policy
+  ---
+  duration_ms: 0.4509
+  ...
+# Subtest: doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
+not ok 16 - doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
+  ---
+  duration_ms: 2.1576
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:108:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:111:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
+not ok 17 - doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
+  ---
+  duration_ms: 0.5124
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:117:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:120:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
+not ok 18 - doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
+  ---
+  duration_ms: 0.572
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\doctor.test.mjs:125:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/doctor.test.mjs:128:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: doctor fails closed on unrealistic worker timeouts
+ok 19 - doctor fails closed on unrealistic worker timeouts
+  ---
+  duration_ms: 0.3888
+  ...
+# Subtest: doctor fails closed when the runtime root is not writable
+ok 20 - doctor fails closed when the runtime root is not writable
+  ---
+  duration_ms: 0.8204
+  ...
+# Subtest: doctor accepts C-quoted Windows paths from git check-ignore
+ok 21 - doctor accepts C-quoted Windows paths from git check-ignore
+  ---
+  duration_ms: 0.4804
+  ...
+# Subtest: doctor fails closed when runtime or worktree roots are not git-ignored
+ok 22 - doctor fails closed when runtime or worktree roots are not git-ignored
+  ---
+  duration_ms: 0.5099
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 23 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.9883
+  ...
+# Subtest: sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check
+ok 24 - sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check
+  ---
+  duration_ms: 1.1727
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 25 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 10.657
+  ...
+# Subtest: runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)
+not ok 26 - runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)
+  ---
+  duration_ms: 232.0081
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\process-runner.test.mjs:24:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/process-runner.test.mjs:33:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: runProcess default timeout kill actually terminates the spawned process
+not ok 27 - runProcess default timeout kill actually terminates the spawned process
+  ---
+  duration_ms: 322.2786
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\process-runner.test.mjs:37:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the result must expose the child pid for liveness verification
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/process-runner.test.mjs:41:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+not ok 28 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+  ---
+  duration_ms: 1.3703
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-operability.test.mjs:32:1'
+  failureType: 'testCodeFailure'
+  error: 'unknown config key: tools'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:8:73)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:33:16)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    node:internal/test_runner/harness:255:12
+    node:internal/process/task_queues:140:7
+    AsyncResource.runInAsyncScope (node:async_hooks:206:9)
+    AsyncResource.runMicrotask (node:internal/process/task_queues:137:8)
+  ...
+# Subtest: config requires an explicit tool surface and nested-execution denies (QA-263-011)
+not ok 29 - config requires an explicit tool surface and nested-execution denies (QA-263-011)
+  ---
+  duration_ms: 0.1581
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-operability.test.mjs:39:1'
+  failureType: 'testCodeFailure'
+  error: 'unknown config key: tools'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:8:73)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:40:20)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: config requires realistic development and QA timeouts above the command timeout
+not ok 30 - config requires realistic development and QA timeouts above the command timeout
+  ---
+  duration_ms: 1.6848
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-operability.test.mjs:50:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /developmentTimeoutMs must exceed commandTimeoutMs/. Input:
+
+    'Error: unknown config key: tools'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+  error: 'unknown config key: tools'
+  stack: |-
+    validateConfig (file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/config.mjs:8:73)
+    file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:51:23
+    getActual (node:assert:498:5)
+    Function.throws (node:assert:644:24)
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:51:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/worker-operability.test.mjs:51:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
+ok 31 - Claude worker passes the scoped allowedTools policy and the development timeout
+  ---
+  duration_ms: 6.9008
+  ...
+# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+ok 32 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+  ---
+  duration_ms: 0.3534
+  ...
+# Subtest: Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+ok 33 - Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+  ---
+  duration_ms: 1.36
+  ...
+# Subtest: Codex QA worker uses the dedicated QA timeout
+ok 34 - Codex QA worker uses the dedicated QA timeout
+  ---
+  duration_ms: 2.3033
+  ...
+# node:internal/modules/esm/resolve:283
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\src\\core\\worker-policy.mjs' imported from C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-policy.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+#     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:708:12)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:657:25)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:640:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:264:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:168:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///C:/tmp/ClinicOS-agent-team/agent-team/src/core/worker-policy.mjs'
+# }
+# Node.js v20.19.6
+# Subtest: C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-policy.test.mjs
+not ok 6 - C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-policy.test.mjs
+  ---
+  duration_ms: 120.8816
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\worker-policy.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 22
+# fail 13
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 747.738
