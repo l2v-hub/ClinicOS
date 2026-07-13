@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "clinic-os-agent-team evidence_binding v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "message_type", "message_id", "correlation_id", "producer_role", "repository", "issue_number", "pull_request_number", "created_at", "subject_sha", "manifest_path", "manifest_git_blob_sha", "manifest_sha256", "manifest_subject_sha"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "message_type": { "const": "evidence_binding" },
+    "message_id": { "type": "string", "pattern": "^[A-Za-z0-9._:-]+$" },
+    "correlation_id": { "type": "string", "pattern": "^issue-[0-9]+-attempt-[0-9]+$" },
+    "producer_role": { "enum": ["claude-development", "codex-qa"] },
+    "repository": { "const": "l2v-hub/ClinicOS" },
+    "issue_number": { "type": "integer" },
+    "pull_request_number": { "type": "integer" },
+    "created_at": { "type": "string" },
+    "subject_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "manifest_path": { "type": "string" },
+    "manifest_git_blob_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "manifest_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "manifest_subject_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+  }
+}

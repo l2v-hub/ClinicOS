@@ -1,18 +1,20 @@
 import { spawn } from 'node:child_process';
 import { sanitizeText } from '../core/sanitize.mjs';
 
-export function runProcess({ command, args = [], cwd, input, timeoutMs = 120000, maxOutputBytes = 1048576 }) {
+export function runProcess({ command, args = [], cwd, input, timeoutMs = 120000, maxOutputBytes = 1048576, sanitize = true }) {
   const startedAt = new Date().toISOString();
   return new Promise((resolve) => {
     let stdout = '';
     let stderr = '';
     let settled = false;
     const child = spawn(command, args, { cwd, shell: false, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
+    // sanitize:false is reserved for content-addressed reads (digest verification needs exact bytes).
+    const clean = (value) => sanitize ? sanitizeText(value.slice(0, maxOutputBytes)) : value.slice(0, maxOutputBytes);
     const finish = (payload) => {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
-      resolve({ ...payload, command, args, startedAt, finishedAt: new Date().toISOString(), stdout: sanitizeText(stdout.slice(0, maxOutputBytes)), stderr: sanitizeText(stderr.slice(0, maxOutputBytes)) });
+      resolve({ ...payload, command, args, startedAt, finishedAt: new Date().toISOString(), stdout: clean(stdout), stderr: clean(stderr) });
     };
     const timer = setTimeout(() => { child.kill(); finish({ ok: false, code: null, error: `process timeout after ${timeoutMs}ms` }); }, timeoutMs);
     child.stdout.on('data', (chunk) => { stdout += chunk; });
