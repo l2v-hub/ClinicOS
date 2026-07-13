@@ -1,19 +1,80 @@
 import { mkdir, open, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { formatProtocolComment, parseProtocolComment } from './protocol.mjs';
 
 export function arbitrateClaims(claims, now = new Date()) {
   return claims.filter((claim) => Date.parse(claim.expires_at) > now.getTime()).sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at) || a.comment_id - b.comment_id)[0] ?? null;
 }
 
-export async function acquireGitHubClaim({ github, issue, workerId, role, attempt, leaseDurationMs, now = new Date() }) {
-  const claim = { schema_version: 1, message_type: 'work.claim', lease_id: randomUUID(), worker_id: workerId, role, issue_number: issue.number, attempt, created_at: now.toISOString(), expires_at: new Date(now.getTime() + leaseDurationMs).toISOString() };
-  const created = await github.addIssueComment(issue.number, `<!-- clinic-os-agent-team:v1 -->\n${JSON.stringify(claim)}`);
+const stripLocalFields = ({ comment_id, ...message }) => message;
+
+function parseClaimComments(comments, schema) {
+  const claims = [];
+  for (const comment of comments) {
+    try {
+      const parsed = parseProtocolComment(comment.body ?? '', schema);
+      if (parsed?.message_type === 'work.claim') claims.push({ ...parsed, comment_id: comment.id });
+    } catch { /* invalid or foreign comment — never a claim competitor */ }
+  }
+  return claims;
+}
+
+export async function acquireGitHubClaim({ github, config, schema, issue, workerId, role = 'claude-development', attempt, branch, worktree, pullRequestNumber, priorQaResultComment, leaseDurationMs, now = new Date() }) {
+  const lease = randomUUID();
+  const duration = leaseDurationMs ?? config?.leaseDurationMs ?? 300000;
+  const claim = {
+    schema_version: 1,
+    message_type: 'work.claim',
+    message_id: `claim-${issue.number}-${attempt}-${lease.slice(0, 8)}`,
+    correlation_id: `issue-${issue.number}-attempt-${attempt}`,
+    producer_role: role,
+    repository: config?.repository ?? 'l2v-hub/ClinicOS',
+    issue_number: issue.number,
+    attempt,
+    worker_id: workerId,
+    lease_id: lease,
+    role,
+    created_at: now.toISOString(),
+    expires_at: new Date(now.getTime() + duration).toISOString()
+  };
+  if (branch) claim.branch = branch;
+  if (worktree) claim.worktree = worktree;
+  if (pullRequestNumber) claim.pull_request_number = pullRequestNumber;
+  if (priorQaResultComment) claim.prior_qa_result_comment = priorQaResultComment;
+  const created = await github.addIssueComment(issue.number, formatProtocolComment(claim, schema));
   claim.comment_id = created.id;
-  const comments = await github.listIssueComments(issue.number);
-  const claims = comments.map((comment) => { try { const parsed = JSON.parse(comment.body.split('\n').slice(1).join('\n')); return parsed.message_type === 'work.claim' && parsed.attempt === attempt ? { ...parsed, comment_id: comment.id } : null; } catch { return null; } }).filter(Boolean);
-  const winner = arbitrateClaims(claims, now);
+  const competitors = parseClaimComments(await github.listIssueComments(issue.number), schema)
+    .filter((candidate) => candidate.issue_number === issue.number && candidate.attempt === attempt);
+  const winner = arbitrateClaims(competitors, now);
   return { won: winner?.comment_id === claim.comment_id, claim, winner };
+}
+
+export async function refreshGitHubClaim({ github, config, schema, claim, leaseDurationMs, now = new Date() }) {
+  const duration = leaseDurationMs ?? config?.leaseDurationMs ?? 300000;
+  const refreshed = { ...stripLocalFields(claim), refreshed_at: now.toISOString(), expires_at: new Date(now.getTime() + duration).toISOString() };
+  await github.editIssueComment(claim.comment_id, formatProtocolComment(refreshed, schema));
+  return { ...refreshed, comment_id: claim.comment_id };
+}
+
+export async function releaseGitHubClaim({ github, schema, claim, reason, now = new Date() }) {
+  const released = {
+    ...stripLocalFields(claim),
+    message_type: 'work.claim_released',
+    message_id: `${claim.message_id}-released`,
+    released_at: now.toISOString(),
+    release_reason: reason
+  };
+  delete released.refreshed_at;
+  delete released.refresh_reason;
+  await github.addIssueComment(claim.issue_number, formatProtocolComment(released, schema));
+  return released;
+}
+
+export function recoverActiveClaim({ comments, schema, issueNumber, workerId, now = new Date() }) {
+  const mine = parseClaimComments(comments, schema)
+    .filter((claim) => claim.issue_number === issueNumber && claim.worker_id === workerId);
+  return arbitrateClaims(mine, now);
 }
 
 export async function acquireLocalSupervisorLock(runtimeRoot) {
@@ -26,8 +87,8 @@ export async function acquireLocalSupervisorLock(runtimeRoot) {
   return { async release() { await rm(lockPath, { force: true }); } };
 }
 
-export async function isSupervisorLive(runtimeRoot) {
-  try { const state = JSON.parse(await readFile(path.join(runtimeRoot, 'heartbeat.json'), 'utf8')); return Date.now() - Date.parse(state.at) < 45000; } catch { return false; }
+export async function isSupervisorLive(runtimeRoot, { heartbeatTimeoutMs = 45000, now = () => Date.now() } = {}) {
+  try { const state = JSON.parse(await readFile(path.join(runtimeRoot, 'heartbeat.json'), 'utf8')); return now() - Date.parse(state.at) < heartbeatTimeoutMs; } catch { return false; }
 }
 
 export async function writeHeartbeat(runtimeRoot, state) {

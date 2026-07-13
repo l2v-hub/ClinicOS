@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { formatProtocolComment } from '../core/protocol.mjs';
+import { validateAgainstSchema } from '../core/json-schema.mjs';
 
 export async function runClaudeDevelopment({ issue, attempt, config, github, git, run, schema, priorQaResult }) {
   if (!Array.isArray(config.allowedTools) || config.allowedTools.length === 0) {
@@ -13,6 +14,9 @@ export async function runClaudeDevelopment({ issue, attempt, config, github, git
   if (!result.ok) throw new Error(result.error || result.stderr || 'Claude development failed');
   const envelope = JSON.parse(result.stdout);
   const handoff = envelope.structured_output ?? (typeof envelope.result === 'string' ? JSON.parse(envelope.result) : envelope.result ?? envelope);
+  try { validateAgainstSchema(handoff, schema); } catch (error) {
+    throw new Error(`claude structured output failed schema validation: ${error.message}`);
+  }
   const actualSha = await git.headSha(coordinates.path);
   if (handoff.subject_sha !== actualSha) throw new Error('Claude handoff SHA does not equal worktree HEAD');
   const comment = formatProtocolComment(handoff, schema);

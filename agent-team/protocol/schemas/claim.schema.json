@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "clinic-os-agent-team work.claim / work.claim_released v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "message_type", "message_id", "correlation_id", "producer_role", "repository", "issue_number", "attempt", "worker_id", "lease_id", "created_at", "expires_at"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "message_type": { "enum": ["work.claim", "work.claim_released"] },
+    "message_id": { "type": "string", "pattern": "^[A-Za-z0-9._:-]+$" },
+    "correlation_id": { "type": "string", "pattern": "^issue-[0-9]+-attempt-[0-9]+$" },
+    "producer_role": { "enum": ["claude-development", "codex-qa", "agent-team-supervisor"] },
+    "repository": { "const": "l2v-hub/ClinicOS" },
+    "issue_number": { "type": "integer" },
+    "attempt": { "type": "integer" },
+    "worker_id": { "type": "string" },
+    "lease_id": { "type": "string" },
+    "role": { "enum": ["claude-development", "codex-qa"] },
+    "branch": { "type": "string" },
+    "worktree": { "type": "string" },
+    "base_branch": { "type": "string" },
+    "pull_request_number": { "type": "integer" },
+    "prior_qa_result_comment": { "type": "integer" },
+    "created_at": { "type": "string" },
+    "expires_at": { "type": "string" },
+    "refreshed_at": { "type": "string" },
+    "refresh_reason": { "type": "string" },
+    "released_at": { "type": "string" },
+    "release_reason": { "type": "string" }
+  }
+}

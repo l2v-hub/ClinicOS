@@ -49,6 +49,22 @@ test('Claude worker refuses to launch with an empty permission policy and a prec
   );
 });
 
+test('Claude worker rejects a structured handoff that violates the required schema before any GitHub change', async () => {
+  const githubCalls = [];
+  const github = {
+    addIssueComment: async () => { githubCalls.push('comment'); return { id: 1 }; },
+    addPullRequestComment: async () => { githubCalls.push('pr-comment'); },
+    addLabels: async () => { githubCalls.push('add-labels'); },
+    removeLabels: async () => { githubCalls.push('remove-labels'); }
+  };
+  const run = async () => ({ ok: true, code: 0, stdout: JSON.stringify({ structured_output: { unexpected: true } }), stderr: '', error: null });
+  await assert.rejects(
+    () => runClaudeDevelopment({ issue: { number: 263, title: 't', body: 'b' }, attempt: 2, config: baseConfig, github, git: worktree, run, schema: { type: 'object', required: ['message_type', 'subject_sha'] }, priorQaResult: null }),
+    /claude structured output failed schema validation/
+  );
+  assert.deepEqual(githubCalls, []);
+});
+
 test('Codex QA worker uses the dedicated QA timeout', async () => {
   const calls = [];
   const qa = { schema_version: 1, message_type: 'qa_result', issue_number: 263, pull_request_number: 264, attempt: 2, subject_sha: 'a'.repeat(40), decision: 'qa-passed', acceptance_criteria: [], findings: [], commands: [], artifact_refs: [], next_actions: ['qa-passed'] };
