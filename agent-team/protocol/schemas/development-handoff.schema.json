@@ -28,6 +28,15 @@
       }
     },
     "resolved_findings": { "type": "array", "items": { "type": "string" } },
+    "unresolved_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding_id", "status", "reason", "owner"],
+        "properties": { "finding_id": { "type": "string" }, "status": { "const": "unresolved" }, "reason": { "type": "string" }, "owner": { "enum": ["repository-owner", "codex-qa", "claude-development"] } }
+      }
+    },
     "commands": {
       "type": "array",
       "items": {

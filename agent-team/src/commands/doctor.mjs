@@ -71,8 +71,11 @@ export async function runDoctor({ config, run, isSupervisorLive, probes = defaul
     ['git-origin', 'both', 'git', ['remote', 'get-url', 'origin'], (r) => ({ ok: r.ok && r.stdout.includes(config.repository), detail: r.error || r.stderr || `origin does not reference ${config.repository}` })],
     ['git-worktree', 'both', 'git', ['worktree', 'list', '--porcelain'], (r) => ({ ok: r.ok, detail: r.error || r.stderr || 'check failed' })],
     ['roots-ignored', 'both', 'git', ['check-ignore', config.runtimeRoot, config.worktreeRoot], (r) => {
-      const listed = (r.stdout ?? '').split(/\r?\n/).filter(Boolean);
-      const missing = [config.runtimeRoot, config.worktreeRoot].filter((root) => !listed.includes(root));
+      // git check-ignore may echo paths C-style quoted with escaped backslashes on Windows.
+      const unquote = (line) => line.startsWith('"') && line.endsWith('"') ? line.slice(1, -1).replace(/\\\\/g, '\\') : line;
+      const normalize = (value) => unquote(value).replace(/\//g, '\\');
+      const listed = (r.stdout ?? '').split(/\r?\n/).filter(Boolean).map(normalize);
+      const missing = [config.runtimeRoot, config.worktreeRoot].filter((root) => !listed.includes(normalize(root)));
       return missing.length ? { ok: false, detail: `not git-ignored: ${missing.join(', ')}` } : { ok: true, detail: 'ok' };
     }]
   ];

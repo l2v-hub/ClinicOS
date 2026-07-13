@@ -113,6 +113,19 @@ test('doctor fails closed when the runtime root is not writable', async () => {
   assert.equal(doctor.checks.find((c) => c.id === 'runtime-root-writable').ok, false);
 });
 
+test('doctor accepts C-quoted Windows paths from git check-ignore', async () => {
+  // Real behavior: git check-ignore echoes paths C-style quoted with escaped backslashes.
+  const quoted = (value) => `"${value.replace(/\\/g, '\\\\')}"`;
+  const winConfig = { ...config, runtimeRoot: 'C:\\repo\\agent-team\\.runtime', worktreeRoot: 'C:\\repo\\agent-team\\.worktrees' };
+  const doctor = await runDoctor({
+    config: winConfig,
+    run: healthyRun({ [`git check-ignore ${winConfig.runtimeRoot} ${winConfig.worktreeRoot}`]: result(`${quoted(winConfig.runtimeRoot)}\n${quoted(winConfig.worktreeRoot)}\n`) }),
+    isSupervisorLive: async () => false,
+    probes
+  });
+  assert.equal(doctor.checks.find((c) => c.id === 'roots-ignored').ok, true);
+});
+
 test('doctor fails closed when runtime or worktree roots are not git-ignored', async () => {
   const doctor = await runDoctor(doctorArgs({ overrides: { [`git check-ignore ${config.runtimeRoot} ${config.worktreeRoot}`]: result(`${config.runtimeRoot}\n`, 0) } }));
   assert.equal(doctor.checks.find((c) => c.id === 'roots-ignored').ok, false);
