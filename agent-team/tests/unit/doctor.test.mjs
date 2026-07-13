@@ -7,12 +7,14 @@ const config = {
   repository: 'l2v-hub/ClinicOS', baseBranch: 'origin/main',
   runtimeRoot: 'C:/repo/agent-team/.runtime', worktreeRoot: 'C:/repo/agent-team/.worktrees',
   heartbeatTimeoutMs: 45000, commandTimeoutMs: 120000, developmentTimeoutMs: 5400000, qaTimeoutMs: 3600000,
+  tools: ['Read', 'Edit', 'Write', 'Glob', 'Grep', 'Bash'],
   allowedTools: ['Read', 'Edit', 'Bash(git *)'],
+  disallowedTools: ['Task', 'Agent', 'Bash(claude)', 'Bash(claude *)', 'Bash(claude.exe)', 'Bash(claude.exe *)', 'Bash(npx claude)', 'Bash(npx claude *)', 'Bash(npx @anthropic-ai/claude-code)', 'Bash(npx @anthropic-ai/claude-code *)'],
   labels: { readyForDev: 'ready-for-dev', assignedToClaude: 'assigned-to-claude', working: 'agent-working', readyForQa: 'ready-for-qa', qaPassed: 'qa-passed', qaFailed: 'qa-failed', blocked: 'blocked' }
 };
 
 const result = (stdout, code = 0, stderr = '') => ({ ok: code === 0, code, stdout, stderr, error: null });
-const CLAUDE_HELP = 'Usage: claude [options] --print --output-format <fmt> --permission-mode <mode> --allowedTools <tools>';
+const CLAUDE_HELP = 'Usage: claude [options] --print --output-format <fmt> --permission-mode <mode> --tools <tools...> --allowedTools <tools> --disallowedTools <tools...>';
 const CODEX_EXEC_HELP = 'Usage: codex exec [options] --sandbox <mode> --cd <dir> --output-schema <file> --output-last-message <file>';
 
 function healthyRun(overrides = {}) {
@@ -100,6 +102,31 @@ test('doctor fails closed when referenced prompt or schema files are missing', a
 test('doctor blocks development on an empty worker permission policy', async () => {
   const doctor = await runDoctor({ ...doctorArgs(), config: { ...config, allowedTools: [] } });
   assert.equal(doctor.checks.find((c) => c.id === 'worker-permission-policy').ok, false);
+  assert.equal(doctor.developmentReady, false);
+});
+
+test('doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)', async () => {
+  const doctor = await runDoctor(doctorArgs({ overrides: { 'claude --help': result('Usage: claude --print --output-format <fmt> --permission-mode <mode> --allowedTools <tools>') } }));
+  const check = doctor.checks.find((c) => c.id === 'claude-worker-options');
+  assert.equal(check.ok, false);
+  assert.match(check.detail, /--tools/);
+  assert.match(check.detail, /--disallowedTools/);
+  assert.equal(doctor.developmentReady, false);
+});
+
+test('doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)', async () => {
+  const doctor = await runDoctor({ ...doctorArgs(), config: { ...config, tools: [...config.tools, 'Task'] } });
+  const check = doctor.checks.find((c) => c.id === 'worker-permission-policy');
+  assert.equal(check.ok, false);
+  assert.match(check.detail, /nested-agent/);
+  assert.equal(doctor.developmentReady, false);
+});
+
+test('doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)', async () => {
+  const doctor = await runDoctor({ ...doctorArgs(), config: { ...config, disallowedTools: config.disallowedTools.filter((rule) => rule !== 'Agent') } });
+  const check = doctor.checks.find((c) => c.id === 'worker-permission-policy');
+  assert.equal(check.ok, false);
+  assert.match(check.detail, /missing Agent/);
   assert.equal(doctor.developmentReady, false);
 });
 

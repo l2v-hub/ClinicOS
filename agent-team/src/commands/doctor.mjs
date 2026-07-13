@@ -1,7 +1,8 @@
 import { access, mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { validateWorkerToolPolicy } from '../core/worker-policy.mjs';
 
-const REQUIRED_CLAUDE_OPTIONS = ['--print', '--output-format', '--permission-mode', '--allowedTools'];
+const REQUIRED_CLAUDE_OPTIONS = ['--print', '--output-format', '--permission-mode', '--tools', '--allowedTools', '--disallowedTools'];
 const REQUIRED_CODEX_EXEC_OPTIONS = ['--sandbox', '--cd', '--output-schema', '--output-last-message'];
 const REFERENCED_FILES = [
   'agent-team/prompts/claude-development.md',
@@ -90,9 +91,10 @@ export async function runDoctor({ config, run, isSupervisorLive, probes = defaul
   for (const file of REFERENCED_FILES) if (!(await probes.fileExists(path.resolve(file)))) missingFiles.push(file);
   push('config-files', 'both', missingFiles.length === 0, `missing referenced files: ${missingFiles.join(', ')}`);
 
-  const policyOk = Array.isArray(config.allowedTools) && config.allowedTools.length > 0
-    && config.allowedTools.every((rule) => typeof rule === 'string' && rule.length > 0 && !/dangerous|bypass/i.test(rule));
-  push('worker-permission-policy', 'development', policyOk, 'allowedTools policy is empty, missing, or references bypass options');
+  // QA-263-011: the same fail-closed policy the worker launch enforces — the tool surface must
+  // exclude nested-agent tools and the deny rules must make Claude subprocess invocation unavailable.
+  const policy = validateWorkerToolPolicy(config);
+  push('worker-permission-policy', 'development', policy.ok, policy.errors.join('; '));
 
   const timeoutsOk = Number.isInteger(config.developmentTimeoutMs) && Number.isInteger(config.qaTimeoutMs)
     && config.developmentTimeoutMs > config.commandTimeoutMs && config.qaTimeoutMs > config.commandTimeoutMs

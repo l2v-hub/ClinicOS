@@ -1,7 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { validateWorkerToolPolicy } from './worker-policy.mjs';
 
-const KEYS = ['schemaVersion', 'repository', 'baseBranch', 'pollIntervalMs', 'heartbeatTimeoutMs', 'leaseDurationMs', 'leaseRefreshMs', 'developmentConcurrency', 'qaConcurrency', 'noProgressLimit', 'worktreeRoot', 'artifactRoot', 'runtimeRoot', 'commandTimeoutMs', 'maxOutputBytes', 'developmentTimeoutMs', 'qaTimeoutMs', 'allowedTools', 'labels'];
+const KEYS = ['schemaVersion', 'repository', 'baseBranch', 'pollIntervalMs', 'heartbeatTimeoutMs', 'leaseDurationMs', 'leaseRefreshMs', 'developmentConcurrency', 'qaConcurrency', 'noProgressLimit', 'worktreeRoot', 'artifactRoot', 'runtimeRoot', 'commandTimeoutMs', 'maxOutputBytes', 'developmentTimeoutMs', 'qaTimeoutMs', 'tools', 'allowedTools', 'disallowedTools', 'labels'];
 const LABEL_KEYS = ['readyForDev', 'assignedToClaude', 'working', 'readyForQa', 'qaPassed', 'qaFailed', 'blocked'];
 
 export function validateConfig(config) {
@@ -19,6 +20,9 @@ export function validateConfig(config) {
     if (typeof rule !== 'string' || !/^[A-Za-z][A-Za-z0-9_-]*(\(.+\))?$/.test(rule)) throw new Error(`allowedTools entry must be a scoped tool rule: ${rule}`);
     if (/dangerous/i.test(rule) || /bypass/i.test(rule)) throw new Error(`allowedTools entry must not reference bypass options: ${rule}`);
   }
+  // QA-263-011: the complete worker tool policy must make nested Claude execution unavailable.
+  const policy = validateWorkerToolPolicy(config);
+  if (!policy.ok) throw new Error(policy.errors[0]);
   for (const key of LABEL_KEYS) if (!config.labels?.[key]) throw new Error(`missing label key: ${key}`);
   for (const key of Object.keys(config.labels ?? {})) if (!LABEL_KEYS.includes(key)) throw new Error(`unknown label key: ${key}`);
   return config;

@@ -1,7 +1,16 @@
 import { spawn } from 'node:child_process';
 import { sanitizeText } from '../core/sanitize.mjs';
 
-export function runProcess({ command, args = [], cwd, input, timeoutMs = 120000, maxOutputBytes = 1048576, sanitize = true }) {
+// Timeout kill must take down the whole owned process tree (QA-263-011): on Windows,
+// child.kill() terminates only the direct child and would orphan its descendants.
+function defaultKillTree(child) {
+  if (process.platform === 'win32' && child.pid) {
+    spawn('taskkill', ['/pid', String(child.pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' });
+  }
+  child.kill();
+}
+
+export function runProcess({ command, args = [], cwd, input, timeoutMs = 120000, maxOutputBytes = 1048576, sanitize = true, killTree = defaultKillTree }) {
   const startedAt = new Date().toISOString();
   return new Promise((resolve) => {
     let stdout = '';
@@ -14,9 +23,9 @@ export function runProcess({ command, args = [], cwd, input, timeoutMs = 120000,
       if (settled) return;
       settled = true;
       clearTimeout(timer);
-      resolve({ ...payload, command, args, startedAt, finishedAt: new Date().toISOString(), stdout: clean(stdout), stderr: clean(stderr) });
+      resolve({ ...payload, command, args, pid: child.pid ?? null, startedAt, finishedAt: new Date().toISOString(), stdout: clean(stdout), stderr: clean(stderr) });
     };
-    const timer = setTimeout(() => { child.kill(); finish({ ok: false, code: null, error: `process timeout after ${timeoutMs}ms` }); }, timeoutMs);
+    const timer = setTimeout(() => { killTree(child); finish({ ok: false, code: null, error: `process timeout after ${timeoutMs}ms` }); }, timeoutMs);
     child.stdout.on('data', (chunk) => { stdout += chunk; });
     child.stderr.on('data', (chunk) => { stderr += chunk; });
     child.on('error', (error) => finish({ ok: false, code: null, error: sanitizeText(error.message) }));

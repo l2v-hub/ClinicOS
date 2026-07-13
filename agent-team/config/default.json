@@ -16,6 +16,14 @@
   "maxOutputBytes": 1048576,
   "developmentTimeoutMs": 5400000,
   "qaTimeoutMs": 3600000,
+  "tools": [
+    "Read",
+    "Edit",
+    "Write",
+    "Glob",
+    "Grep",
+    "Bash"
+  ],
   "allowedTools": [
     "Read",
     "Edit",
@@ -28,6 +36,18 @@
     "Bash(npm run *)",
     "Bash(npx *)",
     "Bash(mkdir *)"
+  ],
+  "disallowedTools": [
+    "Task",
+    "Agent",
+    "Bash(claude)",
+    "Bash(claude *)",
+    "Bash(claude.exe)",
+    "Bash(claude.exe *)",
+    "Bash(npx claude)",
+    "Bash(npx claude *)",
+    "Bash(npx @anthropic-ai/claude-code)",
+    "Bash(npx @anthropic-ai/claude-code *)"
   ],
   "labels": {
     "readyForDev": "ready-for-dev",
