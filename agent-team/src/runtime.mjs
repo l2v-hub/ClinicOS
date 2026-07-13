@@ -82,12 +82,17 @@ export async function createRuntime({ config, repoRoot, allowCurrentSupervisor =
     if (!acquired.won) return { skipped: 'claim-lost', issue: issue.number };
     await github.removeLabels(issue.number, [config.labels.readyForDev, config.labels.assignedToClaude, ...(labelsOf(issue).includes(config.labels.qaFailed) ? [config.labels.qaFailed] : [])]);
     await github.addLabels(issue.number, [config.labels.working]);
+    let handoff;
     try {
-      return await runClaudeDevelopment({ issue, attempt: context.attempt, config, github, git, run, schema: schemas.development, priorQaResult });
+      handoff = await runClaudeDevelopment({ issue, attempt: context.attempt, config, github, git, run, schema: schemas.development, priorQaResult });
     } catch (error) {
       await releaseGitHubClaim({ github, schema: schemas.claim, claim: acquired.claim, reason: `worker-failure: ${error.message}`.slice(0, 300) });
       throw error;
     }
+    // QA-263-010: a successful run must release its claim too — only after the handoff is
+    // preserved on GitHub, so ready-for-qa never carries an active development claim.
+    await releaseGitHubClaim({ github, schema: schemas.claim, claim: acquired.claim, reason: `development-handoff-published: ${handoff.message_id}` });
+    return handoff;
   };
 
   const runQa = (item) => runCodexQa({ ...item, config, github, run, schema: schemas.qa });

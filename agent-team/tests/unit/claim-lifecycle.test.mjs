@@ -50,6 +50,22 @@ test('releaseGitHubClaim publishes a schema-valid work.claim_released message', 
   assert.equal(released.release_reason, 'worker-failure');
 });
 
+test('a released claim no longer competes in acquire arbitration', async () => {
+  const github = githubFake();
+  const first = await acquireGitHubClaim({ github, config, schema: claimSchema, issue: { number: 263 }, workerId: 'host:1', role: 'claude-development', attempt: 2, now: new Date('2026-07-13T08:00:00Z') });
+  await releaseGitHubClaim({ github, schema: claimSchema, claim: first.claim, reason: 'development-handoff-published: dev-263-2-handoff-abc', now: new Date('2026-07-13T08:01:00Z') });
+  const second = await acquireGitHubClaim({ github, config, schema: claimSchema, issue: { number: 263 }, workerId: 'host:2', role: 'claude-development', attempt: 2, now: new Date('2026-07-13T08:02:00Z') });
+  assert.equal(second.won, true, 'a released but unexpired claim must not defeat the next live claim');
+});
+
+test('recoverActiveClaim ignores my claim once a matching release exists', async () => {
+  const github = githubFake();
+  const acquired = await acquireGitHubClaim({ github, config, schema: claimSchema, issue: { number: 263 }, workerId: 'host:1', role: 'claude-development', attempt: 2, now: new Date('2026-07-13T08:00:00Z') });
+  await releaseGitHubClaim({ github, schema: claimSchema, claim: acquired.claim, reason: 'development-handoff-published: dev-263-2-handoff-abc', now: new Date('2026-07-13T08:01:00Z') });
+  const active = recoverActiveClaim({ comments: github.state.comments, schema: claimSchema, issueNumber: 263, workerId: 'host:1', now: new Date('2026-07-13T08:02:00Z') });
+  assert.equal(active, null, 'a released claim must never be recovered as active work');
+});
+
 test('recoverActiveClaim returns my unexpired claim and null when expired', () => {
   const mine = { schema_version: 1, message_type: 'work.claim', message_id: 'claim-263-2-abc', correlation_id: 'issue-263-attempt-2', producer_role: 'claude-development', repository: 'l2v-hub/ClinicOS', issue_number: 263, attempt: 2, worker_id: 'host:1', lease_id: 'x', created_at: '2026-07-13T08:00:00Z', expires_at: '2026-07-13T09:00:00Z' };
   const comments = [{ id: 5, created_at: '2026-07-13T08:00:00Z', body: `${MARKER}\n${JSON.stringify(mine)}` }];

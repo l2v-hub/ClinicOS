@@ -45,6 +45,26 @@ test('status projection reads work coordinates from GitHub protocol history, not
   assert.equal(issue.pull_request.head_sha, S1);
 });
 
+test('status projection reports no active claim once a matching release exists', () => {
+  // Mirrors the real QA-263-010 state: the claim comment is tolerated even when schema-invalid
+  // (missing message_id), so only a lease-matched release may clear it before lease expiry.
+  const { message_id, ...invalidClaim } = claim;
+  const release = { ...claim, message_type: 'work.claim_released', message_id: 'claim-263-2-abc-released', released_at: '2026-07-13T08:30:00Z', release_reason: 'development-handoff-published: dev-263-2-handoff-abc' };
+  const projection = buildStatusProjection({
+    local: { supervisor_running: false, heartbeat_age_ms: null, pid: null },
+    items: [{
+      issue: { number: 263, labels: [{ name: 'ready-for-qa' }], comments: [comment(1, invalidClaim), comment(2, release)] },
+      pullRequest: { number: 264, isDraft: true, headRefOid: S1, headRefName: 'codex/agent-team-architecture' }
+    }],
+    config,
+    now: new Date('2026-07-13T09:00:00Z')
+  });
+  const issue = projection.issues[0];
+  assert.equal(issue.active_claim, null, 'a released claim must not be projected as active before lease expiry');
+  assert.equal(issue.released_claims, 1);
+  assert.equal(issue.expired_claims, 0);
+});
+
 test('stop waits for the supervisor to exit before reporting stopped', async () => {
   const runtimeRoot = await mkdtemp(path.join(tmpdir(), 'agent-team-stop-'));
   let polls = 0;

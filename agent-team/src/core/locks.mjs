@@ -11,13 +11,16 @@ const stripLocalFields = ({ comment_id, ...message }) => message;
 
 function parseClaimComments(comments, schema) {
   const claims = [];
+  const releasedLeases = new Set();
   for (const comment of comments) {
     try {
       const parsed = parseProtocolComment(comment.body ?? '', schema);
       if (parsed?.message_type === 'work.claim') claims.push({ ...parsed, comment_id: comment.id });
+      else if (parsed?.message_type === 'work.claim_released') releasedLeases.add(parsed.lease_id);
     } catch { /* invalid or foreign comment — never a claim competitor */ }
   }
-  return claims;
+  // QA-263-010: a released lease is permanently out of arbitration, even before its expiry.
+  return claims.filter((claim) => !releasedLeases.has(claim.lease_id));
 }
 
 export async function acquireGitHubClaim({ github, config, schema, issue, workerId, role = 'claude-development', attempt, branch, worktree, pullRequestNumber, priorQaResultComment, leaseDurationMs, now = new Date() }) {

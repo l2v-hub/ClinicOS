@@ -1,0 +1,90 @@
+TAP version 13
+# Subtest: qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
+ok 1 - qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
+  ---
+  duration_ms: 15.0728
+  ...
+# Subtest: three equivalent qa-failed results block the issue with a structured reason and no Claude launch
+ok 2 - three equivalent qa-failed results block the issue with a structured reason and no Claude launch
+  ---
+  duration_ms: 6.1807
+  ...
+# Subtest: a successful development handoff releases its claim after publishing and leaves ready-for-qa with no active claim
+ok 3 - a successful development handoff releases its claim after publishing and leaves ready-for-qa with no active claim
+  ---
+  duration_ms: 7.2722
+  ...
+# Subtest: a failing Claude worker releases the claim with a schema-valid work.claim_released message
+ok 4 - a failing Claude worker releases the claim with a schema-valid work.claim_released message
+  ---
+  duration_ms: 4.9968
+  ...
+# Subtest: status projection reads work coordinates from GitHub protocol history, not local files
+ok 5 - status projection reads work coordinates from GitHub protocol history, not local files
+  ---
+  duration_ms: 4.4749
+  ...
+# Subtest: status projection reports no active claim once a matching release exists
+ok 6 - status projection reports no active claim once a matching release exists
+  ---
+  duration_ms: 0.3352
+  ...
+# Subtest: stop waits for the supervisor to exit before reporting stopped
+ok 7 - stop waits for the supervisor to exit before reporting stopped
+  ---
+  duration_ms: 8.3796
+  ...
+# Subtest: stop reports a timeout when the supervisor never exits
+ok 8 - stop reports a timeout when the supervisor never exits
+  ---
+  duration_ms: 3.701
+  ...
+# Subtest: start acknowledges only after the detached supervisor owns the runtime
+ok 9 - start acknowledges only after the detached supervisor owns the runtime
+  ---
+  duration_ms: 0.8801
+  ...
+# Subtest: restart recovery refreshes my unexpired claims from GitHub state
+ok 10 - restart recovery refreshes my unexpired claims from GitHub state
+  ---
+  duration_ms: 2.1507
+  ...
+# Subtest: acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
+ok 11 - acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
+  ---
+  duration_ms: 4.9107
+  ...
+# Subtest: refreshGitHubClaim edits the same comment and extends the lease
+ok 12 - refreshGitHubClaim edits the same comment and extends the lease
+  ---
+  duration_ms: 1.0994
+  ...
+# Subtest: releaseGitHubClaim publishes a schema-valid work.claim_released message
+ok 13 - releaseGitHubClaim publishes a schema-valid work.claim_released message
+  ---
+  duration_ms: 0.4891
+  ...
+# Subtest: a released claim no longer competes in acquire arbitration
+ok 14 - a released claim no longer competes in acquire arbitration
+  ---
+  duration_ms: 0.3813
+  ...
+# Subtest: recoverActiveClaim ignores my claim once a matching release exists
+ok 15 - recoverActiveClaim ignores my claim once a matching release exists
+  ---
+  duration_ms: 0.403
+  ...
+# Subtest: recoverActiveClaim returns my unexpired claim and null when expired
+ok 16 - recoverActiveClaim returns my unexpired claim and null when expired
+  ---
+  duration_ms: 0.2211
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 215.2896

@@ -6,6 +6,7 @@ import { createRuntime } from '../../src/runtime.mjs';
 import { reconcileOnce } from '../../src/core/reconciler.mjs';
 import { parseProtocolComment } from '../../src/core/protocol.mjs';
 import { loadConfig } from '../../src/core/config.mjs';
+import { buildStatusProjection } from '../../src/core/status-projection.mjs';
 
 const repoRoot = path.resolve('.');
 const config = await loadConfig({ repoRoot, env: {} });
@@ -97,6 +98,43 @@ test('three equivalent qa-failed results block the issue with a structured reaso
   assert.equal(blockedMessages.length, 1);
   assert.match(blockedMessages[0].reason, /no-progress/);
   assert.equal(blockedMessages[0].qa_history.length, 3);
+});
+
+test('a successful development handoff releases its claim after publishing and leaves ready-for-qa with no active claim', async () => {
+  const github = githubFake([handoffMsg(1, S1), qaFailedMsg(1, S1, 'd'.repeat(64))]);
+  const run = async (call) => {
+    if (call.command === 'claude') {
+      const handoff = { ...handoffMsg(2, S2), resolved_findings: ['QA-263-001'] };
+      return { ok: true, code: 0, stdout: JSON.stringify({ structured_output: handoff }), stderr: '', error: null };
+    }
+    throw new Error(`unexpected process invocation: ${call.command}`);
+  };
+  const git = { async prepareIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async headSha() { return S2; } };
+  const runtime = await createRuntime({ config, repoRoot, overrides: { run, github, git, workerId: 'host:test', doctor: async () => ({ ok: false, developmentReady: true, qaReady: false, checks: [] }) } });
+
+  const result = await reconcileOnce(runtime);
+  assert.deepEqual(result.development.errors, []);
+  assert.deepEqual(result.development.processed, [263]);
+
+  const protocol = github.state.comments.map((c) => { try { return { value: parseProtocolComment(c.body, claimSchema), id: c.id }; } catch { return null; } }).filter(Boolean);
+  const claims = protocol.filter((entry) => entry.value.message_type === 'work.claim');
+  const released = protocol.filter((entry) => entry.value.message_type === 'work.claim_released');
+  assert.equal(claims.length, 1);
+  assert.equal(released.length, 1, 'a successful development run must publish a schema-valid claim release');
+  assert.equal(released[0].value.lease_id, claims[0].value.lease_id, 'the release must name the same lease as the claim');
+  assert.match(released[0].value.release_reason, /development-handoff-published/);
+
+  const handoffComment = github.state.comments.find((c) => c.body.includes('"development_handoff"') && c.body.includes('"attempt":2'));
+  assert.ok(handoffComment, 'the attempt-2 handoff comment must exist');
+  assert.ok(handoffComment.id < released[0].id, 'the handoff must be preserved before the claim release');
+
+  assert.equal(github.state.labels.has('ready-for-qa'), true);
+  const projection = buildStatusProjection({
+    local: { supervisor_running: false, heartbeat_age_ms: null, pid: null },
+    items: [{ issue: await github.viewIssue(), pullRequest: await github.viewPullRequest(264) }],
+    config
+  });
+  assert.equal(projection.issues[0].active_claim, null, 'ready-for-qa must have no active development claim');
 });
 
 test('a failing Claude worker releases the claim with a schema-valid work.claim_released message', async () => {
