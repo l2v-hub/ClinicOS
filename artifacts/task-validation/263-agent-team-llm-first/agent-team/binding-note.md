@@ -13,7 +13,13 @@ Chain:
 3. The final PR head (the commit adding these two JSON files) is bound by the **evidence_binding
    envelope**, generated after the final commit and published only as a protocol comment on issue
    #263 and PR #264 — never committed, so no circular SHA dependency exists.
-4. `verifyEvidenceBinding` proves, reading exclusively committed state at the PR head: envelope
+4. Self-reference rule: the manifest never enumerates the files rewritten by the binding commit
+   itself (`artifact-manifest.json`, `development-handoff.json`, `binding-note.md`) — their blobs
+   at the PR head would disagree with the manifest by construction. The envelope binds the
+   manifest; the manifest binds every other artifact. This rule was enforced by
+   `verifyEvidenceBinding` itself, which rejected the first attempt-2 manifest for exactly this
+   self-reference (recorded in `checks/command-log.jsonl` context and the handoff comment).
+5. `verifyEvidenceBinding` proves, reading exclusively committed state at the PR head: envelope
    subject equals the PR head; the manifest blob and SHA-256 at the head equal the envelope's
    declared values; the committed manifest's own subject equals the envelope's
    `manifest_subject_sha`; and every artifact's git blob ID and committed content digest match the

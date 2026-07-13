@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "message_type": "development_handoff",
-  "message_id": "dev-263-2-handoff-7c4fb0b69a27",
+  "message_id": "dev-263-2-handoff-5327210808ae",
   "correlation_id": "issue-263-attempt-2",
   "producer_role": "claude-development",
   "repository": "l2v-hub/ClinicOS",
   "issue_number": 263,
   "pull_request_number": 264,
   "attempt": 2,
-  "created_at": "2026-07-13T08:57:43.232Z",
-  "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59",
+  "created_at": "2026-07-13T09:02:30.877Z",
+  "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba",
   "state_before": "agent-working",
   "state_after": "ready-for-qa",
   "acceptance_criteria": [
@@ -223,28 +223,12 @@
   ],
   "artifact_refs": [
     {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/agent-team/artifact-manifest.json",
-      "media_type": "application/json",
-      "sha256": "24f0f7df19be3070098c3637c25c9e8d5bff82bf4525d8b4535a7c308293c79a",
-      "git_blob_sha": "ccb13abedcaca5e1e427702e5f8444df7642880a",
-      "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
-    },
-    {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/agent-team/development-handoff.json",
-      "media_type": "application/json",
-      "sha256": "878ec98fac4b893346be118e70a82826ba09c6a9b64b4f74a080b624f00d769c",
-      "git_blob_sha": "69bc80f7b7942820c6e5ad11b7e706417f872a1d",
-      "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
-    },
-    {
       "path": "artifacts/task-validation/263-agent-team-llm-first/agent-team/qa-result.json",
       "media_type": "application/json",
       "sha256": "567476d9ffd375a4f321edb6da9a79ecfd7fe02667a0474cf62d5890a64c795f",
       "git_blob_sha": "5a5c1797e87776d1cc5466d8a667f7cf8b458f9f",
       "producer_role": "codex-qa",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/command-log.jsonl",
@@ -252,7 +236,7 @@
       "sha256": "9a960e5d3a852a80e25af915c2802f595d0ed8bc8613c4d98a9cac97caf66a47",
       "git_blob_sha": "13883168ef45c37293c119288339dd80b4277a1c",
       "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json",
@@ -260,7 +244,7 @@
       "sha256": "353139dd0ac62fe6d4950575eba3b92302b60f71eeb1220f80cbaa15a693d72d",
       "git_blob_sha": "ce9069357bd184b9a3ef8be4a1fc1a620b09ec65",
       "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt",
@@ -268,7 +252,7 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
       "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/codex-qa-report.md",
@@ -276,7 +260,7 @@
       "sha256": "9b751c14c02e845bc39ef9ed7faf6c093d22829f03f23bbafd6f1dff5ee8199f",
       "git_blob_sha": "7899ed7e1a1c4abb21c84d5c85b7fb05e84763d3",
       "producer_role": "codex-qa",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/remediation-map.md",
@@ -284,7 +268,7 @@
       "sha256": "3810e7c1955d2367ecbdc473d8e062bf5dbc94b18931d3eb3fb9c5e36be91e5b",
       "git_blob_sha": "09a1be590632fd51623800a4b658172f338ebb35",
       "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/task-contract.md",
@@ -292,7 +276,7 @@
       "sha256": "dd0b8987ca726615a4618fcf837cda23a0cb2bee729d7f277ce0ae5f047d7691",
       "git_blob_sha": "5eae477b1e95d5d35ba3060d85404a3d9eae22bd",
       "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap",
@@ -300,7 +284,7 @@
       "sha256": "44c9e617af32b8dd0c2685d554bbe645212a63b37763f65bf20b703dcc79d284",
       "git_blob_sha": "7d55c3fdf431716697b2266b71cc190495dd1822",
       "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap",
@@ -308,7 +292,7 @@
       "sha256": "98c7b7de0f1bbe7af953fd9c2586e26d99852693d4baeedc5cce8c971e81e9e2",
       "git_blob_sha": "2feafb9ac3d1e1ae5e73bd30871b7e6ed9e4221b",
       "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/validation-report.md",
@@ -316,7 +300,7 @@
       "sha256": "652015e7b5afc05e99565d90b4e15785fc671cd3d6740627dd864a56548a6bef",
       "git_blob_sha": "0d2c4e4074a3aacba92a1f0bd209d468e7ab8f71",
       "producer_role": "claude-development",
-      "subject_sha": "7c4fb0b69a27f61e707e09ebb9e9cbdb1018fa59"
+      "subject_sha": "5327210808ae4a3a6f8cc350130bd19b1f6e5dba"
     }
   ],
   "next_actions": [
