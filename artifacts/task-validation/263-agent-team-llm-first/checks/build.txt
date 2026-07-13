@@ -22,7 +22,7 @@ dist/assets/ParametriTab-CW9Izmtp.js              16.68 kB │ gzip:   5.64 kB
 dist/assets/TerapiaFarmacologicaTab-BuhAj5-M.js   19.15 kB │ gzip:   4.77 kB
 dist/assets/index-BozKZKpF.js                    842.30 kB │ gzip: 226.02 kB
 
-[32m✓ built in 21.00s[39m
+[32m✓ built in 22.07s[39m
 
 > clinicos@1.0.0 build:backend
 > npm --prefix backend run build
@@ -32,20 +32,21 @@ dist/assets/index-BozKZKpF.js                    842.30 kB │ gzip: 226.02 kB
 > npx prisma generate --schema=../prisma/schema.prisma && tsc -p tsconfig.json
 
 
-✔ Generated Prisma Client (v7.8.0) to .\..\node_modules\@prisma\client in 268ms
+✔ Generated Prisma Client (v7.8.0) to .\..\node_modules\@prisma\client in 326ms
 
 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
 
 
 
+--- stderr ---
 [33m[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
 [33m[33m[PLUGIN_TIMINGS] Warning:[0m Your build spent significant time in plugins. Here is a breakdown:
-  - @rolldown/plugin-babel (86%)
-  - vite:css (14%)
+  - @rolldown/plugin-babel (91%)
+  - vite:css (8%)
 See https://rolldown.rs/options/checks#plugintimings for more details.
 [39m
 Prisma schema loaded from ..\prisma\schema.prisma.

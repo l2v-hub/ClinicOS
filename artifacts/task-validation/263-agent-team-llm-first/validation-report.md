@@ -1,79 +1,105 @@
-# Task Validation Report — attempt 2 (remediation)
+# Task Validation Report — attempt 3 (remediation)
 
 ## Task
 - Title: Agent Team LLM-first con Claude development loop e Codex QA indipendente
 - Slug: 263-agent-team-llm-first
 - Issue: l2v-hub/ClinicOS#263 · PR: #264 (draft, unchanged)
-- Attempt: 2 (remediation of Codex qa_result comment 4952257860, decision qa-failed)
-- Claim: comment 4955564065 (work.claim attempt 2, lease e2431891-a34c-44c2-8c83-bfaae86f8066, refreshed for local-clock skew against authoritative GitHub time)
+- Attempt: 3 (remediation of Codex qa_result comment 4957169054, decision qa-failed)
+- Claim: comment 4957297633 (work.claim attempt 3, lease 2f1099fa-b2d5-49a6-bcac-e4e1cbd12d8e)
 - Branch: codex/agent-team-architecture (same branch, same worktree C:/tmp/ClinicOS-agent-team, same draft PR)
 - Date: 2026-07-13
 - Producer: claude-development worker (Claude Code)
 
-Attempt-1 report is superseded by this attempt but its evidence remains committed in history;
-Codex QA artifacts (`codex-qa-report.md`, `agent-team/qa-result.json`) are preserved byte-for-byte.
+Attempt-2 report is superseded by this attempt but remains committed in history at the attempt-2
+SHA; Codex QA artifacts (`codex-qa-report.md`, `agent-team/qa-result.json`,
+`agent-team/qa-result-attempt-2.json`) are preserved byte-for-byte.
 
 ## Remediation summary
 
-All eight code findings resolved (QA-263-001…007, QA-263-009) with strict RED→GREEN TDD; QA-263-008
-is explicitly unresolved as an external GitHub Actions billing condition owned by the repository
-owner (reported, not faked). Finding-by-finding detail: `remediation-map.md`.
+Both attempt-2 code findings resolved with strict RED→GREEN TDD:
 
-## TDD Record — attempt 2 (each RED observed before production code)
+- **QA-263-010 (high)** — a successful development run now publishes a schema-valid
+  `work.claim_released` after the handoff is preserved, and released leases are excluded from
+  claim arbitration, recovery, and the status projection even while unexpired. The stale
+  attempt-2 claim (comment 4955564065, lease e2431891…) was explicitly released on GitHub
+  (comment 4957297859) as live cleanup.
+- **QA-263-011 (critical)** — nested Claude execution is made unavailable: the worker argv now
+  carries the documented `--tools` (restricted surface without Task/Agent), `--allowedTools`, and
+  `--disallowedTools` (Task, Agent, and claude/npx-claude subprocess denies; deny rules beat
+  allow rules). The fail-closed policy is enforced identically at config validation, in doctor,
+  and at worker launch; the exact safe argv is pinned by regression tests with literal fixtures.
+  A timed-out worker escalates to a process-tree kill (`taskkill /pid <pid> /T /F` on win32), so
+  timeout/shutdown cannot leave an Agent Team-owned process alive — and no nested Claude process
+  can be created in the first place.
+
+QA-263-008 remains explicitly unresolved as an external GitHub Actions billing condition owned by
+the repository owner (reported, not faked). Finding-by-finding detail: `remediation-map.md`.
+
+## TDD Record — attempt 3 (each RED observed before production code)
 
 | Cycle | Finding | RED (exit ≠ 0) | GREEN |
 |---|---|---|---|
-| R1 history rebuild | QA-263-001 | tdd/r1-history-red.txt (module missing) | tdd/r1-history-green.txt (4/4) |
-| R2 config + worker operability | QA-263-002 | tdd/r2-operability-red.txt (5 fail) | tdd/r2-operability-green.txt + r2-aggregate-green.txt (30/30) |
-| R4 claim lifecycle | QA-263-003 | tdd/r4-claims-red.txt (missing exports) | tdd/r4-claims-green.txt + r4-aggregate-green.txt (35/35) |
-| R4b structured-output intake validation | QA-263-002 | tdd/r4b-schema-intake-red.txt (1 fail) | included in r4 green runs |
-| R5 doctor completeness | QA-263-004 | tdd/r5-doctor-red.txt (11 fail) | tdd/r5-doctor-green.txt (13/13) + r5-aggregate-green.txt (48/48) |
-| R6 evidence binding (real git) | QA-263-005 | tdd/r6-binding-red.txt (modules missing) | tdd/r6-binding-green.txt (2/2) |
-| R7 runtime remediation wiring | QA-263-001/006 | tdd/r7-loop-red.txt (schema missing) | tdd/r7-loop-green.txt (3/3) + r7-aggregate.txt (53/53) |
-| R8 supervisor lifecycle | QA-263-007 | tdd/r8-lifecycle-red.txt (modules missing) | tdd/r8-lifecycle-green2.txt + r8-aggregate.txt (58/58) |
-| R9 deterministic sanitization | QA-263-009 | tdd/r9-sanitize-red.txt (1 fail) | tdd/r9-sanitize-green.txt (3/3) |
-| R10 check-ignore path normalization (found by live smoke) | QA-263-004 | tdd/r10-checkignore-red.txt (1 fail) | tdd/r10-checkignore-green.txt (14/14) |
+| A3-1 claim release lifecycle | QA-263-010 | tdd/a3-1-claim-release-red.txt (4 fail: arbitration, recovery, projection, success-release) | tdd/a3-1-claim-release-green.txt (16/16) |
+| A3-2 worker tool policy + tree kill | QA-263-011 | tdd/a3-2-tool-policy-red.txt (13 fail incl. missing worker-policy module) | tdd/a3-2-tool-policy-green.txt (42/42) |
 
-Two defects were discovered by the live doctor smoke and fixed test-first (R10 here; codex-stderr in
-attempt 1) — the doctor executes the real installed CLIs, which is exactly its acceptance role.
+RED evidence is normalized with `sanitizeText` (node:test YAML failure blocks emit
+whitespace-only lines); the normalization is its own commit for byte-level traceability. The
+whitespace regression was caught by this attempt's evidence harness running git directly — an
+output-filtering shell proxy had masked it in a manual check, which is exactly why every gate
+below is recorded through `runProcess` with authentic timestamps.
 
 ## Fresh verification (real timestamps in checks/command-log.jsonl)
 
-| Check | Result | Evidence |
-|---|---:|---|
-| Unit suite (13 files, 47 tests) | PASS 47/47, exit 0 | test-results/unit.tap |
-| Integration suite (5 files, 13 tests — real runtime reconciliation, real git binding, lifecycle) | PASS 13/13, exit 0 | test-results/integration.tap |
-| Live doctor smoke (21 checks incl. verified claude/codex worker options, labels, permissions, ignored roots) | PASS ok:true, exit 0 | checks/doctor-smoke.json |
-| Root build (frontend tsc+vite, backend prisma+tsc) | PASS exit 0 | checks/build.txt |
-| git diff --check origin/main...HEAD | PASS exit 0, zero trailing-whitespace lines tree-wide | checks/git-diff-check.txt |
-| Prohibited-action static gate | PASS (in integration suite) | test-results/integration.tap |
-| Syntax node --check (all .mjs) | PASS via unit/integration import graph + build | checks/command-log.jsonl |
-| CI (GitHub Actions) | EXTERNAL BLOCK — jobs do not start (billing/spending limit), probed post-push and reported in handoff | QA-263-008, unresolved_findings |
+- `node --test --test-reporter=tap agent-team/tests/unit/*` → `test-results/unit.tap` (exit 0)
+- `node --test --test-reporter=tap agent-team/tests/integration/*` → `test-results/integration.tap` (exit 0)
+- `node agent-team/src/cli.mjs doctor` → `checks/doctor-smoke.json` (exit 0, 21/21 checks ok,
+  including the strengthened `claude-worker-options` verifying documented `--tools` and
+  `--disallowedTools` against the installed CLI, and `worker-permission-policy` running the
+  fail-closed nested-agent validator against the shipped config)
+- `cmd /d /s /c npm run build` → `checks/build.txt` (exit 0, frontend + backend)
+- `git diff --check origin/main...HEAD` → `checks/git-diff-check.txt` (exit 0, empty)
 
-## Integration coverage of actual runtime paths (Codex gate requirement)
+Full suite after both fixes: 80/80 (unit + integration).
 
-- `remediation-loop.test.mjs`: real `createRuntime` + `reconcileOnce` with injected external
-  boundaries only — proves qa-failed → same branch/worktree/PR → Claude receives findings →
-  ready-for-qa; no-progress → `worker.blocked` + `blocked` label with zero Claude launches;
-  worker failure → schema-valid claim release.
-- `evidence-binding.test.mjs`: real git repository, real process spawns — build/verify/tamper.
-- `supervisor-lifecycle.test.mjs`: GitHub-backed status projection, waiting stop, acknowledged
-  start, restart claim recovery refreshing the actual claim comment.
+## New/changed tests
+
+- `worker-policy.test.mjs` (new): pins `NESTED_AGENT_TOOLS` and all ten
+  `REQUIRED_DISALLOWED_TOOLS` by literal value; exact-argv regression for
+  `buildClaudeWorkerArgs`; per-rule policy rejection diagnostics; bypass-token rejection in
+  every list; launch refusal before any spawn.
+- `claude-development-worker.test.mjs`: exact safe argv deep-equal (literal fixtures, never
+  echoed from the implementation); refusal when policy exposes Task or lacks disallowedTools.
+- `claim-lifecycle.test.mjs`: released claims lose arbitration; released claims are never
+  recovered as active work.
+- `remediation-loop.test.mjs`: successful development publishes the release after the handoff
+  (comment-order asserted), same lease, `development-handoff-published` reason, ready-for-qa
+  label with `active_claim: null` in the projection.
+- `supervisor-lifecycle.test.mjs`: projection clears a lease-matched release even for a
+  schema-invalid claim comment (the real attempt-2 shape) and reports `released_claims`.
+- `process-runner.test.mjs`: timeout escalates to the injected tree kill; default kill provably
+  terminates the child (pid liveness poll).
+- `config.test.mjs` / `worker-operability.test.mjs` / `doctor.test.mjs`: required `tools` +
+  `disallowedTools` keys, nested-agent rejection, missing-deny rejection, doctor negatives for
+  undocumented CLI options and unsafe policy.
 
 ## Security / privacy
 
-- Sanitizer covers credentials, tokens, env secrets, patient/operator identifiers, and now
-  deterministic whitespace hygiene; unit-tested.
-- Doctor validates the scoped worker permission policy and refuses wildcards/bypass references.
-- Prohibited-action gate scans runtime source for merge/close/deploy/bypass invocations: zero.
-- Evidence contains no secrets or account identifiers (doctor output carries only ok/detail).
+- The worker tool surface excludes every nested-agent tool; nested Claude execution is denied at
+  three independent layers (tool surface, deny rules, prompt constraint) and validated at three
+  gates (config, doctor, launch).
+- No bypass or dangerous permission token can appear in any policy list or in the built argv
+  (validated + regression-tested); permission mode is pinned to `acceptEdits`.
+- Process-tree timeout kill prevents orphaned owned processes on win32.
+- Sanitizer discipline unchanged (credentials, tokens, identifiers, deterministic whitespace).
+- Evidence contains no secrets or account identifiers.
 
-## Evidence binding (QA-263-005 architecture)
+## Evidence binding (QA-263-005 architecture, unchanged)
 
 Committed manifest binds artifacts at its evidence commit; the authoritative `evidence_binding`
 envelope is generated after the final commit, published as a protocol comment bound to the exact
-PR head, and machine-verified with `verifyEvidenceBinding` (blob IDs + committed contents read from
-the commit). The dogfood verification result of this very PR is recorded in the handoff comment.
+PR head, and machine-verified with `verifyEvidenceBinding` (blob IDs + committed contents read
+from the commit). The dogfood verification result of this attempt is recorded in the handoff
+comment.
 
 ## Final Decision
 

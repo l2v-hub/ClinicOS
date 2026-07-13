@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+ok 1 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+  ---
+  duration_ms: 6.533
+  ...
+# Subtest: Claude worker passes the exact safe argv: restricted tool surface, allow rules, and nested-execution denies (QA-263-011)
+ok 2 - Claude worker passes the exact safe argv: restricted tool surface, allow rules, and nested-execution denies (QA-263-011)
+  ---
+  duration_ms: 1.7895
+  ...
+# Subtest: Claude worker refuses to launch when the policy would allow nested Claude agents
+ok 3 - Claude worker refuses to launch when the policy would allow nested Claude agents
+  ---
+  duration_ms: 1.0973
+  ...
+# Subtest: loadConfig loads versioned defaults and resolves repository paths
+ok 4 - loadConfig loads versioned defaults and resolves repository paths
+  ---
+  duration_ms: 8.8559
+  ...
+# Subtest: validateConfig fails closed for unknown keys and unsafe relationships
+ok 5 - validateConfig fails closed for unknown keys and unsafe relationships
+  ---
+  duration_ms: 0.7179
+  ...
+# Subtest: doctor passes every contract prerequisite on a healthy workstation
+ok 6 - doctor passes every contract prerequisite on a healthy workstation
+  ---
+  duration_ms: 2.6654
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 7 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 0.5266
+  ...
+# Subtest: doctor accepts Codex login confirmation printed to stderr
+ok 8 - doctor accepts Codex login confirmation printed to stderr
+  ---
+  duration_ms: 0.5774
+  ...
+# Subtest: doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+ok 9 - doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+  ---
+  duration_ms: 0.6545
+  ...
+# Subtest: doctor fails closed when a required GitHub label is missing
+ok 10 - doctor fails closed when a required GitHub label is missing
+  ---
+  duration_ms: 0.4809
+  ...
+# Subtest: doctor fails closed without push permission on the repository
+ok 11 - doctor fails closed without push permission on the repository
+  ---
+  duration_ms: 0.3493
+  ...
+# Subtest: doctor blocks development when claude help lacks a required worker option
+ok 12 - doctor blocks development when claude help lacks a required worker option
+  ---
+  duration_ms: 0.3764
+  ...
+# Subtest: doctor blocks QA when codex exec help lacks a required option
+ok 13 - doctor blocks QA when codex exec help lacks a required option
+  ---
+  duration_ms: 0.353
+  ...
+# Subtest: doctor fails closed when referenced prompt or schema files are missing
+ok 14 - doctor fails closed when referenced prompt or schema files are missing
+  ---
+  duration_ms: 0.4524
+  ...
+# Subtest: doctor blocks development on an empty worker permission policy
+ok 15 - doctor blocks development on an empty worker permission policy
+  ---
+  duration_ms: 0.4813
+  ...
+# Subtest: doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
+ok 16 - doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
+  ---
+  duration_ms: 0.4314
+  ...
+# Subtest: doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
+ok 17 - doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
+  ---
+  duration_ms: 0.5732
+  ...
+# Subtest: doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
+ok 18 - doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
+  ---
+  duration_ms: 0.7855
+  ...
+# Subtest: doctor fails closed on unrealistic worker timeouts
+ok 19 - doctor fails closed on unrealistic worker timeouts
+  ---
+  duration_ms: 0.3459
+  ...
+# Subtest: doctor fails closed when the runtime root is not writable
+ok 20 - doctor fails closed when the runtime root is not writable
+  ---
+  duration_ms: 0.2924
+  ...
+# Subtest: doctor accepts C-quoted Windows paths from git check-ignore
+ok 21 - doctor accepts C-quoted Windows paths from git check-ignore
+  ---
+  duration_ms: 0.4013
+  ...
+# Subtest: doctor fails closed when runtime or worktree roots are not git-ignored
+ok 22 - doctor fails closed when runtime or worktree roots are not git-ignored
+  ---
+  duration_ms: 0.3091
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 23 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 1.4816
+  ...
+# Subtest: sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check
+ok 24 - sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check
+  ---
+  duration_ms: 0.6978
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 25 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 8.1652
+  ...
+# Subtest: runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)
+ok 26 - runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)
+  ---
+  duration_ms: 228.1317
+  ...
+# Subtest: runProcess default timeout kill actually terminates the spawned process
+ok 27 - runProcess default timeout kill actually terminates the spawned process
+  ---
+  duration_ms: 356.7498
+  ...
+# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+ok 28 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+  ---
+  duration_ms: 3.4851
+  ...
+# Subtest: config requires an explicit tool surface and nested-execution denies (QA-263-011)
+ok 29 - config requires an explicit tool surface and nested-execution denies (QA-263-011)
+  ---
+  duration_ms: 1.4306
+  ...
+# Subtest: config requires realistic development and QA timeouts above the command timeout
+ok 30 - config requires realistic development and QA timeouts above the command timeout
+  ---
+  duration_ms: 0.2591
+  ...
+# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
+ok 31 - Claude worker passes the scoped allowedTools policy and the development timeout
+  ---
+  duration_ms: 6.0429
+  ...
+# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+ok 32 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+  ---
+  duration_ms: 0.3914
+  ...
+# Subtest: Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+ok 33 - Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+  ---
+  duration_ms: 1.9631
+  ...
+# Subtest: Codex QA worker uses the dedicated QA timeout
+ok 34 - Codex QA worker uses the dedicated QA timeout
+  ---
+  duration_ms: 2.1087
+  ...
+# Subtest: the module constants pin every nested-agent surface
+ok 35 - the module constants pin every nested-agent surface
+  ---
+  duration_ms: 1.474
+  ...
+# Subtest: buildClaudeWorkerArgs produces the exact safe argv with --tools and --disallowedTools
+ok 36 - buildClaudeWorkerArgs produces the exact safe argv with --tools and --disallowedTools
+  ---
+  duration_ms: 0.4622
+  ...
+# Subtest: the built argv never references bypass or dangerous permission modes
+ok 37 - the built argv never references bypass or dangerous permission modes
+  ---
+  duration_ms: 0.2852
+  ...
+# Subtest: a policy exposing a nested-agent tool is rejected with a precise diagnostic
+ok 38 - a policy exposing a nested-agent tool is rejected with a precise diagnostic
+  ---
+  duration_ms: 0.3457
+  ...
+# Subtest: a policy missing a required nested-execution deny rule is rejected
+ok 39 - a policy missing a required nested-execution deny rule is rejected
+  ---
+  duration_ms: 0.1965
+  ...
+# Subtest: empty or missing tool policies fail closed
+ok 40 - empty or missing tool policies fail closed
+  ---
+  duration_ms: 0.1876
+  ...
+# Subtest: bypass tokens are rejected in every policy list
+ok 41 - bypass tokens are rejected in every policy list
+  ---
+  duration_ms: 0.118
+  ...
+# Subtest: buildClaudeWorkerArgs refuses an unsafe policy before any spawn
+ok 42 - buildClaudeWorkerArgs refuses an unsafe policy before any spawn
+  ---
+  duration_ms: 0.5134
+  ...
+1..42
+# tests 42
+# suites 0
+# pass 42
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2452.937
