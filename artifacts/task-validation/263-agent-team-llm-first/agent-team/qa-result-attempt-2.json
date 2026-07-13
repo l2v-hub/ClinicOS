@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "message_type": "qa_result",
+  "message_id": "codex-qa-263-attempt-2-c1eeae00",
+  "correlation_id": "issue-263-attempt-2",
+  "producer_role": "codex-qa",
+  "repository": "l2v-hub/ClinicOS",
+  "issue_number": 263,
+  "pull_request_number": 264,
+  "attempt": 2,
+  "created_at": "2026-07-13T10:50:46.499Z",
+  "subject_sha": "c1eeae00f32059bf8bda1de39cdfda133a91953b",
+  "state_before": "ready-for-qa",
+  "state_after": "qa-failed",
+  "decision": "qa-failed",
+  "acceptance_criteria": [
+    { "id": "AC1", "status": "passed", "evidence_refs": ["agent-team/", "package.json"] },
+    { "id": "AC2", "status": "failed", "evidence_refs": ["QA-263-011"] },
+    { "id": "AC3", "status": "passed", "evidence_refs": ["npm run agent-team:doctor"] },
+    { "id": "AC4", "status": "failed", "evidence_refs": ["QA-263-010"] },
+    { "id": "AC5", "status": "failed", "evidence_refs": ["QA-263-011"] },
+    { "id": "AC6", "status": "unresolved", "evidence_refs": ["QA-263-008"] },
+    { "id": "AC7", "status": "passed", "evidence_refs": ["agent-team/tests/integration/evidence-binding.test.mjs"] },
+    { "id": "AC8", "status": "passed", "evidence_refs": ["agent-team/tests/integration/remediation-loop.test.mjs"] },
+    { "id": "AC9", "status": "passed", "evidence_refs": ["agent-team/tests/integration/remediation-loop.test.mjs"] },
+    { "id": "AC10", "status": "passed", "evidence_refs": ["agent-team/tests/integration/remediation-loop.test.mjs"] },
+    { "id": "AC11", "status": "failed", "evidence_refs": ["QA-263-010", "QA-263-011"] },
+    { "id": "AC12", "status": "failed", "evidence_refs": ["QA-263-010", "QA-263-011"] },
+    { "id": "AC13", "status": "passed", "evidence_refs": ["agent-team/tests/integration/prohibited-actions.test.mjs"] }
+  ],
+  "findings": [
+    { "finding_id": "QA-263-010", "acceptance_criterion_id": "AC4", "severity": "high", "category": "claim-lifecycle", "observed": "ready-for-qa handoff completed but attempt-2 development claim remains active and no claim release message exists", "expected": "successful and failed workers both publish schema-valid release and leave no active claim", "reproduction_command_ref": "npm run agent-team:status; gh api repos/l2v-hub/ClinicOS/issues/263/comments --paginate", "evidence_refs": ["agent-team/src/runtime.mjs:65-91", "codex-qa-report.md"], "status": "open", "remediation_required": true, "fingerprint": "b7ae77dbc16d1663f481f605f96b140dada041719bde50673333f0d0d10b93ec" },
+    { "finding_id": "QA-263-011", "acceptance_criterion_id": "AC5", "severity": "critical", "category": "permission-bypass", "observed": "an Agent Team implementation worker left a concurrent claude.exe process running with --permission-mode bypassPermissions", "expected": "scoped tools prevent nested Claude workers and no Agent Team process uses or survives with bypass permissions", "reproduction_command_ref": "Get-CimInstance Win32_Process -Filter ProcessId=22548", "evidence_refs": ["agent-team/config/default.json", "agent-team/src/workers/claude-development-worker.mjs", "codex-qa-report.md"], "status": "open", "remediation_required": true, "fingerprint": "a9b903b27efa5f2ca881b57edd562f2ce58cf82232f1fcc76e5dc0e54d2b511e" },
+    { "finding_id": "QA-263-008", "acceptance_criterion_id": "AC6", "severity": "medium", "category": "ci-external", "observed": "GitHub Actions jobs still cannot start due account payment or spending limit", "expected": "CI jobs execute on the final remediation SHA", "reproduction_command_ref": "gh pr checks 264", "evidence_refs": ["https://github.com/l2v-hub/ClinicOS/actions"], "status": "unresolved", "remediation_required": false, "fingerprint": "1feb1cea04d6d53fdcfe70f3f38b0a4fba5aa10090fa99a249dad8c032ce9473" }
+  ],
+  "commands": [],
+  "artifact_refs": [],
+  "next_actions": ["ready-for-dev", "assigned-to-claude"]
+}

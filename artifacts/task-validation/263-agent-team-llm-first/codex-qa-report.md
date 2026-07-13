@@ -91,3 +91,35 @@ Required remediation: sanitize captured output deterministically, rerun `git dif
 | Final decision | QA FAILED | Remediation required on the same draft PR |
 
 Final Decision: QA FAILED
+
+## Independent QA attempt 2 — PR head `c1eeae00f32059bf8bda1de39cdfda133a91953b`
+
+Fresh attempt-2 verification:
+
+- `node --test agent-team/tests/unit agent-team/tests/integration`: PASS, 60/60.
+- `npm run agent-team:doctor`: PASS, 21 checks.
+- `npm run agent-team:status`: PASS and reconstructs issue/PR state from GitHub.
+- `npm run build`: PASS.
+- `git diff --check origin/main...HEAD`: PASS.
+- Evidence binding integration tests: PASS.
+- GitHub Actions remain unavailable because the account billing/spending gate prevents jobs from starting.
+
+### QA-263-010 — HIGH — Successful development leaves its GitHub claim active
+
+After the attempt-2 handoff moved issue #263 to `ready-for-qa`, `agent-team:status` still reported the attempt-2 claim as active until `2026-07-13T15:37:44Z`. No `work.claim_released` comment exists. Code review confirms `runDevelopment` calls `releaseGitHubClaim` only in the failure `catch`, never after a successful `runClaudeDevelopment` return.
+
+Required remediation: release the same claim after a successful development handoff, preserve the handoff before release, and add an integration test proving `ready-for-qa` has no active development claim.
+
+### QA-263-011 — CRITICAL — A nested Claude process survived with `bypassPermissions`
+
+The timed-out implementation worker left PID 22548 alive with command line:
+
+```text
+claude.exe --permission-mode bypassPermissions
+```
+
+This violates the explicit no-bypass constraint and caused concurrent writes with the next worker. Codex stopped the orphan only after the branch was clean and pushed. The configured `allowedTools` policy restricts Bash permissions but does not remove the `Agent`/nested-worker tool surface; a Claude session can therefore spawn another Claude process outside the intended single-worker lifecycle.
+
+Required remediation: restrict the available Claude tool set to the required file/search/Bash tools, explicitly disallow nested agents and Claude subprocess invocation, validate that policy in config and doctor, test the exact argv, and ensure timeout/shutdown cannot leave an Agent Team-owned process tree alive.
+
+Attempt-2 Final Decision: QA FAILED
