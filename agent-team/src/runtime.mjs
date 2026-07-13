@@ -16,7 +16,7 @@ export async function createRuntime({ config, repoRoot, allowCurrentSupervisor =
   const git = createGitAdapter({ run: runProcess, config });
   const developmentSchema = await loadSchema(repoRoot, 'development-handoff.schema.json');
   const qaSchema = await loadSchema(repoRoot, 'qa-result.schema.json');
-  const doctor = () => runDoctor({ config, run: runProcess, isSupervisorLive: () => allowCurrentSupervisor ? false : isSupervisorLive(config.runtimeRoot) });
+  const doctor = () => runDoctor({ config, run: runProcess, isSupervisorLive: ({ heartbeatTimeoutMs } = {}) => allowCurrentSupervisor ? false : isSupervisorLive(config.runtimeRoot, { heartbeatTimeoutMs: heartbeatTimeoutMs ?? config.heartbeatTimeoutMs }) });
   const listDevelopment = async () => (await github.listIssuesByLabels([config.labels.readyForDev, config.labels.assignedToClaude])).slice(0, config.developmentConcurrency);
   const listQa = async () => {
     const issues = (await github.listIssuesByLabels([config.labels.readyForQa])).slice(0, config.qaConcurrency);
