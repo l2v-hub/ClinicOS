@@ -153,4 +153,10 @@ test('a failing Claude worker releases the claim with a schema-valid work.claim_
   const released = github.state.comments.map((c) => { try { return parseProtocolComment(c.body, claimSchema); } catch { return null; } }).filter((v) => v?.message_type === 'work.claim_released');
   assert.equal(released.length, 1);
   assert.match(released[0].release_reason, /worker-failure/);
+
+  // QA-263-013: after a worker failure the issue must return to the configured claimable
+  // development state instead of remaining agent-working with no active claim.
+  assert.equal(github.state.labels.has('agent-working'), false, 'worker failure must not leave the issue agent-working');
+  assert.equal(github.state.labels.has('ready-for-dev'), true, 'worker failure must restore ready-for-dev');
+  assert.equal(github.state.labels.has('assigned-to-claude'), true, 'worker failure must restore assigned-to-claude');
 });

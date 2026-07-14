@@ -87,6 +87,10 @@ export async function createRuntime({ config, repoRoot, allowCurrentSupervisor =
       handoff = await runClaudeDevelopment({ issue, attempt: context.attempt, config, github, git, run, schema: schemas.development, priorQaResult });
     } catch (error) {
       await releaseGitHubClaim({ github, schema: schemas.claim, claim: acquired.claim, reason: `worker-failure: ${error.message}`.slice(0, 300) });
+      // QA-263-013: a failed worker must return the issue to the configured claimable
+      // development state — never leave it agent-working with no active claim.
+      await github.removeLabels(issue.number, [config.labels.working]);
+      await github.addLabels(issue.number, [config.labels.readyForDev, config.labels.assignedToClaude]);
       throw error;
     }
     // QA-263-010: a successful run must release its claim too — only after the handoff is

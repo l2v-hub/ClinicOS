@@ -21,6 +21,15 @@ test('runProcess reports a missing executable without throwing', async () => {
   assert.match(result.error, /ENOENT|not found/i);
 });
 
+test('runProcess refuses a nonexistent working directory with an unambiguous diagnostic instead of a misleading spawn ENOENT (QA-263-013)', async () => {
+  const missingCwd = `${process.cwd()}\\agent-team\\.worktrees\\definitely-missing-issue-263`;
+  const result = await runProcess({ command: 'node', args: ['-e', 'process.exit(0)'], cwd: missingCwd, timeoutMs: 2000, maxOutputBytes: 1024 });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, null);
+  assert.match(result.error, /working directory does not exist/i, 'the error must name the invalid cwd condition, not the executable');
+  assert.doesNotMatch(result.error, /spawn node ENOENT/, 'an invalid cwd must not masquerade as a missing executable');
+});
+
 test('runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)', async () => {
   const killed = [];
   const result = await runProcess({

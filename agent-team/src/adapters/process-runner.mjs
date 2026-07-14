@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { sanitizeText } from '../core/sanitize.mjs';
 
 // Timeout kill must take down the whole owned process tree (QA-263-011): on Windows,
@@ -12,6 +13,11 @@ function defaultKillTree(child) {
 
 export function runProcess({ command, args = [], cwd, input, timeoutMs = 120000, maxOutputBytes = 1048576, sanitize = true, killTree = defaultKillTree }) {
   const startedAt = new Date().toISOString();
+  // QA-263-013: node's spawn reports a missing cwd as `spawn <command> ENOENT`, which is
+  // indistinguishable from a missing executable. Refuse invalid coordinates explicitly.
+  if (cwd !== undefined && !existsSync(cwd)) {
+    return Promise.resolve({ ok: false, code: null, error: sanitizeText(`working directory does not exist: ${cwd}`), command, args, pid: null, startedAt, finishedAt: new Date().toISOString(), stdout: '', stderr: '' });
+  }
   return new Promise((resolve) => {
     let stdout = '';
     let stderr = '';
