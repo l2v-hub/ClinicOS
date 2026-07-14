@@ -1,0 +1,20 @@
+TAP version 13
+# Subtest: browser-e2e job binds the production frontend build to the local CI backend (QA-263-012)
+ok 1 - browser-e2e job binds the production frontend build to the local CI backend (QA-263-012)
+  ---
+  duration_ms: 4.6482
+  ...
+# Subtest: production fallback behavior in frontend config is unchanged (QA-263-012 constraint)
+ok 2 - production fallback behavior in frontend config is unchanged (QA-263-012 constraint)
+  ---
+  duration_ms: 1.1939
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 126.2909

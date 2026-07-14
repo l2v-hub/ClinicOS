@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "message_type": "qa_result",
+  "message_id": "codex-qa-263-attempt-4-ci-browser",
+  "correlation_id": "issue-263-attempt-4",
+  "producer_role": "codex-qa",
+  "repository": "l2v-hub/ClinicOS",
+  "issue_number": 263,
+  "pull_request_number": 264,
+  "attempt": 4,
+  "created_at": "2026-07-14T08:20:00.000Z",
+  "subject_sha": "028f767004ce73ccd9622e74f414029a0c71d47d",
+  "state_before": "blocked",
+  "state_after": "qa-failed",
+  "decision": "qa-failed",
+  "acceptance_criteria": [
+    {
+      "id": "AC6",
+      "status": "failed",
+      "evidence_refs": [
+        "https://github.com/l2v-hub/ClinicOS/actions/runs/29248135138/job/87033047628",
+        "https://github.com/l2v-hub/ClinicOS/actions/runs/29248135178/job/87032278624"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "QA-263-012",
+      "acceptance_criterion_id": "AC6",
+      "severity": "medium",
+      "category": "ci-configuration",
+      "observed": "Azure staging quota is remediated and the preview deploy passes, but browser-e2e builds the production frontend without VITE_API_URL. The browser therefore calls the Railway fallback instead of the CI backend. Local backend and AI runtime logs show no import request and recent import jobs is empty.",
+      "expected": "The browser-e2e production build uses http://localhost:3001, reaches the deterministic local backend and AI runtime, displays the review UI, and completes both desktop and tablet paths.",
+      "reproduction_command_ref": "gh run view 29248135138 --repo l2v-hub/ClinicOS --job 87033047628 --log-failed",
+      "evidence_refs": [
+        "https://github.com/l2v-hub/ClinicOS/actions/runs/29248135138/job/87033047628",
+        "artifact:ai-import-e2e-screenshots:sha256:157bda752a7290b46b8c5edc644139c8b13176d707a27551f3949d14e31ef9f5"
+      ],
+      "status": "open",
+      "remediation_required": true,
+      "fingerprint": "b85714063ef4866dc03e0453b8756e300562b0e19eac69c2b1e12d0965b0c805"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "gh",
+        "run",
+        "view",
+        "29248135138",
+        "--job",
+        "87033047628",
+        "--log-failed"
+      ],
+      "cwd": "C:/tmp/ClinicOS-agent-team",
+      "exit_code": 0,
+      "started_at": "2026-07-14T08:13:00.000Z",
+      "finished_at": "2026-07-14T08:14:00.000Z",
+      "stdout_ref": "https://github.com/l2v-hub/ClinicOS/actions/runs/29248135138/job/87033047628",
+      "stderr_ref": "https://github.com/l2v-hub/ClinicOS/actions/runs/29248135138/job/87033047628"
+    }
+  ],
+  "artifact_refs": [],
+  "next_actions": [
+    "ready-for-dev",
+    "assigned-to-claude"
+  ]
+}

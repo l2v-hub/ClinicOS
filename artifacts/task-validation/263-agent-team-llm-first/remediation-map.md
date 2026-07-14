@@ -28,3 +28,17 @@ Attempt-2 claim: comment 4955564065 (lease e2431891…, refreshed for server-clo
 
 Attempt-3 claim: comment 4957297633 (lease 2f1099fa-b2d5-49a6-bcac-e4e1cbd12d8e); stale attempt-2
 claim released in comment 4957297859 (`claim-263-2-e2431891-released`).
+
+## Attempt 6 (remediation of qa_result comments 4967120522 attempt 4 and 4967217638 attempt 5)
+
+Verbatim Codex QA results preserved at `agent-team/qa-result-attempt-4.json` and
+`agent-team/qa-result-attempt-5.json`.
+
+| Finding | Severity | Resolution | Code | TDD evidence |
+|---|---|---|---|---|
+| QA-263-012 | medium | RESOLVED — smallest safe workflow correction: `VITE_API_URL: http://localhost:3001` added to the browser-e2e **job env** of `ai-import-e2e.yml`, so the production Vite build bakes the CI backend URL in and both deterministic desktop/tablet paths reach the local backend/mock runtime. Production fallback in `frontend/src/config.ts` untouched and pinned by regression test (Railway URL + PROD/dev selection asserted verbatim) | `.github/workflows/ai-import-e2e.yml` | tdd/a6-1-ci-binding-red.txt (1 fail) → tdd/a6-1-ci-binding-green.txt (2/2); `agent-team/tests/unit/ci-browser-e2e-config.test.mjs` |
+| QA-263-013 | high | RESOLVED — recovered coordinates validated before spawn (existence + expected branch via `rev-parse --abbrev-ref HEAD` + expected repository via `remote get-url origin`); stale coordinates safely repaired: live checkout of the same branch reused, else `worktree prune` + recreation from the existing branch; no destructive git command on any recovery path (occupied dir / missing branch fail closed); `runProcess` refuses a nonexistent cwd with `working directory does not exist: <cwd>` instead of a misleading `spawn claude ENOENT`; worker failure releases the claim **and** restores `ready-for-dev` + `assigned-to-claude` while removing `agent-working`; `once` returns `ok:false` (exit 1 via existing cli mapping) whenever `development.errors`/`qa.errors` is non-empty | `agent-team/src/adapters/git.mjs`, `agent-team/src/adapters/process-runner.mjs`, `agent-team/src/runtime.mjs`, `agent-team/src/core/reconciler.mjs`, `agent-team/src/commands/once.mjs` | tdd/a6-2-worktree-recovery-red.txt (5 fail) → green (11/11); tdd/a6-3-failure-reporting-red.txt (2 fail) → green (6/6); `git-worktree-recovery.test.mjs`, `once-failure-reporting.test.mjs`, extended `process-runner.test.mjs` + `remediation-loop.test.mjs` |
+
+Attempt-6 claim: comment 4967240019 (lease c5f9b01e-bdf5-4360-ab8b-8fff7d34cb78, refreshed during
+execution). Full suite after both fixes: 90/90; doctor 21/21; build exit 0; diff-check exit 0;
+static scan clean (`checks/a6-secret-prohibited-scan.txt`).

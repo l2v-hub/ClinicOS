@@ -2,84 +2,94 @@ TAP version 13
 # Subtest: evidence binding builds from and verifies against committed state at the PR head, rejecting tampering
 ok 1 - evidence binding builds from and verifies against committed state at the PR head, rejecting tampering
   ---
-  duration_ms: 2083.123
+  duration_ms: 2476.2547
   ...
 # Subtest: evidence binding rejects a schema-invalid envelope before touching git history
 ok 2 - evidence binding rejects a schema-invalid envelope before touching git history
   ---
-  duration_ms: 0.7037
+  duration_ms: 0.3476
+  ...
+# Subtest: reconciliationOutcome marks a pass with worker errors as failed even when doctor is ready
+ok 3 - reconciliationOutcome marks a pass with worker errors as failed even when doctor is ready
+  ---
+  duration_ms: 1.1668
+  ...
+# Subtest: once returns ok:false when the development worker fails, so the CLI exits non-zero (QA-263-013)
+ok 4 - once returns ok:false when the development worker fails, so the CLI exits non-zero (QA-263-013)
+  ---
+  duration_ms: 14.7361
   ...
 # Subtest: runtime source contains no prohibited automatic action or bypass invocation
-ok 3 - runtime source contains no prohibited automatic action or bypass invocation
+ok 5 - runtime source contains no prohibited automatic action or bypass invocation
   ---
-  duration_ms: 17.4918
+  duration_ms: 11.7634
   ...
 # Subtest: qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
-ok 4 - qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
+ok 6 - qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
   ---
-  duration_ms: 17.8089
+  duration_ms: 11.0918
   ...
 # Subtest: three equivalent qa-failed results block the issue with a structured reason and no Claude launch
-ok 5 - three equivalent qa-failed results block the issue with a structured reason and no Claude launch
+ok 7 - three equivalent qa-failed results block the issue with a structured reason and no Claude launch
   ---
-  duration_ms: 6.1026
+  duration_ms: 6.1828
   ...
 # Subtest: a successful development handoff releases its claim after publishing and leaves ready-for-qa with no active claim
-ok 6 - a successful development handoff releases its claim after publishing and leaves ready-for-qa with no active claim
+ok 8 - a successful development handoff releases its claim after publishing and leaves ready-for-qa with no active claim
   ---
-  duration_ms: 6.3716
+  duration_ms: 5.7449
   ...
 # Subtest: a failing Claude worker releases the claim with a schema-valid work.claim_released message
-ok 7 - a failing Claude worker releases the claim with a schema-valid work.claim_released message
+ok 9 - a failing Claude worker releases the claim with a schema-valid work.claim_released message
   ---
-  duration_ms: 7.0841
+  duration_ms: 5.2527
   ...
 # Subtest: status projection reads work coordinates from GitHub protocol history, not local files
-ok 8 - status projection reads work coordinates from GitHub protocol history, not local files
+ok 10 - status projection reads work coordinates from GitHub protocol history, not local files
   ---
-  duration_ms: 3.7408
+  duration_ms: 3.1345
   ...
 # Subtest: status projection reports no active claim once a matching release exists
-ok 9 - status projection reports no active claim once a matching release exists
+ok 11 - status projection reports no active claim once a matching release exists
   ---
-  duration_ms: 0.3192
+  duration_ms: 0.2482
   ...
 # Subtest: stop waits for the supervisor to exit before reporting stopped
-ok 10 - stop waits for the supervisor to exit before reporting stopped
+ok 12 - stop waits for the supervisor to exit before reporting stopped
   ---
-  duration_ms: 9.3498
+  duration_ms: 8.2015
   ...
 # Subtest: stop reports a timeout when the supervisor never exits
-ok 11 - stop reports a timeout when the supervisor never exits
+ok 13 - stop reports a timeout when the supervisor never exits
   ---
-  duration_ms: 3.4662
+  duration_ms: 2.3825
   ...
 # Subtest: start acknowledges only after the detached supervisor owns the runtime
-ok 12 - start acknowledges only after the detached supervisor owns the runtime
+ok 14 - start acknowledges only after the detached supervisor owns the runtime
   ---
-  duration_ms: 1.4372
+  duration_ms: 0.9442
   ...
 # Subtest: restart recovery refreshes my unexpired claims from GitHub state
-ok 13 - restart recovery refreshes my unexpired claims from GitHub state
+ok 15 - restart recovery refreshes my unexpired claims from GitHub state
   ---
-  duration_ms: 3.6831
+  duration_ms: 2.1184
   ...
 # Subtest: reconciler never launches development when doctor says Claude is unavailable
-ok 14 - reconciler never launches development when doctor says Claude is unavailable
+ok 16 - reconciler never launches development when doctor says Claude is unavailable
   ---
-  duration_ms: 2.4326
+  duration_ms: 1.3445
   ...
 # Subtest: duplicate supervisor lock remains rejected
-ok 15 - duplicate supervisor lock remains rejected
+ok 17 - duplicate supervisor lock remains rejected
   ---
-  duration_ms: 14.7499
+  duration_ms: 10.9202
   ...
-1..15
-# tests 15
+1..17
+# tests 17
 # suites 0
-# pass 15
+# pass 17
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 2299.2396
+# duration_ms 2668.6595

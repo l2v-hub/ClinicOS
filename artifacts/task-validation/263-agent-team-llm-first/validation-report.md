@@ -1,97 +1,96 @@
-# Task Validation Report — attempt 3 (remediation)
+# Task Validation Report — attempt 6 (remediation)
 
 ## Task
 - Title: Agent Team LLM-first con Claude development loop e Codex QA indipendente
 - Slug: 263-agent-team-llm-first
 - Issue: l2v-hub/ClinicOS#263 · PR: #264 (draft, unchanged)
-- Attempt: 3 (remediation of Codex qa_result comment 4957169054, decision qa-failed)
-- Claim: comment 4957297633 (work.claim attempt 3, lease 2f1099fa-b2d5-49a6-bcac-e4e1cbd12d8e)
+- Attempt: 6 (remediation of Codex qa_result comments 4967120522 attempt 4 and 4967217638 attempt 5, decision qa-failed)
+- Claim: comment 4967240019 (work.claim attempt 6, lease c5f9b01e-bdf5-4360-ab8b-8fff7d34cb78, refreshed during execution)
 - Branch: codex/agent-team-architecture (same branch, same worktree C:/tmp/ClinicOS-agent-team, same draft PR)
-- Date: 2026-07-13
+- Date: 2026-07-14
 - Producer: claude-development worker (Claude Code)
 
-Attempt-2 report is superseded by this attempt but remains committed in history at the attempt-2
-SHA; Codex QA artifacts (`codex-qa-report.md`, `agent-team/qa-result.json`,
-`agent-team/qa-result-attempt-2.json`) are preserved byte-for-byte.
+Attempt-3 report is superseded by this attempt but remains committed in history at the attempt-3
+SHA; Codex QA artifacts (`codex-qa-report.md`, `agent-team/qa-result*.json`) are preserved
+byte-for-byte, including the new verbatim `qa-result-attempt-4.json` and
+`qa-result-attempt-5.json`.
 
 ## Remediation summary
 
-Both attempt-2 code findings resolved with strict RED→GREEN TDD:
+Both open findings resolved with strict RED→GREEN TDD:
 
-- **QA-263-010 (high)** — a successful development run now publishes a schema-valid
-  `work.claim_released` after the handoff is preserved, and released leases are excluded from
-  claim arbitration, recovery, and the status projection even while unexpired. The stale
-  attempt-2 claim (comment 4955564065, lease e2431891…) was explicitly released on GitHub
-  (comment 4957297859) as live cleanup.
-- **QA-263-011 (critical)** — nested Claude execution is made unavailable: the worker argv now
-  carries the documented `--tools` (restricted surface without Task/Agent), `--allowedTools`, and
-  `--disallowedTools` (Task, Agent, and claude/npx-claude subprocess denies; deny rules beat
-  allow rules). The fail-closed policy is enforced identically at config validation, in doctor,
-  and at worker launch; the exact safe argv is pinned by regression tests with literal fixtures.
-  A timed-out worker escalates to a process-tree kill (`taskkill /pid <pid> /T /F` on win32), so
-  timeout/shutdown cannot leave an Agent Team-owned process alive — and no nested Claude process
-  can be created in the first place.
+- **QA-263-012 (medium, ci-configuration / AC6)** — the `browser-e2e` job of
+  `.github/workflows/ai-import-e2e.yml` built the production Vite frontend without
+  `VITE_API_URL`, so `frontend/src/config.ts` baked the Railway production fallback into the
+  bundle and the browser test never reached the CI backend/mock runtime. The smallest safe
+  correction adds `VITE_API_URL: http://localhost:3001` to the browser-e2e **job env only**
+  (build-time binding for both deterministic desktop/tablet paths). Production fallback behavior
+  in `frontend/src/config.ts` is untouched and now pinned by a dedicated regression test.
+- **QA-263-013 (high, recovery-worktree / AC11)** — four coordinated fixes:
+  1. `git.mjs prepareIssueWorktree` no longer adopts recorded coordinates blindly: it validates
+     existence, expected branch (`rev-parse --abbrev-ref HEAD`), and expected repository
+     (`remote get-url origin` vs configured repository). Stale coordinates are safely repaired:
+     a live checkout of the same branch is reused; otherwise dead registrations are pruned and
+     the worktree is recreated from the existing branch. No destructive git command
+     (remove/‑D/‑B/--force/reset) exists on any recovery path; occupied directories or missing
+     branches fail closed.
+  2. `process-runner.mjs` refuses a nonexistent `cwd` with the unambiguous diagnostic
+     `working directory does not exist: <cwd>` instead of node's misleading
+     `spawn claude ENOENT`.
+  3. `runtime.mjs runDevelopment` failure path now returns the issue to the configured claimable
+     development state: after the claim release it removes `agent-working` and restores
+     `ready-for-dev` + `assigned-to-claude` — no more orphaned agent-working with no active claim.
+  4. `reconciler.mjs` exports `reconciliationOutcome` and `once.mjs` uses it: a pass with
+     populated `development.errors`/`qa.errors` returns `ok:false`, which `cli.mjs` already maps
+     to process exit 1 — `agent-team:once` reports worker failure unambiguously.
 
-QA-263-008 remains explicitly unresolved as an external GitHub Actions billing condition owned by
-the repository owner (reported, not faked). Finding-by-finding detail: `remediation-map.md`.
+Finding-by-finding detail: `remediation-map.md` (attempt-6 section).
 
-## TDD Record — attempt 3 (each RED observed before production code)
+## TDD Record — attempt 6 (each RED observed before production code)
 
 | Cycle | Finding | RED (exit ≠ 0) | GREEN |
 |---|---|---|---|
-| A3-1 claim release lifecycle | QA-263-010 | tdd/a3-1-claim-release-red.txt (4 fail: arbitration, recovery, projection, success-release) | tdd/a3-1-claim-release-green.txt (16/16) |
-| A3-2 worker tool policy + tree kill | QA-263-011 | tdd/a3-2-tool-policy-red.txt (13 fail incl. missing worker-policy module) | tdd/a3-2-tool-policy-green.txt (42/42) |
-
-RED evidence is normalized with `sanitizeText` (node:test YAML failure blocks emit
-whitespace-only lines); the normalization is its own commit for byte-level traceability. The
-whitespace regression was caught by this attempt's evidence harness running git directly — an
-output-filtering shell proxy had masked it in a manual check, which is exactly why every gate
-below is recorded through `runProcess` with authentic timestamps.
+| A6-1 CI browser-e2e frontend binding | QA-263-012 | tdd/a6-1-ci-binding-red.txt (1 fail: missing VITE_API_URL in browser-e2e job) | tdd/a6-1-ci-binding-green.txt (2/2) |
+| A6-2 worktree recovery + invalid cwd | QA-263-013 | tdd/a6-2-worktree-recovery-red.txt (5 fail: blind adoption, no recreation, no fail-closed, foreign repo adopted, misleading ENOENT) | tdd/a6-2-worktree-recovery-green.txt (11/11) |
+| A6-3 failure labels + once outcome | QA-263-013 | tdd/a6-3-failure-reporting-red.txt (2 fail: agent-working left behind, missing reconciliationOutcome) | tdd/a6-3-failure-reporting-green.txt (6/6) |
 
 ## Fresh verification (real timestamps in checks/command-log.jsonl)
 
-- `node --test --test-reporter=tap agent-team/tests/unit/*` → `test-results/unit.tap` (exit 0)
-- `node --test --test-reporter=tap agent-team/tests/integration/*` → `test-results/integration.tap` (exit 0)
-- `node agent-team/src/cli.mjs doctor` → `checks/doctor-smoke.json` (exit 0, 21/21 checks ok,
-  including the strengthened `claude-worker-options` verifying documented `--tools` and
-  `--disallowedTools` against the installed CLI, and `worker-permission-policy` running the
-  fail-closed nested-agent validator against the shipped config)
+- `node --test --test-reporter=tap agent-team/tests/unit/*` → `test-results/unit.tap` (exit 0, 73/73)
+- `node --test --test-reporter=tap agent-team/tests/integration/*` → `test-results/integration.tap` (exit 0, 17/17)
+- `node agent-team/src/cli.mjs doctor` → `checks/doctor-smoke.json` (exit 0, 21/21 checks ok)
 - `cmd /d /s /c npm run build` → `checks/build.txt` (exit 0, frontend + backend)
 - `git diff --check origin/main...HEAD` → `checks/git-diff-check.txt` (exit 0, empty)
+- static secret/prohibited-action scan of every touched file → `checks/a6-secret-prohibited-scan.txt` (clean)
 
-Full suite after both fixes: 80/80 (unit + integration).
+Full suite after both fixes: 90/90 (73 unit + 17 integration).
 
 ## New/changed tests
 
-- `worker-policy.test.mjs` (new): pins `NESTED_AGENT_TOOLS` and all ten
-  `REQUIRED_DISALLOWED_TOOLS` by literal value; exact-argv regression for
-  `buildClaudeWorkerArgs`; per-rule policy rejection diagnostics; bypass-token rejection in
-  every list; launch refusal before any spawn.
-- `claude-development-worker.test.mjs`: exact safe argv deep-equal (literal fixtures, never
-  echoed from the implementation); refusal when policy exposes Task or lacks disallowedTools.
-- `claim-lifecycle.test.mjs`: released claims lose arbitration; released claims are never
-  recovered as active work.
-- `remediation-loop.test.mjs`: successful development publishes the release after the handoff
-  (comment-order asserted), same lease, `development-handoff-published` reason, ready-for-qa
-  label with `active_claim: null` in the projection.
-- `supervisor-lifecycle.test.mjs`: projection clears a lease-matched release even for a
-  schema-invalid claim comment (the real attempt-2 shape) and reports `released_claims`.
-- `process-runner.test.mjs`: timeout escalates to the injected tree kill; default kill provably
-  terminates the child (pid liveness poll).
-- `config.test.mjs` / `worker-operability.test.mjs` / `doctor.test.mjs`: required `tools` +
-  `disallowedTools` keys, nested-agent rejection, missing-deny rejection, doctor negatives for
-  undocumented CLI options and unsafe policy.
+- `ci-browser-e2e-config.test.mjs` (new): deterministic validation that the browser-e2e job binds
+  `VITE_API_URL` to `http://localhost:3001` for its build, and that the production fallback in
+  `frontend/src/config.ts` (Railway URL + PROD/dev selection) is unchanged.
+- `git-worktree-recovery.test.mjs` (new): stale recorded path never blindly adopted (live checkout
+  of the branch reused); recreation from the existing branch with `worktree prune` and without any
+  destructive command; valid coordinates reused as-is; occupied wrong-branch directory fails
+  closed; foreign-repository worktree never adopted.
+- `process-runner.test.mjs`: nonexistent cwd refused with `working directory does not exist`,
+  explicitly not `spawn node ENOENT`.
+- `remediation-loop.test.mjs`: failing worker restores `ready-for-dev` + `assigned-to-claude` and
+  removes `agent-working` (in the same test that already asserts the schema-valid claim release).
+- `once-failure-reporting.test.mjs` (new): `reconciliationOutcome` marks passes with development
+  or QA errors as failed; `once` run against an injected fake runtime returns `ok:false` when the
+  development worker fails with the invalid-cwd diagnostic.
 
 ## Security / privacy
 
-- The worker tool surface excludes every nested-agent tool; nested Claude execution is denied at
-  three independent layers (tool surface, deny rules, prompt constraint) and validated at three
-  gates (config, doctor, launch).
-- No bypass or dangerous permission token can appear in any policy list or in the built argv
-  (validated + regression-tested); permission mode is pinned to `acceptEdits`.
-- Process-tree timeout kill prevents orphaned owned processes on win32.
-- Sanitizer discipline unchanged (credentials, tokens, identifiers, deterministic whitespace).
-- Evidence contains no secrets or account identifiers.
+- The recovery path passes commands as argument arrays only; no untrusted issue content reaches a
+  shell string; no destructive git operation exists on any recovery path.
+- The invalid-cwd diagnostic is sanitized through `sanitizeText` like all runner errors.
+- Evidence contains no secrets, account identifiers, or clinical content
+  (`checks/a6-secret-prohibited-scan.txt`).
+- Workflow change adds a localhost-only build-time URL to a CI job; no production configuration,
+  fallback, secret, or deploy path is touched.
 
 ## Evidence binding (QA-263-005 architecture, unchanged)
 

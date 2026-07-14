@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "message_type": "qa_result",
+  "message_id": "codex-qa-263-attempt-5-worker-recovery",
+  "correlation_id": "issue-263-attempt-5",
+  "producer_role": "codex-qa",
+  "repository": "l2v-hub/ClinicOS",
+  "issue_number": 263,
+  "pull_request_number": 264,
+  "attempt": 5,
+  "created_at": "2026-07-14T09:00:00.000Z",
+  "subject_sha": "028f767004ce73ccd9622e74f414029a0c71d47d",
+  "state_before": "agent-working",
+  "state_after": "qa-failed",
+  "decision": "qa-failed",
+  "acceptance_criteria": [
+    {
+      "id": "AC6",
+      "status": "failed",
+      "evidence_refs": [
+        "QA-263-012"
+      ]
+    },
+    {
+      "id": "AC11",
+      "status": "failed",
+      "evidence_refs": [
+        "QA-263-013"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "QA-263-012",
+      "acceptance_criterion_id": "AC6",
+      "severity": "medium",
+      "category": "ci-configuration",
+      "observed": "browser-e2e builds the production frontend without VITE_API_URL, calls the Railway fallback, and never reaches the CI backend or mock runtime.",
+      "expected": "browser-e2e builds with VITE_API_URL=http://localhost:3001 and completes the deterministic desktop and tablet import paths.",
+      "reproduction_command_ref": "gh run view 29248135138 --repo l2v-hub/ClinicOS --job 87033047628 --log-failed",
+      "evidence_refs": [
+        "https://github.com/l2v-hub/ClinicOS/actions/runs/29248135138/job/87033047628"
+      ],
+      "status": "open",
+      "remediation_required": true,
+      "fingerprint": "b85714063ef4866dc03e0453b8756e300562b0e19eac69c2b1e12d0965b0c805"
+    },
+    {
+      "finding_id": "QA-263-013",
+      "acceptance_criterion_id": "AC11",
+      "severity": "high",
+      "category": "recovery-worktree",
+      "observed": "Attempt 5 reconstructed C:/tmp/ClinicOS-agent-team/agent-team/.worktrees/issue-263 even though that directory does not exist. runProcess then reported spawn claude ENOENT. The claim was released but the issue remained agent-working with no active claim, and agent-team:once still returned process exit code 0 with development.errors populated.",
+      "expected": "Recovery validates that the recorded worktree exists and belongs to the expected branch; otherwise it safely reuses or recreates valid coordinates. Worker failure returns the issue to a claimable development state and the command reports the failure unambiguously. Claude must then be invoked in the valid worktree.",
+      "reproduction_command_ref": "npm run agent-team:once; npm run agent-team:status; git worktree list --porcelain",
+      "evidence_refs": [
+        "https://github.com/l2v-hub/ClinicOS/issues/263#issuecomment-4967224848",
+        "https://github.com/l2v-hub/ClinicOS/issues/263#issuecomment-4967226391"
+      ],
+      "status": "open",
+      "remediation_required": true,
+      "fingerprint": "c4d1efbf4677f8f4d4c0224c2a4e530210135ee4928a9b895708ff90edba4e15"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "npm",
+        "run",
+        "agent-team:once"
+      ],
+      "cwd": "C:/tmp/ClinicOS-agent-team",
+      "exit_code": 0,
+      "started_at": "2026-07-14T08:54:00.000Z",
+      "finished_at": "2026-07-14T08:55:17.000Z",
+      "stdout_ref": "issue-comment:4967226391",
+      "stderr_ref": "issue-comment:4967226391"
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "agent-team:status"
+      ],
+      "cwd": "C:/tmp/ClinicOS-agent-team",
+      "exit_code": 0,
+      "started_at": "2026-07-14T08:58:30.000Z",
+      "finished_at": "2026-07-14T08:58:40.000Z",
+      "stdout_ref": "local-qa-session",
+      "stderr_ref": "local-qa-session"
+    }
+  ],
+  "artifact_refs": [],
+  "next_actions": [
+    "ready-for-dev",
+    "assigned-to-claude"
+  ]
+}

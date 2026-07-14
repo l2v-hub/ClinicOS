@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: reconciliationOutcome marks a pass with worker errors as failed even when doctor is ready
+ok 1 - reconciliationOutcome marks a pass with worker errors as failed even when doctor is ready
+  ---
+  duration_ms: 1.4017
+  ...
+# Subtest: once returns ok:false when the development worker fails, so the CLI exits non-zero (QA-263-013)
+ok 2 - once returns ok:false when the development worker fails, so the CLI exits non-zero (QA-263-013)
+  ---
+  duration_ms: 11.1493
+  ...
+# Subtest: qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
+ok 3 - qa-failed loops back to Claude on the same branch, worktree, and PR, then returns to ready-for-qa
+  ---
+  duration_ms: 11.1807
+  ...
+# Subtest: three equivalent qa-failed results block the issue with a structured reason and no Claude launch
+ok 4 - three equivalent qa-failed results block the issue with a structured reason and no Claude launch
+  ---
+  duration_ms: 2.8956
+  ...
+# Subtest: a successful development handoff releases its claim after publishing and leaves ready-for-qa with no active claim
+ok 5 - a successful development handoff releases its claim after publishing and leaves ready-for-qa with no active claim
+  ---
+  duration_ms: 4.4086
+  ...
+# Subtest: a failing Claude worker releases the claim with a schema-valid work.claim_released message
+ok 6 - a failing Claude worker releases the claim with a schema-valid work.claim_released message
+  ---
+  duration_ms: 4.0203
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 222.6062
