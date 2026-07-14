@@ -110,6 +110,10 @@ jobs:
       AI_PROVIDER: mock
       PORT: 3001
       NODE_OPTIONS: --max-old-space-size=4096
+      # QA-263-012: the production Vite build bakes the backend URL in at build time; without
+      # this binding frontend/src/config.ts falls back to the Railway production backend and
+      # the browser test never reaches the CI backend/mock runtime below.
+      VITE_API_URL: http://localhost:3001
       # Backend delegates extraction to the clinicos-ai-runtime service (started below with
       # the mock provider) — same wiring as the gate job. Runtime is on :8000, backend on :3001.
       AI_RUNTIME_URL: http://127.0.0.1:8000
