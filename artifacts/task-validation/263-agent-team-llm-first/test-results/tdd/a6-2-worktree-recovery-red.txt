@@ -8,7 +8,7 @@ not ok 1 - a recorded worktree path that no longer exists is never blindly adopt
   error: |-
     stale recorded coordinates must be repaired to the live checkout of the expected branch
     + actual - expected
-    
+
     + 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-missing-1784021160667\\issue-263'
     - 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-live-worktree-Nj7nqK'
   code: 'ERR_ASSERTION'
@@ -68,7 +68,7 @@ not ok 5 - a worktree belonging to a foreign repository is repaired to a checkou
   error: |-
     coordinates in a foreign repository must never be adopted
     + actual - expected
-    
+
     + 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-foreign-repo-zzFSoc'
     - 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-right-repo-Dz245l'
   code: 'ERR_ASSERTION'

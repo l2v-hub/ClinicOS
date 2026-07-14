@@ -42,9 +42,9 @@ not ok 5 - a failing Claude worker releases the claim with a schema-valid work.c
   failureType: 'testCodeFailure'
   error: |-
     worker failure must not leave the issue agent-working
-    
+
     true !== false
-    
+
   code: 'ERR_ASSERTION'
   name: 'AssertionError'
   expected: false
