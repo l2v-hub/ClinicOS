@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "message_type": "development_handoff",
-  "message_id": "dev-263-6-handoff-e5bdab1f0d37",
-  "correlation_id": "issue-263-attempt-6",
+  "message_id": "dev-263-9-handoff-652210dd99c0",
+  "correlation_id": "issue-263-attempt-9",
   "producer_role": "claude-development",
   "repository": "l2v-hub/ClinicOS",
   "issue_number": 263,
   "pull_request_number": 264,
-  "attempt": 6,
-  "created_at": "2026-07-14T09:43:25.989Z",
-  "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143",
+  "attempt": 9,
+  "created_at": "2026-07-15T07:39:31.584Z",
+  "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488",
   "state_before": "agent-working",
   "state_after": "ready-for-qa",
   "acceptance_criteria": [
@@ -41,8 +41,12 @@
       "id": "AC4",
       "status": "passed",
       "evidence_refs": [
-        "agent-team/tests/integration/remediation-loop.test.mjs",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
+        "agent-team/tests/unit/claim-worktree-authority.test.mjs",
+        "agent-team/tests/unit/lease-heartbeat.test.mjs",
+        "agent-team/tests/unit/process-ownership.test.mjs",
+        "agent-team/tests/integration/process-exit-ownership.test.mjs",
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a9-1-ownership-red.txt",
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a9-1-ownership-green.txt"
       ]
     },
     {
@@ -58,10 +62,11 @@
       "id": "AC6",
       "status": "passed",
       "evidence_refs": [
-        ".github/workflows/ai-import-e2e.yml",
-        "agent-team/tests/unit/ci-browser-e2e-config.test.mjs",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-1-ci-binding-red.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-1-ci-binding-green.txt"
+        "e2e/import-happy-path.mjs",
+        "agent-team/tests/unit/e2e-import-journey.test.mjs",
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a8-1-journey-red.txt",
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a8-1-journey-green.txt",
+        "artifacts/task-validation/263-agent-team-llm-first/checks/build.txt"
       ]
     },
     {
@@ -100,9 +105,8 @@
       "status": "passed",
       "evidence_refs": [
         "agent-team/tests/unit/git-worktree-recovery.test.mjs",
-        "agent-team/tests/integration/once-failure-reporting.test.mjs",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-2-worktree-recovery-green.txt",
-        "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-3-failure-reporting-green.txt"
+        "agent-team/tests/unit/claim-worktree-authority.test.mjs",
+        "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap"
       ]
     },
     {
@@ -119,13 +123,13 @@
       "status": "passed",
       "evidence_refs": [
         "agent-team/tests/integration/prohibited-actions.test.mjs",
-        "artifacts/task-validation/263-agent-team-llm-first/checks/a6-secret-prohibited-scan.txt"
+        "artifacts/task-validation/263-agent-team-llm-first/checks/a9-secret-prohibited-scan.txt"
       ]
     }
   ],
   "resolved_findings": [
-    "QA-263-012",
-    "QA-263-013"
+    "QA-263-014",
+    "QA-263-015"
   ],
   "commands": [
     {
@@ -135,14 +139,18 @@
         "--test-reporter=tap",
         "agent-team/tests/unit/ci-browser-e2e-config.test.mjs",
         "agent-team/tests/unit/claim-lifecycle.test.mjs",
+        "agent-team/tests/unit/claim-worktree-authority.test.mjs",
         "agent-team/tests/unit/claude-development-worker.test.mjs",
         "agent-team/tests/unit/codex-qa-worker.test.mjs",
         "agent-team/tests/unit/config.test.mjs",
         "agent-team/tests/unit/doctor.test.mjs",
+        "agent-team/tests/unit/e2e-import-journey.test.mjs",
         "agent-team/tests/unit/git-worktree-recovery.test.mjs",
         "agent-team/tests/unit/github.test.mjs",
         "agent-team/tests/unit/history.test.mjs",
+        "agent-team/tests/unit/lease-heartbeat.test.mjs",
         "agent-team/tests/unit/locks.test.mjs",
+        "agent-team/tests/unit/process-ownership.test.mjs",
         "agent-team/tests/unit/process-runner.test.mjs",
         "agent-team/tests/unit/protocol.test.mjs",
         "agent-team/tests/unit/remediation.test.mjs",
@@ -152,8 +160,8 @@
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-14T09:32:18.275Z",
-      "finished_at": "2026-07-14T09:32:21.775Z",
+      "started_at": "2026-07-15T07:34:47.168Z",
+      "finished_at": "2026-07-15T07:34:53.373Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap"
     },
@@ -164,6 +172,7 @@
         "--test-reporter=tap",
         "agent-team/tests/integration/evidence-binding.test.mjs",
         "agent-team/tests/integration/once-failure-reporting.test.mjs",
+        "agent-team/tests/integration/process-exit-ownership.test.mjs",
         "agent-team/tests/integration/prohibited-actions.test.mjs",
         "agent-team/tests/integration/remediation-loop.test.mjs",
         "agent-team/tests/integration/supervisor-lifecycle.test.mjs",
@@ -171,8 +180,8 @@
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-14T09:32:21.783Z",
-      "finished_at": "2026-07-14T09:32:24.589Z",
+      "started_at": "2026-07-15T07:34:53.395Z",
+      "finished_at": "2026-07-15T07:34:56.962Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap"
     },
@@ -184,8 +193,8 @@
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-14T09:32:24.594Z",
-      "finished_at": "2026-07-14T09:32:29.594Z",
+      "started_at": "2026-07-15T07:34:56.970Z",
+      "finished_at": "2026-07-15T07:35:01.318Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json"
     },
@@ -199,50 +208,82 @@
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-14T09:32:29.599Z",
-      "finished_at": "2026-07-14T09:32:59.016Z",
+      "started_at": "2026-07-15T07:35:01.327Z",
+      "finished_at": "2026-07-15T07:35:57.616Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/build.txt",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/build.txt"
     },
     {
       "argv": [
         "git",
-        "diff",
-        "--check",
-        "origin/main...HEAD"
+        "add",
+        "-A"
       ],
       "cwd": ".",
       "exit_code": 0,
-      "started_at": "2026-07-14T09:32:59.022Z",
-      "finished_at": "2026-07-14T09:32:59.293Z",
+      "started_at": "2026-07-15T07:35:57.627Z",
+      "finished_at": "2026-07-15T07:35:57.837Z",
+      "stdout_ref": "(none)",
+      "stderr_ref": "(none)"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "origin/main"
+      ],
+      "cwd": ".",
+      "exit_code": 2,
+      "started_at": "2026-07-15T07:35:57.842Z",
+      "finished_at": "2026-07-15T07:35:58.003Z",
+      "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt",
+      "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt"
+    },
+    {
+      "argv": [
+        "node",
+        "-e",
+        "strip trailing whitespace from captured RED/GREEN + build-vite evidence"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "started_at": "2026-07-15T07:36:49.195Z",
+      "finished_at": "2026-07-15T07:36:49.302Z",
+      "stdout_ref": "(none)",
+      "stderr_ref": "(none)"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "origin/main"
+      ],
+      "cwd": ".",
+      "exit_code": 0,
+      "started_at": "2026-07-15T07:36:49.303Z",
+      "finished_at": "2026-07-15T07:36:49.450Z",
       "stdout_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt",
       "stderr_ref": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt"
     }
   ],
   "artifact_refs": [
     {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/agent-team/qa-result-attempt-4.json",
+      "path": "artifacts/task-validation/263-agent-team-llm-first/agent-team/qa-result-attempt-8.json",
       "media_type": "application/json",
-      "sha256": "0b10ad22f844e0addb7b371dd6cec2804a067f5f9995d1e7dcf95175058a9dea",
-      "git_blob_sha": "0359b253fd164f40cc47c7d549e501dd474c59d2",
+      "sha256": "71883468f0d704d72e94212c3fe8a9f1b0ae0505b4356f36726172e2aeb4a55c",
+      "git_blob_sha": "472990c3785f484b2526c0c15696b9993af9b76e",
       "producer_role": "codex-qa",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
-    },
-    {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/agent-team/qa-result-attempt-5.json",
-      "media_type": "application/json",
-      "sha256": "94c52ce06a0f7efedc7383a8b02789621a4bc33c65299945398ba3cb7b36dcb7",
-      "git_blob_sha": "6821f17c341616530d9f01be201334b1e7b1e13d",
-      "producer_role": "codex-qa",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/command-log.jsonl",
       "media_type": "application/json",
-      "sha256": "4ce35d407435eba80099ef5c207da5844c8d97243ea650d3ea58c3f2852faf10",
-      "git_blob_sha": "478f04da347c4fa064254dc49309fe3c536d634a",
+      "sha256": "0b78083e20646ddc8d848901148e20915b19d51494262a79f8d0df264c493bc0",
+      "git_blob_sha": "e5ecd28c2938cc287e28ed89317577ab4a1fd1b1",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/doctor-smoke.json",
@@ -250,15 +291,23 @@
       "sha256": "afa4bf1fb82cd8a1e0ad416d16bba34054d39ff5f66b35d20308ef28f08f2213",
       "git_blob_sha": "93d2e7e2540ae38524254753ff6c8598a586b940",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/build.txt",
       "media_type": "text/plain",
-      "sha256": "b41c7d654b292e0a56772e1610bfe75d4d39b59a16ab7aa45c0c1a1e7114aaf1",
-      "git_blob_sha": "ea64141a95d3bf99255e638d2a174fae221401da",
+      "sha256": "9215cda04cfb58f778f94834896aabafec93b9b199eb5447df55da87364b536b",
+      "git_blob_sha": "a071796cfdf6d63e2e4bcc5fe10bfa66decf700b",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
+    },
+    {
+      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/build-vite.txt",
+      "media_type": "text/plain",
+      "sha256": "84d894985f8044a087593af33ef0c53aad281ce914f7bb2c476cfe9aa0092a86",
+      "git_blob_sha": "790ff522e74c6f78431cc63ce62cfb55b9042df4",
+      "producer_role": "claude-development",
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/checks/git-diff-check.txt",
@@ -266,95 +315,79 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/a6-secret-prohibited-scan.txt",
+      "path": "artifacts/task-validation/263-agent-team-llm-first/checks/a9-secret-prohibited-scan.txt",
       "media_type": "text/plain",
-      "sha256": "a60ceaca7c661b1a1815c7979ba9473a08b48b596d684d759198349a54b831f2",
-      "git_blob_sha": "78060983cc0ef8e634348556b1d73462a00403a9",
+      "sha256": "8b276248fd57896d19f450219d6b2e41745f694f0f6ab32f8dc0f6d5ff62c3d1",
+      "git_blob_sha": "f55f0e278d8b2e7f0adbc130e19c1c5f198b2a08",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/unit.tap",
       "media_type": "text/plain",
-      "sha256": "ed629c77e8829fe4f2b5c7d519f621d1f96814f6496125f1c8c5dd48f46a86a4",
-      "git_blob_sha": "056973e201071f8fab92d5be640ea79c8ff67e38",
+      "sha256": "17730bdf4d5de2b36369429f8771923b7d8c7e8dbc47a606f84ae0d891b4d21a",
+      "git_blob_sha": "b461b1e4b4f07b20651c40e2e49e0c516e83d2ec",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/integration.tap",
       "media_type": "text/plain",
-      "sha256": "362f080c15f759d4c9c2ad71fd6284264175eed39a1bc67888f8108a740e9ed5",
-      "git_blob_sha": "9c38733c2093db5272c0067265ecf03c7ecff0d1",
+      "sha256": "fcd9cb22526b32b7a6129ad2f59355667a0c4f23d892eceb642c430cfd8cc4d1",
+      "git_blob_sha": "c258b57912088c06c563b3fa2ac9e57446c756b6",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-1-ci-binding-red.txt",
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a8-1-journey-red.txt",
       "media_type": "text/plain",
-      "sha256": "1be79da269b2c3850c2b5aab94b48d67706a1dd18fe8542a276783bc39583f3e",
-      "git_blob_sha": "a754f5313043a5da8b8dcd4d1ff4b636267aab7d",
+      "sha256": "06ba09623299d4c8846ea99a546ab74776f546fb2235e52239892da0667ccc4a",
+      "git_blob_sha": "f3d15d67204d1badb7f9fdcf5fb0a7a008fa4ee5",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-1-ci-binding-green.txt",
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a8-1-journey-green.txt",
       "media_type": "text/plain",
-      "sha256": "b1937cc314ae74fbcd03218d802e370b5e06060a983913c4189dc79004a895b6",
-      "git_blob_sha": "897055c8d1a08c809d39b2f0f45eb1ba211848fd",
+      "sha256": "ed025c226464217899196f0c981ac1b7cf3e21dec713597904444d9546344937",
+      "git_blob_sha": "90ba525c0e788efff91a18e594fdf685a24d528b",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-2-worktree-recovery-red.txt",
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a9-1-ownership-red.txt",
       "media_type": "text/plain",
-      "sha256": "fbd4f7a7b50fd5063d93e7d6ca3040bbc52f6dcd994d15d12202546de8e49df3",
-      "git_blob_sha": "a9a936dc970d27135201f9e85ff7726ae49dad82",
+      "sha256": "eb7f93d40e9e10a2b7648f8061eef9d2ecaeeaafc03a357bfc1187410aef7b22",
+      "git_blob_sha": "dc35e4698f45a9612144c9cd093ad63b4e00f03e",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-2-worktree-recovery-green.txt",
+      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a9-1-ownership-green.txt",
       "media_type": "text/plain",
-      "sha256": "11692dac50ff0b46697f434e0a21694976eabb495cdb4a45757948ce041d4ee8",
-      "git_blob_sha": "94757cc5d102d394071e826978d5be7df185ca29",
+      "sha256": "05164c15f9dbea6231707f8e3af03483c6286ebd63a69bd908ceb44dbe837390",
+      "git_blob_sha": "3aa30363ee40f6f992d430d5dcf6752c7e161db6",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
-    },
-    {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-3-failure-reporting-red.txt",
-      "media_type": "text/plain",
-      "sha256": "70946b30e11bcf2aec13967b1b46e901b76af74630a0187bb428fdd42815b302",
-      "git_blob_sha": "0ba129cb1201eeeed1539d5892711b002a4dac94",
-      "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
-    },
-    {
-      "path": "artifacts/task-validation/263-agent-team-llm-first/test-results/tdd/a6-3-failure-reporting-green.txt",
-      "media_type": "text/plain",
-      "sha256": "d63a46c571f3db9acb30a98428113d11bfbe3cd665cfa19f78605552d2c4a964",
-      "git_blob_sha": "8afa50a9ad820a56ffc990093c73b41ddb7fc479",
-      "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/validation-report.md",
       "media_type": "text/markdown",
-      "sha256": "b422fe52f08e3cd2ba4d9e57ed6037d90ccd41dd03f918f1750f962e54653c53",
-      "git_blob_sha": "9326f9e0b22b12787c777415e9ec8c44d52613b0",
+      "sha256": "49f2f398ab8b1595d8d9d55c58e4903948e2a69794e1be285cd591638aef20cf",
+      "git_blob_sha": "c1434980c60532c194d1722f85fc15e75c65af02",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     },
     {
       "path": "artifacts/task-validation/263-agent-team-llm-first/remediation-map.md",
       "media_type": "text/markdown",
-      "sha256": "f0b64ce926afa50170c6047377e47ce788cc1abc7d3cb8fe81033f3662618d2a",
-      "git_blob_sha": "0def539692c41fac56892766ccc6d64793af0f0d",
+      "sha256": "072d836130895e7a569eaeba49089c88595ae290cd40d7210dc5e699af579b8b",
+      "git_blob_sha": "4641451ec793d917e2ba4e14fe1f6ba490e5d992",
       "producer_role": "claude-development",
-      "subject_sha": "e5bdab1f0d37f4c224958469fcba8df0d1ee7143"
+      "subject_sha": "652210dd99c0d666624e11f0e8103ddaa7042488"
     }
   ],
   "next_actions": [
