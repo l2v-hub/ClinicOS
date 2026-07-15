@@ -2,374 +2,449 @@ TAP version 13
 # Subtest: browser-e2e job binds the production frontend build to the local CI backend (QA-263-012)
 ok 1 - browser-e2e job binds the production frontend build to the local CI backend (QA-263-012)
   ---
-  duration_ms: 6.9877
+  duration_ms: 5.3107
   ...
 # Subtest: production fallback behavior in frontend config is unchanged (QA-263-012 constraint)
 ok 2 - production fallback behavior in frontend config is unchanged (QA-263-012 constraint)
   ---
-  duration_ms: 2.0944
+  duration_ms: 1.6177
   ...
 # Subtest: acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
 ok 3 - acquireGitHubClaim publishes a schema-valid claim and ignores invalid competitors
   ---
-  duration_ms: 6.9797
+  duration_ms: 3.8599
   ...
 # Subtest: refreshGitHubClaim edits the same comment and extends the lease
 ok 4 - refreshGitHubClaim edits the same comment and extends the lease
   ---
-  duration_ms: 1.6832
+  duration_ms: 1.1716
   ...
 # Subtest: releaseGitHubClaim publishes a schema-valid work.claim_released message
 ok 5 - releaseGitHubClaim publishes a schema-valid work.claim_released message
   ---
-  duration_ms: 0.6349
+  duration_ms: 0.5219
   ...
 # Subtest: a released claim no longer competes in acquire arbitration
 ok 6 - a released claim no longer competes in acquire arbitration
   ---
-  duration_ms: 0.5732
+  duration_ms: 0.4383
   ...
 # Subtest: recoverActiveClaim ignores my claim once a matching release exists
 ok 7 - recoverActiveClaim ignores my claim once a matching release exists
   ---
-  duration_ms: 0.6265
+  duration_ms: 0.497
   ...
 # Subtest: recoverActiveClaim returns my unexpired claim and null when expired
 ok 8 - recoverActiveClaim returns my unexpired claim and null when expired
   ---
-  duration_ms: 0.3638
+  duration_ms: 0.2627
+  ...
+# Subtest: a nested subdirectory of a registered worktree is never adopted as claim coordinates (QA-263-015)
+ok 9 - a nested subdirectory of a registered worktree is never adopted as claim coordinates (QA-263-015)
+  ---
+  duration_ms: 9.1506
+  ...
+# Subtest: resolveIssueWorktree resolves the authoritative registered checkout without any mutating git command (QA-263-015)
+ok 10 - resolveIssueWorktree resolves the authoritative registered checkout without any mutating git command (QA-263-015)
+  ---
+  duration_ms: 2.2445
+  ...
+# Subtest: the published claim names the exact authoritative worktree the Claude process runs in (QA-263-015)
+ok 11 - the published claim names the exact authoritative worktree the Claude process runs in (QA-263-015)
+  ---
+  duration_ms: 11.172
+  ...
+# Subtest: a prepared worktree that differs from the claimed coordinates fails closed and restores the claimable state (QA-263-015)
+ok 12 - a prepared worktree that differs from the claimed coordinates fails closed and restores the claimable state (QA-263-015)
+  ---
+  duration_ms: 4.4415
   ...
 # Subtest: Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
-ok 9 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
+ok 13 - Claude worker uses print mode, schema output, safe permissions, and the existing remediation coordinates
   ---
-  duration_ms: 11.1833
+  duration_ms: 6.2694
   ...
 # Subtest: Claude worker passes the exact safe argv: restricted tool surface, allow rules, and nested-execution denies (QA-263-011)
-ok 10 - Claude worker passes the exact safe argv: restricted tool surface, allow rules, and nested-execution denies (QA-263-011)
+ok 14 - Claude worker passes the exact safe argv: restricted tool surface, allow rules, and nested-execution denies (QA-263-011)
   ---
-  duration_ms: 2.2684
+  duration_ms: 1.9312
   ...
 # Subtest: Claude worker refuses to launch when the policy would allow nested Claude agents
-ok 11 - Claude worker refuses to launch when the policy would allow nested Claude agents
+ok 15 - Claude worker refuses to launch when the policy would allow nested Claude agents
   ---
-  duration_ms: 1.4354
+  duration_ms: 0.9977
   ...
 # Subtest: Codex QA uses output schema and rejects a result for another SHA
-ok 12 - Codex QA uses output schema and rejects a result for another SHA
+ok 16 - Codex QA uses output schema and rejects a result for another SHA
   ---
-  duration_ms: 9.6222
+  duration_ms: 5.429
   ...
 # Subtest: loadConfig loads versioned defaults and resolves repository paths
-ok 13 - loadConfig loads versioned defaults and resolves repository paths
+ok 17 - loadConfig loads versioned defaults and resolves repository paths
   ---
-  duration_ms: 18.7498
+  duration_ms: 7.6119
   ...
 # Subtest: validateConfig fails closed for unknown keys and unsafe relationships
-ok 14 - validateConfig fails closed for unknown keys and unsafe relationships
+ok 18 - validateConfig fails closed for unknown keys and unsafe relationships
   ---
-  duration_ms: 1.1693
+  duration_ms: 0.5254
   ...
 # Subtest: doctor passes every contract prerequisite on a healthy workstation
-ok 15 - doctor passes every contract prerequisite on a healthy workstation
+ok 19 - doctor passes every contract prerequisite on a healthy workstation
   ---
-  duration_ms: 5.7276
+  duration_ms: 2.3442
   ...
 # Subtest: doctor marks development unavailable when Claude is unauthenticated
-ok 16 - doctor marks development unavailable when Claude is unauthenticated
+ok 20 - doctor marks development unavailable when Claude is unauthenticated
   ---
-  duration_ms: 1.2501
+  duration_ms: 0.4753
   ...
 # Subtest: doctor accepts Codex login confirmation printed to stderr
-ok 17 - doctor accepts Codex login confirmation printed to stderr
+ok 21 - doctor accepts Codex login confirmation printed to stderr
   ---
-  duration_ms: 1.2485
+  duration_ms: 0.5067
   ...
 # Subtest: doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
-ok 18 - doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+ok 22 - doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+  ---
+  duration_ms: 0.6515
+  ...
+# Subtest: doctor fails closed when a required GitHub label is missing
+ok 23 - doctor fails closed when a required GitHub label is missing
+  ---
+  duration_ms: 0.4999
+  ...
+# Subtest: doctor fails closed without push permission on the repository
+ok 24 - doctor fails closed without push permission on the repository
+  ---
+  duration_ms: 0.5336
+  ...
+# Subtest: doctor blocks development when claude help lacks a required worker option
+ok 25 - doctor blocks development when claude help lacks a required worker option
+  ---
+  duration_ms: 0.4732
+  ...
+# Subtest: doctor blocks QA when codex exec help lacks a required option
+ok 26 - doctor blocks QA when codex exec help lacks a required option
+  ---
+  duration_ms: 0.5331
+  ...
+# Subtest: doctor fails closed when referenced prompt or schema files are missing
+ok 27 - doctor fails closed when referenced prompt or schema files are missing
+  ---
+  duration_ms: 0.6246
+  ...
+# Subtest: doctor blocks development on an empty worker permission policy
+ok 28 - doctor blocks development on an empty worker permission policy
+  ---
+  duration_ms: 0.8547
+  ...
+# Subtest: doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
+ok 29 - doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
+  ---
+  duration_ms: 0.7073
+  ...
+# Subtest: doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
+ok 30 - doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
+  ---
+  duration_ms: 0.5651
+  ...
+# Subtest: doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
+ok 31 - doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
+  ---
+  duration_ms: 1.0632
+  ...
+# Subtest: doctor fails closed on unrealistic worker timeouts
+ok 32 - doctor fails closed on unrealistic worker timeouts
+  ---
+  duration_ms: 0.347
+  ...
+# Subtest: doctor fails closed when the runtime root is not writable
+ok 33 - doctor fails closed when the runtime root is not writable
+  ---
+  duration_ms: 0.2532
+  ...
+# Subtest: doctor accepts C-quoted Windows paths from git check-ignore
+ok 34 - doctor accepts C-quoted Windows paths from git check-ignore
+  ---
+  duration_ms: 0.3963
+  ...
+# Subtest: doctor fails closed when runtime or worktree roots are not git-ignored
+ok 35 - doctor fails closed when runtime or worktree roots are not git-ignored
+  ---
+  duration_ms: 0.5086
+  ...
+# Subtest: browser journey completes every required intake confirmation (QA-263-014)
+ok 36 - browser journey completes every required intake confirmation (QA-263-014)
+  ---
+  duration_ms: 3.5745
+  ...
+# Subtest: browser journey asserts a persisted patient, not transient form text (QA-263-014)
+ok 37 - browser journey asserts a persisted patient, not transient form text (QA-263-014)
+  ---
+  duration_ms: 0.8249
+  ...
+# Subtest: intake wizard persists the operator-selected allergy state (QA-263-014)
+ok 38 - intake wizard persists the operator-selected allergy state (QA-263-014)
+  ---
+  duration_ms: 2.1825
+  ...
+# Subtest: a recorded worktree path that no longer exists is never blindly adopted: the existing checkout of the same branch is reused (QA-263-013)
+ok 39 - a recorded worktree path that no longer exists is never blindly adopted: the existing checkout of the same branch is reused (QA-263-013)
+  ---
+  duration_ms: 6.8869
+  ...
+# Subtest: stale coordinates with no live checkout are recreated from the existing branch without destructive commands (QA-263-013)
+ok 40 - stale coordinates with no live checkout are recreated from the existing branch without destructive commands (QA-263-013)
+  ---
+  duration_ms: 1.4115
+  ...
+# Subtest: valid recorded coordinates (existing directory, expected branch and repository) are reused as-is
+ok 41 - valid recorded coordinates (existing directory, expected branch and repository) are reused as-is
+  ---
+  duration_ms: 3.6829
+  ...
+# Subtest: an existing directory on an unexpected branch or foreign repository is not reused and nothing is destroyed
+ok 42 - an existing directory on an unexpected branch or foreign repository is not reused and nothing is destroyed
+  ---
+  duration_ms: 1.8111
+  ...
+# Subtest: a worktree belonging to a foreign repository is repaired to a checkout of the expected repository
+ok 43 - a worktree belonging to a foreign repository is repaired to a checkout of the expected repository
+  ---
+  duration_ms: 1.4299
+  ...
+# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
+ok 44 - GitHub adapter passes labels as argv and never constructs a shell string
+  ---
+  duration_ms: 1.8844
+  ...
+# Subtest: parseProtocolComments skips prose and invalid protocol payloads without throwing
+ok 45 - parseProtocolComments skips prose and invalid protocol payloads without throwing
+  ---
+  duration_ms: 1.2824
+  ...
+# Subtest: rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+ok 46 - rebuildRemediationContext returns next attempt, open findings, and stable coordinates
+  ---
+  duration_ms: 0.524
+  ...
+# Subtest: rebuildRemediationContext reports blocked after three equivalent failed attempts
+ok 47 - rebuildRemediationContext reports blocked after three equivalent failed attempts
+  ---
+  duration_ms: 0.2976
+  ...
+# Subtest: rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+ok 48 - rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
+  ---
+  duration_ms: 0.1069
+  ...
+# Subtest: startLeaseHeartbeat refreshes the lease on the configured interval and stop() halts it (QA-263-015)
+ok 49 - startLeaseHeartbeat refreshes the lease on the configured interval and stop() halts it (QA-263-015)
+  ---
+  duration_ms: 185.4222
+  ...
+# Subtest: startLeaseHeartbeat aborts its signal when the lease refresh fails (QA-263-015)
+ok 50 - startLeaseHeartbeat aborts its signal when the lease refresh fails (QA-263-015)
+  ---
+  duration_ms: 30.6487
+  ...
+# Subtest: the Claude worker refreshes its lease while the process runs and hands the heartbeat signal to the runner (QA-263-015)
+ok 51 - the Claude worker refreshes its lease while the process runs and hands the heartbeat signal to the runner (QA-263-015)
+  ---
+  duration_ms: 126.399
+  ...
+# Subtest: a lease lost during Claude execution aborts the owned process and restores the claimable state (QA-263-015)
+ok 52 - a lease lost during Claude execution aborts the owned process and restores the claimable state (QA-263-015)
+  ---
+  duration_ms: 47.3166
+  ...
+# Subtest: arbitration selects earliest created claim then lowest comment id
+ok 53 - arbitration selects earliest created claim then lowest comment id
+  ---
+  duration_ms: 1.5465
+  ...
+# Subtest: arbitration ignores expired claims
+ok 54 - arbitration ignores expired claims
+  ---
+  duration_ms: 0.184
+  ...
+# Subtest: local supervisor lock is exclusive
+ok 55 - local supervisor lock is exclusive
+  ---
+  duration_ms: 12.3149
+  ...
+# Subtest: runProcess abort signal kills the owned process tree with an explicit abort diagnostic (QA-263-015)
+ok 56 - runProcess abort signal kills the owned process tree with an explicit abort diagnostic (QA-263-015)
+  ---
+  duration_ms: 183.4759
+  ...
+# Subtest: an already-aborted signal refuses to spawn at all (QA-263-015)
+ok 57 - an already-aborted signal refuses to spawn at all (QA-263-015)
+  ---
+  duration_ms: 0.3392
+  ...
+# Subtest: killOwnedProcessTrees terminates every live owned child so supervisor termination leaves no orphan (QA-263-015)
+ok 58 - killOwnedProcessTrees terminates every live owned child so supervisor termination leaves no orphan (QA-263-015)
+  ---
+  duration_ms: 5343.7869
+  ...
+# Subtest: finished children leave the owned registry (QA-263-015)
+ok 59 - finished children leave the owned registry (QA-263-015)
+  ---
+  duration_ms: 135.0101
+  ...
+# Subtest: sanitizeText removes credentials and authorization values
+ok 60 - sanitizeText removes credentials and authorization values
+  ---
+  duration_ms: 2.2443
+  ...
+# Subtest: sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check
+ok 61 - sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check
+  ---
+  duration_ms: 0.171
+  ...
+# Subtest: runProcess reports a missing executable without throwing
+ok 62 - runProcess reports a missing executable without throwing
+  ---
+  duration_ms: 7.4916
+  ...
+# Subtest: runProcess refuses a nonexistent working directory with an unambiguous diagnostic instead of a misleading spawn ENOENT (QA-263-013)
+ok 63 - runProcess refuses a nonexistent working directory with an unambiguous diagnostic instead of a misleading spawn ENOENT (QA-263-013)
+  ---
+  duration_ms: 0.3855
+  ...
+# Subtest: runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)
+ok 64 - runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)
+  ---
+  duration_ms: 224.6993
+  ...
+# Subtest: runProcess default timeout kill actually terminates the spawned process
+ok 65 - runProcess default timeout kill actually terminates the spawned process
+  ---
+  duration_ms: 319.4692
+  ...
+# Subtest: protocol comment round-trips one schema-valid JSON object
+ok 66 - protocol comment round-trips one schema-valid JSON object
+  ---
+  duration_ms: 1.382
+  ...
+# Subtest: protocol rejects prose and unknown fields
+ok 67 - protocol rejects prose and unknown fields
+  ---
+  duration_ms: 0.4299
+  ...
+# Subtest: finding fingerprints remain stable across timestamps
+ok 68 - finding fingerprints remain stable across timestamps
+  ---
+  duration_ms: 12.6713
+  ...
+# Subtest: three equivalent failures without changed SHA become blocked
+ok 69 - three equivalent failures without changed SHA become blocked
+  ---
+  duration_ms: 1.6032
+  ...
+# Subtest: a changed SHA restarts remediation eligibility
+ok 70 - a changed SHA restarts remediation eligibility
+  ---
+  duration_ms: 0.1477
+  ...
+# Subtest: development requires both intake labels
+ok 71 - development requires both intake labels
+  ---
+  duration_ms: 1.1857
+  ...
+# Subtest: QA requires ready-for-qa and excludes terminal current states
+ok 72 - QA requires ready-for-qa and excludes terminal current states
+  ---
+  duration_ms: 0.1397
+  ...
+# Subtest: state machine rejects Claude to qa-passed
+ok 73 - state machine rejects Claude to qa-passed
+  ---
+  duration_ms: 0.3795
+  ...
+# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+ok 74 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
+  ---
+  duration_ms: 1.6393
+  ...
+# Subtest: config requires an explicit tool surface and nested-execution denies (QA-263-011)
+ok 75 - config requires an explicit tool surface and nested-execution denies (QA-263-011)
+  ---
+  duration_ms: 0.8101
+  ...
+# Subtest: config requires realistic development and QA timeouts above the command timeout
+ok 76 - config requires realistic development and QA timeouts above the command timeout
+  ---
+  duration_ms: 0.1331
+  ...
+# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
+ok 77 - Claude worker passes the scoped allowedTools policy and the development timeout
+  ---
+  duration_ms: 3.9958
+  ...
+# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+ok 78 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
+  ---
+  duration_ms: 0.3655
+  ...
+# Subtest: Claude worker rejects a structured handoff that violates the required schema before any GitHub change
+ok 79 - Claude worker rejects a structured handoff that violates the required schema before any GitHub change
   ---
   duration_ms: 1.5208
   ...
-# Subtest: doctor fails closed when a required GitHub label is missing
-ok 19 - doctor fails closed when a required GitHub label is missing
-  ---
-  duration_ms: 0.9624
-  ...
-# Subtest: doctor fails closed without push permission on the repository
-ok 20 - doctor fails closed without push permission on the repository
-  ---
-  duration_ms: 0.672
-  ...
-# Subtest: doctor blocks development when claude help lacks a required worker option
-ok 21 - doctor blocks development when claude help lacks a required worker option
-  ---
-  duration_ms: 0.6484
-  ...
-# Subtest: doctor blocks QA when codex exec help lacks a required option
-ok 22 - doctor blocks QA when codex exec help lacks a required option
-  ---
-  duration_ms: 0.7151
-  ...
-# Subtest: doctor fails closed when referenced prompt or schema files are missing
-ok 23 - doctor fails closed when referenced prompt or schema files are missing
-  ---
-  duration_ms: 0.9414
-  ...
-# Subtest: doctor blocks development on an empty worker permission policy
-ok 24 - doctor blocks development on an empty worker permission policy
-  ---
-  duration_ms: 1.1515
-  ...
-# Subtest: doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
-ok 25 - doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
-  ---
-  duration_ms: 0.8205
-  ...
-# Subtest: doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
-ok 26 - doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
-  ---
-  duration_ms: 0.775
-  ...
-# Subtest: doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
-ok 27 - doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
-  ---
-  duration_ms: 1.6943
-  ...
-# Subtest: doctor fails closed on unrealistic worker timeouts
-ok 28 - doctor fails closed on unrealistic worker timeouts
-  ---
-  duration_ms: 0.7315
-  ...
-# Subtest: doctor fails closed when the runtime root is not writable
-ok 29 - doctor fails closed when the runtime root is not writable
-  ---
-  duration_ms: 0.6023
-  ...
-# Subtest: doctor accepts C-quoted Windows paths from git check-ignore
-ok 30 - doctor accepts C-quoted Windows paths from git check-ignore
-  ---
-  duration_ms: 0.7933
-  ...
-# Subtest: doctor fails closed when runtime or worktree roots are not git-ignored
-ok 31 - doctor fails closed when runtime or worktree roots are not git-ignored
-  ---
-  duration_ms: 0.8284
-  ...
-# Subtest: a recorded worktree path that no longer exists is never blindly adopted: the existing checkout of the same branch is reused (QA-263-013)
-ok 32 - a recorded worktree path that no longer exists is never blindly adopted: the existing checkout of the same branch is reused (QA-263-013)
-  ---
-  duration_ms: 9.1797
-  ...
-# Subtest: stale coordinates with no live checkout are recreated from the existing branch without destructive commands (QA-263-013)
-ok 33 - stale coordinates with no live checkout are recreated from the existing branch without destructive commands (QA-263-013)
-  ---
-  duration_ms: 1.5049
-  ...
-# Subtest: valid recorded coordinates (existing directory, expected branch and repository) are reused as-is
-ok 34 - valid recorded coordinates (existing directory, expected branch and repository) are reused as-is
-  ---
-  duration_ms: 3.5717
-  ...
-# Subtest: an existing directory on an unexpected branch or foreign repository is not reused and nothing is destroyed
-ok 35 - an existing directory on an unexpected branch or foreign repository is not reused and nothing is destroyed
-  ---
-  duration_ms: 2.8338
-  ...
-# Subtest: a worktree belonging to a foreign repository is repaired to a checkout of the expected repository
-ok 36 - a worktree belonging to a foreign repository is repaired to a checkout of the expected repository
-  ---
-  duration_ms: 3.4368
-  ...
-# Subtest: GitHub adapter passes labels as argv and never constructs a shell string
-ok 37 - GitHub adapter passes labels as argv and never constructs a shell string
-  ---
-  duration_ms: 3.1351
-  ...
-# Subtest: parseProtocolComments skips prose and invalid protocol payloads without throwing
-ok 38 - parseProtocolComments skips prose and invalid protocol payloads without throwing
-  ---
-  duration_ms: 3.2178
-  ...
-# Subtest: rebuildRemediationContext returns next attempt, open findings, and stable coordinates
-ok 39 - rebuildRemediationContext returns next attempt, open findings, and stable coordinates
-  ---
-  duration_ms: 1.1581
-  ...
-# Subtest: rebuildRemediationContext reports blocked after three equivalent failed attempts
-ok 40 - rebuildRemediationContext reports blocked after three equivalent failed attempts
-  ---
-  duration_ms: 0.6058
-  ...
-# Subtest: rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
-ok 41 - rebuildRemediationContext starts fresh issues at attempt 1 with no prior QA
-  ---
-  duration_ms: 0.2214
-  ...
-# Subtest: arbitration selects earliest created claim then lowest comment id
-ok 42 - arbitration selects earliest created claim then lowest comment id
-  ---
-  duration_ms: 1.656
-  ...
-# Subtest: arbitration ignores expired claims
-ok 43 - arbitration ignores expired claims
-  ---
-  duration_ms: 0.2535
-  ...
-# Subtest: local supervisor lock is exclusive
-ok 44 - local supervisor lock is exclusive
-  ---
-  duration_ms: 17.3113
-  ...
-# Subtest: sanitizeText removes credentials and authorization values
-ok 45 - sanitizeText removes credentials and authorization values
-  ---
-  duration_ms: 3.3706
-  ...
-# Subtest: sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check
-ok 46 - sanitizeText strips trailing whitespace deterministically so captured evidence passes git diff --check
-  ---
-  duration_ms: 0.3168
-  ...
-# Subtest: runProcess reports a missing executable without throwing
-ok 47 - runProcess reports a missing executable without throwing
-  ---
-  duration_ms: 13.5308
-  ...
-# Subtest: runProcess refuses a nonexistent working directory with an unambiguous diagnostic instead of a misleading spawn ENOENT (QA-263-013)
-ok 48 - runProcess refuses a nonexistent working directory with an unambiguous diagnostic instead of a misleading spawn ENOENT (QA-263-013)
-  ---
-  duration_ms: 0.6118
-  ...
-# Subtest: runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)
-ok 49 - runProcess timeout escalates to a process-tree kill so no owned child survives (QA-263-011)
-  ---
-  duration_ms: 232.0073
-  ...
-# Subtest: runProcess default timeout kill actually terminates the spawned process
-ok 50 - runProcess default timeout kill actually terminates the spawned process
-  ---
-  duration_ms: 323.5543
-  ...
-# Subtest: protocol comment round-trips one schema-valid JSON object
-ok 51 - protocol comment round-trips one schema-valid JSON object
-  ---
-  duration_ms: 2.2365
-  ...
-# Subtest: protocol rejects prose and unknown fields
-ok 52 - protocol rejects prose and unknown fields
-  ---
-  duration_ms: 0.7622
-  ...
-# Subtest: finding fingerprints remain stable across timestamps
-ok 53 - finding fingerprints remain stable across timestamps
-  ---
-  duration_ms: 16.081
-  ...
-# Subtest: three equivalent failures without changed SHA become blocked
-ok 54 - three equivalent failures without changed SHA become blocked
-  ---
-  duration_ms: 2.0207
-  ...
-# Subtest: a changed SHA restarts remediation eligibility
-ok 55 - a changed SHA restarts remediation eligibility
-  ---
-  duration_ms: 0.2422
-  ...
-# Subtest: development requires both intake labels
-ok 56 - development requires both intake labels
-  ---
-  duration_ms: 2.0162
-  ...
-# Subtest: QA requires ready-for-qa and excludes terminal current states
-ok 57 - QA requires ready-for-qa and excludes terminal current states
-  ---
-  duration_ms: 0.2447
-  ...
-# Subtest: state machine rejects Claude to qa-passed
-ok 58 - state machine rejects Claude to qa-passed
-  ---
-  duration_ms: 0.6951
-  ...
-# Subtest: config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
-ok 59 - config requires a non-empty scoped allowedTools policy without wildcards or bypass flags
-  ---
-  duration_ms: 3.0793
-  ...
-# Subtest: config requires an explicit tool surface and nested-execution denies (QA-263-011)
-ok 60 - config requires an explicit tool surface and nested-execution denies (QA-263-011)
-  ---
-  duration_ms: 1.2203
-  ...
-# Subtest: config requires realistic development and QA timeouts above the command timeout
-ok 61 - config requires realistic development and QA timeouts above the command timeout
-  ---
-  duration_ms: 0.2043
-  ...
-# Subtest: Claude worker passes the scoped allowedTools policy and the development timeout
-ok 62 - Claude worker passes the scoped allowedTools policy and the development timeout
-  ---
-  duration_ms: 7.1072
-  ...
-# Subtest: Claude worker refuses to launch with an empty permission policy and a precise diagnostic
-ok 63 - Claude worker refuses to launch with an empty permission policy and a precise diagnostic
-  ---
-  duration_ms: 0.6124
-  ...
-# Subtest: Claude worker rejects a structured handoff that violates the required schema before any GitHub change
-ok 64 - Claude worker rejects a structured handoff that violates the required schema before any GitHub change
-  ---
-  duration_ms: 3.0038
-  ...
 # Subtest: Codex QA worker uses the dedicated QA timeout
-ok 65 - Codex QA worker uses the dedicated QA timeout
+ok 80 - Codex QA worker uses the dedicated QA timeout
   ---
-  duration_ms: 2.8204
+  duration_ms: 1.6115
   ...
 # Subtest: the module constants pin every nested-agent surface
-ok 66 - the module constants pin every nested-agent surface
+ok 81 - the module constants pin every nested-agent surface
   ---
-  duration_ms: 2.3822
+  duration_ms: 1.3349
   ...
 # Subtest: buildClaudeWorkerArgs produces the exact safe argv with --tools and --disallowedTools
-ok 67 - buildClaudeWorkerArgs produces the exact safe argv with --tools and --disallowedTools
+ok 82 - buildClaudeWorkerArgs produces the exact safe argv with --tools and --disallowedTools
   ---
-  duration_ms: 0.5514
+  duration_ms: 0.3771
   ...
 # Subtest: the built argv never references bypass or dangerous permission modes
-ok 68 - the built argv never references bypass or dangerous permission modes
+ok 83 - the built argv never references bypass or dangerous permission modes
   ---
-  duration_ms: 0.3924
+  duration_ms: 0.2494
   ...
 # Subtest: a policy exposing a nested-agent tool is rejected with a precise diagnostic
-ok 69 - a policy exposing a nested-agent tool is rejected with a precise diagnostic
+ok 84 - a policy exposing a nested-agent tool is rejected with a precise diagnostic
   ---
-  duration_ms: 0.4768
+  duration_ms: 0.3253
   ...
 # Subtest: a policy missing a required nested-execution deny rule is rejected
-ok 70 - a policy missing a required nested-execution deny rule is rejected
+ok 85 - a policy missing a required nested-execution deny rule is rejected
   ---
-  duration_ms: 0.3075
+  duration_ms: 0.1858
   ...
 # Subtest: empty or missing tool policies fail closed
-ok 71 - empty or missing tool policies fail closed
+ok 86 - empty or missing tool policies fail closed
   ---
-  duration_ms: 0.1627
+  duration_ms: 0.2355
   ...
 # Subtest: bypass tokens are rejected in every policy list
-ok 72 - bypass tokens are rejected in every policy list
+ok 87 - bypass tokens are rejected in every policy list
   ---
-  duration_ms: 0.1455
+  duration_ms: 0.1116
   ...
 # Subtest: buildClaudeWorkerArgs refuses an unsafe policy before any spawn
-ok 73 - buildClaudeWorkerArgs refuses an unsafe policy before any spawn
+ok 88 - buildClaudeWorkerArgs refuses an unsafe policy before any spawn
   ---
-  duration_ms: 0.6613
+  duration_ms: 0.4577
   ...
-1..73
-# tests 73
+1..88
+# tests 88
 # suites 0
-# pass 73
+# pass 88
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 3357.9445
+# duration_ms 6010.418

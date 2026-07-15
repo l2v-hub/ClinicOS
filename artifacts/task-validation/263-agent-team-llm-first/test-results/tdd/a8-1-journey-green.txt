@@ -1,0 +1,25 @@
+TAP version 13
+# Subtest: browser journey completes every required intake confirmation (QA-263-014)
+ok 1 - browser journey completes every required intake confirmation (QA-263-014)
+  ---
+  duration_ms: 3.8106
+  ...
+# Subtest: browser journey asserts a persisted patient, not transient form text (QA-263-014)
+ok 2 - browser journey asserts a persisted patient, not transient form text (QA-263-014)
+  ---
+  duration_ms: 0.8591
+  ...
+# Subtest: intake wizard persists the operator-selected allergy state (QA-263-014)
+ok 3 - intake wizard persists the operator-selected allergy state (QA-263-014)
+  ---
+  duration_ms: 2.0901
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 120.2332

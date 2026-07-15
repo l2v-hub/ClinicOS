@@ -75,6 +75,8 @@ test('stale coordinates with no live checkout are recreated from the existing br
 test('valid recorded coordinates (existing directory, expected branch and repository) are reused as-is', async () => {
   const existing = await mkdtemp(path.join(tmpdir(), 'agent-team-valid-worktree-'));
   const { run, calls } = fakeRun([
+    // QA-263-015: validity additionally requires the directory to be a registered worktree root.
+    [/^worktree list --porcelain$/, ok(worktreeList([{ dir: existing, branch: BRANCH }]))],
     [/^rev-parse --abbrev-ref HEAD$/, ({ cwd }) => { assert.equal(cwd, existing); return ok(BRANCH); }],
     [/^remote get-url origin$/, ok(ORIGIN)]
   ]);

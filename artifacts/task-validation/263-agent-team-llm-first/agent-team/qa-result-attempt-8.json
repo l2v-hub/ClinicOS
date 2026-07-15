@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "message_type": "qa_result",
+  "message_id": "codex-qa-263-attempt-8-orchestrator-recovery",
+  "correlation_id": "issue-263-attempt-8",
+  "producer_role": "codex-qa",
+  "repository": "l2v-hub/ClinicOS",
+  "issue_number": 263,
+  "pull_request_number": 264,
+  "attempt": 8,
+  "created_at": "2026-07-14T14:15:36.449Z",
+  "subject_sha": "56fa2d4e19a1d9ce00ac7a233e07a878e3951c9e",
+  "state_before": "agent-working",
+  "state_after": "qa-failed",
+  "decision": "qa-failed",
+  "acceptance_criteria": [
+    {
+      "id": "AC1",
+      "status": "unresolved",
+      "evidence_refs": []
+    },
+    {
+      "id": "AC2",
+      "status": "unresolved",
+      "evidence_refs": []
+    },
+    {
+      "id": "AC3",
+      "status": "unresolved",
+      "evidence_refs": []
+    },
+    {
+      "id": "AC4",
+      "status": "failed",
+      "evidence_refs": [
+        "QA-263-015"
+      ]
+    },
+    {
+      "id": "AC5",
+      "status": "unresolved",
+      "evidence_refs": []
+    },
+    {
+      "id": "AC6",
+      "status": "failed",
+      "evidence_refs": [
+        "QA-263-014"
+      ]
+    },
+    {
+      "id": "AC7",
+      "status": "unresolved",
+      "evidence_refs": []
+    },
+    {
+      "id": "AC8",
+      "status": "unresolved",
+      "evidence_refs": [
+        "QA-263-014",
+        "QA-263-015"
+      ]
+    },
+    {
+      "id": "AC9",
+      "status": "unresolved",
+      "evidence_refs": []
+    },
+    {
+      "id": "AC10",
+      "status": "unresolved",
+      "evidence_refs": []
+    },
+    {
+      "id": "AC11",
+      "status": "failed",
+      "evidence_refs": [
+        "QA-263-015"
+      ]
+    },
+    {
+      "id": "AC12",
+      "status": "unresolved",
+      "evidence_refs": []
+    },
+    {
+      "id": "AC13",
+      "status": "unresolved",
+      "evidence_refs": []
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "QA-263-014",
+      "acceptance_criterion_id": "AC6",
+      "severity": "high",
+      "category": "playwright-ci-contract",
+      "observed": "browser-e2e at subject SHA fails because the import journey reaches IntakeWorkspace but does not satisfy the required allergy state, therapy acceptance, wizard navigation, demographics acceptance, and persisted-patient assertion.",
+      "expected": "Complete the real synthetic desktop and tablet journey, assert persistence via backend and reload, and publish exact-SHA browser evidence while retaining genuine regression detection.",
+      "reproduction_command_ref": "gh run view 29322810597 --repo l2v-hub/ClinicOS --job 87052666482 --log",
+      "evidence_refs": [
+        "https://github.com/l2v-hub/ClinicOS/actions/runs/29322810597/job/87052666482",
+        "artifact:8306785799:ai-import-e2e-screenshots",
+        "e2e/import-happy-path.mjs"
+      ],
+      "status": "open",
+      "remediation_required": true,
+      "fingerprint": "fbc9e687511fa682d2e70b7c55b9ca7f3e6b426123638726b099cb144c8872eb"
+    },
+    {
+      "finding_id": "QA-263-015",
+      "acceptance_criterion_id": "AC4",
+      "severity": "critical",
+      "category": "claim-worktree-process-ownership",
+      "observed": "Attempt 8 claim declared C:/tmp/ClinicOS-agent-team/agent-team/.worktrees/issue-263, but that path became absent and was not a registered Git worktree while mutations appeared in C:/tmp/ClinicOS-agent-team. The five-minute GitHub lease expired without refresh while Claude and supervisor processes remained active; agent-team:status then reported active_claim null with agent-working still applied. Terminating the outer command left both owned child processes alive until explicitly stopped.",
+      "expected": "The claim worktree must equal the actual Claude cwd and a registered worktree for the claimed branch. The lease must refresh throughout worker execution. Claim loss or supervisor termination must stop the owned process tree before further mutation, publish release, and restore an eligible deterministic state without split-brain coordinates.",
+      "reproduction_command_ref": "npm run agent-team:once; npm run agent-team:status; git worktree list --porcelain; Test-Path C:/tmp/ClinicOS-agent-team/agent-team/.worktrees/issue-263; git status --short",
+      "evidence_refs": [
+        "https://github.com/l2v-hub/ClinicOS/issues/263#issuecomment-4969951520",
+        "https://github.com/l2v-hub/ClinicOS/issues/263#issuecomment-4970191961",
+        "agent-team/src/adapters/git.mjs",
+        "agent-team/src/runtime.mjs",
+        "agent-team/src/core/locks.mjs",
+        "agent-team/src/adapters/process-runner.mjs"
+      ],
+      "status": "open",
+      "remediation_required": true,
+      "fingerprint": "fca8dc3018dcab0a2695565ff3ab74045025f5dbbb60794118c6f2ea5f4f73fc"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "npm",
+        "run",
+        "agent-team:status"
+      ],
+      "cwd": "C:/tmp/ClinicOS-agent-team",
+      "exit_code": 0,
+      "started_at": "2026-07-14T13:59:48.000Z",
+      "finished_at": "2026-07-14T13:59:55.000Z",
+      "stdout_ref": "issue-comment:4969951520",
+      "stderr_ref": "none"
+    },
+    {
+      "argv": [
+        "git",
+        "worktree",
+        "list",
+        "--porcelain"
+      ],
+      "cwd": "C:/tmp/ClinicOS-agent-team",
+      "exit_code": 0,
+      "started_at": "2026-07-14T14:06:00.000Z",
+      "finished_at": "2026-07-14T14:06:01.000Z",
+      "stdout_ref": "QA-263-015",
+      "stderr_ref": "none"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--short",
+        "--branch"
+      ],
+      "cwd": "C:/tmp/ClinicOS-agent-team",
+      "exit_code": 0,
+      "started_at": "2026-07-14T14:14:00.000Z",
+      "finished_at": "2026-07-14T14:14:01.000Z",
+      "stdout_ref": "QA-263-015",
+      "stderr_ref": "none"
+    }
+  ],
+  "artifact_refs": [],
+  "next_actions": [
+    "ready-for-dev",
+    "assigned-to-claude"
+  ]
+}

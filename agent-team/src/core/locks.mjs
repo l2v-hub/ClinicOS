@@ -60,6 +60,26 @@ export async function refreshGitHubClaim({ github, config, schema, claim, leaseD
   return { ...refreshed, comment_id: claim.comment_id };
 }
 
+// QA-263-015: the attempt-8 lease expired while Claude was still running because nothing
+// refreshed the claim during execution. The heartbeat refreshes the lease on a fixed interval
+// for the whole worker run; a failed refresh means the lease is lost, so the returned signal
+// aborts and the process runner kills the owned process tree.
+export function startLeaseHeartbeat({ refresh, intervalMs, onLost }) {
+  const controller = new AbortController();
+  const timer = setInterval(() => {
+    refresh().catch((error) => {
+      clearInterval(timer);
+      if (!controller.signal.aborted) {
+        const reason = new Error(`lease lost: ${error.message}`);
+        controller.abort(reason);
+        onLost?.(reason);
+      }
+    });
+  }, intervalMs);
+  timer.unref?.();
+  return { signal: controller.signal, stop: () => clearInterval(timer) };
+}
+
 export async function releaseGitHubClaim({ github, schema, claim, reason, now = new Date() }) {
   const released = {
     ...stripLocalFields(claim),

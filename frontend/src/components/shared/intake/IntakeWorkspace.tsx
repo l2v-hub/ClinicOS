@@ -288,6 +288,9 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       ...ingressoObj,
     };
     if (data.allergie !== undefined) cartella.allergie = data.allergie;
+    // #244 explicit allergy status selected during intake (QA-263-014) — same cartella key
+    // PatientDetail reads/writes; confirmDraft spreads cartella keys into Cartella.data.
+    if (data.allergieStatus !== undefined) cartella.allergieStatus = data.allergieStatus;
     if (data.diagnosi !== undefined) cartella.diagnosi = data.diagnosi;
     if (data.anamnesi !== undefined) cartella.anamnesi = data.anamnesi;
     // Vitals: data.parametri is an OBJECT { parametriMensili?, parametriVitali? } (Task 5 shape)

@@ -1,0 +1,255 @@
+TAP version 13
+# Subtest: host termination takes down the owned process tree (QA-263-015)
+ok 1 - host termination takes down the owned process tree (QA-263-015)
+  ---
+  duration_ms: 265.0878
+  ...
+# Subtest: a nested subdirectory of a registered worktree is never adopted as claim coordinates (QA-263-015)
+not ok 2 - a nested subdirectory of a registered worktree is never adopted as claim coordinates (QA-263-015)
+  ---
+  duration_ms: 7.7878
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\claim-worktree-authority.test.mjs:43:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    an unregistered nested path must be repaired to the registered worktree root of the same branch
+    + actual - expected
+
+    + 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-registered-root-XC9kii\\agent-team\\.worktrees\\issue-263'
+    - 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-registered-root-XC9kii'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-registered-root-XC9kii'
+  actual: 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-registered-root-XC9kii\\agent-team\\.worktrees\\issue-263'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claim-worktree-authority.test.mjs:56:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: resolveIssueWorktree resolves the authoritative registered checkout without any mutating git command (QA-263-015)
+not ok 3 - resolveIssueWorktree resolves the authoritative registered checkout without any mutating git command (QA-263-015)
+  ---
+  duration_ms: 1.5985
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\claim-worktree-authority.test.mjs:59:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the git adapter must expose a read-only resolveIssueWorktree
+    + actual - expected
+
+    + 'undefined'
+    - 'function'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'function'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claim-worktree-authority.test.mjs:66:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: the published claim names the exact authoritative worktree the Claude process runs in (QA-263-015)
+not ok 4 - the published claim names the exact authoritative worktree the Claude process runs in (QA-263-015)
+  ---
+  duration_ms: 14.0365
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\claim-worktree-authority.test.mjs:110:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the claim must name the authoritative registered worktree, not the recorded nested default
+    + actual - expected
+
+    + 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\.worktrees\\issue-263'
+    - 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-authority\\clinicos-issue-263'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'C:\\Users\\llavia\\AppData\\Local\\Temp\\agent-team-authority\\clinicos-issue-263'
+  actual: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\.worktrees\\issue-263'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/claim-worktree-authority.test.mjs:136:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async startSubtest (node:internal/test_runner/harness:259:3)
+  ...
+# Subtest: a prepared worktree that differs from the claimed coordinates fails closed and restores the claimable state (QA-263-015)
+ok 5 - a prepared worktree that differs from the claimed coordinates fails closed and restores the claimable state (QA-263-015)
+  ---
+  duration_ms: 6.2847
+  ...
+# Subtest: startLeaseHeartbeat refreshes the lease on the configured interval and stop() halts it (QA-263-015)
+not ok 6 - startLeaseHeartbeat refreshes the lease on the configured interval and stop() halts it (QA-263-015)
+  ---
+  duration_ms: 2.156
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\lease-heartbeat.test.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locks must expose startLeaseHeartbeat
+    + actual - expected
+
+    + 'undefined'
+    - 'function'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'function'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/lease-heartbeat.test.mjs:19:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    node:internal/test_runner/harness:255:12
+    node:internal/process/task_queues:140:7
+    AsyncResource.runInAsyncScope (node:async_hooks:206:9)
+    AsyncResource.runMicrotask (node:internal/process/task_queues:137:8)
+  ...
+# Subtest: startLeaseHeartbeat aborts its signal when the lease refresh fails (QA-263-015)
+not ok 7 - startLeaseHeartbeat aborts its signal when the lease refresh fails (QA-263-015)
+  ---
+  duration_ms: 0.1782
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\lease-heartbeat.test.mjs:31:1'
+  failureType: 'testCodeFailure'
+  error: 'locks.startLeaseHeartbeat is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/lease-heartbeat.test.mjs:32:27)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: the Claude worker refreshes its lease while the process runs and hands the heartbeat signal to the runner (QA-263-015)
+not ok 8 - the Claude worker refreshes its lease while the process runs and hands the heartbeat signal to the runner (QA-263-015)
+  ---
+  duration_ms: 136.8318
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\lease-heartbeat.test.mjs:48:1'
+  failureType: 'testCodeFailure'
+  error: 'the lease must be refreshed during Claude execution, got 0 refreshes'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/lease-heartbeat.test.mjs:60:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: a lease lost during Claude execution aborts the owned process and restores the claimable state (QA-263-015)
+not ok 9 - a lease lost during Claude execution aborts the owned process and restores the claimable state (QA-263-015)
+  ---
+  duration_ms: 421.6039
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\lease-heartbeat.test.mjs:76:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    losing the lease mid-run must surface as a worker failure
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/lease-heartbeat.test.mjs:117:10)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: runProcess abort signal kills the owned process tree with an explicit abort diagnostic (QA-263-015)
+not ok 10 - runProcess abort signal kills the owned process tree with an explicit abort diagnostic (QA-263-015)
+  ---
+  duration_ms: 3124.823
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\process-ownership.test.mjs:19:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    an aborted run must never report success
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/process-ownership.test.mjs:27:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: an already-aborted signal refuses to spawn at all (QA-263-015)
+not ok 11 - an already-aborted signal refuses to spawn at all (QA-263-015)
+  ---
+  duration_ms: 116.4466
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\process-ownership.test.mjs:34:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    true !== false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/process-ownership.test.mjs:41:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: killOwnedProcessTrees terminates every live owned child so supervisor termination leaves no orphan (QA-263-015)
+not ok 12 - killOwnedProcessTrees terminates every live owned child so supervisor termination leaves no orphan (QA-263-015)
+  ---
+  duration_ms: 0.8424
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\process-ownership.test.mjs:46:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    the runner must expose killOwnedProcessTrees for supervisor shutdown
+    + actual - expected
+
+    + 'undefined'
+    - 'function'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'function'
+  actual: 'undefined'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/process-ownership.test.mjs:47:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: finished children leave the owned registry (QA-263-015)
+not ok 13 - finished children leave the owned registry (QA-263-015)
+  ---
+  duration_ms: 107.9082
+  location: 'C:\\tmp\\ClinicOS-agent-team\\agent-team\\tests\\unit\\process-ownership.test.mjs:60:1'
+  failureType: 'testCodeFailure'
+  error: 'runner.killOwnedProcessTrees is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/tmp/ClinicOS-agent-team/agent-team/tests/unit/process-ownership.test.mjs:66:23)
+    process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    async Test.run (node:internal/test_runner/test:797:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 2
+# fail 11
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3505.5023

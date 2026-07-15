@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { runProcess } from './adapters/process-runner.mjs';
 import { createGitHubAdapter } from './adapters/github.mjs';
-import { createGitAdapter } from './adapters/git.mjs';
+import { createGitAdapter, isSameWorktreePath } from './adapters/git.mjs';
 import { runDoctor } from './commands/doctor.mjs';
 import { isSupervisorLive, acquireGitHubClaim, releaseGitHubClaim, refreshGitHubClaim, recoverActiveClaim } from './core/locks.mjs';
 import { rebuildRemediationContext } from './core/history.mjs';
@@ -74,17 +74,30 @@ export async function createRuntime({ config, repoRoot, allowCurrentSupervisor =
       const pullRequest = await github.viewPullRequest(priorQaResult.coordinates.pull_request_number);
       priorQaResult = { ...priorQaResult, coordinates: { ...priorQaResult.coordinates, branch: pullRequest.headRefName } };
     }
+    // QA-263-015: resolve the authoritative worktree read-only BEFORE claiming, so the
+    // published claim names the exact registered checkout the Claude process will run in
+    // and a losing claimant never mutates branches or worktrees.
+    const resolved = await git.resolveIssueWorktree({ issue, prior: priorQaResult?.coordinates });
     const acquired = await acquireGitHubClaim({
       github, config, schema: schemas.claim, issue, workerId, role: 'claude-development', attempt: context.attempt,
-      branch: priorQaResult?.coordinates?.branch, worktree: priorQaResult?.coordinates?.worktree_path,
-      pullRequestNumber: priorQaResult?.coordinates?.pull_request_number
+      branch: resolved.branch ?? priorQaResult?.coordinates?.branch, worktree: resolved.path,
+      pullRequestNumber: resolved.pullRequestNumber ?? priorQaResult?.coordinates?.pull_request_number
     });
     if (!acquired.won) return { skipped: 'claim-lost', issue: issue.number };
     await github.removeLabels(issue.number, [config.labels.readyForDev, config.labels.assignedToClaude, ...(labelsOf(issue).includes(config.labels.qaFailed) ? [config.labels.qaFailed] : [])]);
     await github.addLabels(issue.number, [config.labels.working]);
     let handoff;
     try {
-      handoff = await runClaudeDevelopment({ issue, attempt: context.attempt, config, github, git, run, schema: schemas.development, priorQaResult });
+      const coordinates = await git.prepareIssueWorktree({ issue, prior: priorQaResult?.coordinates });
+      // QA-263-015: the prepared checkout must be the claimed one — a divergence means the
+      // claim no longer describes the mutation target and the run must fail closed.
+      if (!isSameWorktreePath(coordinates.path, resolved.path)) {
+        throw new Error(`prepared worktree ${coordinates.path} does not match the claimed authoritative worktree ${resolved.path}`);
+      }
+      handoff = await runClaudeDevelopment({
+        issue, attempt: context.attempt, config, github, git, run, schema: schemas.development, priorQaResult, coordinates,
+        lease: { refresh: () => refreshGitHubClaim({ github, config, schema: schemas.claim, claim: acquired.claim }), intervalMs: config.leaseRefreshMs }
+      });
     } catch (error) {
       await releaseGitHubClaim({ github, schema: schemas.claim, claim: acquired.claim, reason: `worker-failure: ${error.message}`.slice(0, 300) });
       // QA-263-013: a failed worker must return the issue to the configured claimable

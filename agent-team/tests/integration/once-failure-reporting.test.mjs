@@ -53,7 +53,7 @@ test('once returns ok:false when the development worker fails, so the CLI exits 
     if (call.command === 'claude') return { ok: false, code: null, stdout: '', stderr: '', error: 'working directory does not exist: agent-team/.worktrees/issue-263' };
     throw new Error(`unexpected process invocation: ${call.command}`);
   };
-  const git = { async prepareIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async headSha() { return S1; } };
+  const git = { async resolveIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async prepareIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async headSha() { return S1; } };
   const result = await runOnce({
     config, repoRoot, allowCurrentSupervisor: true,
     overrides: { run, github, git, workerId: 'host:test', doctor: async () => ({ ok: true, developmentReady: true, qaReady: false, checks: [] }) }

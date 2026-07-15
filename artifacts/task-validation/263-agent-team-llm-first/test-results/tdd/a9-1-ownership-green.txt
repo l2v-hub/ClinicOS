@@ -1,0 +1,75 @@
+TAP version 13
+# Subtest: host termination takes down the owned process tree (QA-263-015)
+ok 1 - host termination takes down the owned process tree (QA-263-015)
+  ---
+  duration_ms: 5311.8889
+  ...
+# Subtest: a nested subdirectory of a registered worktree is never adopted as claim coordinates (QA-263-015)
+ok 2 - a nested subdirectory of a registered worktree is never adopted as claim coordinates (QA-263-015)
+  ---
+  duration_ms: 8.4592
+  ...
+# Subtest: resolveIssueWorktree resolves the authoritative registered checkout without any mutating git command (QA-263-015)
+ok 3 - resolveIssueWorktree resolves the authoritative registered checkout without any mutating git command (QA-263-015)
+  ---
+  duration_ms: 1.9599
+  ...
+# Subtest: the published claim names the exact authoritative worktree the Claude process runs in (QA-263-015)
+ok 4 - the published claim names the exact authoritative worktree the Claude process runs in (QA-263-015)
+  ---
+  duration_ms: 10.4785
+  ...
+# Subtest: a prepared worktree that differs from the claimed coordinates fails closed and restores the claimable state (QA-263-015)
+ok 5 - a prepared worktree that differs from the claimed coordinates fails closed and restores the claimable state (QA-263-015)
+  ---
+  duration_ms: 4.2142
+  ...
+# Subtest: startLeaseHeartbeat refreshes the lease on the configured interval and stop() halts it (QA-263-015)
+ok 6 - startLeaseHeartbeat refreshes the lease on the configured interval and stop() halts it (QA-263-015)
+  ---
+  duration_ms: 184.7596
+  ...
+# Subtest: startLeaseHeartbeat aborts its signal when the lease refresh fails (QA-263-015)
+ok 7 - startLeaseHeartbeat aborts its signal when the lease refresh fails (QA-263-015)
+  ---
+  duration_ms: 30.2426
+  ...
+# Subtest: the Claude worker refreshes its lease while the process runs and hands the heartbeat signal to the runner (QA-263-015)
+ok 8 - the Claude worker refreshes its lease while the process runs and hands the heartbeat signal to the runner (QA-263-015)
+  ---
+  duration_ms: 123.3554
+  ...
+# Subtest: a lease lost during Claude execution aborts the owned process and restores the claimable state (QA-263-015)
+ok 9 - a lease lost during Claude execution aborts the owned process and restores the claimable state (QA-263-015)
+  ---
+  duration_ms: 46.7827
+  ...
+# Subtest: runProcess abort signal kills the owned process tree with an explicit abort diagnostic (QA-263-015)
+ok 10 - runProcess abort signal kills the owned process tree with an explicit abort diagnostic (QA-263-015)
+  ---
+  duration_ms: 182.5808
+  ...
+# Subtest: an already-aborted signal refuses to spawn at all (QA-263-015)
+ok 11 - an already-aborted signal refuses to spawn at all (QA-263-015)
+  ---
+  duration_ms: 0.4239
+  ...
+# Subtest: killOwnedProcessTrees terminates every live owned child so supervisor termination leaves no orphan (QA-263-015)
+ok 12 - killOwnedProcessTrees terminates every live owned child so supervisor termination leaves no orphan (QA-263-015)
+  ---
+  duration_ms: 5442.4866
+  ...
+# Subtest: finished children leave the owned registry (QA-263-015)
+ok 13 - finished children leave the owned registry (QA-263-015)
+  ---
+  duration_ms: 118.8481
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 62087.4499

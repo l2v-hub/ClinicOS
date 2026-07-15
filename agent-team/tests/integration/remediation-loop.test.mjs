@@ -54,6 +54,7 @@ test('qa-failed loops back to Claude on the same branch, worktree, and PR, then 
     throw new Error(`unexpected process invocation: ${call.command}`);
   };
   const git = {
+    async resolveIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; },
     async prepareIssueWorktree({ issue, prior }) { prepareCalls.push(prior); return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; },
     async headSha() { return S2; }
   };
@@ -109,7 +110,7 @@ test('a successful development handoff releases its claim after publishing and l
     }
     throw new Error(`unexpected process invocation: ${call.command}`);
   };
-  const git = { async prepareIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async headSha() { return S2; } };
+  const git = { async resolveIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async prepareIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async headSha() { return S2; } };
   const runtime = await createRuntime({ config, repoRoot, overrides: { run, github, git, workerId: 'host:test', doctor: async () => ({ ok: false, developmentReady: true, qaReady: false, checks: [] }) } });
 
   const result = await reconcileOnce(runtime);
@@ -143,7 +144,7 @@ test('a failing Claude worker releases the claim with a schema-valid work.claim_
     if (call.command === 'claude') return { ok: false, code: 1, stdout: '', stderr: 'claude exploded', error: null };
     throw new Error(`unexpected process invocation: ${call.command}`);
   };
-  const git = { async prepareIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async headSha() { return S2; } };
+  const git = { async resolveIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async prepareIssueWorktree({ prior }) { return { path: prior.worktree_path, branch: prior.branch, pullRequestNumber: prior.pull_request_number }; }, async headSha() { return S2; } };
   const runtime = await createRuntime({ config, repoRoot, overrides: { run, github, git, workerId: 'host:test', doctor: async () => ({ ok: false, developmentReady: true, qaReady: false, checks: [] }) } });
 
   const result = await reconcileOnce(runtime);

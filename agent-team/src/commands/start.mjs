@@ -3,6 +3,7 @@ import { access, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { acquireLocalSupervisorLock, isSupervisorLive, writeHeartbeat } from '../core/locks.mjs';
+import { killOwnedProcessTrees } from '../adapters/process-runner.mjs';
 import { recoverActiveWork } from '../core/recovery.mjs';
 import { createRuntime } from '../runtime.mjs';
 import { run as runDoctor } from './doctor-entry.mjs';
@@ -49,5 +50,11 @@ export async function run({ config, repoRoot, mode, deps = {} }) {
       await sleep(config.pollIntervalMs);
     }
     return { ok: true, stopped: true };
-  } finally { await lock.release(); await rm(stopPath, { force: true }); }
+  } finally {
+    // QA-263-015: supervisor shutdown must never leave an owned process tree alive; the
+    // process runner's exit hook covers abnormal termination, this covers the graceful path.
+    killOwnedProcessTrees();
+    await lock.release();
+    await rm(stopPath, { force: true });
+  }
 }
