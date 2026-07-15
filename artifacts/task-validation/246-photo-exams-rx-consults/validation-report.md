@@ -160,11 +160,14 @@ unreachable on `localhost:5433` — was resolved by starting a dedicated ephemer
 
 ### Commit binding
 
-- Evidence in this section was produced in worktree `E:/Workspace/DG_SE_DEV/ClinicOS/.wt-246-final`
-  on branch `fix/issue-246-final-qa` and committed immediately after this report was finalized.
-  The exact head SHA, per-artifact `sha256` and `git_blob_sha` bindings, and every command's
-  exit code are recorded in the schema-valid `development_handoff` posted on issue #246 and on
-  the draft PR (which supersedes PRs #253 and #261).
+- Evidence commit (implementation + all refreshed evidence listed above):
+  **`6391b8273ef4d3cc1f2509bda34178c8da2f30bc`** on branch `fix/issue-246-final-qa`
+  (worktree `E:/Workspace/DG_SE_DEV/ClinicOS/.wt-246-final`, base `origin/main` = `0953223`,
+  fully integrated: 0 behind).
+- `git diff --check origin/main...HEAD` at that commit: **exit 0** (QA-246-003 gate).
+- Per-artifact `sha256` and `git_blob_sha` bindings and every command's exit code are recorded
+  in the schema-valid `development_handoff` posted on issue #246 and on the draft PR (which
+  supersedes PRs #253 and #261).
 
 ### Demo vs production split (explicit, per PO scope update 2026-07-12)
 
