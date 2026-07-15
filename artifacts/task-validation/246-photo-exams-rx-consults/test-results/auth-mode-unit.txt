@@ -1,10 +1,64 @@
-Codex rerun 2026-07-12
+# patient-documents security/config unit tests — issue #246 attempt 5 (2026-07-15)
+# command: node ../node_modules/tsx/dist/cli.mjs --test src/ai/__tests__/patient-documents-security.test.ts  (cwd: backend/)
+# result: 10/10 PASS, exit 0
 
-Command: node_modules/.bin/tsx --test backend/src/ai/__tests__/patient-documents-security.test.ts
-Result: PASS 10/10
-
-Covered: explicit demo mode, missing/invalid mode fail-closed, entra safe failure, demo rejected in production, anonymous 401, forbidden role 403, demo patient-scope mismatch 403, magic-byte families, spoof rejection, size constant.
-
-Backend build: PASS
-Frontend build: PASS
-Data: synthetic only; no document bytes, token, DB URL or clinical content recorded.
+TAP version 13
+# Subtest: AUTH_MODE is fail-closed when absent, invalid, entra-unimplemented, or demo in production
+ok 1 - AUTH_MODE is fail-closed when absent, invalid, entra-unimplemented, or demo in production
+  ---
+  duration_ms: 1.7036
+  ...
+# Subtest: patient-documents gate: anonymous caller (no operator headers) -> 401
+ok 2 - patient-documents gate: anonymous caller (no operator headers) -> 401
+  ---
+  duration_ms: 0.4487
+  ...
+# Subtest: patient-documents gate: role "guest" -> 403
+ok 3 - patient-documents gate: role "guest" -> 403
+  ---
+  duration_ms: 0.2119
+  ...
+# Subtest: patient-documents gate: valid "operatore" role passes and is attached to the request
+ok 4 - patient-documents gate: valid "operatore" role passes and is attached to the request
+  ---
+  duration_ms: 0.2344
+  ...
+# Subtest: patient-documents gate: demo request scoped to another patient -> 403
+ok 5 - patient-documents gate: demo request scoped to another patient -> 403
+  ---
+  duration_ms: 0.3512
+  ...
+# Subtest: patient-documents gate: entra, missing and invalid modes return explicit 503 without fallback
+ok 6 - patient-documents gate: entra, missing and invalid modes return explicit 503 without fallback
+  ---
+  duration_ms: 0.3864
+  ...
+# Subtest: sniffAllowedMime: recognises real signatures for every allowed family
+ok 7 - sniffAllowedMime: recognises real signatures for every allowed family
+  ---
+  duration_ms: 0.9259
+  ...
+# Subtest: sniffAllowedMime: spoofed upload (PNG-declared filename/mimetype, non-image bytes) -> null (rejected)
+ok 8 - sniffAllowedMime: spoofed upload (PNG-declared filename/mimetype, non-image bytes) -> null (rejected)
+  ---
+  duration_ms: 0.1476
+  ...
+# Subtest: sniffAllowedMime: empty/truncated buffer -> null
+ok 9 - sniffAllowedMime: empty/truncated buffer -> null
+  ---
+  duration_ms: 0.1804
+  ...
+# Subtest: upload size limit: multer is configured with the documented 15MB cap
+ok 10 - upload size limit: multer is configured with the documented 15MB cap
+  ---
+  duration_ms: 0.1735
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 742.258

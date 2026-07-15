@@ -72,9 +72,10 @@ infrastructure-side fix, not attributable to this change.
 La stringa "CLOSED — VERIFIED" viene apposta da Codex dopo verifica indipendente, come da
 handoff #239.
 
-Final Decision: QA FAILED — FUNCTIONAL DEMO VERIFIED, PRODUCTION AUTH DEFERRED
+Final Decision (historical, 2026-07-12 round — superseded by attempt 5 below): QA FAILED —
+FUNCTIONAL DEMO VERIFIED, PRODUCTION AUTH DEFERRED
 
-## Codex scope update — 2026-07-12
+## Codex scope update — 2026-07-12 (historical)
 
 The functional document flow remains accepted for synthetic QA in explicit `AUTH_MODE=demo` only. Production-grade authentication and operator-to-patient authorization are not accepted here and are tracked by #260.
 
@@ -94,3 +95,91 @@ The functional document flow remains accepted for synthetic QA in explicit `AUTH
 | Final decision | QA FAILED | Issue remains open because server-verifiable identity is still explicit in its contract |
 
 The `X-Operator-*` and `X-Demo-Patient-Id` headers are falsifiable demo hints. They are not described or accepted as secure authentication.
+
+## Claude remediation attempt 5 — 2026-07-15 (branch `fix/issue-246-final-qa`, worktree `E:/Workspace/DG_SE_DEV/ClinicOS/.wt-246-final`)
+
+Findings in scope: **QA-246-003** (diff hygiene) and **QA-246-004** (visible per-section
+screenshot evidence + report status). Both are executed and RESOLVED in this attempt; the
+attempt-4 "no execution permissions" blocker no longer applies (this session ran the full
+stack, tests and builds — see commands below).
+
+### QA-246-003 — RESOLVED
+
+- Root cause (attempt-4 analysis, confirmed here): `core.autocrlf=true` + CRLF-stored files
+  made the six added lines (`PatientDetail.tsx:1528,1552`; `DocumentiTab.tsx:12,13,65,132`)
+  end in CR, which `git diff --check` reports as trailing whitespace.
+- Fix applied: exactly those six line terminators are normalized CRLF→LF; the rest of both
+  files is byte-identical, so the committed diff stays the same six lines with no behavior
+  change.
+- Verified: `git diff --check origin/main` (working tree vs base) exits **0**;
+  `git diff --check origin/main...HEAD` re-verified at **exit 0** after the evidence commit
+  (command + exit code recorded in the development_handoff on issue #246).
+
+### QA-246-004 — RESOLVED (real UI flow re-run, per-section screenshots)
+
+Full local stack brought up for this attempt (the previous rerun blocker — configured DB
+unreachable on `localhost:5433` — was resolved by starting a dedicated ephemeral QA Postgres):
+
+| Step | Command (cwd) | Result |
+|---|---|---|
+| QA DB | `podman run -d --name clinicos-qa-246-db -e POSTGRES_USER=clinicos -e POSTGRES_DB=clinicos -p 5433:5432 postgres:16` | Up, reachable |
+| Schema | `prisma db push --schema=../prisma/schema.prisma --url postgresql://…@localhost:5433/clinicos` (backend/) | In sync, exit 0 |
+| Seed | `tsx src/seed.ts` (backend/, synthetic demo seed) | 8 synthetic patients incl. `SEED-PAZ-008` |
+| Backend | `tsx src/server.ts` (backend/, `PORT=3101`, `AUTH_MODE=demo`, `NODE_ENV=development`) | `GET /health` 200 |
+| Frontend | `vite --port 5173 --strictPort` (frontend/, `VITE_API_URL=http://localhost:3101`) | 200 |
+| E2E | `playwright test --config pw.config.246.ts` (e2e/remediation/, `CLINICOS_API=http://localhost:3101`) | **3/3 PASS, exit 0** |
+
+- The re-run executed the improved post-reload block: each of the three section panels is
+  scrolled into view and captured per-section. New exact-head screenshots under
+  `screenshots/`:
+  - `after-reload-esame-viewport.png` + `after-reload-esame-panel.png`
+  - `after-reload-rx-viewport.png` + `after-reload-rx-panel.png`
+  - `after-reload-consulenza-viewport.png` + `after-reload-consulenza-panel.png`
+  - `result-authenticated-upload.png` (fullPage), `result-ac5-camera-denied-fallback.png`
+- The `after-reload-consulenza-viewport.png` frame alone visibly shows **all three** persisted
+  chips after reload, each under its own section: `_test-246-esame.png` (Esami),
+  `_test-246-rx.png` (RX / Diagnostica per immagini), `_test-246-consulenza.png`
+  (Consulenze specialistiche) — closing the exact visibility gap of QA-246-004.
+- Test 1 also asserts **no console errors** and **no unexpected HTTP 4xx/5xx** during the whole
+  flow (401/403 are expected only in the dedicated negative tests), and asserts no
+  cross-section leakage after reload. All assertions passed.
+- Refreshed evidence at this head: `test-results/` (incl. `trace.zip` + `video.webm` per UI
+  test and `.last-run.json` = passed), `playwright-report/`,
+  `test-results/auth-mode-unit.txt` (10/10 security/config unit TAP output),
+  `test-results/backend-log-sanitized.txt` (full backend log of the session — no PHI, no
+  document bytes, no filenames, no secrets).
+
+### Other gates re-run in this attempt
+
+- Security/config unit tests: `tsx --test src/ai/__tests__/patient-documents-security.test.ts`
+  (backend/) — **10/10 PASS** (fail-closed AUTH_MODE incl. demo-in-production and entra 503;
+  anonymous 401; wrong role 403; demo patient scope 403; magic-byte families + spoof reject;
+  15 MB multer cap).
+- Backend build (`npm run build` = prisma generate + `tsc`): **exit 0**.
+- Frontend build (`npm run build` = `tsc -b && vite build`): **exit 0**.
+
+### Commit binding
+
+- Evidence in this section was produced in worktree `E:/Workspace/DG_SE_DEV/ClinicOS/.wt-246-final`
+  on branch `fix/issue-246-final-qa` and committed immediately after this report was finalized.
+  The exact head SHA, per-artifact `sha256` and `git_blob_sha` bindings, and every command's
+  exit code are recorded in the schema-valid `development_handoff` posted on issue #246 and on
+  the draft PR (which supersedes PRs #253 and #261).
+
+### Demo vs production split (explicit, per PO scope update 2026-07-12)
+
+- **Verified here (demo scope only):** demo-functional upload/list/open/download and
+  per-section persistence on the real UI (Playwright 3/3 at this head, DB-backed), magic-byte
+  vs declared-MIME mismatch → 415, 15 MB limit, document–patient ownership, demo patient
+  scope → 403, `Cache-Control: private, no-store`, fail-closed AUTH_MODE handling (10/10
+  unit), sanitized logging. `AUTH_MODE=demo` is explicit and non-production; its
+  `X-Operator-*`/`X-Demo-Patient-Id` headers are falsifiable demo hints and are **not**
+  claimed to be secure authentication.
+- **Neither claimed nor required here:** production Entra/OIDC, JWT validation, role mapping
+  and operator–patient authorization — tracked exclusively in excluded issue
+  [#260](https://github.com/l2v-hub/ClinicOS/issues/260). This issue is demo-functional only.
+
+Final Decision: READY FOR CODEX QA — QA-246-003 and QA-246-004 resolved with executed evidence
+at this head; demo functional + privacy controls verified; production auth neither claimed nor
+required here (open only in excluded #260). `CLOSED — VERIFIED` remains a Codex-only stamp
+applied after independent verification.

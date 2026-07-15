@@ -18,7 +18,9 @@ import { join } from 'node:path';
 //       content read (the security fix itself);
 //   (c) camera permission denied does not block the upload — the file-picker fallback path
 //       (the underlying <input type=file>) still completes it (AC5).
-// Not run by the implementer (no local stack here) — executed later by the controller.
+// Attempt 5 (2026-07-15): executed against the local QA stack (Postgres 16 @5433, backend
+// :3101 AUTH_MODE=demo, frontend :5173) — 3/3 PASS; evidence under
+// artifacts/task-validation/246-photo-exams-rx-consults/.
 
 const API = process.env.CLINICOS_API ?? 'http://localhost:3001';
 const PATIENT_ID = 'SEED-PAZ-008';
@@ -80,13 +82,20 @@ test('AC1-AC4: authenticated operator uploads into each section; chip stays in i
   }
 
   // AC4 — persistence + correct section after reload: no cross-section leakage.
+  // QA-246-004: the tab scrolls inside a fixed internal container, so a single fullPage
+  // screenshot cuts off whatever sits below the fold (the Consulenze panel). Scroll each
+  // section into view and save one viewport screenshot per section plus an element shot of
+  // the panel itself, so every persisted chip is visibly provable in its own section.
   await openEsamiConsulenze(page);
   for (const s of sections) {
     const panel = page.locator(`[data-testid="photos-${s.doc}"]`);
+    await panel.scrollIntoViewIfNeeded();
     await expect(panel.getByText(s.fileName)).toBeVisible();
     for (const other of sections.filter((o) => o.doc !== s.doc)) {
       await expect(panel.getByText(other.fileName)).toHaveCount(0);
     }
+    await page.screenshot({ path: join(OUT, 'screenshots', `after-reload-${s.doc}-viewport.png`) });
+    await panel.screenshot({ path: join(OUT, 'screenshots', `after-reload-${s.doc}-panel.png`) });
   }
 
   await page.screenshot({ path: join(OUT, 'screenshots', 'result-authenticated-upload.png'), fullPage: true });

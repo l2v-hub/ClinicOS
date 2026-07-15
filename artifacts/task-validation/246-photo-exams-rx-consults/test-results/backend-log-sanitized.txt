@@ -1,0 +1,18 @@
+# Sanitized backend log — issue #246 attempt 5 (2026-07-15)
+# Stack: QA Postgres 16 @localhost:5433 (ephemeral podman, synthetic seed only) · backend tsx src/server.ts PORT=3101 AUTH_MODE=demo · frontend vite 5173 VITE_API_URL=http://localhost:3101
+# Full backend stdout/stderr for the entire Playwright session. Verified: no PHI, no document bytes,
+# no filenames, no secrets are logged by the patient-document routes (they emit no per-request lines).
+# The GEMINI_API_KEY line below is the standard startup notice that the optional AI service is OFF.
+
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000'
+]
+ClinicOS backend listening on port 3101
+[ai] extraction NOT available: GEMINI_API_KEY mancante: servizio AI non disponibile
+[ai-worker] started (poll 2000ms)
+GET /patients → 8 record
+GET /patients → 8 record
+GET /patients → 8 record
+GET /patients → 8 record
