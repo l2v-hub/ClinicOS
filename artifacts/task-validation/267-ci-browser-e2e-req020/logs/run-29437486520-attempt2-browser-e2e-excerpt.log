@@ -1,0 +1,371 @@
+# Sanitized excerpt of https://github.com/l2v-hub/ClinicOS/actions/runs/29437486520 (attempt 2, job browser-e2e)
+# Full log retrieved with: gh run view --job 87555160770 --repo l2v-hub/ClinicOS --log
+
+browser-e2e	Install Playwright Chromium	﻿2026-07-16T06:53:21.6314181Z ##[group]Run node node_modules/playwright/cli.js install --with-deps chromium || npm i --no-save playwright && node node_modules/playwright/cli.js install --with-deps chromium
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6315072Z ^[[36;1mnode node_modules/playwright/cli.js install --with-deps chromium || npm i --no-save playwright && node node_modules/playwright/cli.js install --with-deps chromium^[[0m
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6344588Z shell: /usr/bin/bash -e {0}
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6344808Z env:
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6345273Z   DATABASE_URL: ***localhost:5432/clinicos_test?schema=public
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6345551Z   AI_PROVIDER: mock
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6345720Z   PORT: 3001
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6345900Z   NODE_OPTIONS: --max-old-space-size=4096
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6346134Z   AI_RUNTIME_URL: http://127.0.0.1:8000
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6346383Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6346617Z   AI_OCR_MODEL: mock:mock
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6346806Z   AI_EXTRACTION_MODEL: mock:mock
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6347003Z   AI_AGENT_MODEL: mock:mock
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6347233Z   AI_REPAIR_MODEL: mock:mock
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6347465Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6347794Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6348112Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6348560Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6348839Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6349126Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6349383Z ##[endgroup]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6646628Z node:internal/modules/cjs/loader:1210
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6647282Z   throw err;
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6648077Z   ^
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6648280Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6648724Z Error: Cannot find module '/home/runner/work/ClinicOS/ClinicOS/node_modules/playwright/cli.js'
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6649341Z     at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6649862Z     at Module._load (node:internal/modules/cjs/loader:1038:27)
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6650421Z     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6650937Z     at node:internal/main/run_main_module:28:49 {
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6651313Z   code: 'MODULE_NOT_FOUND',
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6651613Z   requireStack: []
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6651883Z }
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6652066Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:21.6652256Z Node.js v20.20.2
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0654200Z npm warn EBADENGINE Unsupported engine {
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0654906Z npm warn EBADENGINE   package: '@prisma/streams-local@0.1.2',
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0655549Z npm warn EBADENGINE   required: { bun: '>=1.3.6', node: '>=22.0.0' },
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0656196Z npm warn EBADENGINE   current: { node: 'v20.20.2', npm: '10.8.2' }
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0656647Z npm warn EBADENGINE }
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0657036Z npm warn EBADENGINE Unsupported engine {
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0657608Z npm warn EBADENGINE   package: '@rolldown/plugin-babel@0.2.3',
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0658210Z npm warn EBADENGINE   required: { node: '>=22.12.0 || ^24.0.0' },
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0658814Z npm warn EBADENGINE   current: { node: 'v20.20.2', npm: '10.8.2' }
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:23.0659253Z npm warn EBADENGINE }
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.3521680Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.3522427Z added 2 packages, and audited 465 packages in 3s
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.3522797Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.3522995Z 89 packages are looking for funding
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.3523772Z   run `npm fund` for details
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4283812Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4284704Z 13 vulnerabilities (2 low, 6 moderate, 3 high, 2 critical)
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4284980Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4285151Z To address issues that do not require attention, run:
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4285416Z   npm audit fix
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4285533Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4285705Z To address all issues (including breaking changes), run:
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4285976Z   npm audit fix --force
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4286648Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.4286750Z Run `npm audit` for details.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.8696298Z Installing dependencies...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:24.8751569Z Switching to root user to install dependencies...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.2419498Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.2892882Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.2904861Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.3568581Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.3945978Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.4024695Z Get:6 https://packages.microsoft.com/repos/azure-cli noble InRelease [3564 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.4073765Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.4107482Z Get:8 https://dl.google.com/linux/chrome-stable/deb stable InRelease [1825 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.6983791Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1096 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7088144Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [270 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7105389Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7120710Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1661 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7190251Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [328 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7208604Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7230203Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1229 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7291568Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [278 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7311674Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7447552Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5776 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7889419Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [10.5 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7903563Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [836 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7944837Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [189 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7958947Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [44.9 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7985306Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [11.9 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.7993924Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1177 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.8044958Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [232 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.8060748Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.2 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.8073545Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [24.2 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.8091970Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1139 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.8131959Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [260 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:25.9603849Z Get:30 https://packages.microsoft.com/repos/azure-cli noble/main amd64 Packages [2314 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:26.0053021Z Get:31 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [227 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:26.0586024Z Get:32 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1213 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:26.0746338Z Get:33 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [11.7 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:26.0930792Z Get:34 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [195 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:32.7714474Z Fetched 10.3 MB in 1s (8015 kB/s)
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.3119980Z Reading package lists...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.3322442Z Reading package lists...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.4740743Z Building dependency tree...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.4746759Z Reading state information...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5986257Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5987140Z libatk-bridge2.0-0t64 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5987702Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5988191Z libatk1.0-0t64 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5988697Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5989178Z libatspi2.0-0t64 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5989645Z libcairo2 is already the newest version (1.18.0-3build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5990130Z libcairo2 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5990630Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5991139Z libcups2t64 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5991655Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5992704Z libdbus-1-3 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5993304Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5994054Z libdrm2 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5994592Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.2).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5995086Z libgbm1 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5995593Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.8).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5996044Z libglib2.0-0t64 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5996476Z libnspr4 is already the newest version (2:4.35-1.1build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5996850Z libnspr4 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5997160Z libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5997465Z libnss3 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5997787Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5998125Z libpango-1.0-0 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5998434Z libx11-6 is already the newest version (2:1.8.7-1build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5998712Z libx11-6 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5998987Z libxcb1 is already the newest version (1.15-1ubuntu2).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5999317Z libxcb1 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.5999737Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6000062Z libxcomposite1 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6000381Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6000684Z libxdamage1 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6000980Z libxext6 is already the newest version (2:1.3.4-1build2).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6001269Z libxext6 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6001564Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6001854Z libxfixes3 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6002299Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6002605Z libxkbcommon0 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6002932Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6003209Z libxrandr2 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6003667Z xvfb is already the newest version (2:21.1.12-1ubuntu1.6).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6004077Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6004505Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6004816Z libfontconfig1 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6005145Z libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.1).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6005661Z libfreetype6 set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6005971Z fonts-liberation is already the newest version (1:2.1.5-3).
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6006277Z fonts-liberation set to manually installed.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6006579Z The following additional packages will be installed:
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6006890Z   libasound2-data xfonts-encodings xfonts-utils
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6007138Z Suggested packages:
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6007340Z   alsa-utils libasound2-plugins
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6007550Z Recommended packages:
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6007847Z   fonts-ipafont-mincho fonts-tlwg-loma alsa-ucm-conf alsa-topology-conf
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6595417Z The following NEW packages will be installed:
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6596208Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6600342Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6600871Z   xfonts-utils
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6603705Z The following packages will be upgraded:
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6607573Z   libasound2-data libasound2t64
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6751944Z 2 upgraded, 9 newly installed, 0 to remove and 53 not upgraded.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6752325Z Need to get 21.5 MB of archives.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6752661Z After this operation, 79.5 MB of additional disk space will be used.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.6753699Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.7353019Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.7993094Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.8719884Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.9180237Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:33.9785538Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.0833813Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libasound2t64 amd64 1.2.11-1ubuntu0.3 [398 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.1314161Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libasound2-data all 1.2.11-1ubuntu0.3 [21.4 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.1779933Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.2271452Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.2735019Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.3212745Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.5391900Z Fetched 21.5 MB in 1s (32.8 MB/s)
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.6965954Z Selecting previously unselected package fonts-ipafont-gothic.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7770891Z (Reading database ... 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7771220Z (Reading database ... 5%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7771544Z (Reading database ... 10%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7771766Z (Reading database ... 15%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7772021Z (Reading database ... 20%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7772483Z (Reading database ... 25%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7772719Z (Reading database ... 30%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7772910Z (Reading database ... 35%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7773121Z (Reading database ... 40%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7773514Z (Reading database ... 45%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.7773854Z (Reading database ... 50%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:34.8525163Z (Reading database ... 55%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:36.0074430Z (Reading database ... 60%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:36.4932542Z (Reading database ... 65%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:36.9008573Z (Reading database ... 70%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:37.2945176Z (Reading database ... 75%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:39.2035085Z (Reading database ... 80%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:41.7899440Z (Reading database ... 85%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:45.2322442Z (Reading database ... 90%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:46.7126140Z (Reading database ... 95%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:46.7126563Z (Reading database ... 100%
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:46.7127057Z (Reading database ... 202701 files and directories currently installed.)
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:46.7170277Z Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:46.7251382Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:46.9430633Z Selecting previously unselected package fonts-freefont-ttf.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:46.9542446Z Preparing to unpack .../01-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:46.9550509Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.5238504Z Selecting previously unselected package fonts-tlwg-loma-otf.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.5350539Z Preparing to unpack .../02-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.5358981Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.5539295Z Selecting previously unselected package fonts-unifont.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.5647320Z Preparing to unpack .../03-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.5655509Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.8738200Z Selecting previously unselected package fonts-wqy-zenhei.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.8851507Z Preparing to unpack .../04-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:47.8972429Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.4779525Z Preparing to unpack .../05-libasound2t64_1.2.11-1ubuntu0.3_amd64.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.4850357Z Unpacking libasound2t64:amd64 (1.2.11-1ubuntu0.3) over (1.2.11-1ubuntu0.2) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.6654555Z Preparing to unpack .../06-libasound2-data_1.2.11-1ubuntu0.3_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.6726153Z Unpacking libasound2-data (1.2.11-1ubuntu0.3) over (1.2.11-1ubuntu0.2) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.8757787Z Selecting previously unselected package xfonts-encodings.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.8871637Z Preparing to unpack .../07-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.8879485Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.9415109Z Selecting previously unselected package xfonts-utils.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.9525037Z Preparing to unpack .../08-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:48.9532940Z Unpacking xfonts-utils (1:7.7+6build3) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:49.5041620Z Selecting previously unselected package xfonts-cyrillic.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:49.5152636Z Preparing to unpack .../09-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:49.5162380Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:49.9450126Z Selecting previously unselected package xfonts-scalable.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:49.9561352Z Preparing to unpack .../10-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:49.9573925Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:49.9951017Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.0960854Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.0982727Z Setting up libasound2-data (1.2.11-1ubuntu0.3) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1009385Z Setting up libasound2t64:amd64 (1.2.11-1ubuntu0.3) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1031643Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1056131Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1077437Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1143688Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1415968Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1439653Z Setting up xfonts-utils (1:7.7+6build3) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1484193Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.1768340Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:53:50.2322888Z Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:07.4691101Z Processing triggers for man-db (2.12.0-4build2) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:07.4765591Z Not building database; man-db/auto-update is not 'true'.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:07.4792624Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8970319Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8973056Z Running kernel seems to be up-to-date.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8973510Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8973696Z No services need to be restarted.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8973900Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8974013Z No containers need to be restarted.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8974161Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8974299Z No user sessions are running outdated binaries.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8974469Z 
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:09.8974687Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:10.7039627Z Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/linux64/chrome-linux64.zip
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:11.7810801Z |                                                                                |   0% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:11.9679455Z |■■■■■■■■                                                                        |  10% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.0477721Z |■■■■■■■■■■■■■■■■                                                                |  20% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.1241261Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.1970512Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.2684275Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.3368280Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.4031488Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.4679202Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.5303105Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:12.5927581Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 177 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:15.0920857Z Chrome for Testing 149.0.7827.55 (playwright chromium v1228) downloaded to /home/runner/.cache/ms-playwright/chromium-1228
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:15.0924122Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1143984Z |                                                                                |   0% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1385240Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1508017Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1579082Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1672528Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1723771Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1756102Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1808983Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1827020Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1889869Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.1906065Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.2451424Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:16.2454410Z Downloading Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/linux64/chrome-headless-shell-linux64.zip
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.3156711Z |                                                                                |   0% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.4684240Z |■■■■■■■■                                                                        |  10% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.5236357Z |■■■■■■■■■■■■■■■■                                                                |  20% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.5708050Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.6190962Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.6664940Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.7124896Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.7582435Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.8033259Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.8465035Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:17.8890006Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 114.2 MiB
+browser-e2e	Install Playwright Chromium	2026-07-16T06:54:19.6698300Z Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1228
+browser-e2e	Browser happy-path screenshots	﻿2026-07-16T06:54:47.7423960Z ##[group]Run mkdir -p artifacts && node e2e/import-happy-path.mjs artifacts
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7424397Z ^[[36;1mmkdir -p artifacts && node e2e/import-happy-path.mjs artifacts^[[0m
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7453479Z shell: /usr/bin/bash -e {0}
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7453793Z env:
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7454239Z   DATABASE_URL: ***localhost:5432/clinicos_test?schema=public
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7454508Z   AI_PROVIDER: mock
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7454671Z   PORT: 3001
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7454844Z   NODE_OPTIONS: --max-old-space-size=4096
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7455075Z   AI_RUNTIME_URL: http://127.0.0.1:8000
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7455310Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7455537Z   AI_OCR_MODEL: mock:mock
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7455718Z   AI_EXTRACTION_MODEL: mock:mock
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7455915Z   AI_AGENT_MODEL: mock:mock
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7456094Z   AI_REPAIR_MODEL: mock:mock
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7456323Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7456640Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7456988Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7457272Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7457722Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7458006Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:54:47.7458252Z ##[endgroup]
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:55:55.3770903Z req020-desktop FAILED: locator.waitFor: Timeout 30000ms exceeded.
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:55:55.3771443Z Call log:
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:55:55.3771912Z   - waiting for locator('[data-testid="srev-PATIENT_DEMOGRAPHICS"]') to be visible
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:55:55.3772310Z 
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:57:01.4688671Z req020-tablet FAILED: locator.waitFor: Timeout 30000ms exceeded.
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:57:01.4689207Z Call log:
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:57:01.4689669Z   - waiting for locator('[data-testid="srev-PATIENT_DEMOGRAPHICS"]') to be visible
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:57:01.4690032Z 
+browser-e2e	Browser happy-path screenshots	2026-07-16T06:57:01.6253628Z ##[error]Process completed with exit code 1.
+browser-e2e	Dump server logs on failure	﻿2026-07-16T06:57:01.6301964Z ##[group]Run echo "===== AI runtime ====="; tail -n 60 /tmp/ai-runtime.log || true
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6302389Z ^[[36;1mecho "===== AI runtime ====="; tail -n 60 /tmp/ai-runtime.log || true^[[0m
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6302738Z ^[[36;1mecho "===== backend ====="; tail -n 120 /tmp/backend.log || true^[[0m
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6303070Z ^[[36;1mecho "===== recent import jobs (status/stage/error) ====="^[[0m
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6304647Z ^[[36;1mnode -e "import('./backend/dist/lib/prisma.js').then(async m=>{const j=await m.prisma.importJob.findMany({orderBy:{createdAt:'desc'},take:4,select:{id:true,status:true,stage:true,error:true}});console.log(JSON.stringify(j,null,2));await m.prisma.\$disconnect()}).catch(e=>{console.error(String(e));process.exit(0)})" || true^[[0m
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6345212Z shell: /usr/bin/bash -e {0}
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6345497Z env:
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6346077Z   DATABASE_URL: ***localhost:5432/clinicos_test?schema=public
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6346456Z   AI_PROVIDER: mock
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6346679Z   PORT: 3001
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6346958Z   NODE_OPTIONS: --max-old-space-size=4096
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6347293Z   AI_RUNTIME_URL: http://127.0.0.1:8000
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6347644Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6347966Z   AI_OCR_MODEL: mock:mock
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6348221Z   AI_EXTRACTION_MODEL: mock:mock
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6348478Z   AI_AGENT_MODEL: mock:mock
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6348718Z   AI_REPAIR_MODEL: mock:mock
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6349049Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6349599Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6350126Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6350577Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6351027Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6351463Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6351847Z ##[endgroup]
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6405901Z ===== AI runtime =====
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6418442Z /home/runner/work/ClinicOS/ClinicOS/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:33: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6444114Z   class CreateJobRequest(BaseModel):
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6444570Z INFO:     Started server process [3859]
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6444999Z INFO:     Waiting for application startup.
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6445420Z INFO:     Application startup complete.
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6447124Z INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6448281Z INFO:     127.0.0.1:51488 - "GET /v1/runtime/health HTTP/1.1" 200 OK
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6448838Z ===== backend =====
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6449140Z CORS allowed origins: [
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6449531Z   'http://localhost:5173',
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6449883Z   'http://127.0.0.1:5173',
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6450246Z   'http://localhost:3000'
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6450569Z ]
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6450918Z ClinicOS backend listening on port 3001
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6451943Z [ai] extraction ready: provider=mock model=gemma-4-31b-it
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6452716Z [ai-worker] started (poll 2000ms)
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.6453223Z ===== recent import jobs (status/stage/error) =====
+browser-e2e	Dump server logs on failure	2026-07-16T06:57:01.9064863Z []

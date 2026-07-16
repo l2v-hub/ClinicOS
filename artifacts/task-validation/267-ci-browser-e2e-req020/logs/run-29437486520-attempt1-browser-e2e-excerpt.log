@@ -1,0 +1,87 @@
+# Sanitized excerpt of https://github.com/l2v-hub/ClinicOS/actions/runs/29437486520 (attempt 1, job browser-e2e)
+# Retrieved with: gh api repos/l2v-hub/ClinicOS/actions/runs/29437486520/attempts/1/logs
+
+===== 0_browser-e2e.txt =====
+2026-07-15T17:45:10.3956480Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:45:19.4533794Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:45:23.2312373Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:45:23.3979847Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:45:34.1610242Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:45:35.5925116Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:45:36.7453723Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:46:02.8258660Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:46:02.8588785Z   code: 'MODULE_NOT_FOUND',
+2026-07-15T17:46:28.3297232Z ##[group]Run pip install -r clinicos-ai-runtime/requirements.txt
+2026-07-15T17:46:28.3297706Z [36;1mpip install -r clinicos-ai-runtime/requirements.txt[0m
+2026-07-15T17:46:28.3333399Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:46:29.1384917Z Collecting fastapi>=0.110 (from -r clinicos-ai-runtime/requirements.txt (line 2))
+2026-07-15T17:46:29.2723054Z Collecting uvicorn>=0.29 (from uvicorn[standard]>=0.29->-r clinicos-ai-runtime/requirements.txt (line 3))
+2026-07-15T17:46:29.3958715Z Collecting pydantic>=2.6 (from -r clinicos-ai-runtime/requirements.txt (line 4))
+2026-07-15T17:46:29.4710371Z Collecting agno>=1.0 (from -r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:29.6343675Z Collecting google-genai>=1.0 (from -r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:29.7067949Z Collecting openai>=1.30 (from -r clinicos-ai-runtime/requirements.txt (line 8))
+2026-07-15T17:46:29.7520839Z Collecting starlette>=0.46.0 (from fastapi>=0.110->-r clinicos-ai-runtime/requirements.txt (line 2))
+2026-07-15T17:46:29.7886692Z Collecting typing-extensions>=4.8.0 (from fastapi>=0.110->-r clinicos-ai-runtime/requirements.txt (line 2))
+2026-07-15T17:46:29.8183838Z Collecting typing-inspection>=0.4.2 (from fastapi>=0.110->-r clinicos-ai-runtime/requirements.txt (line 2))
+2026-07-15T17:46:29.8491179Z Collecting annotated-doc>=0.0.2 (from fastapi>=0.110->-r clinicos-ai-runtime/requirements.txt (line 2))
+2026-07-15T17:46:29.8856741Z Collecting click>=7.0 (from uvicorn>=0.29->uvicorn[standard]>=0.29->-r clinicos-ai-runtime/requirements.txt (line 3))
+2026-07-15T17:46:29.9168973Z Collecting h11>=0.8 (from uvicorn>=0.29->uvicorn[standard]>=0.29->-r clinicos-ai-runtime/requirements.txt (line 3))
+2026-07-15T17:46:29.9472887Z Collecting annotated-types>=0.6.0 (from pydantic>=2.6->-r clinicos-ai-runtime/requirements.txt (line 4))
+2026-07-15T17:46:30.5657468Z Collecting pydantic-core==2.46.4 (from pydantic>=2.6->-r clinicos-ai-runtime/requirements.txt (line 4))
+2026-07-15T17:46:30.6017413Z Collecting agnoctl>=0.1.1 (from agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:30.6360711Z Collecting docstring-parser (from agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:30.6731205Z Collecting httpx[http2] (from agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:30.7089952Z Collecting packaging (from agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:30.7431354Z Collecting pydantic-settings (from agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:30.7937852Z Collecting pyyaml (from agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:30.8433750Z Collecting rich (from agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:30.8809922Z Collecting anyio<5.0.0,>=4.8.0 (from google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:30.9254956Z Collecting google-auth<3.0.0,>=2.48.1 (from google-auth[requests]<3.0.0,>=2.48.1->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:30.9719345Z Collecting requests<3.0.0,>=2.28.1 (from google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.0076964Z Collecting tenacity<9.2.0,>=8.2.3 (from google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.0997620Z Collecting websockets<17.0,>=13.0.0 (from google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.1318624Z Collecting distro<2,>=1.7.0 (from google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.1615323Z Collecting sniffio (from google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.1954601Z Collecting idna>=2.8 (from anyio<5.0.0,>=4.8.0->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.2334691Z Collecting pyasn1-modules>=0.2.1 (from google-auth<3.0.0,>=2.48.1->google-auth[requests]<3.0.0,>=2.48.1->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.4215673Z Collecting cryptography>=38.0.3 (from google-auth<3.0.0,>=2.48.1->google-auth[requests]<3.0.0,>=2.48.1->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.4611984Z Collecting certifi (from httpx[http2]->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:31.4950435Z Collecting httpcore==1.* (from httpx[http2]->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:31.5997957Z Collecting charset_normalizer<4,>=2 (from requests<3.0.0,>=2.28.1->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.6423151Z Collecting urllib3<3,>=1.26 (from requests<3.0.0,>=2.28.1->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.7387654Z Collecting jiter<1,>=0.10.0 (from openai>=1.30->-r clinicos-ai-runtime/requirements.txt (line 8))
+2026-07-15T17:46:31.7862574Z Collecting tqdm>4 (from openai>=1.30->-r clinicos-ai-runtime/requirements.txt (line 8))
+2026-07-15T17:46:31.8288004Z Collecting typer (from agnoctl>=0.1.1->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:31.9328903Z Collecting cffi>=2.0.0 (from cryptography>=38.0.3->google-auth<3.0.0,>=2.48.1->google-auth[requests]<3.0.0,>=2.48.1->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:31.9639484Z Collecting pycparser (from cffi>=2.0.0->cryptography>=38.0.3->google-auth<3.0.0,>=2.48.1->google-auth[requests]<3.0.0,>=2.48.1->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:32.0027676Z Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth<3.0.0,>=2.48.1->google-auth[requests]<3.0.0,>=2.48.1->google-genai>=1.0->-r clinicos-ai-runtime/requirements.txt (line 7))
+2026-07-15T17:46:32.0534753Z Collecting httptools>=0.8.0 (from uvicorn[standard]>=0.29->-r clinicos-ai-runtime/requirements.txt (line 3))
+2026-07-15T17:46:32.0875618Z Collecting python-dotenv>=0.13 (from uvicorn[standard]>=0.29->-r clinicos-ai-runtime/requirements.txt (line 3))
+2026-07-15T17:46:32.1404354Z Collecting uvloop>=0.15.1 (from uvicorn[standard]>=0.29->-r clinicos-ai-runtime/requirements.txt (line 3))
+2026-07-15T17:46:32.2446657Z Collecting watchfiles>=0.20 (from uvicorn[standard]>=0.29->-r clinicos-ai-runtime/requirements.txt (line 3))
+2026-07-15T17:46:32.2831936Z Collecting h2<5,>=3 (from httpx[http2]->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:32.3146427Z Collecting hyperframe<7,>=6.1 (from h2<5,>=3->httpx[http2]->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:32.3449429Z Collecting hpack<5,>=4.1 (from h2<5,>=3->httpx[http2]->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:32.3820854Z Collecting markdown-it-py>=2.2.0 (from rich->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:32.4195932Z Collecting pygments<3.0.0,>=2.13.0 (from rich->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:32.4503604Z Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:32.4831660Z Collecting shellingham>=1.3.0 (from typer->agnoctl>=0.1.1->agno>=1.0->-r clinicos-ai-runtime/requirements.txt (line 5))
+2026-07-15T17:46:39.4486954Z ##[group]Run ( cd clinicos-ai-runtime && PORT=8000 python -m clinicos_ai.main > /tmp/ai-runtime.log 2>&1 & )
+2026-07-15T17:46:39.4487883Z [36;1m( cd clinicos-ai-runtime && PORT=8000 python -m clinicos_ai.main > /tmp/ai-runtime.log 2>&1 & )[0m
+2026-07-15T17:46:39.4488761Z [36;1mfor i in $(seq 1 30); do curl -sf http://127.0.0.1:8000/v1/runtime/health > /dev/null && { echo "AI runtime healthy"; break; }; sleep 1; done[0m
+2026-07-15T17:46:39.4530861Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:46:40.4889773Z AI runtime healthy
+2026-07-15T17:46:48.3673293Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:47:56.0163414Z req020-desktop FAILED: locator.waitFor: Timeout 30000ms exceeded.
+2026-07-15T17:47:56.0164944Z   - waiting for locator('[data-testid="srev-PATIENT_DEMOGRAPHICS"]') to be visible
+2026-07-15T17:49:02.2066322Z req020-tablet FAILED: locator.waitFor: Timeout 30000ms exceeded.
+2026-07-15T17:49:02.2067896Z   - waiting for locator('[data-testid="srev-PATIENT_DEMOGRAPHICS"]') to be visible
+2026-07-15T17:49:02.3401512Z ##[group]Run echo "===== AI runtime ====="; tail -n 60 /tmp/ai-runtime.log || true
+2026-07-15T17:49:02.3402001Z [36;1mecho "===== AI runtime ====="; tail -n 60 /tmp/ai-runtime.log || true[0m
+2026-07-15T17:49:02.3402799Z [36;1mecho "===== recent import jobs (status/stage/error) ====="[0m
+2026-07-15T17:49:02.3439800Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
+2026-07-15T17:49:02.3495710Z ===== AI runtime =====
+2026-07-15T17:49:02.3505147Z /home/runner/work/ClinicOS/ClinicOS/clinicos-ai-runtime/clinicos_ai/domain/contracts.py:33: UserWarning: Field name "schema" in "CreateJobRequest" shadows an attribute in parent "BaseModel"
+2026-07-15T17:49:02.3507878Z INFO:     127.0.0.1:42370 - "GET /v1/runtime/health HTTP/1.1" 200 OK
+2026-07-15T17:49:02.3514949Z ===== recent import jobs (status/stage/error) =====
+2026-07-15T17:49:12.6550813Z   AI_RUNTIME_SERVICE_TOKEN: ci-mock-runtime-token
