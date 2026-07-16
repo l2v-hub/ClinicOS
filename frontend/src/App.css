@@ -3,7 +3,7 @@
    Stack: React 19 + Vite, pure CSS, no external UI libs
    ────────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import './app-additions.css';
 
 /* ── Override Vite #root defaults ─────────────────────────────────────────── */
@@ -24,7 +24,7 @@
   --navy:               #0C1E35;
   --navy-mid:           #122847;
   --navy-border:        #1A3357;
-  --blue:               #0F5FD7;
+  --blue:               #2F6BED;
   --blue-dim:           rgba(15, 95, 215, 0.14);
   --blue-glow:          rgba(15, 95, 215, 0.08);
 
@@ -44,16 +44,16 @@
   /* Semantic accents */
   --teal:               #0D9488;
   --teal-bg:            #F0FDFA;
-  --indigo:             #4338CA;
-  --indigo-bg:          #EEF2FF;
-  --emerald:            #059669;
-  --emerald-bg:         #ECFDF5;
-  --amber:              #D97706;
-  --amber-bg:           #FFFBEB;
+  --indigo:             #2F6BED;
+  --indigo-bg:          #EEF3FE;
+  --emerald:            #16A37B;
+  --emerald-bg:         #E7F7F0;
+  --amber:              #C77700;
+  --amber-bg:           #FDF3E2;
   --red:                #DC2626;
   --red-bg:             #FEF2F2;
   --red-border:         #FECACA;
-  --purple:             #8B5CF6;
+  --purple:             #6C4BD1;
 
   /* Shape */
   --radius:             10px;
@@ -100,10 +100,10 @@ body { margin: 0; background: var(--bg); }
   --primary: var(--blue);
 
   /* === 014 DESIGN SYSTEM: intent tokens (medical blue) === */
-  --c-primary:          var(--blue);          /* #0F5FD7 */
-  --c-primary-hover:    #0C52BE;
-  --c-primary-active:   #004FC4;
-  --c-primary-bg:       #EBF1FE;
+  --c-primary:          var(--blue);          /* #2F6BED */
+  --c-primary-hover:    #2560E0;
+  --c-primary-active:   #1E52C9;
+  --c-primary-bg:       #EEF3FE;
   --c-success:          var(--emerald);
   --c-success-bg:       var(--emerald-bg);
   --c-warning:          var(--amber);
@@ -171,7 +171,7 @@ body { margin: 0; background: var(--bg); }
 .teams-sidebar__brand-dot {
   width: 30px;
   height: 30px;
-  background: #0F5FD7;
+  background: #2F6BED;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -215,14 +215,14 @@ body { margin: 0; background: var(--bg); }
 }
 
 .teams-sidebar__item.active {
-  color: #004FC4;
-  border-left-color: #0F5FD7;
+  color: #1E52C9;
+  border-left-color: #2F6BED;
   background: #FFFFFF;
   font-weight: 600;
   box-shadow: 0 1px 3px rgba(16,24,40,0.10), 0 1px 2px rgba(16,24,40,0.06);
 }
 
-.teams-sidebar__item.active .teams-sidebar__item-icon { color: #004FC4; }
+.teams-sidebar__item.active .teams-sidebar__item-icon { color: #1E52C9; }
 
 .teams-sidebar__item-icon {
   width: 22px;
@@ -272,7 +272,7 @@ body { margin: 0; background: var(--bg); }
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #0F5FD7;
+  background: #2F6BED;
   color: #fff;
   display: flex;
   align-items: center;
@@ -1337,7 +1337,7 @@ body { margin: 0; background: var(--bg); }
   width: 52px;
   height: 52px;
   border-radius: 13px;
-  background: linear-gradient(135deg, #1A56DB 0%, #4338CA 100%);
+  background: linear-gradient(135deg, #1A56DB 0%, #2F6BED 100%);
   color: #fff;
   font-size: 17px;
   font-weight: 700;
@@ -1854,7 +1854,7 @@ body { margin: 0; background: var(--bg); }
 }
 
 .allergy-entry--severe   { background: #FFF5F5; border-left: 3px solid var(--red); }
-.allergy-entry--moderate { background: #FFFBEB; border-left: 3px solid var(--amber); }
+.allergy-entry--moderate { background: #FDF3E2; border-left: 3px solid var(--amber); }
 .allergy-entry--mild     { background: #F0FFF4; border-left: 3px solid var(--emerald); }
 
 .allergy-entry__header {
@@ -3962,7 +3962,7 @@ textarea.form-input {
 
 /* #241: weekday posology selector + day pill */
 .weekday-toggle { display: flex; gap: 6px; flex-wrap: wrap; }
-.sched-pill--days { background: var(--c-primary-bg, #E8F0FE); color: var(--c-primary, #0F5FD7); font-weight: 600; }
+.sched-pill--days { background: var(--c-primary-bg, #E8F0FE); color: var(--c-primary, #2F6BED); font-weight: 600; }
 
 /* #243: intake "Moduli" step — grid of operational modules with status */
 .intake-modules-grid {
@@ -3987,15 +3987,15 @@ textarea.form-input {
   opacity: 0.6;
 }
 .intake-module-card:not(:disabled):hover {
-  border-color: var(--c-primary, #0F5FD7);
+  border-color: var(--c-primary, #2F6BED);
 }
 .intake-module-card:focus-visible {
-  outline: 2px solid var(--c-primary, #0F5FD7);
+  outline: 2px solid var(--c-primary, #2F6BED);
   outline-offset: 2px;
 }
 .intake-module-card--selected {
-  border-color: var(--c-primary, #0F5FD7);
-  box-shadow: 0 0 0 1px var(--c-primary, #0F5FD7);
+  border-color: var(--c-primary, #2F6BED);
+  box-shadow: 0 0 0 1px var(--c-primary, #2F6BED);
   background: var(--c-primary-bg, #EFF4FD);
 }
 .intake-module-card__head {
@@ -4011,7 +4011,7 @@ textarea.form-input {
   margin: 8px 0 0;
   font-size: 12px;
   font-weight: 600;
-  color: var(--c-primary, #0F5FD7);
+  color: var(--c-primary, #2F6BED);
 }
 
 /* #244: allergy status selector (Presenti / Assenti / Paziente nega) */
@@ -4072,7 +4072,7 @@ textarea.form-input {
 ═══════════════════════════════════════════════════════════════════════════ */
 @keyframes voicePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-.voice-preview { border: 1px solid var(--c-primary-bg, #EBF1FE); background: var(--surface-raised, #F4F7FB);
+.voice-preview { border: 1px solid var(--c-primary-bg, #EEF3FE); background: var(--surface-raised, #F4F7FB);
   border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
 .voice-preview__title { font-size: 15px; font-weight: 700; color: var(--text, #101828); }
 .voice-preview__patient { font-size: 13px; color: var(--text-muted, #667085); }
@@ -4124,9 +4124,9 @@ textarea.form-input {
 .agnos-tts--on {
   color: var(--c-primary, var(--blue));
   border-color: var(--c-primary, var(--blue));
-  background: var(--c-primary-bg, #EBF1FE);
+  background: var(--c-primary-bg, #EEF3FE);
 }
-.agnos-tts--on:hover { background: var(--c-primary-bg, #EBF1FE); color: var(--c-primary-active, #004FC4); }
+.agnos-tts--on:hover { background: var(--c-primary-bg, #EEF3FE); color: var(--c-primary-active, #1E52C9); }
 
 .agnos-mic { min-width: 44px; min-height: 44px; color: var(--c-primary, var(--blue)); }
 .agnos-mic--listening,
@@ -4164,3 +4164,4 @@ textarea.form-input {
   .agnos-panel { width: min(460px, 100vw); }
   .agnos-compose { padding: 10px 12px; }
 }
+@import './clinicos-restyle.css';

@@ -1,0 +1,116 @@
+/* ════════════════════════════════════════════════════════════════════════
+   ClinicOS — Restyle 2026 (design refresh)
+   Drop-in TOKEN OVERRIDE. Non tocca la logica né i componenti.
+
+   USO:
+   1. Copia questo file in  frontend/src/clinicos-restyle.css
+   2. In  frontend/src/App.css  aggiungi come ULTIMA riga:
+          @import './clinicos-restyle.css';
+      (deve stare DOPO  @import './app-additions.css';  per vincere per ordine sorgente)
+   3. Sostituisci l'import font in cima ad App.css con quello indicato sotto.
+
+   Direzione: blu più moderno e luminoso, superfici più ariose, semantica
+   clinica più leggibile. Tutti i valori derivano dal prototipo approvato.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* --- FONT: sostituire in App.css la riga @import Plus Jakarta con questa ---
+   @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+   Se preferisci non toccare App.css, questo @import qui sotto è sufficiente. */
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ---- Brand blu (più luminoso) ---- */
+  --blue:               #2F6BED;
+  --blue-dim:           rgba(47, 107, 237, 0.14);
+  --blue-glow:          rgba(47, 107, 237, 0.08);
+
+  /* ---- Superfici (più ariose) ---- */
+  --bg:                 #EEF1F6;
+  --surface:            #FFFFFF;
+  --surface-raised:     #F7F9FC;
+  --border:             #E6EBF2;
+  --divider:            #F0F3F8;
+  --hover:              #F7F9FC;
+
+  /* ---- Testo ---- */
+  --text:               #16202E;
+  --text-muted:         #5A6B80;
+  --text-xmuted:        #8595A8;
+
+  /* ---- Semantica clinica ---- */
+  --emerald:            #16A37B;   --emerald-bg: #E7F7F0;
+  --teal:               #0E8A63;   --teal-bg:    #E7F7F0;
+  --amber:              #C77700;   --amber-bg:   #FDF3E2;
+  --red:                #D93A4A;   --red-bg:     #FDECEE;   --red-border: #F6C9CE;
+  --indigo:             #2F6BED;   --indigo-bg:  #EEF3FE;   /* usato per chip MRN */
+  --purple:             #6C4BD1;   /* terapie */
+
+  /* ---- Forma (angoli più morbidi) ---- */
+  --radius:             12px;
+  --radius-sm:          8px;
+  --radius-xs:          6px;
+  --card-radius:        16px;
+  --card-radius-sm:     12px;
+  --clinical-card-radius: 14px;
+
+  /* ---- Ombre (soft) ---- */
+  --shadow-card:        0 1px 2px rgba(16,32,54,0.04), 0 2px 8px rgba(16,32,54,0.04);
+  --shadow-card-hover:  0 8px 24px rgba(16,32,54,0.10), 0 2px 6px rgba(16,32,54,0.05);
+  --shadow-sm:          0 1px 2px rgba(16,32,54,0.04);
+  --shadow-md:          0 4px 16px rgba(16,32,54,0.08), 0 1px 4px rgba(16,32,54,0.04);
+  --shadow-focus:       0 0 0 3px rgba(47,107,237,0.18);
+  --card-shadow:        0 1px 2px rgba(16,32,54,0.05), 0 1px 3px rgba(16,32,54,0.04);
+
+  /* ---- Tipografia ---- */
+  --font-ui:            'Public Sans', system-ui, sans-serif;
+  --font-mono:          'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --fs-base:            14.5px;
+
+  /* ---- Intent tokens (dipendono da --blue, aggiornati) ---- */
+  --c-primary-hover:    #1D4FC4;
+  --c-primary-active:   #1D4FC4;
+  --c-primary-bg:       #EEF3FE;
+  --c-neutral-bg:       #EEF1F6;
+  --border-subtle:      rgba(22,32,46,0.08);
+}
+
+/* Densità un filo più ariosa sui contenuti principali (opzionale ma consigliato) */
+.app-main   { padding: 28px 32px 56px; }
+.content-panel { padding: 20px 24px 24px; }
+
+/* Card cliniche: bordo/raggio/ombra coerenti col refresh */
+.exp-card,
+.clinical-card,
+.stat-card,
+.table-wrap {
+  border-color: var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+/* MRN chip: mono + fondo azzurro tenue */
+.mrn, .mrn-badge {
+  background: var(--indigo-bg);
+  color: var(--indigo);
+  font-family: var(--font-mono);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   OPZIONALE — Sidebar scura (come nel prototipo).
+   DEVIA dal "navigation contract" attuale (sidebar grigio chiaro).
+   Attiva SOLO se il cliente approva. Rimuovi questo blocco per restare
+   fedele al contract esistente.
+   ════════════════════════════════════════════════════════════════════════ */
+/*
+.teams-sidebar { background: #0F1B30; border-right: none; }
+.teams-sidebar__brand { border-bottom-color: rgba(255,255,255,0.08); }
+.teams-sidebar__item { color: #8EA3C4; }
+.teams-sidebar__item:hover:not(.active) { background: rgba(255,255,255,0.08); color: #FFFFFF; }
+.teams-sidebar__item.active {
+  background: rgba(255,255,255,0.12);
+  color: #FFFFFF;
+  border-left-color: #2F6BED;
+  box-shadow: none;
+}
+.teams-sidebar__item.active .teams-sidebar__item-icon { color: #FFFFFF; }
+.teams-sidebar__footer { border-top-color: rgba(255,255,255,0.08); }
+*/

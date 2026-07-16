@@ -31,9 +31,9 @@ function rischio(score: number): { label: string; cls: string; color: string } {
   if (score === 0) return { label: '—', cls: '', color: '' };
   if (score <= 9)  return { label: 'Rischio molto alto', cls: 'badge--red',   color: '#DC2626' };
   if (score <= 12) return { label: 'Rischio alto',       cls: 'badge--red',   color: '#DC2626' };
-  if (score <= 14) return { label: 'Rischio moderato',   cls: 'badge--amber', color: '#D97706' };
+  if (score <= 14) return { label: 'Rischio moderato',   cls: 'badge--amber', color: '#C77700' };
   if (score <= 18) return { label: 'Rischio basso',      cls: 'badge--blue',  color: '#1A56DB' };
-  return              { label: 'Nessun rischio',      cls: 'badge--green', color: '#059669' };
+  return              { label: 'Nessun rischio',      cls: 'badge--green', color: '#16A37B' };
 }
 
 // ── Braden table data (fedele al template cartaceo) ───────────────────────
