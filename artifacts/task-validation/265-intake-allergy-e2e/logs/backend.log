@@ -1,0 +1,54 @@
+CORS allowed origins: [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+  'http://localhost:5174',
+  'http://127.0.0.1:5174'
+]
+ClinicOS backend listening on port 3002
+[ai] extraction ready: provider=mock model=gemma-4-31b-it
+[ai-worker] started (poll 2000ms)
+GET /patients → 0 record
+GET /patients → 0 record
+GET /patients → 1 record
+GET /patients → 1 record
+GET /patients → 1 record
+GET /patients → 1 record
+GET /patients → 2 record
+GET /patients → 2 record
+GET /patients → 2 record
+GET /patients → 2 record
+GET /patients → 3 record
+GET /patients → 3 record
+GET /patients → 3 record
+GET /patients → 3 record
+GET /patients → 4 record
+GET /patients → 4 record
+GET /patients → 4 record
+GET /patients → 4 record
+GET /patients → 5 record
+GET /patients → 5 record
+GET /patients → 5 record
+GET /patients → 5 record
+GET /patients → 6 record
+GET /patients → 6 record
+GET /patients → 6 record
+GET /patients → 6 record
+GET /patients → 6 record
+GET /patients → 6 record
+GET /patients → 6 record
+GET /patients → 7 record
+GET /patients → 7 record
+GET /patients → 7 record
+GET /patients → 7 record
+GET /patients → 8 record
+GET /patients → 8 record
+GET /patients → 8 record
+GET /patients → 8 record
+GET /patients → 9 record
+GET /patients → 9 record
+GET /patients → 9 record
+GET /patients → 9 record
+GET /patients → 10 record
+GET /patients → 10 record
+GET /patients → 10 record

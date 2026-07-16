@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: carries allergieStatus=paziente_nega into the confirmed cartella
+ok 1 - carries allergieStatus=paziente_nega into the confirmed cartella
+  ---
+  duration_ms: 1.1278
+  ...
+# Subtest: carries allergieStatus=assenti into the confirmed cartella
+ok 2 - carries allergieStatus=assenti into the confirmed cartella
+  ---
+  duration_ms: 0.1666
+  ...
+# Subtest: presenti keeps BOTH the status and the allergy list (no data loss)
+ok 3 - presenti keeps BOTH the status and the allergy list (no data loss)
+  ---
+  duration_ms: 1.1439
+  ...
+# Subtest: omits allergieStatus when the operator never selected one (undocumented ≠ false value)
+ok 4 - omits allergieStatus when the operator never selected one (undocumented ≠ false value)
+  ---
+  duration_ms: 0.1888
+  ...
+# Subtest: preserves the pre-existing mapping keys unchanged
+ok 5 - preserves the pre-existing mapping keys unchanged
+  ---
+  duration_ms: 0.4825
+  ...
+# Subtest: does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella
+ok 6 - does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella
+  ---
+  duration_ms: 0.1151
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 432.8447

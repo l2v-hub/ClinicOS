@@ -4,7 +4,7 @@
 
 import { useState, type ComponentType } from 'react';
 import type { SectionProps } from '../../operator/sections/types';
-import type { AllergiaItem } from '../../../types';
+import type { AllergiaItem, AllergyStatus } from '../../../types';
 import { intakeSections } from '../../operator/sections/patientSections';
 import { DischargeTherapyReview } from './DischargeTherapyReview';
 import type { DischargeTherapyRow } from './dischargeTherapy';
@@ -106,12 +106,23 @@ export function StepClinica({ data, onUpdateSection, operatoreNome, importedFiel
 
         // Cast: the registry stores ComponentType<SectionProps<never>> for type-safety at
         // definition time; here we widen to SectionProps<unknown> for intake rendering.
-        const EditorCast = Editor as unknown as ComponentType<SectionProps<unknown> & { allergie?: AllergiaItem[] }>;
+        const EditorCast = Editor as unknown as ComponentType<SectionProps<unknown> & {
+          allergie?: AllergiaItem[];
+          status?: AllergyStatus;
+          onStatusChange?: (s: AllergyStatus) => void;
+        }>;
 
         // AnamnesisEditor requires an extra allergie prop (read-only card inside Anamnesi).
+        // #265: AllergiesEditor needs status/onStatusChange wired to the draft, otherwise the
+        // Presenti/Assenti/Paziente nega selection is rendered but never enters allergieStatus.
         const extraProps = sectionKey === 'anamnesi'
           ? { allergie: (data.allergie as AllergiaItem[]) ?? [] }
-          : {};
+          : sectionKey === 'allergie'
+            ? {
+                status: data.allergieStatus as AllergyStatus | undefined,
+                onStatusChange: (s: AllergyStatus) => onUpdateSection('allergieStatus', s),
+              }
+            : {};
 
         const isImported = importedFields.includes(sectionKey);
         const refs = refsForSection(sectionKey);

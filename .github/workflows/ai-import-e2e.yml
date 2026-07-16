@@ -167,7 +167,11 @@ jobs:
         if: always()
         with:
           name: ai-import-e2e-screenshots
-          path: artifacts/*.png
+          # #265: the completed REQ-020 journey also emits a Playwright trace per viewport
+          # (req020-*-trace.zip) — upload it alongside the screenshots for post-mortem.
+          path: |
+            artifacts/*.png
+            artifacts/*-trace.zip
           if-no-files-found: ignore
 
   real-provider:
