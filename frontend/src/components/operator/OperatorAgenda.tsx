@@ -155,7 +155,7 @@ export function OperatorAgenda({
       {/* ── Legend ── */}
       <div className="agt-legend">
         <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#16A37B' }} />Completato</span>
-        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#1A56DB' }} />In corso</span>
+        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#2F6BED' }} />In corso</span>
         <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#C77700' }} />Programmato</span>
         <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#E5E7EB', border: '1px dashed #9DB7D5' }} />Disponibile</span>
       </div>

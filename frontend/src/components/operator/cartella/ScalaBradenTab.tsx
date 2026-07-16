@@ -32,7 +32,7 @@ function rischio(score: number): { label: string; cls: string; color: string } {
   if (score <= 9)  return { label: 'Rischio molto alto', cls: 'badge--red',   color: '#DC2626' };
   if (score <= 12) return { label: 'Rischio alto',       cls: 'badge--red',   color: '#DC2626' };
   if (score <= 14) return { label: 'Rischio moderato',   cls: 'badge--amber', color: '#C77700' };
-  if (score <= 18) return { label: 'Rischio basso',      cls: 'badge--blue',  color: '#1A56DB' };
+  if (score <= 18) return { label: 'Rischio basso',      cls: 'badge--blue',  color: '#2F6BED' };
   return              { label: 'Nessun rischio',      cls: 'badge--green', color: '#16A37B' };
 }
 

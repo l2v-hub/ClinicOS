@@ -38,13 +38,13 @@
   border-radius: 999px;
   transition: background .15s ease-out;
 }
-.top-nav__item:hover { color: var(--c-primary, #1d5fd6); }
-.top-nav__item.is-active::after { background: var(--c-primary, #1d5fd6); }
+.top-nav__item:hover { color: var(--c-primary, #2F6BED); }
+.top-nav__item.is-active::after { background: var(--c-primary, #2F6BED); }
 
 /* Level 2 — primary page nav: bigger, stronger, thicker underline */
 .top-nav--level2 { gap: 32px; min-height: 52px; }
 .top-nav--level2 .top-nav__item { font-size: 15px; padding: 14px 2px; }
-.top-nav--level2 .top-nav__item.is-active { color: var(--c-primary, #1d5fd6); }
+.top-nav--level2 .top-nav__item.is-active { color: var(--c-primary, #2F6BED); }
 .top-nav--level2 .top-nav__item.is-active::after { height: 3px; }
 
 /* Level 3 — contextual sub-nav: segmented grey control (grey track, white active pill) */
@@ -85,6 +85,6 @@
   line-height: 1.4;
   padding: 1px 6px;
   border-radius: 999px;
-  color: var(--c-primary, #1d5fd6);
+  color: var(--c-primary, #2F6BED);
   background: var(--c-primary-bg, #ebf1fe);
 }

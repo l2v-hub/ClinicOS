@@ -101,7 +101,7 @@ export const MOCK_OPERATORI: Operatore[] = [
     email: 'marco.ferretti@clinicos.it', telefono: '+39 02 1234 5678',
     reparto: 'Cardiologia', stato: 'attivo',
     pazientiAssegnati: 12, appuntamentiOggi: 5, iniziali: 'MF',
-    colore: '#1A56DB',
+    colore: '#2F6BED',
     note: 'Specialista in cardiologia interventistica.',
   },
   {
@@ -116,14 +116,14 @@ export const MOCK_OPERATORI: Operatore[] = [
     email: 'giulia.bianchi@clinicos.it', telefono: '+39 02 1234 5680',
     reparto: 'Reparto Generale', stato: 'attivo',
     pazientiAssegnati: 15, appuntamentiOggi: 7, iniziali: 'GB',
-    colore: '#4338CA',
+    colore: '#6C4BD1',
   },
   {
     id: 'op4', nome: 'Luca', cognome: 'Esposito', ruolo: 'infermiere',
     email: 'luca.esposito@clinicos.it', telefono: '+39 02 1234 5681',
     reparto: 'Pronto Soccorso', stato: 'attivo',
     pazientiAssegnati: 10, appuntamentiOggi: 3, iniziali: 'LE',
-    colore: '#D97706',
+    colore: '#C77700',
   },
   {
     id: 'op5', nome: 'Alessandro', cognome: 'Ricci', ruolo: 'coordinatore',
