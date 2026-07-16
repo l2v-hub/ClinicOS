@@ -3,7 +3,7 @@
 - Issue: https://github.com/l2v-hub/ClinicOS/issues/265
 - Branch: `codex/issue-265-bug-stato-allergie-non-persistito-nel-wizard-int`
 - Base: `origin/main` @ 0953223
-- Commit (evidence-bound SHA): `__PENDING_SHA__`
+- Commit (evidence-bound SHA): `05f1fa2`
 - Slug: `265-intake-allergy-e2e`
 - Status: **READY FOR CODEX QA**
 
@@ -53,7 +53,7 @@ Backend / Prisma: **no changes**. `confirmDraft` already persists `payload.carte
 | AC6 — CI builds the frontend against the local mock backend; browser job blocking | **DEPENDS ON #268** | see note — delivered by PR #268 (issue #267). #265 alone keeps only the trace-artifact change. |
 | AC7 — build + typecheck + unit green | **PASS** | table above |
 | AC8 — no real clinical data or secrets | **PASS** | synthetic fixtures only (`e2e/fixtures.mjs`, "E2E Sintetico_*"); logs sanitized; no PHI/secrets in screenshots/traces |
-| AC9 — evidence declares and matches the exact pushed SHA | **PASS** | this file, commit `__PENDING_SHA__` |
+| AC9 — evidence declares and matches the exact pushed SHA | **PASS** | this file, commit `05f1fa2` |
 
 ## Dependency on #268 (issue #267) — AC6
 
