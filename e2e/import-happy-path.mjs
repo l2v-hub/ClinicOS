@@ -62,10 +62,38 @@ try {
       await page.waitForTimeout(300);
       await page.screenshot({ path: resolve(outDir, `${tag}-3-prefilled.png`) });
 
-      // Conferma -> paziente creato.
+      // "Crea paziente" in the review does NOT create the patient directly: it hands off to
+      // the 6-step intake wizard (F5 #124), which opens at step 3 (Clinica). The patient is
+      // created only at step 6 (Verifica), after the #235 acceptance gates (therapy + anagrafica).
       await page.getByRole('button', { name: /Crea paziente/i }).click();
-      await page.waitForTimeout(2000);
-      await page.screenshot({ path: resolve(outDir, `${tag}-4-created.png`) });
+
+      // Step 3 (Clinica): accept the therapy gate. The mock import carries no therapy rows,
+      // so the acceptance reads "Confermo: nessuna terapia da inserire".
+      const step3 = page.locator('[data-testid="intake-step-3"]');
+      await step3.waitFor({ state: 'visible', timeout: 30000 });
+      await page.locator('[data-testid="accept-therapy"] input[type="checkbox"]').check();
+      await page.screenshot({ path: resolve(outDir, `${tag}-4-clinica.png`) });
+
+      // Advance Clinica -> Moduli -> Documenti -> Verifica (steps 3–5 carry no blocking gate).
+      const avanti = page.getByRole('button', { name: /Avanti/i });
+      await avanti.click();
+      await page.locator('[data-testid="intake-step-4"]').waitFor({ state: 'visible', timeout: 15000 });
+      await avanti.click();
+      await page.locator('[data-testid="intake-step-5"]').waitFor({ state: 'visible', timeout: 15000 });
+      await avanti.click();
+      const step6 = page.locator('[data-testid="intake-step-6"]');
+      await step6.waitFor({ state: 'visible', timeout: 15000 });
+
+      // Step 6 (Verifica): accept the anagrafica gate, then create the patient.
+      await page.locator('[data-testid="accept-demographics"] input[type="checkbox"]').check();
+      await page.screenshot({ path: resolve(outDir, `${tag}-5-verifica.png`) });
+      await step6.getByRole('button', { name: /Crea paziente/i }).click();
+
+      // Success closes the whole intake modal (onCreated -> onClose); wait for that as the
+      // positive signal, then let the patient list refetch settle so the record is in the DOM.
+      await page.locator('[data-testid="patient-intake-header"]').waitFor({ state: 'detached', timeout: 20000 });
+      await page.waitForTimeout(1200);
+      await page.screenshot({ path: resolve(outDir, `${tag}-6-created.png`) });
 
       const body = (await page.textContent('body')) ?? '';
       const ok = body.includes(`Sintetico_${vp.name}`) || body.includes('E2E');
