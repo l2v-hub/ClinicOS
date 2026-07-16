@@ -194,3 +194,15 @@ Rules:
 - Claude must **not close** GitHub issues, must not merge or deploy. Claude declares only
   **READY FOR CODEX QA**, **BLOCKED**, or **FAILED VALIDATION** — never "done". Codex remains the sole
   QA Gatekeeper and re-runs the QA Gate against the attached evidence.
+
+## QA Gate (mandatory before any PR and after agent-team development)
+
+Every PR must pass the **QA Gate** (skill: `.claude/skills/qa-gate`) before being opened or
+declared ready: diff review, independent build+tests, Playwright evidence for every UI feature
+touched, security validation, and a structured verdict against the issue's acceptance criteria.
+
+When the user requests development **in agent teams**, the team lead MUST — automatically, at the
+end of development, before reporting the result to the user — spawn a **dedicated QA session**
+(a new QA teammate) that runs the `qa-gate` skill against the delivered diff. Whoever wrote or
+coordinated the code never certifies it. The lead reports only after receiving the QA verdict:
+**READY FOR CODEX QA**, **BLOCKED**, or **FAILED VALIDATION** — never "done".
