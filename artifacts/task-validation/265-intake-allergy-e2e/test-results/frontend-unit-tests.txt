@@ -1,0 +1,500 @@
+TAP version 13
+# Subtest: (a) populated dimissione + therapies → model has correct patient name/MRN and non-null dimissione
+ok 1 - (a) populated dimissione + therapies → model has correct patient name/MRN and non-null dimissione
+  ---
+  duration_ms: 67.8743
+  ...
+# Subtest: (a) patient name and MRN come from input paziente (scoping check)
+ok 2 - (a) patient name and MRN come from input paziente (scoping check)
+  ---
+  duration_ms: 0.2526
+  ...
+# Subtest: (b) cartella.dimissione undefined → dimissione is null, no crash
+ok 3 - (b) cartella.dimissione undefined → dimissione is null, no crash
+  ---
+  duration_ms: 0.1129
+  ...
+# Subtest: (c) only active therapies appear in terapie
+ok 4 - (c) only active therapies appear in terapie
+  ---
+  duration_ms: 0.1318
+  ...
+# Subtest: (c) empty therapies array → terapie is empty
+ok 5 - (c) empty therapies array → terapie is empty
+  ---
+  duration_ms: 0.5738
+  ...
+# Subtest: (c) fasce labels built correctly for active therapy
+ok 6 - (c) fasce labels built correctly for active therapy
+  ---
+  duration_ms: 0.1938
+  ...
+# Subtest: (c) orarioSpecifico takes priority over fasce labels
+ok 7 - (c) orarioSpecifico takes priority over fasce labels
+  ---
+  duration_ms: 0.1332
+  ...
+# Subtest: (d) allergie mapped with testo and grave flag
+ok 8 - (d) allergie mapped with testo and grave flag
+  ---
+  duration_ms: 0.2045
+  ...
+# Subtest: (d) no allergie → empty array (renders "Nessuna allergia nota")
+ok 9 - (d) no allergie → empty array (renders "Nessuna allergia nota")
+  ---
+  duration_ms: 0.1898
+  ...
+# Subtest: (d) only attive/monitoraggio diagnosi appear
+ok 10 - (d) only attive/monitoraggio diagnosi appear
+  ---
+  duration_ms: 0.4035
+  ...
+# Subtest: (d) condizioni croniche from boolean flags
+ok 11 - (d) condizioni croniche from boolean flags
+  ---
+  duration_ms: 0.2461
+  ...
+# Subtest: (d) no camera field on model anymore
+ok 12 - (d) no camera field on model anymore
+  ---
+  duration_ms: 0.1722
+  ...
+# Subtest: sortEsamiDesc: orders by date descending (most recent first)
+ok 13 - sortEsamiDesc: orders by date descending (most recent first)
+  ---
+  duration_ms: 16.7045
+  ...
+# Subtest: sortEsamiDesc: same date ordered by time descending
+ok 14 - sortEsamiDesc: same date ordered by time descending
+  ---
+  duration_ms: 0.3258
+  ...
+# Subtest: sortEsamiDesc: records without time come before same-date records with midnight time
+ok 15 - sortEsamiDesc: records without time come before same-date records with midnight time
+  ---
+  duration_ms: 0.2491
+  ...
+# Subtest: sortEsamiDesc: mixed dates and times
+ok 16 - sortEsamiDesc: mixed dates and times
+  ---
+  duration_ms: 0.3161
+  ...
+# Subtest: sortEsamiDesc: empty array returns empty array
+ok 17 - sortEsamiDesc: empty array returns empty array
+  ---
+  duration_ms: 0.183
+  ...
+# Subtest: sortEsamiDesc: single record returns unchanged
+ok 18 - sortEsamiDesc: single record returns unchanged
+  ---
+  duration_ms: 0.2105
+  ...
+# Subtest: sortEsamiDesc: does not mutate the original array
+ok 19 - sortEsamiDesc: does not mutate the original array
+  ---
+  duration_ms: 0.2846
+  ...
+# Subtest: Tinetti balance max is 16
+ok 20 - Tinetti balance max is 16
+  ---
+  duration_ms: 0.7265
+  ...
+# Subtest: Tinetti gait max is 12
+ok 21 - Tinetti gait max is 12
+  ---
+  duration_ms: 0.1193
+  ...
+# Subtest: Tinetti total max is 28
+ok 22 - Tinetti total max is 28
+  ---
+  duration_ms: 0.1557
+  ...
+# Subtest: Tinetti total min is 0
+ok 23 - Tinetti total min is 0
+  ---
+  duration_ms: 0.0806
+  ...
+# Subtest: Tinetti risk: score 0 -> Alto rischio cadute
+ok 24 - Tinetti risk: score 0 -> Alto rischio cadute
+  ---
+  duration_ms: 0.0864
+  ...
+# Subtest: Tinetti risk: score 18 -> Alto rischio cadute
+ok 25 - Tinetti risk: score 18 -> Alto rischio cadute
+  ---
+  duration_ms: 0.0576
+  ...
+# Subtest: Tinetti risk: score 19 -> Rischio moderato
+ok 26 - Tinetti risk: score 19 -> Rischio moderato
+  ---
+  duration_ms: 0.12
+  ...
+# Subtest: Tinetti risk: score 23 -> Rischio moderato
+ok 27 - Tinetti risk: score 23 -> Rischio moderato
+  ---
+  duration_ms: 0.0736
+  ...
+# Subtest: Tinetti risk: score 24 -> Basso rischio
+ok 28 - Tinetti risk: score 24 -> Basso rischio
+  ---
+  duration_ms: 0.1306
+  ...
+# Subtest: Tinetti risk: score 28 -> Basso rischio
+ok 29 - Tinetti risk: score 28 -> Basso rischio
+  ---
+  duration_ms: 0.1402
+  ...
+# Subtest: NRS severity: 0 -> Assente
+ok 30 - NRS severity: 0 -> Assente
+  ---
+  duration_ms: 0.0786
+  ...
+# Subtest: NRS severity: 1 -> Lieve
+ok 31 - NRS severity: 1 -> Lieve
+  ---
+  duration_ms: 0.0732
+  ...
+# Subtest: NRS severity: 3 -> Lieve
+ok 32 - NRS severity: 3 -> Lieve
+  ---
+  duration_ms: 0.0517
+  ...
+# Subtest: NRS severity: 4 -> Moderato
+ok 33 - NRS severity: 4 -> Moderato
+  ---
+  duration_ms: 0.245
+  ...
+# Subtest: NRS severity: 6 -> Moderato
+ok 34 - NRS severity: 6 -> Moderato
+  ---
+  duration_ms: 0.1048
+  ...
+# Subtest: NRS severity: 7 -> Severo
+ok 35 - NRS severity: 7 -> Severo
+  ---
+  duration_ms: 0.0665
+  ...
+# Subtest: NRS severity: 10 -> Severo
+ok 36 - NRS severity: 10 -> Severo
+  ---
+  duration_ms: 0.0538
+  ...
+# Subtest: registry lists the core clinical sections
+ok 37 - registry lists the core clinical sections
+  ---
+  duration_ms: 0.7192
+  ...
+# Subtest: intakeSections returns only intake-available sections
+ok 38 - intakeSections returns only intake-available sections
+  ---
+  duration_ms: 0.1251
+  ...
+# Subtest: getSection resolves by key
+ok 39 - getSection resolves by key
+  ---
+  duration_ms: 0.1237
+  ...
+# Subtest: resolves a registered, implemented section
+ok 40 - resolves a registered, implemented section
+  ---
+  duration_ms: 0.7073
+  ...
+# Subtest: returns null for unknown section
+ok 41 - returns null for unknown section
+  ---
+  duration_ms: 0.1198
+  ...
+# Subtest: carries allergieStatus=paziente_nega into the confirmed cartella
+ok 42 - carries allergieStatus=paziente_nega into the confirmed cartella
+  ---
+  duration_ms: 0.7613
+  ...
+# Subtest: carries allergieStatus=assenti into the confirmed cartella
+ok 43 - carries allergieStatus=assenti into the confirmed cartella
+  ---
+  duration_ms: 0.1269
+  ...
+# Subtest: presenti keeps BOTH the status and the allergy list (no data loss)
+ok 44 - presenti keeps BOTH the status and the allergy list (no data loss)
+  ---
+  duration_ms: 0.3873
+  ...
+# Subtest: omits allergieStatus when the operator never selected one (undocumented ≠ false value)
+ok 45 - omits allergieStatus when the operator never selected one (undocumented ≠ false value)
+  ---
+  duration_ms: 0.1332
+  ...
+# Subtest: preserves the pre-existing mapping keys unchanged
+ok 46 - preserves the pre-existing mapping keys unchanged
+  ---
+  duration_ms: 0.4709
+  ...
+# Subtest: does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella
+ok 47 - does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella
+  ---
+  duration_ms: 0.1109
+  ...
+# Subtest: createDraft POSTs to /intake/drafts
+ok 48 - createDraft POSTs to /intake/drafts
+  ---
+  duration_ms: 1.4282
+  ...
+# Subtest: patchDraft PATCHes the draft id
+ok 49 - patchDraft PATCHes the draft id
+  ---
+  duration_ms: 0.4035
+  ...
+# Subtest: DD/MM/YYYY at the start of a line is a prefix
+ok 50 - DD/MM/YYYY at the start of a line is a prefix
+  ---
+  duration_ms: 2.6402
+  ...
+# Subtest: DD-MM-YYYY and DD.MM.YYYY are recognised
+ok 51 - DD-MM-YYYY and DD.MM.YYYY are recognised
+  ---
+  duration_ms: 0.3434
+  ...
+# Subtest: two-digit year DD/MM/YY is recognised
+ok 52 - two-digit year DD/MM/YY is recognised
+  ---
+  duration_ms: 0.2313
+  ...
+# Subtest: textual month is recognised
+ok 53 - textual month is recognised
+  ---
+  duration_ms: 0.1805
+  ...
+# Subtest: "In data 09/03/2026" highlights the whole expression
+ok 54 - "In data 09/03/2026" highlights the whole expression
+  ---
+  duration_ms: 0.1825
+  ...
+# Subtest: "Il 09/03/2026" at line start highlights the whole expression
+ok 55 - "Il 09/03/2026" at line start highlights the whole expression
+  ---
+  duration_ms: 0.1476
+  ...
+# Subtest: date after a bullet item is a prefix
+ok 56 - date after a bullet item is a prefix
+  ---
+  duration_ms: 0.4108
+  ...
+# Subtest: a date INSIDE a sentence is NOT a prefix
+ok 57 - a date INSIDE a sentence is NOT a prefix
+  ---
+  duration_ms: 0.1077
+  ...
+# Subtest: page numbers and record numbers are NOT marked
+ok 58 - page numbers and record numbers are NOT marked
+  ---
+  duration_ms: 0.1774
+  ...
+# Subtest: multiple date prefixes in one block (new paragraphs)
+ok 59 - multiple date prefixes in one block (new paragraphs)
+  ---
+  duration_ms: 0.1888
+  ...
+# Subtest: offsets are exact and slice back to the same text
+ok 60 - offsets are exact and slice back to the same text
+  ---
+  duration_ms: 0.1329
+  ...
+# Subtest: recalculation after a manual edit reflects the new text (no stale offsets)
+ok 61 - recalculation after a manual edit reflects the new text (no stale offsets)
+  ---
+  duration_ms: 0.152
+  ...
+# Subtest: render: DATE_PREFIX produces a bold segment, text is never modified
+ok 62 - render: DATE_PREFIX produces a bold segment, text is never modified
+  ---
+  duration_ms: 0.3509
+  ...
+# Subtest: withDatePrefixes does not double-mark a provided overlapping annotation
+ok 63 - withDatePrefixes does not double-mark a provided overlapping annotation
+  ---
+  duration_ms: 0.1762
+  ...
+# Subtest: sectionsFromNarrative maps diagnosisText -> DISCHARGE_DIAGNOSIS block (no diagnoses[])
+ok 64 - sectionsFromNarrative maps diagnosisText -> DISCHARGE_DIAGNOSIS block (no diagnoses[])
+  ---
+  duration_ms: 0.9028
+  ...
+# Subtest: all canonical sections kept (even empty, fillable); allergies surfaced first; empty unmapped dropped
+ok 65 - all canonical sections kept (even empty, fillable); allergies surfaced first; empty unmapped dropped
+  ---
+  duration_ms: 0.1711
+  ...
+# Subtest: assertNoLegacyImportArrays throws on legacy contract, passes on narrative
+ok 66 - assertNoLegacyImportArrays throws on legacy contract, passes on narrative
+  ---
+  duration_ms: 0.4697
+  ...
+# Subtest: GUARD: the import modal never renders the legacy ImportReviewFull table
+ok 67 - GUARD: the import modal never renders the legacy ImportReviewFull table
+  ---
+  duration_ms: 1.1688
+  ...
+# Subtest: assertNoLegacyImportArrays is a no-op on null/undefined (safe to call eagerly)
+ok 68 - assertNoLegacyImportArrays is a no-op on null/undefined (safe to call eagerly)
+  ---
+  duration_ms: 0.2678
+  ...
+# Subtest: BUG-050: import-contract assertion is wired into the result-load path (runs in prod)
+ok 69 - BUG-050: import-contract assertion is wired into the result-load path (runs in prod)
+  ---
+  duration_ms: 0.7489
+  ...
+# Subtest: no annotations -> single faithful plain segment
+ok 70 - no annotations -> single faithful plain segment
+  ---
+  duration_ms: 0.8692
+  ...
+# Subtest: segments always reconstruct rawText exactly (no loss, no edit)
+ok 71 - segments always reconstruct rawText exactly (no loss, no edit)
+  ---
+  duration_ms: 0.2244
+  ...
+# Subtest: DATE annotation produces an exact bold span
+ok 72 - DATE annotation produces an exact bold span
+  ---
+  duration_ms: 0.1138
+  ...
+# Subtest: SUBSECTION_TITLE bolded (anamnesis subtitles)
+ok 73 - SUBSECTION_TITLE bolded (anamnesis subtitles)
+  ---
+  duration_ms: 0.1141
+  ...
+# Subtest: wrong-offset annotation is ignored (text still rendered, never mutated)
+ok 74 - wrong-offset annotation is ignored (text still rendered, never mutated)
+  ---
+  duration_ms: 0.1437
+  ...
+# Subtest: annotation whose text mismatches its offsets is ignored
+ok 75 - annotation whose text mismatches its offsets is ignored
+  ---
+  duration_ms: 0.0834
+  ...
+# Subtest: overlapping annotations: inner one skipped (no double wrap)
+ok 76 - overlapping annotations: inner one skipped (no double wrap)
+  ---
+  duration_ms: 0.0973
+  ...
+# Subtest: illegible markers are highlighted
+ok 77 - illegible markers are highlighted
+  ---
+  duration_ms: 0.0871
+  ...
+# Subtest: ALLERGY_CRITICAL carries the critical class
+ok 78 - ALLERGY_CRITICAL carries the critical class
+  ---
+  duration_ms: 0.165
+  ...
+# Subtest: no HTML is produced: literal angle brackets stay as text
+ok 79 - no HTML is produced: literal angle brackets stay as text
+  ---
+  duration_ms: 0.104
+  ...
+# Subtest: deriveAllergySummary: non-empty list wins regardless of status (count)
+ok 80 - deriveAllergySummary: non-empty list wins regardless of status (count)
+  ---
+  duration_ms: 1.1132
+  ...
+# Subtest: deriveAllergySummary: non-empty list wins even if status contradicts it (legacy/edge data)
+ok 81 - deriveAllergySummary: non-empty list wins even if status contradicts it (legacy/edge data)
+  ---
+  duration_ms: 0.1254
+  ...
+# Subtest: deriveAllergySummary: empty list + status assenti -> success, verified-absent
+ok 82 - deriveAllergySummary: empty list + status assenti -> success, verified-absent
+  ---
+  duration_ms: 0.1321
+  ...
+# Subtest: deriveAllergySummary: empty list + status paziente_nega -> info, patient denies
+ok 83 - deriveAllergySummary: empty list + status paziente_nega -> info, patient denies
+  ---
+  duration_ms: 0.0716
+  ...
+# Subtest: deriveAllergySummary: undefined status + empty list -> warning, undocumented
+ok 84 - deriveAllergySummary: undefined status + empty list -> warning, undocumented
+  ---
+  duration_ms: 0.069
+  ...
+# Subtest: deriveAllergySummary: empty list + undefined status (explicit []) -> warning, undocumented
+ok 85 - deriveAllergySummary: empty list + undefined status (explicit []) -> warning, undocumented
+  ---
+  duration_ms: 0.0575
+  ...
+# Subtest: deriveAllergySummary: status presenti but list emptied (edge case) -> falls back to undocumented
+ok 86 - deriveAllergySummary: status presenti but list emptied (edge case) -> falls back to undocumented
+  ---
+  duration_ms: 0.1214
+  ...
+# Subtest: canSetStatus: blocks "assenti" when the list has entries
+ok 87 - canSetStatus: blocks "assenti" when the list has entries
+  ---
+  duration_ms: 0.1448
+  ...
+# Subtest: canSetStatus: blocks "paziente_nega" when the list has entries
+ok 88 - canSetStatus: blocks "paziente_nega" when the list has entries
+  ---
+  duration_ms: 0.1375
+  ...
+# Subtest: canSetStatus: allows "presenti" even when the list has entries
+ok 89 - canSetStatus: allows "presenti" even when the list has entries
+  ---
+  duration_ms: 0.232
+  ...
+# Subtest: canSetStatus: allows "assenti" when the list is empty
+ok 90 - canSetStatus: allows "assenti" when the list is empty
+  ---
+  duration_ms: 0.0947
+  ...
+# Subtest: canSetStatus: allows "paziente_nega" when the list is empty
+ok 91 - canSetStatus: allows "paziente_nega" when the list is empty
+  ---
+  duration_ms: 0.0689
+  ...
+# Subtest: canSetStatus: allows "assenti"/"paziente_nega" when list is undefined
+ok 92 - canSetStatus: allows "assenti"/"paziente_nega" when list is undefined
+  ---
+  duration_ms: 0.0649
+  ...
+# Subtest: hasLegacyAnamnesis: undefined/null/empty -> false
+ok 93 - hasLegacyAnamnesis: undefined/null/empty -> false
+  ---
+  duration_ms: 0.731
+  ...
+# Subtest: hasLegacyAnamnesis: blank-string-only fields -> false
+ok 94 - hasLegacyAnamnesis: blank-string-only fields -> false
+  ---
+  duration_ms: 0.1409
+  ...
+# Subtest: hasLegacyAnamnesis: at least one populated field -> true
+ok 95 - hasLegacyAnamnesis: at least one populated field -> true
+  ---
+  duration_ms: 0.1039
+  ...
+# Subtest: legacyAnamnesisRows: empty input -> []
+ok 96 - legacyAnamnesisRows: empty input -> []
+  ---
+  duration_ms: 0.5672
+  ...
+# Subtest: legacyAnamnesisRows: maps only populated fields, in canonical order, skips metadata
+ok 97 - legacyAnamnesisRows: maps only populated fields, in canonical order, skips metadata
+  ---
+  duration_ms: 0.3369
+  ...
+# Subtest: legacyAnamnesisRows: surfaces legacy-only familiare/lavorativa fields when populated
+ok 98 - legacyAnamnesisRows: surfaces legacy-only familiare/lavorativa fields when populated
+  ---
+  duration_ms: 0.1133
+  ...
+1..98
+# tests 98
+# suites 0
+# pass 98
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 705.7125

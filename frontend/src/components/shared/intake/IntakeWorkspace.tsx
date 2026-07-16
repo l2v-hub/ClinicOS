@@ -8,6 +8,7 @@ import { StepVerifica } from './StepVerifica';
 import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
 import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
 import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
+import { buildConfirmCartella } from './confirmCartella';
 
 const STEPS = [
   'Anagrafica',
@@ -282,29 +283,8 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       ...(a.emergencyContactPhone !== undefined && { emergencyContactPhone: a.emergencyContactPhone }),
     };
 
-    const ingressoObj = data.ingresso ?? {};
-    const cartella: Record<string, unknown> = {
-      statoRicovero: 'ricoverato',
-      ...ingressoObj,
-    };
-    if (data.allergie !== undefined) cartella.allergie = data.allergie;
-    if (data.diagnosi !== undefined) cartella.diagnosi = data.diagnosi;
-    if (data.anamnesi !== undefined) cartella.anamnesi = data.anamnesi;
-    // Vitals: data.parametri is an OBJECT { parametriMensili?, parametriVitali? } (Task 5 shape)
-    if (data.parametri != null) {
-      const parametriObj = data.parametri as { parametriMensili?: unknown[]; parametriVitali?: unknown[] };
-      cartella.parametriMensili = parametriObj.parametriMensili ?? [];
-      cartella.parametriVitali = parametriObj.parametriVitali ?? [];
-    }
-    // Pain assessments
-    if (Array.isArray(data.dolore) && data.dolore.length) {
-      cartella.valutazioniNRS = data.dolore;
-    }
-    // Carry imported therapy text (TherapyEditor intake mode is still a placeholder)
-    // so it is persisted instead of dropped on confirm.
-    if (typeof data._terapiaText === 'string' && data._terapiaText.trim()) {
-      cartella.terapiaImportText = data._terapiaText;
-    }
+    // #265: extracted pure mapper (unit-tested) — carries allergieStatus into the cartella.
+    const cartella = buildConfirmCartella(data);
 
     // Structured therapies to persist = manual TherapyFormValue rows + #156 discharge-detected rows
     // (edited in the "Terapie rilevate" table, data.terapiaImport). Both map to TherapyCreateInput.

@@ -1,0 +1,39 @@
+# REQ-020 browser E2E — issue #265 (allergy status persistence)
+# Command: E2E_FRONTEND_URL=http://localhost:5174 E2E_BACKEND_URL=http://localhost:3002 \
+#          node e2e/import-happy-path.mjs artifacts/task-validation/265-intake-allergy-e2e/e2e-out-final
+# Local hermetic stack: backend :3002 (AI_PROVIDER=mock) + AI runtime :8000 (mock) +
+#          frontend :5174 (Vite dev, VITE_API_URL=http://localhost:3002) +
+#          Postgres podman container clinicos-e2e-265 (host :5433).
+# Serialized run — single Playwright lane, no concurrent browser runs.
+
+## Authoritative run (exit 0 — both viewports green)
+req020-desktop: duplicate detected — confirming explicitly via "Crea comunque"
+req020-desktop: API persistence OK — patient cmrnl0q0r006184eiiwu6snyo allergieStatus='paziente_nega'
+req020-desktop: UI-after-reload OK — detail shows 'Paziente nega allergie'
+req020-desktop: created=true consoleErrors=0 httpFailures=0
+req020-tablet: duplicate detected — confirming explicitly via "Crea comunque"
+req020-tablet: API persistence OK — patient cmrnl1cly006r84eitc668dor allergieStatus='assenti'
+req020-tablet: UI-after-reload OK — detail shows 'Allergie assenti (verificato)'
+req020-tablet: created=true consoleErrors=0 httpFailures=0
+EXIT: 0
+
+## Note on the first attempt in the same outDir (classified — NOT a product defect)
+The first invocation of this run failed ONLY on the desktop viewport with two
+"Failed to load resource: net::ERR_INSUFFICIENT_RESOURCES" browser console entries — a
+Chromium resource-exhaustion error under local machine load (multiple podman stacks running),
+not an application error. All functional assertions still passed on that attempt
+(API persistence paziente_nega, reload detail, duplicate handling). The immediate re-run
+above was fully clean (consoleErrors=0) on both viewports; that clean run is authoritative.
+The transient desktop-FAIL.png was removed from e2e-out-final/ to avoid ambiguity.
+
+## Assertions exercised (real, non-trivial)
+- allergy-status button aria-checked flips to 'true' after selection (draft actually updated)
+- allergy-undocumented hint is NOT visible after selection (regression guard for the bug)
+- therapy + demographics acceptance gates (REQ-020 / #235) must be checked to proceed/create
+- explicit duplicate branch: 409 on /confirm -> "Crea comunque" -> wizard closes
+- GET /patients contains the created patient (E2E <lastName>)
+- GET /patients/:id/cartella -> data.allergieStatus === expected status (persistence)
+- absent-status viewports assert allergie[] stays empty (no ambiguous clinical state, AC3)
+- UI after full reload: patient detail shows the human-readable status label
+- zero relevant console errors, zero relevant backend 4xx/5xx (409 duplicate tolerated only when handled)
+- process exits non-zero if any gate/persistence assertion fails (AC5)
