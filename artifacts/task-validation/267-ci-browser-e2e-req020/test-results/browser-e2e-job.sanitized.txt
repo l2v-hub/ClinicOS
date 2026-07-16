@@ -1,0 +1,35 @@
+# browser-e2e job — sanitized log excerpt
+# Run:  https://github.com/l2v-hub/ClinicOS/actions/runs/29505031086
+# Job:  browser-e2e (id 87644426673)
+# SHA:  83f6afd1c97b34b92a76567d975f5b50b7ed8b21   (PR #268, branch fix/issue-267-ci-browser-e2e)
+# Result: SUCCESS
+# Sanitization: secret-bearing env echoes (DATABASE_URL password, service token) omitted;
+#   only the deterministic assertion lines are reproduced. AI_RUNTIME_SERVICE_TOKEN in the
+#   workflow is the hardcoded non-secret mock value "ci-mock-runtime-token".
+
+# ── AC1: Playwright installed from the lockfile CLI — no MODULE_NOT_FOUND ─────────
+$ node node_modules/playwright/cli.js install --with-deps chromium
+Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) ...
+Chrome for Testing 149.0.7827.55 downloaded to /home/runner/.cache/ms-playwright/chromium-1228
+Chrome Headless Shell 149.0.7827.55 downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1228
+# (no "MODULE_NOT_FOUND", no fallback "npm i playwright")
+
+# ── Stack up ─────────────────────────────────────────────────────────────────────
+AI runtime healthy
+
+# ── Browser happy-path screenshots step ──────────────────────────────────────────
+$ mkdir -p artifacts && node e2e/import-happy-path.mjs artifacts
+req020-desktop: created=true consoleErrors=0        # AC2 (review reached) + AC4 (no console errors)
+req020-tablet: created=true consoleErrors=0         # AC3 (review reached) + AC4 (no console errors)
+# step exit code: 0  (no "req020-* ASSERT FAILED", no "Errore temporaneo durante l'elaborazione")
+
+# ── AC5: mock AI runtime received document-job calls ─────────────────────────────
+INFO:     127.0.0.1 - "POST /v1/document-jobs HTTP/1.1" 201 Created
+INFO:     127.0.0.1 - "POST /v1/document-jobs/<uuid>/run HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1 - "GET  /v1/document-jobs/<uuid> HTTP/1.1" 200 OK
+INFO:     127.0.0.1 - "GET  /v1/document-jobs/<uuid>/result HTTP/1.1" 200 OK
+OK: mock runtime received a document-job request
+# assert step exit code: 0
+
+# ── Job result ───────────────────────────────────────────────────────────────────
+# browser-e2e: completed / success   (no ##[error], no continue-on-error masking)

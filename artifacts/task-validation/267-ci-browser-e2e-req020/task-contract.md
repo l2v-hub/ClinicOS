@@ -103,6 +103,33 @@ Required evidence:
 - Playwright version is pinned via the lockfile; browser download happens in CI via
   `install --with-deps chromium` as before.
 
+## Addendum — residual root cause (commit 83f6afd, 2026-07-16)
+
+The two earlier fixes (`92d5b88`: `VITE_API_URL=http://localhost:3001`; lockfile Playwright
+install) removed the `MODULE_NOT_FOUND` and the "silently drives production" causes, so the flow
+reached the **Revisione** step on run 29480138060 — but `browser-e2e` stayed red with
+`req020-desktop: created=false` / `req020-tablet: created=false`, `consoleErrors=0`.
+
+Diagnosis from the run 29480138060 `--log-failed` output and the `ai-import-e2e-screenshots`
+artifact (`req020-*-FAIL-not-created.png`): the failure screenshot shows the **"Nuovo paziente"
+intake wizard stuck at step "3. Clinica"** with the therapy checkbox and
+"Stato allergie non documentato — seleziona uno stato".
+
+The E2E script `e2e/import-happy-path.mjs` was **stale relative to the F5 #124 flow**. Since #124,
+`ImportSectionsReview`'s "Crea paziente" no longer creates the patient directly:
+`DischargeImportModal.handleProceedToWorkspace` seeds an intake draft and hands off to the 6-step
+`IntakeWorkspace`, which opens at **step 3 (Clinica)**. The patient is created only at **step 6
+(Verifica)**, after the two `#235` acceptance gates — `accept-therapy` (Clinica) and
+`accept-demographics` (Verifica). The old test clicked "Crea paziente" once, landed on step 3, and
+asserted the patient name in the DOM, so `created=false` every run. The allergy message is advisory
+(`StepVerifica.canCreate` does not require an allergy state) — not a creation gate.
+
+Fix (test-only, `e2e/import-happy-path.mjs`): after the review's "Crea paziente", check
+`accept-therapy` (step 3), advance 3→4→5→6 via "Avanti →", check `accept-demographics` (step 6),
+click "Crea paziente", then wait for the intake header to detach (onCreated → onClose) before
+asserting the new patient in the refreshed list — at desktop (1366×768) and tablet (1024×768).
+No job disabled, no `continue-on-error`, no skipped assertion, no timeout inflation.
+
 ## Gate Status
 
 READY FOR IMPLEMENTATION
