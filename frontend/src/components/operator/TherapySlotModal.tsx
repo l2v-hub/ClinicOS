@@ -86,7 +86,7 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                         </div>
                         <div className="therapy-drug-row__actions">
                           {a.status === 'administered' && (
-                            <span style={{ color: '#059669', fontWeight: 600, fontSize: 12 }}>
+                            <span style={{ color: '#16A37B', fontWeight: 600, fontSize: 12 }}>
                               ✓ Erogata{a.administeredBy ? ` (${a.administeredBy})` : ''}
                             </span>
                           )}

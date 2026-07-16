@@ -14,9 +14,9 @@ interface Props {
 // ── Scoring & severity ────────────────────────────────────────────────────────
 
 export function nrsSeverity(punteggio: number): { label: string; cls: string; color: string } {
-  if (punteggio === 0) return { label: 'Assente',  cls: 'badge--green', color: '#059669' };
+  if (punteggio === 0) return { label: 'Assente',  cls: 'badge--green', color: '#16A37B' };
   if (punteggio <= 3)  return { label: 'Lieve',    cls: 'badge--blue',  color: '#1A56DB' };
-  if (punteggio <= 6)  return { label: 'Moderato', cls: 'badge--amber', color: '#D97706' };
+  if (punteggio <= 6)  return { label: 'Moderato', cls: 'badge--amber', color: '#C77700' };
   return                      { label: 'Severo',   cls: 'badge--red',   color: '#DC2626' };
 }
 

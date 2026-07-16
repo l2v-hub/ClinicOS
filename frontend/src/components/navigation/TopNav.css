@@ -72,7 +72,7 @@
 .top-nav--level3 .top-nav__item::after { display: none; }
 .top-nav--level3 .top-nav__item:hover { color: #101828; background: rgba(15,95,215,0.06); }
 .top-nav--level3 .top-nav__item.is-active {
-  color: var(--c-primary, #0F5FD7);
+  color: var(--c-primary, #2F6BED);
   background: #FFFFFF;
   font-weight: 600;
   box-shadow: 0 1px 2px rgba(16,24,40,0.10);

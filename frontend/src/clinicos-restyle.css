@@ -1,0 +1,80 @@
+/* ClinicOS — Visual Refresh (restyle, token-only)
+   ────────────────────────────────────────────────────────────────────────────
+   Solo override dei design token :root. NON ridisegna i componenti: lo stile è
+   guidato dai token esistenti in App.css. Importato come ULTIMA riga di App.css
+   così l'override arriva dopo il :root base e vince nel cascade.
+   Rosso riservato agli alert clinici/errori.
+   Reference: mockup/ClinicOS RSA - standalone.html
+   ──────────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* :root:root → specificità (0,2,0) > :root (0,1,0): l'override vince a prescindere
+   dalla posizione dell'@import nel bundle, senza dipendere da un @import in coda
+   (che sarebbe CSS non valido). */
+:root:root {
+  /* Brand — blu medicale più luminoso */
+  --blue:               #2F6BED;
+  --blue-dim:           rgba(47, 107, 237, 0.14);
+  --blue-glow:          rgba(47, 107, 237, 0.08);
+
+  /* Surface — page bg più chiara e neutra, superfici raised morbide */
+  --bg:                 #EEF1F6;
+  --surface-raised:     #F7F9FC;
+  --border:             #E6EBF2;
+  --divider:            #F0F3F8;
+  --hover:              #F7F9FC;
+
+  /* Text — gerarchia con tinte più fredde/leggibili */
+  --text:               #16202E;
+  --text-muted:         #5A6B80;
+  --text-xmuted:        #8595A8;
+
+  /* Semantic accents */
+  --emerald:            #16A37B;
+  --emerald-bg:         #E7F7F0;
+  --amber:              #C77700;
+  --amber-bg:           #FDF3E2;
+  --red:                #D93A4A;   /* alert clinici / errori ONLY */
+  --red-bg:             #FDECEE;
+  --red-border:         #F6C9CE;
+  --indigo:             #2F6BED;
+  --indigo-bg:          #EEF3FE;
+  --purple:             #6C4BD1;
+
+  /* Shape — angoli leggermente più morbidi */
+  --radius:             12px;
+  --radius-sm:          8px;
+
+  /* Shadows — soft blu-navy invece del nero puro */
+  --shadow-card:        0 1px 4px rgba(16,32,54,0.06), 0 1px 2px rgba(16,32,54,0.04);
+  --shadow-card-hover:  0 8px 24px rgba(16,32,54,0.10), 0 2px 6px rgba(16,32,54,0.06);
+  --shadow-sm:          0 1px 3px rgba(16,32,54,0.06);
+  --shadow-md:          0 4px 16px rgba(16,32,54,0.09), 0 1px 4px rgba(16,32,54,0.05);
+  --shadow-focus:       0 0 0 3px rgba(47,107,237,0.28);
+
+  /* Typography */
+  --font-ui:            'Public Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:          'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Derivati intent (erano hard-coded sul blu vecchio) — riallineati al nuovo blu */
+  --c-primary-hover:    #2560E0;
+  --c-primary-active:   #1E52C9;
+  --c-primary-bg:       #EEF3FE;
+  --card-shadow:        0 1px 2px rgba(16,32,54,0.06), 0 1px 3px rgba(16,32,54,0.04);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   Sidebar scura (opzionale) — DISATTIVATA salvo conferma.
+   Per attivarla, decommentare il blocco: applica il tema navy alla .teams-sidebar.
+   ────────────────────────────────────────────────────────────────────────────
+.teams-sidebar {
+  background: var(--navy);
+  border-right: 1px solid var(--navy-border);
+}
+.teams-sidebar .teams-nav-label { color: rgba(255,255,255,0.72); }
+.teams-sidebar .teams-nav-item.active {
+  background: var(--navy-mid);
+  color: #FFFFFF;
+}
+*/

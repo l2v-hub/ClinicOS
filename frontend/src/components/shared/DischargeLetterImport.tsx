@@ -356,11 +356,11 @@ export function DischargeLetterImport({ onApply, onClose, operatoreNome }: Props
           {/* Applied step */}
           {step === 'applied' && (
             <div className="dli-progress" style={{ padding: '40px 0' }}>
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#16A37B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                 <polyline points="22 4 12 14.01 9 11.01"/>
               </svg>
-              <div className="dli-progress__text" style={{ marginTop: 12, fontWeight: 600, color: '#059669' }}>
+              <div className="dli-progress__text" style={{ marginTop: 12, fontWeight: 600, color: '#16A37B' }}>
                 Dati applicati ai campi del paziente
               </div>
             </div>

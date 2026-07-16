@@ -32,8 +32,8 @@ export function calcTinettiTotal(v: Partial<ScalaTinettiValutazione>): number {
 
 export function tinettiRischio(total: number): { label: string; cls: string; color: string } {
   if (total < 19) return { label: 'Alto rischio cadute',  cls: 'badge--red',   color: '#DC2626' };
-  if (total < 24) return { label: 'Rischio moderato',     cls: 'badge--amber', color: '#D97706' };
-  return              { label: 'Basso rischio',           cls: 'badge--green', color: '#059669' };
+  if (total < 24) return { label: 'Rischio moderato',     cls: 'badge--amber', color: '#C77700' };
+  return              { label: 'Basso rischio',           cls: 'badge--green', color: '#16A37B' };
 }
 
 // ── Form state ────────────────────────────────────────────────────────────────

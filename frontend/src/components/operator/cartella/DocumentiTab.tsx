@@ -158,7 +158,7 @@ export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome, oper
         </div>
       )}
       {daVerificare.length > 0 && (
-        <div style={{ background: '#FFFBEB', border: '1px solid #FCD34D', borderRadius: 6, padding: '8px 12px', marginBottom: 10, fontSize: '13px', color: '#92400E' }}>
+        <div style={{ background: '#FDF3E2', border: '1px solid #FCD34D', borderRadius: 6, padding: '8px 12px', marginBottom: 10, fontSize: '13px', color: '#92400E' }}>
           <strong>Da verificare ({daVerificare.length}):</strong> {daVerificare.map(d => d.descrizione).join(', ')}
         </div>
       )}
