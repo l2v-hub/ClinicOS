@@ -223,8 +223,12 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
     };
 
     const ingressoObj = data.ingresso ?? {};
+    const reviewCartella = data._reviewCartella && typeof data._reviewCartella === 'object'
+      ? data._reviewCartella as Record<string, unknown>
+      : {};
     const cartella: Record<string, unknown> = {
       statoRicovero: 'ricoverato',
+      ...reviewCartella,
       ...ingressoObj,
     };
     if (data.allergie !== undefined) cartella.allergie = data.allergie;
@@ -250,7 +254,7 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       patient,
       cartella,
       confirmDuplicate: force,
-      ...(allergyConflictOverride ? { confirmAllergyConflict: true } : {}),
+      ...(allergyConflictOverride || data._confirmAllergyConflict === true ? { confirmAllergyConflict: true } : {}),
       // Structured therapy items entered during intake → create PatientTherapy rows
       ...(Array.isArray(data.terapia) && (data.terapia as TherapyFormValue[]).length > 0
         ? { therapies: (data.terapia as TherapyFormValue[]).map(f => therapyFormToInput(f, operatoreNome)) }
