@@ -72,6 +72,43 @@ evidence for #265 is the **local** hermetic run above. `e2e/import-happy-path.mj
 by #268 (a smaller subset) — #265's completed journey supersedes it; whichever PR merges second
 must rebase this file.
 
+## CI / GitHub Actions on the pushed SHA
+
+Workflow **AI Import E2E Gate** — run [`29506267979`](https://github.com/l2v-hub/ClinicOS/actions/runs/29506267979)
+on branch head `738c6a9` (evidence commit `05f1fa2`): **conclusion = success (green)**.
+
+| Job | Result | Note |
+|---|---|---|
+| `secret-scan` | success | no secrets |
+| `gate` | success | **authoritative** deterministic gate (runtime-mock document-job assertion) |
+| `real-provider` | success | — |
+| `browser-e2e` | failure — **`continue-on-error: true`** | see note below; does NOT fail the workflow |
+
+**On `browser-e2e` (read before flagging a "skipped gate"):** on this #265 branch the `browser-e2e`
+job is intentionally left `continue-on-error: true` — the same best-effort setting as `main`. It is
+**not** a gate that was skipped or silenced for #265; promoting it to a blocking job (and pinning the
+CI Vite build to the local mock backend so it can pass) is issue #267's deliverable in **PR #268**.
+Its CI failure here is exactly the #268-dependent symptom: without `VITE_API_URL` the CI production
+build targets the real Railway backend, so the import review pane never renders and the run fails with
+`waiting for locator('[data-testid="srev-PATIENT_DEMOGRAPHICS"]')` Timeout 30000ms (desktop and tablet).
+The identical journey passes fully in the **local** hermetic run above (frontend built with
+`VITE_API_URL=http://localhost:3002`). So #265's browser-e2e evidence is the local run; the CI browser
+green lands with #268.
+
+## Known non-blocking risk — Azure Static Web Apps CI/CD
+
+The **Azure Static Web Apps CI/CD** check on PR #269 reports **failure**, but the failure is
+infrastructure-only and unrelated to #265 — the frontend build itself succeeded (Oryx built the app,
+`dist/` produced). The deploy step is rejected because the SWA per-PR preview-environment quota is
+exhausted:
+
+> The content server has rejected the request with: BadRequest
+> Reason: This Static Web App already has the maximum number of staging environments. Please remove one and try again.
+
+This affects **every open PR** that spins up a preview environment (a shared quota, not this diff), so
+it is a **known non-blocking risk** for #265: no code change in this PR can resolve it; it clears when
+open PRs / their preview environments are pruned.
+
 ## Final Decision
 
 **READY FOR CODEX QA** — implementation verified locally (unit + typecheck + build + serialized
