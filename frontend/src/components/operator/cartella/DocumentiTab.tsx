@@ -9,6 +9,8 @@ interface Props {
   paziente: Paziente;
   onUpdate: (updates: Partial<CartellaPaziente>) => void;
   operatoreNome: string;
+  operatoreId?: string;
+  operatoreRole?: string;
 }
 
 const TIPO_LABEL: Record<TipoDocumento, string> = {
@@ -60,7 +62,7 @@ const EMPTY_FORM = {
   note: '',
 };
 
-export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome, operatoreId, operatoreRole }: Props) {
   const allDocs = cartella.documentiConsegnati ?? [];
   const docs = allDocs.filter(d => !d.archiviato);
   const archived = allDocs.filter(d => d.archiviato);
@@ -127,7 +129,7 @@ export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
 
   return (
     <div className="cr-tab-content">
-      <ImportedDocumentsList patientId={paziente.id} />
+      <ImportedDocumentsList patientId={paziente.id} operatorId={operatoreId} operatorRole={operatoreRole} />
       {/* Print header */}
       <div className="print-only print-form-header">
         <div className="print-form-header__title">DOCUMENTI PAZIENTE</div>
