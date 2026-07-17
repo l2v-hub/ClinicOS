@@ -41,6 +41,14 @@ export function OperatorDashboard({
   const allergieGravi = cartelle.filter(c => c.allergie.some(a => a.gravita === 'grave')).length;
   const pazientiRicoverati = cartelle.filter(c => c.statoRicovero === 'ricoverato').length;
 
+  // Avanzamento terapie / consegne (dati reali)
+  const tutteTerapie = cartelle.flatMap(c => c.terapie ?? []);
+  const terapieTotali = tutteTerapie.length;
+  const terapieCompletate = tutteTerapie.filter(t => t.stato === 'completata').length;
+  const pctTerapie = terapieTotali > 0 ? Math.round((terapieCompletate / terapieTotali) * 100) : 0;
+  const consegneCompletate = mieConsegne.filter(c => c.stato === 'completata').length;
+  const pctConsegne = mieConsegne.length > 0 ? Math.round((consegneCompletate / mieConsegne.length) * 100) : 0;
+
   const todayStr = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
   return (
@@ -70,34 +78,7 @@ export function OperatorDashboard({
         </div>
       )}
 
-      {/* Stat cards */}
-      <div className="stats-grid">
-        <div className="stat-card stat-card--blue">
-          <div className="stat-card__label">I Miei Pazienti</div>
-          <div className="stat-card__value">{loadingPazienti ? '—' : totalePazienti}</div>
-          <button className="stat-card__action" onClick={() => onNavigate('pazienti')}>
-            Lista pazienti <IcoArrow />
-          </button>
-        </div>
-        <div className="stat-card stat-card--indigo">
-          <div className="stat-card__label">Appuntamenti Oggi</div>
-          <div className="stat-card__value">{agenda.filter(s => s.stato !== 'libero' && s.stato !== 'annullato').length}</div>
-          <button className="stat-card__action" onClick={() => onNavigate('agenda-operatore')}>
-            Agenda <IcoArrow />
-          </button>
-        </div>
-        <div className="stat-card stat-card--emerald">
-          <div className="stat-card__label">Consegne Aperte</div>
-          <div className="stat-card__value" style={urgenti.length > 0 ? { color: 'var(--red)' } : {}}>
-            {aperte.length}
-          </div>
-          <button className="stat-card__action" onClick={() => onNavigate('consegne')}>
-            Vedi consegne <IcoArrow />
-          </button>
-        </div>
-      </div>
-
-      {/* Clinical KPI strip */}
+      {/* Clinical KPI band — banda alert clinici in cima */}
       {cartelle.length > 0 && (
         <div className="kpi-alert-grid">
           <div className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`} onClick={() => onNavigate('parametri-multipaziente')} title="Vai a Parametri">
@@ -118,6 +99,48 @@ export function OperatorDashboard({
           <div className="kpi-alert-card kpi-alert-card--blue" onClick={() => onNavigate('pazienti')} title="Vai a Pazienti">
             <span className="kpi-alert-card__val">{pazientiRicoverati}</span>
             <span className="kpi-alert-card__lbl">Ricoverati attivi</span>
+          </div>
+        </div>
+      )}
+
+      {/* Stat cards — KPI grandi e cliccabili */}
+      <div className="stats-grid">
+        {([
+          { key: 'pazienti' as NavKey, mod: 'blue', label: 'I Miei Pazienti', value: loadingPazienti ? '—' : totalePazienti, cta: 'Lista pazienti' },
+          { key: 'agenda-operatore' as NavKey, mod: 'indigo', label: 'Appuntamenti Oggi', value: agenda.filter(s => s.stato !== 'libero' && s.stato !== 'annullato').length, cta: 'Agenda' },
+          { key: 'consegne' as NavKey, mod: 'emerald', label: 'Consegne Aperte', value: aperte.length, cta: 'Vedi consegne', danger: urgenti.length > 0 },
+        ]).map(c => (
+          <div
+            key={c.key}
+            className={`stat-card stat-card--${c.mod} stat-card--clickable`}
+            role="button"
+            tabIndex={0}
+            onClick={() => onNavigate(c.key)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onNavigate(c.key); } }}
+          >
+            <div className="stat-card__label">{c.label}</div>
+            <div className="stat-card__value" style={c.danger ? { color: 'var(--red)' } : {}}>{c.value}</div>
+            <span className="stat-card__action">{c.cta} <IcoArrow /></span>
+          </div>
+        ))}
+      </div>
+
+      {/* Avanzamento terapie — barre di avanzamento (dati reali cartelle) */}
+      {terapieTotali > 0 && (
+        <div className="progress-card-grid">
+          <div className="progress-card">
+            <div className="progress-card__head">
+              <span className="progress-card__label">Terapie completate</span>
+              <span className="progress-card__count">{terapieCompletate}/{terapieTotali}</span>
+            </div>
+            <div className="progress-bar"><div className="progress-bar__fill progress-bar__fill--emerald" style={{ width: `${pctTerapie}%` }} /></div>
+          </div>
+          <div className="progress-card">
+            <div className="progress-card__head">
+              <span className="progress-card__label">Consegne evase</span>
+              <span className="progress-card__count">{consegneCompletate}/{mieConsegne.length}</span>
+            </div>
+            <div className="progress-bar"><div className="progress-bar__fill progress-bar__fill--blue" style={{ width: `${pctConsegne}%` }} /></div>
           </div>
         </div>
       )}

@@ -5385,25 +5385,27 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: var(--card-radius-sm);
-  padding: 14px 16px;
+  padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   cursor: pointer;
-  transition: box-shadow 0.15s, border-color 0.15s;
+  transition: box-shadow 0.15s, border-color 0.15s, transform 0.14s;
 }
 .kpi-alert-card:hover {
   box-shadow: var(--shadow-card-hover);
   border-color: var(--blue);
+  transform: translateY(-1px);
 }
-.kpi-alert-card--red   { border-left: 3px solid var(--red); }
-.kpi-alert-card--amber { border-left: 3px solid var(--amber); }
-.kpi-alert-card--blue  { border-left: 3px solid var(--blue); }
-.kpi-alert-card--green { border-left: 3px solid var(--emerald); }
+.kpi-alert-card--red   { border-left: 4px solid var(--red);     background: var(--red-bg); }
+.kpi-alert-card--amber { border-left: 4px solid var(--amber);   background: var(--amber-bg); }
+.kpi-alert-card--blue  { border-left: 4px solid var(--blue); }
+.kpi-alert-card--green { border-left: 4px solid var(--emerald); }
 .kpi-alert-card__val {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
   line-height: 1;
+  letter-spacing: -1px;
   color: var(--text);
 }
 .kpi-alert-card--red   .kpi-alert-card__val { color: var(--red); }
@@ -5411,7 +5413,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .kpi-alert-card__lbl {
   font-size: 12px;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-muted);
   margin-top: 2px;
   letter-spacing: 0.04em;
 }
@@ -5422,6 +5424,54 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   color: var(--emerald);
   margin-top: 2px;
 }
+
+/* Progress cards — barre di avanzamento (terapie / consegne) */
+.progress-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.progress-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius-sm);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-card);
+}
+.progress-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.progress-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+}
+.progress-card__count {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.progress-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-raised);
+  overflow: hidden;
+}
+.progress-bar__fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+.progress-bar__fill--emerald { background: var(--emerald); }
+.progress-bar__fill--blue    { background: var(--blue); }
+.progress-bar__fill--amber   { background: var(--amber); }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    UNIFIED TABLE STYLE — .clinicos-table
