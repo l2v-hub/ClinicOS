@@ -5172,6 +5172,18 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   white-space: nowrap;
 }
 
+/* ── Banda allergie/rischi persistente (sotto l'header, su tutti i tab) ── */
+.cr-alert-band {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 24px 0;
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .cr-alert-band { padding: 8px 16px 0; }
+}
+
 /* ── Quick stats clickable ── */
 .cr-quick-stat--clickable {
   cursor: pointer;

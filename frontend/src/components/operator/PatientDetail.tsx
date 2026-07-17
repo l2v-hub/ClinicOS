@@ -798,28 +798,7 @@ export function PatientDetail({
     return (
       <div className="cr-tab-content">
 
-        {/* ── Alert allergie gravi ── */}
-        {hasAllergie && (
-          <button
-            className="cr-alert-strip cr-alert-strip--allergie"
-            onClick={() => setCardModal('allergie')}
-          >
-            <span className="cr-alert-strip__ico"><IcoWarning /></span>
-            <span><strong>ALLERGIE GRAVI:</strong> {allergieGravi.map(a => a.allergene).join(', ')}</span>
-            <span className="cr-alert-strip__link">Gestisci →</span>
-          </button>
-        )}
-
-        {/* ── Alert rischi ── */}
-        {rischioAlto.length > 0 && (
-          <div className="cr-alert-strip cr-alert-strip--rischi">
-            <span className="cr-alert-strip__ico"><IcoWarning /></span>
-            <span>
-              <strong>Rischi attivi:</strong>{' '}
-              {rischioAlto.map(r => `${r.tipo.replace('_', ' ')} (${r.livello})`).join(' · ')}
-            </span>
-          </div>
-        )}
+        {/* Alert allergie/rischi spostati nella banda persistente sotto l'header (sempre visibili) */}
 
         {/* ── Quick stats row ── */}
         <div className="cr-quick-stats">
@@ -1474,6 +1453,31 @@ export function PatientDetail({
         onBack={onBack}
         onInvioPS={() => setShowInvioPS(true)}
       />
+
+      {/* Banda allergie/rischi — sempre visibile sotto l'header, su tutti i tab */}
+      {(hasAllergie || rischioAlto.length > 0) && (
+        <div className="cr-alert-band">
+          {hasAllergie && (
+            <button
+              className="cr-alert-strip cr-alert-strip--allergie"
+              onClick={() => setCardModal('allergie')}
+            >
+              <span className="cr-alert-strip__ico"><IcoWarning /></span>
+              <span><strong>ALLERGIE GRAVI:</strong> {allergieGravi.map(a => a.allergene).join(', ')}</span>
+              <span className="cr-alert-strip__link">Gestisci →</span>
+            </button>
+          )}
+          {rischioAlto.length > 0 && (
+            <div className="cr-alert-strip cr-alert-strip--rischi">
+              <span className="cr-alert-strip__ico"><IcoWarning /></span>
+              <span>
+                <strong>Rischi attivi:</strong>{' '}
+                {rischioAlto.map(r => `${r.tipo.replace('_', ' ')} (${r.livello})`).join(' · ')}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* L2 — Navigazione orizzontale principale della pagina */}
       <TopNav
