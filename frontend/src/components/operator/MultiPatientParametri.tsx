@@ -80,6 +80,15 @@ function rigaToParametroGiorno(r: RigaEditabile): ParametroGiorno {
   };
 }
 
+// ── Soglie cliniche (evidenza automatica, sola presentazione client-side) ────────
+// SpO2 < 92 → critico (rosso). TC ≥ 37,5 → attenzione (ambra). Accetta virgola o punto.
+function parseNum(v: string): number { return parseFloat(v.replace(',', '.')); }
+function spo2Critico(v: string): boolean { const n = parseNum(v); return !Number.isNaN(n) && n < 92; }
+function tempAttenzione(v: string): boolean { const n = parseNum(v); return !Number.isNaN(n) && n >= 37.5; }
+function hasRilevazione(p: ParametroGiorno | null): boolean {
+  return !!p && !!(p.pa || p.fc || p.spo2 || p.temperatura || p.dtx08 || p.evacuazione);
+}
+
 // ── Props ──────────────────────────────────────────────────────────────────────
 
 interface Props {
@@ -189,12 +198,13 @@ function RigaPaziente({
         onKeyDown={onEnter}
       />
       <input
-        className="qe-row__input"
+        className={'qe-row__input' + (spo2Critico(riga.spo2) ? ' qe-row__input--critico' : '')}
         placeholder="SpO2 %"
         inputMode="decimal"
         value={riga.spo2}
         onChange={e => update('spo2', e.target.value)}
         onKeyDown={onEnter}
+        title={spo2Critico(riga.spo2) ? 'SpO2 sotto soglia (<92)' : undefined}
       />
       <input
         className="qe-row__input"
@@ -205,12 +215,13 @@ function RigaPaziente({
         onKeyDown={onEnter}
       />
       <input
-        className="qe-row__input"
+        className={'qe-row__input' + (tempAttenzione(riga.temperatura) ? ' qe-row__input--attenzione' : '')}
         placeholder="TC °C"
         inputMode="decimal"
         value={riga.temperatura}
         onChange={e => update('temperatura', e.target.value)}
         onKeyDown={onEnter}
+        title={tempAttenzione(riga.temperatura) ? 'Temperatura ≥ 37,5 °C' : undefined}
       />
       <input
         className="qe-row__input"
@@ -332,6 +343,11 @@ export function MultiPatientParametri({
     );
   }).sort(comparePazienti);
 
+  // Contatore avanzamento: pazienti con almeno una rilevazione registrata oggi.
+  const totaleRilevabili = filtrati.length;
+  const rilevatiOggi = filtrati.filter(p => hasRilevazione(getParametroOggi(getCartella(p.id)))).length;
+  const rilevatiPct = totaleRilevabili ? Math.round((rilevatiOggi / totaleRilevabili) * 100) : 0;
+
   return (
     <div className="patient-list-view">
       <PageHeader
@@ -357,6 +373,12 @@ export function MultiPatientParametri({
             </button>
           )}
         </div>
+        {!loading && totaleRilevabili > 0 && (
+          <div className="qe-progress" aria-label={`${rilevatiOggi} di ${totaleRilevabili} pazienti rilevati oggi`}>
+            <span><span className="qe-progress__count">{rilevatiOggi}</span>/{totaleRilevabili} rilevati oggi</span>
+            <span className="qe-progress__bar"><span className="qe-progress__fill" style={{ width: `${rilevatiPct}%` }} /></span>
+          </div>
+        )}
       </div>
 
       {loading ? (

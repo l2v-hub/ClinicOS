@@ -142,7 +142,7 @@ body { margin: 0; background: var(--bg); }
   --qe-row-h: 56px;
   --qe-row-vpad: 8px;
   --qe-row-hpad: 12px;
-  --qe-input-h: 36px;
+  --qe-input-h: 44px;
   --qe-input-w-narrow: 64px;
   --qe-input-w-wide: 96px;
   --qe-patient-col-w: 220px;
@@ -3639,6 +3639,44 @@ textarea.form-input {
   outline-offset: 2px;
   border-color: var(--primary, var(--blue));
 }
+/* Evidenza automatica soglie cliniche (rosso = alert clinico, ambra = attenzione) */
+.qe-row__input--critico {
+  background: var(--red-bg);
+  border-color: var(--red);
+  color: var(--red);
+  font-weight: 700;
+}
+.qe-row__input--attenzione {
+  background: var(--amber-bg);
+  border-color: var(--amber);
+  color: var(--amber);
+  font-weight: 700;
+}
+
+/* Contatore avanzamento rilevazioni */
+.qe-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.qe-progress__bar {
+  width: 120px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--divider);
+  overflow: hidden;
+}
+.qe-progress__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--blue);
+  transition: width 200ms ease-out;
+}
+.qe-progress__count { font-weight: 700; color: var(--text); }
 .qe-row__note-btn {
   min-width: 36px;
   height: 36px;
