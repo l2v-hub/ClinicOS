@@ -302,7 +302,7 @@ function DimissioneModulo({ dim, lib, paziente }: {
 function CbInput({ checked, label, onChange }: { checked: boolean; label: string; onChange: (v: boolean) => void }) {
   return (
     <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: '14px' }}>
-      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} style={{ width: 15, height: 15, accentColor: '#1A56DB' }} />
+      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} style={{ width: 15, height: 15, accentColor: '#2F6BED' }} />
       <span>{label}</span>
     </label>
   );

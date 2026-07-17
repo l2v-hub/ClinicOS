@@ -158,7 +158,7 @@ export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome, oper
         </div>
       )}
       {daVerificare.length > 0 && (
-        <div style={{ background: '#FDF3E2', border: '1px solid #FCD34D', borderRadius: 6, padding: '8px 12px', marginBottom: 10, fontSize: '13px', color: '#92400E' }}>
+        <div style={{ background: '#FDF3E2', border: '1px solid #C77700', borderRadius: 6, padding: '8px 12px', marginBottom: 10, fontSize: '13px', color: '#92400E' }}>
           <strong>Da verificare ({daVerificare.length}):</strong> {daVerificare.map(d => d.descrizione).join(', ')}
         </div>
       )}
@@ -244,7 +244,7 @@ export function DocumentiTab({ cartella, paziente, onUpdate, operatoreNome, oper
                 style={isMancante
                   ? { borderLeft: '3px solid #EF4444', background: '#FFF5F5' }
                   : isDaVer
-                    ? { borderLeft: '3px solid #F59E0B', background: '#FFFDF0' }
+                    ? { borderLeft: '3px solid #C77700', background: '#FFFDF0' }
                     : undefined}
               >
                 <div className="doc-item__icon">📄</div>

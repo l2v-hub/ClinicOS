@@ -90,8 +90,8 @@ export type StatoOperatore = 'attivo' | 'inattivo';
 export type RuoloOperatore = 'medico' | 'infermiere' | 'coordinatore';
 
 export const OPERATOR_COLOR_PALETTE = [
-  '#1A56DB', '#0D9488', '#4338CA', '#D97706', '#DC2626',
-  '#8B5CF6', '#059669', '#F59E0B', '#EF4444', '#06B6D4',
+  '#2F6BED', '#0D9488', '#6C4BD1', '#C77700', '#DC2626',
+  '#8B5CF6', '#059669', '#C77700', '#EF4444', '#06B6D4',
 ];
 
 export interface Operatore {

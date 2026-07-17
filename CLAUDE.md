@@ -73,15 +73,16 @@ Development rules:
 - Do not use heavy UI frameworks.
 
 ## Brand palette (medical blue — no red as primary)
-- primary blue: `#0F5FD7`  (CSS `--blue` / `--c-primary`)
-- active blue:  `#004FC4`  (`--c-primary-active`)
-- sidebar bg:   `#E9EDF2`  · active item bg: `#FFFFFF`
-- text `#101828` · muted `#667085` · border `#D0D5DD`
-- Red (`--red #DC2626`) is reserved for clinical alerts / errors / count badges ONLY — never as brand/active.
+Source of truth: approved mockup `mockup/design-mockup.html` (token-driven via `:root` in `App.css`).
+- primary blue: `#2F6BED`  (CSS `--blue`)
+- active blue:  `#1D4FC4`
+- sidebar: **dark navy** — bg gradient `#123056 → #0F1B30` (`--navy-mid`/`--navy`); item inactive `#8EA3C4` (`--sidebar-item`), active = white text on translucent pill `rgba(255,255,255,.12)` (`--sidebar-item-active-bg`) + blue left bar
+- page bg `#EEF1F6` (`--bg`) · surface `#FFFFFF` · text `#16202E` · muted `#5A6B80` · border `#E6EBF2`
+- Red (`--red #D93A4A`) is reserved for clinical alerts / errors / count badges ONLY — never as brand/active.
 
 ## Navigation system (unified — do not duplicate)
 Single source of truth. Do NOT create parallel nav components.
-- **L1 sidebar** = `components/shared/TeamsLikeSidebar.tsx` (styled `.teams-sidebar` in `App.css`). Fixed left, light grey, icon-above-label, active = white card + blue left bar. Width `--sidebar-w` (96px desktop / 88px tablet band; hidden ≤1023px).
+- **L1 sidebar** = `components/shared/TeamsLikeSidebar.tsx` (styled `.teams-sidebar` in `App.css`). Fixed left, **dark navy** (approved mockup), icon-above-label, active = white text/icon on translucent pill + blue left bar. Width `--sidebar-w` (96px desktop / 88px tablet band; hidden ≤1023px).
 - **L2 + L3** = `components/navigation/TopNav.tsx` (`variant="level2"` underline tabs / `variant="level3"` segmented grey control). No pills, no per-item borders, no per-page custom tabs.
 - Named aliases exist (`AppSidebar`, `PageTopNavigation`, `PageSecondaryNavigation`) — thin wrappers over the above, zero duplicated logic.
 - Diario uses the shared L3 (`TopNav level3`) like every other section — no custom Diario tabs.

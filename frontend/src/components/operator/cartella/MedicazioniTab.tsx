@@ -72,10 +72,10 @@ function ChipGroup({ options, value, onChange }: { options: string[]; value: str
             onClick={() => onChange(toggleInList(value, opt))}
             style={{
               padding: '4px 10px',
-              border: `1px solid ${active ? '#1A56DB' : '#d1d5db'}`,
+              border: `1px solid ${active ? '#2F6BED' : '#d1d5db'}`,
               borderRadius: 4,
-              background: active ? '#EFF6FF' : '#fff',
-              color: active ? '#1A56DB' : '#374151',
+              background: active ? '#EEF3FE' : '#fff',
+              color: active ? '#2F6BED' : '#374151',
               cursor: 'pointer',
               fontSize: '13px',
               lineHeight: 1.4,
