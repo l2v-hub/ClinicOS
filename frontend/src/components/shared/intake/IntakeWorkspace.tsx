@@ -377,7 +377,8 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
                 className={isDone ? 'is-done' : isActive ? 'is-active' : ''}
                 aria-current={isActive ? 'step' : undefined}
               >
-                {n}. {label}
+                <span className="import-step__marker" aria-hidden="true">{isDone ? '✓' : n}</span>
+                <span className="import-step__label">{label}</span>
               </li>
             );
           })}

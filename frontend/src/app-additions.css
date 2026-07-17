@@ -6190,10 +6190,31 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .import-modal__foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
 
 /* ── Import review step (REQ-017) ─────────────────────────────────────────── */
-.import-modal__steps { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0 0 8px; font-size: 12px; }
-.import-modal__steps li { color: var(--muted, #667085); padding: 4px 8px; border-radius: 6px; background: #F2F4F7; }
-.import-modal__steps li.is-active { color: #fff; background: var(--c-primary, #2F6BED); }
-.import-modal__steps li.is-done { color: var(--c-primary, #2F6BED); }
+/* Stepper wizard — cerchi numerati, step attivo blu, completati con check, connettori */
+.import-modal__steps { display: flex; align-items: center; list-style: none; padding: 0; margin: 0 0 12px; }
+.import-modal__steps li { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.import-modal__steps li:last-child { flex: 0 0 auto; }
+.import-modal__steps li:not(:last-child)::after {
+  content: ''; flex: 1 1 auto; min-width: 14px; height: 2px; margin: 0 10px;
+  background: var(--border); border-radius: 2px;
+}
+.import-modal__steps li.is-done:not(:last-child)::after { background: var(--blue); }
+.import-step__marker {
+  flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; line-height: 1;
+  background: var(--surface-raised); color: var(--text-muted);
+  border: 1.5px solid var(--border); box-sizing: border-box;
+}
+.import-step__label { font-size: 12px; font-weight: 500; color: var(--text-muted); white-space: nowrap; }
+.import-modal__steps li.is-active .import-step__marker { background: var(--blue); color: #fff; border-color: var(--blue); }
+.import-modal__steps li.is-active .import-step__label { color: var(--text); font-weight: 700; }
+.import-modal__steps li.is-done .import-step__marker { background: var(--blue-dim); color: var(--blue); border-color: var(--blue); }
+.import-modal__steps li.is-done .import-step__label { color: var(--blue); }
+@media (max-width: 640px) {
+  .import-step__label { display: none; }
+  .import-modal__steps li:not(:last-child)::after { margin: 0 6px; }
+}
 
 /* ── BUG-074: intake workspace — keep the popup large, scroll only the inner body ──
    The shell is a fixed-height flex column: header + stepper + footer stay pinned
