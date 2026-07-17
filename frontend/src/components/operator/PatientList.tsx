@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { API_URL } from '../../config';
-import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente } from '../../types';
+import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente, CartellaPaziente } from '../../types';
 import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus, IcoTrash } from '../../icons';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { ClinicalTableSection } from './cartella/shared';
@@ -24,6 +24,25 @@ interface PatientListProps {
   /** REQ-019: operator identity for import authorization. */
   operatorId?: string;
   operatorRole?: string;
+  /** Cartelle cliniche (già disponibili nel parent) per badge stato clinico + allergie. */
+  cartelle?: CartellaPaziente[];
+}
+
+const STATO_RICOVERO_LABEL: Record<string, string> = {
+  ricoverato: 'Ricoverato',
+  ambulatoriale: 'Ambulatoriale',
+  day_hospital: 'Day Hospital',
+  dimesso: 'Dimesso',
+};
+
+/** Stato clinico sintetico per la lista (dati reali cartella, nessuna chiamata extra). */
+function statoClinicoBadges(c?: CartellaPaziente) {
+  if (!c) return null;
+  const critico =
+    (c.parametriVitali ?? []).some(v => v.stato === 'critico') ||
+    (c.indicatoriRischio ?? []).some(r => r.livello === 'alto' || r.livello === 'critico');
+  const allergie = (c.allergie ?? []).length;
+  return { statoRicovero: c.statoRicovero, critico, allergie };
 }
 
 function calcAge(dob: string): number {
@@ -37,9 +56,10 @@ function calcAge(dob: string): number {
 
 // Riga card mobile estratta e memoizzata: evita il ri-render completo delle righe
 // a ogni keystroke del filtro (SPEC-015 US5 / T029).
-const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, deleteEnabled, deleting, onSelect, onDelete }: {
+const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, badges, deleteEnabled, deleting, onSelect, onDelete }: {
   p: Paziente;
   hasConsegnaAperta: boolean;
+  badges: ReturnType<typeof statoClinicoBadges>;
   deleteEnabled: boolean;
   deleting: boolean;
   onSelect: (p: Paziente) => void;
@@ -51,8 +71,15 @@ const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, de
       <div className="pt-list-card__info">
         <span className="pt-list-card__name">{p.lastName}, {p.firstName}</span>
         <span className="pt-list-card__meta">
-          {p.medicalRecordNumber} · {calcAge(p.dateOfBirth)} anni · {p.sex ?? '--'}
+          <span className="mrn-tag">{p.medicalRecordNumber}</span> · {calcAge(p.dateOfBirth)} anni · {p.sex ?? '--'}
         </span>
+        {badges && (
+          <span className="pt-list-card__badges">
+            <span className={`stato-pill stato-pill--ricovero-${badges.statoRicovero}`}>{STATO_RICOVERO_LABEL[badges.statoRicovero] ?? badges.statoRicovero}</span>
+            {badges.critico && <span className="alert-chip alert-chip--red">Critico</span>}
+            {badges.allergie > 0 && <span className="alert-chip alert-chip--amber">⚠ Allergie</span>}
+          </span>
+        )}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         {hasConsegnaAperta && (
@@ -69,7 +96,8 @@ const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, de
   );
 });
 
-export function PatientList({ pazienti, consegne, loading, onSelect, onAddPaziente: _onAddPaziente, onImported, operatorId, operatorRole }: PatientListProps) {
+export function PatientList({ pazienti, consegne, loading, onSelect, onAddPaziente: _onAddPaziente, onImported, operatorId, operatorRole, cartelle = [] }: PatientListProps) {
+  const cartellaMap = useMemo(() => new Map(cartelle.map(c => [c.pazienteId, c])), [cartelle]);
   const [ricerca, setRicerca] = useState('');
   const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [showModal, setShowModal] = useState(false);
@@ -223,6 +251,20 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
                   ),
                 },
                 {
+                  key: 'statoClinico', label: 'Stato clinico',
+                  render: (_v, p) => {
+                    const s = statoClinicoBadges(cartellaMap.get(p.id));
+                    if (!s) return <span className="cell--muted" style={{ fontSize: 11 }}>—</span>;
+                    return (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                        <span className={`stato-pill stato-pill--ricovero-${s.statoRicovero}`}>{STATO_RICOVERO_LABEL[s.statoRicovero] ?? s.statoRicovero}</span>
+                        {s.critico && <span className="alert-chip alert-chip--red">Critico</span>}
+                        {s.allergie > 0 && <span className="alert-chip alert-chip--amber" title={`${s.allergie} allergie documentate`}>⚠ Allergie</span>}
+                      </div>
+                    );
+                  },
+                },
+                {
                   key: 'medicalRecordNumber', label: 'MRN', sortable: true,
                   render: (_v, p) => <span className="mrn-tag">{p.medicalRecordNumber}</span>,
                 },
@@ -283,6 +325,7 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
                 key={p.id}
                 p={p}
                 hasConsegnaAperta={consegneAperte.has(p.id)}
+                badges={statoClinicoBadges(cartellaMap.get(p.id))}
                 deleteEnabled={deleteEnabled}
                 deleting={deletingId === p.id}
                 onSelect={onSelect}

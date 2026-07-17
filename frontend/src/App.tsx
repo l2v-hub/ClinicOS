@@ -290,7 +290,14 @@ export default function App() {
       // Issue #129: il backend ordina per createdAt — il roster va sempre
       // tenuto in ordine alfabetico (cognome, nome) per tutte le viste.
       .then(r => r.json())
-      .then((data: Paziente[]) => setPazienti(sortPazienti(data)))
+      .then((data: Paziente[]) => {
+        const sorted = sortPazienti(data);
+        setPazienti(sorted);
+        // Prefetch cartelle so the patient list can render clinical-status/allergy
+        // badges without opening each patient. Reuses the existing per-patient
+        // endpoint (no backend change); a patient with no record stays badge-less.
+        void Promise.all(sorted.map(p => loadCartella(p.id)));
+      })
       .catch(() => setPazienti([]))
       .finally(() => setLoadingPazienti(false));
     loadTherapySlots();
@@ -1068,6 +1075,7 @@ export default function App() {
               loading={loadingPazienti}
               onSelect={selectPaziente}
               onAddPaziente={addPaziente}
+              cartelle={cartelle}
               operatorId={utente?.id}
               operatorRole={utente?.ruolo}
               onImported={(patientId, moduleTabId) => {

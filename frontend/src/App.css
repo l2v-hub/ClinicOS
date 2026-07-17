@@ -2571,6 +2571,15 @@ body { margin: 0; background: var(--bg); }
 .stato-pill--consegna-in_corso  { background: var(--amber-bg);       color: var(--amber); }
 .stato-pill--consegna-completata{ background: var(--emerald-bg);     color: var(--emerald); }
 
+/* Stato ricovero (lista pazienti) */
+.stato-pill--ricovero-ricoverato    { background: var(--blue-dim);      color: var(--blue); }
+.stato-pill--ricovero-ambulatoriale { background: var(--indigo-bg);     color: var(--indigo); }
+.stato-pill--ricovero-day_hospital  { background: var(--surface-raised); color: var(--text-muted); border: 1px solid var(--border); }
+.stato-pill--ricovero-dimesso       { background: var(--divider);       color: var(--text-muted); }
+
+/* Badge riga card mobile (lista pazienti) */
+.pt-list-card__badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
 /* Alert chips */
 .alert-chip {
   display: inline-flex;
