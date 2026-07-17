@@ -1,0 +1,23 @@
+# Railway upload exclude — mantiene piccolo il payload del deploy backend.
+# Fix del "413 Payload Too Large": `railway up` caricava l'intero repo, e
+# artifacts/ pesava ~205MB / 632 file. Il build backend usa backend/, prisma/,
+# package*.json, nixpacks.toml — NON le evidenze QA.
+
+# Evidenze / artifact QA pesanti (causa del 413)
+artifacts/
+docs/qa/
+
+# Riferimenti di design e mockup
+mockup/
+design_handoff_restyle/
+
+# Screenshot committati sotto le skill
+.claude/skills/run-clinicos/*.png
+
+# Git worktree (non vanno mai caricati)
+.wt-*/
+.worktrees/
+
+# Dipendenze / build locali
+node_modules/
+frontend/dist/

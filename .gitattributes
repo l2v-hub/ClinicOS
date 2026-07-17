@@ -1,0 +1,40 @@
+# Normalizza i line-ending: LF nel repo, nativo in checkout.
+# Evita il churn CRLF<->LF (es. edit via sed/tool che fanno esplodere i diff a interi file).
+* text=auto
+
+# Testo esplicito (LF nel repo)
+*.ts    text
+*.tsx   text
+*.mts   text
+*.js    text
+*.jsx   text
+*.mjs   text
+*.cjs   text
+*.json  text
+*.css   text
+*.scss  text
+*.html  text
+*.md    text
+*.yml   text
+*.yaml  text
+*.sql   text
+*.sh    text eol=lf
+*.ps1   text eol=crlf
+
+# Binari (mai diff/normalizzati)
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.webm  binary
+*.mp4   binary
+*.zip   binary
+*.tgz   binary
+*.gz    binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
