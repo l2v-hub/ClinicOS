@@ -1,5 +1,5 @@
 import type { UtenteApp, Consegna, SlotAgenda, CartellaPaziente, Paziente } from '../../types';
-import { IcoArrow, IcoWarning, IcoCalendar, IcoConsegne, IcoActivity, IcoShield } from '../../icons';
+import { IcoArrow, IcoWarning, IcoCalendar, IcoConsegne, IcoActivity, IcoShield, IcoClock } from '../../icons';
 import type { NavKey } from '../../types';
 import { PageHeader } from '../shared/PageHeader';
 
@@ -214,7 +214,7 @@ export function OperatorDashboard({
                 <div className="consegna-card__top">
                   <span className="consegna-priorita-badge consegna-priorita-badge--urgente">Urgente</span>
                   <span className="consegna-tipo">{c.tipo}</span>
-                  {c.oraScadenza && <span className="consegna-scadenza">⏰ {c.oraScadenza}</span>}
+                  {c.oraScadenza && <span className="consegna-scadenza"><IcoClock />{c.oraScadenza}</span>}
                 </div>
                 {onSelectPaziente && c.pazienteNome
                   ? <button className="link-btn consegna-paziente" onClick={() => onSelectPaziente(c.pazienteNome!)} style={{ fontWeight: 600 }}>{c.pazienteNome}</button>

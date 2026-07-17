@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { API_URL } from '../../config';
 import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente, CartellaPaziente } from '../../types';
-import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus, IcoTrash } from '../../icons';
+import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus, IcoTrash, IcoUser } from '../../icons';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalTable } from './cartella/ClinicalTable';
@@ -214,7 +214,7 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
       {/* Empty state */}
       {!loading && pazienti.length === 0 && (
         <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>👥</div>
+          <div className="empty-state-card__ico" aria-hidden="true"><IcoUser /></div>
           <h3 style={{ marginBottom: 8, fontSize: 18 }}>Nessun paziente presente</h3>
           <p style={{ color: 'var(--text-muted)', marginBottom: 24, maxWidth: 360, margin: '0 auto 24px' }}>
             Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.

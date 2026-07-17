@@ -1,5 +1,34 @@
 # ClinicOS — Design Parity (mockup ↔ classi CSS reali)
 
+## ⚑ FIX PRIORITARI (dal confronto con la app LIVE — luglio 2026)
+Questi 4 punti sono i divari **realmente visibili** tra app e mockup. Falli PRIMA di tutto il resto.
+
+1. **Topbar vuota** — la fascia in alto (barra bianca sopra il contenuto, presente su tutte le schermate)
+   è quasi vuota: solo l'icona ricerca a destra. Portarla al mockup: a sinistra campo ricerca globale
+   (`--surface-raised`, `border-radius:12px`, `height:42px`, icona + placeholder "Cerca paziente, camera, MRN…");
+   a destra pill turno/reparto (`--emerald-bg`/`--teal`, dot verde) + avatar utente con nome/ruolo.
+   Se non c'è un componente topbar dedicato, ridurne almeno l'altezza per eliminare la banda bianca vuota.
+   Cerca la classe dell'header applicativo (es. `.app-topbar`/`.app-header`/`.topbar`) e popola/comprimi.
+
+2. **Header scuro delle sezioni tabella** — `ClinicalTableSection` rende una testata **navy scura**
+   (visibile come "PARAMETRI · 8 pazienti" e "DIARIO PAZIENTE · 0 voci"). Contraddice la direzione chiara.
+   Cambiare la testata in **chiara**: `background:var(--surface-raised)`, testo `var(--text)`,
+   contatore in pill `--indigo-bg`/`--indigo`, bordo inferiore `--border`. (Individua la classe della
+   testata dentro `ClinicalTableSection`, es. `.clinical-table-section__head` o simile, e togli il fondo scuro.)
+
+3. **Stat card con barra-accento in alto** — `.stat-card--blue/--indigo/--emerald` usano
+   `border-top-color` che disegna una barretta colorata spessa sopra ogni card. Rimuoverla:
+   niente `border-top` colorato; l'accento colore va solo su `.stat-card__value`/`__action` o sull'icona.
+   Card = bordo neutro `--border` + ombra `--shadow-card`, come nel mockup.
+
+4. **Icona "Note" = emoji 📝** — nella griglia parametri (`.qe-row__note-btn`) l'icona è un'emoji.
+   Sostituire con un'icona del set (`IcoMessage` o `IcoEdit` da `icons.tsx`) per coerenza con lo stile
+   stroke 24×24 del resto dell'app. Verifica altre emoji residue (es. 👥 empty-state, ⏰ scadenze) e,
+   dove possibile, sostituiscile con icone del set.
+
+---
+
+
 Scopo: portare il **trattamento visivo** delle classi CSS esistenti a combaciare col mockup approvato
 (`design-mockup.html`). La **struttura JSX e i nomi delle classi esistono già** e sono corretti — NON si
 cambia markup, NON si rifà l'IA. Si riscrivono solo le **regole CSS** di queste classi in `App.css` /

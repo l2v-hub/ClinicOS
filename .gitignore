@@ -40,4 +40,4 @@ backend/.env.local
 # local tooling / scratch (not tracked)
 .worktrees/
 .playwright-mcp/
-Gestione clinica RSA.zip
+Gestione clinica RSA*.zip

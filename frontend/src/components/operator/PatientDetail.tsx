@@ -8,7 +8,7 @@ import type {
 import {
   IcoEdit, IcoCheck, IcoX, IcoPlus,
   IcoWarning, IcoActivity, IcoPill, IcoConsegne, IcoBed,
-  IcoCartelle,
+  IcoCartelle, IcoClock,
 } from '../../icons';
 import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
 import { DocumentiTab } from './cartella/DocumentiTab';
@@ -1384,7 +1384,7 @@ export function PatientDetail({
               <div className="consegna-card__top">
                 <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>{c.priorita}</span>
                 <span className="consegna-tipo">{c.tipo}</span>
-                {c.oraScadenza && <span className="consegna-scadenza">⏰ {c.oraScadenza}</span>}
+                {c.oraScadenza && <span className="consegna-scadenza"><IcoClock />{c.oraScadenza}</span>}
                 <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{c.stato.replace('_', ' ')}</span>
               </div>
               <p className="consegna-note">{c.note}</p>

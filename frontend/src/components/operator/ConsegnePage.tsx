@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Consegna, PrioritaConsegna, StatoConsegna } from '../../types';
-import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit } from '../../icons';
+import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit, IcoClock } from '../../icons';
 import { InlineEditableField } from '../shared/InlineEditableField';
 import { comparePazientiNome } from '../../lib/patientSort';
 
@@ -224,7 +224,7 @@ function ConsegnaCard({ consegna: c, onUpdate, onUpdateStato, onDelete, isAdmin,
           {PRIORITA_LABEL[c.priorita]}
         </span>
         <span className="consegna-tipo">{c.tipo}</span>
-        {c.oraScadenza && <span className="consegna-scadenza">⏰ {c.oraScadenza}</span>}
+        {c.oraScadenza && <span className="consegna-scadenza"><IcoClock />{c.oraScadenza}</span>}
         <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{STATO_LABEL[c.stato]}</span>
         <button className="icon-btn icon-btn--sm consegna-edit-btn" onClick={() => setEditOpen(true)} title="Modifica consegna" aria-label="Modifica consegna">
           <IcoEdit />

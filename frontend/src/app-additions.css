@@ -2575,6 +2575,8 @@
 }
 
 .empty-state-card svg { width: 28px; height: 28px; opacity: 0.4; }
+.empty-state-card__ico { display: flex; justify-content: center; margin-bottom: 16px; color: var(--text-xmuted); }
+.empty-state-card__ico svg { width: 44px; height: 44px; opacity: 0.5; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    NEW PATIENT MODAL — wider
@@ -5639,17 +5641,18 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 14px;
-  min-height: 38px;
-  background: #1A3357;
-  color: white;
+  padding: 0 16px;
+  min-height: 44px;
+  background: var(--surface-raised);
+  color: var(--text);
   border: none;
+  border-bottom: 1px solid var(--border);
   cursor: pointer;
   font: inherit;
   text-align: left;
   gap: 8px;
 }
-.cts__header:hover { background: #1E3A5F; }
+.cts__header:hover { background: var(--hover); }
 .cts__header-left {
   display: flex;
   align-items: center;
@@ -5680,10 +5683,11 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .cts__badge {
   font-size: 10px;
-  font-weight: 600;
-  background: rgba(255,255,255,0.18);
+  font-weight: 700;
+  color: var(--indigo);
+  background: var(--indigo-bg);
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: 999px;
   white-space: nowrap;
   letter-spacing: 0.3px;
 }
@@ -5710,19 +5714,21 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .cts__body--padded {
   padding: 12px 14px;
 }
-/* Actions inside header — keep button styles but override for dark bg */
+/* Actions inside header — light header treatment */
 .cts__header-right .btn-sm {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: white;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--blue);
   font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 4px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
 }
 .cts__header-right .btn-sm:hover {
-  background: rgba(255,255,255,0.22);
+  background: var(--c-primary-bg);
+  border-color: var(--blue);
 }
 
 @media (max-width: 1024px) {

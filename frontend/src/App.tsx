@@ -937,12 +937,30 @@ export default function App() {
         {/* Compact Topbar */}
         <div className="compact-topbar">
           <button
-            className="icon-btn"
-            onClick={() => setSearchOpen(v => !v)}
+            type="button"
+            className="topbar-search"
+            onClick={() => setSearchOpen(true)}
             title="Cerca (Ctrl+K)"
           >
             <IcoSearch />
+            <span className="topbar-search__ph">Cerca paziente, camera, MRN…</span>
+            <kbd className="topbar-search__kbd">/</kbd>
           </button>
+          {utente && (
+            <div className="topbar-ctx">
+              <span className="topbar-shift">
+                <span className="topbar-shift__dot" aria-hidden="true" />
+                {utente.reparto}
+              </span>
+              <div className="topbar-user">
+                <span className="topbar-user__avatar" aria-hidden="true">{utente.iniziali}</span>
+                <span className="topbar-user__meta">
+                  <span className="topbar-user__name">{utente.nome}</span>
+                  <span className="topbar-user__role">{utente.ruolo === 'admin' ? 'Amministratore' : 'Operatore'}</span>
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Search overlay */}

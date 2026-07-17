@@ -3,7 +3,7 @@ import type {
   Paziente, CartellaPaziente,
   ParametriMensili, ParametroGiorno,
 } from '../../types';
-import { IcoSearch, IcoX } from '../../icons';
+import { IcoSearch, IcoX, IcoMessage } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
 import { ClinicalTableSection } from './cartella/shared';
 import { comparePazienti } from '../../lib/patientSort';
@@ -249,7 +249,7 @@ function RigaPaziente({
         onClick={() => onToggleNote(!isNoteOpen)}
         title="Note"
       >
-        <span aria-hidden="true">📝</span>
+        <span className="qe-row__note-btn-ico" aria-hidden="true"><IcoMessage /></span>
         <span className="qe-row__note-btn-label">Note</span>
       </button>
 
