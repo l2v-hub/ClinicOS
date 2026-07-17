@@ -1,5 +1,5 @@
 import type { UtenteApp, Consegna, SlotAgenda, CartellaPaziente, Paziente } from '../../types';
-import { IcoArrow, IcoWarning, IcoCalendar, IcoConsegne, IcoActivity, IcoShield, IcoClock } from '../../icons';
+import { IcoArrow, IcoWarning, IcoCalendar, IcoConsegne, IcoActivity, IcoShield, IcoClock, IcoChevronRight, IcoBed } from '../../icons';
 import type { NavKey } from '../../types';
 import { PageHeader } from '../shared/PageHeader';
 
@@ -82,21 +82,37 @@ export function OperatorDashboard({
       {cartelle.length > 0 && (
         <div className="kpi-alert-grid">
           <div className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`} onClick={() => onNavigate('parametri-multipaziente')} title="Vai a Parametri">
+            <div className="kpi-alert-card__top">
+              <span className="kpi-alert-card__ico"><IcoActivity /></span>
+              <span className="kpi-alert-card__chevron"><IcoChevronRight /></span>
+            </div>
             <span className="kpi-alert-card__val">{critici}</span>
-            <span className="kpi-alert-card__lbl"><IcoActivity /> Parametri critici</span>
+            <span className="kpi-alert-card__lbl">Parametri critici</span>
             {critici === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
           </div>
           <div className={`kpi-alert-card${rischiAlti > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`} onClick={() => onNavigate('pazienti')} title="Vai a Pazienti">
+            <div className="kpi-alert-card__top">
+              <span className="kpi-alert-card__ico"><IcoShield /></span>
+              <span className="kpi-alert-card__chevron"><IcoChevronRight /></span>
+            </div>
             <span className="kpi-alert-card__val">{rischiAlti}</span>
-            <span className="kpi-alert-card__lbl"><IcoShield /> Rischi alti/critici</span>
+            <span className="kpi-alert-card__lbl">Rischi alti/critici</span>
             {rischiAlti === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
           </div>
           <div className={`kpi-alert-card${allergieGravi > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`} onClick={() => onNavigate('pazienti')} title="Vai a Pazienti">
+            <div className="kpi-alert-card__top">
+              <span className="kpi-alert-card__ico"><IcoWarning /></span>
+              <span className="kpi-alert-card__chevron"><IcoChevronRight /></span>
+            </div>
             <span className="kpi-alert-card__val">{allergieGravi}</span>
-            <span className="kpi-alert-card__lbl"><IcoWarning /> Allergie gravi</span>
+            <span className="kpi-alert-card__lbl">Allergie gravi</span>
             {allergieGravi === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
           </div>
           <div className="kpi-alert-card kpi-alert-card--blue" onClick={() => onNavigate('pazienti')} title="Vai a Pazienti">
+            <div className="kpi-alert-card__top">
+              <span className="kpi-alert-card__ico"><IcoBed /></span>
+              <span className="kpi-alert-card__chevron"><IcoChevronRight /></span>
+            </div>
             <span className="kpi-alert-card__val">{pazientiRicoverati}</span>
             <span className="kpi-alert-card__lbl">Ricoverati attivi</span>
           </div>

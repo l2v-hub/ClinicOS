@@ -5414,11 +5414,29 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   border-color: #c9d6ea;
   transform: translateY(-2px);
 }
-/* Accent solo su bordo/icona/valore — niente riempimento pieno del fondo */
-.kpi-alert-card--red   { border-left: 4px solid var(--red); }
-.kpi-alert-card--amber { border-left: 4px solid var(--amber); }
-.kpi-alert-card--blue  { border-left: 4px solid var(--blue); }
-.kpi-alert-card--green { border-left: 4px solid var(--teal); }
+/* Testata card: icona in pastiglia tinta (alto-sx) + chevron (alto-dx) */
+.kpi-alert-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.kpi-alert-card__ico {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--indigo-bg);
+  color: var(--blue);
+  flex-shrink: 0;
+}
+.kpi-alert-card__ico svg { width: 20px; height: 20px; }
+.kpi-alert-card__chevron { display: inline-flex; color: #c2ccda; }
+.kpi-alert-card__chevron svg { width: 18px; height: 18px; }
+
+/* Lo stato colora SOLO icona (pastiglia) + numero — niente fondo pieno né bordo laterale */
 .kpi-alert-card__val {
   font-size: 38px;
   font-weight: 800;
@@ -5426,8 +5444,14 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   letter-spacing: -1px;
   color: var(--text);
 }
+.kpi-alert-card--red   .kpi-alert-card__ico { background: var(--red-bg);     color: var(--red); }
 .kpi-alert-card--red   .kpi-alert-card__val { color: var(--red); }
+.kpi-alert-card--amber .kpi-alert-card__ico { background: var(--amber-bg);   color: var(--amber); }
 .kpi-alert-card--amber .kpi-alert-card__val { color: var(--amber); }
+.kpi-alert-card--blue  .kpi-alert-card__ico { background: var(--indigo-bg);  color: var(--blue); }
+.kpi-alert-card--blue  .kpi-alert-card__val { color: var(--blue); }
+.kpi-alert-card--green .kpi-alert-card__ico { background: var(--emerald-bg); color: var(--teal); }
+.kpi-alert-card--green .kpi-alert-card__val { color: var(--teal); }
 .kpi-alert-card__lbl {
   font-size: 14px;
   font-weight: 600;
@@ -5451,14 +5475,14 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .progress-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  gap: 18px;
   margin-bottom: 24px;
 }
 .progress-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--card-radius);
-  padding: 22px;
+  padding: 20px 22px;
   box-shadow: var(--shadow-card);
 }
 .progress-card__head {
@@ -5469,7 +5493,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .progress-card__label {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   color: var(--text-muted);
