@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'Public Sans', system-ui, sans-serif; background: #eef1f6; color: #16202e; -webkit-font-smoothing: antialiased; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cdd6e3; border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
+  a { color: #2f6bed; text-decoration: none; }
+  a:hover { color: #1d4fc4; }
+  input, button, select, textarea { font-family: inherit; }
+  input:focus, textarea:focus, select:focus { outline: none; }
+</style>
+</helmet>
+<div style="display:flex; min-height:100vh; width:100%; background:#eef1f6;">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside style="width:96px; flex:0 0 96px; background:#0f1b30; display:flex; flex-direction:column; align-items:center; padding:20px 0; gap:6px; position:sticky; top:0; height:100vh;">
+    <div style="width:46px; height:46px; border-radius:13px; background:linear-gradient(150deg,#3f78f6,#2f6bed); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#fff; margin-bottom:18px; box-shadow:0 6px 16px rgba(47,107,237,.4);">C</div>
+    <sc-for list="{{ nav }}" as="item" hint-placeholder-count="7">
+      <button onClick="{{ item.go }}" style="{{ item.style }}" style-hover="background:rgba(255,255,255,.08);">
+        <span style="width:24px; height:24px; display:block;">{{ item.icon }}</span>
+        <span style="font-size:11px; font-weight:600; letter-spacing:.2px;">{{ item.label }}</span>
+      </button>
+    </sc-for>
+    <div style="margin-top:auto; width:44px; height:44px; border-radius:50%; background:#2f6bed; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;">GM</div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column;">
+
+    <!-- topbar -->
+    <header style="height:64px; flex:0 0 64px; background:#ffffff; border-bottom:1px solid #e6ebf2; display:flex; align-items:center; gap:16px; padding:0 28px; position:sticky; top:0; z-index:20;">
+      <div style="display:flex; align-items:center; gap:10px; flex:1; max-width:520px; background:#f3f6fb; border:1px solid #e6ebf2; border-radius:12px; padding:0 14px; height:42px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8595a8" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input placeholder="Cerca paziente, camera, MRN…  ( / )" style="border:none; background:transparent; flex:1; font-size:15px; color:#16202e;"/>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; margin-left:auto; background:#e7f7f0; color:#0e8a63; border-radius:999px; padding:7px 14px; font-size:13px; font-weight:700;">
+        <span style="width:8px; height:8px; border-radius:50%; background:#16a37b;"></span> Turno Mattina · Reparto A
+      </div>
+      <button style="width:42px; height:42px; border-radius:12px; border:1px solid #e6ebf2; background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer;" style-hover="background:#f3f6fb;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5a6b80" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      </button>
+      <div style="display:flex; align-items:center; gap:10px; padding-left:8px;">
+        <div style="width:40px; height:40px; border-radius:50%; background:#2f6bed; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px;">GM</div>
+        <div style="line-height:1.2;">
+          <div style="font-weight:700; font-size:14px;">Inf. Giulia Moretti</div>
+          <div style="font-size:12px; color:#8595a8;">Coordinatrice</div>
+        </div>
+      </div>
+    </header>
+
+    <main style="flex:1; overflow:auto; padding:28px 32px 60px;">
+
+      <!-- ========== DASHBOARD ========== -->
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1400px; margin:0 auto;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:24px; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:13px; color:#8595a8; font-weight:600; text-transform:uppercase; letter-spacing:.6px;">ClinicOS · Reparto A</div>
+            <h1 style="margin:6px 0 4px; font-size:30px; font-weight:800; letter-spacing:-.5px;">Buongiorno, Giulia</h1>
+            <div style="font-size:16px; color:#5a6b80;">Giovedì 16 luglio 2026 · 18 pazienti in carico</div>
+          </div>
+          <button onClick="{{ goVitals }}" style="display:flex; align-items:center; gap:10px; background:#2f6bed; color:#fff; border:none; border-radius:12px; padding:13px 20px; font-size:15px; font-weight:700; cursor:pointer; box-shadow:0 6px 16px rgba(47,107,237,.28);" style-hover="background:#1d4fc4;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            Rilevazione parametri
+          </button>
+        </div>
+
+        <!-- urgent alert strip -->
+        <div style="display:flex; align-items:center; gap:14px; background:#fdecee; border:1px solid #f6c9ce; border-left:5px solid #d93a4a; border-radius:14px; padding:16px 20px; margin-bottom:24px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d93a4a" stroke-width="2.2"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+          <div style="flex:1;">
+            <span style="font-weight:800; color:#b02535;">2 segnalazioni da gestire</span>
+            <span style="color:#8a3a44; margin-left:8px;">Bonazza A. — perdite anomale (OSS) · Domenicali G. — SpO₂ 88% ore 07:40</span>
+          </div>
+          <button onClick="{{ goHandovers }}" style="background:#d93a4a; color:#fff; border:none; border-radius:10px; padding:9px 16px; font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:#b02535;">Apri consegne →</button>
+        </div>
+
+        <!-- KPI row -->
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-bottom:24px;">
+          <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+            <button onClick="{{ k.go }}" style="text-align:left; background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:20px 22px; cursor:pointer; box-shadow:0 1px 2px rgba(16,32,54,.04); transition:transform .12s;" style-hover="border-color:#c9d6ea; transform:translateY(-2px);">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div style="width:38px; height:38px; border-radius:11px; background:{{ k.tint }}; display:flex; align-items:center; justify-content:center;">{{ k.icon }}</div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2ccda" stroke-width="2.4"><path d="m9 18 6-6-6-6"/></svg>
+              </div>
+              <div style="font-size:38px; font-weight:800; letter-spacing:-1px; margin:14px 0 2px; color:{{ k.color }};">{{ k.value }}</div>
+              <div style="font-size:14px; color:#5a6b80; font-weight:600;">{{ k.label }}</div>
+              <div style="font-size:13px; color:#8595a8; margin-top:2px;">{{ k.sub }}</div>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:20px; align-items:start;">
+          <!-- task list -->
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:18px; padding:6px 0; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 22px 12px;">
+              <h2 style="margin:0; font-size:18px; font-weight:800;">Da fare adesso</h2>
+              <span style="font-size:13px; color:#8595a8; font-weight:600;">Turno mattina · 06:00 – 14:00</span>
+            </div>
+            <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="5">
+              <button onClick="{{ t.go }}" style="width:100%; text-align:left; display:flex; align-items:center; gap:16px; padding:15px 22px; border:none; border-top:1px solid #f0f3f8; background:transparent; cursor:pointer;" style-hover="background:#f7f9fc;">
+                <div style="width:44px; height:44px; border-radius:12px; background:{{ t.tint }}; color:{{ t.color }}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; flex:0 0 auto;">{{ t.time }}</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-weight:700; font-size:15px;">{{ t.title }}</div>
+                  <div style="font-size:13px; color:#8595a8;">{{ t.sub }}</div>
+                </div>
+                <span style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.4px; color:{{ t.color }}; background:{{ t.tint }}; padding:5px 11px; border-radius:999px;">{{ t.tag }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <!-- therapy progress -->
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div style="background:#fff; border:1px solid #e6ebf2; border-radius:18px; padding:22px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+                <h2 style="margin:0; font-size:18px; font-weight:800;">Terapie del turno</h2>
+                <a href="#" onClick="{{ goAgenda }}" style="font-size:13px; font-weight:700;">Agenda →</a>
+              </div>
+              <sc-for list="{{ therapy }}" as="th" hint-placeholder-count="3">
+                <div style="margin-bottom:16px;">
+                  <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:7px;">
+                    <span style="font-weight:700;">{{ th.name }}</span>
+                    <span style="color:#8595a8; font-weight:600;">{{ th.done }}/{{ th.total }}</span>
+                  </div>
+                  <div style="height:9px; background:#eef1f6; border-radius:6px; overflow:hidden;">
+                    <div style="height:100%; width:{{ th.pct }}; background:linear-gradient(90deg,#6c4bd1,#8a6ef0); border-radius:6px;"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background:linear-gradient(155deg,#123056,#0f1b30); border-radius:18px; padding:22px; color:#fff;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8ab4ff" stroke-width="2"><path d="M12 3a6 6 0 0 0-6 6c0 4 6 12 6 12s6-8 6-12a6 6 0 0 0-6-6Z"/><circle cx="12" cy="9" r="2"/></svg>
+                <span style="font-weight:800; font-size:16px;">Prossimo giro visite</span>
+              </div>
+              <div style="font-size:14px; color:#b9c9e6; margin-bottom:16px;">Dr. Ferretti · Camere 12 → 18 · con te per medicazioni</div>
+              <div style="font-size:30px; font-weight:800;">10:30</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ========== PAZIENTI ========== -->
+      <sc-if value="{{ isPatients }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1400px; margin:0 auto;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:20px; flex-wrap:wrap;">
+          <div>
+            <h1 style="margin:0 0 4px; font-size:28px; font-weight:800; letter-spacing:-.5px;">Pazienti</h1>
+            <div style="font-size:15px; color:#5a6b80;">18 in carico · Reparto A</div>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #e6ebf2; border-radius:12px; padding:12px 18px; font-weight:700; font-size:14px; cursor:pointer; color:#0e8a63;" style-hover="background:#f3f6fb;"><span style="width:8px;height:8px;border-radius:50%;background:#16a37b;"></span>Importa dimissione</button>
+            <button onClick="{{ goWizard }}" style="display:flex; align-items:center; gap:8px; background:#2f6bed; color:#fff; border:none; border-radius:12px; padding:12px 18px; font-weight:700; font-size:14px; cursor:pointer; box-shadow:0 6px 16px rgba(47,107,237,.28);" style-hover="background:#1d4fc4;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Nuovo paziente</button>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:280px; background:#fff; border:1px solid #e6ebf2; border-radius:12px; padding:0 14px; height:46px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8595a8" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input value="{{ patientQuery }}" onInput="{{ onPatientQuery }}" placeholder="Cerca per nome, MRN, camera…" style="border:none; background:transparent; flex:1; font-size:15px;"/>
+          </div>
+          <div style="display:flex; gap:8px; background:#fff; border:1px solid #e6ebf2; border-radius:12px; padding:5px;">
+            <sc-for list="{{ genderFilters }}" as="g" hint-placeholder-count="3">
+              <button onClick="{{ g.set }}" style="{{ g.style }}">{{ g.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fff; border:1px solid #e6ebf2; border-radius:18px; overflow:hidden; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+          <div style="display:grid; grid-template-columns:2.4fr 1.3fr 1fr 1.2fr 1fr 40px; gap:16px; padding:15px 24px; background:#f7f9fc; border-bottom:1px solid #e6ebf2; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#8595a8;">
+            <div>Paziente</div><div>MRN</div><div>Camera / Letto</div><div>Stato clinico</div><div>Consegne</div><div></div>
+          </div>
+          <sc-for list="{{ filteredPatients }}" as="p" hint-placeholder-count="8">
+            <button onClick="{{ p.open }}" style="width:100%; text-align:left; display:grid; grid-template-columns:2.4fr 1.3fr 1fr 1.2fr 1fr 40px; gap:16px; align-items:center; padding:14px 24px; border:none; border-top:1px solid #f0f3f8; background:transparent; cursor:pointer;" style-hover="background:#f7f9fc;">
+              <div style="display:flex; align-items:center; gap:14px; min-width:0;">
+                <div style="width:44px; height:44px; border-radius:12px; background:{{ p.avatarBg }}; color:{{ p.avatarColor }}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex:0 0 auto;">{{ p.initials }}</div>
+                <div style="min-width:0;">
+                  <div style="font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px;">{{ p.name }} <sc-if value="{{ p.allergy }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px; font-weight:800; color:#d93a4a; background:#fdecee; padding:2px 8px; border-radius:999px;">⚠ Allergie</span></sc-if></div>
+                  <div style="font-size:13px; color:#8595a8;">{{ p.age }} · {{ p.dob }}</div>
+                </div>
+              </div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#5a6b80; background:#f3f6fb; padding:5px 9px; border-radius:7px; justify-self:start;">{{ p.mrn }}</div>
+              <div style="font-size:14px; font-weight:700;">{{ p.room }}</div>
+              <div><span style="font-size:12px; font-weight:800; color:{{ p.statusColor }}; background:{{ p.statusTint }}; padding:5px 11px; border-radius:999px;">{{ p.status }}</span></div>
+              <div style="font-size:14px; color:#5a6b80;">{{ p.deliveries }}</div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2ccda" stroke-width="2.4"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ========== CARTELLA / CHART ========== -->
+      <sc-if value="{{ isChart }}" hint-placeholder-val="{{ true }}">
+      <div style="max-width:1400px; margin:0 auto;">
+        <!-- patient header -->
+        <div style="background:#fff; border:1px solid #e6ebf2; border-radius:18px; padding:20px 24px; margin-bottom:16px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+          <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+            <button onClick="{{ goPatients }}" style="width:40px; height:40px; border-radius:11px; border:1px solid #e6ebf2; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:#f3f6fb;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5a6b80" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg></button>
+            <div style="width:56px; height:56px; border-radius:15px; background:#e7edfb; color:#2f6bed; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">AB</div>
+            <div>
+              <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <h1 style="margin:0; font-size:24px; font-weight:800;">Bonazza, Aldina</h1>
+                <span style="font-size:13px; font-weight:800; color:#d93a4a; background:#fdecee; padding:4px 12px; border-radius:999px;">⚠ Allergie gravi</span>
+              </div>
+              <div style="display:flex; gap:16px; font-size:14px; color:#5a6b80; margin-top:4px; flex-wrap:wrap;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">MRN-1781789960408</span>
+                <span>90 anni · F</span>
+                <span>Camera 12 · Letto B</span>
+                <span style="color:#0e8a63; font-weight:700;">● Ricoverata</span>
+              </div>
+            </div>
+            <div style="margin-left:auto; display:flex; gap:10px;">
+              <button style="background:#fff; border:1px solid #e6ebf2; border-radius:11px; padding:11px 16px; font-weight:700; font-size:14px; cursor:pointer; color:#5a6b80;" style-hover="background:#f3f6fb;">Stampa scheda</button>
+              <button style="background:#fdecee; border:1px solid #f6c9ce; color:#d93a4a; border-radius:11px; padding:11px 16px; font-weight:800; font-size:14px; cursor:pointer;" style-hover="background:#f9dbdf;">Invio in PS</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- safety banner -->
+        <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:280px; display:flex; align-items:center; gap:12px; background:#fdecee; border:1px solid #f6c9ce; border-left:5px solid #d93a4a; border-radius:13px; padding:13px 18px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d93a4a" stroke-width="2.2"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <div><span style="font-weight:800; color:#b02535;">Allergie gravi:</span> <span style="color:#8a3a44;">Penicillina (anafilassi) · FANS · Lattice</span></div>
+          </div>
+          <div style="flex:1; min-width:280px; display:flex; align-items:center; gap:12px; background:#fdf3e2; border:1px solid #f3ddb0; border-left:5px solid #c77700; border-radius:13px; padding:13px 18px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c77700" stroke-width="2.2"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
+            <div><span style="font-weight:800; color:#9a5c00;">Rischi attivi:</span> <span style="color:#8a6a2e;">Lesioni da pressione (alto) · Nutrizione (alto)</span></div>
+          </div>
+        </div>
+
+        <!-- tabs -->
+        <div style="display:flex; gap:6px; background:#fff; border:1px solid #e6ebf2; border-radius:14px; padding:6px; margin-bottom:18px; width:fit-content;">
+          <sc-for list="{{ chartTabs }}" as="tb" hint-placeholder-count="3">
+            <button onClick="{{ tb.set }}" style="{{ tb.style }}">{{ tb.label }}<sc-if value="{{ tb.count }}" hint-placeholder-val="{{ false }}"><span style="margin-left:7px; font-size:12px; background:{{ tb.badgeBg }}; color:{{ tb.badgeColor }}; padding:1px 8px; border-radius:999px;">{{ tb.count }}</span></sc-if></button>
+          </sc-for>
+        </div>
+
+        <!-- PANORAMICA -->
+        <sc-if value="{{ isPanoramica }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:start;">
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:20px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;"><h3 style="margin:0; font-size:16px; font-weight:800;">Diagnosi attive</h3><span style="font-size:13px; color:#8595a8;">3</span></div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;"><div><div style="font-weight:700; font-size:15px;">Ipertensione arteriosa</div><div style="font-size:12px; color:#8595a8; font-family:'JetBrains Mono',monospace;">I10</div></div><span style="font-size:11px; font-weight:800; color:#fff; background:#2f6bed; padding:4px 10px; border-radius:999px;">PRINCIPALE</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;"><div><div style="font-weight:700; font-size:15px;">Ipercolesterolemia</div><div style="font-size:12px; color:#8595a8; font-family:'JetBrains Mono',monospace;">E78.0</div></div><span style="font-size:11px; font-weight:800; color:#2f6bed; background:#eef3fe; padding:4px 10px; border-radius:999px;">SECONDARIA</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;"><div><div style="font-weight:700; font-size:15px;">Osteoporosi</div></div><span style="font-size:11px; font-weight:800; color:#6c4bd1; background:#f0ecfc; padding:4px 10px; border-radius:999px;">DIFFERENZIALE</span></div>
+            </div>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:20px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;"><h3 style="margin:0; font-size:16px; font-weight:800;">Farmaci attivi</h3><span style="font-size:13px; color:#8595a8;">4</span></div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <sc-for list="{{ meds }}" as="m" hint-placeholder-count="4">
+                <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;"><span style="font-weight:700; font-size:15px;">{{ m.name }}</span><span style="font-size:13px; color:#5a6b80;"><b style="color:#16202e;">{{ m.dose }}</b> · {{ m.freq }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:20px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;"><h3 style="margin:0; font-size:16px; font-weight:800;">Ultimi parametri</h3><a href="#" onClick="{{ goVitals }}" style="font-size:13px; font-weight:700;">Rileva →</a></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <sc-for list="{{ lastVitals }}" as="v" hint-placeholder-count="4">
+                <div style="background:{{ v.tint }}; border:1px solid {{ v.border }}; border-radius:12px; padding:12px 14px;">
+                  <div style="font-size:11px; font-weight:800; color:{{ v.color }}; text-transform:uppercase; letter-spacing:.4px;">{{ v.label }}</div>
+                  <div style="font-size:22px; font-weight:800; margin-top:3px;">{{ v.value }} <span style="font-size:12px; color:#8595a8; font-weight:600;">{{ v.unit }}</span></div>
+                  <div style="font-size:11px; color:#8595a8; margin-top:2px;">{{ v.when }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:20px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <h3 style="margin:0 0 14px; font-size:16px; font-weight:800;">Allergie</h3>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;"><div><div style="font-weight:700;">Penicillina</div><div style="font-size:12px; color:#8595a8;">Anafilassi</div></div><span style="font-size:11px; font-weight:800; color:#fff; background:#d93a4a; padding:4px 10px; border-radius:999px;">GRAVE</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;"><div><div style="font-weight:700;">FANS (Ibuprofene)</div><div style="font-size:12px; color:#8595a8;">Ulcera gastrica</div></div><span style="font-size:11px; font-weight:800; color:#fff; background:#c77700; padding:4px 10px; border-radius:999px;">MODERATA</span></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;"><div><div style="font-weight:700;">Lattice</div><div style="font-size:12px; color:#8595a8;">Dermatite da contatto</div></div><span style="font-size:11px; font-weight:800; color:#5a6b80; background:#eef1f6; padding:4px 10px; border-radius:999px;">LIEVE</span></div>
+            </div>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:20px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <h3 style="margin:0 0 14px; font-size:16px; font-weight:800;">Camera & assistenza</h3>
+            <div style="display:flex; flex-direction:column; gap:11px; font-size:14px;">
+              <div style="display:flex; justify-content:space-between;"><span style="color:#8595a8;">Camera / Letto</span><b>12 · B</b></div>
+              <div style="display:flex; justify-content:space-between;"><span style="color:#8595a8;">Mobilità</span><b>Allettata</b></div>
+              <div style="display:flex; justify-content:space-between;"><span style="color:#8595a8;">Continenza</span><b>Doppia — pannolone</b></div>
+              <div style="display:flex; justify-content:space-between;"><span style="color:#8595a8;">Catetere vescicale</span><b>Sì · dal 10/06</b></div>
+              <div style="display:flex; justify-content:space-between;"><span style="color:#8595a8;">Alimentazione</span><b>Autonoma assistita</b></div>
+            </div>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:20px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;"><h3 style="margin:0; font-size:16px; font-weight:800;">Ultime consegne</h3><a href="#" onClick="{{ goHandovers }}" style="font-size:13px; font-weight:700;">Tutte →</a></div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="border-left:3px solid #16a37b; padding-left:12px;"><div style="font-size:12px; color:#8595a8;">Oggi 06:40 · Notte</div><div style="font-size:14px;">Riposo notturno regolare, parametri nella norma.</div></div>
+              <div style="border-left:3px solid #c77700; padding-left:12px;"><div style="font-size:12px; color:#8595a8;">Ieri 15:33 · OSS</div><div style="font-size:14px;">Presenta perdite anomale, segnalato al medico.</div></div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- CLINICA -->
+        <sc-if value="{{ isClinica }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+          <sc-for list="{{ clinicaSubtabs }}" as="s" hint-placeholder-count="5">
+            <button style="{{ s.style }}">{{ s.label }}</button>
+          </sc-for>
+        </div>
+        <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:24px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;"><h3 style="margin:0; font-size:18px; font-weight:800;">Presa in carico</h3><button style="background:#eef3fe; color:#2f6bed; border:none; border-radius:9px; padding:8px 14px; font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:#e0e9fd;">Modifica</button></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:28px;">
+            <div>
+              <div style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#8595a8; margin-bottom:14px;">Dati di ingresso</div>
+              <sc-for list="{{ ingressData }}" as="d" hint-placeholder-count="6">
+                <div style="display:flex; justify-content:space-between; gap:16px; padding:11px 0; border-bottom:1px solid #f0f3f8; font-size:14px;"><span style="color:#8595a8;">{{ d.k }}</span><span style="font-weight:700; text-align:right;">{{ d.v }}</span></div>
+              </sc-for>
+            </div>
+            <div>
+              <div style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#8595a8; margin-bottom:14px;">Condizioni iniziali</div>
+              <sc-for list="{{ initialCond }}" as="d" hint-placeholder-count="5">
+                <div style="display:flex; justify-content:space-between; gap:16px; padding:11px 0; border-bottom:1px solid #f0f3f8; font-size:14px;"><span style="color:#8595a8;">{{ d.k }}</span><span style="font-weight:700; text-align:right; max-width:60%;">{{ d.v }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- DIARIO -->
+        <sc-if value="{{ isDiario }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <sc-for list="{{ diaryFilters }}" as="f" hint-placeholder-count="6">
+              <button onClick="{{ f.set }}" style="{{ f.style }}">{{ f.label }}</button>
+            </sc-for>
+          </div>
+          <button style="display:flex; align-items:center; gap:8px; background:#2f6bed; color:#fff; border:none; border-radius:11px; padding:11px 18px; font-weight:700; font-size:14px; cursor:pointer; box-shadow:0 6px 16px rgba(47,107,237,.28);" style-hover="background:#1d4fc4;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Aggiungi voce</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <sc-for list="{{ filteredDiary }}" as="e" hint-placeholder-count="5">
+            <div style="background:#fff; border:1px solid #e6ebf2; border-radius:15px; padding:18px 20px; box-shadow:0 1px 2px rgba(16,32,54,.04); border-left:4px solid {{ e.accent }};">
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap;">
+                <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.4px; color:#fff; background:{{ e.accent }}; padding:4px 11px; border-radius:999px;">{{ e.role }}</span>
+                <span style="font-weight:700; font-size:14px;">{{ e.author }}</span>
+                <span style="font-size:13px; color:#8595a8;">{{ e.time }}</span>
+                <sc-if value="{{ e.important }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px; font-weight:800; color:#c77700; background:#fdf3e2; padding:4px 10px; border-radius:999px;">IMPORTANTE</span></sc-if>
+                <span style="margin-left:auto; font-size:12px; font-weight:800; color:#2f6bed; background:#eef3fe; padding:4px 10px; border-radius:999px;">APERTA</span>
+              </div>
+              <sc-if value="{{ e.title }}" hint-placeholder-val="{{ false }}"><div style="font-weight:800; font-size:15px; margin-bottom:4px;">{{ e.title }}</div></sc-if>
+              <div style="font-size:14px; color:#3a4658; line-height:1.55; text-wrap:pretty;">{{ e.text }}</div>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <!-- MODULI -->
+        <sc-if value="{{ isModuli }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+          <sc-for list="{{ moduliSubtabs }}" as="m" hint-placeholder-count="6">
+            <button style="{{ m.style }}">{{ m.label }}</button>
+          </sc-for>
+        </div>
+        <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+          <div style="display:flex; align-items:center; gap:12px; padding:16px 22px; background:#0f1b30; color:#fff;">
+            <span style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:.6px;">Medicazioni / Wound care</span>
+            <span style="font-size:12px; font-weight:700; background:rgba(255,255,255,.15); padding:3px 11px; border-radius:999px;">0 attive</span>
+            <button style="margin-left:auto; background:#2f6bed; color:#fff; border:none; border-radius:9px; padding:8px 15px; font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:#1d4fc4;">+ Nuova medicazione</button>
+          </div>
+          <div style="padding:40px 24px; text-align:center; color:#8595a8;">
+            <div style="width:56px; height:56px; border-radius:16px; background:#eef1f6; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8595a8" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+            <div style="font-size:15px; font-weight:700; color:#5a6b80;">Nessuna medicazione registrata</div>
+            <div style="font-size:13px; margin-top:4px;">Registra la prima medicazione o compila una scala di valutazione.</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- DOCUMENTI -->
+        <sc-if value="{{ isDocumenti }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:20px 22px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+              <h3 style="margin:0; font-size:16px; font-weight:800;">Documenti importati</h3>
+              <span style="font-size:12px; font-weight:800; color:#2f6bed; background:#eef3fe; padding:4px 11px; border-radius:999px; text-transform:uppercase; letter-spacing:.4px;">Lettera di dimissione</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <sc-for list="{{ importedDocs }}" as="d" hint-placeholder-count="4">
+                <button style="display:flex; align-items:center; gap:12px; text-align:left; background:#fcfdff; border:1px solid #e6ebf2; border-radius:12px; padding:12px 14px; cursor:pointer;" style-hover="border-color:#c9d6ea; background:#f7f9fc;">
+                  <div style="width:38px; height:38px; border-radius:9px; background:#e7f7f0; color:#0e8a63; display:flex; align-items:center; justify-content:center; flex:0 0 auto;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.5-3.5a2 2 0 0 0-3 0L5 21"/></svg></div>
+                  <div style="min-width:0;"><div style="font-weight:700; font-size:14px;">{{ d.name }}</div><div style="font-size:12px; color:#8595a8;">{{ d.meta }}</div></div>
+                  <svg style="margin-left:auto; flex:0 0 auto;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2ccda" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+            <div style="display:flex; align-items:center; gap:12px; padding:16px 22px; background:#0f1b30; color:#fff;">
+              <span style="font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:.6px;">Documenti paziente</span>
+              <span style="font-size:12px; font-weight:700; background:rgba(255,255,255,.15); padding:3px 11px; border-radius:999px;">0 documenti</span>
+              <button style="margin-left:auto; background:#2f6bed; color:#fff; border:none; border-radius:9px; padding:8px 15px; font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:#1d4fc4;">+ Carica documento</button>
+            </div>
+            <div style="padding:32px 24px; text-align:center; color:#8595a8;">
+              <div style="font-size:15px; font-weight:700; color:#5a6b80;">Nessun documento registrato</div>
+              <button style="margin-top:14px; background:#f3f6fb; border:1px solid #e6ebf2; border-radius:9px; padding:9px 16px; font-weight:700; font-size:13px; color:#5a6b80; cursor:pointer;" style-hover="background:#eef1f6;">▾ Archivio (1)</button>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- ========== PARAMETRI ========== -->
+      <sc-if value="{{ isVitals }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1400px; margin:0 auto;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:8px; flex-wrap:wrap;">
+          <div>
+            <h1 style="margin:0 0 4px; font-size:28px; font-weight:800; letter-spacing:-.5px;">Rilevazione parametri</h1>
+            <div style="font-size:15px; color:#5a6b80;">Giro mattina · giovedì 16 luglio 2026</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:#5a6b80;">
+            <span style="font-weight:700; color:#16202e;">{{ vitalsDoneCount }}/8</span> rilevati
+            <div style="width:140px; height:9px; background:#eef1f6; border-radius:6px; overflow:hidden;"><div style="height:100%; width:{{ vitalsPct }}; background:#16a37b; border-radius:6px; transition:width .3s;"></div></div>
+          </div>
+        </div>
+        <div style="font-size:13px; color:#8595a8; margin-bottom:18px;">Inserisci e premi <b style="color:#5a6b80;">Salva riga</b> — i valori fuori soglia vengono evidenziati in automatico.</div>
+
+        <div style="background:#fff; border:1px solid #e6ebf2; border-radius:18px; overflow:hidden; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+          <div style="display:grid; grid-template-columns:1.6fr repeat(5,1fr) 1.4fr 120px; gap:12px; padding:14px 22px; background:#f7f9fc; border-bottom:1px solid #e6ebf2; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#8595a8;">
+            <div>Paziente</div><div>PA mmHg</div><div>SpO₂ %</div><div>FC bpm</div><div>TC °C</div><div>DTX</div><div>Note rapide</div><div></div>
+          </div>
+          <sc-for list="{{ vitalRows }}" as="r" hint-placeholder-count="8">
+            <div style="display:grid; grid-template-columns:1.6fr repeat(5,1fr) 1.4fr 120px; gap:12px; align-items:center; padding:12px 22px; border-top:1px solid #f0f3f8; background:{{ r.rowBg }};">
+              <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+                <div style="width:40px; height:40px; border-radius:11px; background:{{ r.avatarBg }}; color:{{ r.avatarColor }}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; flex:0 0 auto;">{{ r.initials }}</div>
+                <div style="min-width:0;"><div style="font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.name }}</div><div style="font-size:12px; color:#8595a8;">Cam. {{ r.room }}</div></div>
+              </div>
+              <input value="{{ r.pa }}" onInput="{{ r.onPa }}" placeholder="—/—" style="width:100%; height:44px; border:1.5px solid #e1e8f2; border-radius:10px; padding:0 10px; font-size:16px; font-weight:700; text-align:center; background:#fff;" style-focus="border-color:#2f6bed;"/>
+              <input value="{{ r.spo2 }}" onInput="{{ r.onSpo2 }}" placeholder="—" style="{{ r.spo2Style }}" style-focus="border-color:#2f6bed;"/>
+              <input value="{{ r.fc }}" onInput="{{ r.onFc }}" placeholder="—" style="width:100%; height:44px; border:1.5px solid #e1e8f2; border-radius:10px; padding:0 10px; font-size:16px; font-weight:700; text-align:center; background:#fff;" style-focus="border-color:#2f6bed;"/>
+              <input value="{{ r.tc }}" onInput="{{ r.onTc }}" placeholder="—" style="{{ r.tcStyle }}" style-focus="border-color:#2f6bed;"/>
+              <input value="{{ r.dtx }}" onInput="{{ r.onDtx }}" placeholder="—" style="width:100%; height:44px; border:1.5px solid #e1e8f2; border-radius:10px; padding:0 10px; font-size:16px; font-weight:700; text-align:center; background:#fff;" style-focus="border-color:#2f6bed;"/>
+              <input value="{{ r.note }}" onInput="{{ r.onNote }}" placeholder="Aggiungi nota…" style="width:100%; height:44px; border:1.5px solid #e1e8f2; border-radius:10px; padding:0 12px; font-size:14px; background:#fff;" style-focus="border-color:#2f6bed;"/>
+              <button onClick="{{ r.save }}" style="{{ r.saveStyle }}">{{ r.saveLabel }}</button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ========== CONSEGNE ========== -->
+      <sc-if value="{{ isHandovers }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1200px; margin:0 auto;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:18px; flex-wrap:wrap;">
+          <div>
+            <h1 style="margin:0 0 4px; font-size:28px; font-weight:800; letter-spacing:-.5px;">Consegne</h1>
+            <div style="font-size:15px; color:#5a6b80;"><b style="color:#d93a4a;">2 aperte</b> · 0 urgenti · passaggio turno mattina → pomeriggio</div>
+          </div>
+          <button style="display:flex; align-items:center; gap:8px; background:#2f6bed; color:#fff; border:none; border-radius:12px; padding:12px 18px; font-weight:700; font-size:14px; cursor:pointer; box-shadow:0 6px 16px rgba(47,107,237,.28);" style-hover="background:#1d4fc4;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Nuova consegna</button>
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;">
+          <sc-for list="{{ handoverFilters }}" as="f" hint-placeholder-count="4">
+            <button onClick="{{ f.set }}" style="{{ f.style }}">{{ f.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <sc-for list="{{ filteredHandovers }}" as="h" hint-placeholder-count="4">
+            <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:18px 22px; box-shadow:0 1px 2px rgba(16,32,54,.04); border-left:5px solid {{ h.accent }};">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
+                <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.4px; color:{{ h.prioColor }}; background:{{ h.prioTint }}; padding:4px 11px; border-radius:999px;">{{ h.prio }}</span>
+                <span style="font-size:12px; font-weight:700; color:#5a6b80; background:#f3f6fb; padding:4px 11px; border-radius:999px;">{{ h.type }}</span>
+                <span style="font-size:12px; font-weight:800; color:{{ h.statusColor }}; text-transform:uppercase; letter-spacing:.4px;">{{ h.status }}</span>
+                <span style="margin-left:auto; font-size:13px; color:#8595a8;">{{ h.time }}</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:40px; height:40px; border-radius:11px; background:{{ h.avatarBg }}; color:{{ h.avatarColor }}; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px;">{{ h.initials }}</div>
+                <div style="flex:1;"><div style="font-weight:800; font-size:16px;">{{ h.patient }}</div><div style="font-size:14px; color:#3a4658;">{{ h.text }}</div></div>
+              </div>
+              <div style="font-size:13px; color:#8595a8; margin-top:12px; padding-top:12px; border-top:1px solid #f0f3f8;">→ {{ h.assignee }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ========== AGENDA ========== -->
+      <sc-if value="{{ isAgenda }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1200px; margin:0 auto;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:18px; flex-wrap:wrap;">
+          <div><h1 style="margin:0 0 4px; font-size:28px; font-weight:800; letter-spacing:-.5px;">Agenda terapie</h1><div style="font-size:15px; color:#5a6b80;">Giovedì 16 luglio 2026 · Reparto A</div></div>
+          <div style="display:flex; gap:6px; background:#fff; border:1px solid #e6ebf2; border-radius:12px; padding:5px;">
+            <button style="background:#2f6bed; color:#fff; border:none; border-radius:8px; padding:8px 18px; font-weight:700; font-size:14px; cursor:pointer;">Giorno</button>
+            <button style="background:transparent; color:#5a6b80; border:none; border-radius:8px; padding:8px 18px; font-weight:700; font-size:14px; cursor:pointer;">Settimana</button>
+            <button style="background:transparent; color:#5a6b80; border:none; border-radius:8px; padding:8px 18px; font-weight:700; font-size:14px; cursor:pointer;">Mese</button>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <sc-for list="{{ agendaBlocks }}" as="b" hint-placeholder-count="3">
+            <div style="background:#fff; border:1px solid #e6ebf2; border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+              <div style="display:flex; align-items:center; gap:12px; padding:15px 20px; background:#f6f2fe; border-left:5px solid #6c4bd1;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6c4bd1" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <span style="font-weight:800; font-size:16px; color:#4a2fa8;">{{ b.name }}</span>
+                <span style="margin-left:auto; font-size:13px; font-weight:700; color:#6c4bd1; background:#eee6fc; padding:5px 12px; border-radius:999px;">{{ b.done }}/{{ b.total }} erogate</span>
+              </div>
+              <sc-for list="{{ b.slots }}" as="s" hint-placeholder-count="3">
+                <div style="display:flex; align-items:center; gap:16px; padding:13px 20px; border-top:1px solid #f0f3f8;">
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:14px; color:#8595a8; width:52px;">{{ s.time }}</span>
+                  <div style="flex:1;"><div style="font-weight:700; font-size:15px;">{{ s.title }}</div><div style="font-size:13px; color:#8595a8;">{{ s.sub }}</div></div>
+                  <span style="font-size:12px; font-weight:800; color:{{ s.color }}; background:{{ s.tint }}; padding:5px 12px; border-radius:999px;">{{ s.status }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ========== WIZARD ========== -->
+      <sc-if value="{{ isWizard }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:1000px; margin:0 auto;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:20px;">
+          <button onClick="{{ goPatients }}" style="width:40px; height:40px; border-radius:11px; border:1px solid #e6ebf2; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:#f3f6fb;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5a6b80" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg></button>
+          <div><h1 style="margin:0; font-size:26px; font-weight:800; letter-spacing:-.5px;">Nuovo paziente</h1><div style="font-size:14px; color:#8595a8;">Ingresso in struttura</div></div>
+        </div>
+
+        <!-- stepper -->
+        <div style="display:flex; align-items:center; margin-bottom:24px; background:#fff; border:1px solid #e6ebf2; border-radius:16px; padding:16px 20px; box-shadow:0 1px 2px rgba(16,32,54,.04);">
+          <sc-for list="{{ wizardSteps }}" as="w" hint-placeholder-count="6">
+            <div onClick="{{ w.go }}" style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <div style="width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; background:{{ w.circleBg }}; color:{{ w.circleColor }}; border:2px solid {{ w.circleBorder }};">{{ w.num }}</div>
+              <span style="font-size:14px; font-weight:700; color:{{ w.textColor }};">{{ w.label }}</span>
+            </div>
+            <sc-if value="{{ w.connector }}" hint-placeholder-val="{{ true }}"><div style="flex:1; height:2px; background:#e6ebf2; margin:0 12px;"></div></sc-if>
+          </sc-for>
+        </div>
+
+        <div style="background:#fff; border:1px solid #e6ebf2; border-radius:18px; padding:28px; box-shadow:0 1px 2px rgba(16,32,54,.04); min-height:420px;">
+          <sc-if value="{{ wizStep1 }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#2f6bed; margin-bottom:4px;">Dati personali</div>
+            <div style="font-size:14px; color:#8595a8; margin-bottom:22px;">Informazioni identificative del paziente</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+              <div><label style="display:block; font-size:13px; font-weight:700; margin-bottom:7px;">Nome <span style="color:#d93a4a;">*</span></label><input placeholder="Mario" style="width:100%; height:48px; border:1.5px solid #e1e8f2; border-radius:11px; padding:0 14px; font-size:15px;" style-focus="border-color:#2f6bed;"/></div>
+              <div><label style="display:block; font-size:13px; font-weight:700; margin-bottom:7px;">Cognome <span style="color:#d93a4a;">*</span></label><input placeholder="Rossi" style="width:100%; height:48px; border:1.5px solid #e1e8f2; border-radius:11px; padding:0 14px; font-size:15px;" style-focus="border-color:#2f6bed;"/></div>
+              <div><label style="display:block; font-size:13px; font-weight:700; margin-bottom:7px;">Data di nascita <span style="color:#d93a4a;">*</span></label><input type="date" style="width:100%; height:48px; border:1.5px solid #e1e8f2; border-radius:11px; padding:0 14px; font-size:15px;" style-focus="border-color:#2f6bed;"/></div>
+              <div><label style="display:block; font-size:13px; font-weight:700; margin-bottom:7px;">Sesso</label><select style="width:100%; height:48px; border:1.5px solid #e1e8f2; border-radius:11px; padding:0 14px; font-size:15px; background:#fff;"><option>Femmina</option><option>Maschio</option></select></div>
+              <div style="grid-column:1/3;"><label style="display:block; font-size:13px; font-weight:700; margin-bottom:7px;">Codice fiscale</label><input placeholder="RSSMRA80A01H501U" style="width:100%; height:48px; border:1.5px solid #e1e8f2; border-radius:11px; padding:0 14px; font-size:15px; font-family:'JetBrains Mono',monospace; text-transform:uppercase;" style-focus="border-color:#2f6bed;"/><div style="font-size:12px; color:#8595a8; margin-top:6px;">Maiuscolo — 16 caratteri</div></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ wizStepOther }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 20px; color:#8595a8;">
+              <div style="width:64px; height:64px; border-radius:18px; background:#eef3fe; color:#2f6bed; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
+              <div style="font-size:18px; font-weight:800; color:#16202e; margin-bottom:6px;">Step "{{ wizStepLabel }}"</div>
+              <div style="font-size:14px; max-width:420px;">Sezione del flusso di ingresso — anteprima della struttura a step. Compila e prosegui.</div>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-top:20px;">
+          <button onClick="{{ goPatients }}" style="background:#fff; border:1px solid #e6ebf2; border-radius:11px; padding:12px 20px; font-weight:700; font-size:14px; cursor:pointer; color:#5a6b80;" style-hover="background:#f3f6fb;">Annulla</button>
+          <div style="display:flex; gap:10px;">
+            <button onClick="{{ wizPrev }}" style="background:#fff; border:1px solid #e6ebf2; border-radius:11px; padding:12px 20px; font-weight:700; font-size:14px; cursor:pointer;" style-hover="background:#f3f6fb;">← Indietro</button>
+            <button onClick="{{ wizNext }}" style="background:#2f6bed; color:#fff; border:none; border-radius:11px; padding:12px 24px; font-weight:700; font-size:14px; cursor:pointer; box-shadow:0 6px 16px rgba(47,107,237,.28);" style-hover="background:#1d4fc4;">Avanti →</button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    screen: 'dashboard',
+    chartTab: 'panoramica',
+    patientQuery: '',
+    gender: 'all',
+    delFilter: 'aperte',
+    diaryFilter: 'tutti',
+    wizStep: 1,
+    vitals: {},
+    saved: {},
+  };
+
+  ic(paths) { // simple inline svg icon helper
+    return this.svg(paths);
+  }
+  svg(d) {
+    return React.createElement('svg', { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', style: { display: 'block' } },
+      d.map((p, i) => React.createElement('path', { key: i, d: p })));
+  }
+
+  navItems() {
+    return [
+      { id: 'dashboard', label: 'Dashboard', d: ['M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z'] },
+      { id: 'patients', label: 'Pazienti', d: ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z', 'M22 21v-2a4 4 0 0 0-3-3.87', 'M16 3.13a4 4 0 0 1 0 7.75'] },
+      { id: 'vitals', label: 'Parametri', d: ['M22 12h-4l-3 9L9 3l-3 9H2'] },
+      { id: 'handovers', label: 'Consegne', d: ['M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2', 'M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2 2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2Z', 'm9 14 2 2 4-4'] },
+      { id: 'agenda', label: 'Agenda', d: ['M8 2v4M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z'] },
+      { id: 'note', label: 'Note', d: ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'] },
+    ];
+  }
+
+  go(screen) { this.setState({ screen }); }
+
+  patientsData() {
+    return [
+      { id: 1, ln: 'Bonazza', fn: 'Aldina', age: 90, dob: '13/02/1936', sex: 'F', mrn: 'MRN-1781789960408', room: '12 · B', status: 'Stabile', allergy: true, del: '2 aperte', tone: 'blue' },
+      { id: 2, ln: 'Cavina', fn: 'Roberto', age: 86, dob: '11/09/1939', sex: 'M', mrn: 'MRN-1781769161045', room: '08 · A', status: 'Da valutare', allergy: false, del: '—', tone: 'amber' },
+      { id: 3, ln: 'Dalmonte', fn: 'Graziella', age: 92, dob: '17/08/1933', sex: 'F', mrn: 'MRN-1782308754753', room: '14 · A', status: 'Stabile', allergy: false, del: '—', tone: 'blue' },
+      { id: 4, ln: 'Domenicali', fn: 'Gaspera', age: 92, dob: '25/08/1933', sex: 'F', mrn: 'MRN-1783499835019', room: '05 · C', status: 'Critico', allergy: true, del: '1 aperta', tone: 'red' },
+      { id: 5, ln: 'Folli', fn: 'Ugo', age: 89, dob: '23/06/1937', sex: 'M', mrn: 'MRN-1783179374216', room: '11 · A', status: 'Stabile', allergy: false, del: '—', tone: 'blue' },
+      { id: 6, ln: 'Forlano', fn: 'Fabio', age: 78, dob: '12/05/1948', sex: 'M', mrn: 'DEMO-FULL-001', room: '03 · B', status: 'Stabile', allergy: false, del: '—', tone: 'blue' },
+      { id: 7, ln: 'Gaglianone', fn: 'Francesco', age: 90, dob: '22/05/1936', sex: 'M', mrn: 'MRN-1778312267348', room: '16 · A', status: 'Da valutare', allergy: false, del: '—', tone: 'amber' },
+      { id: 8, ln: 'Manaresi', fn: 'Bruna', age: 88, dob: '26/05/1938', sex: 'F', mrn: 'MRN-1779794632117', room: '18 · B', status: 'Stabile', allergy: true, del: '—', tone: 'blue' },
+    ];
+  }
+
+  toneColors(tone) {
+    const map = {
+      blue: { bg: '#e7edfb', color: '#2f6bed', st: '#e7f7f0', sc: '#0e8a63' },
+      amber: { bg: '#fdf3e2', color: '#c77700', st: '#fdf3e2', sc: '#c77700' },
+      red: { bg: '#fdecee', color: '#d93a4a', st: '#fdecee', sc: '#d93a4a' },
+    };
+    return map[tone] || map.blue;
+  }
+  statusStyle(status) {
+    if (status === 'Critico') return { color: '#d93a4a', tint: '#fdecee' };
+    if (status === 'Da valutare') return { color: '#c77700', tint: '#fdf3e2' };
+    return { color: '#0e8a63', tint: '#e7f7f0' };
+  }
+
+  pill(active) {
+    return active
+      ? 'padding:8px 16px; border:none; border-radius:9px; background:#2f6bed; color:#fff; font-weight:700; font-size:14px; cursor:pointer;'
+      : 'padding:8px 16px; border:none; border-radius:9px; background:transparent; color:#5a6b80; font-weight:700; font-size:14px; cursor:pointer;';
+  }
+  chip(active) {
+    return active
+      ? 'padding:9px 16px; border:1px solid #2f6bed; border-radius:999px; background:#2f6bed; color:#fff; font-weight:700; font-size:13px; cursor:pointer;'
+      : 'padding:9px 16px; border:1px solid #e6ebf2; border-radius:999px; background:#fff; color:#5a6b80; font-weight:700; font-size:13px; cursor:pointer;';
+  }
+
+  vitalOf(id) { return this.state.vitals[id] || {}; }
+  updateVital(id, field, value) {
+    this.setState(s => ({ vitals: { ...s.vitals, [id]: { ...(s.vitals[id] || {}), [field]: value } } }));
+  }
+  saveRow(id) {
+    this.setState(s => ({ saved: { ...s.saved, [id]: true } }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const nav = this.navItems().map(n => ({
+      label: n.label,
+      icon: this.svg(n.d),
+      go: () => this.go(n.id),
+      style: `background:${s.screen === n.id ? 'rgba(255,255,255,.12)' : 'transparent'}; color:${s.screen === n.id ? '#fff' : '#8ea3c4'}; border:none; width:72px; padding:11px 0; border-radius:14px; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer;`,
+    }));
+
+    // ---- patients ----
+    const all = this.patientsData();
+    const filteredPatients = all.filter(p => {
+      if (s.gender === 'M' && p.sex !== 'M') return false;
+      if (s.gender === 'F' && p.sex !== 'F') return false;
+      const q = s.patientQuery.trim().toLowerCase();
+      if (q && !(`${p.ln} ${p.fn} ${p.mrn} ${p.room}`.toLowerCase().includes(q))) return false;
+      return true;
+    }).map(p => {
+      const tc = this.toneColors(p.tone), st = this.statusStyle(p.status);
+      return {
+        name: `${p.ln}, ${p.fn}`, age: `${p.age} anni`, dob: p.dob, mrn: p.mrn, room: p.room,
+        initials: (p.ln[0] + p.fn[0]).toUpperCase(), allergy: p.allergy, deliveries: p.del,
+        avatarBg: tc.bg, avatarColor: tc.color, status: p.status, statusColor: st.color, statusTint: st.tint,
+        open: () => this.setState({ screen: 'chart', chartTab: 'panoramica' }),
+      };
+    });
+    const genderFilters = [
+      { key: 'all', label: 'Tutti' }, { key: 'M', label: 'Uomini' }, { key: 'F', label: 'Donne' },
+    ].map(g => ({ label: g.label, set: () => this.setState({ gender: g.key }), style: this.pill(s.gender === g.key) }));
+
+    // ---- dashboard ----
+    const kpis = [
+      { value: '8', label: 'Parametri da rilevare', sub: 'giro mattina', color: '#2f6bed', tint: '#eef3fe', icon: this.svg(['M22 12h-4l-3 9L9 3l-3 9H2']), go: () => this.go('vitals') },
+      { value: '2', label: 'Consegne aperte', sub: '0 urgenti', color: '#d93a4a', tint: '#fdecee', icon: this.svg(['M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2', 'm9 14 2 2 4-4']), go: () => this.go('handovers') },
+      { value: '54', label: 'Terapie da erogare', sub: 'oggi', color: '#6c4bd1', tint: '#f0ecfc', icon: this.svg(['M8 2v4M16 2v4', 'M3 10h18', 'M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z']), go: () => this.go('agenda') },
+      { value: '18', label: 'Pazienti in carico', sub: 'Reparto A', color: '#16202e', tint: '#eef1f6', icon: this.svg(['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z']), go: () => this.go('patients') },
+    ];
+    const tasks = [
+      { time: '08:00', title: 'Parametri giro mattina', sub: '8 pazienti — 0 rilevati', tag: 'Da fare', tint: '#eef3fe', color: '#2f6bed', go: () => this.go('vitals') },
+      { time: '08:30', title: 'Terapia orale — Camera 12, Bonazza A.', sub: 'Losartan 50mg · Atorvastatina 20mg', tag: 'Terapia', tint: '#f0ecfc', color: '#6c4bd1', go: () => this.go('agenda') },
+      { time: '09:00', title: 'Medicazione ferita lombare — Bonazza A.', sub: 'sutura 25/06 · controllo', tag: 'Urgente', tint: '#fdecee', color: '#d93a4a', go: () => this.setState({ screen: 'chart', chartTab: 'diario' }) },
+      { time: '10:30', title: 'Giro visite con Dr. Ferretti', sub: 'Camere 12 → 18', tag: 'Visita', tint: '#fdf3e2', color: '#c77700', go: () => this.go('agenda') },
+      { time: '13:30', title: 'Passaggio consegne al turno pomeriggio', sub: '2 aperte da riportare', tag: 'Consegne', tint: '#e7f7f0', color: '#0e8a63', go: () => this.go('handovers') },
+    ];
+    const therapy = [
+      { name: 'Terapia mattina', done: 12, total: 44, pct: '27%' },
+      { name: 'Terapia pranzo', done: 0, total: 10, pct: '0%' },
+      { name: 'Medicazioni', done: 1, total: 3, pct: '33%' },
+    ];
+
+    // ---- chart ----
+    const badge = (k, c) => ({ badgeBg: s.chartTab === k ? 'rgba(255,255,255,.25)' : '#eef3fe', badgeColor: s.chartTab === k ? '#fff' : '#2f6bed', count: c });
+    const chartTabs = [
+      { key: 'panoramica', label: 'Panoramica', count: null },
+      { key: 'clinica', label: 'Clinica', ...badge('clinica', '7') },
+      { key: 'diario', label: 'Diario', ...badge('diario', '6') },
+      { key: 'moduli', label: 'Moduli', count: null },
+      { key: 'documenti', label: 'Documenti', ...badge('documenti', '1') },
+    ].map(t => ({ ...t, set: () => this.setState({ chartTab: t.key }),
+      style: (s.chartTab === t.key
+        ? 'padding:10px 20px; border:none; border-radius:10px; background:#2f6bed; color:#fff; font-weight:700; font-size:15px; cursor:pointer; display:flex; align-items:center;'
+        : 'padding:10px 20px; border:none; border-radius:10px; background:transparent; color:#5a6b80; font-weight:700; font-size:15px; cursor:pointer; display:flex; align-items:center;') }));
+
+    const meds = [
+      { name: 'Losartan', dose: '50 mg', freq: '1×/die' },
+      { name: 'Amlodipina', dose: '5 mg', freq: '1×/die' },
+      { name: 'Aspirina', dose: '75 mg', freq: '1×/die' },
+      { name: 'Atorvastatina', dose: '20 mg', freq: '1×/die sera' },
+    ];
+    const lastVitals = [
+      { label: 'Pressione', value: '138/86', unit: 'mmHg', when: '18/06 · 08:10', tint: '#fdf3e2', border: '#f3ddb0', color: '#c77700' },
+      { label: 'Freq. cardiaca', value: '74', unit: 'bpm', when: '18/06 · 08:10', tint: '#eef3fe', border: '#d4e0fb', color: '#2f6bed' },
+      { label: 'SpO₂', value: '97', unit: '%', when: '18/06 · 08:10', tint: '#e7f7f0', border: '#bfe9d6', color: '#0e8a63' },
+      { label: 'Temperatura', value: '36.8', unit: '°C', when: '18/06 · 08:10', tint: '#e7f7f0', border: '#bfe9d6', color: '#0e8a63' },
+    ];
+    const clinicaSubtabs = ['Presa in carico', 'Sezioni cliniche', 'Diagnosi', 'Terapia farmacologica', 'Parametri', 'Esami & consulenze']
+      .map((l, i) => ({ label: l, style: this.chip(i === 0) }));
+    const ingressData = [
+      { k: 'Data / Ora', v: '18/06/2026 14:24' }, { k: 'Provenienza', v: 'Geriatria Imola' },
+      { k: 'Modalità', v: 'Ambulante' }, { k: 'Tipo ricovero', v: 'Convenzionato' },
+      { k: 'Operatore', v: 'Forlano F.' }, { k: 'Camera / Letto', v: '12 · B' },
+    ];
+    const initialCond = [
+      { k: 'Condizioni generali', v: 'Buone' }, { k: 'Stato di coscienza', v: 'Vigile' },
+      { k: 'Orientamento', v: 'Orientata, risponde a domande semplici' },
+      { k: 'Continenza', v: 'Doppia — pannolone' }, { k: 'Catetere vescicale', v: 'Posizionato 10/06' },
+    ];
+    const diaryAll = [
+      { role: 'Altro', accent: '#8595a8', author: 'Dr. Marco Ferretti', time: '18/06 15:34', title: '', text: 'Esegue attività di gruppo.', important: false, cat: 'altro' },
+      { role: 'OSS', accent: '#16a37b', author: 'M. Rossi', time: '18/06 15:33', title: '', text: 'Presenta perdite anomale colore verde — segnalato al medico.', important: true, cat: 'oss' },
+      { role: 'Fisioterapista', accent: '#c77700', author: 'L. Bianchi', time: '18/06 15:32', title: '', text: 'Esegue rinforzo muscolare, magnetoterapia, cammino assistito.', important: false, cat: 'fisio' },
+      { role: 'Medico', accent: '#2f6bed', author: 'Dr. Marco Ferretti', time: '18/06 15:30', title: 'Nausea', text: 'Causa nausea si consiglia Plasil 1 cp ore 12 e ore 18 prima dei pasti. Da rivalutare tra 1 settimana.', important: false, cat: 'medico' },
+      { role: 'Infermiere', accent: '#6c4bd1', author: 'f.f.', time: '18/06 14:26', title: '', text: 'Esegue FKT.', important: false, cat: 'infermiere' },
+      { role: 'Infermiere', accent: '#6c4bd1', author: 'Forlano F.', time: '18/06 14:21', title: 'Ingresso', text: 'Paziente proveniente dalla geriatria di Imola in forma convenzionata per riattivazione post lungo ricovero. Non riferisce allergie/intolleranze, porta pannolone g/n per incontinenza doppia, protesi dentarie. Riferisce stipsi, ultima evacuazione 17/06. Presenta ferita chirurgica in zona lombare, sutura 25/06. Vigile orientata, porta catetere vescicale posizionato il 10/06.', important: true, cat: 'infermiere' },
+    ];
+    const diaryFilters = [
+      { key: 'tutti', label: 'Tutti' }, { key: 'medico', label: 'Medico' }, { key: 'infermiere', label: 'Infermiere' },
+      { key: 'oss', label: 'OSS' }, { key: 'fisio', label: 'Fisioterapista' }, { key: 'altro', label: 'Altro' },
+    ].map(f => ({ label: f.label, set: () => this.setState({ diaryFilter: f.key }), style: this.chip(s.diaryFilter === f.key) }));
+    const filteredDiary = diaryAll.filter(e => s.diaryFilter === 'tutti' || e.cat === s.diaryFilter);
+
+    // ---- vitals ----
+    const vitalPatients = all;
+    const vitalRows = vitalPatients.map((p, i) => {
+      const v = this.vitalOf(p.id);
+      const tc = this.toneColors(p.tone);
+      const saved = !!s.saved[p.id];
+      const baseInput = 'width:100%; height:44px; border:1.5px solid #e1e8f2; border-radius:10px; padding:0 10px; font-size:16px; font-weight:700; text-align:center; background:#fff;';
+      const spo2Num = parseInt(v.spo2, 10);
+      const spo2Low = !isNaN(spo2Num) && spo2Num < 92;
+      const tcNum = parseFloat((v.tc || '').replace(',', '.'));
+      const tcHigh = !isNaN(tcNum) && tcNum >= 37.5;
+      return {
+        name: `${p.ln}, ${p.fn}`, room: p.room, initials: (p.ln[0] + p.fn[0]).toUpperCase(),
+        avatarBg: tc.bg, avatarColor: tc.color,
+        rowBg: saved ? '#f4fbf7' : (i % 2 ? '#fcfdff' : '#fff'),
+        pa: v.pa || '', spo2: v.spo2 || '', fc: v.fc || '', tc: v.tc || '', dtx: v.dtx || '', note: v.note || '',
+        onPa: e => this.updateVital(p.id, 'pa', e.target.value),
+        onSpo2: e => this.updateVital(p.id, 'spo2', e.target.value),
+        onFc: e => this.updateVital(p.id, 'fc', e.target.value),
+        onTc: e => this.updateVital(p.id, 'tc', e.target.value),
+        onDtx: e => this.updateVital(p.id, 'dtx', e.target.value),
+        onNote: e => this.updateVital(p.id, 'note', e.target.value),
+        spo2Style: baseInput + (spo2Low ? 'border-color:#d93a4a; color:#d93a4a; background:#fdecee;' : ''),
+        tcStyle: baseInput + (tcHigh ? 'border-color:#c77700; color:#c77700; background:#fdf3e2;' : ''),
+        save: () => this.saveRow(p.id),
+        saveLabel: saved ? '✓ Salvato' : 'Salva',
+        saveStyle: saved
+          ? 'height:44px; border:none; border-radius:10px; background:#e7f7f0; color:#0e8a63; font-weight:800; font-size:14px; cursor:pointer;'
+          : 'height:44px; border:none; border-radius:10px; background:#2f6bed; color:#fff; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 4px 10px rgba(47,107,237,.25);',
+      };
+    });
+    const vitalsDoneCount = Object.keys(s.saved).filter(k => s.saved[k]).length;
+    const vitalsPct = Math.round(vitalsDoneCount / 8 * 100) + '%';
+
+    // ---- handovers ----
+    const handoversAll = [
+      { prio: 'Urgente', type: 'Segnalazione', status: 'Aperta', statusColor: '#d93a4a', accent: '#d93a4a', patient: 'Domenicali, Gaspera', text: 'SpO₂ 88% ore 07:40, somministrato O₂ 2L. Rivalutare.', assignee: 'Dr. Ferretti', time: 'Oggi 07:45', tone: 'red', cat: 'aperte' },
+      { prio: 'Importante', type: 'Monitoraggio', status: 'Aperta', statusColor: '#c77700', accent: '#c77700', patient: 'Bonazza, Aldina', text: 'Perdite anomale colore verde, segnalato. Monitorare temperatura.', assignee: 'Dr. Ferretti', time: 'Ieri 15:33', tone: 'blue', cat: 'aperte' },
+      { prio: 'Normale', type: 'Monitoraggio', status: 'Completata', statusColor: '#0e8a63', accent: '#16a37b', patient: 'Cavina, Roberto', text: 'Stabile, riposo notturno regolare.', assignee: 'Turno notte', time: 'Oggi 06:40', tone: 'blue', cat: 'complete' },
+      { prio: 'Normale', type: 'Altro', status: 'Completata', statusColor: '#0e8a63', accent: '#16a37b', patient: 'Folli, Ugo', text: 'Esegue FKT asintomatico.', assignee: 'Fisioterapista', time: 'Ieri 11:20', tone: 'blue', cat: 'complete' },
+    ];
+    const handoverFilters = [
+      { key: 'tutte', label: 'Tutte' }, { key: 'aperte', label: 'Aperte' }, { key: 'complete', label: 'Completate' }, { key: 'urgenti', label: 'Urgenti' },
+    ].map(f => ({ label: f.label, set: () => this.setState({ delFilter: f.key }), style: this.chip(s.delFilter === f.key) }));
+    const filteredHandovers = handoversAll.filter(h => {
+      if (s.delFilter === 'tutte') return true;
+      if (s.delFilter === 'urgenti') return h.prio === 'Urgente';
+      return h.cat === s.delFilter;
+    }).map(h => {
+      const tc = this.toneColors(h.tone);
+      const prioMap = { Urgente: { c: '#d93a4a', t: '#fdecee' }, Importante: { c: '#c77700', t: '#fdf3e2' }, Normale: { c: '#5a6b80', t: '#eef1f6' } };
+      const pm = prioMap[h.prio];
+      const parts = h.patient.split(', ');
+      return { ...h, prioColor: pm.c, prioTint: pm.t, avatarBg: tc.bg, avatarColor: tc.color, initials: (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase() };
+    });
+
+    // ---- agenda ----
+    const agendaBlocks = [
+      { name: 'Terapia mattina', done: 12, total: 44, slots: [
+        { time: '08:00', title: 'Terapia orale — Camera 12', sub: 'Bonazza A. · Losartan, Atorvastatina', status: 'Erogata', color: '#0e8a63', tint: '#e7f7f0' },
+        { time: '08:30', title: 'Insulina — Camera 05', sub: 'Domenicali G. · DTX pre', status: 'In corso', color: '#2f6bed', tint: '#eef3fe' },
+        { time: '09:00', title: 'Medicazione — Camera 12', sub: 'Bonazza A. · ferita lombare', status: 'Programmata', color: '#c77700', tint: '#fdf3e2' },
+      ] },
+      { name: 'Terapia pranzo', done: 0, total: 10, slots: [
+        { time: '12:00', title: 'Terapia orale — giro pranzo', sub: '10 pazienti', status: 'Programmata', color: '#c77700', tint: '#fdf3e2' },
+        { time: '12:30', title: 'Plasil — Camera 12', sub: 'Bonazza A. · pre-pasto', status: 'Programmata', color: '#c77700', tint: '#fdf3e2' },
+      ] },
+    ];
+
+    // ---- wizard ----
+    const wizLabels = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Documenti', 'Verifica'];
+    const wizardSteps = wizLabels.map((l, i) => {
+      const num = i + 1;
+      const done = num < s.wizStep, active = num === s.wizStep;
+      return {
+        num: done ? '✓' : String(num), label: l, connector: num < 6,
+        go: () => this.setState({ wizStep: num }),
+        circleBg: active ? '#2f6bed' : done ? '#e7f7f0' : '#fff',
+        circleColor: active ? '#fff' : done ? '#0e8a63' : '#8595a8',
+        circleBorder: active ? '#2f6bed' : done ? '#bfe9d6' : '#e6ebf2',
+        textColor: active ? '#16202e' : '#8595a8',
+      };
+    });
+
+    return {
+      nav,
+      isDashboard: s.screen === 'dashboard', isPatients: s.screen === 'patients', isChart: s.screen === 'chart',
+      isVitals: s.screen === 'vitals', isHandovers: s.screen === 'handovers', isAgenda: s.screen === 'agenda', isWizard: s.screen === 'wizard',
+      goVitals: () => this.go('vitals'), goHandovers: () => this.go('handovers'), goAgenda: () => this.go('agenda'),
+      goPatients: () => this.go('patients'), goWizard: () => this.setState({ screen: 'wizard', wizStep: 1 }),
+      kpis, tasks, therapy,
+      filteredPatients, genderFilters, patientQuery: s.patientQuery,
+      onPatientQuery: e => this.setState({ patientQuery: e.target.value }),
+      chartTabs, isPanoramica: s.chartTab === 'panoramica', isClinica: s.chartTab === 'clinica', isDiario: s.chartTab === 'diario',
+      isModuli: s.chartTab === 'moduli', isDocumenti: s.chartTab === 'documenti',
+      moduliSubtabs: ['Medicazioni', 'Contenzioni', 'Scala Braden', 'Scala Tinetti', 'Scala NRS', 'Dimissione'].map((l, i) => ({ label: l, style: this.chip(i === 0) })),
+      importedDocs: [
+        { name: '1.jpg', meta: 'JPEG · 3.5 MB · 18/06/2026' },
+        { name: '2.jpg', meta: 'JPEG · 3.5 MB · 18/06/2026' },
+        { name: '3.jpg', meta: 'JPEG · 4.2 MB · 18/06/2026' },
+        { name: '4.jpg', meta: 'JPEG · 3.7 MB · 18/06/2026' },
+      ],
+      meds, lastVitals, clinicaSubtabs, ingressData, initialCond, diaryFilters, filteredDiary,
+      vitalRows, vitalsDoneCount, vitalsPct,
+      handoverFilters, filteredHandovers,
+      agendaBlocks,
+      wizardSteps, wizStep1: s.wizStep === 1, wizStepOther: s.wizStep !== 1, wizStepLabel: wizLabels[s.wizStep - 1],
+      wizNext: () => this.setState({ wizStep: Math.min(6, s.wizStep + 1) }),
+      wizPrev: () => this.setState({ wizStep: Math.max(1, s.wizStep - 1) }),
+    };
+  }
+}
+</script>
+</body>
+</html>

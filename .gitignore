@@ -36,3 +36,8 @@ backend/.env.local
 
 # Claude local settings (may contain tokens) — never commit
 .claude/settings.local.json
+
+# local tooling / scratch (not tracked)
+.worktrees/
+.playwright-mcp/
+Gestione clinica RSA.zip

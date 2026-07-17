@@ -3,6 +3,13 @@
     "stitch": {
       "command": "npx",
       "args": ["@_davideast/stitch-mcp", "proxy"]
+    },
+    "postgres": {
+      "command": "uvx",
+      "args": ["postgres-mcp", "--access-mode=restricted"],
+      "env": {
+        "DATABASE_URI": "${DATABASE_URI}"
+      }
     }
   }
 }

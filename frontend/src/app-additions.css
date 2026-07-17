@@ -1335,34 +1335,34 @@
   gap: 10px;
   padding: 10px 14px;
   margin: 2px 0;
-  background: linear-gradient(135deg, #F0ECFC 0%, #F3E8FF 100%);
-  border: 1px solid #C4B5FD;
-  border-left: 4px solid #6C4BD1;
+  background: #F6F2FE;
+  border: 1px solid #E4DAFA;
+  border-left: 5px solid var(--purple);
   border-radius: 8px;
   cursor: pointer;
   min-height: 52px;
   transition: box-shadow 0.15s, transform 0.1s;
 }
 .agt-therapy-slot:hover {
-  box-shadow: 0 2px 8px rgba(124,58,237,0.15);
+  box-shadow: 0 2px 8px rgba(108,75,209,0.15);
   transform: translateY(-1px);
 }
 .agt-therapy-slot__icon {
   width: 28px; height: 28px;
   display: flex; align-items: center; justify-content: center;
-  background: #6C4BD1; color: #fff; border-radius: 6px;
+  background: var(--purple); color: #fff; border-radius: 6px;
   flex-shrink: 0;
 }
 .agt-therapy-slot__icon svg { width: 16px; height: 16px; }
 .agt-therapy-slot__label {
-  font-weight: 600; font-size: 13px; color: #4C1D95;
+  font-weight: 600; font-size: 13px; color: var(--purple);
 }
 .agt-therapy-slot__count {
-  font-size: 12px; color: #6C4BD1; margin-left: auto;
+  font-size: 12px; color: var(--purple); margin-left: auto;
 }
 .agt-therapy-slot__progress {
-  font-size: 11px; color: #6C4BD1;
-  background: rgba(124,58,237,0.1); padding: 2px 8px; border-radius: 10px;
+  font-size: 11px; color: var(--purple);
+  background: rgba(108,75,209,0.1); padding: 2px 8px; border-radius: 10px;
 }
 .agt-therapy-slot--completed {
   background: linear-gradient(135deg, #E7F7F0 0%, #E7F7F0 100%);
@@ -4399,14 +4399,14 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 /* ── Inputs ── */
 .npm-input {
   width: 100%;
-  min-height: 44px;
-  padding: 10px 14px;
+  min-height: 48px;
+  padding: 12px 14px;
   font-size: 14px;
   line-height: 1.4;
   color: var(--text);
   background: #fff;
   border: 1.5px solid var(--border);
-  border-radius: 8px;
+  border-radius: 11px;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
   box-sizing: border-box;
@@ -4414,7 +4414,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .npm-input:focus {
   border-color: var(--blue, #2F6BED);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  box-shadow: var(--shadow-focus);
 }
 .npm-input::placeholder {
   color: var(--text-muted);
@@ -5389,33 +5389,37 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 ═══════════════════════════════════════════════════════════════════════════ */
 .kpi-alert-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
   margin-bottom: 24px;
 }
+@media (max-width: 900px) { .kpi-alert-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .kpi-alert-grid { grid-template-columns: 1fr; } }
 .kpi-alert-card {
-  background: var(--card-bg);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--card-radius-sm);
-  padding: 18px 18px 16px;
+  border-radius: var(--card-radius);
+  padding: 20px 22px;
   display: flex;
   flex-direction: column;
   gap: 3px;
   cursor: pointer;
+  box-shadow: var(--shadow-card);
   transition: box-shadow 0.15s, border-color 0.15s, transform 0.14s;
 }
 .kpi-alert-card:hover {
   box-shadow: var(--shadow-card-hover);
-  border-color: var(--blue);
-  transform: translateY(-1px);
+  border-color: #c9d6ea;
+  transform: translateY(-2px);
 }
-.kpi-alert-card--red   { border-left: 4px solid var(--red);     background: var(--red-bg); }
-.kpi-alert-card--amber { border-left: 4px solid var(--amber);   background: var(--amber-bg); }
+/* Accent solo su bordo/icona/valore — niente riempimento pieno del fondo */
+.kpi-alert-card--red   { border-left: 4px solid var(--red); }
+.kpi-alert-card--amber { border-left: 4px solid var(--amber); }
 .kpi-alert-card--blue  { border-left: 4px solid var(--blue); }
-.kpi-alert-card--green { border-left: 4px solid var(--emerald); }
+.kpi-alert-card--green { border-left: 4px solid var(--teal); }
 .kpi-alert-card__val {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 38px;
+  font-weight: 800;
   line-height: 1;
   letter-spacing: -1px;
   color: var(--text);
@@ -5423,18 +5427,22 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .kpi-alert-card--red   .kpi-alert-card__val { color: var(--red); }
 .kpi-alert-card--amber .kpi-alert-card__val { color: var(--amber); }
 .kpi-alert-card__lbl {
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--text-muted);
   margin-top: 2px;
-  letter-spacing: 0.04em;
 }
 .kpi-alert-card__lbl svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; }
 .kpi-alert-card__ok {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--emerald);
-  margin-top: 2px;
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal);
+  background: var(--emerald-bg);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-top: 6px;
 }
 
 /* Progress cards — barre di avanzamento (terapie / consegne) */
@@ -5447,8 +5455,8 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .progress-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--card-radius-sm);
-  padding: 16px 18px;
+  border-radius: var(--card-radius);
+  padding: 22px;
   box-shadow: var(--shadow-card);
 }
 .progress-card__head {
@@ -5468,21 +5476,21 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   font-family: var(--font-mono);
   font-size: 15px;
   font-weight: 600;
-  color: var(--text);
+  color: var(--text-muted);
 }
 .progress-bar {
-  height: 8px;
-  border-radius: 999px;
-  background: var(--surface-raised);
+  height: 9px;
+  border-radius: 6px;
+  background: var(--divider);
   overflow: hidden;
 }
 .progress-bar__fill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: 6px;
   transition: width 0.4s ease;
 }
-.progress-bar__fill--emerald { background: var(--emerald); }
-.progress-bar__fill--blue    { background: var(--blue); }
+.progress-bar__fill--emerald { background: linear-gradient(90deg, var(--emerald), #34c896); }
+.progress-bar__fill--blue    { background: linear-gradient(90deg, var(--blue), #5b8bf5); }
 .progress-bar__fill--amber   { background: var(--amber); }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -6198,19 +6206,19 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   content: ''; flex: 1 1 auto; min-width: 14px; height: 2px; margin: 0 10px;
   background: var(--border); border-radius: 2px;
 }
-.import-modal__steps li.is-done:not(:last-child)::after { background: var(--blue); }
+.import-modal__steps li.is-done:not(:last-child)::after { background: var(--emerald); }
 .import-step__marker {
-  flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%;
+  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; line-height: 1;
+  font-size: 13px; font-weight: 700; line-height: 1;
   background: var(--surface-raised); color: var(--text-muted);
   border: 1.5px solid var(--border); box-sizing: border-box;
 }
 .import-step__label { font-size: 12px; font-weight: 500; color: var(--text-muted); white-space: nowrap; }
 .import-modal__steps li.is-active .import-step__marker { background: var(--blue); color: #fff; border-color: var(--blue); }
 .import-modal__steps li.is-active .import-step__label { color: var(--text); font-weight: 700; }
-.import-modal__steps li.is-done .import-step__marker { background: var(--blue-dim); color: var(--blue); border-color: var(--blue); }
-.import-modal__steps li.is-done .import-step__label { color: var(--blue); }
+.import-modal__steps li.is-done .import-step__marker { background: var(--emerald-bg); color: var(--teal); border-color: var(--emerald); }
+.import-modal__steps li.is-done .import-step__label { color: var(--teal); }
 @media (max-width: 640px) {
   .import-step__label { display: none; }
   .import-modal__steps li:not(:last-child)::after { margin: 0 6px; }
