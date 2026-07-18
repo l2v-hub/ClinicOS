@@ -88,3 +88,33 @@ test('#156: blank/empty text yields no rows', () => {
   assert.deepEqual(parseDischargeTherapy(''), []);
   assert.deepEqual(parseDischargeTherapy('\n   \n'), []);
 });
+
+// ── #274: medicinale + quantitativo + modalità di somministrazione anche in testo libero ──
+
+test('#274: free-text administration route is captured (per os, endovena, sottocute)', () => {
+  assert.equal(parseTherapyLine('Ramipril 5 mg 1 compressa al giorno per os').viaSomministrazione, 'OS');
+  assert.equal(parseTherapyLine('Furosemide 25 mg 1 fiala 2 volte al giorno endovena').viaSomministrazione, 'EV');
+  assert.equal(parseTherapyLine('Enoxaparina 4000 UI sottocute la sera').viaSomministrazione, 'SC');
+  assert.equal(parseTherapyLine('Insulina 10 UI sottocutanea prima dei pasti').viaSomministrazione, 'SC');
+  assert.equal(parseTherapyLine('Morfina 10 mg intramuscolo').viaSomministrazione, 'IM');
+});
+
+test('#274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e)', () => {
+  assert.equal(parseTherapyLine('Ramipril 5 mg 1 compressa al giorno per os').quantita, '1 compressa');
+  assert.equal(parseTherapyLine('Amoxicillina 875 mg 2 compresse al giorno per os').quantita, '2 compresse');
+  assert.equal(parseTherapyLine('Furosemide 25 mg 1 fiala endovena').quantita, '1 fiala');
+});
+
+test('#274: medicinale + quantitativo + via together upgrade the row to ok', () => {
+  const r = parseTherapyLine('Pantoprazolo 20 mg 1 cp al mattino per os');
+  assert.equal(r.farmacoNome, 'PANTOPRAZOLO');
+  assert.equal(r.dosaggio, '20 mg');
+  assert.equal(r.quantita, '1 cp');
+  assert.equal(r.viaSomministrazione, 'OS');
+  assert.equal(r.stato, 'ok');
+});
+
+test('#274: parenthesized route codes still work (no regression)', () => {
+  assert.equal(parseTherapyLine('KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00').viaSomministrazione, 'OS');
+  assert.equal(parseTherapyLine('Farmaco 10 MG (EV) 1 Fl ore 08:00').viaSomministrazione, 'EV');
+});

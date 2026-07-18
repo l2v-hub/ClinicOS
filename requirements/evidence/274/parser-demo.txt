@@ -1,0 +1,5 @@
+{"farmaco":"RAMIPRIL","quantita":"1 compressa","via":"OS","dosaggio":"5 mg","stato":"ok"}
+{"farmaco":"FUROSEMIDE","quantita":"1 fiala","via":"EV","dosaggio":"25 mg","stato":"ok"}
+{"farmaco":"ENOXAPARINA","quantita":"","via":"SC","dosaggio":"4000 UI","stato":"ok"}
+{"farmaco":"PANTOPRAZOLO","quantita":"1 cp","via":"OS","dosaggio":"20 mg","stato":"ok"}
+{"farmaco":"INSULINA","quantita":"","via":"SC","dosaggio":"10 UI","stato":"ok"}
