@@ -1,0 +1,6 @@
+Backend smoke test — 2026-07-18
+GET https://clinicos-backend-production-df88.up.railway.app/patients
+HTTP=200 · content-type=application/json · len=7287
+patients_count=18
+structure(keys)=id,medicalRecordNumber,firstName,lastName,dateOfBirth,sex,email,phone,address,emergencyContactName
+result=PASS (backend restituisce pazienti reali, JSON array valido)
