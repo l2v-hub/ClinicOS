@@ -1,0 +1,118 @@
+- generic [ref=f6e26]:
+  - navigation [ref=f6e27]:
+    - generic [ref=f6e28]: C
+    - generic [ref=f6e30]:
+      - generic "Dashboard" [ref=f6e31] [cursor=pointer]
+      - generic "Pazienti" [ref=f6e39] [cursor=pointer]
+      - generic "Parametri" [ref=f6e47] [cursor=pointer]
+      - generic "Consegne" [ref=f6e52] [cursor=pointer]
+      - generic "Agenda" [ref=f6e59] [cursor=pointer]
+      - generic "Note" [ref=f6e64] [cursor=pointer]
+      - generic "Assistente" [ref=f6e69] [cursor=pointer]
+    - generic [ref=f6e75]:
+      - generic "Dr. Marco Ferretti" [ref=f6e76] [cursor=pointer]: MF
+      - generic "Esci" [ref=f6e77] [cursor=pointer]
+  - generic [ref=f6e80]:
+    - generic [ref=f6e81]:
+      - button "Cerca paziente, camera, MRN… /" [ref=f6e82] [cursor=pointer]:
+        - generic [ref=f6e86]: Cerca paziente, camera, MRN…
+        - generic [ref=f6e87]: /
+      - generic [ref=f6e88]:
+        - generic [ref=f6e89]: Cardiologia
+        - generic [ref=f6e91]:
+          - generic [ref=f6e92]: MF
+          - generic [ref=f6e93]:
+            - generic [ref=f6e94]: Dr. Marco Ferretti
+            - generic [ref=f6e95]: Operatore
+    - main [ref=f6e96]:
+      - generic [ref=f6e496]:
+        - generic [ref=f6e497]:
+          - generic "Torna alla lista" [ref=f6e498] [cursor=pointer]
+          - generic [ref=f6e501]: EM
+          - generic [ref=f6e502]:
+            - generic [ref=f6e503]:
+              - generic [ref=f6e504]: Moretti, Elena
+              - generic [ref=f6e505]: ⚠ Allergie
+            - generic [ref=f6e506]:
+              - generic [ref=f6e507]: MRN-DEMO-008·
+              - generic [ref=f6e508]: 41a · F
+          - generic [ref=f6e509]:
+            - button "Stampa scheda" [ref=f6e510] [cursor=pointer]
+            - button "Invio in PS" [ref=f6e511] [cursor=pointer]
+        - generic [ref=f6e515]:
+          - 'button "ALLERGIE GRAVI: Penicillina Gestisci →" [ref=f6e516] [cursor=pointer]':
+            - generic [ref=f6e520]:
+              - strong [ref=f6e521]: "ALLERGIE GRAVI:"
+              - text: Penicillina
+            - generic [ref=f6e522]: Gestisci →
+          - generic [ref=f6e527]:
+            - strong [ref=f6e528]: "Rischi attivi:"
+            - text: lesioni pressione (alto)
+        - tablist "Sezioni principali" [ref=f6e529]:
+          - tab "Panoramica" [ref=f6e530] [cursor=pointer]
+          - tab "Clinica" [ref=f6e531] [cursor=pointer]
+          - tab "Diario" [active] [selected] [ref=f6e532] [cursor=pointer]
+          - tab "Moduli" [ref=f6e533] [cursor=pointer]
+          - tab "Documenti" [ref=f6e534] [cursor=pointer]
+        - tablist "Sotto-sezioni" [ref=f6e535]:
+          - tab "Tutti" [selected] [ref=f6e640] [cursor=pointer]
+          - tab "Medico" [ref=f6e641] [cursor=pointer]
+          - tab "Infermiere" [ref=f6e642] [cursor=pointer]
+          - tab "OSS" [ref=f6e643] [cursor=pointer]
+          - tab "Fisioterapista" [ref=f6e644] [cursor=pointer]
+          - tab "Operatore" [ref=f6e645] [cursor=pointer]
+          - tab "Altro" [ref=f6e646] [cursor=pointer]
+        - generic [ref=f6e648]:
+          - button "▼ Diario Paziente 4 voci Aggiungi voce" [ref=f6e649] [cursor=pointer]:
+            - generic [ref=f6e650]:
+              - generic [ref=f6e651]: ▼
+              - generic [ref=f6e652]: Diario Paziente
+              - generic [ref=f6e653]: 4 voci
+            - button "Aggiungi voce" [ref=f6e655]
+          - generic [ref=f6e658]:
+            - generic [ref=f6e659]:
+              - generic [ref=f6e660]:
+                - generic [ref=f6e661]: Medico
+                - generic [ref=f6e662]: Importante
+                - generic [ref=f6e663]: Aperta
+                - generic [ref=f6e664]: 17/07/2026 09:30
+                - generic [ref=f6e665]:
+                  - button "Modifica" [ref=f6e666] [cursor=pointer]
+                  - button "Elimina" [ref=f6e670] [cursor=pointer]
+              - generic [ref=f6e675]: Dr. Bianchi
+              - generic [ref=f6e676]: Visita medica
+              - generic [ref=f6e677]: Paziente stabile. Parametri nella norma. Si prosegue terapia in corso.
+            - generic [ref=f6e678]:
+              - generic [ref=f6e679]:
+                - generic [ref=f6e680]: Infermiere
+                - generic [ref=f6e681]: Normale
+                - generic [ref=f6e682]: Completata
+                - generic [ref=f6e683]: 17/07/2026 08:00
+                - generic [ref=f6e684]:
+                  - button "Modifica" [ref=f6e685] [cursor=pointer]
+                  - button "Elimina" [ref=f6e689] [cursor=pointer]
+              - generic [ref=f6e694]: Inf. Rossi
+              - generic [ref=f6e695]: Somministrata terapia mattutina. Paziente collaborante, alimentazione regolare.
+            - generic [ref=f6e696]:
+              - generic [ref=f6e697]:
+                - generic [ref=f6e698]: OSS
+                - generic [ref=f6e699]: Normale
+                - generic [ref=f6e700]: Completata
+                - generic [ref=f6e701]: 17/07/2026 07:15
+                - generic [ref=f6e702]:
+                  - button "Modifica" [ref=f6e703] [cursor=pointer]
+                  - button "Elimina" [ref=f6e707] [cursor=pointer]
+              - generic [ref=f6e712]: OSS Verdi
+              - generic [ref=f6e713]: Igiene personale eseguita. Mobilizzazione a letto effettuata senza difficolta.
+            - generic [ref=f6e714]:
+              - generic [ref=f6e715]:
+                - generic [ref=f6e716]: Fisioterapista
+                - generic [ref=f6e717]: Importante
+                - generic [ref=f6e718]: Da rivedere
+                - generic [ref=f6e719]: 16/07/2026 16:00
+                - generic [ref=f6e720]:
+                  - button "Modifica" [ref=f6e721] [cursor=pointer]
+                  - button "Elimina" [ref=f6e725] [cursor=pointer]
+              - generic [ref=f6e730]: FT Conti
+              - generic [ref=f6e731]: Seduta di riabilitazione motoria. Buona risposta agli esercizi di deambulazione assistita.
+  - button "Agnos — Assistente ClinicOS" [ref=f6e232] [cursor=pointer]

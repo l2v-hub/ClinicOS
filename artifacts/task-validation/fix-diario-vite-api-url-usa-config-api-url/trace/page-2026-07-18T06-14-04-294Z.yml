@@ -1,0 +1,129 @@
+- generic [ref=f7e26]:
+  - navigation [ref=f7e27]:
+    - generic [ref=f7e28]: C
+    - generic [ref=f7e30]:
+      - generic "Dashboard" [ref=f7e31] [cursor=pointer]
+      - generic "Pazienti" [ref=f7e39] [cursor=pointer]
+      - generic "Parametri" [ref=f7e47] [cursor=pointer]
+      - generic "Consegne" [ref=f7e52] [cursor=pointer]
+      - generic "Agenda" [ref=f7e59] [cursor=pointer]
+      - generic "Note" [ref=f7e64] [cursor=pointer]
+      - generic "Assistente" [ref=f7e69] [cursor=pointer]
+    - generic [ref=f7e75]:
+      - generic "Dr. Marco Ferretti" [ref=f7e76] [cursor=pointer]: MF
+      - generic "Esci" [ref=f7e77] [cursor=pointer]
+  - generic [ref=f7e80]:
+    - generic [ref=f7e81]:
+      - button "Cerca paziente, camera, MRN… /" [ref=f7e82] [cursor=pointer]:
+        - generic [ref=f7e86]: Cerca paziente, camera, MRN…
+        - generic [ref=f7e87]: /
+      - generic [ref=f7e88]:
+        - generic [ref=f7e89]: Cardiologia
+        - generic [ref=f7e91]:
+          - generic [ref=f7e92]: MF
+          - generic [ref=f7e93]:
+            - generic [ref=f7e94]: Dr. Marco Ferretti
+            - generic [ref=f7e95]: Operatore
+    - main [ref=f7e96]:
+      - generic [ref=f7e496]:
+        - generic [ref=f7e497]:
+          - generic "Torna alla lista" [ref=f7e498] [cursor=pointer]
+          - generic [ref=f7e501]: EM
+          - generic [ref=f7e502]:
+            - generic [ref=f7e503]:
+              - generic [ref=f7e504]: Moretti, Elena
+              - generic [ref=f7e505]: ⚠ Allergie
+            - generic [ref=f7e506]:
+              - generic [ref=f7e507]: MRN-DEMO-008·
+              - generic [ref=f7e508]: 41a · F
+          - generic [ref=f7e509]:
+            - button "Stampa scheda" [ref=f7e510] [cursor=pointer]
+            - button "Invio in PS" [ref=f7e511] [cursor=pointer]
+        - generic [ref=f7e515]:
+          - 'button "ALLERGIE GRAVI: Penicillina Gestisci →" [ref=f7e516] [cursor=pointer]':
+            - generic [ref=f7e520]:
+              - strong [ref=f7e521]: "ALLERGIE GRAVI:"
+              - text: Penicillina
+            - generic [ref=f7e522]: Gestisci →
+          - generic [ref=f7e527]:
+            - strong [ref=f7e528]: "Rischi attivi:"
+            - text: lesioni pressione (alto)
+        - tablist "Sezioni principali" [ref=f7e529]:
+          - tab "Panoramica" [ref=f7e530] [cursor=pointer]
+          - tab "Clinica" [ref=f7e531] [cursor=pointer]
+          - tab "Diario" [active] [selected] [ref=f7e532] [cursor=pointer]
+          - tab "Moduli" [ref=f7e533] [cursor=pointer]
+          - tab "Documenti" [ref=f7e534] [cursor=pointer]
+        - tablist "Sotto-sezioni" [ref=f7e535]:
+          - tab "Tutti" [selected] [ref=f7e640] [cursor=pointer]
+          - tab "Medico" [ref=f7e641] [cursor=pointer]
+          - tab "Infermiere" [ref=f7e642] [cursor=pointer]
+          - tab "OSS" [ref=f7e643] [cursor=pointer]
+          - tab "Fisioterapista" [ref=f7e644] [cursor=pointer]
+          - tab "Operatore" [ref=f7e645] [cursor=pointer]
+          - tab "Altro" [ref=f7e646] [cursor=pointer]
+        - generic [ref=f7e648]:
+          - button "▼ Diario Paziente 5 voci Aggiungi voce" [ref=f7e649] [cursor=pointer]:
+            - generic [ref=f7e650]:
+              - generic [ref=f7e651]: ▼
+              - generic [ref=f7e652]: Diario Paziente
+              - generic [ref=f7e653]: 5 voci
+            - button "Aggiungi voce" [ref=f7e655]
+          - generic [ref=f7e658]:
+            - generic [ref=f7e659]:
+              - generic [ref=f7e660]:
+                - generic [ref=f7e661]: Infermiere
+                - generic [ref=f7e662]: Normale
+                - generic [ref=f7e663]: Aperta
+                - generic [ref=f7e664]: 18/07/2026 06:10
+                - generic [ref=f7e665]:
+                  - button "Modifica" [ref=f7e666] [cursor=pointer]
+                  - button "Elimina" [ref=f7e670] [cursor=pointer]
+              - generic [ref=f7e675]: Dr. Marco Ferretti
+              - generic [ref=f7e676]: QA test voce diario - verifica persistenza fix config API_URL
+            - generic [ref=f7e677]:
+              - generic [ref=f7e678]:
+                - generic [ref=f7e679]: Medico
+                - generic [ref=f7e680]: Importante
+                - generic [ref=f7e681]: Aperta
+                - generic [ref=f7e682]: 17/07/2026 09:30
+                - generic [ref=f7e683]:
+                  - button "Modifica" [ref=f7e684] [cursor=pointer]
+                  - button "Elimina" [ref=f7e688] [cursor=pointer]
+              - generic [ref=f7e693]: Dr. Bianchi
+              - generic [ref=f7e694]: Visita medica
+              - generic [ref=f7e695]: Paziente stabile. Parametri nella norma. Si prosegue terapia in corso.
+            - generic [ref=f7e696]:
+              - generic [ref=f7e697]:
+                - generic [ref=f7e698]: Infermiere
+                - generic [ref=f7e699]: Normale
+                - generic [ref=f7e700]: Completata
+                - generic [ref=f7e701]: 17/07/2026 08:00
+                - generic [ref=f7e702]:
+                  - button "Modifica" [ref=f7e703] [cursor=pointer]
+                  - button "Elimina" [ref=f7e707] [cursor=pointer]
+              - generic [ref=f7e712]: Inf. Rossi
+              - generic [ref=f7e713]: Somministrata terapia mattutina. Paziente collaborante, alimentazione regolare.
+            - generic [ref=f7e714]:
+              - generic [ref=f7e715]:
+                - generic [ref=f7e716]: OSS
+                - generic [ref=f7e717]: Normale
+                - generic [ref=f7e718]: Completata
+                - generic [ref=f7e719]: 17/07/2026 07:15
+                - generic [ref=f7e720]:
+                  - button "Modifica" [ref=f7e721] [cursor=pointer]
+                  - button "Elimina" [ref=f7e725] [cursor=pointer]
+              - generic [ref=f7e730]: OSS Verdi
+              - generic [ref=f7e731]: Igiene personale eseguita. Mobilizzazione a letto effettuata senza difficolta.
+            - generic [ref=f7e732]:
+              - generic [ref=f7e733]:
+                - generic [ref=f7e734]: Fisioterapista
+                - generic [ref=f7e735]: Importante
+                - generic [ref=f7e736]: Da rivedere
+                - generic [ref=f7e737]: 16/07/2026 16:00
+                - generic [ref=f7e738]:
+                  - button "Modifica" [ref=f7e739] [cursor=pointer]
+                  - button "Elimina" [ref=f7e743] [cursor=pointer]
+              - generic [ref=f7e748]: FT Conti
+              - generic [ref=f7e749]: Seduta di riabilitazione motoria. Buona risposta agli esercizi di deambulazione assistita.
+  - button "Agnos — Assistente ClinicOS" [ref=f7e232] [cursor=pointer]
