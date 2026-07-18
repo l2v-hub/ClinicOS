@@ -3845,7 +3845,14 @@
   .cr-drawer-toggle__icon { font-size: 18px; }
   .cr-drawer-toggle__label { color: var(--blue); }
   .cr-detail-layout { flex-direction: column; }
-  .cr-detail-content { overflow-y: visible; }
+  /* Rilascia lo scroll interno annidato della scheda paziente: su mobile il contenuto deve
+     scorrere naturalmente nel .content-panel, non restare intrappolato in una finestra alta ~418px.
+     (Specificità pari alla regola base .cr-detail-layout--no-sidebar .cr-detail-content, ma dentro la
+     media query e più in basso nel sorgente → vince quando il viewport è ≤1023px.) */
+  .patient-record-view,
+  .cr-detail-layout--no-sidebar { height: auto; overflow: visible; }
+  .cr-detail-layout--no-sidebar .cr-detail-content,
+  .cr-detail-content { overflow-y: visible; height: auto; min-height: 0; }
 }
 
 /* Mobile (<768px): smaller touch targets */
@@ -6654,3 +6661,14 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .diario-card__author { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
 .diario-card__title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .diario-card__content { font-size: 14px; line-height: 1.55; color: var(--text-muted); white-space: pre-wrap; word-break: break-word; }
+
+/* Phone: i form multi-colonna della scheda paziente (editor terapia, righe 2 colonne) impilano
+   i campi in una colonna così non vengono tagliati nei contenitori stretti. */
+@media (max-width: 768px) {
+  .terapia-sched-form { grid-template-columns: 1fr; min-width: 0; }
+  .form-row-2col { grid-template-columns: 1fr; }
+  /* i campi non devono forzare una larghezza min > contenitore (unità dose non tagliata). */
+  .terapia-sched-form .form-group,
+  .terapia-sched-form .form-input,
+  .terapia-sched-form .form-select { min-width: 0; max-width: 100%; }
+}

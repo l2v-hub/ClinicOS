@@ -115,7 +115,16 @@ export function ClinicalTableSection({
 
   return (
     <div className={`cts${open ? ' cts--open' : ''}`}>
-      <button type="button" className="cts__header" onClick={() => setOpen(v => !v)}>
+      {/* header è un div role=button (non <button>) così i pulsanti azione annidati sono HTML valido
+          e i tap su mobile non innescano per errore anche il toggle della sezione. */}
+      <div
+        className="cts__header"
+        role="button"
+        tabIndex={0}
+        aria-expanded={open}
+        onClick={() => setOpen(v => !v)}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(v => !v); } }}
+      >
         <div className="cts__header-left">
           <span className="cts__chevron">{open ? '▼' : '▶'}</span>
           <span className="cts__title">{title}</span>
@@ -124,7 +133,7 @@ export function ClinicalTableSection({
         <div className="cts__header-right" onClick={e => e.stopPropagation()}>
           {actions}
         </div>
-      </button>
+      </div>
       {open && <div className="cts__body">{children}</div>}
     </div>
   );

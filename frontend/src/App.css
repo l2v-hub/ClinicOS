@@ -3660,8 +3660,31 @@ textarea.form-input {
     transform: translateX(0);
     box-shadow: 4px 0 24px rgba(16, 32, 54, 0.28);
   }
+  /* Su mobile il modello "shell fissa a 100vh con scroll interno" intrappola i form clinici lunghi
+     (Braden/Terapia/…): rilascia l'intera catena così il documento scorre naturalmente e il pulsante
+     Salva in fondo è raggiungibile. Il .app-shell (min-height:100svh, senza overflow) fa scorrere il body. */
+  /* overflow:visible su ENTRAMBI gli assi: `overflow-x:hidden` forzerebbe `overflow-y` a `auto`
+     (regola CSS), rendendo questi contenitori degli scrollport e rompendo la topbar sticky. La
+     protezione anti-overflow orizzontale è spostata su `body` (che resta il vero scroller del documento). */
+  .app-shell { overflow: visible; }
   .main-area-clean {
     margin-left: 0;
+    height: auto;
+    overflow: visible;
+  }
+  .content-panel,
+  .page-content {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    overflow-y: visible;
+  }
+  body { overflow-x: hidden; }
+  /* La topbar resta accessibile (hamburger = unica nav) mentre il documento scorre. */
+  .compact-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 60;
   }
 }
 
@@ -3705,7 +3728,12 @@ textarea.form-input {
 .app-shell,
 .main-area-clean {
   max-width: 100%;
-  overflow-x: hidden;
+}
+/* overflow-x:hidden solo su desktop: su mobile forzerebbe overflow-y a `auto` rompendo la topbar
+   sticky; l'asse orizzontale su mobile è già protetto da `body { overflow-x: hidden }`. */
+@media (min-width: 1024px) {
+  .app-shell,
+  .main-area-clean { overflow-x: hidden; }
 }
 
 .page-tabs,
