@@ -3,7 +3,6 @@ import { API_URL } from '../../config';
 import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente, CartellaPaziente } from '../../types';
 import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus, IcoTrash, IcoUser } from '../../icons';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
-import { ClinicalTableSection } from './cartella/shared';
 import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
@@ -69,15 +68,19 @@ const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, ba
     <div className="pt-list-card" onClick={() => onSelect(p)}>
       <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
       <div className="pt-list-card__info">
-        <span className="pt-list-card__name">{p.lastName}, {p.firstName}</span>
+        <span className="pt-list-card__name">
+          {p.lastName}, {p.firstName}
+          {badges && badges.allergie > 0 && <span className="alert-chip alert-chip--amber">⚠ Allergie</span>}
+          {p.sex === 'M' && <span className="sex-badge sex-badge--m">M</span>}
+          {p.sex === 'F' && <span className="sex-badge sex-badge--f">F</span>}
+        </span>
         <span className="pt-list-card__meta">
-          <span className="mrn-tag">{p.medicalRecordNumber}</span> · {calcAge(p.dateOfBirth)} anni · {p.sex ?? '--'}
+          <span className="mrn-tag">{p.medicalRecordNumber}</span> · {calcAge(p.dateOfBirth)} anni
         </span>
         {badges && (
           <span className="pt-list-card__badges">
             <span className={`stato-pill stato-pill--ricovero-${badges.statoRicovero}`}>{STATO_RICOVERO_LABEL[badges.statoRicovero] ?? badges.statoRicovero}</span>
             {badges.critico && <span className="alert-chip alert-chip--red">Critico</span>}
-            {badges.allergie > 0 && <span className="alert-chip alert-chip--amber">⚠ Allergie</span>}
           </span>
         )}
       </div>
@@ -225,9 +228,9 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
         </div>
       )}
 
-      {/* Table + cards wrapped in collapsible section */}
+      {/* Tabella + card, sempre aperte (niente sezione collassabile) */}
       {(loading || pazienti.length > 0) && (
-        <ClinicalTableSection title="Pazienti" count={pazienti.length} countLabel="pazienti">
+        <>
           {/* Tabella desktop — shared ClinicalTable */}
           <div className="table-wrap table-wrap--desktop">
             <ClinicalTable<Paziente>
@@ -240,15 +243,23 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
               columns={[
                 {
                   key: 'lastName', label: 'Paziente', sortable: true,
-                  render: (_v, p) => (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
-                      <div>
-                        <div className="cell--name">{p.lastName}, {p.firstName}</div>
-                        <div className="cell--muted" style={{ fontSize: 12 }}>{calcAge(p.dateOfBirth)} anni</div>
+                  render: (_v, p) => {
+                    const b = statoClinicoBadges(cartellaMap.get(p.id));
+                    return (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
+                        <div>
+                          <div className="cell--name">
+                            {p.lastName}, {p.firstName}
+                            {b && b.allergie > 0 && <span className="alert-chip alert-chip--amber" title={`${b.allergie} allergie documentate`}>⚠ Allergie</span>}
+                            {p.sex === 'M' && <span className="sex-badge sex-badge--m">M</span>}
+                            {p.sex === 'F' && <span className="sex-badge sex-badge--f">F</span>}
+                          </div>
+                          <div className="cell--muted" style={{ fontSize: 12 }}>{calcAge(p.dateOfBirth)} anni</div>
+                        </div>
                       </div>
-                    </div>
-                  ),
+                    );
+                  },
                 },
                 {
                   key: 'statoClinico', label: 'Stato clinico',
@@ -259,7 +270,6 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                         <span className={`stato-pill stato-pill--ricovero-${s.statoRicovero}`}>{STATO_RICOVERO_LABEL[s.statoRicovero] ?? s.statoRicovero}</span>
                         {s.critico && <span className="alert-chip alert-chip--red">Critico</span>}
-                        {s.allergie > 0 && <span className="alert-chip alert-chip--amber" title={`${s.allergie} allergie documentate`}>⚠ Allergie</span>}
                       </div>
                     );
                   },
@@ -333,7 +343,7 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
               />
             ))}
           </div>
-        </ClinicalTableSection>
+        </>
       )}
 
       <IntakeWorkspace

@@ -1333,8 +1333,13 @@ body { margin: 0; background: var(--bg); font-family: var(--font-ui); color: var
   white-space: nowrap;
 }
 
-.cell--name    { font-size: 15px; font-weight: 700; color: var(--text); transition: color 0.1s; }
+.cell--name    { font-size: 15px; font-weight: 700; color: var(--text); transition: color 0.1s; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .cell--muted   { color: var(--text-xmuted); }
+
+/* Badge sesso (Maschio/Femmina) */
+.sex-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 7px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.sex-badge--m { background: #e7edfb; color: #2f6bed; }
+.sex-badge--f { background: #fbe7f1; color: #c2418a; }
 .cell--chevron { width: 32px; text-align: center; color: var(--text-xmuted); }
 .cell--chevron svg { width: 15px; height: 15px; }
 
@@ -1392,6 +1397,10 @@ body { margin: 0; background: var(--bg); font-family: var(--font-ui); color: var
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .pt-list-card__meta {
@@ -2555,10 +2564,11 @@ body { margin: 0; background: var(--bg); font-family: var(--font-ui); color: var
   font-family: var(--font-ui);
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.12s;
+  box-shadow: 0 6px 16px rgba(47,107,237,.28);
+  transition: background 0.12s, box-shadow 0.15s;
   white-space: nowrap;
 }
-.btn-primary:hover { opacity: 0.88; }
+.btn-primary:hover { background: var(--c-primary-hover); box-shadow: 0 8px 20px rgba(47,107,237,.34); }
 .btn-primary svg   { width: 15px; height: 15px; }
 
 .btn-secondary {
