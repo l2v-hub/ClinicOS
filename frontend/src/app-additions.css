@@ -5150,7 +5150,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 18px;
+  padding: 10px 16px;
   border-radius: 14px;
   border: 1px solid var(--border);
   border-left: 5px solid var(--border);
@@ -5194,12 +5194,15 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: flex-start; /* niente stretch: ogni strip è alta quanto il suo contenuto */
   gap: 12px;
   padding: 10px 24px 0;
   flex-shrink: 0;
 }
 @media (max-width: 768px) {
   .cr-alert-band { padding: 8px 16px 0; flex-direction: column; }
+  /* in colonna il flex-basis 300px diventerebbe l'altezza → strip alte 300px: forza altezza-contenuto. */
+  .cr-alert-strip { flex: 0 0 auto; width: 100%; }
 }
 
 /* ── Quick stats clickable ── */
