@@ -98,3 +98,11 @@
   color: var(--c-primary, #2F6BED);
   background: var(--c-primary-bg, #ebf1fe);
 }
+
+/* Phone: tab L2/L3 più compatti così più voci sono visibili e la barra scorre meglio. */
+@media (max-width: 640px) {
+  .top-nav--level2 { gap: 6px; min-height: 46px; }
+  .top-nav--level2 .top-nav__item { font-size: 13px; padding: 7px 12px; }
+  .top-nav--level3 { gap: 2px; padding: 3px; margin: 6px 0; }
+  .top-nav--level3 .top-nav__item { font-size: 12.5px; padding: 6px 10px; }
+}

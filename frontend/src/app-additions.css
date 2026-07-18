@@ -5345,12 +5345,14 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
     grid-template-columns: 1fr;
   }
   .cr-quick-stats {
+    grid-template-columns: repeat(2, 1fr); /* mini-card riepilogo su phone: 2 colonne compatte, non a tutta riga */
     gap: 8px;
   }
   .cr-quick-stat {
-    min-width: 76px;
-    padding: 8px 12px;
+    min-width: 0;
+    padding: 10px 10px;
   }
+  .cr-quick-stat__val { font-size: 18px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
