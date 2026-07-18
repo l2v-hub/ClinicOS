@@ -29,6 +29,9 @@ export interface HeaderFilterConfig {
   labels: string[];
   requiredMatches: number;
   confidenceThreshold: number;
+  // #275: keep the page-N/total marker (normalized) instead of deleting it — it's the one part of the
+  // footer worth preserving because it lets a reader follow multi-page documents in sequential order.
+  keepPageMarkers: boolean;
 }
 
 export interface HeaderFilterResult {
@@ -38,6 +41,8 @@ export interface HeaderFilterResult {
   removedFooterLines: number;
   detectedPageNumbers: number[];
   matchedLabels: string[];
+  // #275: how many page-number footer lines were normalized to a kept "--- Pagina N/Tot ---" marker.
+  keptPageMarkers: number;
 }
 
 export function loadHeaderFilterConfig(env: NodeJS.ProcessEnv = process.env): HeaderFilterConfig {
@@ -45,7 +50,8 @@ export function loadHeaderFilterConfig(env: NodeJS.ProcessEnv = process.env): He
   const labels = labelsRaw ? labelsRaw.split(',').map((s) => normalise(s)).filter(Boolean) : DEFAULT_HEADER_LABELS;
   const requiredMatches = clampInt(env.DOCUMENT_HEADER_REQUIRED_MATCHES, 3, 1, 10);
   const confidenceThreshold = clampFloat(env.DOCUMENT_HEADER_CONFIDENCE_THRESHOLD, 0.85, 0, 1);
-  return { labels, requiredMatches, confidenceThreshold };
+  const keepPageMarkers = (env.DOCUMENT_KEEP_PAGE_MARKERS || '').trim().toLowerCase() !== 'false';
+  return { labels, requiredMatches, confidenceThreshold, keepPageMarkers };
 }
 
 function clampInt(v: string | undefined, def: number, lo: number, hi: number): number {
@@ -204,7 +210,7 @@ export function filterRepeatedHeaders(rawText: string, config?: Partial<HeaderFi
   const detectedPageNumbers: number[] = [];
   const matchedLabels: string[] = [];
   if (!rawText || !rawText.trim()) {
-    return { cleanedText: rawText ?? '', warnings, removedHeaderBlocks: 0, removedFooterLines: 0, detectedPageNumbers, matchedLabels };
+    return { cleanedText: rawText ?? '', warnings, removedHeaderBlocks: 0, removedFooterLines: 0, detectedPageNumbers, matchedLabels, keptPageMarkers: 0 };
   }
 
   const lines = rawText.split('\n');
@@ -236,13 +242,20 @@ export function filterRepeatedHeaders(rawText: string, config?: Partial<HeaderFi
 
   // footer page-number lines (recover the number BEFORE removing the line)
   let removedFooterLines = 0;
+  let keptPageMarkers = 0;
   for (let k = 0; k < lines.length; k++) {
     if (remove.has(k)) continue;
     const pn = pageNumberOnly(lines[k]);
     if (pn) {
       detectedPageNumbers.push(pn.page);
-      remove.add(k);
-      removedFooterLines++;
+      if (cfg.keepPageMarkers) {
+        // #275: keep the page-N/total marker as a normalized, sequential-reading aid instead of deleting it.
+        lines[k] = pn.total ? `--- Pagina ${pn.page}/${pn.total} ---` : `--- Pagina ${pn.page} ---`;
+        keptPageMarkers++;
+      } else {
+        remove.add(k);
+        removedFooterLines++;
+      }
     } else if (footerWithExtra(lines[k])) {
       warnings.push('FOOTER_WITH_EXTRA_TEXT_KEPT');
     }
@@ -256,5 +269,6 @@ export function filterRepeatedHeaders(rawText: string, config?: Partial<HeaderFi
     removedFooterLines,
     detectedPageNumbers,
     matchedLabels,
+    keptPageMarkers,
   };
 }
