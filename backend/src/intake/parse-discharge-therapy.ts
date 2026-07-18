@@ -20,10 +20,35 @@ export interface ParsedTherapyRow {
 }
 
 const ROUTES = ['OS', 'IM', 'EV', 'SC', 'SL', 'TD', 'INAL', 'TOP', 'RETT', 'OFT', 'OTO', 'NAS', 'VAG', 'IN'];
-const UNITS = 'Cpr|Cps|Cp|Dosi|Dose|Fl|Bs|Bust|ml|mL|gtt|gc|Puff|Fiala|Fiale|Supp|Cerotto|Cerotti';
+// Bug #274: quantity units — include full Italian words (compressa/e, capsula/e, fiala/e, bustina/e,
+// goccia/gocce, supposta/e) besides the abbreviated forms.
+const UNITS = 'Cpr|Cps|Cp|compress[ae]|capsul[ae]|Dosi|Dose|Fl|fial[ae]|Bs|Bust|bustin[ae]|ml|mL|gtt|gocce|goccia|gc|Puff|Supp|suppost[ae]|Cerotti|Cerotto';
 const DAYS = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 
 const ROUTE_RE = new RegExp(`\\(\\s*(${ROUTES.join('|')})\\s*\\)`, 'i');
+// Bug #274: also detect the administration modality written in free text (not only the parenthesized
+// code), mapping the common Italian phrasings to the normalized short route code.
+const ROUTE_PHRASES: Array<[RegExp, string]> = [
+  [/\b(per\s+os|per\s+bocca|via\s+orale|orale)\b/i, 'OS'],
+  [/\b(endovenos[ao]|endovena|flebo|e\.\s?v\.)\b/i, 'EV'],
+  [/\b(sottocutane[ao]|sottocute|s\.\s?c\.)\b/i, 'SC'],
+  [/\b(intramuscolar[e]?|intramuscolo|i\.\s?m\.)\b/i, 'IM'],
+  [/\b(sublinguale)\b/i, 'SL'],
+  [/\b(transdermic[ao]|cerotto\s+transdermico)\b/i, 'TD'],
+  [/\b(per\s+inalazione|inalatori[ao]|inalazione)\b/i, 'INAL'],
+  [/\b(per\s+via\s+rettale|rettale)\b/i, 'RETT'],
+  [/\b(oftalmic[ao]|collirio)\b/i, 'OFT'],
+  [/\b(spray\s+nasale|nasale)\b/i, 'NAS'],
+  [/\b(vaginale)\b/i, 'VAG'],
+  [/\b(uso\s+topico|topic[ao]|cutane[ao])\b/i, 'TOP'],
+];
+/** Detect the administration route: parenthesized code first, then free-text Italian phrasing. */
+function detectRoute(text: string): string {
+  const paren = text.match(ROUTE_RE)?.[1];
+  if (paren) return paren.toUpperCase();
+  for (const [re, code] of ROUTE_PHRASES) if (re.test(text)) return code;
+  return '';
+}
 const QTY_RE = new RegExp(`\\b(\\d+(?:\\/\\d+)?)\\s+(${UNITS})\\b`, 'i');
 const DOSE_RE = /\b(\d+(?:[.,]\d+)?)\s?(MGR|MCG|MG|GR|G|UI|ML)\b(\s?\/\s?\d+(?:[.,]\d+)?\s?(?:UI|ML|MG|MGR|MCG|GR|G))?/i;
 const DAY_RE = new RegExp(`\\b(${DAYS.join('|')})\\b`, 'g');
@@ -58,7 +83,7 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     ? [...originalText.slice(oreIdx).matchAll(/\b(\d{1,2}:\d{2})\b/g)].map((m) => m[1])
     : [];
 
-  const viaSomministrazione = (originalText.match(ROUTE_RE)?.[1] ?? '').toUpperCase();
+  const viaSomministrazione = detectRoute(originalText);
   const qtyM = originalText.match(QTY_RE);
   const quantita = qtyM ? `${qtyM[1]} ${qtyM[2]}` : '';
   const doseM = originalText.match(DOSE_RE);
@@ -88,7 +113,8 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     .trim();
 
   // A line is "ok" when it has a name AND at least two structured signals; otherwise operator-verify.
-  const signals = [dosaggio, orari.length ? 'x' : '', quantita, dataInizio].filter(Boolean).length;
+  // Bug #274: the administration route (via) counts as a structured signal too.
+  const signals = [dosaggio, orari.length ? 'x' : '', quantita, dataInizio, viaSomministrazione].filter(Boolean).length;
   const stato: ParsedTherapyRow['stato'] = farmacoNome && signals >= 2 ? 'ok' : 'da_verificare';
 
   return { farmacoNome, forma, dosaggio, viaSomministrazione, quantita, orari, giorni, dataInizio, classe, note, originalText, stato };

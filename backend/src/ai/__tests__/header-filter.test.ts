@@ -53,11 +53,32 @@ test('ambiguous repeated block BELOW threshold is kept and flagged', () => {
   assert.ok(r.warnings.some((w) => w.startsWith('AMBIGUOUS_HEADER_KEPT')), 'ambiguity warned');
 });
 
-test('footer with page number is recovered then stripped', () => {
+test('#275: page-number footer is normalized and KEPT (sequential-reading aid)', () => {
   const doc = [page(1, '## Anamnesi\nA.'), page(2, 'B.')].join('\n');
   const r = filterRepeatedHeaders(doc);
   assert.ok(r.detectedPageNumbers.includes(1) && r.detectedPageNumbers.includes(2), 'page numbers recovered');
-  assert.ok(!/Pagina \d+ di 3/.test(r.cleanedText), 'page-number footer lines removed');
+  // #275: the noisy footer is normalized, but the page N/total marker is KEPT — it lets a reader
+  // follow a multi-page document in sequential order (the original "Pagina 1 di 3" wording is gone).
+  assert.ok(!/Pagina \d+ di 3/.test(r.cleanedText), 'original footer wording normalized');
+  assert.ok(/--- Pagina 1\/3 ---/.test(r.cleanedText), 'page 1 marker kept');
+  assert.ok(/--- Pagina 2\/3 ---/.test(r.cleanedText), 'page 2 marker kept');
+  assert.equal(r.keptPageMarkers, 2);
+  assert.equal(r.removedFooterLines, 0, 'markers kept, not removed');
+  assert.ok(r.cleanedText.indexOf('Pagina 1/3') < r.cleanedText.indexOf('Pagina 2/3'), 'markers stay in reading order');
+});
+
+test('#275: page marker without a total is kept as "--- Pagina N ---"', () => {
+  const doc = 'Diagnosi.\n\nPagina 1\n\nProsegue.\n\nPagina 2';
+  const r = filterRepeatedHeaders(doc);
+  assert.ok(/--- Pagina 1 ---/.test(r.cleanedText) && /--- Pagina 2 ---/.test(r.cleanedText));
+  assert.equal(r.keptPageMarkers, 2);
+});
+
+test('#275: opt-out (keepPageMarkers:false) restores the old strip behavior', () => {
+  const doc = [page(1, 'A.'), page(2, 'B.')].join('\n');
+  const r = filterRepeatedHeaders(doc, { keepPageMarkers: false });
+  assert.ok(!/Pagina/.test(r.cleanedText), 'markers removed when opted out');
+  assert.equal(r.keptPageMarkers, 0);
   assert.ok(r.removedFooterLines >= 2);
 });
 
