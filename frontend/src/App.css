@@ -501,11 +501,9 @@ body { margin: 0; background: var(--bg); }
 .patient-compact-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 64px;
-  /* Restyle: promote the compact patient header to a white card (mockup Scheda paziente) */
-  padding: 14px 20px;
-  margin: 12px 24px 4px;
+  gap: 16px;
+  padding: 20px 24px;
+  margin: 12px 24px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -514,66 +512,100 @@ body { margin: 0; background: var(--bg); }
 }
 
 .patient-compact-header__back {
-  color: #6B7280;
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;     /* ≥44px touch target */
-  min-height: 44px;
-  border-radius: 8px;
+  min-width: 40px;
+  min-height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
   flex-shrink: 0;
   transition: background 0.1s;
 }
 
 .patient-compact-header__back:hover {
-  background: #F3F4F6;
-  color: #111827;
+  background: var(--hover);
+  color: var(--text);
+}
+
+.patient-compact-header__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--indigo-bg);
+  color: var(--blue);
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.patient-compact-header__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.patient-compact-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .patient-compact-header__name {
   font-weight: 800;
-  font-size: 20px;
-  letter-spacing: -0.2px;
+  font-size: 24px;
+  letter-spacing: -0.4px;
   color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 320px;
-  flex-shrink: 1;
 }
 
-.patient-compact-header__sep {
-  color: #D1D5DB;
-  font-size: 14px;
-  flex-shrink: 0;
+.patient-compact-header__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .patient-compact-header__meta {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text-muted);
   white-space: nowrap;
-  flex-shrink: 0;
+}
+.patient-compact-header__meta:not(:last-child)::after {
+  content: '·';
+  margin-left: 8px;
+  color: var(--text-xmuted);
 }
 
 .patient-compact-header__badge {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
+/* Allergie = alert clinico → rosso */
 .patient-compact-header__badge--allergy {
-  background: #FDF3E2;
-  color: #92400E;
-  border: 1px solid var(--amber);
+  background: var(--red-bg);
+  color: var(--red);
+  border: 1px solid var(--red-border);
 }
 
-.patient-compact-header__badge--status {
-  background: #EEF2F7;
-  color: #374151;
+.patient-compact-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 /* Restyle: "Invio in PS" is a clinical escalation → clinical red (not brand blue) */

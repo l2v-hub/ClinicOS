@@ -6610,3 +6610,39 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .sched-pill strong { color: #101828; }
 .sched-pill__mg { color: #1D4FC4; font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DIARIO PAZIENTE — voci a card (border-left colore ruolo)
+═══════════════════════════════════════════════════════════════════════════ */
+.diario-cards { display: flex; flex-direction: column; gap: 12px; }
+.diario-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: 15px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-card);
+}
+.diario-card--medico         { border-left-color: var(--blue); }
+.diario-card--infermiere     { border-left-color: var(--purple); }
+.diario-card--oss            { border-left-color: var(--emerald); }
+.diario-card--fisioterapista { border-left-color: var(--amber); }
+.diario-card--operatore      { border-left-color: var(--border); }
+.diario-card--altro          { border-left-color: var(--border); }
+.diario-card__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.diario-card__time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-xmuted);
+  margin-left: auto;
+}
+.diario-card__actions { display: flex; gap: 4px; }
+.diario-card__author { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+.diario-card__title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.diario-card__content { font-size: 14px; line-height: 1.55; color: var(--text-muted); white-space: pre-wrap; word-break: break-word; }
