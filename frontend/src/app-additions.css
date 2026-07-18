@@ -125,6 +125,28 @@
   font-size: 14px;
   text-align: right;
   margin-left: auto;
+  overflow-wrap: anywhere;
+}
+
+/* Presa in carico VIEW: la sezione dentro una ClinicalCard è solo un contenitore (niente card-in-card:
+   no bordo/ombra/raggio/padding doppio); niente gap che spezzerebbe il divisore tra le righe. */
+.clinical-card .cr-form-section {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  gap: 0;
+}
+/* valori inline-editable allineati a destra come quelli statici (asse valori coerente). */
+.pic-row .inline-edit__value { margin-left: auto; }
+
+@media (max-width: 640px) {
+  /* su phone la riga impila label sopra e valore sotto: i valori non vengono più tagliati. */
+  .pic-row { flex-direction: column; align-items: stretch; gap: 2px; }
+  .pic-row__lbl { min-width: 0; }
+  .pic-row__val { text-align: left; margin-left: 0; }
+  .pic-row .inline-edit__value { margin-left: 0; }
 }
 
 /* REQ-006: uniform inline-editable fields (click value -> edit -> floppy save) */

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, PresaInCarico, Paziente } from '../../../types';
-import { PrintButton, EmptyState, todayStr, nowTime, nowISO, ClinicalTableSection } from './shared';
+import { PrintButton, todayStr, nowTime, nowISO, ClinicalTableSection } from './shared';
 import { ClinicalCard } from '../../shared/ClinicalCard';
 import { InlineEditableField, type InlineOption } from '../../shared/InlineEditableField';
 
@@ -462,10 +462,6 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         actions={<PrintButton />}
       >
         <div className="cts__body--padded">
-          {!pic && editingId === null && (
-            <EmptyState msg="Presa in carico non ancora compilata." />
-          )}
-
           <ClinicalCard
             title="Dati di ingresso"
             defaultExpanded={true}
