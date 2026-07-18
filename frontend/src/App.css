@@ -94,7 +94,7 @@
 
 /* ── Base reset ───────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); }
+body { margin: 0; background: var(--bg); font-family: var(--font-ui); color: var(--text); }
 
 /* === 003 CLEAN NAV: SIDEBAR === */
 :root {
@@ -203,13 +203,12 @@ body { margin: 0; background: var(--bg); }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 62px;
+  height: 64px;
   cursor: pointer;
   color: var(--sidebar-item);
-  gap: 5px;
-  border-radius: 10px;
-  border-left: 3px solid transparent;
-  font-size: 11px;
+  gap: 6px;
+  border-radius: 14px;
+  font-size: 13px;
   user-select: none;
   transition: background 0.12s, color 0.12s, box-shadow 0.12s;
   padding: 0 4px;
@@ -223,9 +222,8 @@ body { margin: 0; background: var(--bg); }
 
 .teams-sidebar__item.active {
   color: var(--sidebar-item-active);
-  border-left-color: var(--blue);
   background: var(--sidebar-item-active-bg);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .teams-sidebar__item.active .teams-sidebar__item-icon { color: var(--sidebar-item-active); }
@@ -244,9 +242,9 @@ body { margin: 0; background: var(--bg); }
 }
 
 .teams-sidebar__item-label {
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.1px;
-  line-height: 1.1;
+  line-height: 1.15;
   text-align: center;
 }
 
@@ -3989,11 +3987,11 @@ textarea.form-input {
 .page-header__titles { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .page-header__title {
   margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
   color: var(--text);
-  line-height: 1.2;
+  line-height: 1.15;
 }
 .page-header__subtitle {
   margin: 0;

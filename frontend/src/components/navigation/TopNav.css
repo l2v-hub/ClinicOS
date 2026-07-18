@@ -41,11 +41,20 @@
 .top-nav__item:hover { color: var(--c-primary, #2F6BED); }
 .top-nav__item.is-active::after { background: var(--c-primary, #2F6BED); }
 
-/* Level 2 — primary page nav: bigger, stronger, thicker underline */
-.top-nav--level2 { gap: 32px; min-height: 52px; }
-.top-nav--level2 .top-nav__item { font-size: 15px; padding: 14px 2px; }
-.top-nav--level2 .top-nav__item.is-active { color: var(--c-primary, #2F6BED); }
-.top-nav--level2 .top-nav__item.is-active::after { height: 3px; }
+/* Level 2 — primary page nav: pill attive (parità mockup) */
+.top-nav--level2 { gap: 8px; min-height: 52px; }
+.top-nav--level2 .top-nav__item {
+  font-size: 15px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  color: var(--text-muted, #5A6B80);
+}
+.top-nav--level2 .top-nav__item::after { display: none; }
+.top-nav--level2 .top-nav__item:hover { color: var(--text, #16202E); background: var(--hover, #F7F9FC); }
+.top-nav--level2 .top-nav__item.is-active {
+  color: #fff;
+  background: var(--blue, #2F6BED);
+}
 
 /* Level 3 — contextual sub-nav: segmented grey control (grey track, white active pill) */
 .top-nav--level3 {
@@ -72,11 +81,12 @@
 .top-nav--level3 .top-nav__item::after { display: none; }
 .top-nav--level3 .top-nav__item:hover { color: #101828; background: rgba(15,95,215,0.06); }
 .top-nav--level3 .top-nav__item.is-active {
-  color: var(--c-primary, #2F6BED);
-  background: #FFFFFF;
+  color: #fff;
+  background: var(--blue, #2F6BED);
   font-weight: 600;
-  box-shadow: 0 1px 2px rgba(16,24,40,0.10);
+  box-shadow: none;
 }
+.top-nav--level3 .top-nav__item.is-active:hover { color: #fff; background: var(--c-primary-active, #1D4FC4); }
 
 /* Optional count badge — subtle, no heavy pill */
 .top-nav__badge {
