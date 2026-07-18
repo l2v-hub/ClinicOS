@@ -5536,7 +5536,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
   margin-bottom: 20px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   border-radius: 8px;
-  overflow: hidden;
+  overflow-x: auto;
   border: 1px solid var(--border);
 }
 .clinicos-table {
@@ -5725,6 +5725,7 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 .cts__body {
   border-top: none;
+  overflow-x: auto; /* le griglie larghe (es. Parametri .qe-list) scrollano invece di essere tagliate */
 }
 /* When CTS wraps a clinicos-table-wrap, remove double border/shadow */
 .cts .clinicos-table-wrap {

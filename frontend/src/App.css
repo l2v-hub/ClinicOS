@@ -606,6 +606,14 @@ body { margin: 0; background: var(--bg); font-family: var(--font-ui); color: var
   flex-shrink: 0;
 }
 
+/* Header paziente: su schermi stretti il nome e i bottoni non si sovrappongono — vanno a capo. */
+@media (max-width: 640px) {
+  .patient-compact-header { flex-wrap: wrap; padding: 16px; gap: 12px; }
+  .patient-compact-header__name { font-size: 20px; }
+  .patient-compact-header__actions { margin-left: 0; width: 100%; }
+  .patient-compact-header__actions .btn-sm { flex: 1; justify-content: center; }
+}
+
 /* Restyle: "Invio in PS" is a clinical escalation → clinical red (not brand blue) */
 .patient-compact-header .btn-primary {
   background: var(--red-bg);
@@ -1270,7 +1278,7 @@ body { margin: 0; background: var(--bg); font-family: var(--font-ui); color: var
   border: 1px solid var(--border);
   border-radius: 18px;
   box-shadow: var(--shadow-card);
-  overflow: hidden;
+  overflow-x: auto; /* tabelle larghe scrollano orizzontalmente su viewport stretti invece di tagliare */
 }
 
 /* Desktop table shown by default, hidden on small screens */
@@ -3640,12 +3648,58 @@ textarea.form-input {
   :root { --sidebar-w: 88px; }
 }
 @media (max-width: 1023px) {
+  /* Sidebar come drawer off-canvas: resta montata ma fuori schermo, entra con l'hamburger. */
   .teams-sidebar {
-    display: none;
+    display: flex;
+    width: 100px;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    z-index: 1200;
+  }
+  .app-shell--nav-open .teams-sidebar {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(16, 32, 54, 0.28);
   }
   .main-area-clean {
     margin-left: 0;
   }
+}
+
+/* Scrim del drawer di navigazione mobile (renderizzato solo quando aperto, ≤1023px). */
+.mobile-nav-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 32, 54, 0.5);
+  z-index: 1150;
+}
+
+/* Pulsante hamburger nella topbar — visibile quando la sidebar è collassata; nascosto su desktop. */
+.topbar-hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.topbar-hamburger:hover { background: var(--hover); color: var(--text); }
+@media (min-width: 1024px) { .topbar-hamburger { display: none; } }
+
+/* Su mobile lascia spazio in fondo alle viste così il FAB Assistente non copre l'ultimo contenuto. */
+@media (max-width: 1023px) {
+  .operator-dashboard,
+  .patient-list-view,
+  .patient-detail,
+  .patient-record-view,
+  .consegne-page,
+  .operator-agenda-view,
+  .admin-dashboard { padding-bottom: 84px; }
 }
 
 .app-shell,

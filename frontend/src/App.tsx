@@ -117,6 +117,7 @@ export default function App() {
 
   // Search
   const [searchOpen, setSearchOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -154,6 +155,7 @@ export default function App() {
   }
 
   function navigate(key: NavKey) {
+    setMobileNavOpen(false); // chiudi il drawer di navigazione mobile a ogni cambio sezione
     if (key === 'ai-assistant') {
       setAiOpen(true);
       setAiOpenTrigger(t => t + 1);
@@ -912,7 +914,11 @@ export default function App() {
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell${mobileNavOpen ? ' app-shell--nav-open' : ''}`}>
+      {/* Scrim per il drawer di navigazione mobile (≤1023px) */}
+      {mobileNavOpen && (
+        <div className="mobile-nav-scrim" onClick={() => setMobileNavOpen(false)} aria-hidden="true" />
+      )}
       {toastMsg && (
         <div className="app-toast app-toast--success" role="status">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -936,6 +942,17 @@ export default function App() {
       <div className="main-area-clean">
         {/* Compact Topbar */}
         <div className="compact-topbar">
+          <button
+            type="button"
+            className="topbar-hamburger"
+            onClick={() => setMobileNavOpen(v => !v)}
+            aria-label={mobileNavOpen ? 'Chiudi menu' : 'Apri menu'}
+            aria-expanded={mobileNavOpen}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
           <button
             type="button"
             className="topbar-search"
