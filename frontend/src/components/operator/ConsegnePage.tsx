@@ -230,13 +230,20 @@ function ConsegnaCard({ consegna: c, onUpdate, onUpdateStato, onDelete, isAdmin,
           <IcoEdit />
         </button>
       </div>
-      {onSelectPaziente && c.pazienteNome ? (
-        <button className="link-btn consegna-paziente" onClick={() => onSelectPaziente(c.pazienteNome!)} style={{ fontWeight: 600 }}>
-          {c.pazienteNome}
-        </button>
-      ) : (
-        <span className="consegna-paziente">{c.pazienteNome}</span>
-      )}
+      <div className="consegna-card__patient">
+        {c.pazienteNome && (
+          <span className="consegna-avatar" aria-hidden="true">
+            {c.pazienteNome.split(/[,\s]+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase()}
+          </span>
+        )}
+        {onSelectPaziente && c.pazienteNome ? (
+          <button className="link-btn consegna-paziente" onClick={() => onSelectPaziente(c.pazienteNome!)}>
+            {c.pazienteNome}
+          </button>
+        ) : (
+          <span className="consegna-paziente">{c.pazienteNome}</span>
+        )}
+      </div>
       <div className="consegna-note">
         <InlineEditableField
           variant="block"

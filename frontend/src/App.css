@@ -501,15 +501,16 @@ body { margin: 0; background: var(--bg); }
 .patient-compact-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  height: 56px;
-  min-height: 56px;
-  /* REQ-003: align compact header content to the page gutter (same left axis as L2/L3 nav) */
-  padding: 0;
-  background: #fff;
-  border-bottom: 1px solid #E5E7EB;
+  gap: 12px;
+  min-height: 64px;
+  /* Restyle: promote the compact patient header to a white card (mockup Scheda paziente) */
+  padding: 14px 20px;
+  margin: 12px 24px 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
   flex-shrink: 0;
-  overflow: hidden;
 }
 
 .patient-compact-header__back {
@@ -531,13 +532,14 @@ body { margin: 0; background: var(--bg); }
 }
 
 .patient-compact-header__name {
-  font-weight: 700;
-  font-size: 15px;
-  color: #111827;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.2px;
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 220px;
+  max-width: 320px;
   flex-shrink: 1;
 }
 
@@ -548,8 +550,8 @@ body { margin: 0; background: var(--bg); }
 }
 
 .patient-compact-header__meta {
-  font-size: 12px;
-  color: #6B7280;
+  font-size: 12.5px;
+  color: var(--text-muted);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -572,6 +574,17 @@ body { margin: 0; background: var(--bg); }
 .patient-compact-header__badge--status {
   background: #EEF2F7;
   color: #374151;
+}
+
+/* Restyle: "Invio in PS" is a clinical escalation → clinical red (not brand blue) */
+.patient-compact-header .btn-primary {
+  background: var(--red-bg);
+  color: var(--red);
+  border: 1px solid var(--red-border);
+}
+.patient-compact-header .btn-primary:hover {
+  background: #FBDDE1;
+  border-color: var(--red);
 }
 
 /* === 003 CLEAN NAV: MAIN AREA LAYOUT === */
@@ -3119,10 +3132,31 @@ textarea.form-input {
 .consegna-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px 16px;
+  border-radius: var(--card-radius);
+  padding: 18px 22px;
   box-shadow: var(--shadow-card);
   border-left-width: 5px;
+  margin-bottom: 14px;
+}
+
+.consegna-card__patient {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.consegna-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--indigo-bg);
+  color: var(--blue);
+  font-weight: 800;
+  font-size: 13px;
 }
 
 .consegna-card--urgente { border-left-color: var(--red); }
@@ -3171,11 +3205,10 @@ textarea.form-input {
 .consegna-scadenza svg { width: 13px; height: 13px; flex-shrink: 0; }
 
 .consegna-paziente {
-  display: block;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 800;
   color: var(--text);
-  margin-bottom: 4px;
+  text-align: left;
 }
 
 .consegna-note {
@@ -3191,11 +3224,14 @@ textarea.form-input {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider);
 }
 
 .consegna-assegnato {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 13px;
+  color: var(--text-xmuted);
   font-weight: 500;
 }
 
@@ -3556,7 +3592,7 @@ textarea.form-input {
 
 .patient-list-view { max-width: 1040px; }
 .operator-agenda-view { max-width: 900px; }
-.consegne-page { max-width: 900px; }
+.consegne-page { max-width: 1200px; margin: 0 auto; }
 
 /* === 003 CLEAN NAV: RESPONSIVE === */
 /* Tablet-landscape / small laptop: narrower sidebar (≈88px) */
@@ -4181,8 +4217,7 @@ textarea.form-input {
 .operator-agenda-view,
 .agenda-admin-view,
 .admin-dashboard,
-.operator-dashboard,
-.consegne-page { max-width: none; }
+.operator-dashboard { max-width: none; }
 
 /* ClinicalTable pagination footer */
 .cdt__pagination {
