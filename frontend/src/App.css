@@ -2827,7 +2827,7 @@ textarea.form-input {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 .admin-dashboard  { max-width: 1040px; }
-.operator-dashboard { max-width: 1040px; }
+.operator-dashboard { max-width: 1400px; margin: 0 auto; }
 
 .dashboard__date {
   font-size: 13px;
@@ -3140,7 +3140,7 @@ textarea.form-input {
    CONSEGNE
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.consegne-page { max-width: 900px; }
+.consegne-page { max-width: 1400px; margin: 0 auto; }
 
 .consegne-list {
   display: flex;
@@ -3620,9 +3620,9 @@ textarea.form-input {
    PATIENT LIST VIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 
-.patient-list-view { max-width: 1040px; }
-.operator-agenda-view { max-width: 900px; }
-.consegne-page { max-width: 1200px; margin: 0 auto; }
+.patient-list-view { max-width: 1400px; margin: 0 auto; }
+.operator-agenda-view { max-width: 1400px; margin: 0 auto; }
+.consegne-page { max-width: 1400px; margin: 0 auto; }
 
 /* === 003 CLEAN NAV: RESPONSIVE === */
 /* Tablet-landscape / small laptop: narrower sidebar (≈88px) */
@@ -4239,15 +4239,12 @@ textarea.form-input {
    priority pages so content fills the desktop. Gutter comes from the
    content padding; wide tables scroll inside their own container. */
 .page-content { max-width: none; }
-.patient-list-view,
 .patients-view,
 .patient-detail,
 .patient-detail-view,
 .op-management,
-.operator-agenda-view,
 .agenda-admin-view,
-.admin-dashboard,
-.operator-dashboard { max-width: none; }
+.admin-dashboard { max-width: none; }
 
 /* ClinicalTable pagination footer */
 .cdt__pagination {
