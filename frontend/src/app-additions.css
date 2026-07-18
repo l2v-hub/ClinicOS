@@ -1572,7 +1572,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 20, 40, 0.45);
+  background: rgba(16, 32, 54, 0.55);
   backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
@@ -6208,8 +6208,8 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .import-modal {
   width: min(1600px, 96vw); max-width: 1600px; max-height: 94vh;
   display: flex; flex-direction: column; gap: 12px; padding: 20px;
-  background: var(--surface, #fff); border-radius: var(--card-radius, 12px);
-  box-shadow: var(--shadow-md, 0 12px 32px rgba(16, 24, 40, 0.18));
+  background: var(--surface, #fff); border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(16, 32, 54, 0.22);
 }
 /* Review step also takes most of the height for the two-panel workspace. */
 .import-modal--review {
@@ -6217,23 +6217,28 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 }
 @media (max-width: 767px) { .import-modal { width: 100vw; } }
 .import-modal__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.import-modal__head h2 { font-size: 18px; margin: 0; color: var(--text, #101828); }
+.import-modal__head h2 { font-size: 18px; margin: 0; color: var(--text); }
 /* REQ-036: back-to-documents control. */
-.import-modal__back { font-size: 13px; font-weight: 600; color: var(--c-primary, #2F6BED); padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
-.import-modal__back:hover:not(:disabled) { background: #EFF4FE; }
+.import-modal__back { font-size: 13px; font-weight: 600; color: var(--blue); padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
+.import-modal__back:hover:not(:disabled) { background: var(--indigo-bg); }
 .import-modal__actions { display: flex; gap: 10px; flex-wrap: wrap; }
-.import-modal__limits { font-size: 13px; color: var(--muted, #667085); margin: 0; }
-.import-modal__error { color: var(--red, #DC2626); font-size: 13px; margin: 0; }
-.import-modal__rejected { list-style: none; padding: 8px 10px; margin: 0; background: #FEF3F2; border-radius: 8px; font-size: 12px; color: #B42318; }
+.import-modal__limits { font-size: 13px; color: var(--text-muted); margin: 0; }
+.import-modal__error { color: var(--red); font-size: 13px; margin: 0; }
+.import-modal__rejected { list-style: none; padding: 8px 10px; margin: 0; background: var(--red-bg); border-radius: 8px; font-size: 12px; color: var(--red); }
 .import-modal__list { list-style: none; padding: 0; margin: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-.import-modal__item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border, #D0D5DD); border-radius: 8px; }
-.import-modal__idx { width: 20px; height: 20px; border-radius: 50%; background: var(--c-primary, #2F6BED); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.import-modal__item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; }
+.import-modal__item:hover { background: var(--hover); }
+.import-modal__idx { width: 20px; height: 20px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; }
 .import-modal__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
-.import-modal__size { font-size: 12px; color: var(--muted, #667085); flex: 0 0 auto; }
+.import-modal__size { font-size: 12px; color: var(--text-muted); flex: 0 0 auto; }
 .import-modal__ctrls { display: inline-flex; gap: 2px; flex: 0 0 auto; }
-.import-modal__empty { color: var(--muted, #667085); font-size: 13px; padding: 16px; text-align: center; }
+.import-modal__empty { color: var(--text-muted); font-size: 13px; padding: 16px; text-align: center; }
 .import-modal__status { font-size: 13px; margin: 0; }
 .import-modal__foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+.import-modal__foot .btn-primary { border-radius: 11px; box-shadow: 0 6px 16px rgba(47,107,237,.28); }
+.import-modal__foot .btn-primary:hover { background: var(--c-primary-hover); box-shadow: 0 8px 20px rgba(47,107,237,.34); }
+.import-modal__foot .btn-ghost { border-radius: 11px; padding: 9px 16px; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; }
+.import-modal__foot .btn-ghost:hover:not(:disabled) { background: var(--hover); color: var(--text); }
 
 /* ── Import review step (REQ-017) ─────────────────────────────────────────── */
 /* Stepper wizard — cerchi numerati, step attivo blu, completati con check, connettori */
@@ -6414,8 +6419,8 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .irf-note-card__head { display: grid; grid-template-columns: 1fr 1fr 28px; gap: 8px; align-items: center; }
 
 /* ── Import: logical-doc grouping input (REQ-014 residual) ─────────────────── */
-.import-modal__logical { width: 64px; flex: 0 0 auto; font-size: 12px; padding: 3px 6px; border: 1px solid var(--border, #D0D5DD); border-radius: 6px; }
-.import-modal__logical:focus { border-color: var(--c-primary, #2F6BED); outline: none; }
+.import-modal__logical { width: 64px; flex: 0 0 auto; font-size: 12px; padding: 3px 6px; border: 1px solid var(--border); border-radius: 6px; }
+.import-modal__logical:focus { border-color: var(--blue); outline: none; }
 
 /* ── Import review target banner (REQ-021 new vs existing) ─────────────────── */
 .import-review__target { font-size: 13px; padding: 8px 10px; border-radius: 8px; }
@@ -6423,9 +6428,9 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .import-review__target.is-existing { background: #EEF3FE; color: #2F6BED; }
 
 /* ── Async import progress (REQ-022) ──────────────────────────────────────── */
-.import-modal__progress { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #EEF3FE; border-radius: 8px; font-size: 13px; color: #2F6BED; }
+.import-modal__progress { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--indigo-bg); border-radius: 8px; font-size: 13px; color: var(--blue); }
 .import-modal__progress-txt { font-weight: 500; }
-.import-modal__spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #BCD2FF; border-top-color: #2F6BED; animation: ir-spin 0.8s linear infinite; flex: 0 0 auto; }
+.import-modal__spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--blue-dim); border-top-color: var(--blue); animation: ir-spin 0.8s linear infinite; flex: 0 0 auto; }
 @keyframes ir-spin { to { transform: rotate(360deg); } }
 .import-modal__retry { display: flex; justify-content: center; }
 @media (prefers-reduced-motion: reduce) { .import-modal__spinner { animation: none; } }
