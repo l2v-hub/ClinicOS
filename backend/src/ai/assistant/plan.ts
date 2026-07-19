@@ -81,6 +81,8 @@ function searchPhrase(q: string, original: string): string | undefined {
 export interface PlanContext {
   /** The patient currently open in the UI, if any (default scope on the patient page). */
   currentPatientId?: string;
+  /** Fase 0: selected sub-agent (scopes which intents are answered). Type-only import avoids a runtime cycle. */
+  agent?: import('./agents.js').AgentId;
 }
 
 /** Produce a typed, validated plan for a question. Never executes anything. */

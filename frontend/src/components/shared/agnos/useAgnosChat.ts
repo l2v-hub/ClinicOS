@@ -14,6 +14,9 @@ import type { AssistantAnswer } from '../AIAssistantButton';
 
 export type AgnosChannel = 'testo' | 'voce';
 
+/** Fase 0: sub-agent scelto nella UI (scoping delle risposte). */
+export type AgnosAgent = 'facility' | 'clinical';
+
 export interface AgnosPreview {
   title: string;
   patientName?: string;
@@ -61,6 +64,8 @@ interface UseAgnosChatOptions {
   operatorRole?: string;
   operatorName?: string;
   currentPatientId?: string;
+  /** Fase 0: sub-agent selezionato; inviato al backend per lo scoping degli intent. */
+  agent?: AgnosAgent;
   /** SPEC-015 US4: receives the executed actionType so the app can refresh the right data
    *  (cartella for clinical writes, agenda for create/update_appointment). */
   onExecuted?: (info: { actionType?: string }) => void;
@@ -105,6 +110,7 @@ export function useAgnosChat({
   operatorRole,
   operatorName,
   currentPatientId,
+  agent,
   onExecuted,
 }: UseAgnosChatOptions) {
   const [turns, setTurns] = useState<AgnosTurn[]>([]);
@@ -152,7 +158,7 @@ export function useAgnosChat({
         const res = await fetch(`${API_URL}/ai/actions/plan`, {
           method: 'POST',
           headers: headers(),
-          body: JSON.stringify({ text, channel, currentPatientId }),
+          body: JSON.stringify({ text, channel, currentPatientId, agent }),
         });
         const data = (await res.json()) as ApiError & {
           plan?: AgnosPlan;
@@ -216,7 +222,7 @@ export function useAgnosChat({
         setBusy(false);
       }
     },
-    [busy, turns, pending, currentPatientId, headers, patchTurn],
+    [busy, turns, pending, currentPatientId, agent, headers, patchTurn],
   );
 
   const confirmPending = useCallback(async () => {
