@@ -201,6 +201,72 @@ export function AIAssistantButton({
 }
 
 // Exported for reuse by AgnosPanel (015): same read-answer rendering (results + sources).
+/** Parse a vital reading into a numeric Y. PA "130/80" → systolica; decimali con virgola gestiti. */
+function parseVitalY(valore: string): number | null {
+  const v = String(valore ?? '').trim();
+  if (!v) return null;
+  const raw = v.includes('/') ? v.split('/')[0] : v;
+  const n = parseFloat(raw.replace(',', '.'));
+  return Number.isFinite(n) ? n : null;
+}
+
+/** Fase 1a: sparkline compatta dell'andamento di un parametro. Solo dati esistenti (nessuna
+ *  interpretazione): mostra min/max/ultimo + una polyline. Difensiva: <2 punti numerici ⇒ niente. */
+function VitalsSparkline({ results }: { results: unknown[] }) {
+  const rows = results as Array<{ etichetta?: string; valore?: string; rilevato?: string }>;
+  const points = rows
+    .map((r) => ({ t: r.rilevato ?? '', y: parseVitalY(r.valore ?? '') }))
+    .filter((p): p is { t: string; y: number } => p.y != null && !!p.t)
+    .sort((a, b) => a.t.localeCompare(b.t));
+  if (points.length < 2) return null;
+  const ys = points.map((p) => p.y);
+  const min = Math.min(...ys);
+  const max = Math.max(...ys);
+  const W = 240;
+  const H = 46;
+  const pad = 4;
+  const span = max - min || 1;
+  const coords = points
+    .map((p, i) => {
+      const x = pad + (i / (points.length - 1)) * (W - 2 * pad);
+      const y = pad + (1 - (p.y - min) / span) * (H - 2 * pad);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(' ');
+  const label = rows[0]?.etichetta ?? 'Parametro';
+  return (
+    <div
+      style={{
+        margin: '2px 0 10px',
+        padding: '8px 10px',
+        background: 'var(--hover, #f2f5fb)',
+        borderRadius: 8,
+      }}
+    >
+      <div style={{ fontSize: 12, color: 'var(--text-muted, #5A6B80)', marginBottom: 4 }}>
+        Andamento {label} · {points.length} rilevazioni · min {min} · max {max} · ultimo{' '}
+        {points[points.length - 1].y}
+      </div>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        width="100%"
+        height={H}
+        role="img"
+        aria-label={`Andamento ${label}`}
+      >
+        <polyline
+          fill="none"
+          stroke="var(--blue, #2f6bed)"
+          strokeWidth={2}
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          points={coords}
+        />
+      </svg>
+    </div>
+  );
+}
+
 export function AnswerView({
   answer,
   onNavigate,
@@ -216,6 +282,7 @@ export function AnswerView({
       <div className="ai-asst__count">
         {answer.results.length} risultat{answer.results.length === 1 ? 'o' : 'i'}
       </div>
+      {answer.intent === 'vitals_trend' && <VitalsSparkline results={answer.results} />}
       <ul className="ai-asst__sources">
         {answer.sources.slice(0, 25).map((s, i) => (
           <li key={i} className="ai-asst__source">

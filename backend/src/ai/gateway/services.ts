@@ -231,7 +231,13 @@ export async function getPatientVitalSigns(
   assertTenant(ctx);
   assertPatientAllowed(ctx, input.patientId);
   const { cartella, recordId } = await loadCartella(input.patientId);
-  const filtered = filterVitals(cartella.parametriVitali ?? [], input);
+  // Fase 1a: `days` (finestra andamento) è tradotto server-side in `from` = oggi−days (il planner
+  // resta puro, senza clock). Un `from` esplicito già presente ha precedenza.
+  const query =
+    input.days != null && !input.from
+      ? { ...input, from: new Date(Date.now() - input.days * 86400000).toISOString() }
+      : input;
+  const filtered = filterVitals(cartella.parametriVitali ?? [], query);
   const refs = filtered.map((v) =>
     vitalSource(
       input.patientId,

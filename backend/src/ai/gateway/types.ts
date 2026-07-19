@@ -85,6 +85,8 @@ export interface VitalSignQueryInput {
   valueMax?: number;
   from?: string;
   to?: string;
+  /** Fase 1a: finestra andamento in giorni; il service la traduce in `from` = oggi−days. */
+  days?: number;
 }
 
 export interface CorrelateInput {

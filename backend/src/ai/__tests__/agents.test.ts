@@ -35,12 +35,14 @@ test('facility agent serves its own domain + shared intents, not clinical ones',
   assert.equal(agentAllowsIntent('facility', 'narrative_search'), false);
   assert.equal(agentAllowsIntent('facility', 'document_search'), false);
   assert.equal(agentAllowsIntent('facility', 'correlate'), false);
+  assert.equal(agentAllowsIntent('facility', 'vitals_trend'), false);
 });
 
 test('clinical agent serves its own domain + shared intents, not facility ones', () => {
   assert.equal(agentAllowsIntent('clinical', 'allergies'), true);
   assert.equal(agentAllowsIntent('clinical', 'therapies'), true);
   assert.equal(agentAllowsIntent('clinical', 'vitals_recent'), true);
+  assert.equal(agentAllowsIntent('clinical', 'vitals_trend'), true);
   assert.equal(agentAllowsIntent('clinical', 'timeline'), true);
   assert.equal(agentAllowsIntent('clinical', 'correlate'), true);
   // shared

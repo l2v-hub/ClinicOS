@@ -33,7 +33,7 @@ export const READ_TOOL_SCHEMA: Array<{ name: string; args: Record<string, string
   { name: 'get_patient_therapies', args: { patientId: 'string' } },
   {
     name: 'get_patient_vital_signs',
-    args: { patientId: 'string', label: 'string?', systolicMin: 'number?' },
+    args: { patientId: 'string', label: 'string?', systolicMin: 'number?', days: 'number?' },
   },
   { name: 'get_patient_timeline', args: { patientId: 'string' } },
   { name: 'get_patient_appointments', args: { patientId: 'string' } },
