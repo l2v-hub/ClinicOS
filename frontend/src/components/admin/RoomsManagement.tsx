@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';
 import { API_URL } from '../../config';
 import { ClinicalTableSection } from '../operator/cartella/shared';
+import { ConfirmDialog } from '../shared/ConfirmDialog';
 
 /* ── API types ─────────────────────────────────────────── */
 
@@ -173,6 +174,9 @@ export function RoomsManagement() {
     }
   }
 
+  const [pendingRoom, setPendingRoom] = useState<RoomAPI | null>(null);
+  const [deletingRoom, setDeletingRoom] = useState(false);
+
   async function eliminaCamera(roomId: string) {
     setError(null);
     try {
@@ -190,6 +194,14 @@ export function RoomsManagement() {
     } catch {
       setError("Errore di rete durante l'eliminazione");
     }
+  }
+
+  async function confirmDeleteRoom() {
+    if (!pendingRoom) return;
+    setDeletingRoom(true);
+    await eliminaCamera(pendingRoom.id);
+    setDeletingRoom(false);
+    setPendingRoom(null);
   }
 
   function apriModificaCamera(room: RoomAPI) {
@@ -261,7 +273,7 @@ export function RoomsManagement() {
           </p>
         </div>
         <button
-          className="btn-primary"
+          className="btn-success"
           style={{ minHeight: 44 }}
           onClick={() => {
             setFormAperto((v) => !v);
@@ -414,7 +426,7 @@ export function RoomsManagement() {
               Annulla
             </button>
             <button
-              className="btn-primary"
+              className="btn-success"
               style={{ minHeight: 44 }}
               onClick={salvaCamera}
               disabled={saving}
@@ -467,7 +479,7 @@ export function RoomsManagement() {
               >
                 Annulla
               </button>
-              <button className="btn-primary" style={{ minHeight: 44 }} onClick={salvaLetto}>
+              <button className="btn-success" style={{ minHeight: 44 }} onClick={salvaLetto}>
                 <IcoCheck /> Salva
               </button>
             </div>
@@ -521,7 +533,7 @@ export function RoomsManagement() {
                     </span>
                   </div>
                   <button
-                    className="icon-btn icon-btn--sm"
+                    className="icon-btn icon-btn--sm icon-btn--edit"
                     style={{ minHeight: 44, minWidth: 44 }}
                     onClick={() => apriModificaCamera(room)}
                     title="Modifica camera"
@@ -531,7 +543,7 @@ export function RoomsManagement() {
                   <button
                     className="icon-btn icon-btn--sm"
                     style={{ minHeight: 44, minWidth: 44, color: 'var(--red)' }}
-                    onClick={() => eliminaCamera(room.id)}
+                    onClick={() => setPendingRoom(room)}
                     title="Elimina camera"
                   >
                     <IcoX />
@@ -574,6 +586,20 @@ export function RoomsManagement() {
           })}
         </div>
       </ClinicalTableSection>
+
+      <ConfirmDialog
+        open={pendingRoom !== null}
+        title="Eliminare la camera?"
+        message={
+          pendingRoom
+            ? `La camera ${pendingRoom.numero} verrà eliminata. L'azione non è reversibile.`
+            : ''
+        }
+        confirmLabel="Elimina camera"
+        busy={deletingRoom}
+        onConfirm={() => void confirmDeleteRoom()}
+        onCancel={() => setPendingRoom(null)}
+      />
     </div>
   );
 }

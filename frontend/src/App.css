@@ -3318,6 +3318,45 @@ body {
   box-shadow: none;
 }
 
+/* Create/Save action — green (reuses --emerald; same shape as .btn-primary). */
+.btn-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: var(--touch-target);
+  padding: 0 18px;
+  background: var(--emerald);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(22, 163, 123, 0.26);
+  transition:
+    background 0.12s,
+    box-shadow 0.15s;
+  white-space: nowrap;
+}
+.btn-success:hover {
+  background: #0f8c68;
+  box-shadow: 0 8px 20px rgba(22, 163, 123, 0.32);
+}
+.btn-success svg {
+  width: 15px;
+  height: 15px;
+}
+.btn-success:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.btn-success:focus-visible {
+  outline: 2px solid var(--emerald);
+  outline-offset: 2px;
+}
+
 /* Consistent keyboard focus for all CRUD action buttons. */
 .btn-primary:focus-visible,
 .btn-secondary:focus-visible {
@@ -3386,6 +3425,15 @@ body {
 }
 .icon-btn--success:hover {
   background: var(--emerald-bg);
+}
+
+/* Edit action — blue accent (icon buttons). */
+.icon-btn--edit {
+  color: var(--blue) !important;
+  border-color: rgba(47, 107, 237, 0.25);
+}
+.icon-btn--edit:hover {
+  background: rgba(47, 107, 237, 0.08);
 }
 
 /* Filter chips */

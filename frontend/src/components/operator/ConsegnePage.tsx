@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Consegna, PrioritaConsegna, StatoConsegna } from '../../types';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit, IcoClock } from '../../icons';
 import { InlineEditableField } from '../shared/InlineEditableField';
+import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { comparePazientiNome } from '../../lib/patientSort';
 
 interface ConsegnePageProps {
@@ -320,6 +321,7 @@ function ConsegnaCard({
   onSelectPaziente?: (nome: string) => void;
 }) {
   const [editOpen, setEditOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
     <div
@@ -415,7 +417,7 @@ function ConsegnaCard({
             {isAdmin && (
               <button
                 className="icon-btn icon-btn--sm icon-btn--danger"
-                onClick={() => onDelete(c.id)}
+                onClick={() => setConfirmOpen(true)}
                 title="Elimina"
               >
                 <IcoX />
@@ -426,7 +428,7 @@ function ConsegnaCard({
         {c.stato === 'completata' && isAdmin && (
           <button
             className="icon-btn icon-btn--sm icon-btn--danger"
-            onClick={() => onDelete(c.id)}
+            onClick={() => setConfirmOpen(true)}
             title="Elimina"
           >
             <IcoX />
@@ -442,6 +444,18 @@ function ConsegnaCard({
           onClose={() => setEditOpen(false)}
         />
       )}
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Eliminare la consegna?"
+        message="La consegna verrà eliminata. L'azione non è reversibile."
+        confirmLabel="Elimina consegna"
+        onConfirm={() => {
+          onDelete(c.id);
+          setConfirmOpen(false);
+        }}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </div>
   );
 }
