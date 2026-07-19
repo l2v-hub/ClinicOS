@@ -31,10 +31,16 @@ export function isReadTool(name: string): name is ReadTool {
 export const READ_TOOL_SCHEMA: Array<{ name: string; args: Record<string, string> }> = [
   { name: 'get_patient_allergies', args: { patientId: 'string' } },
   { name: 'get_patient_therapies', args: { patientId: 'string' } },
-  { name: 'get_patient_vital_signs', args: { patientId: 'string', label: 'string?', systolicMin: 'number?' } },
+  {
+    name: 'get_patient_vital_signs',
+    args: { patientId: 'string', label: 'string?', systolicMin: 'number?' },
+  },
   { name: 'get_patient_timeline', args: { patientId: 'string' } },
   { name: 'get_patient_appointments', args: { patientId: 'string' } },
-  { name: 'search_clinical_sections', args: { patientId: 'string', sectionKey: 'string?', query: 'string' } },
+  {
+    name: 'search_clinical_sections',
+    args: { patientId: 'string', sectionKey: 'string?', query: 'string' },
+  },
   { name: 'search_documents', args: { patientId: 'string?', query: 'string' } },
   { name: 'search_patients', args: { query: 'string' } },
   { name: 'search_across_patients', args: { query: 'string?', systolicMin: 'number?' } },

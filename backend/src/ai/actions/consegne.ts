@@ -14,9 +14,7 @@
 import { randomUUID } from 'node:crypto';
 import type { ActionPlan, ActionPreview, VoiceActionType } from '../voice/types.js';
 import { isWriteAction } from '../voice/types.js';
-import {
-  defaultSearchPatients, defaultGetPatient, type PatientHit,
-} from './appointments.js';
+import { defaultSearchPatients, defaultGetPatient, type PatientHit } from './appointments.js';
 
 export function isConsegnaAction(t: VoiceActionType): boolean {
   return t === 'create_consegna';
@@ -26,13 +24,15 @@ const norm = (s: string) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').t
 
 // Verb DIRECTLY followed by (optional article +) "consegna": a diary/narrative command whose
 // payload merely mentions "consegna" is never hijacked ("scrivi nel diario: … la consegna …").
-const CONSEGNA_CMD_RE = /\b(aggiungi|aggiungere|crea|creare|scrivi|scrivere|inserisci|inserire|registra|registrare)\s+(?:una\s+|la\s+|nuova\s+)?consegn\w*\b/;
+const CONSEGNA_CMD_RE =
+  /\b(aggiungi|aggiungere|crea|creare|scrivi|scrivere|inserisci|inserire|registra|registrare)\s+(?:una\s+|la\s+|nuova\s+)?consegn\w*\b/;
 // Variant without a verb: the command STARTS with "consegna per …".
 const CONSEGNA_LEAD_RE = /^consegn\w*\s+per\b/;
 
 // Patient from the ORIGINAL text (casing preserved for the DB lookup): up to two words after
 // "consegna per", stopping naturally before the ":" separator.
-const CONSEGNA_PATIENT_RE = /consegn\w*\s+per\s+(?:il\s+paziente\s+|la\s+paziente\s+|il\s+sig\.?\s+|la\s+sig\.?ra\s+)?([A-Za-zÀ-ÿ'][\wÀ-ÿ']*(?:\s+[A-Za-zÀ-ÿ'][\wÀ-ÿ']*)?)/;
+const CONSEGNA_PATIENT_RE =
+  /consegn\w*\s+per\s+(?:il\s+paziente\s+|la\s+paziente\s+|il\s+sig\.?\s+|la\s+sig\.?ra\s+)?([A-Za-zÀ-ÿ'][\wÀ-ÿ']*(?:\s+[A-Za-zÀ-ÿ'][\wÀ-ÿ']*)?)/;
 
 export interface ConsegnaPlanContext {
   currentPatientId?: string;
@@ -74,13 +74,20 @@ export function matchConsegnaCommand(
   if (colonIdx >= 0) {
     note = original.slice(colonIdx + 1).trim();
   } else if (patientMatch) {
-    note = original.slice((patientMatch.index ?? 0) + patientMatch[0].length).replace(/^[,;-]\s*/, '').trim();
+    note = original
+      .slice((patientMatch.index ?? 0) + patientMatch[0].length)
+      .replace(/^[,;-]\s*/, '')
+      .trim();
   }
   note = note.replace(/[?.!]+$/, '').trim();
 
   plan.fields = { note, ...(patientQuery ? { patientQuery } : {}) };
-  if (!note) plan.ambiguities.push('Testo della consegna non riconosciuto (es. «consegna per Rossi: controllare la pressione»)');
-  if (patientQuery) plan.patientId = null; // risolto dal grounding sul nome indicato
+  if (!note)
+    plan.ambiguities.push(
+      'Testo della consegna non riconosciuto (es. «consegna per Rossi: controllare la pressione»)',
+    );
+  if (patientQuery)
+    plan.patientId = null; // risolto dal grounding sul nome indicato
   else if (!ctx.currentPatientId) plan.ambiguities.push('Paziente non identificato con certezza');
   return plan;
 }
@@ -112,8 +119,10 @@ export async function groundConsegnaPlan(
   // patient: named in the command > current context
   if (query) {
     const hits = await searchPatients(query);
-    if (hits.length === 1) { plan.patientId = hits[0].id; patientName = displayName(hits[0]); }
-    else if (hits.length === 0) plan.ambiguities.push(`Paziente «${query}» non trovato`);
+    if (hits.length === 1) {
+      plan.patientId = hits[0].id;
+      patientName = displayName(hits[0]);
+    } else if (hits.length === 0) plan.ambiguities.push(`Paziente «${query}» non trovato`);
     else plan.ambiguities.push(`Più pazienti corrispondono a «${query}»: specifica nome e cognome`);
   } else if (plan.patientId) {
     const p = await getPatient(plan.patientId);

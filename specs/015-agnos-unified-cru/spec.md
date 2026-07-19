@@ -14,7 +14,7 @@ ClinicOS dispone già di due assistenti separati: un assistente testuale di sola
 
 Obiettivo: un unico assistente Agnos AI (testo + voce) che comanda l'applicazione con azioni Create/Read/Update, con divieto strutturale di Delete, sicurezza server-side e piena tracciabilità — più un pacchetto di miglioramenti UX e performance misurabili.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - CRU via chatbot testuale unificato (Priority: P1)
 
@@ -108,7 +108,7 @@ Ogni azione dell'app (tradizionale o via Agnos) dà riscontro visivo coerente: s
 - TTS attivo su dispositivo senza voci italiane disponibili: la risposta resta testuale, nessun errore bloccante.
 - Backend riavviato tra preview e conferma: la conferma fallisce in modo pulito con invito a ripetere la verifica (nessuna scrittura parziale).
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -156,7 +156,7 @@ Ogni azione dell'app (tradizionale o via Agnos) dà riscontro visivo coerente: s
 - **Voce di audit**: registrazione persistente di ogni azione AI: operatore, paziente, tipo azione, nomi campo, canale (testo/voce), esito (ok/rifiutata/errore/dedupe), timestamp.
 - **Appuntamento agenda**: slot da 30 minuti con paziente, operatore, tipologia; creabile/aggiornabile via Agnos, cancellabile solo via UI.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

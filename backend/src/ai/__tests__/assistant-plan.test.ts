@@ -26,20 +26,26 @@ test('search inside Anamnesi → narrative search with sectionKey', () => {
 });
 
 test('document search → search_documents', () => {
-  const p = planQuery('Cerca nei documenti la frase "controllo cardiologico"', { currentPatientId: P });
+  const p = planQuery('Cerca nei documenti la frase "controllo cardiologico"', {
+    currentPatientId: P,
+  });
   assert.equal(p.intent, 'document_search');
   assert.equal(p.tools[0].tool, 'search_documents');
   assert.equal(p.tools[0].args.query, 'controllo cardiologico');
 });
 
 test('recent vitals → vital signs tool', () => {
-  const p = planQuery('Quali parametri sono stati rilevati negli ultimi sette giorni?', { currentPatientId: P });
+  const p = planQuery('Quali parametri sono stati rilevati negli ultimi sette giorni?', {
+    currentPatientId: P,
+  });
   assert.equal(p.intent, 'vitals_recent');
   assert.equal(p.tools[0].tool, 'get_patient_vital_signs');
 });
 
 test('timeline question → timeline tool', () => {
-  const p = planQuery('Mostrami la sequenza temporale del decorso ospedaliero', { currentPatientId: P });
+  const p = planQuery('Mostrami la sequenza temporale del decorso ospedaliero', {
+    currentPatientId: P,
+  });
   assert.equal(p.intent, 'timeline');
   assert.equal(p.tools[0].tool, 'get_patient_timeline');
 });

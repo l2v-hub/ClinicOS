@@ -13,18 +13,37 @@ import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionPrompt, loadOutputSchema, type AiConfig } from '../config.js';
 import { recordAudit } from '../audit.js';
 import { mergeExtractions, type DocResult, type MergedProposal } from '../merge.js';
-import { buildSectionsRequest, postProcessSections, buildNarrativeDraft, narrativeFromRawText, parseNarrativeFromMarkdown, narrativeHasSectionText, type SectionsResult } from '../sections/index.js';
+import {
+  buildSectionsRequest,
+  postProcessSections,
+  buildNarrativeDraft,
+  narrativeFromRawText,
+  parseNarrativeFromMarkdown,
+  narrativeHasSectionText,
+  type SectionsResult,
+} from '../sections/index.js';
 import { filterRepeatedHeaders } from '../sections/header-filter.js';
 import { AiExtractionError } from '../types.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
 
 export type JobStatus =
-  | 'created' | 'uploaded' | 'queued' | 'uploading_to_google' | 'waiting_for_model'
-  | 'validating_response' | 'repairing_response' | 'review_ready' | 'retryable_error'
-  | 'failed' | 'expired' | 'cancelled' | 'confirmed'
+  | 'created'
+  | 'uploaded'
+  | 'queued'
+  | 'uploading_to_google'
+  | 'waiting_for_model'
+  | 'validating_response'
+  | 'repairing_response'
+  | 'review_ready'
+  | 'retryable_error'
+  | 'failed'
+  | 'expired'
+  | 'cancelled'
+  | 'confirmed'
   // legacy transient kept for backward compatibility
-  | 'validating' | 'processing';
+  | 'validating'
+  | 'processing';
 
 export interface FileOutcome {
   filename: string;
@@ -69,7 +88,14 @@ export interface PublicJob {
 }
 
 const TERMINAL: JobStatus[] = ['review_ready', 'failed', 'expired', 'cancelled', 'confirmed'];
-const ACTIVE: JobStatus[] = ['queued', 'uploading_to_google', 'waiting_for_model', 'validating_response', 'repairing_response', 'processing'];
+const ACTIVE: JobStatus[] = [
+  'queued',
+  'uploading_to_google',
+  'waiting_for_model',
+  'validating_response',
+  'repairing_response',
+  'processing',
+];
 
 function expiry(cfg: AiConfig): Date {
   return new Date(Date.now() + cfg.jobRetentionMin * 60_000);
@@ -133,7 +159,7 @@ async function runtimeFetch(path: string, options: RequestInit = {}): Promise<Re
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
       ...(options.headers ?? {}),
     },
   });
@@ -148,12 +174,18 @@ async function runtimeCreateJob(
   prompt: string,
 ): Promise<string> {
   const body = buildRuntimeCreateBody(jobId, documents, schema, prompt);
-  const res = await runtimeFetch('/v1/document-jobs', { method: 'POST', body: JSON.stringify(body) });
+  const res = await runtimeFetch('/v1/document-jobs', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new AiExtractionError('provider_error', `Runtime createJob failed: ${res.status} ${text}`);
+    throw new AiExtractionError(
+      'provider_error',
+      `Runtime createJob failed: ${res.status} ${text}`,
+    );
   }
-  const json = await res.json() as { job_id: string };
+  const json = (await res.json()) as { job_id: string };
   return json.job_id;
 }
 
@@ -191,7 +223,10 @@ async function runtimeGetResult(runtimeJobId: string): Promise<RuntimeJobResult>
   const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}/result`);
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new AiExtractionError('provider_error', `Runtime getResult failed: ${res.status} ${text}`);
+    throw new AiExtractionError(
+      'provider_error',
+      `Runtime getResult failed: ${res.status} ${text}`,
+    );
   }
   return res.json() as Promise<RuntimeJobResult>;
 }
@@ -203,17 +238,20 @@ async function runtimeGetResult(runtimeJobId: string): Promise<RuntimeJobResult>
  * schema JSON and `ImportReview` crashes on `proposal._merge.report`. Exported for tests.
  */
 export function wrapRuntimeResult(
-  raw: { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null | undefined,
+  raw:
+    { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null | undefined,
   documents: Array<{ id: string; filename: string }>,
   model: string,
   preferRecent: boolean,
 ): MergedProposal {
-  const docResults: DocResult[] = [{
-    docId: documents[0]?.id ?? 'doc',
-    filename: documents.map((d) => d.filename).join(', ') || 'documento',
-    model,
-    data: { anagrafica: raw?.anagrafica, cartella: raw?.cartella },
-  }];
+  const docResults: DocResult[] = [
+    {
+      docId: documents[0]?.id ?? 'doc',
+      filename: documents.map((d) => d.filename).join(', ') || 'documento',
+      model,
+      data: { anagrafica: raw?.anagrafica, cartella: raw?.cartella },
+    },
+  ];
   return mergeExtractions(docResults, { preferRecent });
 }
 
@@ -222,7 +260,7 @@ export function wrapRuntimeResult(
 // structured extraction. Returns '' on any failure.
 const TRANSCRIBE_PROMPT =
   'Sei un sistema OCR clinico. Trascrivi INTEGRALMENTE e fedelmente tutto il testo ' +
-  'leggibile dei documenti allegati, mantenendo l\'ordine originale. Non riassumere, ' +
+  "leggibile dei documenti allegati, mantenendo l'ordine originale. Non riassumere, " +
   'non interpretare, non tradurre, non dedurre. Per parti illeggibili usa [ILLEGGIBILE]. ' +
   'Restituisci SOLO JSON valido nel formato {"rawText": "<trascrizione integrale>"}.';
 
@@ -257,7 +295,7 @@ const CLINICAL_LISTS_SCHEMA = {
 };
 const CLINICAL_LISTS_PROMPT =
   'Sei un estrattore clinico. Dai documenti allegati estrai TUTTE le diagnosi, allergie, ' +
-  'farmaci e terapie presenti. Per OGNI voce trovata inserisci un oggetto nell\'array ' +
+  "farmaci e terapie presenti. Per OGNI voce trovata inserisci un oggetto nell'array " +
   'corrispondente (es. due allergie => due oggetti in "allergie"). Se una categoria è ' +
   'assente, usa []. Non inventare. Restituisci SOLO JSON valido conforme allo schema fornito.';
 const CLINICAL_LIST_KEYS = ['diagnosi', 'allergie', 'farmaci', 'terapie'] as const;
@@ -266,7 +304,12 @@ async function runtimeClinicalLists(
   jobId: string,
   documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
 ): Promise<Record<string, unknown>> {
-  const rid = await runtimeCreateJob(jobId, documents, CLINICAL_LISTS_SCHEMA, CLINICAL_LISTS_PROMPT);
+  const rid = await runtimeCreateJob(
+    jobId,
+    documents,
+    CLINICAL_LISTS_SCHEMA,
+    CLINICAL_LISTS_PROMPT,
+  );
   await runtimeRunJob(rid);
   const deadline = Date.now() + 10 * 60 * 1000;
   while (Date.now() < deadline) {
@@ -291,7 +334,13 @@ function applyClinicalLists(
   const cartella = { ...(base.cartella ?? {}) };
   for (const k of CLINICAL_LIST_KEYS) {
     const v = lists[k];
-    if (Array.isArray(v) && v.some((it) => it && typeof it === 'object' && Object.values(it).some((x) => x !== '' && x != null))) {
+    if (
+      Array.isArray(v) &&
+      v.some(
+        (it) =>
+          it && typeof it === 'object' && Object.values(it).some((x) => x !== '' && x != null),
+      )
+    ) {
       cartella[k] = v;
     }
   }
@@ -327,7 +376,10 @@ async function runtimeSections(
 }
 
 /** Map runtime status string to ClinicOS JobStatus */
-export function mapRuntimeStatus(runtimeStatus: string): { jobStatus: JobStatus; isTerminal: boolean } {
+export function mapRuntimeStatus(runtimeStatus: string): {
+  jobStatus: JobStatus;
+  isTerminal: boolean;
+} {
   const terminalOk = ['completed', 'review_ready'];
   const terminalFail = ['failed', 'cancelled'];
   const retryable = ['retryable_error'];
@@ -350,10 +402,14 @@ export function mapRuntimeStatus(runtimeStatus: string): { jobStatus: JobStatus;
 // ---------------------------------------------------------------------------
 
 /** Create a new (empty) import job. Idempotent on idempotencyKey. */
-export async function createJob(opts: { idempotencyKey?: string; createdById?: string } = {}): Promise<PublicJob> {
+export async function createJob(
+  opts: { idempotencyKey?: string; createdById?: string } = {},
+): Promise<PublicJob> {
   const cfg = loadAiConfig();
   if (opts.idempotencyKey) {
-    const existing = await prisma.importJob.findUnique({ where: { idempotencyKey: opts.idempotencyKey } });
+    const existing = await prisma.importJob.findUnique({
+      where: { idempotencyKey: opts.idempotencyKey },
+    });
     if (existing) return getJob(existing.id) as Promise<PublicJob>;
   }
   const job = await prisma.importJob.create({
@@ -370,9 +426,15 @@ export async function createJob(opts: { idempotencyKey?: string; createdById?: s
 }
 
 /** Add files to a job. Invalid/duplicate files are reported but never abort the valid ones. */
-export async function addFiles(jobId: string, files: IncomingFile[]): Promise<{ job: PublicJob; outcomes: FileOutcome[] }> {
+export async function addFiles(
+  jobId: string,
+  files: IncomingFile[],
+): Promise<{ job: PublicJob; outcomes: FileOutcome[] }> {
   const cfg = loadAiConfig();
-  const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: true } });
+  const job = await prisma.importJob.findUnique({
+    where: { id: jobId },
+    include: { documents: true },
+  });
   if (!job) throw new AiExtractionError('config', 'Job non trovato');
   if (!['uploaded', 'validating'].includes(job.status)) {
     throw new AiExtractionError('config', `Job non modificabile nello stato ${job.status}`);
@@ -387,20 +449,39 @@ export async function addFiles(jobId: string, files: IncomingFile[]): Promise<{ 
   for (const incoming of files) {
     const res = validateFile(incoming, { maxFileBytes: maxTotalBytes });
     if (!res.ok || !res.file) {
-      outcomes.push({ filename: incoming.filename, status: 'rejected', reason: res.reason, message: res.message });
+      outcomes.push({
+        filename: incoming.filename,
+        status: 'rejected',
+        reason: res.reason,
+        message: res.message,
+      });
       continue;
     }
     const vf = res.file;
     if (seen.has(vf.sha256)) {
-      outcomes.push({ filename: incoming.filename, status: 'duplicate', message: 'Documento già presente nel job' });
+      outcomes.push({
+        filename: incoming.filename,
+        status: 'duplicate',
+        message: 'Documento già presente nel job',
+      });
       continue;
     }
     if (acceptedCount + 1 > job.maxFiles) {
-      outcomes.push({ filename: incoming.filename, status: 'rejected', reason: 'too_large', message: `Massimo ${job.maxFiles} file per job` });
+      outcomes.push({
+        filename: incoming.filename,
+        status: 'rejected',
+        reason: 'too_large',
+        message: `Massimo ${job.maxFiles} file per job`,
+      });
       continue;
     }
     if (runningTotal + vf.sizeBytes > maxTotalBytes) {
-      outcomes.push({ filename: incoming.filename, status: 'rejected', reason: 'too_large', message: 'Dimensione totale superata' });
+      outcomes.push({
+        filename: incoming.filename,
+        status: 'rejected',
+        reason: 'too_large',
+        message: 'Dimensione totale superata',
+      });
       continue;
     }
 
@@ -438,9 +519,15 @@ export async function getJob(jobId: string): Promise<PublicJob | null> {
   });
   if (!job) return null;
   const status = job.status as JobStatus;
-  const totalFiles = job.documents.filter((d) => d.status !== 'duplicate' && d.status !== 'rejected').length;
-  const completedFiles = job.documents.filter((d) => d.status === 'completed' || d.status === 'uploaded').length;
-  const elapsedSeconds = job.startedAt ? Math.max(0, Math.round((Date.now() - job.startedAt.getTime()) / 1000)) : 0;
+  const totalFiles = job.documents.filter(
+    (d) => d.status !== 'duplicate' && d.status !== 'rejected',
+  ).length;
+  const completedFiles = job.documents.filter(
+    (d) => d.status === 'completed' || d.status === 'uploaded',
+  ).length;
+  const elapsedSeconds = job.startedAt
+    ? Math.max(0, Math.round((Date.now() - job.startedAt.getTime()) / 1000))
+    : 0;
   return {
     id: job.id,
     status,
@@ -496,7 +583,11 @@ export async function reorder(jobId: string, orderedDocIds: string[]): Promise<P
 }
 
 /** Assign a logical-document label to a single item (group multiple photos as one doc). */
-export async function setLogicalDoc(jobId: string, docId: string, logicalDoc: string): Promise<PublicJob> {
+export async function setLogicalDoc(
+  jobId: string,
+  docId: string,
+  logicalDoc: string,
+): Promise<PublicJob> {
   const doc = await prisma.importDocument.findFirst({ where: { id: docId, jobId } });
   if (!doc) throw new AiExtractionError('config', 'Documento non trovato');
   const value = logicalDoc.trim().slice(0, 80) || null;
@@ -508,7 +599,10 @@ export async function setLogicalDoc(jobId: string, docId: string, logicalDoc: st
 export async function cancelJob(jobId: string): Promise<PublicJob> {
   await removeJobDir(jobId);
   await prisma.importDocument.deleteMany({ where: { jobId } });
-  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'expired', totalBytes: 0 } });
+  await prisma.importJob.update({
+    where: { id: jobId },
+    data: { status: 'expired', totalBytes: 0 },
+  });
   return (await getJob(jobId))!;
 }
 
@@ -524,7 +618,10 @@ export async function enqueueJob(jobId: string): Promise<PublicJob> {
   if (!['uploaded', 'validating'].includes(status)) {
     throw new AiExtractionError('config', `Job non accodabile nello stato ${status}`);
   }
-  await setState(jobId, 'queued', { stage: 'queued', error: null, errorCode: null } as Record<string, unknown>);
+  await setState(jobId, 'queued', { stage: 'queued', error: null, errorCode: null } as Record<
+    string,
+    unknown
+  >);
   await recordAudit(jobId, 'process_started', { detail: 'enqueue → queued' });
   return (await getJob(jobId))!;
 }
@@ -540,12 +637,23 @@ export async function reopenJob(jobId: string): Promise<PublicJob> {
   const job = await prisma.importJob.findUnique({ where: { id: jobId } });
   if (!job) throw new AiExtractionError('config', 'Job non trovato');
   const status = job.status as JobStatus;
-  if (status === 'confirmed') throw new AiExtractionError('config', 'Paziente già creato: job non riapribile');
-  if (status === 'expired' || status === 'cancelled') throw new AiExtractionError('config', `Job non riapribile nello stato ${status}`);
+  if (status === 'confirmed')
+    throw new AiExtractionError('config', 'Paziente già creato: job non riapribile');
+  if (status === 'expired' || status === 'cancelled')
+    throw new AiExtractionError('config', `Job non riapribile nello stato ${status}`);
   // Back to the editable phase; invalidate the derived draft, keep files + documents.
   await prisma.importJob.update({
     where: { id: jobId },
-    data: { status: 'uploaded', stage: null, error: null, errorCode: null, currentFileName: null, startedAt: null, resultData: Prisma.DbNull, model: null },
+    data: {
+      status: 'uploaded',
+      stage: null,
+      error: null,
+      errorCode: null,
+      currentFileName: null,
+      startedAt: null,
+      resultData: Prisma.DbNull,
+      model: null,
+    },
   });
   await recordAudit(jobId, 'process_started', { detail: 'reopen → uploaded (draft invalidated)' });
   return (await getJob(jobId))!;
@@ -558,12 +666,19 @@ export async function retryJob(jobId: string): Promise<PublicJob> {
   if (!['retryable_error', 'failed'].includes(job.status)) {
     throw new AiExtractionError('config', `Job non ritentabile nello stato ${job.status}`);
   }
-  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'queued', stage: 'queued', error: null } });
+  await prisma.importJob.update({
+    where: { id: jobId },
+    data: { status: 'queued', stage: 'queued', error: null },
+  });
   await recordAudit(jobId, 'process_started', { detail: 'retry → queued' });
   return (await getJob(jobId))!;
 }
 
-async function setState(jobId: string, status: JobStatus, extra: Record<string, unknown> = {}): Promise<void> {
+async function setState(
+  jobId: string,
+  status: JobStatus,
+  extra: Record<string, unknown> = {},
+): Promise<void> {
   await prisma.importJob.update({ where: { id: jobId }, data: { status, ...extra } });
 }
 
@@ -587,13 +702,23 @@ async function runSuperseded(jobId: string): Promise<boolean> {
 export async function runJob(jobId: string): Promise<void> {
   // REQ-036: documents MUST be read in the operator-defined order (sortOrder). The extraction
   // (page merge, section continuity) depends on it; a wrong order splits Diagnosi/Anamnesi/Decorso.
-  const job = await prisma.importJob.findUnique({ where: { id: jobId }, include: { documents: { orderBy: { sortOrder: 'asc' } } } });
+  const job = await prisma.importJob.findUnique({
+    where: { id: jobId },
+    include: { documents: { orderBy: { sortOrder: 'asc' } } },
+  });
   if (!job) return;
 
   const usable = job.documents.filter((d) => d.status === 'uploaded');
-  if (usable.length === 0) { await setState(jobId, 'failed', { error: 'Nessun documento valido', stage: 'error' }); return; }
+  if (usable.length === 0) {
+    await setState(jobId, 'failed', { error: 'Nessun documento valido', stage: 'error' });
+    return;
+  }
 
-  await setState(jobId, 'uploading_to_google', { stage: 'uploading_files', startedAt: new Date(), error: null });
+  await setState(jobId, 'uploading_to_google', {
+    stage: 'uploading_files',
+    startedAt: new Date(),
+    error: null,
+  });
 
   try {
     // 0. Load the prompt + the real JSON Schema. Structured-output models (Mistral
@@ -630,7 +755,10 @@ export async function runJob(jobId: string): Promise<void> {
       await new Promise((r) => setTimeout(r, pollIntervalMs));
       // REQ-036: operator reopened the job (back to documents) while we were running → abort
       // quietly and DO NOT overwrite the now-editable state with a stale extraction result.
-      if (await runSuperseded(jobId)) { await recordAudit(jobId, 'process_failed', { detail: 'superseded by reopen' }); return; }
+      if (await runSuperseded(jobId)) {
+        await recordAudit(jobId, 'process_failed', { detail: 'superseded by reopen' });
+        return;
+      }
       const rStatus = await runtimeGetJob(runtimeJobId);
       const { jobStatus, isTerminal } = mapRuntimeStatus(rStatus.status);
 
@@ -645,7 +773,10 @@ export async function runJob(jobId: string): Promise<void> {
           //    AND the full raw extraction (_full, lossless — every schema field) plus a
           //    best-effort integral transcription (rawText) for the full review editor.
           const resultPayload = await runtimeGetResult(runtimeJobId);
-          let raw = resultPayload.data as { anagrafica?: Record<string, unknown>; cartella?: Record<string, unknown> } | null;
+          let raw = resultPayload.data as {
+            anagrafica?: Record<string, unknown>;
+            cartella?: Record<string, unknown>;
+          } | null;
           const modelUsed = resultPayload.model ?? rStatus.model ?? 'runtime';
           // Focused clinical-lists pass (best-effort, opt-in). Adds one model call per
           // import — disabled by default to protect constrained provider quota. Enable
@@ -692,9 +823,13 @@ export async function runJob(jobId: string): Promise<void> {
           // the integral OCR rawText, so the UI never falls back to the legacy structured table.
           const ana = (raw?.anagrafica ?? {}) as Record<string, unknown>;
           const demo = {
-            firstName: String(ana.nome ?? ''), lastName: String(ana.cognome ?? ''),
-            dateOfBirth: String(ana.dataNascita ?? ''), sex: String(ana.sesso ?? ''),
-            fiscalCode: String((raw?.cartella as Record<string, unknown> | undefined)?.codiceFiscale ?? ''),
+            firstName: String(ana.nome ?? ''),
+            lastName: String(ana.cognome ?? ''),
+            dateOfBirth: String(ana.dataNascita ?? ''),
+            sex: String(ana.sesso ?? ''),
+            fiscalCode: String(
+              (raw?.cartella as Record<string, unknown> | undefined)?.codiceFiscale ?? '',
+            ),
           };
           // REQ-037: strip repetitive page headers/footers from the combined transcription BEFORE
           // composing sections, so a per-page patient header can't break Anamnesi/Decorso/Terapia
@@ -705,25 +840,53 @@ export async function runJob(jobId: string): Promise<void> {
           // REQ-035: populate the narrative from the (cleaned) OCR markdown — the model already
           // produced the section text; just map it (no extra AI call). Prefer this when it found
           // section text; otherwise fall back to the sections pass, then to raw text.
-          let narrative = parseNarrativeFromMarkdown(cleanedRawText, demo, usable[0] ? { id: usable[0].id, filename: usable[0].filename } : undefined);
+          let narrative = parseNarrativeFromMarkdown(
+            cleanedRawText,
+            demo,
+            usable[0] ? { id: usable[0].id, filename: usable[0].filename } : undefined,
+          );
           if (!narrativeHasSectionText(narrative)) {
             narrative = sections
-              ? buildNarrativeDraft(sections, usable.map((d) => ({ id: d.id, filename: d.filename })))
+              ? buildNarrativeDraft(
+                  sections,
+                  usable.map((d) => ({ id: d.id, filename: d.filename })),
+                )
               : narrativeFromRawText(cleanedRawText, demo);
           }
           // REQ-036: final supersede check — the operator may have reopened during the
           // best-effort transcription/sections passes above. Never persist a stale draft.
-          if (await runSuperseded(jobId)) { await recordAudit(jobId, 'process_failed', { detail: 'superseded by reopen (pre-persist)' }); return; }
+          if (await runSuperseded(jobId)) {
+            await recordAudit(jobId, 'process_failed', {
+              detail: 'superseded by reopen (pre-persist)',
+            });
+            return;
+          }
           await prisma.importJob.update({
             where: { id: jobId },
             data: {
               status: 'review_ready',
               stage: 'completed',
-              resultData: { ...merged, _full: raw ?? {}, rawText, cleanedRawText, _headerFilter: { warnings: hf.warnings, removedHeaderBlocks: hf.removedHeaderBlocks, removedFooterLines: hf.removedFooterLines, detectedPageNumbers: hf.detectedPageNumbers, matchedLabels: hf.matchedLabels }, _sections: sections, _narrative: narrative } as object,
+              resultData: {
+                ...merged,
+                _full: raw ?? {},
+                rawText,
+                cleanedRawText,
+                _headerFilter: {
+                  warnings: hf.warnings,
+                  removedHeaderBlocks: hf.removedHeaderBlocks,
+                  removedFooterLines: hf.removedFooterLines,
+                  detectedPageNumbers: hf.detectedPageNumbers,
+                  matchedLabels: hf.matchedLabels,
+                },
+                _sections: sections,
+                _narrative: narrative,
+              } as object,
               model: modelUsed,
             },
           });
-          await recordAudit(jobId, 'process_completed', { detail: 'runtime extraction + merge + transcription' });
+          await recordAudit(jobId, 'process_completed', {
+            detail: 'runtime extraction + merge + transcription',
+          });
         } else {
           // failed / retryable_error
           const retryable = jobStatus === 'retryable_error';
@@ -740,12 +903,15 @@ export async function runJob(jobId: string): Promise<void> {
     // Timeout
     await setState(jobId, 'retryable_error', { stage: 'error', error: 'Runtime timeout' });
     await recordAudit(jobId, 'process_failed', { detail: 'timeout' });
-
   } catch (err) {
     const kind = err instanceof AiExtractionError ? err.kind : 'provider_error';
     const message = err instanceof Error ? err.message : 'Errore elaborazione';
-    const retryable = kind === 'timeout' || kind === 'provider_error' || kind === 'provider_unavailable';
-    await setState(jobId, retryable ? 'retryable_error' : 'failed', { stage: 'error', error: `[${kind}] ${message}` });
+    const retryable =
+      kind === 'timeout' || kind === 'provider_error' || kind === 'provider_unavailable';
+    await setState(jobId, retryable ? 'retryable_error' : 'failed', {
+      stage: 'error',
+      error: `[${kind}] ${message}`,
+    });
     await recordAudit(jobId, 'process_failed', { detail: kind });
   }
 }
@@ -764,32 +930,46 @@ export async function rebuildNarrativeDraftFromExistingExtraction(
   const current = resultData._narrative as { allergiesText?: string } | null | undefined;
   const hasText = !!current && narrativeHasSectionText(current as never);
   if (hasText || !rawText.trim()) return resultData; // already populated, or nothing to parse
-  const ana = ((resultData._full as { anagrafica?: Record<string, unknown> } | undefined)?.anagrafica ?? {}) as Record<string, unknown>;
+  const ana = ((resultData._full as { anagrafica?: Record<string, unknown> } | undefined)
+    ?.anagrafica ?? {}) as Record<string, unknown>;
   // REQ-037: parse from the header/footer-cleaned text (reuse the stored cleaned text when present).
-  const cleaned = typeof resultData.cleanedRawText === 'string' && resultData.cleanedRawText.trim()
-    ? resultData.cleanedRawText
-    : filterRepeatedHeaders(rawText).cleanedText;
+  const cleaned =
+    typeof resultData.cleanedRawText === 'string' && resultData.cleanedRawText.trim()
+      ? resultData.cleanedRawText
+      : filterRepeatedHeaders(rawText).cleanedText;
   const rebuilt = parseNarrativeFromMarkdown(cleaned, {
-    firstName: String(ana.nome ?? ''), lastName: String(ana.cognome ?? ''),
-    dateOfBirth: String(ana.dataNascita ?? ''), sex: String(ana.sesso ?? ''),
+    firstName: String(ana.nome ?? ''),
+    lastName: String(ana.cognome ?? ''),
+    dateOfBirth: String(ana.dataNascita ?? ''),
+    sex: String(ana.sesso ?? ''),
   });
   if (!narrativeHasSectionText(rebuilt)) return resultData; // no recognisable sections — leave as-is
   const updated = { ...resultData, _narrative: rebuilt };
   try {
-    await prisma.importJob.update({ where: { id: jobId }, data: { resultData: updated as object } });
-  } catch { /* read path must not fail on a heal-write error */ }
+    await prisma.importJob.update({
+      where: { id: jobId },
+      data: { resultData: updated as object },
+    });
+  } catch {
+    /* read path must not fail on a heal-write error */
+  }
   return updated;
 }
 
 /** Extraction result for review (REQ-015 → consumed by REQ-016/017). */
-export async function getJobResult(jobId: string): Promise<{ status: JobStatus; model: string | null; resultData: unknown } | null> {
+export async function getJobResult(
+  jobId: string,
+): Promise<{ status: JobStatus; model: string | null; resultData: unknown } | null> {
   const job = await prisma.importJob.findUnique({
     where: { id: jobId },
     select: { status: true, model: true, resultData: true },
   });
   if (!job) return null;
   // REQ-035: self-heal legacy jobs whose narrative text was never populated from the markdown.
-  const resultData = await rebuildNarrativeDraftFromExistingExtraction(jobId, job.resultData as Record<string, unknown> | null);
+  const resultData = await rebuildNarrativeDraftFromExistingExtraction(
+    jobId,
+    job.resultData as Record<string, unknown> | null,
+  );
   return { status: job.status as JobStatus, model: job.model, resultData };
 }
 
@@ -803,7 +983,10 @@ export async function sweepExpiredJobs(): Promise<{ expiredJobs: number; removed
   for (const j of expired) {
     await removeJobDir(j.id);
     await prisma.importDocument.deleteMany({ where: { jobId: j.id } });
-    await prisma.importJob.update({ where: { id: j.id }, data: { status: 'expired', totalBytes: 0 } });
+    await prisma.importJob.update({
+      where: { id: j.id },
+      data: { status: 'expired', totalBytes: 0 },
+    });
   }
   const removedDirs = await sweepExpiredDirs();
   return { expiredJobs: expired.length, removedDirs };

@@ -66,7 +66,7 @@
 +import MedicalRecordsPage from './pages/MedicalRecordsPage';
 +import SettingsPage from './pages/SettingsPage';
  import './App.css';
- 
+
  function App() {
    return (
 -    <div className="app" data-testid="app">
@@ -115,7 +115,7 @@
 +    </BrowserRouter>
    );
  }
- 
+
  export default App;
 ```
 
@@ -128,7 +128,7 @@
 +  padding: 0;
    box-sizing: border-box;
  }
- 
+
 -#root {
 -  width: 100%;
 -  min-height: 100vh;
@@ -137,7 +137,7 @@
 +#root {
 +  height: 100%;
  }
- 
+
  .app {
    display: flex;
    flex-direction: column;
@@ -145,7 +145,7 @@
 +  height: 100vh;
 +  background-color: #f8fafc;
  }
- 
+
 -.app-header {
 +.header {
    background-color: #1e40af;
@@ -158,7 +158,7 @@
 +  height: 64px;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
  }
- 
+
 -.header-content {
 +.header-search {
    display: flex;
@@ -168,7 +168,7 @@
 +  max-width: 500px;
 +  position: relative;
  }
- 
+
 -.logo {
 -  font-size: 1.5rem;
 -  font-weight: bold;
@@ -177,7 +177,7 @@
 +  left: 12px;
 +  color: #94a3b8;
  }
- 
+
 -.app-nav {
 +.search-input {
 +  width: 100%;
@@ -200,7 +200,7 @@
 -  gap: 1rem;
 +  gap: 20px;
  }
- 
+
 -.nav-link {
 +.icon-button {
 +  background: none;
@@ -424,7 +424,7 @@
  import App from './App.tsx';
  import './index.css';
 -import { BrowserRouter } from 'react-router-dom';
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
 -    <BrowserRouter>
@@ -436,9 +436,11 @@
 ```
 
 **New file: src/components/Header.tsx**
+
 ```typescript
 import { Bell, Search, User } from 'lucide-react';
 
 export default function Header() {
   return (
     <header
+```

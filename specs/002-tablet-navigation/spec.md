@@ -8,7 +8,7 @@
 
 **Input**: User description: "Ottimizzazione navigazione tablet-first di ClinicOS. Rivedere la navigazione grafica perché l'attuale struttura non è ottimale per tablet. Sidebar principale resta primo livello. Secondo livello diventa navigazione orizzontale. Terzo livello in sotto-tab compatti."
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Navigazione macro-aree da sidebar (Priority: P1)
 
@@ -92,7 +92,7 @@ Come operatore, voglio che Agenda, Terapia, Parametri, Diario e Documenti usino 
 - Cosa succede se la sidebar è collassata? → i tab orizzontali si espandono a tutta larghezza
 - Cosa succede su desktop (>1280px)? → il layout funziona anche su desktop senza regressioni
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -112,7 +112,7 @@ Come operatore, voglio che Agenda, Terapia, Parametri, Diario e Documenti usino 
 - **Tab Bar orizzontale (livello 2)**: Navigazione sezioni dentro una macro-area — es. in Paziente: Anagrafica, Clinica, Dimissione, Documenti
 - **Sotto-tab / Segmented Control (livello 3)**: Navigazione sotto-sezioni interne — es. in Clinica: Diario, Terapia, Parametri, Medicazioni
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

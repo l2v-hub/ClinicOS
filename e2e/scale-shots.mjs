@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { mkdirSync } from 'node:fs';
 
 const FRONTEND = process.argv[2] ?? 'http://localhost:4173';
-const outDir   = process.argv[3] ?? 'requirements/evidence/BUG-060';
+const outDir = process.argv[3] ?? 'requirements/evidence/BUG-060';
 mkdirSync(outDir, { recursive: true });
 
 const PATIENT = {
@@ -71,7 +71,10 @@ const CARTELLA = {
   statoRicovero: 'ricoverato',
   cameraNumero: '3',
   lettoNumero: 'A',
-  anamnesi: { anamnesiPatologicaRemota: 'Artrite, ipertensione', anamnesiPatologicaProssima: 'Caduta accidentale' },
+  anamnesi: {
+    anamnesiPatologicaRemota: 'Artrite, ipertensione',
+    anamnesiPatologicaProssima: 'Caduta accidentale',
+  },
   diagnosi: [],
   terapie: [],
   farmaci: [],
@@ -105,7 +108,8 @@ async function mockRoutes(page) {
 
     if (url.match(/\/patients(\?|$)/) && method === 'GET') return json([PATIENT]);
     if (url.match(/\/patients\/p-bug060$/) && method === 'GET') return json(PATIENT);
-    if (url.match(/\/patients\/p-bug060\/cartella/) && method === 'GET') return json({ patientId: PATIENT.id, data: CARTELLA });
+    if (url.match(/\/patients\/p-bug060\/cartella/) && method === 'GET')
+      return json({ patientId: PATIENT.id, data: CARTELLA });
     if (url.match(/\/patients\/p-bug060\/therapies/) && method === 'GET') return json([]);
     if (url.includes('/patients/settings')) return json({ allowDelete: false });
     if (url.match(/\/patients\/p-bug060\/narrative-sections/)) return json([]);
@@ -121,14 +125,17 @@ async function loginAndGoToPatient(page) {
 
   // Login as Operatore
   const loginCard = page.locator('.login-role-card--operatore');
-  if (await loginCard.count() > 0) {
+  if ((await loginCard.count()) > 0) {
     await loginCard.click();
     await page.waitForTimeout(1200);
   }
 
   // Navigate to Pazienti
-  const nav = page.locator('[title="Pazienti"], .teams-sidebar__item').filter({ hasText: /Pazienti/i }).first();
-  if (await nav.count() > 0) {
+  const nav = page
+    .locator('[title="Pazienti"], .teams-sidebar__item')
+    .filter({ hasText: /Pazienti/i })
+    .first();
+  if ((await nav.count()) > 0) {
     await nav.click();
   } else {
     await page.getByText('Pazienti').first().click();
@@ -137,20 +144,20 @@ async function loginAndGoToPatient(page) {
 
   // Open patient Rossi Mario
   const row = page.getByText('Rossi').first();
-  if (await row.count() > 0) await row.click();
+  if ((await row.count()) > 0) await row.click();
   await page.waitForTimeout(1200);
 }
 
 async function clickTab(page, groupLabel, tabLabel) {
   // Click L2 group (e.g. "Moduli")
   const group = page.getByText(groupLabel, { exact: true }).first();
-  if (await group.count() > 0) {
+  if ((await group.count()) > 0) {
     await group.click();
     await page.waitForTimeout(800);
   }
   // Click L3 tab (e.g. "Scala Tinetti")
   const tab = page.getByText(tabLabel, { exact: true }).first();
-  if (await tab.count() > 0) {
+  if ((await tab.count()) > 0) {
     await tab.click();
     await page.waitForTimeout(1000);
   }

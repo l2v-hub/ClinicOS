@@ -9,14 +9,31 @@ import { resolve } from 'node:path';
 const URL = process.env.PROD_URL ?? 'https://clinicos-eosin.vercel.app';
 const pdf = process.argv[2];
 const outDir = process.argv[3] ?? '.';
-const VPS = [{ n: 'desktop', width: 1366, height: 768 }, { n: 'tablet', width: 1024, height: 768 }];
+const VPS = [
+  { n: 'desktop', width: 1366, height: 768 },
+  { n: 'tablet', width: 1024, height: 768 },
+];
 
 async function clickFirst(page, names) {
   for (const re of names) {
     const el = page.getByRole('button', { name: re }).first();
-    try { if (await el.count() && await el.isVisible()) { await el.click(); return true; } } catch { /* try text */ }
+    try {
+      if ((await el.count()) && (await el.isVisible())) {
+        await el.click();
+        return true;
+      }
+    } catch {
+      /* try text */
+    }
     const t = page.getByText(re).first();
-    try { if (await t.count() && await t.isVisible()) { await t.click(); return true; } } catch { /* next */ }
+    try {
+      if ((await t.count()) && (await t.isVisible())) {
+        await t.click();
+        return true;
+      }
+    } catch {
+      /* next */
+    }
   }
   return false;
 }
@@ -49,12 +66,23 @@ try {
 
     // Wait for the REAL AI pipeline to reach the narrative review. The "2. Revisione" step tab is
     // always in the DOM, so poll for the ACTUAL review content (sections-review testid / Crea paziente).
-    let reached = false, failed = false;
-    for (let i = 0; i < 110; i++) { // up to ~220s
+    let reached = false,
+      failed = false;
+    for (let i = 0; i < 110; i++) {
+      // up to ~220s
       await page.waitForTimeout(2000);
-      if (await page.locator('[data-testid="sections-review"]').count() || (await page.textContent('body') ?? '').includes('Crea paziente')) { reached = true; break; }
+      if (
+        (await page.locator('[data-testid="sections-review"]').count()) ||
+        ((await page.textContent('body')) ?? '').includes('Crea paziente')
+      ) {
+        reached = true;
+        break;
+      }
       const b = (await page.textContent('body')) ?? '';
-      if (b.includes('non riuscita') || b.includes('Estrazione completata ma')) { failed = true; break; }
+      if (b.includes('non riuscita') || b.includes('Estrazione completata ma')) {
+        failed = true;
+        break;
+      }
     }
     await page.waitForTimeout(1500);
     await card.screenshot({ path: resolve(outDir, `review-${vp.n}.png`) });
@@ -63,7 +91,15 @@ try {
     if (reached) {
       const sr = page.locator('[data-testid="sections-review"]');
       for (let s = 1; s <= 2; s++) {
-        try { await sr.evaluate((el, dy) => { (el.closest('.import-modal') ?? el).scrollBy(0, dy); el.scrollBy?.(0, dy); window.scrollBy(0, dy); }, 620); } catch { /* ok */ }
+        try {
+          await sr.evaluate((el, dy) => {
+            (el.closest('.import-modal') ?? el).scrollBy(0, dy);
+            el.scrollBy?.(0, dy);
+            window.scrollBy(0, dy);
+          }, 620);
+        } catch {
+          /* ok */
+        }
         await page.waitForTimeout(500);
         await card.screenshot({ path: resolve(outDir, `review-${vp.n}-${s}.png`) });
       }

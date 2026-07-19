@@ -9,7 +9,10 @@ import { tmpdir } from 'node:os';
 const FRONTEND = 'http://localhost:5173';
 const outDir = process.argv[2] ?? '.';
 const fx = writeFixtures(resolve(tmpdir(), 'clinicos-r22-fixtures'));
-const VPS = [{ n: 'desktop', width: 1366, height: 768 }, { n: 'tablet', width: 1024, height: 768 }];
+const VPS = [
+  { n: 'desktop', width: 1366, height: 768 },
+  { n: 'tablet', width: 1024, height: 768 },
+];
 
 const browser = await chromium.launch();
 try {
@@ -36,7 +39,9 @@ try {
     await page.waitForTimeout(3000); // wait for the worker + review
     await page.screenshot({ path: resolve(outDir, `review-${vp.n}.png`) });
     const body = (await page.textContent('body')) ?? '';
-    console.log(`${vp.n}: reachedReview=${body.includes('Crea paziente') || body.includes('Aggiorna paziente')} consoleErrors=${errs.length}`);
+    console.log(
+      `${vp.n}: reachedReview=${body.includes('Crea paziente') || body.includes('Aggiorna paziente')} consoleErrors=${errs.length}`,
+    );
     await page.close();
   }
 } finally {

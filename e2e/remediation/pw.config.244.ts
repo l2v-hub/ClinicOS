@@ -8,7 +8,14 @@ export default defineConfig({
   workers: 1,
   outputDir: '../../artifacts/task-validation/244-allergies-absent-denied/test-results',
   reporter: [
-    ['html', { outputFolder: '../../artifacts/task-validation/244-allergies-absent-denied/playwright-report', open: 'never' }],
+    [
+      'html',
+      {
+        outputFolder:
+          '../../artifacts/task-validation/244-allergies-absent-denied/playwright-report',
+        open: 'never',
+      },
+    ],
     ['list'],
   ],
   use: {

@@ -4,23 +4,25 @@ Data: 2026-07-04 · Branch: `fix/issue-129-ordinamento-pazienti` · Ambiente: ba
 
 ## Root cause (per vista)
 
-| Vista | Componente | Causa |
-|---|---|---|
-| Consegne | `frontend/src/components/operator/ConsegnePage.tsx` | sort per priorità + `createdAt` desc: il paziente non era mai parte della chiave di ordinamento |
-| Parametri | `frontend/src/components/operator/MultiPatientParametri.tsx` | nessun sort: la lista ereditava l'ordine dell'API `/patients` (`orderBy createdAt desc`) |
-| Pazienti presenti | roster `pazienti` in `frontend/src/App.tsx` (reso da `PatientList`) | nessun sort alla fetch; il paziente nuovo veniva appeso in coda (`[...prev, newP]`) |
-| Terapia da somministrare | `frontend/src/components/operator/TherapySlotModal.tsx` | il backend (`/therapy-slots`, `backend/src/routes/therapy.ts`) costruisce `patients` in ordine di inserimento terapie; il modal renderizzava as-is |
+| Vista                    | Componente                                                          | Causa                                                                                                                                              |
+| ------------------------ | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Consegne                 | `frontend/src/components/operator/ConsegnePage.tsx`                 | sort per priorità + `createdAt` desc: il paziente non era mai parte della chiave di ordinamento                                                    |
+| Parametri                | `frontend/src/components/operator/MultiPatientParametri.tsx`        | nessun sort: la lista ereditava l'ordine dell'API `/patients` (`orderBy createdAt desc`)                                                           |
+| Pazienti presenti        | roster `pazienti` in `frontend/src/App.tsx` (reso da `PatientList`) | nessun sort alla fetch; il paziente nuovo veniva appeso in coda (`[...prev, newP]`)                                                                |
+| Terapia da somministrare | `frontend/src/components/operator/TherapySlotModal.tsx`             | il backend (`/therapy-slots`, `backend/src/routes/therapy.ts`) costruisce `patients` in ordine di inserimento terapie; il modal renderizzava as-is |
 
 Nota: il backend NON è stato modificato (vincolo); l'ordinamento è ora garantito lato frontend in modo stabile.
 
 ## Fix
 
 Utility condivisa `frontend/src/lib/patientSort.ts`:
+
 - `comparePazienti(a,b)` — cognome poi nome, `Intl.Collator('it', { sensitivity: 'base' })` (case/accenti-insensibile), fallback al nome se il cognome manca, record senza nome in fondo;
 - `comparePazientiNome(a,b)` — per nomi completi visualizzati ("Cognome, Nome");
 - `sortPazienti(list)` — copia ordinata (sort V8 stabile).
 
 Applicata in 4 punti (una funzione, nessuna duplicazione):
+
 1. `App.tsx` — sort del roster alla fetch, al refetch post-import e all'inserimento ottimistico (AC5);
 2. `MultiPatientParametri.tsx` — sort dei `filtrati` (vale anche con ricerca attiva);
 3. `ConsegnePage.tsx` — chiave primaria = nome paziente, poi priorità, poi recenza;

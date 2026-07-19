@@ -74,7 +74,7 @@ limiti sono documentati qui:
 
 1. **Associazione per-task**: il preflight è stateless e non sa a quale task appartiene una modifica.
    Applica una regola grossolana: se si modifica codice protetto e **non esiste alcun** contract
-   valido → blocca. Con più task aperti non verifica che il contract sia *quello giusto*: la
+   valido → blocca. Con più task aperti non verifica che il contract sia _quello giusto_: la
    corrispondenza task→contract resta responsabilità dell'operatore/skill.
 2. **Testo finale dell'assistant**: gli hook non ricevono in modo affidabile il messaggio finale
    dell'assistant e non possono riscriverlo. `quality-gate-closure.js` funziona come Stop hook

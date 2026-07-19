@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { CartellaPaziente, EsameClinicoRecord, Paziente } from '../../../types';
-import { uid, todayStr, nowISO, fmtDate, ClinicalTableSection, InlineForm, EmptyState } from './shared';
+import {
+  uid,
+  todayStr,
+  nowISO,
+  fmtDate,
+  ClinicalTableSection,
+  InlineForm,
+  EmptyState,
+} from './shared';
 import { API_URL } from '../../../config';
 
 // #246: photo/scan attachments for exams/RX/consultations. Uses the device camera on mobile
@@ -9,9 +17,19 @@ import { API_URL } from '../../../config';
 // #246: explicit demo-only scope headers accompany every /documents call. They are falsifiable
 // QA hints, not secure authentication. The content endpoint is opened via a gated blob
 // fetch (a plain <a href>/<img src> cannot attach custom headers).
-type SectionDocMeta = { id: string; originalName: string; mimeType: string; documentType: string; createdAt: string };
+type SectionDocMeta = {
+  id: string;
+  originalName: string;
+  mimeType: string;
+  documentType: string;
+  createdAt: string;
+};
 
-function opHeaders(patientId: string, operatorId?: string, operatorRole?: string): Record<string, string> {
+function opHeaders(
+  patientId: string,
+  operatorId?: string,
+  operatorRole?: string,
+): Record<string, string> {
   const h: Record<string, string> = {};
   if (operatorId) h['X-Operator-Id'] = operatorId;
   if (operatorRole) h['X-Operator-Role'] = operatorRole;
@@ -19,16 +37,36 @@ function opHeaders(patientId: string, operatorId?: string, operatorRole?: string
   return h;
 }
 
-function SectionPhotos({ patientId, documentType, operatorId, operatorRole }: { patientId: string; documentType: string; operatorId?: string; operatorRole?: string }) {
+function SectionPhotos({
+  patientId,
+  documentType,
+  operatorId,
+  operatorRole,
+}: {
+  patientId: string;
+  documentType: string;
+  operatorId?: string;
+  operatorRole?: string;
+}) {
   const [docs, setDocs] = useState<SectionDocMeta[]>([]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   function reload() {
-    fetch(`${API_URL}/patients/${patientId}/documents`, { headers: opHeaders(patientId, operatorId, operatorRole) })
-      .then(r => (r.ok ? r.json() : { documents: [] }))
-      .then(d => setDocs((Array.isArray(d.documents) ? d.documents : []).filter((x: SectionDocMeta) => x.documentType === documentType)))
-      .catch(() => { /* none */ });
+    fetch(`${API_URL}/patients/${patientId}/documents`, {
+      headers: opHeaders(patientId, operatorId, operatorRole),
+    })
+      .then((r) => (r.ok ? r.json() : { documents: [] }))
+      .then((d) =>
+        setDocs(
+          (Array.isArray(d.documents) ? d.documents : []).filter(
+            (x: SectionDocMeta) => x.documentType === documentType,
+          ),
+        ),
+      )
+      .catch(() => {
+        /* none */
+      });
   }
   useEffect(reload, [patientId, documentType, operatorId, operatorRole]);
 
@@ -36,42 +74,80 @@ function SectionPhotos({ patientId, documentType, operatorId, operatorRole }: { 
     const f = e.target.files?.[0];
     e.target.value = '';
     if (!f) return;
-    setBusy(true); setErr(null);
+    setBusy(true);
+    setErr(null);
     try {
       const fd = new FormData();
       fd.append('file', f);
       fd.append('documentType', documentType);
       const r = await fetch(`${API_URL}/patients/${patientId}/documents`, {
-        method: 'POST', body: fd, headers: opHeaders(patientId, operatorId, operatorRole),
+        method: 'POST',
+        body: fd,
+        headers: opHeaders(patientId, operatorId, operatorRole),
       });
       if (!r.ok) throw new Error(String(r.status));
       reload();
-    } catch { setErr('Caricamento non riuscito'); }
-    finally { setBusy(false); }
+    } catch {
+      setErr('Caricamento non riuscito');
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function openDoc(d: SectionDocMeta) {
     try {
-      const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, { headers: opHeaders(patientId, operatorId, operatorRole) });
+      const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, {
+        headers: opHeaders(patientId, operatorId, operatorRole),
+      });
       if (!r.ok) throw new Error(String(r.status));
       const blob = await r.blob();
       const objectUrl = URL.createObjectURL(blob);
       window.open(objectUrl, '_blank', 'noreferrer');
       setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
-    } catch { setErr('Apertura documento non riuscita'); }
+    } catch {
+      setErr('Apertura documento non riuscita');
+    }
   }
 
   return (
     <div className="section-photos" data-testid={`photos-${documentType}`}>
-      <label className={`btn-secondary btn-sm ${busy ? 'is-busy' : ''}`} style={{ cursor: busy ? 'default' : 'pointer' }}>
+      <label
+        className={`btn-secondary btn-sm ${busy ? 'is-busy' : ''}`}
+        style={{ cursor: busy ? 'default' : 'pointer' }}
+      >
         📷 Aggiungi foto/allegato
-        <input type="file" accept="image/*,application/pdf" capture="environment" hidden disabled={busy} onChange={onFile} />
+        <input
+          type="file"
+          accept="image/*,application/pdf"
+          capture="environment"
+          hidden
+          disabled={busy}
+          onChange={onFile}
+        />
       </label>
-      {busy && <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--c-muted,#667085)' }}>Caricamento…</span>}
-      {err && <span role="alert" style={{ marginLeft: 8, fontSize: 12, color: 'var(--red,#DC2626)' }}>{err}</span>}
+      {busy && (
+        <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--c-muted,#667085)' }}>
+          Caricamento…
+        </span>
+      )}
+      {err && (
+        <span role="alert" style={{ marginLeft: 8, fontSize: 12, color: 'var(--red,#DC2626)' }}>
+          {err}
+        </span>
+      )}
       {docs.length > 0 && (
-        <ul className="section-photos__list" style={{ listStyle: 'none', padding: 0, margin: '8px 0 0', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {docs.map(d => (
+        <ul
+          className="section-photos__list"
+          style={{
+            listStyle: 'none',
+            padding: 0,
+            margin: '8px 0 0',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 8,
+          }}
+        >
+          {docs.map((d) => (
             <li key={d.id}>
               <button type="button" className="srev-chip" onClick={() => openDoc(d)}>
                 {d.mimeType.includes('pdf') ? '📄' : '🖼️'} {d.originalName}
@@ -126,7 +202,8 @@ function EsameRow({
         <div className="cr-visita-header">
           <span className="cr-visita-tipo">{r.descrizione}</span>
           <span className="cr-diag-meta">
-            {fmtDate(r.data)}{r.ora ? ` ${r.ora}` : ''} · {r.operatore}
+            {fmtDate(r.data)}
+            {r.ora ? ` ${r.ora}` : ''} · {r.operatore}
           </span>
         </div>
         {r.esito && <p className="cr-nota-text">{r.esito}</p>}
@@ -135,15 +212,36 @@ function EsameRow({
       </div>
       <div className="cr-item-actions">
         <button className="btn-icon btn-sm" title="Modifica" onClick={onEdit}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
           </svg>
         </button>
         <button className="btn-icon btn-sm btn-icon--danger" title="Elimina" onClick={onDelete}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/>
-            <path d="M9 6V4h6v2"/>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14H6L5 6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="M9 6V4h6v2" />
           </svg>
         </button>
       </div>
@@ -163,7 +261,7 @@ function EsameForm({
   onCancel: () => void;
 }) {
   const [f, setF] = useState(initial);
-  const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF(p => ({ ...p, [k]: v }));
+  const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((p) => ({ ...p, [k]: v }));
 
   return (
     <InlineForm onSave={() => onSave(f)} onCancel={onCancel}>
@@ -174,16 +272,26 @@ function EsameForm({
             className="form-input"
             value={f.descrizione}
             placeholder="es. Emocromo completo, RX torace…"
-            onChange={e => set('descrizione', e.target.value)}
+            onChange={(e) => set('descrizione', e.target.value)}
           />
         </div>
         <div className="form-field">
           <label className="form-label">Data</label>
-          <input className="form-input" type="date" value={f.data} onChange={e => set('data', e.target.value)} />
+          <input
+            className="form-input"
+            type="date"
+            value={f.data}
+            onChange={(e) => set('data', e.target.value)}
+          />
         </div>
         <div className="form-field">
           <label className="form-label">Ora (facoltativo)</label>
-          <input className="form-input" type="time" value={f.ora ?? ''} onChange={e => set('ora', e.target.value)} />
+          <input
+            className="form-input"
+            type="time"
+            value={f.ora ?? ''}
+            onChange={(e) => set('ora', e.target.value)}
+          />
         </div>
       </div>
       <div className="form-field" style={{ marginTop: 8 }}>
@@ -192,12 +300,16 @@ function EsameForm({
           className="form-input"
           rows={3}
           value={f.esito}
-          onChange={e => set('esito', e.target.value)}
+          onChange={(e) => set('esito', e.target.value)}
         />
       </div>
       <div className="form-field" style={{ marginTop: 8 }}>
         <label className="form-label">Allegati (nomi file / riferimenti)</label>
-        <input className="form-input" value={f.allegati ?? ''} onChange={e => set('allegati', e.target.value)} />
+        <input
+          className="form-input"
+          value={f.allegati ?? ''}
+          onChange={(e) => set('allegati', e.target.value)}
+        />
       </div>
       <div className="form-field" style={{ marginTop: 8 }}>
         <label className="form-label">Note (facoltativo)</label>
@@ -205,7 +317,7 @@ function EsameForm({
           className="form-input"
           rows={2}
           value={f.note ?? ''}
-          onChange={e => set('note', e.target.value)}
+          onChange={(e) => set('note', e.target.value)}
         />
       </div>
     </InlineForm>
@@ -229,7 +341,10 @@ function EsameSection({
 }) {
   const [showAdd, setShowAdd] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<Omit<EsameClinicoRecord, 'id' | 'operatore' | 'createdAt'> | null>(null);
+  const [editForm, setEditForm] = useState<Omit<
+    EsameClinicoRecord,
+    'id' | 'operatore' | 'createdAt'
+  > | null>(null);
 
   const sorted = sortEsamiDesc(list);
 
@@ -245,14 +360,17 @@ function EsameSection({
     setShowAdd(false);
   }
 
-  function handleUpdate(id: string, data: Omit<EsameClinicoRecord, 'id' | 'operatore' | 'createdAt'>) {
-    onChange(list.map(r => r.id === id ? { ...r, ...data } : r));
+  function handleUpdate(
+    id: string,
+    data: Omit<EsameClinicoRecord, 'id' | 'operatore' | 'createdAt'>,
+  ) {
+    onChange(list.map((r) => (r.id === id ? { ...r, ...data } : r)));
     setEditId(null);
     setEditForm(null);
   }
 
   function handleDelete(id: string) {
-    onChange(list.filter(r => r.id !== id));
+    onChange(list.filter((r) => r.id !== id));
   }
 
   return (
@@ -263,7 +381,11 @@ function EsameSection({
       actions={
         <button
           className="btn-sm"
-          onClick={() => { setShowAdd(v => !v); setEditId(null); setEditForm(null); }}
+          onClick={() => {
+            setShowAdd((v) => !v);
+            setEditId(null);
+            setEditForm(null);
+          }}
         >
           + Aggiungi
         </button>
@@ -271,21 +393,20 @@ function EsameSection({
     >
       <div className="cts__body--padded">
         {showAdd && (
-          <EsameForm
-            initial={emptyForm()}
-            onSave={handleAdd}
-            onCancel={() => setShowAdd(false)}
-          />
+          <EsameForm initial={emptyForm()} onSave={handleAdd} onCancel={() => setShowAdd(false)} />
         )}
         <div className="cr-list">
           {sorted.length === 0 && <EmptyState msg={emptyMsg} />}
-          {sorted.map(r =>
+          {sorted.map((r) =>
             editId === r.id && editForm ? (
               <EsameForm
                 key={r.id}
                 initial={editForm}
-                onSave={data => handleUpdate(r.id, data)}
-                onCancel={() => { setEditId(null); setEditForm(null); }}
+                onSave={(data) => handleUpdate(r.id, data)}
+                onCancel={() => {
+                  setEditId(null);
+                  setEditForm(null);
+                }}
               />
             ) : (
               <EsameRow
@@ -293,12 +414,19 @@ function EsameSection({
                 r={r}
                 onEdit={() => {
                   setEditId(r.id);
-                  setEditForm({ data: r.data, ora: r.ora, descrizione: r.descrizione, esito: r.esito, allegati: r.allegati, note: r.note });
+                  setEditForm({
+                    data: r.data,
+                    ora: r.ora,
+                    descrizione: r.descrizione,
+                    esito: r.esito,
+                    allegati: r.allegati,
+                    note: r.note,
+                  });
                   setShowAdd(false);
                 }}
                 onDelete={() => handleDelete(r.id)}
               />
-            )
+            ),
           )}
         </div>
       </div>
@@ -308,11 +436,20 @@ function EsameSection({
 
 // ── Main tab component ────────────────────────────────────────────────────────
 
-export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome, operatoreId, operatoreRole }: Props) {
+export function EsamiConsulenzeTab({
+  cartella,
+  paziente,
+  onUpdate,
+  operatoreNome,
+  operatoreId,
+  operatoreRole,
+}: Props) {
   return (
     <div className="cr-tab-content">
       <div style={{ marginBottom: 8 }}>
-        <h3 className="cr-tab-title" style={{ margin: 0 }}>Esami &amp; Consulenze</h3>
+        <h3 className="cr-tab-title" style={{ margin: 0 }}>
+          Esami &amp; Consulenze
+        </h3>
         <p style={{ margin: '4px 0 16px', fontSize: 13, color: '#667085' }}>
           Le tre sezioni sono indipendenti — i dati non sono mescolati.
         </p>
@@ -323,9 +460,14 @@ export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome
         emptyMsg="Nessun esame ematico registrato."
         list={cartella.esamiEmatici ?? []}
         operatoreNome={operatoreNome}
-        onChange={updated => onUpdate({ esamiEmatici: updated })}
+        onChange={(updated) => onUpdate({ esamiEmatici: updated })}
       />
-      <SectionPhotos patientId={paziente.id} documentType="esame" operatorId={operatoreId} operatorRole={operatoreRole} />
+      <SectionPhotos
+        patientId={paziente.id}
+        documentType="esame"
+        operatorId={operatoreId}
+        operatorRole={operatoreRole}
+      />
 
       <div style={{ marginTop: 16 }}>
         <EsameSection
@@ -333,9 +475,14 @@ export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome
           emptyMsg="Nessun esame strumentale / RX registrato."
           list={cartella.esamiStrumentali ?? []}
           operatoreNome={operatoreNome}
-          onChange={updated => onUpdate({ esamiStrumentali: updated })}
+          onChange={(updated) => onUpdate({ esamiStrumentali: updated })}
         />
-        <SectionPhotos patientId={paziente.id} documentType="rx" operatorId={operatoreId} operatorRole={operatoreRole} />
+        <SectionPhotos
+          patientId={paziente.id}
+          documentType="rx"
+          operatorId={operatoreId}
+          operatorRole={operatoreRole}
+        />
       </div>
 
       <div style={{ marginTop: 16 }}>
@@ -344,9 +491,14 @@ export function EsamiConsulenzeTab({ cartella, paziente, onUpdate, operatoreNome
           emptyMsg="Nessuna consulenza specialistica registrata."
           list={cartella.consulenze ?? []}
           operatoreNome={operatoreNome}
-          onChange={updated => onUpdate({ consulenze: updated })}
+          onChange={(updated) => onUpdate({ consulenze: updated })}
         />
-        <SectionPhotos patientId={paziente.id} documentType="consulenza" operatorId={operatoreId} operatorRole={operatoreRole} />
+        <SectionPhotos
+          patientId={paziente.id}
+          documentType="consulenza"
+          operatorId={operatoreId}
+          operatorRole={operatoreRole}
+        />
       </div>
     </div>
   );

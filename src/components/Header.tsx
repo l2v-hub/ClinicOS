@@ -17,9 +17,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
       <div className="header-right">
         {user && (
           <div className="user-menu" onClick={() => setMenuOpen(!menuOpen)}>
-            <div className="user-avatar">
-              {user.name.charAt(0).toUpperCase()}
-            </div>
+            <div className="user-avatar">{user.name.charAt(0).toUpperCase()}</div>
             <span className="user-name">{user.name}</span>
             <span className="user-role">{user.role}</span>
             {menuOpen && (
@@ -31,9 +29,7 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
             )}
           </div>
         )}
-        {!user && (
-          <button className="login-button">Login</button>
-        )}
+        {!user && <button className="login-button">Login</button>}
       </div>
     </header>
   );

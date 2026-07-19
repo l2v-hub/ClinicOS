@@ -1,7 +1,16 @@
 import type { UtenteApp, NavKey } from '../../types';
 import {
-  IcoDashboard, IcoPazienti, IcoCalendar, IcoConsegne, IcoMessage,
-  IcoLogout, IcoOperatori, IcoBed, IcoActivity, IcoClock, IcoAI,
+  IcoDashboard,
+  IcoPazienti,
+  IcoCalendar,
+  IcoConsegne,
+  IcoMessage,
+  IcoLogout,
+  IcoOperatori,
+  IcoBed,
+  IcoActivity,
+  IcoClock,
+  IcoAI,
 } from '../../icons';
 
 interface TeamsLikeSidebarProps {
@@ -44,14 +53,17 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
 }
 
 export default function TeamsLikeSidebar({
-  activeKey, utente, onNavigate, onLogout, unreadNotes = 0
+  activeKey,
+  utente,
+  onNavigate,
+  onLogout,
+  unreadNotes = 0,
 }: TeamsLikeSidebarProps) {
   const items = getNavItems(utente, unreadNotes);
   const initials = utente.iniziali || (utente.nome ? utente.nome.slice(0, 2).toUpperCase() : 'CL');
 
   // Treat 'dettaglio-paziente' as active on pazienti item
-  const resolvedActiveKey: NavKey =
-    activeKey === 'dettaglio-paziente' ? 'pazienti' : activeKey;
+  const resolvedActiveKey: NavKey = activeKey === 'dettaglio-paziente' ? 'pazienti' : activeKey;
 
   return (
     <nav className="teams-sidebar">
@@ -60,7 +72,7 @@ export default function TeamsLikeSidebar({
       </div>
 
       <div className="teams-sidebar__nav">
-        {items.map(item => (
+        {items.map((item) => (
           <div
             key={item.key}
             className={`teams-sidebar__item${resolvedActiveKey === item.key ? ' active' : ''}`}

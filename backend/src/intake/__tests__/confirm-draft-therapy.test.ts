@@ -95,17 +95,25 @@ test('confirmDraft: persists therapies + vitals/pain into Cartella.data', async 
     const data = cartella!.data as Record<string, unknown>;
 
     const pm = data.parametriMensili as unknown[];
-    assert.ok(Array.isArray(pm) && pm.length === 1, `Expected parametriMensili length 1, got ${pm?.length}`);
+    assert.ok(
+      Array.isArray(pm) && pm.length === 1,
+      `Expected parametriMensili length 1, got ${pm?.length}`,
+    );
 
     const nrs = data.valutazioniNRS as unknown[];
-    assert.ok(Array.isArray(nrs) && nrs.length === 1, `Expected valutazioniNRS length 1, got ${nrs?.length}`);
+    assert.ok(
+      Array.isArray(nrs) && nrs.length === 1,
+      `Expected valutazioniNRS length 1, got ${nrs?.length}`,
+    );
   } finally {
     // Cleanup: find the patient (if created) and cascade-delete everything.
     // Re-fetch the draft to find the confirmedPatientId.
     const confirmedDraft = await prisma.patientIntakeDraft.findUnique({ where: { id: draft.id } });
     const pid = confirmedDraft?.confirmedPatientId;
     if (pid) {
-      await prisma.therapySchedule.deleteMany({ where: { therapy: { patientId: pid } } }).catch(() => {});
+      await prisma.therapySchedule
+        .deleteMany({ where: { therapy: { patientId: pid } } })
+        .catch(() => {});
       await prisma.patientTherapy.deleteMany({ where: { patientId: pid } }).catch(() => {});
       await prisma.cartella.deleteMany({ where: { patientId: pid } }).catch(() => {});
       await prisma.patient.delete({ where: { id: pid } }).catch(() => {});

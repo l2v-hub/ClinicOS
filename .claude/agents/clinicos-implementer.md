@@ -20,15 +20,15 @@ You write and edit React/TypeScript/CSS code. You receive precise instructions f
 
 ## Stack
 
-| What | Detail |
-|------|--------|
-| Framework | React 18 (functional components, hooks only) |
-| Language | TypeScript strict mode |
-| Bundler | Vite |
-| Styling | Plain CSS — `app-additions.css` (main), `App.css` (base), `print-forms.css` (print) |
-| Types | `frontend/src/types.ts` — ALL interfaces live here |
-| State | useState/useEffect in components, no Redux/Zustand |
-| API | `fetch()` to `VITE_API_URL` (env var), JSON REST |
+| What      | Detail                                                                              |
+| --------- | ----------------------------------------------------------------------------------- |
+| Framework | React 18 (functional components, hooks only)                                        |
+| Language  | TypeScript strict mode                                                              |
+| Bundler   | Vite                                                                                |
+| Styling   | Plain CSS — `app-additions.css` (main), `App.css` (base), `print-forms.css` (print) |
+| Types     | `frontend/src/types.ts` — ALL interfaces live here                                  |
+| State     | useState/useEffect in components, no Redux/Zustand                                  |
+| API       | `fetch()` to `VITE_API_URL` (env var), JSON REST                                    |
 
 ## File map
 
@@ -80,15 +80,15 @@ frontend/src/
 
 ## Design system — what to use
 
-| Need | Use this |
-|------|----------|
-| Wrap a section | `<ClinicalTableSection title="..." count={N}>` from `./cartella/shared` |
-| Data table | `<div className="clinicos-table-wrap"><table className="clinicos-table">` |
-| Inline form | `<div className="cr-inline-form">` with `.form-input`, `.form-select` |
-| Badges | `.badge--green`, `.badge--amber`, `.badge--red`, `.badge--gray`, `.badge--blue` |
-| Actions | `.icon-btn.icon-btn--sm` for edit/delete, `.btn-primary.btn-sm` for add/save |
-| Empty state | `<p className="cr-empty">Nessun dato.</p>` |
-| Padded body | `<div className="cts__body--padded">` inside ClinicalTableSection (for non-table content) |
+| Need           | Use this                                                                                  |
+| -------------- | ----------------------------------------------------------------------------------------- |
+| Wrap a section | `<ClinicalTableSection title="..." count={N}>` from `./cartella/shared`                   |
+| Data table     | `<div className="clinicos-table-wrap"><table className="clinicos-table">`                 |
+| Inline form    | `<div className="cr-inline-form">` with `.form-input`, `.form-select`                     |
+| Badges         | `.badge--green`, `.badge--amber`, `.badge--red`, `.badge--gray`, `.badge--blue`           |
+| Actions        | `.icon-btn.icon-btn--sm` for edit/delete, `.btn-primary.btn-sm` for add/save              |
+| Empty state    | `<p className="cr-empty">Nessun dato.</p>`                                                |
+| Padded body    | `<div className="cts__body--padded">` inside ClinicalTableSection (for non-table content) |
 
 ## Rules — MUST follow
 

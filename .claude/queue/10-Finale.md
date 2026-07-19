@@ -3,6 +3,7 @@ Ora applica questi requisiti visivi ai moduli clinici della Cartella Clinica Ope
 Non generare immagini.
 Non mostrare le immagini originali.
 Crea template digitali che somiglino ai moduli cartacei:
+
 - griglie
 - tabelle
 - checkbox
@@ -11,6 +12,7 @@ Crea template digitali che somiglino ai moduli cartacei:
 - layout stampabile A4
 
 Ogni modulo deve avere:
+
 - vista web tablet-friendly
 - vista modulo simile al cartaceo
 - modalità editabile

@@ -18,9 +18,7 @@ const TASK_ROOT = path.join(ROOT, 'artifacts', 'task-validation');
 const MUTATING_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);
 
 // Prefissi di CODICE APPLICATIVO protetti (relativi alla root del repo).
-const GUARDED = [
-  'frontend/', 'backend/', 'clinicos-ai-runtime/', 'prisma/',
-];
+const GUARDED = ['frontend/', 'backend/', 'clinicos-ai-runtime/', 'prisma/'];
 // Pattern aggiuntivi (config runtime/provider/env).
 const GUARDED_RE = [/\.env(\.|$)/i, /railway\.json$/i, /vercel\.json$/i];
 
@@ -34,8 +32,13 @@ const ALLOW = [
 ];
 
 function relForward(p) {
-  try { return path.relative(ROOT, path.resolve(ROOT, p)).split(path.sep).join('/'); }
-  catch (_e) { return String(p || '').split(path.sep).join('/'); }
+  try {
+    return path.relative(ROOT, path.resolve(ROOT, p)).split(path.sep).join('/');
+  } catch (_e) {
+    return String(p || '')
+      .split(path.sep)
+      .join('/');
+  }
 }
 
 function isAllowed(rel) {
@@ -55,15 +58,24 @@ function isGuarded(rel) {
 function hasValidContract() {
   try {
     if (!fs.existsSync(TASK_ROOT)) return false;
-    const REQUIRED = ['impact classification', 'current behaviour', 'expected behaviour',
-      'acceptance criteria', 'test plan', 'evidence plan', 'gate status'];
+    const REQUIRED = [
+      'impact classification',
+      'current behaviour',
+      'expected behaviour',
+      'acceptance criteria',
+      'test plan',
+      'evidence plan',
+      'gate status',
+    ];
     for (const name of fs.readdirSync(TASK_ROOT)) {
       const cp = path.join(TASK_ROOT, name, 'task-contract.md');
       if (!fs.existsSync(cp)) continue;
       const t = fs.readFileSync(cp, 'utf8').toLowerCase();
       if (REQUIRED.every((s) => t.includes(s))) return true;
     }
-  } catch (_e) { /* fail-open */ }
+  } catch (_e) {
+    /* fail-open */
+  }
   return false;
 }
 
@@ -73,15 +85,25 @@ function targetPaths(input) {
   for (const k of ['file_path', 'path', 'notebook_path']) {
     if (typeof input[k] === 'string') out.push(input[k]);
   }
-  if (Array.isArray(input.edits)) { /* MultiEdit shares file_path */ }
+  if (Array.isArray(input.edits)) {
+    /* MultiEdit shares file_path */
+  }
   return out;
 }
 
 function main() {
   let raw = '';
-  try { raw = fs.readFileSync(0, 'utf8'); } catch (_e) { process.exit(0); }
+  try {
+    raw = fs.readFileSync(0, 'utf8');
+  } catch (_e) {
+    process.exit(0);
+  }
   let evt;
-  try { evt = JSON.parse(raw || '{}'); } catch (_e) { process.exit(0); }
+  try {
+    evt = JSON.parse(raw || '{}');
+  } catch (_e) {
+    process.exit(0);
+  }
 
   const tool = evt.tool_name || evt.toolName || '';
   if (!MUTATING_TOOLS.has(tool)) process.exit(0); // read/search/bash → consentito
@@ -100,14 +122,18 @@ function main() {
   const blocked = rels.filter(isGuarded).join(', ');
   process.stderr.write(
     'QUALITY GATE — modifica bloccata.\n' +
-    `File di codice applicativo: ${blocked}\n` +
-    'Manca un Task Contract valido. Crealo prima:\n' +
-    '  node scripts/quality-gate/create-task-contract.js "<titolo>"\n' +
-    '  # poi compila il contract e valida:\n' +
-    '  node scripts/quality-gate/validate-task-contract.js <slug>\n' +
-    'Percorso richiesto: artifacts/task-validation/<slug>/task-contract.md\n'
+      `File di codice applicativo: ${blocked}\n` +
+      'Manca un Task Contract valido. Crealo prima:\n' +
+      '  node scripts/quality-gate/create-task-contract.js "<titolo>"\n' +
+      '  # poi compila il contract e valida:\n' +
+      '  node scripts/quality-gate/validate-task-contract.js <slug>\n' +
+      'Percorso richiesto: artifacts/task-validation/<slug>/task-contract.md\n',
   );
   process.exit(2);
 }
 
-try { main(); } catch (_e) { process.exit(0); } // fail-open assoluto
+try {
+  main();
+} catch (_e) {
+  process.exit(0);
+} // fail-open assoluto

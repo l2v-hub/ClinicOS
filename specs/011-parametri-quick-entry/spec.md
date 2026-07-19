@@ -8,7 +8,7 @@
 
 **Input**: User description: "Layout rapido Parametri Pazienti. Card oggi troppo alta. Compilazione molti pazienti deve occupare meno spazio verticale. Parametri principali su riga compatta. Ora rilevazione = ora salvataggio (auto). Operatore = utente loggato (auto). Note rapide solo via espansione / bottone Note. Tablet-friendly. Backend invariato salvo stretta necessita, Prisma e VITE_API_URL invariati."
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Operator records vitals for a full ward with minimal scrolling (Priority: P1) - MVP
 
@@ -65,11 +65,11 @@ When the operator needs to attach Note rapide to a specific measurement, they cl
 - A row is half-edited when the operator switches tabs / loses focus / accidentally taps another row. Half-entered values must not be silently saved with auto-`ora`; either preserve the draft visibly on the row or discard cleanly with a single-step confirmation.
 - A row's compact width at 1024 px cannot fit all six clinical fields without overflowing. Fields must compress (reduced label widths, abbreviated units) or wrap inside the row container without producing a global horizontal scroll.
 - A note is very long (more than 200 characters). The note input must accept multi-line text and the saved row must show a note-present indicator (small icon or non-empty Note button) even when the note input is closed.
-- Operator role changes mid-session (the logged-in user is updated). The auto-`operatore` value used on subsequent saves must reflect the *current* logged-in user at save time, not a value cached when the page was first opened.
+- Operator role changes mid-session (the logged-in user is updated). The auto-`operatore` value used on subsequent saves must reflect the _current_ logged-in user at save time, not a value cached when the page was first opened.
 - Save fails with a network error. The entered values must remain on the row (not be wiped) and the operator must be able to retry from the same row without re-typing.
 - The operator was the one who recorded the values offline on paper at an earlier time and wants the `ora` to reflect that earlier time. This case is **out of scope** for v1 — if the user needs a retroactive time, they must use the existing detail / edit screen, not this quick-entry layout.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -88,7 +88,7 @@ When the operator needs to attach Note rapide to a specific measurement, they cl
 - **FR-013**: If the row width at 1024 px cannot fit all six fields, the fields MUST compress (reduced label widths, abbreviated units) or wrap inside the row container; the row MUST NOT expand the page's horizontal scroll.
 - **FR-014**: If the user session is expired or no user is logged in at the moment of Save, the system MUST surface a clear error and MUST NOT silently discard the entered values.
 - **FR-015**: If a Save call fails with a network error, the row MUST retain the entered values (the values MUST NOT be wiped) and the operator MUST be able to retry from the same row.
-- **FR-016**: The auto-`operatore` value used on each save MUST be the user logged in *at the moment of that save*, not a value cached from page load.
+- **FR-016**: The auto-`operatore` value used on each save MUST be the user logged in _at the moment of that save_, not a value cached from page load.
 - **FR-017**: The redesign MUST preserve all existing Italian UI labels for the six clinical fields and the page title.
 - **FR-018**: The redesign MUST NOT modify the Prisma schema.
 - **FR-019**: The redesign MUST NOT modify the `VITE_API_URL` configuration value.
@@ -99,7 +99,7 @@ When the operator needs to attach Note rapide to a specific measurement, they cl
 
 - **Misurazione Parametri Vitali**: an existing entity; this feature does not change its fields. It carries `pa`, `spO2`, `fc`, `tc`, `dtxGli`, `evacuazione`, `noteRapide`, `ora`, `operatoreId`. After this feature, `ora` and `operatoreId` MUST be populated by the system at save time rather than supplied by the client form.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

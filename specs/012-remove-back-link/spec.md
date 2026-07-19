@@ -8,7 +8,7 @@
 
 **Input**: User description: "Nella Scheda Paziente ci sono due elementi di navigazione duplicati: 1) breadcrumb superiore 'Pazienti > Nome', 2) sotto, '‹ Pazienti'. Il secondo e inutile e ruba spazio verticale. Tenere solo breadcrumb superiore. Card paziente sotto invariata."
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 — Operator sees one and only one back-to-list affordance on the Scheda Paziente (Priority: P1) — MVP
 
@@ -30,7 +30,7 @@ An operator opens any patient's Scheda Paziente. At the top of the page they see
 - The operator is on a narrow tablet viewport (1024px). The single breadcrumb must not wrap awkwardly or be hidden because the removed back link reclaimed its space.
 - The patient identity card itself (initials, name, status, MRN, age, sex, room, allergies) is **out of scope** — it MUST render identically to today.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -43,7 +43,7 @@ An operator opens any patient's Scheda Paziente. At the top of the page they see
 - **FR-007**: The redesign MUST NOT modify backend code, Prisma schema, or any API contract.
 - **FR-008**: All Italian UI labels touched by this change MUST be preserved verbatim where they remain visible.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

@@ -65,8 +65,13 @@ noteRouter.put('/:id', async (req, res) => {
     }
 
     const allowed = [
-      'destinatarioId', 'destinatarioNome', 'pazienteId', 'pazienteNome',
-      'priorita', 'messaggio', 'stato',
+      'destinatarioId',
+      'destinatarioNome',
+      'pazienteId',
+      'pazienteNome',
+      'priorita',
+      'messaggio',
+      'stato',
     ];
     const updates: Record<string, unknown> = {};
     for (const key of allowed) {

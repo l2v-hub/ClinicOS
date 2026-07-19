@@ -15,7 +15,17 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const TASK_ROOT = path.join(ROOT, 'artifacts', 'task-validation');
-const COMPLETION_WORDS = ['done', 'fatto', 'completato', 'completed', 'fixed', 'resolved', 'risolto', 'chiuso', 'closed'];
+const COMPLETION_WORDS = [
+  'done',
+  'fatto',
+  'completato',
+  'completed',
+  'fixed',
+  'resolved',
+  'risolto',
+  'chiuso',
+  'closed',
+];
 
 function anyVerifiedReport() {
   try {
@@ -26,21 +36,31 @@ function anyVerifiedReport() {
       const t = fs.readFileSync(rp, 'utf8');
       if (/final decision/i.test(t) && /CLOSED\s*[—-]\s*VERIFIED/i.test(t)) return true;
     }
-  } catch (_e) { /* fail-open */ }
+  } catch (_e) {
+    /* fail-open */
+  }
   return false;
 }
 
 // Estrae testo candidato dall'evento hook (vari possibili campi) o usa il raw come testo.
 function extractText(raw) {
   let evt = null;
-  try { evt = JSON.parse(raw); } catch (_e) { return raw; }
+  try {
+    evt = JSON.parse(raw);
+  } catch (_e) {
+    return raw;
+  }
   if (evt && typeof evt === 'object') {
     for (const k of ['assistant_message', 'message', 'text', 'last_message', 'response']) {
       if (typeof evt[k] === 'string') return evt[k];
     }
     // Stop hook con transcript_path: leggi l'ultimo messaggio se disponibile.
     if (typeof evt.transcript_path === 'string' && fs.existsSync(evt.transcript_path)) {
-      try { return fs.readFileSync(evt.transcript_path, 'utf8').slice(-4000); } catch (_e) { /* ignore */ }
+      try {
+        return fs.readFileSync(evt.transcript_path, 'utf8').slice(-4000);
+      } catch (_e) {
+        /* ignore */
+      }
     }
     return JSON.stringify(evt);
   }
@@ -54,20 +74,28 @@ function hasCompletionClaim(text) {
 
 function main() {
   let raw = '';
-  try { raw = fs.readFileSync(0, 'utf8'); } catch (_e) { process.exit(0); }
+  try {
+    raw = fs.readFileSync(0, 'utf8');
+  } catch (_e) {
+    process.exit(0);
+  }
   const text = extractText(raw || '');
   if (!hasCompletionClaim(text)) process.exit(0);
   if (anyVerifiedReport()) process.exit(0);
 
   process.stderr.write(
     'QUALITY GATE — dichiarazione di completamento bloccata.\n' +
-    'Trovate parole di chiusura ma manca un validation-report.md con `CLOSED — VERIFIED`.\n' +
-    'Stato corretto: IMPLEMENTED — NOT VERIFIED (oppure FAILED VALIDATION / BLOCKED / PARTIAL).\n' +
-    'Genera il report e la decisione finale prima di dichiarare il task concluso:\n' +
-    '  artifacts/task-validation/<slug>/validation-report.md → Final Decision: CLOSED — VERIFIED\n' +
-    '  node scripts/quality-gate/check-closure.js <slug>\n'
+      'Trovate parole di chiusura ma manca un validation-report.md con `CLOSED — VERIFIED`.\n' +
+      'Stato corretto: IMPLEMENTED — NOT VERIFIED (oppure FAILED VALIDATION / BLOCKED / PARTIAL).\n' +
+      'Genera il report e la decisione finale prima di dichiarare il task concluso:\n' +
+      '  artifacts/task-validation/<slug>/validation-report.md → Final Decision: CLOSED — VERIFIED\n' +
+      '  node scripts/quality-gate/check-closure.js <slug>\n',
   );
   process.exit(2);
 }
 
-try { main(); } catch (_e) { process.exit(0); }
+try {
+  main();
+} catch (_e) {
+  process.exit(0);
+}

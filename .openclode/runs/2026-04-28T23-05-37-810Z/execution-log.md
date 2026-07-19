@@ -156,7 +156,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  text-align: center;
 +  color: #64748b;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -178,7 +178,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import './App.css'
 +import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 +import './App.css';
- 
+
  function App() {
 -  return <h1>ClinicOS</h1>
 +  return (
@@ -212,7 +212,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +
 +function Layout() {
 +  const location = useLocation();
-+  
++
 +  return (
 +    <div className="app">
 +      <header className="app-header">
@@ -261,7 +261,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +function ManagerDashboard() {
 +  return <PlaceholderPage title="Manager Dashboard" description="Clinic analytics, reports, and administration" />;
  }
- 
+
 @@ -9,3 +89,9 @@
  function App() {
 -  return <h1>ClinicOS</h1>
@@ -312,7 +312,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import App from './App.tsx'
 -import './index.css'
 +import './index.css';
- 
+
 @@ -7,3 +7,3 @@
    <React.StrictMode>
 -    <App />
@@ -327,7 +327,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import { defineConfig } from 'vite'
  import react from '@vitejs/plugin-react'
 +import react from '@vitejs/plugin-react'
- 
+
  // https://vitejs.dev/config/
  export default defineConfig({
 ```
@@ -479,7 +479,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  text-align: center;
 +  color: #64748b;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -501,7 +501,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import './App.css'
 +import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 +import './App.css';
- 
+
  function App() {
 -  return <h1>ClinicOS</h1>
 +  return (
@@ -535,7 +535,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +
 +function Layout() {
 +  const location = useLocation();
-+  
++
 +  return (
 +    <div className="app">
 +      <header className="app-header">
@@ -592,7 +592,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </>
 +  );
  }
- 
+
 -export default App
 \ No newline at end of file
 +function OperatorDashboard() { return <PlaceholderPage title="Operator Dashboard" description="Overview of today's schedule, appointments, and alerts" />; }
@@ -641,7 +641,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import App from './App.tsx'
 -import './index.css'
 +import './index.css';
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
 -    <App />
@@ -657,7 +657,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import { defineConfig } from 'vite'
  import react from '@vitejs/plugin-react'
 +import react from '@vitejs/plugin-react'
- 
+
  // https://vitejs.dev/config/
  export default defineConfig({
 ```
@@ -817,7 +817,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  text-align: center;
 +  color: #64748b;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -839,7 +839,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import './App.css'
 +import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 +import './App.css';
- 
+
  function App() {
 -  return <h1>ClinicOS</h1>
 +  return (
@@ -873,7 +873,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +
 +function Layout() {
 +  const location = useLocation();
-+  
++
 +  return (
 +    <div className="app">
 +      <header className="app-header">
@@ -922,7 +922,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +function ManagerDashboard() {
 +  return <PlaceholderPage title="Manager Dashboard" description="Clinic analytics, reports, and administration" />;
  }
- 
+
 @@ -8,5 +88,11 @@
  function App() {
 -  return <h1>ClinicOS</h1>
@@ -934,7 +934,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    <><div className="page-header"><h2>{title}</h2><p>{description}</p></div><div className="placeholder-card">Content placeholder for {title}</div></>
 +  );
  }
- 
+
 -export default App
 \ No newline at end of file
 +export default App;
@@ -977,7 +977,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import App from './App.tsx'
 -import './index.css'
 +import './index.css';
- 
+
 @@ -7,3 +7,3 @@
    <React.StrictMode>
 -    <App />
@@ -992,7 +992,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import { defineConfig } from 'vite'
  import react from '@vitejs/plugin-react'
 +import react from '@vitejs/plugin-react'
- 
+
  // https://vitejs.dev/config/
  export default defineConfig({
 ```
@@ -1152,7 +1152,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  text-align: center;
 +  color: #64748b;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -1166,7 +1166,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  background-color: #f1f5f9;
  }
 ```
- 
+
 +```diff
 --- a/src/App.tsx
 +++ b/src/App.tsx
@@ -1174,106 +1174,115 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import './App.css'
 +import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 +import './App.css';
- 
- function App() {
--  return <h1>ClinicOS</h1>
-+  return (
-+    <Router>
-+      <Routes>
-+        <Route path="/login" element={<LoginPage />} />
-+        <Route path="/*" element={<Layout />}>
-+          <Route index element={<Navigate to="/operator/dashboard" replace />} />
-+          <Route path="operator/dashboard" element={<OperatorDashboard />} />
-+          <Route path="operator/agenda" element={<OperatorAgenda />} />
-+          <Route path="operator/patients" element={<PatientList />} />
-+          <Route path="operator/patients/:id" element={<PatientDetail />} />
-+          <Route path="manager/dashboard" element={<ManagerDashboard />} />
-+        </Route>
-+      </Routes>
-+    </Router>
-+  );
-+}
-+
+
+function App() {
+
+- return <h1>ClinicOS</h1>
+
+* return (
+* <Router>
+*      <Routes>
+*        <Route path="/login" element={<LoginPage />} />
+*        <Route path="/*" element={<Layout />}>
+*          <Route index element={<Navigate to="/operator/dashboard" replace />} />
+*          <Route path="operator/dashboard" element={<OperatorDashboard />} />
+*          <Route path="operator/agenda" element={<OperatorAgenda />} />
+*          <Route path="operator/patients" element={<PatientList />} />
+*          <Route path="operator/patients/:id" element={<PatientDetail />} />
+*          <Route path="manager/dashboard" element={<ManagerDashboard />} />
+*        </Route>
+*      </Routes>
+* </Router>
+* );
+  +}
+*
+
 +function LoginPage() {
-+  return (
-+    <div className="login-container">
-+      <div className="placeholder-card" style={{ maxWidth: '400px', width: '100%' }}>
-+        <h2>ClinicOS Login</h2>
-+        <p>Login form placeholder</p>
-+        <p>User: operator | manager</p>
-+      </div>
-+    </div>
-+  );
-+}
-+
+
+- return (
+- <div className="login-container">
+-      <div className="placeholder-card" style={{ maxWidth: '400px', width: '100%' }}>
+-        <h2>ClinicOS Login</h2>
+-        <p>Login form placeholder</p>
+-        <p>User: operator | manager</p>
+-      </div>
+- </div>
+- );
+  +}
+-
+
 +function Layout() {
-+  const location = useLocation();
-+  
-+  return (
-+    <div className="app">
-+      <header className="app-header">
-+        <h1>ClinicOS</h1>
-+        <div className="user-info">
-+          User: Operator | <Link to="/login" style={{ color: 'white', textDecoration: 'underline' }}>Logout</Link>
-+        </div>
-+      </header>
-+      <div className="app-container">
-+        <nav className="sidebar">
-+          <div className="nav-section">
-+            <h3>Operator</h3>
-+            <Link to="/operator/dashboard" className={`nav-link ${location.pathname.startsWith('/operator/dashboard') ? 'active' : ''}`}>
-+              Dashboard
-+            </Link>
-+            <Link to="/operator/agenda" className={`nav-link ${location.pathname.startsWith('/operator/agenda') ? 'active' : ''}`}>
-+              Agenda
-+            </Link>
-+            <Link to="/operator/patients" className={`nav-link ${location.pathname.startsWith('/operator/patients') ? 'active' : ''}`}>
-+              Patients
-+            </Link>
-+          </div>
-+          <div className="nav-section">
-+            <h3>Manager</h3>
-+            <Link to="/manager/dashboard" className={`nav-link ${location.pathname.startsWith('/manager/dashboard') ? 'active' : ''}`}>
-+              Dashboard
-+            </Link>
-+          </div>
-+        </nav>
-+        <main className="main-content">
-+          <Routes>
-+            <Route path="/operator/dashboard" element={<OperatorDashboard />} />
-+            <Route path="/operator/agenda" element={<OperatorAgenda />} />
-+            <Route path="/operator/patients" element={<PatientList />} />
-+            <Route path="/operator/patients/:id" element={<PatientDetail />} />
-+            <Route path="/manager/dashboard" element={<ManagerDashboard />} />
-+          </Routes>
-+        </main>
-+      </div>
-+    </div>
-+  );
-+}
-+
+
+- const location = useLocation();
+-
+- return (
+- <div className="app">
+-      <header className="app-header">
+-        <h1>ClinicOS</h1>
+-        <div className="user-info">
+-          User: Operator | <Link to="/login" style={{ color: 'white', textDecoration: 'underline' }}>Logout</Link>
+-        </div>
+-      </header>
+-      <div className="app-container">
+-        <nav className="sidebar">
+-          <div className="nav-section">
+-            <h3>Operator</h3>
+-            <Link to="/operator/dashboard" className={`nav-link ${location.pathname.startsWith('/operator/dashboard') ? 'active' : ''}`}>
+-              Dashboard
+-            </Link>
+-            <Link to="/operator/agenda" className={`nav-link ${location.pathname.startsWith('/operator/agenda') ? 'active' : ''}`}>
+-              Agenda
+-            </Link>
+-            <Link to="/operator/patients" className={`nav-link ${location.pathname.startsWith('/operator/patients') ? 'active' : ''}`}>
+-              Patients
+-            </Link>
+-          </div>
+-          <div className="nav-section">
+-            <h3>Manager</h3>
+-            <Link to="/manager/dashboard" className={`nav-link ${location.pathname.startsWith('/manager/dashboard') ? 'active' : ''}`}>
+-              Dashboard
+-            </Link>
+-          </div>
+-        </nav>
+-        <main className="main-content">
+-          <Routes>
+-            <Route path="/operator/dashboard" element={<OperatorDashboard />} />
+-            <Route path="/operator/agenda" element={<OperatorAgenda />} />
+-            <Route path="/operator/patients" element={<PatientList />} />
+-            <Route path="/operator/patients/:id" element={<PatientDetail />} />
+-            <Route path="/manager/dashboard" element={<ManagerDashboard />} />
+-          </Routes>
+-        </main>
+-      </div>
+- </div>
+- );
+  +}
+-
+
 +function PlaceholderPage({ title, description }: { title: string; description: string }) {
-+  return (
-+    <>
-+      <div className="page-header">
-+        <h2>{title}</h2>
-+        <p>{description}</p>
-+      </div>
-+      <div className="placeholder-card">
-+        Content placeholder for {title}
-+      </div>
-+    </>
-+  );
-+}
-+
+
+- return (
+- <>
+-      <div className="page-header">
+-        <h2>{title}</h2>
+-        <p>{description}</p>
+-      </div>
+-      <div className="placeholder-card">
+-        Content placeholder for {title}
+-      </div>
+- </>
+- );
+  +}
+-
+
 +function OperatorDashboard() { return <PlaceholderPage title="Operator Dashboard" description="Overview of today's schedule, appointments, and alerts" />; }
 +function OperatorAgenda() { return <PlaceholderPage title="Operator Agenda" description="Daily schedule and appointment management" />; }
 +function PatientList() { return <PlaceholderPage title="Patients" description="List of all registered patients" />; }
 +function PatientDetail() { return <PlaceholderPage title="Patient Details" description="Patient information, medical history, and appointments" />; }
-+function ManagerDashboard() { return <PlaceholderPage title="Manager Dashboard" description="Clinic analytics, reports, and administration" />; }
-+
++function ManagerDashboard() { return <PlaceholderPage title="Manager Dashboard" description="Clinic analytics, reports, and administration" />; } +
 +export default App;
-```
+
+````
 
 ```diff
 --- a/src/index.css
@@ -1301,7 +1310,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  color: #1e293b;
 +  background-color: #ffffff;
  }
-```
+````
 
 ```diff
 --- a/src/main.tsx
@@ -1312,7 +1321,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import App from './App.tsx'
 -import './index.css'
 +import './index.css';
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
 -    <App />
@@ -1328,7 +1337,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import { defineConfig } from 'vite'
 -import react from '@vitejs/plugin-react'
 +import react from '@vitejs/plugin-react-swc'
- 
+
  // https://vitejs.dev/config/
  export default defineConfig({
 ```
@@ -1337,190 +1346,190 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 
 [diff-apply error] package.json: Hunk 1 context not found in package.json near line 31.
 Expected:
-      "typescript": "^5.2.2",
-      "vite": "^5.3.1"
-    },
-    "dependencies": {
-    }
+"typescript": "^5.2.2",
+"vite": "^5.3.1"
+},
+"dependencies": {
+}
 File has 35 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 1.
 Expected:
-  #root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+#root {
+max-width: 1280px;
+margin: 0 auto;
+padding: 2rem;
+text-align: center;
 File has 185 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 9.
 Expected:
-  function App() {
-    return <h1>ClinicOS</h1>
-  }
-  
+function App() {
+return <h1>ClinicOS</h1>
+}
+
 File has 123 lines.
 [diff-apply error] src/index.css: Hunk 1 context not found in src/index.css near line 1.
 Expected:
-  :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-  
+:root {
+font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+line-height: 1.5;
+font-weight: 400;
+
 File has 112 lines.
 [diff-apply error] src/main.tsx: Hunk 1 context not found in src/main.tsx near line 7.
 Expected:
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-  
+<React.StrictMode>
+<App />
+</React.StrictMode>,
+
 File has 11 lines.
 [diff-apply error] vite.config.ts: Hunk 1 context not found in vite.config.ts near line 1.
 Expected:
-  import { defineConfig } from 'vite'
-  import react from '@vitejs/plugin-react'
-  
-  // https://vitejs.dev/config/
-  export default defineConfig({
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
 File has 12 lines.
 [diff-apply error] package.json: Hunk 1 context not found in package.json near line 23.
 Expected:
-      "react-dom": "^18.3.1"
-    },
-    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^7.13.1",
-      "@typescript-eslint/parser": "^7.13.1",
+"react-dom": "^18.3.1"
+},
+"devDependencies": {
+"@typescript-eslint/eslint-plugin": "^7.13.1",
+"@typescript-eslint/parser": "^7.13.1",
 File has 35 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 1.
 Expected:
-  #root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+#root {
+max-width: 1280px;
+margin: 0 auto;
+padding: 2rem;
+text-align: center;
 File has 185 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 1.
 Expected:
-  import './App.css'
-  
-  function App() {
-    return <h1>ClinicOS</h1>
-  }
+import './App.css'
+
+function App() {
+return <h1>ClinicOS</h1>
+}
 File has 123 lines.
 [diff-apply error] src/index.css: Hunk 1 context not found in src/index.css near line 1.
 Expected:
-  :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-  
+:root {
+font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+line-height: 1.5;
+font-weight: 400;
+
 File has 112 lines.
 [diff-apply error] src/main.tsx: Hunk 1 context not found in src/main.tsx near line 1.
 Expected:
-  import React from 'react'
-  import ReactDOM from 'react-dom/client'
-  import App from './App.tsx'
-  import './index.css'
-  
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+
 File has 11 lines.
 [diff-apply error] vite.config.ts: Hunk 1 context not found in vite.config.ts near line 1.
 Expected:
-  import { defineConfig } from 'vite'
-  import react from '@vitejs/plugin-react'
-  
-  // https://vitejs.dev/config/
-  export default defineConfig({
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
 File has 12 lines.
 [diff-apply error] package.json: Hunk 1 context not found in package.json near line 20.
 Expected:
-      "@typescript-eslint/eslint-plugin": "^7.13.1",
-      "@typescript-eslint/parser": "^7.13.1",
-      "eslint": "^8.57.0",
-      "eslint-plugin-react-hooks": "^4.6.2",
-      "eslint-plugin-react-refresh": "^0.4.10",
+"@typescript-eslint/eslint-plugin": "^7.13.1",
+"@typescript-eslint/parser": "^7.13.1",
+"eslint": "^8.57.0",
+"eslint-plugin-react-hooks": "^4.6.2",
+"eslint-plugin-react-refresh": "^0.4.10",
 File has 35 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 1.
 Expected:
-  #root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+#root {
+max-width: 1280px;
+margin: 0 auto;
+padding: 2rem;
+text-align: center;
 File has 185 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 8.
 Expected:
-  function App() {
-    return <h1>ClinicOS</h1>
-  }
-  
-  export default App
+function App() {
+return <h1>ClinicOS</h1>
+}
+
+export default App
 File has 123 lines.
 [diff-apply error] src/index.css: Hunk 1 context not found in src/index.css near line 1.
 Expected:
-  :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-  
+:root {
+font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+line-height: 1.5;
+font-weight: 400;
+
 File has 112 lines.
 [diff-apply error] src/main.tsx: Hunk 1 context not found in src/main.tsx near line 7.
 Expected:
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-  
+<React.StrictMode>
+<App />
+</React.StrictMode>,
+
 File has 11 lines.
 [diff-apply error] vite.config.ts: Hunk 1 context not found in vite.config.ts near line 1.
 Expected:
-  import { defineConfig } from 'vite'
-  import react from '@vitejs/plugin-react'
-  
-  // https://vitejs.dev/config/
-  export default defineConfig({
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
 File has 12 lines.
 [diff-apply error] package.json: Hunk 1 context not found in package.json near line 16.
 Expected:
-    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^7.13.1",
-      "@typescript-eslint/parser": "^7.13.1",
-      "eslint": "^8.57.0",
-      "eslint-plugin-react-hooks": "^4.6.2",
+"devDependencies": {
+"@typescript-eslint/eslint-plugin": "^7.13.1",
+"@typescript-eslint/parser": "^7.13.1",
+"eslint": "^8.57.0",
+"eslint-plugin-react-hooks": "^4.6.2",
 File has 35 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 1.
 Expected:
-  #root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+#root {
+max-width: 1280px;
+margin: 0 auto;
+padding: 2rem;
+text-align: center;
 File has 185 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 1.
 Expected:
-  import './App.css'
-  
-  function App() {
-    return <h1>ClinicOS</h1>
-  
+import './App.css'
+
+function App() {
+return <h1>ClinicOS</h1>
+
 File has 123 lines.
 [diff-apply error] src/index.css: Hunk 1 context not found in src/index.css near line 1.
 Expected:
-  :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-  
+:root {
+font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+line-height: 1.5;
+font-weight: 400;
+
 File has 112 lines.
 [diff-apply error] src/main.tsx: Hunk 1 context not found in src/main.tsx near line 1.
 Expected:
-  import React from 'react'
-  import ReactDOM from 'react-dom/client'
-  import App from './App.tsx'
-  import './index.css'
-  
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+
 File has 11 lines.
 [diff-apply error] vite.config.ts: Hunk 1 context not found in vite.config.ts near line 1.
 Expected:
-  import { defineConfig } from 'vite'
-  import react from '@vitejs/plugin-react'
-  
-  // https://vitejs.dev/config/
-  export default defineConfig({
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
 File has 12 lines.

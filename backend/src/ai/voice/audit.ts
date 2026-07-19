@@ -14,7 +14,7 @@ export interface VoiceAuditEntry {
   patientId: string | null;
   actionType: string;
   recordId: string | null;
-  fields: string[];          // field NAMES only, no values
+  fields: string[]; // field NAMES only, no values
   source: 'VOICE';
   /** SPEC-015: input channel — TESTO (typed) or VOCE (spoken). Legacy callers default to VOCE. */
   channel: 'TESTO' | 'VOCE';

@@ -22,7 +22,14 @@ try {
     console.log(`clicked "${label}"`);
   }
   if (scrollTo) {
-    try { await page.getByText(scrollTo, { exact: false }).first().scrollIntoViewIfNeeded({ timeout: 5000 }); } catch { /* */ }
+    try {
+      await page
+        .getByText(scrollTo, { exact: false })
+        .first()
+        .scrollIntoViewIfNeeded({ timeout: 5000 });
+    } catch {
+      /* */
+    }
     await page.waitForTimeout(400);
   }
   if (interact?.startsWith('click:')) {
@@ -31,6 +38,14 @@ try {
   }
   await page.screenshot({ path: resolve(out), fullPage: true });
   const body = (await page.textContent('body')) ?? '';
-  console.log(JSON.stringify({ out, bodyChars: body.length, hasScrollTo: scrollTo ? body.includes(scrollTo) : null }));
+  console.log(
+    JSON.stringify({
+      out,
+      bodyChars: body.length,
+      hasScrollTo: scrollTo ? body.includes(scrollTo) : null,
+    }),
+  );
   await page.close();
-} finally { await browser.close(); }
+} finally {
+  await browser.close();
+}

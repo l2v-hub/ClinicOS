@@ -5,12 +5,16 @@
 import type { LlmPlanRequest, LlmPlanResponse } from './llm-planner.js';
 import type { AssistantLlmConfig } from './config.js';
 
-export async function callPlanRuntime(req: LlmPlanRequest, cfg: AssistantLlmConfig): Promise<LlmPlanResponse> {
+export async function callPlanRuntime(
+  req: LlmPlanRequest,
+  cfg: AssistantLlmConfig,
+): Promise<LlmPlanResponse> {
   const token = process.env.AI_RUNTIME_SERVICE_TOKEN;
-  if (!cfg.runtimeUrl || !token || !cfg.planModel) throw new Error('assistant plan runtime not configured');
+  if (!cfg.runtimeUrl || !token || !cfg.planModel)
+    throw new Error('assistant plan runtime not configured');
   const res = await fetch(`${cfg.runtimeUrl.replace(/\/$/, '')}/v1/assistant/plan`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ ...req, model: cfg.planModel }),
     signal: AbortSignal.timeout(cfg.timeoutMs),
   });
@@ -28,10 +32,11 @@ export async function callComposeRuntime(
   cfg: AssistantLlmConfig,
 ): Promise<ComposeRuntimeResponse> {
   const token = process.env.AI_RUNTIME_SERVICE_TOKEN;
-  if (!cfg.runtimeUrl || !token || !cfg.composeModel) throw new Error('assistant compose runtime not configured');
+  if (!cfg.runtimeUrl || !token || !cfg.composeModel)
+    throw new Error('assistant compose runtime not configured');
   const res = await fetch(`${cfg.runtimeUrl.replace(/\/$/, '')}/v1/assistant/compose`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ ...req, language: 'it', model: cfg.composeModel }),
     signal: AbortSignal.timeout(cfg.timeoutMs),
   });

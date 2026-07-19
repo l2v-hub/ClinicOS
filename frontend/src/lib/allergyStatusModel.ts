@@ -28,7 +28,11 @@ export function deriveAllergySummary(
   const items = list ?? [];
 
   if (items.length > 0) {
-    return { label: `${items.length} allerg${items.length === 1 ? 'ia' : 'ie'}`, badge: 'count', count: items.length };
+    return {
+      label: `${items.length} allerg${items.length === 1 ? 'ia' : 'ie'}`,
+      badge: 'count',
+      count: items.length,
+    };
   }
 
   if (status === 'assenti') {
@@ -51,10 +55,16 @@ export interface CanSetStatusResult {
 // status while the detail list still has entries is exactly the contradictory state
 // Codex flagged (modal shows "nega" while data proves otherwise). Block the transition
 // at the source instead of persisting-then-warning.
-export function canSetStatus(list: AllergiaItem[] | undefined, next: AllergyStatus): CanSetStatusResult {
+export function canSetStatus(
+  list: AllergiaItem[] | undefined,
+  next: AllergyStatus,
+): CanSetStatusResult {
   const items = list ?? [];
   if ((next === 'assenti' || next === 'paziente_nega') && items.length > 0) {
-    return { ok: false, reason: 'Rimuovi prima le allergie registrate per impostare questo stato.' };
+    return {
+      ok: false,
+      reason: 'Rimuovi prima le allergie registrate per impostare questo stato.',
+    };
   }
   return { ok: true };
 }

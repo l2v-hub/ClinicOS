@@ -11,39 +11,43 @@ e deployment prima della chiusura.
 
 ## Esito
 
-| Issue | Tipo | Titolo | Iter. | Esito | PR | Commit merge | Deployment | Screenshot |
-|---|---|---|---:|---|---|---|---|---|
-| #127 | BUG | Creazione paziente non funzionante (manuale + import) | 1/4 | ✅ PASS · CHIUSA | #132 | `bdd797f` | Vercel+Railway success | `docs/qa/issues/127/` |
-| #128 | BUG | Camera assegnata non risulta occupata | 1/4 | ✅ PASS · CHIUSA | #134 | `1132dcd` | Vercel+Railway success | `docs/qa/issues/128/` |
-| #129 | BUG | Ordinamento alfabetico pazienti non coerente | 1/4 | ✅ PASS · CHIUSA | #135 | `b443ce3` | Vercel+Railway success | `docs/qa/issues/129/` |
-| #130 | BUG | Comandi vocali consegne/diario/parametri/appuntamenti | 1/4 | ✅ PASS · CHIUSA | #136 | `43b2cc1` | Vercel+Railway success | `docs/qa/issues/130/` |
-| #133 | CI  | browser-e2e (req020) fallisce per drift ambientale runner | — | 🔵 APERTA (tracking infra, aperta durante il batch) | — | — | — | artifact CI |
-| #137 | BUG | Agnos non legge config LLM da env Railway | 0/4 | ⛔ BLOCCATA (needs-info) | — | — | — | prod status probe |
+| Issue | Tipo | Titolo                                                    | Iter. | Esito                                               | PR   | Commit merge | Deployment             | Screenshot            |
+| ----- | ---- | --------------------------------------------------------- | ----: | --------------------------------------------------- | ---- | ------------ | ---------------------- | --------------------- |
+| #127  | BUG  | Creazione paziente non funzionante (manuale + import)     |   1/4 | ✅ PASS · CHIUSA                                    | #132 | `bdd797f`    | Vercel+Railway success | `docs/qa/issues/127/` |
+| #128  | BUG  | Camera assegnata non risulta occupata                     |   1/4 | ✅ PASS · CHIUSA                                    | #134 | `1132dcd`    | Vercel+Railway success | `docs/qa/issues/128/` |
+| #129  | BUG  | Ordinamento alfabetico pazienti non coerente              |   1/4 | ✅ PASS · CHIUSA                                    | #135 | `b443ce3`    | Vercel+Railway success | `docs/qa/issues/129/` |
+| #130  | BUG  | Comandi vocali consegne/diario/parametri/appuntamenti     |   1/4 | ✅ PASS · CHIUSA                                    | #136 | `43b2cc1`    | Vercel+Railway success | `docs/qa/issues/130/` |
+| #133  | CI   | browser-e2e (req020) fallisce per drift ambientale runner |     — | 🔵 APERTA (tracking infra, aperta durante il batch) | —    | —            | —                      | artifact CI           |
+| #137  | BUG  | Agnos non legge config LLM da env Railway                 |   0/4 | ⛔ BLOCCATA (needs-info)                            | —    | —            | —                      | prod status probe     |
 
 **Chiuse: 4 · Aperte: 2 (#133 tracking-infra, #137 needs-info).**
 
 ## Dettaglio per issue
 
 ### #127 — Creazione paziente (root cause doppia)
+
 1. `AnamnesisEditor` dereferenziava `value` undefined (draft manuali senza `data.anamnesi`;
    import senza `anamnesisText`) → schermo bianco al passo Clinica, nessuna `POST /patients`.
 2. Flusso import: `handleProceedToWorkspace` scartava l'anagrafica corretta in Revisione.
-Fix frontend: editor null-tolerant + `patchDraft` dell'anagrafica dopo `createDraftFromImport`.
-E2E `e2e/issue-127-verify.mjs` 7/7 PASS.
+   Fix frontend: editor null-tolerant + `patchDraft` dell'anagrafica dopo `createDraftFromImport`.
+   E2E `e2e/issue-127-verify.mjs` 7/7 PASS.
 
 ### #128 — Camera non occupata
+
 La cartella JSON scriveva `cameraNumero/lettoNumero` ma non creava la `PatientRoomAssignment`,
 unica fonte letta da `/admin/rooms` e dalle viste occupazione → letto sempre libero.
 Fix frontend: `syncCameraAssignment` (POST/PUT room-assignments) + select camere filtrate a
 letti liberi. E2E `e2e/issue-128-verify.mjs` 9/9 PASS (AC1-AC4 + refresh).
 
 ### #129 — Ordinamento pazienti
+
 Nessun ordinamento client-side nelle 4 viste (consegne/parametri/pazienti presenti/terapia);
 ereditavano l'ordine `createdAt` del backend.
 Fix: utility condivisa `frontend/src/lib/patientSort.ts` (`Intl.Collator('it')`, cognome→nome,
 stabile) applicata alle 4 viste + roster. E2E `e2e/issue-129-verify.mjs` PASS su 4 viste + refresh.
 
 ### #130 — Voce operativa
+
 Diario/parametri/appuntamenti + divieto Delete già coperti da SPEC-015. Gap reale: **consegne**
 (mancava `create_consegna`; verbo `scriv…` non riconosciuto).
 Fix: `backend/src/services/consegna-service.ts` condiviso UI+AI (FR-007), entry catalogo, matcher

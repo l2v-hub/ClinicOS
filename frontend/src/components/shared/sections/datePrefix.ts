@@ -7,13 +7,17 @@
 
 import type { SemanticAnnotation } from './types';
 
-const MONTHS = 'gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre';
+const MONTHS =
+  'gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre';
 // Numeric DD/MM/YYYY · DD-MM-YYYY · DD.MM.YYYY · DD/MM/YY, or textual "9 marzo 2026".
 const DATE_CORE = `(?:\\d{1,2}[/.\\-]\\d{1,2}[/.\\-]\\d{2,4}|\\d{1,2}\\s+(?:${MONTHS})\\s+\\d{4})`;
 // Optional Italian lead-in "In data …" / "Il …" — highlighted together with the date.
 const EXPRESSION = `(?:(?:in\\s+data|il)\\s+)?${DATE_CORE}`;
 // Line start (start of text or after \n), optional bullet/numbered-list marker, then the expression.
-const LINE_START = new RegExp(`(^|\\n)([ \\t]*(?:[-*•]\\s+|\\d{1,2}[.)]\\s+)?)(${EXPRESSION})`, 'gi');
+const LINE_START = new RegExp(
+  `(^|\\n)([ \\t]*(?:[-*•]\\s+|\\d{1,2}[.)]\\s+)?)(${EXPRESSION})`,
+  'gi',
+);
 
 /**
  * Return DATE_PREFIX annotations for every date that opens a line/paragraph/bullet in `text`.
@@ -25,7 +29,7 @@ export function detectDatePrefixAnnotations(text: string): SemanticAnnotation[] 
   LINE_START.lastIndex = 0;
   let m: RegExpExecArray | null;
   while ((m = LINE_START.exec(text)) !== null) {
-    const lead = m[1].length + m[2].length;        // newline + bullet/indent before the expression
+    const lead = m[1].length + m[2].length; // newline + bullet/indent before the expression
     const start = m.index + lead;
     const expr = m[3];
     const end = start + expr.length;

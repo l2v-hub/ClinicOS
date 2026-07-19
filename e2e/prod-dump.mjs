@@ -26,7 +26,11 @@ try {
   await af(`${base}/${jobId}/process`, { method: 'POST' });
   const term = new Set(['review_ready', 'failed', 'retryable_error', 'cancelled']);
   let last;
-  for (let i = 0; i < 120; i++) { await sleep(3000); last = await (await af(`${base}/${jobId}`)).json(); if (term.has(last.status)) break; }
+  for (let i = 0; i < 120; i++) {
+    await sleep(3000);
+    last = await (await af(`${base}/${jobId}`)).json();
+    if (term.has(last.status)) break;
+  }
   console.log('status:', last.status);
   if (last.status === 'review_ready') {
     const rd = (await (await af(`${base}/${jobId}/result`)).json()).resultData ?? {};

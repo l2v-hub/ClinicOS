@@ -6,10 +6,16 @@
 
 /* ── Toggle logic ─────────────────────────────────────────────────────────── */
 
-.modulo-content { display: none; }
+.modulo-content {
+  display: none;
+}
 
-.mode-modulo .web-content     { display: none !important; }
-.mode-modulo .modulo-content  { display: block !important; }
+.mode-modulo .web-content {
+  display: none !important;
+}
+.mode-modulo .modulo-content {
+  display: block !important;
+}
 
 .modulo-toggle-bar {
   display: flex;
@@ -40,17 +46,43 @@
 }
 
 @media print {
-  .web-content    { display: none !important; }
-  .modulo-content { display: block !important; }
-  .modulo-toggle-bar { display: none !important; }
-  .cr-tab-header  { display: none !important; }
-  .no-print       { display: none !important; }
-  .print-only     { display: block !important; }
-  .nav-rail, .app-shell__sidebar { display: none !important; }
-  .cr-header, .cr-breadcrumb, .cr-tab-bar { display: none !important; }
-  body { background: white; margin: 0; }
-  .patient-record-view { padding: 0; }
-  @page { margin: 15mm; }
+  .web-content {
+    display: none !important;
+  }
+  .modulo-content {
+    display: block !important;
+  }
+  .modulo-toggle-bar {
+    display: none !important;
+  }
+  .cr-tab-header {
+    display: none !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .nav-rail,
+  .app-shell__sidebar {
+    display: none !important;
+  }
+  .cr-header,
+  .cr-breadcrumb,
+  .cr-tab-bar {
+    display: none !important;
+  }
+  body {
+    background: white;
+    margin: 0;
+  }
+  .patient-record-view {
+    padding: 0;
+  }
+  @page {
+    margin: 15mm;
+  }
 
   /* When Invio in PS modal is open, print only the modal document.
      The overlay is rendered INSIDE .patient-record-view, so we must hide
@@ -121,7 +153,7 @@
   padding: 20px 24px 30px;
   border: 1px solid #aaa;
   border-radius: 0;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 /* Title bar */
@@ -152,7 +184,9 @@
   padding: 4px 8px;
   min-height: 34px;
 }
-.fm-patient-field:last-child { border-right: none; }
+.fm-patient-field:last-child {
+  border-right: none;
+}
 .fm-patient-field__lbl {
   font-size: 8pt;
   font-weight: 700;
@@ -193,9 +227,16 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
-.fm-allergie-box--grave .fm-allergie-box__lbl { color: #b00020; }
-.fm-allergie-box__val { font-weight: 600; }
-.fm-allergene--grave { color: #b00020; font-weight: 700; }
+.fm-allergie-box--grave .fm-allergie-box__lbl {
+  color: #b00020;
+}
+.fm-allergie-box__val {
+  font-weight: 600;
+}
+.fm-allergene--grave {
+  color: #b00020;
+  font-weight: 700;
+}
 
 /* ── Section label ── */
 .fm-section {
@@ -263,8 +304,12 @@
   font-size: 10pt;
   padding-bottom: 1px;
 }
-.fm-inline__val--wide { min-width: 160px; }
-.fm-inline__val--sm   { min-width: 50px; }
+.fm-inline__val--wide {
+  min-width: 160px;
+}
+.fm-inline__val--sm {
+  min-width: 50px;
+}
 
 /* ── Checkbox ── */
 .fm-cb-group {
@@ -300,8 +345,14 @@
   flex-shrink: 0;
   background: white;
 }
-.fm-cb__box--checked::after { content: '✓'; font-weight: 700; }
-.fm-cb__box--x::after { content: 'X'; font-weight: 700; }
+.fm-cb__box--checked::after {
+  content: '✓';
+  font-weight: 700;
+}
+.fm-cb__box--x::after {
+  content: 'X';
+  font-weight: 700;
+}
 
 /* ── Signature area ── */
 .fm-signature-row {
@@ -344,8 +395,12 @@
   background: #e0e0e0;
   text-align: center;
 }
-.fm-table td { min-height: 24px; }
-.fm-table tr:nth-child(even) td { background: #f9f9f9; }
+.fm-table td {
+  min-height: 24px;
+}
+.fm-table tr:nth-child(even) td {
+  background: #f9f9f9;
+}
 
 /* ── Notes area ── */
 .fm-notes {
@@ -412,7 +467,7 @@
   text-align: center;
 }
 .braden-modulo-table .col-indicator {
-  background: #1A3357;
+  background: #1a3357;
   color: white;
   font-weight: 700;
   font-size: 9pt;
@@ -421,7 +476,7 @@
   width: 110px;
 }
 .braden-modulo-table .col-score-hdr {
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
   font-size: 12pt;
   font-weight: 700;
@@ -438,12 +493,12 @@
 .braden-modulo-table .score-cell.selected {
   background: #c8e6c9;
   font-weight: 700;
-  border: 2px solid #388E3C;
+  border: 2px solid #388e3c;
   position: relative;
 }
 .braden-modulo-table .score-cell.selected::before {
   content: '✓ ';
-  color: #2E7D32;
+  color: #2e7d32;
   font-weight: 900;
 }
 .braden-modulo-table .totale-row td {
@@ -488,11 +543,28 @@
   vertical-align: top;
   min-height: 36px;
 }
-.diario-modulo-table td.col-data { width: 70px; text-align: center; font-weight: 600; }
-.diario-modulo-table td.col-turno { width: 70px; text-align: center; }
-.diario-modulo-table td.col-testo { line-height: 1.8; white-space: pre-wrap; }
-.diario-modulo-table td.col-firma { width: 90px; vertical-align: bottom; border-bottom: 1px dotted #333; font-size: 9pt; }
-.diario-modulo-table tr.empty-row td { height: 48px; }
+.diario-modulo-table td.col-data {
+  width: 70px;
+  text-align: center;
+  font-weight: 600;
+}
+.diario-modulo-table td.col-turno {
+  width: 70px;
+  text-align: center;
+}
+.diario-modulo-table td.col-testo {
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+.diario-modulo-table td.col-firma {
+  width: 90px;
+  vertical-align: bottom;
+  border-bottom: 1px dotted #333;
+  font-size: 9pt;
+}
+.diario-modulo-table tr.empty-row td {
+  height: 48px;
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PARAMETRI VITALI — griglia mensile (A4 landscape)
@@ -531,10 +603,19 @@
   font-weight: 700;
   font-size: 8pt;
 }
-.parametri-modulo-table td { height: 17px; }
-.parametri-modulo-table tbody tr:nth-child(even) td { background: #f9f9f9; }
-.parametri-modulo-table tbody tr:nth-child(even) td.col-day { background: #e8e8e8; }
-.parametri-modulo-table td.has-value { font-weight: 600; background: #eef5ff; }
+.parametri-modulo-table td {
+  height: 17px;
+}
+.parametri-modulo-table tbody tr:nth-child(even) td {
+  background: #f9f9f9;
+}
+.parametri-modulo-table tbody tr:nth-child(even) td.col-day {
+  background: #e8e8e8;
+}
+.parametri-modulo-table td.has-value {
+  font-weight: 600;
+  background: #eef5ff;
+}
 
 @media print {
   .parametri-modulo-wrap {
@@ -593,13 +674,32 @@
   width: 36px;
   background: #9e9e9e;
 }
-.terapia-modulo-table td.col-inizio { width: 65px; font-size: 8pt; }
-.terapia-modulo-table td.col-farmaco { font-weight: 600; }
-.terapia-modulo-table td.col-medico { width: 60px; font-size: 8pt; }
-.terapia-modulo-table td.col-time { width: 36px; text-align: center; }
-.terapia-modulo-table td.col-fine { width: 65px; font-size: 8pt; }
-.terapia-modulo-table td.col-note { font-size: 7.5pt; }
-.terapia-modulo-table tr.empty-row td { min-height: 20px; height: 20px; }
+.terapia-modulo-table td.col-inizio {
+  width: 65px;
+  font-size: 8pt;
+}
+.terapia-modulo-table td.col-farmaco {
+  font-weight: 600;
+}
+.terapia-modulo-table td.col-medico {
+  width: 60px;
+  font-size: 8pt;
+}
+.terapia-modulo-table td.col-time {
+  width: 36px;
+  text-align: center;
+}
+.terapia-modulo-table td.col-fine {
+  width: 65px;
+  font-size: 8pt;
+}
+.terapia-modulo-table td.col-note {
+  font-size: 7.5pt;
+}
+.terapia-modulo-table tr.empty-row td {
+  min-height: 20px;
+  height: 20px;
+}
 .terapia-modulo-allegies {
   display: flex;
   gap: 20px;
@@ -651,7 +751,14 @@
   flex-shrink: 0;
   position: relative;
 }
-.med-modulo-cb.checked::after { content: '×'; position: absolute; top: -2px; left: 1px; font-weight: 700; font-size: 11px; }
+.med-modulo-cb.checked::after {
+  content: '×';
+  position: absolute;
+  top: -2px;
+  left: 1px;
+  font-weight: 700;
+  font-size: 11px;
+}
 
 /* Followup log table (template 02) */
 .med-followup-table {
@@ -665,7 +772,11 @@
   border: 1px solid #444;
   padding: 4px 6px;
 }
-.med-followup-table th { background: #ccc; font-weight: 700; font-size: 8pt; }
+.med-followup-table th {
+  background: #ccc;
+  font-weight: 700;
+  font-size: 8pt;
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CONTENZIONE CONSENSO — modulo consenso informato
@@ -760,9 +871,17 @@
 ═══════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 700px) {
-  .fm { padding: 12px 10px 20px; }
+  .fm {
+    padding: 12px 10px 20px;
+  }
   .fm-patient-header,
-  .fm-patient-header.cols-4 { grid-template-columns: 1fr 1fr; }
-  .braden-modulo-table { font-size: 8pt; }
-  .diario-modulo-table { font-size: 8pt; }
+  .fm-patient-header.cols-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .braden-modulo-table {
+    font-size: 8pt;
+  }
+  .diario-modulo-table {
+    font-size: 8pt;
+  }
 }

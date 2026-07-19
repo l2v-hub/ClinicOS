@@ -2,7 +2,7 @@
 // Fractions are kept EXACT; mg equivalents are derived for display only.
 
 export interface ScheduleRow {
-  time: string;                 // "HH:MM"
+  time: string; // "HH:MM"
   quantityNumerator: number;
   quantityDenominator: number;
   administrationUnit: string;
@@ -10,30 +10,55 @@ export interface ScheduleRow {
 
 // Quick fraction presets the operator can offer (value = num/den, label for the chip).
 export const FRACTION_PRESETS: { key: string; label: string; num: number; den: number }[] = [
-  { key: '1',   label: '1',   num: 1, den: 1 },
-  { key: '3/4', label: '¾',   num: 3, den: 4 },
-  { key: '1/2', label: '½',   num: 1, den: 2 },
-  { key: '1/3', label: '⅓',   num: 1, den: 3 },
-  { key: '1/4', label: '¼',   num: 1, den: 4 },
+  { key: '1', label: '1', num: 1, den: 1 },
+  { key: '3/4', label: '¾', num: 3, den: 4 },
+  { key: '1/2', label: '½', num: 1, den: 2 },
+  { key: '1/3', label: '⅓', num: 1, den: 3 },
+  { key: '1/4', label: '¼', num: 1, den: 4 },
 ];
 
 // Administration units. Solid divisible forms support fractions; liquids/counts are whole amounts.
-export const ADMIN_UNITS = ['compressa', 'capsula', 'ml', 'gocce', 'unità', 'bustina', 'fiala', 'puff'];
+export const ADMIN_UNITS = [
+  'compressa',
+  'capsula',
+  'ml',
+  'gocce',
+  'unità',
+  'bustina',
+  'fiala',
+  'puff',
+];
 export const DIVISIBLE_UNITS = new Set(['compressa']); // tablet is the only inherently splittable form
 
-export const PHARMA_FORMS = ['compressa', 'capsula', 'sciroppo', 'fiala', 'flacone', 'bustina', 'gocce', 'cerotto', 'crema'];
+export const PHARMA_FORMS = [
+  'compressa',
+  'capsula',
+  'sciroppo',
+  'fiala',
+  'flacone',
+  'bustina',
+  'gocce',
+  'cerotto',
+  'crema',
+];
 export const STRENGTH_UNITS = ['mg', 'g', 'mcg', 'ml', 'UI', '%'];
 
 function gcd(a: number, b: number): number {
-  a = Math.abs(a); b = Math.abs(b);
-  while (b) { [a, b] = [b, a % b]; }
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b) {
+    [a, b] = [b, a % b];
+  }
   return a || 1;
 }
 
 export function normalizeFraction(num: number, den: number): { num: number; den: number } {
   let n = Math.round(num);
   let d = Math.round(den) || 1;
-  if (d < 0) { n = -n; d = -d; }
+  if (d < 0) {
+    n = -n;
+    d = -d;
+  }
   const g = gcd(n, d);
   return { num: n / g, den: d / g };
 }
@@ -67,8 +92,10 @@ export function parseQuantity(text: string): { num: number; den: number } | null
 
 /** mg (or strength-unit) equivalent for a fraction of the commercial strength. */
 export function computeEquivalent(
-  num: number, den: number,
-  strengthValue?: number | null, strengthUnit?: string | null,
+  num: number,
+  den: number,
+  strengthValue?: number | null,
+  strengthUnit?: string | null,
 ): string | null {
   if (strengthValue == null || !(strengthValue > 0) || !strengthUnit) return null;
   const mg = (num / (den || 1)) * strengthValue;
@@ -79,11 +106,17 @@ export function computeEquivalent(
 /** "08:00 — 1/2 compressa — equivalente a 50 mg" */
 export function scheduleLabel(
   s: ScheduleRow,
-  strengthValue?: number | null, strengthUnit?: string | null,
+  strengthValue?: number | null,
+  strengthUnit?: string | null,
 ): string {
   const frac = formatFraction(s.quantityNumerator, s.quantityDenominator);
   let label = `${s.time} — ${frac} ${s.administrationUnit}`;
-  const eq = computeEquivalent(s.quantityNumerator, s.quantityDenominator, strengthValue, strengthUnit);
+  const eq = computeEquivalent(
+    s.quantityNumerator,
+    s.quantityDenominator,
+    strengthValue,
+    strengthUnit,
+  );
   if (eq) label += ` — equivalente a ${eq}`;
   return label;
 }
@@ -91,5 +124,10 @@ export function scheduleLabel(
 /** Parse the configurable allowedFractions string ("1,1/2,1/4") into preset keys. Default: whole only. */
 export function parseAllowedFractions(raw?: string | null): Set<string> {
   if (!raw || !raw.trim()) return new Set(['1']);
-  return new Set(raw.split(',').map(s => s.trim()).filter(Boolean));
+  return new Set(
+    raw
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean),
+  );
 }

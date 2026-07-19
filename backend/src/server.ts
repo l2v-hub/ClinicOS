@@ -21,7 +21,6 @@ const parsePort = (value: string | undefined): number => {
 
 const port = process.env.PORT || 3001;
 
-
 const server = app.listen(port, () => {
   console.log(`ClinicOS backend listening on port ${port}`);
   // Controlled AI config validation at startup (secret-free).
@@ -34,7 +33,9 @@ const server = app.listen(port, () => {
   // Periodic retention sweep for expired import jobs (REQ-014/019). Best-effort.
   const SWEEP_MS = 15 * 60_000;
   setInterval(() => {
-    sweepExpiredJobs().catch(() => { /* DB may be unavailable; ignore */ });
+    sweepExpiredJobs().catch(() => {
+      /* DB may be unavailable; ignore */
+    });
   }, SWEEP_MS).unref();
   // Async import worker (REQ-022): processes queued jobs in the background.
   // Disable in-process with AI_WORKER_INLINE=false when running a separate worker service.

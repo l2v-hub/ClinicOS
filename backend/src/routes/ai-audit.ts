@@ -29,7 +29,12 @@ function queryDate(v: unknown): Date | undefined {
 auditRouter.get('/', async (req: AuthedRequest, res) => {
   const role = req.operator!.role; // requireOperator guarantees + lowercases it
   if (!PRIVILEGED_ROLES.has(role)) {
-    res.status(403).json({ error: { kind: 'forbidden', message: 'Consultazione audit riservata ai ruoli admin/manager.' } });
+    res.status(403).json({
+      error: {
+        kind: 'forbidden',
+        message: 'Consultazione audit riservata ai ruoli admin/manager.',
+      },
+    });
     return;
   }
   try {
@@ -46,7 +51,8 @@ auditRouter.get('/', async (req: AuthedRequest, res) => {
     if (operatorId) where.operatorId = operatorId;
     if (patientId) where.patientId = patientId;
     if (outcome) where.outcome = outcome;
-    if (from || to) where.createdAt = { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) };
+    if (from || to)
+      where.createdAt = { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) };
 
     const events = await prisma.aiAuditEvent.findMany({
       where,
@@ -56,7 +62,9 @@ auditRouter.get('/', async (req: AuthedRequest, res) => {
     res.status(200).json(events);
   } catch (error) {
     console.error('GET /ai/audit error:', error);
-    res.status(500).json({ error: { kind: 'internal', message: 'Errore durante la consultazione dell’audit' } });
+    res
+      .status(500)
+      .json({ error: { kind: 'internal', message: 'Errore durante la consultazione dell’audit' } });
   }
 });
 

@@ -19,8 +19,20 @@ const outDir = process.argv[2] ?? '.';
 const fx = writeFixtures(resolve(tmpdir(), 'clinicos-e2e-fixtures'));
 // #265: each viewport exercises a different explicit allergy status; both must persist.
 const VIEWPORTS = [
-  { name: 'desktop', width: 1366, height: 768, allergyStatus: 'paziente_nega', allergyLabel: 'Paziente nega allergie' },
-  { name: 'tablet', width: 1024, height: 768, allergyStatus: 'assenti', allergyLabel: 'Allergie assenti (verificato)' },
+  {
+    name: 'desktop',
+    width: 1366,
+    height: 768,
+    allergyStatus: 'paziente_nega',
+    allergyLabel: 'Paziente nega allergie',
+  },
+  {
+    name: 'tablet',
+    width: 1024,
+    height: 768,
+    allergyStatus: 'assenti',
+    allergyLabel: 'Allergie assenti (verificato)',
+  },
 ];
 
 /** Navigate from the SPA root to the operator patient list. */
@@ -49,7 +61,10 @@ try {
     let duplicate409 = 0;
     page.on('response', (r) => {
       if (r.status() < 400 || !r.url().startsWith(BACKEND)) return;
-      if (r.status() === 409 && r.url().includes('/confirm')) { duplicate409++; return; }
+      if (r.status() === 409 && r.url().includes('/confirm')) {
+        duplicate409++;
+        return;
+      }
       httpFailures.push(`${r.status()} ${r.url()}`);
     });
     const tag = `req020-${vp.name}`;
@@ -75,7 +90,10 @@ try {
         demo.waitFor({ state: 'visible', timeout: 30000 }).catch(() => null),
         dataTab.waitFor({ state: 'visible', timeout: 30000 }).catch(() => null),
       ]);
-      if (!(await demo.isVisible().catch(() => false)) && (await dataTab.isVisible().catch(() => false))) {
+      if (
+        !(await demo.isVisible().catch(() => false)) &&
+        (await dataTab.isVisible().catch(() => false))
+      ) {
         await dataTab.click().catch(() => {});
       }
       await demo.waitFor({ state: 'visible', timeout: 30000 });
@@ -83,27 +101,38 @@ try {
 
       // Modifica: fill the required anagrafica fields (synthetic; the mock extraction is empty).
       // Field order (ANAG_PREFILL): Nome, Cognome, Data di nascita(type=date), Sesso, ...
-      await demo.locator('input[type=text]').nth(0).fill('E2E');       // Nome
-      await demo.locator('input[type=text]').nth(1).fill(lastName);    // Cognome (unique per viewport)
+      await demo.locator('input[type=text]').nth(0).fill('E2E'); // Nome
+      await demo.locator('input[type=text]').nth(1).fill(lastName); // Cognome (unique per viewport)
       await demo.locator('input[type=date]').first().fill('1955-09-09'); // Data di nascita
       await page.waitForTimeout(300);
       await page.screenshot({ path: resolve(outDir, `${tag}-3-prefilled.png`) });
 
       // "Crea paziente" hands off to the IntakeWorkspace wizard at step 3 (Clinica).
       await page.getByRole('button', { name: /Crea paziente/i }).click();
-      await page.locator('[data-testid="intake-step-3"]').waitFor({ state: 'visible', timeout: 15000 });
+      await page
+        .locator('[data-testid="intake-step-3"]')
+        .waitFor({ state: 'visible', timeout: 15000 });
 
       // #265: the allergy selection must actually update the draft. Before the fix the button
       // rendered but aria-checked never flipped and the "non documentato" hint never cleared.
       const statusBtn = page.locator(`[data-testid="allergy-status-${vp.allergyStatus}"]`);
       await statusBtn.click();
       await page.waitForFunction(
-        (s) => document.querySelector(`[data-testid="allergy-status-${s}"]`)?.getAttribute('aria-checked') === 'true',
+        (s) =>
+          document
+            .querySelector(`[data-testid="allergy-status-${s}"]`)
+            ?.getAttribute('aria-checked') === 'true',
         vp.allergyStatus,
         { timeout: 5000 },
       );
-      const undocumented = await page.locator('[data-testid="allergy-undocumented"]').isVisible().catch(() => false);
-      if (undocumented) throw new Error('allergy status selected but "non documentato" hint still shown — draft not updated');
+      const undocumented = await page
+        .locator('[data-testid="allergy-undocumented"]')
+        .isVisible()
+        .catch(() => false);
+      if (undocumented)
+        throw new Error(
+          'allergy status selected but "non documentato" hint still shown — draft not updated',
+        );
 
       // #235 gate: explicit therapy acceptance (empty therapy in the mock fixture).
       await page.locator('[data-testid="accept-therapy"] input[type=checkbox]').check();
@@ -112,17 +141,26 @@ try {
 
       // Steps 4 (Moduli) and 5 (Documenti) have no required input -> advance to 6 (Verifica).
       await page.getByRole('button', { name: /Avanti/i }).click();
-      await page.locator('[data-testid="intake-step-4"]').waitFor({ state: 'visible', timeout: 10000 });
+      await page
+        .locator('[data-testid="intake-step-4"]')
+        .waitFor({ state: 'visible', timeout: 10000 });
       await page.getByRole('button', { name: /Avanti/i }).click();
-      await page.locator('[data-testid="intake-step-5"]').waitFor({ state: 'visible', timeout: 10000 });
+      await page
+        .locator('[data-testid="intake-step-5"]')
+        .waitFor({ state: 'visible', timeout: 10000 });
       await page.getByRole('button', { name: /Avanti/i }).click();
-      await page.locator('[data-testid="intake-step-6"]').waitFor({ state: 'visible', timeout: 10000 });
+      await page
+        .locator('[data-testid="intake-step-6"]')
+        .waitFor({ state: 'visible', timeout: 10000 });
 
       // #235 gate: explicit demographics acceptance, then create.
       await page.locator('[data-testid="accept-demographics"] input[type=checkbox]').check();
       await page.waitForTimeout(700); // allow the debounced autosave to flush
       await page.screenshot({ path: resolve(outDir, `${tag}-5-step6-verifica.png`) });
-      await page.locator('[data-testid="intake-step-6"]').getByRole('button', { name: /Crea paziente/i }).click();
+      await page
+        .locator('[data-testid="intake-step-6"]')
+        .getByRole('button', { name: /Crea paziente/i })
+        .click();
 
       // Outcome: wizard closes on success, or the explicit duplicate branch appears (AC4).
       const wizardHeader = page.locator('[data-testid="patient-intake-header"]');
@@ -150,20 +188,30 @@ try {
       const created = (Array.isArray(patients) ? patients : []).find(
         (p) => p.firstName === 'E2E' && p.lastName === lastName,
       );
-      if (!created) throw new Error(`API check failed: patient E2E ${lastName} not found in /patients`);
+      if (!created)
+        throw new Error(`API check failed: patient E2E ${lastName} not found in /patients`);
       const cartellaRes = await fetch(`${BACKEND}/patients/${created.id}/cartella`);
-      if (!cartellaRes.ok) throw new Error(`API check failed: GET /patients/${created.id}/cartella -> ${cartellaRes.status}`);
+      if (!cartellaRes.ok)
+        throw new Error(
+          `API check failed: GET /patients/${created.id}/cartella -> ${cartellaRes.status}`,
+        );
       const cartella = await cartellaRes.json();
       const persisted = cartella?.data?.allergieStatus;
       if (persisted !== vp.allergyStatus) {
-        throw new Error(`API check failed: cartella.allergieStatus=${JSON.stringify(persisted)} — expected '${vp.allergyStatus}'`);
+        throw new Error(
+          `API check failed: cartella.allergieStatus=${JSON.stringify(persisted)} — expected '${vp.allergyStatus}'`,
+        );
       }
       // AC3: the explicit-absent statuses must not co-exist with a recorded allergy list.
       const allergie = Array.isArray(cartella?.data?.allergie) ? cartella.data.allergie : [];
       if (vp.allergyStatus !== 'presenti' && allergie.length > 0) {
-        throw new Error(`API check failed: status '${vp.allergyStatus}' with ${allergie.length} allergie recorded — ambiguous clinical state`);
+        throw new Error(
+          `API check failed: status '${vp.allergyStatus}' with ${allergie.length} allergie recorded — ambiguous clinical state`,
+        );
       }
-      console.log(`${tag}: API persistence OK — patient ${created.id} allergieStatus='${persisted}'`);
+      console.log(
+        `${tag}: API persistence OK — patient ${created.id} allergieStatus='${persisted}'`,
+      );
 
       // ── UI after reload (AC2/AC5): list shows the patient; detail shows the status ──
       await gotoPatientList(page);

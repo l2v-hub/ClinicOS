@@ -1,1 +1,13 @@
-{"createdAt":"2026-06-01T12:38:18Z","defaultBranchRef":{"name":"main"},"diskUsage":13916,"hasIssuesEnabled":true,"hasProjectsEnabled":true,"hasWikiEnabled":false,"isArchived":false,"nameWithOwner":"lucalavia/ClinicOS","pushedAt":"2026-06-24T18:15:08Z","url":"https://github.com/lucalavia/ClinicOS","visibility":"PRIVATE"}
+{
+  "createdAt": "2026-06-01T12:38:18Z",
+  "defaultBranchRef": { "name": "main" },
+  "diskUsage": 13916,
+  "hasIssuesEnabled": true,
+  "hasProjectsEnabled": true,
+  "hasWikiEnabled": false,
+  "isArchived": false,
+  "nameWithOwner": "lucalavia/ClinicOS",
+  "pushedAt": "2026-06-24T18:15:08Z",
+  "url": "https://github.com/lucalavia/ClinicOS",
+  "visibility": "PRIVATE"
+}

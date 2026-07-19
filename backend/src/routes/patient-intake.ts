@@ -9,7 +9,7 @@ router.post('/discharge-letter/upload', async (req, res) => {
   const { fileName, fileType, fileData, operatoreNome } = req.body as {
     fileName: string;
     fileType: string;
-    fileData: string;   // base64
+    fileData: string; // base64
     operatoreNome?: string;
   };
 
@@ -74,7 +74,7 @@ router.post('/discharge-letter/extract', async (req, res) => {
     res.status(200).json({ documentId, extractedData, status: 'extracted' });
   } catch (error) {
     console.error('POST /patient-intake/discharge-letter/extract error:', error);
-    res.status(500).json({ error: 'Errore durante l\'estrazione dei dati' });
+    res.status(500).json({ error: "Errore durante l'estrazione dei dati" });
   }
 });
 

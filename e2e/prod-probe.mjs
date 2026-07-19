@@ -16,14 +16,20 @@ try {
   await page.screenshot({ path: resolve(outDir, 'prod-landing.png') });
   const body = (await page.textContent('body')) ?? '';
   const has = (t) => body.includes(t);
-  console.log(JSON.stringify({
-    url: URL,
-    hasOperatore: has('Operatore'),
-    hasManager: has('Manager') || has('Responsabile'),
-    hasPazienti: has('Pazienti'),
-    title: await page.title(),
-    consoleErrors: errs.slice(0, 5),
-  }, null, 2));
+  console.log(
+    JSON.stringify(
+      {
+        url: URL,
+        hasOperatore: has('Operatore'),
+        hasManager: has('Manager') || has('Responsabile'),
+        hasPazienti: has('Pazienti'),
+        title: await page.title(),
+        consoleErrors: errs.slice(0, 5),
+      },
+      null,
+      2,
+    ),
+  );
 } finally {
   await browser.close();
 }

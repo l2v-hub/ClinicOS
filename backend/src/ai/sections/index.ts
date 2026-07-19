@@ -10,7 +10,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const BACKEND_ROOT = resolve(HERE, '..', '..', '..');
 
 function schemaPath(): string {
-  return process.env.AI_SECTIONS_SCHEMA_PATH?.trim() || resolve(BACKEND_ROOT, 'ai-assets', 'clinicos-sections.schema.json');
+  return (
+    process.env.AI_SECTIONS_SCHEMA_PATH?.trim() ||
+    resolve(BACKEND_ROOT, 'ai-assets', 'clinicos-sections.schema.json')
+  );
 }
 
 /** Build the {schema, prompt} pair the model-agnostic runtime needs for a sections pass. */

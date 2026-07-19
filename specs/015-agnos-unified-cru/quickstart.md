@@ -12,17 +12,17 @@ node .claude/skills/run-clinicos/driver.mjs smoke   # atteso: OK, ~11 rows
 
 ## Percorsi chiave
 
-| Cosa | Dove |
-|---|---|
-| Planner deterministico voce (da generalizzare) | `backend/src/ai/voice/plan.ts` |
-| Executor + guardie | `backend/src/ai/voice/execute.ts` |
-| Write services (4 azioni) | `backend/src/ai/voice/write-services.ts` |
-| Assistant read (intent → query) | `backend/src/ai/assistant/plan.ts`, `service.ts` |
-| Pannello chat attuale (read-only) | `frontend/src/components/shared/AIAssistantButton.tsx` |
-| FAB voce attuale | `frontend/src/components/shared/VoiceAssistant.tsx` |
-| Mock appuntamenti da eliminare | `frontend/src/App.tsx:98` |
-| Test backend AI | `backend/src/ai/__tests__/` (`npm --prefix backend test`) |
-| Harness E2E | `e2e/req041-voice-shots.mjs` (pattern), `.claude/skills/run-clinicos/driver.mjs` |
+| Cosa                                           | Dove                                                                             |
+| ---------------------------------------------- | -------------------------------------------------------------------------------- |
+| Planner deterministico voce (da generalizzare) | `backend/src/ai/voice/plan.ts`                                                   |
+| Executor + guardie                             | `backend/src/ai/voice/execute.ts`                                                |
+| Write services (4 azioni)                      | `backend/src/ai/voice/write-services.ts`                                         |
+| Assistant read (intent → query)                | `backend/src/ai/assistant/plan.ts`, `service.ts`                                 |
+| Pannello chat attuale (read-only)              | `frontend/src/components/shared/AIAssistantButton.tsx`                           |
+| FAB voce attuale                               | `frontend/src/components/shared/VoiceAssistant.tsx`                              |
+| Mock appuntamenti da eliminare                 | `frontend/src/App.tsx:98`                                                        |
+| Test backend AI                                | `backend/src/ai/__tests__/` (`npm --prefix backend test`)                        |
+| Harness E2E                                    | `e2e/req041-voice-shots.mjs` (pattern), `.claude/skills/run-clinicos/driver.mjs` |
 
 ## Verifica rapida orchestratore (dopo incremento A)
 

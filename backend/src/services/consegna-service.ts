@@ -14,7 +14,7 @@ export interface CreateConsegnaInput {
   stato?: string;
   tipo?: string;
   note: string;
-  scadenza?: string;          // YYYY-MM-DD (default: oggi)
+  scadenza?: string; // YYYY-MM-DD (default: oggi)
   oraScadenza?: string | null;
   operatoreAssegnato?: string;
   creatoDA?: string;
@@ -29,7 +29,9 @@ export async function createConsegna(input: CreateConsegnaInput) {
     data: {
       pazienteId: String(input.pazienteId ?? ''),
       pazienteNome: String(input.pazienteNome),
-      priorita: CONSEGNA_PRIORITA.includes(String(input.priorita)) ? String(input.priorita) : 'normale',
+      priorita: CONSEGNA_PRIORITA.includes(String(input.priorita))
+        ? String(input.priorita)
+        : 'normale',
       stato: CONSEGNA_STATO.includes(String(input.stato)) ? String(input.stato) : 'aperta',
       tipo: String(input.tipo ?? 'Monitoraggio'),
       note: String(input.note),

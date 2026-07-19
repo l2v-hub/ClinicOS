@@ -23,24 +23,28 @@ export function Login({ onLogin }: LoginProps) {
             className="login-role-card login-role-card--admin"
             onClick={() => onLogin(UTENTE_ADMIN)}
           >
-            <span className="login-role-icon"><IcoAdmin /></span>
+            <span className="login-role-icon">
+              <IcoAdmin />
+            </span>
             <span className="login-role-title">Amministratore</span>
-            <span className="login-role-desc">Gestione operatori, agenda globale e supervisione</span>
+            <span className="login-role-desc">
+              Gestione operatori, agenda globale e supervisione
+            </span>
           </button>
 
           <button
             className="login-role-card login-role-card--operatore"
             onClick={() => onLogin(UTENTE_OPERATORE)}
           >
-            <span className="login-role-icon"><IcoUser /></span>
+            <span className="login-role-icon">
+              <IcoUser />
+            </span>
             <span className="login-role-title">Operatore</span>
             <span className="login-role-desc">Pazienti, consegne, agenda e cartelle cliniche</span>
           </button>
         </div>
 
-        <p className="login-note">
-          Accesso dimostrativo — nessuna credenziale richiesta
-        </p>
+        <p className="login-note">Accesso dimostrativo — nessuna credenziale richiesta</p>
       </div>
     </div>
   );

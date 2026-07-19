@@ -12,7 +12,14 @@ export default defineConfig({
   workers: 1,
   outputDir: '../../artifacts/task-validation/225-preparazione-futuro-backend-azure/test-results',
   reporter: [
-    ['html', { outputFolder: '../../artifacts/task-validation/225-preparazione-futuro-backend-azure/playwright-report', open: 'never' }],
+    [
+      'html',
+      {
+        outputFolder:
+          '../../artifacts/task-validation/225-preparazione-futuro-backend-azure/playwright-report',
+        open: 'never',
+      },
+    ],
     ['list'],
   ],
   use: {

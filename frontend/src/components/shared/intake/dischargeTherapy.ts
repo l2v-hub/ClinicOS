@@ -18,9 +18,19 @@ export interface DischargeTherapyRow {
 }
 
 const VIA_MAP: Record<string, string> = {
-  OS: 'orale', IM: 'intramuscolo', EV: 'endovena', SC: 'sottocute', SL: 'sublinguale',
-  TD: 'transdermica', INAL: 'inalatoria', TOP: 'topica', RETT: 'rettale', OFT: 'oftalmica',
-  OTO: 'otologica', NAS: 'nasale', VAG: 'vaginale',
+  OS: 'orale',
+  IM: 'intramuscolo',
+  EV: 'endovena',
+  SC: 'sottocute',
+  SL: 'sublinguale',
+  TD: 'transdermica',
+  INAL: 'inalatoria',
+  TOP: 'topica',
+  RETT: 'rettale',
+  OFT: 'oftalmica',
+  OTO: 'otologica',
+  NAS: 'nasale',
+  VAG: 'vaginale',
 };
 
 function mapVia(v: string): string {
@@ -34,7 +44,10 @@ function todayIso(): string {
 /** Map one detected discharge-therapy row → TherapyCreateInput-compatible object for confirmDraft.
  *  orari → schedules; forma → pharmaceuticalForm; classe/giorni/quantità/originalText/verify-flag
  *  are preserved in `note` (the schema has no weekday field). dataInizio falls back to today. */
-export function dischargeRowToTherapyInput(r: DischargeTherapyRow, operatoreNome?: string): Record<string, unknown> {
+export function dischargeRowToTherapyInput(
+  r: DischargeTherapyRow,
+  operatoreNome?: string,
+): Record<string, unknown> {
   const orari = Array.isArray(r.orari) ? r.orari.filter((t) => /^\d{1,2}:\d{2}$/.test(t)) : [];
   const giorni = Array.isArray(r.giorni) ? r.giorni : [];
   const note = [
@@ -44,7 +57,9 @@ export function dischargeRowToTherapyInput(r: DischargeTherapyRow, operatoreNome
     r.quantita ? `Quantità: ${r.quantita}` : '',
     r.stato === 'da_verificare' ? '[DA VERIFICARE]' : '',
     r.originalText ? `Origine: ${r.originalText}` : '',
-  ].filter(Boolean).join(' — ');
+  ]
+    .filter(Boolean)
+    .join(' — ');
   return {
     farmacoNome: (r.farmacoNome || '').trim(),
     dataInizio: r.dataInizio && r.dataInizio.trim() ? r.dataInizio : todayIso(),
@@ -53,7 +68,12 @@ export function dischargeRowToTherapyInput(r: DischargeTherapyRow, operatoreNome
     stato: 'attiva',
     ...(r.forma ? { pharmaceuticalForm: r.forma } : {}),
     allowedFractions: '1',
-    schedules: orari.map((time) => ({ time, quantityNumerator: 1, quantityDenominator: 1, administrationUnit: '' })),
+    schedules: orari.map((time) => ({
+      time,
+      quantityNumerator: 1,
+      quantityDenominator: 1,
+      administrationUnit: '',
+    })),
     ...(operatoreNome ? { operatoreInseritore: operatoreNome } : {}),
     ...(note ? { note } : {}),
   };

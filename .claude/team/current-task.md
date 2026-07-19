@@ -1,6 +1,7 @@
 # Task: Unifica Tabelle con ClinicalTable
 
 ## Obiettivo
+
 Creare componente `ClinicalTable` riutilizzabile con filtri per colonna e ordinamento.
 Migrare TUTTE le tabelle dell'app a questo componente unico.
 
@@ -9,6 +10,7 @@ Migrare TUTTE le tabelle dell'app a questo componente unico.
 File: `frontend/src/components/operator/cartella/ClinicalTable.tsx`
 
 ### ColumnDef interface
+
 ```typescript
 export interface ColumnDef<T = any> {
   key: string;
@@ -23,6 +25,7 @@ export interface ColumnDef<T = any> {
 ```
 
 ### Props
+
 - title: string
 - columns: ColumnDef<T>[]
 - data: T[]
@@ -34,6 +37,7 @@ export interface ColumnDef<T = any> {
 - keyField?: string (default: 'id')
 
 ### Comportamento
+
 - Wrap in ClinicalTableSection (blue header, collapsible)
 - Sort: click header → asc → desc → reset
 - Filtri: pulsante "Filtri" in header actions mostra/nasconde riga filtri sotto intestazioni
@@ -47,30 +51,61 @@ export interface ColumnDef<T = any> {
 
 ```css
 /* ── ClinicalTable (CDT) ──────────────────────────────────────── */
-.cdt__th-inner { display: flex; flex-direction: column; gap: 2px; }
+.cdt__th-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .cdt__sort-btn {
-  background: none; border: none; cursor: pointer;
-  color: inherit; font-size: 11px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.04em;
-  display: flex; align-items: center; gap: 4px;
-  padding: 0; white-space: nowrap;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  white-space: nowrap;
 }
-.cdt__sort-btn:hover { color: #a8d4f8; }
-.cdt__sort-icon { font-size: 10px; opacity: 0.7; }
-.cdt__filter { margin-top: 4px; }
-.cdt__filter-input, .cdt__filter-select {
-  width: 100%; font-size: 11px; padding: 2px 4px; border-radius: 4px;
-  border: 1px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.15); color: #fff;
+.cdt__sort-btn:hover {
+  color: #a8d4f8;
 }
-.cdt__filter-input::placeholder { color: rgba(255,255,255,0.5); }
-.cdt__filter-input:focus, .cdt__filter-select:focus {
-  outline: none; border-color: rgba(255,255,255,0.6);
-  background: rgba(255,255,255,0.25);
+.cdt__sort-icon {
+  font-size: 10px;
+  opacity: 0.7;
+}
+.cdt__filter {
+  margin-top: 4px;
+}
+.cdt__filter-input,
+.cdt__filter-select {
+  width: 100%;
+  font-size: 11px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+.cdt__filter-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.cdt__filter-input:focus,
+.cdt__filter-select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.25);
 }
 .cdt__empty {
-  text-align: center; padding: 32px 16px;
-  color: var(--text-muted, #8898AA); font-style: italic; font-size: 13px;
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-muted, #8898aa);
+  font-style: italic;
+  font-size: 13px;
 }
 ```
 

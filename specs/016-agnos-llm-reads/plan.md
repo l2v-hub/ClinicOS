@@ -28,17 +28,17 @@ Introdurre un **agente LLM con tool-calling** davanti al Data Gateway esistente 
 
 ## Constitution Check
 
-*GATE: verificato contro Constitution v1.1.0 — PASS con giustificazioni.*
+_GATE: verificato contro Constitution v1.1.0 — PASS con giustificazioni._
 
-| Principio | Esito | Note |
-|---|---|---|
-| I. Simplicity First | PASS | Riuso di gateway/executor/planner esistenti; l'LLM si innesta in 2 punti (planner, composer) dietro l'executor fidato; nessun refactoring dell'accesso dati. |
-| II. Healthcare UX | PASS | Nessuna nuova tabella; risposta nel pannello Agnos esistente (italiano, tablet-first); compatibile con TTS. |
-| III. Backend Data Authority | PASS | I dati escono solo dal gateway (backend); nessun mock; l'LLM non è fonte dati. |
-| IV. Schema & API Stability | PASS con richiesta esplicita | L'unico eventuale schema change è ADDITIVO su `AiAuditEvent` (`mode`,`model`) e va richiesto esplicitamente; senza approvazione la modalità resta a log runtime. Nessun `migrate reset`. `/patients` intatto. Nuovi endpoint runtime (`/v1/assistant/*`) sono additivi, non modificano le route Express dati. |
-| V. Role-Aware Development | PASS | Autorizzazione per ruolo/perimetro applicata dal gateway; cross-patient role-gated e ricalcolato server-side. |
-| VI. Integration Integrity | PASS | `/ai/actions/*`, `/ai/voice/*`, `/ai/assistant/query` restano funzionanti; l'LLM è dietro feature flag con fallback deterministico; build/test gate per incremento. |
-| VII. Environment Safety | PASS | Config via env Railway (modello per-ruolo, flag, timeout); nessun cambio a deploy/DATABASE_URL. Dati clinici solo verso runtime EU approvato. |
+| Principio                   | Esito                        | Note                                                                                                                                                                                                                                                                                                          |
+| --------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| I. Simplicity First         | PASS                         | Riuso di gateway/executor/planner esistenti; l'LLM si innesta in 2 punti (planner, composer) dietro l'executor fidato; nessun refactoring dell'accesso dati.                                                                                                                                                  |
+| II. Healthcare UX           | PASS                         | Nessuna nuova tabella; risposta nel pannello Agnos esistente (italiano, tablet-first); compatibile con TTS.                                                                                                                                                                                                   |
+| III. Backend Data Authority | PASS                         | I dati escono solo dal gateway (backend); nessun mock; l'LLM non è fonte dati.                                                                                                                                                                                                                                |
+| IV. Schema & API Stability  | PASS con richiesta esplicita | L'unico eventuale schema change è ADDITIVO su `AiAuditEvent` (`mode`,`model`) e va richiesto esplicitamente; senza approvazione la modalità resta a log runtime. Nessun `migrate reset`. `/patients` intatto. Nuovi endpoint runtime (`/v1/assistant/*`) sono additivi, non modificano le route Express dati. |
+| V. Role-Aware Development   | PASS                         | Autorizzazione per ruolo/perimetro applicata dal gateway; cross-patient role-gated e ricalcolato server-side.                                                                                                                                                                                                 |
+| VI. Integration Integrity   | PASS                         | `/ai/actions/*`, `/ai/voice/*`, `/ai/assistant/query` restano funzionanti; l'LLM è dietro feature flag con fallback deterministico; build/test gate per incremento.                                                                                                                                           |
+| VII. Environment Safety     | PASS                         | Config via env Railway (modello per-ruolo, flag, timeout); nessun cambio a deploy/DATABASE_URL. Dati clinici solo verso runtime EU approvato.                                                                                                                                                                 |
 
 ## Incrementi (ordine di consegna)
 
@@ -93,7 +93,7 @@ e2e/
 
 ## Complexity Tracking
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| Nuovi endpoint su clinicos-ai-runtime | L'interpretazione NL libera e la composizione richiedono un modello; il runtime EU è l'unico host approvato per dati clinici | Chiamare un LLM esterno dal backend: viola FR-011 (PHI verso host non approvato) e Constitution VII |
-| Eventuale campo additivo `mode`/`model` su AiAuditEvent | Tracciabilità della modalità (LLM vs deterministica) per audit/forense | Solo log runtime: non consultabile via API, non sopravvive ai redeploy — mitigato lasciandolo opzionale e subordinato ad approvazione esplicita |
+| Violation                                               | Why Needed                                                                                                                   | Simpler Alternative Rejected Because                                                                                                            |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nuovi endpoint su clinicos-ai-runtime                   | L'interpretazione NL libera e la composizione richiedono un modello; il runtime EU è l'unico host approvato per dati clinici | Chiamare un LLM esterno dal backend: viola FR-011 (PHI verso host non approvato) e Constitution VII                                             |
+| Eventuale campo additivo `mode`/`model` su AiAuditEvent | Tracciabilità della modalità (LLM vs deterministica) per audit/forense                                                       | Solo log runtime: non consultabile via API, non sopravvive ai redeploy — mitigato lasciandolo opzionale e subordinato ad approvazione esplicita |

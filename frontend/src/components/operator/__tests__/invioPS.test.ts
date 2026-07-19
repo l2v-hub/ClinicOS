@@ -99,11 +99,11 @@ interface PatientTherapyAPI {
 // ── Inline buildInvioPSModel (mirrors the real implementation to avoid tsx/ESM issues) ──
 
 const FASCE_LABELS: { boolKey: keyof PatientTherapyAPI; label: string }[] = [
-  { boolKey: 'fasceMattina',    label: 'Mattina'    },
-  { boolKey: 'fascePranzo',     label: 'Pranzo'     },
+  { boolKey: 'fasceMattina', label: 'Mattina' },
+  { boolKey: 'fascePranzo', label: 'Pranzo' },
   { boolKey: 'fascePomeriggio', label: 'Pomeriggio' },
-  { boolKey: 'fasceSera',       label: 'Sera'       },
-  { boolKey: 'fasceNotte',      label: 'Notte'      },
+  { boolKey: 'fasceSera', label: 'Sera' },
+  { boolKey: 'fasceNotte', label: 'Notte' },
 ];
 
 function fmtDate(iso: string): string {
@@ -119,17 +119,23 @@ function calcAge(dob: string): string {
   return years > 0 ? `${years} anni` : '';
 }
 
-function buildInvioPSModel(paziente: Paziente, cartella: CartellaPaziente, therapies: PatientTherapyAPI[]) {
+function buildInvioPSModel(
+  paziente: Paziente,
+  cartella: CartellaPaziente,
+  therapies: PatientTherapyAPI[],
+) {
   const cognomeNome = `${paziente.lastName} ${paziente.firstName}`.trim();
 
-  const allergie = (cartella.allergie || []).map(a => {
-    const reazione = a.reazione ? ` (${a.reazione})` : '';
-    return { testo: `${a.allergene}${reazione}`.trim(), grave: a.gravita === 'grave' };
-  }).filter(a => a.testo);
+  const allergie = (cartella.allergie || [])
+    .map((a) => {
+      const reazione = a.reazione ? ` (${a.reazione})` : '';
+      return { testo: `${a.allergene}${reazione}`.trim(), grave: a.gravita === 'grave' };
+    })
+    .filter((a) => a.testo);
 
   const diagnosi = (cartella.diagnosi || [])
-    .filter(d => d.stato === 'attiva' || d.stato === 'monitoraggio')
-    .map(d => d.descrizione)
+    .filter((d) => d.stato === 'attiva' || d.stato === 'monitoraggio')
+    .map((d) => d.descrizione)
     .filter(Boolean);
 
   const condizioniCroniche: string[] = [];
@@ -155,17 +161,26 @@ function buildInvioPSModel(paziente: Paziente, cartella: CartellaPaziente, thera
   }
 
   let dimissione: {
-    data: string; ora: string; condizioni: string; destinazione: string;
-    autonomiaResidua: string; istruzioni: string; controlliProgrammati: string;
-    personaAccompagna: string; mezzoTrasporto: string; materialeConsegnato: string;
+    data: string;
+    ora: string;
+    condizioni: string;
+    destinazione: string;
+    autonomiaResidua: string;
+    istruzioni: string;
+    controlliProgrammati: string;
+    personaAccompagna: string;
+    mezzoTrasporto: string;
+    materialeConsegnato: string;
     note: string;
   } | null = null;
 
   if (cartella.dimissione) {
     const d = cartella.dimissione;
     const DEST_LABELS: Record<string, string> = {
-      domicilio: 'Domicilio', altra_struttura: 'Altra struttura',
-      hospice: 'Hospice', ospedale: 'Ospedale',
+      domicilio: 'Domicilio',
+      altra_struttura: 'Altra struttura',
+      hospice: 'Hospice',
+      ospedale: 'Ospedale',
     };
     dimissione = {
       data: fmtDate(d.data),
@@ -183,15 +198,22 @@ function buildInvioPSModel(paziente: Paziente, cartella: CartellaPaziente, thera
   }
 
   const terapie = therapies
-    .filter(t => t.stato === 'attiva')
-    .map(t => {
-      const fasceLabelList = FASCE_LABELS
-        .filter(f => t[f.boolKey] === true)
-        .map(f => f.label);
+    .filter((t) => t.stato === 'attiva')
+    .map((t) => {
+      const fasceLabelList = FASCE_LABELS.filter((f) => t[f.boolKey] === true).map((f) => f.label);
       const fasce = t.orarioSpecifico
         ? t.orarioSpecifico
-        : fasceLabelList.length > 0 ? fasceLabelList.join(', ') : '—';
-      return { id: t.id, farmaco: t.farmacoNome, dose: t.dosaggio, via: t.viaSomministrazione, fasce, stato: t.stato };
+        : fasceLabelList.length > 0
+          ? fasceLabelList.join(', ')
+          : '—';
+      return {
+        id: t.id,
+        farmaco: t.farmacoNome,
+        dose: t.dosaggio,
+        via: t.viaSomministrazione,
+        fasce,
+        stato: t.stato,
+      };
     });
 
   return { patient, dimissione, terapie };
@@ -339,7 +361,13 @@ test('(c) empty therapies array → terapie is empty', () => {
 });
 
 test('(c) fasce labels built correctly for active therapy', () => {
-  const t = makeTherapy({ fasceMattina: true, fasceSera: true, fasceNotte: false, fascePranzo: false, fascePomeriggio: false });
+  const t = makeTherapy({
+    fasceMattina: true,
+    fasceSera: true,
+    fasceNotte: false,
+    fascePranzo: false,
+    fascePomeriggio: false,
+  });
   const model = buildInvioPSModel(PAZIENTE, makeCartella(), [t]);
   assert.equal(model.terapie[0].fasce, 'Mattina, Sera');
 });
@@ -389,6 +417,10 @@ test('(d) condizioni croniche from boolean flags', () => {
 });
 
 test('(d) no camera field on model anymore', () => {
-  const model = buildInvioPSModel(PAZIENTE, makeCartella({ cameraNumero: '5', lettoNumero: 'B' }), []);
+  const model = buildInvioPSModel(
+    PAZIENTE,
+    makeCartella({ cameraNumero: '5', lettoNumero: 'B' }),
+    [],
+  );
   assert.equal('camera' in model.patient, false);
 });

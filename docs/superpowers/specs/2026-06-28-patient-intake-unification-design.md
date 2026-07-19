@@ -33,6 +33,7 @@ Rules (#125): **idempotent** (re-confirm → same patient, no duplicate), full *
 Today each clinical tab (e.g. `TerapiaFarmacologicaTab`, `ParametriTab`) reads/writes `Cartella` via `onUpdate` — coupled to the chart.
 
 **Approach (low-risk): presentational sections + per-mode data adapter.**
+
 - Each editor becomes **controlled**: `value` + `onChange` props, no internal fetch/persist. Pure UI.
 - A **per-mode adapter** wires data:
   - `mode="patient-chart"` → read/write `Cartella` (as today)
@@ -41,6 +42,7 @@ Today each clinical tab (e.g. `TerapiaFarmacologicaTab`, `ParametriTab`) reads/w
 - Thin per-section wrapper: `<PatientTherapySection mode draftId|patientId />` selects the adapter and passes value/onChange to the presentational editor.
 
 **Canonical registry** `patientSections.ts` — single source of truth iterated by workspace, chart and import:
+
 ```ts
 interface PatientSectionDefinition {
   sectionKey: string;
@@ -61,6 +63,7 @@ interface PatientSectionDefinition {
 
 **Full-screen workspace** replacing the `NewPatientModal` popup, 6 steps:
 `[1 Anagrafica] [2 Ingresso] [3 Clinica] [4 Moduli] [5 Documenti] [6 Verifica e crea]`
+
 - Stepper consistent with the design system (reuse the `DischargeImportModal` review L3 pattern).
 - Steps 3/4/5 render sections from the **registry** (`availableDuringIntake`), shared editors (Section 2), `mode="intake"`, autosaving to the draft.
 - Step 4 Moduli: `ClinicalModuleRenderer` from the registry; non-required modules are skippable.
@@ -68,6 +71,7 @@ interface PatientSectionDefinition {
 - Step 6 Verifica: summary from `draft.data` → `POST /confirm` (Section 1).
 
 **Import → same draft (#124):**
+
 - Flow: Importa/Scatta → order → process (existing runtime extraction) → **write into `PatientIntakeDraft`** (`source=import`) instead of a separate path → open the **same workspace** at the Clinica/Verifica step.
 - Extracted fields prefill the sections; not-found fields stay empty and manually fillable.
 - Every imported field shows a **"Importato dal documento"** badge + **"Confronta con la fonte"** action (reuse `sourceReferences` + the compare panel fixed in #70). Manual edits do NOT remove the source reference.
@@ -79,14 +83,14 @@ interface PatientSectionDefinition {
 
 Dependency order (EPIC rule: unblocked sub-issues first; EPIC closed last):
 
-| Phase | Sub | Work | Depends on |
-|---|---|---|---|
-| **F1** | #121 | Runtime gap analysis → `docs/patient-intake/patient-chart-intake-gap-analysis.md` (inventory chart fields/sections/modules vs manual vs import). **Doc only** | — |
-| **F2** | #123 | Presentational shared editors + per-mode adapter + `patientSections.ts` registry. Incremental core migration | F1 |
-| **F3** | #125 | `PatientIntakeDraft` table + CRUD/autosave endpoints + transactional confirm (extends `confirm-service`) + audit/idempotency | F1 (may run parallel to F2) |
-| **F4** | #122 | 6-step manual workspace using F2 editors + F3 draft | F2, F3 |
-| **F5** | #124 | Import writes into the draft → same workspace; source badge + compare | F3, F4 |
-| **F6** | #120 | End-to-end E2E (manual + import converge), close EPIC | F1–F5 |
+| Phase  | Sub  | Work                                                                                                                                                          | Depends on                  |
+| ------ | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **F1** | #121 | Runtime gap analysis → `docs/patient-intake/patient-chart-intake-gap-analysis.md` (inventory chart fields/sections/modules vs manual vs import). **Doc only** | —                           |
+| **F2** | #123 | Presentational shared editors + per-mode adapter + `patientSections.ts` registry. Incremental core migration                                                  | F1                          |
+| **F3** | #125 | `PatientIntakeDraft` table + CRUD/autosave endpoints + transactional confirm (extends `confirm-service`) + audit/idempotency                                  | F1 (may run parallel to F2) |
+| **F4** | #122 | 6-step manual workspace using F2 editors + F3 draft                                                                                                           | F2, F3                      |
+| **F5** | #124 | Import writes into the draft → same workspace; source badge + compare                                                                                         | F3, F4                      |
+| **F6** | #120 | End-to-end E2E (manual + import converge), close EPIC                                                                                                         | F1–F5                       |
 
 **Cross-cutting (#125):** idempotent, rollback, no silent partial patient, no document loss, resumable draft, audit.
 

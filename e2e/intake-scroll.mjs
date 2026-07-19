@@ -10,7 +10,12 @@ const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
 const errors = [];
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
 let failed = false;
-const check = (cond, msg) => { if (!cond) { failed = true; console.log('FAIL:', msg); } else console.log('ok  :', msg); };
+const check = (cond, msg) => {
+  if (!cond) {
+    failed = true;
+    console.log('FAIL:', msg);
+  } else console.log('ok  :', msg);
+};
 
 try {
   await page.goto('http://localhost:5173', { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -38,10 +43,14 @@ try {
   await check(dlgBox.width >= 0.9 * 1366, `popup wide (${Math.round(dlgBox.width)}px of 1366)`);
 
   const m = await body.evaluate((el) => ({
-    scrollHeight: el.scrollHeight, clientHeight: el.clientHeight,
+    scrollHeight: el.scrollHeight,
+    clientHeight: el.clientHeight,
     overflowY: getComputedStyle(el).overflowY,
   }));
-  await check(m.scrollHeight > m.clientHeight, `body scrollable (scrollH ${m.scrollHeight} > clientH ${m.clientHeight})`);
+  await check(
+    m.scrollHeight > m.clientHeight,
+    `body scrollable (scrollH ${m.scrollHeight} > clientH ${m.clientHeight})`,
+  );
   await check(/auto|scroll/.test(m.overflowY), `body overflowY=${m.overflowY}`);
 
   // record geometry, then scroll body to the bottom
@@ -50,7 +59,9 @@ try {
   const headY0 = (await header.boundingBox()).y;
   await page.screenshot({ path: resolve(out, 'patient-intake-popup-full-size.png') });
 
-  await body.evaluate((el) => { el.scrollTop = el.scrollHeight; });
+  await body.evaluate((el) => {
+    el.scrollTop = el.scrollHeight;
+  });
   await page.waitForTimeout(300);
 
   const footY1 = (await footer.boundingBox()).y;
@@ -61,11 +72,19 @@ try {
   await check(scrolled > 0, `body scrolled to ${scrolled}px`);
   await check(Math.abs(footY1 - footY0) < 2, 'footer stayed put after body scroll');
   await check(Math.abs(headY1 - headY0) < 2, 'header stayed put after body scroll');
-  await check(pageYBefore === pageYAfter, `outer page did not scroll (${pageYBefore}->${pageYAfter})`);
-  await check(await footer.isVisible() && await header.isVisible(), 'header+footer still visible at bottom');
+  await check(
+    pageYBefore === pageYAfter,
+    `outer page did not scroll (${pageYBefore}->${pageYAfter})`,
+  );
+  await check(
+    (await footer.isVisible()) && (await header.isVisible()),
+    'header+footer still visible at bottom',
+  );
 
   // no global horizontal scroll
-  const hOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+  const hOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+  );
   await check(!hOverflow, 'no global horizontal scroll');
 
   await page.screenshot({ path: resolve(out, 'patient-intake-scroll-bottom.png') });

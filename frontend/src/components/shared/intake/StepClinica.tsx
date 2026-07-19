@@ -14,7 +14,7 @@ const SECTION_KEY_TO_ITALIAN: Record<string, string> = {
   allergie: 'ALLERGIE',
   anamnesi: 'ANAMNESI',
   diagnosi: 'DIAGNOSI',
-  terapia:  'TERAPIA',
+  terapia: 'TERAPIA',
 };
 
 interface SourceReference {
@@ -45,7 +45,10 @@ function SourceComparePanel({ refs }: { refs: SourceReference[] }) {
   return (
     <div className="step-clinica__source-panel" role="complementary" aria-label="Fonte documento">
       {refs.map((r, i) => (
-        <p key={`${r.fileId ?? r.fileName ?? 'doc'}-${r.pageFrom ?? i}`} className="step-clinica__source-ref">
+        <p
+          key={`${r.fileId ?? r.fileName ?? 'doc'}-${r.pageFrom ?? i}`}
+          className="step-clinica__source-ref"
+        >
           {r.fileName
             ? `Fonte: ${r.fileName}${r.pageFrom != null ? ` — pagina ${r.pageFrom}` : ''}${r.pageTo != null && r.pageTo !== r.pageFrom ? `–${r.pageTo}` : ''}`
             : 'Fonte: documento importato'}
@@ -55,7 +58,13 @@ function SourceComparePanel({ refs }: { refs: SourceReference[] }) {
   );
 }
 
-export function StepClinica({ data, onUpdateSection, operatoreNome, importedFields = [], narrative }: StepClinicaProps) {
+export function StepClinica({
+  data,
+  onUpdateSection,
+  operatoreNome,
+  importedFields = [],
+  narrative,
+}: StepClinicaProps) {
   const sections = intakeSections();
   const [showSource, setShowSource] = useState<Record<string, boolean>>({});
 
@@ -68,7 +77,9 @@ export function StepClinica({ data, onUpdateSection, operatoreNome, importedFiel
     return sourceRefs.filter((r) => r.sectionKey === italianKey);
   }
 
-  const terapiaImport = Array.isArray(data.terapiaImport) ? (data.terapiaImport as DischargeTherapyRow[]) : [];
+  const terapiaImport = Array.isArray(data.terapiaImport)
+    ? (data.terapiaImport as DischargeTherapyRow[])
+    : [];
   const manualTerapia = Array.isArray(data.terapia) ? (data.terapia as unknown[]) : [];
   // #235: therapy is "empty" when neither imported rows nor manual rows exist. The acceptance
   // label adapts to distinguish "nessuna terapia" from "non ancora revisionata".
@@ -92,7 +103,9 @@ export function StepClinica({ data, onUpdateSection, operatoreNome, importedFiel
           <input
             type="checkbox"
             checked={therapyAccepted}
-            onChange={(e) => onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })}
+            onChange={(e) =>
+              onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
+            }
           />
           <span>
             {therapyEmpty
@@ -106,23 +119,26 @@ export function StepClinica({ data, onUpdateSection, operatoreNome, importedFiel
 
         // Cast: the registry stores ComponentType<SectionProps<never>> for type-safety at
         // definition time; here we widen to SectionProps<unknown> for intake rendering.
-        const EditorCast = Editor as unknown as ComponentType<SectionProps<unknown> & {
-          allergie?: AllergiaItem[];
-          status?: AllergyStatus;
-          onStatusChange?: (s: AllergyStatus) => void;
-        }>;
+        const EditorCast = Editor as unknown as ComponentType<
+          SectionProps<unknown> & {
+            allergie?: AllergiaItem[];
+            status?: AllergyStatus;
+            onStatusChange?: (s: AllergyStatus) => void;
+          }
+        >;
 
         // AnamnesisEditor requires an extra allergie prop (read-only card inside Anamnesi).
         // #265: AllergiesEditor needs status/onStatusChange wired to the draft, otherwise the
         // Presenti/Assenti/Paziente nega selection is rendered but never enters allergieStatus.
-        const extraProps = sectionKey === 'anamnesi'
-          ? { allergie: (data.allergie as AllergiaItem[]) ?? [] }
-          : sectionKey === 'allergie'
-            ? {
-                status: data.allergieStatus as AllergyStatus | undefined,
-                onStatusChange: (s: AllergyStatus) => onUpdateSection('allergieStatus', s),
-              }
-            : {};
+        const extraProps =
+          sectionKey === 'anamnesi'
+            ? { allergie: (data.allergie as AllergiaItem[]) ?? [] }
+            : sectionKey === 'allergie'
+              ? {
+                  status: data.allergieStatus as AllergyStatus | undefined,
+                  onStatusChange: (s: AllergyStatus) => onUpdateSection('allergieStatus', s),
+                }
+              : {};
 
         const isImported = importedFields.includes(sectionKey);
         const refs = refsForSection(sectionKey);

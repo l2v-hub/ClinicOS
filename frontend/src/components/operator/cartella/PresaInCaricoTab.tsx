@@ -59,7 +59,9 @@ const PROVENIENZA_LABEL: Record<PresaInCarico['provenienza'], string> = {
   familiare_caregiver: 'Familiare / Caregiver',
 };
 
-const PROVENIENZA_OPTS: InlineOption[] = (Object.entries(PROVENIENZA_LABEL) as [string, string][]).map(([value, label]) => ({ value, label }));
+const PROVENIENZA_OPTS: InlineOption[] = (
+  Object.entries(PROVENIENZA_LABEL) as [string, string][]
+).map(([value, label]) => ({ value, label }));
 const MODALITA_OPTS: InlineOption[] = [
   { value: 'ambulante', label: 'Ambulante' },
   { value: 'barella', label: 'Barella' },
@@ -105,7 +107,13 @@ function Row({ label, value }: { label: string; value: string | boolean | number
   );
 }
 
-function RowAlways({ label, value }: { label: string; value: string | boolean | number | undefined }) {
+function RowAlways({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | boolean | number | undefined;
+}) {
   const display = value === true ? 'Sì' : value === false ? 'No' : (value ?? '—');
   return (
     <div className="pic-row">
@@ -120,7 +128,9 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
   const [editingId, setEditingId] = useState<EditId>(null);
   const [form, setForm] = useState<PresaInCarico>(pic ?? { ...EMPTY, operatore: operatoreNome });
 
-  function set(f: Partial<PresaInCarico>) { setForm(p => ({ ...p, ...f })); }
+  function set(f: Partial<PresaInCarico>) {
+    setForm((p) => ({ ...p, ...f }));
+  }
 
   function handleSave() {
     onUpdate({ presaInCarico: { ...form, compilatoAt: nowISO() } });
@@ -150,31 +160,61 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       <div className="form-row-2col">
         <div className="form-row">
           <label className="form-label">Data presa in carico</label>
-          <input type="date" className="form-input" value={form.dataIngresso} onChange={e => set({ dataIngresso: e.target.value })} />
+          <input
+            type="date"
+            className="form-input"
+            value={form.dataIngresso}
+            onChange={(e) => set({ dataIngresso: e.target.value })}
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Ora presa in carico</label>
-          <input type="time" className="form-input" value={form.oraIngresso} onChange={e => set({ oraIngresso: e.target.value })} />
+          <input
+            type="time"
+            className="form-input"
+            value={form.oraIngresso}
+            onChange={(e) => set({ oraIngresso: e.target.value })}
+          />
         </div>
       </div>
       <div className="form-row-2col">
         <div className="form-row">
           <label className="form-label">Provenienza</label>
-          <select className="form-input" value={form.provenienza} onChange={e => set({ provenienza: e.target.value as PresaInCarico['provenienza'] })}>
-            {(Object.entries(PROVENIENZA_LABEL) as [PresaInCarico['provenienza'], string][]).map(([k, v]) => (
-              <option key={k} value={k}>{v}</option>
-            ))}
+          <select
+            className="form-input"
+            value={form.provenienza}
+            onChange={(e) => set({ provenienza: e.target.value as PresaInCarico['provenienza'] })}
+          >
+            {(Object.entries(PROVENIENZA_LABEL) as [PresaInCarico['provenienza'], string][]).map(
+              ([k, v]) => (
+                <option key={k} value={k}>
+                  {v}
+                </option>
+              ),
+            )}
           </select>
         </div>
         <div className="form-row">
           <label className="form-label">Centro inviante</label>
-          <input type="text" className="form-input" value={form.centroInviante ?? ''} onChange={e => set({ centroInviante: e.target.value })} placeholder="Nome centro / struttura…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.centroInviante ?? ''}
+            onChange={(e) => set({ centroInviante: e.target.value })}
+            placeholder="Nome centro / struttura…"
+          />
         </div>
       </div>
       <div className="form-row-2col">
         <div className="form-row">
           <label className="form-label">Modalità ingresso</label>
-          <select className="form-input" value={form.modalitaIngresso} onChange={e => set({ modalitaIngresso: e.target.value as PresaInCarico['modalitaIngresso'] })}>
+          <select
+            className="form-input"
+            value={form.modalitaIngresso}
+            onChange={(e) =>
+              set({ modalitaIngresso: e.target.value as PresaInCarico['modalitaIngresso'] })
+            }
+          >
             <option value="ambulante">Ambulante</option>
             <option value="barella">Barella</option>
             <option value="sedia_rotelle">Sedia a rotelle</option>
@@ -182,55 +222,124 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         </div>
         <div className="form-row">
           <label className="form-label">Accompagnato da</label>
-          <input type="text" className="form-input" value={form.accompagnatoDa} onChange={e => set({ accompagnatoDa: e.target.value })} />
+          <input
+            type="text"
+            className="form-input"
+            value={form.accompagnatoDa}
+            onChange={(e) => set({ accompagnatoDa: e.target.value })}
+          />
         </div>
       </div>
       <div className="form-row-2col">
         <div className="form-row">
           <label className="form-label">Operatore responsabile</label>
-          <input type="text" className="form-input" value={form.operatoreResponsabile ?? ''} onChange={e => set({ operatoreResponsabile: e.target.value })} placeholder="Nome operatore…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.operatoreResponsabile ?? ''}
+            onChange={(e) => set({ operatoreResponsabile: e.target.value })}
+            placeholder="Nome operatore…"
+          />
         </div>
         <div className="form-row-2col" style={{ gap: 10 }}>
           <div className="form-row">
             <label className="form-label">Camera</label>
-            <input type="text" className="form-input" value={form.camera ?? ''} onChange={e => set({ camera: e.target.value })} placeholder="es. 12" />
+            <input
+              type="text"
+              className="form-input"
+              value={form.camera ?? ''}
+              onChange={(e) => set({ camera: e.target.value })}
+              placeholder="es. 12"
+            />
           </div>
           <div className="form-row">
             <label className="form-label">Letto / posto</label>
-            <input type="text" className="form-input" value={form.letto ?? ''} onChange={e => set({ letto: e.target.value })} placeholder="es. A" />
+            <input
+              type="text"
+              className="form-input"
+              value={form.letto ?? ''}
+              onChange={(e) => set({ letto: e.target.value })}
+              placeholder="es. A"
+            />
           </div>
         </div>
       </div>
       <div className="form-row">
         <label className="form-label">Motivo dell'ingresso</label>
-        <textarea className="form-input" rows={4} value={form.motivoIngresso} onChange={e => set({ motivoIngresso: e.target.value })} placeholder="Descrivere il motivo del ricovero / accesso…" />
+        <textarea
+          className="form-input"
+          rows={4}
+          value={form.motivoIngresso}
+          onChange={(e) => set({ motivoIngresso: e.target.value })}
+          placeholder="Descrivere il motivo del ricovero / accesso…"
+        />
       </div>
-      <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
-        <button className="btn-secondary" onClick={cancelEdit}>Annulla</button>
-        <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva</button>
+      <div
+        className="cr-form-actions"
+        style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}
+      >
+        <button className="btn-secondary" onClick={cancelEdit}>
+          Annulla
+        </button>
+        <button className="btn-primary" onClick={handleSave}>
+          <IcoCheck /> Salva
+        </button>
       </div>
     </div>
   );
 
   const datiView = (
     <div className="cr-form-section">
-      <RowAlways label="Data / Ora" value={`${safePic.dataIngresso.split('-').reverse().join('/')} ${safePic.oraIngresso}`} />
+      <RowAlways
+        label="Data / Ora"
+        value={`${safePic.dataIngresso.split('-').reverse().join('/')} ${safePic.oraIngresso}`}
+      />
       <InlineEditableField
-        label="Provenienza" type="select" options={PROVENIENZA_OPTS}
+        label="Provenienza"
+        type="select"
+        options={PROVENIENZA_OPTS}
         value={safePic.provenienza}
         display={PROVENIENZA_LABEL[safePic.provenienza] ?? safePic.provenienza}
-        onSave={v => saveField({ provenienza: v as PresaInCarico['provenienza'] })}
+        onSave={(v) => saveField({ provenienza: v as PresaInCarico['provenienza'] })}
       />
-      <InlineEditableField label="Centro inviante" value={safePic.centroInviante ?? ''} placeholder="Nome centro / struttura…" onSave={v => saveField({ centroInviante: v })} />
       <InlineEditableField
-        label="Modalità ingresso" type="select" options={MODALITA_OPTS}
-        value={safePic.modalitaIngresso} display={safePic.modalitaIngresso.replace('_', ' ')}
-        onSave={v => saveField({ modalitaIngresso: v as PresaInCarico['modalitaIngresso'] })}
+        label="Centro inviante"
+        value={safePic.centroInviante ?? ''}
+        placeholder="Nome centro / struttura…"
+        onSave={(v) => saveField({ centroInviante: v })}
       />
-      <InlineEditableField label="Accompagnato da" value={safePic.accompagnatoDa ?? ''} onSave={v => saveField({ accompagnatoDa: v })} />
-      <InlineEditableField label="Operatore responsabile" value={safePic.operatoreResponsabile ?? ''} placeholder="Nome operatore…" onSave={v => saveField({ operatoreResponsabile: v })} />
-      <RowAlways label="Camera / Letto" value={safePic.camera ? `${safePic.camera}${safePic.letto ? ' — ' + safePic.letto : ''}` : '—'} />
-      <InlineEditableField label="Motivo ingresso" type="textarea" value={safePic.motivoIngresso ?? ''} placeholder="Descrivere il motivo del ricovero / accesso…" onSave={v => saveField({ motivoIngresso: v })} />
+      <InlineEditableField
+        label="Modalità ingresso"
+        type="select"
+        options={MODALITA_OPTS}
+        value={safePic.modalitaIngresso}
+        display={safePic.modalitaIngresso.replace('_', ' ')}
+        onSave={(v) => saveField({ modalitaIngresso: v as PresaInCarico['modalitaIngresso'] })}
+      />
+      <InlineEditableField
+        label="Accompagnato da"
+        value={safePic.accompagnatoDa ?? ''}
+        onSave={(v) => saveField({ accompagnatoDa: v })}
+      />
+      <InlineEditableField
+        label="Operatore responsabile"
+        value={safePic.operatoreResponsabile ?? ''}
+        placeholder="Nome operatore…"
+        onSave={(v) => saveField({ operatoreResponsabile: v })}
+      />
+      <RowAlways
+        label="Camera / Letto"
+        value={
+          safePic.camera ? `${safePic.camera}${safePic.letto ? ' — ' + safePic.letto : ''}` : '—'
+        }
+      />
+      <InlineEditableField
+        label="Motivo ingresso"
+        type="textarea"
+        value={safePic.motivoIngresso ?? ''}
+        placeholder="Descrivere il motivo del ricovero / accesso…"
+        onSave={(v) => saveField({ motivoIngresso: v })}
+      />
     </div>
   );
 
@@ -240,7 +349,13 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       <div className="form-row-2col">
         <div className="form-row">
           <label className="form-label">Condizioni generali</label>
-          <select className="form-input" value={form.condizioniGenerali} onChange={e => set({ condizioniGenerali: e.target.value as PresaInCarico['condizioniGenerali'] })}>
+          <select
+            className="form-input"
+            value={form.condizioniGenerali}
+            onChange={(e) =>
+              set({ condizioniGenerali: e.target.value as PresaInCarico['condizioniGenerali'] })
+            }
+          >
             <option value="buone">Buone</option>
             <option value="discrete">Discrete</option>
             <option value="scadenti">Scadenti</option>
@@ -249,7 +364,13 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         </div>
         <div className="form-row">
           <label className="form-label">Stato di coscienza</label>
-          <select className="form-input" value={form.statoCoscienza} onChange={e => set({ statoCoscienza: e.target.value as PresaInCarico['statoCoscienza'] })}>
+          <select
+            className="form-input"
+            value={form.statoCoscienza}
+            onChange={(e) =>
+              set({ statoCoscienza: e.target.value as PresaInCarico['statoCoscienza'] })
+            }
+          >
             <option value="vigile">Vigile</option>
             <option value="confuso">Confuso</option>
             <option value="soporoso">Soporoso</option>
@@ -260,25 +381,70 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       </div>
       <div className="form-row">
         <label className="form-label">Descrizione condizioni all'ingresso</label>
-        <textarea className="form-input" rows={4} value={form.condizioniIniziali ?? ''} onChange={e => set({ condizioniIniziali: e.target.value })} placeholder="Descrizione condizioni al momento dell'ingresso…" />
+        <textarea
+          className="form-input"
+          rows={4}
+          value={form.condizioniIniziali ?? ''}
+          onChange={(e) => set({ condizioniIniziali: e.target.value })}
+          placeholder="Descrizione condizioni al momento dell'ingresso…"
+        />
       </div>
       <div className="form-row">
         <label className="form-label">Note iniziali</label>
-        <textarea className="form-input" rows={3} value={form.noteIniziali ?? ''} onChange={e => set({ noteIniziali: e.target.value })} placeholder="Note aggiuntive sull'accesso…" />
+        <textarea
+          className="form-input"
+          rows={3}
+          value={form.noteIniziali ?? ''}
+          onChange={(e) => set({ noteIniziali: e.target.value })}
+          placeholder="Note aggiuntive sull'accesso…"
+        />
       </div>
-      <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
-        <button className="btn-secondary" onClick={cancelEdit}>Annulla</button>
-        <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva</button>
+      <div
+        className="cr-form-actions"
+        style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}
+      >
+        <button className="btn-secondary" onClick={cancelEdit}>
+          Annulla
+        </button>
+        <button className="btn-primary" onClick={handleSave}>
+          <IcoCheck /> Salva
+        </button>
       </div>
     </div>
   );
 
   const condView = (
     <div className="cr-form-section">
-      <InlineEditableField label="Condizioni generali" type="select" options={CONDGEN_OPTS} value={safePic.condizioniGenerali} display={safePic.condizioniGenerali} onSave={v => saveField({ condizioniGenerali: v as PresaInCarico['condizioniGenerali'] })} />
-      <InlineEditableField label="Stato di coscienza" type="select" options={COSCIENZA_OPTS} value={safePic.statoCoscienza} display={safePic.statoCoscienza} onSave={v => saveField({ statoCoscienza: v as PresaInCarico['statoCoscienza'] })} />
-      <InlineEditableField label="Condizioni iniziali" type="textarea" value={safePic.condizioniIniziali ?? ''} placeholder="Descrizione condizioni al momento dell'ingresso…" onSave={v => saveField({ condizioniIniziali: v })} />
-      <InlineEditableField label="Note iniziali" type="textarea" value={safePic.noteIniziali ?? ''} placeholder="Note aggiuntive sull'accesso…" onSave={v => saveField({ noteIniziali: v })} />
+      <InlineEditableField
+        label="Condizioni generali"
+        type="select"
+        options={CONDGEN_OPTS}
+        value={safePic.condizioniGenerali}
+        display={safePic.condizioniGenerali}
+        onSave={(v) => saveField({ condizioniGenerali: v as PresaInCarico['condizioniGenerali'] })}
+      />
+      <InlineEditableField
+        label="Stato di coscienza"
+        type="select"
+        options={COSCIENZA_OPTS}
+        value={safePic.statoCoscienza}
+        display={safePic.statoCoscienza}
+        onSave={(v) => saveField({ statoCoscienza: v as PresaInCarico['statoCoscienza'] })}
+      />
+      <InlineEditableField
+        label="Condizioni iniziali"
+        type="textarea"
+        value={safePic.condizioniIniziali ?? ''}
+        placeholder="Descrizione condizioni al momento dell'ingresso…"
+        onSave={(v) => saveField({ condizioniIniziali: v })}
+      />
+      <InlineEditableField
+        label="Note iniziali"
+        type="textarea"
+        value={safePic.noteIniziali ?? ''}
+        placeholder="Note aggiuntive sull'accesso…"
+        onSave={(v) => saveField({ noteIniziali: v })}
+      />
     </div>
   );
 
@@ -288,7 +454,11 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       <div className="form-row-2col">
         <div className="form-row">
           <label className="form-label">Orientamento</label>
-          <select className="form-input" value={form.orientamento} onChange={e => set({ orientamento: e.target.value as PresaInCarico['orientamento'] })}>
+          <select
+            className="form-input"
+            value={form.orientamento}
+            onChange={(e) => set({ orientamento: e.target.value as PresaInCarico['orientamento'] })}
+          >
             <option value="orientato">Orientato</option>
             <option value="parzialmente_orientato">Parzialmente orientato</option>
             <option value="disorientato">Disorientato</option>
@@ -296,7 +466,11 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         </div>
         <div className="form-row">
           <label className="form-label">Autonomia</label>
-          <select className="form-input" value={form.autonomia} onChange={e => set({ autonomia: e.target.value as PresaInCarico['autonomia'] })}>
+          <select
+            className="form-input"
+            value={form.autonomia}
+            onChange={(e) => set({ autonomia: e.target.value as PresaInCarico['autonomia'] })}
+          >
             <option value="autonomo">Autonomo</option>
             <option value="parzialmente_autonomo">Parzialmente autonomo</option>
             <option value="non_autonomo">Non autonomo</option>
@@ -307,45 +481,103 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       <div className="form-row-3col">
         <div className="form-row">
           <label className="form-label">Comunicazione</label>
-          <input type="text" className="form-input" value={form.comunicazione} onChange={e => set({ comunicazione: e.target.value })} placeholder="es. verbale, afasico…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.comunicazione}
+            onChange={(e) => set({ comunicazione: e.target.value })}
+            placeholder="es. verbale, afasico…"
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Udito</label>
-          <input type="text" className="form-input" value={form.udito} onChange={e => set({ udito: e.target.value })} placeholder="es. normale, ridotto…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.udito}
+            onChange={(e) => set({ udito: e.target.value })}
+            placeholder="es. normale, ridotto…"
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Vista</label>
-          <input type="text" className="form-input" value={form.vista} onChange={e => set({ vista: e.target.value })} placeholder="es. normale, occhiali…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.vista}
+            onChange={(e) => set({ vista: e.target.value })}
+            placeholder="es. normale, occhiali…"
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Dentizione</label>
-          <input type="text" className="form-input" value={form.dentizione} onChange={e => set({ dentizione: e.target.value })} placeholder="es. propria, protesi…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.dentizione}
+            onChange={(e) => set({ dentizione: e.target.value })}
+            placeholder="es. propria, protesi…"
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Alimentazione</label>
-          <input type="text" className="form-input" value={form.alimentazione} onChange={e => set({ alimentazione: e.target.value })} placeholder="es. autonomo, SNG…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.alimentazione}
+            onChange={(e) => set({ alimentazione: e.target.value })}
+            placeholder="es. autonomo, SNG…"
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Elim. urinaria</label>
-          <input type="text" className="form-input" value={form.eliminazioneUrinaria} onChange={e => set({ eliminazioneUrinaria: e.target.value })} placeholder="es. autonoma, catetere…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.eliminazioneUrinaria}
+            onChange={(e) => set({ eliminazioneUrinaria: e.target.value })}
+            placeholder="es. autonoma, catetere…"
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Elim. intestinale</label>
-          <input type="text" className="form-input" value={form.eliminazioneIntestinale} onChange={e => set({ eliminazioneIntestinale: e.target.value })} placeholder="es. autonoma, stomia…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.eliminazioneIntestinale}
+            onChange={(e) => set({ eliminazioneIntestinale: e.target.value })}
+            placeholder="es. autonoma, stomia…"
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Mobilità</label>
-          <input type="text" className="form-input" value={form.mobilita} onChange={e => set({ mobilita: e.target.value })} placeholder="es. autonoma, allettato…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.mobilita}
+            onChange={(e) => set({ mobilita: e.target.value })}
+            placeholder="es. autonoma, allettato…"
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Cute / mucose</label>
-          <input type="text" className="form-input" value={form.cuteIntegrita} onChange={e => set({ cuteIntegrita: e.target.value })} placeholder="es. integra, eritema…" />
+          <input
+            type="text"
+            className="form-input"
+            value={form.cuteIntegrita}
+            onChange={(e) => set({ cuteIntegrita: e.target.value })}
+            placeholder="es. integra, eritema…"
+          />
         </div>
       </div>
       <div className="form-row-2col">
         <div className="form-row">
           <label className="form-label">Dolore</label>
-          <select className="form-input" value={form.dolore} onChange={e => set({ dolore: e.target.value as 'assente' | 'presente' })}>
+          <select
+            className="form-input"
+            value={form.dolore}
+            onChange={(e) => set({ dolore: e.target.value as 'assente' | 'presente' })}
+          >
             <option value="assente">Assente</option>
             <option value="presente">Presente</option>
           </select>
@@ -353,40 +585,115 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         {form.dolore === 'presente' && (
           <div className="form-row">
             <label className="form-label">Livello NRS (0–10)</label>
-            <input type="number" className="form-input" min={0} max={10} value={form.doloreLivello} onChange={e => set({ doloreLivello: Number(e.target.value) })} />
+            <input
+              type="number"
+              className="form-input"
+              min={0}
+              max={10}
+              value={form.doloreLivello}
+              onChange={(e) => set({ doloreLivello: Number(e.target.value) })}
+            />
           </div>
         )}
       </div>
-      <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
-        <button className="btn-secondary" onClick={cancelEdit}>Annulla</button>
-        <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva</button>
+      <div
+        className="cr-form-actions"
+        style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}
+      >
+        <button className="btn-secondary" onClick={cancelEdit}>
+          Annulla
+        </button>
+        <button className="btn-primary" onClick={handleSave}>
+          <IcoCheck /> Salva
+        </button>
       </div>
     </div>
   );
 
   const valutazioneView = (
     <div className="cr-form-section">
-      <InlineEditableField label="Orientamento" type="select" options={ORIENT_OPTS} value={safePic.orientamento} display={safePic.orientamento.replace('_', ' ')} onSave={v => saveField({ orientamento: v as PresaInCarico['orientamento'] })} />
-      <InlineEditableField label="Autonomia" type="select" options={AUTON_OPTS} value={safePic.autonomia} display={safePic.autonomia.replace('_', ' ')} onSave={v => saveField({ autonomia: v as PresaInCarico['autonomia'] })} />
-      <InlineEditableField label="Comunicazione" value={safePic.comunicazione ?? ''} onSave={v => saveField({ comunicazione: v })} />
-      <InlineEditableField label="Udito" value={safePic.udito ?? ''} onSave={v => saveField({ udito: v })} />
-      <InlineEditableField label="Vista" value={safePic.vista ?? ''} onSave={v => saveField({ vista: v })} />
-      <InlineEditableField label="Dentizione" value={safePic.dentizione ?? ''} onSave={v => saveField({ dentizione: v })} />
-      <InlineEditableField label="Alimentazione" value={safePic.alimentazione ?? ''} onSave={v => saveField({ alimentazione: v })} />
-      <InlineEditableField label="Elim. urinaria" value={safePic.eliminazioneUrinaria ?? ''} onSave={v => saveField({ eliminazioneUrinaria: v })} />
-      <InlineEditableField label="Elim. intestinale" value={safePic.eliminazioneIntestinale ?? ''} onSave={v => saveField({ eliminazioneIntestinale: v })} />
-      <InlineEditableField label="Mobilità" value={safePic.mobilita ?? ''} onSave={v => saveField({ mobilita: v })} />
-      <InlineEditableField label="Cute / mucose" value={safePic.cuteIntegrita ?? ''} onSave={v => saveField({ cuteIntegrita: v })} />
       <InlineEditableField
-        label="Dolore" type="select" options={DOLORE_OPTS}
-        value={safePic.dolore} display={safePic.dolore === 'presente' ? 'Presente' : 'Assente'}
-        onSave={v => saveField(v === 'presente' ? { dolore: 'presente' } : { dolore: 'assente', doloreLivello: 0 })}
+        label="Orientamento"
+        type="select"
+        options={ORIENT_OPTS}
+        value={safePic.orientamento}
+        display={safePic.orientamento.replace('_', ' ')}
+        onSave={(v) => saveField({ orientamento: v as PresaInCarico['orientamento'] })}
+      />
+      <InlineEditableField
+        label="Autonomia"
+        type="select"
+        options={AUTON_OPTS}
+        value={safePic.autonomia}
+        display={safePic.autonomia.replace('_', ' ')}
+        onSave={(v) => saveField({ autonomia: v as PresaInCarico['autonomia'] })}
+      />
+      <InlineEditableField
+        label="Comunicazione"
+        value={safePic.comunicazione ?? ''}
+        onSave={(v) => saveField({ comunicazione: v })}
+      />
+      <InlineEditableField
+        label="Udito"
+        value={safePic.udito ?? ''}
+        onSave={(v) => saveField({ udito: v })}
+      />
+      <InlineEditableField
+        label="Vista"
+        value={safePic.vista ?? ''}
+        onSave={(v) => saveField({ vista: v })}
+      />
+      <InlineEditableField
+        label="Dentizione"
+        value={safePic.dentizione ?? ''}
+        onSave={(v) => saveField({ dentizione: v })}
+      />
+      <InlineEditableField
+        label="Alimentazione"
+        value={safePic.alimentazione ?? ''}
+        onSave={(v) => saveField({ alimentazione: v })}
+      />
+      <InlineEditableField
+        label="Elim. urinaria"
+        value={safePic.eliminazioneUrinaria ?? ''}
+        onSave={(v) => saveField({ eliminazioneUrinaria: v })}
+      />
+      <InlineEditableField
+        label="Elim. intestinale"
+        value={safePic.eliminazioneIntestinale ?? ''}
+        onSave={(v) => saveField({ eliminazioneIntestinale: v })}
+      />
+      <InlineEditableField
+        label="Mobilità"
+        value={safePic.mobilita ?? ''}
+        onSave={(v) => saveField({ mobilita: v })}
+      />
+      <InlineEditableField
+        label="Cute / mucose"
+        value={safePic.cuteIntegrita ?? ''}
+        onSave={(v) => saveField({ cuteIntegrita: v })}
+      />
+      <InlineEditableField
+        label="Dolore"
+        type="select"
+        options={DOLORE_OPTS}
+        value={safePic.dolore}
+        display={safePic.dolore === 'presente' ? 'Presente' : 'Assente'}
+        onSave={(v) =>
+          saveField(
+            v === 'presente' ? { dolore: 'presente' } : { dolore: 'assente', doloreLivello: 0 },
+          )
+        }
       />
       {safePic.dolore === 'presente' && (
         <InlineEditableField
-          label="Livello NRS (0–10)" type="number"
-          value={String(safePic.doloreLivello ?? 0)} display={`${safePic.doloreLivello ?? 0}/10`}
-          onSave={v => saveField({ doloreLivello: Math.max(0, Math.min(10, Math.round(Number(v) || 0))) })}
+          label="Livello NRS (0–10)"
+          type="number"
+          value={String(safePic.doloreLivello ?? 0)}
+          display={`${safePic.doloreLivello ?? 0}/10`}
+          onSave={(v) =>
+            saveField({ doloreLivello: Math.max(0, Math.min(10, Math.round(Number(v) || 0))) })
+          }
         />
       )}
     </div>
@@ -397,35 +704,78 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
     <div className="pic-edit-form">
       <div className="form-row">
         <label className="form-label">Documenti ricevuti</label>
-        <textarea className="form-input" rows={3} value={form.documentiRicevuti ?? ''} onChange={e => set({ documentiRicevuti: e.target.value })} placeholder="Elenco documenti ricevuti all'ingresso…" />
+        <textarea
+          className="form-input"
+          rows={3}
+          value={form.documentiRicevuti ?? ''}
+          onChange={(e) => set({ documentiRicevuti: e.target.value })}
+          placeholder="Elenco documenti ricevuti all'ingresso…"
+        />
       </div>
       <div className="form-row">
         <label className="form-label">Documenti mancanti</label>
-        <textarea className="form-input" rows={3} value={form.documentiMancanti ?? ''} onChange={e => set({ documentiMancanti: e.target.value })} placeholder="Documenti ancora da richiedere…" />
+        <textarea
+          className="form-input"
+          rows={3}
+          value={form.documentiMancanti ?? ''}
+          onChange={(e) => set({ documentiMancanti: e.target.value })}
+          placeholder="Documenti ancora da richiedere…"
+        />
       </div>
       <div className="form-row">
         <label style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}>
-          <input type="checkbox" style={{ width: 18, height: 18 }} checked={form.materialeConsegnato} onChange={e => set({ materialeConsegnato: e.target.checked })} />
-          <span className="form-label" style={{ margin: 0 }}>Materiale informativo consegnato al paziente / familiare</span>
+          <input
+            type="checkbox"
+            style={{ width: 18, height: 18 }}
+            checked={form.materialeConsegnato}
+            onChange={(e) => set({ materialeConsegnato: e.target.checked })}
+          />
+          <span className="form-label" style={{ margin: 0 }}>
+            Materiale informativo consegnato al paziente / familiare
+          </span>
         </label>
       </div>
       <div className="form-row-2col">
         <div className="form-row">
           <label className="form-label">Operatore</label>
-          <input type="text" className="form-input" value={form.operatore} onChange={e => set({ operatore: e.target.value })} />
+          <input
+            type="text"
+            className="form-input"
+            value={form.operatore}
+            onChange={(e) => set({ operatore: e.target.value })}
+          />
         </div>
         <div className="form-row">
           <label className="form-label">Sigla / firma</label>
-          <input type="text" className="form-input" value={form.sigla ?? ''} onChange={e => set({ sigla: e.target.value })} placeholder="es. M.F." />
+          <input
+            type="text"
+            className="form-input"
+            value={form.sigla ?? ''}
+            onChange={(e) => set({ sigla: e.target.value })}
+            placeholder="es. M.F."
+          />
         </div>
       </div>
       <div className="form-row">
         <label className="form-label">Note</label>
-        <textarea className="form-input" rows={4} value={form.note} onChange={e => set({ note: e.target.value })} placeholder="Note libere…" />
+        <textarea
+          className="form-input"
+          rows={4}
+          value={form.note}
+          onChange={(e) => set({ note: e.target.value })}
+          placeholder="Note libere…"
+        />
       </div>
-      <div className="cr-form-actions" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
-        <button className="btn-secondary" onClick={cancelEdit}>Annulla</button>
-        <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva</button>
+      <div
+        className="cr-form-actions"
+        style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}
+      >
+        <button className="btn-secondary" onClick={cancelEdit}>
+          Annulla
+        </button>
+        <button className="btn-primary" onClick={handleSave}>
+          <IcoCheck /> Salva
+        </button>
       </div>
     </div>
   );
@@ -434,15 +784,27 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
     <div className="cr-form-section">
       <Row label="Documenti ricevuti" value={safePic.documentiRicevuti} />
       {safePic.documentiMancanti && (
-        <div className="pic-row" style={{ background: '#FEF2F2', borderRadius: 4, padding: '4px 8px' }}>
-          <span className="pic-row__lbl" style={{ color: '#B91C1C' }}>Documenti mancanti</span>
-          <span className="pic-row__val" style={{ color: '#B91C1C' }}>{safePic.documentiMancanti}</span>
+        <div
+          className="pic-row"
+          style={{ background: '#FEF2F2', borderRadius: 4, padding: '4px 8px' }}
+        >
+          <span className="pic-row__lbl" style={{ color: '#B91C1C' }}>
+            Documenti mancanti
+          </span>
+          <span className="pic-row__val" style={{ color: '#B91C1C' }}>
+            {safePic.documentiMancanti}
+          </span>
         </div>
       )}
       <RowAlways label="Materiale consegnato" value={safePic.materialeConsegnato} />
       <RowAlways label="Operatore" value={safePic.operatore} />
       <Row label="Sigla" value={safePic.sigla} />
-      <RowAlways label="Compilato il" value={safePic.compilatoAt ? new Date(safePic.compilatoAt).toLocaleDateString('it-IT') : '—'} />
+      <RowAlways
+        label="Compilato il"
+        value={
+          safePic.compilatoAt ? new Date(safePic.compilatoAt).toLocaleDateString('it-IT') : '—'
+        }
+      />
       {safePic.note && <RowAlways label="Note" value={safePic.note} />}
     </div>
   );
@@ -453,12 +815,16 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
       <div className="print-only print-form-header">
         <div className="print-form-header__title">PRESA IN CARICO</div>
         <div className="print-form-header__patient">
-          Paziente: {paziente.lastName} {paziente.firstName} — Tessera: {paziente.medicalRecordNumber}
+          Paziente: {paziente.lastName} {paziente.firstName} — Tessera:{' '}
+          {paziente.medicalRecordNumber}
         </div>
       </div>
 
       {/* Niente sezione collassabile: le card sono separate e sempre visibili. */}
-      <div className="no-print" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+      <div
+        className="no-print"
+        style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}
+      >
         <PrintButton />
       </div>
 

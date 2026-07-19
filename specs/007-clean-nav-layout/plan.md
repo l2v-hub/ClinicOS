@@ -30,15 +30,15 @@ Frontend-only CSS/layout refactor targeting tablet-first (1024px+) and desktop (
 
 ## Constitution Check
 
-| Principle | Gate | Status |
-|-----------|------|--------|
-| I. Simplicity First | No new npm deps, no new components, YAGNI | PASS — pure CSS + one `key` prop |
-| II. Healthcare UX | Tablet-first, touch-friendly (44px L2 height), Italian UI unchanged | PASS |
-| III. Backend Data Authority | No backend changes | PASS — N/A |
-| IV. Schema & API Stability | No Prisma changes | PASS — N/A |
-| V. Role-Aware | No role logic changed | PASS |
-| VI. Integration Integrity | Must pass `npm run build` with zero TS/lint errors | GATE — verify after every edit |
-| VII. Environment Safety | No env vars, no infra changes | PASS — N/A |
+| Principle                   | Gate                                                                | Status                           |
+| --------------------------- | ------------------------------------------------------------------- | -------------------------------- |
+| I. Simplicity First         | No new npm deps, no new components, YAGNI                           | PASS — pure CSS + one `key` prop |
+| II. Healthcare UX           | Tablet-first, touch-friendly (44px L2 height), Italian UI unchanged | PASS                             |
+| III. Backend Data Authority | No backend changes                                                  | PASS — N/A                       |
+| IV. Schema & API Stability  | No Prisma changes                                                   | PASS — N/A                       |
+| V. Role-Aware               | No role logic changed                                               | PASS                             |
+| VI. Integration Integrity   | Must pass `npm run build` with zero TS/lint errors                  | GATE — verify after every edit   |
+| VII. Environment Safety     | No env vars, no infra changes                                       | PASS — N/A                       |
 
 ## Project Structure
 
@@ -77,9 +77,11 @@ No Constitution violations. Feature stays within simplicity bounds. No justifica
 ## Implementation Phases
 
 ### Phase 0: Research (complete)
+
 → See [research.md](./research.md)
 
 Key decisions:
+
 - Target `App.css` as primary file; `index.css` for `#root` fix; `app-additions.css` audit only
 - Extend breakpoints additively with `min-width` blocks (1180px, 1366px)
 - L2 underline: CSS `::after` pseudo-element, `width` transition 180ms
@@ -87,13 +89,16 @@ Key decisions:
 - L3 scroll: `overflow-x: auto` + hidden scrollbar CSS
 
 ### Phase 1: Design (complete)
+
 → See [data-model.md](./data-model.md), [quickstart.md](./quickstart.md)
 
 Key outputs:
+
 - CSS variable additions: `--tab-transition-duration`, `--tab-transition-easing`, `--l2-underline-color`, `--l2-underline-h`, `--content-px`, `--content-px-lg`, `--content-px-xl`
 - New class: `.tab-panel-transition` with `@keyframes tabPanelEnter`
 - Modified classes: `.app-shell`, `.main-area-clean`, `.content-panel`, `.main-h-nav`, `.context-sub-tabs`
 - `prefers-reduced-motion` handled via `@media` block on `.tab-panel-transition`
 
 ### Phase 2: Tasks
+
 → Run `/speckit-tasks` to generate `tasks.md`

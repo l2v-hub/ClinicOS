@@ -1,9 +1,11 @@
 # Piano: Parametro Vitale Modal
 
 ## FileDaCreare
+
 - `frontend/src/components/operator/ParametroVitaleModal.tsx`
 
 ## FileDaModificare
+
 - `frontend/src/components/operator/MultiPatientParametri.tsx`
 
 ## InterfaceModal
@@ -30,11 +32,13 @@ interface ParametroVitaleModalProps {
 ### In RigaPaziente
 
 1. Aggiungere stato locale per la modal:
+
 ```typescript
 const [modalCampo, setModalCampo] = useState<CampoParametro | null>(null);
 ```
 
 2. Sostituire ogni `<label className="mpp-field"><input ...>` con un `<button>` cliccabile:
+
 ```typescript
 <button className="mpp-cell-btn" onClick={() => setModalCampo('pa')}>
   <span className="mpp-cell-btn__label">PA <span className="mpp-field__unit">mmHg</span></span>
@@ -43,6 +47,7 @@ const [modalCampo, setModalCampo] = useState<CampoParametro | null>(null);
 ```
 
 3. Renderizzare la modal condizionalmente:
+
 ```typescript
 {modalCampo && (
   <ParametroVitaleModal
@@ -72,15 +77,15 @@ Dopo `onSalva` nella modal, mostrare toast verde "Valore salvato" per 2.5s. Gest
 
 ## ValidationRules
 
-| Campo | Tipo input | Validazione |
-|---|---|---|
-| PA | Due input numerici: sistolica + diastolica | Entrambi interi 40-300, sistolica > diastolica. Join come "120/80" su salva. Se valoreCorrente contiene "/", split per pre-popolare. |
-| FC | Input numerico | Intero positivo, range 20-300 |
-| SpO2 | Input numerico | Intero, range 70-100 |
-| Temperatura | Input numerico (step 0.1) | Decimale, range 35.0-42.0 |
-| DTX | Input numerico | Intero positivo (> 0) |
-| Evacuazione | Select dropdown | Opzioni: "", "Si", "No", "Alvo regolare", "Stipsi", "Diarrea" |
-| Note | Textarea | Nessuna validazione, max 500 caratteri |
+| Campo       | Tipo input                                 | Validazione                                                                                                                          |
+| ----------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| PA          | Due input numerici: sistolica + diastolica | Entrambi interi 40-300, sistolica > diastolica. Join come "120/80" su salva. Se valoreCorrente contiene "/", split per pre-popolare. |
+| FC          | Input numerico                             | Intero positivo, range 20-300                                                                                                        |
+| SpO2        | Input numerico                             | Intero, range 70-100                                                                                                                 |
+| Temperatura | Input numerico (step 0.1)                  | Decimale, range 35.0-42.0                                                                                                            |
+| DTX         | Input numerico                             | Intero positivo (> 0)                                                                                                                |
+| Evacuazione | Select dropdown                            | Opzioni: "", "Si", "No", "Alvo regolare", "Stipsi", "Diarrea"                                                                        |
+| Note        | Textarea                                   | Nessuna validazione, max 500 caratteri                                                                                               |
 
 Errore di validazione mostrato sotto l'input con classe `npm-field-error` (riusata da NewPatientModal).
 
@@ -89,6 +94,7 @@ Il pulsante "Salva" nella modal e disabilitato se la validazione fallisce.
 ## ClassiCSSRiusate
 
 Da NewPatientModal (gia definite nel CSS globale):
+
 - `modal-overlay` — sfondo scuro semi-trasparente
 - `npm-header` — header della modal
 - `npm-header__text` — wrapper testo header
@@ -111,6 +117,7 @@ Da NewPatientModal (gia definite nel CSS globale):
 ## ClassiCSSNuove
 
 1. `modal-box--parametro` — variante compatta della modal box:
+
 ```css
 .modal-box--parametro {
   max-width: 440px;
@@ -119,6 +126,7 @@ Da NewPatientModal (gia definite nel CSS globale):
 ```
 
 2. `mpp-cell-btn` — bottone cella che sostituisce gli input inline nella riga:
+
 ```css
 .mpp-cell-btn {
   display: flex;
@@ -136,13 +144,21 @@ Da NewPatientModal (gia definite nel CSS globale):
 .mpp-cell-btn:hover {
   border-color: var(--primary, #2563eb);
 }
-.mpp-cell-btn__label { font-size: 11px; color: var(--text-muted); }
-.mpp-cell-btn__value { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.mpp-cell-btn__label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.mpp-cell-btn__value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
 ```
 
 ## Configurazione campi (dentro ParametroVitaleModal)
 
 Mappa statica `CAMPO_CONFIG` che per ogni `CampoParametro` definisce:
+
 - `titolo`: string (es. "Pressione arteriosa")
 - `unita`: string | null (es. "mmHg")
 - `tipo`: 'testo' | 'numero' | 'numero_doppio' | 'select' | 'textarea'

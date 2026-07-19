@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' });
+res.status(200).json({ status: 'ok' });
 });
 
 app.use('/patients', patientsRouter);
@@ -29,13 +29,13 @@ const prisma = new PrismaClient();
 const router = Router();
 
 router.get('/', async (_req, res) => {
-  try {
-    const patients = await prisma.patient.findMany();
-    res.status(200).json(patients);
-  } catch (error) {
-    console.error('Failed to fetch patients:', error);
-    res.status(500).json({ error: 'Failed to fetch patients' });
-  }
+try {
+const patients = await prisma.patient.findMany();
+res.status(200).json(patients);
+} catch (error) {
+console.error('Failed to fetch patients:', error);
+res.status(500).json({ error: 'Failed to fetch patients' });
+}
 });
 
 export default router;

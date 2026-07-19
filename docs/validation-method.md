@@ -7,7 +7,9 @@ Prima di dichiarare completato qualsiasi task, identifica il tipo di modifica e 
 minime sotto `artifacts/validation/<task>/`.
 
 ## 1. Frontend / UX / UI
+
 Se tocchi interfaccia, layout, popup, form, liste, chatbot o voce:
+
 - test Playwright; screenshot **prima/dopo**; video o trace del flusso;
 - responsive desktop/mobile; **assenza errori console**; dimostrazione visiva.
 
@@ -17,7 +19,9 @@ artifacts/validation/<task>/
 ```
 
 ## 2. Backend / API / dati
+
 Se tocchi backend, servizi, DB, API o persistenza:
+
 - endpoint coinvolti; request/response; status code; payload; **persistenza su DB**;
 - errori controllati; test API aggiornati/creati; elenco REST esposte/modificate.
 
@@ -27,22 +31,26 @@ artifacts/validation/<task>/
 ```
 
 ## 3. Agnos AI / chatbot / voce
+
 Se tocchi Agnos AI:
+
 - domanda → risposta; tool/action chiamata; **impossibilità di Delete**;
 - **log sanitizzati** (PHI-safe: nomi campo, mai valori); frontend aggiornato dopo azione AI;
 - comando vocale se coinvolto.
 
 ## 4. Regola finale — tabella obbligatoria
+
 Non dichiarare "done" senza: test eseguiti · evidenza generata · path artefatti · PASS/FAIL · limiti residui.
 
-| Area | Test eseguito | Esito | Evidenza |
-|---|---|---|---|
-| Frontend | Playwright/screenshot/video | PASS/FAIL | path |
-| Backend | API/database/test | PASS/FAIL | path |
-| Agnos AI | chatbot/voice/action | PASS/FAIL | path |
-| Sicurezza | no-secret/no-delete/log sanitizzati | PASS/FAIL | path |
+| Area      | Test eseguito                       | Esito     | Evidenza |
+| --------- | ----------------------------------- | --------- | -------- |
+| Frontend  | Playwright/screenshot/video         | PASS/FAIL | path     |
+| Backend   | API/database/test                   | PASS/FAIL | path     |
+| Agnos AI  | chatbot/voice/action                | PASS/FAIL | path     |
+| Sicurezza | no-secret/no-delete/log sanitizzati | PASS/FAIL | path     |
 
 ## Note operative su questo progetto
+
 - **Prod frontend** (`clinicos-eosin.vercel.app`) non raggiungibile da questa postazione (Zscaler):
   usare Playwright su build locale (pointing a prod o locale) + stato deploy piattaforma.
 - **Prod backend**: validabile via API (`/ai/actions/*`, `/health`, `/patients`). Validazione su prod

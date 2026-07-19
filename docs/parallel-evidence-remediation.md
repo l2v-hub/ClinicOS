@@ -39,10 +39,10 @@ Se vedi uno di questi segnali, non "rispiegare" a parole che la feature funziona
 
 ## Roles & governance
 
-| Ruolo | Chi | Cosa può fare | Cosa NON può fare |
-|-------|-----|---------------|-------------------|
-| **Product Owner + QA Gatekeeper** | **Codex** | Rieseguire il QA Gate, decidere QA PASSED / QA FAILED, applicare `qa-passed` / `closed-verified`, **chiudere** le issue, autorizzare merge/deploy | — |
-| **Implementer** | **Claude** | Scrivere codice, scrivere test, **produrre evidenza oggettiva**, allegarla alla issue, dichiarare lo stato | Chiudere issue, applicare `qa-passed`/`closed-verified`, fare merge, push su `main`, deploy |
+| Ruolo                             | Chi        | Cosa può fare                                                                                                                                     | Cosa NON può fare                                                                           |
+| --------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Product Owner + QA Gatekeeper** | **Codex**  | Rieseguire il QA Gate, decidere QA PASSED / QA FAILED, applicare `qa-passed` / `closed-verified`, **chiudere** le issue, autorizzare merge/deploy | —                                                                                           |
+| **Implementer**                   | **Claude** | Scrivere codice, scrivere test, **produrre evidenza oggettiva**, allegarla alla issue, dichiarare lo stato                                        | Chiudere issue, applicare `qa-passed`/`closed-verified`, fare merge, push su `main`, deploy |
 
 **Claude non dichiara mai "done" / "fixed" / "closed".** Claude dichiara esattamente
 uno di questi tre stati:
@@ -65,15 +65,15 @@ Codex **rifiuta** tutto ciò che non è verificabile. Non sono evidenza:
 **È evidenza oggettiva**, e va salvata sotto
 `artifacts/task-validation/<issue-number>-<slug>/`:
 
-| Artefatto | Obbligatorio | Note |
-|-----------|--------------|------|
-| `task-contract.md` | Sì | Scope, AC, perimetro file, definizione di "verificato" per questa issue |
-| `validation-report.md` | Sì | Con **percorsi file REALI** agli artefatti sottostanti + tabella PASS/FAIL |
-| Screenshot finale Playwright | Sì | Mostra il **RISULTATO verificato** (non una homepage generica) |
-| `trace.zip` (Playwright trace) | Sì | Trace completo del flusso |
-| `playwright-report/` (HTML) | Sì | Report HTML della run |
-| `test-results/` | Sì | Output della run (incl. screenshot/trace per test) |
-| Video `.webm` | Sì se l'issue tocca **UI / chatbot / voice** | Registrazione del flusso |
+| Artefatto                      | Obbligatorio                                 | Note                                                                       |
+| ------------------------------ | -------------------------------------------- | -------------------------------------------------------------------------- |
+| `task-contract.md`             | Sì                                           | Scope, AC, perimetro file, definizione di "verificato" per questa issue    |
+| `validation-report.md`         | Sì                                           | Con **percorsi file REALI** agli artefatti sottostanti + tabella PASS/FAIL |
+| Screenshot finale Playwright   | Sì                                           | Mostra il **RISULTATO verificato** (non una homepage generica)             |
+| `trace.zip` (Playwright trace) | Sì                                           | Trace completo del flusso                                                  |
+| `playwright-report/` (HTML)    | Sì                                           | Report HTML della run                                                      |
+| `test-results/`                | Sì                                           | Output della run (incl. screenshot/trace per test)                         |
+| Video `.webm`                  | Sì se l'issue tocca **UI / chatbot / voice** | Registrazione del flusso                                                   |
 
 ### Rendere l'evidenza VISIBILE a Codex
 
@@ -107,7 +107,9 @@ Uno scheletro di riferimento:
 
 ```ts
 const consoleErrors: string[] = [];
-page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+page.on('console', (m) => {
+  if (m.type() === 'error') consoleErrors.push(m.text());
+});
 
 const badResponses: string[] = [];
 page.on('response', (r) => {

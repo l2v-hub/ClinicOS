@@ -26,7 +26,9 @@ const run = async () => {
   const ctx = await browser.newContext({ viewport: VP.desktop });
   const page = await ctx.newPage();
   const errors = [];
-  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
 
   await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
   await clickText(page, 'Operatore');
@@ -61,7 +63,10 @@ const run = async () => {
   let backSeen = false;
   for (let i = 0; i < 20; i++) {
     await sleep(400);
-    if (await page.locator('.import-modal__back').count()) { backSeen = true; break; }
+    if (await page.locator('.import-modal__back').count()) {
+      backSeen = true;
+      break;
+    }
   }
   console.log('back-during-processing visible:', backSeen);
   await page.locator('.import-modal').screenshot({ path: evid('return-to-documents.png') });
@@ -71,9 +76,12 @@ const run = async () => {
   const ctx2 = await browser.newContext({ viewport: VP.tablet });
   const p2 = await ctx2.newPage();
   await p2.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
-  await clickText(p2, 'Operatore'); await sleep(700);
-  await clickText(p2, 'Pazienti'); await sleep(700);
-  await clickText(p2, 'Importa dimissione'); await sleep(500);
+  await clickText(p2, 'Operatore');
+  await sleep(700);
+  await clickText(p2, 'Pazienti');
+  await sleep(700);
+  await clickText(p2, 'Importa dimissione');
+  await sleep(500);
   await p2.locator('input[type="file"][multiple]').setInputFiles(FILES);
   await p2.locator('.import-modal__item').nth(2).waitFor({ timeout: 15000 });
   await sleep(500);
@@ -84,4 +92,7 @@ const run = async () => {
   await browser.close();
 };
 
-run().catch((e) => { console.error('FAIL', e); process.exit(1); });
+run().catch((e) => {
+  console.error('FAIL', e);
+  process.exit(1);
+});

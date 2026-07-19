@@ -12,9 +12,23 @@ const outDir = process.argv[3] ?? '.';
 async function clickFirst(page, names) {
   for (const re of names) {
     const el = page.getByRole('button', { name: re }).first();
-    try { if (await el.count() && await el.isVisible()) { await el.click(); return true; } } catch { /* */ }
+    try {
+      if ((await el.count()) && (await el.isVisible())) {
+        await el.click();
+        return true;
+      }
+    } catch {
+      /* */
+    }
     const t = page.getByText(re).first();
-    try { if (await t.count() && await t.isVisible()) { await t.click(); return true; } } catch { /* */ }
+    try {
+      if ((await t.count()) && (await t.isVisible())) {
+        await t.click();
+        return true;
+      }
+    } catch {
+      /* */
+    }
   }
   return false;
 }
@@ -38,27 +52,54 @@ try {
   let reached = false;
   for (let i = 0; i < 110; i++) {
     await page.waitForTimeout(2000);
-    if (await page.locator('[data-testid="sections-review"]').count() || (await page.textContent('body') ?? '').includes('Crea paziente')) { reached = true; break; }
-    if ((await page.textContent('body') ?? '').includes('non riuscita')) break;
+    if (
+      (await page.locator('[data-testid="sections-review"]').count()) ||
+      ((await page.textContent('body')) ?? '').includes('Crea paziente')
+    ) {
+      reached = true;
+      break;
+    }
+    if (((await page.textContent('body')) ?? '').includes('non riuscita')) break;
   }
   await page.waitForTimeout(1200);
 
-  const anam = (await page.locator('[data-testid="srev-ANAMNESIS"]').textContent().catch(() => '')) ?? '';
-  const ther = (await page.locator('[data-testid="srev-DISCHARGE_HOME_THERAPY"]').textContent().catch(() => '')) ?? '';
-  await page.locator('.modal-card.import-modal').screenshot({ path: resolve(outDir, 'multipage-review.png') }).catch(() => {});
+  const anam =
+    (await page
+      .locator('[data-testid="srev-ANAMNESIS"]')
+      .textContent()
+      .catch(() => '')) ?? '';
+  const ther =
+    (await page
+      .locator('[data-testid="srev-DISCHARGE_HOME_THERAPY"]')
+      .textContent()
+      .catch(() => '')) ?? '';
+  await page
+    .locator('.modal-card.import-modal')
+    .screenshot({ path: resolve(outDir, 'multipage-review.png') })
+    .catch(() => {});
   const anamLoc = page.locator('[data-testid="srev-ANAMNESIS"]');
-  if (await anamLoc.count()) await anamLoc.screenshot({ path: resolve(outDir, 'multipage-anamnesi.png') }).catch(() => {});
+  if (await anamLoc.count())
+    await anamLoc.screenshot({ path: resolve(outDir, 'multipage-anamnesi.png') }).catch(() => {});
 
   console.error('=== RAW ANAMNESI TEXT ===\n' + JSON.stringify(anam.slice(0, 900)));
-  console.log(JSON.stringify({
-    reached,
-    anamnesi_hasPaginaUno: /pagina uno/i.test(anam),
-    anamnesi_hasPaginaDue: /pagina due/i.test(anam),          // continuation merged into ONE block
-    anamnesi_mergedBothPages: /pagina uno/i.test(anam) && /pagina due/i.test(anam),
-    anamnesi_noHeaderBleed: !/codice fiscale/i.test(anam) && !/cartella/i.test(anam),
-    therapy_hasFarmaco: /Farmaco-di-prova/i.test(ther),
-    therapy_noPaginaDueBleed: !/pagina due/i.test(ther),     // page-2 text stayed in Anamnesi, not Terapia
-    anamLen: anam.length, therLen: ther.length,
-  }, null, 2));
+  console.log(
+    JSON.stringify(
+      {
+        reached,
+        anamnesi_hasPaginaUno: /pagina uno/i.test(anam),
+        anamnesi_hasPaginaDue: /pagina due/i.test(anam), // continuation merged into ONE block
+        anamnesi_mergedBothPages: /pagina uno/i.test(anam) && /pagina due/i.test(anam),
+        anamnesi_noHeaderBleed: !/codice fiscale/i.test(anam) && !/cartella/i.test(anam),
+        therapy_hasFarmaco: /Farmaco-di-prova/i.test(ther),
+        therapy_noPaginaDueBleed: !/pagina due/i.test(ther), // page-2 text stayed in Anamnesi, not Terapia
+        anamLen: anam.length,
+        therLen: ther.length,
+      },
+      null,
+      2,
+    ),
+  );
   await page.close();
-} finally { await browser.close(); }
+} finally {
+  await browser.close();
+}

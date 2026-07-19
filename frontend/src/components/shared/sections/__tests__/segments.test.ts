@@ -20,7 +20,11 @@ test('no annotations -> single faithful plain segment', () => {
 
 test('segments always reconstruct rawText exactly (no loss, no edit)', () => {
   const raw = 'Il 12/03/2025 visita. Anamnesi familiare: padre diabetico.';
-  const segs = buildSegments(raw, [ann(raw, '12/03/2025', 'DATE'), ann(raw, 'Anamnesi familiare', 'SUBSECTION_TITLE')], S);
+  const segs = buildSegments(
+    raw,
+    [ann(raw, '12/03/2025', 'DATE'), ann(raw, 'Anamnesi familiare', 'SUBSECTION_TITLE')],
+    S,
+  );
   assert.equal(join(segs), raw);
 });
 
@@ -41,24 +45,36 @@ test('SUBSECTION_TITLE bolded (anamnesis subtitles)', () => {
 
 test('wrong-offset annotation is ignored (text still rendered, never mutated)', () => {
   const raw = 'Decorso regolare.';
-  const segs = buildSegments(raw, [{ tag: 'DATE', text: '01/01/2099', startOffset: 0, endOffset: 10 }], S);
+  const segs = buildSegments(
+    raw,
+    [{ tag: 'DATE', text: '01/01/2099', startOffset: 0, endOffset: 10 }],
+    S,
+  );
   assert.equal(join(segs), raw);
   assert.ok(segs.every((s) => !s.bold));
 });
 
 test('annotation whose text mismatches its offsets is ignored', () => {
   const raw = 'Diagnosi: BPCO.';
-  const segs = buildSegments(raw, [{ tag: 'SECTION_TITLE', text: 'Diagnosi', startOffset: 0, endOffset: 4 }], S);
+  const segs = buildSegments(
+    raw,
+    [{ tag: 'SECTION_TITLE', text: 'Diagnosi', startOffset: 0, endOffset: 4 }],
+    S,
+  );
   assert.equal(join(segs), raw);
   assert.ok(segs.every((s) => !s.bold));
 });
 
 test('overlapping annotations: inner one skipped (no double wrap)', () => {
   const raw = '12/03/2025 ore 10:00';
-  const segs = buildSegments(raw, [
-    { tag: 'DATE', text: '12/03/2025 ore 10:00', startOffset: 0, endOffset: 20 },
-    { tag: 'TIME', text: '10:00', startOffset: 15, endOffset: 20 },
-  ], S);
+  const segs = buildSegments(
+    raw,
+    [
+      { tag: 'DATE', text: '12/03/2025 ore 10:00', startOffset: 0, endOffset: 20 },
+      { tag: 'TIME', text: '10:00', startOffset: 15, endOffset: 20 },
+    ],
+    S,
+  );
   assert.equal(join(segs), raw);
   assert.equal(segs.filter((s) => s.bold).length, 1);
 });

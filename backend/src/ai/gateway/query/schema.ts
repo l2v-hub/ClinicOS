@@ -39,22 +39,36 @@ const D: FieldDef = { type: 'date' };
 
 export const QUERY_SCHEMA: Record<string, EntityDef> = {
   patient: {
-    prismaModel: 'patient', authz: 'public', patientIdField: 'id',
-    fields: { id: S(), firstName: S(true), lastName: S(true), medicalRecordNumber: S(true), dateOfBirth: D, sex: S(), createdAt: D },
+    prismaModel: 'patient',
+    authz: 'public',
+    patientIdField: 'id',
+    fields: {
+      id: S(),
+      firstName: S(true),
+      lastName: S(true),
+      medicalRecordNumber: S(true),
+      dateOfBirth: D,
+      sex: S(),
+      createdAt: D,
+    },
     relations: {},
   },
   room: {
-    prismaModel: 'room', authz: 'facility',
+    prismaModel: 'room',
+    authz: 'facility',
     fields: { id: S(), numero: S(), tipo: S(), piano: S(), reparto: S(), stato: S() },
     relations: { beds: { target: 'bed', kind: 'toMany' } },
   },
   bed: {
-    prismaModel: 'bed', authz: 'facility',
+    prismaModel: 'bed',
+    authz: 'facility',
     fields: { id: S(), label: S(), stato: S(), roomId: S() },
     relations: { room: { target: 'room', kind: 'toOne' } },
   },
   roomAssignment: {
-    prismaModel: 'patientRoomAssignment', authz: 'facility', patientIdField: 'patientId',
+    prismaModel: 'patientRoomAssignment',
+    authz: 'facility',
+    patientIdField: 'patientId',
     fields: { id: S(), patientId: S(), roomId: S(), bedId: S(), startDate: S(), endDate: S() },
     relations: {
       patient: { target: 'patient', kind: 'toOne' },
@@ -62,17 +76,33 @@ export const QUERY_SCHEMA: Record<string, EntityDef> = {
     },
   },
   appointment: {
-    prismaModel: 'appointment', authz: 'facility', patientIdField: 'patientId',
+    prismaModel: 'appointment',
+    authz: 'facility',
+    patientIdField: 'patientId',
     fields: { id: S(), patientId: S(), scheduledAt: D, status: S(), reason: S() },
     relations: { patient: { target: 'patient', kind: 'toOne' } },
   },
   therapy: {
-    prismaModel: 'patientTherapy', authz: 'patient-scoped', patientIdField: 'patientId',
-    fields: { id: S(), patientId: S(), farmacoNome: S(), dosaggio: S(), tipo: S(), stato: S(), dataInizio: S(), dataFine: S(), createdAt: D },
+    prismaModel: 'patientTherapy',
+    authz: 'patient-scoped',
+    patientIdField: 'patientId',
+    fields: {
+      id: S(),
+      patientId: S(),
+      farmacoNome: S(),
+      dosaggio: S(),
+      tipo: S(),
+      stato: S(),
+      dataInizio: S(),
+      dataFine: S(),
+      createdAt: D,
+    },
     relations: {},
   },
   vitalSign: {
-    authz: 'patient-scoped', custom: true, patientIdField: 'patientId',
+    authz: 'patient-scoped',
+    custom: true,
+    patientIdField: 'patientId',
     fields: { patientId: S(), etichetta: S(), valore: N, systolic: N, rilevato: D },
     relations: {},
   },
@@ -84,7 +114,10 @@ export function getEntity(name: string): EntityDef | null {
 
 /** Resolve a field path against the schema. Supports 'field' and 1-hop 'relation.field'. Returns
  *  null (denied) for unknown entities/relations/fields or paths deeper than one hop. */
-export function resolveField(entityName: string, path: string): { entity: EntityDef; field: string; def: FieldDef } | null {
+export function resolveField(
+  entityName: string,
+  path: string,
+): { entity: EntityDef; field: string; def: FieldDef } | null {
   const e = getEntity(entityName);
   if (!e) return null;
   const parts = path.split('.');

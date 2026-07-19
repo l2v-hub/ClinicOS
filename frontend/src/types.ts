@@ -63,7 +63,13 @@ export interface NuovoPaziente {
   referenteRelazione: string;
   emergencyContact: string;
   // Ingresso
-  provenienza: 'accesso_diretto' | 'ospedale' | 'centro_medico' | 'altra_struttura' | 'familiare_caregiver' | '';
+  provenienza:
+    | 'accesso_diretto'
+    | 'ospedale'
+    | 'centro_medico'
+    | 'altra_struttura'
+    | 'familiare_caregiver'
+    | '';
   centroInviante: string;
   dataIngresso: string;
   motivoIngresso: string;
@@ -90,8 +96,16 @@ export type StatoOperatore = 'attivo' | 'inattivo';
 export type RuoloOperatore = 'medico' | 'infermiere' | 'coordinatore';
 
 export const OPERATOR_COLOR_PALETTE = [
-  '#2F6BED', '#0D9488', '#6C4BD1', '#C77700', '#DC2626',
-  '#8B5CF6', '#059669', '#C77700', '#EF4444', '#06B6D4',
+  '#2F6BED',
+  '#0D9488',
+  '#6C4BD1',
+  '#C77700',
+  '#DC2626',
+  '#8B5CF6',
+  '#059669',
+  '#C77700',
+  '#EF4444',
+  '#06B6D4',
 ];
 
 export interface Operatore {
@@ -146,13 +160,14 @@ export interface SlotAgenda {
 // ── Appointment ────────────────────────────────────────────────────────────────
 
 export type StatoAppuntamento = 'programmato' | 'in_corso' | 'completato' | 'annullato';
-export type TipoIntervento = 'visita' | 'controllo' | 'procedura' | 'urgenza' | 'consulto' | 'follow-up' | 'altro';
+export type TipoIntervento =
+  'visita' | 'controllo' | 'procedura' | 'urgenza' | 'consulto' | 'follow-up' | 'altro';
 
 export interface Appuntamento {
   id: string;
-  data: string;           // YYYY-MM-DD
-  ora: string;            // HH:MM
-  durata: number;         // minutes: 30 | 60 | 90 | 120
+  data: string; // YYYY-MM-DD
+  ora: string; // HH:MM
+  durata: number; // minutes: 30 | 60 | 90 | 120
   pazienteId: string | null;
   pazienteNome: string | null;
   operatoreId: string;
@@ -191,15 +206,27 @@ export interface Camera {
 
 // ── Operator Schedule ─────────────────────────────────────────────────────────
 
-export type GiornoSettimana = 'lunedi' | 'martedi' | 'mercoledi' | 'giovedi' | 'venerdi' | 'sabato' | 'domenica';
+export type GiornoSettimana =
+  'lunedi' | 'martedi' | 'mercoledi' | 'giovedi' | 'venerdi' | 'sabato' | 'domenica';
 
 export const GIORNI_SETTIMANA: GiornoSettimana[] = [
-  'lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato', 'domenica',
+  'lunedi',
+  'martedi',
+  'mercoledi',
+  'giovedi',
+  'venerdi',
+  'sabato',
+  'domenica',
 ];
 
 export const GIORNO_LABEL: Record<GiornoSettimana, string> = {
-  lunedi: 'Lun', martedi: 'Mar', mercoledi: 'Mer', giovedi: 'Gio',
-  venerdi: 'Ven', sabato: 'Sab', domenica: 'Dom',
+  lunedi: 'Lun',
+  martedi: 'Mar',
+  mercoledi: 'Mer',
+  giovedi: 'Gio',
+  venerdi: 'Ven',
+  sabato: 'Sab',
+  domenica: 'Dom',
 };
 
 export interface TurnoOperatore {
@@ -225,7 +252,7 @@ export interface Nota {
   id: string;
   autoreId: string;
   autoreNome: string;
-  destinatarioId: string;   // operatoreId | 'admin' | 'tutti'
+  destinatarioId: string; // operatoreId | 'admin' | 'tutti'
   destinatarioNome: string;
   pazienteId?: string;
   pazienteNome?: string;
@@ -478,7 +505,12 @@ export interface CartellaPaziente {
 export interface PresaInCarico {
   dataIngresso: string;
   oraIngresso: string;
-  provenienza: 'accesso_diretto' | 'centro_medico' | 'altra_struttura' | 'dimissione_ospedaliera' | 'familiare_caregiver';
+  provenienza:
+    | 'accesso_diretto'
+    | 'centro_medico'
+    | 'altra_struttura'
+    | 'dimissione_ospedaliera'
+    | 'familiare_caregiver';
   centroInviante?: string;
   modalitaIngresso: 'ambulante' | 'barella' | 'sedia_rotelle';
   accompagnatoDa: string;
@@ -579,7 +611,8 @@ export interface DiarioEntry {
 
 // ── Diario Paziente (unified API) ──────────────────────────────────────────────
 
-export type DiarioAuthorType = 'medico' | 'infermiere' | 'oss' | 'fisioterapista' | 'operatore' | 'altro';
+export type DiarioAuthorType =
+  'medico' | 'infermiere' | 'oss' | 'fisioterapista' | 'operatore' | 'altro';
 
 export interface DiarioPazienteEntry {
   id: string;
@@ -590,7 +623,7 @@ export interface DiarioPazienteEntry {
   content: string;
   priority: 'normale' | 'importante' | 'urgente';
   status: 'aperta' | 'completata' | 'da_rivedere';
-  entryDateTime: string;  // ISO YYYY-MM-DDTHH:mm
+  entryDateTime: string; // ISO YYYY-MM-DDTHH:mm
   category: string | null;
   createdAt: string;
   updatedAt: string;
@@ -761,9 +794,9 @@ export interface ScalaNRSValutazione {
   id: string;
   data: string;
   ora?: string;
-  punteggio: number;   // 0..10
-  aRiposo?: number;    // optional 0..10
-  inMovimento?: number;// optional 0..10
+  punteggio: number; // 0..10
+  aRiposo?: number; // optional 0..10
+  inMovimento?: number; // optional 0..10
   sede?: string;
   operatore: string;
   note: string;
@@ -938,11 +971,11 @@ export interface TherapySlot {
 export interface TherapyScheduleAPI {
   id: string;
   therapyId: string;
-  time: string;                 // "HH:MM"
-  fascia: string;               // mattina|pranzo|pomeriggio|sera|notte
+  time: string; // "HH:MM"
+  fascia: string; // mattina|pranzo|pomeriggio|sera|notte
   quantityNumerator: number;
   quantityDenominator: number;
-  administrationUnit: string;   // compressa | ml | gocce | unità | bustina | ...
+  administrationUnit: string; // compressa | ml | gocce | unità | bustina | ...
   createdAt?: string;
   updatedAt?: string;
 }

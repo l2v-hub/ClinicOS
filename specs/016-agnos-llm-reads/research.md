@@ -5,7 +5,7 @@ Basata su ricognizione codebase 2026-07-04 (percorso read attuale + gateway + ru
 ## D1 — Punto di innesto dell'LLM
 
 - **Decision**: l'LLM entra in due punti dietro l'executor fidato: (1) **planner** (`llm-planner.ts`) che sostituisce/affianca `planQuery` producendo lo stesso tipo `QueryPlan`; (2) **composer** (`composer.ts`) che trasforma i risultati dei tool in prosa. L'executor `dispatch()` sul gateway e il contratto SOURCE_ONLY restano invariati.
-- **Rationale**: il confine dati (gateway, authz, allowlist) non cambia; l'LLM decide solo *quali* letture e *come* formulare la risposta. Riduce la superficie di rischio e riusa tutto il codice esistente (Constitution I).
+- **Rationale**: il confine dati (gateway, authz, allowlist) non cambia; l'LLM decide solo _quali_ letture e _come_ formulare la risposta. Riduce la superficie di rischio e riusa tutto il codice esistente (Constitution I).
 - **Alternatives considered**: LLM che interroga direttamente il DB (respinto: viola Backend Data Authority e authz); riscrittura dell'executor (inutile, aumenta rischio).
 
 ## D2 — Risoluzione del paziente per nome (F0, senza LLM)

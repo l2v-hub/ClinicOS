@@ -6,20 +6,25 @@ import type { TherapyFormValue } from '../cartella/TherapyFormFields';
 
 // Lazy import keeps import.meta.env out of module-evaluation scope,
 // which allows the patientSections registry test to run in Node without Vite.
-const TerapiaFarmacologicaTab = lazy(
-  () => import('../cartella/TerapiaFarmacologicaTab').then(m => ({ default: m.TerapiaFarmacologicaTab }))
+const TerapiaFarmacologicaTab = lazy(() =>
+  import('../cartella/TerapiaFarmacologicaTab').then((m) => ({
+    default: m.TerapiaFarmacologicaTab,
+  })),
 );
 
 type TherapyEditorProps = SectionProps<TherapyFormValue[]> & { paziente?: Paziente };
 
-export function TherapyEditor({ mode, value, onChange, paziente, operatoreNome }: TherapyEditorProps) {
+export function TherapyEditor({
+  mode,
+  value,
+  onChange,
+  paziente,
+  operatoreNome,
+}: TherapyEditorProps) {
   if (mode === 'patient-chart' && paziente) {
     return (
       <Suspense fallback={null}>
-        <TerapiaFarmacologicaTab
-          paziente={paziente}
-          operatoreNome={operatoreNome ?? ''}
-        />
+        <TerapiaFarmacologicaTab paziente={paziente} operatoreNome={operatoreNome ?? ''} />
       </Suspense>
     );
   }
@@ -80,14 +85,22 @@ function TherapyIntakeEditor({
   }
 
   const doseSummary = (item: TherapyFormValue) => {
-    const parts = [item.commercialStrengthValue, item.commercialStrengthUnit, item.pharmaceuticalForm].filter(Boolean);
+    const parts = [
+      item.commercialStrengthValue,
+      item.commercialStrengthUnit,
+      item.pharmaceuticalForm,
+    ].filter(Boolean);
     return parts.join(' ');
   };
 
   return (
     <div className="cr-list">
       <div className="ec-modal-add-form">
-        <TherapyFormFields value={draftItem} onChange={setDraftItem} operatoreNome={operatoreNome} />
+        <TherapyFormFields
+          value={draftItem}
+          onChange={setDraftItem}
+          operatoreNome={operatoreNome}
+        />
         <div className="ec-modal-add-form__actions">
           {editingIndex !== null && (
             <button className="btn-secondary btn-sm" type="button" onClick={handleCancelEdit}>
@@ -110,40 +123,36 @@ function TherapyIntakeEditor({
           {items.map((item, idx) => {
             const ds = doseSummary(item);
             return (
-            <div key={idx} className="ec-modal-item">
-              <div className="ec-modal-item__main">
-                <span className="ec-modal-item__title">{item.farmacoNome}</span>
-                {ds && (
-                  <span className="ec-modal-item__sub">{ds}</span>
-                )}
-                <span className="badge badge--gray">{item.stato}</span>
+              <div key={idx} className="ec-modal-item">
+                <div className="ec-modal-item__main">
+                  <span className="ec-modal-item__title">{item.farmacoNome}</span>
+                  {ds && <span className="ec-modal-item__sub">{ds}</span>}
+                  <span className="badge badge--gray">{item.stato}</span>
+                </div>
+                <div className="cr-item-row__actions">
+                  <button
+                    className="btn-secondary btn-sm"
+                    type="button"
+                    onClick={() => handleEdit(idx)}
+                  >
+                    Modifica
+                  </button>
+                  <button
+                    className="icon-btn icon-btn--sm icon-btn--danger"
+                    type="button"
+                    onClick={() => handleRemove(idx)}
+                    title="Rimuovi"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
-              <div className="cr-item-row__actions">
-                <button
-                  className="btn-secondary btn-sm"
-                  type="button"
-                  onClick={() => handleEdit(idx)}
-                >
-                  Modifica
-                </button>
-                <button
-                  className="icon-btn icon-btn--sm icon-btn--danger"
-                  type="button"
-                  onClick={() => handleRemove(idx)}
-                  title="Rimuovi"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
             );
           })}
         </div>
       )}
 
-      {items.length === 0 && (
-        <p className="cr-empty">Nessuna terapia aggiunta.</p>
-      )}
+      {items.length === 0 && <p className="cr-empty">Nessuna terapia aggiunta.</p>}
     </div>
   );
 }

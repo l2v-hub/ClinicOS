@@ -10,14 +10,15 @@ import { parseDischargeTherapy } from './parse-discharge-therapy.js';
 
 const MAX_ALLERGEN_LEN = 120;
 // Headers that mark NON-allergy clinical sections — their presence means the text is a narrative dump.
-const NON_ALLERGY_MARKERS = /(patologie|anamnesi|a\.\s*(pat|familiare|fisiologica)|tp\s+domiciliare|terapia\s+domiciliare|ospite|diagnosi|ricover|decorso|dislipidemia|ipertensione)/i;
+const NON_ALLERGY_MARKERS =
+  /(patologie|anamnesi|a\.\s*(pat|familiare|fisiologica)|tp\s+domiciliare|terapia\s+domiciliare|ospite|diagnosi|ricover|decorso|dislipidemia|ipertensione)/i;
 
 /** True only when the text plausibly IS an allergen (concise, single block), not a narrative. */
 export function isPlausibleAllergenText(text: string): boolean {
   const t = (text ?? '').trim();
   if (!t) return false;
-  if (t.length > 400) return false;          // whole-narrative dump
-  if (/\n\s*\n/.test(t)) return false;       // blank-line-separated sections
+  if (t.length > 400) return false; // whole-narrative dump
+  if (/\n\s*\n/.test(t)) return false; // blank-line-separated sections
   if (NON_ALLERGY_MARKERS.test(t)) return false;
   return true;
 }
@@ -65,7 +66,9 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
   const merged: Record<string, unknown> = { ...existingData, ...patch };
   return prisma.patientIntakeDraft.update({
     where: { id },
-    data: { data: merged as Parameters<typeof prisma.patientIntakeDraft.update>[0]['data']['data'] },
+    data: {
+      data: merged as Parameters<typeof prisma.patientIntakeDraft.update>[0]['data']['data'],
+    },
   });
 }
 
@@ -190,10 +193,7 @@ export function buildImportDraftData(
  * Find or create a `source='import'` intake draft seeded from a finished extraction job.
  * Idempotent: if a draft already exists for `jobId`, returns it without creating a second one.
  */
-export async function seedDraftFromImport(
-  jobId: string,
-  opts: SeedDraftFromImportOpts = {},
-) {
+export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImportOpts = {}) {
   // Idempotency check: return existing draft for this job.
   const existing = await prisma.patientIntakeDraft.findFirst({
     where: { importJobId: jobId },

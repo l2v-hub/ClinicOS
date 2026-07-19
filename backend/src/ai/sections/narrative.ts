@@ -16,7 +16,7 @@ import type { Annotation, Section, SectionsResult } from './validate.js';
 export const NARRATIVE_SCHEMA_VERSION = 'clinicos-discharge-narrative-v1';
 
 export interface NarrativeTag {
-  sectionKey: string;       // Italian canonical key (DIAGNOSI, ANAMNESI, ...)
+  sectionKey: string; // Italian canonical key (DIAGNOSI, ANAMNESI, ...)
   tagType: string;
   text: string;
   startOffset: number;
@@ -61,16 +61,36 @@ export interface DischargeNarrativeDraft {
 
 // Narrative text field <- canonical EN section key(s) + Italian key. Therapy intentionally
 // merges home + hospital therapy into one faithful block (home first), losing nothing.
-interface FieldSpec { field: keyof DischargeNarrativeDraft; italian: string; keys: SectionKey[] }
+interface FieldSpec {
+  field: keyof DischargeNarrativeDraft;
+  italian: string;
+  keys: SectionKey[];
+}
 const TEXT_FIELDS: FieldSpec[] = [
   { field: 'diagnosisText', italian: 'DIAGNOSI', keys: ['DISCHARGE_DIAGNOSIS'] },
   { field: 'anamnesisText', italian: 'ANAMNESI', keys: ['ANAMNESIS'] },
   { field: 'hospitalCourseText', italian: 'DECORSO_OSPEDALIERO', keys: ['HOSPITAL_COURSE'] },
   { field: 'consultationsText', italian: 'CONSULENZE', keys: ['CONSULTATIONS'] },
-  { field: 'imagingDiagnosticsText', italian: 'DIAGNOSTICA_PER_IMMAGINI', keys: ['IMAGING_DIAGNOSTICS'] },
-  { field: 'proceduresAndInterventionsText', italian: 'PRESTAZIONI_E_INTERVENTI', keys: ['PROCEDURES_AND_INTERVENTIONS'] },
-  { field: 'therapyText', italian: 'TERAPIA', keys: ['DISCHARGE_HOME_THERAPY', 'HOSPITAL_THERAPY'] },
-  { field: 'adviceAndFollowUpText', italian: 'CONSIGLI_E_CONTROLLI', keys: ['ADVICE_AND_FOLLOW_UP'] },
+  {
+    field: 'imagingDiagnosticsText',
+    italian: 'DIAGNOSTICA_PER_IMMAGINI',
+    keys: ['IMAGING_DIAGNOSTICS'],
+  },
+  {
+    field: 'proceduresAndInterventionsText',
+    italian: 'PRESTAZIONI_E_INTERVENTI',
+    keys: ['PROCEDURES_AND_INTERVENTIONS'],
+  },
+  {
+    field: 'therapyText',
+    italian: 'TERAPIA',
+    keys: ['DISCHARGE_HOME_THERAPY', 'HOSPITAL_THERAPY'],
+  },
+  {
+    field: 'adviceAndFollowUpText',
+    italian: 'CONSIGLI_E_CONTROLLI',
+    keys: ['ADVICE_AND_FOLLOW_UP'],
+  },
   { field: 'unmappedText', italian: 'CONTENUTO_NON_CLASSIFICATO', keys: ['UNMAPPED_CONTENT'] },
 ];
 
@@ -93,14 +113,26 @@ function buildField(
     for (const a of s.annotations ?? []) tags.push(annToTag(a, italian, base));
     for (const sr of s.sourceRanges ?? []) {
       const r = sr as { fileId?: string; pageNumber?: number };
-      sources.push({ sectionKey: italian, fileId: r.fileId, fileName: docName(r.fileId), pageFrom: r.pageNumber, pageTo: r.pageNumber });
+      sources.push({
+        sectionKey: italian,
+        fileId: r.fileId,
+        fileName: docName(r.fileId),
+        pageFrom: r.pageNumber,
+        pageTo: r.pageNumber,
+      });
     }
   }
   return { text, tags, sources };
 }
 
 function annToTag(a: Annotation, italian: string, shift: number): NarrativeTag {
-  return { sectionKey: italian, tagType: a.tag, text: a.text, startOffset: a.startOffset + shift, endOffset: a.endOffset + shift };
+  return {
+    sectionKey: italian,
+    tagType: a.tag,
+    text: a.text,
+    startOffset: a.startOffset + shift,
+    endOffset: a.endOffset + shift,
+  };
 }
 
 /** Pure transform: faithful sections -> flat narrative draft (no structured arrays). */
@@ -120,22 +152,44 @@ export function buildNarrativeDraft(
 
   const draft: DischargeNarrativeDraft = {
     schemaVersion: NARRATIVE_SCHEMA_VERSION,
-    firstName: str(demo.firstName), lastName: str(demo.lastName), dateOfBirth: str(demo.dateOfBirth),
-    placeOfBirth: str(demo.placeOfBirth), sex: str(demo.sex),
+    firstName: str(demo.firstName),
+    lastName: str(demo.lastName),
+    dateOfBirth: str(demo.dateOfBirth),
+    placeOfBirth: str(demo.placeOfBirth),
+    sex: str(demo.sex),
     fiscalCode: str(demo.fiscalCode) || str(demo.codiceFiscale),
-    address: str(demo.address), phone: str(demo.phone), email: str(demo.email),
-    allergyStatus: allergy.status, allergiesText: str(allergy.rawText) || str(allergySection?.rawText),
-    diagnosisText: '', anamnesisText: '', hospitalCourseText: '', consultationsText: '',
-    imagingDiagnosticsText: '', proceduresAndInterventionsText: '', therapyText: '',
-    adviceAndFollowUpText: '', unmappedText: '',
-    boldTags: [], sourceReferences: [], missingSections: [], warnings: [...(allergy.warnings ?? [])],
+    address: str(demo.address),
+    phone: str(demo.phone),
+    email: str(demo.email),
+    allergyStatus: allergy.status,
+    allergiesText: str(allergy.rawText) || str(allergySection?.rawText),
+    diagnosisText: '',
+    anamnesisText: '',
+    hospitalCourseText: '',
+    consultationsText: '',
+    imagingDiagnosticsText: '',
+    proceduresAndInterventionsText: '',
+    therapyText: '',
+    adviceAndFollowUpText: '',
+    unmappedText: '',
+    boldTags: [],
+    sourceReferences: [],
+    missingSections: [],
+    warnings: [...(allergy.warnings ?? [])],
   };
 
   // Allergy annotations + source (allergies are top priority).
-  for (const a of allergySection?.annotations ?? []) draft.boldTags.push(annToTag(a, 'ALLERGIE', 0));
+  for (const a of allergySection?.annotations ?? [])
+    draft.boldTags.push(annToTag(a, 'ALLERGIE', 0));
   for (const sr of allergySection?.sourceRanges ?? []) {
     const r = sr as { fileId?: string; pageNumber?: number };
-    draft.sourceReferences.push({ sectionKey: 'ALLERGIE', fileId: r.fileId, fileName: docName(r.fileId), pageFrom: r.pageNumber, pageTo: r.pageNumber });
+    draft.sourceReferences.push({
+      sectionKey: 'ALLERGIE',
+      fileId: r.fileId,
+      fileName: docName(r.fileId),
+      pageFrom: r.pageNumber,
+      pageTo: r.pageNumber,
+    });
   }
 
   for (const spec of TEXT_FIELDS) {
@@ -145,9 +199,11 @@ export function buildNarrativeDraft(
     draft.boldTags.push(...tags);
     draft.sourceReferences.push(...sources);
     for (const s of secs) draft.warnings.push(...(s.warnings ?? []));
-    if (!text.trim() && spec.italian !== 'CONTENUTO_NON_CLASSIFICATO') draft.missingSections.push(spec.italian);
+    if (!text.trim() && spec.italian !== 'CONTENUTO_NON_CLASSIFICATO')
+      draft.missingSections.push(spec.italian);
   }
-  if (!draft.allergiesText.trim() && allergy.status === 'not_documented') draft.missingSections.push('ALLERGIE');
+  if (!draft.allergiesText.trim() && allergy.status === 'not_documented')
+    draft.missingSections.push('ALLERGIE');
 
   draft.warnings = [...new Set(draft.warnings)];
   return draft;
@@ -156,38 +212,64 @@ export function buildNarrativeDraft(
 /** True when at least one clinical section carries text (used to choose the best source). */
 export function narrativeHasSectionText(d: DischargeNarrativeDraft): boolean {
   return [
-    d.diagnosisText, d.anamnesisText, d.hospitalCourseText, d.consultationsText,
-    d.imagingDiagnosticsText, d.proceduresAndInterventionsText, d.therapyText,
-    d.adviceAndFollowUpText, d.allergiesText,
+    d.diagnosisText,
+    d.anamnesisText,
+    d.hospitalCourseText,
+    d.consultationsText,
+    d.imagingDiagnosticsText,
+    d.proceduresAndInterventionsText,
+    d.therapyText,
+    d.adviceAndFollowUpText,
+    d.allergiesText,
   ].some((t) => (t || '').trim().length > 0);
 }
 
 /** Fallback narrative draft when the sections pass yields nothing: keep the integral OCR
  *  text (never re-split into clinical rows) + demographics. Guarantees `_narrative` is
  *  always present so the import never falls back to the legacy structured table (REQ-033). */
-export function narrativeFromRawText(rawText: string, demographics?: Record<string, unknown>): DischargeNarrativeDraft {
+export function narrativeFromRawText(
+  rawText: string,
+  demographics?: Record<string, unknown>,
+): DischargeNarrativeDraft {
   const sections: SectionsResult = {
     sections: rawText.trim() ? [{ sectionKey: 'UNMAPPED_CONTENT', rawText }] : [],
     allergies: { status: 'not_documented' },
     demographics,
   };
   const draft = buildNarrativeDraft(sections);
-  if (rawText.trim()) draft.warnings = [...new Set([...draft.warnings, 'NARRATIVE_FALLBACK_FROM_RAWTEXT'])];
+  if (rawText.trim())
+    draft.warnings = [...new Set([...draft.warnings, 'NARRATIVE_FALLBACK_FROM_RAWTEXT'])];
   return draft;
 }
 
 // ── AJV validation against the flat contract ────────────────────────────────
 const HERE = dirname(fileURLToPath(import.meta.url));
-const SCHEMA_PATH = resolve(HERE, '..', '..', '..', 'ai-assets', 'clinicos-discharge-narrative.schema.json');
+const SCHEMA_PATH = resolve(
+  HERE,
+  '..',
+  '..',
+  '..',
+  'ai-assets',
+  'clinicos-discharge-narrative.schema.json',
+);
 let validator: ValidateFunction | null = null;
-export function _resetNarrativeValidator(): void { validator = null; }
+export function _resetNarrativeValidator(): void {
+  validator = null;
+}
 
 export function validateNarrativeDraft(data: unknown): { valid: boolean; errors: string[] } {
   if (!validator) {
     const ajv = new Ajv({ allErrors: true, strict: false });
-    validator = ajv.compile(JSON.parse(readFileSync(process.env.AI_NARRATIVE_SCHEMA_PATH?.trim() || SCHEMA_PATH, 'utf8')));
+    validator = ajv.compile(
+      JSON.parse(readFileSync(process.env.AI_NARRATIVE_SCHEMA_PATH?.trim() || SCHEMA_PATH, 'utf8')),
+    );
   }
   const valid = validator(data) as boolean;
   if (valid) return { valid: true, errors: [] };
-  return { valid: false, errors: (validator.errors ?? []).slice(0, 20).map((e) => `${e.instancePath || '(root)'} ${e.message ?? 'invalid'}`.trim()) };
+  return {
+    valid: false,
+    errors: (validator.errors ?? [])
+      .slice(0, 20)
+      .map((e) => `${e.instancePath || '(root)'} ${e.message ?? 'invalid'}`.trim()),
+  };
 }

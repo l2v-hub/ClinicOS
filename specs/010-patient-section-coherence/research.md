@@ -11,12 +11,14 @@ The spec produced zero `NEEDS CLARIFICATION` markers. This document records the 
 **Decision**: All L2 / L3 visual rules introduced by feature `009-nav-l2-l3-hierarchy` (the `.page-tabs*` / `.section-tabs*` selectors, the `--l2-h` / `--l3-h` / `--l2-underline-*` / `--l3-underline-*` / `--tab-transition-*` tokens, the `.tab-panel-transition` keyframes, and the `@media (prefers-reduced-motion: reduce)` block) are the canonical contract. Feature 010 **enforces** them across every Scheda Paziente sub-page and **does not** redefine them.
 
 **Rationale**:
+
 - 009 is already in production. Redefining tokens or rewriting the L2 / L3 base would regress the very uniformity this feature exists to ensure.
-- The defect this feature targets is *inconsistent application* of the canonical rules, not the rules themselves.
+- The defect this feature targets is _inconsistent application_ of the canonical rules, not the rules themselves.
 
 **Alternatives considered**:
-- *Introduce a per-page L2 token override system* — multiplies the defect surface; explicitly rejected.
-- *Rewrite L2 / L3 from scratch* — burns the work shipped in 009 with no upside.
+
+- _Introduce a per-page L2 token override system_ — multiplies the defect surface; explicitly rejected.
+- _Rewrite L2 / L3 from scratch_ — burns the work shipped in 009 with no upside.
 
 ---
 
@@ -27,13 +29,15 @@ The spec produced zero `NEEDS CLARIFICATION` markers. This document records the 
 Inverse principle: this is a wrapper, not a framework. It carries no clinical logic, no form layouts, and no Modifica handler implementation. Each call site supplies its own edit content and save handler.
 
 **Rationale**:
+
 - Anamnesi already has the model the spec asks Presa in Carico to adopt. Today the markup is inline in `renderAnamnesi()` inside `PatientDetail.tsx`. Without consolidation, the parity required by FR-009 would mean copying that markup into `PresaInCaricoTab.tsx`, which would immediately drift.
 - The duplication threshold (≥ 2 distinct call sites that need identical collapse + Modifica behaviour) is met by Anamnesi + Presa in Carico. The Profilo page also collapses card-like blocks and is a likely future call site, taking the count to three — comfortably above Principle I's bar.
 - Keeping the component small (no slots beyond title + Modifica + content) avoids the "card framework" smell.
 
 **Alternatives considered**:
-- *Pure CSS, no shared component* — leaves the open/collapse state in each call site's React state and the Modifica button shape inlined per page. Drift returns within one feature cycle.
-- *Use a library (e.g. Radix, Headless UI)* — adds a dependency, violates Principle I, and gives features (focus-trap, async API, slotting) we do not need.
+
+- _Pure CSS, no shared component_ — leaves the open/collapse state in each call site's React state and the Modifica button shape inlined per page. Drift returns within one feature cycle.
+- _Use a library (e.g. Radix, Headless UI)_ — adds a dependency, violates Principle I, and gives features (focus-trap, async API, slotting) we do not need.
 
 ---
 
@@ -42,13 +46,15 @@ Inverse principle: this is a wrapper, not a framework. It carries no clinical lo
 **Decision**: The section-level flat blue header (already shipped, used at the top of Anamnesi, Presa in Carico, Terapia Farmacologica, etc.) is preserved untouched. The card-level header (inside each card) is a lighter inline strip with title + collapse toggle + Modifica button, using the existing `--card-*` tokens if present, otherwise plain text + the existing `.btn-sm` / `.btn-link` styles already in use across the codebase.
 
 **Rationale**:
+
 - FR-012 explicitly requires the section blue header to remain.
 - Adding a second heavy header at card level would compete with the section header and break the visual rhythm. A lighter strip is conventional (think Notion / Linear collapsible sections).
 - Reusing existing button classes avoids introducing new button variants.
 
 **Alternatives considered**:
-- *Match the section header treatment at card level* — visually noisy and clashes with the existing Anamnesi shape.
-- *No card header at all, only a content block with a side toggle* — loses the collapse affordance and weakens the Modifica entry point.
+
+- _Match the section header treatment at card level_ — visually noisy and clashes with the existing Anamnesi shape.
+- _No card header at all, only a content block with a side toggle_ — loses the collapse affordance and weakens the Modifica entry point.
 
 ---
 
@@ -57,13 +63,15 @@ Inverse principle: this is a wrapper, not a framework. It carries no clinical lo
 **Decision**: Card content uses CSS `height: 0 → auto` via the established pattern of measuring `scrollHeight` on the content node and toggling a `--card-content-h` custom property. Animation duration = `var(--tab-transition-duration, 180ms)`, easing = `var(--tab-transition-easing, ease-out)` — the same tokens 009 introduced. The `@media (prefers-reduced-motion: reduce)` block from 009 is extended with the card selector so animation is suppressed under user preference (FR-018 / SC-012).
 
 **Rationale**:
+
 - Reuses the token language 009 established; no new motion tokens.
 - Measuring `scrollHeight` keeps the animation real (not a fake `max-height` clip) and respects dynamic content sizes.
 - `prefers-reduced-motion` rule is centralised in `App.css` — one block governs both tab and card motion, matching the spec's expectation that 010 builds on 009.
 
 **Alternatives considered**:
-- *CSS-only `transition: max-height: 9999px`* — clips long content awkwardly and the timing function feels wrong on long expansions.
-- *Framer Motion / react-spring* — extra dependency, Principle I violation.
+
+- _CSS-only `transition: max-height: 9999px`_ — clips long content awkwardly and the timing function feels wrong on long expansions.
+- _Framer Motion / react-spring_ — extra dependency, Principle I violation.
 
 ---
 
@@ -72,12 +80,14 @@ Inverse principle: this is a wrapper, not a framework. It carries no clinical lo
 **Decision**: Identify every place in the Scheda Paziente content area that renders a `Pazienti > <Patient>` path or a Back / Indietro link, and remove the in-content occurrence. The upper page-chrome breadcrumb (rendered by the page shell, not by sub-page components) is the single survivor.
 
 **Rationale**:
+
 - FR-007 forces exactly one breadcrumb visible per Scheda Paziente sub-page.
 - The upper page-chrome breadcrumb is shared across the app — removing it would break navigation everywhere. The in-content duplicates exist because earlier features added their own quick-back affordance per page; consolidating to the page-chrome one returns the app to a single source of truth.
 
 **Alternatives considered**:
-- *Remove the upper breadcrumb and keep the in-content ones* — would force each sub-page to render its own path, multiplying the inconsistency this feature aims to fix.
-- *Keep both but visually hide one via CSS* — bloats the DOM and breaks the page-tree audit (SC-006).
+
+- _Remove the upper breadcrumb and keep the in-content ones_ — would force each sub-page to render its own path, multiplying the inconsistency this feature aims to fix.
+- _Keep both but visually hide one via CSS_ — bloats the DOM and breaks the page-tree audit (SC-006).
 
 ---
 
@@ -86,12 +96,14 @@ Inverse principle: this is a wrapper, not a framework. It carries no clinical lo
 **Decision**: Measure the computed vertical gap between the section title and the L3 sub-menu on `ParametriTab` (the reference baseline), then apply the same `margin-top` (or equivalent token) on the L3 sub-menu wrapper inside `TerapiaFarmacologicaTab`. Token candidates: an existing `--section-title-gap` or `--space-3` if defined; otherwise introduce a single named token in `App.css` (`--clinical-submenu-gap`) and use it on both pages.
 
 **Rationale**:
+
 - FR-013 sets a ± 2 px tolerance. Matching by a shared token rather than by hand-tuned `margin-top: 16px` ensures both pages drift together.
 - Parametri Vitali is the reference baseline because it is already correct per the spec.
 
 **Alternatives considered**:
-- *Hand-pick a number per page* — recreates the drift; rejected.
-- *Reuse `--content-px-lg`* — that token is for content-area padding, not vertical title gap; semantic mismatch.
+
+- _Hand-pick a number per page_ — recreates the drift; rejected.
+- _Reuse `--content-px-lg`_ — that token is for content-area padding, not vertical title gap; semantic mismatch.
 
 ---
 
@@ -105,13 +117,15 @@ Inverse principle: this is a wrapper, not a framework. It carries no clinical lo
 4. For badges that survive, add a one-line comment at the call site naming the count (e.g. `// badge = number of unread diario entries in last 24h`).
 
 **Rationale**:
+
 - FR-015 mandates removal of undefined badges.
 - An exhaustive audit (not a sample) satisfies SC-009.
 - One-line comments at the surviving call sites help the next implementer avoid reintroducing the drift.
 
 **Alternatives considered**:
-- *Add a runtime warning for "phantom" badges* — adds dev noise; explicit removal is cleaner.
-- *Keep all current badges with a TODO* — leaves the defect in production, violates the spec's "remove if undefined" rule.
+
+- _Add a runtime warning for "phantom" badges_ — adds dev noise; explicit removal is cleaner.
+- _Keep all current badges with a TODO_ — leaves the defect in production, violates the spec's "remove if undefined" rule.
 
 ---
 
@@ -131,8 +145,9 @@ Inverse principle: this is a wrapper, not a framework. It carries no clinical lo
 **Rationale**: New component first so the consumers compile; CSS second so the cascade exists; component refactors last so test surface is minimised at each step.
 
 **Alternatives considered**:
-- *Refactor `PatientDetail.tsx` first* — would break the build until step 1 lands.
-- *Single bulk commit per file rather than per step* — collapses verification points; rejected.
+
+- _Refactor `PatientDetail.tsx` first_ — would break the build until step 1 lands.
+- _Single bulk commit per file rather than per step_ — collapses verification points; rejected.
 
 ---
 

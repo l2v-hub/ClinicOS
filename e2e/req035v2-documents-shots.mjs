@@ -2,46 +2,138 @@ import { chromium } from 'playwright';
 import { resolve } from 'node:path';
 import { mkdirSync } from 'node:fs';
 import { buildSyntheticPdf } from './real-pdf.mjs';
-const OUT='requirements/evidence/REQ-035v2'; mkdirSync(OUT,{recursive:true});
-const PID='p-doc';
-const PATIENT={id:PID,medicalRecordNumber:'MRN-7',firstName:'Mario',lastName:'Bianchi',dateOfBirth:'1948-07-23',sex:'M'};
-const PDF=buildSyntheticPdf(['AUSL Imola - Lettera di dimissione','Anamnesi Patologica Recente: Inviata in PS 09/03.']);
-const SVG='<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="700" height="950"><rect width="700" height="950" fill="#fff"/><rect width="700" height="70" fill="#0F5FD7"/><text x="20" y="44" font-size="22" fill="#fff" font-family="Arial">AUSL Imola - foto</text></svg>';
-const DOCS=[{id:'doc1',originalName:'lettera-dimissione-imola.pdf',mimeType:'application/pdf',sizeBytes:PDF.length,documentType:'discharge_import',importJobId:'j',createdAt:'2026-06-16T10:00:00Z',sortOrder:0},{id:'doc2',originalName:'foto-documento.svg',mimeType:'image/svg+xml',sizeBytes:SVG.length,documentType:'discharge_import',importJobId:'j',createdAt:'2026-06-16T10:00:00Z',sortOrder:1}];
-const anam='## Anamnesi Patologica Recente:\n\nInviata in PS in data 09/03 per dolore toracico.';
-const SECTIONS=[{sectionKey:'ALLERGIES',title:'Allergie',originalText:'Penicillina (grave).',reviewedText:'',displayText:'Penicillina (grave).',annotations:[],sourceReferences:[{sectionKey:'ALLERGIE',fileName:'lettera-dimissione-imola.pdf',pageFrom:1}],reviewStatus:'pending'},{sectionKey:'ANAMNESIS',title:'Anamnesi',originalText:anam,reviewedText:'',displayText:anam,annotations:[],sourceReferences:[{sectionKey:'ANAMNESI',fileName:'lettera-dimissione-imola.pdf',pageFrom:2}],reviewStatus:'pending'}];
-const b=await chromium.launch();const p=await b.newPage({viewport:{width:1366,height:768}});p.on('dialog',d=>d.accept());
-await p.route('**/*',async r=>{const u=r.request().url();const j=(x,s=200)=>r.fulfill({status:s,contentType:'application/json',body:JSON.stringify(x)});
- if(/\/documents\/doc1\/content/.test(u))return r.fulfill({status:200,headers:{'content-type':'application/pdf'},body:PDF});
- if(/\/documents\/doc2\/content/.test(u))return r.fulfill({status:200,headers:{'content-type':'image/svg+xml'},body:SVG});
- if(/\/patients\/[^/]+\/documents$/.test(u)||/\/documents\?/.test(u))return j({documents:DOCS,total:DOCS.length});
- if(/\/patients\/[^/]+\/narrative-sections/.test(u))return j({sections:SECTIONS,total:SECTIONS.length});
- if(/\/patients\/[^/]+\/cartella/.test(u))return j({},404);
- if(/\/patients\/[^/]+\/(diary|therap|assign|intake)/i.test(u))return j({entries:[],therapies:[],items:[]});
- if(u.includes('/patients/settings'))return j({allowDelete:true});
- if(u.match(/\/patients(\?|$)/))return j([PATIENT]);
- if(u.includes('/ai/extraction/status'))return j({available:true,errors:[]});
- return r.continue();});
-await p.goto('http://localhost:4173',{waitUntil:'networkidle',timeout:30000});await p.waitForTimeout(700);
-await p.getByText('Operatore',{exact:true}).click();await p.waitForTimeout(900);
-await p.getByText('Pazienti').first().click();await p.waitForTimeout(700);
-await p.getByText('Bianchi',{exact:false}).first().click();await p.waitForTimeout(1000);
+const OUT = 'requirements/evidence/REQ-035v2';
+mkdirSync(OUT, { recursive: true });
+const PID = 'p-doc';
+const PATIENT = {
+  id: PID,
+  medicalRecordNumber: 'MRN-7',
+  firstName: 'Mario',
+  lastName: 'Bianchi',
+  dateOfBirth: '1948-07-23',
+  sex: 'M',
+};
+const PDF = buildSyntheticPdf([
+  'AUSL Imola - Lettera di dimissione',
+  'Anamnesi Patologica Recente: Inviata in PS 09/03.',
+]);
+const SVG =
+  '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="700" height="950"><rect width="700" height="950" fill="#fff"/><rect width="700" height="70" fill="#0F5FD7"/><text x="20" y="44" font-size="22" fill="#fff" font-family="Arial">AUSL Imola - foto</text></svg>';
+const DOCS = [
+  {
+    id: 'doc1',
+    originalName: 'lettera-dimissione-imola.pdf',
+    mimeType: 'application/pdf',
+    sizeBytes: PDF.length,
+    documentType: 'discharge_import',
+    importJobId: 'j',
+    createdAt: '2026-06-16T10:00:00Z',
+    sortOrder: 0,
+  },
+  {
+    id: 'doc2',
+    originalName: 'foto-documento.svg',
+    mimeType: 'image/svg+xml',
+    sizeBytes: SVG.length,
+    documentType: 'discharge_import',
+    importJobId: 'j',
+    createdAt: '2026-06-16T10:00:00Z',
+    sortOrder: 1,
+  },
+];
+const anam = '## Anamnesi Patologica Recente:\n\nInviata in PS in data 09/03 per dolore toracico.';
+const SECTIONS = [
+  {
+    sectionKey: 'ALLERGIES',
+    title: 'Allergie',
+    originalText: 'Penicillina (grave).',
+    reviewedText: '',
+    displayText: 'Penicillina (grave).',
+    annotations: [],
+    sourceReferences: [
+      { sectionKey: 'ALLERGIE', fileName: 'lettera-dimissione-imola.pdf', pageFrom: 1 },
+    ],
+    reviewStatus: 'pending',
+  },
+  {
+    sectionKey: 'ANAMNESIS',
+    title: 'Anamnesi',
+    originalText: anam,
+    reviewedText: '',
+    displayText: anam,
+    annotations: [],
+    sourceReferences: [
+      { sectionKey: 'ANAMNESI', fileName: 'lettera-dimissione-imola.pdf', pageFrom: 2 },
+    ],
+    reviewStatus: 'pending',
+  },
+];
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 1366, height: 768 } });
+p.on('dialog', (d) => d.accept());
+await p.route('**/*', async (r) => {
+  const u = r.request().url();
+  const j = (x, s = 200) =>
+    r.fulfill({ status: s, contentType: 'application/json', body: JSON.stringify(x) });
+  if (/\/documents\/doc1\/content/.test(u))
+    return r.fulfill({ status: 200, headers: { 'content-type': 'application/pdf' }, body: PDF });
+  if (/\/documents\/doc2\/content/.test(u))
+    return r.fulfill({ status: 200, headers: { 'content-type': 'image/svg+xml' }, body: SVG });
+  if (/\/patients\/[^/]+\/documents$/.test(u) || /\/documents\?/.test(u))
+    return j({ documents: DOCS, total: DOCS.length });
+  if (/\/patients\/[^/]+\/narrative-sections/.test(u))
+    return j({ sections: SECTIONS, total: SECTIONS.length });
+  if (/\/patients\/[^/]+\/cartella/.test(u)) return j({}, 404);
+  if (/\/patients\/[^/]+\/(diary|therap|assign|intake)/i.test(u))
+    return j({ entries: [], therapies: [], items: [] });
+  if (u.includes('/patients/settings')) return j({ allowDelete: true });
+  if (u.match(/\/patients(\?|$)/)) return j([PATIENT]);
+  if (u.includes('/ai/extraction/status')) return j({ available: true, errors: [] });
+  return r.continue();
+});
+await p.goto('http://localhost:4173', { waitUntil: 'networkidle', timeout: 30000 });
+await p.waitForTimeout(700);
+await p.getByText('Operatore', { exact: true }).click();
+await p.waitForTimeout(900);
+await p.getByText('Pazienti').first().click();
+await p.waitForTimeout(700);
+await p.getByText('Bianchi', { exact: false }).first().click();
+await p.waitForTimeout(1000);
 // Documenti tab (L2)
-await p.getByRole('tab',{name:/Documenti/}).click();await p.waitForTimeout(700);
-await p.waitForSelector('[data-testid="imported-documents"]',{timeout:8000});
-await p.screenshot({path:resolve(OUT,'patient-imported-documents-tab.png')});
-console.log('imported docs visible:',(await p.locator('[data-testid="imported-documents"]').count())>0);
+await p.getByRole('tab', { name: /Documenti/ }).click();
+await p.waitForTimeout(700);
+await p.waitForSelector('[data-testid="imported-documents"]', { timeout: 8000 });
+await p.screenshot({ path: resolve(OUT, 'patient-imported-documents-tab.png') });
+console.log(
+  'imported docs visible:',
+  (await p.locator('[data-testid="imported-documents"]').count()) > 0,
+);
 // open side panel
-await p.locator('[data-testid="imported-documents"]').getByRole('button',{name:'Anteprima'}).first().click();await p.waitForTimeout(900);
-await p.screenshot({path:resolve(OUT,'patient-document-side-panel.png')});
-console.log('side panel open:',(await p.locator('.doc-source-panel').count())>0);
-await p.locator('.doc-source-panel .icon-btn').click().catch(()=>{});await p.waitForTimeout(300);
+await p
+  .locator('[data-testid="imported-documents"]')
+  .getByRole('button', { name: 'Anteprima' })
+  .first()
+  .click();
+await p.waitForTimeout(900);
+await p.screenshot({ path: resolve(OUT, 'patient-document-side-panel.png') });
+console.log('side panel open:', (await p.locator('.doc-source-panel').count()) > 0);
+await p
+  .locator('.doc-source-panel .icon-btn')
+  .click()
+  .catch(() => {});
+await p.waitForTimeout(300);
 // narrative section compare
-await p.getByRole('tab',{name:/Clinica/}).click();await p.waitForTimeout(400);
-await p.getByRole('tab',{name:/Sezioni Cliniche/}).click();await p.waitForTimeout(700);
+await p.getByRole('tab', { name: /Clinica/ }).click();
+await p.waitForTimeout(400);
+await p.getByRole('tab', { name: /Sezioni Cliniche/ }).click();
+await p.waitForTimeout(700);
 await p.locator('[data-testid="narr-ANAMNESIS"]').scrollIntoViewIfNeeded();
-await p.screenshot({path:resolve(OUT,'patient-section-source-action.png')});
-await p.locator('[data-testid="narr-ANAMNESIS"]').getByRole('button',{name:/Confronta con il documento/}).click();await p.waitForTimeout(900);
-await p.screenshot({path:resolve(OUT,'patient-anamnesis-source.png')});
-console.log('anamnesis source panel:',(await p.locator('.doc-source-panel').count())>0);
+await p.screenshot({ path: resolve(OUT, 'patient-section-source-action.png') });
+await p
+  .locator('[data-testid="narr-ANAMNESIS"]')
+  .getByRole('button', { name: /Confronta con il documento/ })
+  .click();
+await p.waitForTimeout(900);
+await p.screenshot({ path: resolve(OUT, 'patient-anamnesis-source.png') });
+console.log('anamnesis source panel:', (await p.locator('.doc-source-panel').count()) > 0);
 await b.close();

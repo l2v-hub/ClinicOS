@@ -49,9 +49,9 @@ Inoltre le select camera in PatientDetail elencavano tutte le camere `attive` se
 
 ## Evidenze
 
-| File | Cosa mostra |
-|------|-------------|
-| `final/before.png` | PRIMA: paziente con camera 102 salvata ma Posti Letto = 0 occupati, letto 102/A LIBERO |
-| `final/after.png` | DOPO: Posti Letto mostra 1 occupato, letto 102/A OCCUPATO con paziente "Camera128" |
-| `final/after-refresh.png` | DOPO refresh completo: scheda paziente coerente (Camera 102 / Letto A / ricoverato) |
-| `final/ac2-select-altro-paziente.png` | Select camera di un altro paziente: la 102 non è più proposta |
+| File                                  | Cosa mostra                                                                            |
+| ------------------------------------- | -------------------------------------------------------------------------------------- |
+| `final/before.png`                    | PRIMA: paziente con camera 102 salvata ma Posti Letto = 0 occupati, letto 102/A LIBERO |
+| `final/after.png`                     | DOPO: Posti Letto mostra 1 occupato, letto 102/A OCCUPATO con paziente "Camera128"     |
+| `final/after-refresh.png`             | DOPO refresh completo: scheda paziente coerente (Camera 102 / Letto A / ricoverato)    |
+| `final/ac2-select-altro-paziente.png` | Select camera di un altro paziente: la 102 non è più proposta                          |

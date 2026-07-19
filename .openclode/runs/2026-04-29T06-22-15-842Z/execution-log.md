@@ -43,7 +43,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { BrowserRouter } from 'react-router-dom'
 +import App from './App'
  import './index.css'
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
 -  <React.StrictMode>
 -    <App />
@@ -77,7 +77,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { AppointmentsPage } from './pages/AppointmentsPage'
 +import { CalendarPage } from './pages/CalendarPage'
  import './App.css'
- 
+
  function App() {
 -  const [count, setCount] = useState(0)
 -
@@ -99,7 +99,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </Routes>
    )
  }
- 
+
  export default App
 +export { App }
 ```
@@ -118,7 +118,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  display: flex;
 +  flex-direction: column;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -232,7 +232,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  }
 ```
 
-```diff
+````diff
 --- /dev/null
 +++ b/src/components/Layout.tsx
 @@ -0,0 +1,60 @@
@@ -448,7 +448,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
    },
    "devDependencies": {
      "@typescript-eslint/eslint-plugin": "^7.13.1",
-```
+````
 
 ```diff
 --- a/src/main.tsx
@@ -461,7 +461,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { BrowserRouter } from 'react-router-dom'
 +import App from './App'
  import './index.css'
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
 -  <React.StrictMode>
 -    <App />
@@ -495,7 +495,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { AppointmentsPage } from './pages/AppointmentsPage'
 +import { CalendarPage } from './pages/CalendarPage'
  import './App.css'
- 
+
  function App() {
 -  const [count, setCount] = useState(0)
 -
@@ -517,7 +517,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </Routes>
    )
  }
- 
+
  export default App
 +export { App }
 ```
@@ -536,7 +536,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  display: flex;
 +  flex-direction: column;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -650,7 +650,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  }
 ```
 
-```diff
+````diff
 --- /dev/null
 +++ b/src/components/Layout.tsx
 @@ -0,0 +1,60 @@
@@ -874,7 +874,8 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
      "eslint": "^8.57.0",
      "eslint-plugin-react-hooks": "^4.6.2",
      "eslint-plugin-react-refresh": "^0.4.10",
-```
+````
+
 ```diff
 --- a/src/main.tsx
 +++ b/src/main.tsx
@@ -886,7 +887,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { BrowserRouter } from 'react-router-dom'
 +import App from './App'
  import './index.css'
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
 -  <React.StrictMode>
 -    <App />
@@ -905,6 +906,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -ReactDOM.createRoot(...).render(<RouterProvider router={router} />)
 -*/
 ```
+
 ```diff
 --- a/src/App.tsx
 +++ b/src/App.tsx
@@ -919,7 +921,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { AppointmentsPage } from './pages/AppointmentsPage'
 +import { CalendarPage } from './pages/CalendarPage'
  import './App.css'
- 
+
  function App() {
 -  const [count, setCount] = useState(0)
 -
@@ -941,10 +943,11 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </Routes>
    )
  }
- 
+
  export default App
 +export { App }
 ```
+
 ```diff
 --- a/src/App.css
 +++ b/src/App.css
@@ -959,7 +962,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  display: flex;
 +  flex-direction: column;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -1125,7 +1128,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { BrowserRouter } from 'react-router-dom'
 +import App from './App'
  import './index.css'
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
 -  <React.StrictMode>
 -    <App />
@@ -1145,7 +1148,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -*/
 ```
 
-```diff
+````diff
 --- a/src/App.tsx
 +++ b/src/App.tsx
 @@ -1,17 +1,31 @@
@@ -1159,7 +1162,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { AppointmentsPage } from './pages/AppointmentsPage'
 +import { CalendarPage } from './pages/CalendarPage'
  import './App.css'
- 
+
  function App() {
 -  const [count, setCount] = useState(0)
 -
@@ -1181,7 +1184,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </Routes>
    )
  }
- 
+
  export default App
 +export { App }
 +```
@@ -1200,7 +1203,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  display: flex;
 +  flex-direction: column;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -1312,9 +1315,9 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +.text-muted {
 +  color: #6b7280;
  }
-```
+````
 
-```diff
+````diff
 --- /dev/null
 +++ b/src/components/Layout.tsx
 @@ -0,0 +1,60 @@
@@ -1520,7 +1523,7 @@ Expected:
   import ReactDOM from 'react-dom/client'
   import App from './App.tsx'
   import './index.css'
-  
+
 File has 11 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 1.
 Expected:
@@ -1528,7 +1531,7 @@ Expected:
   import reactLogo from './assets/react.svg'
   import viteLogo from '/vite.svg'
   import './App.css'
-  
+
 File has 123 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 1.
 Expected:
@@ -1556,7 +1559,7 @@ Expected:
   import ReactDOM from 'react-dom/client'
   import App from './App.tsx'
   import './index.css'
-  
+
 File has 11 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 1.
 Expected:
@@ -1564,7 +1567,7 @@ Expected:
   import reactLogo from './assets/react.svg'
   import viteLogo from '/vite.svg'
   import './App.css'
-  
+
 File has 123 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 1.
 Expected:
@@ -1588,7 +1591,7 @@ Expected:
   import ReactDOM from 'react-dom/client'
   import App from './App.tsx'
   import './index.css'
-  
+
 File has 11 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 1.
 Expected:
@@ -1596,7 +1599,7 @@ Expected:
   import reactLogo from './assets/react.svg'
   import viteLogo from '/vite.svg'
   import './App.css'
-  
+
 File has 123 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 1.
 Expected:
@@ -1624,7 +1627,7 @@ Expected:
   import ReactDOM from 'react-dom/client'
   import App from './App.tsx'
   import './index.css'
-  
+
 File has 11 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 1.
 Expected:
@@ -1632,5 +1635,6 @@ Expected:
   import reactLogo from './assets/react.svg'
   import viteLogo from '/vite.svg'
   import './App.css'
-  
+
 File has 123 lines.
+````

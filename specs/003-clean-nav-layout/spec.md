@@ -8,7 +8,7 @@
 
 **Input**: Redesign navigazione e layout ClinicOS con stile pulito tipo desktop console, ottimizzato per tablet.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Navigazione a 3 livelli compatta (Priority: P1)
 
@@ -81,7 +81,7 @@ L'intera interfaccia si adatta senza overflow orizzontale alle risoluzioni table
 - Come si comporta il layout se il browser è in modalità portrait su tablet (768x1024)? (fuori scope per questa iterazione)
 - Cosa mostra la sidebar se nessuna macro-area è attiva (es. pagina 404)? (nessuna voce evidenziata)
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -124,7 +124,7 @@ L'intera interfaccia si adatta senza overflow orizzontale alle risoluzioni table
 - **PatientHeader**: Intestazione compatta con dati essenziali del paziente; sticky, altezza ≤56px.
 - **ContentArea**: Area residua dopo sidebar + header + L2 + L3; contiene il contenuto clinico operativo.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

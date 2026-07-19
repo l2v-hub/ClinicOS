@@ -3,12 +3,14 @@
 ## File changes
 
 ### NEW
+
 - `frontend/src/components/shared/PageHeader.tsx` — shared header w/ breadcrumb, title, L2 slot, actions slot
 - `frontend/src/components/shared/AIAssistantButton.tsx` — floating circular button + placeholder panel
 - `specs/013-redesign-shell-nav/spec.md` ✓
 - `specs/013-redesign-shell-nav/plan.md` ✓
 
 ### MODIFIED
+
 - `frontend/src/types.ts` — add NavKey 'ai-assistant'
 - `frontend/src/App.tsx` — add ai-assistant route, mount AIAssistantButton globally
 - `frontend/src/components/shared/TeamsLikeSidebar.tsx` — add AI Assistant entry
@@ -35,4 +37,5 @@
 - No TS errors, no console errors.
 
 ## Commit
+
 `feat: redesign ClinicOS layout and multi-level navigation in medical blue style`

@@ -29,6 +29,7 @@ completo. Build `npm run build` deve passare senza errori al termine.
 **Performance Goals**: Risposta API < 500ms per slot agenda con ≤ 50 pazienti
 
 **Constraints**:
+
 - NO `prisma migrate reset`
 - NO `prisma db push --force-reset`
 - Nessuna migrazione DB (schema sufficiente)
@@ -39,17 +40,17 @@ completo. Build `npm run build` deve passare senza errori al termine.
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-| Principio | Status | Note |
-|-----------|--------|------|
-| I. Simplicity First | ✅ | Rimozione dead code (TerapiaMedicaTab, TerapiaScheduleTab). No nuove astrazioni. |
-| II. Healthcare UX | ✅ | Sezione unica, UI italiana, ClinicalTable già usato, nessun tooltip. |
-| III. Backend Data Authority | ✅ | TerapiaMedicaTab (violatore) rimosso. TerapiaFarmacologicaTab usa solo API. |
-| IV. Schema & API Stability | ✅ | Nessuna migrazione. Nessun reset. /patients API invariata. |
-| V. Role-Aware Development | ✅ | TerapiaFarmacologicaTab riceve `operatoreNome` dal contesto operatore. |
-| VI. Integration Integrity | ✅ | /patients, /therapy-slots invariati. Build deve passare dopo ogni cambio. |
-| VII. Environment Safety | ✅ | Nessun hardcoding DB locale. VITE_API_URL mantenuto. |
+| Principio                   | Status | Note                                                                             |
+| --------------------------- | ------ | -------------------------------------------------------------------------------- |
+| I. Simplicity First         | ✅     | Rimozione dead code (TerapiaMedicaTab, TerapiaScheduleTab). No nuove astrazioni. |
+| II. Healthcare UX           | ✅     | Sezione unica, UI italiana, ClinicalTable già usato, nessun tooltip.             |
+| III. Backend Data Authority | ✅     | TerapiaMedicaTab (violatore) rimosso. TerapiaFarmacologicaTab usa solo API.      |
+| IV. Schema & API Stability  | ✅     | Nessuna migrazione. Nessun reset. /patients API invariata.                       |
+| V. Role-Aware Development   | ✅     | TerapiaFarmacologicaTab riceve `operatoreNome` dal contesto operatore.           |
+| VI. Integration Integrity   | ✅     | /patients, /therapy-slots invariati. Build deve passare dopo ogni cambio.        |
+| VII. Environment Safety     | ✅     | Nessun hardcoding DB locale. VITE_API_URL mantenuto.                             |
 
 **Post-design re-check**: ✅ Nessuna violazione — nessun Complexity Tracking richiesto.
 
@@ -95,6 +96,7 @@ frontend/
 Vedere [research.md](./research.md) per tutti i dettagli.
 
 **Findings chiave**:
+
 - Schema Prisma già completo — nessuna migrazione
 - `TerapiaMedicaTab` e `TerapiaScheduleTab` sono dead code non importato — rimuovere
 - `therapy.ts` manca filtro per `al_bisogno` — fix necessario
@@ -128,34 +130,49 @@ sono già corrette.
 #### `TerapiaFarmacologicaTab.tsx` — Aggiungere tipo al_bisogno
 
 1. Aggiungere `'al_bisogno'` all'enum `TherapyForm.tipo`:
+
    ```typescript
    tipo: 'periodica' | 'una_tantum' | 'al_bisogno';
    ```
 
 2. Aggiungere opzione al radio group:
+
    ```tsx
-   <label><input type="radio" name="tf-tipo" value="al_bisogno"
-     checked={form.tipo === 'al_bisogno'}
-     onChange={() => updateForm({ tipo: 'al_bisogno' })} /> Al bisogno</label>
+   <label>
+     <input
+       type="radio"
+       name="tf-tipo"
+       value="al_bisogno"
+       checked={form.tipo === 'al_bisogno'}
+       onChange={() => updateForm({ tipo: 'al_bisogno' })}
+     />{' '}
+     Al bisogno
+   </label>
    ```
 
 3. Nascondere fasce orarie quando `tipo === 'al_bisogno'` (non serve per agenda):
+
    ```tsx
-   {form.tipo !== 'al_bisogno' && (
-     <div className="form-group form-group--full">
-       <label>Fasce orarie</label>
-       ...
-     </div>
-   )}
+   {
+     form.tipo !== 'al_bisogno' && (
+       <div className="form-group form-group--full">
+         <label>Fasce orarie</label>
+         ...
+       </div>
+     );
+   }
    ```
 
 4. In `formToPayload`: per `al_bisogno`, non inviare dataSomministrazione/orario:
+
    ```typescript
    dataSomministrazione: form.tipo === 'una_tantum' ? form.dataSomministrazione : null,
    ```
+
    (già corretto — il branch `una_tantum` è esplicito)
 
 5. Aggiungere badge per `al_bisogno` in `TIPO_BADGE`:
+
    ```typescript
    const TIPO_BADGE: Record<string, string> = {
      periodica: 'badge--blue',

@@ -32,7 +32,8 @@ export interface AgnosPlan {
   refusalReason?: string;
 }
 
-export type AgnosTurnStatus = 'attesa' | 'errore' | 'rifiuto' | 'in-conferma' | 'eseguito' | 'annullato' | 'successo';
+export type AgnosTurnStatus =
+  'attesa' | 'errore' | 'rifiuto' | 'in-conferma' | 'eseguito' | 'annullato' | 'successo';
 
 export interface AgnosTurn {
   role: 'utente' | 'agnos';
@@ -65,7 +66,9 @@ interface UseAgnosChatOptions {
   onExecuted?: (info: { actionType?: string }) => void;
 }
 
-interface ApiError { error?: { kind?: string; message?: string } }
+interface ApiError {
+  error?: { kind?: string; message?: string };
+}
 
 const ERROR_KIND_LABEL: Record<string, string> = {
   feature_disabled: 'Le azioni AI sono disabilitate.',
@@ -92,10 +95,18 @@ function errorMessage(data: ApiError | undefined, fallback: string): string {
 }
 
 function markCancelled(t: AgnosTurn[], index: number): AgnosTurn[] {
-  return t.map((x, i) => (i === index && x.status === 'in-conferma' ? { ...x, status: 'annullato' as const } : x));
+  return t.map((x, i) =>
+    i === index && x.status === 'in-conferma' ? { ...x, status: 'annullato' as const } : x,
+  );
 }
 
-export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPatientId, onExecuted }: UseAgnosChatOptions) {
+export function useAgnosChat({
+  operatorId,
+  operatorRole,
+  operatorName,
+  currentPatientId,
+  onExecuted,
+}: UseAgnosChatOptions) {
   const [turns, setTurns] = useState<AgnosTurn[]>([]);
   const [pending, setPending] = useState<AgnosPending | null>(null);
   const [busy, setBusy] = useState(false);
@@ -117,84 +128,96 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
   const cancelPending = useCallback(() => {
     if (!pending) return;
     const idx = pending.turnIndex;
-    setTurns((t) => [...markCancelled(t, idx), { role: 'agnos', text: 'Operazione annullata. Nessun dato è stato salvato.' }]);
+    setTurns((t) => [
+      ...markCancelled(t, idx),
+      { role: 'agnos', text: 'Operazione annullata. Nessun dato è stato salvato.' },
+    ]);
     setPending(null);
     setError(null);
   }, [pending]);
 
-  const sendCommand = useCallback(async (rawText: string, channel: AgnosChannel = 'testo') => {
-    const text = rawText.trim();
-    if (!text || busy) return;
-    setBusy(true);
-    setError(null);
-    // A new command supersedes any preview still waiting for confirmation.
-    // `busy` guards concurrency, so the closure state is the current state.
-    const base = pending ? markCancelled(turns, pending.turnIndex) : turns;
-    if (pending) setPending(null);
-    const agnosIndex = base.length + 1;
-    setTurns([...base, { role: 'utente', text }, { role: 'agnos', status: 'attesa' }]);
-    try {
-      const res = await fetch(`${API_URL}/ai/actions/plan`, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify({ text, channel, currentPatientId }),
-      });
-      const data = await res.json() as ApiError & {
-        plan?: AgnosPlan;
-        preview?: (Omit<AgnosPreview, 'lines'> & { lines?: unknown }) | null;
-        read?: AssistantAnswer | null;
-      };
-      if (!res.ok) {
-        const msg = errorMessage(data, 'Comando non interpretabile.');
+  const sendCommand = useCallback(
+    async (rawText: string, channel: AgnosChannel = 'testo') => {
+      const text = rawText.trim();
+      if (!text || busy) return;
+      setBusy(true);
+      setError(null);
+      // A new command supersedes any preview still waiting for confirmation.
+      // `busy` guards concurrency, so the closure state is the current state.
+      const base = pending ? markCancelled(turns, pending.turnIndex) : turns;
+      if (pending) setPending(null);
+      const agnosIndex = base.length + 1;
+      setTurns([...base, { role: 'utente', text }, { role: 'agnos', status: 'attesa' }]);
+      try {
+        const res = await fetch(`${API_URL}/ai/actions/plan`, {
+          method: 'POST',
+          headers: headers(),
+          body: JSON.stringify({ text, channel, currentPatientId }),
+        });
+        const data = (await res.json()) as ApiError & {
+          plan?: AgnosPlan;
+          preview?: (Omit<AgnosPreview, 'lines'> & { lines?: unknown }) | null;
+          read?: AssistantAnswer | null;
+        };
+        if (!res.ok) {
+          const msg = errorMessage(data, 'Comando non interpretabile.');
+          setError(msg);
+          patchTurn(agnosIndex, { status: 'errore', text: msg });
+          return;
+        }
+        const plan = data.plan;
+        const refused =
+          !!plan &&
+          (plan.actionType === 'refused_delete' ||
+            plan.actionType === 'refused_forbidden' ||
+            plan.actionType.startsWith('refuse'));
+        const refusalText = data.preview?.refusal || (refused ? plan?.refusalReason : undefined);
+        if (refusalText || refused) {
+          patchTurn(agnosIndex, {
+            status: 'rifiuto',
+            plan,
+            text:
+              refusalText ||
+              'Agnos non può eseguire questa operazione: usa il comando nell’interfaccia.',
+          });
+          return;
+        }
+        if (data.read) {
+          patchTurn(agnosIndex, { status: undefined, read: data.read, plan });
+          return;
+        }
+        if (data.preview) {
+          const preview: AgnosPreview = {
+            title: data.preview.title,
+            patientName: data.preview.patientName,
+            lines: normalizeLines(data.preview.lines),
+            warnings: data.preview.warnings ?? [],
+            ambiguities: data.preview.ambiguities ?? [],
+            canExecute: data.preview.canExecute === true,
+          };
+          patchTurn(agnosIndex, { status: 'in-conferma', preview, plan });
+          setPending({
+            text,
+            channel,
+            patientId: plan?.patientId ?? currentPatientId ?? null,
+            idempotencyKey: crypto.randomUUID(),
+            turnIndex: agnosIndex,
+          });
+          return;
+        }
+        const msg = 'Risposta non riconosciuta dal servizio Agnos.';
         setError(msg);
         patchTurn(agnosIndex, { status: 'errore', text: msg });
-        return;
+      } catch {
+        const msg = 'Errore di rete: comando non inviato.';
+        setError(msg);
+        patchTurn(agnosIndex, { status: 'errore', text: msg });
+      } finally {
+        setBusy(false);
       }
-      const plan = data.plan;
-      const refused = !!plan && (plan.actionType === 'refused_delete' || plan.actionType === 'refused_forbidden' || plan.actionType.startsWith('refuse'));
-      const refusalText = data.preview?.refusal || (refused ? plan?.refusalReason : undefined);
-      if (refusalText || refused) {
-        patchTurn(agnosIndex, {
-          status: 'rifiuto',
-          plan,
-          text: refusalText || 'Agnos non può eseguire questa operazione: usa il comando nell’interfaccia.',
-        });
-        return;
-      }
-      if (data.read) {
-        patchTurn(agnosIndex, { status: undefined, read: data.read, plan });
-        return;
-      }
-      if (data.preview) {
-        const preview: AgnosPreview = {
-          title: data.preview.title,
-          patientName: data.preview.patientName,
-          lines: normalizeLines(data.preview.lines),
-          warnings: data.preview.warnings ?? [],
-          ambiguities: data.preview.ambiguities ?? [],
-          canExecute: data.preview.canExecute === true,
-        };
-        patchTurn(agnosIndex, { status: 'in-conferma', preview, plan });
-        setPending({
-          text,
-          channel,
-          patientId: plan?.patientId ?? currentPatientId ?? null,
-          idempotencyKey: crypto.randomUUID(),
-          turnIndex: agnosIndex,
-        });
-        return;
-      }
-      const msg = 'Risposta non riconosciuta dal servizio Agnos.';
-      setError(msg);
-      patchTurn(agnosIndex, { status: 'errore', text: msg });
-    } catch {
-      const msg = 'Errore di rete: comando non inviato.';
-      setError(msg);
-      patchTurn(agnosIndex, { status: 'errore', text: msg });
-    } finally {
-      setBusy(false);
-    }
-  }, [busy, turns, pending, currentPatientId, headers, patchTurn]);
+    },
+    [busy, turns, pending, currentPatientId, headers, patchTurn],
+  );
 
   const confirmPending = useCallback(async () => {
     if (!pending || busy) return;
@@ -208,7 +231,12 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
         // L'esecuzione confermata di un comando dettato resta channel:'voce'.
         body: JSON.stringify({ text, channel, patientId, idempotencyKey, confirmed: true }),
       });
-      const data = await res.json() as ApiError & { ok?: boolean; message?: string; deduped?: boolean; actionType?: string };
+      const data = (await res.json()) as ApiError & {
+        ok?: boolean;
+        message?: string;
+        deduped?: boolean;
+        actionType?: string;
+      };
       if (!res.ok || !data.ok) {
         const msg = errorMessage(data, 'Operazione non salvata.');
         setError(msg);
@@ -220,7 +248,9 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
         {
           role: 'agnos',
           status: 'successo',
-          text: data.deduped ? 'Operazione già registrata (nessun duplicato).' : (data.message || 'Salvato.'),
+          text: data.deduped
+            ? 'Operazione già registrata (nessun duplicato).'
+            : data.message || 'Salvato.',
         },
       ]);
       setPending(null);
@@ -244,5 +274,14 @@ export function useAgnosChat({ operatorId, operatorRole, operatorName, currentPa
     return { text, channel };
   }, [pending]);
 
-  return { turns, pending, busy, error, sendCommand, confirmPending, cancelPending, dismissPendingForEdit };
+  return {
+    turns,
+    pending,
+    busy,
+    error,
+    sendCommand,
+    confirmPending,
+    cancelPending,
+    dismissPendingForEdit,
+  };
 }

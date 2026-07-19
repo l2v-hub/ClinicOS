@@ -6,7 +6,11 @@ import * as svc from '../services.js';
 import type { UserContext } from '../types.js';
 import type { RawFilter } from './dsl.js';
 
-export async function resolvePatientFilter(filters: RawFilter[], ctx: UserContext, currentPatientId?: string): Promise<string | null> {
+export async function resolvePatientFilter(
+  filters: RawFilter[],
+  ctx: UserContext,
+  currentPatientId?: string,
+): Promise<string | null> {
   const pf = filters.find((f) => f.field === 'patient');
   if (!pf) return null;
   if (pf.value === 'current') return currentPatientId ?? null;

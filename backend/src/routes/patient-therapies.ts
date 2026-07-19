@@ -56,11 +56,11 @@ router.post('/:patientId/therapies', async (req, res) => {
       return;
     }
 
-    const therapy = await prisma.$transaction(tx =>
-      createTherapyInTx(tx, patientId, body),
-    );
+    const therapy = await prisma.$transaction((tx) => createTherapyInTx(tx, patientId, body));
 
-    console.log(`POST /patients/${patientId}/therapies → created id=${therapy.id} (${therapy.schedules.length} schedules)`);
+    console.log(
+      `POST /patients/${patientId}/therapies → created id=${therapy.id} (${therapy.schedules.length} schedules)`,
+    );
     res.status(201).json(therapy);
   } catch (error) {
     const msg = error instanceof Error ? error.message : '';
@@ -88,20 +88,39 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     }
 
     const scalarAllowed = [
-      'farmacoNome', 'dosaggio', 'viaSomministrazione', 'tipo', 'stato',
-      'dataInizio', 'dataFine', 'fasceMattina', 'fascePranzo', 'fascePomeriggio',
-      'fasceSera', 'fasceNotte', 'orarioSpecifico', 'prescrittore',
-      'operatoreInseritore', 'note', 'dataSomministrazione', 'orarioSomministrazione',
-      'commercialStrengthValue', 'commercialStrengthUnit', 'pharmaceuticalForm',
-      'allowedFractions', 'drugPackageRef', 'giorniSettimana',
+      'farmacoNome',
+      'dosaggio',
+      'viaSomministrazione',
+      'tipo',
+      'stato',
+      'dataInizio',
+      'dataFine',
+      'fasceMattina',
+      'fascePranzo',
+      'fascePomeriggio',
+      'fasceSera',
+      'fasceNotte',
+      'orarioSpecifico',
+      'prescrittore',
+      'operatoreInseritore',
+      'note',
+      'dataSomministrazione',
+      'orarioSomministrazione',
+      'commercialStrengthValue',
+      'commercialStrengthUnit',
+      'pharmaceuticalForm',
+      'allowedFractions',
+      'drugPackageRef',
+      'giorniSettimana',
     ];
 
     const updates: Record<string, unknown> = {};
     for (const key of scalarAllowed) {
       if (body[key] !== undefined) updates[key] = body[key];
     }
-    if (updates.commercialStrengthValue === '' ) updates.commercialStrengthValue = null;
-    if (updates.commercialStrengthValue != null) updates.commercialStrengthValue = Number(updates.commercialStrengthValue);
+    if (updates.commercialStrengthValue === '') updates.commercialStrengthValue = null;
+    if (updates.commercialStrengthValue != null)
+      updates.commercialStrengthValue = Number(updates.commercialStrengthValue);
     // #241: PUT must canonicalize giorniSettimana exactly like POST (createTherapyInTx), otherwise
     // non-canonical/invalid CSV (duplicates, unsorted, non-collapsed "every day") can persist and
     // silently suppress a therapy from days it should appear on.
@@ -118,7 +137,7 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
         await tx.therapySchedule.deleteMany({ where: { therapyId } });
         if (schedules.length) {
           await tx.therapySchedule.createMany({
-            data: schedules.map(s => ({ ...s, therapyId })),
+            data: schedules.map((s) => ({ ...s, therapyId })),
           });
           const derived = deriveLegacyFromSchedules(schedules);
           updates.fasceMattina = derived.fasceMattina;
@@ -136,7 +155,9 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
       });
     });
 
-    console.log(`PUT /patients/${patientId}/therapies/${therapyId} → updated (${hasSchedules ? schedules.length + ' schedules' : 'scalars only'})`);
+    console.log(
+      `PUT /patients/${patientId}/therapies/${therapyId} → updated (${hasSchedules ? schedules.length + ' schedules' : 'scalars only'})`,
+    );
     res.status(200).json(therapy);
   } catch (error) {
     console.error('PUT /patients/:patientId/therapies/:therapyId error:', error);

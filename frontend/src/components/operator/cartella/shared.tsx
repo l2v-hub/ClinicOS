@@ -1,10 +1,18 @@
 // Shared utilities for cartella clinica sub-tabs
 import { useState } from 'react';
 
-export function uid(): string { return crypto.randomUUID(); }
-export function nowISO(): string { return new Date().toISOString(); }
-export function todayStr(): string { return new Date().toISOString().slice(0, 10); }
-export function nowTime(): string { return new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }); }
+export function uid(): string {
+  return crypto.randomUUID();
+}
+export function nowISO(): string {
+  return new Date().toISOString();
+}
+export function todayStr(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+export function nowTime(): string {
+  return new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+}
 
 export function fmtDate(iso: string): string {
   if (!iso) return '—';
@@ -13,7 +21,11 @@ export function fmtDate(iso: string): string {
 export function fmtDateTime(iso: string): string {
   if (!iso) return '—';
   const d = new Date(iso);
-  return d.toLocaleDateString('it-IT') + ' ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+  return (
+    d.toLocaleDateString('it-IT') +
+    ' ' +
+    d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+  );
 }
 
 export function PrintButton({ label = 'Stampa' }: { label?: string }) {
@@ -23,18 +35,35 @@ export function PrintButton({ label = 'Stampa' }: { label?: string }) {
       onClick={() => window.print()}
       style={{ display: 'flex', alignItems: 'center', gap: 6 }}
     >
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="6 9 6 2 18 2 18 9"/>
-        <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
-        <rect x="6" y="14" width="12" height="8"/>
+      <svg
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <polyline points="6 9 6 2 18 2 18 9" />
+        <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
+        <rect x="6" y="14" width="12" height="8" />
       </svg>
       {label}
     </button>
   );
 }
 
-export function SectionHeader({ title, onAdd, addLabel = 'Aggiungi', extra }: {
-  title: string; onAdd?: () => void; addLabel?: string; extra?: React.ReactNode;
+export function SectionHeader({
+  title,
+  onAdd,
+  addLabel = 'Aggiungi',
+  extra,
+}: {
+  title: string;
+  onAdd?: () => void;
+  addLabel?: string;
+  extra?: React.ReactNode;
 }) {
   return (
     <div className="cr-section-header">
@@ -43,7 +72,18 @@ export function SectionHeader({ title, onAdd, addLabel = 'Aggiungi', extra }: {
         {extra}
         {onAdd && (
           <button className="btn-primary btn-sm" onClick={onAdd}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
             {addLabel}
           </button>
         )}
@@ -52,16 +92,34 @@ export function SectionHeader({ title, onAdd, addLabel = 'Aggiungi', extra }: {
   );
 }
 
-export function InlineForm({ onSave, onCancel, children }: {
-  onSave: () => void; onCancel: () => void; children: React.ReactNode;
+export function InlineForm({
+  onSave,
+  onCancel,
+  children,
+}: {
+  onSave: () => void;
+  onCancel: () => void;
+  children: React.ReactNode;
 }) {
   return (
     <div className="cr-inline-form">
       {children}
       <div className="cr-inline-form__actions">
-        <button className="btn-secondary btn-sm" onClick={onCancel}>Annulla</button>
+        <button className="btn-secondary btn-sm" onClick={onCancel}>
+          Annulla
+        </button>
         <button className="btn-primary btn-sm" onClick={onSave}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
           Salva
         </button>
       </div>
@@ -109,9 +167,10 @@ export function ClinicalTableSection({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(defaultOpen);
-  const badge = count !== undefined
-    ? `${count} ${countLabel ?? (count === 1 ? 'elemento' : 'elementi')}`
-    : null;
+  const badge =
+    count !== undefined
+      ? `${count} ${countLabel ?? (count === 1 ? 'elemento' : 'elementi')}`
+      : null;
 
   return (
     <div className={`cts${open ? ' cts--open' : ''}`}>
@@ -122,15 +181,20 @@ export function ClinicalTableSection({
         role="button"
         tabIndex={0}
         aria-expanded={open}
-        onClick={() => setOpen(v => !v)}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(v => !v); } }}
+        onClick={() => setOpen((v) => !v)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setOpen((v) => !v);
+          }
+        }}
       >
         <div className="cts__header-left">
           <span className="cts__chevron">{open ? '▼' : '▶'}</span>
           <span className="cts__title">{title}</span>
           {badge && <span className="cts__badge">{badge}</span>}
         </div>
-        <div className="cts__header-right" onClick={e => e.stopPropagation()}>
+        <div className="cts__header-right" onClick={(e) => e.stopPropagation()}>
           {actions}
         </div>
       </div>

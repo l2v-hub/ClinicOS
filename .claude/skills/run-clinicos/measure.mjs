@@ -5,9 +5,10 @@ const VP = { width: 1366, height: 768 };
 
 async function measurePage(page) {
   return page.evaluate(() => {
-    const main = document.querySelector('main.page-content') || document.querySelector('.content-panel');
+    const main =
+      document.querySelector('main.page-content') || document.querySelector('.content-panel');
     const cs = main ? getComputedStyle(main) : null;
-    const L = sel => {
+    const L = (sel) => {
       const el = document.querySelector(sel);
       if (!el) return null;
       return Math.round(el.getBoundingClientRect().left);
@@ -38,7 +39,10 @@ async function run() {
 
   const out = {};
   const go = async (label, clicks) => {
-    for (const c of clicks) { await page.getByText(c).first().click(); await page.waitForTimeout(1000); }
+    for (const c of clicks) {
+      await page.getByText(c).first().click();
+      await page.waitForTimeout(1000);
+    }
     out[label] = await measurePage(page);
   };
   out['Dashboard'] = await measurePage(page);
@@ -50,4 +54,7 @@ async function run() {
   console.log(JSON.stringify(out, null, 2));
   await browser.close();
 }
-run().catch(e => { console.error('MEASURE FAILED:', e.message); process.exit(1); });
+run().catch((e) => {
+  console.error('MEASURE FAILED:', e.message);
+  process.exit(1);
+});

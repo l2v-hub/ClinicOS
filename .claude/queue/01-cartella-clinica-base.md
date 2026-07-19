@@ -53,13 +53,15 @@ Lavora solo su frontend/layout/stile.
 ## Problemi da correggere
 
 1. Header paziente poco armonico
+
 - Il breadcrumb e il back link non sono ben integrati.
 - Nome, avatar, badge e metadati devono essere più ordinati.
 - L’header deve avere una gerarchia più chiara.
 - Gli elementi non devono sembrare appoggiati casualmente.
 
 2. Navigazione primo livello da migliorare
-La barra:
+   La barra:
+
 - Panoramica
 - Clinica
 - Diario
@@ -69,6 +71,7 @@ La barra:
 deve diventare più professionale.
 
 Richieste:
+
 - tab più leggibili
 - spacing migliore
 - stato attivo più evidente
@@ -78,7 +81,8 @@ Richieste:
 - stile coerente con app sanitaria moderna
 
 3. Navigazione secondo livello da migliorare
-La barra:
+   La barra:
+
 - Riepilogo
 - Profilo
 - Consegne
@@ -86,6 +90,7 @@ La barra:
 deve essere visivamente subordinata al primo livello.
 
 Richieste:
+
 - non deve competere con i tab principali
 - deve sembrare una section navigation
 - stato attivo chiaro ma più leggero
@@ -93,12 +98,14 @@ Richieste:
 - stile coerente e riutilizzabile
 
 4. Spacing generale
+
 - La pagina non deve essere attaccata ai bordi.
 - Header, nav primaria, nav secondaria e contenuto devono avere spazi coerenti.
 - La schermata deve respirare.
 - Deve essere coerente con le altre pagine dell’app.
 
 5. No overflow
+
 - nessuno scroll orizzontale
 - nessun tab deve uscire dalla larghezza disponibile
 - su tablet i tab devono rimanere leggibili
@@ -166,6 +173,7 @@ Tab principali:
 - Documenti
 
 Caratteristiche:
+
 - tab con padding orizzontale generoso
 - active tab con underline più elegante oppure pill leggera
 - hover leggero
@@ -182,6 +190,7 @@ Tab secondari:
 - Consegne
 
 Caratteristiche:
+
 - più piccola della primaria
 - meno dominante
 - active state chiaro

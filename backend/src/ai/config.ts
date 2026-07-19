@@ -72,7 +72,8 @@ export function loadAiConfig(force = false): AiConfig {
   const agentModel = process.env.AI_AGENT_MODEL?.trim() || 'gemini-2.0-flash';
   const schemaPath = process.env.AI_EXTRACTION_SCHEMA_PATH?.trim() || DEFAULT_SCHEMA_PATH;
   const promptPath = process.env.AI_EXTRACTION_PROMPT_PATH?.trim() || DEFAULT_PROMPT_PATH;
-  const outputSchemaPath = process.env.AI_EXTRACTION_OUTPUT_SCHEMA_PATH?.trim() || DEFAULT_OUTPUT_SCHEMA_PATH;
+  const outputSchemaPath =
+    process.env.AI_EXTRACTION_OUTPUT_SCHEMA_PATH?.trim() || DEFAULT_OUTPUT_SCHEMA_PATH;
   const apiKey = process.env.GEMINI_API_KEY?.trim() || undefined;
 
   const errors: string[] = [];
@@ -118,7 +119,8 @@ export function loadAiConfig(force = false): AiConfig {
     maxTotalMb: intEnv('AI_MAX_TOTAL_MB', 25),
     uploadDir: process.env.AI_UPLOAD_DIR?.trim() || resolve(tmpdir(), 'clinicos-imports'),
     jobRetentionMin: intEnv('AI_JOB_RETENTION_MIN', 60),
-    mergePreferRecent: (process.env.AI_MERGE_PREFER_RECENT ?? 'true').trim().toLowerCase() !== 'false',
+    mergePreferRecent:
+      (process.env.AI_MERGE_PREFER_RECENT ?? 'true').trim().toLowerCase() !== 'false',
     requestTimeoutMs: intEnv('AI_REQUEST_TIMEOUT_MS', 300_000),
     jobMaxDurationMs: intEnv('AI_JOB_MAX_DURATION_MS', 900_000),
     jobPollIntervalMs: intEnv('AI_JOB_POLL_INTERVAL_MS', 2_000),

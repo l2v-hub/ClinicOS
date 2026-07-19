@@ -96,7 +96,9 @@ export function validateSectionsSchema(data: unknown): SectionsValidation {
   const validate = getValidator();
   const valid = validate(data) as boolean;
   if (valid) return { valid: true, errors: [] };
-  const errors = (validate.errors ?? []).slice(0, 20).map((e) => `${e.instancePath || '(root)'} ${e.message ?? 'invalid'}`.trim());
+  const errors = (validate.errors ?? [])
+    .slice(0, 20)
+    .map((e) => `${e.instancePath || '(root)'} ${e.message ?? 'invalid'}`.trim());
   return { valid: false, errors };
 }
 
@@ -107,14 +109,23 @@ function pushWarn(list: string[] | undefined, w: string): string[] {
 }
 
 /** Keep only annotations that map to an EXACT substring of rawText (relocate when offsets drift). */
-function reconcileAnnotations(rawText: string, anns: Annotation[] | undefined): { annotations: Annotation[]; warnings: string[] } {
+function reconcileAnnotations(
+  rawText: string,
+  anns: Annotation[] | undefined,
+): { annotations: Annotation[]; warnings: string[] } {
   const warnings: string[] = [];
   const out: Annotation[] = [];
   for (const a of anns ?? []) {
     if (!a || typeof a.text !== 'string' || !TAG_SET.has(a.tag)) continue;
-    if (HTML_TAG.test(a.text)) { warnings.push('ANNOTATION_HTML_REMOVED'); continue; }
+    if (HTML_TAG.test(a.text)) {
+      warnings.push('ANNOTATION_HTML_REMOVED');
+      continue;
+    }
     const exact = rawText.slice(a.startOffset, a.endOffset) === a.text;
-    if (exact) { out.push(a); continue; }
+    if (exact) {
+      out.push(a);
+      continue;
+    }
     const idx = rawText.indexOf(a.text);
     if (idx >= 0 && a.text.length > 0) {
       out.push({ ...a, startOffset: idx, endOffset: idx + a.text.length });
@@ -131,10 +142,17 @@ function collapseDuplicates(sections: Section[]): Section[] {
   const byKey = new Map<SectionKey, Section>();
   for (const s of sections) {
     const cur = byKey.get(s.sectionKey);
-    if (!cur) { byKey.set(s.sectionKey, { ...s }); continue; }
+    if (!cur) {
+      byKey.set(s.sectionKey, { ...s });
+      continue;
+    }
     const sep = cur.rawText.endsWith('\n') || !cur.rawText ? '' : '\n';
     const shift = cur.rawText.length + sep.length;
-    const shifted = (s.annotations ?? []).map((a) => ({ ...a, startOffset: a.startOffset + shift, endOffset: a.endOffset + shift }));
+    const shifted = (s.annotations ?? []).map((a) => ({
+      ...a,
+      startOffset: a.startOffset + shift,
+      endOffset: a.endOffset + shift,
+    }));
     cur.rawText = cur.rawText + sep + s.rawText;
     cur.annotations = [...(cur.annotations ?? []), ...shifted];
     cur.sourceRanges = [...(cur.sourceRanges ?? []), ...(s.sourceRanges ?? [])];
@@ -149,9 +167,11 @@ function normalizeMedications(section: Section): Section {
     let warnings = Array.isArray(m.warnings) ? [...m.warnings] : [];
     const exact = (m.exactText ?? '').trim();
     if (!exact) warnings = pushWarn(warnings, 'MEDICATION_EXACT_TEXT_MISSING');
-    else if (!section.rawText.includes(exact)) warnings = pushWarn(warnings, 'MEDICATION_TEXT_MISSING_FROM_RAW');
+    else if (!section.rawText.includes(exact))
+      warnings = pushWarn(warnings, 'MEDICATION_TEXT_MISSING_FROM_RAW');
     const incomplete = MED_KEYS.some((k) => !((m[k] as string | undefined) ?? '').trim());
-    if (incomplete && exact) warnings = pushWarn(warnings, 'MEDICATION_COMPONENTS_NOT_FULLY_IDENTIFIED');
+    if (incomplete && exact)
+      warnings = pushWarn(warnings, 'MEDICATION_COMPONENTS_NOT_FULLY_IDENTIFIED');
     return { ...m, exactText: m.exactText ?? '', warnings };
   });
   return { ...section, medications: meds };
@@ -162,11 +182,19 @@ function normalizeMedications(section: Section): Section {
  * Never throws on model imperfections — it repairs (relocate/drop annotations, collapse
  * duplicate sections, add warnings) and reports. Throws only on a structurally invalid shape.
  */
-export function postProcessSections(data: unknown, profile: DocumentProfile = loadProfile()): SectionsResult {
+export function postProcessSections(
+  data: unknown,
+  profile: DocumentProfile = loadProfile(),
+): SectionsResult {
   const schemaCheck = validateSectionsSchema(data);
-  if (!schemaCheck.valid) throw new Error(`Sezioni non conformi allo schema: ${schemaCheck.errors.join('; ')}`);
+  if (!schemaCheck.valid)
+    throw new Error(`Sezioni non conformi allo schema: ${schemaCheck.errors.join('; ')}`);
 
-  const input = data as { sections: Section[]; allergies?: AllergyBlock; demographics?: Record<string, unknown> };
+  const input = data as {
+    sections: Section[];
+    allergies?: AllergyBlock;
+    demographics?: Record<string, unknown>;
+  };
   const medSections = new Set<SectionKey>(profile.medicationSections);
 
   let sections = collapseDuplicates(input.sections);
@@ -182,7 +210,9 @@ export function postProcessSections(data: unknown, profile: DocumentProfile = lo
 
   // Allergies are top-priority: default to not_documented (absence of text != absence of allergies).
   const a = input.allergies ?? ({} as AllergyBlock);
-  const status: AllergyStatus = (ALLERGY_STATUSES as readonly string[]).includes(a.status) ? a.status : 'not_documented';
+  const status: AllergyStatus = (ALLERGY_STATUSES as readonly string[]).includes(a.status)
+    ? a.status
+    : 'not_documented';
   const allergies: AllergyBlock = { ...a, status };
 
   return { sections, allergies, demographics: input.demographics };

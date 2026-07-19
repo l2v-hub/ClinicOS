@@ -66,7 +66,7 @@
 +import { BrowserRouter } from 'react-router-dom'
  import App from './App.tsx'
  import './index.css'
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
 -    <App />
@@ -100,7 +100,7 @@
 +import MedicalRecords from './pages/MedicalRecords';
 +import SettingsPage from './pages/Settings';
 +import './App.css';
- 
+
 -const App = () => {
 -  return <div>ClinicOS</div>
 -}
@@ -202,7 +202,7 @@
 +    </div>
 +  );
 +}
- 
+
  export default App;
 ```
 
@@ -405,3 +405,4 @@
 +  display: flex;
 +  align-items: center;
 +  gap: 12
+```

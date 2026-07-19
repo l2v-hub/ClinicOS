@@ -44,9 +44,15 @@ export async function persistImportDocuments(
       if (!dataBase64) dataBase64 = (await readFile(d.storagePath)).toString('base64');
       await tx.patientDocument.create({
         data: {
-          patientId, importJobId: jobId, originalName: d.filename, mimeType: d.mimeType,
-          sizeBytes: d.sizeBytes, sha256: d.sha256, dataBase64,
-          sortOrder: d.sortOrder, ...(createdById ? { createdById } : {}),
+          patientId,
+          importJobId: jobId,
+          originalName: d.filename,
+          mimeType: d.mimeType,
+          sizeBytes: d.sizeBytes,
+          sha256: d.sha256,
+          dataBase64,
+          sortOrder: d.sortOrder,
+          ...(createdById ? { createdById } : {}),
         },
       });
       saved++;
@@ -67,11 +73,17 @@ export async function createPatientDocument(
   file: { originalname: string; mimetype: string; buffer: Buffer },
   documentType: string,
 ): Promise<PublicPatientDocument> {
-  const patient = await prisma.patient.findUnique({ where: { id: patientId }, select: { id: true } });
+  const patient = await prisma.patient.findUnique({
+    where: { id: patientId },
+    select: { id: true },
+  });
   if (!patient) throw new Error('patient_not_found');
   const buf = file.buffer;
   const sha256 = createHash('sha256').update(buf).digest('hex');
-  const agg = await prisma.patientDocument.aggregate({ where: { patientId }, _max: { sortOrder: true } });
+  const agg = await prisma.patientDocument.aggregate({
+    where: { patientId },
+    _max: { sortOrder: true },
+  });
   const row = await prisma.patientDocument.create({
     data: {
       patientId,
@@ -84,8 +96,15 @@ export async function createPatientDocument(
       sortOrder: (agg._max.sortOrder ?? -1) + 1,
     },
     select: {
-      id: true, originalName: true, mimeType: true, sizeBytes: true, sha256: true,
-      documentType: true, sortOrder: true, importJobId: true, createdAt: true,
+      id: true,
+      originalName: true,
+      mimeType: true,
+      sizeBytes: true,
+      sha256: true,
+      documentType: true,
+      sortOrder: true,
+      importJobId: true,
+      createdAt: true,
     },
   });
   return { ...row, createdAt: row.createdAt.toISOString() };
@@ -97,8 +116,15 @@ export async function listPatientDocuments(patientId: string): Promise<PublicPat
     where: { patientId },
     orderBy: { sortOrder: 'asc' },
     select: {
-      id: true, originalName: true, mimeType: true, sizeBytes: true, sha256: true,
-      documentType: true, sortOrder: true, importJobId: true, createdAt: true,
+      id: true,
+      originalName: true,
+      mimeType: true,
+      sizeBytes: true,
+      sha256: true,
+      documentType: true,
+      sortOrder: true,
+      importJobId: true,
+      createdAt: true,
     },
   });
   return rows.map((r) => ({ ...r, createdAt: r.createdAt.toISOString() }));
@@ -114,5 +140,9 @@ export async function getPatientDocumentContent(
     select: { mimeType: true, originalName: true, dataBase64: true },
   });
   if (!row) return null;
-  return { mimeType: row.mimeType, originalName: row.originalName, buffer: Buffer.from(row.dataBase64, 'base64') };
+  return {
+    mimeType: row.mimeType,
+    originalName: row.originalName,
+    buffer: Buffer.from(row.dataBase64, 'base64'),
+  };
 }

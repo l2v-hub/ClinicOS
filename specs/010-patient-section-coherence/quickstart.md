@@ -31,12 +31,12 @@ Required after every edit: zero new TS errors, zero new Vite warnings (SC-011).
 
 Open Chrome / Edge DevTools (F12) → device toolbar (Ctrl+Shift+M).
 
-| Viewport | Width × Height | What to verify |
-|----------|---------------|----------------|
-| Tablet baseline | 1024 × 768 | L2 uniform across all sub-pages; cards readable; no horizontal scroll |
-| Large tablet | 1180 × 820 | Sub-menu spacing on Terapia Farmacologica matches Parametri Vitali |
-| Desktop | 1366 × 768 | Cards extend to full content width; no max-width clamp regression |
-| Desktop wide | 1920 × 1080 | No dead space; cards stack cleanly |
+| Viewport        | Width × Height | What to verify                                                        |
+| --------------- | -------------- | --------------------------------------------------------------------- |
+| Tablet baseline | 1024 × 768     | L2 uniform across all sub-pages; cards readable; no horizontal scroll |
+| Large tablet    | 1180 × 820     | Sub-menu spacing on Terapia Farmacologica matches Parametri Vitali    |
+| Desktop         | 1366 × 768     | Cards extend to full content width; no max-width clamp regression     |
+| Desktop wide    | 1920 × 1080    | No dead space; cards stack cleanly                                    |
 
 ### Per-page script (run at every viewport)
 
@@ -60,7 +60,7 @@ Open Chrome / Edge DevTools (F12) → device toolbar (Ctrl+Shift+M).
 In DevTools Console at each viewport:
 
 ```javascript
-document.querySelectorAll('*').forEach(el => {
+document.querySelectorAll('*').forEach((el) => {
   if (el.offsetWidth > document.body.offsetWidth) {
     console.log('overflow:', el, el.offsetWidth);
   }
@@ -77,25 +77,25 @@ Capture screenshots of Anamnesi and Presa in Carico at 1366 × 768. Show them si
 
 ## Files You Will Edit
 
-| File | Why touched |
-|------|-------------|
-| `frontend/src/components/shared/ClinicalCard.tsx` | NEW — shared collapsible card wrapper |
-| `frontend/src/App.css` | New `--clinical-*` / `--card-*` tokens, `.clinical-card*` rules, reduced-motion extension |
-| `frontend/src/app-additions.css` | Prune duplicate-breadcrumb and stray L2 overrides |
-| `frontend/src/components/operator/PatientDetail.tsx` | Route `renderAnamnesi()` through `ClinicalCard`; remove in-content breadcrumb dupes; badge audit |
-| `frontend/src/components/operator/cartella/PresaInCaricoTab.tsx` | Refactor into 4 × `ClinicalCard` |
-| `frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx` | Apply `--clinical-submenu-gap` |
-| `frontend/src/components/operator/cartella/ParametriTab.tsx` | Apply same token as the reference baseline |
+| File                                                                    | Why touched                                                                                      |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `frontend/src/components/shared/ClinicalCard.tsx`                       | NEW — shared collapsible card wrapper                                                            |
+| `frontend/src/App.css`                                                  | New `--clinical-*` / `--card-*` tokens, `.clinical-card*` rules, reduced-motion extension        |
+| `frontend/src/app-additions.css`                                        | Prune duplicate-breadcrumb and stray L2 overrides                                                |
+| `frontend/src/components/operator/PatientDetail.tsx`                    | Route `renderAnamnesi()` through `ClinicalCard`; remove in-content breadcrumb dupes; badge audit |
+| `frontend/src/components/operator/cartella/PresaInCaricoTab.tsx`        | Refactor into 4 × `ClinicalCard`                                                                 |
+| `frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx` | Apply `--clinical-submenu-gap`                                                                   |
+| `frontend/src/components/operator/cartella/ParametriTab.tsx`            | Apply same token as the reference baseline                                                       |
 
 ### Files You Must NOT Touch
 
-| Path | Reason |
-|------|--------|
-| `backend/**` | Constitution IV |
-| `prisma/**` | Constitution IV |
-| `frontend/.env*`, `vercel.json`, `railway.json` | FR-020 |
-| `frontend/src/components/shared/TeamsLikeSidebar.tsx` | FR-001 (L1 untouched) |
-| `frontend/src/components/shared/NavComponents.tsx` | 009 canonical surface — do not re-shape |
+| Path                                                  | Reason                                  |
+| ----------------------------------------------------- | --------------------------------------- |
+| `backend/**`                                          | Constitution IV                         |
+| `prisma/**`                                           | Constitution IV                         |
+| `frontend/.env*`, `vercel.json`, `railway.json`       | FR-020                                  |
+| `frontend/src/components/shared/TeamsLikeSidebar.tsx` | FR-001 (L1 untouched)                   |
+| `frontend/src/components/shared/NavComponents.tsx`    | 009 canonical surface — do not re-shape |
 
 ---
 

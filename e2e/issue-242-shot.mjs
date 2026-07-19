@@ -15,10 +15,21 @@ const verdict = (await page.locator('#verdict').innerText()).trim();
 const diagText = await page.locator('[data-testid="diag"]').innerText();
 const therText = await page.locator('[data-testid="ther"]').innerText();
 const drugsInDiag = ['Ramipril', 'Bisoprololo', 'Furosemide'].filter((d) => diagText.includes(d));
-const ok = verdict.includes('correttamente separate') && drugsInDiag.length === 0 && therText.includes('Ramipril');
+const ok =
+  verdict.includes('correttamente separate') &&
+  drugsInDiag.length === 0 &&
+  therText.includes('Ramipril');
 console.log('verdict:', verdict);
-console.log('drugs in diagnosi:', drugsInDiag.length, '| therapy ha Ramipril:', therText.includes('Ramipril'));
-await page.screenshot({ path: join(OUT, 'screenshots', 'diagnosi-terapia-separate.png'), fullPage: true });
+console.log(
+  'drugs in diagnosi:',
+  drugsInDiag.length,
+  '| therapy ha Ramipril:',
+  therText.includes('Ramipril'),
+);
+await page.screenshot({
+  path: join(OUT, 'screenshots', 'diagnosi-terapia-separate.png'),
+  fullPage: true,
+});
 await ctx.tracing.stop({ path: join(OUT, 'trace', 'trace.zip') });
 await browser.close();
 console.log(ok ? '\nPASS — screenshot+trace salvati' : '\nFAIL');

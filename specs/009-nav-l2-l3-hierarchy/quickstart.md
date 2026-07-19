@@ -31,12 +31,12 @@ Required: zero new TypeScript errors, zero new build warnings (SC-005). Run afte
 
 Open Chrome or Edge DevTools (F12) → device toolbar (Ctrl+Shift+M) → set custom size.
 
-| Viewport | Width × Height | What to verify |
-|----------|---------------|----------------|
-| Tablet baseline | 1024 × 768 | L2 row dominant, L2 height ≥ 44px, L3 ≤ 32px, no global horizontal scroll |
-| Large tablet | 1180 × 820 | Content padding widens, nav still flush to content area |
-| Desktop | 1366 × 768 | Layout extends, no max-width clamp |
-| Desktop wide | 1920 × 1080 | Page uses full width, no dead space on the right |
+| Viewport        | Width × Height | What to verify                                                            |
+| --------------- | -------------- | ------------------------------------------------------------------------- |
+| Tablet baseline | 1024 × 768     | L2 row dominant, L2 height ≥ 44px, L3 ≤ 32px, no global horizontal scroll |
+| Large tablet    | 1180 × 820     | Content padding widens, nav still flush to content area                   |
+| Desktop         | 1366 × 768     | Layout extends, no max-width clamp                                        |
+| Desktop wide    | 1920 × 1080    | Page uses full width, no dead space on the right                          |
 
 For each viewport, follow this script:
 
@@ -58,7 +58,7 @@ For each viewport, follow this script:
 In DevTools Console at each viewport, paste:
 
 ```javascript
-document.querySelectorAll('*').forEach(el => {
+document.querySelectorAll('*').forEach((el) => {
   if (el.offsetWidth > document.body.offsetWidth) {
     console.log('overflow:', el, el.offsetWidth);
   }
@@ -82,21 +82,21 @@ Target: 9 / 10 viewers correct on both.
 
 All paths relative to repo root.
 
-| File | Why touched |
-|------|-------------|
-| `frontend/src/App.css` | Enforce design tokens; refine `.page-tabs` / `.section-tabs` base rules; add new `--l3-underline-h` / `--l3-underline-color` |
-| `frontend/src/app-additions.css` | Enforce clinical-record overrides for L2 / L3 |
-| `frontend/src/index.css` | Audit only — confirm `#root` width clamp is absent |
+| File                                                 | Why touched                                                                                                                                       |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `frontend/src/App.css`                               | Enforce design tokens; refine `.page-tabs` / `.section-tabs` base rules; add new `--l3-underline-h` / `--l3-underline-color`                      |
+| `frontend/src/app-additions.css`                     | Enforce clinical-record overrides for L2 / L3                                                                                                     |
+| `frontend/src/index.css`                             | Audit only — confirm `#root` width clamp is absent                                                                                                |
 | `frontend/src/components/operator/PatientDetail.tsx` | Verify L2 / L3 markup uses canonical class names; keep the ref-based `.tab-panel-transition` re-trigger; **do not** introduce `key={...}` remount |
 
 ### Files You Must NOT Touch
 
-| Path | Reason |
-|------|--------|
-| `backend/**` | Constitution IV — backend untouched |
-| `prisma/**` | Constitution IV — schema untouched |
-| `frontend/src/components/shared/TeamsLikeSidebar.tsx` | FR-001 — L1 untouched |
-| `frontend/.env*`, `vercel.json`, `railway.json` | FR-014 — no env / deploy config drift |
+| Path                                                  | Reason                                |
+| ----------------------------------------------------- | ------------------------------------- |
+| `backend/**`                                          | Constitution IV — backend untouched   |
+| `prisma/**`                                           | Constitution IV — schema untouched    |
+| `frontend/src/components/shared/TeamsLikeSidebar.tsx` | FR-001 — L1 untouched                 |
+| `frontend/.env*`, `vercel.json`, `railway.json`       | FR-014 — no env / deploy config drift |
 
 ---
 

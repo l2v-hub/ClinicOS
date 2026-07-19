@@ -7,19 +7,34 @@ Tutte le route sotto auth `requireOperator` (header X-Operator-Id / X-Operator-R
 Interpreta un comando (testo digitato o trascrizione vocale) senza eseguire nulla.
 
 Request:
+
 ```json
 { "text": "registra pressione 130/80 alle 9", "channel": "testo", "currentPatientId": "pat_123" }
 ```
 
 Response 200:
+
 ```json
 {
-  "plan": { "actionType": "create_vital_sign", "kind": "create", "patientId": "pat_123",
-            "fields": {"etichetta":"PA","valore":"130/80","orario":"09:00"},
-            "ambiguities": [], "requiresConfirmation": true },
-  "preview": { "title": "Aggiungi parametro", "patientName": "Elena Moretti",
-               "lines": [["Parametro","PA 130/80 mmHg"],["Orario","09:00"]],
-               "warnings": [], "ambiguities": [], "canExecute": true },
+  "plan": {
+    "actionType": "create_vital_sign",
+    "kind": "create",
+    "patientId": "pat_123",
+    "fields": { "etichetta": "PA", "valore": "130/80", "orario": "09:00" },
+    "ambiguities": [],
+    "requiresConfirmation": true
+  },
+  "preview": {
+    "title": "Aggiungi parametro",
+    "patientName": "Elena Moretti",
+    "lines": [
+      ["Parametro", "PA 130/80 mmHg"],
+      ["Orario", "09:00"]
+    ],
+    "warnings": [],
+    "ambiguities": [],
+    "canExecute": true
+  },
   "read": null
 }
 ```
@@ -33,14 +48,27 @@ Response 200:
 Esegue SOLO azioni write confermate. Il piano è SEMPRE riderivato server-side dal testo (tamper-proof).
 
 Request:
+
 ```json
-{ "text": "registra pressione 130/80 alle 9", "channel": "voce",
-  "patientId": "pat_123", "idempotencyKey": "uuid", "confirmed": true }
+{
+  "text": "registra pressione 130/80 alle 9",
+  "channel": "voce",
+  "patientId": "pat_123",
+  "idempotencyKey": "uuid",
+  "confirmed": true
+}
 ```
 
 Response 200:
+
 ```json
-{ "ok": true, "actionType": "create_vital_sign", "recordId": "…", "message": "Parametro registrato.", "deduped": false }
+{
+  "ok": true,
+  "actionType": "create_vital_sign",
+  "recordId": "…",
+  "message": "Parametro registrato.",
+  "deduped": false
+}
 ```
 
 Guardie in ordine: feature flag → azione in catalogo && enabled → kind ∈ {create,update} → paziente identificato → 0 ambiguità → confirmed=true → idempotenza → dispatch al service condiviso → audit. Violazione ⇒ 4xx `{error:{kind}}` con kind ∈ feature_disabled | not_in_catalog | delete_forbidden | not_executable | ambiguous | confirmation_required.

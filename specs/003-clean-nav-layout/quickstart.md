@@ -13,6 +13,7 @@ npm install          # already done; verify node_modules present
 ```
 
 Backend running (for patient data):
+
 ```bash
 cd C:\Workspace\DG_SE_DEV\ClinicOS\backend
 npm run dev          # http://localhost:3001
@@ -73,12 +74,15 @@ Open `http://localhost:5173` in browser. Use DevTools → Device toolbar.
    - [ ] No horizontal scrollbar on the page
 
 ### Viewport 2: 1180x820
+
 - Repeat checks 1–6 above
 
 ### Viewport 3: 1366x1024
+
 - [ ] No layout breaks; sidebar scales correctly
 
 ### Viewport 4: Desktop 1440x900
+
 - [ ] Content area has reasonable max-width; not stretched to full 1376px
 
 ---
@@ -100,11 +104,11 @@ Verify these existing features still work:
 
 ## Key Files Modified
 
-| File | Change |
-|---|---|
-| `frontend/src/App.tsx` | Replace inline sidebar JSX with `<TeamsLikeSidebar>`, simplify topbar |
-| `frontend/src/App.css` | Update `.nav-rail`/`.teams-sidebar`, `.topbar`/`.compact-topbar`, tab hierarchy |
-| `frontend/src/app-additions.css` | Patient header compactness, content margin reduction |
-| `frontend/src/components/shared/NavComponents.tsx` | Rename + restyle PageTabs→MainHorizontalNav, SectionTabs→ContextSubTabs |
-| `frontend/src/components/shared/TeamsLikeSidebar.tsx` | **NEW** — extracted sidebar |
-| `frontend/src/components/operator/PatientCompactHeader.tsx` | **NEW** — compact patient header |
+| File                                                        | Change                                                                          |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `frontend/src/App.tsx`                                      | Replace inline sidebar JSX with `<TeamsLikeSidebar>`, simplify topbar           |
+| `frontend/src/App.css`                                      | Update `.nav-rail`/`.teams-sidebar`, `.topbar`/`.compact-topbar`, tab hierarchy |
+| `frontend/src/app-additions.css`                            | Patient header compactness, content margin reduction                            |
+| `frontend/src/components/shared/NavComponents.tsx`          | Rename + restyle PageTabs→MainHorizontalNav, SectionTabs→ContextSubTabs         |
+| `frontend/src/components/shared/TeamsLikeSidebar.tsx`       | **NEW** — extracted sidebar                                                     |
+| `frontend/src/components/operator/PatientCompactHeader.tsx` | **NEW** — compact patient header                                                |

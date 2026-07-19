@@ -17,7 +17,7 @@ export function DashboardPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default DashboardPage
+export default DashboardPage;

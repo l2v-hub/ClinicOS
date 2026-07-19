@@ -102,9 +102,18 @@
             }
           }
         },
-        "diarioMedico": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
-        "indicatoriRischio": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
-        "noteClinica": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+        "diarioMedico": {
+          "type": "array",
+          "items": { "type": "object", "additionalProperties": true }
+        },
+        "indicatoriRischio": {
+          "type": "array",
+          "items": { "type": "object", "additionalProperties": true }
+        },
+        "noteClinica": {
+          "type": "array",
+          "items": { "type": "object", "additionalProperties": true }
+        },
         "pianoCura": { "type": "object", "additionalProperties": true },
         "presaInCarico": { "type": "object", "additionalProperties": true }
       }

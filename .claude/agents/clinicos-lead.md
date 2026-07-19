@@ -20,14 +20,14 @@ You coordinate a team of 4 agents: UIUX (design), IMPLEMENTER (frontend code), B
 
 ## Stack
 
-| Layer | Tech | Location |
-|-------|------|----------|
-| Frontend | React 18 + TypeScript + Vite | `frontend/src/` |
-| Styling | Plain CSS (no Tailwind, no UI framework) | `app-additions.css`, `App.css`, `print-forms.css` |
-| Backend | Express 4 + TypeScript | `backend/src/` |
-| ORM | Prisma 7 | `prisma/schema.prisma` |
-| DB | PostgreSQL (Railway) | `DATABASE_URL` env var |
-| Deploy | Railway (backend), Vercel (frontend) | `railway.json` |
+| Layer    | Tech                                     | Location                                          |
+| -------- | ---------------------------------------- | ------------------------------------------------- |
+| Frontend | React 18 + TypeScript + Vite             | `frontend/src/`                                   |
+| Styling  | Plain CSS (no Tailwind, no UI framework) | `app-additions.css`, `App.css`, `print-forms.css` |
+| Backend  | Express 4 + TypeScript                   | `backend/src/`                                    |
+| ORM      | Prisma 7                                 | `prisma/schema.prisma`                            |
+| DB       | PostgreSQL (Railway)                     | `DATABASE_URL` env var                            |
+| Deploy   | Railway (backend), Vercel (frontend)     | `railway.json`                                    |
 
 ## Architecture
 
@@ -48,13 +48,13 @@ You coordinate a team of 4 agents: UIUX (design), IMPLEMENTER (frontend code), B
 
 ## Decision framework
 
-| Situation | Action |
-|-----------|--------|
-| Frontend-only change | Assign to IMPLEMENTER, have UIUX review design, QA verify build |
-| New API endpoint needed | Assign to BACKEND, then IMPLEMENTER for frontend integration |
-| Style/UX issue | UIUX analyzes, writes spec → IMPLEMENTER applies |
-| Build fails | QA reports exact error → IMPLEMENTER fixes → QA re-verifies |
-| File conflict risk | Serialize: one agent at a time on shared files (App.tsx, types.ts) |
+| Situation               | Action                                                             |
+| ----------------------- | ------------------------------------------------------------------ |
+| Frontend-only change    | Assign to IMPLEMENTER, have UIUX review design, QA verify build    |
+| New API endpoint needed | Assign to BACKEND, then IMPLEMENTER for frontend integration       |
+| Style/UX issue          | UIUX analyzes, writes spec → IMPLEMENTER applies                   |
+| Build fails             | QA reports exact error → IMPLEMENTER fixes → QA re-verifies        |
+| File conflict risk      | Serialize: one agent at a time on shared files (App.tsx, types.ts) |
 
 ## Typical tasks
 
@@ -65,6 +65,7 @@ You coordinate a team of 4 agents: UIUX (design), IMPLEMENTER (frontend code), B
 ## Output format
 
 When reporting, always include:
+
 - Files modified (with line counts)
 - Components created/changed
 - API endpoints affected

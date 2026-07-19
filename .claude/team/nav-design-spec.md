@@ -4,13 +4,13 @@
 
 ### What exists
 
-| Element | Location | CSS class | Role |
-|---|---|---|---|
-| **Sidebar (L0)** | `App.tsx` — `<aside class="nav-rail">` | `.nav-rail`, `.nav-rail__item`, `.nav-rail__icon`, `.nav-rail__label`, `.nav-rail__badge` | Global app-level nav (Dashboard, Pazienti, Parametri, Consegne, Agenda, Note) |
-| **Topbar** | `App.tsx` — `<header class="topbar">` | `.topbar`, `.topbar__breadcrumb`, `.topbar__search-btn` | Breadcrumb + search — NOT used for tab navigation |
-| **Group tabs (L1-equivalent)** | `PatientDetail.tsx` — `<div class="cr-nav-groups">` | `.cr-nav-groups`, `.cr-nav-group-btn` | Panoramica / Clinica / Diario / Moduli / Documenti |
-| **Sub-tabs (L2-equivalent)** | `PatientDetail.tsx` — `<div class="cr-tab-bar">` | `.cr-tab-bar`, `.cr-tab-btn`, `.cr-tab-badge` | Tabs within each group (e.g. Anamnesi, Diagnosi, Terapie under Clinica) |
-| **No L3** | — | — | No sub-section segmented control exists anywhere |
+| Element                        | Location                                            | CSS class                                                                                 | Role                                                                          |
+| ------------------------------ | --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Sidebar (L0)**               | `App.tsx` — `<aside class="nav-rail">`              | `.nav-rail`, `.nav-rail__item`, `.nav-rail__icon`, `.nav-rail__label`, `.nav-rail__badge` | Global app-level nav (Dashboard, Pazienti, Parametri, Consegne, Agenda, Note) |
+| **Topbar**                     | `App.tsx` — `<header class="topbar">`               | `.topbar`, `.topbar__breadcrumb`, `.topbar__search-btn`                                   | Breadcrumb + search — NOT used for tab navigation                             |
+| **Group tabs (L1-equivalent)** | `PatientDetail.tsx` — `<div class="cr-nav-groups">` | `.cr-nav-groups`, `.cr-nav-group-btn`                                                     | Panoramica / Clinica / Diario / Moduli / Documenti                            |
+| **Sub-tabs (L2-equivalent)**   | `PatientDetail.tsx` — `<div class="cr-tab-bar">`    | `.cr-tab-bar`, `.cr-tab-btn`, `.cr-tab-badge`                                             | Tabs within each group (e.g. Anamnesi, Diagnosi, Terapie under Clinica)       |
+| **No L3**                      | —                                                   | —                                                                                         | No sub-section segmented control exists anywhere                              |
 
 ### Issues found
 
@@ -19,7 +19,7 @@
 2. **Duplicate `.cr-tab-btn` definition.** Defined twice in `app-additions.css`:
    - Line 2414: base definition (generic font-weight, border-bottom, color)
    - Line 3141: override with padding/font-size
-   The second silently overrides the first. This works but is fragile.
+     The second silently overrides the first. This works but is fragile.
 
 3. **PatientDetail header duplicates topbar breadcrumb.** The topbar already shows `Pazienti > LastName, FirstName`. Then `PatientDetail` renders its own `cr-header` with a back button labelled "Pazienti" and the patient name again. This is redundant — the user sees the patient identity in two places.
 
@@ -28,7 +28,7 @@
    - `.patient-record-view` sets `overflow-x: hidden` twice (line 2332 and 4402)
    - `.cr-header, .cr-nav-groups, .cr-tab-bar` get `max-width: 100%` (line 4410)
    - `.cr-tab-content` gets `overflow-x: hidden` (line 4406)
-   These are band-aids. The root cause is that `.patient-record-view` needs a proper flex column with a scrollable content region.
+     These are band-aids. The root cause is that `.patient-record-view` needs a proper flex column with a scrollable content region.
 
 5. **`page-content` has `max-width: 1200px`** (App.css line 1961) which is removed for patient detail via `:has()`. This means other pages are constrained but PatientDetail is full-width — an inconsistency if other pages later adopt L1/L2 tabs.
 
@@ -62,24 +62,24 @@
 
 ### CSS class naming (extends existing `nav-rail__*` pattern)
 
-| Level | CSS root class | Modifier pattern | Container |
-|---|---|---|---|
-| L0 | `.nav-rail` | `.nav-rail__item`, `.nav-rail__item.active` | `<aside class="nav-rail">` |
-| L1 | `.page-tabs` | `.page-tabs__btn`, `.page-tabs__btn--active`, `.page-tabs__badge` | `<nav class="page-tabs">` |
-| L2 | `.section-tabs` | `.section-tabs__btn`, `.section-tabs__btn--active`, `.section-tabs__badge` | `<nav class="section-tabs">` |
-| L3 | `.subsection-ctrl` | `.subsection-ctrl__option`, `.subsection-ctrl__option--active` | `<div class="subsection-ctrl">` |
+| Level | CSS root class     | Modifier pattern                                                           | Container                       |
+| ----- | ------------------ | -------------------------------------------------------------------------- | ------------------------------- |
+| L0    | `.nav-rail`        | `.nav-rail__item`, `.nav-rail__item.active`                                | `<aside class="nav-rail">`      |
+| L1    | `.page-tabs`       | `.page-tabs__btn`, `.page-tabs__btn--active`, `.page-tabs__badge`          | `<nav class="page-tabs">`       |
+| L2    | `.section-tabs`    | `.section-tabs__btn`, `.section-tabs__btn--active`, `.section-tabs__badge` | `<nav class="section-tabs">`    |
+| L3    | `.subsection-ctrl` | `.subsection-ctrl__option`, `.subsection-ctrl__option--active`             | `<div class="subsection-ctrl">` |
 
 ---
 
 ## 3. Component API
 
-### `<PageTabs />`  (Level 1)
+### `<PageTabs />` (Level 1)
 
 ```tsx
 interface PageTabGroup {
   id: string;
   label: string;
-  badge?: number;        // aggregate count shown on group button
+  badge?: number; // aggregate count shown on group button
 }
 
 interface PageTabsProps {
@@ -93,6 +93,7 @@ interface PageTabsProps {
 ```
 
 **Design rules:**
+
 - Background: `var(--surface)` (#FFFFFF)
 - Bottom border: `1px solid var(--border)`
 - Active indicator: `3px solid var(--blue)` bottom border
@@ -101,14 +102,14 @@ interface PageTabsProps {
 - Horizontal padding of container: `0 28px` (matches existing `cr-nav-groups`)
 - Scrollbar hidden, overflow-x auto
 
-### `<SectionTabs />`  (Level 2)
+### `<SectionTabs />` (Level 2)
 
 ```tsx
 interface SectionTab {
   id: string;
   label: string;
   badge?: number;
-  urgent?: boolean;       // renders badge in red
+  urgent?: boolean; // renders badge in red
 }
 
 interface SectionTabsProps {
@@ -122,6 +123,7 @@ interface SectionTabsProps {
 ```
 
 **Design rules:**
+
 - Background: `#FFFFFF`
 - Bottom border: `1px solid var(--border)`
 - Active indicator: `2px solid var(--blue)` bottom border (thinner than L1)
@@ -130,7 +132,7 @@ interface SectionTabsProps {
 - Badge: 18px round pill, `var(--divider)` background; `.urgent` gets `var(--red)` background + white text
 - Horizontal padding of container: `0 28px`
 
-### `<SubSectionControl />`  (Level 3)
+### `<SubSectionControl />` (Level 3)
 
 ```tsx
 interface SubSectionOption {
@@ -142,7 +144,7 @@ interface SubSectionControlProps {
   options: SubSectionOption[];
   value: string;
   onChange: (value: string) => void;
-  size?: 'sm' | 'md';     // default 'md'
+  size?: 'sm' | 'md'; // default 'md'
 }
 
 // Renders: <div class="subsection-ctrl"> — segmented control (pill group)
@@ -150,6 +152,7 @@ interface SubSectionControlProps {
 ```
 
 **Design rules:**
+
 - Container: `display: inline-flex`, `border: 1px solid var(--border)`, `border-radius: 8px`, `background: var(--surface-raised)`, `padding: 3px`
 - Option: `padding: 5px 14px`, `border-radius: 6px`, `font-size: 13px`, `font-weight: 500`, `color: var(--text-muted)`, no border
 - Active option: `background: var(--surface)`, `color: var(--text)`, `font-weight: 600`, `box-shadow: var(--shadow-sm)`
@@ -163,12 +166,12 @@ interface SubSectionControlProps {
 
 ### Current state mapping
 
-| Current | New |
-|---|---|
-| `TAB_GROUPS` array + `tabGroup` state + `cr-nav-groups` div | `<PageTabs>` component |
-| `TAB_GROUPS[x].tabs` + `tab` state + `cr-tab-bar` div | `<SectionTabs>` component |
-| `switchGroup()` / `switchTab()` functions | `PageTabs.onChange` / `SectionTabs.onChange` |
-| Inline filter chips (e.g., `diario-filters`) | Candidate for `<SubSectionControl>` |
+| Current                                                     | New                                          |
+| ----------------------------------------------------------- | -------------------------------------------- |
+| `TAB_GROUPS` array + `tabGroup` state + `cr-nav-groups` div | `<PageTabs>` component                       |
+| `TAB_GROUPS[x].tabs` + `tab` state + `cr-tab-bar` div       | `<SectionTabs>` component                    |
+| `switchGroup()` / `switchTab()` functions                   | `PageTabs.onChange` / `SectionTabs.onChange` |
+| Inline filter chips (e.g., `diario-filters`)                | Candidate for `<SubSectionControl>`          |
 
 ### Step-by-step refactor
 
@@ -179,6 +182,7 @@ interface SubSectionControlProps {
 3. **Create `frontend/src/components/nav/SubSectionControl.tsx`** — new component. Renders a segmented control for L3 navigation. Initial use: replace the `.diario-filters` / `.filter-chip` pattern in `DiarioTab`.
 
 4. **Update PatientDetail.tsx:**
+
    ```tsx
    // Before (inline rendering):
    <div className="cr-nav-groups no-print">
@@ -226,7 +230,9 @@ interface SubSectionControlProps {
   overflow-x: auto;
   scrollbar-width: none;
 }
-.page-tabs::-webkit-scrollbar { display: none; }
+.page-tabs::-webkit-scrollbar {
+  display: none;
+}
 
 .page-tabs__btn {
   display: inline-flex;
@@ -243,7 +249,9 @@ interface SubSectionControlProps {
   margin-bottom: -1px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 .page-tabs__btn:hover {
   color: var(--text);
@@ -281,7 +289,9 @@ interface SubSectionControlProps {
   flex-shrink: 0;
   scrollbar-width: none;
 }
-.section-tabs::-webkit-scrollbar { display: none; }
+.section-tabs::-webkit-scrollbar {
+  display: none;
+}
 
 .section-tabs__btn {
   display: inline-flex;
@@ -298,9 +308,13 @@ interface SubSectionControlProps {
   margin-bottom: -1px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
-.section-tabs__btn:hover { color: var(--text); }
+.section-tabs__btn:hover {
+  color: var(--text);
+}
 .section-tabs__btn--active {
   color: var(--blue);
   border-bottom-color: var(--blue);
@@ -347,9 +361,13 @@ interface SubSectionControlProps {
   border: none;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.12s, color 0.12s;
+  transition:
+    background 0.12s,
+    color 0.12s;
 }
-.subsection-ctrl__option:hover { color: var(--text); }
+.subsection-ctrl__option:hover {
+  color: var(--text);
+}
 .subsection-ctrl__option--active {
   background: var(--surface);
   color: var(--text);
@@ -365,12 +383,22 @@ interface SubSectionControlProps {
 /* ── Responsive ───────────────────────────────────────────────── */
 
 @media (max-width: 900px) {
-  .page-tabs__btn { padding: 8px 12px; font-size: 12px; }
-  .section-tabs__btn { padding: 8px 10px; font-size: 12px; }
+  .page-tabs__btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .section-tabs__btn {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
 }
 
 @media print {
-  .page-tabs, .section-tabs, .subsection-ctrl { display: none !important; }
+  .page-tabs,
+  .section-tabs,
+  .subsection-ctrl {
+    display: none !important;
+  }
 }
 ```
 
@@ -387,8 +415,10 @@ Keep the old classes until all consumers are migrated, then remove.
 ## 6. Layout / Overflow / Padding Issues and Fixes
 
 ### Issue 1: Double overflow-hidden on patient-record-view
+
 **Problem:** `.patient-record-view` is defined in two places (line 2328 and 4401) with `overflow: hidden` and `overflow-x: hidden`. The tab content area needs vertical scrolling.
 **Fix:** The scroll region must be the `.cr-tab-content` container (or a new `.page-tabs-content-scroll` wrapper), not the outer view. Structure should be:
+
 ```
 .patient-record-view        → flex column, height: 100%, overflow: hidden
   .cr-header                → flex-shrink: 0
@@ -399,17 +429,21 @@ Keep the old classes until all consumers are migrated, then remove.
 ```
 
 ### Issue 2: page-content max-width inconsistency
+
 **Problem:** `.page-content` has `max-width: 1200px` but patient detail removes it via `:has()`. Other pages that adopt L1 tabs will also need full-width.
 **Fix:** Move the `max-width` constraint inside the content area rather than on `.page-content`. The page-content should always be full-width; individual page components can self-constrain with a utility class like `.content-constrained { max-width: 1200px; margin: 0 auto; }`.
 
 ### Issue 3: Mobile group nav disappears
+
 **Problem:** At `max-width: 900px`, `.cr-nav-groups` is hidden entirely — users lose L1 navigation.
 **Fix:** Instead of hiding, make the `<PageTabs>` component horizontally scrollable with smaller padding. The existing tablet rule already shrinks sizes; just remove the `display: none !important`. If space is truly tight, collapse to a dropdown via a `<select>` or a hamburger reveal.
 
 ### Issue 4: No visual separation between L1 and L2
+
 **Problem:** Both bars have `border-bottom: 1px solid var(--border)` with no gap between them. They look like one thick bar.
 **Fix:** Give `.page-tabs` a slightly different background tint: `background: var(--surface-raised)` (#FAFBFC) vs `.section-tabs` staying white. The subtle shade difference visually separates the two levels without needing a gap or extra border. Alternatively, add `2px` of margin-top on `.section-tabs`.
 
 ### Issue 5: Padding mismatch between nav bars and content
+
 **Problem:** Nav bars use `padding: 0 28px` but `.page-content` uses `padding: 24px 24px`. The content is 4px less indented than the tab labels.
 **Fix:** Normalize to `28px` horizontal padding in content areas within patient detail, or adjust nav bars to `0 24px`. The 4px difference is visually noticeable when tab labels don't align with section headers below them.

@@ -11,11 +11,13 @@ const norm = (s: string) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').t
 
 // Issue #130: "scriv…" (scrivi/scrivere/scrivimi) added — the PO example «Scrivi nel diario di …»
 // must be recognized as a write command like the other Italian write verbs.
-const WRITE_VERB = /\b(registra|aggiungi|aggiorna|modifica|cambia|sostituisci|imposta|inserisci|crea|prescriv|scriv\w*|elimina|cancella|rimuovi)\b/;
+const WRITE_VERB =
+  /\b(registra|aggiungi|aggiorna|modifica|cambia|sostituisci|imposta|inserisci|crea|prescriv|scriv\w*|elimina|cancella|rimuovi)\b/;
 // SPEC-015 (FR-008/FR-009): every Italian deletion verb AND its inflections is refused outright,
 // on every channel, with or without another write verb. "deleta" is matched by explicit inflections
 // only, so legitimate words like "deleterio" never trigger a refusal.
-const DELETE_VERB = /\b(elimin\w*|cancell\w*|rimuov\w*|rimoss\w*|togli\w*|tolg\w*|tolt\w*|svuot\w*|azzer\w*|distrugg\w*|distrutt\w*|cestin\w*|delet(?:a|are|ando|at[oaie]|i|iamo))\b|\bbutt\w*\s+via\b/;
+const DELETE_VERB =
+  /\b(elimin\w*|cancell\w*|rimuov\w*|rimoss\w*|togli\w*|tolg\w*|tolt\w*|svuot\w*|azzer\w*|distrugg\w*|distrutt\w*|cestin\w*|delet(?:a|are|ando|at[oaie]|i|iamo))\b|\bbutt\w*\s+via\b/;
 
 /** SPEC-015: deletion is only ever possible from the traditional UI — never through Agnos. */
 export const DELETE_REFUSAL_MESSAGE =
@@ -23,12 +25,19 @@ export const DELETE_REFUSAL_MESSAGE =
 // #239 chatbot: recognise natural Italian questions as reads (only ever checked when there is NO
 // write verb, so broadening cannot hijack a write command). Covers common interrogatives that
 // operators actually type ("che terapie…", "quante camere…", "com'è…", "dove…").
-const READ_VERB = /\b(mostra|mostrami|apri|cerca|trova|elenca|visualizza|leggi|dimmi|fammi vedere|quali|quale|quant\w*|che|cosa|chi|qual e|qual'?e|come|com'?e|quando|dove|perch\w*|c'?e|ci sono)\b/;
+const READ_VERB =
+  /\b(mostra|mostrami|apri|cerca|trova|elenca|visualizza|leggi|dimmi|fammi vedere|quali|quale|quant\w*|che|cosa|chi|qual e|qual'?e|come|com'?e|quando|dove|perch\w*|c'?e|ci sono)\b/;
 
 // Clinical judgement is refused outright (mirrors the read assistant's refusal set).
 const CLINICAL_REFUSAL = [
-  /\bsuggerisci\b/, /\bconsiglia\b/, /che (terapia|cura|farmaco) (dovrei|devo|si dovrebbe)/,
-  /\bdiagnosi\b/, /\bprognosi\b/, /\bcausa\b.*\bmalattia\b/, /\bpiu grave\b/, /interpreta.*valori/,
+  /\bsuggerisci\b/,
+  /\bconsiglia\b/,
+  /che (terapia|cura|farmaco) (dovrei|devo|si dovrebbe)/,
+  /\bdiagnosi\b/,
+  /\bprognosi\b/,
+  /\bcausa\b.*\bmalattia\b/,
+  /\bpiu grave\b/,
+  /interpreta.*valori/,
 ];
 
 // Narrative section recognition (Italian → canonical key).
@@ -68,10 +77,7 @@ export function planAction(
   const q = norm(original);
   const pid = ctx.currentPatientId ?? null;
 
-  const make = (
-    actionType: VoiceActionType,
-    extra: Partial<ActionPlan> = {},
-  ): ActionPlan => ({
+  const make = (actionType: VoiceActionType, extra: Partial<ActionPlan> = {}): ActionPlan => ({
     actionType,
     patientId: pid,
     targetRecordId: null,
@@ -89,19 +95,30 @@ export function planAction(
 
   // 1) clinical refusal
   if (CLINICAL_REFUSAL.some((re) => re.test(q))) {
-    return make('refuse_clinical', { refusalReason: 'L’assistente non fornisce diagnosi, terapie o valutazioni cliniche.' });
+    return make('refuse_clinical', {
+      refusalReason: 'L’assistente non fornisce diagnosi, terapie o valutazioni cliniche.',
+    });
   }
 
   // 2) deletions are refused outright (SPEC-015: CRU-only — no write verb required, any inflection)
   if (DELETE_VERB.test(q)) {
-    return make('refuse_forbidden', { refusalReason: DELETE_REFUSAL_MESSAGE, refusalKind: 'delete' });
+    return make('refuse_forbidden', {
+      refusalReason: DELETE_REFUSAL_MESSAGE,
+      refusalKind: 'delete',
+    });
   }
   // 2b) other forbidden writes (v1): therapy changes, allergy changes
   if (hasWriteVerb && /\b(terapia|terapie|farmac|prescriv)\b/.test(q)) {
-    return make('refuse_forbidden', { refusalReason: 'Le modifiche a terapie e farmaci richiedono una conferma rafforzata e non sono disponibili via voce.' });
+    return make('refuse_forbidden', {
+      refusalReason:
+        'Le modifiche a terapie e farmaci richiedono una conferma rafforzata e non sono disponibili via voce.',
+    });
   }
   if (hasWriteVerb && /\ballerg/.test(q)) {
-    return make('refuse_forbidden', { refusalReason: 'Le modifiche alle allergie richiedono una conferma rafforzata e non sono disponibili via voce.' });
+    return make('refuse_forbidden', {
+      refusalReason:
+        'Le modifiche alle allergie richiedono una conferma rafforzata e non sono disponibili via voce.',
+    });
   }
 
   // 3) reads (questions or explicit read verbs, with no write verb) → delegate to the assistant
@@ -122,25 +139,35 @@ export function planAction(
       const plan = make('create_vital_sign');
       const val = parseVitalValue(vital, q);
       const t = parseSpokenTime(q);
-      plan.fields = { etichetta: vital.etichetta, label: vital.label, valore: val.valore, unita: vital.unita };
+      plan.fields = {
+        etichetta: vital.etichetta,
+        label: vital.label,
+        valore: val.valore,
+        unita: vital.unita,
+      };
       plan.ambiguities.push(...val.ambiguities);
       if (!t.has) plan.ambiguities.push('Manca l’orario del parametro');
-      else plan.fields.timeHHMM = `${String(t.hh).padStart(2, '0')}:${String(t.mm).padStart(2, '0')}`;
+      else
+        plan.fields.timeHHMM = `${String(t.hh).padStart(2, '0')}:${String(t.mm).padStart(2, '0')}`;
       (plan.fields as Record<string, unknown>).warnings = val.warnings;
       return needPatient(plan);
     }
 
     // 4b) demographics
-    const demoField =
-      /telefon|cellulare|numero/.test(q) ? 'phone'
-      : /\bemail\b|posta elettronica|mail/.test(q) ? 'email'
-      : /indirizz|residenza|via\b/.test(q) ? 'address'
-      : /contatto.*emergenz|emergenz.*contatto/.test(q) ? 'emergencyContactName'
-      : null;
+    const demoField = /telefon|cellulare|numero/.test(q)
+      ? 'phone'
+      : /\bemail\b|posta elettronica|mail/.test(q)
+        ? 'email'
+        : /indirizz|residenza|via\b/.test(q)
+          ? 'address'
+          : /contatto.*emergenz|emergenz.*contatto/.test(q)
+            ? 'emergencyContactName'
+            : null;
     if (demoField) {
       const plan = make('update_patient_demographics');
       let raw = valueAfter(original);
-      if (demoField === 'phone' && raw) raw = (/(\+?\d[\d\s]{4,})/.exec(raw)?.[1] ?? raw).replace(/\s+/g, '');
+      if (demoField === 'phone' && raw)
+        raw = (/(\+?\d[\d\s]{4,})/.exec(raw)?.[1] ?? raw).replace(/\s+/g, '');
       if (!raw) plan.ambiguities.push('Nuovo valore non riconosciuto');
       plan.fields = { field: demoField, value: raw ?? '' };
       return needPatient(plan);

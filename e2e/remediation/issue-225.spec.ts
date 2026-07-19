@@ -14,7 +14,7 @@ import path from 'node:path';
 const DOC_PATH = path.resolve(__dirname, '../../docs/azure-backend-config-principles.md');
 const SCREENSHOT_PATH = path.resolve(
   __dirname,
-  '../../artifacts/task-validation/225-preparazione-futuro-backend-azure/screenshots/result.png'
+  '../../artifacts/task-validation/225-preparazione-futuro-backend-azure/screenshots/result.png',
 );
 
 function escapeHtml(s: string): string {
@@ -33,16 +33,50 @@ function mdToHtml(md: string): string {
     const h2 = /^##\s+(.*)$/.exec(line);
     const h1 = /^#\s+(.*)$/.exec(line);
     const li = /^-\s+(.*)$/.exec(line);
-    if (h4) { if (inList) { html += '</ul>'; inList = false; } html += `<h4>${escapeHtml(h4[1])}</h4>`; continue; }
-    if (h3) { if (inList) { html += '</ul>'; inList = false; } html += `<h3>${escapeHtml(h3[1])}</h3>`; continue; }
-    if (h2) { if (inList) { html += '</ul>'; inList = false; } html += `<h2>${escapeHtml(h2[1])}</h2>`; continue; }
-    if (h1) { if (inList) { html += '</ul>'; inList = false; } html += `<h1>${escapeHtml(h1[1])}</h1>`; continue; }
+    if (h4) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      html += `<h4>${escapeHtml(h4[1])}</h4>`;
+      continue;
+    }
+    if (h3) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      html += `<h3>${escapeHtml(h3[1])}</h3>`;
+      continue;
+    }
+    if (h2) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      html += `<h2>${escapeHtml(h2[1])}</h2>`;
+      continue;
+    }
+    if (h1) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      html += `<h1>${escapeHtml(h1[1])}</h1>`;
+      continue;
+    }
     if (li) {
-      if (!inList) { html += '<ul>'; inList = true; }
+      if (!inList) {
+        html += '<ul>';
+        inList = true;
+      }
       html += `<li>${escapeHtml(li[1])}</li>`;
       continue;
     }
-    if (inList) { html += '</ul>'; inList = false; }
+    if (inList) {
+      html += '</ul>';
+      inList = false;
+    }
     if (line.trim() === '') continue;
     html += `<p>${escapeHtml(line)}</p>`;
   }
@@ -92,7 +126,7 @@ test.describe('issue #225 — Azure backend config principles (docs-only evidenc
 
     // Title / identity of the deliverable.
     await expect(page.locator('h1')).toHaveText(
-      'Backend configuration principles for a future Azure deployment (#225)'
+      'Backend configuration principles for a future Azure deployment (#225)',
     );
 
     // AC1 — env/secret model documented.
@@ -112,7 +146,7 @@ test.describe('issue #225 — Azure backend config principles (docs-only evidenc
     // Concrete value check: the explicit "no deploy" statement must be present verbatim
     // (this is a single source line in the doc, so it renders inside one element).
     await expect(
-      page.getByText('No production deployment is performed by this document')
+      page.getByText('No production deployment is performed by this document'),
     ).toBeVisible();
 
     // Re-render after a reload to prove the QA surface is stable/reproducible across
@@ -121,7 +155,7 @@ test.describe('issue #225 — Azure backend config principles (docs-only evidenc
     await page.reload();
     await page.setContent(html, { waitUntil: 'load' });
     await expect(page.locator('h1')).toHaveText(
-      'Backend configuration principles for a future Azure deployment (#225)'
+      'Backend configuration principles for a future Azure deployment (#225)',
     );
     await expect(ac1).toBeVisible();
     await expect(ac2).toBeVisible();

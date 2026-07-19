@@ -37,7 +37,14 @@ export function ctxFromOperator(req: AuthedRequest): UserContext {
 
 function fail(res: Response, err: unknown) {
   if (err instanceof GatewayError) {
-    const map: Record<string, number> = { unauthorized: 401, forbidden: 403, tenant_isolation: 403, cross_patient_disabled: 403, not_found: 404, bad_request: 400 };
+    const map: Record<string, number> = {
+      unauthorized: 401,
+      forbidden: 403,
+      tenant_isolation: 403,
+      cross_patient_disabled: 403,
+      not_found: 404,
+      bad_request: 400,
+    };
     return res.status(map[err.kind] ?? 400).json({ error: err.message, kind: err.kind });
   }
   console.error('[ai-assistant] error:', err instanceof Error ? err.message : err);
@@ -47,9 +54,13 @@ function fail(res: Response, err: unknown) {
 // POST /ai/assistant/query  { question, currentPatientId? }
 assistantPublicRouter.post('/query', async (req, res) => {
   try {
-    const question = String((req.body?.question ?? '')).slice(0, 500);
-    const currentPatientId = req.body?.currentPatientId ? String(req.body.currentPatientId) : undefined;
-    const answer = await assistantQuery(question, ctxFromOperator(req as AuthedRequest), { currentPatientId });
+    const question = String(req.body?.question ?? '').slice(0, 500);
+    const currentPatientId = req.body?.currentPatientId
+      ? String(req.body.currentPatientId)
+      : undefined;
+    const answer = await assistantQuery(question, ctxFromOperator(req as AuthedRequest), {
+      currentPatientId,
+    });
     return res.status(200).json(answer);
   } catch (err) {
     return fail(res, err);

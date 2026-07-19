@@ -9,12 +9,14 @@ Mantieni tutto in italiano.
 Esegui npm run build.
 
 Scale da prevedere:
+
 - Scala Braden
 - Tinetti
 - NRS
 - altre scale future
 
 Ogni scala deve avere:
+
 - data compilazione
 - operatore
 - punteggi
@@ -25,6 +27,7 @@ Ogni scala deve avere:
 
 Contenzioni:
 La scheda contenzione deve prevedere:
+
 - tipo contenzione/protezione
 - motivazione
 - data inizio
@@ -36,6 +39,7 @@ La scheda contenzione deve prevedere:
 
 Firma:
 Per ora implementa una soluzione frontend:
+
 - campo “Firma parente/tutore”
 - modalità firma placeholder
 - eventuale area firma disegnabile se semplice

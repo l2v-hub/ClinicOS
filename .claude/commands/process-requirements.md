@@ -19,6 +19,7 @@ gh issue list --label "clinicos-requirement" --state open
 Then process one issue at a time.
 
 Mandatory rules:
+
 - open issue = to process
 - closed issue = already completed, tested and validated
 - never process closed issues
@@ -29,6 +30,7 @@ Mandatory rules:
 - if completed, comment test report and close the issue
 
 For each issue:
+
 1. read issue details
 2. create short implementation plan
 3. implement only the issue scope
@@ -43,6 +45,7 @@ Stop when there are no more open processable issues.
 Additional mandatory deployment rule:
 
 A requirement is complete only after:
+
 1. acceptance criteria pass;
 2. required tests pass;
 3. npm run build passes;
@@ -64,6 +67,7 @@ Do not close the GitHub Issue if deployment does not start.
 If deployment fails or does not start, add label status-deploy-failed and comment the reason.
 
 When successful, comment the GitHub Issue with:
+
 - requirement number;
 - files changed;
 - tests executed;
@@ -77,6 +81,7 @@ Only then close the issue.
 Additional mandatory traceability rule:
 
 Every completed REQ must be traceable in:
+
 1. GitHub Issue
 2. commit message
 3. pushed branch
@@ -92,6 +97,7 @@ Before closing an issue, create/update:
 requirements/deployments/DEPLOY-YYYYMMDD-HHMM.md
 
 The deployment manifest must list:
+
 - all REQs included in the deploy
 - issue numbers
 - commit hashes
@@ -101,6 +107,7 @@ The deployment manifest must list:
 - deployment status
 
 Do not close an issue if:
+
 - the commit message does not contain the REQ id;
 - the deployment manifest was not created;
 - the issue comment does not link commit and deploy manifest.

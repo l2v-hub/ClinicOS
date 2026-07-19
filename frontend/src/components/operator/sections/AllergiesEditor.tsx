@@ -19,7 +19,14 @@ const STATUS_OPTIONS: ReadonlyArray<{ key: AllergyStatus; label: string }> = [
   { key: 'paziente_nega', label: 'Paziente nega' },
 ];
 
-export function AllergiesEditor({ value, onChange, readOnly, operatoreNome, status, onStatusChange }: AllergiesEditorProps) {
+export function AllergiesEditor({
+  value,
+  onChange,
+  readOnly,
+  operatoreNome,
+  status,
+  onStatusChange,
+}: AllergiesEditorProps) {
   const list = value ?? [];
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<Partial<AllergiaItem>>({});
@@ -46,8 +53,13 @@ export function AllergiesEditor({ value, onChange, readOnly, operatoreNome, stat
   function add() {
     if (!form.allergene) return;
     const newItem: AllergiaItem = {
-      id: uid(), allergene: '', gravita: 'lieve', reazione: '',
-      documentato: todayStr(), documentatoDa: operatoreNome ?? '', ...form,
+      id: uid(),
+      allergene: '',
+      gravita: 'lieve',
+      reazione: '',
+      documentato: todayStr(),
+      documentatoDa: operatoreNome ?? '',
+      ...form,
     } as AllergiaItem;
     onChange([newItem, ...list]);
     // NON chiamare onStatusChange qui: due upd() consecutivi costruiscono i payload dalla
@@ -59,14 +71,19 @@ export function AllergiesEditor({ value, onChange, readOnly, operatoreNome, stat
   }
 
   function remove(id: string) {
-    onChange(list.filter(a => a.id !== id));
+    onChange(list.filter((a) => a.id !== id));
   }
 
   return (
     <>
       {/* #244: explicit allergy status selector */}
-      <div className="allergy-status" role="radiogroup" aria-label="Stato allergie" data-testid="allergy-status">
-        {STATUS_OPTIONS.map(o => {
+      <div
+        className="allergy-status"
+        role="radiogroup"
+        aria-label="Stato allergie"
+        data-testid="allergy-status"
+      >
+        {STATUS_OPTIONS.map((o) => {
           const check = canSetStatus(list, o.key);
           const disabled = readOnly || !check.ok;
           return (
@@ -94,68 +111,118 @@ export function AllergiesEditor({ value, onChange, readOnly, operatoreNome, stat
       )}
 
       {effStatus === 'assenti' && (
-        <p className="cr-empty" data-testid="allergy-none"><span className="status-badge status-badge--success">Allergie assenti</span> — verificato dall’operatore.</p>
+        <p className="cr-empty" data-testid="allergy-none">
+          <span className="status-badge status-badge--success">Allergie assenti</span> — verificato
+          dall’operatore.
+        </p>
       )}
       {effStatus === 'paziente_nega' && (
-        <p className="cr-empty" data-testid="allergy-denied"><span className="status-badge status-badge--info">Paziente nega allergie</span></p>
+        <p className="cr-empty" data-testid="allergy-denied">
+          <span className="status-badge status-badge--info">Paziente nega allergie</span>
+        </p>
       )}
       {effStatus === undefined && (
-        <p className="cr-empty" data-testid="allergy-undocumented">Stato allergie non documentato — seleziona uno stato.</p>
+        <p className="cr-empty" data-testid="allergy-undocumented">
+          Stato allergie non documentato — seleziona uno stato.
+        </p>
       )}
 
       {/* AC3/validation: keep recorded detail even under assenti/nega, and flag the conflict */}
       {!showList && list.length > 0 && (
         <p className="cr-empty" role="alert" data-testid="allergy-conflict">
-          <span className="status-badge status-badge--warning">Attenzione</span> risultano {list.length} allergie registrate ma lo stato è “{STATUS_OPTIONS.find(o => o.key === effStatus)?.label}”. Il dettaglio è conservato: seleziona “Presenti” per rivederlo.
+          <span className="status-badge status-badge--warning">Attenzione</span> risultano{' '}
+          {list.length} allergie registrate ma lo stato è “
+          {STATUS_OPTIONS.find((o) => o.key === effStatus)?.label}”. Il dettaglio è conservato:
+          seleziona “Presenti” per rivederlo.
         </p>
       )}
 
       {showList && (
         <div className="ec-modal-list">
-          {list.length === 0 && <p className="cr-empty">Nessuna allergia inserita — aggiungi il dettaglio.</p>}
-          {list.map(a => (
+          {list.length === 0 && (
+            <p className="cr-empty">Nessuna allergia inserita — aggiungi il dettaglio.</p>
+          )}
+          {list.map((a) => (
             <div key={a.id} className="ec-modal-item">
               <div className="ec-modal-item__main">
                 <span className="ec-modal-item__title">{a.allergene}</span>
                 {a.reazione && <span className="ec-modal-item__sub">{a.reazione}</span>}
-                <span className={`badge ${a.gravita === 'grave' ? 'badge--red' : a.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}>{a.gravita}</span>
+                <span
+                  className={`badge ${a.gravita === 'grave' ? 'badge--red' : a.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}
+                >
+                  {a.gravita}
+                </span>
               </div>
               {!readOnly && (
-                <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => remove(a.id)} title="Elimina"><IcoX /></button>
+                <button
+                  className="icon-btn icon-btn--sm icon-btn--danger"
+                  onClick={() => remove(a.id)}
+                  title="Elimina"
+                >
+                  <IcoX />
+                </button>
               )}
             </div>
           ))}
         </div>
       )}
 
-      {!readOnly && showList && (
-        showForm ? (
+      {!readOnly &&
+        showList &&
+        (showForm ? (
           <div className="ec-modal-add-form">
             <div className="op-form-grid">
               <div className="form-field">
                 <label className="form-label">Allergene *</label>
-                <input className="form-input" value={form.allergene ?? ''} onChange={e => setForm(p => ({ ...p, allergene: e.target.value }))} />
+                <input
+                  className="form-input"
+                  value={form.allergene ?? ''}
+                  onChange={(e) => setForm((p) => ({ ...p, allergene: e.target.value }))}
+                />
               </div>
               <div className="form-field">
                 <label className="form-label">Gravità</label>
-                <select className="form-select" value={form.gravita ?? 'lieve'} onChange={e => setForm(p => ({ ...p, gravita: e.target.value as AllergiaItem['gravita'] }))}>
-                  <option value="lieve">Lieve</option><option value="moderata">Moderata</option><option value="grave">Grave</option>
+                <select
+                  className="form-select"
+                  value={form.gravita ?? 'lieve'}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, gravita: e.target.value as AllergiaItem['gravita'] }))
+                  }
+                >
+                  <option value="lieve">Lieve</option>
+                  <option value="moderata">Moderata</option>
+                  <option value="grave">Grave</option>
                 </select>
               </div>
             </div>
             <div className="form-field" style={{ marginTop: 4 }}>
               <label className="form-label">Reazione</label>
-              <input className="form-input" value={form.reazione ?? ''} onChange={e => setForm(p => ({ ...p, reazione: e.target.value }))} />
+              <input
+                className="form-input"
+                value={form.reazione ?? ''}
+                onChange={(e) => setForm((p) => ({ ...p, reazione: e.target.value }))}
+              />
             </div>
             <div className="ec-modal-add-form__actions">
-              <button className="btn-secondary btn-sm" onClick={() => { setShowForm(false); setForm({}); }}>Annulla</button>
-              <button className="btn-primary btn-sm" onClick={add}><IcoCheck /> Salva</button>
+              <button
+                className="btn-secondary btn-sm"
+                onClick={() => {
+                  setShowForm(false);
+                  setForm({});
+                }}
+              >
+                Annulla
+              </button>
+              <button className="btn-primary btn-sm" onClick={add}>
+                <IcoCheck /> Salva
+              </button>
             </div>
           </div>
         ) : (
-          <button className="btn-secondary btn-sm" onClick={() => setShowForm(true)}><IcoPlus /> Aggiungi allergia</button>
-        )
-      )}
+          <button className="btn-secondary btn-sm" onClick={() => setShowForm(true)}>
+            <IcoPlus /> Aggiungi allergia
+          </button>
+        ))}
     </>
   );
 }

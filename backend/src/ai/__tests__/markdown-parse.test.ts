@@ -1,8 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  parseMarkdownSections, parseNarrativeFromMarkdown, detectSectionLoss,
-  assertNoNarrativeSectionLoss, NarrativeSectionContentLostError,
+  parseMarkdownSections,
+  parseNarrativeFromMarkdown,
+  detectSectionLoss,
+  assertNoNarrativeSectionLoss,
+  NarrativeSectionContentLostError,
 } from '../sections/markdown-parse.js';
 import { narrativeDraftToSectionRows } from '../sections/patient-narrative.js';
 
@@ -44,7 +47,9 @@ Bisoprololo 2.5 mg.`;
 });
 
 test('#242 inline "Terapia:" label starts a therapy block even after diagnosis lines', () => {
-  const m = parseMarkdownSections('## Diagnosi di dimissione\nScompenso.\nTerapia: Ramipril 5 mg.\nFurosemide 25 mg.');
+  const m = parseMarkdownSections(
+    '## Diagnosi di dimissione\nScompenso.\nTerapia: Ramipril 5 mg.\nFurosemide 25 mg.',
+  );
   assert.ok(!/ramipril|furosemide/i.test(m.get('diagnosisText')?.text ?? ''));
   assert.ok(/ramipril/i.test(m.get('therapyText')?.text ?? ''));
   assert.ok(/furosemide/i.test(m.get('therapyText')?.text ?? ''));
@@ -75,7 +80,8 @@ test('plain (non-markdown) title line is recognised', () => {
 });
 
 test('newlines and bullet lists are preserved', () => {
-  const doc = '## Consigli e controlli:\n\n- Controllo cardiologico tra 30 giorni\n- Dieta iposodica\n\nMisurare il peso ogni giorno.';
+  const doc =
+    '## Consigli e controlli:\n\n- Controllo cardiologico tra 30 giorni\n- Dieta iposodica\n\nMisurare il peso ogni giorno.';
   const d = parseNarrativeFromMarkdown(doc);
   assert.ok(d.adviceAndFollowUpText.includes('\n- Controllo cardiologico tra 30 giorni'));
   assert.ok(d.adviceAndFollowUpText.includes('- Dieta iposodica'));
@@ -125,9 +131,15 @@ test('NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc 
 // BUG-048 (#70): populated sections must carry a sourceReference to the document so the
 // "Confronta con la fonte" action has a file to open.
 test('BUG-048: documentInfo populates sourceReferences for each non-empty section', () => {
-  const d = parseNarrativeFromMarkdown(ANAMNESI_DOC, undefined, { id: 'doc1', filename: 'lettera.pdf' });
+  const d = parseNarrativeFromMarkdown(ANAMNESI_DOC, undefined, {
+    id: 'doc1',
+    filename: 'lettera.pdf',
+  });
   const keys = new Set(d.sourceReferences.map((r) => r.sectionKey));
-  assert.ok(keys.has('ANAMNESI') && keys.has('DIAGNOSI'), 'populated sections linked to the document');
+  assert.ok(
+    keys.has('ANAMNESI') && keys.has('DIAGNOSI'),
+    'populated sections linked to the document',
+  );
   assert.ok(d.sourceReferences.every((r) => r.fileName === 'lettera.pdf' && r.fileId === 'doc1'));
   // empty sections (e.g. therapy) get no source ref
   assert.ok(!keys.has('TERAPIA'));
@@ -181,7 +193,7 @@ test('BUG-051: guard does NOT fire for unstructured text (no headings → UNMAPP
 // the following page must stay in ONE block. The page boundary must NOT close the section.
 test('REQ-036: section spanning a page break stays in one block until a new canonical heading', () => {
   const crossPage =
-    '## Anamnesi Patologica Recente\n\n' +            // page 2
+    '## Anamnesi Patologica Recente\n\n' + // page 2
     'Inviata in PS in data 09/03 per dolore toracico.\n\n' +
     'Proseguiva quindi il ricovero con stabilizzazione del quadro clinico.\n\n' + // page 3 (no heading)
     '## Terapia alla dimissione\n\n' +

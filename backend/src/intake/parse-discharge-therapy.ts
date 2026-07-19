@@ -5,24 +5,40 @@
 // always preserved). PRIVACY: this module never logs; callers must log only counts/status, not text.
 
 export interface ParsedTherapyRow {
-  farmacoNome: string;          // drug name (first token), e.g. KEPPRA
-  forma: string;                // pharmaceutical form, e.g. "CPR RIV", "SCIR", "POLVERE"
-  dosaggio: string;             // strength, e.g. "500 MGR", "1GR/880UI", "10MG"
-  viaSomministrazione: string;  // route, e.g. OS, IM, EV
-  quantita: string;             // dose amount, e.g. "1 Cpr", "1/2 Dosi"
-  orari: string[];              // ["08:00","20:00"]
-  giorni: string[];             // ["Mar","Gio","Sab","Dom"]
-  dataInizio: string;           // ISO YYYY-MM-DD or ''
-  classe: string;               // "A", "C" or ''
-  note: string;                 // leftover free text
-  originalText: string;         // source line kept verbatim (audit / operator reference)
+  farmacoNome: string; // drug name (first token), e.g. KEPPRA
+  forma: string; // pharmaceutical form, e.g. "CPR RIV", "SCIR", "POLVERE"
+  dosaggio: string; // strength, e.g. "500 MGR", "1GR/880UI", "10MG"
+  viaSomministrazione: string; // route, e.g. OS, IM, EV
+  quantita: string; // dose amount, e.g. "1 Cpr", "1/2 Dosi"
+  orari: string[]; // ["08:00","20:00"]
+  giorni: string[]; // ["Mar","Gio","Sab","Dom"]
+  dataInizio: string; // ISO YYYY-MM-DD or ''
+  classe: string; // "A", "C" or ''
+  note: string; // leftover free text
+  originalText: string; // source line kept verbatim (audit / operator reference)
   stato: 'ok' | 'da_verificare';
 }
 
-const ROUTES = ['OS', 'IM', 'EV', 'SC', 'SL', 'TD', 'INAL', 'TOP', 'RETT', 'OFT', 'OTO', 'NAS', 'VAG', 'IN'];
+const ROUTES = [
+  'OS',
+  'IM',
+  'EV',
+  'SC',
+  'SL',
+  'TD',
+  'INAL',
+  'TOP',
+  'RETT',
+  'OFT',
+  'OTO',
+  'NAS',
+  'VAG',
+  'IN',
+];
 // Bug #274: quantity units — include full Italian words (compressa/e, capsula/e, fiala/e, bustina/e,
 // goccia/gocce, supposta/e) besides the abbreviated forms.
-const UNITS = 'Cpr|Cps|Cp|compress[ae]|capsul[ae]|Dosi|Dose|Fl|fial[ae]|Bs|Bust|bustin[ae]|ml|mL|gtt|gocce|goccia|gc|Puff|Supp|suppost[ae]|Cerotti|Cerotto';
+const UNITS =
+  'Cpr|Cps|Cp|compress[ae]|capsul[ae]|Dosi|Dose|Fl|fial[ae]|Bs|Bust|bustin[ae]|ml|mL|gtt|gocce|goccia|gc|Puff|Supp|suppost[ae]|Cerotti|Cerotto';
 const DAYS = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 
 const ROUTE_RE = new RegExp(`\\(\\s*(${ROUTES.join('|')})\\s*\\)`, 'i');
@@ -50,7 +66,8 @@ function detectRoute(text: string): string {
   return '';
 }
 const QTY_RE = new RegExp(`\\b(\\d+(?:\\/\\d+)?)\\s+(${UNITS})\\b`, 'i');
-const DOSE_RE = /\b(\d+(?:[.,]\d+)?)\s?(MGR|MCG|MG|GR|G|UI|ML)\b(\s?\/\s?\d+(?:[.,]\d+)?\s?(?:UI|ML|MG|MGR|MCG|GR|G))?/i;
+const DOSE_RE =
+  /\b(\d+(?:[.,]\d+)?)\s?(MGR|MCG|MG|GR|G|UI|ML)\b(\s?\/\s?\d+(?:[.,]\d+)?\s?(?:UI|ML|MG|MGR|MCG|GR|G))?/i;
 const DAY_RE = new RegExp(`\\b(${DAYS.join('|')})\\b`, 'g');
 
 function toIsoDate(dmy: string | undefined): string {
@@ -66,7 +83,9 @@ export function splitTherapyLines(text: string): string[] {
     .split(/\r?\n/)
     .map((l) => l.trim())
     .filter((l) => l.length > 0)
-    .filter((l) => !/^(terapia(\s+domiciliare)?|tp\.?|home therapy|hospital therapy)\s*:?\s*$/i.test(l));
+    .filter(
+      (l) => !/^(terapia(\s+domiciliare)?|tp\.?|home therapy|hospital therapy)\s*:?\s*$/i.test(l),
+    );
 }
 
 /** Parse ONE prescription line into a structured row. Fields are extracted independently, so a
@@ -79,16 +98,19 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   const giorni = [...new Set([...originalText.matchAll(DAY_RE)].map((m) => m[1]))];
 
   const oreIdx = originalText.search(/\bore\b/i);
-  const orari = oreIdx >= 0
-    ? [...originalText.slice(oreIdx).matchAll(/\b(\d{1,2}:\d{2})\b/g)].map((m) => m[1])
-    : [];
+  const orari =
+    oreIdx >= 0
+      ? [...originalText.slice(oreIdx).matchAll(/\b(\d{1,2}:\d{2})\b/g)].map((m) => m[1])
+      : [];
 
   const viaSomministrazione = detectRoute(originalText);
   const qtyM = originalText.match(QTY_RE);
   const quantita = qtyM ? `${qtyM[1]} ${qtyM[2]}` : '';
   const doseM = originalText.match(DOSE_RE);
   const dosaggio = doseM ? doseM[0].replace(/\s+/g, ' ').trim() : '';
-  const farmacoNome = (originalText.match(/^([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9.\-]*)/)?.[1] ?? '').toUpperCase();
+  const farmacoNome = (
+    originalText.match(/^([A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9.\-]*)/)?.[1] ?? ''
+  ).toUpperCase();
 
   // forma = text between the drug name and the first structural marker (route / dosage / quantity).
   const afterName = originalText.slice(farmacoNome.length);
@@ -102,7 +124,8 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
 
   // note = anything after the last recognized structured token, minus date/class/times (best effort).
   let note = originalText;
-  for (const seg of [forma, dosaggio, quantita, `(${viaSomministrazione})`].filter(Boolean)) note = note.replace(seg, ' ');
+  for (const seg of [forma, dosaggio, quantita, `(${viaSomministrazione})`].filter(Boolean))
+    note = note.replace(seg, ' ');
   note = note
     .replace(new RegExp(`^${farmacoNome}`, 'i'), ' ')
     .replace(/\(\s*classe\s*[A-Za-z]?\s*\)/i, ' ')
@@ -114,10 +137,29 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
 
   // A line is "ok" when it has a name AND at least two structured signals; otherwise operator-verify.
   // Bug #274: the administration route (via) counts as a structured signal too.
-  const signals = [dosaggio, orari.length ? 'x' : '', quantita, dataInizio, viaSomministrazione].filter(Boolean).length;
+  const signals = [
+    dosaggio,
+    orari.length ? 'x' : '',
+    quantita,
+    dataInizio,
+    viaSomministrazione,
+  ].filter(Boolean).length;
   const stato: ParsedTherapyRow['stato'] = farmacoNome && signals >= 2 ? 'ok' : 'da_verificare';
 
-  return { farmacoNome, forma, dosaggio, viaSomministrazione, quantita, orari, giorni, dataInizio, classe, note, originalText, stato };
+  return {
+    farmacoNome,
+    forma,
+    dosaggio,
+    viaSomministrazione,
+    quantita,
+    orari,
+    giorni,
+    dataInizio,
+    classe,
+    note,
+    originalText,
+    stato,
+  };
 }
 
 /** Parse a whole therapy text block into structured rows (one per prescription line). */

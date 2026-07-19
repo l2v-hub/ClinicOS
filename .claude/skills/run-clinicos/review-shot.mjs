@@ -35,7 +35,12 @@ try {
   await page.waitForTimeout(2500);
   await page.screenshot({ path: resolve(outDir, 'req017-review.png') });
   const body = (await page.textContent('body')) ?? '';
-  console.log('SHOT review  reachedReview=' + body.includes('Crea paziente') + ' consoleErrors=' + errors.length);
+  console.log(
+    'SHOT review  reachedReview=' +
+      body.includes('Crea paziente') +
+      ' consoleErrors=' +
+      errors.length,
+  );
   if (errors.length) console.log('first error:', errors[0]);
 } finally {
   await browser.close();

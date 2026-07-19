@@ -14,6 +14,7 @@ FILE: path/to/file.ext
 END FILE
 
 Rules:
+
 - Output the FULL file content. No partial content. No placeholders.
 - Do NOT output unified diffs (--- / +++ / @@ lines). Diffs are rejected.
 - Do NOT use ```diff blocks. Diffs are rejected.
@@ -31,32 +32,34 @@ const app = express();
 app.use(express.json());
 
 void prisma
-  .$connect()
-  .then(() => {
-    console.log('Prisma client connected to the database successfully.');
-  })
-  .catch((error: unknown) => {
-    console.error('Failed to connect to the database with Prisma.', error);
-  });
+.$connect()
+.then(() => {
+console.log('Prisma client connected to the database successfully.');
+})
+.catch((error: unknown) => {
+console.error('Failed to connect to the database with Prisma.', error);
+});
 
 app.get('/health', async (_req, res) => {
-  try {
-    await prisma.$queryRaw`SELECT 1`;
+try {
+await prisma.$queryRaw`SELECT 1`;
 
     res.status(200).json({
       status: 'ok',
       service: 'clinicos-backend',
       database: 'connected',
     });
-  } catch (error) {
-    console.error('Health check database query failed.', error);
+
+} catch (error) {
+console.error('Health check database query failed.', error);
 
     res.status(500).json({
       status: 'error',
       service: 'clinicos-backend',
       database: 'disconnected',
     });
-  }
+
+}
 });
 
 export default app;
@@ -65,13 +68,13 @@ FILE: backend/src/lib/prisma.ts
 import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = globalThis as unknown as {
-  prisma?: PrismaClient;
+prisma?: PrismaClient;
 };
 
 const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
 if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
+globalForPrisma.prisma = prisma;
 }
 
 export { prisma };

@@ -13,7 +13,10 @@ test('016 F2: prosa valida con fonti citate ⊆ fonti fornite → composta', asy
 });
 
 test('016 F2: prosa che cita una fonte NON fornita (invenzione) → scartata', async () => {
-  const rt = async () => ({ answerText: 'Il paziente ha il diabete [s99].', citedSources: ['s99'] });
+  const rt = async () => ({
+    answerText: 'Il paziente ha il diabete [s99].',
+    citedSources: ['s99'],
+  });
   const r = await composeAnswer('allergie?', RESULTS, SOURCES, { callComposeRuntime: rt });
   assert.equal(r.composed, false);
   assert.equal(r.answerText, undefined);
@@ -26,7 +29,9 @@ test('016 F2: nessuna fonte citata → scartata (niente prosa non fondata)', asy
 });
 
 test('016 F2: runtime errore/timeout → non composto (risposta strutturata)', async () => {
-  const rt = async () => { throw new Error('timeout'); };
+  const rt = async () => {
+    throw new Error('timeout');
+  };
   const r = await composeAnswer('allergie?', RESULTS, SOURCES, { callComposeRuntime: rt });
   assert.equal(r.composed, false);
 });

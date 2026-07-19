@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import type {
-  Paziente, CartellaPaziente,
-  ParametriMensili, ParametroGiorno,
-} from '../../types';
+import type { Paziente, CartellaPaziente, ParametriMensili, ParametroGiorno } from '../../types';
 import { IcoSearch, IcoX, IcoMessage } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
 import { ClinicalTableSection } from './cartella/shared';
@@ -10,7 +7,9 @@ import { comparePazienti } from '../../lib/patientSort';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
-function uid() { return crypto.randomUUID(); }
+function uid() {
+  return crypto.randomUUID();
+}
 
 function todayStr(): string {
   const d = new Date();
@@ -24,15 +23,20 @@ function meseCorrente(): { mese: number; anno: number; giorno: number } {
 
 function getParametroOggi(cartella: CartellaPaziente): ParametroGiorno | null {
   const { mese, anno, giorno } = meseCorrente();
-  const mensile = cartella.parametriMensili?.find(m => m.mese === mese && m.anno === anno);
-  return mensile?.giorni.find(g => g.giorno === giorno) ?? null;
+  const mensile = cartella.parametriMensili?.find((m) => m.mese === mese && m.anno === anno);
+  return mensile?.giorni.find((g) => g.giorno === giorno) ?? null;
 }
 
 function emptyRow(giorno: number): RigaEditabile {
   return {
     giorno,
-    pa: '', fc: '', spo2: '', temperatura: '',
-    dtx: '', evacuazione: '', note: '',
+    pa: '',
+    fc: '',
+    spo2: '',
+    temperatura: '',
+    dtx: '',
+    evacuazione: '',
+    note: '',
     ora: todayStr(),
     operatore: '',
   };
@@ -82,9 +86,17 @@ function rigaToParametroGiorno(r: RigaEditabile): ParametroGiorno {
 
 // ── Soglie cliniche (evidenza automatica, sola presentazione client-side) ────────
 // SpO2 < 92 → critico (rosso). TC ≥ 37,5 → attenzione (ambra). Accetta virgola o punto.
-function parseNum(v: string): number { return parseFloat(v.replace(',', '.')); }
-function spo2Critico(v: string): boolean { const n = parseNum(v); return !Number.isNaN(n) && n < 92; }
-function tempAttenzione(v: string): boolean { const n = parseNum(v); return !Number.isNaN(n) && n >= 37.5; }
+function parseNum(v: string): number {
+  return parseFloat(v.replace(',', '.'));
+}
+function spo2Critico(v: string): boolean {
+  const n = parseNum(v);
+  return !Number.isNaN(n) && n < 92;
+}
+function tempAttenzione(v: string): boolean {
+  const n = parseNum(v);
+  return !Number.isNaN(n) && n >= 37.5;
+}
 function hasRilevazione(p: ParametroGiorno | null): boolean {
   return !!p && !!(p.pa || p.fc || p.spo2 || p.temperatura || p.dtx08 || p.evacuazione);
 }
@@ -113,9 +125,13 @@ interface RigaProps {
 }
 
 function RigaPaziente({
-  paziente, cartella, operatoreNome,
-  isNoteOpen, onToggleNote,
-  onClickPaziente, onSalva,
+  paziente,
+  cartella,
+  operatoreNome,
+  isNoteOpen,
+  onToggleNote,
+  onClickPaziente,
+  onSalva,
 }: RigaProps) {
   const { giorno } = meseCorrente();
   const existing = getParametroOggi(cartella);
@@ -127,7 +143,10 @@ function RigaPaziente({
   const [saving, setSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const hasSavedNote = Boolean((existing?.note && existing.note.trim().length > 0) || (riga.note && riga.note.trim().length > 0));
+  const hasSavedNote = Boolean(
+    (existing?.note && existing.note.trim().length > 0) ||
+    (riga.note && riga.note.trim().length > 0),
+  );
   const initials = ((paziente.firstName?.[0] ?? '') + (paziente.lastName?.[0] ?? '')).toUpperCase();
 
   const cameraInfo = (() => {
@@ -139,7 +158,7 @@ function RigaPaziente({
   })();
 
   function update<K extends keyof RigaEditabile>(k: K, v: RigaEditabile[K]) {
-    setRiga(r => ({ ...r, [k]: v }));
+    setRiga((r) => ({ ...r, [k]: v }));
   }
 
   async function handleSave() {
@@ -152,7 +171,7 @@ function RigaPaziente({
     const oraAuto = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
     try {
       await Promise.resolve(
-        onSalva(paziente.id, { ...riga, ora: oraAuto, operatore: operatoreNome })
+        onSalva(paziente.id, { ...riga, ora: oraAuto, operatore: operatoreNome }),
       );
       setErrorMessage(null);
       onToggleNote(false);
@@ -173,18 +192,29 @@ function RigaPaziente({
   const rowClass = 'qe-row' + (isNoteOpen ? ' qe-row--has-note-open' : '');
 
   return (
-    <div className={rowClass} role="group" aria-label={`Parametri ${paziente.firstName} ${paziente.lastName}`}>
+    <div
+      className={rowClass}
+      role="group"
+      aria-label={`Parametri ${paziente.firstName} ${paziente.lastName}`}
+    >
       <div
         className="qe-row__patient"
         role="button"
         tabIndex={0}
         onClick={onClickPaziente}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClickPaziente(); } }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onClickPaziente();
+          }
+        }}
         aria-label={`Apri scheda ${paziente.firstName} ${paziente.lastName}`}
       >
         <div className="qe-row__avatar">{initials}</div>
         <div style={{ overflow: 'hidden' }}>
-          <div className="qe-row__name">{paziente.lastName}, {paziente.firstName}</div>
+          <div className="qe-row__name">
+            {paziente.lastName}, {paziente.firstName}
+          </div>
           <div className="qe-row__room">{cameraInfo}</div>
         </div>
       </div>
@@ -194,7 +224,7 @@ function RigaPaziente({
         placeholder="PA"
         inputMode="text"
         value={riga.pa}
-        onChange={e => update('pa', e.target.value)}
+        onChange={(e) => update('pa', e.target.value)}
         onKeyDown={onEnter}
       />
       <input
@@ -202,7 +232,7 @@ function RigaPaziente({
         placeholder="SpO2 %"
         inputMode="decimal"
         value={riga.spo2}
-        onChange={e => update('spo2', e.target.value)}
+        onChange={(e) => update('spo2', e.target.value)}
         onKeyDown={onEnter}
         title={spo2Critico(riga.spo2) ? 'SpO2 sotto soglia (<92)' : undefined}
       />
@@ -211,15 +241,17 @@ function RigaPaziente({
         placeholder="FC bpm"
         inputMode="decimal"
         value={riga.fc}
-        onChange={e => update('fc', e.target.value)}
+        onChange={(e) => update('fc', e.target.value)}
         onKeyDown={onEnter}
       />
       <input
-        className={'qe-row__input' + (tempAttenzione(riga.temperatura) ? ' qe-row__input--attenzione' : '')}
+        className={
+          'qe-row__input' + (tempAttenzione(riga.temperatura) ? ' qe-row__input--attenzione' : '')
+        }
         placeholder="TC °C"
         inputMode="decimal"
         value={riga.temperatura}
-        onChange={e => update('temperatura', e.target.value)}
+        onChange={(e) => update('temperatura', e.target.value)}
         onKeyDown={onEnter}
         title={tempAttenzione(riga.temperatura) ? 'Temperatura ≥ 37,5 °C' : undefined}
       />
@@ -228,7 +260,7 @@ function RigaPaziente({
         placeholder="DTX"
         inputMode="decimal"
         value={riga.dtx}
-        onChange={e => update('dtx', e.target.value)}
+        onChange={(e) => update('dtx', e.target.value)}
         onKeyDown={onEnter}
       />
       <input
@@ -236,7 +268,7 @@ function RigaPaziente({
         placeholder="Evac."
         inputMode="text"
         value={riga.evacuazione}
-        onChange={e => update('evacuazione', e.target.value)}
+        onChange={(e) => update('evacuazione', e.target.value)}
         onKeyDown={onEnter}
       />
 
@@ -249,7 +281,9 @@ function RigaPaziente({
         onClick={() => onToggleNote(!isNoteOpen)}
         title="Note"
       >
-        <span className="qe-row__note-btn-ico" aria-hidden="true"><IcoMessage /></span>
+        <span className="qe-row__note-btn-ico" aria-hidden="true">
+          <IcoMessage />
+        </span>
         <span className="qe-row__note-btn-label">Note</span>
       </button>
 
@@ -269,14 +303,18 @@ function RigaPaziente({
             value={riga.note}
             rows={2}
             placeholder="Note rapide"
-            onChange={e => update('note', e.target.value)}
-            onKeyDown={e => { if (e.key === 'Escape') onToggleNote(false); }}
+            onChange={(e) => update('note', e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') onToggleNote(false);
+            }}
           />
         </div>
       )}
 
       {errorMessage && (
-        <div className="qe-row__error" role="alert">{errorMessage}</div>
+        <div className="qe-row__error" role="alert">
+          {errorMessage}
+        </div>
       )}
     </div>
   );
@@ -285,15 +323,18 @@ function RigaPaziente({
 // ── Main component ─────────────────────────────────────────────────────────────
 
 export function MultiPatientParametri({
-  pazienti, cartelle,
-  operatoreNome, loading,
-  onSelectPaziente, onUpdateCartella,
+  pazienti,
+  cartelle,
+  operatoreNome,
+  loading,
+  onSelectPaziente,
+  onUpdateCartella,
 }: Props) {
   const [noteOpenForPazienteId, setNoteOpenForPazienteId] = useState<string | null>(null);
   const [ricerca, setRicerca] = useState('');
 
   function getCartella(pazienteId: string): CartellaPaziente {
-    return cartelle.find(c => c.pazienteId === pazienteId) ?? createEmptyCartella(pazienteId);
+    return cartelle.find((c) => c.pazienteId === pazienteId) ?? createEmptyCartella(pazienteId);
   }
 
   function salvaRiga(pazienteId: string, riga: RigaEditabile) {
@@ -302,11 +343,11 @@ export function MultiPatientParametri({
     const parametroGiorno = rigaToParametroGiorno(riga);
 
     const mensili: ParametriMensili[] = [...(cartella.parametriMensili ?? [])];
-    const idxMensile = mensili.findIndex(m => m.mese === mese && m.anno === anno);
+    const idxMensile = mensili.findIndex((m) => m.mese === mese && m.anno === anno);
 
     if (idxMensile >= 0) {
       const giorni = [...mensili[idxMensile].giorni];
-      const idxGiorno = giorni.findIndex(g => g.giorno === riga.giorno);
+      const idxGiorno = giorni.findIndex((g) => g.giorno === riga.giorno);
       if (idxGiorno >= 0) {
         giorni[idxGiorno] = parametroGiorno;
       } else {
@@ -327,25 +368,32 @@ export function MultiPatientParametri({
   }
 
   const oggi = new Date().toLocaleDateString('it-IT', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
   });
 
   // Issue #129: ordinamento alfabetico stabile per cognome+nome, anche con filtri attivi.
-  const filtrati = pazienti.filter(p => {
-    const q = ricerca.trim().toLowerCase();
-    if (!q) return true;
-    const cart = getCartella(p.id);
-    const room = `${cart.cameraNumero ?? ''} ${cart.lettoNumero ?? ''}`;
-    return (
-      `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
-      p.medicalRecordNumber.toLowerCase().includes(q) ||
-      room.toLowerCase().includes(q)
-    );
-  }).sort(comparePazienti);
+  const filtrati = pazienti
+    .filter((p) => {
+      const q = ricerca.trim().toLowerCase();
+      if (!q) return true;
+      const cart = getCartella(p.id);
+      const room = `${cart.cameraNumero ?? ''} ${cart.lettoNumero ?? ''}`;
+      return (
+        `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
+        p.medicalRecordNumber.toLowerCase().includes(q) ||
+        room.toLowerCase().includes(q)
+      );
+    })
+    .sort(comparePazienti);
 
   // Contatore avanzamento: pazienti con almeno una rilevazione registrata oggi.
   const totaleRilevabili = filtrati.length;
-  const rilevatiOggi = filtrati.filter(p => hasRilevazione(getParametroOggi(getCartella(p.id)))).length;
+  const rilevatiOggi = filtrati.filter((p) =>
+    hasRilevazione(getParametroOggi(getCartella(p.id))),
+  ).length;
   const rilevatiPct = totaleRilevabili ? Math.round((rilevatiOggi / totaleRilevabili) * 100) : 0;
 
   return (
@@ -359,24 +407,38 @@ export function MultiPatientParametri({
       {/* Toolbar — coerente con pagina Pazienti */}
       <div className="toolbar">
         <div className="search-wrap">
-          <span className="search-wrap__ico"><IcoSearch /></span>
+          <span className="search-wrap__ico">
+            <IcoSearch />
+          </span>
           <input
             className="search-input"
             type="search"
             placeholder="Cerca per nome, MRN, camera…"
             value={ricerca}
-            onChange={e => setRicerca(e.target.value)}
+            onChange={(e) => setRicerca(e.target.value)}
           />
           {ricerca && (
-            <button className="search-clear-btn" onClick={() => setRicerca('')} aria-label="Cancella">
+            <button
+              className="search-clear-btn"
+              onClick={() => setRicerca('')}
+              aria-label="Cancella"
+            >
               <IcoX />
             </button>
           )}
         </div>
         {!loading && totaleRilevabili > 0 && (
-          <div className="qe-progress" aria-label={`${rilevatiOggi} di ${totaleRilevabili} pazienti rilevati oggi`}>
-            <span><span className="qe-progress__count">{rilevatiOggi}</span>/{totaleRilevabili} rilevati oggi</span>
-            <span className="qe-progress__bar"><span className="qe-progress__fill" style={{ width: `${rilevatiPct}%` }} /></span>
+          <div
+            className="qe-progress"
+            aria-label={`${rilevatiOggi} di ${totaleRilevabili} pazienti rilevati oggi`}
+          >
+            <span>
+              <span className="qe-progress__count">{rilevatiOggi}</span>/{totaleRilevabili} rilevati
+              oggi
+            </span>
+            <span className="qe-progress__bar">
+              <span className="qe-progress__fill" style={{ width: `${rilevatiPct}%` }} />
+            </span>
           </div>
         )}
       </div>
@@ -394,7 +456,9 @@ export function MultiPatientParametri({
           <div className="qe-list">
             {/* Column headers */}
             <div className="qe-row qe-row--header" role="presentation" aria-hidden="true">
-              <div className="qe-row__patient"><span className="qe-row__col-label">Paziente</span></div>
+              <div className="qe-row__patient">
+                <span className="qe-row__col-label">Paziente</span>
+              </div>
               <span className="qe-row__col-label qe-row__col-label--wide">PA</span>
               <span className="qe-row__col-label">SpO2</span>
               <span className="qe-row__col-label">FC</span>
@@ -404,14 +468,16 @@ export function MultiPatientParametri({
               <span className="qe-row__col-label">Note</span>
               <span className="qe-row__col-label">Salva</span>
             </div>
-            {filtrati.map(paziente => (
+            {filtrati.map((paziente) => (
               <RigaPaziente
                 key={paziente.id}
                 paziente={paziente}
                 cartella={getCartella(paziente.id)}
                 operatoreNome={operatoreNome}
                 isNoteOpen={noteOpenForPazienteId === paziente.id}
-                onToggleNote={(open: boolean) => setNoteOpenForPazienteId(open ? paziente.id : null)}
+                onToggleNote={(open: boolean) =>
+                  setNoteOpenForPazienteId(open ? paziente.id : null)
+                }
                 onClickPaziente={() => onSelectPaziente(paziente)}
                 onSalva={salvaRiga}
               />
@@ -430,9 +496,15 @@ function createEmptyCartella(pazienteId: string): CartellaPaziente {
     pazienteId,
     statoRicovero: 'ricoverato',
     anamnesi: {
-      fisiologica: '', patologicaRemota: '', patologicaProssima: '',
-      familiare: '', lavorativa: '', abitudini: '', note: '',
-      updatedAt: new Date().toISOString(), operatore: '',
+      fisiologica: '',
+      patologicaRemota: '',
+      patologicaProssima: '',
+      familiare: '',
+      lavorativa: '',
+      abitudini: '',
+      note: '',
+      updatedAt: new Date().toISOString(),
+      operatore: '',
     },
     diagnosi: [],
     terapie: [],
@@ -442,7 +514,13 @@ function createEmptyCartella(pazienteId: string): CartellaPaziente {
     visite: [],
     parametriVitali: [],
     interventi: [],
-    pianoCura: { obiettivi: '', interventiPrevisti: '', notePianificazione: '', dataAggiornamento: '', operatore: '' },
+    pianoCura: {
+      obiettivi: '',
+      interventiPrevisti: '',
+      notePianificazione: '',
+      dataAggiornamento: '',
+      operatore: '',
+    },
     indicatoriRischio: [],
     documentiConsegnati: [],
     diarioInfermieristico: [],

@@ -53,7 +53,9 @@ function toIncoming(files: Express.Multer.File[] | undefined): IncomingFile[] {
 
 function handleError(res: import('express').Response, err: unknown) {
   if (err instanceof AiExtractionError) {
-    return res.status(err.kind === 'config' ? 400 : 503).json({ error: err.message, kind: err.kind });
+    return res
+      .status(err.kind === 'config' ? 400 : 503)
+      .json({ error: err.message, kind: err.kind });
   }
   if (err instanceof multer.MulterError) {
     return res.status(400).json({ error: `Upload non valido: ${err.code}` });
@@ -65,14 +67,19 @@ function handleError(res: import('express').Response, err: unknown) {
 // POST /ai/extraction/jobs — create a job, optionally with the first batch of files.
 aiJobsRouter.post('/', upload.array('files'), async (req, res) => {
   try {
-    const idempotencyKey = (req.header('Idempotency-Key') || req.body?.idempotencyKey || undefined) as string | undefined;
+    const idempotencyKey = (req.header('Idempotency-Key') ||
+      req.body?.idempotencyKey ||
+      undefined) as string | undefined;
     const op = (req as AuthedRequest).operator;
     const job = await createJob({ idempotencyKey, createdById: op?.id });
     await recordAudit(job.id, 'job_created', { operatorId: op?.id });
     const incoming = toIncoming(req.files as Express.Multer.File[]);
     if (incoming.length === 0) return res.status(201).json({ job, outcomes: [] });
     const result = await addFiles(job.id, incoming);
-    await recordAudit(job.id, 'files_added', { operatorId: op?.id, detail: `${incoming.length} file` });
+    await recordAudit(job.id, 'files_added', {
+      operatorId: op?.id,
+      detail: `${incoming.length} file`,
+    });
     return res.status(201).json(result);
   } catch (err) {
     return handleError(res, err);
@@ -84,7 +91,10 @@ aiJobsRouter.post('/:id/files', upload.array('files'), async (req, res) => {
   try {
     const incoming = toIncoming(req.files as Express.Multer.File[]);
     const result = await addFiles(String(req.params.id), incoming);
-    await recordAudit(String(req.params.id), 'files_added', { operatorId: (req as AuthedRequest).operator?.id, detail: `${incoming.length} file` });
+    await recordAudit(String(req.params.id), 'files_added', {
+      operatorId: (req as AuthedRequest).operator?.id,
+      detail: `${incoming.length} file`,
+    });
     return res.status(200).json(result);
   } catch (err) {
     return handleError(res, err);
@@ -138,7 +148,9 @@ aiJobsRouter.post('/:id/files/:docId/logical', async (req, res) => {
 aiJobsRouter.post('/:id/cancel', async (req, res) => {
   try {
     const job = await cancelJob(String(req.params.id));
-    await recordAudit(String(req.params.id), 'job_cancelled', { operatorId: (req as AuthedRequest).operator?.id });
+    await recordAudit(String(req.params.id), 'job_cancelled', {
+      operatorId: (req as AuthedRequest).operator?.id,
+    });
     return res.status(200).json(job);
   } catch (err) {
     return handleError(res, err);
@@ -165,7 +177,10 @@ aiJobsRouter.post('/:id/reopen', async (req, res) => {
   const jobId = String(req.params.id);
   try {
     const job = await reopenJob(jobId);
-    await recordAudit(jobId, 'process_started', { operatorId: (req as AuthedRequest).operator?.id, detail: 'reopen' });
+    await recordAudit(jobId, 'process_started', {
+      operatorId: (req as AuthedRequest).operator?.id,
+      detail: 'reopen',
+    });
     return res.status(200).json(job);
   } catch (err) {
     return handleError(res, err);
@@ -177,7 +192,10 @@ aiJobsRouter.post('/:id/retry', extractionCostGuard, async (req, res) => {
   const jobId = String(req.params.id);
   try {
     const job = await retryJob(jobId);
-    await recordAudit(jobId, 'process_started', { operatorId: (req as AuthedRequest).operator?.id, detail: 'retry' });
+    await recordAudit(jobId, 'process_started', {
+      operatorId: (req as AuthedRequest).operator?.id,
+      detail: 'retry',
+    });
     return res.status(202).json({ ...job, message: 'Nuovo tentativo avviato' });
   } catch (err) {
     return handleError(res, err);

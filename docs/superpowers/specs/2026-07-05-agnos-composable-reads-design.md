@@ -6,11 +6,12 @@
 
 ## 1. Obiettivo e visione
 
-Rendere l'assistente Agnos capace di rispondere a una **classe generale** di domande sui dati (gestionali, operative, cliniche-strutturate), non a un elenco cablato. Principio: *ogni domanda esprimibile come **filtra + correla + aggrega** sulle entità/campi esposti diventa una composizione*, senza codice per-domanda.
+Rendere l'assistente Agnos capace di rispondere a una **classe generale** di domande sui dati (gestionali, operative, cliniche-strutturate), non a un elenco cablato. Principio: _ogni domanda esprimibile come **filtra + correla + aggrega** sulle entità/campi esposti diventa una composizione_, senza codice per-domanda.
 
 Traguardo a due fasi:
-- **Fase 1 (questo spec):** un **motore di query componibile fidato** — l'LLM emette un *piano di query multi-step* (con dipendenze e condizioni dichiarative) che il backend valida ed esegue in sicurezza. Copre già i 5 esempi + domande condizionali/correlate.
-- **Fase 2 (documentata, §9):** **orchestrazione agentica** (supervisore + sub-agenti Agno tool-calling) *sopra* il motore, per ragionamento iterativo in linguaggio naturale sui risultati intermedi. Fattibilità confermata (Azure `gpt-5.4-mini` supporta il tool-calling — verificato live).
+
+- **Fase 1 (questo spec):** un **motore di query componibile fidato** — l'LLM emette un _piano di query multi-step_ (con dipendenze e condizioni dichiarative) che il backend valida ed esegue in sicurezza. Copre già i 5 esempi + domande condizionali/correlate.
+- **Fase 2 (documentata, §9):** **orchestrazione agentica** (supervisore + sub-agenti Agno tool-calling) _sopra_ il motore, per ragionamento iterativo in linguaggio naturale sui risultati intermedi. Fattibilità confermata (Azure `gpt-5.4-mini` supporta il tool-calling — verificato live).
 
 ## 2. Invarianti di sicurezza (invariati rispetto a F0–F2)
 
@@ -25,12 +26,12 @@ Traguardo a due fasi:
 
 Nuovo sotto-sistema nel backend, `backend/src/ai/gateway/query/`:
 
-| File | Responsabilità |
-|---|---|
-| `schema.ts` | **Descrittore dichiarativo** whitelist: entità → campi (con tag sensibilità) → relazioni (1-hop) → **authz-class** per entità. Unica fonte di verità di cosa l'LLM può toccare. |
-| `dsl.ts` | Tipi del **piano di query** (steps, filtri, relate, aggregate, select, condizioni/dipendenze). |
-| `validate.ts` | Piano LLM → query validata o **rifiuto** (deny-by-default su entità/campo/relazione/operatore ignoti). |
-| `engine.ts` | Query validata → **Prisma** (mai SQL grezzo) → `SourcedResult`; authz per-entità, valutazione condizioni tra step, limiti, `sourceRefs`. |
+| File          | Responsabilità                                                                                                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `schema.ts`   | **Descrittore dichiarativo** whitelist: entità → campi (con tag sensibilità) → relazioni (1-hop) → **authz-class** per entità. Unica fonte di verità di cosa l'LLM può toccare. |
+| `dsl.ts`      | Tipi del **piano di query** (steps, filtri, relate, aggregate, select, condizioni/dipendenze).                                                                                  |
+| `validate.ts` | Piano LLM → query validata o **rifiuto** (deny-by-default su entità/campo/relazione/operatore ignoti).                                                                          |
+| `engine.ts`   | Query validata → **Prisma** (mai SQL grezzo) → `SourcedResult`; authz per-entità, valutazione condizioni tra step, limiti, `sourceRefs`.                                        |
 
 Più: integrazione planner (`llm-planner.ts`, `read-tools.ts`, prompt runtime `assistant.py`), executor (`service.ts`), fonti (`gateway/types.ts` + `sources.ts`), authz (`gateway/context.ts`).
 
@@ -70,7 +71,7 @@ Estendere la copertura futura = aggiungere righe qui, **zero codice esecutivo nu
 ```
 
 - **`dateWindow`**: `{ lastDays: n }` | `{ day: "today"|"yesterday" }` | `{ from, to }`. Risolto server-side (niente date arbitrarie dal modello oltre lo schema).
-- **`runIf`**: esecuzione condizionale su risultato di uno step precedente (deterministica). → copre *"se ieri PA<Y, allora recupera 7 giorni"*.
+- **`runIf`**: esecuzione condizionale su risultato di uno step precedente (deterministica). → copre _"se ieri PA<Y, allora recupera 7 giorni"_.
 - **`bindFrom`**: un passo usa gli id emessi da un passo precedente (fan-out/correlazione), es. pazienti trovati → loro parametri.
 - Limiti hard: max step, max righe per step, max relate/step, timeout — rifiuto se superati.
 
@@ -90,19 +91,19 @@ Estendere la copertura futura = aggiungere righe qui, **zero codice esecutivo nu
 
 ## 8. Mappatura esempi → piano (nessun codice per-domanda)
 
-| Domanda | Piano DSL |
-|---|---|
-| Quante camere occupate? | `s1: from roomAssignment, filter endDate isNull, aggregate countDistinct(roomId)` |
-| Quanti pazienti in struttura? | `s1: from roomAssignment, filter endDate isNull, countDistinct(patientId)` **+** `s2: from patient, count` → answer entrambi |
-| Camera 12 e da chi? | `s1: from roomAssignment, filter endDate isNull & room.numero=12, relate bed,room,patient, select room.numero,bed.label,patient.nome` |
-| Andamento parametri 7gg di X | `s1: from vitalSign, filter patient=X & etichetta=PA & rilevato dateWindow lastDays 7, select etichetta,valore,rilevato, sort rilevato` |
-| Appuntamenti di oggi | `s1: from appointment, filter scheduledAt dateWindow today, relate patient, select scheduledAt,patient.nome,reason` |
-| **Se ieri PA<Y, dammi anche 7gg** | `s1: vitalSign X, PA, yesterday, systolic<Y` → `s2: runIf s1 nonEmpty → vitalSign X, PA, lastDays 7` → answer s1+s2 |
+| Domanda                           | Piano DSL                                                                                                                               |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Quante camere occupate?           | `s1: from roomAssignment, filter endDate isNull, aggregate countDistinct(roomId)`                                                       |
+| Quanti pazienti in struttura?     | `s1: from roomAssignment, filter endDate isNull, countDistinct(patientId)` **+** `s2: from patient, count` → answer entrambi            |
+| Camera 12 e da chi?               | `s1: from roomAssignment, filter endDate isNull & room.numero=12, relate bed,room,patient, select room.numero,bed.label,patient.nome`   |
+| Andamento parametri 7gg di X      | `s1: from vitalSign, filter patient=X & etichetta=PA & rilevato dateWindow lastDays 7, select etichetta,valore,rilevato, sort rilevato` |
+| Appuntamenti di oggi              | `s1: from appointment, filter scheduledAt dateWindow today, relate patient, select scheduledAt,patient.nome,reason`                     |
+| **Se ieri PA<Y, dammi anche 7gg** | `s1: vitalSign X, PA, yesterday, systolic<Y` → `s2: runIf s1 nonEmpty → vitalSign X, PA, lastDays 7` → answer s1+s2                     |
 
 ## 9. Fase 2 — Orchestrazione supervisore + sub-agenti (documentata, non in questo spec)
 
 - **Fattibilità confermata**: Azure `gpt-5.4-mini` (EU/GDPR) supporta il tool-calling nativo (verificato live: `finish_reason=tool_calls`).
-- **Forma**: team Agno nel runtime; il **supervisore** decompone la domanda e coordina **sub-agenti**, ognuno dei quali usa come *tool* il **motore di query** del backend (via endpoint) — quindi ogni accesso resta validato/authz/SOURCE_ONLY. Il supervisore **correla** i risultati e compone.
+- **Forma**: team Agno nel runtime; il **supervisore** decompone la domanda e coordina **sub-agenti**, ognuno dei quali usa come _tool_ il **motore di query** del backend (via endpoint) — quindi ogni accesso resta validato/authz/SOURCE_ONLY. Il supervisore **correla** i risultati e compone.
 - **Perché sopra la Fase 1**: i sub-agenti non toccano il DB; usano il motore come layer-strumenti fidato. Senza Fase 1, niente garanzie.
 - **Da definire in un brainstorm dedicato**: schema dei tool esposti al supervisore, bounding (max sub-agenti/step/round, timeout, budget token), topologia (loop nel backend che chiama il runtime per il ragionamento vs team Agno nel runtime che richiama il backend), preservazione SOURCE_ONLY end-to-end, osservabilità.
 

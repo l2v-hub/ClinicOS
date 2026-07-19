@@ -14,6 +14,7 @@ These are the externally-visible contracts for the 5 components this feature int
 **Replaces**: inline sidebar JSX in App.tsx
 
 **Exported interface**:
+
 ```typescript
 export interface TeamsLikeSidebarProps {
   activeKey: NavKey;
@@ -37,6 +38,7 @@ export interface TeamsLikeSidebarProps {
 **Replaces**: patient header block (~30 lines) at top of PatientDetail.tsx render
 
 **Exported interface**:
+
 ```typescript
 export interface PatientCompactHeaderProps {
   paziente: Paziente;
@@ -58,6 +60,7 @@ export interface PatientCompactHeaderProps {
 **Replaces**: `PageTabs` export (backward-compat alias `export { MainHorizontalNav as PageTabs }` for zero-change callers during migration)
 
 **Exported interface**: unchanged from `PageTabs`
+
 ```typescript
 export interface PageTabGroup {
   id: string;
@@ -83,6 +86,7 @@ export function MainHorizontalNav(props: {
 **Replaces**: `SectionTabs` export (backward-compat alias `export { ContextSubTabs as SectionTabs }`)
 
 **Exported interface**: unchanged from `SectionTabs`
+
 ```typescript
 export interface SectionTab {
   id: string;
@@ -119,7 +123,7 @@ export function ContextSubTabs(props: {
 All callers of renamed components must be updated (or use backward-compat aliases):
 
 - [ ] `PatientDetail.tsx` — import `MainHorizontalNav` (or keep `PageTabs` alias)
-- [ ] `PatientDetail.tsx` — import `ContextSubTabs` (or keep `SectionTabs` alias)  
+- [ ] `PatientDetail.tsx` — import `ContextSubTabs` (or keep `SectionTabs` alias)
 - [ ] `App.tsx` — replace inline sidebar JSX with `<TeamsLikeSidebar />`
 - [ ] `App.tsx` — replace inline patient header with `<PatientCompactHeader />` via PatientDetail
 - [ ] `App.tsx` — replace `.topbar` JSX with compact single-line topbar

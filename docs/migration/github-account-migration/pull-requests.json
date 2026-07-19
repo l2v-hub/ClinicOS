@@ -1,1 +1,266 @@
-[{"baseRefName":"main","headRefName":"fix/req-093-therapy-fractions","number":114,"state":"MERGED","title":"REQ-093: graphical fractional therapy dosing (BUG-055)","url":"https://github.com/lucalavia/ClinicOS/pull/114"},{"baseRefName":"main","headRefName":"feature/issue-102-invio-ps","number":113,"state":"MERGED","title":"fix(issue-102): Invio in PS print window for dimissioni + terapia (BUG-064)","url":"https://github.com/lucalavia/ClinicOS/pull/113"},{"baseRefName":"main","headRefName":"feature/issue-99-esami-consulenze","number":112,"state":"MERGED","title":"fix(issue-99): separate Esami ematici / RX / Consulenze sections (BUG-061)","url":"https://github.com/lucalavia/ClinicOS/pull/112"},{"baseRefName":"main","headRefName":"feature/issue-98-tinetti-nrs","number":111,"state":"MERGED","title":"fix(issue-98): add Scala Tinetti + Scala NRS clinical modules (BUG-060)","url":"https://github.com/lucalavia/ClinicOS/pull/111"},{"baseRefName":"main","headRefName":"fix/issue-103-consegne-inline","number":110,"state":"MERGED","title":"BUG-065 (#103): inline consegna edit (no overlapping windows)","url":"https://github.com/lucalavia/ClinicOS/pull/110"},{"baseRefName":"main","headRefName":"fix/issue-100-remove-giro-medicazione","number":109,"state":"MERGED","title":"BUG-062 (#100): remove Giro medicazione from dimissione","url":"https://github.com/lucalavia/ClinicOS/pull/109"},{"baseRefName":"main","headRefName":"fix/issue-97-remove-intervallo","number":108,"state":"MERGED","title":"BUG-059 (#97): remove Intervallo rivalutazione from contenzioni","url":"https://github.com/lucalavia/ClinicOS/pull/108"},{"baseRefName":"main","headRefName":"fix/issue-92-remove-anamnesi-fields","number":107,"state":"MERGED","title":"BUG-054 (#92): remove Anamnesi familiare + Contesto lavorativo","url":"https://github.com/lucalavia/ClinicOS/pull/107"},{"baseRefName":"main","headRefName":"fix/issue-101-allergie-mock-leak","number":106,"state":"MERGED","title":"BUG-063 (#101): empty default cartella — allergie per-patient","url":"https://github.com/lucalavia/ClinicOS/pull/106"},{"baseRefName":"main","headRefName":"fix/issue-94-multi-orari","number":105,"state":"MERGED","title":"BUG-056 (#94): multiple times per therapy prescription","url":"https://github.com/lucalavia/ClinicOS/pull/105"},{"baseRefName":"main","headRefName":"fix/issue-91-dolore-editable","number":104,"state":"MERGED","title":"BUG-053 (#91): Dolore inline-editable in Presa in Carico","url":"https://github.com/lucalavia/ClinicOS/pull/104"},{"baseRefName":"main","headRefName":"req-041-voice-actions","number":88,"state":"MERGED","title":"REQ-041: confirmed voice write-actions (parameters + data edits)","url":"https://github.com/lucalavia/ClinicOS/pull/88"},{"baseRefName":"main","headRefName":"req-040-assistant-panel","number":59,"state":"MERGED","title":"REQ-040: assistant panel + public operator endpoint (completes #53)","url":"https://github.com/lucalavia/ClinicOS/pull/59"},{"baseRefName":"main","headRefName":"req-040-ai-assistant-backend","number":58,"state":"MERGED","title":"REQ-040: source-grounded AI assistant (backend orchestration)","url":"https://github.com/lucalavia/ClinicOS/pull/58"},{"baseRefName":"main","headRefName":"req-039-ai-data-gateway","number":57,"state":"MERGED","title":"REQ-039: add model-agnostic ClinicOS AI data gateway","url":"https://github.com/lucalavia/ClinicOS/pull/57"},{"baseRefName":"main","headRefName":"req-038-date-prefix-bold","number":56,"state":"MERGED","title":"REQ-038: highlight narrative date prefixes","url":"https://github.com/lucalavia/ClinicOS/pull/56"},{"baseRefName":"main","headRefName":"req-037-header-footer-filter","number":55,"state":"MERGED","title":"REQ-037: detect and filter repeated document headers","url":"https://github.com/lucalavia/ClinicOS/pull/55"},{"baseRefName":"main","headRefName":"req-036-document-reorder-reprocess","number":51,"state":"MERGED","title":"REQ-036: allow document reorder and reprocessing","url":"https://github.com/lucalavia/ClinicOS/pull/51"},{"baseRefName":"main","headRefName":"req-035v2-persist-documents","number":47,"state":"MERGED","title":"REQ-035 v2: persist imported documents and link patient sections","url":"https://github.com/lucalavia/ClinicOS/pull/47"},{"baseRefName":"main","headRefName":"hotfix-cartella-allergie-array","number":45,"state":"MERGED","title":"hotfix: fix cartella.allergie.filter crash on imported patients","url":"https://github.com/lucalavia/ClinicOS/pull/45"},{"baseRefName":"main","headRefName":"req-035-populate-narrative","number":44,"state":"MERGED","title":"REQ-035: populate narrative sections from extracted text","url":"https://github.com/lucalavia/ClinicOS/pull/44"},{"baseRefName":"main","headRefName":"req-033-real-narrative-flow","number":42,"state":"MERGED","title":"REQ-033: replace legacy import rows with narrative sections","url":"https://github.com/lucalavia/ClinicOS/pull/42"},{"baseRefName":"main","headRefName":"req-032-wide-import-workspace","number":41,"state":"MERGED","title":"REQ-032: enlarge document import and review workspace","url":"https://github.com/lucalavia/ClinicOS/pull/41"},{"baseRefName":"main","headRefName":"req-030-narrative-ui","number":39,"state":"MERGED","title":"REQ-030: replace imported clinical rows with narrative sections","url":"https://github.com/lucalavia/ClinicOS/pull/39"},{"baseRefName":"main","headRefName":"req-029-narrative-persistence","number":38,"state":"MERGED","title":"REQ-029: persist patient narrative clinical sections","url":"https://github.com/lucalavia/ClinicOS/pull/38"},{"baseRefName":"main","headRefName":"req-028-narrative-sections","number":36,"state":"MERGED","title":"REQ-028: extract discharge letter as narrative sections","url":"https://github.com/lucalavia/ClinicOS/pull/36"},{"baseRefName":"main","headRefName":"req-025-imola-doc-profile","number":31,"state":"MERGED","title":"REQ-025: add Imola discharge document profile","url":"https://github.com/lucalavia/ClinicOS/pull/31"},{"baseRefName":"main","headRefName":"req-027-map-sections","number":30,"state":"MERGED","title":"REQ-027: map discharge sections into ClinicOS","url":"https://github.com/lucalavia/ClinicOS/pull/30"},{"baseRefName":"main","headRefName":"req-026-faithful-sections","number":29,"state":"MERGED","title":"REQ-026: extract faithful clinical sections with semantic tags","url":"https://github.com/lucalavia/ClinicOS/pull/29"},{"baseRefName":"main","headRefName":"req/REQ-023-agno-runtime","number":25,"state":"MERGED","title":"REQ-023/024: ClinicOS AI Runtime (Agno) + Model Role Registry","url":"https://github.com/lucalavia/ClinicOS/pull/25"},{"baseRefName":"main","headRefName":"req/REQ-022-async-import","number":24,"state":"MERGED","title":"REQ-022: stabilize async document import flow","url":"https://github.com/lucalavia/ClinicOS/pull/24"},{"baseRefName":"main","headRefName":"015-unified-topnav","number":2,"state":"MERGED","title":"Unified Left-Top-Top navigation (TopNav)","url":"https://github.com/lucalavia/ClinicOS/pull/2"},{"baseRefName":"main","headRefName":"014-redesign-design-system","number":1,"state":"MERGED","title":"Redesign ClinicOS design system & layout (014)","url":"https://github.com/lucalavia/ClinicOS/pull/1"}]
+[
+  {
+    "baseRefName": "main",
+    "headRefName": "fix/req-093-therapy-fractions",
+    "number": 114,
+    "state": "MERGED",
+    "title": "REQ-093: graphical fractional therapy dosing (BUG-055)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/114"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "feature/issue-102-invio-ps",
+    "number": 113,
+    "state": "MERGED",
+    "title": "fix(issue-102): Invio in PS print window for dimissioni + terapia (BUG-064)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/113"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "feature/issue-99-esami-consulenze",
+    "number": 112,
+    "state": "MERGED",
+    "title": "fix(issue-99): separate Esami ematici / RX / Consulenze sections (BUG-061)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/112"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "feature/issue-98-tinetti-nrs",
+    "number": 111,
+    "state": "MERGED",
+    "title": "fix(issue-98): add Scala Tinetti + Scala NRS clinical modules (BUG-060)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/111"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "fix/issue-103-consegne-inline",
+    "number": 110,
+    "state": "MERGED",
+    "title": "BUG-065 (#103): inline consegna edit (no overlapping windows)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/110"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "fix/issue-100-remove-giro-medicazione",
+    "number": 109,
+    "state": "MERGED",
+    "title": "BUG-062 (#100): remove Giro medicazione from dimissione",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/109"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "fix/issue-97-remove-intervallo",
+    "number": 108,
+    "state": "MERGED",
+    "title": "BUG-059 (#97): remove Intervallo rivalutazione from contenzioni",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/108"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "fix/issue-92-remove-anamnesi-fields",
+    "number": 107,
+    "state": "MERGED",
+    "title": "BUG-054 (#92): remove Anamnesi familiare + Contesto lavorativo",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/107"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "fix/issue-101-allergie-mock-leak",
+    "number": 106,
+    "state": "MERGED",
+    "title": "BUG-063 (#101): empty default cartella — allergie per-patient",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/106"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "fix/issue-94-multi-orari",
+    "number": 105,
+    "state": "MERGED",
+    "title": "BUG-056 (#94): multiple times per therapy prescription",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/105"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "fix/issue-91-dolore-editable",
+    "number": 104,
+    "state": "MERGED",
+    "title": "BUG-053 (#91): Dolore inline-editable in Presa in Carico",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/104"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-041-voice-actions",
+    "number": 88,
+    "state": "MERGED",
+    "title": "REQ-041: confirmed voice write-actions (parameters + data edits)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/88"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-040-assistant-panel",
+    "number": 59,
+    "state": "MERGED",
+    "title": "REQ-040: assistant panel + public operator endpoint (completes #53)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/59"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-040-ai-assistant-backend",
+    "number": 58,
+    "state": "MERGED",
+    "title": "REQ-040: source-grounded AI assistant (backend orchestration)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/58"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-039-ai-data-gateway",
+    "number": 57,
+    "state": "MERGED",
+    "title": "REQ-039: add model-agnostic ClinicOS AI data gateway",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/57"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-038-date-prefix-bold",
+    "number": 56,
+    "state": "MERGED",
+    "title": "REQ-038: highlight narrative date prefixes",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/56"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-037-header-footer-filter",
+    "number": 55,
+    "state": "MERGED",
+    "title": "REQ-037: detect and filter repeated document headers",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/55"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-036-document-reorder-reprocess",
+    "number": 51,
+    "state": "MERGED",
+    "title": "REQ-036: allow document reorder and reprocessing",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/51"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-035v2-persist-documents",
+    "number": 47,
+    "state": "MERGED",
+    "title": "REQ-035 v2: persist imported documents and link patient sections",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/47"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "hotfix-cartella-allergie-array",
+    "number": 45,
+    "state": "MERGED",
+    "title": "hotfix: fix cartella.allergie.filter crash on imported patients",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/45"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-035-populate-narrative",
+    "number": 44,
+    "state": "MERGED",
+    "title": "REQ-035: populate narrative sections from extracted text",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/44"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-033-real-narrative-flow",
+    "number": 42,
+    "state": "MERGED",
+    "title": "REQ-033: replace legacy import rows with narrative sections",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/42"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-032-wide-import-workspace",
+    "number": 41,
+    "state": "MERGED",
+    "title": "REQ-032: enlarge document import and review workspace",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/41"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-030-narrative-ui",
+    "number": 39,
+    "state": "MERGED",
+    "title": "REQ-030: replace imported clinical rows with narrative sections",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/39"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-029-narrative-persistence",
+    "number": 38,
+    "state": "MERGED",
+    "title": "REQ-029: persist patient narrative clinical sections",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/38"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-028-narrative-sections",
+    "number": 36,
+    "state": "MERGED",
+    "title": "REQ-028: extract discharge letter as narrative sections",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/36"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-025-imola-doc-profile",
+    "number": 31,
+    "state": "MERGED",
+    "title": "REQ-025: add Imola discharge document profile",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/31"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-027-map-sections",
+    "number": 30,
+    "state": "MERGED",
+    "title": "REQ-027: map discharge sections into ClinicOS",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/30"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req-026-faithful-sections",
+    "number": 29,
+    "state": "MERGED",
+    "title": "REQ-026: extract faithful clinical sections with semantic tags",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/29"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req/REQ-023-agno-runtime",
+    "number": 25,
+    "state": "MERGED",
+    "title": "REQ-023/024: ClinicOS AI Runtime (Agno) + Model Role Registry",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/25"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "req/REQ-022-async-import",
+    "number": 24,
+    "state": "MERGED",
+    "title": "REQ-022: stabilize async document import flow",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/24"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "015-unified-topnav",
+    "number": 2,
+    "state": "MERGED",
+    "title": "Unified Left-Top-Top navigation (TopNav)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/2"
+  },
+  {
+    "baseRefName": "main",
+    "headRefName": "014-redesign-design-system",
+    "number": 1,
+    "state": "MERGED",
+    "title": "Redesign ClinicOS design system & layout (014)",
+    "url": "https://github.com/lucalavia/ClinicOS/pull/1"
+  }
+]

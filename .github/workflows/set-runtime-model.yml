@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       model:
-        description: "provider:model_id (es. google:gemma-4-31b-it, azure:gpt-4o-mini)"
+        description: 'provider:model_id (es. google:gemma-4-31b-it, azure:gpt-4o-mini)'
         required: true
         type: string
 concurrency:

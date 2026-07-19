@@ -31,9 +31,12 @@ export function hasLegacyAnamnesis(anamnesi: Partial<Anamnesi> | null | undefine
 }
 
 /** Maps a legacy anamnesi object to ordered, non-empty label/value rows for read-only display. */
-export function legacyAnamnesisRows(anamnesi: Partial<Anamnesi> | null | undefined): LegacyAnamnesisRow[] {
+export function legacyAnamnesisRows(
+  anamnesi: Partial<Anamnesi> | null | undefined,
+): LegacyAnamnesisRow[] {
   if (!anamnesi) return [];
-  return FIELD_LABELS
-    .filter(({ key }) => isNonEmpty(anamnesi[key]))
-    .map(({ key, label }) => ({ label, value: String(anamnesi[key]) }));
+  return FIELD_LABELS.filter(({ key }) => isNonEmpty(anamnesi[key])).map(({ key, label }) => ({
+    label,
+    value: String(anamnesi[key]),
+  }));
 }

@@ -37,12 +37,12 @@ Run this after every significant change to catch TypeScript errors early.
 
 Open Chrome/Edge DevTools (`F12`) → Toggle device toolbar (`Ctrl+Shift+M`) → Set custom size:
 
-| Test Target | Width | Height | What to check |
-|-------------|-------|--------|----------------|
-| Tablet baseline | 1024 | 768 | No dead space, no overflow, L2/L3 nav fits |
-| Large tablet | 1180 | 820 | Wider cards, correct padding |
-| Desktop | 1366 | 768 | Full-width layout, cards extend naturally |
-| Desktop wide | 1920 | 1080 | No max-width clamp on shell |
+| Test Target     | Width | Height | What to check                              |
+| --------------- | ----- | ------ | ------------------------------------------ |
+| Tablet baseline | 1024  | 768    | No dead space, no overflow, L2/L3 nav fits |
+| Large tablet    | 1180  | 820    | Wider cards, correct padding               |
+| Desktop         | 1366  | 768    | Full-width layout, cards extend naturally  |
+| Desktop wide    | 1920  | 1080   | No max-width clamp on shell                |
 
 ### Navigation Testing
 
@@ -55,13 +55,15 @@ Open Chrome/Edge DevTools (`F12`) → Toggle device toolbar (`Ctrl+Shift+M`) →
 ### Overflow Check
 
 In DevTools Console, paste:
+
 ```javascript
-document.querySelectorAll('*').forEach(el => {
+document.querySelectorAll('*').forEach((el) => {
   if (el.offsetWidth > document.body.offsetWidth) {
     console.log('overflow:', el, el.offsetWidth);
   }
 });
 ```
+
 Should return no results at any tested viewport.
 
 ---
@@ -70,13 +72,13 @@ Should return no results at any tested viewport.
 
 All files are under `C:\Workspace\DG_SE_DEV\ClinicOS\frontend\src\`:
 
-| File | Purpose |
-|------|---------|
-| `index.css` | Fix `#root` width constraint |
-| `App.css` | Main layout, L2 nav, L3 nav, breakpoints, tab transitions |
-| `app-additions.css` | Audit for overrides that fight new layout rules |
-| `components/operator/PatientDetail.tsx` | Add `key` prop to tab content wrapper |
-| `components/shared/NavComponents.tsx` | Check if any inline styles override CSS (read-only likely) |
+| File                                    | Purpose                                                    |
+| --------------------------------------- | ---------------------------------------------------------- |
+| `index.css`                             | Fix `#root` width constraint                               |
+| `App.css`                               | Main layout, L2 nav, L3 nav, breakpoints, tab transitions  |
+| `app-additions.css`                     | Audit for overrides that fight new layout rules            |
+| `components/operator/PatientDetail.tsx` | Add `key` prop to tab content wrapper                      |
+| `components/shared/NavComponents.tsx`   | Check if any inline styles override CSS (read-only likely) |
 
 ### Recommended Edit Order
 

@@ -72,16 +72,16 @@ minimum assertion bar of the `parallel-evidence-remediation` skill (§3 and §5)
 Explicit checklist over the diff and the running feature (healthcare app — this phase is
 never N/A, not even for frontend-only changes):
 
-| Check | What to verify |
-|-------|----------------|
-| Secrets | No tokens/keys/passwords/connection strings in diff, fixtures, or logs |
-| PHI | No real patient data in code, tests, logs, or evidence — synthetic fixtures only |
-| Logging | New logs limited to correlationId / ids / outcomes — no clinical payloads |
-| Input validation | New/changed endpoints validate and bound their inputs (types, lengths) |
-| AuthZ | New routes/actions respect role gating (operator vs manager); no auth bypass |
-| Injection/XSS | No raw SQL (Prisma only), no `dangerouslySetInnerHTML` with user content |
-| Dependencies | No new packages unless required by the issue; no license/typo-squat risk |
-| Config | CORS, env handling, and prod flags not weakened; QA-only surfaces env-gated |
+| Check            | What to verify                                                                   |
+| ---------------- | -------------------------------------------------------------------------------- |
+| Secrets          | No tokens/keys/passwords/connection strings in diff, fixtures, or logs           |
+| PHI              | No real patient data in code, tests, logs, or evidence — synthetic fixtures only |
+| Logging          | New logs limited to correlationId / ids / outcomes — no clinical payloads        |
+| Input validation | New/changed endpoints validate and bound their inputs (types, lengths)           |
+| AuthZ            | New routes/actions respect role gating (operator vs manager); no auth bypass     |
+| Injection/XSS    | No raw SQL (Prisma only), no `dangerouslySetInnerHTML` with user content         |
+| Dependencies     | No new packages unless required by the issue; no license/typo-squat risk         |
+| Config           | CORS, env handling, and prod flags not weakened; QA-only surfaces env-gated      |
 
 Any finding → **BLOCKED** (security) with file:line and remediation.
 
@@ -89,24 +89,24 @@ Any finding → **BLOCKED** (security) with file:line and remediation.
 
 Produce `validation-report.md` in the evidence folder and report:
 
-| Phase | Result | Evidence |
-|-------|--------|----------|
-| 0 Contract | criteria list | task-contract.md |
-| 1 Diff review | PASS/FAIL + findings | file:line list |
-| 2 Build & tests | PASS/FAIL | command output |
-| 3 Playwright | PASS/FAIL per UI feature | real artifact paths |
-| 4 Security | PASS/BLOCKED | checklist results |
+| Phase           | Result                   | Evidence            |
+| --------------- | ------------------------ | ------------------- |
+| 0 Contract      | criteria list            | task-contract.md    |
+| 1 Diff review   | PASS/FAIL + findings     | file:line list      |
+| 2 Build & tests | PASS/FAIL                | command output      |
+| 3 Playwright    | PASS/FAIL per UI feature | real artifact paths |
+| 4 Security      | PASS/BLOCKED             | checklist results   |
 
 Then one verdict: **READY FOR CODEX QA** / **BLOCKED** / **FAILED VALIDATION**. Attach
 evidence to the GitHub issue per `parallel-evidence-remediation` §4. Do not close anything.
 
 ## Red flags — the gate is being skipped
 
-| Rationalization | Reality |
-|-----------------|---------|
-| "tsc and build pass, it's done" | Build passing is Phase 2 of 5. Three phases remain. |
-| "The user is in a hurry, open the PR now" | A PR without evidence bounces off Codex as QA FAILED — slower than running the gate. |
-| "The implementer already tested it" | Whoever wrote the code never certifies it. Spawn the QA session. |
-| "Security doesn't apply, it's only frontend" | Healthcare app: PHI, XSS, and logging checks apply to every diff. |
-| "Screenshot exists from development" | Evidence comes from the QA run's Playwright artifacts, not dev screenshots. |
-| "I'll do QA after opening the PR" | The gate runs BEFORE reporting/opening. FAILED means the PR does not open. |
+| Rationalization                              | Reality                                                                              |
+| -------------------------------------------- | ------------------------------------------------------------------------------------ |
+| "tsc and build pass, it's done"              | Build passing is Phase 2 of 5. Three phases remain.                                  |
+| "The user is in a hurry, open the PR now"    | A PR without evidence bounces off Codex as QA FAILED — slower than running the gate. |
+| "The implementer already tested it"          | Whoever wrote the code never certifies it. Spawn the QA session.                     |
+| "Security doesn't apply, it's only frontend" | Healthcare app: PHI, XSS, and logging checks apply to every diff.                    |
+| "Screenshot exists from development"         | Evidence comes from the QA run's Playwright artifacts, not dev screenshots.          |
+| "I'll do QA after opening the PR"            | The gate runs BEFORE reporting/opening. FAILED means the PR does not open.           |

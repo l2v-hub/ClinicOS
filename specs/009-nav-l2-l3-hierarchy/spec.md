@@ -8,7 +8,7 @@
 
 **Input**: User description: "Redesign professionale navigazione livello 2 e livello 3 di ClinicOS. L1 sidebar va bene. L2 e L3 oggi non hanno gerarchia chiara, sembrano poco professionali. Stesso linguaggio grafico ma non identici. L2 grande, evidente, active con underline/barra. L3 piu piccolo, leggero, subordinato. No bordi pesanti, no pill grosse, no stili random. Adattivo tablet/desktop, no overflow orizzontale, transizione leggera. L1 invariata. Build passa. Backend/Prisma/API/VITE_API_URL invariati."
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Operator immediately recognises the primary page menu (Priority: P1) - MVP
 
@@ -66,7 +66,7 @@ When the operator clicks a different L2 or L3 tab, the new content appears with 
 - User taps very close to the edge of an L3 chip on tablet -> touch target must remain large enough (>=32px) to be reliably hittable.
 - Theme already defines an accent color -> L2 active indicator must reuse the existing token, not introduce a new color.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -91,7 +91,7 @@ When the operator clicks a different L2 or L3 tab, the new content appears with 
 
 Not applicable - this feature has no new data entities. It refines presentation of existing navigation components only.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

@@ -7,7 +7,9 @@
 import type { NextFunction, Response } from 'express';
 import type { AuthedRequest } from './auth.js';
 
-interface Bucket { hits: number[]; }
+interface Bucket {
+  hits: number[];
+}
 
 function makeLimiter(windowMs: number, max: number, label: string) {
   const buckets = new Map<string, Bucket>();
@@ -39,4 +41,8 @@ const intEnv = (name: string, fallback: number): number => {
 export const importRateLimit = makeLimiter(60_000, intEnv('AI_RATE_LIMIT_PER_MIN', 60), 'import');
 
 // Cost guard on extraction: default 10 model runs / 5 minutes per operator.
-export const extractionCostGuard = makeLimiter(5 * 60_000, intEnv('AI_MAX_EXTRACTIONS_PER_5MIN', 10), 'estrazione');
+export const extractionCostGuard = makeLimiter(
+  5 * 60_000,
+  intEnv('AI_MAX_EXTRACTIONS_PER_5MIN', 10),
+  'estrazione',
+);

@@ -19,11 +19,11 @@ npm run build
 
 Aprire DevTools → Responsive mode e testare questi viewport:
 
-| Viewport | Descrizione |
-|----------|-------------|
-| 1024×768 | Tablet landscape minimum |
-| 1180×820 | iPad Pro portrait |
-| 1366×1024 | Tablet grande |
+| Viewport  | Descrizione              |
+| --------- | ------------------------ |
+| 1024×768  | Tablet landscape minimum |
+| 1180×820  | iPad Pro portrait        |
+| 1366×1024 | Tablet grande            |
 
 ## Workflow test manuale
 

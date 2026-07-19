@@ -4,7 +4,10 @@
 
 import type { ExecuteResult } from './types.js';
 
-interface Entry { result: ExecuteResult; at: number }
+interface Entry {
+  result: ExecuteResult;
+  at: number;
+}
 
 const TTL_MS = 10 * 60_000; // a confirmation window; ample for double-clicks and retries
 
@@ -15,7 +18,10 @@ export class IdempotencyStore {
   get(key: string, now: number = Date.now()): ExecuteResult | null {
     const e = this.map.get(key);
     if (!e) return null;
-    if (now - e.at > TTL_MS) { this.map.delete(key); return null; }
+    if (now - e.at > TTL_MS) {
+      this.map.delete(key);
+      return null;
+    }
     return { ...e.result, deduped: true };
   }
 

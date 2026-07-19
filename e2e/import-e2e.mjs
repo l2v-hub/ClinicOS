@@ -27,7 +27,10 @@ function form(files) {
 
 try {
   // 0. Auth gate: no operator header -> 401.
-  let res = await fetch(base, { method: 'POST', body: form([{ name: 'x.pdf', buf: FIXTURES.pdf, type: 'application/pdf' }]) });
+  let res = await fetch(base, {
+    method: 'POST',
+    body: form([{ name: 'x.pdf', buf: FIXTURES.pdf, type: 'application/pdf' }]),
+  });
   assert.equal(res.status, 401, 'anonymous import rejected (401)');
 
   // 1. Multi-file upload: pdf + jpg accepted, invalid exe-as-pdf rejected (valids kept).
@@ -44,7 +47,10 @@ try {
   const jobId = body.job.id;
   createdJobIds.push(jobId);
   assert.equal(body.job.fileCount, 2, 'two valid files');
-  assert.ok(body.outcomes.find((o) => o.filename === 'non-ammesso.pdf')?.status === 'rejected', 'invalid rejected');
+  assert.ok(
+    body.outcomes.find((o) => o.filename === 'non-ammesso.pdf')?.status === 'rejected',
+    'invalid rejected',
+  );
 
   // 2. Extract (REQ-022 async): enqueue 202 -> worker -> review_ready.
   res = await af(`${base}/${jobId}/process`, { method: 'POST' });
@@ -58,9 +64,16 @@ try {
   assert.equal(result.resultData.anagrafica.nome.status, 'missing', 'no invented data');
 
   // 3. Confirm with reviewed synthetic patient -> created + persisted.
-  const SYNTH = { firstName: 'E2ETest', lastName: 'Sintetico', dateOfBirth: '1955-09-09', sex: 'M', phone: '000' };
+  const SYNTH = {
+    firstName: 'E2ETest',
+    lastName: 'Sintetico',
+    dateOfBirth: '1955-09-09',
+    sex: 'M',
+    phone: '000',
+  };
   res = await af(`${base}/${jobId}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: SYNTH, cartella: { statoRicovero: 'ricoverato' } }),
   });
   assert.equal(res.status, 201, 'patient created');
@@ -77,7 +90,8 @@ try {
 
   // 5. Idempotent re-confirm -> no duplicate.
   res = await af(`${base}/${jobId}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: SYNTH }),
   });
   body = await res.json();

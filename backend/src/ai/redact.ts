@@ -6,7 +6,8 @@
 //
 // Everything that gets logged from the AI module should pass through here.
 
-const SECRET_KEY_PATTERN = /(api[_-]?key|gemini[_-]?api[_-]?key|authorization|bearer|secret|token)/i;
+const SECRET_KEY_PATTERN =
+  /(api[_-]?key|gemini[_-]?api[_-]?key|authorization|bearer|secret|token)/i;
 
 // Heuristic for values that look like credentials (long opaque strings).
 const SECRET_VALUE_PATTERN = /\bAIza[0-9A-Za-z\-_]{10,}\b|\b[A-Za-z0-9\-_]{32,}\b/g;

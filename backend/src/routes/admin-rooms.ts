@@ -6,10 +6,7 @@ const patientAssignmentRouter = Router();
 
 // ── Helper: check if two date ranges overlap ──────────────────────────────
 // endDate null means "infinity"
-function rangesOverlap(
-  s1: string, e1: string | null,
-  s2: string, e2: string | null,
-): boolean {
+function rangesOverlap(s1: string, e1: string | null, s2: string, e2: string | null): boolean {
   // s1 <= e2 (or e2 is null) AND s2 <= e1 (or e1 is null)
   const startBeforeEnd2 = e2 === null || s1 <= e2;
   const startBeforeEnd1 = e1 === null || s2 <= e1;
@@ -20,10 +17,7 @@ function rangesOverlap(
 function activeAssignmentFilter() {
   const today = new Date().toISOString().slice(0, 10);
   return {
-    OR: [
-      { endDate: null },
-      { endDate: { gte: today } },
-    ],
+    OR: [{ endDate: null }, { endDate: { gte: today } }],
   };
 }
 
@@ -194,7 +188,12 @@ adminRouter.post('/rooms', async (req, res) => {
     res.status(201).json(room);
   } catch (error: unknown) {
     console.error('POST /admin/rooms error:', error);
-    if (error && typeof error === 'object' && 'code' in error && (error as { code: string }).code === 'P2002') {
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      (error as { code: string }).code === 'P2002'
+    ) {
       res.status(409).json({ error: 'Numero stanza già esistente' });
       return;
     }
@@ -392,7 +391,12 @@ adminRouter.post('/rooms/:roomId/beds', async (req, res) => {
     res.status(201).json(bed);
   } catch (error: unknown) {
     console.error('POST /admin/rooms/:roomId/beds error:', error);
-    if (error && typeof error === 'object' && 'code' in error && (error as { code: string }).code === 'P2002') {
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      (error as { code: string }).code === 'P2002'
+    ) {
       res.status(409).json({ error: 'Label letto già esistente per questa stanza' });
       return;
     }

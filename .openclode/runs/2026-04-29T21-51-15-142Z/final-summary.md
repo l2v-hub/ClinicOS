@@ -9,50 +9,49 @@ FILE: src/App.tsx
 import './App.css';
 
 const quickStats = [
-  { label: 'Patients', value: '1,284' },
-  { label: 'Appointments Today', value: '42' },
-  { label: 'Doctors On Duty', value: '8' },
-  { label: 'Open Invoices', value: '17' },
+{ label: 'Patients', value: '1,284' },
+{ label: 'Appointments Today', value: '42' },
+{ label: 'Doctors On Duty', value: '8' },
+{ label: 'Open Invoices', value: '17' },
 ];
 
 const modules = [
-  {
-    title: 'Patient Management',
-    description: 'Register patients, review medical history, and maintain accurate records.',
-  },
-  {
-    title: 'Appointments',
-    description: 'Schedule visits, track availability, and manage daily consultations.',
-  },
-  {
-    title: 'Billing',
-    description: 'Handle invoices, payments, and insurance-related workflows in one place.',
-  },
-  {
-    title: 'Reports',
-    description: 'Monitor clinic performance with clear operational and financial insights.',
-  },
+{
+title: 'Patient Management',
+description: 'Register patients, review medical history, and maintain accurate records.',
+},
+{
+title: 'Appointments',
+description: 'Schedule visits, track availability, and manage daily consultations.',
+},
+{
+title: 'Billing',
+description: 'Handle invoices, payments, and insurance-related workflows in one place.',
+},
+{
+title: 'Reports',
+description: 'Monitor clinic performance with clear operational and financial insights.',
+},
 ];
 
 function App() {
-  return (
-    <div className="app">
-      <header
-        className="app-header"
-        style={{
+return (
+<div className="app">
+<header
+className="app-header"
+style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '1rem',
           padding: '1rem 1.5rem',
-        }}
-      >
-        <div>
-          <h1 style={{ margin: 0, fontSize: '1.75rem' }}>ClinicOS</h1>
-          <p style={{ margin: '0.25rem 0 0', opacity: 0.9 }}>
-            Modern clinic operations in one dashboard
-          </p>
-        </div>
+        }} >
+<div>
+<h1 style={{ margin: 0, fontSize: '1.75rem' }}>ClinicOS</h1>
+<p style={{ margin: '0.25rem 0 0', opacity: 0.9 }}>
+Modern clinic operations in one dashboard
+</p>
+</div>
 
         <div
           style={{
@@ -192,7 +191,8 @@ function App() {
         </section>
       </main>
     </div>
-  );
+
+);
 }
 
 export default App;

@@ -1,6 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildRuntimeCreateBody, mapRuntimeStatus, wrapRuntimeResult } from '../upload/job-service.js';
+import {
+  buildRuntimeCreateBody,
+  mapRuntimeStatus,
+  wrapRuntimeResult,
+} from '../upload/job-service.js';
 import { buildModelSchema } from '../config.js';
 
 // These field names MUST match clinicos-ai-runtime/clinicos_ai/domain/contracts.py
@@ -29,7 +33,12 @@ test('create body matches the runtime neutral contract', () => {
   // per-file keys
   assert.equal(body.files.length, 2);
   const f0 = body.files[0];
-  assert.deepEqual(Object.keys(f0).sort(), ['content_base64', 'filename', 'mime_type', 'sort_order']);
+  assert.deepEqual(Object.keys(f0).sort(), [
+    'content_base64',
+    'filename',
+    'mime_type',
+    'sort_order',
+  ]);
   assert.ok(!('content_b64' in f0), 'must use content_base64, not content_b64');
   assert.equal(f0.filename, 'lettera.pdf');
   assert.equal(f0.mime_type, 'application/pdf');
@@ -53,9 +62,17 @@ test('REQ-036: reordered documents produce a reordered sort_order sequence', () 
 test('wrapRuntimeResult produces the merged-proposal shape the review UI needs', () => {
   const raw = {
     anagrafica: { nome: 'Mario', cognome: 'Bianchi', dataNascita: '1950-01-01' },
-    cartella: { diagnosi: [{ descrizione: 'BPCO', codiceICD: 'J44.9' }], allergie: [{ allergene: 'Penicillina' }] },
+    cartella: {
+      diagnosi: [{ descrizione: 'BPCO', codiceICD: 'J44.9' }],
+      allergie: [{ allergene: 'Penicillina' }],
+    },
   };
-  const m = wrapRuntimeResult(raw, [{ id: 'd1', filename: 'lettera.pdf' }], 'google:gemma-4-31b-it', true);
+  const m = wrapRuntimeResult(
+    raw,
+    [{ id: 'd1', filename: 'lettera.pdf' }],
+    'google:gemma-4-31b-it',
+    true,
+  );
 
   // _merge present (ImportReview reads proposal._merge.report — was crashing)
   assert.ok(m._merge, '_merge must exist');
@@ -88,7 +105,10 @@ test('buildModelSchema renders lists as example arrays (so the model fills them)
       anamnesi: { _descrizione: 'a', fisiologica: { valore: '', descrizione: 'F' } },
       diagnosi: {
         _descrizione: 'd',
-        _template: { codiceICD: { valore: '', descrizione: 'ICD' }, descrizione: { valore: '', descrizione: 'Desc' } },
+        _template: {
+          codiceICD: { valore: '', descrizione: 'ICD' },
+          descrizione: { valore: '', descrizione: 'Desc' },
+        },
         valori: [],
       },
     },
@@ -110,9 +130,15 @@ test('buildModelSchema renders lists as example arrays (so the model fills them)
 });
 
 test('runtime status maps to ClinicOS job states', () => {
-  assert.deepEqual(mapRuntimeStatus('review_ready'), { jobStatus: 'review_ready', isTerminal: true });
+  assert.deepEqual(mapRuntimeStatus('review_ready'), {
+    jobStatus: 'review_ready',
+    isTerminal: true,
+  });
   assert.deepEqual(mapRuntimeStatus('completed'), { jobStatus: 'review_ready', isTerminal: true });
-  assert.deepEqual(mapRuntimeStatus('retryable_error'), { jobStatus: 'retryable_error', isTerminal: true });
+  assert.deepEqual(mapRuntimeStatus('retryable_error'), {
+    jobStatus: 'retryable_error',
+    isTerminal: true,
+  });
   assert.deepEqual(mapRuntimeStatus('failed'), { jobStatus: 'failed', isTerminal: true });
   assert.equal(mapRuntimeStatus('running').isTerminal, false);
   assert.equal(mapRuntimeStatus('ocr_running').isTerminal, false);

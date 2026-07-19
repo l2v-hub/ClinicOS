@@ -20,7 +20,10 @@ export function buildConfirmCartella(data: ConfirmDraftData): Record<string, unk
   if (data.anamnesi !== undefined) cartella.anamnesi = data.anamnesi;
   // Vitals: data.parametri is an OBJECT { parametriMensili?, parametriVitali? } (Task 5 shape)
   if (data.parametri != null) {
-    const parametriObj = data.parametri as { parametriMensili?: unknown[]; parametriVitali?: unknown[] };
+    const parametriObj = data.parametri as {
+      parametriMensili?: unknown[];
+      parametriVitali?: unknown[];
+    };
     cartella.parametriMensili = parametriObj.parametriMensili ?? [];
     cartella.parametriVitali = parametriObj.parametriVitali ?? [];
   }

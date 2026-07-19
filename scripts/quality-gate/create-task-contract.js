@@ -145,7 +145,9 @@ IMPLEMENTED — NOT VERIFIED
 function main() {
   const { title, type, force } = parseArgs(process.argv.slice(2));
   if (!title) {
-    console.error('ERRORE: titolo mancante. Uso: create-task-contract.js "<titolo>" [--type <tipo>] [--force]');
+    console.error(
+      'ERRORE: titolo mancante. Uso: create-task-contract.js "<titolo>" [--type <tipo>] [--force]',
+    );
     process.exit(1);
   }
   const slug = slugify(title);
@@ -153,7 +155,9 @@ function main() {
   const cpath = contractPath(dir);
 
   if (fs.existsSync(cpath) && !force) {
-    console.error(`ATTENZIONE: esiste già un contract per '${slug}':\n  ${cpath}\nUsa --force per sovrascrivere.`);
+    console.error(
+      `ATTENZIONE: esiste già un contract per '${slug}':\n  ${cpath}\nUsa --force per sovrascrivere.`,
+    );
     process.exit(2);
   }
 

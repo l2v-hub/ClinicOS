@@ -9,20 +9,32 @@ import { join } from 'node:path';
 
 const FRONTEND = process.env.CLINICOS_FRONTEND ?? 'http://localhost:5173';
 const OUT = process.argv[2] ?? 'artifacts/task-validation/243-moduli-section-operative';
-for (const d of ['screenshots', 'video', 'trace', 'logs']) mkdirSync(join(OUT, d), { recursive: true });
+for (const d of ['screenshots', 'video', 'trace', 'logs'])
+  mkdirSync(join(OUT, d), { recursive: true });
 
 const results = [];
-const ok = (name, cond, detail = '') => { results.push({ name, pass: !!cond, detail }); console.log(`${cond ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`); };
+const ok = (name, cond, detail = '') => {
+  results.push({ name, pass: !!cond, detail });
+  console.log(`${cond ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`);
+};
 const consoleErrors = [];
 const MODULES = ['medicazioni', 'contenzioni', 'braden', 'tinetti', 'nrs', 'dimissione'];
 
 const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 }, recordVideo: { dir: join(OUT, 'video'), size: { width: 1366, height: 768 } } });
+const ctx = await browser.newContext({
+  viewport: { width: 1366, height: 768 },
+  recordVideo: { dir: join(OUT, 'video'), size: { width: 1366, height: 768 } },
+});
 await ctx.tracing.start({ screenshots: true, snapshots: true, sources: true });
 const page = await ctx.newPage();
-page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+page.on('console', (m) => {
+  if (m.type() === 'error') consoleErrors.push(m.text());
+});
 const shot = (n) => page.screenshot({ path: join(OUT, 'screenshots', n) });
-async function clickText(t) { await page.locator(`text="${t}"`).first().click(); await page.waitForTimeout(500); }
+async function clickText(t) {
+  await page.locator(`text="${t}"`).first().click();
+  await page.waitForTimeout(500);
+}
 
 try {
   await page.goto(FRONTEND + '/', { waitUntil: 'networkidle' });
@@ -38,17 +50,26 @@ try {
 
   // Step 1 — anagrafica minima valida (dati sintetici)
   const nome = page.getByPlaceholder('Mario', { exact: true });
-  await nome.click(); await nome.pressSequentially('Test', { delay: 20 });
+  await nome.click();
+  await nome.pressSequentially('Test', { delay: 20 });
   const cognome = page.getByPlaceholder('Rossi', { exact: true });
-  await cognome.click(); await cognome.pressSequentially('Moduli243', { delay: 20 });
+  await cognome.click();
+  await cognome.pressSequentially('Moduli243', { delay: 20 });
   const dob = page.locator('[data-testid="intake-step-1"] input[type="date"]');
   await dob.fill('1980-01-01');
   await dob.press('Tab');
   await page.waitForTimeout(800);
-  ok('step 1 anagrafica compilata, wizard aperto', await page.locator('[data-testid="patient-intake-body"]').isVisible());
+  ok(
+    'step 1 anagrafica compilata, wizard aperto',
+    await page.locator('[data-testid="patient-intake-body"]').isVisible(),
+  );
 
   // Avanti fino allo step 4 "Moduli" — avanza finché lo stepper è su "4. Moduli"
-  const activeStepTxt = () => page.locator('[data-testid="patient-intake-stepper"] .is-active').innerText().catch(() => '');
+  const activeStepTxt = () =>
+    page
+      .locator('[data-testid="patient-intake-stepper"] .is-active')
+      .innerText()
+      .catch(() => '');
   for (let guard = 0; guard < 8; guard++) {
     const cur = (await activeStepTxt()).trim();
     if (/Moduli/i.test(cur)) break;
@@ -59,33 +80,62 @@ try {
   await shot('intake-step4-moduli.png');
 
   // Assert: stepper su "4. Moduli" attivo
-  const activeStep = (await page.locator('[data-testid="patient-intake-stepper"] .is-active').innerText().catch(() => '')).trim();
+  const activeStep = (
+    await page
+      .locator('[data-testid="patient-intake-stepper"] .is-active')
+      .innerText()
+      .catch(() => '')
+  ).trim();
   ok('step 4 "Moduli" attivo', /Moduli/i.test(activeStep), `active=${activeStep}`);
 
   // AC1 — nessun messaggio "in arrivo" bloccante
   const bodyTxt = await page.locator('[data-testid="patient-intake-body"]').innerText();
-  ok('AC1 nessun "Moduli configurabili — in arrivo"', !/Moduli configurabili\s*[—-]\s*in arrivo/i.test(bodyTxt), `snippet=${bodyTxt.slice(0,60)}`);
+  ok(
+    'AC1 nessun "Moduli configurabili — in arrivo"',
+    !/Moduli configurabili\s*[—-]\s*in arrivo/i.test(bodyTxt),
+    `snippet=${bodyTxt.slice(0, 60)}`,
+  );
 
   // AC2 — griglia moduli disponibili
-  ok('AC2 griglia moduli visibile', await page.locator('[data-testid="intake-modules-grid"]').isVisible());
+  ok(
+    'AC2 griglia moduli visibile',
+    await page.locator('[data-testid="intake-modules-grid"]').isVisible(),
+  );
   let cardsOk = 0;
   for (const m of MODULES) {
-    const vis = await page.locator(`[data-testid="intake-module-${m}"]`).isVisible().catch(() => false);
+    const vis = await page
+      .locator(`[data-testid="intake-module-${m}"]`)
+      .isVisible()
+      .catch(() => false);
     if (vis) cardsOk++;
   }
-  ok('AC2 tutte le 6 card moduli presenti', cardsOk === MODULES.length, `card=${cardsOk}/${MODULES.length}`);
+  ok(
+    'AC2 tutte le 6 card moduli presenti',
+    cardsOk === MODULES.length,
+    `card=${cardsOk}/${MODULES.length}`,
+  );
 
   // AC3 — ogni card ha uno status-badge (Disponibile / In arrivo non bloccante)
   const badges = await page.locator('[data-testid="intake-modules-grid"] .status-badge').count();
   ok('AC3 badge di stato per ogni modulo', badges >= MODULES.length, `badge=${badges}`);
 
   // chiudi senza creare paziente
-  await page.getByRole('button', { name: /Annulla/i }).click().catch(() => {});
-  ok('nessun console error', consoleErrors.filter((e) => !/descendant of|nested|hydration/i.test(e)).length === 0, `errors=${consoleErrors.length}`);
+  await page
+    .getByRole('button', { name: /Annulla/i })
+    .click()
+    .catch(() => {});
+  ok(
+    'nessun console error',
+    consoleErrors.filter((e) => !/descendant of|nested|hydration/i.test(e)).length === 0,
+    `errors=${consoleErrors.length}`,
+  );
 } finally {
   await ctx.tracing.stop({ path: join(OUT, 'trace', 'trace.zip') });
   writeFileSync(join(OUT, 'logs', 'console-errors.log'), consoleErrors.join('\n') + '\n');
-  writeFileSync(join(OUT, 'ui-report.json'), JSON.stringify({ ranAt: new Date().toISOString(), results, consoleErrors }, null, 2));
+  writeFileSync(
+    join(OUT, 'ui-report.json'),
+    JSON.stringify({ ranAt: new Date().toISOString(), results, consoleErrors }, null, 2),
+  );
   await ctx.close();
   await browser.close();
 }

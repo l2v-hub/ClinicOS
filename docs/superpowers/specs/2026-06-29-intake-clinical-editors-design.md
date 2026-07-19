@@ -10,6 +10,7 @@ During intake, an operator cannot enter drug therapy, vital signs, or pain (NRS)
 ## Goal
 
 The operator fills therapy, vitals, and pain during intake. On "Crea paziente" they are persisted in the same single transaction as the rest of the draft:
+
 - **Therapy** → real `PatientTherapy` + `TherapySchedule` rows (full parity with the Patient Chart therapy tab — same fields, same DB rows, queryable via the existing `/patients/:id/therapies` API).
 - **Vitals** (`parametriMensili`) and **Pain** (`valutazioniNRS`) → stored in the `Cartella.data` JSON (these have no dedicated DB table today; the Patient Chart already stores them in the cartella JSON).
 
@@ -33,7 +34,7 @@ The operator fills therapy, vitals, and pain during intake. On "Crea paziente" t
 
 ### B. Frontend — shared therapy form (parity) + controlled intake editor
 
-4. **Extract** the therapy *form* (all fields + the schedule builder, no fetch/list/API) from `TerapiaFarmacologicaTab` into a presentational, controlled component `TherapyForm` (props: `value: TherapyForm`, `onChange`, `operatoreNome?`). `TerapiaFarmacologicaTab` (chart mode) consumes `TherapyForm` for its add/edit form — its API list/save logic stays. Verify the chart therapy tab is visually + behaviourally unchanged (no-regression) before building the intake editor.
+4. **Extract** the therapy _form_ (all fields + the schedule builder, no fetch/list/API) from `TerapiaFarmacologicaTab` into a presentational, controlled component `TherapyForm` (props: `value: TherapyForm`, `onChange`, `operatoreNome?`). `TerapiaFarmacologicaTab` (chart mode) consumes `TherapyForm` for its add/edit form — its API list/save logic stays. Verify the chart therapy tab is visually + behaviourally unchanged (no-regression) before building the intake editor.
 5. **`TherapyEditor` intake mode**: a controlled list editor — `value: TherapyDraftItem[]` (the `TherapyForm` shape per item) — that uses `TherapyForm` to add/edit items and shows the added list with remove. No API, no patientId. `onChange(next[])` updates the draft (`data.terapia`).
 
 ### C. Frontend — vitals/pain shims (reuse the tabs as-is)

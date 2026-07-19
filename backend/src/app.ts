@@ -1,4 +1,3 @@
-
 import cors from 'cors';
 import express from 'express';
 import { adminRouter as adminRoomsRouter, patientAssignmentRouter } from './routes/admin-rooms.js';
@@ -35,11 +34,7 @@ const app = express();
 //   FRONTEND_URL=https://clinicos-eosin.vercel.app
 //   FRONTEND_URLS=https://clinicos-eosin.vercel.app,https://clinicos-el91lyszt-lucalavia-2482s-projects.vercel.app
 
-const staticAllowed = [
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:3000',
-];
+const staticAllowed = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'];
 
 const envAllowed: string[] = [];
 
@@ -48,9 +43,9 @@ if (process.env.FRONTEND_URL) {
 }
 if (process.env.FRONTEND_URLS) {
   process.env.FRONTEND_URLS.split(',')
-    .map(u => u.trim())
+    .map((u) => u.trim())
     .filter(Boolean)
-    .forEach(u => envAllowed.push(u));
+    .forEach((u) => envAllowed.push(u));
 }
 
 const allowedOrigins = Array.from(new Set([...staticAllowed, ...envAllowed]));
@@ -64,16 +59,18 @@ function isAllowed(origin: string): boolean {
   return false;
 }
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (curl, Postman, server-to-server)
-    if (!origin) return callback(null, true);
-    if (isAllowed(origin)) return callback(null, true);
-    console.warn(`CORS blocked origin: ${origin}`);
-    callback(new Error(`CORS: origin ${origin} not allowed`));
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (curl, Postman, server-to-server)
+      if (!origin) return callback(null, true);
+      if (isAllowed(origin)) return callback(null, true);
+      console.warn(`CORS blocked origin: ${origin}`);
+      callback(new Error(`CORS: origin ${origin} not allowed`));
+    },
+    credentials: true,
+  }),
+);
 
 app.use(express.json({ limit: '10mb' }));
 

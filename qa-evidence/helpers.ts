@@ -14,14 +14,22 @@ function backendEnv(): Record<string, string> {
       const m = /^([A-Z_][A-Z0-9_]*)=(.*)$/.exec(line.trim());
       if (m) env[m[1]] = m[2];
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return env;
 }
 
 /** Run a shell command from the evidence worktree; capture combined output + exit code. */
 export function runCmd(cmd: string): { code: number; out: string } {
   try {
-    const out = _exec(cmd, { cwd: EVID, encoding: 'utf8', stdio: 'pipe', maxBuffer: 20 * 1024 * 1024, env: { ...process.env, ...backendEnv() } });
+    const out = _exec(cmd, {
+      cwd: EVID,
+      encoding: 'utf8',
+      stdio: 'pipe',
+      maxBuffer: 20 * 1024 * 1024,
+      env: { ...process.env, ...backendEnv() },
+    });
     return { code: 0, out };
   } catch (e: any) {
     return { code: e.status ?? 1, out: `${e.stdout ?? ''}${e.stderr ?? ''}` };
@@ -29,7 +37,12 @@ export function runCmd(cmd: string): { code: number; out: string } {
 }
 
 /** Run a backend node:test file via the repo's tsx and return its TAP output + pass/fail summary. */
-export function runBackendTest(relTestPath: string): { code: number; out: string; pass: number; fail: number } {
+export function runBackendTest(relTestPath: string): {
+  code: number;
+  out: string;
+  pass: number;
+  fail: number;
+} {
   const r = runCmd(`node "${TSX}" --test "${relTestPath}"`);
   const pass = Number(/# pass (\d+)/.exec(r.out)?.[1] ?? '0');
   const fail = Number(/# fail (\d+)/.exec(r.out)?.[1] ?? '0');
@@ -39,7 +52,8 @@ export function runBackendTest(relTestPath: string): { code: number; out: string
 // Pre-existing, unrelated dev warnings (not introduced by these features) are filtered so the guard
 // asserts on genuine, feature-relevant errors only. The nested-<button> hydration warning originates
 // in AIImportStatus on main.
-const BENIGN = /favicon|sourcemap|\.map\b|net::ERR_ABORTED|ResizeObserver|cannot be a descendant|cannot contain a nested|hydration/i;
+const BENIGN =
+  /favicon|sourcemap|\.map\b|net::ERR_ABORTED|ResizeObserver|cannot be a descendant|cannot contain a nested|hydration/i;
 
 /** Wire console-error and HTTP-4xx/5xx guards on a page. Returns collectors + an assert helper.
  *  Only backend (:3001) responses count as relevant HTTP errors; benign noise is filtered. */
@@ -86,7 +100,11 @@ export async function showReport(page: Page, html: string) {
 }
 
 /** Minimal styled QA report document (light, print-clean) for backend evidence. */
-export function reportDoc(title: string, rows: Array<{ k: string; v: string; ok?: boolean }>, note = ''): string {
+export function reportDoc(
+  title: string,
+  rows: Array<{ k: string; v: string; ok?: boolean }>,
+  note = '',
+): string {
   const body = rows
     .map(
       (r) =>
@@ -107,7 +125,10 @@ export function reportDoc(title: string, rows: Array<{ k: string; v: string; ok?
 }
 
 function esc(s: string): string {
-  return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  return String(s).replace(
+    /[&<>"]/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!,
+  );
 }
 
 export { expect };

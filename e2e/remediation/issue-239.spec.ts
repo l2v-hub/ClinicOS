@@ -17,7 +17,10 @@ import { test, expect, type Page, type ConsoleMessage } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const EVIDENCE_DIR = path.resolve(__dirname, '../../artifacts/task-validation/239-agnos-chatbot-plan-routing');
+const EVIDENCE_DIR = path.resolve(
+  __dirname,
+  '../../artifacts/task-validation/239-agnos-chatbot-plan-routing',
+);
 const SHOTS = path.join(EVIDENCE_DIR, 'screenshots');
 
 // Known synthetic patient surnames present in the seed — asserted ABSENT from the aggregate
@@ -55,15 +58,18 @@ async function ask(page: Page, question: string) {
 }
 
 test.describe('#239 — Agnos plan routing (rooms_occupancy aggregate + plural terapie)', () => {
-  test('routes occupancy to aggregate counts (no names) and plural terapie to therapies', async ({ page }) => {
+  test('routes occupancy to aggregate counts (no names) and plural terapie to therapies', async ({
+    page,
+  }) => {
     const consoleErrors: string[] = [];
     const badResponses: string[] = [];
     page.on('console', (m: ConsoleMessage) => {
       if (m.type() === 'error' && !IGNORED_CONSOLE_RE.test(m.text())) consoleErrors.push(m.text());
     });
-    page.on('response', res => {
+    page.on('response', (res) => {
       const s = res.status();
-      if (s >= 400 && s !== 401 && s !== 403) badResponses.push(`${res.request().method()} ${res.url()} -> ${s}`);
+      if (s >= 400 && s !== 401 && s !== 403)
+        badResponses.push(`${res.request().method()} ${res.url()} -> ${s}`);
     });
 
     // ── AC1/AC2: aggregate rooms occupancy, counts only ──────────────────────────
@@ -72,24 +78,33 @@ test.describe('#239 — Agnos plan routing (rooms_occupancy aggregate + plural t
     await openAgnos(page);
 
     const [planResp] = await Promise.all([
-      page.waitForResponse(r => /\/ai\/actions\/plan$/.test(r.url()) && r.request().method() === 'POST'),
+      page.waitForResponse(
+        (r) => /\/ai\/actions\/plan$/.test(r.url()) && r.request().method() === 'POST',
+      ),
       ask(page, 'quante camere sono occupate oggi'),
     ]);
     expect(planResp.status(), `POST ${planResp.url()}`).toBe(200);
 
     // The read-answer renders the occupancy source produced by query_rooms_occupancy.
-    const occupancyLabel = page.locator('.ai-asst__source-label', { hasText: 'Occupazione camere' });
+    const occupancyLabel = page.locator('.ai-asst__source-label', {
+      hasText: 'Occupazione camere',
+    });
     await expect(occupancyLabel).toBeVisible({ timeout: 15_000 });
 
-    const occupancyText = page.locator('.ai-asst__source-text', { hasText: /letti occupati/i }).first();
+    const occupancyText = page
+      .locator('.ai-asst__source-text', { hasText: /letti occupati/i })
+      .first();
     await expect(occupancyText).toBeVisible();
     // Aggregate shape: "<occupied>/<total> letti occupati; <rooms> camere censite".
     await expect(occupancyText).toHaveText(/^\d+\/\d+ letti occupati; \d+ camere censite$/);
 
     // AC2: no patient surname anywhere in the answer body (counts only).
-    const drawerText = (await page.getByRole('dialog', { name: 'Agnos — Assistente ClinicOS' }).innerText()) ?? '';
+    const drawerText =
+      (await page.getByRole('dialog', { name: 'Agnos — Assistente ClinicOS' }).innerText()) ?? '';
     for (const surname of SEED_SURNAMES) {
-      expect(drawerText, `occupancy answer must not leak patient name "${surname}"`).not.toContain(surname);
+      expect(drawerText, `occupancy answer must not leak patient name "${surname}"`).not.toContain(
+        surname,
+      );
     }
 
     await page.screenshot({ path: path.join(SHOTS, 'rooms-occupancy.png'), fullPage: true });
@@ -103,7 +118,9 @@ test.describe('#239 — Agnos plan routing (rooms_occupancy aggregate + plural t
     await openAgnos(page);
 
     const [planResp2] = await Promise.all([
-      page.waitForResponse(r => /\/ai\/actions\/plan$/.test(r.url()) && r.request().method() === 'POST'),
+      page.waitForResponse(
+        (r) => /\/ai\/actions\/plan$/.test(r.url()) && r.request().method() === 'POST',
+      ),
       ask(page, 'che terapie ha in corso'),
     ]);
     expect(planResp2.status(), `POST ${planResp2.url()}`).toBe(200);

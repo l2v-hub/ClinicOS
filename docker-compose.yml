@@ -8,11 +8,11 @@ services:
       POSTGRES_USER: clinicos
       POSTGRES_PASSWORD: clinicos_password
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - clinicos_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U clinicos -d clinicos"]
+      test: ['CMD-SHELL', 'pg_isready -U clinicos -d clinicos']
       interval: 10s
       timeout: 5s
       retries: 5

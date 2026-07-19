@@ -20,7 +20,7 @@ Farmacologica" e garantisce che l'Agenda Terapia legga esclusivamente da questa 
 
 ---
 
-## User Scenarios & Testing *(obbligatorio)*
+## User Scenarios & Testing _(obbligatorio)_
 
 ### User Story 1 — Gestione Terapia Farmacologica del Paziente (Priority: P1)
 
@@ -136,7 +136,7 @@ la pagina, riaprire la stessa popup — il farmaco deve mostrare stato "Erogata"
 
 ---
 
-## Requirements *(obbligatorio)*
+## Requirements _(obbligatorio)_
 
 ### Functional Requirements
 
@@ -193,7 +193,7 @@ la pagina, riaprire la stessa popup — il farmaco deve mostrare stato "Erogata"
 
 ---
 
-## Success Criteria *(obbligatorio)*
+## Success Criteria _(obbligatorio)_
 
 ### Measurable Outcomes
 

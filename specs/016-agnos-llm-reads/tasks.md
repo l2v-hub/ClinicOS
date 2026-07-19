@@ -114,6 +114,7 @@
 - **Polish (P7)**: dopo gli incrementi consegnati.
 
 ### Parallel Opportunities
+
 - T002 ∥ T001; T009/T013/T016/T023 ∥ (test in file diversi); runtime e backend di una stessa fase in parallelo dove i file sono disgiunti.
 
 ---

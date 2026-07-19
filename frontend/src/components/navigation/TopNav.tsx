@@ -28,7 +28,7 @@ export function TopNav({ variant, items, activeKey, onChange, ariaLabel }: TopNa
       role="tablist"
       aria-label={ariaLabel ?? (variant === 'level2' ? 'Sezioni principali' : 'Sotto-sezioni')}
     >
-      {items.map(item => {
+      {items.map((item) => {
         const active = activeKey === item.key;
         return (
           <button

@@ -3,9 +3,9 @@
 // transcribed and flagged as a warning so the operator sees and confirms it.
 
 export interface VitalSpec {
-  etichetta: string;          // canonical short label stored in the cartella
-  label: string;              // Italian display name
-  unita: string;              // canonical unit
+  etichetta: string; // canonical short label stored in the cartella
+  label: string; // Italian display name
+  unita: string; // canonical unit
   /** Plausible technical range for a single numeric value (systolic for PA). */
   min: number;
   max: number;
@@ -42,9 +42,9 @@ export function matchVital(transcript: string): VitalSpec | null {
 }
 
 export interface ParsedVitalValue {
-  valore: string;                   // canonical string stored ("130/80", "37.4", "98")
-  ambiguities: string[];            // blocking problems (no value, etc.)
-  warnings: string[];               // non-blocking (out-of-range, kept as-is)
+  valore: string; // canonical string stored ("130/80", "37.4", "98")
+  ambiguities: string[]; // blocking problems (no value, etc.)
+  warnings: string[]; // non-blocking (out-of-range, kept as-is)
 }
 
 /** Extract and validate the numeric value(s) for a vital from the spoken text. */
@@ -56,19 +56,36 @@ export function parseVitalValue(spec: VitalSpec, transcript: string): ParsedVita
   if (spec.etichetta === 'PA') {
     // "130 su 80", "130/80", "130 e 80"
     const m = /(\d{2,3})\s*(?:\/|su|e|\\)\s*(\d{2,3})/.exec(q);
-    if (!m) { ambiguities.push('Valore della pressione non chiaro (atteso sistolica/diastolica)'); return { valore: '', ambiguities, warnings }; }
-    const sys = parseInt(m[1], 10), dia = parseInt(m[2], 10);
-    if (sys < spec.min || sys > spec.max) warnings.push(`Sistolica ${sys} fuori dall'intervallo tecnico atteso (${spec.min}-${spec.max})`);
-    if (dia < 20 || dia > 200) warnings.push(`Diastolica ${dia} fuori dall'intervallo tecnico atteso (20-200)`);
+    if (!m) {
+      ambiguities.push('Valore della pressione non chiaro (atteso sistolica/diastolica)');
+      return { valore: '', ambiguities, warnings };
+    }
+    const sys = parseInt(m[1], 10),
+      dia = parseInt(m[2], 10);
+    if (sys < spec.min || sys > spec.max)
+      warnings.push(
+        `Sistolica ${sys} fuori dall'intervallo tecnico atteso (${spec.min}-${spec.max})`,
+      );
+    if (dia < 20 || dia > 200)
+      warnings.push(`Diastolica ${dia} fuori dall'intervallo tecnico atteso (20-200)`);
     return { valore: `${sys}/${dia}`, ambiguities, warnings };
   }
 
   // single decimal number; accept Italian comma decimals ("37,4")
   const m = /(\d{1,3}(?:[.,]\d{1,2})?)/.exec(q);
-  if (!m) { ambiguities.push(`Valore di ${spec.label.toLowerCase()} non riconosciuto`); return { valore: '', ambiguities, warnings }; }
+  if (!m) {
+    ambiguities.push(`Valore di ${spec.label.toLowerCase()} non riconosciuto`);
+    return { valore: '', ambiguities, warnings };
+  }
   const num = parseFloat(m[1].replace(',', '.'));
-  if (!Number.isFinite(num)) { ambiguities.push('Valore numerico non valido'); return { valore: '', ambiguities, warnings }; }
-  if (num < spec.min || num > spec.max) warnings.push(`Valore ${m[1].replace(',', '.')} fuori dall'intervallo tecnico atteso (${spec.min}-${spec.max} ${spec.unita})`);
+  if (!Number.isFinite(num)) {
+    ambiguities.push('Valore numerico non valido');
+    return { valore: '', ambiguities, warnings };
+  }
+  if (num < spec.min || num > spec.max)
+    warnings.push(
+      `Valore ${m[1].replace(',', '.')} fuori dall'intervallo tecnico atteso (${spec.min}-${spec.max} ${spec.unita})`,
+    );
   return { valore: String(num), ambiguities, warnings };
 }
 
@@ -76,7 +93,11 @@ export function parseVitalValue(spec: VitalSpec, transcript: string): ParsedVita
 // ("Manca l'orario del parametro"): a vital must carry an explicit moment, never a silent "now".
 const TIME_RE = /\b(alle|ore)\s+(\d{1,2})(?:[:.](\d{2}))?\b|\b(\d{1,2})[:.](\d{2})\b/;
 
-export interface ParsedTime { has: boolean; hh?: number; mm?: number }
+export interface ParsedTime {
+  has: boolean;
+  hh?: number;
+  mm?: number;
+}
 
 export function parseSpokenTime(transcript: string): ParsedTime {
   const q = norm(transcript);

@@ -6,19 +6,29 @@ import { randomUUID } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
 import { asCartella, type VitalItem } from '../gateway/filters.js';
 import {
-  getNarrativeSection, upsertNarrativeSection, pickDisplayText,
-  NARRATIVE_SECTION_KEYS, type NarrativeSectionKey,
+  getNarrativeSection,
+  upsertNarrativeSection,
+  pickDisplayText,
+  NARRATIVE_SECTION_KEYS,
+  type NarrativeSectionKey,
 } from '../sections/patient-narrative.js';
 import { createAppointment, updateAppointment } from '../../services/appointment-service.js';
 import { createConsegna as createConsegnaService } from '../../services/consegna-service.js';
 import type { VoiceWriter, WriteMeta } from './execute.js';
 
-const DEMOGRAPHIC_FIELDS = new Set(['phone', 'email', 'address', 'emergencyContactName', 'emergencyContactPhone']);
+const DEMOGRAPHIC_FIELDS = new Set([
+  'phone',
+  'email',
+  'address',
+  'emergencyContactName',
+  'emergencyContactPhone',
+]);
 
 /** Combine the run date with a spoken HH:MM into an ISO timestamp (falls back to now). */
 function rilevatoFrom(meta: WriteMeta, timeHHMM: unknown): string {
   const datePart = meta.nowISO.slice(0, 10);
-  if (typeof timeHHMM === 'string' && /^\d{2}:\d{2}$/.test(timeHHMM)) return `${datePart}T${timeHHMM}:00`;
+  if (typeof timeHHMM === 'string' && /^\d{2}:\d{2}$/.test(timeHHMM))
+    return `${datePart}T${timeHHMM}:00`;
   return meta.nowISO;
 }
 
@@ -47,13 +57,15 @@ export const prismaVoiceWriter: VoiceWriter = {
   },
 
   async updateDemographics(patientId, field, value, _meta) {
-    if (!DEMOGRAPHIC_FIELDS.has(field)) throw new Error(`Campo anagrafico non consentito: ${field}`);
+    if (!DEMOGRAPHIC_FIELDS.has(field))
+      throw new Error(`Campo anagrafico non consentito: ${field}`);
     await prisma.patient.update({ where: { id: patientId }, data: { [field]: value } });
     return patientId;
   },
 
   async appendNarrative(patientId, sectionKey, addedText, meta) {
-    if (!NARRATIVE_SECTION_KEYS.includes(sectionKey as NarrativeSectionKey)) throw new Error(`sectionKey non valido: ${sectionKey}`);
+    if (!NARRATIVE_SECTION_KEYS.includes(sectionKey as NarrativeSectionKey))
+      throw new Error(`sectionKey non valido: ${sectionKey}`);
     const current = await getNarrativeSection(patientId, sectionKey);
     const currentText = current ? pickDisplayText(current.originalText, current.reviewedText) : '';
     const resulting = currentText.trim() ? `${currentText}\n${addedText}` : addedText;

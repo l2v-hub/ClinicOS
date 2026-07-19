@@ -10,7 +10,14 @@ export default defineConfig({
   workers: 1,
   outputDir: '../../artifacts/task-validation/241-medication-weekday-schedule/test-results',
   reporter: [
-    ['html', { outputFolder: '../../artifacts/task-validation/241-medication-weekday-schedule/playwright-report', open: 'never' }],
+    [
+      'html',
+      {
+        outputFolder:
+          '../../artifacts/task-validation/241-medication-weekday-schedule/playwright-report',
+        open: 'never',
+      },
+    ],
     ['list'],
   ],
   use: {

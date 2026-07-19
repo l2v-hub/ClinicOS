@@ -1,6 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { API_URL } from '../../../config';
-import { NarrativeClinicalSection, type BoldTag, type SourceRef } from '../../shared/sections/NarrativeClinicalSection';
+import {
+  NarrativeClinicalSection,
+  type BoldTag,
+  type SourceRef,
+} from '../../shared/sections/NarrativeClinicalSection';
 import { DocumentSourcePanel } from '../../shared/DocumentSourcePanel';
 
 // Scheda Paziente — narrative clinical sections (REQ-030). Always shows the canonical
@@ -23,15 +27,25 @@ interface NarrativeSectionsTabProps {
   operatoreRole?: string;
 }
 
-export function NarrativeSectionsTab({ patientId, operatoreId, operatoreRole }: NarrativeSectionsTabProps) {
+export function NarrativeSectionsTab({
+  patientId,
+  operatoreId,
+  operatoreRole,
+}: NarrativeSectionsTabProps) {
   const [sections, setSections] = useState<SectionDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [savingKey, setSavingKey] = useState<string | null>(null);
-  const [compare, setCompare] = useState<{ fileName?: string; page?: number; sourceText: string; title: string } | null>(null);
+  const [compare, setCompare] = useState<{
+    fileName?: string;
+    page?: number;
+    sourceText: string;
+    title: string;
+  } | null>(null);
 
   const load = useCallback(async () => {
-    setLoading(true); setError(null);
+    setLoading(true);
+    setError(null);
     try {
       const r = await fetch(`${API_URL}/patients/${patientId}/narrative-sections`);
       const data = await r.json();
@@ -44,7 +58,9 @@ export function NarrativeSectionsTab({ patientId, operatoreId, operatoreRole }: 
     }
   }, [patientId]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
   async function save(sectionKey: string, reviewedText: string) {
     setSavingKey(sectionKey);
@@ -56,7 +72,9 @@ export function NarrativeSectionsTab({ patientId, operatoreId, operatoreRole }: 
       });
       if (r.ok) {
         const dto = await r.json();
-        setSections((prev) => prev.map((s) => (s.sectionKey === sectionKey ? { ...s, ...dto } : s)));
+        setSections((prev) =>
+          prev.map((s) => (s.sectionKey === sectionKey ? { ...s, ...dto } : s)),
+        );
       }
     } finally {
       setSavingKey(null);
@@ -69,7 +87,8 @@ export function NarrativeSectionsTab({ patientId, operatoreId, operatoreRole }: 
   return (
     <div className="narrative-sections" data-testid="patient-narrative-sections">
       {sections.map((s) => {
-        const ref = (s.sourceReferences ?? [])[0] as { fileName?: string; pageFrom?: number } | undefined;
+        const ref = (s.sourceReferences ?? [])[0] as
+          { fileName?: string; pageFrom?: number } | undefined;
         return (
           <NarrativeClinicalSection
             key={s.sectionKey}
@@ -79,14 +98,22 @@ export function NarrativeSectionsTab({ patientId, operatoreId, operatoreRole }: 
             reviewedText={s.reviewedText}
             annotations={s.annotations}
             sources={s.sourceReferences}
-            critical={s.sectionKey === 'ALLERGIES' && (s.reviewStatus === 'conflict')}
+            critical={s.sectionKey === 'ALLERGIES' && s.reviewStatus === 'conflict'}
             editable
             reviewStatus={s.reviewStatus}
             busy={savingKey === s.sectionKey}
             onSave={(text) => save(s.sectionKey, text)}
-            onCompareSource={(ref || (s.displayText || '').trim())
-              ? () => setCompare({ fileName: ref?.fileName, page: ref?.pageFrom, sourceText: s.displayText || s.originalText, title: `Fonte — ${s.title}` })
-              : undefined}
+            onCompareSource={
+              ref || (s.displayText || '').trim()
+                ? () =>
+                    setCompare({
+                      fileName: ref?.fileName,
+                      page: ref?.pageFrom,
+                      sourceText: s.displayText || s.originalText,
+                      title: `Fonte — ${s.title}`,
+                    })
+                : undefined
+            }
           />
         );
       })}

@@ -30,17 +30,17 @@ Unificare i due assistenti esistenti (pannello testuale read-only REQ-040 + assi
 
 ## Constitution Check
 
-*GATE: verificato contro Constitution v1.1.0 — PASS con giustificazioni.*
+_GATE: verificato contro Constitution v1.1.0 — PASS con giustificazioni._
 
-| Principio | Esito | Note |
-|---|---|---|
-| I. Simplicity First | PASS | Riuso planner/executor/preview esistenti; nessuna nuova dipendenza; catalogo = modulo TS semplice. |
-| II. Healthcare UX | PASS | Pannello unico Agnos in italiano, tablet-first; nessun tooltip-only; nessuna nuova tabella fuori ClinicalTable. |
-| III. Backend Data Authority | PASS (migliora) | Elimina MOCK_APPUNTAMENTI: appuntamenti persistiti via API. Audit su Postgres. |
-| IV. Schema & API Stability | PASS con richiesta esplicita | L'utente ha esplicitamente richiesto backend/schema per: orchestratore, audit persistente, allowlist, appuntamenti. Migrazione ADDITIVA (`AiAuditEvent`); nessun `migrate reset`. `/patients` intatto. |
-| V. Role-Aware Development | PASS | Azioni AI validate server-side su ruolo operatore; route pubbliche continuano a fare clamp del ruolo. |
-| VI. Integration Integrity | PASS | Endpoint `/ai/voice/*` e `/ai/assistant/query` restano funzionanti (delega al nuovo orchestratore); tsc/build gate ad ogni incremento. |
-| VII. Environment Safety | PASS | Nessun cambio a env/deploy config; audit usa la stessa DATABASE_URL. |
+| Principio                   | Esito                        | Note                                                                                                                                                                                                   |
+| --------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| I. Simplicity First         | PASS                         | Riuso planner/executor/preview esistenti; nessuna nuova dipendenza; catalogo = modulo TS semplice.                                                                                                     |
+| II. Healthcare UX           | PASS                         | Pannello unico Agnos in italiano, tablet-first; nessun tooltip-only; nessuna nuova tabella fuori ClinicalTable.                                                                                        |
+| III. Backend Data Authority | PASS (migliora)              | Elimina MOCK_APPUNTAMENTI: appuntamenti persistiti via API. Audit su Postgres.                                                                                                                         |
+| IV. Schema & API Stability  | PASS con richiesta esplicita | L'utente ha esplicitamente richiesto backend/schema per: orchestratore, audit persistente, allowlist, appuntamenti. Migrazione ADDITIVA (`AiAuditEvent`); nessun `migrate reset`. `/patients` intatto. |
+| V. Role-Aware Development   | PASS                         | Azioni AI validate server-side su ruolo operatore; route pubbliche continuano a fare clamp del ruolo.                                                                                                  |
+| VI. Integration Integrity   | PASS                         | Endpoint `/ai/voice/*` e `/ai/assistant/query` restano funzionanti (delega al nuovo orchestratore); tsc/build gate ad ogni incremento.                                                                 |
+| VII. Environment Safety     | PASS                         | Nessun cambio a env/deploy config; audit usa la stessa DATABASE_URL.                                                                                                                                   |
 
 ## Project Structure
 
@@ -108,7 +108,7 @@ Ogni incremento: team agenti (UIUX review → implementazione → QA build/test)
 
 ## Complexity Tracking
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
+| Violation                                              | Why Needed                                                                                  | Simpler Alternative Rejected Because                                                                    |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | Modifica backend + migrazione Prisma (Constitution IV) | Richiesta esplicita utente: orchestratore, audit persistente, allowlist, appuntamenti reali | Audit su file JSONL: non consultabile via API, non sopravvive ai redeploy Railway (filesystem effimero) |
-| Nuovo endpoint pubblico `/ai/actions/*` | Canale testo deve eseguire write con stesso contratto del canale voce | Estendere `/ai/voice/*` col canale nel nome: fuorviante e rompe la semantica delle route esistenti |
+| Nuovo endpoint pubblico `/ai/actions/*`                | Canale testo deve eseguire write con stesso contratto del canale voce                       | Estendere `/ai/voice/*` col canale nel nome: fuorviante e rompe la semantica delle route esistenti      |

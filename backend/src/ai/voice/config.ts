@@ -2,13 +2,13 @@
 // for anything destructive. Pure function over the environment → fully unit-testable.
 
 export interface VoiceConfig {
-  voiceEnabled: boolean;            // AI_VOICE_ENABLED
-  writeActionsEnabled: boolean;     // AI_WRITE_ACTIONS_ENABLED
-  deleteActionsEnabled: boolean;    // AI_DELETE_ACTIONS_ENABLED (always treated as off in v1)
-  requireWriteConfirmation: boolean;// AI_REQUIRE_WRITE_CONFIRMATION
-  sttModel: string | null;          // AI_STT_MODEL ("provider:model_id") — null → STT degraded
-  audioRetentionSeconds: number;    // AI_VOICE_AUDIO_RETENTION_SECONDS (0 = delete after processing)
-  transcriptRetentionDays: number;  // AI_VOICE_TRANSCRIPT_RETENTION_DAYS (0 = do not persist)
+  voiceEnabled: boolean; // AI_VOICE_ENABLED
+  writeActionsEnabled: boolean; // AI_WRITE_ACTIONS_ENABLED
+  deleteActionsEnabled: boolean; // AI_DELETE_ACTIONS_ENABLED (always treated as off in v1)
+  requireWriteConfirmation: boolean; // AI_REQUIRE_WRITE_CONFIRMATION
+  sttModel: string | null; // AI_STT_MODEL ("provider:model_id") — null → STT degraded
+  audioRetentionSeconds: number; // AI_VOICE_AUDIO_RETENTION_SECONDS (0 = delete after processing)
+  transcriptRetentionDays: number; // AI_VOICE_TRANSCRIPT_RETENTION_DAYS (0 = do not persist)
 }
 
 function boolEnv(env: NodeJS.ProcessEnv, key: string, def: boolean): boolean {
@@ -49,7 +49,12 @@ export interface SttStatus {
 
 export function sttStatus(cfg: VoiceConfig = loadVoiceConfig()): SttStatus {
   if (!cfg.sttModel) {
-    return { available: false, model: null, degraded: true, reason: 'AI_STT_MODEL non configurato' };
+    return {
+      available: false,
+      model: null,
+      degraded: true,
+      reason: 'AI_STT_MODEL non configurato',
+    };
   }
   // Provider capability verification happens in the runtime; here we report configured intent.
   return { available: true, model: cfg.sttModel, degraded: false };

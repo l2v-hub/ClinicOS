@@ -5,16 +5,33 @@ import assert from 'node:assert/strict';
 // We inline the logic here (mirrors the exported helpers) to avoid tsx/ESM complexity.
 
 function calcBalance(v: Record<string, number>): number {
-  return (v.equilibrioSeduto ?? 0) + (v.alzarsi ?? 0) + (v.tentativiAlzarsi ?? 0) +
-    (v.equilibrioImmediato ?? 0) + (v.equilibrioProlungato ?? 0) + (v.rombergSpinta ?? 0) +
-    (v.occhiChiusi ?? 0) + (v.girarsi360Passi ?? 0) + (v.girarsi360Stabilita ?? 0) +
-    (v.sedersi ?? 0);
+  return (
+    (v.equilibrioSeduto ?? 0) +
+    (v.alzarsi ?? 0) +
+    (v.tentativiAlzarsi ?? 0) +
+    (v.equilibrioImmediato ?? 0) +
+    (v.equilibrioProlungato ?? 0) +
+    (v.rombergSpinta ?? 0) +
+    (v.occhiChiusi ?? 0) +
+    (v.girarsi360Passi ?? 0) +
+    (v.girarsi360Stabilita ?? 0) +
+    (v.sedersi ?? 0)
+  );
 }
 
 function calcGait(v: Record<string, number>): number {
-  return (v.iniziazione ?? 0) + (v.lunghezzaPassoDx ?? 0) + (v.altezzaPassoDx ?? 0) +
-    (v.lunghezzaPassoSx ?? 0) + (v.altezzaPassoSx ?? 0) + (v.simmetria ?? 0) +
-    (v.continuita ?? 0) + (v.traiettoria ?? 0) + (v.tronco ?? 0) + (v.cammino ?? 0);
+  return (
+    (v.iniziazione ?? 0) +
+    (v.lunghezzaPassoDx ?? 0) +
+    (v.altezzaPassoDx ?? 0) +
+    (v.lunghezzaPassoSx ?? 0) +
+    (v.altezzaPassoSx ?? 0) +
+    (v.simmetria ?? 0) +
+    (v.continuita ?? 0) +
+    (v.traiettoria ?? 0) +
+    (v.tronco ?? 0) +
+    (v.cammino ?? 0)
+  );
 }
 
 function calcTotal(v: Record<string, number>): number {
@@ -31,30 +48,60 @@ function tinettiRischio(total: number): string {
 
 function nrsSeverity(p: number): string {
   if (p === 0) return 'Assente';
-  if (p <= 3)  return 'Lieve';
-  if (p <= 6)  return 'Moderato';
+  if (p <= 3) return 'Lieve';
+  if (p <= 6) return 'Moderato';
   return 'Severo';
 }
 
 // ── Tinetti tests ─────────────────────────────────────────────────────────────
 
 const MAX_BALANCE = {
-  equilibrioSeduto: 1, alzarsi: 2, tentativiAlzarsi: 2, equilibrioImmediato: 2,
-  equilibrioProlungato: 2, rombergSpinta: 2, occhiChiusi: 1, girarsi360Passi: 1,
-  girarsi360Stabilita: 1, sedersi: 2,
+  equilibrioSeduto: 1,
+  alzarsi: 2,
+  tentativiAlzarsi: 2,
+  equilibrioImmediato: 2,
+  equilibrioProlungato: 2,
+  rombergSpinta: 2,
+  occhiChiusi: 1,
+  girarsi360Passi: 1,
+  girarsi360Stabilita: 1,
+  sedersi: 2,
 };
 
 const MAX_GAIT = {
-  iniziazione: 1, lunghezzaPassoDx: 1, altezzaPassoDx: 1, lunghezzaPassoSx: 1,
-  altezzaPassoSx: 1, simmetria: 1, continuita: 1, traiettoria: 2, tronco: 2, cammino: 1,
+  iniziazione: 1,
+  lunghezzaPassoDx: 1,
+  altezzaPassoDx: 1,
+  lunghezzaPassoSx: 1,
+  altezzaPassoSx: 1,
+  simmetria: 1,
+  continuita: 1,
+  traiettoria: 2,
+  tronco: 2,
+  cammino: 1,
 };
 
 const MIN_RECORD = {
-  equilibrioSeduto: 0, alzarsi: 0, tentativiAlzarsi: 0, equilibrioImmediato: 0,
-  equilibrioProlungato: 0, rombergSpinta: 0, occhiChiusi: 0, girarsi360Passi: 0,
-  girarsi360Stabilita: 0, sedersi: 0,
-  iniziazione: 0, lunghezzaPassoDx: 0, altezzaPassoDx: 0, lunghezzaPassoSx: 0,
-  altezzaPassoSx: 0, simmetria: 0, continuita: 0, traiettoria: 0, tronco: 0, cammino: 0,
+  equilibrioSeduto: 0,
+  alzarsi: 0,
+  tentativiAlzarsi: 0,
+  equilibrioImmediato: 0,
+  equilibrioProlungato: 0,
+  rombergSpinta: 0,
+  occhiChiusi: 0,
+  girarsi360Passi: 0,
+  girarsi360Stabilita: 0,
+  sedersi: 0,
+  iniziazione: 0,
+  lunghezzaPassoDx: 0,
+  altezzaPassoDx: 0,
+  lunghezzaPassoSx: 0,
+  altezzaPassoSx: 0,
+  simmetria: 0,
+  continuita: 0,
+  traiettoria: 0,
+  tronco: 0,
+  cammino: 0,
 };
 
 test('Tinetti balance max is 16', () => {

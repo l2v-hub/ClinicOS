@@ -24,7 +24,11 @@ function ok(name, cond, detail = '') {
   console.log(`${cond ? 'PASS' : 'FAIL'}  ${name}${detail ? ` — ${detail}` : ''}`);
 }
 
-const OP_HEADERS = { 'X-Operator-Id': 'e2e-lead', 'X-Operator-Role': 'operatore', 'X-Operator-Name': 'E2E Lead' };
+const OP_HEADERS = {
+  'X-Operator-Id': 'e2e-lead',
+  'X-Operator-Role': 'operatore',
+  'X-Operator-Name': 'E2E Lead',
+};
 const ADMIN_HEADERS = { 'X-Operator-Id': 'e2e-lead', 'X-Operator-Role': 'admin' };
 const api = async (path, headers = {}) => (await fetch(`${BACKEND}${path}`, { headers })).json();
 
@@ -74,23 +78,44 @@ await ctx.tracing.start({ screenshots: true, snapshots: true });
 // Voce simulata: stub SpeechRecognition + getUserMedia (D9: iniezione trascrizione).
 await ctx.addInitScript(() => {
   class FakeSR {
-    constructor() { this.lang = ''; this.interimResults = false; this.continuous = false; this.onresult = null; this.onerror = null; this.onend = null; this._done = false; }
+    constructor() {
+      this.lang = '';
+      this.interimResults = false;
+      this.continuous = false;
+      this.onresult = null;
+      this.onerror = null;
+      this.onend = null;
+      this._done = false;
+    }
     start() {
       setTimeout(() => {
         if (this._done) return;
         this.onresult?.({ results: [[{ transcript: window.__fakeTranscript ?? 'test' }]] });
-        setTimeout(() => { if (!this._done) { this._done = true; this.onend?.(); } }, 150);
+        setTimeout(() => {
+          if (!this._done) {
+            this._done = true;
+            this.onend?.();
+          }
+        }, 150);
       }, 250);
     }
-    stop() { if (!this._done) { this._done = true; this.onend?.(); } }
+    stop() {
+      if (!this._done) {
+        this._done = true;
+        this.onend?.();
+      }
+    }
   }
   window.SpeechRecognition = FakeSR;
   window.webkitSpeechRecognition = FakeSR;
-  if (navigator.mediaDevices) navigator.mediaDevices.getUserMedia = async () => ({ getTracks: () => [] });
+  if (navigator.mediaDevices)
+    navigator.mediaDevices.getUserMedia = async () => ({ getTracks: () => [] });
 });
 
 const page = await ctx.newPage();
-page.on('dialog', (d) => { void d.accept(); });
+page.on('dialog', (d) => {
+  void d.accept();
+});
 const shot = (name) => page.screenshot({ path: join(OUT, name) });
 
 try {
@@ -108,10 +133,16 @@ try {
   await clickText(page, 'Diario');
   await clickText(page, 'Aggiungi voce');
   await page.fill('input[placeholder="Titolo voce…"]', 'Controllo E2E tradizionale');
-  await page.fill('textarea[placeholder="Descrizione, note cliniche…"]', 'Voce creata dalla UI tradizionale (suite SPEC-015).');
+  await page.fill(
+    'textarea[placeholder="Descrizione, note cliniche…"]',
+    'Voce creata dalla UI tradizionale (suite SPEC-015).',
+  );
   await page.locator('.btn-primary', { hasText: 'Salva' }).first().click();
   await page.waitForTimeout(1200);
-  ok('1. UI tradizionale: nota diario creata', (await page.locator('text=Controllo E2E tradizionale').count()) > 0);
+  ok(
+    '1. UI tradizionale: nota diario creata',
+    (await page.locator('text=Controllo E2E tradizionale').count()) > 0,
+  );
   await shot('01-tradizionale-diario.png');
 
   // ── 2. CREATE via chat ──────────────────────────────────────────────────────
@@ -136,22 +167,34 @@ try {
   await shot('04-update-preview.png');
   await chatConfirm(page);
   const afterUpd = (await api('/patients')).find((p) => p.id === moretti.id);
-  ok('4. UPDATE via chat: telefono aggiornato nel backend', /7654321/.test(afterUpd?.phone ?? ''), afterUpd?.phone);
+  ok(
+    '4. UPDATE via chat: telefono aggiornato nel backend',
+    /7654321/.test(afterUpd?.phone ?? ''),
+    afterUpd?.phone,
+  );
   await shot('04-update-eseguito.png');
 
   // ── 5. CREATE via VOCE simulata (stesso percorso, channel=voce) ─────────────
-  await page.evaluate(() => { window.__fakeTranscript = 'registra saturazione 97 alle 15'; });
+  await page.evaluate(() => {
+    window.__fakeTranscript = 'registra saturazione 97 alle 15';
+  });
   await page.locator('.agnos-mic').click();
   await page.waitForTimeout(1500); // fake STT: trascrizione nel campo, modificabile
   const fieldVal = await page.locator('.agnos-input').inputValue();
-  ok('5a. Voce: trascrizione visibile e modificabile nel campo', /saturazione 97/.test(fieldVal), fieldVal);
+  ok(
+    '5a. Voce: trascrizione visibile e modificabile nel campo',
+    /saturazione 97/.test(fieldVal),
+    fieldVal,
+  );
   await shot('05-voce-trascrizione.png');
   await page.click('.ai-asst__send');
   await page.waitForSelector('.voice-actions .btn-primary', { timeout: 10000 });
   await shot('05-voce-preview.png');
   await chatConfirm(page);
   const audit1 = await api('/ai/audit?limit=20', ADMIN_HEADERS);
-  const voceEvt = audit1.find((e) => e.channel === 'voce' && e.actionType === 'create_vital_sign' && e.outcome === 'ok');
+  const voceEvt = audit1.find(
+    (e) => e.channel === 'voce' && e.actionType === 'create_vital_sign' && e.outcome === 'ok',
+  );
   ok('5b. Voce: stesso percorso del testo, audit con channel=voce', !!voceEvt);
   await shot('05-voce-eseguito.png');
 
@@ -184,7 +227,10 @@ try {
   await shot('08-appuntamento-preview.png');
   await chatConfirm(page);
   const appts = await api(`/appointments?date=${tomorrow}`);
-  ok('8. Appuntamento creato via chat e persistito', appts.some((a) => a.ora === '11:00' && a.patientId === moretti.id));
+  ok(
+    '8. Appuntamento creato via chat e persistito',
+    appts.some((a) => a.ora === '11:00' && a.patientId === moretti.id),
+  );
   await shot('08-appuntamento-eseguito.png');
 
   // ── 9. NO-DELETE: varianti via chat ─────────────────────────────────────────
@@ -200,38 +246,61 @@ try {
   for (const cmd of deleteAttempts) {
     const before = await page.locator('.agnos-refusal').count();
     await chatSend(page, cmd);
-    await page.waitForFunction((n) => document.querySelectorAll('.agnos-refusal').length > n, before, { timeout: 10000 });
+    await page.waitForFunction(
+      (n) => document.querySelectorAll('.agnos-refusal').length > n,
+      before,
+      { timeout: 10000 },
+    );
     refused += 1;
   }
-  ok('9a. Delete via chat: tutte le varianti rifiutate', refused === deleteAttempts.length, `${refused}/${deleteAttempts.length}`);
+  ok(
+    '9a. Delete via chat: tutte le varianti rifiutate',
+    refused === deleteAttempts.length,
+    `${refused}/${deleteAttempts.length}`,
+  );
   await shot('09-delete-rifiutati-chat.png');
 
   // 9b. Delete via VOCE simulata
   const beforeVoice = await page.locator('.agnos-refusal').count();
-  await page.evaluate(() => { window.__fakeTranscript = 'elimina la nota del diario di Elena Moretti'; });
+  await page.evaluate(() => {
+    window.__fakeTranscript = 'elimina la nota del diario di Elena Moretti';
+  });
   await page.locator('.agnos-mic').click();
   await page.waitForTimeout(1500);
   await page.click('.ai-asst__send');
-  await page.waitForFunction((n) => document.querySelectorAll('.agnos-refusal').length > n, beforeVoice, { timeout: 10000 });
+  await page.waitForFunction(
+    (n) => document.querySelectorAll('.agnos-refusal').length > n,
+    beforeVoice,
+    { timeout: 10000 },
+  );
   ok('9b. Delete via voce: rifiutato', true);
   await shot('09-delete-rifiutato-voce.png');
 
   // 9c. Catalogo ispezionabile: zero azioni delete
   const catalog = await api('/ai/actions/catalog', OP_HEADERS);
-  ok('9c. Catalogo: 0 azioni delete su ' + catalog.length, catalog.every((a) => a.kind !== 'delete') && catalog.length > 0,
-    catalog.map((a) => `${a.name}:${a.kind}`).join(', '));
+  ok(
+    '9c. Catalogo: 0 azioni delete su ' + catalog.length,
+    catalog.every((a) => a.kind !== 'delete') && catalog.length > 0,
+    catalog.map((a) => `${a.name}:${a.kind}`).join(', '),
+  );
 
   // 9d. Audit: i rifiuti delete sono tracciati (chat e voce)
   const audit2 = await api('/ai/audit?limit=50', ADMIN_HEADERS);
   const refusals = audit2.filter((e) => e.actionType === 'refused_delete');
-  ok('9d. Audit: rifiuti delete persistiti (testo+voce)',
-    refusals.some((e) => e.channel === 'testo') && refusals.some((e) => e.channel === 'voce'), `${refusals.length} eventi refused_delete`);
+  ok(
+    '9d. Audit: rifiuti delete persistiti (testo+voce)',
+    refusals.some((e) => e.channel === 'testo') && refusals.some((e) => e.channel === 'voce'),
+    `${refusals.length} eventi refused_delete`,
+  );
 
   // 9e. I dati NON sono cambiati (la nota diario del punto 1 esiste ancora)
   await page.locator('.ai-drawer__scrim').click();
   await clickText(page, 'Diario');
   await page.waitForTimeout(800);
-  ok('9e. Nessun dato cancellato dai tentativi', (await page.locator('text=Controllo E2E tradizionale').count()) > 0);
+  ok(
+    '9e. Nessun dato cancellato dai tentativi',
+    (await page.locator('text=Controllo E2E tradizionale').count()) > 0,
+  );
 
   // ── 10. Delete via pulsante UI (FR-010: resta possibile SOLO qui) ───────────
   const row = page.locator('tr', { hasText: 'Controllo E2E tradizionale' }).first();
@@ -250,6 +319,13 @@ try {
 }
 
 const passed = results.filter((r) => r.pass).length;
-writeFileSync(join(OUT, 'report.json'), JSON.stringify({ ranAt: new Date().toISOString(), passed, total: results.length, results }, null, 2));
+writeFileSync(
+  join(OUT, 'report.json'),
+  JSON.stringify(
+    { ranAt: new Date().toISOString(), passed, total: results.length, results },
+    null,
+    2,
+  ),
+);
 console.log(`\n${passed}/${results.length} PASS — evidenze in ${OUT}`);
 if (passed !== results.length) process.exit(1);

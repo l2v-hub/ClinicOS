@@ -15,9 +15,23 @@ const out = (o) => console.log(JSON.stringify(o, null, 2));
 async function clickFirst(page, names) {
   for (const re of names) {
     const el = page.getByRole('button', { name: re }).first();
-    try { if (await el.count() && await el.isVisible()) { await el.click(); return true; } } catch { /* */ }
+    try {
+      if ((await el.count()) && (await el.isVisible())) {
+        await el.click();
+        return true;
+      }
+    } catch {
+      /* */
+    }
     const t = page.getByText(re).first();
-    try { if (await t.count() && await t.isVisible()) { await t.click(); return true; } } catch { /* */ }
+    try {
+      if ((await t.count()) && (await t.isVisible())) {
+        await t.click();
+        return true;
+      }
+    } catch {
+      /* */
+    }
   }
   return false;
 }
@@ -42,17 +56,28 @@ try {
   await clickFirst(page, [/Avvia elaborazione/i]);
   for (let i = 0; i < 110; i++) {
     await page.waitForTimeout(2000);
-    if (await page.locator('[data-testid="sections-review"]').count() || (await page.textContent('body') ?? '').includes('Crea paziente')) break;
+    if (
+      (await page.locator('[data-testid="sections-review"]').count()) ||
+      ((await page.textContent('body')) ?? '').includes('Crea paziente')
+    )
+      break;
   }
   // acknowledge the allergy checkbox if the review requires it, then create the patient
-  try { const ack = page.locator('.srev-ack input[type=checkbox]'); if (await ack.count()) await ack.first().check(); } catch { /* */ }
+  try {
+    const ack = page.locator('.srev-ack input[type=checkbox]');
+    if (await ack.count()) await ack.first().check();
+  } catch {
+    /* */
+  }
   await clickFirst(page, [/Crea paziente/i]);
   // handle a possible duplicate confirmation
   await page.waitForTimeout(1500);
   await clickFirst(page, [/Conferma/i, /Crea comunque/i, /Procedi/i]);
   await page.waitForTimeout(3500);
   await page.close();
-} finally { await browser.close(); }
+} finally {
+  await browser.close();
+}
 
 // find the newly created patient by id-diff (no names read)
 const after = await ids();
@@ -76,7 +101,9 @@ if (createdId) {
   const secs = await (await fetch(`${API}/patients/${createdId}/narrative-sections`)).json();
   const withSrc = (secs.sections ?? []).filter((s) => (s.sourceReferences ?? []).length > 0);
   report.sectionsWithSource = withSrc.map((s) => s.sectionKey);
-  report.anamnesiPopulated = !!(secs.sections ?? []).find((s) => s.sectionKey === 'ANAMNESIS' && (s.displayText ?? '').trim());
+  report.anamnesiPopulated = !!(secs.sections ?? []).find(
+    (s) => s.sectionKey === 'ANAMNESIS' && (s.displayText ?? '').trim(),
+  );
 
   // CLEANUP: delete the synthetic patient, confirm cascade
   const del = await fetch(`${API}/patients/${createdId}`, { method: 'DELETE' });
@@ -84,7 +111,9 @@ if (createdId) {
   await new Promise((r) => setTimeout(r, 1000));
   const after2 = await ids();
   report.patientGoneAfterDelete = !after2.has(createdId);
-  const docsAfter = await fetch(`${API}/patients/${createdId}/documents`).then((r) => r.json()).catch(() => []);
+  const docsAfter = await fetch(`${API}/patients/${createdId}/documents`)
+    .then((r) => r.json())
+    .catch(() => []);
   report.documentsGoneAfterDelete = !Array.isArray(docsAfter) || docsAfter.length === 0;
 }
 out(report);

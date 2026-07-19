@@ -4,10 +4,20 @@
 // SOURCE_ONLY contract stay identical.)
 
 export type AssistantIntent =
-  | 'allergies' | 'therapies' | 'vitals_range' | 'vitals_recent' | 'narrative_search'
-  | 'document_search' | 'timeline' | 'appointments' | 'correlate' | 'patient_search'
+  | 'allergies'
+  | 'therapies'
+  | 'vitals_range'
+  | 'vitals_recent'
+  | 'narrative_search'
+  | 'document_search'
+  | 'timeline'
+  | 'appointments'
+  | 'correlate'
+  | 'patient_search'
   | 'rooms_occupancy'
-  | 'refuse_clinical' | 'data_query' | 'unknown';
+  | 'refuse_clinical'
+  | 'data_query'
+  | 'unknown';
 
 export type QueryScope = 'current_patient' | 'cross_patient';
 
@@ -29,10 +39,19 @@ const norm = (s: string) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').t
 
 // Requests for clinical judgement are refused outright (no diagnosis/therapy/prognosis/triage).
 const CLINICAL_REFUSAL = [
-  /\bsuggerisci\b/, /\bconsiglia\b/, /che (terapia|cura|farmaco) (dovrei|devo|si dovrebbe)/,
-  /\bdiagnosi\b.*\?/, /che (diagnosi|malattia|patologia)/, /\bprognosi\b/, /\bcausa\b.*\bmalattia\b/,
-  /quale paziente e (piu|più) grave/, /\bpiu grave\b/, /\bpiù grave\b/, /stabilisci.*priorita/,
-  /interpreta.*valori/, /e (grave|preoccupante)\b/,
+  /\bsuggerisci\b/,
+  /\bconsiglia\b/,
+  /che (terapia|cura|farmaco) (dovrei|devo|si dovrebbe)/,
+  /\bdiagnosi\b.*\?/,
+  /che (diagnosi|malattia|patologia)/,
+  /\bprognosi\b/,
+  /\bcausa\b.*\bmalattia\b/,
+  /quale paziente e (piu|più) grave/,
+  /\bpiu grave\b/,
+  /\bpiù grave\b/,
+  /stabilisci.*priorita/,
+  /interpreta.*valori/,
+  /e (grave|preoccupante)\b/,
 ];
 
 const SECTION_HINTS: Array<{ re: RegExp; key: string }> = [
@@ -69,10 +88,22 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   const original = question || '';
   const q = norm(original);
   const onPatient = !!ctx.currentPatientId;
-  const scope: QueryScope = onPatient && !/\b(pazienti|chiunque|chi assume|tutti i pazienti|across)\b/.test(q)
-    ? 'current_patient' : 'cross_patient';
-  const base = (intent: AssistantIntent, tools: PlannedToolCall[], requiresCross = false, refusalReason?: string): QueryPlan =>
-    ({ intent, scope, tools, requiresCrossPatientAccess: requiresCross, refusalReason });
+  const scope: QueryScope =
+    onPatient && !/\b(pazienti|chiunque|chi assume|tutti i pazienti|across)\b/.test(q)
+      ? 'current_patient'
+      : 'cross_patient';
+  const base = (
+    intent: AssistantIntent,
+    tools: PlannedToolCall[],
+    requiresCross = false,
+    refusalReason?: string,
+  ): QueryPlan => ({
+    intent,
+    scope,
+    tools,
+    requiresCrossPatientAccess: requiresCross,
+    refusalReason,
+  });
 
   if (CLINICAL_REFUSAL.some((re) => re.test(q))) {
     return base('refuse_clinical', [], false, 'clinical_advice_not_allowed');
@@ -81,27 +112,58 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   const pid = ctx.currentPatientId;
   // ── current-patient retrieval intents (need a patient in context) ──
   if (scope === 'current_patient' && pid) {
-    if (/\ballerg/.test(q)) return base('allergies', [{ tool: 'get_patient_allergies', args: { patientId: pid } }]);
-    if (/(parametri|pressione|pa\b|frequenza|spo2|temperatura).*(ultim|7|sette|giorni|recenti)/.test(q) || /ultimi parametri/.test(q))
+    if (/\ballerg/.test(q))
+      return base('allergies', [{ tool: 'get_patient_allergies', args: { patientId: pid } }]);
+    if (
+      /(parametri|pressione|pa\b|frequenza|spo2|temperatura).*(ultim|7|sette|giorni|recenti)/.test(
+        q,
+      ) ||
+      /ultimi parametri/.test(q)
+    )
       return base('vitals_recent', [{ tool: 'get_patient_vital_signs', args: { patientId: pid } }]);
     const sysGt = /(pressione|sistolic|pa).*?(\d{2,3})/.exec(q);
-    if (/pression|sistolic/.test(q) && sysGt) return base('vitals_range', [{ tool: 'get_patient_vital_signs', args: { patientId: pid, label: 'PA', systolicMin: parseInt(sysGt[2], 10) + 1 } }]);
-    if (/timeline|sequenza temporale|cronologia/.test(q)) return base('timeline', [{ tool: 'get_patient_timeline', args: { patientId: pid } }]);
-    if (/appuntament\w*|agenda/.test(q)) return base('appointments', [{ tool: 'get_patient_appointments', args: { patientId: pid } }]);
+    if (/pression|sistolic/.test(q) && sysGt)
+      return base('vitals_range', [
+        {
+          tool: 'get_patient_vital_signs',
+          args: { patientId: pid, label: 'PA', systolicMin: parseInt(sysGt[2], 10) + 1 },
+        },
+      ]);
+    if (/timeline|sequenza temporale|cronologia/.test(q))
+      return base('timeline', [{ tool: 'get_patient_timeline', args: { patientId: pid } }]);
+    if (/appuntament\w*|agenda/.test(q))
+      return base('appointments', [{ tool: 'get_patient_appointments', args: { patientId: pid } }]);
     // 016 F0: plurali/sinonimi (terapia/terapie/farmaco/farmaci/prescriz…)
-    if (/terapi\w*|farmac\w*|prescriz\w*/.test(q)) return base('therapies', [{ tool: 'get_patient_therapies', args: { patientId: pid } }]);
+    if (/terapi\w*|farmac\w*|prescriz\w*/.test(q))
+      return base('therapies', [{ tool: 'get_patient_therapies', args: { patientId: pid } }]);
     const sec = sectionKeyFor(q);
     if (/cerca|trova|consulenz|anamnes|decorso|documenti|sezione/.test(q)) {
       const phrase = searchPhrase(q, original);
-      if (/documenti?/.test(q)) return base('document_search', [{ tool: 'search_documents', args: { patientId: pid, query: phrase ?? '' } }]);
-      return base('narrative_search', [{ tool: 'search_clinical_sections', args: { patientId: pid, sectionKey: sec, query: phrase ?? sec ?? '' } }]);
+      if (/documenti?/.test(q))
+        return base('document_search', [
+          { tool: 'search_documents', args: { patientId: pid, query: phrase ?? '' } },
+        ]);
+      return base('narrative_search', [
+        {
+          tool: 'search_clinical_sections',
+          args: { patientId: pid, sectionKey: sec, query: phrase ?? sec ?? '' },
+        },
+      ]);
     }
   }
 
   // ── cross-patient intents (role + env gated downstream) ──
-  if (/valori? pressori? (superior|maggior|sopra).*?(\d{2,3})/.test(q) || /pressione.*(superiore a|>)\s*(\d{2,3})/.test(q)) {
-    const m = /(\d{2,3})/.exec(q); const min = m ? parseInt(m[1], 10) + 1 : 151;
-    return base('correlate', [{ tool: 'search_across_patients', args: { systolicMin: min } }], true);
+  if (
+    /valori? pressori? (superior|maggior|sopra).*?(\d{2,3})/.test(q) ||
+    /pressione.*(superiore a|>)\s*(\d{2,3})/.test(q)
+  ) {
+    const m = /(\d{2,3})/.exec(q);
+    const min = m ? parseInt(m[1], 10) + 1 : 151;
+    return base(
+      'correlate',
+      [{ tool: 'search_across_patients', args: { systolicMin: min } }],
+      true,
+    );
   }
   if (/quali pazienti|chi assume|chi ha\b|pazienti con/.test(q)) {
     const allergy = /allerg\w*\s+(?:a|al|alla|alle|ai)?\s*([a-zàèéìòù]+)/.exec(q)?.[1];
@@ -109,16 +171,35 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   }
   // issue #239: aggregate rooms/beds occupancy (counts only, never patient names/identifiers —
   // facility-level read, gated downstream by canFacilityRead, NOT a cross-patient PHI search).
-  if (/(camere?|stanze?|letti?).*(occupat|liber|disponibil|manutenzione)|occupazione.*(camere?|stanze?|letti?)/.test(q)) {
+  if (
+    /(camere?|stanze?|letti?).*(occupat|liber|disponibil|manutenzione)|occupazione.*(camere?|stanze?|letti?)/.test(
+      q,
+    )
+  ) {
     return base('rooms_occupancy', [{ tool: 'query_rooms_occupancy', args: {} }]);
   }
-  if (/appuntamenti (di )?oggi|agenda oggi/.test(q)) return base('appointments', [{ tool: 'query_appointments_today', args: {} }], true);
+  if (/appuntamenti (di )?oggi|agenda oggi/.test(q))
+    return base('appointments', [{ tool: 'query_appointments_today', args: {} }], true);
   if (/cerca|trova/.test(q)) {
     const phrase = searchPhrase(q, original);
-    if (/documenti?/.test(q)) return base('document_search', [{ tool: 'search_documents', args: { query: phrase ?? '' } }], true);
-    return base('narrative_search', [{ tool: 'search_across_patients', args: { query: phrase ?? '' } }], true);
+    if (/documenti?/.test(q))
+      return base(
+        'document_search',
+        [{ tool: 'search_documents', args: { query: phrase ?? '' } }],
+        true,
+      );
+    return base(
+      'narrative_search',
+      [{ tool: 'search_across_patients', args: { query: phrase ?? '' } }],
+      true,
+    );
   }
-  if (/paziente|cerca paziente|trova paziente/.test(q)) return base('patient_search', [{ tool: 'search_patients', args: { query: original.trim() } }], true);
+  if (/paziente|cerca paziente|trova paziente/.test(q))
+    return base(
+      'patient_search',
+      [{ tool: 'search_patients', args: { query: original.trim() } }],
+      true,
+    );
 
   return base('unknown', []);
 }
@@ -127,7 +208,17 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
 // nome→id (che richiede il DB) è fatta da service.ts, che usa questo estrattore.
 // Parole capitalizzate note che NON sono nomi di paziente (evita falsi positivi a fine frase).
 const NAME_STOPWORDS = new Set([
-  'PA', 'SpO2', 'TC', 'FC', 'DTX', 'RX', 'TAC', 'RMN', 'ECG', 'PS', 'MRN',
+  'PA',
+  'SpO2',
+  'TC',
+  'FC',
+  'DTX',
+  'RX',
+  'TAC',
+  'RMN',
+  'ECG',
+  'PS',
+  'MRN',
 ]);
 
 /**
@@ -141,7 +232,9 @@ export function extractPatientName(question: string): string | null {
   if (!text) return null;
   const NAME = "[A-ZÀ-Þ][a-zà-ÿ']+(?:\\s+[A-ZÀ-Þ][a-zà-ÿ']+)?";
 
-  const prep = new RegExp(`\\b(?:di|del|della|dei|delle|per|al|allo|alla|paziente)\\s+(${NAME})`).exec(text);
+  const prep = new RegExp(
+    `\\b(?:di|del|della|dei|delle|per|al|allo|alla|paziente)\\s+(${NAME})`,
+  ).exec(text);
   if (prep) return prep[1].trim();
 
   // token capitalizzati in coda, ma non se sono la prima parola della frase (verbo iniziale).

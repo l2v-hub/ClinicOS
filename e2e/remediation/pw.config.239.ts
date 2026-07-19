@@ -13,7 +13,14 @@ export default defineConfig({
   fullyParallel: false,
   outputDir: '../../artifacts/task-validation/239-agnos-chatbot-plan-routing/test-results',
   reporter: [
-    ['html', { outputFolder: '../../artifacts/task-validation/239-agnos-chatbot-plan-routing/playwright-report', open: 'never' }],
+    [
+      'html',
+      {
+        outputFolder:
+          '../../artifacts/task-validation/239-agnos-chatbot-plan-routing/playwright-report',
+        open: 'never',
+      },
+    ],
     ['list'],
   ],
   use: {

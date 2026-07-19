@@ -3,18 +3,18 @@
 // Mg equivalents are derived for display only.
 
 export interface ScheduleInput {
-  time: string;                 // "HH:MM"
+  time: string; // "HH:MM"
   quantityNumerator: number;
   quantityDenominator: number;
-  administrationUnit: string;   // compressa | ml | gocce | unità | bustina | ...
-  fascia: string;               // mattina|pranzo|pomeriggio|sera|notte (derived from time)
+  administrationUnit: string; // compressa | ml | gocce | unità | bustina | ...
+  fascia: string; // mattina|pranzo|pomeriggio|sera|notte (derived from time)
 }
 
 const FASCE_RANGES: { fascia: string; startMin: number; endMin: number }[] = [
-  { fascia: 'mattina',    startMin: 5 * 60,  endMin: 11 * 60 - 1 },   // 05:00–10:59
-  { fascia: 'pranzo',     startMin: 11 * 60, endMin: 14 * 60 - 1 },   // 11:00–13:59
-  { fascia: 'pomeriggio', startMin: 14 * 60, endMin: 18 * 60 - 1 },   // 14:00–17:59
-  { fascia: 'sera',       startMin: 18 * 60, endMin: 22 * 60 - 1 },   // 18:00–21:59
+  { fascia: 'mattina', startMin: 5 * 60, endMin: 11 * 60 - 1 }, // 05:00–10:59
+  { fascia: 'pranzo', startMin: 11 * 60, endMin: 14 * 60 - 1 }, // 11:00–13:59
+  { fascia: 'pomeriggio', startMin: 14 * 60, endMin: 18 * 60 - 1 }, // 14:00–17:59
+  { fascia: 'sera', startMin: 18 * 60, endMin: 22 * 60 - 1 }, // 18:00–21:59
   // notte = everything else (22:00–04:59)
 ];
 
@@ -23,13 +23,16 @@ export function fasciaFromTime(time: string): string {
   const m = /^(\d{1,2}):(\d{2})$/.exec((time || '').trim());
   if (!m) return 'mattina';
   const mins = parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
-  const hit = FASCE_RANGES.find(r => mins >= r.startMin && mins <= r.endMin);
+  const hit = FASCE_RANGES.find((r) => mins >= r.startMin && mins <= r.endMin);
   return hit ? hit.fascia : 'notte';
 }
 
 function gcd(a: number, b: number): number {
-  a = Math.abs(a); b = Math.abs(b);
-  while (b) { [a, b] = [b, a % b]; }
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b) {
+    [a, b] = [b, a % b];
+  }
   return a || 1;
 }
 
@@ -37,7 +40,10 @@ function gcd(a: number, b: number): number {
 export function normalizeFraction(num: number, den: number): { num: number; den: number } {
   let n = Math.round(num);
   let d = Math.round(den) || 1;
-  if (d < 0) { n = -n; d = -d; }
+  if (d < 0) {
+    n = -n;
+    d = -d;
+  }
   const g = gcd(n, d);
   return { num: n / g, den: d / g };
 }
@@ -98,12 +104,19 @@ export function scheduleDoseShort(
  * so the existing fascia-keyed therapy-slots / administration / print pipeline keeps working.
  */
 export function deriveLegacyFromSchedules(schedules: ScheduleInput[]): {
-  fasceMattina: boolean; fascePranzo: boolean; fascePomeriggio: boolean;
-  fasceSera: boolean; fasceNotte: boolean; orarioSpecifico: string | null;
+  fasceMattina: boolean;
+  fascePranzo: boolean;
+  fascePomeriggio: boolean;
+  fasceSera: boolean;
+  fasceNotte: boolean;
+  orarioSpecifico: string | null;
 } {
   const flags = {
-    fasceMattina: false, fascePranzo: false, fascePomeriggio: false,
-    fasceSera: false, fasceNotte: false,
+    fasceMattina: false,
+    fascePranzo: false,
+    fascePomeriggio: false,
+    fasceSera: false,
+    fasceNotte: false,
   };
   const times: string[] = [];
   for (const s of schedules) {
@@ -134,8 +147,10 @@ export function normalizeSchedules(raw: unknown): ScheduleInput[] {
     if (!/^\d{1,2}:\d{2}$/.test(time)) continue;
     const num = Math.max(1, Math.round(Number(r.quantityNumerator) || 1));
     const den = Math.max(1, Math.round(Number(r.quantityDenominator) || 1));
-    const unit = typeof r.administrationUnit === 'string' && r.administrationUnit.trim()
-      ? r.administrationUnit.trim() : 'compressa';
+    const unit =
+      typeof r.administrationUnit === 'string' && r.administrationUnit.trim()
+        ? r.administrationUnit.trim()
+        : 'compressa';
     const key = `${time}|${unit}`;
     if (seen.has(key)) continue; // one schedule per (time, unit)
     seen.add(key);

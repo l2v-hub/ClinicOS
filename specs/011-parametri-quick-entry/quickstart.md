@@ -33,17 +33,25 @@ Required after every edit: zero new TS errors, zero new Vite warnings (SC-010).
 
 ### Density (US1)
 
-| Viewport | Width × Height | What to verify |
-|----------|---------------|----------------|
-| Tablet baseline | 1024 × 768 | ≥ 8 patient rows above the fold (SC-001); row height ≤ 56 px (SC-002) |
-| Large tablet | 1180 × 820 | Slightly more rows visible; layout still uses full content width |
-| Desktop | 1366 × 768 | At least 10 rows above the fold; no horizontal scroll |
-| Desktop wide | 1920 × 1080 | Plenty of rows; no dead space; rows do not stretch absurdly |
+| Viewport        | Width × Height | What to verify                                                        |
+| --------------- | -------------- | --------------------------------------------------------------------- |
+| Tablet baseline | 1024 × 768     | ≥ 8 patient rows above the fold (SC-001); row height ≤ 56 px (SC-002) |
+| Large tablet    | 1180 × 820     | Slightly more rows visible; layout still uses full content width      |
+| Desktop         | 1366 × 768     | At least 10 rows above the fold; no horizontal scroll                 |
+| Desktop wide    | 1920 × 1080    | Plenty of rows; no dead space; rows do not stretch absurdly           |
 
 DevTools console at each viewport:
+
 ```javascript
 const rows = document.querySelectorAll('.qe-row');
-console.log('count:', rows.length, 'first row height:', rows[0]?.offsetHeight, 'visible (above fold) ≥8:', Array.from(rows).filter(r => r.getBoundingClientRect().top < window.innerHeight).length);
+console.log(
+  'count:',
+  rows.length,
+  'first row height:',
+  rows[0]?.offsetHeight,
+  'visible (above fold) ≥8:',
+  Array.from(rows).filter((r) => r.getBoundingClientRect().top < window.innerHeight).length,
+);
 ```
 
 ### Auto-`ora` and Auto-`operatore` (US2 / SC-004 / SC-008)
@@ -55,7 +63,10 @@ console.log('count:', rows.length, 'first row height:', rows[0]?.offsetHeight, '
 5. Confirm no `<input>` for `ora` or `operatore` exists in the DOM:
    ```javascript
    console.log('ora inputs:', document.querySelectorAll('.qe-row input[name="ora"]').length);
-   console.log('operatore inputs:', document.querySelectorAll('.qe-row input[name="operatore"]').length);
+   console.log(
+     'operatore inputs:',
+     document.querySelectorAll('.qe-row input[name="operatore"]').length,
+   );
    // Expected: 0 / 0
    ```
 
@@ -71,18 +82,21 @@ console.log('count:', rows.length, 'first row height:', rows[0]?.offsetHeight, '
 ### Overflow Audit (SC-007)
 
 At each of the four viewports, paste in DevTools Console:
+
 ```javascript
-document.querySelectorAll('*').forEach(el => {
+document.querySelectorAll('*').forEach((el) => {
   if (el.offsetWidth > document.body.offsetWidth) {
     console.log('overflow:', el, el.offsetWidth);
   }
 });
 ```
+
 Expected: zero hits (SC-007).
 
 ### Click-to-Save Stopwatch (SC-009)
 
 With a populated 10-patient ward:
+
 1. Place cursor at the first row's PA field.
 2. Start stopwatch.
 3. Type 6 values, press Enter (or click Save).
@@ -92,31 +106,31 @@ With a populated 10-patient ward:
 
 ### Edge-Case Drills
 
-| Drill | Expected |
-|-------|----------|
-| Disconnect network, then Save | Row keeps the entered values; error message surfaces (FR-015) |
+| Drill                                                       | Expected                                                                      |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Disconnect network, then Save                               | Row keeps the entered values; error message surfaces (FR-015)                 |
 | Open Note on row, switch to a different sub-page, come back | Note state may reset (acceptable for v1); clinical field values remain intact |
-| Operator name changes mid-session (re-login) | Next Save carries the **new** name in `firmaIpM` (FR-016) |
-| Operator presses Enter inside any clinical input | Triggers Save for that row (R-5 keyboard shortcut) |
+| Operator name changes mid-session (re-login)                | Next Save carries the **new** name in `firmaIpM` (FR-016)                     |
+| Operator presses Enter inside any clinical input            | Triggers Save for that row (R-5 keyboard shortcut)                            |
 
 ---
 
 ## Files You Will Edit
 
-| File | Why touched |
-|------|-------------|
-| `frontend/src/App.css` | Add `--qe-*` tokens + `.qe-*` rule block + media query |
+| File                                                         | Why touched                                                                                                           |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `frontend/src/App.css`                                       | Add `--qe-*` tokens + `.qe-*` rule block + media query                                                                |
 | `frontend/src/components/operator/MultiPatientParametri.tsx` | Refactor `RigaPaziente` to compact grid; remove Ora/Operatore inputs; add per-row note expansion; auto-inject at save |
 
 ### Files You Must NOT Touch
 
-| Path | Reason |
-|------|--------|
-| `backend/**` | Constitution IV |
-| `prisma/**` | Constitution IV |
-| `frontend/.env*`, `vercel.json`, `railway.json` | FR-019 |
-| `frontend/src/components/shared/TeamsLikeSidebar.tsx` | L1 untouched |
-| `frontend/src/components/shared/NavComponents.tsx` | 009 canonical surface — do not reshape |
+| Path                                                  | Reason                                 |
+| ----------------------------------------------------- | -------------------------------------- |
+| `backend/**`                                          | Constitution IV                        |
+| `prisma/**`                                           | Constitution IV                        |
+| `frontend/.env*`, `vercel.json`, `railway.json`       | FR-019                                 |
+| `frontend/src/components/shared/TeamsLikeSidebar.tsx` | L1 untouched                           |
+| `frontend/src/components/shared/NavComponents.tsx`    | 009 canonical surface — do not reshape |
 
 ---
 

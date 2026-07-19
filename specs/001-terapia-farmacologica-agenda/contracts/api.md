@@ -7,9 +7,11 @@ Base URL: `VITE_API_URL` (es. `http://localhost:3001` in locale, Railway in prod
 ## Terapia Farmacologica (CRUD)
 
 ### GET /patients/:patientId/therapies
+
 Recupera tutte le terapie di un paziente.
 
 **Response 200**:
+
 ```json
 [
   {
@@ -38,22 +40,25 @@ Recupera tutte le terapie di un paziente.
   }
 ]
 ```
+
 **Response 404**: `{ "error": "Paziente non trovato" }`
 
 ---
 
 ### POST /patients/:patientId/therapies
+
 Crea una nuova terapia.
 
 **Request body**:
+
 ```json
 {
-  "farmacoNome": "Paracetamolo",       // obbligatorio
-  "dosaggio": "500mg",                 // obbligatorio
-  "dataInizio": "2026-01-01",          // obbligatorio
-  "viaSomministrazione": "orale",      // default: "orale"
-  "tipo": "periodica",                 // "periodica" | "una_tantum" | "al_bisogno"
-  "stato": "attiva",                   // "attiva" | "sospesa" | "conclusa"
+  "farmacoNome": "Paracetamolo", // obbligatorio
+  "dosaggio": "500mg", // obbligatorio
+  "dataInizio": "2026-01-01", // obbligatorio
+  "viaSomministrazione": "orale", // default: "orale"
+  "tipo": "periodica", // "periodica" | "una_tantum" | "al_bisogno"
+  "stato": "attiva", // "attiva" | "sospesa" | "conclusa"
   "dataFine": null,
   "fasceMattina": true,
   "fascePranzo": false,
@@ -68,6 +73,7 @@ Crea una nuova terapia.
   "orarioSomministrazione": null
 }
 ```
+
 **Response 201**: oggetto PatientTherapy creato
 **Response 400**: `{ "error": "Campi obbligatori: farmacoNome, dosaggio, dataInizio" }`
 **Response 404**: `{ "error": "Paziente non trovato" }`
@@ -75,18 +81,22 @@ Crea una nuova terapia.
 ---
 
 ### PUT /patients/:patientId/therapies/:therapyId
+
 Aggiorna una terapia esistente (qualsiasi campo).
 
 **Request body**: subset dei campi (solo quelli da aggiornare)
+
 ```json
 { "stato": "sospesa" }
 ```
+
 **Response 200**: oggetto PatientTherapy aggiornato
 **Response 404**: `{ "error": "Terapia non trovata" }`
 
 ---
 
 ### DELETE /patients/:patientId/therapies/:therapyId
+
 Elimina una terapia.
 
 **Response 204**: no body
@@ -101,13 +111,16 @@ Elimina una terapia.
 ## Storico Somministrazioni
 
 ### GET /patients/:patientId/medication-administrations
+
 Recupera lo storico somministrazioni di un paziente.
 
 **Query params**:
+
 - `date` (opzionale): filtra per data YYYY-MM-DD
 - `limit` (opzionale): default 100
 
 **Response 200**:
+
 ```json
 [
   {
@@ -136,13 +149,16 @@ Recupera lo storico somministrazioni di un paziente.
 ## Agenda Terapia
 
 ### GET /therapy-slots?date=YYYY-MM-DD
+
 Recupera gli slot terapia per una data, raggruppati per fascia oraria.
 Legge esclusivamente da PatientTherapy (stato=attiva, tipo≠al_bisogno, valida per la data).
 
 **Query params**:
+
 - `date` (opzionale): default oggi
 
 **Response 200**:
+
 ```json
 [
   {
@@ -182,14 +198,17 @@ Legge esclusivamente da PatientTherapy (stato=attiva, tipo≠al_bisogno, valida 
   }
 ]
 ```
+
 > Solo slot con almeno 1 paziente sono inclusi nella risposta.
 
 ---
 
 ### POST /therapy-slots/confirm
+
 Registra una somministrazione come "Erogata".
 
 **Request body**:
+
 ```json
 {
   "patientId": "cuid",
@@ -204,6 +223,7 @@ Registra una somministrazione come "Erogata".
   "therapyId": "cuid"
 }
 ```
+
 **Response 200**: oggetto MedicationAdministration creato/aggiornato
 **Response 400**: `{ "error": "Campi obbligatori: patientId, farmacoNome, date, fascia" }`
 **Response 409**: `{ "error": "Terapia già erogata", "existingRecord": { ... } }`
@@ -211,9 +231,11 @@ Registra una somministrazione come "Erogata".
 ---
 
 ### POST /therapy-slots/not-administered
+
 Registra una somministrazione come "Non erogata".
 
 **Request body**:
+
 ```json
 {
   "patientId": "cuid",
@@ -230,6 +252,7 @@ Registra una somministrazione come "Non erogata".
   "therapyId": "cuid"
 }
 ```
+
 **Response 200**: oggetto MedicationAdministration creato/aggiornato
 **Response 400**: `{ "error": "Campi obbligatori: patientId, farmacoNome, date, fascia, motivo" }`
 
@@ -238,6 +261,7 @@ Registra una somministrazione come "Non erogata".
 ## Motivi Non Erogazione
 
 Enum valori accettati per il campo `motivo`:
+
 - `rifiutata_paziente`
 - `paziente_assente`
 - `sospesa_medico`

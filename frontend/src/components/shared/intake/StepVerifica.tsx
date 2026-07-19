@@ -32,12 +32,12 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
   const a = (data.anagrafica ?? {}) as AnagraficaData;
 
   const clinicalSections: Array<{ key: string; label: string }> = [
-    { key: 'allergie',  label: 'Allergie' },
-    { key: 'anamnesi',  label: 'Anamnesi' },
-    { key: 'diagnosi',  label: 'Diagnosi' },
-    { key: 'terapia',   label: 'Terapia farmacologica' },
+    { key: 'allergie', label: 'Allergie' },
+    { key: 'anamnesi', label: 'Anamnesi' },
+    { key: 'diagnosi', label: 'Diagnosi' },
+    { key: 'terapia', label: 'Terapia farmacologica' },
     { key: 'parametri', label: 'Parametri vitali' },
-    { key: 'dolore',    label: 'Dolore (NRS)' },
+    { key: 'dolore', label: 'Dolore (NRS)' },
   ];
   const filledSections = clinicalSections.filter((s) => countFilled(data[s.key]));
 
@@ -52,7 +52,12 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
   if (!a.dateOfBirth) missingDemo.push('Data di nascita');
 
   const checklist: Array<{ label: string; ok: boolean }> = [
-    { label: missingDemo.length ? `Dati anagrafici obbligatori mancanti: ${missingDemo.join(', ')}` : 'Dati anagrafici obbligatori', ok: missingDemo.length === 0 },
+    {
+      label: missingDemo.length
+        ? `Dati anagrafici obbligatori mancanti: ${missingDemo.join(', ')}`
+        : 'Dati anagrafici obbligatori',
+      ok: missingDemo.length === 0,
+    },
     { label: 'Accetta anagrafica', ok: demoAccepted },
     { label: 'Accetta terapia', ok: therapyAccepted },
   ];
@@ -87,7 +92,9 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
             type="checkbox"
             checked={demoAccepted}
             disabled={busy}
-            onChange={(e) => onUpdateSection('_accepted', { ...accepted, demographics: e.target.checked })}
+            onChange={(e) =>
+              onUpdateSection('_accepted', { ...accepted, demographics: e.target.checked })
+            }
           />
           <span>Accetto i dati anagrafici</span>
         </label>
@@ -107,8 +114,13 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
       </section>
 
       {!canCreate && (
-        <section className="step-verifica__section step-verifica__blocks" data-testid="intake-blocking-checklist">
-          <h4 className="step-verifica__section-title">Da completare prima di creare il paziente</h4>
+        <section
+          className="step-verifica__section step-verifica__blocks"
+          data-testid="intake-blocking-checklist"
+        >
+          <h4 className="step-verifica__section-title">
+            Da completare prima di creare il paziente
+          </h4>
           <ul className="step-verifica__checklist">
             {checklist.map((c) => (
               <li key={c.label} className={c.ok ? 'is-ok' : 'is-todo'}>
@@ -122,11 +134,7 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
       {error && <p className="import-modal__error">{error}</p>}
 
       <div className="step-verifica__actions">
-        <button
-          className="btn-primary"
-          onClick={onConfirm}
-          disabled={busy || !canCreate}
-        >
+        <button className="btn-primary" onClick={onConfirm} disabled={busy || !canCreate}>
           <IcoCheck /> {busy ? 'Creazione…' : 'Crea paziente'}
         </button>
       </div>

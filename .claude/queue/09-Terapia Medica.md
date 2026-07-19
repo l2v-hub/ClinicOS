@@ -11,7 +11,8 @@ Esegui npm run build.
 Requisiti:
 
 1. Agenda
-Deve mostrare:
+   Deve mostrare:
+
 - appuntamenti
 - visite
 - note
@@ -23,7 +24,8 @@ Deve mostrare:
 - camera/letto se presente
 
 2. Creazione appuntamento
-Cliccando su uno slot:
+   Cliccando su uno slot:
+
 - apri form appuntamento
 - seleziona paziente
 - seleziona operatore
@@ -34,19 +36,22 @@ Cliccando su uno slot:
 - stato
 
 3. Click paziente
-Ovunque appaia un paziente in agenda:
+   Ovunque appaia un paziente in agenda:
+
 - nome paziente cliccabile
 - apre scheda paziente
 - browser back deve tornare all’agenda
 
 4. Note
-Le note possono essere:
+   Le note possono essere:
+
 - generali
 - legate al paziente
 - legate all’appuntamento
 - legate all’operatore
 
 UX:
+
 - agenda leggibile
 - colori chiari ma non invasivi
 - niente overflow orizzontale

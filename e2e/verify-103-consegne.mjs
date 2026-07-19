@@ -21,16 +21,20 @@ try {
   await page.getByRole('button', { name: /Nuova consegna/i }).click();
   await page.waitForTimeout(400);
   await page.getByPlaceholder('Cognome, Nome').fill(PAZ);
-  await page.getByPlaceholder(/Istruzioni per il prossimo operatore/).fill('Nota di prova sintetica');
+  await page
+    .getByPlaceholder(/Istruzioni per il prossimo operatore/)
+    .fill('Nota di prova sintetica');
   await page.getByRole('button', { name: /Crea consegna/i }).click();
   await page.waitForTimeout(1000);
-  report.cardCreated = (await page.textContent('body') ?? '').includes(PAZ);
+  report.cardCreated = ((await page.textContent('body')) ?? '').includes(PAZ);
   // open edit on the card
   await page.getByRole('button', { name: 'Modifica consegna' }).first().click();
   await page.waitForTimeout(500);
-  report.inlineEditPresent = await page.locator('.consegna-edit-inline').count() > 0;
-  report.noModalOverlay = await page.locator('.modal-overlay').count() === 0;
+  report.inlineEditPresent = (await page.locator('.consegna-edit-inline').count()) > 0;
+  report.noModalOverlay = (await page.locator('.modal-overlay').count()) === 0;
   await page.screenshot({ path: resolve(outDir, 'after.png'), fullPage: true });
   console.log(JSON.stringify(report, null, 2));
   await page.close();
-} finally { await browser.close(); }
+} finally {
+  await browser.close();
+}

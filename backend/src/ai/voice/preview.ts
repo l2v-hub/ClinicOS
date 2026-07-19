@@ -5,19 +5,23 @@ import type { ActionPlan, ActionPreview } from './types.js';
 import { isWriteAction } from './types.js';
 
 const DEMO_LABELS: Record<string, string> = {
-  phone: 'Telefono', email: 'Email', address: 'Indirizzo',
-  emergencyContactName: 'Contatto di emergenza', emergencyContactPhone: 'Telefono di emergenza',
+  phone: 'Telefono',
+  email: 'Email',
+  address: 'Indirizzo',
+  emergencyContactName: 'Contatto di emergenza',
+  emergencyContactPhone: 'Telefono di emergenza',
 };
 
 export interface PreviewContext {
   patientName?: string;
-  currentNarrativeText?: string;   // for update_narrative_section diff
-  currentDemographicValue?: string;// for update_patient_demographics diff
+  currentNarrativeText?: string; // for update_narrative_section diff
+  currentDemographicValue?: string; // for update_patient_demographics diff
 }
 
 export function buildPreview(plan: ActionPlan, pctx: PreviewContext = {}): ActionPreview {
   const warnings = Array.isArray((plan.fields as Record<string, unknown>).warnings)
-    ? ((plan.fields as Record<string, unknown>).warnings as string[]) : [];
+    ? ((plan.fields as Record<string, unknown>).warnings as string[])
+    : [];
   const base: ActionPreview = {
     actionType: plan.actionType,
     patientId: plan.patientId,
@@ -65,8 +69,10 @@ export function buildPreview(plan: ActionPlan, pctx: PreviewContext = {}): Actio
       return base;
     }
     default: {
-      base.title = plan.actionType === 'refuse_clinical' || plan.actionType === 'refuse_forbidden'
-        ? 'Azione non consentita' : 'Comando';
+      base.title =
+        plan.actionType === 'refuse_clinical' || plan.actionType === 'refuse_forbidden'
+          ? 'Azione non consentita'
+          : 'Comando';
       base.lines = plan.refusalReason ? [{ label: 'Motivo', value: plan.refusalReason }] : [];
       if (plan.refusalReason) base.refusal = plan.refusalReason; // SPEC-015: surfaced to the unified panel
       return base;

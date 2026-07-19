@@ -25,6 +25,7 @@ Enforce the canonical L2 / L3 surface that feature `009-nav-l2-l3-hierarchy` alr
 **Performance Goals**: Card expand / collapse transition ≤ 200ms (same budget as 009's tab transition). No added bundle weight > 2 kB gzipped (the new `ClinicalCard` wrapper plus rule pruning typically nets out flat).
 
 **Constraints**:
+
 - Zero global horizontal overflow at any supported viewport.
 - L2 touch targets ≥ 44px, L3 ≥ 32px (already enforced by 009's tokens — this feature preserves them).
 - `prefers-reduced-motion: reduce` honored for every transition added by this feature (card expand / collapse).
@@ -37,17 +38,17 @@ Enforce the canonical L2 / L3 surface that feature `009-nav-l2-l3-hierarchy` alr
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-| # | Principle | Status | Notes |
-|---|-----------|--------|-------|
-| I | Simplicity First | PASS | One new small component (`ClinicalCard`) is introduced because Anamnesi and Presa in Carico need identical collapse + edit behaviour — duplication threshold (≥ 2 call sites and ≥ 3 if Profilo is migrated later) is met. No other abstraction is added. |
-| II | Healthcare UX | PASS | Italian labels preserved (FR-022). Tablet-first viewport (1024px+) baseline. No tooltip-as-primary-UX. Existing flat blue section header preserved (FR-012). Card design system extended without ad-hoc styling — single shared wrapper enforces it. ClinicalTable component untouched. |
+| #   | Principle              | Status                                                                                                                                                                   | Notes                                                                                                                                                                                                                                                                                   |
+| --- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| I   | Simplicity First       | PASS                                                                                                                                                                     | One new small component (`ClinicalCard`) is introduced because Anamnesi and Presa in Carico need identical collapse + edit behaviour — duplication threshold (≥ 2 call sites and ≥ 3 if Profilo is migrated later) is met. No other abstraction is added.                               |
+| II  | Healthcare UX          | PASS                                                                                                                                                                     | Italian labels preserved (FR-022). Tablet-first viewport (1024px+) baseline. No tooltip-as-primary-UX. Existing flat blue section header preserved (FR-012). Card design system extended without ad-hoc styling — single shared wrapper enforces it. ClinicalTable component untouched. |
 | III | Backend Data Authority | N/A — no clinical data lifecycle change. Card-level Modifica wires to existing edit flows already persisted via the backend; no clinical data moves to local-only state. |
-| IV | Schema & API Stability | PASS | FR-020 forbids backend / Prisma / API / `VITE_API_URL` changes. `/patients` integration preserved. |
-| V | Role-Aware Development | PASS | Card surface and L2 / L3 uniformity are role-agnostic; L1 sidebar (which carries role-aware items) is untouched. |
-| VI | Integration Integrity | PASS | `npm run build` must succeed with zero new TS / build errors (FR-021 / SC-011). All existing nav routes and the Anamnesi edit flow keep working. |
-| VII | Environment Safety | N/A — no env or deployment changes. |
+| IV  | Schema & API Stability | PASS                                                                                                                                                                     | FR-020 forbids backend / Prisma / API / `VITE_API_URL` changes. `/patients` integration preserved.                                                                                                                                                                                      |
+| V   | Role-Aware Development | PASS                                                                                                                                                                     | Card surface and L2 / L3 uniformity are role-agnostic; L1 sidebar (which carries role-aware items) is untouched.                                                                                                                                                                        |
+| VI  | Integration Integrity  | PASS                                                                                                                                                                     | `npm run build` must succeed with zero new TS / build errors (FR-021 / SC-011). All existing nav routes and the Anamnesi edit flow keep working.                                                                                                                                        |
+| VII | Environment Safety     | N/A — no env or deployment changes.                                                                                                                                      |
 
 **Result**: GATE PASS. No violations; Complexity Tracking table left empty.
 
@@ -97,5 +98,5 @@ prisma/                                               # UNTOUCHED (constitution 
 > Constitution Check passes with no violations. Table intentionally left empty.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
+| --------- | ---------- | ------------------------------------ |
 | _none_    | _n/a_      | _n/a_                                |

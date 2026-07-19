@@ -53,13 +53,18 @@ async function openEsamiConsulenze(page: import('@playwright/test').Page) {
   await page.waitForTimeout(500);
 }
 
-test('AC1-AC4: authenticated operator uploads into each section; chip stays in its own section after reload', async ({ page }) => {
+test('AC1-AC4: authenticated operator uploads into each section; chip stays in its own section after reload', async ({
+  page,
+}) => {
   const consoleErrors: string[] = [];
   const badResponses: string[] = [];
-  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+  page.on('console', (m) => {
+    if (m.type() === 'error') consoleErrors.push(m.text());
+  });
   page.on('response', (r) => {
     const status = r.status();
-    if (status >= 400 && status !== 401 && status !== 403) badResponses.push(`${status} ${r.url()}`);
+    if (status >= 400 && status !== 401 && status !== 403)
+      badResponses.push(`${status} ${r.url()}`);
   });
 
   await openEsamiConsulenze(page);
@@ -74,10 +79,18 @@ test('AC1-AC4: authenticated operator uploads into each section; chip stays in i
     const panel = page.locator(`[data-testid="photos-${s.doc}"]`);
     await expect(panel).toBeVisible();
     const [uploadResponse] = await Promise.all([
-      page.waitForResponse((r) => r.url().includes(`/patients/${PATIENT_ID}/documents`) && r.request().method() === 'POST'),
-      panel.locator('input[type="file"]').setInputFiles({ name: s.fileName, mimeType: 'image/png', buffer: SYNTHETIC_PNG }),
+      page.waitForResponse(
+        (r) =>
+          r.url().includes(`/patients/${PATIENT_ID}/documents`) && r.request().method() === 'POST',
+      ),
+      panel
+        .locator('input[type="file"]')
+        .setInputFiles({ name: s.fileName, mimeType: 'image/png', buffer: SYNTHETIC_PNG }),
     ]);
-    expect(uploadResponse.status(), `upload into ${s.doc} must succeed (201) as an authenticated operator`).toBe(201);
+    expect(
+      uploadResponse.status(),
+      `upload into ${s.doc} must succeed (201) as an authenticated operator`,
+    ).toBe(201);
     await expect(panel.getByText(s.fileName)).toBeVisible();
   }
 
@@ -98,10 +111,16 @@ test('AC1-AC4: authenticated operator uploads into each section; chip stays in i
     await panel.screenshot({ path: join(OUT, 'screenshots', `after-reload-${s.doc}-panel.png`) });
   }
 
-  await page.screenshot({ path: join(OUT, 'screenshots', 'result-authenticated-upload.png'), fullPage: true });
+  await page.screenshot({
+    path: join(OUT, 'screenshots', 'result-authenticated-upload.png'),
+    fullPage: true,
+  });
 
   const newConsoleErrors = consoleErrors.filter((e) => !KNOWN_PREEXISTING.test(e));
-  expect(newConsoleErrors, `unexpected console errors: ${newConsoleErrors.join(' | ')}`).toHaveLength(0);
+  expect(
+    newConsoleErrors,
+    `unexpected console errors: ${newConsoleErrors.join(' | ')}`,
+  ).toHaveLength(0);
   expect(badResponses, `unexpected 4xx/5xx responses: ${badResponses.join(' | ')}`).toHaveLength(0);
 });
 
@@ -114,25 +133,35 @@ test('security fix: anonymous caller (no operator headers) is rejected with 401 
         documentType: 'esame',
       },
     });
-    expect(uploadRes.status(), 'anonymous upload must be rejected before it ever reaches storage').toBe(401);
+    expect(
+      uploadRes.status(),
+      'anonymous upload must be rejected before it ever reaches storage',
+    ).toBe(401);
 
     const listRes = await ctx.get(`${API}/patients/${PATIENT_ID}/documents`);
     expect(listRes.status(), 'anonymous metadata read must be rejected').toBe(401);
 
     const contentRes = await ctx.get(`${API}/patients/${PATIENT_ID}/documents/anything/content`);
-    expect(contentRes.status(), 'anonymous content read must be rejected regardless of documentId validity').toBe(401);
+    expect(
+      contentRes.status(),
+      'anonymous content read must be rejected regardless of documentId validity',
+    ).toBe(401);
   } finally {
     await ctx.dispose();
   }
 });
 
-test('AC5: camera permission denied does not block upload — file-picker fallback still completes it', async ({ page, context }) => {
+test('AC5: camera permission denied does not block upload — file-picker fallback still completes it', async ({
+  page,
+  context,
+}) => {
   await context.grantPermissions([]); // explicit camera denial
   await page.addInitScript(() => {
     // Stub getUserMedia so any camera-capture attempt rejects, simulating "permesso negato".
     Object.defineProperty(navigator, 'mediaDevices', {
       value: {
-        getUserMedia: () => Promise.reject(new DOMException('Permission denied', 'NotAllowedError')),
+        getUserMedia: () =>
+          Promise.reject(new DOMException('Permission denied', 'NotAllowedError')),
       },
       configurable: true,
     });
@@ -146,11 +175,24 @@ test('AC5: camera permission denied does not block upload — file-picker fallba
   // camera it always falls back to the OS file picker. Driving it via setInputFiles is exactly
   // that fallback path (no getUserMedia call is made by this control at all).
   const [uploadResponse] = await Promise.all([
-    page.waitForResponse((r) => r.url().includes(`/patients/${PATIENT_ID}/documents`) && r.request().method() === 'POST'),
-    panel.locator('input[type="file"]').setInputFiles({ name: '_test-246-ac5-fallback.png', mimeType: 'image/png', buffer: SYNTHETIC_PNG }),
+    page.waitForResponse(
+      (r) =>
+        r.url().includes(`/patients/${PATIENT_ID}/documents`) && r.request().method() === 'POST',
+    ),
+    panel.locator('input[type="file"]').setInputFiles({
+      name: '_test-246-ac5-fallback.png',
+      mimeType: 'image/png',
+      buffer: SYNTHETIC_PNG,
+    }),
   ]);
-  expect(uploadResponse.status(), 'file-picker fallback upload must succeed even with camera permission denied').toBe(201);
+  expect(
+    uploadResponse.status(),
+    'file-picker fallback upload must succeed even with camera permission denied',
+  ).toBe(201);
   await expect(panel.getByText('_test-246-ac5-fallback.png')).toBeVisible();
 
-  await page.screenshot({ path: join(OUT, 'screenshots', 'result-ac5-camera-denied-fallback.png'), fullPage: true });
+  await page.screenshot({
+    path: join(OUT, 'screenshots', 'result-ac5-camera-denied-fallback.png'),
+    fullPage: true,
+  });
 });

@@ -76,7 +76,7 @@ const THERAPIES = [
     dosaggio: '1000mg',
     viaSomministrazione: 'orale',
     tipo: 'periodica',
-    stato: 'sospesa',  // NOT active — should not appear
+    stato: 'sospesa', // NOT active — should not appear
     dataInizio: '2026-04-01',
     dataFine: '2026-06-10',
     fasceMattina: true,
@@ -100,11 +100,23 @@ const CARTELLA = {
   statoRicovero: 'ricoverato',
   cameraNumero: '7',
   lettoNumero: 'B',
-  anamnesi: { anamnesiPatologicaRemota: 'Ipertensione, diabete tipo 2', anamnesiPatologicaProssima: 'Peggioramento parametri' },
+  anamnesi: {
+    anamnesiPatologicaRemota: 'Ipertensione, diabete tipo 2',
+    anamnesiPatologicaProssima: 'Peggioramento parametri',
+  },
   diagnosi: [],
   terapie: [],
   farmaci: [],
-  allergie: [{ id: 'al-1', sostanza: 'Penicillina', reazione: 'orticaria', gravita: 'grave', operatore: 'Inf. Test', createdAt: '2026-06-01T00:00:00.000Z' }],
+  allergie: [
+    {
+      id: 'al-1',
+      sostanza: 'Penicillina',
+      reazione: 'orticaria',
+      gravita: 'grave',
+      operatore: 'Inf. Test',
+      createdAt: '2026-06-01T00:00:00.000Z',
+    },
+  ],
   noteClinica: [],
   visite: [],
   parametriVitali: [],
@@ -174,14 +186,17 @@ try {
 
   // Step 1: Login as Operatore (click the "Operatore" login card)
   const loginCard = page.locator('.login-role-card--operatore');
-  if (await loginCard.count() > 0) {
+  if ((await loginCard.count()) > 0) {
     await loginCard.click();
     await page.waitForTimeout(1200);
   }
 
   // Step 2: Navigate to Pazienti (sidebar nav)
-  const pazientiNav = page.locator('[title="Pazienti"], .teams-sidebar__item').filter({ hasText: /Pazienti/i }).first();
-  if (await pazientiNav.count() > 0) {
+  const pazientiNav = page
+    .locator('[title="Pazienti"], .teams-sidebar__item')
+    .filter({ hasText: /Pazienti/i })
+    .first();
+  if ((await pazientiNav.count()) > 0) {
     await pazientiNav.click();
     await page.waitForTimeout(1200);
   } else {
@@ -192,14 +207,14 @@ try {
 
   // Step 3: Click on the patient row (Bianchi)
   const patientRow = page.getByText('Bianchi').first();
-  if (await patientRow.count() > 0) {
+  if ((await patientRow.count()) > 0) {
     await patientRow.click();
     await page.waitForTimeout(1200);
   }
 
   // Step 4: Click "Invio in PS" button
   const invioBtn = page.getByRole('button', { name: /Invio in PS/i });
-  if (await invioBtn.count() > 0) {
+  if ((await invioBtn.count()) > 0) {
     await invioBtn.click();
     await page.waitForTimeout(1500); // wait for therapy fetch
     await page.screenshot({ path: resolve(outDir, 'invio-ps-preview.png'), fullPage: false });

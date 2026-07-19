@@ -67,11 +67,7 @@ export interface SectionData {
 }
 
 export type AllergyStatus =
-  | 'present'
-  | 'explicitly_absent'
-  | 'conflicting'
-  | 'not_documented'
-  | 'unclear';
+  'present' | 'explicitly_absent' | 'conflicting' | 'not_documented' | 'unclear';
 
 export interface AllergyBlock {
   status: AllergyStatus;

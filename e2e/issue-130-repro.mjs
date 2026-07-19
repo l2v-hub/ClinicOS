@@ -15,7 +15,10 @@ await page.waitForLoadState('networkidle');
 await page.waitForSelector('.ai-fab', { timeout: 20000 });
 await page.locator('.ai-fab').click();
 await page.waitForSelector('.agnos-panel');
-await page.fill('.agnos-input', 'Aggiungi una consegna per Elena Moretti: controllare la pressione dopo cena');
+await page.fill(
+  '.agnos-input',
+  'Aggiungi una consegna per Elena Moretti: controllare la pressione dopo cena',
+);
 await page.click('.ai-asst__send');
 await page.waitForTimeout(4000);
 const body = await page.locator('.ai-asst__body').innerText();

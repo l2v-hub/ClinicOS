@@ -37,8 +37,14 @@ function field(
   };
 }
 
-function NpmCard({ title, desc, children }: {
-  title: string; desc?: string; children: React.ReactNode;
+function NpmCard({
+  title,
+  desc,
+  children,
+}: {
+  title: string;
+  desc?: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="npm-card">
@@ -51,14 +57,26 @@ function NpmCard({ title, desc, children }: {
   );
 }
 
-function NpmField({ label, required, hint, span2, error, children }: {
-  label: string; required?: boolean; hint?: string;
-  span2?: boolean; error?: string; children: React.ReactNode;
+function NpmField({
+  label,
+  required,
+  hint,
+  span2,
+  error,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  hint?: string;
+  span2?: boolean;
+  error?: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className={`npm-field${span2 ? ' npm-span-2' : ''}${error ? ' npm-field--error' : ''}`}>
       <label className="npm-label">
-        {label}{required && <span className="npm-required"> *</span>}
+        {label}
+        {required && <span className="npm-required"> *</span>}
       </label>
       {children}
       {error && <span className="npm-field-error">{error}</span>}
@@ -71,12 +89,9 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
   const f = (key: keyof AnagraficaData) => field(value, onChange, key);
 
   const errors: Partial<Record<keyof AnagraficaData, string>> = {};
-  if (submitAttempted && !value.firstName?.trim())
-    errors.firstName = 'Nome obbligatorio';
-  if (submitAttempted && !value.lastName?.trim())
-    errors.lastName = 'Cognome obbligatorio';
-  if (submitAttempted && !value.dateOfBirth)
-    errors.dateOfBirth = 'Data di nascita obbligatoria';
+  if (submitAttempted && !value.firstName?.trim()) errors.firstName = 'Nome obbligatorio';
+  if (submitAttempted && !value.lastName?.trim()) errors.lastName = 'Cognome obbligatorio';
+  if (submitAttempted && !value.dateOfBirth) errors.dateOfBirth = 'Data di nascita obbligatoria';
 
   return (
     <>

@@ -1,6 +1,10 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
-import { createConsegna, CONSEGNA_PRIORITA as PRIORITA, CONSEGNA_STATO as STATO } from '../services/consegna-service.js';
+import {
+  createConsegna,
+  CONSEGNA_PRIORITA as PRIORITA,
+  CONSEGNA_STATO as STATO,
+} from '../services/consegna-service.js';
 
 const consegneRouter = Router();
 
@@ -42,7 +46,8 @@ consegneRouter.post('/', async (req, res) => {
       note: String(body.note),
       scadenza: body.scadenza !== undefined ? String(body.scadenza) : undefined,
       oraScadenza: body.oraScadenza ? String(body.oraScadenza) : null,
-      operatoreAssegnato: body.operatoreAssegnato !== undefined ? String(body.operatoreAssegnato) : undefined,
+      operatoreAssegnato:
+        body.operatoreAssegnato !== undefined ? String(body.operatoreAssegnato) : undefined,
       creatoDA: body.creatoDA !== undefined ? String(body.creatoDA) : undefined,
     });
     console.log(`POST /consegne → created id=${consegna.id}`);
@@ -66,8 +71,16 @@ consegneRouter.put('/:id', async (req, res) => {
     }
 
     const allowed = [
-      'pazienteId', 'pazienteNome', 'priorita', 'stato', 'tipo',
-      'note', 'scadenza', 'oraScadenza', 'operatoreAssegnato', 'creatoDA',
+      'pazienteId',
+      'pazienteNome',
+      'priorita',
+      'stato',
+      'tipo',
+      'note',
+      'scadenza',
+      'oraScadenza',
+      'operatoreAssegnato',
+      'creatoDA',
     ];
     const updates: Record<string, unknown> = {};
     for (const key of allowed) {

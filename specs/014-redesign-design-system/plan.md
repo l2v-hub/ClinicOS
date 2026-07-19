@@ -31,17 +31,17 @@ layout with no global horizontal overflow. No backend, Prisma, or `/patients` ch
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-| Principle | Status | Note |
-|-----------|--------|------|
-| I. Simplicity First | ✅ PASS | Consolidation reduces variants; no new framework; reuse existing shared components. |
-| II. Healthcare UX | ✅ PASS (this feature serves it) | Expandable cards kept; Italian UI preserved; tablet-first; single `ClinicalTable`; unified card system. |
-| III. Backend Data Authority | ✅ PASS | Presentation only; no data moved into local state; no mock data introduced. |
-| IV. Schema & API Stability | ✅ PASS | No Prisma/Express/route changes; `/patients` untouched; no destructive DB commands. |
-| V. Role-Aware Development | ✅ PASS | Existing operator/manager nav generation preserved; no reload on role switch. |
-| VI. Integration Integrity | ✅ PASS | `tsc` must stay clean; lint resolved; `/patients` integration preserved; build gate enforced. |
-| VII. Environment Safety | ✅ PASS | No env/secret changes. |
+| Principle                   | Status                           | Note                                                                                                    |
+| --------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| I. Simplicity First         | ✅ PASS                          | Consolidation reduces variants; no new framework; reuse existing shared components.                     |
+| II. Healthcare UX           | ✅ PASS (this feature serves it) | Expandable cards kept; Italian UI preserved; tablet-first; single `ClinicalTable`; unified card system. |
+| III. Backend Data Authority | ✅ PASS                          | Presentation only; no data moved into local state; no mock data introduced.                             |
+| IV. Schema & API Stability  | ✅ PASS                          | No Prisma/Express/route changes; `/patients` untouched; no destructive DB commands.                     |
+| V. Role-Aware Development   | ✅ PASS                          | Existing operator/manager nav generation preserved; no reload on role switch.                           |
+| VI. Integration Integrity   | ✅ PASS                          | `tsc` must stay clean; lint resolved; `/patients` integration preserved; build gate enforced.           |
+| VII. Environment Safety     | ✅ PASS                          | No env/secret changes.                                                                                  |
 
 **Naming reconciliation**: Spec/user text says `ClinicalDataTable`; constitution mandates the
 single `ClinicalTable`. **Decision: `ClinicalTable` is the canonical shared table** (already exists,

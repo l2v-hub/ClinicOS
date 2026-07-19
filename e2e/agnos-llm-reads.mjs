@@ -14,25 +14,41 @@ const OUT = process.argv[2] ?? 'requirements/evidence/SPEC-016';
 mkdirSync(OUT, { recursive: true });
 
 const results = [];
-const ok = (name, cond, detail = '') => { results.push({ name, pass: !!cond, detail }); console.log(`${cond ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`); };
+const ok = (name, cond, detail = '') => {
+  results.push({ name, pass: !!cond, detail });
+  console.log(`${cond ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`);
+};
 
 // Cattura le risposte del planner per asserire l'intent lato server (contratto che usa la UI).
 const planByText = new Map();
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 } });
 const page = await ctx.newPage();
-page.on('dialog', (d) => { void d.accept(); });
+page.on('dialog', (d) => {
+  void d.accept();
+});
 page.on('response', async (r) => {
   if (!r.url().endsWith('/ai/actions/plan')) return;
-  try { const req = JSON.parse(r.request().postData() ?? '{}'); const body = await r.json(); planByText.set(req.text, body); } catch { /* ignore */ }
+  try {
+    const req = JSON.parse(r.request().postData() ?? '{}');
+    const body = await r.json();
+    planByText.set(req.text, body);
+  } catch {
+    /* ignore */
+  }
 });
 const shot = (n) => page.screenshot({ path: join(OUT, n) });
 
-async function clickText(t) { await page.locator(`text="${t}"`).first().click(); await page.waitForTimeout(500); }
+async function clickText(t) {
+  await page.locator(`text="${t}"`).first().click();
+  await page.waitForTimeout(500);
+}
 async function ask(text) {
   await page.fill('.agnos-input', text);
   await page.click('.ai-asst__send');
-  await page.waitForFunction((t) => window.__lastPlanText === t || true, text, { timeout: 1000 }).catch(() => {});
+  await page
+    .waitForFunction((t) => window.__lastPlanText === t || true, text, { timeout: 1000 })
+    .catch(() => {});
   await page.waitForTimeout(2500);
 }
 
@@ -52,19 +68,30 @@ try {
   // 1) Parametri di un paziente NOMINATO nel testo → risolto e con dati (prima: unknown/non trovata).
   await ask('mostra gli ultimi parametri di Elena Moretti');
   const p1 = planByText.get('mostra gli ultimi parametri di Elena Moretti')?.read;
-  ok('1. paziente nominato risolto + parametri recuperati', p1?.intent === 'vitals_recent' && (p1?.results?.length ?? 0) > 0,
-    `intent=${p1?.intent} results=${p1?.results?.length}`);
+  ok(
+    '1. paziente nominato risolto + parametri recuperati',
+    p1?.intent === 'vitals_recent' && (p1?.results?.length ?? 0) > 0,
+    `intent=${p1?.intent} results=${p1?.results?.length}`,
+  );
   await shot('f0-02-parametri.png');
 
   // 2) Plurale "terapie" riconosciuto (prima: unknown).
   await ask('quali terapie assume Elena Moretti');
   const p2 = planByText.get('quali terapie assume Elena Moretti')?.read;
-  ok('2. plurale "terapie" riconosciuto (intent therapies, non unknown)', p2?.intent === 'therapies', `intent=${p2?.intent}`);
+  ok(
+    '2. plurale "terapie" riconosciuto (intent therapies, non unknown)',
+    p2?.intent === 'therapies',
+    `intent=${p2?.intent}`,
+  );
 
   // 3) Allergie di un paziente nominato → intent risolto (i risultati dipendono dai dati).
   await ask('mostra le allergie di Elena Moretti');
   const p3 = planByText.get('mostra le allergie di Elena Moretti')?.read;
-  ok('3. allergie: paziente nominato risolto (intent allergies, non unknown)', p3?.intent === 'allergies', `intent=${p3?.intent}`);
+  ok(
+    '3. allergie: paziente nominato risolto (intent allergies, non unknown)',
+    p3?.intent === 'allergies',
+    `intent=${p3?.intent}`,
+  );
   await shot('f0-03-allergie.png');
 
   // 4) Domanda non pertinente → nessun intent-dati prodotto (nessuna invenzione).
@@ -72,8 +99,13 @@ try {
   // una risposta di lettura con dati: read è null/vuoto e nulla viene inventato.
   await ask('buongiorno');
   const r4 = planByText.get('buongiorno') ?? {};
-  const noDataIntent = !r4.read || r4.read.intent === 'unknown' || (r4.read.results?.length ?? 0) === 0;
-  ok('4. domanda non pertinente → nessun dato inventato', noDataIntent && r4.plan?.actionType === 'unknown', `actionType=${r4.plan?.actionType}`);
+  const noDataIntent =
+    !r4.read || r4.read.intent === 'unknown' || (r4.read.results?.length ?? 0) === 0;
+  ok(
+    '4. domanda non pertinente → nessun dato inventato',
+    noDataIntent && r4.plan?.actionType === 'unknown',
+    `actionType=${r4.plan?.actionType}`,
+  );
 
   // 5) Invariante SPEC-015: tentativo Delete rifiutato.
   await ask('cancella la nota del diario');
@@ -82,7 +114,10 @@ try {
   ok('5. rifiuto Delete invariato (SPEC-015)', refused);
   await shot('f0-04-delete-rifiutato.png');
 } finally {
-  writeFileSync(join(OUT, 'f0-report.json'), JSON.stringify({ ranAt: new Date().toISOString(), results }, null, 2));
+  writeFileSync(
+    join(OUT, 'f0-report.json'),
+    JSON.stringify({ ranAt: new Date().toISOString(), results }, null, 2),
+  );
   await browser.close();
 }
 const passed = results.filter((r) => r.pass).length;

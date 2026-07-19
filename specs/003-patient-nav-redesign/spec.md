@@ -8,7 +8,7 @@
 
 **Input**: Redesign navigazione Scheda Paziente con gerarchia visiva chiara tra tre livelli. Ottimizzazione per tablet 1024×768 e 1180×820.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 — Sidebar L1 stile Microsoft Teams (Priority: P1)
 
@@ -94,7 +94,7 @@ L'operatore vuole tornare alla lista pazienti. Il pulsante "Pazienti" (back) e l
 - Viewport 1024×768 con molti tab L3 (Clinica: 6 tab): scroll orizzontale solo sul L3, non sulla pagina.
 - Badge numerici su L2 (es. "Clinica [3]"): devono restare leggibili con nuovi stili.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -118,7 +118,7 @@ L'operatore vuole tornare alla lista pazienti. Il pulsante "Pazienti" (back) e l
 - **Livello 3 (L3)**: Sotto-tab contestuali — visibili solo per gruppi con >1 tab. Stile pill/segmented.
 - **Header Paziente**: Card compatta — nome, info essenziali, back button integrato. Max 80px altezza.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

@@ -40,23 +40,42 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
     if (!open) return;
     let cancelled = false;
     setPhase('requesting');
-    if (photoUrl) { URL.revokeObjectURL(photoUrl); setPhotoUrl(null); }
+    if (photoUrl) {
+      URL.revokeObjectURL(photoUrl);
+      setPhotoUrl(null);
+    }
     blobRef.current = null;
     const md = navigator.mediaDevices;
-    if (!md?.getUserMedia) { setPhase('unavailable'); return; }
+    if (!md?.getUserMedia) {
+      setPhase('unavailable');
+      return;
+    }
     md.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false })
       .then((stream) => {
-        if (cancelled) { stream.getTracks().forEach((t) => t.stop()); return; }
+        if (cancelled) {
+          stream.getTracks().forEach((t) => t.stop());
+          return;
+        }
         streamRef.current = stream;
-        if (videoRef.current) { videoRef.current.srcObject = stream; void videoRef.current.play().catch(() => {}); }
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          void videoRef.current.play().catch(() => {});
+        }
         setPhase('live');
       })
       .catch((err: unknown) => {
         if (cancelled) return;
         const name = (err as { name?: string })?.name;
-        setPhase(name === 'NotAllowedError' || name === 'SecurityError' || name === 'PermissionDeniedError' ? 'denied' : 'unavailable');
+        setPhase(
+          name === 'NotAllowedError' || name === 'SecurityError' || name === 'PermissionDeniedError'
+            ? 'denied'
+            : 'unavailable',
+        );
       });
-    return () => { cancelled = true; stopStream(); };
+    return () => {
+      cancelled = true;
+      stopStream();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, restart]);
 
@@ -73,26 +92,38 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
   }, [phase]);
 
   // Clean up object URL + stream on unmount / close.
-  useEffect(() => () => { stopStream(); if (photoUrl) URL.revokeObjectURL(photoUrl); }, [photoUrl]);
+  useEffect(
+    () => () => {
+      stopStream();
+      if (photoUrl) URL.revokeObjectURL(photoUrl);
+    },
+    [photoUrl],
+  );
 
   if (!open) return null;
 
   function capture() {
     const v = videoRef.current;
     if (!v) return;
-    const w = v.videoWidth || 1280, h = v.videoHeight || 720;
+    const w = v.videoWidth || 1280,
+      h = v.videoHeight || 720;
     const canvas = document.createElement('canvas');
-    canvas.width = w; canvas.height = h;
+    canvas.width = w;
+    canvas.height = h;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     ctx.drawImage(v, 0, 0, w, h);
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      blobRef.current = blob;
-      setPhotoUrl(URL.createObjectURL(blob));
-      stopStream();
-      setPhase('preview');
-    }, 'image/jpeg', 0.92);
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) return;
+        blobRef.current = blob;
+        setPhotoUrl(URL.createObjectURL(blob));
+        stopStream();
+        setPhase('preview');
+      },
+      'image/jpeg',
+      0.92,
+    );
   }
 
   function usePhoto() {
@@ -102,46 +133,96 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
     close();
   }
 
-  function close() { stopStream(); onClose(); }
+  function close() {
+    stopStream();
+    onClose();
+  }
 
   return (
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Scatta foto">
       <div className="modal-card camera-capture" data-testid="camera-capture">
-        <header className="import-modal__head"><h3>Scatta foto</h3>
-          <button className="btn-ghost" onClick={close} aria-label="Chiudi">✕</button>
+        <header className="import-modal__head">
+          <h3>Scatta foto</h3>
+          <button className="btn-ghost" onClick={close} aria-label="Chiudi">
+            ✕
+          </button>
         </header>
 
-        {phase === 'requesting' && <p className="camera-capture__msg" data-testid="camera-requesting">Richiesta accesso alla fotocamera…</p>}
+        {phase === 'requesting' && (
+          <p className="camera-capture__msg" data-testid="camera-requesting">
+            Richiesta accesso alla fotocamera…
+          </p>
+        )}
 
         {phase === 'live' && (
           <div className="camera-capture__stage">
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <video ref={videoRef} className="camera-capture__video" playsInline muted data-testid="camera-live" />
+            <video
+              ref={videoRef}
+              className="camera-capture__video"
+              playsInline
+              muted
+              data-testid="camera-live"
+            />
             <div className="camera-capture__actions">
-              <button className="btn-primary" onClick={capture} data-testid="camera-shoot">Scatta</button>
-              <button className="btn-ghost" onClick={close}>Annulla</button>
+              <button className="btn-primary" onClick={capture} data-testid="camera-shoot">
+                Scatta
+              </button>
+              <button className="btn-ghost" onClick={close}>
+                Annulla
+              </button>
             </div>
           </div>
         )}
 
         {phase === 'preview' && photoUrl && (
           <div className="camera-capture__stage">
-            <img src={photoUrl} className="camera-capture__photo" alt="Anteprima foto acquisita" data-testid="camera-preview" />
+            <img
+              src={photoUrl}
+              className="camera-capture__photo"
+              alt="Anteprima foto acquisita"
+              data-testid="camera-preview"
+            />
             <div className="camera-capture__actions">
-              <button className="btn-primary" onClick={usePhoto} data-testid="camera-use">Usa foto</button>
-              <button className="btn-secondary" onClick={() => setRestart((n) => n + 1)} data-testid="camera-retake">Ripeti</button>
-              <button className="btn-ghost" onClick={close}>Annulla</button>
+              <button className="btn-primary" onClick={usePhoto} data-testid="camera-use">
+                Usa foto
+              </button>
+              <button
+                className="btn-secondary"
+                onClick={() => setRestart((n) => n + 1)}
+                data-testid="camera-retake"
+              >
+                Ripeti
+              </button>
+              <button className="btn-ghost" onClick={close}>
+                Annulla
+              </button>
             </div>
           </div>
         )}
 
         {phase === 'denied' && (
           <div className="camera-capture__msg" data-testid="camera-denied">
-            <p>Non è possibile accedere alla fotocamera. Controlla i permessi del browser oppure seleziona un’immagine già presente sul dispositivo.</p>
+            <p>
+              Non è possibile accedere alla fotocamera. Controlla i permessi del browser oppure
+              seleziona un’immagine già presente sul dispositivo.
+            </p>
             <div className="camera-capture__actions">
-              <button className="btn-secondary" onClick={() => setRestart((n) => n + 1)}>Riprova</button>
-              <button className="btn-primary" onClick={() => { close(); onFallbackImport(); }}>Apri importazione</button>
-              <button className="btn-ghost" onClick={close}>Annulla</button>
+              <button className="btn-secondary" onClick={() => setRestart((n) => n + 1)}>
+                Riprova
+              </button>
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  close();
+                  onFallbackImport();
+                }}
+              >
+                Apri importazione
+              </button>
+              <button className="btn-ghost" onClick={close}>
+                Annulla
+              </button>
             </div>
           </div>
         )}
@@ -150,8 +231,18 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
           <div className="camera-capture__msg" data-testid="camera-unavailable">
             <p>Fotocamera non disponibile.</p>
             <div className="camera-capture__actions">
-              <button className="btn-primary" onClick={() => { close(); onFallbackImport(); }}>Seleziona un’immagine dal dispositivo</button>
-              <button className="btn-ghost" onClick={close}>Annulla</button>
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  close();
+                  onFallbackImport();
+                }}
+              >
+                Seleziona un’immagine dal dispositivo
+              </button>
+              <button className="btn-ghost" onClick={close}>
+                Annulla
+              </button>
             </div>
           </div>
         )}

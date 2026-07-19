@@ -60,7 +60,10 @@ export class FakeVoiceSttProvider implements VoiceSttProvider {
   probe(signal?: AbortSignal): Promise<SttProbeResult> {
     const { mode, model } = this.opts;
     if (mode === 'success') {
-      return Promise.resolve({ model, capabilities: this.opts.capabilities ?? [...REQUIRED_STT_CAPABILITIES] });
+      return Promise.resolve({
+        model,
+        capabilities: this.opts.capabilities ?? [...REQUIRED_STT_CAPABILITIES],
+      });
     }
     if (mode === 'failure') {
       return Promise.reject(this.opts.error ?? new Error('provider non disponibile'));
@@ -87,7 +90,12 @@ export async function probeSttStatus(
   opts: { timeoutMs?: number } = {},
 ): Promise<SttStatus> {
   if (!cfg.sttModel) {
-    return { available: false, model: null, degraded: true, reason: 'AI_STT_MODEL non configurato' };
+    return {
+      available: false,
+      model: null,
+      degraded: true,
+      reason: 'AI_STT_MODEL non configurato',
+    };
   }
   const timeoutMs = opts.timeoutMs ?? 3000;
   const ac = new AbortController();
@@ -96,7 +104,12 @@ export async function probeSttStatus(
     const res = await provider.probe(ac.signal);
     const missing = REQUIRED_STT_CAPABILITIES.filter((c) => !res.capabilities.includes(c));
     if (missing.length > 0) {
-      return { available: false, model: res.model, degraded: true, reason: `capability mancanti: ${missing.join(', ')}` };
+      return {
+        available: false,
+        model: res.model,
+        degraded: true,
+        reason: `capability mancanti: ${missing.join(', ')}`,
+      };
     }
     return { available: true, model: res.model, degraded: false };
   } catch (err) {
@@ -105,7 +118,9 @@ export async function probeSttStatus(
       available: false,
       model: cfg.sttModel,
       degraded: true,
-      reason: isTimeout ? `timeout STT (${timeoutMs}ms)` : `provider STT non disponibile: ${err instanceof Error ? err.message : String(err)}`,
+      reason: isTimeout
+        ? `timeout STT (${timeoutMs}ms)`
+        : `provider STT non disponibile: ${err instanceof Error ? err.message : String(err)}`,
     };
   } finally {
     clearTimeout(timer);

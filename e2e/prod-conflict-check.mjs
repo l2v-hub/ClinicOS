@@ -8,11 +8,15 @@ const OP = { 'X-Operator-Id': 'op-conflict-check', 'X-Operator-Role': 'operatore
 const af = (url, opts = {}) => fetch(url, { ...opts, headers: { ...OP, ...(opts.headers ?? {}) } });
 
 const docA = buildSyntheticPdf([
-  'LETTERA DI DIMISSIONE', 'Paziente: Mario Bianchi', 'Data di nascita: 01/01/1950',
+  'LETTERA DI DIMISSIONE',
+  'Paziente: Mario Bianchi',
+  'Data di nascita: 01/01/1950',
   'Indirizzo: Via Roma 1, Milano',
 ]);
 const docB = buildSyntheticPdf([
-  'LETTERA DI DIMISSIONE', 'Paziente: Mario Bianchi', 'Data di nascita: 02/02/1960',
+  'LETTERA DI DIMISSIONE',
+  'Paziente: Mario Bianchi',
+  'Data di nascita: 02/02/1960',
   'Indirizzo: Via Milano 9, Roma',
 ]);
 
@@ -33,12 +37,25 @@ try {
   const rd = (await res.json()).resultData ?? {};
   const dob = rd.anagrafica?.dataNascita ?? {};
   const ind = rd.anagrafica?.indirizzo ?? {};
-  console.log('dataNascita.status:', dob.status, '| candidates:', JSON.stringify((dob.candidates ?? []).map((c) => c.value)));
-  console.log('indirizzo.status:', ind.status, '| candidates:', JSON.stringify((ind.candidates ?? []).map((c) => c.value)));
+  console.log(
+    'dataNascita.status:',
+    dob.status,
+    '| candidates:',
+    JSON.stringify((dob.candidates ?? []).map((c) => c.value)),
+  );
+  console.log(
+    'indirizzo.status:',
+    ind.status,
+    '| candidates:',
+    JSON.stringify((ind.candidates ?? []).map((c) => c.value)),
+  );
   console.log('report:', JSON.stringify(rd._merge?.report));
   console.log('documents in provenance:', (rd._merge?.documents ?? []).length);
 } catch (e) {
   console.log('ERROR:', e?.message ?? e);
 } finally {
-  if (jobId) { await af(`${base}/${jobId}/cancel`, { method: 'POST' }).catch(() => {}); console.log('cleanup: cancelled'); }
+  if (jobId) {
+    await af(`${base}/${jobId}/cancel`, { method: 'POST' }).catch(() => {});
+    console.log('cleanup: cancelled');
+  }
 }

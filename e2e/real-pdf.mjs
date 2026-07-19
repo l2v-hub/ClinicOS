@@ -7,7 +7,8 @@ export function buildSyntheticPdf(lines) {
   const objs = [];
   objs[1] = '<</Type/Catalog/Pages 2 0 R>>';
   objs[2] = '<</Type/Pages/Kids[3 0 R]/Count 1>>';
-  objs[3] = '<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>';
+  objs[3] =
+    '<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>';
   objs[4] = `<</Length ${text.length}>>\nstream\n${text}\nendstream`;
   objs[5] = '<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>';
 

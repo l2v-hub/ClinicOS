@@ -5,15 +5,31 @@ import { cachedGetJson, invalidateCachedGet } from './lib/cachedFetch';
 import { sortPazienti } from './lib/patientSort';
 
 import type {
-  UtenteApp, Paziente, Operatore, Consegna, NavKey,
-  Appuntamento, Camera, ScheduleOperatore, Nota, StatoNota,
-  CartellaPaziente, NuovoPaziente, TherapySlot, MotivoNonErogazione,
-  TherapySlotPatient, TherapyAdministration, TipoIntervento,
+  UtenteApp,
+  Paziente,
+  Operatore,
+  Consegna,
+  NavKey,
+  Appuntamento,
+  Camera,
+  ScheduleOperatore,
+  Nota,
+  StatoNota,
+  CartellaPaziente,
+  NuovoPaziente,
+  TherapySlot,
+  MotivoNonErogazione,
+  TherapySlotPatient,
+  TherapyAdministration,
+  TipoIntervento,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
-  MOCK_OPERATORI, MOCK_AGENDA, MOCK_SCHEDULES,
-  createDefaultCartella, createMockTherapySlots,
+  MOCK_OPERATORI,
+  MOCK_AGENDA,
+  MOCK_SCHEDULES,
+  createDefaultCartella,
+  createMockTherapySlots,
 } from './mockData';
 
 import { Login } from './components/Login';
@@ -38,20 +54,27 @@ import { IcoSearch, IcoX } from './icons';
 
 // #243: valid "Moduli" tab ids a moduleTabId coming from the intake wizard may target —
 // guards against forwarding an unexpected string as an initialTab.
-const MODULE_TAB_IDS: TabId[] = ['medicazioni', 'contenzioni', 'braden', 'tinetti', 'nrs', 'dimissione'];
+const MODULE_TAB_IDS: TabId[] = [
+  'medicazioni',
+  'contenzioni',
+  'braden',
+  'tinetti',
+  'nrs',
+  'dimissione',
+];
 
 const NAV_LABELS: Record<NavKey, string> = {
-  'login': 'Login',
+  login: 'Login',
   'admin-dashboard': 'Dashboard',
   'gestione-operatori': 'Operatori',
   'agenda-admin': 'Agenda',
   'posti-letto': 'Posti Letto',
   'orari-operatori': 'Orari',
-  'note': 'Note',
+  note: 'Note',
   'operator-dashboard': 'Dashboard',
-  'pazienti': 'Pazienti',
+  pazienti: 'Pazienti',
   'dettaglio-paziente': 'Scheda Paziente',
-  'consegne': 'Consegne',
+  consegne: 'Consegne',
   'agenda-operatore': 'Agenda',
   'parametri-multipaziente': 'Parametri',
   'ai-assistant': 'Assistente ClinicOS',
@@ -74,7 +97,15 @@ const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
 // (es. "fisioterapia" via Agnos) → tipoIntervento 'altro' con la tipologia riportata nelle note;
 // priorita/cameraId non sono persistiti dal modello → default.
 
-const TIPI_NOTI: readonly TipoIntervento[] = ['visita', 'controllo', 'procedura', 'urgenza', 'consulto', 'follow-up', 'altro'];
+const TIPI_NOTI: readonly TipoIntervento[] = [
+  'visita',
+  'controllo',
+  'procedura',
+  'urgenza',
+  'consulto',
+  'follow-up',
+  'altro',
+];
 
 function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {
   const tipologia = String(r.tipologia ?? '');
@@ -91,9 +122,11 @@ function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {
     operatoreId: String(r.operatorId ?? ''),
     operatoreNome: r.operatorName ? String(r.operatorName) : '',
     tipoIntervento: (known ? tipologia : 'altro') as TipoIntervento,
-    stato: (['programmato', 'in_corso', 'completato', 'annullato'].includes(stato) ? stato : 'programmato') as Appuntamento['stato'],
+    stato: (['programmato', 'in_corso', 'completato', 'annullato'].includes(stato)
+      ? stato
+      : 'programmato') as Appuntamento['stato'],
     priorita: 'normale',
-    note: known || !tipologia ? note : (note ? `${tipologia} — ${note}` : tipologia),
+    note: known || !tipologia ? note : note ? `${tipologia} — ${note}` : tipologia,
   };
 }
 
@@ -145,7 +178,11 @@ export default function App() {
     prevNavKeyRef.current = navKey;
     historyDepth.current += 1;
     const hash = `#/${key}`;
-    window.history.pushState({ navKey: key, pazienteId: paziente?.id, prevNavKey: navKey }, '', hash);
+    window.history.pushState(
+      { navKey: key, pazienteId: paziente?.id, prevNavKey: navKey },
+      '',
+      hash,
+    );
     setNavKey(key);
     if (paziente) {
       setPazienteSelezionato(paziente);
@@ -158,7 +195,7 @@ export default function App() {
     setMobileNavOpen(false); // chiudi il drawer di navigazione mobile a ogni cambio sezione
     if (key === 'ai-assistant') {
       setAiOpen(true);
-      setAiOpenTrigger(t => t + 1);
+      setAiOpenTrigger((t) => t + 1);
       return;
     }
     pushNav(key);
@@ -175,14 +212,20 @@ export default function App() {
     setPendingModuleTab(moduleTabId);
   }
 
-  const goBack = useCallback((fallbackKey?: NavKey) => {
-    if (historyDepth.current > 0) {
-      window.history.back();
-    } else {
-      const target = fallbackKey ?? NAV_FALLBACK[navKey] ?? (utente?.ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard');
-      navigate(target);
-    }
-  }, [navKey, utente?.ruolo]);
+  const goBack = useCallback(
+    (fallbackKey?: NavKey) => {
+      if (historyDepth.current > 0) {
+        window.history.back();
+      } else {
+        const target =
+          fallbackKey ??
+          NAV_FALLBACK[navKey] ??
+          (utente?.ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard');
+        navigate(target);
+      }
+    },
+    [navKey, utente?.ruolo],
+  );
 
   // Restore nav from hash on mount + listen to popstate
   useEffect(() => {
@@ -220,7 +263,12 @@ export default function App() {
         fascia: s.fascia as TherapySlot['fascia'],
         label: s.label as string,
         ora: s.ora as string,
-        summary: (s.summary as TherapySlot['summary']) ?? { total: 0, administered: 0, notAdministered: 0, pending: 0 },
+        summary: (s.summary as TherapySlot['summary']) ?? {
+          total: 0,
+          administered: 0,
+          notAdministered: 0,
+          pending: 0,
+        },
         patients: Array.isArray(s.patients) ? (s.patients as TherapySlotPatient[]) : [],
       }));
       setTherapySlots(data);
@@ -250,8 +298,8 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/consegne`);
       if (!res.ok) return; // lista corrente invariata
-      const data = await res.json() as Consegna[];
-      setConsegne(data.map(c => ({ ...c, oraScadenza: c.oraScadenza ?? undefined })));
+      const data = (await res.json()) as Consegna[];
+      setConsegne(data.map((c) => ({ ...c, oraScadenza: c.oraScadenza ?? undefined })));
     } catch {
       // rete assente: lista corrente invariata
     }
@@ -261,26 +309,57 @@ export default function App() {
 
   const loadCamere = useCallback(() => {
     fetch(`${API_URL}/admin/rooms`)
-      .then(r => r.ok ? r.json() : [])
-      .then((rooms: Array<{ id: string; numero: string; tipo: string; piano: string; reparto: string; stato: string; note: string; beds: Array<{ id: string; label: string; stato: string; assignments: Array<{ patientId: string; patient: { firstName: string; lastName: string } }> }> }>) => {
-        setCamere(rooms.map(r => ({
-          id: r.id,
-          numero: r.numero,
-          tipo: r.tipo as Camera['tipo'],
-          piano: r.piano,
-          reparto: r.reparto,
-          stato: r.stato as Camera['stato'],
-          note: r.note,
-          letti: r.beds.map(b => ({
-            id: b.id,
-            numero: b.label === 'A' ? 1 : b.label === 'B' ? 2 : 3,
-            stato: (b.assignments.length > 0 ? 'occupato' : b.stato === 'manutenzione' ? 'manutenzione' : 'libero') as Camera['letti'][0]['stato'],
-            pazienteId: b.assignments[0]?.patientId,
-            pazienteNome: b.assignments[0]?.patient ? `${b.assignments[0].patient.lastName}, ${b.assignments[0].patient.firstName}` : undefined,
-          })),
-        })));
-      })
-      .catch(() => { /* keep empty array */ });
+      .then((r) => (r.ok ? r.json() : []))
+      .then(
+        (
+          rooms: Array<{
+            id: string;
+            numero: string;
+            tipo: string;
+            piano: string;
+            reparto: string;
+            stato: string;
+            note: string;
+            beds: Array<{
+              id: string;
+              label: string;
+              stato: string;
+              assignments: Array<{
+                patientId: string;
+                patient: { firstName: string; lastName: string };
+              }>;
+            }>;
+          }>,
+        ) => {
+          setCamere(
+            rooms.map((r) => ({
+              id: r.id,
+              numero: r.numero,
+              tipo: r.tipo as Camera['tipo'],
+              piano: r.piano,
+              reparto: r.reparto,
+              stato: r.stato as Camera['stato'],
+              note: r.note,
+              letti: r.beds.map((b) => ({
+                id: b.id,
+                numero: b.label === 'A' ? 1 : b.label === 'B' ? 2 : 3,
+                stato: (b.assignments.length > 0
+                  ? 'occupato'
+                  : b.stato === 'manutenzione'
+                    ? 'manutenzione'
+                    : 'libero') as Camera['letti'][0]['stato'],
+                pazienteId: b.assignments[0]?.patientId,
+                pazienteNome: b.assignments[0]?.patient
+                  ? `${b.assignments[0].patient.lastName}, ${b.assignments[0].patient.firstName}`
+                  : undefined,
+              })),
+            })),
+          );
+        },
+      )
+      .catch(() => {
+        /* keep empty array */
+      });
   }, []);
 
   // ── Fetch patients ──────────────────────────────────────────────────────────
@@ -291,14 +370,14 @@ export default function App() {
     fetch(`${API_URL}/patients`)
       // Issue #129: il backend ordina per createdAt — il roster va sempre
       // tenuto in ordine alfabetico (cognome, nome) per tutte le viste.
-      .then(r => r.json())
+      .then((r) => r.json())
       .then((data: Paziente[]) => {
         const sorted = sortPazienti(data);
         setPazienti(sorted);
         // Prefetch cartelle so the patient list can render clinical-status/allergy
         // badges without opening each patient. Reuses the existing per-patient
         // endpoint (no backend change); a patient with no record stays badge-less.
-        void Promise.all(sorted.map(p => loadCartella(p.id)));
+        void Promise.all(sorted.map((p) => loadCartella(p.id)));
       })
       .catch(() => setPazienti([]))
       .finally(() => setLoadingPazienti(false));
@@ -310,23 +389,38 @@ export default function App() {
     void loadConsegne();
     // Load note/messaggi from API (persisted)
     fetch(`${API_URL}/notes`)
-      .then(r => r.ok ? r.json() : [])
-      .then((data: Nota[]) => setNote(data.map(n => ({ ...n, pazienteId: n.pazienteId ?? undefined, pazienteNome: n.pazienteNome ?? undefined }))))
-      .catch(() => { /* keep empty array */ });
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: Nota[]) =>
+        setNote(
+          data.map((n) => ({
+            ...n,
+            pazienteId: n.pazienteId ?? undefined,
+            pazienteNome: n.pazienteNome ?? undefined,
+          })),
+        ),
+      )
+      .catch(() => {
+        /* keep empty array */
+      });
   }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); setSearchOpen(v => !v); }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
       if (e.key === 'Escape') setSearchOpen(false);
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  useEffect(() => { if (searchOpen) searchRef.current?.focus(); }, [searchOpen]);
+  useEffect(() => {
+    if (searchOpen) searchRef.current?.focus();
+  }, [searchOpen]);
 
   // ── Auth ────────────────────────────────────────────────────────────────────
 
@@ -347,33 +441,45 @@ export default function App() {
 
   // ── Operatori CRUD ──────────────────────────────────────────────────────────
 
-  function addOperatore(op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>) {
-    const usedColors = operatori.map(o => o.colore);
-    const colore = op.colore || (OPERATOR_COLOR_PALETTE.find(c => !usedColors.includes(c)) ?? OPERATOR_COLOR_PALETTE[0]);
-    setOperatori(prev => [...prev, {
-      ...op, colore,
-      id: crypto.randomUUID(),
-      pazientiAssegnati: 0,
-      appuntamentiOggi: 0,
-      iniziali: `${op.nome[0]}${op.cognome[0]}`.toUpperCase(),
-    }]);
+  function addOperatore(
+    op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>,
+  ) {
+    const usedColors = operatori.map((o) => o.colore);
+    const colore =
+      op.colore ||
+      (OPERATOR_COLOR_PALETTE.find((c) => !usedColors.includes(c)) ?? OPERATOR_COLOR_PALETTE[0]);
+    setOperatori((prev) => [
+      ...prev,
+      {
+        ...op,
+        colore,
+        id: crypto.randomUUID(),
+        pazientiAssegnati: 0,
+        appuntamentiOggi: 0,
+        iniziali: `${op.nome[0]}${op.cognome[0]}`.toUpperCase(),
+      },
+    ]);
   }
 
   function updateOperatore(id: string, updates: Partial<Operatore>) {
-    setOperatori(prev => prev.map(o => {
-      if (o.id !== id) return o;
-      const updated = { ...o, ...updates };
-      if (updates.nome || updates.cognome) {
-        updated.iniziali = `${updated.nome[0]}${updated.cognome[0]}`.toUpperCase();
-      }
-      return updated;
-    }));
+    setOperatori((prev) =>
+      prev.map((o) => {
+        if (o.id !== id) return o;
+        const updated = { ...o, ...updates };
+        if (updates.nome || updates.cognome) {
+          updated.iniziali = `${updated.nome[0]}${updated.cognome[0]}`.toUpperCase();
+        }
+        return updated;
+      }),
+    );
   }
 
   function toggleStatoOperatore(id: string) {
-    setOperatori(prev => prev.map(o =>
-      o.id === id ? { ...o, stato: o.stato === 'attivo' ? 'inattivo' : 'attivo' } : o
-    ));
+    setOperatori((prev) =>
+      prev.map((o) =>
+        o.id === id ? { ...o, stato: o.stato === 'attivo' ? 'inattivo' : 'attivo' } : o,
+      ),
+    );
   }
 
   // ── Consegne CRUD ───────────────────────────────────────────────────────────
@@ -387,9 +493,15 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(c),
       });
-      if (!res.ok) { showToast('Impossibile creare la consegna'); return false; }
-      const created = await res.json() as Consegna;
-      setConsegne(prev => [{ ...created, oraScadenza: created.oraScadenza ?? undefined }, ...prev]);
+      if (!res.ok) {
+        showToast('Impossibile creare la consegna');
+        return false;
+      }
+      const created = (await res.json()) as Consegna;
+      setConsegne((prev) => [
+        { ...created, oraScadenza: created.oraScadenza ?? undefined },
+        ...prev,
+      ]);
       showToast('Consegna creata');
       return true;
     } catch {
@@ -401,16 +513,24 @@ export default function App() {
   async function updateConsegna(id: string, patch: Partial<Consegna>): Promise<boolean> {
     const snapshot = consegne;
     // Optimistic update
-    setConsegne(prev => prev.map(c => c.id === id ? { ...c, ...patch } : c));
+    setConsegne((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)));
     try {
       const res = await fetch(`${API_URL}/consegne/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(patch),
       });
-      if (!res.ok) { setConsegne(snapshot); showToast('Impossibile salvare la consegna'); return false; }
-      const updated = await res.json() as Consegna;
-      setConsegne(prev => prev.map(c => c.id === id ? { ...updated, oraScadenza: updated.oraScadenza ?? undefined } : c));
+      if (!res.ok) {
+        setConsegne(snapshot);
+        showToast('Impossibile salvare la consegna');
+        return false;
+      }
+      const updated = (await res.json()) as Consegna;
+      setConsegne((prev) =>
+        prev.map((c) =>
+          c.id === id ? { ...updated, oraScadenza: updated.oraScadenza ?? undefined } : c,
+        ),
+      );
       showToast('Consegna aggiornata');
       return true;
     } catch {
@@ -426,10 +546,13 @@ export default function App() {
 
   async function deleteConsegna(id: string): Promise<void> {
     const snapshot = consegne;
-    setConsegne(prev => prev.filter(c => c.id !== id));
+    setConsegne((prev) => prev.filter((c) => c.id !== id));
     try {
       const res = await fetch(`${API_URL}/consegne/${id}`, { method: 'DELETE' });
-      if (!res.ok) { setConsegne(snapshot); showToast('Impossibile eliminare la consegna'); }
+      if (!res.ok) {
+        setConsegne(snapshot);
+        showToast('Impossibile eliminare la consegna');
+      }
     } catch {
       setConsegne(snapshot);
       showToast('Impossibile eliminare la consegna');
@@ -457,10 +580,13 @@ export default function App() {
           stato: apt.stato,
         }),
       });
-      const body = await res.json().catch(() => ({})) as { error?: { kind?: string; message?: string } } & Record<string, unknown>;
-      if (res.status === 409) return body.error?.message ?? 'Slot già occupato: scegli un altro orario.';
+      const body = (await res.json().catch(() => ({}))) as {
+        error?: { kind?: string; message?: string };
+      } & Record<string, unknown>;
+      if (res.status === 409)
+        return body.error?.message ?? 'Slot già occupato: scegli un altro orario.';
       if (!res.ok) return body.error?.message ?? 'Impossibile salvare l’appuntamento.';
-      setAppuntamenti(prev => [...prev, mapAppointmentDTO(body)]);
+      setAppuntamenti((prev) => [...prev, mapAppointmentDTO(body)]);
       showToast('Appuntamento salvato');
       return null;
     } catch {
@@ -475,9 +601,9 @@ export default function App() {
   // ── Schedules ───────────────────────────────────────────────────────────────
 
   function saveSchedule(s: ScheduleOperatore) {
-    setSchedules(prev => {
-      const idx = prev.findIndex(x => x.operatoreId === s.operatoreId);
-      if (idx >= 0) return prev.map((x, i) => i === idx ? s : x);
+    setSchedules((prev) => {
+      const idx = prev.findIndex((x) => x.operatoreId === s.operatoreId);
+      if (idx >= 0) return prev.map((x, i) => (i === idx ? s : x));
       return [...prev, s];
     });
   }
@@ -485,20 +611,23 @@ export default function App() {
   // ── Cartella CRUD (API-persisted) ─────────────────────────────────────────
 
   function getCartella(pazienteId: string): CartellaPaziente {
-    return cartelle.find(c => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
+    return cartelle.find((c) => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
   }
 
   async function loadCartella(pazienteId: string): Promise<void> {
     try {
       const res = await fetch(`${API_URL}/patients/${pazienteId}/cartella`);
       if (!res.ok) return;
-      const json = await res.json() as { patientId: string; data: CartellaPaziente | null };
+      const json = (await res.json()) as { patientId: string; data: CartellaPaziente | null };
       if (json.data) {
-        setCartelle(prev => {
-          const idx = prev.findIndex(c => c.pazienteId === pazienteId);
+        setCartelle((prev) => {
+          const idx = prev.findIndex((c) => c.pazienteId === pazienteId);
           const base = createDefaultCartella(pazienteId);
           const baseRec = base as unknown as Record<string, unknown>;
-          const merged = { ...base, ...json.data, pazienteId } as unknown as Record<string, unknown>;
+          const merged = { ...base, ...json.data, pazienteId } as unknown as Record<
+            string,
+            unknown
+          >;
           // Defensive: a clinical-list field stored as a non-array (e.g. an object written by an
           // older import) must never reach the UI — coerce it back to the default array so
           // `.filter`/`.map` never crash the patient record.
@@ -506,7 +635,7 @@ export default function App() {
             if (Array.isArray(baseRec[k]) && !Array.isArray(merged[k])) merged[k] = baseRec[k];
           }
           const safe = merged as unknown as CartellaPaziente;
-          if (idx >= 0) return prev.map((c, i) => i === idx ? safe : c);
+          if (idx >= 0) return prev.map((c, i) => (i === idx ? safe : c));
           return [...prev, safe];
         });
       }
@@ -515,14 +644,18 @@ export default function App() {
     }
   }
 
-  async function updateCartella(pazienteId: string, updates: Partial<CartellaPaziente>): Promise<boolean> {
-    const existing = cartelle.find(c => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
+  async function updateCartella(
+    pazienteId: string,
+    updates: Partial<CartellaPaziente>,
+  ): Promise<boolean> {
+    const existing =
+      cartelle.find((c) => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
     const updated = { ...existing, ...updates };
 
     // Optimistic update
-    setCartelle(prev => {
-      const idx = prev.findIndex(c => c.pazienteId === pazienteId);
-      return idx >= 0 ? prev.map((c, i) => i === idx ? updated : c) : [...prev, updated];
+    setCartelle((prev) => {
+      const idx = prev.findIndex((c) => c.pazienteId === pazienteId);
+      return idx >= 0 ? prev.map((c, i) => (i === idx ? updated : c)) : [...prev, updated];
     });
 
     // Persist to backend; return success so callers (e.g. inline edit) can react to failure.
@@ -533,7 +666,10 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: dataToSave }),
       });
-      if (r.ok) { showToast('Dati salvati correttamente'); return true; }
+      if (r.ok) {
+        showToast('Dati salvati correttamente');
+        return true;
+      }
       showToast('Impossibile salvare i dati');
       return false;
     } catch {
@@ -553,8 +689,10 @@ export default function App() {
     try {
       const today = new Date().toISOString().slice(0, 10);
       const assignRes = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`);
-      const assignments: Array<{ id: string; bedId: string; endDate: string | null }> = assignRes.ok ? await assignRes.json() : [];
-      const active = assignments.find(a => a.endDate === null || a.endDate >= today);
+      const assignments: Array<{ id: string; bedId: string; endDate: string | null }> = assignRes.ok
+        ? await assignRes.json()
+        : [];
+      const active = assignments.find((a) => a.endDate === null || a.endDate >= today);
 
       // Camera rimossa → chiudi l'assegnazione attiva
       if (!cameraNumero) {
@@ -570,18 +708,39 @@ export default function App() {
       }
 
       const roomsRes = await fetch(`${API_URL}/admin/rooms`);
-      const rooms: Array<{ id: string; numero: string; beds: Array<{ id: string; label: string; stato: string; assignments: Array<{ patientId: string }> }> }> = roomsRes.ok ? await roomsRes.json() : [];
-      const room = rooms.find(r => r.numero === cameraNumero);
-      if (!room) { showToast(`Camera ${cameraNumero} non trovata`); return { ok: false }; }
+      const rooms: Array<{
+        id: string;
+        numero: string;
+        beds: Array<{
+          id: string;
+          label: string;
+          stato: string;
+          assignments: Array<{ patientId: string }>;
+        }>;
+      }> = roomsRes.ok ? await roomsRes.json() : [];
+      const room = rooms.find((r) => r.numero === cameraNumero);
+      if (!room) {
+        showToast(`Camera ${cameraNumero} non trovata`);
+        return { ok: false };
+      }
 
       const isFree = (bd: { stato: string; assignments: Array<{ patientId: string }> }) =>
-        bd.stato !== 'manutenzione' && bd.assignments.every(a => a.patientId === pazienteId);
+        bd.stato !== 'manutenzione' && bd.assignments.every((a) => a.patientId === pazienteId);
       const wanted = (lettoNumero ?? '').trim().toUpperCase();
       const byIndex = /^\d+$/.test(wanted) ? 'ABCDEFGH'[parseInt(wanted, 10) - 1] : undefined;
-      let bed = room.beds.find(bd => bd.label.toUpperCase() === wanted || (byIndex !== undefined && bd.label === byIndex));
-      if (bed && !isFree(bed)) { showToast(`Letto ${bed.label} già occupato nella camera ${cameraNumero}`); return { ok: false }; }
+      let bed = room.beds.find(
+        (bd) =>
+          bd.label.toUpperCase() === wanted || (byIndex !== undefined && bd.label === byIndex),
+      );
+      if (bed && !isFree(bed)) {
+        showToast(`Letto ${bed.label} già occupato nella camera ${cameraNumero}`);
+        return { ok: false };
+      }
       if (!bed) bed = room.beds.find(isFree);
-      if (!bed) { showToast(`Camera ${cameraNumero} occupata: nessun letto libero`); return { ok: false }; }
+      if (!bed) {
+        showToast(`Camera ${cameraNumero} occupata: nessun letto libero`);
+        return { ok: false };
+      }
 
       if (active && active.bedId === bed.id) return { ok: true, lettoLabel: bed.label };
 
@@ -591,7 +750,7 @@ export default function App() {
         body: JSON.stringify({ bedId: bed.id, startDate: today }),
       });
       if (!res.ok) {
-        const err = await res.json().catch(() => null) as { error?: string } | null;
+        const err = (await res.json().catch(() => null)) as { error?: string } | null;
         showToast(err?.error ?? 'Impossibile assegnare la camera');
         return { ok: false };
       }
@@ -604,7 +763,7 @@ export default function App() {
   }
 
   async function updatePaziente(id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) {
-    setPazienti(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    setPazienti((prev) => prev.map((p) => (p.id === id ? { ...p, ...updates } : p)));
     try {
       const res = await fetch(`${API_URL}/patients/${id}`, {
         method: 'PATCH',
@@ -629,11 +788,11 @@ export default function App() {
       lastName: np.lastName.trim(),
       dateOfBirth: np.dateOfBirth,
     };
-    if (np.sex)                      payload.sex                  = np.sex;
-    if (np.email.trim())             payload.email                = np.email.trim();
-    if (np.phone.trim())             payload.phone                = np.phone.trim();
-    if (address)                     payload.address              = address;
-    if (np.referenteNome.trim())     payload.emergencyContactName = np.referenteNome.trim();
+    if (np.sex) payload.sex = np.sex;
+    if (np.email.trim()) payload.email = np.email.trim();
+    if (np.phone.trim()) payload.phone = np.phone.trim();
+    if (address) payload.address = address;
+    if (np.referenteNome.trim()) payload.emergencyContactName = np.referenteNome.trim();
     if (np.referenteTelefono.trim()) payload.emergencyContactPhone = np.referenteTelefono.trim();
 
     const res = await fetch(`${API_URL}/patients`, {
@@ -642,7 +801,7 @@ export default function App() {
       body: JSON.stringify(payload),
     });
 
-    const data = await res.json() as Record<string, unknown>;
+    const data = (await res.json()) as Record<string, unknown>;
 
     if (!res.ok) {
       throw new Error((data.error as string) || 'Errore durante la creazione del paziente');
@@ -650,7 +809,7 @@ export default function App() {
 
     const newP = data as unknown as Paziente;
     // Issue #129 (AC5): il nuovo paziente entra già in posizione alfabetica.
-    setPazienti(prev => sortPazienti([...prev, newP]));
+    setPazienti((prev) => sortPazienti([...prev, newP]));
 
     // Seed cartella from form fields not persisted in backend
     const cartellaInit: Partial<CartellaPaziente> = {};
@@ -664,7 +823,14 @@ export default function App() {
     } else if (np.letto) {
       cartellaInit.lettoNumero = np.letto;
     }
-    if (np.condizioniIniziali || np.motivoIngresso || np.notaClinicaIniziale || np.allergie || np.farmaci || np.alertClinici) {
+    if (
+      np.condizioniIniziali ||
+      np.motivoIngresso ||
+      np.notaClinicaIniziale ||
+      np.allergie ||
+      np.farmaci ||
+      np.alertClinici
+    ) {
       cartellaInit.anamnesi = {
         fisiologica: np.condizioniIniziali || '',
         patologicaRemota: '',
@@ -672,7 +838,15 @@ export default function App() {
         familiare: '',
         lavorativa: '',
         abitudini: '',
-        note: [np.alertClinici, np.notaClinicaIniziale, np.noteIniziali, np.allergie ? `Allergie: ${np.allergie}` : '', np.farmaci ? `Farmaci: ${np.farmaci}` : ''].filter(Boolean).join('\n'),
+        note: [
+          np.alertClinici,
+          np.notaClinicaIniziale,
+          np.noteIniziali,
+          np.allergie ? `Allergie: ${np.allergie}` : '',
+          np.farmaci ? `Farmaci: ${np.farmaci}` : '',
+        ]
+          .filter(Boolean)
+          .join('\n'),
         updatedAt: new Date().toISOString(),
         operatore: np.operatoreId,
       };
@@ -689,10 +863,11 @@ export default function App() {
   function goToPazienteByNome(nome: string) {
     if (!nome) return;
     const q = nome.toLowerCase().trim();
-    const found = pazienti.find(p =>
-      `${p.lastName}, ${p.firstName}`.toLowerCase() === q ||
-      `${p.firstName} ${p.lastName}`.toLowerCase() === q ||
-      `${p.lastName} ${p.firstName}`.toLowerCase() === q
+    const found = pazienti.find(
+      (p) =>
+        `${p.lastName}, ${p.firstName}`.toLowerCase() === q ||
+        `${p.firstName} ${p.lastName}`.toLowerCase() === q ||
+        `${p.lastName} ${p.firstName}`.toLowerCase() === q,
     );
     if (found) selectPaziente(found);
   }
@@ -708,9 +883,19 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(n),
       });
-      if (!res.ok) { showToast('Impossibile inviare la nota'); return false; }
-      const created = await res.json() as Nota;
-      setNote(prev => [{ ...created, pazienteId: created.pazienteId ?? undefined, pazienteNome: created.pazienteNome ?? undefined }, ...prev]);
+      if (!res.ok) {
+        showToast('Impossibile inviare la nota');
+        return false;
+      }
+      const created = (await res.json()) as Nota;
+      setNote((prev) => [
+        {
+          ...created,
+          pazienteId: created.pazienteId ?? undefined,
+          pazienteNome: created.pazienteNome ?? undefined,
+        },
+        ...prev,
+      ]);
       showToast('Nota inviata');
       return true;
     } catch {
@@ -721,16 +906,30 @@ export default function App() {
 
   async function updateNota(id: string, patch: Partial<Nota>): Promise<boolean> {
     const snapshot = note;
-    setNote(prev => prev.map(n => n.id === id ? { ...n, ...patch } : n));
+    setNote((prev) => prev.map((n) => (n.id === id ? { ...n, ...patch } : n)));
     try {
       const res = await fetch(`${API_URL}/notes/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(patch),
       });
-      if (!res.ok) { setNote(snapshot); showToast('Impossibile salvare la nota'); return false; }
-      const updated = await res.json() as Nota;
-      setNote(prev => prev.map(n => n.id === id ? { ...updated, pazienteId: updated.pazienteId ?? undefined, pazienteNome: updated.pazienteNome ?? undefined } : n));
+      if (!res.ok) {
+        setNote(snapshot);
+        showToast('Impossibile salvare la nota');
+        return false;
+      }
+      const updated = (await res.json()) as Nota;
+      setNote((prev) =>
+        prev.map((n) =>
+          n.id === id
+            ? {
+                ...updated,
+                pazienteId: updated.pazienteId ?? undefined,
+                pazienteNome: updated.pazienteNome ?? undefined,
+              }
+            : n,
+        ),
+      );
       return true;
     } catch {
       setNote(snapshot);
@@ -755,28 +954,35 @@ export default function App() {
     ora: string;
   }) {
     const now = new Date();
-    setTherapySlots(prev => prev.map(slot => {
-      if (slot.fascia !== info.fascia) return slot;
-      return {
-        ...slot,
-        summary: {
-          ...slot.summary,
-          administered: slot.summary.administered + 1,
-          pending: Math.max(0, slot.summary.pending - 1),
-        },
-        patients: slot.patients.map((p: TherapySlotPatient) => {
-          if (p.patientId !== info.patientId) return p;
-          return {
-            ...p,
-            administrations: p.administrations.map((a: TherapyAdministration) =>
-              a.therapyId === info.therapyId
-                ? { ...a, status: 'administered' as const, administeredAt: now.toISOString(), administeredBy: utente?.nome ?? '' }
-                : a
-            ),
-          };
-        }),
-      };
-    }));
+    setTherapySlots((prev) =>
+      prev.map((slot) => {
+        if (slot.fascia !== info.fascia) return slot;
+        return {
+          ...slot,
+          summary: {
+            ...slot.summary,
+            administered: slot.summary.administered + 1,
+            pending: Math.max(0, slot.summary.pending - 1),
+          },
+          patients: slot.patients.map((p: TherapySlotPatient) => {
+            if (p.patientId !== info.patientId) return p;
+            return {
+              ...p,
+              administrations: p.administrations.map((a: TherapyAdministration) =>
+                a.therapyId === info.therapyId
+                  ? {
+                      ...a,
+                      status: 'administered' as const,
+                      administeredAt: now.toISOString(),
+                      administeredBy: utente?.nome ?? '',
+                    }
+                  : a,
+              ),
+            };
+          }),
+        };
+      }),
+    );
 
     try {
       const res = await fetch(`${API_URL}/therapy-slots/confirm`, {
@@ -829,28 +1035,30 @@ export default function App() {
     noteText: string,
   ) {
     const now = new Date();
-    setTherapySlots(prev => prev.map(slot => {
-      if (slot.fascia !== info.fascia) return slot;
-      return {
-        ...slot,
-        summary: {
-          ...slot.summary,
-          notAdministered: slot.summary.notAdministered + 1,
-          pending: Math.max(0, slot.summary.pending - 1),
-        },
-        patients: slot.patients.map((p: TherapySlotPatient) => {
-          if (p.patientId !== info.patientId) return p;
-          return {
-            ...p,
-            administrations: p.administrations.map((a: TherapyAdministration) =>
-              a.therapyId === info.therapyId
-                ? { ...a, status: 'not_administered' as const, notAdministeredReason: motivo }
-                : a
-            ),
-          };
-        }),
-      };
-    }));
+    setTherapySlots((prev) =>
+      prev.map((slot) => {
+        if (slot.fascia !== info.fascia) return slot;
+        return {
+          ...slot,
+          summary: {
+            ...slot.summary,
+            notAdministered: slot.summary.notAdministered + 1,
+            pending: Math.max(0, slot.summary.pending - 1),
+          },
+          patients: slot.patients.map((p: TherapySlotPatient) => {
+            if (p.patientId !== info.patientId) return p;
+            return {
+              ...p,
+              administrations: p.administrations.map((a: TherapyAdministration) =>
+                a.therapyId === info.therapyId
+                  ? { ...a, status: 'not_administered' as const, notAdministeredReason: motivo }
+                  : a,
+              ),
+            };
+          }),
+        };
+      }),
+    );
 
     try {
       const res = await fetch(`${API_URL}/therapy-slots/not-administered`, {
@@ -888,23 +1096,30 @@ export default function App() {
 
   // ── Search ──────────────────────────────────────────────────────────────────
 
-  const searchResults = searchQuery.length > 1
-    ? pazienti.filter(p => {
-        const q = searchQuery.toLowerCase();
-        return `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
-          p.medicalRecordNumber.toLowerCase().includes(q);
-      }).slice(0, 6)
-    : [];
+  const searchResults =
+    searchQuery.length > 1
+      ? pazienti
+          .filter((p) => {
+            const q = searchQuery.toLowerCase();
+            return (
+              `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
+              p.medicalRecordNumber.toLowerCase().includes(q)
+            );
+          })
+          .slice(0, 6)
+      : [];
 
   // ── Unread notes count ──────────────────────────────────────────────────────
 
   const utenteId = utente?.id ?? '';
   const isAdmin = utente?.ruolo === 'admin';
 
-  const unreadNotes = note.filter(n =>
-    n.stato === 'non_letta' &&
-    (n.destinatarioId === utenteId || n.destinatarioId === 'tutti' ||
-    (isAdmin && n.destinatarioId === 'admin'))
+  const unreadNotes = note.filter(
+    (n) =>
+      n.stato === 'non_letta' &&
+      (n.destinatarioId === utenteId ||
+        n.destinatarioId === 'tutti' ||
+        (isAdmin && n.destinatarioId === 'admin')),
   ).length;
 
   // ── Login gate ──────────────────────────────────────────────────────────────
@@ -917,15 +1132,34 @@ export default function App() {
     <div className={`app-shell${mobileNavOpen ? ' app-shell--nav-open' : ''}`}>
       {/* Scrim per il drawer di navigazione mobile (≤1023px) */}
       {mobileNavOpen && (
-        <div className="mobile-nav-scrim" onClick={() => setMobileNavOpen(false)} aria-hidden="true" />
+        <div
+          className="mobile-nav-scrim"
+          onClick={() => setMobileNavOpen(false)}
+          aria-hidden="true"
+        />
       )}
       {toastMsg && (
         <div className="app-toast app-toast--success" role="status">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="20 6 9 17 4 12" />
           </svg>
           <span>{toastMsg}</span>
-          <button className="app-toast__close" onClick={() => setToastMsg(null)} aria-label="Chiudi">×</button>
+          <button
+            className="app-toast__close"
+            onClick={() => setToastMsg(null)}
+            aria-label="Chiudi"
+          >
+            ×
+          </button>
         </div>
       )}
 
@@ -945,12 +1179,22 @@ export default function App() {
           <button
             type="button"
             className="topbar-hamburger"
-            onClick={() => setMobileNavOpen(v => !v)}
+            onClick={() => setMobileNavOpen((v) => !v)}
             aria-label={mobileNavOpen ? 'Chiudi menu' : 'Apri menu'}
             aria-expanded={mobileNavOpen}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
           <button
@@ -970,10 +1214,14 @@ export default function App() {
                 {utente.reparto}
               </span>
               <div className="topbar-user">
-                <span className="topbar-user__avatar" aria-hidden="true">{utente.iniziali}</span>
+                <span className="topbar-user__avatar" aria-hidden="true">
+                  {utente.iniziali}
+                </span>
                 <span className="topbar-user__meta">
                   <span className="topbar-user__name">{utente.nome}</span>
-                  <span className="topbar-user__role">{utente.ruolo === 'admin' ? 'Amministratore' : 'Operatore'}</span>
+                  <span className="topbar-user__role">
+                    {utente.ruolo === 'admin' ? 'Amministratore' : 'Operatore'}
+                  </span>
                 </span>
               </div>
             </div>
@@ -983,25 +1231,45 @@ export default function App() {
         {/* Search overlay */}
         {searchOpen && (
           <div className="search-overlay" onClick={() => setSearchOpen(false)}>
-            <div className="search-modal" onClick={e => e.stopPropagation()}>
+            <div className="search-modal" onClick={(e) => e.stopPropagation()}>
               <div className="search-modal__input-wrap">
                 <IcoSearch />
-                <input ref={searchRef} className="search-modal__input" type="search"
+                <input
+                  ref={searchRef}
+                  className="search-modal__input"
+                  type="search"
                   placeholder="Cerca paziente per nome o MRN…"
-                  value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
-                <button className="icon-btn" onClick={() => setSearchOpen(false)}><IcoX /></button>
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button className="icon-btn" onClick={() => setSearchOpen(false)}>
+                  <IcoX />
+                </button>
               </div>
               {searchResults.length > 0 && (
                 <ul className="search-modal__results">
-                  {searchResults.map(p => (
+                  {searchResults.map((p) => (
                     <li key={p.id}>
-                      <button className="search-modal__result-item"
-                        onClick={() => { selectPaziente(p); setSearchOpen(false); setSearchQuery(''); }}>
-                        <span className="op-avatar-sm" style={{ width: 32, height: 32, fontSize: 12 }} aria-hidden="true">
-                          {p.firstName[0]}{p.lastName[0]}
+                      <button
+                        className="search-modal__result-item"
+                        onClick={() => {
+                          selectPaziente(p);
+                          setSearchOpen(false);
+                          setSearchQuery('');
+                        }}
+                      >
+                        <span
+                          className="op-avatar-sm"
+                          style={{ width: 32, height: 32, fontSize: 12 }}
+                          aria-hidden="true"
+                        >
+                          {p.firstName[0]}
+                          {p.lastName[0]}
                         </span>
                         <div>
-                          <span className="search-result__name">{p.lastName}, {p.firstName}</span>
+                          <span className="search-result__name">
+                            {p.lastName}, {p.firstName}
+                          </span>
                           <span className="search-result__mrn">{p.medicalRecordNumber}</span>
                         </div>
                       </button>
@@ -1018,7 +1286,6 @@ export default function App() {
 
         {/* Page content */}
         <main className="page-content content-panel">
-
           {/* ── ADMIN ── */}
           {isAdmin && navKey === 'admin-dashboard' && (
             <AdminDashboard
@@ -1050,15 +1317,9 @@ export default function App() {
               onSelectPaziente={goToPazienteByNome}
             />
           )}
-          {isAdmin && navKey === 'posti-letto' && (
-            <RoomsManagement />
-          )}
+          {isAdmin && navKey === 'posti-letto' && <RoomsManagement />}
           {isAdmin && navKey === 'orari-operatori' && (
-            <OperatorSchedule
-              operatori={operatori}
-              schedules={schedules}
-              onSave={saveSchedule}
-            />
+            <OperatorSchedule operatori={operatori} schedules={schedules} onSave={saveSchedule} />
           )}
 
           {/* ── SHARED ── */}
@@ -1117,23 +1378,26 @@ export default function App() {
                 // REQ-018: refresh the patient list after an imported patient is created.
                 setLoadingPazienti(true);
                 fetch(`${API_URL}/patients`)
-                  .then(r => r.json())
+                  .then((r) => r.json())
                   .then((data: Paziente[]) => {
                     const sorted = sortPazienti(data);
                     setPazienti(sorted);
                     // #243 AC4: if the patient was just created from the intake wizard, land
                     // on its chart — on the selected "Moduli" tab when the operator chose one.
                     if (patientId) {
-                      const created = sorted.find(p => p.id === patientId);
+                      const created = sorted.find((p) => p.id === patientId);
                       if (created) {
-                        const tab = moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
-                          ? (moduleTabId as TabId)
-                          : undefined;
+                        const tab =
+                          moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
+                            ? (moduleTabId as TabId)
+                            : undefined;
                         selectPaziente(created, tab);
                       }
                     }
                   })
-                  .catch(() => { /* keep current list */ })
+                  .catch(() => {
+                    /* keep current list */
+                  })
                   .finally(() => setLoadingPazienti(false));
               }}
             />
@@ -1141,7 +1405,9 @@ export default function App() {
           {navKey === 'dettaglio-paziente' && !pazienteSelezionato && (
             <div style={{ padding: '48px 32px', textAlign: 'center', color: 'var(--text-muted)' }}>
               <p style={{ fontSize: 16, marginBottom: 16 }}>Nessun paziente selezionato.</p>
-              <button className="btn-primary" onClick={() => goBack('pazienti')}>Vai alla lista pazienti</button>
+              <button className="btn-primary" onClick={() => goBack('pazienti')}>
+                Vai alla lista pazienti
+              </button>
             </div>
           )}
           {navKey === 'dettaglio-paziente' && pazienteSelezionato && (
@@ -1200,15 +1466,28 @@ export default function App() {
         operatorRole={utente?.ruolo}
         operatorName={utente?.nome}
         currentPatientId={navKey === 'dettaglio-paziente' ? pazienteSelezionato?.id : undefined}
-        currentPatientName={navKey === 'dettaglio-paziente' && pazienteSelezionato ? `${pazienteSelezionato.lastName ?? ''} ${pazienteSelezionato.firstName ?? ''}`.trim() : undefined}
+        currentPatientName={
+          navKey === 'dettaglio-paziente' && pazienteSelezionato
+            ? `${pazienteSelezionato.lastName ?? ''} ${pazienteSelezionato.firstName ?? ''}`.trim()
+            : undefined
+        }
         onExecuted={(info) => {
           if (pazienteSelezionato) loadCartella(pazienteSelezionato.id);
           // SPEC-015 US4: un'azione Agnos sull'agenda aggiorna subito la lista appuntamenti (FR-020)
-          if (info?.actionType === 'create_appointment' || info?.actionType === 'update_appointment') loadAppuntamenti();
+          if (
+            info?.actionType === 'create_appointment' ||
+            info?.actionType === 'update_appointment'
+          )
+            loadAppuntamenti();
           // Issue #130: una consegna creata via Agnos appare subito nella UI consegne
           if (info?.actionType === 'create_consegna') void loadConsegne();
         }}
-        onNavigate={(n) => { if (n.patientId) { const p = pazienti.find((x) => x.id === n.patientId); if (p) selectPaziente(p); } }}
+        onNavigate={(n) => {
+          if (n.patientId) {
+            const p = pazienti.find((x) => x.id === n.patientId);
+            if (p) selectPaziente(p);
+          }
+        }}
       />
     </div>
   );

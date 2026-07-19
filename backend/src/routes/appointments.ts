@@ -5,8 +5,12 @@
 
 import { Router } from 'express';
 import {
-  listAppointments, createAppointment, updateAppointment, uiOnlyDeleteAppointment,
-  SlotConflictError, AppointmentNotFoundError,
+  listAppointments,
+  createAppointment,
+  updateAppointment,
+  uiOnlyDeleteAppointment,
+  SlotConflictError,
+  AppointmentNotFoundError,
 } from '../services/appointment-service.js';
 
 const router = Router();
@@ -16,7 +20,10 @@ const router = Router();
 router.get('/', async (req, res) => {
   try {
     const date = typeof req.query.date === 'string' && req.query.date ? req.query.date : undefined;
-    const operatorId = typeof req.query.operatorId === 'string' && req.query.operatorId ? req.query.operatorId : undefined;
+    const operatorId =
+      typeof req.query.operatorId === 'string' && req.query.operatorId
+        ? req.query.operatorId
+        : undefined;
     const rows = await listAppointments({ date, operatorId });
     res.status(200).json(rows);
   } catch (error) {
@@ -25,7 +32,9 @@ router.get('/', async (req, res) => {
       return;
     }
     console.error('GET /appointments error:', error);
-    res.status(500).json({ error: { kind: 'internal', message: 'Errore nel recupero degli appuntamenti' } });
+    res
+      .status(500)
+      .json({ error: { kind: 'internal', message: 'Errore nel recupero degli appuntamenti' } });
   }
 });
 
@@ -37,12 +46,20 @@ router.post('/', async (req, res) => {
   const data = String(b.data ?? '').trim();
   const ora = String(b.ora ?? '').trim();
   if (!patientId || !operatorId || !data || !ora) {
-    res.status(400).json({ error: { kind: 'bad_request', message: 'Campi obbligatori: patientId, operatorId, data, ora' } });
+    res.status(400).json({
+      error: {
+        kind: 'bad_request',
+        message: 'Campi obbligatori: patientId, operatorId, data, ora',
+      },
+    });
     return;
   }
   try {
     const created = await createAppointment({
-      patientId, operatorId, data, ora,
+      patientId,
+      operatorId,
+      data,
+      ora,
       tipologia: String(b.tipologia ?? 'visita'),
       note: b.note !== undefined ? String(b.note) : undefined,
       durata: b.durata !== undefined ? Number(b.durata) : undefined,
@@ -56,12 +73,17 @@ router.post('/', async (req, res) => {
       res.status(409).json({ error: { kind: 'slot_conflict', message: error.message } });
       return;
     }
-    if (error instanceof Error && (/non valida/.test(error.message) || error.message.includes('Foreign key'))) {
+    if (
+      error instanceof Error &&
+      (/non valida/.test(error.message) || error.message.includes('Foreign key'))
+    ) {
       res.status(400).json({ error: { kind: 'bad_request', message: error.message } });
       return;
     }
     console.error('POST /appointments error:', error);
-    res.status(500).json({ error: { kind: 'internal', message: 'Errore durante la creazione dell’appuntamento' } });
+    res.status(500).json({
+      error: { kind: 'internal', message: 'Errore durante la creazione dell’appuntamento' },
+    });
   }
 });
 
@@ -93,7 +115,9 @@ router.patch('/:id', async (req, res) => {
       return;
     }
     console.error('PATCH /appointments/:id error:', error);
-    res.status(500).json({ error: { kind: 'internal', message: 'Errore durante l’aggiornamento dell’appuntamento' } });
+    res.status(500).json({
+      error: { kind: 'internal', message: 'Errore durante l’aggiornamento dell’appuntamento' },
+    });
   }
 });
 
@@ -109,7 +133,9 @@ router.delete('/:id', async (req, res) => {
     res.status(204).end();
   } catch (error) {
     console.error('DELETE /appointments/:id error:', error);
-    res.status(500).json({ error: { kind: 'internal', message: 'Errore durante l’eliminazione dell’appuntamento' } });
+    res.status(500).json({
+      error: { kind: 'internal', message: 'Errore durante l’eliminazione dell’appuntamento' },
+    });
   }
 });
 

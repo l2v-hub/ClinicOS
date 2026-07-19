@@ -17,7 +17,7 @@ export function PatientsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default PatientsPage
+export default PatientsPage;

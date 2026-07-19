@@ -6,9 +6,17 @@ export default defineConfig({
   timeout: 90_000,
   retries: 0,
   workers: 1,
-  outputDir: '../../artifacts/task-validation/242-diagnosis-excludes-pharmacological-therapy/test-results',
+  outputDir:
+    '../../artifacts/task-validation/242-diagnosis-excludes-pharmacological-therapy/test-results',
   reporter: [
-    ['html', { outputFolder: '../../artifacts/task-validation/242-diagnosis-excludes-pharmacological-therapy/playwright-report', open: 'never' }],
+    [
+      'html',
+      {
+        outputFolder:
+          '../../artifacts/task-validation/242-diagnosis-excludes-pharmacological-therapy/playwright-report',
+        open: 'never',
+      },
+    ],
     ['list'],
   ],
   use: {

@@ -18,7 +18,9 @@ const REQUIRED = [
 function main() {
   const arg = process.argv[2];
   if (!arg) {
-    console.error('ERRORE: specifica lo slug o il path del task. Uso: validate-task-contract.js <slug|path>');
+    console.error(
+      'ERRORE: specifica lo slug o il path del task. Uso: validate-task-contract.js <slug|path>',
+    );
     process.exit(1);
   }
   const dir = resolveTaskDir(arg);

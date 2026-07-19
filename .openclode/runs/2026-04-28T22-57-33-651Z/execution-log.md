@@ -15,7 +15,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +++ b/.openclode/project-memory.md
 @@ -1 +1,28 @@
  # Project Memory: ClinicOS
- 
+
 +High-level notes about this project. Updated by agents after significant changes.
 +
 +---
@@ -77,9 +77,9 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +++ b/.openclode/project-memory.md
 @@ -1,4 +1,28 @@
  # Project Memory: ClinicOS
- 
+
  High-level notes about this project. Updated by agents after significant changes.
- 
+
 +---
 +
 +## Project Overview
@@ -139,7 +139,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +++ b/.openclode/project-memory.md
 @@ -1 +1,28 @@
  # Project Memory: ClinicOS
- 
+
 +High-level notes about this project. Updated by agents after significant changes.
 +
 +---
@@ -201,7 +201,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +++ b/.openclode/project-memory.md
 @@ -1 +1,28 @@
  # Project Memory: ClinicOS
- 
+
 +High-level notes about this project. Updated by agents after significant changes.
 +
 +---

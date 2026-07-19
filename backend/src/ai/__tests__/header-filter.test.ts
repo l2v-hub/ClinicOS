@@ -14,7 +14,11 @@ const HEADER = [
 const page = (n: number, body: string) => `${HEADER}\n\n${body}\n\nPagina ${n} di 3`;
 
 test('identical header on every page → kept once, removed from later pages', () => {
-  const doc = [page(1, '## Anamnesi\nDolore toracico.'), page(2, 'Proseguiva il ricovero.'), page(3, '## Terapia\nRamipril 5 mg.')].join('\n');
+  const doc = [
+    page(1, '## Anamnesi\nDolore toracico.'),
+    page(2, 'Proseguiva il ricovero.'),
+    page(3, '## Terapia\nRamipril 5 mg.'),
+  ].join('\n');
   const r = filterRepeatedHeaders(doc);
   // header text appears exactly once in the cleaned output
   const occurrences = (r.cleanedText.match(/Codice Fiscale: NBLDNL44A70/g) || []).length;
@@ -38,7 +42,10 @@ test('page WITHOUT a header is left untouched', () => {
 });
 
 test('clinical text at the TOP of a page is not mistaken for a header', () => {
-  const doc = ['Il paziente è stato ricoverato per dolore toracico acuto e dispnea ingravescente.', '## Diagnosi\nIMA.'].join('\n');
+  const doc = [
+    'Il paziente è stato ricoverato per dolore toracico acuto e dispnea ingravescente.',
+    '## Diagnosi\nIMA.',
+  ].join('\n');
   const r = filterRepeatedHeaders(doc);
   assert.equal(r.removedHeaderBlocks, 0);
   assert.ok(r.cleanedText.includes('dolore toracico acuto'));
@@ -50,13 +57,19 @@ test('ambiguous repeated block BELOW threshold is kept and flagged', () => {
   const doc = [HEADER + '\n\nA.', HEADER + '\n\nB.'].join('\n');
   const r = filterRepeatedHeaders(doc, { confidenceThreshold: 0.99 });
   assert.equal(r.removedHeaderBlocks, 0, 'nothing removed below threshold');
-  assert.ok(r.warnings.some((w) => w.startsWith('AMBIGUOUS_HEADER_KEPT')), 'ambiguity warned');
+  assert.ok(
+    r.warnings.some((w) => w.startsWith('AMBIGUOUS_HEADER_KEPT')),
+    'ambiguity warned',
+  );
 });
 
 test('#275: page-number footer is normalized and KEPT (sequential-reading aid)', () => {
   const doc = [page(1, '## Anamnesi\nA.'), page(2, 'B.')].join('\n');
   const r = filterRepeatedHeaders(doc);
-  assert.ok(r.detectedPageNumbers.includes(1) && r.detectedPageNumbers.includes(2), 'page numbers recovered');
+  assert.ok(
+    r.detectedPageNumbers.includes(1) && r.detectedPageNumbers.includes(2),
+    'page numbers recovered',
+  );
   // #275: the noisy footer is normalized, but the page N/total marker is KEPT — it lets a reader
   // follow a multi-page document in sequential order (the original "Pagina 1 di 3" wording is gone).
   assert.ok(!/Pagina \d+ di 3/.test(r.cleanedText), 'original footer wording normalized');
@@ -64,7 +77,10 @@ test('#275: page-number footer is normalized and KEPT (sequential-reading aid)',
   assert.ok(/--- Pagina 2\/3 ---/.test(r.cleanedText), 'page 2 marker kept');
   assert.equal(r.keptPageMarkers, 2);
   assert.equal(r.removedFooterLines, 0, 'markers kept, not removed');
-  assert.ok(r.cleanedText.indexOf('Pagina 1/3') < r.cleanedText.indexOf('Pagina 2/3'), 'markers stay in reading order');
+  assert.ok(
+    r.cleanedText.indexOf('Pagina 1/3') < r.cleanedText.indexOf('Pagina 2/3'),
+    'markers stay in reading order',
+  );
 });
 
 test('#275: page marker without a total is kept as "--- Pagina N ---"', () => {
@@ -98,8 +114,15 @@ test('anagraphic data from the first page is preserved (first header kept)', () 
 
 test('Anamnesi split across two pages becomes contiguous after the interleaved header is removed', () => {
   const doc = [
-    HEADER, '', '## Anamnesi Patologica', 'Inviata in PS per dolore toracico.', '',
-    HEADER, '', 'Proseguiva il ricovero con stabilizzazione.', '',
+    HEADER,
+    '',
+    '## Anamnesi Patologica',
+    'Inviata in PS per dolore toracico.',
+    '',
+    HEADER,
+    '',
+    'Proseguiva il ricovero con stabilizzazione.',
+    '',
   ].join('\n');
   const r = filterRepeatedHeaders(doc);
   const idxStart = r.cleanedText.indexOf('Inviata in PS');
@@ -111,9 +134,21 @@ test('Anamnesi split across two pages becomes contiguous after the interleaved h
 });
 
 test('Terapia continuation across pages stays contiguous', () => {
-  const doc = [HEADER, '', '## Terapia', 'Ramipril 5 mg.', '', HEADER, '', 'Furosemide 25 mg.'].join('\n');
+  const doc = [
+    HEADER,
+    '',
+    '## Terapia',
+    'Ramipril 5 mg.',
+    '',
+    HEADER,
+    '',
+    'Furosemide 25 mg.',
+  ].join('\n');
   const r = filterRepeatedHeaders(doc);
-  const between = r.cleanedText.slice(r.cleanedText.indexOf('Ramipril'), r.cleanedText.indexOf('Furosemide'));
+  const between = r.cleanedText.slice(
+    r.cleanedText.indexOf('Ramipril'),
+    r.cleanedText.indexOf('Furosemide'),
+  );
   assert.ok(!/Reparto:/.test(between), 'no header between therapy fragments');
 });
 
@@ -139,13 +174,22 @@ test('BUG-046: inline multi-label header row repeated across pages is removed fr
   // Real-OCR shape: the two header rows are separated by a BLANK line, and the 2nd row alone has
   // only 2 labels (< requiredMatches). The scanner must still treat them as one header block.
   const INLINE = [
-    'Paziente: ROSSI MARIO (PAZIENTE FITTIZIO) Nascita: 01/01/1950 Sesso: M', '',
+    'Paziente: ROSSI MARIO (PAZIENTE FITTIZIO) Nascita: 01/01/1950 Sesso: M',
+    '',
     'Residenza: Via di Prova 1, Testopoli Codice Fiscale: RSSMRA50A01L000T Cartella: TEST-0001',
   ].join('\n');
   const doc = [
-    INLINE, '', '## Anamnesi Patologica Recente:', 'Frase di prova pagina uno.', '',
-    INLINE, '', 'Frase di prova pagina due.', '',
-    '## Terapia alla dimissione:', 'Farmaco A 5 mg.',
+    INLINE,
+    '',
+    '## Anamnesi Patologica Recente:',
+    'Frase di prova pagina uno.',
+    '',
+    INLINE,
+    '',
+    'Frase di prova pagina due.',
+    '',
+    '## Terapia alla dimissione:',
+    'Farmaco A 5 mg.',
   ].join('\n');
   const r = filterRepeatedHeaders(doc);
   assert.ok(r.removedHeaderBlocks >= 1, 'the repeated inline header block is detected and removed');
@@ -154,13 +198,20 @@ test('BUG-046: inline multi-label header row repeated across pages is removed fr
   const b = r.cleanedText.indexOf('pagina due');
   assert.ok(a >= 0 && b > a, 'anamnesi continuation preserved');
   const between = r.cleanedText.slice(a, b);
-  assert.ok(!/Codice Fiscale/i.test(between) && !/Cartella/i.test(between), 'no header bleed inside the section');
+  assert.ok(
+    !/Codice Fiscale/i.test(between) && !/Cartella/i.test(between),
+    'no header bleed inside the section',
+  );
   // first occurrence kept (anagraphic data preserved)
   assert.equal((r.cleanedText.match(/RSSMRA50A01L000T/g) || []).length, 1);
 });
 
 test('config: env threshold + label list are honoured', () => {
-  const cfg = loadHeaderFilterConfig({ DOCUMENT_HEADER_CONFIDENCE_THRESHOLD: '0.5', DOCUMENT_HEADER_REQUIRED_MATCHES: '2', DOCUMENT_HEADER_LABELS: 'paziente,reparto' } as NodeJS.ProcessEnv);
+  const cfg = loadHeaderFilterConfig({
+    DOCUMENT_HEADER_CONFIDENCE_THRESHOLD: '0.5',
+    DOCUMENT_HEADER_REQUIRED_MATCHES: '2',
+    DOCUMENT_HEADER_LABELS: 'paziente,reparto',
+  } as NodeJS.ProcessEnv);
   assert.equal(cfg.confidenceThreshold, 0.5);
   assert.equal(cfg.requiredMatches, 2);
   assert.deepEqual(cfg.labels, ['paziente', 'reparto']);

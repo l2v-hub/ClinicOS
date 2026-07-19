@@ -9,36 +9,42 @@
 import { prisma } from '../lib/prisma.js';
 
 export class SlotConflictError extends Error {
-  constructor(message: string) { super(message); this.name = 'SlotConflictError'; }
+  constructor(message: string) {
+    super(message);
+    this.name = 'SlotConflictError';
+  }
 }
 export class AppointmentNotFoundError extends Error {
-  constructor(message: string) { super(message); this.name = 'AppointmentNotFoundError'; }
+  constructor(message: string) {
+    super(message);
+    this.name = 'AppointmentNotFoundError';
+  }
 }
 
 /** UI-facing DTO: the Prisma model mapped to the agenda's date/time/tipologia vocabulary. */
 export interface AppointmentDTO {
   id: string;
   patientId: string;
-  patientName: string | null;   // "Cognome, Nome" — the agenda card label
+  patientName: string | null; // "Cognome, Nome" — the agenda card label
   operatorId: string;
   operatorName: string | null;
-  data: string;                 // YYYY-MM-DD (local)
-  ora: string;                  // HH:MM (local)
-  durata: number;               // minutes
-  tipologia: string;            // stored in Appointment.reason
-  note: string;                 // stored in Appointment.notes
+  data: string; // YYYY-MM-DD (local)
+  ora: string; // HH:MM (local)
+  durata: number; // minutes
+  tipologia: string; // stored in Appointment.reason
+  note: string; // stored in Appointment.notes
   stato: 'programmato' | 'completato' | 'annullato';
 }
 
 export interface CreateAppointmentInput {
   patientId: string;
   operatorId: string;
-  data: string;                 // YYYY-MM-DD
-  ora: string;                  // HH:MM
+  data: string; // YYYY-MM-DD
+  ora: string; // HH:MM
   tipologia: string;
   note?: string;
   durata?: number;
-  stato?: string;               // UI status ('programmato' | 'in_corso' | 'completato' | 'annullato')
+  stato?: string; // UI status ('programmato' | 'in_corso' | 'completato' | 'annullato')
   /** Display name used when the operator row must be provisioned on the fly. */
   operatorName?: string;
 }
@@ -75,15 +81,27 @@ function dataOraFrom(dt: Date): { data: string; ora: string } {
 
 // UI stato → Prisma AppointmentStatus ('in_corso' has no DB equivalent → SCHEDULED).
 const STATUS_TO_DB: Record<string, 'SCHEDULED' | 'COMPLETED' | 'CANCELLED'> = {
-  programmato: 'SCHEDULED', in_corso: 'SCHEDULED', completato: 'COMPLETED', annullato: 'CANCELLED',
+  programmato: 'SCHEDULED',
+  in_corso: 'SCHEDULED',
+  completato: 'COMPLETED',
+  annullato: 'CANCELLED',
 };
 const STATUS_TO_UI: Record<string, AppointmentDTO['stato']> = {
-  SCHEDULED: 'programmato', COMPLETED: 'completato', CANCELLED: 'annullato', NO_SHOW: 'annullato',
+  SCHEDULED: 'programmato',
+  COMPLETED: 'completato',
+  CANCELLED: 'annullato',
+  NO_SHOW: 'annullato',
 };
 
 type AppointmentRow = {
-  id: string; patientId: string; operatorId: string; scheduledAt: Date; durationMinutes: number;
-  reason: string | null; notes: string | null; status: string;
+  id: string;
+  patientId: string;
+  operatorId: string;
+  scheduledAt: Date;
+  durationMinutes: number;
+  reason: string | null;
+  notes: string | null;
+  status: string;
   patient?: { firstName: string; lastName: string } | null;
   operator?: { user?: { fullName: string } | null } | null;
 };
@@ -96,7 +114,8 @@ function toDTO(row: AppointmentRow): AppointmentDTO {
     patientName: row.patient ? `${row.patient.lastName}, ${row.patient.firstName}` : null,
     operatorId: row.operatorId,
     operatorName: row.operator?.user?.fullName ?? null,
-    data, ora,
+    data,
+    ora,
     durata: row.durationMinutes,
     tipologia: row.reason ?? '',
     note: row.notes ?? '',
@@ -116,8 +135,14 @@ const INCLUDE = {
 // operator-management rework, an unknown operator id is provisioned on first use as a lightweight
 // Operator (+ backing User) row that PRESERVES the UI id, so agenda filtering keeps working.
 
-async function ensureOperator(operatorId: string, displayName?: string): Promise<{ id: string; userId: string }> {
-  const existing = await prisma.operator.findUnique({ where: { id: operatorId }, select: { id: true, userId: true } });
+async function ensureOperator(
+  operatorId: string,
+  displayName?: string,
+): Promise<{ id: string; userId: string }> {
+  const existing = await prisma.operator.findUnique({
+    where: { id: operatorId },
+    select: { id: true, userId: true },
+  });
   if (existing) return existing;
   const user = await prisma.user.upsert({
     where: { email: `${operatorId}@clinicos.local` },
@@ -139,22 +164,33 @@ async function ensureOperator(operatorId: string, displayName?: string): Promise
 
 // ── read ─────────────────────────────────────────────────────────────────────
 
-export async function listAppointments(filter: { date?: string; operatorId?: string } = {}): Promise<AppointmentDTO[]> {
+export async function listAppointments(
+  filter: { date?: string; operatorId?: string } = {},
+): Promise<AppointmentDTO[]> {
   const where: Record<string, unknown> = {};
   if (filter.date) {
-    if (!DATE_RE.test(filter.date)) throw new Error(`Data non valida: ${filter.date} (atteso YYYY-MM-DD)`);
+    if (!DATE_RE.test(filter.date))
+      throw new Error(`Data non valida: ${filter.date} (atteso YYYY-MM-DD)`);
     const from = new Date(`${filter.date}T00:00:00`);
     const to = new Date(from.getTime() + 24 * 60 * 60_000);
     where.scheduledAt = { gte: from, lt: to };
   }
   if (filter.operatorId) where.operatorId = filter.operatorId;
-  const rows = await prisma.appointment.findMany({ where, orderBy: { scheduledAt: 'asc' }, include: INCLUDE, take: 1000 });
+  const rows = await prisma.appointment.findMany({
+    where,
+    orderBy: { scheduledAt: 'asc' },
+    include: INCLUDE,
+    take: 1000,
+  });
   return rows.map(toDTO);
 }
 
 /** 30-min slot conflict: same operator, same date/time, not cancelled. Reused by the AI preview. */
 export async function findConflict(
-  operatorId: string, data: string, ora: string, excludeId?: string,
+  operatorId: string,
+  data: string,
+  ora: string,
+  excludeId?: string,
 ): Promise<AppointmentDTO | null> {
   const row = await prisma.appointment.findFirst({
     where: {
@@ -169,7 +205,11 @@ export async function findConflict(
 }
 
 /** Locate the appointment an update command refers to ("l'appuntamento delle 15" of a patient). */
-export async function findAppointmentAt(patientId: string, data: string, ora: string): Promise<AppointmentDTO | null> {
+export async function findAppointmentAt(
+  patientId: string,
+  data: string,
+  ora: string,
+): Promise<AppointmentDTO | null> {
   const row = await prisma.appointment.findFirst({
     where: { patientId, scheduledAt: toScheduledAt(data, ora), status: { not: 'CANCELLED' } },
     include: INCLUDE,
@@ -184,7 +224,9 @@ export async function createAppointment(input: CreateAppointmentInput): Promise<
   const operator = await ensureOperator(input.operatorId, input.operatorName);
   const conflict = await findConflict(input.operatorId, input.data, input.ora);
   if (conflict) {
-    throw new SlotConflictError(`Slot già occupato: l'operatore ha già un appuntamento il ${input.data} alle ${input.ora}.`);
+    throw new SlotConflictError(
+      `Slot già occupato: l'operatore ha già un appuntamento il ${input.data} alle ${input.ora}.`,
+    );
   }
   const row = await prisma.appointment.create({
     data: {
@@ -202,7 +244,10 @@ export async function createAppointment(input: CreateAppointmentInput): Promise<
   return toDTO(row);
 }
 
-export async function updateAppointment(id: string, patch: UpdateAppointmentPatch): Promise<AppointmentDTO> {
+export async function updateAppointment(
+  id: string,
+  patch: UpdateAppointmentPatch,
+): Promise<AppointmentDTO> {
   const existing = await prisma.appointment.findUnique({ where: { id } });
   if (!existing) throw new AppointmentNotFoundError(`Appuntamento non trovato: ${id}`);
 
@@ -210,13 +255,17 @@ export async function updateAppointment(id: string, patch: UpdateAppointmentPatc
   const data = patch.data ?? current.data;
   const ora = patch.ora ?? current.ora;
   const operatorId = patch.operatorId ?? existing.operatorId;
-  if (patch.operatorId && patch.operatorId !== existing.operatorId) await ensureOperator(patch.operatorId);
+  if (patch.operatorId && patch.operatorId !== existing.operatorId)
+    await ensureOperator(patch.operatorId);
 
-  const slotChanged = data !== current.data || ora !== current.ora || operatorId !== existing.operatorId;
+  const slotChanged =
+    data !== current.data || ora !== current.ora || operatorId !== existing.operatorId;
   if (slotChanged) {
     const conflict = await findConflict(operatorId, data, ora, id);
     if (conflict) {
-      throw new SlotConflictError(`Slot già occupato: l'operatore ha già un appuntamento il ${data} alle ${ora}.`);
+      throw new SlotConflictError(
+        `Slot già occupato: l'operatore ha già un appuntamento il ${data} alle ${ora}.`,
+      );
     }
   }
 

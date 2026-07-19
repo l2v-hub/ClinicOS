@@ -21,11 +21,13 @@
 ### Task 1: Draft API client + IntakeWorkspace shell
 
 **Files:**
+
 - Create: `frontend/src/components/shared/intake/intakeDraftApi.ts` (typed fetch wrappers)
 - Create: `frontend/src/components/shared/intake/IntakeWorkspace.tsx` (6-step shell)
 - Create: `frontend/src/components/shared/intake/__tests__/intakeDraftApi.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `createDraft(source?: 'manual'|'import'): Promise<{ id: string; data: Record<string, unknown> }>`
   - `patchDraft(id: string, patch: Record<string, unknown>): Promise<{ id: string; data: Record<string, unknown> }>`
@@ -42,7 +44,10 @@ import { createDraft, patchDraft } from '../intakeDraftApi.js';
 
 test('createDraft POSTs to /intake/drafts', async () => {
   const calls: any[] = [];
-  globalThis.fetch = (async (url: string, opts: any) => { calls.push({ url, opts }); return { ok: true, json: async () => ({ id: 'd1', data: {} }) }; }) as any;
+  globalThis.fetch = (async (url: string, opts: any) => {
+    calls.push({ url, opts });
+    return { ok: true, json: async () => ({ id: 'd1', data: {} }) };
+  }) as any;
   const d = await createDraft('manual');
   assert.equal(d.id, 'd1');
   assert.match(calls[0].url, /\/intake\/drafts$/);
@@ -51,7 +56,10 @@ test('createDraft POSTs to /intake/drafts', async () => {
 
 test('patchDraft PATCHes the draft id', async () => {
   const calls: any[] = [];
-  globalThis.fetch = (async (url: string, opts: any) => { calls.push({ url, opts }); return { ok: true, json: async () => ({ id: 'd1', data: { a: 1 } }) }; }) as any;
+  globalThis.fetch = (async (url: string, opts: any) => {
+    calls.push({ url, opts });
+    return { ok: true, json: async () => ({ id: 'd1', data: { a: 1 } }) };
+  }) as any;
   await patchDraft('d1', { a: 1 });
   assert.match(calls[0].url, /\/intake\/drafts\/d1$/);
   assert.equal(calls[0].opts.method, 'PATCH');
@@ -78,11 +86,13 @@ git commit -m "feat(intake): draft API client + IntakeWorkspace 6-step shell (#1
 ### Task 2: Step 1 Anagrafica + Step 2 Ingresso (autosave to draft)
 
 **Files:**
+
 - Create: `frontend/src/components/shared/intake/StepAnagrafica.tsx`
 - Create: `frontend/src/components/shared/intake/StepIngresso.tsx`
 - Modify: `IntakeWorkspace.tsx` (render these for steps 1-2; debounced `patchDraft` on change)
 
 **Interfaces:**
+
 - Consumes: `patchDraft` (Task 1); `draft.data`.
 - Produces: `StepAnagrafica({ value, onChange })` / `StepIngresso({ value, onChange })` — controlled, write to `draft.data.anagrafica` / `draft.data.ingresso`.
 
@@ -98,10 +108,12 @@ git commit -m "feat(intake): draft API client + IntakeWorkspace 6-step shell (#1
 ### Task 3: Step 3 Clinica — registry editors in intake mode
 
 **Files:**
+
 - Create: `frontend/src/components/shared/intake/StepClinica.tsx`
 - Modify: `IntakeWorkspace.tsx` (render StepClinica for step 3)
 
 **Interfaces:**
+
 - Consumes: `intakeSections()` + `PatientSection` (from `sections/`); `draft.data`.
 
 - [ ] **Step 1:** `StepClinica` iterates `intakeSections()`. For each section render its registry component in `mode="intake"` with `value={data[sectionKey]}` and `onChange={v => updateSection(sectionKey, v)}` (which updates local `data` + debounced `patchDraft(draftId, { [sectionKey]: v })`). The extracted editors (Allergie/Diagnosi/Anamnesi) are controlled and work directly; the wrapped editors (Terapia/Parametri/NRS) render their built-in "in arrivo" intake placeholder — acceptable for this task (controlled variants are a follow-up noted on #122/#124).
@@ -114,6 +126,7 @@ git commit -m "feat(intake): draft API client + IntakeWorkspace 6-step shell (#1
 ### Task 4: Steps 4-6 (Moduli, Documenti, Verifica → confirm) + wire triggers
 
 **Files:**
+
 - Create: `frontend/src/components/shared/intake/StepVerifica.tsx`
 - Modify: `IntakeWorkspace.tsx` (steps 4-6); `PatientList.tsx`, `OperatorAgenda.tsx`, `AdminAgenda.tsx` (open `IntakeWorkspace` instead of `NewPatientModal`)
 

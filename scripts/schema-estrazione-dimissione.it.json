@@ -10,21 +10,33 @@
     "email": { "valore": "", "descrizione": "Email se presente" },
     "telefono": { "valore": "", "descrizione": "Numero di telefono del paziente" },
     "indirizzo": { "valore": "", "descrizione": "Indirizzo di residenza" },
-    "contattoEmergenzaNome": { "valore": "", "descrizione": "Nome del familiare/referente di emergenza" },
+    "contattoEmergenzaNome": {
+      "valore": "",
+      "descrizione": "Nome del familiare/referente di emergenza"
+    },
     "contattoEmergenzaTel": { "valore": "", "descrizione": "Telefono del referente di emergenza" }
   },
 
   "cartella": {
     "_nota_db": "Tutte queste chiavi corrispondono 1:1 a Cartella.data nel DB (già in italiano).",
 
-    "statoRicovero": { "valore": "ricoverato | dimesso | in_attesa", "descrizione": "Stato attuale di ricovero" },
+    "statoRicovero": {
+      "valore": "ricoverato | dimesso | in_attesa",
+      "descrizione": "Stato attuale di ricovero"
+    },
     "cameraNumero": { "valore": "", "descrizione": "Numero camera assegnata" },
     "lettoNumero": { "valore": "", "descrizione": "Lettera/numero letto" },
     "codiceFiscale": { "valore": "", "descrizione": "Codice fiscale del paziente" },
     "contattoEmergenzaNome": { "valore": "", "descrizione": "Nome referente di emergenza" },
     "contattoEmergenzaTel": { "valore": "", "descrizione": "Telefono referente di emergenza" },
-    "contattoEmergenzaRel": { "valore": "", "descrizione": "Relazione del referente (es. Figlia, Coniuge)" },
-    "patologiaIngresso": { "valore": "", "descrizione": "Motivo/patologia principale all'ingresso" },
+    "contattoEmergenzaRel": {
+      "valore": "",
+      "descrizione": "Relazione del referente (es. Figlia, Coniuge)"
+    },
+    "patologiaIngresso": {
+      "valore": "",
+      "descrizione": "Motivo/patologia principale all'ingresso"
+    },
     "diabetico": { "valore": false, "descrizione": "true se il paziente è diabetico" },
     "ipertensione": { "valore": false, "descrizione": "true se iperteso" },
     "terapiaTriturata": { "valore": false, "descrizione": "true se la terapia va triturata" },
@@ -34,9 +46,15 @@
 
     "anamnesi": {
       "_descrizione": "Anamnesi del paziente estratta dalla lettera di dimissione",
-      "fisiologica": { "valore": "", "descrizione": "Anamnesi fisiologica (età, sesso, stato generale)" },
+      "fisiologica": {
+        "valore": "",
+        "descrizione": "Anamnesi fisiologica (età, sesso, stato generale)"
+      },
       "patologicaRemota": { "valore": "", "descrizione": "Patologie e interventi pregressi" },
-      "patologicaProssima": { "valore": "", "descrizione": "Condizione clinica attuale / motivo recente" },
+      "patologicaProssima": {
+        "valore": "",
+        "descrizione": "Condizione clinica attuale / motivo recente"
+      },
       "familiare": { "valore": "", "descrizione": "Anamnesi familiare" },
       "lavorativa": { "valore": "", "descrizione": "Anamnesi lavorativa" },
       "abitudini": { "valore": "", "descrizione": "Abitudini (fumo, alcol, ecc.)" },
@@ -63,7 +81,10 @@
       "_template": {
         "allergene": { "valore": "", "descrizione": "Sostanza allergenica (es. Penicillina)" },
         "reazione": { "valore": "", "descrizione": "Tipo di reazione" },
-        "gravita": { "valore": "lieve | moderata | grave", "descrizione": "Gravità della reazione" },
+        "gravita": {
+          "valore": "lieve | moderata | grave",
+          "descrizione": "Gravità della reazione"
+        },
         "documentato": { "valore": "AAAA-MM-GG", "descrizione": "Data di documentazione" },
         "documentatoDa": { "valore": "", "descrizione": "Chi ha documentato" },
         "note": { "valore": "", "descrizione": "Note" }
@@ -94,7 +115,10 @@
     "terapie": {
       "_descrizione": "Terapie non farmacologiche o schemi terapeutici. Un oggetto per terapia.",
       "_template": {
-        "tipo": { "valore": "farmacologica | riabilitativa | altra", "descrizione": "Tipo di terapia" },
+        "tipo": {
+          "valore": "farmacologica | riabilitativa | altra",
+          "descrizione": "Tipo di terapia"
+        },
         "descrizione": { "valore": "", "descrizione": "Descrizione/schema della terapia" },
         "dataInizio": { "valore": "AAAA-MM-GG", "descrizione": "Data inizio" },
         "stato": { "valore": "attiva | sospesa | conclusa", "descrizione": "Stato" },
@@ -110,7 +134,10 @@
         "etichetta": { "valore": "PA | FC | SpO2 | TC | DTX", "descrizione": "Tipo di parametro" },
         "valore": { "valore": "", "descrizione": "Valore misurato (es. 130/85)" },
         "unita": { "valore": "", "descrizione": "Unità di misura (mmHg, bpm, %, °C, mg/dL)" },
-        "stato": { "valore": "normale | attenzione | critico", "descrizione": "Valutazione del valore" },
+        "stato": {
+          "valore": "normale | attenzione | critico",
+          "descrizione": "Valutazione del valore"
+        },
         "rilevato": { "valore": "AAAA-MM-GG", "descrizione": "Data rilevazione" },
         "rilevatoDa": { "valore": "", "descrizione": "Operatore che ha rilevato" }
       },
@@ -136,7 +163,10 @@
     "indicatoriRischio": {
       "_descrizione": "Indicatori di rischio (caduta, lesioni da pressione, ecc.). Un oggetto per rischio.",
       "_template": {
-        "tipo": { "valore": "caduta | lesioni_pressione | nutrizionale | altro", "descrizione": "Tipo di rischio" },
+        "tipo": {
+          "valore": "caduta | lesioni_pressione | nutrizionale | altro",
+          "descrizione": "Tipo di rischio"
+        },
         "livello": { "valore": "basso | medio | alto", "descrizione": "Livello di rischio" },
         "descrizione": { "valore": "", "descrizione": "Descrizione del rischio" },
         "dataValutazione": { "valore": "AAAA-MM-GG", "descrizione": "Data valutazione" },
@@ -149,7 +179,10 @@
       "_descrizione": "Piano di cura / indicazioni alla dimissione",
       "obiettivi": { "valore": "", "descrizione": "Obiettivi terapeutici" },
       "interventiPrevisti": { "valore": "", "descrizione": "Interventi previsti" },
-      "notePianificazione": { "valore": "", "descrizione": "Note di pianificazione (es. controlli)" },
+      "notePianificazione": {
+        "valore": "",
+        "descrizione": "Note di pianificazione (es. controlli)"
+      },
       "dataAggiornamento": { "valore": "AAAA-MM-GG", "descrizione": "Data aggiornamento" },
       "operatore": { "valore": "", "descrizione": "Operatore" }
     },
@@ -168,20 +201,35 @@
       "_descrizione": "Dati di presa in carico/ingresso ricavabili dalla lettera",
       "dataIngresso": { "valore": "AAAA-MM-GG", "descrizione": "Data ingresso" },
       "oraIngresso": { "valore": "HH:MM", "descrizione": "Ora ingresso" },
-      "provenienza": { "valore": "dimissione_ospedaliera | domicilio | altra_struttura", "descrizione": "Provenienza" },
+      "provenienza": {
+        "valore": "dimissione_ospedaliera | domicilio | altra_struttura",
+        "descrizione": "Provenienza"
+      },
       "centroInviante": { "valore": "", "descrizione": "Ospedale/struttura inviante" },
-      "modalitaIngresso": { "valore": "ambulante | barella | carrozzina", "descrizione": "Modalità di ingresso" },
+      "modalitaIngresso": {
+        "valore": "ambulante | barella | carrozzina",
+        "descrizione": "Modalità di ingresso"
+      },
       "accompagnatoDa": { "valore": "", "descrizione": "Accompagnatore" },
       "motivoIngresso": { "valore": "", "descrizione": "Motivo dell'ingresso" },
       "operatoreResponsabile": { "valore": "", "descrizione": "Operatore responsabile" },
-      "condizioniGenerali": { "valore": "buone | discrete | scadute", "descrizione": "Condizioni generali" },
+      "condizioniGenerali": {
+        "valore": "buone | discrete | scadute",
+        "descrizione": "Condizioni generali"
+      },
       "condizioniIniziali": { "valore": "", "descrizione": "Condizioni cliniche iniziali" },
       "noteIniziali": { "valore": "", "descrizione": "Note iniziali" },
       "camera": { "valore": "", "descrizione": "Camera" },
       "letto": { "valore": "", "descrizione": "Letto" },
-      "statoCoscienza": { "valore": "vigile | soporoso | non_responsivo", "descrizione": "Stato di coscienza" },
+      "statoCoscienza": {
+        "valore": "vigile | soporoso | non_responsivo",
+        "descrizione": "Stato di coscienza"
+      },
       "orientamento": { "valore": "orientato | disorientato", "descrizione": "Orientamento" },
-      "autonomia": { "valore": "autonomo | parzialmente_autonomo | dipendente", "descrizione": "Grado di autonomia" },
+      "autonomia": {
+        "valore": "autonomo | parzialmente_autonomo | dipendente",
+        "descrizione": "Grado di autonomia"
+      },
       "alimentazione": { "valore": "", "descrizione": "Modalità di alimentazione/dieta" },
       "mobilita": { "valore": "", "descrizione": "Mobilità" },
       "cuteIntegrita": { "valore": "", "descrizione": "Integrità della cute" },

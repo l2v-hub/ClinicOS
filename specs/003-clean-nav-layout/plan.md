@@ -36,17 +36,17 @@ Refactor the ClinicOS frontend into a clean 3-level navigation hierarchy: compac
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-| Principle | Status | Notes |
-|---|---|---|
-| I. Simplicity First | ✅ PASS | 2 new files only; no heavy UI framework; components stay small and single-purpose; no premature abstractions |
-| II. Healthcare UX | ✅ PASS | Italian labels maintained; tablet-first (1024px+) improved; expandable cards unaffected; ClinicalTable untouched; unified card design system preserved |
-| III. Backend Data Authority | ✅ PASS | No clinical data moved to local state; no mock data introduced; API calls unchanged |
-| IV. Schema & API Stability | ✅ PASS | No Prisma schema changes; no backend routes touched; `/patients` API untouched |
-| V. Role-Aware Development | ✅ PASS | `TeamsLikeSidebar` receives `utente` prop and filters nav items by role; admin/operator separation preserved |
-| VI. Integration Integrity | ✅ PASS | TypeScript must compile; lint must pass; existing functionality unchanged — verified by build + manual QA |
-| VII. Environment Safety | ✅ PASS | No environment variables modified; no deployment config changed |
+| Principle                   | Status  | Notes                                                                                                                                                  |
+| --------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| I. Simplicity First         | ✅ PASS | 2 new files only; no heavy UI framework; components stay small and single-purpose; no premature abstractions                                           |
+| II. Healthcare UX           | ✅ PASS | Italian labels maintained; tablet-first (1024px+) improved; expandable cards unaffected; ClinicalTable untouched; unified card design system preserved |
+| III. Backend Data Authority | ✅ PASS | No clinical data moved to local state; no mock data introduced; API calls unchanged                                                                    |
+| IV. Schema & API Stability  | ✅ PASS | No Prisma schema changes; no backend routes touched; `/patients` API untouched                                                                         |
+| V. Role-Aware Development   | ✅ PASS | `TeamsLikeSidebar` receives `utente` prop and filters nav items by role; admin/operator separation preserved                                           |
+| VI. Integration Integrity   | ✅ PASS | TypeScript must compile; lint must pass; existing functionality unchanged — verified by build + manual QA                                              |
+| VII. Environment Safety     | ✅ PASS | No environment variables modified; no deployment config changed                                                                                        |
 
 **Gate result**: All 7 principles pass. No Complexity Tracking violations.
 
@@ -135,21 +135,48 @@ See [contracts/ui-components.md](contracts/ui-components.md). Migration path: ba
 
 ```css
 /* App.css additions */
-.teams-sidebar          { width: 64px; background: var(--navy); }
-.teams-sidebar__item    { height: 56px; /* 44px touch target + padding */ }
-.teams-sidebar__item.active { border-left: 3px solid var(--blue); }
+.teams-sidebar {
+  width: 64px;
+  background: var(--navy);
+}
+.teams-sidebar__item {
+  height: 56px; /* 44px touch target + padding */
+}
+.teams-sidebar__item.active {
+  border-left: 3px solid var(--blue);
+}
 
-.compact-topbar         { height: 36px; /* was ~48px */ }
+.compact-topbar {
+  height: 36px; /* was ~48px */
+}
 
-.main-h-nav             { height: 44px; background: var(--surface); }
-.main-h-nav__tab.active { background: var(--blue); color: #fff; }
+.main-h-nav {
+  height: 44px;
+  background: var(--surface);
+}
+.main-h-nav__tab.active {
+  background: var(--blue);
+  color: #fff;
+}
 
 /* app-additions.css additions */
-.context-sub-tabs       { padding: 6px 12px; }
-.context-sub-tabs__pill { height: 28px; border-radius: 14px; font-size: 11.5px; }
-.context-sub-tabs__pill.active { background: var(--blue); color: #fff; }
+.context-sub-tabs {
+  padding: 6px 12px;
+}
+.context-sub-tabs__pill {
+  height: 28px;
+  border-radius: 14px;
+  font-size: 11.5px;
+}
+.context-sub-tabs__pill.active {
+  background: var(--blue);
+  color: #fff;
+}
 
-.patient-compact-header { height: 56px; padding: 0 12px; }
+.patient-compact-header {
+  height: 56px;
+  padding: 0 12px;
+}
 ```
 
 ---
@@ -159,36 +186,43 @@ See [contracts/ui-components.md](contracts/ui-components.md). Migration path: ba
 Tasks are ordered by dependency. Each task is independently deployable and testable.
 
 ### T1 — CSS Foundation (no component changes)
+
 **Goal**: Apply new sizing tokens to existing components so layout proportions are visible before component extraction.
 **Files**: `App.css`, `app-additions.css`
 **Test**: `npm run build` passes; sidebar fits 64px; tabs look larger.
 
 ### T2 — TeamsLikeSidebar component
+
 **Goal**: Extract sidebar from App.tsx into `TeamsLikeSidebar.tsx`. App.tsx wires `<TeamsLikeSidebar>` replacing the inline block.
 **Files**: `TeamsLikeSidebar.tsx` (new), `App.tsx` (import + usage)
 **Test**: Sidebar renders identically at all resolutions; role-based items correct; badge count correct; logout works.
 
 ### T3 — Compact topbar
+
 **Goal**: Remove breadcrumb element from topbar in App.tsx. Apply `.compact-topbar` class.
 **Files**: `App.tsx`
 **Test**: Topbar is single row, ~36px height; search button functional.
 
 ### T4 — MainHorizontalNav + ContextSubTabs
+
 **Goal**: Rename `PageTabs`→`MainHorizontalNav` and `SectionTabs`→`ContextSubTabs` in NavComponents.tsx with new CSS classes. Add backward-compat aliases.
 **Files**: `NavComponents.tsx`
 **Test**: PatientDetail.tsx renders with new styles without import changes (aliases work); L2 tabs are 44px; L3 pills are 28px.
 
 ### T5 — PatientCompactHeader component
+
 **Goal**: Extract patient header from PatientDetail.tsx into `PatientCompactHeader.tsx`. Apply compact layout with name/MRN/age/sex/room/allergy.
 **Files**: `PatientCompactHeader.tsx` (new), `PatientDetail.tsx` (import + usage)
 **Test**: Header ≤56px; back button works; allergy badge shows if allergie.length > 0; long names truncate.
 
 ### T6 — Content margin reduction
+
 **Goal**: Reduce top padding in content sections; bring first clinical card closer to nav.
 **Files**: `app-additions.css` (section padding), `App.css` (`.page-content` padding-top)
 **Test**: First card visible without scroll on 1024x768 after header+nav stack.
 
 ### T7 — QA pass at all viewports
+
 **Goal**: Full manual QA checklist from quickstart.md at 1024x768, 1180x820, 1366x1024, desktop.
 **Test**: All items in quickstart.md QA checklist pass; `npm run build` clean.
 

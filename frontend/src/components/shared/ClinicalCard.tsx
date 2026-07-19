@@ -62,7 +62,10 @@ export function ClinicalCard({
     onEdit?.();
   }
 
-  const sectionClass = 'clinical-card' + (collapsed ? ' clinical-card--collapsed' : '') + (className ? ` ${className}` : '');
+  const sectionClass =
+    'clinical-card' +
+    (collapsed ? ' clinical-card--collapsed' : '') +
+    (className ? ` ${className}` : '');
   const contentStyle: React.CSSProperties = collapsed
     ? { height: 0 }
     : contentHeight === 'auto'
@@ -79,10 +82,16 @@ export function ClinicalCard({
         onClick={handleToggle}
         onKeyDown={onHeaderKeyDown}
       >
-        <h3 id={titleId} className="clinical-card__title">{title}</h3>
+        <h3 id={titleId} className="clinical-card__title">
+          {title}
+        </h3>
         <div className="clinical-card__actions">
           {onEdit && (
-            <button type="button" className="clinical-card__edit btn-link" onClick={handleEditClick}>
+            <button
+              type="button"
+              className="clinical-card__edit btn-link"
+              onClick={handleEditClick}
+            >
               {editLabel}
             </button>
           )}
@@ -90,16 +99,28 @@ export function ClinicalCard({
             type="button"
             className="clinical-card__toggle"
             aria-label="Espandi / Comprimi"
-            onClick={(e) => { e.stopPropagation(); handleToggle(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggle();
+            }}
           >
             <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false">
-              <path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M3 5l4 4 4-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
         </div>
       </div>
       <div className="clinical-card__content" style={contentStyle}>
-        <div ref={innerRef} className="clinical-card__content-inner">{children}</div>
+        <div ref={innerRef} className="clinical-card__content-inner">
+          {children}
+        </div>
       </div>
     </section>
   );

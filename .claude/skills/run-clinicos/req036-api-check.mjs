@@ -8,14 +8,25 @@ const get = async (id) => (await fetch(`${BASE}/${id}`, { headers: H })).json();
 
 const upload = async (names) => {
   const fd = new FormData();
-  names.forEach((n) => fd.append('files', new Blob([`Contenuto di ${n}\n`], { type: 'text/plain' }), n));
+  names.forEach((n) =>
+    fd.append('files', new Blob([`Contenuto di ${n}\n`], { type: 'text/plain' }), n),
+  );
   const r = await fetch(BASE, { method: 'POST', headers: H, body: fd });
   return { status: r.status, body: await r.json() };
 };
 
 const run = async () => {
-  let pass = 0, fail = 0;
-  const ok = (cond, msg) => { if (cond) { pass++; log('  PASS', msg); } else { fail++; log('  FAIL', msg); } };
+  let pass = 0,
+    fail = 0;
+  const ok = (cond, msg) => {
+    if (cond) {
+      pass++;
+      log('  PASS', msg);
+    } else {
+      fail++;
+      log('  FAIL', msg);
+    }
+  };
 
   // 1. create a job with 3 files
   const up = await upload(['a.txt', 'b.txt', 'c.txt']);
@@ -27,7 +38,11 @@ const run = async () => {
   // 2. reorder: reverse
   const ids = job.documents.map((d) => d.id);
   const rev = [...ids].reverse();
-  await fetch(`${BASE}/${id}/reorder`, { method: 'POST', headers: { ...H, 'Content-Type': 'application/json' }, body: JSON.stringify({ order: rev }) });
+  await fetch(`${BASE}/${id}/reorder`, {
+    method: 'POST',
+    headers: { ...H, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ order: rev }),
+  });
   const afterReorder = await get(id);
   ok(afterReorder.documents[0].id === rev[0], 'order persisted (first = reversed first)');
 
@@ -59,4 +74,7 @@ const run = async () => {
   log(`\nREQ-036 API check: ${pass} passed, ${fail} failed`);
   process.exit(fail ? 1 : 0);
 };
-run().catch((e) => { console.error('FAIL', e); process.exit(1); });
+run().catch((e) => {
+  console.error('FAIL', e);
+  process.exit(1);
+});

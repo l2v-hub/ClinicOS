@@ -10,7 +10,8 @@
 
 export const MERGE_VERSION = '1.0.0';
 
-export type FieldStatus = 'extracted' | 'missing' | 'conflict' | 'low_confidence' | 'manually_confirmed';
+export type FieldStatus =
+  'extracted' | 'missing' | 'conflict' | 'low_confidence' | 'manually_confirmed';
 
 export interface Provenance {
   docId: string;
@@ -102,7 +103,13 @@ function isEmpty(v: unknown): boolean {
   return false;
 }
 function prov(doc: DocResult, snippet?: string): Provenance {
-  return { docId: doc.docId, filename: doc.filename, docDate: doc.docDate, model: doc.model, snippet };
+  return {
+    docId: doc.docId,
+    filename: doc.filename,
+    docDate: doc.docDate,
+    model: doc.model,
+    snippet,
+  };
 }
 function byRecency(a: Provenance, b: Provenance): number {
   return (b.docDate ?? '').localeCompare(a.docDate ?? '');
@@ -115,9 +122,7 @@ function mergeScalar(
   pick: (d: DocResult) => unknown,
   opts: MergeOptions,
 ): MergedField {
-  const contributing = docs
-    .map((d) => ({ d, v: pick(d) }))
-    .filter(({ v }) => !isEmpty(v));
+  const contributing = docs.map((d) => ({ d, v: pick(d) })).filter(({ v }) => !isEmpty(v));
 
   if (contributing.length === 0) {
     return { status: 'missing', value: '', sources: [] };
@@ -138,7 +143,10 @@ function mergeScalar(
   }
 
   // Conflict: multiple distinct values. Never auto-pick.
-  const candidates: Candidate[] = [...groups.values()].map((g) => ({ value: g.value, sources: g.sources }));
+  const candidates: Candidate[] = [...groups.values()].map((g) => ({
+    value: g.value,
+    sources: g.sources,
+  }));
   if (opts.preferRecent) {
     candidates.sort((a, b) => byRecency(a.sources[0], b.sources[0]));
   }
@@ -188,7 +196,10 @@ function mergeList(field: string, docs: DocResult[]): MergedList {
     } else {
       // Same key, differing details across docs -> item conflict (e.g. updated therapy dose).
       anyConflict = true;
-      const candidates: Candidate[] = [...distinct.values()].map((g) => ({ value: g.item, sources: g.sources }));
+      const candidates: Candidate[] = [...distinct.values()].map((g) => ({
+        value: g.item,
+        sources: g.sources,
+      }));
       items.push({
         key,
         value: candidates[0].value as Record<string, unknown>,
@@ -211,12 +222,25 @@ function truncateSnippet(s: string, max = 120): string {
 }
 
 const ANAGRAFICA_FIELDS = [
-  'nome', 'cognome', 'dataNascita', 'sesso', 'email', 'telefono', 'indirizzo',
-  'contattoEmergenzaNome', 'contattoEmergenzaTel',
+  'nome',
+  'cognome',
+  'dataNascita',
+  'sesso',
+  'email',
+  'telefono',
+  'indirizzo',
+  'contattoEmergenzaNome',
+  'contattoEmergenzaTel',
 ];
 const CARTELLA_SCALARS = [
-  'statoRicovero', 'cameraNumero', 'lettoNumero', 'codiceFiscale', 'patologiaIngresso',
-  'dataRicovero', 'noteGenerali', 'medicoCurante',
+  'statoRicovero',
+  'cameraNumero',
+  'lettoNumero',
+  'codiceFiscale',
+  'patologiaIngresso',
+  'dataRicovero',
+  'noteGenerali',
+  'medicoCurante',
 ];
 
 /** Deterministically merge per-document extractions into one proposal. */
@@ -235,7 +259,10 @@ export function mergeExtractions(docs: DocResult[], opts: MergeOptions = {}): Me
   }
 
   // Report counts.
-  let filled = 0, missing = 0, conflict = 0, duplicate = 0;
+  let filled = 0,
+    missing = 0,
+    conflict = 0,
+    duplicate = 0;
   const tally = (mf: MergedField) => {
     if (mf.status === 'conflict') conflict++;
     else if (mf.status === 'missing') missing++;

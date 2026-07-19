@@ -11,7 +11,10 @@ import path from 'node:path';
 
 const PATIENT = 'Moretti, Elena';
 const DRUG = 'TestFarmaco241B';
-const EVIDENCE_DIR = path.resolve(__dirname, '../../artifacts/task-validation/241-medication-weekday-schedule');
+const EVIDENCE_DIR = path.resolve(
+  __dirname,
+  '../../artifacts/task-validation/241-medication-weekday-schedule',
+);
 
 const IGNORED_CONSOLE_RE = /descendant of|nested|hydration/i;
 
@@ -32,11 +35,15 @@ function pillText(page: Page) {
   return page.locator('[data-testid="therapy-days-summary"]').first();
 }
 
-test('#241 PUT normalizes giorniSettimana on edit (regression for bypass)', async ({ page }, testInfo) => {
+test('#241 PUT normalizes giorniSettimana on edit (regression for bypass)', async ({
+  page,
+}, testInfo) => {
   mkdirSync(path.join(EVIDENCE_DIR, 'screenshots'), { recursive: true });
 
   const consoleErrors: string[] = [];
-  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+  page.on('console', (m) => {
+    if (m.type() === 'error') consoleErrors.push(m.text());
+  });
 
   const httpIssues: string[] = [];
   page.on('response', (r: Response) => {
@@ -59,7 +66,10 @@ test('#241 PUT normalizes giorniSettimana on edit (regression for bypass)', asyn
   if (await addBodyLink.count()) {
     await addBodyLink.first().click();
   } else {
-    await page.locator('.cts__header-right button', { hasText: 'Aggiungi farmaco' }).first().click();
+    await page
+      .locator('.cts__header-right button', { hasText: 'Aggiungi farmaco' })
+      .first()
+      .click();
   }
   await page.waitForSelector('[data-testid="therapy-weekdays"]', { timeout: 8000 });
   await expect(page.locator('[data-testid="therapy-weekdays"]')).toBeVisible();
@@ -74,14 +84,19 @@ test('#241 PUT normalizes giorniSettimana on edit (regression for bypass)', asyn
   }
 
   const [createResp] = await Promise.all([
-    page.waitForResponse((r) => /\/patients\/.+\/therap/i.test(r.url()) && r.request().method() === 'POST', { timeout: 10_000 }),
+    page.waitForResponse(
+      (r) => /\/patients\/.+\/therap/i.test(r.url()) && r.request().method() === 'POST',
+      { timeout: 10_000 },
+    ),
     page.getByRole('button', { name: /Salva terapia/i }).click(),
   ]);
   expect(createResp.status(), `POST status was ${createResp.status()}`).toBe(201);
 
   // AC2/AC3 — pill shows all four selected days.
   await expect(pillText(page)).toHaveText('Lun Mar Gio Dom', { timeout: 10_000 });
-  await page.screenshot({ path: path.join(EVIDENCE_DIR, 'screenshots', 'after-create-days-pill.png') });
+  await page.screenshot({
+    path: path.join(EVIDENCE_DIR, 'screenshots', 'after-create-days-pill.png'),
+  });
 
   // Re-open the therapy for editing (icon-btn "Modifica" on the row for our new drug) and toggle
   // OFF weekday-2 (Mar). This exercises the PUT route under test.
@@ -96,7 +111,10 @@ test('#241 PUT normalizes giorniSettimana on edit (regression for bypass)', asyn
   await expect(day2Toggle).toHaveAttribute('aria-pressed', 'false');
 
   const [updateResp] = await Promise.all([
-    page.waitForResponse((r) => /\/patients\/.+\/therap/i.test(r.url()) && r.request().method() === 'PUT', { timeout: 10_000 }),
+    page.waitForResponse(
+      (r) => /\/patients\/.+\/therap/i.test(r.url()) && r.request().method() === 'PUT',
+      { timeout: 10_000 },
+    ),
     page.getByRole('button', { name: /Aggiorna/i }).click(),
   ]);
   expect(updateResp.status(), `PUT status was ${updateResp.status()}`).toBeGreaterThanOrEqual(200);
@@ -104,7 +122,9 @@ test('#241 PUT normalizes giorniSettimana on edit (regression for bypass)', asyn
 
   // AC6 — pill now reflects the canonicalized PUT-persisted set (Mar removed).
   await expect(pillText(page)).toHaveText('Lun Gio Dom', { timeout: 10_000 });
-  await page.screenshot({ path: path.join(EVIDENCE_DIR, 'screenshots', 'after-put-edit-days-pill.png') });
+  await page.screenshot({
+    path: path.join(EVIDENCE_DIR, 'screenshots', 'after-put-edit-days-pill.png'),
+  });
 
   // AC4 — persistence after reload: reload, navigate back to the tab, pill must be unchanged.
   await page.reload({ waitUntil: 'networkidle' });
@@ -119,6 +139,9 @@ test('#241 PUT normalizes giorniSettimana on edit (regression for bypass)', asyn
   await testInfo.attach('result', { path: resultPath, contentType: 'image/png' });
 
   const newConsoleErrors = consoleErrors.filter((e) => !IGNORED_CONSOLE_RE.test(e));
-  expect(newConsoleErrors, `unexpected console errors: ${newConsoleErrors.join(' | ')}`).toHaveLength(0);
+  expect(
+    newConsoleErrors,
+    `unexpected console errors: ${newConsoleErrors.join(' | ')}`,
+  ).toHaveLength(0);
   expect(httpIssues, `unexpected HTTP 4xx/5xx: ${httpIssues.join(' | ')}`).toHaveLength(0);
 });

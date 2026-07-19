@@ -27,18 +27,32 @@ export function DischargeTherapyReview({ rows, onChange }: Props) {
       data-testid="discharge-therapy-review"
       aria-label="Terapie rilevate dalla lettera di dimissioni"
     >
-      <div className="discharge-therapy-review__title">Terapie rilevate dalla lettera di dimissioni</div>
+      <div className="discharge-therapy-review__title">
+        Terapie rilevate dalla lettera di dimissioni
+      </div>
       {daVerificare > 0 && (
-        <p className="discharge-therapy-review__alert" role="alert" data-testid="discharge-therapy-alert">
-          {daVerificare} {daVerificare > 1 ? 'righe' : 'riga'} da verificare: dati incompleti, controlla prima di salvare.
+        <p
+          className="discharge-therapy-review__alert"
+          role="alert"
+          data-testid="discharge-therapy-alert"
+        >
+          {daVerificare} {daVerificare > 1 ? 'righe' : 'riga'} da verificare: dati incompleti,
+          controlla prima di salvare.
         </p>
       )}
       <div className="discharge-therapy-review__scroll" style={{ overflowX: 'auto' }}>
         <table className="discharge-therapy-review__table">
           <thead>
             <tr>
-              <th>Farmaco</th><th>Dosaggio</th><th>Via</th><th>Quantità</th>
-              <th>Orari</th><th>Giorni</th><th>Data inizio</th><th>Classe</th><th>Stato</th>
+              <th>Farmaco</th>
+              <th>Dosaggio</th>
+              <th>Via</th>
+              <th>Quantità</th>
+              <th>Orari</th>
+              <th>Giorni</th>
+              <th>Data inizio</th>
+              <th>Classe</th>
+              <th>Stato</th>
             </tr>
           </thead>
           <tbody>
@@ -50,25 +64,86 @@ export function DischargeTherapyReview({ rows, onChange }: Props) {
                 data-farmaco={r.farmacoNome}
                 className={r.stato === 'da_verificare' ? 'is-da-verificare' : ''}
               >
-                <td><input aria-label="Farmaco" value={r.farmacoNome} onChange={(e) => update(i, { farmacoNome: e.target.value })} /></td>
-                <td><input aria-label="Dosaggio" value={r.dosaggio} onChange={(e) => update(i, { dosaggio: e.target.value })} /></td>
-                <td><input aria-label="Via" value={r.viaSomministrazione} onChange={(e) => update(i, { viaSomministrazione: e.target.value })} /></td>
-                <td><input aria-label="Quantità" value={r.quantita} onChange={(e) => update(i, { quantita: e.target.value })} /></td>
-                <td><input aria-label="Orari" value={r.orari.join(', ')} onChange={(e) => update(i, { orari: e.target.value.split(',').map((s) => s.trim()).filter(Boolean) })} /></td>
-                <td><input aria-label="Giorni" value={r.giorni.join(' ')} onChange={(e) => update(i, { giorni: e.target.value.split(/\s+/).filter(Boolean) })} /></td>
-                <td><input aria-label="Data inizio" value={r.dataInizio} onChange={(e) => update(i, { dataInizio: e.target.value })} /></td>
-                <td><input aria-label="Classe" value={r.classe} onChange={(e) => update(i, { classe: e.target.value })} /></td>
                 <td>
-                  {r.stato === 'da_verificare'
-                    ? <span className="discharge-therapy-review__badge is-verify">da verificare</span>
-                    : <span className="discharge-therapy-review__badge is-ok">ok</span>}
+                  <input
+                    aria-label="Farmaco"
+                    value={r.farmacoNome}
+                    onChange={(e) => update(i, { farmacoNome: e.target.value })}
+                  />
+                </td>
+                <td>
+                  <input
+                    aria-label="Dosaggio"
+                    value={r.dosaggio}
+                    onChange={(e) => update(i, { dosaggio: e.target.value })}
+                  />
+                </td>
+                <td>
+                  <input
+                    aria-label="Via"
+                    value={r.viaSomministrazione}
+                    onChange={(e) => update(i, { viaSomministrazione: e.target.value })}
+                  />
+                </td>
+                <td>
+                  <input
+                    aria-label="Quantità"
+                    value={r.quantita}
+                    onChange={(e) => update(i, { quantita: e.target.value })}
+                  />
+                </td>
+                <td>
+                  <input
+                    aria-label="Orari"
+                    value={r.orari.join(', ')}
+                    onChange={(e) =>
+                      update(i, {
+                        orari: e.target.value
+                          .split(',')
+                          .map((s) => s.trim())
+                          .filter(Boolean),
+                      })
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    aria-label="Giorni"
+                    value={r.giorni.join(' ')}
+                    onChange={(e) =>
+                      update(i, { giorni: e.target.value.split(/\s+/).filter(Boolean) })
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    aria-label="Data inizio"
+                    value={r.dataInizio}
+                    onChange={(e) => update(i, { dataInizio: e.target.value })}
+                  />
+                </td>
+                <td>
+                  <input
+                    aria-label="Classe"
+                    value={r.classe}
+                    onChange={(e) => update(i, { classe: e.target.value })}
+                  />
+                </td>
+                <td>
+                  {r.stato === 'da_verificare' ? (
+                    <span className="discharge-therapy-review__badge is-verify">da verificare</span>
+                  ) : (
+                    <span className="discharge-therapy-review__badge is-ok">ok</span>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p className="discharge-therapy-review__hint">Le righe verranno salvate nella terapia del paziente alla conferma.</p>
+      <p className="discharge-therapy-review__hint">
+        Le righe verranno salvate nella terapia del paziente alla conferma.
+      </p>
     </section>
   );
 }

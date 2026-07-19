@@ -49,7 +49,10 @@ export class MockExtractionProvider implements AiExtractionProvider {
       promptVersion: EXTRACTION_PROMPT_VERSION,
       data,
       warnings: [
-        { code: 'mock_provider', message: 'Provider mock attivo: estrazione vuota, nessun dato inventato.' },
+        {
+          code: 'mock_provider',
+          message: 'Provider mock attivo: estrazione vuota, nessun dato inventato.',
+        },
       ],
       valid: true,
     };

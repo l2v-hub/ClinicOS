@@ -2,17 +2,20 @@
 // (flag off): senza attivazione esplicita il comportamento è identico a oggi (nessuna regressione).
 
 export interface AssistantLlmConfig {
-  llmEnabled: boolean;      // master
-  planEnabled: boolean;     // F1: planner LLM
-  composeEnabled: boolean;  // F2: composer LLM
-  planModel: string;        // provider:model_id
-  composeModel: string;     // provider:model_id (solo host EU/self-hosted approvato)
+  llmEnabled: boolean; // master
+  planEnabled: boolean; // F1: planner LLM
+  composeEnabled: boolean; // F2: composer LLM
+  planModel: string; // provider:model_id
+  composeModel: string; // provider:model_id (solo host EU/self-hosted approvato)
   timeoutMs: number;
-  runtimeUrl: string;       // clinicos-ai-runtime
+  runtimeUrl: string; // clinicos-ai-runtime
 }
 
 const bool = (v: string | undefined) => v === 'true' || v === '1';
-const int = (v: string | undefined, d: number) => { const n = parseInt(v ?? '', 10); return Number.isFinite(n) ? n : d; };
+const int = (v: string | undefined, d: number) => {
+  const n = parseInt(v ?? '', 10);
+  return Number.isFinite(n) ? n : d;
+};
 
 export function loadAssistantLlmConfig(env: NodeJS.ProcessEnv = process.env): AssistantLlmConfig {
   const llmEnabled = bool(env.AI_ASSISTANT_LLM_ENABLED);

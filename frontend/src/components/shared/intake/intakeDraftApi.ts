@@ -11,7 +11,9 @@ function resolveApiUrl(): string {
     const raw = (import.meta as unknown as { env?: { VITE_API_URL?: string; PROD?: boolean } }).env;
     if (!raw) throw new Error('no env');
     const url = raw.VITE_API_URL?.trim();
-    const fallback = raw.PROD ? 'https://clinicos-backend-production-df88.up.railway.app' : 'http://localhost:3001';
+    const fallback = raw.PROD
+      ? 'https://clinicos-backend-production-df88.up.railway.app'
+      : 'http://localhost:3001';
     return (url ? url : fallback).replace(/\/$/, '');
   } catch {
     return 'http://localhost:3001';

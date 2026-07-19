@@ -32,7 +32,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
    display: flex;
    flex-direction: column;
  }
- 
+
  .app-header {
 -  background-color: #2563eb;
 +  background-color: #1e40af;
@@ -46,7 +46,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 +  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
  }
- 
+
  .app-title {
    font-size: 1.5rem;
    font-weight: 600;
@@ -54,13 +54,13 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  align-items: center;
 +  gap: 0.5rem;
  }
- 
+
  .app-content {
    display: flex;
    flex: 1;
    overflow: hidden;
  }
- 
+
  .sidebar {
 -  width: 16rem;
 -  background-color: #f9fafb;
@@ -71,7 +71,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
    padding: 1.5rem 0;
 +  overflow-y: auto;
  }
- 
+
  .sidebar-nav {
    display: flex;
    flex-direction: column;
@@ -141,13 +141,13 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  text-align: center;
 +  padding: 3rem 1rem;
  }
- 
+
  .user-info {
    display: flex;
    align-items: center;
    gap: 0.75rem;
  }
- 
+
  .user-avatar {
 -  width: 2.5rem;
 -  height: 2.5rem;
@@ -167,7 +167,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  justify-content: center;
 +  font-weight: 600;
  }
- 
+
  .login-container {
    display: flex;
    align-items: center;
@@ -242,7 +242,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  margin-bottom: 2rem;
 +  text-align: center;
  }
- 
+
  .login-button {
    width: 100%;
    padding: 0.75rem;
@@ -254,11 +254,11 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
    cursor: pointer;
    transition: background-color 0.2s;
  }
- 
+
  .login-button:hover {
    background-color: #2563eb;
  }
-- 
+-
 -.nav-item {
 -  padding: 0.75rem 1rem;
 -  color: #4b5563;
@@ -321,7 +321,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  }
 ```
 
-```diff
+````diff
 --- a/src/App.tsx
 +++ b/src/App.tsx
 @@ -1,19 +1,139 @@
@@ -330,7 +330,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import viteLogo from '/vite.svg'
 +import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
  import './App.css'
- 
+
 +// Layout Components
 +const Header = () => (
 +  <header className="app-header">
@@ -349,7 +349,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +
 +const Sidebar = () => {
 +  const location = useLocation()
-+  
++
 +  const navItems = [
 +    { path: '/operator/dashboard', label: 'Dashboard', icon: '📊' },
 +    { path: '/operator/agenda', label: 'Agenda', icon: '📅' },
@@ -412,7 +412,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +        <div className="placeholder-text">System notifications will appear here</div>
 +      </div>
 +    </div>
-+ 
++
 
 ## [REVIEWER] (15402ms — compatible/DeepSeek-V3.2)
 
@@ -436,7 +436,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
      "@vitejs/plugin-react": "^4.3.1",
      "eslint": "^8.57.0",
      "eslint-plugin-react-hooks": "^4.6.2",
-```
+````
 
 ```diff
 --- a/src/App.tsx
@@ -445,7 +445,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 +import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useParams } from 'react-router-dom'
  import './App.css'
- 
+
  // Layout Components
  const Header = () => (
    <header className="app-header">
@@ -461,10 +461,10 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
      </div>
    </header>
  )
- 
+
  const Sidebar = () => {
    const location = useLocation()
-   
+
    const navItems = [
      { path: '/operator/dashboard', label: 'Dashboard', icon: '📊' },
      { path: '/operator/agenda', label: 'Agenda', icon: '📅' },
@@ -651,15 +651,15 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  .sidebar {
 +    width: 200px;
 +  }
-+  
++
 +  .grid-cols-2 {
 +    grid-template-columns: 1fr;
 +  }
-+  
++
 +  .app-title span {
 +    font-size: 1.25rem;
 +  }
-+  
++
 +  .user-info > div:last-child {
 +    display: none;
 +  }
@@ -669,7 +669,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  .sidebar {
 +    display: none;
 +  }
-+  
++
 +  .main-content {
 +    padding: 1rem;
 +  }
@@ -713,15 +713,15 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  .sidebar {
 +    width: 200px;
 +  }
-+  
++
 +  .grid-cols-2 {
 +    grid-template-columns: 1fr;
 +  }
-+  
++
 +  .app-title span {
 +    font-size: 1.25rem;
 +  }
-+  
++
 +  .user-info > div:last-child {
 +    display: none;
 +  }
@@ -731,7 +731,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  .sidebar {
 +    display: none;
 +  }
-+  
++
 +  .main-content {
 +    padding: 1rem;
 +  }
@@ -746,11 +746,11 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import ReactDOM from 'react-dom/client'
 -import App from './App.tsx'
  import './index.css'
- 
+
 @@ -7,4 +6,6 @@
    strictMode: false,
  })
- 
+
 -ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
 +import App from './App.tsx'
 +
@@ -785,71 +785,71 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 
 [diff-apply error] package.json: Hunk 1 context not found in package.json near line 18.
 Expected:
-    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^7.13.1",
-      "@typescript-eslint/parser": "^7.13.1",
-      "@vitejs/plugin-react": "^4.3.1",
-      "eslint": "^8.57.0",
+"devDependencies": {
+"@typescript-eslint/eslint-plugin": "^7.13.1",
+"@typescript-eslint/parser": "^7.13.1",
+"@vitejs/plugin-react": "^4.3.1",
+"eslint": "^8.57.0",
 File has 35 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 122.
 Expected:
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
+font-weight: 600;
+cursor: pointer;
+transition: background-color 0.2s;
+}
+
 File has 185 lines.
 [diff-apply error] package.json: Hunk 1 context not found in package.json near line 18.
 Expected:
-    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^7.13.1",
-      "@typescript-eslint/parser": "^7.13.1",
-      "@types/react-router-dom": "^5.3.4",
-      "@vitejs/plugin-react": "^4.3.1",
+"devDependencies": {
+"@typescript-eslint/eslint-plugin": "^7.13.1",
+"@typescript-eslint/parser": "^7.13.1",
+"@types/react-router-dom": "^5.3.4",
+"@vitejs/plugin-react": "^4.3.1",
 File has 35 lines.
 [diff-apply error] src/App.tsx: Hunk 1 context not found in src/App.tsx near line 1.
 Expected:
-  import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
-  import './App.css'
-  
-  // Layout Components
-  const Header = () => (
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
+import './App.css'
+
+// Layout Components
+const Header = () => (
 File has 123 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 158.
 Expected:
-    font-size: 0.875rem;
-    font-family: monospace;
-  }
-  
+font-size: 0.875rem;
+font-family: monospace;
+}
+
 File has 185 lines.
 [diff-apply error] package.json: Hunk 1 context not found in package.json near line 18.
 Expected:
-    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^7.13.1",
-      "@typescript-eslint/parser": "^7.13.1",
-      "@types/react-router-dom": "^6.26.0",
-      "@vitejs/plugin-react": "^4.3.1",
+"devDependencies": {
+"@typescript-eslint/eslint-plugin": "^7.13.1",
+"@typescript-eslint/parser": "^7.13.1",
+"@types/react-router-dom": "^6.26.0",
+"@vitejs/plugin-react": "^4.3.1",
 File has 35 lines.
 [diff-apply error] src/App.css: Hunk 1 context not found in src/App.css near line 158.
 Expected:
-    font-size: 0.875rem;
-    font-family: monospace;
-  }
-  
+font-size: 0.875rem;
+font-family: monospace;
+}
+
 File has 185 lines.
 [diff-apply error] src/main.tsx: Hunk 1 context not found in src/main.tsx near line 7.
 Expected:
-    strictMode: false,
-  })
-  
-  ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
-  
+strictMode: false,
+})
+
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
+
 File has 11 lines.
 [diff-apply error] package.json: Hunk 1 context not found in package.json near line 18.
 Expected:
-    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^7.13.1",
-      "@typescript-eslint/parser": "^7.13.1",
-      "@types/react-router-dom": "^6.26.1",
-      "@vitejs/plugin-react": "^4.3.1",
+"devDependencies": {
+"@typescript-eslint/eslint-plugin": "^7.13.1",
+"@typescript-eslint/parser": "^7.13.1",
+"@types/react-router-dom": "^6.26.1",
+"@vitejs/plugin-react": "^4.3.1",
 File has 35 lines.

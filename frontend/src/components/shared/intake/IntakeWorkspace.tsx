@@ -10,20 +10,28 @@ import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
 import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
 import { buildConfirmCartella } from './confirmCartella';
 
-const STEPS = [
-  'Anagrafica',
-  'Ingresso',
-  'Clinica',
-  'Moduli',
-  'Documenti',
-  'Verifica',
-] as const;
+const STEPS = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Documenti', 'Verifica'] as const;
 
 // #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
 // dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
-const CLINICAL_MODULES: ReadonlyArray<{ id: string; label: string; desc: string; available: boolean }> = [
-  { id: 'medicazioni', label: 'Medicazioni / Wound Care', desc: 'Registro medicazioni e lesioni', available: true },
-  { id: 'contenzioni', label: 'Contenzioni / Protezioni', desc: 'Registrazione contenzioni e consenso', available: true },
+const CLINICAL_MODULES: ReadonlyArray<{
+  id: string;
+  label: string;
+  desc: string;
+  available: boolean;
+}> = [
+  {
+    id: 'medicazioni',
+    label: 'Medicazioni / Wound Care',
+    desc: 'Registro medicazioni e lesioni',
+    available: true,
+  },
+  {
+    id: 'contenzioni',
+    label: 'Contenzioni / Protezioni',
+    desc: 'Registrazione contenzioni e consenso',
+    available: true,
+  },
   { id: 'braden', label: 'Scala Braden', desc: 'Rischio lesioni da pressione', available: true },
   { id: 'tinetti', label: 'Scala Tinetti', desc: 'Equilibrio e andatura', available: true },
   { id: 'nrs', label: 'Scala NRS', desc: 'Valutazione del dolore', available: true },
@@ -74,19 +82,20 @@ interface DraftData {
 // Mirrors TerapiaFarmacologicaTab.formToPayload minus patientId.
 // Produces a TherapyCreateInput object suitable for the confirmDraft payload.
 function therapyFormToInput(f: TherapyFormValue, operatoreNome?: string): Record<string, unknown> {
-  const allowed = FRACTION_PRESETS
-    .filter(p => f.allowedFractions.includes(p.key))
-    .map(p => p.key);
-  const schedules = f.tipo === 'periodica'
-    ? f.schedules
-        .filter(s => /^\d{1,2}:\d{2}$/.test(s.time))
-        .map(s => ({
-          time: s.time,
-          quantityNumerator: s.quantityNumerator,
-          quantityDenominator: s.quantityDenominator,
-          administrationUnit: s.administrationUnit,
-        }))
-    : [];
+  const allowed = FRACTION_PRESETS.filter((p) => f.allowedFractions.includes(p.key)).map(
+    (p) => p.key,
+  );
+  const schedules =
+    f.tipo === 'periodica'
+      ? f.schedules
+          .filter((s) => /^\d{1,2}:\d{2}$/.test(s.time))
+          .map((s) => ({
+            time: s.time,
+            quantityNumerator: s.quantityNumerator,
+            quantityDenominator: s.quantityDenominator,
+            administrationUnit: s.administrationUnit,
+          }))
+      : [];
   return {
     farmacoNome: f.farmacoNome,
     dataInizio: f.dataInizio,
@@ -94,7 +103,9 @@ function therapyFormToInput(f: TherapyFormValue, operatoreNome?: string): Record
     viaSomministrazione: f.viaSomministrazione,
     tipo: f.tipo,
     stato: f.stato,
-    ...(f.commercialStrengthValue.trim() ? { commercialStrengthValue: Number(f.commercialStrengthValue) } : {}),
+    ...(f.commercialStrengthValue.trim()
+      ? { commercialStrengthValue: Number(f.commercialStrengthValue) }
+      : {}),
     ...(f.commercialStrengthUnit ? { commercialStrengthUnit: f.commercialStrengthUnit } : {}),
     ...(f.pharmaceuticalForm ? { pharmaceuticalForm: f.pharmaceuticalForm } : {}),
     allowedFractions: allowed.length ? allowed.join(',') : '1',
@@ -102,8 +113,12 @@ function therapyFormToInput(f: TherapyFormValue, operatoreNome?: string): Record
     ...(f.prescrittore ? { prescrittore: f.prescrittore } : {}),
     ...(operatoreNome ? { operatoreInseritore: operatoreNome } : {}),
     ...(f.note ? { note: f.note } : {}),
-    ...(f.tipo === 'una_tantum' && f.dataSomministrazione ? { dataSomministrazione: f.dataSomministrazione } : {}),
-    ...(f.tipo === 'una_tantum' && f.orarioSomministrazione ? { orarioSomministrazione: f.orarioSomministrazione } : {}),
+    ...(f.tipo === 'una_tantum' && f.dataSomministrazione
+      ? { dataSomministrazione: f.dataSomministrazione }
+      : {}),
+    ...(f.tipo === 'una_tantum' && f.orarioSomministrazione
+      ? { orarioSomministrazione: f.orarioSomministrazione }
+      : {}),
   };
 }
 
@@ -122,7 +137,16 @@ interface IntakeWorkspaceProps {
   onBackToDocuments?: () => void;
 }
 
-export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, operatorId, operatorRole, importDraftId, onBackToDocuments }: IntakeWorkspaceProps) {
+export function IntakeWorkspace({
+  open,
+  onClose,
+  onCreated,
+  operatoreNome,
+  operatorId,
+  operatorRole,
+  importDraftId,
+  onBackToDocuments,
+}: IntakeWorkspaceProps) {
   const op = { operatorId, operatorRole };
   // Import flow starts at step 3 (Clinica) — anagrafica is already prefilled.
   const initialStep = importDraftId ? 3 : 1;
@@ -214,7 +238,9 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
     if (!open) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [open]);
 
   if (!open) return null;
@@ -236,7 +262,10 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
         .catch((err: unknown) => {
           // #234: no longer swallowed — surface an error state (no PHI in the log).
           setSaveState('error');
-          console.error('[ClinicOS] autosave bozza intake non riuscito:', err instanceof Error ? err.message : 'errore sconosciuto');
+          console.error(
+            '[ClinicOS] autosave bozza intake non riuscito:',
+            err instanceof Error ? err.message : 'errore sconosciuto',
+          );
         });
     }, 500);
   }
@@ -261,7 +290,9 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
     // #235: acceptance gate — demographics + therapy must be explicitly accepted.
     if (!acceptanceComplete()) {
       setSubmitAttempted(true);
-      setSubmitError('Prima di creare il paziente accetta l’anagrafica e la terapia (vedi checklist).');
+      setSubmitError(
+        'Prima di creare il paziente accetta l’anagrafica e la terapia (vedi checklist).',
+      );
       return;
     }
     setSubmitting(true);
@@ -280,7 +311,9 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
       ...(a.email !== undefined && { email: a.email }),
       ...(a.address !== undefined && { address: a.address }),
       ...(a.emergencyContactName !== undefined && { emergencyContactName: a.emergencyContactName }),
-      ...(a.emergencyContactPhone !== undefined && { emergencyContactPhone: a.emergencyContactPhone }),
+      ...(a.emergencyContactPhone !== undefined && {
+        emergencyContactPhone: a.emergencyContactPhone,
+      }),
     };
 
     // #265: extracted pure mapper (unit-tested) — carries allergieStatus into the cartella.
@@ -288,13 +321,14 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
 
     // Structured therapies to persist = manual TherapyFormValue rows + #156 discharge-detected rows
     // (edited in the "Terapie rilevate" table, data.terapiaImport). Both map to TherapyCreateInput.
-    const manualTherapies = Array.isArray(data.terapia) && (data.terapia as TherapyFormValue[]).length > 0
-      ? (data.terapia as TherapyFormValue[]).map(f => therapyFormToInput(f, operatoreNome))
-      : [];
+    const manualTherapies =
+      Array.isArray(data.terapia) && (data.terapia as TherapyFormValue[]).length > 0
+        ? (data.terapia as TherapyFormValue[]).map((f) => therapyFormToInput(f, operatoreNome))
+        : [];
     const importedTherapies = Array.isArray(data.terapiaImport)
       ? (data.terapiaImport as DischargeTherapyRow[])
-          .filter(r => (r.farmacoNome || '').trim())
-          .map(r => dischargeRowToTherapyInput(r, operatoreNome))
+          .filter((r) => (r.farmacoNome || '').trim())
+          .map((r) => dischargeRowToTherapyInput(r, operatoreNome))
       : [];
     const allTherapies = [...manualTherapies, ...importedTherapies];
 
@@ -355,18 +389,29 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
   }
 
   return (
-    <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Nuovo paziente — intake">
+    <div
+      className="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Nuovo paziente — intake"
+    >
       <div className="modal-card import-modal import-modal--intake">
         <header className="import-modal__head" data-testid="patient-intake-header">
           <h2>
             Nuovo paziente
             {operatoreNome ? ` — ${operatoreNome}` : ''}
           </h2>
-          <button className="icon-btn" onClick={onClose} aria-label="Chiudi">✕</button>
+          <button className="icon-btn" onClick={onClose} aria-label="Chiudi">
+            ✕
+          </button>
         </header>
 
         {/* 6-step stepper */}
-        <ol className="import-modal__steps" aria-label="Fasi di registrazione" data-testid="patient-intake-stepper">
+        <ol
+          className="import-modal__steps"
+          aria-label="Fasi di registrazione"
+          data-testid="patient-intake-stepper"
+        >
           {STEPS.map((label, i) => {
             const n = i + 1;
             const isDone = n < step;
@@ -377,7 +422,9 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
                 className={isDone ? 'is-done' : isActive ? 'is-active' : ''}
                 aria-current={isActive ? 'step' : undefined}
               >
-                <span className="import-step__marker" aria-hidden="true">{isDone ? '✓' : n}</span>
+                <span className="import-step__marker" aria-hidden="true">
+                  {isDone ? '✓' : n}
+                </span>
                 <span className="import-step__label">{label}</span>
               </li>
             );
@@ -426,10 +473,15 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
               {step === 4 && (
                 <div data-testid="intake-step-4" data-draft-id={draftId ?? undefined}>
                   <p className="cr-empty" style={{ marginBottom: 12 }}>
-                    Moduli operativi disponibili nella sezione <strong>Moduli</strong> della scheda paziente dopo la presa in carico.
-                    Seleziona (facoltativo) il modulo da aprire subito dopo la creazione del paziente.
+                    Moduli operativi disponibili nella sezione <strong>Moduli</strong> della scheda
+                    paziente dopo la presa in carico. Seleziona (facoltativo) il modulo da aprire
+                    subito dopo la creazione del paziente.
                   </p>
-                  <div className="intake-modules-grid" role="list" data-testid="intake-modules-grid">
+                  <div
+                    className="intake-modules-grid"
+                    role="list"
+                    data-testid="intake-modules-grid"
+                  >
                     {CLINICAL_MODULES.map((m) => {
                       const selected = selectedModuleId === m.id;
                       return (
@@ -440,17 +492,24 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
                             data-testid={`intake-module-${m.id}`}
                             aria-pressed={selected}
                             disabled={!m.available}
-                            onClick={() => setSelectedModuleId((cur) => (cur === m.id ? null : m.id))}
+                            onClick={() =>
+                              setSelectedModuleId((cur) => (cur === m.id ? null : m.id))
+                            }
                           >
                             <div className="intake-module-card__head">
                               <span className="intake-module-card__title">{m.label}</span>
-                              <span className={`status-badge status-badge--${m.available ? 'success' : 'neutral'}`}>
+                              <span
+                                className={`status-badge status-badge--${m.available ? 'success' : 'neutral'}`}
+                              >
                                 {m.available ? 'Disponibile' : 'In arrivo'}
                               </span>
                             </div>
                             <p className="intake-module-card__desc">{m.desc}</p>
                             {selected && (
-                              <p className="intake-module-card__hint" data-testid={`intake-module-${m.id}-hint`}>
+                              <p
+                                className="intake-module-card__hint"
+                                data-testid={`intake-module-${m.id}-hint`}
+                              >
                                 Si aprirà dopo la creazione del paziente
                               </p>
                             )}
@@ -470,7 +529,8 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
                 <div data-draft-id={draftId ?? undefined}>
                   {duplicateWarn && (
                     <div className="import-modal__warning" role="alert">
-                      <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati potrebbe già esistere.
+                      <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati
+                      potrebbe già esistere.
                       <br />
                       <button
                         className="btn-secondary"
@@ -528,21 +588,26 @@ export function IntakeWorkspace({ open, onClose, onCreated, operatoreNome, opera
             {saveState === 'error' && 'Errore salvataggio — riprova'}
           </span>
           {onBackToDocuments ? (
-            <button className="btn-ghost" onClick={onBackToDocuments}>← Torna ai documenti</button>
+            <button className="btn-ghost" onClick={onBackToDocuments}>
+              ← Torna ai documenti
+            </button>
           ) : (
-            <button className="btn-ghost" onClick={onClose}>Annulla</button>
+            <button className="btn-ghost" onClick={onClose}>
+              Annulla
+            </button>
           )}
-          <button
-            className="btn-secondary"
-            onClick={handleBack}
-            disabled={isFirst || loading}
-          >
+          <button className="btn-secondary" onClick={handleBack} disabled={isFirst || loading}>
             ← Indietro
           </button>
           <button
             className="btn-primary"
             onClick={handleNext}
-            disabled={loading || !!error || (step === 1 && !anagraficaValid()) || (isLast && (submitting || !acceptanceComplete()))}
+            disabled={
+              loading ||
+              !!error ||
+              (step === 1 && !anagraficaValid()) ||
+              (isLast && (submitting || !acceptanceComplete()))
+            }
           >
             {isLast ? 'Conferma' : 'Avanti →'}
           </button>

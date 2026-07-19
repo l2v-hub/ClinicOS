@@ -7,7 +7,11 @@ import { ClinicalTableSection, fmtDateTime } from '../cartella/shared';
 // chart tab was removed (dedup vs "Sezioni Cliniche (testo)"). Renders nothing when the
 // legacy object has no populated field — no dead panel for patients intaken after the change.
 
-export function LegacyAnamnesisView({ anamnesi }: { anamnesi: Partial<Anamnesi> | null | undefined }) {
+export function LegacyAnamnesisView({
+  anamnesi,
+}: {
+  anamnesi: Partial<Anamnesi> | null | undefined;
+}) {
   if (!hasLegacyAnamnesis(anamnesi)) return null;
 
   const rows = legacyAnamnesisRows(anamnesi);

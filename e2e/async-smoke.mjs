@@ -18,7 +18,11 @@ await new Promise((r) => server.once('listening', r));
 const { port } = server.address();
 const base = `http://127.0.0.1:${port}/ai/extraction/jobs`;
 const af = (url, opts = {}) => fetch(url, { ...opts, headers: { ...OP, ...(opts.headers ?? {}) } });
-const PDF = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.from('async test'), Buffer.from('%%EOF')]);
+const PDF = Buffer.concat([
+  Buffer.from('%PDF-1.4\n'),
+  Buffer.from('async test'),
+  Buffer.from('%%EOF'),
+]);
 const get = (id) => af(`${base}/${id}`).then((r) => r.json());
 
 let jobId;
@@ -31,30 +35,50 @@ try {
   assert.equal(res.status, 202, 'process returns 202');
   const enq = await res.json();
   assert.equal(enq.status, 'queued', 'status queued immediately');
-  assert.ok('elapsedSeconds' in enq && 'canCancel' in enq && 'stage' in enq, 'status payload has async fields');
+  assert.ok(
+    'elapsedSeconds' in enq && 'canCancel' in enq && 'stage' in enq,
+    'status payload has async fields',
+  );
 
   // 2. Worker step drives the state machine to review_ready.
   await runJob(jobId);
   let job = await get(jobId);
-  assert.equal(job.status, 'review_ready', `worker -> review_ready (got ${job.status}/${job.error ?? ''})`);
+  assert.equal(
+    job.status,
+    'review_ready',
+    `worker -> review_ready (got ${job.status}/${job.error ?? ''})`,
+  );
   assert.equal(job.stage, 'completed', 'stage completed');
 
   // 3. Orphan reclaim: simulate a worker death mid-flight -> back to queued.
-  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'waiting_for_model', stage: 'model_processing' } });
+  await prisma.importJob.update({
+    where: { id: jobId },
+    data: { status: 'waiting_for_model', stage: 'model_processing' },
+  });
   assert.ok((await reclaimOrphans()) >= 1, 'reclaimed orphaned job');
   assert.equal((await get(jobId)).status, 'queued', 'orphan back to queued (work not lost)');
 
   // 4. Retry a failed job without re-upload; documents preserved.
-  await prisma.importJob.update({ where: { id: jobId }, data: { status: 'failed', error: '[provider_error] simulato', stage: 'error' } });
+  await prisma.importJob.update({
+    where: { id: jobId },
+    data: { status: 'failed', error: '[provider_error] simulato', stage: 'error' },
+  });
   res = await af(`${base}/${jobId}/retry`, { method: 'POST' });
   assert.equal(res.status, 202, 'retry returns 202');
   assert.equal((await res.json()).status, 'queued', 'retry re-queues');
-  assert.ok((await prisma.importDocument.count({ where: { jobId } })) >= 1, 'documents preserved across retry');
+  assert.ok(
+    (await prisma.importDocument.count({ where: { jobId } })) >= 1,
+    'documents preserved across retry',
+  );
   await runJob(jobId);
   assert.equal((await get(jobId)).status, 'review_ready', 'retry completes to review_ready');
 
   // 5. Retry rejected when not retryable.
-  assert.equal((await af(`${base}/${jobId}/retry`, { method: 'POST' })).status, 400, 'retry on review_ready -> 400');
+  assert.equal(
+    (await af(`${base}/${jobId}/retry`, { method: 'POST' })).status,
+    400,
+    'retry on review_ready -> 400',
+  );
 
   console.log('REQ-022 async-smoke: 202 + state-machine + reclaim + retry PASS');
 } finally {

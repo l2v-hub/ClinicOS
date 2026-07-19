@@ -40,7 +40,9 @@ async function defaultPersist(evt: AiAuditEventInput): Promise<void> {
     // No DB configured (e.g. unit tests): the stdout audit line is still emitted by the callers.
     if (!warnedNoDatabase) {
       warnedNoDatabase = true;
-      console.log('[ai-audit] DATABASE_URL assente: persistenza audit su Postgres disattivata (resta il log su stdout)');
+      console.log(
+        '[ai-audit] DATABASE_URL assente: persistenza audit su Postgres disattivata (resta il log su stdout)',
+      );
     }
     return;
   }
@@ -73,7 +75,10 @@ export function setAuditPersistence(fn: AuditPersistence | null): void {
  *  action: every error is caught and logged, nothing is ever thrown or awaited by callers. */
 export function recordAuditEvent(evt: AiAuditEventInput): void {
   const logFailure = (err: unknown) =>
-    console.error('[ai-audit] persistenza fallita (azione NON bloccata):', err instanceof Error ? err.message : err);
+    console.error(
+      '[ai-audit] persistenza fallita (azione NON bloccata):',
+      err instanceof Error ? err.message : err,
+    );
   try {
     Promise.resolve((persistence ?? defaultPersist)(evt)).catch(logFailure);
   } catch (err) {

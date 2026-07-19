@@ -6,11 +6,23 @@
 
 import type { SourceReference } from '../gateway/types.js';
 
-export interface ComposeRuntimeResponse { answerText?: string; citedSources?: string[]; refusal?: string }
-export interface ComposeAnswerDeps {
-  callComposeRuntime?: (req: { question: string; results: unknown[]; sources: SourceReference[] }) => Promise<ComposeRuntimeResponse>;
+export interface ComposeRuntimeResponse {
+  answerText?: string;
+  citedSources?: string[];
+  refusal?: string;
 }
-export interface ComposeResult { answerText?: string; composed: boolean; refusal?: string }
+export interface ComposeAnswerDeps {
+  callComposeRuntime?: (req: {
+    question: string;
+    results: unknown[];
+    sources: SourceReference[];
+  }) => Promise<ComposeRuntimeResponse>;
+}
+export interface ComposeResult {
+  answerText?: string;
+  composed: boolean;
+  refusal?: string;
+}
 
 /** Identificatori delle fonti fornite (per il post-check citedSources ⊆ sources). */
 function sourceIds(sources: SourceReference[]): Set<string> {

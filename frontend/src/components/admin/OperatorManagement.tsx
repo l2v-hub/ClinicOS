@@ -7,7 +7,9 @@ import type { ColumnDef } from '../operator/cartella/ClinicalTable';
 
 interface OperatorManagementProps {
   operatori: Operatore[];
-  onAdd: (op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>) => void;
+  onAdd: (
+    op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>,
+  ) => void;
   onUpdate: (id: string, updates: Partial<Operatore>) => void;
   onToggleStato: (id: string) => void;
 }
@@ -38,8 +40,12 @@ function operatoriColumns(
       filterType: 'text',
       render: (_v, op) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div className="op-avatar-sm" style={{ background: op.colore }}>{op.iniziali}</div>
-          <div className="cell--name">{op.cognome} {op.nome}</div>
+          <div className="op-avatar-sm" style={{ background: op.colore }}>
+            {op.iniziali}
+          </div>
+          <div className="cell--name">
+            {op.cognome} {op.nome}
+          </div>
         </div>
       ),
     },
@@ -98,7 +104,11 @@ function operatoriColumns(
       width: '72px',
       render: (_v, op) => (
         <div className="table-actions">
-          <button className="icon-btn icon-btn--sm" onClick={() => apriModifica(op)} title="Modifica">
+          <button
+            className="icon-btn icon-btn--sm"
+            onClick={() => apriModifica(op)}
+            title="Modifica"
+          >
             <IcoEdit />
           </button>
           <button
@@ -114,15 +124,22 @@ function operatoriColumns(
   ];
 }
 
-export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }: OperatorManagementProps) {
+export function OperatorManagement({
+  operatori,
+  onAdd,
+  onUpdate,
+  onToggleStato,
+}: OperatorManagementProps) {
   const [ricerca, setRicerca] = useState('');
   const [filtroStato, setFiltroStato] = useState<'tutti' | StatoOperatore>('tutti');
   const [formAperto, setFormAperto] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState(FORM_VUOTO);
 
-  const filtrati = operatori.filter(op => {
-    const match = `${op.nome} ${op.cognome} ${op.reparto} ${op.email}`.toLowerCase().includes(ricerca.toLowerCase());
+  const filtrati = operatori.filter((op) => {
+    const match = `${op.nome} ${op.cognome} ${op.reparto} ${op.email}`
+      .toLowerCase()
+      .includes(ricerca.toLowerCase());
     const statoMatch = filtroStato === 'tutti' || op.stato === filtroStato;
     return match && statoMatch;
   });
@@ -130,8 +147,9 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
   function apriNuovo() {
     setEditId(null);
     // Pick next unused color
-    const usedColors = operatori.map(o => o.colore);
-    const nextColor = OPERATOR_COLOR_PALETTE.find(c => !usedColors.includes(c)) ?? OPERATOR_COLOR_PALETTE[0];
+    const usedColors = operatori.map((o) => o.colore);
+    const nextColor =
+      OPERATOR_COLOR_PALETTE.find((c) => !usedColors.includes(c)) ?? OPERATOR_COLOR_PALETTE[0];
     setForm({ ...FORM_VUOTO, colore: nextColor });
     setFormAperto(true);
   }
@@ -139,9 +157,15 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
   function apriModifica(op: Operatore) {
     setEditId(op.id);
     setForm({
-      nome: op.nome, cognome: op.cognome, ruolo: op.ruolo,
-      email: op.email, telefono: op.telefono, reparto: op.reparto,
-      stato: op.stato, colore: op.colore, note: op.note ?? '',
+      nome: op.nome,
+      cognome: op.cognome,
+      ruolo: op.ruolo,
+      email: op.email,
+      telefono: op.telefono,
+      reparto: op.reparto,
+      stato: op.stato,
+      colore: op.colore,
+      note: op.note ?? '',
     });
     setFormAperto(true);
   }
@@ -165,7 +189,9 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
   }
 
   const ruoloLabel: Record<RuoloOperatore, string> = {
-    medico: 'Medico', infermiere: 'Infermiere', coordinatore: 'Coordinatore',
+    medico: 'Medico',
+    infermiere: 'Infermiere',
+    coordinatore: 'Coordinatore',
   };
 
   return (
@@ -174,7 +200,8 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
         <div>
           <h2 className="view-header__title">Gestione Operatori</h2>
           <p className="view-header__sub">
-            {operatori.filter(o => o.stato === 'attivo').length} attivi su {operatori.length} totali
+            {operatori.filter((o) => o.stato === 'attivo').length} attivi su {operatori.length}{' '}
+            totali
           </p>
         </div>
         <button className="btn-primary" onClick={apriNuovo}>
@@ -186,24 +213,41 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
       {formAperto && (
         <div className="op-form-panel">
           <div className="op-form-panel__header">
-            <h3 className="op-form-panel__title">{editId ? 'Modifica Operatore' : 'Nuovo Operatore'}</h3>
-            <button className="icon-btn" onClick={annulla}><IcoX /></button>
+            <h3 className="op-form-panel__title">
+              {editId ? 'Modifica Operatore' : 'Nuovo Operatore'}
+            </h3>
+            <button className="icon-btn" onClick={annulla}>
+              <IcoX />
+            </button>
           </div>
           <div className="op-form-grid">
             <div className="form-field">
               <label className="form-label">Nome *</label>
-              <input className="form-input" value={form.nome}
-                onChange={e => setForm(p => ({ ...p, nome: e.target.value }))} placeholder="Nome" />
+              <input
+                className="form-input"
+                value={form.nome}
+                onChange={(e) => setForm((p) => ({ ...p, nome: e.target.value }))}
+                placeholder="Nome"
+              />
             </div>
             <div className="form-field">
               <label className="form-label">Cognome *</label>
-              <input className="form-input" value={form.cognome}
-                onChange={e => setForm(p => ({ ...p, cognome: e.target.value }))} placeholder="Cognome" />
+              <input
+                className="form-input"
+                value={form.cognome}
+                onChange={(e) => setForm((p) => ({ ...p, cognome: e.target.value }))}
+                placeholder="Cognome"
+              />
             </div>
             <div className="form-field">
               <label className="form-label">Ruolo</label>
-              <select className="form-select" value={form.ruolo}
-                onChange={e => setForm(p => ({ ...p, ruolo: e.target.value as RuoloOperatore }))}>
+              <select
+                className="form-select"
+                value={form.ruolo}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, ruolo: e.target.value as RuoloOperatore }))
+                }
+              >
                 <option value="medico">Medico</option>
                 <option value="infermiere">Infermiere</option>
                 <option value="coordinatore">Coordinatore</option>
@@ -211,23 +255,41 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
             </div>
             <div className="form-field">
               <label className="form-label">Reparto</label>
-              <input className="form-input" value={form.reparto}
-                onChange={e => setForm(p => ({ ...p, reparto: e.target.value }))} placeholder="Reparto" />
+              <input
+                className="form-input"
+                value={form.reparto}
+                onChange={(e) => setForm((p) => ({ ...p, reparto: e.target.value }))}
+                placeholder="Reparto"
+              />
             </div>
             <div className="form-field">
               <label className="form-label">Email</label>
-              <input className="form-input" type="email" value={form.email}
-                onChange={e => setForm(p => ({ ...p, email: e.target.value }))} placeholder="email@clinicos.it" />
+              <input
+                className="form-input"
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+                placeholder="email@clinicos.it"
+              />
             </div>
             <div className="form-field">
               <label className="form-label">Telefono</label>
-              <input className="form-input" value={form.telefono}
-                onChange={e => setForm(p => ({ ...p, telefono: e.target.value }))} placeholder="+39 02 …" />
+              <input
+                className="form-input"
+                value={form.telefono}
+                onChange={(e) => setForm((p) => ({ ...p, telefono: e.target.value }))}
+                placeholder="+39 02 …"
+              />
             </div>
             <div className="form-field">
               <label className="form-label">Stato</label>
-              <select className="form-select" value={form.stato}
-                onChange={e => setForm(p => ({ ...p, stato: e.target.value as StatoOperatore }))}>
+              <select
+                className="form-select"
+                value={form.stato}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, stato: e.target.value as StatoOperatore }))
+                }
+              >
                 <option value="attivo">Attivo</option>
                 <option value="inattivo">Inattivo</option>
               </select>
@@ -237,30 +299,39 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
             <div className="form-field">
               <label className="form-label">Colore operatore</label>
               <div className="color-picker">
-                {OPERATOR_COLOR_PALETTE.map(c => (
+                {OPERATOR_COLOR_PALETTE.map((c) => (
                   <button
                     key={c}
                     type="button"
                     className={`color-swatch${form.colore === c ? ' selected' : ''}`}
                     style={{ background: c }}
-                    onClick={() => setForm(p => ({ ...p, colore: c }))}
+                    onClick={() => setForm((p) => ({ ...p, colore: c }))}
                     title={c}
                   />
                 ))}
-                <input type="color" className="color-custom-input" value={form.colore}
-                  onChange={e => setForm(p => ({ ...p, colore: e.target.value }))}
-                  title="Colore personalizzato" />
+                <input
+                  type="color"
+                  className="color-custom-input"
+                  value={form.colore}
+                  onChange={(e) => setForm((p) => ({ ...p, colore: e.target.value }))}
+                  title="Colore personalizzato"
+                />
               </div>
             </div>
           </div>
           <div className="form-field" style={{ marginTop: 8 }}>
             <label className="form-label">Note</label>
-            <input className="form-input" value={form.note}
-              onChange={e => setForm(p => ({ ...p, note: e.target.value }))}
-              placeholder="Note sull'operatore…" />
+            <input
+              className="form-input"
+              value={form.note}
+              onChange={(e) => setForm((p) => ({ ...p, note: e.target.value }))}
+              placeholder="Note sull'operatore…"
+            />
           </div>
           <div className="op-form-panel__actions">
-            <button className="btn-secondary" onClick={annulla}>Annulla</button>
+            <button className="btn-secondary" onClick={annulla}>
+              Annulla
+            </button>
             <button className="btn-primary" onClick={salva}>
               <IcoCheck /> {editId ? 'Salva modifiche' : 'Crea operatore'}
             </button>
@@ -271,19 +342,29 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
       {/* Toolbar */}
       <div className="toolbar">
         <div className="search-wrap">
-          <span className="search-wrap__ico"><IcoSearch /></span>
-          <input className="search-input" type="search"
+          <span className="search-wrap__ico">
+            <IcoSearch />
+          </span>
+          <input
+            className="search-input"
+            type="search"
             placeholder="Cerca per nome, reparto, email…"
-            value={ricerca} onChange={e => setRicerca(e.target.value)} />
+            value={ricerca}
+            onChange={(e) => setRicerca(e.target.value)}
+          />
           {ricerca && (
-            <button className="search-clear-btn" onClick={() => setRicerca('')}><IcoX /></button>
+            <button className="search-clear-btn" onClick={() => setRicerca('')}>
+              <IcoX />
+            </button>
           )}
         </div>
         <div className="filter-chips">
-          {(['tutti', 'attivo', 'inattivo'] as const).map(s => (
-            <button key={s}
+          {(['tutti', 'attivo', 'inattivo'] as const).map((s) => (
+            <button
+              key={s}
               className={`filter-chip${filtroStato === s ? ' active' : ''}`}
-              onClick={() => setFiltroStato(s)}>
+              onClick={() => setFiltroStato(s)}
+            >
               {s === 'tutti' ? 'Tutti' : s === 'attivo' ? 'Attivi' : 'Inattivi'}
             </button>
           ))}
@@ -302,24 +383,38 @@ export function OperatorManagement({ operatori, onAdd, onUpdate, onToggleStato }
 
       {/* Card list mobile */}
       <div className="pt-card-list">
-        {filtrati.map(op => (
+        {filtrati.map((op) => (
           <div key={op.id} className="pt-list-card" style={{ cursor: 'default' }}>
-            <div className="op-avatar-sm" style={{ background: op.colore }}>{op.iniziali}</div>
-            <div className="pt-list-card__info">
-              <span className="pt-list-card__name">{op.cognome} {op.nome}</span>
-              <span className="pt-list-card__meta">{ruoloLabel[op.ruolo]} · {op.reparto}</span>
+            <div className="op-avatar-sm" style={{ background: op.colore }}>
+              {op.iniziali}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}>
+            <div className="pt-list-card__info">
+              <span className="pt-list-card__name">
+                {op.cognome} {op.nome}
+              </span>
+              <span className="pt-list-card__meta">
+                {ruoloLabel[op.ruolo]} · {op.reparto}
+              </span>
+            </div>
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}
+            >
               <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>
               <div className="table-actions">
-                <button className="icon-btn icon-btn--sm" onClick={() => apriModifica(op)}><IcoEdit /></button>
-                <button className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
-                  onClick={() => onToggleStato(op.id)}>
+                <button className="icon-btn icon-btn--sm" onClick={() => apriModifica(op)}>
+                  <IcoEdit />
+                </button>
+                <button
+                  className={`icon-btn icon-btn--sm${op.stato === 'attivo' ? ' icon-btn--danger' : ' icon-btn--success'}`}
+                  onClick={() => onToggleStato(op.id)}
+                >
                   {op.stato === 'attivo' ? <IcoX /> : <IcoCheck />}
                 </button>
               </div>
             </div>
-            <span className="pt-list-card__chevron"><IcoChevronRight /></span>
+            <span className="pt-list-card__chevron">
+              <IcoChevronRight />
+            </span>
           </div>
         ))}
       </div>

@@ -10,15 +10,15 @@ This feature has no new data entities, backend models, or TypeScript interfaces.
 
 File: `frontend/src/App.css`
 
-| Variable | Current Value | New Value | Reason |
-|----------|--------------|-----------|--------|
-| `--l2-h` | `44px` | `44px` | Keep — already touch-friendly |
-| `--l2-font` | `14px` | `14px` | Keep — already correct |
-| `--l3-h` | `36px` | `32px` | Slightly more compact on tablet |
-| `--l3-font` | `11.5px` | `11.5px` | Keep |
-| `--content-px` | _(new)_ | `16px` | Tablet horizontal padding for `.content-panel` |
-| `--content-px-lg` | _(new)_ | `24px` | Large tablet (1180px+) padding |
-| `--content-px-xl` | _(new)_ | `32px` | Desktop (1366px+) padding |
+| Variable          | Current Value | New Value | Reason                                         |
+| ----------------- | ------------- | --------- | ---------------------------------------------- |
+| `--l2-h`          | `44px`        | `44px`    | Keep — already touch-friendly                  |
+| `--l2-font`       | `14px`        | `14px`    | Keep — already correct                         |
+| `--l3-h`          | `36px`        | `32px`    | Slightly more compact on tablet                |
+| `--l3-font`       | `11.5px`      | `11.5px`  | Keep                                           |
+| `--content-px`    | _(new)_       | `16px`    | Tablet horizontal padding for `.content-panel` |
+| `--content-px-lg` | _(new)_       | `24px`    | Large tablet (1180px+) padding                 |
+| `--content-px-xl` | _(new)_       | `32px`    | Desktop (1366px+) padding                      |
 
 ---
 
@@ -56,6 +56,7 @@ Change: use CSS variable `var(--content-px)` for horizontal padding; add respons
 
 Current: border/box styling on active tab
 Changes:
+
 - Remove `border`, `border-radius`, `box-shadow` from `.main-h-nav .nav-tab.active`
 - Remove background fill from active state
 - Add `position: relative` to `.main-h-nav .nav-tab`
@@ -66,6 +67,7 @@ Changes:
 
 Current: flex container, pills
 Changes:
+
 - Add `overflow-x: auto`
 - Add `white-space: nowrap`
 - Add scrollbar hiding rules
@@ -158,11 +160,11 @@ File: `frontend/src/App.css`
 
 ## Files to Modify (summary)
 
-| File | Change Type |
-|------|-------------|
-| `frontend/src/index.css` | Fix `#root` width |
-| `frontend/src/App.css` | CSS vars, L2/L3 nav, breakpoints, `.tab-panel-transition` |
-| `frontend/src/app-additions.css` | Fix any conflicting overrides (audit only, minimal edits) |
-| `frontend/src/components/operator/PatientDetail.tsx` | Add `key` prop to tab content wrapper for transition |
+| File                                                 | Change Type                                               |
+| ---------------------------------------------------- | --------------------------------------------------------- |
+| `frontend/src/index.css`                             | Fix `#root` width                                         |
+| `frontend/src/App.css`                               | CSS vars, L2/L3 nav, breakpoints, `.tab-panel-transition` |
+| `frontend/src/app-additions.css`                     | Fix any conflicting overrides (audit only, minimal edits) |
+| `frontend/src/components/operator/PatientDetail.tsx` | Add `key` prop to tab content wrapper for transition      |
 
 No new TypeScript interfaces. No new React components. No new npm packages.

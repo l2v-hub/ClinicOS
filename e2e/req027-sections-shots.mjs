@@ -17,10 +17,32 @@ const tmpFile = resolve(tmpdir(), 'imola-lettera.pdf');
 writeFileSync(tmpFile, '%PDF-1.4\n% synthetic\n');
 
 const JOB = {
-  id: 'job-demo', status: 'uploaded', stage: null, completedFiles: 1, totalFiles: 1,
-  currentFileName: null, elapsedSeconds: 0, canRetry: false, canCancel: true,
-  maxFiles: 10, maxTotalBytes: 26214400, totalBytes: 1024, fileCount: 1, error: null, model: null,
-  documents: [{ id: 'doc-1', filename: 'lettera-dimissione.pdf', mimeType: 'application/pdf', sizeBytes: 1024, sortOrder: 0, status: 'uploaded', logicalDoc: null }],
+  id: 'job-demo',
+  status: 'uploaded',
+  stage: null,
+  completedFiles: 1,
+  totalFiles: 1,
+  currentFileName: null,
+  elapsedSeconds: 0,
+  canRetry: false,
+  canCancel: true,
+  maxFiles: 10,
+  maxTotalBytes: 26214400,
+  totalBytes: 1024,
+  fileCount: 1,
+  error: null,
+  model: null,
+  documents: [
+    {
+      id: 'doc-1',
+      filename: 'lettera-dimissione.pdf',
+      mimeType: 'application/pdf',
+      sizeBytes: 1024,
+      sortOrder: 0,
+      status: 'uploaded',
+      logicalDoc: null,
+    },
+  ],
 };
 
 async function mock(page) {
@@ -28,21 +50,55 @@ async function mock(page) {
     const req = route.request();
     const url = req.url();
     const m = req.method();
-    const json = (body, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
-    if (url.includes('/ai/extraction/status')) return json({ available: true, provider: 'mock', model: 'demo', errors: [] });
+    const json = (body, status = 200) =>
+      route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) });
+    if (url.includes('/ai/extraction/status'))
+      return json({ available: true, provider: 'mock', model: 'demo', errors: [] });
     if (url.includes('/ai/extraction/capabilities')) return json({});
     if (url.endsWith('/ai/extraction/schema')) return json({});
     if (url.includes('/ai/extraction/jobs')) {
-      if (m === 'POST' && url.endsWith('/process')) return json({ ...JOB, status: 'queued', stage: 'queued' });
+      if (m === 'POST' && url.endsWith('/process'))
+        return json({ ...JOB, status: 'queued', stage: 'queued' });
       if (m === 'POST' && url.endsWith('/retry')) return json({ ...JOB, status: 'queued' });
-      if (m === 'POST' && url.endsWith('/confirm')) return json({ status: 'created', patient: { id: 'p1', firstName: 'Mario', lastName: 'Bianchi', medicalRecordNumber: 'MRN-DEMO' } }, 201);
-      if (m === 'GET' && url.endsWith('/result')) return json({ status: 'review_ready', model: 'demo', resultData: { _sections: SECTIONS_FIXTURE, rawText: '', _full: {} } });
+      if (m === 'POST' && url.endsWith('/confirm'))
+        return json(
+          {
+            status: 'created',
+            patient: {
+              id: 'p1',
+              firstName: 'Mario',
+              lastName: 'Bianchi',
+              medicalRecordNumber: 'MRN-DEMO',
+            },
+          },
+          201,
+        );
+      if (m === 'GET' && url.endsWith('/result'))
+        return json({
+          status: 'review_ready',
+          model: 'demo',
+          resultData: { _sections: SECTIONS_FIXTURE, rawText: '', _full: {} },
+        });
       if (m === 'GET') return json({ ...JOB, status: 'review_ready', stage: 'completed' });
-      if (m === 'POST') return json({ job: JOB, outcomes: [{ filename: 'lettera-dimissione.pdf', status: 'accepted' }] });
+      if (m === 'POST')
+        return json({
+          job: JOB,
+          outcomes: [{ filename: 'lettera-dimissione.pdf', status: 'accepted' }],
+        });
       return json(JOB);
     }
     if (url.includes('/patients/settings')) return json({ allowDelete: false });
-    if (url.match(/\/patients(\?|$)/)) return json([{ id: 'p1', medicalRecordNumber: 'MRN-1', firstName: 'Anna', lastName: 'Verdi', dateOfBirth: '1950-01-01', sex: 'F' }]);
+    if (url.match(/\/patients(\?|$)/))
+      return json([
+        {
+          id: 'p1',
+          medicalRecordNumber: 'MRN-1',
+          firstName: 'Anna',
+          lastName: 'Verdi',
+          dateOfBirth: '1950-01-01',
+          sex: 'F',
+        },
+      ]);
     return route.continue();
   });
 }
@@ -79,7 +135,9 @@ try {
     await page.waitForTimeout(150);
     await el.screenshot({ path: resolve(outDir, `${name}.png`) });
   }
-  await page.locator('.import-modal').screenshot({ path: resolve(outDir, 'imola-final-review.png') });
+  await page
+    .locator('.import-modal')
+    .screenshot({ path: resolve(outDir, 'imola-final-review.png') });
   console.log(`desktop: shots=${SHOTS.length + 1} consoleErrors=${errors.length}`);
   if (errors.length) console.log('first error:', errors[0]);
   await page.close();
@@ -89,7 +147,9 @@ try {
   tab.on('dialog', (d) => d.accept());
   await mock(tab);
   await reachReview(tab);
-  await tab.locator('.import-modal').screenshot({ path: resolve(outDir, 'imola-final-review-tablet.png') });
+  await tab
+    .locator('.import-modal')
+    .screenshot({ path: resolve(outDir, 'imola-final-review-tablet.png') });
   console.log('tablet: final-review captured');
   await tab.close();
 } catch (err) {

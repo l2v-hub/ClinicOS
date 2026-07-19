@@ -3,6 +3,7 @@
 ## Codebase Audit (Phase 0)
 
 ### Decision 1 — Schema Prisma
+
 **Decision**: Nessuna migrazione richiesta. Lo schema attuale è sufficiente.
 
 **Rationale**: `PatientTherapy` ha tutti i campi richiesti dalla spec: farmacoNome, dosaggio,
@@ -20,9 +21,11 @@ una migrazione non necessaria.
 ---
 
 ### Decision 2 — Duplicazione UI (TerapiaMedicaTab + TerapiaScheduleTab)
+
 **Decision**: Rimuovere entrambi i file.
 
 **Rationale**:
+
 - `TerapiaMedicaTab.tsx` usa `cartella.farmaci` (JSON blob) come sorgente primaria e chiama l'API
   in fire-and-forget. Viola costituzione III (Backend Data Authority). Non è importato da nessun
   file in `frontend/src`.
@@ -38,6 +41,7 @@ e III (Backend Data Authority).
 ---
 
 ### Decision 3 — Backend therapy.ts route
+
 **Decision**: Il route `GET /therapy-slots` va corretto per escludere `tipo = 'al_bisogno'` dagli slot agenda.
 
 **Rationale**: Il route attualmente fa fallback alla logica periodica per tutti i tipi non-`una_tantum`.
@@ -49,6 +53,7 @@ esplicitamente: "Terapia Al bisogno: non appare nell'Agenda programmata (slot fi
 ---
 
 ### Decision 4 — Frontend TerapiaFarmacologicaTab tipo options
+
 **Decision**: Aggiungere `al_bisogno` come terza opzione di tipo.
 
 **Rationale**: La spec richiede supporto per Periodica, Una tantum, Al bisogno. Il form attuale
@@ -60,6 +65,7 @@ dataSomministrazione (non è una tantum). Mostrare solo farmaco, dose, via, data
 ---
 
 ### Decision 5 — console.log in production routes
+
 **Decision**: Lasciare in place per ora (rimozione fuori scope di questa feature).
 
 **Rationale**: `console.log` nelle route POST/DELETE è il comportamento attuale. La rimozione è
@@ -69,6 +75,7 @@ non la menziona.
 ---
 
 ### Decision 6 — TerapieModuloView.tsx
+
 **Decision**: Mantenere il file ma NON importarlo da TerapiaFarmacologicaTab.
 
 **Rationale**: `TerapieModuloView.tsx` è un componente per la vista stampa. Attualmente è usato
@@ -80,15 +87,15 @@ Se non è importato da nessun altro file, TypeScript build lo ignorerà (tree-sh
 
 ## Stack Confermato
 
-| Layer      | Tecnologia             | Note |
-|------------|------------------------|------|
-| Frontend   | React 18 + TS + Vite   | `frontend/` workspace |
-| Backend    | Node.js + Express + TS | `backend/` workspace |
-| ORM        | Prisma 7               | schema in `prisma/schema.prisma` |
-| DB locale  | PostgreSQL via Podman  | `localhost:5432` |
-| DB cloud   | Railway PostgreSQL      | env var `DATABASE_URL` |
-| Frontend deploy | Vercel            | env var `VITE_API_URL` |
-| Backend deploy  | Railway           | env var `DATABASE_URL` |
+| Layer           | Tecnologia             | Note                             |
+| --------------- | ---------------------- | -------------------------------- |
+| Frontend        | React 18 + TS + Vite   | `frontend/` workspace            |
+| Backend         | Node.js + Express + TS | `backend/` workspace             |
+| ORM             | Prisma 7               | schema in `prisma/schema.prisma` |
+| DB locale       | PostgreSQL via Podman  | `localhost:5432`                 |
+| DB cloud        | Railway PostgreSQL     | env var `DATABASE_URL`           |
+| Frontend deploy | Vercel                 | env var `VITE_API_URL`           |
+| Backend deploy  | Railway                | env var `DATABASE_URL`           |
 
 ## Vincoli Confermati
 

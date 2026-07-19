@@ -13,18 +13,27 @@ export function defaultTenant(env: NodeJS.ProcessEnv = process.env): string {
 }
 
 /** Verify the caller presented the runtime service token. The frontend NEVER calls these routes. */
-export function checkServiceToken(authorization: string | undefined, env: NodeJS.ProcessEnv = process.env): boolean {
+export function checkServiceToken(
+  authorization: string | undefined,
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
   const token = (env.AI_RUNTIME_SERVICE_TOKEN || '').trim();
   if (!token) return false; // not configured → closed by default
   return authorization === `Bearer ${token}`;
 }
 
 function csv(v: string | undefined): string[] {
-  return (v || '').split(',').map((s) => s.trim()).filter(Boolean);
+  return (v || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
 /** Build the user context from request headers. Throws `unauthorized` when identity is missing. */
-export function parseUserContext(headers: Record<string, string | undefined>, env: NodeJS.ProcessEnv = process.env): UserContext {
+export function parseUserContext(
+  headers: Record<string, string | undefined>,
+  env: NodeJS.ProcessEnv = process.env,
+): UserContext {
   const get = (k: string) => headers[k] ?? headers[k.toLowerCase()];
   const userId = (get('X-AI-User-Id') || '').trim();
   if (!userId) throw new GatewayError('unauthorized', 'Missing user context');
@@ -52,11 +61,15 @@ export function isPatientAllowed(ctx: UserContext, patientId: string): boolean {
 
 /** Throw `forbidden` unless the caller may read this patient. */
 export function assertPatientAllowed(ctx: UserContext, patientId: string): void {
-  if (!isPatientAllowed(ctx, patientId)) throw new GatewayError('forbidden', 'Patient not accessible');
+  if (!isPatientAllowed(ctx, patientId))
+    throw new GatewayError('forbidden', 'Patient not accessible');
 }
 
 /** Cross-patient search is opt-in (env) AND role-gated — never on by default. */
-export function canCrossPatientSearch(ctx: UserContext, env: NodeJS.ProcessEnv = process.env): boolean {
+export function canCrossPatientSearch(
+  ctx: UserContext,
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
   const enabled = (env.AI_CROSS_PATIENT_SEARCH_ENABLED || 'false').trim() === 'true';
   const privileged = ctx.roles.some((r) => r === 'manager' || r === 'admin');
   return enabled && privileged;

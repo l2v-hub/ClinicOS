@@ -5,7 +5,9 @@ import { tmpdir } from 'node:os';
 
 // #234 (import-proposed text editable + save feedback) + #235 (acceptance gate on Crea paziente).
 // Drives the REAL import flow (mock AI runtime) → review → workspace, with real assertions.
-test('#234/#235 import review: editable text + save feedback + acceptance gate', async ({ page }) => {
+test('#234/#235 import review: editable text + save feedback + acceptance gate', async ({
+  page,
+}) => {
   const g = guard(page);
   const fx = writeFixtures(resolve(tmpdir(), 'clinicos-ir-fixtures'));
 
@@ -25,20 +27,32 @@ test('#234/#235 import review: editable text + save feedback + acceptance gate',
   await demo.locator('input[type=text]').nth(0).fill('E2E');
   await demo.locator('input[type=text]').nth(1).fill('ImportReview');
   await demo.locator('input[type=date]').first().fill('1955-09-09');
-  await page.getByRole('button', { name: /^Crea paziente$/ }).first().click();
+  await page
+    .getByRole('button', { name: /^Crea paziente$/ })
+    .first()
+    .click();
 
   // ── Workspace (step 3 Clinica) ─────────────────────────────────────────────
   const acceptTherapy = page.locator('[data-testid="accept-therapy"]');
   await acceptTherapy.waitFor({ state: 'visible', timeout: 30000 });
 
   // #234: a proposed clinical editor is editable — type into one (best-effort across editor types).
-  const editable = page.locator('.cts--open textarea, .cts--open input[type=text], .cts--open [contenteditable="true"]').first();
-  if (await editable.count()) { await editable.click().catch(() => {}); await editable.type(' revisionato E2E', { delay: 10 }).catch(() => {}); }
+  const editable = page
+    .locator(
+      '.cts--open textarea, .cts--open input[type=text], .cts--open [contenteditable="true"]',
+    )
+    .first();
+  if (await editable.count()) {
+    await editable.click().catch(() => {});
+    await editable.type(' revisionato E2E', { delay: 10 }).catch(() => {});
+  }
 
   // #235 + #234 save feedback: checking accept-therapy is an autosaved update → save-state indicator shows.
   await acceptTherapy.check();
   await expect(acceptTherapy).toBeChecked();
-  await expect(page.getByText(/Salvato|Salvataggio|Errore salvataggio/i).first()).toBeVisible({ timeout: 12000 });
+  await expect(page.getByText(/Salvato|Salvataggio|Errore salvataggio/i).first()).toBeVisible({
+    timeout: 12000,
+  });
 
   // Advance to the final review step.
   for (let i = 0; i < 5; i++) {
@@ -46,7 +60,10 @@ test('#234/#235 import review: editable text + save feedback + acceptance gate',
     if (await verifica.count()) break;
     const avanti = page.getByRole('button', { name: /Avanti/i });
     if (!(await avanti.count())) break;
-    await avanti.first().click().catch(() => {});
+    await avanti
+      .first()
+      .click()
+      .catch(() => {});
     await page.waitForTimeout(500);
   }
 

@@ -10,7 +10,8 @@ Esegui npm run build.
 Crea o migliora la navigazione interna della scheda paziente con queste aree:
 
 1. Presa in carico
-Contiene:
+   Contiene:
+
 - anagrafica
 - contatti familiari
 - provenienza
@@ -20,7 +21,8 @@ Contiene:
 - condizioni attuali
 
 2. Terapia
-Contiene:
+   Contiene:
+
 - farmaci
 - allergie
 - terapia giornaliera
@@ -29,14 +31,16 @@ Contiene:
 - schema insulinico
 
 3. Area infermieristica
-Contiene sottosezioni:
+   Contiene sottosezioni:
+
 - diario consegne
 - medicazioni
 - scale di valutazione
 - contenzioni
 
 4. Area fisioterapica
-Contiene:
+   Contiene:
+
 - diario fisioterapico
 - consegne fisioterapiche
 - valutazioni funzionali
@@ -44,14 +48,16 @@ Contiene:
 - note evolutive
 
 5. Area medica
-Contiene:
+   Contiene:
+
 - diario medico
 - dimissione medica
 - prescrizioni
 - note cliniche
 
 6. Documenti
-Contiene:
+   Contiene:
+
 - tessera sanitaria
 - carta identità
 - privacy
@@ -61,7 +67,8 @@ Contiene:
 - altri allegati
 
 7. Invio in PS
-Contiene:
+   Contiene:
+
 - motivo invio
 - parametri recenti
 - terapia attuale
@@ -71,6 +78,7 @@ Contiene:
 - stampa riepilogo invio
 
 UX:
+
 - menu interno ordinato, non troppo ricco
 - usa macro-aree e sottosezioni
 - stile tab pulito

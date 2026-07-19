@@ -14,6 +14,7 @@ FILE: path/to/file.ext
 END FILE
 
 Rules:
+
 - Output the FULL file content. No partial content. No placeholders.
 - Do NOT output unified diffs (--- / +++ / @@ lines). Diffs are rejected.
 - Do NOT use ```diff blocks. Diffs are rejected.
@@ -27,81 +28,82 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 type Patient = {
-  id?: number | string;
-  firstName?: string;
-  lastName?: string;
-  name?: string;
-  email?: string;
-  phone?: string;
-  dateOfBirth?: string;
-  [key: string]: unknown;
+id?: number | string;
+firstName?: string;
+lastName?: string;
+name?: string;
+email?: string;
+phone?: string;
+dateOfBirth?: string;
+[key: string]: unknown;
 };
 
 const PATIENTS_URL = 'http://localhost:3001/patients';
 
 function getPatientName(patient: Patient, index: number): string {
-  const fullName = [patient.firstName, patient.lastName].filter(Boolean).join(' ').trim();
+const fullName = [patient.firstName, patient.lastName].filter(Boolean).join(' ').trim();
 
-  if (fullName) {
-    return fullName;
-  }
+if (fullName) {
+return fullName;
+}
 
-  if (typeof patient.name === 'string' && patient.name.trim()) {
-    return patient.name;
-  }
+if (typeof patient.name === 'string' && patient.name.trim()) {
+return patient.name;
+}
 
-  return `Patient ${index + 1}`;
+return `Patient ${index + 1}`;
 }
 
 function getPatientKey(patient: Patient, index: number): string {
-  if (typeof patient.id === 'string' || typeof patient.id === 'number') {
-    return String(patient.id);
-  }
+if (typeof patient.id === 'string' || typeof patient.id === 'number') {
+return String(patient.id);
+}
 
-  if (typeof patient.email === 'string' && patient.email.trim()) {
-    return `${patient.email}-${index}`;
-  }
+if (typeof patient.email === 'string' && patient.email.trim()) {
+return `${patient.email}-${index}`;
+}
 
-  return `patient-${index}`;
+return `patient-${index}`;
 }
 
 function formatDate(value: unknown): string | null {
-  if (typeof value !== 'string' && typeof value !== 'number') {
-    return null;
-  }
+if (typeof value !== 'string' && typeof value !== 'number') {
+return null;
+}
 
-  const date = new Date(value);
+const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return String(value);
-  }
+if (Number.isNaN(date.getTime())) {
+return String(value);
+}
 
-  return date.toLocaleDateString();
+return date.toLocaleDateString();
 }
 
 function normalizePatients(data: unknown): Patient[] {
-  if (Array.isArray(data)) {
-    return data.filter((item): item is Patient => item !== null && typeof item === 'object');
-  }
+if (Array.isArray(data)) {
+return data.filter((item): item is Patient => item !== null && typeof item === 'object');
+}
 
-  if (data && typeof data === 'object' && 'patients' in data) {
-    const nestedPatients = (data as { patients?: unknown }).patients;
+if (data && typeof data === 'object' && 'patients' in data) {
+const nestedPatients = (data as { patients?: unknown }).patients;
 
     if (Array.isArray(nestedPatients)) {
       return nestedPatients.filter((item): item is Patient => item !== null && typeof item === 'object');
     }
-  }
 
-  throw new Error('Unexpected response format');
+}
+
+throw new Error('Unexpected response format');
 }
 
 function App() {
-  const [patients, setPatients] = useState<Patient[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const [patients, setPatients] = useState<Patient[]>([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const controller = new AbortController();
+useEffect(() => {
+const controller = new AbortController();
 
     async function loadPatients() {
       try {
@@ -140,21 +142,21 @@ function App() {
     return () => {
       controller.abort();
     };
-  }, []);
 
-  return (
-    <main
-      className="app"
-      style={{
+}, []);
+
+return (
+<main
+className="app"
+style={{
         minHeight: '100vh',
         padding: '2rem',
         boxSizing: 'border-box',
         backgroundColor: '#f8fafc',
         color: '#0f172a',
-      }}
-    >
-      <section
-        style={{
+      }} >
+<section
+style={{
           maxWidth: '900px',
           margin: '0 auto',
           backgroundColor: '#ffffff',
@@ -162,19 +164,17 @@ function App() {
           boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08)',
           border: '1px solid #e2e8f0',
           overflow: 'hidden',
-        }}
-      >
-        <header
-          style={{
+        }} >
+<header
+style={{
             padding: '1.5rem 2rem',
             borderBottom: '1px solid #e2e8f0',
             background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
             color: '#ffffff',
-          }}
-        >
-          <h1 style={{ margin: 0, fontSize: '1.75rem' }}>ClinicOS Patients</h1>
-          <p style={{ margin: '0.5rem 0 0', opacity: 0.9 }}>Data source: {PATIENTS_URL}</p>
-        </header>
+          }} >
+<h1 style={{ margin: 0, fontSize: '1.75rem' }}>ClinicOS Patients</h1>
+<p style={{ margin: '0.5rem 0 0', opacity: 0.9 }}>Data source: {PATIENTS_URL}</p>
+</header>
 
         <div style={{ padding: '1.5rem 2rem' }}>
           {loading ? (
@@ -230,7 +230,8 @@ function App() {
         </div>
       </section>
     </main>
-  );
+
+);
 }
 
 export default App;

@@ -9,8 +9,14 @@ function doc(id: string, filename: string, data: DocResult['data'], docDate?: st
 const baseAnag = { nome: 'Mario', cognome: 'Rossi', dataNascita: '1948-03-15', sesso: 'M' };
 
 test('identical documents -> single proposal, no duplicates, sources from both', () => {
-  const d1 = doc('a', 'dim1.pdf', { anagrafica: baseAnag, cartella: { diagnosi: [{ codiceICD: 'J44.1', descrizione: 'BPCO' }] } });
-  const d2 = doc('b', 'dim2.pdf', { anagrafica: baseAnag, cartella: { diagnosi: [{ codiceICD: 'J44.1', descrizione: 'BPCO' }] } });
+  const d1 = doc('a', 'dim1.pdf', {
+    anagrafica: baseAnag,
+    cartella: { diagnosi: [{ codiceICD: 'J44.1', descrizione: 'BPCO' }] },
+  });
+  const d2 = doc('b', 'dim2.pdf', {
+    anagrafica: baseAnag,
+    cartella: { diagnosi: [{ codiceICD: 'J44.1', descrizione: 'BPCO' }] },
+  });
   const m = mergeExtractions([d1, d2]);
   const nome = m.anagrafica.nome as MergedField;
   assert.equal(nome.status, 'extracted');
@@ -23,8 +29,14 @@ test('identical documents -> single proposal, no duplicates, sources from both',
 });
 
 test('differing addresses -> conflict with candidates + provenance, never auto-picked', () => {
-  const d1 = doc('a', 'dim1.pdf', { anagrafica: { ...baseAnag, indirizzo: 'Via Roma 1' }, cartella: {} });
-  const d2 = doc('b', 'dim2.pdf', { anagrafica: { ...baseAnag, indirizzo: 'Via Milano 2' }, cartella: {} });
+  const d1 = doc('a', 'dim1.pdf', {
+    anagrafica: { ...baseAnag, indirizzo: 'Via Roma 1' },
+    cartella: {},
+  });
+  const d2 = doc('b', 'dim2.pdf', {
+    anagrafica: { ...baseAnag, indirizzo: 'Via Milano 2' },
+    cartella: {},
+  });
   const m = mergeExtractions([d1, d2]);
   const ind = m.anagrafica.indirizzo as MergedField;
   assert.equal(ind.status, 'conflict');
@@ -32,7 +44,10 @@ test('differing addresses -> conflict with candidates + provenance, never auto-p
   assert.equal(ind.candidates?.length, 2);
   const vals = ind.candidates!.map((c) => c.value);
   assert.ok(vals.includes('Via Roma 1') && vals.includes('Via Milano 2'));
-  assert.ok(ind.candidates!.every((c) => c.sources.length >= 1), 'each candidate keeps its source');
+  assert.ok(
+    ind.candidates!.every((c) => c.sources.length >= 1),
+    'each candidate keeps its source',
+  );
   assert.ok(m._merge.report.conflict >= 1);
 });
 
@@ -49,8 +64,12 @@ test('duplicate therapy (same drug+dose) -> deduped to one item', () => {
 });
 
 test('updated therapy (same drug, different dose) -> item conflict', () => {
-  const d1 = doc('a', 'dim1.pdf', { cartella: { farmaci: [{ nome: 'Aspirina', dose: '100 mg' }] } });
-  const d2 = doc('b', 'dim2.pdf', { cartella: { farmaci: [{ nome: 'Aspirina', dose: '150 mg' }] } });
+  const d1 = doc('a', 'dim1.pdf', {
+    cartella: { farmaci: [{ nome: 'Aspirina', dose: '100 mg' }] },
+  });
+  const d2 = doc('b', 'dim2.pdf', {
+    cartella: { farmaci: [{ nome: 'Aspirina', dose: '150 mg' }] },
+  });
   const m = mergeExtractions([d1, d2]);
   const far = m.cartella.farmaci as MergedList;
   assert.equal(far.items.length, 1, 'same drug key -> one merged item');
@@ -60,7 +79,9 @@ test('updated therapy (same drug, different dose) -> item conflict', () => {
 });
 
 test('allergy present in only one document -> extracted, keeps that single source', () => {
-  const d1 = doc('a', 'dim1.pdf', { cartella: { allergie: [{ allergene: 'Penicillina', gravita: 'grave' }] } });
+  const d1 = doc('a', 'dim1.pdf', {
+    cartella: { allergie: [{ allergene: 'Penicillina', gravita: 'grave' }] },
+  });
   const d2 = doc('b', 'dim2.pdf', { cartella: { allergie: [] } });
   const m = mergeExtractions([d1, d2]);
   const all = m.cartella.allergie as MergedList;
@@ -79,8 +100,18 @@ test('missing field across all docs -> missing, no invention', () => {
 });
 
 test('preferRecent orders conflict candidates most-recent-first (still not resolved)', () => {
-  const d1 = doc('a', 'old.pdf', { anagrafica: { indirizzo: 'Via Vecchia' }, cartella: {} }, '2020-01-01');
-  const d2 = doc('b', 'new.pdf', { anagrafica: { indirizzo: 'Via Nuova' }, cartella: {} }, '2024-06-01');
+  const d1 = doc(
+    'a',
+    'old.pdf',
+    { anagrafica: { indirizzo: 'Via Vecchia' }, cartella: {} },
+    '2020-01-01',
+  );
+  const d2 = doc(
+    'b',
+    'new.pdf',
+    { anagrafica: { indirizzo: 'Via Nuova' }, cartella: {} },
+    '2024-06-01',
+  );
   const m = mergeExtractions([d1, d2], { preferRecent: true });
   const ind = m.anagrafica.indirizzo as MergedField;
   assert.equal(ind.status, 'conflict');
@@ -88,8 +119,14 @@ test('preferRecent orders conflict candidates most-recent-first (still not resol
 });
 
 test('report counts filled/missing/conflict/duplicate', () => {
-  const d1 = doc('a', 'd1.pdf', { anagrafica: { nome: 'Mario', indirizzo: 'Via Roma' }, cartella: { diagnosi: [{ codiceICD: 'J44.1', descrizione: 'BPCO' }] } });
-  const d2 = doc('b', 'd2.pdf', { anagrafica: { nome: 'Mario', indirizzo: 'Via Milano' }, cartella: { diagnosi: [{ codiceICD: 'J44.1', descrizione: 'BPCO' }] } });
+  const d1 = doc('a', 'd1.pdf', {
+    anagrafica: { nome: 'Mario', indirizzo: 'Via Roma' },
+    cartella: { diagnosi: [{ codiceICD: 'J44.1', descrizione: 'BPCO' }] },
+  });
+  const d2 = doc('b', 'd2.pdf', {
+    anagrafica: { nome: 'Mario', indirizzo: 'Via Milano' },
+    cartella: { diagnosi: [{ codiceICD: 'J44.1', descrizione: 'BPCO' }] },
+  });
   const m = mergeExtractions([d1, d2]);
   assert.ok(m._merge.report.conflict >= 1, 'address conflict counted');
   assert.ok(m._merge.report.duplicate >= 1, 'duplicate diagnosis counted');

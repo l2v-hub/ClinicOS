@@ -18,8 +18,12 @@ interface PageTabsProps {
 
 export function MainHorizontalNav({ groups, activeId, onChange, className }: PageTabsProps) {
   return (
-    <nav className={`page-tabs${className ? ` ${className}` : ''}`} role="tablist" aria-label="Sezioni principali">
-      {groups.map(g => (
+    <nav
+      className={`page-tabs${className ? ` ${className}` : ''}`}
+      role="tablist"
+      aria-label="Sezioni principali"
+    >
+      {groups.map((g) => (
         <button
           key={g.id}
           role="tab"
@@ -28,7 +32,9 @@ export function MainHorizontalNav({ groups, activeId, onChange, className }: Pag
           onClick={() => onChange(g.id)}
         >
           {g.label}
-          {(g.badge ?? 0) > 0 && <span className="page-tabs__badge">{(g.badge ?? 0) > 99 ? '99+' : g.badge}</span>}
+          {(g.badge ?? 0) > 0 && (
+            <span className="page-tabs__badge">{(g.badge ?? 0) > 99 ? '99+' : g.badge}</span>
+          )}
         </button>
       ))}
     </nav>
@@ -57,8 +63,12 @@ interface SectionTabsProps {
 
 export function ContextSubTabs({ tabs, activeId, onChange, className }: SectionTabsProps) {
   return (
-    <nav className={`section-tabs${className ? ` ${className}` : ''}`} role="tablist" aria-label="Sotto-sezioni">
-      {tabs.map(t => (
+    <nav
+      className={`section-tabs${className ? ` ${className}` : ''}`}
+      role="tablist"
+      aria-label="Sotto-sezioni"
+    >
+      {tabs.map((t) => (
         <button
           key={t.id}
           role="tab"
@@ -96,11 +106,21 @@ interface SubSectionControlProps {
   className?: string;
 }
 
-export function SubSectionControl({ options, value, onChange, size = 'md', className }: SubSectionControlProps) {
+export function SubSectionControl({
+  options,
+  value,
+  onChange,
+  size = 'md',
+  className,
+}: SubSectionControlProps) {
   const sizeClass = size === 'sm' ? ' subsection-ctrl--sm' : '';
   return (
-    <div className={`subsection-ctrl${sizeClass}${className ? ` ${className}` : ''}`} role="tablist" aria-label="Sub-section">
-      {options.map(o => (
+    <div
+      className={`subsection-ctrl${sizeClass}${className ? ` ${className}` : ''}`}
+      role="tablist"
+      aria-label="Sub-section"
+    >
+      {options.map((o) => (
         <button
           key={o.value}
           role="tab"

@@ -1,7 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  NARRATIVE_SECTION_KEYS, NARRATIVE_TITLES, pickDisplayText, narrativeDraftToSectionRows,
+  NARRATIVE_SECTION_KEYS,
+  NARRATIVE_TITLES,
+  pickDisplayText,
+  narrativeDraftToSectionRows,
 } from '../sections/patient-narrative.js';
 import { buildNarrativeDraft } from '../sections/narrative.js';
 import type { SectionsResult } from '../sections/validate.js';
@@ -24,7 +27,11 @@ test('displayText = reviewedText when present, else originalText', () => {
 });
 
 test('narrative draft maps to rows: diagnosisText -> DIAGNOSIS.originalText (no arrays)', () => {
-  const draft = buildNarrativeDraft(result({ sections: [{ sectionKey: 'DISCHARGE_DIAGNOSIS', rawText: 'Scompenso.\nIpertensione.' }] }));
+  const draft = buildNarrativeDraft(
+    result({
+      sections: [{ sectionKey: 'DISCHARGE_DIAGNOSIS', rawText: 'Scompenso.\nIpertensione.' }],
+    }),
+  );
   const rows = narrativeDraftToSectionRows(draft);
   const diag = rows.find((r) => r.sectionKey === 'DIAGNOSIS')!;
   assert.equal(diag.originalText, 'Scompenso.\nIpertensione.');
@@ -39,9 +46,19 @@ test('empty sections map to reviewStatus "absent"', () => {
 
 test('annotations are routed to their section by italian key', () => {
   const raw = 'Anamnesi familiare: diabete.';
-  const draft = buildNarrativeDraft(result({
-    sections: [{ sectionKey: 'ANAMNESIS', rawText: raw, annotations: [{ tag: 'SUBSECTION_TITLE', text: 'Anamnesi familiare', startOffset: 0, endOffset: 18 }] }],
-  }));
+  const draft = buildNarrativeDraft(
+    result({
+      sections: [
+        {
+          sectionKey: 'ANAMNESIS',
+          rawText: raw,
+          annotations: [
+            { tag: 'SUBSECTION_TITLE', text: 'Anamnesi familiare', startOffset: 0, endOffset: 18 },
+          ],
+        },
+      ],
+    }),
+  );
   const rows = narrativeDraftToSectionRows(draft);
   const anam = rows.find((r) => r.sectionKey === 'ANAMNESIS')!;
   assert.equal(anam.annotations.length, 1);
@@ -49,9 +66,13 @@ test('annotations are routed to their section by italian key', () => {
 });
 
 test('allergy conflict/unclear -> reviewStatus conflict (blocks silent save)', () => {
-  const conflict = narrativeDraftToSectionRows(buildNarrativeDraft(result({ allergies: { status: 'conflicting', rawText: 'A vs B' } })));
+  const conflict = narrativeDraftToSectionRows(
+    buildNarrativeDraft(result({ allergies: { status: 'conflicting', rawText: 'A vs B' } })),
+  );
   assert.equal(conflict.find((r) => r.sectionKey === 'ALLERGIES')!.reviewStatus, 'conflict');
-  const unclear = narrativeDraftToSectionRows(buildNarrativeDraft(result({ allergies: { status: 'unclear', rawText: '[ILLEGGIBILE]' } })));
+  const unclear = narrativeDraftToSectionRows(
+    buildNarrativeDraft(result({ allergies: { status: 'unclear', rawText: '[ILLEGGIBILE]' } })),
+  );
   assert.equal(unclear.find((r) => r.sectionKey === 'ALLERGIES')!.reviewStatus, 'conflict');
 });
 
@@ -64,7 +85,9 @@ test('BUG-040/041/042: multi-line diagnosis -> ONE narrative block, no structure
     'Diabete mellito tipo 2.',
     'Insufficienza renale cronica.',
   ].join('\n');
-  const draft = buildNarrativeDraft(result({ sections: [{ sectionKey: 'DISCHARGE_DIAGNOSIS', rawText: multiLine }] }));
+  const draft = buildNarrativeDraft(
+    result({ sections: [{ sectionKey: 'DISCHARGE_DIAGNOSIS', rawText: multiLine }] }),
+  );
   const rows = narrativeDraftToSectionRows(draft);
   // exactly the 10 canonical narrative sections — NOT one row per diagnosis line (no "36 rows")
   assert.equal(rows.length, 10);
@@ -81,12 +104,14 @@ test('BUG-040/041/042: multi-line diagnosis -> ONE narrative block, no structure
 });
 
 test('therapy combined block maps to THERAPY.originalText', () => {
-  const draft = buildNarrativeDraft(result({
-    sections: [
-      { sectionKey: 'DISCHARGE_HOME_THERAPY', rawText: 'Ramipril 5 mg.' },
-      { sectionKey: 'HOSPITAL_THERAPY', rawText: 'Furosemide ev.' },
-    ],
-  }));
+  const draft = buildNarrativeDraft(
+    result({
+      sections: [
+        { sectionKey: 'DISCHARGE_HOME_THERAPY', rawText: 'Ramipril 5 mg.' },
+        { sectionKey: 'HOSPITAL_THERAPY', rawText: 'Furosemide ev.' },
+      ],
+    }),
+  );
   const therapy = narrativeDraftToSectionRows(draft).find((r) => r.sectionKey === 'THERAPY')!;
   assert.ok(therapy.originalText.includes('Ramipril 5 mg.'));
   assert.ok(therapy.originalText.includes('Furosemide ev.'));

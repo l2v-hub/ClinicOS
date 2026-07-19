@@ -1,5 +1,5 @@
 ---
-description: "Task list — Redesign Navigazione Scheda Paziente Tablet-First"
+description: 'Task list — Redesign Navigazione Scheda Paziente Tablet-First'
 ---
 
 # Tasks: Redesign Navigazione Scheda Paziente Tablet-First

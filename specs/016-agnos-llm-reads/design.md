@@ -105,18 +105,21 @@ errore per l'utente): il chatbot resta funzionante come oggi (potenziato — ved
 ## 6. Sicurezza e GDPR (la parte critica)
 
 ### 6.1 Classificazione PHI dei due confini
+
 - **Planner** (domanda → tool): all'LLM va il testo della domanda. Può contenere un **nome paziente**
   (dato personale) ma non valori clinici. Rischio medio-basso.
 - **Composer** (risultati → prosa): all'LLM vanno **dati clinici reali**. Rischio alto. È il punto che
   SPEC-015 D1 aveva evitato per decisione del committente.
 
 ### 6.2 Postura richiesta (decisione committente — §11)
+
 Il trattamento di dati clinici da parte di un LLM è ammissibile **solo** con modello **self-hosted o
 in regione EU sotto DPA**, come già fatto per l'estrazione dimissioni (precedente conforme nel
 progetto). **Vietata** un'API esterna generica senza DPA/EU. Il modello per `compose` è configurato
 via env Railway; nessun dato clinico verso endpoint non approvati.
 
 ### 6.3 Garanzie invariate (difesa in profondità)
+
 - **Delete impossibile**: l'LLM non riceve alcun tool di scrittura/cancellazione; il tipo del piano
   ammette solo tool di lettura; l'executor rifiuta qualunque nome fuori allowlist read. Anche con
   prompt injection/jailbreak nel testo o **nei documenti importati**, non esiste un percorso di
@@ -135,6 +138,7 @@ via env Railway; nessun dato clinico verso endpoint non approvati.
   percorso deterministico con conferma esplicita dell'operatore.
 
 ## 7. Prompt design (sintesi)
+
 - **Planner**: system prompt con ruolo («traduci la domanda in chiamate ai tool di lettura elencati;
   se citi un paziente per nome, pianifica prima `search_patients`; non inventare tool»), lo schema
   JSON dei tool, e output forzato JSON (structured output). Temperatura 0.
@@ -144,12 +148,14 @@ via env Railway; nessun dato clinico verso endpoint non approvati.
   `refuse_clinical`, verificato anche a valle).
 
 ## 8. Correlazione
+
 La correlazione richiesta dall'utente («correla i dati se richiesto») è realizzata dal **piano
 multi-tool** + i tool `correlate_structured_data` / `search_across_patients` già esistenti, eseguiti
 dall'executor fidato; il composer poi sintetizza. Nessuna correlazione avviene dentro l'LLM su dati
 non recuperati dal gateway (evita invenzioni).
 
 ## 9. Confidence e fallback (nessuna regressione)
+
 - Se il runtime è assente/timeout/modello non configurato → **fallback deterministico**.
 - Se il planner LLM produce un piano non valido (tool fuori allowlist, JSON malformato) → fallback.
 - Se il composer non è disponibile → si rende la risposta **strutturata** attuale (elenco + fonti).
@@ -158,6 +164,7 @@ non recuperati dal gateway (evita invenzioni).
   anche a LLM spento. Questo è il ponte tra "oggi non funziona" e la fase LLM.
 
 ## 10. Test e validazione
+
 - **Unit**: validazione del piano LLM (rifiuto tool fuori allowlist → fallback); post-check SOURCE_ONLY
   del composer (scarto prosa con entità non citate); ricalcolo server-side di `requiresCrossPatientAccess`.
 - **Adversarial (obbligatori)**: prompt injection nel testo e nei documenti → nessun delete, nessun
@@ -169,6 +176,7 @@ non recuperati dal gateway (evita invenzioni).
 - **Golden set**: insieme di domande→piano atteso per misurare la qualità del planner prima/dopo.
 
 ## 11. Decisioni aperte (committente)
+
 1. **Modello/host per `compose`** (dati clinici → LLM): quale modello EU/self-hosted (il runtime
    attuale, provider `google:gemma` in EU? o Mistral/Azure EU già usato per l'estrazione?). Vincolo:
    DPA + regione EU; nessuna API esterna generica.
@@ -176,6 +184,7 @@ non recuperati dal gateway (evita invenzioni).
 3. **Ambito iniziale**: solo `current_patient` (rischio minore) o anche cross-patient dal giorno 1.
 
 ## 12. Consegna incrementale
+
 - **F0 (prerequisito, senza LLM)**: potenziamento deterministico — risoluzione paziente per nome +
   pattern plurali/sinonimi. Sblocca l'uso immediato e diventa il fallback.
 - **F1**: endpoint runtime `/v1/assistant/plan` + `planQueryLLM` con validazione e fallback (planner

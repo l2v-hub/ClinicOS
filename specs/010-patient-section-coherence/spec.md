@@ -8,7 +8,7 @@
 
 **Input**: User description: "Uniformare navigazione L2/L3 e layout sezioni cliniche Scheda Paziente. Problemi: L2 non uniforme, alcuni tab con bordo/pill altri con underline, breadcrumb duplicato, L3 disorganizzato in sezioni specifiche, Presa in Carico non ha la stessa qualita di Anamnesi, card non collassabili/modificabili, sotto-menu Terapia Farmacologica attaccato alla voce principale, badge counter incoerenti. Obiettivo: navigazione Scheda Paziente coerente e professionale. L1 invariata. Backend/Prisma/API/VITE_API_URL invariati."
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Operator sees one consistent L2 tab style across every Scheda Paziente sub-page (Priority: P1) - MVP
 
@@ -62,7 +62,7 @@ The operator navigates into a deep sub-page (e.g. Pazienti -> Mario Rossi -> Cli
 
 When a sub-page exposes a third level of navigation (sub-sections, contextual sub-tabs, or a tree view), the L3 surface reads as subordinate to the L2 row and is presented consistently from one section to another. For Panoramica / Profilo the L3 categories are Anagrafica, Contatti, Contatto emergenza, and Assegnazione clinica. The L3 surface never reads as a second main menu.
 
-**Why this priority**: Builds on the foundation that 009 already shipped for L3 styling. This feature ensures the *information architecture* of L3 is consistent across the Scheda Paziente, not just the visual treatment.
+**Why this priority**: Builds on the foundation that 009 already shipped for L3 styling. This feature ensures the _information architecture_ of L3 is consistent across the Scheda Paziente, not just the visual treatment.
 
 **Independent Test**: Open Panoramica / Profilo and confirm the four L3 categories appear in the listed order. Open another sub-page that exposes L3 (e.g. Clinica) and confirm the L3 treatment is visibly the same family as Panoramica's L3 surface — same scale, same spacing, same active indicator intensity — never larger or louder than L2.
 
@@ -117,7 +117,7 @@ Every counter badge shown on an L2 or L3 tab corresponds to a clearly defined, u
 - L1 sidebar is untouched. Confirming that L1 is not visually altered by any of the layout changes in this feature.
 - `prefers-reduced-motion: reduce` is set. Card expand / collapse must use the same reduced-motion behaviour as the canonical tab transition from 009 (no animation).
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -148,7 +148,7 @@ Every counter badge shown on an L2 or L3 tab corresponds to a clearly defined, u
 
 Not applicable - this feature has no new data entities. It refines presentation of existing Scheda Paziente sub-pages and consolidates the card / collapse / edit pattern that Anamnesi already exposes.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

@@ -28,21 +28,24 @@ export const AGNOS_ACTION_CATALOG: Record<string, AgnosCatalogEntry> = {
     kind: 'create',
     entity: 'vital_sign',
     enabled: true,
-    description: 'Registra un parametro vitale (pressione, temperatura, saturazione…) con orario esplicito.',
+    description:
+      'Registra un parametro vitale (pressione, temperatura, saturazione…) con orario esplicito.',
   },
   update_patient_demographics: {
     name: 'update_patient_demographics',
     kind: 'update',
     entity: 'patient',
     enabled: true,
-    description: 'Aggiorna un dato anagrafico non clinico (telefono, email, indirizzo, contatto di emergenza).',
+    description:
+      'Aggiorna un dato anagrafico non clinico (telefono, email, indirizzo, contatto di emergenza).',
   },
   update_narrative_section: {
     name: 'update_narrative_section',
     kind: 'update',
     entity: 'narrative_section',
     enabled: true,
-    description: 'Aggiunge testo a una sezione narrativa della cartella (solo append, mai sovrascrittura).',
+    description:
+      'Aggiunge testo a una sezione narrativa della cartella (solo append, mai sovrascrittura).',
   },
   add_diary_note: {
     name: 'add_diary_note',
@@ -58,14 +61,16 @@ export const AGNOS_ACTION_CATALOG: Record<string, AgnosCatalogEntry> = {
     kind: 'create',
     entity: 'appointment',
     enabled: true,
-    description: 'Crea un appuntamento in agenda (paziente, data, ora, tipologia) con controllo conflitti slot.',
+    description:
+      'Crea un appuntamento in agenda (paziente, data, ora, tipologia) con controllo conflitti slot.',
   },
   update_appointment: {
     name: 'update_appointment',
     kind: 'update',
     entity: 'appointment',
     enabled: true,
-    description: 'Sposta o aggiorna un appuntamento esistente in agenda (nuovo orario) con controllo conflitti slot.',
+    description:
+      'Sposta o aggiorna un appuntamento esistente in agenda (nuovo orario) con controllo conflitti slot.',
   },
   // Issue #130: consegne (handover cards) — create ONLY. delete_consegna does not exist and must
   // never be added: la cancellazione consegne è riservata al pulsante della UI tradizionale.
@@ -74,7 +79,8 @@ export const AGNOS_ACTION_CATALOG: Record<string, AgnosCatalogEntry> = {
     kind: 'create',
     entity: 'consegna',
     enabled: true,
-    description: 'Crea una consegna operativa per un paziente (testo libero) con conferma obbligatoria.',
+    description:
+      'Crea una consegna operativa per un paziente (testo libero) con conferma obbligatoria.',
   },
 };
 
@@ -97,5 +103,8 @@ export function isActionAllowed(name: string, env: NodeJS.ProcessEnv = process.e
 /** Inspectable catalog for GET /ai/actions/catalog (proof: zero delete actions). */
 export function listCatalog(env: NodeJS.ProcessEnv = process.env): AgnosCatalogEntry[] {
   const off = envDisabledNames(env);
-  return Object.values(AGNOS_ACTION_CATALOG).map((e) => ({ ...e, enabled: e.enabled && !off.has(e.name) }));
+  return Object.values(AGNOS_ACTION_CATALOG).map((e) => ({
+    ...e,
+    enabled: e.enabled && !off.has(e.name),
+  }));
 }

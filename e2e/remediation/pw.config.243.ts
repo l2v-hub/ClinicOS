@@ -9,7 +9,14 @@ export default defineConfig({
   workers: 1,
   outputDir: '../../artifacts/task-validation/243-modules-section-operational/test-results',
   reporter: [
-    ['html', { outputFolder: '../../artifacts/task-validation/243-modules-section-operational/playwright-report', open: 'never' }],
+    [
+      'html',
+      {
+        outputFolder:
+          '../../artifacts/task-validation/243-modules-section-operational/playwright-report',
+        open: 'never',
+      },
+    ],
     ['list'],
   ],
   use: {

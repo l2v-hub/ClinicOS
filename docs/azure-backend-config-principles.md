@@ -1,7 +1,7 @@
 # Backend configuration principles for a future Azure deployment (#225)
 
 **Status:** principles only. **No production deployment is performed by this document** (AC3). Current
-production keeps running on Railway; this defines *how* config/secrets must be modelled so that a future
+production keeps running on Railway; this defines _how_ config/secrets must be modelled so that a future
 Azure backend is a configuration change, not a code rewrite.
 
 Scope: environment/secret model + provider swappability for the AI/LLM layer (Agnos chatbot, OCR,
@@ -27,11 +27,12 @@ API key, token). This already holds in the runtime:
   - **Legacy** `AI_AGENT_MODEL` remains only as a fallback when `AGNOS_LLM_PROVIDER` is unset.
 
 **Secret custody:**
+
 - Runtime secrets live in the platform's secret store — Railway variables today; **Azure Key Vault**
   (referenced from App Service / Container Apps settings) for a future Azure backend. Never in git.
 - Secrets are never committed and never printed as full values. Config summaries log
   provider/model/source only (see `env_config.safe_config_summary`), never keys/endpoints.
-- Health checks are secret-free: they expose *presence* booleans (`endpointConfigured`,
+- Health checks are secret-free: they expose _presence_ booleans (`endpointConfigured`,
   `apiKeyConfigured`), never values (see `/v1/assistant/llm-health`, #239).
 
 ## 2. Provider dependencies remain swappable (AC2)

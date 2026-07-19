@@ -2,22 +2,27 @@
 
 Nuovi endpoint su `clinicos-ai-runtime` (FastAPI), stesso `AI_RUNTIME_SERVICE_TOKEN` service-to-service delle document-jobs. Chiamati SOLO dal backend (mai dal browser). Temperatura 0, timeout ≤ `AI_ASSISTANT_TIMEOUT_MS`. Errori/timeout ⇒ il backend usa il percorso deterministico.
 
-## POST /v1/assistant/plan  (F1)
+## POST /v1/assistant/plan (F1)
 
 Interpreta la domanda e propone un piano di lettura. **Non riceve dati clinici** (solo il testo domanda + contesto).
 
 Request:
+
 ```json
 {
   "question": "mostra le allergie di Elena Moretti",
   "currentPatientId": null,
   "scope_hint": "auto",
   "roles": ["operatore"],
-  "toolSchema": [ { "name": "get_patient_allergies", "args": { "patientId": "string" } }, "…(solo tool read)" ]
+  "toolSchema": [
+    { "name": "get_patient_allergies", "args": { "patientId": "string" } },
+    "…(solo tool read)"
+  ]
 }
 ```
 
 Response 200:
+
 ```json
 {
   "plan": {
@@ -32,24 +37,31 @@ Response 200:
   "confidence": 0.86
 }
 ```
+
 - Il backend **valida**: ogni `tool` ∈ allowlist read; `requiresCrossPatientAccess` è **ricalcolato server-side** (il valore del modello è indicativo); risoluzione `$N` di riferimento a risultati precedenti gestita dall'executor. Piano invalido / JSON malformato ⇒ fallback deterministico + audit `mode:deterministic`.
 - Nessun tool di scrittura/cancellazione è ammesso nello schema né nell'output (FR-008).
 
-## POST /v1/assistant/compose  (F2)
+## POST /v1/assistant/compose (F2)
 
 Compone la risposta discorsiva dai risultati. **Riceve dati clinici** ⇒ ammesso solo con modello EU/self-hosted sotto DPA (FR-011). Se il modello configurato non è approvato, il backend non chiama questo endpoint e rende la risposta strutturata.
 
 Request:
+
 ```json
 {
   "question": "mostra le allergie di Elena Moretti",
-  "results": [ { "type": "allergy", "value": "Penicillina", "severity": "grave", "sourceId": "src_1" } ],
-  "sources": [ { "id": "src_1", "type": "NARRATIVE_SECTION", "patientId": "pat_1", "recordId": "rec_9" } ],
+  "results": [
+    { "type": "allergy", "value": "Penicillina", "severity": "grave", "sourceId": "src_1" }
+  ],
+  "sources": [
+    { "id": "src_1", "type": "NARRATIVE_SECTION", "patientId": "pat_1", "recordId": "rec_9" }
+  ],
   "language": "it"
 }
 ```
 
 Response 200:
+
 ```json
 {
   "answerText": "Elena Moretti ha un'allergia grave alla penicillina [fonte: sezione allergie].",
@@ -57,6 +69,7 @@ Response 200:
   "refusal": null
 }
 ```
+
 - **Post-check backend (SOURCE_ONLY)**: se `answerText` cita valori/entità non presenti in `results`, la prosa è scartata e si rende la risposta strutturata (FR-006). `citedSources` deve essere sottoinsieme di `sources`.
 - Richieste di giudizio clinico ⇒ `refusal` valorizzato (coerente col rifiuto deterministico).
 - I contenuti clinici **non** vengono loggati (FR-012).

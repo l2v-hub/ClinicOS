@@ -30,7 +30,9 @@ try {
 
   res = await af(`${base}/${jobId}/process`, { method: 'POST' });
   body = await res.json();
-  console.log(`process: status=${body.status} model=${body.model ?? '-'} error=${body.error ?? '-'}`);
+  console.log(
+    `process: status=${body.status} model=${body.model ?? '-'} error=${body.error ?? '-'}`,
+  );
 
   res = await af(`${base}/${jobId}/result`);
   const result = await res.json();
@@ -40,8 +42,14 @@ try {
   console.log('nome:', JSON.stringify(anag.nome));
   console.log('cognome:', JSON.stringify(anag.cognome));
   console.log('dataNascita:', JSON.stringify(anag.dataNascita));
-  console.log('diagnosi items:', (rd.cartella?.diagnosi?.items ?? []).map((i) => i.value?.descrizione));
-  console.log('allergie items:', (rd.cartella?.allergie?.items ?? []).map((i) => i.value?.allergene));
+  console.log(
+    'diagnosi items:',
+    (rd.cartella?.diagnosi?.items ?? []).map((i) => i.value?.descrizione),
+  );
+  console.log(
+    'allergie items:',
+    (rd.cartella?.allergie?.items ?? []).map((i) => i.value?.allergene),
+  );
   console.log('merge version:', rd._merge?.version, '| report:', JSON.stringify(rd._merge?.report));
 
   const serialized = JSON.stringify(result);
@@ -49,5 +57,8 @@ try {
 } catch (e) {
   console.log('ERROR:', e?.message ?? e);
 } finally {
-  if (jobId) { await af(`${base}/${jobId}/cancel`, { method: 'POST' }).catch(() => {}); console.log('cleanup: job cancelled'); }
+  if (jobId) {
+    await af(`${base}/${jobId}/cancel`, { method: 'POST' }).catch(() => {});
+    console.log('cleanup: job cancelled');
+  }
 }

@@ -13,7 +13,10 @@ export interface LlmPlanRequest {
   roles: string[];
   toolSchema: typeof READ_TOOL_SCHEMA;
 }
-export interface LlmPlanResponse { plan: unknown; confidence?: number }
+export interface LlmPlanResponse {
+  plan: unknown;
+  confidence?: number;
+}
 
 export interface PlanQueryLLMDeps {
   /** Client del runtime LLM (iniettabile per i test). Assente ⇒ solo deterministico. */
@@ -21,14 +24,28 @@ export interface PlanQueryLLMDeps {
   roles?: string[];
 }
 
-export interface PlanResult { plan: QueryPlan; mode: 'llm' | 'deterministic' }
+export interface PlanResult {
+  plan: QueryPlan;
+  mode: 'llm' | 'deterministic';
+}
 
 // I tool che comportano accesso cross-patient: se il piano LLM ne usa uno, il server IMPONE cross.
-const CROSS_TOOLS = new Set(['search_across_patients', 'correlate_structured_data', 'query_appointments_today']);
+const CROSS_TOOLS = new Set([
+  'search_across_patients',
+  'correlate_structured_data',
+  'query_appointments_today',
+]);
 
 // Tool vincolati a un singolo paziente: il patientId è AUTORITATIVO lato server (risolto da F0),
 // mai dedotto dall'LLM. Vi si inietta il currentPatientId quando manca.
-const PATIENT_SCOPED = new Set(['get_patient_allergies', 'get_patient_therapies', 'get_patient_vital_signs', 'get_patient_timeline', 'get_patient_appointments', 'search_clinical_sections']);
+const PATIENT_SCOPED = new Set([
+  'get_patient_allergies',
+  'get_patient_therapies',
+  'get_patient_vital_signs',
+  'get_patient_timeline',
+  'get_patient_appointments',
+  'search_clinical_sections',
+]);
 
 /**
  * Impone il currentPatientId (risolto server-side da F0) su OGNI tool patient-scoped. Il
@@ -44,7 +61,21 @@ export function injectPatientId(plan: QueryPlan, patientId?: string): QueryPlan 
   );
   return { ...plan, tools };
 }
-const INTENTS = new Set<AssistantIntent>(['allergies', 'therapies', 'vitals_range', 'vitals_recent', 'narrative_search', 'document_search', 'timeline', 'appointments', 'correlate', 'patient_search', 'refuse_clinical', 'data_query', 'unknown']);
+const INTENTS = new Set<AssistantIntent>([
+  'allergies',
+  'therapies',
+  'vitals_range',
+  'vitals_recent',
+  'narrative_search',
+  'document_search',
+  'timeline',
+  'appointments',
+  'correlate',
+  'patient_search',
+  'refuse_clinical',
+  'data_query',
+  'unknown',
+]);
 
 /** Valida la forma del piano LLM e i tool contro l'allowlist read. Ritorna null se non valido. */
 function validatePlan(raw: unknown, ctx: PlanContext): QueryPlan | null {
@@ -72,12 +103,19 @@ function validatePlan(raw: unknown, ctx: PlanContext): QueryPlan | null {
 }
 
 /** Pianifica una lettura via LLM con validazione e fallback deterministico garantito. */
-export async function planQueryLLM(question: string, ctx: PlanContext, deps: PlanQueryLLMDeps = {}): Promise<PlanResult> {
+export async function planQueryLLM(
+  question: string,
+  ctx: PlanContext,
+  deps: PlanQueryLLMDeps = {},
+): Promise<PlanResult> {
   const fallback = (): PlanResult => ({ plan: planQuery(question, ctx), mode: 'deterministic' });
   if (!deps.callPlanRuntime) return fallback();
   try {
     const res = await deps.callPlanRuntime({
-      question, currentPatientId: ctx.currentPatientId, roles: deps.roles ?? [], toolSchema: READ_TOOL_SCHEMA,
+      question,
+      currentPatientId: ctx.currentPatientId,
+      roles: deps.roles ?? [],
+      toolSchema: READ_TOOL_SCHEMA,
     });
     const validated = validatePlan(res?.plan, ctx);
     if (!validated) return fallback();

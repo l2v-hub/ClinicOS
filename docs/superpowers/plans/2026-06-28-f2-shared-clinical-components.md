@@ -22,9 +22,11 @@
 ### Task 1: Shared section types
 
 **Files:**
+
 - Create: `frontend/src/components/operator/sections/types.ts`
 
 **Interfaces:**
+
 - Produces:
   - `type SectionMode = 'patient-chart' | 'intake' | 'review'`
   - `interface SectionProps<T> { mode: SectionMode; value: T; onChange: (next: T) => void; readOnly?: boolean; operatoreNome?: string }`
@@ -76,10 +78,12 @@ git commit -m "feat(sections): shared SectionProps + PatientSectionDefinition ty
 ### Task 2: Canonical section registry
 
 **Files:**
+
 - Create: `frontend/src/components/operator/sections/patientSections.ts`
 - Create: `frontend/src/components/operator/sections/__tests__/patientSections.test.ts`
 
 **Interfaces:**
+
 - Consumes: `PatientSectionDefinition` from Task 1.
 - Produces:
   - `const PATIENT_SECTIONS: PatientSectionDefinition[]`
@@ -97,14 +101,14 @@ import assert from 'node:assert/strict';
 import { PATIENT_SECTIONS, intakeSections, getSection } from '../patientSections.js';
 
 test('registry lists the core clinical sections', () => {
-  const keys = PATIENT_SECTIONS.map(s => s.sectionKey);
+  const keys = PATIENT_SECTIONS.map((s) => s.sectionKey);
   for (const k of ['allergie', 'diagnosi', 'terapia', 'parametri', 'dolore', 'anamnesi']) {
     assert.ok(keys.includes(k), `missing section ${k}`);
   }
 });
 
 test('intakeSections returns only intake-available sections', () => {
-  assert.ok(intakeSections().every(s => s.availableDuringIntake));
+  assert.ok(intakeSections().every((s) => s.availableDuringIntake));
 });
 
 test('getSection resolves by key', () => {
@@ -125,23 +129,73 @@ Expected: FAIL — cannot find `../patientSections.js`.
 import type { ComponentType } from 'react';
 import type { PatientSectionDefinition, SectionProps } from './types.js';
 
-const TODO: ComponentType<SectionProps<never>> = () => { throw new Error('section component not yet extracted'); };
+const TODO: ComponentType<SectionProps<never>> = () => {
+  throw new Error('section component not yet extracted');
+};
 
 export const PATIENT_SECTIONS: PatientSectionDefinition[] = [
-  { sectionKey: 'allergie',   title: 'Allergie',            component: TODO, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: true,  permissions: ['operatore'] },
-  { sectionKey: 'anamnesi',   title: 'Anamnesi',            component: TODO, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: true,  permissions: ['operatore'] },
-  { sectionKey: 'diagnosi',   title: 'Diagnosi',            component: TODO, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: true,  permissions: ['operatore'] },
-  { sectionKey: 'terapia',    title: 'Terapia Farmacologica', component: TODO, availableDuringIntake: true, requiredDuringIntake: false, supportedByDocumentImport: true, permissions: ['operatore'] },
-  { sectionKey: 'parametri',  title: 'Parametri Vitali',    component: TODO, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: false, permissions: ['operatore'] },
-  { sectionKey: 'dolore',     title: 'Dolore (NRS)',        component: TODO, availableDuringIntake: true,  requiredDuringIntake: false, supportedByDocumentImport: false, permissions: ['operatore'] },
+  {
+    sectionKey: 'allergie',
+    title: 'Allergie',
+    component: TODO,
+    availableDuringIntake: true,
+    requiredDuringIntake: false,
+    supportedByDocumentImport: true,
+    permissions: ['operatore'],
+  },
+  {
+    sectionKey: 'anamnesi',
+    title: 'Anamnesi',
+    component: TODO,
+    availableDuringIntake: true,
+    requiredDuringIntake: false,
+    supportedByDocumentImport: true,
+    permissions: ['operatore'],
+  },
+  {
+    sectionKey: 'diagnosi',
+    title: 'Diagnosi',
+    component: TODO,
+    availableDuringIntake: true,
+    requiredDuringIntake: false,
+    supportedByDocumentImport: true,
+    permissions: ['operatore'],
+  },
+  {
+    sectionKey: 'terapia',
+    title: 'Terapia Farmacologica',
+    component: TODO,
+    availableDuringIntake: true,
+    requiredDuringIntake: false,
+    supportedByDocumentImport: true,
+    permissions: ['operatore'],
+  },
+  {
+    sectionKey: 'parametri',
+    title: 'Parametri Vitali',
+    component: TODO,
+    availableDuringIntake: true,
+    requiredDuringIntake: false,
+    supportedByDocumentImport: false,
+    permissions: ['operatore'],
+  },
+  {
+    sectionKey: 'dolore',
+    title: 'Dolore (NRS)',
+    component: TODO,
+    availableDuringIntake: true,
+    requiredDuringIntake: false,
+    supportedByDocumentImport: false,
+    permissions: ['operatore'],
+  },
 ];
 
 export function intakeSections(): PatientSectionDefinition[] {
-  return PATIENT_SECTIONS.filter(s => s.availableDuringIntake);
+  return PATIENT_SECTIONS.filter((s) => s.availableDuringIntake);
 }
 
 export function getSection(sectionKey: string): PatientSectionDefinition | undefined {
-  return PATIENT_SECTIONS.find(s => s.sectionKey === sectionKey);
+  return PATIENT_SECTIONS.find((s) => s.sectionKey === sectionKey);
 }
 ```
 
@@ -164,11 +218,13 @@ git commit -m "feat(sections): canonical patient-section registry (#123)"
 This is the **template** every later editor extraction follows: lift the current chart editor's JSX into a controlled component that takes `value`/`onChange`, and re-wire the chart to render it through the section wrapper with `mode="patient-chart"`.
 
 **Files:**
+
 - Create: `frontend/src/components/operator/sections/AllergiesEditor.tsx`
 - Modify: `frontend/src/components/operator/PatientDetail.tsx` (replace the inline allergie editor — currently `saveAllergie`/`addAllergia` near `PatientDetail.tsx:385` — with `<AllergiesEditor mode="patient-chart" value={cartella.allergie ?? []} onChange={list => upd({ allergie: list })} />`)
 - Modify: `frontend/src/components/operator/sections/patientSections.ts` (set `allergie.component = AllergiesEditor`)
 
 **Interfaces:**
+
 - Consumes: `SectionProps` (Task 1); `AllergiaItem` (from `../../../types`).
 - Produces: `function AllergiesEditor(props: SectionProps<AllergiaItem[]>): JSX.Element`
 
@@ -189,28 +245,69 @@ export function AllergiesEditor({ value, onChange, readOnly }: SectionProps<Alle
 
   function add() {
     if (!form.allergene) return;
-    onChange([...list, { allergene: form.allergene, reazione: form.reazione ?? '', gravita: form.gravita ?? 'lieve' } as AllergiaItem]);
+    onChange([
+      ...list,
+      {
+        allergene: form.allergene,
+        reazione: form.reazione ?? '',
+        gravita: form.gravita ?? 'lieve',
+      } as AllergiaItem,
+    ]);
     setForm({});
   }
-  function remove(i: number) { onChange(list.filter((_, idx) => idx !== i)); }
+  function remove(i: number) {
+    onChange(list.filter((_, idx) => idx !== i));
+  }
 
   return (
     <div className="alg-editor">
       {list.length === 0 && <p className="cr-empty">Nessuna allergia registrata.</p>}
       {list.map((a, i) => (
         <div key={i} className="alg-row">
-          <span>{a.allergene}{a.reazione ? ` — ${a.reazione}` : ''}{a.gravita ? ` (${a.gravita})` : ''}</span>
-          {!readOnly && <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => remove(i)}><IcoTrash /></button>}
+          <span>
+            {a.allergene}
+            {a.reazione ? ` — ${a.reazione}` : ''}
+            {a.gravita ? ` (${a.gravita})` : ''}
+          </span>
+          {!readOnly && (
+            <button
+              className="icon-btn icon-btn--sm icon-btn--danger"
+              title="Elimina"
+              onClick={() => remove(i)}
+            >
+              <IcoTrash />
+            </button>
+          )}
         </div>
       ))}
       {!readOnly && (
         <div className="alg-form">
-          <input className="form-input" placeholder="Allergene" value={form.allergene ?? ''} onChange={e => setForm(f => ({ ...f, allergene: e.target.value }))} />
-          <input className="form-input" placeholder="Reazione" value={form.reazione ?? ''} onChange={e => setForm(f => ({ ...f, reazione: e.target.value }))} />
-          <select className="form-input" value={form.gravita ?? 'lieve'} onChange={e => setForm(f => ({ ...f, gravita: e.target.value as AllergiaItem['gravita'] }))}>
-            <option value="lieve">Lieve</option><option value="moderata">Moderata</option><option value="grave">Grave</option>
+          <input
+            className="form-input"
+            placeholder="Allergene"
+            value={form.allergene ?? ''}
+            onChange={(e) => setForm((f) => ({ ...f, allergene: e.target.value }))}
+          />
+          <input
+            className="form-input"
+            placeholder="Reazione"
+            value={form.reazione ?? ''}
+            onChange={(e) => setForm((f) => ({ ...f, reazione: e.target.value }))}
+          />
+          <select
+            className="form-input"
+            value={form.gravita ?? 'lieve'}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, gravita: e.target.value as AllergiaItem['gravita'] }))
+            }
+          >
+            <option value="lieve">Lieve</option>
+            <option value="moderata">Moderata</option>
+            <option value="grave">Grave</option>
           </select>
-          <button className="btn-primary btn-sm" onClick={add}><IcoCheck /> Aggiungi</button>
+          <button className="btn-primary btn-sm" onClick={add}>
+            <IcoCheck /> Aggiungi
+          </button>
         </div>
       )}
     </div>
@@ -223,8 +320,13 @@ export function AllergiesEditor({ value, onChange, readOnly }: SectionProps<Alle
 - [ ] **Step 3: Wire it into the chart** — in `PatientDetail.tsx`, replace the inline allergie editor JSX with:
 
 ```tsx
-<AllergiesEditor mode="patient-chart" value={cartella.allergie ?? []} onChange={list => upd({ allergie: list })} />
+<AllergiesEditor
+  mode="patient-chart"
+  value={cartella.allergie ?? []}
+  onChange={(list) => upd({ allergie: list })}
+/>
 ```
+
 and add the import `import { AllergiesEditor } from './sections/AllergiesEditor';`. Remove the now-dead local `allergiaForm`/`addAllergia`/`saveAllergie` if no longer referenced.
 
 - [ ] **Step 4: Point the registry at it** — in `patientSections.ts`, `import { AllergiesEditor }` and set the `allergie` row's `component: AllergiesEditor as ...`.
@@ -236,6 +338,7 @@ cd frontend && node ../node_modules/vite/bin/vite.js build   # must succeed
 # start app per run-clinicos skill, then:
 MSYS_NO_PATHCONV=1 node .claude/skills/run-clinicos/driver.mjs shot / /tmp/allergie.png desktop operatore "Pazienti>>Moretti, Elena>>Clinica>>Allergie"
 ```
+
 Expected: build OK; the Allergie section in the chart renders + add/remove works identically to before. Read the PNG to confirm.
 
 - [ ] **Step 6: Commit**
@@ -264,10 +367,12 @@ After each task: `node node_modules/tsx/dist/cli.mjs --test frontend/src/compone
 ### Task 9: Section wrapper + registry-driven render helper
 
 **Files:**
+
 - Create: `frontend/src/components/operator/sections/PatientSection.tsx`
 - Create: `frontend/src/components/operator/sections/__tests__/sectionResolve.test.ts`
 
 **Interfaces:**
+
 - Consumes: `getSection` (Task 2), `SectionProps` (Task 1).
 - Produces: `function PatientSection(props: { sectionKey: string } & SectionProps<never>): JSX.Element | null` — looks up the registry component by key and renders it, or `null` + a console.warn if unknown/unimplemented.
 
@@ -296,13 +401,21 @@ import type { ComponentType } from 'react';
 import type { SectionProps } from './types';
 import { getSection } from './patientSections';
 
-export function resolveSectionComponent(sectionKey: string): ComponentType<SectionProps<never>> | null {
+export function resolveSectionComponent(
+  sectionKey: string,
+): ComponentType<SectionProps<never>> | null {
   return getSection(sectionKey)?.component ?? null;
 }
 
-export function PatientSection({ sectionKey, ...rest }: { sectionKey: string } & SectionProps<never>) {
+export function PatientSection({
+  sectionKey,
+  ...rest
+}: { sectionKey: string } & SectionProps<never>) {
   const Cmp = resolveSectionComponent(sectionKey);
-  if (!Cmp) { console.warn(`PatientSection: unknown section ${sectionKey}`); return null; }
+  if (!Cmp) {
+    console.warn(`PatientSection: unknown section ${sectionKey}`);
+    return null;
+  }
   return <Cmp {...rest} />;
 }
 ```

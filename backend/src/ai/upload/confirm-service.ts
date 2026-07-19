@@ -57,7 +57,10 @@ export interface ConfirmResult {
 }
 
 /** Merge reviewed cartella into an existing one: non-empty scalars win, arrays concat+dedup. */
-function mergeCartella(existing: Record<string, unknown>, incoming: Record<string, unknown>): Record<string, unknown> {
+function mergeCartella(
+  existing: Record<string, unknown>,
+  incoming: Record<string, unknown>,
+): Record<string, unknown> {
   const out: Record<string, unknown> = { ...existing };
   for (const [k, v] of Object.entries(incoming)) {
     if (Array.isArray(v)) {
@@ -65,7 +68,10 @@ function mergeCartella(existing: Record<string, unknown>, incoming: Record<strin
       const seen = new Set(prev.map((x) => JSON.stringify(x)));
       out[k] = [...prev, ...v.filter((x) => !seen.has(JSON.stringify(x)))];
     } else if (v && typeof v === 'object') {
-      out[k] = mergeCartella((out[k] as Record<string, unknown>) ?? {}, v as Record<string, unknown>);
+      out[k] = mergeCartella(
+        (out[k] as Record<string, unknown>) ?? {},
+        v as Record<string, unknown>,
+      );
     } else if (v !== '' && v != null) {
       out[k] = v;
     }
@@ -102,7 +108,10 @@ interface MaterializeArgs {
 
 type PrismaTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
 
-async function materializePatient(tx: PrismaTx, { patient: p, cartellaData, narrative, jobId, therapies }: MaterializeArgs) {
+async function materializePatient(
+  tx: PrismaTx,
+  { patient: p, cartellaData, narrative, jobId, therapies }: MaterializeArgs,
+) {
   const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
   const created = await tx.patient.create({
     data: {
@@ -138,7 +147,10 @@ async function materializePatient(tx: PrismaTx, { patient: p, cartellaData, narr
 // If the draft is already confirmed, returns the existing patient (idempotent).
 // On success sets draft status='confirmed', confirmedPatientId, confirmedAt.
 // Full rollback if the transaction throws — draft stays 'draft'.
-export async function confirmDraft(draftId: string, payload: ConfirmPayload): Promise<ConfirmResult> {
+export async function confirmDraft(
+  draftId: string,
+  payload: ConfirmPayload,
+): Promise<ConfirmResult> {
   const draft = await getDraft(draftId);
   if (!draft) throw new AiExtractionError('config', 'Bozza non trovata');
 
@@ -148,7 +160,12 @@ export async function confirmDraft(draftId: string, payload: ConfirmPayload): Pr
     if (existing) {
       return {
         status: 'idempotent',
-        patient: { id: existing.id, firstName: existing.firstName, lastName: existing.lastName, medicalRecordNumber: existing.medicalRecordNumber },
+        patient: {
+          id: existing.id,
+          firstName: existing.firstName,
+          lastName: existing.lastName,
+          medicalRecordNumber: existing.medicalRecordNumber,
+        },
       };
     }
   }
@@ -163,7 +180,8 @@ export async function confirmDraft(draftId: string, payload: ConfirmPayload): Pr
   }
 
   // Narrative from draft data if present (opt-in; skipped for manual drafts without narrative).
-  const narrative = (draft.data as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
+  const narrative =
+    (draft.data as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
 
   // ── Clinical-safety guards (parity with confirmJob) ──────────────────────────
   // Import-seeded drafts carry a linked importJob whose resultData holds the
@@ -172,24 +190,34 @@ export async function confirmDraft(draftId: string, payload: ConfirmPayload): Pr
   // (no importJobId) have no narrative/sections and skip these — unchanged.
   if (draft.importJobId) {
     const job = await prisma.importJob.findUnique({ where: { id: draft.importJobId } });
-    const resultData = job?.resultData as
-      | { _sections?: SectionsResult; cleanedRawText?: string; rawText?: string }
-      | null;
+    const resultData = job?.resultData as {
+      _sections?: SectionsResult;
+      cleanedRawText?: string;
+      rawText?: string;
+    } | null;
 
     // REQ-026: contradictory allergy reading blocks confirmation until operator override.
     const sections = resultData?._sections;
     if (isConfirmBlocked(sections) && !payload.confirmAllergyConflict) {
       await audit(draft.importJobId, 'allergy_conflict_blocked', undefined, 'allergie conflicting');
-      throw new AiExtractionError('config', 'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.');
+      throw new AiExtractionError(
+        'config',
+        'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.',
+      );
     }
 
     // BUG-051: clinical text detected in source but lost from the narrative blocks confirm.
     if (narrative) {
-      const sourceText = resultData?.cleanedRawText?.trim() ? resultData.cleanedRawText : (resultData?.rawText ?? '');
+      const sourceText = resultData?.cleanedRawText?.trim()
+        ? resultData.cleanedRawText
+        : (resultData?.rawText ?? '');
       const lost = detectSectionLoss(sourceText, narrative);
       if (lost.length > 0) {
         await audit(draft.importJobId, 'narrative_content_lost_blocked', undefined, lost.join(','));
-        throw new AiExtractionError('config', `Importazione bloccata: testo clinico rilevato ma non importato per: ${lost.join(', ')}. Riprocessare i documenti.`);
+        throw new AiExtractionError(
+          'config',
+          `Importazione bloccata: testo clinico rilevato ma non importato per: ${lost.join(', ')}. Riprocessare i documenti.`,
+        );
       }
     }
   }
@@ -206,8 +234,17 @@ export async function confirmDraft(draftId: string, payload: ConfirmPayload): Pr
   if (dupes.length > 0 && !payload.confirmDuplicate) {
     const dup = dupes[0];
     // Audit: best-effort using linked importJobId if available (ImportAudit FK requires a valid job).
-    if (draft.importJobId) await audit(draft.importJobId, 'duplicate_flagged', dup.id, `draft:${draftId}`);
-    return { status: 'duplicate', duplicate: { id: dup.id, firstName: dup.firstName, lastName: dup.lastName, medicalRecordNumber: dup.medicalRecordNumber } };
+    if (draft.importJobId)
+      await audit(draft.importJobId, 'duplicate_flagged', dup.id, `draft:${draftId}`);
+    return {
+      status: 'duplicate',
+      duplicate: {
+        id: dup.id,
+        firstName: dup.firstName,
+        lastName: dup.lastName,
+        medicalRecordNumber: dup.medicalRecordNumber,
+      },
+    };
   }
 
   const cartellaData: Record<string, unknown> = {
@@ -237,15 +274,32 @@ export async function confirmDraft(draftId: string, payload: ConfirmPayload): Pr
     });
 
     // Best-effort audit: only when a linked import job exists (FK constraint).
-    if (draft.importJobId) await audit(draft.importJobId, 'patient_created', created.id, `draft:${draftId}`);
+    if (draft.importJobId)
+      await audit(draft.importJobId, 'patient_created', created.id, `draft:${draftId}`);
 
     return {
       status: 'created',
-      patient: { id: created.id, firstName: created.firstName, lastName: created.lastName, medicalRecordNumber: created.medicalRecordNumber },
+      patient: {
+        id: created.id,
+        firstName: created.firstName,
+        lastName: created.lastName,
+        medicalRecordNumber: created.medicalRecordNumber,
+      },
     };
   } catch (err) {
-    if (draft.importJobId) await audit(draft.importJobId, 'confirm_failed', undefined, err instanceof Error ? err.message.slice(0, 120) : 'error');
-    throw err instanceof AiExtractionError ? err : new AiExtractionError('provider_error', 'Errore durante la conferma transazionale della bozza');
+    if (draft.importJobId)
+      await audit(
+        draft.importJobId,
+        'confirm_failed',
+        undefined,
+        err instanceof Error ? err.message.slice(0, 120) : 'error',
+      );
+    throw err instanceof AiExtractionError
+      ? err
+      : new AiExtractionError(
+          'provider_error',
+          'Errore durante la conferma transazionale della bozza',
+        );
   }
 }
 
@@ -259,7 +313,12 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
     if (existing) {
       return {
         status: 'idempotent',
-        patient: { id: existing.id, firstName: existing.firstName, lastName: existing.lastName, medicalRecordNumber: existing.medicalRecordNumber },
+        patient: {
+          id: existing.id,
+          firstName: existing.firstName,
+          lastName: existing.lastName,
+          medicalRecordNumber: existing.medicalRecordNumber,
+        },
       };
     }
   }
@@ -269,10 +328,14 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
   // sections pass produced a 'conflicting' status; otherwise this is a no-op.
   const sections = (job.resultData as { _sections?: SectionsResult } | null)?._sections;
   // REQ-029: faithful narrative draft persisted into PatientNarrativeSection on confirm.
-  const narrative = (job.resultData as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
+  const narrative =
+    (job.resultData as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
   if (isConfirmBlocked(sections) && !payload.confirmAllergyConflict) {
     await audit(jobId, 'allergy_conflict_blocked', undefined, 'allergie conflicting');
-    throw new AiExtractionError('config', 'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.');
+    throw new AiExtractionError(
+      'config',
+      'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.',
+    );
   }
 
   // BUG-051: a section detected with non-empty text in the source must never be persisted with
@@ -285,7 +348,10 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
     const lost = detectSectionLoss(sourceText, narrative);
     if (lost.length > 0) {
       await audit(jobId, 'narrative_content_lost_blocked', undefined, lost.join(','));
-      throw new AiExtractionError('config', `Importazione bloccata: testo clinico rilevato ma non importato per: ${lost.join(', ')}. Riprocessare i documenti.`);
+      throw new AiExtractionError(
+        'config',
+        `Importazione bloccata: testo clinico rilevato ma non importato per: ${lost.join(', ')}. Riprocessare i documenti.`,
+      );
     }
   }
 
@@ -307,10 +373,11 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
     if (!existing) throw new AiExtractionError('config', 'Paziente esistente non trovato');
     const updated = await prisma.$transaction(async (tx) => {
       const cur = await tx.cartella.findUnique({ where: { patientId: existing.id } });
-      const merged = mergeCartella(
-        (cur?.data as Record<string, unknown>) ?? {},
-        { ...(payload.cartella ?? {}), ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}), _lastImportJob: jobId },
-      );
+      const merged = mergeCartella((cur?.data as Record<string, unknown>) ?? {}, {
+        ...(payload.cartella ?? {}),
+        ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}),
+        _lastImportJob: jobId,
+      });
       await tx.cartella.upsert({
         where: { patientId: existing.id },
         create: { patientId: existing.id, data: merged as object },
@@ -318,13 +385,21 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
       });
       if (narrative) await persistNarrativeFromDraft(tx, existing.id, narrative, jobId);
       await persistImportDocuments(tx, existing.id, jobId);
-      await tx.importJob.update({ where: { id: jobId }, data: { status: 'confirmed', createdPatientId: existing.id, confirmedAt: new Date() } });
+      await tx.importJob.update({
+        where: { id: jobId },
+        data: { status: 'confirmed', createdPatientId: existing.id, confirmedAt: new Date() },
+      });
       return existing;
     });
     await audit(jobId, 'confirm_committed', updated.id, 'existing patient cartella updated');
     return {
       status: 'updated',
-      patient: { id: updated.id, firstName: updated.firstName, lastName: updated.lastName, medicalRecordNumber: updated.medicalRecordNumber },
+      patient: {
+        id: updated.id,
+        firstName: updated.firstName,
+        lastName: updated.lastName,
+        medicalRecordNumber: updated.medicalRecordNumber,
+      },
     };
   }
 
@@ -340,7 +415,15 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
   if (dupes.length > 0 && !payload.confirmDuplicate) {
     const d = dupes[0];
     await audit(jobId, 'duplicate_flagged', d.id, 'name+dob match');
-    return { status: 'duplicate', duplicate: { id: d.id, firstName: d.firstName, lastName: d.lastName, medicalRecordNumber: d.medicalRecordNumber } };
+    return {
+      status: 'duplicate',
+      duplicate: {
+        id: d.id,
+        firstName: d.firstName,
+        lastName: d.lastName,
+        medicalRecordNumber: d.medicalRecordNumber,
+      },
+    };
   }
 
   // One transaction: patient + cartella + job confirmation. Full rollback on any error.
@@ -376,10 +459,22 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
     await audit(jobId, 'confirm_committed', created.id, 'transaction committed');
     return {
       status: 'created',
-      patient: { id: created.id, firstName: created.firstName, lastName: created.lastName, medicalRecordNumber: created.medicalRecordNumber },
+      patient: {
+        id: created.id,
+        firstName: created.firstName,
+        lastName: created.lastName,
+        medicalRecordNumber: created.medicalRecordNumber,
+      },
     };
   } catch (err) {
-    await audit(jobId, 'confirm_failed', undefined, err instanceof Error ? err.message.slice(0, 120) : 'error');
-    throw err instanceof AiExtractionError ? err : new AiExtractionError('provider_error', 'Errore durante la conferma transazionale');
+    await audit(
+      jobId,
+      'confirm_failed',
+      undefined,
+      err instanceof Error ? err.message.slice(0, 120) : 'error',
+    );
+    throw err instanceof AiExtractionError
+      ? err
+      : new AiExtractionError('provider_error', 'Errore durante la conferma transazionale');
   }
 }

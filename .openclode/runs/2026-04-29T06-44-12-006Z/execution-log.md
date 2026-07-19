@@ -81,7 +81,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +++ b/docker-compose.yml
 @@ -1,2 +1,24 @@
  version: '3.8'
- 
+
 +services:
 +  postgres:
 +    image: postgres:16-alpine
@@ -106,12 +106,12 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  postgres_data:
 ```
 
-```diff
+````diff
 --- a/README.md
 +++ b/README.md
 @@ -1,3 +1,70 @@
  # ClinicOS
- 
+
 -Clinic Management System
 +Clinic Management System (ClinicOS) - Full-stack TypeScript application
 +
@@ -191,7 +191,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +```
 +DATABASE_URL="postgresql://clincos:clincos_password@localhost:5432/clincos_db?schema=public"
 +```
-```
+````
 
 ```diff
 --- a/.gitignore
@@ -219,7 +219,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +docker-data/
 ```
 
-```diff
+````diff
 --- a/frontend/package.json
 +++ b/frontend/package.json
 @@ -0,0 +1,45 @@
@@ -273,9 +273,9 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  }
 +})
 +```
-```
+````
 
-```diff
+````diff
 --- a/frontend/tsconfig.json
 +++ b/frontend/tsconfig.json
 @@ -0,0 +1,22 @@
@@ -303,9 +303,9 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  }
 +}
 +```
-```
+````
 
-```diff
+````diff
 --- a/frontend/src/main.tsx
 +++ b/frontend/src/main.tsx
 @@ -0,0 +1,19 @@
@@ -330,9 +330,9 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  </React.StrictMode>,
 +)
 +```
-```
+````
 
-```diff
+````diff
 --- a/frontend/src/index.css
 +++ b/frontend/src/index.css
 @@ -0,0 +1,11 @@
@@ -348,9 +348,9 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  min-height: 100vh;
 +}
 +```
-```
+````
 
-```diff
+````diff
 --- a/frontend/src/App.tsx
 +++ b/frontend/src/App.tsx
 @@ -0,0 +1,37 @@
@@ -386,12 +386,12 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +++ b/README.md
 @@ -1,70 +1,99 @@
  # ClinicOS
- 
+
 -Clinic Management System (ClinicOS) - Full-stack TypeScript application
 +Clinic Management System (ClinicOS) - Full-stack TypeScript Application
- 
+
  ## Tech Stack
- 
+
 -- **Frontend**: React 18, TypeScript, Vite, React Router
 -- **Backend**: Node.js, Express, TypeScript
 -- **Database**: PostgreSQL 16, Prisma ORM
@@ -400,68 +400,70 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +- **Backend**: Node.js, Express, TypeScript, Prisma ORM
 +- **Database**: PostgreSQL 16 (via Docker)
 +- **Infrastructure**: Docker Compose for PostgreSQL, npm scripts for orchestration
- 
+
  ## Project Structure
- 
- ```
+
+````
+
 -clinicos/
--├── frontend/          # React Vite application
--├── backend/           # Node.js Express API
+-├── frontend/ # React Vite application
+-├── backend/ # Node.js Express API
 -├── docker-compose.yml # PostgreSQL service
 +ClinicOS/
-+├── frontend/           # React TypeScript Vite application
-+├── backend/            # Node.js Express TypeScript API
-+├── docker-compose.yml  # PostgreSQL Docker service
- └── README.md
- ```
- 
- ## Quick Start
- 
- 1. **Install dependencies** (from project root):
-    ```bash
-    npm install
++├── frontend/ # React TypeScript Vite application
++├── backend/ # Node.js Express TypeScript API
++├── docker-compose.yml # PostgreSQL Docker service
+└── README.md
+
+````
+
+## Quick Start
+
+1. **Install dependencies** (from project root):
+   ```bash
+   npm install
 -   cd frontend && npm install
 -   cd ../backend && npm install
 +   npm run install:all
-    ```
- 
+   ```
+
 -2. **Start PostgreSQL with Docker**:
 +2. **Start PostgreSQL Docker container**:
-    ```bash
-    npm run docker:up
-    ```
- 
+   ```bash
+   npm run docker:up
+   ```
+
 -3. **Set up database**:
 +3. **Set up the database**:
-    ```bash
-    npm run prisma:generate
-    npm run prisma:migrate
-    ```
+   ```bash
+   npm run prisma:generate
+   npm run prisma:migrate
+   ```
 -   Or use the setup command:
 +
 +   Or run the full setup:
-    ```bash
-    npm run setup
-    ```
- 
- 4. **Start development servers**:
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm run setup
+   ```
+
+4. **Start development servers**:
+   ```bash
+   npm run dev
+   ```
 -   This starts both backend (port 3000) and frontend (port 5173) concurrently.
 +   This starts both backend (port 3001) and frontend (port 5173) concurrently.
- 
- 5. **Access the applications**:
-    - Frontend: http://localhost:5173
+
+5. **Access the applications**:
+   - Frontend: http://localhost:5173
 -   - Backend API: http://localhost:3000
 -   - Prisma Studio (DB GUI): Run `npm run prisma:studio` then http://localhost:5555
 +   - Backend API: http://localhost:3001
 +   - Prisma Studio: Run `npm run prisma:studio` then visit http://localhost:5555
- 
- ## Available Commands
- 
- | Command | Description |
- |---------|-------------|
+
+## Available Commands
+
+| Command | Description |
+|---------|-------------|
 -| `npm run dev` | Start both frontend and backend in dev mode |
 -| `npm run frontend:dev` | Start only frontend dev server |
 -| `npm run backend:dev` | Start only backend dev server |
@@ -478,44 +480,41 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +| `npm run docker:up` | Start PostgreSQL Docker service |
 +| `npm run docker:down` | Stop PostgreSQL Docker service |
 +| `npm run docker:reset` | Reset PostgreSQL (delete volumes and restart) |
- | `npm run prisma:generate` | Generate Prisma client |
- | `npm run prisma:migrate` | Run database migrations |
- | `npm run prisma:studio` | Open Prisma Studio GUI |
+| `npm run prisma:generate` | Generate Prisma client |
+| `npm run prisma:migrate` | Run database migrations |
+| `npm run prisma:studio` | Open Prisma Studio GUI |
 -| `npm run setup` | Full setup (Docker + DB migrations) |
 -| `npm run build` | Build both frontend and backend |
 -| `npm run start` | Start production backend server |
 -| `npm run lint` | Run linting on both projects |
 +| `npm run setup` | Full local setup (Docker up + DB migrations) |
- 
- ## Environment Variables
- 
+
+## Environment Variables
+
 -Backend environment variables are configured in `backend/.env`. The default Docker PostgreSQL connection is:
 +### Backend (`.env` file in `backend/`)
- ```
+````
+
 -DATABASE_URL="postgresql://clincos:clincos_password@localhost:5432/clincos_db?schema=public"
 +DATABASE_URL="postgresql://clinicos:clinicos_password@localhost:5432/clinicos_db?schema=public"
 +PORT=3001
 +NODE_ENV=development
-+```
-+
++``` +
 +### Frontend (environment variables in `vite.config.ts`)
-+The frontend proxies API requests to the backend.
-+
-+## API Endpoints
-+
-+The backend provides a RESTful API:
-+
++The frontend proxies API requests to the backend. +
++## API Endpoints +
++The backend provides a RESTful API: +
 +- `GET /api/health` - Health check
 +- `GET /api/users` - List users
 +- `GET /api/patients` - List patients
 +- `GET /api/appointments` - List appointments
 +- `GET /api/clinical-records` - List clinical records
-+- `GET /api/operators` - List operators
-+
-+## Database Schema
-+
++- `GET /api/operators` - List operators +
++## Database Schema +
 +See `backend/prisma/schema.prisma` for the complete Prisma schema including Users, Roles, Patients, ClinicalRecords, Appointments, and Operators.
- ```
+
+```
+
 ```
 
 ```diff
@@ -523,7 +522,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +++ b/docker-compose.yml
 @@ -1,24 +1,26 @@
  version: '3.8'
- 
+
  services:
    postgres:
 -    image: postgres:16-alpine
@@ -548,7 +547,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
        start_period: 30s
 +    networks:
 +      - clinicos-network
- 
+
  volumes:
    postgres_data:
 +
@@ -625,7 +624,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import Operators from './pages/Operators'
  import Layout from './components/Layout'
 +import Dashboard from './pages/Dashboard'
- 
+
  function App() {
    return (
      <Routes>
@@ -650,7 +649,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 @@ -4,17 +4,12 @@ import { BrowserRouter } from 'react-router-dom'
  import App from './App.tsx'
  import './index.css'
- 
+
 -// Declare global API base URL for TypeScript
 -declare global {
 -  interface Window {
@@ -717,3 +716,4 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +              <span className="user-role">Administrator</span>
 +            </div>
 
+```

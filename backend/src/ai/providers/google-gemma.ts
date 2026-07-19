@@ -59,7 +59,10 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
     }
     const GoogleGenAI = mod.GoogleGenAI ?? mod.default?.GoogleGenAI;
     if (!GoogleGenAI) {
-      throw new AiExtractionError('provider_unavailable', 'GoogleGenAI non disponibile nel modulo SDK');
+      throw new AiExtractionError(
+        'provider_unavailable',
+        'GoogleGenAI non disponibile nel modulo SDK',
+      );
     }
     return new GoogleGenAI({ apiKey: this.opts.apiKey });
   }
@@ -70,7 +73,9 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
       { text: `SCHEMA:\n${JSON.stringify(request.schema)}` },
     ];
     if (correction) {
-      parts.push({ text: `CORREGGI: l'output precedente non era conforme. ${correction} Rispondi solo con JSON valido.` });
+      parts.push({
+        text: `CORREGGI: l'output precedente non era conforme. ${correction} Rispondi solo con JSON valido.`,
+      });
     }
     for (const file of request.files) {
       parts.push({
@@ -110,14 +115,20 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
       try {
         const raw = await this.callOnce(request, correction);
         // Models may wrap JSON in code fences; strip a leading/trailing fence.
-        const cleaned = raw.replace(/^```(?:json)?/i, '').replace(/```$/i, '').trim();
+        const cleaned = raw
+          .replace(/^```(?:json)?/i, '')
+          .replace(/```$/i, '')
+          .trim();
 
         let data: unknown;
         try {
           data = JSON.parse(cleaned);
         } catch {
           correction = 'Output non era JSON parseabile.';
-          warnings.push({ code: 'invalid_json', message: 'Output non JSON; nuovo tentativo di correzione' });
+          warnings.push({
+            code: 'invalid_json',
+            message: 'Output non JSON; nuovo tentativo di correzione',
+          });
           continue; // retry with correction
         }
 
@@ -136,7 +147,10 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
         }
         // Non-conforming: feed errors back for a correction attempt.
         correction = `Errori schema: ${check.errors.slice(0, 8).join('; ')}.`;
-        warnings.push({ code: 'schema_invalid', message: `Output non conforme allo schema (tentativo ${attempt + 1})` });
+        warnings.push({
+          code: 'schema_invalid',
+          message: `Output non conforme allo schema (tentativo ${attempt + 1})`,
+        });
       } catch (err) {
         lastErr = err;
         if (err instanceof AiExtractionError && err.kind === 'provider_unavailable') throw err;
@@ -151,7 +165,10 @@ export class GoogleGemmaExtractionProvider implements AiExtractionProvider {
     if (lastErr instanceof AiExtractionError) throw lastErr;
     // Retries exhausted with non-conforming output: distinguishable schema error.
     if (lastData !== null) {
-      throw new AiExtractionError('schema_validation', 'Output non conforme allo schema dopo i retry di correzione');
+      throw new AiExtractionError(
+        'schema_validation',
+        'Output non conforme allo schema dopo i retry di correzione',
+      );
     }
     // Surface the real (redacted) provider cause so failures are diagnosable.
     const rawCause = lastErr instanceof Error ? lastErr.message : String(lastErr ?? '');

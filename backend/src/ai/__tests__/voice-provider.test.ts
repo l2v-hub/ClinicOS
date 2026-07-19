@@ -5,7 +5,10 @@ import assert from 'node:assert/strict';
 import { FakeVoiceSttProvider, probeSttStatus } from '../voice/provider.js';
 import { REQUIRED_STT_CAPABILITIES, loadVoiceConfig, type VoiceConfig } from '../voice/config.js';
 
-const cfgWithModel: VoiceConfig = { ...loadVoiceConfig({} as NodeJS.ProcessEnv), sttModel: 'fake:stt-it' };
+const cfgWithModel: VoiceConfig = {
+  ...loadVoiceConfig({} as NodeJS.ProcessEnv),
+  sttModel: 'fake:stt-it',
+};
 const cfgNoModel: VoiceConfig = { ...loadVoiceConfig({} as NodeJS.ProcessEnv), sttModel: null };
 
 // ── AC1/AC3: everything below uses only the fake — no env, no secrets, no network ────────────────
@@ -19,7 +22,10 @@ test('#201 success: fake advertising required capabilities → available, not de
 });
 
 test('#201 failure: fake rejecting → degraded with provider reason, never throws', async () => {
-  const provider = new FakeVoiceSttProvider({ mode: 'failure', error: new Error('401 unauthorized') });
+  const provider = new FakeVoiceSttProvider({
+    mode: 'failure',
+    error: new Error('401 unauthorized'),
+  });
   const status = await probeSttStatus(provider, cfgWithModel, { timeoutMs: 50 });
   assert.equal(status.available, false);
   assert.equal(status.degraded, true);
@@ -49,7 +55,10 @@ test('#201 missing capabilities: success but incomplete set → degraded listing
 
 test('#201 no model configured: degraded regardless of provider (no probe attempted)', async () => {
   // A provider that would throw if probed proves probeSttStatus short-circuits on missing config.
-  const provider = new FakeVoiceSttProvider({ mode: 'failure', error: new Error('should not be called') });
+  const provider = new FakeVoiceSttProvider({
+    mode: 'failure',
+    error: new Error('should not be called'),
+  });
   const status = await probeSttStatus(provider, cfgNoModel, { timeoutMs: 50 });
   assert.equal(status.available, false);
   assert.equal(status.degraded, true);

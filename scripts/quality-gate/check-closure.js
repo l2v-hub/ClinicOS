@@ -12,7 +12,14 @@ function extractDecision(text) {
   const scope = idx >= 0 ? text.slice(idx) : text;
   for (const d of ALLOWED_DECISIONS) {
     // confronto tollerante su trattino normale/lungo
-    const re = new RegExp(d.replace(/[—-]/g, '[—-]').replace(/[.*+?^${}()|[\]\\]/g, (m) => (m === '[' || m === ']' || m === '—' || m === '-' ? m : '\\' + m)), 'i');
+    const re = new RegExp(
+      d
+        .replace(/[—-]/g, '[—-]')
+        .replace(/[.*+?^${}()|[\]\\]/g, (m) =>
+          m === '[' || m === ']' || m === '—' || m === '-' ? m : '\\' + m,
+        ),
+      'i',
+    );
     if (re.test(scope)) return d;
   }
   return null;
@@ -21,7 +28,9 @@ function extractDecision(text) {
 function main() {
   const arg = process.argv[2];
   if (!arg) {
-    console.error('ERRORE: specifica lo slug o il path del task. Uso: check-closure.js <slug|path>');
+    console.error(
+      'ERRORE: specifica lo slug o il path del task. Uso: check-closure.js <slug|path>',
+    );
     process.exit(1);
   }
   const dir = resolveTaskDir(arg);
@@ -43,7 +52,9 @@ function main() {
     process.exit(1);
   }
   if (decision !== 'CLOSED — VERIFIED') {
-    console.error(`NON COMPLETABILE — decisione: ${decision}. Solo 'CLOSED — VERIFIED' consente "done".`);
+    console.error(
+      `NON COMPLETABILE — decisione: ${decision}. Solo 'CLOSED — VERIFIED' consente "done".`,
+    );
     process.exit(2);
   }
   console.log('CLOSED — VERIFIED: il task può essere dichiarato completato. (' + rpath + ')');

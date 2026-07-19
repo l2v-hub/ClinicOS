@@ -20,16 +20,16 @@ You own the backend: Express routes, Prisma schema, database queries, API contra
 
 ## Stack
 
-| What | Detail |
-|------|--------|
-| Runtime | Node.js 20+ |
-| Framework | Express 4 + TypeScript |
-| ORM | Prisma 7 with PrismaPg adapter |
-| Database | PostgreSQL 16 (Railway) |
-| Connection | `pg` Pool → PrismaPg adapter → PrismaClient |
-| Build | `npx prisma generate && tsc` |
-| Start | `node backend/dist/server.js` |
-| Deploy | Railway — `railway.json` controls build/start commands |
+| What       | Detail                                                 |
+| ---------- | ------------------------------------------------------ |
+| Runtime    | Node.js 20+                                            |
+| Framework  | Express 4 + TypeScript                                 |
+| ORM        | Prisma 7 with PrismaPg adapter                         |
+| Database   | PostgreSQL 16 (Railway)                                |
+| Connection | `pg` Pool → PrismaPg adapter → PrismaClient            |
+| Build      | `npx prisma generate && tsc`                           |
+| Start      | `node backend/dist/server.js`                          |
+| Deploy     | Railway — `railway.json` controls build/start commands |
 
 ## File map
 
@@ -53,29 +53,29 @@ railway.json               # Build: npm install + prisma generate + tsc
 
 ## Current API endpoints
 
-| Method | Path | Purpose | Response |
-|--------|------|---------|----------|
-| GET | `/health` | Health check | `{ status: 'ok' }` |
-| GET | `/patients` | List all patients | `Patient[]` |
-| GET | `/patients/:id` | Get single patient | `Patient` |
-| POST | `/patients` | Create patient | `Patient` (201) |
-| POST | `/patients/seed` | Seed demo patients | `{ created: N }` |
-| POST | `/patients/demo-setup` | Upsert Fabio Forlano + full cartella | `{ patientId, sections }` |
-| PATCH | `/patients/:id` | Update demographics | `Patient` |
-| GET | `/patients/:id/cartella` | Load clinical record | `{ patientId, data }` |
-| PUT | `/patients/:id/cartella` | Upsert clinical record (JSON) | `{ patientId, data }` |
+| Method | Path                     | Purpose                              | Response                  |
+| ------ | ------------------------ | ------------------------------------ | ------------------------- |
+| GET    | `/health`                | Health check                         | `{ status: 'ok' }`        |
+| GET    | `/patients`              | List all patients                    | `Patient[]`               |
+| GET    | `/patients/:id`          | Get single patient                   | `Patient`                 |
+| POST   | `/patients`              | Create patient                       | `Patient` (201)           |
+| POST   | `/patients/seed`         | Seed demo patients                   | `{ created: N }`          |
+| POST   | `/patients/demo-setup`   | Upsert Fabio Forlano + full cartella | `{ patientId, sections }` |
+| PATCH  | `/patients/:id`          | Update demographics                  | `Patient`                 |
+| GET    | `/patients/:id/cartella` | Load clinical record                 | `{ patientId, data }`     |
+| PUT    | `/patients/:id/cartella` | Upsert clinical record (JSON)        | `{ patientId, data }`     |
 
 ## Prisma schema — models
 
-| Model | Purpose | Key fields |
-|-------|---------|------------|
-| User | App users (operators/managers) | email, passwordHash, role, fullName |
-| Operator | Clinical operators (linked to User) | userId, licenseNumber, department |
-| Patient | Patient demographics | medicalRecordNumber, firstName, lastName, dateOfBirth |
-| Cartella | Clinical record (JSON blob) | patientId (unique), data (Json) |
-| ClinicalRecord | Structured clinical record | patientId, authorOperatorId, diagnosis |
-| ClinicalNote | Notes on clinical records | clinicalRecordId, authorOperatorId, note |
-| Appointment | Scheduled appointments | patientId, operatorId, scheduledAt, status |
+| Model          | Purpose                             | Key fields                                            |
+| -------------- | ----------------------------------- | ----------------------------------------------------- |
+| User           | App users (operators/managers)      | email, passwordHash, role, fullName                   |
+| Operator       | Clinical operators (linked to User) | userId, licenseNumber, department                     |
+| Patient        | Patient demographics                | medicalRecordNumber, firstName, lastName, dateOfBirth |
+| Cartella       | Clinical record (JSON blob)         | patientId (unique), data (Json)                       |
+| ClinicalRecord | Structured clinical record          | patientId, authorOperatorId, diagnosis                |
+| ClinicalNote   | Notes on clinical records           | clinicalRecordId, authorOperatorId, note              |
+| Appointment    | Scheduled appointments              | patientId, operatorId, scheduledAt, status            |
 
 ## Architecture: Cartella JSON blob
 
@@ -95,6 +95,7 @@ CartellaPaziente {
 ```
 
 **Important**: The frontend does a full PUT of the entire cartella on every save. This means:
+
 - No partial updates — always send the complete cartella object
 - Frontend merges local state with API response
 - Backend just stores/retrieves the JSON blob, no validation of internal structure
@@ -128,10 +129,10 @@ router.post('/new-thing', async (req, res) => {
   try {
     // 2. Execute
     const result = await prisma.model.create({ data: { ... } });
-    
+
     // 3. Log
     console.log(`POST /new-thing → created id=${result.id}`);
-    
+
     // 4. Respond
     res.status(201).json(result);
   } catch (error) {
@@ -158,10 +159,10 @@ router.post('/new-thing', async (req, res) => {
 
 ## Missing APIs (known gaps)
 
-| Feature | Status | What's needed |
-|---------|--------|---------------|
-| Appointments CRUD | Schema exists, no REST endpoints | POST/GET/PATCH/DELETE /appointments |
-| User auth/login | Schema has User + passwordHash, no endpoints | POST /auth/login, middleware |
-| Operator CRUD | Schema exists, no endpoints | CRUD /operators |
-| Tinetti scale | No schema or type | Add to CartellaPaziente type + cartella JSON |
-| NRS scale | No schema or type | Add to CartellaPaziente type + cartella JSON |
+| Feature           | Status                                       | What's needed                                |
+| ----------------- | -------------------------------------------- | -------------------------------------------- |
+| Appointments CRUD | Schema exists, no REST endpoints             | POST/GET/PATCH/DELETE /appointments          |
+| User auth/login   | Schema has User + passwordHash, no endpoints | POST /auth/login, middleware                 |
+| Operator CRUD     | Schema exists, no endpoints                  | CRUD /operators                              |
+| Tinetti scale     | No schema or type                            | Add to CartellaPaziente type + cartella JSON |
+| NRS scale         | No schema or type                            | Add to CartellaPaziente type + cartella JSON |

@@ -20,7 +20,9 @@ export function cachedGetJson<T>(url: string, ttlMs: number = DEFAULT_TTL_MS): P
       cache.set(url, { at: Date.now(), data });
       return data;
     })
-    .finally(() => { inflight.delete(url); });
+    .finally(() => {
+      inflight.delete(url);
+    });
   inflight.set(url, p);
   return p as Promise<T>;
 }

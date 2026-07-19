@@ -17,9 +17,9 @@ All decisions below resolve open choices so Phase 1 has no NEEDS CLARIFICATION.
 - **Decision**: Keep the navy medical-blue sidebar shipped in spec 013, but **widen 64px → 80px**,
   ensure **icon + label** on every item, and strengthen the active state (blue active bar +
   filled icon/label). Tablet keeps the same 80px (no aggressive collapse).
-- **Rationale**: Current problem #1 is *width/legibility*, not color. Reference uses a light
-  sidebar with a red brand — color is explicitly "do NOT copy"; *proportions and icon+label
-  layout* are what we adopt. Flipping navy→light days after 013 shipped is high-risk visual churn
+- **Rationale**: Current problem #1 is _width/legibility_, not color. Reference uses a light
+  sidebar with a red brand — color is explicitly "do NOT copy"; _proportions and icon+label
+  layout_ are what we adopt. Flipping navy→light days after 013 shipped is high-risk visual churn
   for no requirement. Widening + labels directly satisfies FR-001 and SC-004 intent.
 - **Alternatives considered**: Light-neutral sidebar like reference → rejected (color is brand,
   out of scope; high churn). Icon-only 64px → rejected (fails legibility requirement).
@@ -39,7 +39,7 @@ All decisions below resolve open choices so Phase 1 has no NEEDS CLARIFICATION.
 
 - **Decision**: Replace Diario's custom author-type filter chips (`.filter-chip` in
   `app-additions.css`) with the shared L3 `ContextSubTabs` for author categories, and route any
-  remaining true *filters* through the `ClinicalTable` per-column filter API. No bespoke chip CSS.
+  remaining true _filters_ through the `ClinicalTable` per-column filter API. No bespoke chip CSS.
 - **Rationale**: FR-004 + SC-002 require Diario's L3 to be visually identical to other pages.
   The author categories are navigation-like (switch view) → belong in shared L3. Free-text/date
   filtering belongs in the shared table filter, not custom chips.

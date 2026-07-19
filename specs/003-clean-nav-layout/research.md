@@ -13,6 +13,7 @@
 **Rationale**: App.tsx manages authentication, routing, patient state, and API calls. Extracting a wrapper would require threading props through a new component layer with no functional benefit. The user's `CleanAppShell` name maps to a CSS class restructuring (`.clean-shell`) and a `TeamsLikeSidebar` component extraction, not a full file split.
 
 **Alternatives considered**:
+
 - Full extraction into `CleanAppShell.tsx` — rejected: premature abstraction, large diff, risk of breaking auth/state wiring (Constitution I: Simplicity First).
 - Keep App.tsx entirely inline — rejected: sidebar JSX is large enough to warrant its own component for maintainability.
 
@@ -22,15 +23,15 @@
 
 **Decision**: Map the 7 user-requested components to concrete implementation actions:
 
-| User Request | Implementation | Action |
-|---|---|---|
-| `CleanAppShell` | CSS class `.clean-shell` on `.app-shell` + layout token changes | CSS update |
-| `TeamsLikeSidebar` | New `components/shared/TeamsLikeSidebar.tsx` extracted from App.tsx inline sidebar JSX | New file |
-| `CompactPageHeader` | Eliminate `.topbar` breadcrumb duplication; fold into single-line compact header | CSS + App.tsx edit |
-| `PatientCompactHeader` | New `components/operator/PatientCompactHeader.tsx` extracted from PatientDetail.tsx header block | New file |
-| `MainHorizontalNav` | Rename + restyle existing `PageTabs` in NavComponents.tsx | Refactor |
-| `ContextSubTabs` | Rename + restyle existing `SectionTabs` in NavComponents.tsx as pills | Refactor |
-| `ContentPanel` | CSS class `.content-panel` on existing `.page-content` wrapper — no new component | CSS update |
+| User Request           | Implementation                                                                                   | Action             |
+| ---------------------- | ------------------------------------------------------------------------------------------------ | ------------------ |
+| `CleanAppShell`        | CSS class `.clean-shell` on `.app-shell` + layout token changes                                  | CSS update         |
+| `TeamsLikeSidebar`     | New `components/shared/TeamsLikeSidebar.tsx` extracted from App.tsx inline sidebar JSX           | New file           |
+| `CompactPageHeader`    | Eliminate `.topbar` breadcrumb duplication; fold into single-line compact header                 | CSS + App.tsx edit |
+| `PatientCompactHeader` | New `components/operator/PatientCompactHeader.tsx` extracted from PatientDetail.tsx header block | New file           |
+| `MainHorizontalNav`    | Rename + restyle existing `PageTabs` in NavComponents.tsx                                        | Refactor           |
+| `ContextSubTabs`       | Rename + restyle existing `SectionTabs` in NavComponents.tsx as pills                            | Refactor           |
+| `ContentPanel`         | CSS class `.content-panel` on existing `.page-content` wrapper — no new component                | CSS update         |
 
 **Rationale**: Minimal new files. Maximum reuse of existing component structure. Constitution I compliance.
 
@@ -42,15 +43,16 @@
 
 **Sizing targets (from spec FR-001 through FR-005):**
 
-| Element | Current (est.) | Target |
-|---|---|---|
-| `.nav-rail` width | ~72-80px | 64px |
-| Patient header height | ~80-100px | ≤56px |
-| L2 nav (MainHorizontalNav) height | ~36px | 44px (touch-friendly) |
-| L3 nav (ContextSubTabs) height | ~28px | 28px pills |
-| Total nav vertical budget | ~200px+ | ≤160px |
+| Element                           | Current (est.) | Target                |
+| --------------------------------- | -------------- | --------------------- |
+| `.nav-rail` width                 | ~72-80px       | 64px                  |
+| Patient header height             | ~80-100px      | ≤56px                 |
+| L2 nav (MainHorizontalNav) height | ~36px          | 44px (touch-friendly) |
+| L3 nav (ContextSubTabs) height    | ~28px          | 28px pills            |
+| Total nav vertical budget         | ~200px+        | ≤160px                |
 
 **Active state tokens:**
+
 - L1 sidebar active: white icon + left accent border `var(--blue)` on dark `var(--navy)` background
 - L2 active: filled background `var(--blue)` + white text + no bottom border (elevated tab style)
 - L3 active: `var(--blue)` text + subtle underline or `var(--accent-bg)` pill background
@@ -76,6 +78,7 @@
 **Rationale**: The breadcrumb duplicates information already visible in the sidebar active state and patient header. Removing it saves ~36px vertical space (topbar height reduction from ~48px to ~36px). The back navigation remains via sidebar click (Pazienti item).
 
 **Alternatives considered**:
+
 - Keep breadcrumb, reduce font — saves less space, still duplicates info.
 - Move breadcrumb into patient header — header is already dense at ≤56px.
 

@@ -3,10 +3,7 @@
     "timestamp": "2026-04-28T22-57-33-651Z",
     "requestType": "modify-code",
     "prompt": "Inspect the existing React TypeScript Vite project. Update .openclode memory with project structure, available scripts, and next implementation plan. Do not modify code.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 45888,
     "dryRun": false
   },
@@ -14,9 +11,7 @@
     "timestamp": "2026-04-28T22-59-30-155Z",
     "requestType": "shell-automation",
     "prompt": "Implement basic ClinicOS application shell in the existing React TypeScript Vite project. Add routing, layout, sidebar, header, login placeholder, operator dashboard placeholder, patient list placeholder, patient detail placeholder, operator agenda placeholder and manager dashboard placeholder. No backend. No business logic. Apply changes to disk.",
-    "agentRoles": [
-      "coder"
-    ],
+    "agentRoles": ["coder"],
     "durationMs": 59258,
     "dryRun": false
   },
@@ -24,10 +19,7 @@
     "timestamp": "2026-04-28T23-05-37-810Z",
     "requestType": "modify-code",
     "prompt": "Implement basic ClinicOS application shell in the existing React TypeScript Vite project. Add routing, layout, sidebar, header, login placeholder, operator dashboard placeholder, patient list placeholder, patient detail placeholder, operator agenda placeholder and manager dashboard placeholder. No backend. No business logic. Apply changes to disk. Do not modify any file inside .openclode. Modify only package.json and src files.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 183319,
     "dryRun": false
   },
@@ -35,10 +27,7 @@
     "timestamp": "2026-04-29T06-18-55-906Z",
     "requestType": "modify-code",
     "prompt": "Implement basic ClinicOS application shell in the existing React TypeScript Vite project. Add routing, layout, sidebar, header, login placeholder, operator dashboard placeholder, patient list placeholder, patient detail placeholder, operator agenda placeholder and manager dashboard placeholder. No backend. No business logic. Apply changes to disk. Do not modify any file inside .openclode. Modify only package.json and src files.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 165822,
     "dryRun": false
   },
@@ -46,10 +35,7 @@
     "timestamp": "2026-04-29T06-22-15-842Z",
     "requestType": "modify-code",
     "prompt": "Implement ClinicOS application shell using full-file overwrite for selected files only. Do not use unified diff patches. Overwrite only these files: src/App.tsx, src/App.css, src/main.tsx, package.json. Create folders/files if needed under src/pages and src/components. Do not modify .openclode. Do not use reviewer. Use one coder agent only. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 410789,
     "dryRun": false
   },
@@ -57,10 +43,7 @@
     "timestamp": "2026-04-29T06-29-08-469Z",
     "requestType": "modify-code",
     "prompt": "Implement ClinicOS application shell using full-file overwrite for selected files only. Do not use unified diff patches. Overwrite only these files: src/App.tsx, src/App.css, src/main.tsx, package.json. Create folders/files if needed under src/pages and src/components. Do not modify .openclode. Do not use reviewer. Use one coder agent only. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 219324,
     "dryRun": false
   },
@@ -68,10 +51,7 @@
     "timestamp": "2026-04-29T06-32-49-349Z",
     "requestType": "modify-code",
     "prompt": "Implement ClinicOS application shell using full-file overwrite for selected files only. Do not use unified diff patches. Overwrite only these files: src/App.tsx, src/App.css, src/main.tsx, package.json. Create folders/files if needed under src/pages and src/components. Do not modify .openclode. Do not use reviewer. Use one coder agent only. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 419676,
     "dryRun": false
   },
@@ -79,9 +59,7 @@
     "timestamp": "2026-04-29T06-44-12-006Z",
     "requestType": "shell-automation",
     "prompt": "Define ClinicOS as a full-stack end-to-end application using React TypeScript Vite frontend, Node.js Express TypeScript backend, Prisma ORM and PostgreSQL. Use Docker Compose for local PostgreSQL. Do not use SQLite. Create frontend, backend, prisma and docker-compose structure. Include initial Prisma schema for users, roles, patients, clinical records, appointments and operators. Apply changes to disk using full-file overwrite for explicitly selected files only. Do not modify .openclode.",
-    "agentRoles": [
-      "coder"
-    ],
+    "agentRoles": ["coder"],
     "durationMs": 253544,
     "dryRun": false
   },
@@ -89,10 +67,7 @@
     "timestamp": "2026-04-29T20-48-55-528Z",
     "requestType": "modify-code",
     "prompt": "Create src/App.tsx with a simple React component. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 92,
     "dryRun": false
   },
@@ -100,10 +75,7 @@
     "timestamp": "2026-04-29T20-57-11-938Z",
     "requestType": "modify-code",
     "prompt": "Create src/App.tsx with a simple React component. Output exactly one file block using format `\file:src/App.tsx ...` and apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 106,
     "dryRun": false
   },
@@ -111,10 +83,7 @@
     "timestamp": "2026-04-29T21-20-35-940Z",
     "requestType": "modify-code",
     "prompt": "Create src/App.tsx with a simple React component. Output one file block with marker file:src/App.tsx and apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 550094,
     "dryRun": false
   },
@@ -122,9 +91,7 @@
     "timestamp": "2026-04-29T21-35-51-777Z",
     "requestType": "review-code",
     "prompt": "Use FULL FILE MODE only. Do not output diff. Do not use reviewer. Write exactly one complete file block. File path: src/App.tsx. Content must be a complete React component that renders ClinicOS. Apply changes to disk.",
-    "agentRoles": [
-      "reviewer"
-    ],
+    "agentRoles": ["reviewer"],
     "durationMs": 146260,
     "dryRun": false
   },
@@ -132,10 +99,7 @@
     "timestamp": "2026-04-29T21-51-15-142Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Do not output diff. Do not use reviewer. Write exactly one complete file block. File path: src/App.tsx. Content must be a complete React component that renders ClinicOS. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 171848,
     "dryRun": false
   },
@@ -143,10 +107,7 @@
     "timestamp": "2026-04-29T22-01-54-644Z",
     "requestType": "modify-code",
     "prompt": "Build ClinicOS as a professional end-to-end full-stack healthcare management application.Use FULL FILE MODE only.Output FILE blocks only.Apply changes to disk.Do not output diffs.Do not modify .openclode.Use one coder agent only.No reviewer.Goal:Create a professional, modern, enterprise-style ClinicOS application for managing patients, clinical records, operators and appointments.Tech stack:- Frontend: React + TypeScript + Vite- Backend: Node.js + Express + TypeScript- ORM: Prisma- Database: PostgreSQL- Local database: Docker Compose PostgreSQL- Styling: clean professional CSS, no heavy UI frameworkCore roles:1. Operator   - sees only personal dashboard   - sees own agenda   - manages patient clinical records   - creates/updates clinical notes   - plans appointments in 30-minute slots2. Manager   - sees global dashboard   - sees all operators   - sees all agendas   - monitors workload and daily planning   - has complete visibilityFunctional modules:- Login page with mock role selection- Operator dashboard- Manager dashboard- Patient registry- Patient detail page- Electronic clinical record- Operator agenda with 30-minute slots- Manager agenda overview for all operators- Appointment planning- Operator management- Clinical data entryFrontend requirements:- Professional app shell- Sidebar navigation- Header- Role-based navigation- Login screen- Responsive layout- Enterprise healthcare visual style- Pages:  - Login  - Operator Dashboard  - Manager Dashboard  - Patients  - Patient Detail  - Clinical Record  - Operator Agenda  - Manager Agenda  - Operators  - SettingsBackend requirements:- Express API structure- Health endpoint- Auth mock endpoint- Patients routes- Clinical records routes- Appointments routes- Operators routes- Role-aware placeholder middleware- Clear separation between routes, controllers and servicesDatabase requirements:- Prisma schema with:  - User  - Operator  - Patient  - ClinicalRecord  - ClinicalNote  - Appointment  - Role enum  - AppointmentStatus enum- PostgreSQL datasource- Seed file with sample users, operators, patients and appointmentsProject structure:- frontend/- backend/- prisma/- docker-compose.yml- package.json- README.mdRoot package scripts:- dev- dev:frontend- dev:backend- db:generate- db:migrate- db:seed- buildImportant:- Implement a working first version, not only placeholders.- Use mock frontend data only where backend connection is not yet wired.- Keep code clean and simple.- Avoid overengineering.- Prefer small files.- Ensure app can start locally.Expected output:Create all necessary files as complete FILE blocks.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 66677,
     "dryRun": false
   },
@@ -154,10 +115,7 @@
     "timestamp": "2026-04-29T22-11-53-402Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Do not output diffs. Create only these files for ClinicOS full-stack setup: package.json, docker-compose.yml, README.md. Stack: frontend React Vite TypeScript, backend Express TypeScript, Prisma, PostgreSQL. Include root scripts dev, dev:frontend, dev:backend, db:generate, db:migrate, db:seed, build. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 108823,
     "dryRun": false
   },
@@ -165,10 +123,7 @@
     "timestamp": "2026-04-29T22-14-02-863Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Do not output diffs. Create only backend starter files: backend/package.json, backend/tsconfig.json, backend/src/server.ts, backend/src/app.ts, backend/src/routes/health.ts, backend/src/routes/patients.ts, backend/src/routes/appointments.ts. Use Express TypeScript. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 141311,
     "dryRun": false
   },
@@ -176,10 +131,7 @@
     "timestamp": "2026-04-29T22-17-39-054Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Do not output diffs. Create only Prisma files: prisma/schema.prisma and prisma/seed.ts. Use PostgreSQL. Include User, Operator, Patient, ClinicalRecord, ClinicalNote, Appointment, Role enum, AppointmentStatus enum. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 90307,
     "dryRun": false
   },
@@ -187,10 +139,7 @@
     "timestamp": "2026-04-29T22-21-44-230Z",
     "requestType": "modify-code",
     "prompt": "Write exactly this file. FILE: prisma/test.txt hello END FILE",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 18005,
     "dryRun": false
   },
@@ -198,10 +147,7 @@
     "timestamp": "2026-04-29T22-26-43-959Z",
     "requestType": "modify-code",
     "prompt": "Write exactly this file. FILE: prisma/schema.prisma generator client { provider = 'prisma-client-js' } datasource db { provider = 'postgresql' url = env('DATABASE_URL') } enum Role { OPERATOR MANAGER } enum AppointmentStatus { SCHEDULED COMPLETED CANCELLED NO_SHOW } model User { id String @id @default(cuid()) email String @unique name String role Role createdAt DateTime @default(now()) operator Operator? } model Operator { id String @id @default(cuid()) userId String @unique user User @relation(fields: [userId], references: [id]) patients Patient[] appointments Appointment[] } model Patient { id String @id @default(cuid()) firstName String lastName String birthDate DateTime? phone String? email String? operatorId String? operator Operator? @relation(fields: [operatorId], references: [id]) clinicalRecord ClinicalRecord? appointments Appointment[] createdAt DateTime @default(now()) } model ClinicalRecord { id String @id @default(cuid()) patientId String @unique patient Patient @relation(fields: [patientId], references: [id]) anamnesis String? allergies String? medications String? notes ClinicalNote[] updatedAt DateTime @updatedAt } model ClinicalNote { id String @id @default(cuid()) clinicalRecordId String clinicalRecord ClinicalRecord @relation(fields: [clinicalRecordId], references: [id]) content String createdAt DateTime @default(now()) } model Appointment { id String @id @default(cuid()) patientId String patient Patient @relation(fields: [patientId], references: [id]) operatorId String operator Operator @relation(fields: [operatorId], references: [id]) startAt DateTime endAt DateTime status AppointmentStatus @default(SCHEDULED) notes String? } END FILE",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 128109,
     "dryRun": false
   },
@@ -209,10 +155,7 @@
     "timestamp": "2026-04-30T06-12-37-514Z",
     "requestType": "modify-code",
     "prompt": "Write exactly this file. FILE: prisma/test.prisma generator client { provider = 'prisma-client-js' } END FILE",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 50431,
     "dryRun": false
   },
@@ -220,10 +163,7 @@
     "timestamp": "2026-04-30T06-14-36-925Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Create exactly one file: prisma/schema.prisma. It must be a formatted Prisma schema for PostgreSQL with generator client, datasource db, enums Role OPERATOR MANAGER and AppointmentStatus SCHEDULED COMPLETED CANCELLED NO_SHOW, models User, Operator, Patient, ClinicalRecord, ClinicalNote, Appointment. Use relations between users/operators/patients/clinical records/appointments. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 212545,
     "dryRun": false
   },
@@ -231,10 +171,7 @@
     "timestamp": "2026-04-30T06-30-51-157Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Create exactly two files: docker-compose.yml and .env.example. Use PostgreSQL for ClinicOS local development. Database name clinicos, user clinicos, password clinicos_password, port 5432. .env.example must include DATABASE_URL, PORT, NODE_ENV, JWT_SECRET. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 91799,
     "dryRun": false
   },
@@ -242,10 +179,7 @@
     "timestamp": "2026-04-30T06-34-26-114Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Create exactly two files: docker-compose.yml and .env.example. Use PostgreSQL for ClinicOS local development. Database name clinicos, user clinicos, password clinicos_password, port 5432. .env.example must include DATABASE_URL, PORT, NODE_ENV, JWT_SECRET. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 133223,
     "dryRun": false
   },
@@ -253,10 +187,7 @@
     "timestamp": "2026-04-30T06-37-13-231Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Create backend base for ClinicOS. Create these files only: backend/package.json, backend/tsconfig.json, backend/src/server.ts, backend/src/app.ts. Use Express with TypeScript. Server must start on PORT env or 3001. Add basic /health endpoint returning status ok. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 205055,
     "dryRun": false
   },
@@ -264,10 +195,7 @@
     "timestamp": "2026-04-30T12-21-12-139Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Update backend to integrate Prisma client. Create backend/src/lib/prisma.ts that exports a singleton PrismaClient instance. Update backend/src/app.ts to import Prisma client and log successful DB connection on startup. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 95432,
     "dryRun": false
   },
@@ -275,10 +203,7 @@
     "timestamp": "2026-04-30T19-25-13-705Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Create backend/src/routes/patients.ts with GET /patients that returns all patients using Prisma. Update app.ts to register /patients route. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 181858,
     "dryRun": false
   },
@@ -286,10 +211,7 @@
     "timestamp": "2026-04-30T19-28-40-124Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Replace frontend/src/App.tsx with a React component that fetches http://localhost:3001/patients and displays the list. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 240488,
     "dryRun": false
   },
@@ -297,10 +219,7 @@
     "timestamp": "2026-05-01T07-29-19-180Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Improve the ClinicOS frontend UI professionally. Modify only frontend/src/App.tsx and frontend/src/App.css. Create an enterprise healthcare layout with sidebar, header, dashboard cards, patient table, search input, and clean empty/loading/error states. Fetch patients from http://localhost:3001/patients. Keep code simple. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 71679,
     "dryRun": false
   },
@@ -308,10 +227,7 @@
     "timestamp": "2026-05-01T07-36-37-322Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output FILE blocks only. Do not output prose. Improve the ClinicOS frontend UI professionally. Modify only frontend/src/App.tsx and frontend/src/App.css. Create an enterprise healthcare layout with sidebar, header, dashboard cards, patient table, search input, and clean empty/loading/error states. Fetch patients from http://localhost:3001/patients. Keep code simple. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 64429,
     "dryRun": false
   },
@@ -319,10 +235,7 @@
     "timestamp": "2026-05-01T07-42-37-757Z",
     "requestType": "modify-code",
     "prompt": "Write exactly one file. FILE: frontend/src/App.tsx import './App.css'; function App() { return <main className='app'><h1>ClinicOS</h1><p>Professional healthcare management system.</p></main>; } export default App; END FILE",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 26067,
     "dryRun": false
   },
@@ -330,10 +243,7 @@
     "timestamp": "2026-05-01T07-43-19-836Z",
     "requestType": "modify-code",
     "prompt": "Use FULL FILE MODE only. Output exactly one FILE block. Create frontend/src/App.tsx only. Build a professional ClinicOS dashboard with sidebar, header, patient table, search box, loading state, error state and empty state. Fetch patients from http://localhost:3001/patients. Do not output prose. Do not modify CSS. Apply changes to disk.",
-    "agentRoles": [
-      "coder",
-      "reviewer"
-    ],
+    "agentRoles": ["coder", "reviewer"],
     "durationMs": 101812,
     "dryRun": false
   }

@@ -21,7 +21,11 @@ await new Promise((r) => server.once('listening', r));
 const { port } = server.address();
 const base = `http://127.0.0.1:${port}/ai/extraction/jobs`;
 const af = (url, opts = {}) => fetch(url, { ...opts, headers: { ...OP, ...(opts.headers ?? {}) } });
-const PDF = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.from('synthetic targeting test'), Buffer.from('%%EOF')]);
+const PDF = Buffer.concat([
+  Buffer.from('%PDF-1.4\n'),
+  Buffer.from('synthetic targeting test'),
+  Buffer.from('%%EOF'),
+]);
 
 const SYNTH = { firstName: 'TargetMock', lastName: 'Sintetico', dateOfBirth: '1970-01-01' };
 const jobs = [];
@@ -42,13 +46,20 @@ async function reviewReadyJob() {
 }
 
 try {
-  await prisma.patient.deleteMany({ where: { firstName: SYNTH.firstName, lastName: SYNTH.lastName } });
+  await prisma.patient.deleteMany({
+    where: { firstName: SYNTH.firstName, lastName: SYNTH.lastName },
+  });
 
   // 1. Confirm as NEW -> patient created (201).
   const job1 = await reviewReadyJob();
   let r = await af(`${base}/${job1}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mode: 'new', patient: SYNTH, cartella: { statoRicovero: 'ricoverato' } }),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode: 'new',
+      patient: SYNTH,
+      cartella: { statoRicovero: 'ricoverato' },
+    }),
   });
   assert.equal(r.status, 201, 'new confirm -> 201');
   createdId = (await r.json()).patient.id;
@@ -57,8 +68,14 @@ try {
   const before = await prisma.patient.count();
   const job2 = await reviewReadyJob();
   r = await af(`${base}/${job2}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mode: 'existing', patientId: createdId, patient: SYNTH, cartella: { statoRicovero: 'dimesso', diagnosi: [{ descrizione: 'Nuova diagnosi' }] } }),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode: 'existing',
+      patientId: createdId,
+      patient: SYNTH,
+      cartella: { statoRicovero: 'dimesso', diagnosi: [{ descrizione: 'Nuova diagnosi' }] },
+    }),
   });
   assert.equal(r.status, 200, 'existing confirm -> 200');
   assert.equal((await r.json()).status, 'updated', 'status updated (not created)');
@@ -70,8 +87,13 @@ try {
   // 3. Confirm NEW with the SAME identity -> 409 duplicate, no second patient.
   const job3 = await reviewReadyJob();
   r = await af(`${base}/${job3}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mode: 'new', patient: SYNTH, cartella: { statoRicovero: 'ricoverato' } }),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode: 'new',
+      patient: SYNTH,
+      cartella: { statoRicovero: 'ricoverato' },
+    }),
   });
   assert.equal(r.status, 409, 'same identity -> 409 duplicate');
   assert.equal((await r.json()).status, 'duplicate', 'flagged as duplicate');

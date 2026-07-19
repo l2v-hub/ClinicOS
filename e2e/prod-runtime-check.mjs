@@ -40,7 +40,9 @@ try {
     await sleep(3000);
     res = await af(`${base}/${jobId}`);
     last = await res.json();
-    process.stdout.write(`  [${i}] status=${last.status} stage=${last.stage ?? '-'} model=${last.model ?? '-'}\n`);
+    process.stdout.write(
+      `  [${i}] status=${last.status} stage=${last.stage ?? '-'} model=${last.model ?? '-'}\n`,
+    );
     if (terminal.has(last.status)) break;
   }
 
@@ -52,22 +54,43 @@ try {
     const result = await res.json();
     const rd = result.resultData ?? {};
     const anag = rd.anagrafica ?? {};
-    const hasMerge = !!rd._merge;                                  // ImportReview needs this
-    const nome = anag.nome?.value;                                 // merged shape: {value,status}
+    const hasMerge = !!rd._merge; // ImportReview needs this
+    const nome = anag.nome?.value; // merged shape: {value,status}
     const cognome = anag.cognome?.value;
     const diagnosi = (rd.cartella?.diagnosi?.items ?? []).map((i) => i.value?.descrizione);
     console.log('--- merged proposal (UI shape) ---');
     console.log('_merge present:', hasMerge, '| report:', JSON.stringify(rd._merge?.report));
-    console.log('nome.value:', JSON.stringify(nome), '| cognome.value:', JSON.stringify(cognome), '| dataNascita.value:', JSON.stringify(anag.dataNascita?.value));
+    console.log(
+      'nome.value:',
+      JSON.stringify(nome),
+      '| cognome.value:',
+      JSON.stringify(cognome),
+      '| dataNascita.value:',
+      JSON.stringify(anag.dataNascita?.value),
+    );
     console.log('diagnosi items:', JSON.stringify(diagnosi));
     console.log('no AIza key in result:', !/AIza[0-9A-Za-z_-]{10,}/.test(JSON.stringify(result)));
     const full = rd._full ?? null;
     const fullCartellaKeys = full?.cartella ? Object.keys(full.cartella).length : 0;
     const rawLen = (rd.rawText ?? '').length;
     console.log('--- full editor inputs ---');
-    console.log('_full present:', !!full, '| anagrafica.nome:', JSON.stringify(full?.anagrafica?.nome), '| cartella keys:', fullCartellaKeys);
-    console.log('rawText length:', rawLen, rawLen ? `| preview: "${String(rd.rawText).slice(0, 80).replace(/\n/g, ' ')}…"` : '(empty — best-effort)');
-    if (hasMerge && nome && full) console.log('\n✅ PASS — review_ready, merged + _full present (editor ready)');
+    console.log(
+      '_full present:',
+      !!full,
+      '| anagrafica.nome:',
+      JSON.stringify(full?.anagrafica?.nome),
+      '| cartella keys:',
+      fullCartellaKeys,
+    );
+    console.log(
+      'rawText length:',
+      rawLen,
+      rawLen
+        ? `| preview: "${String(rd.rawText).slice(0, 80).replace(/\n/g, ' ')}…"`
+        : '(empty — best-effort)',
+    );
+    if (hasMerge && nome && full)
+      console.log('\n✅ PASS — review_ready, merged + _full present (editor ready)');
     else console.log('\n❌ missing _merge/_full/anagrafica');
   } else {
     console.log('\n❌ NOT review_ready — see error above');
@@ -75,5 +98,8 @@ try {
 } catch (e) {
   console.log('ERROR:', e?.message ?? e);
 } finally {
-  if (jobId) { await af(`${base}/${jobId}/cancel`, { method: 'POST' }).catch(() => {}); console.log('cleanup: job cancelled'); }
+  if (jobId) {
+    await af(`${base}/${jobId}/cancel`, { method: 'POST' }).catch(() => {});
+    console.log('cleanup: job cancelled');
+  }
 }

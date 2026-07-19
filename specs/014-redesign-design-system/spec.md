@@ -8,7 +8,7 @@
 
 **Input**: Redesign ClinicOS design system and layout from the `.claude/design-reference` visual audit. Unify shell, navigation (L1/L2/L3), tables, and cards into shared components with a medical-blue palette. Realign 9 priority pages. Source of truth: `.claude/design-reference/CLINICOS_VISUAL_AUDIT.md`.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Consistent shell & navigation everywhere (Priority: P1)
 
@@ -105,7 +105,7 @@ overflow occurs, the sidebar stays legible, and wide tables scroll within their 
 - Empty table (no rows) → consistent empty state within the shared table.
 - Status value outside the known set → falls back to a neutral badge, never an undefined/red style by accident.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -144,7 +144,7 @@ overflow occurs, the sidebar stays legible, and wide tables scroll within their 
 - **Status Badge**: One of success/warning/danger/info/neutral mapped from a domain value.
 - **Clinical Card**: Title, edit affordance, collapsible flag, focus/compressed state.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

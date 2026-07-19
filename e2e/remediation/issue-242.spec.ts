@@ -19,7 +19,10 @@ import { test, expect, type Page, type ConsoleMessage } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const EVIDENCE_DIR = path.resolve(__dirname, '../../artifacts/task-validation/242-diagnosis-excludes-pharmacological-therapy');
+const EVIDENCE_DIR = path.resolve(
+  __dirname,
+  '../../artifacts/task-validation/242-diagnosis-excludes-pharmacological-therapy',
+);
 const SCREENSHOTS_DIR = path.join(EVIDENCE_DIR, 'screenshots');
 
 // Nomi unici per run: nel DB condiviso (suite integrata #256) restano terapie/diagnosi
@@ -76,7 +79,7 @@ test.describe('#242 — diagnosi di dimissione esclude la terapia farmacologica 
         consoleErrors.push(msg.text());
       }
     });
-    page.on('response', res => {
+    page.on('response', (res) => {
       const status = res.status();
       if (status >= 400 && status !== 401 && status !== 403) {
         badResponses.push(`${res.request().method()} ${res.url()} -> ${status}`);
@@ -112,34 +115,57 @@ test.describe('#242 — diagnosi di dimissione esclude la terapia farmacologica 
     if (await addBodyLink.count()) {
       await addBodyLink.first().click();
     } else {
-      await page.locator('.cts__header-right button', { hasText: 'Aggiungi farmaco' }).first().click();
+      await page
+        .locator('.cts__header-right button', { hasText: 'Aggiungi farmaco' })
+        .first()
+        .click();
     }
 
     await page.getByPlaceholder('es. Kanrenol').fill(SYNTH_DRUG);
 
     const [therapyResponse] = await Promise.all([
-      page.waitForResponse(res => /\/patients\/[^/]+\/therapies$/.test(res.url()) && res.request().method() === 'POST'),
+      page.waitForResponse(
+        (res) =>
+          /\/patients\/[^/]+\/therapies$/.test(res.url()) && res.request().method() === 'POST',
+      ),
       page.getByRole('button', { name: 'Salva terapia' }).click(),
     ]);
     expect(therapyResponse.status(), `POST ${therapyResponse.url()}`).toBe(201);
 
-    const therapyRow = page.locator('.clinicos-table, table').locator('text=' + SYNTH_DRUG).first();
+    const therapyRow = page
+      .locator('.clinicos-table, table')
+      .locator('text=' + SYNTH_DRUG)
+      .first();
     await expect(therapyRow).toBeVisible();
 
     // ── Step 3: verify separation BEFORE reload ──
     // Explicit positive/negative checks scoped to each surface (more reliable than a body-wide check):
     await expect(page.getByText(SYNTH_DRUG).first()).toBeVisible(); // therapy surface shows the drug
-    const diagnosisTextOnTherapySurface = await page.locator('.cr-tab-content', { hasText: SYNTH_DIAGNOSIS }).count();
-    expect(diagnosisTextOnTherapySurface, 'Diagnosis text must NOT appear as a therapy row').toBe(0);
+    const diagnosisTextOnTherapySurface = await page
+      .locator('.cr-tab-content', { hasText: SYNTH_DIAGNOSIS })
+      .count();
+    expect(diagnosisTextOnTherapySurface, 'Diagnosis text must NOT appear as a therapy row').toBe(
+      0,
+    );
 
-    await page.screenshot({ path: path.join(SCREENSHOTS_DIR, '242-terapia-surface.png'), fullPage: true });
+    await page.screenshot({
+      path: path.join(SCREENSHOTS_DIR, '242-terapia-surface.png'),
+      fullPage: true,
+    });
 
     await openDiagnosiTab(page);
     await expect(diagnosiRow).toBeVisible();
-    const drugTextOnDiagnosisSurface = await page.locator('.cr-tab-content', { hasText: SYNTH_DRUG }).count();
-    expect(drugTextOnDiagnosisSurface, 'Therapy drug must NOT appear on the Diagnosi surface').toBe(0);
+    const drugTextOnDiagnosisSurface = await page
+      .locator('.cr-tab-content', { hasText: SYNTH_DRUG })
+      .count();
+    expect(drugTextOnDiagnosisSurface, 'Therapy drug must NOT appear on the Diagnosi surface').toBe(
+      0,
+    );
 
-    await page.screenshot({ path: path.join(SCREENSHOTS_DIR, '242-diagnosi-surface.png'), fullPage: true });
+    await page.screenshot({
+      path: path.join(SCREENSHOTS_DIR, '242-diagnosi-surface.png'),
+      fullPage: true,
+    });
 
     // ── Step 4 (AC3): reload the page and re-verify BOTH persistence and separation ──
     // Dopo il reload l'app torna al gate del ruolo: si rifà login + apertura paziente.
@@ -147,13 +173,23 @@ test.describe('#242 — diagnosi di dimissione esclude la terapia farmacologica 
     await openPatient(page);
     await openDiagnosiTab(page);
     await expect(page.locator('.cr-diag-desc', { hasText: SYNTH_DIAGNOSIS }).first()).toBeVisible();
-    const drugAfterReloadOnDiagnosis = await page.locator('.cr-tab-content', { hasText: SYNTH_DRUG }).count();
-    expect(drugAfterReloadOnDiagnosis, 'After reload: drug must still be absent from Diagnosi').toBe(0);
+    const drugAfterReloadOnDiagnosis = await page
+      .locator('.cr-tab-content', { hasText: SYNTH_DRUG })
+      .count();
+    expect(
+      drugAfterReloadOnDiagnosis,
+      'After reload: drug must still be absent from Diagnosi',
+    ).toBe(0);
 
     await openTerapiaTab(page);
     await expect(page.getByText(SYNTH_DRUG).first()).toBeVisible();
-    const diagnosisAfterReloadOnTherapy = await page.locator('.cr-tab-content', { hasText: SYNTH_DIAGNOSIS }).count();
-    expect(diagnosisAfterReloadOnTherapy, 'After reload: diagnosis must still be absent from Terapia').toBe(0);
+    const diagnosisAfterReloadOnTherapy = await page
+      .locator('.cr-tab-content', { hasText: SYNTH_DIAGNOSIS })
+      .count();
+    expect(
+      diagnosisAfterReloadOnTherapy,
+      'After reload: diagnosis must still be absent from Terapia',
+    ).toBe(0);
 
     // Final proof screenshot (result.png) — Terapia surface post-reload with the drug visible,
     // diagnosis text absent, proving the separation survives save + reload.
@@ -172,14 +208,20 @@ test.describe('#242 — diagnosi di dimissione esclude la terapia farmacologica 
       await openPatient(page);
 
       await openTerapiaTab(page);
-      const therapyDeleteBtn = page.locator('.cr-item-row, tr', { hasText: SYNTH_DRUG }).getByTitle('Elimina').first();
+      const therapyDeleteBtn = page
+        .locator('.cr-item-row, tr', { hasText: SYNTH_DRUG })
+        .getByTitle('Elimina')
+        .first();
       if (await therapyDeleteBtn.count()) {
-        page.once('dialog', d => d.accept());
+        page.once('dialog', (d) => d.accept());
         await therapyDeleteBtn.click().catch(() => {});
       }
 
       await openDiagnosiTab(page);
-      const diagDeleteBtn = page.locator('.cr-item-row', { hasText: SYNTH_DIAGNOSIS }).getByTitle('Elimina').first();
+      const diagDeleteBtn = page
+        .locator('.cr-item-row', { hasText: SYNTH_DIAGNOSIS })
+        .getByTitle('Elimina')
+        .first();
       if (await diagDeleteBtn.count()) {
         await diagDeleteBtn.click().catch(() => {});
       }

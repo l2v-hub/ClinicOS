@@ -23,11 +23,13 @@
 ### Task 1: Backend — extract `createTherapyInTx` shared helper; route reuses it
 
 **Files:**
+
 - Create: `backend/src/therapies/therapy-create.ts`
 - Modify: `backend/src/routes/patient-therapies.ts:48-130` (POST handler → call the helper)
 - Test: `backend/src/therapies/__tests__/therapy-create.test.ts`
 
 **Interfaces:**
+
 - Consumes: `normalizeSchedules`, `deriveLegacyFromSchedules`, `type ScheduleInput` from `../lib/therapy-dose.js`; `PrismaTx` (a `prisma.$transaction` tx client).
 - Produces: `export interface TherapyCreateInput { farmacoNome: string; dataInizio: string; dosaggio?: string; viaSomministrazione?: string; tipo?: string; stato?: string; dataFine?: string; fasceMattina?: boolean; fascePranzo?: boolean; fascePomeriggio?: boolean; fasceSera?: boolean; fasceNotte?: boolean; orarioSpecifico?: string; prescrittore?: string; operatoreInseritore?: string; note?: string; dataSomministrazione?: string; orarioSomministrazione?: string; commercialStrengthValue?: number | string | null; commercialStrengthUnit?: string; pharmaceuticalForm?: string; allowedFractions?: string; drugPackageRef?: string; schedules?: unknown }` and `export async function createTherapyInTx(tx: PrismaTx, patientId: string, input: TherapyCreateInput): Promise<PatientTherapyWithSchedules>` (throws `Error('Campi obbligatori: farmacoNome, dataInizio')` when either is missing). `PrismaTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0]`.
 
@@ -43,10 +45,12 @@
 ### Task 2: Backend — therapy-aware `materializePatient` + `confirmDraft`
 
 **Files:**
+
 - Modify: `backend/src/ai/upload/confirm-service.ts` (`MaterializeArgs`, `materializePatient`, `ConfirmPayload`, `confirmDraft`)
 - Test: `backend/src/intake/__tests__/confirm-draft-therapy.test.ts`
 
 **Interfaces:**
+
 - Consumes: `createTherapyInTx`, `TherapyCreateInput` from `../../therapies/therapy-create.js`.
 - Produces: `ConfirmPayload.therapies?: TherapyCreateInput[]`; `MaterializeArgs.therapies?: TherapyCreateInput[]`.
 
@@ -62,10 +66,12 @@
 ### Task 3: Frontend — extract `TherapyFormFields` from `TerapiaFarmacologicaTab` (no-regression)
 
 **Files:**
+
 - Create: `frontend/src/components/operator/cartella/TherapyFormFields.tsx`
 - Modify: `frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx` (consume the extracted component)
 
 **Interfaces:**
+
 - Produces: `export interface TherapyFormValue { farmacoNome: string; pharmaceuticalForm: string; commercialStrengthValue: string; commercialStrengthUnit: string; allowedFractions: string[]; viaSomministrazione: string; tipo: 'periodica' | 'una_tantum' | 'al_bisogno'; stato: 'attiva' | 'sospesa' | 'conclusa'; dataInizio: string; dataFine: string; schedules: ScheduleRow[]; prescrittore: string; note: string; dataSomministrazione: string; orarioSomministrazione: string }` (this is the existing in-file `TherapyForm` interface — re-export it under this name, or export the existing `TherapyForm` and alias). `export function TherapyFormFields({ value, onChange, operatoreNome }: { value: TherapyFormValue; onChange: (next: TherapyFormValue) => void; operatoreNome?: string })` — a controlled, presentational render of ALL therapy form inputs + the schedule builder (the JSX the tab currently renders inside its add/edit form, including `updateSchedule`/add-row/remove-row handlers operating on `value.schedules` via `onChange`).
 
 - [ ] **Step 1: Read the tab** — open `TerapiaFarmacologicaTab.tsx`; identify the `TherapyForm` interface (line ~54), `emptyForm()` (~74), `updateSchedule` (~366), and the form JSX block (inside the `showForm` render, roughly lines ~607-820 — the farmaco/dose/via/tipo/schedule inputs). These move into `TherapyFormFields`.
@@ -80,9 +86,11 @@
 ### Task 4: Frontend — `TherapyEditor` controlled intake list
 
 **Files:**
+
 - Modify: `frontend/src/components/operator/sections/TherapyEditor.tsx`
 
 **Interfaces:**
+
 - Consumes: `TherapyFormFields`, `TherapyFormValue`, `emptyTherapyForm` from `../cartella/TherapyFormFields`.
 - Produces: `TherapyEditor` now accepts `SectionProps<TherapyFormValue[]>` (value = the list of therapy items collected during intake) in addition to the existing `patient-chart` branch.
 
@@ -99,10 +107,12 @@
 ### Task 5: Frontend — `VitalSignsEditor` + `PainAssessmentEditor` intake shims
 
 **Files:**
+
 - Modify: `frontend/src/components/operator/sections/VitalSignsEditor.tsx`
 - Modify: `frontend/src/components/operator/sections/PainAssessmentEditor.tsx`
 
 **Interfaces:**
+
 - Consumes: `ParametriTab`/`ScalaNRSTab` (already lazy-imported), `CartellaPaziente`, `ParametriMensili`, `ScalaNRSValutazione` from `../../../types`.
 - Produces: `VitalSignsEditor: SectionProps<ParametriMensili[]>`, `PainAssessmentEditor: SectionProps<ScalaNRSValutazione[]>` (plus the existing patient-chart extras).
 
@@ -116,10 +126,12 @@
 ### Task 6: Frontend — confirm wiring in `IntakeWorkspace`
 
 **Files:**
+
 - Modify: `frontend/src/components/shared/intake/IntakeWorkspace.tsx` (`handleConfirm`)
 - Modify (if needed): `frontend/src/components/shared/intake/StepClinica.tsx` (value typing only — it already passes `data[sectionKey]`/`onUpdateSection`)
 
 **Interfaces:**
+
 - Consumes: `data.terapia: TherapyFormValue[]`, `data.parametri: ParametriMensili[]`, `data.dolore: ScalaNRSValutazione[]` from the draft (populated by Tasks 4-5).
 
 - [ ] **Step 1: Map therapy form → TherapyCreateInput** — add a small mapper in `IntakeWorkspace.tsx` (mirror of the tab's `formToPayload` minus patientId): `function therapyFormToInput(f, operatoreNome) { return { farmacoNome:f.farmacoNome, dataInizio:f.dataInizio, dataFine:f.dataFine||undefined, viaSomministrazione:f.viaSomministrazione, tipo:f.tipo, stato:f.stato, commercialStrengthValue:f.commercialStrengthValue?Number(f.commercialStrengthValue):undefined, commercialStrengthUnit:f.commercialStrengthUnit||undefined, pharmaceuticalForm:f.pharmaceuticalForm||undefined, allowedFractions:f.allowedFractions?.join(',')||undefined, prescrittore:f.prescrittore||undefined, operatoreInseritore:operatoreNome||undefined, note:f.note||undefined, dataSomministrazione:f.dataSomministrazione||undefined, orarioSomministrazione:f.orarioSomministrazione||undefined, schedules:f.schedules } }`. (Confirm the exact `formToPayload` field mapping in `TerapiaFarmacologicaTab.tsx:134` and match it.)
@@ -130,6 +142,7 @@
 ---
 
 ## Self-Review notes
+
 - Spec A (backend therapy create + materialize) → Tasks 1-2. Spec B (therapy form + intake editor) → Tasks 3-4. Spec C (vitals/pain shims) → Task 5. Spec D (confirm wiring) → Task 6. All covered.
 - Type consistency: `TherapyCreateInput` (backend) defined Task 1, consumed Tasks 2+6 (frontend mapper produces the same field set). `TherapyFormValue` defined Task 3, consumed Tasks 4+6. `ParametriMensili[]`/`ScalaNRSValutazione[]` from `frontend/src/types.ts` used Tasks 5+6.
 - No-regression gate on the one risky refactor (Task 3 form extraction) before the intake editor depends on it (Task 4).

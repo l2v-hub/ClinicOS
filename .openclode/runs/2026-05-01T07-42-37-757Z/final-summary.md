@@ -9,7 +9,7 @@ FILE: frontend/src/App.tsx
 import './App.css';
 
 function App() {
-  return <main className='app'><h1>ClinicOS</h1><p>Professional healthcare management system.</p></main>;
+return <main className='app'><h1>ClinicOS</h1><p>Professional healthcare management system.</p></main>;
 }
 
 export default App;

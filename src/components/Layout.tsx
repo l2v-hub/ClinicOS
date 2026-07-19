@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from 'react-router-dom'
+import { Outlet, NavLink } from 'react-router-dom';
 
 export function Layout() {
   const navItems = [
@@ -6,7 +6,7 @@ export function Layout() {
     { path: '/patients', label: 'Patients' },
     { path: '/appointments', label: 'Appointments' },
     { path: '/calendar', label: 'Calendar' },
-  ]
+  ];
 
   return (
     <div className="app">
@@ -19,9 +19,7 @@ export function Layout() {
             <NavLink
               key={item.path}
               to={item.path}
-              className={({ isActive }) =>
-                `nav-link ${isActive ? 'active' : ''}`
-              }
+              className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             >
               {item.label}
             </NavLink>
@@ -31,9 +29,7 @@ export function Layout() {
           <div className="app-avatar">DR</div>
           <div>
             <div style={{ fontWeight: 600 }}>Dr. Jane Smith</div>
-            <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>
-              Administrator
-            </div>
+            <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>Administrator</div>
           </div>
         </div>
       </header>
@@ -41,12 +37,10 @@ export function Layout() {
         <Outlet />
       </main>
       <footer className="app-footer">
-        <p>
-          © {new Date().getFullYear()} ClinicOS. All rights reserved.
-        </p>
+        <p>© {new Date().getFullYear()} ClinicOS. All rights reserved.</p>
       </footer>
     </div>
-  )
+  );
 }
 
-export default Layout
+export default Layout;

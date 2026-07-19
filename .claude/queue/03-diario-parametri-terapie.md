@@ -11,7 +11,8 @@ Esegui npm run build.
 Requisiti:
 
 1. Scheda terapia paziente
-Ogni paziente deve poter avere:
+   Ogni paziente deve poter avere:
+
 - farmaco
 - dosaggio
 - via di somministrazione
@@ -26,19 +27,21 @@ Ogni paziente deve poter avere:
   - conclusa
 
 2. Allergie
-Nella terapia deve essere sempre visibile:
+   Nella terapia deve essere sempre visibile:
+
 - allergie note
 - alert allergie
 - note allergiche
 
 3. Schema orario terapia
-Deve essere possibile inserire la terapia nello schema delle ore della giornata:
+   Deve essere possibile inserire la terapia nello schema delle ore della giornata:
+
 - mattina
 - pranzo
 - pomeriggio
 - sera
 - notte
-oppure orari specifici:
+  oppure orari specifici:
 - 08:00
 - 12:00
 - 16:00
@@ -47,9 +50,10 @@ oppure orari specifici:
 - altro
 
 4. Vista “Terapia del mattino di tutti gli ospiti”
-Crea una vista operativa in cui l’operatore vede tutti i pazienti in elenco con le terapie previste per una fascia oraria, ad esempio mattina.
+   Crea una vista operativa in cui l’operatore vede tutti i pazienti in elenco con le terapie previste per una fascia oraria, ad esempio mattina.
 
 La vista deve mostrare:
+
 - paziente
 - camera / letto
 - farmaco
@@ -58,11 +62,13 @@ La vista deve mostrare:
 - stato somministrazione
 
 Azioni:
+
 - clic su spunta = somministrato
 - clic su terapia/paziente = dettaglio
 - se non somministrato, apri un piccolo form per indicare il motivo
 
 Motivi mancata somministrazione:
+
 - rifiutata dal paziente
 - paziente assente
 - vomito / impossibilità
@@ -71,7 +77,8 @@ Motivi mancata somministrazione:
 - altro
 
 5. Registrazione somministrazione
-Ogni somministrazione deve poter avere:
+   Ogni somministrazione deve poter avere:
+
 - stato:
   - da somministrare
   - somministrata
@@ -82,6 +89,7 @@ Ogni somministrazione deve poter avere:
 - note
 
 UX:
+
 - deve essere molto veloce da usare su tablet
 - la vista somministrazione deve funzionare come checklist operativa
 - i colori devono distinguere chiaramente:

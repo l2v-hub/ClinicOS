@@ -12,8 +12,19 @@
 
 /** Header label tokens (normalised, accent-free). Configurable via DOCUMENT_HEADER_LABELS. */
 const DEFAULT_HEADER_LABELS = [
-  'paziente', 'nome', 'cognome', 'nascita', 'data di nascita', 'residenza', 'codice fiscale',
-  'sesso', 'cartella clinica', 'numero nosologico', 'numero cartella', 'reparto', 'unita operativa',
+  'paziente',
+  'nome',
+  'cognome',
+  'nascita',
+  'data di nascita',
+  'residenza',
+  'codice fiscale',
+  'sesso',
+  'cartella clinica',
+  'numero nosologico',
+  'numero cartella',
+  'reparto',
+  'unita operativa',
 ];
 
 // Page-number footer formats: "Pagina 1 di 8", "Pag. 1/8", "1 / 8", "Pagina 1". Group 1 = page,
@@ -47,7 +58,12 @@ export interface HeaderFilterResult {
 
 export function loadHeaderFilterConfig(env: NodeJS.ProcessEnv = process.env): HeaderFilterConfig {
   const labelsRaw = (env.DOCUMENT_HEADER_LABELS || '').trim();
-  const labels = labelsRaw ? labelsRaw.split(',').map((s) => normalise(s)).filter(Boolean) : DEFAULT_HEADER_LABELS;
+  const labels = labelsRaw
+    ? labelsRaw
+        .split(',')
+        .map((s) => normalise(s))
+        .filter(Boolean)
+    : DEFAULT_HEADER_LABELS;
   const requiredMatches = clampInt(env.DOCUMENT_HEADER_REQUIRED_MATCHES, 3, 1, 10);
   const confidenceThreshold = clampFloat(env.DOCUMENT_HEADER_CONFIDENCE_THRESHOLD, 0.85, 0, 1);
   const keepPageMarkers = (env.DOCUMENT_KEEP_PAGE_MARKERS || '').trim().toLowerCase() !== 'false';
@@ -66,7 +82,8 @@ function clampFloat(v: string | undefined, def: number, lo: number, hi: number):
 /** Lowercase, strip accents and markdown bullets/heading marks, collapse spaces. */
 function normalise(line: string): string {
   return line
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
     .replace(/^[\s#>*\-•|]+/, '')
     .replace(/\s+/g, ' ')
@@ -78,7 +95,12 @@ function matchedLabel(line: string, labels: string[]): string | null {
   const n = normalise(line);
   if (!n) return null;
   for (const lab of labels) {
-    if (n === lab || n.startsWith(lab + ':') || n.startsWith(lab + ' :') || n.startsWith(lab + ' ')) {
+    if (
+      n === lab ||
+      n.startsWith(lab + ':') ||
+      n.startsWith(lab + ' :') ||
+      n.startsWith(lab + ' ')
+    ) {
       // guard: "nome" must not swallow a long prose line that merely begins with the word.
       const rest = n.slice(lab.length).replace(/^[\s:]+/, '');
       if (rest.length <= 60 && !/[.!?]/.test(rest)) return lab;
@@ -121,7 +143,10 @@ function pageNumberOnly(line: string): { page: number; total: number | null } | 
   for (const re of PAGE_NUMBER_PATTERNS) {
     const m = re.exec(line);
     if (m) {
-      const residue = line.replace(re, '').replace(/[\s|#>*\-—–.,;:]/g, '').trim();
+      const residue = line
+        .replace(re, '')
+        .replace(/[\s|#>*\-—–.,;:]/g, '')
+        .trim();
       if (residue.length === 0) {
         return { page: parseInt(m[1], 10), total: m[2] ? parseInt(m[2], 10) : null };
       }
@@ -137,14 +162,22 @@ function footerWithExtra(line: string): boolean {
     const m = re.exec(line);
     re.lastIndex = 0;
     if (m) {
-      const residue = line.replace(re, '').replace(/[\s|#>*\-—–.,;:]/g, '').trim();
+      const residue = line
+        .replace(re, '')
+        .replace(/[\s|#>*\-—–.,;:]/g, '')
+        .trim();
       if (residue.length > 0) return true;
     }
   }
   return false;
 }
 
-interface Block { start: number; end: number; labels: string[]; signature: string }
+interface Block {
+  start: number;
+  end: number;
+  labels: string[];
+  signature: string;
+}
 
 /** Find maximal runs of header label lines (absorbing short value lines), each with ≥1 label. */
 function findHeaderBlocks(lines: string[], cfg: HeaderFilterConfig): Block[] {
@@ -157,18 +190,30 @@ function findHeaderBlocks(lines: string[], cfg: HeaderFilterConfig): Block[] {
       let j = i + 1;
       while (j < lines.length) {
         const labs = headerLineLabels(lines[j], cfg);
-        if (labs) { labels.push(...labs); j++; continue; }
+        if (labs) {
+          labels.push(...labs);
+          j++;
+          continue;
+        }
         // absorb blank/value lines that sit BETWEEN header rows (OCR markdown separates the
         // header rows with blank lines, and label-above-value layouts have short value lines).
         if (lines[j].trim() === '' || isValueLine(lines[j])) {
           let k = j;
           while (k < lines.length && (lines[k].trim() === '' || isValueLine(lines[k]))) k++;
-          if (k < lines.length && headerLineLabels(lines[k], cfg)) { j = k; continue; }
+          if (k < lines.length && headerLineLabels(lines[k], cfg)) {
+            j = k;
+            continue;
+          }
         }
         break;
       }
       const distinct = Array.from(new Set(labels));
-      blocks.push({ start: i, end: j, labels: distinct, signature: distinct.slice().sort().join('|') });
+      blocks.push({
+        start: i,
+        end: j,
+        labels: distinct,
+        signature: distinct.slice().sort().join('|'),
+      });
       i = j;
     } else {
       i++;
@@ -178,13 +223,19 @@ function findHeaderBlocks(lines: string[], cfg: HeaderFilterConfig): Block[] {
 }
 
 /** Confidence that a block is a repeated page header. position/repetition/label/tableLayout. */
-function scoreBlock(block: Block, lines: string[], signatureCounts: Map<string, number>, cfg: HeaderFilterConfig): number {
+function scoreBlock(
+  block: Block,
+  lines: string[],
+  signatureCounts: Map<string, number>,
+  cfg: HeaderFilterConfig,
+): number {
   const distinct = block.labels.length;
   const labelScore = Math.min(1, distinct / Math.max(1, cfg.requiredMatches));
   const repeat = signatureCounts.get(block.signature) ?? 1;
   const repetitionScore = repeat >= 2 ? 1 : 0.2;
   // table-like: fraction of block lines that are "label: value" pairs
-  let pairs = 0, total = 0;
+  let pairs = 0,
+    total = 0;
   for (let k = block.start; k < block.end; k++) {
     const t = lines[k].trim();
     if (!t) continue;
@@ -195,7 +246,9 @@ function scoreBlock(block: Block, lines: string[], signatureCounts: Map<string, 
   // position: near the document start or right after a blank/page-break boundary (page top)
   const prev = block.start > 0 ? lines[block.start - 1].trim() : '';
   const positionScore = block.start === 0 || prev === '' || !!pageNumberOnly(prev) ? 1 : 0.4;
-  return 0.35 * repetitionScore + 0.35 * labelScore + 0.15 * tableLayoutScore + 0.15 * positionScore;
+  return (
+    0.35 * repetitionScore + 0.35 * labelScore + 0.15 * tableLayoutScore + 0.15 * positionScore
+  );
 }
 
 /**
@@ -204,13 +257,24 @@ function scoreBlock(block: Block, lines: string[], signatureCounts: Map<string, 
  * lines (recording the numbers), and KEEPS ambiguous/low-confidence blocks with a warning.
  * Deterministic and idempotent: re-running on cleaned text removes nothing further.
  */
-export function filterRepeatedHeaders(rawText: string, config?: Partial<HeaderFilterConfig>): HeaderFilterResult {
+export function filterRepeatedHeaders(
+  rawText: string,
+  config?: Partial<HeaderFilterConfig>,
+): HeaderFilterResult {
   const cfg = { ...loadHeaderFilterConfig(), ...config };
   const warnings: string[] = [];
   const detectedPageNumbers: number[] = [];
   const matchedLabels: string[] = [];
   if (!rawText || !rawText.trim()) {
-    return { cleanedText: rawText ?? '', warnings, removedHeaderBlocks: 0, removedFooterLines: 0, detectedPageNumbers, matchedLabels, keptPageMarkers: 0 };
+    return {
+      cleanedText: rawText ?? '',
+      warnings,
+      removedHeaderBlocks: 0,
+      removedFooterLines: 0,
+      detectedPageNumbers,
+      matchedLabels,
+      keptPageMarkers: 0,
+    };
   }
 
   const lines = rawText.split('\n');
@@ -218,7 +282,8 @@ export function filterRepeatedHeaders(rawText: string, config?: Partial<HeaderFi
 
   // count how often each header signature repeats across the document
   const signatureCounts = new Map<string, number>();
-  for (const b of blocks) signatureCounts.set(b.signature, (signatureCounts.get(b.signature) ?? 0) + 1);
+  for (const b of blocks)
+    signatureCounts.set(b.signature, (signatureCounts.get(b.signature) ?? 0) + 1);
 
   const remove = new Set<number>(); // line indices to drop
   const seenSignature = new Set<string>();
@@ -236,7 +301,9 @@ export function filterRepeatedHeaders(rawText: string, config?: Partial<HeaderFi
       removedHeaderBlocks++;
       for (const l of b.labels) if (!matchedLabels.includes(l)) matchedLabels.push(l);
     } else {
-      warnings.push(`AMBIGUOUS_HEADER_KEPT confidence=${confidence.toFixed(2)} labels=${b.labels.length}`);
+      warnings.push(
+        `AMBIGUOUS_HEADER_KEPT confidence=${confidence.toFixed(2)} labels=${b.labels.length}`,
+      );
     }
   }
 
@@ -261,7 +328,11 @@ export function filterRepeatedHeaders(rawText: string, config?: Partial<HeaderFi
     }
   }
 
-  const cleaned = lines.filter((_, idx) => !remove.has(idx)).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  const cleaned = lines
+    .filter((_, idx) => !remove.has(idx))
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
   return {
     cleanedText: cleaned,
     warnings,

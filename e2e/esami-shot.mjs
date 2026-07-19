@@ -7,7 +7,7 @@ import { resolve } from 'node:path';
 import { mkdirSync } from 'node:fs';
 
 const FRONTEND = process.argv[2] ?? 'http://localhost:4173';
-const outDir   = process.argv[3] ?? 'requirements/evidence/BUG-061';
+const outDir = process.argv[3] ?? 'requirements/evidence/BUG-061';
 mkdirSync(outDir, { recursive: true });
 
 const PATIENT = {
@@ -53,7 +53,8 @@ const ESAMI_STRUMENTALI = [
     data: '2026-06-19',
     ora: '',
     descrizione: 'RX torace in due proiezioni',
-    esito: 'Iperinfiltrazione basale bilaterale compatibile con bronchite cronica. Non versamento pleurico.',
+    esito:
+      'Iperinfiltrazione basale bilaterale compatibile con bronchite cronica. Non versamento pleurico.',
     allegati: 'rx_torace_2026-06-19.jpg',
     note: '',
     operatore: 'Dr. Martini',
@@ -67,7 +68,8 @@ const CONSULENZE = [
     data: '2026-06-21',
     ora: '11:00',
     descrizione: 'Visita cardiologica',
-    esito: 'ECG: ritmo sinusale, FC 78 bpm, non alterazioni significative. Ecocardio programmato tra 30 giorni.',
+    esito:
+      'ECG: ritmo sinusale, FC 78 bpm, non alterazioni significative. Ecocardio programmato tra 30 giorni.',
     allegati: '',
     note: 'Consultare cardiologo dott. Neri per follow-up',
     operatore: 'Dr. Neri',
@@ -80,7 +82,10 @@ const CARTELLA = {
   statoRicovero: 'ricoverato',
   cameraNumero: '12',
   lettoNumero: 'C',
-  anamnesi: { anamnesiPatologicaRemota: 'BPCO, insufficienza cardiaca lieve', anamnesiPatologicaProssima: 'Riacutizzazione BPCO' },
+  anamnesi: {
+    anamnesiPatologicaRemota: 'BPCO, insufficienza cardiaca lieve',
+    anamnesiPatologicaProssima: 'Riacutizzazione BPCO',
+  },
   diagnosi: [],
   terapie: [],
   farmaci: [],
@@ -114,7 +119,8 @@ async function mockRoutes(page) {
 
     if (url.match(/\/patients(\?|$)/) && method === 'GET') return json([PATIENT]);
     if (url.match(/\/patients\/p-bug061$/) && method === 'GET') return json(PATIENT);
-    if (url.match(/\/patients\/p-bug061\/cartella/) && method === 'GET') return json({ patientId: PATIENT.id, data: CARTELLA });
+    if (url.match(/\/patients\/p-bug061\/cartella/) && method === 'GET')
+      return json({ patientId: PATIENT.id, data: CARTELLA });
     if (url.match(/\/patients\/p-bug061\/therapies/) && method === 'GET') return json([]);
     if (url.includes('/patients/settings')) return json({ allowDelete: false });
     if (url.match(/\/patients\/p-bug061\/narrative-sections/)) return json([]);
@@ -136,14 +142,17 @@ try {
 
   // Login as Operatore
   const loginCard = page.locator('.login-role-card--operatore');
-  if (await loginCard.count() > 0) {
+  if ((await loginCard.count()) > 0) {
     await loginCard.click();
     await page.waitForTimeout(1200);
   }
 
   // Navigate to Pazienti
-  const nav = page.locator('[title="Pazienti"], .teams-sidebar__item').filter({ hasText: /Pazienti/i }).first();
-  if (await nav.count() > 0) {
+  const nav = page
+    .locator('[title="Pazienti"], .teams-sidebar__item')
+    .filter({ hasText: /Pazienti/i })
+    .first();
+  if ((await nav.count()) > 0) {
     await nav.click();
   } else {
     await page.getByText('Pazienti').first().click();
@@ -152,19 +161,19 @@ try {
 
   // Open patient Ferrari Lucia
   const row = page.getByText('Ferrari').first();
-  if (await row.count() > 0) await row.click();
+  if ((await row.count()) > 0) await row.click();
   await page.waitForTimeout(1200);
 
   // Click "Clinica" L2 group
   const clinicaGroup = page.getByText('Clinica', { exact: true }).first();
-  if (await clinicaGroup.count() > 0) {
+  if ((await clinicaGroup.count()) > 0) {
     await clinicaGroup.click();
     await page.waitForTimeout(800);
   }
 
   // Click "Esami & Consulenze" L3 tab
   const esamiTab = page.getByText('Esami & Consulenze', { exact: true }).first();
-  if (await esamiTab.count() > 0) {
+  if ((await esamiTab.count()) > 0) {
     await esamiTab.click();
     await page.waitForTimeout(1200);
   }

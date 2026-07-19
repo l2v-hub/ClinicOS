@@ -46,7 +46,7 @@ async function shot(route, out, vpName, role, clicks) {
   try {
     const page = await browser.newPage({ viewport });
     const errors = [];
-    page.on('console', m => m.type() === 'error' && errors.push(m.text()));
+    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
     await page.waitForTimeout(1200); // let React render data after the fetch settles
     if (role && ROLE_LABEL[role]) {
@@ -54,7 +54,10 @@ async function shot(route, out, vpName, role, clicks) {
       await page.waitForTimeout(1500); // dashboard mounts + fetches
     }
     if (clicks) {
-      for (const label of clicks.split('>>').map(s => s.trim()).filter(Boolean)) {
+      for (const label of clicks
+        .split('>>')
+        .map((s) => s.trim())
+        .filter(Boolean)) {
         await page.getByText(label).first().click();
         await page.waitForTimeout(1200);
         console.log(`     clicked "${label}"`);

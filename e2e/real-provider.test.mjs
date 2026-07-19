@@ -13,14 +13,19 @@ if (!key) {
 
 process.env.AI_PROVIDER = 'google';
 const { createExtractionProvider } = await import('../backend/dist/ai/provider-factory.js');
-const { loadAiConfig, loadExtractionSchema, loadExtractionPrompt } = await import('../backend/dist/ai/config.js');
+const { loadAiConfig, loadExtractionSchema, loadExtractionPrompt } =
+  await import('../backend/dist/ai/config.js');
 const { validateExtraction } = await import('../backend/dist/ai/extraction-validate.js');
 
 const cfg = loadAiConfig(true);
 assert.equal(cfg.available, true, 'config available with key');
 const provider = createExtractionProvider(cfg);
 
-const PDF = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.from('Documento sintetico di test. Paziente: Mario Bianchi, nato 1950-01-01.\n'), Buffer.from('%%EOF')]);
+const PDF = Buffer.concat([
+  Buffer.from('%PDF-1.4\n'),
+  Buffer.from('Documento sintetico di test. Paziente: Mario Bianchi, nato 1950-01-01.\n'),
+  Buffer.from('%%EOF'),
+]);
 
 try {
   const result = await provider.extract({
@@ -36,6 +41,8 @@ try {
   console.log(`REQ-020 real-provider: PASS (model=${result.model}, valid=${check.valid})`);
 } catch (err) {
   // A controlled AiExtractionError is acceptable (e.g. model/capability); a crash is not.
-  console.log(`REQ-020 real-provider: controlled error — ${err?.kind ?? 'error'}: ${err?.message ?? err}`);
+  console.log(
+    `REQ-020 real-provider: controlled error — ${err?.kind ?? 'error'}: ${err?.message ?? err}`,
+  );
   process.exit(0);
 }

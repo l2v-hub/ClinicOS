@@ -3,6 +3,7 @@
 **Phase F1 of EPIC #120.** Runtime inventory of every Scheda Paziente field/section/module, classified by availability and obligation, with the differences against the manual new-patient form and the document import. Verified against mounted components, API/DTO and the data model — not just visible labels.
 
 **Sources verified:**
+
 - Chart nav + tabs: `frontend/src/components/operator/PatientDetail.tsx` (`TAB_GROUPS`, L2/L3).
 - Clinical data model: `CartellaPaziente` (cartella JSON) + relational tables `Patient`, `Cartella`, `PatientTherapy`, `TherapySchedule`, `Allergie`/`AllergiaItem`, `Diagnosi`, `PatientNarrativeSection`, `PatientDocument`, `ImportDocument` (`prisma/schema.prisma`).
 - Manual form: `frontend/src/components/shared/NewPatientModal.tsx`.
@@ -14,34 +15,34 @@ Legend — **Intake avail.**: present today in the manual intake form. **Import*
 
 Chart tab: `Panoramica → Profilo` (L3: Anagrafica / Contatti / Contatto emergenza / Assegnazione clinica). Component: `PatientDetail.renderProfilo`. Model: `Patient` table.
 
-| Field | Source | Intake avail. | Import | Req@intake |
-|---|---|---|---|---|
-| firstName / Nome | Patient.firstName | ✅ | ✅ | ✅ |
-| lastName / Cognome | Patient.lastName | ✅ | ✅ | ✅ |
-| dateOfBirth | Patient.dateOfBirth | ✅ | ✅ | ✅ |
-| sex / Sesso | Patient.sex | ✅ | ✅ | – |
-| codiceFiscale | Cartella/Patient | ✅ | ✅ | – |
-| luogo di nascita | (chart only) | ❌ | ❌ | – |
-| residenza / address | Patient.address | ✅ | ✅ | – |
-| telefono / email | Patient.phone/email | ✅ | ✅ | – |
-| referente / emergencyContact | Patient.emergencyContact* | ✅ (Contatti) | ❌ | – |
-| camera / letto / assegnazione | Cartella.cameraNumero/lettoNumero | ❌ | ❌ | – |
+| Field                         | Source                            | Intake avail. | Import | Req@intake |
+| ----------------------------- | --------------------------------- | ------------- | ------ | ---------- |
+| firstName / Nome              | Patient.firstName                 | ✅            | ✅     | ✅         |
+| lastName / Cognome            | Patient.lastName                  | ✅            | ✅     | ✅         |
+| dateOfBirth                   | Patient.dateOfBirth               | ✅            | ✅     | ✅         |
+| sex / Sesso                   | Patient.sex                       | ✅            | ✅     | –          |
+| codiceFiscale                 | Cartella/Patient                  | ✅            | ✅     | –          |
+| luogo di nascita              | (chart only)                      | ❌            | ❌     | –          |
+| residenza / address           | Patient.address                   | ✅            | ✅     | –          |
+| telefono / email              | Patient.phone/email               | ✅            | ✅     | –          |
+| referente / emergencyContact  | Patient.emergencyContact*         | ✅ (Contatti) | ❌     | –          |
+| camera / letto / assegnazione | Cartella.cameraNumero/lettoNumero | ❌            | ❌     | –          |
 
-**Gap:** manual form covers anagraphics + contacts only; missing *luogo di nascita* and bed assignment. Import covers anagraphics but not contacts/referente.
+**Gap:** manual form covers anagraphics + contacts only; missing _luogo di nascita_ and bed assignment. Import covers anagraphics but not contacts/referente.
 
 ## 2. Ingresso (Presa in Carico)
 
 Chart tab: `Clinica → Presa in Carico`. Component: `PresaInCaricoTab`. Model: `Cartella` (statoRicovero, patologiaIngresso, presaInCarico fields).
 
-| Field | Intake avail. | Import | Req@intake |
-|---|---|---|---|
-| Data/ora presa in carico | ❌ | ❌ | ✅ |
-| Provenienza / centro inviante | ❌ | partial (narrative) | – |
-| Modalità ingresso | ❌ | ❌ | – |
-| Motivo ingresso / patologiaIngresso | ❌ | partial (narrative) | ✅ |
-| Operatore responsabile | ❌ | ❌ | – |
-| statoRicovero | partial (confirm default) | ✅ | ✅ |
-| Note iniziali | ❌ | ❌ | – |
+| Field                               | Intake avail.             | Import              | Req@intake |
+| ----------------------------------- | ------------------------- | ------------------- | ---------- |
+| Data/ora presa in carico            | ❌                        | ❌                  | ✅         |
+| Provenienza / centro inviante       | ❌                        | partial (narrative) | –          |
+| Modalità ingresso                   | ❌                        | ❌                  | –          |
+| Motivo ingresso / patologiaIngresso | ❌                        | partial (narrative) | ✅         |
+| Operatore responsabile              | ❌                        | ❌                  | –          |
+| statoRicovero                       | partial (confirm default) | ✅                  | ✅         |
+| Note iniziali                       | ❌                        | ❌                  | –          |
 
 **Gap:** the entire admission block is absent from manual intake; only set later in the chart.
 
@@ -49,32 +50,32 @@ Chart tab: `Clinica → Presa in Carico`. Component: `PresaInCaricoTab`. Model: 
 
 Chart tabs under `Clinica` + `Moduli`. Models in parentheses.
 
-| Section | Chart component | Intake avail. | Import | Req@intake |
-|---|---|---|---|---|
-| Allergie (`AllergiaItem[]`) | allergie editor | ❌ | ✅ (narrative) | – (safety: surface) |
-| Anamnesi (`Cartella.anamnesi`) | `renderAnamnesi` | ❌ | ✅ | – |
-| Diagnosi (`Diagnosi[]`) | `renderDiagnosi` | ❌ | ✅ | – |
-| Terapia farmacologica (`PatientTherapy` + `TherapySchedule`) | `TerapiaFarmacologicaTab` | ❌ | ✅ (narrative, not structured) | – |
-| Parametri vitali (`Cartella.parametriVitali`) | `ParametriTab` | ❌ | ❌ | – |
-| Dolore (NRS) | `ScalaNRSTab` (module) | ❌ | ❌ | – |
-| Note & Visite (`noteClinica`/`visite`) | `renderNote` | ❌ | ❌ | – |
-| Esami & Consulenze | `EsamiConsulenzeTab` | ❌ | partial (narrative) | – |
-| Sezioni Cliniche (narrative) (`PatientNarrativeSection`) | `NarrativeSectionsTab` | ❌ | ✅ | – |
+| Section                                                      | Chart component           | Intake avail. | Import                         | Req@intake          |
+| ------------------------------------------------------------ | ------------------------- | ------------- | ------------------------------ | ------------------- |
+| Allergie (`AllergiaItem[]`)                                  | allergie editor           | ❌            | ✅ (narrative)                 | – (safety: surface) |
+| Anamnesi (`Cartella.anamnesi`)                               | `renderAnamnesi`          | ❌            | ✅                             | –                   |
+| Diagnosi (`Diagnosi[]`)                                      | `renderDiagnosi`          | ❌            | ✅                             | –                   |
+| Terapia farmacologica (`PatientTherapy` + `TherapySchedule`) | `TerapiaFarmacologicaTab` | ❌            | ✅ (narrative, not structured) | –                   |
+| Parametri vitali (`Cartella.parametriVitali`)                | `ParametriTab`            | ❌            | ❌                             | –                   |
+| Dolore (NRS)                                                 | `ScalaNRSTab` (module)    | ❌            | ❌                             | –                   |
+| Note & Visite (`noteClinica`/`visite`)                       | `renderNote`              | ❌            | ❌                             | –                   |
+| Esami & Consulenze                                           | `EsamiConsulenzeTab`      | ❌            | partial (narrative)            | –                   |
+| Sezioni Cliniche (narrative) (`PatientNarrativeSection`)     | `NarrativeSectionsTab`    | ❌            | ✅                             | –                   |
 
-**Gap:** none of the clinical sections are available in manual intake. Import prefills the *narrative* sections (diagnosi/anamnesi/terapia/allergie/esami) but not the *structured* ones (parametri, dolore, structured therapy schedules) and via a separate review path that does not converge with manual intake.
+**Gap:** none of the clinical sections are available in manual intake. Import prefills the _narrative_ sections (diagnosi/anamnesi/terapia/allergie/esami) but not the _structured_ ones (parametri, dolore, structured therapy schedules) and via a separate review path that does not converge with manual intake.
 
 ## 4. Moduli
 
 Chart tab: `Moduli`. Components: `MedicazioniTab`, `ContenzioniTab`, `ScalaBradenTab`, `ScalaTinettiTab`, `ScalaNRSTab`, `DimissioneTab`. Models: `Cartella.medicazioniFerite`, `.contenzioni`, `.valutazioniBraden`, NRS/Tinetti JSON.
 
-| Module | Intake avail. | Import | Req@intake |
-|---|---|---|---|
-| Medicazioni | ❌ | ❌ | – |
-| Contenzioni | ❌ | ❌ | – |
-| Scala Braden | ❌ | ❌ | – (configurable) |
-| Scala Tinetti | ❌ | ❌ | – (configurable) |
-| Scala NRS (dolore) | ❌ | ❌ | – (configurable) |
-| Dimissione | ❌ (not an intake module) | ❌ | – |
+| Module             | Intake avail.             | Import | Req@intake       |
+| ------------------ | ------------------------- | ------ | ---------------- |
+| Medicazioni        | ❌                        | ❌     | –                |
+| Contenzioni        | ❌                        | ❌     | –                |
+| Scala Braden       | ❌                        | ❌     | – (configurable) |
+| Scala Tinetti      | ❌                        | ❌     | – (configurable) |
+| Scala NRS (dolore) | ❌                        | ❌     | – (configurable) |
+| Dimissione         | ❌ (not an intake module) | ❌     | –                |
 
 **Gap:** no module is fillable at intake. Required/skippable must be configurable per the registry (`requiredDuringIntake`). Dimissione is end-of-stay, excluded from intake.
 
@@ -82,19 +83,19 @@ Chart tab: `Moduli`. Components: `MedicazioniTab`, `ContenzioniTab`, `ScalaBrade
 
 Chart tab: `Documenti`. Component: `DocumentiTab`. Model: `PatientDocument` (bytes in DB) + `ImportDocument`.
 
-| Capability | Intake avail. | Import | Req@intake |
-|---|---|---|---|
-| Importa file | ❌ (only via separate import path) | ✅ | – |
-| Scatta foto | ❌ | ✅ (CameraCapture) | – |
-| Ordina / anteprima / collega | ❌ | ✅ (review) | – |
-| sourceReferences (campo→fonte) | ❌ | ✅ | – |
+| Capability                     | Intake avail.                      | Import             | Req@intake |
+| ------------------------------ | ---------------------------------- | ------------------ | ---------- |
+| Importa file                   | ❌ (only via separate import path) | ✅                 | –          |
+| Scatta foto                    | ❌                                 | ✅ (CameraCapture) | –          |
+| Ordina / anteprima / collega   | ❌                                 | ✅ (review)        | –          |
+| sourceReferences (campo→fonte) | ❌                                 | ✅                 | –          |
 
 **Gap:** documents only attach through the separate import flow; manual intake cannot attach documents pre-creation.
 
 ## 6. Summary of gaps
 
 - **Manual intake form** = anagraphics + contacts only. Missing: admission block, all 9 Clinica sections, all 5 intake modules, documents. → addressed by **#122** (workspace) using **#123** shared editors.
-- **Document import** = anagraphics + narrative clinical sections via a *separate* path; missing structured sections (parametri, dolore, structured therapy), modules; does not converge with manual intake. → addressed by **#124** (import → same `PatientIntakeDraft`).
+- **Document import** = anagraphics + narrative clinical sections via a _separate_ path; missing structured sections (parametri, dolore, structured therapy), modules; does not converge with manual intake. → addressed by **#124** (import → same `PatientIntakeDraft`).
 - **No-duplication:** the chart already has one editor per section; intake/import must **reuse** them (mode-aware, **#123**) — do **not** create `New*` / `Imported*` / `Chart*` copies.
 
 ## 7. Required-at-intake set (proposed)

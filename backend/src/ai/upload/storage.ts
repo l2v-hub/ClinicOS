@@ -39,7 +39,9 @@ export async function removeJobDir(jobId: string): Promise<void> {
 }
 
 /** Delete on-disk job directories whose mtime is older than retention. */
-export async function sweepExpiredDirs(retentionMin = loadAiConfig().jobRetentionMin): Promise<number> {
+export async function sweepExpiredDirs(
+  retentionMin = loadAiConfig().jobRetentionMin,
+): Promise<number> {
   const root = loadAiConfig().uploadDir;
   let removed = 0;
   let entries: string[];

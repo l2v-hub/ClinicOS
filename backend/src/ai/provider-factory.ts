@@ -9,7 +9,9 @@ import { MockExtractionProvider } from './providers/mock.js';
 
 export function createExtractionProvider(cfg: AiConfig = loadAiConfig()): AiExtractionProvider {
   if (cfg.provider === 'mock') {
-    return new MockExtractionProvider(cfg.model === 'gemma-4-31b-it' ? 'mock-extractor' : cfg.model);
+    return new MockExtractionProvider(
+      cfg.model === 'gemma-4-31b-it' ? 'mock-extractor' : cfg.model,
+    );
   }
 
   // google

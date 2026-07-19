@@ -4,5 +4,3 @@
 **Dry-run:** false
 
 ## Last agent output
-
-

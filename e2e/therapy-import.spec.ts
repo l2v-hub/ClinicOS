@@ -20,7 +20,9 @@ const DRAFT_ID = process.env.E2E_IMPORT_DRAFT_ID;
 test.describe('#156 discharge therapy → structured rows', () => {
   test.skip(!DRAFT_ID, 'set E2E_IMPORT_DRAFT_ID to a seeded import draft with therapy');
 
-  test('detected therapies are shown, editable, and persist after confirm + refresh', async ({ page }) => {
+  test('detected therapies are shown, editable, and persist after confirm + refresh', async ({
+    page,
+  }) => {
     await page.goto(`${BASE}/?intakeDraft=${DRAFT_ID}`);
 
     // AC1/AC7: the review section is shown at the Clinica step.

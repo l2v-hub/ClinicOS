@@ -1,15 +1,27 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { loadAiConfig, publicStatus, loadExtractionSchema, loadExtractionPrompt } from '../config.js';
+import {
+  loadAiConfig,
+  publicStatus,
+  loadExtractionSchema,
+  loadExtractionPrompt,
+} from '../config.js';
 import { createExtractionProvider } from '../provider-factory.js';
 import { maskSecret, redactForLog, truncateForLog } from '../redact.js';
 import { MockExtractionProvider } from '../providers/mock.js';
 
 function resetEnv(overrides: Record<string, string | undefined>) {
   for (const k of [
-    'AI_PROVIDER', 'AI_MODEL', 'GEMINI_API_KEY', 'AI_STRUCTURED_MODEL',
-    'AI_TIMEOUT_MS', 'AI_MAX_RETRIES', 'AI_MAX_FILES', 'AI_MAX_TOTAL_MB',
-    'AI_EXTRACTION_SCHEMA_PATH', 'AI_EXTRACTION_PROMPT_PATH',
+    'AI_PROVIDER',
+    'AI_MODEL',
+    'GEMINI_API_KEY',
+    'AI_STRUCTURED_MODEL',
+    'AI_TIMEOUT_MS',
+    'AI_MAX_RETRIES',
+    'AI_MAX_FILES',
+    'AI_MAX_TOTAL_MB',
+    'AI_EXTRACTION_SCHEMA_PATH',
+    'AI_EXTRACTION_PROMPT_PATH',
   ]) {
     delete process.env[k];
   }
@@ -20,7 +32,11 @@ function resetEnv(overrides: Record<string, string | undefined>) {
 }
 
 test('valid config: google provider with key is available', () => {
-  resetEnv({ AI_PROVIDER: 'google', AI_MODEL: 'gemma-4-31b-it', GEMINI_API_KEY: 'FAKEKEY-TESTONLY-1234567890' });
+  resetEnv({
+    AI_PROVIDER: 'google',
+    AI_MODEL: 'gemma-4-31b-it',
+    GEMINI_API_KEY: 'FAKEKEY-TESTONLY-1234567890',
+  });
   const cfg = loadAiConfig(true);
   assert.equal(cfg.available, true);
   assert.equal(cfg.provider, 'google');
@@ -36,7 +52,11 @@ test('absent config: missing GEMINI_API_KEY produces controlled error, never thr
 });
 
 test('changing AI_MODEL changes the model (no frontend change needed)', () => {
-  resetEnv({ AI_PROVIDER: 'google', AI_MODEL: 'gemini-2.0-flash', GEMINI_API_KEY: 'FAKEKEY-TESTONLY-1234567890' });
+  resetEnv({
+    AI_PROVIDER: 'google',
+    AI_MODEL: 'gemini-2.0-flash',
+    GEMINI_API_KEY: 'FAKEKEY-TESTONLY-1234567890',
+  });
   const cfg = loadAiConfig(true);
   assert.equal(cfg.model, 'gemini-2.0-flash');
   assert.equal(publicStatus(cfg).model, 'gemini-2.0-flash');
@@ -72,13 +92,19 @@ test('publicStatus never leaks the API key', () => {
   resetEnv({ AI_PROVIDER: 'google', GEMINI_API_KEY: 'FAKEKEYSUPERSECRETVALUE0987654321xx' });
   const status = publicStatus(loadAiConfig(true));
   const serialized = JSON.stringify(status);
-  assert.ok(!serialized.includes('FAKEKEYSUPERSECRETVALUE0987654321xx'), 'status must not contain the key');
+  assert.ok(
+    !serialized.includes('FAKEKEYSUPERSECRETVALUE0987654321xx'),
+    'status must not contain the key',
+  );
   assert.ok(!('apiKey' in status), 'status has no apiKey field');
 });
 
 test('redaction: secrets masked, long content truncated', () => {
   assert.equal(maskSecret('FAKEKEYSUPERSECRETVALUE0987654321xx').includes('SUPERSECRET'), false);
-  const redacted = redactForLog({ apiKey: 'FAKEKEYSUPERSECRETVALUE0987654321xx', note: 'hi' }) as Record<string, unknown>;
+  const redacted = redactForLog({
+    apiKey: 'FAKEKEYSUPERSECRETVALUE0987654321xx',
+    note: 'hi',
+  }) as Record<string, unknown>;
   assert.ok(!JSON.stringify(redacted).includes('SUPERSECRETVALUE'));
   assert.equal(redacted.note, 'hi');
   const long = 'x'.repeat(200);

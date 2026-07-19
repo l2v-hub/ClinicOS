@@ -21,7 +21,14 @@ export interface SemanticTaggedTextProps {
   datePrefix?: boolean;
 }
 
-export function SemanticTaggedText({ rawText, annotations, styleOverrides, sourceTitle, className, datePrefix = true }: SemanticTaggedTextProps) {
+export function SemanticTaggedText({
+  rawText,
+  annotations,
+  styleOverrides,
+  sourceTitle,
+  className,
+  datePrefix = true,
+}: SemanticTaggedTextProps) {
   const styles = resolveStyles(styleOverrides);
   // REQ-038: date prefixes are detected at render time from the exact text (never persisted),
   // so a manual edit recalculates them and the stored value stays plain.
@@ -35,9 +42,13 @@ export function SemanticTaggedText({ rawText, annotations, styleOverrides, sourc
     >
       {segments.map((s, i) =>
         s.bold ? (
-          <strong key={i} className={s.className}>{s.text}</strong>
+          <strong key={i} className={s.className}>
+            {s.text}
+          </strong>
         ) : s.illegible ? (
-          <mark key={i} className="stt-illegible">{s.text}</mark>
+          <mark key={i} className="stt-illegible">
+            {s.text}
+          </mark>
         ) : (
           <span key={i}>{s.text}</span>
         ),

@@ -22,7 +22,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import BillingPage from './pages/BillingPage';
 -import SettingsPage from './pages/SettingsPage';
  import './App.css';
- 
+
  function App() {
    return (
 -    <Routes>
@@ -40,7 +40,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </main>
    );
  }
- 
+
  export default App;
 ```
 
@@ -78,7 +78,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -import BillingPage from './pages/BillingPage';
 -import SettingsPage from './pages/SettingsPage';
  import './App.css';
- 
+
  function App() {
    return (
 -    <Routes>
@@ -96,7 +96,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </main>
    );
  }
- 
+
  export default App;
 ```
 

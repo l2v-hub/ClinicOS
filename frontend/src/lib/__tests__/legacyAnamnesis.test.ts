@@ -13,7 +13,10 @@ test('hasLegacyAnamnesis: blank-string-only fields -> false', () => {
 });
 
 test('hasLegacyAnamnesis: at least one populated field -> true', () => {
-  assert.equal(hasLegacyAnamnesis({ patologicaRemota: 'Ipertensione arteriosa (sintetico)' }), true);
+  assert.equal(
+    hasLegacyAnamnesis({ patologicaRemota: 'Ipertensione arteriosa (sintetico)' }),
+    true,
+  );
 });
 
 test('legacyAnamnesisRows: empty input -> []', () => {

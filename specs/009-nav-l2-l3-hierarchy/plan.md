@@ -25,6 +25,7 @@ Refine the existing `.page-tabs` (Level 2) and `.section-tabs` (Level 3) navigat
 **Performance Goals**: Tab-change content transition ≤ 200ms; first paint of redesigned tabs ≤ 100ms over existing baseline; no added bundle weight > 1 kB gzipped.
 
 **Constraints**:
+
 - Zero global horizontal overflow at any supported viewport.
 - L2 touch targets ≥ 44px, L3 ≥ 32px.
 - `prefers-reduced-motion: reduce` honored for every transition introduced.
@@ -36,17 +37,17 @@ Refine the existing `.page-tabs` (Level 2) and `.section-tabs` (Level 3) navigat
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-| # | Principle | Status | Notes |
-|---|-----------|--------|-------|
-| I | Simplicity First | PASS | CSS-first refinement; new shared components introduced only if they remove existing duplication. No new deps. |
-| II | Healthcare UX | PASS | Italian labels preserved (FR-016). Tablet-first viewport (1024px+) is the explicit baseline. No tooltips introduced. ClinicalTable / card design untouched. |
+| #   | Principle              | Status                                                                             | Notes                                                                                                                                                       |
+| --- | ---------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| I   | Simplicity First       | PASS                                                                               | CSS-first refinement; new shared components introduced only if they remove existing duplication. No new deps.                                               |
+| II  | Healthcare UX          | PASS                                                                               | Italian labels preserved (FR-016). Tablet-first viewport (1024px+) is the explicit baseline. No tooltips introduced. ClinicalTable / card design untouched. |
 | III | Backend Data Authority | N/A — frontend presentation only. No clinical data flow or state lifecycle change. |
-| IV | Schema & API Stability | PASS | Explicit FR-014 forbids backend / Prisma / API / `VITE_API_URL` changes. `/patients` integration preserved. |
-| V | Role-Aware Development | PASS | Nav-level styling is role-agnostic; L1 sidebar (which carries role-aware items) is explicitly untouched (FR-001). |
-| VI | Integration Integrity | PASS | `npm run build` must succeed with zero new TS/build errors (FR-015 / SC-005). All existing nav routes keep working. |
-| VII | Environment Safety | N/A — no env or deployment changes. |
+| IV  | Schema & API Stability | PASS                                                                               | Explicit FR-014 forbids backend / Prisma / API / `VITE_API_URL` changes. `/patients` integration preserved.                                                 |
+| V   | Role-Aware Development | PASS                                                                               | Nav-level styling is role-agnostic; L1 sidebar (which carries role-aware items) is explicitly untouched (FR-001).                                           |
+| VI  | Integration Integrity  | PASS                                                                               | `npm run build` must succeed with zero new TS/build errors (FR-015 / SC-005). All existing nav routes keep working.                                         |
+| VII | Environment Safety     | N/A — no env or deployment changes.                                                |
 
 **Result**: GATE PASS. No violations; Complexity Tracking table left empty.
 
@@ -86,12 +87,12 @@ frontend/
 backend/                                         # UNTOUCHED (constitution IV)
 ```
 
-**Structure Decision**: Web application, monorepo. This feature touches only the `frontend/` workspace. Primary edits land in three CSS files plus the L2/L3 call sites in `PatientDetail.tsx`. The optional `NavComponents.tsx` consolidation is reserved for *after* the visual rules are stable — done only if the same nav markup is repeated in ≥3 places (current count). Otherwise the existing inline structure is retained per Principle I (no premature abstraction).
+**Structure Decision**: Web application, monorepo. This feature touches only the `frontend/` workspace. Primary edits land in three CSS files plus the L2/L3 call sites in `PatientDetail.tsx`. The optional `NavComponents.tsx` consolidation is reserved for _after_ the visual rules are stable — done only if the same nav markup is repeated in ≥3 places (current count). Otherwise the existing inline structure is retained per Principle I (no premature abstraction).
 
 ## Complexity Tracking
 
 > Constitution Check passes with no violations. Table intentionally left empty.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
+| --------- | ---------- | ------------------------------------ |
 | _none_    | _n/a_      | _n/a_                                |

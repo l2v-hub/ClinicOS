@@ -21,7 +21,9 @@ async function nav(page) {
 
 // The Dolore row: <div.pic-row><span.pic-row__lbl>Dolore</span><button.pic-row__val>…</button>
 function doloreRow(page) {
-  return page.locator('.pic-row', { has: page.locator('.pic-row__lbl', { hasText: /^Dolore$/ }) }).first();
+  return page
+    .locator('.pic-row', { has: page.locator('.pic-row__lbl', { hasText: /^Dolore$/ }) })
+    .first();
 }
 
 const browser = await chromium.launch();
@@ -39,8 +41,10 @@ try {
   await page.waitForTimeout(1200);
 
   // NRS row now visible -> set 5
-  const nrs = page.locator('.pic-row', { has: page.locator('.pic-row__lbl', { hasText: /NRS/ }) }).first();
-  report.nrsRowAppeared = await nrs.count() > 0;
+  const nrs = page
+    .locator('.pic-row', { has: page.locator('.pic-row__lbl', { hasText: /NRS/ }) })
+    .first();
+  report.nrsRowAppeared = (await nrs.count()) > 0;
   try {
     if (report.nrsRowAppeared) {
       await nrs.getByRole('button').first().click();
@@ -50,7 +54,9 @@ try {
       await page.waitForTimeout(1200);
       report.nrsSet = true;
     }
-  } catch { report.nrsSet = false; }
+  } catch {
+    report.nrsSet = false;
+  }
   await page.screenshot({ path: resolve(outDir, 'after.png'), fullPage: true });
 
   // RELOAD -> assert persistence
@@ -71,4 +77,6 @@ try {
 
   console.log(JSON.stringify(report, null, 2));
   await page.close();
-} finally { await browser.close(); }
+} finally {
+  await browser.close();
+}

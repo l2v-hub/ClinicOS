@@ -16,17 +16,27 @@ const ALLOWED_DECISIONS = [
 
 // Parole che dichiarano un task concluso (usate dall'hook di closure).
 const COMPLETION_WORDS = [
-  'done', 'fatto', 'completato', 'completed', 'fixed', 'resolved',
-  'risolto', 'chiuso', 'closed',
+  'done',
+  'fatto',
+  'completato',
+  'completed',
+  'fixed',
+  'resolved',
+  'risolto',
+  'chiuso',
+  'closed',
 ];
 
 function slugify(title) {
-  return String(title || '')
-    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80) || 'task';
+  return (
+    String(title || '')
+      .normalize('NFKD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80) || 'task'
+  );
 }
 
 function taskDir(slug) {
@@ -45,8 +55,12 @@ function resolveTaskDir(arg) {
   return taskDir(slugify(arg));
 }
 
-function contractPath(dir) { return path.join(dir, 'task-contract.md'); }
-function reportPath(dir) { return path.join(dir, 'validation-report.md'); }
+function contractPath(dir) {
+  return path.join(dir, 'task-contract.md');
+}
+function reportPath(dir) {
+  return path.join(dir, 'validation-report.md');
+}
 
 // Verifica che il testo contenga tutte le sezioni (case-insensitive, come heading o label).
 function missingSections(text, sections) {
@@ -55,6 +69,14 @@ function missingSections(text, sections) {
 }
 
 module.exports = {
-  ROOT, TASK_ROOT, ALLOWED_DECISIONS, COMPLETION_WORDS,
-  slugify, taskDir, resolveTaskDir, contractPath, reportPath, missingSections,
+  ROOT,
+  TASK_ROOT,
+  ALLOWED_DECISIONS,
+  COMPLETION_WORDS,
+  slugify,
+  taskDir,
+  resolveTaskDir,
+  contractPath,
+  reportPath,
+  missingSections,
 };

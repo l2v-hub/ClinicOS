@@ -15,9 +15,17 @@ function mockReq(headers: Record<string, string>, ip = '1.2.3.4') {
 function mockRes() {
   const out: { code?: number; body?: unknown; headers: Record<string, unknown> } = { headers: {} };
   return {
-    status(c: number) { out.code = c; return this; },
-    json(b: unknown) { out.body = b; return this; },
-    setHeader(k: string, v: unknown) { out.headers[k] = v; },
+    status(c: number) {
+      out.code = c;
+      return this;
+    },
+    json(b: unknown) {
+      out.body = b;
+      return this;
+    },
+    setHeader(k: string, v: unknown) {
+      out.headers[k] = v;
+    },
     _out: out,
   };
 }
@@ -26,7 +34,9 @@ test('requireOperator: 401 when no operator headers', () => {
   const req = mockReq({});
   const res = mockRes();
   let nexted = false;
-  requireOperator(req as never, res as never, () => { nexted = true; });
+  requireOperator(req as never, res as never, () => {
+    nexted = true;
+  });
   assert.equal(nexted, false);
   assert.equal(res._out.code, 401);
 });
@@ -35,7 +45,9 @@ test('requireOperator: 403 when role not allowed', () => {
   const req = mockReq({ 'X-Operator-Id': 'u1', 'X-Operator-Role': 'guest' });
   const res = mockRes();
   let nexted = false;
-  requireOperator(req as never, res as never, () => { nexted = true; });
+  requireOperator(req as never, res as never, () => {
+    nexted = true;
+  });
   assert.equal(nexted, false);
   assert.equal(res._out.code, 403);
 });
@@ -44,7 +56,9 @@ test('requireOperator: passes + attaches operator for valid role', () => {
   const req = mockReq({ 'X-Operator-Id': 'u1', 'X-Operator-Role': 'operatore' });
   const res = mockRes();
   let nexted = false;
-  requireOperator(req as never, res as never, () => { nexted = true; });
+  requireOperator(req as never, res as never, () => {
+    nexted = true;
+  });
   assert.equal(nexted, true);
   assert.equal(req.operator?.id, 'u1');
   assert.equal(req.operator?.role, 'operatore');
@@ -55,7 +69,9 @@ test('requireOperator: admin/manager/operator casings accepted', () => {
     const req = mockReq({ 'X-Operator-Id': 'u1', 'X-Operator-Role': role });
     const res = mockRes();
     let nexted = false;
-    requireOperator(req as never, res as never, () => { nexted = true; });
+    requireOperator(req as never, res as never, () => {
+      nexted = true;
+    });
     assert.equal(nexted, true, `role ${role} should pass`);
   }
 });
@@ -67,7 +83,10 @@ test('public assistant: spoofed admin header cannot unlock cross-patient', () =>
   assert.equal(req.operator?.role, 'admin'); // header trusted at the gate (audit) ...
   // ... but the gateway context must be clamped: even with the env flag ON, cross-patient stays closed.
   const ctx = ctxFromOperator(req as never);
-  assert.equal(canCrossPatientSearch(ctx, { AI_CROSS_PATIENT_SEARCH_ENABLED: 'true' } as never), false);
+  assert.equal(
+    canCrossPatientSearch(ctx, { AI_CROSS_PATIENT_SEARCH_ENABLED: 'true' } as never),
+    false,
+  );
 });
 
 test('importRateLimit: 429 after the limit, keyed by operator', () => {
@@ -78,8 +97,14 @@ test('importRateLimit: 429 after the limit, keyed by operator', () => {
     const req = { header: () => undefined, ip: 'x', operator: { id: key, role: 'operatore' } };
     const res = mockRes();
     let nexted = false;
-    importRateLimit(req as never, res as never, () => { nexted = true; });
-    if (!nexted) { blocked = true; assert.equal(res._out.code, 429); break; }
+    importRateLimit(req as never, res as never, () => {
+      nexted = true;
+    });
+    if (!nexted) {
+      blocked = true;
+      assert.equal(res._out.code, 429);
+      break;
+    }
   }
   assert.equal(blocked, true, 'limiter should eventually return 429');
 });

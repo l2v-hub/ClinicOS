@@ -17,22 +17,22 @@ On top of that, three genuine code gaps/hardenings were implemented locally (see
 
 ## Per-issue triage
 
-| Issue | Bug | Title | Classification | Resolved by | Local change this batch |
-|------|-----|-------|----------------|-------------|--------------------------|
-| #73 | BUG-051 | Narrative blocks not populated | **Code gap (fixed)** | REQ-035 + new save-block guard | `assertNoNarrativeSectionLoss` wired into confirm; tests |
-| #72 | BUG-050 | Legacy table renderer still used | **Resolved + hardened** | REQ-033 (narrative renderer mounted) | runtime contract assertion now runs in prod (was DEV-only no-op) |
-| #62 | BUG-040 | Diagnosis exploded into 36 rows | Resolved in code | REQ-028/030/033 (narrative-only) | regression lock test |
-| #63 | BUG-041 | Diagnosis type/status inferred | Resolved in code | narrative-only (no structured fields) | regression lock test |
-| #64 | BUG-042 | Diagnosis rows with empty ICD | Resolved in code | narrative-only (no ICD field) | regression lock test |
-| #60 | BUG-038 | Duplicate allergies | Resolved in code | narrative-only allergies (`allergiesText`+status); legacy `allergene`-only merge bypassed | — (verify-on-deploy) |
-| #61 | BUG-039 | DOB format inconsistent | Resolved in code | import review uses `<input type=date>` + `toIso` ISO payload; `AAAA-MM-GG` label gone | — (verify-on-deploy) |
-| #65 | BUG-043 | Clinical text truncated | Resolved in code | narrative cards render full multiline `SemanticTaggedText` (no fixed-width fields) | — (verify-on-deploy) |
-| #66 | BUG-044 | No return to documents | Resolved in code | REQ-036 `reopenToDocuments` + "← Torna ai documenti" | — (verify-on-deploy) |
-| #67 | BUG-045 | Page break interrupts blocks | Resolved in code | REQ-036 cross-page continuation (+ test) | — (verify-on-deploy) |
-| #68 | BUG-046 | Repeated header in extraction | Resolved in code | REQ-037 `filterRepeatedHeaders` | — (verify-on-deploy) |
-| #69 | BUG-047 | Initial dates not bold | Resolved in code | REQ-038 `datePrefix.ts` + `DATE_PREFIX` tag | — (verify-on-deploy) |
-| #70 | BUG-048 | No permanent source compare | Resolved in code | REQ-035 v2 `onCompareSource` / "Confronta con il documento" | — (verify-on-deploy) |
-| #71 | BUG-049 | Import files not persisted | Resolved in code | REQ-035 v2 `persistImportDocuments` (`PatientDocument`) | — (verify-on-deploy) |
+| Issue | Bug     | Title                            | Classification          | Resolved by                                                                               | Local change this batch                                          |
+| ----- | ------- | -------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| #73   | BUG-051 | Narrative blocks not populated   | **Code gap (fixed)**    | REQ-035 + new save-block guard                                                            | `assertNoNarrativeSectionLoss` wired into confirm; tests         |
+| #72   | BUG-050 | Legacy table renderer still used | **Resolved + hardened** | REQ-033 (narrative renderer mounted)                                                      | runtime contract assertion now runs in prod (was DEV-only no-op) |
+| #62   | BUG-040 | Diagnosis exploded into 36 rows  | Resolved in code        | REQ-028/030/033 (narrative-only)                                                          | regression lock test                                             |
+| #63   | BUG-041 | Diagnosis type/status inferred   | Resolved in code        | narrative-only (no structured fields)                                                     | regression lock test                                             |
+| #64   | BUG-042 | Diagnosis rows with empty ICD    | Resolved in code        | narrative-only (no ICD field)                                                             | regression lock test                                             |
+| #60   | BUG-038 | Duplicate allergies              | Resolved in code        | narrative-only allergies (`allergiesText`+status); legacy `allergene`-only merge bypassed | — (verify-on-deploy)                                             |
+| #61   | BUG-039 | DOB format inconsistent          | Resolved in code        | import review uses `<input type=date>` + `toIso` ISO payload; `AAAA-MM-GG` label gone     | — (verify-on-deploy)                                             |
+| #65   | BUG-043 | Clinical text truncated          | Resolved in code        | narrative cards render full multiline `SemanticTaggedText` (no fixed-width fields)        | — (verify-on-deploy)                                             |
+| #66   | BUG-044 | No return to documents           | Resolved in code        | REQ-036 `reopenToDocuments` + "← Torna ai documenti"                                      | — (verify-on-deploy)                                             |
+| #67   | BUG-045 | Page break interrupts blocks     | Resolved in code        | REQ-036 cross-page continuation (+ test)                                                  | — (verify-on-deploy)                                             |
+| #68   | BUG-046 | Repeated header in extraction    | Resolved in code        | REQ-037 `filterRepeatedHeaders`                                                           | — (verify-on-deploy)                                             |
+| #69   | BUG-047 | Initial dates not bold           | Resolved in code        | REQ-038 `datePrefix.ts` + `DATE_PREFIX` tag                                               | — (verify-on-deploy)                                             |
+| #70   | BUG-048 | No permanent source compare      | Resolved in code        | REQ-035 v2 `onCompareSource` / "Confronta con il documento"                               | — (verify-on-deploy)                                             |
+| #71   | BUG-049 | Import files not persisted       | Resolved in code        | REQ-035 v2 `persistImportDocuments` (`PatientDocument`)                                   | — (verify-on-deploy)                                             |
 
 ## Local commits (branches, NOT pushed — deploy/close held on billing)
 
@@ -58,5 +58,6 @@ Each branch is off `main`, touches disjoint files → conflict-free merge.
 4. Close the issues that pass, attaching before/after evidence + commit + deploy manifest.
 
 ## Separate finding (not in this batch)
+
 - `voice.test.ts` "execute: double confirmation does NOT duplicate (idempotent replay)" (REQ-041)
   is **red on `main`** independent of this work — worth its own ticket.

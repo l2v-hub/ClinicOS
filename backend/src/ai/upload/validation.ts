@@ -8,7 +8,17 @@ import { sniffMime, type SniffedType } from './mime-sniff.js';
 // DOCX is a ZIP container — accepted only when the extension says docx/doc.
 // Bare ZIP / EXE / anything else is rejected.
 export const ACCEPTED_EXTENSIONS = new Set([
-  '.pdf', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff', '.heic',
+  '.pdf',
+  '.doc',
+  '.docx',
+  '.txt',
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.webp',
+  '.tif',
+  '.tiff',
+  '.heic',
 ]);
 
 const SNIFF_TO_ALLOWED: Record<string, true> = {
@@ -37,11 +47,7 @@ export interface ValidatedFile {
 }
 
 export type RejectReason =
-  | 'empty'
-  | 'extension_not_allowed'
-  | 'type_not_allowed'
-  | 'too_large'
-  | 'extension_mismatch';
+  'empty' | 'extension_not_allowed' | 'type_not_allowed' | 'too_large' | 'extension_mismatch';
 
 export interface FileValidationResult {
   ok: boolean;
@@ -80,7 +86,11 @@ export function validateFile(file: IncomingFile, limits: PerFileLimits): FileVal
     return { ok: false, reason: 'empty', message: 'File vuoto' };
   }
   if (!ACCEPTED_EXTENSIONS.has(ext)) {
-    return { ok: false, reason: 'extension_not_allowed', message: `Estensione non ammessa: ${ext || '(nessuna)'}` };
+    return {
+      ok: false,
+      reason: 'extension_not_allowed',
+      message: `Estensione non ammessa: ${ext || '(nessuna)'}`,
+    };
   }
   if (file.data.length > limits.maxFileBytes) {
     return { ok: false, reason: 'too_large', message: 'File oltre la dimensione massima' };
@@ -101,7 +111,11 @@ export function validateFile(file: IncomingFile, limits: PerFileLimits): FileVal
     const extFamily = fileFamily(ext);
     const sniffFamily = sniffFamilyOf(sniffed);
     if (extFamily && sniffFamily && extFamily !== sniffFamily) {
-      return { ok: false, reason: 'extension_mismatch', message: 'Estensione non coerente col contenuto' };
+      return {
+        ok: false,
+        reason: 'extension_mismatch',
+        message: 'Estensione non coerente col contenuto',
+      };
     }
   }
 

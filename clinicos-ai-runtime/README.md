@@ -20,18 +20,19 @@ credentials. It returns a proposal; the backend validates and persists it.
 
 Four roles, each its own model — all `provider:model_id`, **no hardcoded IDs**:
 
-| Role | Variable | Capability minimum |
-|------|----------|--------------------|
-| ocr | `AI_OCR_MODEL` | image + pdf input |
-| extraction | `AI_EXTRACTION_MODEL` | image + pdf input |
-| agent | `AI_AGENT_MODEL` | text (+ tools if enabled) |
-| repair | `AI_REPAIR_MODEL` | text |
+| Role       | Variable              | Capability minimum        |
+| ---------- | --------------------- | ------------------------- |
+| ocr        | `AI_OCR_MODEL`        | image + pdf input         |
+| extraction | `AI_EXTRACTION_MODEL` | image + pdf input         |
+| agent      | `AI_AGENT_MODEL`      | text (+ tools if enabled) |
+| repair     | `AI_REPAIR_MODEL`     | text                      |
 
 Selection happens **only** through `ModelRegistry`. Provider SDK imports are allowed
 **only** in `clinicos_ai/models/providers/*` — never in `agents/`, `api/`, `domain/`,
 or the ClinicOS Node backend.
 
 Change provider with one variable, no code change:
+
 ```env
 AI_OCR_MODEL=openai:gpt-4o          # was google:gemma-4-31b-it
 AI_OCR_MODEL=anthropic:claude-3-5-sonnet
@@ -51,6 +52,7 @@ GET  /v1/document-jobs/{id}/result
 POST /v1/document-jobs/{id}/retry
 POST /v1/document-jobs/{id}/cancel
 ```
+
 Authenticated with `Authorization: Bearer $AI_RUNTIME_SERVICE_TOKEN`.
 
 ## Run locally

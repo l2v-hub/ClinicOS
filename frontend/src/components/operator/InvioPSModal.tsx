@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
-import type { Paziente, CartellaPaziente, DimissioneInfermieristica, PatientTherapyAPI } from '../../types';
+import type {
+  Paziente,
+  CartellaPaziente,
+  DimissioneInfermieristica,
+  PatientTherapyAPI,
+} from '../../types';
 import { formatFraction, computeEquivalent } from './cartella/therapyDose';
 import { cachedGetJson } from '../../lib/cachedFetch';
 
@@ -8,11 +13,11 @@ const API_URL = import.meta.env.VITE_API_URL || '';
 // ── FASCE labels (mirrors TerapiaFarmacologicaTab) ────────────────────────────
 
 const FASCE_LABELS: { boolKey: keyof PatientTherapyAPI; label: string }[] = [
-  { boolKey: 'fasceMattina',    label: 'Mattina'    },
-  { boolKey: 'fascePranzo',     label: 'Pranzo'     },
+  { boolKey: 'fasceMattina', label: 'Mattina' },
+  { boolKey: 'fascePranzo', label: 'Pranzo' },
   { boolKey: 'fascePomeriggio', label: 'Pomeriggio' },
-  { boolKey: 'fasceSera',       label: 'Sera'       },
-  { boolKey: 'fasceNotte',      label: 'Notte'      },
+  { boolKey: 'fasceSera', label: 'Sera' },
+  { boolKey: 'fasceNotte', label: 'Notte' },
 ];
 
 // ── Model types ────────────────────────────────────────────────────────────────
@@ -85,14 +90,16 @@ export function buildInvioPSModel(
 ): InvioPSModel {
   const cognomeNome = `${paziente.lastName} ${paziente.firstName}`.trim();
 
-  const allergie: InvioPSAllergia[] = (cartella.allergie || []).map(a => {
-    const reazione = a.reazione ? ` (${a.reazione})` : '';
-    return { testo: `${a.allergene}${reazione}`.trim(), grave: a.gravita === 'grave' };
-  }).filter(a => a.testo);
+  const allergie: InvioPSAllergia[] = (cartella.allergie || [])
+    .map((a) => {
+      const reazione = a.reazione ? ` (${a.reazione})` : '';
+      return { testo: `${a.allergene}${reazione}`.trim(), grave: a.gravita === 'grave' };
+    })
+    .filter((a) => a.testo);
 
   const diagnosi: string[] = (cartella.diagnosi || [])
-    .filter(d => d.stato === 'attiva' || d.stato === 'monitoraggio')
-    .map(d => d.descrizione)
+    .filter((d) => d.stato === 'attiva' || d.stato === 'monitoraggio')
+    .map((d) => d.descrizione)
     .filter(Boolean);
 
   const condizioniCroniche: string[] = [];
@@ -143,33 +150,39 @@ export function buildInvioPSModel(
   }
 
   const terapie: InvioPSTerapia[] = therapies
-    .filter(t => t.stato === 'attiva')
-    .map(t => {
+    .filter((t) => t.stato === 'attiva')
+    .map((t) => {
       // REQ-093: prefer structured schedules → "08:00 (1/2 compressa, 50 mg)" per time.
       let fasce: string;
       if (t.schedules && t.schedules.length) {
         fasce = t.schedules
           .slice()
           .sort((a, b) => a.time.localeCompare(b.time))
-          .map(s => {
+          .map((s) => {
             const frac = formatFraction(s.quantityNumerator, s.quantityDenominator);
-            const eq = computeEquivalent(s.quantityNumerator, s.quantityDenominator, t.commercialStrengthValue, t.commercialStrengthUnit);
+            const eq = computeEquivalent(
+              s.quantityNumerator,
+              s.quantityDenominator,
+              t.commercialStrengthValue,
+              t.commercialStrengthUnit,
+            );
             return `${s.time} (${frac} ${s.administrationUnit}${eq ? `, ${eq}` : ''})`;
           })
           .join('; ');
       } else {
-        const fasceLabelList = FASCE_LABELS
-          .filter(f => t[f.boolKey] === true)
-          .map(f => f.label);
+        const fasceLabelList = FASCE_LABELS.filter((f) => t[f.boolKey] === true).map(
+          (f) => f.label,
+        );
         fasce = t.orarioSpecifico
           ? t.orarioSpecifico
           : fasceLabelList.length > 0
             ? fasceLabelList.join(', ')
             : '—';
       }
-      const dose = t.commercialStrengthValue != null && t.commercialStrengthUnit
-        ? `${t.commercialStrengthValue} ${t.commercialStrengthUnit}${t.pharmaceuticalForm ? ' ' + t.pharmaceuticalForm : ''}`
-        : t.dosaggio;
+      const dose =
+        t.commercialStrengthValue != null && t.commercialStrengthUnit
+          ? `${t.commercialStrengthValue} ${t.commercialStrengthUnit}${t.pharmaceuticalForm ? ' ' + t.pharmaceuticalForm : ''}`
+          : t.dosaggio;
       return {
         id: t.id,
         farmaco: t.farmacoNome,
@@ -203,26 +216,40 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
     setLoading(true);
     setFetchError('');
     cachedGetJson<PatientTherapyAPI[]>(`${API_URL}/patients/${paziente.id}/therapies`)
-      .then(data => { if (!cancelled) { setTherapies(data); setLoading(false); } })
-      .catch(err => {
+      .then((data) => {
+        if (!cancelled) {
+          setTherapies(data);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
         if (!cancelled) {
           setFetchError(err instanceof Error ? err.message : 'Errore caricamento terapie');
           setLoading(false);
         }
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [paziente.id]);
 
   const model = buildInvioPSModel(paziente, cartella, therapies);
 
   return (
-    <div className="modal-overlay invio-ps-overlay" role="dialog" aria-modal="true" aria-label="Invio in Pronto Soccorso">
+    <div
+      className="modal-overlay invio-ps-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Invio in Pronto Soccorso"
+    >
       <div className="modal-box invio-ps-box">
         {/* ── Toolbar (no-print) ── */}
         <div className="modal-header no-print">
           <div>
             <p className="modal-title">Invio in Pronto Soccorso</p>
-            <p className="modal-subtitle">{model.patient.cognomeNome} · {model.patient.mrn}</p>
+            <p className="modal-subtitle">
+              {model.patient.cognomeNome} · {model.patient.mrn}
+            </p>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             {loading && (
@@ -233,21 +260,35 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
               onClick={() => window.print()}
               style={{ display: 'flex', alignItems: 'center', gap: 6 }}
             >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="6 9 6 2 18 2 18 9"/>
-                <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
-                <rect x="6" y="14" width="12" height="8"/>
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="6 9 6 2 18 2 18 9" />
+                <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
+                <rect x="6" y="14" width="12" height="8" />
               </svg>
               Stampa / PDF
             </button>
-            <button className="btn-secondary btn-sm" onClick={onClose}>Chiudi</button>
+            <button className="btn-secondary btn-sm" onClick={onClose}>
+              Chiudi
+            </button>
           </div>
         </div>
 
         {/* ── Printable document ── */}
         <div className="modal-body invio-ps-body">
           {fetchError && (
-            <div className="no-print" style={{ color: 'var(--red, #DC2626)', fontSize: 12, marginBottom: 8 }}>
+            <div
+              className="no-print"
+              style={{ color: 'var(--red, #DC2626)', fontSize: 12, marginBottom: 8 }}
+            >
               {fetchError} — i dati di terapia potrebbero essere incompleti.
             </div>
           )}
@@ -277,7 +318,9 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
             </div>
             <div className="fm-patient-header" style={{ gridTemplateColumns: '1fr 1fr' }}>
               <div className="fm-patient-field">
-                <span className="fm-patient-field__lbl">Diagnosi principale / Patologia di ingresso</span>
+                <span className="fm-patient-field__lbl">
+                  Diagnosi principale / Patologia di ingresso
+                </span>
                 <span className="fm-patient-field__val">
                   {model.patient.diagnosi[0] || model.patient.patologiaIngresso || '—'}
                 </span>
@@ -289,7 +332,9 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
             </div>
 
             {/* ── Allergie (alert clinico) ── */}
-            <div className={`fm-allergie-box${model.patient.allergie.some(a => a.grave) ? ' fm-allergie-box--grave' : ''}`}>
+            <div
+              className={`fm-allergie-box${model.patient.allergie.some((a) => a.grave) ? ' fm-allergie-box--grave' : ''}`}
+            >
               <span className="fm-allergie-box__lbl">⚠ Allergie</span>
               {model.patient.allergie.length === 0 ? (
                 <span className="fm-allergie-box__val">Nessuna allergia nota</span>
@@ -297,7 +342,8 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
                 <span className="fm-allergie-box__val">
                   {model.patient.allergie.map((a, i) => (
                     <span key={i} className={a.grave ? 'fm-allergene--grave' : undefined}>
-                      {a.testo}{i < model.patient.allergie.length - 1 ? '  ·  ' : ''}
+                      {a.testo}
+                      {i < model.patient.allergie.length - 1 ? '  ·  ' : ''}
                     </span>
                   ))}
                 </span>
@@ -305,7 +351,9 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
             </div>
 
             {/* ── Quadro clinico ── */}
-            {(model.patient.diagnosi.length > 0 || model.patient.condizioniCroniche.length > 0 || model.patient.patologiaIngresso) && (
+            {(model.patient.diagnosi.length > 0 ||
+              model.patient.condizioniCroniche.length > 0 ||
+              model.patient.patologiaIngresso) && (
               <div className="fm-section">
                 <div className="fm-section-title">Quadro Clinico</div>
                 {model.patient.diagnosi.length > 0 && (
@@ -323,7 +371,9 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
                 {model.patient.condizioniCroniche.length > 0 && (
                   <div className="fm-row">
                     <span className="fm-row__lbl">Condizioni croniche / note:</span>
-                    <span className="fm-row__val">{model.patient.condizioniCroniche.join('  ·  ')}</span>
+                    <span className="fm-row__val">
+                      {model.patient.condizioniCroniche.join('  ·  ')}
+                    </span>
                   </div>
                 )}
               </div>
@@ -343,13 +393,19 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
                   <div className="fm-row">
                     <span className="fm-row__lbl">Data:</span>
                     <span className="fm-row__val">{model.dimissione.data}</span>
-                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>Ora:</span>
-                    <span className="fm-row__val" style={{ maxWidth: 80 }}>{model.dimissione.ora}</span>
+                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
+                      Ora:
+                    </span>
+                    <span className="fm-row__val" style={{ maxWidth: 80 }}>
+                      {model.dimissione.ora}
+                    </span>
                   </div>
                   <div className="fm-row">
                     <span className="fm-row__lbl">Condizioni:</span>
                     <span className="fm-row__val">{model.dimissione.condizioni}</span>
-                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>Destinazione:</span>
+                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
+                      Destinazione:
+                    </span>
                     <span className="fm-row__val">{model.dimissione.destinazione}</span>
                   </div>
                   <div className="fm-row">
@@ -367,7 +423,9 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
                   <div className="fm-row">
                     <span className="fm-row__lbl">Accompagna:</span>
                     <span className="fm-row__val">{model.dimissione.personaAccompagna}</span>
-                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>Mezzo:</span>
+                    <span className="fm-row__lbl" style={{ marginLeft: 16 }}>
+                      Mezzo:
+                    </span>
                     <span className="fm-row__val">{model.dimissione.mezzoTrasporto}</span>
                   </div>
                   <div className="fm-row">
@@ -410,7 +468,7 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
                     </tr>
                   </thead>
                   <tbody>
-                    {model.terapie.map(t => (
+                    {model.terapie.map((t) => (
                       <tr key={t.id}>
                         <td style={{ fontWeight: 600 }}>{t.farmaco}</td>
                         <td style={{ textAlign: 'center' }}>{t.dose}</td>

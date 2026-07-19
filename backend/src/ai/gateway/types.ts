@@ -78,7 +78,7 @@ export interface ClinicalSectionMatch {
 
 export interface VitalSignQueryInput {
   patientId: string;
-  label?: string;      // 'PA' | 'FC' | 'SpO2' | 'TC' | 'DTX' ...
+  label?: string; // 'PA' | 'FC' | 'SpO2' | 'TC' | 'DTX' ...
   systolicMin?: number;
   systolicMax?: number;
   valueMin?: number;
@@ -97,7 +97,13 @@ export interface CorrelateInput {
 /** A typed gateway error. The HTTP layer maps `kind` to a status; messages carry no PHI. */
 export class GatewayError extends Error {
   constructor(
-    public kind: 'unauthorized' | 'forbidden' | 'tenant_isolation' | 'not_found' | 'bad_request' | 'cross_patient_disabled',
+    public kind:
+      | 'unauthorized'
+      | 'forbidden'
+      | 'tenant_isolation'
+      | 'not_found'
+      | 'bad_request'
+      | 'cross_patient_disabled',
     message: string,
   ) {
     super(message);

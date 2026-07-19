@@ -14,7 +14,7 @@ Oggi il chatbot Agnos interpreta le domande con un motore **deterministico a pat
 
 Questa feature introduce un **agente LLM con tool-calling** che interpreta il linguaggio naturale libero, sceglie quali strumenti di lettura del Data Gateway invocare, recupera e correla i dati, e compone una risposta discorsiva in italiano **citando le fonti** — mantenendo l'involucro di sicurezza di SPEC-015 (autorizzazione lato server, allowlist, divieto Delete, SOURCE_ONLY, audit) come confine fidato. Le scritture restano deterministiche con conferma esplicita.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Il chatbot risponde alle domande comuni, subito (Priority: P1)
 
@@ -93,7 +93,7 @@ L'operatore autorizzato chiede correlazioni tra più pazienti («quali pazienti 
 - Nome paziente con accenti/maiuscole/varianti: la risoluzione è tollerante (normalizzazione) e, se resta ambigua, chiede conferma.
 - TTS/voce: la risposta discorsiva è compatibile con la lettura vocale esistente (interrompibile).
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -127,7 +127,7 @@ L'operatore autorizzato chiede correlazioni tra più pazienti («quali pazienti 
 - **FR-014**: Il motore LLM MUST essere attivabile/disattivabile via configurazione (feature flag), indipendentemente per pianificazione e composizione.
 - **FR-015**: Le scritture (Create/Update) MUST continuare a seguire il percorso deterministico con preview e conferma esplicita; questa feature non introduce scritture guidate da LLM.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Domanda dell'operatore**: testo digitato o dettato + contesto (operatore, ruolo, paziente eventualmente aperto).
 - **Piano di lettura**: interpretazione tipizzata della domanda come sequenza di chiamate agli strumenti di lettura del gateway, con perimetro (paziente corrente / più pazienti) e necessità di autorizzazione.
@@ -136,7 +136,7 @@ L'operatore autorizzato chiede correlazioni tra più pazienti («quali pazienti 
 - **Voce di audit**: registrazione persistente PHI-safe dell'azione di lettura (operatore, paziente, tipo, esito, canale, modalità LLM/deterministica).
 - **Modello (ruolo pianificazione / composizione)**: configurazione del modello per ciascun passaggio, con vincolo di host/regione approvati per la composizione.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

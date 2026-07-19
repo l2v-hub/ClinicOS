@@ -23,11 +23,7 @@ export function PageHeader({ breadcrumb, title, subtitle, actions, tabs }: Props
             return (
               <span key={`${item.label}-${idx}`} className="page-header__crumb">
                 {item.onClick && !last ? (
-                  <button
-                    type="button"
-                    className="page-header__crumb-link"
-                    onClick={item.onClick}
-                  >
+                  <button type="button" className="page-header__crumb-link" onClick={item.onClick}>
                     {item.label}
                   </button>
                 ) : (
@@ -35,7 +31,11 @@ export function PageHeader({ breadcrumb, title, subtitle, actions, tabs }: Props
                     {item.label}
                   </span>
                 )}
-                {!last && <span className="page-header__crumb-sep" aria-hidden="true">/</span>}
+                {!last && (
+                  <span className="page-header__crumb-sep" aria-hidden="true">
+                    /
+                  </span>
+                )}
               </span>
             );
           })}

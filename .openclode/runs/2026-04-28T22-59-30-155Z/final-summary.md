@@ -10,18 +10,18 @@
 +++ b/.openclode/project-memory.md
 @@ -1,28 +1,48 @@
  # Project Memory: ClinicOS
- 
+
  High-level notes about this project. Updated by agents after significant changes.
- 
+
  ---
- 
+
  ## Project Overview
- 
+
 -React TypeScript application built with Vite. Clinic management system (ClinicOS).
 +React TypeScript SPA built with Vite. Clinic management system (ClinicOS).
- 
+
  ## Current Structure (as of inspection)
- 
+
  - **Root**: Vite config (`vite.config.ts`), TypeScript config (`tsconfig.json`, `tsconfig.node.json`), package.json, eslint config, index.html
  - **Source (`src/`)**
 -  - `main.tsx`: App entry point
@@ -65,9 +65,9 @@
 +- Mock authentication (`utils/auth.ts`) with roles: `operator`, `manager`
 +- Route protection via `RequireAuth` component
 +- Sidebar items change based on role
- 
+
  ## Available Scripts (from package.json)
- 
+
  ---
 ```
 
@@ -106,7 +106,7 @@
 +  padding: 0;
 +  box-sizing: border-box;
  }
- 
+
 -.logo {
 -  height: 6em;
 -  padding: 1.5em;
@@ -175,7 +175,7 @@
 +import OperatorAgenda from './pages/OperatorAgenda';
 +import NotFound from './pages/NotFound';
  import './App.css'
- 
+
  function App() {
 -  return <></>
 +  return (
@@ -209,7 +209,7 @@
 +import { BrowserRouter } from 'react-router-dom';
  import App from './App.tsx'
  import './index.css'
- 
+
 -ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
 +ReactDOM.createRoot(document.getElementById('root')!).render(
 +  <BrowserRouter>
@@ -401,3 +401,4 @@
 +  border-radius: 4px;
 +  cursor: pointer;
 
+```

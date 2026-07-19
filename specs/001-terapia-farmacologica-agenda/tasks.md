@@ -1,5 +1,5 @@
 ---
-description: "Task list — Terapia Farmacologica Unica e Agenda Coerente"
+description: 'Task list — Terapia Farmacologica Unica e Agenda Coerente'
 ---
 
 # Tasks: Terapia Farmacologica Unica e Agenda Coerente
@@ -91,7 +91,8 @@ periodiche/una_tantum attive e valide. Al_bisogno mai visibile in Agenda.
 
 **Independent Test**: Aprire popup Agenda → cliccare "Erogata" su un farmaco → ricaricare pagina
 → riaprire popup → farmaco mostra stato "Erogata" con nome operatore. Stesso test con "Non erogata"
-+ motivo.
+
+- motivo.
 
 ### Implementazione per User Story 3
 

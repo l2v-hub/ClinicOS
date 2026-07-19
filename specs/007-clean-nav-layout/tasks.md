@@ -1,5 +1,5 @@
 ---
-description: "Task list for Clean Navigation Layout (007-clean-nav-layout)"
+description: 'Task list for Clean Navigation Layout (007-clean-nav-layout)'
 ---
 
 # Tasks: Clean Navigation Layout
@@ -28,10 +28,10 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 **Purpose**: Verify dev environment ready (no project init needed — existing frontend).
 
-- [X] T001 Verify `frontend/` builds cleanly on current branch: run `npm run build` in `C:\Workspace\DG_SE_DEV\ClinicOS\frontend` and confirm zero errors. Baseline before edits.
-- [X] T002 [P] Audit `frontend/src/index.css` for current `#root` width rule (likely `width: 1126px`) and document line number in task notes.
-- [X] T003 [P] Audit `frontend/src/App.css` for current `.app-shell`, `.main-area-clean`, `.content-panel`, `.main-h-nav`, `.context-sub-tabs` rule locations (note line numbers).
-- [X] T004 [P] Audit `frontend/src/app-additions.css` for any rules overriding the classes in T003 (specifically `padding`, `max-width`, `border`, `background` on those classes).
+- [x] T001 Verify `frontend/` builds cleanly on current branch: run `npm run build` in `C:\Workspace\DG_SE_DEV\ClinicOS\frontend` and confirm zero errors. Baseline before edits.
+- [x] T002 [P] Audit `frontend/src/index.css` for current `#root` width rule (likely `width: 1126px`) and document line number in task notes.
+- [x] T003 [P] Audit `frontend/src/App.css` for current `.app-shell`, `.main-area-clean`, `.content-panel`, `.main-h-nav`, `.context-sub-tabs` rule locations (note line numbers).
+- [x] T004 [P] Audit `frontend/src/app-additions.css` for any rules overriding the classes in T003 (specifically `padding`, `max-width`, `border`, `background` on those classes).
 
 **Checkpoint**: Setup complete. Edit targets identified, baseline build confirmed clean.
 
@@ -43,7 +43,7 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 **⚠️ CRITICAL**: T005 blocks US1, US2, US3, US4 (variables used everywhere).
 
-- [X] T005 Add new CSS variables to `:root` in `frontend/src/App.css`: `--tab-transition-duration: 180ms`, `--tab-transition-easing: ease-out`, `--l2-underline-color: var(--blue, #1A56DB)`, `--l2-underline-h: 2px`, `--content-px: 16px`, `--content-px-lg: 24px`, `--content-px-xl: 32px`. Modify `--l3-h` from `36px` to `32px`.
+- [x] T005 Add new CSS variables to `:root` in `frontend/src/App.css`: `--tab-transition-duration: 180ms`, `--tab-transition-easing: ease-out`, `--l2-underline-color: var(--blue, #1A56DB)`, `--l2-underline-h: 2px`, `--content-px: 16px`, `--content-px-lg: 24px`, `--content-px-xl: 32px`. Modify `--l3-h` from `36px` to `32px`.
 
 **Checkpoint**: Variables defined. All user stories can now start.
 
@@ -54,6 +54,7 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 **Goal**: Eliminate dead lateral space; main content fills viewport between sidebar and right edge across tablet/desktop breakpoints. Implements R01 + R02.
 
 **Independent Test**:
+
 1. Open Scheda Paziente at 1024×768, 1180×820, 1366×768, 1920×1080
 2. Verify no horizontal scrollbar on `<body>` or `.app-shell`
 3. Verify no gap between sidebar (right edge) and `.content-panel` (left edge)
@@ -62,14 +63,14 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 ### Implementation
 
-- [X] T006 [US1] Fix `#root` width constraint in `frontend/src/index.css`: change `width: 1126px` to `width: 100%; max-width: none`. Keep `min-height: 100vh`.
-- [X] T007 [US1] Update `.app-shell` rule in `frontend/src/App.css`: confirm/ensure `width: 100%` with no `max-width`. Keep `display: flex; height: 100vh; overflow: hidden`.
-- [X] T008 [US1] Update `.main-area-clean` rule in `frontend/src/App.css`: add `min-width: 0` to allow flex child to shrink (prevents overflow from rigid children). Keep `margin-left: var(--sidebar-w); flex: 1; overflow-y: auto`.
-- [X] T009 [US1] Update `.content-panel` rule in `frontend/src/App.css`: change horizontal padding to `var(--content-px)`. Final: `padding: 12px var(--content-px) 16px`.
-- [X] T010 [US1] Add `@media (min-width: 1180px)` block in `frontend/src/App.css` to override `.content-panel` padding: `padding: 12px var(--content-px-lg) 16px`.
-- [X] T011 [US1] Add `@media (min-width: 1366px)` block in `frontend/src/App.css` to override `.content-panel` padding: `padding: 16px var(--content-px-xl) 20px`.
-- [X] T012 [US1] Audit `frontend/src/app-additions.css` overrides flagged in T004; remove or adjust any rule that re-imposes `max-width` or fixed padding on `.app-shell`, `.main-area-clean`, `.content-panel`.
-- [X] T013 [US1] Run `npm run build` and manual viewport check at all 4 sizes. Confirm overflow detector script (from quickstart.md) returns zero results.
+- [x] T006 [US1] Fix `#root` width constraint in `frontend/src/index.css`: change `width: 1126px` to `width: 100%; max-width: none`. Keep `min-height: 100vh`.
+- [x] T007 [US1] Update `.app-shell` rule in `frontend/src/App.css`: confirm/ensure `width: 100%` with no `max-width`. Keep `display: flex; height: 100vh; overflow: hidden`.
+- [x] T008 [US1] Update `.main-area-clean` rule in `frontend/src/App.css`: add `min-width: 0` to allow flex child to shrink (prevents overflow from rigid children). Keep `margin-left: var(--sidebar-w); flex: 1; overflow-y: auto`.
+- [x] T009 [US1] Update `.content-panel` rule in `frontend/src/App.css`: change horizontal padding to `var(--content-px)`. Final: `padding: 12px var(--content-px) 16px`.
+- [x] T010 [US1] Add `@media (min-width: 1180px)` block in `frontend/src/App.css` to override `.content-panel` padding: `padding: 12px var(--content-px-lg) 16px`.
+- [x] T011 [US1] Add `@media (min-width: 1366px)` block in `frontend/src/App.css` to override `.content-panel` padding: `padding: 16px var(--content-px-xl) 20px`.
+- [x] T012 [US1] Audit `frontend/src/app-additions.css` overrides flagged in T004; remove or adjust any rule that re-imposes `max-width` or fixed padding on `.app-shell`, `.main-area-clean`, `.content-panel`.
+- [x] T013 [US1] Run `npm run build` and manual viewport check at all 4 sizes. Confirm overflow detector script (from quickstart.md) returns zero results.
 
 **Checkpoint**: US1 complete. Layout is fluid across all target viewports. MVP achieved.
 
@@ -80,6 +81,7 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 **Goal**: Replace pill/border L2 tab styling with animated underline indicator. Implements R03.
 
 **Independent Test**:
+
 1. Open Scheda Paziente
 2. Click between L2 tabs (Panoramica, Clinica, Diario, Moduli, Documenti)
 3. Verify active tab shows underline only (no border, no background fill)
@@ -89,12 +91,12 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 ### Implementation
 
-- [X] T014 [US2] Update `.main-h-nav .nav-tab` rule in `frontend/src/App.css`: add `position: relative`. Preserve existing height (`--l2-h: 44px`) and font (`--l2-font: 14px`). _(Applied to actual class `.page-tabs__btn` in `app-additions.css` — the React component uses class names `page-tabs`/`section-tabs` not the hypothetical `main-h-nav`/`context-sub-tabs`.)_
-- [X] T015 [US2] Remove pill/border styling from `.main-h-nav .nav-tab.active` in `frontend/src/App.css`: strip `border`, `border-radius`, `box-shadow`, `background` from active state. Keep text color emphasis (bolder weight or color shift) for active identification. _(Applied to `.page-tabs__btn--active`.)_
-- [X] T016 [US2] Add `.main-h-nav .nav-tab::after` pseudo-element in `frontend/src/App.css`: `content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: var(--l2-underline-h); background: var(--l2-underline-color); transition: width var(--tab-transition-duration) var(--tab-transition-easing)`. _(Applied to `.page-tabs__btn::after`.)_
-- [X] T017 [US2] Add `.main-h-nav .nav-tab.active::after` rule in `frontend/src/App.css`: `width: 100%`. _(Applied to `.page-tabs__btn--active::after`.)_
-- [X] T018 [US2] Add hover state for `.main-h-nav .nav-tab:hover:not(.active)` in `frontend/src/App.css`: `background: rgba(0, 0, 0, 0.04); border-radius: 4px`. _(Applied to `.page-tabs__btn:hover:not(.page-tabs__btn--active)`.)_
-- [X] T019 [US2] Run `npm run build` and manual L2 tab click-through QA. Confirm animation duration in DevTools (180ms ±20ms).
+- [x] T014 [US2] Update `.main-h-nav .nav-tab` rule in `frontend/src/App.css`: add `position: relative`. Preserve existing height (`--l2-h: 44px`) and font (`--l2-font: 14px`). _(Applied to actual class `.page-tabs__btn` in `app-additions.css` — the React component uses class names `page-tabs`/`section-tabs` not the hypothetical `main-h-nav`/`context-sub-tabs`.)_
+- [x] T015 [US2] Remove pill/border styling from `.main-h-nav .nav-tab.active` in `frontend/src/App.css`: strip `border`, `border-radius`, `box-shadow`, `background` from active state. Keep text color emphasis (bolder weight or color shift) for active identification. _(Applied to `.page-tabs__btn--active`.)_
+- [x] T016 [US2] Add `.main-h-nav .nav-tab::after` pseudo-element in `frontend/src/App.css`: `content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: var(--l2-underline-h); background: var(--l2-underline-color); transition: width var(--tab-transition-duration) var(--tab-transition-easing)`. _(Applied to `.page-tabs__btn::after`.)_
+- [x] T017 [US2] Add `.main-h-nav .nav-tab.active::after` rule in `frontend/src/App.css`: `width: 100%`. _(Applied to `.page-tabs__btn--active::after`.)_
+- [x] T018 [US2] Add hover state for `.main-h-nav .nav-tab:hover:not(.active)` in `frontend/src/App.css`: `background: rgba(0, 0, 0, 0.04); border-radius: 4px`. _(Applied to `.page-tabs__btn:hover:not(.page-tabs__btn--active)`.)_
+- [x] T019 [US2] Run `npm run build` and manual L2 tab click-through QA. Confirm animation duration in DevTools (180ms ±20ms).
 
 **Checkpoint**: US2 complete. L2 navigation visually distinct from L3 with animated underline.
 
@@ -105,6 +107,7 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 **Goal**: Keep L3 as compact pills with horizontal scroll when overflow; hidden scrollbar. Implements R04.
 
 **Independent Test**:
+
 1. Open Scheda Paziente → tab group with many L3 sub-tabs (e.g., Clinica → many sections)
 2. Resize viewport to 1024px width
 3. Verify L3 pills scroll horizontally inside `.context-sub-tabs`
@@ -114,11 +117,11 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 ### Implementation
 
-- [X] T020 [US3] Update `.context-sub-tabs` container rule in `frontend/src/App.css`: add `overflow-x: auto`, `white-space: nowrap`, `scrollbar-width: none`, `-ms-overflow-style: none`. _(Applied to `.section-tabs`.)_
-- [X] T021 [US3] Add `.context-sub-tabs::-webkit-scrollbar` rule in `frontend/src/App.css`: `display: none`. _(Already on `.section-tabs::-webkit-scrollbar`.)_
-- [X] T022 [US3] Update `.context-sub-tabs__pill` rule in `frontend/src/App.css`: confirm `display: inline-flex` (prevents wrap inside scrollable container). Keep pill shape (`border-radius`). _(Applied to `.section-tabs__btn`.)_
-- [X] T023 [US3] Update `.context-sub-tabs__pill.active` rule in `frontend/src/App.css`: reduce contrast vs L2 — use subtle background like `var(--hover, #F5F8FB)` instead of strong fill. No heavy border. _(Applied to `.section-tabs__btn--active`.)_
-- [X] T024 [US3] Run `npm run build` and manual QA: open patient detail in a section with many L3 tabs, verify horizontal scroll works and scrollbar hidden in all major browsers.
+- [x] T020 [US3] Update `.context-sub-tabs` container rule in `frontend/src/App.css`: add `overflow-x: auto`, `white-space: nowrap`, `scrollbar-width: none`, `-ms-overflow-style: none`. _(Applied to `.section-tabs`.)_
+- [x] T021 [US3] Add `.context-sub-tabs::-webkit-scrollbar` rule in `frontend/src/App.css`: `display: none`. _(Already on `.section-tabs::-webkit-scrollbar`.)_
+- [x] T022 [US3] Update `.context-sub-tabs__pill` rule in `frontend/src/App.css`: confirm `display: inline-flex` (prevents wrap inside scrollable container). Keep pill shape (`border-radius`). _(Applied to `.section-tabs__btn`.)_
+- [x] T023 [US3] Update `.context-sub-tabs__pill.active` rule in `frontend/src/App.css`: reduce contrast vs L2 — use subtle background like `var(--hover, #F5F8FB)` instead of strong fill. No heavy border. _(Applied to `.section-tabs__btn--active`.)_
+- [x] T024 [US3] Run `npm run build` and manual QA: open patient detail in a section with many L3 tabs, verify horizontal scroll works and scrollbar hidden in all major browsers.
 
 **Checkpoint**: US3 complete. L3 navigation lighter than L2, scrolls cleanly when overflowed.
 
@@ -129,6 +132,7 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 **Goal**: Smooth fade+slide transition when active tab content changes. Implements R05.
 
 **Independent Test**:
+
 1. Open Scheda Paziente
 2. Switch between L2 tabs — observe incoming content fade in + slide from right (8px) over 180ms
 3. Switch between L3 sub-tabs — same effect
@@ -137,10 +141,10 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 ### Implementation
 
-- [X] T025 [US4] Add `.tab-panel-transition` class + `@keyframes tabPanelEnter` to `frontend/src/App.css` per data-model.md spec (opacity 0→1, transform translateX(8px)→0, duration var(--tab-transition-duration), easing var(--tab-transition-easing)).
-- [X] T026 [US4] Add `@media (prefers-reduced-motion: reduce) { .tab-panel-transition { animation: none } }` block in `frontend/src/App.css`.
-- [X] T027 [US4] Update `frontend/src/components/operator/PatientDetail.tsx`: locate the tab content wrapper (likely the panel rendered after L2/L3 nav). Add `className="tab-panel-transition"` and `key={activeTabId}` (or equivalent active key combining L2+L3) so React remounts on tab change. _(Applied to `.cr-detail-content` with `key={`${activeGroup}-${tab}`}`.)_
-- [X] T028 [US4] Run `npm run build` and manual QA: tab through L2 and L3 with and without `prefers-reduced-motion`. Verify animation triggers and respects user preference.
+- [x] T025 [US4] Add `.tab-panel-transition` class + `@keyframes tabPanelEnter` to `frontend/src/App.css` per data-model.md spec (opacity 0→1, transform translateX(8px)→0, duration var(--tab-transition-duration), easing var(--tab-transition-easing)).
+- [x] T026 [US4] Add `@media (prefers-reduced-motion: reduce) { .tab-panel-transition { animation: none } }` block in `frontend/src/App.css`.
+- [x] T027 [US4] Update `frontend/src/components/operator/PatientDetail.tsx`: locate the tab content wrapper (likely the panel rendered after L2/L3 nav). Add `className="tab-panel-transition"` and `key={activeTabId}` (or equivalent active key combining L2+L3) so React remounts on tab change. _(Applied to `.cr-detail-content` with `key={`${activeGroup}-${tab}`}`.)_
+- [x] T028 [US4] Run `npm run build` and manual QA: tab through L2 and L3 with and without `prefers-reduced-motion`. Verify animation triggers and respects user preference.
 
 **Checkpoint**: US4 complete. Tab content transitions smoothly. All four user stories independently functional.
 
@@ -152,7 +156,7 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 - [ ] T029 Run full QA checklist from `specs/007-clean-nav-layout/spec.md`: 12 items at 1024, 1180, 1366, 1920 viewports. _(Pending manual browser QA by user.)_
 - [ ] T030 Run overflow detector script from `quickstart.md` in DevTools console at each viewport; confirm zero matches. _(Pending manual browser QA by user.)_
-- [X] T031 Final `npm run build` — zero TypeScript errors, zero lint errors.
+- [x] T031 Final `npm run build` — zero TypeScript errors, zero lint errors.
 - [ ] T032 Verify no regressions in Agenda, Terapia, Parametri, Diario pages (each test described in spec.md QA checklist). _(Pending manual browser QA by user.)_
 - [ ] T033 Commit changes: `improve fluid navigation tabs and transitions`. _(Deferred per agent instructions — user reviews before commit.)_
 
@@ -160,10 +164,10 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 ## Phase 8: Expanded Scope (user-requested)
 
-- [X] EX01 L1 sidebar (`.nav-rail`) Teams-style refinement: width 64px (was 96px), icon-only labels (visually hidden via clip-path; `title`/`aria-label` preserve tooltip + accessibility), 4px white left accent bar on active item (top:8px / bottom:8px), softened hover background `rgba(255,255,255,0.06)`.
-- [X] EX02 Vertical space optimization: `.cr-breadcrumb` padding reduced (12px→4px top, 20px→16px sides), `.cr-header` patient card padding 20px/24px→10px/16px and `min-height: 48px`, `border-radius` 16px→12px, `margin: 10px 16px→6px 16px`.
-- [X] EX03 New variable `--topbar-h: 32px` registered for future micro-bars. `--header-h` left at 60px (existing topbar).
-- [X] EX04 `overflow-x: hidden` added on `.app-shell` (NOT body) to prevent any cross-page horizontal scrollbar.
+- [x] EX01 L1 sidebar (`.nav-rail`) Teams-style refinement: width 64px (was 96px), icon-only labels (visually hidden via clip-path; `title`/`aria-label` preserve tooltip + accessibility), 4px white left accent bar on active item (top:8px / bottom:8px), softened hover background `rgba(255,255,255,0.06)`.
+- [x] EX02 Vertical space optimization: `.cr-breadcrumb` padding reduced (12px→4px top, 20px→16px sides), `.cr-header` patient card padding 20px/24px→10px/16px and `min-height: 48px`, `border-radius` 16px→12px, `margin: 10px 16px→6px 16px`.
+- [x] EX03 New variable `--topbar-h: 32px` registered for future micro-bars. `--header-h` left at 60px (existing topbar).
+- [x] EX04 `overflow-x: hidden` added on `.app-shell` (NOT body) to prevent any cross-page horizontal scrollbar.
 
 ---
 
@@ -171,11 +175,11 @@ Web app — frontend-only. All paths under `frontend/src/` unless noted.
 
 Blocking fixes applied during post-implementation review.
 
-- [X] FIX1 L1 `.nav-rail` labels restored to visible (Constitution Principle II): rail width 64px → 80px, `.nav-rail__label` sr-only/clip-path block replaced with visible label styling (10px font, centered, ellipsis), `.nav-rail__item` switched to flex-column (icon + label stacked, gap 4px, padding 8px 4px, min-height 60px). Active 4px white accent bar (`::before`) preserved. `--sidebar-w` token left at 240px (not wired to nav-rail width, no consumers found).
-- [X] FIX2 Removed all page-level `max-width` constraints (defeated R01/R02 fluid layout). 14 selectors switched from `max-width: NNNNpx` to `width: 100%`: `.dashboard`, `.patients-view`, `.patient-detail`, `.admin-dashboard`, `.operator-dashboard`, `.op-management`, `.agenda-admin-view`, `.consegne-page` (both occurrences), `.patient-detail-view`, `.patient-list-view`, `.operator-agenda-view` in `App.css`; `.rooms-view` in `app-additions.css`.
-- [X] FIX3 Removed duplicated `#root` block from `index.css` (App.css now sole authority). Stripped conflicting `:root` declarations (`font: 18px/145%`, `color: var(--text)`, `background: var(--bg)`, light/dark scheme color tokens) from `index.css` `:root`; kept only Vite font-family vars and font-smoothing baseline reset.
-- [X] FIX4 Tab transition no longer remounts heavy children in `PatientDetail.tsx`. Removed `key={...}` from `.cr-detail-content`; replaced with `useRef` + `useEffect` that toggles `tab-panel-transition` class with a forced reflow on `[activeGroup, tab]` change. Animation still fires; `TerapiaFarmacologicaTab`/`ParametriTab`/`DiarioPazienteTab` no longer refetch or lose state on tab switch. Added `useRef` to existing `react` import.
-- [X] FIX5 Extended `@media (prefers-reduced-motion: reduce)` block in `App.css` to also disable transitions on `.page-tabs__btn::after` (L2 underline), `.page-tabs__btn`, and `.section-tabs__btn` (R05 compliance).
+- [x] FIX1 L1 `.nav-rail` labels restored to visible (Constitution Principle II): rail width 64px → 80px, `.nav-rail__label` sr-only/clip-path block replaced with visible label styling (10px font, centered, ellipsis), `.nav-rail__item` switched to flex-column (icon + label stacked, gap 4px, padding 8px 4px, min-height 60px). Active 4px white accent bar (`::before`) preserved. `--sidebar-w` token left at 240px (not wired to nav-rail width, no consumers found).
+- [x] FIX2 Removed all page-level `max-width` constraints (defeated R01/R02 fluid layout). 14 selectors switched from `max-width: NNNNpx` to `width: 100%`: `.dashboard`, `.patients-view`, `.patient-detail`, `.admin-dashboard`, `.operator-dashboard`, `.op-management`, `.agenda-admin-view`, `.consegne-page` (both occurrences), `.patient-detail-view`, `.patient-list-view`, `.operator-agenda-view` in `App.css`; `.rooms-view` in `app-additions.css`.
+- [x] FIX3 Removed duplicated `#root` block from `index.css` (App.css now sole authority). Stripped conflicting `:root` declarations (`font: 18px/145%`, `color: var(--text)`, `background: var(--bg)`, light/dark scheme color tokens) from `index.css` `:root`; kept only Vite font-family vars and font-smoothing baseline reset.
+- [x] FIX4 Tab transition no longer remounts heavy children in `PatientDetail.tsx`. Removed `key={...}` from `.cr-detail-content`; replaced with `useRef` + `useEffect` that toggles `tab-panel-transition` class with a forced reflow on `[activeGroup, tab]` change. Animation still fires; `TerapiaFarmacologicaTab`/`ParametriTab`/`DiarioPazienteTab` no longer refetch or lose state on tab switch. Added `useRef` to existing `react` import.
+- [x] FIX5 Extended `@media (prefers-reduced-motion: reduce)` block in `App.css` to also disable transitions on `.page-tabs__btn::after` (L2 underline), `.page-tabs__btn`, and `.section-tabs__btn` (R05 compliance).
 
 ---
 

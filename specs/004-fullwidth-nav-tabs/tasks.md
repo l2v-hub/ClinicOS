@@ -9,6 +9,7 @@
 **Organization**: Tasks grouped by user story. All tasks are frontend-only (`frontend/src/`). No backend/Prisma/API changes.
 
 **Hard constraints**:
+
 - No new npm dependencies
 - `npm run build` must pass after every phase
 - Italian labels preserved
@@ -16,6 +17,7 @@
 - `prefers-reduced-motion` must be respected for all animations
 
 **Codebase context** (established before task generation):
+
 - L2 nav CSS class: `.page-tabs` / `.page-tabs__btn` / `.page-tabs__btn--active` (in `App.css:291`)
 - L3 nav CSS class: `.section-tabs` / `.section-tabs__btn` / `.section-tabs__btn--active` (in `App.css:342`)
 - Tab transition: `tab-panel-transition` CSS class + `@keyframes tabPanelEnter` already exist (in `App.css:3672`)

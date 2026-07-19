@@ -61,7 +61,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  }
 ```
 
-```diff
+````diff
 --- a/src/App.css
 +++ b/src/App.css
 @@ -1,119 +1,68 @@
@@ -96,7 +96,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
    display: flex;
    flex-direction: column;
  }
- 
+
 -.app-header {
 -  background-color: #2563eb;
 +.App-header {
@@ -112,7 +112,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 -  z-index: 100;
  }
- 
+
 -.app-header-left {
 -  display: flex;
 -  align-items: center;
@@ -122,7 +122,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  font-size: 1.5rem;
 +  letter-spacing: -0.5px;
  }
- 
+
 -.app-logo {
 -  font-weight: 700;
 -  font-size: 1.75rem;
@@ -135,7 +135,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  flex: 1;
 +  overflow: hidden;
  }
- 
+
 -.app-logo-icon {
 -  font-size: 1.5rem;
 +.App-sidebar {
@@ -145,7 +145,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  padding: 1.5rem 0;
 +  overflow-y: auto;
  }
- 
+
 -.app-user {
 -  display: flex;
 -  align-items: center;
@@ -375,7 +375,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    "type": "git"
    }
  }
-```
+````
 
 ```diff
 --- a/src/App.tsx
@@ -503,7 +503,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +export default App;
 ```
 
-```diff
+````diff
 --- a/src/App.css
 +++ b/src/App.css
 @@ -1,68 +1,273 @@
@@ -604,7 +604,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -  font-size: 1.5rem;
    letter-spacing: -0.5px;
  }
- 
+
 -.App-container {
 +.app-logo-icon {
 +  font-size: 1.75rem;
@@ -705,7 +705,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
    flex: 1;
    overflow: hidden;
  }
- 
+
 -.App-sidebar {
 +.app-sidebar {
    width: var(--sidebar-width);
@@ -779,7 +779,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    "type": "git"
    }
  }
-```
+````
 
 ```diff
 --- a/src/main.tsx
@@ -790,7 +790,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { BrowserRouter } from 'react-router-dom'
  import App from './App.tsx'
  import './index.css'
- 
+
 -ReactDOM.createRoot(document.getElementById('root')!).render(
 +ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
@@ -929,7 +929,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +export default App;
 ```
 
-```diff
+````diff
 --- a/src/App.css
 +++ b/src/App.css
 @@ -1,68 +1,273 @@
@@ -1030,7 +1030,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -  font-size: 1.5rem;
    letter-spacing: -0.5px;
  }
- 
+
 -.App-container {
 +.app-logo-icon {
 +  font-size: 1.75rem;
@@ -1167,7 +1167,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    "url": ""
 +  }
  }
-```
+````
 
 ```diff
 --- a/src/main.tsx
@@ -1178,7 +1178,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import { BrowserRouter } from 'react-router-dom'
  import App from './App.tsx'
  import './index.css'
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
 -    <App />
@@ -1212,7 +1212,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import MedicalRecords from './pages/MedicalRecords';
 +import SettingsPage from './pages/Settings';
 +import './App.css';
- 
+
 -const App = () => {
 -  return <div>ClinicOS</div>
 -}
@@ -1314,7 +1314,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </div>
 +  );
 +}
- 
+
  export default App;
 ```
 
@@ -1517,3 +1517,4 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  display: flex;
 +  align-items: center;
 +  gap: 12
+```

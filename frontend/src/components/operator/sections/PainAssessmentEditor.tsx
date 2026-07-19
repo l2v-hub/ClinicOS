@@ -4,8 +4,8 @@ import type { CartellaPaziente, Paziente, ScalaNRSValutazione } from '../../../t
 
 // Lazy import keeps import.meta.env out of module-evaluation scope,
 // which allows the patientSections registry test to run in Node without Vite.
-const ScalaNRSTab = lazy(
-  () => import('../cartella/ScalaNRSTab').then(m => ({ default: m.ScalaNRSTab }))
+const ScalaNRSTab = lazy(() =>
+  import('../cartella/ScalaNRSTab').then((m) => ({ default: m.ScalaNRSTab })),
 );
 
 // ScalaNRSTab passes paziente to NRSModulo which reads paziente.firstName + paziente.lastName
@@ -18,7 +18,15 @@ type PainAssessmentEditorProps = SectionProps<ScalaNRSValutazione[]> & {
   onUpdate?: (patch: Partial<CartellaPaziente>) => void;
 };
 
-export function PainAssessmentEditor({ mode, value, onChange, cartella, paziente, onUpdate, operatoreNome }: PainAssessmentEditorProps) {
+export function PainAssessmentEditor({
+  mode,
+  value,
+  onChange,
+  cartella,
+  paziente,
+  onUpdate,
+  operatoreNome,
+}: PainAssessmentEditorProps) {
   if (mode === 'patient-chart' && cartella && onUpdate) {
     return (
       <Suspense fallback={null}>
@@ -42,7 +50,9 @@ export function PainAssessmentEditor({ mode, value, onChange, cartella, paziente
         <ScalaNRSTab
           cartella={shim}
           paziente={paziente ?? MINIMAL_PAZIENTE}
-          onUpdate={(patch) => onChange((patch.valutazioniNRS as ScalaNRSValutazione[]) ?? (value ?? []))}
+          onUpdate={(patch) =>
+            onChange((patch.valutazioniNRS as ScalaNRSValutazione[]) ?? value ?? [])
+          }
           operatoreNome={operatoreNome ?? ''}
         />
       </Suspense>

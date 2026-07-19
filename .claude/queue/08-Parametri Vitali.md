@@ -10,7 +10,8 @@ Esegui npm run build.
 Requisiti:
 
 1. Diario medico
-Campi:
+   Campi:
+
 - data
 - medico
 - nota medica
@@ -20,16 +21,18 @@ Campi:
 - stampa
 
 2. Dettatura vocale
-Aggiungi un pulsante:
-“Detta nota”
+   Aggiungi un pulsante:
+   “Detta nota”
 
 Se il browser supporta Web Speech API:
+
 - avvia dettatura
 - trascrivi il testo nella textarea della nota medica
 - mostra stato “Ascolto in corso”
 - pulsante “Ferma dettatura”
 
 Se il browser non supporta la funzione:
+
 - mostra messaggio controllato:
   “Dettatura non supportata da questo browser”
 

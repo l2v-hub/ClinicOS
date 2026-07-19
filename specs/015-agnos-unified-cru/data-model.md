@@ -4,19 +4,19 @@
 
 ### AiAuditEvent (nuovo modello Prisma — migrazione ADDITIVA)
 
-| Campo | Tipo | Note |
-|---|---|---|
-| id | String @id @default(cuid()) | |
-| requestId | String | correlazione con log runtime |
-| operatorId | String | identità operatore validata server-side |
-| operatorRole | String | ruolo dichiarato dall'header (forense) |
-| patientId | String? | null per azioni cross-patient / rifiuti generici |
-| actionType | String | nome azione dal catalogo, o `refused_delete`, `refused_clinical`, `refused_forbidden`, `unknown` |
-| kind | String | `read` \| `create` \| `update` \| `refusal` |
-| channel | String | `testo` \| `voce` |
-| fields | String[] | SOLO nomi campo, MAI valori (PHI-safe) |
-| outcome | String | `ok` \| `denied` \| `error` \| `deduped` \| `empty` |
-| createdAt | DateTime @default(now()) | indice per consultazione temporale |
+| Campo        | Tipo                        | Note                                                                                             |
+| ------------ | --------------------------- | ------------------------------------------------------------------------------------------------ |
+| id           | String @id @default(cuid()) |                                                                                                  |
+| requestId    | String                      | correlazione con log runtime                                                                     |
+| operatorId   | String                      | identità operatore validata server-side                                                          |
+| operatorRole | String                      | ruolo dichiarato dall'header (forense)                                                           |
+| patientId    | String?                     | null per azioni cross-patient / rifiuti generici                                                 |
+| actionType   | String                      | nome azione dal catalogo, o `refused_delete`, `refused_clinical`, `refused_forbidden`, `unknown` |
+| kind         | String                      | `read` \| `create` \| `update` \| `refusal`                                                      |
+| channel      | String                      | `testo` \| `voce`                                                                                |
+| fields       | String[]                    | SOLO nomi campo, MAI valori (PHI-safe)                                                           |
+| outcome      | String                      | `ok` \| `denied` \| `error` \| `deduped` \| `empty`                                              |
+| createdAt    | DateTime @default(now())    | indice per consultazione temporale                                                               |
 
 Indici: `@@index([operatorId, createdAt])`, `@@index([patientId, createdAt])`, `@@index([outcome])`.
 

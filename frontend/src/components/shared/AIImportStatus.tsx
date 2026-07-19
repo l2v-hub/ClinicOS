@@ -29,9 +29,21 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
   useEffect(() => {
     let alive = true;
     cachedGetJson<AiStatus>(`${API_URL}/ai/extraction/status`)
-      .then((s) => { if (alive) { setStatus(s); setLoading(false); } })
-      .catch(() => { if (alive) { setStatus(null); setLoading(false); } });
-    return () => { alive = false; };
+      .then((s) => {
+        if (alive) {
+          setStatus(s);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (alive) {
+          setStatus(null);
+          setLoading(false);
+        }
+      });
+    return () => {
+      alive = false;
+    };
   }, []);
 
   if (loading) {
@@ -51,13 +63,25 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
         disabled={!available}
         title={title}
         aria-label={title}
-        onClick={available ? () => { onStart?.(); setOpen(true); } : undefined}
+        onClick={
+          available
+            ? () => {
+                onStart?.();
+                setOpen(true);
+              }
+            : undefined
+        }
       >
         <span className={`ai-import-dot ${available ? 'is-on' : 'is-off'}`} aria-hidden="true" />
         Importa dimissione
       </button>
-      <DischargeImportModal open={open} onClose={() => setOpen(false)} onImported={onImported}
-        operatorId={operatorId} operatorRole={operatorRole} />
+      <DischargeImportModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onImported={onImported}
+        operatorId={operatorId}
+        operatorRole={operatorRole}
+      />
     </>
   );
 }

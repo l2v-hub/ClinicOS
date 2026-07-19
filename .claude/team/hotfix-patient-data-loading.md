@@ -8,6 +8,7 @@ curl -k https://clinicos-backend-production-df88.up.railway.app/patients
 restituisce correttamente i dati.
 
 Quindi:
+
 - il database NON è vuoto
 - NON fare restore DB
 - NON eseguire seed
@@ -20,6 +21,7 @@ Obiettivo:
 Ripristinare la visualizzazione dei dati reali nel frontend ClinicOS.
 
 Controlli obbligatori:
+
 1. Verifica quale endpoint usa il frontend per caricare i pazienti.
 2. Verifica VITE_API_URL.
 3. Verifica se il frontend chiama:
@@ -40,6 +42,7 @@ grep -R "localStorage" frontend/src -n
 grep -R "fetch(" frontend/src -n
 
 Regole:
+
 - Il frontend deve usare il backend reale:
   https://clinicos-backend-production-df88.up.railway.app
 - I pazienti devono essere caricati da /patients se questo è l’endpoint funzionante.
@@ -49,6 +52,7 @@ Regole:
 - Se l’API fallisce, mostrare errore chiaro.
 
 Test obbligatori:
+
 1. curl backend /patients restituisce dati.
 2. frontend mostra lista pazienti.
 3. aprendo una scheda paziente i dati sono presenti.

@@ -2,9 +2,9 @@
 
 **Feature**: 009-nav-l2-l3-hierarchy | **Date**: 2026-06-02
 
-This document captures the *current* contract for the navigation surface. It serves as a frozen reference so the implementation does not silently change props, classes, or behaviour relied on elsewhere.
+This document captures the _current_ contract for the navigation surface. It serves as a frozen reference so the implementation does not silently change props, classes, or behaviour relied on elsewhere.
 
-> Note — Research R-6 decides **not** to introduce new wrapper components in this feature. The contracts below describe the existing inline-rendered surface that the implementation must preserve, plus the *hypothetical* future wrappers that would replace it if duplication ever crosses three call sites.
+> Note — Research R-6 decides **not** to introduce new wrapper components in this feature. The contracts below describe the existing inline-rendered surface that the implementation must preserve, plus the _hypothetical_ future wrappers that would replace it if duplication ever crosses three call sites.
 
 ---
 
@@ -29,12 +29,12 @@ This document captures the *current* contract for the navigation surface. It ser
 
 ### Class Contract
 
-| Class | Purpose | Owner |
-|-------|---------|-------|
-| `.page-tabs` | Row container | `App.css` |
-| `.page-tabs__btn` | Individual tab button | `App.css` |
-| `.page-tabs__btn--active` | Active state — drives the underline `::after` | `App.css` |
-| `.page-tabs__btn:hover`, `:focus-visible` | Hover / keyboard focus | `App.css` |
+| Class                                     | Purpose                                       | Owner     |
+| ----------------------------------------- | --------------------------------------------- | --------- |
+| `.page-tabs`                              | Row container                                 | `App.css` |
+| `.page-tabs__btn`                         | Individual tab button                         | `App.css` |
+| `.page-tabs__btn--active`                 | Active state — drives the underline `::after` | `App.css` |
+| `.page-tabs__btn:hover`, `:focus-visible` | Hover / keyboard focus                        | `App.css` |
 
 ### Accessibility Contract
 
@@ -78,7 +78,7 @@ useEffect(() => {
   const el = contentRef.current;
   if (!el) return;
   el.classList.remove('tab-panel-transition');
-  void el.offsetWidth;            // force reflow so the class re-fires
+  void el.offsetWidth; // force reflow so the class re-fires
   el.classList.add('tab-panel-transition');
 }, [activeGroup, tab]);
 
@@ -99,24 +99,26 @@ If at a later point three or more distinct call sites render `.page-tabs` markup
 
 ### `<NavigationTabsBase>`
 
-| Prop | Type | Required | Purpose |
-|------|------|----------|---------|
-| `level` | `'l2' \| 'l3'` | yes | Picks the variant class set |
-| `items` | `Array<{ id: string; label: string; disabled?: boolean }>` | yes | Tab definitions |
-| `activeId` | `string` | yes | Currently active tab id |
-| `onChange` | `(id: string) => void` | yes | Click + keyboard handler |
-| `ariaLabel` | `string` | yes | Accessible name for the `role="tablist"` |
+| Prop        | Type                                                       | Required | Purpose                                  |
+| ----------- | ---------------------------------------------------------- | -------- | ---------------------------------------- |
+| `level`     | `'l2' \| 'l3'`                                             | yes      | Picks the variant class set              |
+| `items`     | `Array<{ id: string; label: string; disabled?: boolean }>` | yes      | Tab definitions                          |
+| `activeId`  | `string`                                                   | yes      | Currently active tab id                  |
+| `onChange`  | `(id: string) => void`                                     | yes      | Click + keyboard handler                 |
+| `ariaLabel` | `string`                                                   | yes      | Accessible name for the `role="tablist"` |
 
 ### `<PrimaryTopNavigation>` / `<SecondaryTopNavigation>`
 
 Thin call-site-readability wrappers that fix `level` and pass through the rest:
 
 ```tsx
-const PrimaryTopNavigation = (props: Omit<NavigationTabsBaseProps, 'level'>) =>
-  <NavigationTabsBase level="l2" {...props} />;
+const PrimaryTopNavigation = (props: Omit<NavigationTabsBaseProps, 'level'>) => (
+  <NavigationTabsBase level="l2" {...props} />
+);
 
-const SecondaryTopNavigation = (props: Omit<NavigationTabsBaseProps, 'level'>) =>
-  <NavigationTabsBase level="l3" {...props} />;
+const SecondaryTopNavigation = (props: Omit<NavigationTabsBaseProps, 'level'>) => (
+  <NavigationTabsBase level="l3" {...props} />
+);
 ```
 
 Trigger to extract: `git grep -l 'page-tabs__btn'` returns ≥ 3 distinct files **and** each call site renders structurally identical markup. Until then, inline rendering wins on Principle I.

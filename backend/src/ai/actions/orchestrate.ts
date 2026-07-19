@@ -17,13 +17,24 @@ import { executeAction, VoiceError, type VoiceWriter } from '../voice/execute.js
 import { IdempotencyStore, voiceIdempotency } from '../voice/idempotency.js';
 import { loadVoiceConfig, type VoiceConfig } from '../voice/config.js';
 import { voiceAudit } from '../voice/audit.js';
-import { isWriteAction, type ActionPlan, type ActionPreview, type ExecuteResult } from '../voice/types.js';
+import {
+  isWriteAction,
+  type ActionPlan,
+  type ActionPreview,
+  type ExecuteResult,
+} from '../voice/types.js';
 import { isActionAllowed } from './catalog.js';
 import {
-  matchAppointmentCommand, groundAppointmentPlan, isAppointmentAction, type AppointmentLookupDeps,
+  matchAppointmentCommand,
+  groundAppointmentPlan,
+  isAppointmentAction,
+  type AppointmentLookupDeps,
 } from './appointments.js';
 import {
-  matchConsegnaCommand, groundConsegnaPlan, isConsegnaAction, type ConsegnaLookupDeps,
+  matchConsegnaCommand,
+  groundConsegnaPlan,
+  isConsegnaAction,
+  type ConsegnaLookupDeps,
 } from './consegne.js';
 import type { UserContext } from '../gateway/types.js';
 import type { AssistantAnswer } from '../assistant/service.js';
@@ -36,7 +47,8 @@ const AUDIT_CHANNEL: Record<AgnosChannel, 'TESTO' | 'VOCE'> = { testo: 'TESTO', 
  *  clinical ⇒ refused_clinical, any other refusal ⇒ refused_forbidden. */
 function auditedActionType(plan: ActionPlan): string {
   if (plan.actionType === 'refuse_clinical') return 'refused_clinical';
-  if (plan.actionType === 'refuse_forbidden') return plan.refusalKind === 'delete' ? 'refused_delete' : 'refused_forbidden';
+  if (plan.actionType === 'refuse_forbidden')
+    return plan.refusalKind === 'delete' ? 'refused_delete' : 'refused_forbidden';
   return plan.actionType;
 }
 
@@ -55,11 +67,20 @@ export type AgnosPlan = ActionPlan & { channel: AgnosChannel };
  *  explicit appointment verb, so reads and the 4 legacy write actions are never hijacked). */
 function derivePlan(text: string, ctx: VoicePlanContext, genId?: () => string): ActionPlan {
   const voicePlan = genId ? planAction(text, ctx, genId) : planAction(text, ctx);
-  if (voicePlan.actionType === 'refuse_forbidden' || voicePlan.actionType === 'refuse_clinical') return voicePlan;
-  const appointmentPlan = matchAppointmentCommand(text, { currentPatientId: ctx.currentPatientId }, { genId });
+  if (voicePlan.actionType === 'refuse_forbidden' || voicePlan.actionType === 'refuse_clinical')
+    return voicePlan;
+  const appointmentPlan = matchAppointmentCommand(
+    text,
+    { currentPatientId: ctx.currentPatientId },
+    { genId },
+  );
   // Issue #130: consegna matcher, same contract (explicit "consegna" verb form required, so reads
   // and the other write actions are never hijacked).
-  const consegnaPlan = matchConsegnaCommand(text, { currentPatientId: ctx.currentPatientId }, { genId });
+  const consegnaPlan = matchConsegnaCommand(
+    text,
+    { currentPatientId: ctx.currentPatientId },
+    { genId },
+  );
   return appointmentPlan ?? consegnaPlan ?? voicePlan;
 }
 
@@ -80,7 +101,11 @@ export interface PlanCommandResult {
 
 /** Injectable data access — defaults hit the real DB/assistant, tests pass stubs. */
 export interface PlanCommandDeps {
-  runRead?: (query: string, ctx: UserContext, currentPatientId?: string) => Promise<AssistantAnswer>;
+  runRead?: (
+    query: string,
+    ctx: UserContext,
+    currentPatientId?: string,
+  ) => Promise<AssistantAnswer>;
   loadPreviewContext?: (plan: ActionPlan) => Promise<PreviewContext>;
   /** SPEC-015 US4: patient/slot lookups for appointment grounding (tests inject stubs, no DB). */
   appointmentLookup?: AppointmentLookupDeps;
@@ -88,7 +113,11 @@ export interface PlanCommandDeps {
   consegnaLookup?: ConsegnaLookupDeps;
 }
 
-async function defaultRunRead(query: string, ctx: UserContext, currentPatientId?: string): Promise<AssistantAnswer> {
+async function defaultRunRead(
+  query: string,
+  ctx: UserContext,
+  currentPatientId?: string,
+): Promise<AssistantAnswer> {
   const { assistantQuery } = await import('../assistant/service.js');
   return assistantQuery(query, ctx, { currentPatientId });
 }
@@ -101,19 +130,24 @@ async function defaultLoadPreviewContext(plan: ActionPlan): Promise<PreviewConte
   const p = await prisma.patient.findUnique({ where: { id: plan.patientId } });
   if (p) pctx.patientName = `${p.lastName ?? ''} ${p.firstName ?? ''}`.trim();
   if (plan.actionType === 'update_narrative_section' && plan.sectionKey) {
-    const { getNarrativeSection, pickDisplayText } = await import('../sections/patient-narrative.js');
+    const { getNarrativeSection, pickDisplayText } =
+      await import('../sections/patient-narrative.js');
     const sec = await getNarrativeSection(plan.patientId, plan.sectionKey);
     if (sec) pctx.currentNarrativeText = pickDisplayText(sec.originalText, sec.reviewedText);
   }
   if (plan.actionType === 'update_patient_demographics' && p) {
-    pctx.currentDemographicValue = String((p as Record<string, unknown>)[String(plan.fields.field)] ?? '') || '—';
+    pctx.currentDemographicValue =
+      String((p as Record<string, unknown>)[String(plan.fields.field)] ?? '') || '—';
   }
   return pctx;
 }
 
 /** Interpret a command (typed or transcribed) WITHOUT executing anything. Reads are delegated
  *  to the read-only assistant; writes get a grounded preview; refusals get a refusal preview. */
-export async function planCommand(input: PlanCommandInput, deps: PlanCommandDeps = {}): Promise<PlanCommandResult> {
+export async function planCommand(
+  input: PlanCommandInput,
+  deps: PlanCommandDeps = {},
+): Promise<PlanCommandResult> {
   const text = String(input.text ?? '').slice(0, 500);
   const planCtx: VoicePlanContext = { currentPatientId: input.currentPatientId };
   const plan: AgnosPlan = { ...derivePlan(text, planCtx), channel: input.channel };
@@ -124,7 +158,11 @@ export async function planCommand(input: PlanCommandInput, deps: PlanCommandDeps
   // "Comando non riconosciuto"; the assistant itself returns not-found / clinical-refusal as needed.
   if (plan.actionType === 'read' || plan.actionType === 'unknown') {
     const runRead = deps.runRead ?? defaultRunRead;
-    const read = await runRead(plan.readQuery ?? text, input.operatorCtx.gatewayCtx, input.currentPatientId);
+    const read = await runRead(
+      plan.readQuery ?? text,
+      input.operatorCtx.gatewayCtx,
+      input.currentPatientId,
+    );
     return { plan, preview: null, read };
   }
 
@@ -138,14 +176,23 @@ export async function planCommand(input: PlanCommandInput, deps: PlanCommandDeps
         operatorRole: input.operatorCtx.gatewayCtx.roles[0] ?? 'operatore',
         channel: AUDIT_CHANNEL[input.channel],
       },
-      auditedActionType(plan), plan.patientId, null, [], 'denied', new Date().toISOString(),
+      auditedActionType(plan),
+      plan.patientId,
+      null,
+      [],
+      'denied',
+      new Date().toISOString(),
     );
   }
 
   // SPEC-015 US4: appointment plans are grounded (patient by name, target slot, CONFLICT check —
   // a busy slot is a BLOCKING ambiguity in the preview) and build their own preview.
   if (isAppointmentAction(plan.actionType)) {
-    const { preview } = await groundAppointmentPlan(plan, input.operatorCtx.operatorId, deps.appointmentLookup);
+    const { preview } = await groundAppointmentPlan(
+      plan,
+      input.operatorCtx.operatorId,
+      deps.appointmentLookup,
+    );
     return { plan, preview, read: null };
   }
 
@@ -186,7 +233,10 @@ export interface ExecuteCommandDeps {
 
 /** Execute a CONFIRMED write command. The plan is ALWAYS re-derived server-side from the text
  *  (tamper-proof); the client's idempotency key is reused so replays never duplicate a write. */
-export async function executeCommand(input: ExecuteCommandInput, deps: ExecuteCommandDeps = {}): Promise<ExecuteResult> {
+export async function executeCommand(
+  input: ExecuteCommandInput,
+  deps: ExecuteCommandDeps = {},
+): Promise<ExecuteResult> {
   const env = deps.env ?? process.env;
   const cfg = deps.cfg ?? loadVoiceConfig(env);
   const nowISO = deps.nowISO ?? new Date().toISOString();
@@ -203,21 +253,36 @@ export async function executeCommand(input: ExecuteCommandInput, deps: ExecuteCo
     channel: AUDIT_CHANNEL[input.channel],
   };
   const deny = (kind: VoiceError['kind'], message: string): never => {
-    voiceAudit(ctx, auditedActionType(plan), plan.patientId, null, Object.keys(plan.fields), 'denied', nowISO);
+    voiceAudit(
+      ctx,
+      auditedActionType(plan),
+      plan.patientId,
+      null,
+      Object.keys(plan.fields),
+      'denied',
+      nowISO,
+    );
     throw new VoiceError(kind, message);
   };
 
   // 1) feature flag (existing config; AI_VOICE_ENABLED is the Agnos master switch)
   if (!cfg.voiceEnabled) {
-    deny('feature_disabled', input.channel === 'voce' ? 'Funzione vocale disabilitata.' : 'Assistente AI disabilitato.');
+    deny(
+      'feature_disabled',
+      input.channel === 'voce' ? 'Funzione vocale disabilitata.' : 'Assistente AI disabilitato.',
+    );
   }
   // 2) allowlist deny-by-default: a write action must exist in the catalog AND be enabled
   if (isWriteAction(plan.actionType) && !isActionAllowed(plan.actionType, env)) {
-    deny('not_in_catalog', 'Azione non presente nel catalogo delle azioni consentite o disabilitata.');
+    deny(
+      'not_in_catalog',
+      'Azione non presente nel catalogo delle azioni consentite o disabilitata.',
+    );
   }
   // 3) refusals: deletion attempts are rejected with a dedicated kind, everything else as not executable
   if (plan.actionType === 'refuse_forbidden' || plan.actionType === 'refuse_clinical') {
-    if (plan.refusalKind === 'delete') deny('delete_forbidden', plan.refusalReason ?? DELETE_REFUSAL_MESSAGE);
+    if (plan.refusalKind === 'delete')
+      deny('delete_forbidden', plan.refusalReason ?? DELETE_REFUSAL_MESSAGE);
     deny('not_executable', plan.refusalReason ?? 'Azione non consentita.');
   }
 
@@ -229,16 +294,35 @@ export async function executeCommand(input: ExecuteCommandInput, deps: ExecuteCo
   // plan.ambiguities and is rejected by the existing 'ambiguous' guard in executeAction.
   // Idempotent replay short-circuits BEFORE grounding: the write already applied, so its own slot
   // would read as a conflict — return the original result (deduped), same audit as executeAction.
-  if ((isAppointmentAction(plan.actionType) || isConsegnaAction(plan.actionType)) && input.confirmed === true) {
+  if (
+    (isAppointmentAction(plan.actionType) || isConsegnaAction(plan.actionType)) &&
+    input.confirmed === true
+  ) {
     const prior = store.get(plan.idempotencyKey, Date.parse(nowISO) || Date.now());
     if (prior) {
-      voiceAudit(ctx, plan.actionType, plan.patientId, prior.recordId ?? null, Object.keys(plan.fields), 'deduped', nowISO);
+      voiceAudit(
+        ctx,
+        plan.actionType,
+        plan.patientId,
+        prior.recordId ?? null,
+        Object.keys(plan.fields),
+        'deduped',
+        nowISO,
+      );
       return prior;
     }
-    if (isAppointmentAction(plan.actionType)) await groundAppointmentPlan(plan, input.operatorCtx.operatorId, deps.appointmentLookup);
+    if (isAppointmentAction(plan.actionType))
+      await groundAppointmentPlan(plan, input.operatorCtx.operatorId, deps.appointmentLookup);
     else await groundConsegnaPlan(plan, deps.consegnaLookup); // issue #130: stesso re-grounding tamper-proof
   }
 
   // 4) existing execute.ts guards (ambiguity, confirmation, idempotency) + dispatch + audit
-  return executeAction(plan, { confirmed: input.confirmed === true, ctx, cfg, writer, store, nowISO: deps.nowISO });
+  return executeAction(plan, {
+    confirmed: input.confirmed === true,
+    ctx,
+    cfg,
+    writer,
+    store,
+    nowISO: deps.nowISO,
+  });
 }

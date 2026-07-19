@@ -3,8 +3,11 @@
 
 import { Router } from 'express';
 import {
-  NARRATIVE_SECTION_KEYS, type NarrativeSectionKey,
-  getNarrativeSections, getNarrativeSection, upsertNarrativeSection,
+  NARRATIVE_SECTION_KEYS,
+  type NarrativeSectionKey,
+  getNarrativeSections,
+  getNarrativeSection,
+  upsertNarrativeSection,
 } from '../ai/sections/patient-narrative.js';
 
 const router = Router();
@@ -26,7 +29,10 @@ router.get('/:patientId/narrative-sections', async (req, res) => {
 // GET /patients/:patientId/narrative-sections/:sectionKey
 router.get('/:patientId/narrative-sections/:sectionKey', async (req, res) => {
   const { patientId, sectionKey } = req.params;
-  if (!isKey(sectionKey)) { res.status(400).json({ error: 'sectionKey non valido' }); return; }
+  if (!isKey(sectionKey)) {
+    res.status(400).json({ error: 'sectionKey non valido' });
+    return;
+  }
   try {
     const dto = await getNarrativeSection(patientId, sectionKey);
     res.status(200).json(dto);
@@ -39,8 +45,16 @@ router.get('/:patientId/narrative-sections/:sectionKey', async (req, res) => {
 async function save(req: import('express').Request, res: import('express').Response) {
   const patientId = String(req.params.patientId);
   const sectionKey = String(req.params.sectionKey);
-  if (!isKey(sectionKey)) { res.status(400).json({ error: 'sectionKey non valido' }); return; }
-  const body = (req.body ?? {}) as { reviewedText?: string; originalText?: string; reviewStatus?: string; updatedBy?: string };
+  if (!isKey(sectionKey)) {
+    res.status(400).json({ error: 'sectionKey non valido' });
+    return;
+  }
+  const body = (req.body ?? {}) as {
+    reviewedText?: string;
+    originalText?: string;
+    reviewStatus?: string;
+    updatedBy?: string;
+  };
   try {
     const dto = await upsertNarrativeSection(patientId, sectionKey, {
       reviewedText: typeof body.reviewedText === 'string' ? body.reviewedText : undefined,

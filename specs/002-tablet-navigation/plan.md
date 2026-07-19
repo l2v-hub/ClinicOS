@@ -30,15 +30,15 @@ Rimuovere la seconda sidebar laterale (`.cr-sidebar-nav`) dalla Scheda Paziente 
 
 ## Constitution Check
 
-| Principio | Status | Note |
-|-----------|--------|------|
-| I. Simplicity First | ✅ PASS | Riuso componenti esistenti. Nessun nuovo framework. Rimozione di complessità (sidebar). |
-| II. Healthcare UX | ✅ PASS | Migliora compliance: tablet-first, UI in italiano, controlli visibili (no tooltip) |
-| III. Backend Data Authority | ✅ PASS | N/A — nessun dato clinico coinvolto |
-| IV. Schema & API Stability | ✅ PASS | Nessuna modifica a Prisma o Express routes |
-| V. Role-Aware Development | ✅ PASS | Il cambio nav non tocca logica ruoli. Sidebar L1 e permessi immutati. |
-| VI. Integration Integrity | ✅ PASS | Build TypeScript deve passare. Funzionalità esistenti preservate. |
-| VII. Environment Safety | ✅ PASS | N/A — nessuna variabile d'ambiente coinvolta |
+| Principio                   | Status  | Note                                                                                    |
+| --------------------------- | ------- | --------------------------------------------------------------------------------------- |
+| I. Simplicity First         | ✅ PASS | Riuso componenti esistenti. Nessun nuovo framework. Rimozione di complessità (sidebar). |
+| II. Healthcare UX           | ✅ PASS | Migliora compliance: tablet-first, UI in italiano, controlli visibili (no tooltip)      |
+| III. Backend Data Authority | ✅ PASS | N/A — nessun dato clinico coinvolto                                                     |
+| IV. Schema & API Stability  | ✅ PASS | Nessuna modifica a Prisma o Express routes                                              |
+| V. Role-Aware Development   | ✅ PASS | Il cambio nav non tocca logica ruoli. Sidebar L1 e permessi immutati.                   |
+| VI. Integration Integrity   | ✅ PASS | Build TypeScript deve passare. Funzionalità esistenti preservate.                       |
+| VII. Environment Safety     | ✅ PASS | N/A — nessuna variabile d'ambiente coinvolta                                            |
 
 **Gate result**: PASS — nessuna violazione. Nessuna entry in Complexity Tracking.
 
@@ -83,6 +83,7 @@ frontend/src/
 ### Phase 0 — Research ✅ Completata
 
 Vedi `research.md`. Decisioni prese:
+
 - Riutilizzare `PageTabs` / `SectionTabs` (già in `NavComponents.tsx`)
 - Rimuovere `.cr-sidebar-nav` e il drawer toggle da `PatientDetail`
 - Nessun routing aggiuntivo
@@ -110,6 +111,7 @@ Cambiamenti necessari:
 6. Layout: il contenuto paziente diventa `flex-col` (header → PageTabs → SectionTabs → contenuto) invece di `flex-row` (sidebar + contenuto)
 
 **Struttura render target**:
+
 ```
 <div className="patient-record-view">
   <PatientHeader />                   ← header con nome, badge, back button
@@ -127,7 +129,9 @@ Cambiamenti necessari:
    ```css
    /* DA RIMUOVERE: */
    .patient-record-view .page-tabs,
-   .patient-record-view .section-tabs { display: none; }
+   .patient-record-view .section-tabs {
+     display: none;
+   }
    ```
 2. **Rimuovere** stili `.cr-sidebar-nav`, `.cr-sidebar-nav__*`, `.cr-drawer-toggle`, `.cr-drawer-backdrop`
 3. **Aggiungere** layout verticale per `.patient-record-view`:
@@ -159,11 +163,13 @@ Cambiamenti necessari:
 **File da verificare**:
 
 #### 2a. `frontend/src/components/operator/OperatorAgenda.tsx`
+
 - Verificare: ha sezioni interne (Giorno, Settimana, Terapie, Appuntamenti)?
 - Se sì: aggiungere `SectionTabs` orizzontali sopra il contenuto
 - Se no: verificare che non usi pattern sidebar
 
 #### 2b. `frontend/src/components/admin/AdminDashboard.tsx` e `RoomsManagement.tsx`
+
 - Verificare struttura navigazione interna
 - Applicare tab orizzontali se presente navigazione multi-livello
 
@@ -177,11 +183,11 @@ Cambiamenti necessari:
 
 #### 3a. Viewport check per i 3 breakpoint target
 
-| Viewport | Check |
-|----------|-------|
-| 1024×768 | Tab orizzontali visibili, contenuto non compresso, nessun overflow orizzontale globale |
-| 1180×820 | Spazio adeguato, tab leggibili |
-| 1366×1024 | Layout ampio, contenuto centrato o full-width |
+| Viewport  | Check                                                                                  |
+| --------- | -------------------------------------------------------------------------------------- |
+| 1024×768  | Tab orizzontali visibili, contenuto non compresso, nessun overflow orizzontale globale |
+| 1180×820  | Spazio adeguato, tab leggibili                                                         |
+| 1366×1024 | Layout ampio, contenuto centrato o full-width                                          |
 
 #### 3b. Regressioni da verificare
 

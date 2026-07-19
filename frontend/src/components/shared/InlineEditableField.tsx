@@ -65,7 +65,10 @@ export function InlineEditableField({
   useEffect(() => {
     if (editing && inputRef.current) {
       inputRef.current.focus();
-      if (inputRef.current instanceof HTMLInputElement || inputRef.current instanceof HTMLTextAreaElement) {
+      if (
+        inputRef.current instanceof HTMLInputElement ||
+        inputRef.current instanceof HTMLTextAreaElement
+      ) {
         const len = inputRef.current.value.length;
         inputRef.current.setSelectionRange?.(len, len);
       }
@@ -117,40 +120,54 @@ export function InlineEditableField({
 
   if (editing) {
     return (
-      <div className={isBlock ? 'inline-edit-block inline-edit-block--editing' : 'pic-row pic-row--editing'}>
+      <div
+        className={
+          isBlock ? 'inline-edit-block inline-edit-block--editing' : 'pic-row pic-row--editing'
+        }
+      >
         {!isBlock && <span className="pic-row__lbl">{label}</span>}
         <div className="inline-edit__control">
           {type === 'textarea' ? (
             <textarea
-              ref={el => { inputRef.current = el; }}
+              ref={(el) => {
+                inputRef.current = el;
+              }}
               className="form-input inline-edit__input"
               rows={3}
               value={draft}
               placeholder={placeholder}
               disabled={saving}
-              onChange={e => setDraft(e.target.value)}
+              onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
             />
           ) : type === 'select' ? (
             <select
-              ref={el => { inputRef.current = el; }}
+              ref={(el) => {
+                inputRef.current = el;
+              }}
               className="form-input inline-edit__input"
               value={draft}
               disabled={saving}
-              onChange={e => setDraft(e.target.value)}
+              onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
             >
-              {options?.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              {options?.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
             </select>
           ) : (
             <input
-              ref={el => { inputRef.current = el; }}
+              ref={(el) => {
+                inputRef.current = el;
+              }}
               type={type === 'number' ? 'number' : 'text'}
               className="form-input inline-edit__input"
               value={draft}
               placeholder={placeholder}
               disabled={saving}
-              onChange={e => setDraft(e.target.value)}
+              onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
             />
           )}
@@ -197,7 +214,11 @@ export function InlineEditableField({
           aria-label={label}
         >
           <span>{isEmpty ? emptyText : text}</span>
-          {!disabled && <span className="inline-edit__pencil" aria-hidden="true"><IcoEdit /></span>}
+          {!disabled && (
+            <span className="inline-edit__pencil" aria-hidden="true">
+              <IcoEdit />
+            </span>
+          )}
         </button>
       </div>
     );
@@ -214,7 +235,11 @@ export function InlineEditableField({
         title={disabled ? undefined : 'Clicca per modificare'}
       >
         <span>{isEmpty ? emptyText : text}</span>
-        {!disabled && <span className="inline-edit__pencil" aria-hidden="true"><IcoEdit /></span>}
+        {!disabled && (
+          <span className="inline-edit__pencil" aria-hidden="true">
+            <IcoEdit />
+          </span>
+        )}
       </button>
     </div>
   );

@@ -12,13 +12,34 @@ const idem = (k: string) => () => k;
 function fakeWriter() {
   const calls: string[] = [];
   const w: VoiceWriter = {
-    async createVitalSign() { calls.push('vital'); return 'rec-vital'; },
-    async updateDemographics() { calls.push('demo'); return 'rec-demo'; },
-    async appendNarrative() { calls.push('narr'); return 'rec-narr'; },
-    async addDiaryNote() { calls.push('diary'); return 'rec-diary'; },
-    async createAppointment() { calls.push('appt-create'); return 'rec-appt'; },
-    async updateAppointment() { calls.push('appt-update'); return 'rec-appt'; },
-    async createConsegna() { calls.push('consegna'); return 'rec-consegna'; },
+    async createVitalSign() {
+      calls.push('vital');
+      return 'rec-vital';
+    },
+    async updateDemographics() {
+      calls.push('demo');
+      return 'rec-demo';
+    },
+    async appendNarrative() {
+      calls.push('narr');
+      return 'rec-narr';
+    },
+    async addDiaryNote() {
+      calls.push('diary');
+      return 'rec-diary';
+    },
+    async createAppointment() {
+      calls.push('appt-create');
+      return 'rec-appt';
+    },
+    async updateAppointment() {
+      calls.push('appt-update');
+      return 'rec-appt';
+    },
+    async createConsegna() {
+      calls.push('consegna');
+      return 'rec-consegna';
+    },
   };
   return { w, calls };
 }
@@ -34,7 +55,9 @@ test('vocal read: question routes to read intent', () => {
 });
 
 test('vital PA 130/80 with time → executable plan', () => {
-  const p = planAction('Registra pressione 130 su 80 rilevata alle 9:00', { currentPatientId: PID });
+  const p = planAction('Registra pressione 130 su 80 rilevata alle 9:00', {
+    currentPatientId: PID,
+  });
   assert.equal(p.actionType, 'create_vital_sign');
   assert.equal(p.fields.etichetta, 'PA');
   assert.equal(p.fields.valore, '130/80');
@@ -60,7 +83,9 @@ test('ambiguous patient (no current patient) blocks the action', () => {
 });
 
 test('demographics: phone', () => {
-  const p = planAction('Modifica il numero di telefono del paziente con 0612345678', { currentPatientId: PID });
+  const p = planAction('Modifica il numero di telefono del paziente con 0612345678', {
+    currentPatientId: PID,
+  });
   assert.equal(p.actionType, 'update_patient_demographics');
   assert.equal(p.fields.field, 'phone');
   assert.equal(p.fields.value, '0612345678');
@@ -74,20 +99,34 @@ test('demographics: address keeps original casing', () => {
 });
 
 test('narrative: append to Anamnesi', () => {
-  const p = planAction('Aggiorna la sezione Anamnesi aggiungendo paziente iperteso noto', { currentPatientId: PID });
+  const p = planAction('Aggiorna la sezione Anamnesi aggiungendo paziente iperteso noto', {
+    currentPatientId: PID,
+  });
   assert.equal(p.actionType, 'update_narrative_section');
   assert.equal(p.sectionKey, 'ANAMNESIS');
   assert.equal(p.fields.addedText, 'paziente iperteso noto');
 });
 
 test('forbidden: delete, therapy, allergy writes are refused', () => {
-  assert.equal(planAction('Elimina il paziente corrente', { currentPatientId: PID }).actionType, 'refuse_forbidden');
-  assert.equal(planAction('Aggiungi una nuova terapia con paracetamolo', { currentPatientId: PID }).actionType, 'refuse_forbidden');
-  assert.equal(planAction("Modifica l'allergia alla penicillina", { currentPatientId: PID }).actionType, 'refuse_forbidden');
+  assert.equal(
+    planAction('Elimina il paziente corrente', { currentPatientId: PID }).actionType,
+    'refuse_forbidden',
+  );
+  assert.equal(
+    planAction('Aggiungi una nuova terapia con paracetamolo', { currentPatientId: PID }).actionType,
+    'refuse_forbidden',
+  );
+  assert.equal(
+    planAction("Modifica l'allergia alla penicillina", { currentPatientId: PID }).actionType,
+    'refuse_forbidden',
+  );
 });
 
 test('clinical advice is refused', () => {
-  assert.equal(planAction('Suggerisci una terapia per questo paziente', { currentPatientId: PID }).actionType, 'refuse_clinical');
+  assert.equal(
+    planAction('Suggerisci una terapia per questo paziente', { currentPatientId: PID }).actionType,
+    'refuse_clinical',
+  );
 });
 
 test('out-of-range vital is flagged as warning, not auto-corrected', () => {
@@ -101,8 +140,19 @@ test('out-of-range vital is flagged as warning, not auto-corrected', () => {
 test('execute: confirmed write applies once and returns recordId', async () => {
   const cfg = loadVoiceConfig({});
   const { w, calls } = fakeWriter();
-  const plan = planAction('Registra pressione 130 su 80 alle 9:00', { currentPatientId: PID }, idem('k1'));
-  const r = await executeAction(plan, { confirmed: true, ctx: baseCtx, cfg, writer: w, store: new IdempotencyStore(), nowISO: '2026-06-20T09:00:00.000Z' });
+  const plan = planAction(
+    'Registra pressione 130 su 80 alle 9:00',
+    { currentPatientId: PID },
+    idem('k1'),
+  );
+  const r = await executeAction(plan, {
+    confirmed: true,
+    ctx: baseCtx,
+    cfg,
+    writer: w,
+    store: new IdempotencyStore(),
+    nowISO: '2026-06-20T09:00:00.000Z',
+  });
   assert.equal(r.ok, true);
   assert.equal(r.recordId, 'rec-vital');
   assert.equal(r.deduped, false);
@@ -113,9 +163,24 @@ test('execute: double confirmation does NOT duplicate (idempotent replay)', asyn
   const cfg = loadVoiceConfig({});
   const { w, calls } = fakeWriter();
   const store = new IdempotencyStore();
-  const opts = { confirmed: true, ctx: baseCtx, cfg, writer: w, store, nowISO: '2026-06-20T09:00:00.000Z' };
-  const p1 = planAction('Registra pressione 130 su 80 alle 9:00', { currentPatientId: PID }, idem('same-key'));
-  const p2 = planAction('Registra pressione 130 su 80 alle 9:00', { currentPatientId: PID }, idem('same-key'));
+  const opts = {
+    confirmed: true,
+    ctx: baseCtx,
+    cfg,
+    writer: w,
+    store,
+    nowISO: '2026-06-20T09:00:00.000Z',
+  };
+  const p1 = planAction(
+    'Registra pressione 130 su 80 alle 9:00',
+    { currentPatientId: PID },
+    idem('same-key'),
+  );
+  const p2 = planAction(
+    'Registra pressione 130 su 80 alle 9:00',
+    { currentPatientId: PID },
+    idem('same-key'),
+  );
   const r1 = await executeAction(p1, opts);
   const r2 = await executeAction(p2, opts);
   assert.equal(r1.deduped, false);
@@ -126,9 +191,20 @@ test('execute: double confirmation does NOT duplicate (idempotent replay)', asyn
 test('execute: blocked when write actions disabled', async () => {
   const cfg = loadVoiceConfig({ AI_WRITE_ACTIONS_ENABLED: 'false' } as NodeJS.ProcessEnv);
   const { w } = fakeWriter();
-  const plan = planAction('Registra pressione 130 su 80 alle 9:00', { currentPatientId: PID }, idem('k2'));
+  const plan = planAction(
+    'Registra pressione 130 su 80 alle 9:00',
+    { currentPatientId: PID },
+    idem('k2'),
+  );
   await assert.rejects(
-    () => executeAction(plan, { confirmed: true, ctx: baseCtx, cfg, writer: w, store: new IdempotencyStore() }),
+    () =>
+      executeAction(plan, {
+        confirmed: true,
+        ctx: baseCtx,
+        cfg,
+        writer: w,
+        store: new IdempotencyStore(),
+      }),
     (e: unknown) => e instanceof VoiceError && e.kind === 'writes_disabled',
   );
 });
@@ -136,9 +212,20 @@ test('execute: blocked when write actions disabled', async () => {
 test('execute: confirmation is mandatory', async () => {
   const cfg = loadVoiceConfig({});
   const { w } = fakeWriter();
-  const plan = planAction('Registra pressione 130 su 80 alle 9:00', { currentPatientId: PID }, idem('k3'));
+  const plan = planAction(
+    'Registra pressione 130 su 80 alle 9:00',
+    { currentPatientId: PID },
+    idem('k3'),
+  );
   await assert.rejects(
-    () => executeAction(plan, { confirmed: false, ctx: baseCtx, cfg, writer: w, store: new IdempotencyStore() }),
+    () =>
+      executeAction(plan, {
+        confirmed: false,
+        ctx: baseCtx,
+        cfg,
+        writer: w,
+        store: new IdempotencyStore(),
+      }),
     (e: unknown) => e instanceof VoiceError && e.kind === 'confirmation_required',
   );
 });
@@ -148,7 +235,14 @@ test('execute: ambiguous plan can never run', async () => {
   const { w } = fakeWriter();
   const plan = planAction('Aggiungi temperatura 37,4', { currentPatientId: PID }, idem('k4')); // missing time
   await assert.rejects(
-    () => executeAction(plan, { confirmed: true, ctx: baseCtx, cfg, writer: w, store: new IdempotencyStore() }),
+    () =>
+      executeAction(plan, {
+        confirmed: true,
+        ctx: baseCtx,
+        cfg,
+        writer: w,
+        store: new IdempotencyStore(),
+      }),
     (e: unknown) => e instanceof VoiceError && e.kind === 'ambiguous',
   );
 });

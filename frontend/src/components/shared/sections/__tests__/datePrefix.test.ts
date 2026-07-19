@@ -79,5 +79,9 @@ test('withDatePrefixes does not double-mark a provided overlapping annotation', 
   const text = '09/03/2026 evento';
   const provided = [{ tag: 'DATE' as const, text: '09/03/2026', startOffset: 0, endOffset: 10 }];
   const merged = withDatePrefixes(text, provided);
-  assert.equal(merged.filter((a) => a.startOffset === 0).length, 1, 'no duplicate at the same span');
+  assert.equal(
+    merged.filter((a) => a.startOffset === 0).length,
+    1,
+    'no duplicate at the same span',
+  );
 });

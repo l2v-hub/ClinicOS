@@ -139,7 +139,7 @@ serialized execution lane.)
 **Per-issue table:**
 
 | Issue | Type | Test | Screenshot | Trace | Report | Video | Decision |
-|-------|------|------|-----------|-------|--------|-------|----------|
+| ----- | ---- | ---- | ---------- | ----- | ------ | ----- | -------- |
 
 **Final rollup:**
 

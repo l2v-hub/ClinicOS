@@ -39,13 +39,12 @@ const rec = (id: string, data: string, ora?: string): EsameClinicoRecord => ({
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 test('sortEsamiDesc: orders by date descending (most recent first)', () => {
-  const input = [
-    rec('a', '2024-01-15'),
-    rec('b', '2024-03-10'),
-    rec('c', '2023-12-01'),
-  ];
+  const input = [rec('a', '2024-01-15'), rec('b', '2024-03-10'), rec('c', '2023-12-01')];
   const result = sortEsamiDesc(input);
-  assert.deepEqual(result.map(r => r.id), ['b', 'a', 'c']);
+  assert.deepEqual(
+    result.map((r) => r.id),
+    ['b', 'a', 'c'],
+  );
 });
 
 test('sortEsamiDesc: same date ordered by time descending', () => {
@@ -55,19 +54,25 @@ test('sortEsamiDesc: same date ordered by time descending', () => {
     rec('c', '2024-05-20', '09:15'),
   ];
   const result = sortEsamiDesc(input);
-  assert.deepEqual(result.map(r => r.id), ['b', 'c', 'a']);
+  assert.deepEqual(
+    result.map((r) => r.id),
+    ['b', 'c', 'a'],
+  );
 });
 
 test('sortEsamiDesc: records without time come before same-date records with midnight time', () => {
   // Without ora → T00:00, same as explicit midnight
   const input = [
     rec('a', '2024-06-01', '10:00'),
-    rec('b', '2024-06-01'),           // no ora → T00:00
+    rec('b', '2024-06-01'), // no ora → T00:00
     rec('c', '2024-06-01', '07:00'),
   ];
   const result = sortEsamiDesc(input);
   // Descending: 10:00 > 07:00 > 00:00
-  assert.deepEqual(result.map(r => r.id), ['a', 'c', 'b']);
+  assert.deepEqual(
+    result.map((r) => r.id),
+    ['a', 'c', 'b'],
+  );
 });
 
 test('sortEsamiDesc: mixed dates and times', () => {
@@ -78,7 +83,10 @@ test('sortEsamiDesc: mixed dates and times', () => {
     rec('mid-early', '2024-06-15', '06:00'),
   ];
   const result = sortEsamiDesc(input);
-  assert.deepEqual(result.map(r => r.id), ['recent', 'mid', 'mid-early', 'old']);
+  assert.deepEqual(
+    result.map((r) => r.id),
+    ['recent', 'mid', 'mid-early', 'old'],
+  );
 });
 
 test('sortEsamiDesc: empty array returns empty array', () => {
@@ -96,5 +104,8 @@ test('sortEsamiDesc: does not mutate the original array', () => {
   const input = [rec('a', '2024-02-01'), rec('b', '2024-01-01')];
   const original = [...input];
   sortEsamiDesc(input);
-  assert.deepEqual(input.map(r => r.id), original.map(r => r.id));
+  assert.deepEqual(
+    input.map((r) => r.id),
+    original.map((r) => r.id),
+  );
 });

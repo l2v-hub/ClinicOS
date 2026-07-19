@@ -8,7 +8,11 @@ interface StatusBadgeProps {
 }
 
 const TONES: Record<BadgeTone, true> = {
-  success: true, warning: true, danger: true, info: true, neutral: true,
+  success: true,
+  warning: true,
+  danger: true,
+  info: true,
+  neutral: true,
 };
 
 /** Single, shared status badge. Unknown/missing tone → neutral. */

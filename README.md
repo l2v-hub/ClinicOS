@@ -13,12 +13,12 @@ ClinicOS is a full-stack clinic management system using React, Vite, TypeScript,
 ## Project Structure
 
 .
-├── frontend/                 # React Vite TypeScript app
-├── backend/                  # Express TypeScript API
-│   ├── prisma/               # Prisma schema, migrations, seed
-│   └── src/                  # API source code
-├── docker-compose.yml        # PostgreSQL service
-├── package.json              # Root orchestration scripts
+├── frontend/ # React Vite TypeScript app
+├── backend/ # Express TypeScript API
+│ ├── prisma/ # Prisma schema, migrations, seed
+│ └── src/ # API source code
+├── docker-compose.yml # PostgreSQL service
+├── package.json # Root orchestration scripts
 └── README.md
 
 ## Root Scripts
@@ -61,36 +61,43 @@ FRONTEND_URL=http://localhost:5173
 ## Quick Start
 
 1. Install root dependencies:
+
    ```bash
    npm install
    ```
 
 2. Install frontend dependencies:
+
    ```bash
    npm install --prefix frontend
    ```
 
 3. Install backend dependencies:
+
    ```bash
    npm install --prefix backend
    ```
 
 4. Start PostgreSQL:
+
    ```bash
    docker compose up -d
    ```
 
 5. Generate Prisma client:
+
    ```bash
    npm run db:generate
    ```
 
 6. Run database migrations:
+
    ```bash
    npm run db:migrate
    ```
 
 7. Seed the database:
+
    ```bash
    npm run db:seed
    ```
@@ -117,11 +124,11 @@ FRONTEND_URL=http://localhost:5173
 
 ### Overview
 
-| Layer    | Platform | Service            |
-|----------|----------|--------------------|
-| Frontend | Vercel   | Static / Edge      |
-| Backend  | Railway  | Node.js service    |
-| Database | Railway  | PostgreSQL plugin  |
+| Layer    | Platform | Service           |
+| -------- | -------- | ----------------- |
+| Frontend | Vercel   | Static / Edge     |
+| Backend  | Railway  | Node.js service   |
+| Database | Railway  | PostgreSQL plugin |
 
 ---
 
@@ -156,12 +163,12 @@ Railway sets `DATABASE_URL` automatically in the service environment.
 
 #### 4. Set backend environment variables in Railway
 
-| Variable        | Value                                  |
-|-----------------|----------------------------------------|
-| `DATABASE_URL`  | Auto-set by Railway PostgreSQL plugin  |
-| `PORT`          | Auto-set by Railway (do not override)  |
-| `NODE_ENV`      | `production`                           |
-| `FRONTEND_URL`  | `https://your-app.vercel.app`          |
+| Variable       | Value                                 |
+| -------------- | ------------------------------------- |
+| `DATABASE_URL` | Auto-set by Railway PostgreSQL plugin |
+| `PORT`         | Auto-set by Railway (do not override) |
+| `NODE_ENV`     | `production`                          |
+| `FRONTEND_URL` | `https://your-app.vercel.app`         |
 
 > To allow multiple Vercel preview URLs:  
 > `FRONTEND_URLS=https://app.vercel.app,https://app-git-main.vercel.app`
@@ -193,8 +200,8 @@ npm run build && npx prisma migrate deploy
 
 #### 2. Set frontend environment variables in Vercel
 
-| Variable       | Value                                   |
-|----------------|-----------------------------------------|
+| Variable       | Value                                                     |
+| -------------- | --------------------------------------------------------- |
 | `VITE_API_URL` | `https://clinicos-backend-production-df88.up.railway.app` |
 
 > Set this for **Production**, **Preview**, and **Development** environments as needed.
@@ -202,7 +209,7 @@ npm run build && npx prisma migrate deploy
 #### 3. Build settings (Vercel auto-detects, but verify)
 
 | Setting       | Value           |
-|---------------|-----------------|
+| ------------- | --------------- |
 | Build command | `npm run build` |
 | Output dir    | `dist`          |
 | Install cmd   | `npm install`   |
@@ -212,11 +219,13 @@ npm run build && npx prisma migrate deploy
 ### Environment file reference
 
 **`frontend/.env.example`**
+
 ```env
 VITE_API_URL=http://localhost:3001
 ```
 
 **`backend/.env.example`**
+
 ```env
 DATABASE_URL="postgresql://user:password@host:5432/clinicos?schema=public"
 PORT=3001
@@ -224,14 +233,13 @@ NODE_ENV=production
 FRONTEND_URL=https://your-app.vercel.app
 ```
 
-
 ---
 
 ### Migration commands
 
-| Action               | Command                                      |
-|----------------------|----------------------------------------------|
-| Create migration     | `npm run db:migrate` (from repo root)        |
-| Deploy to production | `cd backend && npx prisma migrate deploy`    |
-| Generate client      | `cd backend && npx prisma generate`          |
-| Seed database        | `npm run db:seed` (from repo root)           |
+| Action               | Command                                   |
+| -------------------- | ----------------------------------------- |
+| Create migration     | `npm run db:migrate` (from repo root)     |
+| Deploy to production | `cd backend && npx prisma migrate deploy` |
+| Generate client      | `cd backend && npx prisma generate`       |
+| Seed database        | `npm run db:seed` (from repo root)        |

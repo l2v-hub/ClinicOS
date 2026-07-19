@@ -1,4 +1,4 @@
-import { prisma } from '../lib/prisma.js'
+import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 
 const router = Router();
@@ -14,12 +14,14 @@ router.get('/:patientId/diary', async (req, res) => {
       where: {
         patientId,
         ...(authorType ? { authorType } : {}),
-        ...(from || to ? {
-          entryDateTime: {
-            ...(from ? { gte: from } : {}),
-            ...(to ? { lte: to + 'T23:59:59' } : {}),
-          },
-        } : {}),
+        ...(from || to
+          ? {
+              entryDateTime: {
+                ...(from ? { gte: from } : {}),
+                ...(to ? { lte: to + 'T23:59:59' } : {}),
+              },
+            }
+          : {}),
       },
       orderBy: { entryDateTime: 'desc' },
     });
@@ -33,19 +35,22 @@ router.get('/:patientId/diary', async (req, res) => {
 // POST /patients/:patientId/diary
 router.post('/:patientId/diary', async (req, res) => {
   const { patientId } = req.params;
-  const { authorType, authorName, title, content, priority, status, entryDateTime, category } = req.body as {
-    authorType?: string;
-    authorName?: string;
-    title?: string;
-    content?: string;
-    priority?: string;
-    status?: string;
-    entryDateTime?: string;
-    category?: string;
-  };
+  const { authorType, authorName, title, content, priority, status, entryDateTime, category } =
+    req.body as {
+      authorType?: string;
+      authorName?: string;
+      title?: string;
+      content?: string;
+      priority?: string;
+      status?: string;
+      entryDateTime?: string;
+      category?: string;
+    };
 
   if (!authorType || !authorName || !content || !entryDateTime) {
-    res.status(400).json({ error: 'authorType, authorName, content, entryDateTime sono obbligatori' });
+    res
+      .status(400)
+      .json({ error: 'authorType, authorName, content, entryDateTime sono obbligatori' });
     return;
   }
 
@@ -91,19 +96,22 @@ router.get('/:patientId/diary/:entryId', async (req, res) => {
 // PUT /patients/:patientId/diary/:entryId
 router.put('/:patientId/diary/:entryId', async (req, res) => {
   const { patientId, entryId } = req.params;
-  const { authorType, authorName, title, content, priority, status, entryDateTime, category } = req.body as {
-    authorType?: string;
-    authorName?: string;
-    title?: string;
-    content?: string;
-    priority?: string;
-    status?: string;
-    entryDateTime?: string;
-    category?: string;
-  };
+  const { authorType, authorName, title, content, priority, status, entryDateTime, category } =
+    req.body as {
+      authorType?: string;
+      authorName?: string;
+      title?: string;
+      content?: string;
+      priority?: string;
+      status?: string;
+      entryDateTime?: string;
+      category?: string;
+    };
 
   try {
-    const existing = await prisma.patientDiaryEntry.findFirst({ where: { id: entryId, patientId } });
+    const existing = await prisma.patientDiaryEntry.findFirst({
+      where: { id: entryId, patientId },
+    });
     if (!existing) {
       res.status(404).json({ error: 'Voce non trovata' });
       return;
@@ -132,7 +140,9 @@ router.put('/:patientId/diary/:entryId', async (req, res) => {
 router.delete('/:patientId/diary/:entryId', async (req, res) => {
   const { patientId, entryId } = req.params;
   try {
-    const existing = await prisma.patientDiaryEntry.findFirst({ where: { id: entryId, patientId } });
+    const existing = await prisma.patientDiaryEntry.findFirst({
+      where: { id: entryId, patientId },
+    });
     if (!existing) {
       res.status(404).json({ error: 'Voce non trovata' });
       return;

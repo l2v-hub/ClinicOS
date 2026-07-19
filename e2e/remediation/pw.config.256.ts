@@ -14,7 +14,14 @@ export default defineConfig({
   fullyParallel: false,
   outputDir: '../../artifacts/task-validation/256-integrate-qa-passed-prs/test-results',
   reporter: [
-    ['html', { outputFolder: '../../artifacts/task-validation/256-integrate-qa-passed-prs/playwright-report', open: 'never' }],
+    [
+      'html',
+      {
+        outputFolder:
+          '../../artifacts/task-validation/256-integrate-qa-passed-prs/playwright-report',
+        open: 'never',
+      },
+    ],
     ['list'],
   ],
   use: {

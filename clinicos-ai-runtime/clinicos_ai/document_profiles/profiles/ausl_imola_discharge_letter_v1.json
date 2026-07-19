@@ -1,12 +1,7 @@
 {
   "profileId": "AUSL_IMOLA_DISCHARGE_LETTER_V1",
   "label": "AUSL Imola — Lettera di dimissione (v1)",
-  "identifiers": [
-    "Lettera di dimissione",
-    "AUSL",
-    "Imola",
-    "Azienda USL"
-  ],
+  "identifiers": ["Lettera di dimissione", "AUSL", "Imola", "Azienda USL"],
   "minConfidence": 0.5,
   "headerPatterns": [
     "^\\s*Azienda\\s+USL.*$",
@@ -52,7 +47,16 @@
     "ADVICE_AND_FOLLOW_UP"
   ],
   "tags": [
-    "SECTION_TITLE", "SUBSECTION_TITLE", "DATE", "TIME", "TEMPORAL_MARKER",
-    "MEDICATION_NAME", "DOSE", "SCHEDULE", "FREQUENCY", "ALLERGY_CRITICAL", "WARNING_TEXT"
+    "SECTION_TITLE",
+    "SUBSECTION_TITLE",
+    "DATE",
+    "TIME",
+    "TEMPORAL_MARKER",
+    "MEDICATION_NAME",
+    "DOSE",
+    "SCHEDULE",
+    "FREQUENCY",
+    "ALLERGY_CRITICAL",
+    "WARNING_TEXT"
   ]
 }

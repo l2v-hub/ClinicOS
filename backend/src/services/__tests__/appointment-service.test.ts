@@ -7,8 +7,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { prisma } from '../../lib/prisma.js';
 import {
-  createAppointment, updateAppointment, listAppointments, findConflict, findAppointmentAt,
-  uiOnlyDeleteAppointment, SlotConflictError, AppointmentNotFoundError,
+  createAppointment,
+  updateAppointment,
+  listAppointments,
+  findConflict,
+  findAppointmentAt,
+  uiOnlyDeleteAppointment,
+  SlotConflictError,
+  AppointmentNotFoundError,
 } from '../appointment-service.js';
 
 async function makePatient(tag: string) {
@@ -36,8 +42,13 @@ test('appointment-service: create + conflitto stesso slot/operatore + findConfli
   const opId = `test-op-${Date.now()}`;
   try {
     const created = await createAppointment({
-      patientId: patient.id, operatorId: opId, operatorName: 'Op Agenda Test',
-      data: '2030-01-15', ora: '10:30', tipologia: 'fisioterapia', note: 'test',
+      patientId: patient.id,
+      operatorId: opId,
+      operatorName: 'Op Agenda Test',
+      data: '2030-01-15',
+      ora: '10:30',
+      tipologia: 'fisioterapia',
+      note: 'test',
     });
     assert.equal(created.data, '2030-01-15');
     assert.equal(created.ora, '10:30');
@@ -52,16 +63,24 @@ test('appointment-service: create + conflitto stesso slot/operatore + findConfli
 
     // stesso operatore, stessa data/ora → SlotConflictError
     await assert.rejects(
-      () => createAppointment({
-        patientId: patient.id, operatorId: opId,
-        data: '2030-01-15', ora: '10:30', tipologia: 'visita',
-      }),
+      () =>
+        createAppointment({
+          patientId: patient.id,
+          operatorId: opId,
+          data: '2030-01-15',
+          ora: '10:30',
+          tipologia: 'visita',
+        }),
       (e: unknown) => e instanceof SlotConflictError,
     );
 
     // operatore diverso, stesso orario → nessun conflitto
     const other = await createAppointment({
-      patientId: patient.id, operatorId: `${opId}-b`, data: '2030-01-15', ora: '10:30', tipologia: 'visita',
+      patientId: patient.id,
+      operatorId: `${opId}-b`,
+      data: '2030-01-15',
+      ora: '10:30',
+      tipologia: 'visita',
     });
     assert.notEqual(other.id, created.id);
 
@@ -82,10 +101,18 @@ test('appointment-service: update sposta lo slot, rifiuta slot occupato, delete 
   const opId = `test-op-upd-${Date.now()}`;
   try {
     const apt15 = await createAppointment({
-      patientId: patient.id, operatorId: opId, data: '2030-01-16', ora: '15:00', tipologia: 'controllo',
+      patientId: patient.id,
+      operatorId: opId,
+      data: '2030-01-16',
+      ora: '15:00',
+      tipologia: 'controllo',
     });
     const apt16 = await createAppointment({
-      patientId: patient.id, operatorId: opId, data: '2030-01-16', ora: '16:00', tipologia: 'visita',
+      patientId: patient.id,
+      operatorId: opId,
+      data: '2030-01-16',
+      ora: '16:00',
+      tipologia: 'visita',
     });
 
     // findAppointmentAt (grounding AI "l'appuntamento delle 15")

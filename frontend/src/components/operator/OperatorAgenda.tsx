@@ -1,5 +1,11 @@
 import { useState, Fragment } from 'react';
-import type { Appuntamento, Operatore, Paziente, TherapySlot, MotivoNonErogazione } from '../../types';
+import type {
+  Appuntamento,
+  Operatore,
+  Paziente,
+  TherapySlot,
+  MotivoNonErogazione,
+} from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus, IcoPill } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
@@ -16,8 +22,28 @@ interface OperatorAgendaProps {
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onSelectPaziente?: (nome: string) => void;
   therapySlots?: TherapySlot[];
-  onConfirmTherapy?: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }) => void;
-  onNotAdministeredTherapy?: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }, motivo: MotivoNonErogazione, note: string) => void;
+  onConfirmTherapy?: (info: {
+    patientId: string;
+    therapyId: string;
+    drugName: string;
+    dosage: string;
+    route: string;
+    fascia: string;
+    ora: string;
+  }) => void;
+  onNotAdministeredTherapy?: (
+    info: {
+      patientId: string;
+      therapyId: string;
+      drugName: string;
+      dosage: string;
+      route: string;
+      fascia: string;
+      ora: string;
+    },
+    motivo: MotivoNonErogazione,
+    note: string,
+  ) => void;
   onLoadTherapySlots?: (date: string) => void;
 }
 
@@ -30,7 +56,9 @@ const HOUR_SLOTS = TIME_SLOTS.filter((_, i) => i % 2 === 0);
 const TOTAL_AVAIL_MIN = 11 * 60;
 
 function addDays(d: Date, n: number): Date {
-  const r = new Date(d); r.setDate(d.getDate() + n); return r;
+  const r = new Date(d);
+  r.setDate(d.getDate() + n);
+  return r;
 }
 function getMondayOf(d: Date): Date {
   const day = d.getDay();
@@ -41,29 +69,54 @@ function getWeekDays(ref: Date): Date[] {
   return Array.from({ length: 7 }, (_, i) => addDays(mon, i));
 }
 function getMonthMatrix(ref: Date): Date[] {
-  const y = ref.getFullYear(), m = ref.getMonth();
+  const y = ref.getFullYear(),
+    m = ref.getMonth();
   const mon = getMondayOf(new Date(y, m, 1));
   return Array.from({ length: 42 }, (_, i) => addDays(mon, i));
 }
-function isoDate(d: Date): string { return d.toISOString().slice(0, 10); }
+function isoDate(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
 function fmtDateLong(d: Date): string {
-  return d.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  return d.toLocaleDateString('it-IT', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 }
 function fmtMonth(d: Date): string {
   return d.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
 }
 
 const STATO_LABEL: Record<string, string> = {
-  programmato: 'Programmato', in_corso: 'In corso', completato: 'Completato', annullato: 'Annullato',
+  programmato: 'Programmato',
+  in_corso: 'In corso',
+  completato: 'Completato',
+  annullato: 'Annullato',
 };
 const TIPO_LABEL: Record<string, string> = {
-  visita: 'Visita', controllo: 'Controllo', procedura: 'Procedura',
-  urgenza: 'Urgenza', consulto: 'Consulto', 'follow-up': 'Follow-up', altro: 'Altro',
+  visita: 'Visita',
+  controllo: 'Controllo',
+  procedura: 'Procedura',
+  urgenza: 'Urgenza',
+  consulto: 'Consulto',
+  'follow-up': 'Follow-up',
+  altro: 'Altro',
 };
 
 export function OperatorAgenda({
-  operatoreId, nomeOperatore, operatori, appuntamenti, pazienti, onAddAppuntamento, onSelectPaziente,
-  therapySlots, onConfirmTherapy, onNotAdministeredTherapy, onLoadTherapySlots,
+  operatoreId,
+  nomeOperatore,
+  operatori,
+  appuntamenti,
+  pazienti,
+  onAddAppuntamento,
+  onSelectPaziente,
+  therapySlots,
+  onConfirmTherapy,
+  onNotAdministeredTherapy,
+  onLoadTherapySlots,
 }: OperatorAgendaProps) {
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
@@ -79,21 +132,24 @@ export function OperatorAgenda({
     }
   }
 
-  const myOp = operatori.find(o => o.id === operatoreId);
+  const myOp = operatori.find((o) => o.id === operatoreId);
   const opColor = myOp?.colore ?? 'var(--blue)';
 
   function myApts(data: string): Appuntamento[] {
     return appuntamenti
-      .filter(a => a.data === data && a.operatoreId === operatoreId)
+      .filter((a) => a.data === data && a.operatoreId === operatoreId)
       .sort((a, b) => a.ora.localeCompare(b.ora));
   }
 
   function navigate(delta: number) {
-    setRefDate(d => {
+    setRefDate((d) => {
       let next: Date;
       if (view === 'giornaliero') next = addDays(d, delta);
       else if (view === 'settimanale') next = addDays(d, delta * 7);
-      else { next = new Date(d); next.setMonth(d.getMonth() + delta); }
+      else {
+        next = new Date(d);
+        next.setMonth(d.getMonth() + delta);
+      }
       onLoadTherapySlots?.(isoDate(next));
       return next;
     });
@@ -110,20 +166,27 @@ export function OperatorAgenda({
 
   const todayStr = isoDate(refDate);
   const todayApts = myApts(todayStr);
-  const completati = todayApts.filter(a => a.stato === 'completato').length;
+  const completati = todayApts.filter((a) => a.stato === 'completato').length;
   const usedMin = todayApts.reduce((s, a) => s + (a.durata ?? 30), 0);
   const pct = Math.min(100, Math.round((usedMin / TOTAL_AVAIL_MIN) * 100));
-  const occLabel = pct < 30 ? 'Basso' : pct < 60 ? 'Bilanciato' : pct < 85 ? 'Alto' : 'Sovraccarico';
-  const occClass = pct < 30 ? 'agt-occ--low' : pct < 60 ? 'agt-occ--balanced' : pct < 85 ? 'agt-occ--high' : 'agt-occ--overloaded';
+  const occLabel =
+    pct < 30 ? 'Basso' : pct < 60 ? 'Bilanciato' : pct < 85 ? 'Alto' : 'Sovraccarico';
+  const occClass =
+    pct < 30
+      ? 'agt-occ--low'
+      : pct < 60
+        ? 'agt-occ--balanced'
+        : pct < 85
+          ? 'agt-occ--high'
+          : 'agt-occ--overloaded';
 
   // Extract activeSlot OUTSIDE JSX — avoids React Compiler IIFE caching bug
   const activeSlot = selectedTherapySlotId
-    ? (therapySlots ?? []).find(s => s.id === selectedTherapySlotId) ?? null
+    ? ((therapySlots ?? []).find((s) => s.id === selectedTherapySlotId) ?? null)
     : null;
 
   return (
     <div className="agt-view">
-
       {/* ── Header ── */}
       <div className="agt-header">
         <div className="agt-header__left">
@@ -135,29 +198,51 @@ export function OperatorAgenda({
         </div>
         <div className="agt-header__right">
           <div className="agt-view-switcher">
-            {(['giornaliero', 'settimanale', 'mensile'] as ViewMode[]).map(v => (
-              <button key={v} className={`agt-view-btn${view === v ? ' active' : ''}`}
-                onClick={() => setView(v)}>
+            {(['giornaliero', 'settimanale', 'mensile'] as ViewMode[]).map((v) => (
+              <button
+                key={v}
+                className={`agt-view-btn${view === v ? ' active' : ''}`}
+                onClick={() => setView(v)}
+              >
                 {v === 'giornaliero' ? 'Giorno' : v === 'settimanale' ? 'Settimana' : 'Mese'}
               </button>
             ))}
           </div>
           <div className="agt-nav">
-            <button className="agt-nav-btn" onClick={() => navigate(-1)}><IcoChevronLeft /></button>
+            <button className="agt-nav-btn" onClick={() => navigate(-1)}>
+              <IcoChevronLeft />
+            </button>
             <button className="agt-today-btn" onClick={() => setRefDate(new Date())}>
               <IcoCalendar /> Oggi
             </button>
-            <button className="agt-nav-btn" onClick={() => navigate(1)}><IcoChevronRight /></button>
+            <button className="agt-nav-btn" onClick={() => navigate(1)}>
+              <IcoChevronRight />
+            </button>
           </div>
         </div>
       </div>
 
       {/* ── Legend ── */}
       <div className="agt-legend">
-        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#16A37B' }} />Completato</span>
-        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#2F6BED' }} />In corso</span>
-        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#C77700' }} />Programmato</span>
-        <span className="agt-legend__item"><span className="agt-legend__dot" style={{ background: '#E5E7EB', border: '1px dashed #9DB7D5' }} />Disponibile</span>
+        <span className="agt-legend__item">
+          <span className="agt-legend__dot" style={{ background: '#16A37B' }} />
+          Completato
+        </span>
+        <span className="agt-legend__item">
+          <span className="agt-legend__dot" style={{ background: '#2F6BED' }} />
+          In corso
+        </span>
+        <span className="agt-legend__item">
+          <span className="agt-legend__dot" style={{ background: '#C77700' }} />
+          Programmato
+        </span>
+        <span className="agt-legend__item">
+          <span
+            className="agt-legend__dot"
+            style={{ background: '#E5E7EB', border: '1px dashed #9DB7D5' }}
+          />
+          Disponibile
+        </span>
       </div>
 
       {/* ── Occupancy strip (daily) ── */}
@@ -165,7 +250,8 @@ export function OperatorAgenda({
         <div className="agt-occ-strip">
           <div className="agt-occ-row">
             <span className="agt-occ-stats">
-              {completati}/{todayApts.length} completati · {usedMin} min su {TOTAL_AVAIL_MIN} min disponibili
+              {completati}/{todayApts.length} completati · {usedMin} min su {TOTAL_AVAIL_MIN} min
+              disponibili
             </span>
             <span className={`agt-occ-label ${occClass}`}>{occLabel}</span>
             <span className="agt-occ-pct">{pct}%</span>
@@ -179,33 +265,44 @@ export function OperatorAgenda({
       {/* ── DAILY VIEW ── */}
       {view === 'giornaliero' && (
         <div className="agt-day-wrap">
-          {TIME_SLOTS.map(ora => {
+          {TIME_SLOTS.map((ora) => {
             const tSlot = therapySlotsMap.get(ora);
-            const apt = myApts(todayStr).find(a => a.ora === ora);
+            const apt = myApts(todayStr).find((a) => a.ora === ora);
             const isHour = ora.endsWith(':00');
             const isSelected = apt?.id === selectedAptId;
 
             return (
               <div key={ora}>
                 {/* Therapy slot card */}
-                {tSlot && (() => {
-                  const { administered: tErogate, notAdministered: tNonErogate, pending: tPending, total: tTotal } = tSlot.summary;
-                  const allDone = tTotal > 0 && tErogate === tTotal;
-                  return (
-                    <div
-                      className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
-                      onClick={() => setSelectedTherapySlotId(tSlot.id)}>
-                      <span className="agt-therapy-slot__icon"><IcoPill /></span>
-                      <span className="agt-therapy-slot__label">{tSlot.label}</span>
-                      <span className="agt-therapy-slot__count">{tErogate}/{tTotal} erogate</span>
-                      <span className="agt-therapy-slot__progress">
-                        {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}
-                        {tNonErogate > 0 && tPending > 0 ? ' · ' : ''}
-                        {tPending > 0 ? `${tPending} da erogare` : ''}
-                      </span>
-                    </div>
-                  );
-                })()}
+                {tSlot &&
+                  (() => {
+                    const {
+                      administered: tErogate,
+                      notAdministered: tNonErogate,
+                      pending: tPending,
+                      total: tTotal,
+                    } = tSlot.summary;
+                    const allDone = tTotal > 0 && tErogate === tTotal;
+                    return (
+                      <div
+                        className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
+                        onClick={() => setSelectedTherapySlotId(tSlot.id)}
+                      >
+                        <span className="agt-therapy-slot__icon">
+                          <IcoPill />
+                        </span>
+                        <span className="agt-therapy-slot__label">{tSlot.label}</span>
+                        <span className="agt-therapy-slot__count">
+                          {tErogate}/{tTotal} erogate
+                        </span>
+                        <span className="agt-therapy-slot__progress">
+                          {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}
+                          {tNonErogate > 0 && tPending > 0 ? ' · ' : ''}
+                          {tPending > 0 ? `${tPending} da erogare` : ''}
+                        </span>
+                      </div>
+                    );
+                  })()}
 
                 {/* Regular time slot */}
                 <div
@@ -213,18 +310,34 @@ export function OperatorAgenda({
                   onClick={() => {
                     if (apt) setSelectedAptId(isSelected ? null : apt.id);
                     else setAptForm({ data: todayStr, ora });
-                  }}>
+                  }}
+                >
                   <span className="agt-slot__time">{isHour ? ora : ''}</span>
                   {apt ? (
-                    <div className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}>
+                    <div
+                      className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}
+                    >
                       <div className="agt-apt-card__row">
-                        {onSelectPaziente && apt.pazienteNome
-                          ? <button className="link-btn agt-apt-card__patient" onClick={e => { e.stopPropagation(); onSelectPaziente(apt.pazienteNome!); }}>{apt.pazienteNome}</button>
-                          : <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
-                        }
+                        {onSelectPaziente && apt.pazienteNome ? (
+                          <button
+                            className="link-btn agt-apt-card__patient"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onSelectPaziente(apt.pazienteNome!);
+                            }}
+                          >
+                            {apt.pazienteNome}
+                          </button>
+                        ) : (
+                          <span className="agt-apt-card__patient">{apt.pazienteNome ?? '—'}</span>
+                        )}
                         <div className="agt-apt-card__badges">
-                          {apt.priorita === 'urgente' && <span className="agt-badge agt-badge--urgent">Urgente</span>}
-                          <span className={`agt-badge agt-badge--${apt.stato}`}>{STATO_LABEL[apt.stato]}</span>
+                          {apt.priorita === 'urgente' && (
+                            <span className="agt-badge agt-badge--urgent">Urgente</span>
+                          )}
+                          <span className={`agt-badge agt-badge--${apt.stato}`}>
+                            {STATO_LABEL[apt.stato]}
+                          </span>
                         </div>
                       </div>
                       <div className="agt-apt-card__meta">
@@ -236,7 +349,9 @@ export function OperatorAgenda({
                     </div>
                   ) : (
                     <div className="agt-free-slot">
-                      <span className="agt-free-slot__plus"><IcoPlus /></span>
+                      <span className="agt-free-slot__plus">
+                        <IcoPlus />
+                      </span>
                       <span className="agt-free-slot__label">Disponibile</span>
                     </div>
                   )}
@@ -246,26 +361,38 @@ export function OperatorAgenda({
           })}
 
           {/* Therapy slots outside regular time range (sera 20:00, notte 22:00) */}
-          {therapySlots?.filter(ts => !TIME_SLOTS.includes(ts.ora)).map(ts => {
-            const { administered: tErogate, notAdministered: tNonErogate, pending: tPending, total: tTotal } = ts.summary;
-            const allDone = tTotal > 0 && tErogate === tTotal;
-            return (
-              <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
-                <div
-                  className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
-                  onClick={() => setSelectedTherapySlotId(ts.id)}>
-                  <span className="agt-therapy-slot__icon"><IcoPill /></span>
-                  <span className="agt-therapy-slot__label">{ts.label}</span>
-                  <span className="agt-therapy-slot__count">{tErogate}/{tTotal} erogate</span>
-                  <span className="agt-therapy-slot__progress">
-                    {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}
-                    {tNonErogate > 0 && tPending > 0 ? ' · ' : ''}
-                    {tPending > 0 ? `${tPending} da erogare` : ''}
-                  </span>
+          {therapySlots
+            ?.filter((ts) => !TIME_SLOTS.includes(ts.ora))
+            .map((ts) => {
+              const {
+                administered: tErogate,
+                notAdministered: tNonErogate,
+                pending: tPending,
+                total: tTotal,
+              } = ts.summary;
+              const allDone = tTotal > 0 && tErogate === tTotal;
+              return (
+                <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
+                  <div
+                    className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
+                    onClick={() => setSelectedTherapySlotId(ts.id)}
+                  >
+                    <span className="agt-therapy-slot__icon">
+                      <IcoPill />
+                    </span>
+                    <span className="agt-therapy-slot__label">{ts.label}</span>
+                    <span className="agt-therapy-slot__count">
+                      {tErogate}/{tTotal} erogate
+                    </span>
+                    <span className="agt-therapy-slot__progress">
+                      {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}
+                      {tNonErogate > 0 && tPending > 0 ? ' · ' : ''}
+                      {tPending > 0 ? `${tPending} da erogare` : ''}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       )}
 
@@ -274,83 +401,120 @@ export function OperatorAgenda({
         <div className="agt-week-wrap">
           <div className="agt-week-grid" style={{ gridTemplateColumns: `52px repeat(7, 1fr)` }}>
             <div className="agt-week-corner" />
-            {getWeekDays(refDate).map(d => {
+            {getWeekDays(refDate).map((d) => {
               const isToday = isoDate(d) === isoDate(new Date());
               return (
                 <div key={isoDate(d)} className={`agt-week-hdr${isToday ? ' today' : ''}`}>
                   <span className="agt-week-hdr__name">
                     {d.toLocaleDateString('it-IT', { weekday: 'short' })}
                   </span>
-                  <span className={`agt-week-hdr__num${isToday ? ' today' : ''}`}>{d.getDate()}</span>
+                  <span className={`agt-week-hdr__num${isToday ? ' today' : ''}`}>
+                    {d.getDate()}
+                  </span>
                 </div>
               );
             })}
-            {HOUR_SLOTS.map(ora => (
+            {HOUR_SLOTS.map((ora) => (
               <Fragment key={`hr-${ora}`}>
                 <div className="agt-week-time">{ora}</div>
-                {getWeekDays(refDate).map(d => {
+                {getWeekDays(refDate).map((d) => {
                   const dStr = isoDate(d);
-                  const apts = myApts(dStr).filter(a => a.ora === ora || a.ora === ora.replace(':00', ':30'));
+                  const apts = myApts(dStr).filter(
+                    (a) => a.ora === ora || a.ora === ora.replace(':00', ':30'),
+                  );
                   return (
-                    <div key={`${dStr}-${ora}`}
+                    <div
+                      key={`${dStr}-${ora}`}
                       className={`agt-week-cell${apts.length === 0 && !therapySlotsMap.has(ora) ? ' free' : ''}`}
-                      onClick={() => apts.length === 0 && setAptForm({ data: dStr, ora })}>
-                      {therapySlotsMap.has(ora) && (() => {
-                        const ts = therapySlotsMap.get(ora)!;
-                        const { administered: tErog, notAdministered: tNonErog, pending: tDaErog, total } = ts.summary;
-                        const allDone = total > 0 && tErog === total;
-                        const titleParts = [`${tErog}/${total} erogate`];
-                        if (tNonErog > 0) titleParts.push(`${tNonErog} non erogate`);
-                        if (tDaErog > 0) titleParts.push(`${tDaErog} da erogare`);
-                        return (
-                          <div
-                            className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
-                            title={`${ts.label}: ${titleParts.join(' · ')}`}
-                            onClick={e => { e.stopPropagation(); setSelectedTherapySlotId(ts.id); }}>
-                            <IcoPill />
-                          </div>
-                        );
-                      })()}
-                      {apts.map(a => (
+                      onClick={() => apts.length === 0 && setAptForm({ data: dStr, ora })}
+                    >
+                      {therapySlotsMap.has(ora) &&
+                        (() => {
+                          const ts = therapySlotsMap.get(ora)!;
+                          const {
+                            administered: tErog,
+                            notAdministered: tNonErog,
+                            pending: tDaErog,
+                            total,
+                          } = ts.summary;
+                          const allDone = total > 0 && tErog === total;
+                          const titleParts = [`${tErog}/${total} erogate`];
+                          if (tNonErog > 0) titleParts.push(`${tNonErog} non erogate`);
+                          if (tDaErog > 0) titleParts.push(`${tDaErog} da erogare`);
+                          return (
+                            <div
+                              className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
+                              title={`${ts.label}: ${titleParts.join(' · ')}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedTherapySlotId(ts.id);
+                              }}
+                            >
+                              <IcoPill />
+                            </div>
+                          );
+                        })()}
+                      {apts.map((a) => (
                         <div key={a.id} className={`agt-week-apt agt-apt-card--${a.stato}`}>
                           <span className="agt-week-apt__time">{a.ora}</span>
-                          {onSelectPaziente && a.pazienteNome
-                            ? <button className="link-btn agt-week-apt__name" onClick={e => { e.stopPropagation(); onSelectPaziente(a.pazienteNome!); }}>{a.pazienteNome.split(',')[0]}</button>
-                            : <span className="agt-week-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
-                          }
+                          {onSelectPaziente && a.pazienteNome ? (
+                            <button
+                              className="link-btn agt-week-apt__name"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onSelectPaziente(a.pazienteNome!);
+                              }}
+                            >
+                              {a.pazienteNome.split(',')[0]}
+                            </button>
+                          ) : (
+                            <span className="agt-week-apt__name">
+                              {a.pazienteNome?.split(',')[0] ?? '—'}
+                            </span>
+                          )}
                           <span className={`agt-status-dot agt-status-dot--${a.stato}`} />
                         </div>
                       ))}
-                      {apts.length === 0 && !therapySlotsMap.has(ora) && <span className="agt-week-add"><IcoPlus /></span>}
-                    </div>
-                  );
-                })}
-              </Fragment>
-            ))}
-            {/* Extra therapy slots outside HOUR_SLOTS range (sera/notte) */}
-            {therapySlots?.filter(ts => !HOUR_SLOTS.includes(ts.ora)).map(ts => (
-              <Fragment key={`extra-${ts.fascia}`}>
-                <div className="agt-week-time">{ts.ora}</div>
-                {getWeekDays(refDate).map(d => {
-                  const dStr = isoDate(d);
-                  const isToday = dStr === isoDate(new Date());
-                  const { administered: tErog, total } = ts.summary;
-                  const allDone = total > 0 && tErog === total;
-                  return (
-                    <div key={`${dStr}-${ts.fascia}`} className="agt-week-cell">
-                      {isToday && total > 0 && (
-                        <div
-                          className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
-                          title={`${ts.label}: ${tErog}/${total} erogate`}
-                          onClick={e => { e.stopPropagation(); setSelectedTherapySlotId(ts.id); }}>
-                          <IcoPill />
-                        </div>
+                      {apts.length === 0 && !therapySlotsMap.has(ora) && (
+                        <span className="agt-week-add">
+                          <IcoPlus />
+                        </span>
                       )}
                     </div>
                   );
                 })}
               </Fragment>
             ))}
+            {/* Extra therapy slots outside HOUR_SLOTS range (sera/notte) */}
+            {therapySlots
+              ?.filter((ts) => !HOUR_SLOTS.includes(ts.ora))
+              .map((ts) => (
+                <Fragment key={`extra-${ts.fascia}`}>
+                  <div className="agt-week-time">{ts.ora}</div>
+                  {getWeekDays(refDate).map((d) => {
+                    const dStr = isoDate(d);
+                    const isToday = dStr === isoDate(new Date());
+                    const { administered: tErog, total } = ts.summary;
+                    const allDone = total > 0 && tErog === total;
+                    return (
+                      <div key={`${dStr}-${ts.fascia}`} className="agt-week-cell">
+                        {isToday && total > 0 && (
+                          <div
+                            className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
+                            title={`${ts.label}: ${tErog}/${total} erogate`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedTherapySlotId(ts.id);
+                            }}
+                          >
+                            <IcoPill />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </Fragment>
+              ))}
           </div>
         </div>
       )}
@@ -359,26 +523,44 @@ export function OperatorAgenda({
       {view === 'mensile' && (
         <div className="agt-month-wrap">
           <div className="agt-month-grid">
-            {['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'].map(d => (
-              <div key={d} className="agt-month-wday">{d}</div>
+            {['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'].map((d) => (
+              <div key={d} className="agt-month-wday">
+                {d}
+              </div>
             ))}
             {getMonthMatrix(refDate).map((d, i) => {
               const inMonth = d.getMonth() === refDate.getMonth();
               const isToday = isoDate(d) === isoDate(new Date());
               const apts = myApts(isoDate(d));
               return (
-                <div key={i}
+                <div
+                  key={i}
                   className={`agt-month-day${!inMonth ? ' other' : ''}${isToday ? ' today' : ''}`}
-                  onClick={() => { setRefDate(d); setView('giornaliero'); }}>
+                  onClick={() => {
+                    setRefDate(d);
+                    setView('giornaliero');
+                  }}
+                >
                   <span className="agt-month-day__num">{d.getDate()}</span>
                   <div className="agt-month-day__apts">
-                    {apts.slice(0, 2).map(a => (
+                    {apts.slice(0, 2).map((a) => (
                       <div key={a.id} className={`agt-month-apt agt-apt-card--${a.stato}`}>
                         <span className="agt-month-apt__time">{a.ora}</span>
-                        {onSelectPaziente && a.pazienteNome
-                          ? <button className="link-btn agt-month-apt__name" onClick={e => { e.stopPropagation(); onSelectPaziente(a.pazienteNome!); }}>{a.pazienteNome.split(',')[0]}</button>
-                          : <span className="agt-month-apt__name">{a.pazienteNome?.split(',')[0] ?? '—'}</span>
-                        }
+                        {onSelectPaziente && a.pazienteNome ? (
+                          <button
+                            className="link-btn agt-month-apt__name"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onSelectPaziente(a.pazienteNome!);
+                            }}
+                          >
+                            {a.pazienteNome.split(',')[0]}
+                          </button>
+                        ) : (
+                          <span className="agt-month-apt__name">
+                            {a.pazienteNome?.split(',')[0] ?? '—'}
+                          </span>
+                        )}
                       </div>
                     ))}
                     {apts.length > 2 && <span className="agt-month-more">+{apts.length - 2}</span>}
@@ -392,9 +574,16 @@ export function OperatorAgenda({
 
       {aptForm && (
         <AppointmentForm
-          data={aptForm.data} ora={aptForm.ora}
-          operatoreId={operatoreId} operatori={operatori} pazienti={pazienti}
-          onSave={async apt => { const err = await onAddAppuntamento(apt); if (!err) setAptForm(null); return err; }}
+          data={aptForm.data}
+          ora={aptForm.ora}
+          operatoreId={operatoreId}
+          operatori={operatori}
+          pazienti={pazienti}
+          onSave={async (apt) => {
+            const err = await onAddAppuntamento(apt);
+            if (!err) setAptForm(null);
+            return err;
+          }}
           onCancel={() => setAptForm(null)}
           onNewPatient={() => setShowNewPaziente(true)}
         />

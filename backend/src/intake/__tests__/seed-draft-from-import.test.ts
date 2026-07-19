@@ -4,7 +4,12 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { seedDraftFromImport, buildImportDraftData, deriveAllergens, isPlausibleAllergenText } from '../draft-service.js';
+import {
+  seedDraftFromImport,
+  buildImportDraftData,
+  deriveAllergens,
+  isPlausibleAllergenText,
+} from '../draft-service.js';
 import { prisma } from '../../lib/prisma.js';
 import type { DischargeNarrativeDraft } from '../../ai/sections/narrative.js';
 
@@ -152,7 +157,10 @@ test('seedDraftFromImport: throws when job has no _narrative', async () => {
     await assert.rejects(
       () => seedDraftFromImport(job.id),
       (err: Error) => {
-        assert.ok(err.message.includes('_narrative'), `Expected "_narrative" in error: ${err.message}`);
+        assert.ok(
+          err.message.includes('_narrative'),
+          `Expected "_narrative" in error: ${err.message}`,
+        );
         return true;
       },
     );
@@ -187,14 +195,17 @@ test('buildImportDraftData: blob allergiesText does NOT seed a false allergy row
 });
 
 test('buildImportDraftData: concise multi-allergen text → one row per allergen', () => {
-  const nar = { ...NARRATIVE, allergyStatus: 'present' as const, allergiesText: 'Penicillina\nLattice' };
+  const nar = {
+    ...NARRATIVE,
+    allergyStatus: 'present' as const,
+    allergiesText: 'Penicillina\nLattice',
+  };
   const data = buildImportDraftData(nar, null);
   const al = data.allergie as Array<Record<string, unknown>>;
   assert.equal(al.length, 2);
   assert.equal(al[0].allergene, 'Penicillina');
   assert.equal(al[1].allergene, 'Lattice');
 });
-
 
 // ── #156: discharge therapy text -> structured therapy rows (one per drug) ────
 test('buildImportDraftData: therapyText parsed into structured terapia rows (one per drug)', () => {

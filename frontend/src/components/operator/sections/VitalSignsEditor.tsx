@@ -4,8 +4,8 @@ import type { CartellaPaziente, Paziente } from '../../../types';
 
 // Lazy import keeps import.meta.env out of module-evaluation scope,
 // which allows the patientSections registry test to run in Node without Vite.
-const ParametriTab = lazy(
-  () => import('../cartella/ParametriTab').then(m => ({ default: m.ParametriTab }))
+const ParametriTab = lazy(() =>
+  import('../cartella/ParametriTab').then((m) => ({ default: m.ParametriTab })),
 );
 
 // ParametriTab has TWO mutation paths: the monthly grid patches `parametriMensili`
@@ -25,7 +25,15 @@ type VitalSignsEditorProps = SectionProps<VitalsSlice> & {
   onUpdate?: (patch: Partial<CartellaPaziente>) => void;
 };
 
-export function VitalSignsEditor({ mode, value, onChange, cartella, paziente, onUpdate, operatoreNome }: VitalSignsEditorProps) {
+export function VitalSignsEditor({
+  mode,
+  value,
+  onChange,
+  cartella,
+  paziente,
+  onUpdate,
+  operatoreNome,
+}: VitalSignsEditorProps) {
   if (mode === 'patient-chart' && cartella && onUpdate) {
     return (
       <Suspense fallback={null}>

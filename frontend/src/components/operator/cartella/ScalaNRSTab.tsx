@@ -14,10 +14,10 @@ interface Props {
 // ── Scoring & severity ────────────────────────────────────────────────────────
 
 export function nrsSeverity(punteggio: number): { label: string; cls: string; color: string } {
-  if (punteggio === 0) return { label: 'Assente',  cls: 'badge--green', color: '#16A37B' };
-  if (punteggio <= 3)  return { label: 'Lieve',    cls: 'badge--blue',  color: '#2F6BED' };
-  if (punteggio <= 6)  return { label: 'Moderato', cls: 'badge--amber', color: '#C77700' };
-  return                      { label: 'Severo',   cls: 'badge--red',   color: '#DC2626' };
+  if (punteggio === 0) return { label: 'Assente', cls: 'badge--green', color: '#16A37B' };
+  if (punteggio <= 3) return { label: 'Lieve', cls: 'badge--blue', color: '#2F6BED' };
+  if (punteggio <= 6) return { label: 'Moderato', cls: 'badge--amber', color: '#C77700' };
+  return { label: 'Severo', cls: 'badge--red', color: '#DC2626' };
 }
 
 // ── Form state ────────────────────────────────────────────────────────────────
@@ -25,8 +25,8 @@ export function nrsSeverity(punteggio: number): { label: string; cls: string; co
 interface NRSFormState {
   data: string;
   ora: string;
-  punteggio: number;   // -1 = not selected
-  aRiposo: number;     // -1 = not selected (optional)
+  punteggio: number; // -1 = not selected
+  aRiposo: number; // -1 = not selected (optional)
   inMovimento: number; // -1 = not selected (optional)
   sede: string;
   note: string;
@@ -58,7 +58,12 @@ const NRS_LABELS: Record<number, string> = {
   10: 'Dolore insopportabile',
 };
 
-function NRSScaleSelector({ label, value, onChange, required }: {
+function NRSScaleSelector({
+  label,
+  value,
+  onChange,
+  required,
+}: {
   label: string;
   value: number;
   onChange: (v: number) => void;
@@ -67,7 +72,8 @@ function NRSScaleSelector({ label, value, onChange, required }: {
   return (
     <div className="braden-field">
       <div className="braden-field__label">
-        {label}{required && <span style={{ color: '#DC2626', marginLeft: 4 }}>*</span>}
+        {label}
+        {required && <span style={{ color: '#DC2626', marginLeft: 4 }}>*</span>}
       </div>
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
         {Array.from({ length: 11 }, (_, i) => {
@@ -118,7 +124,14 @@ function NRSScaleSelector({ label, value, onChange, required }: {
         })}
       </div>
       {value >= 0 && (
-        <div style={{ marginTop: 6, fontSize: '0.82rem', color: nrsSeverity(value).color, fontWeight: 500 }}>
+        <div
+          style={{
+            marginTop: 6,
+            fontSize: '0.82rem',
+            color: nrsSeverity(value).color,
+            fontWeight: 500,
+          }}
+        >
           {NRS_LABELS[value]}
         </div>
       )}
@@ -138,7 +151,9 @@ function NRSModulo({ v, paziente }: { v: ScalaNRSValutazione | null; paziente: P
       <div className="fm-patient-header">
         <div className="fm-patient-field">
           <span className="fm-patient-field__lbl">Cognome e Nome</span>
-          <span className="fm-patient-field__val">{v ? `${paziente.lastName} ${paziente.firstName}` : ''}</span>
+          <span className="fm-patient-field__val">
+            {v ? `${paziente.lastName} ${paziente.firstName}` : ''}
+          </span>
         </div>
         <div className="fm-patient-field">
           <span className="fm-patient-field__lbl">Data</span>
@@ -183,7 +198,15 @@ function NRSModulo({ v, paziente }: { v: ScalaNRSValutazione | null; paziente: P
             );
           })}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#667085', marginTop: 4 }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            fontSize: '0.72rem',
+            color: '#667085',
+            marginTop: 4,
+          }}
+        >
           <span>0 — Nessun dolore</span>
           <span>10 — Dolore massimo</span>
         </div>
@@ -192,8 +215,12 @@ function NRSModulo({ v, paziente }: { v: ScalaNRSValutazione | null; paziente: P
       <table className="braden-modulo-table">
         <tbody>
           <tr className="totale-row">
-            <td style={{ textAlign: 'right', padding: '6px 10px', fontWeight: 700 }}>Punteggio NRS</td>
-            <td className="totale-box" style={{ color: r.color }}>{v ? v.punteggio : '___'} / 10</td>
+            <td style={{ textAlign: 'right', padding: '6px 10px', fontWeight: 700 }}>
+              Punteggio NRS
+            </td>
+            <td className="totale-box" style={{ color: r.color }}>
+              {v ? v.punteggio : '___'} / 10
+            </td>
           </tr>
           <tr>
             <td style={{ padding: '4px 10px' }}>Interpretazione</td>
@@ -257,7 +284,7 @@ function NRSHistoryTable({
 }) {
   type Row = ScalaNRSValutazione & { _severity: string; _severityClass: string };
 
-  const rows: Row[] = list.map(v => {
+  const rows: Row[] = list.map((v) => {
     const sv = nrsSeverity(v.punteggio);
     return { ...v, _severity: sv.label, _severityClass: sv.cls };
   });
@@ -281,7 +308,14 @@ function NRSHistoryTable({
       label: 'NRS',
       sortable: true,
       render: (_v, row) => (
-        <span style={{ fontWeight: 700, display: 'block', textAlign: 'center', color: nrsSeverity(row.punteggio).color }}>
+        <span
+          style={{
+            fontWeight: 700,
+            display: 'block',
+            textAlign: 'center',
+            color: nrsSeverity(row.punteggio).color,
+          }}
+        >
           {row.punteggio} / 10
         </span>
       ),
@@ -293,10 +327,10 @@ function NRSHistoryTable({
       filterable: true,
       filterType: 'select',
       options: [
-        { value: 'Assente',  label: 'Assente' },
-        { value: 'Lieve',    label: 'Lieve' },
+        { value: 'Assente', label: 'Assente' },
+        { value: 'Lieve', label: 'Lieve' },
         { value: 'Moderato', label: 'Moderato' },
-        { value: 'Severo',   label: 'Severo' },
+        { value: 'Severo', label: 'Severo' },
       ],
       render: (_v, row) => <span className={`badge ${row._severityClass}`}>{row._severity}</span>,
     },
@@ -318,9 +352,30 @@ function NRSHistoryTable({
       width: '64px',
       render: (_v, row) => (
         <div style={{ display: 'flex', gap: 4 }}>
-          <button className="icon-btn icon-btn--sm" onClick={() => onOpenModulo(row.id)} title="Vista modulo">📋</button>
-          <button className="icon-btn icon-btn--sm icon-btn--danger" onClick={() => onDelete(row.id)} title="Elimina">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <button
+            className="icon-btn icon-btn--sm"
+            onClick={() => onOpenModulo(row.id)}
+            title="Vista modulo"
+          >
+            📋
+          </button>
+          <button
+            className="icon-btn icon-btn--sm icon-btn--danger"
+            onClick={() => onDelete(row.id)}
+            title="Elimina"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
         </div>
       ),
@@ -348,7 +403,9 @@ export function ScalaNRSTab({ cartella, paziente, onUpdate, operatoreNome }: Pro
   const [modulo, setModulo] = useState(false);
   const [moduloTarget, setModuloTarget] = useState<string | null>(null);
 
-  function set(f: Partial<NRSFormState>) { setForm(p => ({ ...p, ...f })); }
+  function set(f: Partial<NRSFormState>) {
+    setForm((p) => ({ ...p, ...f }));
+  }
 
   const canSave = form.punteggio >= 0;
   const r = form.punteggio >= 0 ? nrsSeverity(form.punteggio) : { label: '—', cls: '', color: '' };
@@ -373,7 +430,7 @@ export function ScalaNRSTab({ cartella, paziente, onUpdate, operatoreNome }: Pro
   }
 
   function handleDelete(id: string) {
-    onUpdate({ valutazioniNRS: list.filter(v => v.id !== id) });
+    onUpdate({ valutazioniNRS: list.filter((v) => v.id !== id) });
   }
 
   function openModulo(id: string | null) {
@@ -381,15 +438,18 @@ export function ScalaNRSTab({ cartella, paziente, onUpdate, operatoreNome }: Pro
     setModulo(true);
   }
 
-  const moduloData = moduloTarget ? list.find(v => v.id === moduloTarget) ?? null : (list[0] ?? null);
+  const moduloData = moduloTarget
+    ? (list.find((v) => v.id === moduloTarget) ?? null)
+    : (list[0] ?? null);
 
   return (
     <div className={`cr-tab-content${modulo ? ' mode-modulo' : ''}`}>
-
       {/* ── Modulo view (paper form) ── */}
       <div className="modulo-content">
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }} className="no-print">
-          <button className="btn-secondary btn-sm" onClick={() => setModulo(false)}>← Vista operativa</button>
+          <button className="btn-secondary btn-sm" onClick={() => setModulo(false)}>
+            ← Vista operativa
+          </button>
           <PrintButton label="Stampa modulo" />
         </div>
         <NRSModulo v={moduloData} paziente={paziente} />
@@ -401,16 +461,27 @@ export function ScalaNRSTab({ cartella, paziente, onUpdate, operatoreNome }: Pro
           title="Scala NRS — Valutazione del Dolore"
           count={list.length}
           countLabel="rilevazioni"
-          actions={<>
-            <button className="btn-sm" onClick={() => openModulo(null)} title="Vista modulo cartaceo">
-              Vista modulo
-            </button>
-            <button className="btn-sm" onClick={() => { setForm({ ...EMPTY_FORM }); setShowAdd(true); }}>
-              + Nuova rilevazione
-            </button>
-          </>}
+          actions={
+            <>
+              <button
+                className="btn-sm"
+                onClick={() => openModulo(null)}
+                title="Vista modulo cartaceo"
+              >
+                Vista modulo
+              </button>
+              <button
+                className="btn-sm"
+                onClick={() => {
+                  setForm({ ...EMPTY_FORM });
+                  setShowAdd(true);
+                }}
+              >
+                + Nuova rilevazione
+              </button>
+            </>
+          }
         >
-
           {list.length > 0 && !showAdd && (
             <div className="braden-history">
               <NRSHistoryTable list={list} onOpenModulo={openModulo} onDelete={handleDelete} />
@@ -424,24 +495,36 @@ export function ScalaNRSTab({ cartella, paziente, onUpdate, operatoreNome }: Pro
               <div className="form-row-2col">
                 <div className="form-row">
                   <label className="form-label">Data</label>
-                  <input type="date" className="form-input" value={form.data} onChange={e => set({ data: e.target.value })} />
+                  <input
+                    type="date"
+                    className="form-input"
+                    value={form.data}
+                    onChange={(e) => set({ data: e.target.value })}
+                  />
                 </div>
                 <div className="form-row">
                   <label className="form-label">Ora (opzionale)</label>
-                  <input type="time" className="form-input" value={form.ora} onChange={e => set({ ora: e.target.value })} />
+                  <input
+                    type="time"
+                    className="form-input"
+                    value={form.ora}
+                    onChange={(e) => set({ ora: e.target.value })}
+                  />
                 </div>
               </div>
 
               <NRSScaleSelector
                 label="Punteggio NRS (dolore globale)"
                 value={form.punteggio}
-                onChange={v => set({ punteggio: v })}
+                onChange={(v) => set({ punteggio: v })}
                 required
               />
 
               {form.punteggio >= 0 && (
                 <div className="braden-score-preview" style={{ marginTop: 4 }}>
-                  <div className="braden-score-preview__val" style={{ color: r.color }}>{form.punteggio}</div>
+                  <div className="braden-score-preview__val" style={{ color: r.color }}>
+                    {form.punteggio}
+                  </div>
                   <div className="braden-score-preview__label">/ 10</div>
                   <span className={`badge ${r.cls}`}>{r.label}</span>
                 </div>
@@ -450,13 +533,13 @@ export function ScalaNRSTab({ cartella, paziente, onUpdate, operatoreNome }: Pro
               <NRSScaleSelector
                 label="Dolore a riposo (opzionale)"
                 value={form.aRiposo}
-                onChange={v => set({ aRiposo: v })}
+                onChange={(v) => set({ aRiposo: v })}
               />
 
               <NRSScaleSelector
                 label="Dolore in movimento (opzionale)"
                 value={form.inMovimento}
-                onChange={v => set({ inMovimento: v })}
+                onChange={(v) => set({ inMovimento: v })}
               />
 
               <div className="form-row" style={{ marginTop: 8 }}>
@@ -466,22 +549,25 @@ export function ScalaNRSTab({ cartella, paziente, onUpdate, operatoreNome }: Pro
                   className="form-input"
                   placeholder="es. lombare, spalla dx, addome..."
                   value={form.sede}
-                  onChange={e => set({ sede: e.target.value })}
+                  onChange={(e) => set({ sede: e.target.value })}
                 />
               </div>
 
               <div className="form-row">
                 <label className="form-label">Note</label>
-                <textarea className="form-input" rows={2} value={form.note} onChange={e => set({ note: e.target.value })} />
+                <textarea
+                  className="form-input"
+                  rows={2}
+                  value={form.note}
+                  onChange={(e) => set({ note: e.target.value })}
+                />
               </div>
 
               <div className="cr-inline-form__actions">
-                <button className="btn-secondary btn-sm" onClick={() => setShowAdd(false)}>Annulla</button>
-                <button
-                  className="btn-primary btn-sm"
-                  onClick={handleSave}
-                  disabled={!canSave}
-                >
+                <button className="btn-secondary btn-sm" onClick={() => setShowAdd(false)}>
+                  Annulla
+                </button>
+                <button className="btn-primary btn-sm" onClick={handleSave} disabled={!canSave}>
                   Salva rilevazione
                 </button>
               </div>

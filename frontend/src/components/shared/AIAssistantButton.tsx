@@ -8,17 +8,40 @@ import { API_URL } from '../../config';
 // clinical advice and never invents data.
 
 export interface AssistantSource {
-  sourceType: string; patientId: string; recordId: string; sectionKey?: string;
-  documentId?: string; pageNumber?: number; label: string; exactText?: string; recordedAt?: string;
+  sourceType: string;
+  patientId: string;
+  recordId: string;
+  sectionKey?: string;
+  documentId?: string;
+  pageNumber?: number;
+  label: string;
+  exactText?: string;
+  recordedAt?: string;
 }
 export interface AssistantNav {
-  type: string; label: string; patientId?: string; sectionKey?: string; documentId?: string; recordId?: string; pageNumber?: number;
+  type: string;
+  label: string;
+  patientId?: string;
+  sectionKey?: string;
+  documentId?: string;
+  recordId?: string;
+  pageNumber?: number;
 }
 export interface AssistantAnswer {
-  intent: string; scope: string; results: unknown[]; sources: AssistantSource[];
-  navigation: AssistantNav[]; notFound: boolean; refusal?: string;
+  intent: string;
+  scope: string;
+  results: unknown[];
+  sources: AssistantSource[];
+  navigation: AssistantNav[];
+  notFound: boolean;
+  refusal?: string;
 }
-interface Turn { question: string; answer?: AssistantAnswer; error?: string; loading?: boolean }
+interface Turn {
+  question: string;
+  answer?: AssistantAnswer;
+  error?: string;
+  loading?: boolean;
+}
 
 interface Props {
   forceOpen?: boolean;
@@ -32,17 +55,32 @@ interface Props {
   onNavigate?: (nav: AssistantNav) => void;
 }
 
-export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole, currentPatientId, currentPatientName, onNavigate }: Props) {
+export function AIAssistantButton({
+  forceOpen,
+  onClose,
+  operatorId,
+  operatorRole,
+  currentPatientId,
+  currentPatientName,
+  onNavigate,
+}: Props) {
   const [open, setOpen] = useState(false);
   const [question, setQuestion] = useState('');
   const [turns, setTurns] = useState<Turn[]>([]);
   const [busy, setBusy] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { if (forceOpen) setOpen(true); }, [forceOpen]);
-  useEffect(() => { bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight }); }, [turns]);
+  useEffect(() => {
+    if (forceOpen) setOpen(true);
+  }, [forceOpen]);
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight });
+  }, [turns]);
 
-  function handleClose() { setOpen(false); onClose?.(); }
+  function handleClose() {
+    setOpen(false);
+    onClose?.();
+  }
 
   async function ask(q: string) {
     const question = q.trim();
@@ -55,16 +93,27 @@ export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole
       if (operatorId) headers['X-Operator-Id'] = operatorId;
       if (operatorRole) headers['X-Operator-Role'] = operatorRole;
       const res = await fetch(`${API_URL}/ai/assistant/query`, {
-        method: 'POST', headers,
+        method: 'POST',
+        headers,
         body: JSON.stringify({ question, currentPatientId }),
       });
       const data = await res.json();
-      setTurns((t) => t.map((x, i) => i === t.length - 1
-        ? (res.ok ? { question, answer: data } : { question, error: data.error || 'Richiesta non riuscita' })
-        : x));
+      setTurns((t) =>
+        t.map((x, i) =>
+          i === t.length - 1
+            ? res.ok
+              ? { question, answer: data }
+              : { question, error: data.error || 'Richiesta non riuscita' }
+            : x,
+        ),
+      );
     } catch {
-      setTurns((t) => t.map((x, i) => i === t.length - 1 ? { question, error: 'Errore di rete' } : x));
-    } finally { setBusy(false); }
+      setTurns((t) =>
+        t.map((x, i) => (i === t.length - 1 ? { question, error: 'Errore di rete' } : x)),
+      );
+    } finally {
+      setBusy(false);
+    }
   }
 
   const scopeLabel = currentPatientId
@@ -73,7 +122,13 @@ export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole
 
   return (
     <>
-      <button type="button" className="ai-fab" onClick={() => setOpen(true)} aria-label="Assistente ClinicOS" title="Assistente ClinicOS">
+      <button
+        type="button"
+        className="ai-fab"
+        onClick={() => setOpen(true)}
+        aria-label="Assistente ClinicOS"
+        title="Assistente ClinicOS"
+      >
         <IcoAI />
       </button>
 
@@ -83,13 +138,19 @@ export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole
           <aside className="ai-drawer" role="dialog" aria-label="Assistente ClinicOS">
             <header className="ai-drawer__header">
               <div className="ai-drawer__title">
-                <span className="ai-drawer__icon"><IcoAI /></span>
+                <span className="ai-drawer__icon">
+                  <IcoAI />
+                </span>
                 <span>Assistente ClinicOS</span>
               </div>
-              <button type="button" className="icon-btn" onClick={handleClose} aria-label="Chiudi"><IcoX /></button>
+              <button type="button" className="icon-btn" onClick={handleClose} aria-label="Chiudi">
+                <IcoX />
+              </button>
             </header>
 
-            <div className="ai-asst__scope" aria-label="Perimetro">{scopeLabel}</div>
+            <div className="ai-asst__scope" aria-label="Perimetro">
+              {scopeLabel}
+            </div>
 
             <div className="ai-drawer__body ai-asst__body" ref={bodyRef}>
               {turns.length === 0 && (
@@ -109,7 +170,13 @@ export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole
               ))}
             </div>
 
-            <form className="ai-asst__compose" onSubmit={(e) => { e.preventDefault(); ask(question); }}>
+            <form
+              className="ai-asst__compose"
+              onSubmit={(e) => {
+                e.preventDefault();
+                ask(question);
+              }}
+            >
               <input
                 className="ai-asst__input"
                 value={question}
@@ -118,7 +185,13 @@ export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole
                 aria-label="Domanda"
                 disabled={busy}
               />
-              <button type="submit" className="btn-primary ai-asst__send" disabled={busy || !question.trim()}>Invia</button>
+              <button
+                type="submit"
+                className="btn-primary ai-asst__send"
+                disabled={busy || !question.trim()}
+              >
+                Invia
+              </button>
             </form>
           </aside>
         </>
@@ -128,25 +201,46 @@ export function AIAssistantButton({ forceOpen, onClose, operatorId, operatorRole
 }
 
 // Exported for reuse by AgnosPanel (015): same read-answer rendering (results + sources).
-export function AnswerView({ answer, onNavigate }: { answer: AssistantAnswer; onNavigate?: (n: AssistantNav) => void }) {
+export function AnswerView({
+  answer,
+  onNavigate,
+}: {
+  answer: AssistantAnswer;
+  onNavigate?: (n: AssistantNav) => void;
+}) {
   if (answer.refusal) return <div className="ai-asst__a ai-asst__refusal">{answer.refusal}</div>;
-  if (answer.notFound) return <div className="ai-asst__a ai-asst__muted">Informazione non trovata.</div>;
+  if (answer.notFound)
+    return <div className="ai-asst__a ai-asst__muted">Informazione non trovata.</div>;
   return (
     <div className="ai-asst__a">
-      <div className="ai-asst__count">{answer.results.length} risultat{answer.results.length === 1 ? 'o' : 'i'}</div>
+      <div className="ai-asst__count">
+        {answer.results.length} risultat{answer.results.length === 1 ? 'o' : 'i'}
+      </div>
       <ul className="ai-asst__sources">
         {answer.sources.slice(0, 25).map((s, i) => (
           <li key={i} className="ai-asst__source">
-            <div className="ai-asst__source-label">{s.label}{s.recordedAt ? ` · ${s.recordedAt.slice(0, 10)}` : ''}</div>
-            {s.exactText && <div className="ai-asst__source-text">{s.exactText.length > 220 ? s.exactText.slice(0, 220) + '…' : s.exactText}</div>}
-            <div className="ai-asst__source-meta">Fonte: {s.sourceType}{s.pageNumber ? ` · pagina ${s.pageNumber}` : ''}</div>
+            <div className="ai-asst__source-label">
+              {s.label}
+              {s.recordedAt ? ` · ${s.recordedAt.slice(0, 10)}` : ''}
+            </div>
+            {s.exactText && (
+              <div className="ai-asst__source-text">
+                {s.exactText.length > 220 ? s.exactText.slice(0, 220) + '…' : s.exactText}
+              </div>
+            )}
+            <div className="ai-asst__source-meta">
+              Fonte: {s.sourceType}
+              {s.pageNumber ? ` · pagina ${s.pageNumber}` : ''}
+            </div>
           </li>
         ))}
       </ul>
       {answer.navigation.length > 0 && (
         <div className="ai-asst__actions">
           {answer.navigation.slice(0, 8).map((n, i) => (
-            <button key={i} type="button" className="srev-chip" onClick={() => onNavigate?.(n)}>{n.label}</button>
+            <button key={i} type="button" className="srev-chip" onClick={() => onNavigate?.(n)}>
+              {n.label}
+            </button>
           ))}
         </div>
       )}

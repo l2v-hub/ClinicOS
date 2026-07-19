@@ -7,11 +7,13 @@
   gap: 24px;
   overflow-x: auto;
   white-space: nowrap;
-  scrollbar-width: none;     /* Firefox */
-  min-width: 0;              /* allow internal scroll, no global overflow */
+  scrollbar-width: none; /* Firefox */
+  min-width: 0; /* allow internal scroll, no global overflow */
   border-bottom: 1px solid var(--border, #e3e8ef);
 }
-.top-nav::-webkit-scrollbar { display: none; }
+.top-nav::-webkit-scrollbar {
+  display: none;
+}
 
 .top-nav__item {
   border: 0;
@@ -25,10 +27,10 @@
   gap: 6px;
   flex: 0 0 auto;
   font-family: inherit;
-  transition: color .15s ease-out;
+  transition: color 0.15s ease-out;
 }
 .top-nav__item::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   right: 0;
@@ -36,24 +38,36 @@
   height: 2px;
   background: transparent;
   border-radius: 999px;
-  transition: background .15s ease-out;
+  transition: background 0.15s ease-out;
 }
-.top-nav__item:hover { color: var(--c-primary, #2F6BED); }
-.top-nav__item.is-active::after { background: var(--c-primary, #2F6BED); }
+.top-nav__item:hover {
+  color: var(--c-primary, #2f6bed);
+}
+.top-nav__item.is-active::after {
+  background: var(--c-primary, #2f6bed);
+}
 
 /* Level 2 — primary page nav: pill attive (parità mockup) */
-.top-nav--level2 { gap: 8px; min-height: 52px; }
+.top-nav--level2 {
+  gap: 8px;
+  min-height: 52px;
+}
 .top-nav--level2 .top-nav__item {
   font-size: 15px;
   padding: 9px 16px;
   border-radius: 999px;
-  color: var(--text-muted, #5A6B80);
+  color: var(--text-muted, #5a6b80);
 }
-.top-nav--level2 .top-nav__item::after { display: none; }
-.top-nav--level2 .top-nav__item:hover { color: var(--text, #16202E); background: var(--hover, #F7F9FC); }
+.top-nav--level2 .top-nav__item::after {
+  display: none;
+}
+.top-nav--level2 .top-nav__item:hover {
+  color: var(--text, #16202e);
+  background: var(--hover, #f7f9fc);
+}
 .top-nav--level2 .top-nav__item.is-active {
   color: #fff;
-  background: var(--blue, #2F6BED);
+  background: var(--blue, #2f6bed);
 }
 
 /* Level 3 — contextual sub-nav: segmented grey control (grey track, white active pill) */
@@ -61,8 +75,8 @@
   gap: 2px;
   min-height: 36px;
   border-bottom: 0;
-  background: #EEF1F5;
-  border: 1px solid var(--border, #D0D5DD);
+  background: #eef1f5;
+  border: 1px solid var(--border, #d0d5dd);
   border-radius: 9px;
   padding: 3px;
   width: fit-content;
@@ -75,18 +89,29 @@
   padding: 6px 14px;
   color: #42566f;
   border-radius: 7px;
-  transition: background .15s ease-out, color .15s ease-out, box-shadow .15s ease-out;
+  transition:
+    background 0.15s ease-out,
+    color 0.15s ease-out,
+    box-shadow 0.15s ease-out;
 }
 /* segmented control has no underline indicator */
-.top-nav--level3 .top-nav__item::after { display: none; }
-.top-nav--level3 .top-nav__item:hover { color: #101828; background: rgba(15,95,215,0.06); }
+.top-nav--level3 .top-nav__item::after {
+  display: none;
+}
+.top-nav--level3 .top-nav__item:hover {
+  color: #101828;
+  background: rgba(15, 95, 215, 0.06);
+}
 .top-nav--level3 .top-nav__item.is-active {
   color: #fff;
-  background: var(--blue, #2F6BED);
+  background: var(--blue, #2f6bed);
   font-weight: 600;
   box-shadow: none;
 }
-.top-nav--level3 .top-nav__item.is-active:hover { color: #fff; background: var(--c-primary-active, #1D4FC4); }
+.top-nav--level3 .top-nav__item.is-active:hover {
+  color: #fff;
+  background: var(--c-primary-active, #1d4fc4);
+}
 
 /* Optional count badge — subtle, no heavy pill */
 .top-nav__badge {
@@ -95,14 +120,27 @@
   line-height: 1.4;
   padding: 1px 6px;
   border-radius: 999px;
-  color: var(--c-primary, #2F6BED);
+  color: var(--c-primary, #2f6bed);
   background: var(--c-primary-bg, #ebf1fe);
 }
 
 /* Phone: tab L2/L3 più compatti così più voci sono visibili e la barra scorre meglio. */
 @media (max-width: 640px) {
-  .top-nav--level2 { gap: 6px; min-height: 46px; }
-  .top-nav--level2 .top-nav__item { font-size: 13px; padding: 7px 12px; }
-  .top-nav--level3 { gap: 2px; padding: 3px; margin: 6px 0; }
-  .top-nav--level3 .top-nav__item { font-size: 12.5px; padding: 6px 10px; }
+  .top-nav--level2 {
+    gap: 6px;
+    min-height: 46px;
+  }
+  .top-nav--level2 .top-nav__item {
+    font-size: 13px;
+    padding: 7px 12px;
+  }
+  .top-nav--level3 {
+    gap: 2px;
+    padding: 3px;
+    margin: 6px 0;
+  }
+  .top-nav--level3 .top-nav__item {
+    font-size: 12.5px;
+    padding: 6px 10px;
+  }
 }

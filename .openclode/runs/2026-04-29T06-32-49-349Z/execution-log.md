@@ -70,7 +70,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +* {
 +  box-sizing: border-box;
  }
- 
+
 -.app-header {
 -  background-color: #2563eb;
 -  color: white;
@@ -83,7 +83,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  width: 100%;
 +  min-height: 100vh;
  }
- 
+
 -.logo-container {
 -  display: flex;
 -  align-items: center;
@@ -95,7 +95,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  flex-direction: column;
 +  min-height: 100vh;
  }
- 
+
 -.logo-icon {
 -  width: 1.75rem;
 -  height: 1.75rem;
@@ -112,7 +112,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  justify-content: space-between;
 +  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
  }
- 
+
 -.nav-link {
 -  color: rgba(255, 255, 255, 0.9);
 -  text-decoration: none;
@@ -125,14 +125,14 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  align-items: center;
 +  gap: 1rem;
  }
- 
+
 -.nav-link:hover {
 -  background-color: rgba(255, 255, 255, 0.1);
 +.logo {
 +  font-size: 1.5rem;
 +  font-weight: bold;
  }
- 
+
 -.nav-link.active {
 -  background-color: rgba(255, 255, 255, 0.15);
 -  color: white;
@@ -144,7 +144,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
    align-items: center;
    gap: 1rem;
  }
- 
+
 -.user-avatar {
 -  width: 2.5rem;
 -  height: 2.5rem;
@@ -236,7 +236,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import MedicalRecords from './pages/MedicalRecords';
 +import SettingsPage from './pages/Settings';
  import './App.css';
- 
+
 -// Placeholder page components
 -const Dashboard = () => <div className="page">Dashboard</div>;
 -const Patients = () => <div className="page">Patients</div>;
@@ -359,7 +359,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import App from './App.tsx';
  import './index.css';
 +import { BrowserRouter } from 'react-router-dom';
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
      <BrowserRouter>
@@ -371,6 +371,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 ```
 
 **New file: src/pages/Dashboard.tsx**
+
 ```typescript
 export default function Dashboard() {
   return (
@@ -383,6 +384,7 @@ export default function Dashboard() {
 ```
 
 **New file: src/pages/Patients.tsx**
+
 ```typescript
 export default function Patients() {
   return (
@@ -395,6 +397,7 @@ export default function Patients() {
 ```
 
 **New file: src/pages/Appointments.tsx**
+
 ```typescript
 export default function Appointments() {
   return (
@@ -407,7 +410,6 @@ export default function Appointments() {
 ```
 
 **New file: src/pages/MedicalRecords.tsx**
-
 
 ## [REVIEWER] (101742ms — compatible/DeepSeek-V3.2)
 
@@ -447,7 +449,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import MedicalRecordsPage from './pages/MedicalRecordsPage';
 +import SettingsPage from './pages/SettingsPage';
  import './App.css';
- 
+
  function App() {
    return (
 -    <div className="app" data-testid="app">
@@ -516,13 +518,13 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
 +    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
  }
- 
+
  #root {
 -  width: 100%;
 -  min-height: 100vh;
 +  height: 100%;
  }
- 
+
  .app {
    display: flex;
 -  flex-direction: column;
@@ -530,7 +532,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  height: 100vh;
 +  background-color: #f8fafc;
  }
- 
+
 -.app-header {
 -  background-color: #1e40af;
 -  color: white;
@@ -544,7 +546,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  flex-direction: column;
 +  overflow: hidden;
  }
- 
+
 -.header-content {
 +.content {
 +  flex: 1;
@@ -573,7 +575,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  flex-direction: column;
 +  gap: 1.5rem;
  }
- 
+
 -.logo {
 -  font-size: 1.5rem;
 -  font-weight: bold;
@@ -584,7 +586,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 +  border: 1px solid #e2e8f0;
  }
- 
+
 -.app-nav {
 -  display: flex;
 -  align-items: center;
@@ -614,7 +616,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import App from './App.tsx';
  import './index.css';
 -import { BrowserRouter } from 'react-router-dom';
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
 -    <BrowserRouter>
@@ -658,6 +660,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 ```
 
 **New file: src/components/Header.tsx**
+
 ```typescript
 import { Bell, Search, User } from 'lucide-react';
 
@@ -692,6 +695,7 @@ export default function Header() {
 ```
 
 **New file: src/components/Sidebar.tsx**
+
 ```typescript
 import { NavLink } from 'react-router-dom';
 import {
@@ -779,6 +783,7 @@ export default function Sidebar() {
 ```
 
 **New file: src/pages/DashboardPage.tsx**
+
 ```typescript
 export default function DashboardPage() {
   return (
@@ -803,6 +808,7 @@ export default function DashboardPage() {
 ```
 
 **New file: src/pages/PatientsPage.tsx**
+
 ```typescript
 export default function PatientsPage() {
   return (
@@ -823,7 +829,8 @@ export default function PatientsPage() {
 ```
 
 **New file: src/pages/AppointmentsPage.tsx**
-```typescript
+
+````typescript
 export default function AppointmentsPage() {
   return (
     <div className="page">
@@ -882,7 +889,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -  "author": "ClinicOS Team"
 +  "author": "ClinicOS Team"
  }
-```
+````
 
 ```diff
 --- a/src/App.css
@@ -893,7 +900,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  padding: 0;
    box-sizing: border-box;
  }
- 
+
 -#root {
 -  width: 100%;
 -  min-height: 100vh;
@@ -902,7 +909,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +#root {
 +  height: 100%;
  }
- 
+
  .app {
    display: flex;
    flex-direction: column;
@@ -910,7 +917,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  height: 100vh;
 +  background-color: #f8fafc;
  }
- 
+
 -.app-header {
 +.header {
    background-color: #1e40af;
@@ -923,7 +930,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  height: 64px;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
  }
- 
+
 -.header-content {
 +.header-search {
    display: flex;
@@ -933,7 +940,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  max-width: 500px;
 +  position: relative;
  }
- 
+
 -.logo {
 -  font-size: 1.5rem;
 -  font-weight: bold;
@@ -942,7 +949,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  left: 12px;
 +  color: #94a3b8;
  }
- 
+
 -.app-nav {
 +.search-input {
 +  width: 100%;
@@ -965,7 +972,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -  gap: 1rem;
 +  gap: 20px;
  }
- 
+
 -.nav-link {
 -  color: white;
 +.icon-button {
@@ -1200,7 +1207,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import MedicalRecordsPage from './pages/MedicalRecordsPage';
 +import SettingsPage from './pages/SettingsPage';
  import './App.css';
- 
+
  function App() {
    return (
 -    <div className="app" data-testid="app">
@@ -1249,7 +1256,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </BrowserRouter>
    );
  }
- 
+
  export default App;
 ```
 
@@ -1262,7 +1269,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import App from './App.tsx';
  import './index.css';
 -import { BrowserRouter } from 'react-router-dom';
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
 -    <BrowserRouter>
@@ -1346,7 +1353,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +import MedicalRecordsPage from './pages/MedicalRecordsPage';
 +import SettingsPage from './pages/SettingsPage';
  import './App.css';
- 
+
  function App() {
    return (
 -    <div className="app" data-testid="app">
@@ -1395,7 +1402,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +    </BrowserRouter>
    );
  }
- 
+
  export default App;
 ```
 
@@ -1408,7 +1415,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  padding: 0;
    box-sizing: border-box;
  }
- 
+
 -#root {
 -  width: 100%;
 -  min-height: 100vh;
@@ -1417,7 +1424,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +#root {
 +  height: 100%;
  }
- 
+
  .app {
    display: flex;
    flex-direction: column;
@@ -1425,7 +1432,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  height: 100vh;
 +  background-color: #f8fafc;
  }
- 
+
 -.app-header {
 +.header {
    background-color: #1e40af;
@@ -1438,7 +1445,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  height: 64px;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
  }
- 
+
 -.header-content {
 +.header-search {
    display: flex;
@@ -1448,7 +1455,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  max-width: 500px;
 +  position: relative;
  }
- 
+
 -.logo {
 -  font-size: 1.5rem;
 -  font-weight: bold;
@@ -1457,7 +1464,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 +  left: 12px;
 +  color: #94a3b8;
  }
- 
+
 -.app-nav {
 +.search-input {
 +  width: 100%;
@@ -1480,7 +1487,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 -  gap: 1rem;
 +  gap: 20px;
  }
- 
+
 -.nav-link {
 +.icon-button {
 +  background: none;
@@ -1704,7 +1711,7 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
  import App from './App.tsx';
  import './index.css';
 -import { BrowserRouter } from 'react-router-dom';
- 
+
  ReactDOM.createRoot(document.getElementById('root')!).render(
    <React.StrictMode>
 -    <BrowserRouter>
@@ -1716,9 +1723,11 @@ Respond with diffs only (```diff blocks). Full file output only if file does not
 ```
 
 **New file: src/components/Header.tsx**
+
 ```typescript
 import { Bell, Search, User } from 'lucide-react';
 
 export default function Header() {
   return (
     <header
+```

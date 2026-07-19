@@ -36,15 +36,12 @@ test('browser-e2e builds the frontend against the local backend (VITE_API_URL)',
     job,
     /VITE_API_URL:\s*http:\/\/localhost:3001/,
     'browser-e2e must set VITE_API_URL=http://localhost:3001 so the production-mode ' +
-    'Vite build cannot fall back to the real Railway backend (frontend/src/config.ts)',
+      'Vite build cannot fall back to the real Railway backend (frontend/src/config.ts)',
   );
 });
 
 test('playwright is a pinned root devDependency present in the lockfile', () => {
-  assert.ok(
-    pkg.devDependencies?.playwright,
-    'playwright must be declared in root devDependencies',
-  );
+  assert.ok(pkg.devDependencies?.playwright, 'playwright must be declared in root devDependencies');
   assert.ok(
     lock.packages?.['node_modules/playwright']?.version,
     'playwright must be resolved in package-lock.json',

@@ -59,13 +59,18 @@ test.afterAll(async () => {
   }
 });
 
-test('legacy anamnesi stays reachable (read-only) after duplicate tab removal, survives reload', async ({ page }) => {
+test('legacy anamnesi stays reachable (read-only) after duplicate tab removal, survives reload', async ({
+  page,
+}) => {
   const consoleErrors: string[] = [];
   const badResponses: string[] = [];
-  page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+  page.on('console', (m) => {
+    if (m.type() === 'error') consoleErrors.push(m.text());
+  });
   page.on('response', (r) => {
     const status = r.status();
-    if (status >= 400 && status !== 401 && status !== 403) badResponses.push(`${status} ${r.url()}`);
+    if (status >= 400 && status !== 401 && status !== 403)
+      badResponses.push(`${status} ${r.url()}`);
   });
 
   async function openPatientClinicaSezioniNarrative() {
@@ -83,7 +88,9 @@ test('legacy anamnesi stays reachable (read-only) after duplicate tab removal, s
   await openPatientClinicaSezioniNarrative();
 
   // AC1/AC3 — dedup persists: no duplicate "Anamnesi" tab in the Clinica L3 group.
-  const l3Labels = (await page.locator('button, [role="tab"]').allInnerTexts()).map((s) => s.trim());
+  const l3Labels = (await page.locator('button, [role="tab"]').allInnerTexts()).map((s) =>
+    s.trim(),
+  );
   expect(l3Labels.some((t) => t === 'Anamnesi')).toBe(false);
   expect(l3Labels.some((t) => /Sezioni Cliniche/i.test(t))).toBe(true);
 
@@ -107,6 +114,9 @@ test('legacy anamnesi stays reachable (read-only) after duplicate tab removal, s
   await page.screenshot({ path: join(OUT, 'screenshots', 'result.png'), fullPage: true });
 
   const newConsoleErrors = consoleErrors.filter((e) => !KNOWN_PREEXISTING.test(e));
-  expect(newConsoleErrors, `unexpected console errors: ${newConsoleErrors.join(' | ')}`).toHaveLength(0);
+  expect(
+    newConsoleErrors,
+    `unexpected console errors: ${newConsoleErrors.join(' | ')}`,
+  ).toHaveLength(0);
   expect(badResponses, `unexpected 4xx/5xx responses: ${badResponses.join(' | ')}`).toHaveLength(0);
 });

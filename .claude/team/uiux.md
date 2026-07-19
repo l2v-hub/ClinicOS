@@ -22,44 +22,48 @@ You are the design authority. Every visual decision goes through you. You don't 
 ## Design system — source of truth
 
 ### Colors
-| Token | Value | Usage |
-|-------|-------|-------|
-| Navy header | `#1A3357` | Section headers, table headers |
-| Header row | `#F5F8FB` | Sub-header rows inside tables |
-| Hover | `#EEF2FF` | Row hover |
-| Active row (green) | `#F0FDF4` | Active medication rows |
-| Warning row (amber) | `#FFFBEB` | Suspended items |
-| Data cell | `#DBEAFE` | Cells with data (parametri) |
-| Modified cell | `#E0F2FE` | Recently edited cells |
-| Border | `var(--border)` / `#F0F4F8` | Row separators |
+
+| Token               | Value                       | Usage                          |
+| ------------------- | --------------------------- | ------------------------------ |
+| Navy header         | `#1A3357`                   | Section headers, table headers |
+| Header row          | `#F5F8FB`                   | Sub-header rows inside tables  |
+| Hover               | `#EEF2FF`                   | Row hover                      |
+| Active row (green)  | `#F0FDF4`                   | Active medication rows         |
+| Warning row (amber) | `#FFFBEB`                   | Suspended items                |
+| Data cell           | `#DBEAFE`                   | Cells with data (parametri)    |
+| Modified cell       | `#E0F2FE`                   | Recently edited cells          |
+| Border              | `var(--border)` / `#F0F4F8` | Row separators                 |
 
 ### Components
-| Component | Class/Element | Usage |
-|-----------|--------------|-------|
-| Section wrapper | `ClinicalTableSection` (shared.tsx) | Every clinical section — blue header, collapsible |
-| Table | `.clinicos-table` + `.clinicos-table-wrap` | All data tables (not print) |
-| Table header | `.clinicos-table thead th` | Navy bg, white text, uppercase 11px |
-| Table cell | `.clinicos-table tbody td` | 6-10px padding, 40px height, 12px font |
-| Inline edit | `.vitale-inline-cell` / `.vitale-inline-input` | Parametri Vitali cells |
-| Form | `.cr-inline-form`, `.form-input`, `.form-select` | All inline forms |
-| Badge | `.badge--{green,amber,red,gray,blue,teal,indigo}` | Status indicators |
-| Button primary | `.btn-primary.btn-sm` | Action buttons |
-| Button secondary | `.btn-secondary.btn-sm` | Cancel/secondary actions |
-| Icon button | `.icon-btn.icon-btn--sm` | Edit/delete actions |
+
+| Component        | Class/Element                                     | Usage                                             |
+| ---------------- | ------------------------------------------------- | ------------------------------------------------- |
+| Section wrapper  | `ClinicalTableSection` (shared.tsx)               | Every clinical section — blue header, collapsible |
+| Table            | `.clinicos-table` + `.clinicos-table-wrap`        | All data tables (not print)                       |
+| Table header     | `.clinicos-table thead th`                        | Navy bg, white text, uppercase 11px               |
+| Table cell       | `.clinicos-table tbody td`                        | 6-10px padding, 40px height, 12px font            |
+| Inline edit      | `.vitale-inline-cell` / `.vitale-inline-input`    | Parametri Vitali cells                            |
+| Form             | `.cr-inline-form`, `.form-input`, `.form-select`  | All inline forms                                  |
+| Badge            | `.badge--{green,amber,red,gray,blue,teal,indigo}` | Status indicators                                 |
+| Button primary   | `.btn-primary.btn-sm`                             | Action buttons                                    |
+| Button secondary | `.btn-secondary.btn-sm`                           | Cancel/secondary actions                          |
+| Icon button      | `.icon-btn.icon-btn--sm`                          | Edit/delete actions                               |
 
 ### Layout rules
-| Rule | Value |
-|------|-------|
-| Section border-radius | 8px |
-| Section shadow | `0 1px 4px rgba(0,0,0,0.06)` |
-| Section border | `1px solid var(--border)` |
-| Body padding (non-table) | 12-14px (`.cts__body--padded`) |
-| Min touch target | 44px (tablet) |
-| Font size — table | 12px body, 11px header |
-| Font size — form labels | 12px, uppercase, muted |
+
+| Rule                      | Value                                            |
+| ------------------------- | ------------------------------------------------ |
+| Section border-radius     | 8px                                              |
+| Section shadow            | `0 1px 4px rgba(0,0,0,0.06)`                     |
+| Section border            | `1px solid var(--border)`                        |
+| Body padding (non-table)  | 12-14px (`.cts__body--padded`)                   |
+| Min touch target          | 44px (tablet)                                    |
+| Font size — table         | 12px body, 11px header                           |
+| Font size — form labels   | 12px, uppercase, muted                           |
 | Max columns before scroll | 13 (parametri grid) — internal table scroll only |
 
 ### Forbidden patterns
+
 - ❌ Bare section titles without card wrapper
 - ❌ Popup/modal for inline-editable data (use inline editing)
 - ❌ Global horizontal scroll (only internal table scroll)

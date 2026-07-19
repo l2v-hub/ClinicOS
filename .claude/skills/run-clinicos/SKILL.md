@@ -114,7 +114,7 @@ a headless agent — use the driver instead.
   `http://localhost:5173/C:/Program Files/Git/` because MSYS path-converts the
   bare `/`. Prefix the command with `MSYS_NO_PATHCONV=1` (done above).
 - **`npm install` OOMs on this monorepo** — `FATAL ERROR: ... JavaScript heap
-  out of memory`. Always set `NODE_OPTIONS=--max-old-space-size=4096`.
+out of memory`. Always set `NODE_OPTIONS=--max-old-space-size=4096`.
 - **The app opens on a role-selection screen** (Amministratore / Operatore), not
   the dashboard. Pass a `role` arg so the driver clicks through; without it you
   screenshot the login card (~258 body chars).
@@ -128,7 +128,7 @@ a headless agent — use the driver instead.
 - **Dual container engine.** A Podman container and a `docker-compose.exe`
   shim both exist; `podman compose up` shells to docker-compose and fails with
   `container name "clinicos-postgres" is already in use`. Use `podman start
-  clinicos-postgres` for the existing container. First-time create only:
+clinicos-postgres` for the existing container. First-time create only:
   `podman compose up -d postgres`.
 
 ## Troubleshooting

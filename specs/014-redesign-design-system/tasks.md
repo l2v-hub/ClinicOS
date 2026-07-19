@@ -131,6 +131,7 @@ standalone, demonstrable increment.
 ## Implementation Summary (2026-06-09)
 
 **Done this feature (build-verified, `npm run build` green):**
+
 - Foundational: medical-blue intent tokens; sidebar 64→80px + legibility + stronger active;
   new `PageShell` + `StatusBadge`; `ClinicalTable` gains optional `pageSize` pagination footer,
   `onRowClick`, and `align` column option; `.main-area-clean { min-width:0 }`.
@@ -141,15 +142,17 @@ standalone, demonstrable increment.
   horizontal scroll on tablets.
 
 **Already done by prior specs (009/013) — verified, no change needed:**
+
 - L2 `MainHorizontalNav` + L3 `ContextSubTabs` shared and used everywhere.
 - **Diario already uses shared L3 `SectionTabs`** (`PatientDetail.tsx:1704`) — problem #4 resolved.
 - `OperatorManagement`, `TerapiaFarmacologicaTab`, `DocumentiTab` already use `ClinicalTable`.
 
 **Deviations from the literal task list (justified):**
+
 - `ClinicalDataTable` → canonical `ClinicalTable` (constitution; avoids rename churn).
 - T011 "remove `.filter-chip` CSS" NOT done — `.filter-chip` is used by 6 live pages
   (PatientList/Rooms/Operatori/Consegne/Notes); only the dead `cartella/DiarioTab.tsx`
-  + its `.diario-filters` CSS are removable (left as optional cleanup).
+  - its `.diario-filters` CSS are removable (left as optional cleanup).
 - `RoomsManagement` is a room→bed **card grid**, and `ParametriTab` is a monthly **editable
   matrix** (spec 011) — both are NOT list tables, so they correctly stay specialized, not
   forced into `ClinicalTable`.

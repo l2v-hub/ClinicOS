@@ -6,11 +6,21 @@
   "type": "object",
   "required": [
     "schemaVersion",
-    "allergyStatus", "allergiesText",
-    "diagnosisText", "anamnesisText", "hospitalCourseText", "consultationsText",
-    "imagingDiagnosticsText", "proceduresAndInterventionsText", "therapyText",
-    "adviceAndFollowUpText", "unmappedText",
-    "boldTags", "sourceReferences", "missingSections", "warnings"
+    "allergyStatus",
+    "allergiesText",
+    "diagnosisText",
+    "anamnesisText",
+    "hospitalCourseText",
+    "consultationsText",
+    "imagingDiagnosticsText",
+    "proceduresAndInterventionsText",
+    "therapyText",
+    "adviceAndFollowUpText",
+    "unmappedText",
+    "boldTags",
+    "sourceReferences",
+    "missingSections",
+    "warnings"
   ],
   "additionalProperties": true,
   "properties": {
@@ -26,7 +36,10 @@
     "phone": { "type": "string" },
     "email": { "type": "string" },
 
-    "allergyStatus": { "type": "string", "enum": ["present", "explicitly_absent", "not_documented", "unclear", "conflicting"] },
+    "allergyStatus": {
+      "type": "string",
+      "enum": ["present", "explicitly_absent", "not_documented", "unclear", "conflicting"]
+    },
     "allergiesText": { "type": "string" },
 
     "diagnosisText": { "type": "string" },
@@ -49,7 +62,19 @@
           "sectionKey": { "type": "string" },
           "tagType": {
             "type": "string",
-            "enum": ["SECTION_TITLE", "SUBSECTION_TITLE", "DATE", "TIME", "TEMPORAL_MARKER", "ALLERGY_CRITICAL", "MEDICATION_NAME", "DOSE", "FREQUENCY", "SCHEDULE", "WARNING_TEXT"]
+            "enum": [
+              "SECTION_TITLE",
+              "SUBSECTION_TITLE",
+              "DATE",
+              "TIME",
+              "TEMPORAL_MARKER",
+              "ALLERGY_CRITICAL",
+              "MEDICATION_NAME",
+              "DOSE",
+              "FREQUENCY",
+              "SCHEDULE",
+              "WARNING_TEXT"
+            ]
           },
           "text": { "type": "string" },
           "startOffset": { "type": "integer", "minimum": 0 },

@@ -18,15 +18,34 @@ interface VitaleModalProps {
 }
 
 const MESI = [
-  'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
-  'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre',
+  'Gennaio',
+  'Febbraio',
+  'Marzo',
+  'Aprile',
+  'Maggio',
+  'Giugno',
+  'Luglio',
+  'Agosto',
+  'Settembre',
+  'Ottobre',
+  'Novembre',
+  'Dicembre',
 ];
 
 const EVACUAZIONE_OPTIONS = ['—', 'Sì', 'No', 'Alvo regolare', 'Stipsi', 'Diarrea'];
 
 export function VitaleModal({
-  paziente, giorno, mese, anno, colKey, colLabel, colSub,
-  currentData, operatoreNome, onSave, onClose,
+  paziente,
+  giorno,
+  mese,
+  anno,
+  colKey,
+  colLabel,
+  colSub,
+  currentData,
+  operatoreNome,
+  onSave,
+  onClose,
 }: VitaleModalProps) {
   const [form, setForm] = useState<ParametroGiorno>({ ...currentData });
   const [paSis, setPaSis] = useState('');
@@ -57,8 +76,11 @@ export function VitaleModal({
   }, [onClose]);
 
   function setF(k: keyof ParametroGiorno, v: string) {
-    setForm(prev => ({ ...prev, [k]: v }));
-    if (errorField === k) { setError(null); setErrorField(null); }
+    setForm((prev) => ({ ...prev, [k]: v }));
+    if (errorField === k) {
+      setError(null);
+      setErrorField(null);
+    }
   }
 
   function validate(): boolean {
@@ -70,7 +92,14 @@ export function VitaleModal({
         return false;
       }
     }
-    const numericKeys: (keyof ParametroGiorno)[] = ['fc', 'spo2', 'temperatura', 'dtx08', 'dtx12', 'dtx18'];
+    const numericKeys: (keyof ParametroGiorno)[] = [
+      'fc',
+      'spo2',
+      'temperatura',
+      'dtx08',
+      'dtx12',
+      'dtx18',
+    ];
     if (colKey && numericKeys.includes(colKey)) {
       const val = form[colKey] as string | undefined;
       if (!val?.trim()) {
@@ -105,12 +134,29 @@ export function VitaleModal({
       return (
         <div key="pa" className={`npm-field${isErr ? ' npm-field--error' : ''}`}>
           <label className="npm-label">Sistolica (mmHg) *</label>
-          <input className={`npm-input${isErr ? ' npm-input--error' : ''}`}
-            type="number" value={paSis} onChange={e => { setPaSis(e.target.value); if (isErr) { setError(null); setErrorField(null); } }}
-            placeholder="120" />
-          <label className="npm-label" style={{ marginTop: 8 }}>Diastolica (mmHg)</label>
-          <input className="npm-input" type="number" value={paDia} onChange={e => setPaDia(e.target.value)}
-            placeholder="80" />
+          <input
+            className={`npm-input${isErr ? ' npm-input--error' : ''}`}
+            type="number"
+            value={paSis}
+            onChange={(e) => {
+              setPaSis(e.target.value);
+              if (isErr) {
+                setError(null);
+                setErrorField(null);
+              }
+            }}
+            placeholder="120"
+          />
+          <label className="npm-label" style={{ marginTop: 8 }}>
+            Diastolica (mmHg)
+          </label>
+          <input
+            className="npm-input"
+            type="number"
+            value={paDia}
+            onChange={(e) => setPaDia(e.target.value)}
+            placeholder="80"
+          />
           {isErr && error && <span className="npm-field-error">{error}</span>}
         </div>
       );
@@ -120,9 +166,16 @@ export function VitaleModal({
       return (
         <div key="evacuazione" className="npm-field">
           <label className="npm-label">Evacuazione</label>
-          <select className="npm-input npm-select" value={(form.evacuazione as string) ?? '—'}
-            onChange={e => setF('evacuazione', e.target.value)}>
-            {EVACUAZIONE_OPTIONS.map(o => <option key={o} value={o}>{o}</option>)}
+          <select
+            className="npm-input npm-select"
+            value={(form.evacuazione as string) ?? '—'}
+            onChange={(e) => setF('evacuazione', e.target.value)}
+          >
+            {EVACUAZIONE_OPTIONS.map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
           </select>
         </div>
       );
@@ -132,9 +185,13 @@ export function VitaleModal({
       return (
         <div key="note" className="npm-field npm-span-2">
           <label className="npm-label">Note</label>
-          <textarea className="npm-input npm-textarea" rows={3}
-            value={(form.note as string) ?? ''} onChange={e => setF('note', e.target.value)}
-            placeholder="Eventuali note..." />
+          <textarea
+            className="npm-input npm-textarea"
+            rows={3}
+            value={(form.note as string) ?? ''}
+            onChange={(e) => setF('note', e.target.value)}
+            placeholder="Eventuali note..."
+          />
         </div>
       );
     }
@@ -152,17 +209,27 @@ export function VitaleModal({
     };
 
     const displayLabel = fieldLabels[key] ?? `${label}${sub ? ` (${sub})` : ''}`;
-    const numericKeys: (keyof ParametroGiorno)[] = ['fc', 'spo2', 'temperatura', 'dtx08', 'dtx12', 'dtx18', 'catetere'];
+    const numericKeys: (keyof ParametroGiorno)[] = [
+      'fc',
+      'spo2',
+      'temperatura',
+      'dtx08',
+      'dtx12',
+      'dtx18',
+      'catetere',
+    ];
     const isNumeric = numericKeys.includes(key);
 
     return (
       <div key={String(key)} className={`npm-field${isErr ? ' npm-field--error' : ''}`}>
         <label className="npm-label">{displayLabel}</label>
-        <input className={`npm-input${isErr ? ' npm-input--error' : ''}`}
+        <input
+          className={`npm-input${isErr ? ' npm-input--error' : ''}`}
           type={isNumeric ? 'number' : 'text'}
           value={(form[key] as string | undefined) ?? ''}
-          onChange={e => setF(key, e.target.value)}
-          placeholder={sub ?? ''} />
+          onChange={(e) => setF(key, e.target.value)}
+          placeholder={sub ?? ''}
+        />
         {isErr && error && <span className="npm-field-error">{error}</span>}
       </div>
     );
@@ -185,8 +252,7 @@ export function VitaleModal({
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box modal-box--vitale" onClick={e => e.stopPropagation()}>
-
+      <div className="modal-box modal-box--vitale" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="npm-header">
           <div className="npm-header__text">
@@ -204,20 +270,26 @@ export function VitaleModal({
         <div className="npm-body">
           <div className="npm-grid">
             {colKey === null
-              ? GRID_COLS.map(c => renderField(c.key, c.label, c.sub))
-              : renderField(colKey, colLabel, colSub)
-            }
+              ? GRID_COLS.map((c) => renderField(c.key, c.label, c.sub))
+              : renderField(colKey, colLabel, colSub)}
 
             {/* Always show time and operator */}
             <div className="npm-field">
               <label className="npm-label">Ora rilevazione</label>
-              <input className="npm-input" type="time" value={oraRilevazione}
-                onChange={e => setOraRilevazione(e.target.value)} />
+              <input
+                className="npm-input"
+                type="time"
+                value={oraRilevazione}
+                onChange={(e) => setOraRilevazione(e.target.value)}
+              />
             </div>
             <div className="npm-field">
               <label className="npm-label">Operatore</label>
-              <input className="npm-input" value={operatore}
-                onChange={e => setOperatore(e.target.value)} />
+              <input
+                className="npm-input"
+                value={operatore}
+                onChange={(e) => setOperatore(e.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -225,11 +297,14 @@ export function VitaleModal({
         {/* Footer */}
         <div className="npm-footer">
           <div className="npm-footer__actions">
-            <button className="btn-secondary" onClick={onClose}>Annulla</button>
-            <button className="btn-primary" onClick={handleSave}><IcoCheck /> Salva parametro</button>
+            <button className="btn-secondary" onClick={onClose}>
+              Annulla
+            </button>
+            <button className="btn-primary" onClick={handleSave}>
+              <IcoCheck /> Salva parametro
+            </button>
           </div>
         </div>
-
       </div>
     </div>
   );

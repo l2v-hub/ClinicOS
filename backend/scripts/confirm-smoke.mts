@@ -15,7 +15,7 @@ const base = `http://127.0.0.1:${port}/ai/extraction/jobs`;
 // REQ-019: import endpoints require an operator role header.
 const OP = { 'X-Operator-Id': 'op-smoke', 'X-Operator-Role': 'operatore' };
 const af = (url: string, opts: RequestInit = {}) =>
-  fetch(url, { ...opts, headers: { ...OP, ...(opts.headers as Record<string, string> ?? {}) } });
+  fetch(url, { ...opts, headers: { ...OP, ...((opts.headers as Record<string, string>) ?? {}) } });
 
 const createdPatientIds: string[] = [];
 const createdJobIds: string[] = [];
@@ -35,13 +35,20 @@ async function newReviewReadyJob(): Promise<string> {
   return jobId;
 }
 
-const PATIENT = { firstName: 'TestSint', lastName: 'Paziente', dateOfBirth: '1950-05-05', sex: 'M', phone: '000' };
+const PATIENT = {
+  firstName: 'TestSint',
+  lastName: 'Paziente',
+  dateOfBirth: '1950-05-05',
+  sex: 'M',
+  phone: '000',
+};
 
 try {
   // 1. Confirm -> creates patient transactionally.
   const job1 = await newReviewReadyJob();
   let res = await af(`${base}/${job1}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: PATIENT, cartella: { statoRicovero: 'ricoverato' } }),
   });
   assert.equal(res.status, 201, 'first confirm 201 created');
@@ -58,7 +65,8 @@ try {
 
   // 3. Double confirm of the SAME job -> idempotent, no duplicate.
   res = await af(`${base}/${job1}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: PATIENT }),
   });
   assert.equal(res.status, 200, 'second confirm 200 idempotent');
@@ -69,7 +77,8 @@ try {
   // 4. A NEW job with same name/dob -> duplicate flagged (409).
   const job2 = await newReviewReadyJob();
   res = await af(`${base}/${job2}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: PATIENT }),
   });
   assert.equal(res.status, 409, 'duplicate flagged 409');
@@ -79,7 +88,8 @@ try {
 
   // 5. Override duplicate -> creates a second patient.
   res = await af(`${base}/${job2}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: PATIENT, confirmDuplicate: true }),
   });
   assert.equal(res.status, 201, 'override 201 created');
@@ -96,14 +106,18 @@ try {
   // 7. Required-field validation rejects bad payload.
   const job3 = await newReviewReadyJob();
   res = await af(`${base}/${job3}/confirm`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ patient: { firstName: '', lastName: '', dateOfBirth: '' } }),
   });
   assert.equal(res.status, 400, 'missing required -> 400, no patient created');
 
   // 8. Audit trail written.
   const audits = await prisma.importAudit.findMany({ where: { jobId: job1 } });
-  assert.ok(audits.some((a) => a.action === 'confirm_committed'), 'audit confirm_committed present');
+  assert.ok(
+    audits.some((a) => a.action === 'confirm_committed'),
+    'audit confirm_committed present',
+  );
 
   console.log('REQ-018 confirm-smoke: ALL ASSERTIONS PASS');
 } finally {

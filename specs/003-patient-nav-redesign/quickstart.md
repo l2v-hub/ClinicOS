@@ -18,11 +18,11 @@ npm run build
 
 Aprire DevTools → Responsive mode:
 
-| Viewport | Descrizione |
-|----------|-------------|
+| Viewport | Descrizione              |
+| -------- | ------------------------ |
 | 1024×768 | Tablet landscape minimum |
-| 1180×820 | iPad Pro portrait |
-| 1440×900 | Desktop |
+| 1180×820 | iPad Pro portrait        |
+| 1440×900 | Desktop                  |
 
 ## Workflow test manuale — Gerarchia visiva
 

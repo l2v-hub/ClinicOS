@@ -10,7 +10,7 @@
 
 ---
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 — Layout Full-Width Adattivo (Priority: P1)
 
@@ -84,7 +84,7 @@ Un operatore usa i sotto-tab del terzo livello (es. Anamnesi, Diagnosi, Terapia 
 
 ---
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -107,7 +107,7 @@ Un operatore usa i sotto-tab del terzo livello (es. Anamnesi, Diagnosi, Terapia 
 
 ---
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

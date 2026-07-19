@@ -28,7 +28,8 @@ const CREATE_VERB = /\b(crea|creare|fissa|fissare|prenota|prenotare)\b/;
 const UPDATE_VERB = /\b(sposta|spostare|cambia|cambiare|modifica|modificare)\b/;
 // Old-time token of an update command ("l'appuntamento delle 15", "dalle 15"). Required for
 // cambia/modifica so a narrative text merely containing "appuntamento" is never hijacked.
-const OLD_TIME_RE = /\b(?:delle|dalle)(?:\s+ore)?\s+(\d{1,2})(?::(\d{2})|\.(\d{2})|\s+e\s+(\d{1,2}))?\b/;
+const OLD_TIME_RE =
+  /\b(?:delle|dalle)(?:\s+ore)?\s+(\d{1,2})(?::(\d{2})|\.(\d{2})|\s+e\s+(\d{1,2}))?\b/;
 const NEW_TIME_RE = /\balle(?:\s+ore)?\s+(\d{1,2})(?::(\d{2})|\.(\d{2})|\s+e\s+(\d{1,2}))?\b/;
 
 function hhmm(h: string, m1?: string, m2?: string, m3?: string): string | null {
@@ -45,12 +46,21 @@ function localDate(d: Date): string {
 
 /** Italian relative/explicit date: oggi, domani, dopodomani, "il 12/07[/2026]". */
 function parseSpokenDate(q: string, now: Date): string | null {
-  if (/\bdopodomani\b/.test(q)) { const d = new Date(now); d.setDate(d.getDate() + 2); return localDate(d); }
-  if (/\bdomani\b/.test(q)) { const d = new Date(now); d.setDate(d.getDate() + 1); return localDate(d); }
+  if (/\bdopodomani\b/.test(q)) {
+    const d = new Date(now);
+    d.setDate(d.getDate() + 2);
+    return localDate(d);
+  }
+  if (/\bdomani\b/.test(q)) {
+    const d = new Date(now);
+    d.setDate(d.getDate() + 1);
+    return localDate(d);
+  }
   if (/\boggi\b/.test(q)) return localDate(now);
   const m = /\b(?:il|del|al)\s+(\d{1,2})[/\-.](\d{1,2})(?:[/\-.](\d{2,4}))?\b/.exec(q);
   if (m) {
-    const day = parseInt(m[1], 10), month = parseInt(m[2], 10);
+    const day = parseInt(m[1], 10),
+      month = parseInt(m[2], 10);
     let year = m[3] ? parseInt(m[3], 10) : now.getFullYear();
     if (year < 100) year += 2000;
     if (day < 1 || day > 31 || month < 1 || month > 12) return null;
@@ -61,7 +71,20 @@ function parseSpokenDate(q: string, now: Date): string | null {
 
 // Words that can follow "appuntamento" without being a tipologia.
 const TIPOLOGIA_STOPWORDS = new Set([
-  'domani', 'dopodomani', 'oggi', 'alle', 'delle', 'dalle', 'il', 'per', 'a', 'al', 'del', 'di', 'con', 'ore',
+  'domani',
+  'dopodomani',
+  'oggi',
+  'alle',
+  'delle',
+  'dalle',
+  'il',
+  'per',
+  'a',
+  'al',
+  'del',
+  'di',
+  'con',
+  'ore',
 ]);
 
 /** Tipologia = word right after "appuntamento" ("appuntamento fisioterapia", "appuntamento di controllo"). */
@@ -73,8 +96,10 @@ function parseTipologia(q: string): string | null {
 }
 
 // Patient from the ORIGINAL text (casing preserved for the DB lookup).
-const CREATE_PATIENT_RE = /\bper\s+(?:il\s+paziente\s+|la\s+paziente\s+|il\s+sig\.?\s+|la\s+sig\.?ra\s+)?([A-Za-zÀ-ÿ'][\wÀ-ÿ']+(?:\s+[A-Za-zÀ-ÿ'][\wÀ-ÿ']+)?)\s*[?.!]*\s*$/;
-const UPDATE_PATIENT_RE = /\b(?:di|del paziente|della paziente)\s+([A-ZÀ-Ü][\wÀ-ÿ']+(?:\s+[A-ZÀ-Ü][\wÀ-ÿ']+)?)/;
+const CREATE_PATIENT_RE =
+  /\bper\s+(?:il\s+paziente\s+|la\s+paziente\s+|il\s+sig\.?\s+|la\s+sig\.?ra\s+)?([A-Za-zÀ-ÿ'][\wÀ-ÿ']+(?:\s+[A-Za-zÀ-ÿ'][\wÀ-ÿ']+)?)\s*[?.!]*\s*$/;
+const UPDATE_PATIENT_RE =
+  /\b(?:di|del paziente|della paziente)\s+([A-ZÀ-Ü][\wÀ-ÿ']+(?:\s+[A-ZÀ-Ü][\wÀ-ÿ']+)?)/;
 
 export interface AppointmentPlanContext {
   currentPatientId?: string;
@@ -115,15 +140,26 @@ export function matchAppointmentCommand(
     const plan = make('update_appointment');
     const from = oldTime ? hhmm(oldTime[1], oldTime[2], oldTime[3], oldTime[4]) : null;
     // The new time is the "alle HH" AFTER the old-time token (both use different prepositions).
-    const newMatch = NEW_TIME_RE.exec(oldTime ? q.slice((oldTime.index ?? 0) + oldTime[0].length) : q);
+    const newMatch = NEW_TIME_RE.exec(
+      oldTime ? q.slice((oldTime.index ?? 0) + oldTime[0].length) : q,
+    );
     const to = newMatch ? hhmm(newMatch[1], newMatch[2], newMatch[3], newMatch[4]) : null;
     const data = parseSpokenDate(q, now) ?? localDate(now); // update senza data esplicita = oggi
     const patientQuery = UPDATE_PATIENT_RE.exec(original)?.[1]?.trim();
 
-    plan.fields = { data, ...(from ? { oldTime: from } : {}), ...(to ? { newTime: to } : {}), ...(patientQuery ? { patientQuery } : {}) };
-    if (!from) plan.ambiguities.push('Orario dell’appuntamento da spostare non riconosciuto (es. «delle 15»)');
+    plan.fields = {
+      data,
+      ...(from ? { oldTime: from } : {}),
+      ...(to ? { newTime: to } : {}),
+      ...(patientQuery ? { patientQuery } : {}),
+    };
+    if (!from)
+      plan.ambiguities.push(
+        'Orario dell’appuntamento da spostare non riconosciuto (es. «delle 15»)',
+      );
     if (!to) plan.ambiguities.push('Nuovo orario non riconosciuto (es. «alle 16»)');
-    if (patientQuery) plan.patientId = null; // risolto dal grounding sul nome indicato
+    if (patientQuery)
+      plan.patientId = null; // risolto dal grounding sul nome indicato
     else if (!ctx.currentPatientId) plan.ambiguities.push('Paziente non identificato con certezza');
     return plan;
   }
@@ -137,10 +173,16 @@ export function matchAppointmentCommand(
     const tipologia = parseTipologia(q) ?? 'visita';
     const patientQuery = CREATE_PATIENT_RE.exec(original)?.[1]?.trim();
 
-    plan.fields = { ...(data ? { data } : {}), ...(ora ? { ora } : {}), tipologia, ...(patientQuery ? { patientQuery } : {}) };
+    plan.fields = {
+      ...(data ? { data } : {}),
+      ...(ora ? { ora } : {}),
+      tipologia,
+      ...(patientQuery ? { patientQuery } : {}),
+    };
     if (!data) plan.ambiguities.push('Manca la data dell’appuntamento (es. «domani», «il 12/07»)');
     if (!ora) plan.ambiguities.push('Manca l’orario dell’appuntamento (es. «alle 10:30»)');
-    if (patientQuery) plan.patientId = null; // risolto dal grounding sul nome indicato
+    if (patientQuery)
+      plan.patientId = null; // risolto dal grounding sul nome indicato
     else if (!ctx.currentPatientId) plan.ambiguities.push('Paziente non identificato con certezza');
     return plan;
   }
@@ -150,15 +192,31 @@ export function matchAppointmentCommand(
 
 // ── grounding (DB lookups, injectable) ──────────────────────────────────────
 
-export interface PatientHit { id: string; firstName: string; lastName: string }
-export interface AppointmentHit { id: string; operatorId: string }
+export interface PatientHit {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+export interface AppointmentHit {
+  id: string;
+  operatorId: string;
+}
 
 export interface AppointmentLookupDeps {
   searchPatients?: (query: string) => Promise<PatientHit[]>;
   getPatient?: (id: string) => Promise<PatientHit | null>;
   /** Same 30-min slot rule as the service: same operator + same date/time = conflict. */
-  findConflict?: (operatorId: string, data: string, ora: string, excludeId?: string) => Promise<{ id: string } | null>;
-  findAppointmentAt?: (patientId: string, data: string, ora: string) => Promise<AppointmentHit | null>;
+  findConflict?: (
+    operatorId: string,
+    data: string,
+    ora: string,
+    excludeId?: string,
+  ) => Promise<{ id: string } | null>;
+  findAppointmentAt?: (
+    patientId: string,
+    data: string,
+    ora: string,
+  ) => Promise<AppointmentHit | null>;
 }
 
 // Exported for reuse by the consegne grounding (issue #130) — same lookup, no duplication.
@@ -181,15 +239,27 @@ export async function defaultSearchPatients(query: string): Promise<PatientHit[]
 
 export async function defaultGetPatient(id: string): Promise<PatientHit | null> {
   const { prisma } = await import('../../lib/prisma.js');
-  return prisma.patient.findUnique({ where: { id }, select: { id: true, firstName: true, lastName: true } });
+  return prisma.patient.findUnique({
+    where: { id },
+    select: { id: true, firstName: true, lastName: true },
+  });
 }
 
-async function defaultFindConflict(operatorId: string, data: string, ora: string, excludeId?: string) {
+async function defaultFindConflict(
+  operatorId: string,
+  data: string,
+  ora: string,
+  excludeId?: string,
+) {
   const { findConflict } = await import('../../services/appointment-service.js');
   return findConflict(operatorId, data, ora, excludeId);
 }
 
-async function defaultFindAppointmentAt(patientId: string, data: string, ora: string): Promise<AppointmentHit | null> {
+async function defaultFindAppointmentAt(
+  patientId: string,
+  data: string,
+  ora: string,
+): Promise<AppointmentHit | null> {
   const { findAppointmentAt } = await import('../../services/appointment-service.js');
   const dto = await findAppointmentAt(patientId, data, ora);
   return dto ? { id: dto.id, operatorId: dto.operatorId } : null;
@@ -218,8 +288,10 @@ export async function groundAppointmentPlan(
   // 1) patient: named in the command > current context
   if (query) {
     const hits = await searchPatients(query);
-    if (hits.length === 1) { plan.patientId = hits[0].id; patientName = displayName(hits[0]); }
-    else if (hits.length === 0) plan.ambiguities.push(`Paziente «${query}» non trovato`);
+    if (hits.length === 1) {
+      plan.patientId = hits[0].id;
+      patientName = displayName(hits[0]);
+    } else if (hits.length === 0) plan.ambiguities.push(`Paziente «${query}» non trovato`);
     else plan.ambiguities.push(`Più pazienti corrispondono a «${query}»: specifica nome e cognome`);
   } else if (plan.patientId) {
     const p = await getPatient(plan.patientId);
@@ -234,7 +306,10 @@ export async function groundAppointmentPlan(
     const ora = typeof plan.fields.ora === 'string' ? plan.fields.ora : undefined;
     if (plan.patientId && data && ora) {
       const conflict = await findConflict(operatorId, data, ora);
-      if (conflict) plan.ambiguities.push(`Conflitto slot: esiste già un appuntamento il ${data} alle ${ora} per questo operatore`);
+      if (conflict)
+        plan.ambiguities.push(
+          `Conflitto slot: esiste già un appuntamento il ${data} alle ${ora} per questo operatore`,
+        );
     }
   }
 
@@ -249,7 +324,10 @@ export async function groundAppointmentPlan(
         plan.targetRecordId = target.id;
         if (newTime) {
           const conflict = await findConflict(target.operatorId, data, newTime, target.id);
-          if (conflict) plan.ambiguities.push(`Conflitto slot: esiste già un appuntamento il ${data} alle ${newTime} per questo operatore`);
+          if (conflict)
+            plan.ambiguities.push(
+              `Conflitto slot: esiste già un appuntamento il ${data} alle ${newTime} per questo operatore`,
+            );
         }
       }
     }
@@ -262,17 +340,18 @@ export async function groundAppointmentPlan(
 export function buildAppointmentPreview(plan: ActionPlan, patientName?: string): ActionPreview {
   const f = plan.fields;
   const val = (v: unknown) => (typeof v === 'string' && v ? v : '—');
-  const lines = plan.actionType === 'create_appointment'
-    ? [
-        { label: 'Data', value: val(f.data) },
-        { label: 'Orario', value: val(f.ora) },
-        { label: 'Tipologia', value: val(f.tipologia) },
-      ]
-    : [
-        { label: 'Data', value: val(f.data) },
-        { label: 'Orario attuale', value: val(f.oldTime) },
-        { label: 'Nuovo orario', value: val(f.newTime) },
-      ];
+  const lines =
+    plan.actionType === 'create_appointment'
+      ? [
+          { label: 'Data', value: val(f.data) },
+          { label: 'Orario', value: val(f.ora) },
+          { label: 'Tipologia', value: val(f.tipologia) },
+        ]
+      : [
+          { label: 'Data', value: val(f.data) },
+          { label: 'Orario attuale', value: val(f.oldTime) },
+          { label: 'Nuovo orario', value: val(f.newTime) },
+        ];
   return {
     actionType: plan.actionType,
     patientId: plan.patientId,
@@ -280,8 +359,10 @@ export function buildAppointmentPreview(plan: ActionPlan, patientName?: string):
     title: plan.actionType === 'create_appointment' ? 'Crea appuntamento' : 'Sposta appuntamento',
     lines,
     ambiguities: plan.ambiguities,
-    canExecute: plan.ambiguities.length === 0 && !!plan.patientId
-      && (plan.actionType !== 'update_appointment' || !!plan.targetRecordId),
+    canExecute:
+      plan.ambiguities.length === 0 &&
+      !!plan.patientId &&
+      (plan.actionType !== 'update_appointment' || !!plan.targetRecordId),
     warnings: [],
   };
 }

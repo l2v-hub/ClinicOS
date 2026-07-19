@@ -90,8 +90,8 @@ function App() {
               maxWidth: '760px',
             }}
           >
-            ClinicOS helps teams manage patient records, appointments, billing, and daily
-            operations with a clean, reliable workflow designed for modern healthcare practices.
+            ClinicOS helps teams manage patient records, appointments, billing, and daily operations
+            with a clean, reliable workflow designed for modern healthcare practices.
           </p>
         </section>
 
@@ -146,9 +146,7 @@ function App() {
             boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08)',
           }}
         >
-          <h3 style={{ marginTop: 0, marginBottom: '1rem', fontSize: '1.35rem' }}>
-            Core Modules
-          </h3>
+          <h3 style={{ marginTop: 0, marginBottom: '1rem', fontSize: '1.35rem' }}>Core Modules</h3>
 
           <div
             style={{

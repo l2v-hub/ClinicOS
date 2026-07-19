@@ -3,31 +3,77 @@
 
 import type { SourceReference } from './types.js';
 
-export function patientFieldSource(patientId: string, field: string, exactText?: string): SourceReference {
+export function patientFieldSource(
+  patientId: string,
+  field: string,
+  exactText?: string,
+): SourceReference {
   return { sourceType: 'PATIENT_FIELD', patientId, recordId: patientId, label: field, exactText };
 }
 
-export function narrativeSource(patientId: string, sectionKey: string, recordId: string, exactText?: string, recordedAt?: string): SourceReference {
-  return { sourceType: 'NARRATIVE_SECTION', patientId, recordId, sectionKey, label: sectionKey, exactText, recordedAt };
+export function narrativeSource(
+  patientId: string,
+  sectionKey: string,
+  recordId: string,
+  exactText?: string,
+  recordedAt?: string,
+): SourceReference {
+  return {
+    sourceType: 'NARRATIVE_SECTION',
+    patientId,
+    recordId,
+    sectionKey,
+    label: sectionKey,
+    exactText,
+    recordedAt,
+  };
 }
 
-export function vitalSource(patientId: string, recordId: string, label: string, exactText?: string, recordedAt?: string): SourceReference {
+export function vitalSource(
+  patientId: string,
+  recordId: string,
+  label: string,
+  exactText?: string,
+  recordedAt?: string,
+): SourceReference {
   return { sourceType: 'VITAL_SIGN', patientId, recordId, label, exactText, recordedAt };
 }
 
-export function diarySource(patientId: string, recordId: string, label: string, exactText?: string, recordedAt?: string): SourceReference {
+export function diarySource(
+  patientId: string,
+  recordId: string,
+  label: string,
+  exactText?: string,
+  recordedAt?: string,
+): SourceReference {
   return { sourceType: 'DIARY_ENTRY', patientId, recordId, label, exactText, recordedAt };
 }
 
-export function documentSource(patientId: string, documentId: string, label: string, pageNumber?: number): SourceReference {
+export function documentSource(
+  patientId: string,
+  documentId: string,
+  label: string,
+  pageNumber?: number,
+): SourceReference {
   return { sourceType: 'DOCUMENT', patientId, recordId: documentId, documentId, pageNumber, label };
 }
 
-export function appointmentSource(patientId: string, recordId: string, label: string, recordedAt?: string): SourceReference {
+export function appointmentSource(
+  patientId: string,
+  recordId: string,
+  label: string,
+  recordedAt?: string,
+): SourceReference {
   return { sourceType: 'APPOINTMENT', patientId, recordId, label, recordedAt };
 }
 
-export function therapySource(patientId: string, recordId: string, label: string, exactText?: string, recordedAt?: string): SourceReference {
+export function therapySource(
+  patientId: string,
+  recordId: string,
+  label: string,
+  exactText?: string,
+  recordedAt?: string,
+): SourceReference {
   return { sourceType: 'THERAPY', patientId, recordId, label, exactText, recordedAt };
 }
 
@@ -35,5 +81,12 @@ export function therapySource(patientId: string, recordId: string, label: string
 // composable query engine already uses for room/bed/roomAssignment rows: sourceType 'OCCUPANCY',
 // patientId '' when the record is not patient-owned).
 export function roomOccupancySource(exactText?: string, recordedAt?: string): SourceReference {
-  return { sourceType: 'OCCUPANCY', patientId: '', recordId: 'rooms-occupancy', label: 'Occupazione camere', exactText, recordedAt };
+  return {
+    sourceType: 'OCCUPANCY',
+    patientId: '',
+    recordId: 'rooms-occupancy',
+    label: 'Occupazione camere',
+    exactText,
+    recordedAt,
+  };
 }

@@ -14,6 +14,7 @@ FILE: path/to/file.ext
 END FILE
 
 Rules:
+
 - Output the FULL file content. No partial content. No placeholders.
 - Do NOT output unified diffs (--- / +++ / @@ lines). Diffs are rejected.
 - Do NOT use ```diff blocks. Diffs are rejected.

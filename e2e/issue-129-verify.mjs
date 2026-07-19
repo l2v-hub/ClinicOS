@@ -21,7 +21,9 @@ const failures = [];
 
 function checkOrder(view, names) {
   if (names.length < 2) {
-    failures.push(`${view}: trovati solo ${names.length} pazienti — servono almeno 2 per la verifica`);
+    failures.push(
+      `${view}: trovati solo ${names.length} pazienti — servono almeno 2 per la verifica`,
+    );
     return;
   }
   for (let i = 1; i < names.length; i++) {
@@ -46,12 +48,14 @@ async function nav(page, title) {
 }
 
 async function texts(page, selector) {
-  return page.$$eval(selector, els => els.map(el => (el.childNodes[0]?.textContent ?? el.textContent ?? '').trim()));
+  return page.$$eval(selector, (els) =>
+    els.map((el) => (el.childNodes[0]?.textContent ?? el.textContent ?? '').trim()),
+  );
 }
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
-page.on('dialog', d => d.accept());
+page.on('dialog', (d) => d.accept());
 
 try {
   await login(page);
@@ -102,7 +106,9 @@ try {
   checkOrder('parametri dopo refresh', dopoRefresh);
 } catch (err) {
   failures.push(`Errore esecuzione: ${err.message}`);
-  await page.screenshot({ path: join(outDir, `${prefix}-error.png`), fullPage: true }).catch(() => {});
+  await page
+    .screenshot({ path: join(outDir, `${prefix}-error.png`), fullPage: true })
+    .catch(() => {});
 } finally {
   await browser.close();
 }

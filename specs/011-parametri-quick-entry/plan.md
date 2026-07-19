@@ -23,11 +23,13 @@ Recast `MultiPatientParametri.tsx` from a tall card-per-patient layout into a de
 **Project Type**: Web application monorepo. This feature touches only `frontend/`.
 
 **Performance Goals**:
+
 - Row at rest ≤ 56 px tall on 1024 × 768 (SC-002).
 - At least 8 patient rows above the fold on the same viewport (SC-001).
 - Median click-to-save ≤ 6 s for a 6-field row (SC-009).
 
 **Constraints**:
+
 - Zero global horizontal overflow at any supported viewport.
 - Six inline fields must fit at 1024 px width (compress / abbreviate as needed — FR-013).
 - Auto-`ora` and auto-`operatore` MUST be populated at the save moment, not at form-load (FR-005 / FR-006 / FR-016).
@@ -40,17 +42,17 @@ Recast `MultiPatientParametri.tsx` from a tall card-per-patient layout into a de
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-| # | Principle | Status | Notes |
-|---|-----------|--------|-------|
-| I | Simplicity First | PASS | No new components added. `RigaPaziente` is refactored, not extracted further. No new deps. Auto-`ora` and auto-`operatore` are set at one save site — no helper abstraction needed. |
-| II | Healthcare UX | PASS | Italian labels preserved (FR-017). Tablet-first ≥ 1024 px (SC-001 / FR-013). No tooltip-as-primary-UX. ClinicalTable component untouched. The compact row pattern explicitly favours scanability over decoration. |
-| III | Backend Data Authority | PASS | `ora` and `operatore` are still persisted via the existing backend update endpoint. The only change is *who* populates them inside the frontend (the save handler instead of the user). No clinical data moves to local-only state. |
-| IV | Schema & API Stability | PASS | Plan keeps backend / Prisma / API / `VITE_API_URL` untouched. The existing `onUpdateCartella` contract is preserved verbatim. |
-| V | Role-Aware Development | PASS | Only the operator role uses this page. No role-aware logic is added or removed. |
-| VI | Integration Integrity | PASS | `npm run build` must succeed with zero new TS / build errors (FR-021 / SC-010). All other Parametri call sites (`PatientDetail` → `ParametriTab`) keep working. |
-| VII | Environment Safety | N/A — no env or deployment changes. |
+| #   | Principle              | Status                              | Notes                                                                                                                                                                                                                               |
+| --- | ---------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| I   | Simplicity First       | PASS                                | No new components added. `RigaPaziente` is refactored, not extracted further. No new deps. Auto-`ora` and auto-`operatore` are set at one save site — no helper abstraction needed.                                                 |
+| II  | Healthcare UX          | PASS                                | Italian labels preserved (FR-017). Tablet-first ≥ 1024 px (SC-001 / FR-013). No tooltip-as-primary-UX. ClinicalTable component untouched. The compact row pattern explicitly favours scanability over decoration.                   |
+| III | Backend Data Authority | PASS                                | `ora` and `operatore` are still persisted via the existing backend update endpoint. The only change is _who_ populates them inside the frontend (the save handler instead of the user). No clinical data moves to local-only state. |
+| IV  | Schema & API Stability | PASS                                | Plan keeps backend / Prisma / API / `VITE_API_URL` untouched. The existing `onUpdateCartella` contract is preserved verbatim.                                                                                                       |
+| V   | Role-Aware Development | PASS                                | Only the operator role uses this page. No role-aware logic is added or removed.                                                                                                                                                     |
+| VI  | Integration Integrity  | PASS                                | `npm run build` must succeed with zero new TS / build errors (FR-021 / SC-010). All other Parametri call sites (`PatientDetail` → `ParametriTab`) keep working.                                                                     |
+| VII | Environment Safety     | N/A — no env or deployment changes. |
 
 **Result**: GATE PASS. No violations; Complexity Tracking table left empty.
 
@@ -90,5 +92,5 @@ prisma/                                               # UNTOUCHED
 > Constitution Check passes with no violations. Table intentionally left empty.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
+| --------- | ---------- | ------------------------------------ |
 | _none_    | _n/a_      | _n/a_                                |

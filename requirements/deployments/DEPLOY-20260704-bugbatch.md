@@ -4,12 +4,12 @@
 
 ## REQ/BUG inclusi
 
-| Issue | PR | Commit merge | Deploy |
-|---|---|---|---|
-| BUG #127 — creazione paziente (manuale + import) | #132 | `bdd797f` | Vercel+Railway success |
-| BUG #128 — camera assegnata non occupata | #134 | `1132dcd` | Vercel+Railway success |
-| BUG #129 — ordinamento alfabetico pazienti (4 viste) | #135 | `b443ce3` | Vercel+Railway success |
-| BUG #130 — consegne via Agnos (voce+chat) | #136 | `43b2cc1` | Vercel+Railway success |
+| Issue                                                | PR   | Commit merge | Deploy                 |
+| ---------------------------------------------------- | ---- | ------------ | ---------------------- |
+| BUG #127 — creazione paziente (manuale + import)     | #132 | `bdd797f`    | Vercel+Railway success |
+| BUG #128 — camera assegnata non occupata             | #134 | `1132dcd`    | Vercel+Railway success |
+| BUG #129 — ordinamento alfabetico pazienti (4 viste) | #135 | `b443ce3`    | Vercel+Railway success |
+| BUG #130 — consegne via Agnos (voce+chat)            | #136 | `43b2cc1`    | Vercel+Railway success |
 
 Base della catena: **SPEC-015** (Agnos AI unificato CRU no-Delete), PR #131 → `74cc916`
 (manifest `DEPLOY-20260704-spec015-pending.md`, ora deployato con questo batch).

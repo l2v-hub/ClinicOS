@@ -28,18 +28,20 @@ interface StepIngressoProps {
   onChange: (v: IngressoData) => void;
 }
 
-function field(
-  value: IngressoData,
-  onChange: (v: IngressoData) => void,
-  key: keyof IngressoData,
-) {
+function field(value: IngressoData, onChange: (v: IngressoData) => void, key: keyof IngressoData) {
   return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     onChange({ ...value, [key]: e.target.value });
   };
 }
 
-function NpmCard({ title, desc, children }: {
-  title: string; desc?: string; children: React.ReactNode;
+function NpmCard({
+  title,
+  desc,
+  children,
+}: {
+  title: string;
+  desc?: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="npm-card">
@@ -52,14 +54,24 @@ function NpmCard({ title, desc, children }: {
   );
 }
 
-function NpmField({ label, required, hint, span2, children }: {
-  label: string; required?: boolean; hint?: string;
-  span2?: boolean; children: React.ReactNode;
+function NpmField({
+  label,
+  required,
+  hint,
+  span2,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  hint?: string;
+  span2?: boolean;
+  children: React.ReactNode;
 }) {
   return (
     <div className={`npm-field${span2 ? ' npm-span-2' : ''}`}>
       <label className="npm-label">
-        {label}{required && <span className="npm-required"> *</span>}
+        {label}
+        {required && <span className="npm-required"> *</span>}
       </label>
       {children}
       {hint && <span className="npm-hint">{hint}</span>}

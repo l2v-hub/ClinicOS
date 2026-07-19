@@ -20,7 +20,7 @@ test('createTherapyInTx: creates therapy with schedules and derives dosaggio + f
   });
 
   try {
-    const therapy = await prisma.$transaction(tx =>
+    const therapy = await prisma.$transaction((tx) =>
       createTherapyInTx(tx, patient.id, {
         farmacoNome: 'Tachipirina',
         dataInizio: '2026-06-29',
@@ -42,7 +42,11 @@ test('createTherapyInTx: creates therapy with schedules and derives dosaggio + f
     );
 
     assert.equal(therapy.farmacoNome, 'Tachipirina');
-    assert.equal(therapy.dosaggio, '500 mg compressa', 'dosaggio must be derived from strength+form');
+    assert.equal(
+      therapy.dosaggio,
+      '500 mg compressa',
+      'dosaggio must be derived from strength+form',
+    );
     assert.equal(therapy.commercialStrengthValue, 500);
     assert.equal(therapy.schedules.length, 1, 'one schedule row must be created');
     assert.equal(therapy.schedules[0].time, '08:00');
@@ -68,7 +72,7 @@ test('createTherapyInTx: rejects when farmacoNome is missing', async () => {
   try {
     await assert.rejects(
       () =>
-        prisma.$transaction(tx =>
+        prisma.$transaction((tx) =>
           createTherapyInTx(tx, patient.id, {
             farmacoNome: '',
             dataInizio: '2026-06-29',

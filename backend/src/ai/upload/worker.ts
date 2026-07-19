@@ -12,7 +12,13 @@ import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig } from '../config.js';
 import { runJob } from './job-service.js';
 
-const ORPHAN_STATES = ['processing', 'uploading_to_google', 'waiting_for_model', 'validating_response', 'repairing_response'];
+const ORPHAN_STATES = [
+  'processing',
+  'uploading_to_google',
+  'waiting_for_model',
+  'validating_response',
+  'repairing_response',
+];
 
 let timer: ReturnType<typeof setInterval> | null = null;
 let busy = false;
@@ -54,13 +60,22 @@ export function startWorker(): void {
   if (timer) return;
   const cfg = loadAiConfig();
   reclaimOrphans()
-    .then((n) => { if (n) console.log(`[ai-worker] reclaimed ${n} orphaned job(s)`); })
-    .catch(() => { /* DB may be unavailable; tick will retry */ });
-  timer = setInterval(() => { claimAndRun().catch(() => {}); }, cfg.jobPollIntervalMs);
+    .then((n) => {
+      if (n) console.log(`[ai-worker] reclaimed ${n} orphaned job(s)`);
+    })
+    .catch(() => {
+      /* DB may be unavailable; tick will retry */
+    });
+  timer = setInterval(() => {
+    claimAndRun().catch(() => {});
+  }, cfg.jobPollIntervalMs);
   timer.unref?.();
   console.log(`[ai-worker] started (poll ${cfg.jobPollIntervalMs}ms)`);
 }
 
 export function stopWorker(): void {
-  if (timer) { clearInterval(timer); timer = null; }
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
 }

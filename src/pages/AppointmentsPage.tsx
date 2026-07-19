@@ -17,7 +17,7 @@ export function AppointmentsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AppointmentsPage
+export default AppointmentsPage;

@@ -30,15 +30,15 @@ Ridisegnare la gerarchia visiva dei tre livelli di navigazione in ClinicOS per t
 
 ## Constitution Check
 
-| Principio | Status | Note |
-|-----------|--------|------|
-| I. Simplicity First | ✅ PASS | CSS-only dove possibile. Nessun nuovo componente. Nessun nuovo framework. |
-| II. Healthcare UX | ✅ PASS | Migliora tablet-first, UI italiana preservata, gerarchia visiva più chiara |
-| III. Backend Data Authority | ✅ PASS | N/A — nessun dato clinico coinvolto |
-| IV. Schema & API Stability | ✅ PASS | Nessuna modifica a Prisma o Express routes |
-| V. Role-Aware Development | ✅ PASS | Nessun tocco a logica ruoli. Sidebar L1 e permessi immutati. |
-| VI. Integration Integrity | ✅ PASS | Build TypeScript deve passare. Funzionalità esistenti preservate. |
-| VII. Environment Safety | ✅ PASS | N/A — nessuna variabile d'ambiente coinvolta |
+| Principio                   | Status  | Note                                                                       |
+| --------------------------- | ------- | -------------------------------------------------------------------------- |
+| I. Simplicity First         | ✅ PASS | CSS-only dove possibile. Nessun nuovo componente. Nessun nuovo framework.  |
+| II. Healthcare UX           | ✅ PASS | Migliora tablet-first, UI italiana preservata, gerarchia visiva più chiara |
+| III. Backend Data Authority | ✅ PASS | N/A — nessun dato clinico coinvolto                                        |
+| IV. Schema & API Stability  | ✅ PASS | Nessuna modifica a Prisma o Express routes                                 |
+| V. Role-Aware Development   | ✅ PASS | Nessun tocco a logica ruoli. Sidebar L1 e permessi immutati.               |
+| VI. Integration Integrity   | ✅ PASS | Build TypeScript deve passare. Funzionalità esistenti preservate.          |
+| VII. Environment Safety     | ✅ PASS | N/A — nessuna variabile d'ambiente coinvolta                               |
 
 **Gate result**: PASS — nessuna violazione.
 
@@ -82,6 +82,7 @@ Nessun nuovo file. Nessun nuovo componente React.
 #### 1a. `frontend/src/app-additions.css` — sezione `.nav-rail`
 
 Cambiamenti:
+
 1. `.nav-rail` → `width: 64px` (da 96px)
 2. `.nav-rail__item` → `width: 52px` (da 80px), `min-height: 60px` (da 64px), `padding: 8px 4px`
 3. `.nav-rail__item.active` → active state più forte: `background: rgba(26,86,219,0.28)` + `color: #fff`
@@ -107,6 +108,7 @@ Cambiamenti:
 #### 2a. `frontend/src/app-additions.css` — sezione `.page-tabs`
 
 Cambiamenti:
+
 1. `.page-tabs` → `padding: 8px 8px`, `margin: 0 0 0`, `border-radius: 0`, `background: var(--surface)`, `border-bottom: 1px solid var(--border)` — da segmented control a navigation bar piatta
 2. `.page-tabs__btn` → `padding: 10px 22px`, `font-size: 15px`, `font-weight: 600`, `min-height: 44px` — più grande e touch-friendly
 3. `.page-tabs__btn--active` → `color: var(--blue)`, `background: rgba(26,86,219,0.08)`, `border-bottom: 3px solid var(--blue)`, `border-radius: 6px 6px 0 0`, `box-shadow: none` — active state forte con accent blu
@@ -114,6 +116,7 @@ Cambiamenti:
 5. `.page-tabs__badge` → dimensione coerente, padding leggermente aumentato
 
 **Struttura visiva target**:
+
 ```
 [Panoramica]  [Clinica ●]  [Diario]  [Moduli]  [Documenti]
               ────────────
@@ -133,12 +136,14 @@ Cambiamenti:
 #### 3a. `frontend/src/app-additions.css` — sezione `.section-tabs`
 
 Cambiamenti:
+
 1. `.section-tabs` → `padding: 4px 16px`, `margin: 6px 0 0`, `gap: 3px`
 2. `.section-tabs__btn` → `padding: 5px 14px`, `font-size: 12px`, `font-weight: 500`, `border-radius: 20px` (invariato)
 3. `.section-tabs__btn--active` → `background: rgba(26,86,219,0.09)`, `color: var(--blue)`, `font-weight: 600` — tint leggero, non pieno
 4. Verificare `overflow-x: auto; scrollbar-width: none` già presente
 
 **Gerarchia target**:
+
 ```
 L2: 15px 600 | padding 10px 22px | altezza ~44px | active: fill + border 3px
 L3: 12px 500 | padding  5px 14px | altezza ~30px | active: tint leggero
@@ -157,6 +162,7 @@ L3: 12px 500 | padding  5px 14px | altezza ~30px | active: tint leggero
 #### 4a. `frontend/src/app-additions.css` — sezione `.cr-header` e `.cr-breadcrumb`
 
 Cambiamenti:
+
 1. `.cr-breadcrumb` → rimuovere o azzerare: `padding: 0; display: none` — il back è nell'header
 2. `.cr-header` → `padding: 10px 16px`, `margin: 8px 12px 0`, `border-radius: 12px`
 3. `.cr-header__name` → `font-size: 16px` (da 20px)
@@ -167,6 +173,7 @@ Cambiamenti:
 #### 4b. `frontend/src/components/operator/PatientDetail.tsx` — render header
 
 Cambiamenti JSX:
+
 1. Verificare/spostare back button nella prima riga dell'header (già presente come `<button className="link-btn">`).
 2. Rimuovere `<div className="cr-breadcrumb">` se presente come wrapper separato.
 3. Assicurare allergie inline (`cr-header__allergy-chips` nella stessa riga di `cr-header__meta`).
@@ -174,6 +181,7 @@ Cambiamenti JSX:
 #### 4c. `frontend/src/App.tsx` — topbar breadcrumb
 
 Cambiamento JSX:
+
 1. Nel blocco `navKey === 'dettaglio-paziente'` del topbar breadcrumb (righe ~702–714), mostrare solo `<span>Scheda Paziente</span>` invece di `Pazienti › Nome` — il back button è già nell'header paziente.
 
 **Checkpoint Phase 4**: Header ≤ 80px. Un solo punto di back navigation visibile. Topbar non duplica.
@@ -189,6 +197,7 @@ Cambiamento JSX:
 #### 5a. `frontend/src/app-additions.css` — layout `.cr-detail-layout` e `.cr-tab-content`
 
 Cambiamenti:
+
 1. `.cr-tab-content` → verificare/ridurre `padding-top` a max 12px (da eventuale 20px+)
 2. `.cr-detail-layout--no-sidebar` → verificare che non ci sia margin/padding extra tra L3 e contenuto
 3. Sezioni header blu flat (`.cr-section-header`, `.cr-card-header` blue) — preservati invariati

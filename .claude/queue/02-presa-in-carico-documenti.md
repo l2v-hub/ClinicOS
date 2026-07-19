@@ -11,6 +11,7 @@ Esegui npm run build e correggi errori.
 La presa in carico deve includere:
 
 1. Dati anagrafici paziente
+
 - nome
 - cognome
 - data di nascita
@@ -21,6 +22,7 @@ La presa in carico deve includere:
 - indirizzo
 
 2. Contatti parenti / familiari
+
 - referente principale
 - rapporto con il paziente
 - telefono referente
@@ -28,6 +30,7 @@ La presa in carico deve includere:
 - note referente
 
 3. Provenienza paziente
+
 - accesso diretto
 - ospedale
 - centro medico
@@ -38,6 +41,7 @@ La presa in carico deve includere:
 - motivo ingresso
 
 4. Camera e assegnazione
+
 - camera
 - letto / posto letto
 - operatore assegnato
@@ -45,6 +49,7 @@ La presa in carico deve includere:
 - priorità / alert iniziali
 
 5. Diagnosi e condizioni di ingresso
+
 - diagnosi di ingresso
 - patologie pregresse
 - valutazioni funzionali iniziali
@@ -52,6 +57,7 @@ La presa in carico deve includere:
 - note iniziali
 
 UX:
+
 - usa tab o sezioni chiare
 - i form devono essere ampi e facilmente compilabili
 - input e textarea devono essere touch-friendly
@@ -61,6 +67,7 @@ UX:
 - niente layout rotto su tablet
 
 Dopo creazione paziente:
+
 - aggiungi il paziente alla lista
 - apri automaticamente la scheda paziente
 - mostra feedback “Paziente creato correttamente”

@@ -33,10 +33,14 @@ function activeStepLabel(page: import('@playwright/test').Page) {
   return page.locator('[data-testid="patient-intake-stepper"] .is-active').innerText();
 }
 
-test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazione', async ({ page }) => {
+test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazione', async ({
+  page,
+}) => {
   const consoleErrors: string[] = [];
   const httpErrors: { url: string; status: number }[] = [];
-  page.on('console', (m: ConsoleMessage) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+  page.on('console', (m: ConsoleMessage) => {
+    if (m.type() === 'error') consoleErrors.push(m.text());
+  });
   page.on('response', (r: Response) => {
     const status = r.status();
     if (status >= 400) httpErrors.push({ url: r.url(), status });
@@ -96,8 +100,13 @@ test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazio
   await bradenCard.click();
   await expect(bradenCard).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('[data-testid="intake-module-braden-hint"]')).toBeVisible();
-  await expect(page.locator('[data-testid="intake-module-braden-hint"]')).toHaveText(/Si aprirà dopo la creazione del paziente/i);
-  await page.screenshot({ path: join(RESULT_SCREENSHOT_DIR, '01-step4-braden-selected.png'), fullPage: true });
+  await expect(page.locator('[data-testid="intake-module-braden-hint"]')).toHaveText(
+    /Si aprirà dopo la creazione del paziente/i,
+  );
+  await page.screenshot({
+    path: join(RESULT_SCREENSHOT_DIR, '01-step4-braden-selected.png'),
+    fullPage: true,
+  });
 
   // Step 4 → 5 (Documenti)
   await advanceToNextStep(page);
@@ -120,11 +129,17 @@ test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazio
   const creaComunque = page.getByRole('button', { name: /Crea comunque/i });
   if (await creaComunque.isVisible().catch(() => false)) {
     await creaComunque.click();
-    await page.getByRole('button', { name: /Crea paziente/i }).click().catch(() => {});
+    await page
+      .getByRole('button', { name: /Crea paziente/i })
+      .click()
+      .catch(() => {});
   }
 
   // The intake modal closes once confirmDraft resolves and the app navigates.
-  await page.waitForSelector('[data-testid="patient-intake-header"]', { state: 'detached', timeout: 20_000 });
+  await page.waitForSelector('[data-testid="patient-intake-header"]', {
+    state: 'detached',
+    timeout: 20_000,
+  });
   await page.waitForTimeout(1000);
 
   // ── AC4: landed on the patient chart, Moduli group, Scala Braden tab active ─
@@ -134,7 +149,10 @@ test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazio
   await expect(l3Braden).toHaveAttribute('aria-selected', 'true');
   // Real module content rendered (ScalaBradenTab section), not just the tab highlighted.
   await expect(page.locator('.cts__title', { hasText: /scala di braden/i }).first()).toBeVisible();
-  await page.screenshot({ path: join(RESULT_SCREENSHOT_DIR, '02-patient-chart-braden-flow.png'), fullPage: true });
+  await page.screenshot({
+    path: join(RESULT_SCREENSHOT_DIR, '02-patient-chart-braden-flow.png'),
+    fullPage: true,
+  });
 
   // ── Persistence after reload (full app reset — no client session storage) ──
   await page.reload({ waitUntil: 'networkidle' });
@@ -156,11 +174,19 @@ test('#243 AC4 — card modulo selezionabile naviga al flusso reale post-creazio
 
   const finalShot = join(RESULT_SCREENSHOT_DIR, 'result.png');
   await page.screenshot({ path: finalShot, fullPage: true });
-  await page.screenshot({ path: join(RESULT_SCREENSHOT_DIR, '03-braden-reachable-after-reload.png'), fullPage: true });
+  await page.screenshot({
+    path: join(RESULT_SCREENSHOT_DIR, '03-braden-reachable-after-reload.png'),
+    fullPage: true,
+  });
 
   const newConsoleErrors = consoleErrors.filter((e) => !IGNORED_CONSOLE_RE.test(e));
-  expect(newConsoleErrors, `unexpected console errors: ${newConsoleErrors.join(' | ')}`).toEqual([]);
+  expect(newConsoleErrors, `unexpected console errors: ${newConsoleErrors.join(' | ')}`).toEqual(
+    [],
+  );
 
   const relevantHttpErrors = httpErrors.filter((e) => e.status !== 401 && e.status !== 403);
-  expect(relevantHttpErrors, `unexpected HTTP errors: ${JSON.stringify(relevantHttpErrors)}`).toEqual([]);
+  expect(
+    relevantHttpErrors,
+    `unexpected HTTP errors: ${JSON.stringify(relevantHttpErrors)}`,
+  ).toEqual([]);
 });

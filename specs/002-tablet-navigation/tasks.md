@@ -1,5 +1,5 @@
 ---
-description: "Task list — Ottimizzazione Navigazione Tablet-First"
+description: 'Task list — Ottimizzazione Navigazione Tablet-First'
 ---
 
 # Tasks: Ottimizzazione Navigazione Tablet-First
@@ -37,7 +37,9 @@ description: "Task list — Ottimizzazione Navigazione Tablet-First"
   ```css
   /* DA RIMUOVERE: */
   .patient-record-view .page-tabs,
-  .patient-record-view .section-tabs { display: none; }
+  .patient-record-view .section-tabs {
+    display: none;
+  }
   ```
   Questo riabilita i componenti che erano stati disabilitati quando si è passati alla sidebar.
 
@@ -62,12 +64,13 @@ description: "Task list — Ottimizzazione Navigazione Tablet-First"
   - Inizializzare `activeGroup` correttamente: `TAB_GROUPS.find(g => g.tabs.some(t => t.id === tab))?.id ?? 'panoramica'`
 
 - [x] T004 [US1] Update `frontend/src/components/operator/PatientDetail.tsx` — aggiornare `switchGroup`:
+
   ```typescript
   function switchGroup(groupId: TabGroup) {
-    const group = TAB_GROUPS.find(g => g.id === groupId);
+    const group = TAB_GROUPS.find((g) => g.id === groupId);
     if (!group) return;
     setActiveGroup(groupId);
-    if (!group.tabs.some(t => t.id === tab)) {
+    if (!group.tabs.some((t) => t.id === tab)) {
       setTab(group.tabs[0].id);
     }
   }
@@ -81,30 +84,42 @@ description: "Task list — Ottimizzazione Navigazione Tablet-First"
 
 - [x] T006 [US2] Update `frontend/src/components/operator/PatientDetail.tsx` — aggiungere PageTabs e SectionTabs nel render, subito dopo la fine del blocco header (`</div>` a riga ~1680) e prima del `<div className="cr-detail-layout">`:
   ```tsx
-  {/* L2 — Navigazione orizzontale gruppi */}
+  {
+    /* L2 — Navigazione orizzontale gruppi */
+  }
   <PageTabs
-    groups={TAB_GROUPS.map(g => ({ id: g.id, label: g.label, badge: groupBadgeSum(g.id) || undefined }))}
+    groups={TAB_GROUPS.map((g) => ({
+      id: g.id,
+      label: g.label,
+      badge: groupBadgeSum(g.id) || undefined,
+    }))}
     activeId={activeGroup}
-    onChange={id => switchGroup(id as TabGroup)}
-  />
-  {/* L3 — Sotto-tab del gruppo attivo (solo se gruppo ha >1 tab) */}
-  {(() => {
-    const grp = TAB_GROUPS.find(g => g.id === activeGroup);
-    if (!grp || grp.tabs.length <= 1) return null;
-    const urgentConsegna = grp.id === 'panoramica' && mieConsegne.some(c => c.priorita === 'urgente' && c.stato !== 'completata');
-    return (
-      <SectionTabs
-        tabs={grp.tabs.map(t => ({
-          id: t.id,
-          label: t.label,
-          badge: TAB_BADGES[t.id] || undefined,
-          urgent: t.id === 'consegne' && urgentConsegna,
-        }))}
-        activeId={tab}
-        onChange={id => switchTab(id as TabId)}
-      />
-    );
-  })()}
+    onChange={(id) => switchGroup(id as TabGroup)}
+  />;
+  {
+    /* L3 — Sotto-tab del gruppo attivo (solo se gruppo ha >1 tab) */
+  }
+  {
+    (() => {
+      const grp = TAB_GROUPS.find((g) => g.id === activeGroup);
+      if (!grp || grp.tabs.length <= 1) return null;
+      const urgentConsegna =
+        grp.id === 'panoramica' &&
+        mieConsegne.some((c) => c.priorita === 'urgente' && c.stato !== 'completata');
+      return (
+        <SectionTabs
+          tabs={grp.tabs.map((t) => ({
+            id: t.id,
+            label: t.label,
+            badge: TAB_BADGES[t.id] || undefined,
+            urgent: t.id === 'consegne' && urgentConsegna,
+          }))}
+          activeId={tab}
+          onChange={(id) => switchTab(id as TabId)}
+        />
+      );
+    })();
+  }
   ```
 
 **Checkpoint**: User Story 1+2 funzionali. PatientDetail mostra tab orizzontali L2 e L3. Nessuna `.cr-sidebar-nav` nel DOM. Contenuto full-width dopo sidebar L1.

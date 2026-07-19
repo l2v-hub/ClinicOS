@@ -71,9 +71,7 @@ const FORM_CAMERA_VUOTO = {
 
 function bedIsOccupied(bed: BedAPI): boolean {
   const today = new Date().toISOString().slice(0, 10);
-  return bed.assignments.some(
-    a => a.endDate === null || a.endDate >= today,
-  );
+  return bed.assignments.some((a) => a.endDate === null || a.endDate >= today);
 }
 
 function bedStatoDisplay(bed: BedAPI): StatoLetto {
@@ -84,9 +82,7 @@ function bedStatoDisplay(bed: BedAPI): StatoLetto {
 
 function bedPatientName(bed: BedAPI): string | null {
   const today = new Date().toISOString().slice(0, 10);
-  const active = bed.assignments.find(
-    a => a.endDate === null || a.endDate >= today,
-  );
+  const active = bed.assignments.find((a) => a.endDate === null || a.endDate >= today);
   if (!active) return null;
   return `${active.patient.lastName}, ${active.patient.firstName}`;
 }
@@ -135,11 +131,10 @@ export function RoomsManagement() {
 
   /* ── Derived data ─────────────────────────────────────── */
 
-  const reparti = ['tutti', ...Array.from(new Set(rooms.map(r => r.reparto).filter(Boolean)))];
+  const reparti = ['tutti', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];
 
-  const roomsFiltrate = filtroReparto === 'tutti'
-    ? rooms
-    : rooms.filter(r => r.reparto === filtroReparto);
+  const roomsFiltrate =
+    filtroReparto === 'tutti' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);
 
   /* ── Room CRUD ────────────────────────────────────────── */
 
@@ -148,9 +143,7 @@ export function RoomsManagement() {
     setSaving(true);
     setError(null);
     try {
-      const url = editId
-        ? `${API_URL}/admin/rooms/${editId}`
-        : `${API_URL}/admin/rooms`;
+      const url = editId ? `${API_URL}/admin/rooms/${editId}` : `${API_URL}/admin/rooms`;
       const method = editId ? 'PUT' : 'POST';
       const res = await fetch(url, {
         method,
@@ -189,13 +182,13 @@ export function RoomsManagement() {
         if (res.status === 409) {
           setError(data.error || 'Impossibile eliminare: ci sono assegnazioni attive');
         } else {
-          setError(data.error || 'Errore durante l\'eliminazione');
+          setError(data.error || "Errore durante l'eliminazione");
         }
         return;
       }
       await loadData();
     } catch {
-      setError('Errore di rete durante l\'eliminazione');
+      setError("Errore di rete durante l'eliminazione");
     }
   }
 
@@ -247,7 +240,10 @@ export function RoomsManagement() {
 
   if (loading) {
     return (
-      <div className="rooms-view" style={{ display: 'flex', justifyContent: 'center', padding: 48 }}>
+      <div
+        className="rooms-view"
+        style={{ display: 'flex', justifyContent: 'center', padding: 48 }}
+      >
         <span>Caricamento...</span>
       </div>
     );
@@ -268,7 +264,7 @@ export function RoomsManagement() {
           className="btn-primary"
           style={{ minHeight: 44 }}
           onClick={() => {
-            setFormAperto(v => !v);
+            setFormAperto((v) => !v);
             setEditId(null);
             setForm(FORM_CAMERA_VUOTO);
           }}
@@ -279,20 +275,39 @@ export function RoomsManagement() {
 
       {/* Error alert */}
       {error && (
-        <div className="alert alert--error" style={{ marginBottom: 16, padding: '10px 16px', background: 'var(--red-bg, #fef2f2)', border: '1px solid var(--red, #ef4444)', borderRadius: 8, color: 'var(--red, #ef4444)', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div
+          className="alert alert--error"
+          style={{
+            marginBottom: 16,
+            padding: '10px 16px',
+            background: 'var(--red-bg, #fef2f2)',
+            border: '1px solid var(--red, #ef4444)',
+            borderRadius: 8,
+            color: 'var(--red, #ef4444)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+          }}
+        >
           <span style={{ flex: 1 }}>{error}</span>
-          <button className="icon-btn" onClick={() => setError(null)}><IcoX /></button>
+          <button className="icon-btn" onClick={() => setError(null)}>
+            <IcoX />
+          </button>
         </div>
       )}
 
       {/* Occupancy stats */}
       <div className="occupancy-stats">
         <div className="occ-stat">
-          <span className="occ-stat__val" style={{ color: 'var(--red)' }}>{occ?.occupiedBeds ?? 0}</span>
+          <span className="occ-stat__val" style={{ color: 'var(--red)' }}>
+            {occ?.occupiedBeds ?? 0}
+          </span>
           <span className="occ-stat__lbl">Occupati</span>
         </div>
         <div className="occ-stat">
-          <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>{occ?.freeBeds ?? 0}</span>
+          <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>
+            {occ?.freeBeds ?? 0}
+          </span>
           <span className="occ-stat__lbl">Liberi</span>
         </div>
         <div className="occ-stat">
@@ -324,7 +339,9 @@ export function RoomsManagement() {
         <div className="op-form-panel">
           <div className="op-form-panel__header">
             <h3 className="op-form-panel__title">{editId ? 'Modifica Camera' : 'Nuova Camera'}</h3>
-            <button className="icon-btn" onClick={() => setFormAperto(false)}><IcoX /></button>
+            <button className="icon-btn" onClick={() => setFormAperto(false)}>
+              <IcoX />
+            </button>
           </div>
           <div className="op-form-grid">
             <div className="form-field">
@@ -332,7 +349,7 @@ export function RoomsManagement() {
               <input
                 className="form-input"
                 value={form.numero}
-                onChange={e => setForm(p => ({ ...p, numero: e.target.value }))}
+                onChange={(e) => setForm((p) => ({ ...p, numero: e.target.value }))}
                 placeholder="es. 101, PS-02"
               />
             </div>
@@ -341,7 +358,7 @@ export function RoomsManagement() {
               <select
                 className="form-select"
                 value={form.tipo}
-                onChange={e => setForm(p => ({ ...p, tipo: e.target.value as TipoCamera }))}
+                onChange={(e) => setForm((p) => ({ ...p, tipo: e.target.value as TipoCamera }))}
               >
                 <option value="singola">Singola</option>
                 <option value="doppia">Doppia</option>
@@ -353,7 +370,7 @@ export function RoomsManagement() {
               <input
                 className="form-input"
                 value={form.piano}
-                onChange={e => setForm(p => ({ ...p, piano: e.target.value }))}
+                onChange={(e) => setForm((p) => ({ ...p, piano: e.target.value }))}
                 placeholder="1°, PT…"
               />
             </div>
@@ -362,7 +379,7 @@ export function RoomsManagement() {
               <input
                 className="form-input"
                 value={form.reparto}
-                onChange={e => setForm(p => ({ ...p, reparto: e.target.value }))}
+                onChange={(e) => setForm((p) => ({ ...p, reparto: e.target.value }))}
                 placeholder="Cardiologia…"
               />
             </div>
@@ -371,7 +388,7 @@ export function RoomsManagement() {
               <select
                 className="form-select"
                 value={form.stato}
-                onChange={e => setForm(p => ({ ...p, stato: e.target.value as StatoCamera }))}
+                onChange={(e) => setForm((p) => ({ ...p, stato: e.target.value as StatoCamera }))}
               >
                 <option value="attiva">Attiva</option>
                 <option value="inattiva">Inattiva</option>
@@ -384,13 +401,24 @@ export function RoomsManagement() {
             <input
               className="form-input"
               value={form.note}
-              onChange={e => setForm(p => ({ ...p, note: e.target.value }))}
+              onChange={(e) => setForm((p) => ({ ...p, note: e.target.value }))}
               placeholder="Note sulla camera…"
             />
           </div>
           <div className="op-form-panel__actions">
-            <button className="btn-secondary" style={{ minHeight: 44 }} onClick={() => setFormAperto(false)}>Annulla</button>
-            <button className="btn-primary" style={{ minHeight: 44 }} onClick={salvaCamera} disabled={saving}>
+            <button
+              className="btn-secondary"
+              style={{ minHeight: 44 }}
+              onClick={() => setFormAperto(false)}
+            >
+              Annulla
+            </button>
+            <button
+              className="btn-primary"
+              style={{ minHeight: 44 }}
+              onClick={salvaCamera}
+              disabled={saving}
+            >
               <IcoCheck /> {saving ? 'Salvataggio…' : editId ? 'Salva modifiche' : 'Crea camera'}
             </button>
           </div>
@@ -400,10 +428,12 @@ export function RoomsManagement() {
       {/* Bed edit modal */}
       {lettoEdit && (
         <div className="modal-overlay" onClick={() => setLettoEdit(null)}>
-          <div className="modal-box" onClick={e => e.stopPropagation()}>
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 className="modal-title">Modifica Letto</h3>
-              <button className="icon-btn" onClick={() => setLettoEdit(null)}><IcoX /></button>
+              <button className="icon-btn" onClick={() => setLettoEdit(null)}>
+                <IcoX />
+              </button>
             </div>
             <div className="modal-body">
               <div className="op-form-grid">
@@ -412,7 +442,7 @@ export function RoomsManagement() {
                   <select
                     className="form-select"
                     value={lettoForm.stato}
-                    onChange={e => setLettoForm(p => ({ ...p, stato: e.target.value }))}
+                    onChange={(e) => setLettoForm((p) => ({ ...p, stato: e.target.value }))}
                   >
                     <option value="libero">Libero</option>
                     <option value="occupato">Occupato</option>
@@ -424,14 +454,22 @@ export function RoomsManagement() {
                   <input
                     className="form-input"
                     value={lettoForm.note}
-                    onChange={e => setLettoForm(p => ({ ...p, note: e.target.value }))}
+                    onChange={(e) => setLettoForm((p) => ({ ...p, note: e.target.value }))}
                   />
                 </div>
               </div>
             </div>
             <div className="modal-footer">
-              <button className="btn-secondary" style={{ minHeight: 44 }} onClick={() => setLettoEdit(null)}>Annulla</button>
-              <button className="btn-primary" style={{ minHeight: 44 }} onClick={salvaLetto}><IcoCheck /> Salva</button>
+              <button
+                className="btn-secondary"
+                style={{ minHeight: 44 }}
+                onClick={() => setLettoEdit(null)}
+              >
+                Annulla
+              </button>
+              <button className="btn-primary" style={{ minHeight: 44 }} onClick={salvaLetto}>
+                <IcoCheck /> Salva
+              </button>
             </div>
           </div>
         </div>
@@ -439,7 +477,7 @@ export function RoomsManagement() {
 
       {/* Filtro reparto */}
       <div className="filter-chips" style={{ marginBottom: 16 }}>
-        {reparti.map(r => (
+        {reparti.map((r) => (
           <button
             key={r}
             className={`filter-chip${filtroReparto === r ? ' active' : ''}`}
@@ -453,84 +491,88 @@ export function RoomsManagement() {
 
       {/* Rooms grid */}
       <ClinicalTableSection title="Camere" count={roomsFiltrate.length} countLabel="camere">
-      <div className="rooms-grid">
-        {roomsFiltrate.map(room => {
-          const occupati = room.beds.filter(b => bedStatoDisplay(b) === 'occupato').length;
-          return (
-            <div
-              key={room.id}
-              className={`room-card${room.stato === 'inattiva' ? ' room-card--inactive' : ''}${room.stato === 'manutenzione' ? ' room-card--inactive' : ''}`}
-            >
-              <div className="room-card__header">
-                <div className="room-number-badge">
-                  <IcoBed />
-                  <span>{room.numero}</span>
-                </div>
-                <div className="room-card__info">
-                  <span className="room-tipo">{room.tipo}</span>
-                  <span className="room-piano">{room.piano} · {room.reparto}</span>
-                </div>
-                <div className="room-occupancy-indicator">
-                  <span
-                    style={{
-                      color: occupati === room.beds.length ? 'var(--red)' : 'var(--emerald)',
-                      fontWeight: 700,
-                    }}
+        <div className="rooms-grid">
+          {roomsFiltrate.map((room) => {
+            const occupati = room.beds.filter((b) => bedStatoDisplay(b) === 'occupato').length;
+            return (
+              <div
+                key={room.id}
+                className={`room-card${room.stato === 'inattiva' ? ' room-card--inactive' : ''}${room.stato === 'manutenzione' ? ' room-card--inactive' : ''}`}
+              >
+                <div className="room-card__header">
+                  <div className="room-number-badge">
+                    <IcoBed />
+                    <span>{room.numero}</span>
+                  </div>
+                  <div className="room-card__info">
+                    <span className="room-tipo">{room.tipo}</span>
+                    <span className="room-piano">
+                      {room.piano} · {room.reparto}
+                    </span>
+                  </div>
+                  <div className="room-occupancy-indicator">
+                    <span
+                      style={{
+                        color: occupati === room.beds.length ? 'var(--red)' : 'var(--emerald)',
+                        fontWeight: 700,
+                      }}
+                    >
+                      {occupati}/{room.beds.length}
+                    </span>
+                  </div>
+                  <button
+                    className="icon-btn icon-btn--sm"
+                    style={{ minHeight: 44, minWidth: 44 }}
+                    onClick={() => apriModificaCamera(room)}
+                    title="Modifica camera"
                   >
-                    {occupati}/{room.beds.length}
-                  </span>
+                    <IcoEdit />
+                  </button>
+                  <button
+                    className="icon-btn icon-btn--sm"
+                    style={{ minHeight: 44, minWidth: 44, color: 'var(--red)' }}
+                    onClick={() => eliminaCamera(room.id)}
+                    title="Elimina camera"
+                  >
+                    <IcoX />
+                  </button>
                 </div>
-                <button
-                  className="icon-btn icon-btn--sm"
-                  style={{ minHeight: 44, minWidth: 44 }}
-                  onClick={() => apriModificaCamera(room)}
-                  title="Modifica camera"
-                >
-                  <IcoEdit />
-                </button>
-                <button
-                  className="icon-btn icon-btn--sm"
-                  style={{ minHeight: 44, minWidth: 44, color: 'var(--red)' }}
-                  onClick={() => eliminaCamera(room.id)}
-                  title="Elimina camera"
-                >
-                  <IcoX />
-                </button>
-              </div>
 
-              {room.note && <p className="room-note">{room.note}</p>}
-              {room.stato === 'manutenzione' && (
-                <p className="room-note" style={{ color: 'var(--amber)', fontWeight: 600 }}>In manutenzione</p>
-              )}
+                {room.note && <p className="room-note">{room.note}</p>}
+                {room.stato === 'manutenzione' && (
+                  <p className="room-note" style={{ color: 'var(--amber)', fontWeight: 600 }}>
+                    In manutenzione
+                  </p>
+                )}
 
-              <div className="letti-list">
-                {room.beds.map(bed => {
-                  const stato = bedStatoDisplay(bed);
-                  const patientName = bedPatientName(bed);
-                  return (
-                    <div key={bed.id} className={`letto-row ${STATO_LETTO_CLASS[stato]}`}>
-                      <span className="letto-num">{bed.label}</span>
-                      <span className={`letto-stato-badge letto-stato--${stato}`}>
-                        {STATO_LETTO_LABEL[stato]}
-                      </span>
-                      {patientName && <span className="letto-paziente">{patientName}</span>}
-                      {bed.note && <span className="letto-note">{bed.note}</span>}
-                      <button
-                        className="icon-btn icon-btn--sm"
-                        style={{ minHeight: 44, minWidth: 44 }}
-                        onClick={() => apriLettoEdit(bed)}
-                        title="Modifica letto"
-                      >
-                        <IcoEdit />
-                      </button>
-                    </div>
-                  );
-                })}
+                <div className="letti-list">
+                  {room.beds.map((bed) => {
+                    const stato = bedStatoDisplay(bed);
+                    const patientName = bedPatientName(bed);
+                    return (
+                      <div key={bed.id} className={`letto-row ${STATO_LETTO_CLASS[stato]}`}>
+                        <span className="letto-num">{bed.label}</span>
+                        <span className={`letto-stato-badge letto-stato--${stato}`}>
+                          {STATO_LETTO_LABEL[stato]}
+                        </span>
+                        {patientName && <span className="letto-paziente">{patientName}</span>}
+                        {bed.note && <span className="letto-note">{bed.note}</span>}
+                        <button
+                          className="icon-btn icon-btn--sm"
+                          style={{ minHeight: 44, minWidth: 44 }}
+                          onClick={() => apriLettoEdit(bed)}
+                          title="Modifica letto"
+                        >
+                          <IcoEdit />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
       </ClinicalTableSection>
     </div>
   );

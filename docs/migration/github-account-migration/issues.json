@@ -1,1 +1,3832 @@
-[{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACoJ3c-g","name":"ux","description":"User experience","color":"C5DEF5"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACobsQcQ","name":"handover","description":"","color":"006B75"}],"milestone":null,"number":103,"state":"CLOSED","title":"BUG-065 — Consegne: finestre sovrapposte e inserimento non rapido","url":"https://github.com/lucalavia/ClinicOS/issues/103"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACobsMCA","name":"emergency","description":"","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACobsSZA","name":"printing","description":"","color":"F9D0C4"}],"milestone":null,"number":102,"state":"CLOSED","title":"BUG-064 — Invio in PS: finestra che stampa dimissioni e terapia","url":"https://github.com/lucalavia/ClinicOS/issues/102"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACobsOGw","name":"allergies","description":"","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACobsS6Q","name":"anamnesis","description":"","color":"5319E7"}],"milestone":null,"number":101,"state":"CLOSED","title":"BUG-063 — Anamnesi: vengono mostrate sempre le stesse allergie","url":"https://github.com/lucalavia/ClinicOS/issues/101"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACobsL0w","name":"discharge","description":"","color":"FBCA04"}],"milestone":null,"number":100,"state":"CLOSED","title":"BUG-062 — Dimissione: eliminare Giro medicazione e mantenere solo la frequenza","url":"https://github.com/lucalavia/ClinicOS/issues/100"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACobsOnA","name":"clinical-record","description":"","color":"006B75"}],"milestone":null,"number":99,"state":"CLOSED","title":"BUG-061 — Scheda Clinica: finestre separate per Esami ematici, RX e Consulenze specialistiche","url":"https://github.com/lucalavia/ClinicOS/issues/99"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACobsMfQ","name":"clinical-scales","description":"","color":"0E8A16"}],"milestone":null,"number":98,"state":"CLOSED","title":"BUG-060 — Moduli clinici: aggiungere Scala Tinetti e Scala NRS","url":"https://github.com/lucalavia/ClinicOS/issues/98"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACobsOnA","name":"clinical-record","description":"","color":"006B75"}],"milestone":null,"number":97,"state":"CLOSED","title":"BUG-059 — Contenzioni: eliminare il campo Intervallo rivalutazione","url":"https://github.com/lucalavia/ClinicOS/issues/97"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACobsOnA","name":"clinical-record","description":"","color":"006B75"}],"milestone":null,"number":96,"state":"CLOSED","title":"BUG-058 — Medicazioni e contenzioni non vengono salvate","url":"https://github.com/lucalavia/ClinicOS/issues/96"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38hDw","name":"status-blocked","description":"Blocked requirement","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACobsNAw","name":"therapy","description":"","color":"7057FF"},{"id":"LA_kwDOSt4Zr88AAAACobsRLA","name":"blocked","description":"","color":"000000"}],"milestone":null,"number":95,"state":"OPEN","title":"BUG-057 — Terapia: supportare dosi frazionate 1/2 e 1/4 di compressa","url":"https://github.com/lucalavia/ClinicOS/issues/95"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACobsNAw","name":"therapy","description":"","color":"7057FF"}],"milestone":null,"number":94,"state":"CLOSED","title":"BUG-056 — Terapia: lo stesso farmaco deve supportare più orari","url":"https://github.com/lucalavia/ClinicOS/issues/94"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_OWg","name":"status-deploy-failed","description":"Deployment failed or not started","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACobsNAw","name":"therapy","description":"","color":"7057FF"},{"id":"LA_kwDOSt4Zr88AAAACobsRLA","name":"blocked","description":"","color":"000000"},{"id":"LA_kwDOSt4Zr88AAAACobsRzA","name":"patient-admission","description":"","color":"BFDADC"}],"milestone":null,"number":93,"state":"CLOSED","title":"BUG-055 — La terapia farmacologica non viene impostata all’ingresso","url":"https://github.com/lucalavia/ClinicOS/issues/93"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACobsRzA","name":"patient-admission","description":"","color":"BFDADC"}],"milestone":null,"number":92,"state":"CLOSED","title":"BUG-054 — Rimuovere Anamnesi familiare e Contesto lavorativo dall’ingresso","url":"https://github.com/lucalavia/ClinicOS/issues/92"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACobsRzA","name":"patient-admission","description":"","color":"BFDADC"}],"milestone":null,"number":91,"state":"CLOSED","title":"BUG-053 — Ingresso paziente: il dolore non è modificabile","url":"https://github.com/lucalavia/ClinicOS/issues/91"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACobsO4Q","name":"mobile","description":"","color":"C2E0C6"}],"milestone":null,"number":90,"state":"CLOSED","title":"BUG-052 — Scatta Foto non attiva la fotocamera","url":"https://github.com/lucalavia/ClinicOS/issues/90"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3d-w","name":"ai","description":"AI e pipeline agentica","color":"7057FF"}],"milestone":null,"number":89,"state":"CLOSED","title":"BUG-052 — “Scatta Foto” apre l’importazione file invece della fotocamera","url":"https://github.com/lucalavia/ClinicOS/issues/89"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":87,"state":"CLOSED","title":"BUG-051 — Blocchi narrativi presenti ma contenuto importato non popolato","url":"https://github.com/lucalavia/ClinicOS/issues/87"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dfQ","name":"architecture","description":"Architettura applicativa","color":"F9D0C4"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":86,"state":"CLOSED","title":"BUG-050 — Revisione import: la UI usa ancora il renderer legacy a tabelle","url":"https://github.com/lucalavia/ClinicOS/issues/86"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAAClkiXIQ","name":"enhancement","description":"Miglioramento funzionale","color":"A2EEEF"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eIg","name":"storage","description":"Persistenza e object storage","color":"006B75"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eSA","name":"documents","description":"Documenti paziente","color":"BFDADC"}],"milestone":null,"number":85,"state":"CLOSED","title":"BUG-049 — I file di importazione non sono persistiti nei Documenti del paziente","url":"https://github.com/lucalavia/ClinicOS/issues/85"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAAClkiXIQ","name":"enhancement","description":"Miglioramento funzionale","color":"A2EEEF"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eSA","name":"documents","description":"Documenti paziente","color":"BFDADC"}],"milestone":null,"number":84,"state":"CLOSED","title":"BUG-048 — Sezioni importate: manca il confronto permanente con il documento originale","url":"https://github.com/lucalavia/ClinicOS/issues/84"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAAClkiXIQ","name":"enhancement","description":"Miglioramento funzionale","color":"A2EEEF"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3c-g","name":"ux","description":"User experience","color":"C5DEF5"},{"id":"LA_kwDOSt4Zr88AAAACoJ3d0g","name":"medium","description":"Priorità media","color":"FBCA04"}],"milestone":null,"number":83,"state":"CLOSED","title":"BUG-047 — Rendering narrativo: le date a inizio evento non sono evidenziate","url":"https://github.com/lucalavia/ClinicOS/issues/83"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3cXA","name":"ocr","description":"OCR","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eBw","name":"parser","description":"Parser documentale","color":"006B75"}],"milestone":null,"number":82,"state":"CLOSED","title":"BUG-046 — Parser documenti: header anagrafico ripetuto incluso nell'estrazione","url":"https://github.com/lucalavia/ClinicOS/issues/82"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eBw","name":"parser","description":"Parser documentale","color":"006B75"}],"milestone":null,"number":81,"state":"CLOSED","title":"BUG-045 — Parser multipagina: la fine pagina interrompe i blocchi narrativi","url":"https://github.com/lucalavia/ClinicOS/issues/81"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":80,"state":"CLOSED","title":"BUG-044 — Workflow import: manca il ritorno ai documenti dopo il processamento","url":"https://github.com/lucalavia/ClinicOS/issues/80"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACoJ3c-g","name":"ux","description":"User experience","color":"C5DEF5"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":79,"state":"CLOSED","title":"BUG-043 — Revisione import: testi clinici troncati e non leggibili","url":"https://github.com/lucalavia/ClinicOS/issues/79"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":78,"state":"CLOSED","title":"BUG-042 — Revisione import: righe diagnosi create con codice ICD vuoto","url":"https://github.com/lucalavia/ClinicOS/issues/78"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACoJ3d-w","name":"ai","description":"AI e pipeline agentica","color":"7057FF"}],"milestone":null,"number":77,"state":"CLOSED","title":"BUG-041 — Import: tipo e stato delle diagnosi vengono inferiti senza evidenza","url":"https://github.com/lucalavia/ClinicOS/issues/77"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACoJ3d-w","name":"ai","description":"AI e pipeline agentica","color":"7057FF"}],"milestone":null,"number":76,"state":"CLOSED","title":"BUG-040 — Import: la diagnosi narrativa viene esplosa in 36 record strutturati","url":"https://github.com/lucalavia/ClinicOS/issues/76"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":75,"state":"CLOSED","title":"BUG-039 — Revisione import: formato data di nascita incoerente","url":"https://github.com/lucalavia/ClinicOS/issues/75"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":74,"state":"CLOSED","title":"BUG-038 — Revisione import: allergie duplicate e dati divergenti","url":"https://github.com/lucalavia/ClinicOS/issues/74"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":73,"state":"CLOSED","title":"BUG-051 — Blocchi narrativi presenti ma contenuto importato non popolato","url":"https://github.com/lucalavia/ClinicOS/issues/73"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dfQ","name":"architecture","description":"Architettura applicativa","color":"F9D0C4"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":72,"state":"CLOSED","title":"BUG-050 — Revisione import: la UI usa ancora il renderer legacy a tabelle","url":"https://github.com/lucalavia/ClinicOS/issues/72"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXIQ","name":"enhancement","description":"Miglioramento funzionale","color":"A2EEEF"},{"id":"LA_kwDOSt4Zr88AAAACm3_OWg","name":"status-deploy-failed","description":"Deployment failed or not started","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eIg","name":"storage","description":"Persistenza e object storage","color":"006B75"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eSA","name":"documents","description":"Documenti paziente","color":"BFDADC"},{"id":"LA_kwDOSt4Zr88AAAACobsRLA","name":"blocked","description":"","color":"000000"}],"milestone":null,"number":71,"state":"OPEN","title":"BUG-049 — I file di importazione non sono persistiti nei Documenti del paziente","url":"https://github.com/lucalavia/ClinicOS/issues/71"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXIQ","name":"enhancement","description":"Miglioramento funzionale","color":"A2EEEF"},{"id":"LA_kwDOSt4Zr88AAAACm3_OWg","name":"status-deploy-failed","description":"Deployment failed or not started","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eSA","name":"documents","description":"Documenti paziente","color":"BFDADC"},{"id":"LA_kwDOSt4Zr88AAAACobsRLA","name":"blocked","description":"","color":"000000"}],"milestone":null,"number":70,"state":"OPEN","title":"BUG-048 — Sezioni importate: manca il confronto permanente con il documento originale","url":"https://github.com/lucalavia/ClinicOS/issues/70"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXIQ","name":"enhancement","description":"Miglioramento funzionale","color":"A2EEEF"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3c-g","name":"ux","description":"User experience","color":"C5DEF5"},{"id":"LA_kwDOSt4Zr88AAAACoJ3d0g","name":"medium","description":"Priorità media","color":"FBCA04"}],"milestone":null,"number":69,"state":"CLOSED","title":"BUG-047 — Rendering narrativo: le date a inizio evento non sono evidenziate","url":"https://github.com/lucalavia/ClinicOS/issues/69"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm3_OWg","name":"status-deploy-failed","description":"Deployment failed or not started","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3cXA","name":"ocr","description":"OCR","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eBw","name":"parser","description":"Parser documentale","color":"006B75"},{"id":"LA_kwDOSt4Zr88AAAACobsRLA","name":"blocked","description":"","color":"000000"}],"milestone":null,"number":68,"state":"OPEN","title":"BUG-046 — Parser documenti: header anagrafico ripetuto incluso nell'estrazione","url":"https://github.com/lucalavia/ClinicOS/issues/68"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACoJ3eBw","name":"parser","description":"Parser documentale","color":"006B75"}],"milestone":null,"number":67,"state":"CLOSED","title":"BUG-045 — Parser multipagina: la fine pagina interrompe i blocchi narrativi","url":"https://github.com/lucalavia/ClinicOS/issues/67"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":66,"state":"CLOSED","title":"BUG-044 — Workflow import: manca il ritorno ai documenti dopo il processamento","url":"https://github.com/lucalavia/ClinicOS/issues/66"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACoJ3c-g","name":"ux","description":"User experience","color":"C5DEF5"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":65,"state":"CLOSED","title":"BUG-043 — Revisione import: testi clinici troncati e non leggibili","url":"https://github.com/lucalavia/ClinicOS/issues/65"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":64,"state":"CLOSED","title":"BUG-042 — Revisione import: righe diagnosi create con codice ICD vuoto","url":"https://github.com/lucalavia/ClinicOS/issues/64"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACoJ3d-w","name":"ai","description":"AI e pipeline agentica","color":"7057FF"}],"milestone":null,"number":63,"state":"CLOSED","title":"BUG-041 — Import: tipo e stato delle diagnosi vengono inferiti senza evidenza","url":"https://github.com/lucalavia/ClinicOS/issues/63"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACoJ3d-w","name":"ai","description":"AI e pipeline agentica","color":"7057FF"}],"milestone":null,"number":62,"state":"CLOSED","title":"BUG-040 — Import: la diagnosi narrativa viene esplosa in 36 record strutturati","url":"https://github.com/lucalavia/ClinicOS/issues/62"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dnw","name":"high","description":"Priorità alta","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":61,"state":"CLOSED","title":"BUG-039 — Revisione import: formato data di nascita incoerente","url":"https://github.com/lucalavia/ClinicOS/issues/61"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiW_w","name":"bug","description":"Errore da correggere","color":"D73A4A"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dMA","name":"critical","description":"Priorità critica","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACoJ3dvQ","name":"import","description":"Importazione documentale","color":"5319E7"}],"milestone":null,"number":60,"state":"CLOSED","title":"BUG-038 — Revisione import: allergie duplicate e dati divergenti","url":"https://github.com/lucalavia/ClinicOS/issues/60"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_OWg","name":"status-deploy-failed","description":"Deployment failed or not started","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":54,"state":"CLOSED","title":"# REQ-041 — Introdurre comandi vocali per aggiungere parametri e modificare dati","url":"https://github.com/lucalavia/ClinicOS/issues/54"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38ggQ","name":"status-processing","description":"Currently being processed","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":53,"state":"CLOSED","title":"# REQ-040 — Introdurre un assistente AI globale di ricerca e correlazione","url":"https://github.com/lucalavia/ClinicOS/issues/53"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":52,"state":"CLOSED","title":"# REQ-039 — Rendere tutti i dati ClinicOS interrogabili tramite un Data Gateway agentico","url":"https://github.com/lucalavia/ClinicOS/issues/52"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":50,"state":"CLOSED","title":"# REQ-038 — Evidenziare le date iniziali nei blocchi narrativi","url":"https://github.com/lucalavia/ClinicOS/issues/50"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":49,"state":"CLOSED","title":"# REQ-037 — Riconoscere e filtrare header e footer ripetitivi","url":"https://github.com/lucalavia/ClinicOS/issues/49"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":48,"state":"CLOSED","title":"# REQ-036 — Consentire ritorno, riordinamento e riprocessamento dei documenti","url":"https://github.com/lucalavia/ClinicOS/issues/48"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":46,"state":"CLOSED","title":"REQ-035 v2 — Collegare permanentemente al paziente i documenti utilizzati per l’importazione","url":"https://github.com/lucalavia/ClinicOS/issues/46"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":43,"state":"CLOSED","title":"REQ-034 Popolare realmente i blocchi narrativi con il testo estratto","url":"https://github.com/lucalavia/ClinicOS/issues/43"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":40,"state":"CLOSED","title":"# REQ-033 — Sostituire realmente il flusso legacy di importazione con sezioni narrative","url":"https://github.com/lucalavia/ClinicOS/issues/40"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":37,"state":"CLOSED","title":"REQ-032 — Ampliare la popup di importazione e rendere leggibili immagini e PDF","url":"https://github.com/lucalavia/ClinicOS/issues/37"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38hDw","name":"status-blocked","description":"Blocked requirement","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":35,"state":"CLOSED","title":"# REQ-031 — Visualizzare Revisione e Scheda Paziente come sezioni testuali","url":"https://github.com/lucalavia/ClinicOS/issues/35"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":34,"state":"CLOSED","title":"REQ-030 — Visualizzare Revisione e Scheda Paziente come sezioni testuali","url":"https://github.com/lucalavia/ClinicOS/issues/34"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":33,"state":"CLOSED","title":"# REQ-029 v2 — Aggiungere sezioni narrative permanenti alla Scheda Paziente","url":"https://github.com/lucalavia/ClinicOS/issues/33"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":32,"state":"CLOSED","title":"REQ-028 v2 — Estrarre la lettera di dimissione come sezioni testuali fedeli","url":"https://github.com/lucalavia/ClinicOS/issues/32"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":28,"state":"CLOSED","title":"REQ-027 — Mappare le sezioni della lettera di dimissione nella cartella ClinicOS","url":"https://github.com/lucalavia/ClinicOS/issues/28"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":27,"state":"CLOSED","title":"REQ-026 — Estrarre fedelmente le sezioni cliniche e applicare TAG semantici","url":"https://github.com/lucalavia/ClinicOS/issues/27"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXCA","name":"documentation","description":"Improvements or additions to documentation","color":"0075ca"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":26,"state":"CLOSED","title":"REQ-025 — Profilo documentale Imola e ordinamento pagine","url":"https://github.com/lucalavia/ClinicOS/issues/26"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38hDw","name":"status-blocked","description":"Blocked requirement","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACnP2ETg","name":"security","description":"Security and privacy","color":"B60205"}],"milestone":null,"number":23,"state":"CLOSED","title":"REQ024 Model Role Registry e configurazione multi-modello","url":"https://github.com/lucalavia/ClinicOS/issues/23"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm38hDw","name":"status-blocked","description":"Blocked requirement","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":22,"state":"CLOSED","title":"REQ-023 v2 — Introdurre un AI Runtime Agno completamente model e provider agnostic","url":"https://github.com/lucalavia/ClinicOS/issues/22"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":21,"state":"CLOSED","title":"REQ-022 — Stabilizzare il flusso asincrono di importazione documenti con Gemma","url":"https://github.com/lucalavia/ClinicOS/issues/21"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":20,"state":"CLOSED","title":"REQ-021 ExtractionAgent agent-native: estrazione documenti per paziente nuovo o esistente","url":"https://github.com/lucalavia/ClinicOS/issues/20"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38f5Q","name":"status-ready","description":"Ready to be processed","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Cbw","name":"priority-critical","description":"Critical blocking priority","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACnP2ETg","name":"security","description":"Security and privacy","color":"B60205"}],"milestone":null,"number":19,"state":"CLOSED","title":"REQ-020 Certificare end-to-end importazione con sandbox screenshot e gate","url":"https://github.com/lucalavia/ClinicOS/issues/19"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38f5Q","name":"status-ready","description":"Ready to be processed","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2Cbw","name":"priority-critical","description":"Critical blocking priority","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACnP2ETg","name":"security","description":"Security and privacy","color":"B60205"}],"milestone":null,"number":18,"state":"CLOSED","title":"REQ-019 Proteggere dati sanitari audit e ciclo di vita documenti AI","url":"https://github.com/lucalavia/ClinicOS/issues/18"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38f5Q","name":"status-ready","description":"Ready to be processed","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Cbw","name":"priority-critical","description":"Critical blocking priority","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":17,"state":"CLOSED","title":"REQ-018 Creare il paziente e i dati correlati in modo transazionale","url":"https://github.com/lucalavia/ClinicOS/issues/17"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38f5Q","name":"status-ready","description":"Ready to be processed","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2Dug","name":"frontend","description":"Frontend","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":16,"state":"CLOSED","title":"REQ-017 Precompilare il form Nuovo Paziente con revisione umana","url":"https://github.com/lucalavia/ClinicOS/issues/16"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38f5Q","name":"status-ready","description":"Ready to be processed","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":15,"state":"CLOSED","title":"REQ-016 Unire dati da documenti multipli con provenienza e conflitti","url":"https://github.com/lucalavia/ClinicOS/issues/15"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38f5Q","name":"status-ready","description":"Ready to be processed","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Cbw","name":"priority-critical","description":"Critical blocking priority","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":14,"state":"CLOSED","title":"REQ-015 OCR documentale integrale con rawText e precompilazione ClinicOS","url":"https://github.com/lucalavia/ClinicOS/issues/14"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38f5Q","name":"status-ready","description":"Ready to be processed","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"}],"milestone":null,"number":13,"state":"CLOSED","title":"REQ-014 Creare backend upload multiplo e job di estrazione documentale","url":"https://github.com/lucalavia/ClinicOS/issues/13"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38f5Q","name":"status-ready","description":"Ready to be processed","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"},{"id":"LA_kwDOSt4Zr88AAAACnP2Cbw","name":"priority-critical","description":"Critical blocking priority","color":"B60205"},{"id":"LA_kwDOSt4Zr88AAAACnP2DdA","name":"ai-integration","description":"AI/model integration","color":"6F42C1"},{"id":"LA_kwDOSt4Zr88AAAACnP2EAA","name":"backend","description":"Backend","color":"0052CC"},{"id":"LA_kwDOSt4Zr88AAAACnP2ETg","name":"security","description":"Security and privacy","color":"B60205"}],"milestone":null,"number":12,"state":"CLOSED","title":"REQ-013 Configurare provider AI modello e segreti senza hardcoding","url":"https://github.com/lucalavia/ClinicOS/issues/12"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"}],"milestone":null,"number":11,"state":"CLOSED","title":"REQ-010 Allineare UI/UX della pagina Note e Messaggi al resto di ClinicOS","url":"https://github.com/lucalavia/ClinicOS/issues/11"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"}],"milestone":null,"number":10,"state":"CLOSED","title":"REQ-009 Rendere modificabili tutte le card Consegne","url":"https://github.com/lucalavia/ClinicOS/issues/10"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAAClkiXFA","name":"duplicate","description":"This issue or pull request already exists","color":"cfd3d7"},{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"}],"milestone":null,"number":9,"state":"CLOSED","title":"REQ-008 Import documenti: popup full-size e upload multiplo solo documenti/foto","url":"https://github.com/lucalavia/ClinicOS/issues/9"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"}],"milestone":null,"number":8,"state":"CLOSED","title":"REQ-006 Rendere modificabili tutte le card testuali con comportamento uniforme","url":"https://github.com/lucalavia/ClinicOS/issues/8"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"}],"milestone":null,"number":7,"state":"CLOSED","title":"REQ-005 Migliorare leggibilità delle card interne dati paziente","url":"https://github.com/lucalavia/ClinicOS/issues/7"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"}],"milestone":null,"number":6,"state":"CLOSED","title":"REQ-004 Allineare stile navigazione orizzontale livello 2 e 3 alla reference UI","url":"https://github.com/lucalavia/ClinicOS/issues/6"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm38jDw","name":"status-tested","description":"Implemented and tested","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"}],"milestone":null,"number":5,"state":"CLOSED","title":"REQ-003 Uniformare spazio sinistro e allineamento navigazione livello 2 e 3","url":"https://github.com/lucalavia/ClinicOS/issues/5"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"},{"id":"LA_kwDOSt4Zr88AAAACm3_J_Q","name":"status-deployed","description":"Deployment completed or triggered successfully","color":"0E8A16"}],"milestone":null,"number":4,"state":"CLOSED","title":"REQ-002 Migliorare contrasto background e leggibilità UI","url":"https://github.com/lucalavia/ClinicOS/issues/4"},{"assignees":[],"labels":[{"id":"LA_kwDOSt4Zr88AAAACm35Kpw","name":"clinicos-requirement","description":"ClinicOS requirement","color":"1D76DB"},{"id":"LA_kwDOSt4Zr88AAAACm35M2g","name":"priority-high","description":"High priority","color":"D93F0B"},{"id":"LA_kwDOSt4Zr88AAAACm35PWg","name":"ux-ui","description":"UX/UI requirement","color":"5319E7"},{"id":"LA_kwDOSt4Zr88AAAACm35SDw","name":"qa-required","description":"Acceptance criteria and tests required","color":"FBCA04"}],"milestone":null,"number":3,"state":"CLOSED","title":"REQ-001 Uniformare card e tabelle con collapse, edit modal e UX comune","url":"https://github.com/lucalavia/ClinicOS/issues/3"}]
+[
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3c-g",
+        "name": "ux",
+        "description": "User experience",
+        "color": "C5DEF5"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsQcQ",
+        "name": "handover",
+        "description": "",
+        "color": "006B75"
+      }
+    ],
+    "milestone": null,
+    "number": 103,
+    "state": "CLOSED",
+    "title": "BUG-065 — Consegne: finestre sovrapposte e inserimento non rapido",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/103"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsMCA",
+        "name": "emergency",
+        "description": "",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsSZA",
+        "name": "printing",
+        "description": "",
+        "color": "F9D0C4"
+      }
+    ],
+    "milestone": null,
+    "number": 102,
+    "state": "CLOSED",
+    "title": "BUG-064 — Invio in PS: finestra che stampa dimissioni e terapia",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/102"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsOGw",
+        "name": "allergies",
+        "description": "",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsS6Q",
+        "name": "anamnesis",
+        "description": "",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 101,
+    "state": "CLOSED",
+    "title": "BUG-063 — Anamnesi: vengono mostrate sempre le stesse allergie",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/101"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsL0w",
+        "name": "discharge",
+        "description": "",
+        "color": "FBCA04"
+      }
+    ],
+    "milestone": null,
+    "number": 100,
+    "state": "CLOSED",
+    "title": "BUG-062 — Dimissione: eliminare Giro medicazione e mantenere solo la frequenza",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/100"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsOnA",
+        "name": "clinical-record",
+        "description": "",
+        "color": "006B75"
+      }
+    ],
+    "milestone": null,
+    "number": 99,
+    "state": "CLOSED",
+    "title": "BUG-061 — Scheda Clinica: finestre separate per Esami ematici, RX e Consulenze specialistiche",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/99"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsMfQ",
+        "name": "clinical-scales",
+        "description": "",
+        "color": "0E8A16"
+      }
+    ],
+    "milestone": null,
+    "number": 98,
+    "state": "CLOSED",
+    "title": "BUG-060 — Moduli clinici: aggiungere Scala Tinetti e Scala NRS",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/98"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsOnA",
+        "name": "clinical-record",
+        "description": "",
+        "color": "006B75"
+      }
+    ],
+    "milestone": null,
+    "number": 97,
+    "state": "CLOSED",
+    "title": "BUG-059 — Contenzioni: eliminare il campo Intervallo rivalutazione",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/97"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsOnA",
+        "name": "clinical-record",
+        "description": "",
+        "color": "006B75"
+      }
+    ],
+    "milestone": null,
+    "number": 96,
+    "state": "CLOSED",
+    "title": "BUG-058 — Medicazioni e contenzioni non vengono salvate",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/96"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38hDw",
+        "name": "status-blocked",
+        "description": "Blocked requirement",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsNAw",
+        "name": "therapy",
+        "description": "",
+        "color": "7057FF"
+      },
+      { "id": "LA_kwDOSt4Zr88AAAACobsRLA", "name": "blocked", "description": "", "color": "000000" }
+    ],
+    "milestone": null,
+    "number": 95,
+    "state": "OPEN",
+    "title": "BUG-057 — Terapia: supportare dosi frazionate 1/2 e 1/4 di compressa",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/95"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      { "id": "LA_kwDOSt4Zr88AAAACobsNAw", "name": "therapy", "description": "", "color": "7057FF" }
+    ],
+    "milestone": null,
+    "number": 94,
+    "state": "CLOSED",
+    "title": "BUG-056 — Terapia: lo stesso farmaco deve supportare più orari",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/94"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_OWg",
+        "name": "status-deploy-failed",
+        "description": "Deployment failed or not started",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsNAw",
+        "name": "therapy",
+        "description": "",
+        "color": "7057FF"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsRLA",
+        "name": "blocked",
+        "description": "",
+        "color": "000000"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsRzA",
+        "name": "patient-admission",
+        "description": "",
+        "color": "BFDADC"
+      }
+    ],
+    "milestone": null,
+    "number": 93,
+    "state": "CLOSED",
+    "title": "BUG-055 — La terapia farmacologica non viene impostata all’ingresso",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/93"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsRzA",
+        "name": "patient-admission",
+        "description": "",
+        "color": "BFDADC"
+      }
+    ],
+    "milestone": null,
+    "number": 92,
+    "state": "CLOSED",
+    "title": "BUG-054 — Rimuovere Anamnesi familiare e Contesto lavorativo dall’ingresso",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/92"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACobsRzA",
+        "name": "patient-admission",
+        "description": "",
+        "color": "BFDADC"
+      }
+    ],
+    "milestone": null,
+    "number": 91,
+    "state": "CLOSED",
+    "title": "BUG-053 — Ingresso paziente: il dolore non è modificabile",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/91"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      { "id": "LA_kwDOSt4Zr88AAAACobsO4Q", "name": "mobile", "description": "", "color": "C2E0C6" }
+    ],
+    "milestone": null,
+    "number": 90,
+    "state": "CLOSED",
+    "title": "BUG-052 — Scatta Foto non attiva la fotocamera",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/90"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3d-w",
+        "name": "ai",
+        "description": "AI e pipeline agentica",
+        "color": "7057FF"
+      }
+    ],
+    "milestone": null,
+    "number": 89,
+    "state": "CLOSED",
+    "title": "BUG-052 — “Scatta Foto” apre l’importazione file invece della fotocamera",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/89"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 87,
+    "state": "CLOSED",
+    "title": "BUG-051 — Blocchi narrativi presenti ma contenuto importato non popolato",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/87"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dfQ",
+        "name": "architecture",
+        "description": "Architettura applicativa",
+        "color": "F9D0C4"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 86,
+    "state": "CLOSED",
+    "title": "BUG-050 — Revisione import: la UI usa ancora il renderer legacy a tabelle",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/86"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXIQ",
+        "name": "enhancement",
+        "description": "Miglioramento funzionale",
+        "color": "A2EEEF"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eIg",
+        "name": "storage",
+        "description": "Persistenza e object storage",
+        "color": "006B75"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eSA",
+        "name": "documents",
+        "description": "Documenti paziente",
+        "color": "BFDADC"
+      }
+    ],
+    "milestone": null,
+    "number": 85,
+    "state": "CLOSED",
+    "title": "BUG-049 — I file di importazione non sono persistiti nei Documenti del paziente",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/85"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXIQ",
+        "name": "enhancement",
+        "description": "Miglioramento funzionale",
+        "color": "A2EEEF"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eSA",
+        "name": "documents",
+        "description": "Documenti paziente",
+        "color": "BFDADC"
+      }
+    ],
+    "milestone": null,
+    "number": 84,
+    "state": "CLOSED",
+    "title": "BUG-048 — Sezioni importate: manca il confronto permanente con il documento originale",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/84"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXIQ",
+        "name": "enhancement",
+        "description": "Miglioramento funzionale",
+        "color": "A2EEEF"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3c-g",
+        "name": "ux",
+        "description": "User experience",
+        "color": "C5DEF5"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3d0g",
+        "name": "medium",
+        "description": "Priorità media",
+        "color": "FBCA04"
+      }
+    ],
+    "milestone": null,
+    "number": 83,
+    "state": "CLOSED",
+    "title": "BUG-047 — Rendering narrativo: le date a inizio evento non sono evidenziate",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/83"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      { "id": "LA_kwDOSt4Zr88AAAACoJ3cXA", "name": "ocr", "description": "OCR", "color": "0E8A16" },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eBw",
+        "name": "parser",
+        "description": "Parser documentale",
+        "color": "006B75"
+      }
+    ],
+    "milestone": null,
+    "number": 82,
+    "state": "CLOSED",
+    "title": "BUG-046 — Parser documenti: header anagrafico ripetuto incluso nell'estrazione",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/82"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eBw",
+        "name": "parser",
+        "description": "Parser documentale",
+        "color": "006B75"
+      }
+    ],
+    "milestone": null,
+    "number": 81,
+    "state": "CLOSED",
+    "title": "BUG-045 — Parser multipagina: la fine pagina interrompe i blocchi narrativi",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/81"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 80,
+    "state": "CLOSED",
+    "title": "BUG-044 — Workflow import: manca il ritorno ai documenti dopo il processamento",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/80"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3c-g",
+        "name": "ux",
+        "description": "User experience",
+        "color": "C5DEF5"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 79,
+    "state": "CLOSED",
+    "title": "BUG-043 — Revisione import: testi clinici troncati e non leggibili",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/79"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 78,
+    "state": "CLOSED",
+    "title": "BUG-042 — Revisione import: righe diagnosi create con codice ICD vuoto",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/78"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3d-w",
+        "name": "ai",
+        "description": "AI e pipeline agentica",
+        "color": "7057FF"
+      }
+    ],
+    "milestone": null,
+    "number": 77,
+    "state": "CLOSED",
+    "title": "BUG-041 — Import: tipo e stato delle diagnosi vengono inferiti senza evidenza",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/77"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3d-w",
+        "name": "ai",
+        "description": "AI e pipeline agentica",
+        "color": "7057FF"
+      }
+    ],
+    "milestone": null,
+    "number": 76,
+    "state": "CLOSED",
+    "title": "BUG-040 — Import: la diagnosi narrativa viene esplosa in 36 record strutturati",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/76"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 75,
+    "state": "CLOSED",
+    "title": "BUG-039 — Revisione import: formato data di nascita incoerente",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/75"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 74,
+    "state": "CLOSED",
+    "title": "BUG-038 — Revisione import: allergie duplicate e dati divergenti",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/74"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 73,
+    "state": "CLOSED",
+    "title": "BUG-051 — Blocchi narrativi presenti ma contenuto importato non popolato",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/73"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dfQ",
+        "name": "architecture",
+        "description": "Architettura applicativa",
+        "color": "F9D0C4"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 72,
+    "state": "CLOSED",
+    "title": "BUG-050 — Revisione import: la UI usa ancora il renderer legacy a tabelle",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/72"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXIQ",
+        "name": "enhancement",
+        "description": "Miglioramento funzionale",
+        "color": "A2EEEF"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_OWg",
+        "name": "status-deploy-failed",
+        "description": "Deployment failed or not started",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eIg",
+        "name": "storage",
+        "description": "Persistenza e object storage",
+        "color": "006B75"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eSA",
+        "name": "documents",
+        "description": "Documenti paziente",
+        "color": "BFDADC"
+      },
+      { "id": "LA_kwDOSt4Zr88AAAACobsRLA", "name": "blocked", "description": "", "color": "000000" }
+    ],
+    "milestone": null,
+    "number": 71,
+    "state": "OPEN",
+    "title": "BUG-049 — I file di importazione non sono persistiti nei Documenti del paziente",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/71"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXIQ",
+        "name": "enhancement",
+        "description": "Miglioramento funzionale",
+        "color": "A2EEEF"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_OWg",
+        "name": "status-deploy-failed",
+        "description": "Deployment failed or not started",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eSA",
+        "name": "documents",
+        "description": "Documenti paziente",
+        "color": "BFDADC"
+      },
+      { "id": "LA_kwDOSt4Zr88AAAACobsRLA", "name": "blocked", "description": "", "color": "000000" }
+    ],
+    "milestone": null,
+    "number": 70,
+    "state": "OPEN",
+    "title": "BUG-048 — Sezioni importate: manca il confronto permanente con il documento originale",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/70"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXIQ",
+        "name": "enhancement",
+        "description": "Miglioramento funzionale",
+        "color": "A2EEEF"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3c-g",
+        "name": "ux",
+        "description": "User experience",
+        "color": "C5DEF5"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3d0g",
+        "name": "medium",
+        "description": "Priorità media",
+        "color": "FBCA04"
+      }
+    ],
+    "milestone": null,
+    "number": 69,
+    "state": "CLOSED",
+    "title": "BUG-047 — Rendering narrativo: le date a inizio evento non sono evidenziate",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/69"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_OWg",
+        "name": "status-deploy-failed",
+        "description": "Deployment failed or not started",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      { "id": "LA_kwDOSt4Zr88AAAACoJ3cXA", "name": "ocr", "description": "OCR", "color": "0E8A16" },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eBw",
+        "name": "parser",
+        "description": "Parser documentale",
+        "color": "006B75"
+      },
+      { "id": "LA_kwDOSt4Zr88AAAACobsRLA", "name": "blocked", "description": "", "color": "000000" }
+    ],
+    "milestone": null,
+    "number": 68,
+    "state": "OPEN",
+    "title": "BUG-046 — Parser documenti: header anagrafico ripetuto incluso nell'estrazione",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/68"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3eBw",
+        "name": "parser",
+        "description": "Parser documentale",
+        "color": "006B75"
+      }
+    ],
+    "milestone": null,
+    "number": 67,
+    "state": "CLOSED",
+    "title": "BUG-045 — Parser multipagina: la fine pagina interrompe i blocchi narrativi",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/67"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 66,
+    "state": "CLOSED",
+    "title": "BUG-044 — Workflow import: manca il ritorno ai documenti dopo il processamento",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/66"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3c-g",
+        "name": "ux",
+        "description": "User experience",
+        "color": "C5DEF5"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 65,
+    "state": "CLOSED",
+    "title": "BUG-043 — Revisione import: testi clinici troncati e non leggibili",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/65"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 64,
+    "state": "CLOSED",
+    "title": "BUG-042 — Revisione import: righe diagnosi create con codice ICD vuoto",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/64"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3d-w",
+        "name": "ai",
+        "description": "AI e pipeline agentica",
+        "color": "7057FF"
+      }
+    ],
+    "milestone": null,
+    "number": 63,
+    "state": "CLOSED",
+    "title": "BUG-041 — Import: tipo e stato delle diagnosi vengono inferiti senza evidenza",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/63"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3d-w",
+        "name": "ai",
+        "description": "AI e pipeline agentica",
+        "color": "7057FF"
+      }
+    ],
+    "milestone": null,
+    "number": 62,
+    "state": "CLOSED",
+    "title": "BUG-040 — Import: la diagnosi narrativa viene esplosa in 36 record strutturati",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/62"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dnw",
+        "name": "high",
+        "description": "Priorità alta",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 61,
+    "state": "CLOSED",
+    "title": "BUG-039 — Revisione import: formato data di nascita incoerente",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/61"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiW_w",
+        "name": "bug",
+        "description": "Errore da correggere",
+        "color": "D73A4A"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dMA",
+        "name": "critical",
+        "description": "Priorità critica",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACoJ3dvQ",
+        "name": "import",
+        "description": "Importazione documentale",
+        "color": "5319E7"
+      }
+    ],
+    "milestone": null,
+    "number": 60,
+    "state": "CLOSED",
+    "title": "BUG-038 — Revisione import: allergie duplicate e dati divergenti",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/60"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_OWg",
+        "name": "status-deploy-failed",
+        "description": "Deployment failed or not started",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 54,
+    "state": "CLOSED",
+    "title": "# REQ-041 — Introdurre comandi vocali per aggiungere parametri e modificare dati",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/54"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38ggQ",
+        "name": "status-processing",
+        "description": "Currently being processed",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 53,
+    "state": "CLOSED",
+    "title": "# REQ-040 — Introdurre un assistente AI globale di ricerca e correlazione",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/53"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 52,
+    "state": "CLOSED",
+    "title": "# REQ-039 — Rendere tutti i dati ClinicOS interrogabili tramite un Data Gateway agentico",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/52"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 50,
+    "state": "CLOSED",
+    "title": "# REQ-038 — Evidenziare le date iniziali nei blocchi narrativi",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/50"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 49,
+    "state": "CLOSED",
+    "title": "# REQ-037 — Riconoscere e filtrare header e footer ripetitivi",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/49"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 48,
+    "state": "CLOSED",
+    "title": "# REQ-036 — Consentire ritorno, riordinamento e riprocessamento dei documenti",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/48"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 46,
+    "state": "CLOSED",
+    "title": "REQ-035 v2 — Collegare permanentemente al paziente i documenti utilizzati per l’importazione",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/46"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 43,
+    "state": "CLOSED",
+    "title": "REQ-034 Popolare realmente i blocchi narrativi con il testo estratto",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/43"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 40,
+    "state": "CLOSED",
+    "title": "# REQ-033 — Sostituire realmente il flusso legacy di importazione con sezioni narrative",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/40"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 37,
+    "state": "CLOSED",
+    "title": "REQ-032 — Ampliare la popup di importazione e rendere leggibili immagini e PDF",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/37"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38hDw",
+        "name": "status-blocked",
+        "description": "Blocked requirement",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 35,
+    "state": "CLOSED",
+    "title": "# REQ-031 — Visualizzare Revisione e Scheda Paziente come sezioni testuali",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/35"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 34,
+    "state": "CLOSED",
+    "title": "REQ-030 — Visualizzare Revisione e Scheda Paziente come sezioni testuali",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/34"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 33,
+    "state": "CLOSED",
+    "title": "# REQ-029 v2 — Aggiungere sezioni narrative permanenti alla Scheda Paziente",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/33"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 32,
+    "state": "CLOSED",
+    "title": "REQ-028 v2 — Estrarre la lettera di dimissione come sezioni testuali fedeli",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/32"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 28,
+    "state": "CLOSED",
+    "title": "REQ-027 — Mappare le sezioni della lettera di dimissione nella cartella ClinicOS",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/28"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 27,
+    "state": "CLOSED",
+    "title": "REQ-026 — Estrarre fedelmente le sezioni cliniche e applicare TAG semantici",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/27"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXCA",
+        "name": "documentation",
+        "description": "Improvements or additions to documentation",
+        "color": "0075ca"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 26,
+    "state": "CLOSED",
+    "title": "REQ-025 — Profilo documentale Imola e ordinamento pagine",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/26"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38hDw",
+        "name": "status-blocked",
+        "description": "Blocked requirement",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2ETg",
+        "name": "security",
+        "description": "Security and privacy",
+        "color": "B60205"
+      }
+    ],
+    "milestone": null,
+    "number": 23,
+    "state": "CLOSED",
+    "title": "REQ024 Model Role Registry e configurazione multi-modello",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/23"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38hDw",
+        "name": "status-blocked",
+        "description": "Blocked requirement",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 22,
+    "state": "CLOSED",
+    "title": "REQ-023 v2 — Introdurre un AI Runtime Agno completamente model e provider agnostic",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/22"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 21,
+    "state": "CLOSED",
+    "title": "REQ-022 — Stabilizzare il flusso asincrono di importazione documenti con Gemma",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/21"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 20,
+    "state": "CLOSED",
+    "title": "REQ-021 ExtractionAgent agent-native: estrazione documenti per paziente nuovo o esistente",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/20"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38f5Q",
+        "name": "status-ready",
+        "description": "Ready to be processed",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Cbw",
+        "name": "priority-critical",
+        "description": "Critical blocking priority",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2ETg",
+        "name": "security",
+        "description": "Security and privacy",
+        "color": "B60205"
+      }
+    ],
+    "milestone": null,
+    "number": 19,
+    "state": "CLOSED",
+    "title": "REQ-020 Certificare end-to-end importazione con sandbox screenshot e gate",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/19"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38f5Q",
+        "name": "status-ready",
+        "description": "Ready to be processed",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Cbw",
+        "name": "priority-critical",
+        "description": "Critical blocking priority",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2ETg",
+        "name": "security",
+        "description": "Security and privacy",
+        "color": "B60205"
+      }
+    ],
+    "milestone": null,
+    "number": 18,
+    "state": "CLOSED",
+    "title": "REQ-019 Proteggere dati sanitari audit e ciclo di vita documenti AI",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/18"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38f5Q",
+        "name": "status-ready",
+        "description": "Ready to be processed",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Cbw",
+        "name": "priority-critical",
+        "description": "Critical blocking priority",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 17,
+    "state": "CLOSED",
+    "title": "REQ-018 Creare il paziente e i dati correlati in modo transazionale",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/17"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38f5Q",
+        "name": "status-ready",
+        "description": "Ready to be processed",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Dug",
+        "name": "frontend",
+        "description": "Frontend",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 16,
+    "state": "CLOSED",
+    "title": "REQ-017 Precompilare il form Nuovo Paziente con revisione umana",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/16"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38f5Q",
+        "name": "status-ready",
+        "description": "Ready to be processed",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 15,
+    "state": "CLOSED",
+    "title": "REQ-016 Unire dati da documenti multipli con provenienza e conflitti",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/15"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38f5Q",
+        "name": "status-ready",
+        "description": "Ready to be processed",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Cbw",
+        "name": "priority-critical",
+        "description": "Critical blocking priority",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 14,
+    "state": "CLOSED",
+    "title": "REQ-015 OCR documentale integrale con rawText e precompilazione ClinicOS",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/14"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38f5Q",
+        "name": "status-ready",
+        "description": "Ready to be processed",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      }
+    ],
+    "milestone": null,
+    "number": 13,
+    "state": "CLOSED",
+    "title": "REQ-014 Creare backend upload multiplo e job di estrazione documentale",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/13"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38f5Q",
+        "name": "status-ready",
+        "description": "Ready to be processed",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2Cbw",
+        "name": "priority-critical",
+        "description": "Critical blocking priority",
+        "color": "B60205"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2DdA",
+        "name": "ai-integration",
+        "description": "AI/model integration",
+        "color": "6F42C1"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2EAA",
+        "name": "backend",
+        "description": "Backend",
+        "color": "0052CC"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACnP2ETg",
+        "name": "security",
+        "description": "Security and privacy",
+        "color": "B60205"
+      }
+    ],
+    "milestone": null,
+    "number": 12,
+    "state": "CLOSED",
+    "title": "REQ-013 Configurare provider AI modello e segreti senza hardcoding",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/12"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      }
+    ],
+    "milestone": null,
+    "number": 11,
+    "state": "CLOSED",
+    "title": "REQ-010 Allineare UI/UX della pagina Note e Messaggi al resto di ClinicOS",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/11"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      }
+    ],
+    "milestone": null,
+    "number": 10,
+    "state": "CLOSED",
+    "title": "REQ-009 Rendere modificabili tutte le card Consegne",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/10"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAAClkiXFA",
+        "name": "duplicate",
+        "description": "This issue or pull request already exists",
+        "color": "cfd3d7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      }
+    ],
+    "milestone": null,
+    "number": 9,
+    "state": "CLOSED",
+    "title": "REQ-008 Import documenti: popup full-size e upload multiplo solo documenti/foto",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/9"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      }
+    ],
+    "milestone": null,
+    "number": 8,
+    "state": "CLOSED",
+    "title": "REQ-006 Rendere modificabili tutte le card testuali con comportamento uniforme",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/8"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      }
+    ],
+    "milestone": null,
+    "number": 7,
+    "state": "CLOSED",
+    "title": "REQ-005 Migliorare leggibilità delle card interne dati paziente",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/7"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      }
+    ],
+    "milestone": null,
+    "number": 6,
+    "state": "CLOSED",
+    "title": "REQ-004 Allineare stile navigazione orizzontale livello 2 e 3 alla reference UI",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/6"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm38jDw",
+        "name": "status-tested",
+        "description": "Implemented and tested",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      }
+    ],
+    "milestone": null,
+    "number": 5,
+    "state": "CLOSED",
+    "title": "REQ-003 Uniformare spazio sinistro e allineamento navigazione livello 2 e 3",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/5"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm3_J_Q",
+        "name": "status-deployed",
+        "description": "Deployment completed or triggered successfully",
+        "color": "0E8A16"
+      }
+    ],
+    "milestone": null,
+    "number": 4,
+    "state": "CLOSED",
+    "title": "REQ-002 Migliorare contrasto background e leggibilità UI",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/4"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35Kpw",
+        "name": "clinicos-requirement",
+        "description": "ClinicOS requirement",
+        "color": "1D76DB"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35M2g",
+        "name": "priority-high",
+        "description": "High priority",
+        "color": "D93F0B"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35PWg",
+        "name": "ux-ui",
+        "description": "UX/UI requirement",
+        "color": "5319E7"
+      },
+      {
+        "id": "LA_kwDOSt4Zr88AAAACm35SDw",
+        "name": "qa-required",
+        "description": "Acceptance criteria and tests required",
+        "color": "FBCA04"
+      }
+    ],
+    "milestone": null,
+    "number": 3,
+    "state": "CLOSED",
+    "title": "REQ-001 Uniformare card e tabelle con collapse, edit modal e UX comune",
+    "url": "https://github.com/lucalavia/ClinicOS/issues/3"
+  }
+]

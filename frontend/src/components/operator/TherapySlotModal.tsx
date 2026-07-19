@@ -1,21 +1,46 @@
 import { useState } from 'react';
-import type { TherapySlot, TherapySlotPatient, TherapyAdministration, MotivoNonErogazione } from '../../types';
+import type {
+  TherapySlot,
+  TherapySlotPatient,
+  TherapyAdministration,
+  MotivoNonErogazione,
+} from '../../types';
 import { sortPazienti } from '../../lib/patientSort';
 
 interface Props {
   slot: TherapySlot;
   onClose: () => void;
-  onConfirm: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }) => void;
-  onNotAdministered: (info: { patientId: string; therapyId: string; drugName: string; dosage: string; route: string; fascia: string; ora: string }, motivo: MotivoNonErogazione, note: string) => void;
+  onConfirm: (info: {
+    patientId: string;
+    therapyId: string;
+    drugName: string;
+    dosage: string;
+    route: string;
+    fascia: string;
+    ora: string;
+  }) => void;
+  onNotAdministered: (
+    info: {
+      patientId: string;
+      therapyId: string;
+      drugName: string;
+      dosage: string;
+      route: string;
+      fascia: string;
+      ora: string;
+    },
+    motivo: MotivoNonErogazione,
+    note: string,
+  ) => void;
 }
 
 const MOTIVI: { value: MotivoNonErogazione; label: string }[] = [
-  { value: 'rifiutata_paziente',       label: 'Rifiutata dal paziente' },
-  { value: 'paziente_assente',         label: 'Paziente assente' },
-  { value: 'sospesa_medico',           label: 'Sospesa dal medico' },
-  { value: 'farmaco_non_disponibile',  label: 'Farmaco non disponibile' },
-  { value: 'impossibilita_clinica',    label: 'Impossibilità clinica' },
-  { value: 'altro',                    label: 'Altro' },
+  { value: 'rifiutata_paziente', label: 'Rifiutata dal paziente' },
+  { value: 'paziente_assente', label: 'Paziente assente' },
+  { value: 'sospesa_medico', label: 'Sospesa dal medico' },
+  { value: 'farmaco_non_disponibile', label: 'Farmaco non disponibile' },
+  { value: 'impossibilita_clinica', label: 'Impossibilità clinica' },
+  { value: 'altro', label: 'Altro' },
 ];
 
 export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }: Props) {
@@ -44,18 +69,21 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
 
   return (
     <div className="therapy-modal-overlay" onClick={onClose}>
-      <div className="therapy-modal" onClick={e => e.stopPropagation()}>
-
+      <div className="therapy-modal" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="therapy-modal__header">
           <div>
-            <h3>{slot.label} &mdash; {slot.ora}</h3>
+            <h3>
+              {slot.label} &mdash; {slot.ora}
+            </h3>
             <span className="therapy-modal__header-info">
               {summary.administered}/{summary.total} erogate
               {summary.pending > 0 ? ` · ${summary.pending} da erogare` : ''}
             </span>
           </div>
-          <button className="therapy-modal__close" onClick={onClose} aria-label="Chiudi">&times;</button>
+          <button className="therapy-modal__close" onClick={onClose} aria-label="Chiudi">
+            &times;
+          </button>
         </div>
 
         {/* Body */}
@@ -63,7 +91,7 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
           {patients.length === 0 ? (
             <div className="therapy-modal__empty">Nessuna terapia prevista per questa fascia.</div>
           ) : (
-            patients.map(p => (
+            patients.map((p) => (
               <div key={p.patientId}>
                 {/* Patient header */}
                 <div className="therapy-patient-header">
@@ -74,7 +102,7 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                 </div>
 
                 {/* Drug rows */}
-                {p.administrations.map(a => {
+                {p.administrations.map((a) => {
                   const key = `${p.patientId}|${a.therapyId}`;
                   const isPending = pendingKeys.has(key);
                   return (
@@ -82,7 +110,9 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                       <div className="therapy-drug-row">
                         <div className="therapy-drug-row__info">
                           <span className="therapy-drug-row__name">{a.drugName}</span>
-                          <span className="therapy-drug-row__meta">{a.dosage} · {a.route} · {a.scheduledTime}</span>
+                          <span className="therapy-drug-row__meta">
+                            {a.dosage} · {a.route} · {a.scheduledTime}
+                          </span>
                         </div>
                         <div className="therapy-drug-row__actions">
                           {a.status === 'administered' && (
@@ -94,7 +124,10 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                             <span style={{ color: '#DC2626', fontWeight: 600, fontSize: 12 }}>
                               Non erogata
                               {a.notAdministeredReason && (
-                                <span style={{ fontWeight: 400 }}> — {a.notAdministeredReason}</span>
+                                <span style={{ fontWeight: 400 }}>
+                                  {' '}
+                                  — {a.notAdministeredReason}
+                                </span>
                               )}
                             </span>
                           )}
@@ -105,9 +138,10 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                                 disabled={isPending}
                                 style={{ opacity: isPending ? 0.6 : 1 }}
                                 onClick={() => {
-                                  setPendingKeys(prev => new Set(prev).add(key));
+                                  setPendingKeys((prev) => new Set(prev).add(key));
                                   onConfirm(buildInfo(p, a));
-                                }}>
+                                }}
+                              >
                                 {isPending ? 'Invio…' : 'Erogata'}
                               </button>
                               <button
@@ -122,7 +156,8 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                                     setSelectedMotivo(null);
                                     setNoteText('');
                                   }
-                                }}>
+                                }}
+                              >
                                 Non erogata
                               </button>
                             </>
@@ -132,11 +167,12 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                       {expandedKey === key && (
                         <div className="therapy-nonadmin-expand">
                           <div className="therapy-motivi-grid">
-                            {MOTIVI.map(m => (
+                            {MOTIVI.map((m) => (
                               <button
                                 key={m.value}
                                 className={`therapy-motivo-btn${selectedMotivo === m.value ? ' selected' : ''}`}
-                                onClick={() => setSelectedMotivo(m.value)}>
+                                onClick={() => setSelectedMotivo(m.value)}
+                              >
                                 {m.label}
                               </button>
                             ))}
@@ -146,7 +182,7 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                               className="therapy-note-input"
                               placeholder="Specifica il motivo..."
                               value={noteText}
-                              onChange={e => setNoteText(e.target.value)}
+                              onChange={(e) => setNoteText(e.target.value)}
                             />
                           )}
                           <button
@@ -159,7 +195,8 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                               setExpandedKey(null);
                               setSelectedMotivo(null);
                               setNoteText('');
-                            }}>
+                            }}
+                          >
                             Conferma
                           </button>
                         </div>
@@ -175,7 +212,9 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
         {/* Footer */}
         <div className="therapy-modal__footer">
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span className="therapy-modal__footer-progress">{summary.administered}/{summary.total} erogate</span>
+            <span className="therapy-modal__footer-progress">
+              {summary.administered}/{summary.total} erogate
+            </span>
             <span className="therapy-modal__footer-bar">
               <span className="therapy-modal__footer-fill" style={{ width: `${pctDone}%` }} />
             </span>

@@ -3,7 +3,7 @@
 // and `engine.ts` executes the validated plan via Prisma. No mutation ops exist here — read-only.
 
 export type FilterOp =
-  | 'eq' | 'in' | 'lt' | 'lte' | 'gt' | 'gte' | 'isNull' | 'contains' | 'between' | 'dateWindow';
+  'eq' | 'in' | 'lt' | 'lte' | 'gt' | 'gte' | 'isNull' | 'contains' | 'between' | 'dateWindow';
 
 export interface RawFilter {
   field: string;

@@ -12,11 +12,11 @@ Extracted from App.tsx inline sidebar JSX. Renders the L1 navigation rail.
 
 ```typescript
 interface NavItem {
-  key: NavKey;           // existing NavKey union type from App.tsx
-  label: string;         // Italian label
-  icon: ReactNode;       // from icons.tsx
-  badge?: number;        // notification count (e.g. unread notes)
-  roles: ('admin' | 'operatore')[];  // which roles see this item
+  key: NavKey; // existing NavKey union type from App.tsx
+  label: string; // Italian label
+  icon: ReactNode; // from icons.tsx
+  badge?: number; // notification count (e.g. unread notes)
+  roles: ('admin' | 'operatore')[]; // which roles see this item
 }
 
 interface TeamsLikeSidebarProps {
@@ -40,13 +40,14 @@ Extracted from PatientDetail.tsx header block. Shows patient identity row compac
 interface PatientCompactHeaderProps {
   paziente: Paziente;
   cartella: CartellaPaziente;
-  onBack: () => void;           // navigate back to patient list
+  onBack: () => void; // navigate back to patient list
 }
 ```
 
 **Layout**: single flex row, ≤56px height. Elements: [back chevron] [name + MRN] [age/DOB] [sex] [room/bed] [allergy badge if any] [status badge]. Name truncates with ellipsis if overflow.
 
 **Fields shown**:
+
 - `${paziente.lastName}, ${paziente.firstName}` — truncated at ~30ch
 - `MRN: ${paziente.medicalRecordNumber}` — compact gray label
 - Age computed from `paziente.dateOfBirth`
@@ -75,6 +76,7 @@ interface MainHorizontalNavProps {
 ```
 
 **Styling targets**:
+
 - Height: 44px (touch-friendly)
 - Font: 14px medium weight (vs current ~12-13px)
 - Active state: filled `var(--blue)` background, white text, no bottom border
@@ -105,6 +107,7 @@ interface ContextSubTabsProps {
 ```
 
 **Styling targets**:
+
 - Height: 28px pills (touch area 44px via padding on container)
 - Font: 11.5px (smaller than MainHorizontalNav)
 - Active: `var(--blue)` background pill, white text
@@ -121,11 +124,11 @@ CSS-only. No new component file needed.
 ```css
 /* Applied to existing .page-content */
 .content-panel {
-  padding-top: 8px;    /* reduced from current ~16-20px */
+  padding-top: 8px; /* reduced from current ~16-20px */
   padding-inline: 16px;
   flex: 1;
   overflow-y: auto;
-  min-height: 0;       /* critical for flex children to scroll */
+  min-height: 0; /* critical for flex children to scroll */
 }
 ```
 

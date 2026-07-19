@@ -14,36 +14,40 @@ You are the final gate before any commit. You verify builds pass, catch regressi
 
 ## Stack
 
-| What | Command | Expected |
-|------|---------|----------|
-| TypeScript check | `cd frontend && npx tsc --noEmit` | "No errors found" |
-| Full build | `npm run build` | Frontend + backend build success |
-| Frontend only | `npm --prefix frontend run build` | Vite build success |
-| Backend only | `npm --prefix backend run build` | Prisma generate + tsc success |
+| What             | Command                           | Expected                         |
+| ---------------- | --------------------------------- | -------------------------------- |
+| TypeScript check | `cd frontend && npx tsc --noEmit` | "No errors found"                |
+| Full build       | `npm run build`                   | Frontend + backend build success |
+| Frontend only    | `npm --prefix frontend run build` | Vite build success               |
+| Backend only     | `npm --prefix backend run build`  | Prisma generate + tsc success    |
 
 ## Verification checklist
 
 Run these checks in order. Stop at first failure and report.
 
 ### 1. Build gate (blocking)
+
 ```bash
 cd frontend && npx tsc --noEmit    # Must show: "No errors found"
 cd .. && npm run build              # Must complete without errors
 ```
 
 ### 2. Code quality (report issues)
+
 - [ ] No unused imports or variables (TypeScript flags these as errors)
 - [ ] No `console.log` statements in committed code
 - [ ] No hardcoded `localhost` in source files (search: `grep -r "localhost" frontend/src/ --include="*.tsx" --include="*.ts"`)
 - [ ] No hardcoded API URLs (should use `VITE_API_URL`)
 
 ### 3. Design system compliance (report issues)
+
 - [ ] Every clinical section wrapped in `ClinicalTableSection` — search for bare `cr-section-header` or `SectionHeader` usage
 - [ ] Every web-view table uses `.clinicos-table` — search for old classes: `data-table`, `braden-table`, `cr-uscite-table`, `parametri-mensili-table`
 - [ ] No popup/modal for Parametri Vitali editing — search for `VitaleModal` imports
 - [ ] Print/modulo tables NOT using `.clinicos-table` (they have their own classes)
 
 ### 4. Functional checks (report issues)
+
 - [ ] All sections collapsible/expandable (ClinicalTableSection has `open` state)
 - [ ] Badge counters show correct numbers
 - [ ] Italian labels (no English UI text)

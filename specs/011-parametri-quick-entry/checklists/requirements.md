@@ -32,6 +32,6 @@
 ## Notes
 
 - Passes 16/16 on the first iteration. Zero [NEEDS CLARIFICATION] markers.
-- FR-020 carves out a *conditional* backend allowance: backend MAY change only if strictly necessary to honour FR-005 / FR-006 / FR-016 (server-side `ora` / `operatore` injection). Any backend change must be the smallest viable diff; the implementation plan decides whether it is actually needed or whether the frontend can populate from session at save time.
+- FR-020 carves out a _conditional_ backend allowance: backend MAY change only if strictly necessary to honour FR-005 / FR-006 / FR-016 (server-side `ora` / `operatore` injection). Any backend change must be the smallest viable diff; the implementation plan decides whether it is actually needed or whether the frontend can populate from session at save time.
 - SC-009 (≤ 6 s click-to-save) is a stopwatch metric; the actual measurement protocol (who measures, how many trials) is left to QA but the bar is concrete.
-- SC-011 verifies the *new operator* task path. The retroactive-`ora` case is explicitly out of scope.
+- SC-011 verifies the _new operator_ task path. The retroactive-`ora` case is explicitly out of scope.
