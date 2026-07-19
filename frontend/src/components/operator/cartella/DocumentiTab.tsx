@@ -338,7 +338,7 @@ export function DocumentiTab({
                 >
                   Annulla
                 </button>
-                <button className="btn-primary btn-sm" onClick={handleSave}>
+                <button className="btn-success btn-sm" onClick={handleSave}>
                   <IcoCheck /> Salva
                 </button>
               </div>
@@ -395,7 +395,7 @@ export function DocumentiTab({
                     </div>
                     <div style={{ display: 'flex', gap: 4, flexShrink: 0 }} className="no-print">
                       <button
-                        className="icon-btn icon-btn--sm"
+                        className="icon-btn icon-btn--sm icon-btn--edit"
                         onClick={() => startEdit(d)}
                         title="Modifica"
                       >

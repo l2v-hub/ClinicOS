@@ -895,7 +895,7 @@ export function ContenzioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                   >
                     Annulla
                   </button>
-                  <button className="btn-primary btn-sm" onClick={handleSave}>
+                  <button className="btn-success btn-sm" onClick={handleSave}>
                     <IcoCheck /> Salva
                   </button>
                 </div>
@@ -998,7 +998,11 @@ function ContenzioneCard({
               Termina
             </button>
           )}
-          <button className="icon-btn icon-btn--sm" onClick={onEdit} title="Modifica">
+          <button
+            className="icon-btn icon-btn--sm icon-btn--edit"
+            onClick={onEdit}
+            title="Modifica"
+          >
             <svg
               width="13"
               height="13"

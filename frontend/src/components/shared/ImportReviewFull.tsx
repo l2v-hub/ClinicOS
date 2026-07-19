@@ -883,7 +883,7 @@ export function ImportReviewFull({
         <button className="btn-ghost" disabled={busy} onClick={onBack}>
           Indietro
         </button>
-        <button className="btn-primary" disabled={busy} onClick={submit}>
+        <button className="btn-success" disabled={busy} onClick={submit}>
           Crea paziente
         </button>
       </footer>

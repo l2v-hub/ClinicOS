@@ -425,7 +425,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
                 <button className="btn-secondary btn-sm" onClick={() => setShowVitalePanel(false)}>
                   Annulla
                 </button>
-                <button className="btn-primary btn-sm" onClick={addVitale}>
+                <button className="btn-success btn-sm" onClick={addVitale}>
                   <IcoCheck /> Salva
                 </button>
               </div>

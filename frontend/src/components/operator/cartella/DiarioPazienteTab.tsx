@@ -330,7 +330,7 @@ export function DiarioPazienteTab({
           {!isLegacy(row) && (
             <div className="diario-card__actions">
               <button
-                className="icon-btn icon-btn--sm"
+                className="icon-btn icon-btn--sm icon-btn--edit"
                 title="Modifica"
                 onClick={() => startEdit(row)}
               >
@@ -489,7 +489,7 @@ export function DiarioPazienteTab({
             Annulla
           </button>
           <button
-            className="btn-primary btn-sm"
+            className="btn-success btn-sm"
             onClick={onSave}
             disabled={saving || !f.content.trim()}
           >
@@ -515,7 +515,7 @@ export function DiarioPazienteTab({
 
   const sectionActions = (
     <button
-      className="btn-primary btn-sm"
+      className="btn-success btn-sm"
       onClick={() => {
         setShowAdd((v) => !v);
         setEditEntry(null);

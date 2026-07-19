@@ -31,7 +31,7 @@ function ItemRow({
     <div className="cr-item-row">
       <div className="cr-item-row__content">{children}</div>
       <div className="cr-item-row__actions">
-        <button className="icon-btn icon-btn--sm" onClick={onEdit} title="Modifica">
+        <button className="icon-btn icon-btn--sm icon-btn--edit" onClick={onEdit} title="Modifica">
           <IcoEdit />
         </button>
         <button

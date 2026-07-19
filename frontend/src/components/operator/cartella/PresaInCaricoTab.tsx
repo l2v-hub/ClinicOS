@@ -281,7 +281,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         <button className="btn-secondary" onClick={cancelEdit}>
           Annulla
         </button>
-        <button className="btn-primary" onClick={handleSave}>
+        <button className="btn-success" onClick={handleSave}>
           <IcoCheck /> Salva
         </button>
       </div>
@@ -406,7 +406,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         <button className="btn-secondary" onClick={cancelEdit}>
           Annulla
         </button>
-        <button className="btn-primary" onClick={handleSave}>
+        <button className="btn-success" onClick={handleSave}>
           <IcoCheck /> Salva
         </button>
       </div>
@@ -603,7 +603,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         <button className="btn-secondary" onClick={cancelEdit}>
           Annulla
         </button>
-        <button className="btn-primary" onClick={handleSave}>
+        <button className="btn-success" onClick={handleSave}>
           <IcoCheck /> Salva
         </button>
       </div>
@@ -773,7 +773,7 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         <button className="btn-secondary" onClick={cancelEdit}>
           Annulla
         </button>
-        <button className="btn-primary" onClick={handleSave}>
+        <button className="btn-success" onClick={handleSave}>
           <IcoCheck /> Salva
         </button>
       </div>

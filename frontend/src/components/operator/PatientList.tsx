@@ -245,7 +245,7 @@ export function PatientList({
               operatorId={operatorId}
               operatorRole={operatorRole}
             />
-            <button className="btn-primary" onClick={() => setShowModal(true)}>
+            <button className="btn-success" onClick={() => setShowModal(true)}>
               <IcoPlus /> Nuovo paziente
             </button>
           </>
@@ -322,7 +322,7 @@ export function PatientList({
           >
             Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.
           </p>
-          <button className="btn-primary" onClick={() => setShowModal(true)}>
+          <button className="btn-success" onClick={() => setShowModal(true)}>
             <IcoPlus /> Aggiungi primo paziente
           </button>
         </div>

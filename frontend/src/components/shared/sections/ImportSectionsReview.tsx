@@ -342,7 +342,7 @@ export function ImportSectionsReview({
         <button className="btn-ghost" disabled={busy} onClick={onBack}>
           Indietro
         </button>
-        <button className="btn-primary" disabled={busy} onClick={handleSubmit}>
+        <button className="btn-success" disabled={busy} onClick={handleSubmit}>
           Crea paziente
         </button>
       </footer>

@@ -120,7 +120,7 @@ export function ConsegnePage({
             urgenti
           </p>
         </div>
-        <button className="btn-primary" onClick={() => setFormAperto((v) => !v)}>
+        <button className="btn-success" onClick={() => setFormAperto((v) => !v)}>
           <IcoPlus /> Nuova consegna
         </button>
       </div>
@@ -207,7 +207,7 @@ export function ConsegnePage({
             <button className="btn-secondary" onClick={() => setFormAperto(false)}>
               Annulla
             </button>
-            <button className="btn-primary" onClick={salva}>
+            <button className="btn-success" onClick={salva}>
               <IcoCheck /> Crea consegna
             </button>
           </div>
@@ -340,7 +340,7 @@ function ConsegnaCard({
         )}
         <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{STATO_LABEL[c.stato]}</span>
         <button
-          className="icon-btn icon-btn--sm consegna-edit-btn"
+          className="icon-btn icon-btn--sm consegna-edit-btn icon-btn--edit"
           onClick={() => setEditOpen(true)}
           title="Modifica consegna"
           aria-label="Modifica consegna"
@@ -601,7 +601,7 @@ function ConsegnaEditInline({
         <button className="btn-secondary btn-sm" onClick={onClose} disabled={saving}>
           Annulla
         </button>
-        <button className="btn-primary btn-sm" onClick={save} disabled={saving}>
+        <button className="btn-success btn-sm" onClick={save} disabled={saving}>
           <IcoCheck /> Salva
         </button>
       </div>
