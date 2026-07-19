@@ -128,7 +128,7 @@ export function OperatorSchedule({ operatori, schedules, onSave }: OperatorSched
               </button>
             ) : (
               <div className="table-actions">
-                <button className="btn-primary btn-sm" onClick={salva}>
+                <button className="btn-success btn-sm" onClick={salva}>
                   <IcoCheck /> Salva
                 </button>
                 <button

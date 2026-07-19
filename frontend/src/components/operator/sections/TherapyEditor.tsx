@@ -108,7 +108,7 @@ function TherapyIntakeEditor({
             </button>
           )}
           <button
-            className="btn-primary btn-sm"
+            className="btn-success btn-sm"
             type="button"
             onClick={handleAdd}
             disabled={!draftItem.farmacoNome.trim()}

@@ -145,7 +145,7 @@ export function AnamnesisEditor({
                       <button className="btn-secondary btn-sm" onClick={cancelCard}>
                         Annulla
                       </button>
-                      <button className="btn-primary btn-sm" onClick={saveCard}>
+                      <button className="btn-success btn-sm" onClick={saveCard}>
                         <IcoCheck /> Salva
                       </button>
                     </div>

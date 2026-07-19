@@ -105,7 +105,7 @@ function operatoriColumns(
       render: (_v, op) => (
         <div className="table-actions">
           <button
-            className="icon-btn icon-btn--sm"
+            className="icon-btn icon-btn--sm icon-btn--edit"
             onClick={() => apriModifica(op)}
             title="Modifica"
           >
@@ -204,7 +204,7 @@ export function OperatorManagement({
             totali
           </p>
         </div>
-        <button className="btn-primary" onClick={apriNuovo}>
+        <button className="btn-success" onClick={apriNuovo}>
           <IcoPlus /> Nuovo Operatore
         </button>
       </div>
@@ -332,7 +332,7 @@ export function OperatorManagement({
             <button className="btn-secondary" onClick={annulla}>
               Annulla
             </button>
-            <button className="btn-primary" onClick={salva}>
+            <button className="btn-success" onClick={salva}>
               <IcoCheck /> {editId ? 'Salva modifiche' : 'Crea operatore'}
             </button>
           </div>
@@ -401,7 +401,10 @@ export function OperatorManagement({
             >
               <span className={`stato-pill stato-pill--${op.stato}`}>{op.stato}</span>
               <div className="table-actions">
-                <button className="icon-btn icon-btn--sm" onClick={() => apriModifica(op)}>
+                <button
+                  className="icon-btn icon-btn--sm icon-btn--edit"
+                  onClick={() => apriModifica(op)}
+                >
                   <IcoEdit />
                 </button>
                 <button

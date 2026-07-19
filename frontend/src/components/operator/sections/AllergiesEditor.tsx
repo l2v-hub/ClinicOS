@@ -213,7 +213,7 @@ export function AllergiesEditor({
               >
                 Annulla
               </button>
-              <button className="btn-primary btn-sm" onClick={add}>
+              <button className="btn-success btn-sm" onClick={add}>
                 <IcoCheck /> Salva
               </button>
             </div>

@@ -1210,7 +1210,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                   <button className="btn-secondary btn-sm" onClick={() => setEditingDim(false)}>
                     Annulla
                   </button>
-                  <button className="btn-primary btn-sm" onClick={saveDim}>
+                  <button className="btn-success btn-sm" onClick={saveDim}>
                     <IcoCheck /> Salva
                   </button>
                 </div>
@@ -1401,7 +1401,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                     <button className="btn-secondary btn-sm" onClick={() => setEditingLib(false)}>
                       Annulla
                     </button>
-                    <button className="btn-primary btn-sm" onClick={saveLib}>
+                    <button className="btn-success btn-sm" onClick={saveLib}>
                       <IcoCheck /> Salva liberatoria
                     </button>
                   </div>
@@ -1549,7 +1549,7 @@ export function DimissioneTab({ cartella, paziente, onUpdate, operatoreNome }: P
                       >
                         Annulla
                       </button>
-                      <button className="btn-primary btn-sm" onClick={addUscita}>
+                      <button className="btn-success btn-sm" onClick={addUscita}>
                         Registra uscita
                       </button>
                     </div>

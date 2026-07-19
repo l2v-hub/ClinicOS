@@ -538,7 +538,11 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       width: '90px',
       render: (_: unknown, t: PatientTherapyAPI) => (
         <div style={{ display: 'flex', gap: 4 }}>
-          <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => openEdit(t)}>
+          <button
+            className="icon-btn icon-btn--sm icon-btn--edit"
+            title="Modifica"
+            onClick={() => openEdit(t)}
+          >
             <svg
               width="13"
               height="13"
@@ -656,7 +660,11 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       width: '64px',
       render: (_: unknown, t: PatientTherapyAPI) => (
         <div style={{ display: 'flex', gap: 4 }}>
-          <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => openEdit(t)}>
+          <button
+            className="icon-btn icon-btn--sm icon-btn--edit"
+            title="Modifica"
+            onClick={() => openEdit(t)}
+          >
             <svg
               width="13"
               height="13"
@@ -929,7 +937,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         count={attive.length}
         countLabel="farmaci attivi"
         actions={
-          <button className="btn-primary btn-sm" onClick={openAdd}>
+          <button className="btn-success btn-sm" onClick={openAdd}>
             + Aggiungi farmaco
           </button>
         }
@@ -1000,7 +1008,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                   <button className="btn-secondary btn-sm" onClick={closeForm}>
                     Annulla
                   </button>
-                  <button className="btn-primary btn-sm" disabled={saving} onClick={handleSave}>
+                  <button className="btn-success btn-sm" disabled={saving} onClick={handleSave}>
                     {saving ? 'Salvataggio...' : editId ? 'Aggiorna' : 'Salva terapia'}
                   </button>
                 </div>
@@ -1008,7 +1016,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
             ) : (
               <>
                 <button
-                  className="btn-primary btn-sm"
+                  className="btn-success btn-sm"
                   style={{ marginBottom: 12 }}
                   onClick={openAdd}
                 >

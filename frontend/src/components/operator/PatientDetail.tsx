@@ -250,7 +250,7 @@ function InlineForm({
         <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
           Annulla
         </button>
-        <button className="btn-primary btn-sm" onClick={onSave} disabled={saving}>
+        <button className="btn-success btn-sm" onClick={onSave} disabled={saving}>
           <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
         </button>
       </div>
@@ -273,7 +273,7 @@ function ItemRow({
     <div className="cr-item-row">
       <div className="cr-item-row__content">{children}</div>
       <div className="cr-item-row__actions">
-        <button className="icon-btn icon-btn--sm" onClick={onEdit} title="Modifica">
+        <button className="icon-btn icon-btn--sm icon-btn--edit" onClick={onEdit} title="Modifica">
           <IcoEdit />
         </button>
         <button
@@ -861,7 +861,7 @@ export function PatientDetail({
                     Annulla
                   </button>
                   <button
-                    className="btn-primary btn-sm"
+                    className="btn-success btn-sm"
                     onClick={addVitaleFromModal}
                     disabled={saving}
                   >
@@ -1007,7 +1007,7 @@ export function PatientDetail({
                   >
                     Annulla
                   </button>
-                  <button className="btn-primary btn-sm" onClick={salvaConsegnaDaModal}>
+                  <button className="btn-success btn-sm" onClick={salvaConsegnaDaModal}>
                     <IcoCheck /> Salva
                   </button>
                 </div>
@@ -1215,7 +1215,7 @@ export function PatientDetail({
                   >
                     Annulla
                   </button>
-                  <button className="btn-primary" onClick={saveCameraFromModal} disabled={saving}>
+                  <button className="btn-success" onClick={saveCameraFromModal} disabled={saving}>
                     <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
                   </button>
                 </>

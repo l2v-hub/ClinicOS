@@ -140,7 +140,7 @@ export function NotesPage({
             )}
           </p>
         </div>
-        <button className="btn-primary" onClick={() => setFormAperto((v) => !v)}>
+        <button className="btn-success" onClick={() => setFormAperto((v) => !v)}>
           <IcoPlus /> Nuova nota
         </button>
       </div>
@@ -210,7 +210,7 @@ export function NotesPage({
             <button className="btn-secondary" onClick={() => setFormAperto(false)}>
               Annulla
             </button>
-            <button className="btn-primary" onClick={salva}>
+            <button className="btn-success" onClick={salva}>
               <IcoCheck /> Invia
             </button>
           </div>

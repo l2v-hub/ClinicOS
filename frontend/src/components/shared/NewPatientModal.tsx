@@ -855,7 +855,7 @@ export function NewPatientModal({
               Annulla
             </button>
             <button
-              className="btn-primary"
+              className="btn-success"
               onClick={salva}
               disabled={isSaving}
               title={

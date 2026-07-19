@@ -821,7 +821,7 @@ export function ScalaTinettiTab({ cartella, paziente, onUpdate, operatoreNome }:
                 <button className="btn-secondary btn-sm" onClick={() => setShowAdd(false)}>
                   Annulla
                 </button>
-                <button className="btn-primary btn-sm" onClick={handleSave} disabled={!canSave}>
+                <button className="btn-success btn-sm" onClick={handleSave} disabled={!canSave}>
                   Salva valutazione
                 </button>
               </div>

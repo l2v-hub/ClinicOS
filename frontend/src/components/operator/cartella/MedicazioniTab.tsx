@@ -664,7 +664,7 @@ function FollowUpSection({
                   Annulla
                 </button>
                 <button
-                  className="btn-primary btn-sm"
+                  className="btn-success btn-sm"
                   onClick={handleSave}
                   disabled={!fuForm.siglaOperatore}
                 >
@@ -673,7 +673,7 @@ function FollowUpSection({
               </div>
             </div>
           ) : (
-            <button className="btn-primary btn-sm" onClick={() => setShowAdd(true)}>
+            <button className="btn-success btn-sm" onClick={() => setShowAdd(true)}>
               + Aggiungi follow-up
             </button>
           )}
@@ -1017,7 +1017,7 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                   >
                     Annulla
                   </button>
-                  <button className="btn-primary btn-sm" onClick={handleSave}>
+                  <button className="btn-success btn-sm" onClick={handleSave}>
                     <IcoCheck /> Salva
                   </button>
                 </div>
@@ -1041,7 +1041,7 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                       {m.odore && <span className="badge badge--amber">Odore</span>}
                       <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
                         <button
-                          className="icon-btn icon-btn--sm"
+                          className="icon-btn icon-btn--sm icon-btn--edit"
                           onClick={() => startEdit(m)}
                           title="Modifica"
                         >

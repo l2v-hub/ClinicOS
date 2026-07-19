@@ -134,7 +134,7 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
       {error && <p className="import-modal__error">{error}</p>}
 
       <div className="step-verifica__actions">
-        <button className="btn-primary" onClick={onConfirm} disabled={busy || !canCreate}>
+        <button className="btn-success" onClick={onConfirm} disabled={busy || !canCreate}>
           <IcoCheck /> {busy ? 'Creazione…' : 'Crea paziente'}
         </button>
       </div>

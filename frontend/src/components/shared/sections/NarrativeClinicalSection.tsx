@@ -149,7 +149,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
           <div className="narrative-edit__actions">
             <button
               type="button"
-              className="btn-primary btn-sm"
+              className="btn-success btn-sm"
               disabled={props.busy}
               onClick={save}
             >

@@ -297,7 +297,7 @@ export function AppointmentForm({
             Annulla
           </button>
           <button
-            className="btn-primary"
+            className="btn-success"
             onClick={() => {
               void salva();
             }}
