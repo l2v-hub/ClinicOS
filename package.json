@@ -22,7 +22,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "npm run test -w backend && npm run test -w frontend",
-    "prepare": "husky",
+    "prepare": "husky || exit 0",
     "security:scan-frontend": "node scripts/security/scan-frontend-secrets.mjs frontend/src frontend/index.html",
     "quality-gate:start": "node scripts/quality-gate/create-task-contract.js",
     "quality-gate:validate": "node scripts/quality-gate/validate-task-contract.js",
