@@ -1,7 +1,23 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { API_URL } from '../../config';
-import type { Paziente, Consegna, Operatore, Camera, NuovoPaziente, CartellaPaziente } from '../../types';
-import { IcoSearch, IcoX, IcoChevronRight, IcoAlert, IcoPlus, IcoTrash, IcoUser } from '../../icons';
+import { ConfirmDialog } from '../shared/ConfirmDialog';
+import type {
+  Paziente,
+  Consegna,
+  Operatore,
+  Camera,
+  NuovoPaziente,
+  CartellaPaziente,
+} from '../../types';
+import {
+  IcoSearch,
+  IcoX,
+  IcoChevronRight,
+  IcoAlert,
+  IcoPlus,
+  IcoTrash,
+  IcoUser,
+} from '../../icons';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
@@ -38,8 +54,8 @@ const STATO_RICOVERO_LABEL: Record<string, string> = {
 function statoClinicoBadges(c?: CartellaPaziente) {
   if (!c) return null;
   const critico =
-    (c.parametriVitali ?? []).some(v => v.stato === 'critico') ||
-    (c.indicatoriRischio ?? []).some(r => r.livello === 'alto' || r.livello === 'critico');
+    (c.parametriVitali ?? []).some((v) => v.stato === 'critico') ||
+    (c.indicatoriRischio ?? []).some((r) => r.livello === 'alto' || r.livello === 'critico');
   const allergie = (c.allergie ?? []).length;
   return { statoRicovero: c.statoRicovero, critico, allergie };
 }
@@ -55,7 +71,15 @@ function calcAge(dob: string): number {
 
 // Riga card mobile estratta e memoizzata: evita il ri-render completo delle righe
 // a ogni keystroke del filtro (SPEC-015 US5 / T029).
-const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, badges, deleteEnabled, deleting, onSelect, onDelete }: {
+const PatientListCard = memo(function PatientListCard({
+  p,
+  hasConsegnaAperta,
+  badges,
+  deleteEnabled,
+  deleting,
+  onSelect,
+  onDelete,
+}: {
   p: Paziente;
   hasConsegnaAperta: boolean;
   badges: ReturnType<typeof statoClinicoBadges>;
@@ -66,11 +90,16 @@ const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, ba
 }) {
   return (
     <div className="pt-list-card" onClick={() => onSelect(p)}>
-      <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
+      <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">
+        {p.firstName[0]}
+        {p.lastName[0]}
+      </div>
       <div className="pt-list-card__info">
         <span className="pt-list-card__name">
           {p.lastName}, {p.firstName}
-          {badges && badges.allergie > 0 && <span className="alert-chip alert-chip--amber">⚠ Allergie</span>}
+          {badges && badges.allergie > 0 && (
+            <span className="alert-chip alert-chip--amber">⚠ Allergie</span>
+          )}
           {p.sex === 'M' && <span className="sex-badge sex-badge--m">M</span>}
           {p.sex === 'F' && <span className="sex-badge sex-badge--f">F</span>}
         </span>
@@ -79,28 +108,49 @@ const PatientListCard = memo(function PatientListCard({ p, hasConsegnaAperta, ba
         </span>
         {badges && (
           <span className="pt-list-card__badges">
-            <span className={`stato-pill stato-pill--ricovero-${badges.statoRicovero}`}>{STATO_RICOVERO_LABEL[badges.statoRicovero] ?? badges.statoRicovero}</span>
+            <span className={`stato-pill stato-pill--ricovero-${badges.statoRicovero}`}>
+              {STATO_RICOVERO_LABEL[badges.statoRicovero] ?? badges.statoRicovero}
+            </span>
             {badges.critico && <span className="alert-chip alert-chip--red">Critico</span>}
           </span>
         )}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         {hasConsegnaAperta && (
-          <span className="consegna-alert-dot"><IcoAlert /></span>
+          <span className="consegna-alert-dot">
+            <IcoAlert />
+          </span>
         )}
         {deleteEnabled && (
-          <button className="pt-delete-btn" title="Elimina paziente (test)" disabled={deleting} onClick={(e) => onDelete(p, e)}>
+          <button
+            className="pt-delete-btn"
+            title="Elimina paziente (test)"
+            disabled={deleting}
+            onClick={(e) => onDelete(p, e)}
+          >
             <IcoTrash />
           </button>
         )}
-        <span className="pt-list-card__chevron"><IcoChevronRight /></span>
+        <span className="pt-list-card__chevron">
+          <IcoChevronRight />
+        </span>
       </div>
     </div>
   );
 });
 
-export function PatientList({ pazienti, consegne, loading, onSelect, onAddPaziente: _onAddPaziente, onImported, operatorId, operatorRole, cartelle = [] }: PatientListProps) {
-  const cartellaMap = useMemo(() => new Map(cartelle.map(c => [c.pazienteId, c])), [cartelle]);
+export function PatientList({
+  pazienti,
+  consegne,
+  loading,
+  onSelect,
+  onAddPaziente: _onAddPaziente,
+  onImported,
+  operatorId,
+  operatorRole,
+  cartelle = [],
+}: PatientListProps) {
+  const cartellaMap = useMemo(() => new Map(cartelle.map((c) => [c.pazienteId, c])), [cartelle]);
   const [ricerca, setRicerca] = useState('');
   const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [showModal, setShowModal] = useState(false);
@@ -112,14 +162,30 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
 
   useEffect(() => {
     cachedGetJson<{ deleteEnabled?: boolean } | null>(`${API_URL}/patients/settings`)
-      .then((s) => { if (s) setDeleteEnabled(!!s.deleteEnabled); })
-      .catch(() => { setSettingsError('Impossibile verificare le impostazioni della lista pazienti: alcune funzioni potrebbero non essere disponibili.'); });
+      .then((s) => {
+        if (s) setDeleteEnabled(!!s.deleteEnabled);
+      })
+      .catch(() => {
+        setSettingsError(
+          'Impossibile verificare le impostazioni della lista pazienti: alcune funzioni potrebbero non essere disponibili.',
+        );
+      });
   }, []);
 
-  const handleDelete = useCallback(async (p: Paziente, e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (deletingId) return;
-    if (!window.confirm(`Eliminare definitivamente ${p.lastName}, ${p.firstName} (${p.medicalRecordNumber})? Verranno rimossi anche cartella e dati clinici. Azione di test.`)) return;
+  const [pendingDelete, setPendingDelete] = useState<Paziente | null>(null);
+
+  const handleDelete = useCallback(
+    (p: Paziente, e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (deletingId) return;
+      setPendingDelete(p);
+    },
+    [deletingId],
+  );
+
+  const confirmDelete = useCallback(async () => {
+    const p = pendingDelete;
+    if (!p) return;
     setDeletingId(p.id);
     try {
       const headers: Record<string, string> = {};
@@ -131,32 +197,40 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
         alert(d.error || 'Eliminazione non riuscita');
         return;
       }
+      setPendingDelete(null);
       onImported?.();
     } catch {
       alert('Errore di rete durante l’eliminazione');
     } finally {
       setDeletingId(null);
     }
-  }, [deletingId, operatorId, operatorRole, onImported]);
+  }, [pendingDelete, operatorId, operatorRole, onImported]);
 
   const { consegneAperteMap, consegneAperte } = useMemo(() => {
     const map = new Map<string, number>();
-    consegne.filter(c => c.stato !== 'completata').forEach(c => {
-      map.set(c.pazienteId, (map.get(c.pazienteId) ?? 0) + 1);
-    });
+    consegne
+      .filter((c) => c.stato !== 'completata')
+      .forEach((c) => {
+        map.set(c.pazienteId, (map.get(c.pazienteId) ?? 0) + 1);
+      });
     return { consegneAperteMap: map, consegneAperte: new Set(map.keys()) };
   }, [consegne]);
 
-  const filtrati = useMemo(() => pazienti.filter(p => {
-    const q = ricerca.toLowerCase();
-    const match = !q ||
-      `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
-      p.medicalRecordNumber.toLowerCase().includes(q) ||
-      (p.email ?? '').toLowerCase().includes(q) ||
-      (p.phone ?? '').toLowerCase().includes(q);
-    const sessoMatch = filtroSesso === 'tutti' || p.sex === filtroSesso;
-    return match && sessoMatch;
-  }), [pazienti, ricerca, filtroSesso]);
+  const filtrati = useMemo(
+    () =>
+      pazienti.filter((p) => {
+        const q = ricerca.toLowerCase();
+        const match =
+          !q ||
+          `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
+          p.medicalRecordNumber.toLowerCase().includes(q) ||
+          (p.email ?? '').toLowerCase().includes(q) ||
+          (p.phone ?? '').toLowerCase().includes(q);
+        const sessoMatch = filtroSesso === 'tutti' || p.sex === filtroSesso;
+        return match && sessoMatch;
+      }),
+    [pazienti, ricerca, filtroSesso],
+  );
 
   return (
     <div className="patient-list-view">
@@ -166,7 +240,11 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
         subtitle={`${pazienti.length} pazienti totali`}
         actions={
           <>
-            <AIImportStatus onImported={onImported} operatorId={operatorId} operatorRole={operatorRole} />
+            <AIImportStatus
+              onImported={onImported}
+              operatorId={operatorId}
+              operatorRole={operatorRole}
+            />
             <button className="btn-primary" onClick={() => setShowModal(true)}>
               <IcoPlus /> Nuovo paziente
             </button>
@@ -176,10 +254,17 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
 
       {/* Errore verifica impostazioni (niente fallimenti silenziosi — FR-018) */}
       {settingsError && (
-        <div role="alert" style={{
-          padding: '8px 12px', borderRadius: 6, background: 'var(--red-50, #fef2f2)',
-          color: 'var(--red-700, #b91c1c)', fontSize: '0.85rem', marginBottom: 12,
-        }}>
+        <div
+          role="alert"
+          style={{
+            padding: '8px 12px',
+            borderRadius: 6,
+            background: 'var(--red-50, #fef2f2)',
+            color: 'var(--red-700, #b91c1c)',
+            fontSize: '0.85rem',
+            marginBottom: 12,
+          }}
+        >
           {settingsError}
         </div>
       )}
@@ -187,22 +272,28 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
       {/* Toolbar */}
       <div className="toolbar">
         <div className="search-wrap">
-          <span className="search-wrap__ico"><IcoSearch /></span>
+          <span className="search-wrap__ico">
+            <IcoSearch />
+          </span>
           <input
             className="search-input"
             type="search"
             placeholder="Cerca per nome, MRN, email…"
             value={ricerca}
-            onChange={e => setRicerca(e.target.value)}
+            onChange={(e) => setRicerca(e.target.value)}
           />
           {ricerca && (
-            <button className="search-clear-btn" onClick={() => setRicerca('')} aria-label="Cancella">
+            <button
+              className="search-clear-btn"
+              onClick={() => setRicerca('')}
+              aria-label="Cancella"
+            >
               <IcoX />
             </button>
           )}
         </div>
         <div className="filter-chips">
-          {(['tutti', 'M', 'F'] as const).map(s => (
+          {(['tutti', 'M', 'F'] as const).map((s) => (
             <button
               key={s}
               className={`filter-chip${filtroSesso === s ? ' active' : ''}`}
@@ -217,9 +308,18 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
       {/* Empty state */}
       {!loading && pazienti.length === 0 && (
         <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
-          <div className="empty-state-card__ico" aria-hidden="true"><IcoUser /></div>
+          <div className="empty-state-card__ico" aria-hidden="true">
+            <IcoUser />
+          </div>
           <h3 style={{ marginBottom: 8, fontSize: 18 }}>Nessun paziente presente</h3>
-          <p style={{ color: 'var(--text-muted)', marginBottom: 24, maxWidth: 360, margin: '0 auto 24px' }}>
+          <p
+            style={{
+              color: 'var(--text-muted)',
+              marginBottom: 24,
+              maxWidth: 360,
+              margin: '0 auto 24px',
+            }}
+          >
             Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.
           </p>
           <button className="btn-primary" onClick={() => setShowModal(true)}>
@@ -242,52 +342,91 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
               emptyMessage={loading ? 'Caricamento…' : 'Nessun paziente trovato'}
               columns={[
                 {
-                  key: 'lastName', label: 'Paziente', sortable: true,
+                  key: 'lastName',
+                  label: 'Paziente',
+                  sortable: true,
                   render: (_v, p) => {
                     const b = statoClinicoBadges(cartellaMap.get(p.id));
                     return (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div className="op-avatar-sm" aria-hidden="true">{p.firstName[0]}{p.lastName[0]}</div>
+                        <div className="op-avatar-sm" aria-hidden="true">
+                          {p.firstName[0]}
+                          {p.lastName[0]}
+                        </div>
                         <div>
                           <div className="cell--name">
                             {p.lastName}, {p.firstName}
-                            {b && b.allergie > 0 && <span className="alert-chip alert-chip--amber" title={`${b.allergie} allergie documentate`}>⚠ Allergie</span>}
+                            {b && b.allergie > 0 && (
+                              <span
+                                className="alert-chip alert-chip--amber"
+                                title={`${b.allergie} allergie documentate`}
+                              >
+                                ⚠ Allergie
+                              </span>
+                            )}
                             {p.sex === 'M' && <span className="sex-badge sex-badge--m">M</span>}
                             {p.sex === 'F' && <span className="sex-badge sex-badge--f">F</span>}
                           </div>
-                          <div className="cell--muted" style={{ fontSize: 12 }}>{calcAge(p.dateOfBirth)} anni</div>
+                          <div className="cell--muted" style={{ fontSize: 12 }}>
+                            {calcAge(p.dateOfBirth)} anni
+                          </div>
                         </div>
                       </div>
                     );
                   },
                 },
                 {
-                  key: 'statoClinico', label: 'Stato clinico',
+                  key: 'statoClinico',
+                  label: 'Stato clinico',
                   render: (_v, p) => {
                     const s = statoClinicoBadges(cartellaMap.get(p.id));
-                    if (!s) return <span className="cell--muted" style={{ fontSize: 11 }}>—</span>;
+                    if (!s)
+                      return (
+                        <span className="cell--muted" style={{ fontSize: 11 }}>
+                          —
+                        </span>
+                      );
                     return (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                        <span className={`stato-pill stato-pill--ricovero-${s.statoRicovero}`}>{STATO_RICOVERO_LABEL[s.statoRicovero] ?? s.statoRicovero}</span>
+                      <div
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}
+                      >
+                        <span className={`stato-pill stato-pill--ricovero-${s.statoRicovero}`}>
+                          {STATO_RICOVERO_LABEL[s.statoRicovero] ?? s.statoRicovero}
+                        </span>
                         {s.critico && <span className="alert-chip alert-chip--red">Critico</span>}
                       </div>
                     );
                   },
                 },
                 {
-                  key: 'medicalRecordNumber', label: 'MRN', sortable: true,
+                  key: 'medicalRecordNumber',
+                  label: 'MRN',
+                  sortable: true,
                   render: (_v, p) => <span className="mrn-tag">{p.medicalRecordNumber}</span>,
                 },
                 {
-                  key: 'dateOfBirth', label: 'Data di nascita', sortable: true, filterType: 'date',
-                  render: (_v, p) => <span className="cell--muted">{new Date(p.dateOfBirth).toLocaleDateString('it-IT')}</span>,
+                  key: 'dateOfBirth',
+                  label: 'Data di nascita',
+                  sortable: true,
+                  filterType: 'date',
+                  render: (_v, p) => (
+                    <span className="cell--muted">
+                      {new Date(p.dateOfBirth).toLocaleDateString('it-IT')}
+                    </span>
+                  ),
                 },
                 {
-                  key: 'cameraLetto', label: 'Camera / Letto',
-                  render: () => <span className="cell--muted" style={{ fontSize: 12 }}>--</span>,
+                  key: 'cameraLetto',
+                  label: 'Camera / Letto',
+                  render: () => (
+                    <span className="cell--muted" style={{ fontSize: 12 }}>
+                      --
+                    </span>
+                  ),
                 },
                 {
-                  key: 'contatti', label: 'Contatti',
+                  key: 'contatti',
+                  label: 'Contatti',
                   render: (_v, p) => (
                     <div className="cell--muted" style={{ fontSize: 12 }}>
                       <div>{p.email ?? '--'}</div>
@@ -296,33 +435,49 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
                   ),
                 },
                 {
-                  key: 'consegne', label: 'Consegne', align: 'center',
-                  render: (_v, p) => (
+                  key: 'consegne',
+                  label: 'Consegne',
+                  align: 'center',
+                  render: (_v, p) =>
                     consegneAperteMap.has(p.id) ? (
-                      <span className="consegna-priorita-badge consegna-priorita-badge--alta" title={`${consegneAperteMap.get(p.id)} consegne aperte`}>
+                      <span
+                        className="consegna-priorita-badge consegna-priorita-badge--alta"
+                        title={`${consegneAperteMap.get(p.id)} consegne aperte`}
+                      >
                         {consegneAperteMap.get(p.id)}
                       </span>
                     ) : (
                       <span style={{ color: 'var(--text-xmuted)', fontSize: 11 }}>—</span>
-                    )
-                  ),
+                    ),
                 },
-                ...(deleteEnabled ? [{
-                  key: 'elimina', label: '', align: 'center' as const,
-                  render: (_v: unknown, p: Paziente) => (
-                    <button
-                      className="pt-delete-btn"
-                      title="Elimina paziente (test)"
-                      disabled={deletingId === p.id}
-                      onClick={(e) => handleDelete(p, e)}
-                    >
-                      <IcoTrash />
-                    </button>
-                  ),
-                }] : []),
+                ...(deleteEnabled
+                  ? [
+                      {
+                        key: 'elimina',
+                        label: '',
+                        align: 'center' as const,
+                        render: (_v: unknown, p: Paziente) => (
+                          <button
+                            className="pt-delete-btn"
+                            title="Elimina paziente (test)"
+                            disabled={deletingId === p.id}
+                            onClick={(e) => handleDelete(p, e)}
+                          >
+                            <IcoTrash />
+                          </button>
+                        ),
+                      },
+                    ]
+                  : []),
                 {
-                  key: 'chevron', label: '', align: 'right',
-                  render: () => <span className="row-chevron"><IcoChevronRight /></span>,
+                  key: 'chevron',
+                  label: '',
+                  align: 'right',
+                  render: () => (
+                    <span className="row-chevron">
+                      <IcoChevronRight />
+                    </span>
+                  ),
                 },
               ]}
             />
@@ -330,7 +485,7 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
 
           {/* Card list mobile */}
           <div className="pt-card-list">
-            {filtrati.map(p => (
+            {filtrati.map((p) => (
               <PatientListCard
                 key={p.id}
                 p={p}
@@ -349,9 +504,30 @@ export function PatientList({ pazienti, consegne, loading, onSelect, onAddPazien
       <IntakeWorkspace
         open={showModal}
         onClose={() => setShowModal(false)}
-        onCreated={(patientId, moduleTabId) => { setShowModal(false); onImported?.(patientId, moduleTabId); }}
+        onCreated={(patientId, moduleTabId) => {
+          setShowModal(false);
+          onImported?.(patientId, moduleTabId);
+        }}
         operatorId={operatorId}
         operatorRole={operatorRole}
+      />
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        title="Eliminare definitivamente il paziente?"
+        message={
+          pendingDelete ? (
+            <>
+              Verranno rimossi anche <strong>cartella e dati clinici</strong> di{' '}
+              {pendingDelete.lastName}, {pendingDelete.firstName} (
+              {pendingDelete.medicalRecordNumber}). Azione di test, non reversibile.
+            </>
+          ) : null
+        }
+        confirmLabel="Elimina paziente"
+        busy={deletingId !== null}
+        onConfirm={() => void confirmDelete()}
+        onCancel={() => setPendingDelete(null)}
       />
     </div>
   );

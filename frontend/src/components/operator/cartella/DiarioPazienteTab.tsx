@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../../types';
 import { ClinicalTableSection } from './shared';
+import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { API_URL } from '../../../config';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -67,7 +68,11 @@ function fmtDT(iso: string): string {
   if (!iso) return '—';
   try {
     const d = new Date(iso);
-    return d.toLocaleDateString('it-IT') + ' ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    return (
+      d.toLocaleDateString('it-IT') +
+      ' ' +
+      d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+    );
   } catch {
     return iso;
   }
@@ -76,14 +81,15 @@ function fmtDT(iso: string): string {
 // ── Legacy conversion ──────────────────────────────────────────────────────────
 
 function convertLegacyEntries(inf?: DiarioEntry[], med?: DiarioEntry[]): DiarioPazienteEntry[] {
-  const infEntries: DiarioPazienteEntry[] = (inf ?? []).map(e => ({
+  const infEntries: DiarioPazienteEntry[] = (inf ?? []).map((e) => ({
     id: e.id,
     patientId: '',
     authorType: 'infermiere' as DiarioAuthorType,
     authorName: e.operatore,
     title: null,
     content: e.testo,
-    priority: e.priorita === 'alta' ? 'importante' : e.priorita === 'urgente' ? 'urgente' : 'normale',
+    priority:
+      e.priorita === 'alta' ? 'importante' : e.priorita === 'urgente' ? 'urgente' : 'normale',
     status: e.stato === 'completata' ? 'completata' : 'aperta',
     entryDateTime: `${e.data}T${e.ora}`,
     category: null,
@@ -91,7 +97,7 @@ function convertLegacyEntries(inf?: DiarioEntry[], med?: DiarioEntry[]): DiarioP
     updatedAt: e.createdAt,
   }));
 
-  const medEntries: DiarioPazienteEntry[] = (med ?? []).map(e => ({
+  const medEntries: DiarioPazienteEntry[] = (med ?? []).map((e) => ({
     id: e.id,
     patientId: '',
     authorType: 'medico' as DiarioAuthorType,
@@ -101,7 +107,9 @@ function convertLegacyEntries(inf?: DiarioEntry[], med?: DiarioEntry[]): DiarioP
       e.testo,
       e.prescrizione ? `Prescrizione: ${e.prescrizione}` : '',
       e.evoluzione ? `Evoluzione: ${e.evoluzione}` : '',
-    ].filter(Boolean).join('\n'),
+    ]
+      .filter(Boolean)
+      .join('\n'),
     priority: 'normale',
     status: 'aperta',
     entryDateTime: `${e.data}T${e.ora}`,
@@ -111,7 +119,7 @@ function convertLegacyEntries(inf?: DiarioEntry[], med?: DiarioEntry[]): DiarioP
   }));
 
   return [...infEntries, ...medEntries].sort((a, b) =>
-    b.entryDateTime.localeCompare(a.entryDateTime)
+    b.entryDateTime.localeCompare(a.entryDateTime),
   );
 }
 
@@ -139,7 +147,13 @@ interface Props {
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieristico, legacyMedico, filterBy }: Props) {
+export function DiarioPazienteTab({
+  pazienteId,
+  operatoreNome,
+  legacyInfermieristico,
+  legacyMedico,
+  filterBy,
+}: Props) {
   const [entries, setEntries] = useState<DiarioPazienteEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -171,7 +185,7 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
       if (resolvedFilter !== 'tutti') params.set('authorType', resolvedFilter);
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary?${params}`);
       if (!res.ok) throw new Error('Risposta non valida');
-      const data = await res.json() as { entries: DiarioPazienteEntry[] };
+      const data = (await res.json()) as { entries: DiarioPazienteEntry[] };
       let allEntries = data.entries ?? [];
 
       // Backward compat: show legacy data if API returns nothing and no filter active
@@ -188,7 +202,9 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
     }
   }, [pazienteId, filterBy, legacyInfermieristico, legacyMedico]);
 
-  useEffect(() => { fetchEntries(); }, [fetchEntries]);
+  useEffect(() => {
+    fetchEntries();
+  }, [fetchEntries]);
 
   // ── Save new entry ───────────────────────────────────────────────────────────
 
@@ -210,8 +226,8 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
         }),
       });
       if (!res.ok) throw new Error();
-      const data = await res.json() as { entry: DiarioPazienteEntry };
-      setEntries(prev => [data.entry, ...prev]);
+      const data = (await res.json()) as { entry: DiarioPazienteEntry };
+      setEntries((prev) => [data.entry, ...prev]);
       setForm(emptyForm());
       setShowAdd(false);
     } catch {
@@ -241,8 +257,8 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
         }),
       });
       if (!res.ok) throw new Error();
-      const data = await res.json() as { entry: DiarioPazienteEntry };
-      setEntries(prev => prev.map(e => e.id === data.entry.id ? data.entry : e));
+      const data = (await res.json()) as { entry: DiarioPazienteEntry };
+      setEntries((prev) => prev.map((e) => (e.id === data.entry.id ? data.entry : e)));
       setEditEntry(null);
     } catch {
       setError('Errore nel salvataggio della modifica.');
@@ -253,16 +269,28 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
 
   // ── Delete entry ─────────────────────────────────────────────────────────────
 
-  async function handleDelete(entry: DiarioPazienteEntry) {
-    if (!window.confirm('Eliminare questa voce del diario?')) return;
+  const [pendingDelete, setPendingDelete] = useState<DiarioPazienteEntry | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  function handleDelete(entry: DiarioPazienteEntry) {
+    setPendingDelete(entry);
+  }
+
+  async function confirmDelete() {
+    const entry = pendingDelete;
+    if (!entry) return;
+    setDeleting(true);
     try {
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary/${entry.id}`, {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error();
-      setEntries(prev => prev.filter(e => e.id !== entry.id));
+      setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+      setPendingDelete(null);
     } catch {
       setError('Errore nella eliminazione della voce.');
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -291,24 +319,54 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
     return (
       <div key={row.id} className={`diario-card diario-card--${row.authorType}`}>
         <div className="diario-card__head">
-          <span className={`badge ${AUTHOR_TYPE_BADGE[row.authorType]}`}>{AUTHOR_TYPE_LABELS[row.authorType]}</span>
-          <span className={`badge ${PRIORITY_BADGE[row.priority]}`}>{PRIORITY_LABELS[row.priority]}</span>
+          <span className={`badge ${AUTHOR_TYPE_BADGE[row.authorType]}`}>
+            {AUTHOR_TYPE_LABELS[row.authorType]}
+          </span>
+          <span className={`badge ${PRIORITY_BADGE[row.priority]}`}>
+            {PRIORITY_LABELS[row.priority]}
+          </span>
           <span className={`badge ${STATUS_BADGE[row.status]}`}>{STATUS_LABELS[row.status]}</span>
           <span className="diario-card__time">{fmtDT(row.entryDateTime)}</span>
           {!isLegacy(row) && (
             <div className="diario-card__actions">
-              <button className="icon-btn icon-btn--sm" title="Modifica" onClick={() => startEdit(row)}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              <button
+                className="icon-btn icon-btn--sm"
+                title="Modifica"
+                onClick={() => startEdit(row)}
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                 </svg>
               </button>
-              <button className="icon-btn icon-btn--sm icon-btn--danger" title="Elimina" onClick={() => handleDelete(row)}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 6 5 6 21 6"/>
-                  <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
-                  <path d="M10 11v6M14 11v6"/>
-                  <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+              <button
+                className="icon-btn icon-btn--sm icon-btn--danger"
+                title="Elimina"
+                onClick={() => handleDelete(row)}
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                  <path d="M10 11v6M14 11v6" />
+                  <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
                 </svg>
               </button>
             </div>
@@ -332,7 +390,14 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
   ) {
     return (
       <div className="cr-inline-form" style={{ marginBottom: 16 }}>
-        <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: 10, color: 'var(--text-primary)' }}>
+        <div
+          style={{
+            fontWeight: 600,
+            fontSize: '0.9rem',
+            marginBottom: 10,
+            color: 'var(--text-primary)',
+          }}
+        >
           {title}
         </div>
         <div className="form-row">
@@ -340,10 +405,14 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
           <select
             className="form-input"
             value={f.authorType}
-            onChange={e => setF(prev => ({ ...prev, authorType: e.target.value as DiarioAuthorType }))}
+            onChange={(e) =>
+              setF((prev) => ({ ...prev, authorType: e.target.value as DiarioAuthorType }))
+            }
           >
             {Object.entries(AUTHOR_TYPE_LABELS).map(([k, v]) => (
-              <option key={k} value={k}>{v}</option>
+              <option key={k} value={k}>
+                {v}
+              </option>
             ))}
           </select>
         </div>
@@ -353,7 +422,7 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
             className="form-input"
             type="text"
             value={f.authorName}
-            onChange={e => setF(prev => ({ ...prev, authorName: e.target.value }))}
+            onChange={(e) => setF((prev) => ({ ...prev, authorName: e.target.value }))}
             placeholder={operatoreNome}
           />
         </div>
@@ -363,7 +432,7 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
             className="form-input"
             type="text"
             value={f.title}
-            onChange={e => setF(prev => ({ ...prev, title: e.target.value }))}
+            onChange={(e) => setF((prev) => ({ ...prev, title: e.target.value }))}
             placeholder="Titolo voce…"
           />
         </div>
@@ -373,7 +442,7 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
             className="form-input"
             rows={4}
             value={f.content}
-            onChange={e => setF(prev => ({ ...prev, content: e.target.value }))}
+            onChange={(e) => setF((prev) => ({ ...prev, content: e.target.value }))}
             placeholder="Descrizione, note cliniche…"
             style={{ resize: 'vertical' }}
           />
@@ -383,7 +452,9 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
           <select
             className="form-input"
             value={f.priority}
-            onChange={e => setF(prev => ({ ...prev, priority: e.target.value as DiarioForm['priority'] }))}
+            onChange={(e) =>
+              setF((prev) => ({ ...prev, priority: e.target.value as DiarioForm['priority'] }))
+            }
           >
             <option value="normale">Normale</option>
             <option value="importante">Importante</option>
@@ -395,7 +466,9 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
           <select
             className="form-input"
             value={f.status}
-            onChange={e => setF(prev => ({ ...prev, status: e.target.value as DiarioForm['status'] }))}
+            onChange={(e) =>
+              setF((prev) => ({ ...prev, status: e.target.value as DiarioForm['status'] }))
+            }
           >
             <option value="aperta">Aperta</option>
             <option value="completata">Completata</option>
@@ -408,16 +481,28 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
             className="form-input"
             type="datetime-local"
             value={f.entryDateTime}
-            onChange={e => setF(prev => ({ ...prev, entryDateTime: e.target.value }))}
+            onChange={(e) => setF((prev) => ({ ...prev, entryDateTime: e.target.value }))}
           />
         </div>
         <div className="cr-inline-form__actions">
           <button className="btn-secondary btn-sm" onClick={onCancel} disabled={saving}>
             Annulla
           </button>
-          <button className="btn-primary btn-sm" onClick={onSave} disabled={saving || !f.content.trim()}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <polyline points="20 6 9 17 4 12"/>
+          <button
+            className="btn-primary btn-sm"
+            onClick={onSave}
+            disabled={saving || !f.content.trim()}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            >
+              <polyline points="20 6 9 17 4 12" />
             </svg>
             {saving ? 'Salvataggio…' : 'Salva'}
           </button>
@@ -431,11 +516,22 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
   const sectionActions = (
     <button
       className="btn-primary btn-sm"
-      onClick={() => { setShowAdd(v => !v); setEditEntry(null); }}
+      onClick={() => {
+        setShowAdd((v) => !v);
+        setEditEntry(null);
+      }}
     >
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-        <line x1="12" y1="5" x2="12" y2="19"/>
-        <line x1="5" y1="12" x2="19" y2="12"/>
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
       </svg>
       Aggiungi voce
     </button>
@@ -447,10 +543,16 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
     <div className="cr-tab-content">
       {/* Error message */}
       {error && (
-        <div style={{
-          padding: '8px 12px', borderRadius: 6, background: 'var(--red-50, #fef2f2)',
-          color: 'var(--red-700, #b91c1c)', fontSize: '0.85rem', marginBottom: 12,
-        }}>
+        <div
+          style={{
+            padding: '8px 12px',
+            borderRadius: 6,
+            background: 'var(--red-50, #fef2f2)',
+            color: 'var(--red-700, #b91c1c)',
+            fontSize: '0.85rem',
+            marginBottom: 12,
+          }}
+        >
           {error}
         </div>
       )}
@@ -463,22 +565,27 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
         actions={sectionActions}
       >
         {/* Add form */}
-        {showAdd && renderForm(
-          form,
-          setForm as (fn: (prev: DiarioForm) => DiarioForm) => void,
-          handleSave,
-          () => { setShowAdd(false); setForm(emptyForm()); },
-          'Nuova voce diario',
-        )}
+        {showAdd &&
+          renderForm(
+            form,
+            setForm as (fn: (prev: DiarioForm) => DiarioForm) => void,
+            handleSave,
+            () => {
+              setShowAdd(false);
+              setForm(emptyForm());
+            },
+            'Nuova voce diario',
+          )}
 
         {/* Edit form */}
-        {editEntry && renderForm(
-          editForm,
-          setEditForm as (fn: (prev: DiarioForm) => DiarioForm) => void,
-          handleEditSave,
-          () => setEditEntry(null),
-          `Modifica voce — ${fmtDT(editEntry.entryDateTime)}`,
-        )}
+        {editEntry &&
+          renderForm(
+            editForm,
+            setEditForm as (fn: (prev: DiarioForm) => DiarioForm) => void,
+            handleEditSave,
+            () => setEditEntry(null),
+            `Modifica voce — ${fmtDT(editEntry.entryDateTime)}`,
+          )}
 
         {/* Diario a card (una card per voce, border-left colore ruolo) */}
         {loading ? (
@@ -497,6 +604,16 @@ export function DiarioPazienteTab({ pazienteId, operatoreNome, legacyInfermieris
           </div>
         )}
       </ClinicalTableSection>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        title="Eliminare la voce del diario?"
+        message="La voce verrà rimossa dal diario del paziente. L'azione non è reversibile."
+        confirmLabel="Elimina voce"
+        busy={deleting}
+        onConfirm={() => void confirmDelete()}
+        onCancel={() => setPendingDelete(null)}
+      />
     </div>
   );
 }
