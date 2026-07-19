@@ -10,6 +10,17 @@
       "env": {
         "DATABASE_URI": "${DATABASE_URI}"
       }
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "prisma": {
+      "command": "npx",
+      "args": ["-y", "prisma", "mcp", "--schema", "./prisma/schema.prisma"]
     }
   }
 }

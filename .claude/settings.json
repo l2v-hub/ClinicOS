@@ -28,16 +28,18 @@
     "PreToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit|NotebookEdit",
-        "hooks": [
-          { "type": "command", "command": "node .claude/hooks/quality-gate-preflight.js" }
-        ]
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/quality-gate-preflight.js" }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/format-edited-file.js" }]
       }
     ],
     "Stop": [
       {
-        "hooks": [
-          { "type": "command", "command": "node .claude/hooks/quality-gate-closure.js" }
-        ]
+        "hooks": [{ "type": "command", "command": "node .claude/hooks/quality-gate-closure.js" }]
       }
     ]
   },
@@ -47,7 +49,8 @@
     "ralph-loop": true,
     "compound-engineering@compound-engineering-plugin": true,
     "ui-ux-pro-max": true,
-    "code-reviewer": true},
+    "code-reviewer": true
+  },
   "teammateMode": "tmux",
   "worktree": { "bgIsolation": "none" },
   "agentTeam": {
@@ -134,11 +137,6 @@
       "QA runs npm run build",
       "LEAD summarizes result and next step"
     ],
-    "checkpoints": [
-      "before code changes",
-      "after implementation",
-      "after build",
-      "before commit"
-    ]
+    "checkpoints": ["before code changes", "after implementation", "after build", "before commit"]
   }
 }

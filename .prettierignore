@@ -1,0 +1,25 @@
+# Build output
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+.vercel/
+
+# Dependencies
+node_modules/
+
+# Generated / vendored
+prisma/migrations/
+**/*.min.js
+**/*.min.css
+package-lock.json
+
+# Design handoff & mockups (verbatim, do not reformat)
+design_handoff_restyle/
+mockup/
+.claude/design-reference/
+
+# Evidence artifacts
+artifacts/
+requirements/evidence/
