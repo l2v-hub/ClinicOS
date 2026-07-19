@@ -82,8 +82,8 @@ Source of truth: approved mockup `mockup/design-mockup.html` (token-driven via `
 
 ## Navigation system (unified — do not duplicate)
 Single source of truth. Do NOT create parallel nav components.
-- **L1 sidebar** = `components/shared/TeamsLikeSidebar.tsx` (styled `.teams-sidebar` in `App.css`). Fixed left, **dark navy** (approved mockup), icon-above-label, active = white text/icon on translucent pill + blue left bar. Width `--sidebar-w` (96px desktop / 88px tablet band; hidden ≤1023px).
-- **L2 + L3** = `components/navigation/TopNav.tsx` (`variant="level2"` underline tabs / `variant="level3"` segmented grey control). No pills, no per-item borders, no per-page custom tabs.
+- **L1 sidebar** = `components/shared/TeamsLikeSidebar.tsx` (styled `.teams-sidebar` in `App.css`). Fixed left, **dark navy** (approved mockup), icon-above-label, active = white text/icon on a **translucent pill only** (no blue left bar; removed for mockup parity), item radius 14. Width `--sidebar-w` (96px desktop / 88px tablet band). At **≤1023px** it becomes an **off-canvas drawer** (`transform:translateX`) toggled by a hamburger in `.compact-topbar`, with a `.mobile-nav-scrim`; `navigate()` in `App.tsx` closes it — do NOT revert to plain `display:none`.
+- **L2 + L3** = `components/navigation/TopNav.tsx` (`variant="level2"` / `variant="level3"`). Both render **filled-blue pills** when active (active = `--blue` bg, white text; inactive muted) — this is the current mockup-parity state and **deviates from the old "underline L2 / segmented L3, no pills" contract** (user-approved). Styles in `components/navigation/TopNav.css`. No per-item borders, no per-page custom tabs.
 - Named aliases exist (`AppSidebar`, `PageTopNavigation`, `PageSecondaryNavigation`) — thin wrappers over the above, zero duplicated logic.
 - Diario uses the shared L3 (`TopNav level3`) like every other section — no custom Diario tabs.
 - Design reference PNGs: `.claude/design-reference/*.png`; visual contract: `.claude/design-reference/CLINICOS_NAVIGATION_CONTRACT.md`. Copy structure/spacing/hierarchy only — never logos/brand/red.
@@ -98,8 +98,10 @@ Single source of truth. Do NOT create parallel nav components.
 
 ## Build & deploy
 - Before committing frontend work: `cd frontend && npm run build` must pass (`tsc -b && vite build`).
-- Deploy prod (Vercel project `clinicos__`, alias `clinicos-eosin.vercel.app`) from repo root:
-  `vercel deploy --prod --archive=tgz --yes`  (call the global `vercel` binary directly — `npx vercel` gets rewritten to `npm` by a shell hook).
+- **Frontend (Vercel) — MANUAL.** Deploy prod (project `clinicos__`, alias `clinicos-eosin.vercel.app`) from repo root:
+  `vercel deploy --prod --archive=tgz --yes`  (call the global `vercel` binary directly — `npx vercel` gets rewritten to `npm` by a shell hook). A `--prod` deploy auto-promotes the alias. **Pushing to `main` does NOT deploy the frontend** — only this command does. Cadence: run it when the user says "deploy" after a verified fix, never automatically.
+- **Backend (Railway) — AUTO.** Deploys automatically via GitHub Actions (`.github/workflows/deploy-backend.yml`) on merge/push to `main` (backend URL `clinicos-backend-production-df88.up.railway.app`). Merging a backend PR triggers "Deploy Backend to Railway" + "AI Import E2E Gate" — watch with `gh run watch <id> --exit-status`. Don't try to deploy the backend by hand.
+- **Prod is behind Entra/OIDC auth:** anonymous `curl` to the Vercel URL returns 403 — can't verify prod pages by curl. Verify with LOCAL Playwright + ask the user to hard-reload (Ctrl+Shift+R) authenticated. `frontend/vercel.json` SPA rewrite must stay `"/((?!assets/).*)"` (excludes `/assets/`) — a catch-all serves `index.html` for missing hashed chunks → "MIME type text/html" errors. Don't re-broaden it.
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
