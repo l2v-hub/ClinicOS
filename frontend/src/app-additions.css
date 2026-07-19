@@ -6519,11 +6519,26 @@ textarea.form-input { min-height: 80px; line-height: 1.6; }
 .stt-illegible { background: rgba(245, 158, 11, .25); color: #92400E; border-radius: 3px; padding: 0 2px; }
 
 /* ── REQ-030: NarrativeClinicalSection + patient narrative tab ────────────── */
-.narrative-sections { display: flex; flex-direction: column; gap: 14px; }
-.narrative-section { border: 1px solid var(--border, #D0D5DD); border-radius: 10px; padding: 14px 16px; background: var(--surface, #fff); }
-.narrative-section--critical { border-left: 4px solid var(--red, #DC2626); }
-.narrative-section__head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
-.narrative-section__head h3 { font-size: 15px; margin: 0; color: var(--text, #101828); }
+.narrative-sections { display: flex; flex-direction: column; gap: 12px; }
+/* Sezioni cliniche: stesso stile card di Presa in carico (.clinical-card) — bianca, raggio, ombra soft. */
+.narrative-section {
+  border: 1px solid var(--card-border-color, var(--border));
+  border-radius: var(--clinical-card-radius);
+  padding: 16px 20px;
+  background: var(--surface);
+  box-shadow: var(--card-shadow);
+}
+.narrative-section--critical { border-left: 4px solid var(--red); }
+.narrative-section__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--divider);
+}
+.narrative-section__head h3 { font-size: 14px; font-weight: 700; margin: 0; color: var(--text); }
 .narrative-section__actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
 .narrative-status { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; padding: 2px 8px; border-radius: 999px; background: rgba(102,112,133,.12); color: var(--muted, #667085); }
 .narrative-status--pending { background: rgba(15,95,215,.10); color: var(--c-primary, #2F6BED); }

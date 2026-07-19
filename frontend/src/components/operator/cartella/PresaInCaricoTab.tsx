@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, PresaInCarico, Paziente } from '../../../types';
-import { PrintButton, todayStr, nowTime, nowISO, ClinicalTableSection } from './shared';
+import { PrintButton, todayStr, nowTime, nowISO } from './shared';
 import { ClinicalCard } from '../../shared/ClinicalCard';
 import { InlineEditableField, type InlineOption } from '../../shared/InlineEditableField';
 
@@ -457,44 +457,42 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         </div>
       </div>
 
-      <ClinicalTableSection
-        title="Presa in Carico"
-        actions={<PrintButton />}
+      {/* Niente sezione collassabile: le card sono separate e sempre visibili. */}
+      <div className="no-print" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+        <PrintButton />
+      </div>
+
+      <ClinicalCard
+        title="Dati di ingresso"
+        defaultExpanded={true}
+        onEdit={() => startEdit('dati')}
       >
-        <div className="cts__body--padded">
-          <ClinicalCard
-            title="Dati di ingresso"
-            defaultExpanded={true}
-            onEdit={() => startEdit('dati')}
-          >
-            {editingId === 'dati' ? datiEdit : datiView}
-          </ClinicalCard>
+        {editingId === 'dati' ? datiEdit : datiView}
+      </ClinicalCard>
 
-          <ClinicalCard
-            title="Condizioni iniziali"
-            defaultExpanded={true}
-            onEdit={() => startEdit('cond')}
-          >
-            {editingId === 'cond' ? condEdit : condView}
-          </ClinicalCard>
+      <ClinicalCard
+        title="Condizioni iniziali"
+        defaultExpanded={true}
+        onEdit={() => startEdit('cond')}
+      >
+        {editingId === 'cond' ? condEdit : condView}
+      </ClinicalCard>
 
-          <ClinicalCard
-            title="Valutazione funzionale"
-            defaultExpanded={true}
-            onEdit={() => startEdit('valutazione')}
-          >
-            {editingId === 'valutazione' ? valutazioneEdit : valutazioneView}
-          </ClinicalCard>
+      <ClinicalCard
+        title="Valutazione funzionale"
+        defaultExpanded={true}
+        onEdit={() => startEdit('valutazione')}
+      >
+        {editingId === 'valutazione' ? valutazioneEdit : valutazioneView}
+      </ClinicalCard>
 
-          <ClinicalCard
-            title="Documenti e firma"
-            defaultExpanded={true}
-            onEdit={() => startEdit('docs')}
-          >
-            {editingId === 'docs' ? docsEdit : docsView}
-          </ClinicalCard>
-        </div>
-      </ClinicalTableSection>
+      <ClinicalCard
+        title="Documenti e firma"
+        defaultExpanded={true}
+        onEdit={() => startEdit('docs')}
+      >
+        {editingId === 'docs' ? docsEdit : docsView}
+      </ClinicalCard>
     </div>
   );
 }
