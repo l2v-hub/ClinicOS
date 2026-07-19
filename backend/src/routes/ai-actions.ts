@@ -18,6 +18,7 @@ import {
   type AgnosOperatorContext,
 } from '../ai/actions/orchestrate.js';
 import { ctxFromOperator } from './ai-assistant-public.js';
+import { isAgentId } from '../ai/assistant/agents.js';
 
 const actionsRouter = Router();
 actionsRouter.use(requireOperator);
@@ -97,6 +98,7 @@ actionsRouter.post('/plan', async (req: AuthedRequest, res) => {
       text,
       channel: parseChannel(req.body?.channel),
       currentPatientId,
+      agent: isAgentId(req.body?.agent) ? req.body.agent : undefined,
       operatorCtx: agnosOperatorFrom(req),
     });
     return res.status(200).json(result);

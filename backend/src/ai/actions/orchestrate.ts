@@ -38,6 +38,7 @@ import {
 } from './consegne.js';
 import type { UserContext } from '../gateway/types.js';
 import type { AssistantAnswer } from '../assistant/service.js';
+import type { AgentId } from '../assistant/agents.js';
 
 export type AgnosChannel = 'testo' | 'voce';
 
@@ -91,6 +92,8 @@ export interface PlanCommandInput {
   channel: AgnosChannel;
   currentPatientId?: string;
   operatorCtx: AgnosOperatorContext;
+  /** Fase 0: selected sub-agent (scopes which read intents are answered). */
+  agent?: AgentId;
 }
 
 export interface PlanCommandResult {
@@ -105,6 +108,7 @@ export interface PlanCommandDeps {
     query: string,
     ctx: UserContext,
     currentPatientId?: string,
+    agent?: AgentId,
   ) => Promise<AssistantAnswer>;
   loadPreviewContext?: (plan: ActionPlan) => Promise<PreviewContext>;
   /** SPEC-015 US4: patient/slot lookups for appointment grounding (tests inject stubs, no DB). */
@@ -117,9 +121,10 @@ async function defaultRunRead(
   query: string,
   ctx: UserContext,
   currentPatientId?: string,
+  agent?: AgentId,
 ): Promise<AssistantAnswer> {
   const { assistantQuery } = await import('../assistant/service.js');
-  return assistantQuery(query, ctx, { currentPatientId });
+  return assistantQuery(query, ctx, { currentPatientId, agent });
 }
 
 // Same grounded-preview lookups the voice route performed inline before SPEC-015.
@@ -162,6 +167,7 @@ export async function planCommand(
       plan.readQuery ?? text,
       input.operatorCtx.gatewayCtx,
       input.currentPatientId,
+      input.agent,
     );
     return { plan, preview: null, read };
   }

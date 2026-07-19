@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { IcoAI, IcoX } from '../../icons';
 import { AnswerView, type AssistantAnswer, type AssistantNav } from './AIAssistantButton';
-import { useAgnosChat, type AgnosTurn } from './agnos/useAgnosChat';
+import { useAgnosChat, type AgnosTurn, type AgnosAgent } from './agnos/useAgnosChat';
 import { useVoiceInput } from './agnos/useVoiceInput';
 import { useSpeechOutput } from './agnos/useSpeechOutput';
 
@@ -60,6 +60,8 @@ export function AgnosPanel({
 }: Props) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
+  // Fase 0: sub-agent selezionato. Default: Clinico se c'è un paziente aperto, altrimenti Gestione.
+  const [agent, setAgent] = useState<AgnosAgent>(currentPatientId ? 'clinical' : 'facility');
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   /** true se il testo in input proviene da dettatura (anche dopo modifica: FR-016 → channel:'voce'). */
@@ -73,7 +75,7 @@ export function AgnosPanel({
     confirmPending,
     cancelPending,
     dismissPendingForEdit,
-  } = useAgnosChat({ operatorId, operatorRole, operatorName, currentPatientId, onExecuted });
+  } = useAgnosChat({ operatorId, operatorRole, operatorName, currentPatientId, agent, onExecuted });
 
   const tts = useSpeechOutput();
   const voice = useVoiceInput({
@@ -208,6 +210,29 @@ export function AgnosPanel({
 
             <div className="ai-asst__scope" aria-label="Perimetro">
               {scopeLabel}
+            </div>
+
+            <div
+              className="filter-chips agnos-agent-toggle"
+              role="group"
+              aria-label="Seleziona assistente"
+            >
+              <button
+                type="button"
+                className={`filter-chip${agent === 'clinical' ? ' active' : ''}`}
+                aria-pressed={agent === 'clinical'}
+                onClick={() => setAgent('clinical')}
+              >
+                Assistente clinico
+              </button>
+              <button
+                type="button"
+                className={`filter-chip${agent === 'facility' ? ' active' : ''}`}
+                aria-pressed={agent === 'facility'}
+                onClick={() => setAgent('facility')}
+              >
+                Gestione struttura
+              </button>
             </div>
 
             <div className="ai-drawer__body ai-asst__body" ref={bodyRef}>

@@ -16,6 +16,7 @@ import {
   type PlanContext,
   type QueryPlan,
 } from './plan.js';
+import { agentAllowsIntent, redirectMessage, type AgentId } from './agents.js';
 import { planQueryLLM, injectPatientId } from './llm-planner.js';
 import { composeAnswer } from './composer.js';
 import { callPlanRuntime, callComposeRuntime } from './runtime-client.js';
@@ -47,6 +48,8 @@ export interface AssistantAnswer {
   mode?: 'deterministic' | 'llm';
   answerText?: string;
   composed?: boolean;
+  /** Fase 0: sub-agent that produced (or redirected) this answer. */
+  agent?: AgentId;
 }
 
 function limits(env: NodeJS.ProcessEnv = process.env) {
@@ -235,6 +238,7 @@ export async function assistantQuery(
     truncated: false,
     mode,
     composed: false,
+    agent: planCtx.agent,
     ...extra,
   });
 
@@ -247,6 +251,12 @@ export async function assistantQuery(
   }
   if (plan.intent === 'unknown' || plan.tools.length === 0) {
     return empty({ refusal: undefined });
+  }
+  // Fase 0 sub-agent scoping: the selected agent serves only its domain intents; a domain intent
+  // owned by the OTHER agent is redirected (not executed). Shared/neutral intents (patient_search,
+  // appointments) pass; refusals/not-found already returned above. Additive — no guardrail weakened.
+  if (planCtx.agent && !agentAllowsIntent(planCtx.agent, plan.intent)) {
+    return empty({ notFound: false, refusal: redirectMessage(planCtx.agent, plan.intent) });
   }
   // cross-patient access is role + env gated; a denied request is reported, not executed
   if (plan.requiresCrossPatientAccess && !canCrossPatientSearch(ctx, env)) {
@@ -310,6 +320,7 @@ export async function assistantQuery(
     mode,
     answerText,
     composed,
+    agent: planCtx.agent,
   };
 }
 
