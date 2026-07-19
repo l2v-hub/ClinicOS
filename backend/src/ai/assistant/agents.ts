@@ -25,6 +25,7 @@ const CLINICAL_ONLY: ReadonlySet<AssistantIntent> = new Set([
   'therapies',
   'vitals_recent',
   'vitals_range',
+  'vitals_trend',
   'timeline',
   'narrative_search',
   'document_search',

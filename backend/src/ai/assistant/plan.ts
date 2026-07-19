@@ -8,6 +8,7 @@ export type AssistantIntent =
   | 'therapies'
   | 'vitals_range'
   | 'vitals_recent'
+  | 'vitals_trend'
   | 'narrative_search'
   | 'document_search'
   | 'timeline'
@@ -70,6 +71,27 @@ function sectionKeyFor(q: string): string | undefined {
   return undefined;
 }
 
+// Fase 1a: mappa la parola-parametro all'etichetta canonica della cartella.
+const VITAL_LABELS: Array<{ re: RegExp; label: string }> = [
+  { re: /pression|sistolic|\bpa\b/, label: 'PA' },
+  { re: /frequenz|\bfc\b|battit|cardiac/, label: 'FC' },
+  { re: /satur|spo2/, label: 'SpO2' },
+  { re: /temperatur|febbre|\btc\b/, label: 'TC' },
+  { re: /glicem|\bdtx\b/, label: 'DTX' },
+];
+function vitalLabelFor(q: string): string | undefined {
+  for (const v of VITAL_LABELS) if (v.re.test(q)) return v.label;
+  return undefined;
+}
+/** Finestra dell'andamento in giorni. «N giorni» esplicito, altrimenti mese=30, due settimane=15, default 7. */
+function trendWindowDays(q: string): number {
+  const m = /(\d{1,3})\s*giorni/.exec(q);
+  if (m) return Math.min(90, Math.max(1, parseInt(m[1], 10)));
+  if (/\bmese\b|mensile/.test(q)) return 30;
+  if (/due settimane|quindic/.test(q)) return 15;
+  return 7;
+}
+
 /** Extract a quoted phrase or the words after "cerca/trova … '<phrase>'". */
 function searchPhrase(q: string, original: string): string | undefined {
   const quoted = /["“”']([^"“”']{2,})["“”']/.exec(original);
@@ -116,6 +138,18 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   if (scope === 'current_patient' && pid) {
     if (/\ballerg/.test(q))
       return base('allergies', [{ tool: 'get_patient_allergies', args: { patientId: pid } }]);
+    // Fase 1a: andamento di un parametro su finestra (7/15/30gg). Prima di vitals_recent, così una
+    // domanda di "andamento" non viene assorbita dalla lettura recente. Solo lettura, SOURCE_ONLY.
+    if (/andamento|trend|grafic|storico|evoluzion/.test(q)) {
+      const label = vitalLabelFor(q);
+      if (label)
+        return base('vitals_trend', [
+          {
+            tool: 'get_patient_vital_signs',
+            args: { patientId: pid, label, days: trendWindowDays(q) },
+          },
+        ]);
+    }
     if (
       /(parametri|pressione|pa\b|frequenza|spo2|temperatura).*(ultim|7|sette|giorni|recenti)/.test(
         q,
