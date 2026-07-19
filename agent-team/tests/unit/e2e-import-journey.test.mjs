@@ -32,6 +32,15 @@ const workspacePath = path.join(
   'intake',
   'IntakeWorkspace.tsx',
 );
+const confirmCartellaPath = path.join(
+  repoRoot,
+  'frontend',
+  'src',
+  'components',
+  'shared',
+  'intake',
+  'confirmCartella.ts',
+);
 
 test('browser journey completes every required intake confirmation (QA-263-014)', async () => {
   const script = await readFile(e2ePath, 'utf8');
@@ -89,10 +98,20 @@ test('intake wizard persists the operator-selected allergy state (QA-263-014)', 
     /onUpdateSection\('allergieStatus'/,
     'StepClinica must wire AllergiesEditor onStatusChange to the draft (the #244 selector was rendered but dead in intake mode)',
   );
+  // The confirm-payload mapping was extracted from IntakeWorkspace.tsx into the pure,
+  // unit-tested buildConfirmCartella mapper (confirmCartella.ts). Assert the invariant at
+  // its current home: IntakeWorkspace delegates to the mapper, and the mapper carries
+  // data.allergieStatus into cartella.allergieStatus (same key PatientDetail uses).
   const workspace = await readFile(workspacePath, 'utf8');
   assert.match(
     workspace,
-    /cartella\.allergieStatus/,
-    'IntakeWorkspace confirm payload must carry data.allergieStatus into cartella.allergieStatus (same key PatientDetail uses)',
+    /buildConfirmCartella\(/,
+    'IntakeWorkspace must build the confirm payload via the extracted buildConfirmCartella mapper',
+  );
+  const confirmMapper = await readFile(confirmCartellaPath, 'utf8');
+  assert.match(
+    confirmMapper,
+    /cartella\.allergieStatus\s*=\s*data\.allergieStatus/,
+    'the confirm mapper must carry data.allergieStatus into cartella.allergieStatus (same key PatientDetail uses)',
   );
 });
