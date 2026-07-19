@@ -26,7 +26,12 @@
     "security:scan-frontend": "node scripts/security/scan-frontend-secrets.mjs frontend/src frontend/index.html",
     "quality-gate:start": "node scripts/quality-gate/create-task-contract.js",
     "quality-gate:validate": "node scripts/quality-gate/validate-task-contract.js",
-    "quality-gate:check-closure": "node scripts/quality-gate/check-closure.js"
+    "quality-gate:check-closure": "node scripts/quality-gate/check-closure.js",
+    "agent-team:doctor": "node agent-team/src/cli.mjs doctor",
+    "agent-team:once": "node agent-team/src/cli.mjs once",
+    "agent-team:start": "node agent-team/src/cli.mjs start",
+    "agent-team:status": "node agent-team/src/cli.mjs status",
+    "agent-team:stop": "node agent-team/src/cli.mjs stop"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",

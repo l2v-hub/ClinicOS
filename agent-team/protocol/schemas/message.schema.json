@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "clinic-os-agent-team message v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "message_type",
+    "message_id",
+    "correlation_id",
+    "producer_role",
+    "repository",
+    "issue_number",
+    "attempt",
+    "created_at",
+    "subject_sha",
+    "state_before",
+    "state_after",
+    "acceptance_criteria",
+    "findings",
+    "commands",
+    "artifact_refs",
+    "next_actions"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "message_type": {
+      "enum": [
+        "work.claim",
+        "work.claim_released",
+        "development_handoff",
+        "qa_result",
+        "artifact_manifest",
+        "worker.blocked"
+      ]
+    },
+    "message_id": { "type": "string", "pattern": "^[A-Za-z0-9._:-]+$" },
+    "correlation_id": { "type": "string", "pattern": "^issue-[0-9]+-attempt-[0-9]+$" },
+    "producer_role": { "enum": ["claude-development", "codex-qa", "agent-team-supervisor"] },
+    "repository": { "const": "l2v-hub/ClinicOS" },
+    "issue_number": { "type": "integer" },
+    "pull_request_number": { "type": "integer" },
+    "attempt": { "type": "integer" },
+    "created_at": { "type": "string" },
+    "subject_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "state_before": { "type": "string" },
+    "state_after": { "type": "string" },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "evidence_refs"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "enum": ["passed", "failed", "not-applicable", "unresolved"] },
+          "evidence_refs": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "finding_id",
+          "acceptance_criterion_id",
+          "severity",
+          "category",
+          "observed",
+          "expected",
+          "reproduction_command_ref",
+          "evidence_refs",
+          "status",
+          "remediation_required",
+          "fingerprint"
+        ],
+        "properties": {
+          "finding_id": { "type": "string" },
+          "acceptance_criterion_id": { "type": "string" },
+          "severity": { "enum": ["critical", "high", "medium", "low"] },
+          "category": { "type": "string" },
+          "observed": { "type": "string" },
+          "expected": { "type": "string" },
+          "reproduction_command_ref": { "type": "string" },
+          "evidence_refs": { "type": "array", "items": { "type": "string" } },
+          "status": { "enum": ["open", "resolved", "unresolved"] },
+          "remediation_required": { "type": "boolean" },
+          "fingerprint": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "argv",
+          "cwd",
+          "exit_code",
+          "started_at",
+          "finished_at",
+          "stdout_ref",
+          "stderr_ref"
+        ],
+        "properties": {
+          "argv": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "cwd": { "type": "string" },
+          "exit_code": { "type": "integer" },
+          "started_at": { "type": "string" },
+          "finished_at": { "type": "string" },
+          "stdout_ref": { "type": "string" },
+          "stderr_ref": { "type": "string" }
+        }
+      }
+    },
+    "artifact_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "media_type",
+          "sha256",
+          "git_blob_sha",
+          "producer_role",
+          "subject_sha"
+        ],
+        "properties": {
+          "path": { "type": "string" },
+          "media_type": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "git_blob_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+          "producer_role": { "enum": ["claude-development", "codex-qa"] },
+          "subject_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+        }
+      }
+    },
+    "next_actions": { "type": "array", "items": { "type": "string" } }
+  }
+}
