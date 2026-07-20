@@ -128,8 +128,10 @@ test('#294 CF duplicato rifiutato alla conferma (non forzabile)', async ({ page 
     fullPage: true,
   });
 
-  // Console pulita; l'unico HTTP >=400 tollerato è il 400 ATTESO sulla confirm.
-  expect(g.consoleErrors, `console errors: ${JSON.stringify(g.consoleErrors)}`).toEqual([]);
+  // Console pulita AL NETTO dell'artefatto atteso: il 400 sulla confirm fa sempre loggare al
+  // browser un "Failed to load resource" (QA F2) — quello e solo quello è tollerato.
+  const unexpectedConsole = g.consoleErrors.filter((e) => !/Failed to load resource/i.test(e));
+  expect(unexpectedConsole, `console errors: ${JSON.stringify(unexpectedConsole)}`).toEqual([]);
   expect(
     g.httpErrors.every((e) => e.includes('/confirm')),
     `HTTP inattesi: ${JSON.stringify(g.httpErrors)}`,

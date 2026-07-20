@@ -121,7 +121,8 @@ router.post('/demo-setup', async (_req, res) => {
       statoRicovero: 'ricoverato',
       cameraNumero: '12',
       lettoNumero: 'A',
-      codiceFiscale: 'FRLFBA48E12H501X',
+      // #294 (QA F6): carattere di controllo corretto ('N', il vecchio 'X' era invalido).
+      codiceFiscale: 'FRLFBA48E12H501N',
       contattoEmergenzaNome: 'Maria Forlano',
       contattoEmergenzaTel: '+39 333 0000002',
       contattoEmergenzaRel: 'Figlia',

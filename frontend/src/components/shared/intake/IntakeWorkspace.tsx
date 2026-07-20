@@ -613,7 +613,10 @@ export function IntakeWorkspace({
             disabled={
               loading ||
               !!error ||
-              (step === 1 && !anagraficaValid()) ||
+              // #294 (QA F1/F3): lo step 1 NON disabilita più il bottone — il click passa da
+              // handleNext, che con anagrafica invalida imposta submitAttempted e fa comparire
+              // gli errori di campo (incluso il CF). Un bottone grigio senza spiegazione era
+              // feedback irraggiungibile.
               (isLast && (submitting || !acceptanceComplete()))
             }
           >
