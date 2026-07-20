@@ -159,3 +159,62 @@ test('#274: parenthesized route codes still work (no regression)', () => {
   );
   assert.equal(parseTherapyLine('Farmaco 10 MG (EV) 1 Fl ore 08:00').viaSomministrazione, 'EV');
 });
+
+// ── #296: righe vuote = delimitatore di fine terapia ─────────────────────────
+// Dopo contenuto farmacologico, il primo paragrafo (separato da righe vuote) che NON parla
+// di farmaci termina la terapia: quel testo e tutto ciò che segue non producono righe.
+
+const PROSE = [
+  'Si consiglia controllo cardiologico tra 30 giorni.',
+  'Proseguire la fisioterapia respiratoria a domicilio.',
+  'In caso di febbre contattare il curante.',
+].join('\n');
+
+test('#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata)', () => {
+  const rows = parseDischargeTherapy(`${FIXTURE}\n\n${PROSE}`);
+  assert.equal(rows.length, 10, 'solo le 10 prescrizioni, niente righe spurie dalla prosa');
+  assert.ok(
+    rows.every((r) => r.farmacoNome !== 'SI' && r.farmacoNome !== 'PROSEGUIRE'),
+    'nessuna riga creata dalle frasi di consiglio',
+  );
+});
+
+test('#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)', () => {
+  const rows = parseDischargeTherapy(
+    `${FIXTURE}\n\n${PROSE}\n\nAUGMENTIN CPR 875 MG (OS) 1 Cpr ore 09:00`,
+  );
+  // Il requisito è esplicito: dopo il primo paragrafo non farmacologico la terapia È terminata.
+  assert.equal(rows.length, 10);
+  assert.ok(!rows.some((r) => r.farmacoNome === 'AUGMENTIN'));
+});
+
+test('#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati', () => {
+  const rows = parseDischargeTherapy(
+    [
+      'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00 e alle 20:00 dal 03/07/2026 (Classe A)',
+      '',
+      'LASIX CPR 25 MG (OS) 1 Cpr ore 08:00 e alle 14:00 dal 03/07/2026 (Classe A)',
+      '',
+      '',
+      'Pantoprazolo 20 mg 1 cp al mattino per os',
+    ].join('\n'),
+  );
+  assert.deepEqual(
+    rows.map((r) => r.farmacoNome),
+    ['KEPPRA', 'LASIX', 'PANTOPRAZOLO'],
+  );
+});
+
+test('#296 AC4: intestazione iniziale + riga vuota non termina il blocco', () => {
+  const rows = parseDischargeTherapy(
+    ['Terapia domiciliare:', '', 'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00'].join('\n'),
+  );
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].farmacoNome, 'KEPPRA');
+});
+
+test('#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop)', () => {
+  // PEVARYL (nessun segnale strutturale) è nel MEDESIMO paragrafo: mai scartato.
+  const rows = parseDischargeTherapy(FIXTURE);
+  assert.ok(rows.some((r) => r.farmacoNome === 'PEVARYL' && r.stato === 'da_verificare'));
+});
