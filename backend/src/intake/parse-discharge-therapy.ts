@@ -77,15 +77,45 @@ function toIsoDate(dmy: string | undefined): string {
   return `${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`;
 }
 
+const HEADER_RE = /^(terapia(\s+domiciliare)?|tp\.?|home therapy|hospital therapy)\s*:?\s*$/i;
+
 /** Split a therapy text block into candidate prescription lines (headers/blank lines dropped). */
 export function splitTherapyLines(text: string): string[] {
   return (text ?? '')
     .split(/\r?\n/)
     .map((l) => l.trim())
     .filter((l) => l.length > 0)
-    .filter(
-      (l) => !/^(terapia(\s+domiciliare)?|tp\.?|home therapy|hospital therapy)\s*:?\s*$/i.test(l),
-    );
+    .filter((l) => !HEADER_RE.test(l));
+}
+
+/** #296: split the block into paragraphs on runs of ≥1 blank line (the end-of-therapy delimiter). */
+function splitTherapyParagraphs(text: string): string[][] {
+  const paragraphs: string[][] = [];
+  let current: string[] = [];
+  for (const raw of (text ?? '').split(/\r?\n/)) {
+    const line = raw.trim();
+    if (line.length === 0) {
+      if (current.length) paragraphs.push(current);
+      current = [];
+    } else if (!HEADER_RE.test(line)) {
+      current.push(line);
+    }
+  }
+  if (current.length) paragraphs.push(current);
+  return paragraphs;
+}
+
+/** #296: a paragraph "talks about drugs" when at least one line carries a structural
+ *  prescription signal: strength (DOSE_RE), quantity+unit (QTY_RE), administration route,
+ *  or administration times introduced by "ore". Plain clinical prose has none of these. */
+function talksAboutDrugs(lines: string[]): boolean {
+  return lines.some(
+    (l) =>
+      DOSE_RE.test(l) ||
+      QTY_RE.test(l) ||
+      detectRoute(l) !== '' ||
+      (/\bore\b/i.test(l) && /\b\d{1,2}:\d{2}\b/.test(l)),
+  );
 }
 
 /** Parse ONE prescription line into a structured row. Fields are extracted independently, so a
@@ -162,9 +192,21 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
   };
 }
 
-/** Parse a whole therapy text block into structured rows (one per prescription line). */
+/** Parse a whole therapy text block into structured rows (one per prescription line).
+ *  #296: blank lines are the END-OF-THERAPY delimiter — once drug content has been seen,
+ *  the first blank-line-separated paragraph WITHOUT drug signals terminates the block:
+ *  that paragraph and everything after it (advice / clinical prose) yield no rows.
+ *  Lines inside a drug paragraph are still never dropped (da_verificare on missing structure). */
 export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
-  return splitTherapyLines(text).map(parseTherapyLine);
+  const rows: ParsedTherapyRow[] = [];
+  let sawDrugs = false;
+  for (const lines of splitTherapyParagraphs(text)) {
+    const isDrugParagraph = talksAboutDrugs(lines);
+    if (sawDrugs && !isDrugParagraph) break;
+    rows.push(...lines.map(parseTherapyLine));
+    if (isDrugParagraph) sawDrugs = true;
+  }
+  return rows;
 }
 
 /** Map days (Italian abbreviations) to the PatientTherapy weekly "fasce" booleans is intentionally
