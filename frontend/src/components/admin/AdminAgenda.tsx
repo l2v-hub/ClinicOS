@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import type { Appuntamento, Operatore, Paziente } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
@@ -235,8 +235,8 @@ export function AdminAgenda({
             {TIME_SLOTS.map((ora) => {
               const isHour = ora.endsWith(':00');
               return (
-                <>
-                  <div key={`t-${ora}`} className={`agt-admin-time${isHour ? ' hour' : ''}`}>
+                <Fragment key={ora}>
+                  <div className={`agt-admin-time${isHour ? ' hour' : ''}`}>
                     {isHour ? ora : ''}
                   </div>
                   {visibili.map((op) => {
@@ -289,7 +289,7 @@ export function AdminAgenda({
                       </div>
                     );
                   })}
-                </>
+                </Fragment>
               );
             })}
           </div>

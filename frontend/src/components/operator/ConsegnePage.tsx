@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Consegna, PrioritaConsegna, StatoConsegna } from '../../types';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit, IcoClock } from '../../icons';
 import { InlineEditableField } from '../shared/InlineEditableField';
@@ -14,6 +14,10 @@ interface ConsegnePageProps {
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
   onSelectPaziente?: (nome: string) => void;
+  /** #283: filtro stato con cui aprire la pagina (dalla card "Consegne aperte" in dashboard). */
+  initialFiltroStato?: 'tutte' | StatoConsegna;
+  /** #283: consegna da evidenziare/scrollare quando la card ne apre una specifica. */
+  focusId?: string | null;
 }
 
 const PRIORITA_ORDER: Record<PrioritaConsegna, number> = { urgente: 0, alta: 1, normale: 2 };
@@ -56,12 +60,24 @@ export function ConsegnePage({
   onUpdateStato,
   onDelete,
   onSelectPaziente,
+  initialFiltroStato,
+  focusId,
 }: ConsegnePageProps) {
-  const [filtroStato, setFiltroStato] = useState<'tutte' | Consegna['stato']>('tutte');
+  const [filtroStato, setFiltroStato] = useState<'tutte' | Consegna['stato']>(
+    initialFiltroStato ?? 'tutte',
+  );
   const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>('tutte');
   const [ricerca, setRicerca] = useState('');
   const [formAperto, setFormAperto] = useState(false);
   const [form, setForm] = useState(FORM_VUOTO);
+
+  // #283: quando la dashboard apre UNA consegna specifica, scrolla alla sua card evidenziata.
+  useEffect(() => {
+    if (!focusId) return;
+    document
+      .getElementById(`consegna-${focusId}`)
+      ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, [focusId]);
 
   const filtrate = consegne
     .filter((c) => {
@@ -277,6 +293,7 @@ export function ConsegnePage({
                 onDelete={onDelete}
                 isAdmin={isAdmin}
                 onSelectPaziente={onSelectPaziente}
+                focused={c.id === focusId}
               />
             ))}
           </div>
@@ -297,6 +314,7 @@ export function ConsegnePage({
               onDelete={onDelete}
               isAdmin={isAdmin}
               onSelectPaziente={onSelectPaziente}
+              focused={c.id === focusId}
             />
           ))
         )}
@@ -312,6 +330,7 @@ function ConsegnaCard({
   onDelete,
   isAdmin,
   onSelectPaziente,
+  focused = false,
 }: {
   consegna: Consegna;
   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
@@ -319,13 +338,15 @@ function ConsegnaCard({
   onDelete: (id: string) => void;
   isAdmin: boolean;
   onSelectPaziente?: (nome: string) => void;
+  focused?: boolean;
 }) {
   const [editOpen, setEditOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
     <div
-      className={`consegna-card consegna-card--${c.priorita}${c.stato === 'completata' ? ' consegna-card--done' : ''}`}
+      id={`consegna-${c.id}`}
+      className={`consegna-card consegna-card--${c.priorita}${c.stato === 'completata' ? ' consegna-card--done' : ''}${focused ? ' consegna-card--focus' : ''}`}
     >
       <div className="consegna-card__top">
         <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>

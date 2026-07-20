@@ -47,6 +47,18 @@ model Operator {
   appointments       Appointment[]    @relation("AppointmentOperator")
   clinicalRecords    ClinicalRecord[] @relation("ClinicalRecordAuthor")
   clinicalNotes      ClinicalNote[]   @relation("ClinicalNoteAuthor")
+  schedule           OperatorSchedule?
+}
+
+// #285: weekly shift schedule for an operator (admin "Orari operatori" screen). Stored as a JSON
+// blob ({turni, note}) like the cartella — the shape is owned by the frontend editor.
+model OperatorSchedule {
+  id         String   @id @default(cuid())
+  operatorId String   @unique
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  operator   Operator @relation(fields: [operatorId], references: [id], onDelete: Cascade)
 }
 
 model Patient {

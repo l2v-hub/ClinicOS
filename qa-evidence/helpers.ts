@@ -2,8 +2,9 @@ import { Page, expect } from '@playwright/test';
 import { execSync as _exec } from 'node:child_process';
 import { readFileSync as _read } from 'node:fs';
 
-const ROOT = 'C:/Workspace/DG_SE_DEV/ClinicOS';
-const EVID = `${ROOT}/.worktrees/evidence`;
+const ROOT = process.env.EV_REPO_ROOT ?? 'E:/Workspace/DG_SE_DEV/ClinicOS';
+// Tree the backend tests run from: an evidence worktree if EV_TREE is set, else the repo itself.
+const EVID = process.env.EV_TREE ?? ROOT;
 const TSX = `${ROOT}/node_modules/tsx/dist/cli.mjs`;
 
 /** DATABASE_URL / flags from the evidence backend/.env, injected into child test processes. */
@@ -77,6 +78,39 @@ export function guard(page: Page) {
       expect(httpErrors, `HTTP 4xx/5xx: ${JSON.stringify(httpErrors)}`).toEqual([]);
     },
   };
+}
+
+/** Seed a REAL intake draft on the backend (create + patch with `data`), then route the page so
+ *  the workspace's own createDraft POST returns this seeded draft instead of a fresh empty one.
+ *  Everything after (autosave PATCH, confirm) hits the real server draft — no mocked behavior. */
+export async function seedManualDraft(page: Page, data: Record<string, unknown>): Promise<string> {
+  const api = 'http://localhost:3001';
+  const headers = {
+    'X-Operator-Id': 'qa-e2e',
+    'X-Operator-Role': 'operatore',
+    'Content-Type': 'application/json',
+  };
+  const created = await page.request.post(`${api}/intake/drafts`, {
+    headers,
+    data: { source: 'manual' },
+  });
+  if (!created.ok()) throw new Error(`seed createDraft failed: ${created.status()}`);
+  const draft = (await created.json()) as { id: string };
+  const patched = await page.request.patch(`${api}/intake/drafts/${draft.id}`, { headers, data });
+  if (!patched.ok()) throw new Error(`seed patchDraft failed: ${patched.status()}`);
+  const full = (await patched.json()) as { id: string; data: Record<string, unknown> };
+  await page.route('**/intake/drafts', async (route) => {
+    if (route.request().method() === 'POST') {
+      await route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify({ id: full.id, data: full.data }),
+      });
+    } else {
+      await route.continue();
+    }
+  });
+  return full.id;
 }
 
 /** Land on the SPA and click past the role-selection gate. */

@@ -19,6 +19,8 @@ interface AdminDashboardProps {
   totalePazienti: number;
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
+  /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
+  onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string) => void;
   cartelle?: CartellaPaziente[];
 }
@@ -40,6 +42,7 @@ export function AdminDashboard({
   totalePazienti,
   loadingPazienti,
   onNavigate,
+  onOpenConsegneAperte,
   onSelectPaziente,
   cartelle = [],
 }: AdminDashboardProps) {
@@ -134,7 +137,10 @@ export function AdminDashboard({
           >
             {consegne.filter((c) => c.stato !== 'completata').length}
           </div>
-          <button className="stat-card__action" onClick={() => onNavigate('consegne')}>
+          <button
+            className="stat-card__action"
+            onClick={() => (onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne'))}
+          >
             Vedi tutte <IcoArrow />
           </button>
         </div>
