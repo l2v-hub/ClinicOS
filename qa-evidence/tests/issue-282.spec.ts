@@ -2,11 +2,13 @@
 // premuto-ma-inerte: la conferma terapia è sbloccabile QUI (checkbox accept-therapy-verifica),
 // il bottone si abilita e crea davvero il paziente (persistente dopo reload).
 import { test } from '@playwright/test';
-import { guard, enterAs, nav, expect } from '../helpers';
+import { guard, enterAs, nav, expect, syntheticCF } from '../helpers';
 
 const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
 const STAMP = Date.now();
 const COGNOME = `Creazione282-${STAMP}`;
+// #294: CF obbligatorio (chiave univoca) — sintetico e nuovo a ogni run.
+const CF = syntheticCF(STAMP);
 
 test('#282 creazione paziente: gate sbloccabile allo step finale + creazione persistente', async ({
   page,
@@ -17,10 +19,11 @@ test('#282 creazione paziente: gate sbloccabile allo step finale + creazione per
   await page.getByRole('button', { name: /Nuovo paziente/ }).click();
   await page.waitForTimeout(800);
 
-  // Step 1: anagrafica minima obbligatoria.
+  // Step 1: anagrafica minima obbligatoria (#294: incluso il codice fiscale).
   await page.getByPlaceholder('Mario', { exact: true }).fill('Bruno');
   await page.getByPlaceholder('Rossi', { exact: true }).fill(COGNOME);
   await page.locator('input[type="date"]').first().fill('1960-05-20');
+  await page.getByPlaceholder('RSSMRA80A01H501U').first().fill(CF);
 
   // Avanza fino allo step finale (6 — Verifica) senza toccare la Clinica.
   for (let i = 0; i < 5; i++) {

@@ -49,6 +49,8 @@ const PATIENT = {
   firstName: 'Giulia',
   lastName: 'Bianchi',
   dateOfBirth: '1962-07-14',
+  // #294: CF sintetico valido — obbligatorio per ogni creazione paziente.
+  codiceFiscale: 'BNCGLI62L54H501N',
 };
 
 test('confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict', async () => {

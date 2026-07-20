@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { isValidCF } from '../../../lib/codiceFiscale';
 import { createDraft, getDraft, patchDraft, confirmDraft } from './intakeDraftApi';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
@@ -282,7 +283,14 @@ export function IntakeWorkspace({
 
   function anagraficaValid(): boolean {
     const a = data.anagrafica;
-    return !!(a?.firstName?.trim() && a?.lastName?.trim() && a?.dateOfBirth);
+    // #294: il CF è la chiave univoca del paziente — senza CF valido l'anagrafica
+    // non è accettabile (digitato o calcolato nello StepAnagrafica).
+    return !!(
+      a?.firstName?.trim() &&
+      a?.lastName?.trim() &&
+      a?.dateOfBirth &&
+      isValidCF(a?.codiceFiscale ?? '')
+    );
   }
 
   async function handleConfirm(force = false, allergyConflictOverride = false) {
@@ -605,7 +613,10 @@ export function IntakeWorkspace({
             disabled={
               loading ||
               !!error ||
-              (step === 1 && !anagraficaValid()) ||
+              // #294 (QA F1/F3): lo step 1 NON disabilita più il bottone — il click passa da
+              // handleNext, che con anagrafica invalida imposta submitAttempted e fa comparire
+              // gli errori di campo (incluso il CF). Un bottone grigio senza spiegazione era
+              // feedback irraggiungibile.
               (isLast && (submitting || !acceptanceComplete()))
             }
           >

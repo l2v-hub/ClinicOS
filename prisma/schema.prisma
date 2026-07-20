@@ -68,6 +68,9 @@ model Patient {
   lastName              String
   dateOfBirth           DateTime
   sex                   String?
+  // #294: unique patient key. Nullable only for legacy/seed rows created before the
+  // constraint; every creation path now requires a valid CF (provided or computed).
+  codiceFiscale         String?          @unique
   email                 String?
   phone                 String?
   address               String?

@@ -16,6 +16,8 @@ const PATIENT = {
   firstName: 'Anna',
   lastName: 'Bianchi',
   dateOfBirth: '1960-01-01',
+  // #294: CF sintetico valido — obbligatorio per ogni creazione paziente.
+  codiceFiscale: 'BNCNNA60A41H501N',
 };
 
 const PARAMETRI_MENSILI = [

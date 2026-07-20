@@ -27,7 +27,16 @@ const PDF = Buffer.concat([
   Buffer.from('%%EOF'),
 ]);
 
-const SYNTH = { firstName: 'TargetMock', lastName: 'Sintetico', dateOfBirth: '1970-01-01' };
+// #294: CF sintetico valido — chiave univoca obbligatoria alla creazione.
+const SYNTH = {
+  firstName: 'TargetMock',
+  lastName: 'Sintetico',
+  dateOfBirth: '1970-01-01',
+  codiceFiscale: 'TRGMCK70A01H501H',
+};
+// CF diverso ma stessa identità nome+data: esercita il fallback euristico (409 forzabile),
+// perché un match sul CF è ora un conflitto rigido non forzabile.
+const SYNTH_ALT_CF = { ...SYNTH, codiceFiscale: 'TRGMCK70A01L219Z' };
 const jobs = [];
 let createdId;
 
@@ -85,13 +94,15 @@ try {
   assert.equal(cart.data.diagnosi.length, 1, 'existing diagnosi appended');
 
   // 3. Confirm NEW with the SAME identity -> 409 duplicate, no second patient.
+  // #294: CF diverso (SYNTH_ALT_CF) così il conflitto scatta sull'euristica nome+data —
+  // lo stesso CF sarebbe ora un errore rigido 400, non il 409 forzabile qui asserito.
   const job3 = await reviewReadyJob();
   r = await af(`${base}/${job3}/confirm`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       mode: 'new',
-      patient: SYNTH,
+      patient: SYNTH_ALT_CF,
       cartella: { statoRicovero: 'ricoverato' },
     }),
   });

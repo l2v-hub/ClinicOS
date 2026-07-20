@@ -84,6 +84,8 @@ const PATIENT_DATA = {
   lastName: 'Forlano',
   dateOfBirth: '1948-05-12',
   sex: 'M',
+  // #294: CF sintetico valido — chiave univoca obbligatoria alla creazione.
+  codiceFiscale: 'FRLFBA48E12H501N',
   phone: '+39 333 0000001',
   email: 'fabio.forlano@example.local',
   emergencyContactName: 'Maria Forlano',
@@ -99,7 +101,7 @@ function buildCartella(pazienteId: string) {
     statoRicovero: 'ricoverato' as const,
     cameraNumero: '12',
     lettoNumero: 'A',
-    codiceFiscale: 'FRLFBA48E12H501X',
+    codiceFiscale: 'FRLFBA48E12H501N',
     contattoEmergenzaNome: 'Maria Forlano',
     contattoEmergenzaTel: '+39 333 0000002',
     contattoEmergenzaRel: 'Figlia',
@@ -709,7 +711,7 @@ async function step4_verifyCartella() {
     ['Presa in carico', 'presaInCarico', (v) => !!(v as Record<string, unknown>)?.dataIngresso],
     ['Camera/Letto', 'cameraNumero', (v) => v === '12'],
     ['Stato ricovero', 'statoRicovero', (v) => v === 'ricoverato'],
-    ['Codice fiscale', 'codiceFiscale', (v) => v === 'FRLFBA48E12H501X'],
+    ['Codice fiscale', 'codiceFiscale', (v) => v === 'FRLFBA48E12H501N'],
     ['Diabetico flag', 'diabetico', (v) => v === true],
     ['Ipertensione flag', 'ipertensione', (v) => v === true],
   ];

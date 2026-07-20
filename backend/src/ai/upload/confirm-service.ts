@@ -13,6 +13,28 @@ import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sect
 import { persistImportDocuments } from './patient-documents.js';
 import { getDraft } from '../../intake/draft-service.js';
 import { createTherapyInTx, type TherapyCreateInput } from '../../therapies/therapy-create.js';
+import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../../lib/codice-fiscale.js';
+
+// #294: il CF è la chiave univoca del paziente. Ogni conferma che CREA un paziente
+// esige un CF valido e libero. Un match sul CF è un duplicato certo, non forzabile
+// con confirmDuplicate (a differenza del match euristico nome+data).
+async function requireFreeCodiceFiscale(raw: unknown): Promise<string> {
+  const cf = normalizeCodiceFiscale(raw);
+  if (!isValidCodiceFiscale(cf)) {
+    throw new AiExtractionError(
+      'config',
+      'Codice fiscale mancante o non valido: inserirlo o calcolarlo nello step Anagrafica prima di confermare.',
+    );
+  }
+  const existing = await prisma.patient.findUnique({ where: { codiceFiscale: cf } });
+  if (existing) {
+    throw new AiExtractionError(
+      'config',
+      `Codice fiscale già presente per il paziente ${existing.lastName} ${existing.firstName} (${existing.medicalRecordNumber}). Usare la modalità "paziente esistente" o correggere il CF.`,
+    );
+  }
+  return cf;
+}
 
 export interface ConfirmPatient {
   firstName: string;
@@ -125,6 +147,7 @@ async function materializePatient(
       ...(p.address ? { address: p.address } : {}),
       ...(p.emergencyContactName ? { emergencyContactName: p.emergencyContactName } : {}),
       ...(p.emergencyContactPhone ? { emergencyContactPhone: p.emergencyContactPhone } : {}),
+      ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}),
     },
   });
 
@@ -221,6 +244,9 @@ export async function confirmDraft(
       }
     }
   }
+
+  // #294: CF obbligatorio, valido e libero prima di creare; normalizzato per la persistenza.
+  p.codiceFiscale = await requireFreeCodiceFiscale(p.codiceFiscale);
 
   // Duplicate detection (same as confirmJob).
   const dupes = await prisma.patient.findMany({
@@ -403,7 +429,11 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
     };
   }
 
-  // Duplicate detection by name + date of birth (codiceFiscale lives in cartella Json).
+  // #294: CF obbligatorio, valido e libero prima di creare; normalizzato per la persistenza.
+  p.codiceFiscale = await requireFreeCodiceFiscale(p.codiceFiscale);
+
+  // Fallback heuristic duplicate detection by name + date of birth (CF exact-match
+  // duplicates are already rejected above as hard conflicts).
   const dupes = await prisma.patient.findMany({
     where: {
       firstName: { equals: p.firstName.trim(), mode: 'insensitive' },
