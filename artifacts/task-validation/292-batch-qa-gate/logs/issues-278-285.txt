@@ -1,0 +1,83 @@
+===== ISSUE 278 =====
+[open] Issue #278: ANAMNESI
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/278
+
+  Description:
+    Rendi la sezione ANEMNESI modificabile non è solo in lettura
+===== ISSUE 279 =====
+[open] Issue #279: Header va elimina
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/279
+
+  Description:
+    Nell import del documento c'è un parte che si ripete sempre quello è l'header e quello non serve nell'import del documentn va eliminato e per identificarlo è un testo strutturato che si ripete sempre nel documento perchè ogni pagina ha l'header. 
+    
+    Ad es.Nell'import dei documenti di SABBATANI LILIANA questo è l'header  |  FONDIA UNICAMO REGIONALE
+    UNICAMOAGUEA
+    Azienda Nelle Antiche Incolini di Imola | Azienda Usl Di Imola
+    Viale Amendola, 2 - 40026 Imola (BO) | Geriatria
+    MENETTI MASSIMO  |
+    | --- | --- | --- |
+    |  FONDIA | SABBATANI LILIANA | Codice fiscale | SBBLLN51S55E289T  |
+    | --- | --- | --- | --- |
+    |  Azienda | 15/11/1951 IMOLA | Numero Nosografico | 2026/7489  |
+    |  Residenza | VIA LANZONI, 5
+    IMOLA |  |   |
+===== ISSUE 280 =====
+[open] Issue #280: Import Terapia
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/280
+
+  Description:
+    Nell'import del documento ha identificato la terapia ma questa schermata va riportata anche la parte originale.
+    Perchè ci sono i dati che sono importati ma serve poterlo confrontare con i dati origianli così da poter modificare i dati e la loro somministrazione infatti in questo form non è lo stesso form di quando viene creata la terapia e la tabella proposta deve essere la stessa di quando si crea la terapia da zero la differenza che in questo caso è precompilata
+    
+    <img width="1308" height="979" alt="Image" src="https://github.com/user-attachments/assets/e07c67e4-6475-4ee7-864f-1db643d01563" />
+===== ISSUE 281 =====
+[open] Issue #281: Ultima scherma Import
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/281
+
+  Description:
+    Ultima schermata del processo d'importaziuone quando si arriva alla fine la schermata è completamente assente di stile e illegibile serve un recap per mostrare le informazioni che si aggiungeranno ma molto più leggibile.
+    
+    Es. pessomo risultato vedi immagine
+    
+    <img width="1344" height="999" alt="Image" src="https://github.com/user-attachments/assets/8b3abf53-10e0-4465-ad63-2ce6da0fe9e0" />
+===== ISSUE 282 =====
+[open] Issue #282: Creazione Paziente
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/282
+
+  Description:
+    Errore gravissimo l'ultima step della creazione paziente non funziona il pulsate, viene premuto ma non funziona nulla. Questo è il punto più importante questo tipo di bug deve essere identificato subito
+===== ISSUE 283 =====
+[open] Issue #283: Nella Dashboard Consegne aperte
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/283
+
+  Description:
+    Quandi si preme sulla Card consegne aperte va nella pagina delle consegne ma deve andare direttamente nella card della specifica consegna aperta se è una sola se sono di più mostra tutte le consegne quelle in stato "aperte" filtrando le consegne aperte.
+===== ISSUE 284 =====
+[open] Issue #284: Agenda
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/284
+
+  Description:
+    Cerca di collassare un po' l'agenda occupa troppo spazione senza senso deve essere sempre guidato dalla leggibilità
+===== ISSUE 285 =====
+[open] Issue #285: Persistenza dei dati
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/285
+
+  Description:
+    Ogni volta che applico il CRUD a qualsiasi livello e in qualsiasi pagina deve salavare i dati nel DB sembra che per alcuni di questo quando termino la sessione oppure esco il dato non è più presente vale sia nella sezione Operatore che Amministratore. Quindi è necessario controllare in tutta l'applicazione tutte le operazioni in tutte le pagine

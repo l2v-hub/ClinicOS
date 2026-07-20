@@ -1,0 +1,121 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Workspace\\DG_SE_DEV\\ClinicOS\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "E:\\Workspace\\DG_SE_DEV\\ClinicOS\\.claude\\worktrees\\agent-a3bf3eb1f0b21e88a\\artifacts\\task-validation\\263-qa-gate-pr293\\playwright.qa263.config.mjs",
+      "--reporter=json"
+    ],
+    "configFile": "E:\\Workspace\\DG_SE_DEV\\ClinicOS\\.claude\\worktrees\\agent-a3bf3eb1f0b21e88a\\artifacts\\task-validation\\263-qa-gate-pr293\\playwright.qa263.config.mjs",
+    "rootDir": "E:/Workspace/DG_SE_DEV/ClinicOS/.claude/worktrees/agent-a3bf3eb1f0b21e88a/artifacts/task-validation/263-qa-gate-pr293",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Workspace/DG_SE_DEV/ClinicOS/artifacts/task-validation/263-qa-gate-pr293/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "E:/Workspace/DG_SE_DEV/ClinicOS/.claude/worktrees/agent-a3bf3eb1f0b21e88a/artifacts/task-validation/263-qa-gate-pr293",
+        "testIgnore": [],
+        "testMatch": [
+          "**/qa-report.spec.mjs"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 14,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "qa-report.spec.mjs",
+      "file": "qa-report.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "QA-263-016 evidence surface shows both regression tests passing, 0 failures, roots-ignored ok",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1758,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-20T15:47:25.547Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "E:\\Workspace\\DG_SE_DEV\\ClinicOS\\artifacts\\task-validation\\263-qa-gate-pr293\\test-results\\qa-report-QA-263-016-evide-f4f7a-0-failures-roots-ignored-ok\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "51c9f66157def2dc1811-e0a356074dad5641569e",
+          "file": "qa-report.spec.mjs",
+          "line": 8,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-20T15:47:25.037Z",
+    "duration": 2563.246,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

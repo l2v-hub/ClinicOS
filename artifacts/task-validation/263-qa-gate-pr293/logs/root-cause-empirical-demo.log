@@ -1,0 +1,16 @@
+=== .gitignore rules ===
+rtk: Failed to resolve 'rg' via PATH, falling back to direct exec: Binary 'rg' not found on PATH
+2 matches in 1F:
+
+[file] .gitignore (2):
+    46: agent-team/.runtime
+    47: agent-team/.worktrees
+
+=== bare dir probe (old behavior, dir absent) ===
+agent-team/.worktrees
+exit=0
+=== synthetic child probe (new behavior, dir absent) ===
+agent-team/.worktrees/.doctor-ignore-probe
+exit=0
+=== .worktrees exists? ===
+/usr/bin/ls: cannot access 'agent-team/.worktrees': No such file or directory

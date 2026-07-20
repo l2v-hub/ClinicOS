@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>QA Gate PR #293 — QA-263-016 Evidence</title>
+<style>
+body{font-family:Segoe UI,system-ui,sans-serif;background:#EEF1F6;color:#16202E;margin:0;padding:32px}
+.card{background:#fff;border:1px solid #E6EBF2;border-radius:14px;padding:24px;max-width:900px;margin:0 auto 16px}
+h1{font-size:20px;margin:0 0 4px}h2{font-size:15px;margin:0 0 12px;color:#5A6B80}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #E6EBF2;padding:8px 10px;text-align:left;font-size:14px}
+.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-weight:600;font-size:12px}
+.badge.pass{background:#E4F5EA;color:#1E7A44}.badge.fail{background:#FBE4E7;color:#D93A4A}
+code{background:#F3F6FA;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.meta{font-size:13px;color:#5A6B80}
+</style></head><body>
+<div class="card">
+  <h1>Independent QA Gate — PR #293 (QA-263-016 remediation)</h1>
+  <h2>agent-team doctor: ignore probe existence-independent on fresh checkouts</h2>
+  <p class="meta">PR head SHA: <code id="head-sha">14d50e3c171a323de74536589f5ae24f564d5168</code> · branch <code>fix/263-qa-016-doctor-fresh-checkout</code> · generated 2026-07-20T15:43:57.870Z</p>
+</div>
+<div class="card">
+  <h2>QA-263-016 regression tests (real temporary git repository, no mocks on git check-ignore)</h2>
+  <table id="regression-tests">
+    <tr><th>Test</th><th>Status</th></tr>
+    <tr id="regression-1"><td>doctor passes ignore validation on a real fresh checkout where the roots do not exist (QA-263-016)</td><td><span class="badge pass" data-status="pass">pass</span></td></tr>
+    <tr id="regression-2"><td>doctor fails closed on a real repository whose gitignore lacks the root rules (QA-263-016)</td><td><span class="badge pass" data-status="pass">pass</span></td></tr>
+  </table>
+</div>
+<div class="card">
+  <h2>doctor unit suite totals (node --test agent-team/tests/unit/doctor.test.mjs, exit 0)</h2>
+  <table id="totals">
+    <tr><th>Total</th><th>Pass</th><th>Fail</th></tr>
+    <tr><td id="total-tests">19</td><td id="total-pass">19</td><td id="total-fail">0</td></tr>
+  </table>
+</div>
+<div class="card">
+  <h2>Live <code>npm run agent-team:doctor</code> — roots-ignored check</h2>
+  <table id="doctor-live">
+    <tr><th>Check</th><th>ok</th><th>detail</th></tr>
+    <tr id="roots-ignored-row"><td><code>roots-ignored</code></td><td><span class="badge pass" data-status="pass">pass</span></td><td>ok</td></tr>
+    <tr><td>doctor overall <code>ok</code></td><td><span class="badge pass" data-status="pass">pass</span></td><td>developmentReady=true · qaReady=true · 21 checks</td></tr>
+  </table>
+  <p class="meta">Run performed in a worktree where <code>agent-team/.worktrees</code> did not exist — the exact Codex clean-worktree repro condition.</p>
+</div>
+</body></html>

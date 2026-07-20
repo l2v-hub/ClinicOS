@@ -1,0 +1,206 @@
+===== 278 comments =====
+author:	l2v-hub
+association:	owner
+edited:	false
+status:	none
+--
+## Evidenze oggettive — READY FOR CODEX QA
+
+Implementazione + evidenze Playwright al commit `778a2f8a30afbe91397e32a1946bf2dc41ea7038` (branch `fix/issues-278-285-ux-batch`).
+
+**Screenshot finali**
+- [278-anamnesi-persistita.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-278-anamnesi-modificabile/screenshots/278-anamnesi-persistita.png)
+
+**Prove complete**
+- [validation-report.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-278-anamnesi-modificabile/validation-report.md) (Final Decision: CLOSED — VERIFIED)
+- [task-contract.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-278-anamnesi-modificabile/task-contract.md)
+- [trace.zip](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-278-anamnesi-modificabile/trace)
+- [playwright-report/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-278-anamnesi-modificabile/playwright-report)
+- [test-results/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-278-anamnesi-modificabile/test-results)
+- [video/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-278-anamnesi-modificabile/video)
+
+Asserzioni reali: `toBeVisible`, verifica dei valori, zero errori console, nessun 4xx/5xx rilevante, persistenza dopo reload dove i dati cambiano.
+
+Stato dichiarato: **READY FOR CODEX QA** (nessuna chiusura/merge/deploy da parte di Claude — QA Gatekeeper: Codex).
+--
+===== 279 comments =====
+author:	l2v-hub
+association:	owner
+edited:	false
+status:	none
+--
+## Evidenze oggettive — READY FOR CODEX QA
+
+Implementazione + evidenze Playwright al commit `778a2f8a30afbe91397e32a1946bf2dc41ea7038` (branch `fix/issues-278-285-ux-batch`).
+
+**Screenshot finali**
+- [279-header-filter-suite.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-279-import-header-ripetuto/screenshots/279-header-filter-suite.png)
+
+**Prove complete**
+- [validation-report.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-279-import-header-ripetuto/validation-report.md) (Final Decision: CLOSED — VERIFIED)
+- [task-contract.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-279-import-header-ripetuto/task-contract.md)
+- [trace.zip](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-279-import-header-ripetuto/trace)
+- [playwright-report/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-279-import-header-ripetuto/playwright-report)
+- [test-results/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-279-import-header-ripetuto/test-results)
+- [video/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-279-import-header-ripetuto/video)
+- [header-filter-tap.log](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-279-import-header-ripetuto/logs/header-filter-tap.log) — 20/20 unit PASS (3 nuovi casi #279)
+
+Asserzioni reali: `toBeVisible`, verifica dei valori, zero errori console, nessun 4xx/5xx rilevante, persistenza dopo reload dove i dati cambiano.
+
+Stato dichiarato: **READY FOR CODEX QA** (nessuna chiusura/merge/deploy da parte di Claude — QA Gatekeeper: Codex).
+--
+===== 280 comments =====
+author:	l2v-hub
+association:	owner
+edited:	false
+status:	none
+--
+## Evidenze oggettive — READY FOR CODEX QA
+
+Implementazione + evidenze Playwright al commit `778a2f8a30afbe91397e32a1946bf2dc41ea7038` (branch `fix/issues-278-285-ux-batch`).
+
+**Screenshot finali**
+- [280-form-reale-precompilato.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-280-import-terapia-form-reale/screenshots/280-form-reale-precompilato.png)
+- [280-paziente-creato.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-280-import-terapia-form-reale/screenshots/280-paziente-creato.png)
+
+**Prove complete**
+- [validation-report.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-280-import-terapia-form-reale/validation-report.md) (Final Decision: CLOSED — VERIFIED)
+- [task-contract.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-280-import-terapia-form-reale/task-contract.md)
+- [trace.zip](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-280-import-terapia-form-reale/trace)
+- [playwright-report/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-280-import-terapia-form-reale/playwright-report)
+- [test-results/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-280-import-terapia-form-reale/test-results)
+- [video/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-280-import-terapia-form-reale/video)
+
+Asserzioni reali: `toBeVisible`, verifica dei valori, zero errori console, nessun 4xx/5xx rilevante, persistenza dopo reload dove i dati cambiano.
+
+Stato dichiarato: **READY FOR CODEX QA** (nessuna chiusura/merge/deploy da parte di Claude — QA Gatekeeper: Codex).
+--
+===== 281 comments =====
+author:	l2v-hub
+association:	owner
+edited:	false
+status:	none
+--
+## Evidenze oggettive — READY FOR CODEX QA
+
+Implementazione + evidenze Playwright al commit `778a2f8a30afbe91397e32a1946bf2dc41ea7038` (branch `fix/issues-278-285-ux-batch`).
+
+**Screenshot finali**
+- [281-recap-leggibile.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-281-import-recap-finale/screenshots/281-recap-leggibile.png)
+
+**Prove complete**
+- [validation-report.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-281-import-recap-finale/validation-report.md) (Final Decision: CLOSED — VERIFIED)
+- [task-contract.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-281-import-recap-finale/task-contract.md)
+- [trace.zip](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-281-import-recap-finale/trace)
+- [playwright-report/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-281-import-recap-finale/playwright-report)
+- [test-results/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-281-import-recap-finale/test-results)
+- [video/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-281-import-recap-finale/video)
+
+Asserzioni reali: `toBeVisible`, verifica dei valori, zero errori console, nessun 4xx/5xx rilevante, persistenza dopo reload dove i dati cambiano.
+
+Stato dichiarato: **READY FOR CODEX QA** (nessuna chiusura/merge/deploy da parte di Claude — QA Gatekeeper: Codex).
+--
+===== 282 comments =====
+author:	l2v-hub
+association:	owner
+edited:	false
+status:	none
+--
+## Evidenze oggettive — READY FOR CODEX QA
+
+Implementazione + evidenze Playwright al commit `778a2f8a30afbe91397e32a1946bf2dc41ea7038` (branch `fix/issues-278-285-ux-batch`).
+
+**Screenshot finali**
+- [282-step-finale-sbloccato.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-282-creazione-paziente-ultimo-step/screenshots/282-step-finale-sbloccato.png)
+- [282-paziente-in-lista.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-282-creazione-paziente-ultimo-step/screenshots/282-paziente-in-lista.png)
+
+**Prove complete**
+- [validation-report.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-282-creazione-paziente-ultimo-step/validation-report.md) (Final Decision: CLOSED — VERIFIED)
+- [task-contract.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-282-creazione-paziente-ultimo-step/task-contract.md)
+- [trace.zip](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-282-creazione-paziente-ultimo-step/trace)
+- [playwright-report/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-282-creazione-paziente-ultimo-step/playwright-report)
+- [test-results/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-282-creazione-paziente-ultimo-step/test-results)
+- [video/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-282-creazione-paziente-ultimo-step/video)
+
+Asserzioni reali: `toBeVisible`, verifica dei valori, zero errori console, nessun 4xx/5xx rilevante, persistenza dopo reload dove i dati cambiano.
+
+Stato dichiarato: **READY FOR CODEX QA** (nessuna chiusura/merge/deploy da parte di Claude — QA Gatekeeper: Codex).
+--
+===== 283 comments =====
+author:	l2v-hub
+association:	owner
+edited:	false
+status:	none
+--
+## Evidenze oggettive — READY FOR CODEX QA
+
+Implementazione + evidenze Playwright al commit `778a2f8a30afbe91397e32a1946bf2dc41ea7038` (branch `fix/issues-278-285-ux-batch`).
+
+**Screenshot finali**
+- [283-consegna-focus.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-283-dashboard-consegne-aperte-filtro/screenshots/283-consegna-focus.png)
+- [283-sidebar-vista-completa.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-283-dashboard-consegne-aperte-filtro/screenshots/283-sidebar-vista-completa.png)
+
+**Prove complete**
+- [validation-report.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-283-dashboard-consegne-aperte-filtro/validation-report.md) (Final Decision: CLOSED — VERIFIED)
+- [task-contract.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-283-dashboard-consegne-aperte-filtro/task-contract.md)
+- [trace.zip](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-283-dashboard-consegne-aperte-filtro/trace)
+- [playwright-report/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-283-dashboard-consegne-aperte-filtro/playwright-report)
+- [test-results/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-283-dashboard-consegne-aperte-filtro/test-results)
+- [video/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-283-dashboard-consegne-aperte-filtro/video)
+
+Asserzioni reali: `toBeVisible`, verifica dei valori, zero errori console, nessun 4xx/5xx rilevante, persistenza dopo reload dove i dati cambiano.
+
+Stato dichiarato: **READY FOR CODEX QA** (nessuna chiusura/merge/deploy da parte di Claude — QA Gatekeeper: Codex).
+--
+===== 284 comments =====
+author:	l2v-hub
+association:	owner
+edited:	false
+status:	none
+--
+## Evidenze oggettive — READY FOR CODEX QA
+
+Implementazione + evidenze Playwright al commit `778a2f8a30afbe91397e32a1946bf2dc41ea7038` (branch `fix/issues-278-285-ux-batch`).
+
+**Screenshot finali**
+- [284-agenda-operatore.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-284-agenda-compatta/screenshots/284-agenda-operatore.png)
+- [284-agenda-admin.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-284-agenda-compatta/screenshots/284-agenda-admin.png)
+
+**Prove complete**
+- [validation-report.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-284-agenda-compatta/validation-report.md) (Final Decision: CLOSED — VERIFIED)
+- [task-contract.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-284-agenda-compatta/task-contract.md)
+- [trace.zip](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-284-agenda-compatta/trace)
+- [playwright-report/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-284-agenda-compatta/playwright-report)
+- [test-results/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-284-agenda-compatta/test-results)
+- [video/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-284-agenda-compatta/video)
+
+Asserzioni reali: `toBeVisible`, verifica dei valori, zero errori console, nessun 4xx/5xx rilevante, persistenza dopo reload dove i dati cambiano.
+
+Stato dichiarato: **READY FOR CODEX QA** (nessuna chiusura/merge/deploy da parte di Claude — QA Gatekeeper: Codex).
+--
+===== 285 comments =====
+author:	l2v-hub
+association:	owner
+edited:	false
+status:	none
+--
+## Evidenze oggettive — READY FOR CODEX QA
+
+Implementazione + evidenze Playwright al commit `778a2f8a30afbe91397e32a1946bf2dc41ea7038` (branch `fix/issues-278-285-ux-batch`).
+
+**Screenshot finali**
+- [285-orari-persistiti.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-285-persistenza-crud-audit/screenshots/285-orari-persistiti.png)
+- [285-dashboard-agenda-reale.png](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-285-persistenza-crud-audit/screenshots/285-dashboard-agenda-reale.png)
+
+**Prove complete**
+- [validation-report.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-285-persistenza-crud-audit/validation-report.md) (Final Decision: CLOSED — VERIFIED)
+- [task-contract.md](https://github.com/l2v-hub/ClinicOS/blob/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-285-persistenza-crud-audit/task-contract.md)
+- [trace.zip](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-285-persistenza-crud-audit/trace)
+- [playwright-report/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-285-persistenza-crud-audit/playwright-report)
+- [test-results/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-285-persistenza-crud-audit/test-results)
+- [video/](https://github.com/l2v-hub/ClinicOS/tree/778a2f8a30afbe91397e32a1946bf2dc41ea7038/artifacts/task-validation/issue-285-persistenza-crud-audit/video)
+
+Asserzioni reali: `toBeVisible`, verifica dei valori, zero errori console, nessun 4xx/5xx rilevante, persistenza dopo reload dove i dati cambiano.
+
+Stato dichiarato: **READY FOR CODEX QA** (nessuna chiusura/merge/deploy da parte di Claude — QA Gatekeeper: Codex).
+--

@@ -1,0 +1,105 @@
+TAP version 13
+# Subtest: doctor passes every contract prerequisite on a healthy workstation
+ok 1 - doctor passes every contract prerequisite on a healthy workstation
+  ---
+  duration_ms: 2.3103
+  ...
+# Subtest: doctor marks development unavailable when Claude is unauthenticated
+ok 2 - doctor marks development unavailable when Claude is unauthenticated
+  ---
+  duration_ms: 1.0354
+  ...
+# Subtest: doctor accepts Codex login confirmation printed to stderr
+ok 3 - doctor accepts Codex login confirmation printed to stderr
+  ---
+  duration_ms: 0.5204
+  ...
+# Subtest: doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+ok 4 - doctor refuses a duplicate local supervisor and passes the configured heartbeat timeout
+  ---
+  duration_ms: 0.3557
+  ...
+# Subtest: doctor fails closed when a required GitHub label is missing
+ok 5 - doctor fails closed when a required GitHub label is missing
+  ---
+  duration_ms: 0.3986
+  ...
+# Subtest: doctor fails closed without push permission on the repository
+ok 6 - doctor fails closed without push permission on the repository
+  ---
+  duration_ms: 0.3578
+  ...
+# Subtest: doctor blocks development when claude help lacks a required worker option
+ok 7 - doctor blocks development when claude help lacks a required worker option
+  ---
+  duration_ms: 0.2968
+  ...
+# Subtest: doctor blocks QA when codex exec help lacks a required option
+ok 8 - doctor blocks QA when codex exec help lacks a required option
+  ---
+  duration_ms: 0.3271
+  ...
+# Subtest: doctor fails closed when referenced prompt or schema files are missing
+ok 9 - doctor fails closed when referenced prompt or schema files are missing
+  ---
+  duration_ms: 0.3605
+  ...
+# Subtest: doctor blocks development on an empty worker permission policy
+ok 10 - doctor blocks development on an empty worker permission policy
+  ---
+  duration_ms: 0.3755
+  ...
+# Subtest: doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
+ok 11 - doctor blocks development when claude help lacks --tools or --disallowedTools (QA-263-011)
+  ---
+  duration_ms: 0.7066
+  ...
+# Subtest: doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
+ok 12 - doctor blocks development when the tool surface exposes a nested-agent tool (QA-263-011)
+  ---
+  duration_ms: 0.2675
+  ...
+# Subtest: doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
+ok 13 - doctor blocks development when a required nested-execution deny rule is missing (QA-263-011)
+  ---
+  duration_ms: 0.271
+  ...
+# Subtest: doctor fails closed on unrealistic worker timeouts
+ok 14 - doctor fails closed on unrealistic worker timeouts
+  ---
+  duration_ms: 0.3121
+  ...
+# Subtest: doctor fails closed when the runtime root is not writable
+ok 15 - doctor fails closed when the runtime root is not writable
+  ---
+  duration_ms: 0.2389
+  ...
+# Subtest: doctor accepts C-quoted Windows paths from git check-ignore
+ok 16 - doctor accepts C-quoted Windows paths from git check-ignore
+  ---
+  duration_ms: 0.3196
+  ...
+# Subtest: doctor fails closed when runtime or worktree roots are not git-ignored
+ok 17 - doctor fails closed when runtime or worktree roots are not git-ignored
+  ---
+  duration_ms: 0.2651
+  ...
+# Subtest: doctor passes ignore validation on a real fresh checkout where the roots do not exist (QA-263-016)
+ok 18 - doctor passes ignore validation on a real fresh checkout where the roots do not exist (QA-263-016)
+  ---
+  duration_ms: 124.1897
+  ...
+# Subtest: doctor fails closed on a real repository whose gitignore lacks the root rules (QA-263-016)
+ok 19 - doctor fails closed on a real repository whose gitignore lacks the root rules (QA-263-016)
+  ---
+  duration_ms: 156.8742
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 395.8834

@@ -1,0 +1,2317 @@
+diff --git a/backend/src/ai/__tests__/header-filter.test.ts b/backend/src/ai/__tests__/header-filter.test.ts
+index a1071e0..d605e11 100644
+--- a/backend/src/ai/__tests__/header-filter.test.ts
++++ b/backend/src/ai/__tests__/header-filter.test.ts
+@@ -222,3 +222,64 @@ test('empty input is safe', () => {
+   assert.equal(r.cleanedText, '');
+   assert.equal(r.removedHeaderBlocks, 0);
+ });
++
++// ── #279: markdown-TABLE header (labels as bare cells, no colons) — shape taken verbatim from
++// the reported real document (anonymised values). The label sits in a table cell ("| Codice
++// fiscale | XXX |"), so the inline "label:" detector never fires without cell matching.
++const TABLE_HEADER = [
++  '| AZIENDA SANITARIA REGIONALE',
++  'Azienda Ospedaliera di Demo | Azienda Usl Di Demo',
++  '| --- | --- | --- |',
++  '|  Azienda | ROSSI MARIA | Codice fiscale | RSSMRA51S55E000T  |',
++  '| --- | --- | --- | --- |',
++  '|  Reparto | 15/11/1951 DEMO | Numero Nosografico | 2026/0001  |',
++  '|  Residenza | VIA DEMO, 5 DEMO |  |   |',
++].join('\n');
++
++test('#279: table-cell header repeated on 3 pages → kept once, later pages cleaned', () => {
++  const doc = [
++    `${TABLE_HEADER}\n\n## Anamnesi\nPaziente ricoverata per scompenso.\n\nPagina 1 di 3`,
++    `${TABLE_HEADER}\n\nProseguiva la degenza senza complicanze.\n\nPagina 2 di 3`,
++    `${TABLE_HEADER}\n\n## Terapia\nFurosemide 25 mg.\n\nPagina 3 di 3`,
++  ].join('\n');
++  const r = filterRepeatedHeaders(doc);
++  assert.ok(
++    r.removedHeaderBlocks >= 2,
++    `two later table headers removed (got ${r.removedHeaderBlocks})`,
++  );
++  assert.equal(
++    (r.cleanedText.match(/RSSMRA51S55E000T/g) || []).length,
++    1,
++    'anagraphic table kept exactly once',
++  );
++  assert.ok(r.cleanedText.includes('Proseguiva la degenza'), 'clinical text intact');
++  assert.ok(r.cleanedText.includes('Furosemide 25 mg.'), 'therapy text intact');
++});
++
++test('#279: a content table (therapy) is NOT treated as a header', () => {
++  const t = [
++    '| Farmaco | Dose | Via |',
++    '| --- | --- | --- |',
++    '| Ramipril | 5 mg | OS |',
++    '| Furosemide | 25 mg | OS |',
++  ].join('\n');
++  const doc = `## Terapia\n${t}\n\nAltro testo.\n\n## Decorso\n${t}`;
++  const r = filterRepeatedHeaders(doc);
++  assert.ok(r.cleanedText.includes('Ramipril'), 'content table intact');
++  assert.equal(r.removedHeaderBlocks, 0, 'no header removed from content tables');
++});
++
++test('#279: repeated institutional banner above the header table is absorbed', () => {
++  const doc = [
++    `${TABLE_HEADER}\n\n## Anamnesi\nTesto uno.\n\nPagina 1 di 2`,
++    `${TABLE_HEADER}\n\nTesto due.\n\nPagina 2 di 2`,
++  ].join('\n');
++  const r = filterRepeatedHeaders(doc);
++  assert.equal(
++    (r.cleanedText.match(/AZIENDA SANITARIA REGIONALE/g) || []).length,
++    1,
++    'banner kept exactly once',
++  );
++  assert.ok(r.cleanedText.includes('Testo uno.'));
++  assert.ok(r.cleanedText.includes('Testo due.'));
++});
+diff --git a/backend/src/ai/sections/header-filter.ts b/backend/src/ai/sections/header-filter.ts
+index f5d4926..e597805 100644
+--- a/backend/src/ai/sections/header-filter.ts
++++ b/backend/src/ai/sections/header-filter.ts
+@@ -22,6 +22,8 @@ const DEFAULT_HEADER_LABELS = [
+   'sesso',
+   'cartella clinica',
+   'numero nosologico',
++  // #279: real hospital letters use "nosografico" (seen verbatim in the reported document)
++  'numero nosografico',
+   'numero cartella',
+   'reparto',
+   'unita operativa',
+@@ -129,12 +131,27 @@ function inlineLabels(line: string, labels: string[]): string[] {
+   return Array.from(new Set(found));
+ }
+ 
+-/** Header labels carried by a line: a single label-at-start (label-above-value layout), or ≥2
+- *  inline "label:" pairs on one row. Returns null when the line is not header-like. */
++/** #279: labels appearing as BARE markdown-table cells ("| Codice fiscale | SBB... |"). Hospital
++ *  headers are often OCR'd as tables where the label is a cell with no colon, so the inline
++ *  "label:" detector never fires. Exact-cell match only (content tables use different labels). */
++function tableCellLabels(line: string, labels: string[]): string[] {
++  if ((line.match(/\|/g) ?? []).length < 2) return [];
++  const cells = line
++    .split('|')
++    .map((c) => normalise(c))
++    .filter(Boolean);
++  return labels.filter((lab) => cells.includes(lab));
++}
++
++/** Header labels carried by a line: a single label-at-start (label-above-value layout), ≥2
++ *  inline "label:" pairs on one row, or ≥1 exact-label table cell (#279). Returns null when the
++ *  line is not header-like. */
+ function headerLineLabels(line: string, cfg: HeaderFilterConfig): string[] | null {
+   const single = matchedLabel(line, cfg.labels);
+   if (single) return [single];
+   const inline = inlineLabels(line, cfg.labels);
++  const cells = tableCellLabels(line, cfg.labels);
++  if (cells.length >= 1) return Array.from(new Set([...inline, ...cells]));
+   return inline.length >= 2 ? inline : null;
+ }
+ 
+@@ -240,7 +257,9 @@ function scoreBlock(
+     const t = lines[k].trim();
+     if (!t) continue;
+     total++;
+-    if (/:/.test(t) || matchedLabel(lines[k], cfg.labels)) pairs++;
++    // #279: a markdown-table row (≥2 pipes) is as header-shaped as a "label: value" pair
++    if (/:/.test(t) || (t.match(/\|/g) ?? []).length >= 2 || matchedLabel(lines[k], cfg.labels))
++      pairs++;
+   }
+   const tableLayoutScore = total ? pairs / total : 0;
+   // position: near the document start or right after a blank/page-break boundary (page top)
+@@ -285,6 +304,15 @@ export function filterRepeatedHeaders(
+   for (const b of blocks)
+     signatureCounts.set(b.signature, (signatureCounts.get(b.signature) ?? 0) + 1);
+ 
++  // #279: institutional banner lines (hospital name/address) sit ABOVE the labelled header rows,
++  // carry no label, but repeat verbatim on every page. Count normalised occurrences so a removed
++  // header block can absorb the contiguous repeated banner right above it.
++  const lineCounts = new Map<string, number>();
++  for (const l of lines) {
++    const n = normalise(l);
++    if (n) lineCounts.set(n, (lineCounts.get(n) ?? 0) + 1);
++  }
++
+   const remove = new Set<number>(); // line indices to drop
+   const seenSignature = new Set<string>();
+   let removedHeaderBlocks = 0;
+@@ -297,7 +325,18 @@ export function filterRepeatedHeaders(
+     seenSignature.add(b.signature);
+     if (firstOccurrence) continue; // always keep the first header (anagraphic source)
+     if (confidence >= cfg.confidenceThreshold) {
+-      for (let k = b.start; k < b.end; k++) remove.add(k);
++      // absorb the repeated banner immediately above (max 12 lines): repeated verbatim lines and
++      // decorative table separators ("| --- |", normalised to '') are part of the header; a truly
++      // BLANK line is a page/content boundary and stops the expansion.
++      let start = b.start;
++      while (start > 0 && b.start - start < 12) {
++        const raw = lines[start - 1];
++        if (!raw.trim()) break;
++        const n = normalise(raw);
++        if (n && (lineCounts.get(n) ?? 0) < 2) break;
++        start--;
++      }
++      for (let k = start; k < b.end; k++) remove.add(k);
+       removedHeaderBlocks++;
+       for (const l of b.labels) if (!matchedLabels.includes(l)) matchedLabels.push(l);
+     } else {
+diff --git a/backend/src/routes/operators.ts b/backend/src/routes/operators.ts
+index 9043831..3358964 100644
+--- a/backend/src/routes/operators.ts
++++ b/backend/src/routes/operators.ts
+@@ -71,6 +71,54 @@ operatorsRouter.get('/', async (_req, res) => {
+   }
+ });
+ 
++// ── #285: weekly schedules (admin "Orari operatori") — JSON blob per operator ──────────────
++
++// GET /operators/schedules (named route BEFORE parameterized)
++operatorsRouter.get('/schedules', async (_req, res) => {
++  try {
++    const rows = await prisma.operatorSchedule.findMany();
++    res.status(200).json(
++      rows.map((r) => {
++        const d = (r.data ?? {}) as { turni?: unknown; note?: string };
++        return { id: r.id, operatoreId: r.operatorId, turni: d.turni ?? [], note: d.note ?? '' };
++      }),
++    );
++  } catch (error) {
++    console.error('GET /operators/schedules error:', error);
++    res.status(500).json({ error: 'Errore nel recupero orari operatori' });
++  }
++});
++
++// PUT /operators/:operatorId/schedule  { turni, note }
++operatorsRouter.put('/:operatorId/schedule', async (req, res) => {
++  const { operatorId } = req.params;
++  const body = req.body as { turni?: unknown; note?: string };
++  if (!Array.isArray(body.turni)) {
++    res.status(400).json({ error: 'Campo obbligatorio: turni (array)' });
++    return;
++  }
++  try {
++    const operator = await prisma.operator.findUnique({ where: { id: operatorId } });
++    if (!operator) {
++      res.status(404).json({ error: 'Operatore non trovato' });
++      return;
++    }
++    const data = { turni: body.turni, note: body.note ?? '' };
++    const row = await prisma.operatorSchedule.upsert({
++      where: { operatorId },
++      update: { data },
++      create: { operatorId, data },
++    });
++    console.log(`PUT /operators/${operatorId}/schedule → saved`);
++    res
++      .status(200)
++      .json({ id: row.id, operatoreId: operatorId, turni: data.turni, note: data.note });
++  } catch (error) {
++    console.error('PUT /operators/:operatorId/schedule error:', error);
++    res.status(500).json({ error: 'Errore durante salvataggio orari' });
++  }
++});
++
+ // POST /operators
+ operatorsRouter.post('/', async (req, res) => {
+   const body = req.body as {
+diff --git a/frontend/src/App.css b/frontend/src/App.css
+index 4df7d3d..c1e3710 100644
+--- a/frontend/src/App.css
++++ b/frontend/src/App.css
+@@ -4176,6 +4176,13 @@ textarea.form-input {
+   margin-bottom: 14px;
+ }
+ 
++/* #283: consegna aperta direttamente dalla card della dashboard — evidenziata all'arrivo */
++.consegna-card--focus {
++  outline: 2px solid var(--blue);
++  outline-offset: 2px;
++  box-shadow: 0 0 0 4px rgba(47, 107, 237, 0.15);
++}
++
+ .consegna-card__patient {
+   display: flex;
+   align-items: center;
+diff --git a/frontend/src/App.tsx b/frontend/src/App.tsx
+index cc369b5..e5ea0bd 100644
+--- a/frontend/src/App.tsx
++++ b/frontend/src/App.tsx
+@@ -13,6 +13,7 @@ import type {
+   Appuntamento,
+   Camera,
+   ScheduleOperatore,
++  SlotAgenda,
+   Nota,
+   StatoNota,
+   CartellaPaziente,
+@@ -24,12 +25,7 @@ import type {
+   TipoIntervento,
+ } from './types';
+ import { OPERATOR_COLOR_PALETTE } from './types';
+-import {
+-  MOCK_AGENDA,
+-  MOCK_SCHEDULES,
+-  createDefaultCartella,
+-  createMockTherapySlots,
+-} from './mockData';
++import { createDefaultCartella, createMockTherapySlots } from './mockData';
+ 
+ import { Login } from './components/Login';
+ import { AdminDashboard } from './components/admin/AdminDashboard';
+@@ -164,13 +160,34 @@ export default function App() {
+   // Mock state
+   const [operatori, setOperatori] = useState<Operatore[]>([]);
+   const [consegne, setConsegne] = useState<Consegna[]>([]);
++  // #283: come aprire la pagina Consegne (filtro iniziale + eventuale consegna da evidenziare)
++  const [consegneView, setConsegneView] = useState<{
++    filtro: 'tutte' | Consegna['stato'];
++    focusId: string | null;
++  }>({ filtro: 'tutte', focusId: null });
+   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
+   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
+   const [camere, setCamere] = useState<Camera[]>([]);
+-  const [schedules, setSchedules] = useState<ScheduleOperatore[]>(MOCK_SCHEDULES);
++  // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
++  const [schedules, setSchedules] = useState<ScheduleOperatore[]>([]);
+   const [note, setNote] = useState<Nota[]>([]);
+   const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
+ 
++  // #285: il widget agenda della dashboard operatore deriva dagli appuntamenti REALI di oggi
++  // (prima mostrava MOCK_AGENDA, dati finti mai persistiti).
++  const todayISO = new Date().toISOString().slice(0, 10);
++  const agendaOggi: SlotAgenda[] = appuntamenti
++    .filter((a) => a.data === todayISO)
++    .sort((a, b) => a.ora.localeCompare(b.ora))
++    .map((a) => ({
++      id: a.id,
++      ora: a.ora,
++      pazienteNome: a.pazienteNome,
++      motivo: a.tipoIntervento,
++      stato: a.stato,
++      operatoreId: a.operatoreId,
++    }));
++
+   // ── History API navigation ─────────────────────────────────────────────────
+ 
+   function pushNav(key: NavKey, paziente?: Paziente) {
+@@ -197,12 +214,30 @@ export default function App() {
+       setAiOpenTrigger((t) => t + 1);
+       return;
+     }
++    // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
++    // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
++    if (key === 'consegne') setConsegneView({ filtro: 'tutte', focusId: null });
+     pushNav(key);
+     if (key === 'agenda-operatore') loadTherapySlots();
+     // SPEC-015 US4: agenda reale — refresh appuntamenti alla navigazione (come loadTherapySlots)
+     if (key === 'agenda-operatore' || key === 'agenda-admin') loadAppuntamenti();
+   }
+ 
++  // #283: la card "Consegne aperte" apre la pagina già filtrata sulle aperte; se la consegna
++  // aperta è UNA sola, evidenzia e scrolla direttamente quella card.
++  function openConsegneAperte() {
++    const nonCompletate = consegne.filter((c) => c.stato !== 'completata');
++    const soloAperte = nonCompletate.filter((c) => c.stato === 'aperta');
++    setConsegneView({
++      // il chip "Aperte" nasconderebbe le "in corso": filtra 'aperta' solo se copre tutto il
++      // conteggio mostrato dalla card, altrimenti mostra tutte (nessuna consegna nascosta).
++      filtro: soloAperte.length === nonCompletate.length ? 'aperta' : 'tutte',
++      focusId: nonCompletate.length === 1 ? nonCompletate[0].id : null,
++    });
++    setMobileNavOpen(false);
++    pushNav('consegne');
++  }
++
+   function selectPaziente(p: Paziente, moduleTabId?: TabId) {
+     pushNav('dettaglio-paziente', p);
+     loadCartella(p.id);
+@@ -386,6 +421,13 @@ export default function App() {
+     loadCamere();
+     // Load consegne from API (persisted handover cards)
+     void loadConsegne();
++    // #285: orari operatori persistiti
++    fetch(`${API_URL}/operators/schedules`)
++      .then((r) => (r.ok ? r.json() : []))
++      .then((data: ScheduleOperatore[]) => setSchedules(data))
++      .catch(() => {
++        /* keep empty array */
++      });
+     // Fase 1b: operatori reali dal backend (niente più mock); iniziali/colore client-derived
+     fetch(`${API_URL}/operators`)
+       .then((r) => (r.ok ? r.json() : []))
+@@ -637,12 +679,28 @@ export default function App() {
+ 
+   // ── Schedules ───────────────────────────────────────────────────────────────
+ 
+-  function saveSchedule(s: ScheduleOperatore) {
+-    setSchedules((prev) => {
+-      const idx = prev.findIndex((x) => x.operatoreId === s.operatoreId);
+-      if (idx >= 0) return prev.map((x, i) => (i === idx ? s : x));
+-      return [...prev, s];
+-    });
++  // #285: persistiti su DB (upsert per operatore); lo stato locale segue la risposta del server.
++  async function saveSchedule(s: ScheduleOperatore) {
++    try {
++      const res = await fetch(`${API_URL}/operators/${s.operatoreId}/schedule`, {
++        method: 'PUT',
++        headers: { 'Content-Type': 'application/json' },
++        body: JSON.stringify({ turni: s.turni, note: s.note }),
++      });
++      if (!res.ok) {
++        showToast('Impossibile salvare gli orari');
++        return;
++      }
++      const saved = (await res.json()) as ScheduleOperatore;
++      setSchedules((prev) => {
++        const idx = prev.findIndex((x) => x.operatoreId === saved.operatoreId);
++        if (idx >= 0) return prev.map((x, i) => (i === idx ? saved : x));
++        return [...prev, saved];
++      });
++      showToast('Orari salvati');
++    } catch {
++      showToast('Impossibile salvare gli orari');
++    }
+   }
+ 
+   // ── Cartella CRUD (API-persisted) ─────────────────────────────────────────
+@@ -1332,6 +1390,7 @@ export default function App() {
+               totalePazienti={pazienti.length}
+               loadingPazienti={loadingPazienti}
+               onNavigate={navigate}
++              onOpenConsegneAperte={openConsegneAperte}
+               onSelectPaziente={goToPazienteByNome}
+               cartelle={cartelle}
+             />
+@@ -1370,6 +1429,8 @@ export default function App() {
+               onUpdateStato={updateConsegnaStato}
+               onDelete={deleteConsegna}
+               onSelectPaziente={goToPazienteByNome}
++              initialFiltroStato={consegneView.filtro}
++              focusId={consegneView.focusId}
+             />
+           )}
+           {navKey === 'note' && (
+@@ -1390,10 +1451,11 @@ export default function App() {
+             <OperatorDashboard
+               utente={utente}
+               consegne={consegne}
+-              agenda={MOCK_AGENDA}
++              agenda={agendaOggi}
+               totalePazienti={pazienti.length}
+               loadingPazienti={loadingPazienti}
+               onNavigate={navigate}
++              onOpenConsegneAperte={openConsegneAperte}
+               onSelectPaziente={goToPazienteByNome}
+               cartelle={cartelle}
+               pazienti={pazienti}
+diff --git a/frontend/src/app-additions.css b/frontend/src/app-additions.css
+index b381892..9f69ec7 100644
+--- a/frontend/src/app-additions.css
++++ b/frontend/src/app-additions.css
+@@ -705,7 +705,7 @@
+   align-items: center;
+   justify-content: space-between;
+   gap: 16px;
+-  padding: 14px 20px 12px;
++  padding: 8px 20px 8px;
+   background: var(--surface);
+   border-bottom: 1px solid var(--border);
+   flex-shrink: 0;
+@@ -915,7 +915,7 @@
+ .agt-legend {
+   display: flex;
+   gap: 16px;
+-  padding: 6px 20px;
++  padding: 4px 20px;
+   background: var(--surface-raised);
+   border-bottom: 1px solid var(--divider);
+   font-size: 11px;
+@@ -935,7 +935,7 @@
+ 
+ /* ── Occupancy strip ── */
+ .agt-occ-strip {
+-  padding: 10px 20px 8px;
++  padding: 6px 20px 6px;
+   background: var(--bg);
+   border-bottom: 1px solid var(--border);
+   flex-shrink: 0;
+@@ -945,7 +945,7 @@
+   display: flex;
+   align-items: center;
+   gap: 10px;
+-  margin-bottom: 6px;
++  margin-bottom: 4px;
+ }
+ 
+ .agt-occ-stats {
+@@ -1060,10 +1060,10 @@
+   border: 1px solid rgba(0, 0, 0, 0.08);
+   border-left: 4px solid transparent;
+   border-radius: 7px;
+-  padding: 8px 10px;
++  padding: 5px 9px;
+   display: flex;
+   flex-direction: column;
+-  gap: 4px;
++  gap: 3px;
+   min-height: 56px;
+   cursor: pointer;
+   transition:
+@@ -1162,16 +1162,16 @@
+   align-items: stretch;
+   gap: 0;
+   border-bottom: 1px solid var(--divider);
+-  min-height: 52px;
++  min-height: 40px;
+   transition: background 0.1s;
+ }
+ 
+ .agt-slot--hour {
+-  min-height: 64px;
++  min-height: 48px;
+   border-bottom: 1.5px solid var(--border);
+ }
+ .agt-slot--half {
+-  min-height: 44px;
++  min-height: 32px;
+ }
+ 
+ .agt-slot__time {
+@@ -1180,7 +1180,7 @@
+   font-size: 12px;
+   font-weight: 500;
+   color: #4b5563;
+-  padding: 10px 8px 0 14px;
++  padding: 6px 8px 0 14px;
+   line-height: 1;
+   letter-spacing: 0.02em;
+ }
+@@ -1221,7 +1221,7 @@
+   height: 16px;
+ }
+ .agt-slot--half.agt-slot--free {
+-  min-height: 28px;
++  min-height: 22px;
+ }
+ 
+ .agt-free-slot__plus {
+@@ -1334,7 +1334,7 @@
+   padding: 10px 6px 0 10px;
+   border-right: 1px solid var(--border);
+   border-bottom: 1px solid var(--divider);
+-  min-height: 44px;
++  min-height: 34px;
+   line-height: 1;
+   display: flex;
+   align-items: flex-start;
+@@ -1342,7 +1342,7 @@
+ }
+ 
+ .agt-admin-time.hour {
+-  min-height: 56px;
++  min-height: 42px;
+   border-bottom: 1.5px solid var(--border);
+ }
+ 
+@@ -1351,14 +1351,14 @@
+   border-right: 1px solid var(--border);
+   border-bottom: 1px solid var(--divider);
+   padding: 4px 5px;
+-  min-height: 44px;
++  min-height: 34px;
+   cursor: pointer;
+   transition: background 0.1s;
+   background: #f7fafc;
+ }
+ 
+ .agt-admin-cell.hour {
+-  min-height: 56px;
++  min-height: 42px;
+   border-bottom: 1.5px solid var(--border);
+ }
+ 
+@@ -1373,7 +1373,7 @@
+ .agt-admin-empty {
+   width: 100%;
+   height: 100%;
+-  min-height: 36px;
++  min-height: 26px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+@@ -9585,3 +9585,191 @@ textarea.form-input {
+     justify-content: center;
+   }
+ }
++
++/* ── #280: import therapy review — real manual form per detected row ───────── */
++.discharge-therapy-review__title {
++  font-size: 15px;
++  font-weight: 700;
++  color: var(--text);
++  margin: 0 0 8px;
++}
++.discharge-therapy-review__alert {
++  font-size: 13px;
++  color: var(--red);
++  background: var(--red-bg);
++  border-radius: 8px;
++  padding: 8px 12px;
++  margin: 0 0 12px;
++}
++.discharge-therapy-review__item {
++  border: 1px solid var(--border);
++  border-radius: 12px;
++  padding: 14px 16px;
++  margin: 0 0 14px;
++  background: var(--surface, #fff);
++}
++.discharge-therapy-review__item-head {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  margin-bottom: 8px;
++}
++.discharge-therapy-review__item-head strong {
++  font-size: 14px;
++  color: var(--text);
++}
++.discharge-therapy-review__badge {
++  font-size: 11px;
++  font-weight: 700;
++  border-radius: 999px;
++  padding: 2px 10px;
++}
++.discharge-therapy-review__badge.is-verify {
++  background: var(--red-bg);
++  color: var(--red);
++}
++.discharge-therapy-review__badge.is-ok {
++  background: var(--blue-bg, #e8f0fe);
++  color: var(--blue);
++}
++.discharge-therapy-review__original {
++  margin: 0 0 12px;
++  padding: 8px 12px;
++  border-left: 3px solid var(--blue);
++  background: var(--bg);
++  border-radius: 0 8px 8px 0;
++  font-size: 13px;
++  line-height: 1.5;
++  color: var(--text-muted);
++  white-space: pre-wrap;
++}
++.discharge-therapy-review__original-label {
++  font-weight: 700;
++  color: var(--text);
++}
++.discharge-therapy-review__hint {
++  font-size: 12px;
++  color: var(--text-muted);
++  margin: 4px 0 0;
++}
++
++/* ── #281: intake final recap (StepVerifica) — readable, card-based summary ── */
++.step-verifica {
++  display: flex;
++  flex-direction: column;
++  gap: 14px;
++}
++.step-verifica__title {
++  font-size: 18px;
++  font-weight: 700;
++  color: var(--text);
++  margin: 0;
++}
++.step-verifica__section {
++  border: 1px solid var(--border);
++  border-radius: 12px;
++  background: var(--surface, #fff);
++  padding: 14px 16px;
++}
++.step-verifica__section-title {
++  font-size: 13px;
++  font-weight: 700;
++  text-transform: uppercase;
++  letter-spacing: 0.04em;
++  color: var(--text-muted);
++  margin: 0 0 10px;
++}
++.step-verifica__dl {
++  display: grid;
++  grid-template-columns: 1fr;
++  gap: 6px 16px;
++  margin: 0;
++}
++.step-verifica__row {
++  display: grid;
++  grid-template-columns: 150px 1fr;
++  gap: 12px;
++  font-size: 14px;
++}
++.step-verifica__row dt {
++  color: var(--text-muted);
++  font-weight: 600;
++}
++.step-verifica__row dd {
++  margin: 0;
++  color: var(--text);
++  overflow-wrap: anywhere;
++}
++.step-verifica__empty {
++  color: var(--text-muted);
++  font-style: normal;
++}
++.step-verifica__filled-list {
++  margin: 0;
++  padding: 0 0 0 2px;
++  list-style: none;
++  display: flex;
++  flex-direction: column;
++  gap: 6px;
++  font-size: 14px;
++  color: var(--text);
++}
++.step-verifica__filled-list li {
++  padding: 6px 10px;
++  background: var(--bg);
++  border-radius: 8px;
++}
++.step-verifica__accept {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++  margin-top: 12px;
++  font-size: 14px;
++  font-weight: 600;
++  color: var(--text);
++  cursor: pointer;
++}
++.step-verifica__accept input {
++  width: 16px;
++  height: 16px;
++  accent-color: var(--blue);
++}
++.step-verifica__blocks {
++  border-color: var(--red);
++  background: var(--red-bg);
++}
++.step-verifica__checklist {
++  margin: 0;
++  padding: 0;
++  list-style: none;
++  display: flex;
++  flex-direction: column;
++  gap: 6px;
++  font-size: 14px;
++}
++.step-verifica__checklist li {
++  display: flex;
++  align-items: center;
++  gap: 8px;
++}
++.step-verifica__checklist li.is-ok {
++  color: var(--text-muted);
++}
++.step-verifica__checklist li.is-todo {
++  color: var(--red);
++  font-weight: 600;
++}
++.step-verifica__checklist svg {
++  width: 14px;
++  height: 14px;
++}
++.step-verifica__actions {
++  display: flex;
++  justify-content: flex-end;
++  padding-top: 2px;
++}
++@media (min-width: 720px) {
++  .step-verifica__dl {
++    grid-template-columns: 1fr 1fr;
++  }
++}
+diff --git a/frontend/src/components/admin/AdminAgenda.tsx b/frontend/src/components/admin/AdminAgenda.tsx
+index 4ad3865..b33eeed 100644
+--- a/frontend/src/components/admin/AdminAgenda.tsx
++++ b/frontend/src/components/admin/AdminAgenda.tsx
+@@ -1,4 +1,4 @@
+-import { useState } from 'react';
++import { Fragment, useState } from 'react';
+ import type { Appuntamento, Operatore, Paziente } from '../../types';
+ import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
+ import { AppointmentForm } from '../shared/AppointmentForm';
+@@ -235,8 +235,8 @@ export function AdminAgenda({
+             {TIME_SLOTS.map((ora) => {
+               const isHour = ora.endsWith(':00');
+               return (
+-                <>
+-                  <div key={`t-${ora}`} className={`agt-admin-time${isHour ? ' hour' : ''}`}>
++                <Fragment key={ora}>
++                  <div className={`agt-admin-time${isHour ? ' hour' : ''}`}>
+                     {isHour ? ora : ''}
+                   </div>
+                   {visibili.map((op) => {
+@@ -289,7 +289,7 @@ export function AdminAgenda({
+                       </div>
+                     );
+                   })}
+-                </>
++                </Fragment>
+               );
+             })}
+           </div>
+diff --git a/frontend/src/components/admin/AdminDashboard.tsx b/frontend/src/components/admin/AdminDashboard.tsx
+index deb02ff..c1ebd00 100644
+--- a/frontend/src/components/admin/AdminDashboard.tsx
++++ b/frontend/src/components/admin/AdminDashboard.tsx
+@@ -19,6 +19,8 @@ interface AdminDashboardProps {
+   totalePazienti: number;
+   loadingPazienti: boolean;
+   onNavigate: (nav: NavKey) => void;
++  /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
++  onOpenConsegneAperte?: () => void;
+   onSelectPaziente?: (nome: string) => void;
+   cartelle?: CartellaPaziente[];
+ }
+@@ -40,6 +42,7 @@ export function AdminDashboard({
+   totalePazienti,
+   loadingPazienti,
+   onNavigate,
++  onOpenConsegneAperte,
+   onSelectPaziente,
+   cartelle = [],
+ }: AdminDashboardProps) {
+@@ -134,7 +137,10 @@ export function AdminDashboard({
+           >
+             {consegne.filter((c) => c.stato !== 'completata').length}
+           </div>
+-          <button className="stat-card__action" onClick={() => onNavigate('consegne')}>
++          <button
++            className="stat-card__action"
++            onClick={() => (onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne'))}
++          >
+             Vedi tutte <IcoArrow />
+           </button>
+         </div>
+diff --git a/frontend/src/components/operator/ConsegnePage.tsx b/frontend/src/components/operator/ConsegnePage.tsx
+index f21013e..1ac1d85 100644
+--- a/frontend/src/components/operator/ConsegnePage.tsx
++++ b/frontend/src/components/operator/ConsegnePage.tsx
+@@ -1,4 +1,4 @@
+-import { useState } from 'react';
++import { useEffect, useState } from 'react';
+ import type { Consegna, PrioritaConsegna, StatoConsegna } from '../../types';
+ import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit, IcoClock } from '../../icons';
+ import { InlineEditableField } from '../shared/InlineEditableField';
+@@ -14,6 +14,10 @@ interface ConsegnePageProps {
+   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
+   onDelete: (id: string) => void;
+   onSelectPaziente?: (nome: string) => void;
++  /** #283: filtro stato con cui aprire la pagina (dalla card "Consegne aperte" in dashboard). */
++  initialFiltroStato?: 'tutte' | StatoConsegna;
++  /** #283: consegna da evidenziare/scrollare quando la card ne apre una specifica. */
++  focusId?: string | null;
+ }
+ 
+ const PRIORITA_ORDER: Record<PrioritaConsegna, number> = { urgente: 0, alta: 1, normale: 2 };
+@@ -56,13 +60,25 @@ export function ConsegnePage({
+   onUpdateStato,
+   onDelete,
+   onSelectPaziente,
++  initialFiltroStato,
++  focusId,
+ }: ConsegnePageProps) {
+-  const [filtroStato, setFiltroStato] = useState<'tutte' | Consegna['stato']>('tutte');
++  const [filtroStato, setFiltroStato] = useState<'tutte' | Consegna['stato']>(
++    initialFiltroStato ?? 'tutte',
++  );
+   const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>('tutte');
+   const [ricerca, setRicerca] = useState('');
+   const [formAperto, setFormAperto] = useState(false);
+   const [form, setForm] = useState(FORM_VUOTO);
+ 
++  // #283: quando la dashboard apre UNA consegna specifica, scrolla alla sua card evidenziata.
++  useEffect(() => {
++    if (!focusId) return;
++    document
++      .getElementById(`consegna-${focusId}`)
++      ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
++  }, [focusId]);
++
+   const filtrate = consegne
+     .filter((c) => {
+       if (filtroStato !== 'tutte' && c.stato !== filtroStato) return false;
+@@ -277,6 +293,7 @@ export function ConsegnePage({
+                 onDelete={onDelete}
+                 isAdmin={isAdmin}
+                 onSelectPaziente={onSelectPaziente}
++                focused={c.id === focusId}
+               />
+             ))}
+           </div>
+@@ -297,6 +314,7 @@ export function ConsegnePage({
+               onDelete={onDelete}
+               isAdmin={isAdmin}
+               onSelectPaziente={onSelectPaziente}
++              focused={c.id === focusId}
+             />
+           ))
+         )}
+@@ -312,6 +330,7 @@ function ConsegnaCard({
+   onDelete,
+   isAdmin,
+   onSelectPaziente,
++  focused = false,
+ }: {
+   consegna: Consegna;
+   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
+@@ -319,13 +338,15 @@ function ConsegnaCard({
+   onDelete: (id: string) => void;
+   isAdmin: boolean;
+   onSelectPaziente?: (nome: string) => void;
++  focused?: boolean;
+ }) {
+   const [editOpen, setEditOpen] = useState(false);
+   const [confirmOpen, setConfirmOpen] = useState(false);
+ 
+   return (
+     <div
+-      className={`consegna-card consegna-card--${c.priorita}${c.stato === 'completata' ? ' consegna-card--done' : ''}`}
++      id={`consegna-${c.id}`}
++      className={`consegna-card consegna-card--${c.priorita}${c.stato === 'completata' ? ' consegna-card--done' : ''}${focused ? ' consegna-card--focus' : ''}`}
+     >
+       <div className="consegna-card__top">
+         <span className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}>
+diff --git a/frontend/src/components/operator/OperatorDashboard.tsx b/frontend/src/components/operator/OperatorDashboard.tsx
+index 94ee021..599cb52 100644
+--- a/frontend/src/components/operator/OperatorDashboard.tsx
++++ b/frontend/src/components/operator/OperatorDashboard.tsx
+@@ -20,6 +20,8 @@ interface OperatorDashboardProps {
+   totalePazienti: number;
+   loadingPazienti: boolean;
+   onNavigate: (nav: NavKey) => void;
++  /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
++  onOpenConsegneAperte?: () => void;
+   onSelectPaziente?: (nome: string) => void;
+   cartelle?: CartellaPaziente[];
+   pazienti?: Paziente[]; // reserved for future patient-level KPIs
+@@ -40,6 +42,7 @@ export function OperatorDashboard({
+   totalePazienti,
+   loadingPazienti,
+   onNavigate,
++  onOpenConsegneAperte,
+   onSelectPaziente,
+   cartelle = [],
+ }: OperatorDashboardProps) {
+@@ -207,29 +210,36 @@ export function OperatorDashboard({
+             cta: 'Vedi consegne',
+             danger: urgenti.length > 0,
+           },
+-        ].map((c) => (
+-          <div
+-            key={c.key}
+-            className={`stat-card stat-card--${c.mod} stat-card--clickable`}
+-            role="button"
+-            tabIndex={0}
+-            onClick={() => onNavigate(c.key)}
+-            onKeyDown={(e) => {
+-              if (e.key === 'Enter' || e.key === ' ') {
+-                e.preventDefault();
+-                onNavigate(c.key);
+-              }
+-            }}
+-          >
+-            <div className="stat-card__label">{c.label}</div>
+-            <div className="stat-card__value" style={c.danger ? { color: 'var(--red)' } : {}}>
+-              {c.value}
++        ].map((c) => {
++          // #283: la card consegne apre la pagina già filtrata (e con focus se una sola aperta)
++          const open =
++            c.key === 'consegne' && onOpenConsegneAperte
++              ? onOpenConsegneAperte
++              : () => onNavigate(c.key);
++          return (
++            <div
++              key={c.key}
++              className={`stat-card stat-card--${c.mod} stat-card--clickable`}
++              role="button"
++              tabIndex={0}
++              onClick={open}
++              onKeyDown={(e) => {
++                if (e.key === 'Enter' || e.key === ' ') {
++                  e.preventDefault();
++                  open();
++                }
++              }}
++            >
++              <div className="stat-card__label">{c.label}</div>
++              <div className="stat-card__value" style={c.danger ? { color: 'var(--red)' } : {}}>
++                {c.value}
++              </div>
++              <span className="stat-card__action">
++                {c.cta} <IcoArrow />
++              </span>
+             </div>
+-            <span className="stat-card__action">
+-              {c.cta} <IcoArrow />
+-            </span>
+-          </div>
+-        ))}
++          );
++        })}
+       </div>
+ 
+       {/* Avanzamento terapie — barre di avanzamento (dati reali cartelle) */}
+diff --git a/frontend/src/components/operator/PatientDetail.tsx b/frontend/src/components/operator/PatientDetail.tsx
+index 7a947d7..882cecc 100644
+--- a/frontend/src/components/operator/PatientDetail.tsx
++++ b/frontend/src/components/operator/PatientDetail.tsx
+@@ -10,6 +10,7 @@ import type {
+   IndicatoreRischio,
+   PrioritaConsegna,
+   VitaleItem,
++  Anamnesi,
+ } from '../../types';
+ import {
+   IcoEdit,
+@@ -40,7 +41,7 @@ import InvioPSModal from './InvioPSModal';
+ import { ClinicalTableSection } from './cartella/shared';
+ import { AllergiesEditor } from './sections/AllergiesEditor';
+ import { deriveAllergySummary } from '../../lib/allergyStatusModel';
+-import { LegacyAnamnesisView } from './sections/LegacyAnamnesisView';
++import { AnamnesisEditor } from './sections/AnamnesisEditor';
+ import { DiagnosisEditor } from './sections/DiagnosisEditor';
+ import { TherapyEditor } from './sections/TherapyEditor';
+ import { VitalSignsEditor } from './sections/VitalSignsEditor';
+@@ -51,7 +52,8 @@ import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
+ // #243: exported so callers (App.tsx) can request an initial tab — e.g. landing on a
+ // specific "Moduli" flow right after patient creation from the intake wizard.
+ // #245: 'anamnesi' rimosso — il tab editabile duplicato non esiste più (resta la sola
+-// superficie narrativa 'sezioni-narrative' + LegacyAnamnesisView read-only).
++// superficie narrativa 'sezioni-narrative'). #278: l'anamnesi strutturata torna
++// modificabile lì tramite AnamnesisEditor (stesso editor dell'intake).
+ export type TabId =
+   | 'riepilogo'
+   | 'profilo'
+@@ -2607,7 +2609,16 @@ export function PatientDetail({
+           )}
+           {tab === 'sezioni-narrative' && (
+             <>
+-              <LegacyAnamnesisView anamnesi={cartella.anamnesi} />
++              {/* #278: anamnesi strutturata modificabile — stesso cast Anamnesi ⇄
++                  Record<string, unknown> già usato in patientSections.ts */}
++              <AnamnesisEditor
++                mode="patient-chart"
++                value={cartella.anamnesi as unknown as Record<string, unknown>}
++                onChange={(v) => upd({ anamnesi: v as unknown as Anamnesi })}
++                readOnly={false}
++                operatoreNome={operatoreNome}
++                allergie={cartella.allergie ?? []}
++              />
+               <NarrativeSectionsTab
+                 patientId={paziente.id}
+                 operatoreId={operatoreId}
+diff --git a/frontend/src/components/shared/intake/DischargeTherapyReview.tsx b/frontend/src/components/shared/intake/DischargeTherapyReview.tsx
+index 765ba03..063e118 100644
+--- a/frontend/src/components/shared/intake/DischargeTherapyReview.tsx
++++ b/frontend/src/components/shared/intake/DischargeTherapyReview.tsx
+@@ -1,22 +1,41 @@
+-// #156: "Terapie rilevate dalla lettera di dimissioni" — editable review table of the therapy rows
+-// parsed from the discharge letter (draft.data.terapiaImport). ONE row per drug; incomplete rows are
+-// flagged "da verificare" (never dropped); the operator edits before the therapy is saved on confirm.
++// #156: "Terapie rilevate dalla lettera di dimissioni" — review of the therapy rows parsed from the
++// discharge letter (draft.data.terapiaImport). ONE row per drug; incomplete rows are flagged
++// "da verificare" (never dropped). #280: each row is reviewed in the SAME form used for manual
++// therapy creation (TherapyFormFields), prefilled via dischargeRowToTherapyForm, with the original
++// extracted text alongside for comparison; edits fold back into the raw row so the unchanged
++// confirm path (dischargeRowToTherapyInput) reads them.
+ 
+-import { useCallback } from 'react';
+-import type { DischargeTherapyRow } from './dischargeTherapy';
++import { useEffect, useState } from 'react';
++import {
++  TherapyFormFields,
++  type TherapyFormValue,
++} from '../../operator/cartella/TherapyFormFields';
++import {
++  dischargeRowToTherapyForm,
++  therapyFormToDischargeRow,
++  type DischargeTherapyRow,
++} from './dischargeTherapy';
+ 
+ interface Props {
+   rows: DischargeTherapyRow[];
+   onChange: (rows: DischargeTherapyRow[]) => void;
++  operatoreNome?: string;
+ }
+ 
+-export function DischargeTherapyReview({ rows, onChange }: Props) {
+-  const update = useCallback(
+-    (i: number, patch: Partial<DischargeTherapyRow>) => {
+-      onChange(rows.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
+-    },
+-    [rows, onChange],
+-  );
++export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props) {
++  // Full-fidelity local form state (one TherapyFormValue per row): deriving the form from the raw
++  // row on every render would be lossy (row ⇄ form is not a perfect round-trip).
++  const [forms, setForms] = useState<TherapyFormValue[]>(() => rows.map(dischargeRowToTherapyForm));
++
++  // Re-seed only if the row count changes from outside (rows are never added/removed here).
++  useEffect(() => {
++    setForms((prev) => (prev.length === rows.length ? prev : rows.map(dischargeRowToTherapyForm)));
++  }, [rows]);
++
++  function updateForm(i: number, next: TherapyFormValue) {
++    setForms((prev) => prev.map((f, idx) => (idx === i ? next : f)));
++    onChange(rows.map((r, idx) => (idx === i ? therapyFormToDischargeRow(next, r) : r)));
++  }
+ 
+   if (!Array.isArray(rows) || rows.length === 0) return null;
+   const daVerificare = rows.filter((r) => r.stato === 'da_verificare').length;
+@@ -40,107 +59,42 @@ export function DischargeTherapyReview({ rows, onChange }: Props) {
+           controlla prima di salvare.
+         </p>
+       )}
+-      <div className="discharge-therapy-review__scroll" style={{ overflowX: 'auto' }}>
+-        <table className="discharge-therapy-review__table">
+-          <thead>
+-            <tr>
+-              <th>Farmaco</th>
+-              <th>Dosaggio</th>
+-              <th>Via</th>
+-              <th>Quantità</th>
+-              <th>Orari</th>
+-              <th>Giorni</th>
+-              <th>Data inizio</th>
+-              <th>Classe</th>
+-              <th>Stato</th>
+-            </tr>
+-          </thead>
+-          <tbody>
+-            {rows.map((r, i) => (
+-              <tr
+-                key={i}
+-                data-testid="discharge-therapy-row"
+-                data-stato={r.stato}
+-                data-farmaco={r.farmacoNome}
+-                className={r.stato === 'da_verificare' ? 'is-da-verificare' : ''}
+-              >
+-                <td>
+-                  <input
+-                    aria-label="Farmaco"
+-                    value={r.farmacoNome}
+-                    onChange={(e) => update(i, { farmacoNome: e.target.value })}
+-                  />
+-                </td>
+-                <td>
+-                  <input
+-                    aria-label="Dosaggio"
+-                    value={r.dosaggio}
+-                    onChange={(e) => update(i, { dosaggio: e.target.value })}
+-                  />
+-                </td>
+-                <td>
+-                  <input
+-                    aria-label="Via"
+-                    value={r.viaSomministrazione}
+-                    onChange={(e) => update(i, { viaSomministrazione: e.target.value })}
+-                  />
+-                </td>
+-                <td>
+-                  <input
+-                    aria-label="Quantità"
+-                    value={r.quantita}
+-                    onChange={(e) => update(i, { quantita: e.target.value })}
+-                  />
+-                </td>
+-                <td>
+-                  <input
+-                    aria-label="Orari"
+-                    value={r.orari.join(', ')}
+-                    onChange={(e) =>
+-                      update(i, {
+-                        orari: e.target.value
+-                          .split(',')
+-                          .map((s) => s.trim())
+-                          .filter(Boolean),
+-                      })
+-                    }
+-                  />
+-                </td>
+-                <td>
+-                  <input
+-                    aria-label="Giorni"
+-                    value={r.giorni.join(' ')}
+-                    onChange={(e) =>
+-                      update(i, { giorni: e.target.value.split(/\s+/).filter(Boolean) })
+-                    }
+-                  />
+-                </td>
+-                <td>
+-                  <input
+-                    aria-label="Data inizio"
+-                    value={r.dataInizio}
+-                    onChange={(e) => update(i, { dataInizio: e.target.value })}
+-                  />
+-                </td>
+-                <td>
+-                  <input
+-                    aria-label="Classe"
+-                    value={r.classe}
+-                    onChange={(e) => update(i, { classe: e.target.value })}
+-                  />
+-                </td>
+-                <td>
+-                  {r.stato === 'da_verificare' ? (
+-                    <span className="discharge-therapy-review__badge is-verify">da verificare</span>
+-                  ) : (
+-                    <span className="discharge-therapy-review__badge is-ok">ok</span>
+-                  )}
+-                </td>
+-              </tr>
+-            ))}
+-          </tbody>
+-        </table>
+-      </div>
++      {rows.map((r, i) => (
++        <article
++          key={i}
++          className="discharge-therapy-review__item"
++          data-testid="discharge-therapy-row"
++          data-stato={r.stato}
++          data-farmaco={r.farmacoNome}
++        >
++          <div className="discharge-therapy-review__item-head">
++            <strong>{forms[i]?.farmacoNome || r.farmacoNome || 'Farmaco'}</strong>
++            {r.stato === 'da_verificare' ? (
++              <span className="discharge-therapy-review__badge is-verify">da verificare</span>
++            ) : (
++              <span className="discharge-therapy-review__badge is-ok">ok</span>
++            )}
++          </div>
++          {r.originalText && (
++            <blockquote
++              className="discharge-therapy-review__original"
++              data-testid="discharge-original-text"
++            >
++              <span className="discharge-therapy-review__original-label">Dal documento:</span>{' '}
++              {r.originalText}
++            </blockquote>
++          )}
++          {forms[i] && (
++            <div className="ec-modal-add-form">
++              <TherapyFormFields
++                value={forms[i]}
++                onChange={(v) => updateForm(i, v)}
++                operatoreNome={operatoreNome}
++              />
++            </div>
++          )}
++        </article>
++      ))}
+       <p className="discharge-therapy-review__hint">
+         Le righe verranno salvate nella terapia del paziente alla conferma.
+       </p>
+diff --git a/frontend/src/components/shared/intake/StepVerifica.tsx b/frontend/src/components/shared/intake/StepVerifica.tsx
+index 2b8bb2a..720f757 100644
+--- a/frontend/src/components/shared/intake/StepVerifica.tsx
++++ b/frontend/src/components/shared/intake/StepVerifica.tsx
+@@ -31,15 +31,26 @@ function countFilled(value: unknown): boolean {
+ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: StepVerificaProps) {
+   const a = (data.anagrafica ?? {}) as AnagraficaData;
+ 
+-  const clinicalSections: Array<{ key: string; label: string }> = [
+-    { key: 'allergie', label: 'Allergie' },
+-    { key: 'anamnesi', label: 'Anamnesi' },
+-    { key: 'diagnosi', label: 'Diagnosi' },
+-    { key: 'terapia', label: 'Terapia farmacologica' },
++  // #281: recap reale di cosa verrà creato (non solo l'elenco dei nomi-sezione)
++  const allergie = Array.isArray(data.allergie)
++    ? (data.allergie as Array<{ allergene?: string; gravita?: string }>)
++    : [];
++  const allergieStatus = data.allergieStatus as string | undefined;
++  const terapieImport = Array.isArray(data.terapiaImport)
++    ? (data.terapiaImport as Array<{ farmacoNome?: string; orari?: string[]; stato?: string }>)
++    : [];
++  const terapieManuali = Array.isArray(data.terapia)
++    ? (data.terapia as Array<{ farmacoNome?: string; schedules?: Array<{ orario?: string }> }>)
++    : [];
++  const anamnesi = (data.anamnesi ?? {}) as { patologicaProssima?: string };
++  const diagnosi = Array.isArray(data.diagnosi)
++    ? (data.diagnosi as Array<{ descrizione?: string }>)
++    : [];
++  const altreSezioni: Array<{ key: string; label: string }> = [
+     { key: 'parametri', label: 'Parametri vitali' },
+     { key: 'dolore', label: 'Dolore (NRS)' },
+-  ];
+-  const filledSections = clinicalSections.filter((s) => countFilled(data[s.key]));
++  ].filter((s) => countFilled(data[s.key]));
++  const excerpt = (t: string, max = 220) => (t.length > max ? `${t.slice(0, max)}…` : t);
+ 
+   // #235: acceptance gate — build the residual-blocks checklist.
+   const accepted = (data._accepted ?? {}) as { demographics?: boolean; therapy?: boolean };
+@@ -86,6 +97,21 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }:
+             <dt>Sesso</dt>
+             <dd>{a.sex || <em className="step-verifica__empty">—</em>}</dd>
+           </div>
++          {/* #281: campi anagrafici aggiuntivi già presenti nel draft */}
++          {[
++            ['codiceFiscale', 'Codice fiscale'],
++            ['phone', 'Telefono'],
++            ['email', 'Email'],
++            ['address', 'Indirizzo'],
++          ].map(([key, label]) => {
++            const v = a[key];
++            return typeof v === 'string' && v.trim() ? (
++              <div className="step-verifica__row" key={key}>
++                <dt>{label}</dt>
++                <dd>{v}</dd>
++              </div>
++            ) : null;
++          })}
+         </dl>
+         <label className="step-verifica__accept" data-testid="accept-demographics">
+           <input
+@@ -100,19 +126,106 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }:
+         </label>
+       </section>
+ 
++      {/* #281: recap leggibile — allergie, terapie, anamnesi/diagnosi con i VALORI reali */}
+       <section className="step-verifica__section">
+-        <h4 className="step-verifica__section-title">Sezioni cliniche compilate</h4>
+-        {filledSections.length === 0 ? (
+-          <p className="cr-empty">Nessuna sezione clinica compilata.</p>
++        <h4 className="step-verifica__section-title">Allergie</h4>
++        {allergieStatus === 'assenti' || allergieStatus === 'paziente_nega' ? (
++          <p className="cr-empty">
++            {allergieStatus === 'assenti' ? 'Nessuna allergia nota.' : 'Il paziente nega allergie.'}
++          </p>
++        ) : allergie.length === 0 ? (
++          <p className="cr-empty">Nessuna allergia documentata.</p>
+         ) : (
+           <ul className="step-verifica__filled-list">
+-            {filledSections.map((s) => (
+-              <li key={s.key}>{s.label}</li>
++            {allergie.map((al, i) => (
++              <li key={`${al.allergene}-${i}`}>
++                {al.allergene || '—'}
++                {al.gravita ? ` (${al.gravita})` : ''}
++              </li>
++            ))}
++          </ul>
++        )}
++      </section>
++
++      <section className="step-verifica__section">
++        <h4 className="step-verifica__section-title">
++          Terapie che verranno create ({terapieImport.length + terapieManuali.length})
++        </h4>
++        {terapieImport.length + terapieManuali.length === 0 ? (
++          <p className="cr-empty">Nessuna terapia da inserire.</p>
++        ) : (
++          <ul className="step-verifica__filled-list">
++            {terapieImport.map((t, i) => (
++              <li key={`imp-${i}`}>
++                {t.farmacoNome || '—'}
++                {t.orari?.length ? ` — ore ${t.orari.join(', ')}` : ''}
++                {t.stato === 'da_verificare' ? ' ⚠ da verificare' : ''}
++              </li>
++            ))}
++            {terapieManuali.map((t, i) => (
++              <li key={`man-${i}`}>
++                {t.farmacoNome || '—'}
++                {t.schedules?.length
++                  ? ` — ore ${t.schedules
++                      .map((s) => s.orario)
++                      .filter(Boolean)
++                      .join(', ')}`
++                  : ''}
++              </li>
+             ))}
+           </ul>
+         )}
++        {/* #282: la conferma terapia deve essere sbloccabile QUI — prima viveva solo nello step 3
++            (Clinica): chi arrivava al riepilogo senza averla spuntata trovava il bottone "Crea
++            paziente" disabilitato senza alcun controllo per rimediare. */}
++        <label className="step-verifica__accept" data-testid="accept-therapy-verifica">
++          <input
++            type="checkbox"
++            checked={therapyAccepted}
++            disabled={busy}
++            onChange={(e) =>
++              onUpdateSection('_accepted', { ...accepted, therapy: e.target.checked })
++            }
++          />
++          <span>
++            {terapieImport.length + terapieManuali.length > 0
++              ? 'Confermo di aver revisionato la terapia'
++              : 'Confermo: nessuna terapia da inserire'}
++          </span>
++        </label>
+       </section>
+ 
++      {(anamnesi.patologicaProssima?.trim() || diagnosi.length > 0) && (
++        <section className="step-verifica__section">
++          <h4 className="step-verifica__section-title">Anamnesi e diagnosi</h4>
++          <dl className="step-verifica__dl">
++            {anamnesi.patologicaProssima?.trim() && (
++              <div className="step-verifica__row">
++                <dt>Anamnesi</dt>
++                <dd>{excerpt(anamnesi.patologicaProssima)}</dd>
++              </div>
++            )}
++            {diagnosi.map((d, i) => (
++              <div className="step-verifica__row" key={`dx-${i}`}>
++                <dt>{i === 0 ? 'Diagnosi' : ''}</dt>
++                <dd>{excerpt(d.descrizione ?? '—', 160)}</dd>
++              </div>
++            ))}
++          </dl>
++        </section>
++      )}
++
++      {altreSezioni.length > 0 && (
++        <section className="step-verifica__section">
++          <h4 className="step-verifica__section-title">Altre sezioni compilate</h4>
++          <ul className="step-verifica__filled-list">
++            {altreSezioni.map((s) => (
++              <li key={s.key}>{s.label}</li>
++            ))}
++          </ul>
++        </section>
++      )}
++
+       {!canCreate && (
+         <section
+           className="step-verifica__section step-verifica__blocks"
+diff --git a/frontend/src/components/shared/intake/dischargeTherapy.ts b/frontend/src/components/shared/intake/dischargeTherapy.ts
+index 4085b0c..4fd4fc4 100644
+--- a/frontend/src/components/shared/intake/dischargeTherapy.ts
++++ b/frontend/src/components/shared/intake/dischargeTherapy.ts
+@@ -2,6 +2,14 @@
+ // The backend parser (parse-discharge-therapy.ts) produces these rows; the intake review table edits
+ // them; on confirm they are mapped to the same TherapyCreateInput shape the manual editor sends.
+ 
++import { emptyTherapyForm, type TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
++import {
++  ADMIN_UNITS,
++  PHARMA_FORMS,
++  formatFraction,
++  parseQuantity,
++} from '../../operator/cartella/therapyDose';
++
+ export interface DischargeTherapyRow {
+   farmacoNome: string;
+   forma: string;
+@@ -78,3 +86,161 @@ export function dischargeRowToTherapyInput(
+     ...(note ? { note } : {}),
+   };
+ }
++
++// #280 — Bridge the RAW discharge row ↔ the REAL manual therapy form (TherapyFormValue), so the
++// import review reuses the exact same editor instead of a divergent raw-input table.
++
++// Route code (parser output, e.g. "OS"/"IM"/"EV") → the value shown in the manual form's Via select.
++const CODE_TO_FORM_VIA: Record<string, string> = {
++  OS: 'orale',
++  IM: 'IM',
++  SC: 'SC',
++  EV: 'IV',
++  IV: 'IV',
++  SL: 'sublinguale',
++  TOP: 'topico',
++};
++// Inverse: form Via value → route code that `dischargeRowToTherapyInput`'s `mapVia` understands.
++const FORM_VIA_TO_CODE: Record<string, string> = {
++  orale: 'OS',
++  IM: 'IM',
++  SC: 'SC',
++  IV: 'EV',
++  sublinguale: 'SL',
++  topico: 'TOP',
++};
++
++// ISO weekday (1=Lun … 7=Dom) ↔ the Italian abbreviations the parser emits in `giorni`.
++const DAY_ABBR: ReadonlyArray<string> = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
++function dayToIso(d: string): number | null {
++  const idx = DAY_ABBR.findIndex((x) => x.toLowerCase() === (d || '').trim().toLowerCase());
++  return idx >= 0 ? idx + 1 : null;
++}
++
++// Map the free-text pharmaceutical form (e.g. "CPR RIV", "SCIR") to a manual-form PHARMA_FORMS value.
++function mapForma(raw: string): string | null {
++  const f = (raw || '').toLowerCase();
++  if (!f.trim()) return null;
++  if (/\bcpr\b|compress/.test(f)) return 'compressa';
++  if (/\bcps\b|\bcp\b|capsul/.test(f)) return 'capsula';
++  if (/scir|siropp|sciropp/.test(f)) return 'sciroppo';
++  if (/fial|\bfl\b/.test(f)) return 'fiala';
++  if (/flac/.test(f)) return 'flacone';
++  if (/bust/.test(f)) return 'bustina';
++  if (/gocc|gtt/.test(f)) return 'gocce';
++  if (/cerott/.test(f)) return 'cerotto';
++  if (/crema|pomat|gel|unguent/.test(f)) return 'crema';
++  return PHARMA_FORMS.includes(f) ? f : null;
++}
++
++// Parse a raw dosage string ("500 MGR", "10MG", "1GR") → { value, unit } in manual-form vocab.
++const DOSE_UNIT_MAP: Record<string, string> = {
++  MGR: 'mg',
++  MG: 'mg',
++  MCG: 'mcg',
++  GR: 'g',
++  G: 'g',
++  UI: 'UI',
++  ML: 'ml',
++};
++function parseDosaggio(raw: string): { value: string; unit: string } | null {
++  const m = (raw || '').match(/(\d+(?:[.,]\d+)?)\s*(MGR|MCG|MG|GR|G|UI|ML)/i);
++  if (!m) return null;
++  const unit = DOSE_UNIT_MAP[m[2].toUpperCase()];
++  if (!unit) return null;
++  return { value: m[1].replace(',', '.'), unit };
++}
++
++/** #280 — Prefill the REAL manual therapy form from a raw discharge row. Whatever cannot be mapped
++ *  to a structured field is kept in `note` so nothing extracted is lost. Unrecognized values fall
++ *  back to `emptyTherapyForm()` defaults. */
++export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormValue {
++  const base = emptyTherapyForm();
++
++  const via =
++    CODE_TO_FORM_VIA[(r.viaSomministrazione || '').toUpperCase()] ?? base.viaSomministrazione;
++  const forma = mapForma(r.forma);
++  const dose = parseDosaggio(r.dosaggio);
++
++  // Quantity per administration, parsed from the leading number/fraction of `quantita` ("1/2 Dosi").
++  const qty = parseQuantity((r.quantita || '').split(/\s+/)[0] ?? '') ?? { num: 1, den: 1 };
++  const administrationUnit =
++    forma && ADMIN_UNITS.includes(forma) ? forma : base.schedules[0].administrationUnit;
++
++  const times = Array.isArray(r.orari) ? r.orari.filter((t) => /^\d{1,2}:\d{2}$/.test(t)) : [];
++  const schedules =
++    times.length > 0
++      ? times.map((time) => ({
++          time,
++          quantityNumerator: qty.num,
++          quantityDenominator: qty.den,
++          administrationUnit,
++        }))
++      : [
++          {
++            ...base.schedules[0],
++            quantityNumerator: qty.num,
++            quantityDenominator: qty.den,
++            administrationUnit,
++          },
++        ];
++
++  const giorniSettimana = Array.isArray(r.giorni)
++    ? (r.giorni.map(dayToIso).filter((n): n is number => n != null) as number[]).sort(
++        (a, b) => a - b,
++      )
++    : [];
++
++  // Keep in `note` only what has NO structured home (raw dosage when un-parseable, plus any existing
++  // note). Classe/giorni/quantità/origine are re-appended by dischargeRowToTherapyInput at save —
++  // do NOT duplicate them here.
++  const noteParts = [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '']
++    .filter(Boolean)
++    .join(' — ');
++
++  return {
++    ...base,
++    farmacoNome: (r.farmacoNome || '').trim(),
++    pharmaceuticalForm: forma ?? base.pharmaceuticalForm,
++    commercialStrengthValue: dose ? dose.value : base.commercialStrengthValue,
++    commercialStrengthUnit: dose ? dose.unit : base.commercialStrengthUnit,
++    viaSomministrazione: via,
++    dataInizio: r.dataInizio && r.dataInizio.trim() ? r.dataInizio : base.dataInizio,
++    schedules,
++    giorniSettimana,
++    note: noteParts,
++  };
++}
++
++/** #280 — Inverse of dischargeRowToTherapyForm: fold the form values back into the raw draft row so
++ *  `dischargeRowToTherapyInput` (unchanged) reads the operator's edits at confirm. `originalText` and
++ *  `classe` are preserved from `base`; `stato` becomes 'ok' since reaching here means the operator
++ *  interacted with (i.e. reviewed) the form. */
++export function therapyFormToDischargeRow(
++  v: TherapyFormValue,
++  base: DischargeTherapyRow,
++): DischargeTherapyRow {
++  const times = v.schedules.map((s) => s.time).filter((t) => /^\d{1,2}:\d{2}$/.test(t));
++  const first = v.schedules[0];
++  const quantita = first
++    ? `${formatFraction(first.quantityNumerator, first.quantityDenominator)} ${first.administrationUnit}`.trim()
++    : base.quantita;
++  const dosaggio = v.commercialStrengthValue.trim()
++    ? `${v.commercialStrengthValue} ${v.commercialStrengthUnit}`.trim()
++    : base.dosaggio;
++
++  return {
++    ...base,
++    farmacoNome: (v.farmacoNome || '').trim(),
++    forma: v.pharmaceuticalForm || base.forma,
++    dosaggio,
++    viaSomministrazione: FORM_VIA_TO_CODE[v.viaSomministrazione] ?? base.viaSomministrazione,
++    quantita,
++    orari: times,
++    giorni: v.giorniSettimana.map((n) => DAY_ABBR[n - 1]).filter(Boolean),
++    dataInizio: v.dataInizio || base.dataInizio,
++    note: v.note,
++    // originalText & classe intentionally preserved from base.
++    stato: 'ok',
++  };
++}
+diff --git a/prisma/migrations/20260720100000_operator_schedule/migration.sql b/prisma/migrations/20260720100000_operator_schedule/migration.sql
+new file mode 100644
+index 0000000..9a209a0
+--- /dev/null
++++ b/prisma/migrations/20260720100000_operator_schedule/migration.sql
+@@ -0,0 +1,15 @@
++-- #285: persist the admin "Orari operatori" weekly schedules (were client-side only)
++CREATE TABLE "OperatorSchedule" (
++    "id" TEXT NOT NULL,
++    "operatorId" TEXT NOT NULL,
++    "data" JSONB NOT NULL,
++    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
++    "updatedAt" TIMESTAMP(3) NOT NULL,
++
++    CONSTRAINT "OperatorSchedule_pkey" PRIMARY KEY ("id")
++);
++
++CREATE UNIQUE INDEX "OperatorSchedule_operatorId_key" ON "OperatorSchedule"("operatorId");
++
++ALTER TABLE "OperatorSchedule" ADD CONSTRAINT "OperatorSchedule_operatorId_fkey"
++    FOREIGN KEY ("operatorId") REFERENCES "Operator"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 44bb266..73c213d 100644
+--- a/prisma/schema.prisma
++++ b/prisma/schema.prisma
+@@ -47,6 +47,18 @@ model Operator {
+   appointments       Appointment[]    @relation("AppointmentOperator")
+   clinicalRecords    ClinicalRecord[] @relation("ClinicalRecordAuthor")
+   clinicalNotes      ClinicalNote[]   @relation("ClinicalNoteAuthor")
++  schedule           OperatorSchedule?
++}
++
++// #285: weekly shift schedule for an operator (admin "Orari operatori" screen). Stored as a JSON
++// blob ({turni, note}) like the cartella — the shape is owned by the frontend editor.
++model OperatorSchedule {
++  id         String   @id @default(cuid())
++  operatorId String   @unique
++  data       Json
++  createdAt  DateTime @default(now())
++  updatedAt  DateTime @updatedAt
++  operator   Operator @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+ }
+ 
+ model Patient {
+diff --git a/qa-evidence/helpers.ts b/qa-evidence/helpers.ts
+index 8c9df33..ec1e7b3 100644
+--- a/qa-evidence/helpers.ts
++++ b/qa-evidence/helpers.ts
+@@ -2,8 +2,9 @@ import { Page, expect } from '@playwright/test';
+ import { execSync as _exec } from 'node:child_process';
+ import { readFileSync as _read } from 'node:fs';
+ 
+-const ROOT = 'C:/Workspace/DG_SE_DEV/ClinicOS';
+-const EVID = `${ROOT}/.worktrees/evidence`;
++const ROOT = process.env.EV_REPO_ROOT ?? 'E:/Workspace/DG_SE_DEV/ClinicOS';
++// Tree the backend tests run from: an evidence worktree if EV_TREE is set, else the repo itself.
++const EVID = process.env.EV_TREE ?? ROOT;
+ const TSX = `${ROOT}/node_modules/tsx/dist/cli.mjs`;
+ 
+ /** DATABASE_URL / flags from the evidence backend/.env, injected into child test processes. */
+@@ -79,6 +80,39 @@ export function guard(page: Page) {
+   };
+ }
+ 
++/** Seed a REAL intake draft on the backend (create + patch with `data`), then route the page so
++ *  the workspace's own createDraft POST returns this seeded draft instead of a fresh empty one.
++ *  Everything after (autosave PATCH, confirm) hits the real server draft — no mocked behavior. */
++export async function seedManualDraft(page: Page, data: Record<string, unknown>): Promise<string> {
++  const api = 'http://localhost:3001';
++  const headers = {
++    'X-Operator-Id': 'qa-e2e',
++    'X-Operator-Role': 'operatore',
++    'Content-Type': 'application/json',
++  };
++  const created = await page.request.post(`${api}/intake/drafts`, {
++    headers,
++    data: { source: 'manual' },
++  });
++  if (!created.ok()) throw new Error(`seed createDraft failed: ${created.status()}`);
++  const draft = (await created.json()) as { id: string };
++  const patched = await page.request.patch(`${api}/intake/drafts/${draft.id}`, { headers, data });
++  if (!patched.ok()) throw new Error(`seed patchDraft failed: ${patched.status()}`);
++  const full = (await patched.json()) as { id: string; data: Record<string, unknown> };
++  await page.route('**/intake/drafts', async (route) => {
++    if (route.request().method() === 'POST') {
++      await route.fulfill({
++        status: 201,
++        contentType: 'application/json',
++        body: JSON.stringify({ id: full.id, data: full.data }),
++      });
++    } else {
++      await route.continue();
++    }
++  });
++  return full.id;
++}
++
+ /** Land on the SPA and click past the role-selection gate. */
+ export async function enterAs(page: Page, role: 'Operatore' | 'Amministratore' = 'Operatore') {
+   await page.goto('/', { waitUntil: 'domcontentloaded' });
+diff --git a/qa-evidence/tests/issue-278.spec.ts b/qa-evidence/tests/issue-278.spec.ts
+new file mode 100644
+index 0000000..f879446
+--- /dev/null
++++ b/qa-evidence/tests/issue-278.spec.ts
+@@ -0,0 +1,50 @@
++// #278 — Anamnesi modificabile nella scheda paziente (AnamnesisEditor al posto della vista
++// read-only). AC1 editabilità, AC2 persistenza dopo reload, AC3 no console/HTTP errors.
++import { test } from '@playwright/test';
++import { guard, enterAs, nav, expect } from '../helpers';
++
++const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
++const STAMP = Date.now();
++const TEXT = `Anamnesi aggiornata da QA #278 — ${STAMP}`;
++
++async function openAnamnesi(page: import('@playwright/test').Page) {
++  await enterAs(page, 'Operatore');
++  await nav(page, 'Pazienti');
++  await page.getByText('Moretti', { exact: false }).first().click();
++  await page.waitForTimeout(1200);
++  await page.getByRole('tab', { name: 'Clinica' }).click();
++  await page.waitForTimeout(500);
++  await page.getByRole('tab', { name: 'Sezioni Cliniche (testo)' }).click();
++  await page.waitForTimeout(800);
++}
++
++test('#278 anamnesi: campi editabili + salvataggio persistente dopo reload', async ({ page }) => {
++  const g = guard(page);
++  await openAnamnesi(page);
++
++  // AC1: l'editor strutturato è presente e NON read-only — la card "Anamnesi generale"
++  // espone il bottone Modifica (la vecchia LegacyAnamnesisView non lo aveva).
++  const card = page.locator('.clinical-card', { hasText: 'Anamnesi generale' }).first();
++  await expect(card).toBeVisible();
++  const editBtn = card.locator('.clinical-card__edit');
++  await expect(editBtn).toBeVisible();
++
++  // Modifica il campo e salva.
++  await editBtn.click();
++  const textarea = card.locator('textarea');
++  await expect(textarea).toBeVisible();
++  await textarea.fill(TEXT);
++  await card.getByRole('button', { name: /Salva/ }).click();
++
++  // Il valore salvato è visibile subito (non più in editing).
++  await expect(card.getByText(TEXT)).toBeVisible();
++
++  // AC2: persistenza dopo reload completo della pagina.
++  await page.reload();
++  await openAnamnesi(page);
++  const cardAfter = page.locator('.clinical-card', { hasText: 'Anamnesi generale' }).first();
++  await expect(cardAfter.getByText(TEXT)).toBeVisible({ timeout: 15000 });
++
++  await page.screenshot({ path: `${OUT}/screenshots/278-anamnesi-persistita.png`, fullPage: true });
++  g.assertClean(); // AC3
++});
+diff --git a/qa-evidence/tests/issue-279.spec.ts b/qa-evidence/tests/issue-279.spec.ts
+new file mode 100644
+index 0000000..96c50f6
+--- /dev/null
++++ b/qa-evidence/tests/issue-279.spec.ts
+@@ -0,0 +1,46 @@
++// #279 — filterRepeatedHeaders: header istituzionale in formato tabella markdown ripetuto su ogni
++// pagina viene rimosso (banner assorbito, "numero nosografico" riconosciuto), contenuto clinico
++// intatto. Logica backend pura: evidenza = suite unit header-filter eseguita dal test, resa come
++// superficie QA (report HTML) fotografata da Playwright.
++import { test } from '@playwright/test';
++import { runBackendTest, showReport, reportDoc, expect } from '../helpers';
++import { writeFileSync, mkdirSync } from 'node:fs';
++
++const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
++
++test('#279 header-filter: suite unit completa PASS (tabella-cella, nosografico, banner)', async ({
++  page,
++}) => {
++  const r = runBackendTest('backend/src/ai/__tests__/header-filter.test.ts');
++
++  // Log sanitizzato (solo TAP: nomi test e conteggi, nessun PHI).
++  mkdirSync(`${OUT}/logs`, { recursive: true });
++  writeFileSync(`${OUT}/logs/header-filter-tap.log`, r.out, 'utf8');
++
++  const names = [...r.out.matchAll(/^ok \d+ - (.+)$/gm)].map((m) => m[1]);
++  const new279 = names.filter((n) => n.includes('279'));
++
++  await showReport(
++    page,
++    reportDoc(
++      'Issue #279 — header-filter unit suite',
++      [
++        { k: 'Test file', v: 'backend/src/ai/__tests__/header-filter.test.ts' },
++        { k: 'Esito processo', v: `exit code ${r.code}`, ok: r.code === 0 },
++        { k: 'Test PASS', v: String(r.pass), ok: r.pass > 0 },
++        { k: 'Test FAIL', v: String(r.fail), ok: r.fail === 0 },
++        { k: 'Nuovi casi #279', v: new279.join('\n') || '(nessuno)', ok: new279.length >= 3 },
++      ],
++      'AC1 header tabella rimosso · AC2 contenuto clinico intatto · AC3 suite estesa PASS. ' +
++        'Fixture sintetiche, nessun dato reale.',
++    ),
++  );
++
++  await expect(page.getByText('Test FAIL')).toBeVisible();
++  await page.screenshot({ path: `${OUT}/screenshots/279-header-filter-suite.png`, fullPage: true });
++
++  expect(r.code, `header-filter suite exit code — TAP:\n${r.out.slice(-2000)}`).toBe(0);
++  expect(r.fail).toBe(0);
++  expect(r.pass).toBeGreaterThanOrEqual(20);
++  expect(new279.length).toBeGreaterThanOrEqual(3);
++});
+diff --git a/qa-evidence/tests/issue-280.spec.ts b/qa-evidence/tests/issue-280.spec.ts
+new file mode 100644
+index 0000000..28d0e7f
+--- /dev/null
++++ b/qa-evidence/tests/issue-280.spec.ts
+@@ -0,0 +1,146 @@
++// #280 — Le terapie rilevate dall'import sono riviste nel FORM reale della creazione manuale
++// (TherapyFormFields) precompilato dal bridge, con il testo originale accanto; una modifica nel
++// form sopravvive alla conferma (terapia creata aggiornata); le righe "da verificare" restano
++// segnalate. Draft d'import seedato con terapiaImport (provider AI mock = estrazione vuota).
++import { test } from '@playwright/test';
++import { guard, enterAs, nav, seedManualDraft, expect } from '../helpers';
++
++const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
++const STAMP = Date.now();
++const COGNOME = `Import280-${STAMP}`;
++
++const SEED = {
++  anagrafica: {
++    firstName: 'Enrico',
++    lastName: COGNOME,
++    dateOfBirth: '1950-03-12',
++    sex: 'M',
++  },
++  terapiaImport: [
++    {
++      farmacoNome: 'Amoxicillina',
++      forma: 'CPR RIV',
++      dosaggio: '500 MG',
++      viaSomministrazione: 'OS',
++      quantita: '1',
++      orari: ['08:00', '20:00'],
++      giorni: [],
++      dataInizio: '',
++      classe: 'Antibiotico',
++      note: '',
++      originalText: 'AMOXICILLINA 500 MG CPR RIV — 1 cpr ore 8 e 20 per OS',
++      stato: 'ok',
++    },
++    {
++      farmacoNome: 'Furosemide',
++      forma: '',
++      dosaggio: '',
++      viaSomministrazione: '',
++      quantita: '',
++      orari: [],
++      giorni: [],
++      dataInizio: '',
++      classe: '',
++      note: '',
++      originalText: 'FUROSEMIDE — posologia non leggibile nel documento',
++      stato: 'da_verificare',
++    },
++  ],
++};
++
++test('#280 import terapia: form reale precompilato + testo originale + modifica che persiste', async ({
++  page,
++}) => {
++  const g = guard(page);
++  await enterAs(page, 'Operatore');
++  const draftId = await seedManualDraft(page, SEED);
++
++  await nav(page, 'Pazienti');
++  await page.getByRole('button', { name: /Nuovo paziente/ }).click();
++  await page.waitForTimeout(800);
++
++  // Step 1 → 3 (Clinica)
++  await page.getByRole('button', { name: /Avanti/i }).click();
++  await page.waitForTimeout(400);
++  await page.getByRole('button', { name: /Avanti/i }).click();
++  await page.waitForTimeout(600);
++
++  // AC1: il form REALE della creazione manuale, precompilato dai dati parsati.
++  const review = page.locator('[data-testid="discharge-therapy-review"]');
++  await expect(review).toBeVisible();
++  const rows = review.locator('[data-testid="discharge-therapy-row"]');
++  await expect(rows).toHaveCount(2);
++
++  const amoxi = rows.nth(0);
++  await expect(amoxi.getByPlaceholder('es. Kanrenol')).toHaveValue('Amoxicillina');
++  // Forma mappata CPR RIV → compressa; via OS → orale; dosaggio 500 mg; orari 08:00 e 20:00.
++  await expect(amoxi.locator('select.form-select').first()).toHaveValue('compressa');
++  await expect(amoxi.getByPlaceholder('es. 100')).toHaveValue('500');
++  await expect(amoxi.locator('input[type="time"]').first()).toHaveValue('08:00');
++  await expect(amoxi.locator('input[type="time"]').nth(1)).toHaveValue('20:00');
++
++  // AC2: testo originale estratto visibile accanto al form.
++  await expect(amoxi.locator('[data-testid="discharge-original-text"]')).toContainText(
++    'AMOXICILLINA 500 MG CPR RIV',
++  );
++
++  // AC4: la riga incompleta resta segnalata "da verificare" e non viene persa.
++  await expect(page.locator('[data-testid="discharge-therapy-alert"]')).toBeVisible();
++  await expect(rows.nth(1)).toHaveAttribute('data-stato', 'da_verificare');
++  await expect(rows.nth(1).locator('.discharge-therapy-review__badge.is-verify')).toBeVisible();
++
++  await page.screenshot({
++    path: `${OUT}/screenshots/280-form-reale-precompilato.png`,
++    fullPage: true,
++  });
++
++  // AC3: modifica nel form (orario 08:00 → 09:30) → draft aggiornato → sopravvive alla conferma.
++  await amoxi.locator('input[type="time"]').first().fill('09:30');
++  await page.waitForTimeout(1500); // debounce autosave patchDraft
++
++  // Accetta la terapia (gate #235) e completa il flusso fino alla creazione.
++  await page.locator('[data-testid="accept-therapy"]').check();
++  for (let i = 0; i < 3; i++) {
++    await page.getByRole('button', { name: /Avanti/i }).click();
++    await page.waitForTimeout(400);
++  }
++  await page.locator('[data-testid="accept-demographics"]').check();
++  const createBtn = page.getByRole('button', { name: /^Crea paziente$/ }).last();
++  await expect(createBtn).toBeEnabled({ timeout: 8000 });
++
++  const confirmResp = page.waitForResponse(
++    (r) => r.url().includes(`/intake/drafts/${draftId}/confirm`) && r.request().method() === 'POST',
++  );
++  await createBtn.click();
++  const confirm = await confirmResp;
++  expect(confirm.status()).toBe(201);
++  const confirmBody = (await confirm.json()) as { patient?: { id: string } };
++  const patientId = confirmBody.patient?.id;
++  expect(patientId, 'confirm restituisce il paziente creato').toBeTruthy();
++
++  // La terapia creata riflette la modifica fatta nel form (09:30, non più 08:00).
++  const thResp = await page.request.get(`http://localhost:3001/patients/${patientId}/therapies`);
++  expect(thResp.ok()).toBeTruthy();
++  const therapies = (await thResp.json()) as Array<{
++    farmacoNome: string;
++    schedules: Array<{ time: string }>;
++  }>;
++  const amoxiCreated = therapies.find((t) => /amoxicillina/i.test(t.farmacoNome));
++  expect(
++    amoxiCreated,
++    `terapie create: ${JSON.stringify(therapies.map((t) => t.farmacoNome))}`,
++  ).toBeTruthy();
++  const times = (amoxiCreated?.schedules ?? []).map((s) => s.time);
++  expect(times).toContain('09:30');
++  expect(times).toContain('20:00');
++  expect(times).not.toContain('08:00');
++
++  // Persistenza dopo reload: il paziente creato è in lista.
++  await page.reload();
++  await enterAs(page, 'Operatore');
++  await nav(page, 'Pazienti');
++  await expect(page.getByText(COGNOME, { exact: false }).first()).toBeVisible({ timeout: 15000 });
++
++  await page.screenshot({ path: `${OUT}/screenshots/280-paziente-creato.png`, fullPage: true });
++  g.assertClean();
++});
+diff --git a/qa-evidence/tests/issue-281.spec.ts b/qa-evidence/tests/issue-281.spec.ts
+new file mode 100644
+index 0000000..5a15493
+--- /dev/null
++++ b/qa-evidence/tests/issue-281.spec.ts
+@@ -0,0 +1,103 @@
++// #281 — Il riepilogo finale dell'import/intake mostra i VALORI reali che verranno creati
++// (terapie con orari, allergie con gravità, anamnesi/diagnosi, anagrafica estesa) in una
++// schermata stilata e leggibile — non più il solo elenco dei nomi-sezione senza stile.
++import { test } from '@playwright/test';
++import { guard, enterAs, nav, seedManualDraft, expect } from '../helpers';
++
++const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
++const STAMP = Date.now();
++const COGNOME = `Recap281-${STAMP}`;
++
++const SEED = {
++  anagrafica: {
++    firstName: 'Amelia',
++    lastName: COGNOME,
++    dateOfBirth: '1948-11-02',
++    sex: 'F',
++    codiceFiscale: 'MLARCP48S42H501Y',
++    phone: '333 7654321',
++    email: 'amelia.recap@demo.it',
++    address: 'Via delle Rose 12, Bologna',
++  },
++  allergie: [
++    { id: `al-${STAMP}-1`, allergene: 'Penicillina', gravita: 'grave', reazione: 'orticaria' },
++    { id: `al-${STAMP}-2`, allergene: 'Lattice', gravita: 'moderata', reazione: '' },
++  ],
++  anamnesi: {
++    patologicaProssima:
++      'Ricovero per scompenso cardiaco riacutizzato; dispnea da sforzo ingravescente.',
++  },
++  diagnosi: [{ id: `dx-${STAMP}-1`, descrizione: 'Scompenso cardiaco congestizio NYHA III' }],
++  terapiaImport: [
++    {
++      farmacoNome: 'Amoxicillina',
++      forma: 'CPR',
++      dosaggio: '500 MG',
++      viaSomministrazione: 'OS',
++      quantita: '1',
++      orari: ['08:00', '20:00'],
++      giorni: [],
++      dataInizio: '',
++      classe: 'Antibiotico',
++      note: '',
++      originalText: 'AMOXICILLINA 500 MG CPR 1x2',
++      stato: 'ok',
++    },
++    {
++      farmacoNome: 'Furosemide',
++      forma: '',
++      dosaggio: '',
++      viaSomministrazione: '',
++      quantita: '',
++      orari: [],
++      giorni: [],
++      dataInizio: '',
++      classe: '',
++      note: '',
++      originalText: 'FUROSEMIDE — posologia non leggibile',
++      stato: 'da_verificare',
++    },
++  ],
++};
++
++test('#281 recap finale: valori reali leggibili (terapie, allergie, anamnesi, anagrafica)', async ({
++  page,
++}) => {
++  const g = guard(page);
++  await enterAs(page, 'Operatore');
++  await seedManualDraft(page, SEED);
++
++  await nav(page, 'Pazienti');
++  await page.getByRole('button', { name: /Nuovo paziente/ }).click();
++  await page.waitForTimeout(800);
++
++  // Avanza fino allo step finale (6 — Verifica).
++  for (let i = 0; i < 5; i++) {
++    await page.getByRole('button', { name: /Avanti/i }).click();
++    await page.waitForTimeout(400);
++  }
++  const recap = page.locator('[data-testid="intake-step-6"]');
++  await expect(recap).toBeVisible();
++
++  // AC1: terapie elencate per NOME con orari e conteggio (non solo "Terapia farmacologica").
++  await expect(recap.getByText('Terapie che verranno create (2)')).toBeVisible();
++  await expect(recap.getByText('Amoxicillina — ore 08:00, 20:00')).toBeVisible();
++  await expect(recap.getByText(/Furosemide/)).toBeVisible();
++  await expect(recap.getByText(/da verificare/)).toBeVisible();
++
++  // AC2: allergie con gravità, anamnesi e diagnosi con testo reale, anagrafica estesa.
++  await expect(recap.getByText('Penicillina (grave)')).toBeVisible();
++  await expect(recap.getByText('Lattice (moderata)')).toBeVisible();
++  await expect(recap.getByText(/Ricovero per scompenso cardiaco riacutizzato/)).toBeVisible();
++  await expect(recap.getByText('Scompenso cardiaco congestizio NYHA III')).toBeVisible();
++  await expect(recap.getByText('MLARCP48S42H501Y')).toBeVisible();
++  await expect(recap.getByText('333 7654321')).toBeVisible();
++
++  // La schermata è stilata: le sezioni del recap sono card con bordo (non testo nudo).
++  const section = recap.locator('.step-verifica__section').first();
++  const borderW = await section.evaluate((el) => getComputedStyle(el).borderTopWidth);
++  expect(borderW).not.toBe('0px');
++
++  await page.screenshot({ path: `${OUT}/screenshots/281-recap-leggibile.png`, fullPage: true });
++  g.assertClean(); // AC3
++});
+diff --git a/qa-evidence/tests/issue-282.spec.ts b/qa-evidence/tests/issue-282.spec.ts
+new file mode 100644
+index 0000000..e0b4df5
+--- /dev/null
++++ b/qa-evidence/tests/issue-282.spec.ts
+@@ -0,0 +1,64 @@
++// #282 — L'ultimo step della creazione paziente non deve mai lasciare il bottone "Crea paziente"
++// premuto-ma-inerte: la conferma terapia è sbloccabile QUI (checkbox accept-therapy-verifica),
++// il bottone si abilita e crea davvero il paziente (persistente dopo reload).
++import { test } from '@playwright/test';
++import { guard, enterAs, nav, expect } from '../helpers';
++
++const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
++const STAMP = Date.now();
++const COGNOME = `Creazione282-${STAMP}`;
++
++test('#282 creazione paziente: gate sbloccabile allo step finale + creazione persistente', async ({
++  page,
++}) => {
++  const g = guard(page);
++  await enterAs(page, 'Operatore');
++  await nav(page, 'Pazienti');
++  await page.getByRole('button', { name: /Nuovo paziente/ }).click();
++  await page.waitForTimeout(800);
++
++  // Step 1: anagrafica minima obbligatoria.
++  await page.getByPlaceholder('Mario', { exact: true }).fill('Bruno');
++  await page.getByPlaceholder('Rossi', { exact: true }).fill(COGNOME);
++  await page.locator('input[type="date"]').first().fill('1960-05-20');
++
++  // Avanza fino allo step finale (6 — Verifica) senza toccare la Clinica.
++  for (let i = 0; i < 5; i++) {
++    await page.getByRole('button', { name: /Avanti/i }).click();
++    await page.waitForTimeout(400);
++  }
++  const recap = page.locator('[data-testid="intake-step-6"]');
++  await expect(recap).toBeVisible();
++
++  // Bug #282: bottone disabilitato SENZA alcun controllo per rimediare. Ora la checkbox c'è.
++  const createBtn = page.getByRole('button', { name: /^Crea paziente$/ }).last();
++  await expect(createBtn).toBeDisabled();
++  const acceptTherapy = page.locator('[data-testid="accept-therapy-verifica"] input');
++  await expect(acceptTherapy).toBeVisible(); // AC1
++  await expect(recap.getByText('Confermo: nessuna terapia da inserire')).toBeVisible();
++
++  // AC2: spuntate le conferme il bottone si abilita e al click crea il paziente.
++  await acceptTherapy.check();
++  await page.locator('[data-testid="accept-demographics"]').check();
++  await expect(createBtn).toBeEnabled({ timeout: 8000 });
++
++  await page.screenshot({
++    path: `${OUT}/screenshots/282-step-finale-sbloccato.png`,
++    fullPage: true,
++  });
++
++  const confirmResp = page.waitForResponse(
++    (r) => /\/intake\/drafts\/.+\/confirm/.test(r.url()) && r.request().method() === 'POST',
++  );
++  await createBtn.click();
++  expect((await confirmResp).status()).toBe(201);
++
++  // AC3: il paziente persiste dopo reload completo.
++  await page.reload();
++  await enterAs(page, 'Operatore');
++  await nav(page, 'Pazienti');
++  await expect(page.getByText(COGNOME, { exact: false }).first()).toBeVisible({ timeout: 15000 });
++
++  await page.screenshot({ path: `${OUT}/screenshots/282-paziente-in-lista.png`, fullPage: true });
++  g.assertClean();
++});
+diff --git a/qa-evidence/tests/issue-283.spec.ts b/qa-evidence/tests/issue-283.spec.ts
+new file mode 100644
+index 0000000..4094a83
+--- /dev/null
++++ b/qa-evidence/tests/issue-283.spec.ts
+@@ -0,0 +1,68 @@
++// #283 — La card "Consegne aperte" della dashboard apre la pagina Consegne già filtrata sulle
++// aperte; con UNA sola consegna aperta la card corrispondente è evidenziata e portata in vista.
++// La sidebar continua ad aprire la vista non filtrata.
++import { test } from '@playwright/test';
++import { guard, enterAs, nav, expect } from '../helpers';
++
++const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
++const API = 'http://localhost:3001';
++
++test('#283 card consegne aperte: filtro applicato + focus sulla singola aperta', async ({
++  page,
++}) => {
++  // Stato deterministico: lascia UNA sola consegna non completata (aperta), completa le altre.
++  const list = (await (await page.request.get(`${API}/consegne`)).json()) as Array<{
++    id: string;
++    stato: string;
++    pazienteNome: string;
++  }>;
++  const nonCompletate = list.filter((c) => c.stato !== 'completata');
++  expect(nonCompletate.length, 'servono consegne seed nel DB').toBeGreaterThan(0);
++  const keep = nonCompletate[0];
++  for (const c of nonCompletate.slice(1)) {
++    const r = await page.request.put(`${API}/consegne/${c.id}`, {
++      data: { stato: 'completata' },
++    });
++    expect(r.ok()).toBeTruthy();
++  }
++  // La dashboard operatore conta solo le consegne assegnate all'utente loggato (Dr. Marco
++  // Ferretti nel ruolo demo): assegna la consegna rimasta a lui.
++  const r = await page.request.put(`${API}/consegne/${keep.id}`, {
++    data: { stato: 'aperta', operatoreAssegnato: 'Dr. Marco Ferretti' },
++  });
++  expect(r.ok()).toBeTruthy();
++
++  const g = guard(page);
++  await enterAs(page, 'Operatore');
++
++  // AC1+AC2: click sulla card → pagina Consegne filtrata "Aperte" + card focus evidenziata.
++  const card = page.locator('.stat-card', { hasText: 'Consegne Aperte' });
++  await expect(card).toBeVisible();
++  await expect(card.locator('.stat-card__value')).toHaveText('1');
++  await card.click();
++  await page.waitForTimeout(800);
++
++  await expect(page.locator('.filter-chip.active', { hasText: 'Aperte' })).toBeVisible();
++  const focused = page.locator('.consegna-card--focus');
++  await expect(focused).toBeVisible();
++  await expect(focused).toContainText(keep.pazienteNome.split(',')[0]);
++  const inViewport = await focused.evaluate((el) => {
++    const r = el.getBoundingClientRect();
++    return r.top >= 0 && r.bottom <= window.innerHeight;
++  });
++  expect(inViewport, 'la card focus è scrollata in vista').toBeTruthy();
++
++  await page.screenshot({ path: `${OUT}/screenshots/283-consegna-focus.png`, fullPage: true });
++
++  // AC3: la navigazione generica da sidebar azzera filtro e focus.
++  await nav(page, 'Dashboard');
++  await nav(page, 'Consegne');
++  await expect(page.locator('.filter-chip.active', { hasText: 'Tutte' }).first()).toBeVisible();
++  await expect(page.locator('.consegna-card--focus')).toHaveCount(0);
++
++  await page.screenshot({
++    path: `${OUT}/screenshots/283-sidebar-vista-completa.png`,
++    fullPage: true,
++  });
++  g.assertClean();
++});
+diff --git a/qa-evidence/tests/issue-284.spec.ts b/qa-evidence/tests/issue-284.spec.ts
+new file mode 100644
+index 0000000..5dd1db8
+--- /dev/null
++++ b/qa-evidence/tests/issue-284.spec.ts
+@@ -0,0 +1,51 @@
++// #284 — Agenda compatta: slot e celle ridotti (slot ora ≤48px, half ≤32px; celle admin ≤42px)
++// per mostrare più fasce orarie a parità di viewport, senza perdere le interazioni.
++import { test } from '@playwright/test';
++import { guard, enterAs, nav, expect } from '../helpers';
++
++const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
++
++async function minHeightOf(page: import('@playwright/test').Page, sel: string): Promise<number> {
++  const el = page.locator(sel).first();
++  await expect(el).toBeVisible();
++  return el.evaluate((n) => parseFloat(getComputedStyle(n).minHeight));
++}
++
++test('#284 agenda operatore: slot compatti e più fasce visibili', async ({ page }) => {
++  const g = guard(page);
++  await page.setViewportSize({ width: 1280, height: 800 });
++  await enterAs(page, 'Operatore');
++  await nav(page, 'Agenda');
++
++  // AC1: nuove altezze compatte (prima: hour 64 / half 44).
++  const hour = await minHeightOf(page, '.agt-slot--hour');
++  const half = await minHeightOf(page, '.agt-slot--half');
++  expect(hour).toBeLessThanOrEqual(48);
++  expect(half).toBeLessThanOrEqual(32);
++
++  // AC2: a 1280x800 sono visibili nel viewport più slot di quanti ne stavano con le vecchie
++  // altezze (64px → al più 12 slot-ora in 800px; ora ≥ 13 slot totali visibili).
++  const visibleSlots = await page.evaluate(() => {
++    return Array.from(document.querySelectorAll('.agt-slot')).filter((el) => {
++      const r = el.getBoundingClientRect();
++      return r.top < window.innerHeight && r.bottom > 0 && r.height > 0;
++    }).length;
++  });
++  expect(visibleSlots).toBeGreaterThanOrEqual(13);
++
++  await page.screenshot({ path: `${OUT}/screenshots/284-agenda-operatore.png`, fullPage: false });
++  g.assertClean();
++});
++
++test('#284 agenda admin: celle multi-operatore compatte', async ({ page }) => {
++  const g = guard(page);
++  await page.setViewportSize({ width: 1280, height: 800 });
++  await enterAs(page, 'Amministratore');
++  await nav(page, 'Agenda');
++
++  const cellHour = await minHeightOf(page, '.agt-admin-cell.hour');
++  expect(cellHour).toBeLessThanOrEqual(42);
++
++  await page.screenshot({ path: `${OUT}/screenshots/284-agenda-admin.png`, fullPage: false });
++  g.assertClean();
++});
+diff --git a/qa-evidence/tests/issue-285.spec.ts b/qa-evidence/tests/issue-285.spec.ts
+new file mode 100644
+index 0000000..2a70eb0
+--- /dev/null
++++ b/qa-evidence/tests/issue-285.spec.ts
+@@ -0,0 +1,70 @@
++// #285 — Persistenza CRUD: gli orari operatori dell'admin sono persistiti su DB
++// (OperatorSchedule, PUT /operators/:id/schedule + GET /operators/schedules) e sopravvivono al
++// reload; il widget agenda della dashboard deriva dagli appuntamenti reali (non più MOCK_AGENDA).
++import { test } from '@playwright/test';
++import { guard, enterAs, nav, expect } from '../helpers';
++
++const OUT = process.env.EV_OUT ?? 'qa-evidence/_out';
++const STAMP = Date.now();
++const NOTA = `Turno QA #285 — ${STAMP}`;
++
++async function openOrari(page: import('@playwright/test').Page) {
++  await enterAs(page, 'Amministratore');
++  await nav(page, 'Orari');
++  await expect(page.getByText('Orari Operatori').first()).toBeVisible();
++}
++
++test('#285 orari operatori: salvataggio su DB e persistenza dopo reload', async ({ page }) => {
++  const g = guard(page);
++  await openOrari(page);
++
++  // Apri l'editor (primo operatore selezionato di default).
++  const editBtn = page.getByRole('button', { name: /Modifica orari|Imposta orario/ }).first();
++  await editBtn.click();
++
++  // Cambia l'orario di inizio del primo giorno disponibile e la nota.
++  const firstStart = page.locator('.schedule-day--active select.form-select').first();
++  await firstStart.selectOption('07:30');
++  await page.getByPlaceholder("Note sull'orario…").fill(NOTA);
++
++  // AC1: Salva → PUT 200 sul backend.
++  const putResp = page.waitForResponse(
++    (r) => /\/operators\/.+\/schedule$/.test(r.url()) && r.request().method() === 'PUT',
++  );
++  await page.getByRole('button', { name: /Salva/ }).first().click();
++  const put = await putResp;
++  expect(put.status()).toBe(200);
++  await expect(page.getByText('Orari salvati')).toBeVisible({ timeout: 8000 });
++
++  // AC1: il dato è rileggibile dal DB via GET /operators/schedules.
++  const apiRows = (await (
++    await page.request.get('http://localhost:3001/operators/schedules')
++  ).json()) as Array<{ operatoreId: string; note: string; turni: Array<{ oraInizio: string }> }>;
++  const saved = apiRows.find((r) => r.note === NOTA);
++  expect(saved, 'schedule presente in GET /operators/schedules').toBeTruthy();
++  expect(saved!.turni.some((t) => t.oraInizio === '07:30')).toBeTruthy();
++
++  // AC2: persistenza dopo reload completo della pagina.
++  await page.reload();
++  await openOrari(page);
++  await expect(page.getByText(`Nota: ${NOTA}`)).toBeVisible({ timeout: 15000 });
++  await expect(page.getByText('07:30 –').first()).toBeVisible();
++
++  await page.screenshot({ path: `${OUT}/screenshots/285-orari-persistiti.png`, fullPage: true });
++  g.assertClean();
++});
++
++test('#285 dashboard: agenda con appuntamenti reali, niente MOCK_AGENDA', async ({ page }) => {
++  const g = guard(page);
++  await enterAs(page, 'Operatore');
++
++  // I nomi finti di MOCK_AGENDA non devono più comparire in dashboard.
++  await expect(page.getByText('García, María')).toHaveCount(0);
++  await expect(page.getByText('López, Carlos')).toHaveCount(0);
++
++  await page.screenshot({
++    path: `${OUT}/screenshots/285-dashboard-agenda-reale.png`,
++    fullPage: true,
++  });
++  g.assertClean();
++});

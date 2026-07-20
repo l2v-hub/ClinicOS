@@ -1,0 +1,538 @@
+backend/src/ai/__tests__/header-filter.test.ts     |  61 ++++++
+ backend/src/ai/sections/header-filter.ts           |  47 ++++-
+ backend/src/routes/operators.ts                    |  48 +++++
+ frontend/src/App.css                               |   7 +
+ frontend/src/App.tsx                               |  90 +++++++--
+ frontend/src/app-additions.css                     | 220 +++++++++++++++++++--
+ frontend/src/components/admin/AdminAgenda.tsx      |   8 +-
+ frontend/src/components/admin/AdminDashboard.tsx   |   8 +-
+ frontend/src/components/operator/ConsegnePage.tsx  |  27 ++-
+ .../src/components/operator/OperatorDashboard.tsx  |  54 ++---
+ frontend/src/components/operator/PatientDetail.tsx |  17 +-
+ .../shared/intake/DischargeTherapyReview.tsx       | 180 +++++++----------
+ .../src/components/shared/intake/StepVerifica.tsx  | 137 +++++++++++--
+ .../components/shared/intake/dischargeTherapy.ts   | 166 ++++++++++++++++
+ .../20260720100000_operator_schedule/migration.sql |  15 ++
+ prisma/schema.prisma                               |  12 ++
+ qa-evidence/helpers.ts                             |  38 +++-
+ qa-evidence/tests/issue-278.spec.ts                |  50 +++++
+ qa-evidence/tests/issue-279.spec.ts                |  46 +++++
+ qa-evidence/tests/issue-280.spec.ts                | 146 ++++++++++++++
+ qa-evidence/tests/issue-281.spec.ts                | 103 ++++++++++
+ qa-evidence/tests/issue-282.spec.ts                |  64 ++++++
+ qa-evidence/tests/issue-283.spec.ts                |  68 +++++++
+ qa-evidence/tests/issue-284.spec.ts                |  51 +++++
+ qa-evidence/tests/issue-285.spec.ts                |  70 +++++++
+ 25 files changed, 1539 insertions(+), 194 deletions(-)
+
+--- Changes ---
+
+backend/src/ai/__tests__/header-filter.test.ts
+  @@ -222,3 +222,64 @@ test('empty input is safe', () => {
+  +
+  +// ── #279: markdown-TABLE header (labels as bare cells, no colons) — shape taken verbatim from
+  +// the reported real document (anonymised values). The label sits in a table cell ("| Codice
+  +// fiscale | XXX |"), so the inline "label:" detector never fires without cell matching.
+  +const TABLE_HEADER = [
+  +  '| AZIENDA SANITARIA REGIONALE',
+  +  'Azienda Ospedaliera di Demo | Azienda Usl Di Demo',
+  +  '| --- | --- | --- |',
+  +  '|  Azienda | ROSSI MARIA | Codice fiscale | RSSMRA51S55E000T  |',
+  +  '| --- | --- | --- | --- |',
+  +  '|  Reparto | 15/11/1951 DEMO | Numero Nosografico | 2026/0001  |',
+  +  '|  Residenza | VIA DEMO, 5 DEMO |  |   |',
+  +].join('\n');
+  +
+  +test('#279: table-cell header repeated on 3 pages → kept once, later pages cleaned', () => {
+  +  const doc = [
+  +    `${TABLE_HEADER}\n\n## Anamnesi\nPaziente ricoverata per scompenso.\n\nPagina 1 di 3`,
+  +    `${TABLE_HEADER}\n\nProseguiva la degenza senza complicanze.\n\nPagina 2 di 3`,
+  +    `${TABLE_HEADER}\n\n## Terapia\nFurosemide 25 mg.\n\nPagina 3 di 3`,
+  +  ].join('\n');
+  +  const r = filterRepeatedHeaders(doc);
+  +  assert.ok(
+  +    r.removedHeaderBlocks >= 2,
+  +    `two later table headers removed (got ${r.removedHeaderBlocks})`,
+  +  );
+  +  assert.equal(
+  +    (r.cleanedText.match(/RSSMRA51S55E000T/g) || []).length,
+  +    1,
+  +    'anagraphic table kept exactly once',
+  +  );
+  +  assert.ok(r.cleanedText.includes('Proseguiva la degenza'), 'clinical text intact');
+  +  assert.ok(r.cleanedText.includes('Furosemide 25 mg.'), 'therapy text intact');
+  +});
+  +
+  +test('#279: a content table (therapy) is NOT treated as a header', () => {
+  +  const t = [
+  +    '| Farmaco | Dose | Via |',
+  +    '| --- | --- | --- |',
+  +    '| Ramipril | 5 mg | OS |',
+  +    '| Furosemide | 25 mg | OS |',
+  +  ].join('\n');
+  +  const doc = `## Terapia\n${t}\n\nAltro testo.\n\n## Decorso\n${t}`;
+  +  const r = filterRepeatedHeaders(doc);
+  +  assert.ok(r.cleanedText.includes('Ramipril'), 'content table intact');
+  +  assert.equal(r.removedHeaderBlocks, 0, 'no header removed from content tables');
+  +});
+  +
+  +test('#279: repeated institutional banner above the header table is absorbed', () => {
+  +  const doc = [
+  +    `${TABLE_HEADER}\n\n## Anamnesi\nTesto uno.\n\nPagina 1 di 2`,
+  +    `${TABLE_HEADER}\n\nTesto due.\n\nPagina 2 di 2`,
+  +  ].join('\n');
+  +  const r = filterRepeatedHeaders(doc);
+  +  assert.equal(
+  +    (r.cleanedText.match(/AZIENDA SANITARIA REGIONALE/g) || []).length,
+  +    1,
+  +    'banner kept exactly once',
+  +  );
+  +  assert.ok(r.cleanedText.includes('Testo uno.'));
+  +  assert.ok(r.cleanedText.includes('Testo due.'));
+  +});
+  +61 -0
+
+backend/src/ai/sections/header-filter.ts
+  @@ -22,6 +22,8 @@ const DEFAULT_HEADER_LABELS = [
+  +  // #279: real hospital letters use "nosografico" (seen verbatim in the reported document)
+  +  'numero nosografico',
+     'numero cartella',
+     'reparto',
+     'unita operativa',
+  @@ -129,12 +131,27 @@ function inlineLabels(line: string, labels: string[]): string[] {
+  -/** Header labels carried by a line: a single label-at-start (label-above-value layout), or ≥2
+  - *  inline "label:" pairs on one row. Returns null when the line is not header-like. */
+  +/** #279: labels appearing as BARE markdown-table cells ("| Codice fiscale | SBB... |"). Hospital
+  + *  headers are often OCR'd as tables where the label is a cell with no colon, so the inline
+  + *  "label:" detector never fires. Exact-cell match only (content tables use different labels). */
+  +function tableCellLabels(line: string, labels: string[]): string[] {
+  +  if ((line.match(/\|/g) ?? []).length < 2) return [];
+  +  const cells = line
+  +    .split('|')
+  +    .map((c) => normalise(c))
+  +    .filter(Boolean);
+  +  return labels.filter((lab) => cells.includes(lab));
+  +}
+  +
+  +/** Header labels carried by a line: a single label-at-start (label-above-value layout), ≥2
+  + *  inline "label:" pairs on one row, or ≥1 exact-label table cell (#279). Returns null when the
+  + *  line is not header-like. */
+   function headerLineLabels(line: string, cfg: HeaderFilterConfig): string[] | null {
+     const single = matchedLabel(line, cfg.labels);
+     if (single) return [single];
+     const inline = inlineLabels(line, cfg.labels);
+  +  const cells = tableCellLabels(line, cfg.labels);
+  +  if (cells.length >= 1) return Array.from(new Set([...inline, ...cells]));
+     return inline.length >= 2 ? inline : null;
+   }
+   
+  @@ -240,7 +257,9 @@ function scoreBlock(
+  -    if (/:/.test(t) || matchedLabel(lines[k], cfg.labels)) pairs++;
+  +    // #279: a markdown-table row (≥2 pipes) is as header-shaped as a "label: value" pair
+  +    if (/:/.test(t) || (t.match(/\|/g) ?? []).length >= 2 || matchedLabel(lines[k], cfg.labels))
+  +      pairs++;
+     }
+     const tableLayoutScore = total ? pairs / total : 0;
+     // position: near the document start or right after a blank/page-break boundary (page top)
+  @@ -285,6 +304,15 @@ export function filterRepeatedHeaders(
+  +  // #279: institutional banner lines (hospital name/address) sit ABOVE the labelled header rows,
+  +  // carry no label, but repeat verbatim on every page. Count normalised occurrences so a removed
+  +  // header block can absorb the contiguous repeated banner right above it.
+  +  const lineCounts = new Map<string, number>();
+  +  for (const l of lines) {
+  +    const n = normalise(l);
+  +    if (n) lineCounts.set(n, (lineCounts.get(n) ?? 0) + 1);
+  +  }
+  +
+     const remove = new Set<number>(); // line indices to drop
+     const seenSignature = new Set<string>();
+     let removedHeaderBlocks = 0;
+  @@ -297,7 +325,18 @@ export function filterRepeatedHeaders(
+  -      for (let k = b.start; k < b.end; k++) remove.add(k);
+  +      // absorb the repeated banner immediately above (max 12 lines): repeated verbatim lines and
+  +      // decorative table separators ("| --- |", normalised to '') are part of the header; a truly
+  +      // BLANK line is a page/content boundary and stops the expansion.
+  +      let start = b.start;
+  +      while (start > 0 && b.start - start < 12) {
+  +        const raw = lines[start - 1];
+  +        if (!raw.trim()) break;
+  +        const n = normalise(raw);
+  +        if (n && (lineCounts.get(n) ?? 0) < 2) break;
+  +        start--;
+  +      }
+  +      for (let k = start; k < b.end; k++) remove.add(k);
+         removedHeaderBlocks++;
+         for (const l of b.labels) if (!matchedLabels.includes(l)) matchedLabels.push(l);
+       } else {
+  +43 -4
+
+backend/src/routes/operators.ts
+  @@ -71,6 +71,54 @@ operatorsRouter.get('/', async (_req, res) => {
+  +// ── #285: weekly schedules (admin "Orari operatori") — JSON blob per operator ──────────────
+  +
+  +// GET /operators/schedules (named route BEFORE parameterized)
+  +operatorsRouter.get('/schedules', async (_req, res) => {
+  +  try {
+  +    const rows = await prisma.operatorSchedule.findMany();
+  +    res.status(200).json(
+  +      rows.map((r) => {
+  +        const d = (r.data ?? {}) as { turni?: unknown; note?: string };
+  +        return { id: r.id, operatoreId: r.operatorId, turni: d.turni ?? [], note: d.note ?? '' };
+  +      }),
+  +    );
+  +  } catch (error) {
+  +    console.error('GET /operators/schedules error:', error);
+  +    res.status(500).json({ error: 'Errore nel recupero orari operatori' });
+  +  }
+  +});
+  +
+  +// PUT /operators/:operatorId/schedule  { turni, note }
+  +operatorsRouter.put('/:operatorId/schedule', async (req, res) => {
+  +  const { operatorId } = req.params;
+  +  const body = req.body as { turni?: unknown; note?: string };
+  +  if (!Array.isArray(body.turni)) {
+  +    res.status(400).json({ error: 'Campo obbligatorio: turni (array)' });
+  +    return;
+  +  }
+  +  try {
+  +    const operator = await prisma.operator.findUnique({ where: { id: operatorId } });
+  +    if (!operator) {
+  +      res.status(404).json({ error: 'Operatore non trovato' });
+  +      return;
+  +    }
+  +    const data = { turni: body.turni, note: body.note ?? '' };
+  +    const row = await prisma.operatorSchedule.upsert({
+  +      where: { operatorId },
+  +      update: { data },
+  +      create: { operatorId, data },
+  +    });
+  +    console.log(`PUT /operators/${operatorId}/schedule → saved`);
+  +    res
+  +      .status(200)
+  +      .json({ id: row.id, operatoreId: operatorId, turni: data.turni, note: data.note });
+  +  } catch (error) {
+  +    console.error('PUT /operators/:operatorId/schedule error:', error);
+  +    res.status(500).json({ error: 'Errore durante salvataggio orari' });
+  +  }
+  +});
+  +
+   // POST /operators
+   operatorsRouter.post('/', async (req, res) => {
+     const body = req.body as {
+  +48 -0
+
+frontend/src/App.css
+  @@ -4176,6 +4176,13 @@ textarea.form-input {
+  +/* #283: consegna aperta direttamente dalla card della dashboard — evidenziata all'arrivo */
+  +.consegna-card--focus {
+  +  outline: 2px solid var(--blue);
+  +  outline-offset: 2px;
+  +  box-shadow: 0 0 0 4px rgba(47, 107, 237, 0.15);
+  +}
+  +
+   .consegna-card__patient {
+     display: flex;
+     align-items: center;
+  +7 -0
+
+frontend/src/App.tsx
+  @@ -13,6 +13,7 @@ import type {
+  +  SlotAgenda,
+     Nota,
+     StatoNota,
+     CartellaPaziente,
+  @@ -24,12 +25,7 @@ import type {
+  -import {
+  -  MOCK_AGENDA,
+  -  MOCK_SCHEDULES,
+  -  createDefaultCartella,
+  -  createMockTherapySlots,
+  -} from './mockData';
+  +import { createDefaultCartella, createMockTherapySlots } from './mockData';
+   
+   import { Login } from './components/Login';
+   import { AdminDashboard } from './components/admin/AdminDashboard';
+  @@ -164,13 +160,34 @@ export default function App() {
+  +  // #283: come aprire la pagina Consegne (filtro iniziale + eventuale consegna da evidenziare)
+  +  const [consegneView, setConsegneView] = useState<{
+  +    filtro: 'tutte' | Consegna['stato'];
+  +    focusId: string | null;
+  +  }>({ filtro: 'tutte', focusId: null });
+     const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
+     const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
+     const [camere, setCamere] = useState<Camera[]>([]);
+  -  const [schedules, setSchedules] = useState<ScheduleOperatore[]>(MOCK_SCHEDULES);
+  +  // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
+  +  const [schedules, setSchedules] = useState<ScheduleOperatore[]>([]);
+     const [note, setNote] = useState<Nota[]>([]);
+     const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
+   
+  +  // #285: il widget agenda della dashboard operatore deriva dagli appuntamenti REALI di oggi
+  +  // (prima mostrava MOCK_AGENDA, dati finti mai persistiti).
+  +  const todayISO = new Date().toISOString().slice(0, 10);
+  +  const agendaOggi: SlotAgenda[] = appuntamenti
+  +    .filter((a) => a.data === todayISO)
+  +    .sort((a, b) => a.ora.localeCompare(b.ora))
+  +    .map((a) => ({
+  +      id: a.id,
+  +      ora: a.ora,
+  +      pazienteNome: a.pazienteNome,
+  +      motivo: a.tipoIntervento,
+  +      stato: a.stato,
+  +      operatoreId: a.operatoreId,
+  +    }));
+  +
+     // ── History API navigation ─────────────────────────────────────────────────
+   
+     function pushNav(key: NavKey, paziente?: Paziente) {
+  @@ -197,12 +214,30 @@ export default function App() {
+  +    // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
+  +    // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
+  +    if (key === 'consegne') setConsegneView({ filtro: 'tutte', focusId: null });
+       pushNav(key);
+       if (key === 'agenda-operatore') loadTherapySlots();
+       // SPEC-015 US4: agenda reale — refresh appuntamenti alla navigazione (come loadTherapySlots)
+       if (key === 'agenda-operatore' || key === 'agenda-admin') loadAppuntamenti();
+     }
+   
+  +  // #283: la card "Consegne aperte" apre la pagina già filtrata sulle aperte; se la consegna
+  +  // aperta è UNA sola, evidenzia e scrolla direttamente quella card.
+  +  function openConsegneAperte() {
+  +    const nonCompletate = consegne.filter((c) => c.stato !== 'completata');
+  +    const soloAperte = nonCompletate.filter((c) => c.stato === 'aperta');
+  +    setConsegneView({
+  +      // il chip "Aperte" nasconderebbe le "in corso": filtra 'aperta' solo se copre tutto il
+  +      // conteggio mostrato dalla card, altrimenti mostra tutte (nessuna consegna nascosta).
+  +      filtro: soloAperte.length === nonCompletate.length ? 'aperta' : 'tutte',
+  +      focusId: nonCompletate.length === 1 ? nonCompletate[0].id : null,
+  +    });
+  +    setMobileNavOpen(false);
+  +    pushNav('consegne');
+  +  }
+  +
+     function selectPaziente(p: Paziente, moduleTabId?: TabId) {
+       pushNav('dettaglio-paziente', p);
+       loadCartella(p.id);
+  @@ -386,6 +421,13 @@ export default function App() {
+  +    // #285: orari operatori persistiti
+  +    fetch(`${API_URL}/operators/schedules`)
+  +      .then((r) => (r.ok ? r.json() : []))
+  +      .then((data: ScheduleOperatore[]) => setSchedules(data))
+  +      .catch(() => {
+  +        /* keep empty array */
+  +      });
+       // Fase 1b: operatori reali dal backend (niente più mock); iniziali/colore client-derived
+       fetch(`${API_URL}/operators`)
+         .then((r) => (r.ok ? r.json() : []))
+  @@ -637,12 +679,28 @@ export default function App() {
+  -  function saveSchedule(s: ScheduleOperatore) {
+  -    setSchedules((prev) => {
+  -      const idx = prev.findIndex((x) => x.operatoreId === s.operatoreId);
+  -      if (idx >= 0) return prev.map((x, i) => (i === idx ? s : x));
+  -      return [...prev, s];
+  -    });
+  +  // #285: persistiti su DB (upsert per operatore); lo stato locale segue la risposta del server.
+  +  async function saveSchedule(s: ScheduleOperatore) {
+  +    try {
+  +      const res = await fetch(`${API_URL}/operators/${s.operatoreId}/schedule`, {
+  +        method: 'PUT',
+  +        headers: { 'Content-Type': 'application/json' },
+  +        body: JSON.stringify({ turni: s.turni, note: s.note }),
+  +      });
+  +      if (!res.ok) {
+  +        showToast('Impossibile salvare gli orari');
+  +        return;
+  +      }
+  +      const saved = (await res.json()) as ScheduleOperatore;
+  +      setSchedules((prev) => {
+  +        const idx = prev.findIndex((x) => x.operatoreId === saved.operatoreId);
+  +        if (idx >= 0) return prev.map((x, i) => (i === idx ? saved : x));
+  +        return [...prev, saved];
+  +      });
+  +      showToast('Orari salvati');
+  +    } catch {
+  +      showToast('Impossibile salvare gli orari');
+  +    }
+     }
+   
+     // ── Cartella CRUD (API-persisted) ─────────────────────────────────────────
+  @@ -1332,6 +1390,7 @@ export default function App() {
+  +              onOpenConsegneAperte={openConsegneAperte}
+                 onSelectPaziente={goToPazienteByNome}
+                 cartelle={cartelle}
+               />
+  @@ -1370,6 +1429,8 @@ export default function App() {
+  +              initialFiltroStato={consegneView.filtro}
+  +              focusId={consegneView.focusId}
+               />
+             )}
+             {navKey === 'note' && (
+  @@ -1390,10 +1451,11 @@ export default function App() {
+  -              agenda={MOCK_AGENDA}
+  +              agenda={agendaOggi}
+                 totalePazienti={pazienti.length}
+                 loadingPazienti={loadingPazienti}
+                 onNavigate={navigate}
+  +              onOpenConsegneAperte={openConsegneAperte}
+                 onSelectPaziente={goToPazienteByNome}
+                 cartelle={cartelle}
+                 pazienti={pazienti}
+  +76 -14
+
+frontend/src/app-additions.css
+  @@ -705,7 +705,7 @@
+  -  padding: 14px 20px 12px;
+  +  padding: 8px 20px 8px;
+     background: var(--surface);
+     border-bottom: 1px solid var(--border);
+     flex-shrink: 0;
+  @@ -915,7 +915,7 @@
+  -  padding: 6px 20px;
+  +  padding: 4px 20px;
+     background: var(--surface-raised);
+     border-bottom: 1px solid var(--divider);
+     font-size: 11px;
+  @@ -935,7 +935,7 @@
+  -  padding: 10px 20px 8px;
+  +  padding: 6px 20px 6px;
+     background: var(--bg);
+     border-bottom: 1px solid var(--border);
+     flex-shrink: 0;
+  @@ -945,7 +945,7 @@
+  -  margin-bottom: 6px;
+  +  margin-bottom: 4px;
+   }
+   
+   .agt-occ-stats {
+  @@ -1060,10 +1060,10 @@
+  -  padding: 8px 10px;
+  +  padding: 5px 9px;
+     display: flex;
+     flex-direction: column;
+  -  gap: 4px;
+  +  gap: 3px;
+     min-height: 56px;
+     cursor: pointer;
+     transition:
+  @@ -1162,16 +1162,16 @@
+  -  min-height: 52px;
+  +  min-height: 40px;
+     transition: background 0.1s;
+   }
+   
+   .agt-slot--hour {
+  -  min-height: 64px;
+  +  min-height: 48px;
+     border-bottom: 1.5px solid var(--border);
+   }
+   .agt-slot--half {
+  -  min-height: 44px;
+  +  min-height: 32px;
+   }
+   
+   .agt-slot__time {
+  @@ -1180,7 +1180,7 @@
+  -  padding: 10px 8px 0 14px;
+  +  padding: 6px 8px 0 14px;
+     line-height: 1;
+     letter-spacing: 0.02em;
+   }
+  @@ -1221,7 +1221,7 @@
+  -  min-height: 28px;
+  +  min-height: 22px;
+   }
+   
+   .agt-free-slot__plus {
+  @@ -1334,7 +1334,7 @@
+  -  min-height: 44px;
+  +  min-height: 34px;
+     line-height: 1;
+     display: flex;
+     align-items: flex-start;
+  @@ -1342,7 +1342,7 @@
+  -  min-height: 56px;
+  +  min-height: 42px;
+     border-bottom: 1.5px solid var(--border);
+   }
+   
+  @@ -1351,14 +1351,14 @@
+  -  min-height: 44px;
+  +  min-height: 34px;
+     cursor: pointer;
+     transition: background 0.1s;
+     background: #f7fafc;
+   }
+   
+   .agt-admin-cell.hour {
+  -  min-height: 56px;
+  +  min-height: 42px;
+     border-bottom: 1.5px solid var(--border);
+   }
+   
+  @@ -1373,7 +1373,7 @@
+  -  min-height: 36px;
+  +  min-height: 26px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+  @@ -9585,3 +9585,191 @@ textarea.form-input {
+  +
+  +/* ── #280: import therapy review — real manual form per detected row ───────── */
+  +.discharge-therapy-review__title {
+  +  font-size: 15px;
+  +  font-weight: 700;
+  +  color: var(--text);
+  +  margin: 0 0 8px;
+  +}
+  +.discharge-therapy-review__alert {
+  +  font-size: 13px;
+  +  color: var(--red);
+  +  background: var(--red-bg);
+  +  border-radius: 8px;
+  +  padding: 8px 12px;
+  +  margin: 0 0 12px;
+  +}
+  +.discharge-therapy-review__item {
+  +  border: 1px solid var(--border);
+  +  border-radius: 12px;
+  +  padding: 14px 16px;
+  +  margin: 0 0 14px;
+  +  background: var(--surface, #fff);
+  +}
+  +.discharge-therapy-review__item-head {
+  +  display: flex;
+  +  align-items: center;
+  +  gap: 10px;
+  +  margin-bottom: 8px;
+  +}
+  +.discharge-therapy-review__item-head strong {
+  +  font-size: 14px;
+  +  color: var(--text);
+  +}
+  +.discharge-therapy-review__badge {
+  +  font-size: 11px;
+  +  font-weight: 700;
+  +  border-radius: 999px;
+  +  padding: 2px 10px;
+  +}
+  +.discharge-therapy-review__badge.is-verify {
+  +  background: var(--red-bg);
+  +  color: var(--red);
+  +}
+  +.discharge-therapy-review__badge.is-ok {
+  +  background: var(--blue-bg, #e8f0fe);
+  +  color: var(--blue);
+  +}
+  +.discharge-therapy-review__original {
+  +  margin: 0 0 12px;
+  +  padding: 8px 12px;
+  +  border-left: 3px solid var(--blue);
+  +  background: var(--bg);
+  +  border-radius: 0 8px 8px 0;
+  +  font-size: 13px;
+  +  line-height: 1.5;
+  +  color: var(--text-muted);
+
+... (more changes truncated)
+  +72 -16
+[full diff: rtk git diff --no-compact]
