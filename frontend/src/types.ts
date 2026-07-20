@@ -103,7 +103,7 @@ export const OPERATOR_COLOR_PALETTE = [
   '#DC2626',
   '#8B5CF6',
   '#059669',
-  '#C77700',
+  '#0EA5E9',
   '#EF4444',
   '#06B6D4',
 ];
@@ -117,6 +117,7 @@ export interface Operatore {
   telefono: string;
   reparto: string;
   stato: StatoOperatore;
+  qualifica?: string;
   pazientiAssegnati: number;
   appuntamentiOggi: number;
   iniziali: string;

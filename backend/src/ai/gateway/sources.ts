@@ -90,3 +90,15 @@ export function roomOccupancySource(exactText?: string, recordedAt?: string): So
     recordedAt,
   };
 }
+
+// Fase 1b: staff roster — facility-level organisational data (no patient owns this result).
+export function staffSource(exactText?: string, recordedAt?: string): SourceReference {
+  return {
+    sourceType: 'STAFF',
+    patientId: '',
+    recordId: 'staff-list',
+    label: 'Personale della struttura',
+    exactText,
+    recordedAt,
+  };
+}

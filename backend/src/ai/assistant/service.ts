@@ -7,7 +7,7 @@ import { prisma } from '../../lib/prisma.js';
 import * as svc from '../gateway/services.js';
 import { canCrossPatientSearch, canFacilityRead } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
-import { appointmentSource, roomOccupancySource } from '../gateway/sources.js';
+import { appointmentSource, roomOccupancySource, staffSource } from '../gateway/sources.js';
 import {
   planQuery,
   extractPatientName,
@@ -181,6 +181,31 @@ async function roomsOccupancy(
         new Date().toISOString(),
       ),
     ],
+  };
+}
+
+/** Fase 1b: staff roster (User+Operator) — organisational data only (fullName/ruolo/qualifica/
+ *  reparto/stato), NEVER patient data. Facility-level read behind the same canFacilityRead gate
+ *  as rooms_occupancy; email/phone are deliberately not exposed to the assistant. */
+async function staffList(
+  env: NodeJS.ProcessEnv,
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+  if (!canFacilityRead(env))
+    throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
+  const operators = await prisma.operator.findMany({
+    include: { user: true },
+    orderBy: { createdAt: 'asc' },
+  });
+  const data = operators.map((op) => ({
+    fullName: op.user.fullName,
+    ruolo: op.ruolo ?? null,
+    qualifica: op.qualifica ?? null,
+    reparto: op.department ?? null,
+    stato: op.user.isActive ? 'attivo' : 'inattivo',
+  }));
+  return {
+    data,
+    sourceRefs: [staffSource(`${data.length} operatori censiti`, new Date().toISOString())],
   };
 }
 
@@ -379,6 +404,8 @@ async function dispatch(
       return await appointmentsToday(ctx);
     case 'query_rooms_occupancy':
       return await roomsOccupancy(env);
+    case 'query_staff_list':
+      return await staffList(env);
     case 'query_data':
       return await dispatchQueryData((args as { plan?: unknown }).plan, ctx);
     default:

@@ -25,7 +25,6 @@ import type {
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import {
-  MOCK_OPERATORI,
   MOCK_AGENDA,
   MOCK_SCHEDULES,
   createDefaultCartella,
@@ -163,7 +162,7 @@ export default function App() {
   const [pendingModuleTab, setPendingModuleTab] = useState<TabId | undefined>(undefined);
 
   // Mock state
-  const [operatori, setOperatori] = useState<Operatore[]>(MOCK_OPERATORI);
+  const [operatori, setOperatori] = useState<Operatore[]>([]);
   const [consegne, setConsegne] = useState<Consegna[]>([]);
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
@@ -387,6 +386,21 @@ export default function App() {
     loadCamere();
     // Load consegne from API (persisted handover cards)
     void loadConsegne();
+    // Fase 1b: operatori reali dal backend (niente più mock); iniziali/colore client-derived
+    fetch(`${API_URL}/operators`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: Omit<Operatore, 'iniziali' | 'colore'>[]) =>
+        setOperatori(
+          data.map((row, i) => ({
+            ...row,
+            iniziali: `${row.nome[0] ?? ''}${row.cognome[0] ?? ''}`.toUpperCase(),
+            colore: OPERATOR_COLOR_PALETTE[i % OPERATOR_COLOR_PALETTE.length],
+          })),
+        ),
+      )
+      .catch(() => {
+        /* keep empty array */
+      });
     // Load note/messaggi from API (persisted)
     fetch(`${API_URL}/notes`)
       .then((r) => (r.ok ? r.json() : []))
@@ -439,47 +453,70 @@ export default function App() {
     setNavKey('login');
   }
 
-  // ── Operatori CRUD ──────────────────────────────────────────────────────────
+  // ── Operatori CRUD (API-persisted, Fase 1b) ────────────────────────────────
+  // Il backend restituisce righe già nella forma `Operatore` SENZA iniziali/colore:
+  // derivati client-side (iniziali da nome+cognome, colore dalla palette per indice).
 
-  function addOperatore(
-    op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>,
-  ) {
-    const usedColors = operatori.map((o) => o.colore);
-    const colore =
-      op.colore ||
-      (OPERATOR_COLOR_PALETTE.find((c) => !usedColors.includes(c)) ?? OPERATOR_COLOR_PALETTE[0]);
-    setOperatori((prev) => [
-      ...prev,
-      {
-        ...op,
-        colore,
-        id: crypto.randomUUID(),
-        pazientiAssegnati: 0,
-        appuntamentiOggi: 0,
-        iniziali: `${op.nome[0]}${op.cognome[0]}`.toUpperCase(),
-      },
-    ]);
+  type OperatoreApi = Omit<Operatore, 'iniziali' | 'colore'>;
+
+  function decorateOperatore(row: OperatoreApi, index: number, colore?: string): Operatore {
+    return {
+      ...row,
+      iniziali: `${row.nome[0] ?? ''}${row.cognome[0] ?? ''}`.toUpperCase(),
+      colore: colore || OPERATOR_COLOR_PALETTE[index % OPERATOR_COLOR_PALETTE.length],
+    };
   }
 
-  function updateOperatore(id: string, updates: Partial<Operatore>) {
-    setOperatori((prev) =>
-      prev.map((o) => {
-        if (o.id !== id) return o;
-        const updated = { ...o, ...updates };
-        if (updates.nome || updates.cognome) {
-          updated.iniziali = `${updated.nome[0]}${updated.cognome[0]}`.toUpperCase();
-        }
-        return updated;
-      }),
-    );
+  async function addOperatore(
+    op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>,
+  ) {
+    try {
+      const res = await fetch(`${API_URL}/operators`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(op),
+      });
+      if (!res.ok) {
+        const err = (await res.json().catch(() => null)) as { error?: string } | null;
+        showToast(err?.error ?? "Impossibile creare l'operatore");
+        return;
+      }
+      const created = (await res.json()) as OperatoreApi;
+      setOperatori((prev) => [...prev, decorateOperatore(created, prev.length, op.colore)]);
+      showToast('Operatore creato');
+    } catch {
+      showToast("Impossibile creare l'operatore");
+    }
+  }
+
+  async function updateOperatore(id: string, updates: Partial<Operatore>) {
+    try {
+      const res = await fetch(`${API_URL}/operators/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) {
+        const err = (await res.json().catch(() => null)) as { error?: string } | null;
+        showToast(err?.error ?? "Impossibile aggiornare l'operatore");
+        return;
+      }
+      const saved = (await res.json()) as OperatoreApi;
+      setOperatori((prev) =>
+        prev.map((o, i) =>
+          o.id === id ? decorateOperatore(saved, i, updates.colore ?? o.colore) : o,
+        ),
+      );
+      showToast('Operatore aggiornato');
+    } catch {
+      showToast("Impossibile aggiornare l'operatore");
+    }
   }
 
   function toggleStatoOperatore(id: string) {
-    setOperatori((prev) =>
-      prev.map((o) =>
-        o.id === id ? { ...o, stato: o.stato === 'attivo' ? 'inattivo' : 'attivo' } : o,
-      ),
-    );
+    const current = operatori.find((o) => o.id === id);
+    if (!current) return;
+    void updateOperatore(id, { stato: current.stato === 'attivo' ? 'inattivo' : 'attivo' });
   }
 
   // ── Consegne CRUD ───────────────────────────────────────────────────────────

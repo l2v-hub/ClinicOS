@@ -16,8 +16,13 @@ const SHARED: ReadonlySet<AssistantIntent> = new Set([
   'refuse_clinical',
 ]);
 
-// Management/facility domain: structure & operations (aggregate rooms/occupancy, DSL facility reads).
-const FACILITY_ONLY: ReadonlySet<AssistantIntent> = new Set(['rooms_occupancy', 'data_query']);
+// Management/facility domain: structure & operations (aggregate rooms/occupancy, DSL facility
+// reads, staff roster — Fase 1b).
+const FACILITY_ONLY: ReadonlySet<AssistantIntent> = new Set([
+  'rooms_occupancy',
+  'data_query',
+  'staff_list',
+]);
 
 // Clinical/nursing domain: the patient-centric reads.
 const CLINICAL_ONLY: ReadonlySet<AssistantIntent> = new Set([

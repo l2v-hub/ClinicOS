@@ -22,6 +22,7 @@ const FORM_VUOTO = {
   telefono: '',
   reparto: '',
   stato: 'attivo' as StatoOperatore,
+  qualifica: '',
   colore: OPERATOR_COLOR_PALETTE[0],
   note: '',
 };
@@ -60,7 +61,12 @@ function operatoriColumns(
         { value: 'infermiere', label: 'Infermiere' },
         { value: 'coordinatore', label: 'Coordinatore' },
       ],
-      render: (v) => <span className="cell--muted">{ruoloLabel[v as RuoloOperatore]}</span>,
+      render: (_v, op) => (
+        <span className="cell--muted">
+          {ruoloLabel[op.ruolo]}
+          {op.qualifica ? ` · ${op.qualifica}` : ''}
+        </span>
+      ),
     },
     {
       key: 'reparto',
@@ -164,6 +170,7 @@ export function OperatorManagement({
       telefono: op.telefono,
       reparto: op.reparto,
       stato: op.stato,
+      qualifica: op.qualifica ?? '',
       colore: op.colore,
       note: op.note ?? '',
     });
@@ -171,7 +178,8 @@ export function OperatorManagement({
   }
 
   function salva() {
-    if (!form.nome.trim() || !form.cognome.trim()) return;
+    // email obbligatoria: lato backend l'operatore è uno User (email unica)
+    if (!form.nome.trim() || !form.cognome.trim() || !form.email.trim()) return;
     if (editId) {
       onUpdate(editId, form);
     } else {
@@ -254,6 +262,15 @@ export function OperatorManagement({
               </select>
             </div>
             <div className="form-field">
+              <label className="form-label">Qualifica</label>
+              <input
+                className="form-input"
+                value={form.qualifica}
+                onChange={(e) => setForm((p) => ({ ...p, qualifica: e.target.value }))}
+                placeholder="Es. OSS, Fisioterapista, Specialista…"
+              />
+            </div>
+            <div className="form-field">
               <label className="form-label">Reparto</label>
               <input
                 className="form-input"
@@ -263,7 +280,7 @@ export function OperatorManagement({
               />
             </div>
             <div className="form-field">
-              <label className="form-label">Email</label>
+              <label className="form-label">Email *</label>
               <input
                 className="form-input"
                 type="email"

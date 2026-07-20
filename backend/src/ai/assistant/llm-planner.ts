@@ -72,6 +72,7 @@ const INTENTS = new Set<AssistantIntent>([
   'appointments',
   'correlate',
   'patient_search',
+  'staff_list',
   'refuse_clinical',
   'data_query',
   'unknown',
