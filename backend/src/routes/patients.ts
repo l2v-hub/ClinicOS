@@ -1,5 +1,6 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
 
 const router = Router();
 
@@ -719,6 +720,7 @@ router.post('/', async (req, res) => {
     lastName?: string;
     dateOfBirth?: string;
     sex?: string;
+    codiceFiscale?: string;
     email?: string;
     phone?: string;
     address?: string;
@@ -741,11 +743,29 @@ router.post('/', async (req, res) => {
     return;
   }
 
+  // #294: il CF è la chiave univoca del paziente — obbligatorio e formalmente valido.
+  const codiceFiscale = normalizeCodiceFiscale(body.codiceFiscale);
+  if (!isValidCodiceFiscale(codiceFiscale)) {
+    res.status(400).json({
+      error: 'Codice fiscale mancante o non valido (16 caratteri, carattere di controllo)',
+    });
+    return;
+  }
+  const existing = await prisma.patient.findUnique({ where: { codiceFiscale } });
+  if (existing) {
+    res.status(409).json({
+      error: 'Codice fiscale già presente',
+      existingPatientId: existing.id,
+    });
+    return;
+  }
+
   const buildData = (mrn: string) => ({
     medicalRecordNumber: mrn,
     firstName: body.firstName!.trim(),
     lastName: body.lastName!.trim(),
     dateOfBirth: new Date(body.dateOfBirth!),
+    codiceFiscale,
     ...(body.sex !== undefined && { sex: body.sex }),
     ...(body.email !== undefined && { email: body.email }),
     ...(body.phone !== undefined && { phone: body.phone }),
@@ -765,8 +785,14 @@ router.post('/', async (req, res) => {
     );
     res.status(201).json(patient);
   } catch (error: unknown) {
-    const prismaError = error as { code?: string };
+    const prismaError = error as { code?: string; meta?: { target?: string[] } };
     if (prismaError.code === 'P2002') {
+      // #294: distinguish which unique constraint tripped — a CF race is a real
+      // conflict (409), only an MRN collision justifies the retry with a new MRN.
+      if (prismaError.meta?.target?.includes('codiceFiscale')) {
+        res.status(409).json({ error: 'Codice fiscale già presente' });
+        return;
+      }
       try {
         const patient = await prisma.patient.create({
           data: buildData(`MRN-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`),
@@ -807,6 +833,23 @@ router.patch('/:id', async (req, res) => {
     }
   }
 
+  // #294: CF aggiornabile solo con un valore valido; mai azzerabile da qui.
+  if (req.body.codiceFiscale !== undefined) {
+    const cf = normalizeCodiceFiscale(req.body.codiceFiscale);
+    if (!isValidCodiceFiscale(cf)) {
+      res.status(400).json({
+        error: 'Codice fiscale non valido (16 caratteri, carattere di controllo)',
+      });
+      return;
+    }
+    const other = await prisma.patient.findUnique({ where: { codiceFiscale: cf } });
+    if (other && other.id !== id) {
+      res.status(409).json({ error: 'Codice fiscale già presente', existingPatientId: other.id });
+      return;
+    }
+    updates.codiceFiscale = cf;
+  }
+
   if (Object.keys(updates).length === 0) {
     res.status(400).json({ error: 'Nessun campo da aggiornare' });
     return;
@@ -817,9 +860,14 @@ router.patch('/:id', async (req, res) => {
     console.log(`PATCH /patients/${id} → aggiornato`);
     res.status(200).json(patient);
   } catch (error: unknown) {
-    const prismaError = error as { code?: string };
+    const prismaError = error as { code?: string; meta?: { target?: string[] } };
     if (prismaError.code === 'P2025') {
       res.status(404).json({ error: 'Paziente non trovato' });
+    } else if (
+      prismaError.code === 'P2002' &&
+      prismaError.meta?.target?.includes('codiceFiscale')
+    ) {
+      res.status(409).json({ error: 'Codice fiscale già presente' });
     } else {
       console.error('PATCH /patients/:id error:', error);
       res.status(500).json({ error: 'Errore durante aggiornamento paziente' });

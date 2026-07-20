@@ -2,12 +2,17 @@
 // Mirrors the field set of NewPatientModal's TabAnagrafica + referente section.
 // No fetches here — the parent IntakeWorkspace owns patchDraft.
 
+import { useState } from 'react';
+import { computeCF, isValidCF } from '../../../lib/codiceFiscale';
+
 interface AnagraficaData {
   firstName?: string;
   lastName?: string;
   dateOfBirth?: string;
   sex?: string;
   codiceFiscale?: string;
+  /** #294: comune di nascita — usato solo per calcolare il CF quando non digitato. */
+  comuneNascita?: string;
   phone?: string;
   email?: string;
   address?: string;
@@ -87,11 +92,33 @@ function NpmField({
 
 export function StepAnagrafica({ value, onChange, submitAttempted = false }: StepAnagraficaProps) {
   const f = (key: keyof AnagraficaData) => field(value, onChange, key);
+  const [cfComputeError, setCfComputeError] = useState<string | null>(null);
 
   const errors: Partial<Record<keyof AnagraficaData, string>> = {};
   if (submitAttempted && !value.firstName?.trim()) errors.firstName = 'Nome obbligatorio';
   if (submitAttempted && !value.lastName?.trim()) errors.lastName = 'Cognome obbligatorio';
   if (submitAttempted && !value.dateOfBirth) errors.dateOfBirth = 'Data di nascita obbligatoria';
+  // #294: CF obbligatorio — digitato valido oppure calcolato dai dati.
+  if (submitAttempted && !isValidCF(value.codiceFiscale ?? ''))
+    errors.codiceFiscale = value.codiceFiscale?.trim()
+      ? 'Codice fiscale non valido (16 caratteri, carattere di controllo)'
+      : 'Codice fiscale obbligatorio: digitalo o usa "Calcola"';
+
+  function calcolaCF() {
+    const r = computeCF({
+      nome: value.firstName ?? '',
+      cognome: value.lastName ?? '',
+      sesso: value.sex ?? 'M',
+      dataNascita: value.dateOfBirth ?? '',
+      comuneNascita: value.comuneNascita ?? '',
+    });
+    if (r.ok) {
+      setCfComputeError(null);
+      onChange({ ...value, codiceFiscale: r.cf });
+    } else {
+      setCfComputeError(r.error);
+    }
+  }
 
   return (
     <>
@@ -130,15 +157,39 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               <option value="—">Non specificato</option>
             </select>
           </NpmField>
-          <NpmField label="Codice fiscale" span2 hint="Maiuscolo — 16 caratteri">
+          <NpmField label="Comune di nascita" hint="Usato per calcolare il CF">
             <input
-              className="npm-input npm-mono"
-              value={value.codiceFiscale ?? ''}
-              onChange={f('codiceFiscale')}
-              placeholder="RSSMRA80A01H501U"
-              maxLength={16}
-              style={{ textTransform: 'uppercase' }}
+              className="npm-input"
+              value={value.comuneNascita ?? ''}
+              onChange={f('comuneNascita')}
+              placeholder="Roma"
             />
+          </NpmField>
+          <NpmField
+            label="Codice fiscale"
+            required
+            span2
+            error={errors.codiceFiscale ?? cfComputeError ?? undefined}
+            hint="Digitalo, oppure compila sesso + data + comune di nascita e premi Calcola"
+          >
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input
+                className={`npm-input npm-mono${errors.codiceFiscale ? ' npm-input--error' : ''}`}
+                value={value.codiceFiscale ?? ''}
+                onChange={f('codiceFiscale')}
+                placeholder="RSSMRA80A01H501U"
+                maxLength={16}
+                style={{ textTransform: 'uppercase', flex: 1 }}
+              />
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={calcolaCF}
+                title="Calcola il codice fiscale dai dati inseriti"
+              >
+                Calcola
+              </button>
+            </div>
           </NpmField>
         </div>
       </NpmCard>

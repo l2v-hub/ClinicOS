@@ -52,6 +52,9 @@ const patientIds = [],
   draftIds = [];
 let failed = false;
 try {
+  // #294: local re-runs against a persistent DB — free the unique CF first.
+  await prisma.patient.deleteMany({ where: { codiceFiscale: 'SNTTHR55P09H501Y' } });
+
   // 1. Seed a review-ready import job carrying a therapy narrative.
   const job = await prisma.importJob.create({
     data: {
@@ -125,7 +128,14 @@ try {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      patient: { firstName: 'E2ETher', lastName: 'Sintetico', dateOfBirth: '1955-09-09', sex: 'M' },
+      patient: {
+        firstName: 'E2ETher',
+        lastName: 'Sintetico',
+        dateOfBirth: '1955-09-09',
+        sex: 'M',
+        // #294: CF sintetico valido — chiave univoca obbligatoria alla creazione.
+        codiceFiscale: 'SNTTHR55P09H501Y',
+      },
       cartella: { statoRicovero: 'ricoverato' },
       therapies,
     }),

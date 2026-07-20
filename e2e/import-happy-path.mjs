@@ -25,6 +25,8 @@ const VIEWPORTS = [
     height: 768,
     allergyStatus: 'paziente_nega',
     allergyLabel: 'Paziente nega allergie',
+    // #294: CF sintetico valido, distinto per viewport (chiave univoca a DB).
+    cf: 'SNTDSK55P09H501W',
   },
   {
     name: 'tablet',
@@ -32,8 +34,27 @@ const VIEWPORTS = [
     height: 768,
     allergyStatus: 'assenti',
     allergyLabel: 'Allergie assenti (verificato)',
+    cf: 'SNTTBL55P09H501B',
   },
 ];
+
+// #294: local re-runs against a persistent DB — free the unique CFs first via the
+// test-only delete route (CI DBs are fresh, this is a no-op there).
+async function freeCfs() {
+  try {
+    const res = await fetch(`${BACKEND}/patients`);
+    const patients = await res.json();
+    if (!Array.isArray(patients)) return;
+    const cfs = new Set(VIEWPORTS.map((v) => v.cf));
+    for (const p of patients) {
+      if (p.codiceFiscale && cfs.has(p.codiceFiscale)) {
+        await fetch(`${BACKEND}/patients/${p.id}`, { method: 'DELETE' }).catch(() => {});
+      }
+    }
+  } catch {
+    /* best-effort */
+  }
+}
 
 /** Navigate from the SPA root to the operator patient list. */
 async function gotoPatientList(page) {
@@ -45,6 +66,7 @@ async function gotoPatientList(page) {
   await page.waitForTimeout(900);
 }
 
+await freeCfs();
 const browser = await chromium.launch();
 let failures = 0;
 try {
@@ -100,10 +122,12 @@ try {
       await page.screenshot({ path: resolve(outDir, `${tag}-2-review.png`) });
 
       // Modifica: fill the required anagrafica fields (synthetic; the mock extraction is empty).
-      // Field order (ANAG_PREFILL): Nome, Cognome, Data di nascita(type=date), Sesso, ...
+      // Field order (ANAG_PREFILL): Nome, Cognome, Data di nascita(type=date), Sesso,
+      // Codice fiscale, Indirizzo, Telefono, Email — text inputs: 0=Nome 1=Cognome 2=Sesso 3=CF.
       await demo.locator('input[type=text]').nth(0).fill('E2E'); // Nome
       await demo.locator('input[type=text]').nth(1).fill(lastName); // Cognome (unique per viewport)
       await demo.locator('input[type=date]').first().fill('1955-09-09'); // Data di nascita
+      await demo.locator('input[type=text]').nth(3).fill(vp.cf); // #294: CF (chiave univoca)
       await page.waitForTimeout(300);
       await page.screenshot({ path: resolve(outDir, `${tag}-3-prefilled.png`) });
 

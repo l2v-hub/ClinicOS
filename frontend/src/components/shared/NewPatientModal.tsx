@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import type { NuovoPaziente, Operatore, Camera } from '../../types';
 import { IcoX, IcoCheck } from '../../icons';
 import { DischargeLetterImport } from './DischargeLetterImport';
+import { computeCF, isValidCF } from '../../lib/codiceFiscale';
 
 // ── Local types ───────────────────────────────────────────────────────────────
 
@@ -46,6 +47,7 @@ const FORM_VUOTO: NuovoPaziente = {
   dateOfBirth: '',
   sex: 'M',
   codiceFiscale: '',
+  comuneNascita: '',
   phone: '',
   email: '',
   address: '',
@@ -172,8 +174,35 @@ export function NewPatientModal({
     errors.lastName = 'Cognome obbligatorio';
   if ((submitAttempted || touched.has('dateOfBirth')) && !form.dateOfBirth)
     errors.dateOfBirth = 'Data di nascita obbligatoria';
+  // #294: CF obbligatorio — digitato valido oppure calcolato dai dati.
+  if ((submitAttempted || touched.has('codiceFiscale')) && !isValidCF(form.codiceFiscale))
+    errors.codiceFiscale = form.codiceFiscale.trim()
+      ? 'Codice fiscale non valido (16 caratteri, carattere di controllo)'
+      : 'Codice fiscale obbligatorio: digitalo o usa "Calcola"';
 
-  const hasErrors = !form.firstName.trim() || !form.lastName.trim() || !form.dateOfBirth;
+  const hasErrors =
+    !form.firstName.trim() ||
+    !form.lastName.trim() ||
+    !form.dateOfBirth ||
+    !isValidCF(form.codiceFiscale);
+
+  const [cfComputeError, setCfComputeError] = useState<string | null>(null);
+  function calcolaCF() {
+    const r = computeCF({
+      nome: form.firstName,
+      cognome: form.lastName,
+      sesso: form.sex,
+      dataNascita: form.dateOfBirth,
+      comuneNascita: form.comuneNascita ?? '',
+    });
+    if (r.ok) {
+      setCfComputeError(null);
+      setForm((p) => ({ ...p, codiceFiscale: r.cf }));
+      setTouched((prev) => new Set(prev).add('codiceFiscale'));
+    } else {
+      setCfComputeError(r.error);
+    }
+  }
 
   function handleImportApply(data: Partial<NuovoPaziente>) {
     setForm((prev) => {
@@ -272,15 +301,40 @@ export function NewPatientModal({
                 <option value="—">Non specificato</option>
               </select>
             </NpmField>
-            <NpmField label="Codice fiscale" span2 hint="Maiuscolo — 16 caratteri">
+            <NpmField label="Comune di nascita" hint="Usato per calcolare il CF">
               <input
-                className="npm-input npm-mono"
-                value={form.codiceFiscale}
-                onChange={f('codiceFiscale')}
-                placeholder="RSSMRA80A01H501U"
-                maxLength={16}
-                style={{ textTransform: 'uppercase' }}
+                className="npm-input"
+                value={form.comuneNascita ?? ''}
+                onChange={f('comuneNascita')}
+                placeholder="Roma"
               />
+            </NpmField>
+            <NpmField
+              label="Codice fiscale"
+              required
+              span2
+              error={errors.codiceFiscale ?? cfComputeError ?? undefined}
+              hint="Digitalo, oppure compila sesso + data + comune di nascita e premi Calcola"
+            >
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input
+                  className={`npm-input npm-mono${errors.codiceFiscale ? ' npm-input--error' : ''}`}
+                  value={form.codiceFiscale}
+                  onChange={f('codiceFiscale')}
+                  onBlur={blur('codiceFiscale')}
+                  placeholder="RSSMRA80A01H501U"
+                  maxLength={16}
+                  style={{ textTransform: 'uppercase', flex: 1 }}
+                />
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={calcolaCF}
+                  title="Calcola il codice fiscale dai dati inseriti"
+                >
+                  Calcola
+                </button>
+              </div>
             </NpmField>
           </div>
         </NpmCard>
@@ -816,7 +870,8 @@ export function NewPatientModal({
                 <line x1="12" y1="8" x2="12" y2="12" />
                 <line x1="12" y1="16" x2="12.01" y2="16" />
               </svg>
-              Compila i campi obbligatori: Nome, Cognome e Data di nascita (tab Anagrafica)
+              Compila i campi obbligatori: Nome, Cognome, Data di nascita e Codice fiscale (tab
+              Anagrafica)
             </div>
           )}
           {activeTab === 'anagrafica' && TabAnagrafica()}
@@ -860,7 +915,7 @@ export function NewPatientModal({
               disabled={isSaving}
               title={
                 hasErrors && !submitAttempted
-                  ? 'Compila Nome, Cognome e Data di nascita'
+                  ? 'Compila Nome, Cognome, Data di nascita e Codice fiscale'
                   : undefined
               }
             >

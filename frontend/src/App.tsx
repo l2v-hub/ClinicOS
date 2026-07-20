@@ -882,6 +882,8 @@ export default function App() {
       firstName: np.firstName.trim(),
       lastName: np.lastName.trim(),
       dateOfBirth: np.dateOfBirth,
+      // #294: chiave univoca del paziente — obbligatoria per il backend.
+      codiceFiscale: np.codiceFiscale.trim().toUpperCase(),
     };
     if (np.sex) payload.sex = np.sex;
     if (np.email.trim()) payload.email = np.email.trim();
@@ -908,6 +910,8 @@ export default function App() {
 
     // Seed cartella from form fields not persisted in backend
     const cartellaInit: Partial<CartellaPaziente> = {};
+    // #294: il CF resta visibile anche nella cartella (la colonna Patient è la chiave).
+    cartellaInit.codiceFiscale = payload.codiceFiscale;
     if (np.camera) {
       // Issue #128: crea anche l'assegnazione letto reale, non solo il dato in cartella
       const sync = await syncCameraAssignment(newP.id, np.camera, np.letto);

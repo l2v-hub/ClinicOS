@@ -70,7 +70,11 @@ try {
     dateOfBirth: '1955-09-09',
     sex: 'M',
     phone: '000',
+    // #294: CF sintetico valido — chiave univoca obbligatoria alla creazione.
+    codiceFiscale: 'SNTZTS55P09H501C',
   };
+  // #294: local re-runs against a persistent DB — free the unique CF first.
+  await prisma.patient.deleteMany({ where: { codiceFiscale: SYNTH.codiceFiscale } });
   res = await af(`${base}/${jobId}/confirm`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
