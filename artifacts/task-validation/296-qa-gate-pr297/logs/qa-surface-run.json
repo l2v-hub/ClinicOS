@@ -1,0 +1,14 @@
+{
+  "totalPass": 18,
+  "totalFail": 0,
+  "tests296": 5,
+  "oldRowCount": 13,
+  "oldSpurious": 3,
+  "newRowCount": 10,
+  "newSpurious": 0,
+  "oldSpuriousNames": [
+    "SI",
+    "PROSEGUIRE",
+    "IN"
+  ]
+}

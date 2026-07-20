@@ -1,0 +1,23 @@
+RSSMRA80A01H501U  valid=true  (canonical doc example (unit test))
+NTKSNT70A01H501G  valid=true  (intake-confirm.test.ts)
+BNCGLI62L54H501N  valid=true  (confirm-draft-guards.test.ts)
+BNCNNA60A41H501N  valid=true  (confirm-draft-therapy.test.ts)
+SNTZTS55P09H501C  valid=true  (e2e/import-e2e.mjs)
+SNTDSK55P09H501W  valid=true  (e2e/import-happy-path desktop)
+SNTTBL55P09H501B  valid=true  (e2e/import-happy-path tablet)
+TRGMCK70A01H501H  valid=true  (e2e/new-vs-existing SYNTH)
+TRGMCK70A01L219Z  valid=true  (e2e/new-vs-existing SYNTH_ALT_CF)
+SNTTHR55P09H501Y  valid=true  (e2e/therapy-import-api.mjs)
+FRLFBA48E12H501N  valid=true  (scripts/e2e-full-patient-api-test.ts (new))
+FRLFBA48E12H501X  valid=false  (patients.ts demo-setup cartella (old value, pre-existing))
+--- edge cases ---
+lowercase+spaces: true
+15 chars: false
+17 chars: false
+wrong month Z: false
+wrong checksum: false
+omocodia variant RSSMRA80A01H50MM valid= true
+syntheticCF 1784579982294 QAETST64E03H294A valid= true
+syntheticCF 12345 QAETST35E15H345B valid= true
+syntheticCF 999999 QAETST89E12H999K valid= true
+normalize check: true

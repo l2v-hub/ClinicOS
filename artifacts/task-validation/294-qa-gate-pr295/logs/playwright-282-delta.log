@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › qa-evidence\tests\issue-282.spec.ts:13:5 › #282 creazione paziente: gate sbloccabile allo step finale + creazione persistente (9.9s)
+
+  1 passed (11.3s)

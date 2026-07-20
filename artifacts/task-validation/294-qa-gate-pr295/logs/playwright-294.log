@@ -1,0 +1,93 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 [chromium] › qa-evidence\tests\issue-294.spec.ts:29:5 › #294 CF calcolato dai dati + creazione persistente con CF in colonna (23.8s)
+  ✘  2 [chromium] › qa-evidence\tests\issue-294.spec.ts:92:5 › #294 CF duplicato rifiutato alla conferma (non forzabile) (5.4s)
+
+
+  1) [chromium] › qa-evidence\tests\issue-294.spec.ts:29:5 › #294 CF calcolato dai dati + creazione persistente con CF in colonna 
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /Avanti/i })
+        - locator resolved to <button disabled class="btn-primary">Avanti →</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        28 × waiting for element to be visible, enabled and stable
+           - element is not enabled
+         - retrying click action
+           - waiting 500ms
+
+
+      34 |
+      35 |   // AC4 (negativo): senza CF il wizard non avanza oltre lo step 1.
+    > 36 |   await page.getByRole('button', { name: /Avanti/i }).click();
+         |                                                       ^
+      37 |   await page.waitForTimeout(400);
+      38 |   await expect(page.getByPlaceholder('Mario', { exact: true })).toBeVisible();
+      39 |   await expect(page.getByText(/Codice fiscale obbligatorio/i).first()).toBeVisible();
+        at E:\Workspace\DG_SE_DEV\ClinicOS\.claude\worktrees\agent-a85baaa4c6666ff75\qa-evidence\tests\issue-294.spec.ts:36:55
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-calcolat-a7103-rsistente-con-CF-in-colonna-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-calcolat-a7103-rsistente-con-CF-in-colonna-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-calcolat-a7103-rsistente-con-CF-in-colonna-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-calcolat-a7103-rsistente-con-CF-in-colonna-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-calcolat-a7103-rsistente-con-CF-in-colonna-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa-evidence\tests\issue-294.spec.ts:92:5 › #294 CF duplicato rifiutato alla conferma (non forzabile) 
+
+    Error: CF del primo test presente
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      101 |   }[];
+      102 |   const existing = patients.find((p) => p.lastName === COGNOME);
+    > 103 |   expect(existing?.codiceFiscale, 'CF del primo test presente').toBeTruthy();
+          |                                                                 ^
+      104 |
+      105 |   // Nuovo paziente con NOME diverso ma STESSO CF → la conferma deve fallire.
+      106 |   await fillStep1(page, `${COGNOME}bis`);
+        at E:\Workspace\DG_SE_DEV\ClinicOS\.claude\worktrees\agent-a85baaa4c6666ff75\qa-evidence\tests\issue-294.spec.ts:103:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-duplicat-8b0c7-lla-conferma-non-forzabile--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-duplicat-8b0c7-lla-conferma-non-forzabile--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-duplicat-8b0c7-lla-conferma-non-forzabile--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-duplicat-8b0c7-lla-conferma-non-forzabile--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\issue-294--294-CF-duplicat-8b0c7-lla-conferma-non-forzabile--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › qa-evidence\tests\issue-294.spec.ts:29:5 › #294 CF calcolato dai dati + creazione persistente con CF in colonna 
+    [chromium] › qa-evidence\tests\issue-294.spec.ts:92:5 › #294 CF duplicato rifiutato alla conferma (non forzabile) 

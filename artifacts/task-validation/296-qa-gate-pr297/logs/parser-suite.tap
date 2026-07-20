@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: \#156 AC1/AC2: recognises therapy and yields one row per drug line
+ok 1 - \#156 AC1/AC2: recognises therapy and yields one row per drug line
+  ---
+  duration_ms: 4.8701
+  ...
+# Subtest: \#156 AC3: KEPPRA structured fields
+ok 2 - \#156 AC3: KEPPRA structured fields
+  ---
+  duration_ms: 0.2486
+  ...
+# Subtest: \#156 AC4: multiple times are all extracted
+ok 3 - \#156 AC4: multiple times are all extracted
+  ---
+  duration_ms: 0.1827
+  ...
+# Subtest: \#156 AC5: specific weekdays are captured
+ok 4 - \#156 AC5: specific weekdays are captured
+  ---
+  duration_ms: 0.1337
+  ...
+# Subtest: \#156 AC6: incomplete line kept as da_verificare, original preserved, not dropped
+ok 5 - \#156 AC6: incomplete line kept as da_verificare, original preserved, not dropped
+  ---
+  duration_ms: 0.933
+  ...
+# Subtest: \#156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA)
+ok 6 - \#156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA)
+  ---
+  duration_ms: 0.1519
+  ...
+# Subtest: \#156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly
+ok 7 - \#156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly
+  ---
+  duration_ms: 0.1624
+  ...
+# Subtest: \#156: every row keeps its original text verbatim (audit/reference)
+ok 8 - \#156: every row keeps its original text verbatim (audit/reference)
+  ---
+  duration_ms: 0.3241
+  ...
+# Subtest: \#156: blank/empty text yields no rows
+ok 9 - \#156: blank/empty text yields no rows
+  ---
+  duration_ms: 0.1829
+  ...
+# Subtest: \#274: free-text administration route is captured (per os, endovena, sottocute)
+ok 10 - \#274: free-text administration route is captured (per os, endovena, sottocute)
+  ---
+  duration_ms: 0.2857
+  ...
+# Subtest: \#274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e)
+ok 11 - \#274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e)
+  ---
+  duration_ms: 0.1974
+  ...
+# Subtest: \#274: medicinale + quantitativo + via together upgrade the row to ok
+ok 12 - \#274: medicinale + quantitativo + via together upgrade the row to ok
+  ---
+  duration_ms: 0.1349
+  ...
+# Subtest: \#274: parenthesized route codes still work (no regression)
+ok 13 - \#274: parenthesized route codes still work (no regression)
+  ---
+  duration_ms: 0.1432
+  ...
+# Subtest: \#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata)
+ok 14 - \#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata)
+  ---
+  duration_ms: 0.3323
+  ...
+# Subtest: \#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)
+ok 15 - \#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)
+  ---
+  duration_ms: 0.2266
+  ...
+# Subtest: \#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati
+ok 16 - \#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati
+  ---
+  duration_ms: 0.221
+  ...
+# Subtest: \#296 AC4: intestazione iniziale + riga vuota non termina il blocco
+ok 17 - \#296 AC4: intestazione iniziale + riga vuota non termina il blocco
+  ---
+  duration_ms: 0.1233
+  ...
+# Subtest: \#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop)
+ok 18 - \#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop)
+  ---
+  duration_ms: 0.3129
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 349.5373

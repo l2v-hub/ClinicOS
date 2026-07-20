@@ -1,0 +1,7 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:29:5 › QA-294 diag: step1 bloccato senza CF; Calcola(Imola); CF in colonna; reload (23.1s)
+  ✓  2 [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:97:5 › QA-294 diag: CF duplicato rifiutato alla conferma (400, non forzabile) (13.2s)
+
+  2 passed (43.2s)

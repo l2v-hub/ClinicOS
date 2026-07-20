@@ -1,0 +1,51 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:27:5 › QA-294 diag: step1 bloccato senza CF; Calcola(Imola); CF in colonna; reload (15.8s)
+  ✘  2 [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:95:5 › QA-294 diag: CF duplicato rifiutato alla conferma (400, non forzabile) (9.4s)
+
+
+  1) [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:95:5 › QA-294 diag: CF duplicato rifiutato alla conferma (400, non forzabile) 
+
+    Error: console errors: ["Failed to load resource: the server responded with a status of 400 (Bad Request)"]
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to load resource: the server responded with a status of 400 (Bad Request)",
+    + ]
+
+      130 |   });
+      131 |
+    > 132 |   expect(g.consoleErrors, `console errors: ${JSON.stringify(g.consoleErrors)}`).toEqual([]);
+          |                                                                                 ^
+      133 |   expect(
+      134 |     g.httpErrors.every((e) => e.includes('/confirm')),
+      135 |     `HTTP inattesi: ${JSON.stringify(g.httpErrors)}`,
+        at E:\Workspace\DG_SE_DEV\ClinicOS\.claude\worktrees\agent-a85baaa4c6666ff75\qa-evidence\tests\qa294-diagnostic.spec.ts:132:81
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:95:5 › QA-294 diag: CF duplicato rifiutato alla conferma (400, non forzabile) 
+  1 passed (29.3s)

@@ -1,0 +1,269 @@
+
+artifacts/task-validation/terapia-import-righe-vuote-delimitatore-fine/task-contract.md
+  @@ -0,0 +1,77 @@
+  +# Task Contract
+  +
+  +## Task
+  +
+  +- Title: Terapia import righe vuote delimitatore fine
+  +- Slug: terapia-import-righe-vuote-delimitatore-fine
+  +- Type: bugfix
+  +- Date: 2026-07-20
+  +- Issue: #296
+  +
+  +## Impact Classification
+  +
+  +| Area                 | Impacted |
+  +| -------------------- | -------: |
+  +| Frontend/UI          |       no |
+  +| Backend/API          |      yes |
+  +| Database/Persistence |       no |
+  +| Agnos AI / Chatbot   |       no |
+  +| Voice                |       no |
+  +| OCR / Import         |      yes |
+  +| Auth / Permissions   |       no |
+  +| Privacy / Security   |       no |
+  +| Config / Env         |       no |
+  +
+  +Solo il parser deterministico `backend/src/intake/parse-discharge-therapy.ts` (nessuna route/schema).
+  +
+  +## Current Behaviour
+  +
+  +`parseDischargeTherapy` scarta tutte le righe vuote (`splitTherapyLines`) e converte ogni riga non
+  +vuota del blocco terapia in una riga farmaco: la prosa che segue le prescrizioni (consigli,
+  +follow-up) diventa righe farmaco spurie `da_verificare` che l'operatore deve eliminare a mano.
+  +
+  +## Expected Behaviour
+  +
+  +Le righe vuote sono il delimitatore di fine terapia: il testo è segmentato in paragrafi sulle
+  +righe vuote; dopo che è stato visto contenuto farmacologico, il primo paragrafo privo di segnali
+  +farmacologici (dosaggio, quantità, via di somministrazione, orari "ore HH:MM") TERMINA la terapia
+  +— quel paragrafo e tutto ciò che segue non producono righe. I blocchi farmaci multipli separati da
+  +righe vuote restano tutti parsati; un'intestazione iniziale seguita da riga vuota non termina.
+  +
+  +## Acceptance Criteria
+  +
+  +- AC1: segmentazione in paragrafi su ≥1 riga vuota.
+  +- AC2: primo paragrafo non-farmacologico dopo contenuto farmacologico → terapia terminata, nessuna riga da lì in poi.
+  +- AC3: nessuna regressione sui fixture #156/#274 (blocco singolo, righe da_verificare conservate).
+  +- AC4: più blocchi farmaci separati da righe vuote → tutti parsati; header iniziale + riga vuota non termina.
+  +- AC5: unit test nuovi + suite backend completa verde.
+  +
+  +## Test Plan
+  +
+  +| Test type                 | Required | Reason                                                                                                                     |
+  +| ------------------------- | -------: | -------------------------------------------------------------------------------------------------------------------------- |
+  +| Unit                      |      yes | nuovi casi in `parse-discharge-therapy.test.ts` + regressione fixture                                                      |
+  +| Integration               |       no | parser puro, nessun I/O                                                                                                    |
+  +| API                       |       no | nessuna route toccata                                                                                                      |
+  +| Playwright                |       no | nessuna UI toccata; il comportamento è interamente coperto da unit deterministici sul parser puro (evidenza = output test) |
+  +| Persistence after refresh |       no | nessun dato                                                                                                                |
+  +| Agnos action registry     |       no | non toccato                                                                                                                |
+  +| Voice simulation          |       no | non toccato                                                                                                                |
+  +| OCR/import test           |      yes | il parser È il passo import (unit)                                                                                         |
+  +| Security/privacy scan     |      yes | fixture sintetiche, il modulo non logga (invariante esistente)                                                             |
+  +
+  +## Evidence Plan
+  +
+  +- validation-report.md con output dei test (unit nuovi + suite completa)
+  +
+  +## Risks
+  +
+  +- Prosa che contiene segnali farmacologici (es. "proseguire terapia per os") viene ancora inclusa:
+  +  accettato — "parla di farmaci" per definizione del requisito.
+  +- Un farmaco atipico senza alcun segnale strutturale in un paragrafo isolato dopo il delimitatore
+  +  viene interpretato come fine terapia: coerente col requisito (non "parla di farmaci" in modo
+  +  riconoscibile); la riga resta visibile nel testo originale del documento.
+  +
+  +## Gate Status
+  +
+  +READY FOR IMPLEMENTATION
+  +77 -0
+
+artifacts/task-validation/terapia-import-righe-vuote-delimitatore-fine/validation-report.md
+  @@ -0,0 +1,51 @@
+  +# Task Validation Report
+  +
+  +## Task
+  +- Title: Terapia import righe vuote delimitatore fine
+  +- Slug: terapia-import-righe-vuote-delimitatore-fine
+  +- Issue: #296
+  +- Commit: (branch `fix/therapy-blank-line-terminator`)
+  +- Date: 2026-07-20
+  +
+  +## Implementation Summary
+  +
+  +`backend/src/intake/parse-discharge-therapy.ts`: il testo terapia è ora segmentato in paragrafi
+  +sulle righe vuote (`splitTherapyParagraphs`). Un paragrafo "parla di farmaci" se almeno una riga
+  +ha un segnale strutturale di prescrizione (dosaggio, quantità+unità, via di somministrazione,
+  +orari introdotti da "ore"). Dopo che è stato visto contenuto farmacologico, il primo paragrafo
+  +senza segnali TERMINA la terapia: quel paragrafo e tutto ciò che segue non producono righe
+  +(`parseDischargeTherapy` con flag `sawDrugs`). Dentro un paragrafo farmacologico nessuna riga
+  +viene mai scartata (invariante #156: `da_verificare` su struttura mancante). Nessuna route,
+  +schema o UI toccata; il modulo resta privo di logging (invariante privacy).
+  +
+  +## Acceptance Criteria Result (TDD: i test AC2 fallivano sul parser precedente)
+  +
+  +| AC | Result | Evidence |
+  +|---|---:|---|
+  +| AC1 paragrafi su ≥1 riga vuota | PASS | test `#296 AC4` multi-blocco |
+  +| AC2 prosa dopo delimitatore → terapia terminata | PASS | 2 test `#296 AC2` (prima ROSSI: 10 righe attese, 13/14 prodotte) |
+  +| AC3 nessuna regressione fixture #156/#274 | PASS | 11 test storici verdi invariati; `#296 AC3` PEVARYL da_verificare conservato |
+  +| AC4 multi-blocco + header iniziale | PASS | 2 test `#296 AC4` |
+  +| AC5 suite verde | PASS | parser 18/18; backend completo 360/360; tsc 0 errori |
+  +
+  +## Test Results
+  +
+  +| Test | Result | Evidence |
+  +|---|---:|---|
+  +| Unit parser | PASS 18/18 (5 nuovi #296) | `node --import tsx --test src/intake/__tests__/parse-discharge-therapy.test.ts` |
+  +| Backend suite completa | PASS 360/360 | `npm run test -w backend` (Postgres e2e :5433) |
+  +| Typecheck backend | PASS 0 errori | `npx tsc -p tsconfig.json --noEmit` |
+  +| Playwright | NA | nessuna UI toccata; parser puro coperto da unit deterministici (gate QA produce comunque superficie/screenshot) |
+  +
+  +## Residual Risks
+  +
+  +- Prosa contenente segnali farmacologici (es. "proseguire terapia per os") viene inclusa: coerente
+  +  col requisito ("parla di farmaci").
+  +- Farmaco atipico senza alcun segnale, da solo in un paragrafo dopo il delimitatore → considerato
+  +  fine terapia (per definizione del requisito); il testo resta comunque nel documento originale.
+  +
+  +## Final Decision
+  +
+  +IMPLEMENTED — NOT VERIFIED
+  +
+  +(In attesa del gate QA interno indipendente.)
+  +51 -0
+
+backend/src/intake/__tests__/parse-discharge-therapy.test.ts
+  @@ -159,3 +159,62 @@ test('#274: parenthesized route codes still work (no regression)', () => {
+  +
+  +// ── #296: righe vuote = delimitatore di fine terapia ─────────────────────────
+  +// Dopo contenuto farmacologico, il primo paragrafo (separato da righe vuote) che NON parla
+  +// di farmaci termina la terapia: quel testo e tutto ciò che segue non producono righe.
+  +
+  +const PROSE = [
+  +  'Si consiglia controllo cardiologico tra 30 giorni.',
+  +  'Proseguire la fisioterapia respiratoria a domicilio.',
+  +  'In caso di febbre contattare il curante.',
+  +].join('\n');
+  +
+  +test('#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata)', () => {
+  +  const rows = parseDischargeTherapy(`${FIXTURE}\n\n${PROSE}`);
+  +  assert.equal(rows.length, 10, 'solo le 10 prescrizioni, niente righe spurie dalla prosa');
+  +  assert.ok(
+  +    rows.every((r) => r.farmacoNome !== 'SI' && r.farmacoNome !== 'PROSEGUIRE'),
+  +    'nessuna riga creata dalle frasi di consiglio',
+  +  );
+  +});
+  +
+  +test('#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)', () => {
+  +  const rows = parseDischargeTherapy(
+  +    `${FIXTURE}\n\n${PROSE}\n\nAUGMENTIN CPR 875 MG (OS) 1 Cpr ore 09:00`,
+  +  );
+  +  // Il requisito è esplicito: dopo il primo paragrafo non farmacologico la terapia È terminata.
+  +  assert.equal(rows.length, 10);
+  +  assert.ok(!rows.some((r) => r.farmacoNome === 'AUGMENTIN'));
+  +});
+  +
+  +test('#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati', () => {
+  +  const rows = parseDischargeTherapy(
+  +    [
+  +      'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00 e alle 20:00 dal 03/07/2026 (Classe A)',
+  +      '',
+  +      'LASIX CPR 25 MG (OS) 1 Cpr ore 08:00 e alle 14:00 dal 03/07/2026 (Classe A)',
+  +      '',
+  +      '',
+  +      'Pantoprazolo 20 mg 1 cp al mattino per os',
+  +    ].join('\n'),
+  +  );
+  +  assert.deepEqual(
+  +    rows.map((r) => r.farmacoNome),
+  +    ['KEPPRA', 'LASIX', 'PANTOPRAZOLO'],
+  +  );
+  +});
+  +
+  +test('#296 AC4: intestazione iniziale + riga vuota non termina il blocco', () => {
+  +  const rows = parseDischargeTherapy(
+  +    ['Terapia domiciliare:', '', 'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00'].join('\n'),
+  +  );
+  +  assert.equal(rows.length, 1);
+  +  assert.equal(rows[0].farmacoNome, 'KEPPRA');
+  +});
+  +
+  +test('#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop)', () => {
+  +  // PEVARYL (nessun segnale strutturale) è nel MEDESIMO paragrafo: mai scartato.
+  +  const rows = parseDischargeTherapy(FIXTURE);
+  +  assert.ok(rows.some((r) => r.farmacoNome === 'PEVARYL' && r.stato === 'da_verificare'));
+  +});
+  +59 -0
+
+backend/src/intake/parse-discharge-therapy.ts
+  @@ -77,15 +77,45 @@ function toIsoDate(dmy: string | undefined): string {
+  +const HEADER_RE = /^(terapia(\s+domiciliare)?|tp\.?|home therapy|hospital therapy)\s*:?\s*$/i;
+  +
+   /** Split a therapy text block into candidate prescription lines (headers/blank lines dropped). */
+   export function splitTherapyLines(text: string): string[] {
+     return (text ?? '')
+       .split(/\r?\n/)
+       .map((l) => l.trim())
+       .filter((l) => l.length > 0)
+  -    .filter(
+  -      (l) => !/^(terapia(\s+domiciliare)?|tp\.?|home therapy|hospital therapy)\s*:?\s*$/i.test(l),
+  -    );
+  +    .filter((l) => !HEADER_RE.test(l));
+  +}
+  +
+  +/** #296: split the block into paragraphs on runs of ≥1 blank line (the end-of-therapy delimiter). */
+  +function splitTherapyParagraphs(text: string): string[][] {
+  +  const paragraphs: string[][] = [];
+  +  let current: string[] = [];
+  +  for (const raw of (text ?? '').split(/\r?\n/)) {
+  +    const line = raw.trim();
+  +    if (line.length === 0) {
+  +      if (current.length) paragraphs.push(current);
+  +      current = [];
+  +    } else if (!HEADER_RE.test(line)) {
+  +      current.push(line);
+  +    }
+  +  }
+  +  if (current.length) paragraphs.push(current);
+  +  return paragraphs;
+  +}
+  +
+  +/** #296: a paragraph "talks about drugs" when at least one line carries a structural
+  + *  prescription signal: strength (DOSE_RE), quantity+unit (QTY_RE), administration route,
+  + *  or administration times introduced by "ore". Plain clinical prose has none of these. */
+  +function talksAboutDrugs(lines: string[]): boolean {
+  +  return lines.some(
+  +    (l) =>
+  +      DOSE_RE.test(l) ||
+  +      QTY_RE.test(l) ||
+  +      detectRoute(l) !== '' ||
+  +      (/\bore\b/i.test(l) && /\b\d{1,2}:\d{2}\b/.test(l)),
+  +  );
+   }
+   
+   /** Parse ONE prescription line into a structured row. Fields are extracted independently, so a
+  @@ -162,9 +192,21 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
+  -/** Parse a whole therapy text block into structured rows (one per prescription line). */
+  +/** Parse a whole therapy text block into structured rows (one per prescription line).
+  + *  #296: blank lines are the END-OF-THERAPY delimiter — once drug content has been seen,
+  + *  the first blank-line-separated paragraph WITHOUT drug signals terminates the block:
+  + *  that paragraph and everything after it (advice / clinical prose) yield no rows.
+  + *  Lines inside a drug paragraph are still never dropped (da_verificare on missing structure). */
+   export function parseDischargeTherapy(text: string): ParsedTherapyRow[] {
+  -  return splitTherapyLines(text).map(parseTherapyLine);
+  +  const rows: ParsedTherapyRow[] = [];
+  +  let sawDrugs = false;
+  +  for (const lines of splitTherapyParagraphs(text)) {
+  +    const isDrugParagraph = talksAboutDrugs(lines);
+  +    if (sawDrugs && !isDrugParagraph) break;
+  +    rows.push(...lines.map(parseTherapyLine));
+  +    if (isDrugParagraph) sawDrugs = true;
+  +  }
+  +  return rows;
+   }
+   
+   /** Map days (Italian abbreviations) to the PatientTherapy weekly "fasce" booleans is intentionally
+  +47 -5

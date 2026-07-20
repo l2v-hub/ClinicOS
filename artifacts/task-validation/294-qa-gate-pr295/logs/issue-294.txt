@@ -1,0 +1,20 @@
+[open] Issue #294: Codice fiscale chiave univoca del paziente: obbligatorio o calcolato all'inserimento
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/294
+
+  Description:
+    ## Requisito (PO)
+    
+    Il codice fiscale è la chiave univoca per un paziente. Quando si inserisce un paziente è necessario avere il CF oppure calcolarlo dai dati inseriti (cognome, nome, sesso, data e comune di nascita).
+    
+    ## Acceptance criteria
+    
+    1. Il modello Patient ha una colonna `codiceFiscale` con vincolo UNIQUE a livello DB (nullable per i pazienti legacy esistenti).
+    2. La creazione paziente (POST /patients, conferma draft intake, conferma import) rifiuta con 400 un CF mancante o formalmente non valido (struttura + carattere di controllo, omocodie accettate) e con 409 un CF già presente.
+    3. Nel form nuovo paziente e nello step Anagrafica dell'intake il CF è obbligatorio: digitato e validato in tempo reale, oppure calcolato con un pulsante dai dati inseriti (libreria codice-fiscale-js, approvata dal PO).
+    4. La deduplica alla conferma intake/import usa il CF come chiave primaria di confronto (match CF = duplicato non forzabile), con fallback nome+data di nascita.
+    5. Il CF è persistito sulla colonna Patient (oltre che nella cartella JSON come oggi) e sopravvive al reload.
+    6. Migration additiva con backfill prudente dai dati cartella esistenti (solo CF ben formati e non duplicati).
+    
+    Label: feature, backend, frontend, privacy-required

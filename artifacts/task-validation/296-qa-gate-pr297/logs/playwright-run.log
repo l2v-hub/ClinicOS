@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 .claude\worktrees\agent-ab197c4739e4043e0\artifacts\task-validation\296-qa-gate-pr297\qa296.spec.mjs:8:1 › #296 QA surface: 18/18 pass, 5 #296 tests PASS, spurious rows = 0, no console errors (2.3s)
+
+  1 passed (4.0s)

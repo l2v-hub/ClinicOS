@@ -1,0 +1,21 @@
+[open] Issue #296: Import documenti: righe vuote come delimitatore di fine terapia
+  Author: @l2v-hub
+  Status: OPEN
+  URL: https://github.com/l2v-hub/ClinicOS/issues/296
+
+  Description:
+    ## Requisito (PO)
+    
+    Quando nell'import documenti si intercetta la terapia, il delimitatore di fine terapia sono delle **righe vuote**: se dopo queste righe non si parla più di farmaci, la terapia è terminata — il testo successivo (consigli, prosa clinica) NON va interpretato come righe farmaco.
+    
+    ## Comportamento attuale
+    
+    `parseDischargeTherapy` (`backend/src/intake/parse-discharge-therapy.ts`) elimina tutte le righe vuote e trasforma OGNI riga non vuota del blocco in una riga terapia: la prosa che segue il blocco prescrizioni diventa righe farmaco spurie `da_verificare`.
+    
+    ## Acceptance criteria
+    
+    1. Il testo terapia è segmentato in paragrafi sulle righe vuote (≥1 riga vuota = delimitatore).
+    2. Dopo che è stato visto contenuto farmacologico, il primo paragrafo che NON parla di farmaci (nessun segnale strutturale: dosaggio, quantità, via di somministrazione, orari "ore HH:MM") termina la terapia: quel paragrafo e tutto ciò che segue non producono righe.
+    3. Più blocchi di farmaci separati da righe vuote continuano a essere tutti parsati (nessuna regressione sul fixture #156/#274).
+    4. Un'intestazione iniziale (es. "Terapia domiciliare:") seguita da riga vuota non termina il blocco.
+    5. Unit test per i nuovi comportamenti; suite backend completa verde.

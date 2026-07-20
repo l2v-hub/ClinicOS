@@ -1,0 +1,140 @@
+TAP version 13
+# Subtest: \#156 AC1/AC2: recognises therapy and yields one row per drug line
+ok 1 - \#156 AC1/AC2: recognises therapy and yields one row per drug line
+  ---
+  duration_ms: 4.607
+  ...
+# Subtest: \#156 AC3: KEPPRA structured fields
+ok 2 - \#156 AC3: KEPPRA structured fields
+  ---
+  duration_ms: 0.254
+  ...
+# Subtest: \#156 AC4: multiple times are all extracted
+ok 3 - \#156 AC4: multiple times are all extracted
+  ---
+  duration_ms: 0.2325
+  ...
+# Subtest: \#156 AC5: specific weekdays are captured
+ok 4 - \#156 AC5: specific weekdays are captured
+  ---
+  duration_ms: 0.1657
+  ...
+# Subtest: \#156 AC6: incomplete line kept as da_verificare, original preserved, not dropped
+ok 5 - \#156 AC6: incomplete line kept as da_verificare, original preserved, not dropped
+  ---
+  duration_ms: 0.8773
+  ...
+# Subtest: \#156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA)
+ok 6 - \#156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA)
+  ---
+  duration_ms: 0.1309
+  ...
+# Subtest: \#156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly
+ok 7 - \#156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly
+  ---
+  duration_ms: 0.1575
+  ...
+# Subtest: \#156: every row keeps its original text verbatim (audit/reference)
+ok 8 - \#156: every row keeps its original text verbatim (audit/reference)
+  ---
+  duration_ms: 0.2812
+  ...
+# Subtest: \#156: blank/empty text yields no rows
+ok 9 - \#156: blank/empty text yields no rows
+  ---
+  duration_ms: 0.1715
+  ...
+# Subtest: \#274: free-text administration route is captured (per os, endovena, sottocute)
+ok 10 - \#274: free-text administration route is captured (per os, endovena, sottocute)
+  ---
+  duration_ms: 0.2479
+  ...
+# Subtest: \#274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e)
+ok 11 - \#274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e)
+  ---
+  duration_ms: 0.2246
+  ...
+# Subtest: \#274: medicinale + quantitativo + via together upgrade the row to ok
+ok 12 - \#274: medicinale + quantitativo + via together upgrade the row to ok
+  ---
+  duration_ms: 0.1894
+  ...
+# Subtest: \#274: parenthesized route codes still work (no regression)
+ok 13 - \#274: parenthesized route codes still work (no regression)
+  ---
+  duration_ms: 0.1383
+  ...
+# Subtest: \#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata)
+not ok 14 - \#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata)
+  ---
+  duration_ms: 2.8013
+  location: 'C:\\Users\\llavia\\AppData\\Local\\Temp\\claude\\E--Workspace-DG-SE-DEV-ClinicOS\\8ac75c38-1dba-4271-bf9f-bb5bd8973c09\\scratchpad\\redcheck\\intake\\__tests__\\parse-discharge-therapy.test.ts:2:8155'
+  failureType: 'testCodeFailure'
+  error: |-
+    solo le 10 prescrizioni, niente righe spurie dalla prosa
+    
+    13 !== 10
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 10
+  actual: 13
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\llavia\AppData\Local\Temp\claude\E--Workspace-DG-SE-DEV-ClinicOS\8ac75c38-1dba-4271-bf9f-bb5bd8973c09\scratchpad\redcheck\intake\__tests__\parse-discharge-therapy.test.ts:175:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: \#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)
+not ok 15 - \#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)
+  ---
+  duration_ms: 1.3805
+  location: 'C:\\Users\\llavia\\AppData\\Local\\Temp\\claude\\E--Workspace-DG-SE-DEV-ClinicOS\\8ac75c38-1dba-4271-bf9f-bb5bd8973c09\\scratchpad\\redcheck\\intake\\__tests__\\parse-discharge-therapy.test.ts:4:281'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    14 !== 10
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 10
+  actual: 14
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\llavia\AppData\Local\Temp\claude\E--Workspace-DG-SE-DEV-ClinicOS\8ac75c38-1dba-4271-bf9f-bb5bd8973c09\scratchpad\redcheck\intake\__tests__\parse-discharge-therapy.test.ts:187:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: \#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati
+ok 16 - \#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati
+  ---
+  duration_ms: 0.2375
+  ...
+# Subtest: \#296 AC4: intestazione iniziale + riga vuota non termina il blocco
+ok 17 - \#296 AC4: intestazione iniziale + riga vuota non termina il blocco
+  ---
+  duration_ms: 0.1318
+  ...
+# Subtest: \#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop)
+ok 18 - \#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop)
+  ---
+  duration_ms: 0.3361
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 16
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 530.1734

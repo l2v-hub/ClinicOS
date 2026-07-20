@@ -1,0 +1,79 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:27:5 › QA-294 diag: step1 bloccato senza CF; Calcola(Imola); CF in colonna; reload (12.7s)
+  ✘  2 [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:95:5 › QA-294 diag: CF duplicato rifiutato alla conferma (400, non forzabile) (4.5s)
+
+
+  1) [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:27:5 › QA-294 diag: step1 bloccato senza CF; Calcola(Imola); CF in colonna; reload 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 400
+
+      70 |   );
+      71 |   await createBtn.click();
+    > 72 |   expect((await confirmResp).status()).toBe(201);
+         |                                        ^
+      73 |
+      74 |   // AC5: CF persisted on the Patient COLUMN and equal to the computed value.
+      75 |   const patients = (await (await page.request.get('http://localhost:3001/patients')).json()) as {
+        at E:\Workspace\DG_SE_DEV\ClinicOS\.claude\worktrees\agent-a85baaa4c6666ff75\qa-evidence\tests\qa294-diagnostic.spec.ts:72:40
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-b59b6--Imola-CF-in-colonna-reload-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-b59b6--Imola-CF-in-colonna-reload-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-b59b6--Imola-CF-in-colonna-reload-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-b59b6--Imola-CF-in-colonna-reload-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-b59b6--Imola-CF-in-colonna-reload-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:95:5 › QA-294 diag: CF duplicato rifiutato alla conferma (400, non forzabile) 
+
+    Error: CF del primo test presente
+
+    expect(received).toBeTruthy()
+
+    Received: undefined
+
+      103 |   }[];
+      104 |   const existing = patients.find((p) => p.lastName === COGNOME);
+    > 105 |   expect(existing?.codiceFiscale, 'CF del primo test presente').toBeTruthy();
+          |                                                                 ^
+      106 |
+      107 |   await fillStep1(page, `${COGNOME}bis`);
+      108 |   await page.getByPlaceholder('RSSMRA80A01H501U').first().fill(existing!.codiceFiscale!);
+        at E:\Workspace\DG_SE_DEV\ClinicOS\.claude\worktrees\agent-a85baaa4c6666ff75\qa-evidence\tests\qa294-diagnostic.spec.ts:105:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\..\artifacts\task-validation\294-qa-gate-pr295\test-results\qa294-diagnostic-QA-294-di-f41d7-conferma-400-non-forzabile--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:27:5 › QA-294 diag: step1 bloccato senza CF; Calcola(Imola); CF in colonna; reload 
+    [chromium] › qa-evidence\tests\qa294-diagnostic.spec.ts:95:5 › QA-294 diag: CF duplicato rifiutato alla conferma (400, non forzabile) 

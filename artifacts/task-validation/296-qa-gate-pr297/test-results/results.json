@@ -1,0 +1,134 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "E:\\Workspace\\DG_SE_DEV\\ClinicOS\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "E:\\Workspace\\DG_SE_DEV\\ClinicOS\\.claude\\worktrees\\agent-ab197c4739e4043e0\\artifacts\\task-validation\\296-qa-gate-pr297\\playwright.qa296.config.mjs"
+    ],
+    "configFile": "E:\\Workspace\\DG_SE_DEV\\ClinicOS\\.claude\\worktrees\\agent-ab197c4739e4043e0\\artifacts\\task-validation\\296-qa-gate-pr297\\playwright.qa296.config.mjs",
+    "rootDir": "E:/Workspace/DG_SE_DEV/ClinicOS/.claude/worktrees/agent-ab197c4739e4043e0/artifacts/task-validation/296-qa-gate-pr297",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "E:/Workspace/DG_SE_DEV/ClinicOS/artifacts/task-validation/296-qa-gate-pr297/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "E:/Workspace/DG_SE_DEV/ClinicOS/.claude/worktrees/agent-ab197c4739e4043e0/artifacts/task-validation/296-qa-gate-pr297",
+        "testIgnore": [],
+        "testMatch": [
+          "/qa296\\.spec\\.mjs/"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "E:/Workspace/DG_SE_DEV/ClinicOS/artifacts/task-validation/296-qa-gate-pr297/test-results/results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "E:/Workspace/DG_SE_DEV/ClinicOS/artifacts/task-validation/296-qa-gate-pr297/playwright-report",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 14,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "qa296.spec.mjs",
+      "file": "qa296.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "#296 QA surface: 18/18 pass, 5 #296 tests PASS, spurious rows = 0, no console errors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2293,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-07-20T21:14:20.474Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "E:\\Workspace\\DG_SE_DEV\\ClinicOS\\artifacts\\task-validation\\296-qa-gate-pr297\\test-results\\qa296--296-QA-surface-18-1-4cd8c-us-rows-0-no-console-errors\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "77e55c2f885731f6a8a9-8b6dd0cc5641a8cb9447",
+          "file": "qa296.spec.mjs",
+          "line": 8,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-07-20T21:14:19.813Z",
+    "duration": 4029.729,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
