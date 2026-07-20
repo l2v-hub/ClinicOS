@@ -10,6 +10,7 @@ import patientDiaryRouter from './routes/patient-diary.js';
 import narrativeSectionsRouter from './routes/narrative-sections.js';
 import patientDocumentsRouter from './routes/patient-documents.js';
 import consegneRouter from './routes/consegne.js';
+import operatorsRouter from './routes/operators.js';
 import noteRouter from './routes/note.js';
 import aiExtractionRouter from './routes/ai-extraction.js';
 import aiJobsRouter from './routes/ai-jobs.js';
@@ -90,6 +91,8 @@ app.use('/appointments', appointmentsRouter);
 app.use('/therapy-slots', therapyRouter);
 app.use('/patient-intake', patientIntakeRouter);
 app.use('/consegne', consegneRouter);
+// Fase 1b: real operator CRUD for the admin "Gestione Operatori" screen.
+app.use('/operators', operatorsRouter);
 app.use('/notes', noteRouter);
 app.use('/intake/drafts', intakeDraftsRouter);
 app.use('/ai/extraction/jobs', aiJobsRouter);

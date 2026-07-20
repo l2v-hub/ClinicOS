@@ -16,6 +16,7 @@ export type AssistantIntent =
   | 'correlate'
   | 'patient_search'
   | 'rooms_occupancy'
+  | 'staff_list'
   | 'refuse_clinical'
   | 'data_query'
   | 'unknown';
@@ -189,6 +190,18 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
   }
 
   // ── cross-patient intents (role + env gated downstream) ──
+  // Fase 1b: elenco del personale con qualifica — dato organizzativo (nome/ruolo/reparto/qualifica),
+  // MAI dati clinici né pazienti. Facility-level read, gated downstream da canFacilityRead come
+  // rooms_occupancy. Prima del ramo correlate, così «chi sono gli infermieri» non diventa una
+  // ricerca cross-patient.
+  if (
+    /\b(personale|staff|equipe|organico)\b/.test(q) ||
+    /(elenc\w*|lista|mostra|quant[ie]|qual[ie]|chi sono).*(operator[ie]|infermier[ie]|medic[ih]|coordinator[ie])/.test(
+      q,
+    )
+  ) {
+    return base('staff_list', [{ tool: 'query_staff_list', args: {} }]);
+  }
   if (
     /valori? pressori? (superior|maggior|sopra).*?(\d{2,3})/.test(q) ||
     /pressione.*(superiore a|>)\s*(\d{2,3})/.test(q)
