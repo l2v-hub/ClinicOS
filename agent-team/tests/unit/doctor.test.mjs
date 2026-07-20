@@ -1,7 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { access, mkdtemp, realpath, rm, writeFile } from 'node:fs/promises';
+import { execFile as execFileCb } from 'node:child_process';
+import { promisify } from 'node:util';
 import { runDoctor } from '../../src/commands/doctor.mjs';
+
+const execFile = promisify(execFileCb);
 
 const config = {
   repository: 'l2v-hub/ClinicOS',
@@ -62,7 +68,9 @@ function healthyRun(overrides = {}) {
     if (key === 'gh api repos/l2v-hub/ClinicOS')
       return result(JSON.stringify({ permissions: { push: true, admin: false } }));
     if (key.startsWith('git check-ignore'))
-      return result(`${config.runtimeRoot}\n${config.worktreeRoot}\n`);
+      return result(
+        `${config.runtimeRoot}/.doctor-ignore-probe\n${config.worktreeRoot}/.doctor-ignore-probe\n`,
+      );
     if (key.includes('remote get-url')) return result('https://github.com/l2v-hub/ClinicOS.git');
     return result('ok');
   };
@@ -267,9 +275,10 @@ test('doctor accepts C-quoted Windows paths from git check-ignore', async () => 
   const doctor = await runDoctor({
     config: winConfig,
     run: healthyRun({
-      [`git check-ignore ${winConfig.runtimeRoot} ${winConfig.worktreeRoot}`]: result(
-        `${quoted(winConfig.runtimeRoot)}\n${quoted(winConfig.worktreeRoot)}\n`,
-      ),
+      [`git check-ignore ${winConfig.runtimeRoot}/.doctor-ignore-probe ${winConfig.worktreeRoot}/.doctor-ignore-probe`]:
+        result(
+          `${quoted(`${winConfig.runtimeRoot}/.doctor-ignore-probe`)}\n${quoted(`${winConfig.worktreeRoot}/.doctor-ignore-probe`)}\n`,
+        ),
     }),
     isSupervisorLive: async () => false,
     probes,
@@ -281,12 +290,87 @@ test('doctor fails closed when runtime or worktree roots are not git-ignored', a
   const doctor = await runDoctor(
     doctorArgs({
       overrides: {
-        [`git check-ignore ${config.runtimeRoot} ${config.worktreeRoot}`]: result(
-          `${config.runtimeRoot}\n`,
-          0,
-        ),
+        [`git check-ignore ${config.runtimeRoot}/.doctor-ignore-probe ${config.worktreeRoot}/.doctor-ignore-probe`]:
+          result(`${config.runtimeRoot}/.doctor-ignore-probe\n`, 0),
       },
     }),
   );
   assert.equal(doctor.checks.find((c) => c.id === 'roots-ignored').ok, false);
+});
+
+// QA-263-016: real temporary-git-repository regression coverage. The ignore validation must be
+// existence-independent — a fresh checkout has the ignore rules committed but the runtime/worktree
+// directories not yet created, and doctor must still pass without creating anything on disk.
+async function makeFreshCheckout({ withIgnoreRules }) {
+  const repo = await realpath(await mkdtemp(path.join(tmpdir(), 'doctor-fresh-')));
+  await execFile('git', ['init', repo]);
+  if (withIgnoreRules)
+    await writeFile(path.join(repo, '.gitignore'), 'agent-team/.runtime\nagent-team/.worktrees\n');
+  return repo;
+}
+
+// Runs the real `git check-ignore` inside the temporary repository; every other doctor probe keeps
+// the healthy mocks so the test isolates the ignore validation.
+function realCheckIgnoreRun(repo) {
+  const mocked = healthyRun();
+  return async (invocation) => {
+    if (invocation.command === 'git' && invocation.args[0] === 'check-ignore') {
+      try {
+        const { stdout } = await execFile('git', invocation.args, { cwd: repo });
+        return result(stdout);
+      } catch (error) {
+        return result(
+          error.stdout ?? '',
+          typeof error.code === 'number' ? error.code : 1,
+          error.stderr ?? '',
+        );
+      }
+    }
+    return mocked(invocation);
+  };
+}
+
+test('doctor passes ignore validation on a real fresh checkout where the roots do not exist (QA-263-016)', async () => {
+  const repo = await makeFreshCheckout({ withIgnoreRules: true });
+  try {
+    const freshConfig = {
+      ...config,
+      runtimeRoot: path.join(repo, 'agent-team', '.runtime'),
+      worktreeRoot: path.join(repo, 'agent-team', '.worktrees'),
+    };
+    const doctor = await runDoctor({
+      config: freshConfig,
+      run: realCheckIgnoreRun(repo),
+      isSupervisorLive: async () => false,
+      probes,
+    });
+    assert.equal(doctor.checks.find((c) => c.id === 'roots-ignored').ok, true);
+    // Read-only contract: validating the ignore rules must not have created the roots.
+    await assert.rejects(access(path.join(repo, 'agent-team')));
+  } finally {
+    await rm(repo, { recursive: true, force: true });
+  }
+});
+
+test('doctor fails closed on a real repository whose gitignore lacks the root rules (QA-263-016)', async () => {
+  const repo = await makeFreshCheckout({ withIgnoreRules: false });
+  try {
+    const freshConfig = {
+      ...config,
+      runtimeRoot: path.join(repo, 'agent-team', '.runtime'),
+      worktreeRoot: path.join(repo, 'agent-team', '.worktrees'),
+    };
+    const doctor = await runDoctor({
+      config: freshConfig,
+      run: realCheckIgnoreRun(repo),
+      isSupervisorLive: async () => false,
+      probes,
+    });
+    const check = doctor.checks.find((c) => c.id === 'roots-ignored');
+    assert.equal(check.ok, false);
+    assert.match(check.detail, /\.runtime/);
+    assert.match(check.detail, /\.worktrees/);
+  } finally {
+    await rm(repo, { recursive: true, force: true });
+  }
 });

@@ -213,7 +213,16 @@ export async function runDoctor({ config, run, isSupervisorLive, probes = defaul
       'roots-ignored',
       'both',
       'git',
-      ['check-ignore', config.runtimeRoot, config.worktreeRoot],
+      // QA-263-016: probe a SYNTHETIC CHILD path under each root, never the bare directory. A
+      // trailing-slash-style .gitignore rule matches a directory only when it exists on disk, so
+      // `git check-ignore agent-team/.worktrees` returns nothing on a fresh checkout where the dir
+      // has not been created yet — making doctor fail on an otherwise healthy clone. Checking a
+      // child (which is always covered by the parent rule) is existence-independent.
+      [
+        'check-ignore',
+        `${config.runtimeRoot}/.doctor-ignore-probe`,
+        `${config.worktreeRoot}/.doctor-ignore-probe`,
+      ],
       (r) => {
         // git check-ignore may echo paths C-style quoted with escaped backslashes on Windows.
         const unquote = (line) =>
@@ -222,8 +231,9 @@ export async function runDoctor({ config, run, isSupervisorLive, probes = defaul
             : line;
         const normalize = (value) => unquote(value).replace(/\//g, '\\');
         const listed = (r.stdout ?? '').split(/\r?\n/).filter(Boolean).map(normalize);
+        // A probed child is ignored iff some listed path starts with the root prefix.
         const missing = [config.runtimeRoot, config.worktreeRoot].filter(
-          (root) => !listed.includes(normalize(root)),
+          (root) => !listed.some((line) => line.startsWith(normalize(root))),
         );
         return missing.length
           ? { ok: false, detail: `not git-ignored: ${missing.join(', ')}` }
