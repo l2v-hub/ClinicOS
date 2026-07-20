@@ -20,6 +20,8 @@ interface OperatorDashboardProps {
   totalePazienti: number;
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
+  /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
+  onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string) => void;
   cartelle?: CartellaPaziente[];
   pazienti?: Paziente[]; // reserved for future patient-level KPIs
@@ -40,6 +42,7 @@ export function OperatorDashboard({
   totalePazienti,
   loadingPazienti,
   onNavigate,
+  onOpenConsegneAperte,
   onSelectPaziente,
   cartelle = [],
 }: OperatorDashboardProps) {
@@ -207,29 +210,36 @@ export function OperatorDashboard({
             cta: 'Vedi consegne',
             danger: urgenti.length > 0,
           },
-        ].map((c) => (
-          <div
-            key={c.key}
-            className={`stat-card stat-card--${c.mod} stat-card--clickable`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onNavigate(c.key)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onNavigate(c.key);
-              }
-            }}
-          >
-            <div className="stat-card__label">{c.label}</div>
-            <div className="stat-card__value" style={c.danger ? { color: 'var(--red)' } : {}}>
-              {c.value}
+        ].map((c) => {
+          // #283: la card consegne apre la pagina già filtrata (e con focus se una sola aperta)
+          const open =
+            c.key === 'consegne' && onOpenConsegneAperte
+              ? onOpenConsegneAperte
+              : () => onNavigate(c.key);
+          return (
+            <div
+              key={c.key}
+              className={`stat-card stat-card--${c.mod} stat-card--clickable`}
+              role="button"
+              tabIndex={0}
+              onClick={open}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  open();
+                }
+              }}
+            >
+              <div className="stat-card__label">{c.label}</div>
+              <div className="stat-card__value" style={c.danger ? { color: 'var(--red)' } : {}}>
+                {c.value}
+              </div>
+              <span className="stat-card__action">
+                {c.cta} <IcoArrow />
+              </span>
             </div>
-            <span className="stat-card__action">
-              {c.cta} <IcoArrow />
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Avanzamento terapie — barre di avanzamento (dati reali cartelle) */}

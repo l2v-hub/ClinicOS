@@ -13,6 +13,7 @@ import type {
   Appuntamento,
   Camera,
   ScheduleOperatore,
+  SlotAgenda,
   Nota,
   StatoNota,
   CartellaPaziente,
@@ -24,12 +25,7 @@ import type {
   TipoIntervento,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
-import {
-  MOCK_AGENDA,
-  MOCK_SCHEDULES,
-  createDefaultCartella,
-  createMockTherapySlots,
-} from './mockData';
+import { createDefaultCartella, createMockTherapySlots } from './mockData';
 
 import { Login } from './components/Login';
 import { AdminDashboard } from './components/admin/AdminDashboard';
@@ -164,12 +160,33 @@ export default function App() {
   // Mock state
   const [operatori, setOperatori] = useState<Operatore[]>([]);
   const [consegne, setConsegne] = useState<Consegna[]>([]);
+  // #283: come aprire la pagina Consegne (filtro iniziale + eventuale consegna da evidenziare)
+  const [consegneView, setConsegneView] = useState<{
+    filtro: 'tutte' | Consegna['stato'];
+    focusId: string | null;
+  }>({ filtro: 'tutte', focusId: null });
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
   const [camere, setCamere] = useState<Camera[]>([]);
-  const [schedules, setSchedules] = useState<ScheduleOperatore[]>(MOCK_SCHEDULES);
+  // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
+  const [schedules, setSchedules] = useState<ScheduleOperatore[]>([]);
   const [note, setNote] = useState<Nota[]>([]);
   const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
+
+  // #285: il widget agenda della dashboard operatore deriva dagli appuntamenti REALI di oggi
+  // (prima mostrava MOCK_AGENDA, dati finti mai persistiti).
+  const todayISO = new Date().toISOString().slice(0, 10);
+  const agendaOggi: SlotAgenda[] = appuntamenti
+    .filter((a) => a.data === todayISO)
+    .sort((a, b) => a.ora.localeCompare(b.ora))
+    .map((a) => ({
+      id: a.id,
+      ora: a.ora,
+      pazienteNome: a.pazienteNome,
+      motivo: a.tipoIntervento,
+      stato: a.stato,
+      operatoreId: a.operatoreId,
+    }));
 
   // ── History API navigation ─────────────────────────────────────────────────
 
@@ -197,10 +214,28 @@ export default function App() {
       setAiOpenTrigger((t) => t + 1);
       return;
     }
+    // #283: una navigazione "generica" verso Consegne (sidebar) azzera filtro/focus impostati
+    // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
+    if (key === 'consegne') setConsegneView({ filtro: 'tutte', focusId: null });
     pushNav(key);
     if (key === 'agenda-operatore') loadTherapySlots();
     // SPEC-015 US4: agenda reale — refresh appuntamenti alla navigazione (come loadTherapySlots)
     if (key === 'agenda-operatore' || key === 'agenda-admin') loadAppuntamenti();
+  }
+
+  // #283: la card "Consegne aperte" apre la pagina già filtrata sulle aperte; se la consegna
+  // aperta è UNA sola, evidenzia e scrolla direttamente quella card.
+  function openConsegneAperte() {
+    const nonCompletate = consegne.filter((c) => c.stato !== 'completata');
+    const soloAperte = nonCompletate.filter((c) => c.stato === 'aperta');
+    setConsegneView({
+      // il chip "Aperte" nasconderebbe le "in corso": filtra 'aperta' solo se copre tutto il
+      // conteggio mostrato dalla card, altrimenti mostra tutte (nessuna consegna nascosta).
+      filtro: soloAperte.length === nonCompletate.length ? 'aperta' : 'tutte',
+      focusId: nonCompletate.length === 1 ? nonCompletate[0].id : null,
+    });
+    setMobileNavOpen(false);
+    pushNav('consegne');
   }
 
   function selectPaziente(p: Paziente, moduleTabId?: TabId) {
@@ -386,6 +421,13 @@ export default function App() {
     loadCamere();
     // Load consegne from API (persisted handover cards)
     void loadConsegne();
+    // #285: orari operatori persistiti
+    fetch(`${API_URL}/operators/schedules`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: ScheduleOperatore[]) => setSchedules(data))
+      .catch(() => {
+        /* keep empty array */
+      });
     // Fase 1b: operatori reali dal backend (niente più mock); iniziali/colore client-derived
     fetch(`${API_URL}/operators`)
       .then((r) => (r.ok ? r.json() : []))
@@ -637,12 +679,28 @@ export default function App() {
 
   // ── Schedules ───────────────────────────────────────────────────────────────
 
-  function saveSchedule(s: ScheduleOperatore) {
-    setSchedules((prev) => {
-      const idx = prev.findIndex((x) => x.operatoreId === s.operatoreId);
-      if (idx >= 0) return prev.map((x, i) => (i === idx ? s : x));
-      return [...prev, s];
-    });
+  // #285: persistiti su DB (upsert per operatore); lo stato locale segue la risposta del server.
+  async function saveSchedule(s: ScheduleOperatore) {
+    try {
+      const res = await fetch(`${API_URL}/operators/${s.operatoreId}/schedule`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ turni: s.turni, note: s.note }),
+      });
+      if (!res.ok) {
+        showToast('Impossibile salvare gli orari');
+        return;
+      }
+      const saved = (await res.json()) as ScheduleOperatore;
+      setSchedules((prev) => {
+        const idx = prev.findIndex((x) => x.operatoreId === saved.operatoreId);
+        if (idx >= 0) return prev.map((x, i) => (i === idx ? saved : x));
+        return [...prev, saved];
+      });
+      showToast('Orari salvati');
+    } catch {
+      showToast('Impossibile salvare gli orari');
+    }
   }
 
   // ── Cartella CRUD (API-persisted) ─────────────────────────────────────────
@@ -1332,6 +1390,7 @@ export default function App() {
               totalePazienti={pazienti.length}
               loadingPazienti={loadingPazienti}
               onNavigate={navigate}
+              onOpenConsegneAperte={openConsegneAperte}
               onSelectPaziente={goToPazienteByNome}
               cartelle={cartelle}
             />
@@ -1370,6 +1429,8 @@ export default function App() {
               onUpdateStato={updateConsegnaStato}
               onDelete={deleteConsegna}
               onSelectPaziente={goToPazienteByNome}
+              initialFiltroStato={consegneView.filtro}
+              focusId={consegneView.focusId}
             />
           )}
           {navKey === 'note' && (
@@ -1390,10 +1451,11 @@ export default function App() {
             <OperatorDashboard
               utente={utente}
               consegne={consegne}
-              agenda={MOCK_AGENDA}
+              agenda={agendaOggi}
               totalePazienti={pazienti.length}
               loadingPazienti={loadingPazienti}
               onNavigate={navigate}
+              onOpenConsegneAperte={openConsegneAperte}
               onSelectPaziente={goToPazienteByNome}
               cartelle={cartelle}
               pazienti={pazienti}

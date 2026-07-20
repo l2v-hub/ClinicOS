@@ -222,3 +222,64 @@ test('empty input is safe', () => {
   assert.equal(r.cleanedText, '');
   assert.equal(r.removedHeaderBlocks, 0);
 });
+
+// ── #279: markdown-TABLE header (labels as bare cells, no colons) — shape taken verbatim from
+// the reported real document (anonymised values). The label sits in a table cell ("| Codice
+// fiscale | XXX |"), so the inline "label:" detector never fires without cell matching.
+const TABLE_HEADER = [
+  '| AZIENDA SANITARIA REGIONALE',
+  'Azienda Ospedaliera di Demo | Azienda Usl Di Demo',
+  '| --- | --- | --- |',
+  '|  Azienda | ROSSI MARIA | Codice fiscale | RSSMRA51S55E000T  |',
+  '| --- | --- | --- | --- |',
+  '|  Reparto | 15/11/1951 DEMO | Numero Nosografico | 2026/0001  |',
+  '|  Residenza | VIA DEMO, 5 DEMO |  |   |',
+].join('\n');
+
+test('#279: table-cell header repeated on 3 pages → kept once, later pages cleaned', () => {
+  const doc = [
+    `${TABLE_HEADER}\n\n## Anamnesi\nPaziente ricoverata per scompenso.\n\nPagina 1 di 3`,
+    `${TABLE_HEADER}\n\nProseguiva la degenza senza complicanze.\n\nPagina 2 di 3`,
+    `${TABLE_HEADER}\n\n## Terapia\nFurosemide 25 mg.\n\nPagina 3 di 3`,
+  ].join('\n');
+  const r = filterRepeatedHeaders(doc);
+  assert.ok(
+    r.removedHeaderBlocks >= 2,
+    `two later table headers removed (got ${r.removedHeaderBlocks})`,
+  );
+  assert.equal(
+    (r.cleanedText.match(/RSSMRA51S55E000T/g) || []).length,
+    1,
+    'anagraphic table kept exactly once',
+  );
+  assert.ok(r.cleanedText.includes('Proseguiva la degenza'), 'clinical text intact');
+  assert.ok(r.cleanedText.includes('Furosemide 25 mg.'), 'therapy text intact');
+});
+
+test('#279: a content table (therapy) is NOT treated as a header', () => {
+  const t = [
+    '| Farmaco | Dose | Via |',
+    '| --- | --- | --- |',
+    '| Ramipril | 5 mg | OS |',
+    '| Furosemide | 25 mg | OS |',
+  ].join('\n');
+  const doc = `## Terapia\n${t}\n\nAltro testo.\n\n## Decorso\n${t}`;
+  const r = filterRepeatedHeaders(doc);
+  assert.ok(r.cleanedText.includes('Ramipril'), 'content table intact');
+  assert.equal(r.removedHeaderBlocks, 0, 'no header removed from content tables');
+});
+
+test('#279: repeated institutional banner above the header table is absorbed', () => {
+  const doc = [
+    `${TABLE_HEADER}\n\n## Anamnesi\nTesto uno.\n\nPagina 1 di 2`,
+    `${TABLE_HEADER}\n\nTesto due.\n\nPagina 2 di 2`,
+  ].join('\n');
+  const r = filterRepeatedHeaders(doc);
+  assert.equal(
+    (r.cleanedText.match(/AZIENDA SANITARIA REGIONALE/g) || []).length,
+    1,
+    'banner kept exactly once',
+  );
+  assert.ok(r.cleanedText.includes('Testo uno.'));
+  assert.ok(r.cleanedText.includes('Testo due.'));
+});

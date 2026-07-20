@@ -10,6 +10,7 @@ import type {
   IndicatoreRischio,
   PrioritaConsegna,
   VitaleItem,
+  Anamnesi,
 } from '../../types';
 import {
   IcoEdit,
@@ -40,7 +41,7 @@ import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
 import { deriveAllergySummary } from '../../lib/allergyStatusModel';
-import { LegacyAnamnesisView } from './sections/LegacyAnamnesisView';
+import { AnamnesisEditor } from './sections/AnamnesisEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
 import { VitalSignsEditor } from './sections/VitalSignsEditor';
@@ -51,7 +52,8 @@ import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
 // #243: exported so callers (App.tsx) can request an initial tab — e.g. landing on a
 // specific "Moduli" flow right after patient creation from the intake wizard.
 // #245: 'anamnesi' rimosso — il tab editabile duplicato non esiste più (resta la sola
-// superficie narrativa 'sezioni-narrative' + LegacyAnamnesisView read-only).
+// superficie narrativa 'sezioni-narrative'). #278: l'anamnesi strutturata torna
+// modificabile lì tramite AnamnesisEditor (stesso editor dell'intake).
 export type TabId =
   | 'riepilogo'
   | 'profilo'
@@ -2607,7 +2609,16 @@ export function PatientDetail({
           )}
           {tab === 'sezioni-narrative' && (
             <>
-              <LegacyAnamnesisView anamnesi={cartella.anamnesi} />
+              {/* #278: anamnesi strutturata modificabile — stesso cast Anamnesi ⇄
+                  Record<string, unknown> già usato in patientSections.ts */}
+              <AnamnesisEditor
+                mode="patient-chart"
+                value={cartella.anamnesi as unknown as Record<string, unknown>}
+                onChange={(v) => upd({ anamnesi: v as unknown as Anamnesi })}
+                readOnly={false}
+                operatoreNome={operatoreNome}
+                allergie={cartella.allergie ?? []}
+              />
               <NarrativeSectionsTab
                 patientId={paziente.id}
                 operatoreId={operatoreId}

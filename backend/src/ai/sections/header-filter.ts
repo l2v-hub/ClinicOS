@@ -22,6 +22,8 @@ const DEFAULT_HEADER_LABELS = [
   'sesso',
   'cartella clinica',
   'numero nosologico',
+  // #279: real hospital letters use "nosografico" (seen verbatim in the reported document)
+  'numero nosografico',
   'numero cartella',
   'reparto',
   'unita operativa',
@@ -129,12 +131,27 @@ function inlineLabels(line: string, labels: string[]): string[] {
   return Array.from(new Set(found));
 }
 
-/** Header labels carried by a line: a single label-at-start (label-above-value layout), or ≥2
- *  inline "label:" pairs on one row. Returns null when the line is not header-like. */
+/** #279: labels appearing as BARE markdown-table cells ("| Codice fiscale | SBB... |"). Hospital
+ *  headers are often OCR'd as tables where the label is a cell with no colon, so the inline
+ *  "label:" detector never fires. Exact-cell match only (content tables use different labels). */
+function tableCellLabels(line: string, labels: string[]): string[] {
+  if ((line.match(/\|/g) ?? []).length < 2) return [];
+  const cells = line
+    .split('|')
+    .map((c) => normalise(c))
+    .filter(Boolean);
+  return labels.filter((lab) => cells.includes(lab));
+}
+
+/** Header labels carried by a line: a single label-at-start (label-above-value layout), ≥2
+ *  inline "label:" pairs on one row, or ≥1 exact-label table cell (#279). Returns null when the
+ *  line is not header-like. */
 function headerLineLabels(line: string, cfg: HeaderFilterConfig): string[] | null {
   const single = matchedLabel(line, cfg.labels);
   if (single) return [single];
   const inline = inlineLabels(line, cfg.labels);
+  const cells = tableCellLabels(line, cfg.labels);
+  if (cells.length >= 1) return Array.from(new Set([...inline, ...cells]));
   return inline.length >= 2 ? inline : null;
 }
 
@@ -240,7 +257,9 @@ function scoreBlock(
     const t = lines[k].trim();
     if (!t) continue;
     total++;
-    if (/:/.test(t) || matchedLabel(lines[k], cfg.labels)) pairs++;
+    // #279: a markdown-table row (≥2 pipes) is as header-shaped as a "label: value" pair
+    if (/:/.test(t) || (t.match(/\|/g) ?? []).length >= 2 || matchedLabel(lines[k], cfg.labels))
+      pairs++;
   }
   const tableLayoutScore = total ? pairs / total : 0;
   // position: near the document start or right after a blank/page-break boundary (page top)
@@ -285,6 +304,15 @@ export function filterRepeatedHeaders(
   for (const b of blocks)
     signatureCounts.set(b.signature, (signatureCounts.get(b.signature) ?? 0) + 1);
 
+  // #279: institutional banner lines (hospital name/address) sit ABOVE the labelled header rows,
+  // carry no label, but repeat verbatim on every page. Count normalised occurrences so a removed
+  // header block can absorb the contiguous repeated banner right above it.
+  const lineCounts = new Map<string, number>();
+  for (const l of lines) {
+    const n = normalise(l);
+    if (n) lineCounts.set(n, (lineCounts.get(n) ?? 0) + 1);
+  }
+
   const remove = new Set<number>(); // line indices to drop
   const seenSignature = new Set<string>();
   let removedHeaderBlocks = 0;
@@ -297,7 +325,18 @@ export function filterRepeatedHeaders(
     seenSignature.add(b.signature);
     if (firstOccurrence) continue; // always keep the first header (anagraphic source)
     if (confidence >= cfg.confidenceThreshold) {
-      for (let k = b.start; k < b.end; k++) remove.add(k);
+      // absorb the repeated banner immediately above (max 12 lines): repeated verbatim lines and
+      // decorative table separators ("| --- |", normalised to '') are part of the header; a truly
+      // BLANK line is a page/content boundary and stops the expansion.
+      let start = b.start;
+      while (start > 0 && b.start - start < 12) {
+        const raw = lines[start - 1];
+        if (!raw.trim()) break;
+        const n = normalise(raw);
+        if (n && (lineCounts.get(n) ?? 0) < 2) break;
+        start--;
+      }
+      for (let k = start; k < b.end; k++) remove.add(k);
       removedHeaderBlocks++;
       for (const l of b.labels) if (!matchedLabels.includes(l)) matchedLabels.push(l);
     } else {

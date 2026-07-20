@@ -71,6 +71,54 @@ operatorsRouter.get('/', async (_req, res) => {
   }
 });
 
+// ── #285: weekly schedules (admin "Orari operatori") — JSON blob per operator ──────────────
+
+// GET /operators/schedules (named route BEFORE parameterized)
+operatorsRouter.get('/schedules', async (_req, res) => {
+  try {
+    const rows = await prisma.operatorSchedule.findMany();
+    res.status(200).json(
+      rows.map((r) => {
+        const d = (r.data ?? {}) as { turni?: unknown; note?: string };
+        return { id: r.id, operatoreId: r.operatorId, turni: d.turni ?? [], note: d.note ?? '' };
+      }),
+    );
+  } catch (error) {
+    console.error('GET /operators/schedules error:', error);
+    res.status(500).json({ error: 'Errore nel recupero orari operatori' });
+  }
+});
+
+// PUT /operators/:operatorId/schedule  { turni, note }
+operatorsRouter.put('/:operatorId/schedule', async (req, res) => {
+  const { operatorId } = req.params;
+  const body = req.body as { turni?: unknown; note?: string };
+  if (!Array.isArray(body.turni)) {
+    res.status(400).json({ error: 'Campo obbligatorio: turni (array)' });
+    return;
+  }
+  try {
+    const operator = await prisma.operator.findUnique({ where: { id: operatorId } });
+    if (!operator) {
+      res.status(404).json({ error: 'Operatore non trovato' });
+      return;
+    }
+    const data = { turni: body.turni, note: body.note ?? '' };
+    const row = await prisma.operatorSchedule.upsert({
+      where: { operatorId },
+      update: { data },
+      create: { operatorId, data },
+    });
+    console.log(`PUT /operators/${operatorId}/schedule → saved`);
+    res
+      .status(200)
+      .json({ id: row.id, operatoreId: operatorId, turni: data.turni, note: data.note });
+  } catch (error) {
+    console.error('PUT /operators/:operatorId/schedule error:', error);
+    res.status(500).json({ error: 'Errore durante salvataggio orari' });
+  }
+});
+
 // POST /operators
 operatorsRouter.post('/', async (req, res) => {
   const body = req.body as {

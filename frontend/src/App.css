@@ -4176,6 +4176,13 @@ textarea.form-input {
   margin-bottom: 14px;
 }
 
+/* #283: consegna aperta direttamente dalla card della dashboard — evidenziata all'arrivo */
+.consegna-card--focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(47, 107, 237, 0.15);
+}
+
 .consegna-card__patient {
   display: flex;
   align-items: center;
