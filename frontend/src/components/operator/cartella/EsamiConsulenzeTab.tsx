@@ -11,6 +11,7 @@ import {
   EmptyState,
 } from './shared';
 import { API_URL } from '../../../config';
+import { documentAuthHeaders } from '../../../lib/entraAuth';
 
 // #246: photo/scan attachments for exams/RX/consultations. Uses the device camera on mobile
 // (capture="environment") or a file picker on desktop; bytes are stored on PatientDocument.
@@ -25,17 +26,8 @@ type SectionDocMeta = {
   createdAt: string;
 };
 
-function opHeaders(
-  patientId: string,
-  operatorId?: string,
-  operatorRole?: string,
-): Record<string, string> {
-  const h: Record<string, string> = {};
-  if (operatorId) h['X-Operator-Id'] = operatorId;
-  if (operatorRole) h['X-Operator-Role'] = operatorRole;
-  h['X-Demo-Patient-Id'] = patientId;
-  return h;
-}
+// #260: gli header sono costruiti da documentAuthHeaders — Bearer Entra verificato quando la
+// SPA è configurata (VITE_ENTRA_*), altrimenti gli header demo espliciti di #246 (invariati).
 
 function SectionPhotos({
   patientId,
@@ -53,9 +45,8 @@ function SectionPhotos({
   const [err, setErr] = useState<string | null>(null);
 
   function reload() {
-    fetch(`${API_URL}/patients/${patientId}/documents`, {
-      headers: opHeaders(patientId, operatorId, operatorRole),
-    })
+    documentAuthHeaders(patientId, operatorId, operatorRole)
+      .then((headers) => fetch(`${API_URL}/patients/${patientId}/documents`, { headers }))
       .then((r) => (r.ok ? r.json() : { documents: [] }))
       .then((d) =>
         setDocs(
@@ -83,7 +74,7 @@ function SectionPhotos({
       const r = await fetch(`${API_URL}/patients/${patientId}/documents`, {
         method: 'POST',
         body: fd,
-        headers: opHeaders(patientId, operatorId, operatorRole),
+        headers: await documentAuthHeaders(patientId, operatorId, operatorRole),
       });
       if (!r.ok) throw new Error(String(r.status));
       reload();
@@ -97,7 +88,7 @@ function SectionPhotos({
   async function openDoc(d: SectionDocMeta) {
     try {
       const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, {
-        headers: opHeaders(patientId, operatorId, operatorRole),
+        headers: await documentAuthHeaders(patientId, operatorId, operatorRole),
       });
       if (!r.ok) throw new Error(String(r.status));
       const blob = await r.blob();
