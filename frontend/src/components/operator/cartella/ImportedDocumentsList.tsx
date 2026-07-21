@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { API_URL } from '../../../config';
+import { documentAuthHeaders } from '../../../lib/entraAuth';
 import { DocumentSourcePanel, type PatientDocMeta } from '../../shared/DocumentSourcePanel';
 
 // REQ-035 v2: imported source documents permanently linked to the patient, shown in the
@@ -32,11 +33,9 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
 
   useEffect(() => {
     let alive = true;
-    const headers: Record<string, string> = {};
-    if (operatorId) headers['X-Operator-Id'] = operatorId;
-    if (operatorRole) headers['X-Operator-Role'] = operatorRole;
-    headers['X-Demo-Patient-Id'] = patientId;
-    fetch(`${API_URL}/patients/${patientId}/documents`, { headers })
+    // #260: Bearer Entra verificato quando la SPA è configurata, altrimenti header demo (#246).
+    documentAuthHeaders(patientId, operatorId, operatorRole)
+      .then((headers) => fetch(`${API_URL}/patients/${patientId}/documents`, { headers }))
       .then((r) => (r.ok ? r.json() : { documents: [] }))
       .then((d) => {
         if (alive) setDocs(Array.isArray(d.documents) ? d.documents : []);
@@ -51,12 +50,8 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
 
   async function openDoc(d: PatientDocMeta) {
     try {
-      const headers: Record<string, string> = {};
-      if (operatorId) headers['X-Operator-Id'] = operatorId;
-      if (operatorRole) headers['X-Operator-Role'] = operatorRole;
-      headers['X-Demo-Patient-Id'] = patientId;
       const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, {
-        headers,
+        headers: await documentAuthHeaders(patientId, operatorId, operatorRole),
       });
       if (!r.ok) throw new Error(String(r.status));
       const blob = await r.blob();

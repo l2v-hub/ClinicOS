@@ -11,6 +11,7 @@
     "test": "node ../scripts/run-node-tests.mjs"
   },
   "dependencies": {
+    "@azure/msal-browser": "^5.17.1",
     "codice-fiscale-js": "^2.3.23",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

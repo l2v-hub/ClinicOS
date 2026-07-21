@@ -8,6 +8,7 @@
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import multer from 'multer';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { entraConfig, requireEntraOperator } from '../lib/entra-auth.js';
 import {
   listPatientDocuments,
   getPatientDocumentContent,
@@ -44,7 +45,7 @@ function mimeFamily(m: string): string {
 
 export type DocumentAuthMode = 'demo' | 'entra' | 'disabled';
 
-/** Fail closed: demo is explicit and non-production; Entra remains unavailable until #260. */
+/** Fail closed: demo is explicit and non-production; entra requires complete tenant config. */
 export function documentAuthMode(env: NodeJS.ProcessEnv = process.env): DocumentAuthMode {
   const raw = (env.AUTH_MODE || '').trim().toLowerCase();
   if (raw === 'demo' && env.NODE_ENV !== 'production') return 'demo';
@@ -53,8 +54,12 @@ export function documentAuthMode(env: NodeJS.ProcessEnv = process.env): Document
 }
 
 /**
- * DEMO-ONLY gate. These headers are falsifiable hints, not secure authentication. The explicit
- * patient header prevents accidental cross-patient access in synthetic QA; real authz is #260.
+ * Document-endpoint gate.
+ * - `entra` (#260): verified Entra JWT (signature/issuer/audience/expiry vs tenant JWKS) with
+ *   server-side identity mapping — the ONLY production-grade mode. Struttura scope (PO decision):
+ *   a mapped, active operator may access every patient's documents. Incomplete tenant config
+ *   fails closed. Self-declared X-Operator-* / X-Demo-Patient-Id headers are ignored (AC6).
+ * - `demo`: explicit, non-production only — falsifiable headers for synthetic QA (unchanged).
  */
 export function requirePatientDocumentAccess(
   req: AuthedRequest,
@@ -63,12 +68,21 @@ export function requirePatientDocumentAccess(
 ): void {
   res.setHeader('Cache-Control', 'private, no-store');
   const mode = documentAuthMode();
+  if (mode === 'entra') {
+    const config = entraConfig();
+    if (!config) {
+      res.status(503).json({
+        error: 'Autenticazione Entra non configurata (ENTRA_TENANT_ID / ENTRA_AUDIENCE)',
+        code: 'document_auth_unavailable',
+      });
+      return;
+    }
+    requireEntraOperator(config)(req, res, next);
+    return;
+  }
   if (mode !== 'demo') {
     res.status(503).json({
-      error:
-        mode === 'entra'
-          ? 'Autenticazione Entra non ancora disponibile per i documenti clinici'
-          : 'Endpoint documenti disabilitati: configurare esplicitamente AUTH_MODE',
+      error: 'Endpoint documenti disabilitati: configurare esplicitamente AUTH_MODE',
       code: 'document_auth_unavailable',
     });
     return;
