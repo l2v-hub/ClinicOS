@@ -1,0 +1,15 @@
+
+ATTACK SUITE COMPLETE — cases:13 accepted(fails):0
+  [PASS] 1. alg:none token => 401 token_invalid
+  [PASS] 2. HS256 key-confusion => 401 token_invalid
+  [PASS] 3a. identity binds to verified oid owner => cmruc67f role=operator
+  [PASS] 3b. inactive operator -> 403 => 403 identity_inactive
+  [PASS] 3c. unmapped oid -> 403 => 403 identity_not_mapped
+  [PASS] 4. tampered payload / orig signature => 401 token_invalid
+  [PASS] 5. expired->401, reissued->ok (sanity) => expired 401, fresh ok
+  [PASS] 6. 100KB junk token => 401 in 1ms
+  [PASS] 7. cross-tenant (wrong issuer+key) => 401 token_invalid
+  [PASS] 7b. right issuer, foreign signing key => 401 token_invalid
+  [PASS] 8. gate: alg:none -> 401 + WWW-Authenticate => 401 wa=Bearer realm="clinicos-documents"
+  [PASS] 9. gate: spoofed X-Operator-* ignored (AC6) => 401
+  [PASS] AC7. no token/e-mail in module stdout/stderr => clean (0B captured)

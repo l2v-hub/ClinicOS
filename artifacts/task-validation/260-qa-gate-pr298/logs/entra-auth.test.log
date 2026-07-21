@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: entraConfig fails closed on incomplete configuration (AC5)
+ok 1 - entraConfig fails closed on incomplete configuration (AC5)
+  ---
+  duration_ms: 491.8731
+  ...
+# Subtest: valid token with pre-linked oid resolves the identity (AC1/AC2)
+ok 2 - valid token with pre-linked oid resolves the identity (AC1/AC2)
+  ---
+  duration_ms: 25.9985
+  ...
+# Subtest: unlinked oid with matching verified e-mail auto-links once (AC2)
+ok 3 - unlinked oid with matching verified e-mail auto-links once (AC2)
+  ---
+  duration_ms: 21.8498
+  ...
+# Subtest: e-mail match must NOT hijack a user already linked to a different oid (AC2)
+ok 4 - e-mail match must NOT hijack a user already linked to a different oid (AC2)
+  ---
+  duration_ms: 8.0961
+  ...
+# Subtest: missing / malformed / forged / expired / wrong-issuer / wrong-audience → 401 (AC1/AC4)
+ok 5 - missing / malformed / forged / expired / wrong-issuer / wrong-audience → 401 (AC1/AC4)
+  ---
+  duration_ms: 8.323
+  ...
+# Subtest: valid token without a mapped user → 403; inactive user → 403 (AC4)
+ok 6 - valid token without a mapped user → 403; inactive user → 403 (AC4)
+  ---
+  duration_ms: 8.4504
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11009.8882

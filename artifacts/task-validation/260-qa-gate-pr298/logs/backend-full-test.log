@@ -1,0 +1,1585 @@
+> node ../scripts/run-node-tests.mjs
+run-node-tests: running 42 test file(s) via node --import tsx --test
+TAP version 13
+# Subtest: accepts a canonical valid CF
+ok 1 - accepts a canonical valid CF
+  ---
+  duration_ms: 1.1843
+# Subtest: normalizes case and surrounding whitespace
+ok 2 - normalizes case and surrounding whitespace
+  ---
+  duration_ms: 0.2779
+# Subtest: accepts an omocodia variant with recomputed control character
+ok 3 - accepts an omocodia variant with recomputed control character
+  ---
+  duration_ms: 0.2106
+# Subtest: rejects a CF with a wrong control character
+ok 4 - rejects a CF with a wrong control character
+  ---
+  duration_ms: 0.1806
+# Subtest: rejects malformed input
+ok 5 - rejects malformed input
+  ---
+  duration_ms: 1.1437
+# Subtest: entraConfig fails closed on incomplete configuration (AC5)
+ok 6 - entraConfig fails closed on incomplete configuration (AC5)
+  ---
+  duration_ms: 716.1008
+# Subtest: valid token with pre-linked oid resolves the identity (AC1/AC2)
+ok 7 - valid token with pre-linked oid resolves the identity (AC1/AC2)
+  ---
+  duration_ms: 67.4559
+# Subtest: unlinked oid with matching verified e-mail auto-links once (AC2)
+ok 8 - unlinked oid with matching verified e-mail auto-links once (AC2)
+  ---
+  duration_ms: 62.4029
+# Subtest: e-mail match must NOT hijack a user already linked to a different oid (AC2)
+ok 9 - e-mail match must NOT hijack a user already linked to a different oid (AC2)
+  ---
+  duration_ms: 13.7389
+# Subtest: missing / malformed / forged / expired / wrong-issuer / wrong-audience → 401 (AC1/AC4)
+ok 10 - missing / malformed / forged / expired / wrong-issuer / wrong-audience → 401 (AC1/AC4)
+  ---
+  duration_ms: 18.72
+# Subtest: valid token without a mapped user → 403; inactive user → 403 (AC4)
+ok 11 - valid token without a mapped user → 403; inactive user → 403 (AC4)
+  ---
+  duration_ms: 18.0442
+# Subtest: AC5: AUTH_MODE=entra with incomplete tenant config fails closed (503)
+ok 12 - AC5: AUTH_MODE=entra with incomplete tenant config fails closed (503)
+  ---
+  duration_ms: 598.7471
+# Subtest: AC6: in entra mode self-declared X-Operator-*/X-Demo-Patient-Id headers are NOT identity
+ok 13 - AC6: in entra mode self-declared X-Operator-*/X-Demo-Patient-Id headers are NOT identity
+  ---
+  duration_ms: 1.1459
+# Subtest: AC1-AC3: verified Bearer token authenticates and attaches the mapped operator
+ok 14 - AC1-AC3: verified Bearer token authenticates and attaches the mapped operator
+  ---
+  duration_ms: 46.184
+# Subtest: AC4: forged token in entra mode → 401 without enumeration
+ok 15 - AC4: forged token in entra mode → 401 without enumeration
+  ---
+  duration_ms: 104.291
+# Subtest: fasciaFromTime maps 08:00→mattina and 18:00→sera (two distinct buckets)
+ok 16 - fasciaFromTime maps 08:00→mattina and 18:00→sera (two distinct buckets)
+  ---
+  duration_ms: 1.4555
+# Subtest: fractions stay exact, never approximated to decimals
+ok 17 - fractions stay exact, never approximated to decimals
+  ---
+  duration_ms: 1.0439
+# Subtest: scheduleDoseLabel computes mg equivalent for divisible solid
+ok 18 - scheduleDoseLabel computes mg equivalent for divisible solid
+  ---
+  duration_ms: 0.3848
+# Subtest: deriveLegacyFromSchedules unions fasce + lists specific times
+ok 19 - deriveLegacyFromSchedules unions fasce + lists specific times
+  ---
+  duration_ms: 0.3266
+# Subtest: normalizeSchedules dedupes same (time,unit) so therapy rows never duplicate
+ok 20 - normalizeSchedules dedupes same (time,unit) so therapy rows never duplicate
+  ---
+  duration_ms: 0.5856
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.295Z"}
+# [ai-audit] DATABASE_URL assente: persistenza audit su Postgres disattivata (resta il log su stdout)
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.299Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.299Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.299Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.299Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.299Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.299Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.300Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.300Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.300Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.309Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.310Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.310Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.310Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.310Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.310Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.310Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.310Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.311Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"read","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"unknown","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.313Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":null,"actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":null,"actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":null,"fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_forbidden","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.321Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.321Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# Subtest: catalog: zero delete actions, kinds are CRU-only by construction
+ok 21 - catalog: zero delete actions, kinds are CRU-only by construction
+  ---
+  duration_ms: 1.4767
+# Subtest: catalog: deny-by-default and AI_DISABLED_ACTIONS kill-switch
+ok 22 - catalog: deny-by-default and AI_DISABLED_ACTIONS kill-switch
+  ---
+  duration_ms: 0.4576
+# Subtest: planCommand testo: vital command → executable create_vital_sign preview
+ok 23 - planCommand testo: vital command → executable create_vital_sign preview
+  ---
+  duration_ms: 3.8343
+# Subtest: planCommand: read question delegates to the assistant (preview null, read populated)
+ok 24 - planCommand: read question delegates to the assistant (preview null, read populated)
+  ---
+  duration_ms: 1.1968
+# Subtest: \#239 planCommand: a natural question without an explicit read verb ("che terapie…") delegates to the assistant
+ok 25 - \#239 planCommand: a natural question without an explicit read verb ("che terapie…") delegates to the assistant
+  ---
+  duration_ms: 2.2038
+# Subtest: \#239 planCommand: non-command text (unknown) falls back to the assistant, never dead-ends as "Comando non riconosciuto"
+ok 26 - \#239 planCommand: non-command text (unknown) falls back to the assistant, never dead-ends as "Comando non riconosciuto"
+  ---
+  duration_ms: 0.3895
+# Subtest: planCommand: every delete variant → refusal pointing to the traditional UI
+ok 27 - planCommand: every delete variant → refusal pointing to the traditional UI
+  ---
+  duration_ms: 5.2327
+# Subtest: executeCommand: delete variants are rejected even when confirmed — NO write happens
+ok 28 - executeCommand: delete variants are rejected even when confirmed — NO write happens
+  ---
+  duration_ms: 3.8247
+# Subtest: executeCommand: delete refusal uses the dedicated delete_forbidden kind
+ok 29 - executeCommand: delete refusal uses the dedicated delete_forbidden kind
+  ---
+  duration_ms: 0.6497
+# Subtest: executeCommand: action disabled via AI_DISABLED_ACTIONS → not_in_catalog, NO write
+ok 30 - executeCommand: action disabled via AI_DISABLED_ACTIONS → not_in_catalog, NO write
+  ---
+  duration_ms: 0.9044
+# Subtest: executeCommand testo: add_diary_note happy path writes once
+ok 31 - executeCommand testo: add_diary_note happy path writes once
+  ---
+  duration_ms: 1.7383
+# Subtest: executeCommand testo: replayed idempotency key does not duplicate the write
+ok 32 - executeCommand testo: replayed idempotency key does not duplicate the write
+  ---
+  duration_ms: 1.0981
+# Subtest: executeCommand: confirmation still mandatory on the text channel
+ok 33 - executeCommand: confirmation still mandatory on the text channel
+  ---
+  duration_ms: 0.6282
+# Subtest: T018a planner: ogni variante lessicale di cancellazione (base + flessa) → refusalKind delete
+ok 34 - T018a planner: ogni variante lessicale di cancellazione (base + flessa) → refusalKind delete
+  ---
+  duration_ms: 2.1417
+# Subtest: T018b executor: kind non-write (read/unknown) → not_executable, writer mai chiamato
+ok 35 - T018b executor: kind non-write (read/unknown) → not_executable, writer mai chiamato
+  ---
+  duration_ms: 0.6178
+# Subtest: T018c catalogo: nessuna entry delete su TUTTE le entry + azione inventata rifiutata
+ok 36 - T018c catalogo: nessuna entry delete su TUTTE le entry + azione inventata rifiutata
+  ---
+  duration_ms: 0.2816
+# Subtest: T018d audit: tentativo delete → recordAuditEvent riceve kind refusal / refused_delete
+ok 37 - T018d audit: tentativo delete → recordAuditEvent riceve kind refusal / refused_delete
+  ---
+  duration_ms: 0.6058
+# Subtest: T027 matcher: crea appuntamento — tipologia, data relativa, ora e paziente dal testo
+ok 38 - T027 matcher: crea appuntamento — tipologia, data relativa, ora e paziente dal testo
+  ---
+  duration_ms: 1.2052
+# Subtest: T027 matcher: varianti data/ora — dopodomani, "il GG/MM", "alle 9 e 30"
+ok 39 - T027 matcher: varianti data/ora — dopodomani, "il GG/MM", "alle 9 e 30"
+  ---
+  duration_ms: 0.7145
+# Subtest: T027 matcher: data/ora mancanti e paziente assente = ambiguità bloccanti
+ok 40 - T027 matcher: data/ora mancanti e paziente assente = ambiguità bloccanti
+  ---
+  duration_ms: 0.4154
+# Subtest: T027 matcher: sposta appuntamento — orario vecchio/nuovo, paziente dal contesto
+ok 41 - T027 matcher: sposta appuntamento — orario vecchio/nuovo, paziente dal contesto
+  ---
+  duration_ms: 0.342
+# Subtest: T027 matcher: comandi non-appuntamento NON vengono intercettati
+ok 42 - T027 matcher: comandi non-appuntamento NON vengono intercettati
+  ---
+  duration_ms: 0.1436
+# Subtest: T027 plan: crea appuntamento per Moretti → preview eseguibile con paziente risolto
+ok 43 - T027 plan: crea appuntamento per Moretti → preview eseguibile con paziente risolto
+  ---
+  duration_ms: 0.7838
+# Subtest: T027 plan: conflitto slot → ambiguità BLOCCANTE in preview (conferma disabilitata)
+ok 44 - T027 plan: conflitto slot → ambiguità BLOCCANTE in preview (conferma disabilitata)
+  ---
+  duration_ms: 0.515
+# Subtest: T027 plan: paziente non trovato / ambiguo → conferma disabilitata
+ok 45 - T027 plan: paziente non trovato / ambiguo → conferma disabilitata
+  ---
+  duration_ms: 0.6735
+# Subtest: T027 plan: sposta appuntamento → target risolto e preview con orari
+ok 46 - T027 plan: sposta appuntamento → target risolto e preview con orari
+  ---
+  duration_ms: 0.4618
+# Subtest: T027 execute: crea appuntamento confermato → writer appuntamenti, idempotente al retry
+ok 47 - T027 execute: crea appuntamento confermato → writer appuntamenti, idempotente al retry
+  ---
+  duration_ms: 0.7423
+# Subtest: T027 execute: retry dopo scrittura — lo slot appena creato NON blocca il replay (deduped)
+ok 48 - T027 execute: retry dopo scrittura — lo slot appena creato NON blocca il replay (deduped)
+  ---
+  duration_ms: 0.6047
+# Subtest: T027 execute: conflitto slot rilevato al re-grounding → ambiguous, writer MAI chiamato
+ok 49 - T027 execute: conflitto slot rilevato al re-grounding → ambiguous, writer MAI chiamato
+  ---
+  duration_ms: 0.6167
+# Subtest: T027: "modifica la terapia di Rossi" → rifiuto entità vietata (non delete)
+ok 50 - T027: "modifica la terapia di Rossi" → rifiuto entità vietata (non delete)
+  ---
+  duration_ms: 0.3
+# Subtest: T027: "cancella l'appuntamento delle 15" → refusalKind delete su plan ED execute
+ok 51 - T027: "cancella l'appuntamento delle 15" → refusalKind delete su plan ED execute
+  ---
+  duration_ms: 0.6256
+# Subtest: T027 catalogo: create/update_appointment presenti, NESSUNA azione delete_appointment
+ok 52 - T027 catalogo: create/update_appointment presenti, NESSUNA azione delete_appointment
+  ---
+  duration_ms: 0.1947
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_consegna","recordId":"rec-consegna","fields":["note","patientQuery","pazienteNome"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"create_consegna","recordId":"rec-consegna","fields":["note","patientQuery"],"source":"VOICE","channel":"VOCE","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"create_consegna","recordId":null,"fields":["note"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# [ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-21T07:26:30.621Z"}
+# [ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+# Subtest: T027 isolamento delete: nessun modulo sotto src/ai importa uiOnlyDeleteAppointment
+ok 53 - T027 isolamento delete: nessun modulo sotto src/ai importa uiOnlyDeleteAppointment
+  ---
+  duration_ms: 293.7598
+# Subtest: I130 matcher: consegna con paziente e testo dal comando
+ok 54 - I130 matcher: consegna con paziente e testo dal comando
+  ---
+  duration_ms: 1.4733
+# Subtest: I130 matcher: varianti verbo e variante "consegna per X …" senza verbo
+ok 55 - I130 matcher: varianti verbo e variante "consegna per X …" senza verbo
+  ---
+  duration_ms: 0.3844
+# Subtest: I130 matcher: paziente dal contesto quando non indicato nel testo
+ok 56 - I130 matcher: paziente dal contesto quando non indicato nel testo
+  ---
+  duration_ms: 0.1513
+# Subtest: I130 matcher: testo vuoto e paziente assente = ambiguità bloccanti
+ok 57 - I130 matcher: testo vuoto e paziente assente = ambiguità bloccanti
+  ---
+  duration_ms: 0.64
+# Subtest: I130 matcher: comandi non-consegna NON vengono intercettati
+ok 58 - I130 matcher: comandi non-consegna NON vengono intercettati
+  ---
+  duration_ms: 0.1838
+# Subtest: I130 plan: consegna per Moretti → preview eseguibile con paziente risolto
+ok 59 - I130 plan: consegna per Moretti → preview eseguibile con paziente risolto
+  ---
+  duration_ms: 0.6058
+# Subtest: I130 plan: paziente non trovato → conferma disabilitata
+ok 60 - I130 plan: paziente non trovato → conferma disabilitata
+  ---
+  duration_ms: 0.2759
+# Subtest: I130 execute: consegna confermata → writer consegne, idempotente al retry
+ok 61 - I130 execute: consegna confermata → writer consegne, idempotente al retry
+  ---
+  duration_ms: 0.5691
+# Subtest: I130 execute: senza conferma → confirmation_required, writer MAI chiamato
+ok 62 - I130 execute: senza conferma → confirmation_required, writer MAI chiamato
+  ---
+  duration_ms: 0.4373
+# Subtest: I130: "cancella la consegna" → refusalKind delete su plan ED execute
+ok 63 - I130: "cancella la consegna" → refusalKind delete su plan ED execute
+  ---
+  duration_ms: 0.5381
+# Subtest: I130 catalogo: create_consegna presente, NESSUNA azione delete_consegna, catalogo CRU-only
+ok 64 - I130 catalogo: create_consegna presente, NESSUNA azione delete_consegna, catalogo CRU-only
+  ---
+  duration_ms: 0.1499
+# Subtest: I130 diario: la frase esatta della issue («Scrivi nel diario di …: …») → add_diary_note
+ok 65 - I130 diario: la frase esatta della issue («Scrivi nel diario di …: …») → add_diary_note
+  ---
+  duration_ms: 0.2277
+# Subtest: isAgentId accepts only the two known agents
+ok 66 - isAgentId accepts only the two known agents
+  ---
+  duration_ms: 1.109
+# Subtest: facility agent serves its own domain + shared intents, not clinical ones
+ok 67 - facility agent serves its own domain + shared intents, not clinical ones
+  ---
+  duration_ms: 0.2644
+# Subtest: clinical agent serves its own domain + shared intents, not facility ones
+ok 68 - clinical agent serves its own domain + shared intents, not facility ones
+  ---
+  duration_ms: 0.2256
+# Subtest: ownerAgent maps domain intents; shared intents have no owner
+ok 69 - ownerAgent maps domain intents; shared intents have no owner
+  ---
+  duration_ms: 0.2114
+# Subtest: redirectMessage points to the owning agent only when out of domain
+ok 70 - redirectMessage points to the owning agent only when out of domain
+  ---
+  duration_ms: 1.5219
+# Subtest: allergies question on the patient page → allergies tool, current-patient scope
+ok 71 - allergies question on the patient page → allergies tool, current-patient scope
+  ---
+  duration_ms: 1.9128
+# Subtest: therapy question → therapies tool
+ok 72 - therapy question → therapies tool
+  ---
+  duration_ms: 0.8163
+# Subtest: search inside Anamnesi → narrative search with sectionKey
+ok 73 - search inside Anamnesi → narrative search with sectionKey
+  ---
+  duration_ms: 0.9455
+# Subtest: document search → search_documents
+ok 74 - document search → search_documents
+  ---
+  duration_ms: 0.3942
+# Subtest: recent vitals → vital signs tool
+ok 75 - recent vitals → vital signs tool
+  ---
+  duration_ms: 0.2141
+# Subtest: timeline question → timeline tool
+ok 76 - timeline question → timeline tool
+  ---
+  duration_ms: 0.1761
+# Subtest: appointments question → appointments tool
+ok 77 - appointments question → appointments tool
+  ---
+  duration_ms: 0.272
+# Subtest: cross-patient systolic search requires cross access
+ok 78 - cross-patient systolic search requires cross access
+  ---
+  duration_ms: 0.483
+# Subtest: cross-patient allergy correlate
+ok 79 - cross-patient allergy correlate
+  ---
+  duration_ms: 0.5962
+# Subtest: appointments today → cross tool
+ok 80 - appointments today → cross tool
+  ---
+  duration_ms: 0.7071
+# Subtest: issue \#239: rooms occupancy question → aggregate rooms occupancy tool, no cross-patient access
+ok 81 - issue \#239: rooms occupancy question → aggregate rooms occupancy tool, no cross-patient access
+  ---
+  duration_ms: 0.3073
+# Subtest: a diagnosis request is refused
+ok 82 - a diagnosis request is refused
+  ---
+  duration_ms: 0.1792
+# Subtest: a therapy suggestion request is refused
+ok 83 - a therapy suggestion request is refused
+  ---
+  duration_ms: 0.1464
+# Subtest: a "which patient is more serious" request is refused
+ok 84 - a "which patient is more serious" request is refused
+  ---
+  duration_ms: 0.2717
+# Subtest: an unrelated question is unknown (no tools, no invented answer)
+ok 85 - an unrelated question is unknown (no tools, no invented answer)
+  ---
+  duration_ms: 0.3878
+# Subtest: 016 F0: plural "terapie" is recognized (not only singular)
+ok 86 - 016 F0: plural "terapie" is recognized (not only singular)
+  ---
+  duration_ms: 0.2018
+# Subtest: 016 F0: plural "allergie" and synonym "farmaci" recognized
+ok 87 - 016 F0: plural "allergie" and synonym "farmaci" recognized
+  ---
+  duration_ms: 0.1851
+# Subtest: 016 F0: extractPatientName pulls "di <Nome Cognome>"
+ok 88 - 016 F0: extractPatientName pulls "di <Nome Cognome>"
+  ---
+  duration_ms: 0.5069
+# Subtest: 016 F0: extractPatientName pulls a single surname after the verb
+ok 89 - 016 F0: extractPatientName pulls a single surname after the verb
+  ---
+  duration_ms: 0.3491
+# Subtest: 016 F0: extractPatientName returns null when no patient is named
+ok 90 - 016 F0: extractPatientName returns null when no patient is named
+  ---
+  duration_ms: 0.2211
+# Subtest: 016 F0: pickResolvedPatient resolves a unique match
+ok 91 - 016 F0: pickResolvedPatient resolves a unique match
+  ---
+  duration_ms: 1.0221
+# Subtest: 016 F0: pickResolvedPatient returns "none" when no match
+ok 92 - 016 F0: pickResolvedPatient returns "none" when no match
+  ---
+  duration_ms: 0.1883
+# Subtest: 016 F0: pickResolvedPatient returns "ambiguous" for multiple matches
+ok 93 - 016 F0: pickResolvedPatient returns "ambiguous" for multiple matches
+  ---
+  duration_ms: 0.1352
+# Subtest: 016 F3: dispatchQueryData occupancy count returns a number
+ok 94 - 016 F3: dispatchQueryData occupancy count returns a number
+  ---
+  duration_ms: 366.5654
+# Subtest: 016 F3: invalid plan → empty result (no throw)
+ok 95 - 016 F3: invalid plan → empty result (no throw)
+  ---
+  duration_ms: 1.07
+# Subtest: 016 F3: facility off → forbidden propagates (clean refusal upstream)
+ok 96 - 016 F3: facility off → forbidden propagates (clean refusal upstream)
+  ---
+  duration_ms: 1.1274
+# Subtest: 016 F2: prosa valida con fonti citate ⊆ fonti fornite → composta
+ok 97 - 016 F2: prosa valida con fonti citate ⊆ fonti fornite → composta
+  ---
+  duration_ms: 1.4289
+# Subtest: 016 F2: prosa che cita una fonte NON fornita (invenzione) → scartata
+ok 98 - 016 F2: prosa che cita una fonte NON fornita (invenzione) → scartata
+  ---
+  duration_ms: 0.417
+# Subtest: 016 F2: nessuna fonte citata → scartata (niente prosa non fondata)
+ok 99 - 016 F2: nessuna fonte citata → scartata (niente prosa non fondata)
+  ---
+  duration_ms: 0.2756
+# Subtest: 016 F2: runtime errore/timeout → non composto (risposta strutturata)
+ok 100 - 016 F2: runtime errore/timeout → non composto (risposta strutturata)
+  ---
+  duration_ms: 0.4141
+# Subtest: 016 F2: composer non configurato (nessun client) → non composto
+ok 101 - 016 F2: composer non configurato (nessun client) → non composto
+  ---
+  duration_ms: 0.2709
+# Subtest: valid config: google provider with key is available
+ok 102 - valid config: google provider with key is available
+  ---
+  duration_ms: 3.4051
+# Subtest: absent config: missing GEMINI_API_KEY produces controlled error, never throws
+ok 103 - absent config: missing GEMINI_API_KEY produces controlled error, never throws
+  ---
+  duration_ms: 1.5007
+# Subtest: changing AI_MODEL changes the model (no frontend change needed)
+ok 104 - changing AI_MODEL changes the model (no frontend change needed)
+  ---
+  duration_ms: 8.4821
+# Subtest: mock provider is selectable without a key (CI path)
+ok 105 - mock provider is selectable without a key (CI path)
+  ---
+  duration_ms: 2.305
+# Subtest: factory throws controlled config error when google selected but unavailable
+ok 106 - factory throws controlled config error when google selected but unavailable
+  ---
+  duration_ms: 2.2598
+# Subtest: schema and prompt assets load and are versioned
+ok 107 - schema and prompt assets load and are versioned
+  ---
+  duration_ms: 4.9012
+# Subtest: publicStatus never leaks the API key
+ok 108 - publicStatus never leaks the API key
+  ---
+  duration_ms: 2.6746
+# Subtest: redaction: secrets masked, long content truncated
+ok 109 - redaction: secrets masked, long content truncated
+  ---
+  duration_ms: 1.449
+# Subtest: limits parse from env with sane fallbacks
+ok 110 - limits parse from env with sane fallbacks
+  ---
+  duration_ms: 2.1569
+# Subtest: 016 F3: facility read off by default
+ok 111 - 016 F3: facility read off by default
+  ---
+  duration_ms: 1.5179
+# Subtest: 016 F3: facility read enabled by env flag (role-independent)
+ok 112 - 016 F3: facility read enabled by env flag (role-independent)
+  ---
+  duration_ms: 0.1959
+# Subtest: 016 F3: any non-true value keeps facility read off
+ok 113 - 016 F3: any non-true value keeps facility read off
+  ---
+  duration_ms: 0.1694
+# Subtest: valid extraction passes schema
+ok 114 - valid extraction passes schema
+  ---
+  duration_ms: 64.267
+# Subtest: missing required container fails
+ok 115 - missing required container fails
+  ---
+  duration_ms: 0.3787
+# Subtest: wrong type fails (anagrafica.nome as object, not string)
+ok 116 - wrong type fails (anagrafica.nome as object, not string)
+  ---
+  duration_ms: 0.2017
+# Subtest: invalid enum fails (sesso=X)
+ok 117 - invalid enum fails (sesso=X)
+  ---
+  duration_ms: 0.1958
+# Subtest: diagnosi must be an array
+ok 118 - diagnosi must be an array
+  ---
+  duration_ms: 0.4158
+# Subtest: errors are content-free (path + rule only)
+ok 119 - errors are content-free (path + rule only)
+  ---
+  duration_ms: 0.2302
+# Subtest: mock provider returns a schema-valid, empty (uninvented) instance
+ok 120 - mock provider returns a schema-valid, empty (uninvented) instance
+  ---
+  duration_ms: 2.312
+# Subtest: normalizeDate: IT/ISO handling, no guessing
+ok 121 - normalizeDate: IT/ISO handling, no guessing
+  ---
+  duration_ms: 0.3988
+# Subtest: parseUserContext: missing user id → unauthorized
+ok 122 - parseUserContext: missing user id → unauthorized
+  ---
+  duration_ms: 1.5624
+# Subtest: parseUserContext: header absent → operator scope (permitted=null); present → allow-list
+ok 123 - parseUserContext: header absent → operator scope (permitted=null); present → allow-list
+  ---
+  duration_ms: 1.0767
+# Subtest: assertTenant: a different tenant is rejected (isolation)
+ok 124 - assertTenant: a different tenant is rejected (isolation)
+  ---
+  duration_ms: 0.4257
+# Subtest: patient allow-list is enforced
+ok 125 - patient allow-list is enforced
+  ---
+  duration_ms: 0.3009
+# Subtest: cross-patient search is off unless enabled AND privileged
+ok 126 - cross-patient search is off unless enabled AND privileged
+  ---
+  duration_ms: 0.3883
+# Subtest: service token: closed when unset; matches Bearer when set
+ok 127 - service token: closed when unset; matches Bearer when set
+  ---
+  duration_ms: 0.1925
+# Subtest: vitalNumericValue parses PA systolic/diastolic and plain numbers
+ok 128 - vitalNumericValue parses PA systolic/diastolic and plain numbers
+  ---
+  duration_ms: 0.3757
+# Subtest: filterVitals: systolic > 150 selects only high blood-pressure readings
+ok 129 - filterVitals: systolic > 150 selects only high blood-pressure readings
+  ---
+  duration_ms: 0.3174
+# Subtest: filterVitals: date range
+ok 130 - filterVitals: date range
+  ---
+  duration_ms: 0.1962
+# Subtest: allergy/therapy matching is accent/case-insensitive
+ok 131 - allergy/therapy matching is accent/case-insensitive
+  ---
+  duration_ms: 0.5998
+# Subtest: every source builder carries patientId + recordId + label
+ok 132 - every source builder carries patientId + recordId + label
+  ---
+  duration_ms: 0.2836
+# Subtest: 016 F0: nameMatchesAllTokens matches full name in either order
+ok 133 - 016 F0: nameMatchesAllTokens matches full name in either order
+  ---
+  duration_ms: 0.3458
+# Subtest: 016 F0: nameMatchesAllTokens matches a single surname token
+ok 134 - 016 F0: nameMatchesAllTokens matches a single surname token
+  ---
+  duration_ms: 0.1852
+# Subtest: 016 F0: nameMatchesAllTokens is false when a token is absent
+ok 135 - 016 F0: nameMatchesAllTokens is false when a token is absent
+  ---
+  duration_ms: 0.2694
+# Subtest: identical header on every page → kept once, removed from later pages
+ok 136 - identical header on every page → kept once, removed from later pages
+  ---
+  duration_ms: 5.1625
+# Subtest: header with SAME labels but DIFFERENT values is still detected as repeated
+ok 137 - header with SAME labels but DIFFERENT values is still detected as repeated
+  ---
+  duration_ms: 0.839
+# Subtest: page WITHOUT a header is left untouched
+ok 138 - page WITHOUT a header is left untouched
+  ---
+  duration_ms: 0.4755
+# Subtest: clinical text at the TOP of a page is not mistaken for a header
+ok 139 - clinical text at the TOP of a page is not mistaken for a header
+  ---
+  duration_ms: 1.6354
+# Subtest: ambiguous repeated block BELOW threshold is kept and flagged
+ok 140 - ambiguous repeated block BELOW threshold is kept and flagged
+  ---
+  duration_ms: 0.9894
+# Subtest: \#275: page-number footer is normalized and KEPT (sequential-reading aid)
+ok 141 - \#275: page-number footer is normalized and KEPT (sequential-reading aid)
+  ---
+  duration_ms: 0.9799
+# Subtest: \#275: page marker without a total is kept as "--- Pagina N ---"
+ok 142 - \#275: page marker without a total is kept as "--- Pagina N ---"
+  ---
+  duration_ms: 0.5029
+# Subtest: \#275: opt-out (keepPageMarkers:false) restores the old strip behavior
+ok 143 - \#275: opt-out (keepPageMarkers:false) restores the old strip behavior
+  ---
+  duration_ms: 0.796
+# Subtest: footer line that ALSO carries text is kept and warned
+ok 144 - footer line that ALSO carries text is kept and warned
+  ---
+  duration_ms: 0.7456
+# Subtest: anagraphic data from the first page is preserved (first header kept)
+ok 145 - anagraphic data from the first page is preserved (first header kept)
+  ---
+  duration_ms: 8.8193
+# Subtest: Anamnesi split across two pages becomes contiguous after the interleaved header is removed
+ok 146 - Anamnesi split across two pages becomes contiguous after the interleaved header is removed
+  ---
+  duration_ms: 0.5961
+# Subtest: Terapia continuation across pages stays contiguous
+ok 147 - Terapia continuation across pages stays contiguous
+  ---
+  duration_ms: 0.4307
+# Subtest: no anagraphic duplication: each label value appears once
+ok 148 - no anagraphic duplication: each label value appears once
+  ---
+  duration_ms: 1.8864
+# Subtest: idempotent: re-running on cleaned text removes nothing further
+ok 149 - idempotent: re-running on cleaned text removes nothing further
+  ---
+  duration_ms: 0.7554
+# Subtest: BUG-046: inline multi-label header row repeated across pages is removed from later pages
+ok 150 - BUG-046: inline multi-label header row repeated across pages is removed from later pages
+  ---
+  duration_ms: 0.7371
+# Subtest: config: env threshold + label list are honoured
+ok 151 - config: env threshold + label list are honoured
+  ---
+  duration_ms: 0.985
+# Subtest: empty input is safe
+ok 152 - empty input is safe
+  ---
+  duration_ms: 0.1804
+# Subtest: \#279: table-cell header repeated on 3 pages → kept once, later pages cleaned
+ok 153 - \#279: table-cell header repeated on 3 pages → kept once, later pages cleaned
+  ---
+  duration_ms: 1.2381
+# Subtest: \#279: a content table (therapy) is NOT treated as a header
+ok 154 - \#279: a content table (therapy) is NOT treated as a header
+  ---
+  duration_ms: 0.5715
+# Subtest: \#279: repeated institutional banner above the header table is absorbed
+ok 155 - \#279: repeated institutional banner above the header table is absorbed
+  ---
+  duration_ms: 0.8492
+# Subtest: confirmDraft creates patient transactionally + is idempotent
+ok 156 - confirmDraft creates patient transactionally + is idempotent
+  ---
+  duration_ms: 364.1256
+# Subtest: confirmDraft: blocks a missing CF and a duplicate CF (not forcible)
+ok 157 - confirmDraft: blocks a missing CF and a duplicate CF (not forcible)
+  ---
+  duration_ms: 70.5331
+# Subtest: createDraft + patch autosave merges data
+ok 158 - createDraft + patch autosave merges data
+  ---
+  duration_ms: 439.6388
+# Subtest: 016 F1: READ_TOOLS contiene solo tool di lettura del gateway
+ok 159 - 016 F1: READ_TOOLS contiene solo tool di lettura del gateway
+  ---
+  duration_ms: 1.1483
+# Subtest: 016 F1: nessun tool di scrittura/cancellazione è nell allowlist
+ok 160 - 016 F1: nessun tool di scrittura/cancellazione è nell allowlist
+  ---
+  duration_ms: 0.2719
+# Subtest: 016 F1: piano LLM valido (solo read tools) è accettato
+ok 161 - 016 F1: piano LLM valido (solo read tools) è accettato
+  ---
+  duration_ms: 0.5193
+# Subtest: 016 F1: piano LLM con tool FUORI allowlist → fallback deterministico
+ok 162 - 016 F1: piano LLM con tool FUORI allowlist → fallback deterministico
+  ---
+  duration_ms: 1.2078
+# Subtest: 016 F1: runtime che lancia/timeout → fallback deterministico (nessun errore)
+ok 163 - 016 F1: runtime che lancia/timeout → fallback deterministico (nessun errore)
+  ---
+  duration_ms: 1.0993
+# Subtest: 016 F1: scope=cross dichiarato dall LLM su tool patient-scoped è IGNORATO (no falso rifiuto)
+ok 164 - 016 F1: scope=cross dichiarato dall LLM su tool patient-scoped è IGNORATO (no falso rifiuto)
+  ---
+  duration_ms: 0.2769
+# Subtest: 016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato dall LLM
+ok 165 - 016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato dall LLM
+  ---
+  duration_ms: 0.2242
+# Subtest: 016 F1: piano LLM VUOTO ma deterministico non-vuoto → preferisci deterministico (F1 >= F0)
+ok 166 - 016 F1: piano LLM VUOTO ma deterministico non-vuoto → preferisci deterministico (F1 >= F0)
+  ---
+  duration_ms: 0.4689
+# Subtest: 016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna invenzione)
+ok 167 - 016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna invenzione)
+  ---
+  duration_ms: 1.0172
+# Subtest: 016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped
+ok 168 - 016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped
+  ---
+  duration_ms: 0.3491
+# Subtest: 016 F1: injectPatientId SOVRASCRIVE il patientId proposto dall LLM (paziente autoritativo)
+ok 169 - 016 F1: injectPatientId SOVRASCRIVE il patientId proposto dall LLM (paziente autoritativo)
+  ---
+  duration_ms: 0.2078
+# Subtest: 016 F1: injectPatientId sovrascrive un patientId PLACEHOLDER dell LLM
+ok 170 - 016 F1: injectPatientId sovrascrive un patientId PLACEHOLDER dell LLM
+  ---
+  duration_ms: 0.1749
+# Subtest: 016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients)
+ok 171 - 016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients)
+  ---
+  duration_ms: 0.1626
+# Subtest: 016 F1: injectPatientId senza patientId noto → piano invariato
+ok 172 - 016 F1: injectPatientId senza patientId noto → piano invariato
+  ---
+  duration_ms: 0.2503
+# Subtest: 016 F3: piano LLM con query_data + intent data_query è accettato (non cross-patient)
+ok 173 - 016 F3: piano LLM con query_data + intent data_query è accettato (non cross-patient)
+  ---
+  duration_ms: 0.2625
+# Subtest: parses markdown headings and maps to canonical fields
+ok 174 - parses markdown headings and maps to canonical fields
+  ---
+  duration_ms: 2.5512
+# Subtest: \#242 combined "Diagnosi e terapia" heading keeps pharmacological therapy OUT of diagnosis
+ok 175 - \#242 combined "Diagnosi e terapia" heading keeps pharmacological therapy OUT of diagnosis
+  ---
+  duration_ms: 0.7576
+# Subtest: \#242 inline "Terapia:" label starts a therapy block even after diagnosis lines
+ok 176 - \#242 inline "Terapia:" label starts a therapy block even after diagnosis lines
+  ---
+  duration_ms: 0.7866
+# Subtest: anamnesis subtitles merge into ONE block, headings kept
+ok 177 - anamnesis subtitles merge into ONE block, headings kept
+  ---
+  duration_ms: 0.8453
+# Subtest: section ends at the next canonical heading
+ok 178 - section ends at the next canonical heading
+  ---
+  duration_ms: 0.3699
+# Subtest: plain (non-markdown) title line is recognised
+ok 179 - plain (non-markdown) title line is recognised
+  ---
+  duration_ms: 0.2407
+# Subtest: newlines and bullet lists are preserved
+ok 180 - newlines and bullet lists are preserved
+  ---
+  duration_ms: 0.4028
+# Subtest: multi-page-style continuation (blank lines) stays in the section
+ok 181 - multi-page-style continuation (blank lines) stays in the section
+  ---
+  duration_ms: 0.2318
+# Subtest: imaging heading not swallowed by diagnosi alias
+ok 182 - imaging heading not swallowed by diagnosi alias
+  ---
+  duration_ms: 0.3414
+# Subtest: allergies populate text + status present
+ok 183 - allergies populate text + status present
+  ---
+  duration_ms: 0.2186
+# Subtest: missingSections lists empty sections; populated ones excluded
+ok 184 - missingSections lists empty sections; populated ones excluded
+  ---
+  duration_ms: 0.2015
+# Subtest: detectSectionLoss flags a section whose text was dropped
+ok 185 - detectSectionLoss flags a section whose text was dropped
+  ---
+  duration_ms: 0.9704
+# Subtest: NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc is detected
+ok 186 - NARRATIVE_SECTION_CONTENT_LOST guard: empty draft from a content-rich doc is detected
+  ---
+  duration_ms: 0.3079
+# Subtest: BUG-048: documentInfo populates sourceReferences for each non-empty section
+ok 187 - BUG-048: documentInfo populates sourceReferences for each non-empty section
+  ---
+  duration_ms: 0.3984
+# Subtest: BUG-048: without documentInfo sourceReferences stay empty (back-compat)
+ok 188 - BUG-048: without documentInfo sourceReferences stay empty (back-compat)
+  ---
+  duration_ms: 0.2139
+# Subtest: BUG-051: anamnesis fixture populates ANAMNESIS.originalText through to the row
+ok 189 - BUG-051: anamnesis fixture populates ANAMNESIS.originalText through to the row
+  ---
+  duration_ms: 0.4536
+# Subtest: BUG-051: assertNoNarrativeSectionLoss passes for a faithfully parsed draft
+ok 190 - BUG-051: assertNoNarrativeSectionLoss passes for a faithfully parsed draft
+  ---
+  duration_ms: 0.4024
+# Subtest: BUG-051: assertNoNarrativeSectionLoss throws NarrativeSectionContentLostError on loss
+ok 191 - BUG-051: assertNoNarrativeSectionLoss throws NarrativeSectionContentLostError on loss
+  ---
+  duration_ms: 0.8981
+# Subtest: BUG-051: guard does NOT fire for unstructured text (no headings → UNMAPPED_CONTENT)
+ok 192 - BUG-051: guard does NOT fire for unstructured text (no headings → UNMAPPED_CONTENT)
+  ---
+  duration_ms: 0.2464
+# Subtest: REQ-036: section spanning a page break stays in one block until a new canonical heading
+ok 193 - REQ-036: section spanning a page break stays in one block until a new canonical heading
+  ---
+  duration_ms: 0.2276
+# Subtest: identical documents -> single proposal, no duplicates, sources from both
+ok 194 - identical documents -> single proposal, no duplicates, sources from both
+  ---
+  duration_ms: 18.4654
+# Subtest: differing addresses -> conflict with candidates + provenance, never auto-picked
+ok 195 - differing addresses -> conflict with candidates + provenance, never auto-picked
+  ---
+  duration_ms: 0.7369
+# Subtest: duplicate therapy (same drug+dose) -> deduped to one item
+ok 196 - duplicate therapy (same drug+dose) -> deduped to one item
+  ---
+  duration_ms: 1.2479
+# Subtest: updated therapy (same drug, different dose) -> item conflict
+ok 197 - updated therapy (same drug, different dose) -> item conflict
+  ---
+  duration_ms: 0.5506
+# Subtest: allergy present in only one document -> extracted, keeps that single source
+ok 198 - allergy present in only one document -> extracted, keeps that single source
+  ---
+  duration_ms: 0.4018
+# Subtest: missing field across all docs -> missing, no invention
+ok 199 - missing field across all docs -> missing, no invention
+  ---
+  duration_ms: 0.235
+# Subtest: preferRecent orders conflict candidates most-recent-first (still not resolved)
+ok 200 - preferRecent orders conflict candidates most-recent-first (still not resolved)
+  ---
+  duration_ms: 0.4677
+# Subtest: report counts filled/missing/conflict/duplicate
+ok 201 - report counts filled/missing/conflict/duplicate
+  ---
+  duration_ms: 0.3744
+# Subtest: produces a flat narrative draft — strings, never arrays (no diagnoses[])
+ok 202 - produces a flat narrative draft — strings, never arrays (no diagnoses[])
+  ---
+  duration_ms: 1.7236
+# Subtest: valid draft passes the flat contract schema
+ok 203 - valid draft passes the flat contract schema
+  ---
+  duration_ms: 83.6923
+# Subtest: diagnosis multi-paragraph stays one block
+ok 204 - diagnosis multi-paragraph stays one block
+  ---
+  duration_ms: 0.2947
+# Subtest: anamnesis subtitles preserved + tagged as SUBSECTION_TITLE
+ok 205 - anamnesis subtitles preserved + tagged as SUBSECTION_TITLE
+  ---
+  duration_ms: 0.5684
+# Subtest: hospital course keeps dates (DATE tags map exactly)
+ok 206 - hospital course keeps dates (DATE tags map exactly)
+  ---
+  duration_ms: 0.681
+# Subtest: consultations / imaging / procedures each one block
+ok 207 - consultations / imaging / procedures each one block
+  ---
+  duration_ms: 0.2886
+# Subtest: therapy combines home + hospital into one block (home first), offsets shifted exactly
+ok 208 - therapy combines home + hospital into one block (home first), offsets shifted exactly
+  ---
+  duration_ms: 0.3486
+# Subtest: partially illegible therapy line kept integrally
+ok 209 - partially illegible therapy line kept integrally
+  ---
+  duration_ms: 0.3147
+# Subtest: advice and follow-up kept integrally
+ok 210 - advice and follow-up kept integrally
+  ---
+  duration_ms: 0.3146
+# Subtest: allergies — present/absent/not_documented/unclear faithful
+ok 211 - allergies — present/absent/not_documented/unclear faithful
+  ---
+  duration_ms: 0.4826
+# Subtest: unmapped content not lost; missing sections listed
+ok 212 - unmapped content not lost; missing sections listed
+  ---
+  duration_ms: 0.2433
+# Subtest: all canonical text fields always exist as strings (empty when absent)
+ok 213 - all canonical text fields always exist as strings (empty when absent)
+  ---
+  duration_ms: 1.9543
+# Subtest: \#223 AC1: records actor / action / entity / outcome / timestamp with channel ui
+ok 214 - \#223 AC1: records actor / action / entity / outcome / timestamp with channel ui
+  ---
+  duration_ms: 2.048
+# Subtest: \#223 AC2: only field NAMES are recorded — no values / payload / secrets can be passed
+ok 215 - \#223 AC2: only field NAMES are recorded — no values / payload / secrets can be passed
+  ---
+  duration_ms: 0.4713
+# Subtest: \#223 AC2: defaults are safe (role operatore, kind update, outcome ok, channel ui, fields [])
+ok 216 - \#223 AC2: defaults are safe (role operatore, kind update, outcome ok, channel ui, fields [])
+  ---
+  duration_ms: 0.2725
+# Subtest: \#223 AC3: fields are capped at 20 (defense in depth)
+ok 217 - \#223 AC3: fields are capped at 20 (defense in depth)
+  ---
+  duration_ms: 0.3132
+# Subtest: AUTH_MODE is fail-closed when absent, invalid, entra-unimplemented, or demo in production
+ok 218 - AUTH_MODE is fail-closed when absent, invalid, entra-unimplemented, or demo in production
+  ---
+  duration_ms: 1.2645
+# Subtest: patient-documents gate: anonymous caller (no operator headers) -> 401
+ok 219 - patient-documents gate: anonymous caller (no operator headers) -> 401
+  ---
+  duration_ms: 0.6574
+# Subtest: patient-documents gate: role "guest" -> 403
+ok 220 - patient-documents gate: role "guest" -> 403
+  ---
+  duration_ms: 0.3917
+# Subtest: patient-documents gate: valid "operatore" role passes and is attached to the request
+ok 221 - patient-documents gate: valid "operatore" role passes and is attached to the request
+  ---
+  duration_ms: 0.4
+# Subtest: patient-documents gate: demo request scoped to another patient -> 403
+ok 222 - patient-documents gate: demo request scoped to another patient -> 403
+  ---
+  duration_ms: 0.5467
+# Subtest: patient-documents gate: entra, missing and invalid modes return explicit 503 without fallback
+ok 223 - patient-documents gate: entra, missing and invalid modes return explicit 503 without fallback
+  ---
+  duration_ms: 0.7069
+# Subtest: sniffAllowedMime: recognises real signatures for every allowed family
+ok 224 - sniffAllowedMime: recognises real signatures for every allowed family
+  ---
+  duration_ms: 0.641
+# Subtest: sniffAllowedMime: spoofed upload (PNG-declared filename/mimetype, non-image bytes) -> null (rejected)
+ok 225 - sniffAllowedMime: spoofed upload (PNG-declared filename/mimetype, non-image bytes) -> null (rejected)
+  ---
+  duration_ms: 0.2065
+# Subtest: sniffAllowedMime: empty/truncated buffer -> null
+ok 226 - sniffAllowedMime: empty/truncated buffer -> null
+  ---
+  duration_ms: 3.1508
+# Subtest: upload size limit: multer is configured with the documented 15MB cap
+ok 227 - upload size limit: multer is configured with the documented 15MB cap
+  ---
+  duration_ms: 0.2822
+# Subtest: 10 canonical persistence keys with Italian titles
+ok 228 - 10 canonical persistence keys with Italian titles
+  ---
+  duration_ms: 1.0562
+# Subtest: displayText = reviewedText when present, else originalText
+ok 229 - displayText = reviewedText when present, else originalText
+  ---
+  duration_ms: 0.228
+# Subtest: narrative draft maps to rows: diagnosisText -> DIAGNOSIS.originalText (no arrays)
+ok 230 - narrative draft maps to rows: diagnosisText -> DIAGNOSIS.originalText (no arrays)
+  ---
+  duration_ms: 0.8545
+# Subtest: empty sections map to reviewStatus "absent"
+ok 231 - empty sections map to reviewStatus "absent"
+  ---
+  duration_ms: 0.2937
+# Subtest: annotations are routed to their section by italian key
+ok 232 - annotations are routed to their section by italian key
+  ---
+  duration_ms: 0.3636
+# Subtest: allergy conflict/unclear -> reviewStatus conflict (blocks silent save)
+ok 233 - allergy conflict/unclear -> reviewStatus conflict (blocks silent save)
+  ---
+  duration_ms: 0.5509
+# Subtest: BUG-040/041/042: multi-line diagnosis -> ONE narrative block, no structured fields
+ok 234 - BUG-040/041/042: multi-line diagnosis -> ONE narrative block, no structured fields
+  ---
+  duration_ms: 0.3927
+# Subtest: therapy combined block maps to THERAPY.originalText
+ok 235 - therapy combined block maps to THERAPY.originalText
+  ---
+  duration_ms: 0.2584
+# Subtest: 016 F3: facility flag OFF → forbidden
+ok 236 - 016 F3: facility flag OFF → forbidden
+  ---
+  duration_ms: 2.8915
+# Subtest: 016 F3: count aggregate returns a number (empty DB → 0)
+ok 237 - 016 F3: count aggregate returns a number (empty DB → 0)
+  ---
+  duration_ms: 316.3494
+# Subtest: 016 F3: countDistinct returns a number
+ok 238 - 016 F3: countDistinct returns a number
+  ---
+  duration_ms: 7.2126
+# Subtest: 016 F3: from+filter+select returns arrays (rows + sources)
+ok 239 - 016 F3: from+filter+select returns arrays (rows + sources)
+  ---
+  duration_ms: 21.6575
+# Subtest: 016 F3: relate 1-hop does not crash (patient + bed on roomAssignment)
+ok 240 - 016 F3: relate 1-hop does not crash (patient + bed on roomAssignment)
+  ---
+  duration_ms: 33.4828
+# Subtest: 016 F3: patient-scoped without resolved patient → bad_request
+ok 241 - 016 F3: patient-scoped without resolved patient → bad_request
+  ---
+  duration_ms: 0.6417
+# Subtest: 016 F3: runIf skips step2 when step1 empty
+ok 242 - 016 F3: runIf skips step2 when step1 empty
+  ---
+  duration_ms: 7.902
+# Subtest: 016 F3: tenant isolation rejects a foreign tenant
+ok 243 - 016 F3: tenant isolation rejects a foreign tenant
+  ---
+  duration_ms: 0.6168
+# Subtest: 016 F3: known entity resolves; unknown denied
+ok 244 - 016 F3: known entity resolves; unknown denied
+  ---
+  duration_ms: 1.296
+# Subtest: 016 F3: field resolves incl 1-hop relation; unknown field/relation denied
+ok 245 - 016 F3: field resolves incl 1-hop relation; unknown field/relation denied
+  ---
+  duration_ms: 0.3348
+# Subtest: 016 F3: roomAssignment has no direct room relation (2-hop path denied)
+ok 246 - 016 F3: roomAssignment has no direct room relation (2-hop path denied)
+  ---
+  duration_ms: 0.199
+# Subtest: 016 F3: authz classes and vitalSign custom loader
+ok 247 - 016 F3: authz classes and vitalSign custom loader
+  ---
+  duration_ms: 0.1475
+# Subtest: 016 F3: valid single-step plan accepted
+ok 248 - 016 F3: valid single-step plan accepted
+  ---
+  duration_ms: 3.0207
+# Subtest: 016 F3: reserved patient filter is allowed (resolved by engine)
+ok 249 - 016 F3: reserved patient filter is allowed (resolved by engine)
+  ---
+  duration_ms: 0.2784
+# Subtest: 016 F3: unknown entity rejected
+ok 250 - 016 F3: unknown entity rejected
+  ---
+  duration_ms: 0.1705
+# Subtest: 016 F3: unknown field rejected
+ok 251 - 016 F3: unknown field rejected
+  ---
+  duration_ms: 0.1511
+# Subtest: 016 F3: unknown relation rejected
+ok 252 - 016 F3: unknown relation rejected
+  ---
+  duration_ms: 0.2134
+# Subtest: 016 F3: bad operator rejected
+ok 253 - 016 F3: bad operator rejected
+  ---
+  duration_ms: 0.1415
+# Subtest: 016 F3: too many steps rejected
+ok 254 - 016 F3: too many steps rejected
+  ---
+  duration_ms: 0.1926
+# Subtest: 016 F3: duplicate step id rejected
+ok 255 - 016 F3: duplicate step id rejected
+  ---
+  duration_ms: 0.1763
+# Subtest: 016 F3: runIf referencing unknown step rejected
+ok 256 - 016 F3: runIf referencing unknown step rejected
+  ---
+  duration_ms: 0.2637
+# Subtest: 016 F3: bindFrom referencing prior step accepted; unknown step rejected
+ok 257 - 016 F3: bindFrom referencing prior step accepted; unknown step rejected
+  ---
+  duration_ms: 0.3146
+# Subtest: 016 F3: empty plan rejected
+ok 258 - 016 F3: empty plan rejected
+  ---
+  duration_ms: 0.188
+# Subtest: create body matches the runtime neutral contract
+ok 259 - create body matches the runtime neutral contract
+  ---
+  duration_ms: 2.2156
+# Subtest: REQ-036: reordered documents produce a reordered sort_order sequence
+ok 260 - REQ-036: reordered documents produce a reordered sort_order sequence
+  ---
+  duration_ms: 0.2899
+# Subtest: wrapRuntimeResult produces the merged-proposal shape the review UI needs
+ok 261 - wrapRuntimeResult produces the merged-proposal shape the review UI needs
+  ---
+  duration_ms: 17.3385
+# Subtest: wrapRuntimeResult tolerates empty/missing extraction
+ok 262 - wrapRuntimeResult tolerates empty/missing extraction
+  ---
+  duration_ms: 0.4279
+# Subtest: buildModelSchema renders lists as example arrays (so the model fills them)
+ok 263 - buildModelSchema renders lists as example arrays (so the model fills them)
+  ---
+  duration_ms: 0.4758
+# Subtest: runtime status maps to ClinicOS job states
+ok 264 - runtime status maps to ClinicOS job states
+  ---
+  duration_ms: 0.2899
+# Subtest: profile exposes the 12 canonical sections and configurable aliases
+ok 265 - profile exposes the 12 canonical sections and configurable aliases
+  ---
+  duration_ms: 1.8682
+# Subtest: buildSectionsRequest returns schema + a profile-derived prompt (no HTML, lists aliases)
+ok 266 - buildSectionsRequest returns schema + a profile-derived prompt (no HTML, lists aliases)
+  ---
+  duration_ms: 1.0347
+# Subtest: schema rejects an unknown sectionKey and unknown tag
+ok 267 - schema rejects an unknown sectionKey and unknown tag
+  ---
+  duration_ms: 52.638
+# Subtest: discharge diagnosis: multi-paragraph text stays one faithful block
+ok 268 - discharge diagnosis: multi-paragraph text stays one faithful block
+  ---
+  duration_ms: 0.6587
+# Subtest: anamnesis: subtitles annotated, kept in one block
+ok 269 - anamnesis: subtitles annotated, kept in one block
+  ---
+  duration_ms: 0.2861
+# Subtest: hospital course: multiple dates annotated, sequence preserved
+ok 270 - hospital course: multiple dates annotated, sequence preserved
+  ---
+  duration_ms: 0.135
+# Subtest: consultations / imaging / procedures / advice each stay a single block
+ok 271 - consultations / imaging / procedures / advice each stay a single block
+  ---
+  duration_ms: 0.1491
+# Subtest: home therapy keeps medication name/dose/frequency when readable
+ok 272 - home therapy keeps medication name/dose/frequency when readable
+  ---
+  duration_ms: 0.6706
+# Subtest: partially unreadable therapy line keeps exactText and warns
+ok 273 - partially unreadable therapy line keeps exactText and warns
+  ---
+  duration_ms: 0.2494
+# Subtest: home therapy is a distinct section from hospital therapy
+ok 274 - home therapy is a distinct section from hospital therapy
+  ---
+  duration_ms: 0.242
+# Subtest: explicit allergy -> present
+ok 275 - explicit allergy -> present
+  ---
+  duration_ms: 0.1486
+# Subtest: explicitly declared absence -> explicitly_absent
+ok 276 - explicitly declared absence -> explicitly_absent
+  ---
+  duration_ms: 0.1825
+# Subtest: no allergy block -> not_documented (absence of text != absence of allergies)
+ok 277 - no allergy block -> not_documented (absence of text != absence of allergies)
+  ---
+  duration_ms: 0.1134
+# Subtest: illegible allergy -> unclear, text not interpreted
+ok 278 - illegible allergy -> unclear, text not interpreted
+  ---
+  duration_ms: 0.1591
+# Subtest: conflicting allergy info blocks confirmation
+ok 279 - conflicting allergy info blocks confirmation
+  ---
+  duration_ms: 0.1004
+# Subtest: unmapped content is preserved, never dropped
+ok 280 - unmapped content is preserved, never dropped
+  ---
+  duration_ms: 0.1059
+# Subtest: annotation with wrong offsets is relocated to the exact substring
+ok 281 - annotation with wrong offsets is relocated to the exact substring
+  ---
+  duration_ms: 0.1219
+# Subtest: annotation whose text is absent from rawText is dropped (rawText never mutated)
+ok 282 - annotation whose text is absent from rawText is dropped (rawText never mutated)
+  ---
+  duration_ms: 0.2255
+# Subtest: HTML inside an annotation is stripped out (tags carry no HTML)
+ok 283 - HTML inside an annotation is stripped out (tags carry no HTML)
+  ---
+  duration_ms: 0.1653
+# Subtest: duplicate section keys collapse into one block with shifted annotation offsets
+ok 284 - duplicate section keys collapse into one block with shifted annotation offsets
+  ---
+  duration_ms: 0.2595
+# Subtest: requireOperator: 401 when no operator headers
+ok 285 - requireOperator: 401 when no operator headers
+  ---
+  duration_ms: 0.8715
+# Subtest: requireOperator: 403 when role not allowed
+ok 286 - requireOperator: 403 when role not allowed
+  ---
+  duration_ms: 0.1878
+# Subtest: requireOperator: passes + attaches operator for valid role
+ok 287 - requireOperator: passes + attaches operator for valid role
+  ---
+  duration_ms: 0.1537
+# Subtest: requireOperator: admin/manager/operator casings accepted
+ok 288 - requireOperator: admin/manager/operator casings accepted
+  ---
+  duration_ms: 0.1723
+# Subtest: public assistant: spoofed admin header cannot unlock cross-patient
+ok 289 - public assistant: spoofed admin header cannot unlock cross-patient
+  ---
+  duration_ms: 0.298
+# Subtest: importRateLimit: 429 after the limit, keyed by operator
+ok 290 - importRateLimit: 429 after the limit, keyed by operator
+  ---
+  duration_ms: 0.4768
+# Subtest: staff_list: «elenca il personale» → query_staff_list
+ok 291 - staff_list: «elenca il personale» → query_staff_list
+  ---
+  duration_ms: 2.1215
+# Subtest: staff_list: «chi sono gli infermieri?» → staff_list
+ok 292 - staff_list: «chi sono gli infermieri?» → staff_list
+  ---
+  duration_ms: 0.6719
+# Subtest: staff_list: «mostra gli operatori con qualifica» anche con paziente aperto
+ok 293 - staff_list: «mostra gli operatori con qualifica» anche con paziente aperto
+  ---
+  duration_ms: 1.6744
+# Subtest: una domanda sui pazienti NON è staff_list
+ok 294 - una domanda sui pazienti NON è staff_list
+  ---
+  duration_ms: 0.5108
+# Subtest: staff_list è di dominio facility; il clinico viene rediretto
+ok 295 - staff_list è di dominio facility; il clinico viene rediretto
+  ---
+  duration_ms: 0.3932
+# Subtest: l’occupazione camere resta rooms_occupancy (non staff_list)
+ok 296 - l’occupazione camere resta rooms_occupancy (non staff_list)
+  ---
+  duration_ms: 0.4149
+# Subtest: sniffMime detects real types by magic bytes
+ok 297 - sniffMime detects real types by magic bytes
+  ---
+  duration_ms: 2.773
+# Subtest: valid PDF accepted
+ok 298 - valid PDF accepted
+  ---
+  duration_ms: 0.9056
+# Subtest: valid image (jpg) accepted
+ok 299 - valid image (jpg) accepted
+  ---
+  duration_ms: 0.3535
+# Subtest: DOCX (zip container) accepted only with doc/docx extension
+ok 300 - DOCX (zip container) accepted only with doc/docx extension
+  ---
+  duration_ms: 0.3306
+# Subtest: EXE renamed to .pdf is rejected by magic bytes
+ok 301 - EXE renamed to .pdf is rejected by magic bytes
+  ---
+  duration_ms: 0.2107
+# Subtest: forged extension mismatch (pdf bytes as .png) rejected
+ok 302 - forged extension mismatch (pdf bytes as .png) rejected
+  ---
+  duration_ms: 0.1761
+# Subtest: oversize file rejected
+ok 303 - oversize file rejected
+  ---
+  duration_ms: 0.1778
+# Subtest: empty file rejected
+ok 304 - empty file rejected
+  ---
+  duration_ms: 0.3099
+# Subtest: identical bytes produce identical sha256 (dedup key)
+ok 305 - identical bytes produce identical sha256 (dedup key)
+  ---
+  duration_ms: 0.3547
+# Subtest: filename is sanitized (no path traversal)
+ok 306 - filename is sanitized (no path traversal)
+  ---
+  duration_ms: 0.4056
+# Subtest: accepted extension set covers required formats
+ok 307 - accepted extension set covers required formats
+  ---
+  duration_ms: 0.2137
+# Subtest: vitals_trend: andamento pressione ultimi 30 giorni → PA / days 30
+ok 308 - vitals_trend: andamento pressione ultimi 30 giorni → PA / days 30
+  ---
+  duration_ms: 3.3539
+# Subtest: vitals_trend: graficami la saturazione → SpO2 / default 7
+ok 309 - vitals_trend: graficami la saturazione → SpO2 / default 7
+  ---
+  duration_ms: 0.8304
+# Subtest: vitals_trend: due settimane → 15; temperatura → TC
+ok 310 - vitals_trend: due settimane → 15; temperatura → TC
+  ---
+  duration_ms: 0.3908
+# Subtest: trend senza un parametro riconosciuto NON è vitals_trend
+ok 311 - trend senza un parametro riconosciuto NON è vitals_trend
+  ---
+  duration_ms: 1.3538
+# Subtest: la lettura recente resta vitals_recent (non trend)
+ok 312 - la lettura recente resta vitals_recent (non trend)
+  ---
+  duration_ms: 0.3994
+# Subtest: \#202 AC1/AC2: confirmed create — transcript & audit are sanitized; audit keys are minimal
+ok 313 - \#202 AC1/AC2: confirmed create — transcript & audit are sanitized; audit keys are minimal
+  ---
+  duration_ms: 5.9259
+# Subtest: \#202 AC1/AC2: free-text diary note content never appears in logs or persisted audit
+ok 314 - \#202 AC1/AC2: free-text diary note content never appears in logs or persisted audit
+  ---
+  duration_ms: 3.8708
+# Subtest: \#202 AC1/AC2: refused delete (voice) — no transcript logged, audit fields empty
+ok 315 - \#202 AC1/AC2: refused delete (voice) — no transcript logged, audit fields empty
+  ---
+  duration_ms: 1.4122
+# Subtest: \#202 AC1: plan-time delete refusal emits no transcript
+ok 316 - \#202 AC1: plan-time delete refusal emits no transcript
+  ---
+  duration_ms: 3.3958
+# Subtest: \#201 success: fake advertising required capabilities → available, not degraded
+ok 317 - \#201 success: fake advertising required capabilities → available, not degraded
+  ---
+  duration_ms: 1.7752
+# Subtest: \#201 failure: fake rejecting → degraded with provider reason, never throws
+ok 318 - \#201 failure: fake rejecting → degraded with provider reason, never throws
+  ---
+  duration_ms: 0.6643
+# Subtest: \#201 timeout: fake that never resolves → degraded with timeout reason
+ok 319 - \#201 timeout: fake that never resolves → degraded with timeout reason
+  ---
+  duration_ms: 20.9414
+# Subtest: \#201 missing capabilities: success but incomplete set → degraded listing what is missing
+ok 320 - \#201 missing capabilities: success but incomplete set → degraded listing what is missing
+  ---
+  duration_ms: 0.5156
+# Subtest: \#201 no model configured: degraded regardless of provider (no probe attempted)
+ok 321 - \#201 no model configured: degraded regardless of provider (no probe attempted)
+  ---
+  duration_ms: 0.2214
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-06-20T09:00:00.000Z"}
+# [ai-audit] DATABASE_URL assente: persistenza audit su Postgres disattivata (resta il log su stdout)
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-06-20T09:00:00.000Z"}
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"deduped","at":"2026-06-20T09:00:00.000Z"}
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-21T07:26:30.447Z"}
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-21T07:26:30.451Z"}
+# [ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-21T07:26:30.452Z"}
+# Subtest: vocal read: question routes to read intent
+ok 322 - vocal read: question routes to read intent
+  ---
+  duration_ms: 3.1404
+# Subtest: vital PA 130/80 with time → executable plan
+ok 323 - vital PA 130/80 with time → executable plan
+  ---
+  duration_ms: 2.0296
+# Subtest: temperature with decimal comma
+ok 324 - temperature with decimal comma
+  ---
+  duration_ms: 0.6831
+# Subtest: vital without time → blocking ambiguity
+ok 325 - vital without time → blocking ambiguity
+  ---
+  duration_ms: 0.6185
+# Subtest: ambiguous patient (no current patient) blocks the action
+ok 326 - ambiguous patient (no current patient) blocks the action
+  ---
+  duration_ms: 0.4323
+# Subtest: demographics: phone
+ok 327 - demographics: phone
+  ---
+  duration_ms: 0.7324
+# Subtest: demographics: address keeps original casing
+ok 328 - demographics: address keeps original casing
+  ---
+  duration_ms: 7.8283
+# Subtest: narrative: append to Anamnesi
+ok 329 - narrative: append to Anamnesi
+  ---
+  duration_ms: 0.5669
+# Subtest: forbidden: delete, therapy, allergy writes are refused
+ok 330 - forbidden: delete, therapy, allergy writes are refused
+  ---
+  duration_ms: 0.5436
+# Subtest: clinical advice is refused
+ok 331 - clinical advice is refused
+  ---
+  duration_ms: 0.6456
+# Subtest: out-of-range vital is flagged as warning, not auto-corrected
+ok 332 - out-of-range vital is flagged as warning, not auto-corrected
+  ---
+  duration_ms: 0.3659
+# Subtest: execute: confirmed write applies once and returns recordId
+ok 333 - execute: confirmed write applies once and returns recordId
+  ---
+  duration_ms: 3.8416
+# Subtest: execute: double confirmation does NOT duplicate (idempotent replay)
+ok 334 - execute: double confirmation does NOT duplicate (idempotent replay)
+  ---
+  duration_ms: 0.7116
+# Subtest: execute: blocked when write actions disabled
+ok 335 - execute: blocked when write actions disabled
+  ---
+  duration_ms: 3.3674
+# Subtest: execute: confirmation is mandatory
+ok 336 - execute: confirmation is mandatory
+  ---
+  duration_ms: 0.7405
+# Subtest: execute: ambiguous plan can never run
+ok 337 - execute: ambiguous plan can never run
+  ---
+  duration_ms: 0.6198
+# Subtest: STT degrades when no model configured
+ok 338 - STT degrades when no model configured
+  ---
+  duration_ms: 0.2557
+# Subtest: STT available when model configured
+ok 339 - STT available when model configured
+  ---
+  duration_ms: 0.3316
+# Subtest: audio retention defaults to 0 (delete after processing)
+ok 340 - audio retention defaults to 0 (delete after processing)
+  ---
+  duration_ms: 0.2019
+# Subtest: preview shows patient + cannot execute while ambiguous
+ok 341 - preview shows patient + cannot execute while ambiguous
+  ---
+  duration_ms: 0.5575
+# Subtest: confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict
+ok 342 - confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict
+  ---
+  duration_ms: 442.1658
+# Subtest: confirmDraft: persists therapies + vitals/pain into Cartella.data
+ok 343 - confirmDraft: persists therapies + vitals/pain into Cartella.data
+  ---
+  duration_ms: 397.7611
+# Subtest: \#156 AC1/AC2: recognises therapy and yields one row per drug line
+ok 344 - \#156 AC1/AC2: recognises therapy and yields one row per drug line
+  ---
+  duration_ms: 6.869
+# Subtest: \#156 AC3: KEPPRA structured fields
+ok 345 - \#156 AC3: KEPPRA structured fields
+  ---
+  duration_ms: 0.535
+# Subtest: \#156 AC4: multiple times are all extracted
+ok 346 - \#156 AC4: multiple times are all extracted
+  ---
+  duration_ms: 0.3925
+# Subtest: \#156 AC5: specific weekdays are captured
+ok 347 - \#156 AC5: specific weekdays are captured
+  ---
+  duration_ms: 0.3054
+# Subtest: \#156 AC6: incomplete line kept as da_verificare, original preserved, not dropped
+ok 348 - \#156 AC6: incomplete line kept as da_verificare, original preserved, not dropped
+  ---
+  duration_ms: 1.5927
+# Subtest: \#156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA)
+ok 349 - \#156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA)
+  ---
+  duration_ms: 0.2844
+# Subtest: \#156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly
+ok 350 - \#156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly
+  ---
+  duration_ms: 0.3795
+# Subtest: \#156: every row keeps its original text verbatim (audit/reference)
+ok 351 - \#156: every row keeps its original text verbatim (audit/reference)
+  ---
+  duration_ms: 0.6289
+# Subtest: \#156: blank/empty text yields no rows
+ok 352 - \#156: blank/empty text yields no rows
+  ---
+  duration_ms: 0.3943
+# Subtest: \#274: free-text administration route is captured (per os, endovena, sottocute)
+ok 353 - \#274: free-text administration route is captured (per os, endovena, sottocute)
+  ---
+  duration_ms: 0.6086
+# Subtest: \#274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e)
+ok 354 - \#274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e)
+  ---
+  duration_ms: 0.3751
+# Subtest: \#274: medicinale + quantitativo + via together upgrade the row to ok
+ok 355 - \#274: medicinale + quantitativo + via together upgrade the row to ok
+  ---
+  duration_ms: 0.3218
+# Subtest: \#274: parenthesized route codes still work (no regression)
+ok 356 - \#274: parenthesized route codes still work (no regression)
+  ---
+  duration_ms: 0.311
+# Subtest: \#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata)
+ok 357 - \#296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata)
+  ---
+  duration_ms: 0.5276
+# Subtest: \#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)
+ok 358 - \#296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi)
+  ---
+  duration_ms: 0.3366
+# Subtest: \#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati
+ok 359 - \#296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati
+  ---
+  duration_ms: 0.3181
+# Subtest: \#296 AC4: intestazione iniziale + riga vuota non termina il blocco
+ok 360 - \#296 AC4: intestazione iniziale + riga vuota non termina il blocco
+  ---
+  duration_ms: 0.2504
+# Subtest: \#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop)
+ok 361 - \#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop)
+  ---
+  duration_ms: 0.4134
+# Subtest: seedDraftFromImport: creates draft seeded from narrative
+ok 362 - seedDraftFromImport: creates draft seeded from narrative
+  ---
+  duration_ms: 331.8578
+# Subtest: seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent
+ok 363 - seedDraftFromImport: does NOT seed allergie when allergyStatus is explicitly_absent
+  ---
+  duration_ms: 24.6521
+# Subtest: seedDraftFromImport: throws when job has no _narrative
+ok 364 - seedDraftFromImport: throws when job has no _narrative
+  ---
+  duration_ms: 22.011
+# Subtest: isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text
+ok 365 - isPlausibleAllergenText: rejects a multi-section narrative blob, accepts concise text
+  ---
+  duration_ms: 0.6133
+# Subtest: deriveAllergens: [] for a blob; one entry per concise allergen otherwise
+ok 366 - deriveAllergens: [] for a blob; one entry per concise allergen otherwise
+  ---
+  duration_ms: 0.2205
+# Subtest: buildImportDraftData: blob allergiesText does NOT seed a false allergy row
+ok 367 - buildImportDraftData: blob allergiesText does NOT seed a false allergy row
+  ---
+  duration_ms: 0.191
+# Subtest: buildImportDraftData: concise multi-allergen text → one row per allergen
+ok 368 - buildImportDraftData: concise multi-allergen text → one row per allergen
+  ---
+  duration_ms: 0.1734
+# Subtest: buildImportDraftData: therapyText parsed into structured terapia rows (one per drug)
+ok 369 - buildImportDraftData: therapyText parsed into structured terapia rows (one per drug)
+  ---
+  duration_ms: 3.1765
+# Subtest: appointment-service: create + conflitto stesso slot/operatore + findConflict riusabile
+ok 370 - appointment-service: create + conflitto stesso slot/operatore + findConflict riusabile
+  ---
+  duration_ms: 508.0137
+# Subtest: appointment-service: update sposta lo slot, rifiuta slot occupato, delete è solo UI
+ok 371 - appointment-service: update sposta lo slot, rifiuta slot occupato, delete è solo UI
+  ---
+  duration_ms: 91.2449
+# Subtest: \#241 normalizeGiorniSettimana: dedup+sort; empty/all → null (every day)
+ok 372 - \#241 normalizeGiorniSettimana: dedup+sort; empty/all → null (every day)
+  ---
+  duration_ms: 0.911
+# Subtest: \#241 normalizeGiorniSettimana: PUT-shaped garbage canonicalized (regression for PUT bypass)
+ok 373 - \#241 normalizeGiorniSettimana: PUT-shaped garbage canonicalized (regression for PUT bypass)
+  ---
+  duration_ms: 0.1827
+# Subtest: \#241 weekday filter: drug on Lun/Mar/Gio/Dom absent on other days
+ok 374 - \#241 weekday filter: drug on Lun/Mar/Gio/Dom absent on other days
+  ---
+  duration_ms: 1.488
+# Subtest: createTherapyInTx: creates therapy with schedules and derives dosaggio + fasceMattina
+ok 375 - createTherapyInTx: creates therapy with schedules and derives dosaggio + fasceMattina
+  ---
+  duration_ms: 316.3117
+# Subtest: createTherapyInTx: rejects when farmacoNome is missing
+ok 376 - createTherapyInTx: rejects when farmacoNome is missing
+  ---
+  duration_ms: 16.6404
+1..376
+# tests 376
+# suites 0
+# pass 376
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12910.377

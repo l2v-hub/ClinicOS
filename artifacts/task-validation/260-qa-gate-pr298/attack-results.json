@@ -1,0 +1,102 @@
+{
+  "head": "c853e93da704dc510c6455231268fe3c8515cdba",
+  "results": [
+    {
+      "name": "1. alg:none token",
+      "expect": "401 rejected",
+      "got": "401 token_invalid",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "2. HS256 key-confusion",
+      "expect": "401 rejected",
+      "got": "401 token_invalid",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "3a. identity binds to verified oid owner",
+      "expect": "maps victim cmruc67f",
+      "got": "cmruc67f role=operator",
+      "passed": true,
+      "detail": "preferred_username cannot override oid"
+    },
+    {
+      "name": "3b. inactive operator -> 403",
+      "expect": "403 identity_inactive",
+      "got": "403 identity_inactive",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "3c. unmapped oid -> 403",
+      "expect": "403 identity_not_mapped",
+      "got": "403 identity_not_mapped",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "4. tampered payload / orig signature",
+      "expect": "401 rejected",
+      "got": "401 token_invalid",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "5. expired->401, reissued->ok (sanity)",
+      "expect": "expired 401 / fresh ok",
+      "got": "expired 401, fresh ok",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "6. 100KB junk token",
+      "expect": "401 quickly, no crash",
+      "got": "401 in 1ms",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "7. cross-tenant (wrong issuer+key)",
+      "expect": "401 rejected",
+      "got": "401 token_invalid",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "7b. right issuer, foreign signing key",
+      "expect": "401 rejected",
+      "got": "401 token_invalid",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "8. gate: alg:none -> 401 + WWW-Authenticate",
+      "expect": "401 no next()",
+      "got": "401 wa=Bearer realm=\"clinicos-documents\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "9. gate: spoofed X-Operator-* ignored (AC6)",
+      "expect": "401 no next()",
+      "got": "401",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "AC7. no token/e-mail in module stdout/stderr",
+      "expect": "zero leaks",
+      "got": "clean (0B captured)",
+      "passed": true,
+      "detail": "captured 0 bytes"
+    }
+  ],
+  "accepted": 0,
+  "unitTotals": {
+    "entraAuth": "6/6",
+    "gate": "4/4",
+    "backendFull": "376/376"
+  }
+}
