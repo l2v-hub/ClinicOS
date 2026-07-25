@@ -11,4 +11,4 @@ This directory is the canonical dual-form knowledge base for ClinicOS.
 - Treat `observed`, `inferred`, `declared`, `drifted`, and `deprecated` as distinct confidence states.
 - Never retrieve configuration values from this knowledge base; only variable names and consumers are modeled.
 
-Current authoring inventory hash: `91ba390d6277c9753e3367cb5ab8941399c9a8588ccce0b39406f08b8eee6c79`.
+Current authoring inventory hash: `72e609c2ac06a4ade4df3d8719628805e2d1606ce4aec0e6f662451324869f8e`.

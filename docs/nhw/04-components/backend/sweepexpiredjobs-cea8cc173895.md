@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: "backend/src/ai/upload/job-service.ts"
     symbol: "sweepExpiredJobs"
-    line_start: "1043"
-    line_end: "1059"
+    line_start: "1069"
+    line_end: "1085"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "91ba390d6277c9753e3367cb5ab8941399c9a8588ccce0b39406f08b8eee6c79"
+  inventory_hash: "72e609c2ac06a4ade4df3d8719628805e2d1606ce4aec0e6f662451324869f8e"
 ---
 
 ## Question Answered
@@ -64,7 +64,7 @@ Refer to callers and implementation at the cited source span.
 
 ## Evidence
 
-- `backend/src/ai/upload/job-service.ts:1043-1059` — sweepExpiredJobs
+- `backend/src/ai/upload/job-service.ts:1069-1085` — sweepExpiredJobs
 
 ## Related Knowledge
 

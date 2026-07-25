@@ -8,8 +8,8 @@ bounded_contexts: []
 sources:
   - path: "backend/src/ai/upload/job-service.ts"
     symbol: "AI_CLINICAL_LISTS_PASS"
-    line_start: "851"
-    line_end: "851"
+    line_start: "877"
+    line_end: "877"
     confidence: "observed"
   - path: "docs/nhw/09-configuration/keys/ai-clinical-lists-pass-39de759c1c34.md"
     symbol: "AI_CLINICAL_LISTS_PASS"
@@ -26,7 +26,7 @@ tags:
   - "typescript"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "91ba390d6277c9753e3367cb5ab8941399c9a8588ccce0b39406f08b8eee6c79"
+  inventory_hash: "72e609c2ac06a4ade4df3d8719628805e2d1606ce4aec0e6f662451324869f8e"
 ---
 
 ## Question Answered
@@ -67,7 +67,7 @@ Missing, malformed, or incompatible values follow the consuming source validatio
 
 ## Evidence
 
-- `backend/src/ai/upload/job-service.ts:851-851` — AI_CLINICAL_LISTS_PASS
+- `backend/src/ai/upload/job-service.ts:877-877` — AI_CLINICAL_LISTS_PASS
 - `docs/nhw/09-configuration/keys/ai-clinical-lists-pass-39de759c1c34.md:4-4` — AI_CLINICAL_LISTS_PASS
 
 ## Related Knowledge
