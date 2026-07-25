@@ -40,6 +40,14 @@ API_VERSION = "2024-11-30"
 # e per il parser delle sezioni, che ragiona su righe. Le celle diventano testo separato da
 # " | ", le righe di tabella vanno a capo, i commenti spariscono: il CONTENUTO si conserva,
 # l'impalcatura no.
+# Le intestazioni di pagina NON vanno buttate: Document Intelligence classifica come
+# PageHeader anche il titolo di sezione che apre una pagina, e su un referto vero era
+# "Terapia Domiciliare Consigliata" — cancellandola, la terapia non veniva piu' riconosciuta.
+# Si conserva quindi il TESTO dell'intestazione come riga normale; a distinguere il titolo
+# utile dall'intestazione ripetuta su ogni pagina pensa gia' filterRepeatedHeaders lato
+# backend, che vede l'intero documento. I numeri di pagina invece sono sempre rumore.
+_INTESTAZIONE = re.compile(r'<!--\s*Page(?:Header|Footer)="(.*?)"\s*-->', re.S)
+_NUMERO_PAGINA = re.compile(r'<!--\s*PageNumber=".*?"\s*-->', re.S)
 _COMMENTI = re.compile(r"<!--.*?-->", re.S)
 _FINE_CELLA = re.compile(r"</t[dh]>", re.I)
 _FINE_RIGA = re.compile(r"</tr>", re.I)
@@ -48,7 +56,9 @@ _TROPPE_RIGHE = re.compile(r"\n{3,}")
 
 
 def pulisci_markdown(testo: str) -> str:
-    t = _COMMENTI.sub("", testo or "")
+    t = _NUMERO_PAGINA.sub("", testo or "")
+    t = _INTESTAZIONE.sub(lambda m: "\n" + m.group(1).strip() + "\n", t)
+    t = _COMMENTI.sub("", t)
     t = _FINE_CELLA.sub(" | ", t)
     t = _FINE_RIGA.sub("\n", t)
     t = _TAG.sub("", t)

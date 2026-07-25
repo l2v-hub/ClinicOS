@@ -90,6 +90,26 @@ class TestPuliziaMarkdown(unittest.TestCase):
         self.assertIn("1 cpr ore 08:00", pulito)
         self.assertIn("Terapia Domiciliare Consigliata", pulito)
 
+    def test_il_titolo_marcato_come_intestazione_di_pagina_sopravvive(self):
+        # Document Intelligence classifica come PageHeader anche il titolo che apre una
+        # pagina: su un referto vero era "Terapia Domiciliare Consigliata". Buttando via i
+        # commenti si perdeva la sezione e la terapia spariva dalla Revisione.
+        from clinicos_ai.models.providers.azure_docintel import pulisci_markdown
+
+        pulito = pulisci_markdown(
+            '<!-- PageHeader="Terapia Domiciliare Consigliata" -->\nCORDARONE 200 MG'
+        )
+        righe = [r for r in pulito.split("\n") if r.strip()]
+        self.assertEqual(righe[0], 'Terapia Domiciliare Consigliata')
+        self.assertIn("CORDARONE 200 MG", pulito)
+
+    def test_i_numeri_di_pagina_restano_rumore_da_togliere(self):
+        from clinicos_ai.models.providers.azure_docintel import pulisci_markdown
+
+        pulito = pulisci_markdown('<!-- PageNumber="3" -->\nCONTENUTO')
+        self.assertNotIn("3", pulito.split("CONTENUTO")[0])
+        self.assertIn("CONTENUTO", pulito)
+
     def test_le_celle_restano_distinguibili(self):
         from clinicos_ai.models.providers.azure_docintel import pulisci_markdown
 
