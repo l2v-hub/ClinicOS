@@ -549,3 +549,64 @@ model AiAuditEvent {
   @@index([patientId, createdAt])
   @@index([outcome])
 }
+
+// ── Anagrafica farmaci AIFA ───────────────────────────────────────────────────
+// Copia locale della Banca Dati Farmaci (drive.aifa.gov.it), aggiornata periodicamente.
+// Serve locale e non via servizio esterno: la ricerca risponde mentre l'operatore digita,
+// su ~160.000 confezioni. Non contiene dati di pazienti — e' anagrafica pubblica.
+model Farmaco {
+  aic                 String  @id // CODICE_AIC: chiave naturale, stabile fra gli aggiornamenti
+  denominazione       String // nome commerciale come pubblicato
+  descrizione         String? // confezione (es. "10 COMPRESSE")
+  ragioneSociale      String? // titolare AIC
+  statoAmministrativo String // Autorizzata | Sospesa | Revocata
+  forma               String? // forma farmaceutica (Compressa, Capsula, …)
+  atc                 String? // classificazione ATC: consente di rilevare duplicazioni terapeutiche
+  paAssociati         String? // principi attivi come stringa pubblicata da AIFA
+  fornitura           String? // regime di fornitura (con/senza ricetta)
+  linkFi              String? // foglietto illustrativo (PDF ufficiale)
+  linkRcp             String? // riassunto delle caratteristiche del prodotto
+
+  // Forma normalizzata (maiuscole, senza accenti/punteggiatura): ci corrono sopra sia il
+  // confronto esatto sia quello approssimato. Tenuta in colonna per poterla indicizzare.
+  denominazioneNorm String
+
+  principiAttivi FarmacoPrincipioAttivo[]
+  aggiornatoIl   DateTime                 @updatedAt
+
+  @@index([denominazioneNorm])
+  @@index([atc])
+  @@index([statoAmministrativo])
+}
+
+// Un farmaco puo' avere piu' principi attivi (associazioni), ognuno con la propria quantita'.
+// AIFA li pubblica come tabella separata, con quantita' e unita' gia' in campi distinti:
+// e' cio' che permette di proporre all'operatore i dosaggi realmente in commercio.
+model FarmacoPrincipioAttivo {
+  id                  String  @id @default(cuid())
+  aic                 String
+  principioAttivo     String
+  principioAttivoNorm String
+  quantita            Float? // non sempre valorizzata a monte: chi la usa deve tollerarne l'assenza
+  unitaMisura         String?
+
+  farmaco Farmaco @relation(fields: [aic], references: [aic], onDelete: Cascade)
+
+  @@index([aic])
+  @@index([principioAttivoNorm])
+}
+
+// Traccia di ogni ricaricamento dell'anagrafica: senza di essa non si distingue
+// "nessun farmaco trovato" da "l'anagrafica non e' mai stata caricata".
+model FarmacoImport {
+  id           String   @id @default(cuid())
+  fonte        String
+  righeLette   Int
+  righeScritte Int
+  esito        String // ok | errore
+  messaggio    String?
+  durataMs     Int?
+  eseguitoIl   DateTime @default(now())
+
+  @@index([eseguitoIl])
+}
