@@ -72,6 +72,31 @@ class TestConfigurazione(unittest.TestCase):
         self.assertTrue(ModelRegistry(cfg, env=env).has_credentials("azure-docintel"))
 
 
+class TestPuliziaMarkdown(unittest.TestCase):
+    def test_toglie_commenti_e_tag_conservando_il_contenuto(self):
+        from clinicos_ai.models.providers.azure_docintel import pulisci_markdown
+
+        grezzo = (
+            '<!-- PageHeader="Ospedale Esempio" -->\n'
+            "Terapia Domiciliare Consigliata\n"
+            "<table><tr><td>FARMACO ESEMPIO</td><td>1 cpr ore 08:00</td></tr></table>\n"
+        )
+        pulito = pulisci_markdown(grezzo)
+        # l'impalcatura sparisce...
+        self.assertNotIn("<", pulito)
+        self.assertNotIn("PageHeader", pulito)
+        # ...ma il contenuto no: e' li' che stanno i farmaci
+        self.assertIn("FARMACO ESEMPIO", pulito)
+        self.assertIn("1 cpr ore 08:00", pulito)
+        self.assertIn("Terapia Domiciliare Consigliata", pulito)
+
+    def test_le_celle_restano_distinguibili(self):
+        from clinicos_ai.models.providers.azure_docintel import pulisci_markdown
+
+        pulito = pulisci_markdown("<table><tr><td>A</td><td>B</td></tr></table>")
+        self.assertIn("A | B", pulito)
+
+
 class TestRunner(unittest.TestCase):
     def _run(self, fake, atts=None):
         with mock.patch.dict("os.environ", ENV, clear=False), \

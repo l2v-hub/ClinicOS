@@ -122,11 +122,24 @@ function headingField(line: string): { field: DraftTextField; heading: string } 
   } else {
     // Plain title line: short, optionally ending with ':' (no sentence punctuation inside).
     const t = trimmed.replace(/:\s*$/, '');
+    // Titolo in Maiuscolo Iniziale, es. "Terapia Domiciliare Consigliata": forma comune
+    // nelle lettere di dimissione italiane. Senza questo caso la sezione veniva ignorata e
+    // l'intera terapia finiva nel calderone della sezione precedente — osservato su un
+    // referto reale: 20.000 caratteri in PRESTAZIONI_E_INTERVENTI e Terapia vuota.
+    // Si richiede che ogni parola significativa inizi per maiuscola (le paroline di raccordo
+    // restano minuscole), cosi' una frase di contenuto non viene scambiata per un titolo.
+    const parole = t.split(/\s+/).filter(Boolean);
+    const RACCORDI =
+      /^(di|de|del|della|dei|delle|e|ed|a|al|alla|ai|con|per|in|su|da|dal|il|lo|la|i|gli|le|un|una)$/i;
+    const maiuscoloIniziale =
+      parole.length > 0 &&
+      parole.length <= 6 &&
+      parole.every((p) => RACCORDI.test(p) || /^[A-ZÀ-Þ]/.test(p));
     const looksTitle =
       t.length > 0 &&
       t.length <= 60 &&
       !/[.!?]/.test(t) &&
-      (/:\s*$/.test(trimmed) || t === t.toUpperCase());
+      (/:\s*$/.test(trimmed) || t === t.toUpperCase() || maiuscoloIniziale);
     if (!looksTitle) return null;
     headingText = t;
   }

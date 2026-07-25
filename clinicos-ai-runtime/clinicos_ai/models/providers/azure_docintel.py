@@ -23,6 +23,7 @@ import asyncio
 import base64
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.request
@@ -33,6 +34,27 @@ from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
 
 API_VERSION = "2024-11-30"
+
+# Il markdown di Document Intelligence porta con se' HTML: le tabelle come <table>/<td> e le
+# intestazioni/pie' di pagina come commenti <!-- PageHeader="..." -->. Sono rumore per chi legge
+# e per il parser delle sezioni, che ragiona su righe. Le celle diventano testo separato da
+# " | ", le righe di tabella vanno a capo, i commenti spariscono: il CONTENUTO si conserva,
+# l'impalcatura no.
+_COMMENTI = re.compile(r"<!--.*?-->", re.S)
+_FINE_CELLA = re.compile(r"</t[dh]>", re.I)
+_FINE_RIGA = re.compile(r"</tr>", re.I)
+_TAG = re.compile(r"<[^>]+>")
+_TROPPE_RIGHE = re.compile(r"\n{3,}")
+
+
+def pulisci_markdown(testo: str) -> str:
+    t = _COMMENTI.sub("", testo or "")
+    t = _FINE_CELLA.sub(" | ", t)
+    t = _FINE_RIGA.sub("\n", t)
+    t = _TAG.sub("", t)
+    # separatori di cella rimasti a inizio/fine riga dopo la rimozione dei tag
+    t = "\n".join(riga.strip().strip("|").strip() for riga in t.split("\n"))
+    return _TROPPE_RIGHE.sub("\n\n", t).strip()
 # Analisi in volo contemporaneamente. Oltre questa soglia il servizio inizia a rispondere 429
 # e il parallelismo si trasforma in ritardo. Regolabile senza rilascio.
 _MAX_PARALLEL_PAGES = max(1, int(os.environ.get("AZURE_DOCINTEL_MAX_PARALLEL") or 4))
@@ -82,7 +104,7 @@ class _DocIntelRunner:
                 data = json.loads(resp.read().decode("utf-8"))
             status = (data.get("status") or "").lower()
             if status == "succeeded":
-                return (data.get("analyzeResult") or {}).get("content") or ""
+                return pulisci_markdown((data.get("analyzeResult") or {}).get("content") or "")
             if status in ("failed", "canceled"):
                 detail = str(data.get("error") or "analisi non riuscita")[:200]
                 raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"Document Intelligence: {detail}")

@@ -206,3 +206,36 @@ test('REQ-036: section spanning a page break stays in one block until a new cano
   assert.ok(!d.anamnesisText.includes('Ramipril'));
   assert.ok(d.therapyText.includes('Ramipril 5 mg.'));
 });
+
+// Referto reale: il titolo "Terapia Domiciliare Consigliata" e' in Maiuscolo Iniziale, non
+// tutto maiuscolo ne' seguito da due punti. L'euristica lo scartava e l'INTERA terapia finiva
+// nel calderone della sezione precedente: 20.000 caratteri in PRESTAZIONI_E_INTERVENTI con
+// Terapia vuota, mentre l'operatore vedeva il farmaco da nessuna parte.
+test('un titolo in Maiuscolo Iniziale apre la sezione (es. "Terapia Domiciliare Consigliata")', () => {
+  const testo =
+    'Prestazioni e Interventi\n\n' +
+    'Eseguita coronarografia in data 12/03.\n\n' +
+    'Terapia Domiciliare Consigliata\n\n' +
+    'CORDARONE CPR 200 MGR (OS) 1 Cpr ore 08:00\n' +
+    'FUROSEMIDE 25MG (OS) 2 Dosi ore 08:00 e alle 16:00';
+  const d = parseNarrativeFromMarkdown(testo);
+  assert.ok(d.therapyText.includes('CORDARONE'), 'la terapia deve stare nella sua sezione');
+  assert.ok(d.therapyText.includes('FUROSEMIDE'));
+  assert.ok(
+    !d.proceduresAndInterventionsText.includes('CORDARONE'),
+    'la terapia non deve piu' + " finire fra le prestazioni",
+  );
+});
+
+// Il contrappeso: una frase di contenuto NON deve essere scambiata per un titolo solo perche'
+// contiene la parola "terapia". Senza questo vincolo la correzione qui sopra spezzerebbe i
+// referti a meta' frase.
+test('una frase di contenuto non viene scambiata per intestazione', () => {
+  const testo =
+    'Anamnesi\n\n' +
+    'Il paziente prosegue terapia con ramipril da alcuni anni\n' +
+    'e riferisce buona tolleranza';
+  const d = parseNarrativeFromMarkdown(testo);
+  assert.ok(d.anamnesisText.includes('prosegue terapia con ramipril'));
+  assert.equal(d.therapyText.trim(), '');
+});
