@@ -38,6 +38,7 @@
 {"framework":"node-test","id":"test.repository.backend.src.ai.tests.header-filter.test.ts","path":"backend/src/ai/__tests__/header-filter.test.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.backend.src.ai.tests.intake-confirm.test.ts","path":"backend/src/ai/__tests__/intake-confirm.test.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.backend.src.ai.tests.intake-draft.test.ts","path":"backend/src/ai/__tests__/intake-draft.test.ts","type":"unit"}
+{"framework":"node-test","id":"test.repository.backend.src.ai.tests.lazy-sections.test.ts","path":"backend/src/ai/__tests__/lazy-sections.test.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.backend.src.ai.tests.llm-planner.test.ts","path":"backend/src/ai/__tests__/llm-planner.test.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.backend.src.ai.tests.markdown-parse.test.ts","path":"backend/src/ai/__tests__/markdown-parse.test.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.backend.src.ai.tests.merge.test.ts","path":"backend/src/ai/__tests__/merge.test.ts","type":"unit"}
@@ -70,6 +71,7 @@
 {"framework":"node-test","id":"test.repository.backend.src.therapies.tests.therapy-create.test.ts","path":"backend/src/therapies/__tests__/therapy-create.test.ts","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-assistant-plan.py","path":"clinicos-ai-runtime/tests/test_assistant_plan.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-azure-gpt5.py","path":"clinicos-ai-runtime/tests/test_azure_gpt5.py","type":"unit"}
+{"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-azure-structured.py","path":"clinicos-ai-runtime/tests/test_azure_structured.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-document-profiles.py","path":"clinicos-ai-runtime/tests/test_document_profiles.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-env-config.py","path":"clinicos-ai-runtime/tests/test_env_config.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-factory.py","path":"clinicos-ai-runtime/tests/test_factory.py","type":"unit"}

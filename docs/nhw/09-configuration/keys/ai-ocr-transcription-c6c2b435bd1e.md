@@ -6,10 +6,15 @@ status: 'observed'
 summary: 'Configuration key AI_OCR_TRANSCRIPTION; generated knowledge never includes its value.'
 bounded_contexts: []
 sources:
+  - path: 'backend/src/ai/__tests__/lazy-sections.test.ts'
+    symbol: 'AI_OCR_TRANSCRIPTION'
+    line_start: '54'
+    line_end: '54'
+    confidence: 'observed'
   - path: 'backend/src/ai/upload/job-service.ts'
     symbol: 'AI_OCR_TRANSCRIPTION'
-    line_start: '799'
-    line_end: '799'
+    line_start: '822'
+    line_end: '822'
     confidence: 'observed'
   - path: 'docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md'
     symbol: 'AI_OCR_TRANSCRIPTION'
@@ -19,14 +24,14 @@ sources:
 relations:
   - type: 'belongs-to'
     target: 'system.clinicos'
-    evidence: 'backend/src/ai/upload/job-service.ts,docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md'
+    evidence: 'backend/src/ai/__tests__/lazy-sections.test.ts,backend/src/ai/upload/job-service.ts,docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md'
     confidence: 'observed'
 tags:
   - 'configuration'
   - 'typescript'
 last_verified:
   commit: 'working-tree'
-  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
 ---
 
 ## Question Answered
@@ -67,7 +72,8 @@ Missing, malformed, or incompatible values follow the consuming source validatio
 
 ## Evidence
 
-- `backend/src/ai/upload/job-service.ts:799-799` — AI_OCR_TRANSCRIPTION
+- `backend/src/ai/__tests__/lazy-sections.test.ts:54-54` — AI_OCR_TRANSCRIPTION
+- `backend/src/ai/upload/job-service.ts:822-822` — AI_OCR_TRANSCRIPTION
 - `docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md:4-4` — AI_OCR_TRANSCRIPTION
 
 ## Related Knowledge

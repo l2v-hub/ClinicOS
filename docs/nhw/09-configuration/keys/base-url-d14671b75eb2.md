@@ -6,11 +6,6 @@ status: 'observed'
 summary: 'Configuration key BASE_URL; generated knowledge never includes its value.'
 bounded_contexts: []
 sources:
-  - path: '.claude/settings.local.json'
-    symbol: 'BASE_URL'
-    line_start: '75'
-    line_end: '75'
-    confidence: 'observed'
   - path: 'docs/nhw/09-configuration/keys/base-url-d14671b75eb2.md'
     symbol: 'BASE_URL'
     line_start: '4'
@@ -24,14 +19,14 @@ sources:
 relations:
   - type: 'belongs-to'
     target: 'system.clinicos'
-    evidence: '.claude/settings.local.json,docs/nhw/09-configuration/keys/base-url-d14671b75eb2.md,scripts/e2e-full-patient-api-test.ts'
+    evidence: 'docs/nhw/09-configuration/keys/base-url-d14671b75eb2.md,scripts/e2e-full-patient-api-test.ts'
     confidence: 'observed'
 tags:
   - 'configuration'
   - 'typescript'
 last_verified:
   commit: 'working-tree'
-  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
 ---
 
 ## Question Answered
@@ -72,7 +67,6 @@ Missing, malformed, or incompatible values follow the consuming source validatio
 
 ## Evidence
 
-- `.claude/settings.local.json:75-75` — BASE_URL
 - `docs/nhw/09-configuration/keys/base-url-d14671b75eb2.md:4-4` — BASE_URL
 - `scripts/e2e-full-patient-api-test.ts:9-9` — BASE_URL
 

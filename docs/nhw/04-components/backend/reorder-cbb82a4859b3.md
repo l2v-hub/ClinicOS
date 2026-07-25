@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: 'backend/src/ai/upload/job-service.ts'
     symbol: 'reorder'
-    line_start: '576'
-    line_end: '583'
+    line_start: '599'
+    line_end: '606'
     confidence: 'observed'
 relations:
   - type: 'belongs-to'
@@ -22,7 +22,7 @@ tags:
   - 'function'
 last_verified:
   commit: 'working-tree'
-  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
 ---
 
 ## Question Answered
@@ -63,7 +63,7 @@ Refer to callers and implementation at the cited source span.
 
 ## Evidence
 
-- `backend/src/ai/upload/job-service.ts:576-583` — reorder
+- `backend/src/ai/upload/job-service.ts:599-606` — reorder
 
 ## Related Knowledge
 

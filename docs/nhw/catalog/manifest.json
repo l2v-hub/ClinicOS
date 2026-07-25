@@ -1,21 +1,21 @@
 {
   "baseline": {
-    "branch": "fix/import-azure-gpt55-swap",
-    "commit": "92d8a4735563a235e62079fc53484dfca57700cb",
-    "inventoryHash": "2073f47b8406b08297051d3f3f28e0885439977d59aa9b9a97a42e98eca4edf6"
+    "branch": "main",
+    "commit": "8128b1144a39ca38d746ba9a66615fc7982136af",
+    "inventoryHash": "8703eb2b558a40fb2acaec836ed55a5d2ef541ac38abaa740007254f6c187c3d"
   },
   "schemaVersion": "1.0.0",
   "systemId": "system.clinicos",
   "totals": {
     "cycles": 31,
-    "discoveries": 1539,
-    "documented": 3926,
-    "generatedExcluded": 785,
-    "graphEdges": 3091,
-    "graphNodes": 2622,
-    "metadataOnly": 1470,
+    "discoveries": 1542,
+    "documented": 3736,
+    "generatedExcluded": 769,
+    "graphEdges": 3000,
+    "graphNodes": 2531,
+    "metadataOnly": 1186,
     "orphans": 0,
-    "units": 2622,
+    "units": 2531,
     "unresolved": 0
   },
   "units": [
@@ -7052,12 +7052,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.037c2806db4820dc78a9",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/037c2806db4820dc78a9-5c168de0c474.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.039d54813c3d699e1ce6",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/039d54813c3d699e1ce6-2cf836073e24.md",
@@ -7364,12 +7358,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.0f2df96a34c072134f54",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/0f2df96a34c072134f54-9e307e2366b7.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.0f67973f6b9dcb94bfb1",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/0f67973f6b9dcb94bfb1-28c32ceb2817.md",
@@ -7386,12 +7374,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/101d88df5efb48e7812c-1e3c9fb55313.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.10faee0f4ed366a57be0",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/10faee0f4ed366a57be0-b6d74230f873.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.111fa94e2633e8caf2b5",
@@ -7412,12 +7394,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.12c32588c313daa388e1",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/12c32588c313daa388e1-aee15e830687.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.12c83dddac45057e638a",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/12c83dddac45057e638a-41bc1f72d17a.md",
@@ -7434,12 +7410,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/1354b1b51ae2a318ce64-c407bee367a3.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.13944a221bde5f98e798",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/13944a221bde5f98e798-208e689ffe82.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.13f5a0c7bb203c1152f4",
@@ -7511,12 +7481,6 @@
       "id": "component.repository.source.1739d51de6a00c31c4e5",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/1739d51de6a00c31c4e5-de1b4d5eb847.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.17a60c2a50e3ffae7623",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/17a60c2a50e3ffae7623-e55e2eda68b7.md",
       "status": "declared"
     },
     {
@@ -7607,12 +7571,6 @@
       "id": "component.repository.source.1baad6b179d0755cb2e1",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/1baad6b179d0755cb2e1-cab7562f55a5.md",
-      "status": "observed"
-    },
-    {
-      "id": "component.repository.source.1be57eb01a2c4a2d25ef",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/1be57eb01a2c4a2d25ef-1073ead57601.md",
       "status": "observed"
     },
     {
@@ -7754,12 +7712,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.2355f8bba2ad4d57f945",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/2355f8bba2ad4d57f945-4156d381ecba.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.23b2594b63216b59b8ff",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/23b2594b63216b59b8ff-6e907e3cd6da.md",
@@ -7775,12 +7727,6 @@
       "id": "component.repository.source.2448f5c603b74dcbdb47",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/2448f5c603b74dcbdb47-0161a24ef906.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.24dc46af6c3ffc56fac7",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/24dc46af6c3ffc56fac7-b632098f5658.md",
       "status": "declared"
     },
     {
@@ -7808,22 +7754,10 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.2887883ee45c6110f656",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/2887883ee45c6110f656-0ff5a459c427.md",
-      "status": "observed"
-    },
-    {
       "id": "component.repository.source.2897c169180a0f6c90c1",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/2897c169180a0f6c90c1-0d9fdb4d4ffb.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.28ed9431e9a98ac816ba",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/28ed9431e9a98ac816ba-681ec9175353.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.28fde78382c81d9e485c",
@@ -7880,12 +7814,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.2b2c4594bed3c6f26042",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/2b2c4594bed3c6f26042-c61672ad6bb7.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.2b2f581c73e6a505a79d",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/2b2f581c73e6a505a79d-6be54e047fb2.md",
@@ -7928,21 +7856,9 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.2d94da9bc07168b3a2b1",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/2d94da9bc07168b3a2b1-a1e6524d6644.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.2da6132225c3a371711a",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/2da6132225c3a371711a-25f8a246d927.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.2dc64f4ede4846347b78",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/2dc64f4ede4846347b78-8a5ac9894fb5.md",
       "status": "declared"
     },
     {
@@ -7958,10 +7874,10 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.2f08120e322bf06680f9",
+      "id": "component.repository.source.2e8ccd201417f10c88fc",
       "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/2f08120e322bf06680f9-fff121b0836a.md",
-      "status": "declared"
+      "path": "docs/nhw/12-repository/source-files/2e8ccd201417f10c88fc-60f52b9e0e8b.md",
+      "status": "observed"
     },
     {
       "id": "component.repository.source.2fb5033a04e48fbf3d34",
@@ -8048,12 +7964,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.35eb2c5ba70c149885ea",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/35eb2c5ba70c149885ea-1f0bb128bd4b.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.360b057c6e7c1f89f7bb",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/360b057c6e7c1f89f7bb-29cb5367e414.md",
@@ -8084,12 +7994,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.36ad8a7e7dc1da267d40",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/36ad8a7e7dc1da267d40-1125ebfad0d3.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.3739b4817dc00683945a",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/3739b4817dc00683945a-11588b810413.md",
@@ -8112,6 +8016,12 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/380a53b96831c2ff8067-4e95c0e7d28a.md",
       "status": "observed"
+    },
+    {
+      "id": "component.repository.source.38848a62f1135336e82e",
+      "kind": "repository-source",
+      "path": "docs/nhw/12-repository/source-files/38848a62f1135336e82e-335169741bdb.md",
+      "status": "declared"
     },
     {
       "id": "component.repository.source.38b00d6facf454e2e80c",
@@ -8198,12 +8108,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.3c490c026482953b7eb4",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/3c490c026482953b7eb4-900943c69668.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.3c7e94477a35361c4790",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/3c7e94477a35361c4790-187c6fd8f634.md",
@@ -8219,18 +8123,6 @@
       "id": "component.repository.source.3d7b951b96108c50ca83",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/3d7b951b96108c50ca83-c145c5a0ea43.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.3de5a492664892946bf6",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/3de5a492664892946bf6-f0a727e244e6.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.3e673be3806e61a990dc",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/3e673be3806e61a990dc-15328baa7f34.md",
       "status": "declared"
     },
     {
@@ -8270,12 +8162,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.40a77d9a9ead49632cf2",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/40a77d9a9ead49632cf2-76b281f215ed.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.40d06d9a303aa7f8264e",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/40d06d9a303aa7f8264e-8e8d93fbae85.md",
@@ -8312,21 +8198,9 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.4206914cb4b21070963c",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/4206914cb4b21070963c-eb1860d5310d.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.4237387a2d45584e8149",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/4237387a2d45584e8149-bf8fa3e71cc4.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.423bc8b469b0a3e430bd",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/423bc8b469b0a3e430bd-47992a64e2fe.md",
       "status": "declared"
     },
     {
@@ -8357,12 +8231,6 @@
       "id": "component.repository.source.43a5b3afea345df84e23",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/43a5b3afea345df84e23-3a682d72d3e8.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.43c01c5523cce5e7d056",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/43c01c5523cce5e7d056-b4918faac8ea.md",
       "status": "declared"
     },
     {
@@ -8411,12 +8279,6 @@
       "id": "component.repository.source.45516a2278a7a50ac008",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/45516a2278a7a50ac008-b7aa205cab9f.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.456276fd9fae433b7cf9",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/456276fd9fae433b7cf9-1eba120ed9f9.md",
       "status": "declared"
     },
     {
@@ -8558,12 +8420,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.4c51b89ecb9b1ff2ee16",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/4c51b89ecb9b1ff2ee16-7a070129cb8f.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.4c6552caa34bc123f095",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/4c6552caa34bc123f095-db7bf5e04521.md",
@@ -8606,12 +8462,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.4e54dadc1c58646a6051",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/4e54dadc1c58646a6051-6d5c7cafe07d.md",
-      "status": "observed"
-    },
-    {
       "id": "component.repository.source.4ec4525f7df2cf17bd9c",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/4ec4525f7df2cf17bd9c-4a5821b8a938.md",
@@ -8645,12 +8495,6 @@
       "id": "component.repository.source.5026486788f2e438534b",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/5026486788f2e438534b-fc98d09103ad.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.503f033c63342dba7a54",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/503f033c63342dba7a54-96914e8b3626.md",
       "status": "declared"
     },
     {
@@ -8696,12 +8540,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.52faac3fe046b0c96c53",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/52faac3fe046b0c96c53-4b7ccb891c91.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.53237392a212fb66af57",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/53237392a212fb66af57-fe5b9b5f527b.md",
@@ -8729,12 +8567,6 @@
       "id": "component.repository.source.539a5d691d19d9fa99ce",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/539a5d691d19d9fa99ce-77f57cf00a87.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.5408fb4e24ad13bee40e",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/5408fb4e24ad13bee40e-00791e3d4e4d.md",
       "status": "declared"
     },
     {
@@ -8930,28 +8762,10 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.5a63459a5098965718a5",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/5a63459a5098965718a5-18e93e254aa9.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.5a6a87c7107685c0e815",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/5a6a87c7107685c0e815-b73fae67e391.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.5a98dcc6186433841e3f",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/5a98dcc6186433841e3f-8847c6bf381f.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.5a9f027ec9db78c69f61",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/5a9f027ec9db78c69f61-44628eefdb4b.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.5afd26f29f7c4d8ba5aa",
@@ -8990,18 +8804,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.5c305e1be4d940885f03",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/5c305e1be4d940885f03-3e030805a69f.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.5c354d0feae6fd748782",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/5c354d0feae6fd748782-9bdb6d253caf.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.5c794bd8e54e6c7cef9d",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/5c794bd8e54e6c7cef9d-f8bfe68a4a5e.md",
@@ -9011,12 +8813,6 @@
       "id": "component.repository.source.5c9eafa388fb49abf927",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/5c9eafa388fb49abf927-3540b42f5562.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.5ce10be326f098c4b6b8",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/5ce10be326f098c4b6b8-bfd47b5a677e.md",
       "status": "declared"
     },
     {
@@ -9042,12 +8838,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/5e224e3340ea663ef904-54c5e00973b4.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.5eb8381c306bed4b8de0",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/5eb8381c306bed4b8de0-c23e3cc47c8e.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.5f00a0da40934006c08c",
@@ -9164,12 +8954,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.65be43f7eda9e3f69dd0",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/65be43f7eda9e3f69dd0-ef7ecfbdc941.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.66b5af820d6cf345ffd5",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/66b5af820d6cf345ffd5-62dc1561f279.md",
@@ -9246,12 +9030,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/69a8113268796e818560-fbebed81f9b8.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.69e14d86d8035bd2b53d",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/69e14d86d8035bd2b53d-201fd6527712.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.6a1c0ca25c3cac1d4cc1",
@@ -9338,12 +9116,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.6e252879d79ec258073c",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/6e252879d79ec258073c-ac495ba48fcc.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.6e5532b4342ac0e46ba9",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/6e5532b4342ac0e46ba9-f4073066da3d.md",
@@ -9380,21 +9152,9 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.6fb245b9a4d0645d4849",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/6fb245b9a4d0645d4849-ae8bc621c3ff.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.6fc2632428149adcc50b",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/6fc2632428149adcc50b-18c99e35a02a.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.6fd14887c6f5e8dd07e4",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/6fd14887c6f5e8dd07e4-36d2f4d8a1f6.md",
       "status": "declared"
     },
     {
@@ -9422,12 +9182,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.71974473af1865aeb7b8",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/71974473af1865aeb7b8-05ea185c63ad.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.71b9fa0f414fa289e47b",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/71b9fa0f414fa289e47b-4619add9f56d.md",
@@ -9443,12 +9197,6 @@
       "id": "component.repository.source.71ea0e2abae1674fdf65",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/71ea0e2abae1674fdf65-078d5f35ba03.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.722109df2bb80a5a2ce7",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/722109df2bb80a5a2ce7-6b5ca345a9a0.md",
       "status": "declared"
     },
     {
@@ -9662,12 +9410,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.7c19c6e92ac692ca871a",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/7c19c6e92ac692ca871a-5f28beb8e172.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.7c25284ab3e5c7fb63c6",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/7c25284ab3e5c7fb63c6-2f28fa8b3e17.md",
@@ -9848,12 +9590,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.84d17ac4c44736c73661",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/84d17ac4c44736c73661-700e16bbd57d.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.850132a2ae812e25bdc2",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/850132a2ae812e25bdc2-02c2aeaa2511.md",
@@ -9893,12 +9629,6 @@
       "id": "component.repository.source.85ad4f13e5205e7b29cf",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/85ad4f13e5205e7b29cf-c2311800c41d.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.85b25f4dd5ce78fdf26e",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/85b25f4dd5ce78fdf26e-3b8ae29c5b0a.md",
       "status": "declared"
     },
     {
@@ -9968,12 +9698,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.883a183fd5af58991afc",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/883a183fd5af58991afc-149219892af0.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.8a2211b4cd3cc1f51e75",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/8a2211b4cd3cc1f51e75-3c45134353c2.md",
@@ -9983,18 +9707,6 @@
       "id": "component.repository.source.8a511355451c0babf965",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/8a511355451c0babf965-8df133e89cf8.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.8a5abb414fcba58c6ea8",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/8a5abb414fcba58c6ea8-d7c48067df5b.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.8ac6f2ff1665c9929148",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/8ac6f2ff1665c9929148-fe025a09c1c4.md",
       "status": "declared"
     },
     {
@@ -10031,12 +9743,6 @@
       "id": "component.repository.source.8bafec09f81319059a30",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/8bafec09f81319059a30-c57111c76adf.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.8bc0017afffe276f1853",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/8bc0017afffe276f1853-efb5db512713.md",
       "status": "declared"
     },
     {
@@ -10091,12 +9797,6 @@
       "id": "component.repository.source.8d804aff482fe8e6535a",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/8d804aff482fe8e6535a-d7098575f27a.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.8da0408df9653e4776d5",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/8da0408df9653e4776d5-c7d881e9ae58.md",
       "status": "declared"
     },
     {
@@ -10160,18 +9860,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.90aec4ae770b66a0f8f1",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/90aec4ae770b66a0f8f1-5c417323d3dc.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.9116fd386bdc2c7b9da2",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/9116fd386bdc2c7b9da2-f481e41d2675.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.911b1fcbd6920e27e17e",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/911b1fcbd6920e27e17e-1cabf717f788.md",
@@ -10223,18 +9911,6 @@
       "id": "component.repository.source.93284b4213fe41df94ae",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/93284b4213fe41df94ae-c6cc5ee68c5d.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.932b5783445c758a0891",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/932b5783445c758a0891-ae23f214668a.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.932b9dd39d22877fe010",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/932b9dd39d22877fe010-0bfa0c3277dd.md",
       "status": "declared"
     },
     {
@@ -10328,18 +10004,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.96cb943b9c8035345bb8",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/96cb943b9c8035345bb8-807900512a2a.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.96f680e13e4a4fbe150f",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/96f680e13e4a4fbe150f-8040c8062a89.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.972d8c7821d4081f620e",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/972d8c7821d4081f620e-1f88baee6f3f.md",
@@ -10362,12 +10026,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/97ecba3cd53f5c930750-1a68a5a7342b.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.97f21dbcd9ef85a83565",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/97f21dbcd9ef85a83565-801c8485740f.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.9809d710968833ee4d9e",
@@ -10434,24 +10092,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/9b64bf3a147cf6c49c85-bfa3b7cfc317.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.9b6c54dfc6a8e086b181",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/9b6c54dfc6a8e086b181-2a60b5a772d2.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.9b76607f706b1ba82100",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/9b76607f706b1ba82100-f08c26dd6a88.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.9b78a935ecc1b50a27ef",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/9b78a935ecc1b50a27ef-d6f2bccae2e9.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.9b84dc90b6ae0fd16d8a",
@@ -10712,12 +10352,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.a443e4b8577269c1ad7c",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/a443e4b8577269c1ad7c-a2e4d13eaa72.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.a47c778a6f77dbedd9ec",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/a47c778a6f77dbedd9ec-929fe91839f6.md",
@@ -10811,12 +10445,6 @@
       "id": "component.repository.source.a7ccef660f0186e82fff",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/a7ccef660f0186e82fff-0e3f18c23246.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.a80b543ce8a6437bbb50",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/a80b543ce8a6437bbb50-da289d94c048.md",
       "status": "declared"
     },
     {
@@ -10952,21 +10580,9 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.add89d86a8ea9e5b5dd2",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/add89d86a8ea9e5b5dd2-806cd76ba780.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.adf47bda069162d79b10",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/adf47bda069162d79b10-f18a262a1375.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.ae239254edcd7c2e30de",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/ae239254edcd7c2e30de-05ad6615488b.md",
       "status": "declared"
     },
     {
@@ -11004,12 +10620,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/b08508aff7eab716278e-72fc0888eac0.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.b09959d74234cc631167",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/b09959d74234cc631167-2b9b40a41731.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.b0b38ac7cfe98e495dd7",
@@ -11078,12 +10688,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.b33f5a796c04c06da073",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/b33f5a796c04c06da073-40953338e7af.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.b38e052122e8e3777ae3",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/b38e052122e8e3777ae3-1ff4b2ffa24f.md",
@@ -11130,12 +10734,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/b55cdbef4907b7045f32-add8b5899728.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.b566a339de77d1f2c41c",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/b566a339de77d1f2c41c-5da6b1f67fed.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.b5841ec83b24bea7dbeb",
@@ -11234,12 +10832,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.b8696ffb0b482bc3a912",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/b8696ffb0b482bc3a912-b8dfafd5707c.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.b886c4f08c1705b1fb19",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/b886c4f08c1705b1fb19-1b5b941e83d2.md",
@@ -11258,12 +10850,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.b9a7949050d46fd06533",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/b9a7949050d46fd06533-657ae3430f53.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.b9a8ae84add9071eb7ff",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/b9a8ae84add9071eb7ff-0c15cbf6a319.md",
@@ -11274,12 +10860,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/b9df00ee1864498fe129-606f89545f6a.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.ba39534c8a56ce1e3224",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/ba39534c8a56ce1e3224-93a4eb327c2a.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.ba6187aabbfcd1cd944d",
@@ -11294,21 +10874,9 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.badef15b353481ad47f0",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/badef15b353481ad47f0-3d4a7a5a403a.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.bafd224f9a8754619344",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/bafd224f9a8754619344-62ac38d7d47e.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.bb2915da452585caac62",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/bb2915da452585caac62-880d6b9a88b0.md",
       "status": "declared"
     },
     {
@@ -11390,24 +10958,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.bf23d502e0fff38ec4c0",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/bf23d502e0fff38ec4c0-993ce50bd05c.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.bf5e53cfab99fb9abb40",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/bf5e53cfab99fb9abb40-d102339d5486.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.bfaaa94b79d20f92da8c",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/bfaaa94b79d20f92da8c-7059a1d1a571.md",
-      "status": "observed"
-    },
-    {
       "id": "component.repository.source.bfe2ca6c6895f724ee1e",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/bfe2ca6c6895f724ee1e-309bd3d92ba7.md",
@@ -11454,12 +11004,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/c323e645e878fdffffad-6b313b201eb3.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.c33da0897e14b8c70969",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/c33da0897e14b8c70969-0c87c678c5c8.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.c372173f6c424f081dc8",
@@ -11558,12 +11102,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.c7e66ed359f1015c0b94",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/c7e66ed359f1015c0b94-07bcc63a50be.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.c812e20e22b29260dc5c",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/c812e20e22b29260dc5c-9d19fcf4c70c.md",
@@ -11630,12 +11168,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.cb616fe3eae4b116bbdd",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/cb616fe3eae4b116bbdd-d2c57871c730.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.cba80aa02770e2ca0ee3",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/cba80aa02770e2ca0ee3-cded98504461.md",
@@ -11681,12 +11213,6 @@
       "id": "component.repository.source.cc8ff844d3dd9e253b82",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/cc8ff844d3dd9e253b82-eab90a235d67.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.ccbb94c02453d4ed422e",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/ccbb94c02453d4ed422e-7ca1a8a1ac3a.md",
       "status": "declared"
     },
     {
@@ -11822,12 +11348,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.d413f9f76c40ced65e72",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/d413f9f76c40ced65e72-28f58dec5c77.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.d42a81d397cebe2b8b33",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/d42a81d397cebe2b8b33-83d22fb0dc3a.md",
@@ -11868,12 +11388,6 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/d5244624825eb4dc13f2-ce38ae2ab988.md",
       "status": "observed"
-    },
-    {
-      "id": "component.repository.source.d525e3944ca9998ad2b7",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/d525e3944ca9998ad2b7-79cfd90a5b94.md",
-      "status": "declared"
     },
     {
       "id": "component.repository.source.d571cf1f4ce6a8bbda76",
@@ -11930,12 +11444,6 @@
       "status": "observed"
     },
     {
-      "id": "component.repository.source.d664707c1c9585337843",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/d664707c1c9585337843-61d0283ab7f0.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.d68aa1d667a311ac6463",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/d68aa1d667a311ac6463-ee6631d1aef8.md",
@@ -11960,12 +11468,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.d786e5c1cb6aa05f578d",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/d786e5c1cb6aa05f578d-f715fa8ea59c.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.d79e795f400ee3a397dc",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/d79e795f400ee3a397dc-ea9ebf67a7a2.md",
@@ -11975,12 +11477,6 @@
       "id": "component.repository.source.d7b46a92186d5c560d22",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/d7b46a92186d5c560d22-39285d8bc279.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.d7d182907952997e952a",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/d7d182907952997e952a-50d733f766f6.md",
       "status": "declared"
     },
     {
@@ -12002,27 +11498,9 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.d984d96719f857a5b22d",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/d984d96719f857a5b22d-1f6f7f69f9f3.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.d98a08be05cd791a0c2d",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/d98a08be05cd791a0c2d-f3f77ee2392f.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.d9d1ce40c72e994dfb9b",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/d9d1ce40c72e994dfb9b-5ef847cba012.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.da1266248b5165b76636",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/da1266248b5165b76636-daf21dbaf62e.md",
       "status": "declared"
     },
     {
@@ -12095,12 +11573,6 @@
       "id": "component.repository.source.ddb64f8ca483e5b9ed07",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/ddb64f8ca483e5b9ed07-f6838aa29e76.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.ddbc8d7f0b6e8cdc032a",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/ddbc8d7f0b6e8cdc032a-6bb547d33ded.md",
       "status": "declared"
     },
     {
@@ -12182,12 +11654,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.e2c270517efd9fd0ee81",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/e2c270517efd9fd0ee81-2f2e4b38b5ab.md",
-      "status": "observed"
-    },
-    {
       "id": "component.repository.source.e31e3f780346f3e6cb52",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/e31e3f780346f3e6cb52-6331d9b0ef94.md",
@@ -12227,12 +11693,6 @@
       "id": "component.repository.source.e438da9434afaaffd9a8",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/e438da9434afaaffd9a8-9d7e3ddb962a.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.e52b8f640b02518a731e",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/e52b8f640b02518a731e-388d5876dc88.md",
       "status": "declared"
     },
     {
@@ -12308,12 +11768,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.e9cbb0224c4a3d23a601",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/e9cbb0224c4a3d23a601-631a4570e2c9.md",
-      "status": "observed"
-    },
-    {
       "id": "component.repository.source.e9f586ff1d1d08f010ad",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/e9f586ff1d1d08f010ad-db3d691ff9b4.md",
@@ -12383,12 +11837,6 @@
       "id": "component.repository.source.ed625d80fb4b1ed5cead",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/ed625d80fb4b1ed5cead-6685c1a556ab.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.edbf41a77f189d10fca9",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/edbf41a77f189d10fca9-f1735c18cbcd.md",
       "status": "declared"
     },
     {
@@ -12497,18 +11945,6 @@
       "id": "component.repository.source.f2db8f8ed5fad8e4a3de",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/f2db8f8ed5fad8e4a3de-0952ec18b71f.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.f331e71e0a992d4ef1ca",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/f331e71e0a992d4ef1ca-38bb5ac5ec9a.md",
-      "status": "declared"
-    },
-    {
-      "id": "component.repository.source.f34a8c1cf9ded0f29265",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/f34a8c1cf9ded0f29265-34709d9520f2.md",
       "status": "declared"
     },
     {
@@ -12626,12 +12062,6 @@
       "status": "declared"
     },
     {
-      "id": "component.repository.source.f7c48e4d9d9d0f40ed61",
-      "kind": "repository-source",
-      "path": "docs/nhw/12-repository/source-files/f7c48e4d9d9d0f40ed61-429d5c659029.md",
-      "status": "declared"
-    },
-    {
       "id": "component.repository.source.f7d7254bda9f1765d694",
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/f7d7254bda9f1765d694-d6339a05cca3.md",
@@ -12684,6 +12114,12 @@
       "kind": "repository-source",
       "path": "docs/nhw/12-repository/source-files/f9d8942e6d3ad5e4a720-c1b430062b6d.md",
       "status": "observed"
+    },
+    {
+      "id": "component.repository.source.f9da9c3869eaf9895042",
+      "kind": "repository-source",
+      "path": "docs/nhw/12-repository/source-files/f9da9c3869eaf9895042-20edc8f92d6e.md",
+      "status": "declared"
     },
     {
       "id": "component.repository.source.f9edc6c38a67bdd8ad3a",
@@ -13469,6 +12905,12 @@
       "id": "config.discovered.azure-openai-api-key",
       "kind": "configuration-key",
       "path": "docs/nhw/09-configuration/keys/azure-openai-api-key-802ae7a4ef2d.md",
+      "status": "observed"
+    },
+    {
+      "id": "config.discovered.azure-openai-endpoint",
+      "kind": "configuration-key",
+      "path": "docs/nhw/09-configuration/keys/azure-openai-endpoint-9e8a632b426f.md",
       "status": "observed"
     },
     {
@@ -14858,6 +14300,12 @@
       "status": "observed"
     },
     {
+      "id": "test.repository.backend.src.ai.tests.lazy-sections.test.ts",
+      "kind": "unit-test",
+      "path": "docs/nhw/11-quality/tests/unit/ts-1bdcdd985820.md",
+      "status": "observed"
+    },
+    {
       "id": "test.repository.backend.src.ai.tests.llm-planner.test.ts",
       "kind": "unit-test",
       "path": "docs/nhw/11-quality/tests/unit/ts-a9354d91efc6.md",
@@ -15047,6 +14495,12 @@
       "id": "test.repository.clinicos-ai-runtime.tests.test-azure-gpt5.py",
       "kind": "unit-test",
       "path": "docs/nhw/11-quality/tests/unit/py-974fdbfe9a84.md",
+      "status": "observed"
+    },
+    {
+      "id": "test.repository.clinicos-ai-runtime.tests.test-azure-structured.py",
+      "kind": "unit-test",
+      "path": "docs/nhw/11-quality/tests/unit/py-e2a7cb2acf87.md",
       "status": "observed"
     },
     {

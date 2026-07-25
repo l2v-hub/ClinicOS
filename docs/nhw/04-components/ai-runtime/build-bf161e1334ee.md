@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/azure.py'
     symbol: 'build'
-    line_start: '71'
-    line_end: '73'
+    line_start: '178'
+    line_end: '180'
     confidence: 'observed'
 relations:
   - type: 'belongs-to'
@@ -22,7 +22,7 @@ tags:
   - 'function'
 last_verified:
   commit: 'working-tree'
-  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
 ---
 
 ## Question Answered
@@ -63,7 +63,7 @@ None observed
 
 ## Evidence
 
-- `clinicos-ai-runtime/clinicos_ai/models/providers/azure.py:71-73` — build
+- `clinicos-ai-runtime/clinicos_ai/models/providers/azure.py:178-180` — build
 
 ## Related Knowledge
 

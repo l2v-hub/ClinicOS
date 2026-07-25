@@ -33,8 +33,8 @@ sources:
     confidence: 'observed'
   - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/azure.py'
     symbol: 'build'
-    line_start: '71'
-    line_end: '73'
+    line_start: '178'
+    line_end: '180'
     confidence: 'observed'
   - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/base.py'
     symbol: 'Attachment'
@@ -140,7 +140,7 @@ tags:
   - 'ai-provider'
 last_verified:
   commit: 'working-tree'
-  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
 inference_rule: 'Public provider, registry, and factory symbols form a substitutable model-provider boundary.'
 ---
 
@@ -187,7 +187,7 @@ Unknown providers or invalid model configuration fail during registry/factory re
 - `clinicos-ai-runtime/clinicos_ai/models/errors.py:45-47` — ProviderUnavailableError
 - `clinicos-ai-runtime/clinicos_ai/models/factory.py:32-51` — ModelFactory
 - `clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py:9-17` — build
-- `clinicos-ai-runtime/clinicos_ai/models/providers/azure.py:71-73` — build
+- `clinicos-ai-runtime/clinicos_ai/models/providers/azure.py:178-180` — build
 - `clinicos-ai-runtime/clinicos_ai/models/providers/base.py:13-16` — Attachment
 - `clinicos-ai-runtime/clinicos_ai/models/providers/base.py:25-29` — BuiltModel
 - `clinicos-ai-runtime/clinicos_ai/models/providers/base.py:19-21` — ModelRunner

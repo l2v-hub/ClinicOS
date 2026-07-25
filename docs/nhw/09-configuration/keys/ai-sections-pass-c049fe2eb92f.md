@@ -6,10 +6,15 @@ status: 'observed'
 summary: 'Configuration key AI_SECTIONS_PASS; generated knowledge never includes its value.'
 bounded_contexts: []
 sources:
+  - path: 'backend/src/ai/__tests__/lazy-sections.test.ts'
+    symbol: 'AI_SECTIONS_PASS'
+    line_start: '26'
+    line_end: '26'
+    confidence: 'observed'
   - path: 'backend/src/ai/upload/job-service.ts'
     symbol: 'AI_SECTIONS_PASS'
-    line_start: '350'
-    line_end: '350'
+    line_start: '373'
+    line_end: '373'
     confidence: 'observed'
   - path: 'docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md'
     symbol: 'AI_SECTIONS_PASS'
@@ -41,22 +46,17 @@ sources:
     line_start: '4'
     line_end: '4'
     confidence: 'observed'
-  - path: 'requirements/evidence/REQ-026/visual-verification.md'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '19'
-    line_end: '19'
-    confidence: 'observed'
 relations:
   - type: 'belongs-to'
     target: 'system.clinicos'
-    evidence: 'backend/src/ai/upload/job-service.ts,docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md,requirements/deployments/DEPLOY-20260615-2158.md,requirements/deployments/DEPLOY-20260616-0624.md,requirements/deployments/DEPLOY-20260616-0751.md,requirements/deployments/DEPLOY-20260616-1309.md,requirements/evidence/REQ-026/data-smoke-after.txt,requirements/evidence/REQ-026/visual-verification.md'
+    evidence: 'backend/src/ai/__tests__/lazy-sections.test.ts,backend/src/ai/upload/job-service.ts,docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md,requirements/deployments/DEPLOY-20260615-2158.md,requirements/deployments/DEPLOY-20260616-0624.md,requirements/deployments/DEPLOY-20260616-0751.md,requirements/deployments/DEPLOY-20260616-1309.md,requirements/evidence/REQ-026/data-smoke-after.txt'
     confidence: 'observed'
 tags:
   - 'configuration'
   - 'typescript'
 last_verified:
   commit: 'working-tree'
-  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
 ---
 
 ## Question Answered
@@ -97,14 +97,14 @@ Missing, malformed, or incompatible values follow the consuming source validatio
 
 ## Evidence
 
-- `backend/src/ai/upload/job-service.ts:350-350` — AI_SECTIONS_PASS
+- `backend/src/ai/__tests__/lazy-sections.test.ts:26-26` — AI_SECTIONS_PASS
+- `backend/src/ai/upload/job-service.ts:373-373` — AI_SECTIONS_PASS
 - `docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md:4-4` — AI_SECTIONS_PASS
 - `requirements/deployments/DEPLOY-20260615-2158.md:24-24` — AI_SECTIONS_PASS
 - `requirements/deployments/DEPLOY-20260616-0624.md:44-44` — AI_SECTIONS_PASS
 - `requirements/deployments/DEPLOY-20260616-0751.md:42-42` — AI_SECTIONS_PASS
 - `requirements/deployments/DEPLOY-20260616-1309.md:18-18` — AI_SECTIONS_PASS
 - `requirements/evidence/REQ-026/data-smoke-after.txt:4-4` — AI_SECTIONS_PASS
-- `requirements/evidence/REQ-026/visual-verification.md:19-19` — AI_SECTIONS_PASS
 
 ## Related Knowledge
 

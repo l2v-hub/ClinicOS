@@ -26,7 +26,7 @@ tags:
   - 'system-view'
 last_verified:
   commit: 'working-tree'
-  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
 inference_rule: 'Reconstructed from runtime composition roots and catalogs for authentication, logging, errors, caching, and quality.'
 ---
 
