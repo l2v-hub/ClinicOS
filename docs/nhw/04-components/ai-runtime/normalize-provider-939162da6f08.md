@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: "clinicos-ai-runtime/clinicos_ai/models/env_config.py"
     symbol: "normalize_provider"
-    line_start: "25"
-    line_end: "27"
+    line_start: "32"
+    line_end: "34"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 ---
 
 ## Question Answered
@@ -63,7 +63,7 @@ None observed
 
 ## Evidence
 
-- `clinicos-ai-runtime/clinicos_ai/models/env_config.py:25-27` — normalize_provider
+- `clinicos-ai-runtime/clinicos_ai/models/env_config.py:32-34` — normalize_provider
 
 ## Related Knowledge
 

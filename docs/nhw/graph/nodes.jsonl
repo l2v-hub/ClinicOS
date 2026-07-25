@@ -293,6 +293,7 @@
 {"id":"component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-factory.py.modelfactory","kind":"python-class","path":"docs/nhw/04-components/ai-runtime/modelfactory-7271e3a6ba5e.md","status":"observed"}
 {"id":"component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-profiles.py.capabilities-for","kind":"python-function","path":"docs/nhw/04-components/ai-runtime/capabilities-for-eeb2c4569b89.md","status":"observed"}
 {"id":"component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-anthropic.py.build","kind":"python-function","path":"docs/nhw/04-components/ai-runtime/build-1fdfcbc2acca.md","status":"observed"}
+{"id":"component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-azure-docintel.py.build","kind":"python-function","path":"docs/nhw/04-components/ai-runtime/build-8b21aaeb1960.md","status":"observed"}
 {"id":"component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-azure.py.build","kind":"python-function","path":"docs/nhw/04-components/ai-runtime/build-bf161e1334ee.md","status":"observed"}
 {"id":"component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.attachment","kind":"python-class","path":"docs/nhw/04-components/ai-runtime/attachment-6f09ed1d62aa.md","status":"observed"}
 {"id":"component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.builtmodel","kind":"python-class","path":"docs/nhw/04-components/ai-runtime/builtmodel-4a5b028ded65.md","status":"observed"}
@@ -2144,6 +2145,9 @@
 {"id":"config.discovered.api-url","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/api-url-4852082d350c.md","status":"observed"}
 {"id":"config.discovered.app-url","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/app-url-499813291ae6.md","status":"observed"}
 {"id":"config.discovered.auth-mode","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/auth-mode-ce57afe64a06.md","status":"observed"}
+{"id":"config.discovered.azure-docintel-api-key","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/azure-docintel-api-key-28a8dd9be5dc.md","status":"observed"}
+{"id":"config.discovered.azure-docintel-endpoint","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/azure-docintel-endpoint-6b320e009b51.md","status":"observed"}
+{"id":"config.discovered.azure-docintel-max-parallel","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/azure-docintel-max-parallel-38aecc89840f.md","status":"observed"}
 {"id":"config.discovered.azure-openai-api-key","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/azure-openai-api-key-802ae7a4ef2d.md","status":"observed"}
 {"id":"config.discovered.azure-openai-endpoint","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/azure-openai-endpoint-9e8a632b426f.md","status":"observed"}
 {"id":"config.discovered.base-url","kind":"configuration-key","path":"docs/nhw/09-configuration/keys/base-url-d14671b75eb2.md","status":"observed"}
@@ -2411,6 +2415,7 @@
 {"id":"test.repository.clinicos-ai-runtime.tests.test-assistant-plan.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-fd84adc97513.md","status":"observed"}
 {"id":"test.repository.clinicos-ai-runtime.tests.test-azure-gpt5.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-974fdbfe9a84.md","status":"observed"}
 {"id":"test.repository.clinicos-ai-runtime.tests.test-azure-structured.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-e2a7cb2acf87.md","status":"observed"}
+{"id":"test.repository.clinicos-ai-runtime.tests.test-docintel.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-0832e923fc79.md","status":"observed"}
 {"id":"test.repository.clinicos-ai-runtime.tests.test-document-profiles.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-8df4ca866532.md","status":"observed"}
 {"id":"test.repository.clinicos-ai-runtime.tests.test-env-config.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-beb246bd101a.md","status":"observed"}
 {"id":"test.repository.clinicos-ai-runtime.tests.test-factory.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-14ac8f122669.md","status":"observed"}

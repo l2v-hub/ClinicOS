@@ -17,18 +17,18 @@ sources:
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "llm_health"
-    line_start: "108"
-    line_end: "109"
+    line_start: "109"
+    line_end: "110"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "assistant_compose"
-    line_start: "133"
-    line_end: "143"
+    line_start: "134"
+    line_end: "144"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "assistant_plan"
-    line_start: "115"
-    line_end: "126"
+    line_start: "116"
+    line_end: "127"
     confidence: "observed"
   - path: "backend/src/ai/assistant/agents.ts"
     symbol: "AGENT_PROFILES"
@@ -86,7 +86,7 @@ tags:
   - "runtime-flow"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
@@ -138,9 +138,9 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 - `backend/src/routes/ai-assistant-public.ts:55-68`
 - `backend/src/routes/internal-ai.ts:122-129`
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:108-109` — llm_health
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:133-143` — assistant_compose
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:115-126` — assistant_plan
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:109-110` — llm_health
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:134-144` — assistant_compose
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:116-127` — assistant_plan
 - `backend/src/ai/assistant/agents.ts:48-63` — AGENT_PROFILES
 - `backend/src/ai/assistant/agents.ts:77-79` — agentAllowsIntent
 - `backend/src/ai/assistant/agents.ts:8-8` — AgentId

@@ -8,13 +8,13 @@ bounded_contexts: []
 sources:
   - path: "backend/src/ai/__tests__/lazy-sections.test.ts"
     symbol: "AI_OCR_TRANSCRIPTION"
-    line_start: "54"
-    line_end: "54"
+    line_start: "77"
+    line_end: "77"
     confidence: "observed"
   - path: "backend/src/ai/upload/job-service.ts"
     symbol: "AI_OCR_TRANSCRIPTION"
-    line_start: "822"
-    line_end: "822"
+    line_start: "790"
+    line_end: "790"
     confidence: "observed"
   - path: "docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md"
     symbol: "AI_OCR_TRANSCRIPTION"
@@ -31,7 +31,7 @@ tags:
   - "typescript"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 ---
 
 ## Question Answered
@@ -72,8 +72,8 @@ Missing, malformed, or incompatible values follow the consuming source validatio
 
 ## Evidence
 
-- `backend/src/ai/__tests__/lazy-sections.test.ts:54-54` — AI_OCR_TRANSCRIPTION
-- `backend/src/ai/upload/job-service.ts:822-822` — AI_OCR_TRANSCRIPTION
+- `backend/src/ai/__tests__/lazy-sections.test.ts:77-77` — AI_OCR_TRANSCRIPTION
+- `backend/src/ai/upload/job-service.ts:790-790` — AI_OCR_TRANSCRIPTION
 - `docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md:4-4` — AI_OCR_TRANSCRIPTION
 
 ## Related Knowledge

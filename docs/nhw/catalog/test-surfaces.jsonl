@@ -72,6 +72,7 @@
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-assistant-plan.py","path":"clinicos-ai-runtime/tests/test_assistant_plan.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-azure-gpt5.py","path":"clinicos-ai-runtime/tests/test_azure_gpt5.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-azure-structured.py","path":"clinicos-ai-runtime/tests/test_azure_structured.py","type":"unit"}
+{"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-docintel.py","path":"clinicos-ai-runtime/tests/test_docintel.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-document-profiles.py","path":"clinicos-ai-runtime/tests/test_document_profiles.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-env-config.py","path":"clinicos-ai-runtime/tests/test_env_config.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.clinicos-ai-runtime.tests.test-factory.py","path":"clinicos-ai-runtime/tests/test_factory.py","type":"unit"}

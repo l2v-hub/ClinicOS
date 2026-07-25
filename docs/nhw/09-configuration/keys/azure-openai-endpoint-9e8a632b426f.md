@@ -6,6 +6,11 @@ status: "observed"
 summary: "Configuration key AZURE_OPENAI_ENDPOINT; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py"
+    symbol: "AZURE_OPENAI_ENDPOINT"
+    line_start: "43"
+    line_end: "43"
+    confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"
     symbol: "AZURE_OPENAI_ENDPOINT"
     line_start: "130"
@@ -14,14 +19,14 @@ sources:
 relations:
   - type: "belongs-to"
     target: "system.clinicos"
-    evidence: "clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"
     confidence: "observed"
 tags:
   - "configuration"
   - "python"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 ---
 
 ## Question Answered
@@ -62,6 +67,7 @@ Missing, malformed, or incompatible values follow the consuming source validatio
 
 ## Evidence
 
+- `clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py:43-43` — AZURE_OPENAI_ENDPOINT
 - `clinicos-ai-runtime/clinicos_ai/models/providers/azure.py:130-130` — AZURE_OPENAI_ENDPOINT
 
 ## Related Knowledge

@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: "clinicos-ai-runtime/clinicos_ai/models/env_config.py"
     symbol: "resolve_agnos_llm"
-    line_start: "83"
-    line_end: "128"
+    line_start: "90"
+    line_end: "135"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 ---
 
 ## Question Answered
@@ -63,7 +63,7 @@ None observed
 
 ## Evidence
 
-- `clinicos-ai-runtime/clinicos_ai/models/env_config.py:83-128` — resolve_agnos_llm
+- `clinicos-ai-runtime/clinicos_ai/models/env_config.py:90-135` — resolve_agnos_llm
 
 ## Related Knowledge
 

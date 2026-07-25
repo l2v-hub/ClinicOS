@@ -9,43 +9,43 @@ bounded_contexts:
 sources:
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "llm_health"
-    line_start: "108"
-    line_end: "109"
+    line_start: "109"
+    line_end: "110"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "get_events"
-    line_start: "179"
-    line_end: "184"
+    line_start: "182"
+    line_end: "187"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "get_result"
-    line_start: "188"
-    line_end: "194"
+    line_start: "191"
+    line_end: "197"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "get_job"
-    line_start: "170"
-    line_end: "175"
+    line_start: "173"
+    line_end: "178"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "capabilities"
-    line_start: "100"
-    line_end: "101"
+    line_start: "101"
+    line_end: "102"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "health"
-    line_start: "94"
-    line_end: "96"
+    line_start: "95"
+    line_end: "97"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "assistant_compose"
-    line_start: "133"
-    line_end: "143"
+    line_start: "134"
+    line_end: "144"
     confidence: "observed"
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "assistant_plan"
-    line_start: "115"
-    line_end: "126"
+    line_start: "116"
+    line_end: "127"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -88,7 +88,7 @@ tags:
   - "runtime-flow"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
@@ -138,14 +138,14 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Evidence
 
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:108-109` — llm_health
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:179-184` — get_events
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:188-194` — get_result
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:170-175` — get_job
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:100-101` — capabilities
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:94-96` — health
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:133-143` — assistant_compose
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:115-126` — assistant_plan
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:109-110` — llm_health
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:182-187` — get_events
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:191-197` — get_result
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:173-178` — get_job
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:101-102` — capabilities
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:95-97` — health
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:134-144` — assistant_compose
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:116-127` — assistant_plan
 
 ## Related Knowledge
 

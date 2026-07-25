@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: "backend/src/ai/upload/job-service.ts"
     symbol: "rebuildNarrativeDraftFromExistingExtraction"
-    line_start: "950"
-    line_end: "983"
+    line_start: "990"
+    line_end: "1023"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 ---
 
 ## Question Answered
@@ -63,7 +63,7 @@ Refer to callers and implementation at the cited source span.
 
 ## Evidence
 
-- `backend/src/ai/upload/job-service.ts:950-983` — rebuildNarrativeDraftFromExistingExtraction
+- `backend/src/ai/upload/job-service.ts:990-1023` — rebuildNarrativeDraftFromExistingExtraction
 
 ## Related Knowledge
 

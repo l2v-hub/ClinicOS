@@ -44,8 +44,11 @@
 {"id":"config.discovered.api-url","name":"API_URL","runtimes":["typescript"]}
 {"id":"config.discovered.app-url","name":"APP_URL","runtimes":["typescript"]}
 {"declared":true,"id":"config.discovered.auth-mode","name":"AUTH_MODE","runtimes":["typescript"],"sources":[{"lineEnd":6,"lineStart":6,"path":"backend/.env.example"}]}
-{"id":"config.discovered.azure-openai-api-key","name":"AZURE_OPENAI_API_KEY","runtimes":["python","typescript"],"sources":[{"lineEnd":131,"lineStart":131,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"}]}
-{"id":"config.discovered.azure-openai-endpoint","name":"AZURE_OPENAI_ENDPOINT","runtimes":["python"],"sources":[{"lineEnd":130,"lineStart":130,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"}]}
+{"id":"config.discovered.azure-docintel-api-key","name":"AZURE_DOCINTEL_API_KEY","runtimes":["python"],"sources":[{"lineEnd":46,"lineStart":46,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py"}]}
+{"id":"config.discovered.azure-docintel-endpoint","name":"AZURE_DOCINTEL_ENDPOINT","runtimes":["python"],"sources":[{"lineEnd":43,"lineStart":43,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py"}]}
+{"id":"config.discovered.azure-docintel-max-parallel","name":"AZURE_DOCINTEL_MAX_PARALLEL","runtimes":["python"],"sources":[{"lineEnd":38,"lineStart":38,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py"}]}
+{"id":"config.discovered.azure-openai-api-key","name":"AZURE_OPENAI_API_KEY","runtimes":["python","typescript"],"sources":[{"lineEnd":46,"lineStart":46,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py"},{"lineEnd":131,"lineStart":131,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"}]}
+{"id":"config.discovered.azure-openai-endpoint","name":"AZURE_OPENAI_ENDPOINT","runtimes":["python"],"sources":[{"lineEnd":43,"lineStart":43,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py"},{"lineEnd":130,"lineStart":130,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"}]}
 {"id":"config.discovered.base-url","name":"BASE_URL","runtimes":["typescript"]}
 {"id":"config.discovered.clinicos-api","name":"CLINICOS_API","runtimes":["typescript"]}
 {"id":"config.discovered.clinicos-backend","name":"CLINICOS_BACKEND","runtimes":["typescript"]}

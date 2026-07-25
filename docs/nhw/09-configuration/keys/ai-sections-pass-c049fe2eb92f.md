@@ -13,8 +13,8 @@ sources:
     confidence: "observed"
   - path: "backend/src/ai/upload/job-service.ts"
     symbol: "AI_SECTIONS_PASS"
-    line_start: "373"
-    line_end: "373"
+    line_start: "394"
+    line_end: "394"
     confidence: "observed"
   - path: "docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md"
     symbol: "AI_SECTIONS_PASS"
@@ -56,7 +56,7 @@ tags:
   - "typescript"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 ---
 
 ## Question Answered
@@ -98,7 +98,7 @@ Missing, malformed, or incompatible values follow the consuming source validatio
 ## Evidence
 
 - `backend/src/ai/__tests__/lazy-sections.test.ts:26-26` — AI_SECTIONS_PASS
-- `backend/src/ai/upload/job-service.ts:373-373` — AI_SECTIONS_PASS
+- `backend/src/ai/upload/job-service.ts:394-394` — AI_SECTIONS_PASS
 - `docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md:4-4` — AI_SECTIONS_PASS
 - `requirements/deployments/DEPLOY-20260615-2158.md:24-24` — AI_SECTIONS_PASS
 - `requirements/deployments/DEPLOY-20260616-0624.md:44-44` — AI_SECTIONS_PASS

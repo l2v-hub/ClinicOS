@@ -10,7 +10,7 @@ sources:
   - path: "clinicos-ai-runtime/clinicos_ai/domain/contracts.py"
     symbol: "RunRequest"
     line_start: "41"
-    line_end: "43"
+    line_end: "44"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "pydantic-model"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 ---
 
 ## Question Answered
@@ -63,7 +63,7 @@ None observed
 
 ## Evidence
 
-- `clinicos-ai-runtime/clinicos_ai/domain/contracts.py:41-43` — RunRequest
+- `clinicos-ai-runtime/clinicos_ai/domain/contracts.py:41-44` — RunRequest
 
 ## Related Knowledge
 

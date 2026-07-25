@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
     symbol: "retry_job"
-    line_start: "198"
-    line_end: "207"
+    line_start: "201"
+    line_end: "210"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "async-function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "2795bded959bb18b7093e7b78e09e009420c83bddf50a2eb3099c3d580a2fb30"
+  inventory_hash: "08c87c6a548cec58f1d08efe113cc064ee7c64dfcb11038dbd88590d39464548"
 ---
 
 ## Question Answered
@@ -63,7 +63,7 @@ None observed
 
 ## Evidence
 
-- `clinicos-ai-runtime/clinicos_ai/api/app.py:198-207` — retry_job
+- `clinicos-ai-runtime/clinicos_ai/api/app.py:201-210` — retry_job
 
 ## Related Knowledge
 
