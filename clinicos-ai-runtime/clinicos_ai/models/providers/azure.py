@@ -115,9 +115,11 @@ class _AzureRunner:
             raise ProviderUnavailableError(
                 "AZURE_OPENAI_ENDPOINT / AZURE_OPENAI_API_KEY non configurati")
         url = f"{endpoint}/openai/v1/chat/completions"
-        payload = json.dumps(self._structured_body(prompt, schema, attachments)).encode("utf-8")
 
         def _call() -> str:
+            # base64 + serializzazione stanno DENTRO il thread: su un import multi-foto
+            # l'encoding degli allegati non deve bloccare l'event loop.
+            payload = json.dumps(self._structured_body(prompt, schema, attachments)).encode("utf-8")
             req = urllib.request.Request(
                 url, data=payload, method="POST",
                 headers={"Content-Type": "application/json", "api-key": key})
@@ -127,9 +129,8 @@ class _AzureRunner:
 
         try:
             return await asyncio.wait_for(asyncio.to_thread(_call), timeout=self._timeout + 30)
-        except asyncio.TimeoutError as ex:
-            raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
         except urllib.error.HTTPError as ex:
+            # HTTPError deriva da URLError: va intercettato per primo.
             # Il corpo puo' contenere il messaggio del provider ma mai la chiave: e' negli header.
             detail = ""
             try:
@@ -138,6 +139,18 @@ class _AzureRunner:
                 pass
             kind = ErrorKind.RATE_LIMIT if ex.code == 429 else ErrorKind.PROVIDER_ERROR
             raise RuntimeError_(kind, f"Azure structured: HTTP {ex.code} {detail}") from ex
+        except (asyncio.TimeoutError, TimeoutError) as ex:
+            # Il timeout del socket (self._timeout) scatta sempre prima di quello esterno
+            # (+30s): urllib NON incapsula il timeout in attesa di risposta, quindi arriva qui
+            # come TimeoutError grezzo. Va classificato TIMEOUT, non PROVIDER_ERROR, altrimenti
+            # "Azure e' lento" e "Azure ha rifiutato" diventano indistinguibili nei log.
+            raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
+        except urllib.error.URLError as ex:
+            # In fase di connessione urllib incapsula l'OSError: recupera il timeout dal reason.
+            if isinstance(getattr(ex, "reason", None), TimeoutError):
+                raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
+            raise RuntimeError_(ErrorKind.PROVIDER_ERROR,
+                                f"Azure structured: {str(ex.reason)[:200]}") from ex
         except Exception as ex:
             msg = str(ex)
             kind = ErrorKind.RATE_LIMIT if "429" in msg or "quota" in msg.lower() else ErrorKind.PROVIDER_ERROR

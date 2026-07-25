@@ -83,6 +83,35 @@ impiegavano ~120s con stadi ~30s (estrazione) + ~15s (trascrizione) + ~75s (sezi
 - Nessun log con chiavi, endpoint o dati paziente: fixture sintetiche (chiave finta,
   byte fittizi) e paziente inventato "Mario Sintetico".
 
+## QA indipendente
+
+Sessione QA separata sul branch `fix/import-structured-output`: **QA PASSED**, con esecuzione
+propria delle suite in un worktree isolato (runtime 86/86, backend 379/379, `tsc` pulito) e
+ispezione del sorgente di `urllib` per validare il comportamento dei timeout.
+
+Rilievi accolti e corretti in questa stessa PR:
+
+1. **MEDIO — timeout mal classificati.** Il timeout del socket (`self._timeout`) scatta sempre
+   prima di quello esterno (`+30s`) e `urllib` non incapsula il timeout in attesa di risposta:
+   arrivava come `TimeoutError` grezzo nel ramo generico → `PROVIDER_ERROR` invece di `TIMEOUT`,
+   violando AC2 e rendendo indistinguibili nei log "Azure e' lento" e "Azure ha rifiutato".
+   Corretto: rami dedicati per `TimeoutError` e per `URLError` con `reason` di tipo timeout,
+   con `HTTPError` intercettato per primo (deriva da `URLError`). Aggiunti 3 test
+   (`test_socket_timeout_is_classified_as_timeout`,
+   `test_connect_timeout_wrapped_in_urlerror_is_timeout`, `test_other_urlerror_is_provider_error`).
+   Suite runtime ora **89/89 OK**.
+2. **BASSO — encoding sull'event loop.** `_structured_body` (base64 di tutti gli allegati +
+   `json.dumps`) girava sull'event loop prima di `to_thread`: su import multi-foto poteva
+   ritardare altri job. Spostato dentro il thread.
+3. **BASSO — documentazione trappola.** `docs/agnos-azure-openai-gpt55.md` riportava
+   `AZURE_OPENAI_ENDPOINT` **con** `/openai/v1`, in contraddizione con la config reale: chi
+   avesse "corretto" la variabile seguendo quella doc avrebbe rotto di nuovo l'estrazione con un
+   404 silenzioso. Valore corretto alla root + nota esplicita sul perche'.
+
+Rilievo non risolto e accettato consapevolmente: la guardia sul sezionamento pigro resta
+**strutturale**; un test comportamentale richiederebbe un seam di iniezione su Prisma e sul client
+HTTP del runtime, che oggi `job-service.ts` non ha. Annotato tra i rischi residui.
+
 ## Residual Risks
 
 - `strict:false` guida ma non garantisce al 100% la compilazione dei campi: su documenti molto

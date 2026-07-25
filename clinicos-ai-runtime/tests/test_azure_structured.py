@@ -110,6 +110,35 @@ class TestStructuredCall(unittest.TestCase):
             self._run(fake)
         self.assertEqual(cm.exception.kind, ErrorKind.RATE_LIMIT)
 
+    def test_socket_timeout_is_classified_as_timeout(self):
+        # urllib NON incapsula il timeout in attesa di risposta: arriva come TimeoutError grezzo.
+        # Deve diventare ErrorKind.TIMEOUT, non PROVIDER_ERROR, o nei log "Azure e' lento" e
+        # "Azure ha rifiutato" diventano indistinguibili.
+        def fake(req, timeout=None):
+            raise TimeoutError("timed out")
+
+        with self.assertRaises(RuntimeError_) as cm:
+            self._run(fake)
+        self.assertEqual(cm.exception.kind, ErrorKind.TIMEOUT)
+
+    def test_connect_timeout_wrapped_in_urlerror_is_timeout(self):
+        # In fase di connessione il timeout arriva incapsulato in URLError.
+        def fake(req, timeout=None):
+            raise urllib.error.URLError(TimeoutError("timed out"))
+
+        with self.assertRaises(RuntimeError_) as cm:
+            self._run(fake)
+        self.assertEqual(cm.exception.kind, ErrorKind.TIMEOUT)
+
+    def test_other_urlerror_is_provider_error(self):
+        def fake(req, timeout=None):
+            raise urllib.error.URLError(ConnectionRefusedError("connessione rifiutata"))
+
+        with self.assertRaises(RuntimeError_) as cm:
+            self._run(fake)
+        self.assertEqual(cm.exception.kind, ErrorKind.PROVIDER_ERROR)
+        self.assertNotIn("chiave-di-test", cm.exception.message)
+
     def test_missing_credentials_is_provider_unavailable(self):
         from clinicos_ai.models.errors import ProviderUnavailableError
         with mock.patch.dict("os.environ", {"AZURE_OPENAI_ENDPOINT": "",
