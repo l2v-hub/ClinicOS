@@ -779,9 +779,33 @@ export async function runJob(jobId: string): Promise<void> {
       })),
     );
 
-    // 2. Create runtime job
+    // 2. Trascrizione PRIMA dell'estrazione. Con un motore di layout (Document Intelligence)
+    //    il testo arriva fedele riga per riga: darlo al modello di estrazione, invece di
+    //    fargli rileggere i pixel da zero, e' cio' che tiene insieme farmaco, dose e posologia
+    //    quando stanno su colonne o dopo spaziature ampie. E' anche piu' economico: elaborare
+    //    testo costa una frazione rispetto alle immagini.
+    let rawText = '';
+    if (process.env.AI_OCR_TRANSCRIPTION !== 'false') {
+      try {
+        await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
+        rawText = await runtimeTranscribe(jobId, docFiles);
+      } catch {
+        /* trascrizione best-effort: se fallisce si estrae dalle sole immagini, come prima */
+      }
+    }
+    // Con una trascrizione sostanziosa le immagini diventano ridondanti e si possono omettere
+    // (meno token, import piu' veloce). Se l'OCR ha reso poco o nulla si torna alle immagini,
+    // che restano la sorgente di verita'.
+    const OCR_ENOUGH_CHARS = 200;
+    const ocrUsable = rawText.trim().length >= OCR_ENOUGH_CHARS;
+    const extractionPrompt = ocrUsable
+      ? `${prompt}\n\nTESTO DEL DOCUMENTO (trascrizione fedele al layout: ogni riga e' una voce a se'):\n${rawText}`
+      : prompt;
+    const extractionFiles = ocrUsable ? [] : docFiles;
+
+    // 3. Create runtime job
     await setState(jobId, 'uploading_to_google', { stage: 'uploading_files' });
-    const runtimeJobId = await runtimeCreateJob(jobId, docFiles, schema, prompt);
+    const runtimeJobId = await runtimeCreateJob(jobId, extractionFiles, schema, extractionPrompt);
     await recordAudit(jobId, 'process_started', { detail: `runtime_job=${runtimeJobId}` });
 
     // 3. Trigger processing
@@ -837,17 +861,9 @@ export async function runJob(jobId: string): Promise<void> {
             modelUsed,
             cfg.mergePreferRecent,
           );
-          // Integral OCR transcription (best-effort). Adds one model call per import;
-          // disable with AI_OCR_TRANSCRIPTION=false to save provider quota.
-          let rawText = '';
-          if (process.env.AI_OCR_TRANSCRIPTION !== 'false') {
-            try {
-              await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
-              rawText = await runtimeTranscribe(jobId, docFiles);
-            } catch {
-              /* transcription is best-effort; never block the import */
-            }
-          }
+          // `rawText` e' gia' stato prodotto PRIMA dell'estrazione (passo 2) e da' in pasto al
+          // modello il testo fedele al layout: qui serve solo per l'anteprima e per il parsing
+          // delle sezioni, senza una seconda chiamata al servizio.
           // REQ-033: faithful clinical-sections + narrative are now the DEFAULT import path
           // (set AI_SECTIONS_PASS=false only to disable). The discharge letter is never
           // rendered as structured diagnosis/therapy rows.
