@@ -88,8 +88,29 @@ class _AzureRunner:
     # come content-part `file`: entrambe le forme sono state verificate sul
     # deployment reale. `strict` resta False perche' lo schema ClinicOS e' draft-07
     # e non soddisfa il sottoinsieme strict (che pretende ogni proprieta' in required).
+    @staticmethod
+    def _looks_like_json_schema(schema: object) -> bool:
+        """Un chiamante puo' passare un ESEMPIO di output invece di uno schema (e' successo con
+        la trascrizione: `{"rawText": ""}`). Azure risponderebbe 400 e, siccome quei passaggi sono
+        best-effort e incapsulati in try/except, il guasto sparirebbe in silenzio. Meglio
+        riconoscerlo e degradare al percorso prompt, che con un esempio funziona comunque."""
+        return isinstance(schema, dict) and (
+            "type" in schema or "properties" in schema or "$schema" in schema
+        )
+
     def _structured_body(self, prompt: str, schema: object, attachments: list[Attachment]) -> dict:
-        content: list[dict] = [{"type": "text", "text": prompt}]
+        text = prompt
+        if self._looks_like_json_schema(schema):
+            response_format: dict = {"type": "json_schema",
+                                     "json_schema": {"name": "clinicos_extraction",
+                                                     "strict": False,
+                                                     "schema": schema}}
+        else:
+            # Esempio di output invece di uno schema: niente json_schema (sarebbe un 400),
+            # si mostra l'esempio nel prompt e si impone comunque un JSON valido.
+            text = f"{prompt}\n\nFORMATO DI OUTPUT (esempio):\n{json.dumps(schema)}"
+            response_format = {"type": "json_object"}
+        content: list[dict] = [{"type": "text", "text": text}]
         for a in attachments:
             b64 = base64.b64encode(a.data).decode("ascii")
             if a.mime_type.startswith("image/"):
@@ -102,10 +123,7 @@ class _AzureRunner:
         return {
             "model": self._spec.model_id,
             "messages": [{"role": "user", "content": content}],
-            "response_format": {"type": "json_schema",
-                                "json_schema": {"name": "clinicos_extraction",
-                                                "strict": False,
-                                                "schema": schema}},
+            "response_format": response_format,
         }
 
     async def run_structured(self, prompt: str, schema: object, attachments: list[Attachment]) -> str:
