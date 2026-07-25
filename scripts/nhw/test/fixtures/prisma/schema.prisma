@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+}
+
+model User {
+  id       String    @id @default(uuid())
+  email    String    @unique
+  patients Patient[]
+
+  @@index([email])
+}
+
+model Patient {
+  id           String        @id @default(uuid())
+  fiscalCode   String?       @unique
+  ownerId      String
+  owner        User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@unique([ownerId, fiscalCode])
+  @@index([ownerId])
+}
+
+model Appointment {
+  id        String            @id @default(uuid())
+  patientId String
+  status    AppointmentStatus @default(SCHEDULED)
+  patient   Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId, status])
+}

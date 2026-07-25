@@ -8,9 +8,14 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { writeJson, writeJsonl } from './lib/contracts.mjs';
 import { buildInventory, inventoryHash } from './lib/inventory.mjs';
+import {
+  buildMigrationLineage,
+  parseMigration,
+  parsePrismaSchema,
+} from './lib/prisma-extractor.mjs';
 import { extractTypeScript } from './lib/typescript-extractor.mjs';
 
-const STAGES = ['inventory', 'python', 'typescript'];
+const STAGES = ['inventory', 'prisma', 'python', 'typescript'];
 
 function outputDirectories(repoRoot, outputRoot) {
   return ['catalog', 'coverage', 'evidence', 'graph', 'reports']
@@ -169,6 +174,66 @@ async function generatePython(repoRoot, outputRoot) {
   };
 }
 
+async function generatePrisma(repoRoot, outputRoot) {
+  const catalogDirectory = join(outputRoot, 'catalog');
+  mkdirSync(catalogDirectory, { recursive: true });
+  const inventory = await buildInventory(repoRoot, {
+    excludedDirectories: outputDirectories(repoRoot, outputRoot),
+  });
+  const schemaCandidates = inventory
+    .filter((record) => record.pathType === 'file')
+    .map((record) => record.path)
+    .filter((path) => path.endsWith('schema.prisma'));
+  const schemaPath =
+    schemaCandidates.find((path) => path === 'prisma/schema.prisma') ?? schemaCandidates.sort()[0];
+  if (!schemaPath) {
+    throw new Error('No Prisma schema.prisma found in repository inventory');
+  }
+  const schema = parsePrismaSchema(
+    readFileSync(resolve(repoRoot, ...schemaPath.split('/')), 'utf8'),
+    schemaPath,
+  );
+  const schemaDirectory = schemaPath.includes('/')
+    ? schemaPath.slice(0, schemaPath.lastIndexOf('/'))
+    : '';
+  const migrationPrefix = schemaDirectory ? `${schemaDirectory}/migrations/` : 'migrations/';
+  const migrations = inventory
+    .filter((record) => record.pathType === 'file')
+    .map((record) => record.path)
+    .filter(
+      (path) =>
+        path.startsWith(migrationPrefix) &&
+        /\/migrations\/[^/]+\/migration\.sql$|^migrations\/[^/]+\/migration\.sql$/.test(path),
+    )
+    .sort()
+    .map((path) => {
+      const migrationId = path.match(/migrations\/([^/]+)\/migration\.sql$/)[1];
+      return {
+        ...parseMigration(readFileSync(resolve(repoRoot, ...path.split('/')), 'utf8'), migrationId),
+        sourcePath: path,
+      };
+    });
+  const lineage = buildMigrationLineage(schema, migrations);
+  const migrationRecords = migrations.map((migration) => ({
+    ...migration,
+    currentModels: lineage.currentModels,
+    currentOnlyModels: lineage.currentOnlyModels,
+  }));
+
+  writeJsonl(join(catalogDirectory, 'prisma-models.jsonl'), schema.models);
+  writeJsonl(join(catalogDirectory, 'migration-lineage.jsonl'), migrationRecords);
+
+  return {
+    stage: 'prisma',
+    schemaPath,
+    models: schema.models.length,
+    enums: schema.enums.length,
+    migrations: migrations.length,
+    destructiveMigrations: migrations.filter((migration) => migration.destructive).length,
+    currentOnlyModels: lineage.currentOnlyModels.length,
+  };
+}
+
 export async function generateKnowledgeBase(options = {}) {
   const repoRoot = resolve(options.repoRoot ?? process.cwd());
   const outputRoot = resolve(options.outputRoot ?? join(repoRoot, 'docs', 'nhw'));
@@ -186,6 +251,9 @@ export async function generateKnowledgeBase(options = {}) {
   }
   if (stage === 'python') {
     return generatePython(repoRoot, outputRoot);
+  }
+  if (stage === 'prisma') {
+    return generatePrisma(repoRoot, outputRoot);
   }
 
   throw new Error(`NHW stage '${stage}' has no implementation`);
