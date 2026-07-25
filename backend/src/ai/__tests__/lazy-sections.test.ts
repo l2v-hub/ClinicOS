@@ -45,6 +45,29 @@ test('i passaggi ausiliari inviano JSON Schema veri, non esempi di output', () =
   assert.match(SRC, /const CLINICAL_LISTS_SCHEMA = \{\s*\n\s*type: 'object'/);
 });
 
+test('il prompt di trascrizione impone le intestazioni canoniche del parser', () => {
+  // Senza `## NOME` il parser non ha appigli: in produzione ha ammassato 17.880 char su 18.987
+  // in un'unica sezione, lasciando Terapia e Diagnosi vuote. I nomi devono restare allineati a
+  // FIELD_TO_ITALIAN in sections/markdown-parse.ts, altrimenti l'intestazione non viene mappata.
+  const italian = readFileSync(
+    resolve(import.meta.dirname, '..', 'sections', 'markdown-parse.ts'),
+    'utf8',
+  );
+  for (const name of [
+    'ANAMNESI',
+    'DIAGNOSI',
+    'DECORSO_OSPEDALIERO',
+    'PRESTAZIONI_E_INTERVENTI',
+    'TERAPIA',
+    'CONSIGLI_E_CONTROLLI',
+    'ALLERGIE',
+  ]) {
+    assert.ok(SRC.includes(name), `il prompt deve elencare la sezione ${name}`);
+    assert.ok(italian.includes(`'${name}'`), `${name} deve esistere in FIELD_TO_ITALIAN`);
+  }
+  assert.match(SRC, /## NOME/, 'il prompt deve chiedere intestazioni markdown');
+});
+
 test('la trascrizione resta un passaggio separato e precede il parsing', () => {
   // Sanity: la pigrizia introdotta riguarda solo il sezionamento; la trascrizione integrale
   // alimenta il parsing del markdown e deve continuare a precederlo.
