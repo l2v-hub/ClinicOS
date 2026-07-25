@@ -31,7 +31,11 @@
     "agent-team:once": "node agent-team/src/cli.mjs once",
     "agent-team:start": "node agent-team/src/cli.mjs start",
     "agent-team:status": "node agent-team/src/cli.mjs status",
-    "agent-team:stop": "node agent-team/src/cli.mjs stop"
+    "agent-team:stop": "node agent-team/src/cli.mjs stop",
+    "nhw:generate": "node scripts/nhw/generate.mjs",
+    "nhw:validate": "node scripts/nhw/validate.mjs",
+    "nhw:check": "npm run test:nhw && npm run nhw:generate && npm run nhw:validate",
+    "test:nhw": "node --test scripts/nhw/test/contracts.test.mjs scripts/nhw/test/inventory.test.mjs scripts/nhw/test/typescript-extractor.test.mjs scripts/nhw/test/python-extractor.test.mjs scripts/nhw/test/prisma-extractor.test.mjs scripts/nhw/test/repository-extractor.test.mjs scripts/nhw/test/markdown-graph.test.mjs scripts/nhw/test/coverage-validator.test.mjs scripts/nhw/test/knowledge-compiler.test.mjs scripts/nhw/test/determinism.test.mjs"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
@@ -39,7 +43,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
     "playwright": "1.61.1",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "typescript": "^6.0.2"
   },
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx,mjs,cjs,json,css,md,html}": [

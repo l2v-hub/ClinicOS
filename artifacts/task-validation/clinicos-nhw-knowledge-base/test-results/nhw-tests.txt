@@ -1,0 +1,189 @@
+
+> clinicos@1.0.0 test:nhw
+> node --test scripts/nhw/test/contracts.test.mjs scripts/nhw/test/inventory.test.mjs scripts/nhw/test/typescript-extractor.test.mjs scripts/nhw/test/python-extractor.test.mjs scripts/nhw/test/prisma-extractor.test.mjs scripts/nhw/test/repository-extractor.test.mjs scripts/nhw/test/markdown-graph.test.mjs scripts/nhw/test/coverage-validator.test.mjs scripts/nhw/test/knowledge-compiler.test.mjs scripts/nhw/test/determinism.test.mjs
+
+TAP version 13
+# Subtest: normalizes knowledge identifiers deterministically
+ok 1 - normalizes knowledge identifiers deterministically
+  ---
+  duration_ms: 1.4381
+  ...
+# Subtest: serializes object keys deterministically
+ok 2 - serializes object keys deterministically
+  ---
+  duration_ms: 0.7164
+  ...
+# Subtest: coverage reports an uncovered route and succeeds after its endpoint unit is added
+ok 3 - coverage reports an uncovered route and succeeds after its endpoint unit is added
+  ---
+  duration_ms: 10.1338
+  ...
+# Subtest: treats a knowledge-unit Markdown path as documented by its own unit
+ok 4 - treats a knowledge-unit Markdown path as documented by its own unit
+  ---
+  duration_ms: 0.2289
+  ...
+# Subtest: compiles source evidence with stable hashes and confidence
+ok 5 - compiles source evidence with stable hashes and confidence
+  ---
+  duration_ms: 0.649
+  ...
+# Subtest: structural validation checks graph endpoints, source paths, and unresolved coverage
+ok 6 - structural validation checks graph endpoints, source paths, and unresolved coverage
+  ---
+  duration_ms: 8.3566
+  ...
+# Subtest: fail-closed validation detects uncovered semantics, stale hashes, orphans, manifest drift, and secrets
+ok 7 - fail-closed validation detects uncovered semantics, stale hashes, orphans, manifest drift, and secrets
+  ---
+  duration_ms: 5.773
+  ...
+# Subtest: full generation is byte-identical across equivalent repositories and uses LF
+ok 8 - full generation is byte-identical across equivalent repositories and uses LF
+  ---
+  duration_ms: 2125.7512
+  ...
+# Subtest: classifies source, generated, migration, and evidence paths
+ok 9 - classifies source, generated, migration, and evidence paths
+  ---
+  duration_ms: 1.7212
+  ...
+# Subtest: inventories the complete working tree deterministically
+ok 10 - inventories the complete working tree deterministically
+  ---
+  duration_ms: 670.5469
+  ...
+# Subtest: writes inventory and exclusion catalogs through the staged generator
+ok 11 - writes inventory and exclusion catalogs through the staged generator
+  ---
+  duration_ms: 552.431
+  ...
+# Subtest: builds atomic core units for projects, public components, entities, models, and migrations
+ok 12 - builds atomic core units for projects, public components, entities, models, and migrations
+  ---
+  duration_ms: 13.2938
+  ...
+# Subtest: builds operational units for endpoints, configuration, tests, scripts, flows, and findings
+ok 13 - builds operational units for endpoints, configuration, tests, scripts, flows, and findings
+  ---
+  duration_ms: 3.354
+  ...
+# Subtest: builds the required semantic discovery set while excluding private and test symbols
+ok 14 - builds the required semantic discovery set while excluding private and test symbols
+  ---
+  duration_ms: 0.4357
+  ...
+# Subtest: synchronizes generator-owned unit directories and removes stale generated files
+ok 15 - synchronizes generator-owned unit directories and removes stale generated files
+  ---
+  duration_ms: 53.6107
+  ...
+# Subtest: parses and byte-stably renders the complete Markdown knowledge-unit contract
+ok 16 - parses and byte-stably renders the complete Markdown knowledge-unit contract
+  ---
+  duration_ms: 2.4239
+  ...
+# Subtest: rejects missing headings and inferred claims without an inference rule
+ok 17 - rejects missing headings and inferred claims without an inference rule
+  ---
+  duration_ms: 0.4332
+  ...
+# Subtest: rejects duplicate keys, unknown fields, aliases, and executable YAML tags
+ok 18 - rejects duplicate keys, unknown fields, aliases, and executable YAML tags
+  ---
+  duration_ms: 1.4454
+  ...
+# Subtest: detects duplicate canonical definitions
+ok 19 - detects duplicate canonical definitions
+  ---
+  duration_ms: 0.3765
+  ...
+# Subtest: compiles typed relations, resolves redirects, and detects exact cycles without orphans
+ok 20 - compiles typed relations, resolves redirects, and detects exact cycles without orphans
+  ---
+  duration_ms: 9.7192
+  ...
+# Subtest: classifies bidirectional data-model cycles as acceptable schema relationships
+ok 21 - classifies bidirectional data-model cycles as acceptable schema relationships
+  ---
+  duration_ms: 0.136
+  ...
+# Subtest: parses Prisma models, fields, relations, indexes, and constraints
+ok 22 - parses Prisma models, fields, relations, indexes, and constraints
+  ---
+  duration_ms: 10.6007
+  ...
+# Subtest: parses ordered SQL operations and destructive migration behavior
+ok 23 - parses ordered SQL operations and destructive migration behavior
+  ---
+  duration_ms: 1.2477
+  ...
+# Subtest: reconciles migration history with the current schema
+ok 24 - reconciles migration history with the current schema
+  ---
+  duration_ms: 0.6884
+  ...
+# Subtest: writes Prisma and migration catalogs through the staged generator
+ok 25 - writes Prisma and migration catalogs through the staged generator
+  ---
+  duration_ms: 181.5741
+  ...
+# Subtest: extracts FastAPI routes, models, headers, failures, and background tasks
+ok 26 - extracts FastAPI routes, models, headers, failures, and background tasks
+  ---
+  duration_ms: 125.8676
+  ...
+# Subtest: extracts lifecycle hooks, environment reads, public symbols, and providers
+ok 27 - extracts lifecycle hooks, environment reads, public symbols, and providers
+  ---
+  duration_ms: 128.1843
+  ...
+# Subtest: writes Python and FastAPI catalogs through the staged generator
+ok 28 - writes Python and FastAPI catalogs through the staged generator
+  ---
+  duration_ms: 285.7753
+  ...
+# Subtest: extracts projects, scripts, workflows, containers, and configuration names
+ok 29 - extracts projects, scripts, workflows, containers, and configuration names
+  ---
+  duration_ms: 121.9005
+  ...
+# Subtest: classifies tests, requirements, deployments, and binary artifacts
+ok 30 - classifies tests, requirements, deployments, and binary artifacts
+  ---
+  duration_ms: 103.0765
+  ...
+# Subtest: writes repository catalogs through the staged generator
+ok 31 - writes repository catalogs through the staged generator
+  ---
+  duration_ms: 112.2466
+  ...
+# Subtest: reconstructs mounted Express routes and handler behavior
+ok 32 - reconstructs mounted Express routes and handler behavior
+  ---
+  duration_ms: 27.7877
+  ...
+# Subtest: extracts exported symbols, React components, imports, and consumers
+ok 33 - extracts exported symbols, React components, imports, and consumers
+  ---
+  duration_ms: 5.3104
+  ...
+# Subtest: extracts frontend requests and configuration reads
+ok 34 - extracts frontend requests and configuration reads
+  ---
+  duration_ms: 4.2649
+  ...
+# Subtest: writes TypeScript discovery catalogs through the staged generator
+ok 35 - writes TypeScript discovery catalogs through the staged generator
+  ---
+  duration_ms: 190.6419
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2705.7603

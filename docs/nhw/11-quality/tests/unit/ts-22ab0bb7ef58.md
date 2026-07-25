@@ -1,0 +1,67 @@
+---
+id: 'test.repository.backend.src.ai.tests.voice-provider.test.ts'
+kind: 'unit-test'
+title: 'voice-provider.test.ts'
+status: 'observed'
+summary: 'node-test unit test surface.'
+bounded_contexts: []
+sources:
+  - path: 'backend/src/ai/__tests__/voice-provider.test.ts'
+    confidence: 'observed'
+relations:
+  - type: 'belongs-to'
+    target: 'project.backend'
+    evidence: 'backend/src/ai/__tests__/voice-provider.test.ts'
+    confidence: 'observed'
+tags:
+  - 'test'
+  - 'unit'
+  - 'node-test'
+last_verified:
+  commit: 'working-tree'
+  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+---
+
+## Question Answered
+
+What does `test.repository.backend.src.ai.tests.voice-provider.test.ts` represent in ClinicOS?
+
+## Canonical Definition
+
+test.repository.backend.src.ai.tests.voice-provider.test.ts is the canonical unit-test named voice-provider.test.ts.
+
+## Inputs
+
+Test source: `backend/src/ai/__tests__/voice-provider.test.ts`.
+
+## Outputs
+
+Objective pass/fail evidence for the behavior encoded in the test.
+
+## Dependencies
+
+Framework: `node-test`; owning project: `project.backend`.
+
+## Side Effects
+
+May create isolated fixtures or exercise local runtime behavior as defined by the test.
+
+## Consumers
+
+CI/CD, quality gates, maintainers, and autonomous QA agents.
+
+## Invariants
+
+A test is evidence only for assertions and execution paths it actually exercises.
+
+## Failure Modes
+
+Assertion failure, fixture failure, unavailable dependency, timeout, or environment mismatch.
+
+## Evidence
+
+- `backend/src/ai/__tests__/voice-provider.test.ts`
+
+## Related Knowledge
+
+- `belongs-to` → `project.backend`

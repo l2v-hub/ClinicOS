@@ -1,0 +1,7 @@
+{
+  "redirects": {
+    "context.patient-record": "context.clinical-record",
+    "project.ai-runtime": "project.clinicos-ai-runtime"
+  },
+  "schemaVersion": "1.0.0"
+}

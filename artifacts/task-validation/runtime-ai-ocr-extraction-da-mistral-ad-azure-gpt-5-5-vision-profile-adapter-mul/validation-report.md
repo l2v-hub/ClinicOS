@@ -92,9 +92,18 @@ in un colpo solo ed è quella raccomandata.
 
 ## Residual Risks
 
-- **Config non ancora applicata su Railway**: la CLI risponde `Invalid RAILWAY_TOKEN`, quindi
-  le variabili del servizio runtime NON sono state modificate in questa sessione. Finché non
-  vengono impostate, OCR/extraction continuano a puntare al provider ritirato.
+- **Config Railway: APPLICATA** (correzione di una stesura precedente di questo report, che la
+  dava per non applicata perché il primo tentativo CLI rispondeva `Invalid RAILWAY_TOKEN`).
+  Con il project token fornito dal committente le variabili sono state impostate e rilette dal
+  servizio: `AI_OCR_PROVIDER/AI_EXTRACTION_PROVIDER=azure-openai`, `AI_OCR_MODEL/
+AI_EXTRACTION_MODEL=gpt-5.5`, `AI_TEMPERATURE=1`. Impostate con `--skip-deploys`: diventano
+  effettive al primo deploy del runtime, che deve avvenire DOPO il merge di questo codice
+  (senza il fix di `profiles.py` il capability gate rifiuterebbe gpt-5.5).
+- Residuo di pulizia su Railway (non bloccante): restano `MISTRAL_API_KEY` e `MISTRAL_OCR_URL`
+  ormai inutilizzate, e una variabile malformata con **spazio iniziale** nel nome
+  (` AI_OCR_MODEL=mistral-document-ai-2505`) che è inerte ma può trarre in inganno.
+  `AI_REPAIR_MODEL=gpt-5.4-mini` e `AI_AGENT_MODEL=gpt-5.4-mini` puntano a un deployment
+  diverso da `gpt-5.5`: non verificato in questa sessione se esista ancora su Foundry.
 - `pdf_input=True` per gpt-5.5 assume il supporto file-parts via Agno `File`: se il deployment
   rifiutasse i PDF, l'errore emerge come PROVIDER_ERROR visibile (non un drop silenzioso).
   Il caso rotto oggi (foto WhatsApp) usa il ramo `images`, certo.
@@ -104,6 +113,20 @@ in un colpo solo ed è quella raccomandata.
   `GEMINI_API_KEY` **lato backend** (`backend/src/ai/config.ts:104`), non dal runtime: il
   tooltip mostra il modello del backend (es. gemma), che è puramente cosmetico perché
   l'estrazione reale è delegata a `AI_RUNTIME_URL`. Allineare quell'etichetta è un task a parte.
+
+## QA indipendente
+
+Sessione QA separata (non quella che ha scritto il codice) sul commit `0663699`:
+**QA PASSED**. Ha rieseguito in proprio suite runtime (78/78 OK), `tsc --noEmit` (pulito) e
+`npm run build` (exit 0), ha confrontato `azure.py` con il runner generico sostituito
+verificando che nessuna funzionalità sia andata persa (timeout, normalizzazione errori,
+semantica issue #239) e ha confermato via `job-service.ts` che `canRetry` è calcolato dal
+backend, quindi il routing del bottone è coerente con la state machine.
+
+Rilievi accolti: la contraddizione sullo stato della config Railway (corretta qui sopra) e
+l'auto-certificazione (sanata da questo verdetto indipendente). Un rilievo è stato respinto
+con prova: il file `docs/superpowers/plans/...knowledge-base.md` NON è nel commit
+(`git show --stat 0663699` → 13 file, nessun match; `docs/` pulito).
 
 ## Final Decision
 

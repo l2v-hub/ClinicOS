@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clinicos.local/nhw/graph-node.schema.json",
+  "title": "NHW Graph Node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "path", "status"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+    "kind": { "type": "string", "minLength": 1 },
+    "path": { "type": "string", "minLength": 1 },
+    "status": {
+      "enum": ["observed", "inferred", "declared", "drifted", "deprecated"]
+    }
+  }
+}

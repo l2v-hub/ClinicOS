@@ -1,0 +1,68 @@
+---
+id: 'config.discovered.google-api-key'
+kind: 'configuration-key'
+title: 'GOOGLE_API_KEY'
+status: 'observed'
+summary: 'Configuration key GOOGLE_API_KEY; generated knowledge never includes its value.'
+bounded_contexts: []
+sources:
+  - path: 'clinicos-ai-runtime/.env.example'
+    symbol: 'GOOGLE_API_KEY'
+    line_start: '60'
+    line_end: '60'
+    confidence: 'observed'
+relations:
+  - type: 'belongs-to'
+    target: 'system.clinicos'
+    evidence: 'clinicos-ai-runtime/.env.example'
+    confidence: 'observed'
+tags:
+  - 'configuration'
+last_verified:
+  commit: 'working-tree'
+  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+---
+
+## Question Answered
+
+What does `config.discovered.google-api-key` represent in ClinicOS?
+
+## Canonical Definition
+
+config.discovered.google-api-key is the canonical configuration-key named GOOGLE_API_KEY.
+
+## Inputs
+
+Environment variable name: `GOOGLE_API_KEY`.
+
+## Outputs
+
+Runtime scopes: None observed.
+
+## Dependencies
+
+Declared in example configuration: `true`.
+
+## Side Effects
+
+May alter runtime behavior in the consuming process; no value is captured in this knowledge base.
+
+## Consumers
+
+None observed
+
+## Invariants
+
+Security classification: sensitive-name; value intentionally excluded.
+
+## Failure Modes
+
+Missing, malformed, or incompatible values follow the consuming source validation and fallback policy.
+
+## Evidence
+
+- `clinicos-ai-runtime/.env.example:60-60` — GOOGLE_API_KEY
+
+## Related Knowledge
+
+- `belongs-to` → `system.clinicos`

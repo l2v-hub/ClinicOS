@@ -1,0 +1,72 @@
+---
+id: 'component.frontend.frontend.src.components.operator.cartella.therapyformfields.therapyformfields'
+kind: 'typescript-react-component'
+title: 'TherapyFormFields'
+status: 'observed'
+summary: 'Exported react-component from frontend/src/components/operator/cartella/TherapyFormFields.tsx.'
+bounded_contexts:
+  - 'context.identity-access'
+sources:
+  - path: 'frontend/src/components/operator/cartella/TherapyFormFields.tsx'
+    symbol: 'TherapyFormFields'
+    line_start: '92'
+    line_end: '515'
+    confidence: 'observed'
+relations:
+  - type: 'belongs-to'
+    target: 'project.frontend'
+    evidence: 'frontend/src/components/operator/cartella/TherapyFormFields.tsx'
+    confidence: 'observed'
+tags:
+  - 'typescript'
+  - 'react-component'
+last_verified:
+  commit: 'working-tree'
+  inventory_hash: '57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c'
+---
+
+## Question Answered
+
+What does `component.frontend.frontend.src.components.operator.cartella.therapyformfields.therapyformfields` represent in ClinicOS?
+
+## Canonical Definition
+
+component.frontend.frontend.src.components.operator.cartella.therapyformfields.therapyformfields is the canonical typescript-react-component named TherapyFormFields.
+
+## Inputs
+
+None observed
+
+## Outputs
+
+None observed
+
+## Dependencies
+
+Owning project: `project.frontend`.
+
+## Side Effects
+
+None observed
+
+## Consumers
+
+- `frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx`
+- `frontend/src/components/operator/sections/TherapyEditor.tsx`
+- `frontend/src/components/shared/intake/DischargeTherapyReview.tsx`
+
+## Invariants
+
+The symbol is exported across its module boundary as `TherapyFormFields`.
+
+## Failure Modes
+
+Refer to callers and implementation at the cited source span.
+
+## Evidence
+
+- `frontend/src/components/operator/cartella/TherapyFormFields.tsx:92-515` — TherapyFormFields
+
+## Related Knowledge
+
+- `belongs-to` → `project.frontend`

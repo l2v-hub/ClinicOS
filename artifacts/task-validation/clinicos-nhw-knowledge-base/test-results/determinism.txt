@@ -1,0 +1,16 @@
+Working-tree docs/nhw hash comparison: PASS (2648 files byte-identical)
+TAP version 13
+# Subtest: full generation is byte-identical across equivalent repositories and uses LF
+ok 1 - full generation is byte-identical across equivalent repositories and uses LF
+  ---
+  duration_ms: 2026.2883
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2516.031
