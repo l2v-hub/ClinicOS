@@ -69,6 +69,11 @@ test('inventories the complete working tree deterministically', async (t) => {
   const second = await buildInventory(root);
   assert.deepEqual(first, second);
   assert.equal(inventoryHash(first), inventoryHash(second));
+  assert.equal(
+    inventoryHash(first),
+    inventoryHash([...first].reverse()),
+    'inventory hashes must not depend on JSONL row order',
+  );
   assert.deepEqual(
     first.map((record) => record.path),
     [...first.map((record) => record.path)].sort((a, b) => a.localeCompare(b, 'en')),

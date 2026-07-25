@@ -166,6 +166,7 @@
 {"framework":"node-test","id":"test.repository.scripts.e2e-full-patient-api-test.ts","path":"scripts/e2e-full-patient-api-test.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.contracts.test.mjs","path":"scripts/nhw/test/contracts.test.mjs","type":"contract"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.coverage-validator.test.mjs","path":"scripts/nhw/test/coverage-validator.test.mjs","type":"unit"}
+{"framework":"node-test","id":"test.repository.scripts.nhw.test.determinism.test.mjs","path":"scripts/nhw/test/determinism.test.mjs","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.fixtures.prisma.schema.prisma","path":"scripts/nhw/test/fixtures/prisma/schema.prisma","type":"unit"}
 {"framework":"unittest","id":"test.repository.scripts.nhw.test.fixtures.python.app.py","path":"scripts/nhw/test/fixtures/python/app.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.scripts.nhw.test.fixtures.python.tests.test-app.py","path":"scripts/nhw/test/fixtures/python/tests/test_app.py","type":"unit"}

@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: "scripts/nhw/lib/knowledge-pipeline.mjs"
     symbol: "loadKnowledgeUnits"
-    line_start: "206"
-    line_end: "221"
+    line_start: "240"
+    line_end: "255"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+  inventory_hash: "c9afd3c8ec19230402b6b7a13d5dafa466340869ffb16b942b4d37abf28bdf7d"
 ---
 
 ## Question Answered
@@ -63,7 +63,7 @@ Refer to callers and implementation at the cited source span.
 
 ## Evidence
 
-- `scripts/nhw/lib/knowledge-pipeline.mjs:206-221` — loadKnowledgeUnits
+- `scripts/nhw/lib/knowledge-pipeline.mjs:240-255` — loadKnowledgeUnits
 
 ## Related Knowledge
 

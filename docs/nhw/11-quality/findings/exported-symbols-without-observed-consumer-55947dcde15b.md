@@ -3,7 +3,7 @@ id: "finding.abstraction.exported-symbols-without-observed-consumers"
 kind: "architectural-finding"
 title: "Exported symbols without observed consumers"
 status: "inferred"
-summary: "245 exported symbols have no observed cross-file consumers."
+summary: "246 exported symbols have no observed cross-file consumers."
 bounded_contexts: []
 sources:
   - path: "agent-team/src/commands/status.mjs"
@@ -537,7 +537,7 @@ tags:
   - "consumer-analysis"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+  inventory_hash: "c9afd3c8ec19230402b6b7a13d5dafa466340869ffb16b942b4d37abf28bdf7d"
 inference_rule: "The TypeScript compiler extraction found exported production symbols with no cross-file import consumers."
 ---
 
@@ -551,7 +551,7 @@ finding.abstraction.exported-symbols-without-observed-consumers is the canonical
 
 ## Inputs
 
-245 exported production symbols.
+246 exported production symbols.
 
 ## Outputs
 

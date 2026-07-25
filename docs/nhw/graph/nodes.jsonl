@@ -2173,6 +2173,7 @@
 {"id":"component.scripts.scripts.nhw.lib.knowledge-pipeline.enrichconfigurationsources","kind":"typescript-function","path":"docs/nhw/04-components/repository-automation/enrichconfigurationsources-5e37eb1c3e84.md","status":"observed"}
 {"id":"component.scripts.scripts.nhw.lib.knowledge-pipeline.loadknowledgecatalogs","kind":"typescript-function","path":"docs/nhw/04-components/repository-automation/loadknowledgecatalogs-e0d95bd653f5.md","status":"observed"}
 {"id":"component.scripts.scripts.nhw.lib.knowledge-pipeline.loadknowledgeunits","kind":"typescript-function","path":"docs/nhw/04-components/repository-automation/loadknowledgeunits-e35468faf4b5.md","status":"observed"}
+{"id":"component.scripts.scripts.nhw.lib.knowledge-pipeline.synchronizeknowledgerecords","kind":"typescript-function","path":"docs/nhw/04-components/repository-automation/synchronizeknowledgerecords-6a0ee3f857e9.md","status":"observed"}
 {"id":"component.scripts.scripts.nhw.lib.knowledge-pipeline.writeknowledgeoverview","kind":"typescript-function","path":"docs/nhw/04-components/repository-automation/writeknowledgeoverview-f61551cdedfc.md","status":"observed"}
 {"id":"component.scripts.scripts.nhw.lib.knowledge-pipeline.writeknowledgerecords","kind":"typescript-function","path":"docs/nhw/04-components/repository-automation/writeknowledgerecords-3367c2b4b05f.md","status":"observed"}
 {"id":"component.scripts.scripts.nhw.lib.markdown.parseknowledgeunit","kind":"typescript-function","path":"docs/nhw/04-components/repository-automation/parseknowledgeunit-11b6562b92fd.md","status":"observed"}
@@ -2598,6 +2599,7 @@
 {"id":"test.repository.scripts.e2e-full-patient-api-test.ts","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/ts-5c1f8b629c5e.md","status":"observed"}
 {"id":"test.repository.scripts.nhw.test.contracts.test.mjs","kind":"contract-test","path":"docs/nhw/11-quality/tests/contract/mjs-f221d9ee53e7.md","status":"observed"}
 {"id":"test.repository.scripts.nhw.test.coverage-validator.test.mjs","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/mjs-6e2e1938034e.md","status":"observed"}
+{"id":"test.repository.scripts.nhw.test.determinism.test.mjs","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/mjs-14d241b541bd.md","status":"observed"}
 {"id":"test.repository.scripts.nhw.test.fixtures.prisma.schema.prisma","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/prisma-e59d9e78bede.md","status":"observed"}
 {"id":"test.repository.scripts.nhw.test.fixtures.python.app.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-6f3bfb2b4c64.md","status":"observed"}
 {"id":"test.repository.scripts.nhw.test.fixtures.python.tests.test-app.py","kind":"unit-test","path":"docs/nhw/11-quality/tests/unit/py-6367588b15a5.md","status":"observed"}

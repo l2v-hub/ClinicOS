@@ -299,5 +299,8 @@ export async function buildInventory(repoRoot, options = {}) {
 }
 
 export function inventoryHash(records) {
-  return sha256(stableJson(records));
+  const canonicalRecords = [...records].sort((left, right) =>
+    stableJson(left).localeCompare(stableJson(right), 'en'),
+  );
+  return sha256(stableJson(canonicalRecords));
 }

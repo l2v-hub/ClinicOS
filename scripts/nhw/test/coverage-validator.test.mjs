@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 
 import { buildCoverage, buildSourceMap } from '../lib/coverage.mjs';
+import { sha256 } from '../lib/contracts.mjs';
 import { compileGraph } from '../lib/graph.mjs';
 import { REQUIRED_HEADINGS } from '../lib/markdown.mjs';
 import { validateStructuralArtifacts } from '../lib/validator.mjs';
@@ -166,4 +167,104 @@ test('structural validation checks graph endpoints, source paths, and unresolved
     allowUnresolved: true,
   });
   assert.equal(allowed.ok, true);
+});
+
+test('fail-closed validation detects uncovered semantics, stale hashes, orphans, manifest drift, and secrets', (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'clinicos-nhw-fail-closed-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(join(root, 'src'), { recursive: true });
+  const body = 'export const route = true;\n';
+  writeFileSync(join(root, 'src', 'routes.ts'), body);
+
+  const endpoint = knowledgeUnit('api.fixture.patient-list', [
+    { path: 'src/routes.ts', confidence: 'observed' },
+  ]);
+  const inventory = [
+    {
+      ...inventoryRecord('src/routes.ts', 'semantic-source'),
+      bytes: Buffer.byteLength(body),
+      sha256: sha256(body),
+      reason: 'fixture',
+    },
+  ];
+  const result = validateStructuralArtifacts({
+    repoRoot: root,
+    units: [endpoint],
+    graph: {
+      nodes: [
+        {
+          id: endpoint.id,
+          kind: endpoint.kind,
+          path: endpoint.path,
+          status: endpoint.status,
+        },
+        {
+          id: 'component.fixture.orphan',
+          kind: 'component',
+          path: 'orphan.md',
+          status: 'observed',
+        },
+      ],
+      edges: [],
+    },
+    coverage: {
+      inventoryHash: '0'.repeat(64),
+      documented: 1,
+      metadataOnly: 0,
+      generatedExcluded: 0,
+      unresolved: 0,
+      records: [],
+    },
+    inventory,
+    discoveries: [
+      {
+        id: 'api.fixture.missing',
+        kind: 'api-endpoint',
+        sourcePath: 'src/routes.ts',
+      },
+      {
+        id: 'data.model.patient',
+        kind: 'data-model',
+        sourcePath: 'src/routes.ts',
+      },
+    ],
+    sourceMap: [
+      {
+        knowledgeId: endpoint.id,
+        path: 'src/routes.ts',
+        symbol: '',
+        lineStart: 1,
+        lineEnd: 1,
+        fileHash: 'f'.repeat(64),
+        confidence: 'observed',
+      },
+    ],
+    manifest: {
+      schemaVersion: '1.0.0',
+      systemId: 'system.clinicos',
+      baseline: {
+        branch: 'fixture',
+        commit: 'fixture',
+        inventoryHash: '0'.repeat(64),
+      },
+      units: [],
+      totals: {},
+    },
+    generatedTexts: [
+      {
+        path: 'docs/nhw/leak.md',
+        text: 'OPENAI_API_KEY=sk-abcdefghijklmnopqrstuvwxyz123456',
+      },
+    ],
+  });
+  const codes = new Set(result.errors.map((error) => error.code));
+
+  assert.ok(codes.has('NHW_UNCOVERED_ENDPOINT'));
+  assert.ok(codes.has('NHW_UNCOVERED_MODEL'));
+  assert.ok(codes.has('NHW_MISSING_DOMAIN_ENTITY'));
+  assert.ok(codes.has('NHW_STALE_SOURCE_HASH'));
+  assert.ok(codes.has('NHW_STALE_INVENTORY'));
+  assert.ok(codes.has('NHW_GRAPH_ORPHAN'));
+  assert.ok(codes.has('NHW_MANIFEST_UNIT_MISMATCH'));
+  assert.ok(codes.has('NHW_SECRET_VALUE_DETECTED'));
 });

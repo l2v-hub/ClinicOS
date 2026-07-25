@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: "scripts/nhw/lib/graph.mjs"
     symbol: "findOrphans"
-    line_start: "111"
-    line_end: "121"
+    line_start: "127"
+    line_end: "137"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+  inventory_hash: "c9afd3c8ec19230402b6b7a13d5dafa466340869ffb16b942b4d37abf28bdf7d"
 ---
 
 ## Question Answered
@@ -52,6 +52,7 @@ None observed
 ## Consumers
 
 - `scripts/nhw/lib/knowledge-pipeline.mjs`
+- `scripts/nhw/lib/validator.mjs`
 - `scripts/nhw/test/markdown-graph.test.mjs`
 
 ## Invariants
@@ -64,7 +65,7 @@ Refer to callers and implementation at the cited source span.
 
 ## Evidence
 
-- `scripts/nhw/lib/graph.mjs:111-121` — findOrphans
+- `scripts/nhw/lib/graph.mjs:127-137` — findOrphans
 
 ## Related Knowledge
 
