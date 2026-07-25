@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.package-script.package.json.test-e2e-full-patient-api'
-kind: 'package-script'
-title: 'clinicos:test:e2e:full-patient:api'
-status: 'observed'
-summary: 'Package script test:e2e:full-patient:api executes tsx scripts/e2e-full-patient-api-test.ts.'
+id: "component.repository.package-script.package.json.test-e2e-full-patient-api"
+kind: "package-script"
+title: "clinicos:test:e2e:full-patient:api"
+status: "observed"
+summary: "Package script test:e2e:full-patient:api executes tsx scripts/e2e-full-patient-api-test.ts."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    symbol: 'test:e2e:full-patient:api'
-    confidence: 'observed'
+  - path: "package.json"
+    symbol: "test:e2e:full-patient:api"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "package.json"
+    confidence: "observed"
 tags:
-  - 'package-script'
+  - "package-script"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.filters.ascartella'
-kind: 'typescript-function'
-title: 'asCartella'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/gateway/filters.ts.'
+id: "component.backend.backend.src.ai.gateway.filters.ascartella"
+kind: "typescript-function"
+title: "asCartella"
+status: "observed"
+summary: "Exported function from backend/src/ai/gateway/filters.ts."
 bounded_contexts:
-  - 'context.clinical-record'
+  - "context.clinical-record"
 sources:
-  - path: 'backend/src/ai/gateway/filters.ts'
-    symbol: 'asCartella'
-    line_start: '116'
-    line_end: '118'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/filters.ts"
+    symbol: "asCartella"
+    line_start: "116"
+    line_end: "118"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/filters.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/filters.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

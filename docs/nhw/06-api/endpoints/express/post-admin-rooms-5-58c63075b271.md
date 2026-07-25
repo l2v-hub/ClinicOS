@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.post-admin-rooms-5'
-kind: 'api-endpoint'
-title: 'POST /admin/rooms'
-status: 'observed'
-summary: 'POST /admin/rooms endpoint implemented by the express runtime.'
+id: "api.backend.post-admin-rooms-5"
+kind: "api-endpoint"
+title: "POST /admin/rooms"
+status: "observed"
+summary: "POST /admin/rooms endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.facility-occupancy'
+  - "context.facility-occupancy"
 sources:
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '145'
-    line_end: '202'
-    confidence: 'observed'
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "145"
+    line_end: "202"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/admin-rooms.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.room'
-    evidence: 'backend/src/routes/admin-rooms.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/admin-rooms.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.room"
+    evidence: "backend/src/routes/admin-rooms.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.workflow.github.workflows.ai-runtime-tests.yml'
-kind: 'ci-workflow'
-title: 'AI Runtime Tests'
-status: 'observed'
-summary: 'GitHub Actions workflow with jobs test.'
+id: "component.repository.workflow.github.workflows.ai-runtime-tests.yml"
+kind: "ci-workflow"
+title: "AI Runtime Tests"
+status: "observed"
+summary: "GitHub Actions workflow with jobs test."
 bounded_contexts: []
 sources:
-  - path: '.github/workflows/ai-runtime-tests.yml'
-    confidence: 'observed'
+  - path: ".github/workflows/ai-runtime-tests.yml"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.github/workflows/ai-runtime-tests.yml'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".github/workflows/ai-runtime-tests.yml"
+    confidence: "observed"
 tags:
-  - 'github-actions'
-  - 'ci-cd'
+  - "github-actions"
+  - "ci-cd"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

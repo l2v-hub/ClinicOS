@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.delete-ai-extraction-jobs-by-param-files-by-param-28'
-kind: 'api-endpoint'
-title: 'DELETE /ai/extraction/jobs/:id/files/:docId'
-status: 'observed'
-summary: 'DELETE /ai/extraction/jobs/:id/files/:docId endpoint implemented by the express runtime.'
+id: "api.backend.delete-ai-extraction-jobs-by-param-files-by-param-28"
+kind: "api-endpoint"
+title: "DELETE /ai/extraction/jobs/:id/files/:docId"
+status: "observed"
+summary: "DELETE /ai/extraction/jobs/:id/files/:docId endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/routes/ai-jobs.ts'
-    symbol: 'aiJobsRouter'
-    line_start: '116'
-    line_end: '123'
-    confidence: 'observed'
+  - path: "backend/src/routes/ai-jobs.ts"
+    symbol: "aiJobsRouter"
+    line_start: "116"
+    line_end: "123"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/ai-jobs.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/ai-jobs.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'delete'
+  - "api"
+  - "express"
+  - "delete"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

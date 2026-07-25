@@ -1,25 +1,25 @@
 ---
-id: 'runtime.frontend.initialization'
-kind: 'runtime-startup'
-title: 'Frontend initialization'
-status: 'observed'
-summary: 'Vite browser entry point mounts the React application.'
+id: "runtime.frontend.initialization"
+kind: "runtime-startup"
+title: "Frontend initialization"
+status: "observed"
+summary: "Vite browser entry point mounts the React application."
 bounded_contexts: []
 sources:
-  - path: 'frontend/src/main.tsx'
-    confidence: 'observed'
-  - path: 'frontend/src/App.tsx'
-    confidence: 'observed'
+  - path: "frontend/src/main.tsx"
+    confidence: "observed"
+  - path: "frontend/src/App.tsx"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/main.tsx,frontend/src/App.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/main.tsx,frontend/src/App.tsx"
+    confidence: "observed"
 tags:
-  - 'runtime-startup'
+  - "runtime-startup"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

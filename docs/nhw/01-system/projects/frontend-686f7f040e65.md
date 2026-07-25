@@ -1,24 +1,24 @@
 ---
-id: 'project.frontend'
-kind: 'node-package'
-title: 'frontend'
-status: 'observed'
-summary: 'frontend project rooted at frontend.'
+id: "project.frontend"
+kind: "node-package"
+title: "frontend"
+status: "observed"
+summary: "frontend project rooted at frontend."
 bounded_contexts: []
 sources:
-  - path: 'frontend/package.json'
-    confidence: 'observed'
+  - path: "frontend/package.json"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'frontend/package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/package.json"
+    confidence: "observed"
 tags:
-  - 'project'
-  - 'node-package'
+  - "project"
+  - "node-package"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

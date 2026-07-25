@@ -1,24 +1,24 @@
 ---
-id: 'project.clinicos'
-kind: 'node-package'
-title: 'clinicos'
-status: 'observed'
-summary: 'clinicos project rooted at ..'
+id: "project.clinicos"
+kind: "node-package"
+title: "clinicos"
+status: "observed"
+summary: "clinicos project rooted at .."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    confidence: 'observed'
+  - path: "package.json"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "package.json"
+    confidence: "observed"
 tags:
-  - 'project'
-  - 'node-package'
+  - "project"
+  - "node-package"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

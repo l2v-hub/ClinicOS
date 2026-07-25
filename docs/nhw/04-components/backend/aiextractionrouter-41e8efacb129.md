@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.routes.ai-extraction.aiextractionrouter'
-kind: 'typescript-constant'
-title: 'aiExtractionRouter'
-status: 'observed'
-summary: 'Exported constant from backend/src/routes/ai-extraction.ts.'
+id: "component.backend.backend.src.routes.ai-extraction.aiextractionrouter"
+kind: "typescript-constant"
+title: "aiExtractionRouter"
+status: "observed"
+summary: "Exported constant from backend/src/routes/ai-extraction.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/routes/ai-extraction.ts'
-    symbol: 'aiExtractionRouter'
-    line_start: '5'
-    line_end: '5'
-    confidence: 'observed'
+  - path: "backend/src/routes/ai-extraction.ts"
+    symbol: "aiExtractionRouter"
+    line_start: "5"
+    line_end: "5"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/ai-extraction.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/ai-extraction.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

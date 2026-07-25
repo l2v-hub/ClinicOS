@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.rate-limit.importratelimit'
-kind: 'typescript-constant'
-title: 'importRateLimit'
-status: 'observed'
-summary: 'Exported constant from backend/src/ai/rate-limit.ts.'
+id: "component.backend.backend.src.ai.rate-limit.importratelimit"
+kind: "typescript-constant"
+title: "importRateLimit"
+status: "observed"
+summary: "Exported constant from backend/src/ai/rate-limit.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/ai/rate-limit.ts'
-    symbol: 'importRateLimit'
-    line_start: '41'
-    line_end: '41'
-    confidence: 'observed'
+  - path: "backend/src/ai/rate-limit.ts"
+    symbol: "importRateLimit"
+    line_start: "41"
+    line_end: "41"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/rate-limit.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/rate-limit.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,44 +1,44 @@
 ---
-id: 'data.model.appointment'
-kind: 'data-model'
-title: 'Appointment'
-status: 'observed'
-summary: 'Prisma persistence model Appointment.'
+id: "data.model.appointment"
+kind: "data-model"
+title: "Appointment"
+status: "observed"
+summary: "Prisma persistence model Appointment."
 bounded_contexts:
-  - 'context.scheduling'
+  - "context.scheduling"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'Appointment'
-    line_start: '192'
-    line_end: '215'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "Appointment"
+    line_start: "192"
+    line_end: "215"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.clinicalrecord'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.operator'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.patient'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.user'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.clinicalrecord"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.operator"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.patient"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.user"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'prisma'
-  - 'database-model'
+  - "prisma"
+  - "database-model"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

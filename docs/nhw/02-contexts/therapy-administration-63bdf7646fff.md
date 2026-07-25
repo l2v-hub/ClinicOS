@@ -1,55 +1,55 @@
 ---
-id: 'context.therapy-administration'
-kind: 'bounded-context'
-title: 'Therapy Administration'
-status: 'inferred'
-summary: 'Therapy Administration bounded context reconstructed from executable ClinicOS sources.'
+id: "context.therapy-administration"
+kind: "bounded-context"
+title: "Therapy Administration"
+status: "inferred"
+summary: "Therapy Administration bounded context reconstructed from executable ClinicOS sources."
 bounded_contexts:
-  - 'context.therapy-administration'
+  - "context.therapy-administration"
 sources:
-  - path: 'prisma/schema.prisma'
-    line_start: '217'
-    line_end: '239'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '259'
-    line_end: '297'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '301'
-    line_end: '314'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-therapies.ts'
-    line_start: '169'
-    line_end: '188'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-therapies.ts'
-    line_start: '191'
-    line_end: '217'
-    confidence: 'observed'
-  - path: 'backend/src/routes/therapy.ts'
-    line_start: '26'
-    line_end: '192'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    line_start: "217"
+    line_end: "239"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "259"
+    line_end: "297"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "301"
+    line_end: "314"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-therapies.ts"
+    line_start: "169"
+    line_end: "188"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-therapies.ts"
+    line_start: "191"
+    line_end: "217"
+    confidence: "observed"
+  - path: "backend/src/routes/therapy.ts"
+    line_start: "26"
+    line_end: "192"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/patient-therapies.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/therapy.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.medicationadministration'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/patient-therapies.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/therapy.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.therapyschedule'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/patient-therapies.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/therapy.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/patient-therapies.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/therapy.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.medicationadministration"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/patient-therapies.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/therapy.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.therapyschedule"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/patient-therapies.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/therapy.ts"
+    confidence: "inferred"
 tags:
-  - 'bounded-context'
+  - "bounded-context"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership."
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.navigation.topnav.topnavitem'
-kind: 'typescript-interface'
-title: 'TopNavItem'
-status: 'observed'
-summary: 'Exported interface from frontend/src/components/navigation/TopNav.tsx.'
+id: "component.frontend.frontend.src.components.navigation.topnav.topnavitem"
+kind: "typescript-interface"
+title: "TopNavItem"
+status: "observed"
+summary: "Exported interface from frontend/src/components/navigation/TopNav.tsx."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/components/navigation/TopNav.tsx'
-    symbol: 'TopNavItem'
-    line_start: '3'
-    line_end: '7'
-    confidence: 'observed'
+  - path: "frontend/src/components/navigation/TopNav.tsx"
+    symbol: "TopNavItem"
+    line_start: "3"
+    line_end: "7"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/navigation/TopNav.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/navigation/TopNav.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

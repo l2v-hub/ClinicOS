@@ -1,23 +1,23 @@
 ---
-id: 'integration.container.postgres'
-kind: 'integration'
-title: 'postgres'
-status: 'observed'
-summary: 'integration.container.postgres declared by docker-compose.yml.'
+id: "integration.container.postgres"
+kind: "integration"
+title: "postgres"
+status: "observed"
+summary: "integration.container.postgres declared by docker-compose.yml."
 bounded_contexts: []
 sources:
-  - path: 'docker-compose.yml'
-    confidence: 'observed'
+  - path: "docker-compose.yml"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'docker-compose.yml'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "docker-compose.yml"
+    confidence: "observed"
 tags:
-  - 'infrastructure'
+  - "infrastructure"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

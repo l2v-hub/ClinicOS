@@ -1,28 +1,28 @@
 ---
-id: 'api.consumer.frontend.frontend.src.components.shared.dischargeletterimport.tsx.181.55'
-kind: 'frontend-api-consumer'
-title: 'DischargeLetterImport POST /patient-intake/discharge-letter/extract'
-status: 'observed'
-summary: 'Frontend request issued by DischargeLetterImport.'
+id: "api.consumer.frontend.frontend.src.components.shared.dischargeletterimport.tsx.181.55"
+kind: "frontend-api-consumer"
+title: "DischargeLetterImport POST /patient-intake/discharge-letter/extract"
+status: "observed"
+summary: "Frontend request issued by DischargeLetterImport."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'frontend/src/components/shared/DischargeLetterImport.tsx'
-    symbol: 'DischargeLetterImport'
-    line_start: '181'
-    line_end: '185'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/DischargeLetterImport.tsx"
+    symbol: "DischargeLetterImport"
+    line_start: "181"
+    line_end: "185"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/DischargeLetterImport.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/DischargeLetterImport.tsx"
+    confidence: "observed"
 tags:
-  - 'frontend'
-  - 'api-consumer'
+  - "frontend"
+  - "api-consumer"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

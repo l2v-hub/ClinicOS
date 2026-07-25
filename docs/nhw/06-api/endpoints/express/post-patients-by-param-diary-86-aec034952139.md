@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.post-patients-by-param-diary-86'
-kind: 'api-endpoint'
-title: 'POST /patients/:patientId/diary'
-status: 'observed'
-summary: 'POST /patients/:patientId/diary endpoint implemented by the express runtime.'
+id: "api.backend.post-patients-by-param-diary-86"
+kind: "api-endpoint"
+title: "POST /patients/:patientId/diary"
+status: "observed"
+summary: "POST /patients/:patientId/diary endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patient-diary.ts'
-    symbol: 'router'
-    line_start: '36'
-    line_end: '76'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-diary.ts"
+    symbol: "router"
+    line_start: "36"
+    line_end: "76"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-diary.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.patientdiaryentry'
-    evidence: 'backend/src/routes/patient-diary.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-diary.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.patientdiaryentry"
+    evidence: "backend/src/routes/patient-diary.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

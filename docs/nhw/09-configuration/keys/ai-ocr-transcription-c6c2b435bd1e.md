@@ -1,37 +1,37 @@
 ---
-id: 'config.discovered.ai-ocr-transcription'
-kind: 'configuration-key'
-title: 'AI_OCR_TRANSCRIPTION'
-status: 'observed'
-summary: 'Configuration key AI_OCR_TRANSCRIPTION; generated knowledge never includes its value.'
+id: "config.discovered.ai-ocr-transcription"
+kind: "configuration-key"
+title: "AI_OCR_TRANSCRIPTION"
+status: "observed"
+summary: "Configuration key AI_OCR_TRANSCRIPTION; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/ai/__tests__/lazy-sections.test.ts'
-    symbol: 'AI_OCR_TRANSCRIPTION'
-    line_start: '54'
-    line_end: '54'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/job-service.ts'
-    symbol: 'AI_OCR_TRANSCRIPTION'
-    line_start: '822'
-    line_end: '822'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md'
-    symbol: 'AI_OCR_TRANSCRIPTION'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
+  - path: "backend/src/ai/__tests__/lazy-sections.test.ts"
+    symbol: "AI_OCR_TRANSCRIPTION"
+    line_start: "54"
+    line_end: "54"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/job-service.ts"
+    symbol: "AI_OCR_TRANSCRIPTION"
+    line_start: "822"
+    line_end: "822"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md"
+    symbol: "AI_OCR_TRANSCRIPTION"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/ai/__tests__/lazy-sections.test.ts,backend/src/ai/upload/job-service.ts,docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/ai/__tests__/lazy-sections.test.ts,backend/src/ai/upload/job-service.ts,docs/nhw/09-configuration/keys/ai-ocr-transcription-c6c2b435bd1e.md"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

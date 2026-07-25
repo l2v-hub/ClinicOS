@@ -1,87 +1,87 @@
 ---
-id: 'flow.patient-room-assignment'
-kind: 'runtime-flow'
-title: 'Patient room and bed assignment'
-status: 'inferred'
-summary: 'Patient room and bed assignment workflow across ClinicOS components.'
+id: "flow.patient-room-assignment"
+kind: "runtime-flow"
+title: "Patient room and bed assignment"
+status: "inferred"
+summary: "Patient room and bed assignment workflow across ClinicOS components."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '458'
-    line_end: '485'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '293'
-    line_end: '325'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '643'
-    line_end: '662'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '90'
-    line_end: '128'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '131'
-    line_end: '142'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '205'
-    line_end: '221'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '332'
-    line_end: '356'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '43'
-    line_end: '87'
-    confidence: 'observed'
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "458"
+    line_end: "485"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "293"
+    line_end: "325"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "643"
+    line_end: "662"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "90"
+    line_end: "128"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "131"
+    line_end: "142"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "205"
+    line_end: "221"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "332"
+    line_end: "356"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "43"
+    line_end: "87"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-admin-beds-by-param-12'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-admin-rooms-by-param-8'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-patients-by-param-room-assignments-by-param-16'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-admin-beds-available-3'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-admin-rooms-4'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-admin-rooms-by-param-6'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-admin-rooms-by-param-beds-9'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-admin-rooms-occupancy-2'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-admin-beds-by-param-12"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-admin-rooms-by-param-8"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-patients-by-param-room-assignments-by-param-16"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-admin-beds-available-3"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-admin-rooms-4"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-admin-rooms-by-param-6"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-admin-rooms-by-param-beds-9"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-admin-rooms-occupancy-2"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts"
+    confidence: "inferred"
 tags:
-  - 'runtime-flow'
+  - "runtime-flow"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
 ## Question Answered
@@ -153,13 +153,13 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Sequence
 
-| Step | Actor            | Operation                                                           | State change               | Failure branch                  |
-| ---- | ---------------- | ------------------------------------------------------------------- | -------------------------- | ------------------------------- |
-| 1    | Trigger actor    | `api.backend.delete-admin-beds-by-param-12`                         | Defined by cited component | Owning component error contract |
-| 2    | ClinicOS runtime | `api.backend.delete-admin-rooms-by-param-8`                         | Defined by cited component | Owning component error contract |
-| 3    | ClinicOS runtime | `api.backend.delete-patients-by-param-room-assignments-by-param-16` | Defined by cited component | Owning component error contract |
-| 4    | ClinicOS runtime | `api.backend.get-admin-beds-available-3`                            | Defined by cited component | Owning component error contract |
-| 5    | ClinicOS runtime | `api.backend.get-admin-rooms-4`                                     | Defined by cited component | Owning component error contract |
-| 6    | ClinicOS runtime | `api.backend.get-admin-rooms-by-param-6`                            | Defined by cited component | Owning component error contract |
-| 7    | ClinicOS runtime | `api.backend.get-admin-rooms-by-param-beds-9`                       | Defined by cited component | Owning component error contract |
-| 8    | ClinicOS runtime | `api.backend.get-admin-rooms-occupancy-2`                           | Defined by cited component | Owning component error contract |
+| Step | Actor | Operation | State change | Failure branch |
+| --- | --- | --- | --- | --- |
+| 1 | Trigger actor | `api.backend.delete-admin-beds-by-param-12` | Defined by cited component | Owning component error contract |
+| 2 | ClinicOS runtime | `api.backend.delete-admin-rooms-by-param-8` | Defined by cited component | Owning component error contract |
+| 3 | ClinicOS runtime | `api.backend.delete-patients-by-param-room-assignments-by-param-16` | Defined by cited component | Owning component error contract |
+| 4 | ClinicOS runtime | `api.backend.get-admin-beds-available-3` | Defined by cited component | Owning component error contract |
+| 5 | ClinicOS runtime | `api.backend.get-admin-rooms-4` | Defined by cited component | Owning component error contract |
+| 6 | ClinicOS runtime | `api.backend.get-admin-rooms-by-param-6` | Defined by cited component | Owning component error contract |
+| 7 | ClinicOS runtime | `api.backend.get-admin-rooms-by-param-beds-9` | Defined by cited component | Owning component error contract |
+| 8 | ClinicOS runtime | `api.backend.get-admin-rooms-occupancy-2` | Defined by cited component | Owning component error contract |

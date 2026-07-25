@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.eef5ff89908c654aecea'
-kind: 'repository-source'
-title: 'deploy-vercel.yml.disabled'
-status: 'observed'
-summary: 'Repository source path .github/workflows/deploy-vercel.yml.disabled classified as deployment-source.'
+id: "component.repository.source.eef5ff89908c654aecea"
+kind: "repository-source"
+title: "deploy-vercel.yml.disabled"
+status: "observed"
+summary: "Repository source path .github/workflows/deploy-vercel.yml.disabled classified as deployment-source."
 bounded_contexts: []
 sources:
-  - path: '.github/workflows/deploy-vercel.yml.disabled'
-    confidence: 'observed'
+  - path: ".github/workflows/deploy-vercel.yml.disabled"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.github/workflows/deploy-vercel.yml.disabled'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".github/workflows/deploy-vercel.yml.disabled"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'deployment-source'
+  - "repository-source"
+  - "deployment-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

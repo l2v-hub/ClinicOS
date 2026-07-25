@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.types.statoletto'
-kind: 'typescript-type-alias'
-title: 'StatoLetto'
-status: 'observed'
-summary: 'Exported type-alias from frontend/src/types.ts.'
+id: "component.frontend.frontend.src.types.statoletto"
+kind: "typescript-type-alias"
+title: "StatoLetto"
+status: "observed"
+summary: "Exported type-alias from frontend/src/types.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/types.ts'
-    symbol: 'StatoLetto'
-    line_start: '189'
-    line_end: '189'
-    confidence: 'observed'
+  - path: "frontend/src/types.ts"
+    symbol: "StatoLetto"
+    line_start: "189"
+    line_end: "189"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/types.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/types.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'type-alias'
+  - "typescript"
+  - "type-alias"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

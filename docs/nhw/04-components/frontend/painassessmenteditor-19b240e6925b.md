@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.operator.sections.painassessmenteditor.painassessmenteditor'
-kind: 'typescript-react-component'
-title: 'PainAssessmentEditor'
-status: 'observed'
-summary: 'Exported react-component from frontend/src/components/operator/sections/PainAssessmentEditor.tsx.'
+id: "component.frontend.frontend.src.components.operator.sections.painassessmenteditor.painassessmenteditor"
+kind: "typescript-react-component"
+title: "PainAssessmentEditor"
+status: "observed"
+summary: "Exported react-component from frontend/src/components/operator/sections/PainAssessmentEditor.tsx."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/components/operator/sections/PainAssessmentEditor.tsx'
-    symbol: 'PainAssessmentEditor'
-    line_start: '21'
-    line_end: '67'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/sections/PainAssessmentEditor.tsx"
+    symbol: "PainAssessmentEditor"
+    line_start: "21"
+    line_end: "67"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/operator/sections/PainAssessmentEditor.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/operator/sections/PainAssessmentEditor.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'react-component'
+  - "typescript"
+  - "react-component"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.context.asserttenant'
-kind: 'typescript-function'
-title: 'assertTenant'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/gateway/context.ts.'
+id: "component.backend.backend.src.ai.gateway.context.asserttenant"
+kind: "typescript-function"
+title: "assertTenant"
+status: "observed"
+summary: "Exported function from backend/src/ai/gateway/context.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/gateway/context.ts'
-    symbol: 'assertTenant'
-    line_start: '50'
-    line_end: '54'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/context.ts"
+    symbol: "assertTenant"
+    line_start: "50"
+    line_end: "54"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/context.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/context.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

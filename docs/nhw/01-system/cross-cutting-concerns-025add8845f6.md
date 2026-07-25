@@ -1,33 +1,33 @@
 ---
-id: 'system.cross-cutting-concerns'
-kind: 'system-view'
-title: 'Cross-Cutting Concerns'
-status: 'inferred'
-summary: 'System view of ClinicOS authentication, logging, errors, caching, and quality.'
+id: "system.cross-cutting-concerns"
+kind: "system-view"
+title: "Cross-Cutting Concerns"
+status: "inferred"
+summary: "System view of ClinicOS authentication, logging, errors, caching, and quality."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    confidence: 'observed'
-  - path: 'backend/src/app.ts'
-    confidence: 'observed'
-  - path: 'frontend/src/App.tsx'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - path: "package.json"
+    confidence: "observed"
+  - path: "backend/src/app.ts"
+    confidence: "observed"
+  - path: "frontend/src/App.tsx"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'package.json,backend/src/app.ts,frontend/src/App.tsx,clinicos-ai-runtime/clinicos_ai/api/app.py,prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "package.json,backend/src/app.ts,frontend/src/App.tsx,clinicos-ai-runtime/clinicos_ai/api/app.py,prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'architecture'
-  - 'system-view'
+  - "architecture"
+  - "system-view"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Reconstructed from runtime composition roots and catalogs for authentication, logging, errors, caching, and quality.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Reconstructed from runtime composition roots and catalogs for authentication, logging, errors, caching, and quality."
 ---
 
 ## Question Answered

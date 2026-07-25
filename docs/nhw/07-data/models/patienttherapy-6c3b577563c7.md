@@ -1,36 +1,36 @@
 ---
-id: 'data.model.patienttherapy'
-kind: 'data-model'
-title: 'PatientTherapy'
-status: 'observed'
-summary: 'Prisma persistence model PatientTherapy.'
+id: "data.model.patienttherapy"
+kind: "data-model"
+title: "PatientTherapy"
+status: "observed"
+summary: "Prisma persistence model PatientTherapy."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'PatientTherapy'
-    line_start: '259'
-    line_end: '297'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "PatientTherapy"
+    line_start: "259"
+    line_end: "297"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.patient'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.therapyschedule'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.patient"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.therapyschedule"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'prisma'
-  - 'database-model'
+  - "prisma"
+  - "database-model"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

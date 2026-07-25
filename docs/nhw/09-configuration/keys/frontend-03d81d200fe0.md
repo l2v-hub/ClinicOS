@@ -1,62 +1,62 @@
 ---
-id: 'config.discovered.frontend'
-kind: 'configuration-key'
-title: 'FRONTEND'
-status: 'observed'
-summary: 'Configuration key FRONTEND; generated knowledge never includes its value.'
+id: "config.discovered.frontend"
+kind: "configuration-key"
+title: "FRONTEND"
+status: "observed"
+summary: "Configuration key FRONTEND; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: '.claude/skills/run-clinicos/driver.mjs'
-    symbol: 'FRONTEND'
-    line_start: '19'
-    line_end: '19'
-    confidence: 'observed'
-  - path: '.claude/skills/run-clinicos/measure-detail.mjs'
-    symbol: 'FRONTEND'
-    line_start: '2'
-    line_end: '2'
-    confidence: 'observed'
-  - path: '.claude/skills/run-clinicos/measure.mjs'
-    symbol: 'FRONTEND'
-    line_start: '3'
-    line_end: '3'
-    confidence: 'observed'
-  - path: '.claude/skills/run-clinicos/overflow.mjs'
-    symbol: 'FRONTEND'
-    line_start: '2'
-    line_end: '2'
-    confidence: 'observed'
-  - path: '.claude/skills/run-clinicos/review-shot.mjs'
-    symbol: 'FRONTEND'
-    line_start: '8'
-    line_end: '8'
-    confidence: 'observed'
-  - path: 'agent-team/tests/unit/e2e-import-journey.test.mjs'
-    symbol: 'FRONTEND'
-    line_start: '83'
-    line_end: '83'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/frontend-03d81d200fe0.md'
-    symbol: 'FRONTEND'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'e2e/agnos-cru.mjs'
-    symbol: 'FRONTEND'
-    line_start: '16'
-    line_end: '16'
-    confidence: 'observed'
+  - path: ".claude/skills/run-clinicos/driver.mjs"
+    symbol: "FRONTEND"
+    line_start: "19"
+    line_end: "19"
+    confidence: "observed"
+  - path: ".claude/skills/run-clinicos/measure-detail.mjs"
+    symbol: "FRONTEND"
+    line_start: "2"
+    line_end: "2"
+    confidence: "observed"
+  - path: ".claude/skills/run-clinicos/measure.mjs"
+    symbol: "FRONTEND"
+    line_start: "3"
+    line_end: "3"
+    confidence: "observed"
+  - path: ".claude/skills/run-clinicos/overflow.mjs"
+    symbol: "FRONTEND"
+    line_start: "2"
+    line_end: "2"
+    confidence: "observed"
+  - path: ".claude/skills/run-clinicos/review-shot.mjs"
+    symbol: "FRONTEND"
+    line_start: "8"
+    line_end: "8"
+    confidence: "observed"
+  - path: "agent-team/tests/unit/e2e-import-journey.test.mjs"
+    symbol: "FRONTEND"
+    line_start: "83"
+    line_end: "83"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/frontend-03d81d200fe0.md"
+    symbol: "FRONTEND"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "e2e/agnos-cru.mjs"
+    symbol: "FRONTEND"
+    line_start: "16"
+    line_end: "16"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.claude/skills/run-clinicos/driver.mjs,.claude/skills/run-clinicos/measure-detail.mjs,.claude/skills/run-clinicos/measure.mjs,.claude/skills/run-clinicos/overflow.mjs,.claude/skills/run-clinicos/review-shot.mjs,agent-team/tests/unit/e2e-import-journey.test.mjs,docs/nhw/09-configuration/keys/frontend-03d81d200fe0.md,e2e/agnos-cru.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".claude/skills/run-clinicos/driver.mjs,.claude/skills/run-clinicos/measure-detail.mjs,.claude/skills/run-clinicos/measure.mjs,.claude/skills/run-clinicos/overflow.mjs,.claude/skills/run-clinicos/review-shot.mjs,agent-team/tests/unit/e2e-import-journey.test.mjs,docs/nhw/09-configuration/keys/frontend-03d81d200fe0.md,e2e/agnos-cru.mjs"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

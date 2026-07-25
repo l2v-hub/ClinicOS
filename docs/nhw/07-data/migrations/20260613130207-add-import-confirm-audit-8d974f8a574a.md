@@ -1,32 +1,32 @@
 ---
-id: 'data.migration.20260613130207-add-import-confirm-audit'
-kind: 'database-migration'
-title: '20260613130207_add_import_confirm_audit'
-status: 'observed'
-summary: 'Ordered SQL migration 20260613130207_add_import_confirm_audit.'
+id: "data.migration.20260613130207-add-import-confirm-audit"
+kind: "database-migration"
+title: "20260613130207_add_import_confirm_audit"
+status: "observed"
+summary: "Ordered SQL migration 20260613130207_add_import_confirm_audit."
 bounded_contexts: []
 sources:
-  - path: 'prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql'
-    confidence: 'observed'
+  - path: "prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.importaudit'
-    evidence: 'prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.importjob'
-    evidence: 'prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.importaudit"
+    evidence: "prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.importjob"
+    evidence: "prisma/migrations/20260613130207_add_import_confirm_audit/migration.sql"
+    confidence: "observed"
 tags:
-  - 'migration'
-  - 'non-destructive'
+  - "migration"
+  - "non-destructive"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

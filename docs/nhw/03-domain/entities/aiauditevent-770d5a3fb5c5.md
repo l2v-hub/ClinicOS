@@ -1,33 +1,33 @@
 ---
-id: 'entity.aiauditevent'
-kind: 'domain-entity'
-title: 'AiAuditEvent'
-status: 'inferred'
-summary: 'Business entity persisted by the AiAuditEvent Prisma model.'
+id: "entity.aiauditevent"
+kind: "domain-entity"
+title: "AiAuditEvent"
+status: "inferred"
+summary: "Business entity persisted by the AiAuditEvent Prisma model."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'AiAuditEvent'
-    line_start: '535'
-    line_end: '551'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "AiAuditEvent"
+    line_start: "535"
+    line_end: "551"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.ai-assistance'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'persists-as'
-    target: 'data.model.aiauditevent'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "context.ai-assistance"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "persists-as"
+    target: "data.model.aiauditevent"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'domain-entity'
-  - 'aiauditevent'
+  - "domain-entity"
+  - "aiauditevent"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Business entity reconstructed from the current Prisma model and its executable consumers.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 
 ## Question Answered

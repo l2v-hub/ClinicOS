@@ -1,62 +1,62 @@
 ---
-id: 'config.discovered.prod'
-kind: 'configuration-key'
-title: 'PROD'
-status: 'observed'
-summary: 'Configuration key PROD; generated knowledge never includes its value.'
+id: "config.discovered.prod"
+kind: "configuration-key"
+title: "PROD"
+status: "observed"
+summary: "Configuration key PROD; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'agent-team/tests/unit/ci-browser-e2e-config.test.mjs'
-    symbol: 'PROD'
-    line_start: '43'
-    line_end: '43'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/prod-22850fceeda7.md'
-    symbol: 'PROD'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'e2e/prod-agent-check.mjs'
-    symbol: 'PROD'
-    line_start: '1'
-    line_end: '1'
-    confidence: 'observed'
-  - path: 'e2e/prod-conflict-check.mjs'
-    symbol: 'PROD'
-    line_start: '1'
-    line_end: '1'
-    confidence: 'observed'
-  - path: 'e2e/prod-real-check.mjs'
-    symbol: 'PROD'
-    line_start: '1'
-    line_end: '1'
-    confidence: 'observed'
-  - path: 'e2e/prod-runtime-check.mjs'
-    symbol: 'PROD'
-    line_start: '1'
-    line_end: '1'
-    confidence: 'observed'
-  - path: 'frontend/src/components/shared/intake/intakeDraftApi.ts'
-    symbol: 'PROD'
-    line_start: '11'
-    line_end: '11'
-    confidence: 'observed'
-  - path: 'frontend/src/config.ts'
-    symbol: 'PROD'
-    line_start: '14'
-    line_end: '14'
-    confidence: 'observed'
+  - path: "agent-team/tests/unit/ci-browser-e2e-config.test.mjs"
+    symbol: "PROD"
+    line_start: "43"
+    line_end: "43"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/prod-22850fceeda7.md"
+    symbol: "PROD"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "e2e/prod-agent-check.mjs"
+    symbol: "PROD"
+    line_start: "1"
+    line_end: "1"
+    confidence: "observed"
+  - path: "e2e/prod-conflict-check.mjs"
+    symbol: "PROD"
+    line_start: "1"
+    line_end: "1"
+    confidence: "observed"
+  - path: "e2e/prod-real-check.mjs"
+    symbol: "PROD"
+    line_start: "1"
+    line_end: "1"
+    confidence: "observed"
+  - path: "e2e/prod-runtime-check.mjs"
+    symbol: "PROD"
+    line_start: "1"
+    line_end: "1"
+    confidence: "observed"
+  - path: "frontend/src/components/shared/intake/intakeDraftApi.ts"
+    symbol: "PROD"
+    line_start: "11"
+    line_end: "11"
+    confidence: "observed"
+  - path: "frontend/src/config.ts"
+    symbol: "PROD"
+    line_start: "14"
+    line_end: "14"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'agent-team/tests/unit/ci-browser-e2e-config.test.mjs,docs/nhw/09-configuration/keys/prod-22850fceeda7.md,e2e/prod-agent-check.mjs,e2e/prod-conflict-check.mjs,e2e/prod-real-check.mjs,e2e/prod-runtime-check.mjs,frontend/src/components/shared/intake/intakeDraftApi.ts,frontend/src/config.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "agent-team/tests/unit/ci-browser-e2e-config.test.mjs,docs/nhw/09-configuration/keys/prod-22850fceeda7.md,e2e/prod-agent-check.mjs,e2e/prod-conflict-check.mjs,e2e/prod-real-check.mjs,e2e/prod-runtime-check.mjs,frontend/src/components/shared/intake/intakeDraftApi.ts,frontend/src/config.ts"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

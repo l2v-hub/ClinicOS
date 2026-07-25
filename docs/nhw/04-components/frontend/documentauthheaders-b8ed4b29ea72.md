@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.lib.entraauth.documentauthheaders'
-kind: 'typescript-function'
-title: 'documentAuthHeaders'
-status: 'observed'
-summary: 'Exported function from frontend/src/lib/entraAuth.ts.'
+id: "component.frontend.frontend.src.lib.entraauth.documentauthheaders"
+kind: "typescript-function"
+title: "documentAuthHeaders"
+status: "observed"
+summary: "Exported function from frontend/src/lib/entraAuth.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/lib/entraAuth.ts'
-    symbol: 'documentAuthHeaders'
-    line_start: '68'
-    line_end: '80'
-    confidence: 'observed'
+  - path: "frontend/src/lib/entraAuth.ts"
+    symbol: "documentAuthHeaders"
+    line_start: "68"
+    line_end: "80"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/lib/entraAuth.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/lib/entraAuth.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.scripts.scripts.nhw.lib.knowledge-pipeline.loadknowledgecatalogs'
-kind: 'typescript-function'
-title: 'loadKnowledgeCatalogs'
-status: 'observed'
-summary: 'Exported function from scripts/nhw/lib/knowledge-pipeline.mjs.'
+id: "component.scripts.scripts.nhw.lib.knowledge-pipeline.loadknowledgecatalogs"
+kind: "typescript-function"
+title: "loadKnowledgeCatalogs"
+status: "observed"
+summary: "Exported function from scripts/nhw/lib/knowledge-pipeline.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'scripts/nhw/lib/knowledge-pipeline.mjs'
-    symbol: 'loadKnowledgeCatalogs'
-    line_start: '31'
-    line_end: '52'
-    confidence: 'observed'
+  - path: "scripts/nhw/lib/knowledge-pipeline.mjs"
+    symbol: "loadKnowledgeCatalogs"
+    line_start: "31"
+    line_end: "52"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'scripts/nhw/lib/knowledge-pipeline.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "scripts/nhw/lib/knowledge-pipeline.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

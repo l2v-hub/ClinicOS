@@ -1,25 +1,25 @@
 ---
-id: 'runtime.backend.ai-upload-worker'
-kind: 'background-worker'
-title: 'AI upload worker'
-status: 'observed'
-summary: 'Backend worker claims and processes persisted AI extraction jobs.'
+id: "runtime.backend.ai-upload-worker"
+kind: "background-worker"
+title: "AI upload worker"
+status: "observed"
+summary: "Backend worker claims and processes persisted AI extraction jobs."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/ai/upload/worker.ts'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/job-service.ts'
-    confidence: 'observed'
+  - path: "backend/src/ai/upload/worker.ts"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/job-service.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/upload/worker.ts,backend/src/ai/upload/job-service.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/upload/worker.ts,backend/src/ai/upload/job-service.ts"
+    confidence: "observed"
 tags:
-  - 'background-worker'
+  - "background-worker"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

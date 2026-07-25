@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.1b958bcccf43e96b7e4b'
-kind: 'repository-source'
-title: 'frontend-bundle-scan.txt'
-status: 'declared'
-summary: 'Repository source path requirements/evidence/BUG-048/prod-verify/frontend-bundle-scan.txt classified as narrative-source.'
+id: "component.repository.source.1b958bcccf43e96b7e4b"
+kind: "repository-source"
+title: "frontend-bundle-scan.txt"
+status: "declared"
+summary: "Repository source path requirements/evidence/BUG-048/prod-verify/frontend-bundle-scan.txt classified as narrative-source."
 bounded_contexts: []
 sources:
-  - path: 'requirements/evidence/BUG-048/prod-verify/frontend-bundle-scan.txt'
-    confidence: 'declared'
+  - path: "requirements/evidence/BUG-048/prod-verify/frontend-bundle-scan.txt"
+    confidence: "declared"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'requirements/evidence/BUG-048/prod-verify/frontend-bundle-scan.txt'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "requirements/evidence/BUG-048/prod-verify/frontend-bundle-scan.txt"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'narrative-source'
+  - "repository-source"
+  - "narrative-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

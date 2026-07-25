@@ -1,25 +1,25 @@
 ---
-id: 'test.repository.backend.src.ai.tests.patient-documents-security.test.ts'
-kind: 'security-test'
-title: 'patient-documents-security.test.ts'
-status: 'observed'
-summary: 'node-test security test surface.'
+id: "test.repository.backend.src.ai.tests.patient-documents-security.test.ts"
+kind: "security-test"
+title: "patient-documents-security.test.ts"
+status: "observed"
+summary: "node-test security test surface."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/ai/__tests__/patient-documents-security.test.ts'
-    confidence: 'observed'
+  - path: "backend/src/ai/__tests__/patient-documents-security.test.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/__tests__/patient-documents-security.test.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/__tests__/patient-documents-security.test.ts"
+    confidence: "observed"
 tags:
-  - 'test'
-  - 'security'
-  - 'node-test'
+  - "test"
+  - "security"
+  - "node-test"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,25 +1,25 @@
 ---
-id: 'runtime.backend.express-startup'
-kind: 'runtime-startup'
-title: 'Express backend startup'
-status: 'observed'
-summary: 'Backend startup resolves the port, starts Express, reports AI status, and schedules retention.'
+id: "runtime.backend.express-startup"
+kind: "runtime-startup"
+title: "Express backend startup"
+status: "observed"
+summary: "Backend startup resolves the port, starts Express, reports AI status, and schedules retention."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/server.ts'
-    confidence: 'observed'
-  - path: 'backend/src/app.ts'
-    confidence: 'observed'
+  - path: "backend/src/server.ts"
+    confidence: "observed"
+  - path: "backend/src/app.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/server.ts,backend/src/app.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/server.ts,backend/src/app.ts"
+    confidence: "observed"
 tags:
-  - 'runtime-startup'
+  - "runtime-startup"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

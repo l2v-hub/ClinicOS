@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.config.aiprovider'
-kind: 'typescript-type-alias'
-title: 'AiProvider'
-status: 'observed'
-summary: 'Exported type-alias from backend/src/ai/config.ts.'
+id: "component.backend.backend.src.ai.config.aiprovider"
+kind: "typescript-type-alias"
+title: "AiProvider"
+status: "observed"
+summary: "Exported type-alias from backend/src/ai/config.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/config.ts'
-    symbol: 'AiProvider'
-    line_start: '21'
-    line_end: '21'
-    confidence: 'observed'
+  - path: "backend/src/ai/config.ts"
+    symbol: "AiProvider"
+    line_start: "21"
+    line_end: "21"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/config.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/config.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'type-alias'
+  - "typescript"
+  - "type-alias"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

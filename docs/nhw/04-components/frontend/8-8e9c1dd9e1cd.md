@@ -1,28 +1,28 @@
 ---
-id: 'api.consumer.frontend.frontend.src.app.tsx.516.8'
-kind: 'frontend-api-consumer'
-title: 'addOperatore POST /operators'
-status: 'observed'
-summary: 'Frontend request issued by addOperatore.'
+id: "api.consumer.frontend.frontend.src.app.tsx.516.8"
+kind: "frontend-api-consumer"
+title: "addOperatore POST /operators"
+status: "observed"
+summary: "Frontend request issued by addOperatore."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/App.tsx'
-    symbol: 'addOperatore'
-    line_start: '516'
-    line_end: '520'
-    confidence: 'observed'
+  - path: "frontend/src/App.tsx"
+    symbol: "addOperatore"
+    line_start: "516"
+    line_end: "520"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/App.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/App.tsx"
+    confidence: "observed"
 tags:
-  - 'frontend'
-  - 'api-consumer'
+  - "frontend"
+  - "api-consumer"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

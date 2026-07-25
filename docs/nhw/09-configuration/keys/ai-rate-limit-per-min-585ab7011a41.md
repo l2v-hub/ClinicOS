@@ -1,26 +1,26 @@
 ---
-id: 'config.discovered.ai-rate-limit-per-min'
-kind: 'configuration-key'
-title: 'AI_RATE_LIMIT_PER_MIN'
-status: 'observed'
-summary: 'Configuration key AI_RATE_LIMIT_PER_MIN; generated knowledge never includes its value.'
+id: "config.discovered.ai-rate-limit-per-min"
+kind: "configuration-key"
+title: "AI_RATE_LIMIT_PER_MIN"
+status: "observed"
+summary: "Configuration key AI_RATE_LIMIT_PER_MIN; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/.env.example'
-    symbol: 'AI_RATE_LIMIT_PER_MIN'
-    line_start: '41'
-    line_end: '41'
-    confidence: 'observed'
+  - path: "backend/.env.example"
+    symbol: "AI_RATE_LIMIT_PER_MIN"
+    line_start: "41"
+    line_end: "41"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/.env.example'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/.env.example"
+    confidence: "observed"
 tags:
-  - 'configuration'
+  - "configuration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

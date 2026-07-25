@@ -1,90 +1,90 @@
 ---
-id: 'flow.appointment-scheduling'
-kind: 'runtime-flow'
-title: 'Appointments and operator schedules'
-status: 'inferred'
-summary: 'Appointments and operator schedules workflow across ClinicOS components.'
+id: "flow.appointment-scheduling"
+kind: "runtime-flow"
+title: "Appointments and operator schedules"
+status: "inferred"
+summary: "Appointments and operator schedules workflow across ClinicOS components."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/routes/appointments.ts'
-    line_start: '125'
-    line_end: '140'
-    confidence: 'observed'
-  - path: 'backend/src/routes/appointments.ts'
-    line_start: '20'
-    line_end: '39'
-    confidence: 'observed'
-  - path: 'backend/src/routes/appointments.ts'
-    line_start: '91'
-    line_end: '122'
-    confidence: 'observed'
-  - path: 'backend/src/routes/appointments.ts'
-    line_start: '42'
-    line_end: '88'
-    confidence: 'observed'
-  - path: 'backend/src/routes/internal-ai.ts'
-    line_start: '71'
-    line_end: '79'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/appointments.ts'
-    symbol: 'AppointmentHit'
-    line_start: '200'
-    line_end: '203'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/appointments.ts'
-    symbol: 'AppointmentLookupDeps'
-    line_start: '205'
-    line_end: '220'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/appointments.ts'
-    symbol: 'AppointmentPlanContext'
-    line_start: '104'
-    line_end: '106'
-    confidence: 'observed'
+  - path: "backend/src/routes/appointments.ts"
+    line_start: "125"
+    line_end: "140"
+    confidence: "observed"
+  - path: "backend/src/routes/appointments.ts"
+    line_start: "20"
+    line_end: "39"
+    confidence: "observed"
+  - path: "backend/src/routes/appointments.ts"
+    line_start: "91"
+    line_end: "122"
+    confidence: "observed"
+  - path: "backend/src/routes/appointments.ts"
+    line_start: "42"
+    line_end: "88"
+    confidence: "observed"
+  - path: "backend/src/routes/internal-ai.ts"
+    line_start: "71"
+    line_end: "79"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/appointments.ts"
+    symbol: "AppointmentHit"
+    line_start: "200"
+    line_end: "203"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/appointments.ts"
+    symbol: "AppointmentLookupDeps"
+    line_start: "205"
+    line_end: "220"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/appointments.ts"
+    symbol: "AppointmentPlanContext"
+    line_start: "104"
+    line_end: "106"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-appointments-by-param-44'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-appointments-41'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.patch-appointments-by-param-43'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.post-appointments-42'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.post-internal-ai-query-appointments-61'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.actions.appointments.appointmenthit'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.actions.appointments.appointmentlookupdeps'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.actions.appointments.appointmentplancontext'
-    evidence: 'backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-appointments-by-param-44"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-appointments-41"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.patch-appointments-by-param-43"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.post-appointments-42"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.post-internal-ai-query-appointments-61"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.actions.appointments.appointmenthit"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.actions.appointments.appointmentlookupdeps"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.actions.appointments.appointmentplancontext"
+    evidence: "backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/appointments.ts,backend/src/routes/internal-ai.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts,backend/src/ai/actions/appointments.ts"
+    confidence: "inferred"
 tags:
-  - 'runtime-flow'
+  - "runtime-flow"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
 ## Question Answered
@@ -156,13 +156,13 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Sequence
 
-| Step | Actor            | Operation                                                                      | State change               | Failure branch                  |
-| ---- | ---------------- | ------------------------------------------------------------------------------ | -------------------------- | ------------------------------- |
-| 1    | Trigger actor    | `api.backend.delete-appointments-by-param-44`                                  | Defined by cited component | Owning component error contract |
-| 2    | ClinicOS runtime | `api.backend.get-appointments-41`                                              | Defined by cited component | Owning component error contract |
-| 3    | ClinicOS runtime | `api.backend.patch-appointments-by-param-43`                                   | Defined by cited component | Owning component error contract |
-| 4    | ClinicOS runtime | `api.backend.post-appointments-42`                                             | Defined by cited component | Owning component error contract |
-| 5    | ClinicOS runtime | `api.backend.post-internal-ai-query-appointments-61`                           | Defined by cited component | Owning component error contract |
-| 6    | ClinicOS runtime | `component.backend.backend.src.ai.actions.appointments.appointmenthit`         | Defined by cited component | Owning component error contract |
-| 7    | ClinicOS runtime | `component.backend.backend.src.ai.actions.appointments.appointmentlookupdeps`  | Defined by cited component | Owning component error contract |
-| 8    | ClinicOS runtime | `component.backend.backend.src.ai.actions.appointments.appointmentplancontext` | Defined by cited component | Owning component error contract |
+| Step | Actor | Operation | State change | Failure branch |
+| --- | --- | --- | --- | --- |
+| 1 | Trigger actor | `api.backend.delete-appointments-by-param-44` | Defined by cited component | Owning component error contract |
+| 2 | ClinicOS runtime | `api.backend.get-appointments-41` | Defined by cited component | Owning component error contract |
+| 3 | ClinicOS runtime | `api.backend.patch-appointments-by-param-43` | Defined by cited component | Owning component error contract |
+| 4 | ClinicOS runtime | `api.backend.post-appointments-42` | Defined by cited component | Owning component error contract |
+| 5 | ClinicOS runtime | `api.backend.post-internal-ai-query-appointments-61` | Defined by cited component | Owning component error contract |
+| 6 | ClinicOS runtime | `component.backend.backend.src.ai.actions.appointments.appointmenthit` | Defined by cited component | Owning component error contract |
+| 7 | ClinicOS runtime | `component.backend.backend.src.ai.actions.appointments.appointmentlookupdeps` | Defined by cited component | Owning component error contract |
+| 8 | ClinicOS runtime | `component.backend.backend.src.ai.actions.appointments.appointmentplancontext` | Defined by cited component | Owning component error contract |

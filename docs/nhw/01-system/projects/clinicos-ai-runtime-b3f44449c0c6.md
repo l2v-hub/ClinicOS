@@ -1,24 +1,24 @@
 ---
-id: 'project.clinicos-ai-runtime'
-kind: 'python-package'
-title: 'clinicos-ai-runtime'
-status: 'observed'
-summary: 'clinicos-ai-runtime project rooted at clinicos-ai-runtime.'
+id: "project.clinicos-ai-runtime"
+kind: "python-package"
+title: "clinicos-ai-runtime"
+status: "observed"
+summary: "clinicos-ai-runtime project rooted at clinicos-ai-runtime."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/requirements.txt'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/requirements.txt"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'clinicos-ai-runtime/requirements.txt'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "clinicos-ai-runtime/requirements.txt"
+    confidence: "observed"
 tags:
-  - 'project'
-  - 'python-package'
+  - "project"
+  - "python-package"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

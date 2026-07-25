@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.assistant.agents.redirectmessage'
-kind: 'typescript-function'
-title: 'redirectMessage'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/assistant/agents.ts.'
+id: "component.backend.backend.src.ai.assistant.agents.redirectmessage"
+kind: "typescript-function"
+title: "redirectMessage"
+status: "observed"
+summary: "Exported function from backend/src/ai/assistant/agents.ts."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'backend/src/ai/assistant/agents.ts'
-    symbol: 'redirectMessage'
-    line_start: '83'
-    line_end: '87'
-    confidence: 'observed'
+  - path: "backend/src/ai/assistant/agents.ts"
+    symbol: "redirectMessage"
+    line_start: "83"
+    line_end: "87"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/assistant/agents.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/assistant/agents.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

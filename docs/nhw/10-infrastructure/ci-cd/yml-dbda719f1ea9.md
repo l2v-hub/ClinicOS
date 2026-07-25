@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.workflow.github.workflows.railway-set-var.yml'
-kind: 'ci-workflow'
-title: 'Railway Set Backend Variable'
-status: 'observed'
-summary: 'GitHub Actions workflow with jobs set-var.'
+id: "component.repository.workflow.github.workflows.railway-set-var.yml"
+kind: "ci-workflow"
+title: "Railway Set Backend Variable"
+status: "observed"
+summary: "GitHub Actions workflow with jobs set-var."
 bounded_contexts: []
 sources:
-  - path: '.github/workflows/railway-set-var.yml'
-    confidence: 'observed'
+  - path: ".github/workflows/railway-set-var.yml"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.github/workflows/railway-set-var.yml'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".github/workflows/railway-set-var.yml"
+    confidence: "observed"
 tags:
-  - 'github-actions'
-  - 'ci-cd'
+  - "github-actions"
+  - "ci-cd"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

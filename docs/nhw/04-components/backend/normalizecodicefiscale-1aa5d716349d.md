@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.lib.codice-fiscale.normalizecodicefiscale'
-kind: 'typescript-function'
-title: 'normalizeCodiceFiscale'
-status: 'observed'
-summary: 'Exported function from backend/src/lib/codice-fiscale.ts.'
+id: "component.backend.backend.src.lib.codice-fiscale.normalizecodicefiscale"
+kind: "typescript-function"
+title: "normalizeCodiceFiscale"
+status: "observed"
+summary: "Exported function from backend/src/lib/codice-fiscale.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/lib/codice-fiscale.ts'
-    symbol: 'normalizeCodiceFiscale'
-    line_start: '87'
-    line_end: '89'
-    confidence: 'observed'
+  - path: "backend/src/lib/codice-fiscale.ts"
+    symbol: "normalizeCodiceFiscale"
+    line_start: "87"
+    line_end: "89"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/lib/codice-fiscale.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/lib/codice-fiscale.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

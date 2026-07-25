@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.therapies.therapy-create.normalizegiornisettimana'
-kind: 'typescript-function'
-title: 'normalizeGiorniSettimana'
-status: 'observed'
-summary: 'Exported function from backend/src/therapies/therapy-create.ts.'
+id: "component.backend.backend.src.therapies.therapy-create.normalizegiornisettimana"
+kind: "typescript-function"
+title: "normalizeGiorniSettimana"
+status: "observed"
+summary: "Exported function from backend/src/therapies/therapy-create.ts."
 bounded_contexts:
-  - 'context.therapy-administration'
+  - "context.therapy-administration"
 sources:
-  - path: 'backend/src/therapies/therapy-create.ts'
-    symbol: 'normalizeGiorniSettimana'
-    line_start: '61'
-    line_end: '68'
-    confidence: 'observed'
+  - path: "backend/src/therapies/therapy-create.ts"
+    symbol: "normalizeGiorniSettimana"
+    line_start: "61"
+    line_end: "68"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/therapies/therapy-create.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/therapies/therapy-create.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

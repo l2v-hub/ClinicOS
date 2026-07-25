@@ -1,37 +1,37 @@
 ---
-id: 'config.discovered.vite-entra-tenant-id'
-kind: 'configuration-key'
-title: 'VITE_ENTRA_TENANT_ID'
-status: 'observed'
-summary: 'Configuration key VITE_ENTRA_TENANT_ID; generated knowledge never includes its value.'
+id: "config.discovered.vite-entra-tenant-id"
+kind: "configuration-key"
+title: "VITE_ENTRA_TENANT_ID"
+status: "observed"
+summary: "Configuration key VITE_ENTRA_TENANT_ID; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'docs/entra-setup.md'
-    symbol: 'VITE_ENTRA_TENANT_ID'
-    line_start: '43'
-    line_end: '43'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/vite-entra-tenant-id-6848da5b686c.md'
-    symbol: 'VITE_ENTRA_TENANT_ID'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'frontend/src/lib/entraAuth.ts'
-    symbol: 'VITE_ENTRA_TENANT_ID'
-    line_start: '2'
-    line_end: '2'
-    confidence: 'observed'
+  - path: "docs/entra-setup.md"
+    symbol: "VITE_ENTRA_TENANT_ID"
+    line_start: "43"
+    line_end: "43"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/vite-entra-tenant-id-6848da5b686c.md"
+    symbol: "VITE_ENTRA_TENANT_ID"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "frontend/src/lib/entraAuth.ts"
+    symbol: "VITE_ENTRA_TENANT_ID"
+    line_start: "2"
+    line_end: "2"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'docs/entra-setup.md,docs/nhw/09-configuration/keys/vite-entra-tenant-id-6848da5b686c.md,frontend/src/lib/entraAuth.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "docs/entra-setup.md,docs/nhw/09-configuration/keys/vite-entra-tenant-id-6848da5b686c.md,frontend/src/lib/entraAuth.ts"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

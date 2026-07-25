@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.get-patients-by-param-narrative-sections-by-param-73'
-kind: 'api-endpoint'
-title: 'GET /patients/:patientId/narrative-sections/:sectionKey'
-status: 'observed'
-summary: 'GET /patients/:patientId/narrative-sections/:sectionKey endpoint implemented by the express runtime.'
+id: "api.backend.get-patients-by-param-narrative-sections-by-param-73"
+kind: "api-endpoint"
+title: "GET /patients/:patientId/narrative-sections/:sectionKey"
+status: "observed"
+summary: "GET /patients/:patientId/narrative-sections/:sectionKey endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/narrative-sections.ts'
-    symbol: 'router'
-    line_start: '30'
-    line_end: '42'
-    confidence: 'observed'
+  - path: "backend/src/routes/narrative-sections.ts"
+    symbol: "router"
+    line_start: "30"
+    line_end: "42"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/narrative-sections.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/narrative-sections.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'get'
+  - "api"
+  - "express"
+  - "get"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

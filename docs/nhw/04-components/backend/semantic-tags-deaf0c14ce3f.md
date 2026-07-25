@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.sections.profile.semantic-tags'
-kind: 'typescript-constant'
-title: 'SEMANTIC_TAGS'
-status: 'observed'
-summary: 'Exported constant from backend/src/ai/sections/profile.ts.'
+id: "component.backend.backend.src.ai.sections.profile.semantic-tags"
+kind: "typescript-constant"
+title: "SEMANTIC_TAGS"
+status: "observed"
+summary: "Exported constant from backend/src/ai/sections/profile.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/sections/profile.ts'
-    symbol: 'SEMANTIC_TAGS'
-    line_start: '33'
-    line_end: '45'
-    confidence: 'observed'
+  - path: "backend/src/ai/sections/profile.ts"
+    symbol: "SEMANTIC_TAGS"
+    line_start: "33"
+    line_end: "45"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/sections/profile.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/sections/profile.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

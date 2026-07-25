@@ -1,23 +1,23 @@
 ---
-id: 'runtime.backend.middleware-pipeline'
-kind: 'runtime-middleware'
-title: 'Express middleware and route order'
-status: 'observed'
-summary: 'Express composition root applies CORS, JSON parsing, health, route modules, and error behavior in source order.'
+id: "runtime.backend.middleware-pipeline"
+kind: "runtime-middleware"
+title: "Express middleware and route order"
+status: "observed"
+summary: "Express composition root applies CORS, JSON parsing, health, route modules, and error behavior in source order."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/app.ts'
-    confidence: 'observed'
+  - path: "backend/src/app.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/app.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/app.ts"
+    confidence: "observed"
 tags:
-  - 'runtime-middleware'
+  - "runtime-middleware"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

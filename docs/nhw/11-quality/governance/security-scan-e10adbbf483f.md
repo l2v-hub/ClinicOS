@@ -1,25 +1,25 @@
 ---
-id: 'test.governance.security-scan'
-kind: 'security-gate'
-title: 'Frontend secret scan'
-status: 'observed'
-summary: 'Repository security gate rejects credential-like values and secret-like VITE variable names in frontend source and bundles.'
+id: "test.governance.security-scan"
+kind: "security-gate"
+title: "Frontend secret scan"
+status: "observed"
+summary: "Repository security gate rejects credential-like values and secret-like VITE variable names in frontend source and bundles."
 bounded_contexts: []
 sources:
-  - path: 'scripts/security/scan-frontend-secrets.mjs'
-    confidence: 'observed'
-  - path: 'package.json'
-    confidence: 'observed'
+  - path: "scripts/security/scan-frontend-secrets.mjs"
+    confidence: "observed"
+  - path: "package.json"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.delivery-quality-governance'
-    evidence: 'scripts/security/scan-frontend-secrets.mjs,package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "context.delivery-quality-governance"
+    evidence: "scripts/security/scan-frontend-secrets.mjs,package.json"
+    confidence: "observed"
 tags:
-  - 'security-gate'
+  - "security-gate"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.services.consegna-service.createconsegnainput'
-kind: 'typescript-interface'
-title: 'CreateConsegnaInput'
-status: 'observed'
-summary: 'Exported interface from backend/src/services/consegna-service.ts.'
+id: "component.backend.backend.src.services.consegna-service.createconsegnainput"
+kind: "typescript-interface"
+title: "CreateConsegnaInput"
+status: "observed"
+summary: "Exported interface from backend/src/services/consegna-service.ts."
 bounded_contexts:
-  - 'context.operator-collaboration'
+  - "context.operator-collaboration"
 sources:
-  - path: 'backend/src/services/consegna-service.ts'
-    symbol: 'CreateConsegnaInput'
-    line_start: '10'
-    line_end: '21'
-    confidence: 'observed'
+  - path: "backend/src/services/consegna-service.ts"
+    symbol: "CreateConsegnaInput"
+    line_start: "10"
+    line_end: "21"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/services/consegna-service.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/services/consegna-service.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

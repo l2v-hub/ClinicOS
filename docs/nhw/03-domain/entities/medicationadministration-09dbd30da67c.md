@@ -1,33 +1,33 @@
 ---
-id: 'entity.medicationadministration'
-kind: 'domain-entity'
-title: 'MedicationAdministration'
-status: 'inferred'
-summary: 'Business entity persisted by the MedicationAdministration Prisma model.'
+id: "entity.medicationadministration"
+kind: "domain-entity"
+title: "MedicationAdministration"
+status: "inferred"
+summary: "Business entity persisted by the MedicationAdministration Prisma model."
 bounded_contexts:
-  - 'context.therapy-administration'
+  - "context.therapy-administration"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'MedicationAdministration'
-    line_start: '217'
-    line_end: '239'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "MedicationAdministration"
+    line_start: "217"
+    line_end: "239"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.therapy-administration'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'persists-as'
-    target: 'data.model.medicationadministration'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "context.therapy-administration"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "persists-as"
+    target: "data.model.medicationadministration"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'domain-entity'
-  - 'medicationadministration'
+  - "domain-entity"
+  - "medicationadministration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Business entity reconstructed from the current Prisma model and its executable consumers.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 
 ## Question Answered

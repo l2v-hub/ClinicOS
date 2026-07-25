@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.get-operators-80'
-kind: 'api-endpoint'
-title: 'GET /operators/'
-status: 'observed'
-summary: 'GET /operators/ endpoint implemented by the express runtime.'
+id: "api.backend.get-operators-80"
+kind: "api-endpoint"
+title: "GET /operators/"
+status: "observed"
+summary: "GET /operators/ endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/routes/operators.ts'
-    symbol: 'operatorsRouter'
-    line_start: '58'
-    line_end: '72'
-    confidence: 'observed'
+  - path: "backend/src/routes/operators.ts"
+    symbol: "operatorsRouter"
+    line_start: "58"
+    line_end: "72"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/operators.ts'
-    confidence: 'observed'
-  - type: 'reads'
-    target: 'data.model.operator'
-    evidence: 'backend/src/routes/operators.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/operators.ts"
+    confidence: "observed"
+  - type: "reads"
+    target: "data.model.operator"
+    evidence: "backend/src/routes/operators.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'get'
+  - "api"
+  - "express"
+  - "get"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.operator.cartella.diariopazientetab.diario-author-filters'
-kind: 'typescript-constant'
-title: 'DIARIO_AUTHOR_FILTERS'
-status: 'observed'
-summary: 'Exported constant from frontend/src/components/operator/cartella/DiarioPazienteTab.tsx.'
+id: "component.frontend.frontend.src.components.operator.cartella.diariopazientetab.diario-author-filters"
+kind: "typescript-constant"
+title: "DIARIO_AUTHOR_FILTERS"
+status: "observed"
+summary: "Exported constant from frontend/src/components/operator/cartella/DiarioPazienteTab.tsx."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/components/operator/cartella/DiarioPazienteTab.tsx'
-    symbol: 'DIARIO_AUTHOR_FILTERS'
-    line_start: '51'
-    line_end: '59'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx"
+    symbol: "DIARIO_AUTHOR_FILTERS"
+    line_start: "51"
+    line_end: "59"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/operator/cartella/DiarioPazienteTab.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

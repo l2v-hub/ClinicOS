@@ -1,28 +1,28 @@
 ---
-id: 'component.e2e.e2e.real-pdf.buildsyntheticpdf'
-kind: 'typescript-function'
-title: 'buildSyntheticPdf'
-status: 'observed'
-summary: 'Exported function from e2e/real-pdf.mjs.'
+id: "component.e2e.e2e.real-pdf.buildsyntheticpdf"
+kind: "typescript-function"
+title: "buildSyntheticPdf"
+status: "observed"
+summary: "Exported function from e2e/real-pdf.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'e2e/real-pdf.mjs'
-    symbol: 'buildSyntheticPdf'
-    line_start: '3'
-    line_end: '28'
-    confidence: 'observed'
+  - path: "e2e/real-pdf.mjs"
+    symbol: "buildSyntheticPdf"
+    line_start: "3"
+    line_end: "28"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos'
-    evidence: 'e2e/real-pdf.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos"
+    evidence: "e2e/real-pdf.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

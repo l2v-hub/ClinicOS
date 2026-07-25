@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.workflow.github.workflows.azure-static-web-apps-orange-hill-02285750f.yml'
-kind: 'ci-workflow'
-title: 'Azure Static Web Apps CI/CD'
-status: 'observed'
-summary: 'GitHub Actions workflow with jobs build_and_deploy_job, close_pull_request_job.'
+id: "component.repository.workflow.github.workflows.azure-static-web-apps-orange-hill-02285750f.yml"
+kind: "ci-workflow"
+title: "Azure Static Web Apps CI/CD"
+status: "observed"
+summary: "GitHub Actions workflow with jobs build_and_deploy_job, close_pull_request_job."
 bounded_contexts: []
 sources:
-  - path: '.github/workflows/azure-static-web-apps-orange-hill-02285750f.yml'
-    confidence: 'observed'
+  - path: ".github/workflows/azure-static-web-apps-orange-hill-02285750f.yml"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.github/workflows/azure-static-web-apps-orange-hill-02285750f.yml'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".github/workflows/azure-static-web-apps-orange-hill-02285750f.yml"
+    confidence: "observed"
 tags:
-  - 'github-actions'
-  - 'ci-cd'
+  - "github-actions"
+  - "ci-cd"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

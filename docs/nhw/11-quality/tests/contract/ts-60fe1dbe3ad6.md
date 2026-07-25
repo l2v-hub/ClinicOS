@@ -1,25 +1,25 @@
 ---
-id: 'test.repository.backend.src.ai.tests.runtime-contract.test.ts'
-kind: 'contract-test'
-title: 'runtime-contract.test.ts'
-status: 'observed'
-summary: 'node-test contract test surface.'
+id: "test.repository.backend.src.ai.tests.runtime-contract.test.ts"
+kind: "contract-test"
+title: "runtime-contract.test.ts"
+status: "observed"
+summary: "node-test contract test surface."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/ai/__tests__/runtime-contract.test.ts'
-    confidence: 'observed'
+  - path: "backend/src/ai/__tests__/runtime-contract.test.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/__tests__/runtime-contract.test.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/__tests__/runtime-contract.test.ts"
+    confidence: "observed"
 tags:
-  - 'test'
-  - 'contract'
-  - 'node-test'
+  - "test"
+  - "contract"
+  - "node-test"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

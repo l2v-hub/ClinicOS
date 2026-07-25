@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.patch-patients-by-param-108'
-kind: 'api-endpoint'
-title: 'PATCH /patients/:id'
-status: 'observed'
-summary: 'PATCH /patients/:id endpoint implemented by the express runtime.'
+id: "api.backend.patch-patients-by-param-108"
+kind: "api-endpoint"
+title: "PATCH /patients/:id"
+status: "observed"
+summary: "PATCH /patients/:id endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patients.ts'
-    symbol: 'router'
-    line_start: '816'
-    line_end: '877'
-    confidence: 'observed'
+  - path: "backend/src/routes/patients.ts"
+    symbol: "router"
+    line_start: "816"
+    line_end: "877"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.patient'
-    evidence: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patients.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.patient"
+    evidence: "backend/src/routes/patients.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'patch'
+  - "api"
+  - "express"
+  - "patch"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

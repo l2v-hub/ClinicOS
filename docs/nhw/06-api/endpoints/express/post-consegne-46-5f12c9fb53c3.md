@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.post-consegne-46'
-kind: 'api-endpoint'
-title: 'POST /consegne/'
-status: 'observed'
-summary: 'POST /consegne/ endpoint implemented by the express runtime.'
+id: "api.backend.post-consegne-46"
+kind: "api-endpoint"
+title: "POST /consegne/"
+status: "observed"
+summary: "POST /consegne/ endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/routes/consegne.ts'
-    symbol: 'consegneRouter'
-    line_start: '31'
-    line_end: '59'
-    confidence: 'observed'
+  - path: "backend/src/routes/consegne.ts"
+    symbol: "consegneRouter"
+    line_start: "31"
+    line_end: "59"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/consegne.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/consegne.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

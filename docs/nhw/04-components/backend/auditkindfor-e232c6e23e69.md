@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.voice.audit.auditkindfor'
-kind: 'typescript-function'
-title: 'auditKindFor'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/voice/audit.ts.'
+id: "component.backend.backend.src.ai.voice.audit.auditkindfor"
+kind: "typescript-function"
+title: "auditKindFor"
+status: "observed"
+summary: "Exported function from backend/src/ai/voice/audit.ts."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'backend/src/ai/voice/audit.ts'
-    symbol: 'auditKindFor'
-    line_start: '27'
-    line_end: '31'
-    confidence: 'observed'
+  - path: "backend/src/ai/voice/audit.ts"
+    symbol: "auditKindFor"
+    line_start: "27"
+    line_end: "31"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/voice/audit.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/voice/audit.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

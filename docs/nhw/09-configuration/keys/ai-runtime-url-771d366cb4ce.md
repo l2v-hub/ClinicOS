@@ -1,62 +1,62 @@
 ---
-id: 'config.discovered.ai-runtime-url'
-kind: 'configuration-key'
-title: 'AI_RUNTIME_URL'
-status: 'observed'
-summary: 'Configuration key AI_RUNTIME_URL; generated knowledge never includes its value.'
+id: "config.discovered.ai-runtime-url"
+kind: "configuration-key"
+title: "AI_RUNTIME_URL"
+status: "observed"
+summary: "Configuration key AI_RUNTIME_URL; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: '.github/workflows/ai-import-e2e.yml'
-    symbol: 'AI_RUNTIME_URL'
-    line_start: '49'
-    line_end: '49'
-    confidence: 'observed'
-  - path: 'backend/src/ai/assistant/config.ts'
-    symbol: 'AI_RUNTIME_URL'
-    line_start: '29'
-    line_end: '29'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/job-service.ts'
-    symbol: 'AI_RUNTIME_URL'
-    line_start: '8'
-    line_end: '8'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/README.md'
-    symbol: 'AI_RUNTIME_URL'
-    line_start: '79'
-    line_end: '79'
-    confidence: 'observed'
-  - path: 'docs/azure-backend-config-principles.md'
-    symbol: 'AI_RUNTIME_URL'
-    line_start: '25'
-    line_end: '25'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/ai-runtime-url-771d366cb4ce.md'
-    symbol: 'AI_RUNTIME_URL'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'docs/qa/requirement-processing-report.md'
-    symbol: 'AI_RUNTIME_URL'
-    line_start: '62'
-    line_end: '62'
-    confidence: 'observed'
-  - path: 'e2e/issue-127-verify.mjs'
-    symbol: 'AI_RUNTIME_URL'
-    line_start: '2'
-    line_end: '2'
-    confidence: 'observed'
+  - path: ".github/workflows/ai-import-e2e.yml"
+    symbol: "AI_RUNTIME_URL"
+    line_start: "49"
+    line_end: "49"
+    confidence: "observed"
+  - path: "backend/src/ai/assistant/config.ts"
+    symbol: "AI_RUNTIME_URL"
+    line_start: "29"
+    line_end: "29"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/job-service.ts"
+    symbol: "AI_RUNTIME_URL"
+    line_start: "8"
+    line_end: "8"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/README.md"
+    symbol: "AI_RUNTIME_URL"
+    line_start: "79"
+    line_end: "79"
+    confidence: "observed"
+  - path: "docs/azure-backend-config-principles.md"
+    symbol: "AI_RUNTIME_URL"
+    line_start: "25"
+    line_end: "25"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/ai-runtime-url-771d366cb4ce.md"
+    symbol: "AI_RUNTIME_URL"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "docs/qa/requirement-processing-report.md"
+    symbol: "AI_RUNTIME_URL"
+    line_start: "62"
+    line_end: "62"
+    confidence: "observed"
+  - path: "e2e/issue-127-verify.mjs"
+    symbol: "AI_RUNTIME_URL"
+    line_start: "2"
+    line_end: "2"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.github/workflows/ai-import-e2e.yml,backend/src/ai/assistant/config.ts,backend/src/ai/upload/job-service.ts,clinicos-ai-runtime/README.md,docs/azure-backend-config-principles.md,docs/nhw/09-configuration/keys/ai-runtime-url-771d366cb4ce.md,docs/qa/requirement-processing-report.md,e2e/issue-127-verify.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".github/workflows/ai-import-e2e.yml,backend/src/ai/assistant/config.ts,backend/src/ai/upload/job-service.ts,clinicos-ai-runtime/README.md,docs/azure-backend-config-principles.md,docs/nhw/09-configuration/keys/ai-runtime-url-771d366cb4ce.md,docs/qa/requirement-processing-report.md,e2e/issue-127-verify.mjs"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

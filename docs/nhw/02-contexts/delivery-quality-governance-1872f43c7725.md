@@ -1,27 +1,27 @@
 ---
-id: 'context.delivery-quality-governance'
-kind: 'bounded-context'
-title: 'Delivery, Quality, and Governance'
-status: 'inferred'
-summary: 'Delivery, Quality, and Governance bounded context reconstructed from executable ClinicOS sources.'
+id: "context.delivery-quality-governance"
+kind: "bounded-context"
+title: "Delivery, Quality, and Governance"
+status: "inferred"
+summary: "Delivery, Quality, and Governance bounded context reconstructed from executable ClinicOS sources."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'prisma/schema.prisma'
-    line_start: '535'
-    line_end: '551'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    line_start: "535"
+    line_end: "551"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'bounded-context'
+  - "bounded-context"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership."
 ---
 
 ## Question Answered

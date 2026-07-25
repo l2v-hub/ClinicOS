@@ -1,92 +1,92 @@
 ---
-id: 'flow.clinical-document-access'
-kind: 'runtime-flow'
-title: 'Protected clinical document access'
-status: 'inferred'
-summary: 'Protected clinical document access workflow across ClinicOS components.'
+id: "flow.clinical-document-access"
+kind: "runtime-flow"
+title: "Protected clinical document access"
+status: "inferred"
+summary: "Protected clinical document access workflow across ClinicOS components."
 bounded_contexts:
-  - 'context.clinical-record'
+  - "context.clinical-record"
 sources:
-  - path: 'backend/src/routes/patient-documents.ts'
-    line_start: '194'
-    line_end: '201'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-documents.ts'
-    line_start: '204'
-    line_end: '228'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-documents.ts'
-    line_start: '153'
-    line_end: '191'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/patient-documents.ts'
-    symbol: 'createPatientDocument'
-    line_start: '71'
-    line_end: '111'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/patient-documents.ts'
-    symbol: 'getPatientDocumentContent'
-    line_start: '134'
-    line_end: '148'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/patient-documents.ts'
-    symbol: 'listPatientDocuments'
-    line_start: '114'
-    line_end: '131'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/patient-documents.ts'
-    symbol: 'persistImportDocuments'
-    line_start: '28'
-    line_end: '64'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/patient-documents.ts'
-    symbol: 'PublicPatientDocument'
-    line_start: '12'
-    line_end: '22'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-documents.ts"
+    line_start: "194"
+    line_end: "201"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-documents.ts"
+    line_start: "204"
+    line_end: "228"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-documents.ts"
+    line_start: "153"
+    line_end: "191"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/patient-documents.ts"
+    symbol: "createPatientDocument"
+    line_start: "71"
+    line_end: "111"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/patient-documents.ts"
+    symbol: "getPatientDocumentContent"
+    line_start: "134"
+    line_end: "148"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/patient-documents.ts"
+    symbol: "listPatientDocuments"
+    line_start: "114"
+    line_end: "131"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/patient-documents.ts"
+    symbol: "persistImportDocuments"
+    line_start: "28"
+    line_end: "64"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/patient-documents.ts"
+    symbol: "PublicPatientDocument"
+    line_start: "12"
+    line_end: "22"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-patients-by-param-documents-91'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-patients-by-param-documents-by-param-content-92'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.post-patients-by-param-documents-90'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.upload.patient-documents.createpatientdocument'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.upload.patient-documents.getpatientdocumentcontent'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.upload.patient-documents.listpatientdocuments'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.upload.patient-documents.persistimportdocuments'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.upload.patient-documents.publicpatientdocument'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-patients-by-param-documents-91"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-patients-by-param-documents-by-param-content-92"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.post-patients-by-param-documents-90"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.upload.patient-documents.createpatientdocument"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.upload.patient-documents.getpatientdocumentcontent"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.upload.patient-documents.listpatientdocuments"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.upload.patient-documents.persistimportdocuments"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.upload.patient-documents.publicpatientdocument"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/routes/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts,backend/src/ai/upload/patient-documents.ts"
+    confidence: "inferred"
 tags:
-  - 'runtime-flow'
+  - "runtime-flow"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
 ## Question Answered
@@ -158,13 +158,13 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Sequence
 
-| Step | Actor            | Operation                                                                             | State change               | Failure branch                  |
-| ---- | ---------------- | ------------------------------------------------------------------------------------- | -------------------------- | ------------------------------- |
-| 1    | Trigger actor    | `api.backend.get-patients-by-param-documents-91`                                      | Defined by cited component | Owning component error contract |
-| 2    | ClinicOS runtime | `api.backend.get-patients-by-param-documents-by-param-content-92`                     | Defined by cited component | Owning component error contract |
-| 3    | ClinicOS runtime | `api.backend.post-patients-by-param-documents-90`                                     | Defined by cited component | Owning component error contract |
-| 4    | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.createpatientdocument`     | Defined by cited component | Owning component error contract |
-| 5    | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.getpatientdocumentcontent` | Defined by cited component | Owning component error contract |
-| 6    | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.listpatientdocuments`      | Defined by cited component | Owning component error contract |
-| 7    | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.persistimportdocuments`    | Defined by cited component | Owning component error contract |
-| 8    | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.publicpatientdocument`     | Defined by cited component | Owning component error contract |
+| Step | Actor | Operation | State change | Failure branch |
+| --- | --- | --- | --- | --- |
+| 1 | Trigger actor | `api.backend.get-patients-by-param-documents-91` | Defined by cited component | Owning component error contract |
+| 2 | ClinicOS runtime | `api.backend.get-patients-by-param-documents-by-param-content-92` | Defined by cited component | Owning component error contract |
+| 3 | ClinicOS runtime | `api.backend.post-patients-by-param-documents-90` | Defined by cited component | Owning component error contract |
+| 4 | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.createpatientdocument` | Defined by cited component | Owning component error contract |
+| 5 | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.getpatientdocumentcontent` | Defined by cited component | Owning component error contract |
+| 6 | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.listpatientdocuments` | Defined by cited component | Owning component error contract |
+| 7 | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.persistimportdocuments` | Defined by cited component | Owning component error contract |
+| 8 | ClinicOS runtime | `component.backend.backend.src.ai.upload.patient-documents.publicpatientdocument` | Defined by cited component | Owning component error contract |

@@ -1,23 +1,23 @@
 ---
-id: 'integration.browser-tesseract-ocr'
-kind: 'browser-integration'
-title: 'Browser-side Tesseract OCR'
-status: 'observed'
-summary: 'Legacy discharge-letter import can run Tesseract.js in the browser and send recognized text to the backend.'
+id: "integration.browser-tesseract-ocr"
+kind: "browser-integration"
+title: "Browser-side Tesseract OCR"
+status: "observed"
+summary: "Legacy discharge-letter import can run Tesseract.js in the browser and send recognized text to the backend."
 bounded_contexts: []
 sources:
-  - path: 'frontend/src/components/shared/DischargeLetterImport.tsx'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/DischargeLetterImport.tsx"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/DischargeLetterImport.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/DischargeLetterImport.tsx"
+    confidence: "observed"
 tags:
-  - 'browser-integration'
+  - "browser-integration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

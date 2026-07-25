@@ -1,27 +1,27 @@
 ---
-id: 'test.governance.agent-team-protocol'
-kind: 'governance-protocol'
-title: 'Claude development and Codex QA protocol'
-status: 'observed'
-summary: 'Agent-team protocol separates development work, independent QA, remediation, and evidence-bound closure.'
+id: "test.governance.agent-team-protocol"
+kind: "governance-protocol"
+title: "Claude development and Codex QA protocol"
+status: "observed"
+summary: "Agent-team protocol separates development work, independent QA, remediation, and evidence-bound closure."
 bounded_contexts: []
 sources:
-  - path: 'agent-team/src/core/protocol.mjs'
-    confidence: 'observed'
-  - path: 'agent-team/src/workers/claude-development-worker.mjs'
-    confidence: 'observed'
-  - path: 'agent-team/src/workers/codex-qa-worker.mjs'
-    confidence: 'observed'
+  - path: "agent-team/src/core/protocol.mjs"
+    confidence: "observed"
+  - path: "agent-team/src/workers/claude-development-worker.mjs"
+    confidence: "observed"
+  - path: "agent-team/src/workers/codex-qa-worker.mjs"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.agent-team'
-    evidence: 'agent-team/src/core/protocol.mjs,agent-team/src/workers/claude-development-worker.mjs,agent-team/src/workers/codex-qa-worker.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.agent-team"
+    evidence: "agent-team/src/core/protocol.mjs,agent-team/src/workers/claude-development-worker.mjs,agent-team/src/workers/codex-qa-worker.mjs"
+    confidence: "observed"
 tags:
-  - 'governance-protocol'
+  - "governance-protocol"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

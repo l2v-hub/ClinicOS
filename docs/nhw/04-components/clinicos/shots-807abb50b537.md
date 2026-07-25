@@ -1,28 +1,28 @@
 ---
-id: 'component.e2e.e2e.req027-sections-fixture.shots'
-kind: 'typescript-constant'
-title: 'SHOTS'
-status: 'observed'
-summary: 'Exported constant from e2e/req027-sections-fixture.mjs.'
+id: "component.e2e.e2e.req027-sections-fixture.shots"
+kind: "typescript-constant"
+title: "SHOTS"
+status: "observed"
+summary: "Exported constant from e2e/req027-sections-fixture.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'e2e/req027-sections-fixture.mjs'
-    symbol: 'SHOTS'
-    line_start: '208'
-    line_end: '219'
-    confidence: 'observed'
+  - path: "e2e/req027-sections-fixture.mjs"
+    symbol: "SHOTS"
+    line_start: "208"
+    line_end: "219"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos'
-    evidence: 'e2e/req027-sections-fixture.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos"
+    evidence: "e2e/req027-sections-fixture.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.src.src.components.layout.layout'
-kind: 'typescript-react-component'
-title: 'Layout'
-status: 'observed'
-summary: 'Exported react-component from src/components/Layout.tsx.'
+id: "component.src.src.components.layout.layout"
+kind: "typescript-react-component"
+title: "Layout"
+status: "observed"
+summary: "Exported react-component from src/components/Layout.tsx."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'src/components/Layout.tsx'
-    symbol: 'Layout'
-    line_start: '3'
-    line_end: '44'
-    confidence: 'observed'
+  - path: "src/components/Layout.tsx"
+    symbol: "Layout"
+    line_start: "3"
+    line_end: "44"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos'
-    evidence: 'src/components/Layout.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos"
+    evidence: "src/components/Layout.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'react-component'
+  - "typescript"
+  - "react-component"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

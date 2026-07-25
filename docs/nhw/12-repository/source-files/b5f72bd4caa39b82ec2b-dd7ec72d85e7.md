@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.b5f72bd4caa39b82ec2b'
-kind: 'repository-source'
-title: 'project-memory.md'
-status: 'declared'
-summary: 'Repository source path .openclode/project-memory.md classified as narrative-source.'
+id: "component.repository.source.b5f72bd4caa39b82ec2b"
+kind: "repository-source"
+title: "project-memory.md"
+status: "declared"
+summary: "Repository source path .openclode/project-memory.md classified as narrative-source."
 bounded_contexts: []
 sources:
-  - path: '.openclode/project-memory.md'
-    confidence: 'declared'
+  - path: ".openclode/project-memory.md"
+    confidence: "declared"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.openclode/project-memory.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".openclode/project-memory.md"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'narrative-source'
+  - "repository-source"
+  - "narrative-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

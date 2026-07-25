@@ -1,25 +1,25 @@
 ---
-id: 'integration.anthropic-ai'
-kind: 'model-provider-integration'
-title: 'Anthropic model provider'
-status: 'observed'
-summary: 'AI runtime model factory exposes the Anthropic provider through the common provider contract.'
+id: "integration.anthropic-ai"
+kind: "model-provider-integration"
+title: "Anthropic model provider"
+status: "observed"
+summary: "AI runtime model factory exposes the Anthropic provider through the common provider contract."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/factory.py'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/factory.py"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/factory.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/factory.py"
+    confidence: "observed"
 tags:
-  - 'model-provider-integration'
+  - "model-provider-integration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

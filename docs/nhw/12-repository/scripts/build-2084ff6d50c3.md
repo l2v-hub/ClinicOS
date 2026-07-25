@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.package-script.package.json.build'
-kind: 'package-script'
-title: 'clinicos:build'
-status: 'observed'
-summary: 'Package script build executes npm run build:frontend && npm run build:backend.'
+id: "component.repository.package-script.package.json.build"
+kind: "package-script"
+title: "clinicos:build"
+status: "observed"
+summary: "Package script build executes npm run build:frontend && npm run build:backend."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    symbol: 'build'
-    confidence: 'observed'
+  - path: "package.json"
+    symbol: "build"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "package.json"
+    confidence: "observed"
 tags:
-  - 'package-script'
+  - "package-script"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

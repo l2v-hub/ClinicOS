@@ -1,28 +1,28 @@
 ---
-id: 'component.scripts.scripts.nhw.lib.knowledge-compiler.buildoperationalknowledge'
-kind: 'typescript-function'
-title: 'buildOperationalKnowledge'
-status: 'observed'
-summary: 'Exported function from scripts/nhw/lib/knowledge-compiler.mjs.'
+id: "component.scripts.scripts.nhw.lib.knowledge-compiler.buildoperationalknowledge"
+kind: "typescript-function"
+title: "buildOperationalKnowledge"
+status: "observed"
+summary: "Exported function from scripts/nhw/lib/knowledge-compiler.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'scripts/nhw/lib/knowledge-compiler.mjs'
-    symbol: 'buildOperationalKnowledge'
-    line_start: '1687'
-    line_end: '1861'
-    confidence: 'observed'
+  - path: "scripts/nhw/lib/knowledge-compiler.mjs"
+    symbol: "buildOperationalKnowledge"
+    line_start: "1687"
+    line_end: "1861"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'scripts/nhw/lib/knowledge-compiler.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "scripts/nhw/lib/knowledge-compiler.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

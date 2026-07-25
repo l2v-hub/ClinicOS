@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.delete-patients-by-param-diary-by-param-89'
-kind: 'api-endpoint'
-title: 'DELETE /patients/:patientId/diary/:entryId'
-status: 'observed'
-summary: 'DELETE /patients/:patientId/diary/:entryId endpoint implemented by the express runtime.'
+id: "api.backend.delete-patients-by-param-diary-by-param-89"
+kind: "api-endpoint"
+title: "DELETE /patients/:patientId/diary/:entryId"
+status: "observed"
+summary: "DELETE /patients/:patientId/diary/:entryId endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patient-diary.ts'
-    symbol: 'router'
-    line_start: '140'
-    line_end: '156'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-diary.ts"
+    symbol: "router"
+    line_start: "140"
+    line_end: "156"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-diary.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.patientdiaryentry'
-    evidence: 'backend/src/routes/patient-diary.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-diary.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.patientdiaryentry"
+    evidence: "backend/src/routes/patient-diary.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'delete'
+  - "api"
+  - "express"
+  - "delete"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

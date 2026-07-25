@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.aa7a6c1c0c13c1b32ef0'
-kind: 'repository-source'
-title: 'NarrativeSectionsTab.tsx'
-status: 'observed'
-summary: 'Repository source path frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx classified as semantic-source.'
+id: "component.repository.source.aa7a6c1c0c13c1b32ef0"
+kind: "repository-source"
+title: "NarrativeSectionsTab.tsx"
+status: "observed"
+summary: "Repository source path frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx classified as semantic-source."
 bounded_contexts: []
 sources:
-  - path: 'frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'semantic-source'
+  - "repository-source"
+  - "semantic-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

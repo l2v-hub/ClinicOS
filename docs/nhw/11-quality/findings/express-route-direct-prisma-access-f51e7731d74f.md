@@ -1,359 +1,359 @@
 ---
-id: 'finding.coupling.express-route-direct-prisma-access'
-kind: 'architectural-finding'
-title: 'Express routes with direct Prisma access'
-status: 'observed'
-summary: '54 Express endpoints invoke Prisma directly from route handlers.'
+id: "finding.coupling.express-route-direct-prisma-access"
+kind: "architectural-finding"
+title: "Express routes with direct Prisma access"
+status: "observed"
+summary: "54 Express endpoints invoke Prisma directly from route handlers."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '458'
-    line_end: '485'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '293'
-    line_end: '325'
-    confidence: 'observed'
-  - path: 'backend/src/routes/consegne.ts'
-    symbol: 'consegneRouter'
-    line_start: '107'
-    line_end: '122'
-    confidence: 'observed'
-  - path: 'backend/src/routes/note.ts'
-    symbol: 'noteRouter'
-    line_start: '98'
-    line_end: '113'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    symbol: 'router'
-    line_start: '889'
-    line_end: '914'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-diary.ts'
-    symbol: 'router'
-    line_start: '140'
-    line_end: '156'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'patientAssignmentRouter'
-    line_start: '643'
-    line_end: '662'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-therapies.ts'
-    symbol: 'router'
-    line_start: '169'
-    line_end: '188'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '90'
-    line_end: '128'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '131'
-    line_end: '142'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '205'
-    line_end: '221'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '332'
-    line_end: '356'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '43'
-    line_end: '87'
-    confidence: 'observed'
-  - path: 'backend/src/routes/ai-audit.ts'
-    symbol: 'auditRouter'
-    line_start: '29'
-    line_end: '69'
-    confidence: 'observed'
-  - path: 'backend/src/routes/consegne.ts'
-    symbol: 'consegneRouter'
-    line_start: '18'
-    line_end: '28'
-    confidence: 'observed'
-  - path: 'backend/src/routes/note.ts'
-    symbol: 'noteRouter'
-    line_start: '14'
-    line_end: '22'
-    confidence: 'observed'
-  - path: 'backend/src/routes/operators.ts'
-    symbol: 'operatorsRouter'
-    line_start: '58'
-    line_end: '72'
-    confidence: 'observed'
-  - path: 'backend/src/routes/operators.ts'
-    symbol: 'operatorsRouter'
-    line_start: '77'
-    line_end: '90'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-intake.ts'
-    symbol: 'router'
-    line_start: '112'
-    line_end: '136'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    symbol: 'router'
-    line_start: '7'
-    line_end: '18'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    symbol: 'router'
-    line_start: '28'
-    line_end: '41'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    symbol: 'router'
-    line_start: '918'
-    line_end: '938'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-diary.ts'
-    symbol: 'router'
-    line_start: '8'
-    line_end: '33'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-diary.ts'
-    symbol: 'router'
-    line_start: '79'
-    line_end: '94'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-therapies.ts'
-    symbol: 'router'
-    line_start: '191'
-    line_end: '217'
-    confidence: 'observed'
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "458"
+    line_end: "485"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "293"
+    line_end: "325"
+    confidence: "observed"
+  - path: "backend/src/routes/consegne.ts"
+    symbol: "consegneRouter"
+    line_start: "107"
+    line_end: "122"
+    confidence: "observed"
+  - path: "backend/src/routes/note.ts"
+    symbol: "noteRouter"
+    line_start: "98"
+    line_end: "113"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    symbol: "router"
+    line_start: "889"
+    line_end: "914"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-diary.ts"
+    symbol: "router"
+    line_start: "140"
+    line_end: "156"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "patientAssignmentRouter"
+    line_start: "643"
+    line_end: "662"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-therapies.ts"
+    symbol: "router"
+    line_start: "169"
+    line_end: "188"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "90"
+    line_end: "128"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "131"
+    line_end: "142"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "205"
+    line_end: "221"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "332"
+    line_end: "356"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "43"
+    line_end: "87"
+    confidence: "observed"
+  - path: "backend/src/routes/ai-audit.ts"
+    symbol: "auditRouter"
+    line_start: "29"
+    line_end: "69"
+    confidence: "observed"
+  - path: "backend/src/routes/consegne.ts"
+    symbol: "consegneRouter"
+    line_start: "18"
+    line_end: "28"
+    confidence: "observed"
+  - path: "backend/src/routes/note.ts"
+    symbol: "noteRouter"
+    line_start: "14"
+    line_end: "22"
+    confidence: "observed"
+  - path: "backend/src/routes/operators.ts"
+    symbol: "operatorsRouter"
+    line_start: "58"
+    line_end: "72"
+    confidence: "observed"
+  - path: "backend/src/routes/operators.ts"
+    symbol: "operatorsRouter"
+    line_start: "77"
+    line_end: "90"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-intake.ts"
+    symbol: "router"
+    line_start: "112"
+    line_end: "136"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    symbol: "router"
+    line_start: "7"
+    line_end: "18"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    symbol: "router"
+    line_start: "28"
+    line_end: "41"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    symbol: "router"
+    line_start: "918"
+    line_end: "938"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-diary.ts"
+    symbol: "router"
+    line_start: "8"
+    line_end: "33"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-diary.ts"
+    symbol: "router"
+    line_start: "79"
+    line_end: "94"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-therapies.ts"
+    symbol: "router"
+    line_start: "191"
+    line_end: "217"
+    confidence: "observed"
 relations:
-  - type: 'documents'
-    target: 'api.backend.delete-admin-beds-by-param-12'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.delete-admin-rooms-by-param-8'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.delete-consegne-by-param-48'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.delete-notes-by-param-79'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.delete-patients-by-param-109'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.delete-patients-by-param-diary-by-param-89'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.delete-patients-by-param-room-assignments-by-param-16'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.delete-patients-by-param-therapies-by-param-100'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-admin-beds-available-3'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-admin-rooms-4'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-admin-rooms-by-param-6'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-admin-rooms-by-param-beds-9'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-admin-rooms-occupancy-2'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-ai-audit-21'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-consegne-45'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-notes-76'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-operators-80'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-operators-schedules-81'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patient-intake-documents-by-param-96'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patients-102'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patients-by-param-104'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patients-by-param-cartella-110'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patients-by-param-diary-85'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patients-by-param-diary-by-param-87'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patients-by-param-medication-administrations-101'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patients-by-param-room-assignments-13'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-patients-by-param-therapies-97'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.get-therapy-slots-112'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.patch-patients-by-param-108'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-admin-rooms-5'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-admin-rooms-by-param-beds-10'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-notes-77'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-operators-83'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patient-intake-discharge-letter-apply-95'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patient-intake-discharge-letter-extract-94'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patient-intake-discharge-letter-upload-93'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patients-107'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patients-by-param-diary-86'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patients-by-param-room-assignments-14'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patients-by-param-therapies-98'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patients-demo-setup-106'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-patients-seed-105'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-therapy-slots-confirm-113'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.post-therapy-slots-not-administered-114'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-admin-beds-by-param-11'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-admin-rooms-by-param-7'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-consegne-by-param-47'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-notes-by-param-78'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-operators-by-param-84'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-operators-by-param-schedule-82'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-patients-by-param-cartella-111'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-patients-by-param-diary-by-param-88'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-patients-by-param-room-assignments-by-param-15'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'documents'
-    target: 'api.backend.put-patients-by-param-therapies-by-param-99'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
+  - type: "documents"
+    target: "api.backend.delete-admin-beds-by-param-12"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.delete-admin-rooms-by-param-8"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.delete-consegne-by-param-48"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.delete-notes-by-param-79"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.delete-patients-by-param-109"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.delete-patients-by-param-diary-by-param-89"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.delete-patients-by-param-room-assignments-by-param-16"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.delete-patients-by-param-therapies-by-param-100"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-admin-beds-available-3"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-admin-rooms-4"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-admin-rooms-by-param-6"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-admin-rooms-by-param-beds-9"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-admin-rooms-occupancy-2"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-ai-audit-21"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-consegne-45"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-notes-76"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-operators-80"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-operators-schedules-81"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patient-intake-documents-by-param-96"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patients-102"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patients-by-param-104"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patients-by-param-cartella-110"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patients-by-param-diary-85"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patients-by-param-diary-by-param-87"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patients-by-param-medication-administrations-101"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patients-by-param-room-assignments-13"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-patients-by-param-therapies-97"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.get-therapy-slots-112"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.patch-patients-by-param-108"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-admin-rooms-5"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-admin-rooms-by-param-beds-10"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-notes-77"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-operators-83"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patient-intake-discharge-letter-apply-95"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patient-intake-discharge-letter-extract-94"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patient-intake-discharge-letter-upload-93"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patients-107"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patients-by-param-diary-86"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patients-by-param-room-assignments-14"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patients-by-param-therapies-98"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patients-demo-setup-106"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-patients-seed-105"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-therapy-slots-confirm-113"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.post-therapy-slots-not-administered-114"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-admin-beds-by-param-11"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-admin-rooms-by-param-7"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-consegne-by-param-47"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-notes-by-param-78"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-operators-by-param-84"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-operators-by-param-schedule-82"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-patients-by-param-cartella-111"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-patients-by-param-diary-by-param-88"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-patients-by-param-room-assignments-by-param-15"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "documents"
+    target: "api.backend.put-patients-by-param-therapies-by-param-99"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/patient-therapies.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-audit.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/patient-intake.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-diary.ts,backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
 tags:
-  - 'hidden-coupling'
-  - 'persistence'
+  - "hidden-coupling"
+  - "persistence"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

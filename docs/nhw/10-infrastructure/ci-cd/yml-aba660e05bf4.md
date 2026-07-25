@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.workflow.github.workflows.set-runtime-model.yml'
-kind: 'ci-workflow'
-title: 'Set Runtime Agent Model'
-status: 'observed'
-summary: 'GitHub Actions workflow with jobs set-and-deploy.'
+id: "component.repository.workflow.github.workflows.set-runtime-model.yml"
+kind: "ci-workflow"
+title: "Set Runtime Agent Model"
+status: "observed"
+summary: "GitHub Actions workflow with jobs set-and-deploy."
 bounded_contexts: []
 sources:
-  - path: '.github/workflows/set-runtime-model.yml'
-    confidence: 'observed'
+  - path: ".github/workflows/set-runtime-model.yml"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.github/workflows/set-runtime-model.yml'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".github/workflows/set-runtime-model.yml"
+    confidence: "observed"
 tags:
-  - 'github-actions'
-  - 'ci-cd'
+  - "github-actions"
+  - "ci-cd"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

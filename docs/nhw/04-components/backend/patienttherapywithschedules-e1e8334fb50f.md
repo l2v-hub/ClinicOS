@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.therapies.therapy-create.patienttherapywithschedules'
-kind: 'typescript-type-alias'
-title: 'PatientTherapyWithSchedules'
-status: 'observed'
-summary: 'Exported type-alias from backend/src/therapies/therapy-create.ts.'
+id: "component.backend.backend.src.therapies.therapy-create.patienttherapywithschedules"
+kind: "typescript-type-alias"
+title: "PatientTherapyWithSchedules"
+status: "observed"
+summary: "Exported type-alias from backend/src/therapies/therapy-create.ts."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/therapies/therapy-create.ts'
-    symbol: 'PatientTherapyWithSchedules'
-    line_start: '23'
-    line_end: '25'
-    confidence: 'observed'
+  - path: "backend/src/therapies/therapy-create.ts"
+    symbol: "PatientTherapyWithSchedules"
+    line_start: "23"
+    line_end: "25"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/therapies/therapy-create.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/therapies/therapy-create.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'type-alias'
+  - "typescript"
+  - "type-alias"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

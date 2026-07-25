@@ -1,26 +1,26 @@
 ---
-id: 'config.discovered.ai-provider-timeout-seconds'
-kind: 'configuration-key'
-title: 'AI_PROVIDER_TIMEOUT_SECONDS'
-status: 'observed'
-summary: 'Configuration key AI_PROVIDER_TIMEOUT_SECONDS; generated knowledge never includes its value.'
+id: "config.discovered.ai-provider-timeout-seconds"
+kind: "configuration-key"
+title: "AI_PROVIDER_TIMEOUT_SECONDS"
+status: "observed"
+summary: "Configuration key AI_PROVIDER_TIMEOUT_SECONDS; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/.env.example'
-    symbol: 'AI_PROVIDER_TIMEOUT_SECONDS'
-    line_start: '47'
-    line_end: '47'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/.env.example"
+    symbol: "AI_PROVIDER_TIMEOUT_SECONDS"
+    line_start: "47"
+    line_end: "47"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'clinicos-ai-runtime/.env.example'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "clinicos-ai-runtime/.env.example"
+    confidence: "observed"
 tags:
-  - 'configuration'
+  - "configuration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

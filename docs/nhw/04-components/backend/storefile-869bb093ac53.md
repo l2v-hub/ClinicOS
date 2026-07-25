@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.upload.storage.storefile'
-kind: 'typescript-function'
-title: 'storeFile'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/upload/storage.ts.'
+id: "component.backend.backend.src.ai.upload.storage.storefile"
+kind: "typescript-function"
+title: "storeFile"
+status: "observed"
+summary: "Exported function from backend/src/ai/upload/storage.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/upload/storage.ts'
-    symbol: 'storeFile'
-    line_start: '21'
-    line_end: '31'
-    confidence: 'observed'
+  - path: "backend/src/ai/upload/storage.ts"
+    symbol: "storeFile"
+    line_start: "21"
+    line_end: "31"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/upload/storage.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/upload/storage.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

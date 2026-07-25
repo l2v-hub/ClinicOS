@@ -1,36 +1,36 @@
 ---
-id: 'data.migration.20260510160953-add-rooms-beds-assignments'
-kind: 'database-migration'
-title: '20260510160953_add_rooms_beds_assignments'
-status: 'observed'
-summary: 'Ordered SQL migration 20260510160953_add_rooms_beds_assignments.'
+id: "data.migration.20260510160953-add-rooms-beds-assignments"
+kind: "database-migration"
+title: "20260510160953_add_rooms_beds_assignments"
+status: "observed"
+summary: "Ordered SQL migration 20260510160953_add_rooms_beds_assignments."
 bounded_contexts: []
 sources:
-  - path: 'prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql'
-    confidence: 'observed'
+  - path: "prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.bed'
-    evidence: 'prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.patientroomassignment'
-    evidence: 'prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.room'
-    evidence: 'prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.bed"
+    evidence: "prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.patientroomassignment"
+    evidence: "prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.room"
+    evidence: "prisma/migrations/20260510160953_add_rooms_beds_assignments/migration.sql"
+    confidence: "observed"
 tags:
-  - 'migration'
-  - 'non-destructive'
+  - "migration"
+  - "non-destructive"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

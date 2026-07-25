@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.sources.narrativesource'
-kind: 'typescript-function'
-title: 'narrativeSource'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/gateway/sources.ts.'
+id: "component.backend.backend.src.ai.gateway.sources.narrativesource"
+kind: "typescript-function"
+title: "narrativeSource"
+status: "observed"
+summary: "Exported function from backend/src/ai/gateway/sources.ts."
 bounded_contexts:
-  - 'context.clinical-record'
+  - "context.clinical-record"
 sources:
-  - path: 'backend/src/ai/gateway/sources.ts'
-    symbol: 'narrativeSource'
-    line_start: '14'
-    line_end: '30'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/sources.ts"
+    symbol: "narrativeSource"
+    line_start: "14"
+    line_end: "30"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/sources.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/sources.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,37 +1,37 @@
 ---
-id: 'api.backend.delete-patients-by-param-109'
-kind: 'api-endpoint'
-title: 'DELETE /patients/:id'
-status: 'observed'
-summary: 'DELETE /patients/:id endpoint implemented by the express runtime.'
+id: "api.backend.delete-patients-by-param-109"
+kind: "api-endpoint"
+title: "DELETE /patients/:id"
+status: "observed"
+summary: "DELETE /patients/:id endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patients.ts'
-    symbol: 'router'
-    line_start: '889'
-    line_end: '914'
-    confidence: 'observed'
+  - path: "backend/src/routes/patients.ts"
+    symbol: "router"
+    line_start: "889"
+    line_end: "914"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.importjob'
-    evidence: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.patient'
-    evidence: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patients.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.importjob"
+    evidence: "backend/src/routes/patients.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.patient"
+    evidence: "backend/src/routes/patients.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'delete'
+  - "api"
+  - "express"
+  - "delete"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

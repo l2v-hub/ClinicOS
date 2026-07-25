@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.lib.patientsort.sortpazienti'
-kind: 'typescript-function'
-title: 'sortPazienti'
-status: 'observed'
-summary: 'Exported function from frontend/src/lib/patientSort.ts.'
+id: "component.frontend.frontend.src.lib.patientsort.sortpazienti"
+kind: "typescript-function"
+title: "sortPazienti"
+status: "observed"
+summary: "Exported function from frontend/src/lib/patientSort.ts."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'frontend/src/lib/patientSort.ts'
-    symbol: 'sortPazienti'
-    line_start: '48'
-    line_end: '52'
-    confidence: 'observed'
+  - path: "frontend/src/lib/patientSort.ts"
+    symbol: "sortPazienti"
+    line_start: "48"
+    line_end: "52"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/lib/patientSort.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/lib/patientSort.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,25 +1,25 @@
 ---
-id: 'runtime.ai-runtime.fastapi-startup'
-kind: 'runtime-startup'
-title: 'FastAPI runtime startup'
-status: 'observed'
-summary: 'Python entry point starts Uvicorn and exposes the FastAPI application and health contract.'
+id: "runtime.ai-runtime.fastapi-startup"
+kind: "runtime-startup"
+title: "FastAPI runtime startup"
+status: "observed"
+summary: "Python entry point starts Uvicorn and exposes the FastAPI application and health contract."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/main.py'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/main.py"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/main.py,clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/main.py,clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 tags:
-  - 'runtime-startup'
+  - "runtime-startup"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

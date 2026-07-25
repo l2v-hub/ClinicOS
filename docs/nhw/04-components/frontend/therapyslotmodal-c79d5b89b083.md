@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.operator.therapyslotmodal.therapyslotmodal'
-kind: 'typescript-react-component'
-title: 'TherapySlotModal'
-status: 'observed'
-summary: 'Exported react-component from frontend/src/components/operator/TherapySlotModal.tsx.'
+id: "component.frontend.frontend.src.components.operator.therapyslotmodal.therapyslotmodal"
+kind: "typescript-react-component"
+title: "TherapySlotModal"
+status: "observed"
+summary: "Exported react-component from frontend/src/components/operator/TherapySlotModal.tsx."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/components/operator/TherapySlotModal.tsx'
-    symbol: 'TherapySlotModal'
-    line_start: '46'
-    line_end: '229'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/TherapySlotModal.tsx"
+    symbol: "TherapySlotModal"
+    line_start: "46"
+    line_end: "229"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/operator/TherapySlotModal.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/operator/TherapySlotModal.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'react-component'
+  - "typescript"
+  - "react-component"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.services.getpatientappointments'
-kind: 'typescript-function'
-title: 'getPatientAppointments'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/gateway/services.ts.'
+id: "component.backend.backend.src.ai.gateway.services.getpatientappointments"
+kind: "typescript-function"
+title: "getPatientAppointments"
+status: "observed"
+summary: "Exported function from backend/src/ai/gateway/services.ts."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/ai/gateway/services.ts'
-    symbol: 'getPatientAppointments'
-    line_start: '332'
-    line_end: '358'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/services.ts"
+    symbol: "getPatientAppointments"
+    line_start: "332"
+    line_end: "358"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/services.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/services.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

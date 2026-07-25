@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.audit.auditaction'
-kind: 'typescript-type-alias'
-title: 'AuditAction'
-status: 'observed'
-summary: 'Exported type-alias from backend/src/ai/audit.ts.'
+id: "component.backend.backend.src.ai.audit.auditaction"
+kind: "typescript-type-alias"
+title: "AuditAction"
+status: "observed"
+summary: "Exported type-alias from backend/src/ai/audit.ts."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'backend/src/ai/audit.ts'
-    symbol: 'AuditAction'
-    line_start: '7'
-    line_end: '19'
-    confidence: 'observed'
+  - path: "backend/src/ai/audit.ts"
+    symbol: "AuditAction"
+    line_start: "7"
+    line_end: "19"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/audit.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/audit.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'type-alias'
+  - "typescript"
+  - "type-alias"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

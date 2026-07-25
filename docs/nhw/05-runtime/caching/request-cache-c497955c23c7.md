@@ -1,23 +1,23 @@
 ---
-id: 'runtime.frontend.request-cache'
-kind: 'runtime-cache'
-title: 'Frontend GET request cache'
-status: 'observed'
-summary: 'Browser request helper deduplicates in-flight GET calls and caches responses for a bounded TTL.'
+id: "runtime.frontend.request-cache"
+kind: "runtime-cache"
+title: "Frontend GET request cache"
+status: "observed"
+summary: "Browser request helper deduplicates in-flight GET calls and caches responses for a bounded TTL."
 bounded_contexts: []
 sources:
-  - path: 'frontend/src/lib/cachedFetch.ts'
-    confidence: 'observed'
+  - path: "frontend/src/lib/cachedFetch.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/lib/cachedFetch.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/lib/cachedFetch.ts"
+    confidence: "observed"
 tags:
-  - 'runtime-cache'
+  - "runtime-cache"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

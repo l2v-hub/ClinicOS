@@ -1,27 +1,27 @@
 ---
-id: 'value.api.authentication-contract'
-kind: 'api-contract'
-title: 'Authentication request contract'
-status: 'observed'
-summary: 'Browser-to-backend identity uses Entra bearer tokens when configured and explicit demo headers only in allowed demo mode.'
+id: "value.api.authentication-contract"
+kind: "api-contract"
+title: "Authentication request contract"
+status: "observed"
+summary: "Browser-to-backend identity uses Entra bearer tokens when configured and explicit demo headers only in allowed demo mode."
 bounded_contexts: []
 sources:
-  - path: 'frontend/src/lib/entraAuth.ts'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-documents.ts'
-    confidence: 'observed'
+  - path: "frontend/src/lib/entraAuth.ts"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-documents.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'frontend/src/lib/entraAuth.ts,backend/src/lib/entra-auth.ts,backend/src/routes/patient-documents.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/src/lib/entraAuth.ts,backend/src/lib/entra-auth.ts,backend/src/routes/patient-documents.ts"
+    confidence: "observed"
 tags:
-  - 'api-contract'
+  - "api-contract"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

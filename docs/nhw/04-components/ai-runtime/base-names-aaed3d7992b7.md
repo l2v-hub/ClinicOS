@@ -1,28 +1,28 @@
 ---
-id: 'component.ai-runtime.scripts-nhw-lib-python-extractor.py.base-names'
-kind: 'python-function'
-title: 'base_names'
-status: 'observed'
-summary: 'Public Python function from scripts/nhw/lib/python-extractor.py.'
+id: "component.ai-runtime.scripts-nhw-lib-python-extractor.py.base-names"
+kind: "python-function"
+title: "base_names"
+status: "observed"
+summary: "Public Python function from scripts/nhw/lib/python-extractor.py."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'scripts/nhw/lib/python-extractor.py'
-    symbol: 'base_names'
-    line_start: '94'
-    line_end: '95'
-    confidence: 'observed'
+  - path: "scripts/nhw/lib/python-extractor.py"
+    symbol: "base_names"
+    line_start: "94"
+    line_end: "95"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'scripts/nhw/lib/python-extractor.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "scripts/nhw/lib/python-extractor.py"
+    confidence: "observed"
 tags:
-  - 'python'
-  - 'function'
+  - "python"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

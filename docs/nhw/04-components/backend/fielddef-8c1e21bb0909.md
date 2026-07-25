@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.query.schema.fielddef'
-kind: 'typescript-interface'
-title: 'FieldDef'
-status: 'observed'
-summary: 'Exported interface from backend/src/ai/gateway/query/schema.ts.'
+id: "component.backend.backend.src.ai.gateway.query.schema.fielddef"
+kind: "typescript-interface"
+title: "FieldDef"
+status: "observed"
+summary: "Exported interface from backend/src/ai/gateway/query/schema.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/gateway/query/schema.ts'
-    symbol: 'FieldDef'
-    line_start: '11'
-    line_end: '17'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/query/schema.ts"
+    symbol: "FieldDef"
+    line_start: "11"
+    line_end: "17"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/query/schema.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/query/schema.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

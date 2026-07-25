@@ -1,28 +1,28 @@
 ---
-id: 'component.agent-team.agent-team.src.core.sanitize.sanitizetext'
-kind: 'typescript-function'
-title: 'sanitizeText'
-status: 'observed'
-summary: 'Exported function from agent-team/src/core/sanitize.mjs.'
+id: "component.agent-team.agent-team.src.core.sanitize.sanitizetext"
+kind: "typescript-function"
+title: "sanitizeText"
+status: "observed"
+summary: "Exported function from agent-team/src/core/sanitize.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'agent-team/src/core/sanitize.mjs'
-    symbol: 'sanitizeText'
-    line_start: '18'
-    line_end: '25'
-    confidence: 'observed'
+  - path: "agent-team/src/core/sanitize.mjs"
+    symbol: "sanitizeText"
+    line_start: "18"
+    line_end: "25"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.agent-team'
-    evidence: 'agent-team/src/core/sanitize.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.agent-team"
+    evidence: "agent-team/src/core/sanitize.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

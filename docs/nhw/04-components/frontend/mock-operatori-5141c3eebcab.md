@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.mockdata.mock-operatori'
-kind: 'typescript-constant'
-title: 'MOCK_OPERATORI'
-status: 'observed'
-summary: 'Exported constant from frontend/src/mockData.ts.'
+id: "component.frontend.frontend.src.mockdata.mock-operatori"
+kind: "typescript-constant"
+title: "MOCK_OPERATORI"
+status: "observed"
+summary: "Exported constant from frontend/src/mockData.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/mockData.ts'
-    symbol: 'MOCK_OPERATORI'
-    line_start: '110'
-    line_end: '182'
-    confidence: 'observed'
+  - path: "frontend/src/mockData.ts"
+    symbol: "MOCK_OPERATORI"
+    line_start: "110"
+    line_end: "182"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/mockData.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/mockData.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.upload.confirm-service.confirmpatient'
-kind: 'typescript-interface'
-title: 'ConfirmPatient'
-status: 'observed'
-summary: 'Exported interface from backend/src/ai/upload/confirm-service.ts.'
+id: "component.backend.backend.src.ai.upload.confirm-service.confirmpatient"
+kind: "typescript-interface"
+title: "ConfirmPatient"
+status: "observed"
+summary: "Exported interface from backend/src/ai/upload/confirm-service.ts."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/ai/upload/confirm-service.ts'
-    symbol: 'ConfirmPatient'
-    line_start: '39'
-    line_end: '50'
-    confidence: 'observed'
+  - path: "backend/src/ai/upload/confirm-service.ts"
+    symbol: "ConfirmPatient"
+    line_start: "39"
+    line_end: "50"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/upload/confirm-service.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/upload/confirm-service.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

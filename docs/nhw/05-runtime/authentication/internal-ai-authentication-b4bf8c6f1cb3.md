@@ -1,27 +1,27 @@
 ---
-id: 'runtime.backend.internal-ai-authentication'
-kind: 'runtime-authentication'
-title: 'Internal AI service-token authentication'
-status: 'observed'
-summary: 'Internal AI gateway calls require the shared runtime service token plus serialized user context.'
+id: "runtime.backend.internal-ai-authentication"
+kind: "runtime-authentication"
+title: "Internal AI service-token authentication"
+status: "observed"
+summary: "Internal AI gateway calls require the shared runtime service token plus serialized user context."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/ai/auth.ts'
-    confidence: 'observed'
-  - path: 'backend/src/routes/internal-ai.ts'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - path: "backend/src/ai/auth.ts"
+    confidence: "observed"
+  - path: "backend/src/routes/internal-ai.ts"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/auth.ts,backend/src/routes/internal-ai.ts,clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/auth.ts,backend/src/routes/internal-ai.ts,clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 tags:
-  - 'runtime-authentication'
+  - "runtime-authentication"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

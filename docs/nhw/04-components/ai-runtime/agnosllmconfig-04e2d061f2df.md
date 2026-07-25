@@ -1,28 +1,28 @@
 ---
-id: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-env-config.py.agnosllmconfig'
-kind: 'python-class'
-title: 'AgnosLlmConfig'
-status: 'observed'
-summary: 'Public Python class from clinicos-ai-runtime/clinicos_ai/models/env_config.py.'
+id: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-env-config.py.agnosllmconfig"
+kind: "python-class"
+title: "AgnosLlmConfig"
+status: "observed"
+summary: "Public Python class from clinicos-ai-runtime/clinicos_ai/models/env_config.py."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/env_config.py'
-    symbol: 'AgnosLlmConfig'
-    line_start: '59'
-    line_end: '65'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/models/env_config.py"
+    symbol: "AgnosLlmConfig"
+    line_start: "59"
+    line_end: "65"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/models/env_config.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/env_config.py"
+    confidence: "observed"
 tags:
-  - 'python'
-  - 'class'
+  - "python"
+  - "class"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

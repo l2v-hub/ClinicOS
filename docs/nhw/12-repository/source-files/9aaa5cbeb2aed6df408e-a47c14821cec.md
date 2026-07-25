@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.9aaa5cbeb2aed6df408e'
-kind: 'repository-source'
-title: 'StepAnagrafica.tsx'
-status: 'observed'
-summary: 'Repository source path frontend/src/components/shared/intake/StepAnagrafica.tsx classified as semantic-source.'
+id: "component.repository.source.9aaa5cbeb2aed6df408e"
+kind: "repository-source"
+title: "StepAnagrafica.tsx"
+status: "observed"
+summary: "Repository source path frontend/src/components/shared/intake/StepAnagrafica.tsx classified as semantic-source."
 bounded_contexts: []
 sources:
-  - path: 'frontend/src/components/shared/intake/StepAnagrafica.tsx'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/intake/StepAnagrafica.tsx"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'frontend/src/components/shared/intake/StepAnagrafica.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/src/components/shared/intake/StepAnagrafica.tsx"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'semantic-source'
+  - "repository-source"
+  - "semantic-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

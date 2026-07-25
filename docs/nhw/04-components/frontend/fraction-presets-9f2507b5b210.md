@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.operator.cartella.therapydose.fraction-presets'
-kind: 'typescript-constant'
-title: 'FRACTION_PRESETS'
-status: 'observed'
-summary: 'Exported constant from frontend/src/components/operator/cartella/therapyDose.ts.'
+id: "component.frontend.frontend.src.components.operator.cartella.therapydose.fraction-presets"
+kind: "typescript-constant"
+title: "FRACTION_PRESETS"
+status: "observed"
+summary: "Exported constant from frontend/src/components/operator/cartella/therapyDose.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/components/operator/cartella/therapyDose.ts'
-    symbol: 'FRACTION_PRESETS'
-    line_start: '12'
-    line_end: '18'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/cartella/therapyDose.ts"
+    symbol: "FRACTION_PRESETS"
+    line_start: "12"
+    line_end: "18"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/operator/cartella/therapyDose.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/operator/cartella/therapyDose.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

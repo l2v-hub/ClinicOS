@@ -1,33 +1,33 @@
 ---
-id: 'entity.appointment'
-kind: 'domain-entity'
-title: 'Appointment'
-status: 'inferred'
-summary: 'Business entity persisted by the Appointment Prisma model.'
+id: "entity.appointment"
+kind: "domain-entity"
+title: "Appointment"
+status: "inferred"
+summary: "Business entity persisted by the Appointment Prisma model."
 bounded_contexts:
-  - 'context.scheduling'
+  - "context.scheduling"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'Appointment'
-    line_start: '192'
-    line_end: '215'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "Appointment"
+    line_start: "192"
+    line_end: "215"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.scheduling'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'persists-as'
-    target: 'data.model.appointment'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "context.scheduling"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "persists-as"
+    target: "data.model.appointment"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'domain-entity'
-  - 'appointment'
+  - "domain-entity"
+  - "appointment"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Business entity reconstructed from the current Prisma model and its executable consumers.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 
 ## Question Answered

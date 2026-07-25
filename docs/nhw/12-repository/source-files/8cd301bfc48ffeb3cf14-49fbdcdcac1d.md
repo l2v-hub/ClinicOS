@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.8cd301bfc48ffeb3cf14'
-kind: 'repository-source'
-title: 'mcp.json'
-status: 'observed'
-summary: 'Repository source path .claude/mcp.json classified as configuration-source.'
+id: "component.repository.source.8cd301bfc48ffeb3cf14"
+kind: "repository-source"
+title: "mcp.json"
+status: "observed"
+summary: "Repository source path .claude/mcp.json classified as configuration-source."
 bounded_contexts: []
 sources:
-  - path: '.claude/mcp.json'
-    confidence: 'observed'
+  - path: ".claude/mcp.json"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.claude/mcp.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".claude/mcp.json"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'configuration-source'
+  - "repository-source"
+  - "configuration-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

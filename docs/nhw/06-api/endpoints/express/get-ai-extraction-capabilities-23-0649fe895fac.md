@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.get-ai-extraction-capabilities-23'
-kind: 'api-endpoint'
-title: 'GET /ai/extraction/capabilities'
-status: 'observed'
-summary: 'GET /ai/extraction/capabilities endpoint implemented by the express runtime.'
+id: "api.backend.get-ai-extraction-capabilities-23"
+kind: "api-endpoint"
+title: "GET /ai/extraction/capabilities"
+status: "observed"
+summary: "GET /ai/extraction/capabilities endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/routes/ai-extraction.ts'
-    symbol: 'aiExtractionRouter'
-    line_start: '19'
-    line_end: '35'
-    confidence: 'observed'
+  - path: "backend/src/routes/ai-extraction.ts"
+    symbol: "aiExtractionRouter"
+    line_start: "19"
+    line_end: "35"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/ai-extraction.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/ai-extraction.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'get'
+  - "api"
+  - "express"
+  - "get"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

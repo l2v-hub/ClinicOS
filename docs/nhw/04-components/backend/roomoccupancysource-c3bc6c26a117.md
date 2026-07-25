@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.sources.roomoccupancysource'
-kind: 'typescript-function'
-title: 'roomOccupancySource'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/gateway/sources.ts.'
+id: "component.backend.backend.src.ai.gateway.sources.roomoccupancysource"
+kind: "typescript-function"
+title: "roomOccupancySource"
+status: "observed"
+summary: "Exported function from backend/src/ai/gateway/sources.ts."
 bounded_contexts:
-  - 'context.facility-occupancy'
+  - "context.facility-occupancy"
 sources:
-  - path: 'backend/src/ai/gateway/sources.ts'
-    symbol: 'roomOccupancySource'
-    line_start: '83'
-    line_end: '92'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/sources.ts"
+    symbol: "roomOccupancySource"
+    line_start: "83"
+    line_end: "92"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/sources.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/sources.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

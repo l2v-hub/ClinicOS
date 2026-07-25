@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.routes.patient-diary.router'
-kind: 'typescript-constant'
-title: 'router'
-status: 'observed'
-summary: 'Exported constant from backend/src/routes/patient-diary.ts.'
+id: "component.backend.backend.src.routes.patient-diary.router"
+kind: "typescript-constant"
+title: "router"
+status: "observed"
+summary: "Exported constant from backend/src/routes/patient-diary.ts."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patient-diary.ts'
-    symbol: 'router'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-diary.ts"
+    symbol: "router"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-diary.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-diary.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

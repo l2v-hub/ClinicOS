@@ -1,25 +1,25 @@
 ---
-id: 'value.api.patient-document-permission'
-kind: 'permission-contract'
-title: 'Patient document access permission'
-status: 'observed'
-summary: 'Document list, upload, and content routes apply per-route patient and operator access checks.'
+id: "value.api.patient-document-permission"
+kind: "permission-contract"
+title: "Patient document access permission"
+status: "observed"
+summary: "Document list, upload, and content routes apply per-route patient and operator access checks."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/routes/patient-documents.ts'
-    confidence: 'observed'
-  - path: 'backend/src/__tests__/patient-documents-entra.test.ts'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-documents.ts"
+    confidence: "observed"
+  - path: "backend/src/__tests__/patient-documents-entra.test.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.clinical-record'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/__tests__/patient-documents-entra.test.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "context.clinical-record"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/__tests__/patient-documents-entra.test.ts"
+    confidence: "observed"
 tags:
-  - 'permission-contract'
+  - "permission-contract"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

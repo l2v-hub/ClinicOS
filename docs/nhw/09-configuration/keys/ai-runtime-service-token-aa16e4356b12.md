@@ -1,33 +1,33 @@
 ---
-id: 'config.discovered.ai-runtime-service-token'
-kind: 'configuration-key'
-title: 'AI_RUNTIME_SERVICE_TOKEN'
-status: 'observed'
-summary: 'Configuration key AI_RUNTIME_SERVICE_TOKEN; generated knowledge never includes its value.'
+id: "config.discovered.ai-runtime-service-token"
+kind: "configuration-key"
+title: "AI_RUNTIME_SERVICE_TOKEN"
+status: "observed"
+summary: "Configuration key AI_RUNTIME_SERVICE_TOKEN; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/.env.example'
-    symbol: 'AI_RUNTIME_SERVICE_TOKEN'
-    line_start: '57'
-    line_end: '57'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/api/app.py'
-    symbol: 'AI_RUNTIME_SERVICE_TOKEN'
-    line_start: '48'
-    line_end: '48'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/.env.example"
+    symbol: "AI_RUNTIME_SERVICE_TOKEN"
+    line_start: "57"
+    line_end: "57"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
+    symbol: "AI_RUNTIME_SERVICE_TOKEN"
+    line_start: "48"
+    line_end: "48"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'clinicos-ai-runtime/.env.example,clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "clinicos-ai-runtime/.env.example,clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'python'
-  - 'typescript'
+  - "configuration"
+  - "python"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,47 +1,47 @@
 ---
-id: 'config.discovered.ai-upload-dir'
-kind: 'configuration-key'
-title: 'AI_UPLOAD_DIR'
-status: 'observed'
-summary: 'Configuration key AI_UPLOAD_DIR; generated knowledge never includes its value.'
+id: "config.discovered.ai-upload-dir"
+kind: "configuration-key"
+title: "AI_UPLOAD_DIR"
+status: "observed"
+summary: "Configuration key AI_UPLOAD_DIR; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/.env.example'
-    symbol: 'AI_UPLOAD_DIR'
-    line_start: '35'
-    line_end: '35'
-    confidence: 'observed'
-  - path: 'backend/src/ai/config.ts'
-    symbol: 'AI_UPLOAD_DIR'
-    line_start: '120'
-    line_end: '120'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/ai-upload-dir-3d9079a54936.md'
-    symbol: 'AI_UPLOAD_DIR'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'requirements/deployments/DEPLOY-20260613-1233.md'
-    symbol: 'AI_UPLOAD_DIR'
-    line_start: '38'
-    line_end: '38'
-    confidence: 'observed'
-  - path: 'requirements/PRIVACY-AI-IMPORT.md'
-    symbol: 'AI_UPLOAD_DIR'
-    line_start: '35'
-    line_end: '35'
-    confidence: 'observed'
+  - path: "backend/.env.example"
+    symbol: "AI_UPLOAD_DIR"
+    line_start: "35"
+    line_end: "35"
+    confidence: "observed"
+  - path: "backend/src/ai/config.ts"
+    symbol: "AI_UPLOAD_DIR"
+    line_start: "120"
+    line_end: "120"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/ai-upload-dir-3d9079a54936.md"
+    symbol: "AI_UPLOAD_DIR"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "requirements/deployments/DEPLOY-20260613-1233.md"
+    symbol: "AI_UPLOAD_DIR"
+    line_start: "38"
+    line_end: "38"
+    confidence: "observed"
+  - path: "requirements/PRIVACY-AI-IMPORT.md"
+    symbol: "AI_UPLOAD_DIR"
+    line_start: "35"
+    line_end: "35"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/.env.example,backend/src/ai/config.ts,docs/nhw/09-configuration/keys/ai-upload-dir-3d9079a54936.md,requirements/deployments/DEPLOY-20260613-1233.md,requirements/PRIVACY-AI-IMPORT.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/.env.example,backend/src/ai/config.ts,docs/nhw/09-configuration/keys/ai-upload-dir-3d9079a54936.md,requirements/deployments/DEPLOY-20260613-1233.md,requirements/PRIVACY-AI-IMPORT.md"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

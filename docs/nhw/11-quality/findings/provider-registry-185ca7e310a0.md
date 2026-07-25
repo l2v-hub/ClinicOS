@@ -1,147 +1,147 @@
 ---
-id: 'finding.extension.provider-registry'
-kind: 'extension-point'
-title: 'AI provider registry extension point'
-status: 'inferred'
-summary: 'Provider registry and factory contracts permit additional AI provider implementations.'
+id: "finding.extension.provider-registry"
+kind: "extension-point"
+title: "AI provider registry extension point"
+status: "inferred"
+summary: "Provider registry and factory contracts permit additional AI provider implementations."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py'
-    symbol: 'DocumentProfileRegistry'
-    line_start: '16'
-    line_end: '56'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/env_config.py'
-    symbol: 'normalize_provider'
-    line_start: '25'
-    line_end: '27'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/errors.py'
-    symbol: 'ProviderUnavailableError'
-    line_start: '45'
-    line_end: '47'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/factory.py'
-    symbol: 'ModelFactory'
-    line_start: '32'
-    line_end: '51'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py'
-    symbol: 'build'
-    line_start: '9'
-    line_end: '17'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/azure.py'
-    symbol: 'build'
-    line_start: '178'
-    line_end: '180'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/base.py'
-    symbol: 'Attachment'
-    line_start: '13'
-    line_end: '16'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/base.py'
-    symbol: 'BuiltModel'
-    line_start: '25'
-    line_end: '29'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/base.py'
-    symbol: 'ModelRunner'
-    line_start: '19'
-    line_end: '21'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/_common.py'
-    symbol: 'make_built'
-    line_start: '47'
-    line_end: '49'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/google.py'
-    symbol: 'build'
-    line_start: '62'
-    line_end: '64'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    symbol: 'build'
-    line_start: '161'
-    line_end: '163'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py"
+    symbol: "DocumentProfileRegistry"
+    line_start: "16"
+    line_end: "56"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/env_config.py"
+    symbol: "normalize_provider"
+    line_start: "25"
+    line_end: "27"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/errors.py"
+    symbol: "ProviderUnavailableError"
+    line_start: "45"
+    line_end: "47"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/factory.py"
+    symbol: "ModelFactory"
+    line_start: "32"
+    line_end: "51"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py"
+    symbol: "build"
+    line_start: "9"
+    line_end: "17"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"
+    symbol: "build"
+    line_start: "178"
+    line_end: "180"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/base.py"
+    symbol: "Attachment"
+    line_start: "13"
+    line_end: "16"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/base.py"
+    symbol: "BuiltModel"
+    line_start: "25"
+    line_end: "29"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/base.py"
+    symbol: "ModelRunner"
+    line_start: "19"
+    line_end: "21"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/_common.py"
+    symbol: "make_built"
+    line_start: "47"
+    line_end: "49"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/google.py"
+    symbol: "build"
+    line_start: "62"
+    line_end: "64"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    symbol: "build"
+    line_start: "161"
+    line_end: "163"
+    confidence: "observed"
 relations:
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-document-profiles-registry.py.documentprofileregistry'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-env-config.py.normalize-provider'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-errors.py.providerunavailableerror'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-factory.py.modelfactory'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-anthropic.py.build'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-azure.py.build'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.attachment'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.builtmodel'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.modelrunner'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-common.py.make-built'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-google.py.build'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-mistral.py.build'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-mock.py.build'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-openai-like.py.build'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-openai.py.build'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-registry.py.modelregistry'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
-  - type: 'documents'
-    target: 'component.ai-runtime.scripts-nhw-lib-python-extractor.py.is-provider'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'inferred'
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-document-profiles-registry.py.documentprofileregistry"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-env-config.py.normalize-provider"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-errors.py.providerunavailableerror"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-factory.py.modelfactory"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-anthropic.py.build"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-azure.py.build"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.attachment"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.builtmodel"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.modelrunner"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-common.py.make-built"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-google.py.build"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-mistral.py.build"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-mock.py.build"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-openai-like.py.build"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-openai.py.build"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-registry.py.modelregistry"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
+  - type: "documents"
+    target: "component.ai-runtime.scripts-nhw-lib-python-extractor.py.is-provider"
+    evidence: "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/models/errors.py,clinicos-ai-runtime/clinicos_ai/models/factory.py,clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py,clinicos-ai-runtime/clinicos_ai/models/providers/azure.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/base.py,clinicos-ai-runtime/clinicos_ai/models/providers/_common.py,clinicos-ai-runtime/clinicos_ai/models/providers/google.py,clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "inferred"
 tags:
-  - 'extension-point'
-  - 'ai-provider'
+  - "extension-point"
+  - "ai-provider"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Public provider, registry, and factory symbols form a substitutable model-provider boundary.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Public provider, registry, and factory symbols form a substitutable model-provider boundary."
 ---
 
 ## Question Answered

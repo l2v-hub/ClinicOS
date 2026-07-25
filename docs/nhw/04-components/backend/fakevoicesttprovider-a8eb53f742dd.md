@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.voice.provider.fakevoicesttprovider'
-kind: 'typescript-class'
-title: 'FakeVoiceSttProvider'
-status: 'observed'
-summary: 'Exported class from backend/src/ai/voice/provider.ts.'
+id: "component.backend.backend.src.ai.voice.provider.fakevoicesttprovider"
+kind: "typescript-class"
+title: "FakeVoiceSttProvider"
+status: "observed"
+summary: "Exported class from backend/src/ai/voice/provider.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/voice/provider.ts'
-    symbol: 'FakeVoiceSttProvider'
-    line_start: '47'
-    line_end: '77'
-    confidence: 'observed'
+  - path: "backend/src/ai/voice/provider.ts"
+    symbol: "FakeVoiceSttProvider"
+    line_start: "47"
+    line_end: "77"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/voice/provider.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/voice/provider.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'class'
+  - "typescript"
+  - "class"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

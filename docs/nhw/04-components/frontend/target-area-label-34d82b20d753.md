@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.sections.sectionmapping.target-area-label'
-kind: 'typescript-constant'
-title: 'TARGET_AREA_LABEL'
-status: 'observed'
-summary: 'Exported constant from frontend/src/components/shared/sections/sectionMapping.ts.'
+id: "component.frontend.frontend.src.components.shared.sections.sectionmapping.target-area-label"
+kind: "typescript-constant"
+title: "TARGET_AREA_LABEL"
+status: "observed"
+summary: "Exported constant from frontend/src/components/shared/sections/sectionMapping.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/components/shared/sections/sectionMapping.ts'
-    symbol: 'TARGET_AREA_LABEL'
-    line_start: '49'
-    line_end: '55'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/sections/sectionMapping.ts"
+    symbol: "TARGET_AREA_LABEL"
+    line_start: "49"
+    line_end: "55"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/sections/sectionMapping.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/sections/sectionMapping.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

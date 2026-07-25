@@ -1,32 +1,32 @@
 ---
-id: 'data.model.therapyschedule'
-kind: 'data-model'
-title: 'TherapySchedule'
-status: 'observed'
-summary: 'Prisma persistence model TherapySchedule.'
+id: "data.model.therapyschedule"
+kind: "data-model"
+title: "TherapySchedule"
+status: "observed"
+summary: "Prisma persistence model TherapySchedule."
 bounded_contexts:
-  - 'context.therapy-administration'
+  - "context.therapy-administration"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'TherapySchedule'
-    line_start: '301'
-    line_end: '314'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "TherapySchedule"
+    line_start: "301"
+    line_end: "314"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.patienttherapy'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.patienttherapy"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'prisma'
-  - 'database-model'
+  - "prisma"
+  - "database-model"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

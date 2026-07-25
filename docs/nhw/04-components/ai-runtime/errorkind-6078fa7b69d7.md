@@ -1,28 +1,28 @@
 ---
-id: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-errors.py.errorkind'
-kind: 'python-class'
-title: 'ErrorKind'
-status: 'observed'
-summary: 'Public Python class from clinicos-ai-runtime/clinicos_ai/models/errors.py.'
+id: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-errors.py.errorkind"
+kind: "python-class"
+title: "ErrorKind"
+status: "observed"
+summary: "Public Python class from clinicos-ai-runtime/clinicos_ai/models/errors.py."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/errors.py'
-    symbol: 'ErrorKind'
-    line_start: '12'
-    line_end: '20'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/models/errors.py"
+    symbol: "ErrorKind"
+    line_start: "12"
+    line_end: "20"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/models/errors.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/errors.py"
+    confidence: "observed"
 tags:
-  - 'python'
-  - 'class'
+  - "python"
+  - "class"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

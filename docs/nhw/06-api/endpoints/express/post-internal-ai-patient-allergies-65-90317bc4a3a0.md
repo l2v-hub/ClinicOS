@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.post-internal-ai-patient-allergies-65'
-kind: 'api-endpoint'
-title: 'POST /internal/ai/patient/allergies'
-status: 'observed'
-summary: 'POST /internal/ai/patient/allergies endpoint implemented by the express runtime.'
+id: "api.backend.post-internal-ai-patient-allergies-65"
+kind: "api-endpoint"
+title: "POST /internal/ai/patient/allergies"
+status: "observed"
+summary: "POST /internal/ai/patient/allergies endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/internal-ai.ts'
-    symbol: 'internalAiRouter'
-    line_start: '94'
-    line_end: '97'
-    confidence: 'observed'
+  - path: "backend/src/routes/internal-ai.ts"
+    symbol: "internalAiRouter"
+    line_start: "94"
+    line_end: "97"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/internal-ai.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/internal-ai.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

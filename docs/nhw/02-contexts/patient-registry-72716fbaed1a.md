@@ -1,79 +1,79 @@
 ---
-id: 'context.patient-registry'
-kind: 'bounded-context'
-title: 'Patient Registry'
-status: 'inferred'
-summary: 'Patient Registry bounded context reconstructed from executable ClinicOS sources.'
+id: "context.patient-registry"
+kind: "bounded-context"
+title: "Patient Registry"
+status: "inferred"
+summary: "Patient Registry bounded context reconstructed from executable ClinicOS sources."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'prisma/schema.prisma'
-    line_start: '67'
-    line_end: '99'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '414'
-    line_end: '432'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '132'
-    line_end: '148'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '241'
-    line_end: '257'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '437'
-    line_end: '451'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '105'
-    line_end: '126'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    line_start: "67"
+    line_end: "99"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "414"
+    line_end: "432"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "132"
+    line_end: "148"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "241"
+    line_end: "257"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "437"
+    line_end: "451"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "105"
+    line_end: "126"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.patient'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.patientdiaryentry'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.patientdocument'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.patientintakedocument'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.patientintakedraft'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.patientnarrativesection'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.patientroomassignment'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.patienttherapy'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.patient"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.patientdiaryentry"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.patientdocument"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.patientintakedocument"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.patientintakedraft"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.patientnarrativesection"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.patientroomassignment"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.patienttherapy"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'bounded-context'
+  - "bounded-context"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership."
 ---
 
 ## Question Answered

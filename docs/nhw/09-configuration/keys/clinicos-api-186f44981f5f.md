@@ -1,42 +1,42 @@
 ---
-id: 'config.discovered.clinicos-api'
-kind: 'configuration-key'
-title: 'CLINICOS_API'
-status: 'observed'
-summary: 'Configuration key CLINICOS_API; generated knowledge never includes its value.'
+id: "config.discovered.clinicos-api"
+kind: "configuration-key"
+title: "CLINICOS_API"
+status: "observed"
+summary: "Configuration key CLINICOS_API; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'docs/nhw/09-configuration/keys/clinicos-api-186f44981f5f.md'
-    symbol: 'CLINICOS_API'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'e2e/issue-128-verify.mjs'
-    symbol: 'CLINICOS_API'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'e2e/remediation/issue-245.spec.ts'
-    symbol: 'CLINICOS_API'
-    line_start: '15'
-    line_end: '15'
-    confidence: 'observed'
-  - path: 'e2e/remediation/issue-246.spec.ts'
-    symbol: 'CLINICOS_API'
-    line_start: '25'
-    line_end: '25'
-    confidence: 'observed'
+  - path: "docs/nhw/09-configuration/keys/clinicos-api-186f44981f5f.md"
+    symbol: "CLINICOS_API"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "e2e/issue-128-verify.mjs"
+    symbol: "CLINICOS_API"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "e2e/remediation/issue-245.spec.ts"
+    symbol: "CLINICOS_API"
+    line_start: "15"
+    line_end: "15"
+    confidence: "observed"
+  - path: "e2e/remediation/issue-246.spec.ts"
+    symbol: "CLINICOS_API"
+    line_start: "25"
+    line_end: "25"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'docs/nhw/09-configuration/keys/clinicos-api-186f44981f5f.md,e2e/issue-128-verify.mjs,e2e/remediation/issue-245.spec.ts,e2e/remediation/issue-246.spec.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "docs/nhw/09-configuration/keys/clinicos-api-186f44981f5f.md,e2e/issue-128-verify.mjs,e2e/remediation/issue-245.spec.ts,e2e/remediation/issue-246.spec.ts"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

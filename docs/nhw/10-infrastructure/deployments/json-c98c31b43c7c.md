@@ -1,23 +1,23 @@
 ---
-id: 'integration.vercel.frontend.vercel.json'
-kind: 'integration'
-title: 'integration.vercel.frontend.vercel.json'
-status: 'observed'
-summary: 'integration.vercel.frontend.vercel.json declared by frontend/vercel.json.'
+id: "integration.vercel.frontend.vercel.json"
+kind: "integration"
+title: "integration.vercel.frontend.vercel.json"
+status: "observed"
+summary: "integration.vercel.frontend.vercel.json declared by frontend/vercel.json."
 bounded_contexts: []
 sources:
-  - path: 'frontend/vercel.json'
-    confidence: 'observed'
+  - path: "frontend/vercel.json"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'frontend/vercel.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/vercel.json"
+    confidence: "observed"
 tags:
-  - 'infrastructure'
+  - "infrastructure"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

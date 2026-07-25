@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.therapies.therapy-create.createtherapyintx'
-kind: 'typescript-function'
-title: 'createTherapyInTx'
-status: 'observed'
-summary: 'Exported function from backend/src/therapies/therapy-create.ts.'
+id: "component.backend.backend.src.therapies.therapy-create.createtherapyintx"
+kind: "typescript-function"
+title: "createTherapyInTx"
+status: "observed"
+summary: "Exported function from backend/src/therapies/therapy-create.ts."
 bounded_contexts:
-  - 'context.therapy-administration'
+  - "context.therapy-administration"
 sources:
-  - path: 'backend/src/therapies/therapy-create.ts'
-    symbol: 'createTherapyInTx'
-    line_start: '106'
-    line_end: '185'
-    confidence: 'observed'
+  - path: "backend/src/therapies/therapy-create.ts"
+    symbol: "createTherapyInTx"
+    line_start: "106"
+    line_end: "185"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/therapies/therapy-create.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/therapies/therapy-create.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

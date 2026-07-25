@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.assistant.agents.isagentid'
-kind: 'typescript-function'
-title: 'isAgentId'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/assistant/agents.ts.'
+id: "component.backend.backend.src.ai.assistant.agents.isagentid"
+kind: "typescript-function"
+title: "isAgentId"
+status: "observed"
+summary: "Exported function from backend/src/ai/assistant/agents.ts."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'backend/src/ai/assistant/agents.ts'
-    symbol: 'isAgentId'
-    line_start: '65'
-    line_end: '67'
-    confidence: 'observed'
+  - path: "backend/src/ai/assistant/agents.ts"
+    symbol: "isAgentId"
+    line_start: "65"
+    line_end: "67"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/assistant/agents.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/assistant/agents.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

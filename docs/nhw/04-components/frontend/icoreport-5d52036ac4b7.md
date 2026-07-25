@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.icons.icoreport'
-kind: 'typescript-react-component'
-title: 'IcoReport'
-status: 'observed'
-summary: 'Exported react-component from frontend/src/icons.tsx.'
+id: "component.frontend.frontend.src.icons.icoreport"
+kind: "typescript-react-component"
+title: "IcoReport"
+status: "observed"
+summary: "Exported react-component from frontend/src/icons.tsx."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/icons.tsx'
-    symbol: 'IcoReport'
-    line_start: '63'
-    line_end: '77'
-    confidence: 'observed'
+  - path: "frontend/src/icons.tsx"
+    symbol: "IcoReport"
+    line_start: "63"
+    line_end: "77"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/icons.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/icons.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'react-component'
+  - "typescript"
+  - "react-component"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

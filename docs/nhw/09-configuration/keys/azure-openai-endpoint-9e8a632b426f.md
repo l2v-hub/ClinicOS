@@ -1,27 +1,27 @@
 ---
-id: 'config.discovered.azure-openai-endpoint'
-kind: 'configuration-key'
-title: 'AZURE_OPENAI_ENDPOINT'
-status: 'observed'
-summary: 'Configuration key AZURE_OPENAI_ENDPOINT; generated knowledge never includes its value.'
+id: "config.discovered.azure-openai-endpoint"
+kind: "configuration-key"
+title: "AZURE_OPENAI_ENDPOINT"
+status: "observed"
+summary: "Configuration key AZURE_OPENAI_ENDPOINT; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/azure.py'
-    symbol: 'AZURE_OPENAI_ENDPOINT'
-    line_start: '130'
-    line_end: '130'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"
+    symbol: "AZURE_OPENAI_ENDPOINT"
+    line_start: "130"
+    line_end: "130"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/models/providers/azure.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/providers/azure.py"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'python'
+  - "configuration"
+  - "python"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,33 +1,33 @@
 ---
-id: 'entity.importjob'
-kind: 'domain-entity'
-title: 'ImportJob'
-status: 'inferred'
-summary: 'Business entity persisted by the ImportJob Prisma model.'
+id: "entity.importjob"
+kind: "domain-entity"
+title: "ImportJob"
+status: "inferred"
+summary: "Business entity persisted by the ImportJob Prisma model."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'ImportJob'
-    line_start: '457'
-    line_end: '491'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "ImportJob"
+    line_start: "457"
+    line_end: "491"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.intake-document-processing'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'persists-as'
-    target: 'data.model.importjob'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "context.intake-document-processing"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "persists-as"
+    target: "data.model.importjob"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'domain-entity'
-  - 'importjob'
+  - "domain-entity"
+  - "importjob"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Business entity reconstructed from the current Prisma model and its executable consumers.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 
 ## Question Answered

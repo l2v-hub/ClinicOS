@@ -1,32 +1,32 @@
 ---
-id: 'data.model.importaudit'
-kind: 'data-model'
-title: 'ImportAudit'
-status: 'observed'
-summary: 'Prisma persistence model ImportAudit.'
+id: "data.model.importaudit"
+kind: "data-model"
+title: "ImportAudit"
+status: "observed"
+summary: "Prisma persistence model ImportAudit."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'ImportAudit'
-    line_start: '494'
-    line_end: '505'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "ImportAudit"
+    line_start: "494"
+    line_end: "505"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.importjob'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.importjob"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'prisma'
-  - 'database-model'
+  - "prisma"
+  - "database-model"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

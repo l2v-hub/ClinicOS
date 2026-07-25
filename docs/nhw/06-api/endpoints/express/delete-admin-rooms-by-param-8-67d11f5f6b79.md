@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.delete-admin-rooms-by-param-8'
-kind: 'api-endpoint'
-title: 'DELETE /admin/rooms/:roomId'
-status: 'observed'
-summary: 'DELETE /admin/rooms/:roomId endpoint implemented by the express runtime.'
+id: "api.backend.delete-admin-rooms-by-param-8"
+kind: "api-endpoint"
+title: "DELETE /admin/rooms/:roomId"
+status: "observed"
+summary: "DELETE /admin/rooms/:roomId endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.facility-occupancy'
+  - "context.facility-occupancy"
 sources:
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '293'
-    line_end: '325'
-    confidence: 'observed'
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "293"
+    line_end: "325"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/admin-rooms.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.room'
-    evidence: 'backend/src/routes/admin-rooms.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/admin-rooms.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.room"
+    evidence: "backend/src/routes/admin-rooms.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'delete'
+  - "api"
+  - "express"
+  - "delete"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

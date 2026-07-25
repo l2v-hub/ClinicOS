@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.post-therapy-slots-confirm-113'
-kind: 'api-endpoint'
-title: 'POST /therapy-slots/confirm'
-status: 'observed'
-summary: 'POST /therapy-slots/confirm endpoint implemented by the express runtime.'
+id: "api.backend.post-therapy-slots-confirm-113"
+kind: "api-endpoint"
+title: "POST /therapy-slots/confirm"
+status: "observed"
+summary: "POST /therapy-slots/confirm endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.therapy-administration'
+  - "context.therapy-administration"
 sources:
-  - path: 'backend/src/routes/therapy.ts'
-    symbol: 'router'
-    line_start: '196'
-    line_end: '280'
-    confidence: 'observed'
+  - path: "backend/src/routes/therapy.ts"
+    symbol: "router"
+    line_start: "196"
+    line_end: "280"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/therapy.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.medicationadministration'
-    evidence: 'backend/src/routes/therapy.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/therapy.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.medicationadministration"
+    evidence: "backend/src/routes/therapy.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

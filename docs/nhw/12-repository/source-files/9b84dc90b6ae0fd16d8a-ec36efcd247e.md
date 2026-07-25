@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.9b84dc90b6ae0fd16d8a'
-kind: 'repository-source'
-title: 'segments.ts'
-status: 'observed'
-summary: 'Repository source path frontend/src/components/shared/sections/segments.ts classified as semantic-source.'
+id: "component.repository.source.9b84dc90b6ae0fd16d8a"
+kind: "repository-source"
+title: "segments.ts"
+status: "observed"
+summary: "Repository source path frontend/src/components/shared/sections/segments.ts classified as semantic-source."
 bounded_contexts: []
 sources:
-  - path: 'frontend/src/components/shared/sections/segments.ts'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/sections/segments.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'frontend/src/components/shared/sections/segments.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/src/components/shared/sections/segments.ts"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'semantic-source'
+  - "repository-source"
+  - "semantic-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

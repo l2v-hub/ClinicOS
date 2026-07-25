@@ -1,28 +1,28 @@
 ---
-id: 'component.scripts.scripts.nhw.lib.coverage.buildcoverage'
-kind: 'typescript-function'
-title: 'buildCoverage'
-status: 'observed'
-summary: 'Exported function from scripts/nhw/lib/coverage.mjs.'
+id: "component.scripts.scripts.nhw.lib.coverage.buildcoverage"
+kind: "typescript-function"
+title: "buildCoverage"
+status: "observed"
+summary: "Exported function from scripts/nhw/lib/coverage.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'scripts/nhw/lib/coverage.mjs'
-    symbol: 'buildCoverage'
-    line_start: '35'
-    line_end: '125'
-    confidence: 'observed'
+  - path: "scripts/nhw/lib/coverage.mjs"
+    symbol: "buildCoverage"
+    line_start: "35"
+    line_end: "125"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'scripts/nhw/lib/coverage.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "scripts/nhw/lib/coverage.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

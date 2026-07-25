@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.upload.validation.rejectreason'
-kind: 'typescript-type-alias'
-title: 'RejectReason'
-status: 'observed'
-summary: 'Exported type-alias from backend/src/ai/upload/validation.ts.'
+id: "component.backend.backend.src.ai.upload.validation.rejectreason"
+kind: "typescript-type-alias"
+title: "RejectReason"
+status: "observed"
+summary: "Exported type-alias from backend/src/ai/upload/validation.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/upload/validation.ts'
-    symbol: 'RejectReason'
-    line_start: '49'
-    line_end: '50'
-    confidence: 'observed'
+  - path: "backend/src/ai/upload/validation.ts"
+    symbol: "RejectReason"
+    line_start: "49"
+    line_end: "50"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/upload/validation.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/upload/validation.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'type-alias'
+  - "typescript"
+  - "type-alias"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

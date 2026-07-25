@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.package-script.package.json.quality-gate-validate'
-kind: 'package-script'
-title: 'clinicos:quality-gate:validate'
-status: 'observed'
-summary: 'Package script quality-gate:validate executes node scripts/quality-gate/validate-task-contract.js.'
+id: "component.repository.package-script.package.json.quality-gate-validate"
+kind: "package-script"
+title: "clinicos:quality-gate:validate"
+status: "observed"
+summary: "Package script quality-gate:validate executes node scripts/quality-gate/validate-task-contract.js."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    symbol: 'quality-gate:validate'
-    confidence: 'observed'
+  - path: "package.json"
+    symbol: "quality-gate:validate"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "package.json"
+    confidence: "observed"
 tags:
-  - 'package-script'
+  - "package-script"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

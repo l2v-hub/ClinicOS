@@ -1,27 +1,27 @@
 ---
-id: 'value.api.internal-gateway-permission'
-kind: 'permission-contract'
-title: 'Internal clinical data gateway permission'
-status: 'observed'
-summary: 'The AI runtime has no generic database path; it reaches allowlisted backend gateway operations with service and user context.'
+id: "value.api.internal-gateway-permission"
+kind: "permission-contract"
+title: "Internal clinical data gateway permission"
+status: "observed"
+summary: "The AI runtime has no generic database path; it reaches allowlisted backend gateway operations with service and user context."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/routes/internal-ai.ts'
-    confidence: 'observed'
-  - path: 'backend/src/ai/gateway/query/validate.ts'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - path: "backend/src/routes/internal-ai.ts"
+    confidence: "observed"
+  - path: "backend/src/ai/gateway/query/validate.ts"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.ai-assistance'
-    evidence: 'backend/src/routes/internal-ai.ts,backend/src/ai/gateway/query/validate.ts,clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "context.ai-assistance"
+    evidence: "backend/src/routes/internal-ai.ts,backend/src/ai/gateway/query/validate.ts,clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 tags:
-  - 'permission-contract'
+  - "permission-contract"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

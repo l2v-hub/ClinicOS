@@ -1,37 +1,37 @@
 ---
-id: 'api.backend.put-operators-by-param-schedule-82'
-kind: 'api-endpoint'
-title: 'PUT /operators/:operatorId/schedule'
-status: 'observed'
-summary: 'PUT /operators/:operatorId/schedule endpoint implemented by the express runtime.'
+id: "api.backend.put-operators-by-param-schedule-82"
+kind: "api-endpoint"
+title: "PUT /operators/:operatorId/schedule"
+status: "observed"
+summary: "PUT /operators/:operatorId/schedule endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/routes/operators.ts'
-    symbol: 'operatorsRouter'
-    line_start: '93'
-    line_end: '120'
-    confidence: 'observed'
+  - path: "backend/src/routes/operators.ts"
+    symbol: "operatorsRouter"
+    line_start: "93"
+    line_end: "120"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/operators.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.operator'
-    evidence: 'backend/src/routes/operators.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.operatorschedule'
-    evidence: 'backend/src/routes/operators.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/operators.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.operator"
+    evidence: "backend/src/routes/operators.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.operatorschedule"
+    evidence: "backend/src/routes/operators.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'put'
+  - "api"
+  - "express"
+  - "put"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

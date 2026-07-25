@@ -1,37 +1,37 @@
 ---
-id: 'config.discovered.allow-patient-delete'
-kind: 'configuration-key'
-title: 'ALLOW_PATIENT_DELETE'
-status: 'observed'
-summary: 'Configuration key ALLOW_PATIENT_DELETE; generated knowledge never includes its value.'
+id: "config.discovered.allow-patient-delete"
+kind: "configuration-key"
+title: "ALLOW_PATIENT_DELETE"
+status: "observed"
+summary: "Configuration key ALLOW_PATIENT_DELETE; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/routes/patients.ts'
-    symbol: 'ALLOW_PATIENT_DELETE'
-    line_start: '24'
-    line_end: '24'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/allow-patient-delete-62b90d541dd2.md'
-    symbol: 'ALLOW_PATIENT_DELETE'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'frontend/src/components/operator/PatientList.tsx'
-    symbol: 'ALLOW_PATIENT_DELETE'
-    line_start: '157'
-    line_end: '157'
-    confidence: 'observed'
+  - path: "backend/src/routes/patients.ts"
+    symbol: "ALLOW_PATIENT_DELETE"
+    line_start: "24"
+    line_end: "24"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/allow-patient-delete-62b90d541dd2.md"
+    symbol: "ALLOW_PATIENT_DELETE"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "frontend/src/components/operator/PatientList.tsx"
+    symbol: "ALLOW_PATIENT_DELETE"
+    line_start: "157"
+    line_end: "157"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/routes/patients.ts,docs/nhw/09-configuration/keys/allow-patient-delete-62b90d541dd2.md,frontend/src/components/operator/PatientList.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/routes/patients.ts,docs/nhw/09-configuration/keys/allow-patient-delete-62b90d541dd2.md,frontend/src/components/operator/PatientList.tsx"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

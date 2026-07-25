@@ -1,28 +1,28 @@
 ---
-id: 'component.agent-team.agent-team.src.core.worker-policy.required-disallowed-tools'
-kind: 'typescript-constant'
-title: 'REQUIRED_DISALLOWED_TOOLS'
-status: 'observed'
-summary: 'Exported constant from agent-team/src/core/worker-policy.mjs.'
+id: "component.agent-team.agent-team.src.core.worker-policy.required-disallowed-tools"
+kind: "typescript-constant"
+title: "REQUIRED_DISALLOWED_TOOLS"
+status: "observed"
+summary: "Exported constant from agent-team/src/core/worker-policy.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'agent-team/src/core/worker-policy.mjs'
-    symbol: 'REQUIRED_DISALLOWED_TOOLS'
-    line_start: '11'
-    line_end: '22'
-    confidence: 'observed'
+  - path: "agent-team/src/core/worker-policy.mjs"
+    symbol: "REQUIRED_DISALLOWED_TOOLS"
+    line_start: "11"
+    line_end: "22"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.agent-team'
-    evidence: 'agent-team/src/core/worker-policy.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.agent-team"
+    evidence: "agent-team/src/core/worker-policy.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

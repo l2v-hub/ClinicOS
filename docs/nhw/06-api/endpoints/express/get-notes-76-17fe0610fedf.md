@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.get-notes-76'
-kind: 'api-endpoint'
-title: 'GET /notes/'
-status: 'observed'
-summary: 'GET /notes/ endpoint implemented by the express runtime.'
+id: "api.backend.get-notes-76"
+kind: "api-endpoint"
+title: "GET /notes/"
+status: "observed"
+summary: "GET /notes/ endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.operator-collaboration'
+  - "context.operator-collaboration"
 sources:
-  - path: 'backend/src/routes/note.ts'
-    symbol: 'noteRouter'
-    line_start: '14'
-    line_end: '22'
-    confidence: 'observed'
+  - path: "backend/src/routes/note.ts"
+    symbol: "noteRouter"
+    line_start: "14"
+    line_end: "22"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/note.ts'
-    confidence: 'observed'
-  - type: 'reads'
-    target: 'data.model.nota'
-    evidence: 'backend/src/routes/note.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/note.ts"
+    confidence: "observed"
+  - type: "reads"
+    target: "data.model.nota"
+    evidence: "backend/src/routes/note.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'get'
+  - "api"
+  - "express"
+  - "get"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

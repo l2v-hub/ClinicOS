@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.post-patients-by-param-documents-90'
-kind: 'api-endpoint'
-title: 'POST /patients/:patientId/documents'
-status: 'observed'
-summary: 'POST /patients/:patientId/documents endpoint implemented by the express runtime.'
+id: "api.backend.post-patients-by-param-documents-90"
+kind: "api-endpoint"
+title: "POST /patients/:patientId/documents"
+status: "observed"
+summary: "POST /patients/:patientId/documents endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patient-documents.ts'
-    symbol: 'router'
-    line_start: '153'
-    line_end: '191'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-documents.ts"
+    symbol: "router"
+    line_start: "153"
+    line_end: "191"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-documents.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-documents.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

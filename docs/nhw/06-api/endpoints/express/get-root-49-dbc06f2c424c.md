@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.get-root-49'
-kind: 'api-endpoint'
-title: 'GET /'
-status: 'observed'
-summary: 'GET / endpoint implemented by the express runtime.'
+id: "api.backend.get-root-49"
+kind: "api-endpoint"
+title: "GET /"
+status: "observed"
+summary: "GET / endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/routes/health.ts'
-    symbol: 'router'
-    line_start: '5'
-    line_end: '11'
-    confidence: 'observed'
+  - path: "backend/src/routes/health.ts"
+    symbol: "router"
+    line_start: "5"
+    line_end: "11"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/health.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/health.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'get'
+  - "api"
+  - "express"
+  - "get"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,62 +1,62 @@
 ---
-id: 'config.discovered.clinicos-frontend'
-kind: 'configuration-key'
-title: 'CLINICOS_FRONTEND'
-status: 'observed'
-summary: 'Configuration key CLINICOS_FRONTEND; generated knowledge never includes its value.'
+id: "config.discovered.clinicos-frontend"
+kind: "configuration-key"
+title: "CLINICOS_FRONTEND"
+status: "observed"
+summary: "Configuration key CLINICOS_FRONTEND; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: '.claude/skills/run-clinicos/driver.mjs'
-    symbol: 'CLINICOS_FRONTEND'
-    line_start: '19'
-    line_end: '19'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/clinicos-frontend-544027901924.md'
-    symbol: 'CLINICOS_FRONTEND'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'e2e/agnos-cru.mjs'
-    symbol: 'CLINICOS_FRONTEND'
-    line_start: '16'
-    line_end: '16'
-    confidence: 'observed'
-  - path: 'e2e/agnos-llm-reads.mjs'
-    symbol: 'CLINICOS_FRONTEND'
-    line_start: '12'
-    line_end: '12'
-    confidence: 'observed'
-  - path: 'e2e/issue-127-verify.mjs'
-    symbol: 'CLINICOS_FRONTEND'
-    line_start: '10'
-    line_end: '10'
-    confidence: 'observed'
-  - path: 'e2e/issue-128-verify.mjs'
-    symbol: 'CLINICOS_FRONTEND'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'e2e/issue-130-repro.mjs'
-    symbol: 'CLINICOS_FRONTEND'
-    line_start: '6'
-    line_end: '6'
-    confidence: 'observed'
-  - path: 'e2e/issue-130-verify.mjs'
-    symbol: 'CLINICOS_FRONTEND'
-    line_start: '5'
-    line_end: '5'
-    confidence: 'observed'
+  - path: ".claude/skills/run-clinicos/driver.mjs"
+    symbol: "CLINICOS_FRONTEND"
+    line_start: "19"
+    line_end: "19"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/clinicos-frontend-544027901924.md"
+    symbol: "CLINICOS_FRONTEND"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "e2e/agnos-cru.mjs"
+    symbol: "CLINICOS_FRONTEND"
+    line_start: "16"
+    line_end: "16"
+    confidence: "observed"
+  - path: "e2e/agnos-llm-reads.mjs"
+    symbol: "CLINICOS_FRONTEND"
+    line_start: "12"
+    line_end: "12"
+    confidence: "observed"
+  - path: "e2e/issue-127-verify.mjs"
+    symbol: "CLINICOS_FRONTEND"
+    line_start: "10"
+    line_end: "10"
+    confidence: "observed"
+  - path: "e2e/issue-128-verify.mjs"
+    symbol: "CLINICOS_FRONTEND"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "e2e/issue-130-repro.mjs"
+    symbol: "CLINICOS_FRONTEND"
+    line_start: "6"
+    line_end: "6"
+    confidence: "observed"
+  - path: "e2e/issue-130-verify.mjs"
+    symbol: "CLINICOS_FRONTEND"
+    line_start: "5"
+    line_end: "5"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.claude/skills/run-clinicos/driver.mjs,docs/nhw/09-configuration/keys/clinicos-frontend-544027901924.md,e2e/agnos-cru.mjs,e2e/agnos-llm-reads.mjs,e2e/issue-127-verify.mjs,e2e/issue-128-verify.mjs,e2e/issue-130-repro.mjs,e2e/issue-130-verify.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".claude/skills/run-clinicos/driver.mjs,docs/nhw/09-configuration/keys/clinicos-frontend-544027901924.md,e2e/agnos-cru.mjs,e2e/agnos-llm-reads.mjs,e2e/issue-127-verify.mjs,e2e/issue-128-verify.mjs,e2e/issue-130-repro.mjs,e2e/issue-130-verify.mjs"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

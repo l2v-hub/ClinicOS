@@ -1,32 +1,32 @@
 ---
-id: 'config.discovered.e2e-backend-url'
-kind: 'configuration-key'
-title: 'E2E_BACKEND_URL'
-status: 'observed'
-summary: 'Configuration key E2E_BACKEND_URL; generated knowledge never includes its value.'
+id: "config.discovered.e2e-backend-url"
+kind: "configuration-key"
+title: "E2E_BACKEND_URL"
+status: "observed"
+summary: "Configuration key E2E_BACKEND_URL; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'docs/nhw/09-configuration/keys/e2e-backend-url-261f7bbbb588.md'
-    symbol: 'E2E_BACKEND_URL'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'e2e/import-happy-path.mjs'
-    symbol: 'E2E_BACKEND_URL'
-    line_start: '17'
-    line_end: '17'
-    confidence: 'observed'
+  - path: "docs/nhw/09-configuration/keys/e2e-backend-url-261f7bbbb588.md"
+    symbol: "E2E_BACKEND_URL"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "e2e/import-happy-path.mjs"
+    symbol: "E2E_BACKEND_URL"
+    line_start: "17"
+    line_end: "17"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'docs/nhw/09-configuration/keys/e2e-backend-url-261f7bbbb588.md,e2e/import-happy-path.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "docs/nhw/09-configuration/keys/e2e-backend-url-261f7bbbb588.md,e2e/import-happy-path.mjs"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.providers.google-gemma.googlegemmaextractionprovider'
-kind: 'typescript-class'
-title: 'GoogleGemmaExtractionProvider'
-status: 'observed'
-summary: 'Exported class from backend/src/ai/providers/google-gemma.ts.'
+id: "component.backend.backend.src.ai.providers.google-gemma.googlegemmaextractionprovider"
+kind: "typescript-class"
+title: "GoogleGemmaExtractionProvider"
+status: "observed"
+summary: "Exported class from backend/src/ai/providers/google-gemma.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/ai/providers/google-gemma.ts'
-    symbol: 'GoogleGemmaExtractionProvider'
-    line_start: '32'
-    line_end: '184'
-    confidence: 'observed'
+  - path: "backend/src/ai/providers/google-gemma.ts"
+    symbol: "GoogleGemmaExtractionProvider"
+    line_start: "32"
+    line_end: "184"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/providers/google-gemma.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/providers/google-gemma.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'class'
+  - "typescript"
+  - "class"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

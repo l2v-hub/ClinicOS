@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.mockdata.createdefaultcartella'
-kind: 'typescript-function'
-title: 'createDefaultCartella'
-status: 'observed'
-summary: 'Exported function from frontend/src/mockData.ts.'
+id: "component.frontend.frontend.src.mockdata.createdefaultcartella"
+kind: "typescript-function"
+title: "createDefaultCartella"
+status: "observed"
+summary: "Exported function from frontend/src/mockData.ts."
 bounded_contexts:
-  - 'context.clinical-record'
+  - "context.clinical-record"
 sources:
-  - path: 'frontend/src/mockData.ts'
-    symbol: 'createDefaultCartella'
-    line_start: '27'
-    line_end: '80'
-    confidence: 'observed'
+  - path: "frontend/src/mockData.ts"
+    symbol: "createDefaultCartella"
+    line_start: "27"
+    line_end: "80"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/mockData.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/mockData.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

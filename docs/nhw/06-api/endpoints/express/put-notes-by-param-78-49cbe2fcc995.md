@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.put-notes-by-param-78'
-kind: 'api-endpoint'
-title: 'PUT /notes/:id'
-status: 'observed'
-summary: 'PUT /notes/:id endpoint implemented by the express runtime.'
+id: "api.backend.put-notes-by-param-78"
+kind: "api-endpoint"
+title: "PUT /notes/:id"
+status: "observed"
+summary: "PUT /notes/:id endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.operator-collaboration'
+  - "context.operator-collaboration"
 sources:
-  - path: 'backend/src/routes/note.ts'
-    symbol: 'noteRouter'
-    line_start: '56'
-    line_end: '95'
-    confidence: 'observed'
+  - path: "backend/src/routes/note.ts"
+    symbol: "noteRouter"
+    line_start: "56"
+    line_end: "95"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/note.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.nota'
-    evidence: 'backend/src/routes/note.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/note.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.nota"
+    evidence: "backend/src/routes/note.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'put'
+  - "api"
+  - "express"
+  - "put"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

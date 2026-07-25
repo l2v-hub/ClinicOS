@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.actions.appointments.isappointmentaction'
-kind: 'typescript-function'
-title: 'isAppointmentAction'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/actions/appointments.ts.'
+id: "component.backend.backend.src.ai.actions.appointments.isappointmentaction"
+kind: "typescript-function"
+title: "isAppointmentAction"
+status: "observed"
+summary: "Exported function from backend/src/ai/actions/appointments.ts."
 bounded_contexts:
-  - 'context.scheduling'
+  - "context.scheduling"
 sources:
-  - path: 'backend/src/ai/actions/appointments.ts'
-    symbol: 'isAppointmentAction'
-    line_start: '20'
-    line_end: '22'
-    confidence: 'observed'
+  - path: "backend/src/ai/actions/appointments.ts"
+    symbol: "isAppointmentAction"
+    line_start: "20"
+    line_end: "22"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/actions/appointments.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/actions/appointments.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

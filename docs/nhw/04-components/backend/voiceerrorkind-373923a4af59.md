@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.voice.execute.voiceerrorkind'
-kind: 'typescript-type-alias'
-title: 'VoiceErrorKind'
-status: 'observed'
-summary: 'Exported type-alias from backend/src/ai/voice/execute.ts.'
+id: "component.backend.backend.src.ai.voice.execute.voiceerrorkind"
+kind: "typescript-type-alias"
+title: "VoiceErrorKind"
+status: "observed"
+summary: "Exported type-alias from backend/src/ai/voice/execute.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/voice/execute.ts'
-    symbol: 'VoiceErrorKind'
-    line_start: '12'
-    line_end: '20'
-    confidence: 'observed'
+  - path: "backend/src/ai/voice/execute.ts"
+    symbol: "VoiceErrorKind"
+    line_start: "12"
+    line_end: "20"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/voice/execute.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/voice/execute.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'type-alias'
+  - "typescript"
+  - "type-alias"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,26 +1,26 @@
 ---
-id: 'config.discovered.ai-max-files'
-kind: 'configuration-key'
-title: 'AI_MAX_FILES'
-status: 'observed'
-summary: 'Configuration key AI_MAX_FILES; generated knowledge never includes its value.'
+id: "config.discovered.ai-max-files"
+kind: "configuration-key"
+title: "AI_MAX_FILES"
+status: "observed"
+summary: "Configuration key AI_MAX_FILES; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/.env.example'
-    symbol: 'AI_MAX_FILES'
-    line_start: '32'
-    line_end: '32'
-    confidence: 'observed'
+  - path: "backend/.env.example"
+    symbol: "AI_MAX_FILES"
+    line_start: "32"
+    line_end: "32"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/.env.example'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/.env.example"
+    confidence: "observed"
 tags:
-  - 'configuration'
+  - "configuration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

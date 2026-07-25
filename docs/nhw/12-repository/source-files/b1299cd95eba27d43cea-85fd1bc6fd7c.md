@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.b1299cd95eba27d43cea'
-kind: 'repository-source'
-title: 'extracted-content-before.md'
-status: 'declared'
-summary: 'Repository source path requirements/evidence/REQ-035/extracted-content-before.md classified as narrative-source.'
+id: "component.repository.source.b1299cd95eba27d43cea"
+kind: "repository-source"
+title: "extracted-content-before.md"
+status: "declared"
+summary: "Repository source path requirements/evidence/REQ-035/extracted-content-before.md classified as narrative-source."
 bounded_contexts: []
 sources:
-  - path: 'requirements/evidence/REQ-035/extracted-content-before.md'
-    confidence: 'declared'
+  - path: "requirements/evidence/REQ-035/extracted-content-before.md"
+    confidence: "declared"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'requirements/evidence/REQ-035/extracted-content-before.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "requirements/evidence/REQ-035/extracted-content-before.md"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'narrative-source'
+  - "repository-source"
+  - "narrative-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

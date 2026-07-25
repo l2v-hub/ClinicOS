@@ -1,27 +1,27 @@
 ---
-id: 'config.source.environment-examples'
-kind: 'configuration-source'
-title: 'Environment example declarations'
-status: 'observed'
-summary: 'Checked-in .env.example files declare supported variable names without supplying production credentials.'
+id: "config.source.environment-examples"
+kind: "configuration-source"
+title: "Environment example declarations"
+status: "observed"
+summary: "Checked-in .env.example files declare supported variable names without supplying production credentials."
 bounded_contexts: []
 sources:
-  - path: 'backend/.env.example'
-    confidence: 'observed'
-  - path: 'frontend/.env.example'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/.env.example'
-    confidence: 'observed'
+  - path: "backend/.env.example"
+    confidence: "observed"
+  - path: "frontend/.env.example"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/.env.example"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/.env.example,frontend/.env.example,clinicos-ai-runtime/.env.example'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/.env.example,frontend/.env.example,clinicos-ai-runtime/.env.example"
+    confidence: "observed"
 tags:
-  - 'configuration-source'
+  - "configuration-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

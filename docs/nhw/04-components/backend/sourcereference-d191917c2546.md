@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.types.sourcereference'
-kind: 'typescript-interface'
-title: 'SourceReference'
-status: 'observed'
-summary: 'Exported interface from backend/src/ai/gateway/types.ts.'
+id: "component.backend.backend.src.ai.gateway.types.sourcereference"
+kind: "typescript-interface"
+title: "SourceReference"
+status: "observed"
+summary: "Exported interface from backend/src/ai/gateway/types.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/gateway/types.ts'
-    symbol: 'SourceReference'
-    line_start: '20'
-    line_end: '30'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/types.ts"
+    symbol: "SourceReference"
+    line_start: "20"
+    line_end: "30"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/types.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/types.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

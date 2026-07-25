@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.routes.ai-assistant-public.ctxfromoperator'
-kind: 'typescript-function'
-title: 'ctxFromOperator'
-status: 'observed'
-summary: 'Exported function from backend/src/routes/ai-assistant-public.ts.'
+id: "component.backend.backend.src.routes.ai-assistant-public.ctxfromoperator"
+kind: "typescript-function"
+title: "ctxFromOperator"
+status: "observed"
+summary: "Exported function from backend/src/routes/ai-assistant-public.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/routes/ai-assistant-public.ts'
-    symbol: 'ctxFromOperator'
-    line_start: '27'
-    line_end: '36'
-    confidence: 'observed'
+  - path: "backend/src/routes/ai-assistant-public.ts"
+    symbol: "ctxFromOperator"
+    line_start: "27"
+    line_end: "36"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/ai-assistant-public.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/ai-assistant-public.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

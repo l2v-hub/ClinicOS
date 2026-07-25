@@ -1,27 +1,27 @@
 ---
-id: 'config.environment.local'
-kind: 'runtime-environment'
-title: 'Local development environment'
-status: 'observed'
-summary: 'Local frontend, backend, AI runtime, and PostgreSQL use package scripts and Docker Compose defaults.'
+id: "config.environment.local"
+kind: "runtime-environment"
+title: "Local development environment"
+status: "observed"
+summary: "Local frontend, backend, AI runtime, and PostgreSQL use package scripts and Docker Compose defaults."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    confidence: 'observed'
-  - path: 'docker-compose.yml'
-    confidence: 'observed'
-  - path: 'frontend/src/config.ts'
-    confidence: 'observed'
+  - path: "package.json"
+    confidence: "observed"
+  - path: "docker-compose.yml"
+    confidence: "observed"
+  - path: "frontend/src/config.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'package.json,docker-compose.yml,frontend/src/config.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "package.json,docker-compose.yml,frontend/src/config.ts"
+    confidence: "observed"
 tags:
-  - 'runtime-environment'
+  - "runtime-environment"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

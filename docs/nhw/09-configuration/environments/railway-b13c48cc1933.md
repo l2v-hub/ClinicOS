@@ -1,29 +1,29 @@
 ---
-id: 'config.environment.railway'
-kind: 'runtime-environment'
-title: 'Railway deployment environment'
-status: 'observed'
-summary: 'Backend and AI runtime use separate Railway services, startup commands, health paths, and environment variables.'
+id: "config.environment.railway"
+kind: "runtime-environment"
+title: "Railway deployment environment"
+status: "observed"
+summary: "Backend and AI runtime use separate Railway services, startup commands, health paths, and environment variables."
 bounded_contexts: []
 sources:
-  - path: 'railway.json'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/railway.json'
-    confidence: 'observed'
-  - path: '.github/workflows/deploy-backend.yml'
-    confidence: 'observed'
-  - path: '.github/workflows/deploy-runtime.yml'
-    confidence: 'observed'
+  - path: "railway.json"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/railway.json"
+    confidence: "observed"
+  - path: ".github/workflows/deploy-backend.yml"
+    confidence: "observed"
+  - path: ".github/workflows/deploy-runtime.yml"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'railway.json,clinicos-ai-runtime/railway.json,.github/workflows/deploy-backend.yml,.github/workflows/deploy-runtime.yml'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "railway.json,clinicos-ai-runtime/railway.json,.github/workflows/deploy-backend.yml,.github/workflows/deploy-runtime.yml"
+    confidence: "observed"
 tags:
-  - 'runtime-environment'
+  - "runtime-environment"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

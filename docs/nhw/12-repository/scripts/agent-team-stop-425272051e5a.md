@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.package-script.package.json.agent-team-stop'
-kind: 'package-script'
-title: 'clinicos:agent-team:stop'
-status: 'observed'
-summary: 'Package script agent-team:stop executes node agent-team/src/cli.mjs stop.'
+id: "component.repository.package-script.package.json.agent-team-stop"
+kind: "package-script"
+title: "clinicos:agent-team:stop"
+status: "observed"
+summary: "Package script agent-team:stop executes node agent-team/src/cli.mjs stop."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    symbol: 'agent-team:stop'
-    confidence: 'observed'
+  - path: "package.json"
+    symbol: "agent-team:stop"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "package.json"
+    confidence: "observed"
 tags:
-  - 'package-script'
+  - "package-script"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

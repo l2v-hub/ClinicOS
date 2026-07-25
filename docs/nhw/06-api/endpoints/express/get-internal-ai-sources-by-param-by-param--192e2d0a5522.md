@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.get-internal-ai-sources-by-param-by-param-71'
-kind: 'api-endpoint'
-title: 'GET /internal/ai/sources/:sourceType/:recordId'
-status: 'observed'
-summary: 'GET /internal/ai/sources/:sourceType/:recordId endpoint implemented by the express runtime.'
+id: "api.backend.get-internal-ai-sources-by-param-by-param-71"
+kind: "api-endpoint"
+title: "GET /internal/ai/sources/:sourceType/:recordId"
+status: "observed"
+summary: "GET /internal/ai/sources/:sourceType/:recordId endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/routes/internal-ai.ts'
-    symbol: 'internalAiRouter'
-    line_start: '132'
-    line_end: '147'
-    confidence: 'observed'
+  - path: "backend/src/routes/internal-ai.ts"
+    symbol: "internalAiRouter"
+    line_start: "132"
+    line_end: "147"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/internal-ai.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/internal-ai.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'get'
+  - "api"
+  - "express"
+  - "get"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

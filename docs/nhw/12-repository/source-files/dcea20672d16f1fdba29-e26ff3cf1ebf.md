@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.dcea20672d16f1fdba29'
-kind: 'repository-source'
-title: '05-job-after-cancel.json'
-status: 'observed'
-summary: 'Repository source path requirements/evidence/BUG-049/prod-verify/05-job-after-cancel.json classified as configuration-source.'
+id: "component.repository.source.dcea20672d16f1fdba29"
+kind: "repository-source"
+title: "05-job-after-cancel.json"
+status: "observed"
+summary: "Repository source path requirements/evidence/BUG-049/prod-verify/05-job-after-cancel.json classified as configuration-source."
 bounded_contexts: []
 sources:
-  - path: 'requirements/evidence/BUG-049/prod-verify/05-job-after-cancel.json'
-    confidence: 'observed'
+  - path: "requirements/evidence/BUG-049/prod-verify/05-job-after-cancel.json"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'requirements/evidence/BUG-049/prod-verify/05-job-after-cancel.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "requirements/evidence/BUG-049/prod-verify/05-job-after-cancel.json"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'configuration-source'
+  - "repository-source"
+  - "configuration-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

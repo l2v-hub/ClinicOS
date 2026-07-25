@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.5b56bdf78de4f3dd3cfb'
-kind: 'repository-source'
-title: 'pull-requests.json'
-status: 'observed'
-summary: 'Repository source path docs/migration/github-account-migration/pull-requests.json classified as configuration-source.'
+id: "component.repository.source.5b56bdf78de4f3dd3cfb"
+kind: "repository-source"
+title: "pull-requests.json"
+status: "observed"
+summary: "Repository source path docs/migration/github-account-migration/pull-requests.json classified as configuration-source."
 bounded_contexts: []
 sources:
-  - path: 'docs/migration/github-account-migration/pull-requests.json'
-    confidence: 'observed'
+  - path: "docs/migration/github-account-migration/pull-requests.json"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'docs/migration/github-account-migration/pull-requests.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "docs/migration/github-account-migration/pull-requests.json"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'configuration-source'
+  - "repository-source"
+  - "configuration-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.sections.profile.sectionkey'
-kind: 'typescript-type-alias'
-title: 'SectionKey'
-status: 'observed'
-summary: 'Exported type-alias from backend/src/ai/sections/profile.ts.'
+id: "component.backend.backend.src.ai.sections.profile.sectionkey"
+kind: "typescript-type-alias"
+title: "SectionKey"
+status: "observed"
+summary: "Exported type-alias from backend/src/ai/sections/profile.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/sections/profile.ts'
-    symbol: 'SectionKey'
-    line_start: '31'
-    line_end: '31'
-    confidence: 'observed'
+  - path: "backend/src/ai/sections/profile.ts"
+    symbol: "SectionKey"
+    line_start: "31"
+    line_end: "31"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/sections/profile.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/sections/profile.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'type-alias'
+  - "typescript"
+  - "type-alias"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

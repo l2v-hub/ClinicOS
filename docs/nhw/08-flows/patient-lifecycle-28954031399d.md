@@ -1,87 +1,87 @@
 ---
-id: 'flow.patient-lifecycle'
-kind: 'runtime-flow'
-title: 'Patient creation, resolution, update, and deletion'
-status: 'inferred'
-summary: 'Patient creation, resolution, update, and deletion workflow across ClinicOS components.'
+id: "flow.patient-lifecycle"
+kind: "runtime-flow"
+title: "Patient creation, resolution, update, and deletion"
+status: "inferred"
+summary: "Patient creation, resolution, update, and deletion workflow across ClinicOS components."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '889'
-    line_end: '914'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '7'
-    line_end: '18'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '28'
-    line_end: '41'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '918'
-    line_end: '938'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '22'
-    line_end: '26'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '816'
-    line_end: '877'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '718'
-    line_end: '812'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '75'
-    line_end: '716'
-    confidence: 'observed'
+  - path: "backend/src/routes/patients.ts"
+    line_start: "889"
+    line_end: "914"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    line_start: "7"
+    line_end: "18"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    line_start: "28"
+    line_end: "41"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    line_start: "918"
+    line_end: "938"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    line_start: "22"
+    line_end: "26"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    line_start: "816"
+    line_end: "877"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    line_start: "718"
+    line_end: "812"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    line_start: "75"
+    line_end: "716"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-patients-by-param-109'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-patients-102'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-patients-by-param-104'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-patients-by-param-cartella-110'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.get-patients-settings-103'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.patch-patients-by-param-108'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.post-patients-107'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.post-patients-demo-setup-106'
-    evidence: 'backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-patients-by-param-109"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-patients-102"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-patients-by-param-104"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-patients-by-param-cartella-110"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.get-patients-settings-103"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.patch-patients-by-param-108"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.post-patients-107"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.post-patients-demo-setup-106"
+    evidence: "backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts,backend/src/routes/patients.ts"
+    confidence: "inferred"
 tags:
-  - 'runtime-flow'
+  - "runtime-flow"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
 ## Question Answered
@@ -153,13 +153,13 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Sequence
 
-| Step | Actor            | Operation                                        | State change               | Failure branch                  |
-| ---- | ---------------- | ------------------------------------------------ | -------------------------- | ------------------------------- |
-| 1    | Trigger actor    | `api.backend.delete-patients-by-param-109`       | Defined by cited component | Owning component error contract |
-| 2    | ClinicOS runtime | `api.backend.get-patients-102`                   | Defined by cited component | Owning component error contract |
-| 3    | ClinicOS runtime | `api.backend.get-patients-by-param-104`          | Defined by cited component | Owning component error contract |
-| 4    | ClinicOS runtime | `api.backend.get-patients-by-param-cartella-110` | Defined by cited component | Owning component error contract |
-| 5    | ClinicOS runtime | `api.backend.get-patients-settings-103`          | Defined by cited component | Owning component error contract |
-| 6    | ClinicOS runtime | `api.backend.patch-patients-by-param-108`        | Defined by cited component | Owning component error contract |
-| 7    | ClinicOS runtime | `api.backend.post-patients-107`                  | Defined by cited component | Owning component error contract |
-| 8    | ClinicOS runtime | `api.backend.post-patients-demo-setup-106`       | Defined by cited component | Owning component error contract |
+| Step | Actor | Operation | State change | Failure branch |
+| --- | --- | --- | --- | --- |
+| 1 | Trigger actor | `api.backend.delete-patients-by-param-109` | Defined by cited component | Owning component error contract |
+| 2 | ClinicOS runtime | `api.backend.get-patients-102` | Defined by cited component | Owning component error contract |
+| 3 | ClinicOS runtime | `api.backend.get-patients-by-param-104` | Defined by cited component | Owning component error contract |
+| 4 | ClinicOS runtime | `api.backend.get-patients-by-param-cartella-110` | Defined by cited component | Owning component error contract |
+| 5 | ClinicOS runtime | `api.backend.get-patients-settings-103` | Defined by cited component | Owning component error contract |
+| 6 | ClinicOS runtime | `api.backend.patch-patients-by-param-108` | Defined by cited component | Owning component error contract |
+| 7 | ClinicOS runtime | `api.backend.post-patients-107` | Defined by cited component | Owning component error contract |
+| 8 | ClinicOS runtime | `api.backend.post-patients-demo-setup-106` | Defined by cited component | Owning component error contract |

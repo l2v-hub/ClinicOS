@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.package-script.package.json.test-nhw'
-kind: 'package-script'
-title: 'clinicos:test:nhw'
-status: 'observed'
-summary: 'Package script test:nhw executes node --test scripts/nhw/test/contracts.test.mjs scripts/nhw/test/inventory.test.mjs scripts/nhw/test/typescript-extractor.test.mjs scripts/nhw/test/python-extractor.test.mjs scripts/nhw/test/prisma-extractor.test.mjs scripts/nhw/test/repository-extractor.test.mjs scripts/nhw/test/markdown-graph.test.mjs scripts/nhw/test/coverage-validator.test.mjs scripts/nhw/test/knowledge-compiler.test.mjs scripts/nhw/test/determinism.test.mjs.'
+id: "component.repository.package-script.package.json.test-nhw"
+kind: "package-script"
+title: "clinicos:test:nhw"
+status: "observed"
+summary: "Package script test:nhw executes node --test scripts/nhw/test/contracts.test.mjs scripts/nhw/test/inventory.test.mjs scripts/nhw/test/typescript-extractor.test.mjs scripts/nhw/test/python-extractor.test.mjs scripts/nhw/test/prisma-extractor.test.mjs scripts/nhw/test/repository-extractor.test.mjs scripts/nhw/test/markdown-graph.test.mjs scripts/nhw/test/coverage-validator.test.mjs scripts/nhw/test/knowledge-compiler.test.mjs scripts/nhw/test/determinism.test.mjs."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    symbol: 'test:nhw'
-    confidence: 'observed'
+  - path: "package.json"
+    symbol: "test:nhw"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "package.json"
+    confidence: "observed"
 tags:
-  - 'package-script'
+  - "package-script"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

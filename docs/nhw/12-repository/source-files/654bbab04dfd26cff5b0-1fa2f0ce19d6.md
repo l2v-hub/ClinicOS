@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.654bbab04dfd26cff5b0'
-kind: 'repository-source'
-title: 'VERIFICATION.md'
-status: 'declared'
-summary: 'Repository source path requirements/evidence/BUG-046/VERIFICATION.md classified as narrative-source.'
+id: "component.repository.source.654bbab04dfd26cff5b0"
+kind: "repository-source"
+title: "VERIFICATION.md"
+status: "declared"
+summary: "Repository source path requirements/evidence/BUG-046/VERIFICATION.md classified as narrative-source."
 bounded_contexts: []
 sources:
-  - path: 'requirements/evidence/BUG-046/VERIFICATION.md'
-    confidence: 'declared'
+  - path: "requirements/evidence/BUG-046/VERIFICATION.md"
+    confidence: "declared"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'requirements/evidence/BUG-046/VERIFICATION.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "requirements/evidence/BUG-046/VERIFICATION.md"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'narrative-source'
+  - "repository-source"
+  - "narrative-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

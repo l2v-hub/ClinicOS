@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.post-internal-ai-query-vital-signs-60'
-kind: 'api-endpoint'
-title: 'POST /internal/ai/query/vital-signs'
-status: 'observed'
-summary: 'POST /internal/ai/query/vital-signs endpoint implemented by the express runtime.'
+id: "api.backend.post-internal-ai-query-vital-signs-60"
+kind: "api-endpoint"
+title: "POST /internal/ai/query/vital-signs"
+status: "observed"
+summary: "POST /internal/ai/query/vital-signs endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/routes/internal-ai.ts'
-    symbol: 'internalAiRouter'
-    line_start: '67'
-    line_end: '70'
-    confidence: 'observed'
+  - path: "backend/src/routes/internal-ai.ts"
+    symbol: "internalAiRouter"
+    line_start: "67"
+    line_end: "70"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/internal-ai.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/internal-ai.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

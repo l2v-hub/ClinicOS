@@ -1,27 +1,27 @@
 ---
-id: 'test.governance.quality-gate'
-kind: 'quality-gate'
-title: 'Task validation and closure gate'
-status: 'observed'
-summary: 'Task contracts, validation reports, test evidence, and closure script form the repository acceptance gate.'
+id: "test.governance.quality-gate"
+kind: "quality-gate"
+title: "Task validation and closure gate"
+status: "observed"
+summary: "Task contracts, validation reports, test evidence, and closure script form the repository acceptance gate."
 bounded_contexts: []
 sources:
-  - path: 'scripts/quality-gate/create-task-contract.js'
-    confidence: 'observed'
-  - path: 'scripts/quality-gate/validate-task-contract.js'
-    confidence: 'observed'
-  - path: 'scripts/quality-gate/check-closure.js'
-    confidence: 'observed'
+  - path: "scripts/quality-gate/create-task-contract.js"
+    confidence: "observed"
+  - path: "scripts/quality-gate/validate-task-contract.js"
+    confidence: "observed"
+  - path: "scripts/quality-gate/check-closure.js"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.delivery-quality-governance'
-    evidence: 'scripts/quality-gate/create-task-contract.js,scripts/quality-gate/validate-task-contract.js,scripts/quality-gate/check-closure.js'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "context.delivery-quality-governance"
+    evidence: "scripts/quality-gate/create-task-contract.js,scripts/quality-gate/validate-task-contract.js,scripts/quality-gate/check-closure.js"
+    confidence: "observed"
 tags:
-  - 'quality-gate'
+  - "quality-gate"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

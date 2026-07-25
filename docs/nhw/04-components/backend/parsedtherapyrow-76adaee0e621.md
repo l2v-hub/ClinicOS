@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.intake.parse-discharge-therapy.parsedtherapyrow'
-kind: 'typescript-interface'
-title: 'ParsedTherapyRow'
-status: 'observed'
-summary: 'Exported interface from backend/src/intake/parse-discharge-therapy.ts.'
+id: "component.backend.backend.src.intake.parse-discharge-therapy.parsedtherapyrow"
+kind: "typescript-interface"
+title: "ParsedTherapyRow"
+status: "observed"
+summary: "Exported interface from backend/src/intake/parse-discharge-therapy.ts."
 bounded_contexts:
-  - 'context.therapy-administration'
+  - "context.therapy-administration"
 sources:
-  - path: 'backend/src/intake/parse-discharge-therapy.ts'
-    symbol: 'ParsedTherapyRow'
-    line_start: '7'
-    line_end: '20'
-    confidence: 'observed'
+  - path: "backend/src/intake/parse-discharge-therapy.ts"
+    symbol: "ParsedTherapyRow"
+    line_start: "7"
+    line_end: "20"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/intake/parse-discharge-therapy.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/intake/parse-discharge-therapy.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

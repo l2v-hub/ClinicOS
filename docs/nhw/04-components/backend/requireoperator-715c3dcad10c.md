@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.auth.requireoperator'
-kind: 'typescript-function'
-title: 'requireOperator'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/auth.ts.'
+id: "component.backend.backend.src.ai.auth.requireoperator"
+kind: "typescript-function"
+title: "requireOperator"
+status: "observed"
+summary: "Exported function from backend/src/ai/auth.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/ai/auth.ts'
-    symbol: 'requireOperator'
-    line_start: '24'
-    line_end: '38'
-    confidence: 'observed'
+  - path: "backend/src/ai/auth.ts"
+    symbol: "requireOperator"
+    line_start: "24"
+    line_end: "38"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/auth.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/auth.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

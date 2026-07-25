@@ -1,25 +1,25 @@
 ---
-id: 'runtime.backend.prisma-lifecycle'
-kind: 'runtime-lifecycle'
-title: 'Prisma and PostgreSQL lifecycle'
-status: 'observed'
-summary: 'A shared Prisma client backed by the PostgreSQL adapter owns backend persistence connections.'
+id: "runtime.backend.prisma-lifecycle"
+kind: "runtime-lifecycle"
+title: "Prisma and PostgreSQL lifecycle"
+status: "observed"
+summary: "A shared Prisma client backed by the PostgreSQL adapter owns backend persistence connections."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/lib/prisma.ts'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - path: "backend/src/lib/prisma.ts"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/lib/prisma.ts,prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/lib/prisma.ts,prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'runtime-lifecycle'
+  - "runtime-lifecycle"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

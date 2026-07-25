@@ -1,57 +1,57 @@
 ---
-id: 'flow.frontend-api-navigation'
-kind: 'runtime-flow'
-title: 'Frontend navigation and API error handling'
-status: 'inferred'
-summary: 'Frontend navigation and API error handling workflow across ClinicOS components.'
+id: "flow.frontend-api-navigation"
+kind: "runtime-flow"
+title: "Frontend navigation and API error handling"
+status: "inferred"
+summary: "Frontend navigation and API error handling workflow across ClinicOS components."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/App.tsx'
-    symbol: 'App'
-    line_start: '130'
-    line_end: '1597'
-    confidence: 'observed'
-  - path: 'frontend/src/App.tsx'
-    symbol: 'mapAppointmentDTO'
-    line_start: '105'
-    line_end: '126'
-    confidence: 'observed'
-  - path: 'frontend/src/App.tsx'
-    symbol: 'MODULE_TAB_IDS'
-    line_start: '52'
-    line_end: '59'
-    confidence: 'observed'
-  - path: 'frontend/src/App.tsx'
-    symbol: 'NAV_FALLBACK'
-    line_start: '78'
-    line_end: '86'
-    confidence: 'observed'
-  - path: 'frontend/src/App.tsx'
-    symbol: 'NAV_LABELS'
-    line_start: '61'
-    line_end: '76'
-    confidence: 'observed'
-  - path: 'frontend/src/App.tsx'
-    symbol: 'TIPI_NOTI'
-    line_start: '95'
-    line_end: '103'
-    confidence: 'observed'
+  - path: "frontend/src/App.tsx"
+    symbol: "App"
+    line_start: "130"
+    line_end: "1597"
+    confidence: "observed"
+  - path: "frontend/src/App.tsx"
+    symbol: "mapAppointmentDTO"
+    line_start: "105"
+    line_end: "126"
+    confidence: "observed"
+  - path: "frontend/src/App.tsx"
+    symbol: "MODULE_TAB_IDS"
+    line_start: "52"
+    line_end: "59"
+    confidence: "observed"
+  - path: "frontend/src/App.tsx"
+    symbol: "NAV_FALLBACK"
+    line_start: "78"
+    line_end: "86"
+    confidence: "observed"
+  - path: "frontend/src/App.tsx"
+    symbol: "NAV_LABELS"
+    line_start: "61"
+    line_end: "76"
+    confidence: "observed"
+  - path: "frontend/src/App.tsx"
+    symbol: "TIPI_NOTI"
+    line_start: "95"
+    line_end: "103"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.frontend.frontend.src.app.app'
-    evidence: 'frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.frontend.frontend.src.app.app"
+    evidence: "frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx,frontend/src/App.tsx"
+    confidence: "inferred"
 tags:
-  - 'runtime-flow'
+  - "runtime-flow"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
 ## Question Answered
@@ -107,11 +107,11 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Sequence
 
-| Step | Actor            | Operation                                               | State change               | Failure branch                  |
-| ---- | ---------------- | ------------------------------------------------------- | -------------------------- | ------------------------------- |
-| 1    | Trigger actor    | `component.frontend.frontend.src.app.app`               | Defined by cited component | Owning component error contract |
-| 2    | ClinicOS runtime | `component.frontend.frontend.src.app.mapappointmentdto` | Defined by cited component | Owning component error contract |
-| 3    | ClinicOS runtime | `component.frontend.frontend.src.app.module-tab-ids`    | Defined by cited component | Owning component error contract |
-| 4    | ClinicOS runtime | `component.frontend.frontend.src.app.nav-fallback`      | Defined by cited component | Owning component error contract |
-| 5    | ClinicOS runtime | `component.frontend.frontend.src.app.nav-labels`        | Defined by cited component | Owning component error contract |
-| 6    | ClinicOS runtime | `component.frontend.frontend.src.app.tipi-noti`         | Defined by cited component | Owning component error contract |
+| Step | Actor | Operation | State change | Failure branch |
+| --- | --- | --- | --- | --- |
+| 1 | Trigger actor | `component.frontend.frontend.src.app.app` | Defined by cited component | Owning component error contract |
+| 2 | ClinicOS runtime | `component.frontend.frontend.src.app.mapappointmentdto` | Defined by cited component | Owning component error contract |
+| 3 | ClinicOS runtime | `component.frontend.frontend.src.app.module-tab-ids` | Defined by cited component | Owning component error contract |
+| 4 | ClinicOS runtime | `component.frontend.frontend.src.app.nav-fallback` | Defined by cited component | Owning component error contract |
+| 5 | ClinicOS runtime | `component.frontend.frontend.src.app.nav-labels` | Defined by cited component | Owning component error contract |
+| 6 | ClinicOS runtime | `component.frontend.frontend.src.app.tipi-noti` | Defined by cited component | Owning component error contract |

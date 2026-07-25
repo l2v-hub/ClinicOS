@@ -1,25 +1,25 @@
 ---
-id: 'integration.openai-compatible'
-kind: 'model-provider-integration'
-title: 'OpenAI and OpenAI-compatible providers'
-status: 'observed'
-summary: 'AI runtime supports native OpenAI and configurable OpenAI-like endpoints behind the shared model runner contract.'
+id: "integration.openai-compatible"
+kind: "model-provider-integration"
+title: "OpenAI and OpenAI-compatible providers"
+status: "observed"
+summary: "AI runtime supports native OpenAI and configurable OpenAI-like endpoints behind the shared model runner contract."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/openai.py'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/openai.py"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/models/providers/openai.py,clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/providers/openai.py,clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py"
+    confidence: "observed"
 tags:
-  - 'model-provider-integration'
+  - "model-provider-integration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

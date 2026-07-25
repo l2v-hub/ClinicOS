@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.agnos.useagnoschat.agnospending'
-kind: 'typescript-interface'
-title: 'AgnosPending'
-status: 'observed'
-summary: 'Exported interface from frontend/src/components/shared/agnos/useAgnosChat.ts.'
+id: "component.frontend.frontend.src.components.shared.agnos.useagnoschat.agnospending"
+kind: "typescript-interface"
+title: "AgnosPending"
+status: "observed"
+summary: "Exported interface from frontend/src/components/shared/agnos/useAgnosChat.ts."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'frontend/src/components/shared/agnos/useAgnosChat.ts'
-    symbol: 'AgnosPending'
-    line_start: '50'
-    line_end: '60'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/agnos/useAgnosChat.ts"
+    symbol: "AgnosPending"
+    line_start: "50"
+    line_end: "60"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/agnos/useAgnosChat.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/agnos/useAgnosChat.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

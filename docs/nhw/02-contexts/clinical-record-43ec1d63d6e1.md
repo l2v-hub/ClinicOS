@@ -1,63 +1,63 @@
 ---
-id: 'context.clinical-record'
-kind: 'bounded-context'
-title: 'Clinical Record'
-status: 'inferred'
-summary: 'Clinical Record bounded context reconstructed from executable ClinicOS sources.'
+id: "context.clinical-record"
+kind: "bounded-context"
+title: "Clinical Record"
+status: "inferred"
+summary: "Clinical Record bounded context reconstructed from executable ClinicOS sources."
 bounded_contexts:
-  - 'context.clinical-record'
+  - "context.clinical-record"
 sources:
-  - path: 'prisma/schema.prisma'
-    line_start: '150'
-    line_end: '157'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '178'
-    line_end: '190'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '159'
-    line_end: '176'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '507'
-    line_end: '530'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '414'
-    line_end: '432'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '132'
-    line_end: '148'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    line_start: "150"
+    line_end: "157"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "178"
+    line_end: "190"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "159"
+    line_end: "176"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "507"
+    line_end: "530"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "414"
+    line_end: "432"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "132"
+    line_end: "148"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.cartella'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.clinicalnote'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.clinicalrecord'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.importdocument'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.cartella"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.clinicalnote"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.clinicalrecord"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.importdocument"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'bounded-context'
+  - "bounded-context"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership."
 ---
 
 ## Question Answered

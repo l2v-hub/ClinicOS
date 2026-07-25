@@ -1,32 +1,32 @@
 ---
-id: 'config.discovered.openai-key'
-kind: 'configuration-key'
-title: 'OPENAI_KEY'
-status: 'observed'
-summary: 'Configuration key OPENAI_KEY; generated knowledge never includes its value.'
+id: "config.discovered.openai-key"
+kind: "configuration-key"
+title: "OPENAI_KEY"
+status: "observed"
+summary: "Configuration key OPENAI_KEY; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'docs/nhw/09-configuration/keys/openai-key-c236b456e142.md'
-    symbol: 'OPENAI_KEY'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'scripts/security/scan-frontend-secrets.mjs'
-    symbol: 'OPENAI_KEY'
-    line_start: '144'
-    line_end: '144'
-    confidence: 'observed'
+  - path: "docs/nhw/09-configuration/keys/openai-key-c236b456e142.md"
+    symbol: "OPENAI_KEY"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "scripts/security/scan-frontend-secrets.mjs"
+    symbol: "OPENAI_KEY"
+    line_start: "144"
+    line_end: "144"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'docs/nhw/09-configuration/keys/openai-key-c236b456e142.md,scripts/security/scan-frontend-secrets.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "docs/nhw/09-configuration/keys/openai-key-c236b456e142.md,scripts/security/scan-frontend-secrets.mjs"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

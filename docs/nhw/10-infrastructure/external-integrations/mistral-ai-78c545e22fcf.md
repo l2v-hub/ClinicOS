@@ -1,25 +1,25 @@
 ---
-id: 'integration.mistral-ai'
-kind: 'model-provider-integration'
-title: 'Mistral model and OCR provider'
-status: 'observed'
-summary: 'AI runtime uses the Mistral adapter for configured OCR, extraction, repair, or assistant roles.'
+id: "integration.mistral-ai"
+kind: "model-provider-integration"
+title: "Mistral model and OCR provider"
+status: "observed"
+summary: "AI runtime uses the Mistral adapter for configured OCR, extraction, repair, or assistant roles."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/env_config.py'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/env_config.py"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py,clinicos-ai-runtime/clinicos_ai/models/env_config.py"
+    confidence: "observed"
 tags:
-  - 'model-provider-integration'
+  - "model-provider-integration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

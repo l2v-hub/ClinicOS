@@ -1,25 +1,25 @@
 ---
-id: 'finding.coupling.patient-document-route-order'
-kind: 'architectural-finding'
-title: 'Patient document route-order coupling'
-status: 'observed'
-summary: 'Protected document routes require per-route middleware because router mount order overlaps the patient router.'
+id: "finding.coupling.patient-document-route-order"
+kind: "architectural-finding"
+title: "Patient document route-order coupling"
+status: "observed"
+summary: "Protected document routes require per-route middleware because router mount order overlaps the patient router."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/routes/patient-documents.ts'
-    confidence: 'observed'
-  - path: 'backend/src/app.ts'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-documents.ts"
+    confidence: "observed"
+  - path: "backend/src/app.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/app.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/app.ts"
+    confidence: "observed"
 tags:
-  - 'architectural-finding'
+  - "architectural-finding"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

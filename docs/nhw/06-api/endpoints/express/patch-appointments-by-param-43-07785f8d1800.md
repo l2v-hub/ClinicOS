@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.patch-appointments-by-param-43'
-kind: 'api-endpoint'
-title: 'PATCH /appointments/:id'
-status: 'observed'
-summary: 'PATCH /appointments/:id endpoint implemented by the express runtime.'
+id: "api.backend.patch-appointments-by-param-43"
+kind: "api-endpoint"
+title: "PATCH /appointments/:id"
+status: "observed"
+summary: "PATCH /appointments/:id endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.scheduling'
+  - "context.scheduling"
 sources:
-  - path: 'backend/src/routes/appointments.ts'
-    symbol: 'router'
-    line_start: '91'
-    line_end: '122'
-    confidence: 'observed'
+  - path: "backend/src/routes/appointments.ts"
+    symbol: "router"
+    line_start: "91"
+    line_end: "122"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/appointments.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/appointments.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'patch'
+  - "api"
+  - "express"
+  - "patch"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

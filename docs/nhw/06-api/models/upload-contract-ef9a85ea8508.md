@@ -1,27 +1,27 @@
 ---
-id: 'value.api.upload-contract'
-kind: 'api-contract'
-title: 'Clinical document upload contract'
-status: 'observed'
-summary: 'Intake and AI extraction endpoints accept bounded document payloads and preserve job/document provenance.'
+id: "value.api.upload-contract"
+kind: "api-contract"
+title: "Clinical document upload contract"
+status: "observed"
+summary: "Intake and AI extraction endpoints accept bounded document payloads and preserve job/document provenance."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/routes/patient-intake.ts'
-    confidence: 'observed'
-  - path: 'backend/src/routes/ai-jobs.ts'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/domain/contracts.py'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-intake.ts"
+    confidence: "observed"
+  - path: "backend/src/routes/ai-jobs.ts"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/domain/contracts.py"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/routes/patient-intake.ts,backend/src/routes/ai-jobs.ts,clinicos-ai-runtime/clinicos_ai/domain/contracts.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/routes/patient-intake.ts,backend/src/routes/ai-jobs.ts,clinicos-ai-runtime/clinicos_ai/domain/contracts.py"
+    confidence: "observed"
 tags:
-  - 'api-contract'
+  - "api-contract"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

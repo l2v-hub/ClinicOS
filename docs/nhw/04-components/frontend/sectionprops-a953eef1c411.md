@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.operator.sections.types.sectionprops'
-kind: 'typescript-interface'
-title: 'SectionProps'
-status: 'observed'
-summary: 'Exported interface from frontend/src/components/operator/sections/types.ts.'
+id: "component.frontend.frontend.src.components.operator.sections.types.sectionprops"
+kind: "typescript-interface"
+title: "SectionProps"
+status: "observed"
+summary: "Exported interface from frontend/src/components/operator/sections/types.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/components/operator/sections/types.ts'
-    symbol: 'SectionProps'
-    line_start: '7'
-    line_end: '13'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/sections/types.ts"
+    symbol: "SectionProps"
+    line_start: "7"
+    line_end: "13"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/operator/sections/types.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/operator/sections/types.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

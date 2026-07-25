@@ -1,33 +1,33 @@
 ---
-id: 'entity.clinicalnote'
-kind: 'domain-entity'
-title: 'ClinicalNote'
-status: 'inferred'
-summary: 'Business entity persisted by the ClinicalNote Prisma model.'
+id: "entity.clinicalnote"
+kind: "domain-entity"
+title: "ClinicalNote"
+status: "inferred"
+summary: "Business entity persisted by the ClinicalNote Prisma model."
 bounded_contexts:
-  - 'context.clinical-record'
+  - "context.clinical-record"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'ClinicalNote'
-    line_start: '178'
-    line_end: '190'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "ClinicalNote"
+    line_start: "178"
+    line_end: "190"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.clinical-record'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'persists-as'
-    target: 'data.model.clinicalnote'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "context.clinical-record"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "persists-as"
+    target: "data.model.clinicalnote"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'domain-entity'
-  - 'clinicalnote'
+  - "domain-entity"
+  - "clinicalnote"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Business entity reconstructed from the current Prisma model and its executable consumers.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 
 ## Question Answered

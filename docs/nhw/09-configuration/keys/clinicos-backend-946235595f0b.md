@@ -1,37 +1,37 @@
 ---
-id: 'config.discovered.clinicos-backend'
-kind: 'configuration-key'
-title: 'CLINICOS_BACKEND'
-status: 'observed'
-summary: 'Configuration key CLINICOS_BACKEND; generated knowledge never includes its value.'
+id: "config.discovered.clinicos-backend"
+kind: "configuration-key"
+title: "CLINICOS_BACKEND"
+status: "observed"
+summary: "Configuration key CLINICOS_BACKEND; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: '.claude/skills/run-clinicos/driver.mjs'
-    symbol: 'CLINICOS_BACKEND'
-    line_start: '20'
-    line_end: '20'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/clinicos-backend-946235595f0b.md'
-    symbol: 'CLINICOS_BACKEND'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'e2e/issue-130-verify.mjs'
-    symbol: 'CLINICOS_BACKEND'
-    line_start: '5'
-    line_end: '5'
-    confidence: 'observed'
+  - path: ".claude/skills/run-clinicos/driver.mjs"
+    symbol: "CLINICOS_BACKEND"
+    line_start: "20"
+    line_end: "20"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/clinicos-backend-946235595f0b.md"
+    symbol: "CLINICOS_BACKEND"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "e2e/issue-130-verify.mjs"
+    symbol: "CLINICOS_BACKEND"
+    line_start: "5"
+    line_end: "5"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.claude/skills/run-clinicos/driver.mjs,docs/nhw/09-configuration/keys/clinicos-backend-946235595f0b.md,e2e/issue-130-verify.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".claude/skills/run-clinicos/driver.mjs,docs/nhw/09-configuration/keys/clinicos-backend-946235595f0b.md,e2e/issue-130-verify.mjs"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

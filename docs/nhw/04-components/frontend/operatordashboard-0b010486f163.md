@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.operator.operatordashboard.operatordashboard'
-kind: 'typescript-react-component'
-title: 'OperatorDashboard'
-status: 'observed'
-summary: 'Exported react-component from frontend/src/components/operator/OperatorDashboard.tsx.'
+id: "component.frontend.frontend.src.components.operator.operatordashboard.operatordashboard"
+kind: "typescript-react-component"
+title: "OperatorDashboard"
+status: "observed"
+summary: "Exported react-component from frontend/src/components/operator/OperatorDashboard.tsx."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/components/operator/OperatorDashboard.tsx'
-    symbol: 'OperatorDashboard'
-    line_start: '38'
-    line_end: '394'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/OperatorDashboard.tsx"
+    symbol: "OperatorDashboard"
+    line_start: "38"
+    line_end: "394"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/operator/OperatorDashboard.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/operator/OperatorDashboard.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'react-component'
+  - "typescript"
+  - "react-component"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

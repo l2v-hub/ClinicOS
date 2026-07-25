@@ -1,37 +1,37 @@
 ---
-id: 'config.discovered.ai-sections-schema-path'
-kind: 'configuration-key'
-title: 'AI_SECTIONS_SCHEMA_PATH'
-status: 'observed'
-summary: 'Configuration key AI_SECTIONS_SCHEMA_PATH; generated knowledge never includes its value.'
+id: "config.discovered.ai-sections-schema-path"
+kind: "configuration-key"
+title: "AI_SECTIONS_SCHEMA_PATH"
+status: "observed"
+summary: "Configuration key AI_SECTIONS_SCHEMA_PATH; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/ai/sections/index.ts'
-    symbol: 'AI_SECTIONS_SCHEMA_PATH'
-    line_start: '14'
-    line_end: '14'
-    confidence: 'observed'
-  - path: 'backend/src/ai/sections/validate.ts'
-    symbol: 'AI_SECTIONS_SCHEMA_PATH'
-    line_start: '28'
-    line_end: '28'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/ai-sections-schema-path-f379b6c42aff.md'
-    symbol: 'AI_SECTIONS_SCHEMA_PATH'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
+  - path: "backend/src/ai/sections/index.ts"
+    symbol: "AI_SECTIONS_SCHEMA_PATH"
+    line_start: "14"
+    line_end: "14"
+    confidence: "observed"
+  - path: "backend/src/ai/sections/validate.ts"
+    symbol: "AI_SECTIONS_SCHEMA_PATH"
+    line_start: "28"
+    line_end: "28"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/ai-sections-schema-path-f379b6c42aff.md"
+    symbol: "AI_SECTIONS_SCHEMA_PATH"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/ai/sections/index.ts,backend/src/ai/sections/validate.ts,docs/nhw/09-configuration/keys/ai-sections-schema-path-f379b6c42aff.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/ai/sections/index.ts,backend/src/ai/sections/validate.ts,docs/nhw/09-configuration/keys/ai-sections-schema-path-f379b6c42aff.md"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

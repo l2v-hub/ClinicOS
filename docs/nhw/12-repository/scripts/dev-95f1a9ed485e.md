@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.package-script.frontend.package.json.dev'
-kind: 'package-script'
-title: 'frontend:dev'
-status: 'observed'
-summary: 'Package script dev executes vite.'
+id: "component.repository.package-script.frontend.package.json.dev"
+kind: "package-script"
+title: "frontend:dev"
+status: "observed"
+summary: "Package script dev executes vite."
 bounded_contexts: []
 sources:
-  - path: 'frontend/package.json'
-    symbol: 'dev'
-    confidence: 'observed'
+  - path: "frontend/package.json"
+    symbol: "dev"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'frontend/package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "frontend/package.json"
+    confidence: "observed"
 tags:
-  - 'package-script'
+  - "package-script"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

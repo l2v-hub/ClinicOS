@@ -1,28 +1,28 @@
 ---
-id: 'component.scripts.scripts.nhw.lib.inventory.inventoryhash'
-kind: 'typescript-function'
-title: 'inventoryHash'
-status: 'observed'
-summary: 'Exported function from scripts/nhw/lib/inventory.mjs.'
+id: "component.scripts.scripts.nhw.lib.inventory.inventoryhash"
+kind: "typescript-function"
+title: "inventoryHash"
+status: "observed"
+summary: "Exported function from scripts/nhw/lib/inventory.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'scripts/nhw/lib/inventory.mjs'
-    symbol: 'inventoryHash'
-    line_start: '301'
-    line_end: '306'
-    confidence: 'observed'
+  - path: "scripts/nhw/lib/inventory.mjs"
+    symbol: "inventoryHash"
+    line_start: "301"
+    line_end: "306"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'scripts/nhw/lib/inventory.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "scripts/nhw/lib/inventory.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.scripts.scripts.nhw.lib.markdown.required-headings'
-kind: 'typescript-constant'
-title: 'REQUIRED_HEADINGS'
-status: 'observed'
-summary: 'Exported constant from scripts/nhw/lib/markdown.mjs.'
+id: "component.scripts.scripts.nhw.lib.markdown.required-headings"
+kind: "typescript-constant"
+title: "REQUIRED_HEADINGS"
+status: "observed"
+summary: "Exported constant from scripts/nhw/lib/markdown.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'scripts/nhw/lib/markdown.mjs'
-    symbol: 'REQUIRED_HEADINGS'
-    line_start: '3'
-    line_end: '15'
-    confidence: 'observed'
+  - path: "scripts/nhw/lib/markdown.mjs"
+    symbol: "REQUIRED_HEADINGS"
+    line_start: "3"
+    line_end: "15"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'scripts/nhw/lib/markdown.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "scripts/nhw/lib/markdown.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.e8814801fa0caba6fcc3'
-kind: 'repository-source'
-title: '10-Finale.md'
-status: 'declared'
-summary: 'Repository source path .claude/queue/10-Finale.md classified as narrative-source.'
+id: "component.repository.source.e8814801fa0caba6fcc3"
+kind: "repository-source"
+title: "10-Finale.md"
+status: "declared"
+summary: "Repository source path .claude/queue/10-Finale.md classified as narrative-source."
 bounded_contexts: []
 sources:
-  - path: '.claude/queue/10-Finale.md'
-    confidence: 'declared'
+  - path: ".claude/queue/10-Finale.md"
+    confidence: "declared"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: '.claude/queue/10-Finale.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".claude/queue/10-Finale.md"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'narrative-source'
+  - "repository-source"
+  - "narrative-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

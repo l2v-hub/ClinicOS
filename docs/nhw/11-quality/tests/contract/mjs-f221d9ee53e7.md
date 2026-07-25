@@ -1,25 +1,25 @@
 ---
-id: 'test.repository.scripts.nhw.test.contracts.test.mjs'
-kind: 'contract-test'
-title: 'contracts.test.mjs'
-status: 'observed'
-summary: 'node-test contract test surface.'
+id: "test.repository.scripts.nhw.test.contracts.test.mjs"
+kind: "contract-test"
+title: "contracts.test.mjs"
+status: "observed"
+summary: "node-test contract test surface."
 bounded_contexts: []
 sources:
-  - path: 'scripts/nhw/test/contracts.test.mjs'
-    confidence: 'observed'
+  - path: "scripts/nhw/test/contracts.test.mjs"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'scripts/nhw/test/contracts.test.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "scripts/nhw/test/contracts.test.mjs"
+    confidence: "observed"
 tags:
-  - 'test'
-  - 'contract'
-  - 'node-test'
+  - "test"
+  - "contract"
+  - "node-test"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

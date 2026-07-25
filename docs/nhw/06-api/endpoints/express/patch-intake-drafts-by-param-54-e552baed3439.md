@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.patch-intake-drafts-by-param-54'
-kind: 'api-endpoint'
-title: 'PATCH /intake/drafts/:id'
-status: 'observed'
-summary: 'PATCH /intake/drafts/:id endpoint implemented by the express runtime.'
+id: "api.backend.patch-intake-drafts-by-param-54"
+kind: "api-endpoint"
+title: "PATCH /intake/drafts/:id"
+status: "observed"
+summary: "PATCH /intake/drafts/:id endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/routes/intake-drafts.ts'
-    symbol: 'intakeDraftsRouter'
-    line_start: '97'
-    line_end: '105'
-    confidence: 'observed'
+  - path: "backend/src/routes/intake-drafts.ts"
+    symbol: "intakeDraftsRouter"
+    line_start: "97"
+    line_end: "105"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/intake-drafts.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/intake-drafts.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'patch'
+  - "api"
+  - "express"
+  - "patch"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

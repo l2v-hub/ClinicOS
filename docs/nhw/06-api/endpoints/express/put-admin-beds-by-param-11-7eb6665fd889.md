@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.put-admin-beds-by-param-11'
-kind: 'api-endpoint'
-title: 'PUT /admin/beds/:bedId'
-status: 'observed'
-summary: 'PUT /admin/beds/:bedId endpoint implemented by the express runtime.'
+id: "api.backend.put-admin-beds-by-param-11"
+kind: "api-endpoint"
+title: "PUT /admin/beds/:bedId"
+status: "observed"
+summary: "PUT /admin/beds/:bedId endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.facility-occupancy'
+  - "context.facility-occupancy"
 sources:
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '408'
-    line_end: '455'
-    confidence: 'observed'
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "408"
+    line_end: "455"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/admin-rooms.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.bed'
-    evidence: 'backend/src/routes/admin-rooms.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/admin-rooms.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.bed"
+    evidence: "backend/src/routes/admin-rooms.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'put'
+  - "api"
+  - "express"
+  - "put"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

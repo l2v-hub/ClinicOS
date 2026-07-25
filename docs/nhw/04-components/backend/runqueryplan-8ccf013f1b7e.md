@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.query.engine.runqueryplan'
-kind: 'typescript-function'
-title: 'runQueryPlan'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/gateway/query/engine.ts.'
+id: "component.backend.backend.src.ai.gateway.query.engine.runqueryplan"
+kind: "typescript-function"
+title: "runQueryPlan"
+status: "observed"
+summary: "Exported function from backend/src/ai/gateway/query/engine.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/gateway/query/engine.ts'
-    symbol: 'runQueryPlan'
-    line_start: '225'
-    line_end: '263'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/query/engine.ts"
+    symbol: "runQueryPlan"
+    line_start: "225"
+    line_end: "263"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/query/engine.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/query/engine.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'data.model.nota'
-kind: 'data-model'
-title: 'Nota'
-status: 'observed'
-summary: 'Prisma persistence model Nota.'
+id: "data.model.nota"
+kind: "data-model"
+title: "Nota"
+status: "observed"
+summary: "Prisma persistence model Nota."
 bounded_contexts:
-  - 'context.operator-collaboration'
+  - "context.operator-collaboration"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'Nota'
-    line_start: '396'
-    line_end: '412'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "Nota"
+    line_start: "396"
+    line_end: "412"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'prisma'
-  - 'database-model'
+  - "prisma"
+  - "database-model"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.post-ai-actions-plan-18'
-kind: 'api-endpoint'
-title: 'POST /ai/actions/plan'
-status: 'observed'
-summary: 'POST /ai/actions/plan endpoint implemented by the express runtime.'
+id: "api.backend.post-ai-actions-plan-18"
+kind: "api-endpoint"
+title: "POST /ai/actions/plan"
+status: "observed"
+summary: "POST /ai/actions/plan endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'backend/src/routes/ai-actions.ts'
-    symbol: 'actionsRouter'
-    line_start: '82'
-    line_end: '108'
-    confidence: 'observed'
+  - path: "backend/src/routes/ai-actions.ts"
+    symbol: "actionsRouter"
+    line_start: "82"
+    line_end: "108"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/ai-actions.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/ai-actions.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

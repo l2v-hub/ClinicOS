@@ -1,37 +1,37 @@
 ---
-id: 'api.backend.put-patients-by-param-cartella-111'
-kind: 'api-endpoint'
-title: 'PUT /patients/:id/cartella'
-status: 'observed'
-summary: 'PUT /patients/:id/cartella endpoint implemented by the express runtime.'
+id: "api.backend.put-patients-by-param-cartella-111"
+kind: "api-endpoint"
+title: "PUT /patients/:id/cartella"
+status: "observed"
+summary: "PUT /patients/:id/cartella endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patients.ts'
-    symbol: 'router'
-    line_start: '942'
-    line_end: '970'
-    confidence: 'observed'
+  - path: "backend/src/routes/patients.ts"
+    symbol: "router"
+    line_start: "942"
+    line_end: "970"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.cartella'
-    evidence: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.patient'
-    evidence: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patients.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.cartella"
+    evidence: "backend/src/routes/patients.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.patient"
+    evidence: "backend/src/routes/patients.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'put'
+  - "api"
+  - "express"
+  - "put"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

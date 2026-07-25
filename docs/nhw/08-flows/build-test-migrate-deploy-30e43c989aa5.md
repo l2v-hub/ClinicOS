@@ -1,87 +1,87 @@
 ---
-id: 'flow.build-test-migrate-deploy'
-kind: 'runtime-flow'
-title: 'Build, test, migration, deployment, and health checks'
-status: 'inferred'
-summary: 'Build, test, migration, deployment, and health checks workflow across ClinicOS components.'
+id: "flow.build-test-migrate-deploy"
+kind: "runtime-flow"
+title: "Build, test, migration, deployment, and health checks"
+status: "inferred"
+summary: "Build, test, migration, deployment, and health checks workflow across ClinicOS components."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '458'
-    line_end: '485'
-    confidence: 'observed'
-  - path: 'backend/src/routes/admin-rooms.ts'
-    line_start: '293'
-    line_end: '325'
-    confidence: 'observed'
-  - path: 'backend/src/routes/ai-jobs.ts'
-    line_start: '116'
-    line_end: '123'
-    confidence: 'observed'
-  - path: 'backend/src/routes/appointments.ts'
-    line_start: '125'
-    line_end: '140'
-    confidence: 'observed'
-  - path: 'backend/src/routes/consegne.ts'
-    line_start: '107'
-    line_end: '122'
-    confidence: 'observed'
-  - path: 'backend/src/routes/note.ts'
-    line_start: '98'
-    line_end: '113'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    line_start: '889'
-    line_end: '914'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patient-diary.ts'
-    line_start: '140'
-    line_end: '156'
-    confidence: 'observed'
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "458"
+    line_end: "485"
+    confidence: "observed"
+  - path: "backend/src/routes/admin-rooms.ts"
+    line_start: "293"
+    line_end: "325"
+    confidence: "observed"
+  - path: "backend/src/routes/ai-jobs.ts"
+    line_start: "116"
+    line_end: "123"
+    confidence: "observed"
+  - path: "backend/src/routes/appointments.ts"
+    line_start: "125"
+    line_end: "140"
+    confidence: "observed"
+  - path: "backend/src/routes/consegne.ts"
+    line_start: "107"
+    line_end: "122"
+    confidence: "observed"
+  - path: "backend/src/routes/note.ts"
+    line_start: "98"
+    line_end: "113"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    line_start: "889"
+    line_end: "914"
+    confidence: "observed"
+  - path: "backend/src/routes/patient-diary.ts"
+    line_start: "140"
+    line_end: "156"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-admin-beds-by-param-12'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-admin-rooms-by-param-8'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-ai-extraction-jobs-by-param-files-by-param-28'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-appointments-by-param-44'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-consegne-by-param-48'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-notes-by-param-79'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-patients-by-param-109'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'api.backend.delete-patients-by-param-diary-by-param-89'
-    evidence: 'backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-admin-beds-by-param-12"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-admin-rooms-by-param-8"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-ai-extraction-jobs-by-param-files-by-param-28"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-appointments-by-param-44"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-consegne-by-param-48"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-notes-by-param-79"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-patients-by-param-109"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "api.backend.delete-patients-by-param-diary-by-param-89"
+    evidence: "backend/src/routes/admin-rooms.ts,backend/src/routes/admin-rooms.ts,backend/src/routes/ai-jobs.ts,backend/src/routes/appointments.ts,backend/src/routes/consegne.ts,backend/src/routes/note.ts,backend/src/routes/patients.ts,backend/src/routes/patient-diary.ts"
+    confidence: "inferred"
 tags:
-  - 'runtime-flow'
+  - "runtime-flow"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
 ## Question Answered
@@ -153,13 +153,13 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Sequence
 
-| Step | Actor            | Operation                                                          | State change               | Failure branch                  |
-| ---- | ---------------- | ------------------------------------------------------------------ | -------------------------- | ------------------------------- |
-| 1    | Trigger actor    | `api.backend.delete-admin-beds-by-param-12`                        | Defined by cited component | Owning component error contract |
-| 2    | ClinicOS runtime | `api.backend.delete-admin-rooms-by-param-8`                        | Defined by cited component | Owning component error contract |
-| 3    | ClinicOS runtime | `api.backend.delete-ai-extraction-jobs-by-param-files-by-param-28` | Defined by cited component | Owning component error contract |
-| 4    | ClinicOS runtime | `api.backend.delete-appointments-by-param-44`                      | Defined by cited component | Owning component error contract |
-| 5    | ClinicOS runtime | `api.backend.delete-consegne-by-param-48`                          | Defined by cited component | Owning component error contract |
-| 6    | ClinicOS runtime | `api.backend.delete-notes-by-param-79`                             | Defined by cited component | Owning component error contract |
-| 7    | ClinicOS runtime | `api.backend.delete-patients-by-param-109`                         | Defined by cited component | Owning component error contract |
-| 8    | ClinicOS runtime | `api.backend.delete-patients-by-param-diary-by-param-89`           | Defined by cited component | Owning component error contract |
+| Step | Actor | Operation | State change | Failure branch |
+| --- | --- | --- | --- | --- |
+| 1 | Trigger actor | `api.backend.delete-admin-beds-by-param-12` | Defined by cited component | Owning component error contract |
+| 2 | ClinicOS runtime | `api.backend.delete-admin-rooms-by-param-8` | Defined by cited component | Owning component error contract |
+| 3 | ClinicOS runtime | `api.backend.delete-ai-extraction-jobs-by-param-files-by-param-28` | Defined by cited component | Owning component error contract |
+| 4 | ClinicOS runtime | `api.backend.delete-appointments-by-param-44` | Defined by cited component | Owning component error contract |
+| 5 | ClinicOS runtime | `api.backend.delete-consegne-by-param-48` | Defined by cited component | Owning component error contract |
+| 6 | ClinicOS runtime | `api.backend.delete-notes-by-param-79` | Defined by cited component | Owning component error contract |
+| 7 | ClinicOS runtime | `api.backend.delete-patients-by-param-109` | Defined by cited component | Owning component error contract |
+| 8 | ClinicOS runtime | `api.backend.delete-patients-by-param-diary-by-param-89` | Defined by cited component | Owning component error contract |

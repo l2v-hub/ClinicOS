@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.package-script.package.json.nhw-validate'
-kind: 'package-script'
-title: 'clinicos:nhw:validate'
-status: 'observed'
-summary: 'Package script nhw:validate executes node scripts/nhw/validate.mjs.'
+id: "component.repository.package-script.package.json.nhw-validate"
+kind: "package-script"
+title: "clinicos:nhw:validate"
+status: "observed"
+summary: "Package script nhw:validate executes node scripts/nhw/validate.mjs."
 bounded_contexts: []
 sources:
-  - path: 'package.json'
-    symbol: 'nhw:validate'
-    confidence: 'observed'
+  - path: "package.json"
+    symbol: "nhw:validate"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.repository-automation'
-    evidence: 'package.json'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.repository-automation"
+    evidence: "package.json"
+    confidence: "observed"
 tags:
-  - 'package-script'
+  - "package-script"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

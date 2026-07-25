@@ -1,55 +1,55 @@
 ---
-id: 'context.operator-collaboration'
-kind: 'bounded-context'
-title: 'Operator Collaboration'
-status: 'inferred'
-summary: 'Operator Collaboration bounded context reconstructed from executable ClinicOS sources.'
+id: "context.operator-collaboration"
+kind: "bounded-context"
+title: "Operator Collaboration"
+status: "inferred"
+summary: "Operator Collaboration bounded context reconstructed from executable ClinicOS sources."
 bounded_contexts:
-  - 'context.operator-collaboration'
+  - "context.operator-collaboration"
 sources:
-  - path: 'prisma/schema.prisma'
-    line_start: '178'
-    line_end: '190'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '377'
-    line_end: '394'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '396'
-    line_end: '412'
-    confidence: 'observed'
-  - path: 'backend/src/routes/note.ts'
-    line_start: '98'
-    line_end: '113'
-    confidence: 'observed'
-  - path: 'backend/src/routes/note.ts'
-    line_start: '14'
-    line_end: '22'
-    confidence: 'observed'
-  - path: 'backend/src/routes/note.ts'
-    line_start: '25'
-    line_end: '53'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    line_start: "178"
+    line_end: "190"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "377"
+    line_end: "394"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "396"
+    line_end: "412"
+    confidence: "observed"
+  - path: "backend/src/routes/note.ts"
+    line_start: "98"
+    line_end: "113"
+    confidence: "observed"
+  - path: "backend/src/routes/note.ts"
+    line_start: "14"
+    line_end: "22"
+    confidence: "observed"
+  - path: "backend/src/routes/note.ts"
+    line_start: "25"
+    line_end: "53"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/note.ts,backend/src/routes/note.ts,backend/src/routes/note.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.consegna'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/note.ts,backend/src/routes/note.ts,backend/src/routes/note.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.nota'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/note.ts,backend/src/routes/note.ts,backend/src/routes/note.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/note.ts,backend/src/routes/note.ts,backend/src/routes/note.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.consegna"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/note.ts,backend/src/routes/note.ts,backend/src/routes/note.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.nota"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/note.ts,backend/src/routes/note.ts,backend/src/routes/note.ts"
+    confidence: "inferred"
 tags:
-  - 'bounded-context'
+  - "bounded-context"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership."
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.services.consegna-service.createconsegna'
-kind: 'typescript-function'
-title: 'createConsegna'
-status: 'observed'
-summary: 'Exported function from backend/src/services/consegna-service.ts.'
+id: "component.backend.backend.src.services.consegna-service.createconsegna"
+kind: "typescript-function"
+title: "createConsegna"
+status: "observed"
+summary: "Exported function from backend/src/services/consegna-service.ts."
 bounded_contexts:
-  - 'context.operator-collaboration'
+  - "context.operator-collaboration"
 sources:
-  - path: 'backend/src/services/consegna-service.ts'
-    symbol: 'createConsegna'
-    line_start: '24'
-    line_end: '44'
-    confidence: 'observed'
+  - path: "backend/src/services/consegna-service.ts"
+    symbol: "createConsegna"
+    line_start: "24"
+    line_end: "44"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/services/consegna-service.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/services/consegna-service.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

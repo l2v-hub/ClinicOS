@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.post-patient-intake-discharge-letter-upload-93'
-kind: 'api-endpoint'
-title: 'POST /patient-intake/discharge-letter/upload'
-status: 'observed'
-summary: 'POST /patient-intake/discharge-letter/upload endpoint implemented by the express runtime.'
+id: "api.backend.post-patient-intake-discharge-letter-upload-93"
+kind: "api-endpoint"
+title: "POST /patient-intake/discharge-letter/upload"
+status: "observed"
+summary: "POST /patient-intake/discharge-letter/upload endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patient-intake.ts'
-    symbol: 'router'
-    line_start: '8'
-    line_end: '37'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-intake.ts"
+    symbol: "router"
+    line_start: "8"
+    line_end: "37"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-intake.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.patientintakedocument'
-    evidence: 'backend/src/routes/patient-intake.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-intake.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.patientintakedocument"
+    evidence: "backend/src/routes/patient-intake.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

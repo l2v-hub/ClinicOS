@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.operator.patientdetail.tabid'
-kind: 'typescript-type-alias'
-title: 'TabId'
-status: 'observed'
-summary: 'Exported type-alias from frontend/src/components/operator/PatientDetail.tsx.'
+id: "component.frontend.frontend.src.components.operator.patientdetail.tabid"
+kind: "typescript-type-alias"
+title: "TabId"
+status: "observed"
+summary: "Exported type-alias from frontend/src/components/operator/PatientDetail.tsx."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/components/operator/PatientDetail.tsx'
-    symbol: 'TabId'
-    line_start: '57'
-    line_end: '75'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/PatientDetail.tsx"
+    symbol: "TabId"
+    line_start: "57"
+    line_end: "75"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/operator/PatientDetail.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/operator/PatientDetail.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'type-alias'
+  - "typescript"
+  - "type-alias"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

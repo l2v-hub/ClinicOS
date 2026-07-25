@@ -1,25 +1,25 @@
 ---
-id: 'finding.drift.readme-backend-port'
-kind: 'architectural-finding'
-title: 'README backend port drift'
-status: 'drifted'
-summary: 'README setup examples include port 4000 while executable backend startup defaults to port 3001.'
+id: "finding.drift.readme-backend-port"
+kind: "architectural-finding"
+title: "README backend port drift"
+status: "drifted"
+summary: "README setup examples include port 4000 while executable backend startup defaults to port 3001."
 bounded_contexts: []
 sources:
-  - path: 'README.md'
-    confidence: 'observed'
-  - path: 'backend/src/server.ts'
-    confidence: 'observed'
+  - path: "README.md"
+    confidence: "observed"
+  - path: "backend/src/server.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'README.md,backend/src/server.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "README.md,backend/src/server.ts"
+    confidence: "observed"
 tags:
-  - 'architectural-finding'
+  - "architectural-finding"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

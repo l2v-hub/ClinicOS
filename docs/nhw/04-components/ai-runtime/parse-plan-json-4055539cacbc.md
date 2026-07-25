@@ -1,28 +1,28 @@
 ---
-id: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-agents-assistant.py.parse-plan-json'
-kind: 'python-function'
-title: 'parse_plan_json'
-status: 'observed'
-summary: 'Public Python function from clinicos-ai-runtime/clinicos_ai/agents/assistant.py.'
+id: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-agents-assistant.py.parse-plan-json"
+kind: "python-function"
+title: "parse_plan_json"
+status: "observed"
+summary: "Public Python function from clinicos-ai-runtime/clinicos_ai/agents/assistant.py."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/agents/assistant.py'
-    symbol: 'parse_plan_json'
-    line_start: '122'
-    line_end: '139'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/agents/assistant.py"
+    symbol: "parse_plan_json"
+    line_start: "122"
+    line_end: "139"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/agents/assistant.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/agents/assistant.py"
+    confidence: "observed"
 tags:
-  - 'python'
-  - 'function'
+  - "python"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

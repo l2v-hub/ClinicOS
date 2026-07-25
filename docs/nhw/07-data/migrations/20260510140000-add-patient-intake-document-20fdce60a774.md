@@ -1,28 +1,28 @@
 ---
-id: 'data.migration.20260510140000-add-patient-intake-document'
-kind: 'database-migration'
-title: '20260510140000_add_patient_intake_document'
-status: 'observed'
-summary: 'Ordered SQL migration 20260510140000_add_patient_intake_document.'
+id: "data.migration.20260510140000-add-patient-intake-document"
+kind: "database-migration"
+title: "20260510140000_add_patient_intake_document"
+status: "observed"
+summary: "Ordered SQL migration 20260510140000_add_patient_intake_document."
 bounded_contexts: []
 sources:
-  - path: 'prisma/migrations/20260510140000_add_patient_intake_document/migration.sql'
-    confidence: 'observed'
+  - path: "prisma/migrations/20260510140000_add_patient_intake_document/migration.sql"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/migrations/20260510140000_add_patient_intake_document/migration.sql'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.patientintakedocument'
-    evidence: 'prisma/migrations/20260510140000_add_patient_intake_document/migration.sql'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/migrations/20260510140000_add_patient_intake_document/migration.sql"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.patientintakedocument"
+    evidence: "prisma/migrations/20260510140000_add_patient_intake_document/migration.sql"
+    confidence: "observed"
 tags:
-  - 'migration'
-  - 'non-destructive'
+  - "migration"
+  - "non-destructive"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

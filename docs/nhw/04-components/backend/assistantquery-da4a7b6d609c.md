@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.assistant.service.assistantquery'
-kind: 'typescript-function'
-title: 'assistantQuery'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/assistant/service.ts.'
+id: "component.backend.backend.src.ai.assistant.service.assistantquery"
+kind: "typescript-function"
+title: "assistantQuery"
+status: "observed"
+summary: "Exported function from backend/src/ai/assistant/service.ts."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'backend/src/ai/assistant/service.ts'
-    symbol: 'assistantQuery'
-    line_start: '213'
-    line_end: '350'
-    confidence: 'observed'
+  - path: "backend/src/ai/assistant/service.ts"
+    symbol: "assistantQuery"
+    line_start: "213"
+    line_end: "350"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/assistant/service.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/assistant/service.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

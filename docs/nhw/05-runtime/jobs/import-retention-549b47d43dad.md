@@ -1,25 +1,25 @@
 ---
-id: 'runtime.backend.import-retention'
-kind: 'scheduled-job'
-title: 'Import-job retention sweep'
-status: 'observed'
-summary: 'Backend startup and a manual endpoint trigger best-effort deletion of expired import jobs.'
+id: "runtime.backend.import-retention"
+kind: "scheduled-job"
+title: "Import-job retention sweep"
+status: "observed"
+summary: "Backend startup and a manual endpoint trigger best-effort deletion of expired import jobs."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/server.ts'
-    confidence: 'observed'
-  - path: 'backend/src/routes/ai-jobs.ts'
-    confidence: 'observed'
+  - path: "backend/src/server.ts"
+    confidence: "observed"
+  - path: "backend/src/routes/ai-jobs.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/server.ts,backend/src/routes/ai-jobs.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/server.ts,backend/src/routes/ai-jobs.ts"
+    confidence: "observed"
 tags:
-  - 'scheduled-job'
+  - "scheduled-job"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

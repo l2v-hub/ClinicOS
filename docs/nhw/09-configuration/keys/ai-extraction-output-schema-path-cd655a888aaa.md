@@ -1,37 +1,37 @@
 ---
-id: 'config.discovered.ai-extraction-output-schema-path'
-kind: 'configuration-key'
-title: 'AI_EXTRACTION_OUTPUT_SCHEMA_PATH'
-status: 'observed'
-summary: 'Configuration key AI_EXTRACTION_OUTPUT_SCHEMA_PATH; generated knowledge never includes its value.'
+id: "config.discovered.ai-extraction-output-schema-path"
+kind: "configuration-key"
+title: "AI_EXTRACTION_OUTPUT_SCHEMA_PATH"
+status: "observed"
+summary: "Configuration key AI_EXTRACTION_OUTPUT_SCHEMA_PATH; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/.env.example'
-    symbol: 'AI_EXTRACTION_OUTPUT_SCHEMA_PATH'
-    line_start: '29'
-    line_end: '29'
-    confidence: 'observed'
-  - path: 'backend/src/ai/config.ts'
-    symbol: 'AI_EXTRACTION_OUTPUT_SCHEMA_PATH'
-    line_start: '76'
-    line_end: '76'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/ai-extraction-output-schema-path-cd655a888aaa.md'
-    symbol: 'AI_EXTRACTION_OUTPUT_SCHEMA_PATH'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
+  - path: "backend/.env.example"
+    symbol: "AI_EXTRACTION_OUTPUT_SCHEMA_PATH"
+    line_start: "29"
+    line_end: "29"
+    confidence: "observed"
+  - path: "backend/src/ai/config.ts"
+    symbol: "AI_EXTRACTION_OUTPUT_SCHEMA_PATH"
+    line_start: "76"
+    line_end: "76"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/ai-extraction-output-schema-path-cd655a888aaa.md"
+    symbol: "AI_EXTRACTION_OUTPUT_SCHEMA_PATH"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/.env.example,backend/src/ai/config.ts,docs/nhw/09-configuration/keys/ai-extraction-output-schema-path-cd655a888aaa.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/.env.example,backend/src/ai/config.ts,docs/nhw/09-configuration/keys/ai-extraction-output-schema-path-cd655a888aaa.md"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

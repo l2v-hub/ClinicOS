@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.gateway.context.parseusercontext'
-kind: 'typescript-function'
-title: 'parseUserContext'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/gateway/context.ts.'
+id: "component.backend.backend.src.ai.gateway.context.parseusercontext"
+kind: "typescript-function"
+title: "parseUserContext"
+status: "observed"
+summary: "Exported function from backend/src/ai/gateway/context.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/ai/gateway/context.ts'
-    symbol: 'parseUserContext'
-    line_start: '33'
-    line_end: '47'
-    confidence: 'observed'
+  - path: "backend/src/ai/gateway/context.ts"
+    symbol: "parseUserContext"
+    line_start: "33"
+    line_end: "47"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/gateway/context.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/gateway/context.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,26 +1,26 @@
 ---
-id: 'config.discovered.google-api-key'
-kind: 'configuration-key'
-title: 'GOOGLE_API_KEY'
-status: 'observed'
-summary: 'Configuration key GOOGLE_API_KEY; generated knowledge never includes its value.'
+id: "config.discovered.google-api-key"
+kind: "configuration-key"
+title: "GOOGLE_API_KEY"
+status: "observed"
+summary: "Configuration key GOOGLE_API_KEY; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'clinicos-ai-runtime/.env.example'
-    symbol: 'GOOGLE_API_KEY'
-    line_start: '60'
-    line_end: '60'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/.env.example"
+    symbol: "GOOGLE_API_KEY"
+    line_start: "60"
+    line_end: "60"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'clinicos-ai-runtime/.env.example'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "clinicos-ai-runtime/.env.example"
+    confidence: "observed"
 tags:
-  - 'configuration'
+  - "configuration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

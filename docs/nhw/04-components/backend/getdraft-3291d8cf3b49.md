@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.intake.draft-service.getdraft'
-kind: 'typescript-function'
-title: 'getDraft'
-status: 'observed'
-summary: 'Exported function from backend/src/intake/draft-service.ts.'
+id: "component.backend.backend.src.intake.draft-service.getdraft"
+kind: "typescript-function"
+title: "getDraft"
+status: "observed"
+summary: "Exported function from backend/src/intake/draft-service.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/intake/draft-service.ts'
-    symbol: 'getDraft'
-    line_start: '59'
-    line_end: '61'
-    confidence: 'observed'
+  - path: "backend/src/intake/draft-service.ts"
+    symbol: "getDraft"
+    line_start: "59"
+    line_end: "61"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/intake/draft-service.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/intake/draft-service.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

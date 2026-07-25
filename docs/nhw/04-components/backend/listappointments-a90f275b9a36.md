@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.services.appointment-service.listappointments'
-kind: 'typescript-function'
-title: 'listAppointments'
-status: 'observed'
-summary: 'Exported function from backend/src/services/appointment-service.ts.'
+id: "component.backend.backend.src.services.appointment-service.listappointments"
+kind: "typescript-function"
+title: "listAppointments"
+status: "observed"
+summary: "Exported function from backend/src/services/appointment-service.ts."
 bounded_contexts:
-  - 'context.scheduling'
+  - "context.scheduling"
 sources:
-  - path: 'backend/src/services/appointment-service.ts'
-    symbol: 'listAppointments'
-    line_start: '167'
-    line_end: '186'
-    confidence: 'observed'
+  - path: "backend/src/services/appointment-service.ts"
+    symbol: "listAppointments"
+    line_start: "167"
+    line_end: "186"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/services/appointment-service.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/services/appointment-service.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

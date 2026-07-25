@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.app.app'
-kind: 'typescript-react-component'
-title: 'App'
-status: 'observed'
-summary: 'Exported react-component from frontend/src/App.tsx.'
+id: "component.frontend.frontend.src.app.app"
+kind: "typescript-react-component"
+title: "App"
+status: "observed"
+summary: "Exported react-component from frontend/src/App.tsx."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/App.tsx'
-    symbol: 'App'
-    line_start: '130'
-    line_end: '1597'
-    confidence: 'observed'
+  - path: "frontend/src/App.tsx"
+    symbol: "App"
+    line_start: "130"
+    line_end: "1597"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/App.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/App.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'react-component'
+  - "typescript"
+  - "react-component"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

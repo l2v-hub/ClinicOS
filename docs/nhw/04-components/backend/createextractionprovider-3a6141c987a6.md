@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.provider-factory.createextractionprovider'
-kind: 'typescript-function'
-title: 'createExtractionProvider'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/provider-factory.ts.'
+id: "component.backend.backend.src.ai.provider-factory.createextractionprovider"
+kind: "typescript-function"
+title: "createExtractionProvider"
+status: "observed"
+summary: "Exported function from backend/src/ai/provider-factory.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/ai/provider-factory.ts'
-    symbol: 'createExtractionProvider'
-    line_start: '10'
-    line_end: '30'
-    confidence: 'observed'
+  - path: "backend/src/ai/provider-factory.ts"
+    symbol: "createExtractionProvider"
+    line_start: "10"
+    line_end: "30"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/provider-factory.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/provider-factory.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,79 +1,79 @@
 ---
-id: 'flow.authentication-token-propagation'
-kind: 'runtime-flow'
-title: 'Authentication and token propagation'
-status: 'inferred'
-summary: 'Authentication and token propagation workflow across ClinicOS components.'
+id: "flow.authentication-token-propagation"
+kind: "runtime-flow"
+title: "Authentication and token propagation"
+status: "inferred"
+summary: "Authentication and token propagation workflow across ClinicOS components."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/lib/entra-auth.ts'
-    symbol: 'authenticateEntra'
-    line_start: '72'
-    line_end: '134'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    symbol: 'bearerToken'
-    line_start: '65'
-    line_end: '68'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    symbol: 'EntraAuthFailure'
-    line_start: '55'
-    line_end: '57'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    symbol: 'EntraConfig'
-    line_start: '17'
-    line_end: '22'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    symbol: 'entraConfig'
-    line_start: '26'
-    line_end: '36'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    symbol: 'EntraIdentity'
-    line_start: '59'
-    line_end: '63'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    symbol: 'jwksCache'
-    line_start: '40'
-    line_end: '40'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    symbol: 'jwksFor'
-    line_start: '41'
-    line_end: '48'
-    confidence: 'observed'
+  - path: "backend/src/lib/entra-auth.ts"
+    symbol: "authenticateEntra"
+    line_start: "72"
+    line_end: "134"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    symbol: "bearerToken"
+    line_start: "65"
+    line_end: "68"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    symbol: "EntraAuthFailure"
+    line_start: "55"
+    line_end: "57"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    symbol: "EntraConfig"
+    line_start: "17"
+    line_end: "22"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    symbol: "entraConfig"
+    line_start: "26"
+    line_end: "36"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    symbol: "EntraIdentity"
+    line_start: "59"
+    line_end: "63"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    symbol: "jwksCache"
+    line_start: "40"
+    line_end: "40"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    symbol: "jwksFor"
+    line_start: "41"
+    line_end: "48"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.lib.entra-auth.authenticateentra'
-    evidence: 'backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.lib.entra-auth.entraauthfailure'
-    evidence: 'backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.lib.entra-auth.entraconfig'
-    evidence: 'backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.lib.entra-auth.entraidentity'
-    evidence: 'backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.lib.entra-auth.authenticateentra"
+    evidence: "backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.lib.entra-auth.entraauthfailure"
+    evidence: "backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.lib.entra-auth.entraconfig"
+    evidence: "backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.lib.entra-auth.entraidentity"
+    evidence: "backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts,backend/src/lib/entra-auth.ts"
+    confidence: "inferred"
 tags:
-  - 'runtime-flow'
+  - "runtime-flow"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
 ## Question Answered
@@ -138,13 +138,13 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Sequence
 
-| Step | Actor            | Operation                                                        | State change               | Failure branch                  |
-| ---- | ---------------- | ---------------------------------------------------------------- | -------------------------- | ------------------------------- |
-| 1    | Trigger actor    | `component.backend.backend.src.lib.entra-auth.authenticateentra` | Defined by cited component | Owning component error contract |
-| 2    | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.bearertoken`       | Defined by cited component | Owning component error contract |
-| 3    | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.entraauthfailure`  | Defined by cited component | Owning component error contract |
-| 4    | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.entraconfig`       | Defined by cited component | Owning component error contract |
-| 5    | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.entraconfig`       | Defined by cited component | Owning component error contract |
-| 6    | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.entraidentity`     | Defined by cited component | Owning component error contract |
-| 7    | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.jwkscache`         | Defined by cited component | Owning component error contract |
-| 8    | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.jwksfor`           | Defined by cited component | Owning component error contract |
+| Step | Actor | Operation | State change | Failure branch |
+| --- | --- | --- | --- | --- |
+| 1 | Trigger actor | `component.backend.backend.src.lib.entra-auth.authenticateentra` | Defined by cited component | Owning component error contract |
+| 2 | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.bearertoken` | Defined by cited component | Owning component error contract |
+| 3 | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.entraauthfailure` | Defined by cited component | Owning component error contract |
+| 4 | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.entraconfig` | Defined by cited component | Owning component error contract |
+| 5 | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.entraconfig` | Defined by cited component | Owning component error contract |
+| 6 | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.entraidentity` | Defined by cited component | Owning component error contract |
+| 7 | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.jwkscache` | Defined by cited component | Owning component error contract |
+| 8 | ClinicOS runtime | `component.backend.backend.src.lib.entra-auth.jwksfor` | Defined by cited component | Owning component error contract |

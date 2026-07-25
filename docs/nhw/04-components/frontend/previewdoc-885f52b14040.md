@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.documentpreview.previewdoc'
-kind: 'typescript-interface'
-title: 'PreviewDoc'
-status: 'observed'
-summary: 'Exported interface from frontend/src/components/shared/DocumentPreview.tsx.'
+id: "component.frontend.frontend.src.components.shared.documentpreview.previewdoc"
+kind: "typescript-interface"
+title: "PreviewDoc"
+status: "observed"
+summary: "Exported interface from frontend/src/components/shared/DocumentPreview.tsx."
 bounded_contexts:
-  - 'context.clinical-record'
+  - "context.clinical-record"
 sources:
-  - path: 'frontend/src/components/shared/DocumentPreview.tsx'
-    symbol: 'PreviewDoc'
-    line_start: '8'
-    line_end: '12'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/DocumentPreview.tsx"
+    symbol: "PreviewDoc"
+    line_start: "8"
+    line_end: "12"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/DocumentPreview.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/DocumentPreview.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.aiassistantbutton.answerview'
-kind: 'typescript-react-component'
-title: 'AnswerView'
-status: 'observed'
-summary: 'Exported react-component from frontend/src/components/shared/AIAssistantButton.tsx.'
+id: "component.frontend.frontend.src.components.shared.aiassistantbutton.answerview"
+kind: "typescript-react-component"
+title: "AnswerView"
+status: "observed"
+summary: "Exported react-component from frontend/src/components/shared/AIAssistantButton.tsx."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'frontend/src/components/shared/AIAssistantButton.tsx'
-    symbol: 'AnswerView'
-    line_start: '270'
-    line_end: '316'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/AIAssistantButton.tsx"
+    symbol: "AnswerView"
+    line_start: "270"
+    line_end: "316"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/AIAssistantButton.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/AIAssistantButton.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'react-component'
+  - "typescript"
+  - "react-component"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

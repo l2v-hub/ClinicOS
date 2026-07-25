@@ -1,26 +1,26 @@
 ---
-id: 'finding.deployment.parallel-frontend-paths'
-kind: 'architectural-finding'
-title: 'Parallel Vercel and Azure Static Web Apps paths'
-status: 'inferred'
-summary: 'Vercel configuration and an Azure Static Web Apps workflow coexist as frontend delivery paths.'
+id: "finding.deployment.parallel-frontend-paths"
+kind: "architectural-finding"
+title: "Parallel Vercel and Azure Static Web Apps paths"
+status: "inferred"
+summary: "Vercel configuration and an Azure Static Web Apps workflow coexist as frontend delivery paths."
 bounded_contexts: []
 sources:
-  - path: 'frontend/vercel.json'
-    confidence: 'inferred'
-  - path: '.github/workflows/azure-static-web-apps-orange-hill-02285750f.yml'
-    confidence: 'inferred'
+  - path: "frontend/vercel.json"
+    confidence: "inferred"
+  - path: ".github/workflows/azure-static-web-apps-orange-hill-02285750f.yml"
+    confidence: "inferred"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/vercel.json,.github/workflows/azure-static-web-apps-orange-hill-02285750f.yml'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/vercel.json,.github/workflows/azure-static-web-apps-orange-hill-02285750f.yml"
+    confidence: "inferred"
 tags:
-  - 'architectural-finding'
+  - "architectural-finding"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Both executable deployment configurations remain present in the current working tree.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Both executable deployment configurations remain present in the current working tree."
 ---
 
 ## Question Answered

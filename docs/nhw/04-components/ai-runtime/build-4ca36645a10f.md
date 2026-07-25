@@ -1,28 +1,28 @@
 ---
-id: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-openai.py.build'
-kind: 'python-function'
-title: 'build'
-status: 'observed'
-summary: 'Public Python function from clinicos-ai-runtime/clinicos_ai/models/providers/openai.py.'
+id: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-openai.py.build"
+kind: "python-function"
+title: "build"
+status: "observed"
+summary: "Public Python function from clinicos-ai-runtime/clinicos_ai/models/providers/openai.py."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/openai.py'
-    symbol: 'build'
-    line_start: '9'
-    line_end: '17'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/openai.py"
+    symbol: "build"
+    line_start: "9"
+    line_end: "17"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/models/providers/openai.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/providers/openai.py"
+    confidence: "observed"
 tags:
-  - 'python'
-  - 'function'
+  - "python"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

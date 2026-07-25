@@ -1,62 +1,62 @@
 ---
-id: 'config.discovered.ai-sections-pass'
-kind: 'configuration-key'
-title: 'AI_SECTIONS_PASS'
-status: 'observed'
-summary: 'Configuration key AI_SECTIONS_PASS; generated knowledge never includes its value.'
+id: "config.discovered.ai-sections-pass"
+kind: "configuration-key"
+title: "AI_SECTIONS_PASS"
+status: "observed"
+summary: "Configuration key AI_SECTIONS_PASS; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/ai/__tests__/lazy-sections.test.ts'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '26'
-    line_end: '26'
-    confidence: 'observed'
-  - path: 'backend/src/ai/upload/job-service.ts'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '373'
-    line_end: '373'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'requirements/deployments/DEPLOY-20260615-2158.md'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '24'
-    line_end: '24'
-    confidence: 'observed'
-  - path: 'requirements/deployments/DEPLOY-20260616-0624.md'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '44'
-    line_end: '44'
-    confidence: 'observed'
-  - path: 'requirements/deployments/DEPLOY-20260616-0751.md'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '42'
-    line_end: '42'
-    confidence: 'observed'
-  - path: 'requirements/deployments/DEPLOY-20260616-1309.md'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '18'
-    line_end: '18'
-    confidence: 'observed'
-  - path: 'requirements/evidence/REQ-026/data-smoke-after.txt'
-    symbol: 'AI_SECTIONS_PASS'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
+  - path: "backend/src/ai/__tests__/lazy-sections.test.ts"
+    symbol: "AI_SECTIONS_PASS"
+    line_start: "26"
+    line_end: "26"
+    confidence: "observed"
+  - path: "backend/src/ai/upload/job-service.ts"
+    symbol: "AI_SECTIONS_PASS"
+    line_start: "373"
+    line_end: "373"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md"
+    symbol: "AI_SECTIONS_PASS"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "requirements/deployments/DEPLOY-20260615-2158.md"
+    symbol: "AI_SECTIONS_PASS"
+    line_start: "24"
+    line_end: "24"
+    confidence: "observed"
+  - path: "requirements/deployments/DEPLOY-20260616-0624.md"
+    symbol: "AI_SECTIONS_PASS"
+    line_start: "44"
+    line_end: "44"
+    confidence: "observed"
+  - path: "requirements/deployments/DEPLOY-20260616-0751.md"
+    symbol: "AI_SECTIONS_PASS"
+    line_start: "42"
+    line_end: "42"
+    confidence: "observed"
+  - path: "requirements/deployments/DEPLOY-20260616-1309.md"
+    symbol: "AI_SECTIONS_PASS"
+    line_start: "18"
+    line_end: "18"
+    confidence: "observed"
+  - path: "requirements/evidence/REQ-026/data-smoke-after.txt"
+    symbol: "AI_SECTIONS_PASS"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/ai/__tests__/lazy-sections.test.ts,backend/src/ai/upload/job-service.ts,docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md,requirements/deployments/DEPLOY-20260615-2158.md,requirements/deployments/DEPLOY-20260616-0624.md,requirements/deployments/DEPLOY-20260616-0751.md,requirements/deployments/DEPLOY-20260616-1309.md,requirements/evidence/REQ-026/data-smoke-after.txt'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/ai/__tests__/lazy-sections.test.ts,backend/src/ai/upload/job-service.ts,docs/nhw/09-configuration/keys/ai-sections-pass-c049fe2eb92f.md,requirements/deployments/DEPLOY-20260615-2158.md,requirements/deployments/DEPLOY-20260616-0624.md,requirements/deployments/DEPLOY-20260616-0751.md,requirements/deployments/DEPLOY-20260616-1309.md,requirements/evidence/REQ-026/data-smoke-after.txt"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

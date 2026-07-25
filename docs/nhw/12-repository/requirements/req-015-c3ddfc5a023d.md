@@ -1,23 +1,23 @@
 ---
-id: 'component.repository.requirement.req-015'
-kind: 'requirement'
-title: 'REQ-015'
-status: 'declared'
-summary: 'component.repository.requirement.req-015 declared by REQ-015.md.'
+id: "component.repository.requirement.req-015"
+kind: "requirement"
+title: "REQ-015"
+status: "declared"
+summary: "component.repository.requirement.req-015 declared by REQ-015.md."
 bounded_contexts: []
 sources:
-  - path: 'REQ-015.md'
-    confidence: 'declared'
+  - path: "REQ-015.md"
+    confidence: "declared"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'REQ-015.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "REQ-015.md"
+    confidence: "observed"
 tags:
-  - 'infrastructure'
+  - "infrastructure"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

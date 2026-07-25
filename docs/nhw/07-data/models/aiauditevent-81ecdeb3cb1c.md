@@ -1,28 +1,28 @@
 ---
-id: 'data.model.aiauditevent'
-kind: 'data-model'
-title: 'AiAuditEvent'
-status: 'observed'
-summary: 'Prisma persistence model AiAuditEvent.'
+id: "data.model.aiauditevent"
+kind: "data-model"
+title: "AiAuditEvent"
+status: "observed"
+summary: "Prisma persistence model AiAuditEvent."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'AiAuditEvent'
-    line_start: '535'
-    line_end: '551'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "AiAuditEvent"
+    line_start: "535"
+    line_end: "551"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'prisma'
-  - 'database-model'
+  - "prisma"
+  - "database-model"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

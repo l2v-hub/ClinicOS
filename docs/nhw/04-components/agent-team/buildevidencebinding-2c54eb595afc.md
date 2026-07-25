@@ -1,28 +1,28 @@
 ---
-id: 'component.agent-team.agent-team.src.core.binding.buildevidencebinding'
-kind: 'typescript-function'
-title: 'buildEvidenceBinding'
-status: 'observed'
-summary: 'Exported function from agent-team/src/core/binding.mjs.'
+id: "component.agent-team.agent-team.src.core.binding.buildevidencebinding"
+kind: "typescript-function"
+title: "buildEvidenceBinding"
+status: "observed"
+summary: "Exported function from agent-team/src/core/binding.mjs."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'agent-team/src/core/binding.mjs'
-    symbol: 'buildEvidenceBinding'
-    line_start: '9'
-    line_end: '40'
-    confidence: 'observed'
+  - path: "agent-team/src/core/binding.mjs"
+    symbol: "buildEvidenceBinding"
+    line_start: "9"
+    line_end: "40"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.agent-team'
-    evidence: 'agent-team/src/core/binding.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.agent-team"
+    evidence: "agent-team/src/core/binding.mjs"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

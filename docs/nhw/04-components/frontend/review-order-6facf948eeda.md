@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.sections.sectionmapping.review-order'
-kind: 'typescript-constant'
-title: 'REVIEW_ORDER'
-status: 'observed'
-summary: 'Exported constant from frontend/src/components/shared/sections/sectionMapping.ts.'
+id: "component.frontend.frontend.src.components.shared.sections.sectionmapping.review-order"
+kind: "typescript-constant"
+title: "REVIEW_ORDER"
+status: "observed"
+summary: "Exported constant from frontend/src/components/shared/sections/sectionMapping.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/components/shared/sections/sectionMapping.ts'
-    symbol: 'REVIEW_ORDER'
-    line_start: '34'
-    line_end: '47'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/sections/sectionMapping.ts"
+    symbol: "REVIEW_ORDER"
+    line_start: "34"
+    line_end: "47"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/sections/sectionMapping.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/sections/sectionMapping.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

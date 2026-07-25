@@ -1,27 +1,27 @@
 ---
-id: 'runtime.system.observability'
-kind: 'runtime-observability'
-title: 'Runtime logging and health observability'
-status: 'observed'
-summary: 'Backend and AI runtime expose health endpoints and log configuration-safe startup and failure information.'
+id: "runtime.system.observability"
+kind: "runtime-observability"
+title: "Runtime logging and health observability"
+status: "observed"
+summary: "Backend and AI runtime expose health endpoints and log configuration-safe startup and failure information."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/server.ts'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/env_config.py'
-    confidence: 'observed'
-  - path: 'clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - path: "backend/src/server.ts"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/models/env_config.py"
+    confidence: "observed"
+  - path: "clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/server.ts,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/api/app.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/server.ts,clinicos-ai-runtime/clinicos_ai/models/env_config.py,clinicos-ai-runtime/clinicos_ai/api/app.py"
+    confidence: "observed"
 tags:
-  - 'runtime-observability'
+  - "runtime-observability"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

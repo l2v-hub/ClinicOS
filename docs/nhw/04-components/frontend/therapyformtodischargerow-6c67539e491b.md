@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.intake.dischargetherapy.therapyformtodischargerow'
-kind: 'typescript-function'
-title: 'therapyFormToDischargeRow'
-status: 'observed'
-summary: 'Exported function from frontend/src/components/shared/intake/dischargeTherapy.ts.'
+id: "component.frontend.frontend.src.components.shared.intake.dischargetherapy.therapyformtodischargerow"
+kind: "typescript-function"
+title: "therapyFormToDischargeRow"
+status: "observed"
+summary: "Exported function from frontend/src/components/shared/intake/dischargeTherapy.ts."
 bounded_contexts:
-  - 'context.therapy-administration'
+  - "context.therapy-administration"
 sources:
-  - path: 'frontend/src/components/shared/intake/dischargeTherapy.ts'
-    symbol: 'therapyFormToDischargeRow'
-    line_start: '219'
-    line_end: '246'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/intake/dischargeTherapy.ts"
+    symbol: "therapyFormToDischargeRow"
+    line_start: "219"
+    line_end: "246"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/intake/dischargeTherapy.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/intake/dischargeTherapy.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,32 +1,32 @@
 ---
-id: 'config.discovered.computername'
-kind: 'configuration-key'
-title: 'COMPUTERNAME'
-status: 'observed'
-summary: 'Configuration key COMPUTERNAME; generated knowledge never includes its value.'
+id: "config.discovered.computername"
+kind: "configuration-key"
+title: "COMPUTERNAME"
+status: "observed"
+summary: "Configuration key COMPUTERNAME; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'agent-team/src/runtime.mjs'
-    symbol: 'COMPUTERNAME'
-    line_start: '35'
-    line_end: '35'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/computername-556f5d7ed2cb.md'
-    symbol: 'COMPUTERNAME'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
+  - path: "agent-team/src/runtime.mjs"
+    symbol: "COMPUTERNAME"
+    line_start: "35"
+    line_end: "35"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/computername-556f5d7ed2cb.md"
+    symbol: "COMPUTERNAME"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'agent-team/src/runtime.mjs,docs/nhw/09-configuration/keys/computername-556f5d7ed2cb.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "agent-team/src/runtime.mjs,docs/nhw/09-configuration/keys/computername-556f5d7ed2cb.md"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

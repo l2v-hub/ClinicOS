@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.voice.provider.probesttstatus'
-kind: 'typescript-function'
-title: 'probeSttStatus'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/voice/provider.ts.'
+id: "component.backend.backend.src.ai.voice.provider.probesttstatus"
+kind: "typescript-function"
+title: "probeSttStatus"
+status: "observed"
+summary: "Exported function from backend/src/ai/voice/provider.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/voice/provider.ts'
-    symbol: 'probeSttStatus'
-    line_start: '87'
-    line_end: '128'
-    confidence: 'observed'
+  - path: "backend/src/ai/voice/provider.ts"
+    symbol: "probeSttStatus"
+    line_start: "87"
+    line_end: "128"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/voice/provider.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/voice/provider.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

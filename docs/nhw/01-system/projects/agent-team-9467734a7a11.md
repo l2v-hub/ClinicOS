@@ -1,24 +1,24 @@
 ---
-id: 'project.agent-team'
-kind: 'node-subsystem'
-title: 'agent-team'
-status: 'observed'
-summary: 'agent-team project rooted at agent-team.'
+id: "project.agent-team"
+kind: "node-subsystem"
+title: "agent-team"
+status: "observed"
+summary: "agent-team project rooted at agent-team."
 bounded_contexts: []
 sources:
-  - path: 'agent-team/src/cli.mjs'
-    confidence: 'observed'
+  - path: "agent-team/src/cli.mjs"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'agent-team/src/cli.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "agent-team/src/cli.mjs"
+    confidence: "observed"
 tags:
-  - 'project'
-  - 'node-subsystem'
+  - "project"
+  - "node-subsystem"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

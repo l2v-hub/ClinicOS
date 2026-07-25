@@ -1,30 +1,30 @@
 ---
-id: 'system.retrieval-contract'
-kind: 'knowledge-contract'
-title: 'Retrieval Contract'
-status: 'declared'
-summary: 'Retrieval Contract governing the ClinicOS NHW knowledge base.'
+id: "system.retrieval-contract"
+kind: "knowledge-contract"
+title: "Retrieval Contract"
+status: "declared"
+summary: "Retrieval Contract governing the ClinicOS NHW knowledge base."
 bounded_contexts: []
 sources:
-  - path: 'docs/superpowers/specs/2026-07-25-clinicos-nhw-knowledge-base-design.md'
-    line_start: '1'
-    line_end: '520'
-    confidence: 'declared'
-  - path: 'docs/nhw/README.md'
-    line_start: '1'
-    line_end: '20'
-    confidence: 'declared'
+  - path: "docs/superpowers/specs/2026-07-25-clinicos-nhw-knowledge-base-design.md"
+    line_start: "1"
+    line_end: "520"
+    confidence: "declared"
+  - path: "docs/nhw/README.md"
+    line_start: "1"
+    line_end: "20"
+    confidence: "declared"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'docs/superpowers/specs/2026-07-25-clinicos-nhw-knowledge-base-design.md,docs/nhw/README.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "docs/superpowers/specs/2026-07-25-clinicos-nhw-knowledge-base-design.md,docs/nhw/README.md"
+    confidence: "observed"
 tags:
-  - 'nhw'
-  - 'contract'
+  - "nhw"
+  - "contract"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

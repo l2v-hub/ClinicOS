@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.operator.cartella.therapydose.computeequivalent'
-kind: 'typescript-function'
-title: 'computeEquivalent'
-status: 'observed'
-summary: 'Exported function from frontend/src/components/operator/cartella/therapyDose.ts.'
+id: "component.frontend.frontend.src.components.operator.cartella.therapydose.computeequivalent"
+kind: "typescript-function"
+title: "computeEquivalent"
+status: "observed"
+summary: "Exported function from frontend/src/components/operator/cartella/therapyDose.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/components/operator/cartella/therapyDose.ts'
-    symbol: 'computeEquivalent'
-    line_start: '94'
-    line_end: '104'
-    confidence: 'observed'
+  - path: "frontend/src/components/operator/cartella/therapyDose.ts"
+    symbol: "computeEquivalent"
+    line_start: "94"
+    line_end: "104"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/operator/cartella/therapyDose.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/operator/cartella/therapyDose.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

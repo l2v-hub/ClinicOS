@@ -1,28 +1,28 @@
 ---
-id: 'component.src.src.pages.appointmentspage.appointmentspage'
-kind: 'typescript-react-component'
-title: 'AppointmentsPage'
-status: 'observed'
-summary: 'Exported react-component from src/pages/AppointmentsPage.tsx.'
+id: "component.src.src.pages.appointmentspage.appointmentspage"
+kind: "typescript-react-component"
+title: "AppointmentsPage"
+status: "observed"
+summary: "Exported react-component from src/pages/AppointmentsPage.tsx."
 bounded_contexts:
-  - 'context.scheduling'
+  - "context.scheduling"
 sources:
-  - path: 'src/pages/AppointmentsPage.tsx'
-    symbol: 'AppointmentsPage'
-    line_start: '1'
-    line_end: '21'
-    confidence: 'observed'
+  - path: "src/pages/AppointmentsPage.tsx"
+    symbol: "AppointmentsPage"
+    line_start: "1"
+    line_end: "21"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos'
-    evidence: 'src/pages/AppointmentsPage.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos"
+    evidence: "src/pages/AppointmentsPage.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'react-component'
+  - "typescript"
+  - "react-component"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.post-intake-drafts-51'
-kind: 'api-endpoint'
-title: 'POST /intake/drafts/'
-status: 'observed'
-summary: 'POST /intake/drafts/ endpoint implemented by the express runtime.'
+id: "api.backend.post-intake-drafts-51"
+kind: "api-endpoint"
+title: "POST /intake/drafts/"
+status: "observed"
+summary: "POST /intake/drafts/ endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/routes/intake-drafts.ts'
-    symbol: 'intakeDraftsRouter'
-    line_start: '59'
-    line_end: '72'
-    confidence: 'observed'
+  - path: "backend/src/routes/intake-drafts.ts"
+    symbol: "intakeDraftsRouter"
+    line_start: "59"
+    line_end: "72"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/intake-drafts.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/intake-drafts.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.types.aiextractionerror'
-kind: 'typescript-class'
-title: 'AiExtractionError'
-status: 'observed'
-summary: 'Exported class from backend/src/ai/types.ts.'
+id: "component.backend.backend.src.ai.types.aiextractionerror"
+kind: "typescript-class"
+title: "AiExtractionError"
+status: "observed"
+summary: "Exported class from backend/src/ai/types.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/ai/types.ts'
-    symbol: 'AiExtractionError'
-    line_start: '54'
-    line_end: '61'
-    confidence: 'observed'
+  - path: "backend/src/ai/types.ts"
+    symbol: "AiExtractionError"
+    line_start: "54"
+    line_end: "61"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/types.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/types.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'class'
+  - "typescript"
+  - "class"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

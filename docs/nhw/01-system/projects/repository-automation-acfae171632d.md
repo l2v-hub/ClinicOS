@@ -1,24 +1,24 @@
 ---
-id: 'project.repository-automation'
-kind: 'operational-tooling'
-title: 'repository-automation'
-status: 'observed'
-summary: 'repository-automation project rooted at scripts.'
+id: "project.repository-automation"
+kind: "operational-tooling"
+title: "repository-automation"
+status: "observed"
+summary: "repository-automation project rooted at scripts."
 bounded_contexts: []
 sources:
-  - path: 'scripts/quality-gate/check-closure.js'
-    confidence: 'observed'
+  - path: "scripts/quality-gate/check-closure.js"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'scripts/quality-gate/check-closure.js'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "scripts/quality-gate/check-closure.js"
+    confidence: "observed"
 tags:
-  - 'project'
-  - 'operational-tooling'
+  - "project"
+  - "operational-tooling"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

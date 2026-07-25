@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.get-patients-by-param-documents-by-param-content-92'
-kind: 'api-endpoint'
-title: 'GET /patients/:patientId/documents/:documentId/content'
-status: 'observed'
-summary: 'GET /patients/:patientId/documents/:documentId/content endpoint implemented by the express runtime.'
+id: "api.backend.get-patients-by-param-documents-by-param-content-92"
+kind: "api-endpoint"
+title: "GET /patients/:patientId/documents/:documentId/content"
+status: "observed"
+summary: "GET /patients/:patientId/documents/:documentId/content endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patient-documents.ts'
-    symbol: 'router'
-    line_start: '204'
-    line_end: '228'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-documents.ts"
+    symbol: "router"
+    line_start: "204"
+    line_end: "228"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-documents.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-documents.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'get'
+  - "api"
+  - "express"
+  - "get"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

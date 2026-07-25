@@ -1,25 +1,25 @@
 ---
-id: 'runtime.agent-team.supervisor'
-kind: 'runtime-orchestrator'
-title: 'Agent-team supervisor lifecycle'
-status: 'observed'
-summary: 'Agent-team runtime coordinates claim, recovery, worker execution, remediation, and shutdown.'
+id: "runtime.agent-team.supervisor"
+kind: "runtime-orchestrator"
+title: "Agent-team supervisor lifecycle"
+status: "observed"
+summary: "Agent-team runtime coordinates claim, recovery, worker execution, remediation, and shutdown."
 bounded_contexts: []
 sources:
-  - path: 'agent-team/src/runtime.mjs'
-    confidence: 'observed'
-  - path: 'agent-team/src/cli.mjs'
-    confidence: 'observed'
+  - path: "agent-team/src/runtime.mjs"
+    confidence: "observed"
+  - path: "agent-team/src/cli.mjs"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.agent-team'
-    evidence: 'agent-team/src/runtime.mjs,agent-team/src/cli.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.agent-team"
+    evidence: "agent-team/src/runtime.mjs,agent-team/src/cli.mjs"
+    confidence: "observed"
 tags:
-  - 'runtime-orchestrator'
+  - "runtime-orchestrator"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

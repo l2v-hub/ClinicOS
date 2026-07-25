@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.types.turnooperatore'
-kind: 'typescript-interface'
-title: 'TurnoOperatore'
-status: 'observed'
-summary: 'Exported interface from frontend/src/types.ts.'
+id: "component.frontend.frontend.src.types.turnooperatore"
+kind: "typescript-interface"
+title: "TurnoOperatore"
+status: "observed"
+summary: "Exported interface from frontend/src/types.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'frontend/src/types.ts'
-    symbol: 'TurnoOperatore'
-    line_start: '237'
-    line_end: '242'
-    confidence: 'observed'
+  - path: "frontend/src/types.ts"
+    symbol: "TurnoOperatore"
+    line_start: "237"
+    line_end: "242"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/types.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/types.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

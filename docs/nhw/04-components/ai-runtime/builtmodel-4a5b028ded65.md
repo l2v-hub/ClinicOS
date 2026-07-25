@@ -1,28 +1,28 @@
 ---
-id: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.builtmodel'
-kind: 'python-class'
-title: 'BuiltModel'
-status: 'observed'
-summary: 'Public Python class from clinicos-ai-runtime/clinicos_ai/models/providers/base.py.'
+id: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-models-providers-base.py.builtmodel"
+kind: "python-class"
+title: "BuiltModel"
+status: "observed"
+summary: "Public Python class from clinicos-ai-runtime/clinicos_ai/models/providers/base.py."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/models/providers/base.py'
-    symbol: 'BuiltModel'
-    line_start: '25'
-    line_end: '29'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/models/providers/base.py"
+    symbol: "BuiltModel"
+    line_start: "25"
+    line_end: "29"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/models/providers/base.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/models/providers/base.py"
+    confidence: "observed"
 tags:
-  - 'python'
-  - 'class'
+  - "python"
+  - "class"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.get-admin-beds-available-3'
-kind: 'api-endpoint'
-title: 'GET /admin/beds/available'
-status: 'observed'
-summary: 'GET /admin/beds/available endpoint implemented by the express runtime.'
+id: "api.backend.get-admin-beds-available-3"
+kind: "api-endpoint"
+title: "GET /admin/beds/available"
+status: "observed"
+summary: "GET /admin/beds/available endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.facility-occupancy'
+  - "context.facility-occupancy"
 sources:
-  - path: 'backend/src/routes/admin-rooms.ts'
-    symbol: 'adminRouter'
-    line_start: '90'
-    line_end: '128'
-    confidence: 'observed'
+  - path: "backend/src/routes/admin-rooms.ts"
+    symbol: "adminRouter"
+    line_start: "90"
+    line_end: "128"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/admin-rooms.ts'
-    confidence: 'observed'
-  - type: 'reads'
-    target: 'data.model.bed'
-    evidence: 'backend/src/routes/admin-rooms.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/admin-rooms.ts"
+    confidence: "observed"
+  - type: "reads"
+    target: "data.model.bed"
+    evidence: "backend/src/routes/admin-rooms.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'get'
+  - "api"
+  - "express"
+  - "get"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.intake.intakedraftapi.createdraftfromimport'
-kind: 'typescript-function'
-title: 'createDraftFromImport'
-status: 'observed'
-summary: 'Exported function from frontend/src/components/shared/intake/intakeDraftApi.ts.'
+id: "component.frontend.frontend.src.components.shared.intake.intakedraftapi.createdraftfromimport"
+kind: "typescript-function"
+title: "createDraftFromImport"
+status: "observed"
+summary: "Exported function from frontend/src/components/shared/intake/intakeDraftApi.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'frontend/src/components/shared/intake/intakeDraftApi.ts'
-    symbol: 'createDraftFromImport'
-    line_start: '93'
-    line_end: '107'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/intake/intakeDraftApi.ts"
+    symbol: "createDraftFromImport"
+    line_start: "93"
+    line_end: "107"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/intake/intakeDraftApi.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/intake/intakeDraftApi.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,33 +1,33 @@
 ---
-id: 'entity.patientdocument'
-kind: 'domain-entity'
-title: 'PatientDocument'
-status: 'inferred'
-summary: 'Business entity persisted by the PatientDocument Prisma model.'
+id: "entity.patientdocument"
+kind: "domain-entity"
+title: "PatientDocument"
+status: "inferred"
+summary: "Business entity persisted by the PatientDocument Prisma model."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'PatientDocument'
-    line_start: '132'
-    line_end: '148'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "PatientDocument"
+    line_start: "132"
+    line_end: "148"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.patient-registry'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'persists-as'
-    target: 'data.model.patientdocument'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "context.patient-registry"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "persists-as"
+    target: "data.model.patientdocument"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'domain-entity'
-  - 'patientdocument'
+  - "domain-entity"
+  - "patientdocument"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Business entity reconstructed from the current Prisma model and its executable consumers.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 
 ## Question Answered

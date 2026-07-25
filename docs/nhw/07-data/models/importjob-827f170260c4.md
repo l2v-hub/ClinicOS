@@ -1,36 +1,36 @@
 ---
-id: 'data.model.importjob'
-kind: 'data-model'
-title: 'ImportJob'
-status: 'observed'
-summary: 'Prisma persistence model ImportJob.'
+id: "data.model.importjob"
+kind: "data-model"
+title: "ImportJob"
+status: "observed"
+summary: "Prisma persistence model ImportJob."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'ImportJob'
-    line_start: '457'
-    line_end: '491'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "ImportJob"
+    line_start: "457"
+    line_end: "491"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.prisma'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.importaudit'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - type: 'depends-on'
-    target: 'data.model.importdocument'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.importaudit"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.importdocument"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'prisma'
-  - 'database-model'
+  - "prisma"
+  - "database-model"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

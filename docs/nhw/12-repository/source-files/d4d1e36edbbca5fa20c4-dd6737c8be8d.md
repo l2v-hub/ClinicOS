@@ -1,24 +1,24 @@
 ---
-id: 'component.repository.source.d4d1e36edbbca5fa20c4'
-kind: 'repository-source'
-title: 'consegna-service.ts'
-status: 'observed'
-summary: 'Repository source path backend/src/services/consegna-service.ts classified as semantic-source.'
+id: "component.repository.source.d4d1e36edbbca5fa20c4"
+kind: "repository-source"
+title: "consegna-service.ts"
+status: "observed"
+summary: "Repository source path backend/src/services/consegna-service.ts classified as semantic-source."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/services/consegna-service.ts'
-    confidence: 'observed'
+  - path: "backend/src/services/consegna-service.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/services/consegna-service.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/services/consegna-service.ts"
+    confidence: "observed"
 tags:
-  - 'repository-source'
-  - 'semantic-source'
+  - "repository-source"
+  - "semantic-source"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

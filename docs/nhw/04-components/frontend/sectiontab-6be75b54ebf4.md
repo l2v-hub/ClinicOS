@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.navcomponents.sectiontab'
-kind: 'typescript-interface'
-title: 'SectionTab'
-status: 'observed'
-summary: 'Exported interface from frontend/src/components/shared/NavComponents.tsx.'
+id: "component.frontend.frontend.src.components.shared.navcomponents.sectiontab"
+kind: "typescript-interface"
+title: "SectionTab"
+status: "observed"
+summary: "Exported interface from frontend/src/components/shared/NavComponents.tsx."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/components/shared/NavComponents.tsx'
-    symbol: 'SectionTab'
-    line_start: '50'
-    line_end: '55'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/NavComponents.tsx"
+    symbol: "SectionTab"
+    line_start: "50"
+    line_end: "55"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/NavComponents.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/NavComponents.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

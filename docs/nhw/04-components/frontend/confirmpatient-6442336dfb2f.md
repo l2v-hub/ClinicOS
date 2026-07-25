@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.importreviewfull.confirmpatient'
-kind: 'typescript-interface'
-title: 'ConfirmPatient'
-status: 'observed'
-summary: 'Exported interface from frontend/src/components/shared/ImportReviewFull.tsx.'
+id: "component.frontend.frontend.src.components.shared.importreviewfull.confirmpatient"
+kind: "typescript-interface"
+title: "ConfirmPatient"
+status: "observed"
+summary: "Exported interface from frontend/src/components/shared/ImportReviewFull.tsx."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'frontend/src/components/shared/ImportReviewFull.tsx'
-    symbol: 'ConfirmPatient'
-    line_start: '20'
-    line_end: '31'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/ImportReviewFull.tsx"
+    symbol: "ConfirmPatient"
+    line_start: "20"
+    line_end: "31"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/ImportReviewFull.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/ImportReviewFull.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

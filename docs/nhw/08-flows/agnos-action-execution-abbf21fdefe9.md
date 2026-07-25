@@ -1,75 +1,75 @@
 ---
-id: 'flow.agnos-action-execution'
-kind: 'runtime-flow'
-title: 'Agnos planning and allowlisted action execution'
-status: 'inferred'
-summary: 'Agnos planning and allowlisted action execution workflow across ClinicOS components.'
+id: "flow.agnos-action-execution"
+kind: "runtime-flow"
+title: "Agnos planning and allowlisted action execution"
+status: "inferred"
+summary: "Agnos planning and allowlisted action execution workflow across ClinicOS components."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'AgnosChannel'
-    line_start: '43'
-    line_end: '43'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'AgnosOperatorContext'
-    line_start: '57'
-    line_end: '61'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'AgnosPlan'
-    line_start: '63'
-    line_end: '63'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'AUDIT_CHANNEL'
-    line_start: '45'
-    line_end: '45'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'auditedActionType'
-    line_start: '49'
-    line_end: '54'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'defaultLoadPreviewContext'
-    line_start: '131'
-    line_end: '148'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'defaultRunRead'
-    line_start: '120'
-    line_end: '128'
-    confidence: 'observed'
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'derivePlan'
-    line_start: '69'
-    line_end: '86'
-    confidence: 'observed'
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "AgnosChannel"
+    line_start: "43"
+    line_end: "43"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "AgnosOperatorContext"
+    line_start: "57"
+    line_end: "61"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "AgnosPlan"
+    line_start: "63"
+    line_end: "63"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "AUDIT_CHANNEL"
+    line_start: "45"
+    line_end: "45"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "auditedActionType"
+    line_start: "49"
+    line_end: "54"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "defaultLoadPreviewContext"
+    line_start: "131"
+    line_end: "148"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "defaultRunRead"
+    line_start: "120"
+    line_end: "128"
+    confidence: "observed"
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "derivePlan"
+    line_start: "69"
+    line_end: "86"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.actions.orchestrate.agnoschannel'
-    evidence: 'backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.actions.orchestrate.agnosoperatorcontext'
-    evidence: 'backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts'
-    confidence: 'inferred'
-  - type: 'invokes'
-    target: 'component.backend.backend.src.ai.actions.orchestrate.agnosplan'
-    evidence: 'backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.actions.orchestrate.agnoschannel"
+    evidence: "backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.actions.orchestrate.agnosoperatorcontext"
+    evidence: "backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts"
+    confidence: "inferred"
+  - type: "invokes"
+    target: "component.backend.backend.src.ai.actions.orchestrate.agnosplan"
+    evidence: "backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts,backend/src/ai/actions/orchestrate.ts"
+    confidence: "inferred"
 tags:
-  - 'runtime-flow'
+  - "runtime-flow"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Ordered workflow reconstructed from matching endpoint, component, persistence, test, and deployment evidence."
 ---
 
 ## Question Answered
@@ -131,13 +131,13 @@ Validation, authorization, persistence, external provider, or orchestration fail
 
 ## Sequence
 
-| Step | Actor            | Operation                                                                        | State change               | Failure branch                  |
-| ---- | ---------------- | -------------------------------------------------------------------------------- | -------------------------- | ------------------------------- |
-| 1    | Trigger actor    | `component.backend.backend.src.ai.actions.orchestrate.agnoschannel`              | Defined by cited component | Owning component error contract |
-| 2    | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.agnosoperatorcontext`      | Defined by cited component | Owning component error contract |
-| 3    | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.agnosplan`                 | Defined by cited component | Owning component error contract |
-| 4    | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.audit-channel`             | Defined by cited component | Owning component error contract |
-| 5    | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.auditedactiontype`         | Defined by cited component | Owning component error contract |
-| 6    | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.defaultloadpreviewcontext` | Defined by cited component | Owning component error contract |
-| 7    | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.defaultrunread`            | Defined by cited component | Owning component error contract |
-| 8    | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.deriveplan`                | Defined by cited component | Owning component error contract |
+| Step | Actor | Operation | State change | Failure branch |
+| --- | --- | --- | --- | --- |
+| 1 | Trigger actor | `component.backend.backend.src.ai.actions.orchestrate.agnoschannel` | Defined by cited component | Owning component error contract |
+| 2 | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.agnosoperatorcontext` | Defined by cited component | Owning component error contract |
+| 3 | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.agnosplan` | Defined by cited component | Owning component error contract |
+| 4 | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.audit-channel` | Defined by cited component | Owning component error contract |
+| 5 | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.auditedactiontype` | Defined by cited component | Owning component error contract |
+| 6 | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.defaultloadpreviewcontext` | Defined by cited component | Owning component error contract |
+| 7 | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.defaultrunread` | Defined by cited component | Owning component error contract |
+| 8 | ClinicOS runtime | `component.backend.backend.src.ai.actions.orchestrate.deriveplan` | Defined by cited component | Owning component error contract |

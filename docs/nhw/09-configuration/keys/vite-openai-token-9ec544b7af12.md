@@ -1,32 +1,32 @@
 ---
-id: 'config.discovered.vite-openai-token'
-kind: 'configuration-key'
-title: 'VITE_OPENAI_TOKEN'
-status: 'observed'
-summary: 'Configuration key VITE_OPENAI_TOKEN; generated knowledge never includes its value.'
+id: "config.discovered.vite-openai-token"
+kind: "configuration-key"
+title: "VITE_OPENAI_TOKEN"
+status: "observed"
+summary: "Configuration key VITE_OPENAI_TOKEN; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'docs/nhw/09-configuration/keys/vite-openai-token-9ec544b7af12.md'
-    symbol: 'VITE_OPENAI_TOKEN'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
-  - path: 'scripts/security/scan-frontend-secrets.mjs'
-    symbol: 'VITE_OPENAI_TOKEN'
-    line_start: '138'
-    line_end: '138'
-    confidence: 'observed'
+  - path: "docs/nhw/09-configuration/keys/vite-openai-token-9ec544b7af12.md"
+    symbol: "VITE_OPENAI_TOKEN"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
+  - path: "scripts/security/scan-frontend-secrets.mjs"
+    symbol: "VITE_OPENAI_TOKEN"
+    line_start: "138"
+    line_end: "138"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'docs/nhw/09-configuration/keys/vite-openai-token-9ec544b7af12.md,scripts/security/scan-frontend-secrets.mjs'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "docs/nhw/09-configuration/keys/vite-openai-token-9ec544b7af12.md,scripts/security/scan-frontend-secrets.mjs"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

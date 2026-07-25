@@ -1,25 +1,25 @@
 ---
-id: 'runtime.backend.authentication-modes'
-kind: 'runtime-authentication'
-title: 'Demo and Entra authentication modes'
-status: 'observed'
-summary: 'Protected document routes select fail-closed, demo, or Entra authentication from AUTH_MODE.'
+id: "runtime.backend.authentication-modes"
+kind: "runtime-authentication"
+title: "Demo and Entra authentication modes"
+status: "observed"
+summary: "Protected document routes select fail-closed, demo, or Entra authentication from AUTH_MODE."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/routes/patient-documents.ts'
-    confidence: 'observed'
-  - path: 'backend/src/lib/entra-auth.ts'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-documents.ts"
+    confidence: "observed"
+  - path: "backend/src/lib/entra-auth.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-documents.ts,backend/src/lib/entra-auth.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-documents.ts,backend/src/lib/entra-auth.ts"
+    confidence: "observed"
 tags:
-  - 'runtime-authentication'
+  - "runtime-authentication"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

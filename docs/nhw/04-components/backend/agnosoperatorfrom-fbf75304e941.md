@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.routes.ai-actions.agnosoperatorfrom'
-kind: 'typescript-function'
-title: 'agnosOperatorFrom'
-status: 'observed'
-summary: 'Exported function from backend/src/routes/ai-actions.ts.'
+id: "component.backend.backend.src.routes.ai-actions.agnosoperatorfrom"
+kind: "typescript-function"
+title: "agnosOperatorFrom"
+status: "observed"
+summary: "Exported function from backend/src/routes/ai-actions.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/routes/ai-actions.ts'
-    symbol: 'agnosOperatorFrom'
-    line_start: '28'
-    line_end: '32'
-    confidence: 'observed'
+  - path: "backend/src/routes/ai-actions.ts"
+    symbol: "agnosOperatorFrom"
+    line_start: "28"
+    line_end: "32"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/ai-actions.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/ai-actions.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

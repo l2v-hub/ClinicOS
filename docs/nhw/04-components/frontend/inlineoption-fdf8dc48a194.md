@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.components.shared.inlineeditablefield.inlineoption'
-kind: 'typescript-interface'
-title: 'InlineOption'
-status: 'observed'
-summary: 'Exported interface from frontend/src/components/shared/InlineEditableField.tsx.'
+id: "component.frontend.frontend.src.components.shared.inlineeditablefield.inlineoption"
+kind: "typescript-interface"
+title: "InlineOption"
+status: "observed"
+summary: "Exported interface from frontend/src/components/shared/InlineEditableField.tsx."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/components/shared/InlineEditableField.tsx'
-    symbol: 'InlineOption'
-    line_start: '6'
-    line_end: '9'
-    confidence: 'observed'
+  - path: "frontend/src/components/shared/InlineEditableField.tsx"
+    symbol: "InlineOption"
+    line_start: "6"
+    line_end: "9"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/components/shared/InlineEditableField.tsx'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/components/shared/InlineEditableField.tsx"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

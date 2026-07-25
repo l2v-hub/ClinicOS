@@ -1,27 +1,27 @@
 ---
-id: 'config.discovered.vite-api-url'
-kind: 'configuration-key'
-title: 'VITE_API_URL'
-status: 'observed'
-summary: 'Configuration key VITE_API_URL; generated knowledge never includes its value.'
+id: "config.discovered.vite-api-url"
+kind: "configuration-key"
+title: "VITE_API_URL"
+status: "observed"
+summary: "Configuration key VITE_API_URL; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'frontend/.env.example'
-    symbol: 'VITE_API_URL'
-    line_start: '1'
-    line_end: '1'
-    confidence: 'observed'
+  - path: "frontend/.env.example"
+    symbol: "VITE_API_URL"
+    line_start: "1"
+    line_end: "1"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'frontend/.env.example'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/.env.example"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

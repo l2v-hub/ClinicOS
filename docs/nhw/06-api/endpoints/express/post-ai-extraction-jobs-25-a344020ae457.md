@@ -1,29 +1,29 @@
 ---
-id: 'api.backend.post-ai-extraction-jobs-25'
-kind: 'api-endpoint'
-title: 'POST /ai/extraction/jobs/'
-status: 'observed'
-summary: 'POST /ai/extraction/jobs/ endpoint implemented by the express runtime.'
+id: "api.backend.post-ai-extraction-jobs-25"
+kind: "api-endpoint"
+title: "POST /ai/extraction/jobs/"
+status: "observed"
+summary: "POST /ai/extraction/jobs/ endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/routes/ai-jobs.ts'
-    symbol: 'aiJobsRouter'
-    line_start: '68'
-    line_end: '87'
-    confidence: 'observed'
+  - path: "backend/src/routes/ai-jobs.ts"
+    symbol: "aiJobsRouter"
+    line_start: "68"
+    line_end: "87"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/ai-jobs.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/ai-jobs.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'post'
+  - "api"
+  - "express"
+  - "post"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

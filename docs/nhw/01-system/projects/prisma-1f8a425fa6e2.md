@@ -1,24 +1,24 @@
 ---
-id: 'project.prisma'
-kind: 'data-schema'
-title: 'prisma'
-status: 'observed'
-summary: 'prisma project rooted at prisma.'
+id: "project.prisma"
+kind: "data-schema"
+title: "prisma"
+status: "observed"
+summary: "prisma project rooted at prisma."
 bounded_contexts: []
 sources:
-  - path: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
 tags:
-  - 'project'
-  - 'data-schema'
+  - "project"
+  - "data-schema"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,59 +1,59 @@
 ---
-id: 'context.identity-access'
-kind: 'bounded-context'
-title: 'Identity and Access'
-status: 'inferred'
-summary: 'Identity and Access bounded context reconstructed from executable ClinicOS sources.'
+id: "context.identity-access"
+kind: "bounded-context"
+title: "Identity and Access"
+status: "inferred"
+summary: "Identity and Access bounded context reconstructed from executable ClinicOS sources."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'prisma/schema.prisma'
-    line_start: '38'
-    line_end: '54'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '58'
-    line_end: '65'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '21'
-    line_end: '36'
-    confidence: 'observed'
-  - path: 'backend/src/routes/operators.ts'
-    line_start: '58'
-    line_end: '72'
-    confidence: 'observed'
-  - path: 'backend/src/routes/operators.ts'
-    line_start: '77'
-    line_end: '90'
-    confidence: 'observed'
-  - path: 'backend/src/routes/operators.ts'
-    line_start: '123'
-    line_end: '185'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    line_start: "38"
+    line_end: "54"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "58"
+    line_end: "65"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "21"
+    line_end: "36"
+    confidence: "observed"
+  - path: "backend/src/routes/operators.ts"
+    line_start: "58"
+    line_end: "72"
+    confidence: "observed"
+  - path: "backend/src/routes/operators.ts"
+    line_start: "77"
+    line_end: "90"
+    confidence: "observed"
+  - path: "backend/src/routes/operators.ts"
+    line_start: "123"
+    line_end: "185"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.operator'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.operatorschedule'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.user'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.operator"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.operatorschedule"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.user"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/operators.ts,backend/src/routes/operators.ts,backend/src/routes/operators.ts"
+    confidence: "inferred"
 tags:
-  - 'bounded-context'
+  - "bounded-context"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership."
 ---
 
 ## Question Answered

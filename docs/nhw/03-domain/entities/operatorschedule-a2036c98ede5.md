@@ -1,33 +1,33 @@
 ---
-id: 'entity.operatorschedule'
-kind: 'domain-entity'
-title: 'OperatorSchedule'
-status: 'inferred'
-summary: 'Business entity persisted by the OperatorSchedule Prisma model.'
+id: "entity.operatorschedule"
+kind: "domain-entity"
+title: "OperatorSchedule"
+status: "inferred"
+summary: "Business entity persisted by the OperatorSchedule Prisma model."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'OperatorSchedule'
-    line_start: '58'
-    line_end: '65'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "OperatorSchedule"
+    line_start: "58"
+    line_end: "65"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.identity-access'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'persists-as'
-    target: 'data.model.operatorschedule'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "context.identity-access"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "persists-as"
+    target: "data.model.operatorschedule"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'domain-entity'
-  - 'operatorschedule'
+  - "domain-entity"
+  - "operatorschedule"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Business entity reconstructed from the current Prisma model and its executable consumers.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 
 ## Question Answered

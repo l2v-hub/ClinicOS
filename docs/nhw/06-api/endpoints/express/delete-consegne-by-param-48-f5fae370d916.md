@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.delete-consegne-by-param-48'
-kind: 'api-endpoint'
-title: 'DELETE /consegne/:id'
-status: 'observed'
-summary: 'DELETE /consegne/:id endpoint implemented by the express runtime.'
+id: "api.backend.delete-consegne-by-param-48"
+kind: "api-endpoint"
+title: "DELETE /consegne/:id"
+status: "observed"
+summary: "DELETE /consegne/:id endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/routes/consegne.ts'
-    symbol: 'consegneRouter'
-    line_start: '107'
-    line_end: '122'
-    confidence: 'observed'
+  - path: "backend/src/routes/consegne.ts"
+    symbol: "consegneRouter"
+    line_start: "107"
+    line_end: "122"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/consegne.ts'
-    confidence: 'observed'
-  - type: 'writes'
-    target: 'data.model.consegna'
-    evidence: 'backend/src/routes/consegne.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/consegne.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.consegna"
+    evidence: "backend/src/routes/consegne.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'delete'
+  - "api"
+  - "express"
+  - "delete"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

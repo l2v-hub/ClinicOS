@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.routes.operators.operatorsrouter'
-kind: 'typescript-constant'
-title: 'operatorsRouter'
-status: 'observed'
-summary: 'Exported constant from backend/src/routes/operators.ts.'
+id: "component.backend.backend.src.routes.operators.operatorsrouter"
+kind: "typescript-constant"
+title: "operatorsRouter"
+status: "observed"
+summary: "Exported constant from backend/src/routes/operators.ts."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'backend/src/routes/operators.ts'
-    symbol: 'operatorsRouter'
-    line_start: '9'
-    line_end: '9'
-    confidence: 'observed'
+  - path: "backend/src/routes/operators.ts"
+    symbol: "operatorsRouter"
+    line_start: "9"
+    line_end: "9"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/operators.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/operators.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'constant'
+  - "typescript"
+  - "constant"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

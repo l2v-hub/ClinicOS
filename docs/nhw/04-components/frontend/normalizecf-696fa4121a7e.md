@@ -1,28 +1,28 @@
 ---
-id: 'component.frontend.frontend.src.lib.codicefiscale.normalizecf'
-kind: 'typescript-function'
-title: 'normalizeCF'
-status: 'observed'
-summary: 'Exported function from frontend/src/lib/codiceFiscale.ts.'
+id: "component.frontend.frontend.src.lib.codicefiscale.normalizecf"
+kind: "typescript-function"
+title: "normalizeCF"
+status: "observed"
+summary: "Exported function from frontend/src/lib/codiceFiscale.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'frontend/src/lib/codiceFiscale.ts'
-    symbol: 'normalizeCF'
-    line_start: '7'
-    line_end: '9'
-    confidence: 'observed'
+  - path: "frontend/src/lib/codiceFiscale.ts"
+    symbol: "normalizeCF"
+    line_start: "7"
+    line_end: "9"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/src/lib/codiceFiscale.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/lib/codiceFiscale.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

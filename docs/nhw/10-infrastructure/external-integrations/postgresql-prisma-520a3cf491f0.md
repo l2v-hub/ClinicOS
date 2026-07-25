@@ -1,27 +1,27 @@
 ---
-id: 'integration.postgresql-prisma'
-kind: 'external-integration'
-title: 'PostgreSQL through Prisma'
-status: 'observed'
-summary: 'Express persistence uses Prisma schema/client with the PostgreSQL adapter and connection string.'
+id: "integration.postgresql-prisma"
+kind: "external-integration"
+title: "PostgreSQL through Prisma"
+status: "observed"
+summary: "Express persistence uses Prisma schema/client with the PostgreSQL adapter and connection string."
 bounded_contexts: []
 sources:
-  - path: 'prisma/schema.prisma'
-    confidence: 'observed'
-  - path: 'backend/src/lib/prisma.ts'
-    confidence: 'observed'
-  - path: 'docker-compose.yml'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    confidence: "observed"
+  - path: "backend/src/lib/prisma.ts"
+    confidence: "observed"
+  - path: "docker-compose.yml"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'prisma/schema.prisma,backend/src/lib/prisma.ts,docker-compose.yml'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "prisma/schema.prisma,backend/src/lib/prisma.ts,docker-compose.yml"
+    confidence: "observed"
 tags:
-  - 'external-integration'
+  - "external-integration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,42 +1,42 @@
 ---
-id: 'config.discovered.ai-structured-model'
-kind: 'configuration-key'
-title: 'AI_STRUCTURED_MODEL'
-status: 'observed'
-summary: 'Configuration key AI_STRUCTURED_MODEL; generated knowledge never includes its value.'
+id: "config.discovered.ai-structured-model"
+kind: "configuration-key"
+title: "AI_STRUCTURED_MODEL"
+status: "observed"
+summary: "Configuration key AI_STRUCTURED_MODEL; generated knowledge never includes its value."
 bounded_contexts: []
 sources:
-  - path: 'backend/.env.example'
-    symbol: 'AI_STRUCTURED_MODEL'
-    line_start: '23'
-    line_end: '23'
-    confidence: 'observed'
-  - path: 'backend/src/ai/__tests__/config.test.ts'
-    symbol: 'AI_STRUCTURED_MODEL'
-    line_start: '18'
-    line_end: '18'
-    confidence: 'observed'
-  - path: 'backend/src/ai/config.ts'
-    symbol: 'AI_STRUCTURED_MODEL'
-    line_start: '71'
-    line_end: '71'
-    confidence: 'observed'
-  - path: 'docs/nhw/09-configuration/keys/ai-structured-model-0e45a6f9ad13.md'
-    symbol: 'AI_STRUCTURED_MODEL'
-    line_start: '4'
-    line_end: '4'
-    confidence: 'observed'
+  - path: "backend/.env.example"
+    symbol: "AI_STRUCTURED_MODEL"
+    line_start: "23"
+    line_end: "23"
+    confidence: "observed"
+  - path: "backend/src/ai/__tests__/config.test.ts"
+    symbol: "AI_STRUCTURED_MODEL"
+    line_start: "18"
+    line_end: "18"
+    confidence: "observed"
+  - path: "backend/src/ai/config.ts"
+    symbol: "AI_STRUCTURED_MODEL"
+    line_start: "71"
+    line_end: "71"
+    confidence: "observed"
+  - path: "docs/nhw/09-configuration/keys/ai-structured-model-0e45a6f9ad13.md"
+    symbol: "AI_STRUCTURED_MODEL"
+    line_start: "4"
+    line_end: "4"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'backend/.env.example,backend/src/ai/__tests__/config.test.ts,backend/src/ai/config.ts,docs/nhw/09-configuration/keys/ai-structured-model-0e45a6f9ad13.md'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "backend/.env.example,backend/src/ai/__tests__/config.test.ts,backend/src/ai/config.ts,docs/nhw/09-configuration/keys/ai-structured-model-0e45a6f9ad13.md"
+    confidence: "observed"
 tags:
-  - 'configuration'
-  - 'typescript'
+  - "configuration"
+  - "typescript"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

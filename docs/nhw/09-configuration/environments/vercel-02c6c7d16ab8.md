@@ -1,25 +1,25 @@
 ---
-id: 'config.environment.vercel'
-kind: 'runtime-environment'
-title: 'Vercel frontend environment'
-status: 'observed'
-summary: 'Frontend deployment uses the Vercel project configuration and build-time VITE variables.'
+id: "config.environment.vercel"
+kind: "runtime-environment"
+title: "Vercel frontend environment"
+status: "observed"
+summary: "Frontend deployment uses the Vercel project configuration and build-time VITE variables."
 bounded_contexts: []
 sources:
-  - path: 'frontend/vercel.json'
-    confidence: 'observed'
-  - path: 'frontend/src/config.ts'
-    confidence: 'observed'
+  - path: "frontend/vercel.json"
+    confidence: "observed"
+  - path: "frontend/src/config.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.frontend'
-    evidence: 'frontend/vercel.json,frontend/src/config.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/vercel.json,frontend/src/config.ts"
+    confidence: "observed"
 tags:
-  - 'runtime-environment'
+  - "runtime-environment"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

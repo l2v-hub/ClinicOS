@@ -1,33 +1,33 @@
 ---
-id: 'api.backend.put-patients-by-param-therapies-by-param-99'
-kind: 'api-endpoint'
-title: 'PUT /patients/:patientId/therapies/:therapyId'
-status: 'observed'
-summary: 'PUT /patients/:patientId/therapies/:therapyId endpoint implemented by the express runtime.'
+id: "api.backend.put-patients-by-param-therapies-by-param-99"
+kind: "api-endpoint"
+title: "PUT /patients/:patientId/therapies/:therapyId"
+status: "observed"
+summary: "PUT /patients/:patientId/therapies/:therapyId endpoint implemented by the express runtime."
 bounded_contexts:
-  - 'context.patient-registry'
+  - "context.patient-registry"
 sources:
-  - path: 'backend/src/routes/patient-therapies.ts'
-    symbol: 'router'
-    line_start: '77'
-    line_end: '166'
-    confidence: 'observed'
+  - path: "backend/src/routes/patient-therapies.ts"
+    symbol: "router"
+    line_start: "77"
+    line_end: "166"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
-  - type: 'reads'
-    target: 'data.model.patienttherapy'
-    evidence: 'backend/src/routes/patient-therapies.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
+  - type: "reads"
+    target: "data.model.patienttherapy"
+    evidence: "backend/src/routes/patient-therapies.ts"
+    confidence: "observed"
 tags:
-  - 'api'
-  - 'express'
-  - 'put'
+  - "api"
+  - "express"
+  - "put"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,25 +1,25 @@
 ---
-id: 'integration.azure-entra-id'
-kind: 'external-integration'
-title: 'Azure Entra ID and JWKS'
-status: 'observed'
-summary: 'Backend verifies Entra JWTs against tenant/audience configuration and remote JWKS with cached resolvers.'
+id: "integration.azure-entra-id"
+kind: "external-integration"
+title: "Azure Entra ID and JWKS"
+status: "observed"
+summary: "Backend verifies Entra JWTs against tenant/audience configuration and remote JWKS with cached resolvers."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/lib/entra-auth.ts'
-    confidence: 'observed'
-  - path: 'frontend/src/lib/entraAuth.ts'
-    confidence: 'observed'
+  - path: "backend/src/lib/entra-auth.ts"
+    confidence: "observed"
+  - path: "frontend/src/lib/entraAuth.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.identity-access'
-    evidence: 'backend/src/lib/entra-auth.ts,frontend/src/lib/entraAuth.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "context.identity-access"
+    evidence: "backend/src/lib/entra-auth.ts,frontend/src/lib/entraAuth.ts"
+    confidence: "observed"
 tags:
-  - 'external-integration'
+  - "external-integration"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

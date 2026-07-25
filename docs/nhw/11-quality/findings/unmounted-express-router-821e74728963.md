@@ -1,27 +1,27 @@
 ---
-id: 'finding.coupling.unmounted-express-router'
-kind: 'architectural-finding'
-title: 'Unmounted Express router'
-status: 'observed'
-summary: '1 route declarations are not mounted by the Express composition root.'
+id: "finding.coupling.unmounted-express-router"
+kind: "architectural-finding"
+title: "Unmounted Express router"
+status: "observed"
+summary: "1 route declarations are not mounted by the Express composition root."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/routes/health.ts'
-    symbol: 'router'
-    line_start: '5'
-    line_end: '11'
-    confidence: 'observed'
+  - path: "backend/src/routes/health.ts"
+    symbol: "router"
+    line_start: "5"
+    line_end: "11"
+    confidence: "observed"
 relations:
-  - type: 'violates'
-    target: 'api.backend.get-root-49'
-    evidence: 'backend/src/routes/health.ts'
-    confidence: 'observed'
+  - type: "violates"
+    target: "api.backend.get-root-49"
+    evidence: "backend/src/routes/health.ts"
+    confidence: "observed"
 tags:
-  - 'coupling'
-  - 'route-mount'
+  - "coupling"
+  - "route-mount"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

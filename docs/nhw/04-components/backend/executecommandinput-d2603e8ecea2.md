@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.actions.orchestrate.executecommandinput'
-kind: 'typescript-interface'
-title: 'ExecuteCommandInput'
-status: 'observed'
-summary: 'Exported interface from backend/src/ai/actions/orchestrate.ts.'
+id: "component.backend.backend.src.ai.actions.orchestrate.executecommandinput"
+kind: "typescript-interface"
+title: "ExecuteCommandInput"
+status: "observed"
+summary: "Exported interface from backend/src/ai/actions/orchestrate.ts."
 bounded_contexts:
-  - 'context.delivery-quality-governance'
+  - "context.delivery-quality-governance"
 sources:
-  - path: 'backend/src/ai/actions/orchestrate.ts'
-    symbol: 'ExecuteCommandInput'
-    line_start: '218'
-    line_end: '225'
-    confidence: 'observed'
+  - path: "backend/src/ai/actions/orchestrate.ts"
+    symbol: "ExecuteCommandInput"
+    line_start: "218"
+    line_end: "225"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/actions/orchestrate.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/actions/orchestrate.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

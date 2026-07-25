@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.config.loadextractionschema'
-kind: 'typescript-function'
-title: 'loadExtractionSchema'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/config.ts.'
+id: "component.backend.backend.src.ai.config.loadextractionschema"
+kind: "typescript-function"
+title: "loadExtractionSchema"
+status: "observed"
+summary: "Exported function from backend/src/ai/config.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/ai/config.ts'
-    symbol: 'loadExtractionSchema'
-    line_start: '140'
-    line_end: '142'
-    confidence: 'observed'
+  - path: "backend/src/ai/config.ts"
+    symbol: "loadExtractionSchema"
+    line_start: "140"
+    line_end: "142"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/config.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/config.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

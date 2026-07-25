@@ -1,33 +1,33 @@
 ---
-id: 'entity.operator'
-kind: 'domain-entity'
-title: 'Operator'
-status: 'inferred'
-summary: 'Business entity persisted by the Operator Prisma model.'
+id: "entity.operator"
+kind: "domain-entity"
+title: "Operator"
+status: "inferred"
+summary: "Business entity persisted by the Operator Prisma model."
 bounded_contexts:
-  - 'context.identity-access'
+  - "context.identity-access"
 sources:
-  - path: 'prisma/schema.prisma'
-    symbol: 'Operator'
-    line_start: '38'
-    line_end: '54'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    symbol: "Operator"
+    line_start: "38"
+    line_end: "54"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'context.identity-access'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
-  - type: 'persists-as'
-    target: 'data.model.operator'
-    evidence: 'prisma/schema.prisma'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "context.identity-access"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
+  - type: "persists-as"
+    target: "data.model.operator"
+    evidence: "prisma/schema.prisma"
+    confidence: "inferred"
 tags:
-  - 'domain-entity'
-  - 'operator'
+  - "domain-entity"
+  - "operator"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Business entity reconstructed from the current Prisma model and its executable consumers.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 
 ## Question Answered

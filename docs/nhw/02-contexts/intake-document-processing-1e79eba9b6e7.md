@@ -1,55 +1,55 @@
 ---
-id: 'context.intake-document-processing'
-kind: 'bounded-context'
-title: 'Intake and Document Processing'
-status: 'inferred'
-summary: 'Intake and Document Processing bounded context reconstructed from executable ClinicOS sources.'
+id: "context.intake-document-processing"
+kind: "bounded-context"
+title: "Intake and Document Processing"
+status: "inferred"
+summary: "Intake and Document Processing bounded context reconstructed from executable ClinicOS sources."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'prisma/schema.prisma'
-    line_start: '494'
-    line_end: '505'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '507'
-    line_end: '530'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '457'
-    line_end: '491'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '241'
-    line_end: '257'
-    confidence: 'observed'
-  - path: 'prisma/schema.prisma'
-    line_start: '437'
-    line_end: '451'
-    confidence: 'observed'
-  - path: 'backend/src/routes/ai-jobs.ts'
-    line_start: '116'
-    line_end: '123'
-    confidence: 'observed'
+  - path: "prisma/schema.prisma"
+    line_start: "494"
+    line_end: "505"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "507"
+    line_end: "530"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "457"
+    line_end: "491"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "241"
+    line_end: "257"
+    confidence: "observed"
+  - path: "prisma/schema.prisma"
+    line_start: "437"
+    line_end: "451"
+    confidence: "observed"
+  - path: "backend/src/routes/ai-jobs.ts"
+    line_start: "116"
+    line_end: "123"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'system.clinicos'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/ai-jobs.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.importaudit'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/ai-jobs.ts'
-    confidence: 'inferred'
-  - type: 'contains'
-    target: 'data.model.importjob'
-    evidence: 'prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/ai-jobs.ts'
-    confidence: 'inferred'
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/ai-jobs.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.importaudit"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/ai-jobs.ts"
+    confidence: "inferred"
+  - type: "contains"
+    target: "data.model.importjob"
+    evidence: "prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,prisma/schema.prisma,backend/src/routes/ai-jobs.ts"
+    confidence: "inferred"
 tags:
-  - 'bounded-context'
+  - "bounded-context"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
-inference_rule: 'Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership.'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
+inference_rule: "Grouped from cohesive model names, mounted route prefixes, UI consumers, and persistence ownership."
 ---
 
 ## Question Answered

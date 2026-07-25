@@ -1,27 +1,27 @@
 ---
-id: 'runtime.backend.error-handling'
-kind: 'runtime-error-policy'
-title: 'Backend error handling'
-status: 'observed'
-summary: 'Route-local catch blocks convert validation, persistence, integration, and unknown failures into HTTP responses.'
+id: "runtime.backend.error-handling"
+kind: "runtime-error-policy"
+title: "Backend error handling"
+status: "observed"
+summary: "Route-local catch blocks convert validation, persistence, integration, and unknown failures into HTTP responses."
 bounded_contexts: []
 sources:
-  - path: 'backend/src/app.ts'
-    confidence: 'observed'
-  - path: 'backend/src/routes/patients.ts'
-    confidence: 'observed'
-  - path: 'backend/src/routes/ai-jobs.ts'
-    confidence: 'observed'
+  - path: "backend/src/app.ts"
+    confidence: "observed"
+  - path: "backend/src/routes/patients.ts"
+    confidence: "observed"
+  - path: "backend/src/routes/ai-jobs.ts"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/app.ts,backend/src/routes/patients.ts,backend/src/routes/ai-jobs.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/app.ts,backend/src/routes/patients.ts,backend/src/routes/ai-jobs.ts"
+    confidence: "observed"
 tags:
-  - 'runtime-error-policy'
+  - "runtime-error-policy"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.extraction-validate.normalizedate'
-kind: 'typescript-function'
-title: 'normalizeDate'
-status: 'observed'
-summary: 'Exported function from backend/src/ai/extraction-validate.ts.'
+id: "component.backend.backend.src.ai.extraction-validate.normalizedate"
+kind: "typescript-function"
+title: "normalizeDate"
+status: "observed"
+summary: "Exported function from backend/src/ai/extraction-validate.ts."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'backend/src/ai/extraction-validate.ts'
-    symbol: 'normalizeDate'
-    line_start: '44'
-    line_end: '58'
-    confidence: 'observed'
+  - path: "backend/src/ai/extraction-validate.ts"
+    symbol: "normalizeDate"
+    line_start: "44"
+    line_end: "58"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/extraction-validate.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/extraction-validate.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'function'
+  - "typescript"
+  - "function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

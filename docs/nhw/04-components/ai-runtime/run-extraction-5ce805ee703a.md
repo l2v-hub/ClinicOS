@@ -1,28 +1,28 @@
 ---
-id: 'component.ai-runtime.clinicos-ai-runtime-clinicos-ai-agents-extraction.py.run-extraction'
-kind: 'python-async-function'
-title: 'run_extraction'
-status: 'observed'
-summary: 'Public Python async-function from clinicos-ai-runtime/clinicos_ai/agents/extraction.py.'
+id: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-agents-extraction.py.run-extraction"
+kind: "python-async-function"
+title: "run_extraction"
+status: "observed"
+summary: "Public Python async-function from clinicos-ai-runtime/clinicos_ai/agents/extraction.py."
 bounded_contexts:
-  - 'context.intake-document-processing'
+  - "context.intake-document-processing"
 sources:
-  - path: 'clinicos-ai-runtime/clinicos_ai/agents/extraction.py'
-    symbol: 'run_extraction'
-    line_start: '31'
-    line_end: '65'
-    confidence: 'observed'
+  - path: "clinicos-ai-runtime/clinicos_ai/agents/extraction.py"
+    symbol: "run_extraction"
+    line_start: "31"
+    line_end: "65"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.clinicos-ai-runtime'
-    evidence: 'clinicos-ai-runtime/clinicos_ai/agents/extraction.py'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/agents/extraction.py"
+    confidence: "observed"
 tags:
-  - 'python'
-  - 'async-function'
+  - "python"
+  - "async-function"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered

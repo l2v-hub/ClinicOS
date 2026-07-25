@@ -1,28 +1,28 @@
 ---
-id: 'component.backend.backend.src.ai.assistant.plan.plannedtoolcall'
-kind: 'typescript-interface'
-title: 'PlannedToolCall'
-status: 'observed'
-summary: 'Exported interface from backend/src/ai/assistant/plan.ts.'
+id: "component.backend.backend.src.ai.assistant.plan.plannedtoolcall"
+kind: "typescript-interface"
+title: "PlannedToolCall"
+status: "observed"
+summary: "Exported interface from backend/src/ai/assistant/plan.ts."
 bounded_contexts:
-  - 'context.ai-assistance'
+  - "context.ai-assistance"
 sources:
-  - path: 'backend/src/ai/assistant/plan.ts'
-    symbol: 'PlannedToolCall'
-    line_start: '26'
-    line_end: '29'
-    confidence: 'observed'
+  - path: "backend/src/ai/assistant/plan.ts"
+    symbol: "PlannedToolCall"
+    line_start: "26"
+    line_end: "29"
+    confidence: "observed"
 relations:
-  - type: 'belongs-to'
-    target: 'project.backend'
-    evidence: 'backend/src/ai/assistant/plan.ts'
-    confidence: 'observed'
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/ai/assistant/plan.ts"
+    confidence: "observed"
 tags:
-  - 'typescript'
-  - 'interface'
+  - "typescript"
+  - "interface"
 last_verified:
-  commit: 'working-tree'
-  inventory_hash: '88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c'
+  commit: "working-tree"
+  inventory_hash: "88bfed0fcf4eeef0bf5613885ddf3f844a8a14eace6d862aaf9b2a925afb484c"
 ---
 
 ## Question Answered
