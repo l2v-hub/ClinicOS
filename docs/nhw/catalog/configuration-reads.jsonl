@@ -8,7 +8,7 @@
 {"id":"config.discovered.ai-narrative-schema-path","name":"AI_NARRATIVE_SCHEMA_PATH","runtimes":["typescript"]}
 {"id":"config.discovered.ai-ocr-transcription","name":"AI_OCR_TRANSCRIPTION","runtimes":["typescript"]}
 {"id":"config.discovered.ai-provider","name":"AI_PROVIDER","runtimes":["typescript"]}
-{"id":"config.discovered.ai-runtime-service-token","name":"AI_RUNTIME_SERVICE_TOKEN","runtimes":["typescript"]}
+{"id":"config.discovered.ai-runtime-service-token","name":"AI_RUNTIME_SERVICE_TOKEN","runtimes":["python","typescript"],"sources":[{"lineEnd":48,"lineStart":48,"path":"clinicos-ai-runtime/clinicos_ai/api/app.py"}]}
 {"id":"config.discovered.ai-runtime-url","name":"AI_RUNTIME_URL","runtimes":["typescript"]}
 {"id":"config.discovered.ai-sections-pass","name":"AI_SECTIONS_PASS","runtimes":["typescript"]}
 {"id":"config.discovered.ai-sections-profile-path","name":"AI_SECTIONS_PROFILE_PATH","runtimes":["typescript"]}
@@ -36,11 +36,16 @@
 {"id":"config.discovered.frontend-url","name":"FRONTEND_URL","runtimes":["typescript"]}
 {"id":"config.discovered.frontend-urls","name":"FRONTEND_URLS","runtimes":["typescript"]}
 {"id":"config.discovered.gemini-api-key","name":"GEMINI_API_KEY","runtimes":["typescript"]}
+{"id":"config.discovered.mistral-api-key","name":"MISTRAL_API_KEY","runtimes":["python"],"sources":[{"lineEnd":69,"lineStart":69,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"}]}
+{"id":"config.discovered.mistral-ocr-url","name":"MISTRAL_OCR_URL","runtimes":["python"],"sources":[{"lineEnd":68,"lineStart":68,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py"}]}
 {"id":"config.discovered.node-env","name":"NODE_ENV","runtimes":["typescript"]}
 {"id":"config.discovered.openai-key","name":"OPENAI_KEY","runtimes":["typescript"]}
-{"id":"config.discovered.port","name":"PORT","runtimes":["typescript"]}
+{"id":"config.discovered.openai-like-api-key","name":"OPENAI_LIKE_API_KEY","runtimes":["python"],"sources":[{"lineEnd":23,"lineStart":23,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py"}]}
+{"id":"config.discovered.openai-like-base-url","name":"OPENAI_LIKE_BASE_URL","runtimes":["python"],"sources":[{"lineEnd":12,"lineStart":12,"path":"clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py"}]}
+{"id":"config.discovered.port","name":"PORT","runtimes":["python","typescript"],"sources":[{"lineEnd":7,"lineStart":7,"path":"clinicos-ai-runtime/clinicos_ai/main.py"}]}
 {"id":"config.discovered.prod","name":"PROD","runtimes":["typescript"]}
 {"id":"config.discovered.prod-url","name":"PROD_URL","runtimes":["typescript"]}
+{"id":"config.discovered.service-token","name":"SERVICE_TOKEN","runtimes":["python"],"sources":[{"lineEnd":25,"lineStart":25,"path":"scripts/nhw/test/fixtures/python/app.py"}]}
 {"id":"config.discovered.something","name":"SOMETHING","runtimes":["typescript"]}
 {"id":"config.discovered.vite-","name":"VITE_","runtimes":["typescript"]}
 {"id":"config.discovered.vite-api-url","name":"VITE_API_URL","runtimes":["typescript"]}

@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 
-import { mkdirSync } from 'node:fs';
-import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { isAbsolute, join, relative, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { writeJson, writeJsonl } from './lib/contracts.mjs';
 import { buildInventory, inventoryHash } from './lib/inventory.mjs';
 import { extractTypeScript } from './lib/typescript-extractor.mjs';
 
-const STAGES = ['inventory', 'typescript'];
+const STAGES = ['inventory', 'python', 'typescript'];
 
 function outputDirectories(repoRoot, outputRoot) {
   return ['catalog', 'coverage', 'evidence', 'graph', 'reports']
@@ -78,6 +80,95 @@ async function generateTypeScript(repoRoot, outputRoot) {
   };
 }
 
+function readJsonl(path) {
+  try {
+    return readFileSync(path, 'utf8')
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .map((line) => JSON.parse(line));
+  } catch (error) {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  }
+}
+
+function mergeConfigurationRecords(existing, pythonReads) {
+  const records = new Map(existing.map((record) => [record.name, record]));
+  for (const read of pythonReads) {
+    const current = records.get(read.name) ?? {
+      id: `config.discovered.${read.name.toLowerCase().replaceAll('_', '-')}`,
+      name: read.name,
+      runtimes: [],
+      sources: [],
+    };
+    current.runtimes = [...new Set([...(current.runtimes ?? []), 'python'])].sort();
+    current.sources = [
+      ...new Map(
+        [
+          ...(current.sources ?? []),
+          {
+            path: read.sourcePath,
+            lineStart: read.lineStart,
+            lineEnd: read.lineEnd,
+          },
+        ].map((source) => [`${source.path}:${source.lineStart}`, source]),
+      ).values(),
+    ].sort((left, right) =>
+      `${left.path}:${left.lineStart}`.localeCompare(`${right.path}:${right.lineStart}`, 'en'),
+    );
+    records.set(read.name, current);
+  }
+  return [...records.values()];
+}
+
+async function generatePython(repoRoot, outputRoot) {
+  const catalogDirectory = join(outputRoot, 'catalog');
+  mkdirSync(catalogDirectory, { recursive: true });
+  const inventory = await buildInventory(repoRoot, {
+    excludedDirectories: outputDirectories(repoRoot, outputRoot),
+  });
+  const paths = inventory
+    .filter((record) => record.pathType === 'file')
+    .filter((record) => ['semantic-source', 'test-source'].includes(record.classification))
+    .filter((record) => record.path.endsWith('.py'))
+    .map((record) => record.path);
+  const scratch = mkdtempSync(join(tmpdir(), 'clinicos-nhw-python-stage-'));
+  const pathsFile = join(scratch, 'paths.json');
+  writeFileSync(pathsFile, `${JSON.stringify(paths)}\n`, 'utf8');
+  const extractor = fileURLToPath(new URL('./lib/python-extractor.py', import.meta.url));
+  const processResult = spawnSync(
+    'python',
+    [extractor, '--repo-root', repoRoot, '--paths-file', pathsFile],
+    { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 },
+  );
+  rmSync(scratch, { recursive: true, force: true });
+  if (processResult.status !== 0) {
+    throw new Error(
+      `Python extractor exited ${processResult.status}: ${processResult.stderr.trim()}`,
+    );
+  }
+  const discovery = JSON.parse(processResult.stdout);
+  const configurationPath = join(catalogDirectory, 'configuration-reads.jsonl');
+  const configurationRecords = mergeConfigurationRecords(
+    readJsonl(configurationPath),
+    discovery.configurationReads,
+  );
+
+  writeJsonl(join(catalogDirectory, 'python-symbols.jsonl'), discovery.symbols);
+  writeJsonl(join(catalogDirectory, 'fastapi-routes.jsonl'), discovery.routes);
+  writeJsonl(configurationPath, configurationRecords);
+
+  return {
+    stage: 'python',
+    sourceFiles: paths.length,
+    symbols: discovery.symbols.length,
+    fastapiRoutes: discovery.routes.length,
+    lifecycleHooks: discovery.lifecycleHooks.length,
+    providerClasses: discovery.providerClasses.length,
+    configurationReads: discovery.configurationReads.length,
+  };
+}
+
 export async function generateKnowledgeBase(options = {}) {
   const repoRoot = resolve(options.repoRoot ?? process.cwd());
   const outputRoot = resolve(options.outputRoot ?? join(repoRoot, 'docs', 'nhw'));
@@ -92,6 +183,9 @@ export async function generateKnowledgeBase(options = {}) {
   }
   if (stage === 'typescript') {
     return generateTypeScript(repoRoot, outputRoot);
+  }
+  if (stage === 'python') {
+    return generatePython(repoRoot, outputRoot);
   }
 
   throw new Error(`NHW stage '${stage}' has no implementation`);
