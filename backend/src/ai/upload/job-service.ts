@@ -809,15 +809,6 @@ export async function runJob(jobId: string): Promise<void> {
           // REQ-033: faithful clinical-sections + narrative are now the DEFAULT import path
           // (set AI_SECTIONS_PASS=false only to disable). The discharge letter is never
           // rendered as structured diagnosis/therapy rows.
-          let sections: SectionsResult | null = null;
-          if (process.env.AI_SECTIONS_PASS !== 'false') {
-            try {
-              await setState(jobId, 'waiting_for_model', { stage: 'sectioning' });
-              sections = await runtimeSections(jobId, docFiles);
-            } catch {
-              /* sectioning is best-effort; the narrative falls back to the integral OCR text */
-            }
-          }
           // REQ-028/033: flat narrative draft (faithful text blocks, NO diagnoses[]/medications[]
           // arrays). ALWAYS present — derived from the sections when available, otherwise from
           // the integral OCR rawText, so the UI never falls back to the legacy structured table.
@@ -845,7 +836,19 @@ export async function runJob(jobId: string): Promise<void> {
             demo,
             usable[0] ? { id: usable[0].id, filename: usable[0].filename } : undefined,
           );
+          // The sections pass is a further FULL model round-trip over every document — the most
+          // expensive step of the import — and its result is only consumed when the markdown parse
+          // above found no section text. Run it lazily, so the common case pays for it no more.
+          let sections: SectionsResult | null = null;
           if (!narrativeHasSectionText(narrative)) {
+            if (process.env.AI_SECTIONS_PASS !== 'false') {
+              try {
+                await setState(jobId, 'waiting_for_model', { stage: 'sectioning' });
+                sections = await runtimeSections(jobId, docFiles);
+              } catch {
+                /* sectioning is best-effort; the narrative falls back to the integral OCR text */
+              }
+            }
             narrative = sections
               ? buildNarrativeDraft(
                   sections,
