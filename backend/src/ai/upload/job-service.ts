@@ -345,13 +345,15 @@ const CLINICAL_LIST_KEYS = ['diagnosi', 'allergie', 'farmaci', 'terapie'] as con
 async function runtimeClinicalLists(
   jobId: string,
   documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
+  rawText = '',
 ): Promise<Record<string, unknown>> {
-  const rid = await runtimeCreateJob(
-    jobId,
-    documents,
-    CLINICAL_LISTS_SCHEMA,
-    CLINICAL_LISTS_PROMPT,
-  );
+  // Con una trascrizione fedele al layout il compito diventa "leggi queste righe" invece di
+  // "interpreta queste immagini": e' sugli elenchi di farmaci, dove dose e posologia sono
+  // allineate in colonna, che la differenza si sente di piu'.
+  const prompt = rawText.trim()
+    ? `${CLINICAL_LISTS_PROMPT}\n\nTESTO DEL DOCUMENTO (ogni riga e' una voce a se'):\n${rawText}`
+    : CLINICAL_LISTS_PROMPT;
+  const rid = await runtimeCreateJob(jobId, documents, CLINICAL_LISTS_SCHEMA, prompt);
   await runtimeRunJob(rid);
   const deadline = Date.now() + 10 * 60 * 1000;
   while (Date.now() < deadline) {
@@ -849,7 +851,10 @@ export async function runJob(jobId: string): Promise<void> {
           // with AI_CLINICAL_LISTS_PASS=true once a capable/quota'd model is configured.
           if (process.env.AI_CLINICAL_LISTS_PASS === 'true') {
             try {
-              const lists = await runtimeClinicalLists(jobId, docFiles);
+              // Come l'estrazione principale: se c'e' una trascrizione fedele al layout la si
+              // passa al posto delle immagini. E' proprio sugli elenchi (farmaci con dose e
+              // posologia) che la fedelta' di riga conta di piu'.
+              const lists = await runtimeClinicalLists(jobId, extractionFiles, rawText);
               raw = applyClinicalLists(raw, lists);
             } catch {
               /* best-effort; keep the main extraction */
