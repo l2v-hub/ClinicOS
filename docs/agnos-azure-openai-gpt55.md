@@ -7,10 +7,14 @@ Agnos legge provider, endpoint, deployment/model e API key **solo da environment
 
 | Variabile                 | Valore                                                 | Note                                        |
 | ------------------------- | ------------------------------------------------------ | ------------------------------------------- |
-| `AZURE_OPENAI_ENDPOINT`   | `https://dpsaifoundry.services.ai.azure.com/openai/v1` | endpoint Azure OpenAI                       |
+| `AZURE_OPENAI_ENDPOINT`   | `https://dpsaifoundry.services.ai.azure.com`           | endpoint ROOT — **senza** `/openai/v1`      |
 | `AZURE_OPENAI_DEPLOYMENT` | `gpt-5.5`                                              | deployment/model (diventa `spec.model_id`)  |
 | `AZURE_OPENAI_API_KEY`    | _(segreto, solo su Railway)_                           | mai committata, mai in log, mai al frontend |
 | `OPENAI_API_VERSION`      | _(secondo l'API surface Azure)_                        | usata dall'SDK Azure/Agno                   |
+
+> L'endpoint deve restare la **root**: Agno appende da se' `/openai/deployments/…` e l'adapter
+> costruisce `…/openai/v1/chat/completions` per l'estrazione vincolata dallo schema. Aggiungere
+> `/openai/v1` alla variabile produce un doppio path e un 404 silenzioso.
 
 Il codice provider: `clinicos-ai-runtime/clinicos_ai/models/providers/azure.py`
 (`AzureOpenAI(id=spec.model_id, …)`) legge endpoint/key dall'ambiente; il deployment arriva da

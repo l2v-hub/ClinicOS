@@ -28,9 +28,12 @@ def capabilities_for(spec: ModelSpec) -> ModelCapabilities:
         )
 
     if p in ("openai", "azure", "openai-like"):
-        vision = any(k in m for k in ("4o", "vision", "o1", "o3", "4.1"))
+        vision = any(k in m for k in ("4o", "vision", "o1", "o3", "4.1", "gpt-5"))
+        # La famiglia gpt-5 (deployment Azure Foundry, API v1) accetta anche PDF come
+        # file content parts; i modelli vision precedenti restano solo-immagine.
+        pdf = "gpt-5" in m
         return ModelCapabilities(
-            text_input=True, image_input=vision, pdf_input=False, file_upload=True,
+            text_input=True, image_input=vision, pdf_input=pdf, file_upload=True,
             json_mode=True, native_structured_output=True, tool_calling=True,
             streaming=True, async_execution=True,
         )

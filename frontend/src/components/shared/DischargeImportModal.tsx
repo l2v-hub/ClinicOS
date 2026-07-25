@@ -799,9 +799,13 @@ export function DischargeImportModal({
               <button
                 className="btn-primary"
                 disabled={busy || count === 0 || processing}
-                onClick={startProcessing}
+                onClick={job?.canRetry ? retry : startProcessing}
               >
-                {processing ? 'Elaborazione in corso…' : 'Avvia elaborazione'}
+                {processing
+                  ? 'Elaborazione in corso…'
+                  : job?.canRetry
+                    ? '↻ Riprova elaborazione'
+                    : 'Avvia elaborazione'}
               </button>
             </footer>
           </>
