@@ -13,9 +13,10 @@ import {
   parseMigration,
   parsePrismaSchema,
 } from './lib/prisma-extractor.mjs';
+import { extractRepositorySurfaces } from './lib/repository-extractor.mjs';
 import { extractTypeScript } from './lib/typescript-extractor.mjs';
 
-const STAGES = ['inventory', 'prisma', 'python', 'typescript'];
+const STAGES = ['inventory', 'prisma', 'python', 'repository', 'typescript'];
 
 function outputDirectories(repoRoot, outputRoot) {
   return ['catalog', 'coverage', 'evidence', 'graph', 'reports']
@@ -234,6 +235,75 @@ async function generatePrisma(repoRoot, outputRoot) {
   };
 }
 
+function mergeConfigurationDeclarations(existing, declarations) {
+  const records = new Map(existing.map((record) => [record.name, record]));
+  for (const declaration of declarations) {
+    const current = records.get(declaration.name) ?? {
+      id: `config.discovered.${declaration.name.toLowerCase().replaceAll('_', '-')}`,
+      name: declaration.name,
+      runtimes: [],
+      sources: [],
+    };
+    current.declared = true;
+    current.sources = [
+      ...new Map(
+        [
+          ...(current.sources ?? []),
+          {
+            path: declaration.sourcePath,
+            lineStart: declaration.lineStart,
+            lineEnd: declaration.lineStart,
+          },
+        ].map((source) => [`${source.path}:${source.lineStart}`, source]),
+      ).values(),
+    ].sort((left, right) =>
+      `${left.path}:${left.lineStart}`.localeCompare(`${right.path}:${right.lineStart}`, 'en'),
+    );
+    records.set(declaration.name, current);
+  }
+  return [...records.values()];
+}
+
+async function generateRepository(repoRoot, outputRoot) {
+  const catalogDirectory = join(outputRoot, 'catalog');
+  mkdirSync(catalogDirectory, { recursive: true });
+  const inventory = await buildInventory(repoRoot, {
+    excludedDirectories: outputDirectories(repoRoot, outputRoot),
+  });
+  const discovery = extractRepositorySurfaces(repoRoot, inventory);
+  const configurationPath = join(catalogDirectory, 'configuration-reads.jsonl');
+  const configurationRecords = mergeConfigurationDeclarations(
+    readJsonl(configurationPath),
+    discovery.configurationDeclarations,
+  );
+
+  writeJson(join(catalogDirectory, 'projects.json'), {
+    schemaVersion: '1.0.0',
+    projects: discovery.projects,
+    packageScripts: discovery.packageScripts,
+    workflows: discovery.workflows,
+    containers: discovery.containers,
+    deployments: discovery.deployments,
+    requirements: discovery.requirements,
+  });
+  writeJsonl(join(catalogDirectory, 'test-surfaces.jsonl'), discovery.testSurfaces);
+  writeJsonl(join(catalogDirectory, 'repository-artifacts.jsonl'), discovery.artifacts);
+  writeJsonl(configurationPath, configurationRecords);
+
+  return {
+    stage: 'repository',
+    projects: discovery.projects.length,
+    packageScripts: discovery.packageScripts.length,
+    workflows: discovery.workflows.length,
+    containers: discovery.containers.length,
+    deployments: discovery.deployments.length,
+    testSurfaces: discovery.testSurfaces.length,
+    requirements: discovery.requirements.length,
+    artifacts: discovery.artifacts.length,
+    configurationDeclarations: discovery.configurationDeclarations.length,
+  };
+}
+
 export async function generateKnowledgeBase(options = {}) {
   const repoRoot = resolve(options.repoRoot ?? process.cwd());
   const outputRoot = resolve(options.outputRoot ?? join(repoRoot, 'docs', 'nhw'));
@@ -254,6 +324,9 @@ export async function generateKnowledgeBase(options = {}) {
   }
   if (stage === 'prisma') {
     return generatePrisma(repoRoot, outputRoot);
+  }
+  if (stage === 'repository') {
+    return generateRepository(repoRoot, outputRoot);
   }
 
   throw new Error(`NHW stage '${stage}' has no implementation`);
