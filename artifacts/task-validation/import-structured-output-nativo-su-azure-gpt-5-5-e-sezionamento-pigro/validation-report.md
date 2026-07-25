@@ -1,6 +1,7 @@
 # Task Validation Report
 
 ## Task
+
 - Title: Import: structured output nativo su Azure gpt-5.5 e sezionamento pigro
 - Slug: import-structured-output-nativo-su-azure-gpt-5-5-e-sezionamento-pigro
 - Commit: (working tree — in attesa di PR)
@@ -33,26 +34,26 @@ Document AI era un adapter specializzato per documenti.
 
 ## Acceptance Criteria Result
 
-| AC | Result | Evidence |
-|---|---:|---|
-| AC1 | PASS | `test_extraction_prefers_run_structured` (hasattr True), `test_body_carries_schema_and_parts` (response_format.json_schema con lo schema fornito, `image_url` per l'immagine e `file` per il PDF), `test_no_attachments_still_valid` |
-| AC2 | PASS | `test_http_error_becomes_provider_error_without_secrets` (asserisce che la chiave NON compare nel messaggio), `test_429_becomes_rate_limit`, `test_missing_credentials_is_provider_unavailable`, `test_url_is_built_on_the_root_endpoint` (nessun doppio `/openai`, nessuno slash duplicato) |
-| AC3 | PASS | `lazy-sections.test.ts`: `runtimeSections` compare DOPO il guard `if (!narrativeHasSectionText(narrative))`; valvola `AI_SECTIONS_PASS` ancora presente; la trascrizione precede il parsing |
-| AC4 | PASS | runtime Python **86/86 OK**; backend **379/379 pass, 0 fail**; `npx tsc --noEmit` backend pulito |
+| AC  | Result | Evidence                                                                                                                                                                                                                                                                                     |
+| --- | -----: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AC1 |   PASS | `test_extraction_prefers_run_structured` (hasattr True), `test_body_carries_schema_and_parts` (response_format.json_schema con lo schema fornito, `image_url` per l'immagine e `file` per il PDF), `test_no_attachments_still_valid`                                                         |
+| AC2 |   PASS | `test_http_error_becomes_provider_error_without_secrets` (asserisce che la chiave NON compare nel messaggio), `test_429_becomes_rate_limit`, `test_missing_credentials_is_provider_unavailable`, `test_url_is_built_on_the_root_endpoint` (nessun doppio `/openai`, nessuno slash duplicato) |
+| AC3 |   PASS | `lazy-sections.test.ts`: `runtimeSections` compare DOPO il guard `if (!narrativeHasSectionText(narrative))`; valvola `AI_SECTIONS_PASS` ancora presente; la trascrizione precede il parsing                                                                                                  |
+| AC4 |   PASS | runtime Python **86/86 OK**; backend **379/379 pass, 0 fail**; `npx tsc --noEmit` backend pulito                                                                                                                                                                                             |
 
 ## Test Results
 
-| Test | Result | Evidence |
-|---|---:|---|
-| Unit | PASS | `Ran 86 tests — OK` (runtime); `# pass 379 # fail 0` (backend) |
-| Integration | NA | la chiamata reale ad Azure e' verificata manualmente (sotto), non in CI |
-| API | NA | contratto HTTP del runtime invariato |
-| Playwright | NA | nessuna modifica UI |
-| Persistence | NA | nessun dato nuovo persistito |
-| Agnos AI | NA | ruolo agent non toccato |
-| Voice | NA | |
-| OCR | PASS | verifica manuale su deployment reale (sotto) + unit sulla costruzione richiesta |
-| Security/privacy | PASS | test dedicato: il messaggio d'errore non contiene la chiave; endpoint/chiave letti da env e mai loggati |
+| Test             | Result | Evidence                                                                                                |
+| ---------------- | -----: | ------------------------------------------------------------------------------------------------------- |
+| Unit             |   PASS | `Ran 86 tests — OK` (runtime); `# pass 379 # fail 0` (backend)                                          |
+| Integration      |     NA | la chiamata reale ad Azure e' verificata manualmente (sotto), non in CI                                 |
+| API              |     NA | contratto HTTP del runtime invariato                                                                    |
+| Playwright       |     NA | nessuna modifica UI                                                                                     |
+| Persistence      |     NA | nessun dato nuovo persistito                                                                            |
+| Agnos AI         |     NA | ruolo agent non toccato                                                                                 |
+| Voice            |     NA |                                                                                                         |
+| OCR              |   PASS | verifica manuale su deployment reale (sotto) + unit sulla costruzione richiesta                         |
+| Security/privacy |   PASS | test dedicato: il messaggio d'errore non contiene la chiave; endpoint/chiave letti da env e mai loggati |
 
 ## Runtime Evidence
 
@@ -124,9 +125,46 @@ HTTP del runtime, che oggi `job-service.ts` non ha. Annotato tra i rischi residu
 - La riduzione di tempo attesa (~75s) vale solo quando il parsing del markdown trova le sezioni;
   su documenti che non le espongono il costo resta quello di prima (piu' il fallback).
 
+## Verifica end-to-end in produzione (dopo il deploy)
+
+Caso reale riprodotto: 8 immagini cliniche sintetiche, 4,5 MB complessivi (piu' pesanti delle 8
+foto WhatsApp dell'operatore), un solo job contro la produzione.
+
+**Primo tentativo — FALLITO, regressione trovata proprio qui.** `review_ready` in 120s (nessun
+guadagno) con `rawText` vuoto e stadio `transcribing` mai comparso. Causa: `runtimeTranscribe`
+passava `{ rawText: '' }` e `runtimeClinicalLists` un oggetto di esempio — ESEMPI di output, non
+JSON Schema. Innocui finche' finivano nel prompt, ora finiscono in `response_format` e il provider
+risponde 400; essendo passaggi best-effort dentro `try/catch`, il guasto spariva in silenzio.
+Senza trascrizione il parsing del markdown non trovava sezioni e il sezionamento andava SEMPRE in
+fallback, annullando il guadagno di questa stessa modifica. Corretto in PR #302 (schemi veri +
+protezione nell'adapter che degrada al prompt invece di produrre un 400 muto).
+
+**Secondo tentativo — PASS.** `review_ready` in **40 secondi** (contro i 120 di partenza, ~3x):
+
+```
+[0s]  waiting_for_model stage=model_processing
+[30s] waiting_for_model stage=transcribing
+[40s] review_ready      stage=completed
+```
+
+- `model: azure:gpt-5.5`
+- `rawText`: 1191 caratteri → la trascrizione integrale e' tornata
+- `_sections calcolato: False` → il sezionamento e' stato **saltato**: e' la prova che la
+  pigrizia funziona in esecuzione, non solo nella struttura del codice
+- `cartella.farmaci`: **4 farmaci con posologia** — Furosemide 25 mg 1 cpr al mattino,
+  Ramipril 5 mg 1 cpr alla sera, Metformina 500 mg 2 volte al di', Cardioaspirina 100 mg dopo
+  pranzo → la terapia, il dato che si era perso, e' recuperata
+- `therapyText` e `diagnosisText` popolati; anagrafica corretta (Mario Sintetico, 1948)
+
+Job sintetici di verifica cancellati; nessun paziente creato.
+
+Nota su un fallimento intermedio non imputabile alla modifica: un tentativo e' fallito con
+`ENOENT` su `/tmp/clinicos-imports/...` perche' il backend si e' riavviato a meta' elaborazione
+durante il proprio deploy. Su Railway il filesystem del container e' effimero: un redeploy
+azzera i file caricati e i job in volo non sono piu' riprendibili ("riprova senza ricaricare"
+non puo' funzionare). E' una caratteristica architetturale nota che vale la pena affrontare a
+parte (storage persistente o object storage per gli upload).
+
 ## Final Decision
 
-IMPLEMENTED — NOT VERIFIED
-
-(la verifica end-to-end in produzione — tempo e presenza della terapia sul caso 8 foto — va
-eseguita dopo il merge e il deploy del runtime; questo report va aggiornato con quell'esito)
+CLOSED — VERIFIED
