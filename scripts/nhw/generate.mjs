@@ -6,8 +6,9 @@ import { pathToFileURL } from 'node:url';
 
 import { writeJson, writeJsonl } from './lib/contracts.mjs';
 import { buildInventory, inventoryHash } from './lib/inventory.mjs';
+import { extractTypeScript } from './lib/typescript-extractor.mjs';
 
-const STAGES = ['inventory'];
+const STAGES = ['inventory', 'typescript'];
 
 function outputDirectories(repoRoot, outputRoot) {
   return ['catalog', 'coverage', 'evidence', 'graph', 'reports']
@@ -40,6 +41,43 @@ async function generateInventory(repoRoot, outputRoot) {
   };
 }
 
+async function generateTypeScript(repoRoot, outputRoot) {
+  const catalogDirectory = join(outputRoot, 'catalog');
+  mkdirSync(catalogDirectory, { recursive: true });
+  const inventory = await buildInventory(repoRoot, {
+    excludedDirectories: outputDirectories(repoRoot, outputRoot),
+  });
+  const paths = inventory
+    .filter((record) => record.pathType === 'file')
+    .filter((record) =>
+      ['semantic-source', 'test-source', 'configuration-source', 'deployment-source'].includes(
+        record.classification,
+      ),
+    )
+    .filter((record) => /\.(?:[cm]?[jt]s|tsx|jsx)$/.test(record.path))
+    .map((record) => record.path);
+  const discovery = extractTypeScript(repoRoot, paths);
+  const configurationRecords = discovery.configurationReads.map((name) => ({
+    id: `config.discovered.${name.toLowerCase().replaceAll('_', '-')}`,
+    name,
+    runtimes: ['typescript'],
+  }));
+
+  writeJsonl(join(catalogDirectory, 'typescript-symbols.jsonl'), discovery.symbols);
+  writeJsonl(join(catalogDirectory, 'express-routes.jsonl'), discovery.routes);
+  writeJsonl(join(catalogDirectory, 'frontend-api-requests.jsonl'), discovery.frontendRequests);
+  writeJsonl(join(catalogDirectory, 'configuration-reads.jsonl'), configurationRecords);
+
+  return {
+    stage: 'typescript',
+    sourceFiles: paths.length,
+    symbols: discovery.symbols.length,
+    expressRoutes: discovery.routes.length,
+    frontendRequests: discovery.frontendRequests.length,
+    configurationReads: discovery.configurationReads.length,
+  };
+}
+
 export async function generateKnowledgeBase(options = {}) {
   const repoRoot = resolve(options.repoRoot ?? process.cwd());
   const outputRoot = resolve(options.outputRoot ?? join(repoRoot, 'docs', 'nhw'));
@@ -51,6 +89,9 @@ export async function generateKnowledgeBase(options = {}) {
 
   if (stage === 'inventory') {
     return generateInventory(repoRoot, outputRoot);
+  }
+  if (stage === 'typescript') {
+    return generateTypeScript(repoRoot, outputRoot);
   }
 
   throw new Error(`NHW stage '${stage}' has no implementation`);
