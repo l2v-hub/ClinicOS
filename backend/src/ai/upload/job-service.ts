@@ -7,7 +7,7 @@
 // REQ-023: extraction is delegated to the AI Runtime service via neutral HTTP contract.
 // The backend has NO Google/provider imports — only AI_RUNTIME_URL + AI_RUNTIME_SERVICE_TOKEN.
 
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig, loadExtractionPrompt, loadOutputSchema, type AiConfig } from '../config.js';
@@ -771,7 +771,33 @@ export async function runJob(jobId: string): Promise<void> {
     const schema = loadOutputSchema(cfg);
     const prompt = loadExtractionPrompt(cfg);
 
-    // 1. Read files from disk
+    // 1. Read files from disk.
+    // I documenti vivono sul disco EFFIMERO del container: se questo e' stato sostituito fra
+    // il caricamento e l'elaborazione (deploy, riavvio, oppure una seconda istanza che non ha
+    // ricevuto l'upload), i file non ci sono piu'. Va accertato SUBITO e detto in chiaro:
+    // lasciando che il guasto emerga a meta' pipeline, i passaggi best-effort lo inghiottono e
+    // il job finisce per somigliare a un import riuscito ma vuoto — che su una lettera di
+    // dimissione puo' far concludere all'operatore che la terapia non c'era.
+    const mancanti: string[] = [];
+    for (const d of usable) {
+      try {
+        await access(d.storagePath);
+      } catch {
+        mancanti.push(d.filename);
+      }
+    }
+    if (mancanti.length > 0) {
+      await setState(jobId, 'failed', {
+        stage: 'error',
+        error:
+          `Documenti non piu' disponibili sul server (${mancanti.length} di ${usable.length}). ` +
+          'Ricaricali e riprova.',
+      });
+      // Non e' 'retryable_error': riprovare senza ricaricare non puo' funzionare, i file
+      // non esistono. Dirlo esplicitamente evita all'operatore un giro di tentativi inutili.
+      await recordAudit(jobId, 'process_failed', { detail: 'documenti mancanti su disco' });
+      return;
+    }
     const docFiles = await Promise.all(
       usable.map(async (d) => ({
         id: d.id,
