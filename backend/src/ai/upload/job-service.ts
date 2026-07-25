@@ -258,10 +258,24 @@ export function wrapRuntimeResult(
 // Best-effort integral OCR transcription (REQ-015 "Testo riconosciuto"). Runs as a
 // SEPARATE runtime job so a long/truncated transcription can never break the
 // structured extraction. Returns '' on any failure.
+// Le intestazioni markdown NON sono un vezzo di formattazione: `parseNarrativeFromMarkdown`
+// segmenta la narrativa su di esse. Mistral Document AI le produceva nativamente; un modello
+// generalista no, e senza di esse il parser aggancia la prima etichetta utile e ammassa TUTTO
+// il referto in un'unica sezione (osservato in produzione: 17.880 caratteri su 18.987 finiti in
+// PRESTAZIONI_E_INTERVENTI, con Terapia e Diagnosi vuote). Le euristiche di fallback sul testo
+// piano sono fragili — scartano le righe con punteggiatura o piu' lunghe di 60 caratteri —
+// mentre una riga `## NOME` viene riconosciuta sempre.
 const TRANSCRIBE_PROMPT =
   'Sei un sistema OCR clinico. Trascrivi INTEGRALMENTE e fedelmente tutto il testo ' +
   "leggibile dei documenti allegati, mantenendo l'ordine originale. Non riassumere, " +
   'non interpretare, non tradurre, non dedurre. Per parti illeggibili usa [ILLEGGIBILE]. ' +
+  'STRUTTURA: ogni volta che nel documento inizia una sezione clinica, inserisci PRIMA del ' +
+  'suo contenuto una riga di intestazione markdown `## NOME`, scegliendo NOME tra: ' +
+  'ANAMNESI, DIAGNOSI, DECORSO_OSPEDALIERO, CONSULENZE, DIAGNOSTICA_PER_IMMAGINI, ' +
+  'PRESTAZIONI_E_INTERVENTI, TERAPIA, CONSIGLI_E_CONTROLLI, ALLERGIE. ' +
+  "Usa TERAPIA per la terapia farmacologica alla dimissione o domiciliare. Conserva anche l'" +
+  'intestazione originale del documento subito sotto quella markdown. Non inventare sezioni ' +
+  "assenti e non spostare testo da una sezione all'altra: il contenuto resta dove si trova. " +
   'Restituisci SOLO JSON valido nel formato {"rawText": "<trascrizione integrale>"}.';
 
 // Deve essere un JSON Schema VERO, non un esempio: gli adapter con structured output nativo
