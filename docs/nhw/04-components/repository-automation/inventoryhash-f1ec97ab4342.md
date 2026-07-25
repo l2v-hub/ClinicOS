@@ -10,7 +10,7 @@ sources:
   - path: "scripts/nhw/lib/inventory.mjs"
     symbol: "inventoryHash"
     line_start: "301"
-    line_end: "306"
+    line_end: "308"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "c9afd3c8ec19230402b6b7a13d5dafa466340869ffb16b942b4d37abf28bdf7d"
+  inventory_hash: "57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c"
 ---
 
 ## Question Answered
@@ -66,7 +66,7 @@ Refer to callers and implementation at the cited source span.
 
 ## Evidence
 
-- `scripts/nhw/lib/inventory.mjs:301-306` — inventoryHash
+- `scripts/nhw/lib/inventory.mjs:301-308` — inventoryHash
 
 ## Related Knowledge
 

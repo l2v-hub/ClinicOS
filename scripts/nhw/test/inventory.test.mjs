@@ -74,6 +74,11 @@ test('inventories the complete working tree deterministically', async (t) => {
     inventoryHash([...first].reverse()),
     'inventory hashes must not depend on JSONL row order',
   );
+  assert.equal(
+    inventoryHash(first),
+    inventoryHash(first.map((record) => ({ ...record, gitState: 'tracked-clean' }))),
+    'content freshness must not depend on transient Git working-tree state',
+  );
   assert.deepEqual(
     first.map((record) => record.path),
     [...first.map((record) => record.path)].sort((a, b) => a.localeCompare(b, 'en')),

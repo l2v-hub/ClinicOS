@@ -26,7 +26,7 @@ tags:
   - "importdocument"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "c9afd3c8ec19230402b6b7a13d5dafa466340869ffb16b942b4d37abf28bdf7d"
+  inventory_hash: "57c381a02126e2007732515f73987664ea86709cad20b363c4f1047427a9bd9c"
 inference_rule: "Business entity reconstructed from the current Prisma model and its executable consumers."
 ---
 

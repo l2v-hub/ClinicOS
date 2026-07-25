@@ -1,0 +1,5 @@
+
+> clinicos@1.0.0 nhw:validate
+> node scripts/nhw/validate.mjs
+
+{"ok":true,"errors":[],"warnings":[],"totals":{"units":2622,"graphNodes":2622,"graphEdges":3091,"cycles":31,"orphans":0,"publicComponents":1038,"expressEndpoints":114,"fastapiEndpoints":12,"domainEntities":25,"prismaModels":25,"migrations":23,"configurationKeys":79,"flows":16,"tests":184,"findings":9,"documented":3926,"excluded":2254,"unresolved":0}}
