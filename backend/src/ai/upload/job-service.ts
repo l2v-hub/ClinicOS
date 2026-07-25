@@ -190,10 +190,12 @@ async function runtimeCreateJob(
 }
 
 /** POST /v1/document-jobs/:id/run — trigger async processing */
-async function runtimeRunJob(runtimeJobId: string): Promise<void> {
+// `mode` sceglie il RUOLO che esegue il job lato runtime: 'extraction' usa il modello di
+// estrazione, 'ocr' il motore di layout (Document Intelligence), che restituisce markdown.
+async function runtimeRunJob(runtimeJobId: string, mode: 'extraction' | 'ocr' = 'extraction') {
   const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}/run`, {
     method: 'POST',
-    body: JSON.stringify({ mode: 'extraction' }),
+    body: JSON.stringify({ mode }),
   });
   if (!res.ok && res.status !== 202) {
     const text = await res.text().catch(() => '');
@@ -258,10 +260,24 @@ export function wrapRuntimeResult(
 // Best-effort integral OCR transcription (REQ-015 "Testo riconosciuto"). Runs as a
 // SEPARATE runtime job so a long/truncated transcription can never break the
 // structured extraction. Returns '' on any failure.
+// Le intestazioni markdown NON sono un vezzo di formattazione: `parseNarrativeFromMarkdown`
+// segmenta la narrativa su di esse. Mistral Document AI le produceva nativamente; un modello
+// generalista no, e senza di esse il parser aggancia la prima etichetta utile e ammassa TUTTO
+// il referto in un'unica sezione (osservato in produzione: 17.880 caratteri su 18.987 finiti in
+// PRESTAZIONI_E_INTERVENTI, con Terapia e Diagnosi vuote). Le euristiche di fallback sul testo
+// piano sono fragili — scartano le righe con punteggiatura o piu' lunghe di 60 caratteri —
+// mentre una riga `## NOME` viene riconosciuta sempre.
 const TRANSCRIBE_PROMPT =
   'Sei un sistema OCR clinico. Trascrivi INTEGRALMENTE e fedelmente tutto il testo ' +
   "leggibile dei documenti allegati, mantenendo l'ordine originale. Non riassumere, " +
   'non interpretare, non tradurre, non dedurre. Per parti illeggibili usa [ILLEGGIBILE]. ' +
+  'STRUTTURA: ogni volta che nel documento inizia una sezione clinica, inserisci PRIMA del ' +
+  'suo contenuto una riga di intestazione markdown `## NOME`, scegliendo NOME tra: ' +
+  'ANAMNESI, DIAGNOSI, DECORSO_OSPEDALIERO, CONSULENZE, DIAGNOSTICA_PER_IMMAGINI, ' +
+  'PRESTAZIONI_E_INTERVENTI, TERAPIA, CONSIGLI_E_CONTROLLI, ALLERGIE. ' +
+  "Usa TERAPIA per la terapia farmacologica alla dimissione o domiciliare. Conserva anche l'" +
+  'intestazione originale del documento subito sotto quella markdown. Non inventare sezioni ' +
+  "assenti e non spostare testo da una sezione all'altra: il contenuto resta dove si trova. " +
   'Restituisci SOLO JSON valido nel formato {"rawText": "<trascrizione integrale>"}.';
 
 // Deve essere un JSON Schema VERO, non un esempio: gli adapter con structured output nativo
@@ -279,7 +295,10 @@ async function runtimeTranscribe(
   documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
 ): Promise<string> {
   const rid = await runtimeCreateJob(jobId, documents, TRANSCRIBE_SCHEMA, TRANSCRIBE_PROMPT);
-  await runtimeRunJob(rid);
+  // Ruolo 'ocr': se e' configurato un motore di layout produce markdown con le intestazioni
+  // e una riga per voce (elenchi di terapia inclusi); se il ruolo 'ocr' punta a un modello di
+  // chat il prompt qui sopra continua a valere e il comportamento resta quello di prima.
+  await runtimeRunJob(rid, 'ocr');
   const deadline = Date.now() + 10 * 60 * 1000;
   while (Date.now() < deadline) {
     await new Promise((r) => setTimeout(r, 3000));
@@ -326,13 +345,15 @@ const CLINICAL_LIST_KEYS = ['diagnosi', 'allergie', 'farmaci', 'terapie'] as con
 async function runtimeClinicalLists(
   jobId: string,
   documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
+  rawText = '',
 ): Promise<Record<string, unknown>> {
-  const rid = await runtimeCreateJob(
-    jobId,
-    documents,
-    CLINICAL_LISTS_SCHEMA,
-    CLINICAL_LISTS_PROMPT,
-  );
+  // Con una trascrizione fedele al layout il compito diventa "leggi queste righe" invece di
+  // "interpreta queste immagini": e' sugli elenchi di farmaci, dove dose e posologia sono
+  // allineate in colonna, che la differenza si sente di piu'.
+  const prompt = rawText.trim()
+    ? `${CLINICAL_LISTS_PROMPT}\n\nTESTO DEL DOCUMENTO (ogni riga e' una voce a se'):\n${rawText}`
+    : CLINICAL_LISTS_PROMPT;
+  const rid = await runtimeCreateJob(jobId, documents, CLINICAL_LISTS_SCHEMA, prompt);
   await runtimeRunJob(rid);
   const deadline = Date.now() + 10 * 60 * 1000;
   while (Date.now() < deadline) {
@@ -760,9 +781,33 @@ export async function runJob(jobId: string): Promise<void> {
       })),
     );
 
-    // 2. Create runtime job
+    // 2. Trascrizione PRIMA dell'estrazione. Con un motore di layout (Document Intelligence)
+    //    il testo arriva fedele riga per riga: darlo al modello di estrazione, invece di
+    //    fargli rileggere i pixel da zero, e' cio' che tiene insieme farmaco, dose e posologia
+    //    quando stanno su colonne o dopo spaziature ampie. E' anche piu' economico: elaborare
+    //    testo costa una frazione rispetto alle immagini.
+    let rawText = '';
+    if (process.env.AI_OCR_TRANSCRIPTION !== 'false') {
+      try {
+        await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
+        rawText = await runtimeTranscribe(jobId, docFiles);
+      } catch {
+        /* trascrizione best-effort: se fallisce si estrae dalle sole immagini, come prima */
+      }
+    }
+    // Con una trascrizione sostanziosa le immagini diventano ridondanti e si possono omettere
+    // (meno token, import piu' veloce). Se l'OCR ha reso poco o nulla si torna alle immagini,
+    // che restano la sorgente di verita'.
+    const OCR_ENOUGH_CHARS = 200;
+    const ocrUsable = rawText.trim().length >= OCR_ENOUGH_CHARS;
+    const extractionPrompt = ocrUsable
+      ? `${prompt}\n\nTESTO DEL DOCUMENTO (trascrizione fedele al layout: ogni riga e' una voce a se'):\n${rawText}`
+      : prompt;
+    const extractionFiles = ocrUsable ? [] : docFiles;
+
+    // 3. Create runtime job
     await setState(jobId, 'uploading_to_google', { stage: 'uploading_files' });
-    const runtimeJobId = await runtimeCreateJob(jobId, docFiles, schema, prompt);
+    const runtimeJobId = await runtimeCreateJob(jobId, extractionFiles, schema, extractionPrompt);
     await recordAudit(jobId, 'process_started', { detail: `runtime_job=${runtimeJobId}` });
 
     // 3. Trigger processing
@@ -806,7 +851,10 @@ export async function runJob(jobId: string): Promise<void> {
           // with AI_CLINICAL_LISTS_PASS=true once a capable/quota'd model is configured.
           if (process.env.AI_CLINICAL_LISTS_PASS === 'true') {
             try {
-              const lists = await runtimeClinicalLists(jobId, docFiles);
+              // Come l'estrazione principale: se c'e' una trascrizione fedele al layout la si
+              // passa al posto delle immagini. E' proprio sugli elenchi (farmaci con dose e
+              // posologia) che la fedelta' di riga conta di piu'.
+              const lists = await runtimeClinicalLists(jobId, extractionFiles, rawText);
               raw = applyClinicalLists(raw, lists);
             } catch {
               /* best-effort; keep the main extraction */
@@ -818,17 +866,9 @@ export async function runJob(jobId: string): Promise<void> {
             modelUsed,
             cfg.mergePreferRecent,
           );
-          // Integral OCR transcription (best-effort). Adds one model call per import;
-          // disable with AI_OCR_TRANSCRIPTION=false to save provider quota.
-          let rawText = '';
-          if (process.env.AI_OCR_TRANSCRIPTION !== 'false') {
-            try {
-              await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
-              rawText = await runtimeTranscribe(jobId, docFiles);
-            } catch {
-              /* transcription is best-effort; never block the import */
-            }
-          }
+          // `rawText` e' gia' stato prodotto PRIMA dell'estrazione (passo 2) e da' in pasto al
+          // modello il testo fedele al layout: qui serve solo per l'anteprima e per il parsing
+          // delle sezioni, senza una seconda chiamata al servizio.
           // REQ-033: faithful clinical-sections + narrative are now the DEFAULT import path
           // (set AI_SECTIONS_PASS=false only to disable). The discharge letter is never
           // rendered as structured diagnosis/therapy rows.

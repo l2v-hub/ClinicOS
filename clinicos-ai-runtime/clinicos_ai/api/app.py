@@ -78,7 +78,8 @@ async def _process(job_id: str) -> None:
                        data=base64.b64decode(f["content_base64"]))
             for f in job["files"]
         ]
-        out = await run_extraction(_REGISTRY, job["prompt"], job["schema"], attachments)
+        out = await run_extraction(_REGISTRY, job["prompt"], job["schema"], attachments,
+                                   mode=job.get("mode") or "extraction")
         job.update(status="review_ready", stage="completed", model=out.model, result=out.data,
                    warnings=out.warnings)
     except RuntimeError_ as ex:
@@ -161,7 +162,9 @@ async def run_job(job_id: str, _body: RunRequest | None = None, authorization: s
     job = _JOBS.get(job_id)
     if not job:
         raise HTTPException(404, "Job non trovato")
-    job.update(status="queued", stage="queued")
+    # Il mode arriva col run, non con la create: decide QUALE ruolo esegue il job
+    # ('ocr' -> motore di layout, 'extraction' -> modello di estrazione).
+    job.update(status="queued", stage="queued", mode=(_body.mode if _body else "extraction"))
     asyncio.create_task(_process(job_id))
     return _public(job)
 
