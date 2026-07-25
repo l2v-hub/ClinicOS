@@ -29,8 +29,29 @@ def _strip_fences(text: str) -> str:
 
 
 async def run_extraction(registry: ModelRegistry, prompt: str, schema: dict,
-                         attachments: list[Attachment]) -> ExtractionOutput:
+                         attachments: list[Attachment],
+                         mode: str = "extraction") -> ExtractionOutput:
     warnings: list[str] = []
+    if mode == "ocr":
+        # Sola trascrizione, col ruolo 'ocr': un motore di layout (Document Intelligence)
+        # restituisce markdown gia' strutturato — niente JSON, niente repair. Il backend
+        # legge `rawText`, la stessa forma del passaggio di trascrizione precedente.
+        ocr = registry.build("ocr")
+        text = await ocr.runner.run(prompt, attachments)
+        # Il ruolo 'ocr' puo' essere servito da un motore di layout (markdown grezzo) oppure,
+        # in configurazioni precedenti, da un modello di chat che obbedisce al prompt e
+        # risponde gia' con {"rawText": ...}. Nel secondo caso va scartato l'involucro,
+        # altrimenti il backend riceverebbe il JSON come se fosse la trascrizione.
+        stripped = _strip_fences(text)
+        if stripped.startswith("{"):
+            try:
+                inner = json.loads(stripped)
+                if isinstance(inner, dict) and isinstance(inner.get("rawText"), str):
+                    text = inner["rawText"]
+            except json.JSONDecodeError:
+                pass  # non era JSON: e' gia' la trascrizione
+        return ExtractionOutput(model=str(ocr.spec), data={"rawText": text}, warnings=warnings)
+
     built = registry.build("extraction")  # capability-checked, fallback-aware
     # Structured-output adapters (e.g. Mistral Document AI) take the JSON Schema directly
     # and return JSON; chat adapters get the schema embedded in the prompt.

@@ -39,8 +39,9 @@ class CreateJobRequest(BaseModel):
 
 
 class RunRequest(BaseModel):
-    # 'extraction' = OCR+extract+repair pipeline; 'agent' = tool-using agent.
-    mode: Literal["extraction", "agent"] = "extraction"
+    # 'extraction' = estrazione+repair col ruolo 'extraction'; 'agent' = agente con tool;
+    # 'ocr' = sola trascrizione col ruolo 'ocr' (Document Intelligence: layout + markdown).
+    mode: Literal["extraction", "agent", "ocr"] = "extraction"
 
 
 class RuntimeEvent(BaseModel):

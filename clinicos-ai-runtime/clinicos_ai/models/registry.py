@@ -20,6 +20,8 @@ PROVIDER_CREDENTIAL_ENV: dict[str, tuple[str, ...]] = {
     "openai": ("OPENAI_API_KEY",),
     "anthropic": ("ANTHROPIC_API_KEY",),
     "azure": ("AZURE_OPENAI_API_KEY",),
+    # Document Intelligence vive sulla stessa risorsa: accetta la chiave dedicata o quella Azure.
+    "azure-docintel": ("AZURE_DOCINTEL_API_KEY", "AZURE_OPENAI_API_KEY"),
     "openai-like": ("OPENAI_LIKE_API_KEY",),
     "mistral": ("MISTRAL_API_KEY",),
     "mock": (),  # no credentials needed
