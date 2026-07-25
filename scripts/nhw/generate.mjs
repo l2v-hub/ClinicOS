@@ -8,6 +8,14 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { writeJson, writeJsonl } from './lib/contracts.mjs';
 import { buildInventory, inventoryHash } from './lib/inventory.mjs';
+import { buildCoreKnowledge, buildOperationalKnowledge } from './lib/knowledge-compiler.mjs';
+import {
+  compileKnowledgeArtifacts,
+  enrichConfigurationSources,
+  loadKnowledgeCatalogs,
+  writeKnowledgeOverview,
+  writeKnowledgeRecords,
+} from './lib/knowledge-pipeline.mjs';
 import {
   buildMigrationLineage,
   parseMigration,
@@ -16,7 +24,17 @@ import {
 import { extractRepositorySurfaces } from './lib/repository-extractor.mjs';
 import { extractTypeScript } from './lib/typescript-extractor.mjs';
 
-const STAGES = ['inventory', 'prisma', 'python', 'repository', 'typescript'];
+const STAGES = [
+  'all',
+  'author-core',
+  'author-operational',
+  'compile',
+  'inventory',
+  'prisma',
+  'python',
+  'repository',
+  'typescript',
+];
 
 function outputDirectories(repoRoot, outputRoot) {
   return ['catalog', 'coverage', 'evidence', 'graph', 'reports']
@@ -304,10 +322,95 @@ async function generateRepository(repoRoot, outputRoot) {
   };
 }
 
+function sourceInventoryHash(inventory) {
+  return inventoryHash(
+    inventory.filter(
+      (record) =>
+        record.path !== 'docs/nhw' &&
+        !record.path.startsWith('docs/nhw/'),
+    ),
+  );
+}
+
+async function authorCoreKnowledge(repoRoot, outputRoot) {
+  const inventory = await buildInventory(repoRoot, {
+    excludedDirectories: outputDirectories(repoRoot, outputRoot),
+  });
+  const catalogs = enrichConfigurationSources(
+    repoRoot,
+    inventory,
+    loadKnowledgeCatalogs(outputRoot),
+  );
+  const hash = sourceInventoryHash(inventory);
+  const records = buildCoreKnowledge({ catalogs, inventory, inventoryHash: hash });
+  const changed = writeKnowledgeRecords(repoRoot, records);
+  writeKnowledgeOverview(outputRoot, hash);
+  return {
+    stage: 'author-core',
+    units: records.length,
+    changed,
+    inventoryHash: hash,
+  };
+}
+
+async function authorOperationalKnowledge(repoRoot, outputRoot) {
+  const inventory = await buildInventory(repoRoot, {
+    excludedDirectories: outputDirectories(repoRoot, outputRoot),
+  });
+  const catalogs = enrichConfigurationSources(
+    repoRoot,
+    inventory,
+    loadKnowledgeCatalogs(outputRoot),
+  );
+  const hash = sourceInventoryHash(inventory);
+  const records = buildOperationalKnowledge({
+    catalogs,
+    inventory,
+    inventoryHash: hash,
+  });
+  const changed = writeKnowledgeRecords(repoRoot, records);
+  return {
+    stage: 'author-operational',
+    units: records.length,
+    changed,
+    inventoryHash: hash,
+  };
+}
+
+async function compileKnowledge(repoRoot, outputRoot) {
+  const inventorySummary = await generateInventory(repoRoot, outputRoot);
+  const inventory = readJsonl(join(outputRoot, 'coverage', 'inventory.jsonl'));
+  const catalogs = enrichConfigurationSources(
+    repoRoot,
+    inventory,
+    loadKnowledgeCatalogs(outputRoot),
+  );
+  const result = compileKnowledgeArtifacts({
+    repoRoot,
+    outputRoot,
+    inventory,
+    catalogs,
+  });
+  return {
+    stage: 'compile',
+    inventoryHash: inventorySummary.inventoryHash,
+    units: result.units.length,
+    discoveries: result.discoveries.length,
+    graphNodes: result.graph.nodes.length,
+    graphEdges: result.graph.edges.length,
+    cycles: result.cycles.length,
+    orphans: result.orphans.length,
+    documented: result.coverage.documented,
+    metadataOnly: result.coverage.metadataOnly,
+    generatedExcluded: result.coverage.generatedExcluded,
+    unresolved: result.coverage.unresolved,
+  };
+}
+
 export async function generateKnowledgeBase(options = {}) {
   const repoRoot = resolve(options.repoRoot ?? process.cwd());
   const outputRoot = resolve(options.outputRoot ?? join(repoRoot, 'docs', 'nhw'));
-  const stage = options.stage ?? 'inventory';
+  const stage = options.stage ?? 'all';
 
   if (!STAGES.includes(stage)) {
     throw new Error(`Unknown NHW stage '${stage}'. Allowed stages: ${STAGES.join(', ')}`);
@@ -327,6 +430,32 @@ export async function generateKnowledgeBase(options = {}) {
   }
   if (stage === 'repository') {
     return generateRepository(repoRoot, outputRoot);
+  }
+  if (stage === 'author-core') {
+    return authorCoreKnowledge(repoRoot, outputRoot);
+  }
+  if (stage === 'author-operational') {
+    return authorOperationalKnowledge(repoRoot, outputRoot);
+  }
+  if (stage === 'compile') {
+    return compileKnowledge(repoRoot, outputRoot);
+  }
+  if (stage === 'all') {
+    const summaries = [];
+    summaries.push(await generateInventory(repoRoot, outputRoot));
+    summaries.push(await generateTypeScript(repoRoot, outputRoot));
+    summaries.push(await generatePython(repoRoot, outputRoot));
+    summaries.push(await generatePrisma(repoRoot, outputRoot));
+    summaries.push(await generateRepository(repoRoot, outputRoot));
+    summaries.push(await authorCoreKnowledge(repoRoot, outputRoot));
+    summaries.push(await authorOperationalKnowledge(repoRoot, outputRoot));
+    summaries.push(await compileKnowledge(repoRoot, outputRoot));
+    return {
+      ...summaries.at(-1),
+      stage: 'all',
+      stages: summaries,
+      stageSequence: summaries.map((summary) => summary.stage),
+    };
   }
 
   throw new Error(`NHW stage '${stage}' has no implementation`);

@@ -59,7 +59,16 @@ test('coverage reports an uncovered route and succeeds after its endpoint unit i
   assert.equal(uncovered.unresolved, 1);
   assert.equal(uncovered.metadataOnly, 1);
   assert.equal(uncovered.generatedExcluded, 1);
-  assert.equal(uncovered.records.find((record) => record.discoveryId)?.status, 'unresolved');
+  assert.equal(
+    uncovered.records.find((record) => record.classification === 'discovery:api-endpoint')
+      ?.coverageStatus,
+    'unresolved',
+  );
+  assert.ok(
+    uncovered.records.every(
+      (record) => record.path && record.classification && record.coverageStatus && record.reason,
+    ),
+  );
 
   const endpoint = knowledgeUnit('api.fixture.patient-list', [
     { path: 'src/routes.ts', line_start: 4, line_end: 8, confidence: 'observed' },
@@ -67,6 +76,20 @@ test('coverage reports an uncovered route and succeeds after its endpoint unit i
   const covered = buildCoverage(inventory, discovery, [endpoint]);
   assert.equal(covered.unresolved, 0);
   assert.equal(covered.documented, 1);
+});
+
+test('treats a knowledge-unit Markdown path as documented by its own unit', () => {
+  const endpoint = knowledgeUnit('api.fixture.patient-list', [
+    { path: 'src/routes.ts', confidence: 'observed' },
+  ]);
+  const inventory = [
+    inventoryRecord('src/routes.ts', 'semantic-source'),
+    inventoryRecord(endpoint.path, 'narrative-source'),
+  ];
+  const covered = buildCoverage(inventory, [], [endpoint]);
+
+  assert.equal(covered.documented, 2);
+  assert.equal(covered.unresolved, 0);
 });
 
 test('compiles source evidence with stable hashes and confidence', () => {

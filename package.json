@@ -35,7 +35,7 @@
     "nhw:generate": "node scripts/nhw/generate.mjs",
     "nhw:validate": "node scripts/nhw/validate.mjs",
     "nhw:check": "npm run test:nhw && npm run nhw:generate && npm run nhw:validate",
-    "test:nhw": "node --test scripts/nhw/test/contracts.test.mjs scripts/nhw/test/inventory.test.mjs scripts/nhw/test/typescript-extractor.test.mjs scripts/nhw/test/python-extractor.test.mjs scripts/nhw/test/prisma-extractor.test.mjs scripts/nhw/test/repository-extractor.test.mjs scripts/nhw/test/markdown-graph.test.mjs scripts/nhw/test/coverage-validator.test.mjs"
+    "test:nhw": "node --test scripts/nhw/test/contracts.test.mjs scripts/nhw/test/inventory.test.mjs scripts/nhw/test/typescript-extractor.test.mjs scripts/nhw/test/python-extractor.test.mjs scripts/nhw/test/prisma-extractor.test.mjs scripts/nhw/test/repository-extractor.test.mjs scripts/nhw/test/markdown-graph.test.mjs scripts/nhw/test/coverage-validator.test.mjs scripts/nhw/test/knowledge-compiler.test.mjs"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",

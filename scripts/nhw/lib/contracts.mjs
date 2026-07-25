@@ -161,6 +161,10 @@ function writeIfChanged(path, content) {
   return true;
 }
 
+export function writeText(path, content) {
+  return writeIfChanged(path, content.replaceAll('\r\n', '\n'));
+}
+
 export function writeJson(path, value) {
   return writeIfChanged(path, stableJson(value));
 }

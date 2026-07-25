@@ -1,0 +1,70 @@
+---
+id: "component.ai-runtime.clinicos-ai-runtime-clinicos-ai-agents-assistant.py.run-assistant-plan"
+kind: "python-async-function"
+title: "run_assistant_plan"
+status: "observed"
+summary: "Public Python async-function from clinicos-ai-runtime/clinicos_ai/agents/assistant.py."
+bounded_contexts:
+  - "context.ai-assistance"
+sources:
+  - path: "clinicos-ai-runtime/clinicos_ai/agents/assistant.py"
+    symbol: "run_assistant_plan"
+    line_start: "142"
+    line_end: "157"
+    confidence: "observed"
+relations:
+  - type: "belongs-to"
+    target: "project.clinicos-ai-runtime"
+    evidence: "clinicos-ai-runtime/clinicos_ai/agents/assistant.py"
+    confidence: "observed"
+tags:
+  - "python"
+  - "async-function"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "1a33da4292b14f795c966b6b4be3fa1ccc6b48f91cb59e051d8bc5fd29fb86e5"
+---
+
+## Question Answered
+
+What does `component.ai-runtime.clinicos-ai-runtime-clinicos-ai-agents-assistant.py.run-assistant-plan` represent in ClinicOS?
+
+## Canonical Definition
+
+component.ai-runtime.clinicos-ai-runtime-clinicos-ai-agents-assistant.py.run-assistant-plan is the canonical python-async-function named run_assistant_plan.
+
+## Inputs
+
+Defined by the Python signature at the cited source span.
+
+## Outputs
+
+Defined by return annotations and implementation.
+
+## Dependencies
+
+Owning project: `project.clinicos-ai-runtime`.
+
+## Side Effects
+
+None observed
+
+## Consumers
+
+Import consumers are resolved through the source graph.
+
+## Invariants
+
+The public symbol name is `run_assistant_plan`.
+
+## Failure Modes
+
+None observed
+
+## Evidence
+
+- `clinicos-ai-runtime/clinicos_ai/agents/assistant.py:142-157` — run_assistant_plan
+
+## Related Knowledge
+
+- `belongs-to` → `project.clinicos-ai-runtime`

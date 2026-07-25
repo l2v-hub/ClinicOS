@@ -1,0 +1,94 @@
+---
+id: "data.model.patientintakedocument"
+kind: "data-model"
+title: "PatientIntakeDocument"
+status: "observed"
+summary: "Prisma persistence model PatientIntakeDocument."
+bounded_contexts:
+  - "context.patient-registry"
+sources:
+  - path: "prisma/schema.prisma"
+    symbol: "PatientIntakeDocument"
+    line_start: "241"
+    line_end: "257"
+    confidence: "observed"
+relations:
+  - type: "belongs-to"
+    target: "project.prisma"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+  - type: "depends-on"
+    target: "data.model.patient"
+    evidence: "prisma/schema.prisma"
+    confidence: "observed"
+tags:
+  - "prisma"
+  - "database-model"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "1a33da4292b14f795c966b6b4be3fa1ccc6b48f91cb59e051d8bc5fd29fb86e5"
+---
+
+## Question Answered
+
+What does `data.model.patientintakedocument` represent in ClinicOS?
+
+## Canonical Definition
+
+data.model.patientintakedocument is the canonical data-model named PatientIntakeDocument.
+
+## Inputs
+
+- `id: String` (id, required, default=cuid())
+- `fileName: String` (required)
+- `fileType: String` (required)
+- `fileData: String` (required)
+- `ocrText: String?` (nullable)
+- `extractedData: Json?` (nullable)
+- `status: String` (required, default="uploaded")
+- `patientId: String?` (nullable)
+- `operatoreNome: String?` (nullable)
+- `createdAt: DateTime` (required, default=now())
+- `updatedAt: DateTime` (required)
+- `patient: Patient?` (nullable)
+
+## Outputs
+
+Persisted PostgreSQL row for `PatientIntakeDocument`.
+
+## Dependencies
+
+- - `patient` → `Patient` (optional-one; onDelete=SetNull)
+
+## Side Effects
+
+Database reads and writes through Prisma clients.
+
+## Consumers
+
+Backend routes, services, migrations, and operational jobs.
+
+## Invariants
+
+- `id`: identifier; required
+- `fileName`: required
+- `fileType`: required
+- `fileData`: required
+- `status`: required
+- `createdAt`: required
+- `updatedAt`: required
+- index on `patientId`
+- index on `status`
+
+## Failure Modes
+
+Constraint violations, relation violations, unavailable database, or Prisma operation errors.
+
+## Evidence
+
+- `prisma/schema.prisma:241-257` — PatientIntakeDocument
+
+## Related Knowledge
+
+- `belongs-to` → `project.prisma`
+- `depends-on` → `data.model.patient`

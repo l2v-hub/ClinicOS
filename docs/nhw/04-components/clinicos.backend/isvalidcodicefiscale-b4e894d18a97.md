@@ -1,0 +1,72 @@
+---
+id: "component.backend.backend.src.lib.codice-fiscale.isvalidcodicefiscale"
+kind: "typescript-function"
+title: "isValidCodiceFiscale"
+status: "observed"
+summary: "Exported function from backend/src/lib/codice-fiscale.ts."
+bounded_contexts:
+  - "context.delivery-quality-governance"
+sources:
+  - path: "backend/src/lib/codice-fiscale.ts"
+    symbol: "isValidCodiceFiscale"
+    line_start: "101"
+    line_end: "105"
+    confidence: "observed"
+relations:
+  - type: "belongs-to"
+    target: "project.clinicos.backend"
+    evidence: "backend/src/lib/codice-fiscale.ts"
+    confidence: "observed"
+tags:
+  - "typescript"
+  - "function"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "1a33da4292b14f795c966b6b4be3fa1ccc6b48f91cb59e051d8bc5fd29fb86e5"
+---
+
+## Question Answered
+
+What does `component.backend.backend.src.lib.codice-fiscale.isvalidcodicefiscale` represent in ClinicOS?
+
+## Canonical Definition
+
+component.backend.backend.src.lib.codice-fiscale.isvalidcodicefiscale is the canonical typescript-function named isValidCodiceFiscale.
+
+## Inputs
+
+Defined by the source signature at the cited span.
+
+## Outputs
+
+Defined by the exported return type.
+
+## Dependencies
+
+Owning project: `project.clinicos.backend`.
+
+## Side Effects
+
+None observed
+
+## Consumers
+
+- `backend/src/__tests__/codice-fiscale.test.ts`
+- `backend/src/ai/upload/confirm-service.ts`
+- `backend/src/routes/patients.ts`
+
+## Invariants
+
+The symbol is exported across its module boundary as `isValidCodiceFiscale`.
+
+## Failure Modes
+
+Refer to callers and implementation at the cited source span.
+
+## Evidence
+
+- `backend/src/lib/codice-fiscale.ts:101-105` — isValidCodiceFiscale
+
+## Related Knowledge
+
+- `belongs-to` → `project.clinicos.backend`
