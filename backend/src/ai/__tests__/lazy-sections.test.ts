@@ -31,6 +31,20 @@ test('la chiamata di sezionamento resta disattivabile via AI_SECTIONS_PASS', () 
   );
 });
 
+test('i passaggi ausiliari inviano JSON Schema veri, non esempi di output', () => {
+  // Regressione reale: la trascrizione passava `{ rawText: '' }` — un esempio, non uno schema.
+  // Finche' lo schema finiva nel prompt era innocuo; con lo structured output nativo finisce in
+  // `response_format` e il provider risponde 400, facendo fallire la trascrizione in SILENZIO
+  // (e' best-effort). Risultato: rawText vuoto e sezionamento sempre in fallback.
+  assert.doesNotMatch(
+    SRC,
+    /runtimeCreateJob\(\s*jobId,\s*documents,\s*\{\s*rawText:\s*''\s*\}/,
+    'la trascrizione non deve passare un esempio al posto dello schema',
+  );
+  assert.match(SRC, /const TRANSCRIBE_SCHEMA = \{\s*\n\s*type: 'object'/);
+  assert.match(SRC, /const CLINICAL_LISTS_SCHEMA = \{\s*\n\s*type: 'object'/);
+});
+
 test('la trascrizione resta un passaggio separato e precede il parsing', () => {
   // Sanity: la pigrizia introdotta riguarda solo il sezionamento; la trascrizione integrale
   // alimenta il parsing del markdown e deve continuare a precederlo.

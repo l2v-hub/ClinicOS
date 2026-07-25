@@ -51,6 +51,18 @@ class TestStructuredBody(unittest.TestCase):
         self.assertTrue(parts[1]["image_url"]["url"].startswith("data:image/jpeg;base64,"))
         self.assertEqual(parts[2]["file"]["filename"], "lettera.pdf")
 
+    def test_example_instead_of_schema_falls_back_to_json_object(self):
+        # Regressione reale: la trascrizione passava {"rawText": ""} (un ESEMPIO, non uno schema).
+        # Finito in response_format.json_schema, Azure rispondeva 400 e il passaggio best-effort
+        # falliva in silenzio, lasciando rawText vuoto. Deve degradare al prompt, non rompersi.
+        body = _runner()._structured_body("trascrivi", {"rawText": ""}, [])
+        self.assertEqual(body["response_format"], {"type": "json_object"})
+        self.assertIn("FORMATO DI OUTPUT", body["messages"][0]["content"][0]["text"])
+
+    def test_real_schema_still_uses_json_schema(self):
+        body = _runner()._structured_body("estrai", SCHEMA, [])
+        self.assertEqual(body["response_format"]["type"], "json_schema")
+
     def test_no_attachments_still_valid(self):
         body = _runner()._structured_body("ripara", SCHEMA, [])
         self.assertEqual(len(body["messages"][0]["content"]), 1)

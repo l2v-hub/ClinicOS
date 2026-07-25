@@ -264,11 +264,21 @@ const TRANSCRIBE_PROMPT =
   'non interpretare, non tradurre, non dedurre. Per parti illeggibili usa [ILLEGGIBILE]. ' +
   'Restituisci SOLO JSON valido nel formato {"rawText": "<trascrizione integrale>"}.';
 
+// Deve essere un JSON Schema VERO, non un esempio: gli adapter con structured output nativo
+// (Azure gpt-5.5) lo passano in `response_format` e un esempio verrebbe rifiutato con 400,
+// facendo fallire la trascrizione in silenzio (e' best-effort, quindi l'errore non emerge).
+const TRANSCRIBE_SCHEMA = {
+  type: 'object',
+  properties: { rawText: { type: 'string' } },
+  required: ['rawText'],
+  additionalProperties: false,
+};
+
 async function runtimeTranscribe(
   jobId: string,
   documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
 ): Promise<string> {
-  const rid = await runtimeCreateJob(jobId, documents, { rawText: '' }, TRANSCRIBE_PROMPT);
+  const rid = await runtimeCreateJob(jobId, documents, TRANSCRIBE_SCHEMA, TRANSCRIBE_PROMPT);
   await runtimeRunJob(rid);
   const deadline = Date.now() + 10 * 60 * 1000;
   while (Date.now() < deadline) {
@@ -287,11 +297,24 @@ async function runtimeTranscribe(
 // Focused second pass for the clinical LISTS (REQ-015 tuning). gemma omits these from
 // the big monolithic schema, but handles a small, directive, list-only task. Best-effort:
 // merged into the main extraction only when it finds items; never blocks the import.
+// Come TRANSCRIBE_SCHEMA: JSON Schema vero, non un esempio (vedi nota sopra).
+const listOf = (props: string[]) => ({
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: Object.fromEntries(props.map((p) => [p, { type: 'string' }])),
+    additionalProperties: false,
+  },
+});
 const CLINICAL_LISTS_SCHEMA = {
-  diagnosi: [{ codiceICD: '', descrizione: '', tipo: '', stato: '' }],
-  allergie: [{ allergene: '', reazione: '', gravita: '' }],
-  farmaci: [{ nome: '', dose: '', frequenza: '', via: '' }],
-  terapie: [{ tipo: '', descrizione: '' }],
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    diagnosi: listOf(['codiceICD', 'descrizione', 'tipo', 'stato']),
+    allergie: listOf(['allergene', 'reazione', 'gravita']),
+    farmaci: listOf(['nome', 'dose', 'frequenza', 'via']),
+    terapie: listOf(['tipo', 'descrizione']),
+  },
 };
 const CLINICAL_LISTS_PROMPT =
   'Sei un estrattore clinico. Dai documenti allegati estrai TUTTE le diagnosi, allergie, ' +
