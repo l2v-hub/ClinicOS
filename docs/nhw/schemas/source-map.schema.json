@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clinicos.local/nhw/source-map.schema.json",
+  "title": "NHW Source Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["knowledgeId", "path", "symbol", "lineStart", "lineEnd", "fileHash", "confidence"],
+  "properties": {
+    "knowledgeId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "path": { "type": "string", "minLength": 1 },
+    "symbol": { "type": "string" },
+    "lineStart": { "type": "integer", "minimum": 1 },
+    "lineEnd": { "type": "integer", "minimum": 1 },
+    "fileHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "confidence": { "enum": ["observed", "inferred", "declared"] },
+    "inferenceRule": { "type": "string", "minLength": 1 }
+  }
+}
