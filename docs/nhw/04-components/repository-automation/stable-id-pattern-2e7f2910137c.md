@@ -22,7 +22,7 @@ tags:
   - "constant"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "1a33da4292b14f795c966b6b4be3fa1ccc6b48f91cb59e051d8bc5fd29fb86e5"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
 ---
 
 ## Question Answered
@@ -51,7 +51,9 @@ None observed
 
 ## Consumers
 
-None observed
+- `scripts/nhw/lib/graph.mjs`
+- `scripts/nhw/lib/markdown.mjs`
+- `scripts/nhw/lib/validator.mjs`
 
 ## Invariants
 

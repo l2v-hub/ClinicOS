@@ -22,15 +22,15 @@ relations:
     evidence: "package.json,backend/src/app.ts,frontend/src/App.tsx,clinicos-ai-runtime/clinicos_ai/api/app.py,prisma/schema.prisma"
     confidence: "observed"
   - type: "contains"
+    target: "project.backend"
+    evidence: "package.json,backend/src/app.ts,frontend/src/App.tsx,clinicos-ai-runtime/clinicos_ai/api/app.py,prisma/schema.prisma"
+    confidence: "observed"
+  - type: "contains"
     target: "project.clinicos"
     evidence: "package.json,backend/src/app.ts,frontend/src/App.tsx,clinicos-ai-runtime/clinicos_ai/api/app.py,prisma/schema.prisma"
     confidence: "observed"
   - type: "contains"
     target: "project.clinicos-ai-runtime"
-    evidence: "package.json,backend/src/app.ts,frontend/src/App.tsx,clinicos-ai-runtime/clinicos_ai/api/app.py,prisma/schema.prisma"
-    confidence: "observed"
-  - type: "contains"
-    target: "project.clinicos.backend"
     evidence: "package.json,backend/src/app.ts,frontend/src/App.tsx,clinicos-ai-runtime/clinicos_ai/api/app.py,prisma/schema.prisma"
     confidence: "observed"
   - type: "contains"
@@ -50,7 +50,7 @@ tags:
   - "system"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "1a33da4292b14f795c966b6b4be3fa1ccc6b48f91cb59e051d8bc5fd29fb86e5"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
 ---
 
 ## Question Answered
@@ -71,8 +71,8 @@ Clinical workflows, persisted records, AI-assisted results, and delivery evidenc
 
 ## Dependencies
 
-- `project.clinicos.backend`
 - `project.agent-team`
+- `project.backend`
 - `project.clinicos`
 - `project.clinicos-ai-runtime`
 - `project.frontend`
@@ -106,9 +106,9 @@ Configuration, persistence, authentication, provider, and deployment failures ar
 ## Related Knowledge
 
 - `contains` → `project.agent-team`
+- `contains` → `project.backend`
 - `contains` → `project.clinicos`
 - `contains` → `project.clinicos-ai-runtime`
-- `contains` → `project.clinicos.backend`
 - `contains` → `project.frontend`
 - `contains` → `project.prisma`
 - `contains` → `project.repository-automation`

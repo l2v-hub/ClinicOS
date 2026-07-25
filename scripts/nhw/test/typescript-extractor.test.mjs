@@ -77,6 +77,7 @@ test('extracts frontend requests and configuration reads', () => {
   assert.equal(result.frontendRequests[0].pathTemplate, '/patients/${patientId}');
   assert.equal(result.frontendRequests[0].consumer, 'loadPatient');
   assert.deepEqual(result.configurationReads, ['VITE_API_URL']);
+  assert.equal(result.configurationReads.includes('VITE_'), false);
 });
 
 test('writes TypeScript discovery catalogs through the staged generator', async (t) => {

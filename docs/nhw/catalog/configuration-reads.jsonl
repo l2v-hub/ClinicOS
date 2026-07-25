@@ -72,7 +72,6 @@
 {"id":"config.discovered.prod-url","name":"PROD_URL","runtimes":["typescript"]}
 {"id":"config.discovered.service-token","name":"SERVICE_TOKEN","runtimes":["python"],"sources":[{"lineEnd":25,"lineStart":25,"path":"scripts/nhw/test/fixtures/python/app.py"}]}
 {"id":"config.discovered.something","name":"SOMETHING","runtimes":["typescript"]}
-{"id":"config.discovered.vite-","name":"VITE_","runtimes":["typescript"]}
 {"declared":true,"id":"config.discovered.vite-api-url","name":"VITE_API_URL","runtimes":["typescript"],"sources":[{"lineEnd":1,"lineStart":1,"path":"frontend/.env.example"}]}
 {"id":"config.discovered.vite-entra-api-scope","name":"VITE_ENTRA_API_SCOPE","runtimes":["typescript"]}
 {"id":"config.discovered.vite-entra-client-id","name":"VITE_ENTRA_CLIENT_ID","runtimes":["typescript"]}

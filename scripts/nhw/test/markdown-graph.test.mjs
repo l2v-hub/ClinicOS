@@ -180,3 +180,25 @@ test('compiles typed relations, resolves redirects, and detects exact cycles wit
     'component.fixture.alpha',
   );
 });
+
+test('classifies bidirectional data-model cycles as acceptable schema relationships', () => {
+  const graph = {
+    nodes: [{ id: 'data.model.patient' }, { id: 'data.model.appointment' }],
+    edges: [
+      {
+        from: 'data.model.patient',
+        type: 'depends-on',
+        to: 'data.model.appointment',
+        evidence: ['prisma/schema.prisma'],
+      },
+      {
+        from: 'data.model.appointment',
+        type: 'depends-on',
+        to: 'data.model.patient',
+        evidence: ['prisma/schema.prisma'],
+      },
+    ],
+  };
+
+  assert.equal(detectCycles(graph)[0].classification, 'acceptable-mutual-schema-relation');
+});

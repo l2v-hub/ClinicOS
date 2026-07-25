@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 
 import { writeJson, writeJsonl, writeText } from './contracts.mjs';
@@ -201,6 +201,40 @@ function walkMarkdown(directory) {
     else if (entry.isFile() && entry.name.endsWith('.md')) paths.push(absolute);
   }
   return paths;
+}
+
+const UNIT_ROOTS = {
+  core: ['00-contract', '01-system', '02-contexts', '03-domain', '04-components', '07-data'],
+  operational: [
+    '05-runtime',
+    '06-api',
+    '08-flows',
+    '09-configuration',
+    '10-infrastructure',
+    '11-quality',
+    '12-repository',
+  ],
+};
+
+export function synchronizeKnowledgeRecords(repoRoot, group, records) {
+  const roots = UNIT_ROOTS[group];
+  if (!roots) throw new Error(`Unknown knowledge synchronization group '${group}'`);
+  const expected = new Set(
+    records.map((record) => resolve(repoRoot, ...record.path.split('/')).toLowerCase()),
+  );
+  let deleted = 0;
+  for (const root of roots) {
+    const absoluteRoot = resolve(repoRoot, 'docs', 'nhw', root);
+    for (const path of walkMarkdown(absoluteRoot)) {
+      if (expected.has(resolve(path).toLowerCase())) continue;
+      rmSync(path);
+      deleted += 1;
+    }
+  }
+  return {
+    written: writeKnowledgeRecords(repoRoot, records),
+    deleted,
+  };
 }
 
 export function loadKnowledgeUnits(repoRoot, outputRoot) {

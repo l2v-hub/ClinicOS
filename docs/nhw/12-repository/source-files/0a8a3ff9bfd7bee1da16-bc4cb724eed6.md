@@ -1,0 +1,66 @@
+---
+id: "component.repository.source.0a8a3ff9bfd7bee1da16"
+kind: "repository-source"
+title: "DocumentPreview.tsx"
+status: "observed"
+summary: "Repository source path frontend/src/components/shared/DocumentPreview.tsx classified as semantic-source."
+bounded_contexts: []
+sources:
+  - path: "frontend/src/components/shared/DocumentPreview.tsx"
+    confidence: "observed"
+relations:
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "frontend/src/components/shared/DocumentPreview.tsx"
+    confidence: "observed"
+tags:
+  - "repository-source"
+  - "semantic-source"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+---
+
+## Question Answered
+
+What does `component.repository.source.0a8a3ff9bfd7bee1da16` represent in ClinicOS?
+
+## Canonical Definition
+
+component.repository.source.0a8a3ff9bfd7bee1da16 is the canonical repository-source named DocumentPreview.tsx.
+
+## Inputs
+
+Path classification: `semantic-source`; reason: `application-source`.
+
+## Outputs
+
+Makes the authored source independently retrievable through its stable knowledge identifier.
+
+## Dependencies
+
+Repository inventory and file hash.
+
+## Side Effects
+
+None observed
+
+## Consumers
+
+Coverage reconciliation, semantic retrieval, and impact analysis.
+
+## Invariants
+
+The file payload remains authoritative; this unit stores metadata and purpose, not a duplicate payload.
+
+## Failure Modes
+
+A changed file hash invalidates stale source evidence until regeneration.
+
+## Evidence
+
+- `frontend/src/components/shared/DocumentPreview.tsx`
+
+## Related Knowledge
+
+- `belongs-to` → `system.clinicos`

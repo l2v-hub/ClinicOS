@@ -1,0 +1,81 @@
+---
+id: "api.backend.post-notes-77"
+kind: "api-endpoint"
+title: "POST /notes/"
+status: "observed"
+summary: "POST /notes/ endpoint implemented by the express runtime."
+bounded_contexts:
+  - "context.operator-collaboration"
+sources:
+  - path: "backend/src/routes/note.ts"
+    symbol: "noteRouter"
+    line_start: "25"
+    line_end: "53"
+    confidence: "observed"
+relations:
+  - type: "belongs-to"
+    target: "project.backend"
+    evidence: "backend/src/routes/note.ts"
+    confidence: "observed"
+  - type: "writes"
+    target: "data.model.nota"
+    evidence: "backend/src/routes/note.ts"
+    confidence: "observed"
+tags:
+  - "api"
+  - "express"
+  - "post"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+---
+
+## Question Answered
+
+What does `api.backend.post-notes-77` represent in ClinicOS?
+
+## Canonical Definition
+
+api.backend.post-notes-77 is the canonical api-endpoint named POST /notes/.
+
+## Inputs
+
+- Method: `POST`
+- Path: `/notes/`
+- Request inputs: `["req.body"]`
+- Middleware/dependencies: None observed
+
+## Outputs
+
+Observed HTTP statuses: `[201,400,500]`; response model: `not explicitly declared`.
+
+## Dependencies
+
+Persistence calls: `["prisma.nota.create"]`
+External calls: None observed
+Background tasks: None observed
+
+## Side Effects
+
+None observed
+
+## Consumers
+
+Frontend request consumers and external HTTP clients matching this method and path.
+
+## Invariants
+
+The complete mounted path is reconstructed from the runtime composition root.
+
+## Failure Modes
+
+Observed error statuses: `[400,500]`. Handler-level triggers remain at the cited source span.
+
+## Evidence
+
+- `backend/src/routes/note.ts:25-53` — noteRouter
+
+## Related Knowledge
+
+- `belongs-to` → `project.backend`
+- `writes` → `data.model.nota`

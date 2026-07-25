@@ -13,8 +13,8 @@ import {
   compileKnowledgeArtifacts,
   enrichConfigurationSources,
   loadKnowledgeCatalogs,
+  synchronizeKnowledgeRecords,
   writeKnowledgeOverview,
-  writeKnowledgeRecords,
 } from './lib/knowledge-pipeline.mjs';
 import {
   buildMigrationLineage,
@@ -325,9 +325,7 @@ async function generateRepository(repoRoot, outputRoot) {
 function sourceInventoryHash(inventory) {
   return inventoryHash(
     inventory.filter(
-      (record) =>
-        record.path !== 'docs/nhw' &&
-        !record.path.startsWith('docs/nhw/'),
+      (record) => record.path !== 'docs/nhw' && !record.path.startsWith('docs/nhw/'),
     ),
   );
 }
@@ -343,12 +341,13 @@ async function authorCoreKnowledge(repoRoot, outputRoot) {
   );
   const hash = sourceInventoryHash(inventory);
   const records = buildCoreKnowledge({ catalogs, inventory, inventoryHash: hash });
-  const changed = writeKnowledgeRecords(repoRoot, records);
+  const synchronization = synchronizeKnowledgeRecords(repoRoot, 'core', records);
   writeKnowledgeOverview(outputRoot, hash);
   return {
     stage: 'author-core',
     units: records.length,
-    changed,
+    changed: synchronization.written,
+    deleted: synchronization.deleted,
     inventoryHash: hash,
   };
 }
@@ -368,11 +367,12 @@ async function authorOperationalKnowledge(repoRoot, outputRoot) {
     inventory,
     inventoryHash: hash,
   });
-  const changed = writeKnowledgeRecords(repoRoot, records);
+  const synchronization = synchronizeKnowledgeRecords(repoRoot, 'operational', records);
   return {
     stage: 'author-operational',
     units: records.length,
-    changed,
+    changed: synchronization.written,
+    deleted: synchronization.deleted,
     inventoryHash: hash,
   };
 }

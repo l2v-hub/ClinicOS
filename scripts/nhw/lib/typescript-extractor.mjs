@@ -533,9 +533,9 @@ function collectFrontendRequests(files) {
 function collectConfigurationReads(files) {
   const keys = new Set();
   const patterns = [
-    /process\.env\.([A-Z][A-Z0-9_]*)/g,
-    /process\.env\[['"]([A-Z][A-Z0-9_]*)['"]\]/g,
-    /import\.meta\.env\.([A-Z][A-Z0-9_]*)/g,
+    /process\.env\.([A-Z](?:[A-Z0-9_]*[A-Z0-9])?)(?![A-Z0-9_])/g,
+    /process\.env\[['"]([A-Z](?:[A-Z0-9_]*[A-Z0-9])?)['"]\]/g,
+    /import\.meta\.env\.([A-Z](?:[A-Z0-9_]*[A-Z0-9])?)(?![A-Z0-9_])/g,
   ];
   for (const file of files) {
     const text = file.sourceFile.getFullText();

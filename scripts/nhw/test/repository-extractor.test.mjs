@@ -27,7 +27,7 @@ function fixture(t) {
     }),
   );
   write(root, 'frontend/package.json', JSON.stringify({ name: 'frontend' }));
-  write(root, 'backend/package.json', JSON.stringify({ name: 'backend' }));
+  write(root, 'backend/package.json', JSON.stringify({ name: '@clinicos/backend' }));
   write(root, 'clinicos-ai-runtime/requirements.txt', 'fastapi>=0.110\n');
   write(
     root,
@@ -67,6 +67,12 @@ jobs:
   write(root, 'prisma/schema.prisma', 'model User { id String @id }\n');
   write(root, 'backend/src/patient.test.ts', 'export const tested = true;\n');
   write(root, 'requirements/REQ-001.md', '# REQ-001\n');
+  write(root, 'docs/nhw/11-quality/tests/unit/generated.md', '# Generated test unit\n');
+  write(
+    root,
+    'docs/nhw/12-repository/requirements/req-999-generated.md',
+    '# Generated requirement unit\n',
+  );
   write(root, 'artifacts/task-validation/1/screenshot.png', Buffer.from([1, 2, 3]));
   return root;
 }
@@ -104,7 +110,9 @@ test('classifies tests, requirements, deployments, and binary artifacts', async 
   const inventory = await buildInventory(root);
   const result = extractRepositorySurfaces(root, inventory);
 
+  assert.equal(result.testSurfaces.length, 1);
   assert.equal(result.testSurfaces[0].type, 'unit');
+  assert.equal(result.requirements.length, 1);
   assert.equal(result.requirements[0].requirementId, 'REQ-001');
   assert.ok(result.deployments.some((deployment) => deployment.platform === 'railway'));
   assert.ok(result.deployments.some((deployment) => deployment.platform === 'vercel'));

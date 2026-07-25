@@ -1,0 +1,66 @@
+---
+id: "component.repository.source.d50e35facf12bac6e531"
+kind: "repository-source"
+title: "plan.md"
+status: "declared"
+summary: "Repository source path specs/007-clean-nav-layout/plan.md classified as narrative-source."
+bounded_contexts: []
+sources:
+  - path: "specs/007-clean-nav-layout/plan.md"
+    confidence: "declared"
+relations:
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: "specs/007-clean-nav-layout/plan.md"
+    confidence: "observed"
+tags:
+  - "repository-source"
+  - "narrative-source"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+---
+
+## Question Answered
+
+What does `component.repository.source.d50e35facf12bac6e531` represent in ClinicOS?
+
+## Canonical Definition
+
+component.repository.source.d50e35facf12bac6e531 is the canonical repository-source named plan.md.
+
+## Inputs
+
+Path classification: `narrative-source`; reason: `documentation-or-requirement`.
+
+## Outputs
+
+Makes the authored source independently retrievable through its stable knowledge identifier.
+
+## Dependencies
+
+Repository inventory and file hash.
+
+## Side Effects
+
+None observed
+
+## Consumers
+
+Coverage reconciliation, semantic retrieval, and impact analysis.
+
+## Invariants
+
+The file payload remains authoritative; this unit stores metadata and purpose, not a duplicate payload.
+
+## Failure Modes
+
+A changed file hash invalidates stale source evidence until regeneration.
+
+## Evidence
+
+- `specs/007-clean-nav-layout/plan.md`
+
+## Related Knowledge
+
+- `belongs-to` → `system.clinicos`

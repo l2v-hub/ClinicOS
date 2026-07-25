@@ -68,6 +68,22 @@ function canonicalCycle(path) {
   return [...variants[0], variants[0][0]];
 }
 
+function classifyCycle(path) {
+  const nodes = path.slice(0, -1);
+  if (nodes.every((identifier) => identifier.startsWith('data.model.'))) {
+    return 'acceptable-mutual-schema-relation';
+  }
+  if (
+    nodes.includes('system.clinicos') &&
+    nodes.every(
+      (identifier) => identifier === 'system.clinicos' || identifier.startsWith('project.'),
+    )
+  ) {
+    return 'expected-system-containment';
+  }
+  return 'architectural-cycle';
+}
+
 export function detectCycles(graph) {
   const adjacency = new Map(graph.nodes.map((node) => [node.id, []]));
   for (const edge of graph.edges) {
@@ -90,7 +106,7 @@ export function detectCycles(graph) {
         const path = canonicalCycle([...stack.slice(start), target]);
         cycles.set(path.join('\u0000'), {
           path,
-          classification: 'architectural-cycle',
+          classification: classifyCycle(path),
         });
       } else if (!visited.has(target)) {
         visit(target);

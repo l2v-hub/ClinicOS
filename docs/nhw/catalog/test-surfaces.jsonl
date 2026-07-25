@@ -165,6 +165,7 @@
 {"framework":"node-test","id":"test.repository.scripts.ci.ai-import-e2e-config.test.mjs","path":"scripts/ci/ai-import-e2e-config.test.mjs","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.e2e-full-patient-api-test.ts","path":"scripts/e2e-full-patient-api-test.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.contracts.test.mjs","path":"scripts/nhw/test/contracts.test.mjs","type":"contract"}
+{"framework":"node-test","id":"test.repository.scripts.nhw.test.coverage-validator.test.mjs","path":"scripts/nhw/test/coverage-validator.test.mjs","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.fixtures.prisma.schema.prisma","path":"scripts/nhw/test/fixtures/prisma/schema.prisma","type":"unit"}
 {"framework":"unittest","id":"test.repository.scripts.nhw.test.fixtures.python.app.py","path":"scripts/nhw/test/fixtures/python/app.py","type":"unit"}
 {"framework":"unittest","id":"test.repository.scripts.nhw.test.fixtures.python.tests.test-app.py","path":"scripts/nhw/test/fixtures/python/tests/test_app.py","type":"unit"}
@@ -174,6 +175,8 @@
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.fixtures.typescript.routes.patients.test.ts","path":"scripts/nhw/test/fixtures/typescript/routes/patients.test.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.fixtures.typescript.routes.patients.ts","path":"scripts/nhw/test/fixtures/typescript/routes/patients.ts","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.inventory.test.mjs","path":"scripts/nhw/test/inventory.test.mjs","type":"unit"}
+{"framework":"node-test","id":"test.repository.scripts.nhw.test.knowledge-compiler.test.mjs","path":"scripts/nhw/test/knowledge-compiler.test.mjs","type":"unit"}
+{"framework":"node-test","id":"test.repository.scripts.nhw.test.markdown-graph.test.mjs","path":"scripts/nhw/test/markdown-graph.test.mjs","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.prisma-extractor.test.mjs","path":"scripts/nhw/test/prisma-extractor.test.mjs","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.python-extractor.test.mjs","path":"scripts/nhw/test/python-extractor.test.mjs","type":"unit"}
 {"framework":"node-test","id":"test.repository.scripts.nhw.test.repository-extractor.test.mjs","path":"scripts/nhw/test/repository-extractor.test.mjs","type":"unit"}

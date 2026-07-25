@@ -9,8 +9,8 @@ bounded_contexts:
 sources:
   - path: "scripts/nhw/lib/contracts.mjs"
     symbol: "writeJsonl"
-    line_start: "168"
-    line_end: "176"
+    line_start: "172"
+    line_end: "180"
     confidence: "observed"
 relations:
   - type: "belongs-to"
@@ -22,7 +22,7 @@ tags:
   - "function"
 last_verified:
   commit: "working-tree"
-  inventory_hash: "1a33da4292b14f795c966b6b4be3fa1ccc6b48f91cb59e051d8bc5fd29fb86e5"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
 ---
 
 ## Question Answered
@@ -52,6 +52,7 @@ None observed
 ## Consumers
 
 - `scripts/nhw/generate.mjs`
+- `scripts/nhw/lib/knowledge-pipeline.mjs`
 
 ## Invariants
 
@@ -63,7 +64,7 @@ Refer to callers and implementation at the cited source span.
 
 ## Evidence
 
-- `scripts/nhw/lib/contracts.mjs:168-176` — writeJsonl
+- `scripts/nhw/lib/contracts.mjs:172-180` — writeJsonl
 
 ## Related Knowledge
 

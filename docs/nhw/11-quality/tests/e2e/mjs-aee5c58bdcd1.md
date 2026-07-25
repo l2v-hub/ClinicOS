@@ -1,0 +1,67 @@
+---
+id: "test.repository.e2e.verify-96-medicazioni.mjs"
+kind: "e2e-test"
+title: "verify-96-medicazioni.mjs"
+status: "observed"
+summary: "node-test e2e test surface."
+bounded_contexts: []
+sources:
+  - path: "e2e/verify-96-medicazioni.mjs"
+    confidence: "observed"
+relations:
+  - type: "belongs-to"
+    target: "project.clinicos"
+    evidence: "e2e/verify-96-medicazioni.mjs"
+    confidence: "observed"
+tags:
+  - "test"
+  - "e2e"
+  - "node-test"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+---
+
+## Question Answered
+
+What does `test.repository.e2e.verify-96-medicazioni.mjs` represent in ClinicOS?
+
+## Canonical Definition
+
+test.repository.e2e.verify-96-medicazioni.mjs is the canonical e2e-test named verify-96-medicazioni.mjs.
+
+## Inputs
+
+Test source: `e2e/verify-96-medicazioni.mjs`.
+
+## Outputs
+
+Objective pass/fail evidence for the behavior encoded in the test.
+
+## Dependencies
+
+Framework: `node-test`; owning project: `project.clinicos`.
+
+## Side Effects
+
+May create isolated fixtures or exercise local runtime behavior as defined by the test.
+
+## Consumers
+
+CI/CD, quality gates, maintainers, and autonomous QA agents.
+
+## Invariants
+
+A test is evidence only for assertions and execution paths it actually exercises.
+
+## Failure Modes
+
+Assertion failure, fixture failure, unavailable dependency, timeout, or environment mismatch.
+
+## Evidence
+
+- `e2e/verify-96-medicazioni.mjs`
+
+## Related Knowledge
+
+- `belongs-to` → `project.clinicos`

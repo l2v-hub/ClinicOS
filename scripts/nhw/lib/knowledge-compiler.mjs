@@ -889,14 +889,17 @@ function flowUnits(catalogs, inventoryHash) {
         candidate.lineEnd,
       ),
     );
-    const relations = selected
-      .filter(
-        (candidate) =>
-          candidate.id &&
-          (candidate.method || candidate.exported === true || candidate.public === true),
-      )
-      .slice(0, 12)
-      .map((candidate) => ({ type: 'invokes', target: candidate.id }));
+    const relations = [
+      { type: 'belongs-to', target: 'system.clinicos' },
+      ...selected
+        .filter(
+          (candidate) =>
+            candidate.id &&
+            (candidate.method || candidate.exported === true || candidate.public === true),
+        )
+        .slice(0, 12)
+        .map((candidate) => ({ type: 'invokes', target: candidate.id })),
+    ];
     return record(
       '08-flows',
       {
@@ -938,6 +941,570 @@ function flowUnits(catalogs, inventoryHash) {
       inventoryHash,
     );
   });
+}
+
+function curatedOperationalUnits(inventoryHash) {
+  const definitions = [
+    {
+      folder: '05-runtime/startup',
+      id: 'runtime.frontend.initialization',
+      kind: 'runtime-startup',
+      title: 'Frontend initialization',
+      summary: 'Vite browser entry point mounts the React application.',
+      paths: ['frontend/src/main.tsx', 'frontend/src/App.tsx'],
+      target: 'project.frontend',
+      sideEffects: 'Creates the browser React root and starts client-side application state.',
+    },
+    {
+      folder: '05-runtime/startup',
+      id: 'runtime.backend.express-startup',
+      kind: 'runtime-startup',
+      title: 'Express backend startup',
+      summary:
+        'Backend startup resolves the port, starts Express, reports AI status, and schedules retention.',
+      paths: ['backend/src/server.ts', 'backend/src/app.ts'],
+      target: 'project.backend',
+      sideEffects: 'Binds the HTTP listener and schedules the import-job retention sweep.',
+    },
+    {
+      folder: '05-runtime/middleware',
+      id: 'runtime.backend.middleware-pipeline',
+      kind: 'runtime-middleware',
+      title: 'Express middleware and route order',
+      summary:
+        'Express composition root applies CORS, JSON parsing, health, route modules, and error behavior in source order.',
+      paths: ['backend/src/app.ts'],
+      target: 'project.backend',
+      sideEffects: 'Applies origin policy, parses request bodies, and dispatches mounted routers.',
+    },
+    {
+      folder: '05-runtime/lifecycle',
+      id: 'runtime.backend.prisma-lifecycle',
+      kind: 'runtime-lifecycle',
+      title: 'Prisma and PostgreSQL lifecycle',
+      summary:
+        'A shared Prisma client backed by the PostgreSQL adapter owns backend persistence connections.',
+      paths: ['backend/src/lib/prisma.ts', 'prisma/schema.prisma'],
+      target: 'project.backend',
+      sideEffects: 'Creates and reuses the database client and PostgreSQL connection resources.',
+    },
+    {
+      folder: '05-runtime/jobs',
+      id: 'runtime.backend.import-retention',
+      kind: 'scheduled-job',
+      title: 'Import-job retention sweep',
+      summary:
+        'Backend startup and a manual endpoint trigger best-effort deletion of expired import jobs.',
+      paths: ['backend/src/server.ts', 'backend/src/routes/ai-jobs.ts'],
+      target: 'project.backend',
+      sideEffects: 'Deletes or expires import-job state according to retention policy.',
+    },
+    {
+      folder: '05-runtime/jobs',
+      id: 'runtime.backend.ai-upload-worker',
+      kind: 'background-worker',
+      title: 'AI upload worker',
+      summary: 'Backend worker claims and processes persisted AI extraction jobs.',
+      paths: ['backend/src/ai/upload/worker.ts', 'backend/src/ai/upload/job-service.ts'],
+      target: 'project.backend',
+      sideEffects:
+        'Transitions job state, invokes the AI runtime, persists results, retries, and audit data.',
+    },
+    {
+      folder: '05-runtime/startup',
+      id: 'runtime.ai-runtime.fastapi-startup',
+      kind: 'runtime-startup',
+      title: 'FastAPI runtime startup',
+      summary:
+        'Python entry point starts Uvicorn and exposes the FastAPI application and health contract.',
+      paths: [
+        'clinicos-ai-runtime/clinicos_ai/main.py',
+        'clinicos-ai-runtime/clinicos_ai/api/app.py',
+      ],
+      target: 'project.clinicos-ai-runtime',
+      sideEffects: 'Binds the runtime HTTP listener and creates process-local runtime state.',
+    },
+    {
+      folder: '05-runtime/jobs',
+      id: 'runtime.ai-runtime.in-process-job-state',
+      kind: 'runtime-state',
+      title: 'FastAPI in-process document-job state',
+      summary:
+        'Document-job endpoints keep runtime job and event state inside the FastAPI process.',
+      paths: ['clinicos-ai-runtime/clinicos_ai/api/app.py'],
+      target: 'project.clinicos-ai-runtime',
+      sideEffects: 'Mutates process-local job, result, event, retry, and cancellation state.',
+    },
+    {
+      folder: '05-runtime/lifecycle',
+      id: 'runtime.agent-team.supervisor',
+      kind: 'runtime-orchestrator',
+      title: 'Agent-team supervisor lifecycle',
+      summary:
+        'Agent-team runtime coordinates claim, recovery, worker execution, remediation, and shutdown.',
+      paths: ['agent-team/src/runtime.mjs', 'agent-team/src/cli.mjs'],
+      target: 'project.agent-team',
+      sideEffects:
+        'Creates claims, worktrees, worker processes, evidence, protocol comments, and local runtime state.',
+    },
+    {
+      folder: '05-runtime/caching',
+      id: 'runtime.frontend.request-cache',
+      kind: 'runtime-cache',
+      title: 'Frontend GET request cache',
+      summary:
+        'Browser request helper deduplicates in-flight GET calls and caches responses for a bounded TTL.',
+      paths: ['frontend/src/lib/cachedFetch.ts'],
+      target: 'project.frontend',
+      sideEffects: 'Stores process-local browser cache entries and invalidates them by URL prefix.',
+    },
+    {
+      folder: '05-runtime/authentication',
+      id: 'runtime.backend.authentication-modes',
+      kind: 'runtime-authentication',
+      title: 'Demo and Entra authentication modes',
+      summary:
+        'Protected document routes select fail-closed, demo, or Entra authentication from AUTH_MODE.',
+      paths: ['backend/src/routes/patient-documents.ts', 'backend/src/lib/entra-auth.ts'],
+      target: 'project.backend',
+      sideEffects:
+        'Resolves verified operator identity and may link Entra object identifiers to users.',
+    },
+    {
+      folder: '05-runtime/authentication',
+      id: 'runtime.backend.internal-ai-authentication',
+      kind: 'runtime-authentication',
+      title: 'Internal AI service-token authentication',
+      summary:
+        'Internal AI gateway calls require the shared runtime service token plus serialized user context.',
+      paths: [
+        'backend/src/ai/auth.ts',
+        'backend/src/routes/internal-ai.ts',
+        'clinicos-ai-runtime/clinicos_ai/api/app.py',
+      ],
+      target: 'project.backend',
+      sideEffects: 'Rejects unauthorized internal requests before clinical data gateway access.',
+    },
+    {
+      folder: '05-runtime/error-handling',
+      id: 'runtime.backend.error-handling',
+      kind: 'runtime-error-policy',
+      title: 'Backend error handling',
+      summary:
+        'Route-local catch blocks convert validation, persistence, integration, and unknown failures into HTTP responses.',
+      paths: [
+        'backend/src/app.ts',
+        'backend/src/routes/patients.ts',
+        'backend/src/routes/ai-jobs.ts',
+      ],
+      target: 'project.backend',
+      sideEffects: 'Writes HTTP error responses and operational console diagnostics.',
+    },
+    {
+      folder: '05-runtime/observability',
+      id: 'runtime.system.observability',
+      kind: 'runtime-observability',
+      title: 'Runtime logging and health observability',
+      summary:
+        'Backend and AI runtime expose health endpoints and log configuration-safe startup and failure information.',
+      paths: [
+        'backend/src/server.ts',
+        'clinicos-ai-runtime/clinicos_ai/models/env_config.py',
+        'clinicos-ai-runtime/clinicos_ai/api/app.py',
+      ],
+      target: 'system.clinicos',
+      sideEffects: 'Emits console and health telemetry without copying credential values.',
+    },
+    {
+      folder: '06-api/models',
+      id: 'value.api.authentication-contract',
+      kind: 'api-contract',
+      title: 'Authentication request contract',
+      summary:
+        'Browser-to-backend identity uses Entra bearer tokens when configured and explicit demo headers only in allowed demo mode.',
+      paths: [
+        'frontend/src/lib/entraAuth.ts',
+        'backend/src/lib/entra-auth.ts',
+        'backend/src/routes/patient-documents.ts',
+      ],
+      target: 'system.clinicos',
+      sideEffects: 'Constructs request headers and resolves server-side operator context.',
+    },
+    {
+      folder: '06-api/models',
+      id: 'value.api.error-envelope',
+      kind: 'api-contract',
+      title: 'HTTP error envelope',
+      summary:
+        'Endpoint failures return status-specific JSON error objects defined by each route family.',
+      paths: [
+        'backend/src/routes/patients.ts',
+        'backend/src/routes/ai-assistant-public.ts',
+        'clinicos-ai-runtime/clinicos_ai/domain/contracts.py',
+      ],
+      target: 'system.clinicos',
+      sideEffects:
+        'Serializes public failure information while keeping internal credentials and provider details out of responses.',
+    },
+    {
+      folder: '06-api/models',
+      id: 'value.api.upload-contract',
+      kind: 'api-contract',
+      title: 'Clinical document upload contract',
+      summary:
+        'Intake and AI extraction endpoints accept bounded document payloads and preserve job/document provenance.',
+      paths: [
+        'backend/src/routes/patient-intake.ts',
+        'backend/src/routes/ai-jobs.ts',
+        'clinicos-ai-runtime/clinicos_ai/domain/contracts.py',
+      ],
+      target: 'system.clinicos',
+      sideEffects: 'Creates document and extraction-job state and may invoke OCR/model providers.',
+    },
+    {
+      folder: '06-api/permissions',
+      id: 'value.api.internal-gateway-permission',
+      kind: 'permission-contract',
+      title: 'Internal clinical data gateway permission',
+      summary:
+        'The AI runtime has no generic database path; it reaches allowlisted backend gateway operations with service and user context.',
+      paths: [
+        'backend/src/routes/internal-ai.ts',
+        'backend/src/ai/gateway/query/validate.ts',
+        'clinicos-ai-runtime/clinicos_ai/api/app.py',
+      ],
+      target: 'context.ai-assistance',
+      sideEffects: 'Authorizes bounded clinical reads and records gateway audit outcomes.',
+    },
+    {
+      folder: '06-api/permissions',
+      id: 'value.api.patient-document-permission',
+      kind: 'permission-contract',
+      title: 'Patient document access permission',
+      summary:
+        'Document list, upload, and content routes apply per-route patient and operator access checks.',
+      paths: [
+        'backend/src/routes/patient-documents.ts',
+        'backend/src/__tests__/patient-documents-entra.test.ts',
+      ],
+      target: 'context.clinical-record',
+      sideEffects: 'Allows or rejects access to protected clinical document metadata and payloads.',
+    },
+    {
+      folder: '09-configuration/sources',
+      id: 'config.source.environment-examples',
+      kind: 'configuration-source',
+      title: 'Environment example declarations',
+      summary:
+        'Checked-in .env.example files declare supported variable names without supplying production credentials.',
+      paths: ['backend/.env.example', 'frontend/.env.example', 'clinicos-ai-runtime/.env.example'],
+      target: 'system.clinicos',
+      sideEffects: 'None observed',
+    },
+    {
+      folder: '09-configuration/environments',
+      id: 'config.environment.local',
+      kind: 'runtime-environment',
+      title: 'Local development environment',
+      summary:
+        'Local frontend, backend, AI runtime, and PostgreSQL use package scripts and Docker Compose defaults.',
+      paths: ['package.json', 'docker-compose.yml', 'frontend/src/config.ts'],
+      target: 'system.clinicos',
+      sideEffects: 'Starts local processes and a PostgreSQL container when invoked.',
+    },
+    {
+      folder: '09-configuration/environments',
+      id: 'config.environment.railway',
+      kind: 'runtime-environment',
+      title: 'Railway deployment environment',
+      summary:
+        'Backend and AI runtime use separate Railway services, startup commands, health paths, and environment variables.',
+      paths: [
+        'railway.json',
+        'clinicos-ai-runtime/railway.json',
+        '.github/workflows/deploy-backend.yml',
+        '.github/workflows/deploy-runtime.yml',
+      ],
+      target: 'system.clinicos',
+      sideEffects: 'Builds, migrates, starts, and health-checks production services.',
+    },
+    {
+      folder: '09-configuration/environments',
+      id: 'config.environment.vercel',
+      kind: 'runtime-environment',
+      title: 'Vercel frontend environment',
+      summary:
+        'Frontend deployment uses the Vercel project configuration and build-time VITE variables.',
+      paths: ['frontend/vercel.json', 'frontend/src/config.ts'],
+      target: 'project.frontend',
+      sideEffects: 'Builds and serves the browser application.',
+    },
+    {
+      folder: '09-configuration/environments',
+      id: 'config.environment.github-actions',
+      kind: 'runtime-environment',
+      title: 'GitHub Actions environment',
+      summary:
+        'CI workflows provide test, security, deployment, and model-configuration environments with secret names only.',
+      paths: [
+        '.github/workflows/ai-runtime-tests.yml',
+        '.github/workflows/ai-import-e2e.yml',
+        '.github/workflows/deploy-backend.yml',
+      ],
+      target: 'system.clinicos',
+      sideEffects: 'Runs deterministic validation and authorized deployment jobs.',
+    },
+    {
+      folder: '10-infrastructure/external-integrations',
+      id: 'integration.postgresql-prisma',
+      kind: 'external-integration',
+      title: 'PostgreSQL through Prisma',
+      summary:
+        'Express persistence uses Prisma schema/client with the PostgreSQL adapter and connection string.',
+      paths: ['prisma/schema.prisma', 'backend/src/lib/prisma.ts', 'docker-compose.yml'],
+      target: 'project.backend',
+      sideEffects: 'Reads and mutates ClinicOS relational state.',
+    },
+    {
+      folder: '10-infrastructure/external-integrations',
+      id: 'integration.azure-entra-id',
+      kind: 'external-integration',
+      title: 'Azure Entra ID and JWKS',
+      summary:
+        'Backend verifies Entra JWTs against tenant/audience configuration and remote JWKS with cached resolvers.',
+      paths: ['backend/src/lib/entra-auth.ts', 'frontend/src/lib/entraAuth.ts'],
+      target: 'context.identity-access',
+      sideEffects:
+        'Fetches signing keys and maps verified identity claims to persisted users/operators.',
+    },
+    {
+      folder: '10-infrastructure/external-integrations',
+      id: 'integration.azure-openai',
+      kind: 'model-provider-integration',
+      title: 'Azure OpenAI-compatible provider',
+      summary:
+        'AI runtime resolves Azure provider aliases, endpoint, deployment, API version, and capabilities from environment configuration.',
+      paths: [
+        'clinicos-ai-runtime/clinicos_ai/models/providers/azure.py',
+        'clinicos-ai-runtime/clinicos_ai/models/env_config.py',
+      ],
+      target: 'project.clinicos-ai-runtime',
+      sideEffects: 'Sends configured model requests to the Azure endpoint.',
+    },
+    {
+      folder: '10-infrastructure/external-integrations',
+      id: 'integration.google-ai',
+      kind: 'model-provider-integration',
+      title: 'Google model provider',
+      summary: 'AI model factory can construct the Google provider adapter for supported roles.',
+      paths: [
+        'clinicos-ai-runtime/clinicos_ai/models/providers/google.py',
+        'backend/src/ai/providers/google-gemma.ts',
+      ],
+      target: 'project.clinicos-ai-runtime',
+      sideEffects: 'Sends configured model requests to Google provider endpoints.',
+    },
+    {
+      folder: '10-infrastructure/external-integrations',
+      id: 'integration.mistral-ai',
+      kind: 'model-provider-integration',
+      title: 'Mistral model and OCR provider',
+      summary:
+        'AI runtime uses the Mistral adapter for configured OCR, extraction, repair, or assistant roles.',
+      paths: [
+        'clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py',
+        'clinicos-ai-runtime/clinicos_ai/models/env_config.py',
+      ],
+      target: 'project.clinicos-ai-runtime',
+      sideEffects: 'Sends configured model and document requests to Mistral.',
+    },
+    {
+      folder: '10-infrastructure/external-integrations',
+      id: 'integration.anthropic-ai',
+      kind: 'model-provider-integration',
+      title: 'Anthropic model provider',
+      summary:
+        'AI runtime model factory exposes the Anthropic provider through the common provider contract.',
+      paths: [
+        'clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py',
+        'clinicos-ai-runtime/clinicos_ai/models/factory.py',
+      ],
+      target: 'project.clinicos-ai-runtime',
+      sideEffects: 'Sends configured model requests to Anthropic.',
+    },
+    {
+      folder: '10-infrastructure/external-integrations',
+      id: 'integration.openai-compatible',
+      kind: 'model-provider-integration',
+      title: 'OpenAI and OpenAI-compatible providers',
+      summary:
+        'AI runtime supports native OpenAI and configurable OpenAI-like endpoints behind the shared model runner contract.',
+      paths: [
+        'clinicos-ai-runtime/clinicos_ai/models/providers/openai.py',
+        'clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py',
+      ],
+      target: 'project.clinicos-ai-runtime',
+      sideEffects: 'Sends configured requests to native or compatible model endpoints.',
+    },
+    {
+      folder: '10-infrastructure/external-integrations',
+      id: 'integration.browser-tesseract-ocr',
+      kind: 'browser-integration',
+      title: 'Browser-side Tesseract OCR',
+      summary:
+        'Legacy discharge-letter import can run Tesseract.js in the browser and send recognized text to the backend.',
+      paths: ['frontend/src/components/shared/DischargeLetterImport.tsx'],
+      target: 'project.frontend',
+      sideEffects:
+        'Processes selected documents in the browser and submits OCR text for extraction.',
+    },
+    {
+      folder: '11-quality/governance',
+      id: 'test.governance.quality-gate',
+      kind: 'quality-gate',
+      title: 'Task validation and closure gate',
+      summary:
+        'Task contracts, validation reports, test evidence, and closure script form the repository acceptance gate.',
+      paths: [
+        'scripts/quality-gate/create-task-contract.js',
+        'scripts/quality-gate/validate-task-contract.js',
+        'scripts/quality-gate/check-closure.js',
+      ],
+      target: 'context.delivery-quality-governance',
+      sideEffects: 'Creates and validates acceptance artifacts and blocks unverified closure.',
+    },
+    {
+      folder: '11-quality/governance',
+      id: 'test.governance.agent-team-protocol',
+      kind: 'governance-protocol',
+      title: 'Claude development and Codex QA protocol',
+      summary:
+        'Agent-team protocol separates development work, independent QA, remediation, and evidence-bound closure.',
+      paths: [
+        'agent-team/src/core/protocol.mjs',
+        'agent-team/src/workers/claude-development-worker.mjs',
+        'agent-team/src/workers/codex-qa-worker.mjs',
+      ],
+      target: 'project.agent-team',
+      sideEffects:
+        'Creates protocol comments, claims, evidence bindings, remediation state, and QA outcomes.',
+    },
+    {
+      folder: '11-quality/governance',
+      id: 'test.governance.security-scan',
+      kind: 'security-gate',
+      title: 'Frontend secret scan',
+      summary:
+        'Repository security gate rejects credential-like values and secret-like VITE variable names in frontend source and bundles.',
+      paths: ['scripts/security/scan-frontend-secrets.mjs', 'package.json'],
+      target: 'context.delivery-quality-governance',
+      sideEffects: 'Fails the command when a credential exposure pattern is detected.',
+    },
+    {
+      folder: '12-repository/documentation-drift',
+      id: 'finding.drift.readme-backend-port',
+      kind: 'architectural-finding',
+      title: 'README backend port drift',
+      status: 'drifted',
+      summary:
+        'README setup examples include port 4000 while executable backend startup defaults to port 3001.',
+      paths: ['README.md', 'backend/src/server.ts'],
+      target: 'system.clinicos',
+      sideEffects: 'Operators following stale examples can target the wrong local backend port.',
+    },
+    {
+      folder: '12-repository/documentation-drift',
+      id: 'finding.deployment.parallel-frontend-paths',
+      kind: 'architectural-finding',
+      title: 'Parallel Vercel and Azure Static Web Apps paths',
+      status: 'inferred',
+      inferenceRule:
+        'Both executable deployment configurations remain present in the current working tree.',
+      summary:
+        'Vercel configuration and an Azure Static Web Apps workflow coexist as frontend delivery paths.',
+      paths: [
+        'frontend/vercel.json',
+        '.github/workflows/azure-static-web-apps-orange-hill-02285750f.yml',
+      ],
+      target: 'project.frontend',
+      sideEffects:
+        'Delivery changes may need coordination across two executable frontend deployment paths.',
+    },
+    {
+      folder: '11-quality/findings',
+      id: 'finding.state.fastapi-process-local-jobs',
+      kind: 'architectural-finding',
+      title: 'FastAPI process-local job state',
+      summary:
+        'AI runtime document-job state is process-local rather than persisted in an external queue or database.',
+      paths: ['clinicos-ai-runtime/clinicos_ai/api/app.py'],
+      target: 'project.clinicos-ai-runtime',
+      sideEffects:
+        'Process restart, horizontal scaling, or request routing can affect job visibility and durability.',
+    },
+    {
+      folder: '11-quality/findings',
+      id: 'finding.coupling.patient-document-route-order',
+      kind: 'architectural-finding',
+      title: 'Patient document route-order coupling',
+      summary:
+        'Protected document routes require per-route middleware because router mount order overlaps the patient router.',
+      paths: ['backend/src/routes/patient-documents.ts', 'backend/src/app.ts'],
+      target: 'project.backend',
+      sideEffects: 'Changing route order or middleware scope can alter access-control behavior.',
+    },
+    {
+      folder: '11-quality/findings',
+      id: 'finding.cycle.prisma-bidirectional-relations',
+      kind: 'architectural-finding',
+      title: 'Bidirectional Prisma relationship cycles',
+      summary:
+        'Current Prisma models contain expected bidirectional relation cycles that require cycle-aware graph traversal.',
+      paths: ['prisma/schema.prisma'],
+      target: 'project.prisma',
+      sideEffects:
+        'Naive recursive traversal can revisit models indefinitely without a visited-node guard.',
+    },
+  ];
+
+  return definitions.map((definition) =>
+    record(
+      definition.folder,
+      {
+        id: definition.id,
+        kind: definition.kind,
+        title: definition.title,
+        status: definition.status,
+        inferenceRule: definition.inferenceRule,
+        summary: definition.summary,
+        sources: definition.paths.map((path) =>
+          source(
+            path,
+            undefined,
+            undefined,
+            undefined,
+            definition.status === 'inferred' ? 'inferred' : 'observed',
+          ),
+        ),
+        relations: [{ type: 'belongs-to', target: definition.target }],
+        tags: [definition.kind],
+        sections: {
+          Inputs:
+            'Inputs are defined by the cited composition, contract, configuration, or governance sources.',
+          Outputs: definition.summary,
+          Dependencies: `Owning knowledge target: \`${definition.target}\`.`,
+          'Side Effects': definition.sideEffects,
+          Consumers:
+            'Runtime components, operators, delivery automation, and future autonomous agents.',
+          Invariants:
+            'Executable sources listed in Evidence are authoritative over lower-precedence narrative claims.',
+          'Failure Modes':
+            'Failure behavior is inherited from the cited runtime, integration, configuration, or gate implementation.',
+        },
+      },
+      inventoryHash,
+    ),
+  );
 }
 
 function findingUnits(catalogs, inventoryHash) {
@@ -1054,7 +1621,9 @@ function findingUnits(catalogs, inventoryHash) {
   }
   const providerSources = catalogs.pythonSymbols.filter(
     (symbol) =>
-      symbol.public && /provider|registry|factory/i.test(`${symbol.name} ${symbol.sourcePath}`),
+      symbol.public &&
+      !symbol.testSource &&
+      /provider|registry|factory/i.test(`${symbol.name} ${symbol.sourcePath}`),
   );
   if (providerSources.length > 0) {
     findings.push(
@@ -1270,6 +1839,7 @@ export function buildOperationalKnowledge({ catalogs, inventory, inventoryHash }
     );
   }
   for (const flow of flowUnits(catalogs, inventoryHash)) addUnique(records, flow);
+  for (const curated of curatedOperationalUnits(inventoryHash)) addUnique(records, curated);
   for (const finding of findingUnits(catalogs, inventoryHash)) addUnique(records, finding);
 
   const representedPaths = new Set(
@@ -1282,7 +1852,7 @@ export function buildOperationalKnowledge({ catalogs, inventory, inventoryHash }
     (candidate) =>
       candidate.pathType === 'file' &&
       !['metadata-only', 'generated-excluded'].includes(candidate.classification) &&
-      !candidate.path.startsWith('docs/nhw/') &&
+      (!candidate.path.startsWith('docs/nhw/') || candidate.path.startsWith('docs/nhw/schemas/')) &&
       !representedPaths.has(candidate.path),
   )) {
     addUnique(records, repositoryUnit(item, inventoryHash));

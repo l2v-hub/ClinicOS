@@ -1,0 +1,66 @@
+---
+id: "component.repository.source.bc9ae8c459b2eb7e2f2f"
+kind: "repository-source"
+title: "final-summary.md"
+status: "declared"
+summary: "Repository source path .openclode/runs/2026-04-28T23-05-37-810Z/final-summary.md classified as narrative-source."
+bounded_contexts: []
+sources:
+  - path: ".openclode/runs/2026-04-28T23-05-37-810Z/final-summary.md"
+    confidence: "declared"
+relations:
+  - type: "belongs-to"
+    target: "system.clinicos"
+    evidence: ".openclode/runs/2026-04-28T23-05-37-810Z/final-summary.md"
+    confidence: "observed"
+tags:
+  - "repository-source"
+  - "narrative-source"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+---
+
+## Question Answered
+
+What does `component.repository.source.bc9ae8c459b2eb7e2f2f` represent in ClinicOS?
+
+## Canonical Definition
+
+component.repository.source.bc9ae8c459b2eb7e2f2f is the canonical repository-source named final-summary.md.
+
+## Inputs
+
+Path classification: `narrative-source`; reason: `documentation-or-requirement`.
+
+## Outputs
+
+Makes the authored source independently retrievable through its stable knowledge identifier.
+
+## Dependencies
+
+Repository inventory and file hash.
+
+## Side Effects
+
+None observed
+
+## Consumers
+
+Coverage reconciliation, semantic retrieval, and impact analysis.
+
+## Invariants
+
+The file payload remains authoritative; this unit stores metadata and purpose, not a duplicate payload.
+
+## Failure Modes
+
+A changed file hash invalidates stale source evidence until regeneration.
+
+## Evidence
+
+- `.openclode/runs/2026-04-28T23-05-37-810Z/final-summary.md`
+
+## Related Knowledge
+
+- `belongs-to` → `system.clinicos`

@@ -1,8 +1,11 @@
 import assert from 'node:assert/strict';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import test from 'node:test';
 
 import { buildCoreKnowledge, buildOperationalKnowledge } from '../lib/knowledge-compiler.mjs';
-import { buildDiscoveryRecords } from '../lib/knowledge-pipeline.mjs';
+import { buildDiscoveryRecords, synchronizeKnowledgeRecords } from '../lib/knowledge-pipeline.mjs';
 import { renderKnowledgeUnit } from '../lib/markdown.mjs';
 
 const HASH = 'a'.repeat(64);
@@ -161,6 +164,12 @@ function inventory() {
       classification: 'test-source',
       sha256: HASH,
     },
+    {
+      path: 'docs/nhw/schemas/graph-node.schema.json',
+      pathType: 'file',
+      classification: 'configuration-source',
+      sha256: HASH,
+    },
   ];
 }
 
@@ -201,6 +210,24 @@ test('builds operational units for endpoints, configuration, tests, scripts, flo
   assert.ok(byId.has('test.repository.backend.patient.test.ts'));
   assert.ok(byId.has('component.repository.package-script.backend.build'));
   assert.ok(byId.has('flow.patient-lifecycle'));
+  assert.ok(byId.has('runtime.backend.express-startup'));
+  assert.ok(byId.has('value.api.authentication-contract'));
+  assert.ok(byId.has('config.environment.railway'));
+  assert.ok(byId.has('integration.azure-entra-id'));
+  assert.ok(byId.has('test.governance.quality-gate'));
+  assert.ok(byId.has('finding.drift.readme-backend-port'));
+  assert.ok(
+    byId
+      .get('flow.application-startup')
+      .relations.some((relation) => relation.target === 'system.clinicos'),
+  );
+  assert.ok(
+    records.some((record) =>
+      record.unit.sources.some(
+        (source) => source.path === 'docs/nhw/schemas/graph-node.schema.json',
+      ),
+    ),
+  );
   assert.ok([...byId.keys()].some((identifier) => identifier.startsWith('finding.')));
 });
 
@@ -240,4 +267,24 @@ test('builds the required semantic discovery set while excluding private and tes
   assert.ok(ids.has('test.repository.backend.patient.test.ts'));
   assert.equal(ids.has('component.backend.private-helper'), false);
   assert.equal(ids.has('component.backend.test-helper'), false);
+});
+
+test('synchronizes generator-owned unit directories and removes stale generated files', (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'clinicos-nhw-knowledge-sync-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const stale = join(root, 'docs', 'nhw', '04-components', 'backend', 'stale.md');
+  mkdirSync(join(stale, '..'), { recursive: true });
+  writeFileSync(stale, 'stale\n');
+  const records = buildCoreKnowledge({
+    catalogs: catalogs(),
+    inventory: inventory(),
+    inventoryHash: HASH,
+  });
+
+  const result = synchronizeKnowledgeRecords(root, 'core', records);
+
+  assert.equal(existsSync(stale), false);
+  assert.ok(result.written > 0);
+  assert.equal(result.deleted, 1);
+  assert.ok(records.every((record) => existsSync(join(root, ...record.path.split('/')))));
 });

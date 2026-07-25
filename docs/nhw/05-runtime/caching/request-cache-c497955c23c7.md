@@ -1,0 +1,65 @@
+---
+id: "runtime.frontend.request-cache"
+kind: "runtime-cache"
+title: "Frontend GET request cache"
+status: "observed"
+summary: "Browser request helper deduplicates in-flight GET calls and caches responses for a bounded TTL."
+bounded_contexts: []
+sources:
+  - path: "frontend/src/lib/cachedFetch.ts"
+    confidence: "observed"
+relations:
+  - type: "belongs-to"
+    target: "project.frontend"
+    evidence: "frontend/src/lib/cachedFetch.ts"
+    confidence: "observed"
+tags:
+  - "runtime-cache"
+last_verified:
+  commit: "working-tree"
+  inventory_hash: "83351c7297d615e6dd0b01b2a080abab4caebe90df6ec1748fcae0c72092b683"
+---
+
+## Question Answered
+
+What does `runtime.frontend.request-cache` represent in ClinicOS?
+
+## Canonical Definition
+
+runtime.frontend.request-cache is the canonical runtime-cache named Frontend GET request cache.
+
+## Inputs
+
+Inputs are defined by the cited composition, contract, configuration, or governance sources.
+
+## Outputs
+
+Browser request helper deduplicates in-flight GET calls and caches responses for a bounded TTL.
+
+## Dependencies
+
+Owning knowledge target: `project.frontend`.
+
+## Side Effects
+
+Stores process-local browser cache entries and invalidates them by URL prefix.
+
+## Consumers
+
+Runtime components, operators, delivery automation, and future autonomous agents.
+
+## Invariants
+
+Executable sources listed in Evidence are authoritative over lower-precedence narrative claims.
+
+## Failure Modes
+
+Failure behavior is inherited from the cited runtime, integration, configuration, or gate implementation.
+
+## Evidence
+
+- `frontend/src/lib/cachedFetch.ts`
+
+## Related Knowledge
+
+- `belongs-to` → `project.frontend`

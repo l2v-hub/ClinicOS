@@ -20,7 +20,10 @@ function projectRecords(repoRoot, inventory) {
   for (const record of inventory.filter((candidate) => candidate.pathType === 'file')) {
     if (record.path === 'package.json' || record.path.endsWith('/package.json')) {
       const manifest = readJson(repoRoot, record.path);
-      const name = manifest.name ?? basename(dirname(record.path)) ?? 'repository';
+      const name =
+        record.path === 'package.json'
+          ? (manifest.name ?? 'repository')
+          : basename(dirname(record.path));
       projects.set(name, {
         id: normalizeId(`project/${name}`),
         name,
@@ -242,7 +245,12 @@ function testType(path) {
 
 function testRecords(inventory) {
   return inventory
-    .filter((record) => record.pathType === 'file' && record.classification === 'test-source')
+    .filter(
+      (record) =>
+        record.pathType === 'file' &&
+        record.classification === 'test-source' &&
+        !record.path.startsWith('docs/nhw/'),
+    )
     .map((record) => ({
       id: normalizeId(`test/repository/${record.path}`),
       path: record.path,
@@ -258,7 +266,7 @@ function testRecords(inventory) {
 
 function requirementRecords(inventory) {
   return inventory
-    .filter((record) => record.pathType === 'file')
+    .filter((record) => record.pathType === 'file' && !record.path.startsWith('docs/nhw/'))
     .map((record) => {
       const match = record.path.match(/(?:^|\/)(REQ-\d+)[^/]*\.md$/i);
       if (!match) return null;
