@@ -98,20 +98,60 @@ class TestRunner(unittest.TestCase):
         self.assertIn("prebuilt-layout:analyze", seen["analyze_url"])
         self.assertNotIn("//documentintelligence", seen["analyze_url"].replace("https://", ""))
 
-    def test_piu_documenti_concatenati_in_ordine(self):
-        pages = iter(["## PAGINA UNO", "## PAGINA DUE"])
+    def test_piu_documenti_concatenati_nell_ordine_di_partenza(self):
+        # Le pagine vengono analizzate in parallelo: l'ordine di completamento NON e' quello
+        # di partenza, ma il testo finale deve rispettare l'ordine deciso dall'operatore —
+        # da esso dipende la continuita' fra Anamnesi, Decorso e Terapia.
+        # La finta risposta e' scelta in base al contenuto della richiesta, non alla sequenza
+        # delle chiamate: con l'esecuzione concorrente un iteratore condiviso sarebbe instabile.
+        import base64 as _b64
+        contenuti = {"a": "## PAGINA UNO", "b": "## PAGINA DUE"}
+        operazioni: dict[str, str] = {}
 
         def fake(req, timeout=None):
             if ":analyze" in req.full_url:
-                return _Resp(b"", {"Operation-Location": "https://example/op/x"})
+                dati = json.loads(req.data.decode())["base64Source"]
+                chiave = _b64.b64decode(dati).decode()
+                op = f"https://example/op/{chiave}"
+                operazioni[op] = contenuti[chiave]
+                return _Resp(b"", {"Operation-Location": op})
             return _Resp(json.dumps({"status": "succeeded",
-                                     "analyzeResult": {"content": next(pages)}}).encode())
+                                     "analyzeResult": {
+                                         "content": operazioni[req.full_url]}}).encode())
 
         out = self._run(fake, [
             Attachment(filename="a.jpg", mime_type="image/jpeg", data=b"a"),
             Attachment(filename="b.jpg", mime_type="image/jpeg", data=b"b"),
         ])
         self.assertLess(out.index("PAGINA UNO"), out.index("PAGINA DUE"))
+
+    def test_pagine_analizzate_in_parallelo(self):
+        # Il guadagno di tempo esiste solo se le analisi si sovrappongono davvero: verifichiamo
+        # che piu' richieste siano in volo insieme, non che il tempo totale scenda (sarebbe
+        # una misura fragile).
+        import threading
+        stato = {"in_volo": 0, "massimo": 0}
+        lock = threading.Lock()
+        via = threading.Event()
+
+        def fake(req, timeout=None):
+            if ":analyze" in req.full_url:
+                with lock:
+                    stato["in_volo"] += 1
+                    stato["massimo"] = max(stato["massimo"], stato["in_volo"])
+                # attende che tutte le pagine siano partite (o scade, per non bloccare il test)
+                via.wait(timeout=2.0)
+                with lock:
+                    stato["in_volo"] -= 1
+                return _Resp(b"", {"Operation-Location": "https://example/op/1"})
+            return _Resp(json.dumps({"status": "succeeded",
+                                     "analyzeResult": {"content": "x"}}).encode())
+
+        atts = [Attachment(filename=f"p{i}.jpg", mime_type="image/jpeg", data=bytes([i]))
+                for i in range(3)]
+        threading.Timer(0.4, via.set).start()
+        self._run(fake, atts)
+        self.assertGreater(stato["massimo"], 1, "le pagine devono essere analizzate in parallelo")
 
     def test_analisi_fallita_e_errore_provider(self):
         def fake(req, timeout=None):

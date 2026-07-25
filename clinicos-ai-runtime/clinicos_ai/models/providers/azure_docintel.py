@@ -33,6 +33,9 @@ from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
 
 API_VERSION = "2024-11-30"
+# Analisi in volo contemporaneamente. Oltre questa soglia il servizio inizia a rispondere 429
+# e il parallelismo si trasforma in ritardo. Regolabile senza rilascio.
+_MAX_PARALLEL_PAGES = max(1, int(os.environ.get("AZURE_DOCINTEL_MAX_PARALLEL") or 4))
 
 
 def _endpoint_and_key() -> tuple[str, str]:
@@ -91,18 +94,22 @@ class _DocIntelRunner:
             return ""
         endpoint, key = _endpoint_and_key()
 
-        def _call() -> str:
-            # Un'analisi per documento, nell'ordine deciso dall'operatore: la continuita' fra
-            # le pagine (Anamnesi/Decorso/Terapia) dipende da quell'ordine.
-            parts: list[str] = []
-            for att in attachments:
-                parts.append(self._analyze_one(att, endpoint, key))
-            return "\n\n".join(p for p in parts if p.strip())
+        # Le pagine sono indipendenti: analizzarle in PARALLELO fa scendere il tempo totale da
+        # "somma delle pagine" a "pagina piu' lenta". Il numero di analisi in volo e' limitato
+        # per non farsi throttlare dal servizio (429) su import corposi.
+        sem = asyncio.Semaphore(_MAX_PARALLEL_PAGES)
+
+        async def _one(att: Attachment) -> str:
+            async with sem:
+                return await asyncio.to_thread(self._analyze_one, att, endpoint, key)
 
         try:
-            # Margine oltre il timeout per-chiamata: qui le analisi sono in sequenza.
-            budget = self._timeout * max(1, len(attachments)) + 30
-            return await asyncio.wait_for(asyncio.to_thread(_call), timeout=budget)
+            # gather preserva l'ORDINE degli allegati, che e' quello deciso dall'operatore: la
+            # continuita' fra le pagine (Anamnesi/Decorso/Terapia) dipende da quell'ordine.
+            budget = self._timeout * 2 + 30
+            parts = await asyncio.wait_for(
+                asyncio.gather(*(_one(a) for a in attachments)), timeout=budget)
+            return "\n\n".join(p for p in parts if p.strip())
         except RuntimeError_:
             raise
         except asyncio.TimeoutError as ex:
