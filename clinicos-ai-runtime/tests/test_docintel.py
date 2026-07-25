@@ -103,6 +103,25 @@ class TestPuliziaMarkdown(unittest.TestCase):
         self.assertEqual(righe[0], 'Terapia Domiciliare Consigliata')
         self.assertIn("CORDARONE 200 MG", pulito)
 
+    def test_i_tag_che_valgono_un_a_capo_diventano_un_a_capo(self):
+        # Cancellandoli e basta le parole si incollano ("a riposoPA 125/75 mmHgApiretico") e
+        # il documento perde le righe: senza righe non ci sono titoli di sezione, e la
+        # terapia smette di essere riconosciuta. Osservato su un referto reale.
+        from clinicos_ai.models.providers.azure_docintel import pulisci_markdown
+
+        pulito = pulisci_markdown("a riposo<br>PA 125/75 mmHg<br/>Apiretico")
+        self.assertEqual(pulito.split("\n"), ["a riposo", "PA 125/75 mmHg", "Apiretico"])
+        self.assertNotIn("riposoPA", pulito)
+
+    def test_un_titolo_seguito_da_a_capo_resta_riga_a_se(self):
+        from clinicos_ai.models.providers.azure_docintel import pulisci_markdown
+
+        pulito = pulisci_markdown(
+            "<td>Terapia Domiciliare Consigliata<br>CORDARONE 200 MG</td>"
+        )
+        righe = [r for r in pulito.split("\n") if r.strip()]
+        self.assertIn("Terapia Domiciliare Consigliata", righe)
+
     def test_i_numeri_di_pagina_restano_rumore_da_togliere(self):
         from clinicos_ai.models.providers.azure_docintel import pulisci_markdown
 

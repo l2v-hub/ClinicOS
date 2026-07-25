@@ -51,6 +51,11 @@ _NUMERO_PAGINA = re.compile(r'<!--\s*PageNumber=".*?"\s*-->', re.S)
 _COMMENTI = re.compile(r"<!--.*?-->", re.S)
 _FINE_CELLA = re.compile(r"</t[dh]>", re.I)
 _FINE_RIGA = re.compile(r"</tr>", re.I)
+# I tag che nel documento valgono un A CAPO devono diventare un a capo, non sparire: se si
+# cancellano e basta, le parole si incollano ("...a riposoPA 125/75 mmHgApiretico") e il
+# documento smette di avere righe. Con le righe si perdono i titoli di sezione, e con essi
+# la terapia — osservato su un referto reale.
+_A_CAPO = re.compile(r"<br\s*/?>|</p>|</div>|</li>|</h[1-6]>", re.I)
 _TAG = re.compile(r"<[^>]+>")
 _TROPPE_RIGHE = re.compile(r"\n{3,}")
 
@@ -59,6 +64,7 @@ def pulisci_markdown(testo: str) -> str:
     t = _NUMERO_PAGINA.sub("", testo or "")
     t = _INTESTAZIONE.sub(lambda m: "\n" + m.group(1).strip() + "\n", t)
     t = _COMMENTI.sub("", t)
+    t = _A_CAPO.sub("\n", t)
     t = _FINE_CELLA.sub(" | ", t)
     t = _FINE_RIGA.sub("\n", t)
     t = _TAG.sub("", t)
