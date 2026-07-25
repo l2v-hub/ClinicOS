@@ -190,10 +190,12 @@ async function runtimeCreateJob(
 }
 
 /** POST /v1/document-jobs/:id/run — trigger async processing */
-async function runtimeRunJob(runtimeJobId: string): Promise<void> {
+// `mode` sceglie il RUOLO che esegue il job lato runtime: 'extraction' usa il modello di
+// estrazione, 'ocr' il motore di layout (Document Intelligence), che restituisce markdown.
+async function runtimeRunJob(runtimeJobId: string, mode: 'extraction' | 'ocr' = 'extraction') {
   const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}/run`, {
     method: 'POST',
-    body: JSON.stringify({ mode: 'extraction' }),
+    body: JSON.stringify({ mode }),
   });
   if (!res.ok && res.status !== 202) {
     const text = await res.text().catch(() => '');
@@ -293,7 +295,10 @@ async function runtimeTranscribe(
   documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
 ): Promise<string> {
   const rid = await runtimeCreateJob(jobId, documents, TRANSCRIBE_SCHEMA, TRANSCRIBE_PROMPT);
-  await runtimeRunJob(rid);
+  // Ruolo 'ocr': se e' configurato un motore di layout produce markdown con le intestazioni
+  // e una riga per voce (elenchi di terapia inclusi); se il ruolo 'ocr' punta a un modello di
+  // chat il prompt qui sopra continua a valere e il comportamento resta quello di prima.
+  await runtimeRunJob(rid, 'ocr');
   const deadline = Date.now() + 10 * 60 * 1000;
   while (Date.now() < deadline) {
     await new Promise((r) => setTimeout(r, 3000));

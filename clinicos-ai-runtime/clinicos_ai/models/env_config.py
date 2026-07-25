@@ -19,7 +19,14 @@ from .spec import ModelSpec, SUPPORTED_PROVIDERS
 
 # Alias env-friendly → provider interno del runtime. 'azure-openai' è il valore che imposta il
 # committente su Railway; il codice non deve conoscere il nome del deployment, solo leggerlo.
-PROVIDER_ALIASES = {"azure-openai": "azure", "openai-azure": "azure"}
+PROVIDER_ALIASES = {
+    "azure-openai": "azure",
+    "openai-azure": "azure",
+    # OCR con analisi di layout (ex ruolo di Mistral Document AI). Gli alias sono i nomi
+    # leggibili che il committente imposta su Railway; il codice usa 'azure-docintel'.
+    "azure-document-intelligence": "azure-docintel",
+    "document-intelligence": "azure-docintel",
+}
 
 
 def normalize_provider(provider: str) -> str:
@@ -202,6 +209,7 @@ def safe_config_summary(env: Mapping[str, str]) -> list[str]:
 # mai il valore. Duplicato locale (evita import circolare con registry.py).
 _AGNOS_CREDENTIAL_ENV: dict[str, tuple[str, ...]] = {
     "azure": ("AZURE_OPENAI_API_KEY",),
+    "azure-docintel": ("AZURE_DOCINTEL_API_KEY", "AZURE_OPENAI_API_KEY"),
     "google": ("GOOGLE_API_KEY", "GEMINI_API_KEY"),
     "openai": ("OPENAI_API_KEY",),
     "anthropic": ("ANTHROPIC_API_KEY",),

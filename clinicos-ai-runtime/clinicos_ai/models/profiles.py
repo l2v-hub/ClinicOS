@@ -38,6 +38,15 @@ def capabilities_for(spec: ModelSpec) -> ModelCapabilities:
             streaming=True, async_execution=True,
         )
 
+    if p == "azure-docintel":
+        # OCR con analisi di layout: PDF e immagini nativi, restituisce markdown.
+        # Non e' un modello di chat — niente tool calling, niente structured output.
+        return ModelCapabilities(
+            text_input=True, image_input=True, pdf_input=True, file_upload=True,
+            json_mode=False, native_structured_output=False, tool_calling=False,
+            streaming=False, async_execution=True,
+        )
+
     if p == "mistral":
         # Mistral Document AI (OCR): native PDF + image, returns markdown + structured
         # annotation via JSON Schema. No tool-calling needed for the OCR pipeline.

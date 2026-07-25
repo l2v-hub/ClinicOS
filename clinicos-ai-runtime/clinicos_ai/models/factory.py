@@ -24,6 +24,7 @@ _PROVIDER_MODULES: dict[str, str] = {
     "openai": "clinicos_ai.models.providers.openai",
     "anthropic": "clinicos_ai.models.providers.anthropic",
     "azure": "clinicos_ai.models.providers.azure",
+    "azure-docintel": "clinicos_ai.models.providers.azure_docintel",
     "openai-like": "clinicos_ai.models.providers.openai_like",
     "mistral": "clinicos_ai.models.providers.mistral",
 }
