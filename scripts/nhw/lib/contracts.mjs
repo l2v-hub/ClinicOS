@@ -51,6 +51,7 @@ const SEMANTIC_ROOTS = new Set([
 /**
  * @typedef {object} InventoryRecord
  * @property {string} path
+ * @property {'file'|'directory'|'symlink'} pathType
  * @property {string} extension
  * @property {number} bytes
  * @property {string|null} sha256
