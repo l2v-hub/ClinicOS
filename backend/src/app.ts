@@ -20,6 +20,7 @@ import assistantPublicRouter from './routes/ai-assistant-public.js';
 import voiceRouter from './routes/ai-voice.js';
 import aiActionsRouter from './routes/ai-actions.js';
 import aiAuditRouter from './routes/ai-audit.js';
+import farmaciRouter from './routes/farmaci.js';
 
 const app = express();
 
@@ -93,6 +94,8 @@ app.use('/patient-intake', patientIntakeRouter);
 app.use('/consegne', consegneRouter);
 // Fase 1b: real operator CRUD for the admin "Gestione Operatori" screen.
 app.use('/operators', operatorsRouter);
+// Anagrafica farmaci AIFA (pubblica, nessun dato di paziente): stato, ricerca, ricaricamento.
+app.use('/farmaci', farmaciRouter);
 app.use('/notes', noteRouter);
 app.use('/intake/drafts', intakeDraftsRouter);
 app.use('/ai/extraction/jobs', aiJobsRouter);
