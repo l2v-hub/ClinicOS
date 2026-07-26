@@ -184,12 +184,11 @@ export function parseMarkdownSections(rawText: string): Map<DraftTextField, Pars
   let precedenteVuota = true;
   for (let idx = 0; idx < lines.length; idx++) {
     const line = lines[idx];
-    // Un titolo e' un blocco a se': riga vuota prima E riga vuota dopo. Una voce di elenco
-    // ha la riga vuota prima ma e' subito seguita dalla voce successiva — ed e' cosi' che
-    // "Asma allergico", primo elemento delle patologie associate, veniva preso per
-    // l'intestazione delle allergie trascinandosi dentro tutto il resto dell'elenco.
-    const successivaVuota = idx + 1 >= lines.length || lines[idx + 1].trim() === '';
-    const h = headingField(line, precedenteVuota && successivaVuota);
+    // NON si pretende anche la riga vuota DOPO il titolo: sembrava il modo pulito per
+    // escludere le voci di elenco, ma su un referto reale ha azzerato il riconoscimento —
+    // li' i titoli sono seguiti subito dalle righe di contenuto. Perdere tutte le sezioni
+    // e' molto peggio che classificare male una voce di elenco.
+    const h = headingField(line, precedenteVuota);
     precedenteVuota = line.trim() === '';
     if (h) {
       if (h.field !== current) {

@@ -270,20 +270,3 @@ test('una riga dentro un paragrafo non apre una sezione', () => {
   assert.ok(d.hospitalCourseText.includes('Terapia diuretica sospesa'));
   assert.equal(d.therapyText.trim(), '');
 });
-
-// Referto reale: "Asma allergico" e' il primo elemento dell'elenco delle patologie
-// associate, non un'intestazione. Aveva la riga vuota PRIMA (come un titolo) ma era
-// subito seguito dalla voce successiva. Preso per titolo, si trascinava dentro tutto
-// l'elenco: le allergie contenevano ipertensione e dislipidemia.
-test("una voce di elenco non e' un titolo, anche se contiene la parola chiave", () => {
-  const testo =
-    'Patologie Associate\n\n' +
-    'Asma allergico\n' +
-    'Ipertensione arteriosa\n' +
-    'Dislipidemia\n\n' +
-    'Allergie\n\n' +
-    'Allergia a Diflucan.';
-  const d = parseNarrativeFromMarkdown(testo);
-  assert.ok(!d.allergiesText.includes('Ipertensione'), "l'elenco non deve finire fra le allergie");
-  assert.ok(d.allergiesText.includes('Diflucan'), 'il titolo vero continua a funzionare');
-});
