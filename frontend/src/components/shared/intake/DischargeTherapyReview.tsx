@@ -27,7 +27,9 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
   // row on every render would be lossy (row ⇄ form is not a perfect round-trip).
   const [forms, setForms] = useState<TherapyFormValue[]>(() => rows.map(dischargeRowToTherapyForm));
 
-  // Re-seed only if the row count changes from outside (rows are never added/removed here).
+  // Re-seed only if the row count changes from OUTSIDE. Una rimozione fatta qui aggiorna
+  // insieme forms e rows, quindi al render successivo le lunghezze coincidono e le modifiche
+  // gia' apportate alle altre righe non vengono perse.
   useEffect(() => {
     setForms((prev) => (prev.length === rows.length ? prev : rows.map(dischargeRowToTherapyForm)));
   }, [rows]);
@@ -35,6 +37,14 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
   function updateForm(i: number, next: TherapyFormValue) {
     setForms((prev) => prev.map((f, idx) => (idx === i ? next : f)));
     onChange(rows.map((r, idx) => (idx === i ? therapyFormToDischargeRow(next, r) : r)));
+  }
+
+  // L'estrazione propone anche farmaci che non vanno riportati nella terapia del paziente
+  // (sospesi durante il ricovero, citati nell'anamnesi, letti male). Potendoli solo correggere
+  // l'operatore sarebbe costretto a salvarli comunque: qui si eliminano.
+  function rimuoviRiga(i: number) {
+    setForms((prev) => prev.filter((_, idx) => idx !== i));
+    onChange(rows.filter((_, idx) => idx !== i));
   }
 
   if (!Array.isArray(rows) || rows.length === 0) return null;
@@ -74,6 +84,16 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
             ) : (
               <span className="discharge-therapy-review__badge is-ok">ok</span>
             )}
+            <button
+              type="button"
+              className="icon-btn icon-btn--sm icon-btn--danger"
+              data-testid="discharge-therapy-remove"
+              onClick={() => rimuoviRiga(i)}
+              title="Non riportare questo farmaco nella terapia"
+              aria-label={`Elimina ${forms[i]?.farmacoNome || r.farmacoNome || 'farmaco'} dalla terapia`}
+            >
+              ✕
+            </button>
           </div>
           {r.originalText && (
             <blockquote
@@ -96,7 +116,8 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
         </article>
       ))}
       <p className="discharge-therapy-review__hint">
-        Le righe verranno salvate nella terapia del paziente alla conferma.
+        Le righe verranno salvate nella terapia del paziente alla conferma. Elimina con ✕ i farmaci
+        che non vanno riportati.
       </p>
     </section>
   );
