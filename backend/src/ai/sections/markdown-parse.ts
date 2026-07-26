@@ -182,8 +182,14 @@ export function parseMarkdownSections(rawText: string): Map<DraftTextField, Pars
   // "Titolo, poi le righe, poi un blocco vuoto": una riga vuota (o l'inizio del documento)
   // e' cio' che rende una riga candidata a essere un titolo.
   let precedenteVuota = true;
-  for (const line of lines) {
-    const h = headingField(line, precedenteVuota);
+  for (let idx = 0; idx < lines.length; idx++) {
+    const line = lines[idx];
+    // Un titolo e' un blocco a se': riga vuota prima E riga vuota dopo. Una voce di elenco
+    // ha la riga vuota prima ma e' subito seguita dalla voce successiva — ed e' cosi' che
+    // "Asma allergico", primo elemento delle patologie associate, veniva preso per
+    // l'intestazione delle allergie trascinandosi dentro tutto il resto dell'elenco.
+    const successivaVuota = idx + 1 >= lines.length || lines[idx + 1].trim() === '';
+    const h = headingField(line, precedenteVuota && successivaVuota);
     precedenteVuota = line.trim() === '';
     if (h) {
       if (h.field !== current) {
