@@ -110,7 +110,16 @@ const MD_HEADING = /^\s{0,3}#{1,6}\s+(.+?)\s*$/;
 // (diagnosi e terapia farmacologica devono restare separate).
 const THERAPY_LABEL = /^(terapi[ae][^:\n]{0,60}|t\.?d\.?)\s*:/i;
 
-function headingField(line: string): { field: DraftTextField; heading: string } | null {
+// Quanto lontano dall'inizio del titolo puo' stare la parola chiave della sezione.
+// "Allergie" apre il titolo; in "DUBBIA REAZIONE ALLERGICA AL CEFTAZIDIME" la parola
+// compare a meta' frase perche' e' CONTENUTO clinico, non un'etichetta di sezione — ed e'
+// cosi' che la diagnosi finiva archiviata sotto le allergie.
+const APERTURA_TITOLO = 12;
+
+function headingField(
+  line: string,
+  isolata: boolean,
+): { field: DraftTextField; heading: string } | null {
   const trimmed = line.trim();
   if (!trimmed) return null;
   const tl = THERAPY_LABEL.exec(trimmed);
@@ -120,32 +129,28 @@ function headingField(line: string): { field: DraftTextField; heading: string } 
   if (md) {
     headingText = md[1].trim();
   } else {
-    // Plain title line: short, optionally ending with ':' (no sentence punctuation inside).
+    // Un titolo, in un referto, si riconosce dalla STRUTTURA: sta su una riga propria,
+    // staccata dal blocco precedente, ed e' seguito dalle righe di contenuto. Il maiuscolo
+    // non e' un criterio affidabile — una diagnosi scritta tutta in maiuscolo NON e' un
+    // titolo, e trattarla come tale faceva finire l'intera diagnosi sotto le allergie.
+    // Una riga che sta dentro un paragrafo non puo' essere un titolo, qualunque sia il caso.
+    if (!isolata) return null;
     const t = trimmed.replace(/:\s*$/, '');
-    // Titolo in Maiuscolo Iniziale, es. "Terapia Domiciliare Consigliata": forma comune
-    // nelle lettere di dimissione italiane. Senza questo caso la sezione veniva ignorata e
-    // l'intera terapia finiva nel calderone della sezione precedente — osservato su un
-    // referto reale: 20.000 caratteri in PRESTAZIONI_E_INTERVENTI e Terapia vuota.
-    // Si richiede che ogni parola significativa inizi per maiuscola (le paroline di raccordo
-    // restano minuscole), cosi' una frase di contenuto non viene scambiata per un titolo.
     const parole = t.split(/\s+/).filter(Boolean);
-    const RACCORDI =
-      /^(di|de|del|della|dei|delle|e|ed|a|al|alla|ai|con|per|in|su|da|dal|il|lo|la|i|gli|le|un|una)$/i;
-    const maiuscoloIniziale =
-      parole.length > 0 &&
-      parole.length <= 6 &&
-      parole.every((p) => RACCORDI.test(p) || /^[A-ZÀ-Þ]/.test(p));
     const looksTitle =
-      t.length > 0 &&
-      t.length <= 60 &&
-      !/[.!?]/.test(t) &&
-      (/:\s*$/.test(trimmed) || t === t.toUpperCase() || maiuscoloIniziale);
+      t.length > 0 && t.length <= 60 && !/[.!?]/.test(t) && parole.length > 0 && parole.length <= 8;
     if (!looksTitle) return null;
     headingText = t;
   }
   const lower = headingText.toLowerCase().replace(/[:#]/g, '').trim();
   for (const a of ALIASES) {
-    if (a.patterns.some((re) => re.test(lower))) return { field: a.field, heading: headingText };
+    // L'etichetta deve APRIRE il titolo. Se la parola chiave compare a meta' riga e'
+    // contenuto clinico, non un'intestazione.
+    const apre = a.patterns.some((re) => {
+      const m = new RegExp(re.source, re.flags.replace('g', '')).exec(lower);
+      return m !== null && m.index <= APERTURA_TITOLO;
+    });
+    if (apre) return { field: a.field, heading: headingText };
   }
   return null;
 }
@@ -174,8 +179,12 @@ export function parseMarkdownSections(rawText: string): Map<DraftTextField, Pars
     buffer = [];
   };
 
+  // "Titolo, poi le righe, poi un blocco vuoto": una riga vuota (o l'inizio del documento)
+  // e' cio' che rende una riga candidata a essere un titolo.
+  let precedenteVuota = true;
   for (const line of lines) {
-    const h = headingField(line);
+    const h = headingField(line, precedenteVuota);
+    precedenteVuota = line.trim() === '';
     if (h) {
       if (h.field !== current) {
         flush();

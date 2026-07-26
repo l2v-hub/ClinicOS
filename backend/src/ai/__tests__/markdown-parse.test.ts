@@ -239,3 +239,34 @@ test('una frase di contenuto non viene scambiata per intestazione', () => {
   assert.ok(d.anamnesisText.includes('prosegue terapia con ramipril'));
   assert.equal(d.therapyText.trim(), '');
 });
+
+// Referto reale: la diagnosi e' scritta TUTTA IN MAIUSCOLO e contiene la parola "ALLERGICA".
+// Trattando il maiuscolo come indizio di titolo, quella riga diventava un'intestazione
+// "allergie" e da li' in poi l'intero referto finiva archiviato sotto le allergie: la
+// sezione diagnosi restava con 22 caratteri (il solo titolo) e le allergie ne avevano 1.429.
+test('una diagnosi in maiuscolo non e\' un titolo di sezione', () => {
+  const testo =
+    'Diagnosi di Dimissione\n\n' +
+    'DUBBIA REAZIONE ALLERGICA AL CEFTAZIDIME\n' +
+    'IVU DA PSEUDOMONAS A- E PROVIDENCIA STUARTII\n\n' +
+    'Allergie\n\n' +
+    'Allergia a Diflucan.';
+  const d = parseNarrativeFromMarkdown(testo);
+  assert.ok(d.diagnosisText.includes('CEFTAZIDIME'), 'la diagnosi deve restare nella diagnosi');
+  assert.ok(!d.allergiesText.includes('CEFTAZIDIME'), 'e non deve finire fra le allergie');
+  // il titolo vero delle allergie continua a funzionare
+  assert.ok(d.allergiesText.includes('Diflucan'));
+});
+
+// La struttura, non il caso: un titolo sta su una riga propria staccata dal blocco
+// precedente. Una riga dentro un paragrafo non e' un titolo, comunque sia scritta.
+test('una riga dentro un paragrafo non apre una sezione', () => {
+  const testo =
+    'Decorso Ospedaliero\n\n' +
+    'La paziente e\' stata ricoverata in reparto\n' +
+    'Terapia diuretica sospesa\n' +
+    'ed e\' stata dimessa in condizioni stabili';
+  const d = parseNarrativeFromMarkdown(testo);
+  assert.ok(d.hospitalCourseText.includes('Terapia diuretica sospesa'));
+  assert.equal(d.therapyText.trim(), '');
+});
