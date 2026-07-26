@@ -146,8 +146,13 @@ export async function importaAnagraficaFarmaci(
   let righeScritte = 0;
 
   try {
-    await client.$transaction(
-      async (tx) => {
+    // NIENTE transazione unica: su Railway la connessione cade prima della fine
+    // ("Connection terminated unexpectedly") perche' ~320.000 righe la tengono occupata per
+    // minuti. Meglio una finestra breve di anagrafica parziale, con l'esito tracciato in
+    // FarmacoImport e la possibilita' di rilanciare, che un'anagrafica che non si carica mai.
+    await (async () => {
+      {
+        const tx = client;
         // I principi attivi hanno una FK su Farmaco con onDelete: Cascade, quindi basta
         // svuotare Farmaco; l'ordine esplicito rende comunque leggibile l'intenzione.
         await tx.farmacoPrincipioAttivo.deleteMany({});
@@ -204,9 +209,8 @@ export async function importaAnagraficaFarmaci(
           await tx.farmacoPrincipioAttivo.createMany({ data: lottoPa });
           righeScritte += lottoPa.length;
         }
-      },
-      { timeout: 15 * 60 * 1000, maxWait: 30_000 },
-    );
+      }
+    })();
 
     const durataMs = Date.now() - avvio;
     await client.farmacoImport.create({
