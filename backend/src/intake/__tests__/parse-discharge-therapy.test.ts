@@ -218,3 +218,104 @@ test('#296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_ver
   const rows = parseDischargeTherapy(FIXTURE);
   assert.ok(rows.some((r) => r.farmacoNome === 'PEVARYL' && r.stato === 'da_verificare'));
 });
+
+// ── Intestazione = marcatore d'inizio elenco (non un farmaco) ────────────────
+// La riga "Terapia / Tp domiciliare o similare" annuncia l'elenco: non deve mai diventare
+// una riga farmaco. Il riconoscimento è strutturale, non una lista chiusa di varianti.
+
+const INTESTAZIONI = [
+  'Terapia:',
+  'Terapia domiciliare',
+  'Tp Domiciliare',
+  'TERAPIA ALLA DIMISSIONE:',
+  'Terapia consigliata:',
+  'Terapia farmacologica alla dimissione:',
+  'TD:',
+  'T.D.:',
+  '## Terapia domiciliare',
+  '**Terapia:**',
+  '- Terapia domiciliare:',
+];
+
+test('AC1: ogni variante di intestazione non genera una riga farmaco', () => {
+  for (const intestazione of INTESTAZIONI) {
+    const rows = parseDischargeTherapy(
+      [intestazione, 'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00'].join('\n'),
+    );
+    assert.equal(rows.length, 1, `intestazione non riconosciuta: ${intestazione}`);
+    assert.equal(rows[0].farmacoNome, 'KEPPRA', `intestazione non riconosciuta: ${intestazione}`);
+  }
+});
+
+test("AC1: l'intestazione non interrompe l'elenco che la segue", () => {
+  const rows = parseDischargeTherapy(['TERAPIA ALLA DIMISSIONE:', FIXTURE].join('\n'));
+  assert.equal(rows.length, 10);
+  assert.ok(!rows.some((r) => r.farmacoNome === 'TERAPIA'));
+});
+
+test('AC2: una riga che prescrive resta un farmaco anche se inizia per "Terapia"', () => {
+  const conDose = parseDischargeTherapy('Terapia con Ramipril 5 mg 1 cpr per os');
+  assert.equal(conDose.length, 1);
+  assert.equal(conDose[0].farmacoNome, 'RAMIPRIL');
+
+  // Nessun segnale strutturale MA nessun due punti e parole non-qualificatore: è un farmaco.
+  const senzaDose = parseDischargeTherapy('Terapia con Ramipril per os');
+  assert.equal(senzaDose.length, 1);
+  assert.equal(senzaDose[0].farmacoNome, 'RAMIPRIL');
+});
+
+test('AC2: una riga di prosa clinica che nomina la terapia non viene scartata', () => {
+  const rows = parseDischargeTherapy('Terapia antibiotica proseguita per sette giorni in reparto');
+  assert.equal(rows.length, 1, 'la riga non deve sparire silenziosamente');
+});
+
+// ── Note = tutto ciò che non si riesce a collocare ───────────────────────────
+
+test('AC3: la forma non assorbe la riga; il resto finisce in note e la riga è da verificare', () => {
+  const r = parseTherapyLine('PEVARYL POLVERE INGUINE SN X 1 AL DI');
+  assert.equal(r.farmacoNome, 'PEVARYL');
+  assert.ok(
+    r.forma.split(/\s+/).filter(Boolean).length <= 3,
+    `forma troppo lunga: "${r.forma}" — deve smettere di fare da discarica`,
+  );
+  assert.ok(r.note.length > 0, 'il testo non collocato deve arrivare in note');
+  assert.match(r.note, /1 AL DI/i);
+  assert.equal(r.stato, 'da_verificare');
+  assert.equal(r.originalText, 'PEVARYL POLVERE INGUINE SN X 1 AL DI');
+});
+
+test('AC4: la via riconosciuta a parole non resta duplicata in note', () => {
+  const r = parseTherapyLine('Ramipril 5 mg 1 compressa al giorno per os');
+  assert.equal(r.viaSomministrazione, 'OS');
+  assert.doesNotMatch(r.note, /per\s+os/i);
+  assert.equal(r.stato, 'ok');
+});
+
+test('AC4: note non ripete il nome del farmaco né i campi già mappati', () => {
+  const r = parseTherapyLine(
+    'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00 e alle 20:00 dal 03/07/2026 (Classe A)',
+  );
+  assert.equal(r.note, '', 'una riga completamente mappata non lascia residuo');
+});
+
+test('AC4: un nome farmaco con caratteri speciali non rompe la pulizia di note', () => {
+  const r = parseTherapyLine('VIT.D3 BS 1GR/880UI (OS) 1 Dosi ore 08:00');
+  assert.equal(r.farmacoNome, 'VIT.D3');
+  assert.doesNotMatch(r.note, /VIT\.D3/i);
+});
+
+test('AC4: una posologia in lettere resta in note senza declassare una riga completa', () => {
+  const r = parseTherapyLine('Pantoprazolo 20 mg 1 cp al mattino per os');
+  assert.match(r.note, /al mattino/i);
+  assert.equal(r.stato, 'ok', 'con dosaggio + quantità + via la riga resta valida');
+});
+
+test('AC4: un numero non collocato porta la riga a da_verificare', () => {
+  // 67G/100ML e' una concentrazione che nessun campo strutturato ha raccolto: l'operatore
+  // deve vederla, perche' un numero perso in una prescrizione e' clinicamente rilevante.
+  const r = parseTherapyLine(
+    'LATTULAC*SCIR 200ML 67G/100ML (OS) 1 Dosi ore 08:00 dal 03/07/2026 (Classe )',
+  );
+  assert.match(r.note, /67G\/100ML/i);
+  assert.equal(r.stato, 'da_verificare');
+});
