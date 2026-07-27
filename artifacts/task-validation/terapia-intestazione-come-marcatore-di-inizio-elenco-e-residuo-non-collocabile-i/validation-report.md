@@ -4,7 +4,7 @@
 
 - Title: Terapia: intestazione come marcatore di inizio elenco e residuo non collocabile in Note
 - Slug: terapia-intestazione-come-marcatore-di-inizio-elenco-e-residuo-non-collocabile-i
-- Commit: (working tree, branch `fix/import-azure-gpt55-swap`) — vedi "Residual Risks"
+- Commit: `ce937ee2` su `feat/terapia-parser-intestazione-note` (base `origin/main` `92f585b7`)
 - Date: 2026-07-27
 
 ## Implementation Summary
