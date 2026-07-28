@@ -18,8 +18,14 @@ import {
   invalidaIndice,
 } from '../services/farmaci/ricerca.js';
 
+// Le rotte in LETTURA sono aperte: servono open data AIFA (licenza CC-BY 4.0), gli stessi gia'
+// pubblici su medicinali.aifa.gov.it, e nessun dato di paziente passa di qui. Tenerle dietro
+// `requireOperator` le rendeva inutilizzabili da `cachedGetJson`, che non allega gli header
+// operatore: le chiamate prendevano 401 e la funzionalita' moriva in silenzio.
+//
+// La SCRITTURA resta protetta: `/ricarica` scarica ~82 MB di CSV e sostituisce l'intera
+// anagrafica, quindi aperta sarebbe un vettore di abuso verso il backend.
 const farmaciRouter = Router();
-farmaciRouter.use(requireOperator);
 
 const RUOLI_PRIVILEGIATI = new Set(['admin', 'manager']);
 
@@ -87,7 +93,7 @@ farmaciRouter.get('/dosaggi', async (req, res) => {
  * e il download deve partire dalla rete del backend. Riservata ad admin/manager perche'
  * sostituisce l'intera anagrafica.
  */
-farmaciRouter.post('/ricarica', async (req: AuthedRequest, res) => {
+farmaciRouter.post('/ricarica', requireOperator, async (req: AuthedRequest, res) => {
   if (!RUOLI_PRIVILEGIATI.has(req.operator!.role)) {
     return res.status(403).json({ error: 'Ricaricamento riservato ai ruoli admin/manager' });
   }
