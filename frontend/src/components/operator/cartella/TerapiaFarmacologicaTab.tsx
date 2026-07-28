@@ -15,6 +15,7 @@ import {
 } from './therapyDose';
 import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import { useDocumentiFarmaco, chiaveFarmaco, etichettaDocumento } from './farmacoRiferimento';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -476,6 +477,48 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     { id: 'sospese', label: 'Sospese/concluse', count: inattive.length },
   ];
 
+  // Documenti ufficiali AIFA dei farmaci in terapia. L'operatore verifica la posologia sulla
+  // fonte autorevole senza uscire dall'applicazione; ClinicOS non interpreta nulla.
+  const documentiFarmaco = useDocumentiFarmaco(therapies.map((t) => t.farmacoNome));
+
+  /** Nome del farmaco, con il link al documento AIFA quando il farmaco e' in anagrafica.
+   *  Se non lo e' — galenico, estero, nome storpiato — la cella resta come prima. */
+  const renderFarmaco = (v: string) => {
+    const doc = documentiFarmaco.get(chiaveFarmaco(v));
+    return (
+      <span style={{ fontWeight: 600 }}>
+        {v}
+        {doc && (
+          <a
+            className="icon-btn icon-btn--sm"
+            href={doc.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={etichettaDocumento(doc)}
+            aria-label={etichettaDocumento(doc)}
+            style={{ marginLeft: 6, verticalAlign: 'middle' }}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <path d="M14 2v6h6" />
+              <path d="M8 13h8M8 17h5" />
+            </svg>
+          </a>
+        )}
+      </span>
+    );
+  };
+
   // ── Column definitions ────────────────────────────────────────────────────────
 
   const attiviColumns: ColumnDef<PatientTherapyAPI>[] = [
@@ -485,7 +528,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       sortable: true,
       filterable: true,
       filterType: 'text',
-      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+      render: renderFarmaco,
     },
     { key: 'dosaggio', label: 'Dosaggio', sortable: true },
     { key: 'viaSomministrazione', label: 'Via', sortable: true },
@@ -604,7 +647,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       sortable: true,
       filterable: true,
       filterType: 'text',
-      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+      render: renderFarmaco,
     },
     { key: 'dosaggio', label: 'Dosaggio', sortable: true },
     { key: 'viaSomministrazione', label: 'Via', sortable: true },
@@ -708,7 +751,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       sortable: true,
       filterable: true,
       filterType: 'text',
-      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+      render: renderFarmaco,
     },
     {
       key: 'dosage',
@@ -797,7 +840,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       sortable: true,
       filterable: true,
       filterType: 'text',
-      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+      render: renderFarmaco,
     },
     { key: 'farmacoDose', label: 'Dose' },
     { key: 'farmacoVia', label: 'Via' },
@@ -853,7 +896,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       sortable: true,
       filterable: true,
       filterType: 'text',
-      render: (v: string) => <span style={{ fontWeight: 600 }}>{v}</span>,
+      render: renderFarmaco,
     },
     { key: 'dosaggio', label: 'Dosaggio' },
     { key: 'viaSomministrazione', label: 'Via' },
