@@ -276,6 +276,13 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     dopoNome.search(ROUTE_RE),
     doseM ? dopoNome.indexOf(doseM[0]) : -1,
     qtyM ? dopoNome.indexOf(qtyM[0]) : -1,
+    // Una forma farmaceutica non contiene separatori di elenco: da li' in poi la riga sta
+    // parlando d'altro, tipicamente di un secondo farmaco. Senza questo taglio
+    // "Eutirox, Omeprazolo e Ramipril 1 cpr" finiva con "Omeprazolo" dentro `forma` — un nome
+    // di farmaco nel campo forma e' un dato errato, e il secondo farmaco non compariva in
+    // `note`, dove l'operatore lo cerca. La virgola decimale ("2,5 mg") e' esclusa: fa parte
+    // di un numero, non separa un elenco.
+    dopoNome.search(/[;+]|,(?!\d)/),
   ].filter((i) => i >= 0);
   const taglio = marcatori.length ? Math.min(...marcatori) : dopoNome.length;
   const paroleForma = [...dopoNome.slice(0, taglio).matchAll(/\S+/g)].slice(0, 3);

@@ -310,6 +310,57 @@ test('AC4: una posologia in lettere resta in note senza declassare una riga comp
   assert.equal(r.stato, 'ok', 'con dosaggio + quantità + via la riga resta valida');
 });
 
+// Righe che contengono piu' di un farmaco. Scelta esplicita: NON si spezzano — sbagliare il punto
+// di taglio inventerebbe una prescrizione inesistente. La riga resta una, marcata da_verificare,
+// con il testo del secondo farmaco visibile in `note`.
+const MULTI = [
+  'Ramipril 5 mg 1 cpr ore 08:00, Cardioaspirin 100 mg 1 cpr ore 20:00',
+  'Eutirox 75 mcg 1 cpr al mattino; Omeprazolo 20 mg 1 cps la sera',
+  'Bisoprololo 2,5 mg 1 cpr + Furosemide 25 mg 1/2 cpr',
+  'Eutirox, Omeprazolo e Ramipril 1 cpr al mattino',
+];
+
+test('multi-farmaco AC1: la forma non assorbe il nome del secondo farmaco', () => {
+  const r = parseTherapyLine('Eutirox, Omeprazolo e Ramipril 1 cpr al mattino');
+  assert.equal(r.farmacoNome, 'EUTIROX');
+  assert.doesNotMatch(
+    r.forma,
+    /omeprazolo/i,
+    'un nome di farmaco nel campo forma e un dato errato',
+  );
+  assert.match(r.note, /omeprazolo/i, "l'operatore deve vedere il secondo farmaco nelle note");
+  assert.equal(r.stato, 'da_verificare');
+});
+
+test('multi-farmaco AC2: il secondo farmaco resta leggibile nelle note', () => {
+  const attesi = [/cardioaspirin/i, /omeprazolo/i, /furosemide/i, /omeprazolo/i];
+  MULTI.forEach((riga, i) => {
+    const r = parseTherapyLine(riga);
+    assert.match(r.note, attesi[i], `note incomplete per: ${riga}`);
+    assert.equal(r.stato, 'da_verificare', `la riga va segnalata: ${riga}`);
+    assert.equal(r.originalText, riga, 'il testo originale resta verbatim');
+  });
+});
+
+test('multi-farmaco AC3: nessuno split automatico, una riga in ingresso = una in uscita', () => {
+  for (const riga of MULTI) {
+    assert.equal(parseDischargeTherapy(riga).length, 1, `split inatteso su: ${riga}`);
+  }
+});
+
+test('multi-farmaco AC4: le forme legittime multi-token non regrediscono', () => {
+  const keppra = parseTherapyLine(
+    'KEPPRA CPR RIV 500 MGR (OS) 1 Cpr ore 08:00 e alle 20:00 dal 03/07/2026 (Classe A)',
+  );
+  assert.equal(keppra.forma, 'CPR RIV', 'una forma senza separatori resta intera');
+  assert.equal(keppra.stato, 'ok');
+  const pevaryl = parseTherapyLine('PEVARYL POLVERE INGUINE SN X 1 AL DI');
+  assert.match(pevaryl.forma, /POLVERE/i);
+  // La virgola decimale non e' un separatore di elenco: non deve troncare nulla.
+  const biso = parseTherapyLine('Bisoprololo 2,5 mg 1 cpr');
+  assert.equal(biso.dosaggio, '2,5 mg');
+});
+
 test('AC4: un numero non collocato porta la riga a da_verificare', () => {
   // 67G/100ML e' una concentrazione che nessun campo strutturato ha raccolto: l'operatore
   // deve vederla, perche' un numero perso in una prescrizione e' clinicamente rilevante.
