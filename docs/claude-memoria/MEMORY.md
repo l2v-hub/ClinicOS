@@ -1,0 +1,18 @@
+- [Azure Foundry config](clinicos-azure-foundry-config.md) — Agnos LLM endpoint/api-version/temperature gotchas that silently 404/400
+- [Branch topology](clinicos-branch-topology.md) — prod runs main (has Azure code); local ai/codex-project-stabilization is older/divergent
+- [Evidence workflow](clinicos-evidence-workflow.md) — Codex Gate RETIRED 2026-07-20: internal independent QA subagent gate (QA PASSED → Claude merges/closes); private-repo raw-URL image gotcha
+- [Worktree validation](clinicos-worktree-validation.md) — npm-workspace install dal root + prisma:generate obbligatorio prima dei test
+- [Agent worker permission lockdown](clinicos-agent-worker-permission-lockdown.md) — RESOLVED: scoped allowlist works; claude/codex only via `npm run agent-team:doctor`; single-command Bash only (compounds get split/denied)
+- [Vite prod-fallback CI gotcha](clinicos-vite-prod-fallback-ci-gotcha.md) — prod builds w/o VITE_API_URL silently hit the real Railway backend; CI e2e must set VITE_API_URL (issue #267)
+- [Claude config backup](claude-config-backup.md) — where config snapshots live (~/.claude/backups) + key state (agent teams, statusline, plugins, hooks)
+- [Local DB startup gotcha](clinicos-local-db-startup-gotcha.md) — backend/.env→:5433 e2e DB; Prisma 7 schema has no url so seed via manual psql migration; well-formed cartella shapes or PatientDetail crashes
+- [Mobile responsive gotchas](clinicos-mobile-responsive-gotchas.md) — drawer nav; overflow-x:hidden→overflow-y:auto breaks sticky; patient-chart nested-scroll shell trap; table/form/alert-band mobile fixes
+- [Restyle status + @import token gotcha](clinicos-restyle-tokens-and-import-gotcha.md) — mockup restyle live; misplaced @import at end of App.css → --clinical-card-radius stays 8px not 14px
+- [Deploy mechanics](clinicos-deploy-mechanics.md) — frontend Vercel manual (`vercel deploy --prod`), backend Railway auto on merge; vercel SPA /assets rewrite; auth-wall blocks curl
+- [husky CI gotcha](clinicos-husky-ci-gotcha.md) — root `prepare` must be `husky || exit 0`; bare `husky` breaks CI/prod npm install (Azure/Build 127)
+- [agent-team #263 CLI](clinicos-agent-team-263-cli.md) — agent-team/ in main is CLI-only (npm run agent-team:doctor/status), not a web feature; #263 issue still open (merged w/o Codex QA)
+- [CRUD color convention](clinicos-crud-color-convention.md) — green create/save (.btn-success), blue edit (.icon-btn--edit), red delete (.btn-danger)+ConfirmDialog; live on prod, existing tokens
+- [QA evidence harness gotchas](clinicos-qa-evidence-harness-gotchas.md) — @playwright/test no-save alla root; EV_OUT assoluto o l'output finisce in qa-evidence/; taskkill del tsx orfano su :3001
+- [Batch 278-285 + CF + parser terapie](clinicos-batch-278-285-pr292.md) — CHIUSI 2026-07-20 (PR #292/#293/#295/#297 mergiati+deployati via QA interno); pattern seedManualDraft/syntheticCF; gotcha rtk/MAX_PATH
+- [Git tooling gotchas](clinicos-git-tooling-gotchas.md) — rtk filtra l'output di git (usa `rtk proxy git`); `gh auth switch --user l2v-hub` per pushare; quota staging Azure SWA fa fallire la preview PR
+- [Entra ID auth documenti #260](clinicos-entra-auth-260.md) — CHIUSO (PR #298); prod fail-closed 503 finché AUTH_MODE=entra + ENTRA__/VITE_ENTRA__ non configurati (docs/entra-setup.md); sblocca #277
