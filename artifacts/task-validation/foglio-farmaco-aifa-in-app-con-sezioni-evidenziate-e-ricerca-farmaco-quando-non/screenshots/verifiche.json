@@ -1,0 +1,114 @@
+{
+  "esiti": [
+    {
+      "nome": "AC3: il farmaco assente dall anagrafica e segnalato sulla riga",
+      "ok": true,
+      "dettaglio": "1 indicatori"
+    },
+    {
+      "nome": "AC1: la riga in anagrafica espone l azione documento",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC1: il documento si apre dentro ClinicOS",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC1: nessun file e stato scaricato",
+      "ok": true,
+      "dettaglio": "nessun download"
+    },
+    {
+      "nome": "AC1: il PDF e effettivamente disegnato",
+      "ok": true,
+      "dettaglio": "38225 pixel di testo"
+    },
+    {
+      "nome": "AC2: le sezioni cliniche sono evidenziate",
+      "ok": true,
+      "dettaglio": "30 rettangoli"
+    },
+    {
+      "nome": "AC2: 4.1, 4.2 e 4.3 sono raggiungibili",
+      "ok": true,
+      "dettaglio": "4.1 Indicazioni terapeutiche | 4.2 Posologia e modo di somministrazione | 4.3 Controindicazioni"
+    },
+    {
+      "nome": "AC8: la formulazione mostrata e dichiarata",
+      "ok": true,
+      "dettaglio": "Formulazione riconosciuta dalla prescrizione: TACHIPIRINA 1000 mg compresse."
+    },
+    {
+      "nome": "AC8: le altre formulazioni sono elencate",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC4: la ricerca si apre dalla riga non risolta",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC4: la ricerca per principio attivo trova il farmaco",
+      "ok": true,
+      "dettaglio": "2 esiti"
+    },
+    {
+      "nome": "AC6: nessun identificativo di paziente negli URL verso AIFA",
+      "ok": true,
+      "dettaglio": "1 richieste verso AIFA, 0 sospette"
+    },
+    {
+      "nome": "la riga senza dosaggio espone il documento",
+      "ok": true,
+      "dettaglio": "1 bottoni documento"
+    },
+    {
+      "nome": "AC9: senza formulazione riconoscibile viene chiesto di scegliere",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC9: nessuna sezione e evidenziata finche la formulazione e ambigua",
+      "ok": true,
+      "dettaglio": "0 rettangoli"
+    },
+    {
+      "nome": "AC9: le formulazioni sono elencate per la scelta",
+      "ok": true,
+      "dettaglio": "6 formulazioni"
+    },
+    {
+      "nome": "AC9: dopo la scelta dell operatore le sezioni sono evidenziate",
+      "ok": true,
+      "dettaglio": "30 rettangoli"
+    },
+    {
+      "nome": "AC5: con AIFA giu il messaggio distingue il guasto della fonte",
+      "ok": true,
+      "dettaglio": "La banca dati AIFA non risponde in questo momento. Il documento esiste: è la fonte a non e"
+    },
+    {
+      "nome": "AC5: viene offerto il link diretto come ripiego",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC4: esiste la pagina dedicata all anagrafica farmaci",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC4: la pagina dedicata cerca con lo stesso componente",
+      "ok": true,
+      "dettaglio": "2 esiti"
+    },
+    {
+      "nome": "nessun errore JavaScript inatteso durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

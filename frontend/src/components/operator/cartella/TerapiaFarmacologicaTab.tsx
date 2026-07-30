@@ -15,11 +15,33 @@ import {
 } from './therapyDose';
 import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
-import { useDocumentiFarmaco, chiaveFarmaco, etichettaDocumento } from './farmacoRiferimento';
+import { useRisoluzioniFarmaco, trovaRisoluzione, etichettaDocumento } from './farmacoRiferimento';
+import type { DocumentoFarmaco, FarmacoTrovato } from './farmacoRiferimento';
+import { VisoreDocumentoFarmaco } from './VisoreDocumentoFarmaco';
+import { RicercaFarmacoModal } from './RicercaFarmaco';
+import type { PrescrizioneDaAbbinare } from './farmacoCorrispondenza';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
+
+/**
+ * Dosaggio di una riga, qualunque tabella la produca.
+ *
+ * Le cinque tabelle di questa scheda chiamano il campo in modi diversi — `dosaggio` nelle
+ * terapie, `farmacoDose` nelle somministrazioni — e la cella del farmaco e' la stessa per tutte.
+ * Leggere il primo campo presente costa meno che uniformare cinque modelli di riga per una
+ * colonna, e non richiede di toccare dati che funzionano.
+ */
+function dosaggioDellaRiga(row: unknown): string | null {
+  if (!row || typeof row !== 'object') return null;
+  const campi = row as Record<string, unknown>;
+  for (const chiave of ['dosaggio', 'farmacoDose', 'dose']) {
+    const valore = campi[chiave];
+    if (typeof valore === 'string' && valore.trim()) return valore;
+  }
+  return null;
+}
 
 const STATO_BADGE: Record<string, string> = {
   attiva: 'badge--green',
@@ -479,24 +501,70 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   // Documenti ufficiali AIFA dei farmaci in terapia. L'operatore verifica la posologia sulla
   // fonte autorevole senza uscire dall'applicazione; ClinicOS non interpreta nulla.
-  const documentiFarmaco = useDocumentiFarmaco(therapies.map((t) => t.farmacoNome));
+  const risoluzioni = useRisoluzioniFarmaco(
+    therapies.map((t) => ({
+      farmacoNome: t.farmacoNome,
+      dosaggio: t.dosaggio,
+      viaSomministrazione: t.viaSomministrazione,
+    })),
+  );
 
-  /** Nome del farmaco, con il link al documento AIFA quando il farmaco e' in anagrafica.
-   *  Se non lo e' — galenico, estero, nome storpiato — la cella resta come prima. */
-  const renderFarmaco = (v: string) => {
-    const doc = documentiFarmaco.get(chiaveFarmaco(v));
+  /** Documento aperto nel visore, con la prescrizione che serve a riconoscerne la formulazione. */
+  const [documentoAperto, setDocumentoAperto] = useState<{
+    documento: DocumentoFarmaco;
+    prescrizione: PrescrizioneDaAbbinare;
+  } | null>(null);
+  /** Nome da cui parte la ricerca quando il farmaco non e' in anagrafica. */
+  const [ricercaPer, setRicercaPer] = useState<string | null>(null);
+
+  const apriDocumentoDaRicerca = useCallback(
+    (documento: DocumentoFarmaco, confezione: FarmacoTrovato) => {
+      setRicercaPer(null);
+      // La confezione arriva da una scelta esplicita dell'operatore: la sua forma e' un dato,
+      // non un'ipotesi, quindi puo' guidare l'evidenziazione.
+      setDocumentoAperto({
+        documento,
+        prescrizione: { dosaggio: confezione.descrizione, forma: confezione.forma },
+      });
+    },
+    [],
+  );
+
+  /**
+   * Nome del farmaco, con accanto l'azione giusta per il suo stato in anagrafica.
+   *
+   * Quattro esiti, tutti visibili: documento apribile, farmaco senza documento, farmaco non
+   * trovato, anagrafica che non risponde. La versione precedente li appiattiva in uno —
+   * nessuna icona — lasciando l'operatore senza sapere se il farmaco fosse assente o se fosse
+   * la ricerca a non aver funzionato.
+   */
+  const renderFarmaco = (v: string, row?: unknown) => {
+    const dosaggio = dosaggioDellaRiga(row);
+    const risoluzione = trovaRisoluzione(risoluzioni, v, dosaggio);
     return (
       <span style={{ fontWeight: 600 }}>
         {v}
-        {doc && (
-          <a
+        {risoluzione?.stato === 'trovato' && risoluzione.documento && (
+          <button
+            type="button"
             className="icon-btn icon-btn--sm"
-            href={doc.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            title={etichettaDocumento(doc)}
-            aria-label={etichettaDocumento(doc)}
+            title={etichettaDocumento(risoluzione.documento)}
+            // Il nome accessibile porta la dose prescritta: senza, due righe dello stesso farmaco
+            // a dosaggi diversi esporrebbero due controlli con un nome identico.
+            aria-label={`${etichettaDocumento(risoluzione.documento)} — ${
+              dosaggio ? `dose prescritta ${dosaggio}` : 'dose non specificata'
+            }`}
             style={{ marginLeft: 6, verticalAlign: 'middle' }}
+            onClick={() =>
+              setDocumentoAperto({
+                documento: risoluzione.documento!,
+                prescrizione: {
+                  dosaggio,
+                  // Solo una confezione riconosciuta con certezza porta una forma utilizzabile.
+                  forma: risoluzione.confezione?.forma,
+                },
+              })
+            }
           >
             <svg
               width="14"
@@ -513,7 +581,30 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               <path d="M14 2v6h6" />
               <path d="M8 13h8M8 17h5" />
             </svg>
-          </a>
+          </button>
+        )}
+        {(risoluzione?.stato === 'non-trovato' || risoluzione?.stato === 'senza-documento') && (
+          <button
+            type="button"
+            className="farmaco-non-trovato"
+            onClick={() => setRicercaPer(v)}
+            title={
+              risoluzione.stato === 'non-trovato'
+                ? `«${v}» non risulta in anagrafica AIFA: cerca il farmaco o il principio attivo`
+                : `«${v}» è in anagrafica ma senza documento ufficiale: cerca un'altra confezione`
+            }
+          >
+            {risoluzione.stato === 'non-trovato' ? 'non in anagrafica' : 'senza documento'}
+          </button>
+        )}
+        {risoluzione?.stato === 'fonte-non-disponibile' && (
+          <span
+            className="farmaco-non-trovato"
+            title="L'anagrafica farmaci non ha risposto: non è detto che il farmaco sia assente"
+            style={{ cursor: 'default' }}
+          >
+            anagrafica non raggiungibile
+          </span>
         )}
       </span>
     );
@@ -1154,6 +1245,22 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         onConfirm={() => void confirmDelete()}
         onCancel={() => setPendingDeleteId(null)}
       />
+
+      {documentoAperto && (
+        <VisoreDocumentoFarmaco
+          documento={documentoAperto.documento}
+          prescrizione={documentoAperto.prescrizione}
+          onChiudi={() => setDocumentoAperto(null)}
+        />
+      )}
+
+      {ricercaPer !== null && (
+        <RicercaFarmacoModal
+          nomeIniziale={ricercaPer}
+          onChiudi={() => setRicercaPer(null)}
+          onApriDocumento={apriDocumentoDaRicerca}
+        />
+      )}
     </div>
   );
 }

@@ -40,6 +40,7 @@ import { ConsegnePage } from './components/operator/ConsegnePage';
 import { OperatorAgenda } from './components/operator/OperatorAgenda';
 import { NotesPage } from './components/shared/NotesPage';
 import { MultiPatientParametri } from './components/operator/MultiPatientParametri';
+import { AnagraficaFarmaciPage } from './components/operator/AnagraficaFarmaciPage';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
 import { AgnosPanel } from './components/shared/AgnosPanel';
 
@@ -72,12 +73,14 @@ const NAV_LABELS: Record<NavKey, string> = {
   consegne: 'Consegne',
   'agenda-operatore': 'Agenda',
   'parametri-multipaziente': 'Parametri',
+  'anagrafica-farmaci': 'Anagrafica farmaci',
   'ai-assistant': 'Assistente ClinicOS',
 };
 
 const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
   'dettaglio-paziente': 'pazienti',
   'parametri-multipaziente': 'operator-dashboard',
+  'anagrafica-farmaci': 'operator-dashboard',
   'gestione-operatori': 'admin-dashboard',
   'posti-letto': 'admin-dashboard',
   'orari-operatori': 'admin-dashboard',
@@ -1533,6 +1536,7 @@ export default function App() {
               operatoreRole={utente?.ruolo}
             />
           )}
+          {!isAdmin && navKey === 'anagrafica-farmaci' && <AnagraficaFarmaciPage />}
           {!isAdmin && navKey === 'parametri-multipaziente' && (
             <MultiPatientParametri
               pazienti={pazienti}
