@@ -36,6 +36,8 @@ import { ScalaTinettiTab } from './cartella/ScalaTinettiTab';
 import { DimissioneTab } from './cartella/DimissioneTab';
 import { EsamiConsulenzeTab } from './cartella/EsamiConsulenzeTab';
 import { TopNav } from '../navigation/TopNav';
+import { AvvisoAnomalieFarmaci } from './cartella/AvvisoAnomalieFarmaci';
+import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
 import PatientCompactHeader from './PatientCompactHeader';
 import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
@@ -315,6 +317,9 @@ export function PatientDetail({
     return TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === target))?.id ?? 'panoramica';
   });
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
+  // AC5: anomalie di terapia del paziente. Passa dalla stessa richiesta di reparto che alimenta
+  // la lista pazienti, quindi aprire una cartella non aggiunge chiamate.
+  const anomalieReparto = useAnomalieReparto();
 
   // #243: this component mounts fresh each time the operator opens the patient chart (the
   // caller conditionally renders it), so a ref seeded from `initialTab` on first render lets us
@@ -2520,6 +2525,19 @@ export function PatientDetail({
           )}
         </div>
       )}
+
+      {/* AC5: anomalie di terapia in testa alla cartella, prima della navigazione, cosi' si
+          vedono aprendo il paziente e non solo entrando nella scheda terapia. L'ambito e'
+          dichiarato perche' /therapy-slots copre le sole terapie attive di oggi. */}
+      <AvvisoAnomalieFarmaci
+        esito={anomalieDelPaziente(anomalieReparto, paziente.id)}
+        ambito="terapie attive di oggi"
+        etichettaAzione="Vai alla terapia"
+        onAzione={() => {
+          switchGroup('clinica');
+          switchTab('terapia-farmacologica');
+        }}
+      />
 
       {/* L2 — Navigazione orizzontale principale della pagina */}
       <TopNav

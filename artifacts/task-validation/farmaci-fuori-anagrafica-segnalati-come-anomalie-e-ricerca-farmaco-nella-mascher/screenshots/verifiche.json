@@ -1,0 +1,171 @@
+{
+  "esiti": [
+    {
+      "nome": "AC8: il cruscotto elenca i pazienti con farmaci fuori anagrafica",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC8: elenca il paziente giusto e il farmaco giusto",
+      "ok": true,
+      "dettaglio": "1 paziente con farmaci non in anagrafica — da correggere in terapia | Anselmi BrunoCardiofillina Inventata | 1"
+    },
+    {
+      "nome": "AC9: il paziente in regola non compare nel cruscotto",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC6: la riga del paziente con anomalie espone l indicatore",
+      "ok": true,
+      "dettaglio": "2 indicatori"
+    },
+    {
+      "nome": "AC9: la riga del paziente in regola non ha indicatore",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC11: le anomalie di reparto costano una sola richiesta /therapy-slots",
+      "ok": true,
+      "dettaglio": "therapy-slots=1, therapies per paziente=0"
+    },
+    {
+      "nome": "AC5: la testa della cartella avvisa delle anomalie",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC5: l avviso nomina il farmaco da correggere",
+      "ok": true,
+      "dettaglio": "! |  | Anomalie da sanare su questo paziente — terapie attive di oggi |  | 1 farmaco in terapia non risulta in"
+    },
+    {
+      "nome": "AC5: il collegamento porta alla scheda terapia",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC7: la scheda terapia riepiloga i farmaci non riconosciuti",
+      "ok": true,
+      "dettaglio": "! |  | Anomalie da sanare su questo paziente — tutte le terapie in cartella |  | 1 farmaco in terapia non risu"
+    },
+    {
+      "nome": "AC1: la maschera espone una ricerca, non un campo libero",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC1: la ricerca per nome commerciale trova il farmaco",
+      "ok": true,
+      "dettaglio": "2 esiti"
+    },
+    {
+      "nome": "AC2: la ricerca per principio attivo trova il farmaco",
+      "ok": true,
+      "dettaglio": "2 esiti"
+    },
+    {
+      "nome": "AC1: la selezione compila il nome del farmaco",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC3: la forma farmaceutica è valorizzata dalla selezione",
+      "ok": true,
+      "dettaglio": "forma=\"sciroppo\""
+    },
+    {
+      "nome": "Persistenza: il farmaco selezionato è inviato al backend",
+      "ok": true,
+      "dettaglio": "farmacoNome inviato: TACHIPIRINA"
+    },
+    {
+      "nome": "Persistenza: la forma dedotta dalla confezione è inviata al backend",
+      "ok": true,
+      "dettaglio": "pharmaceuticalForm inviato: sciroppo"
+    },
+    {
+      "nome": "AC4: un nome non in anagrafica richiede un azione esplicita",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC4: il valore digitato resta e viene dichiarato fuori anagrafica",
+      "ok": true,
+      "dettaglio": "Preparato Galenico Xyz |  | Nome libero: non risulta in anagrafica AIFA, comparirà fra le anomalie da sanare |"
+    },
+    {
+      "nome": "AC10: con l anagrafica muta nessuna anomalia viene dichiarata",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ],
+  "richieste": [
+    "GET /patients",
+    "GET /therapy-slots?date=2026-07-30",
+    "GET /appointments",
+    "GET /admin/rooms",
+    "GET /consegne",
+    "GET /operators/schedules",
+    "GET /operators",
+    "GET /notes",
+    "GET /farmaci/cerca?q=CARDIOFILLINA%20INVENTATA&limite=25",
+    "GET /farmaci/cerca?q=TACHIPIRINA&limite=25",
+    "GET /patients/p-anomalo/cartella",
+    "GET /patients/p-pulito/cartella",
+    "GET /ai/extraction/status",
+    "GET /patients/settings",
+    "GET /patients/p-anomalo/cartella",
+    "GET /farmaci/cerca?q=tachipirina&limite=12",
+    "GET /farmaci/cerca?q=paracetamolo&limite=12&pa=1",
+    "GET /farmaci/cerca?q=Preparato%20Galenico%20Xyz&limite=12",
+    "GET /patients",
+    "GET /therapy-slots?date=2026-07-30",
+    "GET /appointments",
+    "GET /admin/rooms",
+    "GET /consegne",
+    "GET /operators/schedules",
+    "GET /operators",
+    "GET /notes",
+    "GET /patients/p-anomalo/cartella",
+    "GET /patients/p-pulito/cartella",
+    "GET /farmaci/cerca?q=CARDIOFILLINA%20INVENTATA&limite=25",
+    "GET /farmaci/cerca?q=TACHIPIRINA&limite=25"
+  ],
+  "terapieSalvate": [
+    {
+      "patientId": "p-anomalo",
+      "farmacoNome": "TACHIPIRINA",
+      "dosaggio": "",
+      "viaSomministrazione": "orale",
+      "tipo": "periodica",
+      "stato": "attiva",
+      "dataInizio": "2026-07-30",
+      "dataFine": null,
+      "commercialStrengthValue": null,
+      "commercialStrengthUnit": "mg",
+      "pharmaceuticalForm": "sciroppo",
+      "allowedFractions": "1",
+      "giorniSettimana": null,
+      "schedules": [
+        {
+          "time": "08:00",
+          "quantityNumerator": 1,
+          "quantityDenominator": 1,
+          "administrationUnit": "compressa"
+        }
+      ],
+      "prescrittore": null,
+      "operatoreInseritore": "Dr. Marco Ferretti",
+      "note": null,
+      "dataSomministrazione": null,
+      "orarioSomministrazione": null
+    }
+  ]
+}

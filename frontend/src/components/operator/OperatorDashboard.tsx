@@ -12,6 +12,9 @@ import {
 } from '../../icons';
 import type { NavKey } from '../../types';
 import { PageHeader } from '../shared/PageHeader';
+import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
+import { useAnomalieReparto } from './cartella/useAnomalieReparto';
+import './cartella/AvvisoAnomalieFarmaci.css';
 
 interface OperatorDashboardProps {
   utente: UtenteApp;
@@ -54,6 +57,8 @@ export function OperatorDashboard({
   const urgenti = mieConsegne.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
   const aperte = mieConsegne.filter((c) => c.stato !== 'completata');
   const prossimoSlot = agenda.find((s) => s.stato === 'programmato' || s.stato === 'in_corso');
+  // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
+  const anomalie = useAnomalieReparto();
 
   // Clinical KPIs from cartelle
   const critici = cartelle.filter((c) =>
@@ -109,6 +114,40 @@ export function OperatorDashboard({
           <button className="link-btn" onClick={() => onNavigate('consegne')}>
             Vedi <IcoArrow />
           </button>
+        </div>
+      )}
+
+      {/* AC8: pazienti con farmaci fuori anagrafica, come lavoro di reparto da smaltire.
+          Compare solo se ce n'è: un riquadro vuoto su ogni cruscotto diventa arredamento. */}
+      {anomalie.pazienti.length > 0 && (
+        <div className="coverage-alert coverage-alert--amber">
+          <IcoWarning />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <strong>
+              {anomalie.pazienti.length} paziente
+              {anomalie.pazienti.length === 1 ? '' : 'i'} con farmaci non in anagrafica
+            </strong>{' '}
+            — da correggere in terapia
+            <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>
+              {anomalie.pazienti.map((p) => (
+                <li key={p.patientId}>
+                  <button
+                    type="button"
+                    className="anomalie-reparto__riga"
+                    onClick={() => onSelectPaziente?.(p.nome)}
+                  >
+                    <span>
+                      <span className="anomalie-reparto__nome">{p.nome}</span>
+                      <span className="anomalie-reparto__farmaci">
+                        {p.esito.anomalie.map((a) => a.farmacoNome).join(', ')}
+                      </span>
+                    </span>
+                    <IndicatoreAnomalie esito={p.esito} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
 

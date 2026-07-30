@@ -18,7 +18,10 @@ import { documentoDi, testoConfezione, type FarmacoTrovato } from './farmacoDocu
 import type { DocumentoFarmaco } from './farmacoDocumento';
 import './RicercaFarmaco.css';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+// `import.meta.env` non esiste sotto node:test: la lettura difensiva evita che un test
+// che lo raggiunge si spenga su un errore d’ambiente invece che su un’asserzione.
+const API_URL =
+  (import.meta as ImportMeta & { env?: Record<string, string> }).env?.VITE_API_URL ?? '';
 const LIMITE = 25;
 /** Attesa prima di interrogare il backend: evita una richiesta per ogni tasto premuto. */
 const ATTESA_MS = 300;

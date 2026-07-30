@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CampoFarmaco } from './CampoFarmaco';
 import {
   FRACTION_PRESETS,
   ADMIN_UNITS,
@@ -136,15 +137,9 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
 
   return (
     <>
-      <div className="form-group">
-        <label>Prodotto medicinale *</label>
-        <input
-          className="form-input"
-          value={value.farmacoNome}
-          placeholder="es. Kanrenol"
-          onChange={(e) => update({ farmacoNome: e.target.value })}
-        />
-      </div>
+      {/* Ricerca in anagrafica invece del testo libero: il campo libero era la causa a monte
+          dei farmaci che poi non risultano in anagrafica. */}
+      <CampoFarmaco valore={value.farmacoNome} forma={value.pharmaceuticalForm} onCambia={update} />
       <div className="form-group">
         <label>Forma farmaceutica</label>
         <select

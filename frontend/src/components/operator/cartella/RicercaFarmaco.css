@@ -18,6 +18,14 @@
   background: #fff;
 }
 
+/* Stesso vincolo del campo nella maschera terapia: senza, il flex stira l'icona a tutto campo. */
+.ricerca-farmaco__campo > svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+}
+
 .ricerca-farmaco__campo:focus-within {
   border-color: var(--blue);
   box-shadow: 0 0 0 3px rgb(47 107 237 / 12%);
