@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
 import { ClinicalTableSection } from './shared';
@@ -19,6 +19,8 @@ import { useRisoluzioniFarmaco, trovaRisoluzione, etichettaDocumento } from './f
 import type { DocumentoFarmaco, FarmacoTrovato } from './farmacoRiferimento';
 import { VisoreDocumentoFarmaco } from './VisoreDocumentoFarmaco';
 import { RicercaFarmacoModal } from './RicercaFarmaco';
+import { AvvisoAnomalieFarmaci } from './AvvisoAnomalieFarmaci';
+import { anomalieDi } from './anomalieFarmaco';
 import type { PrescrizioneDaAbbinare } from './farmacoCorrispondenza';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
@@ -507,6 +509,13 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       dosaggio: t.dosaggio,
       viaSomministrazione: t.viaSomministrazione,
     })),
+  );
+
+  // AC7: farmaci in terapia che l'anagrafica non riconosce. `trovaRisoluzione` e' passata come
+  // funzione perche' `anomalieDi` non deve sapere nulla della forma della cache.
+  const anomalie = useMemo(
+    () => anomalieDi(therapies, (nome, dosaggio) => trovaRisoluzione(risoluzioni, nome, dosaggio)),
+    [therapies, risoluzioni],
   );
 
   /** Documento aperto nel visore, con la prescrizione che serve a riconoscerne la formulazione. */
@@ -1066,6 +1075,11 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   return (
     <div className="cr-tab-content">
+      {/* AC7: riepilogo dei farmaci non riconosciuti in testa alla scheda. Qui il conteggio e'
+          completo, perche' si legge l'intera lista delle terapie del paziente e non solo quelle
+          attive di oggi. */}
+      <AvvisoAnomalieFarmaci esito={anomalie} ambito="tutte le terapie in cartella" />
+
       <ClinicalTableSection
         title="Terapia Farmacologica"
         count={attive.length}

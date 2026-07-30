@@ -30,8 +30,15 @@ if (files.length === 0) {
   process.exit(0);
 }
 
+// Lo stub CSS va caricato DOPO tsx: tsx registra la trasformazione TypeScript, lo stub intercetta
+// i soli fogli di stile, che Node altrimenti rifiuta con ERR_UNKNOWN_FILE_EXTENSION appena un test
+// raggiunge un componente che importa il proprio CSS.
+const stubCss = new URL('./stub-css-loader.mjs', import.meta.url).href;
+
 console.log(`run-node-tests: running ${files.length} test file(s) via node --import tsx --test`);
-const res = spawnSync(process.execPath, ['--import', 'tsx', '--test', ...files], {
-  stdio: 'inherit',
-});
+const res = spawnSync(
+  process.execPath,
+  ['--import', 'tsx', '--import', stubCss, '--test', ...files],
+  { stdio: 'inherit' },
+);
 process.exit(res.status ?? 1);

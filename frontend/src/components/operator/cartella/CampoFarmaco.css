@@ -1,0 +1,181 @@
+/* Campo farmaco con ricerca in anagrafica. Token del design system. */
+
+.campo-farmaco__criterio {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.campo-farmaco__criterio button {
+  padding: 4px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.campo-farmaco__criterio button.is-attivo {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.campo-farmaco__campo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+/* Senza vincolo l'SVG dell'icona viene stirato dal flex e riempie il campo. */
+.campo-farmaco__campo > svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}
+
+.campo-farmaco__campo:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgb(47 107 237 / 12%);
+}
+
+.campo-farmaco__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+}
+
+.campo-farmaco__esiti {
+  margin-top: 6px;
+  max-height: 260px;
+  overflow: auto;
+}
+
+.campo-farmaco__nota {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.campo-farmaco__nota--errore {
+  color: var(--red);
+}
+
+.campo-farmaco__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.campo-farmaco__lista button {
+  display: block;
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.campo-farmaco__lista button:hover {
+  border-color: var(--blue);
+  background: rgb(47 107 237 / 5%);
+}
+
+.campo-farmaco__nome {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.campo-farmaco__dettagli,
+.campo-farmaco__pa {
+  display: block;
+  margin-top: 1px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Ripiego per galenici ed esteri: deve essere raggiungibile ma non invitante. */
+.campo-farmaco__ripiego {
+  margin-top: 8px;
+  padding: 9px 11px;
+  border: 1px dashed rgb(180 120 0 / 45%);
+  border-radius: 8px;
+  background: rgb(255 196 0 / 8%);
+}
+
+.campo-farmaco__usa-comunque {
+  margin-top: 6px;
+  padding: 5px 11px;
+  border: 1px solid #c98a00;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7a5300;
+  cursor: pointer;
+}
+
+.campo-farmaco__usa-comunque:hover {
+  background: #c98a00;
+  color: #fff;
+}
+
+/* Farmaco già scelto */
+.campo-farmaco__scelto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.campo-farmaco__scelto.is-fuori-anagrafica {
+  border-color: rgb(180 120 0 / 45%);
+  background: rgb(255 196 0 / 8%);
+}
+
+.campo-farmaco__stato {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.campo-farmaco__scelto.is-fuori-anagrafica .campo-farmaco__stato {
+  color: #8a5a00;
+}
+
+.campo-farmaco__cambia {
+  flex: none;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.campo-farmaco__cambia:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}

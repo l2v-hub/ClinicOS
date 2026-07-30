@@ -1,6 +1,9 @@
 import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { API_URL } from '../../config';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
+import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
+import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
+import type { AnomaliePaziente } from './cartella/anomalieFarmaco';
 import type {
   Paziente,
   Consegna,
@@ -75,6 +78,7 @@ const PatientListCard = memo(function PatientListCard({
   p,
   hasConsegnaAperta,
   badges,
+  anomalie,
   deleteEnabled,
   deleting,
   onSelect,
@@ -83,6 +87,7 @@ const PatientListCard = memo(function PatientListCard({
   p: Paziente;
   hasConsegnaAperta: boolean;
   badges: ReturnType<typeof statoClinicoBadges>;
+  anomalie: AnomaliePaziente;
   deleteEnabled: boolean;
   deleting: boolean;
   onSelect: (p: Paziente) => void;
@@ -102,6 +107,7 @@ const PatientListCard = memo(function PatientListCard({
           )}
           {p.sex === 'M' && <span className="sex-badge sex-badge--m">M</span>}
           {p.sex === 'F' && <span className="sex-badge sex-badge--f">F</span>}
+          <IndicatoreAnomalie esito={anomalie} />
         </span>
         <span className="pt-list-card__meta">
           <span className="mrn-tag">{p.medicalRecordNumber}</span> · {calcAge(p.dateOfBirth)} anni
@@ -151,6 +157,8 @@ export function PatientList({
   cartelle = [],
 }: PatientListProps) {
   const cartellaMap = useMemo(() => new Map(cartelle.map((c) => [c.pazienteId, c])), [cartelle]);
+  // AC6/AC11: anomalie di tutto il reparto da UNA richiesta, non una per paziente.
+  const anomalie = useAnomalieReparto();
   const [ricerca, setRicerca] = useState('');
   const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [showModal, setShowModal] = useState(false);
@@ -366,6 +374,9 @@ export function PatientList({
                             )}
                             {p.sex === 'M' && <span className="sex-badge sex-badge--m">M</span>}
                             {p.sex === 'F' && <span className="sex-badge sex-badge--f">F</span>}
+                            {/* AC6: farmaci in terapia che l'anagrafica non riconosce. Una sola
+                                richiesta /therapy-slots copre tutto il reparto (AC11). */}
+                            <IndicatoreAnomalie esito={anomalieDelPaziente(anomalie, p.id)} />
                           </div>
                           <div className="cell--muted" style={{ fontSize: 12 }}>
                             {calcAge(p.dateOfBirth)} anni
@@ -491,6 +502,7 @@ export function PatientList({
                 p={p}
                 hasConsegnaAperta={consegneAperte.has(p.id)}
                 badges={statoClinicoBadges(cartellaMap.get(p.id))}
+                anomalie={anomalieDelPaziente(anomalie, p.id)}
                 deleteEnabled={deleteEnabled}
                 deleting={deletingId === p.id}
                 onSelect={onSelect}

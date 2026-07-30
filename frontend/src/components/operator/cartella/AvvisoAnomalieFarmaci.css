@@ -1,0 +1,154 @@
+/* Avviso anomalie farmaci. Ambra: il rosso in ClinicOS resta agli allarmi clinici. */
+
+.avviso-anomalie {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid rgb(180 120 0 / 40%);
+  border-left: 3px solid #c98a00;
+  border-radius: 10px;
+  background: rgb(255 196 0 / 10%);
+}
+
+.avviso-anomalie--compatto {
+  margin-bottom: 12px;
+  padding: 9px 12px;
+}
+
+.avviso-anomalie__icona {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #c98a00;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.avviso-anomalie__testo {
+  flex: 1;
+  min-width: 0;
+}
+
+.avviso-anomalie__titolo {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #7a5300;
+}
+
+.avviso-anomalie__ambito {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.avviso-anomalie__dettaglio {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.avviso-anomalie__parziale {
+  margin: 4px 0 0;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.avviso-anomalie__azione {
+  flex: none;
+  align-self: center;
+  padding: 6px 12px;
+  border: 1px solid #c98a00;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7a5300;
+  cursor: pointer;
+}
+
+.avviso-anomalie__azione:hover {
+  background: #c98a00;
+  color: #fff;
+}
+
+/* Indicatore per riga di elenco: deve leggersi in mezzo a una tabella densa senza urlare. */
+.indicatore-anomalie {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid rgb(180 120 0 / 45%);
+  border-radius: 999px;
+  background: rgb(255 196 0 / 16%);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #8a5a00;
+}
+
+/* Variante ambra di `.coverage-alert`, che di base è rossa: i farmaci da correggere non sono
+   un'urgenza clinica come una consegna urgente, e non devono averne il peso visivo. */
+.coverage-alert--amber {
+  align-items: flex-start;
+  border-color: rgb(180 120 0 / 40%);
+  background: rgb(255 196 0 / 10%);
+  color: #7a5300;
+}
+
+.coverage-alert--amber svg {
+  color: #c98a00;
+}
+
+/* Riquadro del cruscotto: elenco dei pazienti da bonificare. */
+.anomalie-reparto__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.anomalie-reparto__riga {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.anomalie-reparto__riga:hover {
+  border-color: #c98a00;
+}
+
+.anomalie-reparto__nome {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.anomalie-reparto__farmaci {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.anomalie-reparto__vuoto {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
