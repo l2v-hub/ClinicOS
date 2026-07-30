@@ -26,7 +26,8 @@ export type NavKey =
   | 'consegne'
   | 'agenda-operatore'
   | 'parametri-multipaziente'
-  | 'ai-assistant';
+  | 'ai-assistant'
+  | 'anagrafica-farmaci';
 
 // ── Patient (API) ──────────────────────────────────────────────────────────────
 

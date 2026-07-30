@@ -9,6 +9,7 @@ import {
   IcoOperatori,
   IcoBed,
   IcoActivity,
+  IcoPill,
   IcoClock,
   IcoAI,
 } from '../../icons';
@@ -45,6 +46,7 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
     { key: 'operator-dashboard', label: 'Dashboard', icon: <IcoDashboard /> },
     { key: 'pazienti', label: 'Pazienti', icon: <IcoPazienti /> },
     { key: 'parametri-multipaziente', label: 'Parametri', icon: <IcoActivity /> },
+    { key: 'anagrafica-farmaci', label: 'Farmaci', icon: <IcoPill /> },
     { key: 'consegne', label: 'Consegne', icon: <IcoConsegne /> },
     { key: 'agenda-operatore', label: 'Agenda', icon: <IcoCalendar /> },
     { key: 'note', label: 'Note', icon: <IcoMessage />, badge: unreadNotes },

@@ -1,0 +1,211 @@
+/* Ricerca in anagrafica AIFA. Token del design system; nessun rosso come colore di marca. */
+
+.ricerca-farmaco {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px 20px;
+  min-height: 0;
+}
+
+.ricerca-farmaco__campo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.ricerca-farmaco__campo:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgb(47 107 237 / 12%);
+}
+
+.ricerca-farmaco__campo input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+}
+
+.ricerca-farmaco__criterio {
+  display: flex;
+  gap: 6px;
+}
+
+/* Pillole blu piene per la voce attiva: stessa grammatica della L2/L3 dell'app. */
+.ricerca-farmaco__criterio button {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.ricerca-farmaco__criterio button.is-attivo {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.ricerca-farmaco__esiti {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.ricerca-farmaco__nota {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.ricerca-farmaco__nota--errore {
+  color: var(--red);
+}
+
+.ricerca-farmaco__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ricerca-farmaco__riga {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.ricerca-farmaco__nome {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Il rosso qui e' corretto: e' un avviso, non un accento di marca. */
+.ricerca-farmaco__revocato {
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--red);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.ricerca-farmaco__dettagli,
+.ricerca-farmaco__pa {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ricerca-farmaco__apri {
+  flex: none;
+  padding: 6px 12px;
+  border: 1px solid var(--blue);
+  border-radius: 8px;
+  background: var(--blue);
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+
+.ricerca-farmaco__apri:hover {
+  background: var(--blue-active, #1d4fc4);
+}
+
+/* ── Modale ─────────────────────────────────────────────────────────────────────────────── */
+
+.ricerca-farmaco-modale {
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 96vw);
+  max-height: 88vh;
+  max-width: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ricerca-farmaco-modale__testa {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ricerca-farmaco-modale__testa h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── Pagina dedicata ────────────────────────────────────────────────────────────────────── */
+
+.page-anagrafica-farmaci {
+  padding: 24px 28px;
+}
+
+.page-anagrafica-farmaci__testa h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.page-anagrafica-farmaci__testa p {
+  margin: 0;
+  max-width: 68ch;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.page-anagrafica-farmaci__corpo {
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius, 14px);
+  background: var(--surface);
+}
+
+/* ── Indicatore sulla riga di terapia ───────────────────────────────────────────────────── */
+
+/* Non e' un errore: e' un'informazione mancante su cui l'operatore puo' agire. Percio' ambra
+   e non rosso, che in ClinicOS e' riservato agli allarmi clinici. */
+.farmaco-non-trovato {
+  margin-left: 6px;
+  padding: 1px 8px;
+  border: 1px solid rgb(180 120 0 / 45%);
+  border-radius: 999px;
+  background: rgb(255 196 0 / 14%);
+  font-size: 10px;
+  font-weight: 600;
+  color: #8a5a00;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.farmaco-non-trovato:hover {
+  border-color: #8a5a00;
+  background: rgb(255 196 0 / 26%);
+}

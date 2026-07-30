@@ -1,0 +1,203 @@
+/* Visore del documento ufficiale AIFA. Token del design system, nessun colore letterale nuovo. */
+
+.visore-farmaco {
+  display: flex;
+  flex-direction: column;
+  width: min(1100px, 96vw);
+  height: min(92vh, 1000px);
+  max-width: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+.visore-farmaco__testa {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.visore-farmaco__titolo {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.visore-farmaco__scelta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.visore-farmaco__scelta p {
+  margin: 0 0 6px;
+}
+
+.visore-farmaco__scelta strong {
+  color: var(--text);
+}
+
+.visore-farmaco__scelta label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.visore-farmaco__select {
+  max-width: 420px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* Richiesta di scelta: l'unico caso in cui il rosso e' appropriato, perche' e' un avviso
+   clinico — senza formulazione non si puo' indicare una posologia. */
+.visore-farmaco__scelta--richiesta {
+  padding: 10px 12px;
+  border: 1px solid var(--red);
+  border-left-width: 3px;
+  border-radius: 8px;
+  background: rgb(217 58 74 / 6%);
+  color: var(--text);
+}
+
+.visore-farmaco__scelta--richiesta ul {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.visore-farmaco__scelta--richiesta button {
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.visore-farmaco__scelta--richiesta button:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.visore-farmaco__pagina {
+  color: var(--muted);
+}
+
+.visore-farmaco__sezioni {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.visore-farmaco__sezioni-etichetta {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.visore-farmaco__salto {
+  padding: 4px 10px;
+  border: 1px solid var(--blue);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 12px;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.visore-farmaco__salto:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+.visore-farmaco__corpo {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+.visore-farmaco__stato {
+  margin: 24px auto;
+  max-width: 520px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.visore-farmaco__stato--errore {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+}
+
+.visore-farmaco__stato--errore a {
+  color: var(--blue);
+}
+
+.visore-farmaco__pagina-blocco {
+  margin: 0 auto 20px;
+  width: fit-content;
+}
+
+.visore-farmaco__tela {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.visore-farmaco__tela canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Evidenziazione: sottolineatura spessa invece di un blocco pieno, cosi' il testo resta
+   leggibile. Il giallo non appartiene alla palette di marca perche' non e' un elemento di
+   marca: e' un marcatore di lettura, e deve leggersi come tale. */
+.visore-farmaco__evidenza {
+  position: absolute;
+  background: rgb(255 214 0 / 32%);
+  border-bottom: 2px solid rgb(255 179 0 / 85%);
+  pointer-events: none;
+}
+
+.visore-farmaco__numero-pagina {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .visore-farmaco {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+
+  .visore-farmaco__corpo {
+    padding: 8px;
+  }
+}
