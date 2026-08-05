@@ -15,6 +15,9 @@ import { tmpdir } from 'node:os';
 // CI uses the defaults (frontend :5173, backend :3001).
 const FRONTEND = process.env.E2E_FRONTEND_URL ?? 'http://localhost:5173';
 const BACKEND = process.env.E2E_BACKEND_URL ?? 'http://localhost:3001';
+// Clinical routes require an operator identity (requireOperator middleware); this script
+// calls the API directly (outside the SPA, which attaches these itself) for setup/verification.
+const OPERATOR_HEADERS = { 'X-Operator-Id': 'e2e-script', 'X-Operator-Role': 'operatore' };
 const outDir = process.argv[2] ?? '.';
 const fx = writeFixtures(resolve(tmpdir(), 'clinicos-e2e-fixtures'));
 // #265: each viewport exercises a different explicit allergy status; both must persist.
@@ -42,13 +45,16 @@ const VIEWPORTS = [
 // test-only delete route (CI DBs are fresh, this is a no-op there).
 async function freeCfs() {
   try {
-    const res = await fetch(`${BACKEND}/patients`);
+    const res = await fetch(`${BACKEND}/patients`, { headers: OPERATOR_HEADERS });
     const patients = await res.json();
     if (!Array.isArray(patients)) return;
     const cfs = new Set(VIEWPORTS.map((v) => v.cf));
     for (const p of patients) {
       if (p.codiceFiscale && cfs.has(p.codiceFiscale)) {
-        await fetch(`${BACKEND}/patients/${p.id}`, { method: 'DELETE' }).catch(() => {});
+        await fetch(`${BACKEND}/patients/${p.id}`, {
+          method: 'DELETE',
+          headers: OPERATOR_HEADERS,
+        }).catch(() => {});
       }
     }
   } catch {
@@ -208,13 +214,17 @@ try {
       await page.screenshot({ path: resolve(outDir, `${tag}-7-created.png`) });
 
       // ── API persistence (AC2/AC5): the patient exists and the cartella carries the status ──
-      const patients = await (await fetch(`${BACKEND}/patients`)).json();
+      const patients = await (
+        await fetch(`${BACKEND}/patients`, { headers: OPERATOR_HEADERS })
+      ).json();
       const created = (Array.isArray(patients) ? patients : []).find(
         (p) => p.firstName === 'E2E' && p.lastName === lastName,
       );
       if (!created)
         throw new Error(`API check failed: patient E2E ${lastName} not found in /patients`);
-      const cartellaRes = await fetch(`${BACKEND}/patients/${created.id}/cartella`);
+      const cartellaRes = await fetch(`${BACKEND}/patients/${created.id}/cartella`, {
+        headers: OPERATOR_HEADERS,
+      });
       if (!cartellaRes.ok)
         throw new Error(
           `API check failed: GET /patients/${created.id}/cartella -> ${cartellaRes.status}`,

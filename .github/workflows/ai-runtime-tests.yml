@@ -16,7 +16,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
-      - name: Core tests (stdlib, no provider SDKs)
+      - name: Install core web framework (fastapi/pydantic — not a provider SDK)
+        run: pip install fastapi 'pydantic>=2.6'
+      - name: Core tests (stdlib + fastapi/pydantic, no provider SDKs)
         run: python -m unittest discover -s tests -p "test_*.py" -v
       - name: Compile-check all modules
         run: python -m py_compile $(find clinicos_ai -name "*.py")
