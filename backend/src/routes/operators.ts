@@ -1,5 +1,6 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import { requireOperator } from '../ai/auth.js';
 
 // Fase 1b: real CRUD for the admin "Gestione Operatori" screen (was a client-side mock).
 // An "operatore" in the UI is a User (identity: fullName/email/isActive) + an Operator row
@@ -7,6 +8,10 @@ import { Router } from 'express';
 // `Operatore` shape; colore/iniziali stay client-derived.
 
 const operatorsRouter = Router();
+
+// Gate minimo (header-based, non IdP): l'elenco operatori include email/telefono/orari,
+// richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
+operatorsRouter.use(requireOperator);
 
 // UI fullName convention: first token = nome, rest = cognome ("Marco De Luca" → Marco / De Luca).
 function splitFullName(fullName: string): { nome: string; cognome: string } {
@@ -41,17 +46,27 @@ function toOperatore(op: OperatorWithUser, appuntamentiOggi: number) {
   };
 }
 
-async function appointmentsTodayByOperator(): Promise<Map<string, number>> {
+function todayRange(): { gte: Date; lte: Date } {
   const from = new Date();
   from.setHours(0, 0, 0, 0);
   const to = new Date();
   to.setHours(23, 59, 59, 999);
+  return { gte: from, lte: to };
+}
+
+// Aggregato per l'elenco (un solo round-trip per N operatori). Per il singolo operatore usare
+// `appointmentsTodayForOperator`: il groupBy scandisce gli appuntamenti di tutta la clinica.
+async function appointmentsTodayByOperator(): Promise<Map<string, number>> {
   const rows = await prisma.appointment.groupBy({
     by: ['operatorId'],
-    where: { scheduledAt: { gte: from, lte: to } },
+    where: { scheduledAt: todayRange() },
     _count: { _all: true },
   });
   return new Map(rows.map((r) => [r.operatorId, r._count._all]));
+}
+
+async function appointmentsTodayForOperator(operatorId: string): Promise<number> {
+  return prisma.appointment.count({ where: { operatorId, scheduledAt: todayRange() } });
 }
 
 // GET /operators
@@ -243,11 +258,11 @@ operatorsRouter.put('/:operatorId', async (req, res) => {
         },
         include: { user: true, _count: { select: { registeredPatients: true } } },
       }),
-      appointmentsTodayByOperator(),
+      appointmentsTodayForOperator(operatorId),
     ]);
 
     console.log(`PUT /operators/${operatorId} → updated`);
-    res.status(200).json(toOperatore(updated, apptToday.get(operatorId) ?? 0));
+    res.status(200).json(toOperatore(updated, apptToday));
   } catch (error: unknown) {
     console.error('PUT /operators/:operatorId error:', error);
     if (

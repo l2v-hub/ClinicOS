@@ -1,7 +1,12 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import { requireOperator } from '../ai/auth.js';
 
 const noteRouter = Router();
+
+// Gate minimo (header-based, non IdP): le note interoperatore possono citare pazienti,
+// richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+noteRouter.use(requireOperator);
 
 // ═══════════════════════════════════════════════════════════════════════════
 // NOTE / MESSAGGI CRUD — mounted at /notes
@@ -11,9 +16,22 @@ const PRIORITA = ['normale', 'alta', 'urgente'];
 const STATO = ['non_letta', 'letta', 'risolta'];
 
 // GET /notes
-noteRouter.get('/', async (_req, res) => {
+noteRouter.get('/', async (req, res) => {
+  // Paginazione opt-in (limit/offset): senza parametri il comportamento resta
+  // identico a oggi (nessun take/skip, tutti i record).
+  const { limit, offset } = req.query as { limit?: string; offset?: string };
+  const parsedLimit = Number.parseInt(String(limit ?? ''), 10);
+  const parsedOffset = Number.parseInt(String(offset ?? ''), 10);
+  const take =
+    Number.isFinite(parsedLimit) && parsedLimit > 0 ? Math.min(parsedLimit, 500) : undefined;
+  const skip = Number.isFinite(parsedOffset) && parsedOffset >= 0 ? parsedOffset : undefined;
+
   try {
-    const note = await prisma.nota.findMany({ orderBy: { createdAt: 'desc' } });
+    const note = await prisma.nota.findMany({
+      orderBy: { createdAt: 'desc' },
+      ...(take !== undefined && { take }),
+      ...(skip !== undefined && { skip }),
+    });
     res.status(200).json(note);
   } catch (error) {
     console.error('GET /notes error:', error);

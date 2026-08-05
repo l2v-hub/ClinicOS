@@ -81,7 +81,7 @@ class _MistralOcrRunner:
         req.add_header("api-key", key)
         try:
             with urllib.request.urlopen(req, timeout=self._timeout) as resp:
-                return json.loads(resp.read().decode("utf-8"))
+                raw = resp.read().decode("utf-8")
         except urllib.error.HTTPError as ex:
             detail = ""
             try:
@@ -95,6 +95,14 @@ class _MistralOcrRunner:
             raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"Mistral OCR {ex.code}: {detail}") from ex
         except urllib.error.URLError as ex:
             raise RuntimeError_(ErrorKind.PROVIDER_UNAVAILABLE, f"Mistral OCR irraggiungibile: {ex}") from ex
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError as ex:
+            # Risposta 200 ma corpo non-JSON/malformato: prima risaliva come JSONDecodeError
+            # grezzo (non un RuntimeError_) e il fallback generico in app.py la marcava
+            # "failed" (terminale) invece di un errore retryable come gli altri fallimenti
+            # provider — un job OCR Mistral perdeva cosi' il retry automatico.
+            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"Mistral OCR risposta non valida: {str(ex)[:200]}") from ex
 
     def _ocr_once(self, url: str, key: str, att: Attachment, schema: object | None) -> tuple[str, dict]:
         doc_type, uri = _data_uri(att)

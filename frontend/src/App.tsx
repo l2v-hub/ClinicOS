@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 import { API_URL } from './config';
-import { cachedGetJson, invalidateCachedGet } from './lib/cachedFetch';
+import { cachedGetJson, invalidateCachedGet, clearCachedGet } from './lib/cachedFetch';
 import { sortPazienti } from './lib/patientSort';
+import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';
 
 import type {
   UtenteApp,
@@ -319,7 +320,7 @@ export default function App() {
   const loadAppuntamenti = useCallback(async (date?: string) => {
     try {
       const qs = date ? `?date=${date}` : '';
-      const res = await fetch(`${API_URL}/appointments${qs}`);
+      const res = await fetch(`${API_URL}/appointments${qs}`, { headers: operatorHeaders() });
       if (!res.ok) return; // lista corrente invariata
       const raw = await res.json();
       const rows = Array.isArray(raw) ? raw : [];
@@ -333,7 +334,7 @@ export default function App() {
 
   const loadConsegne = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/consegne`);
+      const res = await fetch(`${API_URL}/consegne`, { headers: operatorHeaders() });
       if (!res.ok) return; // lista corrente invariata
       const data = (await res.json()) as Consegna[];
       setConsegne(data.map((c) => ({ ...c, oraScadenza: c.oraScadenza ?? undefined })));
@@ -345,7 +346,7 @@ export default function App() {
   // ── Load rooms (camere + letti con occupazione reale) ───────────────────────
 
   const loadCamere = useCallback(() => {
-    fetch(`${API_URL}/admin/rooms`)
+    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders() })
       .then((r) => (r.ok ? r.json() : []))
       .then(
         (
@@ -404,7 +405,7 @@ export default function App() {
   useEffect(() => {
     if (!utente) return;
     setLoadingPazienti(true);
-    fetch(`${API_URL}/patients`)
+    fetch(`${API_URL}/patients`, { headers: operatorHeaders() })
       // Issue #129: il backend ordina per createdAt — il roster va sempre
       // tenuto in ordine alfabetico (cognome, nome) per tutte le viste.
       .then((r) => r.json())
@@ -425,14 +426,14 @@ export default function App() {
     // Load consegne from API (persisted handover cards)
     void loadConsegne();
     // #285: orari operatori persistiti
-    fetch(`${API_URL}/operators/schedules`)
+    fetch(`${API_URL}/operators/schedules`, { headers: operatorHeaders() })
       .then((r) => (r.ok ? r.json() : []))
       .then((data: ScheduleOperatore[]) => setSchedules(data))
       .catch(() => {
         /* keep empty array */
       });
     // Fase 1b: operatori reali dal backend (niente più mock); iniziali/colore client-derived
-    fetch(`${API_URL}/operators`)
+    fetch(`${API_URL}/operators`, { headers: operatorHeaders() })
       .then((r) => (r.ok ? r.json() : []))
       .then((data: Omit<Operatore, 'iniziali' | 'colore'>[]) =>
         setOperatori(
@@ -447,7 +448,7 @@ export default function App() {
         /* keep empty array */
       });
     // Load note/messaggi from API (persisted)
-    fetch(`${API_URL}/notes`)
+    fetch(`${API_URL}/notes`, { headers: operatorHeaders() })
       .then((r) => (r.ok ? r.json() : []))
       .then((data: Nota[]) =>
         setNote(
@@ -485,6 +486,7 @@ export default function App() {
 
   function handleLogin(u: UtenteApp) {
     setUtente(u);
+    setCurrentOperator({ id: u.id, role: u.ruolo });
     const key: NavKey = u.ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard';
     window.history.replaceState({ navKey: key }, '', `#/${key}`);
     setNavKey(key);
@@ -492,6 +494,8 @@ export default function App() {
 
   function handleLogout() {
     setUtente(null);
+    setCurrentOperator(null);
+    clearCachedGet();
     setPazienti([]);
     setPazienteSelezionato(null);
     window.history.replaceState({}, '', '#/login');
@@ -518,7 +522,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/operators`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(op),
       });
       if (!res.ok) {
@@ -538,7 +542,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/operators/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(updates),
       });
       if (!res.ok) {
@@ -572,7 +576,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/consegne`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(c),
       });
       if (!res.ok) {
@@ -599,7 +603,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/consegne/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(patch),
       });
       if (!res.ok) {
@@ -630,7 +634,10 @@ export default function App() {
     const snapshot = consegne;
     setConsegne((prev) => prev.filter((c) => c.id !== id));
     try {
-      const res = await fetch(`${API_URL}/consegne/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_URL}/consegne/${id}`, {
+        method: 'DELETE',
+        headers: operatorHeaders(),
+      });
       if (!res.ok) {
         setConsegne(snapshot);
         showToast('Impossibile eliminare la consegna');
@@ -649,7 +656,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/appointments`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
           patientId: apt.pazienteId,
           operatorId: apt.operatoreId,
@@ -687,7 +694,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/operators/${s.operatoreId}/schedule`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ turni: s.turni, note: s.note }),
       });
       if (!res.ok) {
@@ -714,7 +721,9 @@ export default function App() {
 
   async function loadCartella(pazienteId: string): Promise<void> {
     try {
-      const res = await fetch(`${API_URL}/patients/${pazienteId}/cartella`);
+      const res = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
+        headers: operatorHeaders(),
+      });
       if (!res.ok) return;
       const json = (await res.json()) as { patientId: string; data: CartellaPaziente | null };
       if (json.data) {
@@ -761,7 +770,7 @@ export default function App() {
     try {
       const r = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ data: dataToSave }),
       });
       if (r.ok) {
@@ -786,7 +795,9 @@ export default function App() {
   ): Promise<{ ok: boolean; lettoLabel?: string }> {
     try {
       const today = new Date().toISOString().slice(0, 10);
-      const assignRes = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`);
+      const assignRes = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`, {
+        headers: operatorHeaders(),
+      });
       const assignments: Array<{ id: string; bedId: string; endDate: string | null }> = assignRes.ok
         ? await assignRes.json()
         : [];
@@ -797,7 +808,7 @@ export default function App() {
         if (active) {
           await fetch(`${API_URL}/patients/${pazienteId}/room-assignments/${active.id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
             body: JSON.stringify({ endDate: today }),
           });
           loadCamere();
@@ -805,7 +816,7 @@ export default function App() {
         return { ok: true };
       }
 
-      const roomsRes = await fetch(`${API_URL}/admin/rooms`);
+      const roomsRes = await fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders() });
       const rooms: Array<{
         id: string;
         numero: string;
@@ -844,7 +855,7 @@ export default function App() {
 
       const res = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ bedId: bed.id, startDate: today }),
       });
       if (!res.ok) {
@@ -865,7 +876,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/patients/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(updates),
       });
       if (res.ok) showToast('Dati paziente aggiornati');
@@ -897,7 +908,7 @@ export default function App() {
 
     const res = await fetch(`${API_URL}/patients`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
       body: JSON.stringify(payload),
     });
 
@@ -982,7 +993,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/notes`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(n),
       });
       if (!res.ok) {
@@ -1012,7 +1023,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/notes/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(patch),
       });
       if (!res.ok) {
@@ -1089,7 +1100,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/therapy-slots/confirm`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
           patientId: info.patientId,
           farmacoNome: info.drugName,
@@ -1165,7 +1176,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/therapy-slots/not-administered`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
           patientId: info.patientId,
           farmacoNome: info.drugName,
@@ -1483,7 +1494,7 @@ export default function App() {
               onImported={(patientId, moduleTabId) => {
                 // REQ-018: refresh the patient list after an imported patient is created.
                 setLoadingPazienti(true);
-                fetch(`${API_URL}/patients`)
+                fetch(`${API_URL}/patients`, { headers: operatorHeaders() })
                   .then((r) => r.json())
                   .then((data: Paziente[]) => {
                     const sorted = sortPazienti(data);

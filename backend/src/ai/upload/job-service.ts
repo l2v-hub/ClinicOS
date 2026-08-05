@@ -155,15 +155,27 @@ function getRuntimeToken(): string {
 async function runtimeFetch(path: string, options: RequestInit = {}): Promise<Response> {
   const url = getRuntimeUrl() + path;
   const token = getRuntimeToken();
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      ...(options.headers ?? {}),
-    },
-  });
-  return res;
+  // Il tetto e' sulla SINGOLA richiesta, non sull'elaborazione: il runtime lavora in modo
+  // asincrono (run risponde 202, lo stato si legge in polling), quindi nessuna di queste
+  // chiamate deve attendere il modello. Senza AbortSignal una connessione appesa blocca il
+  // poll per sempre e il job resta in "waiting_for_model" senza mai fallire ne' scadere.
+  const timeoutMs = loadAiConfig().requestTimeoutMs;
+  try {
+    return await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        ...(options.headers ?? {}),
+      },
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch (err) {
+    if (err instanceof Error && (err.name === 'TimeoutError' || err.name === 'AbortError')) {
+      throw new AiExtractionError('timeout', `Runtime non risponde entro ${timeoutMs}ms: ${path}`);
+    }
+    throw err;
+  }
 }
 
 /** POST /v1/document-jobs — create a runtime job */

@@ -3,6 +3,8 @@
 // valida per un breve TTL. Le mutazioni DEVONO invalidare i prefissi toccati prima
 // di ricaricare, altrimenti rileggerebbero il dato precedente dalla cache.
 
+import { operatorHeaders } from './operatorSession';
+
 const inflight = new Map<string, Promise<unknown>>();
 const cache = new Map<string, { at: number; data: unknown }>();
 
@@ -13,7 +15,7 @@ export function cachedGetJson<T>(url: string, ttlMs: number = DEFAULT_TTL_MS): P
   if (hit && Date.now() - hit.at < ttlMs) return Promise.resolve(hit.data as T);
   const pending = inflight.get(url);
   if (pending) return pending as Promise<T>;
-  const p = fetch(url)
+  const p = fetch(url, { headers: operatorHeaders() })
     .then(async (res) => {
       if (!res.ok) throw new Error(`Errore ${res.status}`);
       const data: unknown = await res.json();
@@ -30,4 +32,12 @@ export function cachedGetJson<T>(url: string, ttlMs: number = DEFAULT_TTL_MS): P
 /** Invalida tutte le voci di cache il cui URL inizia col prefisso (es. dopo una POST/PATCH). */
 export function invalidateCachedGet(prefix: string): void {
   for (const key of [...cache.keys()]) if (key.startsWith(prefix)) cache.delete(key);
+}
+
+// La cache e' indicizzata solo per URL, non per operatore: al logout va svuotata tutta,
+// altrimenti entro il TTL l'operatore successivo leggerebbe dati scaricati sotto
+// l'identita' del precedente.
+export function clearCachedGet(): void {
+  cache.clear();
+  inflight.clear();
 }

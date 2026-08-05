@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
+import { operatorHeaders } from '../../../lib/operatorSession';
 import { ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
@@ -345,6 +346,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       setHistoryLoading(true);
       const res = await fetch(
         `${API_URL}/patients/${paziente.id}/medication-administrations?limit=200`,
+        { headers: operatorHeaders() },
       );
       if (!res.ok) throw new Error(`Errore ${res.status}`);
       const data: MedAdmin[] = await res.json();
@@ -401,7 +403,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         : `${API_URL}/patients/${paziente.id}/therapies`;
       const res = await fetch(url, {
         method: editId ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
@@ -428,6 +430,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       setError('');
       const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${pendingDeleteId}`, {
         method: 'DELETE',
+        headers: operatorHeaders(),
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
       invalidateTherapies();
@@ -445,7 +448,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       setError('');
       const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${t.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ stato: 'sospesa' }),
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
@@ -461,7 +464,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       setError('');
       const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${t.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ stato: 'attiva' }),
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);

@@ -1703,7 +1703,7 @@ function DimissioneDisplay({ dim }: { dim: DimissioneInfermieristica }) {
                 <span
                   key={item}
                   style={{
-                    background: 'var(--blue-bg)',
+                    background: 'var(--c-primary-bg)',
                     color: 'var(--blue)',
                     padding: '2px 8px',
                     borderRadius: 4,

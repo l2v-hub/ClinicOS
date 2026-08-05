@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';
 import { API_URL } from '../../config';
+import { operatorHeaders } from '../../lib/operatorSession';
 import { ClinicalTableSection } from '../operator/cartella/shared';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 
@@ -114,8 +115,8 @@ export function RoomsManagement() {
   const loadData = useCallback(async () => {
     try {
       const [roomsRes, occRes] = await Promise.all([
-        fetch(`${API_URL}/admin/rooms`),
-        fetch(`${API_URL}/admin/rooms/occupancy`),
+        fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders() }),
+        fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders() }),
       ]);
       if (roomsRes.ok) setRooms(await roomsRes.json());
       if (occRes.ok) setOccupancy(await occRes.json());
@@ -148,7 +149,7 @@ export function RoomsManagement() {
       const method = editId ? 'PUT' : 'POST';
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
           numero: form.numero,
           tipo: form.tipo,
@@ -180,7 +181,10 @@ export function RoomsManagement() {
   async function eliminaCamera(roomId: string) {
     setError(null);
     try {
-      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, { method: 'DELETE' });
+      const res = await fetch(`${API_URL}/admin/rooms/${roomId}`, {
+        method: 'DELETE',
+        headers: operatorHeaders(),
+      });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         if (res.status === 409) {
@@ -230,7 +234,7 @@ export function RoomsManagement() {
     try {
       const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
           stato: lettoForm.stato,
           note: lettoForm.note || undefined,
@@ -287,21 +291,8 @@ export function RoomsManagement() {
 
       {/* Error alert */}
       {error && (
-        <div
-          className="alert alert--error"
-          style={{
-            marginBottom: 16,
-            padding: '10px 16px',
-            background: 'var(--red-bg, #fef2f2)',
-            border: '1px solid var(--red, #ef4444)',
-            borderRadius: 8,
-            color: 'var(--red, #ef4444)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-          }}
-        >
-          <span style={{ flex: 1 }}>{error}</span>
+        <div className="alert alert--error">
+          <span className="alert__text">{error}</span>
           <button className="icon-btn" onClick={() => setError(null)}>
             <IcoX />
           </button>

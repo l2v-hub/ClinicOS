@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { API_URL } from '../../../config';
+import { operatorHeaders } from '../../../lib/operatorSession';
 import {
   NarrativeClinicalSection,
   type BoldTag,
@@ -47,7 +48,9 @@ export function NarrativeSectionsTab({
     setLoading(true);
     setError(null);
     try {
-      const r = await fetch(`${API_URL}/patients/${patientId}/narrative-sections`);
+      const r = await fetch(`${API_URL}/patients/${patientId}/narrative-sections`, {
+        headers: operatorHeaders(),
+      });
       const data = await r.json();
       if (!r.ok) throw new Error();
       setSections(Array.isArray(data.sections) ? data.sections : []);
@@ -67,7 +70,7 @@ export function NarrativeSectionsTab({
     try {
       const r = await fetch(`${API_URL}/patients/${patientId}/narrative-sections/${sectionKey}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ reviewedText }),
       });
       if (r.ok) {

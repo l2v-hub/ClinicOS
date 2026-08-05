@@ -40,6 +40,11 @@ class RuntimeConfig:
     job_max_duration_seconds: int
     max_concurrency: int
     service_token: str | None
+    # AC1: soglia di retention per il garbage-collect dei job terminali in _JOBS.
+    job_retention_seconds: int = 3600
+    # AC4: limite superiore (byte, misurati sul base64 grezzo, senza decodificare) per il
+    # totale allegati di un job — rifiutato con 413 prima di qualunque allocazione/decodifica.
+    max_upload_bytes: int = 50_000_000
     errors: list[str] = field(default_factory=list)
 
     @property
@@ -149,5 +154,7 @@ def load_runtime_config(env: Mapping[str, str] | None = None) -> RuntimeConfig:
         job_max_duration_seconds=_int(e, "AI_JOB_MAX_DURATION_SECONDS", default=1800),
         max_concurrency=_int(e, "AI_MAX_CONCURRENCY", default=2),
         service_token=_get(e, "AI_RUNTIME_SERVICE_TOKEN"),
+        job_retention_seconds=_int(e, "AI_JOB_RETENTION_SECONDS", default=3600),
+        max_upload_bytes=_int(e, "AI_MAX_UPLOAD_BYTES", default=50_000_000),
         errors=errors,
     )

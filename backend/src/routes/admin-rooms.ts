@@ -1,8 +1,18 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import { requireOperator } from '../ai/auth.js';
 
 const adminRouter = Router();
 const patientAssignmentRouter = Router();
+
+// Internal control-flow error: thrown inside the assignment transaction to reject overlapping
+// bed periods after the advisory lock is held, and mapped to 409 by the route's catch block.
+class BedOverlapError extends Error {}
+
+// Gate minimo (header-based, non IdP): stanze/letti e assegnazioni paziente sono dati
+// clinici/operativi reali, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+adminRouter.use(requireOperator);
+patientAssignmentRouter.use(requireOperator);
 
 // ── Helper: check if two date ranges overlap ──────────────────────────────
 // endDate null means "infinity"
@@ -13,11 +23,14 @@ function rangesOverlap(s1: string, e1: string | null, s2: string, e2: string | n
   return startBeforeEnd2 && startBeforeEnd1;
 }
 
-// ── Helper: active assignment filter (endDate is null or >= today) ─────────
-function activeAssignmentFilter() {
-  const today = new Date().toISOString().slice(0, 10);
+// ── Helper: active assignment filter (endDate is null or >= from) ──────────
+// `from` di default e' oggi ("assegnazioni attive"). Chi verifica la disponibilita' per un
+// periodo passa invece la data di inizio di quel periodo: le assegnazioni chiuse prima non
+// possono sovrapporsi, quindi escluderle nel DB da' lo stesso esito di rangesOverlap senza
+// scaricare lo storico.
+function activeAssignmentFilter(from = new Date().toISOString().slice(0, 10)) {
   return {
-    OR: [{ endDate: null }, { endDate: { gte: today } }],
+    OR: [{ endDate: null }, { endDate: { gte: from } }],
   };
 }
 
@@ -101,7 +114,7 @@ adminRouter.get('/beds/available', async (req, res) => {
       where: { stato: { not: 'manutenzione' } },
       include: {
         room: true,
-        assignments: true,
+        assignments: { where: activeAssignmentFilter(startDate) },
       },
     });
 
@@ -332,7 +345,7 @@ adminRouter.delete('/rooms/:roomId', async (req, res) => {
 adminRouter.get('/rooms/:roomId/beds', async (req, res) => {
   const { roomId } = req.params;
   try {
-    const room = await prisma.room.findUnique({ where: { id: roomId } });
+    const room = await prisma.room.findUnique({ where: { id: roomId }, select: { id: true } });
     if (!room) {
       res.status(404).json({ error: 'Stanza non trovata' });
       return;
@@ -366,7 +379,7 @@ adminRouter.post('/rooms/:roomId/beds', async (req, res) => {
   }
 
   try {
-    const room = await prisma.room.findUnique({ where: { id: roomId } });
+    const room = await prisma.room.findUnique({ where: { id: roomId }, select: { id: true } });
     if (!room) {
       res.status(404).json({ error: 'Stanza non trovata' });
       return;
@@ -492,7 +505,10 @@ adminRouter.delete('/beds/:bedId', async (req, res) => {
 patientAssignmentRouter.get('/:patientId/room-assignments', async (req, res) => {
   const { patientId } = req.params;
   try {
-    const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+    const patient = await prisma.patient.findUnique({
+      where: { id: patientId },
+      select: { id: true },
+    });
     if (!patient) {
       res.status(404).json({ error: 'Paziente non trovato' });
       return;
@@ -530,9 +546,16 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req, res) =>
     return;
   }
 
+  const bedId = body.bedId;
+  const startDate = body.startDate;
+  const endDate = body.endDate || null;
+
   try {
     // Validate patient
-    const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+    const patient = await prisma.patient.findUnique({
+      where: { id: patientId },
+      select: { id: true },
+    });
     if (!patient) {
       res.status(404).json({ error: 'Paziente non trovato' });
       return;
@@ -540,7 +563,7 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req, res) =>
 
     // Validate bed
     const bed = await prisma.bed.findUnique({
-      where: { id: body.bedId },
+      where: { id: bedId },
       include: { room: true },
     });
     if (!bed) {
@@ -553,49 +576,60 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req, res) =>
       return;
     }
 
-    // Check for overlapping assignments on this bed
-    const existingBedAssignments = await prisma.patientRoomAssignment.findMany({
-      where: { bedId: body.bedId },
-    });
+    // Overlap check + close-active-assignment + create are one atomic unit: without a lock, two
+    // concurrent requests for the same bed can both pass the overlap check before either commits.
+    // A Postgres advisory lock keyed on bedId (held for the transaction only, no schema change)
+    // serializes them so the second request re-reads post-commit state and is correctly rejected.
+    const assignment = await prisma.$transaction(async (tx) => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${bedId}))`;
 
-    const hasOverlap = existingBedAssignments.some((a) =>
-      rangesOverlap(a.startDate, a.endDate, body.startDate!, body.endDate || null),
-    );
-    if (hasOverlap) {
-      res.status(409).json({ error: 'Il letto è già occupato nel periodo indicato' });
-      return;
-    }
-
-    // Close patient's current active assignment if any
-    const activeAssignment = await prisma.patientRoomAssignment.findFirst({
-      where: { patientId, endDate: null },
-    });
-    if (activeAssignment) {
-      await prisma.patientRoomAssignment.update({
-        where: { id: activeAssignment.id },
-        data: { endDate: body.startDate },
+      // Check for overlapping assignments on this bed
+      const existingBedAssignments = await tx.patientRoomAssignment.findMany({
+        where: { bedId, ...activeAssignmentFilter(startDate) },
       });
-    }
 
-    const assignment = await prisma.patientRoomAssignment.create({
-      data: {
-        patientId,
-        roomId: bed.roomId,
-        bedId: body.bedId,
-        startDate: body.startDate,
-        endDate: body.endDate || null,
-        note: body.note || '',
-        createdById: body.createdById || null,
-      },
-      include: {
-        bed: { include: { room: true } },
-        patient: true,
-      },
+      const hasOverlap = existingBedAssignments.some((a) =>
+        rangesOverlap(a.startDate, a.endDate, startDate, endDate),
+      );
+      if (hasOverlap) {
+        throw new BedOverlapError('Il letto è già occupato nel periodo indicato');
+      }
+
+      // Close patient's current active assignment if any
+      const activeAssignment = await tx.patientRoomAssignment.findFirst({
+        where: { patientId, endDate: null },
+      });
+      if (activeAssignment) {
+        await tx.patientRoomAssignment.update({
+          where: { id: activeAssignment.id },
+          data: { endDate: startDate },
+        });
+      }
+
+      return tx.patientRoomAssignment.create({
+        data: {
+          patientId,
+          roomId: bed.roomId,
+          bedId,
+          startDate,
+          endDate,
+          note: body.note || '',
+          createdById: body.createdById || null,
+        },
+        include: {
+          bed: { include: { room: true } },
+          patient: true,
+        },
+      });
     });
 
     console.log(`POST /patients/${patientId}/room-assignments → created id=${assignment.id}`);
     res.status(201).json(assignment);
   } catch (error) {
+    if (error instanceof BedOverlapError) {
+      res.status(409).json({ error: error.message });
+      return;
+    }
     console.error('POST /patients/:patientId/room-assignments error:', error);
     res.status(500).json({ error: 'Errore durante creazione assegnazione stanza' });
   }

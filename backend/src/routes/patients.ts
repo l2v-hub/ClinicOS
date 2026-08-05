@@ -1,13 +1,29 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
+import { requireOperator } from '../ai/auth.js';
 
 const router = Router();
 
-router.get('/', async (_req, res) => {
+// Gate minimo (header-based, non IdP): dati anagrafici/clinici reali, richiedono un
+// operatore identificato in lettura e scrittura. Vedi backend/src/ai/auth.ts.
+router.use(requireOperator);
+
+router.get('/', async (req, res) => {
+  // Paginazione opt-in (limit/offset): senza parametri il comportamento resta
+  // identico a oggi (nessun take/skip, tutti i record).
+  const { limit, offset } = req.query as { limit?: string; offset?: string };
+  const parsedLimit = Number.parseInt(String(limit ?? ''), 10);
+  const parsedOffset = Number.parseInt(String(offset ?? ''), 10);
+  const take =
+    Number.isFinite(parsedLimit) && parsedLimit > 0 ? Math.min(parsedLimit, 500) : undefined;
+  const skip = Number.isFinite(parsedOffset) && parsedOffset >= 0 ? parsedOffset : undefined;
+
   try {
     const patients = await prisma.patient.findMany({
       orderBy: { createdAt: 'desc' },
+      ...(take !== undefined && { take }),
+      ...(skip !== undefined && { skip }),
     });
     console.log(`GET /patients → ${patients.length} record`);
     res.status(200).json(patients);
@@ -21,7 +37,7 @@ router.get('/', async (_req, res) => {
 // Defined BEFORE '/:id' so it is not captured as an id.
 router.get('/settings', (_req, res) => {
   res.status(200).json({
-    deleteEnabled: (process.env.ALLOW_PATIENT_DELETE ?? 'true').trim().toLowerCase() !== 'false',
+    deleteEnabled: (process.env.ALLOW_PATIENT_DELETE ?? 'false').trim().toLowerCase() !== 'false',
   });
 });
 
@@ -41,6 +57,10 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/seed', async (_req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    res.status(403).json({ error: 'Endpoint di seed/demo non disponibile in produzione' });
+    return;
+  }
   try {
     const patients = await prisma.patient.createMany({
       data: [
@@ -73,6 +93,10 @@ router.post('/seed', async (_req, res) => {
 // ── POST /patients/demo-setup — create or update Fabio Forlano demo patient ──
 
 router.post('/demo-setup', async (_req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    res.status(403).json({ error: 'Endpoint di seed/demo non disponibile in produzione' });
+    return;
+  }
   const DEMO_MRN = 'DEMO-FULL-001';
   const DEMO_EMAIL = 'fabio.forlano@example.local';
   const today = new Date().toISOString().slice(0, 10);
@@ -752,7 +776,10 @@ router.post('/', async (req, res) => {
     });
     return;
   }
-  const existing = await prisma.patient.findUnique({ where: { codiceFiscale } });
+  const existing = await prisma.patient.findUnique({
+    where: { codiceFiscale },
+    select: { id: true },
+  });
   if (existing) {
     res.status(409).json({
       error: 'Codice fiscale già presente',
@@ -843,7 +870,10 @@ router.patch('/:id', async (req, res) => {
       });
       return;
     }
-    const other = await prisma.patient.findUnique({ where: { codiceFiscale: cf } });
+    const other = await prisma.patient.findUnique({
+      where: { codiceFiscale: cf },
+      select: { id: true },
+    });
     if (other && other.id !== id) {
       res.status(409).json({ error: 'Codice fiscale già presente', existingPatientId: other.id });
       return;
@@ -877,13 +907,13 @@ router.patch('/:id', async (req, res) => {
 });
 
 // ── DELETE /patients/:id — remove a patient (TEST-ONLY) ───────────────────
-// Gated by ALLOW_PATIENT_DELETE (default enabled for testing). To permanently
-// forbid deletion later, set ALLOW_PATIENT_DELETE=false — no code change.
+// Gated by ALLOW_PATIENT_DELETE (default DISABLED). Set ALLOW_PATIENT_DELETE=true
+// explicitly (e.g. local/test env) to enable it — no code change needed.
 // DB cascades clinical relations (cartella, records, appointments, therapies,
 // diary, room assignments); dangling import references are nulled first.
 
 function patientDeleteAllowed(): boolean {
-  return (process.env.ALLOW_PATIENT_DELETE ?? 'true').trim().toLowerCase() !== 'false';
+  return (process.env.ALLOW_PATIENT_DELETE ?? 'false').trim().toLowerCase() !== 'false';
 }
 
 router.delete('/:id', async (req, res) => {
@@ -918,19 +948,16 @@ router.delete('/:id', async (req, res) => {
 router.get('/:id/cartella', async (req, res) => {
   const { id } = req.params;
   try {
-    const patient = await prisma.patient.findUnique({ where: { id } });
+    const patient = await prisma.patient.findUnique({
+      where: { id },
+      select: { id: true, cartella: { select: { data: true } } },
+    });
     if (!patient) {
       res.status(404).json({ error: 'Paziente non trovato' });
       return;
     }
 
-    const cartella = await prisma.cartella.findUnique({ where: { patientId: id } });
-    if (!cartella) {
-      res.status(200).json({ patientId: id, data: null });
-      return;
-    }
-
-    res.status(200).json({ patientId: id, data: cartella.data });
+    res.status(200).json({ patientId: id, data: patient.cartella?.data ?? null });
   } catch (error) {
     console.error('GET /patients/:id/cartella error:', error);
     res.status(500).json({ error: 'Errore nel recupero della cartella clinica' });
@@ -949,7 +976,7 @@ router.put('/:id/cartella', async (req, res) => {
   }
 
   try {
-    const patient = await prisma.patient.findUnique({ where: { id } });
+    const patient = await prisma.patient.findUnique({ where: { id }, select: { id: true } });
     if (!patient) {
       res.status(404).json({ error: 'Paziente non trovato' });
       return;

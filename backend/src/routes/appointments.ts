@@ -1,5 +1,6 @@
-// SPEC-015 T024 (US4): REST appointments for the traditional UI agenda. Same open posture as the
-// other UI data routes (/patients, /consegne: no auth middleware — identity is client-side today).
+// SPEC-015 T024 (US4): REST appointments for the traditional UI agenda. Gated by requireOperator
+// (header-based, not a real IdP) like the other UI data routes (/patients, /consegne — see the
+// "gate minimo" task that added this gate to all of them in one pass).
 // Uses the SAME appointment-service as the Agnos AI actions (FR-007). DELETE is the ONLY deletion
 // path and belongs exclusively to the UI button (FR-008/FR-010): no AI module reaches it.
 
@@ -12,8 +13,13 @@ import {
   SlotConflictError,
   AppointmentNotFoundError,
 } from '../services/appointment-service.js';
+import { requireOperator } from '../ai/auth.js';
 
 const router = Router();
+
+// Gate minimo (header-based, non IdP): l'agenda espone nominativi paziente/operatore,
+// richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use(requireOperator);
 
 // GET /appointments?date=YYYY-MM-DD&operatorId=  → AppointmentDTO[]
 // `date` optional: without it the whole agenda is returned (weekly/monthly views).

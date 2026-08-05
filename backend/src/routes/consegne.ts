@@ -5,8 +5,13 @@ import {
   CONSEGNA_PRIORITA as PRIORITA,
   CONSEGNA_STATO as STATO,
 } from '../services/consegna-service.js';
+import { requireOperator } from '../ai/auth.js';
 
 const consegneRouter = Router();
+
+// Gate minimo (header-based, non IdP): le consegne contengono nominativi/dati clinici
+// paziente, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+consegneRouter.use(requireOperator);
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CONSEGNE (handover cards) CRUD — mounted at /consegne
@@ -15,10 +20,21 @@ const consegneRouter = Router();
 // ═══════════════════════════════════════════════════════════════════════════
 
 // GET /consegne
-consegneRouter.get('/', async (_req, res) => {
+consegneRouter.get('/', async (req, res) => {
+  // Paginazione opt-in (limit/offset): senza parametri il comportamento resta
+  // identico a oggi (nessun take/skip, tutti i record).
+  const { limit, offset } = req.query as { limit?: string; offset?: string };
+  const parsedLimit = Number.parseInt(String(limit ?? ''), 10);
+  const parsedOffset = Number.parseInt(String(offset ?? ''), 10);
+  const take =
+    Number.isFinite(parsedLimit) && parsedLimit > 0 ? Math.min(parsedLimit, 500) : undefined;
+  const skip = Number.isFinite(parsedOffset) && parsedOffset >= 0 ? parsedOffset : undefined;
+
   try {
     const consegne = await prisma.consegna.findMany({
       orderBy: { createdAt: 'desc' },
+      ...(take !== undefined && { take }),
+      ...(skip !== undefined && { skip }),
     });
     res.status(200).json(consegne);
   } catch (error) {

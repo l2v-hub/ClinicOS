@@ -319,10 +319,8 @@ export function AdminAgenda({
               );
             })}
             {HOUR_SLOTS.map((ora) => (
-              <>
-                <div key={`tw-${ora}`} className="agt-week-time">
-                  {ora}
-                </div>
+              <Fragment key={ora}>
+                <div className="agt-week-time">{ora}</div>
                 {getWeekDays(refDate).map((d) => {
                   const dStr = isoDate(d);
                   const apts = getApts(dStr).filter(
@@ -378,7 +376,7 @@ export function AdminAgenda({
                     </div>
                   );
                 })}
-              </>
+              </Fragment>
             ))}
           </div>
         </div>

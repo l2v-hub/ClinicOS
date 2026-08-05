@@ -9,8 +9,13 @@ import {
   getNarrativeSection,
   upsertNarrativeSection,
 } from '../ai/sections/patient-narrative.js';
+import { requireOperator } from '../ai/auth.js';
 
 const router = Router();
+
+// Gate minimo (header-based, non IdP): le sezioni narrative sono dati clinici paziente
+// reali, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use(requireOperator);
 
 function isKey(k: string): k is NarrativeSectionKey {
   return (NARRATIVE_SECTION_KEYS as readonly string[]).includes(k);
