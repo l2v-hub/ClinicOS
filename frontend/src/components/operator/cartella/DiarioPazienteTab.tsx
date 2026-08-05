@@ -3,6 +3,7 @@ import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../.
 import { ClinicalTableSection } from './shared';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { API_URL } from '../../../config';
+import { operatorHeaders } from '../../../lib/operatorSession';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -183,7 +184,9 @@ export function DiarioPazienteTab({
     try {
       const params = new URLSearchParams();
       if (resolvedFilter !== 'tutti') params.set('authorType', resolvedFilter);
-      const res = await fetch(`${API_URL}/patients/${pazienteId}/diary?${params}`);
+      const res = await fetch(`${API_URL}/patients/${pazienteId}/diary?${params}`, {
+        headers: operatorHeaders(),
+      });
       if (!res.ok) throw new Error('Risposta non valida');
       const data = (await res.json()) as { entries: DiarioPazienteEntry[] };
       let allEntries = data.entries ?? [];
@@ -214,7 +217,7 @@ export function DiarioPazienteTab({
     try {
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
           authorType: form.authorType,
           authorName: form.authorName.trim() || operatoreNome,
@@ -245,7 +248,7 @@ export function DiarioPazienteTab({
     try {
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary/${editEntry.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
           authorType: editForm.authorType,
           authorName: editForm.authorName.trim() || operatoreNome,
@@ -283,6 +286,7 @@ export function DiarioPazienteTab({
     try {
       const res = await fetch(`${API_URL}/patients/${pazienteId}/diary/${entry.id}`, {
         method: 'DELETE',
+        headers: operatorHeaders(),
       });
       if (!res.ok) throw new Error();
       setEntries((prev) => prev.filter((e) => e.id !== entry.id));

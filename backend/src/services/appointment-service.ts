@@ -6,6 +6,7 @@
 // exported exclusively as `uiOnlyDeleteAppointment` and NO module under backend/src/ai/ may
 // import it — the AI path has create/update only, by construction.
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 
 export class SlotConflictError extends Error {
@@ -135,6 +136,10 @@ const INCLUDE = {
 // operator-management rework, an unknown operator id is provisioned on first use as a lightweight
 // Operator (+ backing User) row that PRESERVES the UI id, so agenda filtering keeps working.
 
+function isUniqueConstraintError(err: unknown): boolean {
+  return err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002';
+}
+
 async function ensureOperator(
   operatorId: string,
   displayName?: string,
@@ -144,22 +149,44 @@ async function ensureOperator(
     select: { id: true, userId: true },
   });
   if (existing) return existing;
-  const user = await prisma.user.upsert({
-    where: { email: `${operatorId}@clinicos.local` },
-    update: {},
-    create: {
-      email: `${operatorId}@clinicos.local`,
-      passwordHash: 'UI_OPERATOR_NOT_A_REAL_HASH',
-      fullName: displayName?.trim() || operatorId,
-      role: 'OPERATOR',
-    },
-  });
-  return prisma.operator.upsert({
-    where: { id: operatorId },
-    update: {},
-    create: { id: operatorId, userId: user.id },
-    select: { id: true, userId: true },
-  });
+  // Provisioning avviene fuori da qualunque lock (chiamato prima che createAppointment/
+  // updateAppointment entrino nella transazione con pg_advisory_xact_lock, per non tenere il
+  // lock durante una query non correlata allo slot). Due richieste concorrenti per lo stesso
+  // operatorId possono quindi arrivare qui entrambe con existing === null: il secondo upsert
+  // puo' vedere l'unique constraint su email/id gia' soddisfatto dal primo e fallire invece di
+  // aggiornare — si ripiega su una rilettura anziche' propagare l'errore.
+  let user;
+  try {
+    user = await prisma.user.upsert({
+      where: { email: `${operatorId}@clinicos.local` },
+      update: {},
+      create: {
+        email: `${operatorId}@clinicos.local`,
+        passwordHash: 'UI_OPERATOR_NOT_A_REAL_HASH',
+        fullName: displayName?.trim() || operatorId,
+        role: 'OPERATOR',
+      },
+    });
+  } catch (err) {
+    if (!isUniqueConstraintError(err)) throw err;
+    user = await prisma.user.findUniqueOrThrow({
+      where: { email: `${operatorId}@clinicos.local` },
+    });
+  }
+  try {
+    return await prisma.operator.upsert({
+      where: { id: operatorId },
+      update: {},
+      create: { id: operatorId, userId: user.id },
+      select: { id: true, userId: true },
+    });
+  } catch (err) {
+    if (!isUniqueConstraintError(err)) throw err;
+    return prisma.operator.findUniqueOrThrow({
+      where: { id: operatorId },
+      select: { id: true, userId: true },
+    });
+  }
 }
 
 // ── read ─────────────────────────────────────────────────────────────────────
@@ -185,14 +212,19 @@ export async function listAppointments(
   return rows.map(toDTO);
 }
 
-/** 30-min slot conflict: same operator, same date/time, not cancelled. Reused by the AI preview. */
-export async function findConflict(
+// A regular PrismaClient query and a `tx` handed out by `prisma.$transaction(async (tx) => ...)`
+// expose the same model delegates, so the conflict query can run on either — the create/update
+// paths below reuse it INSIDE their lock transaction (`tx`) instead of the standalone client.
+type QueryClient = typeof prisma | Prisma.TransactionClient;
+
+async function findConflictWith(
+  client: QueryClient,
   operatorId: string,
   data: string,
   ora: string,
   excludeId?: string,
 ): Promise<AppointmentDTO | null> {
-  const row = await prisma.appointment.findFirst({
+  const row = await client.appointment.findFirst({
     where: {
       operatorId,
       scheduledAt: toScheduledAt(data, ora),
@@ -202,6 +234,16 @@ export async function findConflict(
     include: INCLUDE,
   });
   return row ? toDTO(row) : null;
+}
+
+/** 30-min slot conflict: same operator, same date/time, not cancelled. Reused by the AI preview. */
+export async function findConflict(
+  operatorId: string,
+  data: string,
+  ora: string,
+  excludeId?: string,
+): Promise<AppointmentDTO | null> {
+  return findConflictWith(prisma, operatorId, data, ora, excludeId);
 }
 
 /** Locate the appointment an update command refers to ("l'appuntamento delle 15" of a patient). */
@@ -221,25 +263,42 @@ export async function findAppointmentAt(
 
 export async function createAppointment(input: CreateAppointmentInput): Promise<AppointmentDTO> {
   const scheduledAt = toScheduledAt(input.data, input.ora);
+
+  // ensureOperator provisions the User/Operator rows on first use (idempotent upsert) and is
+  // needed regardless of whether the slot turns out to be free — it stays OUTSIDE the lock
+  // transaction below so its writes commit even if the conflict check subsequently rejects the
+  // request, and so the (unrelated) operator-provisioning path never holds the slot's advisory
+  // lock longer than necessary.
   const operator = await ensureOperator(input.operatorId, input.operatorName);
-  const conflict = await findConflict(input.operatorId, input.data, input.ora);
-  if (conflict) {
-    throw new SlotConflictError(
-      `Slot già occupato: l'operatore ha già un appuntamento il ${input.data} alle ${input.ora}.`,
-    );
-  }
-  const row = await prisma.appointment.create({
-    data: {
-      patientId: input.patientId,
-      operatorId: operator.id,
-      createdByUserId: operator.userId,
-      scheduledAt,
-      durationMinutes: input.durata && input.durata > 0 ? input.durata : 30,
-      reason: input.tipologia || 'visita',
-      notes: input.note ?? null,
-      status: STATUS_TO_DB[input.stato ?? 'programmato'] ?? 'SCHEDULED',
-    },
-    include: INCLUDE,
+
+  // Conflict check + create are one atomic unit: without a lock, two concurrent requests for the
+  // same operator+slot can both pass the conflict check before either commits. A Postgres
+  // advisory lock keyed on operatorId+scheduledAt (held for the transaction only, no schema
+  // change) serializes them so the second request re-reads post-commit state and is rejected.
+  const lockKey = `${operator.id}|${scheduledAt.toISOString()}`;
+  const row = await prisma.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+
+    const conflict = await findConflictWith(tx, input.operatorId, input.data, input.ora);
+    if (conflict) {
+      throw new SlotConflictError(
+        `Slot già occupato: l'operatore ha già un appuntamento il ${input.data} alle ${input.ora}.`,
+      );
+    }
+
+    return tx.appointment.create({
+      data: {
+        patientId: input.patientId,
+        operatorId: operator.id,
+        createdByUserId: operator.userId,
+        scheduledAt,
+        durationMinutes: input.durata && input.durata > 0 ? input.durata : 30,
+        reason: input.tipologia || 'visita',
+        notes: input.note ?? null,
+        status: STATUS_TO_DB[input.stato ?? 'programmato'] ?? 'SCHEDULED',
+      },
+      include: INCLUDE,
+    });
   });
   return toDTO(row);
 }
@@ -260,26 +319,39 @@ export async function updateAppointment(
 
   const slotChanged =
     data !== current.data || ora !== current.ora || operatorId !== existing.operatorId;
-  if (slotChanged) {
-    const conflict = await findConflict(operatorId, data, ora, id);
-    if (conflict) {
-      throw new SlotConflictError(
-        `Slot già occupato: l'operatore ha già un appuntamento il ${data} alle ${ora}.`,
-      );
-    }
-  }
 
-  const row = await prisma.appointment.update({
-    where: { id },
-    data: {
-      scheduledAt: toScheduledAt(data, ora),
-      operatorId,
-      ...(patch.durata !== undefined ? { durationMinutes: patch.durata } : {}),
-      ...(patch.tipologia !== undefined ? { reason: patch.tipologia } : {}),
-      ...(patch.note !== undefined ? { notes: patch.note } : {}),
-      ...(patch.stato !== undefined ? { status: STATUS_TO_DB[patch.stato] ?? 'SCHEDULED' } : {}),
-    },
-    include: INCLUDE,
+  const scheduledAt = toScheduledAt(data, ora);
+
+  // Conflict check + update are one atomic unit whenever the slot actually moves — same
+  // advisory-lock pattern as createAppointment, keyed on the DESTINATION operator+slot so a
+  // concurrent create/update landing on that same slot is serialized against this one. When the
+  // slot is unchanged there is nothing to race against, so the lock/check is skipped (identical
+  // to prior behaviour) and the transaction only wraps the update itself.
+  const row = await prisma.$transaction(async (tx) => {
+    if (slotChanged) {
+      const lockKey = `${operatorId}|${scheduledAt.toISOString()}`;
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+
+      const conflict = await findConflictWith(tx, operatorId, data, ora, id);
+      if (conflict) {
+        throw new SlotConflictError(
+          `Slot già occupato: l'operatore ha già un appuntamento il ${data} alle ${ora}.`,
+        );
+      }
+    }
+
+    return tx.appointment.update({
+      where: { id },
+      data: {
+        scheduledAt,
+        operatorId,
+        ...(patch.durata !== undefined ? { durationMinutes: patch.durata } : {}),
+        ...(patch.tipologia !== undefined ? { reason: patch.tipologia } : {}),
+        ...(patch.note !== undefined ? { notes: patch.note } : {}),
+        ...(patch.stato !== undefined ? { status: STATUS_TO_DB[patch.stato] ?? 'SCHEDULED' } : {}),
+      },
+      include: INCLUDE,
+    });
   });
   return toDTO(row);
 }

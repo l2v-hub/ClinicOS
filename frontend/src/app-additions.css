@@ -6536,7 +6536,7 @@ textarea.form-input {
   border-bottom: none;
 }
 .cr-uscite-table tr:hover td {
-  background: var(--hover-bg);
+  background: var(--hover);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -9772,4 +9772,24 @@ textarea.form-input {
   .step-verifica__dl {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Alert banner
+═══════════════════════════════════════════════════════════════════════════ */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+.alert__text {
+  flex: 1;
+}
+.alert--error {
+  background: var(--red-bg, #fef2f2);
+  border: 1px solid var(--red, #ef4444);
+  color: var(--red, #ef4444);
 }

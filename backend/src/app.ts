@@ -81,11 +81,19 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/admin', adminRoomsRouter);
+// patientDocumentsRouter va montato PRIMA degli altri router /patients ora protetti da
+// `router.use(requireOperator)`: quel middleware, essendo montato senza path, intercetta
+// OGNI richiesta sotto /patients (anche quelle che non hanno una route corrispondente in quel
+// router), non solo le proprie — esattamente il meccanismo descritto nel commento in cima a
+// patient-documents.ts, ma nella direzione opposta. patientDocumentsRouter usa il proprio gate
+// (demo/entra) per-route, distinto dal requireOperator header-based degli altri: se venisse
+// dopo, una richiesta in modalita' entra (Bearer JWT, senza header X-Operator-Id) prenderebbe
+// 401 dal gate generico di un router precedente prima di raggiungere il proprio gate corretto.
+app.use('/patients', patientDocumentsRouter);
 app.use('/patients', patientAssignmentRouter);
 app.use('/patients', patientTherapiesRouter);
 app.use('/patients', patientDiaryRouter);
 app.use('/patients', narrativeSectionsRouter);
-app.use('/patients', patientDocumentsRouter);
 app.use('/patients', patientsRouter);
 // SPEC-015 (US4): real agenda appointments — same service as the Agnos AI actions; DELETE = UI only.
 app.use('/appointments', appointmentsRouter);

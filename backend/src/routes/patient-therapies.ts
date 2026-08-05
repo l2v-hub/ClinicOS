@@ -11,14 +11,22 @@ import {
   normalizeGiorniSettimana,
   type TherapyCreateInput,
 } from '../therapies/therapy-create.js';
+import { requireOperator } from '../ai/auth.js';
 
 const router = Router();
+
+// Gate minimo (header-based, non IdP): le terapie e somministrazioni sono dati clinici
+// paziente reali, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use(requireOperator);
 
 // GET /patients/:patientId/therapies  (includes structured schedules)
 router.get('/:patientId/therapies', async (req, res) => {
   const { patientId } = req.params;
   try {
-    const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+    const patient = await prisma.patient.findUnique({
+      where: { id: patientId },
+      select: { id: true },
+    });
     if (!patient) {
       res.status(404).json({ error: 'Paziente non trovato' });
       return;
@@ -50,7 +58,10 @@ router.post('/:patientId/therapies', async (req, res) => {
   }
 
   try {
-    const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+    const patient = await prisma.patient.findUnique({
+      where: { id: patientId },
+      select: { id: true },
+    });
     if (!patient) {
       res.status(404).json({ error: 'Paziente non trovato' });
       return;
@@ -191,10 +202,13 @@ router.delete('/:patientId/therapies/:therapyId', async (req, res) => {
 router.get('/:patientId/medication-administrations', async (req, res) => {
   const { patientId } = req.params;
   const date = req.query.date as string | undefined;
-  const limit = parseInt(req.query.limit as string) || 100;
+  const limit = Math.min(parseInt(req.query.limit as string) || 100, 500);
 
   try {
-    const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+    const patient = await prisma.patient.findUnique({
+      where: { id: patientId },
+      select: { id: true },
+    });
     if (!patient) {
       res.status(404).json({ error: 'Paziente non trovato' });
       return;

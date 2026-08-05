@@ -1,7 +1,12 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import { requireOperator } from '../ai/auth.js';
 
 const router = Router();
+
+// Gate minimo (header-based, non IdP): le lettere di dimissione contengono dati clinici
+// paziente reali, richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use(requireOperator);
 
 // ── POST /patient-intake/discharge-letter/upload ──
 // Receives base64 file, stores document

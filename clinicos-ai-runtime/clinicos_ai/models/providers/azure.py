@@ -23,6 +23,7 @@ from ..errors import ProviderUnavailableError, RuntimeError_, ErrorKind
 from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
+from ._common import classify_provider_exception
 
 
 class _AzureRunner:
@@ -71,7 +72,7 @@ class _AzureRunner:
             raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
         except Exception as ex:
             msg = str(ex)
-            kind = ErrorKind.RATE_LIMIT if "429" in msg or "quota" in msg.lower() else ErrorKind.PROVIDER_ERROR
+            kind = classify_provider_exception(msg)
             raise RuntimeError_(kind, f"Azure: {msg[:200]}") from ex
 
         # Agno può catturare l'errore provider e restituirlo come RunOutput status=ERROR:
@@ -171,7 +172,7 @@ class _AzureRunner:
                                 f"Azure structured: {str(ex.reason)[:200]}") from ex
         except Exception as ex:
             msg = str(ex)
-            kind = ErrorKind.RATE_LIMIT if "429" in msg or "quota" in msg.lower() else ErrorKind.PROVIDER_ERROR
+            kind = classify_provider_exception(msg)
             raise RuntimeError_(kind, f"Azure structured: {msg[:200]}") from ex
 
 

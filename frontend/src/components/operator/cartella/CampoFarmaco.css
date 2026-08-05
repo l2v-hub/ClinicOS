@@ -12,7 +12,7 @@
   border-radius: 999px;
   background: #fff;
   font-size: 11px;
-  color: var(--muted);
+  color: var(--text-muted);
   cursor: pointer;
 }
 
@@ -37,7 +37,7 @@
   flex: none;
   width: 16px;
   height: 16px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .campo-farmaco__campo:focus-within {
@@ -64,7 +64,7 @@
 .campo-farmaco__nota {
   margin: 4px 0 0;
   font-size: 11px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .campo-farmaco__nota--errore {
@@ -108,7 +108,7 @@
   display: block;
   margin-top: 1px;
   font-size: 11px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 /* Ripiego per galenici ed esteri: deve essere raggiungibile ma non invitante. */
@@ -157,7 +157,7 @@
 .campo-farmaco__stato {
   margin: 2px 0 0;
   font-size: 11px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .campo-farmaco__scelto.is-fuori-anagrafica .campo-farmaco__stato {

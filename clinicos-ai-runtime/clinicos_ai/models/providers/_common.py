@@ -12,6 +12,14 @@ from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
 
 
+def classify_provider_exception(msg: str) -> ErrorKind:
+    """RATE_LIMIT se il messaggio d'errore del provider menziona 429/quota, altrimenti
+    PROVIDER_ERROR. I runner multimodali (google.py, azure.py `run()`) non possono usare
+    _GenericRunner (serve passare images/files ad Agno) ma condividono questa stessa
+    euristica di classificazione: prima duplicata identica in 4 punti, ora unica qui."""
+    return ErrorKind.RATE_LIMIT if "429" in msg or "quota" in msg.lower() else ErrorKind.PROVIDER_ERROR
+
+
 class _GenericRunner:
     def __init__(self, build_agent: Callable[[], object], timeout_seconds: int, label: str) -> None:
         self._build_agent = build_agent
@@ -30,7 +38,7 @@ class _GenericRunner:
             raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
         except Exception as ex:
             msg = str(ex)
-            kind = ErrorKind.RATE_LIMIT if "429" in msg or "quota" in msg.lower() else ErrorKind.PROVIDER_ERROR
+            kind = classify_provider_exception(msg)
             raise RuntimeError_(kind, f"{self._label}: {msg[:200]}") from ex
 
         # Some SDKs (Agno) DON'T raise on a provider error: they capture it and return a

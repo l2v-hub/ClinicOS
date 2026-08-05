@@ -96,6 +96,7 @@ model Patient {
 
   @@index([lastName, firstName])
   @@index([registeredById])
+  @@index([createdAt])
 }
 
 // ── Patient narrative clinical sections (REQ-029) ─────────────────────────────
@@ -212,6 +213,7 @@ model Appointment {
   @@index([operatorId, scheduledAt])
   @@index([createdByUserId])
   @@index([status, scheduledAt])
+  @@index([scheduledAt])
 }
 
 model MedicationAdministration {
@@ -236,6 +238,7 @@ model MedicationAdministration {
   @@unique([patientId, farmacoNome, date, fascia])
   @@index([date, fascia])
   @@index([patientId])
+  @@index([patientId, date])
 }
 
 model PatientIntakeDocument {
@@ -294,6 +297,7 @@ model PatientTherapy {
 
   @@index([patientId])
   @@index([tipo, stato])
+  @@index([stato])
 }
 
 // REQ-093: per-administration-time prescribed quantity, expressed as an EXACT fraction.
@@ -391,6 +395,7 @@ model Consegna {
 
   @@index([stato])
   @@index([priorita])
+  @@index([createdAt])
 }
 
 model Nota {
@@ -409,6 +414,7 @@ model Nota {
 
   @@index([stato])
   @@index([destinatarioId])
+  @@index([createdAt])
 }
 
 model PatientDiaryEntry {
@@ -429,6 +435,7 @@ model PatientDiaryEntry {
   @@index([patientId])
   @@index([authorType])
   @@index([entryDateTime])
+  @@index([patientId, entryDateTime])
 }
 
 // ── Patient intake draft (F3 EPIC #120 / Issue #125) ─────────────────────────

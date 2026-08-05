@@ -1,13 +1,25 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import { requireOperator } from '../ai/auth.js';
 
 const router = Router();
 
+// Gate minimo (header-based, non IdP): il diario paziente e' un dato clinico reale,
+// richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use(requireOperator);
+
 // GET /patients/:patientId/diary
-// Query params: authorType, from (YYYY-MM-DD), to (YYYY-MM-DD)
+// Query params: authorType, from (YYYY-MM-DD), to (YYYY-MM-DD), limit, offset
 router.get('/:patientId/diary', async (req, res) => {
   const { patientId } = req.params;
-  const { authorType, from, to } = req.query as Record<string, string | undefined>;
+  const { authorType, from, to, limit, offset } = req.query as Record<string, string | undefined>;
+  // Paginazione opt-in (limit/offset): senza parametri il comportamento resta
+  // identico a oggi (nessun take/skip, tutti i record).
+  const parsedLimit = Number.parseInt(String(limit ?? ''), 10);
+  const parsedOffset = Number.parseInt(String(offset ?? ''), 10);
+  const take =
+    Number.isFinite(parsedLimit) && parsedLimit > 0 ? Math.min(parsedLimit, 500) : undefined;
+  const skip = Number.isFinite(parsedOffset) && parsedOffset >= 0 ? parsedOffset : undefined;
 
   try {
     const entries = await prisma.patientDiaryEntry.findMany({
@@ -24,6 +36,8 @@ router.get('/:patientId/diary', async (req, res) => {
           : {}),
       },
       orderBy: { entryDateTime: 'desc' },
+      ...(take !== undefined && { take }),
+      ...(skip !== undefined && { skip }),
     });
     res.status(200).json({ entries, total: entries.length });
   } catch (error) {

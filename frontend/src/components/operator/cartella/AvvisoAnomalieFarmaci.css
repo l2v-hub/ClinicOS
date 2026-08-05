@@ -45,7 +45,7 @@
 
 .avviso-anomalie__ambito {
   font-weight: 500;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .avviso-anomalie__dettaglio {
@@ -59,7 +59,7 @@
   margin: 4px 0 0;
   font-size: 11px;
   font-style: italic;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .avviso-anomalie__azione {
@@ -143,12 +143,12 @@
 .anomalie-reparto__farmaci {
   margin: 2px 0 0;
   font-size: 11px;
-  color: var(--muted);
+  color: var(--text-muted);
   overflow-wrap: anywhere;
 }
 
 .anomalie-reparto__vuoto {
   margin: 0;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--text-muted);
 }

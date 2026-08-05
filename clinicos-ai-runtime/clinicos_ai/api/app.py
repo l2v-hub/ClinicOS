@@ -18,7 +18,8 @@ import os
 import time
 import uuid
 
-from fastapi import FastAPI, Header, HTTPException, status
+from fastapi import FastAPI, Header, HTTPException, Request, status
+from pydantic import ValidationError
 
 from ..agents.extraction import run_extraction
 from ..agents.assistant import run_assistant_plan, run_assistant_compose
@@ -35,6 +36,37 @@ _log = logging.getLogger("clinicos_ai.runtime")
 app = FastAPI(title="ClinicOS AI Runtime", version="1.0.0")
 _REGISTRY = ModelRegistry()
 _JOBS: dict[str, dict] = {}
+
+# AC2: limita quanti job girano in _process() in parallelo. Un job in eccesso resta
+# status="queued" (gia' impostato da run_job/retry_job prima di schedulare il task) finche'
+# non tocca a lui — _process acquisisce il semaforo come prima cosa, prima di passare a
+# status="running". Dimensionato su AI_MAX_CONCURRENCY via RuntimeConfig.
+_CONCURRENCY_SEMAPHORE = asyncio.Semaphore(_REGISTRY.config.max_concurrency)
+
+# AC1: stati terminali — mai gli unici stati rimossi dal garbage-collect di _JOBS.
+_TERMINAL_STATUSES = ("review_ready", "failed", "cancelled")
+
+
+def _gc_expired_jobs() -> None:
+    """AC1: rimuove da _JOBS i job terminali (review_ready/failed/cancelled) la cui
+    conclusione (`finished_at`) risale a piu' di AI_JOB_RETENTION_SECONDS fa. Non tocca mai
+    un job non terminale (created/queued/running/validating/repairing/retryable_error).
+
+    Invocata in modo opportunistico ad ogni create_job: per un servizio single-process senza
+    scheduler esterno e' il punto piu' semplice e testabile per un self-cleaning periodico —
+    non serve un background task/thread dedicato solo per limitare la crescita di un
+    dizionario in RAM.
+    """
+    retention = _REGISTRY.config.job_retention_seconds
+    now = time.time()
+    expired_ids = [
+        jid for jid, job in _JOBS.items()
+        if job["status"] in _TERMINAL_STATUSES
+        and job.get("finished_at") is not None
+        and (now - job["finished_at"]) > retention
+    ]
+    for jid in expired_ids:
+        del _JOBS[jid]
 
 
 @app.on_event("startup")
@@ -69,26 +101,40 @@ def _public(job: dict) -> dict:
 
 
 async def _process(job_id: str) -> None:
-    job = _JOBS[job_id]
-    job.update(status="running", stage="model_processing", started_at=time.time(), error=None)
-    job["events"].append({"at": time.strftime("%H:%M:%S"), "stage": "running"})
-    try:
-        attachments = [
-            Attachment(filename=f["filename"], mime_type=f["mime_type"],
-                       data=base64.b64decode(f["content_base64"]))
-            for f in job["files"]
-        ]
-        out = await run_extraction(_REGISTRY, job["prompt"], job["schema"], attachments,
-                                   mode=job.get("mode") or "extraction")
-        job.update(status="review_ready", stage="completed", model=out.model, result=out.data,
-                   warnings=out.warnings)
-    except RuntimeError_ as ex:
-        retryable = ex.kind in (ErrorKind.TIMEOUT, ErrorKind.RATE_LIMIT, ErrorKind.PROVIDER_ERROR,
-                                ErrorKind.PROVIDER_UNAVAILABLE)
-        job.update(status="retryable_error" if retryable else "failed", stage="error", error=ex.to_dict())
-    except Exception as ex:  # pragma: no cover
-        job.update(status="failed", stage="error", error={"kind": "provider_error", "message": str(ex)[:200]})
-    job["events"].append({"at": time.strftime("%H:%M:%S"), "stage": job["stage"]})
+    # AC2: finche' non c'e' uno slot libero il job resta status="queued" (impostato dal
+    # chiamante prima di schedulare il task) — nulla qui sotto viene eseguito prima di
+    # acquisire il semaforo, quindi lo stato non passa a "running" fuori turno.
+    async with _CONCURRENCY_SEMAPHORE:
+        job = _JOBS[job_id]
+        job.update(status="running", stage="model_processing", started_at=time.time(), error=None)
+        job["events"].append({"at": time.strftime("%H:%M:%S"), "stage": "running"})
+        try:
+            attachments = [
+                Attachment(filename=f["filename"], mime_type=f["mime_type"],
+                           data=base64.b64decode(f["content_base64"]))
+                for f in job["files"]
+            ]
+            # AC3: un job che non conclude entro job_max_duration_seconds viene marcato
+            # fallito invece di restare "running" a tempo indeterminato.
+            out = await asyncio.wait_for(
+                run_extraction(_REGISTRY, job["prompt"], job["schema"], attachments,
+                               mode=job.get("mode") or "extraction"),
+                timeout=_REGISTRY.config.job_max_duration_seconds,
+            )
+            job.update(status="review_ready", stage="completed", model=out.model, result=out.data,
+                       warnings=out.warnings, finished_at=time.time())
+        except RuntimeError_ as ex:
+            retryable = ex.kind in (ErrorKind.TIMEOUT, ErrorKind.RATE_LIMIT, ErrorKind.PROVIDER_ERROR,
+                                    ErrorKind.PROVIDER_UNAVAILABLE)
+            job.update(status="retryable_error" if retryable else "failed", stage="error",
+                       error=ex.to_dict(), finished_at=time.time())
+        except asyncio.TimeoutError:
+            job.update(status="failed", stage="error", finished_at=time.time(),
+                       error={"kind": "timeout", "message": "Job superato il tempo massimo consentito"})
+        except Exception as ex:  # pragma: no cover
+            job.update(status="failed", stage="error", finished_at=time.time(),
+                       error={"kind": "provider_error", "message": str(ex)[:200]})
+        job["events"].append({"at": time.strftime("%H:%M:%S"), "stage": job["stage"]})
 
 
 @app.get("/v1/runtime/health")
@@ -145,13 +191,57 @@ async def assistant_compose(req: AssistantComposeRequest, authorization: str | N
 
 
 @app.post("/v1/document-jobs", status_code=201)
+async def _document_jobs_route(request: Request, authorization: str | None = Header(default=None)):
+    # Route HTTP reale: legge Request grezza cosi' auth e size-check avvengono PRIMA che
+    # FastAPI/Pydantic deserializzino il body (che puo' contenere allegati in base64) in un
+    # CreateJobRequest. create_job() sotto resta un callable sincrono plain — invariato nella
+    # firma — per non rompere i test che lo esercitano direttamente con un body gia' costruito
+    # (vedi tests/test_app_limits.py).
+    _auth(authorization)
+    max_upload_bytes = _REGISTRY.config.max_upload_bytes
+    content_length = request.headers.get("content-length")
+    if content_length is not None and int(content_length) > max_upload_bytes:
+        raise HTTPException(
+            413,
+            f"Upload troppo grande: {content_length} byte (limite {max_upload_bytes})",
+        )
+    raw_body = await request.body()
+    if len(raw_body) > max_upload_bytes:
+        raise HTTPException(
+            413,
+            f"Upload troppo grande: {len(raw_body)} byte (limite {max_upload_bytes})",
+        )
+    try:
+        body = CreateJobRequest.model_validate_json(raw_body)
+    except ValidationError as ex:
+        raise HTTPException(422, str(ex))
+    return create_job(body, authorization=authorization)
+
+
 def create_job(body: CreateJobRequest, authorization: str | None = Header(default=None)):
     _auth(authorization)
+    # AC1: self-cleaning opportunistico — ogni create_job e' anche l'occasione per liberare
+    # i job terminali scaduti, senza bisogno di uno scheduler/background task dedicato.
+    _gc_expired_jobs()
+    # AC4: dimensione totale stimata PRIMA di qualunque decodifica/allocazione. len() sul
+    # base64 grezzo e' un limite superiore ragionevole (il payload decodificato e' piu'
+    # piccolo), evita di dover decodificare solo per misurare. Il boundary HTTP reale
+    # (_document_jobs_route) ha gia' fatto un check equivalente sul body grezzo prima del
+    # parsing; questo resta come verifica semantica finale e come garanzia per chi chiama
+    # create_job() direttamente (es. i test).
+    total_upload_bytes = sum(len(f.content_base64) for f in body.files)
+    max_upload_bytes = _REGISTRY.config.max_upload_bytes
+    if total_upload_bytes > max_upload_bytes:
+        raise HTTPException(
+            413,
+            f"Upload troppo grande: {total_upload_bytes} byte (limite {max_upload_bytes})",
+        )
     job_id = str(uuid.uuid4())
     _JOBS[job_id] = {
         "id": job_id, "external_job_id": body.external_job_id, "status": "created", "stage": None,
         "files": [f.model_dump() if hasattr(f, "model_dump") else dict(f) for f in body.files],
         "schema": body.schema, "prompt": body.prompt, "events": [], "started_at": None,
+        "finished_at": None,
     }
     return _public(_JOBS[job_id])
 
@@ -205,7 +295,7 @@ async def retry_job(job_id: str, authorization: str | None = Header(default=None
         raise HTTPException(404, "Job non trovato")
     if job["status"] not in ("failed", "retryable_error"):
         raise HTTPException(400, f"Job non ritentabile nello stato {job['status']}")
-    job.update(status="queued", stage="queued", error=None)
+    job.update(status="queued", stage="queued", error=None, finished_at=None)
     asyncio.create_task(_process(job_id))
     return _public(job)
 
@@ -216,5 +306,5 @@ def cancel_job(job_id: str, authorization: str | None = Header(default=None)):
     job = _JOBS.get(job_id)
     if not job:
         raise HTTPException(404, "Job non trovato")
-    job.update(status="cancelled", stage="error")
+    job.update(status="cancelled", stage="error", finished_at=time.time())
     return _public(job)

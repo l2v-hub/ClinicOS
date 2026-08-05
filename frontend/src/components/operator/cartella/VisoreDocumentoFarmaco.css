@@ -28,7 +28,7 @@
 
 .visore-farmaco__scelta {
   font-size: 13px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .visore-farmaco__scelta p {
@@ -92,7 +92,7 @@
 }
 
 .visore-farmaco__pagina {
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .visore-farmaco__sezioni {
@@ -108,7 +108,7 @@
 .visore-farmaco__sezioni-etichetta {
   font-size: 12px;
   font-weight: 600;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .visore-farmaco__salto {
@@ -139,7 +139,7 @@
   max-width: 520px;
   text-align: center;
   font-size: 14px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .visore-farmaco__stato--errore {
@@ -187,7 +187,7 @@
   margin: 6px 0 0;
   text-align: center;
   font-size: 11px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 @media (max-width: 900px) {

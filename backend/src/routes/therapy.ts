@@ -1,8 +1,13 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
+import { requireOperator } from '../ai/auth.js';
 
 const router = Router();
+
+// Gate minimo (header-based, non IdP): gli slot terapia espongono nominativi paziente e
+// farmaci somministrati, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use(requireOperator);
 
 // Fascia definitions
 const FASCE = [

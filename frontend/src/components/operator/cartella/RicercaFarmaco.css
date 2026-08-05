@@ -23,7 +23,7 @@
   flex: none;
   width: 18px;
   height: 18px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .ricerca-farmaco__campo:focus-within {
@@ -53,7 +53,7 @@
   border-radius: 999px;
   background: #fff;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--text-muted);
   cursor: pointer;
 }
 
@@ -72,7 +72,7 @@
 .ricerca-farmaco__nota {
   margin: 0;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .ricerca-farmaco__nota--errore {
@@ -122,7 +122,7 @@
 .ricerca-farmaco__pa {
   margin: 2px 0 0;
   font-size: 11px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .ricerca-farmaco__apri {
@@ -186,7 +186,7 @@
   margin: 0;
   max-width: 68ch;
   font-size: 13px;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .page-anagrafica-farmaci__corpo {
