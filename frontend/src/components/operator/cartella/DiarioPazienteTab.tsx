@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../../types';
-import { ClinicalTableSection } from './shared';
+import { ClinicalTableSection, LoadingState, EmptyState } from './shared';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { API_URL } from '../../../config';
 import { operatorHeaders } from '../../../lib/operatorSession';
@@ -593,13 +593,9 @@ export function DiarioPazienteTab({
 
         {/* Diario a card (una card per voce, border-left colore ruolo) */}
         {loading ? (
-          <div style={{ padding: '24px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
-            Caricamento…
-          </div>
+          <LoadingState />
         ) : entries.length === 0 ? (
-          <div style={{ padding: '24px 0', textAlign: 'center', color: 'var(--text-muted)' }}>
-            Nessuna voce nel diario.
-          </div>
+          <EmptyState msg="Nessuna voce nel diario." />
         ) : (
           <div className="diario-cards">
             {[...entries]

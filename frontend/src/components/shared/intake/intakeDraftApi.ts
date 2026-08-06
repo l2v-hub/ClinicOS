@@ -1,26 +1,6 @@
 // Intake draft API client.
-//
-// The base URL is resolved from config.ts (which reads VITE_API_URL) in Vite
-// builds. In Node test environments (import.meta.env is undefined), we fall back
-// to localhost — tests mock fetch anyway so the host value doesn't matter for
-// assertions, only the path shape.
 
-function resolveApiUrl(): string {
-  try {
-    // import.meta.env is injected by Vite at build time but is undefined in plain Node.
-    const raw = (import.meta as unknown as { env?: { VITE_API_URL?: string; PROD?: boolean } }).env;
-    if (!raw) throw new Error('no env');
-    const url = raw.VITE_API_URL?.trim();
-    const fallback = raw.PROD
-      ? 'https://clinicos-backend-production-df88.up.railway.app'
-      : 'http://localhost:3001';
-    return (url ? url : fallback).replace(/\/$/, '');
-  } catch {
-    return 'http://localhost:3001';
-  }
-}
-
-const API_URL = resolveApiUrl();
+import { API_URL } from '../../../config';
 
 export interface DraftResponse {
   id: string;

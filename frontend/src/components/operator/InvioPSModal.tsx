@@ -6,9 +6,8 @@ import type {
   PatientTherapyAPI,
 } from '../../types';
 import { formatFraction, computeEquivalent } from './cartella/therapyDose';
+import { API_URL } from '../../config';
 import { cachedGetJson } from '../../lib/cachedFetch';
-
-const API_URL = import.meta.env.VITE_API_URL || '';
 
 // ── FASCE labels (mirrors TerapiaFarmacologicaTab) ────────────────────────────
 

@@ -11,6 +11,7 @@
 // le proprie terapie per intero.
 
 import { useEffect, useMemo, useState } from 'react';
+import { API_URL } from '../../../config';
 import { cachedGetJson } from '../../../lib/cachedFetch';
 import { anomalieDi, NESSUNA_ANOMALIA, type AnomaliePaziente } from './anomalieFarmaco';
 import {
@@ -18,11 +19,6 @@ import {
   useRisoluzioniFarmaco,
   type RigaDaRisolvere,
 } from './farmacoRiferimento';
-
-// `import.meta.env` non esiste sotto node:test: la lettura difensiva evita che un test
-// che lo raggiunge si spenga su un errore d’ambiente invece che su un’asserzione.
-const API_URL =
-  (import.meta as ImportMeta & { env?: Record<string, string> }).env?.VITE_API_URL ?? '';
 
 // Le somministrazioni del giorno cambiano durante il turno, ma l'insieme dei farmaci prescritti
 // no: un minuto di cache evita di ripetere la richiesta a ogni navigazione fra le schermate.

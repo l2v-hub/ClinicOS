@@ -140,6 +140,12 @@ export function EmptyState({ msg }: { msg: string }) {
   return <p className="cr-empty">{msg}</p>;
 }
 
+/** Stato di caricamento transitorio per un tab/sezione — stesso aspetto ovunque, invece di
+ * ognuno con il proprio style inline e il proprio testo ("Caricamento…" / "Caricamento..."). */
+export function LoadingState({ msg = 'Caricamento…' }: { msg?: string }) {
+  return <p className="cr-empty-inline">{msg}</p>;
+}
+
 export function FormRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="form-row">
