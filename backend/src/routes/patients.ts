@@ -41,6 +41,44 @@ router.get('/settings', (_req, res) => {
   });
 });
 
+// GET /patients/clinical-summary — the small set of derived flags the patient list badges
+// and the dashboard KPIs need (stato ricovero, critico, allergie, terapie), for EVERY patient,
+// in one query. Replaces the previous pattern of the frontend fetching the full cartella (the
+// entire clinical record: diario, terapie, anamnesi...) once per patient just to read four
+// booleans/counts out of it. Defined BEFORE '/:id' so it is not captured as an id.
+router.get('/clinical-summary', async (_req, res) => {
+  try {
+    const cartelle = await prisma.cartella.findMany({ select: { patientId: true, data: true } });
+    const summary = cartelle.map(({ patientId, data }) => {
+      const c = (data ?? {}) as {
+        statoRicovero?: string;
+        parametriVitali?: Array<{ stato?: string }>;
+        indicatoriRischio?: Array<{ livello?: string }>;
+        allergie?: Array<{ gravita?: string }>;
+        terapie?: Array<{ stato?: string }>;
+      };
+      const allergie = Array.isArray(c.allergie) ? c.allergie : [];
+      const terapie = Array.isArray(c.terapie) ? c.terapie : [];
+      return {
+        patientId,
+        statoRicovero: c.statoRicovero ?? null,
+        hasCriticalVitals: (c.parametriVitali ?? []).some((v) => v.stato === 'critico'),
+        hasHighRisk: (c.indicatoriRischio ?? []).some(
+          (r) => r.livello === 'alto' || r.livello === 'critico',
+        ),
+        allergieCount: allergie.length,
+        hasSevereAllergy: allergie.some((a) => a.gravita === 'grave'),
+        terapieTotali: terapie.length,
+        terapieCompletate: terapie.filter((t) => t.stato === 'completata').length,
+      };
+    });
+    res.status(200).json(summary);
+  } catch (error) {
+    console.error('GET /patients/clinical-summary error:', error);
+    res.status(500).json({ error: 'Errore nel recupero del riepilogo clinico' });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
