@@ -10,16 +10,12 @@
 // ma solo con un'azione deliberata, che e' diversa dal digitare e passare avanti.
 
 import { useEffect, useRef, useState } from 'react';
+import { API_URL } from '../../../config';
 import { IcoSearch } from '../../../icons';
 import { testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
 import { PHARMA_FORMS } from './therapyDose';
 import { normalizza } from './farmacoCorrispondenza';
 import './CampoFarmaco.css';
-
-// `import.meta.env` non esiste sotto node:test: la lettura difensiva evita che un test
-// che lo raggiunge si spenga su un errore d’ambiente invece che su un’asserzione.
-const API_URL =
-  (import.meta as ImportMeta & { env?: Record<string, string> }).env?.VITE_API_URL ?? '';
 const LIMITE = 12;
 const ATTESA_MS = 300;
 const MINIMO_CARATTERI = 3;

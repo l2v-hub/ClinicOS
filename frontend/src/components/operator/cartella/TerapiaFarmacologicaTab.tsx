@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
+import { API_URL } from '../../../config';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
 import { operatorHeaders } from '../../../lib/operatorSession';
-import { ClinicalTableSection } from './shared';
+import { ClinicalTableSection, LoadingState } from './shared';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
 import {
@@ -23,8 +24,6 @@ import { RicercaFarmacoModal } from './RicercaFarmaco';
 import { AvvisoAnomalieFarmaci } from './AvvisoAnomalieFarmaci';
 import { anomalieDi } from './anomalieFarmaco';
 import type { PrescrizioneDaAbbinare } from './farmacoCorrispondenza';
-
-const API_URL = import.meta.env.VITE_API_URL || '';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -1128,9 +1127,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         {/* ── Sub-tab: Farmaci attivi ── */}
         {subTab === 'attivi' &&
           (loading ? (
-            <p style={{ padding: '16px', color: 'var(--text-muted)', fontSize: 13 }}>
-              Caricamento...
-            </p>
+            <LoadingState />
           ) : attive.length === 0 ? (
             <p className="cr-empty">
               Nessun farmaco attivo.{' '}
@@ -1174,7 +1171,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                   + Nuova terapia
                 </button>
                 {loading ? (
-                  <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Caricamento...</p>
+                  <LoadingState />
                 ) : (
                   <ClinicalTable<PatientTherapyAPI>
                     noWrapper
@@ -1204,7 +1201,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               />
             </div>
             {dailyLoading ? (
-              <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Caricamento...</p>
+              <LoadingState />
             ) : (
               <ClinicalTable<DailyAdminRow>
                 noWrapper
@@ -1221,9 +1218,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         {/* ── Sub-tab: Storico ── */}
         {subTab === 'storico' &&
           (historyLoading ? (
-            <p style={{ padding: '16px', color: 'var(--text-muted)', fontSize: 13 }}>
-              Caricamento storico...
-            </p>
+            <LoadingState msg="Caricamento storico…" />
           ) : (
             <ClinicalTable<MedAdmin>
               noWrapper
@@ -1238,9 +1233,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         {/* ── Sub-tab: Sospese/concluse ── */}
         {subTab === 'sospese' &&
           (loading ? (
-            <p style={{ padding: '16px', color: 'var(--text-muted)', fontSize: 13 }}>
-              Caricamento...
-            </p>
+            <LoadingState />
           ) : (
             <ClinicalTable<PatientTherapyAPI>
               noWrapper
