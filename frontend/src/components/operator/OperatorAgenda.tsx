@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, useMemo, Fragment } from 'react';
 import type {
   Appuntamento,
   Operatore,
@@ -166,6 +166,14 @@ export function OperatorAgenda({
 
   const todayStr = isoDate(refDate);
   const todayApts = myApts(todayStr);
+  // Indice per lookup O(1) nella griglia giornaliera: senza, ogni cella orario richiamava
+  // myApts() e rifiltrava/riordinava l'intero array `appuntamenti` (TIME_SLOTS.length volte
+  // per render, su un array con gli appuntamenti di tutti gli operatori, non solo i propri).
+  const todayAptByOra = useMemo(() => {
+    const map = new Map<string, Appuntamento>();
+    for (const a of todayApts) map.set(a.ora, a);
+    return map;
+  }, [todayApts]);
   const completati = todayApts.filter((a) => a.stato === 'completato').length;
   const usedMin = todayApts.reduce((s, a) => s + (a.durata ?? 30), 0);
   const pct = Math.min(100, Math.round((usedMin / TOTAL_AVAIL_MIN) * 100));
@@ -267,7 +275,7 @@ export function OperatorAgenda({
         <div className="agt-day-wrap">
           {TIME_SLOTS.map((ora) => {
             const tSlot = therapySlotsMap.get(ora);
-            const apt = myApts(todayStr).find((a) => a.ora === ora);
+            const apt = todayAptByOra.get(ora);
             const isHour = ora.endsWith(':00');
             const isSelected = apt?.id === selectedAptId;
 

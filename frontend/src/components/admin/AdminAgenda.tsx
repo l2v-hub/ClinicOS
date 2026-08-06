@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import type { Appuntamento, Operatore, Paziente } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
@@ -132,6 +132,18 @@ export function AdminAgenda({
 
   const todayStr = isoDate(refDate);
 
+  // Indice per lookup O(1) nella griglia giornaliera (operatore x slot orario). Senza,
+  // ogni cella richiamava getApts() e rifiltrava/riordinava l'intero array `appuntamenti`
+  // (TIME_SLOTS.length * operatori visibili chiamate per render, su un array che include
+  // ogni appuntamento mai creato, non solo quelli del giorno mostrato).
+  const aptByOpAndOra = useMemo(() => {
+    const map = new Map<string, Appuntamento>();
+    for (const a of appuntamenti) {
+      if (a.data === todayStr) map.set(`${a.operatoreId}::${a.ora}`, a);
+    }
+    return map;
+  }, [appuntamenti, todayStr]);
+
   return (
     <div className="agt-view">
       {/* ── Header ── */}
@@ -240,7 +252,7 @@ export function AdminAgenda({
                     {isHour ? ora : ''}
                   </div>
                   {visibili.map((op) => {
-                    const apt = getApts(todayStr, op.id).find((a) => a.ora === ora);
+                    const apt = aptByOpAndOra.get(`${op.id}::${ora}`);
                     const isSelected = apt?.id === selectedAptId;
                     return (
                       <div
