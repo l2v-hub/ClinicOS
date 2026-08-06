@@ -1,4 +1,5 @@
-// StepVerifica — Step 6 of the intake wizard.
+// StepVerifica — Step 5 of the intake wizard (was step 6 before removing the unimplemented
+// "Documenti" placeholder step — see IntakeWorkspace.tsx STEPS).
 // Shows a readonly summary of collected data and a "Crea paziente" confirm button.
 
 import { IcoCheck } from '../../../icons';
@@ -75,7 +76,7 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
   const canCreate = checklist.every((c) => c.ok);
 
   return (
-    <div className="step-verifica" data-testid="intake-step-6">
+    <div className="step-verifica" data-testid="intake-step-5">
       <h3 className="step-verifica__title">Riepilogo</h3>
 
       <section className="step-verifica__section">
