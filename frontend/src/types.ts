@@ -506,6 +506,19 @@ export interface CartellaPaziente {
   consulenze?: EsameClinicoRecord[];
 }
 
+/** GET /patients/clinical-summary — the small set of derived flags badges/KPIs need, for
+ * every patient in one call, instead of fetching each patient's full CartellaPaziente. */
+export interface ClinicalSummaryEntry {
+  patientId: string;
+  statoRicovero: CartellaPaziente['statoRicovero'] | null;
+  hasCriticalVitals: boolean;
+  hasHighRisk: boolean;
+  allergieCount: number;
+  hasSevereAllergy: boolean;
+  terapieTotali: number;
+  terapieCompletate: number;
+}
+
 // ── Presa in Carico ────────────────────────────────────────────────────────────
 
 export interface PresaInCarico {

@@ -1,4 +1,4 @@
-import type { Operatore, Consegna, Camera, CartellaPaziente, NavKey } from '../../types';
+import type { Operatore, Consegna, Camera, ClinicalSummaryEntry, NavKey } from '../../types';
 import {
   IcoArrow,
   IcoWarning,
@@ -22,7 +22,7 @@ interface AdminDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string) => void;
-  cartelle?: CartellaPaziente[];
+  clinicalSummary?: ClinicalSummaryEntry[];
 }
 
 function WorkloadBar({ value, max, color }: { value: number; max: number; color?: string }) {
@@ -44,20 +44,16 @@ export function AdminDashboard({
   onNavigate,
   onOpenConsegneAperte,
   onSelectPaziente,
-  cartelle = [],
+  clinicalSummary = [],
 }: AdminDashboardProps) {
   const attivi = operatori.filter((o) => o.stato === 'attivo');
   const urgenti = consegne.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
   const maxPazienti = Math.max(...operatori.map((o) => o.pazientiAssegnati), 1);
 
   // Clinical KPIs
-  const critici = cartelle.filter((c) =>
-    c.parametriVitali.some((v) => v.stato === 'critico'),
-  ).length;
-  const rischiAlti = cartelle.filter((c) =>
-    c.indicatoriRischio.some((r) => r.livello === 'alto' || r.livello === 'critico'),
-  ).length;
-  const dimessi = cartelle.filter((c) => c.statoRicovero === 'dimesso').length;
+  const critici = clinicalSummary.filter((c) => c.hasCriticalVitals).length;
+  const rischiAlti = clinicalSummary.filter((c) => c.hasHighRisk).length;
+  const dimessi = clinicalSummary.filter((c) => c.statoRicovero === 'dimesso').length;
   const consegneAperte = consegne.filter((c) => c.stato !== 'completata').length;
   const consegneInCorso = consegne.filter((c) => c.stato === 'in_corso').length;
 
@@ -147,7 +143,7 @@ export function AdminDashboard({
       </div>
 
       {/* Clinical KPIs */}
-      {cartelle.length > 0 && (
+      {clinicalSummary.length > 0 && (
         <>
           <div className="section-header" style={{ marginTop: 28, marginBottom: 12 }}>
             <h3 className="section-header__title">

@@ -10,7 +10,7 @@ import type {
   Operatore,
   Camera,
   NuovoPaziente,
-  CartellaPaziente,
+  ClinicalSummaryEntry,
 } from '../../types';
 import {
   IcoSearch,
@@ -42,8 +42,8 @@ interface PatientListProps {
   /** REQ-019: operator identity for import authorization. */
   operatorId?: string;
   operatorRole?: string;
-  /** Cartelle cliniche (già disponibili nel parent) per badge stato clinico + allergie. */
-  cartelle?: CartellaPaziente[];
+  /** Riepilogo clinico leggero (già disponibile nel parent) per badge stato clinico + allergie. */
+  clinicalSummary?: ClinicalSummaryEntry[];
 }
 
 const STATO_RICOVERO_LABEL: Record<string, string> = {
@@ -54,13 +54,13 @@ const STATO_RICOVERO_LABEL: Record<string, string> = {
 };
 
 /** Stato clinico sintetico per la lista (dati reali cartella, nessuna chiamata extra). */
-function statoClinicoBadges(c?: CartellaPaziente) {
+function statoClinicoBadges(c?: ClinicalSummaryEntry) {
   if (!c) return null;
-  const critico =
-    (c.parametriVitali ?? []).some((v) => v.stato === 'critico') ||
-    (c.indicatoriRischio ?? []).some((r) => r.livello === 'alto' || r.livello === 'critico');
-  const allergie = (c.allergie ?? []).length;
-  return { statoRicovero: c.statoRicovero, critico, allergie };
+  return {
+    statoRicovero: c.statoRicovero,
+    critico: c.hasCriticalVitals || c.hasHighRisk,
+    allergie: c.allergieCount,
+  };
 }
 
 function calcAge(dob: string): number {
@@ -114,9 +114,11 @@ const PatientListCard = memo(function PatientListCard({
         </span>
         {badges && (
           <span className="pt-list-card__badges">
-            <span className={`stato-pill stato-pill--ricovero-${badges.statoRicovero}`}>
-              {STATO_RICOVERO_LABEL[badges.statoRicovero] ?? badges.statoRicovero}
-            </span>
+            {badges.statoRicovero && (
+              <span className={`stato-pill stato-pill--ricovero-${badges.statoRicovero}`}>
+                {STATO_RICOVERO_LABEL[badges.statoRicovero] ?? badges.statoRicovero}
+              </span>
+            )}
             {badges.critico && <span className="alert-chip alert-chip--red">Critico</span>}
           </span>
         )}
@@ -154,9 +156,12 @@ export function PatientList({
   onImported,
   operatorId,
   operatorRole,
-  cartelle = [],
+  clinicalSummary = [],
 }: PatientListProps) {
-  const cartellaMap = useMemo(() => new Map(cartelle.map((c) => [c.pazienteId, c])), [cartelle]);
+  const summaryMap = useMemo(
+    () => new Map(clinicalSummary.map((c) => [c.patientId, c])),
+    [clinicalSummary],
+  );
   // AC6/AC11: anomalie di tutto il reparto da UNA richiesta, non una per paziente.
   const anomalie = useAnomalieReparto();
   const [ricerca, setRicerca] = useState('');
@@ -354,7 +359,7 @@ export function PatientList({
                   label: 'Paziente',
                   sortable: true,
                   render: (_v, p) => {
-                    const b = statoClinicoBadges(cartellaMap.get(p.id));
+                    const b = statoClinicoBadges(summaryMap.get(p.id));
                     return (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <div className="op-avatar-sm" aria-hidden="true">
@@ -390,7 +395,7 @@ export function PatientList({
                   key: 'statoClinico',
                   label: 'Stato clinico',
                   render: (_v, p) => {
-                    const s = statoClinicoBadges(cartellaMap.get(p.id));
+                    const s = statoClinicoBadges(summaryMap.get(p.id));
                     if (!s)
                       return (
                         <span className="cell--muted" style={{ fontSize: 11 }}>
@@ -401,9 +406,11 @@ export function PatientList({
                       <div
                         style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}
                       >
-                        <span className={`stato-pill stato-pill--ricovero-${s.statoRicovero}`}>
-                          {STATO_RICOVERO_LABEL[s.statoRicovero] ?? s.statoRicovero}
-                        </span>
+                        {s.statoRicovero && (
+                          <span className={`stato-pill stato-pill--ricovero-${s.statoRicovero}`}>
+                            {STATO_RICOVERO_LABEL[s.statoRicovero] ?? s.statoRicovero}
+                          </span>
+                        )}
                         {s.critico && <span className="alert-chip alert-chip--red">Critico</span>}
                       </div>
                     );
@@ -501,7 +508,7 @@ export function PatientList({
                 key={p.id}
                 p={p}
                 hasConsegnaAperta={consegneAperte.has(p.id)}
-                badges={statoClinicoBadges(cartellaMap.get(p.id))}
+                badges={statoClinicoBadges(summaryMap.get(p.id))}
                 anomalie={anomalieDelPaziente(anomalie, p.id)}
                 deleteEnabled={deleteEnabled}
                 deleting={deletingId === p.id}

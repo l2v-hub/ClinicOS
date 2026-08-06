@@ -1,4 +1,4 @@
-import type { UtenteApp, Consegna, SlotAgenda, CartellaPaziente, Paziente } from '../../types';
+import type { UtenteApp, Consegna, SlotAgenda, ClinicalSummaryEntry, Paziente } from '../../types';
 import {
   IcoArrow,
   IcoWarning,
@@ -26,7 +26,7 @@ interface OperatorDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string) => void;
-  cartelle?: CartellaPaziente[];
+  clinicalSummary?: ClinicalSummaryEntry[];
   pazienti?: Paziente[]; // reserved for future patient-level KPIs
 }
 
@@ -47,7 +47,7 @@ export function OperatorDashboard({
   onNavigate,
   onOpenConsegneAperte,
   onSelectPaziente,
-  cartelle = [],
+  clinicalSummary = [],
 }: OperatorDashboardProps) {
   const mieConsegne = consegne.filter(
     (c) =>
@@ -60,22 +60,15 @@ export function OperatorDashboard({
   // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
   const anomalie = useAnomalieReparto();
 
-  // Clinical KPIs from cartelle
-  const critici = cartelle.filter((c) =>
-    c.parametriVitali.some((v) => v.stato === 'critico'),
-  ).length;
-  const rischiAlti = cartelle.filter((c) =>
-    c.indicatoriRischio.some((r) => r.livello === 'alto' || r.livello === 'critico'),
-  ).length;
-  const allergieGravi = cartelle.filter((c) =>
-    c.allergie.some((a) => a.gravita === 'grave'),
-  ).length;
-  const pazientiRicoverati = cartelle.filter((c) => c.statoRicovero === 'ricoverato').length;
+  // Clinical KPIs from clinicalSummary
+  const critici = clinicalSummary.filter((c) => c.hasCriticalVitals).length;
+  const rischiAlti = clinicalSummary.filter((c) => c.hasHighRisk).length;
+  const allergieGravi = clinicalSummary.filter((c) => c.hasSevereAllergy).length;
+  const pazientiRicoverati = clinicalSummary.filter((c) => c.statoRicovero === 'ricoverato').length;
 
   // Avanzamento terapie / consegne (dati reali)
-  const tutteTerapie = cartelle.flatMap((c) => c.terapie ?? []);
-  const terapieTotali = tutteTerapie.length;
-  const terapieCompletate = tutteTerapie.filter((t) => t.stato === 'completata').length;
+  const terapieTotali = clinicalSummary.reduce((sum, c) => sum + c.terapieTotali, 0);
+  const terapieCompletate = clinicalSummary.reduce((sum, c) => sum + c.terapieCompletate, 0);
   const pctTerapie = terapieTotali > 0 ? Math.round((terapieCompletate / terapieTotali) * 100) : 0;
   const consegneCompletate = mieConsegne.filter((c) => c.stato === 'completata').length;
   const pctConsegne =
@@ -152,7 +145,7 @@ export function OperatorDashboard({
       )}
 
       {/* Clinical KPI band — banda alert clinici in cima */}
-      {cartelle.length > 0 && (
+      {clinicalSummary.length > 0 && (
         <div className="kpi-alert-grid">
           <div
             className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`}

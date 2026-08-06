@@ -18,6 +18,7 @@ import type {
   Nota,
   StatoNota,
   CartellaPaziente,
+  ClinicalSummaryEntry,
   NuovoPaziente,
   TherapySlot,
   MotivoNonErogazione,
@@ -170,6 +171,9 @@ export default function App() {
     focusId: string | null;
   }>({ filtro: 'tutte', focusId: null });
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
+  // Riepilogo clinico leggero (badge lista + KPI dashboard) per TUTTI i pazienti in una sola
+  // chiamata — sostituisce il prefetch N+1 della cartella completa per ciascun paziente.
+  const [clinicalSummary, setClinicalSummary] = useState<ClinicalSummaryEntry[]>([]);
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
   const [camere, setCamere] = useState<Camera[]>([]);
   // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
@@ -412,13 +416,15 @@ export default function App() {
       .then((data: Paziente[]) => {
         const sorted = sortPazienti(data);
         setPazienti(sorted);
-        // Prefetch cartelle so the patient list can render clinical-status/allergy
-        // badges without opening each patient. Reuses the existing per-patient
-        // endpoint (no backend change); a patient with no record stays badge-less.
-        void Promise.all(sorted.map((p) => loadCartella(p.id)));
       })
       .catch(() => setPazienti([]))
       .finally(() => setLoadingPazienti(false));
+    // Riepilogo clinico (badge lista + KPI dashboard) per tutti i pazienti in UNA chiamata,
+    // invece della cartella completa di ognuno (era N+1: vedi commit di questo ciclo UX).
+    fetch(`${API_URL}/patients/clinical-summary`, { headers: operatorHeaders() })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: ClinicalSummaryEntry[]) => setClinicalSummary(data))
+      .catch(() => setClinicalSummary([]));
     loadTherapySlots();
     loadAppuntamenti(); // SPEC-015 US4: agenda persistita
     // Load rooms from API for AdminDashboard
@@ -463,6 +469,17 @@ export default function App() {
         /* keep empty array */
       });
   }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
+
+  // "Parametri multipaziente" è l'unica vista che mostra i parametri vitali di TUTTI i
+  // pazienti insieme: a differenza dei badge/KPI (coperti dal riepilogo leggero sopra), le
+  // serve la cartella completa di ognuno. Caricata solo qui, non più al login per tutti.
+  useEffect(() => {
+    if (navKey !== 'parametri-multipaziente' || pazienti.length === 0) return;
+    const cartelleGiaCaricate = new Set(cartelle.map((c) => c.pazienteId));
+    const daCaricare = pazienti.filter((p) => !cartelleGiaCaricate.has(p.id));
+    if (daCaricare.length > 0) void Promise.all(daCaricare.map((p) => loadCartella(p.id)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- loadCartella/cartelle stabili per lo scopo dell'effetto
+  }, [navKey, pazienti]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
 
@@ -1410,7 +1427,7 @@ export default function App() {
               onNavigate={navigate}
               onOpenConsegneAperte={openConsegneAperte}
               onSelectPaziente={goToPazienteByNome}
-              cartelle={cartelle}
+              clinicalSummary={clinicalSummary}
             />
           )}
           {isAdmin && navKey === 'gestione-operatori' && (
@@ -1475,7 +1492,7 @@ export default function App() {
               onNavigate={navigate}
               onOpenConsegneAperte={openConsegneAperte}
               onSelectPaziente={goToPazienteByNome}
-              cartelle={cartelle}
+              clinicalSummary={clinicalSummary}
               pazienti={pazienti}
             />
           )}
@@ -1488,7 +1505,7 @@ export default function App() {
               loading={loadingPazienti}
               onSelect={selectPaziente}
               onAddPaziente={addPaziente}
-              cartelle={cartelle}
+              clinicalSummary={clinicalSummary}
               operatorId={utente?.id}
               operatorRole={utente?.ruolo}
               onImported={(patientId, moduleTabId) => {
