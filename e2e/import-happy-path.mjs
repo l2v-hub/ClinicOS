@@ -1,6 +1,6 @@
 // Browser happy-path E2E for the AI import flow (REQ-020).
 // Drives the real SPA end-to-end: Nuovo paziente -> multi-upload -> estrazione ->
-// revisione -> "Crea paziente" -> IntakeWorkspace wizard (step 3..6, therapy +
+// revisione -> "Crea paziente" -> IntakeWorkspace wizard (step 3..5, therapy +
 // demographics acceptance gates, explicit allergy status #265) -> conferma ->
 // paziente creato -> API persistence check -> UI reload check.
 // Runs at two viewports, capturing screenshots and a Playwright trace per viewport.
@@ -169,7 +169,10 @@ try {
       await page.waitForTimeout(700); // allow the debounced autosave to flush
       await page.screenshot({ path: resolve(outDir, `${tag}-4-step3-clinica.png`) });
 
-      // Steps 4 (Moduli) and 5 (Documenti) have no required input -> advance to 6 (Verifica).
+      // Step 4 (Moduli) has no required input -> advance to 5 (Verifica). "Documenti" was a
+      // step between these two but was an unimplemented placeholder (F5) with nothing to
+      // interact with, so it was removed from the wizard (see IntakeWorkspace.tsx STEPS) —
+      // one fewer "Avanti" click for every patient created, real or synthetic.
       await page.getByRole('button', { name: /Avanti/i }).click();
       await page
         .locator('[data-testid="intake-step-4"]')
@@ -178,17 +181,13 @@ try {
       await page
         .locator('[data-testid="intake-step-5"]')
         .waitFor({ state: 'visible', timeout: 10000 });
-      await page.getByRole('button', { name: /Avanti/i }).click();
-      await page
-        .locator('[data-testid="intake-step-6"]')
-        .waitFor({ state: 'visible', timeout: 10000 });
 
       // #235 gate: explicit demographics acceptance, then create.
       await page.locator('[data-testid="accept-demographics"] input[type=checkbox]').check();
       await page.waitForTimeout(700); // allow the debounced autosave to flush
-      await page.screenshot({ path: resolve(outDir, `${tag}-5-step6-verifica.png`) });
+      await page.screenshot({ path: resolve(outDir, `${tag}-5-step5-verifica.png`) });
       await page
-        .locator('[data-testid="intake-step-6"]')
+        .locator('[data-testid="intake-step-5"]')
         .getByRole('button', { name: /Crea paziente/i })
         .click();
 

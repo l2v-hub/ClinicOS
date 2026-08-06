@@ -11,7 +11,11 @@ import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
 import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
 import { buildConfirmCartella } from './confirmCartella';
 
-const STEPS = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Documenti', 'Verifica'] as const;
+// "Documenti" (import/scatta foto in questo step) non e' ancora implementato (F5): finche' resta
+// un placeholder senza alcun contenuto, tenerlo nel wizard costringe ogni creazione paziente a un
+// click "Avanti" in piu' per attraversare uno step vuoto. Va reintrodotto qui quando F5 sara'
+// pronto, non prima.
+const STEPS = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Verifica'] as const;
 
 // #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
 // dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
@@ -529,11 +533,6 @@ export function IntakeWorkspace({
                 </div>
               )}
               {step === 5 && (
-                <div data-testid="intake-step-5" data-draft-id={draftId ?? undefined}>
-                  <p className="cr-empty">Importa documenti / Scatta foto — in arrivo (F5).</p>
-                </div>
-              )}
-              {step === 6 && (
                 <div data-draft-id={draftId ?? undefined}>
                   {duplicateWarn && (
                     <div className="import-modal__warning" role="alert">
