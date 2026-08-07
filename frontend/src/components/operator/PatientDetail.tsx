@@ -327,6 +327,11 @@ export function PatientDetail({
   // still mounted" (e.g. search/Agnos navigation while already viewing another patient's chart —
   // always reset to the default tab, initialTab only ever targets the patient it was requested for).
   const initialTabPatientRef = useRef<string | null>(initialTab ? paziente.id : null);
+  // Ricorda l'ultimo sotto-tab visitato in ciascun gruppo (es. "Terapia Farmacologica" dentro
+  // "Clinica"): senza, tornare a un gruppo dopo averne visitato un altro riportava sempre al
+  // primo sotto-tab, perdendo il punto in cui si era — anche nella stessa sessione sullo stesso
+  // paziente. Azzerato al cambio paziente, insieme al resto dello stato di navigazione sotto.
+  const lastTabByGroup = useRef<Partial<Record<TabGroup, TabId>>>({});
 
   useEffect(() => {
     if (initialTabPatientRef.current === paziente.id) {
@@ -339,10 +344,18 @@ export function PatientDetail({
       TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === 'riepilogo'))?.id ?? 'panoramica',
     );
     setDiarioFilter('tutti');
+    lastTabByGroup.current = {};
   }, [paziente.id]);
 
   function switchTab(tabId: TabId) {
     setTab(tabId);
+    // Deriva il gruppo dal tab stesso invece di fidarsi dello stato `activeGroup`: alcuni
+    // call site (es. "Apri Terapia Farmacologica" da un'altra scheda) chiamano switchGroup()
+    // e switchTab() in sequenza nello stesso handler — `activeGroup` nella closure resta il
+    // valore del render precedente finche' React non riapplica gli state update, quindi
+    // fidarsi di quella variabile qui scriverebbe la memoria sotto il gruppo sbagliato.
+    const owningGroup = TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === tabId))?.id;
+    if (owningGroup) lastTabByGroup.current[owningGroup] = tabId;
   }
 
   function switchGroup(groupId: TabGroup) {
@@ -350,7 +363,11 @@ export function PatientDetail({
     if (!group) return;
     setActiveGroup(groupId);
     if (!group.tabs.some((t) => t.id === tab)) {
-      setTab(group.tabs[0].id);
+      const remembered = lastTabByGroup.current[groupId];
+      const target =
+        remembered && group.tabs.some((t) => t.id === remembered) ? remembered : group.tabs[0].id;
+      setTab(target);
+      lastTabByGroup.current[groupId] = target;
     }
   }
 
