@@ -1,0 +1,237 @@
+{
+  "esiti": [
+    {
+      "nome": "Setup: la griglia carica i dati esistenti (giorno 3, FC 72)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC-R1: subito dopo i tre Tab, zero richieste PUT sono ancora partite (in attesa del debounce)",
+      "ok": true,
+      "dettaglio": "0 PUT"
+    },
+    {
+      "nome": "AC-R1: i tre valori sono gia visibili in griglia prima che la PUT parta (overlay locale)",
+      "ok": true,
+      "dettaglio": "5\t120/80\t88\t97\t\t—\t—\t—\t—\t—\t—\t—\t—"
+    },
+    {
+      "nome": "AC-R1: dopo la pausa, e partita ESATTAMENTE 1 PUT per tutte e tre le celle (non 3)",
+      "ok": true,
+      "dettaglio": "1 PUT"
+    },
+    {
+      "nome": "AC-R1: il payload della PUT unica contiene tutti e tre i valori fusi in un solo record",
+      "ok": true,
+      "dettaglio": "{\"giorno\":5,\"pa\":\"120/80\",\"fc\":\"88\",\"spo2\":\"97\"}"
+    },
+    {
+      "nome": "AC-R1: il giorno 3 preesistente non e stato toccato dal flush del giorno 5",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC-R1: il toast di conferma appare dopo il flush raggruppato",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Setup: la modifica del giorno 7 e ancora in coda (nessuna PUT ancora)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC-R1: cambiare mese prima dello scadere del debounce forza un flush immediato (non perde la modifica)",
+      "ok": true,
+      "dettaglio": "1 PUT"
+    },
+    {
+      "nome": "AC-R1: uscire dal tab (smontaggio) prima dello scadere del debounce forza comunque il flush",
+      "ok": true,
+      "dettaglio": "1 PUT"
+    },
+    {
+      "nome": "AC-R2: FC=999 (fuori 20-300) riceve la classe out-of-range",
+      "ok": true,
+      "dettaglio": "vitale-inline-cell has-data was-modified out-of-range"
+    },
+    {
+      "nome": "AC-R2: il tooltip spiega che il valore va verificato",
+      "ok": true,
+      "dettaglio": "Valore insolito per questo parametro (999) — verificare che non sia un errore di digitazione."
+    },
+    {
+      "nome": "AC-R2: SpO2=96 (plausibile) NON riceve la classe out-of-range",
+      "ok": true,
+      "dettaglio": "vitale-inline-cell has-data was-modified"
+    },
+    {
+      "nome": "AC-R2: il valore troncato (colonna NOTE) espone il testo completo in title",
+      "ok": true,
+      "dettaglio": "Paziente rifiuta la terapia delle 12, richiamare il medico di reparto"
+    },
+    {
+      "nome": "AC-R2: a schermo il valore resta troncato con ellissi (non rompe il layout della cella)",
+      "ok": true,
+      "dettaglio": "Paziente…"
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ],
+  "putRequests": [
+    {
+      "t": 1786201010221,
+      "body": {
+        "indirizzo": "",
+        "contattoEmergenzaNome": "",
+        "contattoEmergenzaTel": "",
+        "contattoEmergenzaRel": "",
+        "medicoCurante": "",
+        "codiceFiscale": "",
+        "operatoreId": "op1",
+        "cameraNumero": "5",
+        "lettoNumero": "C",
+        "repartoRicovero": "",
+        "statoRicovero": "ricoverato",
+        "dataRicovero": "2026-08-08",
+        "noteGenerali": "",
+        "anamnesi": {},
+        "diagnosi": [],
+        "terapie": [],
+        "farmaci": [],
+        "allergie": [],
+        "noteClinica": [],
+        "visite": [],
+        "parametriVitali": [],
+        "interventi": [],
+        "pianoCura": {},
+        "indicatoriRischio": [],
+        "documentiConsegnati": [],
+        "diarioInfermieristico": [],
+        "diarioMedico": [],
+        "medicazioniFerite": [],
+        "contenzioni": [],
+        "valutazioniBraden": [],
+        "dimissione": null,
+        "valutazioniTinetti": [],
+        "valutazioniNRS": [],
+        "esamiEmatici": [],
+        "esamiStrumentali": [],
+        "consulenze": [],
+        "parametriMensili": [
+          {
+            "id": "pm-1",
+            "mese": 8,
+            "anno": 2026,
+            "giorni": [
+              {
+                "giorno": 3,
+                "fc": "72",
+                "spo2": "97"
+              },
+              {
+                "giorno": 5,
+                "pa": "120/80",
+                "fc": "88",
+                "spo2": "97"
+              },
+              {
+                "giorno": 7,
+                "fc": "75"
+              },
+              {
+                "giorno": 10,
+                "fc": "65"
+              },
+              {
+                "giorno": 12,
+                "fc": "999",
+                "spo2": "96"
+              }
+            ],
+            "createdAt": "2026-08-01T00:00:00.000Z"
+          }
+        ]
+      }
+    },
+    {
+      "t": 1786201011092,
+      "body": {
+        "indirizzo": "",
+        "contattoEmergenzaNome": "",
+        "contattoEmergenzaTel": "",
+        "contattoEmergenzaRel": "",
+        "medicoCurante": "",
+        "codiceFiscale": "",
+        "operatoreId": "op1",
+        "cameraNumero": "5",
+        "lettoNumero": "C",
+        "repartoRicovero": "",
+        "statoRicovero": "ricoverato",
+        "dataRicovero": "2026-08-08",
+        "noteGenerali": "",
+        "anamnesi": {},
+        "diagnosi": [],
+        "terapie": [],
+        "farmaci": [],
+        "allergie": [],
+        "noteClinica": [],
+        "visite": [],
+        "parametriVitali": [],
+        "interventi": [],
+        "pianoCura": {},
+        "indicatoriRischio": [],
+        "documentiConsegnati": [],
+        "diarioInfermieristico": [],
+        "diarioMedico": [],
+        "medicazioniFerite": [],
+        "contenzioni": [],
+        "valutazioniBraden": [],
+        "dimissione": null,
+        "valutazioniTinetti": [],
+        "valutazioniNRS": [],
+        "esamiEmatici": [],
+        "esamiStrumentali": [],
+        "consulenze": [],
+        "parametriMensili": [
+          {
+            "id": "pm-1",
+            "mese": 8,
+            "anno": 2026,
+            "giorni": [
+              {
+                "giorno": 3,
+                "fc": "72",
+                "spo2": "97"
+              },
+              {
+                "giorno": 5,
+                "pa": "120/80",
+                "fc": "88",
+                "spo2": "97"
+              },
+              {
+                "giorno": 7,
+                "fc": "75"
+              },
+              {
+                "giorno": 10,
+                "fc": "65"
+              },
+              {
+                "giorno": 12,
+                "fc": "999",
+                "spo2": "96",
+                "note": "Paziente rifiuta la terapia delle 12, richiamare il medico di reparto"
+              }
+            ],
+            "createdAt": "2026-08-01T00:00:00.000Z"
+          }
+        ]
+      }
+    }
+  ]
+}
