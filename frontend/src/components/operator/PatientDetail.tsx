@@ -1543,16 +1543,9 @@ export function PatientDetail({
         <ClinicalTableSection
           title="Dati e Contatti"
           actions={
-            editProfilo ? (
-              <>
-                <button className="btn-sm" onClick={() => setEditProfilo(false)} disabled={saving}>
-                  Annulla
-                </button>
-                <button className="btn-sm" onClick={saveProfiloHandler} disabled={saving}>
-                  {saving ? 'Salvataggio…' : 'Salva'}
-                </button>
-              </>
-            ) : (
+            editProfilo ? undefined : (
+              // Salva/Annulla in modifica sono gia' resi dal footer di InlineForm sotto — un
+              // secondo paio qui sopra duplicherebbe l'azione (Ciclo 16, backlog Ciclo 12).
               <button
                 className="btn-sm"
                 onClick={() => {

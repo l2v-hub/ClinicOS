@@ -154,6 +154,14 @@ anche quando il click reale (`window.history.back()`) torna al paziente preceden
 Ciclo 13) o a un'altra schermata. Propagato `backLabel` end-to-end; colto anche un gap di
 accessibilita' collaterale nello stesso elemento (`<div onClick>` -> `<button type="button">`).
 
+## Ciclo 16 — rimossa la coppia Salva/Annulla duplicata in Profilo
+
+Vedi `artifacts/task-validation/loop-ux-ciclo-16-rimuovi-la-coppia-salva-annulla-duplicata-in-profilo/`
+per contract, evidenza ed esito. In modifica, `renderProfilo()` mostrava due coppie Salva/Annulla
+funzionalmente identiche: una nell'header sezione (bare `btn-sm`, violazione della regola bottoni),
+l'altra nel footer `InlineForm` (gia' corretta). L'header ora e' `undefined` in modifica — resta
+solo la coppia del footer.
+
 ## Backlog aperto — differito a cicli successivi (deliberatamente)
 
 Trovati dall'analisi ma NON corretti qui perche' richiedono un cambio di comportamento (non solo
@@ -164,6 +172,5 @@ CSS) o una scelta di design piu' ampia:
 - 4 implementazioni parallele di tab bar (2 morte in CSS, mai importate) con indicatori "attivo"
   visivamente diversi (pillola piena vs sottolineatura) nello stesso percorso di navigazione.
 - 5 sistemi di badge/pillola di stato paralleli, da consolidare su `badge--*`.
-- Profilo ha due coppie Salva/Annulla duplicate per la stessa azione.
-- `btn-sm` isolato (24 occorrenze) — ognuna richiede una scelta editoriale (quale ruolo/colore
-  assegnare), non un fix meccanico.
+- `btn-sm` isolato (24 occorrenze, incluso il bottone "Modifica" di Profilo) — ognuna richiede una
+  scelta editoriale (quale ruolo/colore assegnare), non un fix meccanico.
