@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { IcoAI, IcoX } from '../../icons';
 import { API_URL } from '../../config';
+import { NavChips } from './agnos/NavChips';
 
 // REQ-040: global "Assistente ClinicOS" — a SOURCE_ONLY search/correlation assistant.
 // It calls the operator-authenticated /ai/assistant/query (NEVER the token-gated internal route);
@@ -270,9 +271,12 @@ function VitalsSparkline({ results }: { results: unknown[] }) {
 export function AnswerView({
   answer,
   onNavigate,
+  formatNavLabel,
 }: {
   answer: AssistantAnswer;
   onNavigate?: (n: AssistantNav) => void;
+  /** Etichetta ricomposta dai campi strutturati della NavAction (usata dal pannello Agnos). */
+  formatNavLabel?: (n: AssistantNav) => string;
 }) {
   if (answer.refusal) return <div className="ai-asst__a ai-asst__refusal">{answer.refusal}</div>;
   if (answer.notFound)
@@ -302,15 +306,11 @@ export function AnswerView({
           </li>
         ))}
       </ul>
-      {answer.navigation.length > 0 && (
-        <div className="ai-asst__actions">
-          {answer.navigation.slice(0, 8).map((n, i) => (
-            <button key={i} type="button" className="srev-chip" onClick={() => onNavigate?.(n)}>
-              {n.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <NavChips
+        navigation={answer.navigation}
+        onNavigate={onNavigate}
+        formatLabel={formatNavLabel}
+      />
     </div>
   );
 }

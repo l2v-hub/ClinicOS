@@ -37,7 +37,10 @@ import { RoomsManagement } from './components/admin/RoomsManagement';
 import { OperatorSchedule } from './components/admin/OperatorSchedule';
 import { OperatorDashboard } from './components/operator/OperatorDashboard';
 import { PatientList } from './components/operator/PatientList';
-import { PatientDetail, type TabId } from './components/operator/PatientDetail';
+import { PatientDetail } from './components/operator/PatientDetail';
+import type { TabId } from './components/operator/tabGroups';
+import type { AssistantNav } from './components/shared/AIAssistantButton';
+import { navTabId } from './components/shared/agnos/agnosNav';
 import { ConsegnePage } from './components/operator/ConsegnePage';
 import { OperatorAgenda } from './components/operator/OperatorAgenda';
 import { NotesPage } from './components/shared/NotesPage';
@@ -270,6 +273,39 @@ export default function App() {
     // Reset on every selection (not just when a module is passed) so a stale target from a
     // previous intake-created patient never leaks into an unrelated navigation.
     setPendingModuleTab(moduleTabId);
+  }
+
+  // AC5: la NavAction del backend porta sectionKey/recordId/documentId/pageNumber e non solo il
+  // paziente — leggerne solo l'id faceva atterrare ogni azione sulla scheda generica, perdendo
+  // la sezione citata. Le destinazioni di reparto (agenda, consegne, terapie di oggi) non hanno
+  // alcun paziente: vanno gestite prima.
+  function agnosNavigate(n: AssistantNav) {
+    if (n.type === 'open_agenda') {
+      navigate(isAdmin ? 'agenda-admin' : 'agenda-operatore');
+      return;
+    }
+    if (n.type === 'open_therapies_today') {
+      // Lo stato delle somministrazioni di oggi a livello di reparto vive nella dashboard
+      // (useRiepilogoSomministrazioni): non esiste una schermata terapie facility-wide.
+      navigate(isAdmin ? 'admin-dashboard' : 'operator-dashboard');
+      return;
+    }
+    if (n.type === 'open_beds') {
+      // RoomsManagement è montata solo per admin: un operatore atterrerebbe su una pagina vuota.
+      navigate(isAdmin ? 'posti-letto' : 'operator-dashboard');
+      return;
+    }
+    if (n.type === 'open_consegne' && !n.patientId) {
+      // navigate('consegne') azzera filtro e focus: qui la consegna citata va evidenziata.
+      setConsegneView({ filtro: 'tutte', focusId: n.recordId ?? null });
+      setMobileNavOpen(false);
+      pushNav('consegne');
+      return;
+    }
+    if (n.patientId) {
+      const p = pazienti.find((x) => x.id === n.patientId);
+      if (p) selectPaziente(p, navTabId(n));
+    }
   }
 
   const goBack = useCallback(
@@ -1763,12 +1799,12 @@ export default function App() {
           // Issue #130: una consegna creata via Agnos appare subito nella UI consegne
           if (info?.actionType === 'create_consegna') void loadConsegne();
         }}
-        onNavigate={(n) => {
-          if (n.patientId) {
-            const p = pazienti.find((x) => x.id === n.patientId);
-            if (p) selectPaziente(p);
-          }
+        navKey={navKey}
+        resolvePatientName={(id) => {
+          const p = pazienti.find((x) => x.id === id);
+          return p ? `${p.lastName ?? ''} ${p.firstName ?? ''}`.trim() : undefined;
         }}
+        onNavigate={agnosNavigate}
       />
     </div>
   );

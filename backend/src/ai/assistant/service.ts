@@ -5,9 +5,26 @@
 
 import { prisma } from '../../lib/prisma.js';
 import * as svc from '../gateway/services.js';
-import { canCrossPatientSearch, canFacilityRead } from '../gateway/context.js';
+import { canCrossPatientSearch, canFacilityRead, isPatientAllowed } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
-import { appointmentSource, roomOccupancySource, staffSource } from '../gateway/sources.js';
+import {
+  appointmentSource,
+  consegnaSource,
+  roomOccupancySource,
+  staffSource,
+  therapySource,
+} from '../gateway/sources.js';
+import { buildTherapySlots } from '../../therapies/therapy-slots.js';
+import {
+  collectTherapiesDue,
+  dayKey,
+  isConsegnaOpen,
+  isConsegnaOverdue,
+  partitionByOperator,
+  sortConsegne,
+  type ConsegnaRow,
+  type TherapyDueItem,
+} from './facility-signals.js';
 import {
   planQuery,
   extractPatientName,
@@ -22,17 +39,8 @@ import { composeAnswer } from './composer.js';
 import { callPlanRuntime, callComposeRuntime } from './runtime-client.js';
 import { loadAssistantLlmConfig } from './config.js';
 import { validateQueryPlan } from '../gateway/query/validate.js';
+import { dedupeNav, navFromSource, type NavAction } from './nav.js';
 import { runQueryPlan } from '../gateway/query/engine.js';
-
-export interface NavAction {
-  type: string;
-  label: string;
-  patientId?: string;
-  sectionKey?: string;
-  documentId?: string;
-  recordId?: string;
-  pageNumber?: number;
-}
 
 export interface AssistantAnswer {
   intent: AssistantIntent;
@@ -62,55 +70,6 @@ function limits(env: NodeJS.ProcessEnv = process.env) {
     maxToolCalls: int('AI_MAX_TOOL_CALLS', 12),
     maxPatients: int('AI_QUERY_MAX_PATIENTS', 100),
   };
-}
-
-function navFromSource(s: SourceReference): NavAction {
-  switch (s.sourceType) {
-    case 'NARRATIVE_SECTION':
-      return {
-        type: 'open_section',
-        label: `Apri sezione ${s.sectionKey}`,
-        patientId: s.patientId,
-        sectionKey: s.sectionKey,
-        recordId: s.recordId,
-      };
-    case 'DOCUMENT':
-      return {
-        type: 'open_document',
-        label: 'Apri documento',
-        patientId: s.patientId,
-        documentId: s.documentId,
-        pageNumber: s.pageNumber,
-      };
-    case 'APPOINTMENT':
-      return {
-        type: 'open_appointment',
-        label: 'Apri appuntamento',
-        patientId: s.patientId,
-        recordId: s.recordId,
-      };
-    case 'VITAL_SIGN':
-      return {
-        type: 'open_parameter',
-        label: `Apri parametro ${s.label}`,
-        patientId: s.patientId,
-        recordId: s.recordId,
-      };
-    case 'THERAPY':
-      return {
-        type: 'open_therapy',
-        label: 'Apri terapia',
-        patientId: s.patientId,
-        recordId: s.recordId,
-      };
-    default:
-      return {
-        type: 'open_patient',
-        label: 'Apri paziente',
-        patientId: s.patientId,
-        recordId: s.recordId,
-      };
-  }
 }
 
 async function appointmentsToday(
@@ -209,6 +168,193 @@ async function staffList(
   };
 }
 
+/** Quante eccezioni vengono elencate per esteso accanto al conteggio: abbastanza da nominare i casi
+ *  concreti ("2 consegne scadute: …"), non tante da trasformare l'istantanea in un elenco. */
+const SAMPLE_SIZE = 5;
+/** Finestra della coda operatore: le dosi oltre questo orizzonte non sono "adesso". */
+const QUEUE_WINDOW_MINUTES = 120;
+
+// Il perimetro paziente usa la funzione canonica del gateway, non una copia locale: una riga senza
+// paziente collegato (`Consegna.pazienteId` è `String @default("")`) porta comunque nome paziente e
+// note in chiaro, quindi con una allow-list esplicita deve restare fuori.
+async function openConsegne(ctx: UserContext): Promise<ConsegnaRow[]> {
+  const rows = (await prisma.consegna.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: 500,
+  })) as ConsegnaRow[];
+  return rows.filter((c) => isConsegnaOpen(c) && isPatientAllowed(ctx, c.pazienteId));
+}
+
+async function therapiesDue(ctx: UserContext, now: Date, windowMinutes: number) {
+  const slots = await buildTherapySlots(dayKey(now));
+  const scoped = slots.map((s) => ({
+    ...s,
+    patients: s.patients.filter((p) => isPatientAllowed(ctx, p.patientId)),
+  }));
+  return collectTherapiesDue(scoped, now, windowMinutes);
+}
+
+const therapyItemSource = (t: TherapyDueItem) =>
+  therapySource(
+    t.patientId,
+    t.therapyId,
+    `${t.drugName} ${t.scheduledTime}`,
+    `${t.drugName} delle ${t.scheduledTime} non ancora somministrata (${t.patientName})`,
+    undefined,
+  );
+
+const consegnaItemSource = (c: ConsegnaRow) =>
+  consegnaSource(
+    c.pazienteId,
+    c.id,
+    `Consegna ${c.tipo}`,
+    `${c.pazienteNome}: ${c.note}`.slice(0, 300),
+    c.oraScadenza ? `${c.scadenza}T${c.oraScadenza}` : c.scadenza,
+  );
+
+/** Istantanea della struttura: occupazione + terapie in ritardo + consegne scadute + appuntamenti
+ *  di oggi, in una sola lettura. Facility-level (canFacilityRead, role-independent) come
+ *  rooms_occupancy: aggrega ciò che l'operatore vede già nelle schermate di reparto, non apre
+ *  alcuna ricerca clinica cross-paziente. Conteggi e campioni rispettano comunque l'eventuale
+ *  allow-list di pazienti del chiamante. */
+async function facilitySnapshot(
+  ctx: UserContext,
+  env: NodeJS.ProcessEnv,
+  now: Date = new Date(),
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+  if (!canFacilityRead(env))
+    throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
+
+  const occ = await roomsOccupancy(env);
+  const { overdue } = await therapiesDue(ctx, now, 0);
+  const consegneOverdue = sortConsegne(
+    (await openConsegne(ctx)).filter((c) => isConsegnaOverdue(c, now)),
+  );
+  const appuntamenti = await appointmentsToday(ctx);
+  const generatedAt = now.toISOString();
+
+  const therapiesOverdue = overdue.slice(0, SAMPLE_SIZE);
+  const consegneSample = consegneOverdue.slice(0, SAMPLE_SIZE);
+
+  const data = [
+    {
+      generatedAt,
+      occupancy: occ.data[0] ?? null,
+      therapiesOverdueCount: overdue.length,
+      therapiesOverdue,
+      consegneOverdueCount: consegneOverdue.length,
+      consegneOverdue: consegneSample.map((c) => ({
+        id: c.id,
+        pazienteId: c.pazienteId,
+        pazienteNome: c.pazienteNome,
+        tipo: c.tipo,
+        priorita: c.priorita,
+        stato: c.stato,
+        note: c.note,
+        scadenza: c.scadenza,
+        oraScadenza: c.oraScadenza,
+        operatoreAssegnato: c.operatoreAssegnato,
+      })),
+      appointmentsTodayCount: appuntamenti.data.length,
+    },
+  ];
+
+  const sourceRefs: SourceReference[] = [...occ.sourceRefs];
+  sourceRefs.push(
+    therapySource(
+      '',
+      'therapies-overdue',
+      'Somministrazioni in ritardo',
+      `${overdue.length} somministrazioni ancora da erogare oltre l'orario previsto`,
+      generatedAt,
+    ),
+  );
+  sourceRefs.push(...therapiesOverdue.map(therapyItemSource));
+  sourceRefs.push(
+    consegnaSource(
+      '',
+      'consegne-overdue',
+      'Consegne scadute',
+      `${consegneOverdue.length} consegne aperte oltre il termine`,
+      generatedAt,
+    ),
+  );
+  sourceRefs.push(...consegneSample.map(consegnaItemSource));
+  sourceRefs.push(
+    appointmentSource(
+      '',
+      'agenda-today',
+      'Agenda di oggi',
+      `${appuntamenti.data.length} appuntamenti programmati oggi`,
+    ),
+  );
+  return { data, sourceRefs };
+}
+
+/** Coda di lavoro «cosa devo fare adesso»: dosi in ritardo o dovute entro la finestra + consegne
+ *  aperte. LIMITE DICHIARATO: non esiste alcuna assegnazione paziente↔operatore nel modello dati,
+ *  quindi questa è la giornata del REPARTO, non "i tuoi pazienti". `operatoreAssegnato` è testo
+ *  libero: la corrispondenza sul nome ORDINA la lista (gruppo `myLikelyConsegne`) e non ne scarta
+ *  mai una — un match sbagliato non deve poter nascondere un'attività a nessuno. */
+async function operatorQueue(
+  ctx: UserContext,
+  env: NodeJS.ProcessEnv,
+  operatorName?: string,
+  now: Date = new Date(),
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+  if (!canFacilityRead(env))
+    throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
+
+  const { overdue, dueSoon } = await therapiesDue(ctx, now, QUEUE_WINDOW_MINUTES);
+  const { mine, others } = partitionByOperator(sortConsegne(await openConsegne(ctx)), operatorName);
+  const generatedAt = now.toISOString();
+
+  const therapiesOverdue = overdue.slice(0, SAMPLE_SIZE);
+  const therapiesDueSoon = dueSoon.slice(0, SAMPLE_SIZE);
+  const myLikelyConsegne = mine.slice(0, SAMPLE_SIZE);
+  const otherOpenConsegne = others.slice(0, SAMPLE_SIZE);
+
+  const data = [
+    {
+      generatedAt,
+      windowMinutes: QUEUE_WINDOW_MINUTES,
+      operatorName: operatorName ?? null,
+      /** Il perimetro è il reparto: nessun filtro per paziente assegnato esiste nel modello dati. */
+      scope: 'reparto',
+      therapiesOverdueCount: overdue.length,
+      therapiesOverdue,
+      therapiesDueSoonCount: dueSoon.length,
+      therapiesDueSoon,
+      myLikelyConsegneCount: mine.length,
+      myLikelyConsegne,
+      otherOpenConsegneCount: others.length,
+      otherOpenConsegne,
+    },
+  ];
+
+  const sourceRefs: SourceReference[] = [
+    therapySource(
+      '',
+      'therapies-queue',
+      'Somministrazioni da erogare',
+      `${overdue.length} in ritardo, ${dueSoon.length} entro ${QUEUE_WINDOW_MINUTES} minuti`,
+      generatedAt,
+    ),
+    ...therapiesOverdue.map(therapyItemSource),
+    ...therapiesDueSoon.map(therapyItemSource),
+    consegnaSource(
+      '',
+      'consegne-open',
+      'Consegne aperte',
+      `${mine.length + others.length} consegne aperte`,
+      generatedAt,
+    ),
+    ...myLikelyConsegne.map(consegnaItemSource),
+    ...otherOpenConsegne.map(consegnaItemSource),
+  ];
+  return { data, sourceRefs };
+}
+
 /** Run the assistant for a question. Pure orchestration over the gateway; SOURCE_ONLY. */
 export async function assistantQuery(
   question: string,
@@ -298,7 +444,7 @@ export async function assistantQuery(
     if (calls >= lim.maxToolCalls) break;
     calls++;
     try {
-      const r = await dispatch(call.tool, call.args, ctx, env);
+      const r = await dispatch(call.tool, call.args, ctx, env, effectiveCtx.operatorName);
       for (const item of r.data) {
         if (results.length >= lim.maxResults) break;
         results.push(item);
@@ -354,6 +500,7 @@ async function dispatch(
   args: Record<string, unknown>,
   ctx: UserContext,
   env: NodeJS.ProcessEnv = process.env,
+  operatorName?: string,
 ): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
   const pid = String(args.patientId ?? '');
   switch (tool) {
@@ -406,6 +553,12 @@ async function dispatch(
       return await roomsOccupancy(env);
     case 'query_staff_list':
       return await staffList(env);
+    case 'get_facility_snapshot':
+      return await facilitySnapshot(ctx, env);
+    // L'identità dell'operatore arriva dal contesto server, mai da `args`: il modello può chiedere
+    // la coda, non può chiederla "per conto di" qualcun altro.
+    case 'get_operator_queue':
+      return await operatorQueue(ctx, env, operatorName);
     case 'query_data':
       return await dispatchQueryData((args as { plan?: unknown }).plan, ctx);
     default:
@@ -451,17 +604,4 @@ async function crossVitals(
     }
   }
   return { data, sourceRefs };
-}
-
-function dedupeNav(nav: NavAction[]): NavAction[] {
-  const seen = new Set<string>();
-  const out: NavAction[] = [];
-  for (const n of nav) {
-    const k = `${n.type}:${n.patientId}:${n.recordId ?? n.documentId ?? n.sectionKey ?? ''}`;
-    if (!seen.has(k)) {
-      seen.add(k);
-      out.push(n);
-    }
-  }
-  return out;
 }

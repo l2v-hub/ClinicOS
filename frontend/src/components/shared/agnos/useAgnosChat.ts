@@ -59,11 +59,26 @@ export interface AgnosPending {
   turnIndex: number;
 }
 
-interface UseAgnosChatOptions {
+/** Identità dell'operatore chiamante: header, non verificati — il backend li usa per ordinare la
+ *  coda operatore, mai per allargare un permesso. */
+export interface AgnosOperatorIdentity {
   operatorId?: string;
   operatorRole?: string;
   operatorName?: string;
+}
+
+export function buildAgnosHeaders(id: AgnosOperatorIdentity): Record<string, string> {
+  const h: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (id.operatorId) h['X-Operator-Id'] = id.operatorId;
+  if (id.operatorRole) h['X-Operator-Role'] = id.operatorRole;
+  if (id.operatorName) h['X-Operator-Name'] = id.operatorName;
+  return h;
+}
+
+interface UseAgnosChatOptions extends AgnosOperatorIdentity {
   currentPatientId?: string;
+  /** Rotta corrente della UI: contesto additivo, il backend lo ignora finché non lo legge. */
+  navKey?: string;
   /** Fase 0: sub-agent selezionato; inviato al backend per lo scoping degli intent. */
   agent?: AgnosAgent;
   /** SPEC-015 US4: receives the executed actionType so the app can refresh the right data
@@ -110,6 +125,7 @@ export function useAgnosChat({
   operatorRole,
   operatorName,
   currentPatientId,
+  navKey,
   agent,
   onExecuted,
 }: UseAgnosChatOptions) {
@@ -118,13 +134,10 @@ export function useAgnosChat({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const headers = useCallback((): Record<string, string> => {
-    const h: Record<string, string> = { 'Content-Type': 'application/json' };
-    if (operatorId) h['X-Operator-Id'] = operatorId;
-    if (operatorRole) h['X-Operator-Role'] = operatorRole;
-    if (operatorName) h['X-Operator-Name'] = operatorName;
-    return h;
-  }, [operatorId, operatorRole, operatorName]);
+  const headers = useCallback(
+    () => buildAgnosHeaders({ operatorId, operatorRole, operatorName }),
+    [operatorId, operatorRole, operatorName],
+  );
 
   /** Patch the agnos turn at `index` (used to resolve the loading placeholder). */
   const patchTurn = useCallback((index: number, patch: Partial<AgnosTurn>) => {
@@ -158,7 +171,7 @@ export function useAgnosChat({
         const res = await fetch(`${API_URL}/ai/actions/plan`, {
           method: 'POST',
           headers: headers(),
-          body: JSON.stringify({ text, channel, currentPatientId, agent }),
+          body: JSON.stringify({ text, channel, currentPatientId, navKey, agent }),
         });
         const data = (await res.json()) as ApiError & {
           plan?: AgnosPlan;
@@ -222,7 +235,7 @@ export function useAgnosChat({
         setBusy(false);
       }
     },
-    [busy, turns, pending, currentPatientId, agent, headers, patchTurn],
+    [busy, turns, pending, currentPatientId, navKey, agent, headers, patchTurn],
   );
 
   const confirmPending = useCallback(async () => {
@@ -235,7 +248,14 @@ export function useAgnosChat({
         method: 'POST',
         headers: headers(),
         // L'esecuzione confermata di un comando dettato resta channel:'voce'.
-        body: JSON.stringify({ text, channel, patientId, idempotencyKey, confirmed: true }),
+        body: JSON.stringify({
+          text,
+          channel,
+          patientId,
+          navKey,
+          idempotencyKey,
+          confirmed: true,
+        }),
       });
       const data = (await res.json()) as ApiError & {
         ok?: boolean;
@@ -268,7 +288,7 @@ export function useAgnosChat({
     } finally {
       setBusy(false);
     }
-  }, [pending, busy, headers, onExecuted]);
+  }, [pending, busy, navKey, headers, onExecuted]);
 
   /** "Modifica": drop the pending preview without the cancel message; caller refills the input. */
   const dismissPendingForEdit = useCallback((): { text: string; channel: AgnosChannel } | null => {

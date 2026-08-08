@@ -14,7 +14,8 @@ export type SourceType =
   | 'THERAPY'
   | 'ROOM'
   | 'OCCUPANCY'
-  | 'STAFF';
+  | 'STAFF'
+  | 'CONSEGNA';
 
 /** A verifiable pointer back to the exact record a value came from. Never omit on a result. */
 export interface SourceReference {

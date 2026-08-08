@@ -9,9 +9,13 @@ export type AgentId = 'facility' | 'clinical';
 
 // Intents any agent may serve: patient lookup (neutral), not-recognised, clinical refusal, and the
 // shared agenda/appointments read (relevant to both management and clinical contexts).
+// La coda operatore («cosa devo fare adesso») è condivisa per costruzione: mette insieme terapie
+// dovute e consegne aperte, cioè un pezzo del dominio clinico e uno di quello organizzativo.
+// Reindirizzarla all'altro agente lascerebbe l'operatore senza risposta qualunque agente scelga.
 const SHARED: ReadonlySet<AssistantIntent> = new Set([
   'patient_search',
   'appointments',
+  'operator_queue',
   'unknown',
   'refuse_clinical',
 ]);
@@ -22,6 +26,7 @@ const FACILITY_ONLY: ReadonlySet<AssistantIntent> = new Set([
   'rooms_occupancy',
   'data_query',
   'staff_list',
+  'facility_snapshot',
 ]);
 
 // Clinical/nursing domain: the patient-centric reads.
