@@ -113,6 +113,52 @@ export function OperatorDashboard({
         </div>
       )}
 
+      {/* Pazienti con somministrazioni in ritardo: urgenza clinica reale, resta in rosso. */}
+      {somministrazioni.ritardi.length > 0 && (
+        <div className="coverage-alert">
+          <IcoWarning />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <strong>
+              {somministrazioni.ritardi.length} pazient
+              {somministrazioni.ritardi.length === 1 ? 'e' : 'i'} con somministrazioni in ritardo
+            </strong>{' '}
+            — richiede attenzione immediata
+            <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>
+              {somministrazioni.ritardi.slice(0, 5).map((p) => (
+                <li key={p.patientId}>
+                  <button
+                    type="button"
+                    className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
+                    onClick={() => onSelectPaziente?.(p.nome)}
+                  >
+                    <span>
+                      <span className="anomalie-reparto__nome">{p.nome}</span>
+                      <span className="anomalie-reparto__farmaci">
+                        {p.voci
+                          .map(
+                            (v) => `${v.farmacoNome} (${v.scheduledTime}, +${v.minutiRitardo} min)`,
+                          )
+                          .join(', ')}
+                      </span>
+                    </span>
+                    <span className="badge badge--red">+{p.voci[0].minutiRitardo} min</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {somministrazioni.ritardi.length > 5 && (
+              <button
+                className="link-btn"
+                style={{ marginTop: 8 }}
+                onClick={() => onNavigate('agenda-operatore')}
+              >
+                +{somministrazioni.ritardi.length - 5} altre <IcoArrow />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* AC8: pazienti con farmaci fuori anagrafica, come lavoro di reparto da smaltire.
           Compare solo se ce n'è: un riquadro vuoto su ogni cruscotto diventa arredamento. */}
       {anomalie.pazienti.length > 0 && (
@@ -120,8 +166,8 @@ export function OperatorDashboard({
           <IcoWarning />
           <div style={{ flex: 1, minWidth: 0 }}>
             <strong>
-              {anomalie.pazienti.length} paziente
-              {anomalie.pazienti.length === 1 ? '' : 'i'} con farmaci non in anagrafica
+              {anomalie.pazienti.length} pazient
+              {anomalie.pazienti.length === 1 ? 'e' : 'i'} con farmaci non in anagrafica
             </strong>{' '}
             — da correggere in terapia
             <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>

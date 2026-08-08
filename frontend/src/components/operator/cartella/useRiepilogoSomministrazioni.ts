@@ -15,6 +15,18 @@ import type { TherapySlot } from '../../../types';
 
 const TTL_MS = 60 * 1000;
 
+export interface RitardoVoce {
+  farmacoNome: string;
+  scheduledTime: string;
+  minutiRitardo: number;
+}
+
+export interface RitardoPaziente {
+  patientId: string;
+  nome: string;
+  voci: RitardoVoce[];
+}
+
 export interface RiepilogoSomministrazioni {
   totale: number;
   daFare: number;
@@ -22,6 +34,10 @@ export interface RiepilogoSomministrazioni {
   nonErogate: number;
   /** Sottoinsieme di `daFare` il cui orario programmato e' gia' passato. */
   inRitardo: number;
+  /** Pazienti con almeno una dose in ritardo, ordinati per ritardo massimo decrescente
+   * (non per numero di dosi: un paziente con una dose sola ma molto in ritardo e' piu' urgente
+   * di uno con piu' dosi lievemente in ritardo). */
+  ritardi: RitardoPaziente[];
   /** true finche' il caricamento non e' concluso: nessun conteggio va presentato come definitivo. */
   inCorso: boolean;
 }
@@ -32,6 +48,7 @@ const VUOTO: RiepilogoSomministrazioni = {
   fatte: 0,
   nonErogate: 0,
   inRitardo: 0,
+  ritardi: [],
   inCorso: true,
 };
 
@@ -83,6 +100,7 @@ export function useRiepilogoSomministrazioni(attivo = true): RiepilogoSomministr
   let fatte = 0;
   let nonErogate = 0;
   let inRitardo = 0;
+  const ritardiPerPaziente = new Map<string, RitardoPaziente>();
 
   for (const slot of slots) {
     for (const paziente of slot.patients ?? []) {
@@ -93,11 +111,30 @@ export function useRiepilogoSomministrazioni(attivo = true): RiepilogoSomministr
         else {
           daFare++;
           const minutiSlot = minutiDaMezzanotte(a.scheduledTime);
-          if (!Number.isNaN(minutiSlot) && minutiSlot < soglia) inRitardo++;
+          if (!Number.isNaN(minutiSlot) && minutiSlot < soglia) {
+            inRitardo++;
+            const voce: RitardoVoce = {
+              farmacoNome: a.drugName,
+              scheduledTime: a.scheduledTime,
+              minutiRitardo: soglia - minutiSlot,
+            };
+            const esistente = ritardiPerPaziente.get(paziente.patientId);
+            if (esistente) esistente.voci.push(voce);
+            else
+              ritardiPerPaziente.set(paziente.patientId, {
+                patientId: paziente.patientId,
+                nome: `${paziente.lastName} ${paziente.firstName}`.trim(),
+                voci: [voce],
+              });
+          }
         }
       }
     }
   }
 
-  return { totale, daFare, fatte, nonErogate, inRitardo, inCorso: false };
+  const ritardi = [...ritardiPerPaziente.values()]
+    .map((p) => ({ ...p, voci: [...p.voci].sort((a, b) => b.minutiRitardo - a.minutiRitardo) }))
+    .sort((a, b) => b.voci[0].minutiRitardo - a.voci[0].minutiRitardo);
+
+  return { totale, daFare, fatte, nonErogate, inRitardo, ritardi, inCorso: false };
 }
