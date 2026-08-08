@@ -6831,6 +6831,12 @@ textarea.form-input {
 .vitale-inline-cell.was-modified {
   background: #e0f2fe;
 }
+.vitale-inline-cell.out-of-range {
+  box-shadow: inset 0 0 0 2px var(--amber, #c77700);
+}
+.vitale-inline-cell.out-of-range.is-editing {
+  box-shadow: none;
+}
 .vitale-inline-input {
   width: 100%;
   min-width: 44px;

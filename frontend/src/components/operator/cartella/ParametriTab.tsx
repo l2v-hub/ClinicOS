@@ -1,5 +1,5 @@
 // Note: feature 010 reference baseline for clinical sub-menu gap = --clinical-submenu-gap (16px); applied via TerapiaFarmacologicaTab.tsx
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { IcoCheck } from '../../../icons';
 import type { CartellaPaziente, Paziente, ParametriMensili, ParametroGiorno } from '../../../types';
 import { uid, todayStr, nowISO, PrintButton, ClinicalTableSection } from './shared';
@@ -53,6 +53,35 @@ const NUMERIC_COLS: Set<keyof ParametroGiorno> = new Set([
   'dtx18',
   'catetere',
 ]);
+
+/** Soglie anti-errore-di-battitura (non cliniche): un valore fuori qui e' quasi certamente un
+ * refuso, non una lettura estrema ma vera — per questo il salvataggio non viene mai bloccato,
+ * solo segnalato. */
+const PLAUSIBLE_RANGES: Partial<Record<keyof ParametroGiorno, [number, number]>> = {
+  fc: [20, 300],
+  spo2: [0, 100],
+  temperatura: [25, 45],
+  dtx08: [10, 900],
+  dtx12: [10, 900],
+  dtx18: [10, 900],
+};
+const PA_PATTERN = /^(\d{2,3})\/(\d{2,3})$/;
+
+function isOutOfRange(colKey: keyof ParametroGiorno, value: string): boolean {
+  if (!value) return false;
+  if (colKey === 'pa') {
+    const m = value.match(PA_PATTERN);
+    if (!m) return true;
+    const sist = Number(m[1]);
+    const dias = Number(m[2]);
+    return sist < 40 || sist > 300 || dias < 20 || dias > 200;
+  }
+  const range = PLAUSIBLE_RANGES[colKey];
+  if (!range) return false;
+  const n = Number(value);
+  if (Number.isNaN(n)) return true;
+  return n < range[0] || n > range[1];
+}
 
 function emptyGiorno(giorno: number): ParametroGiorno {
   return { giorno };
@@ -130,11 +159,124 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
   const meseCorrente = findOrCreateMese(mensili, viewMese, viewAnno);
   const numGiorni = daysInMonth(viewMese, viewAnno);
 
+  // Quante celle si possono compilare in rapida sequenza (Tab attraverso una riga) prima che
+  // il salvataggio parta: raggruppa una PUT dell'intera cartella per "burst" di editing invece
+  // di una per cella. 800ms di pausa fa scattare il salvataggio; un tetto massimo di 4s evita che
+  // una sessione di editing ininterrotta (l'utente non si ferma mai) rimandi il salvataggio
+  // indefinitamente.
+  const OVERLAY_DEBOUNCE_MS = 800;
+  const OVERLAY_MAX_WAIT_MS = 4000;
+
+  // Overlay locale: valori confermati ma non ancora spediti al backend, mostrati subito nella
+  // griglia (giornoData li legge con priorita') mentre la PUT vera e' ancora in coda. STATO, non
+  // ref: il React Compiler richiede che i dati letti durante il render siano reattivi. Ogni
+  // modifica clona la Map e la rimpiazza (mai mutata in place).
+  const [overlay, setOverlay] = useState<Map<string, string | undefined>>(new Map());
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const firstPendingAtRef = useRef<number | null>(null);
+  // Evita closure stantie dentro flush(), che puo' scattare da un setTimeout creato molti render
+  // fa: sincronizzato in un effect (MAI durante il render, per le regole dei ref del React
+  // Compiler) cosi' flush() legge sempre lo stato piu' recente al momento in cui gira davvero,
+  // non quello catturato quando il timer e' stato creato.
+  const flushDepsRef = useRef({ meseCorrente, mensili, viewMese, viewAnno, overlay, onUpdate });
+  useEffect(() => {
+    flushDepsRef.current = { meseCorrente, mensili, viewMese, viewAnno, overlay, onUpdate };
+  });
+
   function giornoData(g: number): ParametroGiorno {
-    return meseCorrente.giorni.find((d) => d.giorno === g) ?? emptyGiorno(g);
+    const base = meseCorrente.giorni.find((d) => d.giorno === g) ?? emptyGiorno(g);
+    if (overlay.size === 0) return base;
+    let result = base;
+    for (const col of GRID_COLS) {
+      const key = `${g}-${String(col.key)}`;
+      if (overlay.has(key)) {
+        if (result === base) result = { ...base };
+        (result as unknown as Record<string, unknown>)[col.key] = overlay.get(key);
+      }
+    }
+    return result;
   }
 
+  const clearDebounceTimer = useCallback(() => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+  }, []);
+
+  // Applica le modifiche in coda al mese CORRENTE AL MOMENTO DELLA CHIAMATA e le spedisce in una
+  // sola PUT. `overrideOverlay`, quando presente, e' la Map appena calcolata da `queueCellSave`
+  // per il ramo "tetto massimo superato": la usa al posto di `flushDepsRef.current.overlay`
+  // perche' quest'ultimo puo' non essere ancora sincronizzato (l'effect che lo aggiorna non ha
+  // ancora girato) nello stesso istante in cui viene accodata l'ultima modifica \u2014 senza questo
+  // parametro, un flush forzato nello stesso tick in cui si preme l'ultimo tasto perderebbe
+  // esattamente quell'ultima modifica.
+  const flush = useCallback(
+    (overrideOverlay?: Map<string, string | undefined>) => {
+      clearDebounceTimer();
+      firstPendingAtRef.current = null;
+      const {
+        meseCorrente: mc,
+        mensili: allMesi,
+        viewMese: vm,
+        viewAnno: va,
+        overlay: pendingFromDeps,
+        onUpdate: update,
+      } = flushDepsRef.current;
+      const pending = overrideOverlay ?? pendingFromDeps;
+      if (pending.size === 0) return;
+      let giorni = mc.giorni;
+      for (const [key, value] of pending) {
+        const sep = key.indexOf('-');
+        const giorno = Number(key.slice(0, sep));
+        const colKey = key.slice(sep + 1) as keyof ParametroGiorno;
+        const gd = giorni.find((d) => d.giorno === giorno) ?? emptyGiorno(giorno);
+        const updated = { ...gd, giorno, [colKey]: value };
+        giorni = giorni.filter((d) => d.giorno !== giorno);
+        if (giornoHasData(updated)) giorni.push(updated);
+      }
+      giorni.sort((a, b) => a.giorno - b.giorno);
+      const updatedMese: ParametriMensili = { ...mc, giorni };
+      const otherMesi = allMesi.filter((m) => !(m.mese === vm && m.anno === va));
+      setOverlay(new Map());
+      update({ parametriMensili: [...otherMesi, updatedMese] });
+    },
+    [clearDebounceTimer],
+  );
+
+  // Accoda una modifica: aggiorna l'overlay (visibile subito, letto durante il render da
+  // giornoData) e riavvia il debounce, salvo superamento del tetto massimo, nel qual caso
+  // spedisce subito passando la Map appena calcolata (vedi commento su `flush`).
+  const queueCellSave = useCallback(
+    (giorno: number, colKey: keyof ParametroGiorno, value: string) => {
+      const cleanValue = value.trim();
+      const finalValue =
+        colKey === 'evacuazione' && cleanValue === '\u2014' ? undefined : cleanValue || undefined;
+      const key = `${giorno}-${String(colKey)}`;
+      const nextOverlay = new Map(overlay);
+      nextOverlay.set(key, finalValue);
+      setOverlay(nextOverlay);
+      setModifiedCells((prev) => new Set(prev).add(key));
+      if (firstPendingAtRef.current === null) firstPendingAtRef.current = Date.now();
+      clearDebounceTimer();
+      if (Date.now() - firstPendingAtRef.current >= OVERLAY_MAX_WAIT_MS) {
+        flush(nextOverlay);
+      } else {
+        debounceTimerRef.current = setTimeout(() => flush(), OVERLAY_DEBOUNCE_MS);
+      }
+    },
+    [overlay, clearDebounceTimer, flush],
+  );
+
+  // Sicurezza: nessuna modifica in coda deve andare persa lasciando il tab (cambio scheda,
+  // cambio paziente, chiusura cartella smontano questo componente).
+  useEffect(() => {
+    return () => flush();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- flush legge lo stato via flushDepsRef, non serve nelle dep
+  }, []);
+
   function prevMese() {
+    flush();
     if (viewMese === 1) {
       setViewMese(12);
       setViewAnno((v) => v - 1);
@@ -142,31 +284,13 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
     setEditingCell(null);
   }
   function nextMese() {
+    flush();
     if (viewMese === 12) {
       setViewMese(1);
       setViewAnno((v) => v + 1);
     } else setViewMese((v) => v + 1);
     setEditingCell(null);
   }
-
-  const saveCellValue = useCallback(
-    (giorno: number, colKey: keyof ParametroGiorno, value: string) => {
-      const gd = giornoData(giorno);
-      const cleanValue = value.trim();
-      // For evacuazione, treat the placeholder dash as empty
-      const finalValue =
-        colKey === 'evacuazione' && cleanValue === '\u2014' ? undefined : cleanValue || undefined;
-      const updated = { ...gd, giorno, [colKey]: finalValue };
-      const updatedGiorni = meseCorrente.giorni.filter((d) => d.giorno !== giorno);
-      if (giornoHasData(updated)) updatedGiorni.push(updated);
-      updatedGiorni.sort((a, b) => a.giorno - b.giorno);
-      const updatedMese: ParametriMensili = { ...meseCorrente, giorni: updatedGiorni };
-      const otherMesi = mensili.filter((m) => !(m.mese === viewMese && m.anno === viewAnno));
-      onUpdate({ parametriMensili: [...otherMesi, updatedMese] });
-      setModifiedCells((prev) => new Set(prev).add(`${giorno}-${String(colKey)}`));
-    },
-    [meseCorrente, mensili, viewMese, viewAnno, onUpdate],
-  );
 
   function startEditing(giorno: number, colKey: keyof ParametroGiorno) {
     const gd = giornoData(giorno);
@@ -198,25 +322,22 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
   function handleKeyDown(e: React.KeyboardEvent, giorno: number, colKey: keyof ParametroGiorno) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      saveCellValue(giorno, colKey, editingValue);
+      queueCellSave(giorno, colKey, editingValue);
       setEditingCell(null);
     } else if (e.key === 'Escape') {
       e.preventDefault();
       cancelEdit();
     } else if (e.key === 'Tab') {
       e.preventDefault();
-      saveCellValue(giorno, colKey, editingValue);
+      queueCellSave(giorno, colKey, editingValue);
       moveToNextCell(giorno, colKey);
     }
   }
 
   function handleBlur() {
-    // Use timeout to allow Tab key handler to fire first
-    setTimeout(() => {
-      if (!editingCell) return;
-      saveCellValue(editingCell.giorno, editingCell.colKey, editingValue);
-      setEditingCell(null);
-    }, 0);
+    if (!editingCell) return;
+    queueCellSave(editingCell.giorno, editingCell.colKey, editingValue);
+    setEditingCell(null);
   }
 
   function addVitale() {
@@ -270,7 +391,7 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
               value={editingValue || '\u2014'}
               onChange={(e) => {
                 setEditingValue(e.target.value);
-                saveCellValue(giorno, col.key, e.target.value);
+                queueCellSave(giorno, col.key, e.target.value);
                 setEditingCell(null);
               }}
               onKeyDown={(e) => handleKeyDown(e, giorno, col.key)}
@@ -309,8 +430,21 @@ export function ParametriTab({ cartella, paziente, onUpdate, operatoreNome }: Pr
       );
     }
 
+    const outOfRange = isOutOfRange(col.key, val);
+    const finalClasses = [classes, outOfRange ? 'out-of-range' : ''].filter(Boolean).join(' ');
+    const title = outOfRange
+      ? `Valore insolito per questo parametro (${val}) \u2014 verificare che non sia un errore di digitazione.`
+      : val.length > 8
+        ? val
+        : undefined;
+
     return (
-      <td key={String(col.key)} className={classes} onClick={() => startEditing(giorno, col.key)}>
+      <td
+        key={String(col.key)}
+        className={finalClasses}
+        title={title}
+        onClick={() => startEditing(giorno, col.key)}
+      >
         {val ? (
           val.length > 8 ? (
             val.slice(0, 8) + '\u2026'
