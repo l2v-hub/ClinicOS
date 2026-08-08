@@ -33,6 +33,13 @@ interface PatientListProps {
   operatori: Operatore[];
   camere: Camera[];
   loading: boolean;
+  /** Sollevati in App.tsx: PatientList si smonta ad ogni apertura cartella (renderizzato solo
+   * mentre navKey === 'pazienti'), quindi lo stato locale andrebbe perso ad ogni riapertura se
+   * non vivesse nel parent, sempre montato. */
+  ricerca: string;
+  onRicercaChange: (v: string) => void;
+  filtroSesso: 'tutti' | 'M' | 'F';
+  onFiltroSessoChange: (v: 'tutti' | 'M' | 'F') => void;
   onSelect: (p: Paziente) => void;
   onAddPaziente: (p: NuovoPaziente) => Promise<void>;
   /** REQ-018: refresh the list after an imported patient is created.
@@ -151,6 +158,10 @@ export function PatientList({
   pazienti,
   consegne,
   loading,
+  ricerca,
+  onRicercaChange: setRicerca,
+  filtroSesso,
+  onFiltroSessoChange: setFiltroSesso,
   onSelect,
   onAddPaziente: _onAddPaziente,
   onImported,
@@ -164,8 +175,6 @@ export function PatientList({
   );
   // AC6/AC11: anomalie di tutto il reparto da UNA richiesta, non una per paziente.
   const anomalie = useAnomalieReparto();
-  const [ricerca, setRicerca] = useState('');
-  const [filtroSesso, setFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [showModal, setShowModal] = useState(false);
   // TEST-ONLY: patient deletion. Backend gates it via ALLOW_PATIENT_DELETE; we hide the
   // button when disabled so production simply never shows it.
