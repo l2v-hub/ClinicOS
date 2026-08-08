@@ -1,0 +1,60 @@
+{
+  "esiti": [
+    {
+      "nome": "Operatore: la card \"Somministrazioni in ritardo\" e visibile in dashboard",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Operatore: il valore e \"2/3\" (2 in ritardo su 3 da fare, incluso l orario non paddato)",
+      "ok": true,
+      "dettaglio": "2/3 | Somministrazioni in ritardo"
+    },
+    {
+      "nome": "Operatore: la card e rossa (inRitardo > 0)",
+      "ok": true,
+      "dettaglio": "kpi-alert-card kpi-alert-card--red"
+    },
+    {
+      "nome": "Operatore: il click naviga alla propria Agenda",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Admin: la card \"Somministrazioni in ritardo\" e visibile in dashboard",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Admin: lo STESSO valore \"2/3\" (stessa fonte dati dell Operatore, single source of truth)",
+      "ok": true,
+      "dettaglio": "2/3 |  Somministrazioni in ritardo"
+    },
+    {
+      "nome": "Admin: la card e rossa (inRitardo > 0)",
+      "ok": true,
+      "dettaglio": "kpi-alert-card kpi-alert-card--red"
+    },
+    {
+      "nome": "Admin: il click naviga all Agenda",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Rete: la dashboard Operatore ha generato UNA sola richiesta /therapy-slots (useAnomalieReparto + useRiepilogoSomministrazioni condividono la cache)",
+      "ok": true,
+      "dettaglio": "1 richieste"
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ],
+  "richiesteTherapySlots": 2,
+  "orari": {
+    "ORARIO_IN_RITARDO": "16:41",
+    "ORARIO_FUTURO": "20:41",
+    "ORARIO_IN_RITARDO_NON_PADDATO": "1:00"
+  }
+}
