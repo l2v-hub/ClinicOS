@@ -239,7 +239,15 @@ export function AdminDashboard({
                     ? ' kpi-alert-card--red'
                     : ' kpi-alert-card--green'
               }`}
+              role="button"
+              tabIndex={0}
               onClick={() => onNavigate('agenda-admin')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onNavigate('agenda-admin');
+                }
+              }}
               title="Vai a Agenda"
             >
               <span className="kpi-alert-card__val">

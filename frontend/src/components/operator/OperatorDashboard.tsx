@@ -198,7 +198,15 @@ export function OperatorDashboard({
         <div className="kpi-alert-grid">
           <div
             className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`}
+            role="button"
+            tabIndex={0}
             onClick={() => onNavigate('parametri-multipaziente')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onNavigate('parametri-multipaziente');
+              }
+            }}
             title="Vai a Parametri"
           >
             <div className="kpi-alert-card__top">
@@ -215,7 +223,15 @@ export function OperatorDashboard({
           </div>
           <div
             className={`kpi-alert-card${rischiAlti > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}
+            role="button"
+            tabIndex={0}
             onClick={() => onNavigate('pazienti')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onNavigate('pazienti');
+              }
+            }}
             title="Vai a Pazienti"
           >
             <div className="kpi-alert-card__top">
@@ -232,7 +248,15 @@ export function OperatorDashboard({
           </div>
           <div
             className={`kpi-alert-card${allergieGravi > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}
+            role="button"
+            tabIndex={0}
             onClick={() => onNavigate('pazienti')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onNavigate('pazienti');
+              }
+            }}
             title="Vai a Pazienti"
           >
             <div className="kpi-alert-card__top">
@@ -249,7 +273,15 @@ export function OperatorDashboard({
           </div>
           <div
             className="kpi-alert-card kpi-alert-card--blue"
+            role="button"
+            tabIndex={0}
             onClick={() => onNavigate('pazienti')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onNavigate('pazienti');
+              }
+            }}
             title="Vai a Pazienti"
           >
             <div className="kpi-alert-card__top">
@@ -271,7 +303,15 @@ export function OperatorDashboard({
                   ? ' kpi-alert-card--red'
                   : ' kpi-alert-card--green'
             }`}
+            role="button"
+            tabIndex={0}
             onClick={() => onNavigate('agenda-operatore')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onNavigate('agenda-operatore');
+              }
+            }}
             title="Vai a Agenda"
           >
             <div className="kpi-alert-card__top">

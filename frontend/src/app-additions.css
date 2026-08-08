@@ -6663,6 +6663,10 @@ textarea.form-input {
   border-color: #c9d6ea;
   transform: translateY(-2px);
 }
+.kpi-alert-card[role='button']:focus-visible {
+  outline: 2px solid var(--blue, #2f6bed);
+  outline-offset: 2px;
+}
 /* Testata card: icona in pastiglia tinta (alto-sx) + chevron (alto-dx) */
 .kpi-alert-card__top {
   display: flex;
