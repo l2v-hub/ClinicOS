@@ -4,6 +4,8 @@ import { AnswerView, type AssistantAnswer, type AssistantNav } from './AIAssista
 import { useAgnosChat, type AgnosTurn, type AgnosAgent } from './agnos/useAgnosChat';
 import { useVoiceInput } from './agnos/useVoiceInput';
 import { useSpeechOutput } from './agnos/useSpeechOutput';
+import { AgnosBrief } from './agnos/AgnosBrief';
+import { navChipLabel } from './agnos/agnosNav';
 
 // 015 AGNOS — unified chatbot (testo + voce): read answers (with sources) +
 // CRU write actions with preview/confirm. Replaces AIAssistantButton as THE
@@ -21,6 +23,10 @@ interface Props {
   operatorName?: string;
   currentPatientId?: string;
   currentPatientName?: string;
+  /** Rotta corrente: contesto additivo inviato a plan/execute. */
+  navKey?: string;
+  /** Nome del paziente bersaglio di un'azione di navigazione, per comporre l'etichetta del chip. */
+  resolvePatientName?: (id: string) => string | undefined;
   /** SPEC-015 US4: actionType dell'azione eseguita, per refresh mirato (cartella vs agenda). */
   onExecuted?: (info: { actionType?: string }) => void;
   onNavigate?: (nav: AssistantNav) => void;
@@ -55,6 +61,8 @@ export function AgnosPanel({
   operatorName,
   currentPatientId,
   currentPatientName,
+  navKey,
+  resolvePatientName,
   onExecuted,
   onNavigate,
 }: Props) {
@@ -75,7 +83,15 @@ export function AgnosPanel({
     confirmPending,
     cancelPending,
     dismissPendingForEdit,
-  } = useAgnosChat({ operatorId, operatorRole, operatorName, currentPatientId, agent, onExecuted });
+  } = useAgnosChat({
+    operatorId,
+    operatorRole,
+    operatorName,
+    currentPatientId,
+    navKey,
+    agent,
+    onExecuted,
+  });
 
   const tts = useSpeechOutput();
   const voice = useVoiceInput({
@@ -89,6 +105,13 @@ export function AgnosPanel({
   useEffect(() => {
     if (forceOpen) setOpen(true);
   }, [forceOpen]);
+  // Il pannello non si smonta più alla chiusura: la messa a fuoco alla riapertura va rifatta a
+  // mano, altrimenti un dialog che resta nel DOM riapre senza dare il focus a nulla.
+  const wasOpenRef = useRef(false);
+  useEffect(() => {
+    if (open && !wasOpenRef.current) inputRef.current?.focus();
+    wasOpenRef.current = open;
+  }, [open]);
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight });
   }, [turns, busy]);
@@ -153,6 +176,12 @@ export function AgnosPanel({
     ? `Paziente corrente: ${currentPatientName ?? currentPatientId}`
     : 'Tutti i pazienti autorizzati';
 
+  const formatNavLabel = (n: AssistantNav) =>
+    navChipLabel(n, {
+      patientName: n.patientId ? resolvePatientName?.(n.patientId) : undefined,
+      isCurrentPatient: !!n.patientId && n.patientId === currentPatientId,
+    });
+
   return (
     <>
       <button
@@ -165,179 +194,178 @@ export function AgnosPanel({
         <IcoAI />
       </button>
 
-      {open && (
-        <>
-          <div className="ai-drawer__scrim" onClick={handleClose} />
-          <aside
-            className="ai-drawer agnos-panel"
-            role="dialog"
-            aria-label="Agnos — Assistente ClinicOS"
-          >
-            <header className="ai-drawer__header">
-              <div className="ai-drawer__title">
-                <span className="ai-drawer__icon">
-                  <IcoAI />
-                </span>
-                <span>Agnos</span>
-              </div>
-              <div className="agnos-header-actions">
-                {tts.supported && (
-                  <button
-                    type="button"
-                    className={`icon-btn agnos-tts${tts.enabled ? ' agnos-tts--on' : ''}`}
-                    onClick={tts.toggle}
-                    aria-pressed={tts.enabled}
-                    aria-label={
-                      tts.enabled
-                        ? 'Disattiva lettura vocale delle risposte'
-                        : 'Attiva lettura vocale delle risposte'
-                    }
-                    title={tts.enabled ? 'Disattiva lettura vocale' : 'Attiva lettura vocale'}
-                  >
-                    <SpeakerIcon muted={!tts.enabled} />
-                  </button>
-                )}
-                <button
-                  type="button"
-                  className="icon-btn"
-                  onClick={handleClose}
-                  aria-label="Chiudi"
-                >
-                  <IcoX />
-                </button>
-              </div>
-            </header>
-
-            <div className="ai-asst__scope" aria-label="Perimetro">
-              {scopeLabel}
-            </div>
-
-            <div
-              className="filter-chips agnos-agent-toggle"
-              role="group"
-              aria-label="Seleziona assistente"
-            >
+      {open && <div className="ai-drawer__scrim" onClick={handleClose} />}
+      {/* AC6: il pannello resta montato anche da chiuso, così la conversazione sopravvive alla
+          navigazione. `inert` è ciò che lo toglie dal tab order e dagli screen reader ora che
+          non è più lo smontaggio a farlo. */}
+      <aside
+        className="ai-drawer agnos-panel"
+        role="dialog"
+        aria-label="Agnos — Assistente ClinicOS"
+        aria-hidden={!open}
+        inert={!open ? true : undefined}
+      >
+        <header className="ai-drawer__header">
+          <div className="ai-drawer__title">
+            <span className="ai-drawer__icon">
+              <IcoAI />
+            </span>
+            <span>Agnos</span>
+          </div>
+          <div className="agnos-header-actions">
+            {tts.supported && (
               <button
                 type="button"
-                className={`filter-chip${agent === 'clinical' ? ' active' : ''}`}
-                aria-pressed={agent === 'clinical'}
-                onClick={() => setAgent('clinical')}
+                className={`icon-btn agnos-tts${tts.enabled ? ' agnos-tts--on' : ''}`}
+                onClick={tts.toggle}
+                aria-pressed={tts.enabled}
+                aria-label={
+                  tts.enabled
+                    ? 'Disattiva lettura vocale delle risposte'
+                    : 'Attiva lettura vocale delle risposte'
+                }
+                title={tts.enabled ? 'Disattiva lettura vocale' : 'Attiva lettura vocale'}
               >
-                Assistente clinico
+                <SpeakerIcon muted={!tts.enabled} />
               </button>
-              <button
-                type="button"
-                className={`filter-chip${agent === 'facility' ? ' active' : ''}`}
-                aria-pressed={agent === 'facility'}
-                onClick={() => setAgent('facility')}
-              >
-                Gestione struttura
-              </button>
-            </div>
-
-            <div className="ai-drawer__body ai-asst__body" ref={bodyRef}>
-              {turns.length === 0 && (
-                <p className="ai-drawer__hint">
-                  Chiedi dati esistenti (allergie, terapie, parametri, documenti, appuntamenti)
-                  oppure scrivi — o detta con il microfono — un comando, es. «Registra pressione 130
-                  su 80 alle 9:00». Ogni modifica viene mostrata in anteprima e salvata solo dopo la
-                  tua conferma. Agnos non elimina mai dati e non fornisce diagnosi né terapie.
-                </p>
-              )}
-              {turns.map((t, i) => (
-                <TurnView
-                  key={i}
-                  turn={t}
-                  isPending={pending?.turnIndex === i}
-                  busy={busy}
-                  onConfirm={() => {
-                    void confirmPending();
-                  }}
-                  onEdit={handleEdit}
-                  onCancel={cancelPending}
-                  onNavigate={onNavigate}
-                />
-              ))}
-            </div>
-
-            {(voice.listening || voice.error || tts.speaking) && (
-              <div className="agnos-voicebar">
-                {voice.listening && (
-                  <span className="agnos-voice-status" aria-live="polite">
-                    <span className="agnos-voice-status__dot" /> Sto ascoltando… parla pure
-                  </span>
-                )}
-                {voice.error && (
-                  <span className="agnos-voice-error" role="alert">
-                    {voice.error}
-                  </span>
-                )}
-                {tts.speaking && (
-                  <button
-                    type="button"
-                    className="btn-secondary agnos-stop-speech"
-                    onClick={tts.stop}
-                    aria-label="Interrompi la lettura vocale"
-                  >
-                    ■ Interrompi lettura
-                  </button>
-                )}
-              </div>
             )}
+            <button type="button" className="icon-btn" onClick={handleClose} aria-label="Chiudi">
+              <IcoX />
+            </button>
+          </div>
+        </header>
 
-            <form
-              className="ai-asst__compose agnos-compose"
-              onSubmit={(e) => {
+        <div className="ai-asst__scope" aria-label="Perimetro">
+          {scopeLabel}
+        </div>
+
+        <div
+          className="filter-chips agnos-agent-toggle"
+          role="group"
+          aria-label="Seleziona assistente"
+        >
+          <button
+            type="button"
+            className={`filter-chip${agent === 'clinical' ? ' active' : ''}`}
+            aria-pressed={agent === 'clinical'}
+            onClick={() => setAgent('clinical')}
+          >
+            Assistente clinico
+          </button>
+          <button
+            type="button"
+            className={`filter-chip${agent === 'facility' ? ' active' : ''}`}
+            aria-pressed={agent === 'facility'}
+            onClick={() => setAgent('facility')}
+          >
+            Gestione struttura
+          </button>
+        </div>
+
+        <div className="ai-drawer__body ai-asst__body" ref={bodyRef}>
+          {/* AC7: il brief NON è un turno — niente lettura TTS, niente conferma, niente indice. */}
+          <AgnosBrief
+            active={open}
+            kind={operatorRole === 'admin' ? 'facility' : 'operator'}
+            operatorId={operatorId}
+            operatorRole={operatorRole}
+            operatorName={operatorName}
+            navKey={navKey}
+            showHint={turns.length === 0}
+            onNavigate={onNavigate}
+            formatNavLabel={formatNavLabel}
+          />
+          {turns.map((t, i) => (
+            <TurnView
+              key={i}
+              turn={t}
+              isPending={pending?.turnIndex === i}
+              busy={busy}
+              onConfirm={() => {
+                void confirmPending();
+              }}
+              onEdit={handleEdit}
+              onCancel={cancelPending}
+              onNavigate={onNavigate}
+              formatNavLabel={formatNavLabel}
+            />
+          ))}
+        </div>
+
+        {(voice.listening || voice.error || tts.speaking) && (
+          <div className="agnos-voicebar">
+            {voice.listening && (
+              <span className="agnos-voice-status" aria-live="polite">
+                <span className="agnos-voice-status__dot" /> Sto ascoltando… parla pure
+              </span>
+            )}
+            {voice.error && (
+              <span className="agnos-voice-error" role="alert">
+                {voice.error}
+              </span>
+            )}
+            {tts.speaking && (
+              <button
+                type="button"
+                className="btn-secondary agnos-stop-speech"
+                onClick={tts.stop}
+                aria-label="Interrompi la lettura vocale"
+              >
+                ■ Interrompi lettura
+              </button>
+            )}
+          </div>
+        )}
+
+        <form
+          className="ai-asst__compose agnos-compose"
+          onSubmit={(e) => {
+            e.preventDefault();
+            send();
+          }}
+        >
+          <textarea
+            ref={inputRef}
+            className="agnos-input"
+            rows={2}
+            value={displayValue}
+            onChange={(e) => {
+              setInput(e.target.value);
+              if (!e.target.value.trim()) dictatedRef.current = false; // campo svuotato: si riparte dal testo
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 send();
-              }}
+              }
+            }}
+            placeholder={voice.listening ? 'Sto ascoltando…' : 'Scrivi una domanda o un comando…'}
+            aria-label="Comando per Agnos"
+            disabled={busy}
+            readOnly={voice.listening}
+          />
+          {voice.supported && (
+            <button
+              type="button"
+              className={`icon-btn agnos-mic${voice.listening ? ' agnos-mic--listening' : ''}`}
+              onClick={toggleMic}
+              disabled={busy}
+              aria-pressed={voice.listening}
+              aria-label={voice.listening ? 'Interrompi ascolto' : 'Detta un comando'}
+              title={voice.listening ? 'Interrompi ascolto' : 'Detta un comando'}
             >
-              <textarea
-                ref={inputRef}
-                className="agnos-input"
-                rows={2}
-                value={displayValue}
-                onChange={(e) => {
-                  setInput(e.target.value);
-                  if (!e.target.value.trim()) dictatedRef.current = false; // campo svuotato: si riparte dal testo
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    send();
-                  }
-                }}
-                placeholder={
-                  voice.listening ? 'Sto ascoltando…' : 'Scrivi una domanda o un comando…'
-                }
-                aria-label="Comando per Agnos"
-                disabled={busy}
-                readOnly={voice.listening}
-              />
-              {voice.supported && (
-                <button
-                  type="button"
-                  className={`icon-btn agnos-mic${voice.listening ? ' agnos-mic--listening' : ''}`}
-                  onClick={toggleMic}
-                  disabled={busy}
-                  aria-pressed={voice.listening}
-                  aria-label={voice.listening ? 'Interrompi ascolto' : 'Detta un comando'}
-                  title={voice.listening ? 'Interrompi ascolto' : 'Detta un comando'}
-                >
-                  <MicIcon />
-                </button>
-              )}
-              <button
-                type="submit"
-                className="btn-primary ai-asst__send"
-                disabled={busy || voice.listening || !input.trim()}
-              >
-                Invia
-              </button>
-            </form>
-          </aside>
-        </>
-      )}
+              <MicIcon />
+            </button>
+          )}
+          <button
+            type="submit"
+            className="btn-primary ai-asst__send"
+            disabled={busy || voice.listening || !input.trim()}
+          >
+            Invia
+          </button>
+        </form>
+      </aside>
     </>
   );
 }
@@ -350,6 +378,7 @@ interface TurnViewProps {
   onEdit: () => void;
   onCancel: () => void;
   onNavigate?: (nav: AssistantNav) => void;
+  formatNavLabel?: (nav: AssistantNav) => string;
 }
 
 function TurnView({
@@ -360,6 +389,7 @@ function TurnView({
   onEdit,
   onCancel,
   onNavigate,
+  formatNavLabel,
 }: TurnViewProps) {
   if (turn.role === 'utente') {
     return (
@@ -389,7 +419,9 @@ function TurnView({
         </div>
       )}
       {turn.status === 'successo' && <div className="voice-done">✓ {turn.text}</div>}
-      {turn.read && <AnswerView answer={turn.read} onNavigate={onNavigate} />}
+      {turn.read && (
+        <AnswerView answer={turn.read} onNavigate={onNavigate} formatNavLabel={formatNavLabel} />
+      )}
       {turn.preview && (
         <div
           className={`voice-preview agnos-preview${turn.status === 'annullato' ? ' agnos-preview--annullata' : ''}`}

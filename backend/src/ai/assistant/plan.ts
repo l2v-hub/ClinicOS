@@ -17,6 +17,8 @@ export type AssistantIntent =
   | 'patient_search'
   | 'rooms_occupancy'
   | 'staff_list'
+  | 'facility_snapshot'
+  | 'operator_queue'
   | 'refuse_clinical'
   | 'data_query'
   | 'unknown';
@@ -54,6 +56,8 @@ const CLINICAL_REFUSAL = [
   /stabilisci.*priorita/,
   /interpreta.*valori/,
   /e (grave|preoccupante)\b/,
+  // ipotetico clinico («cosa succede se sospendo il farmaco?»): è una previsione, non una lettura.
+  /cosa (succede|succederebbe|accade|accadrebbe) se\b/,
 ];
 
 const SECTION_HINTS: Array<{ re: RegExp; key: string }> = [
@@ -101,11 +105,38 @@ function searchPhrase(q: string, original: string): string | undefined {
   return after ? after[1].replace(/[?.!]+$/, '').trim() : undefined;
 }
 
+// Coda che delimita una domanda "di struttura"/"di turno": la frase deve finire lì oppure
+// proseguire verso il qui-e-ora (reparto, oggi, adesso). Se prosegue verso un caso specifico
+// («…a Mario Rossi», «…per la medicazione di Rossi») NON è una domanda facility: deve cadere
+// negli intent sul paziente.
+const HERE_AND_NOW = String.raw`(\s+(nella|nel|in|qui|dentro|adesso|ora|oggi|stamattina|stamane|stasera|stanotte)\b|[\s?!.,]*$)`;
+
+// «Cosa sta succedendo nella struttura» — istantanea composta (occupazione + eccezioni + agenda).
+const FACILITY_SNAPSHOT = [
+  new RegExp(String.raw`cosa (sta )?succed\w*${HERE_AND_NOW}`),
+  /(situazione|panoramica|riepilogo|quadro|stato)\b[^?]{0,20}(struttura|reparto|clinica|casa di cura)/,
+  /(struttura|reparto)\b[^?]{0,20}(situazione|panoramica|riepilogo)/,
+  /come va (la struttura|il reparto|oggi)/,
+];
+
+// «Cosa devo fare adesso» — coda di lavoro dell'operatore (terapie dovute + consegne aperte).
+const OPERATOR_QUEUE = [
+  new RegExp(String.raw`cosa (devo|dobbiamo|c'?e da) fare${HERE_AND_NOW}`),
+  /cosa (mi )?manca (oggi|adesso|ora|da fare)/,
+  /attivita (mancanti|da fare|aperte)/,
+  /prossim[ae] (terapia|terapie|somministrazion\w*)(\s+(da (fare|somministrare|dare)|di oggi|in scadenza|in reparto|adesso|ora|oggi)\b|[\s?!.,]*$)/,
+  /(le mie|mie) (consegne|attivita|cose da fare)/,
+  /da fare adesso/,
+];
+
 export interface PlanContext {
   /** The patient currently open in the UI, if any (default scope on the patient page). */
   currentPatientId?: string;
   /** Fase 0: selected sub-agent (scopes which intents are answered). Type-only import avoids a runtime cycle. */
   agent?: import('./agents.js').AgentId;
+  /** Nome dell'operatore chiamante (header, non verificato): serve SOLO a ordinare la coda
+   *  operatore per probabile assegnatario, mai a filtrare o ad allargare un permesso. */
+  operatorName?: string;
 }
 
 /** Produce a typed, validated plan for a question. Never executes anything. */
@@ -132,6 +163,17 @@ export function planQuery(question: string, ctx: PlanContext = {}): QueryPlan {
 
   if (CLINICAL_REFUSAL.some((re) => re.test(q))) {
     return base('refuse_clinical', [], false, 'clinical_advice_not_allowed');
+  }
+
+  // ── facility-level "istantanea" e coda operatore ──
+  // Valutati PRIMA degli intent sul paziente aperto: «cosa sta succedendo» e «cosa devo fare
+  // adesso» restano domande sulla giornata della struttura anche stando su una cartella. Entrambe
+  // sono letture facility (role-independent, gated da canFacilityRead a valle), mai cross-paziente.
+  if (FACILITY_SNAPSHOT.some((re) => re.test(q))) {
+    return base('facility_snapshot', [{ tool: 'get_facility_snapshot', args: {} }]);
+  }
+  if (OPERATOR_QUEUE.some((re) => re.test(q))) {
+    return base('operator_queue', [{ tool: 'get_operator_queue', args: {} }]);
   }
 
   const pid = ctx.currentPatientId;

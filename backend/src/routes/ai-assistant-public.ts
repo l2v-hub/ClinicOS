@@ -58,8 +58,13 @@ assistantPublicRouter.post('/query', async (req, res) => {
     const currentPatientId = req.body?.currentPatientId
       ? String(req.body.currentPatientId)
       : undefined;
+    // Nome operatore: solo per ordinare la coda «cosa devo fare» per probabile assegnatario
+    // (testo libero lato dati, header non verificato lato identità). Non conferisce alcun
+    // permesso e non filtra nulla — il role clamp qui sopra resta l'unica fonte di privilegio.
+    const operatorName = (req.header('X-Operator-Name') || '').trim().slice(0, 120) || undefined;
     const answer = await assistantQuery(question, ctxFromOperator(req as AuthedRequest), {
       currentPatientId,
+      operatorName,
     });
     return res.status(200).json(answer);
   } catch (err) {

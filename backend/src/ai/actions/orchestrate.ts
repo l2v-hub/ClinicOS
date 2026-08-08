@@ -109,6 +109,7 @@ export interface PlanCommandDeps {
     ctx: UserContext,
     currentPatientId?: string,
     agent?: AgentId,
+    operatorName?: string,
   ) => Promise<AssistantAnswer>;
   loadPreviewContext?: (plan: ActionPlan) => Promise<PreviewContext>;
   /** SPEC-015 US4: patient/slot lookups for appointment grounding (tests inject stubs, no DB). */
@@ -122,9 +123,10 @@ async function defaultRunRead(
   ctx: UserContext,
   currentPatientId?: string,
   agent?: AgentId,
+  operatorName?: string,
 ): Promise<AssistantAnswer> {
   const { assistantQuery } = await import('../assistant/service.js');
-  return assistantQuery(query, ctx, { currentPatientId, agent });
+  return assistantQuery(query, ctx, { currentPatientId, agent, operatorName });
 }
 
 // Same grounded-preview lookups the voice route performed inline before SPEC-015.
@@ -168,6 +170,7 @@ export async function planCommand(
       input.operatorCtx.gatewayCtx,
       input.currentPatientId,
       input.agent,
+      input.operatorCtx.operatorName,
     );
     return { plan, preview: null, read };
   }

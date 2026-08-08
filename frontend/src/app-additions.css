@@ -9744,3 +9744,54 @@ textarea.form-input {
   border: 1px solid var(--red, #ef4444);
   color: var(--red, #ef4444);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Agnos — brief automatico (impalcatura di layout, nessun linguaggio visivo nuovo)
+═══════════════════════════════════════════════════════════════════════════ */
+.agnos-brief {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.agnos-brief__eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+/* Il numerone da 38px è tarato su una cella di dashboard >= 240px: qui la larghezza utile è ~384px. */
+.agnos-brief .kpi-alert-card__val {
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+.agnos-brief__rule {
+  border-top: 1px solid var(--border);
+  margin: 10px 0;
+}
+/* 44px: le righe sono bersagli tattili sui tablet di reparto. */
+.agnos-brief__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 44px;
+  padding: 6px 0;
+}
+.agnos-brief__row-main {
+  min-width: 0;
+}
+
+/* Le etichette composte possono superare la larghezza del pannello. */
+.ai-asst__actions .srev-chip {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 1024px) {
+  .ai-asst__actions .srev-chip {
+    min-height: 44px;
+    padding-inline: 12px;
+  }
+}

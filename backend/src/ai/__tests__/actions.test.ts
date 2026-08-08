@@ -232,6 +232,33 @@ test('#239 planCommand: non-command text (unknown) falls back to the assistant, 
   assert.equal(r.preview, null);
 });
 
+test('planCommand: forwards operatorName to the read delegate (get_operator_queue "mie" vs "altre" split)', async () => {
+  const answer = {
+    intent: 'operator_queue',
+    results: [],
+    sources: [],
+    navigation: [],
+    notFound: false,
+    truncated: false,
+  } as unknown as AssistantAnswer;
+  let seenOperatorName: string | undefined;
+  const r = await planCommand(
+    { text: 'cosa devo fare adesso?', channel: 'testo', operatorCtx },
+    {
+      runRead: async (_q, _ctx, _pid, _agent, operatorName) => {
+        seenOperatorName = operatorName;
+        return answer;
+      },
+    },
+  );
+  assert.ok(r.read);
+  assert.equal(
+    seenOperatorName,
+    'Inf. Demo',
+    'senza operatorName il partition di get_operator_queue mette tutto in otherOpenConsegne',
+  );
+});
+
 // ── DELETE: refused at plan AND at execute, on every variant ────────────────
 
 const DELETE_VARIANTS = [

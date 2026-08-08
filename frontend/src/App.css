@@ -5358,6 +5358,23 @@ textarea.form-input {
     opacity: 1;
   }
 }
+/* AC6: il pannello Agnos resta montato anche da chiuso — l'animazione d'ingresso di .ai-drawer
+   (pensata per un drawer che si smonta, e ancora usata dall'assistente REQ-040) ripartirebbe a
+   ogni render. Qui entrata e uscita sono una transizione sullo stato aperto/chiuso. */
+.agnos-panel {
+  animation: none;
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out,
+    visibility 0s;
+}
+.agnos-panel[aria-hidden='true'] {
+  opacity: 0;
+  transform: translateX(20px);
+  visibility: hidden;
+  pointer-events: none;
+  transition-delay: 0s, 0s, 200ms;
+}
 .ai-drawer__header {
   display: flex;
   align-items: center;
@@ -5524,6 +5541,7 @@ textarea.form-input {
 
 @media (prefers-reduced-motion: reduce) {
   .ai-drawer,
+  .agnos-panel,
   .ai-drawer__scrim,
   .ai-fab {
     animation: none !important;

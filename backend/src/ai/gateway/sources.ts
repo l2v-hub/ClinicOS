@@ -91,6 +91,25 @@ export function roomOccupancySource(exactText?: string, recordedAt?: string): So
   };
 }
 
+// Consegna (attività di reparto). `pazienteId` è vuoto quando la consegna non è legata a un
+// paziente censito: la navigazione ricade allora sull'elenco consegne, non su una scheda paziente.
+export function consegnaSource(
+  pazienteId: string,
+  consegnaId: string,
+  label: string,
+  exactText?: string,
+  recordedAt?: string,
+): SourceReference {
+  return {
+    sourceType: 'CONSEGNA',
+    patientId: pazienteId || '',
+    recordId: consegnaId,
+    label,
+    exactText,
+    recordedAt,
+  };
+}
+
 // Fase 1b: staff roster — facility-level organisational data (no patient owns this result).
 export function staffSource(exactText?: string, recordedAt?: string): SourceReference {
   return {

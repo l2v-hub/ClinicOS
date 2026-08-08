@@ -17,6 +17,8 @@ export const READ_TOOLS = [
   'query_appointments_today',
   'query_staff_list',
   'query_data',
+  'get_facility_snapshot',
+  'get_operator_queue',
 ] as const;
 
 export type ReadTool = (typeof READ_TOOLS)[number];
@@ -51,4 +53,11 @@ export const READ_TOOL_SCHEMA: Array<{ name: string; args: Record<string, string
   { name: 'query_staff_list', args: {} },
   // 016 F3: motore di query componibile — porta un piano DSL in args.plan (validato server-side).
   { name: 'query_data', args: { plan: 'object' } },
+  // Istantanea della struttura: occupazione + terapie in ritardo + consegne scadute + appuntamenti
+  // di oggi in una sola lettura aggregata. Nessun argomento: nulla di ciò che decide il perimetro
+  // della lettura arriva dal modello.
+  { name: 'get_facility_snapshot', args: {} },
+  // Coda di lavoro dell'operatore chiamante. Nessun argomento: l'identità dell'operatore è presa
+  // dal contesto server, MAI da un argomento proposto dal modello.
+  { name: 'get_operator_queue', args: {} },
 ];

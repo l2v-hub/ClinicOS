@@ -48,88 +48,9 @@ import { DiagnosisEditor } from './sections/DiagnosisEditor';
 import { TherapyEditor } from './sections/TherapyEditor';
 import { VitalSignsEditor } from './sections/VitalSignsEditor';
 import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
+import { TAB_GROUPS, type TabGroup, type TabId } from './tabGroups';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-
-// #243: exported so callers (App.tsx) can request an initial tab — e.g. landing on a
-// specific "Moduli" flow right after patient creation from the intake wizard.
-// #245: 'anamnesi' rimosso — il tab editabile duplicato non esiste più (resta la sola
-// superficie narrativa 'sezioni-narrative'). #278: l'anamnesi strutturata torna
-// modificabile lì tramite AnamnesisEditor (stesso editor dell'intake).
-export type TabId =
-  | 'riepilogo'
-  | 'profilo'
-  | 'diagnosi'
-  | 'terapia-farmacologica'
-  | 'note'
-  | 'parametri'
-  | 'consegne'
-  | 'presa-in-carico'
-  | 'documenti'
-  | 'diario'
-  | 'sezioni-narrative'
-  | 'medicazioni'
-  | 'contenzioni'
-  | 'braden'
-  | 'tinetti'
-  | 'nrs'
-  | 'dimissione'
-  | 'esami-consulenze';
-
-type TabGroup = 'panoramica' | 'clinica' | 'diario' | 'moduli' | 'documenti';
-
-interface TabGroupDef {
-  id: TabGroup;
-  label: string;
-  tabs: { id: TabId; label: string }[];
-}
-
-const TAB_GROUPS: TabGroupDef[] = [
-  {
-    id: 'panoramica',
-    label: 'Panoramica',
-    tabs: [
-      { id: 'riepilogo', label: 'Riepilogo' },
-      { id: 'profilo', label: 'Profilo' },
-      { id: 'consegne', label: 'Consegne' },
-    ],
-  },
-  {
-    id: 'clinica',
-    label: 'Clinica',
-    tabs: [
-      { id: 'presa-in-carico', label: 'Presa in Carico' },
-      { id: 'sezioni-narrative', label: 'Sezioni Cliniche (testo)' },
-      { id: 'diagnosi', label: 'Diagnosi' },
-      { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
-      { id: 'parametri', label: 'Parametri Vitali' },
-      { id: 'note', label: 'Note & Visite' },
-      { id: 'esami-consulenze', label: 'Esami & Consulenze' },
-    ],
-  },
-  {
-    id: 'diario',
-    label: 'Diario',
-    tabs: [{ id: 'diario', label: 'Diario Paziente' }],
-  },
-  {
-    id: 'moduli',
-    label: 'Moduli',
-    tabs: [
-      { id: 'medicazioni', label: 'Medicazioni' },
-      { id: 'contenzioni', label: 'Contenzioni' },
-      { id: 'braden', label: 'Scala Braden' },
-      { id: 'tinetti', label: 'Scala Tinetti' },
-      { id: 'nrs', label: 'Scala NRS' },
-      { id: 'dimissione', label: 'Dimissione' },
-    ],
-  },
-  {
-    id: 'documenti',
-    label: 'Documenti',
-    tabs: [{ id: 'documenti', label: 'Documenti' }],
-  },
-];
 
 // findGroupForTab removed — sidebar nav doesn't need group tracking
 

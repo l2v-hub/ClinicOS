@@ -58,6 +58,16 @@ test('patient allow-list is enforced', () => {
   assert.equal(isPatientAllowed(operator, 'anything'), true);
 });
 
+// QA P1: una riga senza paziente collegato (`Consegna.pazienteId` è `String @default("")`) porta
+// comunque nome paziente e note in chiaro. Con una allow-list esplicita deve restare fuori; senza
+// allow-list (scope operatore) la lettura è invece consentita come per ogni altra riga.
+test('patient allow-list excludes rows with no linked patient', () => {
+  const scoped = parseUserContext({ 'X-AI-User-Id': 'u1', 'X-AI-Permitted-Patients': 'p1' });
+  assert.equal(isPatientAllowed(scoped, ''), false);
+  const unrestricted = parseUserContext({ 'X-AI-User-Id': 'u1' });
+  assert.equal(isPatientAllowed(unrestricted, ''), true);
+});
+
 test('cross-patient search is off unless enabled AND privileged', () => {
   const mgr = parseUserContext({ 'X-AI-User-Id': 'u1', 'X-AI-Roles': 'manager' });
   assert.equal(
