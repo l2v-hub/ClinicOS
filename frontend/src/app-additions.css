@@ -813,8 +813,8 @@
 }
 
 .agt-nav-btn {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1334,7 +1334,7 @@
   padding: 10px 6px 0 10px;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--divider);
-  min-height: 34px;
+  min-height: 44px;
   line-height: 1;
   display: flex;
   align-items: flex-start;
@@ -1342,7 +1342,7 @@
 }
 
 .agt-admin-time.hour {
-  min-height: 42px;
+  min-height: 48px;
   border-bottom: 1.5px solid var(--border);
 }
 
@@ -1351,14 +1351,14 @@
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--divider);
   padding: 4px 5px;
-  min-height: 34px;
+  min-height: 44px;
   cursor: pointer;
   transition: background 0.1s;
   background: #f7fafc;
 }
 
 .agt-admin-cell.hour {
-  min-height: 42px;
+  min-height: 48px;
   border-bottom: 1.5px solid var(--border);
 }
 
@@ -1367,7 +1367,6 @@
 }
 .agt-admin-cell.occ {
   background: transparent;
-  cursor: default;
 }
 
 .agt-admin-empty {
@@ -1742,13 +1741,91 @@
   color: #16a37b;
 }
 
+/* Fascia terapia nella griglia admin: e' un evento di reparto, non di un singolo
+   operatore, quindi attraversa tutte le colonne invece di occuparne una. */
+.agt-empty-note {
+  margin: 12px 0 0;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Azioni sull'appuntamento selezionato. Target 44px: si usa su tablet di reparto. */
+.agt-apt-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.agt-apt-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.agt-apt-action:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.agt-apt-action--danger {
+  color: #b42318;
+}
+
+.agt-apt-action--danger:hover {
+  border-color: #b42318;
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.agt-apt-confirm {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.apt-form-readonly {
+  margin: 0;
+  padding: 9px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.agt-admin-therapy-standalone {
+  padding: 0 16px;
+}
+
+.agt-admin-therapy-row {
+  grid-column: 1 / -1;
+  padding: 2px 8px 2px 52px;
+  background: var(--bg);
+}
+
 /* Weekly therapy dot */
 .agt-week-therapy-dot {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 4px;
   background: #f0ecfc;
   color: #6c4bd1;

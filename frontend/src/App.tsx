@@ -175,6 +175,9 @@ export default function App() {
   // chiamata — sostituisce il prefetch N+1 della cartella completa per ciascun paziente.
   const [clinicalSummary, setClinicalSummary] = useState<ClinicalSummaryEntry[]>([]);
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
+  // Senza questo flag l'agenda, prima che la fetch risponda, dichiara "tutti gli slot liberi":
+  // su uno strumento clinico e' un'informazione falsa, non solo mancante.
+  const [loadingAppuntamenti, setLoadingAppuntamenti] = useState(true);
   const [camere, setCamere] = useState<Camera[]>([]);
   // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>([]);
@@ -226,7 +229,7 @@ export default function App() {
     // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
     if (key === 'consegne') setConsegneView({ filtro: 'tutte', focusId: null });
     pushNav(key);
-    if (key === 'agenda-operatore') loadTherapySlots();
+    if (key === 'agenda-operatore' || key === 'agenda-admin') loadTherapySlots();
     // SPEC-015 US4: agenda reale — refresh appuntamenti alla navigazione (come loadTherapySlots)
     if (key === 'agenda-operatore' || key === 'agenda-admin') loadAppuntamenti();
   }
@@ -322,6 +325,7 @@ export default function App() {
   // ── Load appointments (API — SPEC-015 US4, sostituisce MOCK_APPUNTAMENTI) ──
 
   const loadAppuntamenti = useCallback(async (date?: string) => {
+    setLoadingAppuntamenti(true);
     try {
       const qs = date ? `?date=${date}` : '';
       const res = await fetch(`${API_URL}/appointments${qs}`, { headers: operatorHeaders() });
@@ -331,6 +335,8 @@ export default function App() {
       setAppuntamenti(rows.map((r: Record<string, unknown>) => mapAppointmentDTO(r)));
     } catch {
       // rete assente: lista corrente invariata (nessun fallback mock)
+    } finally {
+      setLoadingAppuntamenti(false);
     }
   }, []);
 
@@ -697,6 +703,61 @@ export default function App() {
       return null;
     } catch {
       return 'Errore di rete: appuntamento non salvato.';
+    }
+  }
+
+  /** PATCH /appointments/:id; stessa convenzione di addAppuntamento: messaggio d'errore o null. */
+  async function updateAppuntamento(
+    id: string,
+    apt: Omit<Appuntamento, 'id'>,
+  ): Promise<string | null> {
+    try {
+      const res = await fetch(`${API_URL}/appointments/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
+        body: JSON.stringify({
+          operatorId: apt.operatoreId,
+          data: apt.data,
+          ora: apt.ora,
+          durata: apt.durata,
+          tipologia: apt.tipoIntervento,
+          note: apt.note,
+          stato: apt.stato,
+        }),
+      });
+      const body = (await res.json().catch(() => ({}))) as {
+        error?: { kind?: string; message?: string };
+      } & Record<string, unknown>;
+      if (res.status === 409)
+        return body.error?.message ?? 'Slot gia occupato: scegli un altro orario.';
+      if (!res.ok) return body.error?.message ?? 'Impossibile aggiornare l’appuntamento.';
+      const updated = mapAppointmentDTO(body);
+      setAppuntamenti((prev) => prev.map((a) => (a.id === id ? updated : a)));
+      showToast('Appuntamento aggiornato');
+      return null;
+    } catch {
+      return 'Errore di rete: appuntamento non aggiornato.';
+    }
+  }
+
+  /** DELETE /appointments/:id con rollback della lista se il server rifiuta. */
+  async function deleteAppuntamento(id: string): Promise<void> {
+    const snapshot = appuntamenti;
+    setAppuntamenti((prev) => prev.filter((a) => a.id !== id));
+    try {
+      const res = await fetch(`${API_URL}/appointments/${id}`, {
+        method: 'DELETE',
+        headers: operatorHeaders(),
+      });
+      if (!res.ok) {
+        setAppuntamenti(snapshot);
+        showToast('Impossibile eliminare l’appuntamento');
+        return;
+      }
+      showToast('Appuntamento eliminato');
+    } catch {
+      setAppuntamenti(snapshot);
+      showToast('Impossibile eliminare l’appuntamento');
     }
   }
 
@@ -1444,8 +1505,13 @@ export default function App() {
               appuntamenti={appuntamenti}
               pazienti={pazienti}
               onAddAppuntamento={addAppuntamento}
+              onUpdateAppuntamento={updateAppuntamento}
+              onDeleteAppuntamento={deleteAppuntamento}
+              loadingAppuntamenti={loadingAppuntamenti}
               onAddPaziente={() => {}}
               onSelectPaziente={goToPazienteByNome}
+              therapySlots={therapySlots}
+              onLoadTherapySlots={loadTherapySlots}
             />
           )}
           {isAdmin && navKey === 'posti-letto' && <RoomsManagement />}
@@ -1583,6 +1649,9 @@ export default function App() {
               appuntamenti={appuntamenti}
               pazienti={pazienti}
               onAddAppuntamento={addAppuntamento}
+              onUpdateAppuntamento={updateAppuntamento}
+              onDeleteAppuntamento={deleteAppuntamento}
+              loadingAppuntamenti={loadingAppuntamenti}
               onSelectPaziente={goToPazienteByNome}
               therapySlots={therapySlots}
               onConfirmTherapy={confirmTherapy}

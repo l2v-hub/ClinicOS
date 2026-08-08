@@ -8,6 +8,8 @@ interface AppointmentFormProps {
   operatoreId: string;
   operatori: Operatore[];
   pazienti: Paziente[];
+  /** Se presente, il form e' in modifica su questo appuntamento invece che in creazione. */
+  appuntamento?: Appuntamento;
   /** SPEC-015 US4: persists via REST — resolves with an error message, or null on success. */
   onSave: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onCancel: () => void;
@@ -37,25 +39,27 @@ export function AppointmentForm({
   operatoreId,
   operatori,
   pazienti,
+  appuntamento,
   onSave,
   onCancel,
   onNewPatient,
 }: AppointmentFormProps) {
+  const isEdit = appuntamento !== undefined;
   const [form, setForm] = useState({
-    data,
-    ora,
-    durata: 30,
-    pazienteId: '' as string,
-    pazienteNome: '',
-    operatoreId,
-    tipoIntervento: 'visita' as TipoIntervento,
-    stato: 'programmato' as Appuntamento['stato'],
-    priorita: 'normale' as Appuntamento['priorita'],
-    note: '',
-    cameraId: '',
+    data: appuntamento?.data ?? data,
+    ora: appuntamento?.ora ?? ora,
+    durata: appuntamento?.durata ?? 30,
+    pazienteId: appuntamento?.pazienteId ?? '',
+    pazienteNome: appuntamento?.pazienteNome ?? '',
+    operatoreId: appuntamento?.operatoreId ?? operatoreId,
+    tipoIntervento: appuntamento?.tipoIntervento ?? ('visita' as TipoIntervento),
+    stato: appuntamento?.stato ?? ('programmato' as Appuntamento['stato']),
+    priorita: appuntamento?.priorita ?? ('normale' as Appuntamento['priorita']),
+    note: appuntamento?.note ?? '',
+    cameraId: appuntamento?.cameraId ?? '',
   });
 
-  const [pazienteSearch, setPazienteSearch] = useState('');
+  const [pazienteSearch, setPazienteSearch] = useState(appuntamento?.pazienteNome ?? '');
   const [showPazSearch, setShowPazSearch] = useState(false);
   // SPEC-015 US4 (FR-018): visible saving state + explicit error (e.g. slot conflict 409).
   const [saving, setSaving] = useState(false);
@@ -97,60 +101,69 @@ export function AppointmentForm({
   }
 
   useEffect(() => {
+    if (isEdit) return; // in modifica i valori vengono dall'appuntamento, non dalla cella cliccata
     setForm((f) => ({ ...f, data, ora, operatoreId }));
-  }, [data, ora, operatoreId]);
+  }, [data, ora, operatoreId, isEdit]);
 
   return (
     <div className="modal-overlay" onClick={onCancel}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3 className="modal-title">Nuovo Appuntamento</h3>
+          <h3 className="modal-title">{isEdit ? 'Modifica Appuntamento' : 'Nuovo Appuntamento'}</h3>
           <button className="icon-btn" onClick={onCancel}>
             <IcoX />
           </button>
         </div>
 
         <div className="modal-body">
-          {/* Paziente */}
-          <div className="form-field">
-            <label className="form-label">Paziente</label>
-            <div style={{ position: 'relative' }}>
-              <input
-                className="form-input"
-                value={pazienteSearch}
-                onChange={(e) => {
-                  setPazienteSearch(e.target.value);
-                  setShowPazSearch(true);
-                  setForm((f) => ({ ...f, pazienteId: '', pazienteNome: '' }));
-                }}
-                onFocus={() => setShowPazSearch(true)}
-                placeholder="Cerca paziente per nome o MRN…"
-              />
-              {showPazSearch && pazientiFiltrati.length > 0 && (
-                <div className="search-dropdown">
-                  {pazientiFiltrati.map((p) => (
-                    <button
-                      key={p.id}
-                      className="search-dropdown__item"
-                      onClick={() => selectPaziente(p)}
-                    >
-                      <span className="search-dropdown__name">
-                        {p.lastName}, {p.firstName}
-                      </span>
-                      <span className="search-dropdown__mrn">{p.medicalRecordNumber}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
+          {/* Il paziente non e' modificabile: PATCH /appointments/:id non accetta patientId,
+              mostrarlo editabile prometterebbe un salvataggio che non avviene. */}
+          {isEdit ? (
+            <div className="form-field">
+              <label className="form-label">Paziente</label>
+              <p className="apt-form-readonly">{appuntamento.pazienteNome ?? '—'}</p>
             </div>
-            <button
-              className="link-btn"
-              style={{ marginTop: 4, fontSize: 12 }}
-              onClick={onNewPatient}
-            >
-              <IcoPlus /> Crea nuovo paziente
-            </button>
-          </div>
+          ) : (
+            <div className="form-field">
+              <label className="form-label">Paziente</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  className="form-input"
+                  value={pazienteSearch}
+                  onChange={(e) => {
+                    setPazienteSearch(e.target.value);
+                    setShowPazSearch(true);
+                    setForm((f) => ({ ...f, pazienteId: '', pazienteNome: '' }));
+                  }}
+                  onFocus={() => setShowPazSearch(true)}
+                  placeholder="Cerca paziente per nome o MRN…"
+                />
+                {showPazSearch && pazientiFiltrati.length > 0 && (
+                  <div className="search-dropdown">
+                    {pazientiFiltrati.map((p) => (
+                      <button
+                        key={p.id}
+                        className="search-dropdown__item"
+                        onClick={() => selectPaziente(p)}
+                      >
+                        <span className="search-dropdown__name">
+                          {p.lastName}, {p.firstName}
+                        </span>
+                        <span className="search-dropdown__mrn">{p.medicalRecordNumber}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button
+                className="link-btn"
+                style={{ marginTop: 4, fontSize: 12 }}
+                onClick={onNewPatient}
+              >
+                <IcoPlus /> Crea nuovo paziente
+              </button>
+            </div>
+          )}
 
           <div
             className="op-form-grid"
@@ -303,7 +316,8 @@ export function AppointmentForm({
             }}
             disabled={saving}
           >
-            <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva appuntamento'}
+            <IcoCheck />{' '}
+            {saving ? 'Salvataggio…' : isEdit ? 'Salva modifiche' : 'Salva appuntamento'}
           </button>
         </div>
       </div>

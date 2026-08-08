@@ -6,9 +6,12 @@ import type {
   TherapySlot,
   MotivoNonErogazione,
 } from '../../types';
-import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus, IcoPill } from '../../icons';
+import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
+import { AgendaLegend } from '../shared/AgendaLegend';
+import { AppuntamentoActions } from '../shared/AppuntamentoActions';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
+import { TherapySlotCard, TherapySlotDot } from '../shared/TherapySlotOverlay';
 import { TherapySlotModal } from './TherapySlotModal';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
@@ -20,6 +23,9 @@ interface OperatorAgendaProps {
   appuntamenti: Appuntamento[];
   pazienti: Paziente[];
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
+  onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
+  onDeleteAppuntamento?: (id: string) => void;
+  loadingAppuntamenti?: boolean;
   onSelectPaziente?: (nome: string) => void;
   therapySlots?: TherapySlot[];
   onConfirmTherapy?: (info: {
@@ -112,6 +118,9 @@ export function OperatorAgenda({
   appuntamenti,
   pazienti,
   onAddAppuntamento,
+  onUpdateAppuntamento,
+  onDeleteAppuntamento,
+  loadingAppuntamenti = false,
   onSelectPaziente,
   therapySlots,
   onConfirmTherapy,
@@ -124,6 +133,8 @@ export function OperatorAgenda({
   const [showNewPaziente, setShowNewPaziente] = useState(false);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
+  const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const therapySlotsMap = new Map<string, TherapySlot>();
   if (therapySlots) {
@@ -166,6 +177,14 @@ export function OperatorAgenda({
 
   const todayStr = isoDate(refDate);
   const todayApts = myApts(todayStr);
+
+  function aptsInRange(days: Date[]): number {
+    const from = isoDate(days[0]);
+    const to = isoDate(days[days.length - 1]);
+    return appuntamenti.filter(
+      (a) => a.operatoreId === operatoreId && a.data >= from && a.data <= to,
+    ).length;
+  }
   // Indice per lookup O(1) nella griglia giornaliera: senza, ogni cella orario richiamava
   // myApts() e rifiltrava/riordinava l'intero array `appuntamenti` (TIME_SLOTS.length volte
   // per render, su un array con gli appuntamenti di tutti gli operatori, non solo i propri).
@@ -230,31 +249,12 @@ export function OperatorAgenda({
         </div>
       </div>
 
-      {/* ── Legend ── */}
-      <div className="agt-legend">
-        <span className="agt-legend__item">
-          <span className="agt-legend__dot" style={{ background: '#16A37B' }} />
-          Completato
-        </span>
-        <span className="agt-legend__item">
-          <span className="agt-legend__dot" style={{ background: '#2F6BED' }} />
-          In corso
-        </span>
-        <span className="agt-legend__item">
-          <span className="agt-legend__dot" style={{ background: '#C77700' }} />
-          Programmato
-        </span>
-        <span className="agt-legend__item">
-          <span
-            className="agt-legend__dot"
-            style={{ background: '#E5E7EB', border: '1px dashed #9DB7D5' }}
-          />
-          Disponibile
-        </span>
-      </div>
+      <AgendaLegend />
+
+      {loadingAppuntamenti && <div className="empty-state-card">Caricamento agenda…</div>}
 
       {/* ── Occupancy strip (daily) ── */}
-      {view === 'giornaliero' && (
+      {!loadingAppuntamenti && view === 'giornaliero' && (
         <div className="agt-occ-strip">
           <div className="agt-occ-row">
             <span className="agt-occ-stats">
@@ -271,7 +271,7 @@ export function OperatorAgenda({
       )}
 
       {/* ── DAILY VIEW ── */}
-      {view === 'giornaliero' && (
+      {!loadingAppuntamenti && view === 'giornaliero' && (
         <div className="agt-day-wrap">
           {TIME_SLOTS.map((ora) => {
             const tSlot = therapySlotsMap.get(ora);
@@ -282,35 +282,12 @@ export function OperatorAgenda({
             return (
               <div key={ora}>
                 {/* Therapy slot card */}
-                {tSlot &&
-                  (() => {
-                    const {
-                      administered: tErogate,
-                      notAdministered: tNonErogate,
-                      pending: tPending,
-                      total: tTotal,
-                    } = tSlot.summary;
-                    const allDone = tTotal > 0 && tErogate === tTotal;
-                    return (
-                      <div
-                        className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
-                        onClick={() => setSelectedTherapySlotId(tSlot.id)}
-                      >
-                        <span className="agt-therapy-slot__icon">
-                          <IcoPill />
-                        </span>
-                        <span className="agt-therapy-slot__label">{tSlot.label}</span>
-                        <span className="agt-therapy-slot__count">
-                          {tErogate}/{tTotal} erogate
-                        </span>
-                        <span className="agt-therapy-slot__progress">
-                          {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}
-                          {tNonErogate > 0 && tPending > 0 ? ' · ' : ''}
-                          {tPending > 0 ? `${tPending} da erogare` : ''}
-                        </span>
-                      </div>
-                    );
-                  })()}
+                {tSlot && (
+                  <TherapySlotCard
+                    slot={tSlot}
+                    onClick={() => setSelectedTherapySlotId(tSlot.id)}
+                  />
+                )}
 
                 {/* Regular time slot */}
                 <div
@@ -354,6 +331,15 @@ export function OperatorAgenda({
                         <span>{apt.durata ?? 30} min</span>
                       </div>
                       {apt.note && isSelected && <p className="agt-apt-card__note">{apt.note}</p>}
+                      {isSelected && (
+                        <AppuntamentoActions
+                          apt={apt}
+                          confirmDeleteId={confirmDeleteId}
+                          onEdit={setEditingApt}
+                          onAskDelete={setConfirmDeleteId}
+                          onDelete={onDeleteAppuntamento}
+                        />
+                      )}
                     </div>
                   ) : (
                     <div className="agt-free-slot">
@@ -371,46 +357,22 @@ export function OperatorAgenda({
           {/* Therapy slots outside regular time range (sera 20:00, notte 22:00) */}
           {therapySlots
             ?.filter((ts) => !TIME_SLOTS.includes(ts.ora))
-            .map((ts) => {
-              const {
-                administered: tErogate,
-                notAdministered: tNonErogate,
-                pending: tPending,
-                total: tTotal,
-              } = ts.summary;
-              const allDone = tTotal > 0 && tErogate === tTotal;
-              return (
-                <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
-                  <div
-                    className={`agt-therapy-slot${allDone ? ' agt-therapy-slot--completed' : ''}`}
-                    onClick={() => setSelectedTherapySlotId(ts.id)}
-                  >
-                    <span className="agt-therapy-slot__icon">
-                      <IcoPill />
-                    </span>
-                    <span className="agt-therapy-slot__label">{ts.label}</span>
-                    <span className="agt-therapy-slot__count">
-                      {tErogate}/{tTotal} erogate
-                    </span>
-                    <span className="agt-therapy-slot__progress">
-                      {tNonErogate > 0 ? `${tNonErogate} non erogate` : ''}
-                      {tNonErogate > 0 && tPending > 0 ? ' · ' : ''}
-                      {tPending > 0 ? `${tPending} da erogare` : ''}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+            .map((ts) => (
+              <div key={ts.id} style={{ padding: '0 0 0 52px' }}>
+                <TherapySlotCard slot={ts} onClick={() => setSelectedTherapySlotId(ts.id)} />
+              </div>
+            ))}
         </div>
       )}
 
       {/* ── WEEKLY VIEW ── */}
-      {view === 'settimanale' && (
+      {!loadingAppuntamenti && view === 'settimanale' && (
         <div className="agt-week-wrap">
           <div className="agt-week-grid" style={{ gridTemplateColumns: `52px repeat(7, 1fr)` }}>
             <div className="agt-week-corner" />
             {getWeekDays(refDate).map((d) => {
               const isToday = isoDate(d) === isoDate(new Date());
+              const dayApts = myApts(isoDate(d));
               return (
                 <div key={isoDate(d)} className={`agt-week-hdr${isToday ? ' today' : ''}`}>
                   <span className="agt-week-hdr__name">
@@ -419,6 +381,9 @@ export function OperatorAgenda({
                   <span className={`agt-week-hdr__num${isToday ? ' today' : ''}`}>
                     {d.getDate()}
                   </span>
+                  {dayApts.length > 0 && (
+                    <span className="agt-week-hdr__count">{dayApts.length}</span>
+                  )}
                 </div>
               );
             })}
@@ -436,34 +401,21 @@ export function OperatorAgenda({
                       className={`agt-week-cell${apts.length === 0 && !therapySlotsMap.has(ora) ? ' free' : ''}`}
                       onClick={() => apts.length === 0 && setAptForm({ data: dStr, ora })}
                     >
-                      {therapySlotsMap.has(ora) &&
-                        (() => {
-                          const ts = therapySlotsMap.get(ora)!;
-                          const {
-                            administered: tErog,
-                            notAdministered: tNonErog,
-                            pending: tDaErog,
-                            total,
-                          } = ts.summary;
-                          const allDone = total > 0 && tErog === total;
-                          const titleParts = [`${tErog}/${total} erogate`];
-                          if (tNonErog > 0) titleParts.push(`${tNonErog} non erogate`);
-                          if (tDaErog > 0) titleParts.push(`${tDaErog} da erogare`);
-                          return (
-                            <div
-                              className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
-                              title={`${ts.label}: ${titleParts.join(' · ')}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedTherapySlotId(ts.id);
-                              }}
-                            >
-                              <IcoPill />
-                            </div>
-                          );
-                        })()}
+                      {therapySlotsMap.has(ora) && (
+                        <TherapySlotDot
+                          slot={therapySlotsMap.get(ora)!}
+                          onClick={() => setSelectedTherapySlotId(therapySlotsMap.get(ora)!.id)}
+                        />
+                      )}
                       {apts.map((a) => (
-                        <div key={a.id} className={`agt-week-apt agt-apt-card--${a.stato}`}>
+                        <div
+                          key={a.id}
+                          className={`agt-week-apt agt-apt-card--${a.stato}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingApt(a);
+                          }}
+                        >
                           <span className="agt-week-apt__time">{a.ora}</span>
                           {onSelectPaziente && a.pazienteNome ? (
                             <button
@@ -502,21 +454,13 @@ export function OperatorAgenda({
                   {getWeekDays(refDate).map((d) => {
                     const dStr = isoDate(d);
                     const isToday = dStr === isoDate(new Date());
-                    const { administered: tErog, total } = ts.summary;
-                    const allDone = total > 0 && tErog === total;
                     return (
                       <div key={`${dStr}-${ts.fascia}`} className="agt-week-cell">
-                        {isToday && total > 0 && (
-                          <div
-                            className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
-                            title={`${ts.label}: ${tErog}/${total} erogate`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedTherapySlotId(ts.id);
-                            }}
-                          >
-                            <IcoPill />
-                          </div>
+                        {isToday && ts.summary.total > 0 && (
+                          <TherapySlotDot
+                            slot={ts}
+                            onClick={() => setSelectedTherapySlotId(ts.id)}
+                          />
                         )}
                       </div>
                     );
@@ -524,11 +468,14 @@ export function OperatorAgenda({
                 </Fragment>
               ))}
           </div>
+          {aptsInRange(getWeekDays(refDate)) === 0 && (
+            <p className="agt-empty-note">Nessun appuntamento in questa settimana.</p>
+          )}
         </div>
       )}
 
       {/* ── MONTHLY VIEW ── */}
-      {view === 'mensile' && (
+      {!loadingAppuntamenti && view === 'mensile' && (
         <div className="agt-month-wrap">
           <div className="agt-month-grid">
             {['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'].map((d) => (
@@ -577,6 +524,9 @@ export function OperatorAgenda({
               );
             })}
           </div>
+          {aptsInRange(getMonthMatrix(refDate)) === 0 && (
+            <p className="agt-empty-note">Nessun appuntamento in questo mese.</p>
+          )}
         </div>
       )}
 
@@ -593,6 +543,23 @@ export function OperatorAgenda({
             return err;
           }}
           onCancel={() => setAptForm(null)}
+          onNewPatient={() => setShowNewPaziente(true)}
+        />
+      )}
+      {editingApt && (
+        <AppointmentForm
+          data={editingApt.data}
+          ora={editingApt.ora}
+          operatoreId={editingApt.operatoreId}
+          operatori={operatori}
+          pazienti={pazienti}
+          appuntamento={editingApt}
+          onSave={async (apt) => {
+            const err = (await onUpdateAppuntamento?.(editingApt.id, apt)) ?? null;
+            if (!err) setEditingApt(null);
+            return err;
+          }}
+          onCancel={() => setEditingApt(null)}
           onNewPatient={() => setShowNewPaziente(true)}
         />
       )}
