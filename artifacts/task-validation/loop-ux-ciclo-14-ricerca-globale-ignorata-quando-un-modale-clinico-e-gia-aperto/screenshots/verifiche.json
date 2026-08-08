@@ -1,0 +1,39 @@
+{
+  "esiti": [
+    {
+      "nome": "AC2: Ctrl+K apre la ricerca quando nessun modale e aperto (nessuna regressione)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC3: Escape chiude ancora la ricerca (nessuna regressione)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Setup: il modale \"Invio in PS\" (.modal-overlay) e aperto",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "CRITICO AC1: Ctrl+K NON ha aperto .search-overlay mentre il modale clinico era attivo (niente overlay fantasma dietro)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Il modale \"Invio in PS\" e ancora l unico overlay visibile dopo Ctrl+K",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Dopo la chiusura del modale, Ctrl+K torna a funzionare normalmente",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}
