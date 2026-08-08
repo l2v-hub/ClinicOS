@@ -147,6 +147,14 @@ export default function App() {
   // Navigation history tracking
   const prevNavKeyRef = useRef<NavKey | null>(null);
   const historyDepth = useRef(0);
+  // Patient id parsed from the hash on mount (refresh/reopened tab) — resolved against the
+  // patients list once it loads, in the effect below. Cleared after the first attempt either way.
+  const pendingPazienteRestoreIdRef = useRef<string | null>(null);
+  // True once the patients fetch has been observed actually in flight — see the resolve effect.
+  const pazientiFetchStartedRef = useRef(false);
+  // True while that restore is pending, so the render below can show a loading state instead of
+  // flashing the "Nessun paziente selezionato" empty state before the patients list arrives.
+  const [restoringPazienteFromHash, setRestoringPazienteFromHash] = useState(false);
 
   // Search
   const [searchOpen, setSearchOpen] = useState(false);
@@ -204,7 +212,9 @@ export default function App() {
   function pushNav(key: NavKey, paziente?: Paziente) {
     prevNavKeyRef.current = navKey;
     historyDepth.current += 1;
-    const hash = `#/${key}`;
+    // #<loop-cycle-1>: encode the patient id in the hash (dettaglio-paziente only) so a page
+    // refresh/reopen can restore the chart by re-fetching that id — see the mount effect below.
+    const hash = key === 'dettaglio-paziente' && paziente ? `#/${key}/${paziente.id}` : `#/${key}`;
     window.history.pushState(
       { navKey: key, pazienteId: paziente?.id, prevNavKey: navKey },
       '',
@@ -275,8 +285,16 @@ export default function App() {
   // Restore nav from hash on mount + listen to popstate
   useEffect(() => {
     const hash = window.location.hash.replace('#/', '');
-    // Don't restore dettaglio-paziente from hash: patient data is in-memory only
-    if (hash && hash !== 'dettaglio-paziente' && hash !== 'login') {
+    // dettaglio-paziente/<id>: restore the chart by re-fetching that patient once the patients
+    // list loads (see the effect below) instead of falling back to the empty state on refresh.
+    if (hash.startsWith('dettaglio-paziente/')) {
+      const id = hash.slice('dettaglio-paziente/'.length);
+      if (id) {
+        pendingPazienteRestoreIdRef.current = id;
+        setRestoringPazienteFromHash(true);
+        setNavKey('dettaglio-paziente');
+      }
+    } else if (hash && hash !== 'dettaglio-paziente' && hash !== 'login') {
       const k = hash as NavKey;
       setNavKey(k);
     }
@@ -476,6 +494,33 @@ export default function App() {
       });
   }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
 
+  // Resolve a patient id restored from the hash (refresh/reopened tab on dettaglio-paziente,
+  // see the mount effect above) once the freshly-fetched patients list lands. Runs at most once:
+  // the pending ref is cleared whether or not the id resolves, so a since-deleted/invalid id
+  // (AC3) falls through to the existing empty-state — it never retries or blocks other loads.
+  //
+  // `loadingPazienti` alone can't distinguish "fetch finished" from "fetch hasn't started yet"
+  // (both read false — it starts false and the fetch only begins once `utente` is set post-login,
+  // which happens after this effect's first pass). Without pazientiFetchStartedRef, that first
+  // pass would already consume pendingPazienteRestoreIdRef against the still-empty initial
+  // `pazienti` array, permanently giving up before the real fetch ever ran.
+  useEffect(() => {
+    if (loadingPazienti) {
+      pazientiFetchStartedRef.current = true;
+      return;
+    }
+    if (!pazientiFetchStartedRef.current || !pendingPazienteRestoreIdRef.current) return;
+    const id = pendingPazienteRestoreIdRef.current;
+    pendingPazienteRestoreIdRef.current = null;
+    const found = pazienti.find((p) => p.id === id);
+    if (found) {
+      setPazienteSelezionato(found);
+      loadCartella(found.id);
+    }
+    setRestoringPazienteFromHash(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- loadCartella stabile per lo scopo dell'effetto
+  }, [pazienti, loadingPazienti]);
+
   // "Parametri multipaziente" è l'unica vista che mostra i parametri vitali di TUTTI i
   // pazienti insieme: a differenza dei badge/KPI (coperti dal riepilogo leggero sopra), le
   // serve la cartella completa di ognuno. Caricata solo qui, non più al login per tutti.
@@ -510,6 +555,13 @@ export default function App() {
   function handleLogin(u: UtenteApp) {
     setUtente(u);
     setCurrentOperator({ id: u.id, role: u.ruolo });
+    // The mount effect above already parsed a dettaglio-paziente/<id> hash (set before login,
+    // since there's no session persistence — every reload hits the role-picker first) and left
+    // pendingPazienteRestoreIdRef set for the resolve effect below to pick up once the patients
+    // list loads. Read window.location.hash directly here (rather than that ref) so this check
+    // never depends on React's effect/commit timing relative to the login click.
+    const currentHash = window.location.hash.replace('#/', '');
+    if (currentHash.startsWith('dettaglio-paziente/')) return;
     const key: NavKey = u.ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard';
     window.history.replaceState({ navKey: key }, '', `#/${key}`);
     setNavKey(key);
@@ -1602,7 +1654,12 @@ export default function App() {
               }}
             />
           )}
-          {navKey === 'dettaglio-paziente' && !pazienteSelezionato && (
+          {navKey === 'dettaglio-paziente' && !pazienteSelezionato && restoringPazienteFromHash && (
+            <div style={{ padding: '48px 32px', textAlign: 'center', color: 'var(--text-muted)' }}>
+              <p style={{ fontSize: 16 }}>Caricamento scheda paziente…</p>
+            </div>
+          )}
+          {navKey === 'dettaglio-paziente' && !pazienteSelezionato && !restoringPazienteFromHash && (
             <div style={{ padding: '48px 32px', textAlign: 'center', color: 'var(--text-muted)' }}>
               <p style={{ fontSize: 16, marginBottom: 16 }}>Nessun paziente selezionato.</p>
               <button className="btn-primary" onClick={() => goBack('pazienti')}>
