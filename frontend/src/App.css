@@ -3725,16 +3725,6 @@ textarea.form-input {
   margin: 8px 0;
 }
 
-.empty-state-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 32px;
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
 /* Inline form */
 .inline-form {
   background: var(--surface-raised);
@@ -4704,15 +4694,15 @@ textarea.form-input {
 }
 
 .badge--blue {
-  background: #1d4fc4;
+  background: var(--blue);
   color: #ffffff;
 }
 .badge--green {
-  background: #0e8a63;
+  background: var(--emerald);
   color: #ffffff;
 }
 .badge--amber {
-  background: #92400e;
+  background: var(--amber);
   color: #ffffff;
 }
 .badge--red {
