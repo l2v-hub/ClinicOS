@@ -136,16 +136,30 @@ click sullo sfondo inclusa la ricerca globale, ma la scorciatoia `Ctrl+K` resta 
 `.search-overlay` (z-index 300) VISIVAMENTE SOTTO il modale gia' aperto — incliccabile, comportamento
 confuso ma non pericoloso per i dati.
 
+## Ciclo 14 — Ctrl+K ignorato quando un modale clinico e' gia' aperto
+
+Vedi `artifacts/task-validation/loop-ux-ciclo-14-ricerca-globale-ignorata-quando-un-modale-clinico-e-gia-aperto/`
+per contract, evidenza ed esito. Scoperta collaterale del Ciclo 13 (sopra) corretta: guard
+`document.querySelector('.modal-overlay, .therapy-modal-overlay')` in cima all'handler `onKey` di
+`Ctrl+K` in `App.tsx` — se un modale e' gia' presente nel DOM, la scorciatoia non fa nulla, coerente
+col click col mouse (gia' bloccato dallo stesso modale).
+
+## Ciclo 15 — il bottone indietro della cartella mostra dove va davvero
+
+Vedi `artifacts/task-validation/loop-ux-ciclo-15-il-bottone-indietro-della-cartella-mostra-dove-va-davvero/`
+per contract, evidenza ed esito. `App.tsx` gia' calcolava l'etichetta corretta
+(`backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}`) ma `PatientDetail`/
+`PatientCompactHeader` la scartavano silenziosamente — il tooltip diceva sempre "Torna alla lista"
+anche quando il click reale (`window.history.back()`) torna al paziente precedente (scenario del
+Ciclo 13) o a un'altra schermata. Propagato `backLabel` end-to-end; colto anche un gap di
+accessibilita' collaterale nello stesso elemento (`<div onClick>` -> `<button type="button">`).
+
 ## Backlog aperto — differito a cicli successivi (deliberatamente)
 
 Trovati dall'analisi ma NON corretti qui perche' richiedono un cambio di comportamento (non solo
 CSS) o una scelta di design piu' ampia:
 
 - `PatientList` perde ricerca/filtro/scroll ad ogni riapertura cartella (stato non sollevato).
-- `Ctrl+K` apre la ricerca globale anche con un modale full-overlay gia' aperto, finendo dietro di
-  esso (z-index 300 vs 1000) — non pericoloso ma confuso, va bloccato o rialzato di z-index.
-- Bottone "indietro" della cartella dichiara sempre "Torna alla lista" ma puo' tornare al paziente
-  precedente (`backLabel` calcolato ma mai passato al componente).
 - `PatientCompactHeader` non allineato al pattern `PageHeader`.
 - 4 implementazioni parallele di tab bar (2 morte in CSS, mai importate) con indicatori "attivo"
   visivamente diversi (pillola piena vs sottolineatura) nello stesso percorso di navigazione.

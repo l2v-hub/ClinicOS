@@ -301,6 +301,7 @@ export function PatientDetail({
   operatori,
   camere,
   onBack,
+  backLabel,
   onAddConsegna,
   onUpdateConsegnaStato,
   onUpdateCartella,
@@ -2537,6 +2538,7 @@ export function PatientDetail({
         paziente={paziente}
         cartella={cartella}
         onBack={onBack}
+        backLabel={backLabel}
         onInvioPS={() => setShowInvioPS(true)}
       />
 
