@@ -54,7 +54,9 @@ const STATO_BADGE: Record<string, string> = {
 const TIPO_BADGE: Record<string, string> = {
   periodica: 'badge--blue',
   una_tantum: 'badge--gray',
-  al_bisogno: 'badge--amber',
+  // Non ambra: nella tabella Programmazione la colonna Tipo sta accanto a Stato, dove ambra
+  // significa «sospesa». Due pillole identiche affiancate direbbero due cose diverse.
+  al_bisogno: 'badge--teal',
 };
 
 const STATO_ORDER: Record<string, number> = { attiva: 0, sospesa: 1, conclusa: 2 };
@@ -215,6 +217,12 @@ function formToPayload(form: TherapyForm, patientId: string, operatoreNome: stri
 
 type DailyAdminRow = {
   therapyId: string;
+  /**
+   * Identita' della riga nella tabella giornaliera. Non basta `therapyId`: una terapia
+   * bigiornaliera compare in due fasce e produrrebbe due righe con la stessa chiave, quindi
+   * indistinguibili per React e per chiunque debba agire su una sola delle due.
+   */
+  rowKey: string;
   drugName: string;
   dosage: string;
   route: string;
@@ -442,10 +450,17 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     }
   };
 
-  const handleSospendi = async (t: PatientTherapyAPI) => {
+  // La sospensione ferma le somministrazioni future senza dirlo a nessuno, e il suo pulsante e'
+  // a pochi pixel da Elimina: un clic sbagliato qui e' l'unico che non lascia traccia visibile.
+  const [pendingSospendiId, setPendingSospendiId] = useState<string | null>(null);
+  const [sospendendo, setSospendendo] = useState(false);
+
+  const confirmSospendi = async () => {
+    if (!pendingSospendiId) return;
+    setSospendendo(true);
     try {
       setError('');
-      const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${t.id}`, {
+      const res = await fetch(`${API_URL}/patients/${paziente.id}/therapies/${pendingSospendiId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({ stato: 'sospesa' }),
@@ -453,8 +468,11 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       if (!res.ok) throw new Error(`Errore ${res.status}`);
       invalidateTherapies();
       await loadTherapies();
+      setPendingSospendiId(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore sospensione');
+    } finally {
+      setSospendendo(false);
     }
   };
 
@@ -479,6 +497,13 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const attive = therapies.filter((t) => t.stato === 'attiva');
   const inattive = therapies.filter((t) => t.stato !== 'attiva');
 
+  // Gli stessi campi che `handleSave` pretende, elencati per nome: prima il salvataggio usciva
+  // in silenzio e il clic sembrava non aver fatto nulla.
+  const campiMancanti =
+    [!form.farmacoNome.trim() && 'il prodotto medicinale', !form.dataInizio && 'la data di inizio']
+      .filter((v): v is string => typeof v === 'string')
+      .join(' e ') || null;
+
   // Filter daily slots for this patient
   const patientDailyAdmins: DailyAdminRow[] = dailySlots.flatMap((slot) =>
     (slot.patients ?? [])
@@ -486,6 +511,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       .flatMap((p) =>
         p.administrations.map((a) => ({
           ...a,
+          rowKey: `${a.therapyId}|${slot.fascia}|${a.scheduledTime}`,
           slotLabel: slot.label,
           fascia: slot.fascia,
           ora: slot.ora,
@@ -558,14 +584,13 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         {risoluzione?.stato === 'trovato' && risoluzione.documento && (
           <button
             type="button"
-            className="icon-btn icon-btn--sm"
+            className="icon-btn icon-btn--inline"
             title={etichettaDocumento(risoluzione.documento)}
             // Il nome accessibile porta la dose prescritta: senza, due righe dello stesso farmaco
             // a dosaggi diversi esporrebbero due controlli con un nome identico.
             aria-label={`${etichettaDocumento(risoluzione.documento)} — ${
               dosaggio ? `dose prescritta ${dosaggio}` : 'dose non specificata'
             }`}
-            style={{ marginLeft: 6, verticalAlign: 'middle' }}
             onClick={() =>
               setDocumentoAperto({
                 documento: risoluzione.documento!,
@@ -702,9 +727,9 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
             </svg>
           </button>
           <button
-            className="icon-btn icon-btn--sm icon-btn--danger"
+            className="icon-btn icon-btn--sm"
             title="Sospendi"
-            onClick={() => handleSospendi(t)}
+            onClick={() => setPendingSospendiId(t.id)}
           >
             <svg
               width="13"
@@ -1087,7 +1112,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         count={attive.length}
         countLabel="farmaci attivi"
         actions={
-          <button className="btn-success btn-sm" onClick={openAdd}>
+          <button className="btn-sm" onClick={openAdd}>
             + Aggiungi farmaco
           </button>
         }
@@ -1114,7 +1139,12 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
             <button
               key={st.id}
               className={`tf-subtab${subTab === st.id ? ' tf-subtab--active' : ''}`}
-              onClick={() => setSubTab(st.id)}
+              // L'errore appartiene alla schermata che l'ha prodotto: senza azzerarlo, un errore
+              // di salvataggio resta appeso in cima mentre si legge lo Storico.
+              onClick={() => {
+                setError('');
+                setSubTab(st.id);
+              }}
             >
               {st.label}
               {st.count !== undefined && st.count > 0 && (
@@ -1129,12 +1159,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
           (loading ? (
             <LoadingState />
           ) : attive.length === 0 ? (
-            <p className="cr-empty">
-              Nessun farmaco attivo.{' '}
-              <button className="link-btn" onClick={openAdd}>
-                + Aggiungi
-              </button>
-            </p>
+            // `.cts__body` non ha padding: senza involucro il testo tocca il bordo della scheda.
+            <div className="cts__body--padded">
+              <p className="cr-empty">
+                Nessun farmaco attivo.{' '}
+                <button className="link-btn" onClick={openAdd}>
+                  + Aggiungi
+                </button>
+              </p>
+            </div>
           ) : (
             <ClinicalTable<PatientTherapyAPI>
               noWrapper
@@ -1153,10 +1186,19 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               <div className="terapia-sched-form">
                 <TherapyFormFields value={form} onChange={setForm} operatoreNome={operatoreNome} />
                 <div className="form-actions">
+                  {campiMancanti && (
+                    // Il pulsante disabilitato da solo non dice cosa manca, e il campo mancante
+                    // puo' essere fuori schermo in una maschera lunga come questa.
+                    <small className="form-hint">Manca: {campiMancanti}.</small>
+                  )}
                   <button className="btn-secondary btn-sm" onClick={closeForm}>
                     Annulla
                   </button>
-                  <button className="btn-success btn-sm" disabled={saving} onClick={handleSave}>
+                  <button
+                    className="btn-success btn-sm"
+                    disabled={saving || campiMancanti !== null}
+                    onClick={handleSave}
+                  >
                     {saving ? 'Salvataggio...' : editId ? 'Aggiorna' : 'Salva terapia'}
                   </button>
                 </div>
@@ -1206,7 +1248,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               <ClinicalTable<DailyAdminRow>
                 noWrapper
                 title=""
-                keyField="therapyId"
+                keyField="rowKey"
+                pageSize={25}
                 data={patientDailyAdmins}
                 emptyMessage="Nessuna somministrazione prevista per questa data."
                 columns={giornaliereColumns}
@@ -1224,6 +1267,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               noWrapper
               title=""
               keyField="id"
+              pageSize={25}
               data={history}
               emptyMessage="Nessuna somministrazione registrata."
               columns={storicoColumns}
@@ -1254,6 +1298,17 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         busy={deleting}
         onConfirm={() => void confirmDelete()}
         onCancel={() => setPendingDeleteId(null)}
+      />
+
+      <ConfirmDialog
+        open={pendingSospendiId !== null}
+        title="Sospendere la terapia?"
+        message="Le somministrazioni programmate non verranno più generate finché la terapia resta sospesa. La terapia resta in cartella e si può riattivare da «Sospese/concluse»."
+        confirmLabel="Sospendi terapia"
+        tone="primary"
+        busy={sospendendo}
+        onConfirm={() => void confirmSospendi()}
+        onCancel={() => setPendingSospendiId(null)}
       />
 
       {documentoAperto && (

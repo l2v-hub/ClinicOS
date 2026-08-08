@@ -1,0 +1,128 @@
+{
+  "esiti": [
+    {
+      "nome": "AC7: il farmaco riconosciuto mostra l icona del documento AIFA",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC7: il farmaco fuori anagrafica mostra la pillola \"non in anagrafica\"",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC9: il pulsante documento resta sulla stessa riga del nome farmaco (righe della tabella della stessa altezza)",
+      "ok": true,
+      "dettaglio": "rigaConIconaH=69.0 rigaSenzaIconaH=69.0"
+    },
+    {
+      "nome": "AC11: il tipo \"al bisogno\" usa badge--teal, non badge--amber",
+      "ok": true,
+      "dettaglio": "badge badge--teal"
+    },
+    {
+      "nome": "AC10: il sub-tab ha un area di tocco di almeno 44px",
+      "ok": true,
+      "dettaglio": "height=44.0"
+    },
+    {
+      "nome": "AC6: il pulsante Sospendi non ha piu la classe icon-btn--danger",
+      "ok": true,
+      "dettaglio": "icon-btn icon-btn--sm"
+    },
+    {
+      "nome": "AC6: la sospensione apre un ConfirmDialog",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC6: il dialogo usa tone=\"primary\" (azione reversibile), non \"danger\"",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC6: dopo conferma il dialogo si chiude",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC6: la terapia sospesa compare in \"Sospese/concluse\"",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC4: il pulsante Salva e disabilitato senza il farmaco",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC4: il suggerimento nomina il campo mancante",
+      "ok": true,
+      "dettaglio": "Manca: il prodotto medicinale."
+    },
+    {
+      "nome": "AC4: dopo la scelta il pulsante Salva si abilita",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC5: un salvataggio fallito mostra un banner di errore",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC5: cambiando sotto-scheda il banner di errore sparisce",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC8: lo Storico mostra al massimo 25 righe per pagina su 30 disponibili",
+      "ok": true,
+      "dettaglio": "25 righe renderizzate"
+    },
+    {
+      "nome": "AC8: il controllo di paginazione riporta \"Pagina 1 di 2\"",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC1: la terapia bigiornaliera produce due righe distinte (mattina+sera), non deduplicate",
+      "ok": true,
+      "dettaglio": "3 righe (attese 3: 2x t-riconosciuto/t-bis mattina + 1x t-bis sera)"
+    },
+    {
+      "nome": "AC7: il ripiego per nome mostra l icona documento anche nelle righe di somministrazione",
+      "ok": true,
+      "dettaglio": "3 icone"
+    },
+    {
+      "nome": "nessun errore JavaScript inatteso durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita (a parte il 500 iniettato per AC5)"
+    }
+  ],
+  "richieste": [
+    "GET /therapy-slots?date=2026-08-08",
+    "GET /patients",
+    "GET /patients/clinical-summary",
+    "GET /appointments",
+    "GET /admin/rooms",
+    "GET /consegne",
+    "GET /operators/schedules",
+    "GET /operators",
+    "GET /notes",
+    "GET /farmaci/cerca?q=TACHIPIRINA&limite=25",
+    "GET /ai/extraction/status",
+    "GET /patients/settings",
+    "GET /patients/p-t7/cartella",
+    "GET /patients/p-t7/therapies",
+    "GET /farmaci/cerca?q=FARMACO%20FANTASMA&limite=25",
+    "PUT /patients/p-t7/therapies/t-riconosciuto",
+    "GET /patients/p-t7/therapies",
+    "GET /farmaci/cerca?q=tachipirina&limite=12",
+    "POST /patients/p-t7/therapies",
+    "GET /patients/p-t7/medication-administrations?limit=200",
+    "GET /therapy-slots?date=2026-08-08"
+  ],
+  "terapieSalvate": []
+}
