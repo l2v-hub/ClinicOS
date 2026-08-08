@@ -1,0 +1,24 @@
+{
+  "esiti": [
+    {
+      "nome": "AC-R2: il modale \"Nuovo paziente\" (.npm-*) si apre e renderizza correttamente",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC-R1: la navigazione L2 (TopNav) e visibile nella cartella paziente",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC-R1: l indicatore \"attivo\" (pillola blu) di TopNav e visibile e invariato",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC-R3: nessun errore JavaScript durante la navigazione delle superfici toccate",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

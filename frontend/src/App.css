@@ -458,150 +458,9 @@ body {
   }
 }
 
-/* === 009 NAV L2/L3 HIERARCHY: L2 PAGE TABS === */
-.page-tabs {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 4px;
-  width: 100%;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 0;
-  box-sizing: border-box;
-}
-.page-tabs__btn {
-  position: relative;
-  height: var(--l2-h);
-  font-size: var(--l2-font);
-  font-weight: 500;
-  padding: 0 12px;
-  border: none;
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  cursor: pointer;
-  color: var(--text-strong, currentColor);
-  transition: color var(--tab-transition-duration) var(--tab-transition-easing);
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.page-tabs__btn:hover {
-  color: var(--primary, var(--blue));
-}
-.page-tabs__btn:focus-visible {
-  outline: 2px solid var(--primary, var(--blue));
-  outline-offset: 2px;
-}
-.page-tabs__btn::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: var(--l2-underline-h);
-  background: var(--l2-underline-color);
-  transition: width var(--tab-transition-duration) var(--tab-transition-easing);
-}
-.page-tabs__btn--active {
-  color: var(--primary, var(--blue));
-}
-.page-tabs__btn--active::after {
-  width: 100%;
-}
-.page-tabs__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 6px;
-  border-radius: 9px;
-  background: var(--primary, var(--blue));
-  color: #fff;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-/* === 009 NAV L2/L3 HIERARCHY: L3 SECTION TABS === */
-.section-tabs {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 4px;
-  width: 100%;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 0;
-  box-sizing: border-box;
-}
-.section-tabs::-webkit-scrollbar {
-  display: none;
-}
-.section-tabs__btn {
-  position: relative;
-  height: var(--l3-h);
-  font-size: var(--l3-font);
-  font-weight: 500;
-  letter-spacing: 0.2px;
-  padding: 0 8px;
-  border: none;
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  cursor: pointer;
-  color: var(--text-soft, currentColor);
-  transition: color var(--tab-transition-duration) var(--tab-transition-easing);
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-.section-tabs__btn:hover {
-  color: var(--primary, var(--blue));
-}
-.section-tabs__btn:focus-visible {
-  outline: 2px solid var(--primary, var(--blue));
-  outline-offset: 2px;
-}
-.section-tabs__btn::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: var(--l3-underline-h);
-  background: var(--l3-underline-color);
-  transition: width var(--tab-transition-duration) var(--tab-transition-easing);
-}
-.section-tabs__btn--active {
-  color: var(--primary, var(--blue));
-}
-.section-tabs__btn--active::after {
-  width: 100%;
-}
-.section-tabs__btn--urgent::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--danger, #dc2626);
-  display: inline-block;
-}
-.section-tabs__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 8px;
-  background: var(--primary, var(--blue));
-  color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-}
+/* .page-tabs/.section-tabs (former L2/L3 tab-bar impl, feature 009) removed in Ciclo 18 —
+   dead CSS for an orphaned component (NavComponents.tsx, zero import sites); TopNav.tsx is the
+   canonical, live L2/L3 nav. See design-system/README.md, Ciclo 18. */
 
 /* === 003 CLEAN NAV: PATIENT COMPACT HEADER === */
 .patient-compact-header {
@@ -4983,11 +4842,6 @@ textarea.form-input {
   }
 }
 
-.page-tabs,
-.section-tabs {
-  -webkit-overflow-scrolling: touch;
-}
-
 /* ───── 010 CLINICAL CARDS ───── */
 .clinical-card {
   display: flex;
@@ -5073,7 +4927,6 @@ textarea.form-input {
 }
 
 /* sub-menu spacing token applied to consumers via clinical-section-title wrapper */
-.clinical-section-title + .section-tabs,
 .clinical-section-title + .section-sub-menu,
 .clinical-section-title + .tf-subtabs {
   margin-top: var(--clinical-submenu-gap);
@@ -5317,10 +5170,6 @@ textarea.form-input {
 }
 @media (prefers-reduced-motion: reduce) {
   .tab-panel-transition,
-  .page-tabs__btn::after,
-  .section-tabs__btn::after,
-  .page-tabs__btn,
-  .section-tabs__btn,
   .clinical-card__content,
   .clinical-card__toggle {
     animation: none !important;

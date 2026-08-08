@@ -3690,53 +3690,8 @@
   height: 12px;
 }
 
-/* ── Tab bar (see also: grouped nav section below for overrides) ── */
-
-.cr-tab-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition:
-    color 0.15s,
-    border-color 0.15s;
-}
-
-.cr-tab-btn:hover {
-  color: var(--text);
-}
-
-.cr-tab-btn.active {
-  color: var(--blue);
-  border-bottom-color: var(--blue);
-  font-weight: 600;
-}
-
-.cr-tab-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 9px;
-  background: var(--divider);
-  color: var(--text-muted);
-}
-
-.cr-tab-badge.urgent {
-  background: var(--red-bg);
-  color: var(--red);
-}
+/* .cr-tab-btn/.cr-tab-badge (dead tab-bar CSS, never used in any .tsx) removed in Ciclo 18 —
+   see design-system/README.md, Ciclo 18. */
 
 /* ── Tab content area ── */
 
@@ -4624,10 +4579,6 @@
 .cr-tab-bar::-webkit-scrollbar {
   display: none;
 }
-.cr-tab-btn {
-  padding: 9px 16px;
-  font-size: 13px;
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    REUSABLE NAV COMPONENTS — PageTabs (L1), SectionTabs (L2), SubSectionControl (L3)
@@ -4897,59 +4848,11 @@
   }
 }
 
-/* ── L2/L3 nav components: canonical rules live in App.css (feature 009).
-   Only retain rules here that have no equivalent in App.css. ── */
+/* .subsection-ctrl (SubSectionControl, L3 nav) removed in Ciclo 18 — dead CSS for an orphaned
+   component (NavComponents.tsx, zero import sites); TopNav.tsx is the canonical, live L2/L3 nav.
+   See design-system/README.md, Ciclo 18. */
 
-/* ── L3: SubSectionControl ── */
-.subsection-ctrl {
-  display: inline-flex;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface-raised);
-  padding: 3px;
-  gap: 2px;
-}
-
-.subsection-ctrl__option {
-  padding: 5px 14px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: var(--font-ui);
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  transition:
-    background 0.12s,
-    color 0.12s;
-}
-.subsection-ctrl__option:hover {
-  color: var(--text);
-}
-.subsection-ctrl__option--active {
-  background: var(--surface);
-  color: var(--text);
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
-}
-
-.subsection-ctrl--sm .subsection-ctrl__option {
-  font-size: 12px;
-  padding: 4px 10px;
-}
-
-.subsection-ctrl__icon {
-  display: inline-flex;
-  align-items: center;
-}
-.subsection-ctrl__icon svg {
-  width: 14px;
-  height: 14px;
-}
-
-/* ── Responsive: nav components (cr-header only; page-tabs/section-tabs are canonical) ── */
+/* ── Responsive: nav components (cr-header only) ── */
 @media (max-width: 900px) {
   .cr-header {
     margin: 6px 8px 0;
@@ -5208,9 +5111,7 @@ textarea.form-input {
 
 /* FR-008: print hides nav chrome so paper output focuses on content */
 @media print {
-  .cr-nav-groups,
-  .page-tabs,
-  .section-tabs {
+  .cr-nav-groups {
     display: none !important;
   }
 }
@@ -5219,10 +5120,6 @@ textarea.form-input {
 @media (max-width: 900px) {
   .cr-nav-group-btn {
     padding: 8px 12px;
-    font-size: 12px;
-  }
-  .cr-tab-btn {
-    padding: 8px 10px;
     font-size: 12px;
   }
   .cr-form-section {
@@ -5378,57 +5275,9 @@ textarea.form-input {
   opacity: 1;
 }
 
-/* ── Tab bar ── */
-.npm-tab-bar {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-  padding: 0 24px;
-  flex-shrink: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-  gap: 0;
-}
-.npm-tab-bar::-webkit-scrollbar {
-  display: none;
-}
-
-.npm-tab {
-  position: relative;
-  padding: 13px 18px 11px;
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--text-muted);
-  border: none;
-  background: none;
-  cursor: pointer;
-  white-space: nowrap;
-  border-bottom: 2.5px solid transparent;
-  transition:
-    color 0.15s,
-    border-color 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.npm-tab:hover {
-  color: var(--text);
-  background: rgba(37, 99, 235, 0.04);
-}
-.npm-tab--active {
-  color: var(--blue, #2f6bed);
-  font-weight: 600;
-  border-bottom-color: var(--blue, #2f6bed);
-}
-
-/* Error dot on tab */
-.npm-tab__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--red, #dc2626);
-  display: inline-block;
-}
+/* .npm-tab-bar/.npm-tab/.npm-tab--active/.npm-tab__dot (dead tab-bar CSS within an otherwise
+   live modal — the rest of the .npm-* family is used by StepAnagrafica/StepIngresso/VitaleModal,
+   only its tab sub-feature is orphaned) removed in Ciclo 18. See design-system/README.md. */
 
 /* ── Body ── */
 .npm-body {
@@ -5784,9 +5633,6 @@ textarea.form-input {
   .npm-header {
     padding: 18px 20px 16px;
   }
-  .npm-tab-bar {
-    padding: 0 16px;
-  }
   .npm-footer {
     padding: 12px 20px;
   }
@@ -5819,10 +5665,6 @@ textarea.form-input {
   }
   .npm-header {
     padding: 14px 16px 12px;
-  }
-  .npm-tab {
-    padding: 11px 12px 9px;
-    font-size: 12.5px;
   }
   .npm-footer {
     padding: 10px 14px;
@@ -6326,9 +6168,7 @@ textarea.form-input {
 .cr-header,
 .cr-breadcrumb,
 .cr-nav-groups,
-.cr-tab-bar,
-.page-tabs,
-.section-tabs {
+.cr-tab-bar {
   max-width: 100%;
   box-sizing: border-box;
 }
