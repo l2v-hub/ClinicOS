@@ -1,0 +1,54 @@
+{
+  "esiti": [
+    {
+      "nome": "Il banner rosso \"somministrazioni in ritardo\" e visibile",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Pluralizzazione corretta: \"3 pazienti\" non \"3 pazientei\"",
+      "ok": true,
+      "dettaglio": "3 pazienti con somministrazioni in ritardo"
+    },
+    {
+      "nome": "Ordine: Aldo Neri (1 dose, 70 min) prima di Carla Rossi (1 dose, 40 min) prima di Bruna Villa (3 dosi, max 7 min) — per gravita, non per numero di dosi",
+      "ok": true,
+      "dettaglio": "Neri Aldo | Rossi Carla | Villa Bruna"
+    },
+    {
+      "nome": "Il badge della prima riga mostra \"+70 min\"",
+      "ok": true,
+      "dettaglio": "+70 MIN"
+    },
+    {
+      "nome": "La riga di Bruna Villa elenca tutte e tre le dosi in ritardo (raggruppamento corretto per paziente)",
+      "ok": true,
+      "dettaglio": "INSULINA (18:03, +7 min), LASIX (18:04, +6 min), AUGMENTIN (18:05, +5 min)"
+    },
+    {
+      "nome": "Il click sulla riga apre la cartella del paziente corretto (Rossi, non Neri ne Villa)",
+      "ok": true,
+      "dettaglio": "Rossi, Carla"
+    },
+    {
+      "nome": "Il tetto mostra esattamente 5 righe su 7 pazienti in ritardo",
+      "ok": true,
+      "dettaglio": "5 righe"
+    },
+    {
+      "nome": "Il bottone \"+2 altre\" compare (7 - 5 = 2 nascosti)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Il click su \"+2 altre\" naviga all Agenda (nessun vicolo cieco)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

@@ -100,6 +100,52 @@ export function AdminDashboard({
         </div>
       )}
 
+      {/* Pazienti con somministrazioni in ritardo: urgenza clinica reale, resta in rosso. */}
+      {somministrazioni.ritardi.length > 0 && (
+        <div className="coverage-alert">
+          <IcoWarning />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <strong>
+              {somministrazioni.ritardi.length} pazient
+              {somministrazioni.ritardi.length === 1 ? 'e' : 'i'} con somministrazioni in ritardo
+            </strong>{' '}
+            — richiede attenzione immediata
+            <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>
+              {somministrazioni.ritardi.slice(0, 5).map((p) => (
+                <li key={p.patientId}>
+                  <button
+                    type="button"
+                    className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
+                    onClick={() => onSelectPaziente?.(p.nome)}
+                  >
+                    <span>
+                      <span className="anomalie-reparto__nome">{p.nome}</span>
+                      <span className="anomalie-reparto__farmaci">
+                        {p.voci
+                          .map(
+                            (v) => `${v.farmacoNome} (${v.scheduledTime}, +${v.minutiRitardo} min)`,
+                          )
+                          .join(', ')}
+                      </span>
+                    </span>
+                    <span className="badge badge--red">+{p.voci[0].minutiRitardo} min</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {somministrazioni.ritardi.length > 5 && (
+              <button
+                className="link-btn"
+                style={{ marginTop: 8 }}
+                onClick={() => onNavigate('agenda-admin')}
+              >
+                +{somministrazioni.ritardi.length - 5} altre <IcoArrow />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Stat cards */}
       <div className="stats-grid">
         <div className="stat-card stat-card--blue">
