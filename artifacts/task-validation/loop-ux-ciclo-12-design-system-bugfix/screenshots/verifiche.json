@@ -1,0 +1,44 @@
+{
+  "esiti": [
+    {
+      "nome": "badge--green usa il token --emerald (#16a37b), non il vecchio hex #0e8a63",
+      "ok": true,
+      "dettaglio": "rgb(22, 163, 123)"
+    },
+    {
+      "nome": "badge--amber usa il token --amber (#c77700), non il vecchio hex #92400e",
+      "ok": true,
+      "dettaglio": "rgb(199, 119, 0)"
+    },
+    {
+      "nome": "badge--blue usa il token --blue (#2f6bed), non il vecchio hex #1d4fc4",
+      "ok": true,
+      "dettaglio": "rgb(47, 107, 237)"
+    },
+    {
+      "nome": "Il bottone Modifica in Esami&Consulenze usa la classe icon-btn corretta (non piu btn-icon fantasma)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Il bottone Modifica ha uno stile reale applicato (non trasparente/senza bordo come una classe fantasma)",
+      "ok": true,
+      "dettaglio": "bg=rgb(255, 255, 255) border=solid"
+    },
+    {
+      "nome": "La empty-state-card usa display:flex (versione app-additions.css, non piu quella solida di App.css)",
+      "ok": true,
+      "dettaglio": "flex"
+    },
+    {
+      "nome": "La empty-state-card ha il bordo tratteggiato (dashed), non piu solido",
+      "ok": true,
+      "dettaglio": "dashed"
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

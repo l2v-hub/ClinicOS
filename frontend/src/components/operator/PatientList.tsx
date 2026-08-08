@@ -272,8 +272,8 @@ export function PatientList({
           style={{
             padding: '8px 12px',
             borderRadius: 6,
-            background: 'var(--red-50, #fef2f2)',
-            color: 'var(--red-700, #b91c1c)',
+            background: 'var(--red-bg)',
+            color: 'var(--red)',
             fontSize: '0.85rem',
             marginBottom: 12,
           }}

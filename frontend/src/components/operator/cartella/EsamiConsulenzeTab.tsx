@@ -202,7 +202,7 @@ function EsameRow({
         {r.note && <p className="cr-diag-note">{r.note}</p>}
       </div>
       <div className="cr-item-actions">
-        <button className="btn-icon btn-sm" title="Modifica" onClick={onEdit}>
+        <button className="icon-btn icon-btn--sm icon-btn--edit" title="Modifica" onClick={onEdit}>
           <svg
             width="14"
             height="14"
@@ -217,7 +217,11 @@ function EsameRow({
             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
           </svg>
         </button>
-        <button className="btn-icon btn-sm btn-icon--danger" title="Elimina" onClick={onDelete}>
+        <button
+          className="icon-btn icon-btn--sm icon-btn--danger"
+          title="Elimina"
+          onClick={onDelete}
+        >
           <svg
             width="14"
             height="14"
