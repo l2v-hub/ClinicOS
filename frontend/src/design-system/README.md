@@ -162,12 +162,22 @@ funzionalmente identiche: una nell'header sezione (bare `btn-sm`, violazione del
 l'altra nel footer `InlineForm` (gia' corretta). L'header ora e' `undefined` in modifica — resta
 solo la coppia del footer.
 
+## Ciclo 17 — PatientList non perde piu' ricerca e filtro ad ogni riapertura
+
+Vedi `artifacts/task-validation/loop-ux-ciclo-17-patientlist-non-perde-piu-ricerca-e-filtro-ad-ogni-riapertura/`
+per contract, evidenza ed esito. `<PatientList>` e' renderizzato solo mentre `navKey === 'pazienti'`
+in `App.tsx` — aprire una cartella lo smonta, distruggendo `ricerca`/`filtroSesso` (`useState`
+locale). Sollevati in `App.tsx` (`pazientiRicerca`/`pazientiFiltroSesso`, sempre montato) e passati
+come prop controllate. Ambito ridotto deliberatamente: solo ricerca e filtro, non lo scroll (backlog
+sotto) ne' persistenza tra refresh di pagina (in-memory di sessione).
+
 ## Backlog aperto — differito a cicli successivi (deliberatamente)
 
 Trovati dall'analisi ma NON corretti qui perche' richiedono un cambio di comportamento (non solo
 CSS) o una scelta di design piu' ampia:
 
-- `PatientList` perde ricerca/filtro/scroll ad ogni riapertura cartella (stato non sollevato).
+- `PatientList` perde la posizione di scroll ad ogni riapertura cartella (ricerca/filtro sollevati
+  nel Ciclo 17, scroll ancora no — richiede un meccanismo diverso: ref al contenitore + restore).
 - `PatientCompactHeader` non allineato al pattern `PageHeader`.
 - 4 implementazioni parallele di tab bar (2 morte in CSS, mai importate) con indicatori "attivo"
   visivamente diversi (pillola piena vs sottolineatura) nello stesso percorso di navigazione.

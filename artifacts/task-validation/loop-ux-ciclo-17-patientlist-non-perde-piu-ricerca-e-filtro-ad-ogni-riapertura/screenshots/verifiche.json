@@ -1,0 +1,29 @@
+{
+  "esiti": [
+    {
+      "nome": "AC-R3 (setup): il filtro riduce davvero i risultati mostrati (Esposito+Femmina esclude Ferri)",
+      "ok": true,
+      "dettaglio": "righe visibili: 1"
+    },
+    {
+      "nome": "CRITICO AC-R1: la ricerca \"Esposito\" e ancora presente dopo apri-e-torna (non svuotata)",
+      "ok": true,
+      "dettaglio": "valore: \"Esposito\""
+    },
+    {
+      "nome": "CRITICO AC-R2: il filtro \"Femmina\" e ancora selezionato dopo apri-e-torna",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "AC-R3: il filtro continua a funzionare correttamente (Ferri, maschio, resta escluso)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

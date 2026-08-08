@@ -165,6 +165,11 @@ export default function App() {
   // Patients (API)
   const [pazienti, setPazienti] = useState<Paziente[]>([]);
   const [loadingPazienti, setLoadingPazienti] = useState(false);
+  // Sollevati da PatientList: quel componente è renderizzato solo mentre navKey === 'pazienti'
+  // e si smonta ad ogni apertura cartella — senza sollevare qui, ricerca e filtro tornavano
+  // sempre a vuoto ad ogni riapertura della lista.
+  const [pazientiRicerca, setPazientiRicerca] = useState('');
+  const [pazientiFiltroSesso, setPazientiFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [pazienteSelezionato, setPazienteSelezionato] = useState<Paziente | null>(null);
   // #243: "Moduli" tab to land on when opening pazienteSelezionato (set only right after a
   // patient is created from the intake wizard with a module card selected in step 4).
@@ -1628,6 +1633,10 @@ export default function App() {
               operatori={operatori}
               camere={camere}
               loading={loadingPazienti}
+              ricerca={pazientiRicerca}
+              onRicercaChange={setPazientiRicerca}
+              filtroSesso={pazientiFiltroSesso}
+              onFiltroSessoChange={setPazientiFiltroSesso}
               onSelect={selectPaziente}
               onAddPaziente={addPaziente}
               clinicalSummary={clinicalSummary}
