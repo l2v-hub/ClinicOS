@@ -1,0 +1,29 @@
+{
+  "esiti": [
+    {
+      "nome": "AC1: entrando dalla lista pazienti, il bottone indietro dice \"Torna a Pazienti\"",
+      "ok": true,
+      "dettaglio": "title=\"Torna a Pazienti\""
+    },
+    {
+      "nome": "Il bottone indietro e un vero <button> (accessibile da tastiera)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "CRITICO AC2: dopo lo switch paziente via ricerca, il bottone indietro dice \"Torna a Scheda Paziente\" (non piu \"Torna alla lista\")",
+      "ok": true,
+      "dettaglio": "title=\"Torna a Scheda Paziente\""
+    },
+    {
+      "nome": "aria-label coerente con title (accessibile agli screen reader)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

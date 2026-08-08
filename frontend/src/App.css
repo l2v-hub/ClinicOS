@@ -618,6 +618,9 @@ body {
 }
 
 .patient-compact-header__back {
+  background: none;
+  padding: 0;
+  font: inherit;
   color: var(--text-muted);
   cursor: pointer;
   display: flex;

@@ -4,6 +4,7 @@ interface PatientCompactHeaderProps {
   paziente: Paziente;
   cartella: CartellaPaziente | null;
   onBack: () => void;
+  backLabel?: string;
   onInvioPS?: () => void;
 }
 
@@ -17,6 +18,7 @@ export default function PatientCompactHeader({
   paziente,
   cartella,
   onBack,
+  backLabel,
   onInvioPS,
 }: PatientCompactHeaderProps) {
   const fullName = `${paziente.lastName}, ${paziente.firstName}`.trim().replace(/^,\s*/, '');
@@ -30,9 +32,17 @@ export default function PatientCompactHeader({
   if (paziente.medicalRecordNumber) meta.push(paziente.medicalRecordNumber);
   if (age || sex) meta.push([age, sex].filter(Boolean).join(' · '));
 
+  const backTitle = backLabel ? `Torna a ${backLabel}` : 'Torna alla lista';
+
   return (
     <div className="patient-compact-header">
-      <div className="patient-compact-header__back" onClick={onBack} title="Torna alla lista">
+      <button
+        type="button"
+        className="patient-compact-header__back"
+        onClick={onBack}
+        title={backTitle}
+        aria-label={backTitle}
+      >
         <svg
           width="18"
           height="18"
@@ -45,7 +55,7 @@ export default function PatientCompactHeader({
         >
           <polyline points="15 18 9 12 15 6" />
         </svg>
-      </div>
+      </button>
 
       <span className="patient-compact-header__avatar" aria-hidden="true">
         {initials}
