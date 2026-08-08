@@ -10,7 +10,10 @@ import { sortPazienti } from '../../lib/patientSort';
 interface Props {
   slot: TherapySlot;
   onClose: () => void;
-  onConfirm: (info: {
+  /** Vista gestionale (admin): l'elenco resta leggibile ma la firma di somministrazione,
+   *  che e' un atto clinico tracciato su administeredBy, non e' offerta. */
+  readOnly?: boolean;
+  onConfirm?: (info: {
     patientId: string;
     therapyId: string;
     drugName: string;
@@ -19,7 +22,7 @@ interface Props {
     fascia: string;
     ora: string;
   }) => void;
-  onNotAdministered: (
+  onNotAdministered?: (
     info: {
       patientId: string;
       therapyId: string;
@@ -43,7 +46,13 @@ const MOTIVI: { value: MotivoNonErogazione; label: string }[] = [
   { value: 'altro', label: 'Altro' },
 ];
 
-export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }: Props) {
+export function TherapySlotModal({
+  slot,
+  onClose,
+  onConfirm,
+  onNotAdministered,
+  readOnly = false,
+}: Props) {
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const [selectedMotivo, setSelectedMotivo] = useState<MotivoNonErogazione | null>(null);
   const [noteText, setNoteText] = useState('');
@@ -131,7 +140,12 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                               )}
                             </span>
                           )}
-                          {a.status === 'pending' && (
+                          {a.status === 'pending' && readOnly && (
+                            <span style={{ color: '#C77700', fontWeight: 600, fontSize: 12 }}>
+                              Da erogare
+                            </span>
+                          )}
+                          {a.status === 'pending' && !readOnly && (
                             <>
                               <button
                                 className="therapy-action-btn therapy-action-btn--confirm"
@@ -139,7 +153,7 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                                 style={{ opacity: isPending ? 0.6 : 1 }}
                                 onClick={() => {
                                   setPendingKeys((prev) => new Set(prev).add(key));
-                                  onConfirm(buildInfo(p, a));
+                                  onConfirm?.(buildInfo(p, a));
                                 }}
                               >
                                 {isPending ? 'Invio…' : 'Erogata'}
@@ -191,7 +205,7 @@ export function TherapySlotModal({ slot, onClose, onConfirm, onNotAdministered }
                             style={{ opacity: selectedMotivo ? 1 : 0.5 }}
                             onClick={() => {
                               if (!selectedMotivo) return;
-                              onNotAdministered(buildInfo(p, a), selectedMotivo, noteText);
+                              onNotAdministered?.(buildInfo(p, a), selectedMotivo, noteText);
                               setExpandedKey(null);
                               setSelectedMotivo(null);
                               setNoteText('');
