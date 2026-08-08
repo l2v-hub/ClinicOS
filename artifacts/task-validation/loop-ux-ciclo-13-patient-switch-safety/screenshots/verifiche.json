@@ -1,0 +1,39 @@
+{
+  "esiti": [
+    {
+      "nome": "Setup: il form \"+ Aggiungi Nota\" e aperto con testo digitato per il paziente A",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "La cartella ora mostra davvero il paziente B (Bonelli, Bice)",
+      "ok": true,
+      "dettaglio": "Bonelli, Bice"
+    },
+    {
+      "nome": "CRITICO: il form \"+ Aggiungi Nota\" si e chiuso dopo lo switch (il draft di A non e visibile/attivo su B)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Il testo della bozza di A non compare da nessuna parte nella cartella di B",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Setup: il form Profilo e in modifica per il paziente B",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Il form Profilo si e chiuso dopo lo switch (torna alla vista sola-lettura con \"Modifica\" di nuovo cliccabile, non resta aperto sui dati di B)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}
