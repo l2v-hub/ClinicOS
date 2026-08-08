@@ -1,0 +1,29 @@
+{
+  "esiti": [
+    {
+      "nome": "AC-R3: fuori modifica, il bottone \"Modifica\" e presente",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "CRITICO AC-R1: un solo bottone \"Salva\" visibile in modifica (non due)",
+      "ok": true,
+      "dettaglio": "trovati: 1"
+    },
+    {
+      "nome": "CRITICO AC-R1: un solo bottone \"Annulla\" visibile in modifica (non due)",
+      "ok": true,
+      "dettaglio": "trovati: 1"
+    },
+    {
+      "nome": "AC-R2: il salvataggio chiude il form di modifica (comportamento pre-esistente invariato)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}
