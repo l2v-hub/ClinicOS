@@ -538,6 +538,13 @@ export default function App() {
     function onKey(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
+        // Un modale clinico full-overlay (.modal-overlay/.therapy-modal-overlay, z-index >=
+        // 1000) blocca gia' i click di sfondo, incluso il bottone di ricerca in topbar — ma
+        // questo listener e' globale su window e non lo sapeva, aprendo .search-overlay
+        // (z-index 300) VISIVAMENTE SOTTO il modale gia' aperto: un secondo overlay invisibile
+        // e incliccabile, non un rischio dati (nessun risultato raggiungibile), ma un
+        // comportamento incoerente con l'equivalente click col mouse (gia' bloccato).
+        if (document.querySelector('.modal-overlay, .therapy-modal-overlay')) return;
         setSearchOpen((v) => !v);
       }
       if (e.key === 'Escape') setSearchOpen(false);
@@ -1659,14 +1666,18 @@ export default function App() {
               <p style={{ fontSize: 16 }}>Caricamento scheda paziente…</p>
             </div>
           )}
-          {navKey === 'dettaglio-paziente' && !pazienteSelezionato && !restoringPazienteFromHash && (
-            <div style={{ padding: '48px 32px', textAlign: 'center', color: 'var(--text-muted)' }}>
-              <p style={{ fontSize: 16, marginBottom: 16 }}>Nessun paziente selezionato.</p>
-              <button className="btn-primary" onClick={() => goBack('pazienti')}>
-                Vai alla lista pazienti
-              </button>
-            </div>
-          )}
+          {navKey === 'dettaglio-paziente' &&
+            !pazienteSelezionato &&
+            !restoringPazienteFromHash && (
+              <div
+                style={{ padding: '48px 32px', textAlign: 'center', color: 'var(--text-muted)' }}
+              >
+                <p style={{ fontSize: 16, marginBottom: 16 }}>Nessun paziente selezionato.</p>
+                <button className="btn-primary" onClick={() => goBack('pazienti')}>
+                  Vai alla lista pazienti
+                </button>
+              </div>
+            )}
           {navKey === 'dettaglio-paziente' && pazienteSelezionato && (
             <PatientDetail
               paziente={pazienteSelezionato}
