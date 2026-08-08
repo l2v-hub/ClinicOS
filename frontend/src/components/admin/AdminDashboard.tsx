@@ -9,8 +9,10 @@ import {
   IcoActivity,
   IcoShield,
   IcoClock,
+  IcoPill,
 } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
+import { useRiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoSomministrazioni';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -49,6 +51,7 @@ export function AdminDashboard({
   const attivi = operatori.filter((o) => o.stato === 'attivo');
   const urgenti = consegne.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
   const maxPazienti = Math.max(...operatori.map((o) => o.pazientiAssegnati), 1);
+  const somministrazioni = useRiepilogoSomministrazioni();
 
   // Clinical KPIs
   const critici = clinicalSummary.filter((c) => c.hasCriticalVitals).length;
@@ -181,6 +184,26 @@ export function AdminDashboard({
             <div className="kpi-alert-card kpi-alert-card--green">
               <span className="kpi-alert-card__val">{dimessi}</span>
               <span className="kpi-alert-card__lbl">Dimessi in archivio</span>
+            </div>
+            <div
+              className={`kpi-alert-card${
+                somministrazioni.inCorso
+                  ? ' kpi-alert-card--blue'
+                  : somministrazioni.inRitardo > 0
+                    ? ' kpi-alert-card--red'
+                    : ' kpi-alert-card--green'
+              }`}
+              onClick={() => onNavigate('agenda-admin')}
+              title="Vai a Agenda"
+            >
+              <span className="kpi-alert-card__val">
+                {somministrazioni.inCorso
+                  ? '—'
+                  : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`}
+              </span>
+              <span className="kpi-alert-card__lbl">
+                <IcoPill /> Somministrazioni in ritardo
+              </span>
             </div>
           </div>
         </>

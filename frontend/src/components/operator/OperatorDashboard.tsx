@@ -9,11 +9,13 @@ import {
   IcoClock,
   IcoChevronRight,
   IcoBed,
+  IcoPill,
 } from '../../icons';
 import type { NavKey } from '../../types';
 import { PageHeader } from '../shared/PageHeader';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
 import { useAnomalieReparto } from './cartella/useAnomalieReparto';
+import { useRiepilogoSomministrazioni } from './cartella/useRiepilogoSomministrazioni';
 import './cartella/AvvisoAnomalieFarmaci.css';
 
 interface OperatorDashboardProps {
@@ -59,6 +61,7 @@ export function OperatorDashboard({
   const prossimoSlot = agenda.find((s) => s.stato === 'programmato' || s.stato === 'in_corso');
   // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
   const anomalie = useAnomalieReparto();
+  const somministrazioni = useRiepilogoSomministrazioni();
 
   // Clinical KPIs from clinicalSummary
   const critici = clinicalSummary.filter((c) => c.hasCriticalVitals).length;
@@ -213,6 +216,35 @@ export function OperatorDashboard({
             </div>
             <span className="kpi-alert-card__val">{pazientiRicoverati}</span>
             <span className="kpi-alert-card__lbl">Ricoverati attivi</span>
+          </div>
+          <div
+            className={`kpi-alert-card${
+              somministrazioni.inCorso
+                ? ' kpi-alert-card--blue'
+                : somministrazioni.inRitardo > 0
+                  ? ' kpi-alert-card--red'
+                  : ' kpi-alert-card--green'
+            }`}
+            onClick={() => onNavigate('agenda-operatore')}
+            title="Vai a Agenda"
+          >
+            <div className="kpi-alert-card__top">
+              <span className="kpi-alert-card__ico">
+                <IcoPill />
+              </span>
+              <span className="kpi-alert-card__chevron">
+                <IcoChevronRight />
+              </span>
+            </div>
+            <span className="kpi-alert-card__val">
+              {somministrazioni.inCorso
+                ? '—'
+                : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`}
+            </span>
+            <span className="kpi-alert-card__lbl">Somministrazioni in ritardo</span>
+            {!somministrazioni.inCorso && somministrazioni.inRitardo === 0 && (
+              <span className="kpi-alert-card__ok">Nessuna criticità</span>
+            )}
           </div>
         </div>
       )}
