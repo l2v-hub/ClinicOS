@@ -1,0 +1,54 @@
+{
+  "esiti": [
+    {
+      "nome": "La card \"Parametri critici\" ha role=\"button\"",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "La card \"Parametri critici\" ha tabIndex=0 (raggiungibile da tastiera)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "La card riceve davvero il focus della tastiera",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Invio sulla card attiva la navigazione (verso Parametri)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "La barra Spazio sulla card attiva la navigazione (verso Agenda)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Anche \"Ricoverati attivi\" (altra card cliccabile) ha role=\"button\" e tabIndex=0",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Admin: la card \"Somministrazioni in ritardo\" ha role=\"button\" e tabIndex=0",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Admin: Invio sulla card attiva la navigazione (verso Agenda)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Admin: la card statica \"Dimessi in archivio\" (nessun onClick) NON ha role=\"button\" (nessun falso bottone)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}
