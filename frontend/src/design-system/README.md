@@ -171,6 +171,22 @@ locale). Sollevati in `App.tsx` (`pazientiRicerca`/`pazientiFiltroSesso`, sempre
 come prop controllate. Ambito ridotto deliberatamente: solo ricerca e filtro, non lo scroll (backlog
 sotto) ne' persistenza tra refresh di pagina (in-memory di sessione).
 
+## Ciclo 18 — rimosse le implementazioni morte di tab bar
+
+Vedi `artifacts/task-validation/loop-ux-ciclo-18-rimuovi-le-implementazioni-morte-di-tab-bar/` per
+contract, evidenza ed esito. Il backlog parlava di "4 implementazioni, 2 morte" — l'analisi ne ha
+trovate di piu': l'intero componente orfano `NavComponents.tsx` (`MainHorizontalNav`/
+`ContextSubTabs`/`SubSectionControl`, zero import ovunque), `.cr-tab-btn`/`.cr-tab-badge`
+(2 definizioni duplicate di `.cr-tab-btn`), e la sotto-funzionalita' tab del modale "Nuovo
+paziente" (`.npm-tab-bar`/`.npm-tab*`, il resto della famiglia `.npm-*` resta vivo). Tutti
+rimossi — ogni classe era confermata irraggiungibile da qualunque `.tsx` PRIMA della rimozione
+(grep ricorsivo + `tsc --noEmit` pulito dopo). `TopNav.tsx` resta l'unica implementazione L2/L3,
+invariata. Bundle CSS: 248.54 kB -> 244.46 kB.
+
+Trovate ma NON rimosse (fuori dal perimetro esatto "tab bar"): `.cr-tab-bar` (contenitore strip,
+dead ma non e' una classe tab) e `.section-sub-menu` (dead, categoria diversa) — prossimo ciclo di
+pulizia CSS.
+
 ## Backlog aperto — differito a cicli successivi (deliberatamente)
 
 Trovati dall'analisi ma NON corretti qui perche' richiedono un cambio di comportamento (non solo
@@ -179,8 +195,7 @@ CSS) o una scelta di design piu' ampia:
 - `PatientList` perde la posizione di scroll ad ogni riapertura cartella (ricerca/filtro sollevati
   nel Ciclo 17, scroll ancora no — richiede un meccanismo diverso: ref al contenitore + restore).
 - `PatientCompactHeader` non allineato al pattern `PageHeader`.
-- 4 implementazioni parallele di tab bar (2 morte in CSS, mai importate) con indicatori "attivo"
-  visivamente diversi (pillola piena vs sottolineatura) nello stesso percorso di navigazione.
 - 5 sistemi di badge/pillola di stato paralleli, da consolidare su `badge--*`.
 - `btn-sm` isolato (24 occorrenze, incluso il bottone "Modifica" di Profilo) — ognuna richiede una
   scelta editoriale (quale ruolo/colore assegnare), non un fix meccanico.
+- CSS morto residuo trovato nel Ciclo 18 ma fuori ambito: `.cr-tab-bar`, `.section-sub-menu`.
