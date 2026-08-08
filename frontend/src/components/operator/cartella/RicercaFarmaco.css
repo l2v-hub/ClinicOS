@@ -199,14 +199,16 @@
 /* ── Indicatore sulla riga di terapia ───────────────────────────────────────────────────── */
 
 /* Non e' un errore: e' un'informazione mancante su cui l'operatore puo' agire. Percio' ambra
-   e non rosso, che in ClinicOS e' riservato agli allarmi clinici. */
+   e non rosso, che in ClinicOS e' riservato agli allarmi clinici.
+   E' anche l'unico segnale, riga per riga, che un farmaco non risulta in anagrafica: a 10px
+   passava inosservato in una tabella densa ed era scomodo da colpire. */
 .farmaco-non-trovato {
   margin-left: 6px;
-  padding: 1px 8px;
+  padding: 4px 10px;
   border: 1px solid rgb(180 120 0 / 45%);
   border-radius: 999px;
   background: rgb(255 196 0 / 14%);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   color: #8a5a00;
   cursor: pointer;

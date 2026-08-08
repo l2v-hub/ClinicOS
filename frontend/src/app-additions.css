@@ -4934,6 +4934,14 @@ textarea.form-input {
   line-height: 1.6;
 }
 
+/* Usata dalle maschere della terapia ma mai definita: restava un `<small>` senza stile. */
+.form-hint {
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
 /* ── Inline form (edit state) ── */
 .cr-inline-form {
   background: #f8fafc;
@@ -7499,6 +7507,15 @@ textarea.form-input {
   padding-top: 8px;
 }
 
+/* La nota su cosa manca sta a sinistra, sulla stessa linea dei pulsanti. Senza `align-self` un
+   elemento di un contenitore flex senza `align-items` si stira a tutta altezza e il testo si
+   posa in alto, fuori asse rispetto ai pulsanti che sta spiegando. */
+.terapia-sched-form .form-actions .form-hint {
+  margin-right: auto;
+  align-self: center;
+  text-align: left;
+}
+
 .fascia-chips {
   display: flex;
   gap: 6px;
@@ -7625,6 +7642,7 @@ textarea.form-input {
   border-bottom: 2px solid transparent;
   margin-bottom: -2px;
   padding: 8px 14px;
+  min-height: 44px;
   font-size: 12px;
   font-weight: 500;
   color: var(--text-muted, #6b7280);
@@ -9317,7 +9335,10 @@ textarea.form-input {
   display: inline-flex;
   align-items: baseline;
   gap: 5px;
-  padding: 6px 12px;
+  /* 44px raggiunti col padding e non con `min-height`: l'allineamento e' `baseline` — serve a
+     posare la sigla «1/2» sulla linea di base dell'etichetta — e un'altezza minima lascerebbe
+     il contenuto incollato in alto invece di centrarlo. */
+  padding: 13px 12px;
   border-radius: 8px;
   cursor: pointer;
   border: 1px solid var(--border, #d0d5dd);
@@ -9377,8 +9398,11 @@ textarea.form-input {
   flex-wrap: wrap;
   align-items: center;
 }
+/* 44px: e' il chip che sceglie la frazione di dose, si usa col dito su tablet e sbagliarlo
+   cambia la quantita' somministrata. */
 .qty-chip {
-  min-width: 38px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;

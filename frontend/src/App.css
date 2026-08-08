@@ -3412,6 +3412,21 @@ body {
   height: 15px;
 }
 
+/* Affordance dentro una cella di testo (es. il documento AIFA accanto al nome del farmaco).
+   `.icon-btn` di base e' `display: flex`, quindi in mezzo a del testo apre una riga nuova e
+   spinge l'icona sotto il nome: qui serve inline, alla stessa altezza della parola. */
+.icon-btn--inline {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.icon-btn--inline svg {
+  width: 14px;
+  height: 14px;
+}
+
 .icon-btn--danger {
   color: var(--red) !important;
   border-color: rgba(220, 38, 38, 0.25);
