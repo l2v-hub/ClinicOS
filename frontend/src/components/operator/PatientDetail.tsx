@@ -333,20 +333,6 @@ export function PatientDetail({
   // paziente. Azzerato al cambio paziente, insieme al resto dello stato di navigazione sotto.
   const lastTabByGroup = useRef<Partial<Record<TabGroup, TabId>>>({});
 
-  useEffect(() => {
-    if (initialTabPatientRef.current === paziente.id) {
-      initialTabPatientRef.current = paziente.id;
-      return;
-    }
-    initialTabPatientRef.current = paziente.id;
-    setTab('riepilogo');
-    setActiveGroup(
-      TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === 'riepilogo'))?.id ?? 'panoramica',
-    );
-    setDiarioFilter('tutti');
-    lastTabByGroup.current = {};
-  }, [paziente.id]);
-
   function switchTab(tabId: TabId) {
     setTab(tabId);
     // Deriva il gruppo dal tab stesso invece di fidarsi dello stato `activeGroup`: alcuni
@@ -434,6 +420,48 @@ export function PatientDetail({
 
   // Invio in PS modal
   const [showInvioPS, setShowInvioPS] = useState(false);
+
+  useEffect(() => {
+    if (initialTabPatientRef.current === paziente.id) {
+      initialTabPatientRef.current = paziente.id;
+      return;
+    }
+    initialTabPatientRef.current = paziente.id;
+    setTab('riepilogo');
+    setActiveGroup(
+      TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === 'riepilogo'))?.id ?? 'panoramica',
+    );
+    setDiarioFilter('tutti');
+    // Nessuno di questi 22 stati e' collegato al paziente.id per progettazione — un form/modale
+    // rimasto aperto dopo il cambio paziente resterebbe agganciato al paziente sbagliato. Due in
+    // particolare (cardModal, showInvioPS) leggono `paziente`/`cartella` come prop LIVE, non uno
+    // snapshot: se non chiusi qui si retargetterebbero silenziosamente sul nuovo paziente invece
+    // di mostrare dati stantii — un'azione clinica confermata (es. Invio in PS) potrebbe colpire
+    // il paziente sbagliato senza che l'operatore se ne accorga.
+    setEditProfilo(false);
+    setProfiloForm({});
+    setProfiloL3('anagrafica');
+    setShowAddRisk(false);
+    setEditRiskId(null);
+    setRiskForm({});
+    setShowAddNota(false);
+    setEditNotaId(null);
+    setNotaForm({});
+    setShowAddVisita(false);
+    setEditVisitaId(null);
+    setVisitaForm({});
+    setShowAddConsegna(false);
+    setConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
+    setCardModal(null);
+    setModalVitaleShow(false);
+    setVitaleForm({});
+    setModalConsegnaShow(false);
+    setModalConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
+    setCameraEditing(false);
+    setCameraModalForm({});
+    setShowInvioPS(false);
+    lastTabByGroup.current = {};
+  }, [paziente.id]);
 
   // ── Computed ───────────────────────────────────────────────────────────────
 

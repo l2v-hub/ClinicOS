@@ -122,14 +122,28 @@ esito. Corretti perche' sono BUG (comportamento non intenzionale), non scelte di
    CSS: il fallback hex hardcoded viene sempre usato, disallineato dal token `--red`/`--red-bg`
    reale usato per lo stesso significato ("errore") ovunque altro nell'app.
 
-## Backlog aperto — differito a cicli successivi (deliberatamente, non nel Ciclo 12)
+## Ciclo 13 — sicurezza clinica: reset stato form/modale al cambio paziente
+
+Vedi `artifacts/task-validation/loop-ux-ciclo-13-patient-switch-safety/` per contract, evidenza ed
+esito. `PatientDetail.tsx` non ha `key={paziente.id}` in `App.tsx`: cambiare paziente mentre la
+cartella e' gia' aperta (ricerca globale, Agnos, `goToPazienteByNome`) riusa la stessa istanza. Un
+`useEffect` esistente resettava gia' la navigazione (`tab`/`activeGroup`/`diarioFilter`) ma non i
+22 stati di form/modale per-sezione — corretto aggiungendo i 22 reset mancanti allo stesso effect.
+
+Scoperta collaterale non corretta in questo ciclo (categoria diversa — z-index/focus dei modali,
+non reset di stato): i modali full-overlay (`.modal-overlay`, z-index 1000) bloccano fisicamente i
+click sullo sfondo inclusa la ricerca globale, ma la scorciatoia `Ctrl+K` resta attiva e apre
+`.search-overlay` (z-index 300) VISIVAMENTE SOTTO il modale gia' aperto — incliccabile, comportamento
+confuso ma non pericoloso per i dati.
+
+## Backlog aperto — differito a cicli successivi (deliberatamente)
 
 Trovati dall'analisi ma NON corretti qui perche' richiedono un cambio di comportamento (non solo
 CSS) o una scelta di design piu' ampia:
 
 - `PatientList` perde ricerca/filtro/scroll ad ogni riapertura cartella (stato non sollevato).
-- Reset di stato al cambio paziente non copre i form aperti (Profilo, rischi/note/visite, modale
-  Invio PS) — rischio di dati residui del paziente precedente.
+- `Ctrl+K` apre la ricerca globale anche con un modale full-overlay gia' aperto, finendo dietro di
+  esso (z-index 300 vs 1000) — non pericoloso ma confuso, va bloccato o rialzato di z-index.
 - Bottone "indietro" della cartella dichiara sempre "Torna alla lista" ma puo' tornare al paziente
   precedente (`backLabel` calcolato ma mai passato al componente).
 - `PatientCompactHeader` non allineato al pattern `PageHeader`.
