@@ -1,0 +1,29 @@
+{
+  "esiti": [
+    {
+      "nome": "Setup: entrambe le fasce (mattina, pomeriggio) sono renderizzate in agenda",
+      "ok": true,
+      "dettaglio": "righe trovate: 2"
+    },
+    {
+      "nome": "La card \"Terapia Pomeriggio\" e visibile",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "CRITICO: la card \"Pomeriggio\" e posizionata alla riga delle 14:00 (orario reale di SABBATANI), non piu 16:00 (default fisso)",
+      "ok": true,
+      "dettaglio": "etichetta riga trovata: \"14:00\""
+    },
+    {
+      "nome": "Il dettaglio della fascia mostra SABBATANI con orario 14:00 per riga",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}
