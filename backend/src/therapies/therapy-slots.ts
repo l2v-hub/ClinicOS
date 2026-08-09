@@ -5,6 +5,7 @@
 
 import { prisma } from '../lib/prisma.js';
 import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
+import { earliestOra } from './slot-scheduling.js';
 
 export const FASCE = [
   { fascia: 'mattina', ora: '08:00', label: 'Terapia Mattina', flagField: 'fasceMattina' },
@@ -159,7 +160,10 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
       id: `ts-${f.fascia}`,
       fascia: f.fascia,
       label: f.label,
-      ora: f.ora,
+      ora: earliestOra(
+        allAdmins.map((a) => a.scheduledTime),
+        f.ora,
+      ),
       summary: {
         total: allAdmins.length,
         administered: allAdmins.filter((a) => a.status === 'administered').length,
