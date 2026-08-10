@@ -109,6 +109,7 @@ export function RoomsManagement() {
   });
 
   const [filtroReparto, setFiltroReparto] = useState('tutti');
+  const [filtroStatoLetto, setFiltroStatoLetto] = useState<'tutti' | StatoLetto>('tutti');
 
   /* ── Data loading ─────────────────────────────────────── */
 
@@ -135,8 +136,21 @@ export function RoomsManagement() {
 
   const reparti = ['tutti', ...Array.from(new Set(rooms.map((r) => r.reparto).filter(Boolean)))];
 
-  const roomsFiltrate =
+  const roomsPerReparto =
     filtroReparto === 'tutti' ? rooms : rooms.filter((r) => r.reparto === filtroReparto);
+
+  const contiStatoLetto: Record<StatoLetto, number> = { libero: 0, occupato: 0, manutenzione: 0 };
+  roomsPerReparto.forEach((r) => r.beds.forEach((b) => (contiStatoLetto[bedStatoDisplay(b)] += 1)));
+
+  const lettiVisibili = (room: RoomAPI) =>
+    filtroStatoLetto === 'tutti'
+      ? room.beds
+      : room.beds.filter((b) => bedStatoDisplay(b) === filtroStatoLetto);
+
+  const roomsFiltrate =
+    filtroStatoLetto === 'tutti'
+      ? roomsPerReparto
+      : roomsPerReparto.filter((r) => lettiVisibili(r).length > 0);
 
   /* ── Room CRUD ────────────────────────────────────────── */
 
@@ -492,6 +506,27 @@ export function RoomsManagement() {
         ))}
       </div>
 
+      {/* Filtro stato letto */}
+      <div className="filter-chips" style={{ marginBottom: 16 }}>
+        {(
+          [
+            { key: 'tutti', label: 'Tutti gli stati' },
+            { key: 'occupato', label: `Occupati (${contiStatoLetto.occupato})` },
+            { key: 'libero', label: `Liberi (${contiStatoLetto.libero})` },
+            { key: 'manutenzione', label: `Manutenzione (${contiStatoLetto.manutenzione})` },
+          ] as const
+        ).map((f) => (
+          <button
+            key={f.key}
+            className={`filter-chip${filtroStatoLetto === f.key ? ' active' : ''}`}
+            style={{ minHeight: 44 }}
+            onClick={() => setFiltroStatoLetto(f.key)}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
       {/* Rooms grid */}
       <ClinicalTableSection title="Camere" count={roomsFiltrate.length} countLabel="camere">
         <div className="rooms-grid">
@@ -549,7 +584,7 @@ export function RoomsManagement() {
                 )}
 
                 <div className="letti-list">
-                  {room.beds.map((bed) => {
+                  {lettiVisibili(room).map((bed) => {
                     const stato = bedStatoDisplay(bed);
                     const patientName = bedPatientName(bed);
                     return (

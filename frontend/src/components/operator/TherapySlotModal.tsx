@@ -46,6 +46,8 @@ const MOTIVI: { value: MotivoNonErogazione; label: string }[] = [
   { value: 'altro', label: 'Altro' },
 ];
 
+type FiltroStato = 'tutte' | TherapyAdministration['status'];
+
 export function TherapySlotModal({
   slot,
   onClose,
@@ -57,12 +59,34 @@ export function TherapySlotModal({
   const [selectedMotivo, setSelectedMotivo] = useState<MotivoNonErogazione | null>(null);
   const [noteText, setNoteText] = useState('');
   const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
+  const [filtroStato, setFiltroStato] = useState<FiltroStato>('tutte');
 
   const { summary } = slot;
   // Issue #129: il backend restituisce i pazienti in ordine di terapia — qui
   // li mostriamo sempre in ordine alfabetico (cognome, nome).
-  const patients = sortPazienti(slot.patients);
+  const patients = sortPazienti(slot.patients)
+    .map((p) => ({
+      ...p,
+      administrations:
+        filtroStato === 'tutte'
+          ? p.administrations
+          : p.administrations.filter((a) => a.status === filtroStato),
+    }))
+    .filter((p) => p.administrations.length > 0);
   const pctDone = summary.total > 0 ? Math.round((summary.administered / summary.total) * 100) : 0;
+
+  const FILTRI: { key: FiltroStato; label: string }[] = [
+    { key: 'tutte', label: 'Tutte' },
+    { key: 'pending', label: `Da erogare${summary.pending > 0 ? ` (${summary.pending})` : ''}` },
+    {
+      key: 'administered',
+      label: `Erogate${summary.administered > 0 ? ` (${summary.administered})` : ''}`,
+    },
+    {
+      key: 'not_administered',
+      label: `Non erogate${summary.notAdministered > 0 ? ` (${summary.notAdministered})` : ''}`,
+    },
+  ];
 
   function buildInfo(p: TherapySlotPatient, a: TherapyAdministration) {
     return {
@@ -95,10 +119,29 @@ export function TherapySlotModal({
           </button>
         </div>
 
+        {/* Filtri per stato somministrazione */}
+        <div className="therapy-modal__filters">
+          <div className="filter-chips">
+            {FILTRI.map((f) => (
+              <button
+                key={f.key}
+                className={`filter-chip${filtroStato === f.key ? ' active' : ''}`}
+                onClick={() => setFiltroStato(f.key)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Body */}
         <div className="therapy-modal__body">
           {patients.length === 0 ? (
-            <div className="therapy-modal__empty">Nessuna terapia prevista per questa fascia.</div>
+            <div className="therapy-modal__empty">
+              {filtroStato === 'tutte'
+                ? 'Nessuna terapia prevista per questa fascia.'
+                : 'Nessuna somministrazione con questo stato.'}
+            </div>
           ) : (
             patients.map((p) => (
               <div key={p.patientId}>

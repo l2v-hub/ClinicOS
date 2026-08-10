@@ -176,6 +176,7 @@ export function PatientList({
   // AC6/AC11: anomalie di tutto il reparto da UNA richiesta, non una per paziente.
   const anomalie = useAnomalieReparto();
   const [showModal, setShowModal] = useState(false);
+  const [filtroStatoRicovero, setFiltroStatoRicovero] = useState<string>('tutti');
   // TEST-ONLY: patient deletion. Backend gates it via ALLOW_PATIENT_DELETE; we hide the
   // button when disabled so production simply never shows it.
   const [deleteEnabled, setDeleteEnabled] = useState(false);
@@ -238,7 +239,7 @@ export function PatientList({
     return { consegneAperteMap: map, consegneAperte: new Set(map.keys()) };
   }, [consegne]);
 
-  const filtrati = useMemo(
+  const filtratiBase = useMemo(
     () =>
       pazienti.filter((p) => {
         const q = ricerca.toLowerCase();
@@ -252,6 +253,34 @@ export function PatientList({
         return match && sessoMatch;
       }),
     [pazienti, ricerca, filtroSesso],
+  );
+
+  // Chip mostrate solo per gli stati davvero presenti in reparto, calcolate su tutti i pazienti
+  // così la riga non cambia forma mentre si digita nella ricerca.
+  const statiPresenti = useMemo(() => {
+    const presenti = new Set<string>();
+    pazienti.forEach((p) => {
+      const s = summaryMap.get(p.id)?.statoRicovero;
+      if (s) presenti.add(s);
+    });
+    return Object.keys(STATO_RICOVERO_LABEL).filter((s) => presenti.has(s));
+  }, [pazienti, summaryMap]);
+
+  const contiStato = useMemo(() => {
+    const conti: Record<string, number> = {};
+    filtratiBase.forEach((p) => {
+      const s = summaryMap.get(p.id)?.statoRicovero;
+      if (s) conti[s] = (conti[s] ?? 0) + 1;
+    });
+    return conti;
+  }, [filtratiBase, summaryMap]);
+
+  const filtrati = useMemo(
+    () =>
+      filtroStatoRicovero === 'tutti'
+        ? filtratiBase
+        : filtratiBase.filter((p) => summaryMap.get(p.id)?.statoRicovero === filtroStatoRicovero),
+    [filtratiBase, filtroStatoRicovero, summaryMap],
   );
 
   return (
@@ -325,6 +354,26 @@ export function PatientList({
             </button>
           ))}
         </div>
+        {statiPresenti.length > 0 && (
+          <div className="filter-chips">
+            <button
+              className={`filter-chip${filtroStatoRicovero === 'tutti' ? ' active' : ''}`}
+              onClick={() => setFiltroStatoRicovero('tutti')}
+            >
+              Tutti gli stati
+            </button>
+            {statiPresenti.map((s) => (
+              <button
+                key={s}
+                className={`filter-chip${filtroStatoRicovero === s ? ' active' : ''}`}
+                onClick={() => setFiltroStatoRicovero(s)}
+              >
+                {STATO_RICOVERO_LABEL[s]}
+                {contiStato[s] ? ` (${contiStato[s]})` : ''}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Empty state */}

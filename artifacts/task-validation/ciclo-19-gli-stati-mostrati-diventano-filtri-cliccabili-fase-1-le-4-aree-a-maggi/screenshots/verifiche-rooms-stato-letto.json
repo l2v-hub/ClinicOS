@@ -1,0 +1,79 @@
+{
+  "esiti": [
+    {
+      "nome": "Setup: tutti e 4 i letti sono visibili senza filtro",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Setup: entrambe le camere sono visibili senza filtro",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "I 3 stati del letto sono chip cliccabili con il conteggio nell etichetta",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "CRITICO: \"Occupati (1)\" riduce la lista a 1 solo letto",
+      "ok": true,
+      "dettaglio": "letti visibili: 1"
+    },
+    {
+      "nome": "\"Occupati\" nasconde le camere senza letti occupati",
+      "ok": true,
+      "dettaglio": "camere visibili: 1"
+    },
+    {
+      "nome": "Il letto rimasto e effettivamente marcato Occupato",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Il chip attivo riceve la classe .active",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "CRITICO: \"Liberi (2)\" mostra 2 letti in 2 camere diverse",
+      "ok": true,
+      "dettaglio": "letti: 2, camere: 2"
+    },
+    {
+      "nome": "CRITICO: \"Manutenzione (1)\" mostra 1 solo letto",
+      "ok": true,
+      "dettaglio": "letti visibili: 1"
+    },
+    {
+      "nome": "AND col filtro reparto: Cardiologia + Manutenzione non ha risultati",
+      "ok": true,
+      "dettaglio": "letti: 0, camere: 0"
+    },
+    {
+      "nome": "I conteggi nei chip si ricalcolano sul reparto selezionato (Liberi 2 -> 1)",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "Il chip \"Tutti gli stati\" ripristina i letti del reparto selezionato",
+      "ok": true,
+      "dettaglio": "letti visibili: 2"
+    },
+    {
+      "nome": "Reset completo: tornano tutti e 4 i letti",
+      "ok": true,
+      "dettaglio": "letti visibili: 4"
+    },
+    {
+      "nome": "La modifica del letto (modale) continua a funzionare",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

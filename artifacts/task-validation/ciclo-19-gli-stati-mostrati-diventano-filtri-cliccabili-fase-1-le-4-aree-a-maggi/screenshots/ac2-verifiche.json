@@ -1,0 +1,59 @@
+{
+  "esiti": [
+    {
+      "nome": "ADMIN setup: le 5 card appuntamento di oggi sono renderizzate",
+      "ok": true,
+      "dettaglio": "card: 5"
+    },
+    {
+      "nome": "ADMIN: la riga di chip per stato e visibile con i conteggi live",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "ADMIN CRITICO: cliccando \"Completato\" resta la sola card completata",
+      "ok": true,
+      "dettaglio": "card visibili: 1"
+    },
+    {
+      "nome": "ADMIN: ri-cliccando lo stesso chip il filtro si azzera (tornano 5 card)",
+      "ok": true,
+      "dettaglio": "card visibili: 5"
+    },
+    {
+      "nome": "ADMIN CRITICO: filtro operatore (Ferretti) e filtro stato (Programmato) si combinano",
+      "ok": true,
+      "dettaglio": "dopo operatore: 4, dopo operatore+stato: 1"
+    },
+    {
+      "nome": "OPERATORE setup: le 4 card di op1 sono renderizzate",
+      "ok": true,
+      "dettaglio": "card: 4"
+    },
+    {
+      "nome": "OPERATORE: la riga di chip per stato e visibile con i conteggi live",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "OPERATORE CRITICO: cliccando \"In corso\" resta la sola card in corso",
+      "ok": true,
+      "dettaglio": "card visibili: 1"
+    },
+    {
+      "nome": "OPERATORE: gli slot occupati ma nascosti dal filtro non mostrano \"Disponibile\"",
+      "ok": true,
+      "dettaglio": "slot occupati con affordance di creazione: 0"
+    },
+    {
+      "nome": "OPERATORE: \"Tutti gli stati\" ripristina le 4 card",
+      "ok": true,
+      "dettaglio": "card visibili: 4"
+    },
+    {
+      "nome": "nessun errore JavaScript durante gli scenari",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}
