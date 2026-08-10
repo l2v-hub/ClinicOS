@@ -1,0 +1,19 @@
+{
+  "esiti": [
+    {
+      "nome": "AC-R1: la card terapia in agenda ADMIN mostra l'orario senza doverla aprire",
+      "ok": true,
+      "dettaglio": "testo card: \"Terapia Pomeriggio · 14:00 0/1 erogate 1 da erogare\""
+    },
+    {
+      "nome": "AC-R2: la card terapia in agenda OPERATORE mostra l'orario (componente condiviso)",
+      "ok": true,
+      "dettaglio": "testo card: \"Terapia Pomeriggio · 14:00 0/1 erogate 1 da erogare\""
+    },
+    {
+      "nome": "AC-R3: nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

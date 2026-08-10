@@ -13,7 +13,9 @@ export function TherapySlotCard({ slot, onClick }: { slot: TherapySlot; onClick:
       <span className="agt-therapy-slot__icon">
         <IcoPill />
       </span>
-      <span className="agt-therapy-slot__label">{slot.label}</span>
+      <span className="agt-therapy-slot__label">
+        {slot.label} <span className="agt-therapy-slot__ora">· {slot.ora}</span>
+      </span>
       <span className="agt-therapy-slot__count">
         {administered}/{total} erogate
       </span>
@@ -36,7 +38,7 @@ export function TherapySlotDot({ slot, onClick }: { slot: TherapySlot; onClick: 
   return (
     <div
       className={`agt-week-therapy-dot${allDone ? ' done' : ''}`}
-      title={`${slot.label}: ${parts.join(' · ')}`}
+      title={`${slot.label} · ${slot.ora}: ${parts.join(' · ')}`}
       onClick={(e) => {
         e.stopPropagation();
         onClick();
