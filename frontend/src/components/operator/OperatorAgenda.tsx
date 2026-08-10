@@ -12,6 +12,8 @@ import { AgendaLegend } from '../shared/AgendaLegend';
 import { AppuntamentoActions } from '../shared/AppuntamentoActions';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { TherapySlotCard, TherapySlotDot } from '../shared/TherapySlotOverlay';
+import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
+import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
 import { TherapySlotModal } from './TherapySlotModal';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
@@ -95,12 +97,6 @@ function fmtMonth(d: Date): string {
   return d.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
 }
 
-const STATO_LABEL: Record<string, string> = {
-  programmato: 'Programmato',
-  in_corso: 'In corso',
-  completato: 'Completato',
-  annullato: 'Annullato',
-};
 const TIPO_LABEL: Record<string, string> = {
   visita: 'Visita',
   controllo: 'Controllo',
@@ -129,6 +125,7 @@ export function OperatorAgenda({
 }: OperatorAgendaProps) {
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
+  const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');
   const [aptForm, setAptForm] = useState<{ data: string; ora: string } | null>(null);
   const [showNewPaziente, setShowNewPaziente] = useState(false);
   const [selectedAptId, setSelectedAptId] = useState<string | null>(null);
@@ -150,6 +147,11 @@ export function OperatorAgenda({
     return appuntamenti
       .filter((a) => a.data === data && a.operatoreId === operatoreId)
       .sort((a, b) => a.ora.localeCompare(b.ora));
+  }
+
+  /** Appuntamenti del giorno effettivamente mostrati, cioe' filtrati per stato. */
+  function visibleApts(data: string): Appuntamento[] {
+    return myApts(data).filter((a) => matchStato(a, filtroStato));
   }
 
   function navigate(delta: number) {
@@ -182,9 +184,29 @@ export function OperatorAgenda({
     const from = isoDate(days[0]);
     const to = isoDate(days[days.length - 1]);
     return appuntamenti.filter(
-      (a) => a.operatoreId === operatoreId && a.data >= from && a.data <= to,
+      (a) =>
+        a.operatoreId === operatoreId &&
+        a.data >= from &&
+        a.data <= to &&
+        matchStato(a, filtroStato),
     ).length;
   }
+
+  // Appuntamenti del range visualizzato (giorno/settimana/mese), non filtrati: alimentano
+  // i conteggi dei chip di stato, che devono restare stabili al variare del filtro.
+  const rangeApts = useMemo(() => {
+    const days =
+      view === 'giornaliero'
+        ? [refDate]
+        : view === 'settimanale'
+          ? getWeekDays(refDate)
+          : getMonthMatrix(refDate);
+    const from = isoDate(days[0]);
+    const to = isoDate(days[days.length - 1]);
+    return appuntamenti.filter(
+      (a) => a.operatoreId === operatoreId && a.data >= from && a.data <= to,
+    );
+  }, [appuntamenti, operatoreId, view, refDate]);
   // Indice per lookup O(1) nella griglia giornaliera: senza, ogni cella orario richiamava
   // myApts() e rifiltrava/riordinava l'intero array `appuntamenti` (TIME_SLOTS.length volte
   // per render, su un array con gli appuntamenti di tutti gli operatori, non solo i propri).
@@ -249,6 +271,13 @@ export function OperatorAgenda({
         </div>
       </div>
 
+      {/* ── Appointment status filter chips ── */}
+      <AgendaStatoFilterRow
+        filtro={filtroStato}
+        onChange={setFiltroStato}
+        appuntamenti={rangeApts}
+      />
+
       <AgendaLegend />
 
       {loadingAppuntamenti && <div className="empty-state-card">Caricamento agenda…</div>}
@@ -275,7 +304,10 @@ export function OperatorAgenda({
         <div className="agt-day-wrap">
           {TIME_SLOTS.map((ora) => {
             const tSlot = therapySlotsMap.get(ora);
-            const apt = todayAptByOra.get(ora);
+            // La fascia resta "occupata" anche se il filtro nasconde l'appuntamento: solo
+            // uno slot davvero libero puo' aprire il form di creazione.
+            const slotApt = todayAptByOra.get(ora);
+            const apt = slotApt && matchStato(slotApt, filtroStato) ? slotApt : undefined;
             const isHour = ora.endsWith(':00');
             const isSelected = apt?.id === selectedAptId;
 
@@ -291,10 +323,10 @@ export function OperatorAgenda({
 
                 {/* Regular time slot */}
                 <div
-                  className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${apt ? ' agt-slot--occ' : ' agt-slot--free'}`}
+                  className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${slotApt ? ' agt-slot--occ' : ' agt-slot--free'}`}
                   onClick={() => {
                     if (apt) setSelectedAptId(isSelected ? null : apt.id);
-                    else setAptForm({ data: todayStr, ora });
+                    else if (!slotApt) setAptForm({ data: todayStr, ora });
                   }}
                 >
                   <span className="agt-slot__time">{isHour ? ora : ''}</span>
@@ -341,7 +373,7 @@ export function OperatorAgenda({
                         />
                       )}
                     </div>
-                  ) : (
+                  ) : slotApt ? null : (
                     <div className="agt-free-slot">
                       <span className="agt-free-slot__plus">
                         <IcoPlus />
@@ -372,7 +404,7 @@ export function OperatorAgenda({
             <div className="agt-week-corner" />
             {getWeekDays(refDate).map((d) => {
               const isToday = isoDate(d) === isoDate(new Date());
-              const dayApts = myApts(isoDate(d));
+              const dayApts = visibleApts(isoDate(d));
               return (
                 <div key={isoDate(d)} className={`agt-week-hdr${isToday ? ' today' : ''}`}>
                   <span className="agt-week-hdr__name">
@@ -392,14 +424,15 @@ export function OperatorAgenda({
                 <div className="agt-week-time">{ora}</div>
                 {getWeekDays(refDate).map((d) => {
                   const dStr = isoDate(d);
-                  const apts = myApts(dStr).filter(
+                  const cellApts = myApts(dStr).filter(
                     (a) => a.ora === ora || a.ora === ora.replace(':00', ':30'),
                   );
+                  const apts = cellApts.filter((a) => matchStato(a, filtroStato));
                   return (
                     <div
                       key={`${dStr}-${ora}`}
-                      className={`agt-week-cell${apts.length === 0 && !therapySlotsMap.has(ora) ? ' free' : ''}`}
-                      onClick={() => apts.length === 0 && setAptForm({ data: dStr, ora })}
+                      className={`agt-week-cell${cellApts.length === 0 && !therapySlotsMap.has(ora) ? ' free' : ''}`}
+                      onClick={() => cellApts.length === 0 && setAptForm({ data: dStr, ora })}
                     >
                       {therapySlotsMap.has(ora) && (
                         <TherapySlotDot
@@ -435,7 +468,7 @@ export function OperatorAgenda({
                           <span className={`agt-status-dot agt-status-dot--${a.stato}`} />
                         </div>
                       ))}
-                      {apts.length === 0 && !therapySlotsMap.has(ora) && (
+                      {cellApts.length === 0 && !therapySlotsMap.has(ora) && (
                         <span className="agt-week-add">
                           <IcoPlus />
                         </span>
@@ -486,7 +519,7 @@ export function OperatorAgenda({
             {getMonthMatrix(refDate).map((d, i) => {
               const inMonth = d.getMonth() === refDate.getMonth();
               const isToday = isoDate(d) === isoDate(new Date());
-              const apts = myApts(isoDate(d));
+              const apts = visibleApts(isoDate(d));
               return (
                 <div
                   key={i}

@@ -6,6 +6,8 @@ import { AgendaLegend } from '../shared/AgendaLegend';
 import { AppuntamentoActions } from '../shared/AppuntamentoActions';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { TherapySlotCard, TherapySlotDot } from '../shared/TherapySlotOverlay';
+import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
+import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
 import { TherapySlotModal } from '../operator/TherapySlotModal';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
@@ -68,12 +70,6 @@ function fmtMonth(d: Date): string {
   return d.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' });
 }
 
-const STATO_LABEL: Record<string, string> = {
-  programmato: 'Programmato',
-  in_corso: 'In corso',
-  completato: 'Completato',
-  annullato: 'Annullato',
-};
 const TIPO_LABEL: Record<string, string> = {
   visita: 'Visita',
   controllo: 'Controllo',
@@ -107,6 +103,7 @@ export function AdminAgenda({
   const [view, setView] = useState<ViewMode>('giornaliero');
   const [refDate, setRefDate] = useState(new Date());
   const [filtroOpId, setFiltroOpId] = useState('tutti');
+  const [filtroStato, setFiltroStato] = useState<FiltroStatoAppuntamento>('tutti');
   const [aptForm, setAptForm] = useState<{ data: string; ora: string; operatoreId: string } | null>(
     null,
   );
@@ -136,6 +133,11 @@ export function AdminAgenda({
           (opId ? a.operatoreId === opId : filtroOpId === 'tutti' || a.operatoreId === filtroOpId),
       )
       .sort((a, b) => a.ora.localeCompare(b.ora));
+  }
+
+  /** Appuntamenti effettivamente mostrati: filtro operatore + filtro stato. */
+  function visibleApts(data: string, opId?: string): Appuntamento[] {
+    return getApts(data, opId).filter((a) => matchStato(a, filtroStato));
   }
 
   function navigate(delta: number) {
@@ -174,9 +176,30 @@ export function AdminAgenda({
     const to = isoDate(days[days.length - 1]);
     return appuntamenti.filter(
       (a) =>
-        a.data >= from && a.data <= to && (filtroOpId === 'tutti' || a.operatoreId === filtroOpId),
+        a.data >= from &&
+        a.data <= to &&
+        (filtroOpId === 'tutti' || a.operatoreId === filtroOpId) &&
+        matchStato(a, filtroStato),
     ).length;
   }
+
+  // Appuntamenti del range visualizzato (giorno/settimana/mese) col solo filtro operatore
+  // applicato: alimentano i conteggi dei chip di stato, che restano stabili al variare
+  // del filtro di stato stesso.
+  const rangeApts = useMemo(() => {
+    const days =
+      view === 'giornaliero'
+        ? [refDate]
+        : view === 'settimanale'
+          ? getWeekDays(refDate)
+          : getMonthMatrix(refDate);
+    const from = isoDate(days[0]);
+    const to = isoDate(days[days.length - 1]);
+    return appuntamenti.filter(
+      (a) =>
+        a.data >= from && a.data <= to && (filtroOpId === 'tutti' || a.operatoreId === filtroOpId),
+    );
+  }, [appuntamenti, view, refDate, filtroOpId]);
 
   // Indice per lookup O(1) nella griglia giornaliera (operatore x slot orario). Senza,
   // ogni cella richiamava getApts() e rifiltrava/riordinava l'intero array `appuntamenti`
@@ -248,6 +271,13 @@ export function AdminAgenda({
           </button>
         ))}
       </div>
+
+      {/* ── Appointment status filter chips ── */}
+      <AgendaStatoFilterRow
+        filtro={filtroStato}
+        onChange={setFiltroStato}
+        appuntamenti={rangeApts}
+      />
 
       <AgendaLegend />
 
@@ -331,15 +361,19 @@ export function AdminAgenda({
                     {isHour ? ora : ''}
                   </div>
                   {visibili.map((op) => {
-                    const apt = aptByOpAndOra.get(`${op.id}::${ora}`);
+                    // La cella resta "occupata" anche se il filtro nasconde l'appuntamento:
+                    // solo una cella davvero libera puo' aprire il form di creazione.
+                    const cellApt = aptByOpAndOra.get(`${op.id}::${ora}`);
+                    const apt = cellApt && matchStato(cellApt, filtroStato) ? cellApt : undefined;
                     const isSelected = apt?.id === selectedAptId;
                     return (
                       <div
                         key={`${op.id}-${ora}`}
-                        className={`agt-admin-cell${apt ? ' occ' : ' free'}${isHour ? ' hour' : ''}`}
+                        className={`agt-admin-cell${cellApt ? ' occ' : ' free'}${isHour ? ' hour' : ''}`}
                         onClick={() => {
                           if (apt) setSelectedAptId(isSelected ? null : apt.id);
-                          else setAptForm({ data: todayStr, ora, operatoreId: op.id });
+                          else if (!cellApt)
+                            setAptForm({ data: todayStr, ora, operatoreId: op.id });
                         }}
                       >
                         {apt ? (
@@ -381,7 +415,7 @@ export function AdminAgenda({
                               />
                             )}
                           </div>
-                        ) : (
+                        ) : cellApt ? null : (
                           <div className="agt-admin-empty">
                             <IcoPlus />
                           </div>
@@ -412,7 +446,7 @@ export function AdminAgenda({
             <div className="agt-week-corner" />
             {getWeekDays(refDate).map((d) => {
               const isToday = isoDate(d) === isoDate(new Date());
-              const dayApts = getApts(isoDate(d));
+              const dayApts = visibleApts(isoDate(d));
               return (
                 <div key={isoDate(d)} className={`agt-week-hdr${isToday ? ' today' : ''}`}>
                   <span className="agt-week-hdr__name">
@@ -432,17 +466,19 @@ export function AdminAgenda({
                 <div className="agt-week-time">{ora}</div>
                 {getWeekDays(refDate).map((d) => {
                   const dStr = isoDate(d);
-                  const apts = getApts(dStr).filter(
+                  const cellApts = getApts(dStr).filter(
                     (a) => a.ora === ora || a.ora === ora.replace(':00', ':30'),
                   );
+                  const apts = cellApts.filter((a) => matchStato(a, filtroStato));
                   const defOpId = filtroOpId !== 'tutti' ? filtroOpId : (attivi[0]?.id ?? '');
                   const tSlot = therapySlotsMap.get(ora);
                   return (
                     <div
                       key={`${dStr}-${ora}`}
-                      className={`agt-week-cell${apts.length === 0 && !tSlot ? ' free' : ''}`}
+                      className={`agt-week-cell${cellApts.length === 0 && !tSlot ? ' free' : ''}`}
                       onClick={() =>
-                        apts.length === 0 && setAptForm({ data: dStr, ora, operatoreId: defOpId })
+                        cellApts.length === 0 &&
+                        setAptForm({ data: dStr, ora, operatoreId: defOpId })
                       }
                     >
                       {tSlot && (
@@ -488,7 +524,7 @@ export function AdminAgenda({
                           </div>
                         );
                       })}
-                      {apts.length === 0 && !tSlot && (
+                      {cellApts.length === 0 && !tSlot && (
                         <span className="agt-week-add">
                           <IcoPlus />
                         </span>
@@ -540,7 +576,7 @@ export function AdminAgenda({
             {getMonthMatrix(refDate).map((d, i) => {
               const inMonth = d.getMonth() === refDate.getMonth();
               const isToday = isoDate(d) === isoDate(new Date());
-              const apts = getApts(isoDate(d));
+              const apts = visibleApts(isoDate(d));
               return (
                 <div
                   key={i}

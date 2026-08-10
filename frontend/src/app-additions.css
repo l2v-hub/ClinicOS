@@ -881,6 +881,15 @@
   display: none;
 }
 
+/* Righe di filtro impilate (operatore + stato): una sola cornice, non due toolbar */
+.agt-filter-row:has(+ .agt-filter-row) {
+  padding-bottom: 4px;
+  border-bottom: none;
+}
+.agt-filter-row + .agt-filter-row {
+  padding-top: 0;
+}
+
 .agt-filter-chip {
   display: inline-flex;
   align-items: center;
@@ -1899,6 +1908,11 @@
 }
 .therapy-modal__close:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+.therapy-modal__filters {
+  flex: 0 0 auto;
+  padding: 12px 16px 0;
+  background: #f8fafc;
 }
 .therapy-modal__body {
   flex: 1 1 auto;

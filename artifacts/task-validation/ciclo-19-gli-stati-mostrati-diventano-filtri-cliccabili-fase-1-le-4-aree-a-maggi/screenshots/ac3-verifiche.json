@@ -1,0 +1,59 @@
+{
+  "esiti": [
+    {
+      "nome": "Setup: la tabella mostra tutti i 7 pazienti mockati",
+      "ok": true,
+      "dettaglio": "righe: 7"
+    },
+    {
+      "nome": "La toolbar espone DUE righe di chip (sesso gia esistente + nuovo stato ricovero)",
+      "ok": true,
+      "dettaglio": "righe di chip: 2"
+    },
+    {
+      "nome": "Le chip stato mostrano \"Tutti gli stati\" + i 4 stati presenti con il conteggio live",
+      "ok": true,
+      "dettaglio": "Tutti gli stati | Ricoverato (3) | Ambulatoriale (2) | Day Hospital (1) | Dimesso (1)"
+    },
+    {
+      "nome": "CRITICO: click su \"Ricoverato\" riduce la tabella da 7 a 3 righe",
+      "ok": true,
+      "dettaglio": "righe: 3"
+    },
+    {
+      "nome": "Anche la card list mobile (stesso array filtrato) scende a 3 elementi",
+      "ok": true,
+      "dettaglio": "card: 3"
+    },
+    {
+      "nome": "Tutte le righe visibili hanno il badge \"Ricoverato\"",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "La chip cliccata riceve lo stato .active",
+      "ok": true,
+      "dettaglio": ""
+    },
+    {
+      "nome": "CRITICO: stato e sesso si combinano in AND (Ricoverato + Femmina = 1 paziente)",
+      "ok": true,
+      "dettaglio": "righe: 1"
+    },
+    {
+      "nome": "I conteggi nelle chip stato si aggiornano rispetto al filtro sesso attivo",
+      "ok": true,
+      "dettaglio": "Tutti gli stati | Ricoverato (1) | Ambulatoriale (1) | Day Hospital (1) | Dimesso"
+    },
+    {
+      "nome": "\"Tutti gli stati\" azzera solo il filtro stato (restano le 3 donne)",
+      "ok": true,
+      "dettaglio": "righe: 3"
+    },
+    {
+      "nome": "nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "esiti": [
+    {
+      "nome": "AC-R1a: il modale mostra 4 filtri di stato con i conteggi nel testo",
+      "ok": true,
+      "dettaglio": "chips: \"Tutte | Da erogare (2) | Erogate (1) | Non erogate (1)\""
+    },
+    {
+      "nome": "AC-R1b: con \"Tutte\" attivo sono mostrate tutte le 4 somministrazioni",
+      "ok": true,
+      "dettaglio": "righe: 4"
+    },
+    {
+      "nome": "AC-R1c: \"Da erogare\" riduce la lista alle sole 2 somministrazioni pending",
+      "ok": true,
+      "dettaglio": "righe: 2"
+    },
+    {
+      "nome": "AC-R1d: con \"Da erogare\" le righe erogate/non erogate spariscono",
+      "ok": true,
+      "dettaglio": "body: \"ROSSI, MARIOCamera 2 / Letto B EUTIROX 1 compressa · orale · 14:00 Erogata Non erogata SABBATANI, LILIANACamera 4 / Letto A LASIX 1 compressa · orale · 14:00 Er\""
+    },
+    {
+      "nome": "AC-R1e: il chip cliccato riceve lo stato attivo (.filter-chip.active)",
+      "ok": true,
+      "dettaglio": "filter-chip active"
+    },
+    {
+      "nome": "AC-R1f: \"Erogate\" mostra la sola somministrazione erogata",
+      "ok": true,
+      "dettaglio": "righe: 1"
+    },
+    {
+      "nome": "AC-R1g: \"Non erogate\" mostra la sola somministrazione non erogata",
+      "ok": true,
+      "dettaglio": "righe: 1"
+    },
+    {
+      "nome": "AC-R1h: tornando su \"Tutte\" la lista completa viene ripristinata",
+      "ok": true,
+      "dettaglio": "righe: 4"
+    },
+    {
+      "nome": "AC-R5: nessun errore JavaScript durante lo scenario",
+      "ok": true,
+      "dettaglio": "console pulita"
+    }
+  ]
+}
