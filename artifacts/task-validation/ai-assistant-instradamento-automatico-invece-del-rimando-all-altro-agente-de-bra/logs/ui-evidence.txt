@@ -1,0 +1,16 @@
+PASS  il FAB espone il nome «Assistente virtuale ClinicOS»
+PASS  nessun controllo visibile si chiama ancora «Agnos»
+PASS  il pannello si apre come dialog «Assistente virtuale ClinicOS»
+PASS  l’intestazione dice «Assistente virtuale»
+PASS  il badge «IA» è visibile
+PASS  il pannello dichiara che non è un operatore umano
+PASS  nessuna occorrenza di «Agnos» nel testo del pannello
+PASS  i chip di scelta dell’assistente non esistono più
+PASS  non c’è più un pulsante «Assistente clinico» da selezionare
+PASS  la chat non invia più un agente scelto a mano (è l’intent a decidere)
+PASS  nessun messaggio «Selezionalo…»
+PASS  nessun messaggio «è di competenza dell’assistente…»
+PASS  la risposta clinica viene mostrata all’operatore
+PASS  la fonte clinica è citata nella risposta
+
+ALL CHECKS PASSED

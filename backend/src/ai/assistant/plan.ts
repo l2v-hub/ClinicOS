@@ -132,7 +132,8 @@ const OPERATOR_QUEUE = [
 export interface PlanContext {
   /** The patient currently open in the UI, if any (default scope on the patient page). */
   currentPatientId?: string;
-  /** Fase 0: selected sub-agent (scopes which intents are answered). Type-only import avoids a runtime cycle. */
+  /** Sub-agent di partenza; l'intent può instradare all'altro (resolveAgent). Type-only import
+   *  avoids a runtime cycle. */
   agent?: import('./agents.js').AgentId;
   /** Nome dell'operatore chiamante (header, non verificato): serve SOLO a ordinare la coda
    *  operatore per probabile assegnatario, mai a filtrare o ad allargare un permesso. */

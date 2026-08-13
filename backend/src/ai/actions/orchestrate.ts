@@ -92,7 +92,7 @@ export interface PlanCommandInput {
   channel: AgnosChannel;
   currentPatientId?: string;
   operatorCtx: AgnosOperatorContext;
-  /** Fase 0: selected sub-agent (scopes which read intents are answered). */
+  /** Sub-agent di partenza; una domanda dell'altro dominio viene instradata, non rifiutata. */
   agent?: AgentId;
 }
 

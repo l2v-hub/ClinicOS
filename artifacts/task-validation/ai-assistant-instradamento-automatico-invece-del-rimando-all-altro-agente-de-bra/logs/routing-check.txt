@@ -1,0 +1,7 @@
+✔ operatore con agente «Gestione struttura»: una domanda clinica viene servita, non rimandata (2.624ms)
+✔ nessun testo di risposta invita a selezionare un altro assistente (0.6987ms)
+✔ dominio proprio: l’agente selezionato resta quello che risponde (0.2098ms)
+✔ senza agente selezionato la risposta non ne inventa uno (0.1904ms)
+ℹ tests 4
+ℹ pass 4
+ℹ fail 0

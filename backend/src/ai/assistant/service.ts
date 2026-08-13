@@ -33,7 +33,7 @@ import {
   type PlanContext,
   type QueryPlan,
 } from './plan.js';
-import { agentAllowsIntent, redirectMessage, type AgentId } from './agents.js';
+import { resolveAgent, type AgentId } from './agents.js';
 import { planQueryLLM, injectPatientId } from './llm-planner.js';
 import { composeAnswer } from './composer.js';
 import { callPlanRuntime, callComposeRuntime } from './runtime-client.js';
@@ -56,7 +56,7 @@ export interface AssistantAnswer {
   mode?: 'deterministic' | 'llm';
   answerText?: string;
   composed?: boolean;
-  /** Fase 0: sub-agent that produced (or redirected) this answer. */
+  /** Sub-agent che ha prodotto la risposta: lo decide l'intent, non la scelta dell'utente. */
   agent?: AgentId;
 }
 
@@ -398,6 +398,12 @@ export async function assistantQuery(
   // Paziente autoritativo lato server: inietta il currentPatientId (risolto da F0) nei tool
   // patient-scoped del piano — l'LLM propone i tool ma non sceglie il paziente.
   plan = injectPatientId(plan, effectiveCtx.currentPatientId);
+  // Sub-agent scoping: l'intent decide l'agente. Se la domanda appartiene all'altro dominio la
+  // richiesta viene instradata al suo proprietario ed eseguita — chi chiede (es. l'operatore che
+  // chiede allergie con l'agente struttura attivo) ha già diritto al dato per ruolo. La selezione
+  // dell'agente non è un controllo di accesso: role clamp, tenant isolation, cross-patient gate e
+  // refuse_clinical restano invariati e sono gli unici a poter negare una risposta.
+  const answeringAgent = planCtx.agent ? resolveAgent(planCtx.agent, plan.intent) : undefined;
   const empty = (extra: Partial<AssistantAnswer> = {}): AssistantAnswer => ({
     intent: plan.intent,
     scope: plan.scope,
@@ -409,7 +415,7 @@ export async function assistantQuery(
     truncated: false,
     mode,
     composed: false,
-    agent: planCtx.agent,
+    agent: answeringAgent,
     ...extra,
   });
 
@@ -422,12 +428,6 @@ export async function assistantQuery(
   }
   if (plan.intent === 'unknown' || plan.tools.length === 0) {
     return empty({ refusal: undefined });
-  }
-  // Fase 0 sub-agent scoping: the selected agent serves only its domain intents; a domain intent
-  // owned by the OTHER agent is redirected (not executed). Shared/neutral intents (patient_search,
-  // appointments) pass; refusals/not-found already returned above. Additive — no guardrail weakened.
-  if (planCtx.agent && !agentAllowsIntent(planCtx.agent, plan.intent)) {
-    return empty({ notFound: false, refusal: redirectMessage(planCtx.agent, plan.intent) });
   }
   // cross-patient access is role + env gated; a denied request is reported, not executed
   if (plan.requiresCrossPatientAccess && !canCrossPatientSearch(ctx, env)) {
@@ -491,7 +491,7 @@ export async function assistantQuery(
     mode,
     answerText,
     composed,
-    agent: planCtx.agent,
+    agent: answeringAgent,
   };
 }
 

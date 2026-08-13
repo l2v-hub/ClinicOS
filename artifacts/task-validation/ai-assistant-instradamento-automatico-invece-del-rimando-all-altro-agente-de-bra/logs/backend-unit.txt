@@ -1,0 +1,521 @@
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.204Z"}
+[ai-audit] DATABASE_URL assente: persistenza audit su Postgres disattivata (resta il log su stdout)
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.208Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.209Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.209Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.209Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.209Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.210Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.210Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.210Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.210Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"add_diary_note","recordId":"rec-diary","fields":["content"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.225Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.225Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.226Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.227Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.227Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.227Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.227Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"read","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-1","actionType":"unknown","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.229Z"}
+[ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":null,"actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":null,"actionType":"create_appointment","recordId":"rec-appt","fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"agnos-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_appointment","recordId":null,"fields":["data","ora","tipologia","patientQuery"],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_forbidden","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.249Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.249Z"}
+[ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+✔ catalog: zero delete actions, kinds are CRU-only by construction (3.8423ms)
+✔ catalog: deny-by-default and AI_DISABLED_ACTIONS kill-switch (0.8547ms)
+✔ planCommand testo: vital command → executable create_vital_sign preview (8.3877ms)
+✔ planCommand: read question delegates to the assistant (preview null, read populated) (2.1915ms)
+✔ #239 planCommand: a natural question without an explicit read verb ("che terapie…") delegates to the assistant (1.29ms)
+✔ #239 planCommand: non-command text (unknown) falls back to the assistant, never dead-ends as "Comando non riconosciuto" (0.8131ms)
+✔ planCommand: forwards operatorName to the read delegate (get_operator_queue "mie" vs "altre" split) (0.6807ms)
+✔ planCommand: every delete variant → refusal pointing to the traditional UI (6.6095ms)
+✔ executeCommand: delete variants are rejected even when confirmed — NO write happens (6.1414ms)
+✔ executeCommand: delete refusal uses the dedicated delete_forbidden kind (0.9073ms)
+✔ executeCommand: action disabled via AI_DISABLED_ACTIONS → not_in_catalog, NO write (1.0369ms)
+✔ executeCommand testo: add_diary_note happy path writes once (2.1639ms)
+✔ executeCommand testo: replayed idempotency key does not duplicate the write (1.9505ms)
+✔ executeCommand: confirmation still mandatory on the text channel (1.2168ms)
+✔ T018a planner: ogni variante lessicale di cancellazione (base + flessa) → refusalKind delete (2.0435ms)
+✔ T018b executor: kind non-write (read/unknown) → not_executable, writer mai chiamato (1.0976ms)
+✔ T018c catalogo: nessuna entry delete su TUTTE le entry + azione inventata rifiutata (0.483ms)
+✔ T018d audit: tentativo delete → recordAuditEvent riceve kind refusal / refused_delete (1.8921ms)
+✔ T027 matcher: crea appuntamento — tipologia, data relativa, ora e paziente dal testo (2.086ms)
+✔ T027 matcher: varianti data/ora — dopodomani, "il GG/MM", "alle 9 e 30" (1.2437ms)
+✔ T027 matcher: data/ora mancanti e paziente assente = ambiguità bloccanti (0.6098ms)
+✔ T027 matcher: sposta appuntamento — orario vecchio/nuovo, paziente dal contesto (0.5079ms)
+✔ T027 matcher: comandi non-appuntamento NON vengono intercettati (0.2149ms)
+✔ T027 plan: crea appuntamento per Moretti → preview eseguibile con paziente risolto (1.8407ms)
+✔ T027 plan: conflitto slot → ambiguità BLOCCANTE in preview (conferma disabilitata) (1.2642ms)
+✔ T027 plan: paziente non trovato / ambiguo → conferma disabilitata (0.8747ms)
+✔ T027 plan: sposta appuntamento → target risolto e preview con orari (0.6346ms)
+✔ T027 execute: crea appuntamento confermato → writer appuntamenti, idempotente al retry (1.692ms)
+✔ T027 execute: retry dopo scrittura — lo slot appena creato NON blocca il replay (deduped) (0.978ms)
+✔ T027 execute: conflitto slot rilevato al re-grounding → ambiguous, writer MAI chiamato (0.989ms)
+✔ T027: "modifica la terapia di Rossi" → rifiuto entità vietata (non delete) (0.5767ms)
+✔ T027: "cancella l'appuntamento delle 15" → refusalKind delete su plan ED execute (0.6955ms)
+✔ T027 catalogo: create/update_appointment presenti, NESSUNA azione delete_appointment (0.2366ms)
+[ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-moretti","actionType":"create_consegna","recordId":"rec-consegna","fields":["note","patientQuery","pazienteNome"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"create_consegna","recordId":"rec-consegna","fields":["note","patientQuery"],"source":"VOICE","channel":"VOCE","outcome":"deduped","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":"pat-1","actionType":"create_consegna","recordId":null,"fields":["note"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+[ai-voice] {"requestId":"test","userId":"op1","patientId":"pat-1","actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"TESTO","outcome":"denied","at":"2026-08-13T11:24:17.563Z"}
+[ai-voice] {"requestId":"voice-op1","userId":"op1","patientId":null,"actionType":"refused_delete","recordId":null,"fields":[],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-07-03T10:00:00.000Z"}
+✔ T027 isolamento delete: nessun modulo sotto src/ai importa uiOnlyDeleteAppointment (305.4028ms)
+✔ I130 matcher: consegna con paziente e testo dal comando (0.9643ms)
+✔ I130 matcher: varianti verbo e variante "consegna per X …" senza verbo (0.592ms)
+✔ I130 matcher: paziente dal contesto quando non indicato nel testo (0.3086ms)
+✔ I130 matcher: testo vuoto e paziente assente = ambiguità bloccanti (0.354ms)
+✔ I130 matcher: comandi non-consegna NON vengono intercettati (0.1156ms)
+✔ I130 plan: consegna per Moretti → preview eseguibile con paziente risolto (0.5459ms)
+✔ I130 plan: paziente non trovato → conferma disabilitata (0.2988ms)
+✔ I130 execute: consegna confermata → writer consegne, idempotente al retry (2.4513ms)
+✔ I130 execute: senza conferma → confirmation_required, writer MAI chiamato (0.62ms)
+✔ I130: "cancella la consegna" → refusalKind delete su plan ED execute (1.0434ms)
+✔ I130 catalogo: create_consegna presente, NESSUNA azione delete_consegna, catalogo CRU-only (0.2509ms)
+✔ I130 diario: la frase esatta della issue («Scrivi nel diario di …: …») → add_diary_note (0.3532ms)
+✔ isAgentId accepts only the two known agents (2.6612ms)
+✔ facility agent serves its own domain + shared intents, not clinical ones (0.4572ms)
+✔ clinical agent serves its own domain + shared intents, not facility ones (0.2761ms)
+✔ ownerAgent maps domain intents; shared intents have no owner (0.3081ms)
+✔ resolveAgent routes an out-of-domain intent to its owner instead of refusing (0.2832ms)
+✔ agent profiles keep their labels (used by the UI/answer metadata) (0.4184ms)
+✔ allergies question on the patient page → allergies tool, current-patient scope (6.6439ms)
+✔ therapy question → therapies tool (4.5825ms)
+✔ search inside Anamnesi → narrative search with sectionKey (2.8387ms)
+✔ document search → search_documents (0.6379ms)
+✔ recent vitals → vital signs tool (0.8328ms)
+✔ timeline question → timeline tool (1.0055ms)
+✔ appointments question → appointments tool (0.5522ms)
+✔ cross-patient systolic search requires cross access (0.8653ms)
+✔ cross-patient allergy correlate (0.897ms)
+✔ appointments today → cross tool (0.8519ms)
+✔ issue #239: rooms occupancy question → aggregate rooms occupancy tool, no cross-patient access (0.4228ms)
+✔ a diagnosis request is refused (0.2919ms)
+✔ a therapy suggestion request is refused (0.182ms)
+✔ a "which patient is more serious" request is refused (0.2537ms)
+✔ an unrelated question is unknown (no tools, no invented answer) (0.6059ms)
+✔ 016 F0: plural "terapie" is recognized (not only singular) (0.4777ms)
+✔ 016 F0: plural "allergie" and synonym "farmaci" recognized (0.2243ms)
+✔ 016 F0: extractPatientName pulls "di <Nome Cognome>" (0.4242ms)
+✔ 016 F0: extractPatientName pulls a single surname after the verb (0.432ms)
+✔ 016 F0: extractPatientName returns null when no patient is named (0.1911ms)
+✔ 016 F0: pickResolvedPatient resolves a unique match (3.2722ms)
+✔ 016 F0: pickResolvedPatient returns "none" when no match (0.3846ms)
+✔ 016 F0: pickResolvedPatient returns "ambiguous" for multiple matches (0.2205ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\assistant-query-data.test.ts (698.3576ms)
+✔ 016 F2: prosa valida con fonti citate ⊆ fonti fornite → composta (2.5458ms)
+✔ 016 F2: prosa che cita una fonte NON fornita (invenzione) → scartata (0.5783ms)
+✔ 016 F2: nessuna fonte citata → scartata (niente prosa non fondata) (0.3821ms)
+✔ 016 F2: runtime errore/timeout → non composto (risposta strutturata) (0.4427ms)
+✔ 016 F2: composer non configurato (nessun client) → non composto (1.8307ms)
+✔ valid config: google provider with key is available (4.7745ms)
+✔ absent config: missing GEMINI_API_KEY produces controlled error, never throws (1.5544ms)
+✔ changing AI_MODEL changes the model (no frontend change needed) (1.4903ms)
+✔ mock provider is selectable without a key (CI path) (1.4278ms)
+✔ factory throws controlled config error when google selected but unavailable (5.4683ms)
+✔ schema and prompt assets load and are versioned (3.3453ms)
+✔ publicStatus never leaks the API key (1.4376ms)
+✔ redaction: secrets masked, long content truncated (1.1884ms)
+✔ limits parse from env with sane fallbacks (1.5846ms)
+✔ 016 F3: facility read off by default (3.078ms)
+✔ 016 F3: facility read enabled by env flag (role-independent) (0.3678ms)
+✔ 016 F3: any non-true value keeps facility read off (0.2496ms)
+✔ valid extraction passes schema (92.7556ms)
+✔ missing required container fails (0.6311ms)
+✔ wrong type fails (anagrafica.nome as object, not string) (0.3478ms)
+✔ invalid enum fails (sesso=X) (0.3052ms)
+✔ diagnosi must be an array (0.2708ms)
+✔ errors are content-free (path + rule only) (0.304ms)
+✔ mock provider returns a schema-valid, empty (uninvented) instance (3.175ms)
+✔ normalizeDate: IT/ISO handling, no guessing (0.7227ms)
+✔ in ritardo = dose pending il cui orario è già passato (9.2258ms)
+✔ esattamente all’orario previsto NON è ancora in ritardo (confronto stretto, come l’UI) (0.5719ms)
+✔ un minuto dopo l’orario previsto è in ritardo (0.3696ms)
+✔ dosi già erogate o marcate non erogate non contano mai come in ritardo (0.2914ms)
+✔ un orario illeggibile non conta come in ritardo (nessun falso allarme) (0.3224ms)
+✔ la finestra limita le dosi "in arrivo": oltre l’orizzonte non sono "adesso" (0.3293ms)
+✔ i ritardi sono ordinati dal più grave, le dosi in arrivo dalla più imminente (2.1866ms)
+✔ minutesFromMidnight accetta ore non zero-paddate e rifiuta il resto (0.5297ms)
+✔ consegna aperta = tutto ciò che non è completata (1.8082ms)
+✔ una consegna completata non è mai scaduta, nemmeno se il termine è passato (1.3425ms)
+✔ senza ora, il termine è l’intera giornata: oggi non è scaduta, ieri sì (0.5446ms)
+✔ con ora esplicita: prima no, esattamente al termine no, dopo sì (0.9339ms)
+✔ una scadenza futura non è scaduta e una data illeggibile non allarma (0.3965ms)
+✔ le consegne si ordinano per priorità e poi per termine più vicino (1.2282ms)
+✔ il nome dell’operatore combacia a meno di maiuscole, accenti e ordine (0.9276ms)
+✔ nessuna consegna viene scartata: chi non combacia finisce in coda, non fuori (0.631ms)
+✔ senza nome operatore nulla viene promosso, ma nulla viene perso (0.3281ms)
+✔ facility_snapshot: «cosa sta succedendo nella struttura?» → get_facility_snapshot (3.8115ms)
+✔ facility_snapshot: «riepilogo della struttura» e «situazione del reparto» (1.9214ms)
+✔ facility_snapshot vale anche con una cartella aperta (resta una domanda di struttura) (0.5628ms)
+✔ operator_queue: «cosa devo fare adesso?» → get_operator_queue (0.8286ms)
+✔ operator_queue: varianti «cosa manca oggi», «prossima terapia», «le mie consegne» (1.9761ms)
+✔ la coda operatore non richiede nome operatore per essere pianificata (2.4261ms)
+✔ le domande cliniche sul paziente aperto non diventano coda operatore (0.9986ms)
+✔ occupazione e personale restano i loro intent, non l’istantanea (1.2445ms)
+✔ una richiesta di consiglio clinico resta rifiutata, non diventa coda operatore (0.5004ms)
+✔ H1: «cosa succede a Mario Rossi?» non è l’istantanea di struttura (1.3432ms)
+✔ H1: «cosa sta succedendo al paziente?» non è l’istantanea di struttura (0.7747ms)
+✔ H1: «qual è la prossima terapia di Mario Rossi?» → terapie del paziente (1.5856ms)
+✔ H1: «cosa devo fare per la medicazione di Rossi?» non è la coda operatore (0.3775ms)
+✔ H1: «cosa succede se sospendo il farmaco?» è un ipotetico clinico → rifiuto (0.2209ms)
+✔ H1: le domande dell’evidenza AC-R1/AC-R2 continuano a instradare come prima (0.351ms)
+✔ la fonte occupazione dell’istantanea naviga ai posti letto, non a un paziente vuoto (1.8118ms)
+✔ le altre fonti di struttura dell’istantanea restano sulle loro schermate di reparto (1.6631ms)
+✔ con un paziente la navigazione resta sulla scheda paziente (0.344ms)
+✔ i due nuovi tool sono in allowlist di SOLA lettura (0.345ms)
+✔ l’istantanea è di dominio facility; la coda operatore è condivisa fra gli agenti (0.182ms)
+✔ parseUserContext: missing user id → unauthorized (3.093ms)
+✔ parseUserContext: header absent → operator scope (permitted=null); present → allow-list (1.941ms)
+✔ assertTenant: a different tenant is rejected (isolation) (1.5013ms)
+✔ patient allow-list is enforced (0.6559ms)
+✔ patient allow-list excludes rows with no linked patient (0.3883ms)
+✔ cross-patient search is off unless enabled AND privileged (0.5068ms)
+✔ service token: closed when unset; matches Bearer when set (0.4433ms)
+✔ vitalNumericValue parses PA systolic/diastolic and plain numbers (1.3454ms)
+✔ filterVitals: systolic > 150 selects only high blood-pressure readings (1.0806ms)
+✔ filterVitals: date range (0.5232ms)
+✔ allergy/therapy matching is accent/case-insensitive (1.2378ms)
+✔ every source builder carries patientId + recordId + label (0.6225ms)
+✔ 016 F0: nameMatchesAllTokens matches full name in either order (0.8286ms)
+✔ 016 F0: nameMatchesAllTokens matches a single surname token (0.2264ms)
+✔ 016 F0: nameMatchesAllTokens is false when a token is absent (0.2313ms)
+✔ identical header on every page → kept once, removed from later pages (6.7881ms)
+✔ header with SAME labels but DIFFERENT values is still detected as repeated (1.0422ms)
+✔ page WITHOUT a header is left untouched (0.5636ms)
+✔ clinical text at the TOP of a page is not mistaken for a header (3.5275ms)
+✔ ambiguous repeated block BELOW threshold is kept and flagged (1.1598ms)
+✔ #275: page-number footer is normalized and KEPT (sequential-reading aid) (1.0502ms)
+✔ #275: page marker without a total is kept as "--- Pagina N ---" (0.8565ms)
+✔ #275: opt-out (keepPageMarkers:false) restores the old strip behavior (0.8029ms)
+✔ footer line that ALSO carries text is kept and warned (1.5578ms)
+✔ anagraphic data from the first page is preserved (first header kept) (2.2211ms)
+✔ Anamnesi split across two pages becomes contiguous after the interleaved header is removed (0.7262ms)
+✔ Terapia continuation across pages stays contiguous (0.5147ms)
+✔ no anagraphic duplication: each label value appears once (0.6826ms)
+✔ idempotent: re-running on cleaned text removes nothing further (0.7863ms)
+✔ BUG-046: inline multi-label header row repeated across pages is removed from later pages (1.0503ms)
+✔ config: env threshold + label list are honoured (1.5022ms)
+✔ empty input is safe (0.2433ms)
+✔ #279: table-cell header repeated on 3 pages → kept once, later pages cleaned (1.3569ms)
+✔ #279: a content table (therapy) is NOT treated as a header (0.665ms)
+✔ #279: repeated institutional banner above the header table is absorbed (1.0623ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\intake-confirm.test.ts (963.1065ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\intake-draft.test.ts (808.1739ms)
+✔ il sezionamento e' invocato solo quando la narrativa non ha testo di sezione (2.7413ms)
+✔ la chiamata di sezionamento resta disattivabile via AI_SECTIONS_PASS (0.4713ms)
+✔ i passaggi ausiliari inviano JSON Schema veri, non esempi di output (0.6822ms)
+✔ il prompt di trascrizione impone le intestazioni canoniche del parser (0.6784ms)
+✔ la trascrizione resta un passaggio separato e precede il parsing (0.3001ms)
+✔ 016 F1: READ_TOOLS contiene solo tool di lettura del gateway (1.9445ms)
+✔ 016 F1: nessun tool di scrittura/cancellazione è nell allowlist (0.4922ms)
+✔ 016 F1: piano LLM valido (solo read tools) è accettato (0.726ms)
+✔ 016 F1: piano LLM con tool FUORI allowlist → fallback deterministico (2.7252ms)
+✔ 016 F1: runtime che lancia/timeout → fallback deterministico (nessun errore) (1.8886ms)
+✔ 016 F1: scope=cross dichiarato dall LLM su tool patient-scoped è IGNORATO (no falso rifiuto) (0.5372ms)
+✔ 016 F1: requiresCrossPatientAccess è RICALCOLATO server-side, non fidato dall LLM (0.5459ms)
+✔ 016 F1: piano LLM VUOTO ma deterministico non-vuoto → preferisci deterministico (F1 >= F0) (0.6822ms)
+✔ 016 F1: piano LLM vuoto E deterministico vuoto → resta vuoto (nessuna invenzione) (1.3902ms)
+✔ 016 F1: injectPatientId riempie patientId mancante nei tool patient-scoped (0.6068ms)
+✔ 016 F1: injectPatientId SOVRASCRIVE il patientId proposto dall LLM (paziente autoritativo) (0.3511ms)
+✔ 016 F1: injectPatientId sovrascrive un patientId PLACEHOLDER dell LLM (0.2207ms)
+✔ 016 F1: injectPatientId NON tocca i tool non patient-scoped (search_patients) (0.1951ms)
+✔ 016 F1: injectPatientId senza patientId noto → piano invariato (0.1932ms)
+✔ 016 F3: piano LLM con query_data + intent data_query è accettato (non cross-patient) (0.4532ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\markdown-parse.test.ts (1248.1832ms)
+✔ identical documents -> single proposal, no duplicates, sources from both (30.7844ms)
+✔ differing addresses -> conflict with candidates + provenance, never auto-picked (1.5101ms)
+✔ duplicate therapy (same drug+dose) -> deduped to one item (0.7412ms)
+✔ updated therapy (same drug, different dose) -> item conflict (0.6135ms)
+✔ allergy present in only one document -> extracted, keeps that single source (0.5391ms)
+✔ missing field across all docs -> missing, no invention (0.3725ms)
+✔ preferRecent orders conflict candidates most-recent-first (still not resolved) (0.4437ms)
+✔ report counts filled/missing/conflict/duplicate (0.4693ms)
+✔ produces a flat narrative draft — strings, never arrays (no diagnoses[]) (2.5268ms)
+✔ valid draft passes the flat contract schema (80.0552ms)
+✔ diagnosis multi-paragraph stays one block (0.4835ms)
+✔ anamnesis subtitles preserved + tagged as SUBSECTION_TITLE (0.5108ms)
+✔ hospital course keeps dates (DATE tags map exactly) (0.2967ms)
+✔ consultations / imaging / procedures each one block (0.2209ms)
+✔ therapy combines home + hospital into one block (home first), offsets shifted exactly (0.3734ms)
+✔ partially illegible therapy line kept integrally (0.3744ms)
+✔ advice and follow-up kept integrally (0.2693ms)
+✔ allergies — present/absent/not_documented/unclear faithful (0.5008ms)
+✔ unmapped content not lost; missing sections listed (0.2227ms)
+✔ all canonical text fields always exist as strings (empty when absent) (0.1997ms)
+✔ #223 AC1: records actor / action / entity / outcome / timestamp with channel ui (3.0151ms)
+✔ #223 AC2: only field NAMES are recorded — no values / payload / secrets can be passed (0.8048ms)
+✔ #223 AC2: defaults are safe (role operatore, kind update, outcome ok, channel ui, fields []) (0.3828ms)
+✔ #223 AC3: fields are capped at 20 (defense in depth) (0.3736ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\patient-documents-security.test.ts (1170.749ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\patient-narrative.test.ts (829.0008ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\query-engine.test.ts (862.0674ms)
+✔ 016 F3: known entity resolves; unknown denied (1.9074ms)
+✔ 016 F3: field resolves incl 1-hop relation; unknown field/relation denied (0.4955ms)
+✔ 016 F3: roomAssignment has no direct room relation (2-hop path denied) (0.301ms)
+✔ 016 F3: authz classes and vitalSign custom loader (0.2441ms)
+✔ 016 F3: valid single-step plan accepted (2.3651ms)
+✔ 016 F3: reserved patient filter is allowed (resolved by engine) (0.4246ms)
+✔ 016 F3: unknown entity rejected (0.2944ms)
+✔ 016 F3: unknown field rejected (0.6008ms)
+✔ 016 F3: unknown relation rejected (1.2592ms)
+✔ 016 F3: bad operator rejected (0.2859ms)
+✔ 016 F3: too many steps rejected (0.2557ms)
+✔ 016 F3: duplicate step id rejected (0.2173ms)
+✔ 016 F3: runIf referencing unknown step rejected (0.3203ms)
+✔ 016 F3: bindFrom referencing prior step accepted; unknown step rejected (0.4862ms)
+✔ 016 F3: empty plan rejected (0.2171ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\runtime-contract.test.ts (863.0481ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\sections.test.ts (931.2472ms)
+C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9
+  throw new Error('DATABASE_URL is required');
+        ^
+
+Error: DATABASE_URL is required
+    at <anonymous> (C:\Workspace\ClinicOSHouse\backend\src\lib\prisma.ts:9:9)
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.3.0
+✖ src\ai\__tests__\security.test.ts (951.2332ms)
+✔ staff_list: «elenca il personale» → query_staff_list (6.2598ms)
+✔ staff_list: «chi sono gli infermieri?» → staff_list (1.2083ms)
+✔ staff_list: «mostra gli operatori con qualifica» anche con paziente aperto (1.1399ms)
+✔ una domanda sui pazienti NON è staff_list (1.0959ms)
+✔ staff_list è di dominio facility; chiesto al clinico viene instradato, non rifiutato (0.6402ms)
+✔ l’occupazione camere resta rooms_occupancy (non staff_list) (0.6233ms)
+✔ sniffMime detects real types by magic bytes (2.107ms)
+✔ valid PDF accepted (1.1502ms)
+✔ valid image (jpg) accepted (0.4046ms)
+✔ DOCX (zip container) accepted only with doc/docx extension (0.3776ms)
+✔ EXE renamed to .pdf is rejected by magic bytes (0.2732ms)
+✔ forged extension mismatch (pdf bytes as .png) rejected (0.2814ms)
+✔ oversize file rejected (0.2302ms)
+✔ empty file rejected (0.2136ms)
+✔ identical bytes produce identical sha256 (dedup key) (0.4195ms)
+✔ filename is sanitized (no path traversal) (0.5002ms)
+✔ accepted extension set covers required formats (0.3254ms)
+✔ vitals_trend: andamento pressione ultimi 30 giorni → PA / days 30 (3.5529ms)
+✔ vitals_trend: graficami la saturazione → SpO2 / default 7 (1.3434ms)
+✔ vitals_trend: due settimane → 15; temperatura → TC (0.7423ms)
+✔ trend senza un parametro riconosciuto NON è vitals_trend (1.5723ms)
+✔ la lettura recente resta vitals_recent (non trend) (0.4886ms)
+✔ #202 AC1/AC2: confirmed create — transcript & audit are sanitized; audit keys are minimal (10.1004ms)
+✔ #202 AC1/AC2: free-text diary note content never appears in logs or persisted audit (2.9098ms)
+✔ #202 AC1/AC2: refused delete (voice) — no transcript logged, audit fields empty (2.3982ms)
+✔ #202 AC1: plan-time delete refusal emits no transcript (7.8008ms)
+✔ #201 success: fake advertising required capabilities → available, not degraded (2.1135ms)
+✔ #201 failure: fake rejecting → degraded with provider reason, never throws (0.8754ms)
+✔ #201 timeout: fake that never resolves → degraded with timeout reason (21.6085ms)
+✔ #201 missing capabilities: success but incomplete set → degraded listing what is missing (0.9586ms)
+✔ #201 no model configured: degraded regardless of provider (no probe attempted) (0.3604ms)
+[ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-06-20T09:00:00.000Z"}
+[ai-audit] DATABASE_URL assente: persistenza audit su Postgres disattivata (resta il log su stdout)
+[ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"ok","at":"2026-06-20T09:00:00.000Z"}
+[ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":"rec-vital","fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"deduped","at":"2026-06-20T09:00:00.000Z"}
+[ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-08-13T11:24:18.380Z"}
+[ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","timeHHMM","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-08-13T11:24:18.383Z"}
+[ai-voice] {"requestId":"r1","userId":"op1","patientId":"pat-1","actionType":"create_vital_sign","recordId":null,"fields":["etichetta","label","valore","unita","warnings"],"source":"VOICE","channel":"VOCE","outcome":"denied","at":"2026-08-13T11:24:18.384Z"}
+✔ vocal read: question routes to read intent (2.743ms)
+✔ vital PA 130/80 with time → executable plan (1.8331ms)
+✔ temperature with decimal comma (0.4501ms)
+✔ vital without time → blocking ambiguity (0.3359ms)
+✔ ambiguous patient (no current patient) blocks the action (0.2619ms)
+✔ demographics: phone (0.5287ms)
+✔ demographics: address keeps original casing (0.443ms)
+✔ narrative: append to Anamnesi (0.4084ms)
+✔ forbidden: delete, therapy, allergy writes are refused (0.253ms)
+✔ clinical advice is refused (0.2246ms)
+✔ out-of-range vital is flagged as warning, not auto-corrected (0.2719ms)
+✔ execute: confirmed write applies once and returns recordId (1.6406ms)
+✔ execute: double confirmation does NOT duplicate (idempotent replay) (0.5238ms)
+✔ execute: blocked when write actions disabled (3.2147ms)
+✔ execute: confirmation is mandatory (0.944ms)
+✔ execute: ambiguous plan can never run (0.5842ms)
+✔ STT degrades when no model configured (0.2034ms)
+✔ STT available when model configured (0.2092ms)
+✔ audio retention defaults to 0 (delete after processing) (0.111ms)
+✔ preview shows patient + cannot execute while ambiguous (0.4347ms)
+ℹ tests 292
+ℹ suites 0
+ℹ pass 282
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1684.4905
+
+✖ failing tests:
+
+test at src\ai\__tests__\assistant-query-data.test.ts:1:1
+✖ src\ai\__tests__\assistant-query-data.test.ts (698.3576ms)
+  'test failed'
+
+test at src\ai\__tests__\intake-confirm.test.ts:1:1
+✖ src\ai\__tests__\intake-confirm.test.ts (963.1065ms)
+  'test failed'
+
+test at src\ai\__tests__\intake-draft.test.ts:1:1
+✖ src\ai\__tests__\intake-draft.test.ts (808.1739ms)
+  'test failed'
+
+test at src\ai\__tests__\markdown-parse.test.ts:1:1
+✖ src\ai\__tests__\markdown-parse.test.ts (1248.1832ms)
+  'test failed'
+
+test at src\ai\__tests__\patient-documents-security.test.ts:1:1
+✖ src\ai\__tests__\patient-documents-security.test.ts (1170.749ms)
+  'test failed'
+
+test at src\ai\__tests__\patient-narrative.test.ts:1:1
+✖ src\ai\__tests__\patient-narrative.test.ts (829.0008ms)
+  'test failed'
+
+test at src\ai\__tests__\query-engine.test.ts:1:1
+✖ src\ai\__tests__\query-engine.test.ts (862.0674ms)
+  'test failed'
+
+test at src\ai\__tests__\runtime-contract.test.ts:1:1
+✖ src\ai\__tests__\runtime-contract.test.ts (863.0481ms)
+  'test failed'
+
+test at src\ai\__tests__\sections.test.ts:1:1
+✖ src\ai\__tests__\sections.test.ts (931.2472ms)
+  'test failed'
+
+test at src\ai\__tests__\security.test.ts:1:1
+✖ src\ai\__tests__\security.test.ts (951.2332ms)
+  'test failed'

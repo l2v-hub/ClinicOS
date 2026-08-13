@@ -159,10 +159,11 @@ export function AgnosBrief({
 
   const hint = showHint ? (
     <p className="ai-drawer__hint">
-      Chiedi dati esistenti (allergie, terapie, parametri, documenti, appuntamenti) oppure scrivi —
-      o detta con il microfono — un comando, es. «Registra pressione 130 su 80 alle 9:00». Ogni
-      modifica viene mostrata in anteprima e salvata solo dopo la tua conferma. Agnos non elimina
-      mai dati e non fornisce diagnosi né terapie.
+      Sono un assistente virtuale: cerco e mostro i dati già presenti in ClinicOS. Chiedi dati
+      esistenti (allergie, terapie, parametri, documenti, appuntamenti) oppure scrivi — o detta con
+      il microfono — un comando, es. «Registra pressione 130 su 80 alle 9:00». Ogni modifica viene
+      mostrata in anteprima e salvata solo dopo la tua conferma. Non elimino mai dati e non fornisco
+      diagnosi né terapie.
     </p>
   ) : null;
 
