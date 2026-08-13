@@ -1,7 +1,9 @@
-// Agnos sub-agent profiles (Fase 0). Two role-scoped assistants over the EXISTING read intents:
-// each agent serves only its domain; an out-of-domain question is redirected (not executed), never
-// invented. Pure + testable: no DB, no model, no side effects. Guardrails (refuse_clinical, role
-// clamp, SOURCE_ONLY) are unchanged — this only narrows which intents an agent will answer.
+// Sub-agent profiles. Two role-scoped assistants over the EXISTING read intents: ogni agente ha il
+// suo dominio, ma una domanda dell'altro dominio viene INSTRADATA al proprietario ed eseguita
+// (`resolveAgent`) — mai rimandata all'utente con «selezionalo tu»: chi chiede ha già diritto al
+// dato per ruolo. Pure + testable: no DB, no model, no side effects. I guardrail (refuse_clinical,
+// role clamp, tenant isolation, cross-patient gate, SOURCE_ONLY) restano gli unici a poter negare
+// una risposta: la scelta dell'agente non è e non è mai stata un controllo di accesso.
 
 import type { AssistantIntent } from './plan.js';
 
@@ -83,10 +85,11 @@ export function agentAllowsIntent(agent: AgentId, intent: AssistantIntent): bool
   return SHARED.has(intent) || AGENT_PROFILES[agent].allowed.has(intent);
 }
 
-/** Message when the selected agent can't serve an intent owned by the other agent. Empty string when
- *  there is nothing to redirect (shared/neutral intent or same-owner). */
-export function redirectMessage(selected: AgentId, intent: AssistantIntent): string {
-  const owner = ownerAgent(intent);
-  if (!owner || owner === selected) return '';
-  return `Questa richiesta è di competenza dell'assistente «${AGENT_PROFILES[owner].label}». Selezionalo per ottenere la risposta.`;
+/** Agent that actually serves this intent. Se l'intent appartiene all'altro dominio, la richiesta
+ *  viene instradata al suo proprietario invece di essere rimandata all'utente: chi chiede ha già
+ *  diritto al dato per ruolo, e la scelta dell'agente non è mai stata un controllo di accesso
+ *  (role clamp, tenant isolation, cross-patient gate e refuse_clinical restano gli unici guardrail). */
+export function resolveAgent(selected: AgentId, intent: AssistantIntent): AgentId {
+  if (agentAllowsIntent(selected, intent)) return selected;
+  return ownerAgent(intent) ?? selected;
 }

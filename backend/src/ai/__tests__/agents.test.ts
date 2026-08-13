@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   agentAllowsIntent,
-  redirectMessage,
+  resolveAgent,
   ownerAgent,
   isAgentId,
   AGENT_PROFILES,
@@ -64,17 +64,24 @@ test('ownerAgent maps domain intents; shared intents have no owner', () => {
   assert.equal(ownerAgent('refuse_clinical'), null);
 });
 
-test('redirectMessage points to the owning agent only when out of domain', () => {
-  // facility asked a clinical thing → redirect to the clinical agent
-  const r1 = redirectMessage('facility', 'allergies');
-  assert.ok(r1.includes(AGENT_PROFILES.clinical.label));
-  // clinical asked a facility thing → redirect to the facility agent
-  const r2 = redirectMessage('clinical', 'rooms_occupancy');
-  assert.ok(r2.includes(AGENT_PROFILES.facility.label));
-  // own domain → no redirect
-  assert.equal(redirectMessage('facility', 'rooms_occupancy'), '');
-  assert.equal(redirectMessage('clinical', 'allergies'), '');
-  // shared/neutral → no redirect
-  assert.equal(redirectMessage('facility', 'patient_search'), '');
-  assert.equal(redirectMessage('clinical', 'appointments'), '');
+test('resolveAgent routes an out-of-domain intent to its owner instead of refusing', () => {
+  // facility selezionato, domanda clinica → risponde il clinico (nessun rimando all'utente)
+  assert.equal(resolveAgent('facility', 'allergies'), 'clinical');
+  assert.equal(resolveAgent('facility', 'therapies'), 'clinical');
+  assert.equal(resolveAgent('facility', 'vitals_recent'), 'clinical');
+  // clinical selezionato, domanda di struttura → risponde la gestione struttura
+  assert.equal(resolveAgent('clinical', 'rooms_occupancy'), 'facility');
+  assert.equal(resolveAgent('clinical', 'staff_list'), 'facility');
+  // dominio proprio → resta l'agente selezionato
+  assert.equal(resolveAgent('facility', 'rooms_occupancy'), 'facility');
+  assert.equal(resolveAgent('clinical', 'allergies'), 'clinical');
+  // shared/neutral → resta l'agente selezionato
+  assert.equal(resolveAgent('facility', 'patient_search'), 'facility');
+  assert.equal(resolveAgent('clinical', 'appointments'), 'clinical');
+  assert.equal(resolveAgent('facility', 'operator_queue'), 'facility');
+});
+
+test('agent profiles keep their labels (used by the UI/answer metadata)', () => {
+  assert.equal(AGENT_PROFILES.clinical.label, 'Assistente clinico');
+  assert.equal(AGENT_PROFILES.facility.label, 'Gestione struttura');
 });

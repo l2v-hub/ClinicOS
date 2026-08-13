@@ -4,7 +4,7 @@
 // evidence dirs were absent. This spec drives the REAL Agnos chatbot (AgnosPanel, mounted in
 // App.tsx) against the ported backend (branch fix/239-rooms-occupancy-port, commit 9167943):
 //
-//   textarea "Comando per Agnos"  →  POST /ai/actions/plan  →  orchestrate delegates the read
+//   textarea "Comando per l’assistente virtuale"  →  POST /ai/actions/plan  →  orchestrate delegates the read
 //   →  assistantQuery  →  deterministic planQuery  →  intent routing.
 //
 // Two routed questions are verified end-to-end in the browser:
@@ -40,18 +40,18 @@ async function selectOperatoreRole(page: Page) {
 }
 
 async function openAgnos(page: Page) {
-  await page.getByRole('button', { name: 'Agnos — Assistente ClinicOS' }).click();
-  await expect(page.getByRole('dialog', { name: 'Agnos — Assistente ClinicOS' })).toBeVisible();
+  await page.getByRole('button', { name: 'Assistente virtuale ClinicOS' }).click();
+  await expect(page.getByRole('dialog', { name: 'Assistente virtuale ClinicOS' })).toBeVisible();
 }
 
 async function closeAgnos(page: Page) {
-  const dialog = page.getByRole('dialog', { name: 'Agnos — Assistente ClinicOS' });
+  const dialog = page.getByRole('dialog', { name: 'Assistente virtuale ClinicOS' });
   await dialog.getByRole('button', { name: 'Chiudi' }).click();
   await expect(dialog).toBeHidden();
 }
 
 async function ask(page: Page, question: string) {
-  const input = page.getByLabel('Comando per Agnos');
+  const input = page.getByLabel('Comando per l’assistente virtuale');
   await input.click();
   await input.fill(question);
   await page.getByRole('button', { name: 'Invia' }).click();
@@ -100,7 +100,7 @@ test.describe('#239 — Agnos plan routing (rooms_occupancy aggregate + plural t
 
     // AC2: no patient surname anywhere in the answer body (counts only).
     const drawerText =
-      (await page.getByRole('dialog', { name: 'Agnos — Assistente ClinicOS' }).innerText()) ?? '';
+      (await page.getByRole('dialog', { name: 'Assistente virtuale ClinicOS' }).innerText()) ?? '';
     for (const surname of SEED_SURNAMES) {
       expect(drawerText, `occupancy answer must not leak patient name "${surname}"`).not.toContain(
         surname,

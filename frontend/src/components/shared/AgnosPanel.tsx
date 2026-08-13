@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { IcoAI, IcoX } from '../../icons';
 import { AnswerView, type AssistantAnswer, type AssistantNav } from './AIAssistantButton';
-import { useAgnosChat, type AgnosTurn, type AgnosAgent } from './agnos/useAgnosChat';
+import { useAgnosChat, type AgnosTurn } from './agnos/useAgnosChat';
 import { useVoiceInput } from './agnos/useVoiceInput';
 import { useSpeechOutput } from './agnos/useSpeechOutput';
 import { AgnosBrief } from './agnos/AgnosBrief';
 import { navChipLabel } from './agnos/agnosNav';
 
-// 015 AGNOS — unified chatbot (testo + voce): read answers (with sources) +
+// 015 — chatbot unificato (testo + voce): read answers (with sources) +
 // CRU write actions with preview/confirm. Replaces AIAssistantButton as THE
-// Agnos entry point (same FAB affordance). Delete is never executable: Agnos
-// refuses and points the operator to the traditional UI command.
+// assistant entry point (same FAB affordance). Delete is never executable:
+// l'assistente rifiuta e rimanda al comando dell'interfaccia.
 // US3: dictation drops the transcript INTO the text field (editable before
 // send, FR-016) and the command travels with channel:'voce' through the SAME
-// plan/execute path as typed text. Optional TTS reads Agnos replies aloud.
+// plan/execute path as typed text. Optional TTS reads the replies aloud.
+// UI: un solo assistente virtuale. La scelta manuale del sub-agent è sparita —
+// è l'intent a decidere chi risponde (backend `resolveAgent`), così l'operatore
+// che chiede un dato clinico lo ottiene invece di ricevere un rimando.
 
 interface Props {
   forceOpen?: boolean;
@@ -68,8 +71,6 @@ export function AgnosPanel({
 }: Props) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
-  // Fase 0: sub-agent selezionato. Default: Clinico se c'è un paziente aperto, altrimenti Gestione.
-  const [agent, setAgent] = useState<AgnosAgent>(currentPatientId ? 'clinical' : 'facility');
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   /** true se il testo in input proviene da dettatura (anche dopo modifica: FR-016 → channel:'voce'). */
@@ -89,7 +90,6 @@ export function AgnosPanel({
     operatorName,
     currentPatientId,
     navKey,
-    agent,
     onExecuted,
   });
 
@@ -188,8 +188,8 @@ export function AgnosPanel({
         type="button"
         className="ai-fab"
         onClick={() => setOpen(true)}
-        aria-label="Agnos — Assistente ClinicOS"
-        title="Agnos — Assistente ClinicOS"
+        aria-label="Assistente virtuale ClinicOS"
+        title="Assistente virtuale ClinicOS"
       >
         <IcoAI />
       </button>
@@ -201,7 +201,7 @@ export function AgnosPanel({
       <aside
         className="ai-drawer agnos-panel"
         role="dialog"
-        aria-label="Agnos — Assistente ClinicOS"
+        aria-label="Assistente virtuale ClinicOS"
         aria-hidden={!open}
         inert={!open ? true : undefined}
       >
@@ -210,7 +210,14 @@ export function AgnosPanel({
             <span className="ai-drawer__icon">
               <IcoAI />
             </span>
-            <span>Agnos</span>
+            <span className="assistant-id">
+              <span className="assistant-id__name">
+                Assistente virtuale <span className="assistant-id__badge">IA</span>
+              </span>
+              <span className="assistant-id__sub">
+                Non è un operatore umano · risponde solo con i dati presenti in ClinicOS
+              </span>
+            </span>
           </div>
           <div className="agnos-header-actions">
             {tts.supported && (
@@ -237,29 +244,6 @@ export function AgnosPanel({
 
         <div className="ai-asst__scope" aria-label="Perimetro">
           {scopeLabel}
-        </div>
-
-        <div
-          className="filter-chips agnos-agent-toggle"
-          role="group"
-          aria-label="Seleziona assistente"
-        >
-          <button
-            type="button"
-            className={`filter-chip${agent === 'clinical' ? ' active' : ''}`}
-            aria-pressed={agent === 'clinical'}
-            onClick={() => setAgent('clinical')}
-          >
-            Assistente clinico
-          </button>
-          <button
-            type="button"
-            className={`filter-chip${agent === 'facility' ? ' active' : ''}`}
-            aria-pressed={agent === 'facility'}
-            onClick={() => setAgent('facility')}
-          >
-            Gestione struttura
-          </button>
         </div>
 
         <div className="ai-drawer__body ai-asst__body" ref={bodyRef}>
@@ -340,7 +324,7 @@ export function AgnosPanel({
               }
             }}
             placeholder={voice.listening ? 'Sto ascoltando…' : 'Scrivi una domanda o un comando…'}
-            aria-label="Comando per Agnos"
+            aria-label="Comando per l’assistente virtuale"
             disabled={busy}
             readOnly={voice.listening}
           />
@@ -402,7 +386,7 @@ function TurnView({
     <div className="ai-asst__turn agnos-turn agnos-turn--agnos">
       {turn.status === 'attesa' && (
         <div className="ai-asst__a ai-asst__muted" aria-live="polite">
-          Agnos sta elaborando…
+          L’assistente sta elaborando…
         </div>
       )}
       {turn.status === 'errore' && (

@@ -14,7 +14,7 @@ import type { AssistantAnswer } from '../AIAssistantButton';
 
 export type AgnosChannel = 'testo' | 'voce';
 
-/** Fase 0: sub-agent scelto nella UI (scoping delle risposte). */
+/** Sub-agent che ha risposto: lo decide il backend dall'intent, la chat non lo sceglie più. */
 export type AgnosAgent = 'facility' | 'clinical';
 
 export interface AgnosPreview {
@@ -79,8 +79,6 @@ interface UseAgnosChatOptions extends AgnosOperatorIdentity {
   currentPatientId?: string;
   /** Rotta corrente della UI: contesto additivo, il backend lo ignora finché non lo legge. */
   navKey?: string;
-  /** Fase 0: sub-agent selezionato; inviato al backend per lo scoping degli intent. */
-  agent?: AgnosAgent;
   /** SPEC-015 US4: receives the executed actionType so the app can refresh the right data
    *  (cartella for clinical writes, agenda for create/update_appointment). */
   onExecuted?: (info: { actionType?: string }) => void;
@@ -92,8 +90,8 @@ interface ApiError {
 
 const ERROR_KIND_LABEL: Record<string, string> = {
   feature_disabled: 'Le azioni AI sono disabilitate.',
-  not_in_catalog: 'Azione non prevista dal catalogo Agnos.',
-  delete_forbidden: 'Agnos non può eliminare dati: usa il comando nell’interfaccia.',
+  not_in_catalog: 'Azione non prevista dal catalogo dell’assistente.',
+  delete_forbidden: 'L’assistente non può eliminare dati: usa il comando nell’interfaccia.',
   not_executable: 'Comando non eseguibile.',
   ambiguous: 'Il comando è ambiguo: riformulalo con più dettagli.',
   confirmation_required: 'L’operazione richiede conferma esplicita.',
@@ -126,7 +124,6 @@ export function useAgnosChat({
   operatorName,
   currentPatientId,
   navKey,
-  agent,
   onExecuted,
 }: UseAgnosChatOptions) {
   const [turns, setTurns] = useState<AgnosTurn[]>([]);
@@ -171,7 +168,9 @@ export function useAgnosChat({
         const res = await fetch(`${API_URL}/ai/actions/plan`, {
           method: 'POST',
           headers: headers(),
-          body: JSON.stringify({ text, channel, currentPatientId, navKey, agent }),
+          // Nessun `agent`: è l'intent a decidere chi risponde (backend `resolveAgent`), così una
+          // domanda clinica dell'operatore viene servita invece di essere rimandata a un'altra chat.
+          body: JSON.stringify({ text, channel, currentPatientId, navKey }),
         });
         const data = (await res.json()) as ApiError & {
           plan?: AgnosPlan;
@@ -197,7 +196,7 @@ export function useAgnosChat({
             plan,
             text:
               refusalText ||
-              'Agnos non può eseguire questa operazione: usa il comando nell’interfaccia.',
+              'L’assistente non può eseguire questa operazione: usa il comando nell’interfaccia.',
           });
           return;
         }
@@ -224,7 +223,7 @@ export function useAgnosChat({
           });
           return;
         }
-        const msg = 'Risposta non riconosciuta dal servizio Agnos.';
+        const msg = 'Risposta non riconosciuta dal servizio assistente.';
         setError(msg);
         patchTurn(agnosIndex, { status: 'errore', text: msg });
       } catch {
@@ -235,7 +234,7 @@ export function useAgnosChat({
         setBusy(false);
       }
     },
-    [busy, turns, pending, currentPatientId, navKey, agent, headers, patchTurn],
+    [busy, turns, pending, currentPatientId, navKey, headers, patchTurn],
   );
 
   const confirmPending = useCallback(async () => {

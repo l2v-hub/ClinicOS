@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { planQuery } from '../assistant/plan.js';
-import { ownerAgent, agentAllowsIntent, redirectMessage } from '../assistant/agents.js';
+import { ownerAgent, agentAllowsIntent, resolveAgent } from '../assistant/agents.js';
 
 test('staff_list: «elenca il personale» → query_staff_list', () => {
   const p = planQuery('elenca il personale della struttura');
@@ -26,11 +26,11 @@ test('una domanda sui pazienti NON è staff_list', () => {
   assert.notEqual(p.intent, 'staff_list');
 });
 
-test('staff_list è di dominio facility; il clinico viene rediretto', () => {
+test('staff_list è di dominio facility; chiesto al clinico viene instradato, non rifiutato', () => {
   assert.equal(ownerAgent('staff_list'), 'facility');
   assert.equal(agentAllowsIntent('facility', 'staff_list'), true);
   assert.equal(agentAllowsIntent('clinical', 'staff_list'), false);
-  assert.ok(redirectMessage('clinical', 'staff_list').includes('Gestione struttura'));
+  assert.equal(resolveAgent('clinical', 'staff_list'), 'facility');
 });
 
 test('l’occupazione camere resta rooms_occupancy (non staff_list)', () => {
