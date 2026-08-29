@@ -4,7 +4,10 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
   authoritativeAssignmentActor,
+  boundPatientAssignmentResult,
   MAX_ACTIVE_ASSIGNMENTS_PER_BED,
+  MAX_PATIENT_ACTIVE_ASSIGNMENTS,
+  MAX_PATIENT_ASSIGNMENT_HISTORY,
   PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
   ROOM_ASSIGNMENT_OCCUPANT_SELECT,
   ROOM_LOCATION_SELECT,
@@ -58,8 +61,26 @@ test('room and patient-assignment projections omit notes and audit metadata', ()
 
 test('facility read bounds and write attribution are server authoritative', () => {
   assert.equal(MAX_ACTIVE_ASSIGNMENTS_PER_BED, 8);
+  assert.equal(MAX_PATIENT_ACTIVE_ASSIGNMENTS, 8);
+  assert.equal(MAX_PATIENT_ASSIGNMENT_HISTORY, 100);
   assert.equal(authoritativeAssignmentActor({ id: 'verified-operator' }), 'verified-operator');
   assert.match(routeSource, /take:\s*MAX_ACTIVE_ASSIGNMENTS_PER_BED/);
   assert.match(routeSource, /createdById:\s*authoritativeAssignmentActor\(req\.operator!\)/);
   assert.doesNotMatch(routeSource, /body\.createdById/);
+});
+
+test('patient assignment windows never expose more than their documented bounds', () => {
+  const rows = Array.from({ length: 101 }, (_, index) => ({ id: `assignment-${index}` }));
+
+  const active = boundPatientAssignmentResult(rows, true);
+  assert.equal(active.items.length, MAX_PATIENT_ACTIVE_ASSIGNMENTS);
+  assert.equal(active.truncated, false);
+
+  const history = boundPatientAssignmentResult(rows, false);
+  assert.equal(history.items.length, MAX_PATIENT_ASSIGNMENT_HISTORY);
+  assert.equal(history.truncated, true);
+
+  const shortHistory = boundPatientAssignmentResult(rows.slice(0, 3), false);
+  assert.equal(shortHistory.items.length, 3);
+  assert.equal(shortHistory.truncated, false);
 });

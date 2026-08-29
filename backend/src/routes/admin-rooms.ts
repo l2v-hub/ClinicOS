@@ -4,7 +4,10 @@ import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js'
 import { requirePatientScope } from '../patients/access.js';
 import {
   authoritativeAssignmentActor,
+  boundPatientAssignmentResult,
   MAX_ACTIVE_ASSIGNMENTS_PER_BED,
+  MAX_PATIENT_ACTIVE_ASSIGNMENTS,
+  MAX_PATIENT_ASSIGNMENT_HISTORY,
   PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
   ROOM_ASSIGNMENT_OCCUPANT_SELECT,
   ROOM_LOCATION_SELECT,
@@ -653,6 +656,8 @@ adminRouter.delete('/beds/:bedId', async (req, res) => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 // GET /patients/:patientId/room-assignments
+// Active and legacy-history reads are both bounded. A future cursor API can replace the explicit
+// truncation signal for clients that need to traverse more than the most recent history window.
 patientAssignmentRouter.get(
   '/:patientId/room-assignments',
   (req, res, next) => {
@@ -672,12 +677,14 @@ patientAssignmentRouter.get(
       const assignments = await prisma.patientRoomAssignment.findMany({
         where: { patientId, ...(activeOnly ? activeAssignmentFilter() : {}) },
         select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
-        orderBy: { startDate: 'desc' },
-        // Corrupted legacy data can contain more than one active assignment. Keep the operational
-        // read bounded without hiding a small overlap that the caller may need to resolve.
-        take: activeOnly ? 8 : undefined,
+        orderBy: [{ startDate: 'desc' }, { id: 'desc' }],
+        // Fetch one extra historical row so the response can disclose truncation without issuing
+        // a separate count query. Active reads remain the small operational overlap window.
+        take: activeOnly ? MAX_PATIENT_ACTIVE_ASSIGNMENTS : MAX_PATIENT_ASSIGNMENT_HISTORY + 1,
       });
-      res.status(200).json(assignments);
+      const result = boundPatientAssignmentResult(assignments, activeOnly);
+      if (result.truncated) res.setHeader('X-Result-Truncated', 'true');
+      res.status(200).json(result.items);
     } catch (error) {
       console.error('GET /patients/:patientId/room-assignments error:', error);
       res.status(500).json({ error: 'Errore nel recupero assegnazioni stanza' });

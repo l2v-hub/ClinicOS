@@ -3,6 +3,21 @@
 // clinical/contact identifiers and must never be joined into facility-wide responses.
 
 export const MAX_ACTIVE_ASSIGNMENTS_PER_BED = 8;
+export const MAX_PATIENT_ACTIVE_ASSIGNMENTS = 8;
+export const MAX_PATIENT_ASSIGNMENT_HISTORY = 100;
+
+export function boundPatientAssignmentResult<T>(
+  assignments: readonly T[],
+  activeOnly: boolean,
+): { items: T[]; truncated: boolean } {
+  const limit = activeOnly ? MAX_PATIENT_ACTIVE_ASSIGNMENTS : MAX_PATIENT_ASSIGNMENT_HISTORY;
+  return {
+    items: assignments.slice(0, limit),
+    // Only the legacy history read fetches a sentinel row. Active reads are an intentionally
+    // bounded operational snapshot and do not advertise pagination semantics.
+    truncated: !activeOnly && assignments.length > limit,
+  };
+}
 
 export const ROOM_PATIENT_SELECT = {
   id: true,
