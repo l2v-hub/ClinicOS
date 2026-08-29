@@ -69,6 +69,28 @@ export async function fetchPatientPageWithSummary(
   return { page, summary: summary as ClinicalSummaryEntry[] };
 }
 
+export async function fetchPatientPage(
+  apiUrl: string,
+  filters: PatientPageFilters,
+  options: { headers: HeadersInit; signal?: AbortSignal; fetcher?: typeof fetch },
+): Promise<PatientPageResponse> {
+  const fetcher = options.fetcher ?? fetch;
+  const response = await fetcher(buildPatientPageUrl(apiUrl, filters), {
+    headers: options.headers,
+    signal: options.signal,
+  });
+  if (!response.ok) throw new Error('Impossibile cercare i pazienti');
+  const page = (await response.json()) as PatientPageResponse;
+  if (
+    !Array.isArray(page.items) ||
+    typeof page.hasMore !== 'boolean' ||
+    (page.nextCursor !== null && typeof page.nextCursor !== 'string')
+  ) {
+    throw new Error('Risposta ricerca pazienti non valida');
+  }
+  return page;
+}
+
 export async function fetchPatientById(
   apiUrl: string,
   patientId: string,

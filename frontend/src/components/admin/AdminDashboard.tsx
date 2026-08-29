@@ -23,7 +23,7 @@ interface AdminDashboardProps {
   onNavigate: (nav: NavKey) => void;
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
-  onSelectPaziente?: (nome: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string) => void;
   clinicalOverview?: ClinicalOverview | null;
 }
 
@@ -116,7 +116,7 @@ export function AdminDashboard({
                   <button
                     type="button"
                     className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
-                    onClick={() => onSelectPaziente?.(p.nome)}
+                    onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
                   >
                     <span>
                       <span className="anomalie-reparto__nome">{p.nome}</span>
@@ -499,7 +499,7 @@ export function AdminDashboard({
                 {onSelectPaziente && c.pazienteNome ? (
                   <button
                     className="link-btn consegna-paziente"
-                    onClick={() => onSelectPaziente(c.pazienteNome!)}
+                    onClick={() => onSelectPaziente(c.pazienteNome!, c.pazienteId)}
                     style={{ fontWeight: 600 }}
                   >
                     {c.pazienteNome}

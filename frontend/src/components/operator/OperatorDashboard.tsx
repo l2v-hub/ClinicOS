@@ -1,4 +1,4 @@
-import type { UtenteApp, Consegna, SlotAgenda, ClinicalOverview, Paziente } from '../../types';
+import type { UtenteApp, Consegna, SlotAgenda, ClinicalOverview } from '../../types';
 import {
   IcoArrow,
   IcoWarning,
@@ -27,9 +27,8 @@ interface OperatorDashboardProps {
   onNavigate: (nav: NavKey) => void;
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
-  onSelectPaziente?: (nome: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string) => void;
   clinicalOverview?: ClinicalOverview | null;
-  pazienti?: Paziente[]; // reserved for future patient-level KPIs
 }
 
 const STATO_LABEL: Record<string, string> = {
@@ -129,7 +128,7 @@ export function OperatorDashboard({
                   <button
                     type="button"
                     className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
-                    onClick={() => onSelectPaziente?.(p.nome)}
+                    onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
                   >
                     <span className="anomalie-reparto__contenuto">
                       <span className="anomalie-reparto__nome">{p.nome}</span>
@@ -187,7 +186,7 @@ export function OperatorDashboard({
                   <button
                     type="button"
                     className="anomalie-reparto__riga"
-                    onClick={() => onSelectPaziente?.(p.nome)}
+                    onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
                   >
                     <span>
                       <span className="anomalie-reparto__nome">{p.nome}</span>
@@ -448,7 +447,7 @@ export function OperatorDashboard({
             {onSelectPaziente && prossimoSlot.pazienteNome ? (
               <button
                 className="link-btn next-appt-banner__patient"
-                onClick={() => onSelectPaziente(prossimoSlot.pazienteNome!)}
+                onClick={() => onSelectPaziente(prossimoSlot.pazienteNome!, prossimoSlot.patientId)}
               >
                 {prossimoSlot.pazienteNome}
               </button>
@@ -485,7 +484,7 @@ export function OperatorDashboard({
                 onSelectPaziente ? (
                   <button
                     className="link-btn agenda-day-slot__patient"
-                    onClick={() => onSelectPaziente(slot.pazienteNome!)}
+                    onClick={() => onSelectPaziente(slot.pazienteNome!, slot.patientId)}
                   >
                     {slot.pazienteNome}
                   </button>
@@ -536,7 +535,7 @@ export function OperatorDashboard({
                 {onSelectPaziente && c.pazienteNome ? (
                   <button
                     className="link-btn consegna-paziente"
-                    onClick={() => onSelectPaziente(c.pazienteNome!)}
+                    onClick={() => onSelectPaziente(c.pazienteNome!, c.pazienteId)}
                     style={{ fontWeight: 600 }}
                   >
                     {c.pazienteNome}

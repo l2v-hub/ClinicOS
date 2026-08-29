@@ -1,11 +1,5 @@
 import { useState, useMemo, Fragment } from 'react';
-import type {
-  Appuntamento,
-  Operatore,
-  Paziente,
-  TherapySlot,
-  MotivoNonErogazione,
-} from '../../types';
+import type { Appuntamento, Operatore, TherapySlot, MotivoNonErogazione } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
 import { AgendaLegend } from '../shared/AgendaLegend';
@@ -23,12 +17,11 @@ interface OperatorAgendaProps {
   nomeOperatore: string;
   operatori: Operatore[];
   appuntamenti: Appuntamento[];
-  pazienti: Paziente[];
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onDeleteAppuntamento?: (id: string) => void;
   loadingAppuntamenti?: boolean;
-  onSelectPaziente?: (nome: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string) => void;
   therapySlots?: TherapySlot[];
   onConfirmTherapy?: (info: {
     patientId: string;
@@ -112,7 +105,6 @@ export function OperatorAgenda({
   nomeOperatore,
   operatori,
   appuntamenti,
-  pazienti,
   onAddAppuntamento,
   onUpdateAppuntamento,
   onDeleteAppuntamento,
@@ -340,7 +332,7 @@ export function OperatorAgenda({
                             className="link-btn agt-apt-card__patient"
                             onClick={(e) => {
                               e.stopPropagation();
-                              onSelectPaziente(apt.pazienteNome!);
+                              onSelectPaziente(apt.pazienteNome!, apt.pazienteId ?? undefined);
                             }}
                           >
                             {apt.pazienteNome}
@@ -455,7 +447,7 @@ export function OperatorAgenda({
                               className="link-btn agt-week-apt__name"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                onSelectPaziente(a.pazienteNome!);
+                                onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
                               }}
                             >
                               {a.pazienteNome.split(',')[0]}
@@ -539,7 +531,7 @@ export function OperatorAgenda({
                             className="link-btn agt-month-apt__name"
                             onClick={(e) => {
                               e.stopPropagation();
-                              onSelectPaziente(a.pazienteNome!);
+                              onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
                             }}
                           >
                             {a.pazienteNome.split(',')[0]}
@@ -569,7 +561,6 @@ export function OperatorAgenda({
           ora={aptForm.ora}
           operatoreId={operatoreId}
           operatori={operatori}
-          pazienti={pazienti}
           onSave={async (apt) => {
             const err = await onAddAppuntamento(apt);
             if (!err) setAptForm(null);
@@ -585,7 +576,6 @@ export function OperatorAgenda({
           ora={editingApt.ora}
           operatoreId={editingApt.operatoreId}
           operatori={operatori}
-          pazienti={pazienti}
           appuntamento={editingApt}
           onSave={async (apt) => {
             const err = (await onUpdateAppuntamento?.(editingApt.id, apt)) ?? null;

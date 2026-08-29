@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import type { Appuntamento, Operatore, Paziente, TipoIntervento } from '../../types';
 import { IcoX, IcoCheck, IcoPlus } from '../../icons';
+import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
 
 interface AppointmentFormProps {
   data: string;
   ora: string;
   operatoreId: string;
   operatori: Operatore[];
-  pazienti: Paziente[];
   /** Se presente, il form e' in modifica su questo appuntamento invece che in creazione. */
   appuntamento?: Appuntamento;
   /** SPEC-015 US4: persists via REST — resolves with an error message, or null on success. */
@@ -38,7 +38,6 @@ export function AppointmentForm({
   ora,
   operatoreId,
   operatori,
-  pazienti,
   appuntamento,
   onSave,
   onCancel,
@@ -65,16 +64,11 @@ export function AppointmentForm({
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  const pazientiFiltrati =
-    pazienteSearch.length > 1
-      ? pazienti
-          .filter(
-            (p) =>
-              `${p.firstName} ${p.lastName}`.toLowerCase().includes(pazienteSearch.toLowerCase()) ||
-              p.medicalRecordNumber.toLowerCase().includes(pazienteSearch.toLowerCase()),
-          )
-          .slice(0, 6)
-      : [];
+  const patientSearch = usePatientDirectorySearch(pazienteSearch, {
+    enabled: !isEdit && showPazSearch,
+    limit: 6,
+  });
+  const pazientiFiltrati: Paziente[] = patientSearch.results;
 
   const operatoreSelezionato = operatori.find((o) => o.id === form.operatoreId);
 
@@ -137,6 +131,7 @@ export function AppointmentForm({
                   }}
                   onFocus={() => setShowPazSearch(true)}
                   placeholder="Cerca paziente per nome o MRN…"
+                  maxLength={80}
                 />
                 {showPazSearch && pazientiFiltrati.length > 0 && (
                   <div className="search-dropdown">
@@ -153,6 +148,16 @@ export function AppointmentForm({
                       </button>
                     ))}
                   </div>
+                )}
+                {showPazSearch && patientSearch.loading && (
+                  <p className="search-dropdown__status" role="status">
+                    Ricerca in corso…
+                  </p>
+                )}
+                {showPazSearch && patientSearch.error && (
+                  <p className="search-dropdown__status" role="alert">
+                    {patientSearch.error}
+                  </p>
                 )}
               </div>
               <button
@@ -314,7 +319,7 @@ export function AppointmentForm({
             onClick={() => {
               void salva();
             }}
-            disabled={saving}
+            disabled={saving || (!isEdit && !form.pazienteId)}
           >
             <IcoCheck />{' '}
             {saving ? 'Salvataggio…' : isEdit ? 'Salva modifiche' : 'Salva appuntamento'}

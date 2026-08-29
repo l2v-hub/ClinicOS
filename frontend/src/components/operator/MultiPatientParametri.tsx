@@ -1,9 +1,19 @@
-import { useState } from 'react';
-import type { Paziente, CartellaPaziente, ParametriMensili, ParametroGiorno } from '../../types';
+import { useEffect, useRef, useState } from 'react';
+import type { CartellaPaziente, ParametriMensili, ParametroGiorno } from '../../types';
 import { IcoSearch, IcoX, IcoMessage } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
 import { ClinicalTableSection } from './cartella/shared';
 import { comparePazienti } from '../../lib/patientSort';
+import { API_URL } from '../../config';
+import { operatorHeaders } from '../../lib/operatorSession';
+import { createLatestRequestGuard } from '../../lib/usePatientDirectorySearch';
+import {
+  fetchPatientParametersPage,
+  mergePatientParametersPage,
+  savePatientParameterMonth,
+  type ParameterPagePatient,
+  type PatientParametersPageItem,
+} from '../../lib/patientParametersPage';
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -80,7 +90,6 @@ function rigaToParametroGiorno(r: RigaEditabile): ParametroGiorno {
     dtx08: r.dtx || undefined,
     evacuazione: r.evacuazione || undefined,
     note: r.note || undefined,
-    firmaIpM: r.operatore || undefined,
   };
 }
 
@@ -104,18 +113,14 @@ function hasRilevazione(p: ParametroGiorno | null): boolean {
 // ── Props ──────────────────────────────────────────────────────────────────────
 
 interface Props {
-  pazienti: Paziente[];
-  cartelle: CartellaPaziente[];
   operatoreNome: string;
-  loading: boolean;
-  onSelectPaziente: (p: Paziente) => void;
-  onUpdateCartella: (pazienteId: string, updates: Partial<CartellaPaziente>) => void;
+  onSelectPaziente: (patientId: string) => void;
 }
 
 // ── Singola riga paziente (sub-component) ─────────────────────────────────────
 
 interface RigaProps {
-  paziente: Paziente;
+  paziente: ParameterPagePatient;
   cartella: CartellaPaziente;
   operatoreNome: string;
   isNoteOpen: boolean;
@@ -322,22 +327,98 @@ function RigaPaziente({
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-export function MultiPatientParametri({
-  pazienti,
-  cartelle,
-  operatoreNome,
-  loading,
-  onSelectPaziente,
-  onUpdateCartella,
-}: Props) {
+export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props) {
   const [noteOpenForPazienteId, setNoteOpenForPazienteId] = useState<string | null>(null);
   const [ricerca, setRicerca] = useState('');
+  const [items, setItems] = useState<PatientParametersPageItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [pageError, setPageError] = useState<string | null>(null);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(false);
+  const pageRequestGuard = useRef(createLatestRequestGuard());
+  const pazienti = items.map((item) => item.patient);
+  const cartelle = items.map((item) => item.cartella as CartellaPaziente);
+
+  useEffect(() => {
+    const guard = pageRequestGuard.current;
+    const request = guard.start();
+    const normalizedQuery = ricerca.trim() || undefined;
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      setLoading(true);
+      setLoadingMore(false);
+      setPageError(null);
+      fetchPatientParametersPage(
+        API_URL,
+        { q: normalizedQuery, limit: 25, month: meseCorrente().mese, year: meseCorrente().anno },
+        {
+          headers: operatorHeaders(),
+          signal: controller.signal,
+        },
+      )
+        .then((page) => {
+          if (!guard.isCurrent(request)) return;
+          setItems(page.items);
+          setNextCursor(page.nextCursor);
+          setHasMore(page.hasMore);
+        })
+        .catch((error: unknown) => {
+          if ((error as { name?: string }).name !== 'AbortError') {
+            if (!guard.isCurrent(request)) return;
+            setItems([]);
+            setPageError('Impossibile caricare i parametri. Riprova.');
+          }
+        })
+        .finally(() => {
+          if (!controller.signal.aborted && guard.isCurrent(request)) setLoading(false);
+        });
+    }, 250);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+      guard.invalidate();
+    };
+  }, [ricerca]);
+
+  async function loadMore() {
+    if (!nextCursor || loadingMore) return;
+    const guard = pageRequestGuard.current;
+    const request = guard.start();
+    const cursor = nextCursor;
+    const normalizedQuery = ricerca.trim() || undefined;
+    setLoadingMore(true);
+    setPageError(null);
+    try {
+      const page = await fetchPatientParametersPage(
+        API_URL,
+        {
+          q: normalizedQuery,
+          cursor,
+          limit: 25,
+          month: meseCorrente().mese,
+          year: meseCorrente().anno,
+        },
+        { headers: operatorHeaders() },
+      );
+      if (!guard.isCurrent(request)) return;
+      setItems((current) => mergePatientParametersPage(current, page.items, true));
+      setNextCursor(page.nextCursor);
+      setHasMore(page.hasMore);
+    } catch {
+      if (guard.isCurrent(request)) {
+        setPageError('Impossibile caricare altri pazienti. Riprova.');
+      }
+    } finally {
+      if (guard.isCurrent(request)) setLoadingMore(false);
+    }
+  }
 
   function getCartella(pazienteId: string): CartellaPaziente {
     return cartelle.find((c) => c.pazienteId === pazienteId) ?? createEmptyCartella(pazienteId);
   }
 
-  function salvaRiga(pazienteId: string, riga: RigaEditabile) {
+  async function salvaRiga(pazienteId: string, riga: RigaEditabile) {
     const cartella = getCartella(pazienteId);
     const { mese, anno } = meseCorrente();
     const parametroGiorno = rigaToParametroGiorno(riga);
@@ -364,7 +445,18 @@ export function MultiPatientParametri({
       });
     }
 
-    onUpdateCartella(pazienteId, { parametriMensili: mensili });
+    const monthToSave = mensili.find((item) => item.mese === mese && item.anno === anno);
+    if (!monthToSave) throw new Error('Periodo parametri non valido');
+    const savedMonth = await savePatientParameterMonth(API_URL, pazienteId, monthToSave, {
+      headers: operatorHeaders(),
+    });
+    setItems((current) =>
+      current.map((item) =>
+        item.patient.id === pazienteId
+          ? { ...item, cartella: { ...item.cartella, parametriMensili: [savedMonth] } }
+          : item,
+      ),
+    );
   }
 
   const oggi = new Date().toLocaleDateString('it-IT', {
@@ -375,19 +467,7 @@ export function MultiPatientParametri({
   });
 
   // Issue #129: ordinamento alfabetico stabile per cognome+nome, anche con filtri attivi.
-  const filtrati = pazienti
-    .filter((p) => {
-      const q = ricerca.trim().toLowerCase();
-      if (!q) return true;
-      const cart = getCartella(p.id);
-      const room = `${cart.cameraNumero ?? ''} ${cart.lettoNumero ?? ''}`;
-      return (
-        `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
-        p.medicalRecordNumber.toLowerCase().includes(q) ||
-        room.toLowerCase().includes(q)
-      );
-    })
-    .sort(comparePazienti);
+  const filtrati = [...pazienti].sort(comparePazienti);
 
   // Contatore avanzamento: pazienti con almeno una rilevazione registrata oggi.
   const totaleRilevabili = filtrati.length;
@@ -430,11 +510,11 @@ export function MultiPatientParametri({
         {!loading && totaleRilevabili > 0 && (
           <div
             className="qe-progress"
-            aria-label={`${rilevatiOggi} di ${totaleRilevabili} pazienti rilevati oggi`}
+            aria-label={`${rilevatiOggi} di ${totaleRilevabili} pazienti caricati rilevati oggi`}
           >
             <span>
-              <span className="qe-progress__count">{rilevatiOggi}</span>/{totaleRilevabili} rilevati
-              oggi
+              <span className="qe-progress__count">{rilevatiOggi}</span>/{totaleRilevabili} caricati
+              rilevati oggi
             </span>
             <span className="qe-progress__bar">
               <span className="qe-progress__fill" style={{ width: `${rilevatiPct}%` }} />
@@ -446,6 +526,14 @@ export function MultiPatientParametri({
       {loading ? (
         <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
           <p style={{ color: 'var(--text-muted)' }}>Caricamento pazienti…</p>
+        </div>
+      ) : pageError && pazienti.length === 0 ? (
+        <div
+          className="empty-state-card"
+          role="alert"
+          style={{ textAlign: 'center', padding: '48px 32px' }}
+        >
+          <p style={{ color: 'var(--danger, #b91c1c)' }}>{pageError}</p>
         </div>
       ) : pazienti.length === 0 ? (
         <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
@@ -470,7 +558,7 @@ export function MultiPatientParametri({
             </div>
             {filtrati.map((paziente) => (
               <RigaPaziente
-                key={paziente.id}
+                key={`${paziente.id}:${JSON.stringify(getParametroOggi(getCartella(paziente.id)))}`}
                 paziente={paziente}
                 cartella={getCartella(paziente.id)}
                 operatoreNome={operatoreNome}
@@ -478,11 +566,27 @@ export function MultiPatientParametri({
                 onToggleNote={(open: boolean) =>
                   setNoteOpenForPazienteId(open ? paziente.id : null)
                 }
-                onClickPaziente={() => onSelectPaziente(paziente)}
+                onClickPaziente={() => onSelectPaziente(paziente.id)}
                 onSalva={salvaRiga}
               />
             ))}
           </div>
+          {pageError && (
+            <p className="qe-row__error" role="alert">
+              {pageError}
+            </p>
+          )}
+          {hasMore && (
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => void loadMore()}
+              disabled={loadingMore}
+              style={{ marginTop: 16 }}
+            >
+              {loadingMore ? 'Caricamento…' : 'Carica altri 25 pazienti'}
+            </button>
+          )}
         </ClinicalTableSection>
       )}
     </div>

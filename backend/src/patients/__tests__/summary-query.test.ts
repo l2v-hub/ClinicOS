@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { PatientSummaryInputError, parsePatientSummaryIds } from '../summary-query.js';
 
-test('summary IDs preserve legacy absence and normalize a bounded unique batch', () => {
-  assert.equal(parsePatientSummaryIds(undefined), undefined);
+test('summary IDs require an explicit scope and normalize a bounded unique batch', () => {
+  assert.throws(() => parsePatientSummaryIds(undefined), PatientSummaryInputError);
   assert.deepEqual(parsePatientSummaryIds(' patient-1,patient-2,patient-1 '), [
     'patient-1',
     'patient-2',

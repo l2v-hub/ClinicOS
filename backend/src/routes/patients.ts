@@ -1,7 +1,7 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import {
   PatientPageInputError,
   decodePatientPageCursor,
@@ -9,6 +9,12 @@ import {
   parsePatientPageQuery,
 } from '../patients/pagination.js';
 import { PatientSummaryInputError, parsePatientSummaryIds } from '../patients/summary-query.js';
+import { loadPatientParametersPage } from '../patients/parameters-page.js';
+import {
+  PatientParametersInputError,
+  PatientParametersNotFoundError,
+  savePatientParameterMonth,
+} from '../patients/parameters-update.js';
 
 const router = Router();
 
@@ -20,22 +26,28 @@ router.use((_req, res, next) => {
   next();
 });
 
-// Contratto scalabile additivo. Il roster legacy su GET /patients resta disponibile durante
-// la migrazione dei consumer, mentre nuove viste devono usare questa pagina keyset bounded.
+// Contratto scalabile per tutti i consumer di elenco; il roster legacy e' dismesso sotto.
 router.get('/page', async (req, res) => {
   try {
     const input = parsePatientPageQuery(req.query as Record<string, unknown>);
     const filters = { q: input.q, sex: input.sex };
     const position = input.cursor ? decodePatientPageCursor(input.cursor, filters) : undefined;
+    const searchTokens =
+      input.q
+        ?.split(/[,\s]+/)
+        .filter(Boolean)
+        .slice(0, 5) ?? [];
 
     const baseWhere = {
       ...(input.sex && { sex: input.sex }),
-      ...(input.q && {
-        OR: [
-          { lastName: { contains: input.q, mode: 'insensitive' as const } },
-          { firstName: { contains: input.q, mode: 'insensitive' as const } },
-          { medicalRecordNumber: { contains: input.q, mode: 'insensitive' as const } },
-        ],
+      ...(searchTokens.length > 0 && {
+        AND: searchTokens.map((token) => ({
+          OR: [
+            { lastName: { contains: token, mode: 'insensitive' as const } },
+            { firstName: { contains: token, mode: 'insensitive' as const } },
+            { medicalRecordNumber: { contains: token, mode: 'insensitive' as const } },
+          ],
+        })),
       }),
     };
     const cursorWhere = position
@@ -91,30 +103,26 @@ router.get('/page', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+// Bounded projection for the multi-patient vital-sign editor. Unlike the legacy roster + one
+// cartella request per patient, this returns at most 25 identities and only the JSON fields the
+// screen renders. It deliberately shares the signed cursor/filter contract with /patients/page.
+router.get('/parameters/page', async (req, res) => {
+  try {
+    res.status(200).json(await loadPatientParametersPage(req.query as Record<string, unknown>));
+  } catch (error) {
+    if (error instanceof PatientPageInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    console.error('GET /patients/parameters/page error:', error);
+    res.status(500).json({ error: 'Errore nel recupero dei parametri pazienti' });
+  }
+});
+
+router.get('/', (_req, res) => {
   res.setHeader('Deprecation', 'true');
   res.setHeader('Sunset', 'Sat, 28 Nov 2026 00:00:00 GMT');
-  // Paginazione opt-in (limit/offset): senza parametri il comportamento resta
-  // identico a oggi (nessun take/skip, tutti i record).
-  const { limit, offset } = req.query as { limit?: string; offset?: string };
-  const parsedLimit = Number.parseInt(String(limit ?? ''), 10);
-  const parsedOffset = Number.parseInt(String(offset ?? ''), 10);
-  const take =
-    Number.isFinite(parsedLimit) && parsedLimit > 0 ? Math.min(parsedLimit, 500) : undefined;
-  const skip = Number.isFinite(parsedOffset) && parsedOffset >= 0 ? parsedOffset : undefined;
-
-  try {
-    const patients = await prisma.patient.findMany({
-      orderBy: { createdAt: 'desc' },
-      ...(take !== undefined && { take }),
-      ...(skip !== undefined && { skip }),
-    });
-    console.log(`GET /patients → ${patients.length} record`);
-    res.status(200).json(patients);
-  } catch (error) {
-    console.error('GET /patients error:', error);
-    res.status(500).json({ error: 'Failed to fetch patients' });
-  }
+  res.status(410).json({ error: 'Endpoint dismesso: usa GET /patients/page' });
 });
 
 // GET /patients/settings — UI capability flags (e.g. whether delete is enabled).
@@ -197,12 +205,8 @@ router.get('/clinical-summary/overview', async (_req, res) => {
 router.get('/clinical-summary', async (req, res) => {
   try {
     const patientIds = parsePatientSummaryIds(req.query.patientIds);
-    if (!patientIds) {
-      res.setHeader('Deprecation', 'true');
-      res.setHeader('Sunset', 'Sat, 28 Nov 2026 00:00:00 GMT');
-    }
     const cartelle = await prisma.cartella.findMany({
-      ...(patientIds && { where: { patientId: { in: patientIds } } }),
+      where: { patientId: { in: patientIds } },
       select: { patientId: true, data: true },
     });
     const summary = cartelle.map(({ patientId, data }) => {
@@ -236,6 +240,25 @@ router.get('/clinical-summary', async (req, res) => {
     }
     console.error('GET /patients/clinical-summary error:', error);
     res.status(500).json({ error: 'Errore nel recupero del riepilogo clinico' });
+  }
+});
+
+router.patch('/:id/parameters', async (req, res) => {
+  try {
+    const actorId = (req as AuthedRequest).operator!.id;
+    const month = await savePatientParameterMonth(req.params.id, req.body, actorId);
+    res.status(200).json({ patientId: req.params.id, month });
+  } catch (error) {
+    if (error instanceof PatientParametersInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    if (error instanceof PatientParametersNotFoundError) {
+      res.status(404).json({ error: 'Paziente non trovato' });
+      return;
+    }
+    console.error('PATCH /patients/:id/parameters error:', error);
+    res.status(500).json({ error: 'Errore nel salvataggio dei parametri' });
   }
 });
 

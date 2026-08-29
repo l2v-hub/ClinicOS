@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useState } from 'react';
-import type { Appuntamento, Operatore, Paziente, TherapySlot } from '../../types';
+import type { Appuntamento, Operatore, TherapySlot } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
 import { AgendaLegend } from '../shared/AgendaLegend';
@@ -15,13 +15,12 @@ type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
 interface AdminAgendaProps {
   operatori: Operatore[];
   appuntamenti: Appuntamento[];
-  pazienti: Paziente[];
   onAddAppuntamento: (apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onDeleteAppuntamento?: (id: string) => void;
   loadingAppuntamenti?: boolean;
   onAddPaziente: (nome: string) => void;
-  onSelectPaziente?: (nome: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string) => void;
   /** Fasce terapia di reparto (GET /therapy-slots). In agenda admin sono di sola lettura:
    *  la firma di somministrazione resta un atto clinico dell'operatore erogante. */
   therapySlots?: TherapySlot[];
@@ -90,7 +89,6 @@ function occInfo(pct: number): { label: string; cls: string } {
 export function AdminAgenda({
   operatori,
   appuntamenti,
-  pazienti,
   onAddAppuntamento,
   onUpdateAppuntamento,
   onDeleteAppuntamento,
@@ -386,7 +384,10 @@ export function AdminAgenda({
                                   className="link-btn agt-apt-card__patient"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    onSelectPaziente(apt.pazienteNome!);
+                                    onSelectPaziente(
+                                      apt.pazienteNome!,
+                                      apt.pazienteId ?? undefined,
+                                    );
                                   }}
                                 >
                                   {apt.pazienteNome}
@@ -505,7 +506,7 @@ export function AdminAgenda({
                                 className="link-btn agt-week-apt__name"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  onSelectPaziente(a.pazienteNome!);
+                                  onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
                                 }}
                               >
                                 {a.pazienteNome.split(',')[0]}
@@ -602,7 +603,7 @@ export function AdminAgenda({
                               className="link-btn agt-month-apt__name"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                onSelectPaziente(a.pazienteNome!);
+                                onSelectPaziente(a.pazienteNome!, a.pazienteId ?? undefined);
                               }}
                             >
                               {a.pazienteNome.split(',')[0]}
@@ -633,7 +634,6 @@ export function AdminAgenda({
           ora={aptForm.ora}
           operatoreId={aptForm.operatoreId}
           operatori={operatori}
-          pazienti={pazienti}
           onSave={async (apt) => {
             const err = await onAddAppuntamento(apt);
             if (!err) setAptForm(null);
@@ -649,7 +649,6 @@ export function AdminAgenda({
           ora={editingApt.ora}
           operatoreId={editingApt.operatoreId}
           operatori={operatori}
-          pazienti={pazienti}
           appuntamento={editingApt}
           onSave={async (apt) => {
             const err = (await onUpdateAppuntamento?.(editingApt.id, apt)) ?? null;

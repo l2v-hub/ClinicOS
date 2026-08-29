@@ -7,9 +7,10 @@ export class PatientSummaryInputError extends Error {
 
 const PATIENT_ID = /^[A-Za-z0-9_-]{1,128}$/;
 
-/** Undefined preserves the temporary legacy all-patient contract; an explicit value is bounded. */
-export function parsePatientSummaryIds(value: unknown): string[] | undefined {
-  if (value === undefined) return undefined;
+export function parsePatientSummaryIds(value: unknown): string[] {
+  if (value === undefined) {
+    throw new PatientSummaryInputError('patientIds deve contenere almeno un identificativo');
+  }
   if (typeof value !== 'string' || value.trim() === '') {
     throw new PatientSummaryInputError('patientIds deve contenere almeno un identificativo');
   }

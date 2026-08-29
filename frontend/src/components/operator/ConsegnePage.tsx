@@ -13,7 +13,7 @@ interface ConsegnePageProps {
   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
-  onSelectPaziente?: (nome: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string) => void;
   /** #283: filtro stato con cui aprire la pagina (dalla card "Consegne aperte" in dashboard). */
   initialFiltroStato?: 'tutte' | StatoConsegna;
   /** #283: consegna da evidenziare/scrollare quando la card ne apre una specifica. */
@@ -337,7 +337,7 @@ function ConsegnaCard({
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
   isAdmin: boolean;
-  onSelectPaziente?: (nome: string) => void;
+  onSelectPaziente?: (nome: string, patientId?: string) => void;
   focused?: boolean;
 }) {
   const [editOpen, setEditOpen] = useState(false);
@@ -384,7 +384,7 @@ function ConsegnaCard({
         {onSelectPaziente && c.pazienteNome ? (
           <button
             className="link-btn consegna-paziente"
-            onClick={() => onSelectPaziente(c.pazienteNome!)}
+            onClick={() => onSelectPaziente(c.pazienteNome!, c.pazienteId)}
           >
             {c.pazienteNome}
           </button>

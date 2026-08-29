@@ -47,26 +47,87 @@ test('AC1: GET /patients/settings senza header operatore risponde 401', async ()
 });
 
 test('loop 3: pagina e overview pazienti restano dietro requireOperator', async () => {
-  const [page, overview] = await Promise.all([
+  const [page, parametersPage, overview] = await Promise.all([
     fetch(`${base}/patients/page`),
+    fetch(`${base}/patients/parameters/page`),
     fetch(`${base}/patients/clinical-summary/overview`),
   ]);
   assert.equal(page.status, 401);
+  assert.equal(parametersPage.status, 401);
   assert.equal(overview.status, 401);
 });
 
 test('loop 3: input non validi sono respinti prima di interrogare il database', async () => {
   const headers = { 'X-Operator-Id': 'test-operatore', 'X-Operator-Role': 'operatore' };
   const patientIds = Array.from({ length: 101 }, (_, index) => `patient-${index}`).join(',');
-  const [badLimit, badCursor, oversizedSummary] = await Promise.all([
+  const [badLimit, badParametersLimit, badPeriod, badCursor, oversizedSummary] = await Promise.all([
     fetch(`${base}/patients/page?limit=10foo`, { headers }),
+    fetch(`${base}/patients/parameters/page?limit=0`, { headers }),
+    fetch(`${base}/patients/parameters/page?month=13&year=2026`, { headers }),
     fetch(`${base}/patients/page?cursor=not-base64!`, { headers }),
     fetch(`${base}/patients/clinical-summary?patientIds=${patientIds}`, { headers }),
   ]);
   assert.equal(badLimit.status, 400);
   assert.equal(badLimit.headers.get('cache-control'), 'private, no-store');
+  assert.equal(badParametersLimit.status, 400);
+  assert.equal(badPeriod.status, 400);
   assert.equal(badCursor.status, 400);
   assert.equal(oversizedSummary.status, 400);
+});
+
+test('loop 6: PATCH parametri richiede auth e valida il payload prima del database', async () => {
+  const unauthenticated = await fetch(`${base}/patients/patient-1/parameters`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ month: {} }),
+  });
+  assert.equal(unauthenticated.status, 401);
+
+  const invalid = await fetch(`${base}/patients/patient-1/parameters`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Operator-Id': 'test-operatore',
+      'X-Operator-Role': 'operatore',
+    },
+    body: JSON.stringify({ month: { id: '../bad' } }),
+  });
+  assert.equal(invalid.status, 400);
+
+  const missingBody = await fetch(`${base}/patients/patient-1/parameters`, {
+    method: 'PATCH',
+    headers: {
+      'X-Operator-Id': 'test-operatore',
+      'X-Operator-Role': 'operatore',
+    },
+  });
+  assert.equal(missingBody.status, 400);
+
+  const spoofedSignature = await fetch(`${base}/patients/patient-1/parameters`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Operator-Id': 'test-operatore',
+      'X-Operator-Role': 'operatore',
+    },
+    body: JSON.stringify({
+      month: {
+        id: 'month-1',
+        mese: 8,
+        anno: 2026,
+        createdAt: '2026-08-29T00:00:00.000Z',
+        giorni: [{ giorno: 29, firmaIpM: 'altro-operatore' }],
+      },
+    }),
+  });
+  assert.equal(spoofedSignature.status, 400);
+});
+
+test('loop 6: clinical-summary richiede sempre una lista pazienti esplicita', async () => {
+  const res = await fetch(`${base}/patients/clinical-summary`, {
+    headers: { 'X-Operator-Id': 'test-operatore', 'X-Operator-Role': 'operatore' },
+  });
+  assert.equal(res.status, 400);
 });
 
 test('AC1: PUT /patients/:id/cartella senza header operatore risponde 401 (mai raggiunge la scrittura)', async () => {
@@ -78,15 +139,11 @@ test('AC1: PUT /patients/:id/cartella senza header operatore risponde 401 (mai r
   assert.equal(res.status, 401);
 });
 
-test('AC2: GET /patients con ruolo "operatore" ammesso risponde con il comportamento normale', async () => {
+test('loop 6: il roster legacy autenticato è dismesso con 410', async () => {
   const res = await fetch(`${base}/patients`, {
     headers: { 'X-Operator-Id': 'test-operatore', 'X-Operator-Role': 'operatore' },
   });
-  // Non deve piu' essere 401/403: la richiesta autenticata raggiunge l'handler reale
-  // (200 con la lista, o al piu' un 500 se il DB non e' raggiungibile in questo ambiente —
-  // mai un errore di autenticazione).
-  assert.notEqual(res.status, 401);
-  assert.notEqual(res.status, 403);
+  assert.equal(res.status, 410);
   assert.equal(res.headers.get('deprecation'), 'true');
 });
 

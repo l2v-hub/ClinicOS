@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { API_URL } from '../../../config';
 import type { AssistantAnswer } from '../AIAssistantButton';
+import { operatorHeaders } from '../../../lib/operatorSession';
 
 // 015 AGNOS — unified chatbot (read + CRU write actions, delete escluso).
 // Contract: specs/015-agnos-unified-cru/contracts/agnos-api.md
@@ -68,7 +69,12 @@ export interface AgnosOperatorIdentity {
 }
 
 export function buildAgnosHeaders(id: AgnosOperatorIdentity): Record<string, string> {
-  const h: Record<string, string> = { 'Content-Type': 'application/json' };
+  // operatorHeaders carries the Entra bearer resolved at login. Declarative X-Operator fields are
+  // retained for demo mode/display context but never replace the bearer in AUTH_MODE=entra.
+  const h: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...operatorHeaders(),
+  };
   if (id.operatorId) h['X-Operator-Id'] = id.operatorId;
   if (id.operatorRole) h['X-Operator-Role'] = id.operatorRole;
   if (id.operatorName) h['X-Operator-Name'] = id.operatorName;

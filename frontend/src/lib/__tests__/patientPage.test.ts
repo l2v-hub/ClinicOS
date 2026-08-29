@@ -4,6 +4,7 @@ import type { Paziente } from '../../types';
 import {
   buildPatientPageUrl,
   fetchPatientById,
+  fetchPatientPage,
   fetchPatientPageWithSummary,
   mergePatientPage,
 } from '../patientPage';
@@ -80,4 +81,17 @@ test('targeted patient refresh never falls back to the legacy roster', async () 
   await fetchPatientById('/api', 'patient/1', { headers: {}, fetcher });
   assert.equal(called, '/api/patients/patient%2F1');
   assert.notEqual(called, '/api/patients');
+});
+
+test('directory search is one bounded page request without clinical summary or roster fallback', async () => {
+  const calls: string[] = [];
+  const fetcher = (async (input: string | URL | Request) => {
+    calls.push(String(input));
+    return new Response(
+      JSON.stringify({ items: [patient('1')], hasMore: false, nextCursor: null }),
+    );
+  }) as typeof fetch;
+  const page = await fetchPatientPage('/api', { q: 'Rossi', limit: 6 }, { headers: {}, fetcher });
+  assert.equal(page.items.length, 1);
+  assert.deepEqual(calls, ['/api/patients/page?limit=6&q=Rossi']);
 });

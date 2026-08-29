@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import './App.css';
 import { API_URL } from './config';
 import { cachedGetJson, invalidateCachedGet, clearCachedGet } from './lib/cachedFetch';
-import { sortPazienti } from './lib/patientSort';
-import { fetchPatientById } from './lib/patientPage';
+import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
+import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
 import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';
 import { acquireApiToken } from './lib/entraAuth';
 
@@ -238,11 +238,11 @@ export default function App() {
   // Navigation history tracking
   const prevNavKeyRef = useRef<NavKey | null>(null);
   const historyDepth = useRef(0);
-  // Patient id parsed from the hash on mount (refresh/reopened tab) — resolved against the
-  // patients list once it loads, in the effect below. Cleared after the first attempt either way.
+  // Patient id parsed from the hash on mount (refresh/reopened tab). It is resolved with one
+  // authenticated lookup after login; no facility-wide roster is downloaded.
   const pendingPazienteRestoreIdRef = useRef<string | null>(null);
-  // True once the patients fetch has been observed actually in flight — see the resolve effect.
-  const pazientiFetchStartedRef = useRef(false);
+  const patientNavigationSequenceRef = useRef(0);
+  const sessionEpochRef = useRef(0);
   // True while that restore is pending, so the render below can show a loading state instead of
   // flashing the "Nessun paziente selezionato" empty state before the patients list arrives.
   const [restoringPazienteFromHash, setRestoringPazienteFromHash] = useState(false);
@@ -253,12 +253,8 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const searchRef = useRef<HTMLInputElement>(null);
 
-  // Patients (API)
-  const [pazienti, setPazienti] = useState<Paziente[]>([]);
-  const [loadingPazienti, setLoadingPazienti] = useState(false);
-  // Sollevati da PatientList: quel componente è renderizzato solo mentre navKey === 'pazienti'
-  // e si smonta ad ogni apertura cartella — senza sollevare qui, ricerca e filtro tornavano
-  // sempre a vuoto ad ogni riapertura della lista.
+  // PatientList owns its bounded page; only the selected patient is retained globally. Its filters
+  // stay lifted here so they survive while that component unmounts for an open patient chart.
   const [pazientiRicerca, setPazientiRicerca] = useState('');
   const [pazientiFiltroSesso, setPazientiFiltroSesso] = useState<'tutti' | 'M' | 'F'>('tutti');
   const [pazienteSelezionato, setPazienteSelezionato] = useState<Paziente | null>(null);
@@ -296,6 +292,7 @@ export default function App() {
     .sort((a, b) => a.ora.localeCompare(b.ora))
     .map((a) => ({
       id: a.id,
+      patientId: a.pazienteId ?? undefined,
       ora: a.ora,
       pazienteNome: a.pazienteNome,
       motivo: a.tipoIntervento,
@@ -355,6 +352,8 @@ export default function App() {
   }
 
   function selectPaziente(p: Paziente, moduleTabId?: TabId) {
+    patientNavigationSequenceRef.current += 1;
+    setRestoringPazienteFromHash(false);
     pushNav('dettaglio-paziente', p);
     loadCartella(p.id);
     // Reset on every selection (not just when a module is passed) so a stale target from a
@@ -362,11 +361,26 @@ export default function App() {
     setPendingModuleTab(moduleTabId);
   }
 
+  async function selectPazienteById(patientId: string, moduleTabId?: TabId) {
+    const request = ++patientNavigationSequenceRef.current;
+    try {
+      const patient = await fetchPatientById(API_URL, patientId, {
+        headers: operatorHeaders(),
+      });
+      if (request !== patientNavigationSequenceRef.current) return;
+      selectPaziente(patient, moduleTabId);
+    } catch {
+      if (request === patientNavigationSequenceRef.current) {
+        showToast('Paziente non disponibile o non autorizzato');
+      }
+    }
+  }
+
   // AC5: la NavAction del backend porta sectionKey/recordId/documentId/pageNumber e non solo il
   // paziente — leggerne solo l'id faceva atterrare ogni azione sulla scheda generica, perdendo
   // la sezione citata. Le destinazioni di reparto (agenda, consegne, terapie di oggi) non hanno
   // alcun paziente: vanno gestite prima.
-  function agnosNavigate(n: AssistantNav) {
+  async function agnosNavigate(n: AssistantNav) {
     if (n.type === 'open_agenda') {
       navigate(isAdmin ? 'agenda-admin' : 'agenda-operatore');
       return;
@@ -390,8 +404,7 @@ export default function App() {
       return;
     }
     if (n.patientId) {
-      const p = pazienti.find((x) => x.id === n.patientId);
-      if (p) selectPaziente(p, navTabId(n));
+      await selectPazienteById(n.patientId, navTabId(n));
     }
   }
 
@@ -413,8 +426,7 @@ export default function App() {
   // Restore nav from hash on mount + listen to popstate
   useEffect(() => {
     const hash = window.location.hash.replace('#/', '');
-    // dettaglio-paziente/<id>: restore the chart by re-fetching that patient once the patients
-    // list loads (see the effect below) instead of falling back to the empty state on refresh.
+    // dettaglio-paziente/<id>: restore the chart with a single lookup after authentication.
     if (hash.startsWith('dettaglio-paziente/')) {
       const id = hash.slice('dettaglio-paziente/'.length);
       if (id) {
@@ -445,6 +457,7 @@ export default function App() {
   // ── Load therapy slots (API with mock fallback) ─────────────────────────────
 
   const loadTherapySlots = useCallback(async (date?: string) => {
+    const sessionEpoch = sessionEpochRef.current;
     const d = date || new Date().toISOString().slice(0, 10);
     try {
       const raw = await cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${d}`);
@@ -462,15 +475,16 @@ export default function App() {
         },
         patients: Array.isArray(s.patients) ? (s.patients as TherapySlotPatient[]) : [],
       }));
-      setTherapySlots(data);
+      if (sessionEpoch === sessionEpochRef.current) setTherapySlots(data);
     } catch {
-      setTherapySlots(createMockTherapySlots(d));
+      if (sessionEpoch === sessionEpochRef.current) setTherapySlots(createMockTherapySlots(d));
     }
   }, []);
 
   // ── Load appointments (API — SPEC-015 US4, sostituisce MOCK_APPUNTAMENTI) ──
 
   const loadAppuntamenti = useCallback(async (date?: string) => {
+    const sessionEpoch = sessionEpochRef.current;
     setLoadingAppuntamenti(true);
     try {
       const qs = date ? `?date=${date}` : '';
@@ -478,22 +492,27 @@ export default function App() {
       if (!res.ok) return; // lista corrente invariata
       const raw = await res.json();
       const rows = Array.isArray(raw) ? raw : [];
-      setAppuntamenti(rows.map((r: Record<string, unknown>) => mapAppointmentDTO(r)));
+      if (sessionEpoch === sessionEpochRef.current) {
+        setAppuntamenti(rows.map((r: Record<string, unknown>) => mapAppointmentDTO(r)));
+      }
     } catch {
       // rete assente: lista corrente invariata (nessun fallback mock)
     } finally {
-      setLoadingAppuntamenti(false);
+      if (sessionEpoch === sessionEpochRef.current) setLoadingAppuntamenti(false);
     }
   }, []);
 
   // ── Load consegne (API — riusata anche da Agnos dopo create_consegna, issue #130) ──
 
   const loadConsegne = useCallback(async () => {
+    const sessionEpoch = sessionEpochRef.current;
     try {
       const res = await fetch(`${API_URL}/consegne`, { headers: operatorHeaders() });
       if (!res.ok) return; // lista corrente invariata
       const data = (await res.json()) as Consegna[];
-      setConsegne(data.map((c) => ({ ...c, oraScadenza: c.oraScadenza ?? undefined })));
+      if (sessionEpoch === sessionEpochRef.current) {
+        setConsegne(data.map((c) => ({ ...c, oraScadenza: c.oraScadenza ?? undefined })));
+      }
     } catch {
       // rete assente: lista corrente invariata
     }
@@ -502,6 +521,7 @@ export default function App() {
   // ── Load rooms (camere + letti con occupazione reale) ───────────────────────
 
   const loadCamere = useCallback(() => {
+    const sessionEpoch = sessionEpochRef.current;
     fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders() })
       .then((r) => (r.ok ? r.json() : []))
       .then(
@@ -525,6 +545,7 @@ export default function App() {
             }>;
           }>,
         ) => {
+          if (sessionEpoch !== sessionEpochRef.current) return;
           setCamere(
             rooms.map((r) => ({
               id: r.id,
@@ -556,29 +577,12 @@ export default function App() {
       });
   }, []);
 
-  // ── Fetch patients ──────────────────────────────────────────────────────────
+  // ── Fetch constant-size session data ───────────────────────────────────────
 
   useEffect(() => {
     if (!utente) return;
+    const sessionEpoch = sessionEpochRef.current;
     const sessionController = new AbortController();
-    setLoadingPazienti(true);
-    fetch(`${API_URL}/patients`, {
-      headers: operatorHeaders(),
-      signal: sessionController.signal,
-    })
-      // Issue #129: il backend ordina per createdAt — il roster va sempre
-      // tenuto in ordine alfabetico (cognome, nome) per tutte le viste.
-      .then((r) => r.json())
-      .then((data: Paziente[]) => {
-        const sorted = sortPazienti(data);
-        setPazienti(sorted);
-      })
-      .catch((error: unknown) => {
-        if ((error as { name?: string }).name !== 'AbortError') setPazienti([]);
-      })
-      .finally(() => {
-        if (!sessionController.signal.aborted) setLoadingPazienti(false);
-      });
     fetch(`${API_URL}/patients/clinical-summary/overview`, {
       headers: operatorHeaders(),
       signal: sessionController.signal,
@@ -587,12 +591,19 @@ export default function App() {
         if (!r.ok) throw new Error('overview unavailable');
         return r.json();
       })
-      .then((data: ClinicalOverview) => setClinicalOverview(data))
+      .then((data: ClinicalOverview) => {
+        if (sessionEpoch === sessionEpochRef.current) setClinicalOverview(data);
+      })
       .catch((error: unknown) => {
-        if ((error as { name?: string }).name !== 'AbortError') setClinicalOverview(null);
+        if (
+          (error as { name?: string }).name !== 'AbortError' &&
+          sessionEpoch === sessionEpochRef.current
+        )
+          setClinicalOverview(null);
       })
       .finally(() => {
-        if (!sessionController.signal.aborted) setLoadingClinicalOverview(false);
+        if (!sessionController.signal.aborted && sessionEpoch === sessionEpochRef.current)
+          setLoadingClinicalOverview(false);
       });
     loadTherapySlots();
     loadAppuntamenti(); // SPEC-015 US4: agenda persistita
@@ -604,82 +615,88 @@ export default function App() {
     const operatorSchedulesPath =
       utente.ruolo === 'admin' ? '/operators/schedules' : '/operators/directory/schedules';
     // #285: orari operatori persistiti. Gli operatori ricevono turni senza note amministrative.
-    fetch(`${API_URL}${operatorSchedulesPath}`, { headers: operatorHeaders() })
+    fetch(`${API_URL}${operatorSchedulesPath}`, {
+      headers: operatorHeaders(),
+      signal: sessionController.signal,
+    })
       .then((r) => (r.ok ? r.json() : []))
-      .then((data: ScheduleOperatore[]) => setSchedules(data))
+      .then((data: ScheduleOperatore[]) => {
+        if (sessionEpoch === sessionEpochRef.current) setSchedules(data);
+      })
       .catch(() => {
         /* keep empty array */
       });
     // Fase 1b: operatori reali dal backend (niente più mock); iniziali/colore client-derived
-    fetch(`${API_URL}${operatorDirectoryPath}`, { headers: operatorHeaders() })
+    fetch(`${API_URL}${operatorDirectoryPath}`, {
+      headers: operatorHeaders(),
+      signal: sessionController.signal,
+    })
       .then((r) => (r.ok ? r.json() : []))
-      .then((data: Omit<Operatore, 'iniziali' | 'colore'>[]) =>
+      .then((data: Omit<Operatore, 'iniziali' | 'colore'>[]) => {
+        if (sessionEpoch !== sessionEpochRef.current) return;
         setOperatori(
           data.map((row, i) => ({
             ...row,
             iniziali: `${row.nome[0] ?? ''}${row.cognome[0] ?? ''}`.toUpperCase(),
             colore: OPERATOR_COLOR_PALETTE[i % OPERATOR_COLOR_PALETTE.length],
           })),
-        ),
-      )
+        );
+      })
       .catch(() => {
         /* keep empty array */
       });
     // Load note/messaggi from API (persisted)
-    fetch(`${API_URL}/notes`, { headers: operatorHeaders() })
+    fetch(`${API_URL}/notes`, {
+      headers: operatorHeaders(),
+      signal: sessionController.signal,
+    })
       .then((r) => (r.ok ? r.json() : []))
-      .then((data: Nota[]) =>
+      .then((data: Nota[]) => {
+        if (sessionEpoch !== sessionEpochRef.current) return;
         setNote(
           data.map((n) => ({
             ...n,
             pazienteId: n.pazienteId ?? undefined,
             pazienteNome: n.pazienteNome ?? undefined,
           })),
-        ),
-      )
+        );
+      })
       .catch(() => {
         /* keep empty array */
       });
     return () => sessionController.abort();
   }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
 
-  // Resolve a patient id restored from the hash (refresh/reopened tab on dettaglio-paziente,
-  // see the mount effect above) once the freshly-fetched patients list lands. Runs at most once:
-  // the pending ref is cleared whether or not the id resolves, so a since-deleted/invalid id
-  // (AC3) falls through to the existing empty-state — it never retries or blocks other loads.
-  //
-  // `loadingPazienti` alone can't distinguish "fetch finished" from "fetch hasn't started yet"
-  // (both read false — it starts false and the fetch only begins once `utente` is set post-login,
-  // which happens after this effect's first pass). Without pazientiFetchStartedRef, that first
-  // pass would already consume pendingPazienteRestoreIdRef against the still-empty initial
-  // `pazienti` array, permanently giving up before the real fetch ever ran.
+  // Resolve a patient restored from the hash with one URL-encoded authenticated lookup. The
+  // pending id is consumed once and every outcome closes the loading state.
   useEffect(() => {
-    if (loadingPazienti) {
-      pazientiFetchStartedRef.current = true;
-      return;
-    }
-    if (!pazientiFetchStartedRef.current || !pendingPazienteRestoreIdRef.current) return;
+    if (!utente || !pendingPazienteRestoreIdRef.current) return;
     const id = pendingPazienteRestoreIdRef.current;
     pendingPazienteRestoreIdRef.current = null;
-    const found = pazienti.find((p) => p.id === id);
-    if (found) {
-      setPazienteSelezionato(found);
-      loadCartella(found.id);
-    }
-    setRestoringPazienteFromHash(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- loadCartella stabile per lo scopo dell'effetto
-  }, [pazienti, loadingPazienti]);
-
-  // "Parametri multipaziente" è l'unica vista che mostra i parametri vitali di TUTTI i
-  // pazienti insieme: a differenza dei badge/KPI (coperti dal riepilogo leggero sopra), le
-  // serve la cartella completa di ognuno. Caricata solo qui, non più al login per tutti.
-  useEffect(() => {
-    if (navKey !== 'parametri-multipaziente' || pazienti.length === 0) return;
-    const cartelleGiaCaricate = new Set(cartelle.map((c) => c.pazienteId));
-    const daCaricare = pazienti.filter((p) => !cartelleGiaCaricate.has(p.id));
-    if (daCaricare.length > 0) void Promise.all(daCaricare.map((p) => loadCartella(p.id)));
+    const request = ++patientNavigationSequenceRef.current;
+    const controller = new AbortController();
+    fetchPatientById(API_URL, id, {
+      headers: operatorHeaders(),
+      signal: controller.signal,
+    })
+      .then((patient) => {
+        if (request !== patientNavigationSequenceRef.current) return;
+        setPazienteSelezionato(patient);
+        return loadCartella(patient.id);
+      })
+      .catch((error: unknown) => {
+        if ((error as { name?: string }).name !== 'AbortError') {
+          showToast('Paziente non disponibile o non autorizzato');
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted && request === patientNavigationSequenceRef.current) {
+          setRestoringPazienteFromHash(false);
+        }
+      });
+    return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- loadCartella/cartelle stabili per lo scopo dell'effetto
-  }, [navKey, pazienti]);
+  }, [utente]);
 
   // ── Keyboard shortcuts ──────────────────────────────────────────────────────
 
@@ -709,6 +726,8 @@ export default function App() {
   // ── Auth ────────────────────────────────────────────────────────────────────
 
   async function handleLogin(u: UtenteApp) {
+    sessionEpochRef.current += 1;
+    patientNavigationSequenceRef.current += 1;
     // In Entra mode the redirect/silent flow completes before any clinical fetch starts.
     // The selected card is only a demo/local hint: with a token, id and UI role are replaced by
     // the identity resolved server-side so an operator cannot unlock admin UI by choosing a card.
@@ -757,13 +776,34 @@ export default function App() {
   }
 
   function handleLogout() {
+    sessionEpochRef.current += 1;
+    patientNavigationSequenceRef.current += 1;
     setUtente(null);
     setCurrentOperator(null);
     clearCachedGet();
-    setPazienti([]);
     setClinicalOverview(null);
     setLoadingClinicalOverview(true);
     setPazienteSelezionato(null);
+    pendingPazienteRestoreIdRef.current = null;
+    setRestoringPazienteFromHash(false);
+    setSearchOpen(false);
+    setSearchQuery('');
+    setAiOpen(false);
+    setAiLoaded(false);
+    setToastMsg(null);
+    setMobileNavOpen(false);
+    setPazientiRicerca('');
+    setPazientiFiltroSesso('tutti');
+    setPendingModuleTab(undefined);
+    setConsegneView({ filtro: 'tutte', focusId: null });
+    setCartelle([]);
+    setAppuntamenti([]);
+    setNote([]);
+    setConsegne([]);
+    setTherapySlots([]);
+    setCamere([]);
+    setOperatori([]);
+    setSchedules([]);
     window.history.replaceState({}, '', '#/login');
     setNavKey('login');
   }
@@ -1041,12 +1081,14 @@ export default function App() {
   }
 
   async function loadCartella(pazienteId: string): Promise<void> {
+    const sessionEpoch = patientNavigationSequenceRef.current;
     try {
       const res = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
         headers: operatorHeaders(),
       });
       if (!res.ok) return;
       const json = (await res.json()) as { patientId: string; data: CartellaPaziente | null };
+      if (sessionEpoch !== patientNavigationSequenceRef.current) return;
       if (json.data) {
         setCartelle((prev) => {
           const idx = prev.findIndex((c) => c.pazienteId === pazienteId);
@@ -1068,7 +1110,9 @@ export default function App() {
         });
       }
     } catch {
-      showToast('Impossibile caricare la cartella clinica');
+      if (sessionEpoch === patientNavigationSequenceRef.current) {
+        showToast('Impossibile caricare la cartella clinica');
+      }
     }
   }
 
@@ -1087,7 +1131,9 @@ export default function App() {
     });
 
     // Persist to backend; return success so callers (e.g. inline edit) can react to failure.
-    const { pazienteId: _pid, ...dataToSave } = updated;
+    const dataToSave = Object.fromEntries(
+      Object.entries(updated).filter(([key]) => key !== 'pazienteId'),
+    );
     try {
       const r = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
         method: 'PUT',
@@ -1193,7 +1239,9 @@ export default function App() {
   }
 
   async function updatePaziente(id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) {
-    setPazienti((prev) => prev.map((p) => (p.id === id ? { ...p, ...updates } : p)));
+    setPazienteSelezionato((current) =>
+      current?.id === id ? { ...current, ...updates } : current,
+    );
     try {
       const res = await fetch(`${API_URL}/patients/${id}`, {
         method: 'PATCH',
@@ -1209,16 +1257,45 @@ export default function App() {
 
   // ── Navigate to patient by name ─────────────────────────────────────────────
 
-  function goToPazienteByNome(nome: string) {
+  async function goToPazienteByNome(nome: string, patientId?: string) {
+    if (patientId) {
+      await selectPazienteById(patientId);
+      return;
+    }
     if (!nome) return;
-    const q = nome.toLowerCase().trim();
-    const found = pazienti.find(
-      (p) =>
-        `${p.lastName}, ${p.firstName}`.toLowerCase() === q ||
-        `${p.firstName} ${p.lastName}`.toLowerCase() === q ||
-        `${p.lastName} ${p.firstName}`.toLowerCase() === q,
-    );
-    if (found) selectPaziente(found);
+    const request = ++patientNavigationSequenceRef.current;
+    const normalizeName = (value: string) =>
+      value
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase('it-IT')
+        .replace(/[,\s]+/g, ' ')
+        .trim();
+    const q = normalizeName(nome);
+    try {
+      const page = await fetchPatientPage(
+        API_URL,
+        { q: nome, limit: 25 },
+        {
+          headers: operatorHeaders(),
+        },
+      );
+      const exact = page.items.filter((patient) => {
+        const firstLast = normalizeName(`${patient.firstName} ${patient.lastName}`);
+        const lastFirst = normalizeName(`${patient.lastName} ${patient.firstName}`);
+        return q === firstLast || q === lastFirst;
+      });
+      if (request !== patientNavigationSequenceRef.current) return;
+      if (exact.length === 1 && !page.hasMore) selectPaziente(exact[0]);
+      else if (page.hasMore) showToast('Ricerca non univoca: usa il codice MRN del paziente');
+      else if (exact.length > 1)
+        showToast('Più pazienti hanno questo nome: usa la ricerca per MRN');
+      else showToast('Paziente non trovato');
+    } catch {
+      if (request === patientNavigationSequenceRef.current) {
+        showToast('Ricerca paziente non disponibile');
+      }
+    }
   }
 
   // ── Note CRUD ───────────────────────────────────────────────────────────────
@@ -1445,18 +1522,11 @@ export default function App() {
 
   // ── Search ──────────────────────────────────────────────────────────────────
 
-  const searchResults =
-    searchQuery.length > 1
-      ? pazienti
-          .filter((p) => {
-            const q = searchQuery.toLowerCase();
-            return (
-              `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
-              p.medicalRecordNumber.toLowerCase().includes(q)
-            );
-          })
-          .slice(0, 6)
-      : [];
+  const globalPatientSearch = usePatientDirectorySearch(searchQuery, {
+    enabled: searchOpen,
+    limit: 6,
+  });
+  const searchResults = globalPatientSearch.results;
 
   // ── Unread notes count ──────────────────────────────────────────────────────
 
@@ -1590,6 +1660,7 @@ export default function App() {
                   placeholder="Cerca paziente per nome o MRN…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  maxLength={80}
                 />
                 <button className="icon-btn" onClick={() => setSearchOpen(false)}>
                   <IcoX />
@@ -1626,9 +1697,22 @@ export default function App() {
                   ))}
                 </ul>
               )}
-              {searchQuery.length > 1 && searchResults.length === 0 && (
-                <p className="search-modal__empty">Nessun paziente trovato.</p>
+              {globalPatientSearch.loading && (
+                <p className="search-modal__empty" role="status">
+                  Ricerca in corso…
+                </p>
               )}
+              {globalPatientSearch.error && (
+                <p className="search-modal__empty" role="alert">
+                  {globalPatientSearch.error}
+                </p>
+              )}
+              {searchQuery.trim().length > 1 &&
+                !globalPatientSearch.loading &&
+                !globalPatientSearch.error &&
+                searchResults.length === 0 && (
+                  <p className="search-modal__empty">Nessun paziente trovato.</p>
+                )}
             </div>
           </div>
         )}
@@ -1663,7 +1747,6 @@ export default function App() {
                 <AdminAgenda
                   operatori={operatori}
                   appuntamenti={appuntamenti}
-                  pazienti={pazienti}
                   onAddAppuntamento={addAppuntamento}
                   onUpdateAppuntamento={updateAppuntamento}
                   onDeleteAppuntamento={deleteAppuntamento}
@@ -1723,13 +1806,12 @@ export default function App() {
                   onOpenConsegneAperte={openConsegneAperte}
                   onSelectPaziente={goToPazienteByNome}
                   clinicalOverview={clinicalOverview}
-                  pazienti={pazienti}
                 />
               )}
               {!isAdmin && navKey === 'pazienti' && (
                 <PatientList
                   consegne={consegne}
-                  totalPatients={clinicalOverview?.totalPatients ?? pazienti.length}
+                  totalPatients={clinicalOverview?.totalPatients ?? 0}
                   ricerca={pazientiRicerca}
                   onRicercaChange={setPazientiRicerca}
                   filtroSesso={pazientiFiltroSesso}
@@ -1738,29 +1820,19 @@ export default function App() {
                   operatorId={utente?.id}
                   operatorRole={utente?.ruolo}
                   onDeleted={(patientId) => {
-                    setPazienti((current) => current.filter((patient) => patient.id !== patientId));
+                    setPazienteSelezionato((current) =>
+                      current?.id === patientId ? null : current,
+                    );
                   }}
                   onImported={(patientId, moduleTabId) => {
                     // La lista ricarica gia' la propria pagina. Per navigare a un paziente appena
                     // creato basta un lookup puntuale: non scaricare di nuovo l'intero roster.
                     if (!patientId) return;
-                    fetchPatientById(API_URL, patientId, { headers: operatorHeaders() })
-                      .then((created) => {
-                        setPazienti((current) =>
-                          sortPazienti([
-                            ...current.filter((patient) => patient.id !== created.id),
-                            created,
-                          ]),
-                        );
-                        const tab =
-                          moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
-                            ? (moduleTabId as TabId)
-                            : undefined;
-                        selectPaziente(created, tab);
-                      })
-                      .catch(() => {
-                        /* keep current list */
-                      });
+                    const tab =
+                      moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
+                        ? (moduleTabId as TabId)
+                        : undefined;
+                    void selectPazienteById(patientId, tab);
                   }}
                 />
               )}
@@ -1816,12 +1888,8 @@ export default function App() {
               {!isAdmin && navKey === 'anagrafica-farmaci' && <AnagraficaFarmaciPage />}
               {!isAdmin && navKey === 'parametri-multipaziente' && (
                 <MultiPatientParametri
-                  pazienti={pazienti}
-                  cartelle={cartelle}
                   operatoreNome={utente.nome}
-                  loading={loadingPazienti}
-                  onSelectPaziente={selectPaziente}
-                  onUpdateCartella={updateCartella}
+                  onSelectPaziente={(patientId) => void selectPazienteById(patientId)}
                 />
               )}
               {!isAdmin && navKey === 'agenda-operatore' && (
@@ -1830,7 +1898,6 @@ export default function App() {
                   nomeOperatore={utente.nome}
                   operatori={operatori}
                   appuntamenti={appuntamenti}
-                  pazienti={pazienti}
                   onAddAppuntamento={addAppuntamento}
                   onUpdateAppuntamento={updateAppuntamento}
                   onDeleteAppuntamento={deleteAppuntamento}
@@ -1884,10 +1951,14 @@ export default function App() {
               }}
               navKey={navKey}
               resolvePatientName={(id) => {
-                const p = pazienti.find((x) => x.id === id);
-                return p ? `${p.lastName ?? ''} ${p.firstName ?? ''}`.trim() : undefined;
+                const patient = pazienteSelezionato?.id === id ? pazienteSelezionato : null;
+                return patient
+                  ? `${patient.lastName ?? ''} ${patient.firstName ?? ''}`.trim()
+                  : undefined;
               }}
-              onNavigate={agnosNavigate}
+              onNavigate={(nav) => {
+                void agnosNavigate(nav);
+              }}
             />
           </Suspense>
         </LazyLoadBoundary>

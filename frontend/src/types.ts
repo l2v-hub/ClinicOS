@@ -156,6 +156,7 @@ export type StatoSlot = 'completato' | 'in_corso' | 'programmato' | 'libero' | '
 
 export interface SlotAgenda {
   id: string;
+  patientId?: string;
   ora: string;
   pazienteNome: string | null;
   motivo: string;
