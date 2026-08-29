@@ -8,7 +8,9 @@ import {
   type TherapyListType,
 } from '../../../lib/therapyPages';
 import { operatorHeaders } from '../../../lib/operatorSession';
+import { loadMedicationAdministrationPage } from '../../../lib/medicationAdministrationPages';
 import { ClinicalTableSection, LoadingState } from './shared';
+import { LoadErrorState } from './LoadErrorState';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
 import {
@@ -309,6 +311,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const [therapyFilterDraft, setTherapyFilterDraft] = useState<TherapyListFilters>({});
   const [therapyFilters, setTherapyFilters] = useState<TherapyListFilters>({});
   const [error, setError] = useState('');
+  const [therapyLoadError, setTherapyLoadError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<TherapyForm>(emptyForm());
@@ -318,11 +321,17 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const [dailyDate, setDailyDate] = useState(todayStr());
   const [dailySlots, setDailySlots] = useState<TherapySlot[]>([]);
   const [dailyLoading, setDailyLoading] = useState(false);
+  const [dailyError, setDailyError] = useState('');
 
   // History state
   const [history, setHistory] = useState<MedAdmin[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyLoadingMore, setHistoryLoadingMore] = useState(false);
+  const [nextHistoryCursor, setNextHistoryCursor] = useState<string | null>(null);
+  const [historyError, setHistoryError] = useState('');
   const therapyLoadSequence = useRef(0);
+  const dailyLoadSequence = useRef(0);
+  const historyLoadSequence = useRef(0);
   const activePatientId = useRef(paziente.id);
 
   useEffect(() => {
@@ -344,7 +353,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     try {
       setLoading(true);
       setLoadingMoreTherapies(false);
-      setError('');
+      setTherapyLoadError('');
       const page = await loadTherapyPage(requestedPatientId, 'tutte', null, therapyFilters);
       if (
         sequence !== therapyLoadSequence.current ||
@@ -365,7 +374,9 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         setTherapies([]);
         setNextTherapyCursor(null);
         setTherapySummary(null);
-        setError(err instanceof Error ? err.message : 'Errore caricamento');
+        setTherapyLoadError(
+          err instanceof Error ? err.message : 'Impossibile caricare le terapie.',
+        );
       }
     } finally {
       if (
@@ -383,7 +394,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     const requestedPatientId = paziente.id;
     try {
       setLoadingMoreTherapies(true);
-      setError('');
+      setTherapyLoadError('');
       const page = await loadTherapyPage(
         requestedPatientId,
         'tutte',
@@ -409,7 +420,9 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         sequence === therapyLoadSequence.current &&
         activePatientId.current === requestedPatientId
       ) {
-        setError(err instanceof Error ? err.message : 'Errore caricamento terapie');
+        setTherapyLoadError(
+          err instanceof Error ? err.message : 'Impossibile caricare altre terapie.',
+        );
       }
     } finally {
       if (
@@ -422,33 +435,100 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   }, [loadingMoreTherapies, nextTherapyCursor, paziente.id, therapyFilters]);
 
   const loadDaily = useCallback(async (date: string) => {
+    const sequence = ++dailyLoadSequence.current;
     try {
       setDailyLoading(true);
+      setDailyError('');
       const slots = await cachedGetJson<TherapySlot[]>(`${API_URL}/therapy-slots?date=${date}`);
-      setDailySlots(slots);
-    } catch {
-      setDailySlots([]);
+      if (sequence === dailyLoadSequence.current) setDailySlots(slots);
+    } catch (err) {
+      if (sequence === dailyLoadSequence.current) {
+        setDailySlots([]);
+        setDailyError(
+          err instanceof Error ? err.message : 'Impossibile caricare le somministrazioni.',
+        );
+      }
     } finally {
-      setDailyLoading(false);
+      if (sequence === dailyLoadSequence.current) setDailyLoading(false);
     }
   }, []);
 
   const loadHistory = useCallback(async () => {
+    const sequence = ++historyLoadSequence.current;
+    const requestedPatientId = paziente.id;
     try {
       setHistoryLoading(true);
-      const res = await fetch(
-        `${API_URL}/patients/${paziente.id}/medication-administrations?limit=200`,
-        { headers: operatorHeaders() },
-      );
-      if (!res.ok) throw new Error(`Errore ${res.status}`);
-      const data: MedAdmin[] = await res.json();
-      setHistory(data);
-    } catch {
-      setHistory([]);
+      setHistoryLoadingMore(false);
+      setHistoryError('');
+      const page = await loadMedicationAdministrationPage<MedAdmin>(requestedPatientId);
+      if (
+        sequence !== historyLoadSequence.current ||
+        activePatientId.current !== requestedPatientId
+      ) {
+        return;
+      }
+      setHistory(page.items);
+      setNextHistoryCursor(page.pageInfo.nextCursor);
+    } catch (err) {
+      if (
+        sequence === historyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setHistory([]);
+        setNextHistoryCursor(null);
+        setHistoryError(err instanceof Error ? err.message : 'Impossibile caricare lo storico.');
+      }
     } finally {
-      setHistoryLoading(false);
+      if (
+        sequence === historyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setHistoryLoading(false);
+      }
     }
   }, [paziente.id]);
+
+  const loadMoreHistory = useCallback(async () => {
+    if (!nextHistoryCursor || historyLoadingMore) return;
+    const sequence = ++historyLoadSequence.current;
+    const requestedPatientId = paziente.id;
+    try {
+      setHistoryLoadingMore(true);
+      setHistoryError('');
+      const page = await loadMedicationAdministrationPage<MedAdmin>(
+        requestedPatientId,
+        nextHistoryCursor,
+      );
+      if (
+        sequence !== historyLoadSequence.current ||
+        activePatientId.current !== requestedPatientId
+      ) {
+        return;
+      }
+      setHistory((current) => {
+        const merged = new Map(
+          current.map((administration) => [administration.id, administration]),
+        );
+        for (const administration of page.items) merged.set(administration.id, administration);
+        return [...merged.values()];
+      });
+      setNextHistoryCursor(page.pageInfo.nextCursor);
+    } catch (err) {
+      if (
+        sequence === historyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setHistoryError(err instanceof Error ? err.message : 'Impossibile caricare altro storico.');
+      }
+    } finally {
+      if (
+        sequence === historyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setHistoryLoadingMore(false);
+      }
+    }
+  }, [historyLoadingMore, nextHistoryCursor, paziente.id]);
 
   useEffect(() => {
     void (async () => {
@@ -1332,6 +1412,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         </div>
         {error && (
           <div
+            role="alert"
             style={{
               padding: '8px 12px',
               background: '#FEF2F2',
@@ -1345,6 +1426,16 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
             {error}
           </div>
         )}
+        {therapyLoadError &&
+          (subTab === 'attivi' || subTab === 'programmazione' || subTab === 'sospese') && (
+            <div className="cts__body--padded">
+              <LoadErrorState
+                message={therapyLoadError}
+                onRetry={() => void (therapies.length > 0 ? loadMoreTherapies() : loadTherapies())}
+                retryLabel={therapies.length > 0 ? 'Riprova caricamento' : 'Riprova'}
+              />
+            </div>
+          )}
 
         {/* Sub-tab navigation — Feature 010 (FR-013): clinical sub-menu gap */}
         <div className="tf-subtabs" style={{ marginTop: 'var(--clinical-submenu-gap, 16px)' }}>
@@ -1371,7 +1462,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         {subTab === 'attivi' &&
           (loading ? (
             <LoadingState />
-          ) : attive.length === 0 ? (
+          ) : therapyLoadError && therapies.length === 0 ? null : attive.length === 0 ? (
             // `.cts__body` non ha padding: senza involucro il testo tocca il bordo della scheda.
             <div className="cts__body--padded">
               <p className="cr-empty">
@@ -1436,7 +1527,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                 </button>
                 {loading ? (
                   <LoadingState />
-                ) : (
+                ) : therapyLoadError && therapies.length === 0 ? null : (
                   <>
                     <ClinicalTable<PatientTherapyAPI>
                       key={`all-${nextTherapyCursor ? 'partial' : 'complete'}`}
@@ -1472,6 +1563,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
             </div>
             {dailyLoading ? (
               <LoadingState />
+            ) : dailyError ? (
+              <LoadErrorState message={dailyError} onRetry={() => void loadDaily(dailyDate)} />
             ) : (
               <ClinicalTable<DailyAdminRow>
                 noWrapper
@@ -1490,23 +1583,55 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         {subTab === 'storico' &&
           (historyLoading ? (
             <LoadingState msg="Caricamento storico…" />
+          ) : historyError && history.length === 0 ? (
+            <div className="cts__body--padded">
+              <LoadErrorState message={historyError} onRetry={() => void loadHistory()} />
+            </div>
           ) : (
-            <ClinicalTable<MedAdmin>
-              noWrapper
-              title=""
-              keyField="id"
-              pageSize={25}
-              data={history}
-              emptyMessage="Nessuna somministrazione registrata."
-              columns={storicoColumns}
-            />
+            <>
+              {historyError && (
+                <div className="cts__body--padded">
+                  <LoadErrorState
+                    message={historyError}
+                    onRetry={() => void loadMoreHistory()}
+                    retryLabel="Riprova caricamento"
+                  />
+                </div>
+              )}
+              <ClinicalTable<MedAdmin>
+                key={`history-${nextHistoryCursor ? 'partial' : 'complete'}`}
+                noWrapper
+                title=""
+                keyField="id"
+                pageSize={25}
+                disableSorting={Boolean(nextHistoryCursor)}
+                data={history}
+                emptyMessage="Nessuna somministrazione registrata."
+                columns={storicoColumns}
+              />
+              {nextHistoryCursor && !historyError && (
+                <div className="cts__body--padded" style={{ textAlign: 'center' }}>
+                  <span style={{ marginRight: 8, color: 'var(--text-muted)', fontSize: 12 }}>
+                    {history.length} somministrazioni caricate; lo storico è parziale.
+                  </span>
+                  <button
+                    type="button"
+                    className="btn-secondary btn-sm"
+                    disabled={historyLoadingMore}
+                    onClick={() => void loadMoreHistory()}
+                  >
+                    {historyLoadingMore ? 'Caricamento…' : 'Carica altro storico'}
+                  </button>
+                </div>
+              )}
+            </>
           ))}
 
         {/* ── Sub-tab: Sospese/concluse ── */}
         {subTab === 'sospese' &&
           (loading ? (
             <LoadingState />
-          ) : (
+          ) : therapyLoadError && therapies.length === 0 ? null : (
             <>
               <ClinicalTable<PatientTherapyAPI>
                 key={`inactive-${nextTherapyCursor ? 'partial' : 'complete'}`}

@@ -63,6 +63,57 @@ test('schema rejects an unknown sectionKey and unknown tag', () => {
   );
 });
 
+test('section processing rejects oversized arrays, text, offsets and extra nested data', () => {
+  const base = { sectionKey: 'ANAMNESIS', rawText: 'testo' } as const;
+  assert.throws(
+    () => pp({ sections: Array.from({ length: 25 }, () => base) }),
+    /sections supera il limite/,
+  );
+  assert.throws(
+    () =>
+      pp({
+        sections: [
+          {
+            ...base,
+            annotations: Array.from({ length: 129 }, () => ({
+              tag: 'DATE',
+              text: 't',
+              startOffset: 0,
+              endOffset: 1,
+            })),
+          },
+        ],
+      }),
+    /annotations supera il limite/,
+  );
+  assert.throws(
+    () =>
+      pp({
+        sections: [
+          {
+            ...base,
+            annotations: [{ tag: 'DATE', text: 'testo', startOffset: 0, endOffset: 99 }],
+          },
+        ],
+      }),
+    /offset non valido/,
+  );
+  assert.throws(
+    () =>
+      pp({
+        sections: [
+          { sectionKey: 'ANAMNESIS', rawText: 'a'.repeat(60_000) },
+          { sectionKey: 'ANAMNESIS', rawText: 'b'.repeat(60_000) },
+        ],
+      }),
+    /limite aggregato/,
+  );
+  assert.equal(
+    validateSectionsSchema({ sections: [{ ...base, injected: { deeply: ['nested'] } }] }).valid,
+    false,
+  );
+});
+
 // ── Faithful single-block sections ─────────────────────────────────────────────
 
 test('discharge diagnosis: multi-paragraph text stays one faithful block', () => {

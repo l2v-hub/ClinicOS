@@ -243,6 +243,7 @@ model MedicationAdministration {
   @@index([date, patientId])
   @@index([patientId])
   @@index([patientId, date])
+  @@index([patientId, date, createdAt, id], map: "MedicationAdministration_patient_history_idx")
 }
 
 model PatientIntakeDocument {

@@ -22,44 +22,45 @@
     "missingSections",
     "warnings"
   ],
-  "additionalProperties": true,
+  "additionalProperties": false,
   "properties": {
     "schemaVersion": { "type": "string", "const": "clinicos-discharge-narrative-v1" },
 
-    "firstName": { "type": "string" },
-    "lastName": { "type": "string" },
-    "dateOfBirth": { "type": "string" },
-    "placeOfBirth": { "type": "string" },
-    "sex": { "type": "string" },
-    "fiscalCode": { "type": "string" },
-    "address": { "type": "string" },
-    "phone": { "type": "string" },
-    "email": { "type": "string" },
+    "firstName": { "type": "string", "maxLength": 255 },
+    "lastName": { "type": "string", "maxLength": 255 },
+    "dateOfBirth": { "type": "string", "maxLength": 255 },
+    "placeOfBirth": { "type": "string", "maxLength": 255 },
+    "sex": { "type": "string", "maxLength": 16 },
+    "fiscalCode": { "type": "string", "maxLength": 255 },
+    "address": { "type": "string", "maxLength": 1000 },
+    "phone": { "type": "string", "maxLength": 255 },
+    "email": { "type": "string", "maxLength": 255 },
 
     "allergyStatus": {
       "type": "string",
       "enum": ["present", "explicitly_absent", "not_documented", "unclear", "conflicting"]
     },
-    "allergiesText": { "type": "string" },
+    "allergiesText": { "type": "string", "maxLength": 100000 },
 
-    "diagnosisText": { "type": "string" },
-    "anamnesisText": { "type": "string" },
-    "hospitalCourseText": { "type": "string" },
-    "consultationsText": { "type": "string" },
-    "imagingDiagnosticsText": { "type": "string" },
-    "proceduresAndInterventionsText": { "type": "string" },
-    "therapyText": { "type": "string" },
-    "adviceAndFollowUpText": { "type": "string" },
-    "unmappedText": { "type": "string" },
+    "diagnosisText": { "type": "string", "maxLength": 100000 },
+    "anamnesisText": { "type": "string", "maxLength": 100000 },
+    "hospitalCourseText": { "type": "string", "maxLength": 100000 },
+    "consultationsText": { "type": "string", "maxLength": 100000 },
+    "imagingDiagnosticsText": { "type": "string", "maxLength": 100000 },
+    "proceduresAndInterventionsText": { "type": "string", "maxLength": 100000 },
+    "therapyText": { "type": "string", "maxLength": 100000 },
+    "adviceAndFollowUpText": { "type": "string", "maxLength": 100000 },
+    "unmappedText": { "type": "string", "maxLength": 100000 },
 
     "boldTags": {
       "type": "array",
+      "maxItems": 1280,
       "items": {
         "type": "object",
         "required": ["sectionKey", "tagType", "text", "startOffset", "endOffset"],
-        "additionalProperties": true,
+        "additionalProperties": false,
         "properties": {
-          "sectionKey": { "type": "string" },
+          "sectionKey": { "type": "string", "maxLength": 64 },
           "tagType": {
             "type": "string",
             "enum": [
@@ -76,7 +77,7 @@
               "WARNING_TEXT"
             ]
           },
-          "text": { "type": "string" },
+          "text": { "type": "string", "maxLength": 2000 },
           "startOffset": { "type": "integer", "minimum": 0 },
           "endOffset": { "type": "integer", "minimum": 0 }
         }
@@ -84,20 +85,29 @@
     },
     "sourceReferences": {
       "type": "array",
+      "maxItems": 320,
       "items": {
         "type": "object",
         "required": ["sectionKey"],
-        "additionalProperties": true,
+        "additionalProperties": false,
         "properties": {
-          "sectionKey": { "type": "string" },
-          "fileId": { "type": "string" },
-          "fileName": { "type": "string" },
-          "pageFrom": { "type": "integer" },
-          "pageTo": { "type": "integer" }
+          "sectionKey": { "type": "string", "maxLength": 64 },
+          "fileId": { "type": "string", "maxLength": 128 },
+          "fileName": { "type": "string", "maxLength": 255 },
+          "pageFrom": { "type": "integer", "minimum": 1, "maximum": 100000 },
+          "pageTo": { "type": "integer", "minimum": 1, "maximum": 100000 }
         }
       }
     },
-    "missingSections": { "type": "array", "items": { "type": "string" } },
-    "warnings": { "type": "array", "items": { "type": "string" } }
+    "missingSections": {
+      "type": "array",
+      "maxItems": 10,
+      "items": { "type": "string", "maxLength": 64 }
+    },
+    "warnings": {
+      "type": "array",
+      "maxItems": 128,
+      "items": { "type": "string", "maxLength": 255 }
+    }
   }
 }

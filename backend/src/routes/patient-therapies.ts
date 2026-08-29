@@ -19,7 +19,9 @@ import {
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
 import {
+  encodeMedicationAdministrationCursor,
   MedicationAdministrationQueryError,
+  parseMedicationAdministrationPageQuery,
   parseMedicationAdministrationQuery,
 } from '../therapies/administration-query.js';
 import {
@@ -371,7 +373,60 @@ router.delete('/:patientId/therapies/:therapyId', async (req, res) => {
   }
 });
 
-// GET /patients/:patientId/medication-administrations
+// GET /patients/:patientId/medication-administrations/page — bounded stable history feed
+router.get('/:patientId/medication-administrations/page', async (req, res) => {
+  const { patientId } = req.params;
+  let input;
+  try {
+    input = parseMedicationAdministrationPageQuery(req.query);
+  } catch (error) {
+    if (error instanceof MedicationAdministrationQueryError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    throw error;
+  }
+
+  try {
+    const baseWhere: Prisma.MedicationAdministrationWhereInput = {
+      patientId,
+      ...(input.date ? { date: input.date } : {}),
+    };
+    const cursorWhere: Prisma.MedicationAdministrationWhereInput | undefined = input.cursor
+      ? {
+          OR: [
+            { date: { lt: input.cursor.date } },
+            { date: input.cursor.date, createdAt: { lt: input.cursor.createdAt } },
+            {
+              date: input.cursor.date,
+              createdAt: input.cursor.createdAt,
+              id: { lt: input.cursor.id },
+            },
+          ],
+        }
+      : undefined;
+    const rows = await prisma.medicationAdministration.findMany({
+      where: cursorWhere ? { AND: [baseWhere, cursorWhere] } : baseWhere,
+      orderBy: [{ date: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
+      take: input.limit + 1,
+    });
+    const hasMore = rows.length > input.limit;
+    const items = hasMore ? rows.slice(0, input.limit) : rows;
+    const last = items.at(-1);
+    res.status(200).json({
+      items,
+      pageInfo: {
+        hasMore,
+        nextCursor: hasMore && last ? encodeMedicationAdministrationCursor(last, input.date) : null,
+      },
+    });
+  } catch (error) {
+    console.error('GET /patients/:patientId/medication-administrations/page error:', error);
+    res.status(500).json({ error: 'Errore nel recupero storico somministrazioni' });
+  }
+});
+
+// Legacy GET: fail explicitly instead of returning a silently truncated clinical history.
 router.get('/:patientId/medication-administrations', async (req, res) => {
   const { patientId } = req.params;
   let input;
@@ -393,8 +448,15 @@ router.get('/:patientId/medication-administrations', async (req, res) => {
     const administrations = await prisma.medicationAdministration.findMany({
       where,
       orderBy: [{ date: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
-      take: limit,
+      take: limit + 1,
     });
+
+    if (administrations.length > limit) {
+      res.status(409).json({
+        error: 'Storico oltre il limite: usare /medication-administrations/page',
+      });
+      return;
+    }
 
     res.status(200).json(administrations);
   } catch (error) {

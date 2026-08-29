@@ -5,14 +5,15 @@
   "description": "Model-agnostic contract: each canonical clinical section keeps one faithful rawText block plus semantic annotations (offsets only, never HTML). Missing data stays empty; nothing is summarised, rewritten or invented.",
   "type": "object",
   "required": ["sections"],
-  "additionalProperties": true,
+  "additionalProperties": false,
   "properties": {
     "sections": {
       "type": "array",
+      "maxItems": 24,
       "items": {
         "type": "object",
         "required": ["sectionKey", "rawText"],
-        "additionalProperties": true,
+        "additionalProperties": false,
         "properties": {
           "sectionKey": {
             "type": "string",
@@ -31,27 +32,29 @@
               "UNMAPPED_CONTENT"
             ]
           },
-          "detectedHeading": { "type": "string" },
-          "rawText": { "type": "string" },
+          "detectedHeading": { "type": "string", "maxLength": 255 },
+          "rawText": { "type": "string", "maxLength": 100000 },
           "sourceRanges": {
             "type": "array",
+            "maxItems": 32,
             "items": {
               "type": "object",
-              "additionalProperties": true,
+              "additionalProperties": false,
               "properties": {
-                "fileId": { "type": "string" },
-                "pageNumber": { "type": "integer" },
-                "startOffset": { "type": "integer" },
-                "endOffset": { "type": "integer" }
+                "fileId": { "type": "string", "maxLength": 128 },
+                "pageNumber": { "type": "integer", "minimum": 1, "maximum": 100000 },
+                "startOffset": { "type": "integer", "minimum": 0, "maximum": 100000 },
+                "endOffset": { "type": "integer", "minimum": 0, "maximum": 100000 }
               }
             }
           },
           "annotations": {
             "type": "array",
+            "maxItems": 128,
             "items": {
               "type": "object",
               "required": ["tag", "text", "startOffset", "endOffset"],
-              "additionalProperties": true,
+              "additionalProperties": false,
               "properties": {
                 "tag": {
                   "type": "string",
@@ -69,62 +72,75 @@
                     "WARNING_TEXT"
                   ]
                 },
-                "text": { "type": "string" },
-                "startOffset": { "type": "integer", "minimum": 0 },
-                "endOffset": { "type": "integer", "minimum": 0 }
+                "text": { "type": "string", "maxLength": 2000 },
+                "startOffset": { "type": "integer", "minimum": 0, "maximum": 100000 },
+                "endOffset": { "type": "integer", "minimum": 0, "maximum": 100000 }
               }
             }
           },
           "medications": {
             "type": "array",
+            "maxItems": 256,
             "items": {
               "type": "object",
               "required": ["exactText"],
-              "additionalProperties": true,
+              "additionalProperties": false,
               "properties": {
-                "medicationName": { "type": "string" },
-                "dose": { "type": "string" },
-                "schedule": { "type": "string" },
-                "frequency": { "type": "string" },
-                "route": { "type": "string" },
-                "duration": { "type": "string" },
-                "exactText": { "type": "string" },
-                "warnings": { "type": "array", "items": { "type": "string" } }
+                "medicationName": { "type": "string", "maxLength": 1000 },
+                "dose": { "type": "string", "maxLength": 1000 },
+                "schedule": { "type": "string", "maxLength": 1000 },
+                "frequency": { "type": "string", "maxLength": 1000 },
+                "route": { "type": "string", "maxLength": 1000 },
+                "duration": { "type": "string", "maxLength": 1000 },
+                "exactText": { "type": "string", "maxLength": 5000 },
+                "warnings": {
+                  "type": "array",
+                  "maxItems": 128,
+                  "items": { "type": "string", "maxLength": 255 }
+                }
               }
             }
           },
-          "warnings": { "type": "array", "items": { "type": "string" } }
+          "warnings": {
+            "type": "array",
+            "maxItems": 128,
+            "items": { "type": "string", "maxLength": 255 }
+          }
         }
       }
     },
     "allergies": {
       "type": "object",
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "status": {
           "type": "string",
           "enum": ["present", "explicitly_absent", "conflicting", "not_documented", "unclear"]
         },
-        "rawText": { "type": "string" },
-        "sourceFileId": { "type": "string" },
-        "sourcePage": { "type": "integer" },
-        "warnings": { "type": "array", "items": { "type": "string" } }
+        "rawText": { "type": "string", "maxLength": 100000 },
+        "sourceFileId": { "type": "string", "maxLength": 128 },
+        "sourcePage": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "warnings": {
+          "type": "array",
+          "maxItems": 128,
+          "items": { "type": "string", "maxLength": 255 }
+        }
       }
     },
     "demographics": {
       "type": "object",
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
-        "firstName": { "type": "string" },
-        "lastName": { "type": "string" },
-        "dateOfBirth": { "type": "string" },
-        "placeOfBirth": { "type": "string" },
+        "firstName": { "type": "string", "maxLength": 255 },
+        "lastName": { "type": "string", "maxLength": 255 },
+        "dateOfBirth": { "type": "string", "maxLength": 255 },
+        "placeOfBirth": { "type": "string", "maxLength": 255 },
         "sex": { "type": "string", "enum": ["", "M", "F"] },
-        "codiceFiscale": { "type": "string" },
-        "address": { "type": "string" },
-        "phone": { "type": "string" },
-        "email": { "type": "string" },
-        "medicalRecordNumber": { "type": "string" }
+        "codiceFiscale": { "type": "string", "maxLength": 255 },
+        "address": { "type": "string", "maxLength": 1000 },
+        "phone": { "type": "string", "maxLength": 255 },
+        "email": { "type": "string", "maxLength": 255 },
+        "medicalRecordNumber": { "type": "string", "maxLength": 255 }
       }
     }
   }

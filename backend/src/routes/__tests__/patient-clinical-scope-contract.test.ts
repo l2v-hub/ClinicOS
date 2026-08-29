@@ -6,6 +6,7 @@ const therapyRouteUrl = new URL('../patient-therapies.ts', import.meta.url);
 const narrativeRouteUrl = new URL('../narrative-sections.ts', import.meta.url);
 const voiceWriterUrl = new URL('../../ai/voice/write-services.ts', import.meta.url);
 const narrativeServiceUrl = new URL('../../ai/sections/patient-narrative.ts', import.meta.url);
+const intakeDraftServiceUrl = new URL('../../intake/draft-service.ts', import.meta.url);
 const therapyCreateUrl = new URL('../../therapies/therapy-create.ts', import.meta.url);
 const gatewayServicesUrl = new URL('../../ai/gateway/services.ts', import.meta.url);
 const prismaSchemaUrl = new URL('../../../../prisma/schema.prisma', import.meta.url);
@@ -111,6 +112,20 @@ test('therapy reads use a bounded stable keyset feed without silent legacy trunc
   assert.match(source, /Terapia con oltre 32 orari/);
 });
 
+test('medication administration history is keyset paged and legacy reads fail on truncation', async () => {
+  const source = await readFile(therapyRouteUrl, 'utf8');
+  const pageBlock =
+    source
+      .split("router.get('/:patientId/medication-administrations/page'")[1]
+      ?.split('// Legacy GET')[0] ?? '';
+  assert.match(pageBlock, /parseMedicationAdministrationPageQuery\(req\.query\)/);
+  assert.match(pageBlock, /take: input\.limit \+ 1/);
+  assert.match(pageBlock, /encodeMedicationAdministrationCursor/);
+  const legacyBlock = source.split('// Legacy GET')[1] ?? '';
+  assert.match(legacyBlock, /take: limit \+ 1/);
+  assert.match(legacyBlock, /res\.status\(409\)/);
+});
+
 test('therapy substring search has a matching PostgreSQL trigram index', async () => {
   const schema = await readFile(prismaSchemaUrl, 'utf8');
   assert.match(schema, /farmacoNome\(ops: raw\("gin_trgm_ops"\)\)/);
@@ -165,5 +180,27 @@ test('therapy and narrative text limits execute before clinical writes', async (
   assert.ok(
     upsertBlock.indexOf('parseNarrativeSaveInput(input)') <
       upsertBlock.indexOf('prisma.patientNarrativeSection.findUnique'),
+  );
+});
+
+test('imported narrative metadata is bounded and projected before JSONB writes', async () => {
+  const source = await readFile(narrativeServiceUrl, 'utf8');
+  const persistBlock = source.split('export async function persistNarrativeFromDraft')[1] ?? '';
+  const validation = persistBlock.indexOf('parseNarrativeMetadata(');
+  const write = persistBlock.indexOf('tx.patientNarrativeSection.upsert');
+  assert.ok(validation >= 0, 'expected narrative metadata validation');
+  assert.ok(write > validation, 'metadata validation must execute before the JSONB write');
+  assert.match(persistBlock, /annotations: metadata\.annotations/);
+  assert.match(persistBlock, /sourceReferences: metadata\.sourceReferences/);
+});
+
+test('intake autosave cannot replace extraction-owned narrative metadata', async () => {
+  const source = await readFile(intakeDraftServiceUrl, 'utf8');
+  const patchBlock =
+    source.split('export async function patchDraft')[1]?.split('export async')[0] ?? '';
+  assert.match(patchBlock, /\['_narrative', '_sections'\]/);
+  assert.ok(
+    patchBlock.indexOf('Object.hasOwn(patch, immutableKey)') <
+      patchBlock.indexOf('prisma.patientIntakeDraft.update'),
   );
 });

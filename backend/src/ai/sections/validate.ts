@@ -85,6 +85,212 @@ export interface SectionsResult {
 const HTML_TAG = /<\/?(?:b|strong|em|i|u|span|font)\b[^>]*>/i;
 const TAG_SET = new Set<string>(SEMANTIC_TAGS);
 const MED_KEYS: Array<keyof MedicationLine> = ['medicationName', 'dose', 'schedule', 'frequency'];
+const MAX_SECTIONS = 24;
+const MAX_SECTION_TEXT = 100_000;
+const MAX_ANNOTATIONS = 128;
+const MAX_SOURCE_RANGES = 32;
+const MAX_MEDICATIONS = 256;
+const MAX_WARNINGS = 128;
+const MAX_METADATA_TEXT = 2_000;
+const MAX_TOTAL_SECTION_TEXT = 500_000;
+const MAX_TOTAL_ANNOTATIONS = 1_280;
+const MAX_TOTAL_SOURCE_RANGES = 320;
+
+function objectRecord(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : null;
+}
+
+function assertArrayBound(value: unknown, max: number, label: string): unknown[] {
+  if (!Array.isArray(value)) throw new Error(`${label} deve essere un array`);
+  if (value.length > max) throw new Error(`${label} supera il limite di ${max} elementi`);
+  return value;
+}
+
+function assertStringBound(value: unknown, max: number, label: string): void {
+  if (typeof value === 'string' && value.length > max) {
+    throw new Error(`${label} supera il limite di ${max} caratteri`);
+  }
+}
+
+/** Fast, schema-independent limits run before AJV and any merge/indexOf processing. */
+function enforceResourceBounds(data: unknown): void {
+  const root = objectRecord(data);
+  if (!root) throw new Error('Risultato sezioni non valido');
+  const sections = assertArrayBound(root.sections, MAX_SECTIONS, 'sections');
+  let totalText = 0;
+  let totalAnnotations = 0;
+  let totalSourceRanges = 0;
+  const textBySectionKey = new Map<string, number>();
+  const annotationsBySectionKey = new Map<string, number>();
+  const rangesBySectionKey = new Map<string, number>();
+  for (const [sectionIndex, value] of sections.entries()) {
+    const section = objectRecord(value);
+    if (!section) continue;
+    const rawText = typeof section.rawText === 'string' ? section.rawText : '';
+    assertStringBound(rawText, MAX_SECTION_TEXT, `sections[${sectionIndex}].rawText`);
+    totalText += rawText.length;
+    if (totalText > MAX_TOTAL_SECTION_TEXT) {
+      throw new Error(`sections supera il limite totale di ${MAX_TOTAL_SECTION_TEXT} caratteri`);
+    }
+    const sectionKey = typeof section.sectionKey === 'string' ? section.sectionKey : '';
+    const sectionText = (textBySectionKey.get(sectionKey) ?? 0) + rawText.length;
+    if (sectionText > MAX_SECTION_TEXT) {
+      throw new Error(`sections.${sectionKey} supera il limite aggregato di ${MAX_SECTION_TEXT}`);
+    }
+    textBySectionKey.set(sectionKey, sectionText);
+    assertStringBound(section.detectedHeading, 255, `sections[${sectionIndex}].detectedHeading`);
+    const annotations = assertArrayBound(
+      section.annotations ?? [],
+      MAX_ANNOTATIONS,
+      `sections[${sectionIndex}].annotations`,
+    );
+    totalAnnotations += annotations.length;
+    if (totalAnnotations > MAX_TOTAL_ANNOTATIONS) {
+      throw new Error(`annotations supera il limite totale di ${MAX_TOTAL_ANNOTATIONS}`);
+    }
+    const sectionAnnotations = (annotationsBySectionKey.get(sectionKey) ?? 0) + annotations.length;
+    if (sectionAnnotations > MAX_ANNOTATIONS) {
+      throw new Error(`annotations.${sectionKey} supera il limite aggregato di ${MAX_ANNOTATIONS}`);
+    }
+    annotationsBySectionKey.set(sectionKey, sectionAnnotations);
+    for (const [annotationIndex, annotationValue] of annotations.entries()) {
+      const annotation = objectRecord(annotationValue);
+      if (!annotation) continue;
+      assertStringBound(
+        annotation.text,
+        MAX_METADATA_TEXT,
+        `sections[${sectionIndex}].annotations[${annotationIndex}].text`,
+      );
+      if (
+        Number.isInteger(annotation.startOffset) &&
+        Number.isInteger(annotation.endOffset) &&
+        ((annotation.startOffset as number) < 0 ||
+          (annotation.endOffset as number) <= (annotation.startOffset as number) ||
+          (annotation.endOffset as number) > rawText.length)
+      ) {
+        throw new Error(
+          `sections[${sectionIndex}].annotations[${annotationIndex}] offset non valido`,
+        );
+      }
+    }
+    const sourceRanges = assertArrayBound(
+      section.sourceRanges ?? [],
+      MAX_SOURCE_RANGES,
+      `sections[${sectionIndex}].sourceRanges`,
+    );
+    totalSourceRanges += sourceRanges.length;
+    if (totalSourceRanges > MAX_TOTAL_SOURCE_RANGES) {
+      throw new Error(`sourceRanges supera il limite totale di ${MAX_TOTAL_SOURCE_RANGES}`);
+    }
+    const sectionRanges = (rangesBySectionKey.get(sectionKey) ?? 0) + sourceRanges.length;
+    if (sectionRanges > MAX_SOURCE_RANGES) {
+      throw new Error(
+        `sourceRanges.${sectionKey} supera il limite aggregato di ${MAX_SOURCE_RANGES}`,
+      );
+    }
+    rangesBySectionKey.set(sectionKey, sectionRanges);
+    for (const [rangeIndex, rangeValue] of sourceRanges.entries()) {
+      const range = objectRecord(rangeValue);
+      if (!range) continue;
+      assertStringBound(
+        range.fileId,
+        128,
+        `sections[${sectionIndex}].sourceRanges[${rangeIndex}].fileId`,
+      );
+    }
+    for (const [medicationIndex, medicationValue] of assertArrayBound(
+      section.medications ?? [],
+      MAX_MEDICATIONS,
+      `sections[${sectionIndex}].medications`,
+    ).entries()) {
+      const medication = objectRecord(medicationValue);
+      if (!medication) continue;
+      for (const field of [
+        'medicationName',
+        'dose',
+        'schedule',
+        'frequency',
+        'route',
+        'duration',
+        'exactText',
+      ]) {
+        assertStringBound(
+          medication[field],
+          field === 'exactText' ? 5_000 : 1_000,
+          `sections[${sectionIndex}].medications[${medicationIndex}].${field}`,
+        );
+      }
+      assertArrayBound(
+        medication.warnings ?? [],
+        MAX_WARNINGS,
+        `sections[${sectionIndex}].medications[${medicationIndex}].warnings`,
+      );
+    }
+    assertArrayBound(section.warnings ?? [], MAX_WARNINGS, `sections[${sectionIndex}].warnings`);
+  }
+  const allergies = objectRecord(root.allergies);
+  if (allergies) {
+    assertStringBound(allergies.rawText, MAX_SECTION_TEXT, 'allergies.rawText');
+    assertStringBound(allergies.sourceFileId, 128, 'allergies.sourceFileId');
+    assertArrayBound(allergies.warnings ?? [], MAX_WARNINGS, 'allergies.warnings');
+  }
+  const demographics = objectRecord(root.demographics);
+  if (demographics) {
+    for (const [key, value] of Object.entries(demographics)) {
+      assertStringBound(value, key === 'address' ? 1_000 : 255, `demographics.${key}`);
+    }
+  }
+}
+
+function projectSection(section: Section): Section {
+  return {
+    sectionKey: section.sectionKey,
+    ...(section.detectedHeading !== undefined ? { detectedHeading: section.detectedHeading } : {}),
+    rawText: section.rawText,
+    ...(section.sourceRanges !== undefined
+      ? {
+          sourceRanges: section.sourceRanges.map((value) => {
+            const range = value as Record<string, unknown>;
+            return {
+              ...(range.fileId !== undefined ? { fileId: range.fileId } : {}),
+              ...(range.pageNumber !== undefined ? { pageNumber: range.pageNumber } : {}),
+              ...(range.startOffset !== undefined ? { startOffset: range.startOffset } : {}),
+              ...(range.endOffset !== undefined ? { endOffset: range.endOffset } : {}),
+            };
+          }),
+        }
+      : {}),
+    ...(section.annotations !== undefined
+      ? {
+          annotations: section.annotations.map((annotation) => ({
+            tag: annotation.tag,
+            text: annotation.text,
+            startOffset: annotation.startOffset,
+            endOffset: annotation.endOffset,
+          })),
+        }
+      : {}),
+    ...(section.medications !== undefined
+      ? {
+          medications: section.medications.map((medication) => ({
+            ...(medication.medicationName !== undefined
+              ? { medicationName: medication.medicationName }
+              : {}),
+            ...(medication.dose !== undefined ? { dose: medication.dose } : {}),
+            ...(medication.schedule !== undefined ? { schedule: medication.schedule } : {}),
+            ...(medication.frequency !== undefined ? { frequency: medication.frequency } : {}),
+            ...(medication.route !== undefined ? { route: medication.route } : {}),
+            ...(medication.duration !== undefined ? { duration: medication.duration } : {}),
+            exactText: medication.exactText,
+            ...(medication.warnings !== undefined ? { warnings: [...medication.warnings] } : {}),
+          })),
+        }
+      : {}),
+    ...(section.warnings !== undefined ? { warnings: [...section.warnings] } : {}),
+  };
+}
 
 export interface SectionsValidation {
   valid: boolean;
@@ -186,6 +392,7 @@ export function postProcessSections(
   data: unknown,
   profile: DocumentProfile = loadProfile(),
 ): SectionsResult {
+  enforceResourceBounds(data);
   const schemaCheck = validateSectionsSchema(data);
   if (!schemaCheck.valid)
     throw new Error(`Sezioni non conformi allo schema: ${schemaCheck.errors.join('; ')}`);
@@ -197,7 +404,7 @@ export function postProcessSections(
   };
   const medSections = new Set<SectionKey>(profile.medicationSections);
 
-  let sections = collapseDuplicates(input.sections);
+  let sections = collapseDuplicates(input.sections.map(projectSection));
   sections = sections.map((s) => {
     let warnings = Array.isArray(s.warnings) ? [...s.warnings] : [];
     if (HTML_TAG.test(s.rawText)) warnings = pushWarn(warnings, 'RAWTEXT_HTML_DETECTED');
@@ -213,9 +420,33 @@ export function postProcessSections(
   const status: AllergyStatus = (ALLERGY_STATUSES as readonly string[]).includes(a.status)
     ? a.status
     : 'not_documented';
-  const allergies: AllergyBlock = { ...a, status };
+  const allergies: AllergyBlock = {
+    status,
+    ...(a.rawText !== undefined ? { rawText: a.rawText } : {}),
+    ...(a.sourceFileId !== undefined ? { sourceFileId: a.sourceFileId } : {}),
+    ...(a.sourcePage !== undefined ? { sourcePage: a.sourcePage } : {}),
+    ...(a.warnings !== undefined ? { warnings: [...a.warnings] } : {}),
+  };
+  const demographics = input.demographics
+    ? Object.fromEntries(
+        [
+          'firstName',
+          'lastName',
+          'dateOfBirth',
+          'placeOfBirth',
+          'sex',
+          'codiceFiscale',
+          'address',
+          'phone',
+          'email',
+          'medicalRecordNumber',
+        ]
+          .filter((key) => input.demographics?.[key] !== undefined)
+          .map((key) => [key, input.demographics![key]]),
+      )
+    : undefined;
 
-  return { sections, allergies, demographics: input.demographics };
+  return { sections, allergies, demographics };
 }
 
 /** Confirmation must be blocked when allergy information is contradictory (REQ-026). */

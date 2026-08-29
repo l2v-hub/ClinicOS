@@ -64,6 +64,14 @@ export async function getDraft(id: string) {
 }
 
 export async function patchDraft(id: string, patch: Record<string, unknown>) {
+  for (const immutableKey of ['_narrative', '_sections']) {
+    if (Object.hasOwn(patch, immutableKey)) {
+      throw new AiExtractionError(
+        'config',
+        `Il campo di importazione ${immutableKey} non può essere modificato`,
+      );
+    }
+  }
   const current = await prisma.patientIntakeDraft.findUniqueOrThrow({ where: { id } });
   const existingData = (current.data ?? {}) as Record<string, unknown>;
   const merged: Record<string, unknown> = { ...existingData, ...patch };

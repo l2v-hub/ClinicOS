@@ -6,7 +6,11 @@
 // This coexists with legacy structured data — it never deletes it.
 
 import type { Prisma } from '@prisma/client';
-import { parseNarrativeSaveInput } from './narrative-input.js';
+import {
+  assertNarrativeDraftMetadataBounds,
+  parseNarrativeMetadata,
+  parseNarrativeSaveInput,
+} from './narrative-input.js';
 import { prisma } from '../../lib/prisma.js';
 import type { DischargeNarrativeDraft } from './narrative.js';
 
@@ -73,6 +77,7 @@ export interface NarrativeSectionRow {
 
 /** Project a discharge narrative draft into per-section persistence rows (no DB access). */
 export function narrativeDraftToSectionRows(draft: DischargeNarrativeDraft): NarrativeSectionRow[] {
+  assertNarrativeDraftMetadataBounds(draft);
   const tags = Array.isArray(draft.boldTags) ? draft.boldTags : [];
   const refs = Array.isArray(draft.sourceReferences) ? draft.sourceReferences : [];
   const conflict = draft.allergyStatus === 'conflicting' || draft.allergyStatus === 'unclear';
@@ -221,22 +226,28 @@ export async function persistNarrativeFromDraft(
       originalText: row.originalText,
       reviewStatus: row.reviewStatus,
     });
+    const metadata = parseNarrativeMetadata(
+      row.annotations,
+      row.sourceReferences,
+      validated.originalText ?? '',
+      FROM_DRAFT.find((entry) => entry.key === row.sectionKey)!.italian,
+    );
     await tx.patientNarrativeSection.upsert({
       where: { patientId_sectionKey: { patientId, sectionKey: row.sectionKey } },
       create: {
         patientId,
         sectionKey: row.sectionKey,
         originalText: validated.originalText ?? '',
-        annotations: row.annotations as Prisma.InputJsonValue,
-        sourceReferences: row.sourceReferences as Prisma.InputJsonValue,
+        annotations: metadata.annotations as unknown as Prisma.InputJsonValue,
+        sourceReferences: metadata.sourceReferences as unknown as Prisma.InputJsonValue,
         importJobId: importJobId ?? undefined,
         reviewStatus: validated.reviewStatus ?? 'pending',
         createdBy,
       },
       update: {
         // Re-import merges into reviewedText path elsewhere; never clobber the original.
-        annotations: row.annotations as Prisma.InputJsonValue,
-        sourceReferences: row.sourceReferences as Prisma.InputJsonValue,
+        annotations: metadata.annotations as unknown as Prisma.InputJsonValue,
+        sourceReferences: metadata.sourceReferences as unknown as Prisma.InputJsonValue,
       },
     });
   }
