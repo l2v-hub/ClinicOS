@@ -2,6 +2,7 @@ import { prisma } from '../lib/prisma.js';
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
+import { getFacilityOccupancy } from '../rooms/occupancy-service.js';
 import {
   authoritativeAssignmentActor,
   boundPatientAssignmentResult,
@@ -122,22 +123,6 @@ function roomWithAssignmentsSelect() {
   };
 }
 
-function occupancyOnlySelect() {
-  return {
-    id: true,
-    beds: {
-      select: {
-        stato: true,
-        assignments: {
-          where: activeAssignmentFilter(),
-          select: { id: true },
-          take: 1,
-        },
-      },
-    },
-  };
-}
-
 // ═══════════════════════════════════════════════════════════════════════════
 // ADMIN ROOMS CRUD — mounted at /admin/rooms
 // ═══════════════════════════════════════════════════════════════════════════
@@ -145,35 +130,7 @@ function occupancyOnlySelect() {
 // GET /admin/rooms/occupancy  (named route BEFORE parameterized)
 adminRouter.get('/rooms/occupancy', async (_req, res) => {
   try {
-    const rooms = await prisma.room.findMany({
-      select: occupancyOnlySelect(),
-    });
-
-    let totalBeds = 0;
-    let occupiedBeds = 0;
-    let maintenanceBeds = 0;
-
-    for (const room of rooms) {
-      for (const bed of room.beds) {
-        totalBeds++;
-        const isOccupied = bed.assignments.length > 0;
-        const isMaintenance = bed.stato === 'manutenzione';
-        if (isOccupied) occupiedBeds++;
-        if (isMaintenance) maintenanceBeds++;
-      }
-    }
-
-    const freeBeds = totalBeds - occupiedBeds - maintenanceBeds;
-    const occupancyPct = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
-
-    res.status(200).json({
-      totalRooms: rooms.length,
-      totalBeds,
-      occupiedBeds,
-      freeBeds,
-      maintenanceBeds,
-      occupancyPct,
-    });
+    res.status(200).json(await getFacilityOccupancy());
   } catch (error) {
     console.error('GET /admin/rooms/occupancy error:', error);
     res.status(500).json({ error: 'Errore nel recupero occupazione stanze' });

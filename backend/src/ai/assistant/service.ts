@@ -5,6 +5,7 @@
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
+import { getFacilityOccupancy } from '../../rooms/occupancy-service.js';
 import * as svc from '../gateway/services.js';
 import { canCrossPatientSearch, canFacilityRead } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
@@ -99,36 +100,13 @@ async function roomsOccupancy(
 ): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
   if (!canFacilityRead(env))
     throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
-  const today = new Date().toISOString().slice(0, 10);
-  const rooms = await prisma.room.findMany({
-    include: {
-      beds: {
-        include: {
-          assignments: { where: { OR: [{ endDate: null }, { endDate: { gte: today } }] } },
-        },
-      },
-    },
-  });
-  let totalBeds = 0;
-  let occupiedBeds = 0;
-  let maintenanceBeds = 0;
-  for (const room of rooms) {
-    for (const bed of room.beds) {
-      totalBeds++;
-      if (bed.assignments.length > 0) occupiedBeds++;
-      if (bed.stato === 'manutenzione') maintenanceBeds++;
-    }
-  }
-  const freeBeds = Math.max(0, totalBeds - occupiedBeds - maintenanceBeds);
-  const occupancyPct = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
-  const data = [
-    { totalRooms: rooms.length, totalBeds, occupiedBeds, freeBeds, maintenanceBeds, occupancyPct },
-  ];
+  const occupancy = await getFacilityOccupancy();
+  const data = [occupancy];
   return {
     data,
     sourceRefs: [
       roomOccupancySource(
-        `${occupiedBeds}/${totalBeds} letti occupati; ${rooms.length} camere censite`,
+        `${occupancy.occupiedBeds}/${occupancy.totalBeds} letti occupati; ${occupancy.totalRooms} camere censite`,
         new Date().toISOString(),
       ),
     ],
