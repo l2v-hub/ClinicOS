@@ -1,79 +1,132 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, type AuthedRequest, type Operator } from '../ai/auth.js';
+import { requirePatientScope } from '../patients/access.js';
+import {
+  DiaryPageInputError,
+  decodeDiaryPageCursor,
+  encodeDiaryPageCursor,
+  parseDiaryPageQuery,
+} from '../patients/diary-pagination.js';
 
 const router = Router();
 
 // Gate minimo (header-based, non IdP): il diario paziente e' un dato clinico reale,
 // richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
 router.use(requireOperator);
+router.use('/:patientId/diary', requirePatientScope);
+
+const DIARY_AUTHOR_TYPES = new Set([
+  'medico',
+  'infermiere',
+  'oss',
+  'fisioterapista',
+  'operatore',
+  'altro',
+]);
+
+async function authoritativeDiaryAuthor(operator: Operator): Promise<{
+  authorType: string;
+  authorName: string;
+}> {
+  const row = await prisma.operator.findUnique({
+    where: { id: operator.id },
+    select: { ruolo: true, user: { select: { fullName: true } } },
+  });
+  if (!row) throw new Error('operator_not_mapped');
+  const normalizedRole = row.ruolo?.trim().toLowerCase() ?? '';
+  return {
+    authorType: DIARY_AUTHOR_TYPES.has(normalizedRole) ? normalizedRole : 'operatore',
+    authorName: row.user.fullName.trim() || operator.name?.trim() || operator.id,
+  };
+}
 
 // GET /patients/:patientId/diary
-// Query params: authorType, from (YYYY-MM-DD), to (YYYY-MM-DD), limit, offset
+// Query params: authorType, from (YYYY-MM-DD), to (YYYY-MM-DD), limit, cursor.
+// `offset` remains bounded for legacy clients; the UI uses the stable keyset cursor.
 router.get('/:patientId/diary', async (req, res) => {
   const { patientId } = req.params;
-  const { authorType, from, to, limit, offset } = req.query as Record<string, string | undefined>;
-  // Paginazione opt-in (limit/offset): senza parametri il comportamento resta
-  // identico a oggi (nessun take/skip, tutti i record).
-  const parsedLimit = Number.parseInt(String(limit ?? ''), 10);
-  const parsedOffset = Number.parseInt(String(offset ?? ''), 10);
-  const take =
-    Number.isFinite(parsedLimit) && parsedLimit > 0 ? Math.min(parsedLimit, 500) : undefined;
-  const skip = Number.isFinite(parsedOffset) && parsedOffset >= 0 ? parsedOffset : undefined;
 
   try {
-    const entries = await prisma.patientDiaryEntry.findMany({
-      where: {
-        patientId,
-        ...(authorType ? { authorType } : {}),
-        ...(from || to
-          ? {
-              entryDateTime: {
-                ...(from ? { gte: from } : {}),
-                ...(to ? { lte: to + 'T23:59:59' } : {}),
-              },
-            }
-          : {}),
-      },
-      orderBy: { entryDateTime: 'desc' },
-      ...(take !== undefined && { take }),
-      ...(skip !== undefined && { skip }),
+    const input = parseDiaryPageQuery(req.query as Record<string, unknown>);
+    const filters = { authorType: input.authorType, from: input.from, to: input.to };
+    const position = input.cursor ? decodeDiaryPageCursor(input.cursor, filters) : undefined;
+    const baseWhere = {
+      patientId,
+      ...(input.authorType ? { authorType: input.authorType } : {}),
+      ...(input.from || input.to
+        ? {
+            entryDateTime: {
+              ...(input.from ? { gte: input.from } : {}),
+              ...(input.to ? { lte: input.to + 'T23:59:59.999' } : {}),
+            },
+          }
+        : {}),
+    };
+    const cursorWhere = position
+      ? {
+          OR: [
+            { entryDateTime: { lt: position.entryDateTime } },
+            { entryDateTime: position.entryDateTime, id: { lt: position.id } },
+          ],
+        }
+      : undefined;
+    const rows = await prisma.patientDiaryEntry.findMany({
+      where: { AND: [baseWhere, ...(cursorWhere ? [cursorWhere] : [])] },
+      orderBy: [{ entryDateTime: 'desc' }, { id: 'desc' }],
+      take: input.limit + 1,
+      ...(input.offset !== undefined && { skip: input.offset }),
     });
-    res.status(200).json({ entries, total: entries.length });
+    const hasMore = rows.length > input.limit;
+    const entries = hasMore ? rows.slice(0, input.limit) : rows;
+    const last = entries.at(-1);
+    res.status(200).json({
+      entries,
+      loadedCount: entries.length,
+      hasMore,
+      nextCursor:
+        hasMore && last
+          ? encodeDiaryPageCursor({ entryDateTime: last.entryDateTime, id: last.id }, filters)
+          : null,
+    });
   } catch (error) {
+    if (error instanceof DiaryPageInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
     console.error('GET /diary error:', error);
     res.status(500).json({ error: 'Errore nel recupero del diario' });
   }
 });
 
 // POST /patients/:patientId/diary
-router.post('/:patientId/diary', async (req, res) => {
-  const { patientId } = req.params;
-  const { authorType, authorName, title, content, priority, status, entryDateTime, category } =
-    req.body as {
-      authorType?: string;
-      authorName?: string;
-      title?: string;
-      content?: string;
-      priority?: string;
-      status?: string;
-      entryDateTime?: string;
-      category?: string;
-    };
+router.post('/:patientId/diary', async (req: AuthedRequest, res) => {
+  const rawPatientId = req.params.patientId;
+  const patientId = (Array.isArray(rawPatientId) ? rawPatientId[0] : rawPatientId) ?? '';
+  const { title, content, priority, status, entryDateTime, category } = req.body as {
+    title?: string;
+    content?: string;
+    priority?: string;
+    status?: string;
+    entryDateTime?: string;
+    category?: string;
+  };
 
-  if (!authorType || !authorName || !content || !entryDateTime) {
-    res
-      .status(400)
-      .json({ error: 'authorType, authorName, content, entryDateTime sono obbligatori' });
+  if (!content || !entryDateTime) {
+    res.status(400).json({ error: 'content e entryDateTime sono obbligatori' });
     return;
   }
 
   try {
+    const author = await authoritativeDiaryAuthor(req.operator!);
     const entry = await prisma.patientDiaryEntry.create({
       data: {
         patientId,
-        authorType,
-        authorName,
+        ...author,
         title: title ?? null,
         content,
         priority: priority ?? 'normale',
@@ -110,17 +163,15 @@ router.get('/:patientId/diary/:entryId', async (req, res) => {
 // PUT /patients/:patientId/diary/:entryId
 router.put('/:patientId/diary/:entryId', async (req, res) => {
   const { patientId, entryId } = req.params;
-  const { authorType, authorName, title, content, priority, status, entryDateTime, category } =
-    req.body as {
-      authorType?: string;
-      authorName?: string;
-      title?: string;
-      content?: string;
-      priority?: string;
-      status?: string;
-      entryDateTime?: string;
-      category?: string;
-    };
+  // Authorship is immutable and server-authoritative. Client author fields are ignored.
+  const { title, content, priority, status, entryDateTime, category } = req.body as {
+    title?: string;
+    content?: string;
+    priority?: string;
+    status?: string;
+    entryDateTime?: string;
+    category?: string;
+  };
 
   try {
     const existing = await prisma.patientDiaryEntry.findFirst({
@@ -133,8 +184,6 @@ router.put('/:patientId/diary/:entryId', async (req, res) => {
     const entry = await prisma.patientDiaryEntry.update({
       where: { id: entryId },
       data: {
-        ...(authorType !== undefined ? { authorType } : {}),
-        ...(authorName !== undefined ? { authorName } : {}),
         ...(title !== undefined ? { title } : {}),
         ...(content !== undefined ? { content } : {}),
         ...(priority !== undefined ? { priority } : {}),

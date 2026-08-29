@@ -67,6 +67,16 @@ test('requireOperator: passes + attaches operator for valid role', () => {
   assert.equal(req.operator?.role, 'operatore');
 });
 
+test('requireOperator: explicit demo aliases resolve to relational seed operators', () => {
+  const operator = mockReq({ 'X-Operator-Id': 'op1', 'X-Operator-Role': 'operatore' });
+  requireOperator(operator as never, mockRes() as never, () => {});
+  assert.equal(operator.operator?.id, 'SEED-OP-001');
+
+  const admin = mockReq({ 'X-Operator-Id': 'admin1', 'X-Operator-Role': 'admin' });
+  requireOperator(admin as never, mockRes() as never, () => {});
+  assert.equal(admin.operator?.id, 'SEED-OP-004');
+});
+
 test('requireOperator: admin/manager/operator casings accepted', () => {
   for (const role of ['admin', 'MANAGER', 'Operator']) {
     const req = mockReq({ 'X-Operator-Id': 'u1', 'X-Operator-Role': role });

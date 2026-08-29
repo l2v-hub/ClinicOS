@@ -49,6 +49,8 @@ const STATUS_LABELS: Record<string, string> = {
   da_rivedere: 'Da rivedere',
 };
 
+const DIARY_PAGE_SIZE = 50;
+
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
 function nowDT(): string {
@@ -117,8 +119,6 @@ function convertLegacyEntries(inf?: DiarioEntry[], med?: DiarioEntry[]): DiarioP
 // ── Form state ─────────────────────────────────────────────────────────────────
 
 interface DiarioForm {
-  authorType: DiarioAuthorType;
-  authorName: string;
   title: string;
   content: string;
   priority: 'normale' | 'importante' | 'urgente';
@@ -140,23 +140,26 @@ interface Props {
 
 export function DiarioPazienteTab({
   pazienteId,
-  operatoreNome,
   legacyInfermieristico,
   legacyMedico,
   filterBy,
 }: Props) {
   const [entries, setEntries] = useState<DiarioPazienteEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+  const [refreshVersion, setRefreshVersion] = useState(0);
   const [showAdd, setShowAdd] = useState(false);
   const [editEntry, setEditEntry] = useState<DiarioPazienteEntry | null>(null);
   const [saving, setSaving] = useState(false);
   const readSequenceRef = useRef(0);
+  const loadMoreControllerRef = useRef<AbortController | null>(null);
 
   function emptyForm(): DiarioForm {
     return {
-      authorType: 'infermiere',
-      authorName: operatoreNome,
       title: '',
       content: '',
       priority: 'normale',
@@ -169,33 +172,76 @@ export function DiarioPazienteTab({
   const [editForm, setEditForm] = useState<DiarioForm>(emptyForm);
 
   const fetchEntries = useCallback(
-    async (signal: AbortSignal, request: number) => {
+    async (
+      signal: AbortSignal,
+      request: number,
+      options: { cursor?: string; append?: boolean; silent?: boolean } = {},
+    ) => {
       const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
-      setLoading(true);
+      if (options.append) setLoadingMore(true);
+      else {
+        setLoadingMore(false);
+        if (!options.silent) setLoading(true);
+      }
       setError('');
+      if (!options.append) setNotice('');
       try {
         const params = new URLSearchParams();
         if (resolvedFilter !== 'tutti') params.set('authorType', resolvedFilter);
+        params.set('limit', String(DIARY_PAGE_SIZE));
+        if (options.cursor) params.set('cursor', options.cursor);
         const res = await fetch(`${API_URL}/patients/${pazienteId}/diary?${params}`, {
           headers: operatorHeaders(),
           signal,
         });
         if (!res.ok) throw new Error('Risposta non valida');
-        const data = (await res.json()) as { entries: DiarioPazienteEntry[] };
+        const data = (await res.json()) as {
+          entries: DiarioPazienteEntry[];
+          hasMore?: boolean;
+          nextCursor?: string | null;
+        };
         let allEntries = data.entries ?? [];
+        let pageHasMore = Boolean(data.hasMore);
+        let pageNextCursor = data.nextCursor ?? null;
+        let legacyPageTruncated = false;
 
-        // Backward compat: show legacy data if API returns nothing and no filter active
-        if (allEntries.length === 0 && resolvedFilter === 'tutti') {
+        // Backward compat: use legacy data only for an empty first page with no active filter.
+        if (!options.append && allEntries.length === 0 && resolvedFilter === 'tutti') {
           const legacyEntries = convertLegacyEntries(legacyInfermieristico, legacyMedico);
-          allEntries = legacyEntries;
+          allEntries = legacyEntries.slice(0, DIARY_PAGE_SIZE);
+          pageHasMore = false;
+          pageNextCursor = null;
+          legacyPageTruncated = legacyEntries.length > DIARY_PAGE_SIZE;
         }
 
-        if (!signal.aborted && request === readSequenceRef.current) setEntries(allEntries);
+        if (!signal.aborted && request === readSequenceRef.current) {
+          setEntries((previous) => {
+            if (!options.append) return allEntries;
+            const seen = new Set(previous.map((entry) => entry.id));
+            return [...previous, ...allEntries.filter((entry) => !seen.has(entry.id))];
+          });
+          setHasMore(pageHasMore);
+          setNextCursor(pageNextCursor);
+          if (!options.append && legacyPageTruncated) {
+            setNotice(
+              'Sono visibili le 50 voci legacy più recenti. Contatta l’amministratore per completare la migrazione dello storico.',
+            );
+          }
+        }
       } catch (error) {
         if ((error as { name?: string }).name === 'AbortError') return;
-        if (request === readSequenceRef.current) setError('Errore nel caricamento del diario.');
+        if (request === readSequenceRef.current) {
+          setError(
+            options.append
+              ? 'Impossibile caricare altre voci. Riprova.'
+              : 'Errore nel caricamento del diario.',
+          );
+        }
       } finally {
-        if (!signal.aborted && request === readSequenceRef.current) setLoading(false);
+        if (!signal.aborted && request === readSequenceRef.current) {
+          if (options.append) setLoadingMore(false);
+          else if (!options.silent) setLoading(false);
+        }
       }
     },
     [pazienteId, filterBy, legacyInfermieristico, legacyMedico],
@@ -204,12 +250,28 @@ export function DiarioPazienteTab({
   useEffect(() => {
     const controller = new AbortController();
     const request = ++readSequenceRef.current;
-    const timer = window.setTimeout(() => void fetchEntries(controller.signal, request), 0);
+    const timer = window.setTimeout(
+      () =>
+        void fetchEntries(controller.signal, request, {
+          silent: refreshVersion > 0,
+        }),
+      0,
+    );
     return () => {
       window.clearTimeout(timer);
       controller.abort();
+      loadMoreControllerRef.current?.abort();
     };
-  }, [fetchEntries]);
+  }, [fetchEntries, refreshVersion]);
+
+  function handleLoadMore() {
+    if (!nextCursor || loadingMore) return;
+    loadMoreControllerRef.current?.abort();
+    const controller = new AbortController();
+    loadMoreControllerRef.current = controller;
+    const request = ++readSequenceRef.current;
+    void fetchEntries(controller.signal, request, { cursor: nextCursor, append: true });
+  }
 
   // ── Save new entry ───────────────────────────────────────────────────────────
 
@@ -221,8 +283,6 @@ export function DiarioPazienteTab({
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
-          authorType: form.authorType,
-          authorName: form.authorName.trim() || operatoreNome,
           title: form.title.trim() || null,
           content: form.content.trim(),
           priority: form.priority,
@@ -232,9 +292,18 @@ export function DiarioPazienteTab({
       });
       if (!res.ok) throw new Error();
       const data = (await res.json()) as { entry: DiarioPazienteEntry };
-      setEntries((prev) => [data.entry, ...prev]);
+      const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
+      if (resolvedFilter === 'tutti' || resolvedFilter === data.entry.authorType) {
+        setEntries((prev) =>
+          [data.entry, ...prev.filter((entry) => entry.id !== data.entry.id)].slice(
+            0,
+            DIARY_PAGE_SIZE,
+          ),
+        );
+      }
       setForm(emptyForm());
       setShowAdd(false);
+      setRefreshVersion((version) => version + 1);
     } catch {
       setError('Errore nel salvataggio della voce.');
     } finally {
@@ -252,8 +321,6 @@ export function DiarioPazienteTab({
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify({
-          authorType: editForm.authorType,
-          authorName: editForm.authorName.trim() || operatoreNome,
           title: editForm.title.trim() || null,
           content: editForm.content.trim(),
           priority: editForm.priority,
@@ -265,6 +332,7 @@ export function DiarioPazienteTab({
       const data = (await res.json()) as { entry: DiarioPazienteEntry };
       setEntries((prev) => prev.map((e) => (e.id === data.entry.id ? data.entry : e)));
       setEditEntry(null);
+      setRefreshVersion((version) => version + 1);
     } catch {
       setError('Errore nel salvataggio della modifica.');
     } finally {
@@ -293,6 +361,7 @@ export function DiarioPazienteTab({
       if (!res.ok) throw new Error();
       setEntries((prev) => prev.filter((e) => e.id !== entry.id));
       setPendingDelete(null);
+      setRefreshVersion((version) => version + 1);
     } catch {
       setError('Errore nella eliminazione della voce.');
     } finally {
@@ -303,8 +372,6 @@ export function DiarioPazienteTab({
   function startEdit(entry: DiarioPazienteEntry) {
     setEditEntry(entry);
     setEditForm({
-      authorType: entry.authorType,
-      authorName: entry.authorName,
       title: entry.title ?? '',
       content: entry.content,
       priority: entry.priority,
@@ -406,32 +473,7 @@ export function DiarioPazienteTab({
         >
           {title}
         </div>
-        <div className="form-row">
-          <label className="form-label">Tipo operatore</label>
-          <select
-            className="form-input"
-            value={f.authorType}
-            onChange={(e) =>
-              setF((prev) => ({ ...prev, authorType: e.target.value as DiarioAuthorType }))
-            }
-          >
-            {Object.entries(AUTHOR_TYPE_LABELS).map(([k, v]) => (
-              <option key={k} value={k}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-row">
-          <label className="form-label">Nome autore</label>
-          <input
-            className="form-input"
-            type="text"
-            value={f.authorName}
-            onChange={(e) => setF((prev) => ({ ...prev, authorName: e.target.value }))}
-            placeholder={operatoreNome}
-          />
-        </div>
+        <div className="form-hint">Autore registrato automaticamente dall’account autenticato.</div>
         <div className="form-row">
           <label className="form-label">Titolo (opzionale)</label>
           <input
@@ -562,11 +604,16 @@ export function DiarioPazienteTab({
           {error}
         </div>
       )}
+      {notice && (
+        <div className="empty-state-card" role="status" style={{ marginBottom: 12 }}>
+          {notice}
+        </div>
+      )}
 
       <ClinicalTableSection
         title="Diario Paziente"
         count={entries.length}
-        countLabel={entries.length === 1 ? 'voce' : 'voci'}
+        countLabel={hasMore ? 'voci caricate' : entries.length === 1 ? 'voce' : 'voci'}
         defaultOpen
         actions={sectionActions}
       >
@@ -599,11 +646,28 @@ export function DiarioPazienteTab({
         ) : entries.length === 0 ? (
           <EmptyState msg="Nessuna voce nel diario." />
         ) : (
-          <div className="diario-cards">
-            {[...entries]
-              .sort((a, b) => (b.entryDateTime || '').localeCompare(a.entryDateTime || ''))
-              .map(renderDiarioCard)}
-          </div>
+          <>
+            <div className="diario-cards">
+              {[...entries]
+                .sort((a, b) => {
+                  const byTime = (b.entryDateTime || '').localeCompare(a.entryDateTime || '');
+                  return byTime || b.id.localeCompare(a.id);
+                })
+                .map(renderDiarioCard)}
+            </div>
+            {hasMore && nextCursor && (
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={handleLoadMore}
+                  disabled={loadingMore}
+                >
+                  {loadingMore ? 'Caricamento…' : 'Carica altre voci'}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </ClinicalTableSection>
 

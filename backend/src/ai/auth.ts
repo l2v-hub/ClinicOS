@@ -16,6 +16,13 @@ export interface Operator {
 // Accept the app's role values plus canonical names; everything else is forbidden.
 const ALLOWED_ROLES = new Set(['operatore', 'admin', 'operator', 'manager']);
 
+// The local demo UI predates the relational seed and uses short fixture ids. Resolve only these
+// two known aliases inside explicit demo mode; production Entra identities never pass here.
+const DEMO_OPERATOR_ALIASES: Readonly<Record<string, string>> = {
+  op1: 'SEED-OP-001',
+  admin1: 'SEED-OP-004',
+};
+
 // Augment Express Request with the resolved operator (no global d.ts needed).
 export interface AuthedRequest extends Request {
   operator?: Operator;
@@ -67,7 +74,8 @@ export function requireOperator(req: AuthedRequest, res: Response, next: NextFun
     res.status(403).json({ error: 'Ruolo non autorizzato per l’importazione' });
     return;
   }
-  req.operator = { id: id.slice(0, 64), role };
+  const boundedId = id.slice(0, 64);
+  req.operator = { id: DEMO_OPERATOR_ALIASES[boundedId] ?? boundedId, role };
   next();
 }
 

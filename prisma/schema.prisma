@@ -469,7 +469,8 @@ model PatientDiaryEntry {
   @@index([patientId])
   @@index([authorType])
   @@index([entryDateTime])
-  @@index([patientId, entryDateTime])
+  @@index([patientId, entryDateTime, id])
+  @@index([patientId, authorType, entryDateTime, id])
 }
 
 // ── Patient intake draft (F3 EPIC #120 / Issue #125) ─────────────────────────
