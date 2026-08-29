@@ -15,13 +15,25 @@ test('therapy list query is bounded and round-trips a stable cursor', () => {
 
   const token = encodeTherapyListCursor(
     { createdAt: new Date('2030-01-02T03:04:05.000Z'), id: 'therapy_123' },
-    'non_attiva',
+    { status: 'non_attiva', q: 'warfarin', tipo: 'periodica', data: '2030-01-02' },
   );
-  assert.deepEqual(parseTherapyListQuery({ cursor: token, status: 'non_attiva' }), {
-    limit: 50,
-    status: 'non_attiva',
-    cursor: { createdAt: new Date('2030-01-02T03:04:05.000Z'), id: 'therapy_123' },
-  });
+  assert.deepEqual(
+    parseTherapyListQuery({
+      cursor: token,
+      status: 'non_attiva',
+      q: ' warfarin ',
+      tipo: 'periodica',
+      data: '2030-01-02',
+    }),
+    {
+      limit: 50,
+      status: 'non_attiva',
+      q: 'warfarin',
+      tipo: 'periodica',
+      data: '2030-01-02',
+      cursor: { createdAt: new Date('2030-01-02T03:04:05.000Z'), id: 'therapy_123' },
+    },
+  );
   assert.throws(
     () => parseTherapyListQuery({ cursor: token, status: 'attiva' }),
     TherapyListInputError,
@@ -34,6 +46,12 @@ test('therapy list query rejects malformed bounds, filters and cursors', () => {
     { limit: '101' },
     { limit: '10foo' },
     { status: 'archiviata' },
+    { tipo: 'occasionale' },
+    { data: '2030-02-30' },
+    { q: 'x' },
+    { q: 'x'.repeat(81) },
+    { q: 'war%' },
+    { q: 'met_formina' },
     { cursor: 'not+base64' },
     { cursor: 'a'.repeat(1025) },
     { offset: '10' },
@@ -41,4 +59,12 @@ test('therapy list query rejects malformed bounds, filters and cursors', () => {
   for (const query of invalid) {
     assert.throws(() => parseTherapyListQuery(query), TherapyListInputError);
   }
+  const token = encodeTherapyListCursor(
+    { createdAt: new Date('2030-01-02T03:04:05.000Z'), id: 'therapy_123' },
+    { status: 'tutte', q: 'warfarin' },
+  );
+  assert.throws(
+    () => parseTherapyListQuery({ cursor: token, q: 'metformina' }),
+    TherapyListInputError,
+  );
 });

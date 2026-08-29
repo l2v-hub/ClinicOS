@@ -100,6 +100,10 @@ router.get('/:patientId/therapies/page', async (req, res) => {
     const where: Prisma.PatientTherapyWhereInput[] = [{ patientId }];
     if (input.status === 'attiva') where.push({ stato: 'attiva' });
     if (input.status === 'non_attiva') where.push({ stato: { not: 'attiva' } });
+    if (input.q) where.push({ farmacoNome: { contains: input.q, mode: 'insensitive' } });
+    if (input.tipo) where.push({ tipo: input.tipo });
+    if (input.data) where.push({ dataInizio: input.data });
+    const filteredWhere: Prisma.PatientTherapyWhereInput = { AND: [...where] };
     if (input.cursor) {
       where.push({
         OR: [
@@ -120,7 +124,7 @@ router.get('/:patientId/therapies/page', async (req, res) => {
         ? Promise.resolve(null)
         : prisma.patientTherapy.groupBy({
             by: ['stato'],
-            where: { patientId },
+            where: filteredWhere,
             _count: { _all: true },
           }),
     ]);
@@ -150,7 +154,10 @@ router.get('/:patientId/therapies/page', async (req, res) => {
         hasMore,
         nextCursor:
           hasMore && last
-            ? encodeTherapyListCursor({ createdAt: last.createdAt, id: last.id }, input.status)
+            ? encodeTherapyListCursor(
+                { createdAt: last.createdAt, id: last.id },
+                { status: input.status, q: input.q, tipo: input.tipo, data: input.data },
+              )
             : null,
       },
     });

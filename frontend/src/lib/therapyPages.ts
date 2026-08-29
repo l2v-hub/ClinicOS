@@ -3,6 +3,13 @@ import type { PatientTherapyAPI } from '../types';
 import { cachedGetJson } from './cachedFetch';
 
 export type TherapyListStatus = 'tutte' | 'attiva' | 'non_attiva';
+export type TherapyListType = 'periodica' | 'una_tantum' | 'al_bisogno';
+
+export interface TherapyListFilters {
+  q?: string;
+  tipo?: TherapyListType;
+  data?: string;
+}
 
 export interface TherapyListPage {
   items: PatientTherapyAPI[];
@@ -79,9 +86,13 @@ export async function loadTherapyPage(
   patientId: string,
   status: TherapyListStatus = 'tutte',
   cursor: string | null = null,
+  filters: TherapyListFilters = {},
 ): Promise<TherapyListPage> {
   const base = `${API_URL}/patients/${encodeURIComponent(patientId)}/therapies/page`;
   const query = new URLSearchParams({ limit: String(PAGE_SIZE), status });
+  if (filters.q) query.set('q', filters.q);
+  if (filters.tipo) query.set('tipo', filters.tipo);
+  if (filters.data) query.set('data', filters.data);
   if (cursor) query.set('cursor', cursor);
   const value: unknown = await cachedGetJson(`${base}?${query.toString()}`);
   assertPage(value);

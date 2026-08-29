@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- legacy generic table accepts heterogeneous clinical DTOs */
 import { useState, useMemo } from 'react';
 import { ClinicalTableSection } from './shared';
 
@@ -29,6 +30,8 @@ interface ClinicalTableProps<T extends Record<string, any> = Record<string, any>
   /** When set, rows are paginated with a footer (items-per-page + page range).
    *  When omitted, all rows are shown (legacy behavior). */
   pageSize?: number;
+  /** Disable local sorting when `data` is only one server page. */
+  disableSorting?: boolean;
 }
 
 type SortDir = 'asc' | 'desc' | null;
@@ -47,7 +50,7 @@ function sortRows<T extends Record<string, any>>(
   return [...rows].sort((a, b) => {
     const va = a[sort.key];
     const vb = b[sort.key];
-    let cmp = 0;
+    let cmp: number;
     if (col.filterType === 'date') {
       cmp = String(va ?? '').localeCompare(String(vb ?? ''));
     } else if (typeof va === 'number' && typeof vb === 'number') {
@@ -93,6 +96,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
   onRowClick,
   noWrapper = false,
   pageSize,
+  disableSorting = false,
 }: ClinicalTableProps<T>) {
   const [sort, setSort] = useState<SortState>({ key: '', dir: null });
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -166,7 +170,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
                 }}
               >
                 <div className="cdt__th-inner">
-                  {col.sortable ? (
+                  {col.sortable && !disableSorting ? (
                     <button
                       type="button"
                       className="cdt__sort-btn"

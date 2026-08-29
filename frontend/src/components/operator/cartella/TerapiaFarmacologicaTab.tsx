@@ -2,7 +2,11 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { API_URL } from '../../../config';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
-import { loadTherapyPage } from '../../../lib/therapyPages';
+import {
+  loadTherapyPage,
+  type TherapyListFilters,
+  type TherapyListType,
+} from '../../../lib/therapyPages';
 import { operatorHeaders } from '../../../lib/operatorSession';
 import { ClinicalTableSection, LoadingState } from './shared';
 import { ClinicalTable } from './ClinicalTable';
@@ -302,6 +306,8 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     active: number;
     inactive: number;
   } | null>(null);
+  const [therapyFilterDraft, setTherapyFilterDraft] = useState<TherapyListFilters>({});
+  const [therapyFilters, setTherapyFilters] = useState<TherapyListFilters>({});
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -339,7 +345,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       setLoading(true);
       setLoadingMoreTherapies(false);
       setError('');
-      const page = await loadTherapyPage(requestedPatientId);
+      const page = await loadTherapyPage(requestedPatientId, 'tutte', null, therapyFilters);
       if (
         sequence !== therapyLoadSequence.current ||
         activePatientId.current !== requestedPatientId
@@ -356,6 +362,9 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         sequence === therapyLoadSequence.current &&
         activePatientId.current === requestedPatientId
       ) {
+        setTherapies([]);
+        setNextTherapyCursor(null);
+        setTherapySummary(null);
         setError(err instanceof Error ? err.message : 'Errore caricamento');
       }
     } finally {
@@ -366,7 +375,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         setLoading(false);
       }
     }
-  }, [paziente.id]);
+  }, [paziente.id, therapyFilters]);
 
   const loadMoreTherapies = useCallback(async () => {
     if (!nextTherapyCursor || loadingMoreTherapies) return;
@@ -375,7 +384,12 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     try {
       setLoadingMoreTherapies(true);
       setError('');
-      const page = await loadTherapyPage(requestedPatientId, 'tutte', nextTherapyCursor);
+      const page = await loadTherapyPage(
+        requestedPatientId,
+        'tutte',
+        nextTherapyCursor,
+        therapyFilters,
+      );
       if (
         sequence !== therapyLoadSequence.current ||
         activePatientId.current !== requestedPatientId
@@ -405,7 +419,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         setLoadingMoreTherapies(false);
       }
     }
-  }, [loadingMoreTherapies, nextTherapyCursor, paziente.id]);
+  }, [loadingMoreTherapies, nextTherapyCursor, paziente.id, therapyFilters]);
 
   const loadDaily = useCallback(async (date: string) => {
     try {
@@ -614,10 +628,34 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
     },
   ];
 
+  const therapyFiltersActive = Boolean(
+    therapyFilters.q || therapyFilters.tipo || therapyFilters.data,
+  );
+
+  const applyTherapyFilters = () => {
+    const q = therapyFilterDraft.q?.trim() || undefined;
+    if (q && q.length < 2) {
+      setError('La ricerca farmaco richiede almeno 2 caratteri.');
+      return;
+    }
+    setError('');
+    setTherapyFilters({
+      ...(q ? { q } : {}),
+      ...(therapyFilterDraft.tipo ? { tipo: therapyFilterDraft.tipo } : {}),
+      ...(therapyFilterDraft.data ? { data: therapyFilterDraft.data } : {}),
+    });
+  };
+
+  const clearTherapyFilters = () => {
+    setTherapyFilterDraft({});
+    setTherapyFilters({});
+    setError('');
+  };
+
   const therapyPager = nextTherapyCursor ? (
     <div className="cts__body--padded" style={{ paddingTop: 12, textAlign: 'center' }}>
       <span style={{ marginRight: 8, color: 'var(--text-muted)', fontSize: 12 }}>
-        {therapies.length} terapie caricate · filtri disponibili a caricamento completo
+        {therapies.length} di {therapySummary?.total ?? '—'} risultati caricati
       </span>
       <button
         type="button"
@@ -754,7 +792,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'farmacoNome',
       label: 'Farmaco',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'text',
       render: renderFarmaco,
     },
@@ -764,7 +802,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'tipo',
       label: 'Tipo',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'select',
       options: [
         { value: 'periodica', label: 'Periodica' },
@@ -787,7 +825,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'dataInizio',
       label: 'Inizio',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'date',
       render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span>,
     },
@@ -873,7 +911,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'farmacoNome',
       label: 'Farmaco',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'text',
       render: renderFarmaco,
     },
@@ -883,7 +921,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'stato',
       label: 'Stato',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'select',
       options: [
         { value: 'attiva', label: 'Attiva' },
@@ -898,7 +936,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'tipo',
       label: 'Tipo',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'select',
       options: [
         { value: 'periodica', label: 'Periodica' },
@@ -915,7 +953,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'dataInizio',
       label: 'Inizio',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'date',
       render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span>,
     },
@@ -1122,7 +1160,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'farmacoNome',
       label: 'Farmaco',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'text',
       render: renderFarmaco,
     },
@@ -1132,7 +1170,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'stato',
       label: 'Stato',
       sortable: true,
-      filterable: !nextTherapyCursor,
+      filterable: false,
       filterType: 'select',
       options: [
         { value: 'sospesa', label: 'Sospesa' },
@@ -1207,8 +1245,10 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         esito={anomalie}
         ambito={
           nextTherapyCursor
-            ? 'terapie caricate (verifica parziale)'
-            : 'tutte le terapie in cartella'
+            ? 'risultati caricati (verifica parziale)'
+            : therapyFiltersActive
+              ? 'tutti i risultati filtrati'
+              : 'tutte le terapie in cartella'
         }
       />
       {nextTherapyCursor && (
@@ -1221,13 +1261,75 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       <ClinicalTableSection
         title="Terapia Farmacologica"
         count={therapySummary?.active ?? attive.length}
-        countLabel="farmaci attivi"
+        countLabel={therapyFiltersActive ? 'farmaci attivi nei risultati' : 'farmaci attivi'}
         actions={
           <button className="btn-sm" onClick={openAdd}>
             + Aggiungi farmaco
           </button>
         }
       >
+        <div className="cts__body--padded" aria-label="Filtri terapie">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'end' }}>
+            <label style={{ minWidth: 220, flex: '1 1 220px' }}>
+              <span className="form-label">Cerca farmaco</span>
+              <input
+                className="form-input"
+                value={therapyFilterDraft.q ?? ''}
+                maxLength={80}
+                placeholder="Almeno 2 caratteri"
+                onChange={(event) =>
+                  setTherapyFilterDraft((current) => ({
+                    ...current,
+                    q: event.target.value || undefined,
+                  }))
+                }
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') applyTherapyFilters();
+                }}
+              />
+            </label>
+            <label style={{ minWidth: 170 }}>
+              <span className="form-label">Tipo</span>
+              <select
+                className="form-input"
+                value={therapyFilterDraft.tipo ?? ''}
+                onChange={(event) =>
+                  setTherapyFilterDraft((current) => ({
+                    ...current,
+                    tipo: (event.target.value || undefined) as TherapyListType | undefined,
+                  }))
+                }
+              >
+                <option value="">Tutti</option>
+                <option value="periodica">Periodica</option>
+                <option value="una_tantum">Una tantum</option>
+                <option value="al_bisogno">Al bisogno</option>
+              </select>
+            </label>
+            <label style={{ minWidth: 170 }}>
+              <span className="form-label">Data inizio</span>
+              <input
+                className="form-input"
+                type="date"
+                value={therapyFilterDraft.data ?? ''}
+                onChange={(event) =>
+                  setTherapyFilterDraft((current) => ({
+                    ...current,
+                    data: event.target.value || undefined,
+                  }))
+                }
+              />
+            </label>
+            <button type="button" className="btn-primary btn-sm" onClick={applyTherapyFilters}>
+              Applica filtri
+            </button>
+            {therapyFiltersActive && (
+              <button type="button" className="btn-secondary btn-sm" onClick={clearTherapyFilters}>
+                Azzera
+              </button>
+            )}
+          </div>
+        </div>
         {error && (
           <div
             style={{
@@ -1290,6 +1392,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                 title=""
                 keyField="id"
                 pageSize={25}
+                disableSorting={Boolean(nextTherapyCursor)}
                 data={attive}
                 emptyMessage="Nessun farmaco attivo."
                 columns={attiviColumns}
@@ -1341,6 +1444,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                       title=""
                       keyField="id"
                       pageSize={25}
+                      disableSorting={Boolean(nextTherapyCursor)}
                       data={therapies}
                       emptyMessage="Nessuna terapia programmata."
                       columns={programmazioneColumns}
@@ -1410,6 +1514,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                 title=""
                 keyField="id"
                 pageSize={25}
+                disableSorting={Boolean(nextTherapyCursor)}
                 data={inattive}
                 emptyMessage={
                   nextTherapyCursor

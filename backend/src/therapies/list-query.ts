@@ -1,4 +1,5 @@
 export type TherapyListStatus = 'tutte' | 'attiva' | 'non_attiva';
+export type TherapyListType = 'periodica' | 'una_tantum' | 'al_bisogno';
 
 export interface TherapyListCursor {
   createdAt: Date;
@@ -8,6 +9,9 @@ export interface TherapyListCursor {
 export interface TherapyListQuery {
   limit: number;
   status: TherapyListStatus;
+  q?: string;
+  tipo?: TherapyListType;
+  data?: string;
   cursor?: TherapyListCursor;
 }
 
@@ -23,10 +27,16 @@ interface TherapyListCursorPayload {
   createdAt: string;
   id: string;
   status: TherapyListStatus;
+  q?: string;
+  tipo?: TherapyListType;
+  data?: string;
 }
 
-const QUERY_KEYS = new Set(['limit', 'status', 'cursor']);
+type TherapyListFilters = Pick<TherapyListQuery, 'status' | 'q' | 'tipo' | 'data'>;
+
+const QUERY_KEYS = new Set(['limit', 'status', 'q', 'tipo', 'data', 'cursor']);
 const STATUSES = new Set<TherapyListStatus>(['tutte', 'attiva', 'non_attiva']);
+const TYPES = new Set<TherapyListType>(['periodica', 'una_tantum', 'al_bisogno']);
 const SAFE_ID = /^[A-Za-z0-9_-]{1,128}$/;
 const BASE64URL = /^[A-Za-z0-9_-]+$/;
 const MAX_CURSOR_LENGTH = 1024;
@@ -52,20 +62,23 @@ function parseLimit(value: unknown): number {
 
 export function encodeTherapyListCursor(
   cursor: TherapyListCursor,
-  status: TherapyListStatus,
+  filters: TherapyListFilters,
 ): string {
   const payload: TherapyListCursorPayload = {
     v: 1,
     createdAt: cursor.createdAt.toISOString(),
     id: cursor.id,
-    status,
+    status: filters.status,
+    q: filters.q,
+    tipo: filters.tipo,
+    data: filters.data,
   };
   return Buffer.from(JSON.stringify(payload), 'utf8').toString('base64url');
 }
 
 function decodeTherapyListCursor(
   value: unknown,
-  status: TherapyListStatus,
+  filters: TherapyListFilters,
 ): TherapyListCursor | undefined {
   const raw = scalar(value, 'cursor');
   if (raw === undefined) return undefined;
@@ -87,7 +100,10 @@ function decodeTherapyListCursor(
       createdAt.toISOString() !== payload.createdAt ||
       typeof payload.id !== 'string' ||
       !SAFE_ID.test(payload.id) ||
-      payload.status !== status
+      payload.status !== filters.status ||
+      payload.q !== filters.q ||
+      payload.tipo !== filters.tipo ||
+      payload.data !== filters.data
     ) {
       throw new Error('payload non valido');
     }
@@ -106,6 +122,33 @@ export function parseTherapyListQuery(query: Record<string, unknown>): TherapyLi
     throw new TherapyListInputError('status non valido');
   }
   const status = rawStatus as TherapyListStatus;
-  const cursor = decodeTherapyListCursor(query.cursor, status);
-  return { limit: parseLimit(query.limit), status, ...(cursor ? { cursor } : {}) };
+  const q = scalar(query.q, 'q')?.trim() || undefined;
+  if (q && (q.length < 2 || q.length > 80)) {
+    throw new TherapyListInputError('q deve contenere da 2 a 80 caratteri');
+  }
+  if (q && /[%_\\]/.test(q)) {
+    throw new TherapyListInputError('q contiene caratteri non consentiti');
+  }
+  const rawType = scalar(query.tipo, 'tipo');
+  if (rawType !== undefined && !TYPES.has(rawType as TherapyListType)) {
+    throw new TherapyListInputError('tipo non valido');
+  }
+  const tipo = rawType as TherapyListType | undefined;
+  const data = scalar(query.data, 'data');
+  if (data !== undefined) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(data);
+    if (!match) throw new TherapyListInputError('data non valida');
+    const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+    if (date.toISOString().slice(0, 10) !== data) {
+      throw new TherapyListInputError('data non valida');
+    }
+  }
+  const filters = {
+    status,
+    ...(q ? { q } : {}),
+    ...(tipo ? { tipo } : {}),
+    ...(data ? { data } : {}),
+  };
+  const cursor = decodeTherapyListCursor(query.cursor, filters);
+  return { limit: parseLimit(query.limit), ...filters, ...(cursor ? { cursor } : {}) };
 }

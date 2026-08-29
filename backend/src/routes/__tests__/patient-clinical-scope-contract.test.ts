@@ -8,6 +8,7 @@ const voiceWriterUrl = new URL('../../ai/voice/write-services.ts', import.meta.u
 const narrativeServiceUrl = new URL('../../ai/sections/patient-narrative.ts', import.meta.url);
 const therapyCreateUrl = new URL('../../therapies/therapy-create.ts', import.meta.url);
 const gatewayServicesUrl = new URL('../../ai/gateway/services.ts', import.meta.url);
+const prismaSchemaUrl = new URL('../../../../prisma/schema.prisma', import.meta.url);
 
 test('patient therapies and administrations are private and patient-scoped', async () => {
   const source = await readFile(therapyRouteUrl, 'utf8');
@@ -102,10 +103,18 @@ test('therapy reads use a bounded stable keyset feed without silent legacy trunc
   assert.match(pageBlock, /encodeTherapyListCursor/);
   assert.match(pageBlock, /groupBy\(\{/);
   assert.match(pageBlock, /\{ total: 0, active: 0, inactive: 0 \}/);
+  assert.match(pageBlock, /farmacoNome: \{ contains: input\.q, mode: 'insensitive' \}/);
+  assert.match(pageBlock, /where: filteredWhere/);
   assert.match(source, /take: 101/);
   assert.match(source, /Elenco oltre il limite legacy/);
   assert.match(source, /take: 33/);
   assert.match(source, /Terapia con oltre 32 orari/);
+});
+
+test('therapy substring search has a matching PostgreSQL trigram index', async () => {
+  const schema = await readFile(prismaSchemaUrl, 'utf8');
+  assert.match(schema, /farmacoNome\(ops: raw\("gin_trgm_ops"\)\)/);
+  assert.match(schema, /PatientTherapy_farmacoNome_trgm_idx/);
 });
 
 test('assistant therapy context is projected, bounded and reports truncation', async () => {

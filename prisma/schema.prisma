@@ -302,6 +302,7 @@ model PatientTherapy {
 
   @@index([patientId])
   @@index([patientId, createdAt, id])
+  @@index([farmacoNome(ops: raw("gin_trgm_ops"))], type: Gin, map: "PatientTherapy_farmacoNome_trgm_idx")
   @@index([tipo, stato])
   @@index([stato])
   @@index([stato, tipo, dataSomministrazione])

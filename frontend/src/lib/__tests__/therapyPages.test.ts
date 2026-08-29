@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { afterEach, test } from 'node:test';
 import { clearCachedGet } from '../cachedFetch';
-import { loadAllTherapyPages } from '../therapyPages';
+import { loadAllTherapyPages, loadTherapyPage } from '../therapyPages';
 
 const originalFetch = globalThis.fetch;
 const therapyTabUrl = new URL(
@@ -64,6 +64,30 @@ test('therapy page loader rejects a repeating cursor instead of looping forever'
   await assert.rejects(() => loadAllTherapyPages('patient-1'), /Paginazione terapie non valida/);
 });
 
+test('therapy page loader carries every server filter on the first page', async () => {
+  let requested = '';
+  globalThis.fetch = (async (input: string | URL | Request) => {
+    requested = String(input);
+    return new Response(
+      JSON.stringify({
+        items: [],
+        summary: { total: 0, active: 0, inactive: 0 },
+        pageInfo: { hasMore: false, nextCursor: null },
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    );
+  }) as typeof fetch;
+
+  await loadTherapyPage('patient-1', 'tutte', null, {
+    q: 'acido acetilsalicilico',
+    tipo: 'periodica',
+    data: '2030-01-02',
+  });
+  assert.match(requested, /q=acido\+acetilsalicilico/);
+  assert.match(requested, /tipo=periodica/);
+  assert.match(requested, /data=2030-01-02/);
+});
+
 test('therapy UI loads incrementally while emergency print requires every active page', async () => {
   const [tab, emergencyPrint] = await Promise.all([
     readFile(therapyTabUrl, 'utf8'),
@@ -75,8 +99,14 @@ test('therapy UI loads incrementally while emergency print requires every active
   assert.match(tab, /pageSize=\{25\}/);
   assert.match(tab, /therapySummary\?\.active/);
   assert.match(tab, /verifica parziale/);
-  assert.match(tab, /filterable: !nextTherapyCursor/);
-  assert.match(tab, /filtri disponibili a caricamento completo/);
+  assert.match(tab, /Applica filtri/);
+  assert.match(tab, /loadTherapyPage\([\s\S]*therapyFilters/);
+  assert.match(tab, /filterable: false/);
+  assert.match(tab, /disableSorting=\{Boolean\(nextTherapyCursor\)\}/);
+  assert.match(
+    tab,
+    /setTherapies\(\[\]\);[\s\S]*setNextTherapyCursor\(null\);[\s\S]*setTherapySummary\(null\);/,
+  );
   assert.match(emergencyPrint, /loadAllTherapyPages\(paziente\.id, 'attiva'\)/);
   assert.match(emergencyPrint, /disabled=\{loading \|\| Boolean\(fetchError\)\}/);
   assert.match(emergencyPrint, /La stampa è bloccata/);
