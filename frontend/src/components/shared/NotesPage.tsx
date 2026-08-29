@@ -4,6 +4,7 @@ import type { NotesMailboxQuery } from '../../lib/notesMailbox';
 import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoMessage } from '../../icons';
 import { InlineEditableField } from './InlineEditableField';
+import { PageHeader } from './PageHeader';
 
 interface NotesPageProps {
   note: Nota[];
@@ -151,26 +152,33 @@ export function NotesPage({
 
   return (
     <div className="notes-page">
-      <div className="view-header">
-        <div>
-          <h2 className="view-header__title">Note e messaggi</h2>
-          <p className="view-header__sub">
-            {unreadCount > 0 ? (
-              <span style={{ color: 'var(--red)' }}>
-                {unreadCount} non lett{unreadCount === 1 ? 'a' : 'e'}
-              </span>
-            ) : (
-              'Tutte lette'
-            )}
-          </p>
-        </div>
-        <button className="btn-success" onClick={() => setFormAperto((open) => !open)}>
-          <IcoPlus /> Nuova nota
-        </button>
-      </div>
+      <PageHeader
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Note' }]}
+        title="Note e messaggi"
+        subtitle={
+          unreadCount > 0 ? (
+            <span className="page-header__status page-header__status--attention">
+              {unreadCount} non lett{unreadCount === 1 ? 'a' : 'e'}
+            </span>
+          ) : (
+            'Tutte lette'
+          )
+        }
+        actions={
+          <button
+            type="button"
+            className="btn-success"
+            aria-expanded={formAperto}
+            aria-controls="nuova-nota-panel"
+            onClick={() => setFormAperto((open) => !open)}
+          >
+            <IcoPlus /> Nuova nota
+          </button>
+        }
+      />
 
       {formAperto && (
-        <div className="op-form-panel">
+        <div id="nuova-nota-panel" className="op-form-panel">
           <div className="op-form-panel__header">
             <h3 className="op-form-panel__title">Nuova nota / messaggio</h3>
             <button

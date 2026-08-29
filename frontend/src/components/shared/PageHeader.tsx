@@ -8,7 +8,7 @@ interface BreadcrumbItem {
 interface Props {
   breadcrumb?: BreadcrumbItem[];
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   actions?: ReactNode;
   tabs?: ReactNode;
 }

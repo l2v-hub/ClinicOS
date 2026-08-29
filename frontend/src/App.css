@@ -5307,6 +5307,10 @@ textarea.form-input {
   font-size: 13px;
   color: var(--text-muted);
 }
+.page-header__status--attention {
+  color: var(--red);
+  font-weight: 600;
+}
 .page-header__actions {
   display: inline-flex;
   align-items: center;

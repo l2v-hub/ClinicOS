@@ -14,6 +14,7 @@ import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
 import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
 import { localIsoDate } from '../../lib/appointmentRange';
+import { PageHeader } from '../shared/PageHeader';
 
 interface ConsegnePageProps {
   consegne: Consegna[];
@@ -163,29 +164,33 @@ export function ConsegnePage({
 
   return (
     <div className="consegne-page">
-      <div className="view-header">
-        <div>
-          <h2 className="view-header__title">Consegne</h2>
-          <p className="view-header__sub">
-            Nel tuo perimetro: {summary.open} aperte · {summary.urgentOpen} urgenti
-            {(filtroStato !== 'tutte' || filtroPriorita !== 'tutte' || ricerca.trim()) &&
-              ' · riepilogo indipendente dai filtri'}
-          </p>
-        </div>
-        <button
-          className="btn-success"
-          onClick={() => {
-            setCreateError(null);
-            setFormAperto((v) => !v);
-          }}
-        >
-          <IcoPlus /> Nuova consegna
-        </button>
-      </div>
+      <PageHeader
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Consegne' }]}
+        title="Consegne"
+        subtitle={`Nel tuo perimetro: ${summary.open} aperte · ${summary.urgentOpen} urgenti${
+          filtroStato !== 'tutte' || filtroPriorita !== 'tutte' || ricerca.trim()
+            ? ' · riepilogo indipendente dai filtri'
+            : ''
+        }`}
+        actions={
+          <button
+            type="button"
+            className="btn-success"
+            aria-expanded={formAperto}
+            aria-controls="nuova-consegna-panel"
+            onClick={() => {
+              setCreateError(null);
+              setFormAperto((v) => !v);
+            }}
+          >
+            <IcoPlus /> Nuova consegna
+          </button>
+        }
+      />
 
       {/* Form */}
       {formAperto && (
-        <div className="op-form-panel">
+        <div id="nuova-consegna-panel" className="op-form-panel">
           <div className="op-form-panel__header">
             <h3 className="op-form-panel__title">Nuova Consegna</h3>
             <button className="icon-btn" onClick={() => setFormAperto(false)}>
