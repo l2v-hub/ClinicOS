@@ -15,13 +15,8 @@ import {
   staffSource,
   therapySource,
 } from '../gateway/sources.js';
-import { buildTherapySlots } from '../../therapies/therapy-slots.js';
-import {
-  collectTherapiesDue,
-  dayKey,
-  type ConsegnaRow,
-  type TherapyDueItem,
-} from './facility-signals.js';
+import { findTherapiesDue } from '../../therapies/due-therapy-query.js';
+import { dayKey, type ConsegnaRow, type TherapyDueItem } from './facility-signals.js';
 import {
   planQuery,
   extractPatientName,
@@ -254,8 +249,13 @@ async function openConsegnaQueue(ctx: UserContext) {
 }
 
 async function therapiesDue(ctx: UserContext, now: Date, windowMinutes: number) {
-  const slots = await buildTherapySlots(dayKey(now), { patientIds: ctx.permittedPatientIds });
-  return collectTherapiesDue(slots, now, windowMinutes);
+  return findTherapiesDue(
+    dayKey(now),
+    { patientIds: ctx.permittedPatientIds },
+    now,
+    windowMinutes,
+    SAMPLE_SIZE,
+  );
 }
 
 const therapyItemSource = (t: TherapyDueItem) =>
@@ -285,26 +285,28 @@ async function facilitySnapshot(
   ctx: UserContext,
   env: NodeJS.ProcessEnv,
   now: Date = new Date(),
-): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated: boolean }> {
   if (!canFacilityRead(env))
     throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
 
   const occ = await roomsOccupancy(env);
-  const { overdue } = await therapiesDue(ctx, now, 0);
+  const therapies = await therapiesDue(ctx, now, 0);
   const consegneOverdue = await overdueConsegne(ctx, now);
   const appuntamenti = await appointmentsToday(ctx);
   const generatedAt = now.toISOString();
 
-  const therapiesOverdue = overdue.slice(0, SAMPLE_SIZE);
+  const therapiesOverdue = therapies.overdue;
   const consegneSample = consegneOverdue.items;
 
   const data = [
     {
       generatedAt,
       occupancy: occ.data[0] ?? null,
-      therapiesOverdueCount: overdue.length,
+      therapiesOverdueCount: therapies.overdueCount,
+      therapiesOverdueSampleCount: therapiesOverdue.length,
       therapiesOverdue,
       consegneOverdueCount: consegneOverdue.count,
+      consegneOverdueSampleCount: consegneSample.length,
       consegneOverdue: consegneSample.map((c) => ({
         id: c.id,
         pazienteId: c.pazienteId,
@@ -327,7 +329,7 @@ async function facilitySnapshot(
       '',
       'therapies-overdue',
       'Somministrazioni in ritardo',
-      `${overdue.length} somministrazioni ancora da erogare oltre l'orario previsto`,
+      `${therapies.overdueCount} somministrazioni ancora da erogare oltre l'orario previsto`,
       generatedAt,
     ),
   );
@@ -350,7 +352,11 @@ async function facilitySnapshot(
       `${appuntamenti.data.length} appuntamenti programmati oggi`,
     ),
   );
-  return { data, sourceRefs };
+  return {
+    data,
+    sourceRefs,
+    truncated: therapies.truncated || consegneOverdue.count > consegneOverdue.items.length,
+  };
 }
 
 /** Coda di lavoro «cosa devo fare adesso»: dosi dovute più consegne create/assegnate all'attore.
@@ -361,16 +367,16 @@ async function operatorQueue(
   env: NodeJS.ProcessEnv,
   operatorName?: string,
   now: Date = new Date(),
-): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated: boolean }> {
   if (!canFacilityRead(env))
     throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
 
-  const { overdue, dueSoon } = await therapiesDue(ctx, now, QUEUE_WINDOW_MINUTES);
+  const therapies = await therapiesDue(ctx, now, QUEUE_WINDOW_MINUTES);
   const queue = await openConsegnaQueue(ctx);
   const generatedAt = now.toISOString();
 
-  const therapiesOverdue = overdue.slice(0, SAMPLE_SIZE);
-  const therapiesDueSoon = dueSoon.slice(0, SAMPLE_SIZE);
+  const therapiesOverdue = therapies.overdue;
+  const therapiesDueSoon = therapies.dueSoon;
   const myLikelyConsegne = queue.mineItems;
   const otherOpenConsegne = queue.otherItems;
 
@@ -380,13 +386,17 @@ async function operatorQueue(
       windowMinutes: QUEUE_WINDOW_MINUTES,
       operatorName: operatorName ?? null,
       scope: privilegedContext(ctx) ? 'reparto' : 'operatore',
-      therapiesOverdueCount: overdue.length,
+      therapiesOverdueCount: therapies.overdueCount,
+      therapiesOverdueSampleCount: therapiesOverdue.length,
       therapiesOverdue,
-      therapiesDueSoonCount: dueSoon.length,
+      therapiesDueSoonCount: therapies.dueSoonCount,
+      therapiesDueSoonSampleCount: therapiesDueSoon.length,
       therapiesDueSoon,
       myLikelyConsegneCount: queue.mineCount,
+      myLikelyConsegneSampleCount: myLikelyConsegne.length,
       myLikelyConsegne,
       otherOpenConsegneCount: queue.otherCount,
+      otherOpenConsegneSampleCount: otherOpenConsegne.length,
       otherOpenConsegne,
     },
   ];
@@ -396,7 +406,7 @@ async function operatorQueue(
       '',
       'therapies-queue',
       'Somministrazioni da erogare',
-      `${overdue.length} in ritardo, ${dueSoon.length} entro ${QUEUE_WINDOW_MINUTES} minuti`,
+      `${therapies.overdueCount} in ritardo, ${therapies.dueSoonCount} entro ${QUEUE_WINDOW_MINUTES} minuti`,
       generatedAt,
     ),
     ...therapiesOverdue.map(therapyItemSource),
@@ -411,7 +421,14 @@ async function operatorQueue(
     ...myLikelyConsegne.map(consegnaItemSource),
     ...otherOpenConsegne.map(consegnaItemSource),
   ];
-  return { data, sourceRefs };
+  return {
+    data,
+    sourceRefs,
+    truncated:
+      therapies.truncated ||
+      queue.mineCount > queue.mineItems.length ||
+      queue.otherCount > queue.otherItems.length,
+  };
 }
 
 /** Run the assistant for a question. Pure orchestration over the gateway; SOURCE_ONLY. */

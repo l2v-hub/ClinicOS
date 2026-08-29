@@ -58,8 +58,10 @@ interface FacilitySnapshot {
     occupancyPct: number;
   } | null;
   therapiesOverdueCount: number;
+  therapiesOverdueSampleCount: number;
   therapiesOverdue: BriefTherapy[];
   consegneOverdueCount: number;
+  consegneOverdueSampleCount: number;
   consegneOverdue: BriefConsegna[];
   appointmentsTodayCount: number;
 }
@@ -67,12 +69,16 @@ interface FacilitySnapshot {
 interface OperatorQueue {
   windowMinutes: number;
   therapiesOverdueCount: number;
+  therapiesOverdueSampleCount: number;
   therapiesOverdue: BriefTherapy[];
   therapiesDueSoonCount: number;
+  therapiesDueSoonSampleCount: number;
   therapiesDueSoon: BriefTherapy[];
   myLikelyConsegneCount: number;
+  myLikelyConsegneSampleCount: number;
   myLikelyConsegne: BriefConsegna[];
   otherOpenConsegneCount: number;
+  otherOpenConsegneSampleCount: number;
   otherOpenConsegne: BriefConsegna[];
 }
 
@@ -301,6 +307,13 @@ function FacilitySnapshotBody({ snapshot }: { snapshot: FacilitySnapshot }) {
               badge={<span className="badge badge--amber">{snapshot.consegneOverdueCount}</span>}
             />
           )}
+          {(snapshot.therapiesOverdueCount > (terapie ? 1 : 0) ||
+            snapshot.consegneOverdueCount > (consegna ? 1 : 0)) && (
+            <div className="ai-asst__partial" role="status" aria-live="polite">
+              Riepilogo parziale: mostrato un esempio per categoria. Apri la sezione per vedere
+              tutti i record.
+            </div>
+          )}
         </>
       )}
       <div className="agnos-brief__rule" />
@@ -375,9 +388,14 @@ function OperatorQueueBody({
           <div className="agnos-brief__eyebrow">Da controllare</div>
           {righe}
           {totale > righe.length && (
-            <button type="button" className="link-btn" onClick={() => onNavigate?.(vediTutte)}>
-              Vedi tutte le {totale} attività
-            </button>
+            <>
+              <div className="ai-asst__partial" role="status" aria-live="polite">
+                Mostrate {righe.length} di {totale} attività.
+              </div>
+              <button type="button" className="link-btn" onClick={() => onNavigate?.(vediTutte)}>
+                Vedi tutte le {totale} attività
+              </button>
+            </>
           )}
           {queue.myLikelyConsegneCount > 0 && (
             <div className="ai-asst__source-meta">

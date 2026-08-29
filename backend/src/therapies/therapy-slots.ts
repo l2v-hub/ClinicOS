@@ -1,7 +1,6 @@
 // Costruzione degli slot terapia di una giornata a partire da PatientTherapy + le somministrazioni
-// gia' registrate. Estratto da GET /therapy-slots perche' ora ha due consumatori (la rotta REST e i
-// tool di lettura di Agnos): una seconda implementazione farebbe divergere i conteggi mostrati
-// dall'UI da quelli su cui l'assistente risponde. Sola lettura.
+// gia' registrate. Il percorso interattivo usa pagine bounded; il reader completo resta solo per la
+// rotta REST legacy. Agnos usa invece un aggregate SQL bounded dedicato. Sola lettura.
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
@@ -11,9 +10,15 @@ import {
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
 import { earliestOra } from './slot-scheduling.js';
+import {
+  findTherapyPageAdministrations,
+  legacyAdministrationKey,
+} from './therapy-administration-page.js';
+import { TherapySlotCapacityError } from './therapy-capacity.js';
 import { therapyWhereForAccess, type TherapyPatientAccess } from './therapy-query.js';
 
 export { therapyWhereForDate } from './therapy-query.js';
+export { TherapySlotCapacityError } from './therapy-capacity.js';
 
 export const FASCE = [
   { fascia: 'mattina', ora: '08:00', label: 'Terapia Mattina', flagField: 'fasceMattina' },
@@ -26,8 +31,6 @@ export const FASCE = [
 type FlagField = (typeof FASCE)[number]['flagField'];
 
 export const MAX_THERAPY_SLOT_SOURCE_ROWS = 5000;
-export const MAX_THERAPY_SLOT_ADMINISTRATION_ROWS = MAX_THERAPY_SLOT_SOURCE_ROWS * FASCE.length;
-export class TherapySlotCapacityError extends Error {}
 
 interface RoomFallbackRow {
   patientId: string;
@@ -270,13 +273,10 @@ async function buildTherapySlotSourcePage(
     return true;
   });
 
-  const patientIds = [...new Set(validTherapies.map((therapy) => therapy.patientId))];
-  const therapyIds = validTherapies.map((therapy) => therapy.id);
-  const drugNames = [...new Set(validTherapies.map((therapy) => therapy.farmacoNome))];
   const legacyCandidateKeys = new Set(
     validTherapies.flatMap((therapy) =>
-      FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map(
-        (fascia) => `${therapy.patientId}|${therapy.farmacoNome}|${fascia.fascia}`,
+      FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map((fascia) =>
+        legacyAdministrationKey(therapy.patientId, therapy.farmacoNome, fascia.fascia),
       ),
     ),
   );
@@ -300,48 +300,24 @@ async function buildTherapySlotSourcePage(
           LIMIT ${MAX_THERAPY_SLOT_SOURCE_ROWS}
         `);
   const roomFallbackByPatient = new Map(fallbackRows.map((row) => [row.patientId, row]));
-  const administrationLimit = Math.min(
-    MAX_THERAPY_SLOT_ADMINISTRATION_ROWS,
-    limit * FASCE.length * 2,
+  const administrations = await findTherapyPageAdministrations(
+    date,
+    validTherapies.map((therapy) => ({
+      therapyId: therapy.id,
+      patientId: therapy.patientId,
+      drugName: therapy.farmacoNome,
+      fasce: FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map(
+        ({ fascia }) => fascia,
+      ),
+    })),
   );
-  const administrations =
-    patientIds.length === 0
-      ? []
-      : await prisma.medicationAdministration.findMany({
-          where: {
-            date,
-            OR: [
-              { therapyId: { in: therapyIds } },
-              {
-                therapyId: null,
-                patientId: { in: patientIds },
-                farmacoNome: { in: drugNames },
-                fascia: { in: FASCE.map(({ fascia }) => fascia) },
-              },
-            ],
-          },
-          orderBy: { id: 'asc' },
-          take: administrationLimit + 1,
-          select: {
-            id: true,
-            therapyId: true,
-            patientId: true,
-            farmacoNome: true,
-            fascia: true,
-            stato: true,
-            confirmedAt: true,
-            operatoreNome: true,
-            motivo: true,
-          },
-        });
-  if (administrations.length > administrationLimit) {
-    throw new TherapySlotCapacityError(
-      `Troppe somministrazioni per la pagina (massimo ${administrationLimit})`,
-    );
-  }
   const adminMap = new Map<string, (typeof administrations)[0]>(
     administrations.flatMap((administration) => {
-      const legacyKey = `${administration.patientId}|${administration.farmacoNome}|${administration.fascia}`;
+      const legacyKey = legacyAdministrationKey(
+        administration.patientId,
+        administration.farmacoNome,
+        administration.fascia,
+      );
       return administration.therapyId
         ? [[`${administration.therapyId}|${administration.fascia}`, administration]]
         : legacyCandidateKeys.has(legacyKey)
@@ -365,7 +341,7 @@ async function buildTherapySlotSourcePage(
 
       const existing =
         adminMap.get(`${pt.id}|${f.fascia}`) ??
-        adminMap.get(`${pt.patientId}|${pt.farmacoNome}|${f.fascia}`);
+        adminMap.get(legacyAdministrationKey(pt.patientId, pt.farmacoNome, f.fascia));
       let status: SlotAdministration['status'] = 'pending';
       if (existing?.stato === 'erogata') status = 'administered';
       if (existing?.stato === 'non_erogata') status = 'not_administered';

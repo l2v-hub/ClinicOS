@@ -29,3 +29,11 @@ test('answer view exposes the partial-results warning as a live status', () => {
   assert.match(source, /role="status"/);
   assert.match(source, /aria-live="polite"/);
 });
+
+test('automatic assistant briefs disclose how many sampled activities are shown', () => {
+  const source = readFileSync(new URL('./AgnosBrief.tsx', import.meta.url), 'utf8');
+  assert.match(source, /Riepilogo parziale: mostrato un esempio per categoria/);
+  assert.match(source, /Mostrate \{righe\.length\} di \{totale\} attività/);
+  assert.match(source, /className="ai-asst__partial"/);
+  assert.match(source, /role="status"/);
+});
