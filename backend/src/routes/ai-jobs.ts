@@ -18,9 +18,10 @@ import {
 } from '../ai/upload/job-service.js';
 import type { IncomingFile } from '../ai/upload/validation.js';
 import { confirmJob, type ConfirmPayload } from '../ai/upload/confirm-service.js';
-import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 import { importRateLimit, extractionCostGuard } from '../ai/rate-limit.js';
 import { recordAudit } from '../ai/audit.js';
+import { requireOwnedImportJob } from '../ai/ownership.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // AI IMPORT JOBS — mounted at /ai/extraction/jobs (REQ-014)
@@ -42,6 +43,9 @@ const aiJobsRouter = Router();
 // The /sweep maintenance route below also benefits from the gate (operator-only).
 aiJobsRouter.use(requireOperator);
 aiJobsRouter.use(importRateLimit);
+// Every route carrying `:id` is owner-scoped. Admin/manager retain break-glass access;
+// unknown and foreign IDs both resolve to 404 to prevent resource enumeration.
+aiJobsRouter.param('id', requireOwnedImportJob);
 
 function toIncoming(files: Express.Multer.File[] | undefined): IncomingFile[] {
   return (files ?? []).map((f) => ({
@@ -53,9 +57,8 @@ function toIncoming(files: Express.Multer.File[] | undefined): IncomingFile[] {
 
 function handleError(res: import('express').Response, err: unknown) {
   if (err instanceof AiExtractionError) {
-    return res
-      .status(err.kind === 'config' ? 400 : 503)
-      .json({ error: err.message, kind: err.kind });
+    const status = err.kind === 'not_found' ? 404 : err.kind === 'config' ? 400 : 503;
+    return res.status(status).json({ error: err.message, kind: err.kind });
   }
   if (err instanceof multer.MulterError) {
     return res.status(400).json({ error: `Upload non valido: ${err.code}` });
@@ -230,7 +233,7 @@ aiJobsRouter.get('/:id/result', async (req, res) => {
 });
 
 // POST /ai/extraction/jobs/sweep — manual retention sweep (also runs on an interval).
-aiJobsRouter.post('/sweep', async (_req, res) => {
+aiJobsRouter.post('/sweep', requireRole('admin', 'manager'), async (_req, res) => {
   try {
     const result = await sweepExpiredJobs();
     return res.status(200).json(result);

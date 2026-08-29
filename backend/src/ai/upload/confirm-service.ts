@@ -13,6 +13,10 @@ import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sect
 import { persistImportDocuments } from './patient-documents.js';
 import { getDraft } from '../../intake/draft-service.js';
 import { createTherapyInTx, type TherapyCreateInput } from '../../therapies/therapy-create.js';
+import {
+  therapiesWithAuthenticatedActor,
+  type ClinicalActor,
+} from '../../therapies/clinical-actor.js';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../../lib/codice-fiscale.js';
 
 // #294: il CF è la chiave univoca del paziente. Ogni conferma che CREA un paziente
@@ -173,6 +177,7 @@ async function materializePatient(
 export async function confirmDraft(
   draftId: string,
   payload: ConfirmPayload,
+  actor: ClinicalActor,
 ): Promise<ConfirmResult> {
   const draft = await getDraft(draftId);
   if (!draft) throw new AiExtractionError('config', 'Bozza non trovata');
@@ -287,7 +292,7 @@ export async function confirmDraft(
         cartellaData,
         narrative,
         jobId: draft.importJobId ?? undefined,
-        therapies: payload.therapies,
+        therapies: therapiesWithAuthenticatedActor(payload.therapies, actor),
       });
 
       // Mark the draft confirmed within the same transaction for atomicity.

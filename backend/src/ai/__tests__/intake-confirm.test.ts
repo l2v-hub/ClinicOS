@@ -21,9 +21,9 @@ test('confirmDraft creates patient transactionally + is idempotent', async () =>
     cartella: { statoRicovero: 'ricoverato' },
     confirmDuplicate: true,
   };
-  const r1 = await confirmDraft(d.id, payload as any);
+  const r1 = await confirmDraft(d.id, payload as any, { id: 'op-test' });
   assert.equal(r1.status, 'created');
-  const r2 = await confirmDraft(d.id, payload as any); // replay
+  const r2 = await confirmDraft(d.id, payload as any, { id: 'op-test' }); // replay
   assert.equal(r2.status, 'idempotent');
   assert.equal(r2.patient!.id, r1.patient!.id);
   // cleanup
@@ -44,7 +44,7 @@ test('confirmDraft: blocks a missing CF and a duplicate CF (not forcible)', asyn
   // 1) Missing CF → hard block, nothing persisted.
   const d1 = await createDraft({ createdById: 'op-test', source: 'manual' });
   await assert.rejects(
-    () => confirmDraft(d1.id, { patient: base, confirmDuplicate: true } as any),
+    () => confirmDraft(d1.id, { patient: base, confirmDuplicate: true } as any, { id: 'op-test' }),
     (err: Error) => err.message.includes('Codice fiscale mancante o non valido'),
   );
   const afterBlock = await prisma.patientIntakeDraft.findUnique({ where: { id: d1.id } });
@@ -54,23 +54,31 @@ test('confirmDraft: blocks a missing CF and a duplicate CF (not forcible)', asyn
   // so only the CF key can flag it).
   const cf = 'NTKSNT70A01H501G';
   const d2 = await createDraft({ createdById: 'op-test', source: 'manual' });
-  const first = await confirmDraft(d2.id, {
-    patient: { ...base, codiceFiscale: cf },
-  } as any);
+  const first = await confirmDraft(
+    d2.id,
+    {
+      patient: { ...base, codiceFiscale: cf },
+    } as any,
+    { id: 'op-test' },
+  );
   assert.equal(first.status, 'created');
 
   const d3 = await createDraft({ createdById: 'op-test', source: 'manual' });
   await assert.rejects(
     () =>
-      confirmDraft(d3.id, {
-        patient: {
-          firstName: 'Altro',
-          lastName: 'Omonimo',
-          dateOfBirth: '1980-05-05',
-          codiceFiscale: ` ${cf.toLowerCase()} `, // normalization must still match
-        },
-        confirmDuplicate: true,
-      } as any),
+      confirmDraft(
+        d3.id,
+        {
+          patient: {
+            firstName: 'Altro',
+            lastName: 'Omonimo',
+            dateOfBirth: '1980-05-05',
+            codiceFiscale: ` ${cf.toLowerCase()} `, // normalization must still match
+          },
+          confirmDuplicate: true,
+        } as any,
+        { id: 'op-test' },
+      ),
     (err: Error) => err.message.includes('Codice fiscale già presente'),
   );
 

@@ -1,6 +1,9 @@
 import { prisma } from '../lib/prisma.js';
 import type { DischargeNarrativeDraft } from '../ai/sections/narrative.js';
 import { parseDischargeTherapy } from './parse-discharge-therapy.js';
+import type { Operator } from '../ai/auth.js';
+import { canAccessOwnedResource } from '../ai/ownership-policy.js';
+import { AiExtractionError } from '../ai/types.js';
 
 // ── Allergene sanitation (import seeding) ────────────────────────────────────
 // CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
@@ -86,6 +89,7 @@ export async function listDrafts(createdById?: string) {
 
 export interface SeedDraftFromImportOpts {
   createdById?: string;
+  actor?: Operator;
 }
 
 /**
@@ -198,7 +202,13 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
   const existing = await prisma.patientIntakeDraft.findFirst({
     where: { importJobId: jobId },
   });
-  if (existing) return existing;
+  if (existing) {
+    const allowed = opts.actor
+      ? canAccessOwnedResource(opts.actor, existing.createdById)
+      : (existing.createdById ?? null) === (opts.createdById ?? null);
+    if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
+    return existing;
+  }
 
   // Load the extraction job.
   const job = await prisma.importJob.findUniqueOrThrow({ where: { id: jobId } });
@@ -230,7 +240,13 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
     // that a P2002 — re-read and return the existing draft instead of failing.
     if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2002') {
       const raced = await prisma.patientIntakeDraft.findFirst({ where: { importJobId: jobId } });
-      if (raced) return raced;
+      if (raced) {
+        const allowed = opts.actor
+          ? canAccessOwnedResource(opts.actor, raced.createdById)
+          : (raced.createdById ?? null) === (opts.createdById ?? null);
+        if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
+        return raced;
+      }
     }
     throw err;
   }

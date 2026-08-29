@@ -1,9 +1,18 @@
 import { prisma } from '../lib/prisma.js';
+import { Prisma } from '@prisma/client';
 import { Router } from 'express';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { buildTherapySlots } from '../therapies/therapy-slots.js';
 
 const router = Router();
+
+class TherapyAlreadyAdministeredError extends Error {}
+
+function isConcurrentWriteConflict(error: unknown): boolean {
+  return Boolean(
+    error && typeof error === 'object' && (error as { code?: string }).code === 'P2034',
+  );
+}
 
 // Gate minimo (header-based, non IdP): gli slot terapia espongono nominativi paziente e
 // farmaci somministrati, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
@@ -23,7 +32,8 @@ router.get('/', async (req, res) => {
 });
 
 // POST /therapy-slots/confirm
-// Body: { patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora, operatoreId, operatoreNome, therapyId? }
+// Actor identity always comes from req.operator; client-supplied actor fields are ignored.
+// Body: { patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora, therapyId? }
 router.post('/confirm', async (req, res) => {
   const {
     patientId,
@@ -33,10 +43,7 @@ router.post('/confirm', async (req, res) => {
     date,
     fascia,
     ora,
-    operatoreId,
-    operatoreNome,
     // therapyId accepted for forward-compat; not stored in DB yet
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     therapyId: _therapyId,
   } = req.body as {
     patientId: string;
@@ -46,8 +53,6 @@ router.post('/confirm', async (req, res) => {
     date: string;
     fascia: string;
     ora: string;
-    operatoreId: string;
-    operatoreNome: string;
     therapyId?: string;
   };
 
@@ -57,61 +62,59 @@ router.post('/confirm', async (req, res) => {
   }
 
   try {
-    // Check if already administered
-    const existing = await prisma.medicationAdministration.findUnique({
-      where: { patientId_farmacoNome_date_fascia: { patientId, farmacoNome, date, fascia } },
-    });
-
-    if (existing?.stato === 'erogata') {
-      res.status(409).json({
-        error: 'Terapia già erogata',
-        existingRecord: {
-          operatoreConferma: existing.operatoreNome,
-          oraConferma: existing.confirmedAt
-            ? new Date(existing.confirmedAt).toLocaleTimeString('it-IT', {
-                hour: '2-digit',
-                minute: '2-digit',
-              })
-            : null,
-        },
-      });
-      return;
-    }
-
-    const record = await prisma.medicationAdministration.upsert({
-      where: { patientId_farmacoNome_date_fascia: { patientId, farmacoNome, date, fascia } },
-      create: {
-        patientId,
-        farmacoNome,
-        farmacoDose: farmacoDose || '',
-        farmacoVia: farmacoVia || 'orale',
-        date,
-        fascia,
-        ora: ora || '',
-        stato: 'erogata',
-        operatoreId: operatoreId || null,
-        operatoreNome: operatoreNome || null,
-        confirmedAt: new Date(),
+    const actor = (req as AuthedRequest).operator!;
+    const record = await prisma.$transaction(
+      async (tx) => {
+        const existing = await tx.medicationAdministration.findUnique({
+          where: { patientId_farmacoNome_date_fascia: { patientId, farmacoNome, date, fascia } },
+        });
+        if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
+        return tx.medicationAdministration.upsert({
+          where: { patientId_farmacoNome_date_fascia: { patientId, farmacoNome, date, fascia } },
+          create: {
+            patientId,
+            farmacoNome,
+            farmacoDose: farmacoDose || '',
+            farmacoVia: farmacoVia || 'orale',
+            date,
+            fascia,
+            ora: ora || '',
+            stato: 'erogata',
+            operatoreId: actor.id,
+            operatoreNome: actor.name || actor.id,
+            confirmedAt: new Date(),
+          },
+          update: {
+            stato: 'erogata',
+            operatoreId: actor.id,
+            operatoreNome: actor.name || actor.id,
+            confirmedAt: new Date(),
+            motivo: null,
+            note: null,
+          },
+        });
       },
-      update: {
-        stato: 'erogata',
-        operatoreId: operatoreId || null,
-        operatoreNome: operatoreNome || null,
-        confirmedAt: new Date(),
-        motivo: null,
-        note: null,
-      },
-    });
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
 
     res.status(200).json(record);
   } catch (error) {
+    if (error instanceof TherapyAlreadyAdministeredError) {
+      res.status(409).json({ error: 'Terapia già erogata' });
+      return;
+    }
+    if (isConcurrentWriteConflict(error)) {
+      res.status(409).json({ error: 'Conflitto concorrente: ricaricare lo slot e riprovare' });
+      return;
+    }
     console.error('POST /therapy-slots/confirm error:', error);
     res.status(500).json({ error: 'Errore durante conferma somministrazione' });
   }
 });
 
 // POST /therapy-slots/not-administered
-// Body: { patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora, operatoreId, operatoreNome, motivo, note, therapyId? }
+// Actor identity always comes from req.operator; client-supplied actor fields are ignored.
+// Body: { patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora, motivo, note, therapyId? }
 router.post('/not-administered', async (req, res) => {
   const {
     patientId,
@@ -121,12 +124,9 @@ router.post('/not-administered', async (req, res) => {
     date,
     fascia,
     ora,
-    operatoreId,
-    operatoreNome,
     motivo,
     note: noteText,
     // therapyId accepted for forward-compat; not stored in DB yet
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     therapyId: _therapyId,
   } = req.body as {
     patientId: string;
@@ -136,8 +136,6 @@ router.post('/not-administered', async (req, res) => {
     date: string;
     fascia: string;
     ora: string;
-    operatoreId: string;
-    operatoreNome: string;
     motivo: string;
     note: string;
     therapyId?: string;
@@ -151,34 +149,53 @@ router.post('/not-administered', async (req, res) => {
   }
 
   try {
-    const record = await prisma.medicationAdministration.upsert({
-      where: { patientId_farmacoNome_date_fascia: { patientId, farmacoNome, date, fascia } },
-      create: {
-        patientId,
-        farmacoNome,
-        farmacoDose: farmacoDose || '',
-        farmacoVia: farmacoVia || 'orale',
-        date,
-        fascia,
-        ora: ora || '',
-        stato: 'non_erogata',
-        operatoreId: operatoreId || null,
-        operatoreNome: operatoreNome || null,
-        motivo,
-        note: noteText || null,
+    const actor = (req as AuthedRequest).operator!;
+    const record = await prisma.$transaction(
+      async (tx) => {
+        const existing = await tx.medicationAdministration.findUnique({
+          where: { patientId_farmacoNome_date_fascia: { patientId, farmacoNome, date, fascia } },
+          select: { stato: true },
+        });
+        if (existing?.stato === 'erogata') throw new TherapyAlreadyAdministeredError();
+        return tx.medicationAdministration.upsert({
+          where: { patientId_farmacoNome_date_fascia: { patientId, farmacoNome, date, fascia } },
+          create: {
+            patientId,
+            farmacoNome,
+            farmacoDose: farmacoDose || '',
+            farmacoVia: farmacoVia || 'orale',
+            date,
+            fascia,
+            ora: ora || '',
+            stato: 'non_erogata',
+            operatoreId: actor.id,
+            operatoreNome: actor.name || actor.id,
+            motivo,
+            note: noteText || null,
+          },
+          update: {
+            stato: 'non_erogata',
+            motivo,
+            note: noteText || null,
+            operatoreId: actor.id,
+            operatoreNome: actor.name || actor.id,
+            confirmedAt: null,
+          },
+        });
       },
-      update: {
-        stato: 'non_erogata',
-        motivo,
-        note: noteText || null,
-        operatoreId: operatoreId || null,
-        operatoreNome: operatoreNome || null,
-        confirmedAt: null,
-      },
-    });
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
 
     res.status(200).json(record);
   } catch (error) {
+    if (error instanceof TherapyAlreadyAdministeredError) {
+      res.status(409).json({ error: 'Terapia già erogata: stato non modificabile' });
+      return;
+    }
+    if (isConcurrentWriteConflict(error)) {
+      res.status(409).json({ error: 'Conflitto concorrente: ricaricare lo slot e riprovare' });
+      return;
+    }
     console.error('POST /therapy-slots/not-administered error:', error);
     res.status(500).json({ error: 'Errore durante registrazione non somministrazione' });
   }

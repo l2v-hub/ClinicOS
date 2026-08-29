@@ -6,6 +6,9 @@
 import { prisma } from '../lib/prisma.js';
 import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
 import { earliestOra } from './slot-scheduling.js';
+import { therapyWhereForDate } from './therapy-query.js';
+
+export { therapyWhereForDate } from './therapy-query.js';
 
 export const FASCE = [
   { fascia: 'mattina', ora: '08:00', label: 'Terapia Mattina', flagField: 'fasceMattina' },
@@ -58,13 +61,47 @@ export interface TherapySlot {
 /** Slot della giornata `date` (YYYY-MM-DD), raggruppati per fascia e paziente. Solo fasce non vuote. */
 export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
   const therapies = await prisma.patientTherapy.findMany({
-    where: { stato: 'attiva' },
-    include: {
-      schedules: true,
+    where: therapyWhereForDate(date),
+    select: {
+      id: true,
+      patientId: true,
+      farmacoNome: true,
+      dosaggio: true,
+      viaSomministrazione: true,
+      tipo: true,
+      giorniSettimana: true,
+      fasceMattina: true,
+      fascePranzo: true,
+      fascePomeriggio: true,
+      fasceSera: true,
+      fasceNotte: true,
+      commercialStrengthValue: true,
+      commercialStrengthUnit: true,
+      schedules: {
+        select: {
+          fascia: true,
+          time: true,
+          quantityNumerator: true,
+          quantityDenominator: true,
+          administrationUnit: true,
+        },
+      },
       patient: {
-        include: {
-          cartella: true,
-          roomAssignments: { include: { bed: { include: { room: true } } } },
+        select: {
+          firstName: true,
+          lastName: true,
+          cartella: { select: { data: true } },
+          roomAssignments: {
+            where: {
+              startDate: { lte: date },
+              OR: [{ endDate: null }, { endDate: { gte: date } }],
+            },
+            orderBy: [{ startDate: 'desc' }, { id: 'desc' }],
+            take: 1,
+            select: {
+              bed: { select: { label: true, room: { select: { numero: true } } } },
+            },
+          },
         },
       },
     },
@@ -75,10 +112,6 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
       console.error('Skipping invalid/orphan therapy: missing patient for therapyId', pt.id);
       return false;
     }
-    if (pt.tipo === 'al_bisogno') return false;
-    if (pt.tipo === 'una_tantum') return pt.dataSomministrazione === date;
-    if (pt.dataInizio > date) return false;
-    if (pt.dataFine && pt.dataFine < date) return false;
     // #241: intermittent weekday posology — a drug with a giorniSettimana list must not appear on
     // days outside it. Empty/null = every day (backward-compatible).
     if (pt.giorniSettimana && pt.giorniSettimana.trim()) {
@@ -90,7 +123,23 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
     return true;
   });
 
-  const administrations = await prisma.medicationAdministration.findMany({ where: { date } });
+  const patientIds = [...new Set(validTherapies.map((therapy) => therapy.patientId))];
+  const administrations =
+    patientIds.length === 0
+      ? []
+      : await prisma.medicationAdministration.findMany({
+          where: { date, patientId: { in: patientIds } },
+          select: {
+            id: true,
+            patientId: true,
+            farmacoNome: true,
+            fascia: true,
+            stato: true,
+            confirmedAt: true,
+            operatoreNome: true,
+            motivo: true,
+          },
+        });
   const adminMap = new Map<string, (typeof administrations)[0]>(
     administrations.map((a) => [`${a.patientId}|${a.farmacoNome}|${a.fascia}`, a]),
   );
@@ -103,11 +152,7 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
       const patient = pt.patient;
 
       // Resolve room/bed from active assignment, fallback to cartella JSON
-      const activeAssignment = patient.roomAssignments.find((ra) => {
-        if (ra.startDate > date) return false;
-        if (ra.endDate && ra.endDate < date) return false;
-        return true;
-      });
+      const activeAssignment = patient.roomAssignments[0];
       const cartData = patient.cartella?.data as CartDataFallback | undefined;
       const room = activeAssignment?.bed?.room?.numero || cartData?.cameraNumero || 'Non assegnato';
       const bed = activeAssignment?.bed?.label || cartData?.lettoNumero || 'Non assegnato';

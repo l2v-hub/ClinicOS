@@ -466,18 +466,46 @@ export async function createJob(
     const existing = await prisma.importJob.findUnique({
       where: { idempotencyKey: opts.idempotencyKey },
     });
-    if (existing) return getJob(existing.id) as Promise<PublicJob>;
+    if (existing) {
+      // Idempotency is scoped to the authenticated actor. A globally unique key must never
+      // become a lookup oracle that returns another operator's clinical import job.
+      if ((existing.createdById ?? null) !== (opts.createdById ?? null)) {
+        throw new AiExtractionError('not_found', 'Job non trovato');
+      }
+      return getJob(existing.id) as Promise<PublicJob>;
+    }
   }
-  const job = await prisma.importJob.create({
-    data: {
-      status: 'uploaded',
-      idempotencyKey: opts.idempotencyKey,
-      createdById: opts.createdById,
-      maxFiles: cfg.maxFiles,
-      maxTotalBytes: cfg.maxTotalMb * 1024 * 1024,
-      expiresAt: expiry(cfg),
-    },
-  });
+  let job;
+  try {
+    job = await prisma.importJob.create({
+      data: {
+        status: 'uploaded',
+        idempotencyKey: opts.idempotencyKey,
+        createdById: opts.createdById,
+        maxFiles: cfg.maxFiles,
+        maxTotalBytes: cfg.maxTotalMb * 1024 * 1024,
+        expiresAt: expiry(cfg),
+      },
+    });
+  } catch (error) {
+    // Two replicas may race after the initial lookup. Re-read the unique key, but apply the
+    // same ownership rule before returning the winner.
+    if (
+      opts.idempotencyKey &&
+      error &&
+      typeof error === 'object' &&
+      (error as { code?: string }).code === 'P2002'
+    ) {
+      const raced = await prisma.importJob.findUnique({
+        where: { idempotencyKey: opts.idempotencyKey },
+      });
+      if (raced && (raced.createdById ?? null) === (opts.createdById ?? null)) {
+        return getJob(raced.id) as Promise<PublicJob>;
+      }
+      if (raced) throw new AiExtractionError('not_found', 'Job non trovato');
+    }
+    throw error;
+  }
   return getJob(job.id) as Promise<PublicJob>;
 }
 

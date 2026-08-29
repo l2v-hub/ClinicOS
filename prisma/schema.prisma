@@ -237,6 +237,7 @@ model MedicationAdministration {
 
   @@unique([patientId, farmacoNome, date, fascia])
   @@index([date, fascia])
+  @@index([date, patientId])
   @@index([patientId])
   @@index([patientId, date])
 }
@@ -298,6 +299,8 @@ model PatientTherapy {
   @@index([patientId])
   @@index([tipo, stato])
   @@index([stato])
+  @@index([stato, tipo, dataSomministrazione])
+  @@index([stato, dataInizio, dataFine])
 }
 
 // REQ-093: per-administration-time prescribed quantity, expressed as an EXACT fraction.
@@ -374,6 +377,7 @@ model PatientRoomAssignment {
   bed         Bed       @relation(fields: [bedId], references: [id], onDelete: Cascade)
 
   @@index([patientId])
+  @@index([patientId, startDate, endDate])
   @@index([bedId])
   @@index([startDate, endDate])
 }

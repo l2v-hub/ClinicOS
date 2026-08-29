@@ -65,14 +65,18 @@ test('confirmDraft: persists therapies + vitals/pain into Cartella.data', async 
   const draft = await createDraft({ source: 'manual' });
 
   try {
-    const result = await confirmDraft(draft.id, {
-      patient: PATIENT,
-      cartella: {
-        parametriMensili: PARAMETRI_MENSILI,
-        valutazioniNRS: VALUTAZIONI_NRS,
+    const result = await confirmDraft(
+      draft.id,
+      {
+        patient: PATIENT,
+        cartella: {
+          parametriMensili: PARAMETRI_MENSILI,
+          valutazioniNRS: VALUTAZIONI_NRS,
+        },
+        therapies: THERAPIES,
       },
-      therapies: THERAPIES,
-    });
+      { id: 'op-test', name: 'Operatore Test' },
+    );
 
     // 1. Status must be 'created'.
     assert.equal(result.status, 'created', `Expected status 'created', got '${result.status}'`);

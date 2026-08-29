@@ -45,6 +45,7 @@ export interface ExtractionResult {
 /** Distinguishes provider/transport errors from schema/validation errors (REQ-015). */
 export type AiErrorKind =
   | 'config'
+  | 'not_found'
   | 'provider_unavailable'
   | 'timeout'
   | 'provider_error'

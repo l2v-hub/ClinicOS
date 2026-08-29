@@ -72,7 +72,7 @@ test('confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConf
   try {
     // 1) Without override → hard block with the REQ-026 message.
     await assert.rejects(
-      () => confirmDraft(draft.id, { patient: PATIENT }),
+      () => confirmDraft(draft.id, { patient: PATIENT }, { id: 'op-test' }),
       (err: Error) => {
         assert.ok(
           err.message.includes('allergie contrastanti'),
@@ -87,7 +87,11 @@ test('confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConf
     assert.equal(afterBlock?.status, 'draft', 'draft must remain unconfirmed after block');
 
     // 2) With explicit override → patient is created.
-    const res = await confirmDraft(draft.id, { patient: PATIENT, confirmAllergyConflict: true });
+    const res = await confirmDraft(
+      draft.id,
+      { patient: PATIENT, confirmAllergyConflict: true },
+      { id: 'op-test' },
+    );
     assert.equal(res.status, 'created', `Expected created, got: ${res.status}`);
     assert.ok(res.patient?.id, 'created patient must have an id');
     createdPatientId = res.patient?.id;

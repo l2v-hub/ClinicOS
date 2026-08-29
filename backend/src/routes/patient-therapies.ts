@@ -11,7 +11,7 @@ import {
   normalizeGiorniSettimana,
   type TherapyCreateInput,
 } from '../therapies/therapy-create.js';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 
 const router = Router();
 
@@ -46,7 +46,11 @@ router.get('/:patientId/therapies', async (req, res) => {
 // POST /patients/:patientId/therapies
 router.post('/:patientId/therapies', async (req, res) => {
   const { patientId } = req.params;
-  const body = req.body as TherapyCreateInput;
+  const actor = (req as AuthedRequest).operator!;
+  const body = {
+    ...(req.body as TherapyCreateInput),
+    operatoreInseritore: actor.name || actor.id,
+  };
 
   // Validate required fields BEFORE the 404 existence check (preserves original
   // 400-before-404 precedence: bad input → 400, then missing patient → 404).
@@ -113,7 +117,6 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
       'fasceNotte',
       'orarioSpecifico',
       'prescrittore',
-      'operatoreInseritore',
       'note',
       'dataSomministrazione',
       'orarioSomministrazione',

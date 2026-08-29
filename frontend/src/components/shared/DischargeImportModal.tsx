@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../config';
+import { operatorHeaders } from '../../lib/operatorSession';
 import type { ConfirmPatient } from './ImportReviewFull';
 import { ImportSectionsReview } from './sections/ImportSectionsReview';
 import type { SectionsResult } from './sections/types';
@@ -91,9 +92,11 @@ export function DischargeImportModal({
   operatorRole,
 }: Props) {
   // REQ-019: attach operator identity to every import request.
-  const opHeaders: Record<string, string> = {};
-  if (operatorId) opHeaders['X-Operator-Id'] = operatorId;
-  if (operatorRole) opHeaders['X-Operator-Role'] = operatorRole;
+  const opHeaders: Record<string, string> = operatorHeaders();
+  // Props remain a demo-mode fallback for older callers; operatorHeaders also carries the
+  // verified Entra bearer token and therefore takes precedence when a real session exists.
+  if (operatorId && !opHeaders['X-Operator-Id']) opHeaders['X-Operator-Id'] = operatorId;
+  if (operatorRole && !opHeaders['X-Operator-Role']) opHeaders['X-Operator-Role'] = operatorRole;
   const apiFetch = (url: string, opts: RequestInit = {}) =>
     fetch(url, {
       ...opts,
@@ -121,10 +124,13 @@ export function DischargeImportModal({
   useEffect(() => {
     if (!open) {
       previews.forEach((p) => URL.revokeObjectURL(p.url));
+      // Closing the modal intentionally resets its complete local workflow state in one effect.
+      /* eslint-disable react-hooks/set-state-in-effect */
       setJob(null);
       setOutcomes([]);
       setError(null);
       setStep('upload');
+      /* eslint-enable react-hooks/set-state-in-effect */
       setProposal(null);
       setProcessing(false);
       setPreviews([]);

@@ -1,25 +1,44 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 
 const router = Router();
 
 // Gate minimo (header-based, non IdP): le lettere di dimissione contengono dati clinici
 // paziente reali, richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
 router.use(requireOperator);
+// Legacy base64 flow has no persisted owner field and is not used by the current frontend.
+// Keep it available only as a privileged compatibility path until it is removed.
+router.use(requireRole('admin', 'manager'));
+router.use((_req, res, next) => {
+  res.setHeader('Deprecation', 'true');
+  res.setHeader('Sunset', 'Thu, 31 Dec 2026 23:59:59 GMT');
+  next();
+});
+
+const MAX_LEGACY_FILE_BYTES = 5 * 1024 * 1024;
+const MAX_BASE64_LENGTH = Math.ceil(MAX_LEGACY_FILE_BYTES / 3) * 4;
+const LEGACY_MIME_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png']);
 
 // ── POST /patient-intake/discharge-letter/upload ──
 // Receives base64 file, stores document
 router.post('/discharge-letter/upload', async (req, res) => {
-  const { fileName, fileType, fileData, operatoreNome } = req.body as {
+  const { fileName, fileType, fileData } = req.body as {
     fileName: string;
     fileType: string;
     fileData: string; // base64
-    operatoreNome?: string;
   };
 
   if (!fileName || !fileType || !fileData) {
     res.status(400).json({ error: 'fileName, fileType e fileData sono obbligatori' });
+    return;
+  }
+  if (!LEGACY_MIME_TYPES.has(fileType)) {
+    res.status(400).json({ error: 'Formato non supportato: usare PDF, JPEG o PNG' });
+    return;
+  }
+  if (fileData.length > MAX_BASE64_LENGTH) {
+    res.status(413).json({ error: 'Documento troppo grande: massimo 5 MB' });
     return;
   }
 
@@ -29,7 +48,8 @@ router.post('/discharge-letter/upload', async (req, res) => {
         fileName,
         fileType,
         fileData,
-        operatoreNome: operatoreNome || null,
+        operatoreNome:
+          (req as AuthedRequest).operator?.name || (req as AuthedRequest).operator?.id || null,
         status: 'uploaded',
       },
     });

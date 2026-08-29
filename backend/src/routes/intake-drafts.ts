@@ -9,6 +9,7 @@ import {
 } from '../intake/draft-service.js';
 import { confirmDraft, type ConfirmPayload } from '../ai/upload/confirm-service.js';
 import { AiExtractionError } from '../ai/types.js';
+import { importJobIsAccessible, requireOwnedIntakeDraft } from '../ai/ownership.js';
 
 // ── Intake Drafts Router — mounted at /intake/drafts (F3 EPIC #120 / #125) ───
 // Operator-gated CRUD + autosave endpoints for PatientIntakeDraft.
@@ -16,14 +17,14 @@ import { AiExtractionError } from '../ai/types.js';
 const intakeDraftsRouter = Router();
 
 intakeDraftsRouter.use(requireOperator);
+intakeDraftsRouter.param('id', requireOwnedIntakeDraft);
 
 function handleError(res: import('express').Response, err: unknown) {
   // Clinical-safety / validation blocks from confirmDraft (allergy conflict, section loss,
   // invalid input) carry a specific Italian message the UI must surface — map like ai-jobs.
   if (err instanceof AiExtractionError) {
-    return res
-      .status(err.kind === 'config' ? 400 : 503)
-      .json({ error: err.message, kind: err.kind });
+    const status = err.kind === 'not_found' ? 404 : err.kind === 'config' ? 400 : 503;
+    return res.status(status).json({ error: err.message, kind: err.kind });
   }
   // Prisma "record not found" (e.g. patchDraft on a missing/confirmed draft) → 404, not 500.
   if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2025') {
@@ -44,7 +45,13 @@ intakeDraftsRouter.post('/from-import', async (req, res) => {
     if (typeof importJobId !== 'string' || !importJobId.trim()) {
       return res.status(400).json({ error: 'importJobId è obbligatorio' });
     }
-    const draft = await seedDraftFromImport(importJobId.trim(), { createdById: op?.id });
+    if (!(await importJobIsAccessible(importJobId.trim(), op))) {
+      return res.status(404).json({ error: 'Job non trovato' });
+    }
+    const draft = await seedDraftFromImport(importJobId.trim(), {
+      createdById: op?.id,
+      actor: op,
+    });
     return res.status(201).json({ id: draft.id, data: draft.data });
   } catch (err) {
     // Map "job not found" (Prisma P2025) → 404, missing _narrative → 422.
@@ -60,10 +67,14 @@ intakeDraftsRouter.post('/', async (req, res) => {
   try {
     const op = (req as AuthedRequest).operator;
     const { source, importJobId } = req.body ?? {};
+    const normalizedImportJobId = typeof importJobId === 'string' ? importJobId.trim() : undefined;
+    if (normalizedImportJobId && !(await importJobIsAccessible(normalizedImportJobId, op))) {
+      return res.status(404).json({ error: 'Job non trovato' });
+    }
     const draft = await createDraft({
       createdById: op?.id,
       source: source === 'import' ? 'import' : 'manual',
-      importJobId: typeof importJobId === 'string' ? importJobId : undefined,
+      importJobId: normalizedImportJobId,
     });
     return res.status(201).json(draft);
   } catch (err) {
@@ -110,7 +121,11 @@ intakeDraftsRouter.patch('/:id', async (req, res) => {
 intakeDraftsRouter.post('/:id/confirm', async (req, res) => {
   try {
     const payload = (req.body ?? {}) as ConfirmPayload;
-    const result = await confirmDraft(String(req.params.id), payload);
+    const result = await confirmDraft(
+      String(req.params.id),
+      payload,
+      (req as AuthedRequest).operator!,
+    );
     if (result.status === 'duplicate') {
       return res.status(409).json(result);
     }
