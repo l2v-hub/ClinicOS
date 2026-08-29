@@ -5,6 +5,9 @@ import { importRateLimit } from '../rate-limit.js';
 import { canCrossPatientSearch } from '../gateway/context.js';
 import { ctxFromOperator } from '../../routes/ai-assistant-public.js';
 
+process.env.NODE_ENV = 'test';
+process.env.AUTH_MODE = 'demo';
+
 function mockReq(headers: Record<string, string>, ip = '1.2.3.4') {
   return {
     header: (n: string) => headers[n] ?? headers[n.toLowerCase()],
@@ -76,16 +79,55 @@ test('requireOperator: admin/manager/operator casings accepted', () => {
   }
 });
 
-test('operatorAuthMode: production fails closed unless Entra is explicit', () => {
-  assert.equal(operatorAuthMode({ NODE_ENV: 'production' } as NodeJS.ProcessEnv), 'disabled');
+test('operatorAuthMode: demo requires explicit development/test opt-in', () => {
+  for (const nodeEnv of [undefined, 'development', 'test', 'staging', 'production']) {
+    const env = nodeEnv === undefined ? {} : { NODE_ENV: nodeEnv };
+    assert.equal(operatorAuthMode(env as NodeJS.ProcessEnv), 'disabled');
+  }
+
+  assert.equal(
+    operatorAuthMode({ NODE_ENV: 'development', AUTH_MODE: 'demo' } as NodeJS.ProcessEnv),
+    'demo',
+  );
+  assert.equal(
+    operatorAuthMode({ NODE_ENV: 'test', AUTH_MODE: 'demo' } as NodeJS.ProcessEnv),
+    'demo',
+  );
   assert.equal(
     operatorAuthMode({ NODE_ENV: 'production', AUTH_MODE: 'demo' } as NodeJS.ProcessEnv),
+    'disabled',
+  );
+  assert.equal(
+    operatorAuthMode({ NODE_ENV: 'staging', AUTH_MODE: 'demo' } as NodeJS.ProcessEnv),
+    'disabled',
+  );
+  assert.equal(
+    operatorAuthMode({ NODE_ENV: 'test', AUTH_MODE: 'unexpected' } as NodeJS.ProcessEnv),
     'disabled',
   );
   assert.equal(
     operatorAuthMode({ NODE_ENV: 'production', AUTH_MODE: 'entra' } as NodeJS.ProcessEnv),
     'entra',
   );
+});
+
+test('requireOperator: spoofed headers fail closed when AUTH_MODE is missing', () => {
+  const previousAuthMode = process.env.AUTH_MODE;
+  delete process.env.AUTH_MODE;
+  try {
+    const req = mockReq({ 'X-Operator-Id': 'attacker', 'X-Operator-Role': 'admin' });
+    const res = mockRes();
+    let nexted = false;
+    requireOperator(req as never, res as never, () => {
+      nexted = true;
+    });
+    assert.equal(nexted, false);
+    assert.equal(res._out.code, 503);
+    assert.equal(req.operator, undefined);
+  } finally {
+    if (previousAuthMode === undefined) delete process.env.AUTH_MODE;
+    else process.env.AUTH_MODE = previousAuthMode;
+  }
 });
 
 test('requireOperator: spoofed demo headers fail closed in production', () => {

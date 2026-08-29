@@ -80,6 +80,10 @@ npm --prefix backend run prisma:generate
 npm run dev                     # frontend :5173 + backend :3001
 ```
 
+Per lo sviluppo sintetico impostare esplicitamente nel runtime backend
+`NODE_ENV=development` e `AUTH_MODE=demo`. Senza `AUTH_MODE`, oppure con un valore non valido,
+gli endpoint protetti restano fail-closed (503). In produzione è ammesso solo `AUTH_MODE=entra`.
+
 Database locale, container Podman su `localhost:5433/clinicos_test`:
 
 ```bash

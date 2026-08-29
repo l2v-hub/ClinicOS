@@ -36,9 +36,17 @@ if (files.length === 0) {
 const stubCss = new URL('./stub-css-loader.mjs', import.meta.url).href;
 
 console.log(`run-node-tests: running ${files.length} test file(s) via node --import tsx --test`);
+const childEnv = { ...process.env };
+const isBackendWorkspace = process.cwd().split(/[\\/]/).at(-1) === 'backend';
+if (isBackendWorkspace) {
+  // Synthetic identities must be an explicit test-harness decision. Application
+  // code stays fail-closed when AUTH_MODE is absent or misspelled.
+  if (!Object.hasOwn(childEnv, 'AUTH_MODE')) childEnv.AUTH_MODE = 'demo';
+  if (!Object.hasOwn(childEnv, 'NODE_ENV')) childEnv.NODE_ENV = 'test';
+}
 const res = spawnSync(
   process.execPath,
   ['--import', 'tsx', '--import', stubCss, '--test', ...files],
-  { stdio: 'inherit' },
+  { stdio: 'inherit', env: childEnv },
 );
 process.exit(res.status ?? 1);

@@ -20,16 +20,27 @@ const workflow = readFileSync(resolve(root, '.github/workflows/ai-import-e2e.yml
 const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 const lock = JSON.parse(readFileSync(resolve(root, 'package-lock.json'), 'utf8'));
 
-/** Extract the browser-e2e job block (up to the next top-level job key). */
-function browserE2eBlock(yml) {
-  const start = yml.indexOf('\n  browser-e2e:');
-  assert.notEqual(start, -1, 'browser-e2e job must exist in ai-import-e2e.yml');
+/** Extract a job block (up to the next top-level job key). */
+function jobBlock(yml, jobName) {
+  const start = yml.indexOf(`\n  ${jobName}:`);
+  assert.notEqual(start, -1, `${jobName} job must exist in ai-import-e2e.yml`);
   const rest = yml.slice(start + 1);
   const next = rest.slice(1).search(/\n {2}[a-zA-Z][\w-]*:/);
   return next === -1 ? rest : rest.slice(0, next + 1);
 }
 
-const job = browserE2eBlock(workflow);
+const gateJob = jobBlock(workflow, 'gate');
+const job = jobBlock(workflow, 'browser-e2e');
+
+test('backend CI jobs explicitly opt in to synthetic test authentication', () => {
+  for (const [name, block] of [
+    ['gate', gateJob],
+    ['browser-e2e', job],
+  ]) {
+    assert.match(block, /NODE_ENV:\s*test/, `${name} must set NODE_ENV=test`);
+    assert.match(block, /AUTH_MODE:\s*demo/, `${name} must explicitly set AUTH_MODE=demo`);
+  }
+});
 
 test('browser-e2e builds the frontend against the local backend (VITE_API_URL)', () => {
   assert.match(

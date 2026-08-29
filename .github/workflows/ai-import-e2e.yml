@@ -41,6 +41,8 @@ jobs:
           --health-timeout 5s --health-retries 5
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/clinicos_test?schema=public
+      NODE_ENV: test
+      AUTH_MODE: demo
       AI_PROVIDER: mock
       NODE_OPTIONS: --max-old-space-size=4096
       # The backend no longer extracts in-process: it delegates to the clinicos-ai-runtime
@@ -113,6 +115,8 @@ jobs:
           --health-timeout 5s --health-retries 5
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/clinicos_test?schema=public
+      NODE_ENV: test
+      AUTH_MODE: demo
       AI_PROVIDER: mock
       PORT: 3001
       NODE_OPTIONS: --max-old-space-size=4096

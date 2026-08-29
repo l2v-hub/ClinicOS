@@ -26,10 +26,11 @@ export type OperatorAuthMode = 'entra' | 'demo' | 'disabled';
 export function operatorAuthMode(env: NodeJS.ProcessEnv = process.env): OperatorAuthMode {
   const configured = (env.AUTH_MODE || '').trim().toLowerCase();
   if (configured === 'entra') return 'entra';
-  if (configured === 'demo') return env.NODE_ENV === 'production' ? 'disabled' : 'demo';
-  // Existing local/test workflows remain ergonomic, while production fails closed
-  // when AUTH_MODE was forgotten or misspelled.
-  if (!configured && env.NODE_ENV !== 'production') return 'demo';
+  if (configured === 'demo') {
+    return env.NODE_ENV === 'development' || env.NODE_ENV === 'test' ? 'demo' : 'disabled';
+  }
+  // Missing, misspelled, and unsupported modes always fail closed. Synthetic
+  // operator headers are accepted only after explicit local/test opt-in.
   return 'disabled';
 }
 
@@ -49,7 +50,7 @@ export function requireOperator(req: AuthedRequest, res: Response, next: NextFun
   }
   if (mode === 'disabled') {
     res.status(503).json({
-      error: 'Endpoint clinici disabilitati: configurare AUTH_MODE=entra',
+      error: 'Endpoint clinici disabilitati: configurare esplicitamente AUTH_MODE',
       code: 'auth_disabled',
     });
     return;

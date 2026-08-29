@@ -1,7 +1,9 @@
 # Attivazione Azure Entra ID per i documenti clinici (#260)
 
-Il codice è già deployabile: senza le variabili qui sotto gli endpoint documenti restano
-**fail-closed** (503) e la SPA mantiene il flusso demo. L'attivazione è solo configurazione.
+Senza una modalità di autenticazione esplicita gli endpoint protetti restano **fail-closed**
+(503): la SPA non attiva più implicitamente il flusso demo. Per QA locale il demo richiede
+`AUTH_MODE=demo` insieme a `NODE_ENV=development` (oppure `test` in CI); in produzione usare
+esclusivamente `AUTH_MODE=entra` con le variabili qui sotto.
 
 ## 1. App registration nel tenant Entra
 

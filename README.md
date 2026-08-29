@@ -53,10 +53,15 @@ Create `backend/.env` with:
 
 ```env
 DATABASE_URL="postgresql://clinicos:clinicos@localhost:5432/clinicos?schema=public"
-PORT=4000
+PORT=3001
 NODE_ENV=development
+AUTH_MODE=demo
 FRONTEND_URL=http://localhost:5173
 ```
+
+`AUTH_MODE=demo` accetta identità sintetiche dagli header ed è consentito solo con
+`NODE_ENV=development` o `test`. Va usato esclusivamente per sviluppo/QA locale; se la variabile
+è assente o non valida, gli endpoint protetti restano disabilitati. In produzione usare `entra`.
 
 ## Quick Start
 
@@ -110,7 +115,7 @@ FRONTEND_URL=http://localhost:5173
 ## Expected Local URLs
 
 - Frontend: `http://localhost:5173`
-- Backend: `http://localhost:4000`
+- Backend: `http://localhost:3001`
 
 ## Notes
 
@@ -163,12 +168,15 @@ Railway sets `DATABASE_URL` automatically in the service environment.
 
 #### 4. Set backend environment variables in Railway
 
-| Variable       | Value                                 |
-| -------------- | ------------------------------------- |
-| `DATABASE_URL` | Auto-set by Railway PostgreSQL plugin |
-| `PORT`         | Auto-set by Railway (do not override) |
-| `NODE_ENV`     | `production`                          |
-| `FRONTEND_URL` | `https://your-app.vercel.app`         |
+| Variable          | Value                                 |
+| ----------------- | ------------------------------------- |
+| `DATABASE_URL`    | Auto-set by Railway PostgreSQL plugin |
+| `PORT`            | Auto-set by Railway (do not override) |
+| `NODE_ENV`        | `production`                          |
+| `AUTH_MODE`       | `entra`                               |
+| `ENTRA_TENANT_ID` | Directory (tenant) ID                 |
+| `ENTRA_AUDIENCE`  | Application ID URI dell'API           |
+| `FRONTEND_URL`    | `https://your-app.vercel.app`         |
 
 > To allow multiple Vercel preview URLs:  
 > `FRONTEND_URLS=https://app.vercel.app,https://app-git-main.vercel.app`
