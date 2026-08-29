@@ -3,6 +3,12 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const css = readFileSync(new URL('../../App.css', import.meta.url), 'utf8');
+const importedStyles = [
+  css,
+  readFileSync(new URL('../../app-additions.css', import.meta.url), 'utf8'),
+  readFileSync(new URL('../../clinicos-restyle.css', import.meta.url), 'utf8'),
+  readFileSync(new URL('../../index.css', import.meta.url), 'utf8'),
+];
 
 function topLevelRootBlocks(source: string): string[] {
   const blocks: string[] = [];
@@ -65,4 +71,16 @@ test('intentional responsive sidebar overrides remain media-scoped', () => {
     css,
     /@media \(min-width: 1024px\) and \(max-width: 1180px\)[\s\S]*?:root\s*{\s*--sidebar-w:\s*88px/,
   );
+});
+
+test('the imported style graph has one token owner and one font request', () => {
+  const roots = importedStyles.flatMap(topLevelRootBlocks);
+  assert.equal(roots.length, 1);
+  assert.equal(importedStyles.join('\n').match(/fonts\.googleapis\.com/g)?.length, 1);
+});
+
+test('legacy theme aliases and automatic dark overrides cannot retarget the clinical theme', () => {
+  const graph = importedStyles.join('\n');
+  assert.doesNotMatch(graph, /var\(--(?:heading|mono|text-h|code-bg)\b/);
+  assert.doesNotMatch(graph, /prefers-color-scheme:\s*dark/);
 });
