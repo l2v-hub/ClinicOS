@@ -4,6 +4,7 @@
 
 import { randomUUID } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
+import { parseDiaryCreateBody } from '../../patients/diary-write-validation.js';
 import { asCartella, type VitalItem } from '../gateway/filters.js';
 import {
   getNarrativeSection,
@@ -78,16 +79,19 @@ export const prismaVoiceWriter: VoiceWriter = {
   },
 
   async addDiaryNote(patientId, content, meta) {
+    const input = parseDiaryCreateBody({
+      content,
+      priority: 'normale',
+      status: 'aperta',
+      entryDateTime: meta.nowISO,
+      category: 'voce',
+    });
     const entry = await prisma.patientDiaryEntry.create({
       data: {
         patientId,
         authorType: 'operatore',
         authorName: meta.operatorName,
-        content,
-        priority: 'normale',
-        status: 'aperta',
-        entryDateTime: meta.nowISO,
-        category: 'voce',
+        ...input,
       },
     });
     return entry.id;

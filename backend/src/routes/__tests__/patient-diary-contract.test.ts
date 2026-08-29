@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 
 const routeUrl = new URL('../patient-diary.ts', import.meta.url);
+const assistantWriterUrl = new URL('../../ai/voice/write-services.ts', import.meta.url);
 
 test('patient diary route is scoped, no-store and bounded by default', async () => {
   const source = await readFile(routeUrl, 'utf8');
@@ -23,4 +24,24 @@ test('patient diary authorship is server authoritative on create and immutable o
   assert.match(createBlock, /authoritativeDiaryAuthor\(req\.operator!\)/);
   assert.match(createBlock, /\.\.\.author/);
   assert.doesNotMatch(updateBlock, /authorType !== undefined|authorName !== undefined/);
+});
+
+test('patient and assistant diary writes share validation before persistence', async () => {
+  const source = await readFile(routeUrl, 'utf8');
+  const assistantWriter = await readFile(assistantWriterUrl, 'utf8');
+  const createBlock =
+    source.split('// POST /patients/:patientId/diary')[1]?.split('// GET ')[0] ?? '';
+  const updateBlock =
+    source.split('// PUT /patients/:patientId/diary/:entryId')[1]?.split('// DELETE ')[0] ?? '';
+
+  assert.ok(
+    createBlock.indexOf('parseDiaryCreateBody(req.body)') <
+      createBlock.indexOf('authoritativeDiaryAuthor(req.operator!)'),
+  );
+  assert.ok(
+    updateBlock.indexOf('parseDiaryPatchBody(req.body)') <
+      updateBlock.indexOf('prisma.patientDiaryEntry.findFirst'),
+  );
+  assert.match(assistantWriter, /addDiaryNote[\s\S]+?parseDiaryCreateBody/);
+  assert.match(assistantWriter, /patientDiaryEntry\.create[\s\S]+?\.\.\.input/);
 });

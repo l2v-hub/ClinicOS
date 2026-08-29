@@ -3,6 +3,7 @@ import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../.
 import { ClinicalTableSection, LoadingState, EmptyState } from './shared';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { API_URL } from '../../../config';
+import { facilityLocalMinute, formatFacilityLocalMinute } from '../../../lib/facilityTime';
 import { operatorHeaders } from '../../../lib/operatorSession';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -51,21 +52,9 @@ const STATUS_LABELS: Record<string, string> = {
 
 const DIARY_PAGE_SIZE = 50;
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
-
-function nowDT(): string {
-  return new Date().toISOString().slice(0, 16);
-}
-
 function fmtDT(iso: string): string {
-  if (!iso) return '—';
   try {
-    const d = new Date(iso);
-    return (
-      d.toLocaleDateString('it-IT') +
-      ' ' +
-      d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
-    );
+    return formatFacilityLocalMinute(iso);
   } catch {
     return iso;
   }
@@ -164,7 +153,7 @@ export function DiarioPazienteTab({
       content: '',
       priority: 'normale',
       status: 'aperta',
-      entryDateTime: nowDT(),
+      entryDateTime: facilityLocalMinute(),
     };
   }
 

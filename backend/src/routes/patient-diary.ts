@@ -8,6 +8,11 @@ import {
   encodeDiaryPageCursor,
   parseDiaryPageQuery,
 } from '../patients/diary-pagination.js';
+import {
+  DiaryWriteInputError,
+  parseDiaryCreateBody,
+  parseDiaryPatchBody,
+} from '../patients/diary-write-validation.js';
 
 const router = Router();
 
@@ -107,17 +112,19 @@ router.get('/:patientId/diary', async (req, res) => {
 router.post('/:patientId/diary', async (req: AuthedRequest, res) => {
   const rawPatientId = req.params.patientId;
   const patientId = (Array.isArray(rawPatientId) ? rawPatientId[0] : rawPatientId) ?? '';
-  const { title, content, priority, status, entryDateTime, category } = req.body as {
-    title?: string;
-    content?: string;
-    priority?: string;
-    status?: string;
-    entryDateTime?: string;
-    category?: string;
-  };
+  let input;
+  try {
+    input = parseDiaryCreateBody(req.body);
+  } catch (error) {
+    if (error instanceof DiaryWriteInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    throw error;
+  }
 
-  if (!content || !entryDateTime) {
-    res.status(400).json({ error: 'content e entryDateTime sono obbligatori' });
+  if (!patientId) {
+    res.status(400).json({ error: 'patientId non valido' });
     return;
   }
 
@@ -127,12 +134,7 @@ router.post('/:patientId/diary', async (req: AuthedRequest, res) => {
       data: {
         patientId,
         ...author,
-        title: title ?? null,
-        content,
-        priority: priority ?? 'normale',
-        status: status ?? 'aperta',
-        entryDateTime,
-        category: category ?? null,
+        ...input,
       },
     });
     res.status(201).json({ entry });
@@ -164,14 +166,16 @@ router.get('/:patientId/diary/:entryId', async (req, res) => {
 router.put('/:patientId/diary/:entryId', async (req, res) => {
   const { patientId, entryId } = req.params;
   // Authorship is immutable and server-authoritative. Client author fields are ignored.
-  const { title, content, priority, status, entryDateTime, category } = req.body as {
-    title?: string;
-    content?: string;
-    priority?: string;
-    status?: string;
-    entryDateTime?: string;
-    category?: string;
-  };
+  let patch;
+  try {
+    patch = parseDiaryPatchBody(req.body);
+  } catch (error) {
+    if (error instanceof DiaryWriteInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    throw error;
+  }
 
   try {
     const existing = await prisma.patientDiaryEntry.findFirst({
@@ -183,14 +187,7 @@ router.put('/:patientId/diary/:entryId', async (req, res) => {
     }
     const entry = await prisma.patientDiaryEntry.update({
       where: { id: entryId },
-      data: {
-        ...(title !== undefined ? { title } : {}),
-        ...(content !== undefined ? { content } : {}),
-        ...(priority !== undefined ? { priority } : {}),
-        ...(status !== undefined ? { status } : {}),
-        ...(entryDateTime !== undefined ? { entryDateTime } : {}),
-        ...(category !== undefined ? { category } : {}),
-      },
+      data: patch,
     });
     res.status(200).json({ entry });
   } catch (error) {
