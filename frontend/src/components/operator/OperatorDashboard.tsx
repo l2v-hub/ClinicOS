@@ -1,4 +1,4 @@
-import type { UtenteApp, Consegna, SlotAgenda, ClinicalSummaryEntry, Paziente } from '../../types';
+import type { UtenteApp, Consegna, SlotAgenda, ClinicalOverview, Paziente } from '../../types';
 import {
   IcoArrow,
   IcoWarning,
@@ -28,7 +28,7 @@ interface OperatorDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string) => void;
-  clinicalSummary?: ClinicalSummaryEntry[];
+  clinicalOverview?: ClinicalOverview | null;
   pazienti?: Paziente[]; // reserved for future patient-level KPIs
 }
 
@@ -49,7 +49,7 @@ export function OperatorDashboard({
   onNavigate,
   onOpenConsegneAperte,
   onSelectPaziente,
-  clinicalSummary = [],
+  clinicalOverview = null,
 }: OperatorDashboardProps) {
   const mieConsegne = consegne.filter(
     (c) =>
@@ -63,15 +63,15 @@ export function OperatorDashboard({
   const anomalie = useAnomalieReparto();
   const somministrazioni = useRiepilogoSomministrazioni();
 
-  // Clinical KPIs from clinicalSummary
-  const critici = clinicalSummary.filter((c) => c.hasCriticalVitals).length;
-  const rischiAlti = clinicalSummary.filter((c) => c.hasHighRisk).length;
-  const allergieGravi = clinicalSummary.filter((c) => c.hasSevereAllergy).length;
-  const pazientiRicoverati = clinicalSummary.filter((c) => c.statoRicovero === 'ricoverato').length;
+  // Clinical KPIs from the constant-size server aggregate.
+  const critici = clinicalOverview?.critici ?? 0;
+  const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
+  const allergieGravi = clinicalOverview?.allergieGravi ?? 0;
+  const pazientiRicoverati = clinicalOverview?.ricoverati ?? 0;
 
   // Avanzamento terapie / consegne (dati reali)
-  const terapieTotali = clinicalSummary.reduce((sum, c) => sum + c.terapieTotali, 0);
-  const terapieCompletate = clinicalSummary.reduce((sum, c) => sum + c.terapieCompletate, 0);
+  const terapieTotali = clinicalOverview?.terapieTotali ?? 0;
+  const terapieCompletate = clinicalOverview?.terapieCompletate ?? 0;
   const pctTerapie = terapieTotali > 0 ? Math.round((terapieCompletate / terapieTotali) * 100) : 0;
   const consegneCompletate = mieConsegne.filter((c) => c.stato === 'completata').length;
   const pctConsegne =
@@ -205,7 +205,7 @@ export function OperatorDashboard({
       )}
 
       {/* Clinical KPI band — banda alert clinici in cima */}
-      {clinicalSummary.length > 0 && (
+      {clinicalOverview !== null && (
         <div className="kpi-alert-grid">
           <div
             className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`}

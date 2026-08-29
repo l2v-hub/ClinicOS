@@ -519,6 +519,18 @@ export interface ClinicalSummaryEntry {
   terapieCompletate: number;
 }
 
+/** GET /patients/clinical-summary/overview — constant-size dashboard aggregate. */
+export interface ClinicalOverview {
+  totalPatients: number;
+  critici: number;
+  rischiAlti: number;
+  ricoverati: number;
+  dimessi: number;
+  allergieGravi: number;
+  terapieTotali: number;
+  terapieCompletate: number;
+}
+
 // ── Presa in Carico ────────────────────────────────────────────────────────────
 
 export interface PresaInCarico {

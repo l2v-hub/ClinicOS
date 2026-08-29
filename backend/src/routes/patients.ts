@@ -2,14 +2,98 @@ import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
 import { requireOperator } from '../ai/auth.js';
+import {
+  PatientPageInputError,
+  decodePatientPageCursor,
+  encodePatientPageCursor,
+  parsePatientPageQuery,
+} from '../patients/pagination.js';
+import { PatientSummaryInputError, parsePatientSummaryIds } from '../patients/summary-query.js';
 
 const router = Router();
 
 // Gate minimo (header-based, non IdP): dati anagrafici/clinici reali, richiedono un
 // operatore identificato in lettura e scrittura. Vedi backend/src/ai/auth.ts.
 router.use(requireOperator);
+router.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
+
+// Contratto scalabile additivo. Il roster legacy su GET /patients resta disponibile durante
+// la migrazione dei consumer, mentre nuove viste devono usare questa pagina keyset bounded.
+router.get('/page', async (req, res) => {
+  try {
+    const input = parsePatientPageQuery(req.query as Record<string, unknown>);
+    const filters = { q: input.q, sex: input.sex };
+    const position = input.cursor ? decodePatientPageCursor(input.cursor, filters) : undefined;
+
+    const baseWhere = {
+      ...(input.sex && { sex: input.sex }),
+      ...(input.q && {
+        OR: [
+          { lastName: { contains: input.q, mode: 'insensitive' as const } },
+          { firstName: { contains: input.q, mode: 'insensitive' as const } },
+          { medicalRecordNumber: { contains: input.q, mode: 'insensitive' as const } },
+        ],
+      }),
+    };
+    const cursorWhere = position
+      ? {
+          OR: [
+            { lastName: { gt: position.lastName } },
+            { lastName: position.lastName, firstName: { gt: position.firstName } },
+            {
+              lastName: position.lastName,
+              firstName: position.firstName,
+              id: { gt: position.id },
+            },
+          ],
+        }
+      : undefined;
+
+    const rows = await prisma.patient.findMany({
+      where: cursorWhere ? { AND: [baseWhere, cursorWhere] } : baseWhere,
+      orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }, { id: 'asc' }],
+      take: input.limit + 1,
+      select: {
+        id: true,
+        medicalRecordNumber: true,
+        firstName: true,
+        lastName: true,
+        dateOfBirth: true,
+        sex: true,
+        email: true,
+        phone: true,
+      },
+    });
+    const hasMore = rows.length > input.limit;
+    const items = hasMore ? rows.slice(0, input.limit) : rows;
+    const last = items.at(-1);
+    res.status(200).json({
+      items,
+      hasMore,
+      nextCursor:
+        hasMore && last
+          ? encodePatientPageCursor(
+              { lastName: last.lastName, firstName: last.firstName, id: last.id },
+              filters,
+            )
+          : null,
+    });
+  } catch (error) {
+    if (error instanceof PatientPageInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    console.error('GET /patients/page error:', error);
+    res.status(500).json({ error: 'Errore nel recupero della pagina pazienti' });
+  }
+});
 
 router.get('/', async (req, res) => {
+  res.setHeader('Deprecation', 'true');
+  res.setHeader('Sunset', 'Sat, 28 Nov 2026 00:00:00 GMT');
   // Paginazione opt-in (limit/offset): senza parametri il comportamento resta
   // identico a oggi (nessun take/skip, tutti i record).
   const { limit, offset } = req.query as { limit?: string; offset?: string };
@@ -41,14 +125,86 @@ router.get('/settings', (_req, res) => {
   });
 });
 
-// GET /patients/clinical-summary — the small set of derived flags the patient list badges
-// and the dashboard KPIs need (stato ricovero, critico, allergie, terapie), for EVERY patient,
-// in one query. Replaces the previous pattern of the frontend fetching the full cartella (the
-// entire clinical record: diario, terapie, anamnesi...) once per patient just to read four
-// booleans/counts out of it. Defined BEFORE '/:id' so it is not captured as an id.
-router.get('/clinical-summary', async (_req, res) => {
+// Dashboard aggregate: one fixed-size response. The SQL evaluates JSONB in PostgreSQL instead
+// of transferring every clinical record into Node. Defined BEFORE '/:id'.
+router.get('/clinical-summary/overview', async (_req, res) => {
   try {
-    const cartelle = await prisma.cartella.findMany({ select: { patientId: true, data: true } });
+    const rows = await prisma.$queryRaw<
+      Array<{
+        totalPatients: number;
+        critici: number;
+        rischiAlti: number;
+        ricoverati: number;
+        dimessi: number;
+        allergieGravi: number;
+        terapieTotali: number;
+        terapieCompletate: number;
+      }>
+    >`
+      SELECT
+        COUNT(*)::int AS "totalPatients",
+        COUNT(*) FILTER (WHERE EXISTS (
+          SELECT 1 FROM jsonb_array_elements(
+            CASE WHEN jsonb_typeof(c.data->'parametriVitali') = 'array'
+              THEN c.data->'parametriVitali' ELSE '[]'::jsonb END
+          ) AS vital WHERE vital->>'stato' = 'critico'
+        ))::int AS critici,
+        COUNT(*) FILTER (WHERE EXISTS (
+          SELECT 1 FROM jsonb_array_elements(
+            CASE WHEN jsonb_typeof(c.data->'indicatoriRischio') = 'array'
+              THEN c.data->'indicatoriRischio' ELSE '[]'::jsonb END
+          ) AS risk WHERE risk->>'livello' IN ('alto', 'critico')
+        ))::int AS "rischiAlti",
+        COUNT(*) FILTER (WHERE c.data->>'statoRicovero' = 'ricoverato')::int AS ricoverati,
+        COUNT(*) FILTER (WHERE c.data->>'statoRicovero' = 'dimesso')::int AS dimessi,
+        COUNT(*) FILTER (WHERE EXISTS (
+          SELECT 1 FROM jsonb_array_elements(
+            CASE WHEN jsonb_typeof(c.data->'allergie') = 'array'
+              THEN c.data->'allergie' ELSE '[]'::jsonb END
+          ) AS allergy WHERE allergy->>'gravita' = 'grave'
+        ))::int AS "allergieGravi",
+        COALESCE(SUM(jsonb_array_length(
+          CASE WHEN jsonb_typeof(c.data->'terapie') = 'array'
+            THEN c.data->'terapie' ELSE '[]'::jsonb END
+        )), 0)::int AS "terapieTotali",
+        COALESCE(SUM((
+          SELECT COUNT(*) FROM jsonb_array_elements(
+            CASE WHEN jsonb_typeof(c.data->'terapie') = 'array'
+              THEN c.data->'terapie' ELSE '[]'::jsonb END
+          ) AS therapy WHERE therapy->>'stato' = 'completata'
+        )), 0)::int AS "terapieCompletate"
+      FROM "Patient" p
+      LEFT JOIN "Cartella" c ON c."patientId" = p.id
+    `;
+    res.status(200).json(
+      rows[0] ?? {
+        totalPatients: 0,
+        critici: 0,
+        rischiAlti: 0,
+        ricoverati: 0,
+        dimessi: 0,
+        allergieGravi: 0,
+        terapieTotali: 0,
+        terapieCompletate: 0,
+      },
+    );
+  } catch (error) {
+    console.error('GET /patients/clinical-summary/overview error:', error);
+    res.status(500).json({ error: 'Errore nel recupero della panoramica clinica' });
+  }
+});
+
+router.get('/clinical-summary', async (req, res) => {
+  try {
+    const patientIds = parsePatientSummaryIds(req.query.patientIds);
+    if (!patientIds) {
+      res.setHeader('Deprecation', 'true');
+      res.setHeader('Sunset', 'Sat, 28 Nov 2026 00:00:00 GMT');
+    }
+    const cartelle = await prisma.cartella.findMany({
+      ...(patientIds && { where: { patientId: { in: patientIds } } }),
+      select: { patientId: true, data: true },
+    });
     const summary = cartelle.map(({ patientId, data }) => {
       const c = (data ?? {}) as {
         statoRicovero?: string;
@@ -74,6 +230,10 @@ router.get('/clinical-summary', async (_req, res) => {
     });
     res.status(200).json(summary);
   } catch (error) {
+    if (error instanceof PatientSummaryInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
     console.error('GET /patients/clinical-summary error:', error);
     res.status(500).json({ error: 'Errore nel recupero del riepilogo clinico' });
   }

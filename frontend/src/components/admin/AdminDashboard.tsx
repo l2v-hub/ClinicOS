@@ -1,4 +1,4 @@
-import type { Operatore, Consegna, Camera, ClinicalSummaryEntry, NavKey } from '../../types';
+import type { Operatore, Consegna, Camera, ClinicalOverview, NavKey } from '../../types';
 import {
   IcoArrow,
   IcoWarning,
@@ -24,7 +24,7 @@ interface AdminDashboardProps {
   /** #283: apertura mirata della pagina Consegne (filtro aperte + focus se una sola). */
   onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string) => void;
-  clinicalSummary?: ClinicalSummaryEntry[];
+  clinicalOverview?: ClinicalOverview | null;
 }
 
 function WorkloadBar({ value, max, color }: { value: number; max: number; color?: string }) {
@@ -46,7 +46,7 @@ export function AdminDashboard({
   onNavigate,
   onOpenConsegneAperte,
   onSelectPaziente,
-  clinicalSummary = [],
+  clinicalOverview = null,
 }: AdminDashboardProps) {
   const attivi = operatori.filter((o) => o.stato === 'attivo');
   const urgenti = consegne.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
@@ -54,9 +54,9 @@ export function AdminDashboard({
   const somministrazioni = useRiepilogoSomministrazioni();
 
   // Clinical KPIs
-  const critici = clinicalSummary.filter((c) => c.hasCriticalVitals).length;
-  const rischiAlti = clinicalSummary.filter((c) => c.hasHighRisk).length;
-  const dimessi = clinicalSummary.filter((c) => c.statoRicovero === 'dimesso').length;
+  const critici = clinicalOverview?.critici ?? 0;
+  const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
+  const dimessi = clinicalOverview?.dimessi ?? 0;
   const consegneAperte = consegne.filter((c) => c.stato !== 'completata').length;
   const consegneInCorso = consegne.filter((c) => c.stato === 'in_corso').length;
 
@@ -192,7 +192,7 @@ export function AdminDashboard({
       </div>
 
       {/* Clinical KPIs */}
-      {clinicalSummary.length > 0 && (
+      {clinicalOverview !== null && (
         <>
           <div className="section-header" style={{ marginTop: 28, marginBottom: 12 }}>
             <h3 className="section-header__title">

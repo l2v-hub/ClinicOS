@@ -21,6 +21,7 @@ import type {
   StatoNota,
   CartellaPaziente,
   ClinicalSummaryEntry,
+  ClinicalOverview,
   NuovoPaziente,
   TherapySlot,
   MotivoNonErogazione,
@@ -275,9 +276,11 @@ export default function App() {
     focusId: string | null;
   }>({ filtro: 'tutte', focusId: null });
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
-  // Riepilogo clinico leggero (badge lista + KPI dashboard) per TUTTI i pazienti in una sola
-  // chiamata — sostituisce il prefetch N+1 della cartella completa per ciascun paziente.
+  // Il dettaglio per-paziente serve solo ai badge della lista legacy ed e' caricato on demand.
   const [clinicalSummary, setClinicalSummary] = useState<ClinicalSummaryEntry[]>([]);
+  // Le dashboard consumano un aggregato di dimensione costante, indipendente dal roster.
+  const [clinicalOverview, setClinicalOverview] = useState<ClinicalOverview | null>(null);
+  const [loadingClinicalOverview, setLoadingClinicalOverview] = useState(true);
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
   // Senza questo flag l'agenda, prima che la fetch risponda, dichiara "tutti gli slot liberi":
   // su uno strumento clinico e' un'informazione falsa, non solo mancante.
@@ -560,6 +563,7 @@ export default function App() {
 
   useEffect(() => {
     if (!utente) return;
+    const overviewController = new AbortController();
     setLoadingPazienti(true);
     fetch(`${API_URL}/patients`, { headers: operatorHeaders() })
       // Issue #129: il backend ordina per createdAt — il roster va sempre
@@ -571,12 +575,21 @@ export default function App() {
       })
       .catch(() => setPazienti([]))
       .finally(() => setLoadingPazienti(false));
-    // Riepilogo clinico (badge lista + KPI dashboard) per tutti i pazienti in UNA chiamata,
-    // invece della cartella completa di ognuno (era N+1: vedi commit di questo ciclo UX).
-    fetch(`${API_URL}/patients/clinical-summary`, { headers: operatorHeaders() })
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: ClinicalSummaryEntry[]) => setClinicalSummary(data))
-      .catch(() => setClinicalSummary([]));
+    fetch(`${API_URL}/patients/clinical-summary/overview`, {
+      headers: operatorHeaders(),
+      signal: overviewController.signal,
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error('overview unavailable');
+        return r.json();
+      })
+      .then((data: ClinicalOverview) => setClinicalOverview(data))
+      .catch((error: unknown) => {
+        if ((error as { name?: string }).name !== 'AbortError') setClinicalOverview(null);
+      })
+      .finally(() => {
+        if (!overviewController.signal.aborted) setLoadingClinicalOverview(false);
+      });
     loadTherapySlots();
     loadAppuntamenti(); // SPEC-015 US4: agenda persistita
     // Load rooms from API for AdminDashboard
@@ -623,7 +636,25 @@ export default function App() {
       .catch(() => {
         /* keep empty array */
       });
+    return () => overviewController.abort();
   }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
+
+  // Compatibilita' temporanea: i badge della lista richiedono ancora il riepilogo completo.
+  // Non viene piu' richiesto al login o durante l'uso delle dashboard.
+  useEffect(() => {
+    if (!utente || navKey !== 'pazienti') return;
+    const controller = new AbortController();
+    fetch(`${API_URL}/patients/clinical-summary`, {
+      headers: operatorHeaders(),
+      signal: controller.signal,
+    })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: ClinicalSummaryEntry[]) => setClinicalSummary(data))
+      .catch((error: unknown) => {
+        if ((error as { name?: string }).name !== 'AbortError') setClinicalSummary([]);
+      });
+    return () => controller.abort();
+  }, [utente, navKey]);
 
   // Resolve a patient id restored from the hash (refresh/reopened tab on dettaglio-paziente,
   // see the mount effect above) once the freshly-fetched patients list lands. Runs at most once:
@@ -724,6 +755,7 @@ export default function App() {
       role: resolvedUser.ruolo,
       accessToken: accessToken ?? undefined,
     });
+    setLoadingClinicalOverview(true);
     setUtente(resolvedUser);
     // The mount effect above already parsed a dettaglio-paziente/<id> hash (set before login,
     // since there's no session persistence — every reload hits the role-picker first) and left
@@ -742,6 +774,9 @@ export default function App() {
     setCurrentOperator(null);
     clearCachedGet();
     setPazienti([]);
+    setClinicalSummary([]);
+    setClinicalOverview(null);
+    setLoadingClinicalOverview(true);
     setPazienteSelezionato(null);
     window.history.replaceState({}, '', '#/login');
     setNavKey('login');
@@ -1707,12 +1742,12 @@ export default function App() {
                   operatori={operatori}
                   consegne={consegne}
                   camere={camere}
-                  totalePazienti={pazienti.length}
-                  loadingPazienti={loadingPazienti}
+                  totalePazienti={clinicalOverview?.totalPatients ?? 0}
+                  loadingPazienti={loadingClinicalOverview}
                   onNavigate={navigate}
                   onOpenConsegneAperte={openConsegneAperte}
                   onSelectPaziente={goToPazienteByNome}
-                  clinicalSummary={clinicalSummary}
+                  clinicalOverview={clinicalOverview}
                 />
               )}
               {isAdmin && navKey === 'gestione-operatori' && (
@@ -1781,12 +1816,12 @@ export default function App() {
                   utente={utente}
                   consegne={consegne}
                   agenda={agendaOggi}
-                  totalePazienti={pazienti.length}
-                  loadingPazienti={loadingPazienti}
+                  totalePazienti={clinicalOverview?.totalPatients ?? 0}
+                  loadingPazienti={loadingClinicalOverview}
                   onNavigate={navigate}
                   onOpenConsegneAperte={openConsegneAperte}
                   onSelectPaziente={goToPazienteByNome}
-                  clinicalSummary={clinicalSummary}
+                  clinicalOverview={clinicalOverview}
                   pazienti={pazienti}
                 />
               )}

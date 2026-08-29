@@ -46,6 +46,29 @@ test('AC1: GET /patients/settings senza header operatore risponde 401', async ()
   assert.equal(res.status, 401);
 });
 
+test('loop 3: pagina e overview pazienti restano dietro requireOperator', async () => {
+  const [page, overview] = await Promise.all([
+    fetch(`${base}/patients/page`),
+    fetch(`${base}/patients/clinical-summary/overview`),
+  ]);
+  assert.equal(page.status, 401);
+  assert.equal(overview.status, 401);
+});
+
+test('loop 3: input non validi sono respinti prima di interrogare il database', async () => {
+  const headers = { 'X-Operator-Id': 'test-operatore', 'X-Operator-Role': 'operatore' };
+  const patientIds = Array.from({ length: 101 }, (_, index) => `patient-${index}`).join(',');
+  const [badLimit, badCursor, oversizedSummary] = await Promise.all([
+    fetch(`${base}/patients/page?limit=10foo`, { headers }),
+    fetch(`${base}/patients/page?cursor=not-base64!`, { headers }),
+    fetch(`${base}/patients/clinical-summary?patientIds=${patientIds}`, { headers }),
+  ]);
+  assert.equal(badLimit.status, 400);
+  assert.equal(badLimit.headers.get('cache-control'), 'private, no-store');
+  assert.equal(badCursor.status, 400);
+  assert.equal(oversizedSummary.status, 400);
+});
+
 test('AC1: PUT /patients/:id/cartella senza header operatore risponde 401 (mai raggiunge la scrittura)', async () => {
   const res = await fetch(`${base}/patients/qualsiasi-id/cartella`, {
     method: 'PUT',
@@ -64,6 +87,7 @@ test('AC2: GET /patients con ruolo "operatore" ammesso risponde con il comportam
   // mai un errore di autenticazione).
   assert.notEqual(res.status, 401);
   assert.notEqual(res.status, 403);
+  assert.equal(res.headers.get('deprecation'), 'true');
 });
 
 test('AC2: ruolo non ammesso resta 403 (non un generico errore 401/500)', async () => {
