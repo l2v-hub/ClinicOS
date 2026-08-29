@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
@@ -16,6 +17,8 @@ import {
   savePatientParameterMonth,
 } from '../patients/parameters-update.js';
 import { loadPatientConsegnaCounts } from '../consegne/read-service.js';
+import { requirePatientScope } from '../patients/access.js';
+import { hasGlobalPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
 
 const router = Router();
 
@@ -30,6 +33,7 @@ router.use((_req, res, next) => {
 // Contratto scalabile per tutti i consumer di elenco; il roster legacy e' dismesso sotto.
 router.get('/page', async (req, res) => {
   try {
+    const actor = (req as AuthedRequest).operator!;
     const input = parsePatientPageQuery(req.query as Record<string, unknown>);
     const filters = { q: input.q, sex: input.sex };
     const position = input.cursor ? decodePatientPageCursor(input.cursor, filters) : undefined;
@@ -40,6 +44,7 @@ router.get('/page', async (req, res) => {
         .slice(0, 5) ?? [];
 
     const baseWhere = {
+      ...patientScopeWhere(actor),
       ...(input.sex && { sex: input.sex }),
       ...(searchTokens.length > 0 && {
         AND: searchTokens.map((token) => ({
@@ -109,7 +114,10 @@ router.get('/page', async (req, res) => {
 // screen renders. It deliberately shares the signed cursor/filter contract with /patients/page.
 router.get('/parameters/page', async (req, res) => {
   try {
-    res.status(200).json(await loadPatientParametersPage(req.query as Record<string, unknown>));
+    const actor = (req as AuthedRequest).operator!;
+    res
+      .status(200)
+      .json(await loadPatientParametersPage(req.query as Record<string, unknown>, actor));
   } catch (error) {
     if (error instanceof PatientPageInputError) {
       res.status(400).json({ error: error.message });
@@ -136,8 +144,12 @@ router.get('/settings', (_req, res) => {
 
 // Dashboard aggregate: one fixed-size response. The SQL evaluates JSONB in PostgreSQL instead
 // of transferring every clinical record into Node. Defined BEFORE '/:id'.
-router.get('/clinical-summary/overview', async (_req, res) => {
+router.get('/clinical-summary/overview', async (req, res) => {
   try {
+    const actor = (req as AuthedRequest).operator!;
+    const scopeSql = hasGlobalPatientScope(actor.role)
+      ? Prisma.empty
+      : Prisma.sql`WHERE p."registeredById" = ${actor.id}`;
     const rows = await prisma.$queryRaw<
       Array<{
         totalPatients: number;
@@ -149,7 +161,7 @@ router.get('/clinical-summary/overview', async (_req, res) => {
         terapieTotali: number;
         terapieCompletate: number;
       }>
-    >`
+    >(Prisma.sql`
       SELECT
         COUNT(*)::int AS "totalPatients",
         COUNT(*) FILTER (WHERE EXISTS (
@@ -184,7 +196,8 @@ router.get('/clinical-summary/overview', async (_req, res) => {
         )), 0)::int AS "terapieCompletate"
       FROM "Patient" p
       LEFT JOIN "Cartella" c ON c."patientId" = p.id
-    `;
+      ${scopeSql}
+    `);
     res.status(200).json(
       rows[0] ?? {
         totalPatients: 0,
@@ -205,16 +218,23 @@ router.get('/clinical-summary/overview', async (_req, res) => {
 
 router.get('/clinical-summary', async (req, res) => {
   try {
+    const actor = (req as AuthedRequest).operator!;
     const patientIds = parsePatientSummaryIds(req.query.patientIds);
+    const allowedPatients = await prisma.patient.findMany({
+      where: { id: { in: patientIds }, ...patientScopeWhere(actor) },
+      select: { id: true },
+    });
+    const allowedIds = new Set(allowedPatients.map((patient) => patient.id));
+    const scopedPatientIds = patientIds.filter((patientId) => allowedIds.has(patientId));
     const [cartelle, consegneCounts] = await Promise.all([
       prisma.cartella.findMany({
-        where: { patientId: { in: patientIds } },
+        where: { patientId: { in: scopedPatientIds } },
         select: { patientId: true, data: true },
       }),
-      loadPatientConsegnaCounts(patientIds),
+      loadPatientConsegnaCounts(scopedPatientIds),
     ]);
     const cartelleByPatient = new Map(cartelle.map((row) => [row.patientId, row.data]));
-    const summary = patientIds.map((patientId) => {
+    const summary = scopedPatientIds.map((patientId) => {
       const data = cartelleByPatient.get(patientId);
       const c = (data ?? {}) as {
         statoRicovero?: string;
@@ -252,8 +272,8 @@ router.get('/clinical-summary', async (req, res) => {
 
 router.patch('/:id/parameters', async (req, res) => {
   try {
-    const actorId = (req as AuthedRequest).operator!.id;
-    const month = await savePatientParameterMonth(req.params.id, req.body, actorId);
+    const actor = (req as AuthedRequest).operator!;
+    const month = await savePatientParameterMonth(req.params.id, req.body, actor);
     res.status(200).json({ patientId: req.params.id, month });
   } catch (error) {
     if (error instanceof PatientParametersInputError) {
@@ -269,8 +289,8 @@ router.patch('/:id/parameters', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
+router.get('/:id', requirePatientScope, async (req, res) => {
+  const id = Array.isArray(req.params.id) ? (req.params.id[0] ?? '') : req.params.id;
   try {
     const patient = await prisma.patient.findUnique({ where: { id } });
     if (!patient) {
@@ -968,6 +988,7 @@ router.post('/demo-setup', async (_req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  const actor = (req as AuthedRequest).operator!;
   const body = req.body as {
     firstName?: string;
     lastName?: string;
@@ -1011,7 +1032,6 @@ router.post('/', async (req, res) => {
   if (existing) {
     res.status(409).json({
       error: 'Codice fiscale già presente',
-      existingPatientId: existing.id,
     });
     return;
   }
@@ -1032,6 +1052,8 @@ router.post('/', async (req, res) => {
     ...(body.emergencyContactPhone !== undefined && {
       emergencyContactPhone: body.emergencyContactPhone,
     }),
+    // Ownership is authoritative server-side; client-supplied ownership is ignored.
+    registeredById: actor.id,
   });
 
   try {
@@ -1068,8 +1090,8 @@ router.post('/', async (req, res) => {
 
 // ── PATCH /patients/:id — update patient demographics ─────────────────────
 
-router.patch('/:id', async (req, res) => {
-  const { id } = req.params;
+router.patch('/:id', requirePatientScope, async (req, res) => {
+  const id = Array.isArray(req.params.id) ? (req.params.id[0] ?? '') : req.params.id;
   const allowed = [
     'firstName',
     'lastName',
@@ -1103,7 +1125,7 @@ router.patch('/:id', async (req, res) => {
       select: { id: true },
     });
     if (other && other.id !== id) {
-      res.status(409).json({ error: 'Codice fiscale già presente', existingPatientId: other.id });
+      res.status(409).json({ error: 'Codice fiscale già presente' });
       return;
     }
     updates.codiceFiscale = cf;
@@ -1144,37 +1166,44 @@ function patientDeleteAllowed(): boolean {
   return (process.env.ALLOW_PATIENT_DELETE ?? 'false').trim().toLowerCase() !== 'false';
 }
 
-router.delete('/:id', async (req, res) => {
-  if (!patientDeleteAllowed()) {
-    res.status(403).json({ error: 'Cancellazione paziente disabilitata' });
-    return;
-  }
-  const { id } = req.params;
-  try {
-    await prisma.$transaction([
-      prisma.importJob.updateMany({
-        where: { createdPatientId: id },
-        data: { createdPatientId: null },
-      }),
-      prisma.patient.delete({ where: { id } }),
-    ]);
-    console.log(`DELETE /patients/${id} → cancellato`);
-    res.status(200).json({ deleted: id });
-  } catch (error: unknown) {
-    const prismaError = error as { code?: string };
-    if (prismaError.code === 'P2025') {
-      res.status(404).json({ error: 'Paziente non trovato' });
-    } else {
-      console.error('DELETE /patients/:id error:', error);
-      res.status(500).json({ error: 'Errore durante la cancellazione del paziente' });
+router.delete(
+  '/:id',
+  (_req, res, next) => {
+    if (!patientDeleteAllowed()) {
+      res.status(403).json({ error: 'Cancellazione paziente disabilitata' });
+      return;
     }
-  }
-});
+    next();
+  },
+  requirePatientScope,
+  async (req, res) => {
+    const id = Array.isArray(req.params.id) ? (req.params.id[0] ?? '') : req.params.id;
+    try {
+      await prisma.$transaction([
+        prisma.importJob.updateMany({
+          where: { createdPatientId: id },
+          data: { createdPatientId: null },
+        }),
+        prisma.patient.delete({ where: { id } }),
+      ]);
+      console.log(`DELETE /patients/${id} → cancellato`);
+      res.status(200).json({ deleted: id });
+    } catch (error: unknown) {
+      const prismaError = error as { code?: string };
+      if (prismaError.code === 'P2025') {
+        res.status(404).json({ error: 'Paziente non trovato' });
+      } else {
+        console.error('DELETE /patients/:id error:', error);
+        res.status(500).json({ error: 'Errore durante la cancellazione del paziente' });
+      }
+    }
+  },
+);
 
 // ── GET /patients/:id/cartella — load clinical record ─────────────────────
 
-router.get('/:id/cartella', async (req, res) => {
-  const { id } = req.params;
+router.get('/:id/cartella', requirePatientScope, async (req, res) => {
+  const id = Array.isArray(req.params.id) ? (req.params.id[0] ?? '') : req.params.id;
   try {
     const patient = await prisma.patient.findUnique({
       where: { id },
@@ -1194,8 +1223,8 @@ router.get('/:id/cartella', async (req, res) => {
 
 // ── PUT /patients/:id/cartella — upsert clinical record ───────────────────
 
-router.put('/:id/cartella', async (req, res) => {
-  const { id } = req.params;
+router.put('/:id/cartella', requirePatientScope, async (req, res) => {
+  const id = Array.isArray(req.params.id) ? (req.params.id[0] ?? '') : req.params.id;
   const { data } = req.body as { data?: unknown };
 
   if (!data || typeof data !== 'object') {

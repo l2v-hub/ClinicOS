@@ -3,10 +3,12 @@ import type { Server } from 'node:http';
 import { after, before, test } from 'node:test';
 import express from 'express';
 import { prisma } from '../../lib/prisma.js';
+import { controlChar } from '../../lib/codice-fiscale.js';
 import actionsRouter from '../ai-actions.js';
 import voiceRouter from '../ai-voice.js';
 import narrativeRouter from '../narrative-sections.js';
 import therapyRouter from '../patient-therapies.js';
+import patientsRouter from '../patients.js';
 
 const suffix = `clinical-scope-${Date.now()}`;
 let server: Server;
@@ -16,6 +18,7 @@ let operatorBId = '';
 let managerId = '';
 let patientAId = '';
 let patientBId = '';
+let createdPatientId = '';
 let therapyBId = '';
 const originalAuthMode = process.env.AUTH_MODE;
 const originalNodeEnv = process.env.NODE_ENV;
@@ -97,6 +100,7 @@ before(async () => {
   app.use(express.json());
   app.use('/patients', therapyRouter);
   app.use('/patients', narrativeRouter);
+  app.use('/patients', patientsRouter);
   app.use('/ai/actions', actionsRouter);
   app.use('/ai/voice', voiceRouter);
   await new Promise<void>((resolve) => {
@@ -110,7 +114,9 @@ before(async () => {
 
 after(async () => {
   await new Promise<void>((resolve) => server.close(() => resolve()));
-  await prisma.patient.deleteMany({ where: { id: { in: [patientAId, patientBId] } } });
+  await prisma.patient.deleteMany({
+    where: { id: { in: [patientAId, patientBId, createdPatientId].filter(Boolean) } },
+  });
   await prisma.user.deleteMany({ where: { email: { startsWith: suffix } } });
   if (originalAuthMode === undefined) delete process.env.AUTH_MODE;
   else process.env.AUTH_MODE = originalAuthMode;
@@ -280,6 +286,99 @@ test('manager retains global access while missing and unauthorized patients shar
   assert.equal(unauthorized.status, 404);
   assert.equal(missing.status, 404);
   assert.deepEqual(await unauthorized.json(), await missing.json());
+});
+
+test('patient roster, summaries, detail and cartella never cross ordinary-operator ownership', async () => {
+  const operatorHeaders = headers(operatorAId);
+  const [pageResponse, parametersResponse, summaryResponse, overviewResponse] = await Promise.all([
+    fetch(`${base}/patients/page?limit=100`, { headers: operatorHeaders }),
+    fetch(`${base}/patients/parameters/page?limit=25`, { headers: operatorHeaders }),
+    fetch(`${base}/patients/clinical-summary?patientIds=${patientAId},${patientBId}`, {
+      headers: operatorHeaders,
+    }),
+    fetch(`${base}/patients/clinical-summary/overview`, { headers: operatorHeaders }),
+  ]);
+  assert.equal(pageResponse.status, 200, await pageResponse.clone().text());
+  assert.equal(parametersResponse.status, 200, await parametersResponse.clone().text());
+  assert.equal(summaryResponse.status, 200, await summaryResponse.clone().text());
+  assert.equal(overviewResponse.status, 200, await overviewResponse.clone().text());
+
+  const page = (await pageResponse.json()) as { items: Array<{ id: string }> };
+  const parameters = (await parametersResponse.json()) as {
+    items: Array<{ patient: { id: string } }>;
+  };
+  const summary = (await summaryResponse.json()) as Array<{ patientId: string }>;
+  const overview = (await overviewResponse.json()) as { totalPatients: number };
+  assert.ok(page.items.some((patient) => patient.id === patientAId));
+  assert.ok(page.items.every((patient) => patient.id !== patientBId));
+  assert.ok(parameters.items.some((item) => item.patient.id === patientAId));
+  assert.ok(parameters.items.every((item) => item.patient.id !== patientBId));
+  assert.deepEqual(
+    summary.map((item) => item.patientId),
+    [patientAId],
+  );
+  assert.equal(overview.totalPatients, 1);
+
+  const attempts: Array<[string, RequestInit]> = [
+    [`/${patientBId}`, {}],
+    [`/${patientBId}`, { method: 'PATCH', body: JSON.stringify({ phone: 'intrusione' }) }],
+    [`/${patientBId}/cartella`, {}],
+    [
+      `/${patientBId}/cartella`,
+      { method: 'PUT', body: JSON.stringify({ data: { noteClinica: 'intrusione' } }) },
+    ],
+    [
+      `/${patientBId}/parameters`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify({
+          month: {
+            id: 'scope-month',
+            mese: 8,
+            anno: 2026,
+            createdAt: '2026-08-29T00:00:00.000Z',
+            giorni: [{ giorno: 29, note: 'intrusione' }],
+          },
+        }),
+      },
+    ],
+  ];
+  for (const [path, init] of attempts) {
+    const response = await fetch(`${base}/patients${path}`, {
+      ...init,
+      headers: { ...operatorHeaders, 'Content-Type': 'application/json' },
+    });
+    assert.equal(response.status, 404, `${init.method ?? 'GET'} ${path}: ${await response.text()}`);
+  }
+  const patientB = await prisma.patient.findUniqueOrThrow({ where: { id: patientBId } });
+  assert.equal(patientB.phone, null);
+  assert.equal(await prisma.cartella.count({ where: { patientId: patientBId } }), 0);
+});
+
+test('manager reads globally and patient creation binds ownership to the authenticated actor', async () => {
+  const managerRead = await fetch(`${base}/patients/${patientBId}`, {
+    headers: headers(managerId, 'manager'),
+  });
+  assert.equal(managerRead.status, 200, await managerRead.text());
+
+  const cf15 = `TSTSCR${String(Date.now()).slice(-2)}A01H501`;
+  const codiceFiscale = `${cf15}${controlChar(cf15)}`;
+  const create = await fetch(`${base}/patients`, {
+    method: 'POST',
+    headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName: 'Nuovo',
+      lastName: 'Scoped',
+      dateOfBirth: '1980-01-01',
+      codiceFiscale,
+      registeredById: operatorBId,
+    }),
+  });
+  assert.equal(create.status, 201, await create.clone().text());
+  const created = (await create.json()) as { id: string };
+  createdPatientId = created.id;
+  const stored = await prisma.patient.findUniqueOrThrow({ where: { id: createdPatientId } });
+  assert.equal(stored.registeredById, operatorAId);
 });
 
 test('text and voice assistant deny foreign-patient preview and execution', async () => {

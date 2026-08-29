@@ -10,7 +10,7 @@ export function requirePatientScope(req: AuthedRequest, res: Response, next: Nex
     res.status(401).json({ error: 'Autenticazione richiesta', code: 'operator_missing' });
     return;
   }
-  const rawPatientId = req.params.patientId;
+  const rawPatientId = req.params.patientId ?? req.params.id;
   const patientId = (Array.isArray(rawPatientId) ? rawPatientId[0] : rawPatientId) ?? '';
   patientIsInOperatorScope(patientId, operator, prisma)
     .then((allowed) => {

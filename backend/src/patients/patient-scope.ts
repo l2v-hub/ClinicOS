@@ -15,6 +15,11 @@ export function hasGlobalPatientScope(role: string): boolean {
   return GLOBAL_PATIENT_ROLES.has(role.trim().toLowerCase());
 }
 
+/** Prisma-compatible ownership predicate. Empty only for facility-wide roles. */
+export function patientScopeWhere(operator: Operator): { registeredById?: string } {
+  return hasGlobalPatientScope(operator.role) ? {} : { registeredById: operator.id };
+}
+
 export async function patientIsInOperatorScope(
   patientId: string,
   operator: Operator,
@@ -24,7 +29,7 @@ export async function patientIsInOperatorScope(
   const patient = await reader.patient.findFirst({
     where: {
       id: patientId,
-      ...(!hasGlobalPatientScope(operator.role) && { registeredById: operator.id }),
+      ...patientScopeWhere(operator),
     },
     select: { id: true },
   });

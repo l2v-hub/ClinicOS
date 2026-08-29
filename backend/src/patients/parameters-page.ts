@@ -1,5 +1,7 @@
 import { Prisma } from '@prisma/client';
+import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
+import { patientScopeWhere } from './patient-scope.js';
 import {
   PatientPageInputError,
   decodePatientPageCursor,
@@ -65,6 +67,7 @@ function normalizedSql(value: Prisma.Sql): Prisma.Sql {
 
 export async function loadPatientParametersPage(
   query: Record<string, unknown>,
+  actor: Operator,
 ): Promise<PatientParametersPage> {
   const input = parsePatientPageQuery(query);
   const { month, year } = period(query);
@@ -72,6 +75,11 @@ export async function loadPatientParametersPage(
   const filters = { q: input.q, sex: input.sex };
   const position = input.cursor ? decodePatientPageCursor(input.cursor, filters) : undefined;
   const predicates: Prisma.Sql[] = [];
+
+  const scope = patientScopeWhere(actor);
+  if (scope.registeredById) {
+    predicates.push(Prisma.sql`p."registeredById" = ${scope.registeredById}`);
+  }
 
   if (input.sex) predicates.push(Prisma.sql`p."sex" = ${input.sex}`);
   if (input.q) {

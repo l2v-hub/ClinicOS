@@ -7,6 +7,7 @@ import { savePatientParameterMonth } from '../parameters-update.js';
 const suffix = `parameters-page-${Date.now()}`;
 const firstId = `${suffix}-1`;
 const secondId = `${suffix}-2`;
+const manager = { id: 'operator-verified', role: 'manager' };
 
 before(async () => {
   await prisma.patient.createMany({
@@ -61,12 +62,15 @@ after(async () => {
 });
 
 test('parameter page filters accents/room before limit and returns a minimal projection', async () => {
-  const byName = await loadPatientParametersPage({
-    q: 'giacomo',
-    limit: '25',
-    month: '8',
-    year: '2026',
-  });
+  const byName = await loadPatientParametersPage(
+    {
+      q: 'giacomo',
+      limit: '25',
+      month: '8',
+      year: '2026',
+    },
+    manager,
+  );
   assert.deepEqual(
     byName.items.map((item) => item.patient.id),
     [firstId],
@@ -83,23 +87,29 @@ test('parameter page filters accents/room before limit and returns a minimal pro
   assert.equal(byName.items[0].cartella.cameraNumero, 'CAM-42');
   assert.equal('allergie' in byName.items[0].cartella, false);
 
-  const byRoom = await loadPatientParametersPage({
-    q: 'cam-42',
-    limit: '25',
-    month: '8',
-    year: '2026',
-  });
+  const byRoom = await loadPatientParametersPage(
+    {
+      q: 'cam-42',
+      limit: '25',
+      month: '8',
+      year: '2026',
+    },
+    manager,
+  );
   assert.deepEqual(
     byRoom.items.map((item) => item.patient.id),
     [firstId],
   );
 
-  const byFullName = await loadPatientParametersPage({
-    q: 'Rossi Giacomo',
-    limit: '25',
-    month: '8',
-    year: '2026',
-  });
+  const byFullName = await loadPatientParametersPage(
+    {
+      q: 'Rossi Giacomo',
+      limit: '25',
+      month: '8',
+      year: '2026',
+    },
+    manager,
+  );
   assert.deepEqual(
     byFullName.items.map((item) => item.patient.id),
     [firstId],
@@ -107,12 +117,15 @@ test('parameter page filters accents/room before limit and returns a minimal pro
 });
 
 test('parameter page enforces its endpoint-specific maximum of 25', async () => {
-  const page = await loadPatientParametersPage({
-    q: suffix,
-    limit: '100',
-    month: '8',
-    year: '2026',
-  });
+  const page = await loadPatientParametersPage(
+    {
+      q: suffix,
+      limit: '100',
+      month: '8',
+      year: '2026',
+    },
+    manager,
+  );
   assert.ok(page.items.length <= 25);
 });
 
@@ -128,7 +141,7 @@ test('parameter PATCH merges days and preserves historical months and unrelated 
         giorni: [{ giorno: 30, temperatura: '36.7' }],
       },
     },
-    'operator-verified',
+    manager,
   );
   assert.deepEqual(saved.giorni, [
     { giorno: 29, spo2: '97' },

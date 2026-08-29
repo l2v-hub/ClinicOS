@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { hasGlobalPatientScope, patientIsInOperatorScope } from '../patient-scope.js';
+import {
+  hasGlobalPatientScope,
+  patientIsInOperatorScope,
+  patientScopeWhere,
+} from '../patient-scope.js';
 
 test('patient scope restricts ordinary operators to registered patients', async () => {
   const seen: unknown[] = [];
@@ -40,6 +44,10 @@ test('manager and admin still verify existence without a registration predicate'
     assert.deepEqual(where, { id: 'patient-1' });
   }
   assert.equal(hasGlobalPatientScope('operatore'), false);
+  assert.deepEqual(patientScopeWhere({ id: 'operator-1', role: 'operatore' }), {
+    registeredById: 'operator-1',
+  });
+  assert.deepEqual(patientScopeWhere({ id: 'manager-1', role: 'manager' }), {});
 });
 
 test('missing and out-of-scope patients are denied uniformly', async () => {
