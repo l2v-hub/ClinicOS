@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import express from 'express';
 import type { Server } from 'node:http';
 import { adminRouter, patientAssignmentRouter } from '../admin-rooms.js';
-import operatorsRouter from '../operators.js';
+import operatorsRouter, { OPERATOR_ADMIN_SELECT, OPERATOR_DIRECTORY_SELECT } from '../operators.js';
 
 const OPERATOR_HEADERS = {
   'X-Operator-Id': 'operator-test',
@@ -139,6 +139,27 @@ test('operator directory and administration responses are private and never cach
     const forbiddenResponse = await fetch(`${base}${path}`, { headers: OPERATOR_HEADERS });
     assert.equal(forbiddenResponse.status, 403);
     assert.equal(forbiddenResponse.headers.get('cache-control'), 'private, no-store');
+  }
+});
+
+test('operator reads select only the User fields required by each response', () => {
+  assert.deepEqual(OPERATOR_DIRECTORY_SELECT.user.select, {
+    fullName: true,
+    isActive: true,
+  });
+  assert.deepEqual(OPERATOR_ADMIN_SELECT.user.select, {
+    email: true,
+    fullName: true,
+    isActive: true,
+  });
+  for (const projection of [
+    OPERATOR_DIRECTORY_SELECT.user.select,
+    OPERATOR_ADMIN_SELECT.user.select,
+  ]) {
+    assert.equal('passwordHash' in projection, false);
+    assert.equal('entraObjectId' in projection, false);
+    assert.equal('createdAt' in projection, false);
+    assert.equal('updatedAt' in projection, false);
   }
 });
 

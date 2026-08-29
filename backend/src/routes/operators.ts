@@ -46,6 +46,24 @@ type OperatorWithUser = {
   _count?: { registeredPatients: number };
 };
 
+export const OPERATOR_DIRECTORY_SELECT = {
+  id: true,
+  department: true,
+  ruolo: true,
+  qualifica: true,
+  user: { select: { fullName: true, isActive: true } },
+} as const;
+
+export const OPERATOR_ADMIN_SELECT = {
+  id: true,
+  department: true,
+  phone: true,
+  ruolo: true,
+  qualifica: true,
+  user: { select: { email: true, fullName: true, isActive: true } },
+  _count: { select: { registeredPatients: true } },
+} as const;
+
 function toOperatore(op: OperatorWithUser, appuntamentiOggi: number) {
   const { nome, cognome } = splitFullName(op.user.fullName);
   return {
@@ -91,7 +109,7 @@ operatorsRouter.get('/directory', async (_req, res) => {
   try {
     const [operators, apptToday] = await Promise.all([
       prisma.operator.findMany({
-        include: { user: true },
+        select: OPERATOR_DIRECTORY_SELECT,
         orderBy: { createdAt: 'asc' },
       }),
       appointmentsTodayByOperator(),
@@ -141,7 +159,7 @@ operatorsRouter.get('/', async (_req, res) => {
   try {
     const [operators, apptToday] = await Promise.all([
       prisma.operator.findMany({
-        include: { user: true, _count: { select: { registeredPatients: true } } },
+        select: OPERATOR_ADMIN_SELECT,
         orderBy: { createdAt: 'asc' },
       }),
       appointmentsTodayByOperator(),
