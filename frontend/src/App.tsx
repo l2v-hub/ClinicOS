@@ -4,6 +4,7 @@ import './App.css';
 import { API_URL } from './config';
 import { cachedGetJson, invalidateCachedGet, clearCachedGet } from './lib/cachedFetch';
 import { sortPazienti } from './lib/patientSort';
+import { fetchPatientById } from './lib/patientPage';
 import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';
 import { acquireApiToken } from './lib/entraAuth';
 
@@ -20,9 +21,7 @@ import type {
   Nota,
   StatoNota,
   CartellaPaziente,
-  ClinicalSummaryEntry,
   ClinicalOverview,
-  NuovoPaziente,
   TherapySlot,
   MotivoNonErogazione,
   TherapySlotPatient,
@@ -276,8 +275,6 @@ export default function App() {
     focusId: string | null;
   }>({ filtro: 'tutte', focusId: null });
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
-  // Il dettaglio per-paziente serve solo ai badge della lista legacy ed e' caricato on demand.
-  const [clinicalSummary, setClinicalSummary] = useState<ClinicalSummaryEntry[]>([]);
   // Le dashboard consumano un aggregato di dimensione costante, indipendente dal roster.
   const [clinicalOverview, setClinicalOverview] = useState<ClinicalOverview | null>(null);
   const [loadingClinicalOverview, setLoadingClinicalOverview] = useState(true);
@@ -563,9 +560,12 @@ export default function App() {
 
   useEffect(() => {
     if (!utente) return;
-    const overviewController = new AbortController();
+    const sessionController = new AbortController();
     setLoadingPazienti(true);
-    fetch(`${API_URL}/patients`, { headers: operatorHeaders() })
+    fetch(`${API_URL}/patients`, {
+      headers: operatorHeaders(),
+      signal: sessionController.signal,
+    })
       // Issue #129: il backend ordina per createdAt — il roster va sempre
       // tenuto in ordine alfabetico (cognome, nome) per tutte le viste.
       .then((r) => r.json())
@@ -573,11 +573,15 @@ export default function App() {
         const sorted = sortPazienti(data);
         setPazienti(sorted);
       })
-      .catch(() => setPazienti([]))
-      .finally(() => setLoadingPazienti(false));
+      .catch((error: unknown) => {
+        if ((error as { name?: string }).name !== 'AbortError') setPazienti([]);
+      })
+      .finally(() => {
+        if (!sessionController.signal.aborted) setLoadingPazienti(false);
+      });
     fetch(`${API_URL}/patients/clinical-summary/overview`, {
       headers: operatorHeaders(),
-      signal: overviewController.signal,
+      signal: sessionController.signal,
     })
       .then((r) => {
         if (!r.ok) throw new Error('overview unavailable');
@@ -588,7 +592,7 @@ export default function App() {
         if ((error as { name?: string }).name !== 'AbortError') setClinicalOverview(null);
       })
       .finally(() => {
-        if (!overviewController.signal.aborted) setLoadingClinicalOverview(false);
+        if (!sessionController.signal.aborted) setLoadingClinicalOverview(false);
       });
     loadTherapySlots();
     loadAppuntamenti(); // SPEC-015 US4: agenda persistita
@@ -636,25 +640,8 @@ export default function App() {
       .catch(() => {
         /* keep empty array */
       });
-    return () => overviewController.abort();
+    return () => sessionController.abort();
   }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
-
-  // Compatibilita' temporanea: i badge della lista richiedono ancora il riepilogo completo.
-  // Non viene piu' richiesto al login o durante l'uso delle dashboard.
-  useEffect(() => {
-    if (!utente || navKey !== 'pazienti') return;
-    const controller = new AbortController();
-    fetch(`${API_URL}/patients/clinical-summary`, {
-      headers: operatorHeaders(),
-      signal: controller.signal,
-    })
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: ClinicalSummaryEntry[]) => setClinicalSummary(data))
-      .catch((error: unknown) => {
-        if ((error as { name?: string }).name !== 'AbortError') setClinicalSummary([]);
-      });
-    return () => controller.abort();
-  }, [utente, navKey]);
 
   // Resolve a patient id restored from the hash (refresh/reopened tab on dettaglio-paziente,
   // see the mount effect above) once the freshly-fetched patients list lands. Runs at most once:
@@ -774,7 +761,6 @@ export default function App() {
     setCurrentOperator(null);
     clearCachedGet();
     setPazienti([]);
-    setClinicalSummary([]);
     setClinicalOverview(null);
     setLoadingClinicalOverview(true);
     setPazienteSelezionato(null);
@@ -1219,91 +1205,6 @@ export default function App() {
     } catch {
       showToast('Impossibile aggiornare il paziente');
     }
-  }
-
-  // ── Add patient (backend-persisted) ────────────────────────────────────────
-
-  async function addPaziente(np: NuovoPaziente) {
-    const addressParts = [np.address, np.comune, np.provincia, np.cap].filter(Boolean);
-    const address = addressParts.length > 0 ? addressParts.join(', ') : undefined;
-
-    const payload: Record<string, string> = {
-      firstName: np.firstName.trim(),
-      lastName: np.lastName.trim(),
-      dateOfBirth: np.dateOfBirth,
-      // #294: chiave univoca del paziente — obbligatoria per il backend.
-      codiceFiscale: np.codiceFiscale.trim().toUpperCase(),
-    };
-    if (np.sex) payload.sex = np.sex;
-    if (np.email.trim()) payload.email = np.email.trim();
-    if (np.phone.trim()) payload.phone = np.phone.trim();
-    if (address) payload.address = address;
-    if (np.referenteNome.trim()) payload.emergencyContactName = np.referenteNome.trim();
-    if (np.referenteTelefono.trim()) payload.emergencyContactPhone = np.referenteTelefono.trim();
-
-    const res = await fetch(`${API_URL}/patients`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-      body: JSON.stringify(payload),
-    });
-
-    const data = (await res.json()) as Record<string, unknown>;
-
-    if (!res.ok) {
-      throw new Error((data.error as string) || 'Errore durante la creazione del paziente');
-    }
-
-    const newP = data as unknown as Paziente;
-    // Issue #129 (AC5): il nuovo paziente entra già in posizione alfabetica.
-    setPazienti((prev) => sortPazienti([...prev, newP]));
-
-    // Seed cartella from form fields not persisted in backend
-    const cartellaInit: Partial<CartellaPaziente> = {};
-    // #294: il CF resta visibile anche nella cartella (la colonna Patient è la chiave).
-    cartellaInit.codiceFiscale = payload.codiceFiscale;
-    if (np.camera) {
-      // Issue #128: crea anche l'assegnazione letto reale, non solo il dato in cartella
-      const sync = await syncCameraAssignment(newP.id, np.camera, np.letto);
-      if (sync.ok) {
-        cartellaInit.cameraNumero = np.camera;
-        cartellaInit.lettoNumero = sync.lettoLabel ?? (np.letto || undefined);
-      }
-    } else if (np.letto) {
-      cartellaInit.lettoNumero = np.letto;
-    }
-    if (
-      np.condizioniIniziali ||
-      np.motivoIngresso ||
-      np.notaClinicaIniziale ||
-      np.allergie ||
-      np.farmaci ||
-      np.alertClinici
-    ) {
-      cartellaInit.anamnesi = {
-        fisiologica: np.condizioniIniziali || '',
-        patologicaRemota: '',
-        patologicaProssima: np.motivoIngresso || '',
-        familiare: '',
-        lavorativa: '',
-        abitudini: '',
-        note: [
-          np.alertClinici,
-          np.notaClinicaIniziale,
-          np.noteIniziali,
-          np.allergie ? `Allergie: ${np.allergie}` : '',
-          np.farmaci ? `Farmaci: ${np.farmaci}` : '',
-        ]
-          .filter(Boolean)
-          .join('\n'),
-        updatedAt: new Date().toISOString(),
-        operatore: np.operatoreId,
-      };
-    }
-    if (Object.keys(cartellaInit).length > 0) {
-      updateCartella(newP.id, cartellaInit);
-    }
-    showToast('Paziente creato correttamente');
-    selectPaziente(newP);
   }
 
   // ── Navigate to patient by name ─────────────────────────────────────────────
@@ -1827,45 +1728,39 @@ export default function App() {
               )}
               {!isAdmin && navKey === 'pazienti' && (
                 <PatientList
-                  pazienti={pazienti}
                   consegne={consegne}
-                  operatori={operatori}
-                  camere={camere}
-                  loading={loadingPazienti}
+                  totalPatients={clinicalOverview?.totalPatients ?? pazienti.length}
                   ricerca={pazientiRicerca}
                   onRicercaChange={setPazientiRicerca}
                   filtroSesso={pazientiFiltroSesso}
                   onFiltroSessoChange={setPazientiFiltroSesso}
                   onSelect={selectPaziente}
-                  onAddPaziente={addPaziente}
-                  clinicalSummary={clinicalSummary}
                   operatorId={utente?.id}
                   operatorRole={utente?.ruolo}
+                  onDeleted={(patientId) => {
+                    setPazienti((current) => current.filter((patient) => patient.id !== patientId));
+                  }}
                   onImported={(patientId, moduleTabId) => {
-                    // REQ-018: refresh the patient list after an imported patient is created.
-                    setLoadingPazienti(true);
-                    fetch(`${API_URL}/patients`, { headers: operatorHeaders() })
-                      .then((r) => r.json())
-                      .then((data: Paziente[]) => {
-                        const sorted = sortPazienti(data);
-                        setPazienti(sorted);
-                        // #243 AC4: if the patient was just created from the intake wizard, land
-                        // on its chart — on the selected "Moduli" tab when the operator chose one.
-                        if (patientId) {
-                          const created = sorted.find((p) => p.id === patientId);
-                          if (created) {
-                            const tab =
-                              moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
-                                ? (moduleTabId as TabId)
-                                : undefined;
-                            selectPaziente(created, tab);
-                          }
-                        }
+                    // La lista ricarica gia' la propria pagina. Per navigare a un paziente appena
+                    // creato basta un lookup puntuale: non scaricare di nuovo l'intero roster.
+                    if (!patientId) return;
+                    fetchPatientById(API_URL, patientId, { headers: operatorHeaders() })
+                      .then((created) => {
+                        setPazienti((current) =>
+                          sortPazienti([
+                            ...current.filter((patient) => patient.id !== created.id),
+                            created,
+                          ]),
+                        );
+                        const tab =
+                          moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
+                            ? (moduleTabId as TabId)
+                            : undefined;
+                        selectPaziente(created, tab);
                       })
                       .catch(() => {
                         /* keep current list */
-                      })
-                      .finally(() => setLoadingPazienti(false));
+                      });
                   }}
                 />
               )}

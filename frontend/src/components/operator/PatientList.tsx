@@ -1,17 +1,10 @@
-import { useState, useEffect, useMemo, useCallback, memo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef, memo } from 'react';
 import { API_URL } from '../../config';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
 import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
 import type { AnomaliePaziente } from './cartella/anomalieFarmaco';
-import type {
-  Paziente,
-  Consegna,
-  Operatore,
-  Camera,
-  NuovoPaziente,
-  ClinicalSummaryEntry,
-} from '../../types';
+import type { Paziente, Consegna, ClinicalSummaryEntry } from '../../types';
 import {
   IcoSearch,
   IcoX,
@@ -26,13 +19,12 @@ import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
 import { cachedGetJson } from '../../lib/cachedFetch';
+import { operatorHeaders } from '../../lib/operatorSession';
+import { fetchPatientPageWithSummary, mergePatientPage } from '../../lib/patientPage';
 
 interface PatientListProps {
-  pazienti: Paziente[];
   consegne: Consegna[];
-  operatori: Operatore[];
-  camere: Camera[];
-  loading: boolean;
+  totalPatients: number;
   /** Sollevati in App.tsx: PatientList si smonta ad ogni apertura cartella (renderizzato solo
    * mentre navKey === 'pazienti'), quindi lo stato locale andrebbe perso ad ogni riapertura se
    * non vivesse nel parent, sempre montato. */
@@ -41,16 +33,14 @@ interface PatientListProps {
   filtroSesso: 'tutti' | 'M' | 'F';
   onFiltroSessoChange: (v: 'tutti' | 'M' | 'F') => void;
   onSelect: (p: Paziente) => void;
-  onAddPaziente: (p: NuovoPaziente) => Promise<void>;
   /** REQ-018: refresh the list after an imported patient is created.
    * #243: also carries the id of the just-created patient and (optionally) the "Moduli" tab
    * the operator selected in the intake wizard, so the caller can navigate straight there. */
   onImported?: (patientId?: string, moduleTabId?: string) => void;
+  onDeleted?: (patientId: string) => void;
   /** REQ-019: operator identity for import authorization. */
   operatorId?: string;
   operatorRole?: string;
-  /** Riepilogo clinico leggero (già disponibile nel parent) per badge stato clinico + allergie. */
-  clinicalSummary?: ClinicalSummaryEntry[];
 }
 
 const STATO_RICOVERO_LABEL: Record<string, string> = {
@@ -155,20 +145,27 @@ const PatientListCard = memo(function PatientListCard({
 });
 
 export function PatientList({
-  pazienti,
   consegne,
-  loading,
+  totalPatients,
   ricerca,
   onRicercaChange: setRicerca,
   filtroSesso,
   onFiltroSessoChange: setFiltroSesso,
   onSelect,
-  onAddPaziente: _onAddPaziente,
   onImported,
+  onDeleted,
   operatorId,
   operatorRole,
-  clinicalSummary = [],
 }: PatientListProps) {
+  const [pazienti, setPazienti] = useState<Paziente[]>([]);
+  const [clinicalSummary, setClinicalSummary] = useState<ClinicalSummaryEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [pageError, setPageError] = useState('');
+  const requestSequence = useRef(0);
+
   const summaryMap = useMemo(
     () => new Map(clinicalSummary.map((c) => [c.patientId, c])),
     [clinicalSummary],
@@ -182,6 +179,72 @@ export function PatientList({
   const [deleteEnabled, setDeleteEnabled] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [settingsError, setSettingsError] = useState('');
+
+  const loadPage = useCallback(
+    async (cursor?: string, append = false, signal?: AbortSignal) => {
+      const requestId = ++requestSequence.current;
+      if (append) setLoadingMore(true);
+      else {
+        setLoading(true);
+        setPageError('');
+        setPazienti([]);
+        setClinicalSummary([]);
+      }
+
+      try {
+        const { page, summary } = await fetchPatientPageWithSummary(
+          API_URL,
+          {
+            q: ricerca,
+            sex: filtroSesso === 'tutti' ? undefined : filtroSesso,
+            cursor,
+            limit: 50,
+          },
+          { headers: operatorHeaders(), signal },
+        );
+
+        if (signal?.aborted || requestId !== requestSequence.current) return;
+        setPazienti((current) => mergePatientPage(current, page.items, append));
+        setClinicalSummary((current) => {
+          if (!append) return summary;
+          const byPatient = new Map(current.map((entry) => [entry.patientId, entry]));
+          summary.forEach((entry) => byPatient.set(entry.patientId, entry));
+          return [...byPatient.values()];
+        });
+        setHasMore(page.hasMore);
+        setNextCursor(page.nextCursor);
+      } catch (error) {
+        if (
+          (error as { name?: string }).name !== 'AbortError' &&
+          requestId === requestSequence.current
+        ) {
+          setPageError((error as Error).message || 'Errore nel caricamento dei pazienti');
+          if (!append) {
+            setHasMore(false);
+            setNextCursor(null);
+          }
+        }
+      } finally {
+        if (requestId === requestSequence.current) {
+          setLoading(false);
+          setLoadingMore(false);
+        }
+      }
+    },
+    [ricerca, filtroSesso],
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      void loadPage(undefined, false, controller.signal);
+    }, 250);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+      requestSequence.current += 1;
+    };
+  }, [loadPage]);
 
   useEffect(() => {
     cachedGetJson<{ deleteEnabled?: boolean } | null>(`${API_URL}/patients/settings`)
@@ -211,23 +274,24 @@ export function PatientList({
     if (!p) return;
     setDeletingId(p.id);
     try {
-      const headers: Record<string, string> = {};
-      if (operatorId) headers['X-Operator-Id'] = operatorId;
-      if (operatorRole) headers['X-Operator-Role'] = operatorRole;
-      const res = await fetch(`${API_URL}/patients/${p.id}`, { method: 'DELETE', headers });
+      const res = await fetch(`${API_URL}/patients/${p.id}`, {
+        method: 'DELETE',
+        headers: operatorHeaders(),
+      });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
         alert(d.error || 'Eliminazione non riuscita');
         return;
       }
       setPendingDelete(null);
-      onImported?.();
+      await loadPage(undefined, false);
+      onDeleted?.(p.id);
     } catch {
       alert('Errore di rete durante l’eliminazione');
     } finally {
       setDeletingId(null);
     }
-  }, [pendingDelete, operatorId, operatorRole, onImported]);
+  }, [pendingDelete, onDeleted, loadPage]);
 
   const { consegneAperteMap, consegneAperte } = useMemo(() => {
     const map = new Map<string, number>();
@@ -239,24 +303,10 @@ export function PatientList({
     return { consegneAperteMap: map, consegneAperte: new Set(map.keys()) };
   }, [consegne]);
 
-  const filtratiBase = useMemo(
-    () =>
-      pazienti.filter((p) => {
-        const q = ricerca.toLowerCase();
-        const match =
-          !q ||
-          `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
-          p.medicalRecordNumber.toLowerCase().includes(q) ||
-          (p.email ?? '').toLowerCase().includes(q) ||
-          (p.phone ?? '').toLowerCase().includes(q);
-        const sessoMatch = filtroSesso === 'tutti' || p.sex === filtroSesso;
-        return match && sessoMatch;
-      }),
-    [pazienti, ricerca, filtroSesso],
-  );
+  const filtratiBase = pazienti;
 
-  // Chip mostrate solo per gli stati davvero presenti in reparto, calcolate su tutti i pazienti
-  // così la riga non cambia forma mentre si digita nella ricerca.
+  // Chip mostrate solo per gli stati presenti nelle pagine gia' caricate. Il backend non espone
+  // ancora un filtro aggregato per stato clinico, quindi questi conteggi non sono facility-wide.
   const statiPresenti = useMemo(() => {
     const presenti = new Set<string>();
     pazienti.forEach((p) => {
@@ -288,11 +338,18 @@ export function PatientList({
       <PageHeader
         breadcrumb={[{ label: 'ClinicOS' }, { label: 'Pazienti' }]}
         title="Pazienti"
-        subtitle={`${pazienti.length} pazienti totali`}
+        subtitle={
+          ricerca || filtroSesso !== 'tutti'
+            ? `${pazienti.length} risultati caricati`
+            : `${pazienti.length} caricati su ${Math.max(totalPatients, pazienti.length)}`
+        }
         actions={
           <>
             <AIImportStatus
-              onImported={onImported}
+              onImported={() => {
+                void loadPage(undefined, false);
+                onImported?.();
+              }}
               operatorId={operatorId}
               operatorRole={operatorRole}
             />
@@ -304,7 +361,7 @@ export function PatientList({
       />
 
       {/* Errore verifica impostazioni (niente fallimenti silenziosi — FR-018) */}
-      {settingsError && (
+      {(settingsError || pageError) && (
         <div
           role="alert"
           style={{
@@ -316,7 +373,17 @@ export function PatientList({
             marginBottom: 12,
           }}
         >
-          {settingsError}
+          {settingsError || pageError}
+          {pageError && (
+            <button
+              type="button"
+              className="link-btn"
+              style={{ marginLeft: 12 }}
+              onClick={() => void loadPage(undefined, false)}
+            >
+              Riprova
+            </button>
+          )}
         </div>
       )}
 
@@ -329,14 +396,21 @@ export function PatientList({
           <input
             className="search-input"
             type="search"
-            placeholder="Cerca per nome, MRN, email…"
+            placeholder="Cerca per nome o MRN…"
+            maxLength={80}
             value={ricerca}
-            onChange={(e) => setRicerca(e.target.value)}
+            onChange={(e) => {
+              setFiltroStatoRicovero('tutti');
+              setRicerca(e.target.value);
+            }}
           />
           {ricerca && (
             <button
               className="search-clear-btn"
-              onClick={() => setRicerca('')}
+              onClick={() => {
+                setFiltroStatoRicovero('tutti');
+                setRicerca('');
+              }}
               aria-label="Cancella"
             >
               <IcoX />
@@ -348,19 +422,22 @@ export function PatientList({
             <button
               key={s}
               className={`filter-chip${filtroSesso === s ? ' active' : ''}`}
-              onClick={() => setFiltroSesso(s)}
+              onClick={() => {
+                setFiltroStatoRicovero('tutti');
+                setFiltroSesso(s);
+              }}
             >
               {s === 'tutti' ? 'Tutti' : s === 'M' ? 'Maschio' : 'Femmina'}
             </button>
           ))}
         </div>
         {statiPresenti.length > 0 && (
-          <div className="filter-chips">
+          <div className="filter-chips" aria-label="Stati nei risultati caricati">
             <button
               className={`filter-chip${filtroStatoRicovero === 'tutti' ? ' active' : ''}`}
               onClick={() => setFiltroStatoRicovero('tutti')}
             >
-              Tutti gli stati
+              Tutti gli stati caricati
             </button>
             {statiPresenti.map((s) => (
               <button
@@ -377,12 +454,16 @@ export function PatientList({
       </div>
 
       {/* Empty state */}
-      {!loading && pazienti.length === 0 && (
+      {!loading && !pageError && pazienti.length === 0 && (
         <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
           <div className="empty-state-card__ico" aria-hidden="true">
             <IcoUser />
           </div>
-          <h3 style={{ marginBottom: 8, fontSize: 18 }}>Nessun paziente presente</h3>
+          <h3 style={{ marginBottom: 8, fontSize: 18 }}>
+            {ricerca || filtroSesso !== 'tutti'
+              ? 'Nessun paziente trovato'
+              : 'Nessun paziente presente'}
+          </h3>
           <p
             style={{
               color: 'var(--text-muted)',
@@ -391,11 +472,15 @@ export function PatientList({
               margin: '0 auto 24px',
             }}
           >
-            Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.
+            {ricerca || filtroSesso !== 'tutti'
+              ? 'Prova a modificare la ricerca o i filtri.'
+              : 'Non ci sono ancora pazienti registrati. Aggiungi il primo paziente per iniziare.'}
           </p>
-          <button className="btn-success" onClick={() => setShowModal(true)}>
-            <IcoPlus /> Aggiungi primo paziente
-          </button>
+          {!ricerca && filtroSesso === 'tutti' && (
+            <button className="btn-success" onClick={() => setShowModal(true)}>
+              <IcoPlus /> Aggiungi primo paziente
+            </button>
+          )}
         </div>
       )}
 
@@ -575,6 +660,18 @@ export function PatientList({
               />
             ))}
           </div>
+          {hasMore && nextCursor && (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+              <button
+                type="button"
+                className="btn-ghost-outline"
+                disabled={loadingMore}
+                onClick={() => void loadPage(nextCursor, true)}
+              >
+                {loadingMore ? 'Caricamento…' : 'Carica altri pazienti'}
+              </button>
+            </div>
+          )}
         </>
       )}
 
@@ -583,6 +680,7 @@ export function PatientList({
         onClose={() => setShowModal(false)}
         onCreated={(patientId, moduleTabId) => {
           setShowModal(false);
+          if (!patientId) void loadPage(undefined, false);
           onImported?.(patientId, moduleTabId);
         }}
         operatorId={operatorId}
