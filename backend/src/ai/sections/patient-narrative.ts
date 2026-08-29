@@ -6,6 +6,7 @@
 // This coexists with legacy structured data — it never deletes it.
 
 import type { Prisma } from '@prisma/client';
+import { parseNarrativeSaveInput } from './narrative-input.js';
 import { prisma } from '../../lib/prisma.js';
 import type { DischargeNarrativeDraft } from './narrative.js';
 
@@ -180,25 +181,26 @@ export async function upsertNarrativeSection(
     updatedBy?: string;
   },
 ): Promise<NarrativeSectionDTO> {
+  const validated = parseNarrativeSaveInput(input);
   const existing = await prisma.patientNarrativeSection.findUnique({
     where: { patientId_sectionKey: { patientId, sectionKey } },
   });
   const reviewStatus =
-    input.reviewStatus ??
-    (input.reviewedText?.trim() ? 'modified' : (existing?.reviewStatus ?? 'pending'));
+    validated.reviewStatus ??
+    (validated.reviewedText?.trim() ? 'modified' : (existing?.reviewStatus ?? 'pending'));
   const row = await prisma.patientNarrativeSection.upsert({
     where: { patientId_sectionKey: { patientId, sectionKey } },
     create: {
       patientId,
       sectionKey,
-      originalText: input.originalText ?? '',
-      reviewedText: input.reviewedText ?? null,
+      originalText: validated.originalText ?? '',
+      reviewedText: validated.reviewedText ?? null,
       reviewStatus,
       updatedBy: input.updatedBy,
     },
     update: {
       // originalText intentionally NOT updated — immutable once created.
-      reviewedText: input.reviewedText ?? existing?.reviewedText ?? null,
+      reviewedText: validated.reviewedText ?? existing?.reviewedText ?? null,
       reviewStatus,
       updatedBy: input.updatedBy,
     },
@@ -215,16 +217,20 @@ export async function persistNarrativeFromDraft(
   createdBy?: string,
 ): Promise<void> {
   for (const row of narrativeDraftToSectionRows(draft)) {
+    const validated = parseNarrativeSaveInput({
+      originalText: row.originalText,
+      reviewStatus: row.reviewStatus,
+    });
     await tx.patientNarrativeSection.upsert({
       where: { patientId_sectionKey: { patientId, sectionKey: row.sectionKey } },
       create: {
         patientId,
         sectionKey: row.sectionKey,
-        originalText: row.originalText,
+        originalText: validated.originalText ?? '',
         annotations: row.annotations as Prisma.InputJsonValue,
         sourceReferences: row.sourceReferences as Prisma.InputJsonValue,
         importJobId: importJobId ?? undefined,
-        reviewStatus: row.reviewStatus,
+        reviewStatus: validated.reviewStatus ?? 'pending',
         createdBy,
       },
       update: {

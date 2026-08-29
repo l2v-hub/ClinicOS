@@ -11,6 +11,7 @@ import {
 } from '../ai/sections/patient-narrative.js';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
+import { NarrativeInputError, parseNarrativeSaveInput } from '../ai/sections/narrative-input.js';
 
 const router = Router();
 
@@ -60,21 +61,21 @@ async function save(req: AuthedRequest, res: import('express').Response) {
     res.status(400).json({ error: 'sectionKey non valido' });
     return;
   }
-  const body = (req.body ?? {}) as {
-    reviewedText?: string;
-    originalText?: string;
-    reviewStatus?: string;
-  };
   try {
+    const body = parseNarrativeSaveInput(req.body);
     const dto = await upsertNarrativeSection(patientId, sectionKey, {
-      reviewedText: typeof body.reviewedText === 'string' ? body.reviewedText : undefined,
+      reviewedText: body.reviewedText,
       // originalText accepted only to seed a manually-created section (ignored if row exists).
-      originalText: typeof body.originalText === 'string' ? body.originalText : undefined,
-      reviewStatus: typeof body.reviewStatus === 'string' ? body.reviewStatus : undefined,
+      originalText: body.originalText,
+      reviewStatus: body.reviewStatus,
       updatedBy: req.operator!.id,
     });
     res.status(200).json(dto);
-  } catch {
+  } catch (error) {
+    if (error instanceof NarrativeInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
     res.status(500).json({ error: 'Errore nel salvataggio della sezione' });
   }
 }

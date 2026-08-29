@@ -13,6 +13,7 @@ import {
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
 import type { PatientTherapy, TherapySchedule } from '@prisma/client';
+import { assertTherapyScalarInput } from './input-validation.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -110,6 +111,7 @@ export async function createTherapyInTx(
   patientId: string,
   input: TherapyCreateInput,
 ): Promise<PatientTherapyWithSchedules> {
+  assertTherapyScalarInput(input as unknown as Record<string, unknown>);
   const farmacoNome = typeof input.farmacoNome === 'string' ? input.farmacoNome.trim() : '';
   const dataInizio = typeof input.dataInizio === 'string' ? input.dataInizio : '';
 

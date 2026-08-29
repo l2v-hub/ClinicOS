@@ -123,3 +123,38 @@ test('assistant therapy context is projected, bounded and reports truncation', a
   assert.match(block, /const truncated = rows\.length > 100/);
   assert.match(block, /return \{ data, sourceRefs: refs, truncated \}/);
 });
+
+test('therapy and narrative text limits execute before clinical writes', async () => {
+  const [therapyRoute, therapyCreate, narrativeRoute, narrativeService] = await Promise.all([
+    readFile(therapyRouteUrl, 'utf8'),
+    readFile(therapyCreateUrl, 'utf8'),
+    readFile(narrativeRouteUrl, 'utf8'),
+    readFile(narrativeServiceUrl, 'utf8'),
+  ]);
+  const updateBlock =
+    therapyRoute
+      .split("router.put('/:patientId/therapies/:therapyId'")[1]
+      ?.split('// DELETE ')[0] ?? '';
+  assert.ok(
+    updateBlock.indexOf('assertTherapyScalarInput(body)') <
+      updateBlock.indexOf('prisma.patientTherapy.findFirst'),
+  );
+  assert.ok(
+    therapyCreate.indexOf('assertTherapyScalarInput') <
+      therapyCreate.indexOf('tx.patientTherapy.create'),
+  );
+  const saveBlock = narrativeRoute.split('async function save')[1] ?? '';
+  assert.ok(
+    saveBlock.indexOf('parseNarrativeSaveInput(req.body)') <
+      saveBlock.indexOf('upsertNarrativeSection'),
+  );
+  assert.match(saveBlock, /error instanceof NarrativeInputError/);
+  const upsertBlock =
+    narrativeService
+      .split('export async function upsertNarrativeSection')[1]
+      ?.split('export async function persistNarrativeFromDraft')[0] ?? '';
+  assert.ok(
+    upsertBlock.indexOf('parseNarrativeSaveInput(input)') <
+      upsertBlock.indexOf('prisma.patientNarrativeSection.findUnique'),
+  );
+});

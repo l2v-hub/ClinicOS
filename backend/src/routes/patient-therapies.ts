@@ -27,6 +27,7 @@ import {
   parseTherapyListQuery,
   TherapyListInputError,
 } from '../therapies/list-query.js';
+import { assertTherapyScalarInput, TherapyInputError } from '../therapies/input-validation.js';
 
 const router = Router();
 
@@ -219,6 +220,7 @@ router.post('/:patientId/therapies', async (req, res) => {
     const msg = error instanceof Error ? error.message : '';
     if (
       msg.includes('Campi obbligatori') ||
+      error instanceof TherapyInputError ||
       error instanceof InvalidTherapySchedulesError ||
       error instanceof TherapyDateRangeError
     ) {
@@ -236,6 +238,7 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
   const body = req.body as Record<string, unknown>;
 
   try {
+    assertTherapyScalarInput(body);
     const existing = await prisma.patientTherapy.findFirst({
       where: { id: therapyId, patientId },
     });
@@ -326,7 +329,11 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     );
     res.status(200).json(therapy);
   } catch (error) {
-    if (error instanceof InvalidTherapySchedulesError || error instanceof TherapyDateRangeError) {
+    if (
+      error instanceof TherapyInputError ||
+      error instanceof InvalidTherapySchedulesError ||
+      error instanceof TherapyDateRangeError
+    ) {
       res.status(400).json({ error: error.message });
       return;
     }
