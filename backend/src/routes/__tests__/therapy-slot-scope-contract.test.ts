@@ -58,6 +58,7 @@ test('interactive agenda uses keyset pages with exact scoped summaries', () => {
   assert.match(slots, /buildTherapySlotExactSummary/);
   assert.match(slots, /COUNT\(\*\) FILTER \(WHERE stato = 'erogata'\)/);
   assert.match(slots, /therapyAccessSql\(access\)/);
+  assert.doesNotMatch(slots, /allowed\.includes\(isoDay\)/);
   assert.match(
     slots,
     /FROM due_therapy due\s+JOIN "MedicationAdministration" ma[\s\S]*ma\."patientId" = due\."patientId"/,

@@ -17,7 +17,7 @@ import {
 import { TherapySlotCapacityError } from './therapy-capacity.js';
 import { therapyWhereForAccess, type TherapyPatientAccess } from './therapy-query.js';
 
-export { therapyWhereForDate } from './therapy-query.js';
+export { therapyWhereForDate, therapyWhereForDueDate } from './therapy-query.js';
 export { TherapySlotCapacityError } from './therapy-capacity.js';
 
 export const FASCE = [
@@ -210,7 +210,6 @@ async function buildTherapySlotSourcePage(
       dosaggio: true,
       viaSomministrazione: true,
       tipo: true,
-      giorniSettimana: true,
       fasceMattina: true,
       fascePranzo: true,
       fascePomeriggio: true,
@@ -261,14 +260,6 @@ async function buildTherapySlotSourcePage(
     if (!pt.patient) {
       console.error('Skipping invalid/orphan therapy: missing patient for therapyId', pt.id);
       return false;
-    }
-    // #241: intermittent weekday posology — a drug with a giorniSettimana list must not appear on
-    // days outside it. Empty/null = every day (backward-compatible).
-    if (pt.giorniSettimana && pt.giorniSettimana.trim()) {
-      const jsDay = new Date(`${date}T00:00:00.000Z`).getUTCDay(); // 0=Sun … 6=Sat
-      const isoDay = jsDay === 0 ? 7 : jsDay; // 1=Mon … 7=Sun
-      const allowed = pt.giorniSettimana.split(',').map((s) => parseInt(s.trim(), 10));
-      if (!allowed.includes(isoDay)) return false;
     }
     return true;
   });
