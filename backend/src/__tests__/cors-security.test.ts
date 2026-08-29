@@ -2,6 +2,7 @@ import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Server } from 'node:http';
 import app, { developmentOrigins, isAllowedOrigin } from '../app.js';
+import { signUserContext } from '../ai/gateway/context.js';
 
 let server: Server;
 let base = '';
@@ -65,5 +66,50 @@ test('backend responses expose the defensive browser headers without framework d
   } finally {
     if (previousNodeEnv === undefined) delete process.env.NODE_ENV;
     else process.env.NODE_ENV = previousNodeEnv;
+  }
+});
+
+test('internal AI rejects legacy spoofed context and accepts only a signed envelope', async () => {
+  const previousToken = process.env.AI_RUNTIME_SERVICE_TOKEN;
+  const previousSecret = process.env.AI_GATEWAY_CONTEXT_SECRET;
+  process.env.AI_RUNTIME_SERVICE_TOKEN = 'route-test-service-token';
+  process.env.AI_GATEWAY_CONTEXT_SECRET = 'route-test-context-secret-at-least-32-bytes';
+  try {
+    const legacy = await fetch(`${base}/internal/ai/search/patients`, {
+      method: 'POST',
+      headers: {
+        authorization: 'Bearer route-test-service-token',
+        'content-type': 'application/json',
+        'x-ai-user-id': 'attacker',
+        'x-ai-roles': 'admin',
+      },
+      body: JSON.stringify({ query: 'Rossi' }),
+    });
+    assert.equal(legacy.status, 401);
+
+    const signed = signUserContext({
+      userId: 'operator-1',
+      tenantId: 'clinicos',
+      roles: ['operator'],
+      permittedPatientIds: ['patient-1'],
+      requestId: 'route-test-1',
+    });
+    const bounded = await fetch(`${base}/internal/ai/search/patients`, {
+      method: 'POST',
+      headers: {
+        authorization: 'Bearer route-test-service-token',
+        'content-type': 'application/json',
+        ...signed,
+      },
+      body: JSON.stringify({}),
+    });
+    assert.equal(bounded.status, 400);
+    assert.equal(bounded.headers.get('cache-control'), 'private, no-store');
+    assert.equal(((await bounded.json()) as { kind?: string }).kind, 'bad_request');
+  } finally {
+    if (previousToken === undefined) delete process.env.AI_RUNTIME_SERVICE_TOKEN;
+    else process.env.AI_RUNTIME_SERVICE_TOKEN = previousToken;
+    if (previousSecret === undefined) delete process.env.AI_GATEWAY_CONTEXT_SECRET;
+    else process.env.AI_GATEWAY_CONTEXT_SECRET = previousSecret;
   }
 });

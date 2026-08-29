@@ -11,6 +11,7 @@ const internalAiRouter = Router();
 
 // Gate 1: service token (the frontend never calls these). Gate 2: a parsed user context.
 internalAiRouter.use((req: Request, res: Response, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
   if (!checkServiceToken(req.header('authorization'))) {
     return res.status(401).json({ error: 'Service token required' });
   }
@@ -18,7 +19,7 @@ internalAiRouter.use((req: Request, res: Response, next) => {
 });
 
 function ctxOf(req: Request) {
-  return parseUserContext(req.headers as Record<string, string | undefined>);
+  return parseUserContext(req.headers);
 }
 
 function fail(res: Response, err: unknown) {

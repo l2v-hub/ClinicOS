@@ -18,7 +18,7 @@ import { patientAssignmentRouter } from '../admin-rooms.js';
 
 let server: Server;
 let base = '';
-const AUTH_HEADERS = { 'X-Operator-Id': 'test-operatore', 'X-Operator-Role': 'operatore' };
+const AUTH_HEADERS = { 'X-Operator-Id': 'test-manager', 'X-Operator-Role': 'manager' };
 
 before(async () => {
   const app = express();

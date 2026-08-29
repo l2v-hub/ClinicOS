@@ -1,11 +1,14 @@
 // REQ-039: deterministic, backend-side filters. ALL numeric comparisons, ranges and text matching
 // happen here — never in the model. Pure functions over plain data → fully unit-testable.
 
+export function normalizeSearchText(value: string): string {
+  return value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
+
 /** Accent-insensitive, case-insensitive substring test. */
 export function textIncludes(haystack: unknown, needle: string): boolean {
   if (typeof haystack !== 'string' || !needle) return false;
-  const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-  return norm(haystack).includes(norm(needle));
+  return normalizeSearchText(haystack).includes(normalizeSearchText(needle));
 }
 
 /** 016 F0: ogni token della query deve comparire in nome o cognome (ordine indifferente).

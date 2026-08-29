@@ -93,21 +93,21 @@ test('AC3: GET /patients/settings con ALLOW_PATIENT_DELETE=true riflette deleteE
   assert.equal(body.deleteEnabled, true);
 });
 
-test('AC4: POST /patients/seed con NODE_ENV=production risponde 403 prima di toccare il DB', async () => {
+test('AC4: POST /patients/seed in produzione fallisce chiuso senza Entra configurato', async () => {
   process.env.NODE_ENV = 'production';
   const res = await fetch(`${base}/patients/seed`, { method: 'POST', headers: OPERATOR_HEADERS });
-  assert.equal(res.status, 403);
+  assert.equal(res.status, 503);
   const body = (await res.json()) as { error?: string };
   assert.ok(body.error);
 });
 
-test('AC4: POST /patients/demo-setup con NODE_ENV=production risponde 403 prima di toccare il DB', async () => {
+test('AC4: POST /patients/demo-setup in produzione fallisce chiuso senza Entra configurato', async () => {
   process.env.NODE_ENV = 'production';
   const res = await fetch(`${base}/patients/demo-setup`, {
     method: 'POST',
     headers: OPERATOR_HEADERS,
   });
-  assert.equal(res.status, 403);
+  assert.equal(res.status, 503);
   const body = (await res.json()) as { error?: string };
   assert.ok(body.error);
 });

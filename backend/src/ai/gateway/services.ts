@@ -2,20 +2,17 @@
 // runtime. No SQL is exposed; every function enforces tenant + patient scope and returns
 // SourceReference-bearing results. All numeric/temporal filtering is deterministic and server-side.
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { getNarrativeSections } from '../sections/patient-narrative.js';
 import { listPatientDocuments } from '../upload/patient-documents.js';
-import {
-  assertPatientAllowed,
-  assertTenant,
-  canCrossPatientSearch,
-  filterAllowedPatients,
-} from './context.js';
+import { assertPatientAllowed, assertTenant, canCrossPatientSearch } from './context.js';
 import {
   asCartella,
   filterVitals,
   matchAllergy,
   matchTherapy,
+  normalizeSearchText,
   textIncludes,
   nameMatchesAllTokens,
   type VitalItem,
@@ -42,19 +39,171 @@ import {
   type UserContext,
   type VitalSignQueryInput,
 } from './types.js';
+import {
+  validateClinicalSearchInput,
+  validateCorrelateInput,
+  validatePatientSearchInput,
+} from './validation.js';
 
 const nowIso = () => new Date().toISOString();
 const displayName = (p: { firstName: string; lastName: string }) =>
   `${p.lastName} ${p.firstName}`.trim();
 
-function clampLimit(n: number | undefined, def = 20, max = 50): number {
-  const v = typeof n === 'number' && Number.isFinite(n) ? Math.floor(n) : def;
-  return Math.min(max, Math.max(1, v));
+interface PatientSearchRow {
+  id: string;
+  firstName: string;
+  lastName: string;
+  medicalRecordNumber: string;
+  dateOfBirth: Date;
 }
 
 async function loadCartella(patientId: string) {
   const c = await prisma.cartella.findUnique({ where: { patientId } });
   return { cartella: asCartella(c?.data), recordId: c?.id ?? patientId };
+}
+
+function likePattern(value: string): string {
+  return `%${value.replace(/[\\%_]/g, (character) => `\\${character}`)}%`;
+}
+
+const ACCENTED_LATIN = 'àáâäãåèéêëìíîïòóôöõùúûüç';
+const PLAIN_LATIN = 'aaaaaaeeeeiiiiooooouuuuc';
+
+function normalizedLikePattern(value: string): string {
+  return likePattern(normalizeSearchText(value));
+}
+
+function normalizedSql(value: Prisma.Sql): Prisma.Sql {
+  return Prisma.sql`translate(lower(${value}), ${ACCENTED_LATIN}, ${PLAIN_LATIN})`;
+}
+
+/** Structured clinical filters run in PostgreSQL before LIMIT and return only projected fields. */
+async function searchStructuredPatientRows(
+  input: ReturnType<typeof validatePatientSearchInput>,
+  ctx: UserContext,
+): Promise<PatientSearchRow[]> {
+  const predicates: Prisma.Sql[] = [];
+  if (ctx.permittedPatientIds !== null) {
+    predicates.push(Prisma.sql`p."id" IN (${Prisma.join(ctx.permittedPatientIds)})`);
+  }
+  for (const token of input.tokens) {
+    const pattern = normalizedLikePattern(token);
+    predicates.push(Prisma.sql`(
+      ${normalizedSql(Prisma.sql`p."firstName"`)} LIKE ${pattern} ESCAPE '\\' OR
+      ${normalizedSql(Prisma.sql`p."lastName"`)} LIKE ${pattern} ESCAPE '\\' OR
+      ${normalizedSql(Prisma.sql`p."medicalRecordNumber"`)} LIKE ${pattern} ESCAPE '\\'
+    )`);
+  }
+  if (input.admissionFrom) {
+    predicates.push(
+      Prisma.sql`p."createdAt" >= ${new Date(`${input.admissionFrom}T00:00:00.000Z`)}`,
+    );
+  }
+  if (input.admissionTo) {
+    predicates.push(Prisma.sql`p."createdAt" <= ${new Date(`${input.admissionTo}T23:59:59.999Z`)}`);
+  }
+  if (input.fiscalCode) {
+    const fiscalPattern = normalizedLikePattern(input.fiscalCode);
+    predicates.push(Prisma.sql`(
+      ${normalizedSql(Prisma.sql`COALESCE(p."codiceFiscale", '')`)} LIKE ${fiscalPattern} ESCAPE '\\'
+      OR ${normalizedSql(Prisma.sql`COALESCE(c."data"->>'codiceFiscale', '')`)} LIKE ${fiscalPattern} ESCAPE '\\'
+    )`);
+  }
+  if (input.allergy) {
+    predicates.push(Prisma.sql`EXISTS (
+      SELECT 1
+      FROM jsonb_array_elements(
+        CASE WHEN jsonb_typeof(c."data"->'allergie') = 'array'
+          THEN c."data"->'allergie' ELSE '[]'::jsonb END
+      ) AS allergy
+      WHERE ${normalizedSql(Prisma.sql`COALESCE(allergy->>'allergene', '')`)}
+        LIKE ${normalizedLikePattern(input.allergy)} ESCAPE '\\'
+    )`);
+  }
+  if (input.therapy) {
+    const therapyPattern = normalizedLikePattern(input.therapy);
+    predicates.push(Prisma.sql`(
+      EXISTS (
+        SELECT 1 FROM "PatientTherapy" therapy
+        WHERE therapy."patientId" = p."id"
+          AND ${normalizedSql(Prisma.sql`therapy."farmacoNome"`)} LIKE ${therapyPattern} ESCAPE '\\'
+      ) OR EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements(
+          CASE WHEN jsonb_typeof(c."data"->'terapie') = 'array'
+            THEN c."data"->'terapie' ELSE '[]'::jsonb END
+        ) AS legacy_therapy
+        WHERE ${normalizedSql(Prisma.sql`COALESCE(legacy_therapy->>'descrizione', '')`)}
+          LIKE ${therapyPattern} ESCAPE '\\'
+      )
+    )`);
+  }
+  const where = Prisma.join(predicates, ' AND ');
+  return prisma.$queryRaw<PatientSearchRow[]>(Prisma.sql`
+    SELECT p."id", p."firstName", p."lastName", p."medicalRecordNumber", p."dateOfBirth"
+    FROM "Patient" p
+    LEFT JOIN "Cartella" c ON c."patientId" = p."id"
+    WHERE ${where}
+    ORDER BY p."lastName" ASC, p."firstName" ASC, p."id" ASC
+    LIMIT ${input.limit}
+  `);
+}
+
+async function searchCorrelatedPatientRows(
+  input: ReturnType<typeof validateCorrelateInput>,
+  ctx: UserContext,
+): Promise<PatientSearchRow[]> {
+  const predicates: Prisma.Sql[] = [];
+  if (ctx.permittedPatientIds !== null) {
+    predicates.push(Prisma.sql`p."id" IN (${Prisma.join(ctx.permittedPatientIds)})`);
+  }
+  if (input.allergy) {
+    predicates.push(Prisma.sql`EXISTS (
+      SELECT 1
+      FROM jsonb_array_elements(
+        CASE WHEN jsonb_typeof(c."data"->'allergie') = 'array'
+          THEN c."data"->'allergie' ELSE '[]'::jsonb END
+      ) AS allergy
+      WHERE ${normalizedSql(Prisma.sql`COALESCE(allergy->>'allergene', '')`)}
+        LIKE ${normalizedLikePattern(input.allergy)} ESCAPE '\\'
+    )`);
+  }
+  if (input.therapy) {
+    const therapyPattern = normalizedLikePattern(input.therapy);
+    predicates.push(Prisma.sql`(
+      EXISTS (
+        SELECT 1 FROM "PatientTherapy" therapy
+        WHERE therapy."patientId" = p."id"
+          AND ${normalizedSql(Prisma.sql`therapy."farmacoNome"`)} LIKE ${therapyPattern} ESCAPE '\\'
+      ) OR EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements(
+          CASE WHEN jsonb_typeof(c."data"->'terapie') = 'array'
+            THEN c."data"->'terapie' ELSE '[]'::jsonb END
+        ) AS legacy_therapy
+        WHERE ${normalizedSql(Prisma.sql`COALESCE(legacy_therapy->>'descrizione', '')`)}
+          LIKE ${therapyPattern} ESCAPE '\\'
+      )
+    )`);
+  }
+  if (input.sectionContains) {
+    const section = input.sectionContains;
+    predicates.push(Prisma.sql`EXISTS (
+      SELECT 1 FROM "PatientNarrativeSection" narrative
+      WHERE narrative."patientId" = p."id"
+        ${section.sectionKey ? Prisma.sql`AND narrative."sectionKey" = ${section.sectionKey}` : Prisma.empty}
+        AND ${normalizedSql(Prisma.sql`COALESCE(narrative."reviewedText", narrative."originalText", '')`)}
+          LIKE ${normalizedLikePattern(section.text)} ESCAPE '\\'
+    )`);
+  }
+  return prisma.$queryRaw<PatientSearchRow[]>(Prisma.sql`
+    SELECT p."id", p."firstName", p."lastName", p."medicalRecordNumber", p."dateOfBirth"
+    FROM "Patient" p
+    LEFT JOIN "Cartella" c ON c."patientId" = p."id"
+    WHERE ${Prisma.join(predicates, ' AND ')}
+    ORDER BY p."lastName" ASC, p."firstName" ASC, p."id" ASC
+    LIMIT ${input.limit}
+  `);
 }
 
 // ── Patient search ───────────────────────────────────────────────────────────
@@ -63,31 +212,45 @@ export async function searchPatients(
   ctx: UserContext,
 ): Promise<PatientSearchResult[]> {
   assertTenant(ctx);
-  const limit = clampLimit(input.limit);
-  const q = (input.query ?? '').trim();
+  const validated = validatePatientSearchInput(input);
+  const { limit, query: q } = validated;
+  if (ctx.permittedPatientIds?.length === 0) {
+    gatewayAudit(ctx, 'search_patients', [], 0, 'empty', nowIso());
+    return [];
+  }
   // 016 F0: match multi-token — ogni token deve comparire in nome/cognome/MRN (AND fra token),
   // così «Elena Moretti» o «Moretti Elena» trovano il paziente pur avendo i campi separati.
-  const tokens = q.split(/\s+/).filter(Boolean);
-  const where = tokens.length
-    ? {
-        AND: tokens.map((t) => ({
-          OR: [
-            { firstName: { contains: t, mode: 'insensitive' as const } },
-            { lastName: { contains: t, mode: 'insensitive' as const } },
-            { medicalRecordNumber: { contains: t, mode: 'insensitive' as const } },
-          ],
-        })),
+  const rows = await searchStructuredPatientRows(validated, ctx);
+  const cartelle =
+    validated.allergy || validated.therapy
+      ? await prisma.cartella.findMany({
+          where: { patientId: { in: rows.map((row) => row.id) } },
+          select: { id: true, patientId: true, data: true },
+        })
+      : [];
+  const cartellaByPatient = new Map(
+    cartelle.map((row) => [row.patientId, { recordId: row.id, cartella: asCartella(row.data) }]),
+  );
+  const therapies = validated.therapy
+    ? await prisma.patientTherapy.findMany({
+        where: { patientId: { in: rows.map((row) => row.id) } },
+        select: { id: true, patientId: true, farmacoNome: true, dosaggio: true, dataInizio: true },
+      })
+    : [];
+  const therapyByPatient = new Map<string, (typeof therapies)[number]>();
+  if (validated.therapy) {
+    for (const therapy of therapies) {
+      if (
+        !therapyByPatient.has(therapy.patientId) &&
+        textIncludes(therapy.farmacoNome, validated.therapy)
+      ) {
+        therapyByPatient.set(therapy.patientId, therapy);
       }
-    : {};
-  const rows = await prisma.patient.findMany({
-    where,
-    orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }],
-    take: 500,
-  });
-  const allowed = rows.filter((p) => filterAllowedPatients(ctx, [p.id]).length === 1);
+    }
+  }
 
   const results: PatientSearchResult[] = [];
-  for (const p of allowed) {
+  for (const p of rows) {
     if (results.length >= limit) break;
     const matching: string[] = [];
     const refs: SourceReference[] = [];
@@ -98,32 +261,45 @@ export async function searchPatients(
       matching.push('name');
       refs.push(patientFieldSource(p.id, 'name', displayName(p)));
     }
-    // fiscalCode / allergy / therapy need the cartella
-    if (input.fiscalCode || input.allergy || input.therapy) {
-      const { cartella, recordId } = await loadCartella(p.id);
-      const cf = String((cartella as Record<string, unknown>).codiceFiscale ?? '');
-      if (input.fiscalCode && textIncludes(cf, input.fiscalCode)) {
-        matching.push('fiscalCode');
-        refs.push(patientFieldSource(p.id, 'codiceFiscale', cf));
-      }
-      if (input.allergy) {
-        const a = matchAllergy(cartella, input.allergy);
-        if (a) {
-          matching.push('allergy');
-          refs.push(patientFieldSource(p.id, `allergie:${a.allergene}`, a.allergene));
-        } else continue;
-      }
-      if (input.therapy) {
-        const t = matchTherapy(cartella, input.therapy);
-        if (t) {
-          matching.push('therapy');
-          refs.push(therapySource(p.id, recordId, 'terapie', t.descrizione, t.dataInizio));
-        } else continue;
-      }
+    if (validated.fiscalCode) {
+      matching.push('fiscalCode');
+      // The matching CF stays inside the predicate; do not echo the national identifier in results.
+      refs.push(patientFieldSource(p.id, 'codiceFiscale'));
     }
-    if (input.admissionFrom && p.createdAt.toISOString().slice(0, 10) < input.admissionFrom)
-      continue;
-    if (input.admissionTo && p.createdAt.toISOString().slice(0, 10) > input.admissionTo) continue;
+    if (validated.allergy) {
+      const cartella = cartellaByPatient.get(p.id)?.cartella ?? asCartella(undefined);
+      const allergy = matchAllergy(cartella, validated.allergy);
+      if (!allergy) continue; // defensive: SQL and application matching must agree
+      matching.push('allergy');
+      refs.push(patientFieldSource(p.id, `allergie:${allergy.allergene}`, allergy.allergene));
+    }
+    if (validated.therapy) {
+      const therapy = therapyByPatient.get(p.id);
+      const legacyCartella = cartellaByPatient.get(p.id);
+      const legacyTherapy = matchTherapy(
+        legacyCartella?.cartella ?? asCartella(undefined),
+        validated.therapy,
+      );
+      if (!therapy && !legacyTherapy) continue;
+      matching.push('therapy');
+      refs.push(
+        therapy
+          ? therapySource(
+              p.id,
+              therapy.id,
+              therapy.farmacoNome,
+              `${therapy.farmacoNome} ${therapy.dosaggio}`,
+              therapy.dataInizio,
+            )
+          : therapySource(
+              p.id,
+              legacyCartella?.recordId ?? p.id,
+              'terapie',
+              legacyTherapy!.descrizione,
+              legacyTherapy!.dataInizio,
+            ),
+      );
+    }
     // a query with no matched field and no structured filter still lists the patient (name source)
     if (refs.length === 0) {
       matching.push('patient');
@@ -416,22 +592,44 @@ export async function searchClinicalSections(
   ctx: UserContext,
 ): Promise<ClinicalSectionMatch[]> {
   assertTenant(ctx);
-  if (!input.query?.trim()) throw new GatewayError('bad_request', 'query required');
-  const limit = clampLimit(input.limit);
-  const where: Record<string, unknown> = {};
-  if (input.patientId) {
-    assertPatientAllowed(ctx, input.patientId);
-    where.patientId = input.patientId;
+  const validated = validateClinicalSearchInput(input, { queryRequired: true });
+  if (ctx.permittedPatientIds?.length === 0) return [];
+  const predicates: Prisma.Sql[] = [];
+  if (ctx.permittedPatientIds !== null) {
+    predicates.push(Prisma.sql`section."patientId" IN (${Prisma.join(ctx.permittedPatientIds)})`);
   }
-  if (input.sectionKey) where.sectionKey = input.sectionKey;
-  const rows = await prisma.patientNarrativeSection.findMany({ where, take: 1000 });
+  if (validated.patientId) {
+    assertPatientAllowed(ctx, validated.patientId);
+    predicates.push(Prisma.sql`section."patientId" = ${validated.patientId}`);
+  }
+  if (validated.sectionKey) {
+    predicates.push(Prisma.sql`section."sectionKey" = ${validated.sectionKey}`);
+  }
+  predicates.push(
+    Prisma.sql`${normalizedSql(Prisma.sql`COALESCE(section."reviewedText", section."originalText", '')`)}
+      LIKE ${normalizedLikePattern(validated.query)} ESCAPE '\\'`,
+  );
+  const rows = await prisma.$queryRaw<
+    Array<{
+      id: string;
+      patientId: string;
+      sectionKey: string;
+      reviewedText: string | null;
+      originalText: string | null;
+      updatedAt: Date;
+    }>
+  >(Prisma.sql`
+    SELECT section."id", section."patientId", section."sectionKey",
+           section."reviewedText", section."originalText", section."updatedAt"
+    FROM "PatientNarrativeSection" section
+    WHERE ${Prisma.join(predicates, ' AND ')}
+    ORDER BY section."updatedAt" DESC, section."id" ASC
+    LIMIT ${validated.limit}
+  `);
   const out: ClinicalSectionMatch[] = [];
   for (const r of rows) {
-    if (out.length >= limit) break;
-    if (!isAllowedPatient(ctx, r.patientId)) continue;
     const text = (r.reviewedText ?? r.originalText) || '';
-    if (!textIncludes(text, input.query)) continue;
-    const excerpt = excerptAround(text, input.query);
+    const excerpt = excerptAround(text, validated.query);
     out.push({
       patientId: r.patientId,
       sectionKey: r.sectionKey,
@@ -457,17 +655,36 @@ export async function searchDocuments(
   ctx: UserContext,
 ): Promise<SourcedResult<unknown[]>> {
   assertTenant(ctx);
-  if (input.patientId) assertPatientAllowed(ctx, input.patientId);
-  const where: Record<string, unknown> = input.patientId ? { patientId: input.patientId } : {};
-  const rows = await prisma.patientDocument.findMany({ where, take: 1000 });
-  const matched = rows.filter(
-    (d) =>
-      isAllowedPatient(ctx, d.patientId) &&
-      (!input.query ||
-        textIncludes(d.originalName, input.query) ||
-        textIncludes(d.documentType, input.query)),
-  );
-  const data = matched.slice(0, clampLimit(input.limit)).map((d) => ({
+  const validated = validateClinicalSearchInput(input, { queryRequired: false });
+  if (ctx.permittedPatientIds?.length === 0) {
+    gatewayAudit(ctx, 'search_documents', [], 0, 'empty', nowIso());
+    return { data: [], sourceRefs: [] };
+  }
+  const predicates: Prisma.Sql[] = [];
+  if (ctx.permittedPatientIds !== null) {
+    predicates.push(Prisma.sql`document."patientId" IN (${Prisma.join(ctx.permittedPatientIds)})`);
+  }
+  if (validated.patientId) assertPatientAllowed(ctx, validated.patientId);
+  if (validated.patientId) {
+    predicates.push(Prisma.sql`document."patientId" = ${validated.patientId}`);
+  }
+  if (validated.query) {
+    const pattern = normalizedLikePattern(validated.query);
+    predicates.push(Prisma.sql`(
+      ${normalizedSql(Prisma.sql`document."originalName"`)} LIKE ${pattern} ESCAPE '\\'
+      OR ${normalizedSql(Prisma.sql`document."documentType"`)} LIKE ${pattern} ESCAPE '\\'
+    )`);
+  }
+  const rows = await prisma.$queryRaw<
+    Array<{ id: string; patientId: string; originalName: string; documentType: string }>
+  >(Prisma.sql`
+    SELECT document."id", document."patientId", document."originalName", document."documentType"
+    FROM "PatientDocument" document
+    WHERE ${Prisma.join(predicates, ' AND ')}
+    ORDER BY document."createdAt" DESC, document."id" ASC
+    LIMIT ${validated.limit}
+  `);
+  const data = rows.map((d) => ({
     id: d.id,
     patientId: d.patientId,
     originalName: d.originalName,
@@ -491,45 +708,125 @@ export async function correlate(
   ctx: UserContext,
 ): Promise<SourcedResult<PatientSearchResult[]>> {
   assertTenant(ctx);
-  const limit = clampLimit(input.limit);
-  const patients = await prisma.patient.findMany({ orderBy: [{ lastName: 'asc' }], take: 1000 });
+  const validated = validateCorrelateInput(input);
+  if (ctx.permittedPatientIds?.length === 0) {
+    gatewayAudit(ctx, 'correlate_structured_data', [], 0, 'empty', nowIso());
+    return { data: [], sourceRefs: [] };
+  }
+  const patients = await searchCorrelatedPatientRows(validated, ctx);
+  const patientIds = patients.map((patient) => patient.id);
+  const [cartelle, therapies, sections] = await Promise.all([
+    validated.allergy || validated.therapy
+      ? prisma.cartella.findMany({
+          where: { patientId: { in: patientIds } },
+          select: { id: true, patientId: true, data: true },
+        })
+      : Promise.resolve([]),
+    validated.therapy
+      ? prisma.patientTherapy.findMany({
+          where: { patientId: { in: patientIds } },
+          select: {
+            id: true,
+            patientId: true,
+            farmacoNome: true,
+            dosaggio: true,
+            dataInizio: true,
+          },
+        })
+      : Promise.resolve([]),
+    validated.sectionContains && patientIds.length
+      ? prisma.$queryRaw<
+          Array<{
+            id: string;
+            patientId: string;
+            sectionKey: string;
+            originalText: string | null;
+            reviewedText: string | null;
+          }>
+        >(Prisma.sql`
+          SELECT DISTINCT ON (section."patientId")
+            section."id", section."patientId", section."sectionKey",
+            section."originalText", section."reviewedText"
+          FROM "PatientNarrativeSection" section
+          WHERE section."patientId" IN (${Prisma.join(patientIds)})
+            ${
+              validated.sectionContains.sectionKey
+                ? Prisma.sql`AND section."sectionKey" = ${validated.sectionContains.sectionKey}`
+                : Prisma.empty
+            }
+            AND ${normalizedSql(Prisma.sql`COALESCE(section."reviewedText", section."originalText", '')`)}
+              LIKE ${normalizedLikePattern(validated.sectionContains.text)} ESCAPE '\\'
+          ORDER BY section."patientId", section."updatedAt" DESC, section."id" ASC
+        `)
+      : Promise.resolve([]),
+  ]);
+  const cartellaByPatient = new Map(
+    cartelle.map((row) => [row.patientId, { recordId: row.id, cartella: asCartella(row.data) }]),
+  );
+  const therapyByPatient = new Map<string, (typeof therapies)[number]>();
+  if (validated.therapy) {
+    for (const therapy of therapies) {
+      if (
+        !therapyByPatient.has(therapy.patientId) &&
+        textIncludes(therapy.farmacoNome, validated.therapy)
+      ) {
+        therapyByPatient.set(therapy.patientId, therapy);
+      }
+    }
+  }
+  const sectionByPatient = new Map(sections.map((row) => [row.patientId, row]));
   const out: PatientSearchResult[] = [];
   const allRefs: SourceReference[] = [];
   for (const p of patients) {
-    if (out.length >= limit) break;
-    if (!isAllowedPatient(ctx, p.id)) continue;
     const matching: string[] = [];
     const refs: SourceReference[] = [];
-    if (input.allergy || input.therapy) {
-      const { cartella, recordId } = await loadCartella(p.id);
-      if (input.allergy) {
-        const a = matchAllergy(cartella, input.allergy);
-        if (!a) continue;
-        matching.push('allergy');
-        refs.push(patientFieldSource(p.id, `allergie:${a.allergene}`, a.allergene));
-      }
-      if (input.therapy) {
-        const t = matchTherapy(cartella, input.therapy);
-        if (!t) continue;
-        matching.push('therapy');
-        refs.push(therapySource(p.id, recordId, 'terapie', t.descrizione, t.dataInizio));
-      }
-    }
-    if (input.sectionContains) {
-      const secWhere: Record<string, unknown> = { patientId: p.id };
-      if (input.sectionContains.sectionKey) secWhere.sectionKey = input.sectionContains.sectionKey;
-      const secs = await prisma.patientNarrativeSection.findMany({ where: secWhere });
-      const hit = secs.find((s) =>
-        textIncludes((s.reviewedText ?? s.originalText) || '', input.sectionContains!.text),
+    if (validated.allergy) {
+      const allergy = matchAllergy(
+        cartellaByPatient.get(p.id)?.cartella ?? asCartella(undefined),
+        validated.allergy,
       );
+      if (!allergy) continue;
+      matching.push('allergy');
+      refs.push(patientFieldSource(p.id, `allergie:${allergy.allergene}`, allergy.allergene));
+    }
+    if (validated.therapy) {
+      const therapy = therapyByPatient.get(p.id);
+      const legacyCartella = cartellaByPatient.get(p.id);
+      const legacyTherapy = matchTherapy(
+        legacyCartella?.cartella ?? asCartella(undefined),
+        validated.therapy,
+      );
+      if (!therapy && !legacyTherapy) continue;
+      matching.push('therapy');
+      refs.push(
+        therapy
+          ? therapySource(
+              p.id,
+              therapy.id,
+              therapy.farmacoNome,
+              `${therapy.farmacoNome} ${therapy.dosaggio}`,
+              therapy.dataInizio,
+            )
+          : therapySource(
+              p.id,
+              legacyCartella?.recordId ?? p.id,
+              'terapie',
+              legacyTherapy!.descrizione,
+              legacyTherapy!.dataInizio,
+            ),
+      );
+    }
+    if (validated.sectionContains) {
+      const hit = sectionByPatient.get(p.id);
       if (!hit) continue;
+      const text = (hit.reviewedText ?? hit.originalText) || '';
       matching.push('section');
       refs.push(
         narrativeSource(
           p.id,
           hit.sectionKey,
           hit.id,
-          excerptAround((hit.reviewedText ?? hit.originalText) || '', input.sectionContains.text),
+          excerptAround(text, validated.sectionContains.text),
         ),
       );
     }
@@ -588,10 +885,6 @@ export async function searchAcrossPatients(
   if (!canCrossPatientSearch(ctx))
     throw new GatewayError('cross_patient_disabled', 'Cross-patient search is disabled');
   return searchClinicalSections({ ...input, patientId: undefined }, ctx);
-}
-
-function isAllowedPatient(ctx: UserContext, patientId: string): boolean {
-  return ctx.permittedPatientIds === null || ctx.permittedPatientIds.includes(patientId);
 }
 
 function excerptAround(text: string, needle: string, radius = 120): string {
