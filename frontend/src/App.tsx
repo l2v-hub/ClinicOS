@@ -284,6 +284,9 @@ export default function App() {
   const consegnePageInfoRef = useRef<ConsegnaPageInfo>({ hasMore: false, nextCursor: null });
   const consegneOverviewRequestRef = useRef(0);
   const consegneOverviewAbortRef = useRef<AbortController | null>(null);
+  const camereRequestSequenceRef = useRef(0);
+  const camereAbortControllerRef = useRef<AbortController | null>(null);
+  const camereLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const patientConsegneRequestRef = useRef(0);
   const patientConsegneAbortRef = useRef<AbortController | null>(null);
   const patientConsegnePageInfoRef = useRef<ConsegnaPageInfo>({
@@ -361,6 +364,10 @@ export default function App() {
   const [loadingAppuntamenti, setLoadingAppuntamenti] = useState(true);
   const [appointmentLoadError, setAppointmentLoadError] = useState<string | null>(null);
   const [camere, setCamere] = useState<Camera[]>([]);
+  const [camereLoadState, setCamereLoadState] = useState<'idle' | 'loading' | 'ready' | 'error'>(
+    'idle',
+  );
+  const [camereLoadError, setCamereLoadError] = useState<string | null>(null);
   // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>([]);
   const [note, setNote] = useState<Nota[]>([]);
@@ -889,61 +896,108 @@ export default function App() {
 
   // ── Load rooms (camere + letti con occupazione reale) ───────────────────────
 
-  const loadCamere = useCallback(() => {
+  const loadCamere = useCallback(async (force = false) => {
+    if (
+      !force &&
+      (camereLoadStateRef.current === 'loading' || camereLoadStateRef.current === 'ready')
+    ) {
+      return;
+    }
     const sessionEpoch = sessionEpochRef.current;
-    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders() })
-      .then((r) => (r.ok ? r.json() : []))
-      .then(
-        (
-          rooms: Array<{
-            id: string;
-            numero: string;
-            tipo: string;
-            piano: string;
-            reparto: string;
-            stato: string;
-            note: string;
-            beds: Array<{
-              id: string;
-              label: string;
-              stato: string;
-              assignments: Array<{
-                patientId: string;
-                patient: { firstName: string; lastName: string };
-              }>;
-            }>;
-          }>,
-        ) => {
-          if (sessionEpoch !== sessionEpochRef.current) return;
-          setCamere(
-            rooms.map((r) => ({
-              id: r.id,
-              numero: r.numero,
-              tipo: r.tipo as Camera['tipo'],
-              piano: r.piano,
-              reparto: r.reparto,
-              stato: r.stato as Camera['stato'],
-              note: r.note,
-              letti: r.beds.map((b) => ({
-                id: b.id,
-                numero: b.label === 'A' ? 1 : b.label === 'B' ? 2 : 3,
-                stato: (b.assignments.length > 0
-                  ? 'occupato'
-                  : b.stato === 'manutenzione'
-                    ? 'manutenzione'
-                    : 'libero') as Camera['letti'][0]['stato'],
-                pazienteId: b.assignments[0]?.patientId,
-                pazienteNome: b.assignments[0]?.patient
-                  ? `${b.assignments[0].patient.lastName}, ${b.assignments[0].patient.firstName}`
-                  : undefined,
-              })),
-            })),
-          );
-        },
-      )
-      .catch(() => {
-        /* keep empty array */
+    const request = ++camereRequestSequenceRef.current;
+    camereAbortControllerRef.current?.abort();
+    const controller = new AbortController();
+    camereAbortControllerRef.current = controller;
+    camereLoadStateRef.current = 'loading';
+    setCamereLoadState('loading');
+    setCamereLoadError(null);
+    try {
+      const response = await fetch(`${API_URL}/admin/rooms`, {
+        headers: operatorHeaders(),
+        signal: controller.signal,
       });
+      if (!response.ok) throw new Error(`rooms_${response.status}`);
+      const rooms = (await response.json()) as Array<{
+        id: string;
+        numero: string;
+        tipo: string;
+        piano: string;
+        reparto: string;
+        stato: string;
+        note: string;
+        beds: Array<{
+          id: string;
+          label: string;
+          stato: string;
+          assignments: Array<{
+            patientId: string;
+            patient: { firstName: string; lastName: string };
+          }>;
+        }>;
+      }>;
+      if (!Array.isArray(rooms)) throw new Error('rooms_shape');
+      if (
+        sessionEpoch !== sessionEpochRef.current ||
+        request !== camereRequestSequenceRef.current
+      ) {
+        return;
+      }
+      setCamere(
+        rooms.map((room) => ({
+          id: room.id,
+          numero: room.numero,
+          tipo: room.tipo as Camera['tipo'],
+          piano: room.piano,
+          reparto: room.reparto,
+          stato: room.stato as Camera['stato'],
+          note: room.note,
+          letti: room.beds.map((bed, index) => {
+            const alphaIndex = 'ABCDEFGH'.indexOf(bed.label.trim().toUpperCase());
+            const numericLabel = Number.parseInt(bed.label, 10);
+            return {
+              id: bed.id,
+              numero:
+                alphaIndex >= 0
+                  ? alphaIndex + 1
+                  : Number.isInteger(numericLabel) && numericLabel > 0
+                    ? numericLabel
+                    : index + 1,
+              stato: (bed.assignments.length > 0
+                ? 'occupato'
+                : bed.stato === 'manutenzione'
+                  ? 'manutenzione'
+                  : 'libero') as Camera['letti'][0]['stato'],
+              pazienteId: bed.assignments[0]?.patientId,
+              pazienteNome: bed.assignments[0]?.patient
+                ? `${bed.assignments[0].patient.lastName}, ${bed.assignments[0].patient.firstName}`
+                : undefined,
+            };
+          }),
+        })),
+      );
+      camereLoadStateRef.current = 'ready';
+      setCamereLoadState('ready');
+    } catch (error) {
+      if ((error as { name?: string }).name === 'AbortError') {
+        if (request === camereRequestSequenceRef.current) {
+          camereLoadStateRef.current = 'idle';
+          setCamereLoadState('idle');
+        }
+        return;
+      }
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === camereRequestSequenceRef.current
+      ) {
+        camereLoadStateRef.current = 'error';
+        setCamereLoadState('error');
+        setCamereLoadError('Dati camere non disponibili. Riprova.');
+      }
+    } finally {
+      if (request === camereRequestSequenceRef.current) {
+        camereAbortControllerRef.current = null;
+      }
+    }
   }, []);
 
   // ── Fetch constant-size session data ───────────────────────────────────────
@@ -980,8 +1034,6 @@ export default function App() {
       to: appointmentDay,
       operatorId: utente.ruolo === 'operatore' ? utente.id : undefined,
     });
-    // Load rooms from API for AdminDashboard
-    loadCamere();
     // Dashboard receives only a constant-size exact read model; the feed loads on navigation.
     void loadConsegneOverview();
     const operatorDirectoryPath = utente.ruolo === 'admin' ? '/operators' : '/operators/directory';
@@ -1020,7 +1072,28 @@ export default function App() {
       });
     void loadNotes({ box: 'all', q: '' });
     return () => sessionController.abort();
-  }, [utente, loadAppuntamenti, loadCamere, loadConsegneOverview, loadNotes]);
+  }, [utente, loadAppuntamenti, loadConsegneOverview, loadNotes]);
+
+  // Facility occupancy contains patient identity and is not session-bootstrap data. Only admins
+  // load it, on the two screens that consume it; RoomsManagement owns its separate abortable feed.
+  useEffect(() => {
+    const needsRooms =
+      utente?.ruolo === 'admin' &&
+      (navKey === 'admin-dashboard' || navKey === 'dettaglio-paziente');
+    if (!needsRooms) {
+      if (camereAbortControllerRef.current) {
+        camereRequestSequenceRef.current += 1;
+        camereAbortControllerRef.current.abort();
+        camereAbortControllerRef.current = null;
+      }
+      // Keep the last snapshot for a truthful background-refresh UI, but mark it stale so the
+      // next relevant navigation always revalidates changes made in RoomsManagement.
+      camereLoadStateRef.current = 'idle';
+      return;
+    }
+    const timer = window.setTimeout(() => void loadCamere(), 0);
+    return () => window.clearTimeout(timer);
+  }, [utente, navKey, loadCamere]);
 
   // The clinical therapy feed is potentially large and is needed only inside the agenda.
   // Keying the load to navigation also covers browser back/forward and a direct agenda hash.
@@ -1109,6 +1182,13 @@ export default function App() {
     consegneAbortControllerRef.current?.abort();
     consegneOverviewRequestRef.current += 1;
     consegneOverviewAbortRef.current?.abort();
+    camereRequestSequenceRef.current += 1;
+    camereAbortControllerRef.current?.abort();
+    camereAbortControllerRef.current = null;
+    camereLoadStateRef.current = 'idle';
+    setCamereLoadState('idle');
+    setCamereLoadError(null);
+    setCamere([]);
     patientConsegneRequestRef.current += 1;
     patientConsegneAbortRef.current?.abort();
     patientNavigationSequenceRef.current += 1;
@@ -1171,6 +1251,10 @@ export default function App() {
     consegneAbortControllerRef.current?.abort();
     consegneOverviewRequestRef.current += 1;
     consegneOverviewAbortRef.current?.abort();
+    camereRequestSequenceRef.current += 1;
+    camereAbortControllerRef.current?.abort();
+    camereAbortControllerRef.current = null;
+    camereLoadStateRef.current = 'idle';
     patientConsegneRequestRef.current += 1;
     patientConsegneAbortRef.current?.abort();
     setUtente(null);
@@ -1192,6 +1276,8 @@ export default function App() {
     setPatientConsegnePageInfo({ hasMore: false, nextCursor: null });
     setConsegneOverview(null);
     setConsegneOverviewState('loading');
+    setCamereLoadState('idle');
+    setCamereLoadError(null);
     setConsegneLoadError(null);
     setLoadingConsegne(false);
     consegneQueryRef.current = {};
@@ -1624,47 +1710,45 @@ export default function App() {
             headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
             body: JSON.stringify({ endDate: today }),
           });
-          loadCamere();
+          void loadCamere(true);
         }
         return { ok: true };
       }
 
-      const roomsRes = await fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders() });
-      const rooms: Array<{
-        id: string;
-        numero: string;
-        beds: Array<{
-          id: string;
-          label: string;
-          stato: string;
-          assignments: Array<{ patientId: string }>;
-        }>;
-      }> = roomsRes.ok ? await roomsRes.json() : [];
-      const room = rooms.find((r) => r.numero === cameraNumero);
+      // The admin-only detail view already owns a guarded room snapshot. Reuse it here instead
+      // of downloading the facility-wide occupancy (and patient identities) a second time.
+      const room = camere.find((candidate) => candidate.numero === cameraNumero);
       if (!room) {
         showToast(`Camera ${cameraNumero} non trovata`);
         return { ok: false };
       }
 
-      const isFree = (bd: { stato: string; assignments: Array<{ patientId: string }> }) =>
-        bd.stato !== 'manutenzione' && bd.assignments.every((a) => a.patientId === pazienteId);
+      const isFree = (bed: Camera['letti'][number]) =>
+        bed.stato !== 'manutenzione' && (bed.stato === 'libero' || bed.pazienteId === pazienteId);
       const wanted = (lettoNumero ?? '').trim().toUpperCase();
-      const byIndex = /^\d+$/.test(wanted) ? 'ABCDEFGH'[parseInt(wanted, 10) - 1] : undefined;
-      let bed = room.beds.find(
-        (bd) =>
-          bd.label.toUpperCase() === wanted || (byIndex !== undefined && bd.label === byIndex),
-      );
+      const alphaIndex = 'ABCDEFGH'.indexOf(wanted);
+      const wantedNumber = /^\d+$/.test(wanted)
+        ? Number.parseInt(wanted, 10)
+        : alphaIndex >= 0
+          ? alphaIndex + 1
+          : undefined;
+      let bed = room.letti.find((candidate) => candidate.numero === wantedNumber);
       if (bed && !isFree(bed)) {
-        showToast(`Letto ${bed.label} già occupato nella camera ${cameraNumero}`);
+        showToast(`Letto ${wanted} già occupato nella camera ${cameraNumero}`);
         return { ok: false };
       }
-      if (!bed) bed = room.beds.find(isFree);
+      if (!bed) bed = room.letti.find(isFree);
       if (!bed) {
         showToast(`Camera ${cameraNumero} occupata: nessun letto libero`);
         return { ok: false };
       }
 
-      if (active && active.bedId === bed.id) return { ok: true, lettoLabel: bed.label };
+      if (active && active.bedId === bed.id) {
+        return {
+          ok: true,
+          lettoLabel: 'ABCDEFGH'[bed.numero - 1] ?? String(bed.numero),
+        };
+      }
 
       const res = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`, {
         method: 'POST',
@@ -1676,8 +1760,11 @@ export default function App() {
         showToast(err?.error ?? 'Impossibile assegnare la camera');
         return { ok: false };
       }
-      loadCamere();
-      return { ok: true, lettoLabel: bed.label };
+      void loadCamere(true);
+      return {
+        ok: true,
+        lettoLabel: 'ABCDEFGH'[bed.numero - 1] ?? String(bed.numero),
+      };
     } catch {
       showToast('Impossibile assegnare la camera');
       return { ok: false };
@@ -2169,6 +2256,9 @@ export default function App() {
                   consegneOverview={consegneOverview}
                   consegneOverviewState={consegneOverviewState}
                   camere={camere}
+                  camereLoadState={camereLoadState}
+                  camereLoadError={camereLoadError}
+                  onRetryCamere={() => void loadCamere(true)}
                   totalePazienti={clinicalOverview?.totalPatients ?? 0}
                   loadingPazienti={loadingClinicalOverview}
                   onNavigate={navigate}
@@ -2346,6 +2436,10 @@ export default function App() {
                   onRetryConsegne={() => void loadPatientConsegne(pazienteSelezionato.id)}
                   operatori={operatori}
                   camere={camere}
+                  camereLoadState={camereLoadState}
+                  camereLoadError={camereLoadError}
+                  onRetryCamere={() => void loadCamere(true)}
+                  canManageRooms={isAdmin}
                   onBack={() => goBack('pazienti')}
                   backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
                   onAddConsegna={addConsegna}

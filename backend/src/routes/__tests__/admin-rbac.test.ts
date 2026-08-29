@@ -39,8 +39,11 @@ after(async () => {
   await new Promise<void>((resolve) => server.close(() => resolve()));
 });
 
-test('operator cannot create or delete rooms and beds', async () => {
+test('operator cannot read or mutate facility rooms and beds', async () => {
   const responses = await Promise.all([
+    fetch(`${base}/admin/rooms`, { headers: OPERATOR_HEADERS }),
+    fetch(`${base}/admin/rooms/occupancy`, { headers: OPERATOR_HEADERS }),
+    fetch(`${base}/admin/beds/available?startDate=2026-08-30`, { headers: OPERATOR_HEADERS }),
     fetch(`${base}/admin/rooms`, {
       method: 'POST',
       headers: OPERATOR_HEADERS,
@@ -51,7 +54,7 @@ test('operator cannot create or delete rooms and beds', async () => {
   ]);
   assert.deepEqual(
     responses.map((response) => response.status),
-    [403, 403, 403],
+    [403, 403, 403, 403, 403, 403],
   );
 });
 

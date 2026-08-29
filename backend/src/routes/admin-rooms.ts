@@ -1,6 +1,7 @@
 import { prisma } from '../lib/prisma.js';
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
+import { requirePatientScope } from '../patients/access.js';
 import {
   authoritativeAssignmentActor,
   MAX_ACTIVE_ASSIGNMENTS_PER_BED,
@@ -52,13 +53,10 @@ patientAssignmentRouter.use(preventClinicalCaching);
 
 // Stanze/letti e assegnazioni paziente richiedono un operatore identificato.
 adminRouter.use(requireOperator);
-adminRouter.use((req, res, next) => {
-  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
-    requireAdmin(req, res, next);
-    return;
-  }
-  next();
-});
+// The read models include facility occupancy and patient identity. The `/admin` namespace is
+// therefore privileged for reads as well as writes; aggregate assistant reads use internal DB
+// services and do not need this route.
+adminRouter.use(requireAdmin);
 patientAssignmentRouter.use(requireOperator);
 patientAssignmentRouter.use((req, res, next) => {
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
@@ -655,38 +653,37 @@ adminRouter.delete('/beds/:bedId', async (req, res) => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 // GET /patients/:patientId/room-assignments
-patientAssignmentRouter.get('/:patientId/room-assignments', async (req, res) => {
-  const { patientId } = req.params;
-  const rawScope = req.query.scope;
-  if (rawScope !== undefined && rawScope !== 'active') {
-    res.status(400).json({ error: 'Parametro scope non valido' });
-    return;
-  }
-  const activeOnly = rawScope === 'active';
-  try {
-    const patient = await prisma.patient.findUnique({
-      where: { id: patientId },
-      select: { id: true },
-    });
-    if (!patient) {
-      res.status(404).json({ error: 'Paziente non trovato' });
+patientAssignmentRouter.get(
+  '/:patientId/room-assignments',
+  (req, res, next) => {
+    const rawScope = req.query.scope;
+    if (rawScope !== undefined && rawScope !== 'active') {
+      res.status(400).json({ error: 'Parametro scope non valido' });
       return;
     }
-
-    const assignments = await prisma.patientRoomAssignment.findMany({
-      where: { patientId, ...(activeOnly ? activeAssignmentFilter() : {}) },
-      select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
-      orderBy: { startDate: 'desc' },
-      // Corrupted legacy data can contain more than one active assignment. Keep the operational
-      // read bounded without hiding a small overlap that the caller may need to resolve.
-      take: activeOnly ? 8 : undefined,
-    });
-    res.status(200).json(assignments);
-  } catch (error) {
-    console.error('GET /patients/:patientId/room-assignments error:', error);
-    res.status(500).json({ error: 'Errore nel recupero assegnazioni stanza' });
-  }
-});
+    next();
+  },
+  requirePatientScope,
+  async (req, res) => {
+    const patientIdParam = req.params.patientId;
+    const patientId = Array.isArray(patientIdParam) ? patientIdParam[0] : patientIdParam;
+    const activeOnly = req.query.scope === 'active';
+    try {
+      const assignments = await prisma.patientRoomAssignment.findMany({
+        where: { patientId, ...(activeOnly ? activeAssignmentFilter() : {}) },
+        select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
+        orderBy: { startDate: 'desc' },
+        // Corrupted legacy data can contain more than one active assignment. Keep the operational
+        // read bounded without hiding a small overlap that the caller may need to resolve.
+        take: activeOnly ? 8 : undefined,
+      });
+      res.status(200).json(assignments);
+    } catch (error) {
+      console.error('GET /patients/:patientId/room-assignments error:', error);
+      res.status(500).json({ error: 'Errore nel recupero assegnazioni stanza' });
+    }
+  },
+);
 
 // POST /patients/:patientId/room-assignments
 patientAssignmentRouter.post('/:patientId/room-assignments', async (req: AuthedRequest, res) => {

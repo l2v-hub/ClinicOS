@@ -19,6 +19,9 @@ interface AdminDashboardProps {
   consegneOverview: ConsegnaOverview | null;
   consegneOverviewState: 'loading' | 'ready' | 'error';
   camere: Camera[];
+  camereLoadState: 'idle' | 'loading' | 'ready' | 'error';
+  camereLoadError: string | null;
+  onRetryCamere: () => void;
   totalePazienti: number;
   loadingPazienti: boolean;
   onNavigate: (nav: NavKey) => void;
@@ -43,6 +46,9 @@ export function AdminDashboard({
   consegneOverview,
   consegneOverviewState,
   camere,
+  camereLoadState,
+  camereLoadError,
+  onRetryCamere,
   totalePazienti,
   loadingPazienti,
   onNavigate,
@@ -71,6 +77,7 @@ export function AdminDashboard({
   const occupancyPct =
     totaleLetti.length > 0 ? Math.round((lettiOccupati / totaleLetti.length) * 100) : 0;
   const camereOccupate = camere.filter((c) => c.letti.every((l) => l.stato === 'occupato')).length;
+  const roomSnapshotAvailable = camereLoadState === 'ready' || camere.length > 0;
 
   const todayStr = new Date().toLocaleDateString('it-IT', {
     weekday: 'long',
@@ -96,6 +103,19 @@ export function AdminDashboard({
               ? 'Aggiornamento consegne non riuscito: sono mostrati gli ultimi dati disponibili.'
               : 'Riepilogo consegne non disponibile. Apri Consegne per riprovare.'}
           </span>
+        </div>
+      )}
+      {camereLoadState === 'error' && (
+        <div className="coverage-alert" role="alert">
+          <IcoWarning />
+          <span>
+            {roomSnapshotAvailable
+              ? 'Aggiornamento occupazione non riuscito: sono mostrati gli ultimi dati disponibili.'
+              : (camereLoadError ?? 'Occupazione camere non disponibile.')}
+          </span>
+          <button type="button" className="link-btn" onClick={onRetryCamere}>
+            Riprova <IcoArrow />
+          </button>
         </div>
       )}
       {urgentCount !== undefined && urgentCount > 0 && (
@@ -292,91 +312,110 @@ export function AdminDashboard({
         </button>
       </div>
 
-      <div className="occupancy-overview">
-        <div className="occ-overview-card">
-          <div className="occ-gauge-wrap">
-            <svg viewBox="0 0 80 80" className="occ-gauge">
-              <circle cx="40" cy="40" r="32" fill="none" stroke="var(--divider)" strokeWidth="8" />
-              <circle
-                cx="40"
-                cy="40"
-                r="32"
-                fill="none"
-                stroke={
-                  occupancyPct >= 90
-                    ? 'var(--red)'
-                    : occupancyPct >= 70
-                      ? 'var(--amber)'
-                      : 'var(--emerald)'
-                }
-                strokeWidth="8"
-                strokeDasharray={`${occupancyPct * 2.01} 201`}
-                strokeLinecap="round"
-                transform="rotate(-90 40 40)"
-              />
-              <text
-                x="40"
-                y="44"
-                textAnchor="middle"
-                fontSize="16"
-                fontWeight="700"
-                fill="var(--text)"
-              >
-                {occupancyPct}%
-              </text>
-            </svg>
-          </div>
-          <div className="occ-overview-stats">
-            <div className="occ-overview-stat">
-              <span className="occ-stat__val" style={{ color: 'var(--red)' }}>
-                {lettiOccupati}
-              </span>
-              <span className="occ-stat__lbl">Letti occupati</span>
-            </div>
-            <div className="occ-overview-stat">
-              <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>
-                {lettiLiberi}
-              </span>
-              <span className="occ-stat__lbl">Letti liberi</span>
-            </div>
-            <div className="occ-overview-stat">
-              <span className="occ-stat__val">{totaleLetti.length}</span>
-              <span className="occ-stat__lbl">Totale letti</span>
-            </div>
-            <div className="occ-overview-stat">
-              <span className="occ-stat__val">
-                {camereOccupate}/{camere.filter((c) => c.stato === 'attiva').length}
-              </span>
-              <span className="occ-stat__lbl">Camere piene</span>
-            </div>
-          </div>
+      {!roomSnapshotAvailable ? (
+        <div className="occupancy-overview">
+          <p role={camereLoadState === 'error' ? 'alert' : 'status'}>
+            {camereLoadState === 'error'
+              ? 'Dati di occupazione non disponibili.'
+              : 'Caricamento occupazione struttura…'}
+          </p>
         </div>
-
-        {/* Reparto breakdown */}
-        <div className="occ-reparti">
-          {Array.from(new Set(camere.map((c) => c.reparto))).map((reparto) => {
-            const camRep = camere.filter((c) => c.reparto === reparto);
-            const lettiRep = camRep.flatMap((c) => c.letti);
-            const occRep = lettiRep.filter((l) => l.stato === 'occupato').length;
-            const pct = lettiRep.length > 0 ? Math.round((occRep / lettiRep.length) * 100) : 0;
-            return (
-              <div key={reparto} className="occ-reparto-row">
-                <span className="occ-reparto-name">{reparto}</span>
-                <div style={{ flex: 1 }}>
-                  <WorkloadBar
-                    value={occRep}
-                    max={lettiRep.length}
-                    color={pct >= 90 ? 'var(--red)' : pct >= 70 ? 'var(--amber)' : 'var(--emerald)'}
-                  />
-                </div>
-                <span className="occ-reparto-count">
-                  {occRep}/{lettiRep.length}
+      ) : (
+        <div className="occupancy-overview">
+          <div className="occ-overview-card">
+            <div className="occ-gauge-wrap">
+              <svg viewBox="0 0 80 80" className="occ-gauge">
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="32"
+                  fill="none"
+                  stroke="var(--divider)"
+                  strokeWidth="8"
+                />
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="32"
+                  fill="none"
+                  stroke={
+                    occupancyPct >= 90
+                      ? 'var(--red)'
+                      : occupancyPct >= 70
+                        ? 'var(--amber)'
+                        : 'var(--emerald)'
+                  }
+                  strokeWidth="8"
+                  strokeDasharray={`${occupancyPct * 2.01} 201`}
+                  strokeLinecap="round"
+                  transform="rotate(-90 40 40)"
+                />
+                <text
+                  x="40"
+                  y="44"
+                  textAnchor="middle"
+                  fontSize="16"
+                  fontWeight="700"
+                  fill="var(--text)"
+                >
+                  {occupancyPct}%
+                </text>
+              </svg>
+            </div>
+            <div className="occ-overview-stats">
+              <div className="occ-overview-stat">
+                <span className="occ-stat__val" style={{ color: 'var(--red)' }}>
+                  {lettiOccupati}
                 </span>
+                <span className="occ-stat__lbl">Letti occupati</span>
               </div>
-            );
-          })}
+              <div className="occ-overview-stat">
+                <span className="occ-stat__val" style={{ color: 'var(--emerald)' }}>
+                  {lettiLiberi}
+                </span>
+                <span className="occ-stat__lbl">Letti liberi</span>
+              </div>
+              <div className="occ-overview-stat">
+                <span className="occ-stat__val">{totaleLetti.length}</span>
+                <span className="occ-stat__lbl">Totale letti</span>
+              </div>
+              <div className="occ-overview-stat">
+                <span className="occ-stat__val">
+                  {camereOccupate}/{camere.filter((c) => c.stato === 'attiva').length}
+                </span>
+                <span className="occ-stat__lbl">Camere piene</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Reparto breakdown */}
+          <div className="occ-reparti">
+            {Array.from(new Set(camere.map((c) => c.reparto))).map((reparto) => {
+              const camRep = camere.filter((c) => c.reparto === reparto);
+              const lettiRep = camRep.flatMap((c) => c.letti);
+              const occRep = lettiRep.filter((l) => l.stato === 'occupato').length;
+              const pct = lettiRep.length > 0 ? Math.round((occRep / lettiRep.length) * 100) : 0;
+              return (
+                <div key={reparto} className="occ-reparto-row">
+                  <span className="occ-reparto-name">{reparto}</span>
+                  <div style={{ flex: 1 }}>
+                    <WorkloadBar
+                      value={occRep}
+                      max={lettiRep.length}
+                      color={
+                        pct >= 90 ? 'var(--red)' : pct >= 70 ? 'var(--amber)' : 'var(--emerald)'
+                      }
+                    />
+                  </div>
+                  <span className="occ-reparto-count">
+                    {occRep}/{lettiRep.length}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Carico operatori */}
       <div className="section-header" style={{ marginTop: 32 }}>

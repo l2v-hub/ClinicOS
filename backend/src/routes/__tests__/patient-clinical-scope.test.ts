@@ -9,6 +9,7 @@ import voiceRouter from '../ai-voice.js';
 import narrativeRouter from '../narrative-sections.js';
 import therapyRouter from '../patient-therapies.js';
 import patientsRouter from '../patients.js';
+import { patientAssignmentRouter } from '../admin-rooms.js';
 
 const suffix = `clinical-scope-${Date.now()}`;
 let server: Server;
@@ -100,6 +101,7 @@ before(async () => {
   app.use(express.json());
   app.use('/patients', therapyRouter);
   app.use('/patients', narrativeRouter);
+  app.use('/patients', patientAssignmentRouter);
   app.use('/patients', patientsRouter);
   app.use('/ai/actions', actionsRouter);
   app.use('/ai/voice', voiceRouter);
@@ -323,6 +325,7 @@ test('patient roster, summaries, detail and cartella never cross ordinary-operat
     [`/${patientBId}`, {}],
     [`/${patientBId}`, { method: 'PATCH', body: JSON.stringify({ phone: 'intrusione' }) }],
     [`/${patientBId}/cartella`, {}],
+    [`/${patientBId}/room-assignments?scope=active`, {}],
     [
       `/${patientBId}/cartella`,
       { method: 'PUT', body: JSON.stringify({ data: { noteClinica: 'intrusione' } }) },
@@ -360,6 +363,10 @@ test('manager reads globally and patient creation binds ownership to the authent
     headers: headers(managerId, 'manager'),
   });
   assert.equal(managerRead.status, 200, await managerRead.text());
+  const managerAssignments = await fetch(`${base}/patients/${patientBId}/room-assignments`, {
+    headers: headers(managerId, 'manager'),
+  });
+  assert.equal(managerAssignments.status, 200, await managerAssignments.text());
 
   const cf15 = `TSTSCR${String(Date.now()).slice(-2)}A01H501`;
   const codiceFiscale = `${cf15}${controlChar(cf15)}`;

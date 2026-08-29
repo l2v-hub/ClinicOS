@@ -72,6 +72,10 @@ interface PatientDetailProps {
   onRetryConsegne: () => void;
   operatori: Operatore[];
   camere: Camera[];
+  camereLoadState: 'idle' | 'loading' | 'ready' | 'error';
+  camereLoadError: string | null;
+  onRetryCamere: () => void;
+  canManageRooms: boolean;
   onBack: () => void;
   backLabel?: string;
   onAddConsegna: (c: NewConsegnaInput) => void;
@@ -239,6 +243,10 @@ export function PatientDetail({
   onRetryConsegne,
   operatori,
   camere,
+  camereLoadState,
+  camereLoadError,
+  onRetryCamere,
+  canManageRooms,
   onBack,
   backLabel,
   onAddConsegna,
@@ -422,6 +430,27 @@ export function PatientDetail({
       c.stato === 'attiva' &&
       c.letti.some((l) => l.stato === 'libero' || l.pazienteId === paziente.id),
   );
+  const roomDataReady = camereLoadState === 'ready';
+
+  function RoomDataNotice() {
+    if (!canManageRooms || roomDataReady) return null;
+    const failed = camereLoadState === 'error';
+    return (
+      <div className="coverage-alert" role={failed ? 'alert' : 'status'}>
+        <IcoWarning />
+        <span>
+          {failed
+            ? (camereLoadError ?? 'Disponibilità camere non accessibile.')
+            : 'Caricamento disponibilità camere…'}
+        </span>
+        {failed && (
+          <button type="button" className="link-btn" onClick={onRetryCamere}>
+            Riprova
+          </button>
+        )}
+      </div>
+    );
+  }
 
   // ── Update helpers ─────────────────────────────────────────────────────────
 
@@ -1116,28 +1145,32 @@ export function PatientDetail({
                     </span>
                   </div>
                 </div>
-                <button
-                  className="btn-secondary btn-sm"
-                  style={{ marginTop: 4 }}
-                  onClick={() => {
-                    setCameraModalForm({
-                      cameraNumero: cartella.cameraNumero,
-                      lettoNumero: cartella.lettoNumero,
-                      repartoRicovero: cartella.repartoRicovero,
-                      statoRicovero: cartella.statoRicovero,
-                    });
-                    setCameraEditing(true);
-                  }}
-                >
-                  <IcoEdit /> Modifica assegnazione
-                </button>
+                {canManageRooms && (
+                  <button
+                    className="btn-secondary btn-sm"
+                    style={{ marginTop: 4 }}
+                    onClick={() => {
+                      setCameraModalForm({
+                        cameraNumero: cartella.cameraNumero,
+                        lettoNumero: cartella.lettoNumero,
+                        repartoRicovero: cartella.repartoRicovero,
+                        statoRicovero: cartella.statoRicovero,
+                      });
+                      setCameraEditing(true);
+                    }}
+                  >
+                    <IcoEdit /> Modifica assegnazione
+                  </button>
+                )}
               </div>
             ) : (
               <div className="op-form-grid">
+                <RoomDataNotice />
                 <div className="form-field">
                   <label className="form-label">Camera</label>
                   <select
                     className="form-select"
+                    disabled={!roomDataReady}
                     value={form.cameraNumero ?? ''}
                     onChange={(e) => {
                       const cam = camere.find((c) => c.numero === e.target.value);
@@ -1199,7 +1232,11 @@ export function PatientDetail({
                   >
                     Annulla
                   </button>
-                  <button className="btn-success" onClick={saveCameraFromModal} disabled={saving}>
+                  <button
+                    className="btn-success"
+                    onClick={saveCameraFromModal}
+                    disabled={saving || !roomDataReady}
+                  >
                     <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
                   </button>
                 </>
@@ -1607,28 +1644,32 @@ export function PatientDetail({
                         ))}
                     </select>
                   </div>
-                  <div className="form-field">
-                    <label className="form-label">Camera</label>
-                    <select
-                      className="form-select"
-                      value={profiloForm.cameraNumero ?? ''}
-                      onChange={(e) => {
-                        const cam = camere.find((c) => c.numero === e.target.value);
-                        setProfiloForm((p) => ({
-                          ...p,
-                          cameraNumero: e.target.value,
-                          repartoRicovero: cam?.reparto ?? p.repartoRicovero,
-                        }));
-                      }}
-                    >
-                      <option value="">— Nessuna —</option>
-                      {camereAssegnabili.map((c) => (
-                        <option key={c.id} value={c.numero}>
-                          {c.numero} — {c.reparto}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {canManageRooms && <RoomDataNotice />}
+                  {canManageRooms && (
+                    <div className="form-field">
+                      <label className="form-label">Camera</label>
+                      <select
+                        className="form-select"
+                        disabled={!roomDataReady}
+                        value={profiloForm.cameraNumero ?? ''}
+                        onChange={(e) => {
+                          const cam = camere.find((c) => c.numero === e.target.value);
+                          setProfiloForm((p) => ({
+                            ...p,
+                            cameraNumero: e.target.value,
+                            repartoRicovero: cam?.reparto ?? p.repartoRicovero,
+                          }));
+                        }}
+                      >
+                        <option value="">— Nessuna —</option>
+                        {camereAssegnabili.map((c) => (
+                          <option key={c.id} value={c.numero}>
+                            {c.numero} — {c.reparto}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                   <div className="form-field">
                     <label className="form-label">Stato ricovero</label>
                     <select
