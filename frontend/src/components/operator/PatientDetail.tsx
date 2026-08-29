@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import type {
   Paziente,
   Consegna,
@@ -27,30 +27,34 @@ import {
   IcoCartelle,
   IcoClock,
 } from '../../icons';
-import { PresaInCaricoTab } from './cartella/PresaInCaricoTab';
-import { DocumentiTab } from './cartella/DocumentiTab';
-import { NarrativeSectionsTab } from './cartella/NarrativeSectionsTab';
-import { DiarioPazienteTab, DIARIO_AUTHOR_FILTERS } from './cartella/DiarioPazienteTab';
-import { MedicazioniTab } from './cartella/MedicazioniTab';
-import { ContenzioniTab } from './cartella/ContenzioniTab';
-import { ScalaBradenTab } from './cartella/ScalaBradenTab';
-import { ScalaTinettiTab } from './cartella/ScalaTinettiTab';
-import { DimissioneTab } from './cartella/DimissioneTab';
-import { EsamiConsulenzeTab } from './cartella/EsamiConsulenzeTab';
+import { DIARIO_AUTHOR_FILTERS } from './cartella/diarioFilters';
 import { TopNav } from '../navigation/TopNav';
 import { AvvisoAnomalieFarmaci } from './cartella/AvvisoAnomalieFarmaci';
 import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
 import PatientCompactHeader from './PatientCompactHeader';
-import InvioPSModal from './InvioPSModal';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
 import { deriveAllergySummary } from '../../lib/allergyStatusModel';
-import { AnamnesisEditor } from './sections/AnamnesisEditor';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
-import { TherapyEditor } from './sections/TherapyEditor';
-import { VitalSignsEditor } from './sections/VitalSignsEditor';
-import { PainAssessmentEditor } from './sections/PainAssessmentEditor';
 import { TAB_GROUPS, type TabGroup, type TabId } from './tabGroups';
+import {
+  AnamnesisEditor,
+  ContenzioniTab,
+  DiarioPazienteTab,
+  DimissioneTab,
+  DocumentiTab,
+  EsamiConsulenzeTab,
+  InvioPSModal,
+  MedicazioniTab,
+  NarrativeSectionsTab,
+  PainAssessmentEditor,
+  PresaInCaricoTab,
+  ScalaBradenTab,
+  ScalaTinettiTab,
+  TherapyEditor,
+  VitalSignsEditor,
+} from './PatientDetailLazyTabs';
+import { ClinicalSectionLoading } from './ClinicalSectionLoading';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -2578,138 +2582,140 @@ export function PatientDetail({
       <div className="cr-detail-layout cr-detail-layout--no-sidebar">
         {/* Content area */}
         <div ref={contentRef} className="cr-detail-content tab-panel-transition">
-          {tab === 'riepilogo' && renderRiepilogo()}
-          {tab === 'profilo' && renderProfilo()}
-          {tab === 'diagnosi' && renderDiagnosi()}
-          {tab === 'terapia-farmacologica' && (
-            <TherapyEditor
-              mode="patient-chart"
-              paziente={paziente}
-              operatoreNome={operatoreNome}
-              value={undefined as never}
-              onChange={() => {}}
-            />
-          )}
-          {tab === 'note' && renderNote()}
-          {tab === 'parametri' && (
-            <VitalSignsEditor
-              mode="patient-chart"
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-              value={undefined as never}
-              onChange={() => {}}
-            />
-          )}
-          {tab === 'consegne' && renderConsegne()}
-          {tab === 'presa-in-carico' && (
-            <PresaInCaricoTab
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-            />
-          )}
-          {tab === 'documenti' && (
-            <DocumentiTab
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-              operatoreId={operatoreId}
-              operatoreRole={operatoreRole}
-            />
-          )}
-          {tab === 'sezioni-narrative' && (
-            <>
-              {/* #278: anamnesi strutturata modificabile — stesso cast Anamnesi ⇄
-                  Record<string, unknown> già usato in patientSections.ts */}
-              <AnamnesisEditor
+          <Suspense fallback={<ClinicalSectionLoading />}>
+            {tab === 'riepilogo' && renderRiepilogo()}
+            {tab === 'profilo' && renderProfilo()}
+            {tab === 'diagnosi' && renderDiagnosi()}
+            {tab === 'terapia-farmacologica' && (
+              <TherapyEditor
                 mode="patient-chart"
-                value={cartella.anamnesi as unknown as Record<string, unknown>}
-                onChange={(v) => upd({ anamnesi: v as unknown as Anamnesi })}
-                readOnly={false}
+                paziente={paziente}
                 operatoreNome={operatoreNome}
-                allergie={cartella.allergie ?? []}
+                value={undefined as never}
+                onChange={() => {}}
               />
-              <NarrativeSectionsTab
-                patientId={paziente.id}
+            )}
+            {tab === 'note' && renderNote()}
+            {tab === 'parametri' && (
+              <VitalSignsEditor
+                mode="patient-chart"
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+                value={undefined as never}
+                onChange={() => {}}
+              />
+            )}
+            {tab === 'consegne' && renderConsegne()}
+            {tab === 'presa-in-carico' && (
+              <PresaInCaricoTab
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+              />
+            )}
+            {tab === 'documenti' && (
+              <DocumentiTab
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
                 operatoreId={operatoreId}
                 operatoreRole={operatoreRole}
               />
-            </>
-          )}
-          {tab === 'diario' && (
-            <DiarioPazienteTab
-              pazienteId={paziente.id}
-              operatoreNome={operatoreNome}
-              legacyInfermieristico={cartella.diarioInfermieristico}
-              legacyMedico={cartella.diarioMedico}
-              filterBy={diarioFilter}
-            />
-          )}
-          {tab === 'medicazioni' && (
-            <MedicazioniTab
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-            />
-          )}
-          {tab === 'contenzioni' && (
-            <ContenzioniTab
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-            />
-          )}
-          {tab === 'esami-consulenze' && (
-            <EsamiConsulenzeTab
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-              operatoreId={operatoreId}
-              operatoreRole={operatoreRole}
-            />
-          )}
-          {tab === 'braden' && (
-            <ScalaBradenTab
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-            />
-          )}
-          {tab === 'tinetti' && (
-            <ScalaTinettiTab
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-            />
-          )}
-          {tab === 'nrs' && (
-            <PainAssessmentEditor
-              mode="patient-chart"
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-              value={undefined as never}
-              onChange={() => {}}
-            />
-          )}
-          {tab === 'dimissione' && (
-            <DimissioneTab
-              cartella={cartella}
-              paziente={paziente}
-              onUpdate={upd}
-              operatoreNome={operatoreNome}
-            />
-          )}
+            )}
+            {tab === 'sezioni-narrative' && (
+              <>
+                {/* #278: anamnesi strutturata modificabile — stesso cast Anamnesi ⇄
+                  Record<string, unknown> già usato in patientSections.ts */}
+                <AnamnesisEditor
+                  mode="patient-chart"
+                  value={cartella.anamnesi as unknown as Record<string, unknown>}
+                  onChange={(v) => upd({ anamnesi: v as unknown as Anamnesi })}
+                  readOnly={false}
+                  operatoreNome={operatoreNome}
+                  allergie={cartella.allergie ?? []}
+                />
+                <NarrativeSectionsTab
+                  patientId={paziente.id}
+                  operatoreId={operatoreId}
+                  operatoreRole={operatoreRole}
+                />
+              </>
+            )}
+            {tab === 'diario' && (
+              <DiarioPazienteTab
+                pazienteId={paziente.id}
+                operatoreNome={operatoreNome}
+                legacyInfermieristico={cartella.diarioInfermieristico}
+                legacyMedico={cartella.diarioMedico}
+                filterBy={diarioFilter}
+              />
+            )}
+            {tab === 'medicazioni' && (
+              <MedicazioniTab
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+              />
+            )}
+            {tab === 'contenzioni' && (
+              <ContenzioniTab
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+              />
+            )}
+            {tab === 'esami-consulenze' && (
+              <EsamiConsulenzeTab
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+                operatoreId={operatoreId}
+                operatoreRole={operatoreRole}
+              />
+            )}
+            {tab === 'braden' && (
+              <ScalaBradenTab
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+              />
+            )}
+            {tab === 'tinetti' && (
+              <ScalaTinettiTab
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+              />
+            )}
+            {tab === 'nrs' && (
+              <PainAssessmentEditor
+                mode="patient-chart"
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+                value={undefined as never}
+                onChange={() => {}}
+              />
+            )}
+            {tab === 'dimissione' && (
+              <DimissioneTab
+                cartella={cartella}
+                paziente={paziente}
+                onUpdate={upd}
+                operatoreNome={operatoreNome}
+              />
+            )}
+          </Suspense>
         </div>
       </div>
 
@@ -2720,11 +2726,13 @@ export function PatientDetail({
       {cardModal === 'allergie' && renderAllergieModal()}
       {cardModal === 'camera' && renderCameraModal()}
       {showInvioPS && (
-        <InvioPSModal
-          paziente={paziente}
-          cartella={cartella}
-          onClose={() => setShowInvioPS(false)}
-        />
+        <Suspense fallback={<ClinicalSectionLoading />}>
+          <InvioPSModal
+            paziente={paziente}
+            cartella={cartella}
+            onClose={() => setShowInvioPS(false)}
+          />
+        </Suspense>
       )}
     </div>
   );

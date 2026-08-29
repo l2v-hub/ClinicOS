@@ -3,6 +3,7 @@ import type { SectionProps } from './types';
 import type { Paziente } from '../../../types';
 import { TherapyFormFields, emptyTherapyForm } from '../cartella/TherapyFormFields';
 import type { TherapyFormValue } from '../cartella/TherapyFormFields';
+import { ClinicalSectionLoading } from '../ClinicalSectionLoading';
 
 // Lazy import keeps import.meta.env out of module-evaluation scope,
 // which allows the patientSections registry test to run in Node without Vite.
@@ -23,7 +24,7 @@ export function TherapyEditor({
 }: TherapyEditorProps) {
   if (mode === 'patient-chart' && paziente) {
     return (
-      <Suspense fallback={null}>
+      <Suspense fallback={<ClinicalSectionLoading />}>
         <TerapiaFarmacologicaTab paziente={paziente} operatoreNome={operatoreNome ?? ''} />
       </Suspense>
     );

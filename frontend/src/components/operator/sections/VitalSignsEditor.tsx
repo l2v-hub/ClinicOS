@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import type { SectionProps } from './types';
 import type { CartellaPaziente, Paziente } from '../../../types';
+import { ClinicalSectionLoading } from '../ClinicalSectionLoading';
 
 // Lazy import keeps import.meta.env out of module-evaluation scope,
 // which allows the patientSections registry test to run in Node without Vite.
@@ -36,7 +37,7 @@ export function VitalSignsEditor({
 }: VitalSignsEditorProps) {
   if (mode === 'patient-chart' && cartella && onUpdate) {
     return (
-      <Suspense fallback={null}>
+      <Suspense fallback={<ClinicalSectionLoading />}>
         <ParametriTab
           cartella={cartella}
           paziente={paziente as Paziente}
@@ -55,7 +56,7 @@ export function VitalSignsEditor({
       parametriVitali: value?.parametriVitali ?? [],
     } as unknown as CartellaPaziente;
     return (
-      <Suspense fallback={null}>
+      <Suspense fallback={<ClinicalSectionLoading />}>
         <ParametriTab
           cartella={shim}
           paziente={paziente ?? MINIMAL_PAZIENTE}

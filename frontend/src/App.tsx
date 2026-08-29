@@ -2272,6 +2272,7 @@ export default function App() {
                 )}
               {navKey === 'dettaglio-paziente' && pazienteSelezionato && (
                 <PatientDetail
+                  key={pazienteSelezionato.id}
                   paziente={pazienteSelezionato}
                   cartella={getCartella(pazienteSelezionato.id)}
                   consegne={patientConsegne}

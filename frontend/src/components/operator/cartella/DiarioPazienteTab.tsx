@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { DiarioPazienteEntry, DiarioAuthorType, DiarioEntry } from '../../../types';
 import { ClinicalTableSection, LoadingState, EmptyState } from './shared';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
@@ -48,16 +48,6 @@ const STATUS_LABELS: Record<string, string> = {
   completata: 'Completata',
   da_rivedere: 'Da rivedere',
 };
-
-export const DIARIO_AUTHOR_FILTERS: { id: string; label: string }[] = [
-  { id: 'tutti', label: 'Tutti' },
-  { id: 'medico', label: 'Medico' },
-  { id: 'infermiere', label: 'Infermiere' },
-  { id: 'oss', label: 'OSS' },
-  { id: 'fisioterapista', label: 'Fisioterapista' },
-  { id: 'operatore', label: 'Operatore' },
-  { id: 'altro', label: 'Altro' },
-];
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -161,6 +151,7 @@ export function DiarioPazienteTab({
   const [showAdd, setShowAdd] = useState(false);
   const [editEntry, setEditEntry] = useState<DiarioPazienteEntry | null>(null);
   const [saving, setSaving] = useState(false);
+  const readSequenceRef = useRef(0);
 
   function emptyForm(): DiarioForm {
     return {
@@ -177,36 +168,47 @@ export function DiarioPazienteTab({
   const [form, setForm] = useState<DiarioForm>(emptyForm);
   const [editForm, setEditForm] = useState<DiarioForm>(emptyForm);
 
-  const fetchEntries = useCallback(async () => {
-    const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
-    setLoading(true);
-    setError('');
-    try {
-      const params = new URLSearchParams();
-      if (resolvedFilter !== 'tutti') params.set('authorType', resolvedFilter);
-      const res = await fetch(`${API_URL}/patients/${pazienteId}/diary?${params}`, {
-        headers: operatorHeaders(),
-      });
-      if (!res.ok) throw new Error('Risposta non valida');
-      const data = (await res.json()) as { entries: DiarioPazienteEntry[] };
-      let allEntries = data.entries ?? [];
+  const fetchEntries = useCallback(
+    async (signal: AbortSignal, request: number) => {
+      const resolvedFilter = (filterBy ?? 'tutti') as DiarioAuthorType | 'tutti';
+      setLoading(true);
+      setError('');
+      try {
+        const params = new URLSearchParams();
+        if (resolvedFilter !== 'tutti') params.set('authorType', resolvedFilter);
+        const res = await fetch(`${API_URL}/patients/${pazienteId}/diary?${params}`, {
+          headers: operatorHeaders(),
+          signal,
+        });
+        if (!res.ok) throw new Error('Risposta non valida');
+        const data = (await res.json()) as { entries: DiarioPazienteEntry[] };
+        let allEntries = data.entries ?? [];
 
-      // Backward compat: show legacy data if API returns nothing and no filter active
-      if (allEntries.length === 0 && resolvedFilter === 'tutti') {
-        const legacyEntries = convertLegacyEntries(legacyInfermieristico, legacyMedico);
-        allEntries = legacyEntries;
+        // Backward compat: show legacy data if API returns nothing and no filter active
+        if (allEntries.length === 0 && resolvedFilter === 'tutti') {
+          const legacyEntries = convertLegacyEntries(legacyInfermieristico, legacyMedico);
+          allEntries = legacyEntries;
+        }
+
+        if (!signal.aborted && request === readSequenceRef.current) setEntries(allEntries);
+      } catch (error) {
+        if ((error as { name?: string }).name === 'AbortError') return;
+        if (request === readSequenceRef.current) setError('Errore nel caricamento del diario.');
+      } finally {
+        if (!signal.aborted && request === readSequenceRef.current) setLoading(false);
       }
-
-      setEntries(allEntries);
-    } catch {
-      setError('Errore nel caricamento del diario.');
-    } finally {
-      setLoading(false);
-    }
-  }, [pazienteId, filterBy, legacyInfermieristico, legacyMedico]);
+    },
+    [pazienteId, filterBy, legacyInfermieristico, legacyMedico],
+  );
 
   useEffect(() => {
-    fetchEntries();
+    const controller = new AbortController();
+    const request = ++readSequenceRef.current;
+    const timer = window.setTimeout(() => void fetchEntries(controller.signal, request), 0);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
   }, [fetchEntries]);
 
   // ── Save new entry ───────────────────────────────────────────────────────────
