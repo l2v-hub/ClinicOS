@@ -1,9 +1,10 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, requireRole } from '../ai/auth.js';
 
 const adminRouter = Router();
 const patientAssignmentRouter = Router();
+const requireAdmin = requireRole('admin', 'manager');
 
 // Internal control-flow error: thrown inside the assignment transaction to reject overlapping
 // bed periods after the advisory lock is held, and mapped to 409 by the route's catch block.
@@ -12,7 +13,21 @@ class BedOverlapError extends Error {}
 // Gate minimo (header-based, non IdP): stanze/letti e assegnazioni paziente sono dati
 // clinici/operativi reali, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
 adminRouter.use(requireOperator);
+adminRouter.use((req, res, next) => {
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+    requireAdmin(req, res, next);
+    return;
+  }
+  next();
+});
 patientAssignmentRouter.use(requireOperator);
+patientAssignmentRouter.use((req, res, next) => {
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+    requireAdmin(req, res, next);
+    return;
+  }
+  next();
+});
 
 // ── Helper: check if two date ranges overlap ──────────────────────────────
 // endDate null means "infinity"

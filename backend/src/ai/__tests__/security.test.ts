@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { requireOperator } from '../auth.js';
+import { operatorAuthMode, requireOperator, requireRole } from '../auth.js';
 import { importRateLimit } from '../rate-limit.js';
 import { canCrossPatientSearch } from '../gateway/context.js';
 import { ctxFromOperator } from '../../routes/ai-assistant-public.js';
@@ -73,6 +73,66 @@ test('requireOperator: admin/manager/operator casings accepted', () => {
       nexted = true;
     });
     assert.equal(nexted, true, `role ${role} should pass`);
+  }
+});
+
+test('operatorAuthMode: production fails closed unless Entra is explicit', () => {
+  assert.equal(operatorAuthMode({ NODE_ENV: 'production' } as NodeJS.ProcessEnv), 'disabled');
+  assert.equal(
+    operatorAuthMode({ NODE_ENV: 'production', AUTH_MODE: 'demo' } as NodeJS.ProcessEnv),
+    'disabled',
+  );
+  assert.equal(
+    operatorAuthMode({ NODE_ENV: 'production', AUTH_MODE: 'entra' } as NodeJS.ProcessEnv),
+    'entra',
+  );
+});
+
+test('requireOperator: spoofed demo headers fail closed in production', () => {
+  const previousNodeEnv = process.env.NODE_ENV;
+  const previousAuthMode = process.env.AUTH_MODE;
+  process.env.NODE_ENV = 'production';
+  process.env.AUTH_MODE = 'demo';
+  try {
+    const req = mockReq({ 'X-Operator-Id': 'attacker', 'X-Operator-Role': 'admin' });
+    const res = mockRes();
+    let nexted = false;
+    requireOperator(req as never, res as never, () => {
+      nexted = true;
+    });
+    assert.equal(nexted, false);
+    assert.equal(res._out.code, 503);
+    assert.equal(req.operator, undefined);
+  } finally {
+    if (previousNodeEnv === undefined) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = previousNodeEnv;
+    if (previousAuthMode === undefined) delete process.env.AUTH_MODE;
+    else process.env.AUTH_MODE = previousAuthMode;
+  }
+});
+
+test('requireRole: an operator cannot cross the admin boundary', () => {
+  const req = mockReq({});
+  req.operator = { id: 'operator-1', role: 'operatore' };
+  const res = mockRes();
+  let nexted = false;
+  requireRole('admin', 'manager')(req as never, res as never, () => {
+    nexted = true;
+  });
+  assert.equal(nexted, false);
+  assert.equal(res._out.code, 403);
+});
+
+test('requireRole: admin and manager cross the admin boundary', () => {
+  for (const role of ['admin', 'manager']) {
+    const req = mockReq({});
+    req.operator = { id: `${role}-1`, role };
+    const res = mockRes();
+    let nexted = false;
+    requireRole('admin', 'manager')(req as never, res as never, () => {
+      nexted = true;
+    });
+    assert.equal(nexted, true);
   }
 });
 

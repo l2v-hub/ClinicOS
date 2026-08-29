@@ -60,6 +60,7 @@ export interface EntraIdentity {
   userId: string;
   operatorId: string;
   role: string;
+  fullName: string;
 }
 
 function bearerToken(header: string | undefined): string | null {
@@ -129,6 +130,7 @@ export async function authenticateEntra(
       userId: user.id,
       operatorId: user.operator.id,
       role: user.role.toLowerCase(),
+      fullName: user.fullName,
     },
   };
 }
@@ -147,7 +149,11 @@ export function requireEntraOperator(config: EntraConfig) {
           return;
         }
         // AC6: identity comes ONLY from verified claims — any X-Operator-* header is ignored.
-        req.operator = { id: result.identity.operatorId, role: result.identity.role };
+        req.operator = {
+          id: result.identity.operatorId,
+          role: result.identity.role,
+          name: result.identity.fullName,
+        };
         next();
       })
       .catch(() => {

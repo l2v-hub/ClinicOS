@@ -75,18 +75,20 @@ export default function TeamsLikeSidebar({
 
       <div className="teams-sidebar__nav">
         {items.map((item) => (
-          <div
+          <button
+            type="button"
             key={item.key}
             className={`teams-sidebar__item${resolvedActiveKey === item.key ? ' active' : ''}`}
             onClick={() => onNavigate(item.key)}
             title={item.label}
+            aria-current={resolvedActiveKey === item.key ? 'page' : undefined}
           >
             <span className="teams-sidebar__item-icon">{item.icon}</span>
             <span className="teams-sidebar__item-label">{item.label}</span>
             {item.badge != null && item.badge > 0 && (
               <span className="teams-sidebar__badge">{item.badge > 99 ? '99+' : item.badge}</span>
             )}
-          </div>
+          </button>
         ))}
       </div>
 
@@ -94,9 +96,15 @@ export default function TeamsLikeSidebar({
         <div className="teams-sidebar__avatar" title={utente.nome}>
           {initials}
         </div>
-        <div className="teams-sidebar__logout" onClick={onLogout} title="Esci">
+        <button
+          type="button"
+          className="teams-sidebar__logout"
+          onClick={onLogout}
+          title="Esci"
+          aria-label="Esci"
+        >
           <IcoLogout />
-        </div>
+        </button>
       </div>
     </nav>
   );

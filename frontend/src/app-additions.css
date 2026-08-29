@@ -6498,7 +6498,15 @@ textarea.form-input {
 }
 @media (max-width: 520px) {
   .kpi-alert-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .kpi-alert-card {
+    min-height: 148px;
+    padding: 14px;
+  }
+  .kpi-alert-card__val {
+    font-size: 30px;
   }
 }
 .kpi-alert-card {

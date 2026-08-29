@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, requireRole } from '../ai/auth.js';
 
 // Fase 1b: real CRUD for the admin "Gestione Operatori" screen (was a client-side mock).
 // An "operatore" in the UI is a User (identity: fullName/email/isActive) + an Operator row
@@ -8,10 +8,20 @@ import { requireOperator } from '../ai/auth.js';
 // `Operatore` shape; colore/iniziali stay client-derived.
 
 const operatorsRouter = Router();
+const requireAdmin = requireRole('admin', 'manager');
 
-// Gate minimo (header-based, non IdP): l'elenco operatori include email/telefono/orari,
-// richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
+// In production the operator is resolved from Entra + the server-side mapping. The operational
+// directory is intentionally minimal; full profiles, notes, schedules and all writes are admin-only.
 operatorsRouter.use(requireOperator);
+operatorsRouter.use((req, res, next) => {
+  const isOperationalDirectory =
+    req.method === 'GET' && (req.path === '/directory' || req.path === '/directory/schedules');
+  if (isOperationalDirectory) {
+    next();
+    return;
+  }
+  requireAdmin(req, res, next);
+});
 
 // UI fullName convention: first token = nome, rest = cognome ("Marco De Luca" → Marco / De Luca).
 function splitFullName(fullName: string): { nome: string; cognome: string } {
@@ -68,6 +78,56 @@ async function appointmentsTodayByOperator(): Promise<Map<string, number>> {
 async function appointmentsTodayForOperator(operatorId: string): Promise<number> {
   return prisma.appointment.count({ where: { operatorId, scheduledAt: todayRange() } });
 }
+
+// GET /operators/directory — minimum fields needed by agendas and clinical collaboration.
+operatorsRouter.get('/directory', async (_req, res) => {
+  try {
+    const [operators, apptToday] = await Promise.all([
+      prisma.operator.findMany({
+        include: { user: true },
+        orderBy: { createdAt: 'asc' },
+      }),
+      appointmentsTodayByOperator(),
+    ]);
+    res.status(200).json(
+      operators.map((op) => {
+        const { nome, cognome } = splitFullName(op.user.fullName);
+        return {
+          id: op.id,
+          nome,
+          cognome,
+          ruolo: op.ruolo ?? 'medico',
+          email: '',
+          telefono: '',
+          reparto: op.department ?? '',
+          stato: op.user.isActive ? 'attivo' : 'inattivo',
+          qualifica: op.qualifica ?? '',
+          pazientiAssegnati: 0,
+          appuntamentiOggi: apptToday.get(op.id) ?? 0,
+        };
+      }),
+    );
+  } catch (error) {
+    console.error('GET /operators/directory error:', error);
+    res.status(500).json({ error: 'Errore nel recupero directory operatori' });
+  }
+});
+
+// GET /operators/directory/schedules — shifts are operational; private admin notes are omitted.
+operatorsRouter.get('/directory/schedules', async (_req, res) => {
+  try {
+    const rows = await prisma.operatorSchedule.findMany();
+    res.status(200).json(
+      rows.map((r) => {
+        const data = (r.data ?? {}) as { turni?: unknown };
+        return { id: r.id, operatoreId: r.operatorId, turni: data.turni ?? [], note: '' };
+      }),
+    );
+  } catch (error) {
+    console.error('GET /operators/directory/schedules error:', error);
+    res.status(500).json({ error: 'Errore nel recupero turni operatori' });
+  }
+});
 
 // GET /operators
 operatorsRouter.get('/', async (_req, res) => {

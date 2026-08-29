@@ -21,8 +21,10 @@ import voiceRouter from './routes/ai-voice.js';
 import aiActionsRouter from './routes/ai-actions.js';
 import aiAuditRouter from './routes/ai-audit.js';
 import farmaciRouter from './routes/farmaci.js';
+import { requireOperator, type AuthedRequest } from './ai/auth.js';
 
 const app = express();
+app.disable('x-powered-by');
 
 // ── CORS configuration ─────────────────────────────────────────────────────
 //
@@ -30,13 +32,19 @@ const app = express();
 //  1. Localhost variants for local development
 //  2. FRONTEND_URL env var (single URL)
 //  3. FRONTEND_URLS env var (comma-separated list)
-//  4. Any *.vercel.app URL containing 'clinicos' (prototype/preview support)
+// Preview origins must be listed explicitly: substring matching would allow an
+// attacker-controlled project such as clinicos-evil.vercel.app.
 //
 // In Railway, set:
 //   FRONTEND_URL=https://clinicos-eosin.vercel.app
 //   FRONTEND_URLS=https://clinicos-eosin.vercel.app,https://clinicos-el91lyszt-lucalavia-2482s-projects.vercel.app
 
-const staticAllowed = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'];
+export function developmentOrigins(env: NodeJS.ProcessEnv = process.env): string[] {
+  if (env.NODE_ENV === 'production') return [];
+  return ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000'];
+}
+
+const staticAllowed = developmentOrigins();
 
 const envAllowed: string[] = [];
 
@@ -50,15 +58,12 @@ if (process.env.FRONTEND_URLS) {
     .forEach((u) => envAllowed.push(u));
 }
 
-const allowedOrigins = Array.from(new Set([...staticAllowed, ...envAllowed]));
+export const allowedOrigins = Array.from(new Set([...staticAllowed, ...envAllowed]));
 
 console.log('CORS allowed origins:', allowedOrigins);
 
-function isAllowed(origin: string): boolean {
-  if (allowedOrigins.includes(origin)) return true;
-  // Allow any Vercel preview/production URL for this project
-  if (origin.endsWith('.vercel.app') && origin.includes('clinicos')) return true;
-  return false;
+export function isAllowedOrigin(origin: string, allowlist = allowedOrigins): boolean {
+  return allowlist.includes(origin);
 }
 
 app.use(
@@ -66,7 +71,7 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (curl, Postman, server-to-server)
       if (!origin) return callback(null, true);
-      if (isAllowed(origin)) return callback(null, true);
+      if (isAllowedOrigin(origin)) return callback(null, true);
       console.warn(`CORS blocked origin: ${origin}`);
       callback(new Error(`CORS: origin ${origin} not allowed`));
     },
@@ -76,8 +81,24 @@ app.use(
 
 app.use(express.json({ limit: '10mb' }));
 
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Permissions-Policy', 'camera=(), geolocation=(), payment=(), usb=()');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
+
 app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
+});
+
+app.get('/auth/me', requireOperator, (req, res) => {
+  const operator = (req as AuthedRequest).operator;
+  res.status(200).json({ id: operator!.id, role: operator!.role, name: operator!.name });
 });
 
 app.use('/admin', adminRoomsRouter);

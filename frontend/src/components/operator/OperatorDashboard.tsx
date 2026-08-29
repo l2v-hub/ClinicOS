@@ -124,21 +124,32 @@ export function OperatorDashboard({
             </strong>{' '}
             — richiede attenzione immediata
             <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>
-              {somministrazioni.ritardi.slice(0, 5).map((p) => (
+              {somministrazioni.ritardi.slice(0, 3).map((p) => (
                 <li key={p.patientId}>
                   <button
                     type="button"
                     className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
                     onClick={() => onSelectPaziente?.(p.nome)}
                   >
-                    <span>
+                    <span className="anomalie-reparto__contenuto">
                       <span className="anomalie-reparto__nome">{p.nome}</span>
-                      <span className="anomalie-reparto__farmaci">
-                        {p.voci
-                          .map(
-                            (v) => `${v.farmacoNome} (${v.scheduledTime}, +${v.minutiRitardo} min)`,
-                          )
-                          .join(', ')}
+                      <span className="anomalie-reparto__farmaci-lista">
+                        {p.voci.slice(0, 3).map((v, index) => (
+                          <span
+                            className="anomalie-reparto__farmaco"
+                            key={`${v.farmacoNome}-${index}`}
+                          >
+                            <strong>{v.farmacoNome}</strong>
+                            <span>
+                              {v.scheduledTime} · +{v.minutiRitardo} min
+                            </span>
+                          </span>
+                        ))}
+                        {p.voci.length > 3 && (
+                          <span className="anomalie-reparto__altre-voci">
+                            +{p.voci.length - 3} altri farmaci
+                          </span>
+                        )}
                       </span>
                     </span>
                     <span className="badge badge--red">+{p.voci[0].minutiRitardo} min</span>
@@ -146,13 +157,13 @@ export function OperatorDashboard({
                 </li>
               ))}
             </ul>
-            {somministrazioni.ritardi.length > 5 && (
+            {somministrazioni.ritardi.length > 3 && (
               <button
                 className="link-btn"
                 style={{ marginTop: 8 }}
                 onClick={() => onNavigate('agenda-operatore')}
               >
-                +{somministrazioni.ritardi.length - 5} altre <IcoArrow />
+                Mostra altri {somministrazioni.ritardi.length - 3} pazienti <IcoArrow />
               </button>
             )}
           </div>

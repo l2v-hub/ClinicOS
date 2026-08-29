@@ -8,6 +8,7 @@
 export interface CurrentOperator {
   id: string;
   role: string;
+  accessToken?: string;
 }
 
 let currentOperator: CurrentOperator | null = null;
@@ -25,5 +26,11 @@ export function getCurrentOperator(): CurrentOperator | null {
 // non aggiungiamo nulla: meglio un 401 esplicito che una richiesta incompleta.
 export function operatorHeaders(): Record<string, string> {
   const op = currentOperator;
-  return op ? { 'X-Operator-Id': op.id, 'X-Operator-Role': op.role } : {};
+  if (!op) return {};
+  const headers: Record<string, string> = {
+    'X-Operator-Id': op.id,
+    'X-Operator-Role': op.role,
+  };
+  if (op.accessToken) headers.Authorization = `Bearer ${op.accessToken}`;
+  return headers;
 }

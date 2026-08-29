@@ -226,6 +226,16 @@ body {
     box-shadow 0.12s;
   padding: 0 4px;
   position: relative;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+}
+
+.teams-sidebar__item:focus-visible,
+.teams-sidebar__logout:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .teams-sidebar__item:hover:not(.active) {
@@ -309,6 +319,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 0;
+  background: transparent;
 }
 
 .teams-sidebar__logout:hover {
@@ -3637,8 +3649,55 @@ textarea.form-input {
   height: 16px;
   flex-shrink: 0;
 }
-.coverage-alert span {
+.coverage-alert > span {
   flex: 1;
+}
+
+.page-loading {
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.page-load-error {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 34rem;
+  margin: 2rem auto;
+  padding: 1rem;
+  color: var(--text-primary, #172033);
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #d9dee8);
+  border-radius: 0.75rem;
+}
+
+.page-load-error button {
+  justify-self: start;
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  color: #fff;
+  background: var(--primary, #1769aa);
+  border: 0;
+  border-radius: 0.5rem;
+}
+
+.page-loading__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: page-loading-spin 0.7s linear infinite;
+}
+
+@keyframes page-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Workload bar */
@@ -5266,7 +5325,7 @@ textarea.form-input {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  height: 32px;
+  min-height: 44px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;

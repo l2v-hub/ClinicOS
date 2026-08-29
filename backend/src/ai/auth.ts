@@ -1,16 +1,16 @@
 // Authorization for the AI import flow (REQ-019).
 //
-// The app has no central identity provider; operator identity is established
-// client-side. This middleware enforces that import endpoints are only reachable
-// by a known operator role — a pragmatic role-gate, not a full IdP. It rejects
-// anonymous/forbidden callers with 401/403 and attaches the operator to the request
-// for audit. Tighten to verified tokens when an IdP exists.
+// Production identity is verified through Entra/OIDC and resolved server-side.
+// Self-declared operator headers remain available only in explicit/non-production
+// demo mode so local fixtures keep working without becoming a production bypass.
 
 import type { NextFunction, Request, Response } from 'express';
+import { entraConfig, requireEntraOperator } from '../lib/entra-auth.js';
 
 export interface Operator {
   id: string;
   role: string;
+  name?: string;
 }
 
 // Accept the app's role values plus canonical names; everything else is forbidden.
@@ -21,7 +21,40 @@ export interface AuthedRequest extends Request {
   operator?: Operator;
 }
 
+export type OperatorAuthMode = 'entra' | 'demo' | 'disabled';
+
+export function operatorAuthMode(env: NodeJS.ProcessEnv = process.env): OperatorAuthMode {
+  const configured = (env.AUTH_MODE || '').trim().toLowerCase();
+  if (configured === 'entra') return 'entra';
+  if (configured === 'demo') return env.NODE_ENV === 'production' ? 'disabled' : 'demo';
+  // Existing local/test workflows remain ergonomic, while production fails closed
+  // when AUTH_MODE was forgotten or misspelled.
+  if (!configured && env.NODE_ENV !== 'production') return 'demo';
+  return 'disabled';
+}
+
 export function requireOperator(req: AuthedRequest, res: Response, next: NextFunction): void {
+  const mode = operatorAuthMode();
+  if (mode === 'entra') {
+    const config = entraConfig();
+    if (!config) {
+      res.status(503).json({
+        error: 'Autenticazione Entra non configurata',
+        code: 'auth_configuration_missing',
+      });
+      return;
+    }
+    requireEntraOperator(config)(req, res, next);
+    return;
+  }
+  if (mode === 'disabled') {
+    res.status(503).json({
+      error: 'Endpoint clinici disabilitati: configurare AUTH_MODE=entra',
+      code: 'auth_disabled',
+    });
+    return;
+  }
+
   const id = (req.header('X-Operator-Id') || '').trim();
   const role = (req.header('X-Operator-Role') || '').trim().toLowerCase();
 
@@ -35,4 +68,19 @@ export function requireOperator(req: AuthedRequest, res: Response, next: NextFun
   }
   req.operator = { id: id.slice(0, 64), role };
   next();
+}
+
+export function requireRole(...allowedRoles: string[]) {
+  const allowed = new Set(allowedRoles.map((role) => role.toLowerCase()));
+  return (req: AuthedRequest, res: Response, next: NextFunction): void => {
+    if (!req.operator) {
+      res.status(401).json({ error: 'Autenticazione richiesta', code: 'operator_missing' });
+      return;
+    }
+    if (!allowed.has(req.operator.role.toLowerCase())) {
+      res.status(403).json({ error: 'Ruolo non autorizzato', code: 'role_forbidden' });
+      return;
+    }
+    next();
+  };
 }
