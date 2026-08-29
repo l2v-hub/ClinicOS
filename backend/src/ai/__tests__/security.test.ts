@@ -188,17 +188,49 @@ test('requireRole: admin and manager cross the admin boundary', () => {
   }
 });
 
-test('public assistant: spoofed admin header cannot unlock cross-patient', () => {
+test('public assistant: spoofed admin header cannot unlock cross-patient', async () => {
   // Attacker passes requireOperator by self-asserting a privileged role on the public route.
   const req = mockReq({ 'X-Operator-Id': 'attacker', 'X-Operator-Role': 'admin' });
   requireOperator(req as never, mockRes() as never, () => {});
   assert.equal(req.operator?.role, 'admin'); // header trusted at the gate (audit) ...
   // ... but the gateway context must be clamped: even with the env flag ON, cross-patient stays closed.
-  const ctx = ctxFromOperator(req as never);
+  const ctx = await ctxFromOperator(req as never, async () => ['patient-owned']);
+  assert.deepEqual(ctx.permittedPatientIds, ['patient-owned']);
   assert.equal(
     canCrossPatientSearch(ctx, { AI_CROSS_PATIENT_SEARCH_ENABLED: 'true' } as never),
     false,
   );
+});
+
+test('public assistant derives ordinary patient scope server-side', async () => {
+  const req = mockReq({ 'X-Operator-Id': 'operator-a', 'X-Operator-Role': 'operatore' });
+  requireOperator(req as never, mockRes() as never, () => {});
+  let resolvedOperatorId = '';
+  const ctx = await ctxFromOperator(req as never, async (operatorId) => {
+    resolvedOperatorId = operatorId;
+    return ['patient-a', 'patient-b'];
+  });
+  assert.equal(resolvedOperatorId, 'operator-a');
+  assert.deepEqual(ctx.permittedPatientIds, ['patient-a', 'patient-b']);
+  assert.equal(
+    canCrossPatientSearch(ctx, { AI_CROSS_PATIENT_SEARCH_ENABLED: 'true' } as never),
+    false,
+  );
+});
+
+test('public assistant grants global scope only in verified Entra mode', async () => {
+  const req = mockReq({});
+  req.operator = { id: 'manager-a', role: 'manager' };
+  const previousMode = process.env.AUTH_MODE;
+  process.env.AUTH_MODE = 'entra';
+  try {
+    const ctx = await ctxFromOperator(req as never, async () => {
+      throw new Error('verified global scope must not enumerate patients');
+    });
+    assert.equal(ctx.permittedPatientIds, null);
+  } finally {
+    process.env.AUTH_MODE = previousMode;
+  }
 });
 
 test('importRateLimit: 429 after the limit, keyed by operator', () => {

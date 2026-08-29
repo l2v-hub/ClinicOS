@@ -37,6 +37,7 @@ import {
   type ConsegnaLookupDeps,
 } from './consegne.js';
 import type { UserContext } from '../gateway/types.js';
+import { assertPatientAllowed } from '../gateway/context.js';
 import type { AssistantAnswer } from '../assistant/service.js';
 import type { AgentId } from '../assistant/agents.js';
 
@@ -159,6 +160,10 @@ export async function planCommand(
   const planCtx: VoicePlanContext = { currentPatientId: input.currentPatientId };
   const plan: AgnosPlan = { ...derivePlan(text, planCtx), channel: input.channel };
 
+  // Preview/read grounding must never become a side-channel for a patient outside the
+  // server-derived operator scope. Appointment/consegna grounding receives the same scope below.
+  if (plan.patientId) assertPatientAllowed(input.operatorCtx.gatewayCtx, plan.patientId);
+
   // #239 chatbot: a read query OR any text that is NOT a recognised write/refusal/appointment command
   // is delegated to the read-only assistant (Azure-backed planner + SOURCE_ONLY answer). This prevents
   // a natural question the deterministic verb-matcher didn't catch from dead-ending as
@@ -266,6 +271,10 @@ export async function executeCommand(
     operatorRole: input.operatorCtx.gatewayCtx.roles[0] ?? 'operatore',
     channel: AUDIT_CHANNEL[input.channel],
   };
+
+  // Check before idempotent replay and before any writer is loaded: a previously valid key must
+  // not become a capability after the operator loses access to the patient.
+  if (plan.patientId) assertPatientAllowed(input.operatorCtx.gatewayCtx, plan.patientId);
   const deny = (kind: VoiceError['kind'], message: string): never => {
     voiceAudit(
       ctx,
@@ -304,27 +313,13 @@ export async function executeCommand(
   const store = deps.store ?? voiceIdempotency;
 
   // 3b) SPEC-015 US4: re-ground appointment plans server-side (tamper-proof, same lookups as the
-  // preview): patient by name, target appointment, slot conflict. Any unresolved item lands in
-  // plan.ambiguities and is rejected by the existing 'ambiguous' guard in executeAction.
-  // Idempotent replay short-circuits BEFORE grounding: the write already applied, so its own slot
-  // would read as a conflict — return the original result (deduped), same audit as executeAction.
+  // preview): patient by name, target appointment, slot conflict. Grounding happens even on replay
+  // so a stale idempotency key cannot bypass a revoked patient scope. A conflict caused by the
+  // already-applied write is harmless because a scoped replay returns before executeAction.
   if (
     (isAppointmentAction(plan.actionType) || isConsegnaAction(plan.actionType)) &&
     input.confirmed === true
   ) {
-    const prior = store.get(plan.idempotencyKey, Date.parse(nowISO) || Date.now());
-    if (prior) {
-      voiceAudit(
-        ctx,
-        plan.actionType,
-        plan.patientId,
-        prior.recordId ?? null,
-        Object.keys(plan.fields),
-        'deduped',
-        nowISO,
-      );
-      return prior;
-    }
     if (isAppointmentAction(plan.actionType))
       await groundAppointmentPlan(
         plan,
@@ -338,6 +333,22 @@ export async function executeCommand(
         deps.consegnaLookup,
         input.operatorCtx.gatewayCtx.permittedPatientIds,
       ); // issue #130: same tamper-proof re-grounding with patient scope
+    if (plan.patientId) {
+      assertPatientAllowed(input.operatorCtx.gatewayCtx, plan.patientId);
+      const prior = store.get(plan.idempotencyKey, Date.parse(nowISO) || Date.now());
+      if (prior) {
+        voiceAudit(
+          ctx,
+          plan.actionType,
+          plan.patientId,
+          prior.recordId ?? null,
+          Object.keys(plan.fields),
+          'deduped',
+          nowISO,
+        );
+        return prior;
+      }
+    }
   }
 
   // 4) existing execute.ts guards (ambiguity, confirmation, idempotency) + dispatch + audit

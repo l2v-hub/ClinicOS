@@ -14,6 +14,7 @@ import { VoiceError } from '../ai/voice/execute.js';
 import { loadVoiceConfig, sttStatus, REQUIRED_STT_CAPABILITIES } from '../ai/voice/config.js';
 import { planCommand, executeCommand } from '../ai/actions/orchestrate.js';
 import { agnosOperatorFrom } from './ai-actions.js';
+import { GatewayError } from '../ai/gateway/types.js';
 
 const voiceRouter = Router();
 voiceRouter.use(requireOperator);
@@ -29,6 +30,17 @@ function mapError(res: Response, err: unknown) {
       not_executable: 400,
       ambiguous: 422,
       confirmation_required: 428,
+    };
+    return res.status(status[err.kind] ?? 400).json({ error: err.message, kind: err.kind });
+  }
+  if (err instanceof GatewayError) {
+    const status: Record<string, number> = {
+      unauthorized: 401,
+      forbidden: 403,
+      tenant_isolation: 403,
+      cross_patient_disabled: 403,
+      not_found: 404,
+      bad_request: 400,
     };
     return res.status(status[err.kind] ?? 400).json({ error: err.message, kind: err.kind });
   }
@@ -60,7 +72,7 @@ voiceRouter.post('/plan', async (req: AuthedRequest, res) => {
       text: transcript,
       channel: 'voce',
       currentPatientId,
-      operatorCtx: agnosOperatorFrom(req),
+      operatorCtx: await agnosOperatorFrom(req),
     });
     // Pre-SPEC-015 response shape preserved: reads carry { plan, read }, everything else { plan, preview }.
     if (plan.actionType === 'read') return res.status(200).json({ plan, read });
@@ -84,7 +96,7 @@ voiceRouter.post('/execute', async (req: AuthedRequest, res) => {
       patientId: req.body?.patientId ? String(req.body.patientId) : undefined,
       idempotencyKey,
       confirmed: req.body?.confirmed === true,
-      operatorCtx: agnosOperatorFrom(req),
+      operatorCtx: await agnosOperatorFrom(req),
     });
     return res.status(200).json(result);
   } catch (err) {

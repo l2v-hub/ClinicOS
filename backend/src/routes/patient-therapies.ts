@@ -12,25 +12,24 @@ import {
   type TherapyCreateInput,
 } from '../therapies/therapy-create.js';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { requirePatientScope } from '../patients/access.js';
 
 const router = Router();
 
 // Gate minimo (header-based, non IdP): le terapie e somministrazioni sono dati clinici
 // paziente reali, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
 router.use(requireOperator);
+router.use('/:patientId/therapies', requirePatientScope);
+router.use('/:patientId/medication-administrations', requirePatientScope);
 
 // GET /patients/:patientId/therapies  (includes structured schedules)
 router.get('/:patientId/therapies', async (req, res) => {
   const { patientId } = req.params;
   try {
-    const patient = await prisma.patient.findUnique({
-      where: { id: patientId },
-      select: { id: true },
-    });
-    if (!patient) {
-      res.status(404).json({ error: 'Paziente non trovato' });
-      return;
-    }
     const therapies = await prisma.patientTherapy.findMany({
       where: { patientId },
       orderBy: { createdAt: 'desc' },
@@ -52,8 +51,7 @@ router.post('/:patientId/therapies', async (req, res) => {
     operatoreInseritore: actor.name || actor.id,
   };
 
-  // Validate required fields BEFORE the 404 existence check (preserves original
-  // 400-before-404 precedence: bad input → 400, then missing patient → 404).
+  // Patient existence/scope is verified by middleware before this handler.
   const farmacoNome = typeof body.farmacoNome === 'string' ? body.farmacoNome.trim() : '';
   const dataInizio = typeof body.dataInizio === 'string' ? body.dataInizio : '';
   if (!farmacoNome || !dataInizio) {
@@ -62,15 +60,6 @@ router.post('/:patientId/therapies', async (req, res) => {
   }
 
   try {
-    const patient = await prisma.patient.findUnique({
-      where: { id: patientId },
-      select: { id: true },
-    });
-    if (!patient) {
-      res.status(404).json({ error: 'Paziente non trovato' });
-      return;
-    }
-
     const therapy = await prisma.$transaction((tx) => createTherapyInTx(tx, patientId, body));
 
     console.log(
@@ -208,15 +197,6 @@ router.get('/:patientId/medication-administrations', async (req, res) => {
   const limit = Math.min(parseInt(req.query.limit as string) || 100, 500);
 
   try {
-    const patient = await prisma.patient.findUnique({
-      where: { id: patientId },
-      select: { id: true },
-    });
-    if (!patient) {
-      res.status(404).json({ error: 'Paziente non trovato' });
-      return;
-    }
-
     const where: { patientId: string; date?: string } = { patientId };
     if (date) where.date = date;
 

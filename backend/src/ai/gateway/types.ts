@@ -36,7 +36,7 @@ export interface UserContext {
   userId: string;
   tenantId: string;
   roles: string[];
-  /** When provided (non-null), the caller may ONLY touch these patients. null = operator scope. */
+  /** When provided, the caller may ONLY touch these patients. null = verified global scope. */
   permittedPatientIds: string[] | null;
   requestId: string;
 }

@@ -72,7 +72,7 @@ export const prismaVoiceWriter: VoiceWriter = {
     await upsertNarrativeSection(patientId, sectionKey as NarrativeSectionKey, {
       reviewedText: resulting,
       reviewStatus: 'modified',
-      updatedBy: meta.operatorName,
+      updatedBy: meta.operatorId,
     });
     return `${patientId}:${sectionKey}`;
   },

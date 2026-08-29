@@ -16,6 +16,7 @@ import { IdempotencyStore } from '../voice/idempotency.js';
 import { loadVoiceConfig } from '../voice/config.js';
 import { setAuditPersistence, type AiAuditEventInput } from '../audit-store.js';
 import type { UserContext } from '../gateway/types.js';
+import { GatewayError } from '../gateway/types.js';
 import type { AssistantAnswer } from '../assistant/service.js';
 
 const PID = 'pat-1';
@@ -143,6 +144,33 @@ test('planCommand testo: vital command → executable create_vital_sign preview'
   assert.equal(r.preview?.canExecute, true);
   assert.equal(r.preview?.patientName, 'Rossi Mario');
   assert.equal(r.preview?.title, 'Aggiungi parametro');
+});
+
+test('planCommand denies an out-of-scope patient before loading preview data', async () => {
+  let previewLoaded = false;
+  const restrictedOperator: AgnosOperatorContext = {
+    ...operatorCtx,
+    gatewayCtx: { ...gatewayCtx, permittedPatientIds: ['patient-owned'] },
+  };
+  await assert.rejects(
+    () =>
+      planCommand(
+        {
+          text: 'registra pressione 130 su 80 alle 9',
+          channel: 'testo',
+          currentPatientId: 'patient-foreign',
+          operatorCtx: restrictedOperator,
+        },
+        {
+          loadPreviewContext: async () => {
+            previewLoaded = true;
+            return {};
+          },
+        },
+      ),
+    (error: unknown) => error instanceof GatewayError && error.kind === 'forbidden',
+  );
+  assert.equal(previewLoaded, false);
 });
 
 test('planCommand: read question delegates to the assistant (preview null, read populated)', async () => {
@@ -393,6 +421,32 @@ test('executeCommand testo: replayed idempotency key does not duplicate the writ
   assert.equal(r1.deduped, false);
   assert.equal(r2.deduped, true);
   assert.deepEqual(calls, ['diary']);
+});
+
+test('executeCommand denies out-of-scope writes before writer and idempotency replay', async () => {
+  const { w, calls } = fakeWriter();
+  const store = new IdempotencyStore();
+  const restrictedOperator: AgnosOperatorContext = {
+    ...operatorCtx,
+    gatewayCtx: { ...gatewayCtx, permittedPatientIds: ['patient-owned'] },
+  };
+  await assert.rejects(
+    () =>
+      executeCommand(
+        {
+          text: 'aggiungi una nota al diario con paziente tranquillo',
+          channel: 'testo',
+          patientId: 'patient-foreign',
+          idempotencyKey: 'foreign-replay-key',
+          confirmed: true,
+          operatorCtx: restrictedOperator,
+        },
+        { ...execDeps(w), store },
+      ),
+    (error: unknown) => error instanceof GatewayError && error.kind === 'forbidden',
+  );
+  assert.deepEqual(calls, []);
+  assert.equal(store.get('foreign-replay-key'), null);
 });
 
 test('executeCommand: confirmation still mandatory on the text channel', async () => {
@@ -735,6 +789,29 @@ test('T027 execute: crea appuntamento confermato → writer appuntamenti, idempo
   const r2 = await executeCommand(input, deps);
   assert.equal(r2.deduped, true);
   assert.deepEqual(calls, ['appt-create']); // una sola scrittura
+});
+
+test('T027 execute: revoked patient scope blocks an appointment idempotency replay', async () => {
+  const { w, calls } = fakeWriter();
+  const scopedOperator: AgnosOperatorContext = {
+    ...operatorCtx,
+    gatewayCtx: { ...gatewayCtx, permittedPatientIds: [MORETTI.id] },
+  };
+  const deps = { ...execDeps(w), appointmentLookup: apptLookup() };
+  const input = {
+    text: 'crea appuntamento fisioterapia domani alle 10:30 per Moretti',
+    channel: 'testo' as const,
+    idempotencyKey: 'k-appt-revoked',
+    confirmed: true,
+    operatorCtx: scopedOperator,
+  };
+  await executeCommand(input, deps);
+  scopedOperator.gatewayCtx.permittedPatientIds = [];
+  await assert.rejects(
+    () => executeCommand(input, deps),
+    (error: unknown) => error instanceof GatewayError && error.kind === 'forbidden',
+  );
+  assert.deepEqual(calls, ['appt-create']);
 });
 
 test('T027 execute: retry dopo scrittura — lo slot appena creato NON blocca il replay (deduped)', async () => {

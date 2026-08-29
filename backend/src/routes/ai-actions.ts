@@ -25,12 +25,12 @@ actionsRouter.use(requireOperator);
 actionsRouter.use(importRateLimit);
 
 /** Operator identity + role-clamped gateway context, shared with the voice routes. */
-export function agnosOperatorFrom(req: AuthedRequest): AgnosOperatorContext {
+export async function agnosOperatorFrom(req: AuthedRequest): Promise<AgnosOperatorContext> {
   const op = req.operator!; // requireOperator guarantees it
   return {
     operatorId: op.id,
     operatorName: op.name?.trim() || op.id,
-    gatewayCtx: ctxFromOperator(req),
+    gatewayCtx: await ctxFromOperator(req),
   };
 }
 
@@ -102,7 +102,7 @@ actionsRouter.post('/plan', async (req: AuthedRequest, res) => {
       channel: parseChannel(req.body?.channel),
       currentPatientId,
       agent: isAgentId(req.body?.agent) ? req.body.agent : undefined,
-      operatorCtx: agnosOperatorFrom(req),
+      operatorCtx: await agnosOperatorFrom(req),
     });
     return res.status(200).json(result);
   } catch (err) {
@@ -129,7 +129,7 @@ actionsRouter.post('/execute', async (req: AuthedRequest, res) => {
       patientId: req.body?.patientId ? String(req.body.patientId) : undefined,
       idempotencyKey,
       confirmed: req.body?.confirmed === true,
-      operatorCtx: agnosOperatorFrom(req),
+      operatorCtx: await agnosOperatorFrom(req),
     });
     return res.status(200).json(result);
   } catch (err) {

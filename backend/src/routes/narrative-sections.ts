@@ -9,13 +9,19 @@ import {
   getNarrativeSection,
   upsertNarrativeSection,
 } from '../ai/sections/patient-narrative.js';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { requirePatientScope } from '../patients/access.js';
 
 const router = Router();
 
 // Gate minimo (header-based, non IdP): le sezioni narrative sono dati clinici paziente
 // reali, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
 router.use(requireOperator);
+router.use('/:patientId/narrative-sections', requirePatientScope);
 
 function isKey(k: string): k is NarrativeSectionKey {
   return (NARRATIVE_SECTION_KEYS as readonly string[]).includes(k);
@@ -47,7 +53,7 @@ router.get('/:patientId/narrative-sections/:sectionKey', async (req, res) => {
 });
 
 // PUT/PATCH /patients/:patientId/narrative-sections/:sectionKey — save reviewedText (+manual create)
-async function save(req: import('express').Request, res: import('express').Response) {
+async function save(req: AuthedRequest, res: import('express').Response) {
   const patientId = String(req.params.patientId);
   const sectionKey = String(req.params.sectionKey);
   if (!isKey(sectionKey)) {
@@ -58,7 +64,6 @@ async function save(req: import('express').Request, res: import('express').Respo
     reviewedText?: string;
     originalText?: string;
     reviewStatus?: string;
-    updatedBy?: string;
   };
   try {
     const dto = await upsertNarrativeSection(patientId, sectionKey, {
@@ -66,7 +71,7 @@ async function save(req: import('express').Request, res: import('express').Respo
       // originalText accepted only to seed a manually-created section (ignored if row exists).
       originalText: typeof body.originalText === 'string' ? body.originalText : undefined,
       reviewStatus: typeof body.reviewStatus === 'string' ? body.reviewStatus : undefined,
-      updatedBy: body.updatedBy,
+      updatedBy: req.operator!.id,
     });
     res.status(200).json(dto);
   } catch {
