@@ -1,5 +1,5 @@
 import { prisma } from '../lib/prisma.js';
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 
 const router = Router();
@@ -10,6 +10,8 @@ router.use(requireOperator);
 // Legacy base64 flow has no persisted owner field and is not used by the current frontend.
 // Keep it available only as a privileged compatibility path until it is removed.
 router.use(requireRole('admin', 'manager'));
+export const LEGACY_INTAKE_JSON_LIMIT = '8mb';
+router.use(express.json({ limit: LEGACY_INTAKE_JSON_LIMIT }));
 router.use((_req, res, next) => {
   res.setHeader('Deprecation', 'true');
   res.setHeader('Sunset', 'Thu, 31 Dec 2026 23:59:59 GMT');

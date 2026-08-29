@@ -26,6 +26,23 @@ import { requireOperator, type AuthedRequest } from './ai/auth.js';
 const app = express();
 app.disable('x-powered-by');
 
+// Apply hardening before CORS and body parsing so rejected origins and oversized payloads receive
+// the same non-renderable API policy as successful JSON responses.
+app.use((_req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'none'; frame-ancestors 'none'; base-uri 'none'",
+  );
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Permissions-Policy', 'camera=(), geolocation=(), payment=(), usb=()');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
+
 // ── CORS configuration ─────────────────────────────────────────────────────
 //
 // Allowed origins:
@@ -79,17 +96,16 @@ app.use(
   }),
 );
 
-app.use(express.json({ limit: '10mb' }));
-
-app.use((_req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Referrer-Policy', 'no-referrer');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('Permissions-Policy', 'camera=(), geolocation=(), payment=(), usb=()');
-  if (process.env.NODE_ENV === 'production') {
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+export const STANDARD_JSON_LIMIT = '512kb';
+const standardJsonParser = express.json({ limit: STANDARD_JSON_LIMIT });
+app.use((req, res, next) => {
+  // The deprecated base64 intake path owns a larger parser behind auth + RBAC in its router.
+  // Skipping it here prevents anonymous 8 MB parsing while all current JSON APIs stay bounded.
+  if (req.path === '/patient-intake' || req.path.startsWith('/patient-intake/')) {
+    next();
+    return;
   }
-  next();
+  standardJsonParser(req, res, next);
 });
 
 app.get('/health', (_req, res) => {
@@ -139,5 +155,26 @@ app.use('/ai/actions', aiActionsRouter);
 app.use('/ai/audit', aiAuditRouter);
 // REQ-039: internal AI Data Gateway (service-token gated; the model's only data path).
 app.use('/internal/ai', internalAiRouter);
+
+interface JsonParserError extends SyntaxError {
+  status?: number;
+  type?: string;
+  body?: unknown;
+}
+
+app.use(
+  (error: unknown, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const parserError = error as JsonParserError;
+    if (parserError?.status === 413 || parserError?.type === 'entity.too.large') {
+      res.status(413).json({ error: 'Payload JSON troppo grande', code: 'payload_too_large' });
+      return;
+    }
+    if (parserError instanceof SyntaxError && parserError.status === 400 && 'body' in parserError) {
+      res.status(400).json({ error: 'JSON non valido', code: 'invalid_json' });
+      return;
+    }
+    next(error);
+  },
+);
 
 export default app;
