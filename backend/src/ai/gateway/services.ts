@@ -49,6 +49,16 @@ import {
   type CrossVitalsInput,
   type CrossVitalsResult,
 } from './cross-vitals.js';
+import {
+  boundTimeline,
+  MAX_TIMELINE_EVENTS,
+  MAX_TIMELINE_FIELD_TEXT,
+  MAX_TIMELINE_SOURCE_TEXT,
+  MAX_TIMELINE_TIMESTAMP_LENGTH,
+  normalizeTimelineVital,
+  TIMELINE_LOOKAHEAD,
+  type TimelineCandidate,
+} from './timeline-window.js';
 
 const nowIso = () => new Date().toISOString();
 const displayName = (p: { firstName: string; lastName: string }) =>
@@ -659,54 +669,115 @@ export async function getPatientAppointments(
 export async function getPatientTimeline(
   patientId: string,
   ctx: UserContext,
-): Promise<SourcedResult<Array<{ at: string; kind: string; label: string }>>> {
+): Promise<
+  SourcedResult<Array<{ at: string; kind: string; label: string }>> & {
+    truncated: boolean;
+  }
+> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
-  const [appts, diary, vit] = await Promise.all([
-    prisma.appointment.findMany({ where: { patientId }, orderBy: { scheduledAt: 'asc' } }),
-    prisma.patientDiaryEntry.findMany({ where: { patientId }, orderBy: { entryDateTime: 'asc' } }),
-    loadCartella(patientId),
+  const [appointmentRows, diaryRows, vitalRows] = await Promise.all([
+    prisma.appointment.findMany({
+      where: { patientId },
+      select: { id: true, scheduledAt: true, reason: true },
+      orderBy: [{ scheduledAt: 'desc' }, { id: 'desc' }],
+      take: TIMELINE_LOOKAHEAD,
+    }),
+    prisma.$queryRaw<
+      Array<{
+        id: string;
+        entryDateTime: string;
+        title: string | null;
+        authorType: string;
+        excerpt: string;
+      }>
+    >(Prisma.sql`
+      SELECT diary."id", diary."entryDateTime", diary."title", diary."authorType",
+             LEFT(diary."content", ${MAX_TIMELINE_SOURCE_TEXT}) AS "excerpt"
+      FROM "PatientDiaryEntry" diary
+      WHERE diary."patientId" = ${patientId}
+      ORDER BY diary."entryDateTime" DESC, diary."id" DESC
+      LIMIT ${TIMELINE_LOOKAHEAD}
+    `),
+    prisma.$queryRaw<
+      Array<{
+        recordId: string;
+        id: string | null;
+        recordedAt: string;
+        label: string | null;
+        value: string | null;
+      }>
+    >(Prisma.sql`
+      SELECT cartella."id" AS "recordId",
+             LEFT(vital.item->>'id', ${MAX_TIMELINE_FIELD_TEXT}) AS "id",
+             LEFT(vital.item->>'rilevato', ${MAX_TIMELINE_TIMESTAMP_LENGTH}) AS "recordedAt",
+             LEFT(vital.item->>'etichetta', ${MAX_TIMELINE_FIELD_TEXT}) AS "label",
+             LEFT(vital.item->>'valore', ${MAX_TIMELINE_FIELD_TEXT}) AS "value"
+      FROM "Cartella" cartella
+      CROSS JOIN LATERAL jsonb_array_elements(
+        CASE
+          WHEN jsonb_typeof(cartella."data"->'parametriVitali') = 'array'
+            THEN cartella."data"->'parametriVitali'
+          ELSE '[]'::jsonb
+        END
+      ) WITH ORDINALITY AS vital(item, ordinal)
+      WHERE cartella."patientId" = ${patientId}
+        AND jsonb_typeof(vital.item) = 'object'
+        AND jsonb_typeof(vital.item->'rilevato') = 'string'
+        AND NULLIF(vital.item->>'rilevato', '') IS NOT NULL
+        AND length(vital.item->>'rilevato') <= ${MAX_TIMELINE_TIMESTAMP_LENGTH}
+      ORDER BY vital.item->>'rilevato' DESC,
+               COALESCE(vital.item->>'id', '') DESC,
+               vital.ordinal DESC
+      LIMIT ${TIMELINE_LOOKAHEAD}
+    `),
   ]);
-  const events: Array<{ at: string; kind: string; label: string }> = [];
-  const refs: SourceReference[] = [];
-  for (const a of appts) {
-    events.push({
-      at: a.scheduledAt.toISOString(),
-      kind: 'APPOINTMENT',
-      label: a.reason ?? 'appuntamento',
+  const sourceTruncated = [appointmentRows, diaryRows, vitalRows].some(
+    (rows) => rows.length > MAX_TIMELINE_EVENTS,
+  );
+  const candidates: TimelineCandidate[] = [];
+  for (const appointment of appointmentRows.slice(0, MAX_TIMELINE_EVENTS)) {
+    const at = appointment.scheduledAt.toISOString();
+    const label = appointment.reason ?? 'appuntamento';
+    candidates.push({
+      event: { at, kind: 'APPOINTMENT', label },
+      source: appointmentSource(patientId, appointment.id, label, at),
     });
-    refs.push(
-      appointmentSource(patientId, a.id, a.reason ?? 'appuntamento', a.scheduledAt.toISOString()),
-    );
   }
-  for (const d of diary) {
-    events.push({ at: d.entryDateTime, kind: 'DIARY_ENTRY', label: d.title ?? d.authorType });
-    refs.push(diarySource(patientId, d.id, d.authorType, d.content, d.entryDateTime));
+  for (const diary of diaryRows.slice(0, MAX_TIMELINE_EVENTS)) {
+    candidates.push({
+      event: {
+        at: diary.entryDateTime,
+        kind: 'DIARY_ENTRY',
+        label: diary.title ?? diary.authorType,
+      },
+      source: diarySource(
+        patientId,
+        diary.id,
+        diary.authorType,
+        diary.excerpt,
+        diary.entryDateTime,
+      ),
+    });
   }
-  for (const v of vit.cartella.parametriVitali ?? []) {
-    if (v.rilevato) {
-      events.push({ at: v.rilevato, kind: 'VITAL_SIGN', label: `${v.etichetta} ${v.valore}` });
-      refs.push(
-        vitalSource(
-          patientId,
-          v.id ?? vit.recordId,
-          v.etichetta ?? 'vital',
-          `${v.etichetta} ${v.valore}`,
-          v.rilevato,
-        ),
-      );
-    }
+  for (const row of vitalRows.slice(0, MAX_TIMELINE_EVENTS)) {
+    const vital = normalizeTimelineVital(row);
+    if (!vital) continue;
+    candidates.push({
+      event: { at: vital.at, kind: 'VITAL_SIGN', label: vital.label },
+      source: vitalSource(patientId, vital.recordId, vital.sourceLabel, vital.label, vital.at),
+    });
   }
-  events.sort((x, y) => (x.at < y.at ? -1 : x.at > y.at ? 1 : 0));
+  const result = boundTimeline(candidates, sourceTruncated);
   gatewayAudit(
     ctx,
     'get_patient_timeline',
     [patientId],
-    events.length,
-    events.length ? 'ok' : 'empty',
+    result.data.length,
+    result.data.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: events, sourceRefs: refs };
+  return result;
 }
 
 // ── Narrative / document search ──────────────────────────────────────────────
