@@ -201,13 +201,18 @@ export async function planCommand(
       plan,
       input.operatorCtx.operatorId,
       deps.appointmentLookup,
+      input.operatorCtx.gatewayCtx.permittedPatientIds,
     );
     return { plan, preview, read: null };
   }
 
   // Issue #130: consegna plans are grounded (patient by name or context) and build their own preview.
   if (isConsegnaAction(plan.actionType)) {
-    const { preview } = await groundConsegnaPlan(plan, deps.consegnaLookup);
+    const { preview } = await groundConsegnaPlan(
+      plan,
+      deps.consegnaLookup,
+      input.operatorCtx.gatewayCtx.permittedPatientIds,
+    );
     return { plan, preview, read: null };
   }
 
@@ -321,8 +326,18 @@ export async function executeCommand(
       return prior;
     }
     if (isAppointmentAction(plan.actionType))
-      await groundAppointmentPlan(plan, input.operatorCtx.operatorId, deps.appointmentLookup);
-    else await groundConsegnaPlan(plan, deps.consegnaLookup); // issue #130: stesso re-grounding tamper-proof
+      await groundAppointmentPlan(
+        plan,
+        input.operatorCtx.operatorId,
+        deps.appointmentLookup,
+        input.operatorCtx.gatewayCtx.permittedPatientIds,
+      );
+    else
+      await groundConsegnaPlan(
+        plan,
+        deps.consegnaLookup,
+        input.operatorCtx.gatewayCtx.permittedPatientIds,
+      ); // issue #130: same tamper-proof re-grounding with patient scope
   }
 
   // 4) existing execute.ts guards (ambiguity, confirmation, idempotency) + dispatch + audit

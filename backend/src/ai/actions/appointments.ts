@@ -220,27 +220,38 @@ export interface AppointmentLookupDeps {
 }
 
 // Exported for reuse by the consegne grounding (issue #130) — same lookup, no duplication.
-export async function defaultSearchPatients(query: string): Promise<PatientHit[]> {
+export async function defaultSearchPatients(
+  query: string,
+  permittedPatientIds: string[] | null = null,
+): Promise<PatientHit[]> {
   const { prisma } = await import('../../lib/prisma.js');
   const tokens = query.split(/\s+/).filter(Boolean);
   return prisma.patient.findMany({
     where: {
-      AND: tokens.map((t) => ({
-        OR: [
-          { lastName: { contains: t, mode: 'insensitive' as const } },
-          { firstName: { contains: t, mode: 'insensitive' as const } },
-        ],
-      })),
+      AND: [
+        ...(permittedPatientIds === null ? [] : [{ id: { in: permittedPatientIds } }]),
+        ...tokens.map((t) => ({
+          OR: [
+            { lastName: { contains: t, mode: 'insensitive' as const } },
+            { firstName: { contains: t, mode: 'insensitive' as const } },
+          ],
+        })),
+      ],
     },
     select: { id: true, firstName: true, lastName: true },
     take: 5,
   });
 }
 
-export async function defaultGetPatient(id: string): Promise<PatientHit | null> {
+export async function defaultGetPatient(
+  id: string,
+  permittedPatientIds: string[] | null = null,
+): Promise<PatientHit | null> {
   const { prisma } = await import('../../lib/prisma.js');
-  return prisma.patient.findUnique({
-    where: { id },
+  return prisma.patient.findFirst({
+    where: {
+      AND: [{ id }, ...(permittedPatientIds === null ? [] : [{ id: { in: permittedPatientIds } }])],
+    },
     select: { id: true, firstName: true, lastName: true },
   });
 }
@@ -276,9 +287,12 @@ export async function groundAppointmentPlan(
   plan: ActionPlan,
   operatorId: string,
   deps: AppointmentLookupDeps = {},
+  permittedPatientIds: string[] | null = null,
 ): Promise<{ plan: ActionPlan; preview: ActionPreview }> {
-  const searchPatients = deps.searchPatients ?? defaultSearchPatients;
-  const getPatient = deps.getPatient ?? defaultGetPatient;
+  const searchPatients =
+    deps.searchPatients ?? ((query: string) => defaultSearchPatients(query, permittedPatientIds));
+  const getPatient =
+    deps.getPatient ?? ((id: string) => defaultGetPatient(id, permittedPatientIds));
   const findConflict = deps.findConflict ?? defaultFindConflict;
   const findAppointmentAt = deps.findAppointmentAt ?? defaultFindAppointmentAt;
 

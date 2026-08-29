@@ -3,42 +3,46 @@
 // reuses the same application service as the UI, no duplicated business logic).
 
 import { prisma } from '../lib/prisma.js';
+import type { Operator } from '../ai/auth.js';
+import type { ConsegnaCreateInput } from '../consegne/write-validation.js';
+import { ConsegnaInputError } from '../consegne/query.js';
 
-export const CONSEGNA_PRIORITA = ['normale', 'alta', 'urgente'];
-export const CONSEGNA_STATO = ['aperta', 'in_corso', 'completata'];
-
-export interface CreateConsegnaInput {
-  pazienteId?: string;
-  pazienteNome: string;
-  priorita?: string;
-  stato?: string;
-  tipo?: string;
-  note: string;
-  scadenza?: string; // YYYY-MM-DD (default: oggi)
-  oraScadenza?: string | null;
-  operatoreAssegnato?: string;
-  creatoDA?: string;
-}
-
-/** Crea una consegna applicando gli stessi default/validazioni della route UI. */
-export async function createConsegna(input: CreateConsegnaInput) {
-  if (!input.pazienteNome || !input.note) {
-    throw new Error('Campi obbligatori: pazienteNome, note');
+/** Shared authoritative creation path for UI and Agnos. */
+export async function createConsegna(input: ConsegnaCreateInput, actor: Operator) {
+  const [patient, assignee, author] = await Promise.all([
+    prisma.patient.findUnique({
+      where: { id: input.pazienteId },
+      select: { id: true, firstName: true, lastName: true },
+    }),
+    input.operatoreAssegnatoId
+      ? prisma.operator.findFirst({
+          where: { id: input.operatoreAssegnatoId, user: { isActive: true } },
+          select: { id: true, user: { select: { fullName: true } } },
+        })
+      : Promise.resolve(null),
+    prisma.operator.findUnique({
+      where: { id: actor.id },
+      select: { user: { select: { fullName: true } } },
+    }),
+  ]);
+  if (!patient) throw new ConsegnaInputError('Paziente non disponibile');
+  if (input.operatoreAssegnatoId && !assignee) {
+    throw new ConsegnaInputError('Operatore assegnato non disponibile');
   }
   return prisma.consegna.create({
     data: {
-      pazienteId: String(input.pazienteId ?? ''),
-      pazienteNome: String(input.pazienteNome),
-      priorita: CONSEGNA_PRIORITA.includes(String(input.priorita))
-        ? String(input.priorita)
-        : 'normale',
-      stato: CONSEGNA_STATO.includes(String(input.stato)) ? String(input.stato) : 'aperta',
-      tipo: String(input.tipo ?? 'Monitoraggio'),
-      note: String(input.note),
-      scadenza: String(input.scadenza ?? new Date().toISOString().slice(0, 10)),
-      oraScadenza: input.oraScadenza ? String(input.oraScadenza) : null,
-      operatoreAssegnato: String(input.operatoreAssegnato ?? ''),
-      creatoDA: String(input.creatoDA ?? ''),
+      pazienteId: patient.id,
+      pazienteNome: `${patient.lastName}, ${patient.firstName}`,
+      priorita: input.priorita,
+      stato: 'aperta',
+      tipo: input.tipo,
+      note: input.note,
+      scadenza: input.scadenza,
+      oraScadenza: input.oraScadenza,
+      operatoreAssegnatoId: assignee?.id ?? null,
+      operatoreAssegnato: assignee?.user.fullName ?? '',
+      creatoDaId: actor.id,
+      creatoDA: actor.name?.trim() || author?.user.fullName || actor.id,
     },
   });
 }

@@ -15,6 +15,7 @@ import {
   PatientParametersNotFoundError,
   savePatientParameterMonth,
 } from '../patients/parameters-update.js';
+import { loadPatientConsegnaCounts } from '../consegne/read-service.js';
 
 const router = Router();
 
@@ -205,11 +206,16 @@ router.get('/clinical-summary/overview', async (_req, res) => {
 router.get('/clinical-summary', async (req, res) => {
   try {
     const patientIds = parsePatientSummaryIds(req.query.patientIds);
-    const cartelle = await prisma.cartella.findMany({
-      where: { patientId: { in: patientIds } },
-      select: { patientId: true, data: true },
-    });
-    const summary = cartelle.map(({ patientId, data }) => {
+    const [cartelle, consegneCounts] = await Promise.all([
+      prisma.cartella.findMany({
+        where: { patientId: { in: patientIds } },
+        select: { patientId: true, data: true },
+      }),
+      loadPatientConsegnaCounts(patientIds),
+    ]);
+    const cartelleByPatient = new Map(cartelle.map((row) => [row.patientId, row.data]));
+    const summary = patientIds.map((patientId) => {
+      const data = cartelleByPatient.get(patientId);
       const c = (data ?? {}) as {
         statoRicovero?: string;
         parametriVitali?: Array<{ stato?: string }>;
@@ -230,6 +236,7 @@ router.get('/clinical-summary', async (req, res) => {
         hasSevereAllergy: allergie.some((a) => a.gravita === 'grave'),
         terapieTotali: terapie.length,
         terapieCompletate: terapie.filter((t) => t.stato === 'completata').length,
+        consegneAperte: consegneCounts.get(patientId) ?? 0,
       };
     });
     res.status(200).json(summary);

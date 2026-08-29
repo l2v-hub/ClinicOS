@@ -109,9 +109,12 @@ const displayName = (p: PatientHit) => `${p.lastName} ${p.firstName}`.trim();
 export async function groundConsegnaPlan(
   plan: ActionPlan,
   deps: ConsegnaLookupDeps = {},
+  permittedPatientIds: string[] | null = null,
 ): Promise<{ plan: ActionPlan; preview: ActionPreview }> {
-  const searchPatients = deps.searchPatients ?? defaultSearchPatients;
-  const getPatient = deps.getPatient ?? defaultGetPatient;
+  const searchPatients =
+    deps.searchPatients ?? ((query: string) => defaultSearchPatients(query, permittedPatientIds));
+  const getPatient =
+    deps.getPatient ?? ((id: string) => defaultGetPatient(id, permittedPatientIds));
 
   let patientName: string | undefined;
   const query = typeof plan.fields.patientQuery === 'string' ? plan.fields.patientQuery : undefined;

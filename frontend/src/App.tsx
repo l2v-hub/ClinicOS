@@ -20,6 +20,12 @@ import {
   type NotesPageInfo,
   type NotesPageResponse,
 } from './lib/notesMailbox';
+import {
+  buildConsegnaFeedUrl,
+  isConsegnaFeedResponse,
+  mergeConsegnaPage,
+  type ConsegnaFeedQuery,
+} from './lib/consegneFeed';
 
 import type {
   UtenteApp,
@@ -40,6 +46,10 @@ import type {
   TherapySlotPatient,
   TherapyAdministration,
   TipoIntervento,
+  ConsegnaOverview,
+  ConsegnaPageInfo,
+  ConsegnaSummary,
+  NewConsegnaInput,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import { createDefaultCartella } from './mockData';
@@ -260,6 +270,18 @@ export default function App() {
   const therapyRequestSequenceRef = useRef(0);
   const notesRequestSequenceRef = useRef(0);
   const notesAbortControllerRef = useRef<AbortController | null>(null);
+  const consegneRequestSequenceRef = useRef(0);
+  const consegneAbortControllerRef = useRef<AbortController | null>(null);
+  const consegneQueryRef = useRef<ConsegnaFeedQuery>({});
+  const consegnePageInfoRef = useRef<ConsegnaPageInfo>({ hasMore: false, nextCursor: null });
+  const consegneOverviewRequestRef = useRef(0);
+  const consegneOverviewAbortRef = useRef<AbortController | null>(null);
+  const patientConsegneRequestRef = useRef(0);
+  const patientConsegneAbortRef = useRef<AbortController | null>(null);
+  const patientConsegnePageInfoRef = useRef<ConsegnaPageInfo>({
+    hasMore: false,
+    nextCursor: null,
+  });
   const notesQueryRef = useRef<NotesMailboxQuery>({ box: 'all', q: '' });
   const notesPageInfoRef = useRef<NotesPageInfo>({ hasMore: false, nextCursor: null });
   const therapyDateRef = useRef(localIsoDate());
@@ -289,9 +311,36 @@ export default function App() {
   // Mock state
   const [operatori, setOperatori] = useState<Operatore[]>([]);
   const [consegne, setConsegne] = useState<Consegna[]>([]);
+  const [patientConsegne, setPatientConsegne] = useState<Consegna[]>([]);
+  const [patientConsegneSummary, setPatientConsegneSummary] = useState<ConsegnaSummary | null>(
+    null,
+  );
+  const [patientConsegnePageInfo, setPatientConsegnePageInfo] = useState<ConsegnaPageInfo>({
+    hasMore: false,
+    nextCursor: null,
+  });
+  const [loadingPatientConsegne, setLoadingPatientConsegne] = useState(false);
+  const [patientConsegneError, setPatientConsegneError] = useState<string | null>(null);
+  const [consegneOverview, setConsegneOverview] = useState<ConsegnaOverview | null>(null);
+  const [consegneOverviewState, setConsegneOverviewState] = useState<'loading' | 'ready' | 'error'>(
+    'loading',
+  );
+  const [consegneSummary, setConsegneSummary] = useState<ConsegnaSummary>({
+    total: 0,
+    open: 0,
+    inProgress: 0,
+    completed: 0,
+    urgentOpen: 0,
+  });
+  const [consegnePageInfo, setConsegnePageInfo] = useState<ConsegnaPageInfo>({
+    hasMore: false,
+    nextCursor: null,
+  });
+  const [loadingConsegne, setLoadingConsegne] = useState(false);
+  const [consegneLoadError, setConsegneLoadError] = useState<string | null>(null);
   // #283: come aprire la pagina Consegne (filtro iniziale + eventuale consegna da evidenziare)
   const [consegneView, setConsegneView] = useState<{
-    filtro: 'tutte' | Consegna['stato'];
+    filtro: 'tutte' | 'attive' | Consegna['stato'];
     focusId: string | null;
   }>({ filtro: 'tutte', focusId: null });
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
@@ -371,13 +420,11 @@ export default function App() {
   // #283: la card "Consegne aperte" apre la pagina già filtrata sulle aperte; se la consegna
   // aperta è UNA sola, evidenzia e scrolla direttamente quella card.
   function openConsegneAperte() {
-    const nonCompletate = consegne.filter((c) => c.stato !== 'completata');
-    const soloAperte = nonCompletate.filter((c) => c.stato === 'aperta');
+    const summary = consegneOverview?.summary;
+    const single = summary?.open === 1 ? consegneOverview?.openPreview[0] : undefined;
     setConsegneView({
-      // il chip "Aperte" nasconderebbe le "in corso": filtra 'aperta' solo se copre tutto il
-      // conteggio mostrato dalla card, altrimenti mostra tutte (nessuna consegna nascosta).
-      filtro: soloAperte.length === nonCompletate.length ? 'aperta' : 'tutte',
-      focusId: nonCompletate.length === 1 ? nonCompletate[0].id : null,
+      filtro: 'attive',
+      focusId: single?.id ?? null,
     });
     setMobileNavOpen(false);
     pushNav('consegne');
@@ -604,19 +651,139 @@ export default function App() {
     void loadAppuntamenti(appointmentRangeRef.current);
   }, [loadAppuntamenti]);
 
-  // ── Load consegne (API — riusata anche da Agnos dopo create_consegna, issue #130) ──
+  // ── Bounded handover feed and exact dashboard read model ──────────────────
 
-  const loadConsegne = useCallback(async () => {
+  const loadConsegne = useCallback(async (query?: ConsegnaFeedQuery, append = false) => {
+    const requestedQuery = query ?? consegneQueryRef.current;
+    const cursor = append ? consegnePageInfoRef.current.nextCursor : null;
+    if (append && !cursor) return;
     const sessionEpoch = sessionEpochRef.current;
+    const request = ++consegneRequestSequenceRef.current;
+    consegneAbortControllerRef.current?.abort();
+    const controller = new AbortController();
+    consegneAbortControllerRef.current = controller;
+    consegneQueryRef.current = requestedQuery;
+    setLoadingConsegne(true);
+    setConsegneLoadError(null);
+    if (!append) setConsegne([]);
     try {
-      const res = await fetch(`${API_URL}/consegne`, { headers: operatorHeaders() });
-      if (!res.ok) return; // lista corrente invariata
-      const data = (await res.json()) as Consegna[];
-      if (sessionEpoch === sessionEpochRef.current) {
-        setConsegne(data.map((c) => ({ ...c, oraScadenza: c.oraScadenza ?? undefined })));
+      const response = await fetch(buildConsegnaFeedUrl(API_URL, requestedQuery, cursor), {
+        headers: operatorHeaders(),
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`consegne_${response.status}`);
+      const page = (await response.json()) as unknown;
+      if (!isConsegnaFeedResponse(page)) throw new Error('consegne_shape');
+      if (
+        sessionEpoch !== sessionEpochRef.current ||
+        request !== consegneRequestSequenceRef.current
+      )
+        return;
+      const items = page.items.map((c) => ({ ...c, oraScadenza: c.oraScadenza ?? undefined }));
+      setConsegne((current) => mergeConsegnaPage(current, items, append));
+      setConsegneSummary(page.summary);
+      consegnePageInfoRef.current = page.pageInfo;
+      setConsegnePageInfo(page.pageInfo);
+    } catch (error) {
+      if ((error as { name?: string }).name === 'AbortError') return;
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === consegneRequestSequenceRef.current
+      ) {
+        setConsegneLoadError('Consegne non disponibili. Riprova.');
       }
-    } catch {
-      // rete assente: lista corrente invariata
+    } finally {
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === consegneRequestSequenceRef.current
+      ) {
+        setLoadingConsegne(false);
+      }
+    }
+  }, []);
+
+  const loadConsegneOverview = useCallback(async () => {
+    const sessionEpoch = sessionEpochRef.current;
+    const request = ++consegneOverviewRequestRef.current;
+    consegneOverviewAbortRef.current?.abort();
+    const controller = new AbortController();
+    consegneOverviewAbortRef.current = controller;
+    setConsegneOverviewState('loading');
+    try {
+      const response = await fetch(`${API_URL}/consegne/overview`, {
+        headers: operatorHeaders(),
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error('consegne_overview');
+      const overview = (await response.json()) as ConsegnaOverview;
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === consegneOverviewRequestRef.current
+      ) {
+        setConsegneOverview(overview);
+        setConsegneOverviewState('ready');
+      }
+    } catch (error) {
+      if ((error as { name?: string }).name === 'AbortError') return;
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === consegneOverviewRequestRef.current
+      ) {
+        // Keep the last known snapshot if there is one, but never present a failed initial read
+        // as a real zero. Dashboards receive this explicit error state.
+        setConsegneOverviewState('error');
+      }
+    }
+  }, []);
+
+  const loadPatientConsegne = useCallback(async (patientId: string, append = false) => {
+    const cursor = append ? patientConsegnePageInfoRef.current.nextCursor : null;
+    if (append && !cursor) return;
+    const sessionEpoch = sessionEpochRef.current;
+    const request = ++patientConsegneRequestRef.current;
+    patientConsegneAbortRef.current?.abort();
+    const controller = new AbortController();
+    patientConsegneAbortRef.current = controller;
+    setLoadingPatientConsegne(true);
+    setPatientConsegneError(null);
+    if (!append) {
+      setPatientConsegne([]);
+      setPatientConsegneSummary(null);
+      patientConsegnePageInfoRef.current = { hasMore: false, nextCursor: null };
+      setPatientConsegnePageInfo({ hasMore: false, nextCursor: null });
+    }
+    try {
+      const response = await fetch(buildConsegnaFeedUrl(API_URL, { patientId }, cursor), {
+        headers: operatorHeaders(),
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error('patient_consegne');
+      const page = (await response.json()) as unknown;
+      if (!isConsegnaFeedResponse(page)) throw new Error('patient_consegne_shape');
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === patientConsegneRequestRef.current
+      ) {
+        setPatientConsegne((current) => mergeConsegnaPage(current, page.items, append));
+        setPatientConsegneSummary(page.summary);
+        patientConsegnePageInfoRef.current = page.pageInfo;
+        setPatientConsegnePageInfo(page.pageInfo);
+      }
+    } catch (error) {
+      if ((error as { name?: string }).name === 'AbortError') return;
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === patientConsegneRequestRef.current
+      ) {
+        setPatientConsegneError('Consegne del paziente non disponibili. Riprova.');
+      }
+    } finally {
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === patientConsegneRequestRef.current
+      ) {
+        setLoadingPatientConsegne(false);
+      }
     }
   }, []);
 
@@ -760,8 +927,8 @@ export default function App() {
     });
     // Load rooms from API for AdminDashboard
     loadCamere();
-    // Load consegne from API (persisted handover cards)
-    void loadConsegne();
+    // Dashboard receives only a constant-size exact read model; the feed loads on navigation.
+    void loadConsegneOverview();
     const operatorDirectoryPath = utente.ruolo === 'admin' ? '/operators' : '/operators/directory';
     const operatorSchedulesPath =
       utente.ruolo === 'admin' ? '/operators/schedules' : '/operators/directory/schedules';
@@ -798,7 +965,18 @@ export default function App() {
       });
     void loadNotes({ box: 'all', q: '' });
     return () => sessionController.abort();
-  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne, loadNotes]);
+  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegneOverview, loadNotes]);
+
+  useEffect(() => {
+    if (!utente || navKey !== 'consegne') return;
+    void loadConsegne(consegneQueryRef.current);
+  }, [utente, navKey, loadConsegne]);
+
+  useEffect(() => {
+    if (!utente || navKey !== 'dettaglio-paziente' || !pazienteSelezionato) return;
+    const timer = window.setTimeout(() => void loadPatientConsegne(pazienteSelezionato.id), 0);
+    return () => window.clearTimeout(timer);
+  }, [utente, navKey, pazienteSelezionato, loadPatientConsegne]);
 
   // Resolve a patient restored from the hash with one URL-encoded authenticated lookup. The
   // pending id is consumed once and every outcome closes the loading state.
@@ -864,6 +1042,12 @@ export default function App() {
     therapyRequestSequenceRef.current += 1;
     notesRequestSequenceRef.current += 1;
     notesAbortControllerRef.current?.abort();
+    consegneRequestSequenceRef.current += 1;
+    consegneAbortControllerRef.current?.abort();
+    consegneOverviewRequestRef.current += 1;
+    consegneOverviewAbortRef.current?.abort();
+    patientConsegneRequestRef.current += 1;
+    patientConsegneAbortRef.current?.abort();
     patientNavigationSequenceRef.current += 1;
     // In Entra mode the redirect/silent flow completes before any clinical fetch starts.
     // The selected card is only a demo/local hint: with a token, id and UI role are replaced by
@@ -918,6 +1102,12 @@ export default function App() {
     patientNavigationSequenceRef.current += 1;
     notesRequestSequenceRef.current += 1;
     notesAbortControllerRef.current?.abort();
+    consegneRequestSequenceRef.current += 1;
+    consegneAbortControllerRef.current?.abort();
+    consegneOverviewRequestRef.current += 1;
+    consegneOverviewAbortRef.current?.abort();
+    patientConsegneRequestRef.current += 1;
+    patientConsegneAbortRef.current?.abort();
     setUtente(null);
     setAppointmentLoadError(null);
     setTherapyLoadError(null);
@@ -927,6 +1117,20 @@ export default function App() {
     notesQueryRef.current = { box: 'all', q: '' };
     notesPageInfoRef.current = { hasMore: false, nextCursor: null };
     setNotesPageInfo({ hasMore: false, nextCursor: null });
+    setConsegne([]);
+    setPatientConsegne([]);
+    setPatientConsegneSummary(null);
+    setPatientConsegneError(null);
+    setLoadingPatientConsegne(false);
+    patientConsegnePageInfoRef.current = { hasMore: false, nextCursor: null };
+    setPatientConsegnePageInfo({ hasMore: false, nextCursor: null });
+    setConsegneOverview(null);
+    setConsegneOverviewState('loading');
+    setConsegneLoadError(null);
+    setLoadingConsegne(false);
+    consegneQueryRef.current = {};
+    consegnePageInfoRef.current = { hasMore: false, nextCursor: null };
+    setConsegnePageInfo({ hasMore: false, nextCursor: null });
     setLoadingTherapySlots(true);
     setCurrentOperator(null);
     clearCachedGet();
@@ -1027,22 +1231,35 @@ export default function App() {
 
   // ── Consegne CRUD (API-persisted) ─────────────────────────────────────────
 
-  async function addConsegna(c: Omit<Consegna, 'id' | 'createdAt'>): Promise<boolean> {
+  function refreshConsegnaViews() {
+    void loadConsegneOverview();
+    if (navKey === 'consegne') void loadConsegne(consegneQueryRef.current);
+    if (pazienteSelezionato) void loadPatientConsegne(pazienteSelezionato.id);
+  }
+
+  async function addConsegna(c: NewConsegnaInput): Promise<boolean> {
+    const sessionEpoch = sessionEpochRef.current;
     try {
       const res = await fetch(`${API_URL}/consegne`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify(c),
+        body: JSON.stringify({
+          pazienteId: c.pazienteId,
+          priorita: c.priorita,
+          tipo: c.tipo,
+          note: c.note,
+          scadenza: c.scadenza,
+          oraScadenza: c.oraScadenza ?? null,
+          operatoreAssegnatoId: c.operatoreAssegnatoId ?? null,
+        }),
       });
       if (!res.ok) {
         showToast('Impossibile creare la consegna');
         return false;
       }
-      const created = (await res.json()) as Consegna;
-      setConsegne((prev) => [
-        { ...created, oraScadenza: created.oraScadenza ?? undefined },
-        ...prev,
-      ]);
+      await res.json();
+      if (sessionEpoch !== sessionEpochRef.current) return false;
+      refreshConsegnaViews();
       showToast('Consegna creata');
       return true;
     } catch {
@@ -1052,30 +1269,34 @@ export default function App() {
   }
 
   async function updateConsegna(id: string, patch: Partial<Consegna>): Promise<boolean> {
-    const snapshot = consegne;
-    // Optimistic update
-    setConsegne((prev) => prev.map((c) => (c.id === id ? { ...c, ...patch } : c)));
+    const sessionEpoch = sessionEpochRef.current;
+    const allowedPatch = {
+      ...(patch.priorita !== undefined ? { priorita: patch.priorita } : {}),
+      ...(patch.stato !== undefined ? { stato: patch.stato } : {}),
+      ...(patch.tipo !== undefined ? { tipo: patch.tipo } : {}),
+      ...(patch.note !== undefined ? { note: patch.note } : {}),
+      ...(patch.scadenza !== undefined ? { scadenza: patch.scadenza } : {}),
+      ...(patch.oraScadenza !== undefined ? { oraScadenza: patch.oraScadenza || null } : {}),
+      ...(patch.operatoreAssegnatoId !== undefined
+        ? { operatoreAssegnatoId: patch.operatoreAssegnatoId }
+        : {}),
+    };
     try {
       const res = await fetch(`${API_URL}/consegne/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify(patch),
+        body: JSON.stringify(allowedPatch),
       });
       if (!res.ok) {
-        setConsegne(snapshot);
         showToast('Impossibile salvare la consegna');
         return false;
       }
-      const updated = (await res.json()) as Consegna;
-      setConsegne((prev) =>
-        prev.map((c) =>
-          c.id === id ? { ...updated, oraScadenza: updated.oraScadenza ?? undefined } : c,
-        ),
-      );
+      await res.json();
+      if (sessionEpoch !== sessionEpochRef.current) return false;
+      refreshConsegnaViews();
       showToast('Consegna aggiornata');
       return true;
     } catch {
-      setConsegne(snapshot);
       showToast('Impossibile salvare la consegna');
       return false;
     }
@@ -1086,19 +1307,18 @@ export default function App() {
   }
 
   async function deleteConsegna(id: string): Promise<void> {
-    const snapshot = consegne;
-    setConsegne((prev) => prev.filter((c) => c.id !== id));
+    const sessionEpoch = sessionEpochRef.current;
     try {
       const res = await fetch(`${API_URL}/consegne/${id}`, {
         method: 'DELETE',
         headers: operatorHeaders(),
       });
       if (!res.ok) {
-        setConsegne(snapshot);
         showToast('Impossibile eliminare la consegna');
+        return;
       }
+      if (sessionEpoch === sessionEpochRef.current) refreshConsegnaViews();
     } catch {
-      setConsegne(snapshot);
       showToast('Impossibile eliminare la consegna');
     }
   }
@@ -1888,7 +2108,8 @@ export default function App() {
               {isAdmin && navKey === 'admin-dashboard' && (
                 <AdminDashboard
                   operatori={operatori}
-                  consegne={consegne}
+                  consegneOverview={consegneOverview}
+                  consegneOverviewState={consegneOverviewState}
                   camere={camere}
                   totalePazienti={clinicalOverview?.totalPatients ?? 0}
                   loadingPazienti={loadingClinicalOverview}
@@ -1939,12 +2160,20 @@ export default function App() {
               {navKey === 'consegne' && (
                 <ConsegnePage
                   consegne={consegne}
-                  operatoreNome={utente.nome}
+                  summary={consegneSummary}
+                  operatori={operatori}
+                  operatoreId={utenteId}
                   isAdmin={isAdmin}
                   onAdd={addConsegna}
                   onUpdate={updateConsegna}
                   onUpdateStato={updateConsegnaStato}
                   onDelete={deleteConsegna}
+                  loading={loadingConsegne}
+                  loadError={consegneLoadError}
+                  hasMore={consegnePageInfo.hasMore}
+                  onQueryChange={loadConsegne}
+                  onLoadMore={() => void loadConsegne(consegneQueryRef.current, true)}
+                  onRetry={() => void loadConsegne(consegneQueryRef.current)}
                   onSelectPaziente={goToPazienteByNome}
                   initialFiltroStato={consegneView.filtro}
                   focusId={consegneView.focusId}
@@ -1974,7 +2203,8 @@ export default function App() {
               {!isAdmin && navKey === 'operator-dashboard' && (
                 <OperatorDashboard
                   utente={utente}
-                  consegne={consegne}
+                  consegneOverview={consegneOverview}
+                  consegneOverviewState={consegneOverviewState}
                   agenda={agendaOggi}
                   totalePazienti={clinicalOverview?.totalPatients ?? 0}
                   loadingPazienti={loadingClinicalOverview}
@@ -1986,7 +2216,6 @@ export default function App() {
               )}
               {!isAdmin && navKey === 'pazienti' && (
                 <PatientList
-                  consegne={consegne}
                   totalPatients={clinicalOverview?.totalPatients ?? 0}
                   ricerca={pazientiRicerca}
                   onRicercaChange={setPazientiRicerca}
@@ -2045,7 +2274,13 @@ export default function App() {
                 <PatientDetail
                   paziente={pazienteSelezionato}
                   cartella={getCartella(pazienteSelezionato.id)}
-                  consegne={consegne}
+                  consegne={patientConsegne}
+                  consegneSummary={patientConsegneSummary}
+                  consegneLoading={loadingPatientConsegne}
+                  consegneError={patientConsegneError}
+                  consegneHasMore={patientConsegnePageInfo.hasMore}
+                  onLoadMoreConsegne={() => void loadPatientConsegne(pazienteSelezionato.id, true)}
+                  onRetryConsegne={() => void loadPatientConsegne(pazienteSelezionato.id)}
                   operatori={operatori}
                   camere={camere}
                   onBack={() => goBack('pazienti')}
@@ -2128,8 +2363,8 @@ export default function App() {
                   info?.actionType === 'update_appointment'
                 )
                   void loadAppuntamenti(appointmentRangeRef.current);
-                // Issue #130: una consegna creata via Agnos appare subito nella UI consegne
-                if (info?.actionType === 'create_consegna') void loadConsegne();
+                // Agnos invalidates the same bounded feed/overview/patient read models as the UI.
+                if (info?.actionType === 'create_consegna') refreshConsegnaViews();
               }}
               navKey={navKey}
               resolvePatientName={(id) => {

@@ -3,6 +3,7 @@
 // is invented; clinical-advice questions are refused; cross-patient access is role-gated; results are
 // capped. No model call here: the plan is deterministic and the executor is the trusted boundary.
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import * as svc from '../gateway/services.js';
 import { canCrossPatientSearch, canFacilityRead, isPatientAllowed } from '../gateway/context.js';
@@ -18,10 +19,6 @@ import { buildTherapySlots } from '../../therapies/therapy-slots.js';
 import {
   collectTherapiesDue,
   dayKey,
-  isConsegnaOpen,
-  isConsegnaOverdue,
-  partitionByOperator,
-  sortConsegne,
   type ConsegnaRow,
   type TherapyDueItem,
 } from './facility-signals.js';
@@ -177,12 +174,83 @@ const QUEUE_WINDOW_MINUTES = 120;
 // Il perimetro paziente usa la funzione canonica del gateway, non una copia locale: una riga senza
 // paziente collegato (`Consegna.pazienteId` è `String @default("")`) porta comunque nome paziente e
 // note in chiaro, quindi con una allow-list esplicita deve restare fuori.
-async function openConsegne(ctx: UserContext): Promise<ConsegnaRow[]> {
-  const rows = (await prisma.consegna.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 500,
-  })) as ConsegnaRow[];
-  return rows.filter((c) => isConsegnaOpen(c) && isPatientAllowed(ctx, c.pazienteId));
+function privilegedContext(ctx: UserContext): boolean {
+  return ctx.roles.some((role) => role === 'admin' || role === 'manager');
+}
+
+function consegnaPatientSql(ctx: UserContext): Prisma.Sql {
+  if (ctx.permittedPatientIds === null) return Prisma.sql`TRUE`;
+  if (ctx.permittedPatientIds.length === 0) return Prisma.sql`FALSE`;
+  return Prisma.sql`c."pazienteId" IN (${Prisma.join(ctx.permittedPatientIds)})`;
+}
+
+function consegnaActorSql(ctx: UserContext): Prisma.Sql {
+  return privilegedContext(ctx)
+    ? Prisma.sql`TRUE`
+    : Prisma.sql`(c."creatoDaId" = ${ctx.userId} OR c."operatoreAssegnatoId" = ${ctx.userId})`;
+}
+
+const AI_CONSEGNA_COLUMNS = Prisma.raw(`
+  c."id", c."pazienteId", c."pazienteNome", c."priorita", c."stato", c."tipo",
+  c."note", c."scadenza", c."oraScadenza", c."operatoreAssegnato",
+  c."operatoreAssegnatoId", c."creatoDaId"`);
+
+async function overdueConsegne(ctx: UserContext, now: Date) {
+  const today = dayKey(now);
+  const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const where = Prisma.sql`
+    c."stato" <> 'completata'
+    AND ${consegnaActorSql(ctx)}
+    AND ${consegnaPatientSql(ctx)}
+    AND (
+      c."scadenza" < ${today}
+      OR (
+        c."scadenza" = ${today}
+        AND c."oraScadenza" ~ '^(?:[01][0-9]|2[0-3]):[0-5][0-9]$'
+        AND c."oraScadenza" < ${currentTime}
+      )
+    )`;
+  const [countRows, items] = await Promise.all([
+    prisma.$queryRaw<Array<{ count: number }>>(Prisma.sql`
+      SELECT COUNT(*)::int AS "count" FROM "Consegna" c WHERE ${where}
+    `),
+    prisma.$queryRaw<ConsegnaRow[]>(Prisma.sql`
+      SELECT ${AI_CONSEGNA_COLUMNS} FROM "Consegna" c WHERE ${where}
+      ORDER BY
+        CASE c."priorita" WHEN 'urgente' THEN 0 WHEN 'alta' THEN 1 ELSE 2 END,
+        c."scadenza" ASC, c."oraScadenza" ASC NULLS LAST, c."id" ASC
+      LIMIT ${SAMPLE_SIZE}
+    `),
+  ]);
+  return { count: countRows[0]?.count ?? 0, items };
+}
+
+async function openConsegnaQueue(ctx: UserContext) {
+  const base = Prisma.sql`
+    c."stato" <> 'completata'
+    AND ${consegnaActorSql(ctx)}
+    AND ${consegnaPatientSql(ctx)}`;
+  const mine = Prisma.sql`${base} AND c."operatoreAssegnatoId" = ${ctx.userId}`;
+  const others = Prisma.sql`${base} AND (c."operatoreAssegnatoId" IS NULL OR c."operatoreAssegnatoId" <> ${ctx.userId})`;
+  const order = Prisma.sql`
+    ORDER BY CASE c."priorita" WHEN 'urgente' THEN 0 WHEN 'alta' THEN 1 ELSE 2 END,
+      c."scadenza" ASC, c."oraScadenza" ASC NULLS LAST, c."id" ASC`;
+  const [mineCount, otherCount, mineItems, otherItems] = await Promise.all([
+    prisma.$queryRaw<Array<{ count: number }>>(Prisma.sql`
+      SELECT COUNT(*)::int AS "count" FROM "Consegna" c WHERE ${mine}`),
+    prisma.$queryRaw<Array<{ count: number }>>(Prisma.sql`
+      SELECT COUNT(*)::int AS "count" FROM "Consegna" c WHERE ${others}`),
+    prisma.$queryRaw<ConsegnaRow[]>(Prisma.sql`
+      SELECT ${AI_CONSEGNA_COLUMNS} FROM "Consegna" c WHERE ${mine} ${order} LIMIT ${SAMPLE_SIZE}`),
+    prisma.$queryRaw<ConsegnaRow[]>(Prisma.sql`
+      SELECT ${AI_CONSEGNA_COLUMNS} FROM "Consegna" c WHERE ${others} ${order} LIMIT ${SAMPLE_SIZE}`),
+  ]);
+  return {
+    mineCount: mineCount[0]?.count ?? 0,
+    otherCount: otherCount[0]?.count ?? 0,
+    mineItems,
+    otherItems,
+  };
 }
 
 async function therapiesDue(ctx: UserContext, now: Date, windowMinutes: number) {
@@ -227,14 +295,12 @@ async function facilitySnapshot(
 
   const occ = await roomsOccupancy(env);
   const { overdue } = await therapiesDue(ctx, now, 0);
-  const consegneOverdue = sortConsegne(
-    (await openConsegne(ctx)).filter((c) => isConsegnaOverdue(c, now)),
-  );
+  const consegneOverdue = await overdueConsegne(ctx, now);
   const appuntamenti = await appointmentsToday(ctx);
   const generatedAt = now.toISOString();
 
   const therapiesOverdue = overdue.slice(0, SAMPLE_SIZE);
-  const consegneSample = consegneOverdue.slice(0, SAMPLE_SIZE);
+  const consegneSample = consegneOverdue.items;
 
   const data = [
     {
@@ -242,7 +308,7 @@ async function facilitySnapshot(
       occupancy: occ.data[0] ?? null,
       therapiesOverdueCount: overdue.length,
       therapiesOverdue,
-      consegneOverdueCount: consegneOverdue.length,
+      consegneOverdueCount: consegneOverdue.count,
       consegneOverdue: consegneSample.map((c) => ({
         id: c.id,
         pazienteId: c.pazienteId,
@@ -275,7 +341,7 @@ async function facilitySnapshot(
       '',
       'consegne-overdue',
       'Consegne scadute',
-      `${consegneOverdue.length} consegne aperte oltre il termine`,
+      `${consegneOverdue.count} consegne aperte oltre il termine`,
       generatedAt,
     ),
   );
@@ -291,11 +357,9 @@ async function facilitySnapshot(
   return { data, sourceRefs };
 }
 
-/** Coda di lavoro «cosa devo fare adesso»: dosi in ritardo o dovute entro la finestra + consegne
- *  aperte. LIMITE DICHIARATO: non esiste alcuna assegnazione paziente↔operatore nel modello dati,
- *  quindi questa è la giornata del REPARTO, non "i tuoi pazienti". `operatoreAssegnato` è testo
- *  libero: la corrispondenza sul nome ORDINA la lista (gruppo `myLikelyConsegne`) e non ne scarta
- *  mai una — un match sbagliato non deve poter nascondere un'attività a nessuno. */
+/** Coda di lavoro «cosa devo fare adesso»: dosi dovute più consegne create/assegnate all'attore.
+ *  L'identità usa solo gli ID verificati; allow-list paziente, ACL, conteggi e sample vengono
+ *  applicati in SQL prima dei LIMIT. I vecchi nomi restano solo campi di presentazione. */
 async function operatorQueue(
   ctx: UserContext,
   env: NodeJS.ProcessEnv,
@@ -306,28 +370,27 @@ async function operatorQueue(
     throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
 
   const { overdue, dueSoon } = await therapiesDue(ctx, now, QUEUE_WINDOW_MINUTES);
-  const { mine, others } = partitionByOperator(sortConsegne(await openConsegne(ctx)), operatorName);
+  const queue = await openConsegnaQueue(ctx);
   const generatedAt = now.toISOString();
 
   const therapiesOverdue = overdue.slice(0, SAMPLE_SIZE);
   const therapiesDueSoon = dueSoon.slice(0, SAMPLE_SIZE);
-  const myLikelyConsegne = mine.slice(0, SAMPLE_SIZE);
-  const otherOpenConsegne = others.slice(0, SAMPLE_SIZE);
+  const myLikelyConsegne = queue.mineItems;
+  const otherOpenConsegne = queue.otherItems;
 
   const data = [
     {
       generatedAt,
       windowMinutes: QUEUE_WINDOW_MINUTES,
       operatorName: operatorName ?? null,
-      /** Il perimetro è il reparto: nessun filtro per paziente assegnato esiste nel modello dati. */
-      scope: 'reparto',
+      scope: privilegedContext(ctx) ? 'reparto' : 'operatore',
       therapiesOverdueCount: overdue.length,
       therapiesOverdue,
       therapiesDueSoonCount: dueSoon.length,
       therapiesDueSoon,
-      myLikelyConsegneCount: mine.length,
+      myLikelyConsegneCount: queue.mineCount,
       myLikelyConsegne,
-      otherOpenConsegneCount: others.length,
+      otherOpenConsegneCount: queue.otherCount,
       otherOpenConsegne,
     },
   ];
@@ -346,7 +409,7 @@ async function operatorQueue(
       '',
       'consegne-open',
       'Consegne aperte',
-      `${mine.length + others.length} consegne aperte`,
+      `${queue.mineCount + queue.otherCount} consegne aperte`,
       generatedAt,
     ),
     ...myLikelyConsegne.map(consegnaItemSource),

@@ -1,135 +1,163 @@
-import { prisma } from '../lib/prisma.js';
+import { Prisma } from '@prisma/client';
 import { Router } from 'express';
-import {
-  createConsegna,
-  CONSEGNA_PRIORITA as PRIORITA,
-  CONSEGNA_STATO as STATO,
-} from '../services/consegna-service.js';
-import { requireOperator } from '../ai/auth.js';
+import type { Response } from 'express';
+import { requireOperator, type AuthedRequest, type Operator } from '../ai/auth.js';
+import { ConsegnaInputError, isSafeConsegnaId, parseConsegnaFeedQuery } from '../consegne/query.js';
+import { loadConsegnaFeed, loadConsegnaOverview } from '../consegne/read-service.js';
+import { parseConsegnaCreateBody, parseConsegnaPatchBody } from '../consegne/write-validation.js';
+import { prisma } from '../lib/prisma.js';
+import { createConsegna } from '../services/consegna-service.js';
 
 const consegneRouter = Router();
+const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
 
-// Gate minimo (header-based, non IdP): le consegne contengono nominativi/dati clinici
-// paziente, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+consegneRouter.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
 consegneRouter.use(requireOperator);
 
-// ═══════════════════════════════════════════════════════════════════════════
-// CONSEGNE (handover cards) CRUD — mounted at /consegne
-// Creazione delegata al servizio condiviso consegna-service (issue #130, FR-007):
-// stesso percorso applicativo per UI tradizionale e Agnos AI.
-// ═══════════════════════════════════════════════════════════════════════════
+function privileged(actor: Operator): boolean {
+  return PRIVILEGED_ROLES.has(actor.role.toLowerCase());
+}
 
-// GET /consegne
-consegneRouter.get('/', async (req, res) => {
-  // Paginazione opt-in (limit/offset): senza parametri il comportamento resta
-  // identico a oggi (nessun take/skip, tutti i record).
-  const { limit, offset } = req.query as { limit?: string; offset?: string };
-  const parsedLimit = Number.parseInt(String(limit ?? ''), 10);
-  const parsedOffset = Number.parseInt(String(offset ?? ''), 10);
-  const take =
-    Number.isFinite(parsedLimit) && parsedLimit > 0 ? Math.min(parsedLimit, 500) : undefined;
-  const skip = Number.isFinite(parsedOffset) && parsedOffset >= 0 ? parsedOffset : undefined;
+function visibleWhere(id: string, actor: Operator): Prisma.ConsegnaWhereInput {
+  if (privileged(actor)) return { id };
+  return {
+    AND: [{ id }, { OR: [{ creatoDaId: actor.id }, { operatoreAssegnatoId: actor.id }] }],
+  };
+}
 
+function notFound(res: Response): void {
+  res.status(404).json({ error: 'Consegna non trovata' });
+}
+
+function badRequest(res: Response, error: unknown): boolean {
+  if (!(error instanceof ConsegnaInputError)) return false;
+  res.status(400).json({ error: error.message });
+  return true;
+}
+
+consegneRouter.get('/', async (req: AuthedRequest, res) => {
   try {
-    const consegne = await prisma.consegna.findMany({
-      orderBy: { createdAt: 'desc' },
-      ...(take !== undefined && { take }),
-      ...(skip !== undefined && { skip }),
-    });
-    res.status(200).json(consegne);
+    const input = parseConsegnaFeedQuery(req.query as Record<string, unknown>);
+    res.status(200).json(await loadConsegnaFeed(req.operator!, input));
   } catch (error) {
+    if (badRequest(res, error)) return;
     console.error('GET /consegne error:', error);
     res.status(500).json({ error: 'Errore nel recupero consegne' });
   }
 });
 
-// POST /consegne
-consegneRouter.post('/', async (req, res) => {
-  const body = req.body as Record<string, unknown>;
-
-  if (!body.pazienteNome || !body.note) {
-    res.status(400).json({ error: 'Campi obbligatori: pazienteNome, note' });
-    return;
-  }
-
+consegneRouter.get('/overview', async (req: AuthedRequest, res) => {
   try {
-    const consegna = await createConsegna({
-      pazienteId: body.pazienteId !== undefined ? String(body.pazienteId) : undefined,
-      pazienteNome: String(body.pazienteNome),
-      priorita: body.priorita !== undefined ? String(body.priorita) : undefined,
-      stato: body.stato !== undefined ? String(body.stato) : undefined,
-      tipo: body.tipo !== undefined ? String(body.tipo) : undefined,
-      note: String(body.note),
-      scadenza: body.scadenza !== undefined ? String(body.scadenza) : undefined,
-      oraScadenza: body.oraScadenza ? String(body.oraScadenza) : null,
-      operatoreAssegnato:
-        body.operatoreAssegnato !== undefined ? String(body.operatoreAssegnato) : undefined,
-      creatoDA: body.creatoDA !== undefined ? String(body.creatoDA) : undefined,
-    });
-    console.log(`POST /consegne → created id=${consegna.id}`);
-    res.status(201).json(consegna);
+    res.status(200).json(await loadConsegnaOverview(req.operator!));
   } catch (error) {
+    console.error('GET /consegne/overview error:', error);
+    res.status(500).json({ error: 'Errore nel riepilogo consegne' });
+  }
+});
+
+consegneRouter.post('/', async (req: AuthedRequest, res) => {
+  try {
+    const input = parseConsegnaCreateBody(req.body);
+    res.status(201).json(await createConsegna(input, req.operator!));
+  } catch (error) {
+    if (badRequest(res, error)) return;
     console.error('POST /consegne error:', error);
     res.status(500).json({ error: 'Errore durante creazione consegna' });
   }
 });
 
-// PUT /consegne/:id
-consegneRouter.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const body = req.body as Record<string, unknown>;
-
+consegneRouter.put('/:id', async (req: AuthedRequest, res) => {
+  const actor = req.operator!;
+  const rawId = req.params.id;
+  if (typeof rawId !== 'string' || !isSafeConsegnaId(rawId)) {
+    notFound(res);
+    return;
+  }
+  const id = rawId;
   try {
-    const existing = await prisma.consegna.findUnique({ where: { id } });
+    const existing = await prisma.consegna.findFirst({ where: visibleWhere(id, actor) });
     if (!existing) {
-      res.status(404).json({ error: 'Consegna non trovata' });
+      notFound(res);
+      return;
+    }
+    const patch = parseConsegnaPatchBody(req.body);
+    const isPrivileged = privileged(actor);
+    const isAuthor = existing.creatoDaId === actor.id;
+    const isAssignee = existing.operatoreAssegnatoId === actor.id;
+    const contentFields = ['priorita', 'tipo', 'note', 'scadenza', 'oraScadenza'];
+    if (
+      !isPrivileged &&
+      Object.keys(patch).some((key) => contentFields.includes(key)) &&
+      !isAuthor
+    ) {
+      notFound(res);
+      return;
+    }
+    if (!isPrivileged && patch.operatoreAssegnatoId !== undefined) {
+      notFound(res);
+      return;
+    }
+    if (patch.stato !== undefined && !isPrivileged && !isAuthor && !isAssignee) {
+      notFound(res);
       return;
     }
 
-    const allowed = [
-      'pazienteId',
-      'pazienteNome',
-      'priorita',
-      'stato',
-      'tipo',
-      'note',
-      'scadenza',
-      'oraScadenza',
-      'operatoreAssegnato',
-      'creatoDA',
-    ];
-    const updates: Record<string, unknown> = {};
-    for (const key of allowed) {
-      if (body[key] === undefined) continue;
-      if (key === 'priorita' && !PRIORITA.includes(String(body[key]))) continue;
-      if (key === 'stato' && !STATO.includes(String(body[key]))) continue;
-      if (key === 'oraScadenza') {
-        updates[key] = body[key] ? String(body[key]) : null;
-      } else {
-        updates[key] = body[key];
+    let assignee: { id: string; user: { fullName: string } } | null | undefined;
+    if (patch.operatoreAssegnatoId !== undefined) {
+      assignee = patch.operatoreAssegnatoId
+        ? await prisma.operator.findFirst({
+            where: { id: patch.operatoreAssegnatoId, user: { isActive: true } },
+            select: { id: true, user: { select: { fullName: true } } },
+          })
+        : null;
+      if (patch.operatoreAssegnatoId && !assignee) {
+        throw new ConsegnaInputError('Operatore assegnato non disponibile');
       }
     }
 
-    const consegna = await prisma.consegna.update({ where: { id }, data: updates });
-    console.log(`PUT /consegne/${id} → updated`);
-    res.status(200).json(consegna);
+    const data: Prisma.ConsegnaUpdateInput = {
+      ...(patch.priorita !== undefined ? { priorita: patch.priorita } : {}),
+      ...(patch.stato !== undefined ? { stato: patch.stato } : {}),
+      ...(patch.tipo !== undefined ? { tipo: patch.tipo } : {}),
+      ...(patch.note !== undefined ? { note: patch.note } : {}),
+      ...(patch.scadenza !== undefined ? { scadenza: patch.scadenza } : {}),
+      ...(patch.oraScadenza !== undefined ? { oraScadenza: patch.oraScadenza } : {}),
+      ...(patch.operatoreAssegnatoId !== undefined
+        ? {
+            operatoreAssegnatoId: assignee?.id ?? null,
+            operatoreAssegnato: assignee?.user.fullName ?? '',
+          }
+        : {}),
+    };
+    res.status(200).json(await prisma.consegna.update({ where: { id }, data }));
   } catch (error) {
+    if (badRequest(res, error)) return;
     console.error('PUT /consegne/:id error:', error);
     res.status(500).json({ error: 'Errore durante aggiornamento consegna' });
   }
 });
 
-// DELETE /consegne/:id
-consegneRouter.delete('/:id', async (req, res) => {
-  const { id } = req.params;
+consegneRouter.delete('/:id', async (req: AuthedRequest, res) => {
+  const actor = req.operator!;
+  const rawId = req.params.id;
+  if (typeof rawId !== 'string' || !isSafeConsegnaId(rawId)) {
+    notFound(res);
+    return;
+  }
+  const id = rawId;
   try {
-    const existing = await prisma.consegna.findUnique({ where: { id } });
-    if (!existing) {
-      res.status(404).json({ error: 'Consegna non trovata' });
+    const existing = await prisma.consegna.findFirst({
+      where: visibleWhere(id, actor),
+      select: { id: true, creatoDaId: true },
+    });
+    if (!existing || (!privileged(actor) && existing.creatoDaId !== actor.id)) {
+      notFound(res);
       return;
     }
-    await prisma.consegna.delete({ where: { id } });
-    console.log(`DELETE /consegne/${id} → deleted`);
+    await prisma.consegna.delete({ where: { id: existing.id } });
     res.status(204).send();
   } catch (error) {
     console.error('DELETE /consegne/:id error:', error);

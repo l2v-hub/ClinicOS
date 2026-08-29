@@ -1,26 +1,43 @@
 import { useEffect, useState } from 'react';
-import type { Consegna, PrioritaConsegna, StatoConsegna } from '../../types';
+import type {
+  Consegna,
+  ConsegnaSummary,
+  Operatore,
+  Paziente,
+  NewConsegnaInput,
+  PrioritaConsegna,
+  StatoConsegna,
+} from '../../types';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit, IcoClock } from '../../icons';
 import { InlineEditableField } from '../shared/InlineEditableField';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
-import { comparePazientiNome } from '../../lib/patientSort';
+import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
+import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
+import { localIsoDate } from '../../lib/appointmentRange';
 
 interface ConsegnePageProps {
   consegne: Consegna[];
-  operatoreNome: string;
+  summary: ConsegnaSummary;
+  operatori: Operatore[];
+  operatoreId: string;
   isAdmin: boolean;
-  onAdd: (c: Omit<Consegna, 'id' | 'createdAt'>) => void;
+  onAdd: (c: NewConsegnaInput) => Promise<boolean>;
   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
+  loading: boolean;
+  loadError: string | null;
+  hasMore: boolean;
+  onQueryChange: (query: ConsegnaFeedQuery) => void;
+  onLoadMore: () => void;
+  onRetry: () => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   /** #283: filtro stato con cui aprire la pagina (dalla card "Consegne aperte" in dashboard). */
-  initialFiltroStato?: 'tutte' | StatoConsegna;
+  initialFiltroStato?: 'tutte' | 'attive' | StatoConsegna;
   /** #283: consegna da evidenziare/scrollare quando la card ne apre una specifica. */
   focusId?: string | null;
 }
 
-const PRIORITA_ORDER: Record<PrioritaConsegna, number> = { urgente: 0, alta: 1, normale: 2 };
 const TIPO_OPTIONS = [
   'Monitoraggio',
   'Terapia',
@@ -43,33 +60,62 @@ const STATO_LABEL: Record<StatoConsegna, string> = {
 };
 
 const FORM_VUOTO = {
+  pazienteId: '',
   pazienteNome: '',
   tipo: 'Monitoraggio',
   priorita: 'normale' as PrioritaConsegna,
   note: '',
   oraScadenza: '',
-  operatoreAssegnato: '',
+  operatoreAssegnatoId: '',
 };
 
 export function ConsegnePage({
   consegne,
-  operatoreNome,
+  summary,
+  operatori,
+  operatoreId,
   isAdmin,
   onAdd,
   onUpdate,
   onUpdateStato,
   onDelete,
+  loading,
+  loadError,
+  hasMore,
+  onQueryChange,
+  onLoadMore,
+  onRetry,
   onSelectPaziente,
   initialFiltroStato,
   focusId,
 }: ConsegnePageProps) {
-  const [filtroStato, setFiltroStato] = useState<'tutte' | Consegna['stato']>(
+  const [filtroStato, setFiltroStato] = useState<'tutte' | 'attive' | Consegna['stato']>(
     initialFiltroStato ?? 'tutte',
   );
   const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>('tutte');
   const [ricerca, setRicerca] = useState('');
   const [formAperto, setFormAperto] = useState(false);
   const [form, setForm] = useState(FORM_VUOTO);
+  const [showPazSearch, setShowPazSearch] = useState(false);
+  const [savingCreate, setSavingCreate] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const patientSearch = usePatientDirectorySearch(form.pazienteNome, {
+    enabled: formAperto && showPazSearch,
+    limit: 6,
+  });
+
+  useEffect(() => {
+    const timer = window.setTimeout(
+      () =>
+        onQueryChange({
+          ...(filtroStato !== 'tutte' ? { status: filtroStato } : {}),
+          ...(filtroPriorita !== 'tutte' ? { priority: filtroPriorita } : {}),
+          ...(ricerca.trim() ? { q: ricerca.trim() } : {}),
+        }),
+      250,
+    );
+    return () => window.clearTimeout(timer);
+  }, [filtroStato, filtroPriorita, ricerca, onQueryChange]);
 
   // #283: quando la dashboard apre UNA consegna specifica, scrolla alla sua card evidenziata.
   useEffect(() => {
@@ -79,45 +125,35 @@ export function ConsegnePage({
       ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [focusId]);
 
-  const filtrate = consegne
-    .filter((c) => {
-      if (filtroStato !== 'tutte' && c.stato !== filtroStato) return false;
-      if (filtroPriorita !== 'tutte' && c.priorita !== filtroPriorita) return false;
-      if (ricerca) {
-        const q = ricerca.toLowerCase();
-        return (
-          (c.pazienteNome ?? '').toLowerCase().includes(q) ||
-          (c.tipo ?? '').toLowerCase().includes(q) ||
-          (c.note ?? '').toLowerCase().includes(q) ||
-          (c.operatoreAssegnato ?? '').toLowerCase().includes(q)
-        );
-      }
-      return true;
-    })
-    .sort((a, b) => {
-      // Issue #129: pazienti in ordine alfabetico (cognome, nome); a parità di
-      // paziente prima le priorità più alte, poi le consegne più recenti.
-      const sn = comparePazientiNome(a.pazienteNome, b.pazienteNome);
-      if (sn !== 0) return sn;
-      const sp = PRIORITA_ORDER[a.priorita] - PRIORITA_ORDER[b.priorita];
-      if (sp !== 0) return sp;
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
+  const filtrate = consegne;
 
-  function salva() {
-    if (!form.pazienteNome.trim() || !form.note.trim()) return;
-    onAdd({
-      pazienteId: '',
-      pazienteNome: form.pazienteNome,
+  function selectPaziente(p: Paziente) {
+    setForm((current) => ({
+      ...current,
+      pazienteId: p.id,
+      pazienteNome: `${p.lastName}, ${p.firstName}`,
+    }));
+    setShowPazSearch(false);
+  }
+
+  async function salva() {
+    if (!form.pazienteId || !form.note.trim() || savingCreate) return;
+    setSavingCreate(true);
+    setCreateError(null);
+    const ok = await onAdd({
+      pazienteId: form.pazienteId,
       priorita: form.priorita,
-      stato: 'aperta',
       tipo: form.tipo,
       note: form.note,
-      scadenza: new Date().toISOString().slice(0, 10),
+      scadenza: localIsoDate(),
       oraScadenza: form.oraScadenza || undefined,
-      operatoreAssegnato: form.operatoreAssegnato || operatoreNome,
-      creatoDA: operatoreNome,
+      operatoreAssegnatoId: form.operatoreAssegnatoId || null,
     });
+    setSavingCreate(false);
+    if (!ok) {
+      setCreateError('Creazione non riuscita. Verifica i dati e riprova.');
+      return;
+    }
     setFormAperto(false);
     setForm(FORM_VUOTO);
   }
@@ -131,12 +167,18 @@ export function ConsegnePage({
         <div>
           <h2 className="view-header__title">Consegne</h2>
           <p className="view-header__sub">
-            {consegne.filter((c) => c.stato !== 'completata').length} aperte ·{' '}
-            {consegne.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata').length}{' '}
-            urgenti
+            Nel tuo perimetro: {summary.open} aperte · {summary.urgentOpen} urgenti
+            {(filtroStato !== 'tutte' || filtroPriorita !== 'tutte' || ricerca.trim()) &&
+              ' · riepilogo indipendente dai filtri'}
           </p>
         </div>
-        <button className="btn-success" onClick={() => setFormAperto((v) => !v)}>
+        <button
+          className="btn-success"
+          onClick={() => {
+            setCreateError(null);
+            setFormAperto((v) => !v);
+          }}
+        >
           <IcoPlus /> Nuova consegna
         </button>
       </div>
@@ -153,12 +195,46 @@ export function ConsegnePage({
           <div className="op-form-grid">
             <div className="form-field">
               <label className="form-label">Paziente *</label>
-              <input
-                className="form-input"
-                value={form.pazienteNome}
-                onChange={(e) => setForm((p) => ({ ...p, pazienteNome: e.target.value }))}
-                placeholder="Cognome, Nome"
-              />
+              <div style={{ position: 'relative' }}>
+                <input
+                  className="form-input"
+                  value={form.pazienteNome}
+                  onChange={(e) => {
+                    setForm((p) => ({ ...p, pazienteId: '', pazienteNome: e.target.value }));
+                    setShowPazSearch(true);
+                  }}
+                  onFocus={() => setShowPazSearch(true)}
+                  placeholder="Cerca paziente per nome o MRN…"
+                  maxLength={80}
+                />
+                {showPazSearch && patientSearch.results.length > 0 && (
+                  <div className="search-dropdown">
+                    {patientSearch.results.map((p) => (
+                      <button
+                        type="button"
+                        key={p.id}
+                        className="search-dropdown__item"
+                        onClick={() => selectPaziente(p)}
+                      >
+                        <span className="search-dropdown__name">
+                          {p.lastName}, {p.firstName}
+                        </span>
+                        <span className="search-dropdown__mrn">{p.medicalRecordNumber}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {showPazSearch && patientSearch.loading && (
+                  <p className="search-dropdown__status" role="status">
+                    Ricerca in corso…
+                  </p>
+                )}
+                {showPazSearch && patientSearch.error && (
+                  <p className="search-dropdown__status" role="alert">
+                    {patientSearch.error}
+                  </p>
+                )}
+              </div>
             </div>
             <div className="form-field">
               <label className="form-label">Tipo</label>
@@ -200,12 +276,20 @@ export function ConsegnePage({
             {isAdmin && (
               <div className="form-field">
                 <label className="form-label">Assegnata a</label>
-                <input
-                  className="form-input"
-                  value={form.operatoreAssegnato}
-                  onChange={(e) => setForm((p) => ({ ...p, operatoreAssegnato: e.target.value }))}
-                  placeholder="Nome operatore"
-                />
+                <select
+                  className="form-select"
+                  value={form.operatoreAssegnatoId}
+                  onChange={(e) => setForm((p) => ({ ...p, operatoreAssegnatoId: e.target.value }))}
+                >
+                  <option value="">Non assegnata</option>
+                  {operatori
+                    .filter((o) => o.stato === 'attivo')
+                    .map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {o.cognome} {o.nome}
+                      </option>
+                    ))}
+                </select>
               </div>
             )}
           </div>
@@ -220,11 +304,23 @@ export function ConsegnePage({
             />
           </div>
           <div className="op-form-panel__actions">
-            <button className="btn-secondary" onClick={() => setFormAperto(false)}>
+            {createError && (
+              <p className="inline-edit__error" role="alert">
+                {createError}
+              </p>
+            )}
+            <button
+              className="btn-secondary"
+              onClick={() => {
+                setCreateError(null);
+                setFormAperto(false);
+              }}
+              disabled={savingCreate}
+            >
               Annulla
             </button>
-            <button className="btn-success" onClick={salva}>
-              <IcoCheck /> Crea consegna
+            <button className="btn-success" onClick={salva} disabled={savingCreate}>
+              <IcoCheck /> {savingCreate ? 'Creazione…' : 'Crea consegna'}
             </button>
           </div>
         </div>
@@ -250,7 +346,7 @@ export function ConsegnePage({
           )}
         </div>
         <div className="filter-chips">
-          {(['tutte', 'aperta', 'in_corso', 'completata'] as const).map((s) => (
+          {(['tutte', 'attive', 'aperta', 'in_corso', 'completata'] as const).map((s) => (
             <button
               key={s}
               className={`filter-chip${filtroStato === s ? ' active' : ''}`}
@@ -258,11 +354,13 @@ export function ConsegnePage({
             >
               {s === 'tutte'
                 ? 'Tutte'
-                : s === 'aperta'
-                  ? 'Aperte'
-                  : s === 'in_corso'
-                    ? 'In corso'
-                    : 'Completate'}
+                : s === 'attive'
+                  ? 'Attive'
+                  : s === 'aperta'
+                    ? 'Da iniziare'
+                    : s === 'in_corso'
+                      ? 'In corso'
+                      : 'Completate'}
             </button>
           ))}
         </div>
@@ -280,29 +378,32 @@ export function ConsegnePage({
       </div>
 
       {/* Urgenti in cima */}
-      {urgenti.length > 0 && (filtroStato === 'tutte' || filtroStato === 'aperta') && (
-        <div className="consegne-section">
-          <h3 className="consegne-section__title consegne-section__title--urgente">Urgenti</h3>
-          <div className="consegne-list">
-            {urgenti.map((c) => (
-              <ConsegnaCard
-                key={c.id}
-                consegna={c}
-                onUpdate={onUpdate}
-                onUpdateStato={onUpdateStato}
-                onDelete={onDelete}
-                isAdmin={isAdmin}
-                onSelectPaziente={onSelectPaziente}
-                focused={c.id === focusId}
-              />
-            ))}
+      {urgenti.length > 0 &&
+        (filtroStato === 'tutte' || filtroStato === 'attive' || filtroStato === 'aperta') && (
+          <div className="consegne-section">
+            <h3 className="consegne-section__title consegne-section__title--urgente">Urgenti</h3>
+            <div className="consegne-list">
+              {urgenti.map((c) => (
+                <ConsegnaCard
+                  key={c.id}
+                  consegna={c}
+                  onUpdate={onUpdate}
+                  onUpdateStato={onUpdateStato}
+                  onDelete={onDelete}
+                  isAdmin={isAdmin}
+                  operatoreId={operatoreId}
+                  operatori={operatori}
+                  onSelectPaziente={onSelectPaziente}
+                  focused={c.id === focusId}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Tutte le altre */}
       <div className="consegne-list" style={{ marginTop: urgenti.length > 0 ? 24 : 0 }}>
-        {altre.length === 0 && urgenti.length === 0 ? (
+        {altre.length === 0 && urgenti.length === 0 && !loading && !loadError ? (
           <div className="empty-state-card">Nessuna consegna trovata.</div>
         ) : (
           altre.map((c) => (
@@ -313,12 +414,34 @@ export function ConsegnePage({
               onUpdateStato={onUpdateStato}
               onDelete={onDelete}
               isAdmin={isAdmin}
+              operatoreId={operatoreId}
+              operatori={operatori}
               onSelectPaziente={onSelectPaziente}
               focused={c.id === focusId}
             />
           ))
         )}
       </div>
+      {loadError && (
+        <div className="empty-state-card" role="alert">
+          <p>{loadError}</p>
+          <button className="btn-secondary btn-sm" onClick={onRetry}>
+            Riprova
+          </button>
+        </div>
+      )}
+      {loading && consegne.length === 0 && (
+        <div className="empty-state-card" role="status">
+          Caricamento consegne…
+        </div>
+      )}
+      {hasMore && !loadError && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+          <button className="btn-secondary" onClick={onLoadMore} disabled={loading}>
+            {loading ? 'Caricamento…' : 'Carica altre'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -329,6 +452,8 @@ function ConsegnaCard({
   onUpdateStato,
   onDelete,
   isAdmin,
+  operatoreId,
+  operatori,
   onSelectPaziente,
   focused = false,
 }: {
@@ -337,11 +462,17 @@ function ConsegnaCard({
   onUpdateStato: (id: string, stato: Consegna['stato']) => void;
   onDelete: (id: string) => void;
   isAdmin: boolean;
+  operatoreId: string;
+  operatori: Operatore[];
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   focused?: boolean;
 }) {
   const [editOpen, setEditOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const canEditContent = isAdmin || c.creatoDaId === operatoreId;
+  const canTransition =
+    isAdmin || c.creatoDaId === operatoreId || c.operatoreAssegnatoId === operatoreId;
+  const canDelete = isAdmin || c.creatoDaId === operatoreId;
 
   return (
     <div
@@ -360,14 +491,16 @@ function ConsegnaCard({
           </span>
         )}
         <span className={`stato-pill stato-pill--consegna-${c.stato}`}>{STATO_LABEL[c.stato]}</span>
-        <button
-          className="icon-btn icon-btn--sm consegna-edit-btn icon-btn--edit"
-          onClick={() => setEditOpen(true)}
-          title="Modifica consegna"
-          aria-label="Modifica consegna"
-        >
-          <IcoEdit />
-        </button>
+        {(canEditContent || isAdmin) && (
+          <button
+            className="icon-btn icon-btn--sm consegna-edit-btn icon-btn--edit"
+            onClick={() => setEditOpen(true)}
+            title="Modifica consegna"
+            aria-label="Modifica consegna"
+          >
+            <IcoEdit />
+          </button>
+        )}
       </div>
       <div className="consegna-card__patient">
         {c.pazienteNome && (
@@ -393,24 +526,28 @@ function ConsegnaCard({
         )}
       </div>
       <div className="consegna-note">
-        <InlineEditableField
-          variant="block"
-          label="Note consegna"
-          type="textarea"
-          value={c.note}
-          emptyText="Aggiungi note…"
-          placeholder="Istruzioni per il prossimo operatore…"
-          onSave={(v) => onUpdate(c.id, { note: v })}
-        />
+        {canEditContent ? (
+          <InlineEditableField
+            variant="block"
+            label="Note consegna"
+            type="textarea"
+            value={c.note}
+            emptyText="Aggiungi note…"
+            placeholder="Istruzioni per il prossimo operatore…"
+            onSave={(v) => onUpdate(c.id, { note: v })}
+          />
+        ) : (
+          <p>{c.note}</p>
+        )}
       </div>
       <div className="consegna-card__footer">
         <div>
-          <span className="consegna-assegnato">→ {c.operatoreAssegnato}</span>
+          <span className="consegna-assegnato">→ {c.operatoreAssegnato || 'Non assegnata'}</span>
           {c.creatoDA !== c.operatoreAssegnato && (
             <span className="consegna-creato"> · da {c.creatoDA}</span>
           )}
         </div>
-        {c.stato !== 'completata' && (
+        {c.stato !== 'completata' && canTransition && (
           <div className="table-actions">
             {c.stato === 'aperta' && (
               <button
@@ -435,7 +572,7 @@ function ConsegnaCard({
             >
               <IcoCheck />
             </button>
-            {isAdmin && (
+            {canDelete && (
               <button
                 className="icon-btn icon-btn--sm icon-btn--danger"
                 onClick={() => setConfirmOpen(true)}
@@ -446,7 +583,7 @@ function ConsegnaCard({
             )}
           </div>
         )}
-        {c.stato === 'completata' && isAdmin && (
+        {c.stato === 'completata' && canDelete && (
           <button
             className="icon-btn icon-btn--sm icon-btn--danger"
             onClick={() => setConfirmOpen(true)}
@@ -461,6 +598,7 @@ function ConsegnaCard({
         <ConsegnaEditInline
           consegna={c}
           isAdmin={isAdmin}
+          operatori={operatori}
           onUpdate={onUpdate}
           onClose={() => setEditOpen(false)}
         />
@@ -484,11 +622,13 @@ function ConsegnaCard({
 function ConsegnaEditInline({
   consegna: c,
   isAdmin,
+  operatori,
   onUpdate,
   onClose,
 }: {
   consegna: Consegna;
   isAdmin: boolean;
+  operatori: Operatore[];
   onUpdate: (id: string, patch: Partial<Consegna>) => void | Promise<boolean>;
   onClose: () => void;
 }) {
@@ -497,7 +637,7 @@ function ConsegnaEditInline({
     stato: c.stato,
     tipo: c.tipo,
     oraScadenza: c.oraScadenza ?? '',
-    operatoreAssegnato: c.operatoreAssegnato,
+    operatoreAssegnatoId: c.operatoreAssegnatoId ?? '',
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -510,8 +650,8 @@ function ConsegnaEditInline({
       priorita: form.priorita,
       stato: form.stato,
       tipo: form.tipo,
-      oraScadenza: form.oraScadenza || undefined,
-      operatoreAssegnato: form.operatoreAssegnato,
+      oraScadenza: form.oraScadenza,
+      ...(isAdmin ? { operatoreAssegnatoId: form.operatoreAssegnatoId || null } : {}),
     });
     setSaving(false);
     if (ok === false) setError('Salvataggio non riuscito. Riprova.');
@@ -602,13 +742,21 @@ function ConsegnaEditInline({
           {isAdmin && (
             <div className="form-field">
               <label className="form-label">Assegnata a</label>
-              <input
-                className="form-input"
-                value={form.operatoreAssegnato}
+              <select
+                className="form-select"
+                value={form.operatoreAssegnatoId}
                 disabled={saving}
-                onChange={(e) => setForm((p) => ({ ...p, operatoreAssegnato: e.target.value }))}
-                placeholder="Nome operatore"
-              />
+                onChange={(e) => setForm((p) => ({ ...p, operatoreAssegnatoId: e.target.value }))}
+              >
+                <option value="">Non assegnata</option>
+                {operatori
+                  .filter((o) => o.stato === 'attivo')
+                  .map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.cognome} {o.nome}
+                    </option>
+                  ))}
+              </select>
             </div>
           )}
         </div>

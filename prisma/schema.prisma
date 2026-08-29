@@ -397,13 +397,20 @@ model Consegna {
   scadenza           String   // YYYY-MM-DD
   oraScadenza        String?
   operatoreAssegnato String
+  operatoreAssegnatoId String?
   creatoDA           String
+  creatoDaId         String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
   @@index([stato])
   @@index([priorita])
   @@index([createdAt])
+  @@index([createdAt, id])
+  @@index([creatoDaId, createdAt, id])
+  @@index([operatoreAssegnatoId, createdAt, id])
+  @@index([stato, priorita, createdAt, id])
+  @@index([pazienteId, stato, createdAt, id])
 }
 
 model Nota {

@@ -1,4 +1,4 @@
-import type { Operatore, Consegna, Camera, ClinicalOverview, NavKey } from '../../types';
+import type { Operatore, Camera, ClinicalOverview, ConsegnaOverview, NavKey } from '../../types';
 import {
   IcoArrow,
   IcoWarning,
@@ -16,7 +16,8 @@ import { useRiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoS
 
 interface AdminDashboardProps {
   operatori: Operatore[];
-  consegne: Consegna[];
+  consegneOverview: ConsegnaOverview | null;
+  consegneOverviewState: 'loading' | 'ready' | 'error';
   camere: Camera[];
   totalePazienti: number;
   loadingPazienti: boolean;
@@ -39,7 +40,8 @@ function WorkloadBar({ value, max, color }: { value: number; max: number; color?
 
 export function AdminDashboard({
   operatori,
-  consegne,
+  consegneOverview,
+  consegneOverviewState,
   camere,
   totalePazienti,
   loadingPazienti,
@@ -49,7 +51,9 @@ export function AdminDashboard({
   clinicalOverview = null,
 }: AdminDashboardProps) {
   const attivi = operatori.filter((o) => o.stato === 'attivo');
-  const urgenti = consegne.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
+  const urgenti = consegneOverview?.urgentPreview ?? [];
+  const overviewAvailable = consegneOverview !== null;
+  const urgentCount = consegneOverview?.summary.urgentOpen;
   const maxPazienti = Math.max(...operatori.map((o) => o.pazientiAssegnati), 1);
   const somministrazioni = useRiepilogoSomministrazioni();
 
@@ -57,8 +61,8 @@ export function AdminDashboard({
   const critici = clinicalOverview?.critici ?? 0;
   const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
   const dimessi = clinicalOverview?.dimessi ?? 0;
-  const consegneAperte = consegne.filter((c) => c.stato !== 'completata').length;
-  const consegneInCorso = consegne.filter((c) => c.stato === 'in_corso').length;
+  const consegneAperte = consegneOverview?.summary.open;
+  const consegneInCorso = consegneOverview?.summary.inProgress;
 
   // Occupancy
   const totaleLetti = camere.flatMap((c) => c.letti);
@@ -84,13 +88,23 @@ export function AdminDashboard({
       />
 
       {/* Alert urgenti */}
-      {urgenti.length > 0 && (
+      {consegneOverviewState === 'error' && (
+        <div className="coverage-alert" role="alert">
+          <IcoWarning />
+          <span>
+            {overviewAvailable
+              ? 'Aggiornamento consegne non riuscito: sono mostrati gli ultimi dati disponibili.'
+              : 'Riepilogo consegne non disponibile. Apri Consegne per riprovare.'}
+          </span>
+        </div>
+      )}
+      {urgentCount !== undefined && urgentCount > 0 && (
         <div className="coverage-alert">
           <IcoWarning />
           <span>
             <strong>
-              {urgenti.length} consegn
-              {urgenti.length === 1 ? 'a urgente aperta' : 'e urgenti aperte'}
+              {urgentCount} consegn
+              {urgentCount === 1 ? 'a urgente aperta' : 'e urgenti aperte'}
             </strong>{' '}
             — richiedono attenzione immediata
           </span>
@@ -178,9 +192,11 @@ export function AdminDashboard({
           <div className="stat-card__label">Consegne Aperte</div>
           <div
             className="stat-card__value"
-            style={urgenti.length > 0 ? { color: 'var(--red)' } : {}}
+            style={urgentCount !== undefined && urgentCount > 0 ? { color: 'var(--red)' } : {}}
           >
-            {consegne.filter((c) => c.stato !== 'completata').length}
+            {consegneOverviewState === 'loading' && !overviewAvailable
+              ? '—'
+              : (consegneAperte ?? '—')}
           </div>
           <button
             className="stat-card__action"
@@ -221,7 +237,7 @@ export function AdminDashboard({
             </div>
             <div className="kpi-alert-card kpi-alert-card--blue">
               <span className="kpi-alert-card__val">
-                {consegneInCorso}/{consegneAperte}
+                {overviewAvailable ? `${consegneInCorso}/${consegneAperte}` : '—'}
               </span>
               <span className="kpi-alert-card__lbl">
                 <IcoConsegne /> Consegne in corso
@@ -409,12 +425,7 @@ export function AdminDashboard({
                   </div>
                   <div className="op-stat">
                     <span className="op-stat__val">
-                      {
-                        consegne.filter(
-                          (c) =>
-                            c.operatoreAssegnato.includes(op.cognome) && c.stato !== 'completata',
-                        ).length
-                      }
+                      {overviewAvailable ? (consegneOverview.byOperator[op.id] ?? 0) : '—'}
                     </span>
                     <span className="op-stat__lbl">Consegne</span>
                   </div>

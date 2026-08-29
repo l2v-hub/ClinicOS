@@ -131,13 +131,22 @@ export const prismaVoiceWriter: VoiceWriter = {
   // Issue #130: consegne go through the SAME service as the UI route POST /consegne (FR-007).
   // The AI can only create — the route's delete is UI-only and never imported here.
   async createConsegna(patientId, fields, meta) {
-    const created = await createConsegnaService({
-      pazienteId: patientId,
-      pazienteNome: String(fields.pazienteNome ?? ''),
-      note: String(fields.note ?? ''),
-      scadenza: meta.nowISO.slice(0, 10),
-      creatoDA: meta.operatorName,
-    });
+    const created = await createConsegnaService(
+      {
+        pazienteId: patientId,
+        priorita: 'normale',
+        tipo: 'Monitoraggio',
+        note: String(fields.note ?? ''),
+        scadenza: meta.nowISO.slice(0, 10),
+        oraScadenza: null,
+        operatoreAssegnatoId: null,
+      },
+      {
+        id: meta.operatorId,
+        role: meta.operatorRole ?? 'operatore',
+        name: meta.operatorName,
+      },
+    );
     return created.id;
   },
 };

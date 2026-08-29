@@ -1,4 +1,4 @@
-import type { UtenteApp, Consegna, SlotAgenda, ClinicalOverview } from '../../types';
+import type { UtenteApp, SlotAgenda, ClinicalOverview, ConsegnaOverview } from '../../types';
 import {
   IcoArrow,
   IcoWarning,
@@ -20,7 +20,8 @@ import './cartella/AvvisoAnomalieFarmaci.css';
 
 interface OperatorDashboardProps {
   utente: UtenteApp;
-  consegne: Consegna[];
+  consegneOverview: ConsegnaOverview | null;
+  consegneOverviewState: 'loading' | 'ready' | 'error';
   agenda: SlotAgenda[];
   totalePazienti: number;
   loadingPazienti: boolean;
@@ -41,7 +42,8 @@ const STATO_LABEL: Record<string, string> = {
 
 export function OperatorDashboard({
   utente,
-  consegne,
+  consegneOverview,
+  consegneOverviewState,
   agenda,
   totalePazienti,
   loadingPazienti,
@@ -50,13 +52,11 @@ export function OperatorDashboard({
   onSelectPaziente,
   clinicalOverview = null,
 }: OperatorDashboardProps) {
-  const mieConsegne = consegne.filter(
-    (c) =>
-      c.operatoreAssegnato.includes(utente.nome.replace('Dr. ', '').replace('Dr.ssa ', '')) ||
-      c.operatoreAssegnato === utente.nome,
-  );
-  const urgenti = mieConsegne.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
-  const aperte = mieConsegne.filter((c) => c.stato !== 'completata');
+  const consegnaSummary = consegneOverview?.summary;
+  const urgenti = consegneOverview?.urgentPreview ?? [];
+  const overviewAvailable = consegnaSummary !== undefined;
+  const urgentCount = consegnaSummary?.urgentOpen;
+  const aperte = consegnaSummary?.open;
   const prossimoSlot = agenda.find((s) => s.stato === 'programmato' || s.stato === 'in_corso');
   // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
   const anomalie = useAnomalieReparto();
@@ -72,9 +72,12 @@ export function OperatorDashboard({
   const terapieTotali = clinicalOverview?.terapieTotali ?? 0;
   const terapieCompletate = clinicalOverview?.terapieCompletate ?? 0;
   const pctTerapie = terapieTotali > 0 ? Math.round((terapieCompletate / terapieTotali) * 100) : 0;
-  const consegneCompletate = mieConsegne.filter((c) => c.stato === 'completata').length;
+  const consegneCompletate = consegnaSummary?.completed;
+  const consegneTotali = consegnaSummary?.total;
   const pctConsegne =
-    mieConsegne.length > 0 ? Math.round((consegneCompletate / mieConsegne.length) * 100) : 0;
+    consegneTotali && consegneCompletate !== undefined
+      ? Math.round((consegneCompletate / consegneTotali) * 100)
+      : 0;
 
   const todayStr = new Date().toLocaleDateString('it-IT', {
     weekday: 'long',
@@ -97,12 +100,22 @@ export function OperatorDashboard({
       />
 
       {/* Alert urgente */}
-      {urgenti.length > 0 && (
+      {consegneOverviewState === 'error' && (
+        <div className="coverage-alert" role="alert">
+          <IcoWarning />
+          <span>
+            {overviewAvailable
+              ? 'Aggiornamento consegne non riuscito: sono mostrati gli ultimi dati disponibili.'
+              : 'Riepilogo consegne non disponibile. Apri Consegne per riprovare.'}
+          </span>
+        </div>
+      )}
+      {urgentCount !== undefined && urgentCount > 0 && (
         <div className="coverage-alert">
           <IcoWarning />
           <span>
             <strong>
-              {urgenti.length} consegn{urgenti.length === 1 ? 'a urgente' : 'e urgenti'} in attesa
+              {urgentCount} consegn{urgentCount === 1 ? 'a urgente' : 'e urgenti'} in attesa
             </strong>{' '}
             — richiede attenzione immediata
           </span>
@@ -366,9 +379,10 @@ export function OperatorDashboard({
             key: 'consegne' as NavKey,
             mod: 'emerald',
             label: 'Consegne Aperte',
-            value: aperte.length,
+            value:
+              consegneOverviewState === 'loading' && !overviewAvailable ? '—' : (aperte ?? '—'),
             cta: 'Vedi consegne',
-            danger: urgenti.length > 0,
+            danger: urgentCount !== undefined && urgentCount > 0,
           },
         ].map((c) => {
           // #283: la card consegne apre la pagina già filtrata (e con focus se una sola aperta)
@@ -403,36 +417,40 @@ export function OperatorDashboard({
       </div>
 
       {/* Avanzamento terapie — barre di avanzamento (dati reali cartelle) */}
-      {terapieTotali > 0 && (
+      {(terapieTotali > 0 || overviewAvailable) && (
         <div className="progress-card-grid">
-          <div className="progress-card">
-            <div className="progress-card__head">
-              <span className="progress-card__label">Terapie completate</span>
-              <span className="progress-card__count">
-                {terapieCompletate}/{terapieTotali}
-              </span>
+          {terapieTotali > 0 && (
+            <div className="progress-card">
+              <div className="progress-card__head">
+                <span className="progress-card__label">Terapie completate</span>
+                <span className="progress-card__count">
+                  {terapieCompletate}/{terapieTotali}
+                </span>
+              </div>
+              <div className="progress-bar">
+                <div
+                  className="progress-bar__fill progress-bar__fill--emerald"
+                  style={{ width: `${pctTerapie}%` }}
+                />
+              </div>
             </div>
-            <div className="progress-bar">
-              <div
-                className="progress-bar__fill progress-bar__fill--emerald"
-                style={{ width: `${pctTerapie}%` }}
-              />
+          )}
+          {overviewAvailable && (
+            <div className="progress-card">
+              <div className="progress-card__head">
+                <span className="progress-card__label">Consegne evase</span>
+                <span className="progress-card__count">
+                  {consegneCompletate}/{consegneTotali}
+                </span>
+              </div>
+              <div className="progress-bar">
+                <div
+                  className="progress-bar__fill progress-bar__fill--blue"
+                  style={{ width: `${pctConsegne}%` }}
+                />
+              </div>
             </div>
-          </div>
-          <div className="progress-card">
-            <div className="progress-card__head">
-              <span className="progress-card__label">Consegne evase</span>
-              <span className="progress-card__count">
-                {consegneCompletate}/{mieConsegne.length}
-              </span>
-            </div>
-            <div className="progress-bar">
-              <div
-                className="progress-bar__fill progress-bar__fill--blue"
-                style={{ width: `${pctConsegne}%` }}
-              />
-            </div>
-          </div>
+          )}
         </div>
       )}
 

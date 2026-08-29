@@ -59,6 +59,8 @@ export interface ConsegnaRow {
   scadenza: string;
   oraScadenza: string | null;
   operatoreAssegnato: string;
+  operatoreAssegnatoId?: string | null;
+  creatoDaId?: string | null;
 }
 
 /** Minuti da mezzanotte; NaN se il formato non e' riconoscibile — un orario illeggibile non deve

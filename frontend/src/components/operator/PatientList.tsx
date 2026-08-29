@@ -4,7 +4,7 @@ import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
 import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
 import type { AnomaliePaziente } from './cartella/anomalieFarmaco';
-import type { Paziente, Consegna, ClinicalSummaryEntry } from '../../types';
+import type { Paziente, ClinicalSummaryEntry } from '../../types';
 import {
   IcoSearch,
   IcoX,
@@ -23,7 +23,6 @@ import { operatorHeaders } from '../../lib/operatorSession';
 import { fetchPatientPageWithSummary, mergePatientPage } from '../../lib/patientPage';
 
 interface PatientListProps {
-  consegne: Consegna[];
   totalPatients: number;
   /** Sollevati in App.tsx: PatientList si smonta ad ogni apertura cartella (renderizzato solo
    * mentre navKey === 'pazienti'), quindi lo stato locale andrebbe perso ad ogni riapertura se
@@ -145,7 +144,6 @@ const PatientListCard = memo(function PatientListCard({
 });
 
 export function PatientList({
-  consegne,
   totalPatients,
   ricerca,
   onRicercaChange: setRicerca,
@@ -294,14 +292,13 @@ export function PatientList({
   }, [pendingDelete, onDeleted, loadPage]);
 
   const { consegneAperteMap, consegneAperte } = useMemo(() => {
-    const map = new Map<string, number>();
-    consegne
-      .filter((c) => c.stato !== 'completata')
-      .forEach((c) => {
-        map.set(c.pazienteId, (map.get(c.pazienteId) ?? 0) + 1);
-      });
+    const map = new Map(
+      clinicalSummary
+        .filter((entry) => entry.consegneAperte > 0)
+        .map((entry) => [entry.patientId, entry.consegneAperte]),
+    );
     return { consegneAperteMap: map, consegneAperte: new Set(map.keys()) };
-  }, [consegne]);
+  }, [clinicalSummary]);
 
   const filtratiBase = pazienti;
 

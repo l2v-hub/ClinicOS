@@ -11,6 +11,8 @@ import type {
   PrioritaConsegna,
   VitaleItem,
   Anamnesi,
+  NewConsegnaInput,
+  ConsegnaSummary,
 } from '../../types';
 import {
   IcoEdit,
@@ -58,11 +60,17 @@ interface PatientDetailProps {
   paziente: Paziente;
   cartella: CartellaPaziente;
   consegne: Consegna[];
+  consegneSummary: ConsegnaSummary | null;
+  consegneLoading: boolean;
+  consegneError: string | null;
+  consegneHasMore: boolean;
+  onLoadMoreConsegne: () => void;
+  onRetryConsegne: () => void;
   operatori: Operatore[];
   camere: Camera[];
   onBack: () => void;
   backLabel?: string;
-  onAddConsegna: (c: Omit<Consegna, 'id' | 'createdAt'>) => void;
+  onAddConsegna: (c: NewConsegnaInput) => void;
   onUpdateConsegnaStato: (id: string, stato: Consegna['stato']) => void;
   onUpdateCartella: (
     pazienteId: string,
@@ -219,6 +227,12 @@ export function PatientDetail({
   paziente,
   cartella,
   consegne,
+  consegneSummary,
+  consegneLoading,
+  consegneError,
+  consegneHasMore,
+  onLoadMoreConsegne,
+  onRetryConsegne,
   operatori,
   camere,
   onBack,
@@ -563,15 +577,11 @@ export function PatientDetail({
     if (!consegnaForm.note.trim()) return;
     onAddConsegna({
       pazienteId: paziente.id,
-      pazienteNome: `${paziente.lastName}, ${paziente.firstName}`,
       priorita: consegnaForm.priorita,
-      stato: 'aperta',
       tipo: consegnaForm.tipo,
       note: consegnaForm.note,
       scadenza: todayStr(),
       oraScadenza: consegnaForm.oraScadenza || undefined,
-      operatoreAssegnato: operatoreNome,
-      creatoDA: operatoreNome,
     });
     setShowAddConsegna(false);
     setConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
@@ -607,15 +617,11 @@ export function PatientDetail({
     if (!modalConsegnaForm.note.trim()) return;
     onAddConsegna({
       pazienteId: paziente.id,
-      pazienteNome: `${paziente.lastName}, ${paziente.firstName}`,
       priorita: modalConsegnaForm.priorita,
-      stato: 'aperta',
       tipo: modalConsegnaForm.tipo,
       note: modalConsegnaForm.note,
       scadenza: todayStr(),
       oraScadenza: modalConsegnaForm.oraScadenza || undefined,
-      operatoreAssegnato: operatoreNome,
-      creatoDA: operatoreNome,
     });
     setModalConsegnaShow(false);
     setModalConsegnaForm({ tipo: 'Monitoraggio', priorita: 'normale', note: '', oraScadenza: '' });
@@ -2355,53 +2361,82 @@ export function PatientDetail({
               </InlineForm>
             )}
             <div className="consegne-list">
-              {mieConsegne.length === 0 ? (
-                <p className="cr-empty">Nessuna consegna per questo paziente.</p>
-              ) : (
-                mieConsegne.map((c) => (
-                  <div key={c.id} className={`consegna-card consegna-card--${c.priorita}`}>
-                    <div className="consegna-card__top">
-                      <span
-                        className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}
-                      >
-                        {c.priorita}
-                      </span>
-                      <span className="consegna-tipo">{c.tipo}</span>
-                      {c.oraScadenza && (
-                        <span className="consegna-scadenza">
-                          <IcoClock />
-                          {c.oraScadenza}
-                        </span>
-                      )}
-                      <span className={`stato-pill stato-pill--consegna-${c.stato}`}>
-                        {c.stato.replace('_', ' ')}
-                      </span>
-                    </div>
-                    <p className="consegna-note">{c.note}</p>
-                    <div className="consegna-card__footer">
-                      <span className="consegna-assegnato">→ {c.operatoreAssegnato}</span>
-                      {c.stato !== 'completata' && (
-                        <div className="table-actions">
-                          {c.stato === 'aperta' && (
-                            <button
-                              className="btn-secondary btn-sm"
-                              onClick={() => onUpdateConsegnaStato(c.id, 'in_corso')}
-                            >
-                              Prendi in carico
-                            </button>
-                          )}
-                          <button
-                            className="icon-btn icon-btn--sm icon-btn--success"
-                            onClick={() => onUpdateConsegnaStato(c.id, 'completata')}
-                          >
-                            <IcoCheck />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))
+              {consegneError && (
+                <div className="cr-empty" role="alert">
+                  <p>{consegneError}</p>
+                  <button type="button" className="btn-secondary btn-sm" onClick={onRetryConsegne}>
+                    Riprova
+                  </button>
+                </div>
               )}
+              {!consegneError && consegneLoading && mieConsegne.length === 0 ? (
+                <p className="cr-empty" role="status">
+                  Caricamento consegne…
+                </p>
+              ) : !consegneError && consegneSummary?.total === 0 ? (
+                <p className="cr-empty">Nessuna consegna per questo paziente.</p>
+              ) : !consegneError ? (
+                <>
+                  {consegneSummary && (
+                    <p className="cr-empty" role="status">
+                      Mostrate {mieConsegne.length} di {consegneSummary.total} consegne.
+                    </p>
+                  )}
+                  {mieConsegne.map((c) => (
+                    <div key={c.id} className={`consegna-card consegna-card--${c.priorita}`}>
+                      <div className="consegna-card__top">
+                        <span
+                          className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}
+                        >
+                          {c.priorita}
+                        </span>
+                        <span className="consegna-tipo">{c.tipo}</span>
+                        {c.oraScadenza && (
+                          <span className="consegna-scadenza">
+                            <IcoClock />
+                            {c.oraScadenza}
+                          </span>
+                        )}
+                        <span className={`stato-pill stato-pill--consegna-${c.stato}`}>
+                          {c.stato.replace('_', ' ')}
+                        </span>
+                      </div>
+                      <p className="consegna-note">{c.note}</p>
+                      <div className="consegna-card__footer">
+                        <span className="consegna-assegnato">→ {c.operatoreAssegnato}</span>
+                        {c.stato !== 'completata' && (
+                          <div className="table-actions">
+                            {c.stato === 'aperta' && (
+                              <button
+                                className="btn-secondary btn-sm"
+                                onClick={() => onUpdateConsegnaStato(c.id, 'in_corso')}
+                              >
+                                Prendi in carico
+                              </button>
+                            )}
+                            <button
+                              className="icon-btn icon-btn--sm icon-btn--success"
+                              onClick={() => onUpdateConsegnaStato(c.id, 'completata')}
+                            >
+                              <IcoCheck />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {consegneHasMore && (
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={onLoadMoreConsegne}
+                      disabled={consegneLoading}
+                    >
+                      {consegneLoading ? 'Caricamento…' : 'Carica altre consegne'}
+                    </button>
+                  )}
+                </>
+              ) : null}
             </div>
           </div>
         </ClinicalTableSection>
@@ -2425,7 +2460,7 @@ export function PatientDetail({
     // badge = documents delivered (documentiConsegnati)
     documenti: (cartella.documentiConsegnati ?? []).length || 0,
     // badge = mie consegne non completate
-    consegne: mieConsegne.filter((c) => c.stato !== 'completata').length,
+    consegne: consegneSummary?.open ?? 0,
   };
 
   function groupBadgeSum(gId: TabGroup): number {

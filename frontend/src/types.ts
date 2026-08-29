@@ -146,8 +146,49 @@ export interface Consegna {
   scadenza: string;
   oraScadenza?: string;
   operatoreAssegnato: string;
+  operatoreAssegnatoId?: string | null;
   creatoDA: string;
+  creatoDaId?: string | null;
   createdAt: string;
+}
+
+/** Client-authorized create fields. Patient/creator/assignee labels and initial status are derived
+ * by the backend and deliberately cannot be supplied by UI or Agnos callers. */
+export interface NewConsegnaInput {
+  pazienteId: string;
+  priorita: PrioritaConsegna;
+  tipo: string;
+  note: string;
+  scadenza: string;
+  oraScadenza?: string;
+  operatoreAssegnatoId?: string | null;
+}
+
+export interface ConsegnaSummary {
+  total: number;
+  open: number;
+  inProgress: number;
+  completed: number;
+  urgentOpen: number;
+}
+
+export interface ConsegnaPageInfo {
+  hasMore: boolean;
+  nextCursor: string | null;
+}
+
+export interface ConsegnaFeedResponse {
+  items: Consegna[];
+  pageInfo: ConsegnaPageInfo;
+  summary: ConsegnaSummary;
+}
+
+export interface ConsegnaOverview {
+  scope: 'facility' | 'operator';
+  summary: ConsegnaSummary;
+  urgentPreview: Consegna[];
+  openPreview: Consegna[];
+  byOperator: Record<string, number>;
 }
 
 // ── Agenda slots (legacy) ──────────────────────────────────────────────────────
@@ -518,6 +559,7 @@ export interface ClinicalSummaryEntry {
   hasSevereAllergy: boolean;
   terapieTotali: number;
   terapieCompletate: number;
+  consegneAperte: number;
 }
 
 /** GET /patients/clinical-summary/overview — constant-size dashboard aggregate. */
