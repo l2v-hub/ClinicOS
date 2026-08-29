@@ -1,7 +1,7 @@
 import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Server } from 'node:http';
-import app, { developmentOrigins, isAllowedOrigin } from '../app.js';
+import app, { developmentOrigins, isAllowedOrigin, trustedProxyHops } from '../app.js';
 import { signUserContext } from '../ai/gateway/context.js';
 
 let server: Server;
@@ -39,6 +39,23 @@ test('localhost origins are development-only', () => {
   assert.ok(
     developmentOrigins({ NODE_ENV: 'test' } as NodeJS.ProcessEnv).includes('http://localhost:3000'),
   );
+});
+
+test('production trusts only the expected reverse-proxy hop for IP abuse controls', () => {
+  assert.equal(trustedProxyHops({ NODE_ENV: 'production' } as NodeJS.ProcessEnv), 1);
+  assert.equal(
+    trustedProxyHops({ NODE_ENV: 'production', TRUST_PROXY_HOPS: '0' } as NodeJS.ProcessEnv),
+    0,
+  );
+  assert.equal(
+    trustedProxyHops({ NODE_ENV: 'production', TRUST_PROXY_HOPS: '2' } as NodeJS.ProcessEnv),
+    2,
+  );
+  assert.equal(
+    trustedProxyHops({ NODE_ENV: 'production', TRUST_PROXY_HOPS: 'invalid' } as NodeJS.ProcessEnv),
+    1,
+  );
+  assert.equal(trustedProxyHops({ NODE_ENV: 'test' } as NodeJS.ProcessEnv), 0);
 });
 
 test('auth/me returns the server-resolved demo identity outside production', async () => {

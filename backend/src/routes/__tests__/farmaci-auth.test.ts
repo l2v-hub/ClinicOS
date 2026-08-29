@@ -53,6 +53,16 @@ test('AC2: la ricerca senza q resta un errore di richiesta, non di autenticazion
   assert.equal(res.status, 400);
 });
 
+test('AC2: query e principio attivo troppo lunghi sono rifiutati prima del lavoro sul database', async () => {
+  const oversized = 'a'.repeat(81);
+  const [search, doses] = await Promise.all([
+    fetch(`${base}/farmaci/cerca?q=${oversized}`),
+    fetch(`${base}/farmaci/dosaggi?pa=${oversized}`),
+  ]);
+  assert.equal(search.status, 400);
+  assert.equal(doses.status, 400);
+});
+
 test('AC3: /farmaci/dosaggi risponde senza header operatore', async () => {
   const res = await fetch(`${base}/farmaci/dosaggi?pa=paracetamolo`);
   assert.notEqual(res.status, 401);
@@ -70,4 +80,21 @@ test('AC4: /farmaci/ricarica con ruolo non privilegiato resta 403', async () => 
     headers: { 'X-Operator-Id': 'test-operatore', 'X-Operator-Role': 'operatore' },
   });
   assert.equal(res.status, 403);
+});
+
+test('AC5: cerca e dosaggi condividono un limite pubblico per IP', async () => {
+  let blockedSearch: Response | null = null;
+  for (let i = 0; i < 65; i++) {
+    const response = await fetch(`${base}/farmaci/cerca`);
+    if (response.status === 429) {
+      blockedSearch = response;
+      break;
+    }
+  }
+  assert.ok(blockedSearch, 'la ricerca ripetuta deve raggiungere il limite');
+  assert.ok(blockedSearch.headers.get('retry-after'));
+
+  const blockedDoses = await fetch(`${base}/farmaci/dosaggi`);
+  assert.equal(blockedDoses.status, 429, 'dosaggi deve condividere il budget di ricerca');
+  assert.ok(blockedDoses.headers.get('retry-after'));
 });

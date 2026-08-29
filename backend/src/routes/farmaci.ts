@@ -9,6 +9,7 @@
 
 import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { medicationSearchGlobalRateLimit, medicationSearchRateLimit } from '../ai/rate-limit.js';
 import { prisma } from '../lib/prisma.js';
 import { importaAnagraficaFarmaci } from '../services/farmaci/import.js';
 import {
@@ -28,6 +29,15 @@ import {
 const farmaciRouter = Router();
 
 const RUOLI_PRIVILEGIATI = new Set(['admin', 'manager']);
+export const MAX_FARMACI_QUERY_LENGTH = 80;
+
+// Both public lookup paths can trigger CPU/DB work. Share one per-IP budget so alternating routes
+// cannot multiply the allowed work.
+farmaciRouter.use(
+  ['/cerca', '/dosaggi'],
+  medicationSearchGlobalRateLimit,
+  medicationSearchRateLimit,
+);
 
 /** Stato dell'anagrafica: quanti farmaci, di quando, com'e' andato l'ultimo caricamento. */
 farmaciRouter.get('/stato', async (_req, res) => {
@@ -63,6 +73,11 @@ farmaciRouter.get('/stato', async (_req, res) => {
 farmaciRouter.get('/cerca', async (req, res) => {
   const q = typeof req.query.q === 'string' ? req.query.q.trim() : '';
   if (!q) return res.status(400).json({ error: 'Parametro q obbligatorio' });
+  if (q.length > MAX_FARMACI_QUERY_LENGTH) {
+    return res.status(400).json({
+      error: `Parametro q troppo lungo: massimo ${MAX_FARMACI_QUERY_LENGTH} caratteri`,
+    });
+  }
   const limite = Math.min(Number.parseInt(String(req.query.limite ?? ''), 10) || 8, 25);
   try {
     const perPa = req.query.pa === '1' || req.query.pa === 'true';
@@ -80,6 +95,11 @@ farmaciRouter.get('/cerca', async (req, res) => {
 farmaciRouter.get('/dosaggi', async (req, res) => {
   const pa = typeof req.query.pa === 'string' ? req.query.pa.trim() : '';
   if (!pa) return res.status(400).json({ error: 'Parametro pa obbligatorio' });
+  if (pa.length > MAX_FARMACI_QUERY_LENGTH) {
+    return res.status(400).json({
+      error: `Parametro pa troppo lungo: massimo ${MAX_FARMACI_QUERY_LENGTH} caratteri`,
+    });
+  }
   try {
     return res.status(200).json({ principioAttivo: pa, dosaggi: await dosaggiInCommercio(pa) });
   } catch (error) {

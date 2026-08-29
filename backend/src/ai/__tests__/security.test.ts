@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { operatorAuthMode, requireOperator, requireRole } from '../auth.js';
-import { importRateLimit } from '../rate-limit.js';
+import { importRateLimit, makeLimiter, medicationSearchRateLimit } from '../rate-limit.js';
 import { canCrossPatientSearch } from '../gateway/context.js';
 import { ctxFromOperator } from '../../routes/ai-assistant-public.js';
 
@@ -251,4 +251,73 @@ test('importRateLimit: 429 after the limit, keyed by operator', () => {
     }
   }
   assert.equal(blocked, true, 'limiter should eventually return 429');
+});
+
+test('public medication fuzzy search is throttled by client IP', () => {
+  const req = mockReq({}, '203.0.113.44');
+  let blocked = false;
+  for (let i = 0; i < 65; i++) {
+    const res = mockRes();
+    let nexted = false;
+    medicationSearchRateLimit(req as never, res as never, () => {
+      nexted = true;
+    });
+    if (!nexted) {
+      blocked = true;
+      assert.equal(res._out.code, 429);
+      assert.ok(res._out.headers['Retry-After']);
+      break;
+    }
+  }
+  assert.equal(blocked, true, 'la ricerca pubblica deve essere limitata per IP');
+});
+
+test('rate limiter uses LRU eviction and removes expired identity buckets', () => {
+  let now = 0;
+  const limiter = makeLimiter(1_000, 1, 'bounded-test', {
+    maxBuckets: 2,
+    now: () => now,
+  });
+  const run = (ip: string) => {
+    const req = mockReq({}, ip);
+    const res = mockRes();
+    let nexted = false;
+    limiter(req as never, res as never, () => {
+      nexted = true;
+    });
+    return { nexted, res };
+  };
+
+  assert.equal(run('198.51.100.1').nexted, true);
+  assert.equal(run('198.51.100.2').nexted, true);
+  assert.equal(run('198.51.100.3').nexted, true, 'un nuovo IP deve sostituire il bucket LRU');
+  const retained = run('198.51.100.2');
+  assert.equal(retained.nexted, false, 'un bucket recente deve conservare il proprio limite');
+  assert.equal(retained.res._out.code, 429);
+  assert.equal(run('198.51.100.1').nexted, true, 'il bucket piu vecchio deve essere stato espulso');
+
+  now = 1_001;
+  assert.equal(run('198.51.100.3').nexted, true, 'i bucket scaduti devono essere rimossi');
+});
+
+test('rate limiter can enforce one aggregate budget across rotating IPs', () => {
+  const limiter = makeLimiter(60_000, 2, 'global-test', {
+    maxBuckets: 1,
+    key: () => 'global',
+  });
+  const run = (ip: string) => {
+    const req = mockReq({}, ip);
+    const res = mockRes();
+    let nexted = false;
+    limiter(req as never, res as never, () => {
+      nexted = true;
+    });
+    return { nexted, res };
+  };
+
+  assert.equal(run('203.0.113.1').nexted, true);
+  assert.equal(run('203.0.113.2').nexted, true);
+  const blocked = run('203.0.113.3');
+  assert.equal(blocked.nexted, false);
+  assert.equal(blocked.res._out.code, 429);
 });

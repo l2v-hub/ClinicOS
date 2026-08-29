@@ -26,6 +26,21 @@ import { requireOperator, type AuthedRequest } from './ai/auth.js';
 const app = express();
 app.disable('x-powered-by');
 
+export function trustedProxyHops(env: NodeJS.ProcessEnv = process.env): number {
+  const fallback = env.NODE_ENV === 'production' ? 1 : 0;
+  if (env.TRUST_PROXY_HOPS === undefined) return fallback;
+  const configured = Number(env.TRUST_PROXY_HOPS);
+  return Number.isInteger(configured) && configured >= 0 && configured <= 10
+    ? configured
+    : fallback;
+}
+
+// Railway terminates public traffic at one reverse proxy. Trust exactly that hop in production so
+// IP-based abuse controls do not collapse every user into the proxy's address. Direct deployments
+// can explicitly set TRUST_PROXY_HOPS=0; deeper trusted proxy chains must opt in deliberately.
+const proxyHops = trustedProxyHops();
+if (proxyHops > 0) app.set('trust proxy', proxyHops);
+
 // Apply hardening before CORS and body parsing so rejected origins and oversized payloads receive
 // the same non-renderable API policy as successful JSON responses.
 app.use((_req, res, next) => {
