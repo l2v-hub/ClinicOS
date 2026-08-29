@@ -93,3 +93,176 @@ test('admin-rooms: due assegnazioni letto concorrenti sullo stesso bed/periodo â
     await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
   }
 });
+
+test('admin-rooms: lo stesso paziente su due letti concorrenti ottiene una sola assegnazione aperta', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-PAT-CC-${Date.now()}`, tipo: 'doppia' },
+  });
+  const [bedA, bedB] = await Promise.all([
+    prisma.bed.create({ data: { roomId: room.id, label: 'A' } }),
+    prisma.bed.create({ data: { roomId: room.id, label: 'B' } }),
+  ]);
+  const patient = await makePatient('SAME');
+
+  try {
+    const request = (bedId: string) =>
+      fetch(`${base}/patients/${patient.id}/room-assignments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+        body: JSON.stringify({ bedId, startDate: '2031-03-01' }),
+      });
+
+    const responses = await Promise.all([request(bedA.id), request(bedB.id)]);
+    assert.deepEqual(responses.map((response) => response.status).sort(), [201, 409]);
+
+    const openAssignments = await prisma.patientRoomAssignment.findMany({
+      where: { patientId: patient.id, endDate: null },
+    });
+    assert.equal(openAssignments.length, 1, 'il paziente deve avere un solo letto aperto');
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test('admin-rooms: intervalli finiti concorrenti dello stesso paziente non si sovrappongono', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-PAT-FIN-${Date.now()}`, tipo: 'doppia' },
+  });
+  const [bedA, bedB] = await Promise.all([
+    prisma.bed.create({ data: { roomId: room.id, label: 'A' } }),
+    prisma.bed.create({ data: { roomId: room.id, label: 'B' } }),
+  ]);
+  const patient = await makePatient('FINITE');
+
+  try {
+    const request = (bedId: string) =>
+      fetch(`${base}/patients/${patient.id}/room-assignments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+        body: JSON.stringify({ bedId, startDate: '2031-03-01', endDate: '2031-03-10' }),
+      });
+
+    const responses = await Promise.all([request(bedA.id), request(bedB.id)]);
+    assert.deepEqual(responses.map((response) => response.status).sort(), [201, 409]);
+    assert.equal(await prisma.patientRoomAssignment.count({ where: { patientId: patient.id } }), 1);
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test('admin-rooms: PUT non puÃ² estendere un soggiorno sopra un altro letto del paziente', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-PUT-SEQ-${Date.now()}`, tipo: 'doppia' },
+  });
+  const [bedA, bedB] = await Promise.all([
+    prisma.bed.create({ data: { roomId: room.id, label: 'A' } }),
+    prisma.bed.create({ data: { roomId: room.id, label: 'B' } }),
+  ]);
+  const patient = await makePatient('PUT-SEQ');
+  const first = await prisma.patientRoomAssignment.create({
+    data: {
+      patientId: patient.id,
+      roomId: room.id,
+      bedId: bedA.id,
+      startDate: '2031-03-01',
+      endDate: '2031-03-05',
+    },
+  });
+  await prisma.patientRoomAssignment.create({
+    data: {
+      patientId: patient.id,
+      roomId: room.id,
+      bedId: bedB.id,
+      startDate: '2031-03-10',
+      endDate: '2031-03-15',
+    },
+  });
+
+  try {
+    const response = await fetch(`${base}/patients/${patient.id}/room-assignments/${first.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+      body: JSON.stringify({ endDate: '2031-03-12' }),
+    });
+    assert.equal(response.status, 409);
+    assert.equal(
+      (await prisma.patientRoomAssignment.findUniqueOrThrow({ where: { id: first.id } })).endDate,
+      '2031-03-05',
+    );
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test('admin-rooms: POST e PUT concorrenti non possono lasciare due soggiorni aperti', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-PUT-CC-${Date.now()}`, tipo: 'doppia' },
+  });
+  const [bedA, bedB] = await Promise.all([
+    prisma.bed.create({ data: { roomId: room.id, label: 'A' } }),
+    prisma.bed.create({ data: { roomId: room.id, label: 'B' } }),
+  ]);
+  const patient = await makePatient('PUT-CC');
+  const first = await prisma.patientRoomAssignment.create({
+    data: {
+      patientId: patient.id,
+      roomId: room.id,
+      bedId: bedA.id,
+      startDate: '2031-03-01',
+      endDate: null,
+    },
+  });
+
+  try {
+    const [postResponse, putResponse] = await Promise.all([
+      fetch(`${base}/patients/${patient.id}/room-assignments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+        body: JSON.stringify({ bedId: bedB.id, startDate: '2031-03-10' }),
+      }),
+      fetch(`${base}/patients/${patient.id}/room-assignments/${first.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+        body: JSON.stringify({ endDate: null }),
+      }),
+    ]);
+    assert.equal(postResponse.status, 201);
+    assert.ok([200, 409].includes(putResponse.status), `PUT inatteso: ${putResponse.status}`);
+
+    const assignments = await prisma.patientRoomAssignment.findMany({
+      where: { patientId: patient.id },
+    });
+    for (let i = 0; i < assignments.length; i += 1) {
+      for (let j = i + 1; j < assignments.length; j += 1) {
+        const left = assignments[i];
+        const right = assignments[j];
+        const overlaps =
+          (right.endDate === null || left.startDate <= right.endDate) &&
+          (left.endDate === null || right.startDate <= left.endDate);
+        assert.equal(overlaps, false, `intervalli sovrapposti: ${left.id}, ${right.id}`);
+      }
+    }
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});

@@ -49,6 +49,7 @@ interface OccupancyAPI {
 type StatoLetto = 'libero' | 'occupato' | 'manutenzione';
 type TipoCamera = 'singola' | 'doppia' | 'altra';
 type StatoCamera = 'attiva' | 'inattiva' | 'manutenzione';
+const MAX_FACILITY_NOTE_LENGTH = 2_000;
 
 const STATO_LETTO_CLASS: Record<StatoLetto, string> = {
   libero: 'letto--libero',
@@ -89,6 +90,21 @@ function bedPatientName(bed: BedAPI): string | null {
   return `${active.patient.lastName}, ${active.patient.firstName}`;
 }
 
+async function fetchFacilityData(signal?: AbortSignal) {
+  const [roomsRes, occRes] = await Promise.all([
+    fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders(), signal }),
+    fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders(), signal }),
+  ]);
+  if (!roomsRes.ok || !occRes.ok) {
+    throw new Error('facility_data_unavailable');
+  }
+  const [rooms, occupancy] = await Promise.all([
+    roomsRes.json() as Promise<RoomAPI[]>,
+    occRes.json() as Promise<OccupancyAPI>,
+  ]);
+  return { rooms, occupancy };
+}
+
 /* ── Component ─────────────────────────────────────────── */
 
 export function RoomsManagement() {
@@ -96,6 +112,7 @@ export function RoomsManagement() {
   const [occupancy, setOccupancy] = useState<OccupancyAPI | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const [formAperto, setFormAperto] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -114,23 +131,41 @@ export function RoomsManagement() {
   /* ── Data loading ─────────────────────────────────────── */
 
   const loadData = useCallback(async () => {
+    setLoading(true);
+    setLoadError(null);
     try {
-      const [roomsRes, occRes] = await Promise.all([
-        fetch(`${API_URL}/admin/rooms`, { headers: operatorHeaders() }),
-        fetch(`${API_URL}/admin/rooms/occupancy`, { headers: operatorHeaders() }),
-      ]);
-      if (roomsRes.ok) setRooms(await roomsRes.json());
-      if (occRes.ok) setOccupancy(await occRes.json());
+      const data = await fetchFacilityData();
+      setRooms(data.rooms);
+      setOccupancy(data.occupancy);
     } catch {
-      /* silently fail, keep existing data */
+      setLoadError(
+        'Impossibile aggiornare camere e occupazione. I dati mostrati potrebbero non essere aggiornati.',
+      );
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    const controller = new AbortController();
+    void fetchFacilityData(controller.signal)
+      .then((data) => {
+        setRooms(data.rooms);
+        setOccupancy(data.occupancy);
+        setLoadError(null);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setLoadError(
+            'Impossibile caricare camere e occupazione. Riprova per visualizzare i dati.',
+          );
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
+  }, []);
 
   /* ── Derived data ─────────────────────────────────────── */
 
@@ -239,7 +274,11 @@ export function RoomsManagement() {
 
   function apriLettoEdit(bed: BedAPI) {
     setLettoEdit({ bedId: bed.id });
-    setLettoForm({ stato: bed.stato, note: bed.note ?? '' });
+    // "occupato" is derived from active assignments; it is never a persisted bed status.
+    setLettoForm({
+      stato: bed.stato === 'manutenzione' ? 'manutenzione' : 'libero',
+      note: bed.note ?? '',
+    });
   }
 
   async function salvaLetto() {
@@ -305,16 +344,25 @@ export function RoomsManagement() {
 
       {/* Error alert */}
       {error && (
-        <div className="alert alert--error">
+        <div className="alert alert--error" role="alert">
           <span className="alert__text">{error}</span>
-          <button className="icon-btn" onClick={() => setError(null)}>
+          <button className="icon-btn" onClick={() => setError(null)} aria-label="Chiudi errore">
             <IcoX />
           </button>
         </div>
       )}
 
+      {loadError && (
+        <div className="alert alert--error" role="alert">
+          <span className="alert__text">{loadError}</span>
+          <button className="btn-secondary" onClick={() => void loadData()}>
+            Riprova
+          </button>
+        </div>
+      )}
+
       {/* Occupancy stats */}
-      <div className="occupancy-stats">
+      <div className="occupancy-stats" hidden={!occupancy}>
         <div className="occ-stat">
           <span className="occ-stat__val" style={{ color: 'var(--red)' }}>
             {occ?.occupiedBeds ?? 0}
@@ -366,6 +414,7 @@ export function RoomsManagement() {
               <input
                 className="form-input"
                 value={form.numero}
+                maxLength={32}
                 onChange={(e) => setForm((p) => ({ ...p, numero: e.target.value }))}
                 placeholder="es. 101, PS-02"
               />
@@ -387,6 +436,7 @@ export function RoomsManagement() {
               <input
                 className="form-input"
                 value={form.piano}
+                maxLength={64}
                 onChange={(e) => setForm((p) => ({ ...p, piano: e.target.value }))}
                 placeholder="1°, PT…"
               />
@@ -396,6 +446,7 @@ export function RoomsManagement() {
               <input
                 className="form-input"
                 value={form.reparto}
+                maxLength={64}
                 onChange={(e) => setForm((p) => ({ ...p, reparto: e.target.value }))}
                 placeholder="Cardiologia…"
               />
@@ -418,6 +469,7 @@ export function RoomsManagement() {
             <input
               className="form-input"
               value={form.note}
+              maxLength={MAX_FACILITY_NOTE_LENGTH}
               onChange={(e) => setForm((p) => ({ ...p, note: e.target.value }))}
               placeholder="Note sulla camera…"
             />
@@ -462,7 +514,6 @@ export function RoomsManagement() {
                     onChange={(e) => setLettoForm((p) => ({ ...p, stato: e.target.value }))}
                   >
                     <option value="libero">Libero</option>
-                    <option value="occupato">Occupato</option>
                     <option value="manutenzione">Manutenzione</option>
                   </select>
                 </div>
@@ -471,6 +522,7 @@ export function RoomsManagement() {
                   <input
                     className="form-input"
                     value={lettoForm.note}
+                    maxLength={MAX_FACILITY_NOTE_LENGTH}
                     onChange={(e) => setLettoForm((p) => ({ ...p, note: e.target.value }))}
                   />
                 </div>
