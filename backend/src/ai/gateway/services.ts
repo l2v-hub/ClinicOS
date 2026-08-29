@@ -531,25 +531,54 @@ export async function getCrossPatientVitalSigns(
 export async function getPatientTherapies(
   patientId: string,
   ctx: UserContext,
-): Promise<SourcedResult<unknown[]>> {
+): Promise<SourcedResult<unknown[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
   const rows = await prisma.patientTherapy.findMany({
     where: { patientId },
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+    take: 101,
+    select: {
+      id: true,
+      farmacoNome: true,
+      dosaggio: true,
+      viaSomministrazione: true,
+      tipo: true,
+      stato: true,
+      dataInizio: true,
+      dataFine: true,
+      fasceMattina: true,
+      fascePranzo: true,
+      fascePomeriggio: true,
+      fasceSera: true,
+      fasceNotte: true,
+      orarioSpecifico: true,
+      prescrittore: true,
+      note: true,
+      dataSomministrazione: true,
+      orarioSomministrazione: true,
+      commercialStrengthValue: true,
+      commercialStrengthUnit: true,
+      pharmaceuticalForm: true,
+      allowedFractions: true,
+      drugPackageRef: true,
+      giorniSettimana: true,
+    },
   });
-  const refs = rows.map((t) =>
+  const truncated = rows.length > 100;
+  const data = truncated ? rows.slice(0, 100) : rows;
+  const refs = data.map((t) =>
     therapySource(patientId, t.id, t.farmacoNome, `${t.farmacoNome} ${t.dosaggio}`, t.dataInizio),
   );
   gatewayAudit(
     ctx,
     'get_patient_therapies',
     [patientId],
-    rows.length,
-    rows.length ? 'ok' : 'empty',
+    data.length,
+    data.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: rows, sourceRefs: refs };
+  return { data, sourceRefs: refs, truncated };
 }
 
 export async function getPatientDiary(

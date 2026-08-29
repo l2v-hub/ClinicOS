@@ -7,6 +7,7 @@ const narrativeRouteUrl = new URL('../narrative-sections.ts', import.meta.url);
 const voiceWriterUrl = new URL('../../ai/voice/write-services.ts', import.meta.url);
 const narrativeServiceUrl = new URL('../../ai/sections/patient-narrative.ts', import.meta.url);
 const therapyCreateUrl = new URL('../../therapies/therapy-create.ts', import.meta.url);
+const gatewayServicesUrl = new URL('../../ai/gateway/services.ts', import.meta.url);
 
 test('patient therapies and administrations are private and patient-scoped', async () => {
   const source = await readFile(therapyRouteUrl, 'utf8');
@@ -87,4 +88,38 @@ test('an explicit empty schedule array clears derived slots instead of enabling 
   const source = await readFile(therapyCreateUrl, 'utf8');
   assert.match(source, /const derived =\s+input\.schedules !== undefined/);
   assert.match(source, /\? deriveLegacyFromSchedules\(schedules\)/);
+});
+
+test('therapy reads use a bounded stable keyset feed without silent legacy truncation', async () => {
+  const source = await readFile(therapyRouteUrl, 'utf8');
+  const pageBlock =
+    source
+      .split("router.get('/:patientId/therapies/page'")[1]
+      ?.split('// GET /patients/:patientId/therapies\n')[0] ?? '';
+  assert.match(pageBlock, /parseTherapyListQuery/);
+  assert.match(pageBlock, /take: input\.limit \+ 1/);
+  assert.match(pageBlock, /orderBy: \[\{ createdAt: 'desc' \}, \{ id: 'desc' \}\]/);
+  assert.match(pageBlock, /encodeTherapyListCursor/);
+  assert.match(pageBlock, /groupBy\(\{/);
+  assert.match(pageBlock, /\{ total: 0, active: 0, inactive: 0 \}/);
+  assert.match(source, /take: 101/);
+  assert.match(source, /Elenco oltre il limite legacy/);
+  assert.match(source, /take: 33/);
+  assert.match(source, /Terapia con oltre 32 orari/);
+});
+
+test('assistant therapy context is projected, bounded and reports truncation', async () => {
+  const source = await readFile(gatewayServicesUrl, 'utf8');
+  const block =
+    source
+      .split('export async function getPatientTherapies')[1]
+      ?.split('export async function getPatientDiary')[0] ?? '';
+  assert.match(block, /assertPatientAllowed\(ctx, patientId\)/);
+  assert.match(block, /take: 101/);
+  assert.match(block, /select: \{/);
+  assert.match(block, /orarioSpecifico: true/);
+  assert.match(block, /commercialStrengthValue: true/);
+  assert.match(block, /allowedFractions: true/);
+  assert.match(block, /const truncated = rows\.length > 100/);
+  assert.match(block, /return \{ data, sourceRefs: refs, truncated \}/);
 });

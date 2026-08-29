@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma.js';
+import type { Prisma } from '@prisma/client';
 import { Router } from 'express';
 import {
   assertValidSchedulesInput,
@@ -21,6 +22,11 @@ import {
   MedicationAdministrationQueryError,
   parseMedicationAdministrationQuery,
 } from '../therapies/administration-query.js';
+import {
+  encodeTherapyListCursor,
+  parseTherapyListQuery,
+  TherapyListInputError,
+} from '../therapies/list-query.js';
 
 const router = Router();
 
@@ -34,15 +40,150 @@ router.use(requireOperator);
 router.use('/:patientId/therapies', requirePatientScope);
 router.use('/:patientId/medication-administrations', requirePatientScope);
 
-// GET /patients/:patientId/therapies  (includes structured schedules)
+const therapyListSelect = {
+  id: true,
+  patientId: true,
+  farmacoNome: true,
+  dosaggio: true,
+  viaSomministrazione: true,
+  tipo: true,
+  stato: true,
+  dataInizio: true,
+  dataFine: true,
+  fasceMattina: true,
+  fascePranzo: true,
+  fascePomeriggio: true,
+  fasceSera: true,
+  fasceNotte: true,
+  orarioSpecifico: true,
+  prescrittore: true,
+  operatoreInseritore: true,
+  note: true,
+  dataSomministrazione: true,
+  orarioSomministrazione: true,
+  commercialStrengthValue: true,
+  commercialStrengthUnit: true,
+  pharmaceuticalForm: true,
+  allowedFractions: true,
+  drugPackageRef: true,
+  giorniSettimana: true,
+  createdAt: true,
+  updatedAt: true,
+  schedules: {
+    orderBy: [{ time: 'asc' }, { id: 'asc' }],
+    take: 33,
+    select: {
+      id: true,
+      therapyId: true,
+      time: true,
+      fascia: true,
+      quantityNumerator: true,
+      quantityDenominator: true,
+      administrationUnit: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  },
+} satisfies Prisma.PatientTherapySelect;
+
+function hasOversizedScheduleSet(items: Array<{ schedules: unknown[] }>): boolean {
+  return items.some((item) => item.schedules.length > 32);
+}
+
+// GET /patients/:patientId/therapies/page
+// Bounded keyset feed used by every first-party UI consumer.
+router.get('/:patientId/therapies/page', async (req, res) => {
+  const { patientId } = req.params;
+  try {
+    const input = parseTherapyListQuery(req.query as Record<string, unknown>);
+    const where: Prisma.PatientTherapyWhereInput[] = [{ patientId }];
+    if (input.status === 'attiva') where.push({ stato: 'attiva' });
+    if (input.status === 'non_attiva') where.push({ stato: { not: 'attiva' } });
+    if (input.cursor) {
+      where.push({
+        OR: [
+          { createdAt: { lt: input.cursor.createdAt } },
+          { createdAt: input.cursor.createdAt, id: { lt: input.cursor.id } },
+        ],
+      });
+    }
+
+    const [rows, groupedCounts] = await Promise.all([
+      prisma.patientTherapy.findMany({
+        where: { AND: where },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        take: input.limit + 1,
+        select: therapyListSelect,
+      }),
+      input.cursor
+        ? Promise.resolve(null)
+        : prisma.patientTherapy.groupBy({
+            by: ['stato'],
+            where: { patientId },
+            _count: { _all: true },
+          }),
+    ]);
+    if (hasOversizedScheduleSet(rows)) {
+      res.status(409).json({ error: 'Terapia con oltre 32 orari: correggere il dato sorgente' });
+      return;
+    }
+
+    const hasMore = rows.length > input.limit;
+    const items = hasMore ? rows.slice(0, input.limit) : rows;
+    const last = items.at(-1);
+    const summary = groupedCounts
+      ? groupedCounts.reduce(
+          (counts, row) => {
+            counts.total += row._count._all;
+            if (row.stato === 'attiva') counts.active += row._count._all;
+            else counts.inactive += row._count._all;
+            return counts;
+          },
+          { total: 0, active: 0, inactive: 0 },
+        )
+      : null;
+    res.status(200).json({
+      items,
+      summary,
+      pageInfo: {
+        hasMore,
+        nextCursor:
+          hasMore && last
+            ? encodeTherapyListCursor({ createdAt: last.createdAt, id: last.id }, input.status)
+            : null,
+      },
+    });
+  } catch (error) {
+    if (error instanceof TherapyListInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    console.error('GET /patients/:patientId/therapies/page error:', error);
+    res.status(500).json({ error: 'Errore nel recupero delle terapie' });
+  }
+});
+
+// GET /patients/:patientId/therapies
+// Compatibility path: bounded and explicit when a legacy consumer would lose rows.
 router.get('/:patientId/therapies', async (req, res) => {
   const { patientId } = req.params;
   try {
     const therapies = await prisma.patientTherapy.findMany({
       where: { patientId },
-      orderBy: { createdAt: 'desc' },
-      include: { schedules: { orderBy: { time: 'asc' } } },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      take: 101,
+      select: therapyListSelect,
     });
+    if (therapies.length > 100) {
+      res.status(409).json({
+        error: 'Elenco oltre il limite legacy: usare /therapies/page',
+      });
+      return;
+    }
+    if (hasOversizedScheduleSet(therapies)) {
+      res.status(409).json({ error: 'Terapia con oltre 32 orari: correggere il dato sorgente' });
+      return;
+    }
     res.status(200).json(therapies);
   } catch (error) {
     console.error('GET /patients/:patientId/therapies error:', error);

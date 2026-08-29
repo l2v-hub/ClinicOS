@@ -6,8 +6,7 @@ import type {
   PatientTherapyAPI,
 } from '../../types';
 import { formatFraction, computeEquivalent } from './cartella/therapyDose';
-import { API_URL } from '../../config';
-import { cachedGetJson } from '../../lib/cachedFetch';
+import { loadAllTherapyPages } from '../../lib/therapyPages';
 
 // ── FASCE labels (mirrors TerapiaFarmacologicaTab) ────────────────────────────
 
@@ -82,6 +81,8 @@ function fmtDate(iso: string): string {
   return d.toLocaleDateString('it-IT');
 }
 
+// Pure builder is exported for unit tests; the component remains the default export.
+// eslint-disable-next-line react-refresh/only-export-components
 export function buildInvioPSModel(
   paziente: Paziente,
   cartella: CartellaPaziente,
@@ -209,28 +210,30 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
   const [therapies, setTherapies] = useState<PatientTherapyAPI[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
+  const [loadRevision, setLoadRevision] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setFetchError('');
-    cachedGetJson<PatientTherapyAPI[]>(`${API_URL}/patients/${paziente.id}/therapies`)
-      .then((data) => {
+    void (async () => {
+      setLoading(true);
+      setFetchError('');
+      try {
+        const data = await loadAllTherapyPages(paziente.id, 'attiva');
         if (!cancelled) {
           setTherapies(data);
           setLoading(false);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         if (!cancelled) {
           setFetchError(err instanceof Error ? err.message : 'Errore caricamento terapie');
           setLoading(false);
         }
-      });
+      }
+    })();
     return () => {
       cancelled = true;
     };
-  }, [paziente.id]);
+  }, [paziente.id, loadRevision]);
 
   const model = buildInvioPSModel(paziente, cartella, therapies);
 
@@ -257,6 +260,12 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
             <button
               className="btn-primary btn-sm"
               onClick={() => window.print()}
+              disabled={loading || Boolean(fetchError)}
+              title={
+                loading || fetchError
+                  ? 'La stampa è disponibile solo dopo il caricamento completo delle terapie'
+                  : undefined
+              }
               style={{ display: 'flex', alignItems: 'center', gap: 6 }}
             >
               <svg
@@ -285,10 +294,17 @@ export default function InvioPSModal({ paziente, cartella, onClose }: InvioPSMod
         <div className="modal-body invio-ps-body">
           {fetchError && (
             <div
-              className="no-print"
+              className="alert alert--error no-print"
+              role="alert"
               style={{ color: 'var(--red, #DC2626)', fontSize: 12, marginBottom: 8 }}
             >
-              {fetchError} — i dati di terapia potrebbero essere incompleti.
+              {fetchError}. La stampa è bloccata perché i dati di terapia non sono completi.{' '}
+              <button
+                className="btn-secondary btn-sm"
+                onClick={() => setLoadRevision((v) => v + 1)}
+              >
+                Riprova
+              </button>
             </div>
           )}
 

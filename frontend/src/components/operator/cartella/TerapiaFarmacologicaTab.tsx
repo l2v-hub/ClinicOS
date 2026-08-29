@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { API_URL } from '../../../config';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
+import { loadTherapyPage } from '../../../lib/therapyPages';
 import { operatorHeaders } from '../../../lib/operatorSession';
 import { ClinicalTableSection, LoadingState } from './shared';
 import { ClinicalTable } from './ClinicalTable';
@@ -294,6 +295,13 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const [subTab, setSubTab] = useState<SubTab>('attivi');
   const [therapies, setTherapies] = useState<PatientTherapyAPI[]>([]);
   const [loading, setLoading] = useState(true);
+  const [nextTherapyCursor, setNextTherapyCursor] = useState<string | null>(null);
+  const [loadingMoreTherapies, setLoadingMoreTherapies] = useState(false);
+  const [therapySummary, setTherapySummary] = useState<{
+    total: number;
+    active: number;
+    inactive: number;
+  } | null>(null);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -308,6 +316,12 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   // History state
   const [history, setHistory] = useState<MedAdmin[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const therapyLoadSequence = useRef(0);
+  const activePatientId = useRef(paziente.id);
+
+  useEffect(() => {
+    activePatientId.current = paziente.id;
+  }, [paziente.id]);
 
   // ── Loaders ──────────────────────────────────────────────────────────────────
 
@@ -319,22 +333,79 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   }, [paziente.id]);
 
   const loadTherapies = useCallback(async () => {
+    const sequence = ++therapyLoadSequence.current;
+    const requestedPatientId = paziente.id;
     try {
       setLoading(true);
+      setLoadingMoreTherapies(false);
       setError('');
-      const data = [
-        ...(await cachedGetJson<PatientTherapyAPI[]>(
-          `${API_URL}/patients/${paziente.id}/therapies`,
-        )),
-      ];
+      const page = await loadTherapyPage(requestedPatientId);
+      if (
+        sequence !== therapyLoadSequence.current ||
+        activePatientId.current !== requestedPatientId
+      ) {
+        return;
+      }
+      const data = [...page.items];
       data.sort((a, b) => (STATO_ORDER[a.stato] ?? 9) - (STATO_ORDER[b.stato] ?? 9));
       setTherapies(data);
+      setNextTherapyCursor(page.pageInfo.nextCursor);
+      setTherapySummary(page.summary);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Errore caricamento');
+      if (
+        sequence === therapyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setError(err instanceof Error ? err.message : 'Errore caricamento');
+      }
     } finally {
-      setLoading(false);
+      if (
+        sequence === therapyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setLoading(false);
+      }
     }
   }, [paziente.id]);
+
+  const loadMoreTherapies = useCallback(async () => {
+    if (!nextTherapyCursor || loadingMoreTherapies) return;
+    const sequence = ++therapyLoadSequence.current;
+    const requestedPatientId = paziente.id;
+    try {
+      setLoadingMoreTherapies(true);
+      setError('');
+      const page = await loadTherapyPage(requestedPatientId, 'tutte', nextTherapyCursor);
+      if (
+        sequence !== therapyLoadSequence.current ||
+        activePatientId.current !== requestedPatientId
+      ) {
+        return;
+      }
+      setTherapies((current) => {
+        const merged = new Map(current.map((therapy) => [therapy.id, therapy]));
+        for (const therapy of page.items) merged.set(therapy.id, therapy);
+        return [...merged.values()].sort(
+          (a, b) => (STATO_ORDER[a.stato] ?? 9) - (STATO_ORDER[b.stato] ?? 9),
+        );
+      });
+      setNextTherapyCursor(page.pageInfo.nextCursor);
+    } catch (err) {
+      if (
+        sequence === therapyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setError(err instanceof Error ? err.message : 'Errore caricamento terapie');
+      }
+    } finally {
+      if (
+        sequence === therapyLoadSequence.current &&
+        activePatientId.current === requestedPatientId
+      ) {
+        setLoadingMoreTherapies(false);
+      }
+    }
+  }, [loadingMoreTherapies, nextTherapyCursor, paziente.id]);
 
   const loadDaily = useCallback(async (date: string) => {
     try {
@@ -366,13 +437,23 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   }, [paziente.id]);
 
   useEffect(() => {
-    loadTherapies();
+    void (async () => {
+      await loadTherapies();
+    })();
   }, [loadTherapies]);
   useEffect(() => {
-    if (subTab === 'giornaliere') loadDaily(dailyDate);
+    if (subTab === 'giornaliere') {
+      void (async () => {
+        await loadDaily(dailyDate);
+      })();
+    }
   }, [subTab, dailyDate, loadDaily]);
   useEffect(() => {
-    if (subTab === 'storico') loadHistory();
+    if (subTab === 'storico') {
+      void (async () => {
+        await loadHistory();
+      })();
+    }
   }, [subTab, loadHistory]);
 
   // ── CRUD ──────────────────────────────────────────────────────────────────────
@@ -522,12 +603,32 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   // ── Sub-tab nav ────────────────────────────────────────────────────────────────
 
   const SUB_TABS: { id: SubTab; label: string; count?: number }[] = [
-    { id: 'attivi', label: 'Farmaci attivi', count: attive.length },
+    { id: 'attivi', label: 'Farmaci attivi', count: therapySummary?.active ?? attive.length },
     { id: 'programmazione', label: 'Programmazione' },
     { id: 'giornaliere', label: 'Somministrazioni giornaliere' },
     { id: 'storico', label: 'Storico', count: history.length },
-    { id: 'sospese', label: 'Sospese/concluse', count: inattive.length },
+    {
+      id: 'sospese',
+      label: 'Sospese/concluse',
+      count: therapySummary?.inactive ?? inattive.length,
+    },
   ];
+
+  const therapyPager = nextTherapyCursor ? (
+    <div className="cts__body--padded" style={{ paddingTop: 12, textAlign: 'center' }}>
+      <span style={{ marginRight: 8, color: 'var(--text-muted)', fontSize: 12 }}>
+        {therapies.length} terapie caricate · filtri disponibili a caricamento completo
+      </span>
+      <button
+        type="button"
+        className="btn-secondary btn-sm"
+        disabled={loadingMoreTherapies}
+        onClick={() => void loadMoreTherapies()}
+      >
+        {loadingMoreTherapies ? 'Caricamento…' : 'Carica altre terapie'}
+      </button>
+    </div>
+  ) : null;
 
   // Documenti ufficiali AIFA dei farmaci in terapia. L'operatore verifica la posologia sulla
   // fonte autorevole senza uscire dall'applicazione; ClinicOS non interpreta nulla.
@@ -653,7 +754,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'farmacoNome',
       label: 'Farmaco',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'text',
       render: renderFarmaco,
     },
@@ -663,7 +764,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'tipo',
       label: 'Tipo',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'select',
       options: [
         { value: 'periodica', label: 'Periodica' },
@@ -686,7 +787,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'dataInizio',
       label: 'Inizio',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'date',
       render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span>,
     },
@@ -772,7 +873,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'farmacoNome',
       label: 'Farmaco',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'text',
       render: renderFarmaco,
     },
@@ -782,7 +883,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'stato',
       label: 'Stato',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'select',
       options: [
         { value: 'attiva', label: 'Attiva' },
@@ -797,7 +898,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'tipo',
       label: 'Tipo',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'select',
       options: [
         { value: 'periodica', label: 'Periodica' },
@@ -814,7 +915,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'dataInizio',
       label: 'Inizio',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'date',
       render: (v: string) => <span style={{ fontSize: 12 }}>{v}</span>,
     },
@@ -1021,7 +1122,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'farmacoNome',
       label: 'Farmaco',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'text',
       render: renderFarmaco,
     },
@@ -1031,7 +1132,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
       key: 'stato',
       label: 'Stato',
       sortable: true,
-      filterable: true,
+      filterable: !nextTherapyCursor,
       filterType: 'select',
       options: [
         { value: 'sospesa', label: 'Sospesa' },
@@ -1102,14 +1203,24 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   return (
     <div className="cr-tab-content">
-      {/* AC7: riepilogo dei farmaci non riconosciuti in testa alla scheda. Qui il conteggio e'
-          completo, perche' si legge l'intera lista delle terapie del paziente e non solo quelle
-          attive di oggi. */}
-      <AvvisoAnomalieFarmaci esito={anomalie} ambito="tutte le terapie in cartella" />
+      <AvvisoAnomalieFarmaci
+        esito={anomalie}
+        ambito={
+          nextTherapyCursor
+            ? 'terapie caricate (verifica parziale)'
+            : 'tutte le terapie in cartella'
+        }
+      />
+      {nextTherapyCursor && (
+        <div className="alert alert--info" role="status">
+          Verifica anagrafica parziale: carica le altre terapie prima di considerare completo il
+          controllo delle anomalie.
+        </div>
+      )}
 
       <ClinicalTableSection
         title="Terapia Farmacologica"
-        count={attive.length}
+        count={therapySummary?.active ?? attive.length}
         countLabel="farmaci attivi"
         actions={
           <button className="btn-sm" onClick={openAdd}>
@@ -1162,21 +1273,29 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
             // `.cts__body` non ha padding: senza involucro il testo tocca il bordo della scheda.
             <div className="cts__body--padded">
               <p className="cr-empty">
-                Nessun farmaco attivo.{' '}
+                {nextTherapyCursor
+                  ? 'Nessun farmaco attivo tra le terapie caricate. '
+                  : 'Nessun farmaco attivo. '}
                 <button className="link-btn" onClick={openAdd}>
                   + Aggiungi
                 </button>
               </p>
+              {therapyPager}
             </div>
           ) : (
-            <ClinicalTable<PatientTherapyAPI>
-              noWrapper
-              title=""
-              keyField="id"
-              data={attive}
-              emptyMessage="Nessun farmaco attivo."
-              columns={attiviColumns}
-            />
+            <>
+              <ClinicalTable<PatientTherapyAPI>
+                key={`active-${nextTherapyCursor ? 'partial' : 'complete'}`}
+                noWrapper
+                title=""
+                keyField="id"
+                pageSize={25}
+                data={attive}
+                emptyMessage="Nessun farmaco attivo."
+                columns={attiviColumns}
+              />
+              {therapyPager}
+            </>
           ))}
 
         {/* ── Sub-tab: Programmazione ── */}
@@ -1215,14 +1334,19 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
                 {loading ? (
                   <LoadingState />
                 ) : (
-                  <ClinicalTable<PatientTherapyAPI>
-                    noWrapper
-                    title=""
-                    keyField="id"
-                    data={therapies}
-                    emptyMessage="Nessuna terapia programmata."
-                    columns={programmazioneColumns}
-                  />
+                  <>
+                    <ClinicalTable<PatientTherapyAPI>
+                      key={`all-${nextTherapyCursor ? 'partial' : 'complete'}`}
+                      noWrapper
+                      title=""
+                      keyField="id"
+                      pageSize={25}
+                      data={therapies}
+                      emptyMessage="Nessuna terapia programmata."
+                      columns={programmazioneColumns}
+                    />
+                    {therapyPager}
+                  </>
                 )}
               </>
             )}
@@ -1279,14 +1403,23 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
           (loading ? (
             <LoadingState />
           ) : (
-            <ClinicalTable<PatientTherapyAPI>
-              noWrapper
-              title=""
-              keyField="id"
-              data={inattive}
-              emptyMessage="Nessuna terapia sospesa o conclusa."
-              columns={sospeseColumns}
-            />
+            <>
+              <ClinicalTable<PatientTherapyAPI>
+                key={`inactive-${nextTherapyCursor ? 'partial' : 'complete'}`}
+                noWrapper
+                title=""
+                keyField="id"
+                pageSize={25}
+                data={inattive}
+                emptyMessage={
+                  nextTherapyCursor
+                    ? 'Nessuna terapia sospesa o conclusa tra quelle caricate.'
+                    : 'Nessuna terapia sospesa o conclusa.'
+                }
+                columns={sospeseColumns}
+              />
+              {therapyPager}
+            </>
           ))}
       </ClinicalTableSection>
 

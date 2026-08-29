@@ -301,6 +301,7 @@ model PatientTherapy {
   patient              Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
   @@index([patientId])
+  @@index([patientId, createdAt, id])
   @@index([tipo, stato])
   @@index([stato])
   @@index([stato, tipo, dataSomministrazione])
@@ -321,7 +322,7 @@ model TherapySchedule {
   updatedAt           DateTime @updatedAt
   therapy             PatientTherapy @relation(fields: [therapyId], references: [id], onDelete: Cascade)
 
-  @@index([therapyId])
+  @@index([therapyId, time, id])
 }
 
 // ── Rooms & Beds ───────────────────────────────────────────────────────────
