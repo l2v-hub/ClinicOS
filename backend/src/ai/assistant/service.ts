@@ -34,6 +34,7 @@ import { loadAssistantLlmConfig } from './config.js';
 import { validateQueryPlan } from '../gateway/query/validate.js';
 import { dedupeNav, navFromSource, type NavAction } from './nav.js';
 import { runQueryPlan } from '../gateway/query/engine.js';
+import { boundStaffList, MAX_STAFF_RESULTS } from './staff-window.js';
 
 export interface AssistantAnswer {
   intent: AssistantIntent;
@@ -118,23 +119,27 @@ async function roomsOccupancy(
  *  as rooms_occupancy; email/phone are deliberately not exposed to the assistant. */
 async function staffList(
   env: NodeJS.ProcessEnv,
-): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated: boolean }> {
   if (!canFacilityRead(env))
     throw new GatewayError('forbidden', 'Funzioni di struttura non abilitate');
   const operators = await prisma.operator.findMany({
-    include: { user: true },
-    orderBy: { createdAt: 'asc' },
+    select: {
+      ruolo: true,
+      qualifica: true,
+      department: true,
+      user: { select: { fullName: true, isActive: true } },
+    },
+    orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+    take: MAX_STAFF_RESULTS + 1,
   });
-  const data = operators.map((op) => ({
-    fullName: op.user.fullName,
-    ruolo: op.ruolo ?? null,
-    qualifica: op.qualifica ?? null,
-    reparto: op.department ?? null,
-    stato: op.user.isActive ? 'attivo' : 'inattivo',
-  }));
+  const result = boundStaffList(operators);
+  const sourceText = result.truncated
+    ? `${result.data.length} operatori mostrati; elenco parziale`
+    : `${result.data.length} operatori censiti`;
   return {
-    data,
-    sourceRefs: [staffSource(`${data.length} operatori censiti`, new Date().toISOString())],
+    data: result.data,
+    sourceRefs: [staffSource(sourceText, new Date().toISOString())],
+    truncated: result.truncated,
   };
 }
 
