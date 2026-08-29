@@ -19,6 +19,7 @@ import { hasGlobalPatientScope } from '../patients/patient-scope.js';
 import {
   encodeTherapySlotCursor,
   parseTherapySlotPageQuery,
+  therapySlotScopeFingerprint,
   TherapySlotPageInputError,
 } from '../therapies/slot-page-query.js';
 
@@ -55,15 +56,17 @@ router.get('/page', async (req, res) => {
       throw new AppointmentListInputError('date obbligatoria');
     }
     const date = parseIsoCalendarDate(req.query.date, 'date');
-    const input = parseTherapySlotPageQuery(req.query as Record<string, unknown>, date);
-    const page = await buildTherapySlotPage(date, patientAccess(req as AuthedRequest), input);
+    const access = patientAccess(req as AuthedRequest);
+    const scope = therapySlotScopeFingerprint(access);
+    const input = parseTherapySlotPageQuery(req.query as Record<string, unknown>, date, scope);
+    const page = await buildTherapySlotPage(date, access, input);
     res.status(200).json({
       slots: page.slots,
       pageInfo: {
         hasMore: page.pageInfo.hasMore,
         nextCursor:
           page.pageInfo.hasMore && page.pageInfo.nextId
-            ? encodeTherapySlotCursor(date, page.pageInfo.nextId)
+            ? encodeTherapySlotCursor(date, scope, page.pageInfo.nextId)
             : null,
         loadedTherapies: page.pageInfo.loadedTherapies,
         completeness: page.pageInfo.hasMore ? 'partial' : 'complete',

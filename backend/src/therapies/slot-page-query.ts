@@ -9,8 +9,9 @@ export class TherapySlotPageInputError extends Error {
 }
 
 interface TherapySlotCursorPayload {
-  v: 1;
+  v: 2;
   date: string;
+  scope: string;
   id: string;
 }
 
@@ -27,20 +28,30 @@ function one(value: unknown, field: string, maxLength: number): string | undefin
   return value;
 }
 
-export function encodeTherapySlotCursor(date: string, id: string): string {
+export function therapySlotScopeFingerprint(access: TherapyPatientAccess): string {
+  const canonical = Array.isArray(access.patientIds)
+    ? `patients:${[...access.patientIds].sort().join('\u0000')}`
+    : access.registeredById
+      ? `owner:${access.registeredById}`
+      : 'global';
+  return createHash('sha256').update(canonical, 'utf8').digest('base64url').slice(0, 22);
+}
+
+export function encodeTherapySlotCursor(date: string, scope: string, id: string): string {
   return Buffer.from(
-    JSON.stringify({ v: 1, date, id } satisfies TherapySlotCursorPayload),
+    JSON.stringify({ v: 2, date, scope, id } satisfies TherapySlotCursorPayload),
   ).toString('base64url');
 }
 
-export function decodeTherapySlotCursor(value: string, date: string): string {
+export function decodeTherapySlotCursor(value: string, date: string, scope: string): string {
   try {
     const payload = JSON.parse(
       Buffer.from(value, 'base64url').toString('utf8'),
     ) as Partial<TherapySlotCursorPayload>;
     if (
-      payload.v !== 1 ||
+      payload.v !== 2 ||
       payload.date !== date ||
+      payload.scope !== scope ||
       typeof payload.id !== 'string' ||
       !/^[A-Za-z0-9_-]{1,128}$/.test(payload.id)
     ) {
@@ -55,6 +66,7 @@ export function decodeTherapySlotCursor(value: string, date: string): string {
 export function parseTherapySlotPageQuery(
   query: Record<string, unknown>,
   date: string,
+  scope: string,
 ): TherapySlotPageQuery {
   const unknown = Object.keys(query).find((key) => !['date', 'limit', 'cursor'].includes(key));
   if (unknown) throw new TherapySlotPageInputError(`parametro non supportato: ${unknown}`);
@@ -66,5 +78,7 @@ export function parseTherapySlotPageQuery(
     );
   }
   const cursor = one(query.cursor, 'cursor', 512);
-  return { limit, ...(cursor && { cursorId: decodeTherapySlotCursor(cursor, date) }) };
+  return { limit, ...(cursor && { cursorId: decodeTherapySlotCursor(cursor, date, scope) }) };
 }
+import { createHash } from 'node:crypto';
+import type { TherapyPatientAccess } from './therapy-query.js';
