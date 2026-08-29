@@ -10,6 +10,13 @@ import { requireOperator, requireRole } from '../ai/auth.js';
 const operatorsRouter = Router();
 const requireAdmin = requireRole('admin', 'manager');
 
+// Operator profiles and schedules contain PII and operational staffing data. Set this before
+// authentication/RBAC so successful responses and all denial/error paths remain non-cacheable.
+operatorsRouter.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
+
 // In production the operator is resolved from Entra + the server-side mapping. The operational
 // directory is intentionally minimal; full profiles, notes, schedules and all writes are admin-only.
 operatorsRouter.use(requireOperator);

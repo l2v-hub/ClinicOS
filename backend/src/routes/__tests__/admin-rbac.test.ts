@@ -130,6 +130,18 @@ test('operator cannot create or alter operators', async () => {
   assert.equal(fullDirectoryResponse.status, 403);
 });
 
+test('operator directory and administration responses are private and never cached', async () => {
+  const unauthenticatedDirectory = await fetch(`${base}/operators/directory`);
+  assert.equal(unauthenticatedDirectory.status, 401);
+  assert.equal(unauthenticatedDirectory.headers.get('cache-control'), 'private, no-store');
+
+  for (const path of ['/operators', '/operators/schedules']) {
+    const forbiddenResponse = await fetch(`${base}${path}`, { headers: OPERATOR_HEADERS });
+    assert.equal(forbiddenResponse.status, 403);
+    assert.equal(forbiddenResponse.headers.get('cache-control'), 'private, no-store');
+  }
+});
+
 test('operator cannot change patient room assignments', async () => {
   const response = await fetch(`${base}/patients/patient-other/room-assignments`, {
     method: 'POST',
