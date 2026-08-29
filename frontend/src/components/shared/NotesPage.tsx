@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import type { Nota, PrioritaNota, StatoNota, Operatore } from '../../types';
+import { useEffect, useState } from 'react';
+import type { Nota, PrioritaNota, StatoNota, Operatore, Paziente } from '../../types';
+import type { NotesMailboxQuery } from '../../lib/notesMailbox';
+import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoMessage } from '../../icons';
 import { InlineEditableField } from './InlineEditableField';
 
@@ -9,10 +11,26 @@ interface NotesPageProps {
   utenteNome: string;
   isAdmin: boolean;
   operatori: Operatore[];
-  onAdd: (n: Omit<Nota, 'id' | 'createdAt'>) => void;
+  loading: boolean;
+  loadError: string | null;
+  unreadCount: number;
+  hasMore: boolean;
+  onAdd: (n: Omit<Nota, 'id' | 'createdAt'>) => Promise<boolean>;
   onUpdate: (id: string, patch: Partial<Nota>) => void | Promise<boolean>;
   onUpdateStato: (id: string, stato: StatoNota) => void;
+  onQueryChange: (query: NotesMailboxQuery) => void | Promise<void>;
+  onLoadMore: () => void;
+  onRetry: () => void;
 }
+
+type UiFilter = 'tutte' | 'ricevute' | 'inviate' | 'non_lette';
+
+const FILTER_BOX: Record<UiFilter, NotesMailboxQuery['box']> = {
+  tutte: 'all',
+  ricevute: 'received',
+  inviate: 'sent',
+  non_lette: 'unread',
+};
 
 const PRIORITA_LABEL: Record<PrioritaNota, string> = {
   normale: 'Normale',
@@ -29,6 +47,7 @@ const STATO_LABEL: Record<StatoNota, string> = {
 const FORM_VUOTO = {
   destinatarioId: 'tutti',
   destinatarioNome: 'Tutti gli operatori',
+  pazienteId: '',
   pazienteNome: '',
   priorita: 'normale' as PrioritaNota,
   messaggio: '',
@@ -40,117 +59,126 @@ export function NotesPage({
   utenteNome,
   isAdmin,
   operatori,
+  loading,
+  loadError,
+  unreadCount,
+  hasMore,
   onAdd,
   onUpdate,
   onUpdateStato,
+  onQueryChange,
+  onLoadMore,
+  onRetry,
 }: NotesPageProps) {
-  const [filtro, setFiltro] = useState<'tutte' | 'ricevute' | 'inviate' | 'non_lette'>('tutte');
+  const [filtro, setFiltro] = useState<UiFilter>('tutte');
   const [ricerca, setRicerca] = useState('');
   const [formAperto, setFormAperto] = useState(false);
   const [form, setForm] = useState(FORM_VUOTO);
+  const [pazienteSearch, setPazienteSearch] = useState('');
+  const [showPazSearch, setShowPazSearch] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const patientSearch = usePatientDirectorySearch(pazienteSearch, {
+    enabled: formAperto && showPazSearch,
+    limit: 6,
+  });
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void onQueryChange({ box: FILTER_BOX[filtro], q: ricerca });
+    }, 250);
+    return () => window.clearTimeout(timer);
+  }, [filtro, onQueryChange, ricerca]);
 
   const destinatari = [
     { id: 'tutti', nome: 'Tutti gli operatori' },
     { id: 'admin', nome: 'Amministrazione' },
     ...operatori
-      .filter((o) => o.stato === 'attivo' && o.id !== utenteId)
-      .map((o) => ({
-        id: o.id,
-        nome: `${o.cognome} ${o.nome}`,
+      .filter((operatore) => operatore.stato === 'attivo' && operatore.id !== utenteId)
+      .map((operatore) => ({
+        id: operatore.id,
+        nome: `${operatore.cognome} ${operatore.nome}`,
       })),
   ];
 
-  const filtrate = note
-    .filter((n) => {
-      if (filtro === 'ricevute') {
-        if (
-          n.destinatarioId !== utenteId &&
-          n.destinatarioId !== 'tutti' &&
-          !(isAdmin && n.destinatarioId === 'admin')
-        )
-          return false;
-      } else if (filtro === 'inviate') {
-        if (n.autoreId !== utenteId) return false;
-      } else if (filtro === 'non_lette') {
-        if (n.stato !== 'non_letta') return false;
-        if (
-          n.destinatarioId !== utenteId &&
-          n.destinatarioId !== 'tutti' &&
-          !(isAdmin && n.destinatarioId === 'admin')
-        )
-          return false;
-      }
-      if (ricerca) {
-        const q = ricerca.toLowerCase();
-        return (
-          n.messaggio.toLowerCase().includes(q) ||
-          n.autoreNome.toLowerCase().includes(q) ||
-          (n.pazienteNome ?? '').toLowerCase().includes(q)
-        );
-      }
-      return true;
-    })
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  function selectPaziente(patient: Paziente) {
+    const name = `${patient.lastName}, ${patient.firstName}`;
+    setForm((current) => ({ ...current, pazienteId: patient.id, pazienteNome: name }));
+    setPazienteSearch(name);
+    setShowPazSearch(false);
+  }
 
-  const nonLette = note.filter(
-    (n) =>
-      n.stato === 'non_letta' &&
-      (n.destinatarioId === utenteId ||
-        n.destinatarioId === 'tutti' ||
-        (isAdmin && n.destinatarioId === 'admin')),
-  ).length;
+  function resetForm() {
+    setForm(FORM_VUOTO);
+    setPazienteSearch('');
+    setShowPazSearch(false);
+    setSaveError(null);
+  }
 
-  function salva() {
-    if (!form.messaggio.trim()) return;
-    const dest = destinatari.find((d) => d.id === form.destinatarioId) ?? destinatari[0];
-    onAdd({
+  async function salva() {
+    if (!form.messaggio.trim() || saving) return;
+    const dest = destinatari.find((item) => item.id === form.destinatarioId) ?? destinatari[0];
+    setSaving(true);
+    setSaveError(null);
+    const saved = await onAdd({
       autoreId: utenteId,
       autoreNome: utenteNome,
       destinatarioId: dest.id,
       destinatarioNome: dest.nome,
+      pazienteId: form.pazienteId || undefined,
       pazienteNome: form.pazienteNome || undefined,
       priorita: form.priorita,
-      messaggio: form.messaggio,
+      messaggio: form.messaggio.trim(),
       stato: 'non_letta',
     });
+    setSaving(false);
+    if (!saved) {
+      setSaveError('Invio non riuscito. Controlla i dati e riprova.');
+      return;
+    }
     setFormAperto(false);
-    setForm(FORM_VUOTO);
+    resetForm();
   }
 
   function fmtTime(iso: string): string {
-    const d = new Date(iso);
+    const date = new Date(iso);
     const now = new Date();
-    const isToday = d.toDateString() === now.toDateString();
-    if (isToday) return d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-    return d.toLocaleDateString('it-IT', { day: '2-digit', month: 'short' });
+    if (date.toDateString() === now.toDateString()) {
+      return date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    }
+    return date.toLocaleDateString('it-IT', { day: '2-digit', month: 'short' });
   }
 
   return (
     <div className="notes-page">
       <div className="view-header">
         <div>
-          <h2 className="view-header__title">Note e Messaggi</h2>
+          <h2 className="view-header__title">Note e messaggi</h2>
           <p className="view-header__sub">
-            {nonLette > 0 ? (
+            {unreadCount > 0 ? (
               <span style={{ color: 'var(--red)' }}>
-                {nonLette} non lett{nonLette === 1 ? 'a' : 'e'}
+                {unreadCount} non lett{unreadCount === 1 ? 'a' : 'e'}
               </span>
             ) : (
               'Tutte lette'
             )}
           </p>
         </div>
-        <button className="btn-success" onClick={() => setFormAperto((v) => !v)}>
+        <button className="btn-success" onClick={() => setFormAperto((open) => !open)}>
           <IcoPlus /> Nuova nota
         </button>
       </div>
 
-      {/* Form */}
       {formAperto && (
         <div className="op-form-panel">
           <div className="op-form-panel__header">
-            <h3 className="op-form-panel__title">Nuova Nota / Messaggio</h3>
-            <button className="icon-btn" onClick={() => setFormAperto(false)}>
+            <h3 className="op-form-panel__title">Nuova nota / messaggio</h3>
+            <button
+              className="icon-btn"
+              aria-label="Chiudi nuova nota"
+              onClick={() => setFormAperto(false)}
+              disabled={saving}
+            >
               <IcoX />
             </button>
           </div>
@@ -160,14 +188,20 @@ export function NotesPage({
               <select
                 className="form-select"
                 value={form.destinatarioId}
-                onChange={(e) => {
-                  const d = destinatari.find((x) => x.id === e.target.value) ?? destinatari[0];
-                  setForm((p) => ({ ...p, destinatarioId: d.id, destinatarioNome: d.nome }));
+                onChange={(event) => {
+                  const dest =
+                    destinatari.find((item) => item.id === event.target.value) ?? destinatari[0];
+                  setForm((current) => ({
+                    ...current,
+                    destinatarioId: dest.id,
+                    destinatarioNome: dest.nome,
+                  }));
                 }}
+                disabled={saving}
               >
-                {destinatari.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.nome}
+                {destinatari.map((dest) => (
+                  <option key={dest.id} value={dest.id}>
+                    {dest.nome}
                   </option>
                 ))}
               </select>
@@ -177,9 +211,13 @@ export function NotesPage({
               <select
                 className="form-select"
                 value={form.priorita}
-                onChange={(e) =>
-                  setForm((p) => ({ ...p, priorita: e.target.value as PrioritaNota }))
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    priorita: event.target.value as PrioritaNota,
+                  }))
                 }
+                disabled={saving}
               >
                 <option value="normale">Normale</option>
                 <option value="alta">Alta</option>
@@ -187,13 +225,49 @@ export function NotesPage({
               </select>
             </div>
             <div className="form-field">
-              <label className="form-label">Paziente (opz.)</label>
-              <input
-                className="form-input"
-                value={form.pazienteNome}
-                onChange={(e) => setForm((p) => ({ ...p, pazienteNome: e.target.value }))}
-                placeholder="Cognome, Nome"
-              />
+              <label className="form-label">Paziente (opzionale)</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  className="form-input"
+                  value={pazienteSearch}
+                  onChange={(event) => {
+                    setPazienteSearch(event.target.value);
+                    setShowPazSearch(true);
+                    setForm((current) => ({ ...current, pazienteId: '', pazienteNome: '' }));
+                  }}
+                  onFocus={() => setShowPazSearch(true)}
+                  placeholder="Cerca per nome o MRN…"
+                  maxLength={80}
+                  disabled={saving}
+                />
+                {showPazSearch && patientSearch.results.length > 0 && (
+                  <div className="search-dropdown">
+                    {patientSearch.results.map((patient) => (
+                      <button
+                        key={patient.id}
+                        type="button"
+                        className="search-dropdown__item"
+                        onClick={() => selectPaziente(patient)}
+                      >
+                        <span className="search-dropdown__name">
+                          {patient.lastName}, {patient.firstName}
+                        </span>
+                        <span className="search-dropdown__mrn">{patient.medicalRecordNumber}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {showPazSearch && patientSearch.loading && (
+                  <p className="search-dropdown__status" role="status">
+                    Ricerca in corso…
+                  </p>
+                )}
+                {showPazSearch && patientSearch.error && (
+                  <p className="search-dropdown__status" role="alert">
+                    {patientSearch.error}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
           <div className="form-field" style={{ marginTop: 8 }}>
@@ -202,22 +276,38 @@ export function NotesPage({
               className="form-input"
               rows={3}
               value={form.messaggio}
-              onChange={(e) => setForm((p) => ({ ...p, messaggio: e.target.value }))}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, messaggio: event.target.value }))
+              }
               placeholder="Scrivi il messaggio…"
+              maxLength={4000}
+              disabled={saving}
             />
           </div>
+          {saveError && (
+            <p className="form-error" role="alert">
+              {saveError}
+            </p>
+          )}
           <div className="op-form-panel__actions">
-            <button className="btn-secondary" onClick={() => setFormAperto(false)}>
+            <button
+              className="btn-secondary"
+              onClick={() => setFormAperto(false)}
+              disabled={saving}
+            >
               Annulla
             </button>
-            <button className="btn-success" onClick={salva}>
-              <IcoCheck /> Invia
+            <button
+              className="btn-success"
+              onClick={() => void salva()}
+              disabled={saving || !form.messaggio.trim()}
+            >
+              <IcoCheck /> {saving ? 'Invio…' : 'Invia'}
             </button>
           </div>
         </div>
       )}
 
-      {/* Toolbar */}
       <div className="toolbar">
         <div className="search-wrap">
           <span className="search-wrap__ico">
@@ -226,12 +316,16 @@ export function NotesPage({
           <input
             className="search-input"
             type="search"
-            placeholder="Cerca…"
+            placeholder="Cerca nelle note…"
             value={ricerca}
-            onChange={(e) => setRicerca(e.target.value)}
+            onChange={(event) => setRicerca(event.target.value.slice(0, 100))}
           />
           {ricerca && (
-            <button className="search-clear-btn" onClick={() => setRicerca('')}>
+            <button
+              className="search-clear-btn"
+              aria-label="Cancella ricerca"
+              onClick={() => setRicerca('')}
+            >
               <IcoX />
             </button>
           )}
@@ -242,44 +336,62 @@ export function NotesPage({
               { key: 'tutte', label: 'Tutte' },
               { key: 'ricevute', label: 'Ricevute' },
               { key: 'inviate', label: 'Inviate' },
-              { key: 'non_lette', label: `Non lette${nonLette > 0 ? ` (${nonLette})` : ''}` },
+              {
+                key: 'non_lette',
+                label: `Non lette${unreadCount > 0 ? ` (${unreadCount})` : ''}`,
+              },
             ] as const
-          ).map((f) => (
+          ).map((filter) => (
             <button
-              key={f.key}
-              className={`filter-chip${filtro === f.key ? ' active' : ''}`}
-              onClick={() => setFiltro(f.key)}
+              key={filter.key}
+              className={`filter-chip${filtro === filter.key ? ' active' : ''}`}
+              onClick={() => setFiltro(filter.key)}
+              aria-pressed={filtro === filter.key}
             >
-              {f.label}
+              {filter.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Note list */}
-      <div className="notes-list">
-        {filtrate.length === 0 ? (
+      {loadError && (
+        <div className="page-load-error" role="alert">
+          <strong>{loadError}</strong>
+          <button type="button" onClick={onRetry} disabled={loading}>
+            Riprova
+          </button>
+        </div>
+      )}
+
+      <div className="notes-list" aria-busy={loading}>
+        {loading && note.length === 0 ? (
+          <div className="page-loading" role="status">
+            Caricamento note…
+          </div>
+        ) : !loadError && note.length === 0 ? (
           <div className="empty-state-card">
             <IcoMessage />
             <p>Nessun messaggio trovato.</p>
           </div>
         ) : (
-          filtrate.map((n) => (
+          note.map((item) => (
             <div
-              key={n.id}
-              className={`note-card note-card--${n.priorita}${n.stato === 'non_letta' ? ' note-card--unread' : ''}`}
+              key={item.id}
+              className={`note-card note-card--${item.priorita}${item.stato === 'non_letta' ? ' note-card--unread' : ''}`}
             >
               <div className="note-card__header">
-                <span className={`consegna-priorita-badge consegna-priorita-badge--${n.priorita}`}>
-                  {PRIORITA_LABEL[n.priorita]}
+                <span
+                  className={`consegna-priorita-badge consegna-priorita-badge--${item.priorita}`}
+                >
+                  {PRIORITA_LABEL[item.priorita]}
                 </span>
-                <span className="note-author">{n.autoreNome}</span>
+                <span className="note-author">{item.autoreNome}</span>
                 <span className="note-arrow">→</span>
-                <span className="note-dest">{n.destinatarioNome}</span>
-                {n.pazienteNome && <span className="note-patient">· {n.pazienteNome}</span>}
-                <span className="note-time">{fmtTime(n.createdAt)}</span>
-                <span className={`stato-pill stato-pill--nota-${n.stato}`}>
-                  {STATO_LABEL[n.stato]}
+                <span className="note-dest">{item.destinatarioNome}</span>
+                {item.pazienteNome && <span className="note-patient">· {item.pazienteNome}</span>}
+                <span className="note-time">{fmtTime(item.createdAt)}</span>
+                <span className={`stato-pill stato-pill--nota-${item.stato}`}>
+                  {STATO_LABEL[item.stato]}
                 </span>
               </div>
               <div className="note-message">
@@ -287,26 +399,27 @@ export function NotesPage({
                   variant="block"
                   label="Messaggio"
                   type="textarea"
-                  value={n.messaggio}
+                  value={item.messaggio}
                   placeholder="Scrivi il messaggio…"
-                  disabled={n.autoreId !== utenteId}
-                  onSave={(v) => onUpdate(n.id, { messaggio: v })}
+                  disabled={!isAdmin && item.autoreId !== utenteId}
+                  onSave={(value) => onUpdate(item.id, { messaggio: value })}
                 />
               </div>
-              {n.stato !== 'risolta' && (
+              {item.stato !== 'risolta' && (
                 <div className="note-card__actions">
-                  {n.stato === 'non_letta' && (
+                  {item.stato === 'non_letta' && (
                     <button
                       className="btn-secondary btn-sm"
-                      onClick={() => onUpdateStato(n.id, 'letta')}
+                      onClick={() => onUpdateStato(item.id, 'letta')}
                     >
                       Segna come letta
                     </button>
                   )}
                   <button
                     className="icon-btn icon-btn--sm icon-btn--success"
-                    onClick={() => onUpdateStato(n.id, 'risolta')}
-                    title="Risolto"
+                    onClick={() => onUpdateStato(item.id, 'risolta')}
+                    title="Segna come risolta"
+                    aria-label="Segna come risolta"
                   >
                     <IcoCheck />
                   </button>
@@ -316,6 +429,14 @@ export function NotesPage({
           ))
         )}
       </div>
+
+      {hasMore && (
+        <div className="op-form-panel__actions">
+          <button className="btn-secondary" onClick={onLoadMore} disabled={loading}>
+            {loading ? 'Caricamento…' : 'Carica altri messaggi'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

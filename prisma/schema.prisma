@@ -419,10 +419,29 @@ model Nota {
   stato            String   @default("non_letta") // non_letta | letta | risolta
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  recipientStates  NotaRecipientState[]
 
   @@index([stato])
   @@index([destinatarioId])
   @@index([createdAt])
+  @@index([destinatarioId, stato, createdAt, id])
+  @@index([destinatarioId, createdAt, id])
+  @@index([autoreId, createdAt, id])
+}
+
+// Read/resolved state belongs to one mailbox. In particular, one operator reading a broadcast
+// must not mark the same note as read for every other operator.
+model NotaRecipientState {
+  id         String   @id @default(cuid())
+  notaId     String
+  operatorId String
+  stato      String   @default("non_letta")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  nota       Nota     @relation(fields: [notaId], references: [id], onDelete: Cascade)
+
+  @@unique([notaId, operatorId])
+  @@index([operatorId, stato, notaId])
 }
 
 model PatientDiaryEntry {

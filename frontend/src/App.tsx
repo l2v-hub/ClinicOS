@@ -12,6 +12,14 @@ import {
   localIsoDate,
   type AppointmentRangeRequest,
 } from './lib/appointmentRange';
+import {
+  buildNotesMailboxUrl,
+  mapNoteDto,
+  mergeNotesPage,
+  type NotesMailboxQuery,
+  type NotesPageInfo,
+  type NotesPageResponse,
+} from './lib/notesMailbox';
 
 import type {
   UtenteApp,
@@ -250,6 +258,10 @@ export default function App() {
   const sessionEpochRef = useRef(0);
   const appointmentRequestSequenceRef = useRef(0);
   const therapyRequestSequenceRef = useRef(0);
+  const notesRequestSequenceRef = useRef(0);
+  const notesAbortControllerRef = useRef<AbortController | null>(null);
+  const notesQueryRef = useRef<NotesMailboxQuery>({ box: 'all', q: '' });
+  const notesPageInfoRef = useRef<NotesPageInfo>({ hasMore: false, nextCursor: null });
   const therapyDateRef = useRef(localIsoDate());
   const appointmentRangeRef = useRef<AppointmentRangeRequest>({
     from: localIsoDate(),
@@ -295,6 +307,13 @@ export default function App() {
   // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>([]);
   const [note, setNote] = useState<Nota[]>([]);
+  const [loadingNotes, setLoadingNotes] = useState(false);
+  const [notesLoadError, setNotesLoadError] = useState<string | null>(null);
+  const [notesUnreadCount, setNotesUnreadCount] = useState(0);
+  const [notesPageInfo, setNotesPageInfo] = useState<NotesPageInfo>({
+    hasMore: false,
+    nextCursor: null,
+  });
   const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
   const [loadingTherapySlots, setLoadingTherapySlots] = useState(true);
   const [therapyLoadError, setTherapyLoadError] = useState<string | null>(null);
@@ -601,6 +620,50 @@ export default function App() {
     }
   }, []);
 
+  // ── Load note private e paginate ───────────────────────────────────────────
+
+  const loadNotes = useCallback(async (query?: NotesMailboxQuery, append = false) => {
+    const requestedQuery = query ?? notesQueryRef.current;
+    const sessionEpoch = sessionEpochRef.current;
+    const request = ++notesRequestSequenceRef.current;
+    notesAbortControllerRef.current?.abort();
+    const controller = new AbortController();
+    notesAbortControllerRef.current = controller;
+    notesQueryRef.current = requestedQuery;
+    const cursor = append ? notesPageInfoRef.current.nextCursor : null;
+    if (append && !cursor) return;
+    setLoadingNotes(true);
+    setNotesLoadError(null);
+    if (!append) setNote([]);
+    try {
+      const response = await fetch(buildNotesMailboxUrl(API_URL, requestedQuery, cursor), {
+        headers: operatorHeaders(),
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`notes_${response.status}`);
+      const page = (await response.json()) as NotesPageResponse;
+      if (!Array.isArray(page.items) || !page.pageInfo || !page.summary) {
+        throw new Error('notes_shape');
+      }
+      if (sessionEpoch !== sessionEpochRef.current || request !== notesRequestSequenceRef.current)
+        return;
+      const items = page.items.map(mapNoteDto);
+      setNote((current) => (append ? mergeNotesPage(current, items) : items));
+      notesPageInfoRef.current = page.pageInfo;
+      setNotesPageInfo(page.pageInfo);
+      setNotesUnreadCount(page.summary.unread);
+    } catch (error) {
+      if ((error as { name?: string }).name === 'AbortError') return;
+      if (sessionEpoch === sessionEpochRef.current && request === notesRequestSequenceRef.current) {
+        setNotesLoadError('Note non disponibili. Riprova.');
+      }
+    } finally {
+      if (sessionEpoch === sessionEpochRef.current && request === notesRequestSequenceRef.current) {
+        setLoadingNotes(false);
+      }
+    }
+  }, []);
+
   // ── Load rooms (camere + letti con occupazione reale) ───────────────────────
 
   const loadCamere = useCallback(() => {
@@ -733,27 +796,9 @@ export default function App() {
       .catch(() => {
         /* keep empty array */
       });
-    // Load note/messaggi from API (persisted)
-    fetch(`${API_URL}/notes`, {
-      headers: operatorHeaders(),
-      signal: sessionController.signal,
-    })
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: Nota[]) => {
-        if (sessionEpoch !== sessionEpochRef.current) return;
-        setNote(
-          data.map((n) => ({
-            ...n,
-            pazienteId: n.pazienteId ?? undefined,
-            pazienteNome: n.pazienteNome ?? undefined,
-          })),
-        );
-      })
-      .catch(() => {
-        /* keep empty array */
-      });
+    void loadNotes({ box: 'all', q: '' });
     return () => sessionController.abort();
-  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne]);
+  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegne, loadNotes]);
 
   // Resolve a patient restored from the hash with one URL-encoded authenticated lookup. The
   // pending id is consumed once and every outcome closes the loading state.
@@ -817,6 +862,8 @@ export default function App() {
     sessionEpochRef.current += 1;
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
+    notesRequestSequenceRef.current += 1;
+    notesAbortControllerRef.current?.abort();
     patientNavigationSequenceRef.current += 1;
     // In Entra mode the redirect/silent flow completes before any clinical fetch starts.
     // The selected card is only a demo/local hint: with a token, id and UI role are replaced by
@@ -869,9 +916,17 @@ export default function App() {
     sessionEpochRef.current += 1;
     appointmentRequestSequenceRef.current += 1;
     patientNavigationSequenceRef.current += 1;
+    notesRequestSequenceRef.current += 1;
+    notesAbortControllerRef.current?.abort();
     setUtente(null);
     setAppointmentLoadError(null);
     setTherapyLoadError(null);
+    setNotesLoadError(null);
+    setLoadingNotes(false);
+    setNotesUnreadCount(0);
+    notesQueryRef.current = { box: 'all', q: '' };
+    notesPageInfoRef.current = { hasMore: false, nextCursor: null };
+    setNotesPageInfo({ hasMore: false, nextCursor: null });
     setLoadingTherapySlots(true);
     setCurrentOperator(null);
     clearCachedGet();
@@ -1401,21 +1456,19 @@ export default function App() {
       const res = await fetch(`${API_URL}/notes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify(n),
+        body: JSON.stringify({
+          destinatarioId: n.destinatarioId,
+          pazienteId: n.pazienteId ?? null,
+          priorita: n.priorita,
+          messaggio: n.messaggio,
+        }),
       });
       if (!res.ok) {
         showToast('Impossibile inviare la nota');
         return false;
       }
-      const created = (await res.json()) as Nota;
-      setNote((prev) => [
-        {
-          ...created,
-          pazienteId: created.pazienteId ?? undefined,
-          pazienteNome: created.pazienteNome ?? undefined,
-        },
-        ...prev,
-      ]);
+      await res.json();
+      await loadNotes(notesQueryRef.current);
       showToast('Nota inviata');
       return true;
     } catch {
@@ -1426,15 +1479,32 @@ export default function App() {
 
   async function updateNota(id: string, patch: Partial<Nota>): Promise<boolean> {
     const snapshot = note;
+    const mutationSession = sessionEpochRef.current;
+    const mutationQuery = notesQueryRef.current;
+    const mutationRequest = notesRequestSequenceRef.current;
     setNote((prev) => prev.map((n) => (n.id === id ? { ...n, ...patch } : n)));
     try {
       const res = await fetch(`${API_URL}/notes/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify(patch),
+        body: JSON.stringify({
+          ...(patch.destinatarioId !== undefined ? { destinatarioId: patch.destinatarioId } : {}),
+          ...(patch.pazienteId !== undefined ? { pazienteId: patch.pazienteId ?? null } : {}),
+          ...(patch.priorita !== undefined ? { priorita: patch.priorita } : {}),
+          ...(patch.messaggio !== undefined ? { messaggio: patch.messaggio } : {}),
+          ...(patch.stato !== undefined ? { stato: patch.stato } : {}),
+        }),
       });
+      if (mutationSession !== sessionEpochRef.current) return false;
       if (!res.ok) {
-        setNote(snapshot);
+        if (
+          mutationQuery === notesQueryRef.current &&
+          mutationRequest === notesRequestSequenceRef.current
+        ) {
+          setNote(snapshot);
+        } else {
+          void loadNotes(notesQueryRef.current);
+        }
         showToast('Impossibile salvare la nota');
         return false;
       }
@@ -1450,9 +1520,18 @@ export default function App() {
             : n,
         ),
       );
+      await loadNotes(notesQueryRef.current);
       return true;
     } catch {
-      setNote(snapshot);
+      if (mutationSession !== sessionEpochRef.current) return false;
+      if (
+        mutationQuery === notesQueryRef.current &&
+        mutationRequest === notesRequestSequenceRef.current
+      ) {
+        setNote(snapshot);
+      } else {
+        void loadNotes(notesQueryRef.current);
+      }
       showToast('Impossibile salvare la nota');
       return false;
     }
@@ -1622,18 +1701,8 @@ export default function App() {
   });
   const searchResults = globalPatientSearch.results;
 
-  // ── Unread notes count ──────────────────────────────────────────────────────
-
   const utenteId = utente?.id ?? '';
   const isAdmin = utente?.ruolo === 'admin';
-
-  const unreadNotes = note.filter(
-    (n) =>
-      n.stato === 'non_letta' &&
-      (n.destinatarioId === utenteId ||
-        n.destinatarioId === 'tutti' ||
-        (isAdmin && n.destinatarioId === 'admin')),
-  ).length;
 
   // ── Login gate ──────────────────────────────────────────────────────────────
 
@@ -1682,7 +1751,7 @@ export default function App() {
         utente={utente}
         onNavigate={(k) => navigate(k)}
         onLogout={handleLogout}
-        unreadNotes={unreadNotes}
+        unreadNotes={notesUnreadCount}
       />
 
       {/* Main */}
@@ -1888,9 +1957,16 @@ export default function App() {
                   utenteNome={utente.nome}
                   isAdmin={isAdmin}
                   operatori={operatori}
+                  loading={loadingNotes}
+                  loadError={notesLoadError}
+                  unreadCount={notesUnreadCount}
+                  hasMore={notesPageInfo.hasMore}
                   onAdd={addNota}
                   onUpdate={updateNota}
                   onUpdateStato={updateNotaStato}
+                  onQueryChange={loadNotes}
+                  onLoadMore={() => void loadNotes(notesQueryRef.current, true)}
+                  onRetry={() => void loadNotes(notesQueryRef.current)}
                 />
               )}
 
