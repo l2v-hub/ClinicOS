@@ -27,6 +27,7 @@ import {
   vitalSource,
 } from './sources.js';
 import { gatewayAudit } from './audit.js';
+import { DiaryPageInputError, parseDiaryPageQuery } from '../../patients/diary-pagination.js';
 import {
   GatewayError,
   type ClinicalSectionMatch,
@@ -59,6 +60,15 @@ import {
   TIMELINE_LOOKAHEAD,
   type TimelineCandidate,
 } from './timeline-window.js';
+import {
+  boundGatewayPatientFeed,
+  GATEWAY_PATIENT_FEED_LOOKAHEAD,
+  MAX_GATEWAY_APPOINTMENT_NOTES,
+  MAX_GATEWAY_DIARY_CONTENT,
+  MAX_GATEWAY_PATIENT_FEED_ROWS,
+  MAX_GATEWAY_SOURCE_EXCERPT,
+  parseGatewayAppointmentRange,
+} from './patient-feed-window.js';
 
 const nowIso = () => new Date().toISOString();
 const displayName = (p: { firstName: string; lastName: string }) =>
@@ -595,28 +605,67 @@ export async function getPatientDiary(
   patientId: string,
   ctx: UserContext,
   opts: { authorType?: string; from?: string; to?: string } = {},
-): Promise<SourcedResult<unknown[]>> {
+): Promise<SourcedResult<unknown[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
-  const rows = await prisma.patientDiaryEntry.findMany({
-    where: { patientId, ...(opts.authorType ? { authorType: opts.authorType } : {}) },
-    orderBy: { entryDateTime: 'desc' },
-  });
-  const inRange = rows.filter(
-    (r) => (!opts.from || r.entryDateTime >= opts.from) && (!opts.to || r.entryDateTime <= opts.to),
-  );
-  const refs = inRange.map((d) =>
-    diarySource(patientId, d.id, d.authorType, d.content, d.entryDateTime),
+  let filters;
+  try {
+    filters = parseDiaryPageQuery({ ...opts, limit: String(MAX_GATEWAY_PATIENT_FEED_ROWS) });
+  } catch (error) {
+    if (error instanceof DiaryPageInputError) {
+      throw new GatewayError('bad_request', error.message);
+    }
+    throw error;
+  }
+  const predicates: Prisma.Sql[] = [Prisma.sql`diary."patientId" = ${patientId}`];
+  if (filters.authorType) {
+    predicates.push(Prisma.sql`diary."authorType" = ${filters.authorType}`);
+  }
+  if (filters.from) predicates.push(Prisma.sql`diary."entryDateTime" >= ${filters.from}`);
+  if (filters.to) {
+    predicates.push(Prisma.sql`diary."entryDateTime" <= ${`${filters.to}T23:59:59.999`}`);
+  }
+  const rows = await prisma.$queryRaw<
+    Array<{
+      id: string;
+      title: string | null;
+      authorType: string;
+      priority: string;
+      status: string;
+      entryDateTime: string;
+      category: string | null;
+      content: string;
+      contentTruncated: boolean;
+    }>
+  >(Prisma.sql`
+    SELECT diary."id", diary."title", diary."authorType", diary."priority", diary."status",
+           diary."entryDateTime", diary."category",
+           LEFT(diary."content", ${MAX_GATEWAY_DIARY_CONTENT}) AS "content",
+           length(diary."content") > ${MAX_GATEWAY_DIARY_CONTENT} AS "contentTruncated"
+    FROM "PatientDiaryEntry" diary
+    WHERE ${Prisma.join(predicates, ' AND ')}
+    ORDER BY diary."entryDateTime" DESC, diary."id" DESC
+    LIMIT ${GATEWAY_PATIENT_FEED_LOOKAHEAD}
+  `);
+  const result = boundGatewayPatientFeed(rows);
+  const refs = result.data.map((d) =>
+    diarySource(
+      patientId,
+      d.id,
+      d.authorType,
+      d.content.slice(0, MAX_GATEWAY_SOURCE_EXCERPT),
+      d.entryDateTime,
+    ),
   );
   gatewayAudit(
     ctx,
     'get_patient_diary',
     [patientId],
-    inRange.length,
-    inRange.length ? 'ok' : 'empty',
+    result.data.length,
+    result.data.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: inRange, sourceRefs: refs };
+  return { data: result.data, sourceRefs: refs, truncated: result.truncated };
 }
 
 export async function getPatientDocumentsG(
@@ -642,28 +691,47 @@ export async function getPatientAppointments(
   patientId: string,
   ctx: UserContext,
   opts: { from?: string; to?: string } = {},
-): Promise<SourcedResult<unknown[]>> {
+): Promise<SourcedResult<unknown[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
-  const where: Record<string, unknown> = { patientId };
-  if (opts.from || opts.to)
-    where.scheduledAt = {
-      ...(opts.from ? { gte: new Date(opts.from) } : {}),
-      ...(opts.to ? { lte: new Date(opts.to) } : {}),
-    };
-  const rows = await prisma.appointment.findMany({ where, orderBy: { scheduledAt: 'asc' } });
-  const refs = rows.map((a) =>
+  const range = parseGatewayAppointmentRange(opts);
+  const predicates: Prisma.Sql[] = [Prisma.sql`appointment."patientId" = ${patientId}`];
+  if (range.from) predicates.push(Prisma.sql`appointment."scheduledAt" >= ${range.from}`);
+  if (range.to) predicates.push(Prisma.sql`appointment."scheduledAt" <= ${range.to}`);
+  const rows = await prisma.$queryRaw<
+    Array<{
+      id: string;
+      scheduledAt: Date;
+      durationMinutes: number;
+      reason: string | null;
+      status: string;
+      notes: string | null;
+      notesTruncated: boolean;
+    }>
+  >(Prisma.sql`
+    SELECT appointment."id", appointment."scheduledAt", appointment."durationMinutes",
+           appointment."reason", appointment."status",
+           LEFT(appointment."notes", ${MAX_GATEWAY_APPOINTMENT_NOTES}) AS "notes",
+           COALESCE(length(appointment."notes"), 0) > ${MAX_GATEWAY_APPOINTMENT_NOTES}
+             AS "notesTruncated"
+    FROM "Appointment" appointment
+    WHERE ${Prisma.join(predicates, ' AND ')}
+    ORDER BY appointment."scheduledAt" ASC, appointment."id" ASC
+    LIMIT ${GATEWAY_PATIENT_FEED_LOOKAHEAD}
+  `);
+  const result = boundGatewayPatientFeed(rows);
+  const refs = result.data.map((a) =>
     appointmentSource(patientId, a.id, a.reason ?? 'appuntamento', a.scheduledAt.toISOString()),
   );
   gatewayAudit(
     ctx,
     'get_patient_appointments',
     [patientId],
-    rows.length,
-    rows.length ? 'ok' : 'empty',
+    result.data.length,
+    result.data.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: rows, sourceRefs: refs };
+  return { data: result.data, sourceRefs: refs, truncated: result.truncated };
 }
 
 export async function getPatientTimeline(
