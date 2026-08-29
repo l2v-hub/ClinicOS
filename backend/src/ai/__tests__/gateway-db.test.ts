@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { prisma } from '../../lib/prisma.js';
 import {
   correlate,
+  getCrossPatientVitalSigns,
   searchClinicalSections,
   searchDocuments,
   searchPatients,
@@ -57,6 +58,9 @@ before(async () => {
         codiceFiscale: `${suffix}-legacy-cf`,
         allergie: [{ allergene: 'Caffè' }],
         terapie: [{ descrizione: 'Warfarìn', dataInizio: '2026-01-01' }],
+        parametriVitali: [
+          { id: `${suffix}-vital`, etichetta: 'PA', valore: '170/95', rilevato: '2026-08-29' },
+        ],
       },
     },
   });
@@ -134,4 +138,25 @@ test('gateway narrative/document/correlation SQL is accent-insensitive and bound
     ),
     [legacyId],
   );
+});
+
+test('cross-vitals applies the patient ACL in SQL before the cap', async () => {
+  const scoped = {
+    ...globalContext,
+    permittedPatientIds: [legacyId],
+    requestId: `${suffix}-vitals`,
+  };
+  const result = await getCrossPatientVitalSigns(
+    { label: 'PA', systolicMin: 151, patientLimit: 1 },
+    scoped,
+    {
+      AI_DEFAULT_TENANT: 'clinicos',
+      AI_CROSS_PATIENT_SEARCH_ENABLED: 'true',
+    },
+  );
+  assert.deepEqual(
+    result.data.map((row) => row.patientId),
+    [legacyId],
+  );
+  assert.ok(result.sourceRefs.every((source) => source.patientId === legacyId));
 });

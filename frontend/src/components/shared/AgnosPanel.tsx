@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { IcoAI, IcoX } from '../../icons';
-import { AnswerView, type AssistantAnswer, type AssistantNav } from './AIAssistantButton';
+import { AnswerView, type AssistantNav } from './AIAssistantButton';
 import { useAgnosChat, type AgnosTurn } from './agnos/useAgnosChat';
 import { useVoiceInput } from './agnos/useVoiceInput';
 import { useSpeechOutput } from './agnos/useSpeechOutput';
 import { AgnosBrief } from './agnos/AgnosBrief';
 import { navChipLabel } from './agnos/agnosNav';
+import { spokenAssistantSummary } from './agnos/assistantFeedback';
 
 // 015 — chatbot unificato (testo + voce): read answers (with sources) +
 // CRU write actions with preview/confirm. Replaces AIAssistantButton as THE
@@ -35,23 +36,11 @@ interface Props {
   onNavigate?: (nav: AssistantNav) => void;
 }
 
-/** Testo sintetico da leggere ad alta voce per una risposta read (mai i dati clinici estesi). */
-function readSpokenSummary(read: AssistantAnswer): string {
-  if (read.refusal) return read.refusal;
-  if (read.notFound || !read.results.length) return 'Informazione non trovata.';
-  const labels = read.sources
-    .slice(0, 3)
-    .map((s) => s.label)
-    .filter(Boolean);
-  const count = read.results.length === 1 ? '1 risultato' : `${read.results.length} risultati`;
-  return labels.length ? `Trovato ${count}: ${labels.join('; ')}.` : `Trovato ${count}.`;
-}
-
 /** Testo da leggere per un turno Agnos risolto (esiti, rifiuti, errori, read); null = non leggere. */
 function spokenTextFor(turn: AgnosTurn): string | null {
   if (turn.role !== 'agnos') return null;
   if (turn.status === 'attesa' || turn.status === 'in-conferma') return null;
-  if (turn.read) return readSpokenSummary(turn.read);
+  if (turn.read) return spokenAssistantSummary(turn.read);
   if (turn.text) return turn.text;
   return null;
 }

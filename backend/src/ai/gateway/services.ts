@@ -44,6 +44,11 @@ import {
   validateCorrelateInput,
   validatePatientSearchInput,
 } from './validation.js';
+import {
+  searchCrossPatientVitals,
+  type CrossVitalsInput,
+  type CrossVitalsResult,
+} from './cross-vitals.js';
 
 const nowIso = () => new Date().toISOString();
 const displayName = (p: { firstName: string; lastName: string }) =>
@@ -432,6 +437,41 @@ export async function getPatientVitalSigns(
     nowIso(),
   );
   return { data: filtered, sourceRefs: refs };
+}
+
+export async function getCrossPatientVitalSigns(
+  input: CrossVitalsInput,
+  ctx: UserContext,
+  env: NodeJS.ProcessEnv = process.env,
+): Promise<CrossVitalsResult> {
+  const result = await searchCrossPatientVitals(
+    input,
+    ctx,
+    {
+      findPatients: async ({ permittedPatientIds, limit }) =>
+        prisma.patient.findMany({
+          where: permittedPatientIds === null ? undefined : { id: { in: permittedPatientIds } },
+          orderBy: { id: 'asc' },
+          take: limit,
+          select: { id: true },
+        }),
+      findCartelle: (patientIds) =>
+        prisma.cartella.findMany({
+          where: { patientId: { in: patientIds } },
+          select: { id: true, patientId: true, data: true },
+        }),
+    },
+    env,
+  );
+  gatewayAudit(
+    ctx,
+    'search_cross_patient_vitals',
+    result.data.map((row) => row.patientId),
+    result.data.length,
+    result.data.length ? 'ok' : 'empty',
+    nowIso(),
+  );
+  return result;
 }
 
 export async function getPatientTherapies(

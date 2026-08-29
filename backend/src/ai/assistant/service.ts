@@ -502,14 +502,20 @@ export async function assistantQuery(
 
   const results: unknown[] = [];
   const sources: SourceReference[] = [];
+  let sourceTruncated = false;
   let calls = 0;
   for (const call of plan.tools) {
-    if (calls >= lim.maxToolCalls) break;
+    if (calls >= lim.maxToolCalls || results.length >= lim.maxResults) {
+      sourceTruncated = true;
+      break;
+    }
     calls++;
     try {
       const r = await dispatch(call.tool, call.args, ctx, env, effectiveCtx.operatorName);
-      for (const item of r.data) {
-        if (results.length >= lim.maxResults) break;
+      sourceTruncated ||= r.truncated === true;
+      const remaining = Math.max(0, lim.maxResults - results.length);
+      if (r.data.length > remaining) sourceTruncated = true;
+      for (const item of r.data.slice(0, remaining)) {
         results.push(item);
       }
       sources.push(...r.sourceRefs);
@@ -550,7 +556,7 @@ export async function assistantQuery(
     sources: cappedSources,
     navigation,
     notFound: results.length === 0,
-    truncated: results.length >= lim.maxResults,
+    truncated: sourceTruncated,
     mode,
     answerText,
     composed,
@@ -564,7 +570,7 @@ async function dispatch(
   ctx: UserContext,
   env: NodeJS.ProcessEnv = process.env,
   operatorName?: string,
-): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated?: boolean }> {
   const pid = String(args.patientId ?? '');
   switch (tool) {
     case 'get_patient_allergies': {
@@ -602,7 +608,7 @@ async function dispatch(
     case 'search_across_patients': {
       // systolic-based broad query → correlate via cross-patient vitals; text → across search
       if (typeof args.systolicMin === 'number')
-        return await crossVitals(Number(args.systolicMin), ctx);
+        return await crossVitals(Number(args.systolicMin), ctx, env);
       const data = await svc.searchAcrossPatients(args as never, ctx);
       return { data, sourceRefs: data.flatMap((m) => m.sourceRefs) };
     }
@@ -654,17 +660,18 @@ export async function dispatchQueryData(
 async function crossVitals(
   systolicMin: number,
   ctx: UserContext,
-): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
-  const patients = await prisma.patient.findMany({ take: 100 });
-  const data: unknown[] = [];
-  const sourceRefs: SourceReference[] = [];
-  for (const p of patients) {
-    if (ctx.permittedPatientIds !== null && !ctx.permittedPatientIds.includes(p.id)) continue;
-    const r = await svc.getPatientVitalSigns({ patientId: p.id, label: 'PA', systolicMin }, ctx);
-    if (r.data.length) {
-      data.push({ patientId: p.id, vitals: r.data });
-      sourceRefs.push(...r.sourceRefs);
-    }
-  }
-  return { data, sourceRefs };
+  env: NodeJS.ProcessEnv,
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated?: boolean }> {
+  const lim = limits(env);
+  return svc.getCrossPatientVitalSigns(
+    {
+      label: 'PA',
+      systolicMin,
+      patientLimit: lim.maxPatients,
+      resultLimit: lim.maxResults,
+      vitalLimitPerPatient: lim.maxResults,
+    },
+    ctx,
+    env,
+  );
 }

@@ -5575,6 +5575,16 @@ textarea.form-input {
   color: var(--text-muted);
   margin-bottom: 6px;
 }
+.ai-asst__partial {
+  margin-bottom: 8px;
+  border-left: 3px solid var(--c-warning);
+  border-radius: 4px;
+  background: var(--c-warning-bg);
+  color: var(--text);
+  padding: 7px 9px;
+  font-size: 12px;
+  font-weight: 600;
+}
 .ai-asst__sources {
   list-style: none;
   margin: 0;

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { IcoAI, IcoX } from '../../icons';
 import { API_URL } from '../../config';
 import { NavChips } from './agnos/NavChips';
+import { PARTIAL_RESULTS_MESSAGE } from './agnos/assistantFeedback';
 
 // REQ-040: global "Assistente ClinicOS" — a SOURCE_ONLY search/correlation assistant.
 // It calls the operator-authenticated /ai/assistant/query (NEVER the token-gated internal route);
@@ -36,6 +37,7 @@ export interface AssistantAnswer {
   navigation: AssistantNav[];
   notFound: boolean;
   refusal?: string;
+  truncated?: boolean;
 }
 interface Turn {
   question: string;
@@ -286,6 +288,11 @@ export function AnswerView({
       <div className="ai-asst__count">
         {answer.results.length} risultat{answer.results.length === 1 ? 'o' : 'i'}
       </div>
+      {answer.truncated && (
+        <div className="ai-asst__partial" role="status" aria-live="polite">
+          {PARTIAL_RESULTS_MESSAGE}
+        </div>
+      )}
       {answer.intent === 'vitals_trend' && <VitalsSparkline results={answer.results} />}
       <ul className="ai-asst__sources">
         {answer.sources.slice(0, 25).map((s, i) => (
