@@ -157,11 +157,101 @@ test('own patient access works and client authorship is ignored', async () => {
       dosaggio: '5 mg',
       dataInizio: '2026-08-29',
       operatoreInseritore: 'Autore contraffatto',
+      schedules: [{ time: '8:00', administrationUnit: 'compressa' }],
     }),
   });
   assert.equal(create.status, 201, await create.text());
-  const createdTherapy = (await create.json()) as { id: string; operatoreInseritore: string };
+  const createdTherapy = (await create.json()) as {
+    id: string;
+    operatoreInseritore: string;
+    schedules: Array<{ time: string }>;
+  };
   assert.equal(createdTherapy.operatoreInseritore, operatorAId);
+  assert.equal(createdTherapy.schedules[0]?.time, '08:00');
+
+  const invalidScheduleUpdate = await fetch(
+    `${base}/patients/${patientAId}/therapies/${createdTherapy.id}`,
+    {
+      method: 'PUT',
+      headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ schedules: null }),
+    },
+  );
+  assert.equal(invalidScheduleUpdate.status, 400, await invalidScheduleUpdate.text());
+  assert.equal(await prisma.therapySchedule.count({ where: { therapyId: createdTherapy.id } }), 1);
+
+  const explicitClear = await fetch(
+    `${base}/patients/${patientAId}/therapies/${createdTherapy.id}`,
+    {
+      method: 'PUT',
+      headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ schedules: [] }),
+    },
+  );
+  assert.equal(explicitClear.status, 200, await explicitClear.text());
+  const clearedTherapy = await prisma.patientTherapy.findUniqueOrThrow({
+    where: { id: createdTherapy.id },
+  });
+  assert.equal(await prisma.therapySchedule.count({ where: { therapyId: createdTherapy.id } }), 0);
+  assert.deepEqual(
+    [
+      clearedTherapy.fasceMattina,
+      clearedTherapy.fascePranzo,
+      clearedTherapy.fascePomeriggio,
+      clearedTherapy.fasceSera,
+      clearedTherapy.fasceNotte,
+    ],
+    [false, false, false, false, false],
+  );
+  assert.equal(clearedTherapy.orarioSpecifico, null);
+
+  const createWithoutSchedules = await fetch(`${base}/patients/${patientAId}/therapies`, {
+    method: 'POST',
+    headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      farmacoNome: 'Terapia senza orari',
+      dataInizio: '2026-08-29',
+      schedules: [],
+    }),
+  });
+  assert.equal(createWithoutSchedules.status, 201, await createWithoutSchedules.text());
+  const emptyScheduleTherapy = (await createWithoutSchedules.json()) as {
+    fasceMattina: boolean;
+    orarioSpecifico: string | null;
+    schedules: unknown[];
+  };
+  assert.deepEqual(emptyScheduleTherapy.schedules, []);
+  assert.equal(emptyScheduleTherapy.fasceMattina, false);
+  assert.equal(emptyScheduleTherapy.orarioSpecifico, null);
+
+  const invalidDateUpdate = await fetch(
+    `${base}/patients/${patientAId}/therapies/${createdTherapy.id}`,
+    {
+      method: 'PUT',
+      headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataFine: '2026-08-28' }),
+    },
+  );
+  assert.equal(invalidDateUpdate.status, 400, await invalidDateUpdate.text());
+
+  await prisma.patientTherapy.update({
+    where: { id: createdTherapy.id },
+    data: { dataInizio: 'legacy-date' },
+  });
+  const legacyStatusUpdate = await fetch(
+    `${base}/patients/${patientAId}/therapies/${createdTherapy.id}`,
+    {
+      method: 'PUT',
+      headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stato: 'sospesa' }),
+    },
+  );
+  assert.equal(legacyStatusUpdate.status, 200, await legacyStatusUpdate.text());
+  const legacyTherapy = await prisma.patientTherapy.findUniqueOrThrow({
+    where: { id: createdTherapy.id },
+  });
+  assert.equal(legacyTherapy.stato, 'sospesa');
+  assert.equal(legacyTherapy.dataInizio, 'legacy-date');
 
   const saveNarrative = await fetch(`${base}/patients/${patientAId}/narrative-sections/ALLERGIES`, {
     method: 'PUT',

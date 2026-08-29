@@ -6,6 +6,8 @@
 
 import { prisma } from '../lib/prisma.js';
 import {
+  assertValidSchedulesInput,
+  normalizeTherapyDateRange,
   normalizeSchedules,
   deriveLegacyFromSchedules,
   type ScheduleInput,
@@ -115,6 +117,9 @@ export async function createTherapyInTx(
     throw new Error('Campi obbligatori: farmacoNome, dataInizio');
   }
 
+  const dates = normalizeTherapyDateRange(dataInizio, input.dataFine);
+  if (input.schedules !== undefined) assertValidSchedulesInput(input.schedules);
+
   const schedules: ScheduleInput[] = normalizeSchedules(input.schedules);
 
   const strengthValue =
@@ -134,16 +139,17 @@ export async function createTherapyInTx(
 
   // Derive legacy fascia boolean flags + orarioSpecifico from structured schedules.
   // When no schedules are supplied fall back to legacy boolean flags from the input.
-  const derived = schedules.length
-    ? deriveLegacyFromSchedules(schedules)
-    : {
-        fasceMattina: input.fasceMattina ?? true,
-        fascePranzo: input.fascePranzo ?? false,
-        fascePomeriggio: input.fascePomeriggio ?? false,
-        fasceSera: input.fasceSera ?? false,
-        fasceNotte: input.fasceNotte ?? false,
-        orarioSpecifico: input.orarioSpecifico ?? null,
-      };
+  const derived =
+    input.schedules !== undefined
+      ? deriveLegacyFromSchedules(schedules)
+      : {
+          fasceMattina: input.fasceMattina ?? true,
+          fascePranzo: input.fascePranzo ?? false,
+          fascePomeriggio: input.fascePomeriggio ?? false,
+          fasceSera: input.fasceSera ?? false,
+          fasceNotte: input.fasceNotte ?? false,
+          orarioSpecifico: input.orarioSpecifico ?? null,
+        };
 
   return tx.patientTherapy.create({
     data: {
@@ -153,8 +159,8 @@ export async function createTherapyInTx(
       viaSomministrazione: input.viaSomministrazione || 'orale',
       tipo: input.tipo || 'periodica',
       stato: input.stato || 'attiva',
-      dataInizio,
-      dataFine: input.dataFine || null,
+      dataInizio: dates.dataInizio,
+      dataFine: dates.dataFine,
       fasceMattina: derived.fasceMattina,
       fascePranzo: derived.fascePranzo,
       fascePomeriggio: derived.fascePomeriggio,

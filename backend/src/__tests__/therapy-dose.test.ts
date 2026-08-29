@@ -8,6 +8,12 @@ import {
   scheduleDoseLabel,
   deriveLegacyFromSchedules,
   normalizeSchedules,
+  assertValidSchedulesInput,
+  assertValidTherapyDateRange,
+  normalizeTherapyDateRange,
+  InvalidTherapySchedulesError,
+  MAX_THERAPY_SCHEDULES,
+  TherapyDateRangeError,
 } from '../lib/therapy-dose.js';
 
 test('fasciaFromTime maps 08:00→mattina and 18:00→sera (two distinct buckets)', () => {
@@ -101,4 +107,55 @@ test('normalizeSchedules dedupes same (time,unit) so therapy rows never duplicat
   assert.equal(out[0].time, '08:00');
   assert.equal(out[1].time, '18:00');
   assert.equal(out[1].fascia, 'sera');
+});
+
+test('strict schedule boundary rejects silent-clear payloads, impossible times and oversized arrays', () => {
+  for (const raw of [
+    null,
+    '08:00',
+    [{ time: '25:99' }],
+    [{ time: '08:00', quantityNumerator: 5000 }],
+    [{ time: '08:00', quantityDenominator: 1.5 }],
+  ]) {
+    assert.throws(
+      () => assertValidSchedulesInput(raw),
+      (error: unknown) => error instanceof InvalidTherapySchedulesError,
+    );
+  }
+  assert.throws(
+    () =>
+      assertValidSchedulesInput(
+        Array.from({ length: MAX_THERAPY_SCHEDULES + 1 }, (_, index) => ({
+          time: `${String(Math.floor(index / 2)).padStart(2, '0')}:${index % 2 ? '30' : '00'}`,
+        })),
+      ),
+    (error: unknown) => error instanceof InvalidTherapySchedulesError,
+  );
+  assert.doesNotThrow(() => assertValidSchedulesInput([]));
+  assert.doesNotThrow(() =>
+    assertValidSchedulesInput([{ time: '23:59', administrationUnit: 'compressa' }]),
+  );
+  assert.deepEqual(
+    normalizeSchedules([{ time: '8:00' }]).map((item) => item.time),
+    ['08:00'],
+  );
+});
+
+test('therapy dates are real ISO calendar dates and cannot run backwards', () => {
+  assert.doesNotThrow(() => assertValidTherapyDateRange('2026-08-29', '2026-09-01'));
+  assert.doesNotThrow(() => assertValidTherapyDateRange('2026-08-29', null));
+  assert.deepEqual(normalizeTherapyDateRange(' 2026-08-29 ', ' 2026-09-01 '), {
+    dataInizio: '2026-08-29',
+    dataFine: '2026-09-01',
+  });
+  for (const [start, end] of [
+    ['2026-02-30', null],
+    ['29/08/2026', null],
+    ['2026-09-02', '2026-09-01'],
+  ]) {
+    assert.throws(
+      () => assertValidTherapyDateRange(start, end),
+      (error: unknown) => error instanceof TherapyDateRangeError,
+    );
+  }
 });

@@ -2,12 +2,110 @@
 // Fractions are kept EXACT (numerator/denominator) and never approximated to a decimal in storage.
 // Mg equivalents are derived for display only.
 
+import { AppointmentListInputError, parseIsoCalendarDate } from '../appointments/list-query.js';
+
 export interface ScheduleInput {
   time: string; // "HH:MM"
   quantityNumerator: number;
   quantityDenominator: number;
   administrationUnit: string; // compressa | ml | gocce | unità | bustina | ...
   fascia: string; // mattina|pranzo|pomeriggio|sera|notte (derived from time)
+}
+
+export const MAX_THERAPY_SCHEDULES = 32;
+
+export class InvalidTherapySchedulesError extends Error {
+  constructor(message = 'Pianificazione terapia non valida') {
+    super(message);
+    this.name = 'InvalidTherapySchedulesError';
+  }
+}
+
+export class TherapyDateRangeError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'TherapyDateRangeError';
+  }
+}
+
+function canonicalScheduleTime(raw: unknown): string | null {
+  if (typeof raw !== 'string') return null;
+  const match = /^(\d{1,2}):(\d{2})$/.exec(raw.trim());
+  if (!match) return null;
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (!Number.isInteger(hour) || hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+}
+
+export function normalizeTherapyDateRange(
+  dataInizio: unknown,
+  dataFine: unknown,
+): { dataInizio: string; dataFine: string | null } {
+  if (typeof dataInizio !== 'string' || dataInizio.trim() === '') {
+    throw new TherapyDateRangeError('dataInizio non valida');
+  }
+  let start: string;
+  let end: string | null = null;
+  try {
+    start = parseIsoCalendarDate(dataInizio.trim(), 'dataInizio');
+    if (dataFine !== undefined && dataFine !== null && dataFine !== '') {
+      if (typeof dataFine !== 'string') throw new TherapyDateRangeError('dataFine non valida');
+      end = parseIsoCalendarDate(dataFine.trim(), 'dataFine');
+    }
+  } catch (error) {
+    if (error instanceof TherapyDateRangeError) throw error;
+    if (error instanceof AppointmentListInputError) {
+      throw new TherapyDateRangeError(error.message);
+    }
+    throw error;
+  }
+  if (end !== null && end < start) {
+    throw new TherapyDateRangeError('dataFine non può precedere dataInizio');
+  }
+  return { dataInizio: start, dataFine: end };
+}
+
+export function assertValidTherapyDateRange(dataInizio: unknown, dataFine: unknown): void {
+  normalizeTherapyDateRange(dataInizio, dataFine);
+}
+
+/** Strict boundary validation. `normalizeSchedules` remains a normalizer, never an input gate. */
+export function assertValidSchedulesInput(raw: unknown): void {
+  if (!Array.isArray(raw)) {
+    throw new InvalidTherapySchedulesError('schedules deve essere un array');
+  }
+  if (raw.length > MAX_THERAPY_SCHEDULES) {
+    throw new InvalidTherapySchedulesError(
+      `Sono consentiti al massimo ${MAX_THERAPY_SCHEDULES} orari per terapia`,
+    );
+  }
+  for (const item of raw) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      throw new InvalidTherapySchedulesError();
+    }
+    const value = item as Record<string, unknown>;
+    if (canonicalScheduleTime(value.time) === null) {
+      throw new InvalidTherapySchedulesError(
+        'Ogni orario deve usare il formato HH:MM (00:00–23:59)',
+      );
+    }
+    for (const key of ['quantityNumerator', 'quantityDenominator'] as const) {
+      if (value[key] === undefined) continue;
+      const quantity = Number(value[key]);
+      if (!Number.isSafeInteger(quantity) || quantity <= 0 || quantity > 1000) {
+        throw new InvalidTherapySchedulesError('Quantità terapia non valida');
+      }
+    }
+    if (
+      value.administrationUnit !== undefined &&
+      (typeof value.administrationUnit !== 'string' ||
+        value.administrationUnit.trim().length === 0 ||
+        value.administrationUnit.trim().length > 64)
+    ) {
+      throw new InvalidTherapySchedulesError('Unità di somministrazione non valida');
+    }
+  }
 }
 
 const FASCE_RANGES: { fascia: string; startMin: number; endMin: number }[] = [
@@ -143,13 +241,13 @@ export function normalizeSchedules(raw: unknown): ScheduleInput[] {
   for (const item of raw) {
     if (!item || typeof item !== 'object') continue;
     const r = item as Record<string, unknown>;
-    const time = typeof r.time === 'string' ? r.time.trim() : '';
-    if (!/^\d{1,2}:\d{2}$/.test(time)) continue;
-    const num = Math.max(1, Math.round(Number(r.quantityNumerator) || 1));
-    const den = Math.max(1, Math.round(Number(r.quantityDenominator) || 1));
+    const time = canonicalScheduleTime(r.time);
+    if (time === null) continue;
+    const num = Math.min(1000, Math.max(1, Math.round(Number(r.quantityNumerator) || 1)));
+    const den = Math.min(1000, Math.max(1, Math.round(Number(r.quantityDenominator) || 1)));
     const unit =
       typeof r.administrationUnit === 'string' && r.administrationUnit.trim()
-        ? r.administrationUnit.trim()
+        ? r.administrationUnit.trim().slice(0, 64)
         : 'compressa';
     const key = `${time}|${unit}`;
     if (seen.has(key)) continue; // one schedule per (time, unit)

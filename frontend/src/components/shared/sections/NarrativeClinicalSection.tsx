@@ -97,8 +97,12 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
     setEditing(false);
   }
   async function save() {
-    await props.onSave?.(draft);
-    setEditing(false);
+    try {
+      await props.onSave?.(draft);
+      setEditing(false);
+    } catch {
+      // The parent renders the actionable error. Keep the draft open so it is never lost.
+    }
   }
   function restoreOriginal() {
     setDraft(originalText);

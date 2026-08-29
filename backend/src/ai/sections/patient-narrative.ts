@@ -134,7 +134,17 @@ function toDTO(
 
 /** All canonical sections for a patient — empty (reviewStatus 'absent') when no row exists. */
 export async function getNarrativeSections(patientId: string): Promise<NarrativeSectionDTO[]> {
-  const rows = await prisma.patientNarrativeSection.findMany({ where: { patientId } });
+  const rows = await prisma.patientNarrativeSection.findMany({
+    where: { patientId },
+    select: {
+      sectionKey: true,
+      originalText: true,
+      reviewedText: true,
+      annotations: true,
+      sourceReferences: true,
+      reviewStatus: true,
+    },
+  });
   const byKey = new Map(rows.map((r) => [r.sectionKey, r]));
   return NARRATIVE_SECTION_KEYS.map((k) => toDTO(k, byKey.get(k) as never));
 }
@@ -146,6 +156,14 @@ export async function getNarrativeSection(
   if (!NARRATIVE_SECTION_KEYS.includes(sectionKey as NarrativeSectionKey)) return null;
   const row = await prisma.patientNarrativeSection.findUnique({
     where: { patientId_sectionKey: { patientId, sectionKey } },
+    select: {
+      sectionKey: true,
+      originalText: true,
+      reviewedText: true,
+      annotations: true,
+      sourceReferences: true,
+      reviewStatus: true,
+    },
   });
   return toDTO(sectionKey as NarrativeSectionKey, row as never);
 }

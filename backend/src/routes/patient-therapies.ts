@@ -1,8 +1,12 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import {
+  assertValidSchedulesInput,
+  normalizeTherapyDateRange,
   normalizeSchedules,
   deriveLegacyFromSchedules,
+  InvalidTherapySchedulesError,
+  TherapyDateRangeError,
   scheduleDoseShort,
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
@@ -13,6 +17,10 @@ import {
 } from '../therapies/therapy-create.js';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
+import {
+  MedicationAdministrationQueryError,
+  parseMedicationAdministrationQuery,
+} from '../therapies/administration-query.js';
 
 const router = Router();
 
@@ -68,7 +76,11 @@ router.post('/:patientId/therapies', async (req, res) => {
     res.status(201).json(therapy);
   } catch (error) {
     const msg = error instanceof Error ? error.message : '';
-    if (msg.includes('Campi obbligatori')) {
+    if (
+      msg.includes('Campi obbligatori') ||
+      error instanceof InvalidTherapySchedulesError ||
+      error instanceof TherapyDateRangeError
+    ) {
       res.status(400).json({ error: msg });
       return;
     }
@@ -122,6 +134,7 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
       if (body[key] !== undefined) updates[key] = body[key];
     }
     if (updates.commercialStrengthValue === '') updates.commercialStrengthValue = null;
+    if (updates.dataFine === '') updates.dataFine = null;
     if (updates.commercialStrengthValue != null)
       updates.commercialStrengthValue = Number(updates.commercialStrengthValue);
     // #241: PUT must canonicalize giorniSettimana exactly like POST (createTherapyInTx), otherwise
@@ -130,9 +143,18 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     if ('giorniSettimana' in updates) {
       updates.giorniSettimana = normalizeGiorniSettimana(updates.giorniSettimana as string | null);
     }
+    if ('dataInizio' in updates || 'dataFine' in updates) {
+      const dates = normalizeTherapyDateRange(
+        updates.dataInizio ?? existing.dataInizio,
+        'dataFine' in updates ? updates.dataFine : existing.dataFine,
+      );
+      updates.dataInizio = dates.dataInizio;
+      updates.dataFine = dates.dataFine;
+    }
 
     // If schedules are provided, replace them atomically and re-derive legacy fascia/orari.
     const hasSchedules = body.schedules !== undefined;
+    if (hasSchedules) assertValidSchedulesInput(body.schedules);
     const schedules: ScheduleInput[] = hasSchedules ? normalizeSchedules(body.schedules) : [];
 
     const therapy = await prisma.$transaction(async (tx) => {
@@ -142,14 +164,14 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
           await tx.therapySchedule.createMany({
             data: schedules.map((s) => ({ ...s, therapyId })),
           });
-          const derived = deriveLegacyFromSchedules(schedules);
-          updates.fasceMattina = derived.fasceMattina;
-          updates.fascePranzo = derived.fascePranzo;
-          updates.fascePomeriggio = derived.fascePomeriggio;
-          updates.fasceSera = derived.fasceSera;
-          updates.fasceNotte = derived.fasceNotte;
-          updates.orarioSpecifico = derived.orarioSpecifico;
         }
+        const derived = deriveLegacyFromSchedules(schedules);
+        updates.fasceMattina = derived.fasceMattina;
+        updates.fascePranzo = derived.fascePranzo;
+        updates.fascePomeriggio = derived.fascePomeriggio;
+        updates.fasceSera = derived.fasceSera;
+        updates.fasceNotte = derived.fasceNotte;
+        updates.orarioSpecifico = derived.orarioSpecifico;
       }
       return tx.patientTherapy.update({
         where: { id: therapyId },
@@ -163,6 +185,10 @@ router.put('/:patientId/therapies/:therapyId', async (req, res) => {
     );
     res.status(200).json(therapy);
   } catch (error) {
+    if (error instanceof InvalidTherapySchedulesError || error instanceof TherapyDateRangeError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
     console.error('PUT /patients/:patientId/therapies/:therapyId error:', error);
     res.status(500).json({ error: 'Errore durante aggiornamento terapia' });
   }
@@ -193,8 +219,17 @@ router.delete('/:patientId/therapies/:therapyId', async (req, res) => {
 // GET /patients/:patientId/medication-administrations
 router.get('/:patientId/medication-administrations', async (req, res) => {
   const { patientId } = req.params;
-  const date = req.query.date as string | undefined;
-  const limit = Math.min(parseInt(req.query.limit as string) || 100, 500);
+  let input;
+  try {
+    input = parseMedicationAdministrationQuery(req.query);
+  } catch (error) {
+    if (error instanceof MedicationAdministrationQueryError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    throw error;
+  }
+  const { date, limit } = input;
 
   try {
     const where: { patientId: string; date?: string } = { patientId };
@@ -202,7 +237,7 @@ router.get('/:patientId/medication-administrations', async (req, res) => {
 
     const administrations = await prisma.medicationAdministration.findMany({
       where,
-      orderBy: [{ date: 'desc' }, { createdAt: 'desc' }],
+      orderBy: [{ date: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
       take: limit,
     });
 
