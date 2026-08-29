@@ -61,10 +61,10 @@ Dataset sintetico di 100.000 note, 25 letture per scenario, soglia fail-closed p
 
 | Scenario | p95 | EXPLAIN execution | Indici principali |
 |---|---:|---:|---|
-| Prima pagina | 4.04 ms | 1.488 ms | `Nota_autoreId_createdAt_id_idx` |
-| Cursore profondo 80% | 2.62 ms | 0.528 ms | autore + destinatario/createdAt/id |
-| Ricerca FTS | 4.07 ms | 1.156 ms | `Nota_search_fts_idx` |
-| Summary unread | 1.95 ms | n/a | mailbox/recipient-state indexes |
+| Prima pagina | 3.98 ms | 1.304 ms | `Nota_autoreId_createdAt_id_idx` |
+| Cursore profondo 80% | 1.97 ms | 0.757 ms | autore + destinatario/createdAt/id |
+| Ricerca FTS | 5.18 ms | 1.945 ms | `Nota_search_fts_idx` |
+| Summary unread | 1.52 ms | n/a | mailbox/recipient-state indexes |
 
 Il benchmark è ripetibile con `node scripts/benchmark-notes-mailbox.mjs 100000`; termina con exit
 non-zero se una soglia fallisce o se i piani non usano gli indici richiesti.
