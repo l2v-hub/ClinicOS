@@ -9,9 +9,20 @@ let server: Server;
 let base = '';
 let patientId = '';
 let therapyId = '';
+let ownerUserId = '';
+const ownerOperatorId = `verified-op-${Date.now()}`;
 const date = '2033-04-05';
 
 before(async () => {
+  const ownerUser = await prisma.user.create({
+    data: {
+      email: `therapy-owner-${Date.now()}@example.test`,
+      passwordHash: 'not-used-by-route-test',
+      fullName: 'Verified Owner',
+      operator: { create: { id: ownerOperatorId, ruolo: 'operatore' } },
+    },
+  });
+  ownerUserId = ownerUser.id;
   const patient = await prisma.patient.create({
     data: {
       medicalRecordNumber: `MRN-THERAPY-AUTH-${Date.now()}`,
@@ -19,6 +30,7 @@ before(async () => {
       lastName: 'Test',
       dateOfBirth: new Date('1970-01-01'),
       sex: 'F',
+      registeredById: ownerOperatorId,
     },
   });
   patientId = patient.id;
@@ -50,6 +62,7 @@ before(async () => {
 after(async () => {
   await new Promise<void>((resolve) => server.close(() => resolve()));
   await prisma.patient.delete({ where: { id: patientId } }).catch(() => {});
+  await prisma.user.delete({ where: { id: ownerUserId } }).catch(() => {});
 });
 
 test('therapy confirm persists prescription fields, not spoofed client drug data', async () => {
@@ -57,7 +70,7 @@ test('therapy confirm persists prescription fields, not spoofed client drug data
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Operator-Id': 'verified-op',
+      'X-Operator-Id': ownerOperatorId,
       'X-Operator-Role': 'operatore',
       'X-Operator-Name': 'Verified Name',
     },
@@ -80,7 +93,7 @@ test('therapy confirm persists prescription fields, not spoofed client drug data
   assert.equal(stored.patientId, patientId);
   assert.equal(stored.farmacoDose, '10 mg');
   assert.equal(stored.farmacoVia, 'orale');
-  assert.equal(stored.operatoreId, 'verified-op');
+  assert.equal(stored.operatoreId, ownerOperatorId);
   assert.notEqual(stored.farmacoNome, 'Farmaco falsificato');
 });
 
@@ -99,12 +112,12 @@ test('therapy confirm rejects a mismatched therapy/patient pair', async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Operator-Id': 'verified-op',
+        'X-Operator-Id': ownerOperatorId,
         'X-Operator-Role': 'operatore',
       },
       body: JSON.stringify({ patientId: other.id, therapyId, date, fascia: 'mattina' }),
     });
-    assert.equal(response.status, 409);
+    assert.equal(response.status, 404);
   } finally {
     await prisma.patient.delete({ where: { id: other.id } }).catch(() => {});
   }
@@ -127,7 +140,7 @@ test('two same-name prescriptions keep independent administration records', asyn
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Operator-Id': 'verified-op',
+      'X-Operator-Id': ownerOperatorId,
       'X-Operator-Role': 'operatore',
     },
     body: JSON.stringify({ patientId, therapyId: second.id, date, fascia: 'mattina' }),
@@ -143,4 +156,110 @@ test('two same-name prescriptions keep independent administration records', asyn
     rows.map((row) => row.farmacoDose),
     ['10 mg', '20 mg'],
   );
+});
+
+test('ordinary operators cannot read or mutate another owner patient; managers retain global scope', async () => {
+  const suffix = Date.now();
+  const otherOperatorId = `other-op-${suffix}`;
+  const otherUser = await prisma.user.create({
+    data: {
+      email: `therapy-other-${suffix}@example.test`,
+      passwordHash: 'not-used-by-route-test',
+      fullName: 'Other Owner',
+      operator: { create: { id: otherOperatorId, ruolo: 'operatore' } },
+    },
+  });
+  const otherPatient = await prisma.patient.create({
+    data: {
+      medicalRecordNumber: `MRN-THERAPY-CROSS-${suffix}`,
+      firstName: 'Scoped',
+      lastName: 'Patient',
+      dateOfBirth: new Date('1970-01-01'),
+      sex: 'F',
+      registeredById: otherOperatorId,
+      therapies: {
+        create: {
+          farmacoNome: 'Scoped drug',
+          dosaggio: '5 mg',
+          viaSomministrazione: 'orale',
+          tipo: 'periodica',
+          stato: 'attiva',
+          dataInizio: '2033-01-01',
+          fasceMattina: true,
+        },
+      },
+    },
+    include: { therapies: true },
+  });
+  const otherTherapyId = otherPatient.therapies[0]!.id;
+  const crossDate = '2033-04-06';
+  try {
+    const operatorHeaders = {
+      'X-Operator-Id': ownerOperatorId,
+      'X-Operator-Role': 'operatore',
+    };
+    const operatorRead = await fetch(`${base}/therapy-slots?date=${crossDate}`, {
+      headers: operatorHeaders,
+    });
+    assert.equal(operatorRead.status, 200, await operatorRead.text());
+    const operatorSlots = (await operatorRead.json()) as Array<{
+      patients: Array<{ patientId: string }>;
+    }>;
+    assert.equal(
+      operatorSlots.some((slot) =>
+        slot.patients.some((patient) => patient.patientId === otherPatient.id),
+      ),
+      false,
+    );
+
+    const deniedWrite = await fetch(`${base}/therapy-slots/confirm`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...operatorHeaders },
+      body: JSON.stringify({
+        patientId: otherPatient.id,
+        therapyId: otherTherapyId,
+        date: crossDate,
+        fascia: 'mattina',
+      }),
+    });
+    assert.equal(deniedWrite.status, 404);
+    assert.equal(
+      await prisma.medicationAdministration.count({
+        where: { therapyId: otherTherapyId, date: crossDate, fascia: 'mattina' },
+      }),
+      0,
+    );
+
+    const managerHeaders = {
+      'X-Operator-Id': 'verified-manager',
+      'X-Operator-Role': 'manager',
+    };
+    const managerRead = await fetch(`${base}/therapy-slots?date=${crossDate}`, {
+      headers: managerHeaders,
+    });
+    assert.equal(managerRead.status, 200, await managerRead.text());
+    const managerSlots = (await managerRead.json()) as Array<{
+      patients: Array<{ patientId: string }>;
+    }>;
+    assert.equal(
+      managerSlots.some((slot) =>
+        slot.patients.some((patient) => patient.patientId === otherPatient.id),
+      ),
+      true,
+    );
+    const managerWrite = await fetch(`${base}/therapy-slots/confirm`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...managerHeaders },
+      body: JSON.stringify({
+        patientId: otherPatient.id,
+        therapyId: otherTherapyId,
+        date: crossDate,
+        fascia: 'mattina',
+      }),
+    });
+    assert.equal(managerWrite.status, 200, await managerWrite.text());
+  } finally {
+    await prisma.patient.delete({ where: { id: otherPatient.id } }).catch(() => {});
+    await prisma.user.delete({ where: { id: otherUser.id } }).catch(() => {});
+  }
 });

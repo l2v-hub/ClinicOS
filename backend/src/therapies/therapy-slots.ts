@@ -5,9 +5,13 @@
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
-import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
+import {
+  MAX_THERAPY_SCHEDULES,
+  scheduleDoseLabel,
+  type ScheduleInput,
+} from '../lib/therapy-dose.js';
 import { earliestOra } from './slot-scheduling.js';
-import { therapyWhereForDate } from './therapy-query.js';
+import { therapyWhereForAccess, type TherapyPatientAccess } from './therapy-query.js';
 
 export { therapyWhereForDate } from './therapy-query.js';
 
@@ -22,6 +26,7 @@ export const FASCE = [
 type FlagField = (typeof FASCE)[number]['flagField'];
 
 export const MAX_THERAPY_SLOT_SOURCE_ROWS = 5000;
+export const MAX_THERAPY_SLOT_ADMINISTRATION_ROWS = MAX_THERAPY_SLOT_SOURCE_ROWS * FASCE.length;
 export class TherapySlotCapacityError extends Error {}
 
 interface RoomFallbackRow {
@@ -63,9 +68,13 @@ export interface TherapySlot {
 }
 
 /** Slot della giornata `date` (YYYY-MM-DD), raggruppati per fascia e paziente. Solo fasce non vuote. */
-export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
+export async function buildTherapySlots(
+  date: string,
+  access: TherapyPatientAccess = {},
+): Promise<TherapySlot[]> {
+  if (Array.isArray(access.patientIds) && access.patientIds.length === 0) return [];
   const therapies = await prisma.patientTherapy.findMany({
-    where: therapyWhereForDate(date),
+    where: therapyWhereForAccess(date, access),
     select: {
       id: true,
       patientId: true,
@@ -82,6 +91,7 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
       commercialStrengthValue: true,
       commercialStrengthUnit: true,
       schedules: {
+        take: MAX_THERAPY_SCHEDULES + 1,
         select: {
           fascia: true,
           time: true,
@@ -115,6 +125,11 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
       `Troppe terapie per la giornata (massimo ${MAX_THERAPY_SLOT_SOURCE_ROWS})`,
     );
   }
+  if (therapies.some((therapy) => therapy.schedules.length > MAX_THERAPY_SCHEDULES)) {
+    throw new TherapySlotCapacityError(
+      `Terapia con troppi orari (massimo ${MAX_THERAPY_SCHEDULES})`,
+    );
+  }
 
   const validTherapies = therapies.filter((pt) => {
     if (!pt.patient) {
@@ -133,6 +148,15 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
   });
 
   const patientIds = [...new Set(validTherapies.map((therapy) => therapy.patientId))];
+  const therapyIds = validTherapies.map((therapy) => therapy.id);
+  const drugNames = [...new Set(validTherapies.map((therapy) => therapy.farmacoNome))];
+  const legacyCandidateKeys = new Set(
+    validTherapies.flatMap((therapy) =>
+      FASCE.filter((fascia) => therapy[fascia.flagField as FlagField] === true).map(
+        (fascia) => `${therapy.patientId}|${therapy.farmacoNome}|${fascia.fascia}`,
+      ),
+    ),
+  );
   const missingAssignmentIds = [
     ...new Set(
       validTherapies
@@ -157,7 +181,20 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
     patientIds.length === 0
       ? []
       : await prisma.medicationAdministration.findMany({
-          where: { date, patientId: { in: patientIds } },
+          where: {
+            date,
+            OR: [
+              { therapyId: { in: therapyIds } },
+              {
+                therapyId: null,
+                patientId: { in: patientIds },
+                farmacoNome: { in: drugNames },
+                fascia: { in: FASCE.map(({ fascia }) => fascia) },
+              },
+            ],
+          },
+          orderBy: { id: 'asc' },
+          take: MAX_THERAPY_SLOT_ADMINISTRATION_ROWS + 1,
           select: {
             id: true,
             therapyId: true,
@@ -170,12 +207,19 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
             motivo: true,
           },
         });
+  if (administrations.length > MAX_THERAPY_SLOT_ADMINISTRATION_ROWS) {
+    throw new TherapySlotCapacityError(
+      `Troppe somministrazioni per la giornata (massimo ${MAX_THERAPY_SLOT_ADMINISTRATION_ROWS})`,
+    );
+  }
   const adminMap = new Map<string, (typeof administrations)[0]>(
     administrations.flatMap((administration) => {
       const legacyKey = `${administration.patientId}|${administration.farmacoNome}|${administration.fascia}`;
       return administration.therapyId
         ? [[`${administration.therapyId}|${administration.fascia}`, administration]]
-        : [[legacyKey, administration]];
+        : legacyCandidateKeys.has(legacyKey)
+          ? [[legacyKey, administration]]
+          : [];
     }),
   );
 

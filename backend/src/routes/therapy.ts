@@ -8,8 +8,10 @@ import {
   parseTherapyAdministrationBody,
   resolveAuthoritativeTherapy,
   TherapyNotDueError,
+  TherapyNotFoundError,
   TherapyWriteInputError,
 } from '../therapies/therapy-write.js';
+import { hasGlobalPatientScope } from '../patients/patient-scope.js';
 
 const router = Router();
 
@@ -37,7 +39,12 @@ router.get('/', async (req, res) => {
       throw new AppointmentListInputError('date obbligatoria');
     }
     const date = parseIsoCalendarDate(req.query.date, 'date');
-    res.status(200).json(await buildTherapySlots(date));
+    const actor = (req as AuthedRequest).operator!;
+    res.status(200).json(
+      await buildTherapySlots(date, {
+        ...(!hasGlobalPatientScope(actor.role) && { registeredById: actor.id }),
+      }),
+    );
   } catch (error) {
     if (error instanceof AppointmentListInputError) {
       res.status(400).json({ error: error.message });
@@ -61,7 +68,7 @@ router.post('/confirm', async (req, res) => {
     const actor = (req as AuthedRequest).operator!;
     const record = await prisma.$transaction(
       async (tx) => {
-        const authoritative = await resolveAuthoritativeTherapy(tx, input);
+        const authoritative = await resolveAuthoritativeTherapy(tx, input, actor);
         const { therapyId, patientId, farmacoNome, farmacoDose, farmacoVia, date, fascia, ora } =
           authoritative;
         const existing = await tx.medicationAdministration.findUnique({
@@ -114,6 +121,10 @@ router.post('/confirm', async (req, res) => {
       res.status(409).json({ error: error.message });
       return;
     }
+    if (error instanceof TherapyNotFoundError) {
+      res.status(404).json({ error: error.message });
+      return;
+    }
     if (error instanceof TherapyAlreadyAdministeredError) {
       res.status(409).json({ error: 'Terapia già erogata' });
       return;
@@ -136,7 +147,7 @@ router.post('/not-administered', async (req, res) => {
     const actor = (req as AuthedRequest).operator!;
     const record = await prisma.$transaction(
       async (tx) => {
-        const authoritative = await resolveAuthoritativeTherapy(tx, input);
+        const authoritative = await resolveAuthoritativeTherapy(tx, input, actor);
         const {
           therapyId,
           patientId,
@@ -199,6 +210,10 @@ router.post('/not-administered', async (req, res) => {
     }
     if (error instanceof TherapyNotDueError) {
       res.status(409).json({ error: error.message });
+      return;
+    }
+    if (error instanceof TherapyNotFoundError) {
+      res.status(404).json({ error: error.message });
       return;
     }
     if (error instanceof TherapyAlreadyAdministeredError) {

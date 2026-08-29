@@ -1,7 +1,9 @@
 import type { Prisma } from '@prisma/client';
+import type { Operator } from '../ai/auth.js';
 import { AppointmentListInputError, parseIsoCalendarDate } from '../appointments/list-query.js';
 import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
 import { therapyWhereForDate } from './therapy-query.js';
+import { hasGlobalPatientScope } from '../patients/patient-scope.js';
 
 export class TherapyWriteInputError extends Error {
   constructor(
@@ -17,6 +19,13 @@ export class TherapyNotDueError extends Error {
   constructor(message = 'Terapia non trovata o non prevista per questo slot') {
     super(message);
     this.name = 'TherapyNotDueError';
+  }
+}
+
+export class TherapyNotFoundError extends Error {
+  constructor(message = 'Terapia non trovata') {
+    super(message);
+    this.name = 'TherapyNotFoundError';
   }
 }
 
@@ -136,12 +145,14 @@ function isDueOnWeekday(date: string, days: string | null): boolean {
 export async function resolveAuthoritativeTherapy(
   tx: Prisma.TransactionClient,
   input: TherapyAdministrationInput,
+  actor: Operator,
 ): Promise<AuthoritativeTherapyAdministration> {
   const therapy = await tx.patientTherapy.findFirst({
     where: {
       id: input.therapyId,
       patientId: input.patientId,
       ...therapyWhereForDate(input.date),
+      ...(!hasGlobalPatientScope(actor.role) && { patient: { registeredById: actor.id } }),
     },
     select: {
       farmacoNome: true,
@@ -168,7 +179,8 @@ export async function resolveAuthoritativeTherapy(
       },
     },
   });
-  if (!therapy || !isDueOnWeekday(input.date, therapy.giorniSettimana)) {
+  if (!therapy) throw new TherapyNotFoundError();
+  if (!isDueOnWeekday(input.date, therapy.giorniSettimana)) {
     throw new TherapyNotDueError();
   }
   const flag = FASCIA_FLAGS[input.fascia];

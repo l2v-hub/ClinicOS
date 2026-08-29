@@ -414,7 +414,6 @@ export default function App() {
     // dalla card della dashboard — unico writer di consegneView è navigate/openConsegneAperte.
     if (key === 'consegne') setConsegneView({ filtro: 'tutte', focusId: null });
     pushNav(key);
-    if (key === 'agenda-operatore' || key === 'agenda-admin') loadTherapySlots();
   }
 
   // #283: la card "Consegne aperte" apre la pagina già filtrata sulle aperte; se la consegna
@@ -918,7 +917,6 @@ export default function App() {
         if (!sessionController.signal.aborted && sessionEpoch === sessionEpochRef.current)
           setLoadingClinicalOverview(false);
       });
-    loadTherapySlots();
     const appointmentDay = localIsoDate();
     void loadAppuntamenti({
       from: appointmentDay,
@@ -965,7 +963,14 @@ export default function App() {
       });
     void loadNotes({ box: 'all', q: '' });
     return () => sessionController.abort();
-  }, [utente, loadTherapySlots, loadAppuntamenti, loadCamere, loadConsegneOverview, loadNotes]);
+  }, [utente, loadAppuntamenti, loadCamere, loadConsegneOverview, loadNotes]);
+
+  // The clinical therapy feed is potentially large and is needed only inside the agenda.
+  // Keying the load to navigation also covers browser back/forward and a direct agenda hash.
+  useEffect(() => {
+    if (!utente || (navKey !== 'agenda-operatore' && navKey !== 'agenda-admin')) return;
+    void loadTherapySlots();
+  }, [utente, navKey, loadTherapySlots]);
 
   useEffect(() => {
     if (!utente || navKey !== 'consegne') return;

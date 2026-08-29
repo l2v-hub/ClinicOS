@@ -6,7 +6,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import * as svc from '../gateway/services.js';
-import { canCrossPatientSearch, canFacilityRead, isPatientAllowed } from '../gateway/context.js';
+import { canCrossPatientSearch, canFacilityRead } from '../gateway/context.js';
 import { GatewayError, type SourceReference, type UserContext } from '../gateway/types.js';
 import {
   appointmentSource,
@@ -254,12 +254,8 @@ async function openConsegnaQueue(ctx: UserContext) {
 }
 
 async function therapiesDue(ctx: UserContext, now: Date, windowMinutes: number) {
-  const slots = await buildTherapySlots(dayKey(now));
-  const scoped = slots.map((s) => ({
-    ...s,
-    patients: s.patients.filter((p) => isPatientAllowed(ctx, p.patientId)),
-  }));
-  return collectTherapiesDue(scoped, now, windowMinutes);
+  const slots = await buildTherapySlots(dayKey(now), { patientIds: ctx.permittedPatientIds });
+  return collectTherapiesDue(slots, now, windowMinutes);
 }
 
 const therapyItemSource = (t: TherapyDueItem) =>
