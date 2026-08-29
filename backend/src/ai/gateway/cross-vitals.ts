@@ -30,7 +30,10 @@ export interface CrossVitalsReaders {
     permittedPatientIds: string[] | null;
     limit: number;
   }): Promise<CrossVitalsPatient[]>;
-  findCartelle(patientIds: string[]): Promise<CrossVitalsCartella[]>;
+  findCartelle(
+    patientIds: string[],
+    input: { label?: string; systolicMin?: number; limit: number },
+  ): Promise<CrossVitalsCartella[]>;
 }
 
 export interface CrossVitalsResult {
@@ -58,9 +61,16 @@ export async function searchCrossPatientVitals(
   if (!canCrossPatientSearch(ctx, env)) {
     throw new GatewayError('cross_patient_disabled', 'Cross-patient search is disabled');
   }
+  if (
+    input.label != null &&
+    (typeof input.label !== 'string' || input.label.trim().length === 0 || input.label.length > 32)
+  ) {
+    throw new GatewayError('bad_request', 'Invalid vital-sign label');
+  }
   if (input.systolicMin != null && !Number.isFinite(input.systolicMin)) {
     throw new GatewayError('bad_request', 'Invalid vital-sign threshold');
   }
+  const label = input.label?.trim();
 
   const patientLimit = boundedInteger(input.patientLimit, MAX_PATIENT_SCAN, MAX_PATIENT_SCAN);
   const resultLimit = boundedInteger(input.resultLimit, MAX_PATIENT_RESULTS, MAX_PATIENT_RESULTS);
@@ -88,7 +98,11 @@ export async function searchCrossPatientVitals(
     return { data: [], sourceRefs: [], truncated: false };
   }
 
-  const cartelle = await readers.findCartelle(patientIds);
+  const cartelle = await readers.findCartelle(patientIds, {
+    label,
+    systolicMin: input.systolicMin,
+    limit: Math.min(vitalLimit, resultLimit) + 1,
+  });
   const allowedPatientIds = new Set(patientIds);
   const cartellaByPatient = new Map(
     cartelle
@@ -103,7 +117,7 @@ export async function searchCrossPatientVitals(
     const row = cartellaByPatient.get(patient.id);
     const storedVitals = asCartella(row?.data).parametriVitali;
     const filtered = filterVitals(Array.isArray(storedVitals) ? storedVitals : [], {
-      label: input.label,
+      label,
       systolicMin: input.systolicMin,
     });
     if (filtered.length === 0) continue;

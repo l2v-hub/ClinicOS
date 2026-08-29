@@ -58,8 +58,21 @@ before(async () => {
         codiceFiscale: `${suffix}-legacy-cf`,
         allergie: [{ allergene: 'Caffè' }],
         terapie: [{ descrizione: 'Warfarìn', dataInizio: '2026-01-01' }],
+        sensitiveNarrative: 'must never leave PostgreSQL during cross-patient vital search',
         parametriVitali: [
-          { id: `${suffix}-vital`, etichetta: 'PA', valore: '170/95', rilevato: '2026-08-29' },
+          {
+            id: `${suffix}-vital`,
+            etichetta: 'PA',
+            valore: '170/95',
+            rilevato: '2026-08-29',
+            arbitraryPrivateField: 'must not be projected',
+          },
+          {
+            id: `${suffix}-vital-2`,
+            etichetta: 'PA',
+            valore: '165/90',
+            rilevato: '2026-08-28',
+          },
         ],
       },
     },
@@ -147,7 +160,7 @@ test('cross-vitals applies the patient ACL in SQL before the cap', async () => {
     requestId: `${suffix}-vitals`,
   };
   const result = await getCrossPatientVitalSigns(
-    { label: 'PA', systolicMin: 151, patientLimit: 1 },
+    { label: 'PA', systolicMin: 151, patientLimit: 1, vitalLimitPerPatient: 1 },
     scoped,
     {
       AI_DEFAULT_TENANT: 'clinicos',
@@ -159,4 +172,12 @@ test('cross-vitals applies the patient ACL in SQL before the cap', async () => {
     [legacyId],
   );
   assert.ok(result.sourceRefs.every((source) => source.patientId === legacyId));
+  assert.equal(result.data[0]?.vitals.length, 1);
+  assert.equal(result.truncated, true);
+  assert.deepEqual(Object.keys(result.data[0]?.vitals[0] ?? {}).sort(), [
+    'etichetta',
+    'id',
+    'rilevato',
+    'valore',
+  ]);
 });

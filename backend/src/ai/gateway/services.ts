@@ -455,11 +455,65 @@ export async function getCrossPatientVitalSigns(
           take: limit,
           select: { id: true },
         }),
-      findCartelle: (patientIds) =>
-        prisma.cartella.findMany({
-          where: { patientId: { in: patientIds } },
-          select: { id: true, patientId: true, data: true },
-        }),
+      findCartelle: (patientIds, vitalInput) => {
+        const vitalPredicates: Prisma.Sql[] = [Prisma.sql`jsonb_typeof(vital.value) = 'object'`];
+        if (vitalInput.label) {
+          vitalPredicates.push(
+            Prisma.sql`upper(COALESCE(vital.value->>'etichetta', '')) = ${vitalInput.label.toUpperCase()}`,
+          );
+        }
+        if (vitalInput.systolicMin != null) {
+          vitalPredicates.push(Prisma.sql`(
+            CASE
+              WHEN COALESCE(vital.value->>'valore', '')
+                ~ '^[0-9]{2,3}[[:space:]]*/[[:space:]]*[0-9]{2,3}$'
+              THEN split_part(
+                regexp_replace(vital.value->>'valore', '[[:space:]]', '', 'g'), '/', 1
+              )::integer
+              ELSE NULL
+            END
+          ) >= ${vitalInput.systolicMin}`);
+        }
+        const vitalWhere = Prisma.sql`WHERE ${Prisma.join(vitalPredicates, ' AND ')}`;
+        return prisma.$queryRaw<
+          Array<{ id: string; patientId: string; data: Prisma.JsonValue }>
+        >(Prisma.sql`
+          SELECT
+            chart."id",
+            chart."patientId",
+            jsonb_build_object(
+              'parametriVitali',
+              COALESCE((
+                SELECT jsonb_agg(
+                  jsonb_strip_nulls(jsonb_build_object(
+                    'id', left(sample.value->>'id', 128),
+                    'etichetta', left(sample.value->>'etichetta', 32),
+                    'valore', left(sample.value->>'valore', 64),
+                    'unita', left(sample.value->>'unita', 32),
+                    'stato', left(sample.value->>'stato', 32),
+                    'rilevato', left(sample.value->>'rilevato', 64)
+                  ))
+                  ORDER BY sample.ordinality
+                )
+                FROM (
+                  SELECT vital.value, vital.ordinality
+                  FROM jsonb_array_elements(
+                    CASE
+                      WHEN jsonb_typeof(chart."data"->'parametriVitali') = 'array'
+                        THEN chart."data"->'parametriVitali'
+                      ELSE '[]'::jsonb
+                    END
+                  ) WITH ORDINALITY AS vital(value, ordinality)
+                  ${vitalWhere}
+                  ORDER BY vital.ordinality
+                  LIMIT ${vitalInput.limit}
+                ) sample
+              ), '[]'::jsonb)
+            ) AS "data"
+          FROM "Cartella" chart
+          WHERE chart."patientId" IN (${Prisma.join(patientIds)})
+        `);
+      },
     },
     env,
   );

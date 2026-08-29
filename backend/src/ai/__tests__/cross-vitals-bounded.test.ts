@@ -33,9 +33,10 @@ test('cross-vitals applies ACL before cap and performs two bounded reads', async
         .filter((patient) => input.permittedPatientIds?.includes(patient.id) ?? true)
         .slice(0, input.limit);
     },
-    async findCartelle(patientIds) {
+    async findCartelle(patientIds, input) {
       cartellaReads++;
       assert.deepEqual(patientIds, [authorizedId]);
+      assert.deepEqual(input, { label: 'PA', systolicMin: 151, limit: 51 });
       return [
         {
           id: 'chart-1',
@@ -103,6 +104,34 @@ test('cross-vitals keeps deterministic order and bounds results and nested vital
   assert.ok(result.data.every((row) => row.vitals.length === 1));
   assert.equal(result.sourceRefs.length, 2);
   assert.equal(result.truncated, true);
+});
+
+test('cross-vitals does not report truncation when the nested result exactly matches the cap', async () => {
+  const readers: CrossVitalsReaders = {
+    async findPatients() {
+      return [{ id: 'p-1' }];
+    },
+    async findCartelle(_patientIds, input) {
+      assert.equal(input.limit, 2);
+      return [
+        {
+          id: 'chart-p-1',
+          patientId: 'p-1',
+          data: { parametriVitali: [{ id: 'vital-1', etichetta: 'PA', valore: '170/95' }] },
+        },
+      ];
+    },
+  };
+
+  const result = await searchCrossPatientVitals(
+    { label: 'PA', systolicMin: 151, vitalLimitPerPatient: 1 },
+    context(null),
+    readers,
+    env,
+  );
+
+  assert.equal(result.data[0]?.vitals.length, 1);
+  assert.equal(result.truncated, false);
 });
 
 test('cross-vitals defensively excludes rows outside the signed patient scope', async () => {
@@ -220,6 +249,32 @@ test('cross-vitals returns early for an empty ACL and requires the environment g
         AI_CROSS_PATIENT_SEARCH_ENABLED: 'false',
       }),
     /disabled/i,
+  );
+  assert.equal(reads, 0);
+});
+
+test('cross-vitals validates an untrusted label before any read', async () => {
+  let reads = 0;
+  const readers: CrossVitalsReaders = {
+    async findPatients() {
+      reads++;
+      return [];
+    },
+    async findCartelle() {
+      reads++;
+      return [];
+    },
+  };
+
+  await assert.rejects(
+    () =>
+      searchCrossPatientVitals(
+        { label: { unexpected: true } as unknown as string },
+        context(null),
+        readers,
+        env,
+      ),
+    /invalid vital-sign label/i,
   );
   assert.equal(reads, 0);
 });
