@@ -38,6 +38,8 @@ export const NESSUNA_ANOMALIA: AnomaliePaziente = {
   verificaIncompleta: false,
 };
 
+export const MAX_ANOMALIE_NEL_RIEPILOGO = 3;
+
 /** Riga di terapia ridotta a cio' che serve qui. */
 export interface RigaConFarmaco {
   farmacoNome: string;
@@ -104,4 +106,14 @@ export function messaggioAnomalie(esito: AnomaliePaziente): string {
   return esito.totale === 1
     ? `1 farmaco in terapia non risulta in anagrafica AIFA: ${farmaci}. Va corretto.`
     : `${esito.totale} farmaci in terapia non risultano in anagrafica AIFA: ${farmaci}. Vanno corretti.`;
+}
+
+/** Variante bounded per righe, tooltip e nomi accessibili in elenchi ad alta densita'. */
+export function messaggioAnomalieCompatto(esito: AnomaliePaziente): string {
+  if (esito.totale === 0) return '';
+  const visibili = esito.anomalie.slice(0, MAX_ANOMALIE_NEL_RIEPILOGO);
+  const residuo = Math.max(0, esito.anomalie.length - visibili.length);
+  const farmaci = visibili.map((a) => a.farmacoNome).join(', ');
+  const altri = residuo > 0 ? `; +${residuo} altri farmaci` : '';
+  return `${esito.totale} ${esito.totale === 1 ? 'farmaco da sanare' : 'farmaci da sanare'}: ${farmaci}${altri}.`;
 }

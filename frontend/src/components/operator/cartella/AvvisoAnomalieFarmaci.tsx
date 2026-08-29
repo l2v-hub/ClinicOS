@@ -8,7 +8,7 @@
 // pericoloso di per se': dargli lo stesso peso visivo di un'allergia svaluterebbe entrambi.
 
 import type { AnomaliePaziente } from './anomalieFarmaco';
-import { messaggioAnomalie } from './anomalieFarmaco';
+import { messaggioAnomalie, messaggioAnomalieCompatto } from './anomalieFarmaco';
 import './AvvisoAnomalieFarmaci.css';
 
 interface Props {
@@ -70,11 +70,12 @@ export function AvvisoAnomalieFarmaci({
 /** Indicatore minimo per una riga di elenco: solo il numero, con il perché nel titolo. */
 export function IndicatoreAnomalie({ esito }: { esito: AnomaliePaziente }) {
   if (esito.totale === 0) return null;
+  const messaggio = messaggioAnomalieCompatto(esito);
   return (
     <span
       className="indicatore-anomalie"
-      title={messaggioAnomalie(esito)}
-      aria-label={messaggioAnomalie(esito)}
+      title={messaggio}
+      aria-label={messaggio}
       data-anomalie={esito.totale}
     >
       {esito.totale} da sanare

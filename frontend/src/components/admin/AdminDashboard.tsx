@@ -12,7 +12,9 @@ import {
   IcoPill,
 } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
+import { MAX_DASHBOARD_DELAY_ITEMS } from '../shared/dashboardAlertLimits';
 import { useRiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoSomministrazioni';
+import '../operator/cartella/AvvisoAnomalieFarmaci.css';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -136,7 +138,7 @@ export function AdminDashboard({
 
       {/* Pazienti con somministrazioni in ritardo: urgenza clinica reale, resta in rosso. */}
       {somministrazioni.ritardi.length > 0 && (
-        <div className="coverage-alert">
+        <div className="coverage-alert" role="alert">
           <IcoWarning />
           <div style={{ flex: 1, minWidth: 0 }}>
             <strong>
@@ -152,14 +154,25 @@ export function AdminDashboard({
                     className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
                     onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
                   >
-                    <span>
+                    <span className="anomalie-reparto__contenuto">
                       <span className="anomalie-reparto__nome">{p.nome}</span>
-                      <span className="anomalie-reparto__farmaci">
-                        {p.voci
-                          .map(
-                            (v) => `${v.farmacoNome} (${v.scheduledTime}, +${v.minutiRitardo} min)`,
-                          )
-                          .join(', ')}
+                      <span className="anomalie-reparto__farmaci-lista">
+                        {p.voci.slice(0, MAX_DASHBOARD_DELAY_ITEMS).map((v, index) => (
+                          <span
+                            className="anomalie-reparto__farmaco"
+                            key={`${v.farmacoNome}-${index}`}
+                          >
+                            <strong>{v.farmacoNome}</strong>
+                            <span>
+                              {v.scheduledTime} · +{v.minutiRitardo} min
+                            </span>
+                          </span>
+                        ))}
+                        {p.voci.length > MAX_DASHBOARD_DELAY_ITEMS && (
+                          <span className="anomalie-reparto__altre-voci">
+                            +{p.voci.length - MAX_DASHBOARD_DELAY_ITEMS} altri farmaci
+                          </span>
+                        )}
                       </span>
                     </span>
                     <span className="badge badge--red">+{p.voci[0].minutiRitardo} min</span>

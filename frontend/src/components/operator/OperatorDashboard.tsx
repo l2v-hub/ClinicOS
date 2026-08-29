@@ -13,7 +13,9 @@ import {
 } from '../../icons';
 import type { NavKey } from '../../types';
 import { PageHeader } from '../shared/PageHeader';
+import { MAX_DASHBOARD_DELAY_ITEMS } from '../shared/dashboardAlertLimits';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
+import { MAX_ANOMALIE_NEL_RIEPILOGO, messaggioAnomalieCompatto } from './cartella/anomalieFarmaco';
 import { useAnomalieReparto } from './cartella/useAnomalieReparto';
 import { useRiepilogoSomministrazioni } from './cartella/useRiepilogoSomministrazioni';
 import './cartella/AvvisoAnomalieFarmaci.css';
@@ -40,6 +42,8 @@ const STATO_LABEL: Record<string, string> = {
   annullato: 'Annullato',
 };
 
+const MAX_DASHBOARD_ANOMALY_PATIENTS = 3;
+
 export function OperatorDashboard({
   utente,
   consegneOverview,
@@ -61,6 +65,7 @@ export function OperatorDashboard({
   // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
   const anomalie = useAnomalieReparto();
   const somministrazioni = useRiepilogoSomministrazioni();
+  const anomalieVisibili = anomalie.pazienti.slice(0, MAX_DASHBOARD_ANOMALY_PATIENTS);
 
   // Clinical KPIs from the constant-size server aggregate.
   const critici = clinicalOverview?.critici ?? 0;
@@ -127,7 +132,7 @@ export function OperatorDashboard({
 
       {/* Pazienti con somministrazioni in ritardo: urgenza clinica reale, resta in rosso. */}
       {somministrazioni.ritardi.length > 0 && (
-        <div className="coverage-alert">
+        <div className="coverage-alert" role="alert">
           <IcoWarning />
           <div style={{ flex: 1, minWidth: 0 }}>
             <strong>
@@ -146,7 +151,7 @@ export function OperatorDashboard({
                     <span className="anomalie-reparto__contenuto">
                       <span className="anomalie-reparto__nome">{p.nome}</span>
                       <span className="anomalie-reparto__farmaci-lista">
-                        {p.voci.slice(0, 3).map((v, index) => (
+                        {p.voci.slice(0, MAX_DASHBOARD_DELAY_ITEMS).map((v, index) => (
                           <span
                             className="anomalie-reparto__farmaco"
                             key={`${v.farmacoNome}-${index}`}
@@ -157,9 +162,9 @@ export function OperatorDashboard({
                             </span>
                           </span>
                         ))}
-                        {p.voci.length > 3 && (
+                        {p.voci.length > MAX_DASHBOARD_DELAY_ITEMS && (
                           <span className="anomalie-reparto__altre-voci">
-                            +{p.voci.length - 3} altri farmaci
+                            +{p.voci.length - MAX_DASHBOARD_DELAY_ITEMS} altri farmaci
                           </span>
                         )}
                       </span>
@@ -194,17 +199,27 @@ export function OperatorDashboard({
             </strong>{' '}
             — da correggere in terapia
             <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>
-              {anomalie.pazienti.map((p) => (
+              {anomalieVisibili.map((p) => (
                 <li key={p.patientId}>
                   <button
                     type="button"
                     className="anomalie-reparto__riga"
                     onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
+                    aria-label={`Apri ${p.nome}. ${messaggioAnomalieCompatto(p.esito)}`}
                   >
-                    <span>
+                    <span className="anomalie-reparto__contenuto">
                       <span className="anomalie-reparto__nome">{p.nome}</span>
-                      <span className="anomalie-reparto__farmaci">
-                        {p.esito.anomalie.map((a) => a.farmacoNome).join(', ')}
+                      <span className="anomalie-reparto__farmaci-lista" aria-hidden="true">
+                        {p.esito.anomalie.slice(0, MAX_ANOMALIE_NEL_RIEPILOGO).map((a) => (
+                          <span className="anomalie-reparto__farmaco" key={a.farmacoNome}>
+                            <strong>{a.farmacoNome}</strong>
+                          </span>
+                        ))}
+                        {p.esito.anomalie.length > MAX_ANOMALIE_NEL_RIEPILOGO && (
+                          <span className="anomalie-reparto__altre-voci">
+                            +{p.esito.anomalie.length - MAX_ANOMALIE_NEL_RIEPILOGO} altri farmaci
+                          </span>
+                        )}
                       </span>
                     </span>
                     <IndicatoreAnomalie esito={p.esito} />
@@ -212,6 +227,17 @@ export function OperatorDashboard({
                 </li>
               ))}
             </ul>
+            {anomalie.pazienti.length > MAX_DASHBOARD_ANOMALY_PATIENTS && (
+              <button
+                type="button"
+                className="link-btn"
+                style={{ marginTop: 8 }}
+                onClick={() => onNavigate('pazienti')}
+              >
+                Apri lista pazienti · {anomalie.pazienti.length - MAX_DASHBOARD_ANOMALY_PATIENTS}{' '}
+                non mostrati <IcoArrow />
+              </button>
+            )}
           </div>
         </div>
       )}
