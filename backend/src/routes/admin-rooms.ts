@@ -10,6 +10,8 @@ import {
 } from './room-read-model.js';
 import {
   assignmentLockKeys,
+  bedWriteLockKeys,
+  MAX_ROOM_BEDS,
   parseAssignmentCreate,
   parseAssignmentUpdate,
   parseBedCreate,
@@ -17,6 +19,7 @@ import {
   parseRoomCreate,
   parseRoomUpdate,
   previousIsoDate,
+  roomWriteLockKeys,
   validateDateRange,
 } from './room-input.js';
 
@@ -36,6 +39,7 @@ const ASSIGNMENT_INTERVAL_SELECT = {
 class BedOverlapError extends Error {}
 class PatientOverlapError extends Error {}
 class InvalidAssignmentRangeError extends Error {}
+class BedUnavailableError extends Error {}
 
 // Facility occupancy is clinical data: do not let browsers or intermediaries retain it.
 const preventClinicalCaching = (_req: Request, res: Response, next: NextFunction) => {
@@ -313,62 +317,73 @@ adminRouter.put('/rooms/:roomId', async (req, res) => {
   const body = input.value;
 
   try {
-    const existing = await prisma.room.findUnique({
-      where: { id: roomId },
-      include: {
-        beds: {
-          include: {
-            assignments: { where: activeAssignmentFilter() },
+    const outcome = await prisma.$transaction(async (tx) => {
+      for (const lockKey of roomWriteLockKeys(roomId)) {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+      const existing = await tx.room.findUnique({
+        where: { id: roomId },
+        select: {
+          tipo: true,
+          beds: {
+            select: {
+              id: true,
+              label: true,
+              assignments: {
+                where: activeAssignmentFilter(),
+                select: { id: true },
+                take: 1,
+              },
+            },
           },
         },
-      },
+      });
+      if (!existing) return { kind: 'not_found' as const };
+      for (const lockKey of roomWriteLockKeys(
+        roomId,
+        existing.beds.map((bed) => bed.id),
+      ).slice(1)) {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+
+      if (body.tipo && body.tipo !== existing.tipo) {
+        const maxBeds =
+          body.tipo === 'singola' ? 1 : body.tipo === 'doppia' ? 2 : existing.beds.length;
+        if (maxBeds < existing.beds.length) {
+          const bedsToRemove = [...existing.beds]
+            .sort((a, b) => a.label.localeCompare(b.label))
+            .slice(maxBeds);
+          if (bedsToRemove.some((bed) => bed.assignments.length > 0)) {
+            return { kind: 'occupied' as const };
+          }
+          await tx.bed.deleteMany({ where: { id: { in: bedsToRemove.map((bed) => bed.id) } } });
+        }
+      }
+
+      const updates: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(body)) {
+        if (value !== undefined) updates[key] = value;
+      }
+      const room = await tx.room.update({
+        where: { id: roomId },
+        data: updates,
+        select: roomWithAssignmentsSelect(),
+      });
+      return { kind: 'updated' as const, room };
     });
-    if (!existing) {
+    if (outcome.kind === 'not_found') {
       res.status(404).json({ error: 'Stanza non trovata' });
       return;
     }
-
-    // If tipo changes, check bed count compatibility
-    if (body.tipo && body.tipo !== existing.tipo) {
-      const newTipo = body.tipo;
-      let maxBeds: number;
-      if (newTipo === 'singola') maxBeds = 1;
-      else if (newTipo === 'doppia') maxBeds = 2;
-      else maxBeds = existing.beds.length; // altra: keep current
-
-      if (maxBeds < existing.beds.length) {
-        // Check if extra beds are unoccupied
-        const sortedBeds = [...existing.beds].sort((a, b) => a.label.localeCompare(b.label));
-        const bedsToRemove = sortedBeds.slice(maxBeds);
-        const occupiedToRemove = bedsToRemove.filter((b) => b.assignments.length > 0);
-        if (occupiedToRemove.length > 0) {
-          res.status(409).json({
-            error: 'Impossibile ridurre il tipo stanza: alcuni letti da rimuovere sono occupati',
-          });
-          return;
-        }
-        // Remove extra beds
-        await prisma.bed.deleteMany({
-          where: { id: { in: bedsToRemove.map((b) => b.id) } },
-        });
-      }
+    if (outcome.kind === 'occupied') {
+      res.status(409).json({
+        error: 'Impossibile ridurre il tipo stanza: alcuni letti da rimuovere sono occupati',
+      });
+      return;
     }
-
-    const updates: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(body)) {
-      if (value !== undefined) {
-        updates[key] = value;
-      }
-    }
-
-    const room = await prisma.room.update({
-      where: { id: roomId },
-      data: updates,
-      select: roomWithAssignmentsSelect(),
-    });
 
     console.log(`PUT /admin/rooms/${roomId} → updated`);
-    res.status(200).json(room);
+    res.status(200).json(outcome.room);
   } catch (error) {
     console.error('PUT /admin/rooms/:roomId error:', error);
     res.status(500).json({ error: 'Errore durante aggiornamento stanza' });
@@ -380,28 +395,51 @@ adminRouter.delete('/rooms/:roomId', async (req, res) => {
   const { roomId } = req.params;
 
   try {
-    const room = await prisma.room.findUnique({
-      where: { id: roomId },
-      include: {
-        beds: {
-          include: {
-            assignments: { where: activeAssignmentFilter() },
+    const outcome = await prisma.$transaction(async (tx) => {
+      for (const lockKey of roomWriteLockKeys(roomId)) {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+      const snapshot = await tx.room.findUnique({
+        where: { id: roomId },
+        select: { beds: { select: { id: true } } },
+      });
+      if (!snapshot) return 'not_found' as const;
+
+      for (const lockKey of roomWriteLockKeys(
+        roomId,
+        snapshot.beds.map((bed) => bed.id),
+      ).slice(1)) {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+      const room = await tx.room.findUnique({
+        where: { id: roomId },
+        select: {
+          beds: {
+            select: {
+              assignments: {
+                where: activeAssignmentFilter(),
+                select: { id: true },
+                take: 1,
+              },
+            },
           },
         },
-      },
+      });
+      if (!room) return 'not_found' as const;
+      if (room.beds.some((bed) => bed.assignments.length > 0)) return 'active' as const;
+
+      await tx.room.delete({ where: { id: roomId } });
+      return 'deleted' as const;
     });
-    if (!room) {
+    if (outcome === 'not_found') {
       res.status(404).json({ error: 'Stanza non trovata' });
       return;
     }
-
-    const hasActiveAssignments = room.beds.some((b) => b.assignments.length > 0);
-    if (hasActiveAssignments) {
+    if (outcome === 'active') {
       res.status(409).json({ error: 'Impossibile eliminare: la stanza ha assegnazioni attive' });
       return;
     }
 
-    await prisma.room.delete({ where: { id: roomId } });
     console.log(`DELETE /admin/rooms/${roomId} → deleted`);
     res.status(204).send();
   } catch (error) {
@@ -447,24 +485,38 @@ adminRouter.post('/rooms/:roomId/beds', async (req, res) => {
   const body = input.value;
 
   try {
-    const room = await prisma.room.findUnique({ where: { id: roomId }, select: { id: true } });
-    if (!room) {
+    const outcome = await prisma.$transaction(async (tx) => {
+      for (const lockKey of roomWriteLockKeys(roomId)) {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+      const room = await tx.room.findUnique({
+        where: { id: roomId },
+        select: { id: true, _count: { select: { beds: true } } },
+      });
+      if (!room) return { kind: 'not_found' as const };
+      if (room._count.beds >= MAX_ROOM_BEDS) return { kind: 'full' as const };
+      const bed = await tx.bed.create({
+        data: {
+          roomId,
+          label: body.label,
+          stato: body.stato,
+          note: body.note,
+        },
+        select: bedWithAssignmentsSelect(),
+      });
+      return { kind: 'created' as const, bed };
+    });
+    if (outcome.kind === 'not_found') {
       res.status(404).json({ error: 'Stanza non trovata' });
       return;
     }
+    if (outcome.kind === 'full') {
+      res.status(409).json({ error: `La stanza ha già il massimo di ${MAX_ROOM_BEDS} letti` });
+      return;
+    }
 
-    const bed = await prisma.bed.create({
-      data: {
-        roomId,
-        label: body.label,
-        stato: body.stato,
-        note: body.note,
-      },
-      select: bedWithAssignmentsSelect(),
-    });
-
-    console.log(`POST /admin/rooms/${roomId}/beds → created id=${bed.id}`);
-    res.status(201).json(bed);
+    console.log(`POST /admin/rooms/${roomId}/beds → created id=${outcome.bed.id}`);
+    res.status(201).json(outcome.bed);
   } catch (error: unknown) {
     console.error('POST /admin/rooms/:roomId/beds error:', error);
     if (
@@ -491,38 +543,57 @@ adminRouter.put('/beds/:bedId', async (req, res) => {
   const body = input.value;
 
   try {
-    const bed = await prisma.bed.findUnique({
+    const lockTarget = await prisma.bed.findUnique({
       where: { id: bedId },
-      include: {
-        assignments: { where: activeAssignmentFilter() },
-      },
+      select: { roomId: true },
     });
-    if (!bed) {
+    if (!lockTarget) {
       res.status(404).json({ error: 'Letto non trovato' });
       return;
     }
 
-    // Cannot set to manutenzione if currently occupied
-    if (body.stato === 'manutenzione' && bed.assignments.length > 0) {
+    const outcome = await prisma.$transaction(async (tx) => {
+      for (const lockKey of bedWriteLockKeys(lockTarget.roomId, bedId)) {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+      const bed = await tx.bed.findUnique({
+        where: { id: bedId },
+        select: {
+          id: true,
+          assignments: {
+            where: activeAssignmentFilter(),
+            select: { id: true },
+            take: 1,
+          },
+        },
+      });
+      if (!bed) return { kind: 'not_found' as const };
+      if (body.stato === 'manutenzione' && bed.assignments.length > 0) {
+        return { kind: 'occupied' as const };
+      }
+
+      const updates: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(body)) {
+        if (value !== undefined) updates[key] = value;
+      }
+      const updated = await tx.bed.update({
+        where: { id: bedId },
+        data: updates,
+        select: bedWithAssignmentsSelect(),
+      });
+      return { kind: 'updated' as const, bed: updated };
+    });
+    if (outcome.kind === 'not_found') {
+      res.status(404).json({ error: 'Letto non trovato' });
+      return;
+    }
+    if (outcome.kind === 'occupied') {
       res.status(409).json({ error: 'Impossibile impostare manutenzione: il letto è occupato' });
       return;
     }
 
-    const updates: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(body)) {
-      if (value !== undefined) {
-        updates[key] = value;
-      }
-    }
-
-    const updated = await prisma.bed.update({
-      where: { id: bedId },
-      data: updates,
-      select: bedWithAssignmentsSelect(),
-    });
-
     console.log(`PUT /admin/beds/${bedId} → updated`);
-    res.status(200).json(updated);
+    res.status(200).json(outcome.bed);
   } catch (error) {
     console.error('PUT /admin/beds/:bedId error:', error);
     res.status(500).json({ error: 'Errore durante aggiornamento letto' });
@@ -534,23 +605,43 @@ adminRouter.delete('/beds/:bedId', async (req, res) => {
   const { bedId } = req.params;
 
   try {
-    const bed = await prisma.bed.findUnique({
+    const lockTarget = await prisma.bed.findUnique({
       where: { id: bedId },
-      include: {
-        assignments: { where: activeAssignmentFilter() },
-      },
+      select: { roomId: true },
     });
-    if (!bed) {
+    if (!lockTarget) {
       res.status(404).json({ error: 'Letto non trovato' });
       return;
     }
 
-    if (bed.assignments.length > 0) {
+    const outcome = await prisma.$transaction(async (tx) => {
+      for (const lockKey of bedWriteLockKeys(lockTarget.roomId, bedId)) {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+      const bed = await tx.bed.findUnique({
+        where: { id: bedId },
+        select: {
+          assignments: {
+            where: activeAssignmentFilter(),
+            select: { id: true },
+            take: 1,
+          },
+        },
+      });
+      if (!bed) return 'not_found' as const;
+      if (bed.assignments.length > 0) return 'active' as const;
+      await tx.bed.delete({ where: { id: bedId } });
+      return 'deleted' as const;
+    });
+    if (outcome === 'not_found') {
+      res.status(404).json({ error: 'Letto non trovato' });
+      return;
+    }
+    if (outcome === 'active') {
       res.status(409).json({ error: 'Impossibile eliminare: il letto ha assegnazioni attive' });
       return;
     }
 
-    await prisma.bed.delete({ where: { id: bedId } });
     console.log(`DELETE /admin/beds/${bedId} → deleted`);
     res.status(204).send();
   } catch (error) {
@@ -622,7 +713,7 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req: AuthedR
     // Validate bed
     const bed = await prisma.bed.findUnique({
       where: { id: bedId },
-      include: { room: true },
+      select: { id: true, roomId: true, stato: true },
     });
     if (!bed) {
       res.status(404).json({ error: 'Letto non trovato' });
@@ -639,8 +730,17 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req: AuthedR
     // Prefixed bed + patient locks are acquired in deterministic order. This serializes both
     // callers contending for one bed and callers moving the same patient to different beds.
     const assignment = await prisma.$transaction(async (tx) => {
-      for (const lockKey of assignmentLockKeys(patientId, bedId)) {
+      for (const lockKey of assignmentLockKeys(patientId, bedId, bed.roomId)) {
         await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+
+      const lockedBed = await tx.bed.findUnique({
+        where: { id: bedId },
+        select: { id: true, roomId: true, stato: true },
+      });
+      if (!lockedBed) throw new BedUnavailableError('Il letto non è più disponibile');
+      if (lockedBed.stato === 'manutenzione') {
+        throw new BedUnavailableError('Il letto è in manutenzione');
       }
 
       // Check for overlapping assignments on this bed
@@ -681,7 +781,7 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req: AuthedR
       return tx.patientRoomAssignment.create({
         data: {
           patientId,
-          roomId: bed.roomId,
+          roomId: lockedBed.roomId,
           bedId,
           startDate,
           endDate,
@@ -695,6 +795,10 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req: AuthedR
     console.log(`POST /patients/${patientId}/room-assignments → created id=${assignment.id}`);
     res.status(201).json(assignment);
   } catch (error) {
+    if (error instanceof BedUnavailableError) {
+      res.status(409).json({ error: error.message, code: 'bed_unavailable' });
+      return;
+    }
     if (error instanceof BedOverlapError) {
       res.status(409).json({ error: error.message });
       return;
@@ -721,7 +825,7 @@ patientAssignmentRouter.put('/:patientId/room-assignments/:assignmentId', async 
   try {
     const lockTarget = await prisma.patientRoomAssignment.findFirst({
       where: { id: assignmentId, patientId },
-      select: { bedId: true },
+      select: { bedId: true, roomId: true },
     });
     if (!lockTarget) {
       res.status(404).json({ error: 'Assegnazione non trovata' });
@@ -729,7 +833,7 @@ patientAssignmentRouter.put('/:patientId/room-assignments/:assignmentId', async 
     }
 
     const assignment = await prisma.$transaction(async (tx) => {
-      for (const lockKey of assignmentLockKeys(patientId, lockTarget.bedId)) {
+      for (const lockKey of assignmentLockKeys(patientId, lockTarget.bedId, lockTarget.roomId)) {
         await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
       }
 

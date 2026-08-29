@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   assignmentLockKeys,
+  bedWriteLockKeys,
   isIsoDate,
   MAX_ROOM_NOTE_LENGTH,
   parseAssignmentCreate,
@@ -9,6 +10,7 @@ import {
   parseBedCreate,
   parseRoomCreate,
   previousIsoDate,
+  roomWriteLockKeys,
   validateDateRange,
 } from '../room-input.js';
 
@@ -57,8 +59,17 @@ test('assignment inputs reject malformed dates, long notes and non-object bodies
 });
 
 test('assignment advisory locks are prefixed and deterministic', () => {
-  assert.deepEqual(assignmentLockKeys('patient-z', 'bed-a'), ['bed:bed-a', 'patient:patient-z']);
-  assert.deepEqual(assignmentLockKeys('a', 'z'), [...assignmentLockKeys('a', 'z')].sort());
+  assert.deepEqual(assignmentLockKeys('patient-z', 'bed-a', 'room-x'), [
+    'room:room-x',
+    'bed:bed-a',
+    'patient:patient-z',
+  ]);
+  assert.deepEqual(bedWriteLockKeys('room-x', 'bed-a'), ['room:room-x', 'bed:bed-a']);
+  assert.deepEqual(roomWriteLockKeys('room-x', ['bed-z', 'bed-a', 'bed-z']), [
+    'room:room-x',
+    'bed:bed-a',
+    'bed:bed-z',
+  ]);
   assert.equal(previousIsoDate('2026-03-01'), '2026-02-28');
   assert.equal(previousIsoDate('2028-03-01'), '2028-02-29');
 });

@@ -71,8 +71,16 @@ export function validateDateRange(
   return { ok: true, value: { startDate, endDate } };
 }
 
-export function assignmentLockKeys(patientId: string, bedId: string): string[] {
-  return [`bed:${bedId}`, `patient:${patientId}`].sort();
+export function roomWriteLockKeys(roomId: string, bedIds: string[] = []): string[] {
+  return [`room:${roomId}`, ...[...new Set(bedIds)].sort().map((bedId) => `bed:${bedId}`)];
+}
+
+export function bedWriteLockKeys(roomId: string, bedId: string): string[] {
+  return roomWriteLockKeys(roomId, [bedId]);
+}
+
+export function assignmentLockKeys(patientId: string, bedId: string, roomId: string): string[] {
+  return [`room:${roomId}`, `bed:${bedId}`, `patient:${patientId}`];
 }
 
 export function previousIsoDate(value: string): string {

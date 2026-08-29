@@ -266,3 +266,148 @@ test('admin-rooms: POST e PUT concorrenti non possono lasciare due soggiorni ape
     await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
   }
 });
+
+test('admin-rooms: POST assegnazione e DELETE letto non possono perdere una scrittura 201', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-DEL-BED-${Date.now()}`, tipo: 'singola' },
+  });
+  const bed = await prisma.bed.create({ data: { roomId: room.id, label: 'A' } });
+  const patient = await makePatient('DEL-BED');
+
+  try {
+    const [postResponse, deleteResponse] = await Promise.all([
+      fetch(`${base}/patients/${patient.id}/room-assignments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+        body: JSON.stringify({ bedId: bed.id, startDate: '2031-04-01' }),
+      }),
+      fetch(`${base}/admin/beds/${bed.id}`, { method: 'DELETE', headers: AUTH_HEADERS }),
+    ]);
+
+    assert.notDeepEqual([postResponse.status, deleteResponse.status], [201, 204]);
+    const assignment = await prisma.patientRoomAssignment.findFirst({
+      where: { patientId: patient.id, bedId: bed.id },
+    });
+    if (postResponse.status === 201) {
+      assert.equal(deleteResponse.status, 409);
+      assert.ok(assignment, 'una POST 201 deve restare persistita');
+    } else {
+      assert.equal(deleteResponse.status, 204);
+      assert.ok([404, 409].includes(postResponse.status), `POST inatteso: ${postResponse.status}`);
+      assert.equal(assignment, null);
+    }
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test('admin-rooms: POST assegnazione e DELETE stanza non possono perdere una scrittura 201', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-DEL-ROOM-${Date.now()}`, tipo: 'singola' },
+  });
+  const bed = await prisma.bed.create({ data: { roomId: room.id, label: 'A' } });
+  const patient = await makePatient('DEL-ROOM');
+
+  try {
+    const [postResponse, deleteResponse] = await Promise.all([
+      fetch(`${base}/patients/${patient.id}/room-assignments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+        body: JSON.stringify({ bedId: bed.id, startDate: '2031-04-01' }),
+      }),
+      fetch(`${base}/admin/rooms/${room.id}`, { method: 'DELETE', headers: AUTH_HEADERS }),
+    ]);
+
+    assert.notDeepEqual([postResponse.status, deleteResponse.status], [201, 204]);
+    const assignment = await prisma.patientRoomAssignment.findFirst({
+      where: { patientId: patient.id, bedId: bed.id },
+    });
+    if (postResponse.status === 201) {
+      assert.equal(deleteResponse.status, 409);
+      assert.ok(assignment, 'una POST 201 deve restare persistita');
+    } else {
+      assert.equal(deleteResponse.status, 204);
+      assert.ok([404, 409].includes(postResponse.status), `POST inatteso: ${postResponse.status}`);
+      assert.equal(assignment, null);
+    }
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test('admin-rooms: riduzione stanza e POST assegnazione non possono cancellare un soggiorno 201', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-SHRINK-${Date.now()}`, tipo: 'doppia' },
+  });
+  await prisma.bed.create({ data: { roomId: room.id, label: 'A' } });
+  const bedB = await prisma.bed.create({ data: { roomId: room.id, label: 'B' } });
+  const patient = await makePatient('SHRINK');
+
+  try {
+    const [postResponse, shrinkResponse] = await Promise.all([
+      fetch(`${base}/patients/${patient.id}/room-assignments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+        body: JSON.stringify({ bedId: bedB.id, startDate: '2031-04-01' }),
+      }),
+      fetch(`${base}/admin/rooms/${room.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+        body: JSON.stringify({ tipo: 'singola' }),
+      }),
+    ]);
+
+    assert.notDeepEqual([postResponse.status, shrinkResponse.status], [201, 200]);
+    const assignment = await prisma.patientRoomAssignment.findFirst({
+      where: { patientId: patient.id, bedId: bedB.id },
+    });
+    if (postResponse.status === 201) {
+      assert.equal(shrinkResponse.status, 409);
+      assert.ok(assignment, 'una POST 201 deve restare persistita');
+    } else {
+      assert.equal(shrinkResponse.status, 200);
+      assert.ok([404, 409].includes(postResponse.status), `POST inatteso: ${postResponse.status}`);
+      assert.equal(assignment, null);
+    }
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test('admin-rooms: aggiunta letto rispetta il limite complessivo sotto lock stanza', async () => {
+  const room = await prisma.room.create({
+    data: {
+      numero: `TEST-BED-CAP-${Date.now()}`,
+      tipo: 'altra',
+      beds: { create: Array.from({ length: 8 }, (_, index) => ({ label: String(index + 1) })) },
+    },
+  });
+
+  try {
+    const response = await fetch(`${base}/admin/rooms/${room.id}/beds`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...AUTH_HEADERS },
+      body: JSON.stringify({ label: '9' }),
+    });
+    assert.equal(response.status, 409);
+    assert.equal(await prisma.bed.count({ where: { roomId: room.id } }), 8);
+  } finally {
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});

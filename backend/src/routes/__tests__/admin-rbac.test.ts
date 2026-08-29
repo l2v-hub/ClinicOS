@@ -39,13 +39,20 @@ after(async () => {
   await new Promise<void>((resolve) => server.close(() => resolve()));
 });
 
-test('operator cannot create rooms', async () => {
-  const response = await fetch(`${base}/admin/rooms`, {
-    method: 'POST',
-    headers: OPERATOR_HEADERS,
-    body: JSON.stringify({ numero: 'SEC-TEST' }),
-  });
-  assert.equal(response.status, 403);
+test('operator cannot create or delete rooms and beds', async () => {
+  const responses = await Promise.all([
+    fetch(`${base}/admin/rooms`, {
+      method: 'POST',
+      headers: OPERATOR_HEADERS,
+      body: JSON.stringify({ numero: 'SEC-TEST' }),
+    }),
+    fetch(`${base}/admin/rooms/room-other`, { method: 'DELETE', headers: OPERATOR_HEADERS }),
+    fetch(`${base}/admin/beds/bed-other`, { method: 'DELETE', headers: OPERATOR_HEADERS }),
+  ]);
+  assert.deepEqual(
+    responses.map((response) => response.status),
+    [403, 403, 403],
+  );
 });
 
 test('room and assignment endpoints forbid caching of clinical occupancy', async () => {
