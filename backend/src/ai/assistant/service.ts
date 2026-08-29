@@ -35,6 +35,7 @@ import { validateQueryPlan } from '../gateway/query/validate.js';
 import { dedupeNav, navFromSource, type NavAction } from './nav.js';
 import { runQueryPlan } from '../gateway/query/engine.js';
 import { boundStaffList, MAX_STAFF_RESULTS } from './staff-window.js';
+import { boundTodayAppointments, todayAppointmentLimit } from './appointments-today-window.js';
 
 export interface AssistantAnswer {
   intent: AssistantIntent;
@@ -66,28 +67,52 @@ function limits(env: NodeJS.ProcessEnv = process.env) {
   };
 }
 
+function appointmentsTodayWhere(ctx: UserContext, now: Date): Prisma.AppointmentWhereInput {
+  const from = new Date(now);
+  from.setHours(0, 0, 0, 0);
+  const to = new Date(now);
+  to.setHours(23, 59, 59, 999);
+  return {
+    scheduledAt: { gte: from, lte: to },
+    ...(ctx.permittedPatientIds === null ? {} : { patientId: { in: ctx.permittedPatientIds } }),
+  };
+}
+
 async function appointmentsToday(
   ctx: UserContext,
-): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
-  const today = new Date();
-  const from = new Date(today);
-  from.setHours(0, 0, 0, 0);
-  const to = new Date(today);
-  to.setHours(23, 59, 59, 999);
+  env: NodeJS.ProcessEnv,
+  now: Date = new Date(),
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated: boolean }> {
+  if (ctx.permittedPatientIds?.length === 0) {
+    return { data: [], sourceRefs: [], truncated: false };
+  }
+  const limit = todayAppointmentLimit(limits(env).maxResults);
   const rows = await prisma.appointment.findMany({
-    where: { scheduledAt: { gte: from, lte: to } },
-    orderBy: { scheduledAt: 'asc' },
-    take: 200,
+    where: appointmentsTodayWhere(ctx, now),
+    select: {
+      id: true,
+      patientId: true,
+      scheduledAt: true,
+      durationMinutes: true,
+      reason: true,
+      status: true,
+    },
+    orderBy: [{ scheduledAt: 'asc' }, { id: 'asc' }],
+    take: limit + 1,
   });
-  const allowed = rows.filter(
-    (a) => ctx.permittedPatientIds === null || ctx.permittedPatientIds.includes(a.patientId),
-  );
+  const result = boundTodayAppointments(rows, limit);
   return {
-    data: allowed,
-    sourceRefs: allowed.map((a) =>
+    data: result.data,
+    sourceRefs: result.data.map((a) =>
       appointmentSource(a.patientId, a.id, a.reason ?? 'appuntamento', a.scheduledAt.toISOString()),
     ),
+    truncated: result.truncated,
   };
+}
+
+async function appointmentsTodayCount(ctx: UserContext, now: Date): Promise<number> {
+  if (ctx.permittedPatientIds?.length === 0) return 0;
+  return prisma.appointment.count({ where: appointmentsTodayWhere(ctx, now) });
 }
 
 /** issue #239: aggregate rooms/beds occupancy — counts only, NEVER patient names/identifiers.
@@ -275,7 +300,7 @@ async function facilitySnapshot(
   const occ = await roomsOccupancy(env);
   const therapies = await therapiesDue(ctx, now, 0);
   const consegneOverdue = await overdueConsegne(ctx, now);
-  const appuntamenti = await appointmentsToday(ctx);
+  const appointmentsTodayTotal = await appointmentsTodayCount(ctx, now);
   const generatedAt = now.toISOString();
 
   const therapiesOverdue = therapies.overdue;
@@ -302,7 +327,7 @@ async function facilitySnapshot(
         oraScadenza: c.oraScadenza,
         operatoreAssegnato: c.operatoreAssegnato,
       })),
-      appointmentsTodayCount: appuntamenti.data.length,
+      appointmentsTodayCount: appointmentsTodayTotal,
     },
   ];
 
@@ -332,7 +357,7 @@ async function facilitySnapshot(
       '',
       'agenda-today',
       'Agenda di oggi',
-      `${appuntamenti.data.length} appuntamenti programmati oggi`,
+      `${appointmentsTodayTotal} appuntamenti programmati oggi`,
     ),
   );
   return {
@@ -613,7 +638,7 @@ async function dispatch(
       return { data: r.data, sourceRefs: r.sourceRefs };
     }
     case 'query_appointments_today':
-      return await appointmentsToday(ctx);
+      return await appointmentsToday(ctx, env);
     case 'query_rooms_occupancy':
       return await roomsOccupancy(env);
     case 'query_staff_list':
