@@ -21,6 +21,24 @@ export class AppointmentNotFoundError extends Error {
     this.name = 'AppointmentNotFoundError';
   }
 }
+export class AppointmentViewCapacityError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AppointmentViewCapacityError';
+  }
+}
+export class AppointmentForbiddenError extends Error {
+  constructor(message = 'Appuntamento non autorizzato per questo operatore') {
+    super(message);
+    this.name = 'AppointmentForbiddenError';
+  }
+}
+
+export interface AppointmentActor {
+  operatorId: string;
+  role: string;
+  name?: string;
+}
 
 /** UI-facing DTO: the Prisma model mapped to the agenda's date/time/tipologia vocabulary. */
 export interface AppointmentDTO {
@@ -46,8 +64,17 @@ export interface CreateAppointmentInput {
   note?: string;
   durata?: number;
   stato?: string; // UI status ('programmato' | 'in_corso' | 'completato' | 'annullato')
-  /** Display name used when the operator row must be provisioned on the fly. */
-  operatorName?: string;
+  actor: AppointmentActor;
+}
+
+function canManageAnyAppointment(role: string): boolean {
+  return ['admin', 'manager'].includes(role.toLowerCase());
+}
+
+function assertCanManage(actor: AppointmentActor, assigneeOperatorId: string): void {
+  if (!canManageAnyAppointment(actor.role) && actor.operatorId !== assigneeOperatorId) {
+    throw new AppointmentForbiddenError();
+  }
 }
 
 export interface UpdateAppointmentPatch {
@@ -63,20 +90,26 @@ export interface UpdateAppointmentPatch {
 // ── date/status mapping ──────────────────────────────────────────────────────
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-const TIME_RE = /^\d{2}:\d{2}$/;
+const TIME_RE = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
 
-/** Combine agenda date+time (server-local, symmetric with dataOraFrom). */
+/** Combine a timezone-free clinical wall-clock value. UTC components are used as a stable storage
+ * encoding so behaviour never depends on the host process timezone or DST configuration. */
 export function toScheduledAt(data: string, ora: string): Date {
   if (!DATE_RE.test(data)) throw new Error(`Data non valida: ${data} (atteso YYYY-MM-DD)`);
   if (!TIME_RE.test(ora)) throw new Error(`Ora non valida: ${ora} (atteso HH:MM)`);
-  return new Date(`${data}T${ora}:00`);
+  const parsed = new Date(`${data}T${ora}:00.000Z`);
+  const roundTrip = Number.isNaN(parsed.getTime()) ? null : dataOraFrom(parsed);
+  if (!roundTrip || roundTrip.data !== data || roundTrip.ora !== ora) {
+    throw new Error(`Data o ora non valida: ${data} ${ora}`);
+  }
+  return parsed;
 }
 
 function dataOraFrom(dt: Date): { data: string; ora: string } {
   const pad = (n: number) => String(n).padStart(2, '0');
   return {
-    data: `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`,
-    ora: `${pad(dt.getHours())}:${pad(dt.getMinutes())}`,
+    data: `${dt.getUTCFullYear()}-${pad(dt.getUTCMonth() + 1)}-${pad(dt.getUTCDate())}`,
+    ora: `${pad(dt.getUTCHours())}:${pad(dt.getUTCMinutes())}`,
   };
 }
 
@@ -124,7 +157,15 @@ function toDTO(row: AppointmentRow): AppointmentDTO {
   };
 }
 
-const INCLUDE = {
+const APPOINTMENT_SELECT = {
+  id: true,
+  patientId: true,
+  operatorId: true,
+  scheduledAt: true,
+  durationMinutes: true,
+  reason: true,
+  notes: true,
+  status: true,
   patient: { select: { firstName: true, lastName: true } },
   operator: { select: { user: { select: { fullName: true } } } },
 } as const;
@@ -191,24 +232,57 @@ async function ensureOperator(
 
 // ── read ─────────────────────────────────────────────────────────────────────
 
-export async function listAppointments(
-  filter: { date?: string; operatorId?: string } = {},
-): Promise<AppointmentDTO[]> {
+export async function listAppointments(filter: {
+  date?: string;
+  from?: string;
+  to?: string;
+  operatorId?: string;
+  limit?: number;
+  actor: AppointmentActor;
+}): Promise<AppointmentDTO[]> {
   const where: Record<string, unknown> = {};
-  if (filter.date) {
-    if (!DATE_RE.test(filter.date))
-      throw new Error(`Data non valida: ${filter.date} (atteso YYYY-MM-DD)`);
-    const from = new Date(`${filter.date}T00:00:00`);
-    const to = new Date(from.getTime() + 24 * 60 * 60_000);
-    where.scheduledAt = { gte: from, lt: to };
+  const fromDate = filter.date ?? filter.from;
+  const toDate = filter.date ?? filter.to;
+  if (!fromDate || !toDate) {
+    throw new Error('Intervallo appuntamenti obbligatorio');
   }
-  if (filter.operatorId) where.operatorId = filter.operatorId;
+  if (!DATE_RE.test(fromDate) || !DATE_RE.test(toDate)) {
+    throw new Error('Data non valida (atteso YYYY-MM-DD)');
+  }
+  const from = new Date(`${fromDate}T00:00:00.000Z`);
+  const toStart = new Date(`${toDate}T00:00:00.000Z`);
+  if (
+    Number.isNaN(from.getTime()) ||
+    Number.isNaN(toStart.getTime()) ||
+    dataOraFrom(from).data !== fromDate ||
+    dataOraFrom(toStart).data !== toDate ||
+    Date.parse(`${toDate}T00:00:00.000Z`) < Date.parse(`${fromDate}T00:00:00.000Z`) ||
+    Date.parse(`${toDate}T00:00:00.000Z`) - Date.parse(`${fromDate}T00:00:00.000Z`) >
+      41 * 86_400_000
+  ) {
+    throw new Error('Intervallo appuntamenti non valido o superiore a 42 giorni');
+  }
+  const to = new Date(toStart.getTime() + 24 * 60 * 60_000);
+  where.scheduledAt = { gte: from, lt: to };
+  const visibleOperatorId = canManageAnyAppointment(filter.actor.role)
+    ? filter.operatorId
+    : filter.actor.operatorId;
+  if (visibleOperatorId) where.operatorId = visibleOperatorId;
+  const limit = filter.limit ?? 1000;
+  if (!Number.isInteger(limit) || limit < 1 || limit > 1000) {
+    throw new Error('Limite appuntamenti non valido');
+  }
   const rows = await prisma.appointment.findMany({
     where,
     orderBy: { scheduledAt: 'asc' },
-    include: INCLUDE,
-    take: 1000,
+    select: APPOINTMENT_SELECT,
+    take: limit + 1,
   });
+  if (rows.length > limit) {
+    throw new AppointmentViewCapacityError(
+      `Troppi appuntamenti nel periodo: restringi data o operatore (massimo ${limit})`,
+    );
+  }
   return rows.map(toDTO);
 }
 
@@ -231,7 +305,7 @@ async function findConflictWith(
       status: { not: 'CANCELLED' },
       ...(excludeId ? { id: { not: excludeId } } : {}),
     },
-    include: INCLUDE,
+    select: APPOINTMENT_SELECT,
   });
   return row ? toDTO(row) : null;
 }
@@ -254,7 +328,7 @@ export async function findAppointmentAt(
 ): Promise<AppointmentDTO | null> {
   const row = await prisma.appointment.findFirst({
     where: { patientId, scheduledAt: toScheduledAt(data, ora), status: { not: 'CANCELLED' } },
-    include: INCLUDE,
+    select: APPOINTMENT_SELECT,
   });
   return row ? toDTO(row) : null;
 }
@@ -263,13 +337,18 @@ export async function findAppointmentAt(
 
 export async function createAppointment(input: CreateAppointmentInput): Promise<AppointmentDTO> {
   const scheduledAt = toScheduledAt(input.data, input.ora);
+  assertCanManage(input.actor, input.operatorId);
 
   // ensureOperator provisions the User/Operator rows on first use (idempotent upsert) and is
   // needed regardless of whether the slot turns out to be free — it stays OUTSIDE the lock
   // transaction below so its writes commit even if the conflict check subsequently rejects the
   // request, and so the (unrelated) operator-provisioning path never holds the slot's advisory
   // lock longer than necessary.
-  const operator = await ensureOperator(input.operatorId, input.operatorName);
+  const operator = await ensureOperator(input.operatorId);
+  const creator =
+    input.actor.operatorId === input.operatorId
+      ? operator
+      : await ensureOperator(input.actor.operatorId, input.actor.name);
 
   // Conflict check + create are one atomic unit: without a lock, two concurrent requests for the
   // same operator+slot can both pass the conflict check before either commits. A Postgres
@@ -290,14 +369,14 @@ export async function createAppointment(input: CreateAppointmentInput): Promise<
       data: {
         patientId: input.patientId,
         operatorId: operator.id,
-        createdByUserId: operator.userId,
+        createdByUserId: creator.userId,
         scheduledAt,
         durationMinutes: input.durata && input.durata > 0 ? input.durata : 30,
         reason: input.tipologia || 'visita',
         notes: input.note ?? null,
         status: STATUS_TO_DB[input.stato ?? 'programmato'] ?? 'SCHEDULED',
       },
-      include: INCLUDE,
+      select: APPOINTMENT_SELECT,
     });
   });
   return toDTO(row);
@@ -306,14 +385,17 @@ export async function createAppointment(input: CreateAppointmentInput): Promise<
 export async function updateAppointment(
   id: string,
   patch: UpdateAppointmentPatch,
+  actor: AppointmentActor,
 ): Promise<AppointmentDTO> {
   const existing = await prisma.appointment.findUnique({ where: { id } });
   if (!existing) throw new AppointmentNotFoundError(`Appuntamento non trovato: ${id}`);
+  assertCanManage(actor, existing.operatorId);
 
   const current = dataOraFrom(existing.scheduledAt);
   const data = patch.data ?? current.data;
   const ora = patch.ora ?? current.ora;
   const operatorId = patch.operatorId ?? existing.operatorId;
+  assertCanManage(actor, operatorId);
   if (patch.operatorId && patch.operatorId !== existing.operatorId)
     await ensureOperator(patch.operatorId);
 
@@ -350,7 +432,7 @@ export async function updateAppointment(
         ...(patch.note !== undefined ? { notes: patch.note } : {}),
         ...(patch.stato !== undefined ? { status: STATUS_TO_DB[patch.stato] ?? 'SCHEDULED' } : {}),
       },
-      include: INCLUDE,
+      select: APPOINTMENT_SELECT,
     });
   });
   return toDTO(row);
@@ -362,9 +444,16 @@ export async function updateAppointment(
 // button. It is intentionally named `uiOnlyDeleteAppointment` and MUST NOT be imported by any
 // module under backend/src/ai/ (asserted by unit test): Agnos has no delete path, by construction.
 
-export async function uiOnlyDeleteAppointment(id: string): Promise<boolean> {
-  const existing = await prisma.appointment.findUnique({ where: { id }, select: { id: true } });
+export async function uiOnlyDeleteAppointment(
+  id: string,
+  actor: AppointmentActor,
+): Promise<boolean> {
+  const existing = await prisma.appointment.findUnique({
+    where: { id },
+    select: { id: true, operatorId: true },
+  });
   if (!existing) return false;
+  assertCanManage(actor, existing.operatorId);
   await prisma.appointment.delete({ where: { id } });
   return true;
 }

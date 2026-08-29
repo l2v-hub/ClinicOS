@@ -36,13 +36,14 @@ test('appointment-service: due createAppointment concorrenti sullo stesso operat
   const patientA = await makePatient('A');
   const patientB = await makePatient('B');
   const opId = `test-op-cc-${Date.now()}`;
+  const actor = { operatorId: opId, role: 'operatore', name: 'Op Concorrenza Test' };
   try {
     const input = {
       operatorId: opId,
-      operatorName: 'Op Concorrenza Test',
       data: '2031-02-20',
       ora: '09:00',
       tipologia: 'visita',
+      actor,
     };
 
     const results = await Promise.allSettled([
@@ -68,7 +69,7 @@ test('appointment-service: due createAppointment concorrenti sullo stesso operat
 
     // Nessuna doppia occupazione: una sola riga persistita per quello slot/operatore.
     const rows = await prisma.appointment.findMany({
-      where: { operatorId: opId, scheduledAt: new Date('2031-02-20T09:00:00') },
+      where: { operatorId: opId, scheduledAt: new Date('2031-02-20T09:00:00.000Z') },
     });
     assert.equal(rows.length, 1, 'deve esistere una sola riga per lo slot conteso');
   } finally {
@@ -81,6 +82,7 @@ test('appointment-service: due createAppointment concorrenti sullo stesso operat
 test('appointment-service: due updateAppointment concorrenti verso lo stesso slot destinazione → una sola vince', async () => {
   const patient = await makePatient('C');
   const opId = `test-op-cc-upd-${Date.now()}`;
+  const actor = { operatorId: opId, role: 'operatore', name: 'Op Concorrenza Test' };
   try {
     // Tre appuntamenti dello stesso operatore: due verranno spostati in concorrenza sullo stesso
     // slot libero (12:00), il terzo resta fermo lì e non c'entra nella corsa.
@@ -90,6 +92,7 @@ test('appointment-service: due updateAppointment concorrenti verso lo stesso slo
       data: '2031-02-21',
       ora: '10:00',
       tipologia: 'controllo',
+      actor,
     });
     const apt2 = await createAppointment({
       patientId: patient.id,
@@ -97,11 +100,12 @@ test('appointment-service: due updateAppointment concorrenti verso lo stesso slo
       data: '2031-02-21',
       ora: '11:00',
       tipologia: 'controllo',
+      actor,
     });
 
     const results = await Promise.allSettled([
-      updateAppointment(apt1.id, { ora: '12:00' }),
-      updateAppointment(apt2.id, { ora: '12:00' }),
+      updateAppointment(apt1.id, { ora: '12:00' }, actor),
+      updateAppointment(apt2.id, { ora: '12:00' }, actor),
     ]);
 
     const fulfilled = results.filter((r) => r.status === 'fulfilled');
@@ -120,7 +124,7 @@ test('appointment-service: due updateAppointment concorrenti verso lo stesso slo
     );
 
     const rows = await prisma.appointment.findMany({
-      where: { operatorId: opId, scheduledAt: new Date('2031-02-21T12:00:00') },
+      where: { operatorId: opId, scheduledAt: new Date('2031-02-21T12:00:00.000Z') },
     });
     assert.equal(rows.length, 1, 'deve esistere una sola riga sullo slot 12:00 conteso');
   } finally {

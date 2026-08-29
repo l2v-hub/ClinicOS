@@ -27,8 +27,11 @@ actionsRouter.use(importRateLimit);
 /** Operator identity + role-clamped gateway context, shared with the voice routes. */
 export function agnosOperatorFrom(req: AuthedRequest): AgnosOperatorContext {
   const op = req.operator!; // requireOperator guarantees it
-  const fromHeader = (req.header('X-Operator-Name') || '').trim();
-  return { operatorId: op.id, operatorName: fromHeader || op.id, gatewayCtx: ctxFromOperator(req) };
+  return {
+    operatorId: op.id,
+    operatorName: op.name?.trim() || op.id,
+    gatewayCtx: ctxFromOperator(req),
+  };
 }
 
 function parseChannel(raw: unknown): AgnosChannel {

@@ -218,6 +218,7 @@ model Appointment {
 
 model MedicationAdministration {
   id            String    @id @default(cuid())
+  therapyId     String?
   patientId     String
   farmacoNome   String
   farmacoDose   String
@@ -234,8 +235,10 @@ model MedicationAdministration {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   patient       Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  therapy       PatientTherapy? @relation(fields: [therapyId], references: [id], onDelete: SetNull)
 
-  @@unique([patientId, farmacoNome, date, fascia])
+  @@unique([therapyId, date, fascia])
+  @@index([therapyId, date])
   @@index([date, fascia])
   @@index([date, patientId])
   @@index([patientId])
@@ -292,6 +295,7 @@ model PatientTherapy {
   // NULL/empty = every day (preserves prior behavior, fully backward-compatible).
   giorniSettimana         String?
   schedules               TherapySchedule[]
+  administrations         MedicationAdministration[]
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
   patient              Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)

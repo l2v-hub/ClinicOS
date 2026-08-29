@@ -3,6 +3,7 @@
 // tool di lettura di Agnos): una seconda implementazione farebbe divergere i conteggi mostrati
 // dall'UI da quelli su cui l'assistente risponde. Sola lettura.
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { scheduleDoseLabel, type ScheduleInput } from '../lib/therapy-dose.js';
 import { earliestOra } from './slot-scheduling.js';
@@ -20,10 +21,13 @@ export const FASCE = [
 
 type FlagField = (typeof FASCE)[number]['flagField'];
 
-interface CartDataFallback {
-  cameraNumero?: string;
-  lettoNumero?: string;
-  [key: string]: unknown;
+export const MAX_THERAPY_SLOT_SOURCE_ROWS = 5000;
+export class TherapySlotCapacityError extends Error {}
+
+interface RoomFallbackRow {
+  patientId: string;
+  cameraNumero: string | null;
+  lettoNumero: string | null;
 }
 
 export interface SlotAdministration {
@@ -90,7 +94,6 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
         select: {
           firstName: true,
           lastName: true,
-          cartella: { select: { data: true } },
           roomAssignments: {
             where: {
               startDate: { lte: date },
@@ -105,7 +108,13 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
         },
       },
     },
+    take: MAX_THERAPY_SLOT_SOURCE_ROWS + 1,
   });
+  if (therapies.length > MAX_THERAPY_SLOT_SOURCE_ROWS) {
+    throw new TherapySlotCapacityError(
+      `Troppe terapie per la giornata (massimo ${MAX_THERAPY_SLOT_SOURCE_ROWS})`,
+    );
+  }
 
   const validTherapies = therapies.filter((pt) => {
     if (!pt.patient) {
@@ -124,6 +133,26 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
   });
 
   const patientIds = [...new Set(validTherapies.map((therapy) => therapy.patientId))];
+  const missingAssignmentIds = [
+    ...new Set(
+      validTherapies
+        .filter((therapy) => therapy.patient.roomAssignments.length === 0)
+        .map((therapy) => therapy.patientId),
+    ),
+  ];
+  const fallbackRows =
+    missingAssignmentIds.length === 0
+      ? []
+      : await prisma.$queryRaw<RoomFallbackRow[]>(Prisma.sql`
+          SELECT
+            "patientId",
+            data->>'cameraNumero' AS "cameraNumero",
+            data->>'lettoNumero' AS "lettoNumero"
+          FROM "Cartella"
+          WHERE "patientId" IN (${Prisma.join(missingAssignmentIds)})
+          LIMIT ${MAX_THERAPY_SLOT_SOURCE_ROWS}
+        `);
+  const roomFallbackByPatient = new Map(fallbackRows.map((row) => [row.patientId, row]));
   const administrations =
     patientIds.length === 0
       ? []
@@ -131,6 +160,7 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
           where: { date, patientId: { in: patientIds } },
           select: {
             id: true,
+            therapyId: true,
             patientId: true,
             farmacoNome: true,
             fascia: true,
@@ -141,7 +171,12 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
           },
         });
   const adminMap = new Map<string, (typeof administrations)[0]>(
-    administrations.map((a) => [`${a.patientId}|${a.farmacoNome}|${a.fascia}`, a]),
+    administrations.flatMap((administration) => {
+      const legacyKey = `${administration.patientId}|${administration.farmacoNome}|${administration.fascia}`;
+      return administration.therapyId
+        ? [[`${administration.therapyId}|${administration.fascia}`, administration]]
+        : [[legacyKey, administration]];
+    }),
   );
 
   const slots: TherapySlot[] = FASCE.map((f) => {
@@ -153,11 +188,13 @@ export async function buildTherapySlots(date: string): Promise<TherapySlot[]> {
 
       // Resolve room/bed from active assignment, fallback to cartella JSON
       const activeAssignment = patient.roomAssignments[0];
-      const cartData = patient.cartella?.data as CartDataFallback | undefined;
-      const room = activeAssignment?.bed?.room?.numero || cartData?.cameraNumero || 'Non assegnato';
-      const bed = activeAssignment?.bed?.label || cartData?.lettoNumero || 'Non assegnato';
+      const fallback = roomFallbackByPatient.get(pt.patientId);
+      const room = activeAssignment?.bed?.room?.numero || fallback?.cameraNumero || 'Non assegnato';
+      const bed = activeAssignment?.bed?.label || fallback?.lettoNumero || 'Non assegnato';
 
-      const existing = adminMap.get(`${pt.patientId}|${pt.farmacoNome}|${f.fascia}`);
+      const existing =
+        adminMap.get(`${pt.id}|${f.fascia}`) ??
+        adminMap.get(`${pt.patientId}|${pt.farmacoNome}|${f.fascia}`);
       let status: SlotAdministration['status'] = 'pending';
       if (existing?.stato === 'erogata') status = 'administered';
       if (existing?.stato === 'non_erogata') status = 'not_administered';

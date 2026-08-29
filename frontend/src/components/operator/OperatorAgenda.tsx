@@ -1,7 +1,8 @@
-import { useState, useMemo, Fragment } from 'react';
+import { useState, useMemo, Fragment, useEffect } from 'react';
 import type { Appuntamento, Operatore, TherapySlot, MotivoNonErogazione } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
+import { localIsoDate } from '../../lib/appointmentRange';
 import { AgendaLegend } from '../shared/AgendaLegend';
 import { AppuntamentoActions } from '../shared/AppuntamentoActions';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
@@ -21,8 +22,14 @@ interface OperatorAgendaProps {
   onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onDeleteAppuntamento?: (id: string) => void;
   loadingAppuntamenti?: boolean;
+  appointmentLoadError?: string | null;
+  onRetryAppointments?: () => void;
+  onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   therapySlots?: TherapySlot[];
+  loadingTherapySlots?: boolean;
+  therapyLoadError?: string | null;
+  onRetryTherapySlots?: () => void;
   onConfirmTherapy?: (info: {
     patientId: string;
     therapyId: string;
@@ -76,7 +83,7 @@ function getMonthMatrix(ref: Date): Date[] {
   return Array.from({ length: 42 }, (_, i) => addDays(mon, i));
 }
 function isoDate(d: Date): string {
-  return d.toISOString().slice(0, 10);
+  return localIsoDate(d);
 }
 function fmtDateLong(d: Date): string {
   return d.toLocaleDateString('it-IT', {
@@ -109,8 +116,14 @@ export function OperatorAgenda({
   onUpdateAppuntamento,
   onDeleteAppuntamento,
   loadingAppuntamenti = false,
+  appointmentLoadError = null,
+  onRetryAppointments,
+  onLoadAppointments,
   onSelectPaziente,
   therapySlots,
+  loadingTherapySlots = false,
+  therapyLoadError = null,
+  onRetryTherapySlots,
   onConfirmTherapy,
   onNotAdministeredTherapy,
   onLoadTherapySlots,
@@ -124,6 +137,16 @@ export function OperatorAgenda({
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const days =
+      view === 'giornaliero'
+        ? [refDate]
+        : view === 'settimanale'
+          ? getWeekDays(refDate)
+          : getMonthMatrix(refDate);
+    onLoadAppointments?.(isoDate(days[0]), isoDate(days[days.length - 1]), operatoreId);
+  }, [onLoadAppointments, operatoreId, refDate, view]);
 
   const therapySlotsMap = new Map<string, TherapySlot>();
   if (therapySlots) {
@@ -170,7 +193,15 @@ export function OperatorAgenda({
   }
 
   const todayStr = isoDate(refDate);
-  const todayApts = myApts(todayStr);
+  const todayApts = useMemo(
+    () =>
+      appuntamenti
+        .filter(
+          (appointment) => appointment.data === todayStr && appointment.operatoreId === operatoreId,
+        )
+        .sort((left, right) => left.ora.localeCompare(right.ora)),
+    [appuntamenti, operatoreId, todayStr],
+  );
 
   function aptsInRange(days: Date[]): number {
     const from = isoDate(days[0]);
@@ -273,9 +304,26 @@ export function OperatorAgenda({
       <AgendaLegend />
 
       {loadingAppuntamenti && <div className="empty-state-card">Caricamento agenda…</div>}
+      {!loadingAppuntamenti && appointmentLoadError && (
+        <div className="empty-state-card" role="alert">
+          <strong>{appointmentLoadError}</strong>
+          <button type="button" className="btn-secondary" onClick={onRetryAppointments}>
+            Riprova
+          </button>
+        </div>
+      )}
+      {loadingTherapySlots && <div className="empty-state-card">Caricamento terapie…</div>}
+      {!loadingTherapySlots && therapyLoadError && (
+        <div className="empty-state-card" role="alert">
+          <strong>{therapyLoadError}</strong>
+          <button type="button" className="btn-secondary" onClick={onRetryTherapySlots}>
+            Riprova terapie
+          </button>
+        </div>
+      )}
 
       {/* ── Occupancy strip (daily) ── */}
-      {!loadingAppuntamenti && view === 'giornaliero' && (
+      {!loadingAppuntamenti && !appointmentLoadError && view === 'giornaliero' && (
         <div className="agt-occ-strip">
           <div className="agt-occ-row">
             <span className="agt-occ-stats">
@@ -292,7 +340,7 @@ export function OperatorAgenda({
       )}
 
       {/* ── DAILY VIEW ── */}
-      {!loadingAppuntamenti && view === 'giornaliero' && (
+      {!loadingAppuntamenti && !appointmentLoadError && view === 'giornaliero' && (
         <div className="agt-day-wrap">
           {TIME_SLOTS.map((ora) => {
             const tSlot = therapySlotsMap.get(ora);
@@ -390,7 +438,7 @@ export function OperatorAgenda({
       )}
 
       {/* ── WEEKLY VIEW ── */}
-      {!loadingAppuntamenti && view === 'settimanale' && (
+      {!loadingAppuntamenti && !appointmentLoadError && view === 'settimanale' && (
         <div className="agt-week-wrap">
           <div className="agt-week-grid" style={{ gridTemplateColumns: `52px repeat(7, 1fr)` }}>
             <div className="agt-week-corner" />
@@ -500,7 +548,7 @@ export function OperatorAgenda({
       )}
 
       {/* ── MONTHLY VIEW ── */}
-      {!loadingAppuntamenti && view === 'mensile' && (
+      {!loadingAppuntamenti && !appointmentLoadError && view === 'mensile' && (
         <div className="agt-month-wrap">
           <div className="agt-month-grid">
             {['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'].map((d) => (

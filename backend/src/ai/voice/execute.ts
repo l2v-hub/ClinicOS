@@ -32,6 +32,7 @@ export class VoiceError extends Error {
 export interface WriteMeta {
   operatorName: string;
   operatorId: string;
+  operatorRole?: string;
   nowISO: string; // injectable "now" for deterministic tests
 }
 
@@ -157,7 +158,12 @@ export async function executeAction(
     return prior;
   }
 
-  const meta: WriteMeta = { operatorName: ctx.operatorName, operatorId: ctx.userId, nowISO };
+  const meta: WriteMeta = {
+    operatorName: ctx.operatorName,
+    operatorId: ctx.userId,
+    operatorRole: ctx.operatorRole,
+    nowISO,
+  };
   let recordId: string;
   switch (plan.actionType) {
     case 'create_vital_sign':

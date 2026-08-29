@@ -1,7 +1,8 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import type { Appuntamento, Operatore, TherapySlot } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
+import { localIsoDate } from '../../lib/appointmentRange';
 import { AgendaLegend } from '../shared/AgendaLegend';
 import { AppuntamentoActions } from '../shared/AppuntamentoActions';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
@@ -19,11 +20,17 @@ interface AdminAgendaProps {
   onUpdateAppuntamento?: (id: string, apt: Omit<Appuntamento, 'id'>) => Promise<string | null>;
   onDeleteAppuntamento?: (id: string) => void;
   loadingAppuntamenti?: boolean;
+  appointmentLoadError?: string | null;
+  onRetryAppointments?: () => void;
+  onLoadAppointments?: (from: string, to: string, operatorId?: string) => void;
   onAddPaziente: (nome: string) => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   /** Fasce terapia di reparto (GET /therapy-slots). In agenda admin sono di sola lettura:
    *  la firma di somministrazione resta un atto clinico dell'operatore erogante. */
   therapySlots?: TherapySlot[];
+  loadingTherapySlots?: boolean;
+  therapyLoadError?: string | null;
+  onRetryTherapySlots?: () => void;
   onLoadTherapySlots?: (date: string) => void;
 }
 
@@ -55,7 +62,7 @@ function getMonthMatrix(ref: Date): Date[] {
   return Array.from({ length: 42 }, (_, i) => addDays(mon, i));
 }
 function isoDate(d: Date): string {
-  return d.toISOString().slice(0, 10);
+  return localIsoDate(d);
 }
 function fmtDate(d: Date): string {
   return d.toLocaleDateString('it-IT', {
@@ -93,9 +100,15 @@ export function AdminAgenda({
   onUpdateAppuntamento,
   onDeleteAppuntamento,
   loadingAppuntamenti = false,
+  appointmentLoadError = null,
+  onRetryAppointments,
+  onLoadAppointments,
   onAddPaziente,
   onSelectPaziente,
   therapySlots,
+  loadingTherapySlots = false,
+  therapyLoadError = null,
+  onRetryTherapySlots,
   onLoadTherapySlots,
 }: AdminAgendaProps) {
   const [view, setView] = useState<ViewMode>('giornaliero');
@@ -110,6 +123,20 @@ export function AdminAgenda({
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const days =
+      view === 'giornaliero'
+        ? [refDate]
+        : view === 'settimanale'
+          ? getWeekDays(refDate)
+          : getMonthMatrix(refDate);
+    onLoadAppointments?.(
+      isoDate(days[0]),
+      isoDate(days[days.length - 1]),
+      filtroOpId === 'tutti' ? undefined : filtroOpId,
+    );
+  }, [filtroOpId, onLoadAppointments, refDate, view]);
 
   const therapySlotsMap = useMemo(() => {
     const map = new Map<string, TherapySlot>();
@@ -280,168 +307,191 @@ export function AdminAgenda({
       <AgendaLegend />
 
       {loadingAppuntamenti && <div className="empty-state-card">Caricamento agenda…</div>}
-
-      {/* ── DAILY VIEW ── */}
-      {!loadingAppuntamenti && view === 'giornaliero' && visibili.length === 0 && (
-        <>
-          <div className="empty-state-card">
-            Nessun operatore attivo: attiva un operatore per pianificare gli appuntamenti.
-          </div>
-          {/* Le terapie sono di reparto: restano visibili anche senza operatori in turno,
-              altrimenti sparirebbero proprio quando il reparto e' scoperto. */}
-          <div className="agt-admin-therapy-standalone">
-            {(therapySlots ?? []).map((ts) => (
-              <TherapySlotCard
-                key={ts.id}
-                slot={ts}
-                onClick={() => setSelectedTherapySlotId(ts.id)}
-              />
-            ))}
-          </div>
-        </>
+      {!loadingAppuntamenti && appointmentLoadError && (
+        <div className="empty-state-card" role="alert">
+          <strong>{appointmentLoadError}</strong>
+          <button type="button" className="btn-secondary" onClick={onRetryAppointments}>
+            Riprova
+          </button>
+        </div>
       )}
-      {!loadingAppuntamenti && view === 'giornaliero' && visibili.length > 0 && (
-        <div className="agt-admin-day-wrap">
-          <div
-            className="agt-admin-grid"
-            style={{
-              gridTemplateColumns: `52px repeat(${visibili.length}, minmax(160px, 1fr))`,
-            }}
-          >
-            {/* Column headers */}
-            <div className="agt-admin-corner" />
-            {visibili.map((op) => {
-              const opApts = getApts(todayStr, op.id);
-              const usedMin = opApts.reduce((s, a) => s + (a.durata ?? 30), 0);
-              const pct = Math.min(100, Math.round((usedMin / TOTAL_AVAIL_MIN) * 100));
-              const occ = occInfo(pct);
-              const completati = opApts.filter((a) => a.stato === 'completato').length;
-              return (
-                <div key={op.id} className="agt-col-hdr">
-                  <div className="agt-col-hdr__top">
-                    <span className="agt-op-dot" style={{ background: op.colore }} />
-                    <span className="agt-col-hdr__name">
-                      {op.cognome} {op.nome}
-                    </span>
-                  </div>
-                  <span className="agt-col-hdr__role">{op.reparto}</span>
-                  <div className="agt-col-hdr__occ-row">
-                    <span className={`agt-occ-label ${occ.cls}`}>{occ.label}</span>
-                    <span className="agt-col-hdr__counts">
-                      {completati}/{opApts.length} · {pct}%
-                    </span>
-                  </div>
-                  <div className="agt-occ-track">
-                    <div
-                      className="agt-occ-fill"
-                      style={{ width: `${pct}%`, background: op.colore }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-
-            {/* Time rows */}
-            {TIME_SLOTS.map((ora) => {
-              const isHour = ora.endsWith(':00');
-              const tSlot = therapySlotsMap.get(ora);
-              return (
-                <Fragment key={ora}>
-                  {tSlot && (
-                    <div className="agt-admin-therapy-row">
-                      <TherapySlotCard
-                        slot={tSlot}
-                        onClick={() => setSelectedTherapySlotId(tSlot.id)}
-                      />
-                    </div>
-                  )}
-                  <div className={`agt-admin-time${isHour ? ' hour' : ''}`}>
-                    {isHour ? ora : ''}
-                  </div>
-                  {visibili.map((op) => {
-                    // La cella resta "occupata" anche se il filtro nasconde l'appuntamento:
-                    // solo una cella davvero libera puo' aprire il form di creazione.
-                    const cellApt = aptByOpAndOra.get(`${op.id}::${ora}`);
-                    const apt = cellApt && matchStato(cellApt, filtroStato) ? cellApt : undefined;
-                    const isSelected = apt?.id === selectedAptId;
-                    return (
-                      <div
-                        key={`${op.id}-${ora}`}
-                        className={`agt-admin-cell${cellApt ? ' occ' : ' free'}${isHour ? ' hour' : ''}`}
-                        onClick={() => {
-                          if (apt) setSelectedAptId(isSelected ? null : apt.id);
-                          else if (!cellApt)
-                            setAptForm({ data: todayStr, ora, operatoreId: op.id });
-                        }}
-                      >
-                        {apt ? (
-                          <div
-                            className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}
-                          >
-                            <div className="agt-apt-card__row">
-                              {onSelectPaziente && apt.pazienteNome ? (
-                                <button
-                                  className="link-btn agt-apt-card__patient"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onSelectPaziente(
-                                      apt.pazienteNome!,
-                                      apt.pazienteId ?? undefined,
-                                    );
-                                  }}
-                                >
-                                  {apt.pazienteNome}
-                                </button>
-                              ) : (
-                                <span className="agt-apt-card__patient">
-                                  {apt.pazienteNome ?? '—'}
-                                </span>
-                              )}
-                              <span className={`agt-badge agt-badge--${apt.stato}`}>
-                                {STATO_LABEL[apt.stato]}
-                              </span>
-                            </div>
-                            <div className="agt-apt-card__meta">
-                              <span>{TIPO_LABEL[apt.tipoIntervento]}</span>
-                              <span className="agt-meta-sep">·</span>
-                              <span>{apt.durata ?? 30} min</span>
-                            </div>
-                            {isSelected && (
-                              <AppuntamentoActions
-                                apt={apt}
-                                confirmDeleteId={confirmDeleteId}
-                                onEdit={setEditingApt}
-                                onAskDelete={setConfirmDeleteId}
-                                onDelete={onDeleteAppuntamento}
-                              />
-                            )}
-                          </div>
-                        ) : cellApt ? null : (
-                          <div className="agt-admin-empty">
-                            <IcoPlus />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </Fragment>
-              );
-            })}
-
-            {/* Fasce fuori dal range orario della griglia (sera 20:00, notte 22:00) */}
-            {(therapySlots ?? [])
-              .filter((ts) => !TIME_SLOTS.includes(ts.ora))
-              .map((ts) => (
-                <div key={ts.id} className="agt-admin-therapy-row">
-                  <TherapySlotCard slot={ts} onClick={() => setSelectedTherapySlotId(ts.id)} />
-                </div>
-              ))}
-          </div>
+      {loadingTherapySlots && <div className="empty-state-card">Caricamento terapie…</div>}
+      {!loadingTherapySlots && therapyLoadError && (
+        <div className="empty-state-card" role="alert">
+          <strong>{therapyLoadError}</strong>
+          <button type="button" className="btn-secondary" onClick={onRetryTherapySlots}>
+            Riprova terapie
+          </button>
         </div>
       )}
 
+      {/* ── DAILY VIEW ── */}
+      {!loadingAppuntamenti &&
+        !appointmentLoadError &&
+        view === 'giornaliero' &&
+        visibili.length === 0 && (
+          <>
+            <div className="empty-state-card">
+              Nessun operatore attivo: attiva un operatore per pianificare gli appuntamenti.
+            </div>
+            {/* Le terapie sono di reparto: restano visibili anche senza operatori in turno,
+              altrimenti sparirebbero proprio quando il reparto e' scoperto. */}
+            <div className="agt-admin-therapy-standalone">
+              {(therapySlots ?? []).map((ts) => (
+                <TherapySlotCard
+                  key={ts.id}
+                  slot={ts}
+                  onClick={() => setSelectedTherapySlotId(ts.id)}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      {!loadingAppuntamenti &&
+        !appointmentLoadError &&
+        view === 'giornaliero' &&
+        visibili.length > 0 && (
+          <div className="agt-admin-day-wrap">
+            <div
+              className="agt-admin-grid"
+              style={{
+                gridTemplateColumns: `52px repeat(${visibili.length}, minmax(160px, 1fr))`,
+              }}
+            >
+              {/* Column headers */}
+              <div className="agt-admin-corner" />
+              {visibili.map((op) => {
+                const opApts = getApts(todayStr, op.id);
+                const usedMin = opApts.reduce((s, a) => s + (a.durata ?? 30), 0);
+                const pct = Math.min(100, Math.round((usedMin / TOTAL_AVAIL_MIN) * 100));
+                const occ = occInfo(pct);
+                const completati = opApts.filter((a) => a.stato === 'completato').length;
+                return (
+                  <div key={op.id} className="agt-col-hdr">
+                    <div className="agt-col-hdr__top">
+                      <span className="agt-op-dot" style={{ background: op.colore }} />
+                      <span className="agt-col-hdr__name">
+                        {op.cognome} {op.nome}
+                      </span>
+                    </div>
+                    <span className="agt-col-hdr__role">{op.reparto}</span>
+                    <div className="agt-col-hdr__occ-row">
+                      <span className={`agt-occ-label ${occ.cls}`}>{occ.label}</span>
+                      <span className="agt-col-hdr__counts">
+                        {completati}/{opApts.length} · {pct}%
+                      </span>
+                    </div>
+                    <div className="agt-occ-track">
+                      <div
+                        className="agt-occ-fill"
+                        style={{ width: `${pct}%`, background: op.colore }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Time rows */}
+              {TIME_SLOTS.map((ora) => {
+                const isHour = ora.endsWith(':00');
+                const tSlot = therapySlotsMap.get(ora);
+                return (
+                  <Fragment key={ora}>
+                    {tSlot && (
+                      <div className="agt-admin-therapy-row">
+                        <TherapySlotCard
+                          slot={tSlot}
+                          onClick={() => setSelectedTherapySlotId(tSlot.id)}
+                        />
+                      </div>
+                    )}
+                    <div className={`agt-admin-time${isHour ? ' hour' : ''}`}>
+                      {isHour ? ora : ''}
+                    </div>
+                    {visibili.map((op) => {
+                      // La cella resta "occupata" anche se il filtro nasconde l'appuntamento:
+                      // solo una cella davvero libera puo' aprire il form di creazione.
+                      const cellApt = aptByOpAndOra.get(`${op.id}::${ora}`);
+                      const apt = cellApt && matchStato(cellApt, filtroStato) ? cellApt : undefined;
+                      const isSelected = apt?.id === selectedAptId;
+                      return (
+                        <div
+                          key={`${op.id}-${ora}`}
+                          className={`agt-admin-cell${cellApt ? ' occ' : ' free'}${isHour ? ' hour' : ''}`}
+                          onClick={() => {
+                            if (apt) setSelectedAptId(isSelected ? null : apt.id);
+                            else if (!cellApt)
+                              setAptForm({ data: todayStr, ora, operatoreId: op.id });
+                          }}
+                        >
+                          {apt ? (
+                            <div
+                              className={`agt-apt-card agt-apt-card--${apt.stato}${isSelected ? ' selected' : ''}`}
+                            >
+                              <div className="agt-apt-card__row">
+                                {onSelectPaziente && apt.pazienteNome ? (
+                                  <button
+                                    className="link-btn agt-apt-card__patient"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onSelectPaziente(
+                                        apt.pazienteNome!,
+                                        apt.pazienteId ?? undefined,
+                                      );
+                                    }}
+                                  >
+                                    {apt.pazienteNome}
+                                  </button>
+                                ) : (
+                                  <span className="agt-apt-card__patient">
+                                    {apt.pazienteNome ?? '—'}
+                                  </span>
+                                )}
+                                <span className={`agt-badge agt-badge--${apt.stato}`}>
+                                  {STATO_LABEL[apt.stato]}
+                                </span>
+                              </div>
+                              <div className="agt-apt-card__meta">
+                                <span>{TIPO_LABEL[apt.tipoIntervento]}</span>
+                                <span className="agt-meta-sep">·</span>
+                                <span>{apt.durata ?? 30} min</span>
+                              </div>
+                              {isSelected && (
+                                <AppuntamentoActions
+                                  apt={apt}
+                                  confirmDeleteId={confirmDeleteId}
+                                  onEdit={setEditingApt}
+                                  onAskDelete={setConfirmDeleteId}
+                                  onDelete={onDeleteAppuntamento}
+                                />
+                              )}
+                            </div>
+                          ) : cellApt ? null : (
+                            <div className="agt-admin-empty">
+                              <IcoPlus />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </Fragment>
+                );
+              })}
+
+              {/* Fasce fuori dal range orario della griglia (sera 20:00, notte 22:00) */}
+              {(therapySlots ?? [])
+                .filter((ts) => !TIME_SLOTS.includes(ts.ora))
+                .map((ts) => (
+                  <div key={ts.id} className="agt-admin-therapy-row">
+                    <TherapySlotCard slot={ts} onClick={() => setSelectedTherapySlotId(ts.id)} />
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
       {/* ── WEEKLY VIEW ── */}
-      {!loadingAppuntamenti && view === 'settimanale' && (
+      {!loadingAppuntamenti && !appointmentLoadError && view === 'settimanale' && (
         <div className="agt-week-wrap">
           <div className="agt-week-grid" style={{ gridTemplateColumns: `52px repeat(7, 1fr)` }}>
             <div className="agt-week-corner" />
@@ -566,7 +616,7 @@ export function AdminAgenda({
       )}
 
       {/* ── MONTHLY VIEW ── */}
-      {!loadingAppuntamenti && view === 'mensile' && (
+      {!loadingAppuntamenti && !appointmentLoadError && view === 'mensile' && (
         <div className="agt-month-wrap">
           <div className="agt-month-grid">
             {['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'].map((d) => (

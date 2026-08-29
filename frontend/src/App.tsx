@@ -7,6 +7,11 @@ import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
 import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
 import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';
 import { acquireApiToken } from './lib/entraAuth';
+import {
+  buildAppointmentRangeUrl,
+  localIsoDate,
+  type AppointmentRangeRequest,
+} from './lib/appointmentRange';
 
 import type {
   UtenteApp,
@@ -29,7 +34,7 @@ import type {
   TipoIntervento,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
-import { createDefaultCartella, createMockTherapySlots } from './mockData';
+import { createDefaultCartella } from './mockData';
 
 import { Login } from './components/Login';
 import type { TabId } from './components/operator/tabGroups';
@@ -243,6 +248,13 @@ export default function App() {
   const pendingPazienteRestoreIdRef = useRef<string | null>(null);
   const patientNavigationSequenceRef = useRef(0);
   const sessionEpochRef = useRef(0);
+  const appointmentRequestSequenceRef = useRef(0);
+  const therapyRequestSequenceRef = useRef(0);
+  const therapyDateRef = useRef(localIsoDate());
+  const appointmentRangeRef = useRef<AppointmentRangeRequest>({
+    from: localIsoDate(),
+    to: localIsoDate(),
+  });
   // True while that restore is pending, so the render below can show a loading state instead of
   // flashing the "Nessun paziente selezionato" empty state before the patients list arrives.
   const [restoringPazienteFromHash, setRestoringPazienteFromHash] = useState(false);
@@ -278,15 +290,18 @@ export default function App() {
   // Senza questo flag l'agenda, prima che la fetch risponda, dichiara "tutti gli slot liberi":
   // su uno strumento clinico e' un'informazione falsa, non solo mancante.
   const [loadingAppuntamenti, setLoadingAppuntamenti] = useState(true);
+  const [appointmentLoadError, setAppointmentLoadError] = useState<string | null>(null);
   const [camere, setCamere] = useState<Camera[]>([]);
   // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>([]);
   const [note, setNote] = useState<Nota[]>([]);
   const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
+  const [loadingTherapySlots, setLoadingTherapySlots] = useState(true);
+  const [therapyLoadError, setTherapyLoadError] = useState<string | null>(null);
 
   // #285: il widget agenda della dashboard operatore deriva dagli appuntamenti REALI di oggi
   // (prima mostrava MOCK_AGENDA, dati finti mai persistiti).
-  const todayISO = new Date().toISOString().slice(0, 10);
+  const todayISO = localIsoDate();
   const agendaOggi: SlotAgenda[] = appuntamenti
     .filter((a) => a.data === todayISO)
     .sort((a, b) => a.ora.localeCompare(b.ora))
@@ -332,8 +347,6 @@ export default function App() {
     if (key === 'consegne') setConsegneView({ filtro: 'tutte', focusId: null });
     pushNav(key);
     if (key === 'agenda-operatore' || key === 'agenda-admin') loadTherapySlots();
-    // SPEC-015 US4: agenda reale — refresh appuntamenti alla navigazione (come loadTherapySlots)
-    if (key === 'agenda-operatore' || key === 'agenda-admin') loadAppuntamenti();
   }
 
   // #283: la card "Consegne aperte" apre la pagina già filtrata sulle aperte; se la consegna
@@ -454,11 +467,16 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  // ── Load therapy slots (API with mock fallback) ─────────────────────────────
+  // ── Load therapy slots (clinical API; never substitute mock data on failure) ──
 
   const loadTherapySlots = useCallback(async (date?: string) => {
     const sessionEpoch = sessionEpochRef.current;
-    const d = date || new Date().toISOString().slice(0, 10);
+    const request = ++therapyRequestSequenceRef.current;
+    const d = date || localIsoDate();
+    therapyDateRef.current = d;
+    setLoadingTherapySlots(true);
+    setTherapyLoadError(null);
+    setTherapySlots([]);
     try {
       const raw = await cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${d}`);
       const slots = Array.isArray(raw) ? raw : [];
@@ -475,32 +493,97 @@ export default function App() {
         },
         patients: Array.isArray(s.patients) ? (s.patients as TherapySlotPatient[]) : [],
       }));
-      if (sessionEpoch === sessionEpochRef.current) setTherapySlots(data);
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === therapyRequestSequenceRef.current &&
+        d === therapyDateRef.current
+      ) {
+        setTherapySlots(data);
+      }
     } catch {
-      if (sessionEpoch === sessionEpochRef.current) setTherapySlots(createMockTherapySlots(d));
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === therapyRequestSequenceRef.current &&
+        d === therapyDateRef.current
+      ) {
+        const message = 'Terapie non disponibili: riprova prima di registrare una somministrazione';
+        setTherapyLoadError(message);
+        showToast(message);
+      }
+    } finally {
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === therapyRequestSequenceRef.current &&
+        d === therapyDateRef.current
+      ) {
+        setLoadingTherapySlots(false);
+      }
     }
   }, []);
+
+  const retryTherapySlots = useCallback(() => {
+    void loadTherapySlots(therapyDateRef.current);
+  }, [loadTherapySlots]);
 
   // ── Load appointments (API — SPEC-015 US4, sostituisce MOCK_APPUNTAMENTI) ──
 
-  const loadAppuntamenti = useCallback(async (date?: string) => {
+  const loadAppuntamenti = useCallback(async (range?: AppointmentRangeRequest) => {
     const sessionEpoch = sessionEpochRef.current;
+    const request = ++appointmentRequestSequenceRef.current;
+    const today = localIsoDate();
+    const requestedRange = range ?? { from: today, to: today };
+    appointmentRangeRef.current = requestedRange;
     setLoadingAppuntamenti(true);
+    setAppointmentLoadError(null);
+    setAppuntamenti([]);
     try {
-      const qs = date ? `?date=${date}` : '';
-      const res = await fetch(`${API_URL}/appointments${qs}`, { headers: operatorHeaders() });
-      if (!res.ok) return; // lista corrente invariata
+      const res = await fetch(buildAppointmentRangeUrl(API_URL, requestedRange), {
+        headers: operatorHeaders(),
+      });
+      if (!res.ok) {
+        if (request === appointmentRequestSequenceRef.current) {
+          const message =
+            res.status === 422
+              ? 'Troppi appuntamenti: restringi periodo o operatore'
+              : 'Impossibile caricare gli appuntamenti';
+          setAppointmentLoadError(message);
+          showToast(message);
+        }
+        return;
+      }
       const raw = await res.json();
       const rows = Array.isArray(raw) ? raw : [];
-      if (sessionEpoch === sessionEpochRef.current) {
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === appointmentRequestSequenceRef.current
+      ) {
         setAppuntamenti(rows.map((r: Record<string, unknown>) => mapAppointmentDTO(r)));
       }
     } catch {
-      // rete assente: lista corrente invariata (nessun fallback mock)
+      if (request === appointmentRequestSequenceRef.current) {
+        const message = 'Connessione non disponibile: agenda non caricata';
+        setAppointmentLoadError(message);
+        showToast(message);
+      }
     } finally {
-      if (sessionEpoch === sessionEpochRef.current) setLoadingAppuntamenti(false);
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === appointmentRequestSequenceRef.current
+      )
+        setLoadingAppuntamenti(false);
     }
   }, []);
+
+  const loadAppointmentRange = useCallback(
+    (from: string, to: string, operatorId?: string) => {
+      void loadAppuntamenti({ from, to, operatorId });
+    },
+    [loadAppuntamenti],
+  );
+
+  const retryAppointmentRange = useCallback(() => {
+    void loadAppuntamenti(appointmentRangeRef.current);
+  }, [loadAppuntamenti]);
 
   // ── Load consegne (API — riusata anche da Agnos dopo create_consegna, issue #130) ──
 
@@ -606,7 +689,12 @@ export default function App() {
           setLoadingClinicalOverview(false);
       });
     loadTherapySlots();
-    loadAppuntamenti(); // SPEC-015 US4: agenda persistita
+    const appointmentDay = localIsoDate();
+    void loadAppuntamenti({
+      from: appointmentDay,
+      to: appointmentDay,
+      operatorId: utente.ruolo === 'operatore' ? utente.id : undefined,
+    });
     // Load rooms from API for AdminDashboard
     loadCamere();
     // Load consegne from API (persisted handover cards)
@@ -727,6 +815,8 @@ export default function App() {
 
   async function handleLogin(u: UtenteApp) {
     sessionEpochRef.current += 1;
+    appointmentRequestSequenceRef.current += 1;
+    therapyRequestSequenceRef.current += 1;
     patientNavigationSequenceRef.current += 1;
     // In Entra mode the redirect/silent flow completes before any clinical fetch starts.
     // The selected card is only a demo/local hint: with a token, id and UI role are replaced by
@@ -777,8 +867,12 @@ export default function App() {
 
   function handleLogout() {
     sessionEpochRef.current += 1;
+    appointmentRequestSequenceRef.current += 1;
     patientNavigationSequenceRef.current += 1;
     setUtente(null);
+    setAppointmentLoadError(null);
+    setTherapyLoadError(null);
+    setLoadingTherapySlots(true);
     setCurrentOperator(null);
     clearCachedGet();
     setClinicalOverview(null);
@@ -1161,7 +1255,7 @@ export default function App() {
     lettoNumero?: string,
   ): Promise<{ ok: boolean; lettoLabel?: string }> {
     try {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localIsoDate();
       const assignRes = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`, {
         headers: operatorHeaders(),
       });
@@ -1419,7 +1513,7 @@ export default function App() {
           farmacoNome: info.drugName,
           farmacoDose: info.dosage,
           farmacoVia: info.route,
-          date: now.toISOString().slice(0, 10),
+          date: localIsoDate(now),
           fascia: info.fascia,
           ora: info.ora,
           operatoreId: utente?.id ?? '',
@@ -1495,7 +1589,7 @@ export default function App() {
           farmacoNome: info.drugName,
           farmacoDose: info.dosage,
           farmacoVia: info.route,
-          date: now.toISOString().slice(0, 10),
+          date: localIsoDate(now),
           fascia: info.fascia,
           ora: info.ora,
           operatoreId: utente?.id ?? '',
@@ -1751,9 +1845,15 @@ export default function App() {
                   onUpdateAppuntamento={updateAppuntamento}
                   onDeleteAppuntamento={deleteAppuntamento}
                   loadingAppuntamenti={loadingAppuntamenti}
+                  appointmentLoadError={appointmentLoadError}
+                  onRetryAppointments={retryAppointmentRange}
+                  onLoadAppointments={loadAppointmentRange}
                   onAddPaziente={() => {}}
                   onSelectPaziente={goToPazienteByNome}
                   therapySlots={therapySlots}
+                  loadingTherapySlots={loadingTherapySlots}
+                  therapyLoadError={therapyLoadError}
+                  onRetryTherapySlots={retryTherapySlots}
                   onLoadTherapySlots={loadTherapySlots}
                 />
               )}
@@ -1902,8 +2002,14 @@ export default function App() {
                   onUpdateAppuntamento={updateAppuntamento}
                   onDeleteAppuntamento={deleteAppuntamento}
                   loadingAppuntamenti={loadingAppuntamenti}
+                  appointmentLoadError={appointmentLoadError}
+                  onRetryAppointments={retryAppointmentRange}
+                  onLoadAppointments={loadAppointmentRange}
                   onSelectPaziente={goToPazienteByNome}
                   therapySlots={therapySlots}
+                  loadingTherapySlots={loadingTherapySlots}
+                  therapyLoadError={therapyLoadError}
+                  onRetryTherapySlots={retryTherapySlots}
                   onConfirmTherapy={confirmTherapy}
                   onNotAdministeredTherapy={notAdministeredTherapy}
                   onLoadTherapySlots={loadTherapySlots}
@@ -1945,7 +2051,7 @@ export default function App() {
                   info?.actionType === 'create_appointment' ||
                   info?.actionType === 'update_appointment'
                 )
-                  loadAppuntamenti();
+                  void loadAppuntamenti(appointmentRangeRef.current);
                 // Issue #130: una consegna creata via Agnos appare subito nella UI consegne
                 if (info?.actionType === 'create_consegna') void loadConsegne();
               }}

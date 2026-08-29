@@ -99,7 +99,11 @@ export const prismaVoiceWriter: VoiceWriter = {
     const dto = await createAppointment({
       patientId,
       operatorId: meta.operatorId,
-      operatorName: meta.operatorName,
+      actor: {
+        operatorId: meta.operatorId,
+        role: meta.operatorRole ?? 'operatore',
+        name: meta.operatorName,
+      },
       data: String(fields.data ?? ''),
       ora: String(fields.ora ?? ''),
       tipologia: String(fields.tipologia ?? 'visita'),
@@ -108,11 +112,19 @@ export const prismaVoiceWriter: VoiceWriter = {
     return dto.id;
   },
 
-  async updateAppointment(targetRecordId, fields, _meta) {
-    const dto = await updateAppointment(targetRecordId, {
-      data: fields.data !== undefined ? String(fields.data) : undefined,
-      ora: fields.newTime !== undefined ? String(fields.newTime) : undefined,
-    });
+  async updateAppointment(targetRecordId, fields, meta) {
+    const dto = await updateAppointment(
+      targetRecordId,
+      {
+        data: fields.data !== undefined ? String(fields.data) : undefined,
+        ora: fields.newTime !== undefined ? String(fields.newTime) : undefined,
+      },
+      {
+        operatorId: meta.operatorId,
+        role: meta.operatorRole ?? 'operatore',
+        name: meta.operatorName,
+      },
+    );
     return dto.id;
   },
 

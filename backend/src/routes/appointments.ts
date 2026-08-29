@@ -12,29 +12,51 @@ import {
   uiOnlyDeleteAppointment,
   SlotConflictError,
   AppointmentNotFoundError,
+  AppointmentViewCapacityError,
+  AppointmentForbiddenError,
+  type AppointmentActor,
 } from '../services/appointment-service.js';
-import { requireOperator } from '../ai/auth.js';
+import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import {
+  AppointmentListInputError,
+  parseAppointmentListQuery,
+} from '../appointments/list-query.js';
+import {
+  AppointmentWriteInputError,
+  parseAppointmentCreateBody,
+  parseAppointmentId,
+  parseAppointmentPatchBody,
+} from '../appointments/write-validation.js';
 
 const router = Router();
 
+function actorFrom(req: AuthedRequest): AppointmentActor {
+  const operator = req.operator!;
+  return { operatorId: operator.id, role: operator.role, name: operator.name };
+}
+
 // Gate minimo (header-based, non IdP): l'agenda espone nominativi paziente/operatore,
 // richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
+router.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
 router.use(requireOperator);
 
-// GET /appointments?date=YYYY-MM-DD&operatorId=  → AppointmentDTO[]
-// `date` optional: without it the whole agenda is returned (weekly/monthly views).
+// GET /appointments?date=YYYY-MM-DD or ?from=YYYY-MM-DD&to=YYYY-MM-DD&operatorId=
+// The explicit visible interval is mandatory and may span at most 42 days.
 router.get('/', async (req, res) => {
   try {
-    const date = typeof req.query.date === 'string' && req.query.date ? req.query.date : undefined;
-    const operatorId =
-      typeof req.query.operatorId === 'string' && req.query.operatorId
-        ? req.query.operatorId
-        : undefined;
-    const rows = await listAppointments({ date, operatorId });
+    const query = parseAppointmentListQuery(req.query as Record<string, unknown>);
+    const rows = await listAppointments({ ...query, actor: actorFrom(req as AuthedRequest) });
     res.status(200).json(rows);
   } catch (error) {
-    if (error instanceof Error && /non valida/.test(error.message)) {
+    if (error instanceof AppointmentListInputError) {
       res.status(400).json({ error: { kind: 'bad_request', message: error.message } });
+      return;
+    }
+    if (error instanceof AppointmentViewCapacityError) {
+      res.status(422).json({ error: { kind: 'capacity', message: error.message } });
       return;
     }
     console.error('GET /appointments error:', error);
@@ -44,37 +66,27 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /appointments { patientId, operatorId, data, ora, tipologia, note?, durata?, stato?, operatorName? }
+// POST /appointments { patientId, operatorId, data, ora, tipologia, note?, durata?, stato? }
 router.post('/', async (req, res) => {
-  const b = req.body as Record<string, unknown>;
-  const patientId = String(b.patientId ?? '').trim();
-  const operatorId = String(b.operatorId ?? '').trim();
-  const data = String(b.data ?? '').trim();
-  const ora = String(b.ora ?? '').trim();
-  if (!patientId || !operatorId || !data || !ora) {
-    res.status(400).json({
-      error: {
-        kind: 'bad_request',
-        message: 'Campi obbligatori: patientId, operatorId, data, ora',
-      },
-    });
-    return;
-  }
   try {
+    const input = parseAppointmentCreateBody(req.body);
     const created = await createAppointment({
-      patientId,
-      operatorId,
-      data,
-      ora,
-      tipologia: String(b.tipologia ?? 'visita'),
-      note: b.note !== undefined ? String(b.note) : undefined,
-      durata: b.durata !== undefined ? Number(b.durata) : undefined,
-      stato: b.stato !== undefined ? String(b.stato) : undefined,
-      operatorName: b.operatorName !== undefined ? String(b.operatorName) : undefined,
+      ...input,
+      actor: actorFrom(req as AuthedRequest),
     });
     console.log(`POST /appointments → created id=${created.id} ${created.data} ${created.ora}`);
     res.status(201).json(created);
   } catch (error) {
+    if (error instanceof AppointmentWriteInputError || error instanceof AppointmentListInputError) {
+      res.status(error instanceof AppointmentWriteInputError ? error.status : 400).json({
+        error: { kind: 'bad_request', message: error.message },
+      });
+      return;
+    }
+    if (error instanceof AppointmentForbiddenError) {
+      res.status(403).json({ error: { kind: 'forbidden', message: error.message } });
+      return;
+    }
     if (error instanceof SlotConflictError) {
       res.status(409).json({ error: { kind: 'slot_conflict', message: error.message } });
       return;
@@ -95,19 +107,22 @@ router.post('/', async (req, res) => {
 
 // PATCH /appointments/:id (partial fields) → 200 | 404 | 409
 router.patch('/:id', async (req, res) => {
-  const b = req.body as Record<string, unknown>;
   try {
-    const updated = await updateAppointment(req.params.id, {
-      data: b.data !== undefined ? String(b.data) : undefined,
-      ora: b.ora !== undefined ? String(b.ora) : undefined,
-      tipologia: b.tipologia !== undefined ? String(b.tipologia) : undefined,
-      note: b.note !== undefined ? String(b.note) : undefined,
-      durata: b.durata !== undefined ? Number(b.durata) : undefined,
-      stato: b.stato !== undefined ? String(b.stato) : undefined,
-      operatorId: b.operatorId !== undefined ? String(b.operatorId) : undefined,
-    });
+    const id = parseAppointmentId(req.params.id);
+    const patch = parseAppointmentPatchBody(req.body);
+    const updated = await updateAppointment(id, patch, actorFrom(req as AuthedRequest));
     res.status(200).json(updated);
   } catch (error) {
+    if (error instanceof AppointmentWriteInputError || error instanceof AppointmentListInputError) {
+      res.status(error instanceof AppointmentWriteInputError ? error.status : 400).json({
+        error: { kind: 'bad_request', message: error.message },
+      });
+      return;
+    }
+    if (error instanceof AppointmentForbiddenError) {
+      res.status(403).json({ error: { kind: 'forbidden', message: error.message } });
+      return;
+    }
     if (error instanceof AppointmentNotFoundError) {
       res.status(404).json({ error: { kind: 'not_found', message: error.message } });
       return;
@@ -130,7 +145,8 @@ router.patch('/:id', async (req, res) => {
 // DELETE /appointments/:id → 204. Reached ONLY by the traditional UI button (FR-010).
 router.delete('/:id', async (req, res) => {
   try {
-    const deleted = await uiOnlyDeleteAppointment(req.params.id);
+    const id = parseAppointmentId(req.params.id);
+    const deleted = await uiOnlyDeleteAppointment(id, actorFrom(req as AuthedRequest));
     if (!deleted) {
       res.status(404).json({ error: { kind: 'not_found', message: 'Appuntamento non trovato' } });
       return;
@@ -138,6 +154,14 @@ router.delete('/:id', async (req, res) => {
     console.log(`DELETE /appointments/${req.params.id} → ok (UI button)`);
     res.status(204).end();
   } catch (error) {
+    if (error instanceof AppointmentWriteInputError) {
+      res.status(error.status).json({ error: { kind: 'bad_request', message: error.message } });
+      return;
+    }
+    if (error instanceof AppointmentForbiddenError) {
+      res.status(403).json({ error: { kind: 'forbidden', message: error.message } });
+      return;
+    }
     console.error('DELETE /appointments/:id error:', error);
     res.status(500).json({
       error: { kind: 'internal', message: 'Errore durante l’eliminazione dell’appuntamento' },
