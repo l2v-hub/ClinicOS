@@ -4,37 +4,23 @@ import type {
   TherapySlotPatient,
   TherapyAdministration,
   MotivoNonErogazione,
+  TherapyActionInfo,
 } from '../../types';
 import { sortPazienti } from '../../lib/patientSort';
 
 interface Props {
   slot: TherapySlot;
+  date: string;
   onClose: () => void;
   /** Vista gestionale (admin): l'elenco resta leggibile ma la firma di somministrazione,
    *  che e' un atto clinico tracciato su administeredBy, non e' offerta. */
   readOnly?: boolean;
-  onConfirm?: (info: {
-    patientId: string;
-    therapyId: string;
-    drugName: string;
-    dosage: string;
-    route: string;
-    fascia: string;
-    ora: string;
-  }) => void;
-  onNotAdministered?: (
-    info: {
-      patientId: string;
-      therapyId: string;
-      drugName: string;
-      dosage: string;
-      route: string;
-      fascia: string;
-      ora: string;
-    },
-    motivo: MotivoNonErogazione,
-    note: string,
-  ) => void;
+  detailsPartial?: boolean;
+  loadingMore?: boolean;
+  loadMoreError?: string | null;
+  onLoadMore?: () => void;
+  onConfirm?: (info: TherapyActionInfo) => void;
+  onNotAdministered?: (info: TherapyActionInfo, motivo: MotivoNonErogazione, note: string) => void;
 }
 
 const MOTIVI: { value: MotivoNonErogazione; label: string }[] = [
@@ -50,10 +36,15 @@ type FiltroStato = 'tutte' | TherapyAdministration['status'];
 
 export function TherapySlotModal({
   slot,
+  date,
   onClose,
   onConfirm,
   onNotAdministered,
   readOnly = false,
+  detailsPartial = false,
+  loadingMore = false,
+  loadMoreError = null,
+  onLoadMore,
 }: Props) {
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
   const [selectedMotivo, setSelectedMotivo] = useState<MotivoNonErogazione | null>(null);
@@ -95,6 +86,7 @@ export function TherapySlotModal({
       drugName: a.drugName,
       dosage: a.dosage,
       route: a.route,
+      date,
       fascia: slot.fascia,
       ora: slot.ora,
     };
@@ -136,11 +128,27 @@ export function TherapySlotModal({
 
         {/* Body */}
         <div className="therapy-modal__body">
+          {detailsPartial && (
+            <div className="therapy-modal__partial" role="status" aria-live="polite">
+              <span>I totali sono esatti; l’elenco mostra solo i dettagli già caricati.</span>
+              {loadMoreError && <span role="alert">{loadMoreError}</span>}
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                onClick={onLoadMore}
+                disabled={loadingMore}
+              >
+                {loadingMore ? 'Caricamento…' : 'Carica altri dettagli'}
+              </button>
+            </div>
+          )}
           {patients.length === 0 ? (
             <div className="therapy-modal__empty">
-              {filtroStato === 'tutte'
-                ? 'Nessuna terapia prevista per questa fascia.'
-                : 'Nessuna somministrazione con questo stato.'}
+              {detailsPartial
+                ? 'Nessun dettaglio corrispondente è ancora caricato.'
+                : filtroStato === 'tutte'
+                  ? 'Nessuna terapia prevista per questa fascia.'
+                  : 'Nessuna somministrazione con questo stato.'}
             </div>
           ) : (
             patients.map((p) => (

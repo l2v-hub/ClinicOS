@@ -1014,6 +1014,17 @@ export interface TherapyAdministration {
   notAdministeredReason: string | null;
 }
 
+export interface TherapyActionInfo {
+  patientId: string;
+  therapyId: string;
+  drugName: string;
+  dosage: string;
+  route: string;
+  date: string;
+  fascia: string;
+  ora: string;
+}
+
 export interface TherapySlotPatient {
   patientId: string;
   firstName: string;
@@ -1037,6 +1048,19 @@ export interface TherapySlot {
   ora: string;
   summary: TherapySlotSummary;
   patients: TherapySlotPatient[];
+}
+
+export interface TherapySlotPageInfo {
+  hasMore: boolean;
+  nextCursor: string | null;
+  loadedTherapies: number;
+  completeness: 'partial' | 'complete';
+  summaryExact: boolean;
+}
+
+export interface TherapySlotPageResponse {
+  slots: TherapySlot[];
+  pageInfo: TherapySlotPageInfo;
 }
 
 // ── Patient Therapy (API) ──────────────────────────────────────────────────

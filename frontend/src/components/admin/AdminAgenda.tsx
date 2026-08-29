@@ -1,12 +1,12 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import type { Appuntamento, Operatore, TherapySlot } from '../../types';
+import type { Appuntamento, Operatore, TherapySlot, TherapySlotPageInfo } from '../../types';
 import { IcoChevronLeft, IcoChevronRight, IcoCalendar, IcoPlus } from '../../icons';
 import { AppointmentForm } from '../shared/AppointmentForm';
 import { localIsoDate } from '../../lib/appointmentRange';
 import { AgendaLegend } from '../shared/AgendaLegend';
 import { AppuntamentoActions } from '../shared/AppuntamentoActions';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
-import { TherapySlotCard, TherapySlotDot } from '../shared/TherapySlotOverlay';
+import { TherapySlotCard } from '../shared/TherapySlotOverlay';
 import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
 import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
 import { TherapySlotModal } from '../operator/TherapySlotModal';
@@ -30,7 +30,11 @@ interface AdminAgendaProps {
   therapySlots?: TherapySlot[];
   loadingTherapySlots?: boolean;
   therapyLoadError?: string | null;
+  therapyLoadMoreError?: string | null;
+  therapyPageInfo?: TherapySlotPageInfo;
+  loadingMoreTherapySlots?: boolean;
   onRetryTherapySlots?: () => void;
+  onLoadMoreTherapySlots?: () => void;
   onLoadTherapySlots?: (date: string) => void;
 }
 
@@ -108,7 +112,11 @@ export function AdminAgenda({
   therapySlots,
   loadingTherapySlots = false,
   therapyLoadError = null,
+  therapyLoadMoreError = null,
+  therapyPageInfo,
+  loadingMoreTherapySlots = false,
   onRetryTherapySlots,
+  onLoadMoreTherapySlots,
   onLoadTherapySlots,
 }: AdminAgendaProps) {
   const [view, setView] = useState<ViewMode>('giornaliero');
@@ -166,6 +174,7 @@ export function AdminAgenda({
   }
 
   function navigate(delta: number) {
+    setSelectedTherapySlotId(null);
     setRefDate((d) => {
       let next: Date;
       if (view === 'giornaliero') next = addDays(d, delta);
@@ -174,15 +183,29 @@ export function AdminAgenda({
         next = new Date(d);
         next.setMonth(d.getMonth() + delta);
       }
-      onLoadTherapySlots?.(isoDate(next));
+      if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(next));
       return next;
     });
   }
 
+  function changeView(next: ViewMode) {
+    setSelectedTherapySlotId(null);
+    setView(next);
+    if (next === 'giornaliero') onLoadTherapySlots?.(isoDate(refDate));
+  }
+
+  function openDay(date: Date) {
+    setSelectedTherapySlotId(null);
+    setRefDate(date);
+    setView('giornaliero');
+    onLoadTherapySlots?.(isoDate(date));
+  }
+
   function goToday() {
     const today = new Date();
+    setSelectedTherapySlotId(null);
     setRefDate(today);
-    onLoadTherapySlots?.(isoDate(today));
+    if (view === 'giornaliero') onLoadTherapySlots?.(isoDate(today));
   }
 
   function titleLabel(): string {
@@ -252,7 +275,7 @@ export function AdminAgenda({
               <button
                 key={v}
                 className={`agt-view-btn${view === v ? ' active' : ''}`}
-                onClick={() => setView(v)}
+                onClick={() => changeView(v)}
               >
                 {v === 'giornaliero' ? 'Giorno' : v === 'settimanale' ? 'Settimana' : 'Mese'}
               </button>
@@ -321,6 +344,23 @@ export function AdminAgenda({
           <strong>{therapyLoadError}</strong>
           <button type="button" className="btn-secondary" onClick={onRetryTherapySlots}>
             Riprova terapie
+          </button>
+        </div>
+      )}
+      {!loadingTherapySlots && !therapyLoadError && therapyPageInfo?.hasMore && (
+        <div className="empty-state-card" role="status" aria-live="polite">
+          <strong>Visualizzazione parziale</strong>
+          <span>
+            Totali esatti; dettagli caricati per {therapyPageInfo.loadedTherapies} terapie.
+          </span>
+          {therapyLoadMoreError && <span role="alert">{therapyLoadMoreError}</span>}
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={onLoadMoreTherapySlots}
+            disabled={loadingMoreTherapySlots}
+          >
+            {loadingMoreTherapySlots ? 'Caricamento…' : 'Carica altre terapie'}
           </button>
         </div>
       )}
@@ -522,22 +562,15 @@ export function AdminAgenda({
                   );
                   const apts = cellApts.filter((a) => matchStato(a, filtroStato));
                   const defOpId = filtroOpId !== 'tutti' ? filtroOpId : (attivi[0]?.id ?? '');
-                  const tSlot = therapySlotsMap.get(ora);
                   return (
                     <div
                       key={`${dStr}-${ora}`}
-                      className={`agt-week-cell${cellApts.length === 0 && !tSlot ? ' free' : ''}`}
+                      className={`agt-week-cell${cellApts.length === 0 ? ' free' : ''}`}
                       onClick={() =>
                         cellApts.length === 0 &&
                         setAptForm({ data: dStr, ora, operatoreId: defOpId })
                       }
                     >
-                      {tSlot && (
-                        <TherapySlotDot
-                          slot={tSlot}
-                          onClick={() => setSelectedTherapySlotId(tSlot.id)}
-                        />
-                      )}
                       {apts.map((a) => {
                         const op = operatori.find((o) => o.id === a.operatoreId);
                         return (
@@ -575,7 +608,7 @@ export function AdminAgenda({
                           </div>
                         );
                       })}
-                      {cellApts.length === 0 && !tSlot && (
+                      {cellApts.length === 0 && (
                         <span className="agt-week-add">
                           <IcoPlus />
                         </span>
@@ -585,30 +618,8 @@ export function AdminAgenda({
                 })}
               </Fragment>
             ))}
-
-            {/* Fasce fuori dal range orario della griglia (sera 20:00, notte 22:00) */}
-            {(therapySlots ?? [])
-              .filter((ts) => !HOUR_SLOTS.includes(ts.ora))
-              .map((ts) => (
-                <Fragment key={`extra-${ts.fascia}`}>
-                  <div className="agt-week-time">{ts.ora}</div>
-                  {getWeekDays(refDate).map((d) => {
-                    const dStr = isoDate(d);
-                    const isToday = dStr === isoDate(new Date());
-                    return (
-                      <div key={`${dStr}-${ts.fascia}`} className="agt-week-cell">
-                        {isToday && ts.summary.total > 0 && (
-                          <TherapySlotDot
-                            slot={ts}
-                            onClick={() => setSelectedTherapySlotId(ts.id)}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-                </Fragment>
-              ))}
           </div>
+          <p className="agt-empty-note">Le terapie sono disponibili nella vista Giorno.</p>
           {aptsInRange(getWeekDays(refDate)) === 0 && (
             <p className="agt-empty-note">Nessun appuntamento in questa settimana.</p>
           )}
@@ -633,8 +644,7 @@ export function AdminAgenda({
                   key={i}
                   className={`agt-month-day${!inMonth ? ' other' : ''}${isToday ? ' today' : ''}`}
                   onClick={() => {
-                    setRefDate(d);
-                    setView('giornaliero');
+                    openDay(d);
                   }}
                 >
                   <span className="agt-month-day__num">{d.getDate()}</span>
@@ -718,11 +728,16 @@ export function AdminAgenda({
           setShowNewPaziente(false);
         }}
       />
-      {activeTherapySlot && (
+      {view === 'giornaliero' && activeTherapySlot && (
         <TherapySlotModal
           slot={activeTherapySlot}
+          date={isoDate(refDate)}
           onClose={() => setSelectedTherapySlotId(null)}
           readOnly
+          detailsPartial={therapyPageInfo?.hasMore}
+          loadingMore={loadingMoreTherapySlots}
+          loadMoreError={therapyLoadMoreError}
+          onLoadMore={onLoadMoreTherapySlots}
         />
       )}
     </div>

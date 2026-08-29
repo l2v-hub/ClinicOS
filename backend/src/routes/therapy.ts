@@ -2,7 +2,11 @@ import { prisma } from '../lib/prisma.js';
 import { Prisma } from '@prisma/client';
 import { Router } from 'express';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
-import { buildTherapySlots, TherapySlotCapacityError } from '../therapies/therapy-slots.js';
+import {
+  buildTherapySlotPage,
+  buildTherapySlots,
+  TherapySlotCapacityError,
+} from '../therapies/therapy-slots.js';
 import { AppointmentListInputError, parseIsoCalendarDate } from '../appointments/list-query.js';
 import {
   parseTherapyAdministrationBody,
@@ -12,6 +16,11 @@ import {
   TherapyWriteInputError,
 } from '../therapies/therapy-write.js';
 import { hasGlobalPatientScope } from '../patients/patient-scope.js';
+import {
+  encodeTherapySlotCursor,
+  parseTherapySlotPageQuery,
+  TherapySlotPageInputError,
+} from '../therapies/slot-page-query.js';
 
 const router = Router();
 
@@ -31,6 +40,50 @@ router.use((_req, res, next) => {
 });
 router.use(requireOperator);
 
+function patientAccess(req: AuthedRequest) {
+  const actor = req.operator!;
+  return {
+    ...(!hasGlobalPatientScope(actor.role) && { registeredById: actor.id }),
+  };
+}
+
+// GET /therapy-slots/page?date=YYYY-MM-DD&limit=100&cursor=...
+// Exact summaries are constant-size; patient/administration details are cursor-paged.
+router.get('/page', async (req, res) => {
+  try {
+    if (typeof req.query.date !== 'string' || !req.query.date) {
+      throw new AppointmentListInputError('date obbligatoria');
+    }
+    const date = parseIsoCalendarDate(req.query.date, 'date');
+    const input = parseTherapySlotPageQuery(req.query as Record<string, unknown>, date);
+    const page = await buildTherapySlotPage(date, patientAccess(req as AuthedRequest), input);
+    res.status(200).json({
+      slots: page.slots,
+      pageInfo: {
+        hasMore: page.pageInfo.hasMore,
+        nextCursor:
+          page.pageInfo.hasMore && page.pageInfo.nextId
+            ? encodeTherapySlotCursor(date, page.pageInfo.nextId)
+            : null,
+        loadedTherapies: page.pageInfo.loadedTherapies,
+        completeness: page.pageInfo.hasMore ? 'partial' : 'complete',
+        summaryExact: !input.cursorId,
+      },
+    });
+  } catch (error) {
+    if (error instanceof AppointmentListInputError || error instanceof TherapySlotPageInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    if (error instanceof TherapySlotCapacityError) {
+      res.status(422).json({ error: error.message });
+      return;
+    }
+    console.error('GET /therapy-slots/page error:', error);
+    res.status(500).json({ error: 'Errore nel recupero della pagina terapie' });
+  }
+});
+
 // GET /therapy-slots?date=YYYY-MM-DD
 // Returns slots grouped by patient, sourced exclusively from PatientTherapy.
 router.get('/', async (req, res) => {
@@ -39,12 +92,7 @@ router.get('/', async (req, res) => {
       throw new AppointmentListInputError('date obbligatoria');
     }
     const date = parseIsoCalendarDate(req.query.date, 'date');
-    const actor = (req as AuthedRequest).operator!;
-    res.status(200).json(
-      await buildTherapySlots(date, {
-        ...(!hasGlobalPatientScope(actor.role) && { registeredById: actor.id }),
-      }),
-    );
+    res.status(200).json(await buildTherapySlots(date, patientAccess(req as AuthedRequest)));
   } catch (error) {
     if (error instanceof AppointmentListInputError) {
       res.status(400).json({ error: error.message });

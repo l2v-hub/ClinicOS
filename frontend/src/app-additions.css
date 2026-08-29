@@ -1922,6 +1922,19 @@
   background: #f8fafc;
   display: block;
 }
+.therapy-modal__partial {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-muted);
+}
 .therapy-modal__rows {
   display: flex;
   flex-direction: column;

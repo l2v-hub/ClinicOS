@@ -67,14 +67,139 @@ export interface TherapySlot {
   patients: SlotPatient[];
 }
 
-/** Slot della giornata `date` (YYYY-MM-DD), raggruppati per fascia e paziente. Solo fasce non vuote. */
-export async function buildTherapySlots(
+export interface TherapySlotSourcePage {
+  slots: TherapySlot[];
+  pageInfo: {
+    hasMore: boolean;
+    nextId: string | null;
+    loadedTherapies: number;
+  };
+}
+
+interface ExactSummaryRow {
+  fascia: string;
+  total: number;
+  administered: number;
+  notAdministered: number;
+  pending: number;
+}
+
+function therapyAccessSql(access: TherapyPatientAccess): Prisma.Sql {
+  if (Array.isArray(access.patientIds)) {
+    if (access.patientIds.length === 0) return Prisma.sql`AND FALSE`;
+    return Prisma.sql`AND pt."patientId" IN (${Prisma.join([...access.patientIds])})`;
+  }
+  if (access.registeredById) {
+    return Prisma.sql`AND p."registeredById" = ${access.registeredById}`;
+  }
+  return Prisma.empty;
+}
+
+/** Exact, constant-size fascia totals. Details remain cursor-paged independently. */
+export async function buildTherapySlotExactSummary(
   date: string,
   access: TherapyPatientAccess = {},
-): Promise<TherapySlot[]> {
-  if (Array.isArray(access.patientIds) && access.patientIds.length === 0) return [];
-  const therapies = await prisma.patientTherapy.findMany({
-    where: therapyWhereForAccess(date, access),
+): Promise<Map<string, TherapySlot['summary']>> {
+  const weekday = new Date(`${date}T00:00:00.000Z`).getUTCDay() || 7;
+  const weekdayPattern = `%,${weekday},%`;
+  const rows = await prisma.$queryRaw<ExactSummaryRow[]>(Prisma.sql`
+    WITH due_therapy AS (
+      SELECT
+        pt.id,
+        pt."patientId",
+        pt."farmacoNome",
+        band.fascia
+      FROM "PatientTherapy" pt
+      JOIN "Patient" p ON p.id = pt."patientId"
+      CROSS JOIN LATERAL (
+        VALUES
+          ('mattina', pt."fasceMattina"),
+          ('pranzo', pt."fascePranzo"),
+          ('pomeriggio', pt."fascePomeriggio"),
+          ('sera', pt."fasceSera"),
+          ('notte', pt."fasceNotte")
+      ) AS band(fascia, enabled)
+      WHERE pt.stato = 'attiva'
+        AND pt.tipo <> 'al_bisogno'
+        AND (
+          (pt.tipo = 'una_tantum' AND pt."dataSomministrazione" = ${date})
+          OR (
+            pt.tipo <> 'una_tantum'
+            AND pt."dataInizio" <= ${date}
+            AND (pt."dataFine" IS NULL OR pt."dataFine" >= ${date})
+          )
+        )
+        AND (
+          pt."giorniSettimana" IS NULL
+          OR btrim(pt."giorniSettimana") = ''
+          OR (
+            ',' || regexp_replace(pt."giorniSettimana", '[[:space:]]+', '', 'g') || ','
+          ) LIKE ${weekdayPattern}
+        )
+        AND band.enabled = TRUE
+        ${therapyAccessSql(access)}
+    ), legacy_administration AS (
+      SELECT DISTINCT ON (ma."patientId", ma."farmacoNome", ma.fascia)
+        ma."patientId",
+        ma."farmacoNome",
+        ma.fascia,
+        ma.stato
+      FROM due_therapy due
+      JOIN "MedicationAdministration" ma
+        ON ma."patientId" = due."patientId"
+        AND ma."farmacoNome" = due."farmacoNome"
+        AND ma.fascia = due.fascia
+        AND ma.date = ${date}
+        AND ma."therapyId" IS NULL
+      ORDER BY ma."patientId", ma."farmacoNome", ma.fascia, ma.id DESC
+    ), resolved AS (
+      SELECT due.fascia, COALESCE(modern.stato, legacy.stato) AS stato
+      FROM due_therapy due
+      LEFT JOIN "MedicationAdministration" modern
+        ON modern."therapyId" = due.id
+        AND modern.date = ${date}
+        AND modern.fascia = due.fascia
+      LEFT JOIN legacy_administration legacy
+        ON modern.id IS NULL
+        AND legacy."patientId" = due."patientId"
+        AND legacy."farmacoNome" = due."farmacoNome"
+        AND legacy.fascia = due.fascia
+    )
+    SELECT
+      fascia,
+      COUNT(*)::int AS total,
+      COUNT(*) FILTER (WHERE stato = 'erogata')::int AS administered,
+      COUNT(*) FILTER (WHERE stato = 'non_erogata')::int AS "notAdministered",
+      COUNT(*) FILTER (WHERE stato IS NULL OR stato NOT IN ('erogata', 'non_erogata'))::int AS pending
+    FROM resolved
+    GROUP BY fascia
+  `);
+  return new Map(
+    rows.map((row) => [
+      row.fascia,
+      {
+        total: Number(row.total),
+        administered: Number(row.administered),
+        notAdministered: Number(row.notAdministered),
+        pending: Number(row.pending),
+      },
+    ]),
+  );
+}
+
+async function buildTherapySlotSourcePage(
+  date: string,
+  access: TherapyPatientAccess,
+  limit: number,
+  cursorId?: string,
+): Promise<TherapySlotSourcePage> {
+  if (Array.isArray(access.patientIds) && access.patientIds.length === 0) {
+    return { slots: [], pageInfo: { hasMore: false, nextId: null, loadedTherapies: 0 } };
+  }
+  const sourceRows = await prisma.patientTherapy.findMany({
+    where: cursorId
+      ? { AND: [therapyWhereForAccess(date, access), { id: { gt: cursorId } }] }
+      : therapyWhereForAccess(date, access),
     select: {
       id: true,
       patientId: true,
@@ -118,13 +243,11 @@ export async function buildTherapySlots(
         },
       },
     },
-    take: MAX_THERAPY_SLOT_SOURCE_ROWS + 1,
+    orderBy: { id: 'asc' },
+    take: limit + 1,
   });
-  if (therapies.length > MAX_THERAPY_SLOT_SOURCE_ROWS) {
-    throw new TherapySlotCapacityError(
-      `Troppe terapie per la giornata (massimo ${MAX_THERAPY_SLOT_SOURCE_ROWS})`,
-    );
-  }
+  const hasMore = sourceRows.length > limit;
+  const therapies = sourceRows.slice(0, limit);
   if (therapies.some((therapy) => therapy.schedules.length > MAX_THERAPY_SCHEDULES)) {
     throw new TherapySlotCapacityError(
       `Terapia con troppi orari (massimo ${MAX_THERAPY_SCHEDULES})`,
@@ -139,7 +262,7 @@ export async function buildTherapySlots(
     // #241: intermittent weekday posology — a drug with a giorniSettimana list must not appear on
     // days outside it. Empty/null = every day (backward-compatible).
     if (pt.giorniSettimana && pt.giorniSettimana.trim()) {
-      const jsDay = new Date(`${date}T00:00:00`).getDay(); // 0=Sun … 6=Sat
+      const jsDay = new Date(`${date}T00:00:00.000Z`).getUTCDay(); // 0=Sun … 6=Sat
       const isoDay = jsDay === 0 ? 7 : jsDay; // 1=Mon … 7=Sun
       const allowed = pt.giorniSettimana.split(',').map((s) => parseInt(s.trim(), 10));
       if (!allowed.includes(isoDay)) return false;
@@ -177,6 +300,10 @@ export async function buildTherapySlots(
           LIMIT ${MAX_THERAPY_SLOT_SOURCE_ROWS}
         `);
   const roomFallbackByPatient = new Map(fallbackRows.map((row) => [row.patientId, row]));
+  const administrationLimit = Math.min(
+    MAX_THERAPY_SLOT_ADMINISTRATION_ROWS,
+    limit * FASCE.length * 2,
+  );
   const administrations =
     patientIds.length === 0
       ? []
@@ -194,7 +321,7 @@ export async function buildTherapySlots(
             ],
           },
           orderBy: { id: 'asc' },
-          take: MAX_THERAPY_SLOT_ADMINISTRATION_ROWS + 1,
+          take: administrationLimit + 1,
           select: {
             id: true,
             therapyId: true,
@@ -207,9 +334,9 @@ export async function buildTherapySlots(
             motivo: true,
           },
         });
-  if (administrations.length > MAX_THERAPY_SLOT_ADMINISTRATION_ROWS) {
+  if (administrations.length > administrationLimit) {
     throw new TherapySlotCapacityError(
-      `Troppe somministrazioni per la giornata (massimo ${MAX_THERAPY_SLOT_ADMINISTRATION_ROWS})`,
+      `Troppe somministrazioni per la pagina (massimo ${administrationLimit})`,
     );
   }
   const adminMap = new Map<string, (typeof administrations)[0]>(
@@ -300,5 +427,60 @@ export async function buildTherapySlots(
     };
   });
 
-  return slots.filter((s) => s.patients.length > 0);
+  return {
+    slots: slots.filter((slot) => slot.patients.length > 0),
+    pageInfo: {
+      hasMore,
+      nextId: hasMore && therapies.length > 0 ? therapies[therapies.length - 1]!.id : null,
+      loadedTherapies: therapies.length,
+    },
+  };
+}
+
+/** Legacy complete read. It fails explicitly instead of returning a truncated clinical agenda. */
+export async function buildTherapySlots(
+  date: string,
+  access: TherapyPatientAccess = {},
+): Promise<TherapySlot[]> {
+  const page = await buildTherapySlotSourcePage(date, access, MAX_THERAPY_SLOT_SOURCE_ROWS);
+  if (page.pageInfo.hasMore) {
+    throw new TherapySlotCapacityError(
+      `Troppe terapie per la giornata (massimo ${MAX_THERAPY_SLOT_SOURCE_ROWS})`,
+    );
+  }
+  return page.slots;
+}
+
+/** One stable therapy-candidate page for the interactive agenda. */
+export async function buildTherapySlotPage(
+  date: string,
+  access: TherapyPatientAccess,
+  input: { limit: number; cursorId?: string },
+): Promise<TherapySlotSourcePage> {
+  // The first response seeds exact totals. Continuation pages carry details only, so the
+  // expensive global aggregate is not repeated for every "load more" click.
+  if (input.cursorId || (Array.isArray(access.patientIds) && access.patientIds.length === 0)) {
+    return buildTherapySlotSourcePage(date, access, input.limit, input.cursorId);
+  }
+  const [page, exactSummary] = await Promise.all([
+    buildTherapySlotSourcePage(date, access, input.limit),
+    buildTherapySlotExactSummary(date, access),
+  ]);
+  const pageByFascia = new Map(page.slots.map((slot) => [slot.fascia, slot]));
+  page.slots = FASCE.flatMap((fascia) => {
+    const summary = exactSummary.get(fascia.fascia);
+    if (!summary?.total) return [];
+    const loaded = pageByFascia.get(fascia.fascia);
+    return [
+      {
+        id: `ts-${fascia.fascia}`,
+        fascia: fascia.fascia,
+        label: fascia.label,
+        ora: loaded?.ora ?? fascia.ora,
+        summary,
+        patients: loaded?.patients ?? [],
+      },
+    ];
+  });
+  return page;
 }

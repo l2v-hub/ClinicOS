@@ -2,7 +2,7 @@ import { Component, lazy, Suspense, useState, useEffect, useRef, useCallback } f
 import type { ReactNode } from 'react';
 import './App.css';
 import { API_URL } from './config';
-import { cachedGetJson, invalidateCachedGet, clearCachedGet } from './lib/cachedFetch';
+import { clearCachedGet } from './lib/cachedFetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
 import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
 import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';
@@ -26,6 +26,11 @@ import {
   mergeConsegnaPage,
   type ConsegnaFeedQuery,
 } from './lib/consegneFeed';
+import {
+  buildTherapySlotPageUrl,
+  mergeTherapySlotPages,
+  parseTherapySlotPage,
+} from './lib/therapySlotPage';
 
 import type {
   UtenteApp,
@@ -50,6 +55,8 @@ import type {
   ConsegnaPageInfo,
   ConsegnaSummary,
   NewConsegnaInput,
+  TherapySlotPageInfo,
+  TherapyActionInfo,
 } from './types';
 import { OPERATOR_COLOR_PALETTE } from './types';
 import { createDefaultCartella } from './mockData';
@@ -268,6 +275,7 @@ export default function App() {
   const sessionEpochRef = useRef(0);
   const appointmentRequestSequenceRef = useRef(0);
   const therapyRequestSequenceRef = useRef(0);
+  const therapyAbortControllerRef = useRef<AbortController | null>(null);
   const notesRequestSequenceRef = useRef(0);
   const notesAbortControllerRef = useRef<AbortController | null>(null);
   const consegneRequestSequenceRef = useRef(0);
@@ -365,7 +373,16 @@ export default function App() {
   });
   const [therapySlots, setTherapySlots] = useState<TherapySlot[]>([]);
   const [loadingTherapySlots, setLoadingTherapySlots] = useState(true);
+  const [loadingMoreTherapySlots, setLoadingMoreTherapySlots] = useState(false);
   const [therapyLoadError, setTherapyLoadError] = useState<string | null>(null);
+  const [therapyLoadMoreError, setTherapyLoadMoreError] = useState<string | null>(null);
+  const [therapyPageInfo, setTherapyPageInfo] = useState<TherapySlotPageInfo>({
+    hasMore: false,
+    nextCursor: null,
+    loadedTherapies: 0,
+    completeness: 'complete',
+    summaryExact: true,
+  });
 
   // #285: il widget agenda della dashboard operatore deriva dagli appuntamenti REALI di oggi
   // (prima mostrava MOCK_AGENDA, dati finti mai persistiti).
@@ -534,61 +551,101 @@ export default function App() {
 
   // ── Load therapy slots (clinical API; never substitute mock data on failure) ──
 
-  const loadTherapySlots = useCallback(async (date?: string) => {
-    const sessionEpoch = sessionEpochRef.current;
-    const request = ++therapyRequestSequenceRef.current;
-    const d = date || localIsoDate();
-    therapyDateRef.current = d;
-    setLoadingTherapySlots(true);
-    setTherapyLoadError(null);
-    setTherapySlots([]);
-    try {
-      const raw = await cachedGetJson<unknown>(`${API_URL}/therapy-slots?date=${d}`);
-      const slots = Array.isArray(raw) ? raw : [];
-      const data: TherapySlot[] = slots.map((s: Record<string, unknown>) => ({
-        id: s.id as string,
-        fascia: s.fascia as TherapySlot['fascia'],
-        label: s.label as string,
-        ora: s.ora as string,
-        summary: (s.summary as TherapySlot['summary']) ?? {
-          total: 0,
-          administered: 0,
-          notAdministered: 0,
-          pending: 0,
-        },
-        patients: Array.isArray(s.patients) ? (s.patients as TherapySlotPatient[]) : [],
-      }));
-      if (
-        sessionEpoch === sessionEpochRef.current &&
-        request === therapyRequestSequenceRef.current &&
-        d === therapyDateRef.current
-      ) {
-        setTherapySlots(data);
+  const loadTherapySlots = useCallback(
+    async (date?: string, options: { append?: boolean; cursor?: string } = {}) => {
+      const sessionEpoch = sessionEpochRef.current;
+      const request = ++therapyRequestSequenceRef.current;
+      const d = date || localIsoDate();
+      const append = options.append === true;
+      therapyDateRef.current = d;
+      therapyAbortControllerRef.current?.abort();
+      const controller = new AbortController();
+      therapyAbortControllerRef.current = controller;
+      if (append) {
+        setLoadingMoreTherapySlots(true);
+        setTherapyLoadMoreError(null);
+      } else {
+        setLoadingTherapySlots(true);
+        setTherapyLoadError(null);
+        setTherapyLoadMoreError(null);
+        setTherapySlots([]);
+        setTherapyPageInfo({
+          hasMore: false,
+          nextCursor: null,
+          loadedTherapies: 0,
+          completeness: 'complete',
+          summaryExact: true,
+        });
       }
-    } catch {
-      if (
-        sessionEpoch === sessionEpochRef.current &&
-        request === therapyRequestSequenceRef.current &&
-        d === therapyDateRef.current
-      ) {
-        const message = 'Terapie non disponibili: riprova prima di registrare una somministrazione';
-        setTherapyLoadError(message);
-        showToast(message);
+      try {
+        const response = await fetch(buildTherapySlotPageUrl(API_URL, d, options.cursor), {
+          headers: operatorHeaders(),
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(`therapy page ${response.status}`);
+        const page = parseTherapySlotPage(await response.json());
+        if (append && page.pageInfo.hasMore && page.pageInfo.nextCursor === options.cursor) {
+          throw new Error('therapy page cursor did not advance');
+        }
+        if (
+          sessionEpoch === sessionEpochRef.current &&
+          request === therapyRequestSequenceRef.current &&
+          d === therapyDateRef.current
+        ) {
+          setTherapySlots((current) =>
+            append
+              ? mergeTherapySlotPages(current, page.slots, page.pageInfo.summaryExact)
+              : page.slots,
+          );
+          setTherapyPageInfo((current) => ({
+            ...page.pageInfo,
+            loadedTherapies: append
+              ? current.loadedTherapies + page.pageInfo.loadedTherapies
+              : page.pageInfo.loadedTherapies,
+            summaryExact: append
+              ? current.summaryExact || page.pageInfo.summaryExact
+              : page.pageInfo.summaryExact,
+          }));
+        }
+      } catch (error) {
+        if (
+          (error as { name?: string }).name !== 'AbortError' &&
+          sessionEpoch === sessionEpochRef.current &&
+          request === therapyRequestSequenceRef.current &&
+          d === therapyDateRef.current
+        ) {
+          const message = append
+            ? 'Altre terapie non disponibili: i dati già caricati restano visibili'
+            : 'Terapie non disponibili: riprova prima di registrare una somministrazione';
+          if (append) setTherapyLoadMoreError(message);
+          else setTherapyLoadError(message);
+          showToast(message);
+        }
+      } finally {
+        if (
+          sessionEpoch === sessionEpochRef.current &&
+          request === therapyRequestSequenceRef.current &&
+          d === therapyDateRef.current
+        ) {
+          if (append) setLoadingMoreTherapySlots(false);
+          else setLoadingTherapySlots(false);
+        }
       }
-    } finally {
-      if (
-        sessionEpoch === sessionEpochRef.current &&
-        request === therapyRequestSequenceRef.current &&
-        d === therapyDateRef.current
-      ) {
-        setLoadingTherapySlots(false);
-      }
-    }
-  }, []);
+    },
+    [],
+  );
 
   const retryTherapySlots = useCallback(() => {
     void loadTherapySlots(therapyDateRef.current);
   }, [loadTherapySlots]);
+
+  const loadMoreTherapySlots = useCallback(() => {
+    if (!therapyPageInfo.nextCursor || loadingMoreTherapySlots) return;
+    void loadTherapySlots(therapyDateRef.current, {
+      append: true,
+      cursor: therapyPageInfo.nextCursor,
+    });
+  }, [loadTherapySlots, loadingMoreTherapySlots, therapyPageInfo.nextCursor]);
 
   // ── Load appointments (API — SPEC-015 US4, sostituisce MOCK_APPUNTAMENTI) ──
 
@@ -1045,6 +1102,7 @@ export default function App() {
     sessionEpochRef.current += 1;
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
+    therapyAbortControllerRef.current?.abort();
     notesRequestSequenceRef.current += 1;
     notesAbortControllerRef.current?.abort();
     consegneRequestSequenceRef.current += 1;
@@ -1104,6 +1162,8 @@ export default function App() {
   function handleLogout() {
     sessionEpochRef.current += 1;
     appointmentRequestSequenceRef.current += 1;
+    therapyRequestSequenceRef.current += 1;
+    therapyAbortControllerRef.current?.abort();
     patientNavigationSequenceRef.current += 1;
     notesRequestSequenceRef.current += 1;
     notesAbortControllerRef.current?.abort();
@@ -1116,6 +1176,7 @@ export default function App() {
     setUtente(null);
     setAppointmentLoadError(null);
     setTherapyLoadError(null);
+    setTherapyLoadMoreError(null);
     setNotesLoadError(null);
     setLoadingNotes(false);
     setNotesUnreadCount(0);
@@ -1137,6 +1198,14 @@ export default function App() {
     consegnePageInfoRef.current = { hasMore: false, nextCursor: null };
     setConsegnePageInfo({ hasMore: false, nextCursor: null });
     setLoadingTherapySlots(true);
+    setLoadingMoreTherapySlots(false);
+    setTherapyPageInfo({
+      hasMore: false,
+      nextCursor: null,
+      loadedTherapies: 0,
+      completeness: 'complete',
+      summaryExact: true,
+    });
     setCurrentOperator(null);
     clearCachedGet();
     setClinicalOverview(null);
@@ -1771,15 +1840,7 @@ export default function App() {
 
   // ── Therapy CRUD (API-persisted with optimistic update) ─────────────────────
 
-  async function confirmTherapy(info: {
-    patientId: string;
-    therapyId: string;
-    drugName: string;
-    dosage: string;
-    route: string;
-    fascia: string;
-    ora: string;
-  }) {
+  async function confirmTherapy(info: TherapyActionInfo) {
     const now = new Date();
     setTherapySlots((prev) =>
       prev.map((slot) => {
@@ -1820,7 +1881,7 @@ export default function App() {
           farmacoNome: info.drugName,
           farmacoDose: info.dosage,
           farmacoVia: info.route,
-          date: localIsoDate(now),
+          date: info.date,
           fascia: info.fascia,
           ora: info.ora,
           operatoreId: utente?.id ?? '',
@@ -1829,39 +1890,29 @@ export default function App() {
         }),
       });
 
-      invalidateCachedGet(`${API_URL}/therapy-slots`); // mutazione: il prossimo load rilegge dal server
       if (res.status === 409) {
         showToast('Terapia già erogata');
-        loadTherapySlots();
+        loadTherapySlots(info.date);
         return;
       }
       if (res.ok) {
         showToast('Somministrazione confermata');
-        loadTherapySlots();
+        loadTherapySlots(info.date);
       } else {
         showToast('Errore durante conferma');
-        loadTherapySlots();
+        loadTherapySlots(info.date);
       }
     } catch {
       showToast('Errore di rete');
-      loadTherapySlots();
+      loadTherapySlots(info.date);
     }
   }
 
   async function notAdministeredTherapy(
-    info: {
-      patientId: string;
-      therapyId: string;
-      drugName: string;
-      dosage: string;
-      route: string;
-      fascia: string;
-      ora: string;
-    },
+    info: TherapyActionInfo,
     motivo: MotivoNonErogazione,
     noteText: string,
   ) {
-    const now = new Date();
     setTherapySlots((prev) =>
       prev.map((slot) => {
         if (slot.fascia !== info.fascia) return slot;
@@ -1896,7 +1947,7 @@ export default function App() {
           farmacoNome: info.drugName,
           farmacoDose: info.dosage,
           farmacoVia: info.route,
-          date: localIsoDate(now),
+          date: info.date,
           fascia: info.fascia,
           ora: info.ora,
           operatoreId: utente?.id ?? '',
@@ -1907,17 +1958,16 @@ export default function App() {
         }),
       });
 
-      invalidateCachedGet(`${API_URL}/therapy-slots`); // mutazione: il prossimo load rilegge dal server
       if (res.ok) {
         showToast('Non somministrazione registrata');
-        loadTherapySlots();
+        loadTherapySlots(info.date);
       } else {
         showToast('Errore durante registrazione');
-        loadTherapySlots();
+        loadTherapySlots(info.date);
       }
     } catch {
       showToast('Errore di rete');
-      loadTherapySlots();
+      loadTherapySlots(info.date);
     }
   }
 
@@ -2151,7 +2201,11 @@ export default function App() {
                   therapySlots={therapySlots}
                   loadingTherapySlots={loadingTherapySlots}
                   therapyLoadError={therapyLoadError}
+                  therapyLoadMoreError={therapyLoadMoreError}
+                  therapyPageInfo={therapyPageInfo}
+                  loadingMoreTherapySlots={loadingMoreTherapySlots}
                   onRetryTherapySlots={retryTherapySlots}
+                  onLoadMoreTherapySlots={loadMoreTherapySlots}
                   onLoadTherapySlots={loadTherapySlots}
                 />
               )}
@@ -2329,7 +2383,11 @@ export default function App() {
                   therapySlots={therapySlots}
                   loadingTherapySlots={loadingTherapySlots}
                   therapyLoadError={therapyLoadError}
+                  therapyLoadMoreError={therapyLoadMoreError}
+                  therapyPageInfo={therapyPageInfo}
+                  loadingMoreTherapySlots={loadingMoreTherapySlots}
                   onRetryTherapySlots={retryTherapySlots}
+                  onLoadMoreTherapySlots={loadMoreTherapySlots}
                   onConfirmTherapy={confirmTherapy}
                   onNotAdministeredTherapy={notAdministeredTherapy}
                   onLoadTherapySlots={loadTherapySlots}

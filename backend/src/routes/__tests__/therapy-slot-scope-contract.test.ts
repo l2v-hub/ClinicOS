@@ -24,7 +24,24 @@ test('therapy slot relations and administration candidates are bounded', () => {
   assert.match(slots, /schedules:\s*\{\s*take: MAX_THERAPY_SCHEDULES \+ 1/);
   assert.match(slots, /therapyId:\s*\{ in: therapyIds \}/);
   assert.match(slots, /therapyId:\s*null,[\s\S]*patientId:\s*\{ in: patientIds \}/);
-  assert.match(slots, /take: MAX_THERAPY_SLOT_ADMINISTRATION_ROWS \+ 1/);
+  assert.match(slots, /const administrationLimit = Math\.min/);
+  assert.match(slots, /take: administrationLimit \+ 1/);
   assert.match(slots, /legacyCandidateKeys\.has\(legacyKey\)/);
   assert.match(schema, /MedicationAdministration_legacy_slot_idx/);
+});
+
+test('interactive agenda uses keyset pages with exact scoped summaries', () => {
+  assert.match(route, /router\.get\('\/page'/);
+  assert.match(route, /parseTherapySlotPageQuery/);
+  assert.match(route, /encodeTherapySlotCursor/);
+  assert.match(slots, /orderBy: \{ id: 'asc' \}/);
+  assert.match(slots, /take: limit \+ 1/);
+  assert.match(slots, /\{ id: \{ gt: cursorId \} \}/);
+  assert.match(slots, /buildTherapySlotExactSummary/);
+  assert.match(slots, /COUNT\(\*\) FILTER \(WHERE stato = 'erogata'\)/);
+  assert.match(slots, /therapyAccessSql\(access\)/);
+  assert.match(
+    slots,
+    /FROM due_therapy due\s+JOIN "MedicationAdministration" ma[\s\S]*ma\."patientId" = due\."patientId"/,
+  );
 });
