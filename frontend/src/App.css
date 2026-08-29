@@ -37,10 +37,10 @@
   --divider: #f0f3f8;
   --hover: #f7f9fc;
 
-  /* Text — mockup (note: --text-xmuted #8595A8 ~3.3:1 AA, flagged in validation) */
+  /* Text — extra-muted remains AA-readable on the canonical white surface. */
   --text: #16202e;
   --text-muted: #5a6b80;
-  --text-xmuted: #8595a8;
+  --text-xmuted: #64758a;
 
   /* Semantic accents */
   --teal: #0d9488;
@@ -71,9 +71,18 @@
   --card-radius-sm: 12px;
 
   /* Layout */
-  --sidebar-w: 240px;
+  --sidebar-w: 96px;
   --sidebar-w-collapsed: 60px;
   --header-h: 64px;
+  --topbar-h: 64px;
+  --l2-h: 44px;
+  --l3-h: 32px;
+  --l2-font: 14px;
+  --l3-font: 11.5px;
+  --gutter: 20px;
+  --content-px: 16px;
+  --content-px-lg: 24px;
+  --content-px-xl: 32px;
 
   /* Touch / interaction */
   --touch-target: 48px;
@@ -91,33 +100,10 @@
   --fs-sm: 12px;
   --fs-base: 14px;
   --fs-lg: 16px;
-}
 
-/* ── Base reset ───────────────────────────────────────────────────────────── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  background: var(--bg);
-  font-family: var(--font-ui);
-  color: var(--text);
-}
-
-/* === 003 CLEAN NAV: SIDEBAR === */
-:root {
-  --sidebar-w: 96px;
-  --topbar-h: 64px;
-  --l2-h: 44px;
-  --l3-h: 32px;
-  --l2-font: 14px;
-  --l3-font: 11.5px;
+  /* Interaction and navigation */
   --primary: var(--blue);
-
-  /* === 014 DESIGN SYSTEM: intent tokens (medical blue) === */
-  --c-primary: var(--blue); /* #2F6BED */
+  --c-primary: var(--blue);
   --c-primary-hover: #2560e0;
   --c-primary-active: #1d4fc4;
   --c-primary-bg: #eef3fe;
@@ -125,12 +111,11 @@ body {
   --c-success-bg: var(--emerald-bg);
   --c-warning: var(--amber);
   --c-warning-bg: var(--amber-bg);
-  --c-danger: var(--red); /* clinical alerts / errors ONLY */
+  --c-danger: var(--red); /* Clinical alerts and errors only. */
   --c-danger-bg: var(--red-bg);
   --c-info: var(--blue);
   --c-neutral: var(--text-xmuted);
   --c-neutral-bg: #f1f4f8;
-  --gutter: 20px;
   --border-subtle: rgba(15, 23, 42, 0.1);
   --tab-transition-duration: 180ms;
   --tab-transition-easing: ease-out;
@@ -138,9 +123,6 @@ body {
   --l2-underline-color: var(--primary, var(--blue, #2f6bed));
   --l3-underline-h: 1px;
   --l3-underline-color: color-mix(in srgb, var(--primary, #2f6bed) 70%, transparent);
-  --content-px: 16px;
-  --content-px-lg: 24px;
-  --content-px-xl: 32px;
   --clinical-submenu-gap: 16px;
   --clinical-card-radius: 8px;
   --card-header-h: 40px;
@@ -159,6 +141,21 @@ body {
   --qe-row-gap: 12px;
   --qe-divider-color: var(--divider);
 }
+
+/* ── Base reset ───────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  font-family: var(--font-ui);
+  color: var(--text);
+}
+
+/* === 003 CLEAN NAV: SIDEBAR === */
 
 .teams-sidebar {
   position: fixed;
