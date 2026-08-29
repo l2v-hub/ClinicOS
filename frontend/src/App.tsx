@@ -1531,9 +1531,12 @@ export default function App() {
   ): Promise<{ ok: boolean; lettoLabel?: string }> {
     try {
       const today = localIsoDate();
-      const assignRes = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`, {
-        headers: operatorHeaders(),
-      });
+      const assignRes = await fetch(
+        `${API_URL}/patients/${pazienteId}/room-assignments?scope=active`,
+        {
+          headers: operatorHeaders(),
+        },
+      );
       const assignments: Array<{ id: string; bedId: string; endDate: string | null }> = assignRes.ok
         ? await assignRes.json()
         : [];

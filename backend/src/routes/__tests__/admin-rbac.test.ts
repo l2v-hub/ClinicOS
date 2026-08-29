@@ -43,6 +43,21 @@ test('operator cannot create rooms', async () => {
   assert.equal(response.status, 403);
 });
 
+test('room and assignment endpoints forbid caching of clinical occupancy', async () => {
+  for (const path of ['/admin/not-a-route', '/patients/not-a-patient/room-assignments/missing']) {
+    const response = await fetch(`${base}${path}`, { headers: OPERATOR_HEADERS });
+    assert.equal(response.headers.get('cache-control'), 'private, no-store');
+  }
+});
+
+test('room assignment read scope rejects unsupported unbounded variants before querying', async () => {
+  const response = await fetch(`${base}/patients/patient-other/room-assignments?scope=history`, {
+    headers: OPERATOR_HEADERS,
+  });
+  assert.equal(response.status, 400);
+  assert.equal(response.headers.get('cache-control'), 'private, no-store');
+});
+
 test('operator cannot create or alter operators', async () => {
   const createResponse = await fetch(`${base}/operators`, {
     method: 'POST',

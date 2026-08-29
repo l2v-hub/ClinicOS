@@ -1,6 +1,13 @@
 import { prisma } from '../lib/prisma.js';
-import { Router } from 'express';
-import { requireOperator, requireRole } from '../ai/auth.js';
+import { Router, type NextFunction, type Request, type Response } from 'express';
+import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
+import {
+  authoritativeAssignmentActor,
+  MAX_ACTIVE_ASSIGNMENTS_PER_BED,
+  PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
+  ROOM_ASSIGNMENT_OCCUPANT_SELECT,
+  ROOM_LOCATION_SELECT,
+} from './room-read-model.js';
 
 const adminRouter = Router();
 const patientAssignmentRouter = Router();
@@ -10,8 +17,16 @@ const requireAdmin = requireRole('admin', 'manager');
 // bed periods after the advisory lock is held, and mapped to 409 by the route's catch block.
 class BedOverlapError extends Error {}
 
-// Gate minimo (header-based, non IdP): stanze/letti e assegnazioni paziente sono dati
-// clinici/operativi reali, richiedono un operatore identificato. Vedi backend/src/ai/auth.ts.
+// Facility occupancy is clinical data: do not let browsers or intermediaries retain it.
+const preventClinicalCaching = (_req: Request, res: Response, next: NextFunction) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+};
+
+adminRouter.use(preventClinicalCaching);
+patientAssignmentRouter.use(preventClinicalCaching);
+
+// Stanze/letti e assegnazioni paziente richiedono un operatore identificato.
 adminRouter.use(requireOperator);
 adminRouter.use((req, res, next) => {
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
@@ -49,14 +64,49 @@ function activeAssignmentFilter(from = new Date().toISOString().slice(0, 10)) {
   };
 }
 
-// ── Helper: beds include with current assignments ─────────────────────────
-function bedsWithAssignments() {
+// ── Exact operational read models (never join a full Patient row) ──────────
+function bedWithAssignmentsSelect() {
   return {
+    id: true,
+    roomId: true,
+    label: true,
+    stato: true,
+    note: true,
+    assignments: {
+      where: activeAssignmentFilter(),
+      orderBy: { startDate: 'desc' as const },
+      take: MAX_ACTIVE_ASSIGNMENTS_PER_BED,
+      select: ROOM_ASSIGNMENT_OCCUPANT_SELECT,
+    },
+  };
+}
+
+function roomWithAssignmentsSelect() {
+  return {
+    id: true,
+    numero: true,
+    tipo: true,
+    piano: true,
+    reparto: true,
+    stato: true,
+    note: true,
     beds: {
-      include: {
+      select: bedWithAssignmentsSelect(),
+      orderBy: { label: 'asc' as const },
+    },
+  };
+}
+
+function occupancyOnlySelect() {
+  return {
+    id: true,
+    beds: {
+      select: {
+        stato: true,
         assignments: {
           where: activeAssignmentFilter(),
-          include: { patient: true },
+          select: { id: true },
+          take: 1,
         },
       },
     },
@@ -71,30 +121,22 @@ function bedsWithAssignments() {
 adminRouter.get('/rooms/occupancy', async (_req, res) => {
   try {
     const rooms = await prisma.room.findMany({
-      include: bedsWithAssignments(),
+      select: occupancyOnlySelect(),
     });
 
     let totalBeds = 0;
     let occupiedBeds = 0;
     let maintenanceBeds = 0;
 
-    const roomSummaries = rooms.map((room) => {
-      const bedSummaries = room.beds.map((bed) => {
+    for (const room of rooms) {
+      for (const bed of room.beds) {
         totalBeds++;
         const isOccupied = bed.assignments.length > 0;
         const isMaintenance = bed.stato === 'manutenzione';
         if (isOccupied) occupiedBeds++;
         if (isMaintenance) maintenanceBeds++;
-        return {
-          id: bed.id,
-          label: bed.label,
-          stato: bed.stato,
-          occupied: isOccupied,
-          currentAssignment: isOccupied ? bed.assignments[0] : null,
-        };
-      });
-      return { ...room, beds: bedSummaries };
-    });
+      }
+    }
 
     const freeBeds = totalBeds - occupiedBeds - maintenanceBeds;
     const occupancyPct = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
@@ -106,7 +148,6 @@ adminRouter.get('/rooms/occupancy', async (_req, res) => {
       freeBeds,
       maintenanceBeds,
       occupancyPct,
-      rooms: roomSummaries,
     });
   } catch (error) {
     console.error('GET /admin/rooms/occupancy error:', error);
@@ -127,9 +168,16 @@ adminRouter.get('/beds/available', async (req, res) => {
   try {
     const beds = await prisma.bed.findMany({
       where: { stato: { not: 'manutenzione' } },
-      include: {
-        room: true,
-        assignments: { where: activeAssignmentFilter(startDate) },
+      select: {
+        id: true,
+        label: true,
+        stato: true,
+        roomId: true,
+        room: { select: ROOM_LOCATION_SELECT },
+        assignments: {
+          where: activeAssignmentFilter(startDate),
+          select: { startDate: true, endDate: true },
+        },
       },
     });
 
@@ -159,7 +207,7 @@ adminRouter.get('/beds/available', async (req, res) => {
 adminRouter.get('/rooms', async (_req, res) => {
   try {
     const rooms = await prisma.room.findMany({
-      include: bedsWithAssignments(),
+      select: roomWithAssignmentsSelect(),
       orderBy: { numero: 'asc' },
     });
     res.status(200).json(rooms);
@@ -209,7 +257,7 @@ adminRouter.post('/rooms', async (req, res) => {
           })),
         },
       },
-      include: bedsWithAssignments(),
+      select: roomWithAssignmentsSelect(),
     });
 
     console.log(`POST /admin/rooms → created id=${room.id} numero=${room.numero}`);
@@ -235,7 +283,7 @@ adminRouter.get('/rooms/:roomId', async (req, res) => {
   try {
     const room = await prisma.room.findUnique({
       where: { id: roomId },
-      include: bedsWithAssignments(),
+      select: roomWithAssignmentsSelect(),
     });
     if (!room) {
       res.status(404).json({ error: 'Stanza non trovata' });
@@ -306,7 +354,7 @@ adminRouter.put('/rooms/:roomId', async (req, res) => {
     const room = await prisma.room.update({
       where: { id: roomId },
       data: updates,
-      include: bedsWithAssignments(),
+      select: roomWithAssignmentsSelect(),
     });
 
     console.log(`PUT /admin/rooms/${roomId} → updated`);
@@ -368,12 +416,7 @@ adminRouter.get('/rooms/:roomId/beds', async (req, res) => {
 
     const beds = await prisma.bed.findMany({
       where: { roomId },
-      include: {
-        assignments: {
-          where: activeAssignmentFilter(),
-          include: { patient: true },
-        },
-      },
+      select: bedWithAssignmentsSelect(),
       orderBy: { label: 'asc' },
     });
     res.status(200).json(beds);
@@ -407,12 +450,7 @@ adminRouter.post('/rooms/:roomId/beds', async (req, res) => {
         stato: body.stato || 'libero',
         note: body.note || '',
       },
-      include: {
-        assignments: {
-          where: activeAssignmentFilter(),
-          include: { patient: true },
-        },
-      },
+      select: bedWithAssignmentsSelect(),
     });
 
     console.log(`POST /admin/rooms/${roomId}/beds → created id=${bed.id}`);
@@ -466,12 +504,7 @@ adminRouter.put('/beds/:bedId', async (req, res) => {
     const updated = await prisma.bed.update({
       where: { id: bedId },
       data: updates,
-      include: {
-        assignments: {
-          where: activeAssignmentFilter(),
-          include: { patient: true },
-        },
-      },
+      select: bedWithAssignmentsSelect(),
     });
 
     console.log(`PUT /admin/beds/${bedId} → updated`);
@@ -519,6 +552,12 @@ adminRouter.delete('/beds/:bedId', async (req, res) => {
 // GET /patients/:patientId/room-assignments
 patientAssignmentRouter.get('/:patientId/room-assignments', async (req, res) => {
   const { patientId } = req.params;
+  const rawScope = req.query.scope;
+  if (rawScope !== undefined && rawScope !== 'active') {
+    res.status(400).json({ error: 'Parametro scope non valido' });
+    return;
+  }
+  const activeOnly = rawScope === 'active';
   try {
     const patient = await prisma.patient.findUnique({
       where: { id: patientId },
@@ -530,13 +569,12 @@ patientAssignmentRouter.get('/:patientId/room-assignments', async (req, res) => 
     }
 
     const assignments = await prisma.patientRoomAssignment.findMany({
-      where: { patientId },
-      include: {
-        bed: {
-          include: { room: true },
-        },
-      },
+      where: { patientId, ...(activeOnly ? activeAssignmentFilter() : {}) },
+      select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
       orderBy: { startDate: 'desc' },
+      // Corrupted legacy data can contain more than one active assignment. Keep the operational
+      // read bounded without hiding a small overlap that the caller may need to resolve.
+      take: activeOnly ? 8 : undefined,
     });
     res.status(200).json(assignments);
   } catch (error) {
@@ -546,14 +584,14 @@ patientAssignmentRouter.get('/:patientId/room-assignments', async (req, res) => 
 });
 
 // POST /patients/:patientId/room-assignments
-patientAssignmentRouter.post('/:patientId/room-assignments', async (req, res) => {
-  const { patientId } = req.params;
+patientAssignmentRouter.post('/:patientId/room-assignments', async (req: AuthedRequest, res) => {
+  const patientIdParam = req.params.patientId;
+  const patientId = Array.isArray(patientIdParam) ? patientIdParam[0] : patientIdParam;
   const body = req.body as {
     bedId?: string;
     startDate?: string;
     endDate?: string;
     note?: string;
-    createdById?: string;
   };
 
   if (!body.bedId || !body.startDate) {
@@ -629,12 +667,9 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req, res) =>
           startDate,
           endDate,
           note: body.note || '',
-          createdById: body.createdById || null,
+          createdById: authoritativeAssignmentActor(req.operator!),
         },
-        include: {
-          bed: { include: { room: true } },
-          patient: true,
-        },
+        select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
       });
     });
 
@@ -675,9 +710,7 @@ patientAssignmentRouter.put('/:patientId/room-assignments/:assignmentId', async 
     const assignment = await prisma.patientRoomAssignment.update({
       where: { id: assignmentId },
       data: updates,
-      include: {
-        bed: { include: { room: true } },
-      },
+      select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
     });
 
     console.log(`PUT /patients/${patientId}/room-assignments/${assignmentId} → updated`);
