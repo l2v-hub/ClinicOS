@@ -193,6 +193,17 @@ const NAV_LABELS: Record<NavKey, string> = {
   'ai-assistant': 'Assistente ClinicOS',
 };
 
+const OPERATOR_DIRECTORY_NAV_KEYS = new Set<NavKey>([
+  'admin-dashboard',
+  'gestione-operatori',
+  'agenda-admin',
+  'orari-operatori',
+  'consegne',
+  'note',
+  'dettaglio-paziente',
+  'agenda-operatore',
+]);
+
 const NAV_FALLBACK: Partial<Record<NavKey, NavKey>> = {
   'dettaglio-paziente': 'pazienti',
   'parametri-multipaziente': 'operator-dashboard',
@@ -290,6 +301,9 @@ export default function App() {
   const schedulesRequestSequenceRef = useRef(0);
   const schedulesAbortControllerRef = useRef<AbortController | null>(null);
   const schedulesLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const operatorDirectoryRequestRef = useRef(0);
+  const operatorDirectoryAbortRef = useRef<AbortController | null>(null);
+  const operatorDirectoryLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const patientConsegneRequestRef = useRef(0);
   const patientConsegneAbortRef = useRef<AbortController | null>(null);
   const patientConsegnePageInfoRef = useRef<ConsegnaPageInfo>({
@@ -324,6 +338,10 @@ export default function App() {
 
   // Mock state
   const [operatori, setOperatori] = useState<Operatore[]>([]);
+  const [operatorDirectoryLoadState, setOperatorDirectoryLoadState] = useState<
+    'idle' | 'loading' | 'ready' | 'error'
+  >('idle');
+  const [operatorDirectoryLoadError, setOperatorDirectoryLoadError] = useState<string | null>(null);
   const [consegne, setConsegne] = useState<Consegna[]>([]);
   const [patientConsegne, setPatientConsegne] = useState<Consegna[]>([]);
   const [patientConsegneSummary, setPatientConsegneSummary] = useState<ConsegnaSummary | null>(
@@ -1070,6 +1088,65 @@ export default function App() {
     }
   }, []);
 
+  const loadOperatorDirectory = useCallback(
+    async (force = false) => {
+      if (!utente) return;
+      if (!force && operatorDirectoryLoadStateRef.current === 'ready') return;
+      if (operatorDirectoryLoadStateRef.current === 'loading') return;
+
+      const sessionEpoch = sessionEpochRef.current;
+      const request = ++operatorDirectoryRequestRef.current;
+      operatorDirectoryAbortRef.current?.abort();
+      const controller = new AbortController();
+      operatorDirectoryAbortRef.current = controller;
+      operatorDirectoryLoadStateRef.current = 'loading';
+      setOperatorDirectoryLoadState('loading');
+      setOperatorDirectoryLoadError(null);
+
+      try {
+        const path = utente.ruolo === 'admin' ? '/operators' : '/operators/directory';
+        const response = await fetch(`${API_URL}${path}`, {
+          headers: operatorHeaders(),
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(`operator directory unavailable: ${response.status}`);
+        const data = (await response.json()) as Omit<Operatore, 'iniziali' | 'colore'>[];
+        if (!Array.isArray(data)) throw new Error('invalid operator directory response');
+        if (
+          controller.signal.aborted ||
+          sessionEpoch !== sessionEpochRef.current ||
+          request !== operatorDirectoryRequestRef.current
+        ) {
+          return;
+        }
+        setOperatori(
+          data.map((row, index) => ({
+            ...row,
+            iniziali: `${row.nome[0] ?? ''}${row.cognome[0] ?? ''}`.toUpperCase(),
+            colore: OPERATOR_COLOR_PALETTE[index % OPERATOR_COLOR_PALETTE.length],
+          })),
+        );
+        operatorDirectoryLoadStateRef.current = 'ready';
+        setOperatorDirectoryLoadState('ready');
+      } catch (error) {
+        if ((error as { name?: string }).name === 'AbortError') return;
+        if (
+          sessionEpoch === sessionEpochRef.current &&
+          request === operatorDirectoryRequestRef.current
+        ) {
+          operatorDirectoryLoadStateRef.current = 'error';
+          setOperatorDirectoryLoadState('error');
+          setOperatorDirectoryLoadError('Directory operatori non disponibile. Riprova.');
+        }
+      } finally {
+        if (request === operatorDirectoryRequestRef.current) {
+          operatorDirectoryAbortRef.current = null;
+        }
+      }
+    },
+    [utente],
+  );
+
   // ── Fetch constant-size session data ───────────────────────────────────────
 
   useEffect(() => {
@@ -1106,29 +1183,25 @@ export default function App() {
     });
     // Dashboard receives only a constant-size exact read model; the feed loads on navigation.
     void loadConsegneOverview();
-    const operatorDirectoryPath = utente.ruolo === 'admin' ? '/operators' : '/operators/directory';
-    // Fase 1b: operatori reali dal backend (niente più mock); iniziali/colore client-derived
-    fetch(`${API_URL}${operatorDirectoryPath}`, {
-      headers: operatorHeaders(),
-      signal: sessionController.signal,
-    })
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: Omit<Operatore, 'iniziali' | 'colore'>[]) => {
-        if (sessionEpoch !== sessionEpochRef.current) return;
-        setOperatori(
-          data.map((row, i) => ({
-            ...row,
-            iniziali: `${row.nome[0] ?? ''}${row.cognome[0] ?? ''}`.toUpperCase(),
-            colore: OPERATOR_COLOR_PALETTE[i % OPERATOR_COLOR_PALETTE.length],
-          })),
-        );
-      })
-      .catch(() => {
-        /* keep empty array */
-      });
     void loadNotes({ box: 'all', q: '' });
     return () => sessionController.abort();
   }, [utente, loadAppuntamenti, loadConsegneOverview, loadNotes]);
+
+  const needsOperatorDirectory = !!utente && OPERATOR_DIRECTORY_NAV_KEYS.has(navKey);
+  useEffect(() => {
+    if (!needsOperatorDirectory) {
+      if (operatorDirectoryAbortRef.current) {
+        operatorDirectoryRequestRef.current += 1;
+        operatorDirectoryAbortRef.current.abort();
+        operatorDirectoryAbortRef.current = null;
+        operatorDirectoryLoadStateRef.current = 'idle';
+        setOperatorDirectoryLoadState('idle');
+      }
+      return;
+    }
+    const timer = window.setTimeout(() => void loadOperatorDirectory(), 0);
+    return () => window.clearTimeout(timer);
+  }, [needsOperatorDirectory, loadOperatorDirectory]);
 
   // Facility occupancy contains patient identity and is not session-bootstrap data. Only admins
   // load it, on the two screens that consume it; RoomsManagement owns its separate abortable feed.
@@ -1401,7 +1474,13 @@ export default function App() {
     setConsegne([]);
     setTherapySlots([]);
     setCamere([]);
+    operatorDirectoryRequestRef.current += 1;
+    operatorDirectoryAbortRef.current?.abort();
+    operatorDirectoryAbortRef.current = null;
+    operatorDirectoryLoadStateRef.current = 'idle';
     setOperatori([]);
+    setOperatorDirectoryLoadState('idle');
+    setOperatorDirectoryLoadError(null);
     setSchedules([]);
     window.history.replaceState({}, '', '#/login');
     setNavKey('login');
@@ -2344,246 +2423,288 @@ export default function App() {
         <main className="page-content content-panel">
           <LazyLoadBoundary>
             <Suspense fallback={<PageLoading />}>
-              {/* ── ADMIN ── */}
-              {isAdmin && navKey === 'admin-dashboard' && (
-                <AdminDashboard
-                  operatori={operatori}
-                  consegneOverview={consegneOverview}
-                  consegneOverviewState={consegneOverviewState}
-                  camere={camere}
-                  camereLoadState={camereLoadState}
-                  camereLoadError={camereLoadError}
-                  onRetryCamere={() => void loadCamere(true)}
-                  totalePazienti={clinicalOverview?.totalPatients ?? 0}
-                  loadingPazienti={loadingClinicalOverview}
-                  onNavigate={navigate}
-                  onOpenConsegneAperte={openConsegneAperte}
-                  onSelectPaziente={goToPazienteByNome}
-                  clinicalOverview={clinicalOverview}
-                />
-              )}
-              {isAdmin && navKey === 'gestione-operatori' && (
-                <OperatorManagement
-                  operatori={operatori}
-                  onAdd={addOperatore}
-                  onUpdate={updateOperatore}
-                  onToggleStato={toggleStatoOperatore}
-                />
-              )}
-              {isAdmin && navKey === 'agenda-admin' && (
-                <AdminAgenda
-                  operatori={operatori}
-                  appuntamenti={appuntamenti}
-                  onAddAppuntamento={addAppuntamento}
-                  onUpdateAppuntamento={updateAppuntamento}
-                  onDeleteAppuntamento={deleteAppuntamento}
-                  loadingAppuntamenti={loadingAppuntamenti}
-                  appointmentLoadError={appointmentLoadError}
-                  onRetryAppointments={retryAppointmentRange}
-                  onLoadAppointments={loadAppointmentRange}
-                  onAddPaziente={() => {}}
-                  onSelectPaziente={goToPazienteByNome}
-                  therapySlots={therapySlots}
-                  loadingTherapySlots={loadingTherapySlots}
-                  therapyLoadError={therapyLoadError}
-                  therapyLoadMoreError={therapyLoadMoreError}
-                  therapyPageInfo={therapyPageInfo}
-                  loadingMoreTherapySlots={loadingMoreTherapySlots}
-                  onRetryTherapySlots={retryTherapySlots}
-                  onLoadMoreTherapySlots={loadMoreTherapySlots}
-                  onLoadTherapySlots={loadTherapySlots}
-                />
-              )}
-              {isAdmin && navKey === 'posti-letto' && <RoomsManagement />}
-              {isAdmin && navKey === 'orari-operatori' && (
-                <OperatorSchedule
-                  operatori={operatori}
-                  schedules={schedules}
-                  loadState={schedulesLoadState}
-                  loadError={schedulesLoadError}
-                  onRetry={() => void loadSchedules(true)}
-                  onSave={saveSchedule}
-                />
-              )}
-
-              {/* ── SHARED ── */}
-              {navKey === 'consegne' && (
-                <ConsegnePage
-                  consegne={consegne}
-                  summary={consegneSummary}
-                  operatori={operatori}
-                  operatoreId={utenteId}
-                  isAdmin={isAdmin}
-                  onAdd={addConsegna}
-                  onUpdate={updateConsegna}
-                  onUpdateStato={updateConsegnaStato}
-                  onDelete={deleteConsegna}
-                  loading={loadingConsegne}
-                  loadError={consegneLoadError}
-                  hasMore={consegnePageInfo.hasMore}
-                  onQueryChange={loadConsegne}
-                  onLoadMore={() => void loadConsegne(consegneQueryRef.current, true)}
-                  onRetry={() => void loadConsegne(consegneQueryRef.current)}
-                  onSelectPaziente={goToPazienteByNome}
-                  initialFiltroStato={consegneView.filtro}
-                  focusId={consegneView.focusId}
-                />
-              )}
-              {navKey === 'note' && (
-                <NotesPage
-                  note={note}
-                  utenteId={utenteId}
-                  utenteNome={utente.nome}
-                  isAdmin={isAdmin}
-                  operatori={operatori}
-                  loading={loadingNotes}
-                  loadError={notesLoadError}
-                  unreadCount={notesUnreadCount}
-                  hasMore={notesPageInfo.hasMore}
-                  onAdd={addNota}
-                  onUpdate={updateNota}
-                  onUpdateStato={updateNotaStato}
-                  onQueryChange={loadNotes}
-                  onLoadMore={() => void loadNotes(notesQueryRef.current, true)}
-                  onRetry={() => void loadNotes(notesQueryRef.current)}
-                />
-              )}
-
-              {/* ── OPERATOR ── */}
-              {!isAdmin && navKey === 'operator-dashboard' && (
-                <OperatorDashboard
-                  utente={utente}
-                  consegneOverview={consegneOverview}
-                  consegneOverviewState={consegneOverviewState}
-                  agenda={agendaOggi}
-                  totalePazienti={clinicalOverview?.totalPatients ?? 0}
-                  loadingPazienti={loadingClinicalOverview}
-                  onNavigate={navigate}
-                  onOpenConsegneAperte={openConsegneAperte}
-                  onSelectPaziente={goToPazienteByNome}
-                  clinicalOverview={clinicalOverview}
-                />
-              )}
-              {!isAdmin && navKey === 'pazienti' && (
-                <PatientList
-                  totalPatients={clinicalOverview?.totalPatients ?? 0}
-                  ricerca={pazientiRicerca}
-                  onRicercaChange={setPazientiRicerca}
-                  filtroSesso={pazientiFiltroSesso}
-                  onFiltroSessoChange={setPazientiFiltroSesso}
-                  onSelect={selectPaziente}
-                  operatorId={utente?.id}
-                  operatorRole={utente?.ruolo}
-                  onDeleted={(patientId) => {
-                    setPazienteSelezionato((current) =>
-                      current?.id === patientId ? null : current,
-                    );
-                  }}
-                  onImported={(patientId, moduleTabId) => {
-                    // La lista ricarica gia' la propria pagina. Per navigare a un paziente appena
-                    // creato basta un lookup puntuale: non scaricare di nuovo l'intero roster.
-                    if (!patientId) return;
-                    const tab =
-                      moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
-                        ? (moduleTabId as TabId)
-                        : undefined;
-                    void selectPazienteById(patientId, tab);
-                  }}
-                />
-              )}
-              {navKey === 'dettaglio-paziente' &&
-                !pazienteSelezionato &&
-                restoringPazienteFromHash && (
-                  <div
-                    style={{
-                      padding: '48px 32px',
-                      textAlign: 'center',
-                      color: 'var(--text-muted)',
-                    }}
+              {needsOperatorDirectory &&
+              operatori.length === 0 &&
+              (operatorDirectoryLoadState === 'idle' ||
+                operatorDirectoryLoadState === 'loading') ? (
+                <PageLoading />
+              ) : needsOperatorDirectory &&
+                operatori.length === 0 &&
+                operatorDirectoryLoadState === 'error' ? (
+                <div className="load-error-state" role="alert">
+                  <p>{operatorDirectoryLoadError}</p>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => void loadOperatorDirectory(true)}
                   >
-                    <p style={{ fontSize: 16 }}>Caricamento scheda paziente…</p>
-                  </div>
-                )}
-              {navKey === 'dettaglio-paziente' &&
-                !pazienteSelezionato &&
-                !restoringPazienteFromHash && (
-                  <div
-                    style={{
-                      padding: '48px 32px',
-                      textAlign: 'center',
-                      color: 'var(--text-muted)',
-                    }}
-                  >
-                    <p style={{ fontSize: 16, marginBottom: 16 }}>Nessun paziente selezionato.</p>
-                    <button className="btn-primary" onClick={() => goBack('pazienti')}>
-                      Vai alla lista pazienti
-                    </button>
-                  </div>
-                )}
-              {navKey === 'dettaglio-paziente' && pazienteSelezionato && (
-                <PatientDetail
-                  key={pazienteSelezionato.id}
-                  paziente={pazienteSelezionato}
-                  cartella={getCartella(pazienteSelezionato.id)}
-                  consegne={patientConsegne}
-                  consegneSummary={patientConsegneSummary}
-                  consegneLoading={loadingPatientConsegne}
-                  consegneError={patientConsegneError}
-                  consegneHasMore={patientConsegnePageInfo.hasMore}
-                  onLoadMoreConsegne={() => void loadPatientConsegne(pazienteSelezionato.id, true)}
-                  onRetryConsegne={() => void loadPatientConsegne(pazienteSelezionato.id)}
-                  operatori={operatori}
-                  camere={camere}
-                  camereLoadState={camereLoadState}
-                  camereLoadError={camereLoadError}
-                  onRetryCamere={() => void loadCamere(true)}
-                  canManageRooms={isAdmin}
-                  onBack={() => goBack('pazienti')}
-                  backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
-                  onAddConsegna={addConsegna}
-                  onUpdateConsegnaStato={updateConsegnaStato}
-                  onUpdateCartella={updateCartella}
-                  onUpdatePaziente={updatePaziente}
-                  onAssignCamera={syncCameraAssignment}
-                  operatoreNome={utente.nome}
-                  operatoreId={utenteId}
-                  initialTab={pendingModuleTab}
-                  operatoreRole={utente?.ruolo}
-                />
-              )}
-              {!isAdmin && navKey === 'anagrafica-farmaci' && <AnagraficaFarmaciPage />}
-              {!isAdmin && navKey === 'parametri-multipaziente' && (
-                <MultiPatientParametri
-                  operatoreNome={utente.nome}
-                  onSelectPaziente={(patientId) => void selectPazienteById(patientId)}
-                />
-              )}
-              {!isAdmin && navKey === 'agenda-operatore' && (
-                <OperatorAgenda
-                  operatoreId={utenteId}
-                  nomeOperatore={utente.nome}
-                  operatori={operatori}
-                  appuntamenti={appuntamenti}
-                  onAddAppuntamento={addAppuntamento}
-                  onUpdateAppuntamento={updateAppuntamento}
-                  onDeleteAppuntamento={deleteAppuntamento}
-                  loadingAppuntamenti={loadingAppuntamenti}
-                  appointmentLoadError={appointmentLoadError}
-                  onRetryAppointments={retryAppointmentRange}
-                  onLoadAppointments={loadAppointmentRange}
-                  onSelectPaziente={goToPazienteByNome}
-                  therapySlots={therapySlots}
-                  loadingTherapySlots={loadingTherapySlots}
-                  therapyLoadError={therapyLoadError}
-                  therapyLoadMoreError={therapyLoadMoreError}
-                  therapyPageInfo={therapyPageInfo}
-                  loadingMoreTherapySlots={loadingMoreTherapySlots}
-                  onRetryTherapySlots={retryTherapySlots}
-                  onLoadMoreTherapySlots={loadMoreTherapySlots}
-                  onConfirmTherapy={confirmTherapy}
-                  onNotAdministeredTherapy={notAdministeredTherapy}
-                  onLoadTherapySlots={loadTherapySlots}
-                />
+                    Riprova
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {needsOperatorDirectory &&
+                    operatori.length > 0 &&
+                    operatorDirectoryLoadState === 'error' && (
+                      <div className="load-error-state" role="alert">
+                        <p>
+                          {operatorDirectoryLoadError} Sono mostrati gli ultimi dati disponibili.
+                        </p>
+                        <button
+                          type="button"
+                          className="btn-secondary"
+                          onClick={() => void loadOperatorDirectory(true)}
+                        >
+                          Riprova
+                        </button>
+                      </div>
+                    )}
+                  {/* ── ADMIN ── */}
+                  {isAdmin && navKey === 'admin-dashboard' && (
+                    <AdminDashboard
+                      operatori={operatori}
+                      consegneOverview={consegneOverview}
+                      consegneOverviewState={consegneOverviewState}
+                      camere={camere}
+                      camereLoadState={camereLoadState}
+                      camereLoadError={camereLoadError}
+                      onRetryCamere={() => void loadCamere(true)}
+                      totalePazienti={clinicalOverview?.totalPatients ?? 0}
+                      loadingPazienti={loadingClinicalOverview}
+                      onNavigate={navigate}
+                      onOpenConsegneAperte={openConsegneAperte}
+                      onSelectPaziente={goToPazienteByNome}
+                      clinicalOverview={clinicalOverview}
+                    />
+                  )}
+                  {isAdmin && navKey === 'gestione-operatori' && (
+                    <OperatorManagement
+                      operatori={operatori}
+                      onAdd={addOperatore}
+                      onUpdate={updateOperatore}
+                      onToggleStato={toggleStatoOperatore}
+                    />
+                  )}
+                  {isAdmin && navKey === 'agenda-admin' && (
+                    <AdminAgenda
+                      operatori={operatori}
+                      appuntamenti={appuntamenti}
+                      onAddAppuntamento={addAppuntamento}
+                      onUpdateAppuntamento={updateAppuntamento}
+                      onDeleteAppuntamento={deleteAppuntamento}
+                      loadingAppuntamenti={loadingAppuntamenti}
+                      appointmentLoadError={appointmentLoadError}
+                      onRetryAppointments={retryAppointmentRange}
+                      onLoadAppointments={loadAppointmentRange}
+                      onAddPaziente={() => {}}
+                      onSelectPaziente={goToPazienteByNome}
+                      therapySlots={therapySlots}
+                      loadingTherapySlots={loadingTherapySlots}
+                      therapyLoadError={therapyLoadError}
+                      therapyLoadMoreError={therapyLoadMoreError}
+                      therapyPageInfo={therapyPageInfo}
+                      loadingMoreTherapySlots={loadingMoreTherapySlots}
+                      onRetryTherapySlots={retryTherapySlots}
+                      onLoadMoreTherapySlots={loadMoreTherapySlots}
+                      onLoadTherapySlots={loadTherapySlots}
+                    />
+                  )}
+                  {isAdmin && navKey === 'posti-letto' && <RoomsManagement />}
+                  {isAdmin && navKey === 'orari-operatori' && (
+                    <OperatorSchedule
+                      operatori={operatori}
+                      schedules={schedules}
+                      loadState={schedulesLoadState}
+                      loadError={schedulesLoadError}
+                      onRetry={() => void loadSchedules(true)}
+                      onSave={saveSchedule}
+                    />
+                  )}
+
+                  {/* ── SHARED ── */}
+                  {navKey === 'consegne' && (
+                    <ConsegnePage
+                      consegne={consegne}
+                      summary={consegneSummary}
+                      operatori={operatori}
+                      operatoreId={utenteId}
+                      isAdmin={isAdmin}
+                      onAdd={addConsegna}
+                      onUpdate={updateConsegna}
+                      onUpdateStato={updateConsegnaStato}
+                      onDelete={deleteConsegna}
+                      loading={loadingConsegne}
+                      loadError={consegneLoadError}
+                      hasMore={consegnePageInfo.hasMore}
+                      onQueryChange={loadConsegne}
+                      onLoadMore={() => void loadConsegne(consegneQueryRef.current, true)}
+                      onRetry={() => void loadConsegne(consegneQueryRef.current)}
+                      onSelectPaziente={goToPazienteByNome}
+                      initialFiltroStato={consegneView.filtro}
+                      focusId={consegneView.focusId}
+                    />
+                  )}
+                  {navKey === 'note' && (
+                    <NotesPage
+                      note={note}
+                      utenteId={utenteId}
+                      utenteNome={utente.nome}
+                      isAdmin={isAdmin}
+                      operatori={operatori}
+                      loading={loadingNotes}
+                      loadError={notesLoadError}
+                      unreadCount={notesUnreadCount}
+                      hasMore={notesPageInfo.hasMore}
+                      onAdd={addNota}
+                      onUpdate={updateNota}
+                      onUpdateStato={updateNotaStato}
+                      onQueryChange={loadNotes}
+                      onLoadMore={() => void loadNotes(notesQueryRef.current, true)}
+                      onRetry={() => void loadNotes(notesQueryRef.current)}
+                    />
+                  )}
+
+                  {/* ── OPERATOR ── */}
+                  {!isAdmin && navKey === 'operator-dashboard' && (
+                    <OperatorDashboard
+                      utente={utente}
+                      consegneOverview={consegneOverview}
+                      consegneOverviewState={consegneOverviewState}
+                      agenda={agendaOggi}
+                      totalePazienti={clinicalOverview?.totalPatients ?? 0}
+                      loadingPazienti={loadingClinicalOverview}
+                      onNavigate={navigate}
+                      onOpenConsegneAperte={openConsegneAperte}
+                      onSelectPaziente={goToPazienteByNome}
+                      clinicalOverview={clinicalOverview}
+                    />
+                  )}
+                  {!isAdmin && navKey === 'pazienti' && (
+                    <PatientList
+                      totalPatients={clinicalOverview?.totalPatients ?? 0}
+                      ricerca={pazientiRicerca}
+                      onRicercaChange={setPazientiRicerca}
+                      filtroSesso={pazientiFiltroSesso}
+                      onFiltroSessoChange={setPazientiFiltroSesso}
+                      onSelect={selectPaziente}
+                      operatorId={utente?.id}
+                      operatorRole={utente?.ruolo}
+                      onDeleted={(patientId) => {
+                        setPazienteSelezionato((current) =>
+                          current?.id === patientId ? null : current,
+                        );
+                      }}
+                      onImported={(patientId, moduleTabId) => {
+                        // La lista ricarica gia' la propria pagina. Per navigare a un paziente appena
+                        // creato basta un lookup puntuale: non scaricare di nuovo l'intero roster.
+                        if (!patientId) return;
+                        const tab =
+                          moduleTabId && MODULE_TAB_IDS.includes(moduleTabId as TabId)
+                            ? (moduleTabId as TabId)
+                            : undefined;
+                        void selectPazienteById(patientId, tab);
+                      }}
+                    />
+                  )}
+                  {navKey === 'dettaglio-paziente' &&
+                    !pazienteSelezionato &&
+                    restoringPazienteFromHash && (
+                      <div
+                        style={{
+                          padding: '48px 32px',
+                          textAlign: 'center',
+                          color: 'var(--text-muted)',
+                        }}
+                      >
+                        <p style={{ fontSize: 16 }}>Caricamento scheda paziente…</p>
+                      </div>
+                    )}
+                  {navKey === 'dettaglio-paziente' &&
+                    !pazienteSelezionato &&
+                    !restoringPazienteFromHash && (
+                      <div
+                        style={{
+                          padding: '48px 32px',
+                          textAlign: 'center',
+                          color: 'var(--text-muted)',
+                        }}
+                      >
+                        <p style={{ fontSize: 16, marginBottom: 16 }}>
+                          Nessun paziente selezionato.
+                        </p>
+                        <button className="btn-primary" onClick={() => goBack('pazienti')}>
+                          Vai alla lista pazienti
+                        </button>
+                      </div>
+                    )}
+                  {navKey === 'dettaglio-paziente' && pazienteSelezionato && (
+                    <PatientDetail
+                      key={pazienteSelezionato.id}
+                      paziente={pazienteSelezionato}
+                      cartella={getCartella(pazienteSelezionato.id)}
+                      consegne={patientConsegne}
+                      consegneSummary={patientConsegneSummary}
+                      consegneLoading={loadingPatientConsegne}
+                      consegneError={patientConsegneError}
+                      consegneHasMore={patientConsegnePageInfo.hasMore}
+                      onLoadMoreConsegne={() =>
+                        void loadPatientConsegne(pazienteSelezionato.id, true)
+                      }
+                      onRetryConsegne={() => void loadPatientConsegne(pazienteSelezionato.id)}
+                      operatori={operatori}
+                      camere={camere}
+                      camereLoadState={camereLoadState}
+                      camereLoadError={camereLoadError}
+                      onRetryCamere={() => void loadCamere(true)}
+                      canManageRooms={isAdmin}
+                      onBack={() => goBack('pazienti')}
+                      backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
+                      onAddConsegna={addConsegna}
+                      onUpdateConsegnaStato={updateConsegnaStato}
+                      onUpdateCartella={updateCartella}
+                      onUpdatePaziente={updatePaziente}
+                      onAssignCamera={syncCameraAssignment}
+                      operatoreNome={utente.nome}
+                      operatoreId={utenteId}
+                      initialTab={pendingModuleTab}
+                      operatoreRole={utente?.ruolo}
+                    />
+                  )}
+                  {!isAdmin && navKey === 'anagrafica-farmaci' && <AnagraficaFarmaciPage />}
+                  {!isAdmin && navKey === 'parametri-multipaziente' && (
+                    <MultiPatientParametri
+                      operatoreNome={utente.nome}
+                      onSelectPaziente={(patientId) => void selectPazienteById(patientId)}
+                    />
+                  )}
+                  {!isAdmin && navKey === 'agenda-operatore' && (
+                    <OperatorAgenda
+                      operatoreId={utenteId}
+                      nomeOperatore={utente.nome}
+                      operatori={operatori}
+                      appuntamenti={appuntamenti}
+                      onAddAppuntamento={addAppuntamento}
+                      onUpdateAppuntamento={updateAppuntamento}
+                      onDeleteAppuntamento={deleteAppuntamento}
+                      loadingAppuntamenti={loadingAppuntamenti}
+                      appointmentLoadError={appointmentLoadError}
+                      onRetryAppointments={retryAppointmentRange}
+                      onLoadAppointments={loadAppointmentRange}
+                      onSelectPaziente={goToPazienteByNome}
+                      therapySlots={therapySlots}
+                      loadingTherapySlots={loadingTherapySlots}
+                      therapyLoadError={therapyLoadError}
+                      therapyLoadMoreError={therapyLoadMoreError}
+                      therapyPageInfo={therapyPageInfo}
+                      loadingMoreTherapySlots={loadingMoreTherapySlots}
+                      onRetryTherapySlots={retryTherapySlots}
+                      onLoadMoreTherapySlots={loadMoreTherapySlots}
+                      onConfirmTherapy={confirmTherapy}
+                      onNotAdministeredTherapy={notAdministeredTherapy}
+                      onLoadTherapySlots={loadTherapySlots}
+                    />
+                  )}
+                </>
               )}
             </Suspense>
           </LazyLoadBoundary>
