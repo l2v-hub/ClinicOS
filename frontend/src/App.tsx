@@ -287,6 +287,9 @@ export default function App() {
   const camereRequestSequenceRef = useRef(0);
   const camereAbortControllerRef = useRef<AbortController | null>(null);
   const camereLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const schedulesRequestSequenceRef = useRef(0);
+  const schedulesAbortControllerRef = useRef<AbortController | null>(null);
+  const schedulesLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const patientConsegneRequestRef = useRef(0);
   const patientConsegneAbortRef = useRef<AbortController | null>(null);
   const patientConsegnePageInfoRef = useRef<ConsegnaPageInfo>({
@@ -370,6 +373,10 @@ export default function App() {
   const [camereLoadError, setCamereLoadError] = useState<string | null>(null);
   // #285: orari operatori persistiti via /operators/schedules (prima erano MOCK_SCHEDULES)
   const [schedules, setSchedules] = useState<ScheduleOperatore[]>([]);
+  const [schedulesLoadState, setSchedulesLoadState] = useState<
+    'idle' | 'loading' | 'ready' | 'error'
+  >('idle');
+  const [schedulesLoadError, setSchedulesLoadError] = useState<string | null>(null);
   const [note, setNote] = useState<Nota[]>([]);
   const [loadingNotes, setLoadingNotes] = useState(false);
   const [notesLoadError, setNotesLoadError] = useState<string | null>(null);
@@ -410,6 +417,10 @@ export default function App() {
   // ── History API navigation ─────────────────────────────────────────────────
 
   function pushNav(key: NavKey, paziente?: Paziente) {
+    if (key === 'orari-operatori' && navKey !== 'orari-operatori') {
+      setSchedulesLoadState('idle');
+      setSchedulesLoadError(null);
+    }
     prevNavKeyRef.current = navKey;
     historyDepth.current += 1;
     // #<loop-cycle-1>: encode the patient id in the hash (dettaglio-paziente only) so a page
@@ -545,6 +556,10 @@ export default function App() {
       if (historyDepth.current > 0) historyDepth.current -= 1;
       if (e.state?.navKey) {
         prevNavKeyRef.current = e.state.prevNavKey ?? null;
+        if (e.state.navKey === 'orari-operatori' && e.state.prevNavKey !== 'orari-operatori') {
+          setSchedulesLoadState('idle');
+          setSchedulesLoadError(null);
+        }
         setNavKey(e.state.navKey as NavKey);
         if (e.state.navKey !== 'dettaglio-paziente') {
           setPazienteSelezionato(null);
@@ -1000,6 +1015,61 @@ export default function App() {
     }
   }, []);
 
+  const loadSchedules = useCallback(async (force = false) => {
+    if (
+      !force &&
+      (schedulesLoadStateRef.current === 'loading' || schedulesLoadStateRef.current === 'ready')
+    ) {
+      return;
+    }
+    const sessionEpoch = sessionEpochRef.current;
+    const request = ++schedulesRequestSequenceRef.current;
+    schedulesAbortControllerRef.current?.abort();
+    const controller = new AbortController();
+    schedulesAbortControllerRef.current = controller;
+    schedulesLoadStateRef.current = 'loading';
+    setSchedulesLoadState('loading');
+    setSchedulesLoadError(null);
+    try {
+      const response = await fetch(`${API_URL}/operators/schedules`, {
+        headers: operatorHeaders(),
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`operator_schedules_${response.status}`);
+      const data = (await response.json()) as unknown;
+      if (!Array.isArray(data)) throw new Error('operator_schedules_shape');
+      if (
+        sessionEpoch !== sessionEpochRef.current ||
+        request !== schedulesRequestSequenceRef.current
+      ) {
+        return;
+      }
+      setSchedules(data as ScheduleOperatore[]);
+      schedulesLoadStateRef.current = 'ready';
+      setSchedulesLoadState('ready');
+    } catch (error) {
+      if ((error as { name?: string }).name === 'AbortError') {
+        if (request === schedulesRequestSequenceRef.current) {
+          schedulesLoadStateRef.current = 'idle';
+          setSchedulesLoadState('idle');
+        }
+        return;
+      }
+      if (
+        sessionEpoch === sessionEpochRef.current &&
+        request === schedulesRequestSequenceRef.current
+      ) {
+        schedulesLoadStateRef.current = 'error';
+        setSchedulesLoadState('error');
+        setSchedulesLoadError('Orari operatori non disponibili. Riprova.');
+      }
+    } finally {
+      if (request === schedulesRequestSequenceRef.current) {
+        schedulesAbortControllerRef.current = null;
+      }
+    }
+  }, []);
+
   // ── Fetch constant-size session data ───────────────────────────────────────
 
   useEffect(() => {
@@ -1037,20 +1107,6 @@ export default function App() {
     // Dashboard receives only a constant-size exact read model; the feed loads on navigation.
     void loadConsegneOverview();
     const operatorDirectoryPath = utente.ruolo === 'admin' ? '/operators' : '/operators/directory';
-    const operatorSchedulesPath =
-      utente.ruolo === 'admin' ? '/operators/schedules' : '/operators/directory/schedules';
-    // #285: orari operatori persistiti. Gli operatori ricevono turni senza note amministrative.
-    fetch(`${API_URL}${operatorSchedulesPath}`, {
-      headers: operatorHeaders(),
-      signal: sessionController.signal,
-    })
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: ScheduleOperatore[]) => {
-        if (sessionEpoch === sessionEpochRef.current) setSchedules(data);
-      })
-      .catch(() => {
-        /* keep empty array */
-      });
     // Fase 1b: operatori reali dal backend (niente più mock); iniziali/colore client-derived
     fetch(`${API_URL}${operatorDirectoryPath}`, {
       headers: operatorHeaders(),
@@ -1094,6 +1150,23 @@ export default function App() {
     const timer = window.setTimeout(() => void loadCamere(), 0);
     return () => window.clearTimeout(timer);
   }, [utente, navKey, loadCamere]);
+
+  // Weekly schedules are an admin-only, potentially growing dataset. Fetch them only while the
+  // schedule page is active; abort on navigation/session changes and revalidate on every return.
+  useEffect(() => {
+    const needsSchedules = utente?.ruolo === 'admin' && navKey === 'orari-operatori';
+    if (!needsSchedules) {
+      if (schedulesAbortControllerRef.current) {
+        schedulesRequestSequenceRef.current += 1;
+        schedulesAbortControllerRef.current.abort();
+        schedulesAbortControllerRef.current = null;
+      }
+      schedulesLoadStateRef.current = 'idle';
+      return;
+    }
+    const timer = window.setTimeout(() => void loadSchedules(), 0);
+    return () => window.clearTimeout(timer);
+  }, [utente, navKey, loadSchedules]);
 
   // The clinical therapy feed is potentially large and is needed only inside the agenda.
   // Keying the load to navigation also covers browser back/forward and a direct agenda hash.
@@ -1186,6 +1259,13 @@ export default function App() {
     camereAbortControllerRef.current?.abort();
     camereAbortControllerRef.current = null;
     camereLoadStateRef.current = 'idle';
+    schedulesRequestSequenceRef.current += 1;
+    schedulesAbortControllerRef.current?.abort();
+    schedulesAbortControllerRef.current = null;
+    schedulesLoadStateRef.current = 'idle';
+    setSchedulesLoadState('idle');
+    setSchedulesLoadError(null);
+    setSchedules([]);
     setCamereLoadState('idle');
     setCamereLoadError(null);
     setCamere([]);
@@ -1255,6 +1335,10 @@ export default function App() {
     camereAbortControllerRef.current?.abort();
     camereAbortControllerRef.current = null;
     camereLoadStateRef.current = 'idle';
+    schedulesRequestSequenceRef.current += 1;
+    schedulesAbortControllerRef.current?.abort();
+    schedulesAbortControllerRef.current = null;
+    schedulesLoadStateRef.current = 'idle';
     patientConsegneRequestRef.current += 1;
     patientConsegneAbortRef.current?.abort();
     setUtente(null);
@@ -1278,6 +1362,8 @@ export default function App() {
     setConsegneOverviewState('loading');
     setCamereLoadState('idle');
     setCamereLoadError(null);
+    setSchedulesLoadState('idle');
+    setSchedulesLoadError(null);
     setConsegneLoadError(null);
     setLoadingConsegne(false);
     consegneQueryRef.current = {};
@@ -1597,6 +1683,9 @@ export default function App() {
         if (idx >= 0) return prev.map((x, i) => (i === idx ? saved : x));
         return [...prev, saved];
       });
+      schedulesLoadStateRef.current = 'ready';
+      setSchedulesLoadState('ready');
+      setSchedulesLoadError(null);
       showToast('Orari salvati');
     } catch {
       showToast('Impossibile salvare gli orari');
@@ -2304,6 +2393,9 @@ export default function App() {
                 <OperatorSchedule
                   operatori={operatori}
                   schedules={schedules}
+                  loadState={schedulesLoadState}
+                  loadError={schedulesLoadError}
+                  onRetry={() => void loadSchedules(true)}
                   onSave={saveSchedule}
                 />
               )}

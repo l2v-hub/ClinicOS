@@ -6,6 +6,9 @@ import { IcoEdit, IcoCheck, IcoX, IcoClock } from '../../icons';
 interface OperatorScheduleProps {
   operatori: Operatore[];
   schedules: ScheduleOperatore[];
+  loadState: 'idle' | 'loading' | 'ready' | 'error';
+  loadError: string | null;
+  onRetry: () => void;
   onSave: (s: ScheduleOperatore) => void;
 }
 
@@ -13,14 +16,25 @@ const ORA_OPTIONS = Array.from({ length: 24 }, (_, h) =>
   ['00', '30'].map((m) => `${String(h).padStart(2, '0')}:${m}`),
 ).flat();
 
-export function OperatorSchedule({ operatori, schedules, onSave }: OperatorScheduleProps) {
-  const [selectedOpId, setSelectedOpId] = useState<string>(operatori[0]?.id ?? '');
+export function OperatorSchedule({
+  operatori,
+  schedules,
+  loadState,
+  loadError,
+  onRetry,
+  onSave,
+}: OperatorScheduleProps) {
+  const [selectedOpIdOverride, setSelectedOpId] = useState('');
   const [editing, setEditing] = useState(false);
   const [editSchedule, setEditSchedule] = useState<ScheduleOperatore | null>(null);
 
   const attivi = operatori.filter((o) => o.stato === 'attivo');
+  const selectedOpId = attivi.some((operator) => operator.id === selectedOpIdOverride)
+    ? selectedOpIdOverride
+    : (attivi[0]?.id ?? '');
   const selectedOp = attivi.find((o) => o.id === selectedOpId);
   const schedule = schedules.find((s) => s.operatoreId === selectedOpId);
+  const scheduleSnapshotAvailable = schedules.length > 0 || loadState === 'ready';
 
   function startEdit() {
     const base = schedule ?? {
@@ -81,8 +95,22 @@ export function OperatorSchedule({ operatori, schedules, onSave }: OperatorSched
         </div>
       </div>
 
+      {loadState === 'loading' && schedules.length === 0 && (
+        <div className="empty-state-card" role="status" aria-live="polite">
+          Caricamento orari operatori…
+        </div>
+      )}
+      {loadError && (
+        <div className="empty-state-card" role="alert">
+          <p>{loadError}</p>
+          <button type="button" className="btn-secondary btn-sm" onClick={onRetry}>
+            Riprova
+          </button>
+        </div>
+      )}
+
       {/* Operator selector */}
-      <div className="schedule-op-selector">
+      <div className="schedule-op-selector" hidden={!scheduleSnapshotAvailable}>
         {attivi.map((op) => (
           <button
             key={op.id}
@@ -107,7 +135,7 @@ export function OperatorSchedule({ operatori, schedules, onSave }: OperatorSched
         ))}
       </div>
 
-      {selectedOp && (
+      {selectedOp && scheduleSnapshotAvailable && (
         <div className="schedule-card">
           <div className="schedule-card__header">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
