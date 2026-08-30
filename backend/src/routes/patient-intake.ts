@@ -4,6 +4,13 @@ import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js'
 
 const router = Router();
 
+// Discharge letters contain raw OCR and structured clinical data. Apply this before auth/RBAC so
+// successful responses and every denial/error path remain private across browser sessions.
+router.use((_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
+
 // Gate minimo (header-based, non IdP): le lettere di dimissione contengono dati clinici
 // paziente reali, richiede un operatore identificato. Vedi backend/src/ai/auth.ts.
 router.use(requireOperator);
@@ -21,6 +28,7 @@ router.use((_req, res, next) => {
 const MAX_LEGACY_FILE_BYTES = 5 * 1024 * 1024;
 const MAX_BASE64_LENGTH = Math.ceil(MAX_LEGACY_FILE_BYTES / 3) * 4;
 const LEGACY_MIME_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png']);
+export const LEGACY_INTAKE_EXISTS_SELECT = { id: true } as const;
 
 // ── POST /patient-intake/discharge-letter/upload ──
 // Receives base64 file, stores document
@@ -79,6 +87,8 @@ router.post('/discharge-letter/extract', async (req, res) => {
   try {
     const doc = await prisma.patientIntakeDocument.findUnique({
       where: { id: documentId },
+      // Existence validation must not materialize the stored base64 (up to 5 MB), OCR or JSON.
+      select: LEGACY_INTAKE_EXISTS_SELECT,
     });
 
     if (!doc) {
