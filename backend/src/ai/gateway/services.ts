@@ -5,7 +5,10 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
 import { getNarrativeSections } from '../sections/patient-narrative.js';
-import { listPatientDocuments } from '../upload/patient-documents.js';
+import {
+  AI_PATIENT_DOCUMENT_LIMIT,
+  listPatientDocumentsForAi,
+} from '../upload/patient-documents.js';
 import { assertPatientAllowed, assertTenant, canCrossPatientSearch } from './context.js';
 import {
   asCartella,
@@ -672,10 +675,12 @@ export async function getPatientDiary(
 export async function getPatientDocumentsG(
   patientId: string,
   ctx: UserContext,
-): Promise<SourcedResult<unknown[]>> {
+): Promise<SourcedResult<unknown[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
-  const docs = await listPatientDocuments(patientId);
+  const rows = await listPatientDocumentsForAi(patientId);
+  const truncated = rows.length > AI_PATIENT_DOCUMENT_LIMIT;
+  const docs = rows.slice(0, AI_PATIENT_DOCUMENT_LIMIT);
   const refs = docs.map((d) => documentSource(patientId, d.id, d.originalName));
   gatewayAudit(
     ctx,
@@ -685,7 +690,7 @@ export async function getPatientDocumentsG(
     docs.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: docs, sourceRefs: refs };
+  return { data: docs, sourceRefs: refs, truncated };
 }
 
 export async function getPatientAppointments(

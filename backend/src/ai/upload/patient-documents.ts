@@ -21,6 +21,18 @@ export interface PublicPatientDocument {
   createdAt: string;
 }
 
+export interface AiPatientDocument {
+  id: string;
+  originalName: string;
+  mimeType: string;
+  sizeBytes: number;
+  documentType: string;
+  createdAt: string;
+}
+
+export const AI_PATIENT_DOCUMENT_LIMIT = 100;
+export const AI_PATIENT_DOCUMENT_LOOKAHEAD = AI_PATIENT_DOCUMENT_LIMIT + 1;
+
 /**
  * Copy a job's uploaded files into permanent PatientDocument rows, inside the patient-create
  * transaction. Best-effort per file: a missing file on disk is skipped (never blocks the import).
@@ -128,6 +140,24 @@ export async function listPatientDocuments(patientId: string): Promise<PublicPat
     },
   });
   return rows.map((r) => ({ ...r, createdAt: r.createdAt.toISOString() }));
+}
+
+/** Bounded, minimized metadata projection for the AI gateway; never used by the full UI list. */
+export async function listPatientDocumentsForAi(patientId: string): Promise<AiPatientDocument[]> {
+  const rows = await prisma.patientDocument.findMany({
+    where: { patientId },
+    orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+    take: AI_PATIENT_DOCUMENT_LOOKAHEAD,
+    select: {
+      id: true,
+      originalName: true,
+      mimeType: true,
+      sizeBytes: true,
+      documentType: true,
+      createdAt: true,
+    },
+  });
+  return rows.map((row) => ({ ...row, createdAt: row.createdAt.toISOString() }));
 }
 
 /** Fetch one document's bytes, verifying it belongs to the patient. Returns null if not found. */
