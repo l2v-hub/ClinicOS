@@ -57,24 +57,30 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
     }
 
     let annullato = false;
+    const controller = new AbortController();
     setEsito({ fase: 'cerco' });
 
     const attesa = setTimeout(() => {
       const pa = criterio === 'principio-attivo' ? '&pa=1' : '';
-      void fetch(`${API_URL}/farmaci/cerca?q=${encodeURIComponent(testo)}&limite=${LIMITE}${pa}`)
+      void fetch(`${API_URL}/farmaci/cerca?q=${encodeURIComponent(testo)}&limite=${LIMITE}${pa}`, {
+        signal: controller.signal,
+      })
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
         .then((dati: { esiti?: FarmacoTrovato[] }) => {
           if (annullato) return;
           setEsito({ fase: 'trovati', farmaci: Array.isArray(dati.esiti) ? dati.esiti : [] });
         })
-        .catch(() => {
-          if (!annullato) setEsito({ fase: 'errore' });
+        .catch((error: unknown) => {
+          if (!annullato && (error as Error)?.name !== 'AbortError') {
+            setEsito({ fase: 'errore' });
+          }
         });
     }, ATTESA_MS);
 
     return () => {
       annullato = true;
       clearTimeout(attesa);
+      controller.abort();
     };
   }, [query, criterio]);
 
