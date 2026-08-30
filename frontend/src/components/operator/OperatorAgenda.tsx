@@ -289,25 +289,42 @@ export function OperatorAgenda({
           <span className="agt-header__date">{titleLabel()}</span>
         </div>
         <div className="agt-header__right">
-          <div className="agt-view-switcher">
+          <div className="agt-view-switcher" role="group" aria-label="Visualizzazione agenda">
             {(['giornaliero', 'settimanale', 'mensile'] as ViewMode[]).map((v) => (
               <button
+                type="button"
                 key={v}
                 className={`agt-view-btn${view === v ? ' active' : ''}`}
                 onClick={() => changeView(v)}
+                aria-pressed={view === v}
               >
                 {v === 'giornaliero' ? 'Giorno' : v === 'settimanale' ? 'Settimana' : 'Mese'}
               </button>
             ))}
           </div>
           <div className="agt-nav">
-            <button className="agt-nav-btn" onClick={() => navigate(-1)}>
+            <button
+              type="button"
+              className="agt-nav-btn"
+              onClick={() => navigate(-1)}
+              aria-label="Intervallo precedente"
+            >
               <IcoChevronLeft />
             </button>
-            <button className="agt-today-btn" onClick={goToday}>
+            <button
+              type="button"
+              className="agt-today-btn"
+              onClick={goToday}
+              aria-label="Vai a oggi"
+            >
               <IcoCalendar /> Oggi
             </button>
-            <button className="agt-nav-btn" onClick={() => navigate(1)}>
+            <button
+              type="button"
+              className="agt-nav-btn"
+              onClick={() => navigate(1)}
+              aria-label="Intervallo successivo"
+            >
               <IcoChevronRight />
             </button>
           </div>
