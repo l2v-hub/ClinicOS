@@ -5984,6 +5984,24 @@ textarea.form-input {
 }
 
 /* Compose row: textarea (Invio invia, Maiusc+Invio a capo). */
+.agnos-voice-consent {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted, #667085);
+  border-top: 1px solid var(--border, #e4e7ec);
+}
+.agnos-voice-consent input {
+  margin-top: 2px;
+  accent-color: var(--c-primary, var(--blue));
+}
+.agnos-voice-consent:focus-within {
+  outline: 2px solid var(--c-primary, var(--blue));
+  outline-offset: -2px;
+}
 .agnos-compose {
   align-items: flex-end;
 }

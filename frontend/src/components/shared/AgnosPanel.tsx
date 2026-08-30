@@ -59,6 +59,7 @@ export function AgnosPanel({
   onNavigate,
 }: Props) {
   const [open, setOpen] = useState(false);
+  const [voiceConsent, setVoiceConsent] = useState(false);
   const [input, setInput] = useState('');
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -84,6 +85,7 @@ export function AgnosPanel({
 
   const tts = useSpeechOutput();
   const voice = useVoiceInput({
+    consentGranted: voiceConsent,
     onFinalTranscript: (text) => {
       setInput((prev) => (prev.trim() ? `${prev.trimEnd()} ${text}` : text));
       dictatedRef.current = true;
@@ -92,6 +94,8 @@ export function AgnosPanel({
   });
 
   useEffect(() => {
+    // `forceOpen` is an external imperative signal, so mirroring it is intentional.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (forceOpen) setOpen(true);
   }, [forceOpen]);
   // Il pannello non si smonta più alla chiusura: la messa a fuoco alla riapertura va rifatta a
@@ -121,7 +125,7 @@ export function AgnosPanel({
   }, [turns, speak]);
 
   function handleClose() {
-    if (voice.listening) voice.stop();
+    voice.stop();
     tts.stop(); // FR-017: chiusura pannello = stop riproduzione
     setOpen(false);
     onClose?.();
@@ -290,6 +294,23 @@ export function AgnosPanel({
           </div>
         )}
 
+        {voice.supported && (
+          <label className="agnos-voice-consent">
+            <input
+              type="checkbox"
+              checked={voiceConsent}
+              onChange={(event) => {
+                setVoiceConsent(event.target.checked);
+                if (!event.target.checked) voice.stop();
+              }}
+            />
+            <span>
+              Consento la dettatura. Il browser può elaborare l’audio tramite un servizio vocale
+              remoto; ClinicOS riceve solo la trascrizione, modificabile prima dell’invio.
+            </span>
+          </label>
+        )}
+
         <form
           className="ai-asst__compose agnos-compose"
           onSubmit={(e) => {
@@ -322,7 +343,7 @@ export function AgnosPanel({
               type="button"
               className={`icon-btn agnos-mic${voice.listening ? ' agnos-mic--listening' : ''}`}
               onClick={toggleMic}
-              disabled={busy}
+              disabled={busy || !voiceConsent}
               aria-pressed={voice.listening}
               aria-label={voice.listening ? 'Interrompi ascolto' : 'Detta un comando'}
               title={voice.listening ? 'Interrompi ascolto' : 'Detta un comando'}
