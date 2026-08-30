@@ -14,7 +14,8 @@ const patientDetail = readFileSync(
 const clinicalDialogs = ['diagnosi', 'farmaci', 'parametri', 'consegne', 'allergie', 'camera'];
 
 test('shared clinical dialog surface owns keyboard focus and restores its trigger', () => {
-  assert.match(dialogSurface, /role="dialog"/);
+  assert.match(dialogSurface, /dialogRole = 'dialog'/);
+  assert.match(dialogSurface, /role=\{dialogRole\}/);
   assert.match(dialogSurface, /aria-modal="true"/);
   assert.match(dialogSurface, /aria-labelledby=\{labelledBy\}/);
   assert.match(dialogSurface, /aria-describedby=\{describedBy\}/);

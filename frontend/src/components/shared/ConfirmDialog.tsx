@@ -1,12 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useId, type ReactNode } from 'react';
 import { IcoWarning, IcoX, IcoCheck } from '../../icons';
+import { AccessibleDialogSurface } from './AccessibleDialogSurface';
 
 interface Props {
   /** Render nothing when false. */
   open: boolean;
   title: string;
   /** Body text (or rich node) explaining the consequence. */
-  message: React.ReactNode;
+  message: ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
   /** 'danger' = red destructive confirm (default); 'primary' = blue confirm. */
@@ -33,58 +34,48 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: Props) {
-  const confirmRef = useRef<HTMLButtonElement | null>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    confirmRef.current?.focus();
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape' && !busy) onCancel();
-    }
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [open, busy, onCancel]);
+  const dialogId = useId();
+  const titleId = `${dialogId}-title`;
+  const messageId = `${dialogId}-message`;
 
   if (!open) return null;
 
   return (
-    <div className="modal-overlay" onClick={() => !busy && onCancel()}>
-      <div
-        className="modal-box modal-box--confirm"
-        role="alertdialog"
-        aria-modal="true"
-        aria-labelledby="confirm-dialog-title"
-        aria-describedby="confirm-dialog-message"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="confirm-dialog__head">
-          <span className={`confirm-dialog__icon confirm-dialog__icon--${tone}`} aria-hidden="true">
-            <IcoWarning />
-          </span>
-          <h3 className="confirm-dialog__title" id="confirm-dialog-title">
-            {title}
-          </h3>
-        </div>
-
-        <p className="confirm-dialog__message" id="confirm-dialog-message">
-          {message}
-        </p>
-
-        <div className="confirm-dialog__actions">
-          <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
-            <IcoX /> {cancelLabel}
-          </button>
-          <button
-            ref={confirmRef}
-            type="button"
-            className={tone === 'danger' ? 'btn-danger' : 'btn-primary'}
-            disabled={busy}
-            onClick={onConfirm}
-          >
-            <IcoCheck /> {confirmLabel}
-          </button>
-        </div>
+    <AccessibleDialogSurface
+      labelledBy={titleId}
+      describedBy={messageId}
+      onClose={onCancel}
+      className="modal-box--confirm"
+      dismissible={!busy}
+      dialogRole="alertdialog"
+    >
+      <div className="confirm-dialog__head">
+        <span className={`confirm-dialog__icon confirm-dialog__icon--${tone}`} aria-hidden="true">
+          <IcoWarning />
+        </span>
+        <h3 className="confirm-dialog__title" id={titleId}>
+          {title}
+        </h3>
       </div>
-    </div>
+
+      <p className="confirm-dialog__message" id={messageId}>
+        {message}
+      </p>
+
+      <div className="confirm-dialog__actions">
+        <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
+          <IcoX /> {cancelLabel}
+        </button>
+        <button
+          type="button"
+          data-dialog-initial-focus
+          className={tone === 'danger' ? 'btn-danger' : 'btn-primary'}
+          disabled={busy}
+          onClick={onConfirm}
+        >
+          <IcoCheck /> {confirmLabel}
+        </button>
+      </div>
+    </AccessibleDialogSurface>
   );
 }

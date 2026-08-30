@@ -13,6 +13,7 @@ interface Props {
   surfaceClassName?: string;
   dismissible?: boolean;
   closeOnOverlay?: boolean;
+  dialogRole?: 'dialog' | 'alertdialog';
 }
 
 export function AccessibleDialogSurface({
@@ -24,6 +25,7 @@ export function AccessibleDialogSurface({
   surfaceClassName = 'modal-box',
   dismissible = true,
   closeOnOverlay = true,
+  dialogRole = 'dialog',
 }: Props) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const onCloseRef = useRef(onClose);
@@ -92,7 +94,7 @@ export function AccessibleDialogSurface({
       <div
         ref={dialogRef}
         className={`${surfaceClassName} ${className}`.trim()}
-        role="dialog"
+        role={dialogRole}
         aria-modal="true"
         aria-labelledby={labelledBy}
         aria-describedby={describedBy}
