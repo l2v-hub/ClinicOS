@@ -12,6 +12,7 @@ import {
 } from './shared';
 import { API_URL } from '../../../config';
 import { documentAuthHeaders } from '../../../lib/entraAuth';
+import { LoadErrorState } from './LoadErrorState';
 
 // #246: photo/scan attachments for exams/RX/consultations. Uses the device camera on mobile
 // (capture="environment") or a file picker on desktop; bytes are stored on PatientDocument.
@@ -430,7 +431,8 @@ export function EsamiConsulenzeTab({
   const [documentState, setDocumentState] = useState<{
     scope: string;
     documents: SectionDocMeta[];
-  }>({ scope: '', documents: [] });
+    status: 'loading' | 'ready' | 'error';
+  }>({ scope: '', documents: [], status: 'loading' });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -442,16 +444,22 @@ export function EsamiConsulenzeTab({
           headers,
           signal: controller.signal,
         });
-        const data = response.ok ? await response.json() : { documents: [] };
+        if (!response.ok) throw new Error(`Document metadata request failed: ${response.status}`);
+        const data = await response.json();
         if (controller.signal.aborted) return;
         setDocumentState({
           scope: documentScope,
           documents: Array.isArray(data.documents) ? data.documents : [],
+          status: 'ready',
         });
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') return;
         if (!controller.signal.aborted) {
-          setDocumentState({ scope: documentScope, documents: [] });
+          setDocumentState((current) =>
+            current.scope === documentScope
+              ? { ...current, status: 'error' }
+              : { scope: documentScope, documents: [], status: 'error' },
+          );
         }
       }
     })();
@@ -474,8 +482,13 @@ export function EsamiConsulenzeTab({
   }, [documentScope, documentState.documents, documentState.scope]);
 
   function reloadDocuments() {
+    setDocumentState((current) =>
+      current.scope === documentScope ? { ...current, status: 'loading' } : current,
+    );
     setDocumentRefresh((current) => current + 1);
   }
+
+  const documentStatus = documentState.scope === documentScope ? documentState.status : 'loading';
 
   return (
     <div className="cr-tab-content">
@@ -487,6 +500,19 @@ export function EsamiConsulenzeTab({
           Le tre sezioni sono indipendenti — i dati non sono mescolati.
         </p>
       </div>
+
+      {documentStatus === 'loading' && (
+        <p role="status" style={{ margin: '0 0 12px', color: 'var(--c-muted, #667085)' }}>
+          Caricamento allegati…
+        </p>
+      )}
+      {documentStatus === 'error' && (
+        <LoadErrorState
+          message="Impossibile caricare gli allegati: l’elenco potrebbe essere incompleto."
+          onRetry={reloadDocuments}
+          retryLabel="Riprova allegati"
+        />
+      )}
 
       <EsameSection
         title="Esami ematici"
