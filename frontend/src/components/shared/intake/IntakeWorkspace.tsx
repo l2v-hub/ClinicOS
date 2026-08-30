@@ -10,6 +10,7 @@ import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields
 import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
 import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
 import { buildConfirmCartella } from './confirmCartella';
+import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 
 // "Documenti" (import/scatta foto in questo step) non e' ancora implementato (F5): finche' resta
 // un placeholder senza alcun contenuto, tenerlo nel wizard costringe ogni creazione paziente a un
@@ -401,228 +402,229 @@ export function IntakeWorkspace({
   }
 
   return (
-    <div
-      className="modal-overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Nuovo paziente — intake"
+    <AccessibleDialogSurface
+      labelledBy="patient-intake-dialog-title"
+      onClose={onClose}
+      dismissible={!submitting}
+      closeOnOverlay={false}
+      surfaceClassName="modal-card"
+      className="import-modal import-modal--intake"
     >
-      <div className="modal-card import-modal import-modal--intake">
-        <header className="import-modal__head" data-testid="patient-intake-header">
-          <h2>
-            Nuovo paziente
-            {operatoreNome ? ` — ${operatoreNome}` : ''}
-          </h2>
-          <button className="icon-btn" onClick={onClose} aria-label="Chiudi">
-            ✕
-          </button>
-        </header>
-
-        {/* 6-step stepper */}
-        <ol
-          className="import-modal__steps"
-          aria-label="Fasi di registrazione"
-          data-testid="patient-intake-stepper"
+      <header className="import-modal__head" data-testid="patient-intake-header">
+        <h2 id="patient-intake-dialog-title">
+          Nuovo paziente
+          {operatoreNome ? ` — ${operatoreNome}` : ''}
+        </h2>
+        <button
+          type="button"
+          className="icon-btn"
+          onClick={onClose}
+          aria-label="Chiudi"
+          data-dialog-initial-focus
+          disabled={submitting}
         >
-          {STEPS.map((label, i) => {
-            const n = i + 1;
-            const isDone = n < step;
-            const isActive = n === step;
-            return (
-              <li
-                key={label}
-                className={isDone ? 'is-done' : isActive ? 'is-active' : ''}
-                aria-current={isActive ? 'step' : undefined}
-              >
-                <span className="import-step__marker" aria-hidden="true">
-                  {isDone ? '✓' : n}
-                </span>
-                <span className="import-step__label">{label}</span>
-              </li>
-            );
-          })}
-        </ol>
+          ✕
+        </button>
+      </header>
 
-        {/* Body — the only scrollable region (BUG-074) */}
-        <div className="import-modal__body" data-testid="patient-intake-body" ref={bodyRef}>
-          {loading && (
-            <div className="import-modal__progress" role="status" aria-live="polite">
-              <span className="import-modal__spinner" aria-hidden="true" />
-              <span className="import-modal__progress-txt">Apertura scheda…</span>
-            </div>
-          )}
-          {error && <p className="import-modal__error">{error}</p>}
-          {!loading && !error && (
-            <>
-              {step === 1 && (
-                <div data-testid="intake-step-1" data-draft-id={draftId ?? undefined}>
-                  <StepAnagrafica
-                    value={data.anagrafica ?? {}}
-                    onChange={(v) => updateSection('anagrafica', v)}
-                    submitAttempted={submitAttempted}
-                  />
+      {/* 6-step stepper */}
+      <ol
+        className="import-modal__steps"
+        aria-label="Fasi di registrazione"
+        data-testid="patient-intake-stepper"
+      >
+        {STEPS.map((label, i) => {
+          const n = i + 1;
+          const isDone = n < step;
+          const isActive = n === step;
+          return (
+            <li
+              key={label}
+              className={isDone ? 'is-done' : isActive ? 'is-active' : ''}
+              aria-current={isActive ? 'step' : undefined}
+            >
+              <span className="import-step__marker" aria-hidden="true">
+                {isDone ? '✓' : n}
+              </span>
+              <span className="import-step__label">{label}</span>
+            </li>
+          );
+        })}
+      </ol>
+
+      {/* Body — the only scrollable region (BUG-074) */}
+      <div className="import-modal__body" data-testid="patient-intake-body" ref={bodyRef}>
+        {loading && (
+          <div className="import-modal__progress" role="status" aria-live="polite">
+            <span className="import-modal__spinner" aria-hidden="true" />
+            <span className="import-modal__progress-txt">Apertura scheda…</span>
+          </div>
+        )}
+        {error && <p className="import-modal__error">{error}</p>}
+        {!loading && !error && (
+          <>
+            {step === 1 && (
+              <div data-testid="intake-step-1" data-draft-id={draftId ?? undefined}>
+                <StepAnagrafica
+                  value={data.anagrafica ?? {}}
+                  onChange={(v) => updateSection('anagrafica', v)}
+                  submitAttempted={submitAttempted}
+                />
+              </div>
+            )}
+            {step === 2 && (
+              <div data-testid="intake-step-2" data-draft-id={draftId ?? undefined}>
+                <StepIngresso
+                  value={data.ingresso ?? {}}
+                  onChange={(v) => updateSection('ingresso', v)}
+                />
+              </div>
+            )}
+            {step === 3 && (
+              <div data-testid="intake-step-3" data-draft-id={draftId ?? undefined}>
+                <StepClinica
+                  data={data}
+                  onUpdateSection={updateSection}
+                  operatoreNome={operatoreNome}
+                  importedFields={(data._importedFields as string[] | undefined) ?? []}
+                  narrative={data._narrative as Record<string, unknown> | undefined}
+                />
+              </div>
+            )}
+            {step === 4 && (
+              <div data-testid="intake-step-4" data-draft-id={draftId ?? undefined}>
+                <p className="cr-empty" style={{ marginBottom: 12 }}>
+                  Moduli operativi disponibili nella sezione <strong>Moduli</strong> della scheda
+                  paziente dopo la presa in carico. Seleziona (facoltativo) il modulo da aprire
+                  subito dopo la creazione del paziente.
+                </p>
+                <div className="intake-modules-grid" role="list" data-testid="intake-modules-grid">
+                  {CLINICAL_MODULES.map((m) => {
+                    const selected = selectedModuleId === m.id;
+                    return (
+                      <div key={m.id} role="listitem">
+                        <button
+                          type="button"
+                          className={`intake-module-card${selected ? ' intake-module-card--selected' : ''}`}
+                          data-testid={`intake-module-${m.id}`}
+                          aria-pressed={selected}
+                          disabled={!m.available}
+                          onClick={() => setSelectedModuleId((cur) => (cur === m.id ? null : m.id))}
+                        >
+                          <div className="intake-module-card__head">
+                            <span className="intake-module-card__title">{m.label}</span>
+                            <span
+                              className={`status-badge status-badge--${m.available ? 'success' : 'neutral'}`}
+                            >
+                              {m.available ? 'Disponibile' : 'In arrivo'}
+                            </span>
+                          </div>
+                          <p className="intake-module-card__desc">{m.desc}</p>
+                          {selected && (
+                            <p
+                              className="intake-module-card__hint"
+                              data-testid={`intake-module-${m.id}-hint`}
+                            >
+                              Si aprirà dopo la creazione del paziente
+                            </p>
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
-              {step === 2 && (
-                <div data-testid="intake-step-2" data-draft-id={draftId ?? undefined}>
-                  <StepIngresso
-                    value={data.ingresso ?? {}}
-                    onChange={(v) => updateSection('ingresso', v)}
-                  />
-                </div>
-              )}
-              {step === 3 && (
-                <div data-testid="intake-step-3" data-draft-id={draftId ?? undefined}>
-                  <StepClinica
-                    data={data}
-                    onUpdateSection={updateSection}
-                    operatoreNome={operatoreNome}
-                    importedFields={(data._importedFields as string[] | undefined) ?? []}
-                    narrative={data._narrative as Record<string, unknown> | undefined}
-                  />
-                </div>
-              )}
-              {step === 4 && (
-                <div data-testid="intake-step-4" data-draft-id={draftId ?? undefined}>
-                  <p className="cr-empty" style={{ marginBottom: 12 }}>
-                    Moduli operativi disponibili nella sezione <strong>Moduli</strong> della scheda
-                    paziente dopo la presa in carico. Seleziona (facoltativo) il modulo da aprire
-                    subito dopo la creazione del paziente.
-                  </p>
-                  <div
-                    className="intake-modules-grid"
-                    role="list"
-                    data-testid="intake-modules-grid"
-                  >
-                    {CLINICAL_MODULES.map((m) => {
-                      const selected = selectedModuleId === m.id;
-                      return (
-                        <div key={m.id} role="listitem">
-                          <button
-                            type="button"
-                            className={`intake-module-card${selected ? ' intake-module-card--selected' : ''}`}
-                            data-testid={`intake-module-${m.id}`}
-                            aria-pressed={selected}
-                            disabled={!m.available}
-                            onClick={() =>
-                              setSelectedModuleId((cur) => (cur === m.id ? null : m.id))
-                            }
-                          >
-                            <div className="intake-module-card__head">
-                              <span className="intake-module-card__title">{m.label}</span>
-                              <span
-                                className={`status-badge status-badge--${m.available ? 'success' : 'neutral'}`}
-                              >
-                                {m.available ? 'Disponibile' : 'In arrivo'}
-                              </span>
-                            </div>
-                            <p className="intake-module-card__desc">{m.desc}</p>
-                            {selected && (
-                              <p
-                                className="intake-module-card__hint"
-                                data-testid={`intake-module-${m.id}-hint`}
-                              >
-                                Si aprirà dopo la creazione del paziente
-                              </p>
-                            )}
-                          </button>
-                        </div>
-                      );
-                    })}
+              </div>
+            )}
+            {step === 5 && (
+              <div data-draft-id={draftId ?? undefined}>
+                {duplicateWarn && (
+                  <div className="import-modal__warning" role="alert">
+                    <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati
+                    potrebbe già esistere.
+                    <br />
+                    <button
+                      className="btn-secondary"
+                      onClick={() => void handleConfirm(true)}
+                      disabled={submitting}
+                      style={{ marginTop: '0.5rem' }}
+                    >
+                      Crea comunque
+                    </button>
                   </div>
-                </div>
-              )}
-              {step === 5 && (
-                <div data-draft-id={draftId ?? undefined}>
-                  {duplicateWarn && (
-                    <div className="import-modal__warning" role="alert">
-                      <strong>Paziente duplicato rilevato.</strong> Un paziente con questi dati
-                      potrebbe già esistere.
-                      <br />
-                      <button
-                        className="btn-secondary"
-                        onClick={() => void handleConfirm(true)}
-                        disabled={submitting}
-                        style={{ marginTop: '0.5rem' }}
-                      >
-                        Crea comunque
-                      </button>
-                    </div>
-                  )}
-                  {allergyConflictWarn && (
-                    <div className="import-modal__warning" role="alert">
-                      <strong>Allergie contrastanti rilevate.</strong> {submitError}
-                      <br />
-                      <button
-                        className="btn-secondary"
-                        onClick={() => void handleConfirm(false, true)}
-                        disabled={submitting}
-                        style={{ marginTop: '0.5rem' }}
-                      >
-                        Conferma comunque
-                      </button>
-                    </div>
-                  )}
-                  <StepVerifica
-                    data={data}
-                    busy={submitting}
-                    error={allergyConflictWarn ? null : submitError}
-                    onConfirm={() => void handleConfirm(false)}
-                    onUpdateSection={updateSection}
-                  />
-                </div>
-              )}
-            </>
-          )}
-        </div>
-
-        <footer className="import-modal__foot" data-testid="patient-intake-footer">
-          {/* #234: unobtrusive autosave status (accessible, muted; red only on error). */}
-          <span
-            className="import-modal__savestate"
-            role="status"
-            aria-live="polite"
-            data-state={saveState}
-            style={{
-              marginRight: 'auto',
-              alignSelf: 'center',
-              fontSize: '0.8125rem',
-              color: saveState === 'error' ? 'var(--red)' : 'var(--muted, #667085)',
-            }}
-          >
-            {saveState === 'saving' && 'Salvataggio…'}
-            {saveState === 'saved' && 'Salvato'}
-            {saveState === 'error' && 'Errore salvataggio — riprova'}
-          </span>
-          {onBackToDocuments ? (
-            <button className="btn-ghost" onClick={onBackToDocuments}>
-              ← Torna ai documenti
-            </button>
-          ) : (
-            <button className="btn-ghost" onClick={onClose}>
-              Annulla
-            </button>
-          )}
-          <button className="btn-secondary" onClick={handleBack} disabled={isFirst || loading}>
-            ← Indietro
-          </button>
-          <button
-            className="btn-primary"
-            onClick={handleNext}
-            disabled={
-              loading ||
-              !!error ||
-              // #294 (QA F1/F3): lo step 1 NON disabilita più il bottone — il click passa da
-              // handleNext, che con anagrafica invalida imposta submitAttempted e fa comparire
-              // gli errori di campo (incluso il CF). Un bottone grigio senza spiegazione era
-              // feedback irraggiungibile.
-              (isLast && (submitting || !acceptanceComplete()))
-            }
-          >
-            {isLast ? 'Conferma' : 'Avanti →'}
-          </button>
-        </footer>
+                )}
+                {allergyConflictWarn && (
+                  <div className="import-modal__warning" role="alert">
+                    <strong>Allergie contrastanti rilevate.</strong> {submitError}
+                    <br />
+                    <button
+                      className="btn-secondary"
+                      onClick={() => void handleConfirm(false, true)}
+                      disabled={submitting}
+                      style={{ marginTop: '0.5rem' }}
+                    >
+                      Conferma comunque
+                    </button>
+                  </div>
+                )}
+                <StepVerifica
+                  data={data}
+                  busy={submitting}
+                  error={allergyConflictWarn ? null : submitError}
+                  onConfirm={() => void handleConfirm(false)}
+                  onUpdateSection={updateSection}
+                />
+              </div>
+            )}
+          </>
+        )}
       </div>
-    </div>
+
+      <footer className="import-modal__foot" data-testid="patient-intake-footer">
+        {/* #234: unobtrusive autosave status (accessible, muted; red only on error). */}
+        <span
+          className="import-modal__savestate"
+          role="status"
+          aria-live="polite"
+          data-state={saveState}
+          style={{
+            marginRight: 'auto',
+            alignSelf: 'center',
+            fontSize: '0.8125rem',
+            color: saveState === 'error' ? 'var(--red)' : 'var(--muted, #667085)',
+          }}
+        >
+          {saveState === 'saving' && 'Salvataggio…'}
+          {saveState === 'saved' && 'Salvato'}
+          {saveState === 'error' && 'Errore salvataggio — riprova'}
+        </span>
+        {onBackToDocuments ? (
+          <button className="btn-ghost" onClick={onBackToDocuments} disabled={submitting}>
+            ← Torna ai documenti
+          </button>
+        ) : (
+          <button className="btn-ghost" onClick={onClose} disabled={submitting}>
+            Annulla
+          </button>
+        )}
+        <button className="btn-secondary" onClick={handleBack} disabled={isFirst || loading}>
+          ← Indietro
+        </button>
+        <button
+          className="btn-primary"
+          onClick={handleNext}
+          disabled={
+            loading ||
+            !!error ||
+            // #294 (QA F1/F3): lo step 1 NON disabilita più il bottone — il click passa da
+            // handleNext, che con anagrafica invalida imposta submitAttempted e fa comparire
+            // gli errori di campo (incluso il CF). Un bottone grigio senza spiegazione era
+            // feedback irraggiungibile.
+            (isLast && (submitting || !acceptanceComplete()))
+          }
+        >
+          {isLast ? 'Conferma' : 'Avanti →'}
+        </button>
+      </footer>
+    </AccessibleDialogSurface>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, type ReactNode } from 'react';
 
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+const dialogStack: HTMLDivElement[] = [];
 
 interface Props {
   labelledBy: string;
@@ -9,7 +10,9 @@ interface Props {
   onClose: () => void;
   children: ReactNode;
   className?: string;
+  surfaceClassName?: string;
   dismissible?: boolean;
+  closeOnOverlay?: boolean;
 }
 
 export function AccessibleDialogSurface({
@@ -18,7 +21,9 @@ export function AccessibleDialogSurface({
   onClose,
   children,
   className = '',
+  surfaceClassName = 'modal-box',
   dismissible = true,
+  closeOnOverlay = true,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const onCloseRef = useRef(onClose);
@@ -32,10 +37,13 @@ export function AccessibleDialogSurface({
   useEffect(() => {
     const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const dialog = dialogRef.current;
+    if (!dialog) return;
+    dialogStack.push(dialog);
     const initial = dialog?.querySelector<HTMLElement>('[data-dialog-initial-focus]');
     initial?.focus();
 
     function onKeyDown(event: KeyboardEvent) {
+      if (dialogStack.at(-1) !== dialog) return;
       if (event.key === 'Escape' && dismissibleRef.current) {
         event.preventDefault();
         onCloseRef.current();
@@ -68,6 +76,8 @@ export function AccessibleDialogSurface({
     document.addEventListener('keydown', onKeyDown);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
+      const stackIndex = dialogStack.lastIndexOf(dialog);
+      if (stackIndex >= 0) dialogStack.splice(stackIndex, 1);
       if (trigger?.isConnected) trigger.focus();
     };
   }, []);
@@ -76,12 +86,12 @@ export function AccessibleDialogSurface({
     <div
       className="modal-overlay"
       onMouseDown={(event) => {
-        if (dismissible && event.target === event.currentTarget) onClose();
+        if (dismissible && closeOnOverlay && event.target === event.currentTarget) onClose();
       }}
     >
       <div
         ref={dialogRef}
-        className={`modal-box ${className}`.trim()}
+        className={`${surfaceClassName} ${className}`.trim()}
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}
