@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoBed } from '../../icons';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { ClinicalTableSection } from '../operator/cartella/shared';
+import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 
 /* ── API types ─────────────────────────────────────────── */
@@ -120,6 +121,8 @@ export function RoomsManagement() {
   const [saving, setSaving] = useState(false);
 
   const [lettoEdit, setLettoEdit] = useState<{ bedId: string } | null>(null);
+  const [bedSaving, setBedSaving] = useState(false);
+  const bedSaveInFlight = useRef(false);
   const [lettoForm, setLettoForm] = useState<{ stato: string; note: string }>({
     stato: 'libero',
     note: '',
@@ -282,7 +285,9 @@ export function RoomsManagement() {
   }
 
   async function salvaLetto() {
-    if (!lettoEdit) return;
+    if (!lettoEdit || bedSaveInFlight.current) return;
+    bedSaveInFlight.current = true;
+    setBedSaving(true);
     setError(null);
     try {
       const res = await fetch(`${API_URL}/admin/beds/${lettoEdit.bedId}`, {
@@ -302,6 +307,9 @@ export function RoomsManagement() {
       await loadData();
     } catch {
       setError('Errore di rete durante il salvataggio del letto');
+    } finally {
+      bedSaveInFlight.current = false;
+      setBedSaving(false);
     }
   }
 
@@ -496,52 +504,79 @@ export function RoomsManagement() {
 
       {/* Bed edit modal */}
       {lettoEdit && (
-        <div className="modal-overlay" onClick={() => setLettoEdit(null)}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3 className="modal-title">Modifica Letto</h3>
-              <button className="icon-btn" onClick={() => setLettoEdit(null)}>
-                <IcoX />
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="op-form-grid">
-                <div className="form-field">
-                  <label className="form-label">Stato</label>
-                  <select
-                    className="form-select"
-                    value={lettoForm.stato}
-                    onChange={(e) => setLettoForm((p) => ({ ...p, stato: e.target.value }))}
-                  >
-                    <option value="libero">Libero</option>
-                    <option value="manutenzione">Manutenzione</option>
-                  </select>
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Note</label>
-                  <input
-                    className="form-input"
-                    value={lettoForm.note}
-                    maxLength={MAX_FACILITY_NOTE_LENGTH}
-                    onChange={(e) => setLettoForm((p) => ({ ...p, note: e.target.value }))}
-                  />
-                </div>
+        <AccessibleDialogSurface
+          labelledBy="bed-edit-dialog-title"
+          onClose={() => setLettoEdit(null)}
+          dismissible={!bedSaving}
+        >
+          <div className="modal-header">
+            <h3 className="modal-title" id="bed-edit-dialog-title">
+              Modifica letto
+            </h3>
+            <button
+              type="button"
+              className="icon-btn"
+              aria-label="Chiudi modifica letto"
+              data-dialog-initial-focus
+              disabled={bedSaving}
+              onClick={() => setLettoEdit(null)}
+            >
+              <IcoX />
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="op-form-grid">
+              <div className="form-field">
+                <label className="form-label" htmlFor="bed-edit-status">
+                  Stato
+                </label>
+                <select
+                  id="bed-edit-status"
+                  className="form-select"
+                  value={lettoForm.stato}
+                  disabled={bedSaving}
+                  onChange={(e) => setLettoForm((p) => ({ ...p, stato: e.target.value }))}
+                >
+                  <option value="libero">Libero</option>
+                  <option value="manutenzione">Manutenzione</option>
+                </select>
+              </div>
+              <div className="form-field">
+                <label className="form-label" htmlFor="bed-edit-notes">
+                  Note
+                </label>
+                <input
+                  id="bed-edit-notes"
+                  className="form-input"
+                  value={lettoForm.note}
+                  maxLength={MAX_FACILITY_NOTE_LENGTH}
+                  disabled={bedSaving}
+                  onChange={(e) => setLettoForm((p) => ({ ...p, note: e.target.value }))}
+                />
               </div>
             </div>
-            <div className="modal-footer">
-              <button
-                className="btn-secondary"
-                style={{ minHeight: 44 }}
-                onClick={() => setLettoEdit(null)}
-              >
-                Annulla
-              </button>
-              <button className="btn-success" style={{ minHeight: 44 }} onClick={salvaLetto}>
-                <IcoCheck /> Salva
-              </button>
-            </div>
           </div>
-        </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn-secondary"
+              style={{ minHeight: 44 }}
+              disabled={bedSaving}
+              onClick={() => setLettoEdit(null)}
+            >
+              Annulla
+            </button>
+            <button
+              type="button"
+              className="btn-success"
+              style={{ minHeight: 44 }}
+              disabled={bedSaving}
+              onClick={salvaLetto}
+            >
+              <IcoCheck /> {bedSaving ? 'Salvataggio…' : 'Salva'}
+            </button>
+          </div>
+        </AccessibleDialogSurface>
       )}
 
       {/* Filtro reparto */}
