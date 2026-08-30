@@ -1667,6 +1667,7 @@ export default function App() {
 
   // #285: persistiti su DB (upsert per operatore); lo stato locale segue la risposta del server.
   async function saveSchedule(s: ScheduleOperatore) {
+    const mutationEpoch = sessionEpochRef.current;
     try {
       const res = await fetch(`${API_URL}/operators/${s.operatoreId}/schedule`, {
         method: 'PUT',
@@ -1674,10 +1675,13 @@ export default function App() {
         body: JSON.stringify({ turni: s.turni, note: s.note }),
       });
       if (!res.ok) {
-        showToast('Impossibile salvare gli orari');
+        if (mutationEpoch === sessionEpochRef.current) {
+          showToast('Impossibile salvare gli orari');
+        }
         return;
       }
       const saved = (await res.json()) as ScheduleOperatore;
+      if (mutationEpoch !== sessionEpochRef.current) return;
       setSchedules((prev) => {
         const idx = prev.findIndex((x) => x.operatoreId === saved.operatoreId);
         if (idx >= 0) return prev.map((x, i) => (i === idx ? saved : x));
@@ -1688,7 +1692,9 @@ export default function App() {
       setSchedulesLoadError(null);
       showToast('Orari salvati');
     } catch {
-      showToast('Impossibile salvare gli orari');
+      if (mutationEpoch === sessionEpochRef.current) {
+        showToast('Impossibile salvare gli orari');
+      }
     }
   }
 

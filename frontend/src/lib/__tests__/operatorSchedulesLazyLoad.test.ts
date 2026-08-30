@@ -36,3 +36,18 @@ test('schedule reads are abortable, session-safe and retryable', () => {
   assert.match(scheduleSource, /role="alert"/);
   assert.match(scheduleSource, />\s*Riprova\s*</);
 });
+
+test('a schedule save response cannot restore operational data after session rotation', () => {
+  const saveBlock = appSource.split('async function saveSchedule')[1]?.split('// ── Cartella')[0];
+  assert.ok(saveBlock);
+  assert.match(saveBlock, /const mutationEpoch = sessionEpochRef\.current/);
+  assert.match(saveBlock, /if \(mutationEpoch !== sessionEpochRef\.current\) return/);
+  assert.ok(
+    saveBlock.indexOf('if (mutationEpoch !== sessionEpochRef.current) return') <
+      saveBlock.indexOf('setSchedules((prev)'),
+  );
+  assert.match(
+    saveBlock,
+    /catch \{[\s\S]*mutationEpoch === sessionEpochRef\.current[\s\S]*Impossibile salvare gli orari/,
+  );
+});
