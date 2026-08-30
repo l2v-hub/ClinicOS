@@ -11,11 +11,12 @@ import {
 } from '../upload/patient-documents.js';
 import { assertPatientAllowed, assertTenant, canCrossPatientSearch } from './context.js';
 import {
-  asCartella,
-  boundAllergies,
+  MAX_GATEWAY_ALLERGIES,
+  MAX_GATEWAY_ALLERGY_FIELD_LENGTH,
   normalizeSearchText,
   textIncludes,
   nameMatchesAllTokens,
+  type AllergyItem,
   type VitalItem,
 } from './filters.js';
 import {
@@ -93,11 +94,6 @@ interface PatientSearchRow {
   lastName: string;
   medicalRecordNumber: string;
   dateOfBirth: Date;
-}
-
-async function loadCartella(patientId: string) {
-  const c = await prisma.cartella.findUnique({ where: { patientId } });
-  return { cartella: asCartella(c?.data), recordId: c?.id ?? patientId };
 }
 
 function likePattern(value: string): string {
@@ -449,8 +445,65 @@ export async function getPatientAllergies(
 ): Promise<SourcedResult<unknown[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
-  const { cartella } = await loadCartella(patientId);
-  const { data: allergies, truncated } = boundAllergies(cartella.allergie);
+  type AllergyProjectionRow = AllergyItem & {
+    arrayTruncated: boolean;
+    contentTruncated: boolean;
+  };
+  const rows = await prisma.$queryRaw<AllergyProjectionRow[]>(Prisma.sql`
+    SELECT
+      CASE WHEN jsonb_typeof(raw.item->'id') = 'string'
+        THEN left(btrim(left(raw.item->>'id', ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH + 1})),
+          ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}) END AS "id",
+      CASE WHEN jsonb_typeof(raw.item->'allergene') = 'string'
+        THEN left(btrim(left(raw.item->>'allergene', ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH + 1})),
+          ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}) END AS "allergene",
+      CASE WHEN jsonb_typeof(raw.item->'reazione') = 'string'
+        THEN left(btrim(left(raw.item->>'reazione', ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH + 1})),
+          ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}) END AS "reazione",
+      CASE WHEN jsonb_typeof(raw.item->'gravita') = 'string'
+        THEN left(btrim(left(raw.item->>'gravita', ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH + 1})),
+          ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}) END AS "gravita",
+      CASE WHEN jsonb_typeof(raw.item->'documentato') = 'string'
+        THEN left(btrim(left(raw.item->>'documentato', ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH + 1})),
+          ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}) END AS "documentato",
+      chart."arrayTruncated",
+      (COALESCE(length(raw.item->>'id'), 0) > ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}
+        OR COALESCE(length(raw.item->>'allergene'), 0) > ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}
+        OR COALESCE(length(raw.item->>'reazione'), 0) > ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}
+        OR COALESCE(length(raw.item->>'gravita'), 0) > ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH}
+        OR COALESCE(length(raw.item->>'documentato'), 0) > ${MAX_GATEWAY_ALLERGY_FIELD_LENGTH})
+        AS "contentTruncated"
+    FROM (
+      SELECT cartella."data",
+        jsonb_array_length(CASE WHEN jsonb_typeof(cartella."data"->'allergie') = 'array'
+          THEN cartella."data"->'allergie' ELSE '[]'::jsonb END) > ${MAX_GATEWAY_ALLERGIES}
+          AS "arrayTruncated"
+      FROM "Cartella" cartella
+      WHERE cartella."patientId" = ${patientId}
+    ) chart
+    LEFT JOIN LATERAL (
+      SELECT allergy.item, allergy.ordinal
+      FROM jsonb_array_elements(
+        CASE WHEN jsonb_typeof(chart."data"->'allergie') = 'array'
+          THEN chart."data"->'allergie' ELSE '[]'::jsonb END
+      ) WITH ORDINALITY AS allergy(item, ordinal)
+      ORDER BY allergy.ordinal
+      LIMIT ${MAX_GATEWAY_ALLERGIES + 1}
+    ) raw ON true
+    ORDER BY raw.ordinal
+  `);
+  const allergies: AllergyItem[] = [];
+  let truncated = rows.some((row) => row.arrayTruncated);
+  for (const row of rows) {
+    if (allergies.length === MAX_GATEWAY_ALLERGIES) break;
+    truncated ||= row.contentTruncated;
+    const allergy = Object.fromEntries(
+      (['id', 'allergene', 'reazione', 'gravita', 'documentato'] as const)
+        .filter((field) => typeof row[field] === 'string' && row[field]!.length > 0)
+        .map((field) => [field, row[field]]),
+    ) as AllergyItem;
+    if (Object.keys(allergy).length > 0) allergies.push(allergy);
+  }
   const refs = allergies.map((a) =>
     patientFieldSource(patientId, `allergie:${a.allergene ?? ''}`, a.allergene),
   );
