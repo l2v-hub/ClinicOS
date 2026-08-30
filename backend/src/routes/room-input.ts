@@ -83,6 +83,17 @@ export function assignmentLockKeys(patientId: string, bedId: string, roomId: str
   return [`room:${roomId}`, `bed:${bedId}`, `patient:${patientId}`];
 }
 
+/**
+ * Exact overlap predicate for an existing assignment against a validated candidate interval.
+ * `null` end dates are positive infinity; ISO dates retain chronological ordering as strings.
+ */
+export function assignmentOverlapFilter(startDate: string, endDate: string | null) {
+  return {
+    ...(endDate === null ? {} : { startDate: { lte: endDate } }),
+    OR: [{ endDate: null }, { endDate: { gte: startDate } }],
+  };
+}
+
 export function previousIsoDate(value: string): string {
   const date = new Date(`${value}T00:00:00.000Z`);
   date.setUTCDate(date.getUTCDate() - 1);

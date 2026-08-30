@@ -15,6 +15,7 @@ import {
 } from './room-read-model.js';
 import {
   assignmentLockKeys,
+  assignmentOverlapFilter,
   bedWriteLockKeys,
   MAX_ROOM_BEDS,
   parseAssignmentCreate,
@@ -31,13 +32,6 @@ import {
 const adminRouter = Router();
 const patientAssignmentRouter = Router();
 const requireAdmin = requireRole('admin', 'manager');
-const ASSIGNMENT_INTERVAL_SELECT = {
-  id: true,
-  patientId: true,
-  bedId: true,
-  startDate: true,
-  endDate: true,
-} as const;
 
 // Internal control-flow error: thrown inside the assignment transaction to reject overlapping
 // bed periods after the advisory lock is held, and mapped to 409 by the route's catch block.
@@ -70,20 +64,10 @@ patientAssignmentRouter.use((req, res, next) => {
   next();
 });
 
-// ── Helper: check if two date ranges overlap ──────────────────────────────
-// endDate null means "infinity"
-function rangesOverlap(s1: string, e1: string | null, s2: string, e2: string | null): boolean {
-  // s1 <= e2 (or e2 is null) AND s2 <= e1 (or e1 is null)
-  const startBeforeEnd2 = e2 === null || s1 <= e2;
-  const startBeforeEnd1 = e1 === null || s2 <= e1;
-  return startBeforeEnd2 && startBeforeEnd1;
-}
-
 // ── Helper: active assignment filter (endDate is null or >= from) ──────────
 // `from` di default e' oggi ("assegnazioni attive"). Chi verifica la disponibilita' per un
-// periodo passa invece la data di inizio di quel periodo: le assegnazioni chiuse prima non
-// possono sovrapporsi, quindi escluderle nel DB da' lo stesso esito di rangesOverlap senza
-// scaricare lo storico.
+// intervallo arbitrario deve invece usare `assignmentOverlapFilter`, che applica anche il limite
+// superiore sulla data iniziale e impedisce di materializzare assegnazioni future non pertinenti.
 function activeAssignmentFilter(from = new Date().toISOString().slice(0, 10)) {
   return {
     OR: [{ endDate: null }, { endDate: { gte: from } }],
@@ -149,36 +133,19 @@ adminRouter.get('/beds/available', async (req, res) => {
 
   try {
     const beds = await prisma.bed.findMany({
-      where: { stato: { not: 'manutenzione' } },
+      where: {
+        stato: { not: 'manutenzione' },
+        assignments: { none: assignmentOverlapFilter(validStartDate, validEndDate) },
+      },
       select: {
         id: true,
         label: true,
         stato: true,
         roomId: true,
         room: { select: ROOM_LOCATION_SELECT },
-        assignments: {
-          where: activeAssignmentFilter(validStartDate),
-          select: { startDate: true, endDate: true },
-        },
       },
     });
-
-    const available = beds.filter((bed) => {
-      const hasOverlap = bed.assignments.some((a) =>
-        rangesOverlap(a.startDate, a.endDate, validStartDate, validEndDate),
-      );
-      return !hasOverlap;
-    });
-
-    const result = available.map((bed) => ({
-      id: bed.id,
-      label: bed.label,
-      stato: bed.stato,
-      roomId: bed.roomId,
-      room: bed.room,
-    }));
-
-    res.status(200).json(result);
+    res.status(200).json(beds);
   } catch (error) {
     console.error('GET /admin/beds/available error:', error);
     res.status(500).json({ error: 'Errore nel recupero letti disponibili' });
@@ -705,31 +672,24 @@ patientAssignmentRouter.post('/:patientId/room-assignments', async (req: AuthedR
       }
 
       // Check for overlapping assignments on this bed
-      const existingBedAssignments = await tx.patientRoomAssignment.findMany({
-        where: { bedId, ...activeAssignmentFilter(startDate) },
-        select: ASSIGNMENT_INTERVAL_SELECT,
+      const existingBedAssignment = await tx.patientRoomAssignment.findFirst({
+        where: { bedId, ...assignmentOverlapFilter(startDate, endDate) },
+        select: { id: true },
       });
-
-      const hasOverlap = existingBedAssignments.some((a) =>
-        rangesOverlap(a.startDate, a.endDate, startDate, endDate),
-      );
-      if (hasOverlap) {
+      if (existingBedAssignment) {
         throw new BedOverlapError('Il letto è già occupato nel periodo indicato');
       }
 
       // A patient lock alone is not sufficient: finite scheduled stays can overlap too. A prior
       // open stay may be closed for a real move; every other overlap is an explicit conflict.
       const patientAssignments = await tx.patientRoomAssignment.findMany({
-        where: { patientId, ...activeAssignmentFilter(startDate) },
-        select: ASSIGNMENT_INTERVAL_SELECT,
+        where: { patientId, ...assignmentOverlapFilter(startDate, endDate) },
+        select: { id: true, startDate: true, endDate: true },
       });
-      const patientOverlaps = patientAssignments.filter((assignment) =>
-        rangesOverlap(assignment.startDate, assignment.endDate, startDate, endDate),
-      );
-      const closableOpen = patientOverlaps.filter(
+      const closableOpen = patientAssignments.filter(
         (assignment) => assignment.endDate === null && assignment.startDate < startDate,
       );
-      if (patientOverlaps.length !== closableOpen.length) {
+      if (patientAssignments.length !== closableOpen.length) {
         throw new PatientOverlapError('Il paziente ha già un’assegnazione nel periodo indicato');
       }
       if (closableOpen.length > 0) {
@@ -813,25 +773,17 @@ patientAssignmentRouter.put('/:patientId/room-assignments/:assignmentId', async 
         const candidates = await tx.patientRoomAssignment.findMany({
           where: {
             id: { not: assignmentId },
-            OR: [
-              { patientId, ...activeAssignmentFilter(existing.startDate) },
-              { bedId: existing.bedId, ...activeAssignmentFilter(existing.startDate) },
+            AND: [
+              { OR: [{ patientId }, { bedId: existing.bedId }] },
+              assignmentOverlapFilter(existing.startDate, candidateEndDate),
             ],
           },
-          select: ASSIGNMENT_INTERVAL_SELECT,
+          select: { patientId: true, bedId: true },
         });
-        const overlaps = candidates.filter((candidate) =>
-          rangesOverlap(
-            candidate.startDate,
-            candidate.endDate,
-            existing.startDate,
-            candidateEndDate,
-          ),
-        );
-        if (overlaps.some((candidate) => candidate.patientId === patientId)) {
+        if (candidates.some((candidate) => candidate.patientId === patientId)) {
           throw new PatientOverlapError('Il paziente ha già un’assegnazione nel periodo indicato');
         }
-        if (overlaps.some((candidate) => candidate.bedId === existing.bedId)) {
+        if (candidates.some((candidate) => candidate.bedId === existing.bedId)) {
           throw new BedOverlapError('Il letto è già occupato nel periodo indicato');
         }
       }

@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   assignmentLockKeys,
+  assignmentOverlapFilter,
   bedWriteLockKeys,
   isIsoDate,
   MAX_ROOM_NOTE_LENGTH,
@@ -72,4 +73,42 @@ test('assignment advisory locks are prefixed and deterministic', () => {
   ]);
   assert.equal(previousIsoDate('2026-03-01'), '2026-02-28');
   assert.equal(previousIsoDate('2028-03-01'), '2028-02-29');
+});
+
+function filterMatches(
+  existing: { startDate: string; endDate: string | null },
+  filter: ReturnType<typeof assignmentOverlapFilter>,
+): boolean {
+  if ('startDate' in filter && filter.startDate && existing.startDate > filter.startDate.lte) {
+    return false;
+  }
+  const minimumEnd = filter.OR[1].endDate?.gte;
+  return existing.endDate === null || (!!minimumEnd && existing.endDate >= minimumEnd);
+}
+
+test('database overlap filter is equivalent for finite and open intervals', () => {
+  const starts = ['2026-01-01', '2026-01-05', '2026-01-10'];
+  const ends: Array<string | null> = ['2026-01-05', '2026-01-10', '2026-01-15', null];
+
+  for (const existingStart of starts) {
+    for (const existingEnd of ends) {
+      if (existingEnd !== null && existingEnd < existingStart) continue;
+      for (const candidateStart of starts) {
+        for (const candidateEnd of ends) {
+          if (candidateEnd !== null && candidateEnd < candidateStart) continue;
+          const expected =
+            (candidateEnd === null || existingStart <= candidateEnd) &&
+            (existingEnd === null || candidateStart <= existingEnd);
+          assert.equal(
+            filterMatches(
+              { startDate: existingStart, endDate: existingEnd },
+              assignmentOverlapFilter(candidateStart, candidateEnd),
+            ),
+            expected,
+            `${existingStart}/${existingEnd} vs ${candidateStart}/${candidateEnd}`,
+          );
+        }
+      }
+    }
+  }
 });
