@@ -111,6 +111,14 @@ app.use(
   }),
 );
 
+// Public AI routes can return patient names, clinical summaries, source references and action
+// previews. Apply privacy before body parsing and route authentication so successes, denials and
+// parser failures cannot be stored by a browser or intermediary cache.
+app.use('/ai', (_req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-store');
+  next();
+});
+
 export const STANDARD_JSON_LIMIT = '512kb';
 const standardJsonParser = express.json({ limit: STANDARD_JSON_LIMIT });
 app.use((req, res, next) => {
