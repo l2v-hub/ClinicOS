@@ -295,6 +295,8 @@ export default function App() {
   const consegnePageInfoRef = useRef<ConsegnaPageInfo>({ hasMore: false, nextCursor: null });
   const consegneOverviewRequestRef = useRef(0);
   const consegneOverviewAbortRef = useRef<AbortController | null>(null);
+  const clinicalOverviewRequestRef = useRef(0);
+  const clinicalOverviewAbortRef = useRef<AbortController | null>(null);
   const camereRequestSequenceRef = useRef(0);
   const camereAbortControllerRef = useRef<AbortController | null>(null);
   const camereLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
@@ -378,7 +380,10 @@ export default function App() {
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
   // Le dashboard consumano un aggregato di dimensione costante, indipendente dal roster.
   const [clinicalOverview, setClinicalOverview] = useState<ClinicalOverview | null>(null);
-  const [loadingClinicalOverview, setLoadingClinicalOverview] = useState(true);
+  const [clinicalOverviewState, setClinicalOverviewState] = useState<'loading' | 'ready' | 'error'>(
+    'loading',
+  );
+  const loadingClinicalOverview = clinicalOverviewState === 'loading';
   const [appuntamenti, setAppuntamenti] = useState<Appuntamento[]>([]); // SPEC-015 US4: da GET /appointments
   // Senza questo flag l'agenda, prima che la fetch risponda, dichiara "tutti gli slot liberi":
   // su uno strumento clinico e' un'informazione falsa, non solo mancante.
@@ -1147,34 +1152,52 @@ export default function App() {
     [utente],
   );
 
+  const loadClinicalOverview = useCallback(async () => {
+    if (!utente) return;
+    const sessionEpoch = sessionEpochRef.current;
+    const request = ++clinicalOverviewRequestRef.current;
+    clinicalOverviewAbortRef.current?.abort();
+    const controller = new AbortController();
+    clinicalOverviewAbortRef.current = controller;
+    setClinicalOverviewState('loading');
+
+    try {
+      const response = await fetch(`${API_URL}/patients/clinical-summary/overview`, {
+        headers: operatorHeaders(),
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error('overview unavailable');
+      const data = (await response.json()) as ClinicalOverview;
+      if (
+        controller.signal.aborted ||
+        sessionEpoch !== sessionEpochRef.current ||
+        request !== clinicalOverviewRequestRef.current
+      ) {
+        return;
+      }
+      setClinicalOverview(data);
+      setClinicalOverviewState('ready');
+    } catch (error: unknown) {
+      if (
+        (error as { name?: string }).name !== 'AbortError' &&
+        sessionEpoch === sessionEpochRef.current &&
+        request === clinicalOverviewRequestRef.current
+      ) {
+        setClinicalOverview(null);
+        setClinicalOverviewState('error');
+      }
+    } finally {
+      if (request === clinicalOverviewRequestRef.current) {
+        clinicalOverviewAbortRef.current = null;
+      }
+    }
+  }, [utente]);
+
   // ── Fetch constant-size session data ───────────────────────────────────────
 
   useEffect(() => {
     if (!utente) return;
-    const sessionEpoch = sessionEpochRef.current;
-    const sessionController = new AbortController();
-    fetch(`${API_URL}/patients/clinical-summary/overview`, {
-      headers: operatorHeaders(),
-      signal: sessionController.signal,
-    })
-      .then((r) => {
-        if (!r.ok) throw new Error('overview unavailable');
-        return r.json();
-      })
-      .then((data: ClinicalOverview) => {
-        if (sessionEpoch === sessionEpochRef.current) setClinicalOverview(data);
-      })
-      .catch((error: unknown) => {
-        if (
-          (error as { name?: string }).name !== 'AbortError' &&
-          sessionEpoch === sessionEpochRef.current
-        )
-          setClinicalOverview(null);
-      })
-      .finally(() => {
-        if (!sessionController.signal.aborted && sessionEpoch === sessionEpochRef.current)
-          setLoadingClinicalOverview(false);
-      });
+    const clinicalOverviewTimer = window.setTimeout(() => void loadClinicalOverview(), 0);
     const appointmentDay = localIsoDate();
     void loadAppuntamenti({
       from: appointmentDay,
@@ -1184,8 +1207,13 @@ export default function App() {
     // Dashboard receives only a constant-size exact read model; the feed loads on navigation.
     void loadConsegneOverview();
     void loadNotes({ box: 'all', q: '' });
-    return () => sessionController.abort();
-  }, [utente, loadAppuntamenti, loadConsegneOverview, loadNotes]);
+    return () => {
+      window.clearTimeout(clinicalOverviewTimer);
+      clinicalOverviewRequestRef.current += 1;
+      clinicalOverviewAbortRef.current?.abort();
+      clinicalOverviewAbortRef.current = null;
+    };
+  }, [utente, loadAppuntamenti, loadClinicalOverview, loadConsegneOverview, loadNotes]);
 
   const needsOperatorDirectory = !!utente && OPERATOR_DIRECTORY_NAV_KEYS.has(navKey);
   useEffect(() => {
@@ -1328,6 +1356,9 @@ export default function App() {
     consegneAbortControllerRef.current?.abort();
     consegneOverviewRequestRef.current += 1;
     consegneOverviewAbortRef.current?.abort();
+    clinicalOverviewRequestRef.current += 1;
+    clinicalOverviewAbortRef.current?.abort();
+    clinicalOverviewAbortRef.current = null;
     camereRequestSequenceRef.current += 1;
     camereAbortControllerRef.current?.abort();
     camereAbortControllerRef.current = null;
@@ -1378,7 +1409,8 @@ export default function App() {
       role: resolvedUser.ruolo,
       accessToken: accessToken ?? undefined,
     });
-    setLoadingClinicalOverview(true);
+    setClinicalOverview(null);
+    setClinicalOverviewState('loading');
     setUtente(resolvedUser);
     // The mount effect above already parsed a dettaglio-paziente/<id> hash (set before login,
     // since there's no session persistence — every reload hits the role-picker first) and left
@@ -1404,6 +1436,9 @@ export default function App() {
     consegneAbortControllerRef.current?.abort();
     consegneOverviewRequestRef.current += 1;
     consegneOverviewAbortRef.current?.abort();
+    clinicalOverviewRequestRef.current += 1;
+    clinicalOverviewAbortRef.current?.abort();
+    clinicalOverviewAbortRef.current = null;
     camereRequestSequenceRef.current += 1;
     camereAbortControllerRef.current?.abort();
     camereAbortControllerRef.current = null;
@@ -1454,7 +1489,7 @@ export default function App() {
     setCurrentOperator(null);
     clearCachedGet();
     setClinicalOverview(null);
-    setLoadingClinicalOverview(true);
+    setClinicalOverviewState('loading');
     setPazienteSelezionato(null);
     pendingPazienteRestoreIdRef.current = null;
     setRestoringPazienteFromHash(false);
@@ -2577,6 +2612,8 @@ export default function App() {
                       onOpenConsegneAperte={openConsegneAperte}
                       onSelectPaziente={goToPazienteByNome}
                       clinicalOverview={clinicalOverview}
+                      clinicalOverviewState={clinicalOverviewState}
+                      onRetryClinicalOverview={() => void loadClinicalOverview()}
                     />
                   )}
                   {!isAdmin && navKey === 'pazienti' && (

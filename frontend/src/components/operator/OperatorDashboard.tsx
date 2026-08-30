@@ -32,6 +32,8 @@ interface OperatorDashboardProps {
   onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   clinicalOverview?: ClinicalOverview | null;
+  clinicalOverviewState: 'loading' | 'ready' | 'error';
+  onRetryClinicalOverview: () => void;
 }
 
 const STATO_LABEL: Record<string, string> = {
@@ -55,6 +57,8 @@ export function OperatorDashboard({
   onOpenConsegneAperte,
   onSelectPaziente,
   clinicalOverview = null,
+  clinicalOverviewState,
+  onRetryClinicalOverview,
 }: OperatorDashboardProps) {
   const consegnaSummary = consegneOverview?.summary;
   const urgenti = consegneOverview?.urgentPreview ?? [];
@@ -72,6 +76,8 @@ export function OperatorDashboard({
   const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
   const allergieGravi = clinicalOverview?.allergieGravi ?? 0;
   const pazientiRicoverati = clinicalOverview?.ricoverati ?? 0;
+  const clinicalOverviewReady = clinicalOverviewState === 'ready' && clinicalOverview !== null;
+  const overviewValue = (value: number): number | string => (clinicalOverviewReady ? value : '—');
 
   // Avanzamento terapie / consegne (dati reali)
   const terapieTotali = clinicalOverview?.terapieTotali ?? 0;
@@ -113,6 +119,18 @@ export function OperatorDashboard({
               ? 'Aggiornamento consegne non riuscito: sono mostrati gli ultimi dati disponibili.'
               : 'Riepilogo consegne non disponibile. Apri Consegne per riprovare.'}
           </span>
+        </div>
+      )}
+      {clinicalOverviewState === 'error' && (
+        <div className="coverage-alert" role="alert">
+          <IcoWarning />
+          <span>
+            <strong>Riepilogo clinico non disponibile.</strong> I valori non verificati sono
+            indicati con un trattino.
+          </span>
+          <button className="link-btn" type="button" onClick={onRetryClinicalOverview}>
+            Riprova <IcoArrow />
+          </button>
         </div>
       )}
       {urgentCount !== undefined && urgentCount > 0 && (
@@ -243,146 +261,168 @@ export function OperatorDashboard({
       )}
 
       {/* Clinical KPI band — banda alert clinici in cima */}
-      {clinicalOverview !== null && (
-        <div className="kpi-alert-grid">
-          <div
-            className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onNavigate('parametri-multipaziente')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onNavigate('parametri-multipaziente');
-              }
-            }}
-            title="Vai a Parametri"
-          >
-            <div className="kpi-alert-card__top">
-              <span className="kpi-alert-card__ico">
-                <IcoActivity />
-              </span>
-              <span className="kpi-alert-card__chevron">
-                <IcoChevronRight />
-              </span>
-            </div>
-            <span className="kpi-alert-card__val">{critici}</span>
-            <span className="kpi-alert-card__lbl">Parametri critici</span>
-            {critici === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
-          </div>
-          <div
-            className={`kpi-alert-card${rischiAlti > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onNavigate('pazienti')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onNavigate('pazienti');
-              }
-            }}
-            title="Vai a Pazienti"
-          >
-            <div className="kpi-alert-card__top">
-              <span className="kpi-alert-card__ico">
-                <IcoShield />
-              </span>
-              <span className="kpi-alert-card__chevron">
-                <IcoChevronRight />
-              </span>
-            </div>
-            <span className="kpi-alert-card__val">{rischiAlti}</span>
-            <span className="kpi-alert-card__lbl">Rischi alti/critici</span>
-            {rischiAlti === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
-          </div>
-          <div
-            className={`kpi-alert-card${allergieGravi > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onNavigate('pazienti')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onNavigate('pazienti');
-              }
-            }}
-            title="Vai a Pazienti"
-          >
-            <div className="kpi-alert-card__top">
-              <span className="kpi-alert-card__ico">
-                <IcoWarning />
-              </span>
-              <span className="kpi-alert-card__chevron">
-                <IcoChevronRight />
-              </span>
-            </div>
-            <span className="kpi-alert-card__val">{allergieGravi}</span>
-            <span className="kpi-alert-card__lbl">Allergie gravi</span>
-            {allergieGravi === 0 && <span className="kpi-alert-card__ok">Nessuna criticità</span>}
-          </div>
-          <div
-            className="kpi-alert-card kpi-alert-card--blue"
-            role="button"
-            tabIndex={0}
-            onClick={() => onNavigate('pazienti')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onNavigate('pazienti');
-              }
-            }}
-            title="Vai a Pazienti"
-          >
-            <div className="kpi-alert-card__top">
-              <span className="kpi-alert-card__ico">
-                <IcoBed />
-              </span>
-              <span className="kpi-alert-card__chevron">
-                <IcoChevronRight />
-              </span>
-            </div>
-            <span className="kpi-alert-card__val">{pazientiRicoverati}</span>
-            <span className="kpi-alert-card__lbl">Ricoverati attivi</span>
-          </div>
-          <div
-            className={`kpi-alert-card${
-              somministrazioni.inCorso
-                ? ' kpi-alert-card--blue'
-                : somministrazioni.inRitardo > 0
-                  ? ' kpi-alert-card--red'
-                  : ' kpi-alert-card--green'
-            }`}
-            role="button"
-            tabIndex={0}
-            onClick={() => onNavigate('agenda-operatore')}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onNavigate('agenda-operatore');
-              }
-            }}
-            title="Vai a Agenda"
-          >
-            <div className="kpi-alert-card__top">
-              <span className="kpi-alert-card__ico">
-                <IcoPill />
-              </span>
-              <span className="kpi-alert-card__chevron">
-                <IcoChevronRight />
-              </span>
-            </div>
-            <span className="kpi-alert-card__val">
-              {somministrazioni.inCorso
-                ? '—'
-                : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`}
+      <div className="kpi-alert-grid" aria-busy={clinicalOverviewState === 'loading'}>
+        <div
+          className={`kpi-alert-card${
+            !clinicalOverviewReady
+              ? ' kpi-alert-card--blue'
+              : critici > 0
+                ? ' kpi-alert-card--red'
+                : ' kpi-alert-card--green'
+          }`}
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate('parametri-multipaziente')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onNavigate('parametri-multipaziente');
+            }
+          }}
+          title="Vai a Parametri"
+        >
+          <div className="kpi-alert-card__top">
+            <span className="kpi-alert-card__ico">
+              <IcoActivity />
             </span>
-            <span className="kpi-alert-card__lbl">Somministrazioni in ritardo</span>
-            {!somministrazioni.inCorso && somministrazioni.inRitardo === 0 && (
-              <span className="kpi-alert-card__ok">Nessuna criticità</span>
-            )}
+            <span className="kpi-alert-card__chevron">
+              <IcoChevronRight />
+            </span>
           </div>
+          <span className="kpi-alert-card__val">{overviewValue(critici)}</span>
+          <span className="kpi-alert-card__lbl">Parametri critici</span>
+          {clinicalOverviewReady && critici === 0 && (
+            <span className="kpi-alert-card__ok">Nessuna criticità</span>
+          )}
         </div>
-      )}
+        <div
+          className={`kpi-alert-card${
+            !clinicalOverviewReady
+              ? ' kpi-alert-card--blue'
+              : rischiAlti > 0
+                ? ' kpi-alert-card--amber'
+                : ' kpi-alert-card--green'
+          }`}
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate('pazienti')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onNavigate('pazienti');
+            }
+          }}
+          title="Vai a Pazienti"
+        >
+          <div className="kpi-alert-card__top">
+            <span className="kpi-alert-card__ico">
+              <IcoShield />
+            </span>
+            <span className="kpi-alert-card__chevron">
+              <IcoChevronRight />
+            </span>
+          </div>
+          <span className="kpi-alert-card__val">{overviewValue(rischiAlti)}</span>
+          <span className="kpi-alert-card__lbl">Rischi alti/critici</span>
+          {clinicalOverviewReady && rischiAlti === 0 && (
+            <span className="kpi-alert-card__ok">Nessuna criticità</span>
+          )}
+        </div>
+        <div
+          className={`kpi-alert-card${
+            !clinicalOverviewReady
+              ? ' kpi-alert-card--blue'
+              : allergieGravi > 0
+                ? ' kpi-alert-card--amber'
+                : ' kpi-alert-card--green'
+          }`}
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate('pazienti')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onNavigate('pazienti');
+            }
+          }}
+          title="Vai a Pazienti"
+        >
+          <div className="kpi-alert-card__top">
+            <span className="kpi-alert-card__ico">
+              <IcoWarning />
+            </span>
+            <span className="kpi-alert-card__chevron">
+              <IcoChevronRight />
+            </span>
+          </div>
+          <span className="kpi-alert-card__val">{overviewValue(allergieGravi)}</span>
+          <span className="kpi-alert-card__lbl">Allergie gravi</span>
+          {clinicalOverviewReady && allergieGravi === 0 && (
+            <span className="kpi-alert-card__ok">Nessuna criticità</span>
+          )}
+        </div>
+        <div
+          className="kpi-alert-card kpi-alert-card--blue"
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate('pazienti')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onNavigate('pazienti');
+            }
+          }}
+          title="Vai a Pazienti"
+        >
+          <div className="kpi-alert-card__top">
+            <span className="kpi-alert-card__ico">
+              <IcoBed />
+            </span>
+            <span className="kpi-alert-card__chevron">
+              <IcoChevronRight />
+            </span>
+          </div>
+          <span className="kpi-alert-card__val">{overviewValue(pazientiRicoverati)}</span>
+          <span className="kpi-alert-card__lbl">Ricoverati attivi</span>
+        </div>
+        <div
+          className={`kpi-alert-card${
+            somministrazioni.inCorso
+              ? ' kpi-alert-card--blue'
+              : somministrazioni.inRitardo > 0
+                ? ' kpi-alert-card--red'
+                : ' kpi-alert-card--green'
+          }`}
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate('agenda-operatore')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onNavigate('agenda-operatore');
+            }
+          }}
+          title="Vai a Agenda"
+        >
+          <div className="kpi-alert-card__top">
+            <span className="kpi-alert-card__ico">
+              <IcoPill />
+            </span>
+            <span className="kpi-alert-card__chevron">
+              <IcoChevronRight />
+            </span>
+          </div>
+          <span className="kpi-alert-card__val">
+            {somministrazioni.inCorso
+              ? '—'
+              : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`}
+          </span>
+          <span className="kpi-alert-card__lbl">Somministrazioni in ritardo</span>
+          {!somministrazioni.inCorso && somministrazioni.inRitardo === 0 && (
+            <span className="kpi-alert-card__ok">Nessuna criticità</span>
+          )}
+        </div>
+      </div>
 
       {/* Stat cards — KPI grandi e cliccabili */}
       <div className="stats-grid">
@@ -391,7 +431,7 @@ export function OperatorDashboard({
             key: 'pazienti' as NavKey,
             mod: 'blue',
             label: 'I Miei Pazienti',
-            value: loadingPazienti ? '—' : totalePazienti,
+            value: loadingPazienti || clinicalOverviewState !== 'ready' ? '—' : totalePazienti,
             cta: 'Lista pazienti',
           },
           {
