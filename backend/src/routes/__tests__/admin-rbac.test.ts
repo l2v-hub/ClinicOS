@@ -101,6 +101,11 @@ test('invalid room, bed and assignment input returns 400 before Prisma', async (
       headers: MANAGER_HEADERS,
       body: JSON.stringify({ endDate: '29/08/2026' }),
     }),
+    fetch(`${base}/operators/operator-x/schedule`, {
+      method: 'PUT',
+      headers: MANAGER_HEADERS,
+      body: JSON.stringify({ turni: [] }),
+    }),
   ];
 
   for (const response of await Promise.all(requests)) {

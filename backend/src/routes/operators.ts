@@ -1,6 +1,13 @@
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
+import type { Prisma } from '@prisma/client';
 import { requireOperator, requireRole } from '../ai/auth.js';
+import {
+  OperatorScheduleInputError,
+  boundStoredOperatorSchedules,
+  operatorScheduleListQuery,
+  parseOperatorScheduleInput,
+} from '../operators/schedule-contract.js';
 
 // Fase 1b: real CRUD for the admin "Gestione Operatori" screen (was a client-side mock).
 // An "operatore" in the UI is a User (identity: fullName/email/isActive) + an Operator row
@@ -141,13 +148,15 @@ operatorsRouter.get('/directory', async (_req, res) => {
 // private schedule notes are omitted from this compatibility response.
 operatorsRouter.get('/directory/schedules', async (_req, res) => {
   try {
-    const rows = await prisma.operatorSchedule.findMany();
-    res.status(200).json(
-      rows.map((r) => {
-        const data = (r.data ?? {}) as { turni?: unknown };
-        return { id: r.id, operatoreId: r.operatorId, turni: data.turni ?? [], note: '' };
-      }),
-    );
+    const rows = await prisma.operatorSchedule.findMany(operatorScheduleListQuery());
+    const result = boundStoredOperatorSchedules(rows, false);
+    if (result.overflow) {
+      res.status(409).json({ error: 'Elenco orari oltre il limite: è richiesta la paginazione' });
+      return;
+    }
+    if (result.invalidRows > 0)
+      console.warn(`GET /operators/directory/schedules omitted ${result.invalidRows} invalid rows`);
+    res.status(200).json(result.items);
   } catch (error) {
     console.error('GET /operators/directory/schedules error:', error);
     res.status(500).json({ error: 'Errore nel recupero turni operatori' });
@@ -176,13 +185,15 @@ operatorsRouter.get('/', async (_req, res) => {
 // GET /operators/schedules (named route BEFORE parameterized)
 operatorsRouter.get('/schedules', async (_req, res) => {
   try {
-    const rows = await prisma.operatorSchedule.findMany();
-    res.status(200).json(
-      rows.map((r) => {
-        const d = (r.data ?? {}) as { turni?: unknown; note?: string };
-        return { id: r.id, operatoreId: r.operatorId, turni: d.turni ?? [], note: d.note ?? '' };
-      }),
-    );
+    const rows = await prisma.operatorSchedule.findMany(operatorScheduleListQuery());
+    const result = boundStoredOperatorSchedules(rows, true);
+    if (result.overflow) {
+      res.status(409).json({ error: 'Elenco orari oltre il limite: è richiesta la paginazione' });
+      return;
+    }
+    if (result.invalidRows > 0)
+      console.warn(`GET /operators/schedules omitted ${result.invalidRows} invalid rows`);
+    res.status(200).json(result.items);
   } catch (error) {
     console.error('GET /operators/schedules error:', error);
     res.status(500).json({ error: 'Errore nel recupero orari operatori' });
@@ -191,23 +202,35 @@ operatorsRouter.get('/schedules', async (_req, res) => {
 
 // PUT /operators/:operatorId/schedule  { turni, note }
 operatorsRouter.put('/:operatorId/schedule', async (req, res) => {
-  const { operatorId } = req.params;
-  const body = req.body as { turni?: unknown; note?: string };
-  if (!Array.isArray(body.turni)) {
-    res.status(400).json({ error: 'Campo obbligatorio: turni (array)' });
-    return;
+  const rawOperatorId = req.params.operatorId;
+  const operatorId = Array.isArray(rawOperatorId) ? (rawOperatorId[0] ?? '') : rawOperatorId;
+  let data;
+  try {
+    data = parseOperatorScheduleInput(operatorId, req.body);
+  } catch (error) {
+    if (error instanceof OperatorScheduleInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    throw error;
   }
   try {
-    const operator = await prisma.operator.findUnique({ where: { id: operatorId } });
+    const operator = await prisma.operator.findUnique({
+      where: { id: operatorId },
+      select: { id: true },
+    });
     if (!operator) {
       res.status(404).json({ error: 'Operatore non trovato' });
       return;
     }
-    const data = { turni: body.turni, note: body.note ?? '' };
+    const storedData = {
+      turni: data.turni.map((shift) => ({ ...shift })),
+      note: data.note,
+    } satisfies Prisma.InputJsonObject;
     const row = await prisma.operatorSchedule.upsert({
       where: { operatorId },
-      update: { data },
-      create: { operatorId, data },
+      update: { data: storedData },
+      create: { operatorId, data: storedData },
     });
     console.log(`PUT /operators/${operatorId}/schedule → saved`);
     res

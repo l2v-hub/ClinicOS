@@ -15,6 +15,7 @@ interface OperatorScheduleProps {
 const ORA_OPTIONS = Array.from({ length: 24 }, (_, h) =>
   ['00', '30'].map((m) => `${String(h).padStart(2, '0')}:${m}`),
 ).flat();
+export const MAX_OPERATOR_SCHEDULE_NOTE_LENGTH = 2000;
 
 export function OperatorSchedule({
   operatori,
@@ -255,15 +256,23 @@ export function OperatorSchedule({
               </div>
               {editing && (
                 <div className="form-field" style={{ marginTop: 14 }}>
-                  <label className="form-label">Note</label>
+                  <label className="form-label" htmlFor="operator-schedule-note">
+                    Note
+                  </label>
                   <input
+                    id="operator-schedule-note"
                     className="form-input"
                     value={editSchedule?.note ?? ''}
                     onChange={(e) =>
                       setEditSchedule((s) => (s ? { ...s, note: e.target.value } : s))
                     }
+                    maxLength={MAX_OPERATOR_SCHEDULE_NOTE_LENGTH}
+                    aria-describedby="operator-schedule-note-limit"
                     placeholder="Note sull'orario…"
                   />
+                  <small id="operator-schedule-note-limit" className="form-hint" aria-live="polite">
+                    {editSchedule?.note.length ?? 0}/{MAX_OPERATOR_SCHEDULE_NOTE_LENGTH} caratteri
+                  </small>
                 </div>
               )}
               {!editing && displaySchedule.note && (
