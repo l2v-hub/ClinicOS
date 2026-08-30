@@ -52,6 +52,16 @@ test('AUTH_MODE is fail-closed when absent, invalid, entra-unimplemented, or dem
     'disabled',
   );
   assert.equal(
+    documentAuthMode({
+      AUTH_MODE: 'demo',
+      NODE_ENV: 'production',
+      ALLOW_PRODUCTION_DEMO_AUTH: 'true',
+      DEMO_DATASET_ID: 'synthetic-v1',
+      DEMO_AUTH_EXPIRES_AT: '2099-01-01T00:00:00.000Z',
+    } as NodeJS.ProcessEnv),
+    'demo',
+  );
+  assert.equal(
     documentAuthMode({ AUTH_MODE: 'demo', NODE_ENV: 'test' } as NodeJS.ProcessEnv),
     'demo',
   );

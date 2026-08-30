@@ -108,6 +108,42 @@ test('operatorAuthMode: demo requires explicit development/test opt-in', () => {
     'disabled',
   );
   assert.equal(
+    operatorAuthMode({
+      NODE_ENV: 'production',
+      AUTH_MODE: 'demo',
+      ALLOW_PRODUCTION_DEMO_AUTH: 'true',
+      DEMO_DATASET_ID: 'synthetic-v1',
+      DEMO_AUTH_EXPIRES_AT: '2099-01-01T00:00:00.000Z',
+    } as NodeJS.ProcessEnv),
+    'demo',
+  );
+  for (const incomplete of [
+    {
+      ALLOW_PRODUCTION_DEMO_AUTH: 'false',
+      DEMO_DATASET_ID: 'synthetic-v1',
+      DEMO_AUTH_EXPIRES_AT: '2099-01-01T00:00:00.000Z',
+    },
+    {
+      ALLOW_PRODUCTION_DEMO_AUTH: 'true',
+      DEMO_DATASET_ID: 'production',
+      DEMO_AUTH_EXPIRES_AT: '2099-01-01T00:00:00.000Z',
+    },
+    {
+      ALLOW_PRODUCTION_DEMO_AUTH: 'true',
+      DEMO_DATASET_ID: 'synthetic-v1',
+      DEMO_AUTH_EXPIRES_AT: '2020-01-01T00:00:00.000Z',
+    },
+  ]) {
+    assert.equal(
+      operatorAuthMode({
+        NODE_ENV: 'production',
+        AUTH_MODE: 'demo',
+        ...incomplete,
+      } as NodeJS.ProcessEnv),
+      'disabled',
+    );
+  }
+  assert.equal(
     operatorAuthMode({ NODE_ENV: 'staging', AUTH_MODE: 'demo' } as NodeJS.ProcessEnv),
     'disabled',
   );
@@ -160,6 +196,60 @@ test('requireOperator: spoofed demo headers fail closed in production', () => {
     else process.env.NODE_ENV = previousNodeEnv;
     if (previousAuthMode === undefined) delete process.env.AUTH_MODE;
     else process.env.AUTH_MODE = previousAuthMode;
+  }
+});
+
+test('requireOperator: production demo accepts only fixed identities with server-owned roles', () => {
+  const previous = {
+    nodeEnv: process.env.NODE_ENV,
+    authMode: process.env.AUTH_MODE,
+    allow: process.env.ALLOW_PRODUCTION_DEMO_AUTH,
+    dataset: process.env.DEMO_DATASET_ID,
+    expires: process.env.DEMO_AUTH_EXPIRES_AT,
+  };
+  process.env.NODE_ENV = 'production';
+  process.env.AUTH_MODE = 'demo';
+  process.env.ALLOW_PRODUCTION_DEMO_AUTH = 'true';
+  process.env.DEMO_DATASET_ID = 'synthetic-v1';
+  process.env.DEMO_AUTH_EXPIRES_AT = '2099-01-01T00:00:00.000Z';
+  try {
+    const allowed = mockReq({ 'X-Operator-Id': 'op1', 'X-Operator-Role': 'operatore' });
+    let nexted = false;
+    requireOperator(allowed as never, mockRes() as never, () => {
+      nexted = true;
+    });
+    assert.equal(nexted, true);
+    assert.deepEqual(allowed.operator, {
+      id: 'SEED-OP-001',
+      role: 'operatore',
+      name: 'Laura Bianchi',
+    });
+
+    for (const headers of [
+      { 'X-Operator-Id': 'attacker', 'X-Operator-Role': 'admin' },
+      { 'X-Operator-Id': 'op1', 'X-Operator-Role': 'admin' },
+      { 'X-Operator-Id': 'admin1', 'X-Operator-Role': 'operatore' },
+    ]) {
+      const req = mockReq(headers);
+      const res = mockRes();
+      let rejectedNext = false;
+      requireOperator(req as never, res as never, () => {
+        rejectedNext = true;
+      });
+      assert.equal(rejectedNext, false);
+      assert.equal(res._out.code, 403);
+      assert.equal(req.operator, undefined);
+    }
+  } finally {
+    const restore = (key: string, value: string | undefined) => {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    };
+    restore('NODE_ENV', previous.nodeEnv);
+    restore('AUTH_MODE', previous.authMode);
+    restore('ALLOW_PRODUCTION_DEMO_AUTH', previous.allow);
+    restore('DEMO_DATASET_ID', previous.dataset);
+    restore('DEMO_AUTH_EXPIRES_AT', previous.expires);
   }
 });
 

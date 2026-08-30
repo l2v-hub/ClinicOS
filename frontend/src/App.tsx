@@ -267,6 +267,12 @@ function mapAppointmentDTO(r: Record<string, unknown>): Appuntamento {
 
 export default function App() {
   const [utente, setUtente] = useState<UtenteApp | null>(null);
+  const [authStatus, setAuthStatus] = useState<{
+    mode: 'entra' | 'demo' | 'disabled';
+    temporaryDemo: boolean;
+  } | null>(null);
+  const [loginPending, setLoginPending] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
   const [navKey, setNavKey] = useState<NavKey>('admin-dashboard');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [aiOpen, setAiOpen] = useState(false);
@@ -283,6 +289,23 @@ export default function App() {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3500);
   }
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`${API_URL}/auth/status`, { signal: controller.signal, cache: 'no-store' })
+      .then(async (response) => {
+        if (!response.ok) throw new Error('auth_status_unavailable');
+        return response.json() as Promise<{
+          mode: 'entra' | 'demo' | 'disabled';
+          temporaryDemo: boolean;
+        }>;
+      })
+      .then(setAuthStatus)
+      .catch((error: unknown) => {
+        if (!(error instanceof DOMException && error.name === 'AbortError')) setAuthStatus(null);
+      });
+    return () => controller.abort();
+  }, []);
 
   // Navigation history tracking
   const prevNavKeyRef = useRef<NavKey | null>(null);
@@ -1414,6 +1437,9 @@ export default function App() {
   // ── Auth ────────────────────────────────────────────────────────────────────
 
   async function handleLogin(u: UtenteApp) {
+    if (loginPending) return;
+    setLoginPending(true);
+    setLoginError(null);
     sessionEpochRef.current += 1;
     appointmentRequestSequenceRef.current += 1;
     therapyRequestSequenceRef.current += 1;
@@ -1447,49 +1473,61 @@ export default function App() {
     // In Entra mode the redirect/silent flow completes before any clinical fetch starts.
     // The selected card is only a demo/local hint: with a token, id and UI role are replaced by
     // the identity resolved server-side so an operator cannot unlock admin UI by choosing a card.
-    const accessToken = await acquireApiToken();
-    let resolvedUser = u;
-    if (accessToken) {
+    try {
+      const accessToken = await acquireApiToken();
+      const identityHeaders: Record<string, string> = accessToken
+        ? { Authorization: `Bearer ${accessToken}` }
+        : { 'X-Operator-Id': u.id, 'X-Operator-Role': u.ruolo };
       const identityResponse = await fetch(`${API_URL}/auth/me`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: identityHeaders,
       });
       if (!identityResponse.ok) {
-        showToast('Identità non autorizzata in ClinicOS');
+        const payload = (await identityResponse.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        setLoginError(payload?.error ?? 'Identità non autorizzata in ClinicOS');
         return;
       }
       const identity = (await identityResponse.json()) as {
         id: string;
         role: string;
         name?: string;
+        authMode: 'entra' | 'demo' | 'disabled';
+        temporaryDemo: boolean;
       };
+      setAuthStatus({ mode: identity.authMode, temporaryDemo: identity.temporaryDemo });
       const resolvedRole = ['admin', 'manager'].includes(identity.role.toLowerCase())
         ? 'admin'
         : 'operatore';
-      resolvedUser = {
+      const resolvedUser: UtenteApp = {
         ...u,
         id: identity.id,
         ruolo: resolvedRole,
         nome: identity.name?.trim() || u.nome,
       };
+      setCurrentOperator({
+        id: resolvedUser.id,
+        role: resolvedUser.ruolo,
+        accessToken: accessToken ?? undefined,
+      });
+      setClinicalOverview(null);
+      setClinicalOverviewState('loading');
+      setUtente(resolvedUser);
+      // The mount effect above already parsed a dettaglio-paziente/<id> hash (set before login,
+      // since there's no session persistence — every reload hits the role-picker first) and left
+      // pendingPazienteRestoreIdRef set for the resolve effect below to pick up once the patients
+      // list loads. Read window.location.hash directly here (rather than that ref) so this check
+      // never depends on React's effect/commit timing relative to the login click.
+      const currentHash = window.location.hash.replace('#/', '');
+      if (currentHash.startsWith('dettaglio-paziente/')) return;
+      const key: NavKey = resolvedUser.ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard';
+      window.history.replaceState({ navKey: key }, '', `#/${key}`);
+      setNavKey(key);
+    } catch {
+      setLoginError('Servizio di autenticazione non raggiungibile');
+    } finally {
+      setLoginPending(false);
     }
-    setCurrentOperator({
-      id: resolvedUser.id,
-      role: resolvedUser.ruolo,
-      accessToken: accessToken ?? undefined,
-    });
-    setClinicalOverview(null);
-    setClinicalOverviewState('loading');
-    setUtente(resolvedUser);
-    // The mount effect above already parsed a dettaglio-paziente/<id> hash (set before login,
-    // since there's no session persistence — every reload hits the role-picker first) and left
-    // pendingPazienteRestoreIdRef set for the resolve effect below to pick up once the patients
-    // list loads. Read window.location.hash directly here (rather than that ref) so this check
-    // never depends on React's effect/commit timing relative to the login click.
-    const currentHash = window.location.hash.replace('#/', '');
-    if (currentHash.startsWith('dettaglio-paziente/')) return;
-    const key: NavKey = resolvedUser.ruolo === 'admin' ? 'admin-dashboard' : 'operator-dashboard';
-    window.history.replaceState({ navKey: key }, '', `#/${key}`);
-    setNavKey(key);
   }
 
   function handleLogout() {
@@ -2404,7 +2442,15 @@ export default function App() {
 
   // ── Login gate ──────────────────────────────────────────────────────────────
 
-  if (!utente) return <Login onLogin={handleLogin} />;
+  if (!utente)
+    return (
+      <Login
+        onLogin={handleLogin}
+        demoMode={authStatus?.temporaryDemo === true}
+        loading={loginPending}
+        error={loginError}
+      />
+    );
 
   // ── Render ───────────────────────────────────────────────────────────────────
 
@@ -2454,6 +2500,12 @@ export default function App() {
 
       {/* Main */}
       <div className="main-area-clean">
+        {authStatus?.temporaryDemo && (
+          <div className="demo-mode-chip" role="status">
+            <strong>DEMO</strong>
+            <span>Solo dati sintetici · azioni persistenti</span>
+          </div>
+        )}
         {/* Compact Topbar */}
         <div className="compact-topbar">
           <button

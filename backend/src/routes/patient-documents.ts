@@ -7,7 +7,7 @@
 
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import multer from 'multer';
-import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { operatorAuthMode, requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { entraConfig, requireEntraOperator } from '../lib/entra-auth.js';
 import {
   listPatientDocuments,
@@ -50,12 +50,9 @@ function mimeFamily(m: string): string {
 
 export type DocumentAuthMode = 'demo' | 'entra' | 'disabled';
 
-/** Fail closed: demo is explicit and non-production; entra requires complete tenant config. */
+/** Fail closed: production demo additionally requires ALLOW_PRODUCTION_DEMO_AUTH=true. */
 export function documentAuthMode(env: NodeJS.ProcessEnv = process.env): DocumentAuthMode {
-  const raw = (env.AUTH_MODE || '').trim().toLowerCase();
-  if (raw === 'demo' && env.NODE_ENV !== 'production') return 'demo';
-  if (raw === 'entra') return 'entra';
-  return 'disabled';
+  return operatorAuthMode(env);
 }
 
 /**
@@ -64,7 +61,8 @@ export function documentAuthMode(env: NodeJS.ProcessEnv = process.env): Document
  *   server-side identity mapping — the ONLY production-grade mode. Struttura scope (PO decision):
  *   a mapped, active operator may access every patient's documents. Incomplete tenant config
  *   fails closed. Self-declared X-Operator-* / X-Demo-Patient-Id headers are ignored (AC6).
- * - `demo`: explicit, non-production only — falsifiable headers for synthetic QA (unchanged).
+ * - `demo`: explicit synthetic-QA mode. Production requires a second opt-in and only the two
+ *   fixed seed identities accepted by requireOperator.
  */
 export function requirePatientDocumentAccess(
   req: AuthedRequest,

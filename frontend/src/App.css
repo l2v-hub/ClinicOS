@@ -2776,6 +2776,26 @@ body {
   margin: 0 0 20px;
 }
 
+.login-demo-warning {
+  display: grid;
+  gap: 3px;
+  margin: -10px 0 20px;
+  padding: 12px 14px;
+  border: 1px solid #f2c94c;
+  border-radius: 10px;
+  background: #fff8db;
+  color: #704f00;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.login-role-card:disabled {
+  cursor: wait;
+  opacity: 0.6;
+  transform: none;
+}
+
 .login-role-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2852,6 +2872,35 @@ body {
   font-size: 12px;
   color: var(--text-xmuted);
   margin: 0;
+}
+
+.login-error {
+  margin: 0 0 10px;
+  color: var(--danger, #b42318);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.demo-mode-chip {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100vw - 36px);
+  padding: 8px 12px;
+  border: 1px solid #e2b93b;
+  border-radius: 999px;
+  background: #fff8db;
+  box-shadow: var(--shadow-md);
+  color: #624600;
+  font-size: 12px;
+}
+
+.demo-mode-chip strong {
+  letter-spacing: 0.08em;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

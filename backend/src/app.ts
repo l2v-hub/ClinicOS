@@ -21,7 +21,12 @@ import voiceRouter from './routes/ai-voice.js';
 import aiActionsRouter from './routes/ai-actions.js';
 import aiAuditRouter from './routes/ai-audit.js';
 import farmaciRouter from './routes/farmaci.js';
-import { requireOperator, type AuthedRequest } from './ai/auth.js';
+import {
+  operatorAuthMode,
+  productionDemoAuthEnabled,
+  requireOperator,
+  type AuthedRequest,
+} from './ai/auth.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -133,9 +138,28 @@ app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+app.get('/auth/status', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.status(200).json({
+    mode: operatorAuthMode(),
+    temporaryDemo: productionDemoAuthEnabled(),
+    syntheticOnly: process.env.DEMO_DATASET_ID === 'synthetic-v1',
+    expiresAt: process.env.DEMO_AUTH_EXPIRES_AT || null,
+  });
+});
+
 app.get('/auth/me', requireOperator, (req, res) => {
   const operator = (req as AuthedRequest).operator;
-  res.status(200).json({ id: operator!.id, role: operator!.role, name: operator!.name });
+  res.setHeader('Cache-Control', 'private, no-store');
+  res.status(200).json({
+    id: operator!.id,
+    role: operator!.role,
+    name: operator!.name,
+    authMode: operatorAuthMode(),
+    temporaryDemo: productionDemoAuthEnabled(),
+    syntheticOnly: process.env.DEMO_DATASET_ID === 'synthetic-v1',
+    expiresAt: process.env.DEMO_AUTH_EXPIRES_AT || null,
+  });
 });
 
 app.use('/admin', adminRoomsRouter);

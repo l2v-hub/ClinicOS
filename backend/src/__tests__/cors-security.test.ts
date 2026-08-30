@@ -82,7 +82,26 @@ test('auth/me returns the server-resolved demo identity outside production', asy
     headers: { 'X-Operator-Id': 'operator-server', 'X-Operator-Role': 'operatore' },
   });
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { id: 'operator-server', role: 'operatore' });
+  assert.deepEqual(await response.json(), {
+    id: 'operator-server',
+    role: 'operatore',
+    authMode: 'demo',
+    temporaryDemo: false,
+    syntheticOnly: false,
+    expiresAt: null,
+  });
+});
+
+test('auth/status is public, cache-disabled, and discloses no identities', async () => {
+  const response = await fetch(`${base}/auth/status`);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.deepEqual(await response.json(), {
+    mode: 'demo',
+    temporaryDemo: false,
+    syntheticOnly: false,
+    expiresAt: null,
+  });
 });
 
 test('backend responses expose the defensive browser headers without framework disclosure', async () => {

@@ -4,9 +4,12 @@ import { IcoAdmin, IcoUser } from '../icons';
 
 interface LoginProps {
   onLogin: (utente: UtenteApp) => void;
+  demoMode?: boolean;
+  loading?: boolean;
+  error?: string | null;
 }
 
-export function Login({ onLogin }: LoginProps) {
+export function Login({ onLogin, demoMode = false, loading = false, error }: LoginProps) {
   return (
     <div className="login-screen">
       <div className="login-box">
@@ -16,12 +19,22 @@ export function Login({ onLogin }: LoginProps) {
           <p className="login-brand-sub">Sistema di Gestione Clinica</p>
         </div>
 
+        {demoMode && (
+          <div className="login-demo-warning" role="status">
+            <strong>Modalità demo temporanea</strong>
+            <span>
+              Usa esclusivamente dati sintetici. Le azioni vengono salvate nel database demo.
+            </span>
+          </div>
+        )}
+
         <p className="login-prompt">Seleziona il tuo profilo per accedere</p>
 
         <div className="login-role-grid">
           <button
             className="login-role-card login-role-card--admin"
             onClick={() => onLogin(UTENTE_ADMIN)}
+            disabled={loading}
           >
             <span className="login-role-icon">
               <IcoAdmin />
@@ -35,6 +48,7 @@ export function Login({ onLogin }: LoginProps) {
           <button
             className="login-role-card login-role-card--operatore"
             onClick={() => onLogin(UTENTE_OPERATORE)}
+            disabled={loading}
           >
             <span className="login-role-icon">
               <IcoUser />
@@ -44,7 +58,14 @@ export function Login({ onLogin }: LoginProps) {
           </button>
         </div>
 
-        <p className="login-note">Accesso dimostrativo — nessuna credenziale richiesta</p>
+        {error && (
+          <p className="login-error" role="alert">
+            {error}
+          </p>
+        )}
+        <p className="login-note">
+          {loading ? 'Verifica accesso…' : 'Accesso dimostrativo — nessuna credenziale richiesta'}
+        </p>
       </div>
     </div>
   );

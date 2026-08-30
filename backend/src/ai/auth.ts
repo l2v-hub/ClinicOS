@@ -16,12 +16,48 @@ export interface Operator {
 // Accept the app's role values plus canonical names; everything else is forbidden.
 const ALLOWED_ROLES = new Set(['operatore', 'admin', 'operator', 'manager']);
 
-// The local demo UI predates the relational seed and uses short fixture ids. Resolve only these
-// two known aliases inside explicit demo mode; production Entra identities never pass here.
-const DEMO_OPERATOR_ALIASES: Readonly<Record<string, string>> = {
-  op1: 'SEED-OP-001',
-  admin1: 'SEED-OP-004',
-};
+interface DemoIdentity extends Operator {
+  aliases: readonly string[];
+}
+
+// Production demo access is intentionally limited to two synthetic seed identities. The role is
+// server-owned: changing X-Operator-Role cannot promote the operator profile to administrator.
+const DEMO_IDENTITIES: readonly DemoIdentity[] = [
+  {
+    id: 'SEED-OP-001',
+    role: 'operatore',
+    name: 'Laura Bianchi',
+    aliases: ['op1', 'SEED-OP-001'],
+  },
+  {
+    id: 'SEED-OP-004',
+    role: 'admin',
+    name: 'Admin Demo',
+    aliases: ['admin1', 'SEED-OP-004'],
+  },
+];
+
+const DEMO_IDENTITY_BY_ALIAS = new Map(
+  DEMO_IDENTITIES.flatMap((identity) =>
+    identity.aliases.map((alias) => [alias, identity] as const),
+  ),
+);
+
+function explicitTrue(value: string | undefined): boolean {
+  return value?.trim().toLowerCase() === 'true';
+}
+
+export function productionDemoAuthEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  const expiresAt = Date.parse(env.DEMO_AUTH_EXPIRES_AT || '');
+  return (
+    env.NODE_ENV === 'production' &&
+    (env.AUTH_MODE || '').trim().toLowerCase() === 'demo' &&
+    explicitTrue(env.ALLOW_PRODUCTION_DEMO_AUTH) &&
+    env.DEMO_DATASET_ID === 'synthetic-v1' &&
+    Number.isFinite(expiresAt) &&
+    expiresAt > Date.now()
+  );
+}
 
 // Augment Express Request with the resolved operator (no global d.ts needed).
 export interface AuthedRequest extends Request {
@@ -34,7 +70,11 @@ export function operatorAuthMode(env: NodeJS.ProcessEnv = process.env): Operator
   const configured = (env.AUTH_MODE || '').trim().toLowerCase();
   if (configured === 'entra') return 'entra';
   if (configured === 'demo') {
-    return env.NODE_ENV === 'development' || env.NODE_ENV === 'test' ? 'demo' : 'disabled';
+    return env.NODE_ENV === 'development' ||
+      env.NODE_ENV === 'test' ||
+      productionDemoAuthEnabled(env)
+      ? 'demo'
+      : 'disabled';
   }
   // Missing, misspelled, and unsupported modes always fail closed. Synthetic
   // operator headers are accepted only after explicit local/test opt-in.
@@ -75,7 +115,35 @@ export function requireOperator(req: AuthedRequest, res: Response, next: NextFun
     return;
   }
   const boundedId = id.slice(0, 64);
-  req.operator = { id: DEMO_OPERATOR_ALIASES[boundedId] ?? boundedId, role };
+  const demoIdentity = DEMO_IDENTITY_BY_ALIAS.get(boundedId);
+  if (productionDemoAuthEnabled()) {
+    if (!demoIdentity) {
+      res.status(403).json({
+        error: 'Identità non disponibile nella modalità demo temporanea',
+        code: 'demo_identity_forbidden',
+      });
+      return;
+    }
+    if (role !== demoIdentity.role) {
+      res.status(403).json({
+        error: 'Il ruolo demo è assegnato dal server e non può essere modificato',
+        code: 'demo_role_mismatch',
+      });
+      return;
+    }
+    req.operator = {
+      id: demoIdentity.id,
+      role: demoIdentity.role,
+      name: demoIdentity.name,
+    };
+  } else {
+    req.operator = {
+      id: demoIdentity?.id ?? boundedId,
+      role,
+      name: demoIdentity?.name,
+    };
+  }
+  res.setHeader('X-ClinicOS-Auth-Mode', 'demo');
   next();
 }
 
