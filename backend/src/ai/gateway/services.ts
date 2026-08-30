@@ -13,8 +13,6 @@ import { assertPatientAllowed, assertTenant, canCrossPatientSearch } from './con
 import {
   asCartella,
   boundAllergies,
-  matchAllergy,
-  matchTherapy,
   normalizeSearchText,
   textIncludes,
   nameMatchesAllTokens,
@@ -115,6 +113,72 @@ function normalizedLikePattern(value: string): string {
 
 function normalizedSql(value: Prisma.Sql): Prisma.Sql {
   return Prisma.sql`translate(lower(${value}), ${ACCENTED_LATIN}, ${PLAIN_LATIN})`;
+}
+
+interface LegacyClinicalMatchRow {
+  recordId: string;
+  patientId: string;
+  allergyAllergene: string | null;
+  therapyDescription: string | null;
+  therapyStart: string | null;
+}
+
+/** Return at most one matching legacy allergy and therapy per candidate, never the chart blob. */
+async function loadLegacyClinicalMatches(
+  patientIds: string[],
+  filters: { allergy?: string; therapy?: string },
+): Promise<Map<string, LegacyClinicalMatchRow>> {
+  if (patientIds.length === 0 || (!filters.allergy && !filters.therapy)) return new Map();
+  const allergyJoin = filters.allergy
+    ? Prisma.sql`LEFT JOIN LATERAL (
+        SELECT LEFT(item.value->>'allergene', ${MAX_GATEWAY_SOURCE_EXCERPT}) AS "allergene"
+        FROM jsonb_array_elements(
+          CASE WHEN jsonb_typeof(chart."data"->'allergie') = 'array'
+            THEN chart."data"->'allergie' ELSE '[]'::jsonb END
+        ) WITH ORDINALITY AS item(value, ordinal)
+        WHERE jsonb_typeof(item.value) = 'object'
+          AND COALESCE(length(item.value->>'allergene'), 0)
+            BETWEEN 1 AND ${MAX_GATEWAY_SOURCE_EXCERPT}
+          AND ${normalizedSql(Prisma.sql`COALESCE(item.value->>'allergene', '')`)}
+            LIKE ${normalizedLikePattern(filters.allergy)} ESCAPE '\\'
+        ORDER BY item.ordinal
+        LIMIT 1
+      ) allergy ON true`
+    : Prisma.sql`LEFT JOIN LATERAL (
+        SELECT NULL::text AS "allergene"
+      ) allergy ON true`;
+  const therapyJoin = filters.therapy
+    ? Prisma.sql`LEFT JOIN LATERAL (
+        SELECT LEFT(item.value->>'descrizione', ${MAX_GATEWAY_SOURCE_EXCERPT}) AS "description",
+               CASE WHEN COALESCE(length(item.value->>'dataInizio'), 0) BETWEEN 1 AND 64
+                 THEN item.value->>'dataInizio' END AS "startedAt"
+        FROM jsonb_array_elements(
+          CASE WHEN jsonb_typeof(chart."data"->'terapie') = 'array'
+            THEN chart."data"->'terapie' ELSE '[]'::jsonb END
+        ) WITH ORDINALITY AS item(value, ordinal)
+        WHERE jsonb_typeof(item.value) = 'object'
+          AND COALESCE(length(item.value->>'descrizione'), 0)
+            BETWEEN 1 AND ${MAX_GATEWAY_SOURCE_EXCERPT}
+          AND ${normalizedSql(Prisma.sql`COALESCE(item.value->>'descrizione', '')`)}
+            LIKE ${normalizedLikePattern(filters.therapy)} ESCAPE '\\'
+        ORDER BY item.ordinal
+        LIMIT 1
+      ) therapy ON true`
+    : Prisma.sql`LEFT JOIN LATERAL (
+        SELECT NULL::text AS "description", NULL::text AS "startedAt"
+      ) therapy ON true`;
+  const rows = await prisma.$queryRaw<LegacyClinicalMatchRow[]>(Prisma.sql`
+    SELECT chart."id" AS "recordId", chart."patientId",
+           allergy."allergene" AS "allergyAllergene",
+           therapy."description" AS "therapyDescription",
+           therapy."startedAt" AS "therapyStart"
+    FROM "Cartella" chart
+    ${allergyJoin}
+    ${therapyJoin}
+    WHERE chart."patientId" IN (${Prisma.join(patientIds)})
+      AND (allergy."allergene" IS NOT NULL OR therapy."description" IS NOT NULL)
+  `);
+  return new Map(rows.map((row) => [row.patientId, row]));
 }
 
 /** Structured clinical filters run in PostgreSQL before LIMIT and return only projected fields. */
@@ -261,15 +325,9 @@ export async function searchPatients(
   // 016 F0: match multi-token — ogni token deve comparire in nome/cognome/MRN (AND fra token),
   // così «Elena Moretti» o «Moretti Elena» trovano il paziente pur avendo i campi separati.
   const rows = await searchStructuredPatientRows(validated, ctx);
-  const cartelle =
-    validated.allergy || validated.therapy
-      ? await prisma.cartella.findMany({
-          where: { patientId: { in: rows.map((row) => row.id) } },
-          select: { id: true, patientId: true, data: true },
-        })
-      : [];
-  const cartellaByPatient = new Map(
-    cartelle.map((row) => [row.patientId, { recordId: row.id, cartella: asCartella(row.data) }]),
+  const legacyMatches = await loadLegacyClinicalMatches(
+    rows.map((row) => row.id),
+    { allergy: validated.allergy, therapy: validated.therapy },
   );
   const therapies = validated.therapy
     ? await prisma.patientTherapy.findMany({
@@ -307,20 +365,15 @@ export async function searchPatients(
       refs.push(patientFieldSource(p.id, 'codiceFiscale'));
     }
     if (validated.allergy) {
-      const cartella = cartellaByPatient.get(p.id)?.cartella ?? asCartella(undefined);
-      const allergy = matchAllergy(cartella, validated.allergy);
-      if (!allergy) continue; // defensive: SQL and application matching must agree
+      const allergy = legacyMatches.get(p.id)?.allergyAllergene;
+      if (!allergy) continue; // defensive: the candidate predicate and projection must agree
       matching.push('allergy');
-      refs.push(patientFieldSource(p.id, `allergie:${allergy.allergene}`, allergy.allergene));
+      refs.push(patientFieldSource(p.id, `allergie:${allergy}`, allergy));
     }
     if (validated.therapy) {
       const therapy = therapyByPatient.get(p.id);
-      const legacyCartella = cartellaByPatient.get(p.id);
-      const legacyTherapy = matchTherapy(
-        legacyCartella?.cartella ?? asCartella(undefined),
-        validated.therapy,
-      );
-      if (!therapy && !legacyTherapy) continue;
+      const legacyMatch = legacyMatches.get(p.id);
+      if (!therapy && !legacyMatch?.therapyDescription) continue;
       matching.push('therapy');
       refs.push(
         therapy
@@ -333,10 +386,10 @@ export async function searchPatients(
             )
           : therapySource(
               p.id,
-              legacyCartella?.recordId ?? p.id,
+              legacyMatch?.recordId ?? p.id,
               'terapie',
-              legacyTherapy!.descrizione,
-              legacyTherapy!.dataInizio,
+              legacyMatch!.therapyDescription!,
+              legacyMatch?.therapyStart ?? undefined,
             ),
       );
     }
@@ -1086,13 +1139,11 @@ export async function correlate(
   }
   const patients = await searchCorrelatedPatientRows(validated, ctx);
   const patientIds = patients.map((patient) => patient.id);
-  const [cartelle, therapies, sections] = await Promise.all([
-    validated.allergy || validated.therapy
-      ? prisma.cartella.findMany({
-          where: { patientId: { in: patientIds } },
-          select: { id: true, patientId: true, data: true },
-        })
-      : Promise.resolve([]),
+  const [legacyMatches, therapies, sections] = await Promise.all([
+    loadLegacyClinicalMatches(patientIds, {
+      allergy: validated.allergy,
+      therapy: validated.therapy,
+    }),
     validated.therapy
       ? prisma.patientTherapy.findMany({
           where: { patientId: { in: patientIds } },
@@ -1131,9 +1182,6 @@ export async function correlate(
         `)
       : Promise.resolve([]),
   ]);
-  const cartellaByPatient = new Map(
-    cartelle.map((row) => [row.patientId, { recordId: row.id, cartella: asCartella(row.data) }]),
-  );
   const therapyByPatient = new Map<string, (typeof therapies)[number]>();
   if (validated.therapy) {
     for (const therapy of therapies) {
@@ -1152,22 +1200,15 @@ export async function correlate(
     const matching: string[] = [];
     const refs: SourceReference[] = [];
     if (validated.allergy) {
-      const allergy = matchAllergy(
-        cartellaByPatient.get(p.id)?.cartella ?? asCartella(undefined),
-        validated.allergy,
-      );
+      const allergy = legacyMatches.get(p.id)?.allergyAllergene;
       if (!allergy) continue;
       matching.push('allergy');
-      refs.push(patientFieldSource(p.id, `allergie:${allergy.allergene}`, allergy.allergene));
+      refs.push(patientFieldSource(p.id, `allergie:${allergy}`, allergy));
     }
     if (validated.therapy) {
       const therapy = therapyByPatient.get(p.id);
-      const legacyCartella = cartellaByPatient.get(p.id);
-      const legacyTherapy = matchTherapy(
-        legacyCartella?.cartella ?? asCartella(undefined),
-        validated.therapy,
-      );
-      if (!therapy && !legacyTherapy) continue;
+      const legacyMatch = legacyMatches.get(p.id);
+      if (!therapy && !legacyMatch?.therapyDescription) continue;
       matching.push('therapy');
       refs.push(
         therapy
@@ -1180,10 +1221,10 @@ export async function correlate(
             )
           : therapySource(
               p.id,
-              legacyCartella?.recordId ?? p.id,
+              legacyMatch?.recordId ?? p.id,
               'terapie',
-              legacyTherapy!.descrizione,
-              legacyTherapy!.dataInizio,
+              legacyMatch!.therapyDescription!,
+              legacyMatch?.therapyStart ?? undefined,
             ),
       );
     }
