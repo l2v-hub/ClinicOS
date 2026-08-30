@@ -167,6 +167,14 @@ interface LegacyClinicalMatchRow {
   therapyStart: string | null;
 }
 
+interface RelationalTherapyMatchRow {
+  id: string;
+  patientId: string;
+  farmacoNome: string;
+  dosaggio: string;
+  dataInizio: string;
+}
+
 /** Return at most one matching legacy allergy and therapy per candidate, never the chart blob. */
 async function loadLegacyClinicalMatches(
   patientIds: string[],
@@ -221,6 +229,27 @@ async function loadLegacyClinicalMatches(
     ${therapyJoin}
     WHERE chart."patientId" IN (${Prisma.join(patientIds)})
       AND (allergy."allergene" IS NOT NULL OR therapy."description" IS NOT NULL)
+  `);
+  return new Map(rows.map((row) => [row.patientId, row]));
+}
+
+/** Return one deterministic relational therapy match per candidate patient, filtered in SQL. */
+async function loadRelationalTherapyMatches(
+  patientIds: string[],
+  query: string | undefined,
+): Promise<Map<string, RelationalTherapyMatchRow>> {
+  if (patientIds.length === 0 || !query) return new Map();
+  const rows = await prisma.$queryRaw<RelationalTherapyMatchRow[]>(Prisma.sql`
+    SELECT DISTINCT ON (therapy."patientId")
+      therapy."id", therapy."patientId",
+      LEFT(therapy."farmacoNome", ${MAX_GATEWAY_SOURCE_EXCERPT}) AS "farmacoNome",
+      LEFT(therapy."dosaggio", 160) AS "dosaggio",
+      LEFT(therapy."dataInizio", 64) AS "dataInizio"
+    FROM "PatientTherapy" therapy
+    WHERE therapy."patientId" IN (${Prisma.join(patientIds)})
+      AND ${normalizedSql(Prisma.sql`therapy."farmacoNome"`)}
+        LIKE ${normalizedLikePattern(query)} ESCAPE '\\'
+    ORDER BY therapy."patientId", therapy."createdAt" DESC, therapy."id" ASC
   `);
   return new Map(rows.map((row) => [row.patientId, row]));
 }
@@ -369,27 +398,14 @@ export async function searchPatients(
   // 016 F0: match multi-token — ogni token deve comparire in nome/cognome/MRN (AND fra token),
   // così «Elena Moretti» o «Moretti Elena» trovano il paziente pur avendo i campi separati.
   const rows = await searchStructuredPatientRows(validated, ctx);
-  const legacyMatches = await loadLegacyClinicalMatches(
-    rows.map((row) => row.id),
-    { allergy: validated.allergy, therapy: validated.therapy },
-  );
-  const therapies = validated.therapy
-    ? await prisma.patientTherapy.findMany({
-        where: { patientId: { in: rows.map((row) => row.id) } },
-        select: { id: true, patientId: true, farmacoNome: true, dosaggio: true, dataInizio: true },
-      })
-    : [];
-  const therapyByPatient = new Map<string, (typeof therapies)[number]>();
-  if (validated.therapy) {
-    for (const therapy of therapies) {
-      if (
-        !therapyByPatient.has(therapy.patientId) &&
-        textIncludes(therapy.farmacoNome, validated.therapy)
-      ) {
-        therapyByPatient.set(therapy.patientId, therapy);
-      }
-    }
-  }
+  const patientIds = rows.map((row) => row.id);
+  const [legacyMatches, therapyByPatient] = await Promise.all([
+    loadLegacyClinicalMatches(patientIds, {
+      allergy: validated.allergy,
+      therapy: validated.therapy,
+    }),
+    loadRelationalTherapyMatches(patientIds, validated.therapy),
+  ]);
 
   const results: PatientSearchResult[] = [];
   for (const p of rows) {
@@ -1268,23 +1284,12 @@ export async function correlate(
   }
   const patients = await searchCorrelatedPatientRows(validated, ctx);
   const patientIds = patients.map((patient) => patient.id);
-  const [legacyMatches, therapies, sections] = await Promise.all([
+  const [legacyMatches, therapyByPatient, sections] = await Promise.all([
     loadLegacyClinicalMatches(patientIds, {
       allergy: validated.allergy,
       therapy: validated.therapy,
     }),
-    validated.therapy
-      ? prisma.patientTherapy.findMany({
-          where: { patientId: { in: patientIds } },
-          select: {
-            id: true,
-            patientId: true,
-            farmacoNome: true,
-            dosaggio: true,
-            dataInizio: true,
-          },
-        })
-      : Promise.resolve([]),
+    loadRelationalTherapyMatches(patientIds, validated.therapy),
     validated.sectionContains && patientIds.length
       ? prisma.$queryRaw<
           Array<{
@@ -1312,17 +1317,6 @@ export async function correlate(
         `)
       : Promise.resolve([]),
   ]);
-  const therapyByPatient = new Map<string, (typeof therapies)[number]>();
-  if (validated.therapy) {
-    for (const therapy of therapies) {
-      if (
-        !therapyByPatient.has(therapy.patientId) &&
-        textIncludes(therapy.farmacoNome, validated.therapy)
-      ) {
-        therapyByPatient.set(therapy.patientId, therapy);
-      }
-    }
-  }
   const sectionByPatient = new Map(sections.map((row) => [row.patientId, row]));
   const out: PatientSearchResult[] = [];
   const allRefs: SourceReference[] = [];
