@@ -9,6 +9,7 @@ import { listPatientDocuments } from '../upload/patient-documents.js';
 import { assertPatientAllowed, assertTenant, canCrossPatientSearch } from './context.js';
 import {
   asCartella,
+  boundAllergies,
   filterVitals,
   matchAllergy,
   matchTherapy,
@@ -378,11 +379,11 @@ export async function getPatientDemographics(
 export async function getPatientAllergies(
   patientId: string,
   ctx: UserContext,
-): Promise<SourcedResult<unknown[]>> {
+): Promise<SourcedResult<unknown[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
   const { cartella } = await loadCartella(patientId);
-  const allergies = cartella.allergie ?? [];
+  const { data: allergies, truncated } = boundAllergies(cartella.allergie);
   const refs = allergies.map((a) =>
     patientFieldSource(patientId, `allergie:${a.allergene ?? ''}`, a.allergene),
   );
@@ -394,7 +395,7 @@ export async function getPatientAllergies(
     allergies.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: allergies, sourceRefs: refs };
+  return { data: allergies, sourceRefs: refs, truncated };
 }
 
 export async function getPatientNarrativeSectionsG(

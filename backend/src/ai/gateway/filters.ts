@@ -86,6 +86,34 @@ export interface AllergyItem {
   gravita?: string;
   documentato?: string;
 }
+export const MAX_GATEWAY_ALLERGIES = 100;
+export const MAX_GATEWAY_ALLERGY_FIELD_LENGTH = 240;
+
+/** Bound and minimize untrusted allergy JSON before it reaches prompts, sources or audit counts. */
+export function boundAllergies(value: unknown): { data: AllergyItem[]; truncated: boolean } {
+  if (!Array.isArray(value)) return { data: [], truncated: false };
+  const data: AllergyItem[] = [];
+  let contentTruncated = false;
+  for (const candidate of value.slice(0, MAX_GATEWAY_ALLERGIES + 1)) {
+    if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) continue;
+    if (data.length === MAX_GATEWAY_ALLERGIES) break;
+    const row = candidate as Record<string, unknown>;
+    const projected: AllergyItem = {};
+    for (const field of ['id', 'allergene', 'reazione', 'gravita', 'documentato'] as const) {
+      if (typeof row[field] !== 'string') continue;
+      const raw = row[field];
+      if (raw.length > MAX_GATEWAY_ALLERGY_FIELD_LENGTH) contentTruncated = true;
+      const normalized = raw.slice(0, MAX_GATEWAY_ALLERGY_FIELD_LENGTH + 1).trim();
+      if (!normalized) continue;
+      projected[field] = normalized.slice(0, MAX_GATEWAY_ALLERGY_FIELD_LENGTH);
+    }
+    if (Object.keys(projected).length > 0) data.push(projected);
+  }
+  return {
+    data,
+    truncated: value.length > MAX_GATEWAY_ALLERGIES || contentTruncated,
+  };
+}
 export interface TherapyItem {
   id?: string;
   descrizione?: string;

@@ -20,6 +20,7 @@ import {
 import type { UserContext } from '../gateway/types.js';
 import { GatewayError } from '../gateway/types.js';
 import {
+  boundAllergies,
   filterVitals,
   vitalNumericValue,
   matchAllergy,
@@ -27,6 +28,35 @@ import {
   normalizeSearchText,
   textIncludes,
 } from '../gateway/filters.js';
+
+test('allergy gateway projection is bounded, minimized and defensive', () => {
+  const input = Array.from({ length: 101 }, (_, index) => ({
+    id: `a-${index}`,
+    allergene: `Allergene ${index}`,
+    reazione: 'rash',
+    gravita: 'media',
+    documentato: '2026-08-30',
+    sensitiveNarrative: 'must not leave the cartella',
+  }));
+  const result = boundAllergies(input);
+  assert.equal(result.data.length, 100);
+  assert.equal(result.truncated, true);
+  assert.equal('sensitiveNarrative' in result.data[0], false);
+  assert.deepEqual(
+    boundAllergies([null, 'bad', [], {}, { allergene: '  Lattice  ', extra: true }]),
+    {
+      data: [{ allergene: 'Lattice' }],
+      truncated: false,
+    },
+  );
+  const oversized = boundAllergies([{ allergene: 'X'.repeat(512_000) }]);
+  assert.equal(oversized.data[0]?.allergene?.length, 240);
+  assert.equal(oversized.truncated, true);
+  assert.deepEqual(boundAllergies({ allergene: 'not-an-array' }), {
+    data: [],
+    truncated: false,
+  });
+});
 import { narrativeSource, vitalSource } from '../gateway/sources.js';
 
 const env = (o: Record<string, string>) => o as unknown as NodeJS.ProcessEnv;
