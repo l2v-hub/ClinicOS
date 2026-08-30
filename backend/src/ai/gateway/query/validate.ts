@@ -36,6 +36,7 @@ export interface ValidatedPlan {
 export const MAX_STEPS = 4;
 export const MAX_ROWS = 200;
 export const MAX_RELATE = 3;
+export const MAX_GROUP_BY_FIELDS = 2;
 
 const OPS = new Set<FilterOp>([
   'eq',
@@ -75,8 +76,15 @@ function validStep(raw: RawStep, priorIds: Set<string>): ValidatedStep | null {
 
   if (raw.aggregate) {
     if (!AGG.has(raw.aggregate.op)) return null;
+    if (raw.aggregate.field !== undefined && typeof raw.aggregate.field !== 'string') return null;
+    if (raw.aggregate.op !== 'count' && !raw.aggregate.field) return null;
     if (raw.aggregate.field && !scalar(raw.from, raw.aggregate.field)) return null;
-    for (const g of raw.aggregate.groupBy ?? []) if (!scalar(raw.from, g)) return null;
+    if (raw.aggregate.groupBy !== undefined && !Array.isArray(raw.aggregate.groupBy)) return null;
+    const groupBy = raw.aggregate.groupBy ?? [];
+    if (groupBy.length > MAX_GROUP_BY_FIELDS || new Set(groupBy).size !== groupBy.length)
+      return null;
+    if (groupBy.length > 0 && raw.aggregate.op !== 'count') return null;
+    for (const g of groupBy) if (typeof g !== 'string' || !scalar(raw.from, g)) return null;
   }
 
   const select = raw.select ?? [];

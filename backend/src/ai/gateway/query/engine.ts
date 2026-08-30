@@ -8,7 +8,7 @@ import { GatewayError, type UserContext, type SourceReference } from '../types.j
 import { canFacilityRead, assertTenant, assertPatientAllowed } from '../context.js';
 import * as svc from '../services.js';
 import { getEntity } from './schema.js';
-import type { ValidatedPlan, ValidatedStep } from './validate.js';
+import { MAX_ROWS, type ValidatedPlan, type ValidatedStep } from './validate.js';
 import type { RawFilter } from './dsl.js';
 import { resolvePatientFilter } from './patient-scope.js';
 
@@ -16,6 +16,44 @@ export interface QueryAnswer {
   rows: unknown[];
   sources: SourceReference[];
   truncated?: boolean;
+}
+
+export const MAX_AGGREGATE_GROUPS = MAX_ROWS;
+
+function aggregateGroupLimit(requestedLimit: number): number {
+  return Math.max(1, Math.min(Math.trunc(requestedLimit), MAX_AGGREGATE_GROUPS));
+}
+
+export function boundedAggregateGroupArgs(
+  groupBy: string[],
+  where: Record<string, unknown>,
+  requestedLimit: number,
+) {
+  const limit = aggregateGroupLimit(requestedLimit);
+  return {
+    by: groupBy,
+    where,
+    _count: true,
+    orderBy: groupBy.map((field) => ({ [field]: 'asc' as const })),
+    take: limit + 1,
+  };
+}
+
+export function boundAggregateGroups<T>(
+  rows: readonly T[],
+  requestedLimit: number,
+): { rows: T[]; truncated: boolean } {
+  const limit = aggregateGroupLimit(requestedLimit);
+  return { rows: rows.slice(0, limit), truncated: rows.length > limit };
+}
+
+export function boundedDistinctCountArgs(field: string, where: Record<string, unknown>) {
+  return {
+    by: [field],
+    where,
+    orderBy: { [field]: 'asc' as const },
+    take: MAX_AGGREGATE_GROUPS + 1,
+  };
 }
 
 const SRC_TYPE: Record<string, SourceReference['sourceType']> = {
@@ -183,15 +221,24 @@ async function runStep(
 
   if (step.aggregate) {
     const a = step.aggregate;
+    if (a.groupBy?.length) {
+      const groups = await delegate.groupBy(
+        boundedAggregateGroupArgs(a.groupBy, where, step.limit),
+      );
+      const bounded = boundAggregateGroups(groups, step.limit);
+      return { rows: bounded.rows, sources: [], truncated: bounded.truncated };
+    }
     if (a.op === 'count')
       return { rows: [{ value: await delegate.count({ where }) }], sources: [] };
     if (a.op === 'countDistinct') {
-      const grp = await delegate.groupBy({ by: [a.field!], where });
-      return { rows: [{ value: grp.length }], sources: [] };
-    }
-    if (a.groupBy?.length) {
-      const grp = await delegate.groupBy({ by: a.groupBy, where, _count: true });
-      return { rows: grp, sources: [] };
+      const groups = await delegate.groupBy(boundedDistinctCountArgs(a.field!, where));
+      if (groups.length > MAX_AGGREGATE_GROUPS) {
+        throw new GatewayError(
+          'bad_request',
+          'Conteggio distinto troppo ampio: restringere i filtri',
+        );
+      }
+      return { rows: [{ value: groups.length }], sources: [] };
     }
     const agg = await delegate.aggregate({ where, [`_${a.op}`]: { [a.field!]: true } });
     return { rows: [{ value: agg[`_${a.op}`][a.field!] }], sources: [] };
