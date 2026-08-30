@@ -15,6 +15,7 @@ import { resolvePatientFilter } from './patient-scope.js';
 export interface QueryAnswer {
   rows: unknown[];
   sources: SourceReference[];
+  truncated?: boolean;
 }
 
 const SRC_TYPE: Record<string, SourceReference['sourceType']> = {
@@ -137,14 +138,22 @@ async function vitalStep(
   const win = step.filters.find((f) => f.op === 'dateWindow')?.value;
   const { from, to } = dateWindowBounds(win);
   const r = await svc.getPatientVitalSigns(
-    { patientId, label, systolicMin, systolicMax } as never,
+    {
+      patientId,
+      label,
+      systolicMin,
+      systolicMax,
+      from: from?.toISOString(),
+      to: to?.toISOString(),
+    } as never,
     ctx,
   );
-  const data = (r.data as Array<{ rilevato?: string }>).filter((v) => {
-    const t = v.rilevato ? new Date(v.rilevato).getTime() : 0;
-    return (!from || t >= from.getTime()) && (!to || t <= to.getTime());
-  });
-  return { rows: data, sources: r.sourceRefs.slice(0, data.length) };
+  const rows = r.data.slice(0, step.limit);
+  return {
+    rows,
+    sources: r.sourceRefs.slice(0, rows.length),
+    truncated: r.truncated || r.data.length > step.limit,
+  };
 }
 
 async function runStep(
@@ -259,5 +268,9 @@ export async function runQueryPlan(
   }
   const primary = results.get(plan.primaryStep) ?? { rows: [], sources: [] };
   const allSources = [...results.values()].flatMap((r) => r.sources);
-  return { rows: primary.rows, sources: dedupeSources(allSources) };
+  return {
+    rows: primary.rows,
+    sources: dedupeSources(allSources),
+    truncated: [...results.values()].some((result) => result.truncated === true),
+  };
 }

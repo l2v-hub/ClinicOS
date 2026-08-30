@@ -13,7 +13,6 @@ import { assertPatientAllowed, assertTenant, canCrossPatientSearch } from './con
 import {
   asCartella,
   boundAllergies,
-  filterVitals,
   matchAllergy,
   matchTherapy,
   normalizeSearchText,
@@ -73,6 +72,18 @@ import {
   MAX_GATEWAY_SOURCE_EXCERPT,
   parseGatewayAppointmentRange,
 } from './patient-feed-window.js';
+import {
+  boundPatientVitalRows,
+  MAX_PATIENT_VITAL_ID,
+  MAX_PATIENT_VITAL_LABEL,
+  MAX_PATIENT_VITAL_STATE,
+  MAX_PATIENT_VITAL_TIMESTAMP,
+  MAX_PATIENT_VITAL_UNIT,
+  MAX_PATIENT_VITAL_VALUE,
+  parsePatientVitalBoundary,
+  PATIENT_VITAL_LOOKAHEAD,
+  type PatientVitalRow,
+} from './patient-vital-window.js';
 
 const nowIso = () => new Date().toISOString();
 const displayName = (p: { firstName: string; lastName: string }) =>
@@ -432,35 +443,127 @@ export async function getPatientNarrativeSectionsG(
 export async function getPatientVitalSigns(
   input: VitalSignQueryInput,
   ctx: UserContext,
-): Promise<SourcedResult<VitalItem[]>> {
+): Promise<SourcedResult<VitalItem[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, input.patientId);
-  const { cartella, recordId } = await loadCartella(input.patientId);
   // Fase 1a: `days` (finestra andamento) è tradotto server-side in `from` = oggi−days (il planner
   // resta puro, senza clock). Un `from` esplicito già presente ha precedenza.
   const query =
     input.days != null && !input.from
       ? { ...input, from: new Date(Date.now() - input.days * 86400000).toISOString() }
       : input;
-  const filtered = filterVitals(cartella.parametriVitali ?? [], query);
-  const refs = filtered.map((v) =>
+  const predicates: Prisma.Sql[] = [Prisma.sql`jsonb_typeof(vital.item) = 'object'`];
+  const rawValue = Prisma.sql`btrim(COALESCE(vital.item->>'valore', ''))`;
+  const pressurePattern = '^[0-9]{2,3}[[:space:]]*/[[:space:]]*[0-9]{2,3}$';
+  const systolic = Prisma.sql`CASE
+    WHEN ${rawValue} ~ ${pressurePattern}
+    THEN split_part(regexp_replace(${rawValue}, '[[:space:]]', '', 'g'), '/', 1)::double precision
+    ELSE NULL
+  END`;
+  const normalizedValue = Prisma.sql`replace(${rawValue}, ',', '.')`;
+  const numericValue = Prisma.sql`CASE
+    WHEN ${rawValue} ~ ${pressurePattern}
+    THEN split_part(regexp_replace(${rawValue}, '[[:space:]]', '', 'g'), '/', 1)::double precision
+    WHEN ${normalizedValue} ~ '^[+-]?[0-9]*[.]?[0-9]+'
+    THEN substring(${normalizedValue} from '^[+-]?[0-9]*[.]?[0-9]+')::double precision
+    ELSE NULL
+  END`;
+  if (query.label) {
+    predicates.push(
+      Prisma.sql`upper(COALESCE(vital.item->>'etichetta', '')) = ${query.label.toUpperCase()}`,
+    );
+  }
+  if (query.systolicMin != null) predicates.push(Prisma.sql`${systolic} >= ${query.systolicMin}`);
+  if (query.systolicMax != null) predicates.push(Prisma.sql`${systolic} <= ${query.systolicMax}`);
+  if (query.valueMin != null) predicates.push(Prisma.sql`${numericValue} >= ${query.valueMin}`);
+  if (query.valueMax != null) predicates.push(Prisma.sql`${numericValue} <= ${query.valueMax}`);
+  const fromBoundary = parsePatientVitalBoundary(query.from);
+  const toBoundary = parsePatientVitalBoundary(query.to);
+  if (query.from && !fromBoundary)
+    throw new GatewayError('bad_request', 'Data iniziale non valida');
+  if (query.to && !toBoundary) throw new GatewayError('bad_request', 'Data finale non valida');
+  const recordedAt = Prisma.sql`btrim(COALESCE(vital.item->>'rilevato', ''))`;
+  const datePattern = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$';
+  const timestampPattern =
+    '^[0-9]{4}-[0-9]{2}-[0-9]{2}T([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9]([.][0-9]{1,6})?)?(Z|[+-](0[0-9]|1[0-4]):[0-5][0-9])$';
+  const validCalendarDate = Prisma.sql`CASE
+    WHEN substring(${recordedAt} from 1 for 10) ~ ${datePattern}
+    THEN CASE
+      WHEN substring(${recordedAt} from 1 for 4)::integer BETWEEN 1 AND 9999
+        AND substring(${recordedAt} from 6 for 2)::integer BETWEEN 1 AND 12
+        AND substring(${recordedAt} from 9 for 2)::integer BETWEEN 1 AND 31
+      THEN to_char(to_date(substring(${recordedAt} from 1 for 10), 'YYYY-MM-DD'), 'YYYY-MM-DD')
+        = substring(${recordedAt} from 1 for 10)
+      ELSE false
+    END
+    ELSE false
+  END`;
+  const recordedAtInstant = Prisma.sql`CASE
+    WHEN ${recordedAt} ~ ${datePattern} AND (${validCalendarDate})
+      THEN (${recordedAt})::date::timestamp AT TIME ZONE 'UTC'
+    WHEN ${recordedAt} ~ ${timestampPattern} AND (${validCalendarDate})
+      THEN (${recordedAt})::timestamptz
+    ELSE NULL
+  END`;
+  if (fromBoundary) predicates.push(Prisma.sql`${recordedAtInstant} >= ${fromBoundary}`);
+  if (toBoundary) predicates.push(Prisma.sql`${recordedAtInstant} <= ${toBoundary}`);
+  const rows = await prisma.$queryRaw<PatientVitalRow[]>(Prisma.sql`
+    SELECT chart."id" AS "recordId",
+      CASE WHEN jsonb_typeof(vital.item->'id') = 'string'
+        THEN left(vital.item->>'id', ${MAX_PATIENT_VITAL_ID}) END AS "id",
+      CASE WHEN jsonb_typeof(vital.item->'etichetta') = 'string'
+        THEN left(vital.item->>'etichetta', ${MAX_PATIENT_VITAL_LABEL}) END AS "etichetta",
+      CASE WHEN jsonb_typeof(vital.item->'valore') = 'string'
+        THEN left(vital.item->>'valore', ${MAX_PATIENT_VITAL_VALUE}) END AS "valore",
+      CASE WHEN jsonb_typeof(vital.item->'unita') = 'string'
+        THEN left(vital.item->>'unita', ${MAX_PATIENT_VITAL_UNIT}) END AS "unita",
+      CASE WHEN jsonb_typeof(vital.item->'stato') = 'string'
+        THEN left(vital.item->>'stato', ${MAX_PATIENT_VITAL_STATE}) END AS "stato",
+      CASE WHEN jsonb_typeof(vital.item->'rilevato') = 'string'
+        THEN left(vital.item->>'rilevato', ${MAX_PATIENT_VITAL_TIMESTAMP}) END AS "rilevato",
+      (COALESCE(length(vital.item->>'id'), 0) > ${MAX_PATIENT_VITAL_ID}
+        OR COALESCE(length(vital.item->>'etichetta'), 0) > ${MAX_PATIENT_VITAL_LABEL}
+        OR COALESCE(length(vital.item->>'valore'), 0) > ${MAX_PATIENT_VITAL_VALUE}
+        OR COALESCE(length(vital.item->>'unita'), 0) > ${MAX_PATIENT_VITAL_UNIT}
+        OR COALESCE(length(vital.item->>'stato'), 0) > ${MAX_PATIENT_VITAL_STATE}
+        OR COALESCE(length(vital.item->>'rilevato'), 0) > ${MAX_PATIENT_VITAL_TIMESTAMP})
+        AS "contentTruncated"
+    FROM "Cartella" chart
+    CROSS JOIN LATERAL jsonb_array_elements(
+      CASE WHEN jsonb_typeof(chart."data"->'parametriVitali') = 'array'
+        THEN chart."data"->'parametriVitali' ELSE '[]'::jsonb END
+    ) WITH ORDINALITY AS vital(item, ordinal)
+    WHERE chart."patientId" = ${input.patientId}
+      AND ${Prisma.join(predicates, ' AND ')}
+    ORDER BY vital.ordinal
+    LIMIT ${PATIENT_VITAL_LOOKAHEAD}
+  `);
+  const bounded = boundPatientVitalRows(rows);
+  const data: VitalItem[] = bounded.rows.map((row) =>
+    Object.fromEntries(
+      (['id', 'etichetta', 'valore', 'unita', 'stato', 'rilevato'] as const)
+        .filter((field) => row[field] != null)
+        .map((field) => [field, row[field]]),
+    ),
+  );
+  const refs = bounded.rows.map((row, index) =>
     vitalSource(
       input.patientId,
-      v.id ?? recordId,
-      v.etichetta ?? 'vital',
-      `${v.etichetta} ${v.valore}`,
-      v.rilevato,
+      row.id ?? row.recordId,
+      row.etichetta ?? 'vital',
+      `${row.etichetta ?? 'vital'} ${row.valore ?? ''}`.trim(),
+      data[index]?.rilevato,
     ),
   );
   gatewayAudit(
     ctx,
     'get_patient_vital_signs',
     [input.patientId],
-    filtered.length,
-    filtered.length ? 'ok' : 'empty',
+    data.length,
+    data.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: filtered, sourceRefs: refs };
+  return { data, sourceRefs: refs, truncated: bounded.truncated };
 }
 
 export async function getCrossPatientVitalSigns(

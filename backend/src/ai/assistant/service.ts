@@ -665,12 +665,12 @@ export async function dispatchQueryData(
   ctx: UserContext,
   env: NodeJS.ProcessEnv = process.env,
   currentPatientId?: string,
-): Promise<{ data: unknown[]; sourceRefs: SourceReference[] }> {
+): Promise<{ data: unknown[]; sourceRefs: SourceReference[]; truncated?: boolean }> {
   const validated = validateQueryPlan(rawPlan);
   if (!validated) return { data: [], sourceRefs: [] };
   try {
     const out = await runQueryPlan(validated, ctx, env, currentPatientId);
-    return { data: out.rows, sourceRefs: out.sources };
+    return { data: out.rows, sourceRefs: out.sources, truncated: out.truncated };
   } catch (e) {
     if (e instanceof GatewayError && e.kind === 'bad_request') return { data: [], sourceRefs: [] };
     throw e;
