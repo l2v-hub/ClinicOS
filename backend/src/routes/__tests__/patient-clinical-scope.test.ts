@@ -87,6 +87,19 @@ before(async () => {
   ]);
   patientAId = patientA.id;
   patientBId = patientB.id;
+  await prisma.cartella.create({
+    data: {
+      patientId: patientAId,
+      data: {
+        statoRicovero: 'ricoverato',
+        parametriVitali: [{ stato: 'critico' }],
+        indicatoriRischio: { malformed: true },
+        allergie: [{ gravita: 'grave' }, { gravita: 'lieve' }],
+        terapie: [{ stato: 'completata' }, { stato: 'attiva' }],
+        largeUnusedNarrative: 'dato non necessario '.repeat(2_000),
+      },
+    },
+  });
   const therapyB = await prisma.patientTherapy.create({
     data: {
       patientId: patientBId,
@@ -309,7 +322,17 @@ test('patient roster, summaries, detail and cartella never cross ordinary-operat
   const parameters = (await parametersResponse.json()) as {
     items: Array<{ patient: { id: string } }>;
   };
-  const summary = (await summaryResponse.json()) as Array<{ patientId: string }>;
+  const summary = (await summaryResponse.json()) as Array<{
+    patientId: string;
+    statoRicovero: string | null;
+    hasCriticalVitals: boolean;
+    hasHighRisk: boolean;
+    allergieCount: number;
+    hasSevereAllergy: boolean;
+    terapieTotali: number;
+    terapieCompletate: number;
+    consegneAperte: number;
+  }>;
   const overview = (await overviewResponse.json()) as { totalPatients: number };
   assert.ok(page.items.some((patient) => patient.id === patientAId));
   assert.ok(page.items.every((patient) => patient.id !== patientBId));
@@ -319,6 +342,17 @@ test('patient roster, summaries, detail and cartella never cross ordinary-operat
     summary.map((item) => item.patientId),
     [patientAId],
   );
+  assert.deepEqual(summary[0], {
+    patientId: patientAId,
+    statoRicovero: 'ricoverato',
+    hasCriticalVitals: true,
+    hasHighRisk: false,
+    allergieCount: 2,
+    hasSevereAllergy: true,
+    terapieTotali: 2,
+    terapieCompletate: 1,
+    consegneAperte: 0,
+  });
   assert.equal(overview.totalPatients, 1);
 
   const attempts: Array<[string, RequestInit]> = [

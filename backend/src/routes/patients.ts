@@ -19,6 +19,10 @@ import {
 import { loadPatientConsegnaCounts } from '../consegne/read-service.js';
 import { requirePatientScope } from '../patients/access.js';
 import { hasGlobalPatientScope, patientScopeWhere } from '../patients/patient-scope.js';
+import {
+  assemblePatientClinicalSummaries,
+  loadPatientClinicalSummaryRows,
+} from '../patients/clinical-summary.js';
 
 const router = Router();
 
@@ -226,39 +230,15 @@ router.get('/clinical-summary', async (req, res) => {
     });
     const allowedIds = new Set(allowedPatients.map((patient) => patient.id));
     const scopedPatientIds = patientIds.filter((patientId) => allowedIds.has(patientId));
-    const [cartelle, consegneCounts] = await Promise.all([
-      prisma.cartella.findMany({
-        where: { patientId: { in: scopedPatientIds } },
-        select: { patientId: true, data: true },
-      }),
+    const [clinicalRows, consegneCounts] = await Promise.all([
+      loadPatientClinicalSummaryRows(scopedPatientIds),
       loadPatientConsegnaCounts(scopedPatientIds),
     ]);
-    const cartelleByPatient = new Map(cartelle.map((row) => [row.patientId, row.data]));
-    const summary = scopedPatientIds.map((patientId) => {
-      const data = cartelleByPatient.get(patientId);
-      const c = (data ?? {}) as {
-        statoRicovero?: string;
-        parametriVitali?: Array<{ stato?: string }>;
-        indicatoriRischio?: Array<{ livello?: string }>;
-        allergie?: Array<{ gravita?: string }>;
-        terapie?: Array<{ stato?: string }>;
-      };
-      const allergie = Array.isArray(c.allergie) ? c.allergie : [];
-      const terapie = Array.isArray(c.terapie) ? c.terapie : [];
-      return {
-        patientId,
-        statoRicovero: c.statoRicovero ?? null,
-        hasCriticalVitals: (c.parametriVitali ?? []).some((v) => v.stato === 'critico'),
-        hasHighRisk: (c.indicatoriRischio ?? []).some(
-          (r) => r.livello === 'alto' || r.livello === 'critico',
-        ),
-        allergieCount: allergie.length,
-        hasSevereAllergy: allergie.some((a) => a.gravita === 'grave'),
-        terapieTotali: terapie.length,
-        terapieCompletate: terapie.filter((t) => t.stato === 'completata').length,
-        consegneAperte: consegneCounts.get(patientId) ?? 0,
-      };
-    });
+    const summary = assemblePatientClinicalSummaries(
+      scopedPatientIds,
+      clinicalRows,
+      consegneCounts,
+    );
     res.status(200).json(summary);
   } catch (error) {
     if (error instanceof PatientSummaryInputError) {
