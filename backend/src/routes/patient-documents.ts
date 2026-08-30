@@ -14,6 +14,11 @@ import {
   getPatientDocumentContent,
   createPatientDocument,
 } from '../ai/upload/patient-documents.js';
+import {
+  decodePatientDocumentCursor,
+  PATIENT_DOCUMENT_PAGE_DEFAULT,
+  PATIENT_DOCUMENT_PAGE_MAX,
+} from '../ai/upload/patient-document-cursor.js';
 
 const router = Router();
 // #246 FIX: NON usare router.use(requireOperator). Questo router è montato su '/patients'
@@ -193,8 +198,32 @@ router.post(
 // GET /patients/:patientId/documents — metadata of the patient's imported documents.
 router.get('/:patientId/documents', requirePatientDocumentAccess, async (req, res) => {
   try {
-    const documents = await listPatientDocuments(String(req.params.patientId));
-    res.status(200).json({ documents, total: documents.length });
+    const patientId = String(req.params.patientId);
+    const rawLimit = typeof req.query.limit === 'string' ? req.query.limit : undefined;
+    const parsedLimit = rawLimit === undefined ? PATIENT_DOCUMENT_PAGE_DEFAULT : Number(rawLimit);
+    if (!Number.isInteger(parsedLimit) || parsedLimit < 1) {
+      res.status(400).json({ error: 'Parametro limit non valido', code: 'invalid_limit' });
+      return;
+    }
+    const limit = Math.min(parsedLimit, PATIENT_DOCUMENT_PAGE_MAX);
+    const rawCursor = typeof req.query.cursor === 'string' ? req.query.cursor : undefined;
+    const decodedCursor = rawCursor ? decodePatientDocumentCursor(rawCursor, patientId) : null;
+    if (rawCursor && !decodedCursor) {
+      res.status(400).json({ error: 'Cursore non valido', code: 'invalid_cursor' });
+      return;
+    }
+    const rawSourceFileName =
+      typeof req.query.sourceFileName === 'string' ? req.query.sourceFileName.trim() : '';
+    if (rawSourceFileName.length > 200) {
+      res.status(400).json({ error: 'Nome sorgente non valido', code: 'invalid_source_name' });
+      return;
+    }
+    const page = await listPatientDocuments(patientId, {
+      limit,
+      cursor: decodedCursor ?? undefined,
+      sourceFileName: rawSourceFileName || undefined,
+    });
+    res.status(200).json(page);
   } catch {
     res.status(500).json({ error: 'Errore nel recupero dei documenti' });
   }

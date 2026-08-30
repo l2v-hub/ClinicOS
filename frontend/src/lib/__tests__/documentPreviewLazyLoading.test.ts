@@ -23,7 +23,9 @@ test('patient source panel fetches one selected document instead of the whole co
   assert.match(sourcePanel, /previewControllersRef\.current\.has\(documentId\)/);
   assert.match(sourcePanel, /encodeURIComponent\(documentId\)/);
   assert.match(sourcePanel, /import \{ documentAuthHeaders \} from '\.\.\/\.\.\/lib\/entraAuth'/);
-  assert.equal(sourcePanel.match(/await documentAuthHeaders\(/g)?.length, 2);
+  assert.equal(sourcePanel.match(/await documentAuthHeaders\(/g)?.length, 1);
+  assert.match(sourcePanel, /sourceFileName: sourceTarget\?\.fileName/);
+  assert.match(sourcePanel, /Carica altri documenti/);
 });
 
 test('lazy previews abort requests, bound blob memory and retain local-upload compatibility', () => {

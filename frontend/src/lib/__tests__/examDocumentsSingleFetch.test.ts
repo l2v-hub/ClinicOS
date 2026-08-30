@@ -8,16 +8,14 @@ const source = readFileSync(
 );
 
 test('exam, imaging and consultation attachments share one scoped metadata request', () => {
-  assert.equal(
-    source.match(/fetch\(`\$\{API_URL\}\/patients\/\$\{paziente\.id\}\/documents`/g)?.length,
-    1,
-  );
-  assert.match(source, /const controller = new AbortController\(\)/);
-  assert.match(source, /signal: controller\.signal/);
-  assert.match(source, /return \(\) => controller\.abort\(\)/);
-  assert.match(source, /documentState\.scope === documentScope/);
+  assert.equal(source.match(/usePatientDocuments\(/g)?.length, 1);
+  assert.doesNotMatch(source, /fetch\(`\$\{API_URL\}\/patients\/\$\{paziente\.id\}\/documents/);
   assert.match(source, /documents=\{documentsByType\.esame\}/);
   assert.match(source, /documents=\{documentsByType\.rx\}/);
   assert.match(source, /documents=\{documentsByType\.consulenza\}/);
-  assert.match(source, /onDocumentsChanged=\{reloadDocuments\}/);
+  assert.equal(source.match(/onDocumentCreated=/g)?.length, 3);
+  assert.equal(source.match(/metadataLoading=\{documentStatus === 'loading'\}/g)?.length, 3);
+  assert.match(source, /disabled=\{busy \|\| metadataLoading\}/);
+  assert.match(source, /document \? upsertDocument\(document\) : reloadDocuments\(\)/);
+  assert.match(source, /Carica altri allegati/);
 });

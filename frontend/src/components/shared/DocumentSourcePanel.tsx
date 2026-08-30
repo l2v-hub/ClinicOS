@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { API_URL } from '../../config';
 import { documentAuthHeaders } from '../../lib/entraAuth';
+import { usePatientDocuments, type PatientDocumentMeta } from '../../lib/usePatientDocuments';
 import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
 
 // Side panel that shows the imported source document(s) for a patient (REQ-035 v2).
@@ -10,15 +11,7 @@ import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
 // authenticated blob and rendered via a local object URL — an <img>/<iframe> src cannot attach
 // custom headers, so it can no longer point straight at the gated content endpoint.
 
-export interface PatientDocMeta {
-  id: string;
-  originalName: string;
-  mimeType: string;
-  sizeBytes: number;
-  documentType: string;
-  importJobId: string | null;
-  createdAt: string;
-}
+export type PatientDocMeta = PatientDocumentMeta;
 
 const MAX_PREVIEW_CACHE = 5;
 
@@ -42,44 +35,24 @@ export function DocumentSourcePanel({
   operatorId,
   operatorRole,
 }: Props) {
-  const [docs, setDocs] = useState<PatientDocMeta[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    documents: docs,
+    status,
+    loadingMore,
+    loadMoreError,
+    pageInfo,
+    reload,
+    loadMore,
+  } = usePatientDocuments({
+    patientId,
+    operatorId,
+    operatorRole,
+    sourceFileName: sourceTarget?.fileName,
+  });
   const [previewStatus, setPreviewStatus] = useState<Record<string, 'loading' | 'error'>>({});
   const [previewUrls, setPreviewUrls] = useState<Map<string, string>>(() => new Map());
   const previewCacheRef = useRef(new Map<string, string>());
   const previewControllersRef = useRef(new Map<string, AbortController>());
-
-  useEffect(() => {
-    const controller = new AbortController();
-    /* eslint-disable react-hooks/set-state-in-effect */
-    setLoading(true);
-    setError(null);
-    setDocs([]);
-    setPreviewStatus({});
-    setPreviewUrls(new Map());
-    /* eslint-enable react-hooks/set-state-in-effect */
-    void (async () => {
-      try {
-        const headers = await documentAuthHeaders(patientId, operatorId, operatorRole);
-        if (controller.signal.aborted) return;
-        const response = await fetch(`${API_URL}/patients/${patientId}/documents`, {
-          headers,
-          signal: controller.signal,
-        });
-        if (!response.ok) throw new Error('document-list-failed');
-        const data = await response.json();
-        if (!controller.signal.aborted) {
-          setDocs(Array.isArray(data.documents) ? data.documents : []);
-        }
-      } catch {
-        if (!controller.signal.aborted) setError('Impossibile caricare i documenti.');
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
-      }
-    })();
-    return () => controller.abort();
-  }, [operatorId, operatorRole, patientId]);
 
   const requestDocument = useCallback(
     (documentId: string) => {
@@ -184,10 +157,15 @@ export function DocumentSourcePanel({
           </button>
         </header>
         <div className="doc-source-panel__body">
-          {loading ? (
+          {status === 'loading' && docs.length === 0 ? (
             <p className="cr-empty">Caricamento documenti…</p>
-          ) : error ? (
-            <p className="cr-empty">{error}</p>
+          ) : status === 'error' ? (
+            <div className="cr-empty" role="alert">
+              <p>Impossibile caricare i documenti.</p>
+              <button type="button" className="btn-secondary btn-sm" onClick={reload}>
+                Riprova
+              </button>
+            </div>
           ) : previews.length === 0 ? (
             <p className="cr-empty">Documento originale non disponibile.</p>
           ) : (
@@ -198,6 +176,24 @@ export function DocumentSourcePanel({
               sourceTarget={sourceTarget}
               onRequestDocument={requestDocument}
             />
+          )}
+          {loadMoreError && (
+            <div className="cr-empty" role="alert">
+              <p>{loadMoreError} L’elenco mostrato è parziale.</p>
+              <button type="button" className="btn-secondary btn-sm" onClick={loadMore}>
+                Riprova caricamento
+              </button>
+            </div>
+          )}
+          {pageInfo.hasMore && !loadMoreError && (
+            <button
+              type="button"
+              className="btn-secondary btn-sm"
+              onClick={loadMore}
+              disabled={loadingMore}
+            >
+              {loadingMore ? 'Caricamento…' : 'Carica altri documenti'}
+            </button>
           )}
         </div>
         {sourceText && (

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { CartellaPaziente, EsameClinicoRecord, Paziente } from '../../../types';
 import {
@@ -12,6 +12,8 @@ import {
 } from './shared';
 import { API_URL } from '../../../config';
 import { documentAuthHeaders } from '../../../lib/entraAuth';
+import { usePatientDocuments } from '../../../lib/usePatientDocuments';
+import type { PatientDocumentMeta } from '../../../lib/patientDocumentsPage';
 import { LoadErrorState } from './LoadErrorState';
 
 // #246: photo/scan attachments for exams/RX/consultations. Uses the device camera on mobile
@@ -19,13 +21,7 @@ import { LoadErrorState } from './LoadErrorState';
 // #246: explicit demo-only scope headers accompany every /documents call. They are falsifiable
 // QA hints, not secure authentication. The content endpoint is opened via a gated blob
 // fetch (a plain <a href>/<img src> cannot attach custom headers).
-type SectionDocMeta = {
-  id: string;
-  originalName: string;
-  mimeType: string;
-  documentType: string;
-  createdAt: string;
-};
+type SectionDocMeta = PatientDocumentMeta;
 
 // #260: gli header sono costruiti da documentAuthHeaders — Bearer Entra verificato quando la
 // SPA è configurata (VITE_ENTRA_*), altrimenti gli header demo espliciti di #246 (invariati).
@@ -36,14 +32,16 @@ function SectionPhotos({
   operatorId,
   operatorRole,
   documents,
-  onDocumentsChanged,
+  metadataLoading,
+  onDocumentCreated,
 }: {
   patientId: string;
   documentType: string;
   operatorId?: string;
   operatorRole?: string;
   documents: SectionDocMeta[];
-  onDocumentsChanged: () => void;
+  metadataLoading: boolean;
+  onDocumentCreated: (document?: SectionDocMeta) => void;
 }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -64,7 +62,8 @@ function SectionPhotos({
         headers: await documentAuthHeaders(patientId, operatorId, operatorRole),
       });
       if (!r.ok) throw new Error(String(r.status));
-      onDocumentsChanged();
+      const result = (await r.json()) as { document?: SectionDocMeta };
+      onDocumentCreated(result.document?.id ? result.document : undefined);
     } catch {
       setErr('Caricamento non riuscito');
     } finally {
@@ -90,16 +89,16 @@ function SectionPhotos({
   return (
     <div className="section-photos" data-testid={`photos-${documentType}`}>
       <label
-        className={`btn-secondary btn-sm ${busy ? 'is-busy' : ''}`}
-        style={{ cursor: busy ? 'default' : 'pointer' }}
+        className={`btn-secondary btn-sm ${busy || metadataLoading ? 'is-busy' : ''}`}
+        style={{ cursor: busy || metadataLoading ? 'default' : 'pointer' }}
       >
-        📷 Aggiungi foto/allegato
+        {metadataLoading ? 'Caricamento allegati…' : '📷 Aggiungi foto/allegato'}
         <input
           type="file"
           accept="image/*,application/pdf"
           capture="environment"
           hidden
-          disabled={busy}
+          disabled={busy || metadataLoading}
           onChange={onFile}
         />
       </label>
@@ -426,48 +425,22 @@ export function EsamiConsulenzeTab({
   operatoreId,
   operatoreRole,
 }: Props) {
-  const [documentRefresh, setDocumentRefresh] = useState(0);
-  const documentScope = `${paziente.id}\u0000${operatoreId ?? ''}\u0000${operatoreRole ?? ''}`;
-  const [documentState, setDocumentState] = useState<{
-    scope: string;
-    documents: SectionDocMeta[];
-    status: 'loading' | 'ready' | 'error';
-  }>({ scope: '', documents: [], status: 'loading' });
-
-  useEffect(() => {
-    const controller = new AbortController();
-    void (async () => {
-      try {
-        const headers = await documentAuthHeaders(paziente.id, operatoreId, operatoreRole);
-        if (controller.signal.aborted) return;
-        const response = await fetch(`${API_URL}/patients/${paziente.id}/documents`, {
-          headers,
-          signal: controller.signal,
-        });
-        if (!response.ok) throw new Error(`Document metadata request failed: ${response.status}`);
-        const data = await response.json();
-        if (controller.signal.aborted) return;
-        setDocumentState({
-          scope: documentScope,
-          documents: Array.isArray(data.documents) ? data.documents : [],
-          status: 'ready',
-        });
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return;
-        if (!controller.signal.aborted) {
-          setDocumentState((current) =>
-            current.scope === documentScope
-              ? { ...current, status: 'error' }
-              : { scope: documentScope, documents: [], status: 'error' },
-          );
-        }
-      }
-    })();
-    return () => controller.abort();
-  }, [documentRefresh, documentScope, operatoreId, operatoreRole, paziente.id]);
+  const {
+    documents,
+    status: documentStatus,
+    loadingMore,
+    loadMoreError,
+    pageInfo,
+    reload: reloadDocuments,
+    loadMore,
+    upsertDocument,
+  } = usePatientDocuments({
+    patientId: paziente.id,
+    operatorId: operatoreId,
+    operatorRole: operatoreRole,
+  });
 
   const documentsByType = useMemo(() => {
-    const documents = documentState.scope === documentScope ? documentState.documents : [];
     const grouped: Record<'esame' | 'rx' | 'consulenza', SectionDocMeta[]> = {
       esame: [],
       rx: [],
@@ -479,16 +452,7 @@ export function EsamiConsulenzeTab({
       }
     }
     return grouped;
-  }, [documentScope, documentState.documents, documentState.scope]);
-
-  function reloadDocuments() {
-    setDocumentState((current) =>
-      current.scope === documentScope ? { ...current, status: 'loading' } : current,
-    );
-    setDocumentRefresh((current) => current + 1);
-  }
-
-  const documentStatus = documentState.scope === documentScope ? documentState.status : 'loading';
+  }, [documents]);
 
   return (
     <div className="cr-tab-content">
@@ -513,6 +477,13 @@ export function EsamiConsulenzeTab({
           retryLabel="Riprova allegati"
         />
       )}
+      {loadMoreError && (
+        <LoadErrorState
+          message={`${loadMoreError} L’elenco allegati mostrato è parziale.`}
+          onRetry={loadMore}
+          retryLabel="Riprova caricamento"
+        />
+      )}
 
       <EsameSection
         title="Esami ematici"
@@ -527,7 +498,8 @@ export function EsamiConsulenzeTab({
         operatorId={operatoreId}
         operatorRole={operatoreRole}
         documents={documentsByType.esame}
-        onDocumentsChanged={reloadDocuments}
+        metadataLoading={documentStatus === 'loading'}
+        onDocumentCreated={(document) => (document ? upsertDocument(document) : reloadDocuments())}
       />
 
       <div style={{ marginTop: 16 }}>
@@ -544,9 +516,25 @@ export function EsamiConsulenzeTab({
           operatorId={operatoreId}
           operatorRole={operatoreRole}
           documents={documentsByType.rx}
-          onDocumentsChanged={reloadDocuments}
+          metadataLoading={documentStatus === 'loading'}
+          onDocumentCreated={(document) =>
+            document ? upsertDocument(document) : reloadDocuments()
+          }
         />
       </div>
+      {pageInfo.hasMore && !loadMoreError && (
+        <div className="empty-state-card" role="status" aria-live="polite">
+          <p>Sono mostrati i primi {documents.length} allegati.</p>
+          <button
+            type="button"
+            className="btn-secondary btn-sm"
+            onClick={loadMore}
+            disabled={loadingMore}
+          >
+            {loadingMore ? 'Caricamento…' : 'Carica altri allegati'}
+          </button>
+        </div>
+      )}
 
       <div style={{ marginTop: 16 }}>
         <EsameSection
@@ -562,7 +550,10 @@ export function EsamiConsulenzeTab({
           operatorId={operatoreId}
           operatorRole={operatoreRole}
           documents={documentsByType.consulenza}
-          onDocumentsChanged={reloadDocuments}
+          metadataLoading={documentStatus === 'loading'}
+          onDocumentCreated={(document) =>
+            document ? upsertDocument(document) : reloadDocuments()
+          }
         />
       </div>
     </div>

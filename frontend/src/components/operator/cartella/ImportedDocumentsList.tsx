@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { API_URL } from '../../../config';
 import { documentAuthHeaders } from '../../../lib/entraAuth';
+import { openScopedPatientDocument } from '../../../lib/patientDocumentContent';
+import { usePatientDocuments } from '../../../lib/usePatientDocuments';
 import { DocumentSourcePanel, type PatientDocMeta } from '../../shared/DocumentSourcePanel';
 
 // REQ-035 v2: imported source documents permanently linked to the patient, shown in the
@@ -27,43 +29,60 @@ interface Props {
 }
 
 export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: Props) {
-  const [docs, setDocs] = useState<PatientDocMeta[]>([]);
+  const {
+    documents: docs,
+    status,
+    loadingMore,
+    loadMoreError,
+    pageInfo,
+    reload,
+    loadMore,
+  } = usePatientDocuments({ patientId, operatorId, operatorRole });
   const [open, setOpen] = useState<{ fileName: string } | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const openControllerRef = useRef<AbortController | null>(null);
+  const openRequestRef = useRef(0);
+  const scope = `${patientId}\u0000${operatorId ?? ''}\u0000${operatorRole ?? ''}`;
+  const scopeRef = useRef(scope);
 
-  useEffect(() => {
-    let alive = true;
-    // #260: Bearer Entra verificato quando la SPA è configurata, altrimenti header demo (#246).
-    documentAuthHeaders(patientId, operatorId, operatorRole)
-      .then((headers) => fetch(`${API_URL}/patients/${patientId}/documents`, { headers }))
-      .then((r) => (r.ok ? r.json() : { documents: [] }))
-      .then((d) => {
-        if (alive) setDocs(Array.isArray(d.documents) ? d.documents : []);
-      })
-      .catch(() => {
-        /* none */
-      });
+  useLayoutEffect(() => {
+    scopeRef.current = scope;
     return () => {
-      alive = false;
+      openRequestRef.current += 1;
+      openControllerRef.current?.abort();
+      openControllerRef.current = null;
     };
-  }, [patientId, operatorId, operatorRole]);
+  }, [scope]);
 
   async function openDoc(d: PatientDocMeta) {
+    openControllerRef.current?.abort();
+    const controller = new AbortController();
+    openControllerRef.current = controller;
+    const request = ++openRequestRef.current;
+    const requestScope = scope;
+    const isCurrent = () =>
+      !controller.signal.aborted &&
+      request === openRequestRef.current &&
+      requestScope === scopeRef.current;
+
     try {
-      const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, {
-        headers: await documentAuthHeaders(patientId, operatorId, operatorRole),
+      setErr(null);
+      await openScopedPatientDocument({
+        url: `${API_URL}/patients/${encodeURIComponent(patientId)}/documents/${encodeURIComponent(d.id)}/content`,
+        signal: controller.signal,
+        getHeaders: () => documentAuthHeaders(patientId, operatorId, operatorRole),
+        isCurrent,
       });
-      if (!r.ok) throw new Error(String(r.status));
-      const blob = await r.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      window.open(objectUrl, '_blank', 'noreferrer');
-      setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
-    } catch {
-      setErr('Apertura documento non riuscita');
+    } catch (error) {
+      if (isCurrent() && !(error instanceof DOMException && error.name === 'AbortError')) {
+        setErr('Apertura documento non riuscita');
+      }
+    } finally {
+      if (request === openRequestRef.current) openControllerRef.current = null;
     }
   }
 
-  if (docs.length === 0) return null;
+  if (status === 'ready' && docs.length === 0) return null;
 
   return (
     <section className="imported-docs" data-testid="imported-documents">
@@ -75,6 +94,19 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
         <p role="alert" className="cr-empty">
           {err}
         </p>
+      )}
+      {status === 'loading' && docs.length === 0 && (
+        <p role="status" className="cr-empty">
+          Caricamento documenti…
+        </p>
+      )}
+      {status === 'error' && (
+        <div className="cr-empty" role="alert">
+          <p>Impossibile caricare i documenti importati.</p>
+          <button type="button" className="btn-secondary btn-sm" onClick={reload}>
+            Riprova
+          </button>
+        </div>
       )}
       <ul className="imported-docs__list">
         {docs.map((d) => (
@@ -100,6 +132,24 @@ export function ImportedDocumentsList({ patientId, operatorId, operatorRole }: P
           </li>
         ))}
       </ul>
+      {loadMoreError && (
+        <div className="cr-empty" role="alert">
+          <p>{loadMoreError} L’elenco mostrato è parziale.</p>
+          <button type="button" className="btn-secondary btn-sm" onClick={loadMore}>
+            Riprova caricamento
+          </button>
+        </div>
+      )}
+      {pageInfo.hasMore && !loadMoreError && (
+        <button
+          type="button"
+          className="btn-secondary btn-sm"
+          onClick={loadMore}
+          disabled={loadingMore}
+        >
+          {loadingMore ? 'Caricamento…' : 'Carica altri documenti'}
+        </button>
+      )}
       {open && (
         <DocumentSourcePanel
           patientId={patientId}

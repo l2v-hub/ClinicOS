@@ -8,6 +8,10 @@ import type { Prisma } from '@prisma/client';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
+import {
+  encodePatientDocumentCursor,
+  type DecodedPatientDocumentCursor,
+} from './patient-document-cursor.js';
 
 export interface PublicPatientDocument {
   id: string;
@@ -32,6 +36,13 @@ export interface AiPatientDocument {
 
 export const AI_PATIENT_DOCUMENT_LIMIT = 100;
 export const AI_PATIENT_DOCUMENT_LOOKAHEAD = AI_PATIENT_DOCUMENT_LIMIT + 1;
+
+export interface PatientDocumentPage {
+  documents: PublicPatientDocument[];
+  total: number | null;
+  sourceMatch: PublicPatientDocument | null;
+  pageInfo: { loadedCount: number; hasMore: boolean; nextCursor: string | null };
+}
 
 /**
  * Copy a job's uploaded files into permanent PatientDocument rows, inside the patient-create
@@ -122,24 +133,69 @@ export async function createPatientDocument(
   return { ...row, createdAt: row.createdAt.toISOString() };
 }
 
-/** Document metadata for the patient (never includes the base64 bytes). */
-export async function listPatientDocuments(patientId: string): Promise<PublicPatientDocument[]> {
-  const rows = await prisma.patientDocument.findMany({
-    where: { patientId },
-    orderBy: { sortOrder: 'asc' },
-    select: {
-      id: true,
-      originalName: true,
-      mimeType: true,
-      sizeBytes: true,
-      sha256: true,
-      documentType: true,
-      sortOrder: true,
-      importJobId: true,
-      createdAt: true,
+const PATIENT_DOCUMENT_PUBLIC_SELECT = {
+  id: true,
+  originalName: true,
+  mimeType: true,
+  sizeBytes: true,
+  sha256: true,
+  documentType: true,
+  sortOrder: true,
+  importJobId: true,
+  createdAt: true,
+} satisfies Prisma.PatientDocumentSelect;
+
+/** Bounded document metadata page for the patient (never includes the base64 bytes). */
+export async function listPatientDocuments(
+  patientId: string,
+  options: {
+    limit: number;
+    cursor?: DecodedPatientDocumentCursor;
+    sourceFileName?: string;
+  },
+): Promise<PatientDocumentPage> {
+  const { limit, cursor, sourceFileName } = options;
+  const [rows, sourceRow, total] = await Promise.all([
+    prisma.patientDocument.findMany({
+      where: {
+        patientId,
+        ...(cursor
+          ? {
+              OR: [
+                { sortOrder: { gt: cursor.sortOrder } },
+                { sortOrder: cursor.sortOrder, id: { gt: cursor.id } },
+              ],
+            }
+          : {}),
+      },
+      orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+      take: limit + 1,
+      select: PATIENT_DOCUMENT_PUBLIC_SELECT,
+    }),
+    sourceFileName
+      ? prisma.patientDocument.findFirst({
+          where: { patientId, originalName: sourceFileName },
+          orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+          select: PATIENT_DOCUMENT_PUBLIC_SELECT,
+        })
+      : Promise.resolve(null),
+    cursor ? Promise.resolve(null) : prisma.patientDocument.count({ where: { patientId } }),
+  ]);
+  const hasMore = rows.length > limit;
+  const pageRows = rows.slice(0, limit);
+  const documents = pageRows.map((row) => ({ ...row, createdAt: row.createdAt.toISOString() }));
+  const last = documents.at(-1);
+
+  return {
+    documents,
+    total,
+    sourceMatch: sourceRow ? { ...sourceRow, createdAt: sourceRow.createdAt.toISOString() } : null,
+    pageInfo: {
+      loadedCount: documents.length,
+      hasMore,
+      nextCursor: hasMore && last ? encodePatientDocumentCursor(patientId, last) : null,
     },
-  });
-  return rows.map((r) => ({ ...r, createdAt: r.createdAt.toISOString() }));
+  };
 }
 
 /** Bounded, minimized metadata projection for the AI gateway; never used by the full UI list. */
