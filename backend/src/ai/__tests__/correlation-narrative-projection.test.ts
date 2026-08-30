@@ -7,19 +7,24 @@ const assistant = readFileSync(new URL('../assistant/service.ts', import.meta.ur
 const correlation = services
   .split('export async function correlate')[1]
   ?.split('/** Resolve a NARRATIVE_SECTION')[0];
+const excerptSql = services
+  .split('function narrativeExcerptLateral')[1]
+  ?.split('interface LegacyClinicalMatchRow')[0];
 
 test('correlation projects a centered bounded narrative excerpt in PostgreSQL', () => {
   assert.ok(correlation);
-  assert.match(correlation, /CROSS JOIN LATERAL/);
-  assert.match(correlation, /strpos\(/);
-  assert.match(correlation, /GREATEST\(1, source\."matchPosition" - 120\)/);
-  assert.match(correlation, /240 \+ \$\{validated\.sectionContains\.text\.length\}/);
+  assert.ok(excerptSql);
+  assert.match(excerptSql, /CROSS JOIN LATERAL/);
+  assert.match(excerptSql, /strpos\(/);
+  assert.match(excerptSql, /GREATEST\(1, source\."matchPosition" - 120\)/);
+  assert.match(excerptSql, /240 \+ \$\{query\.length\}/);
   assert.match(
-    correlation,
-    /GREATEST\(1, source\."matchPosition" - 120\)\s*\+ 240 \+ \$\{validated\.sectionContains\.text\.length\} - 1\s*AS "endPosition"/,
+    excerptSql,
+    /GREATEST\(1, source\."matchPosition" - 120\) \+ 240 \+ \$\{query\.length\} - 1\s*AS "endPosition"/,
   );
-  assert.match(correlation, /AS "excerpt"/);
-  assert.match(correlation, /AS "contentTruncated"/);
+  assert.match(excerptSql, /AS "excerpt"/);
+  assert.match(excerptSql, /AS "contentTruncated"/);
+  assert.match(correlation, /narrativeExcerptLateral\(validated\.sectionContains\.text\)/);
   assert.doesNotMatch(correlation, /section\."originalText", section\."reviewedText"/);
   assert.doesNotMatch(correlation, /excerptAround\(text/);
 });

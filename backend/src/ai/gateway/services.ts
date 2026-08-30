@@ -111,6 +111,32 @@ function normalizedSql(value: Prisma.Sql): Prisma.Sql {
   return Prisma.sql`translate(lower(${value}), ${ACCENTED_LATIN}, ${PLAIN_LATIN})`;
 }
 
+function narrativeExcerptLateral(query: string): Prisma.Sql {
+  return Prisma.sql`CROSS JOIN LATERAL (
+    SELECT source."text", source."matchPosition",
+      GREATEST(1, source."matchPosition" - 120) AS "startPosition",
+      240 + ${query.length} AS "excerptLength",
+      GREATEST(1, source."matchPosition" - 120) + 240 + ${query.length} - 1
+        AS "endPosition"
+    FROM (
+      SELECT COALESCE(section."reviewedText", section."originalText", '') AS "text",
+        strpos(
+          ${normalizedSql(Prisma.sql`COALESCE(section."reviewedText", section."originalText", '')`)},
+          ${normalizeSearchText(query)}
+        ) AS "matchPosition"
+    ) source
+  ) hit`;
+}
+
+const narrativeExcerptColumns = Prisma.sql`
+  (CASE WHEN hit."startPosition" > 1 THEN '…' ELSE '' END)
+    || btrim(substring(hit."text" from hit."startPosition" for hit."excerptLength"))
+    || (CASE WHEN hit."endPosition" < char_length(hit."text") THEN '…' ELSE '' END)
+    AS "excerpt",
+  (hit."startPosition" > 1 OR hit."endPosition" < char_length(hit."text"))
+    AS "contentTruncated"
+`;
+
 interface LegacyClinicalMatchRow {
   recordId: string;
   patientId: string;
@@ -1091,28 +1117,28 @@ export async function searchClinicalSections(
       id: string;
       patientId: string;
       sectionKey: string;
-      reviewedText: string | null;
-      originalText: string | null;
+      excerpt: string;
+      contentTruncated: boolean;
       updatedAt: Date;
     }>
   >(Prisma.sql`
     SELECT section."id", section."patientId", section."sectionKey",
-           section."reviewedText", section."originalText", section."updatedAt"
+           ${narrativeExcerptColumns}, section."updatedAt"
     FROM "PatientNarrativeSection" section
+    ${narrativeExcerptLateral(validated.query)}
     WHERE ${Prisma.join(predicates, ' AND ')}
     ORDER BY section."updatedAt" DESC, section."id" ASC
     LIMIT ${validated.limit}
   `);
   const out: ClinicalSectionMatch[] = [];
   for (const r of rows) {
-    const text = (r.reviewedText ?? r.originalText) || '';
-    const excerpt = excerptAround(text, validated.query);
     out.push({
       patientId: r.patientId,
       sectionKey: r.sectionKey,
-      excerpt,
+      excerpt: r.excerpt,
+      contentTruncated: r.contentTruncated,
       sourceRefs: [
-        narrativeSource(r.patientId, r.sectionKey, r.id, excerpt, r.updatedAt.toISOString()),
+        narrativeSource(r.patientId, r.sectionKey, r.id, r.excerpt, r.updatedAt.toISOString()),
       ],
     });
   }
@@ -1221,28 +1247,9 @@ export async function correlate(
         >(Prisma.sql`
           SELECT DISTINCT ON (section."patientId")
             section."id", section."patientId", section."sectionKey",
-            (CASE WHEN hit."startPosition" > 1 THEN '…' ELSE '' END)
-              || btrim(substring(hit."text" from hit."startPosition" for hit."excerptLength"))
-              || (CASE WHEN hit."endPosition" < char_length(hit."text") THEN '…' ELSE '' END)
-              AS "excerpt",
-            (hit."startPosition" > 1 OR hit."endPosition" < char_length(hit."text"))
-              AS "contentTruncated"
+            ${narrativeExcerptColumns}
           FROM "PatientNarrativeSection" section
-          CROSS JOIN LATERAL (
-            SELECT source."text", source."matchPosition",
-              GREATEST(1, source."matchPosition" - 120) AS "startPosition",
-              240 + ${validated.sectionContains.text.length} AS "excerptLength",
-              GREATEST(1, source."matchPosition" - 120)
-                + 240 + ${validated.sectionContains.text.length} - 1
-                AS "endPosition"
-            FROM (
-              SELECT COALESCE(section."reviewedText", section."originalText", '') AS "text",
-                strpos(
-                  ${normalizedSql(Prisma.sql`COALESCE(section."reviewedText", section."originalText", '')`)},
-                  ${normalizeSearchText(validated.sectionContains.text)}
-                ) AS "matchPosition"
-            ) source
-          ) hit
+          ${narrativeExcerptLateral(validated.sectionContains.text)}
           WHERE section."patientId" IN (${Prisma.join(patientIds)})
             ${
               validated.sectionContains.sectionKey
@@ -1364,13 +1371,4 @@ export async function searchAcrossPatients(
   if (!canCrossPatientSearch(ctx))
     throw new GatewayError('cross_patient_disabled', 'Cross-patient search is disabled');
   return searchClinicalSections({ ...input, patientId: undefined }, ctx);
-}
-
-function excerptAround(text: string, needle: string, radius = 120): string {
-  const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-  const i = norm(text).indexOf(norm(needle));
-  if (i < 0) return text.slice(0, radius);
-  const start = Math.max(0, i - radius);
-  const end = Math.min(text.length, i + needle.length + radius);
-  return (start > 0 ? '…' : '') + text.slice(start, end).trim() + (end < text.length ? '…' : '');
 }

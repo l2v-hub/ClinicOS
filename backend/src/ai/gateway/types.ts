@@ -75,6 +75,7 @@ export interface ClinicalSectionMatch {
   patientId: string;
   sectionKey: string;
   excerpt: string;
+  contentTruncated?: boolean;
   sourceRefs: SourceReference[];
 }
 

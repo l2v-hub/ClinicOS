@@ -616,7 +616,11 @@ async function dispatch(
     }
     case 'search_clinical_sections': {
       const data = await svc.searchClinicalSections(args as never, ctx);
-      return { data, sourceRefs: data.flatMap((m) => m.sourceRefs) };
+      return {
+        data,
+        sourceRefs: data.flatMap((m) => m.sourceRefs),
+        truncated: data.some((match) => match.contentTruncated === true),
+      };
     }
     case 'search_documents': {
       const r = await svc.searchDocuments(args as never, ctx);
@@ -631,7 +635,11 @@ async function dispatch(
       if (typeof args.systolicMin === 'number')
         return await crossVitals(Number(args.systolicMin), ctx, env);
       const data = await svc.searchAcrossPatients(args as never, ctx);
-      return { data, sourceRefs: data.flatMap((m) => m.sourceRefs) };
+      return {
+        data,
+        sourceRefs: data.flatMap((m) => m.sourceRefs),
+        truncated: data.some((match) => match.contentTruncated === true),
+      };
     }
     case 'correlate_structured_data': {
       const r = await svc.correlate(args as never, ctx);
