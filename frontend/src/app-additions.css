@@ -738,6 +738,29 @@
   flex-wrap: wrap;
 }
 
+/* Operator agenda adopts the canonical PageHeader while retaining agenda-specific controls. */
+.agt-page-subtitle,
+.agt-page-actions {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.agt-page-subtitle {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.agt-page-subtitle__separator {
+  color: var(--text-xmuted);
+}
+
+.agt-page-actions {
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 /* ── Operator chip (operator agenda) ── */
 .agt-op-chip {
   display: inline-flex;
@@ -862,6 +885,40 @@
 .agt-today-btn svg {
   width: 13px;
   height: 13px;
+}
+
+@media (max-width: 600px) {
+  .agt-view > .page-header .page-header__row,
+  .agt-view > .page-header .page-header__actions,
+  .agt-page-actions {
+    width: 100%;
+  }
+
+  .agt-page-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .agt-view-switcher {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .agt-view-btn {
+    min-height: 44px;
+    padding-inline: 8px;
+  }
+
+  .agt-nav {
+    width: 100%;
+  }
+
+  .agt-today-btn {
+    flex: 1;
+    justify-content: center;
+    min-height: 44px;
+  }
 }
 
 /* ── Filter chips ── */

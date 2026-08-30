@@ -16,6 +16,7 @@ import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
 import { TherapySlotCard } from '../shared/TherapySlotOverlay';
 import { AgendaStatoFilterRow } from '../shared/AgendaStatoFilter';
 import { STATO_LABEL, matchStato, type FiltroStatoAppuntamento } from '../shared/agendaStato';
+import { PageHeader } from '../shared/PageHeader';
 import { TherapySlotModal } from './TherapySlotModal';
 
 type ViewMode = 'giornaliero' | 'settimanale' | 'mensile';
@@ -279,57 +280,65 @@ export function OperatorAgenda({
 
   return (
     <div className="agt-view">
-      {/* ── Header ── */}
-      <div className="agt-header">
-        <div className="agt-header__left">
-          <div className="agt-op-chip">
-            <span className="agt-op-dot" style={{ background: opColor }} />
-            <span className="agt-op-name">{nomeOperatore}</span>
-          </div>
-          <span className="agt-header__date">{titleLabel()}</span>
-        </div>
-        <div className="agt-header__right">
-          <div className="agt-view-switcher" role="group" aria-label="Visualizzazione agenda">
-            {(['giornaliero', 'settimanale', 'mensile'] as ViewMode[]).map((v) => (
+      <PageHeader
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Agenda' }]}
+        title="Agenda operatore"
+        subtitle={
+          <span className="agt-page-subtitle">
+            <span className="agt-op-chip">
+              <span className="agt-op-dot" style={{ background: opColor }} aria-hidden="true" />
+              <span className="agt-op-name">{nomeOperatore}</span>
+            </span>
+            <span className="agt-page-subtitle__separator" aria-hidden="true">
+              ·
+            </span>
+            <span className="agt-header__date">{titleLabel()}</span>
+          </span>
+        }
+        actions={
+          <div className="agt-page-actions">
+            <div className="agt-view-switcher" role="group" aria-label="Visualizzazione agenda">
+              {(['giornaliero', 'settimanale', 'mensile'] as ViewMode[]).map((v) => (
+                <button
+                  type="button"
+                  key={v}
+                  className={`agt-view-btn${view === v ? ' active' : ''}`}
+                  onClick={() => changeView(v)}
+                  aria-pressed={view === v}
+                >
+                  {v === 'giornaliero' ? 'Giorno' : v === 'settimanale' ? 'Settimana' : 'Mese'}
+                </button>
+              ))}
+            </div>
+            <div className="agt-nav">
               <button
                 type="button"
-                key={v}
-                className={`agt-view-btn${view === v ? ' active' : ''}`}
-                onClick={() => changeView(v)}
-                aria-pressed={view === v}
+                className="agt-nav-btn"
+                onClick={() => navigate(-1)}
+                aria-label="Intervallo precedente"
               >
-                {v === 'giornaliero' ? 'Giorno' : v === 'settimanale' ? 'Settimana' : 'Mese'}
+                <IcoChevronLeft />
               </button>
-            ))}
+              <button
+                type="button"
+                className="agt-today-btn"
+                onClick={goToday}
+                aria-label="Vai a oggi"
+              >
+                <IcoCalendar /> Oggi
+              </button>
+              <button
+                type="button"
+                className="agt-nav-btn"
+                onClick={() => navigate(1)}
+                aria-label="Intervallo successivo"
+              >
+                <IcoChevronRight />
+              </button>
+            </div>
           </div>
-          <div className="agt-nav">
-            <button
-              type="button"
-              className="agt-nav-btn"
-              onClick={() => navigate(-1)}
-              aria-label="Intervallo precedente"
-            >
-              <IcoChevronLeft />
-            </button>
-            <button
-              type="button"
-              className="agt-today-btn"
-              onClick={goToday}
-              aria-label="Vai a oggi"
-            >
-              <IcoCalendar /> Oggi
-            </button>
-            <button
-              type="button"
-              className="agt-nav-btn"
-              onClick={() => navigate(1)}
-              aria-label="Intervallo successivo"
-            >
-              <IcoChevronRight />
-            </button>
-          </div>
-        </div>
-      </div>
+        }
+      />
 
       {/* ── Appointment status filter chips ── */}
       <AgendaStatoFilterRow
