@@ -29,6 +29,32 @@ const MAX_LEGACY_FILE_BYTES = 5 * 1024 * 1024;
 const MAX_BASE64_LENGTH = Math.ceil(MAX_LEGACY_FILE_BYTES / 3) * 4;
 const LEGACY_MIME_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png']);
 export const LEGACY_INTAKE_EXISTS_SELECT = { id: true } as const;
+export const MAX_LEGACY_INTAKE_DOCUMENTS = 50;
+export const LEGACY_INTAKE_LIST_SELECT = {
+  id: true,
+  fileName: true,
+  fileType: true,
+  status: true,
+  operatoreNome: true,
+  createdAt: true,
+} as const;
+
+export function legacyIntakeDocumentsQuery(patientId: string) {
+  return {
+    where: { patientId },
+    select: LEGACY_INTAKE_LIST_SELECT,
+    orderBy: [{ createdAt: 'desc' as const }, { id: 'desc' as const }],
+    take: MAX_LEGACY_INTAKE_DOCUMENTS + 1,
+  };
+}
+
+export function boundLegacyIntakeDocuments<T>(rows: T[]) {
+  const truncated = rows.length > MAX_LEGACY_INTAKE_DOCUMENTS;
+  return {
+    documents: truncated ? rows.slice(0, MAX_LEGACY_INTAKE_DOCUMENTS) : rows,
+    truncated,
+  };
+}
 
 // ── POST /patient-intake/discharge-letter/upload ──
 // Receives base64 file, stores document
@@ -145,27 +171,16 @@ router.post('/discharge-letter/apply', async (req, res) => {
 });
 
 // ── GET /patient-intake/documents/:patientId ──
-// Get all intake documents for a patient
+// Return a bounded metadata history. Raw OCR, extracted clinical JSON and base64 are intentionally
+// excluded from this deprecated collection endpoint.
 router.get('/documents/:patientId', async (req, res) => {
   const { patientId } = req.params;
 
   try {
-    const docs = await prisma.patientIntakeDocument.findMany({
-      where: { patientId },
-      select: {
-        id: true,
-        fileName: true,
-        fileType: true,
-        ocrText: true,
-        extractedData: true,
-        status: true,
-        operatoreNome: true,
-        createdAt: true,
-      },
-      orderBy: { createdAt: 'desc' },
-    });
-
-    res.status(200).json(docs);
+    const rows = await prisma.patientIntakeDocument.findMany(legacyIntakeDocumentsQuery(patientId));
+    const { documents, truncated } = boundLegacyIntakeDocuments(rows);
+    res.setHeader('X-Result-Truncated', String(truncated));
+    res.status(200).json(documents);
   } catch (error) {
     console.error('GET /patient-intake/documents/:patientId error:', error);
     res.status(500).json({ error: 'Errore nel recupero dei documenti' });
