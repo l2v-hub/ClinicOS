@@ -78,17 +78,15 @@ export function developmentOrigins(env: NodeJS.ProcessEnv = process.env): string
 
 const staticAllowed = developmentOrigins();
 
-const envAllowed: string[] = [];
+export function configuredOrigins(env: NodeJS.ProcessEnv = process.env): string[] {
+  return [env.FRONTEND_URL, env.FRONTEND_URLS]
+    .filter((value): value is string => Boolean(value))
+    .flatMap((value) => value.split(','))
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
 
-if (process.env.FRONTEND_URL) {
-  envAllowed.push(process.env.FRONTEND_URL.trim());
-}
-if (process.env.FRONTEND_URLS) {
-  process.env.FRONTEND_URLS.split(',')
-    .map((u) => u.trim())
-    .filter(Boolean)
-    .forEach((u) => envAllowed.push(u));
-}
+const envAllowed = configuredOrigins();
 
 export const allowedOrigins = Array.from(new Set([...staticAllowed, ...envAllowed]));
 

@@ -1,7 +1,12 @@
 import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Server } from 'node:http';
-import app, { developmentOrigins, isAllowedOrigin, trustedProxyHops } from '../app.js';
+import app, {
+  configuredOrigins,
+  developmentOrigins,
+  isAllowedOrigin,
+  trustedProxyHops,
+} from '../app.js';
 import { signUserContext } from '../ai/gateway/context.js';
 
 let server: Server;
@@ -32,6 +37,20 @@ test('production CORS accepts only exact configured origins', () => {
   assert.equal(isAllowedOrigin('https://clinicos-preview-owner.vercel.app', allowlist), true);
   assert.equal(isAllowedOrigin('https://clinicos-evil.vercel.app', allowlist), false);
   assert.equal(isAllowedOrigin('https://clinicos-eosin.vercel.app.evil.example', allowlist), false);
+});
+
+test('configured CORS origins tolerate comma-separated values in either Railway variable', () => {
+  assert.deepEqual(
+    configuredOrigins({
+      FRONTEND_URL: 'https://clinicos-eosin.vercel.app, https://clinicos-preview-owner.vercel.app',
+      FRONTEND_URLS: ' http://localhost:5173 ',
+    } as NodeJS.ProcessEnv),
+    [
+      'https://clinicos-eosin.vercel.app',
+      'https://clinicos-preview-owner.vercel.app',
+      'http://localhost:5173',
+    ],
+  );
 });
 
 test('localhost origins are development-only', () => {
