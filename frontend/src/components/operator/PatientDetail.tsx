@@ -1,4 +1,4 @@
-import { Suspense, useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import type {
   Paziente,
   Consegna,
@@ -55,6 +55,7 @@ import {
   VitalSignsEditor,
 } from './PatientDetailLazyTabs';
 import { ClinicalSectionLoading } from './ClinicalSectionLoading';
+import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -365,6 +366,10 @@ export function PatientDetail({
   // Camera modal
   const [cameraEditing, setCameraEditing] = useState(false);
   const [cameraModalForm, setCameraModalForm] = useState<Partial<CartellaPaziente>>({});
+  const closeCardModal = useCallback(() => {
+    setCardModal(null);
+    setCameraEditing(false);
+  }, []);
 
   // Invio in PS modal
   const [showInvioPS, setShowInvioPS] = useState(false);
@@ -683,572 +688,637 @@ export function PatientDetail({
 
   function renderDiagnosiModal() {
     return (
-      <div className="modal-overlay" onClick={() => setCardModal(null)}>
-        <div className="modal-box modal-box--edit-card" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-header">
-            <div>
-              <h3 className="modal-title">Diagnosi e Problemi</h3>
-              <p className="modal-subtitle">{patientLabel}</p>
-            </div>
-            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}>
-              <IcoX />
+      <AccessibleDialogSurface
+        labelledBy="patient-diagnosi-dialog-title"
+        describedBy="patient-diagnosi-dialog-description"
+        onClose={closeCardModal}
+        className="modal-box--edit-card"
+      >
+        <div className="modal-header">
+          <div>
+            <h3 className="modal-title" id="patient-diagnosi-dialog-title">
+              Diagnosi e Problemi
+            </h3>
+            <p className="modal-subtitle" id="patient-diagnosi-dialog-description">
+              {patientLabel}
+            </p>
+          </div>
+          <button
+            type="button"
+            className="icon-btn icon-btn--sm"
+            onClick={closeCardModal}
+            aria-label="Chiudi"
+            data-dialog-initial-focus
+          >
+            <IcoX />
+          </button>
+        </div>
+        <div className="modal-body">
+          <DiagnosisEditor
+            mode="patient-chart"
+            value={cartella.diagnosi ?? []}
+            onChange={(list) => upd({ diagnosi: list })}
+            operatoreNome={operatoreNome}
+          />
+        </div>
+        <div className="modal-footer">
+          <div className="modal-footer__left">
+            <button
+              className="btn-secondary"
+              onClick={() => {
+                setCardModal(null);
+                switchGroup('clinica');
+                switchTab('diagnosi');
+              }}
+            >
+              Apri sezione completa
             </button>
           </div>
-          <div className="modal-body">
-            <DiagnosisEditor
-              mode="patient-chart"
-              value={cartella.diagnosi ?? []}
-              onChange={(list) => upd({ diagnosi: list })}
-              operatoreNome={operatoreNome}
-            />
-          </div>
-          <div className="modal-footer">
-            <div className="modal-footer__left">
-              <button
-                className="btn-secondary"
-                onClick={() => {
-                  setCardModal(null);
-                  switchGroup('clinica');
-                  switchTab('diagnosi');
-                }}
-              >
-                Apri sezione completa
-              </button>
-            </div>
-            <div className="modal-footer__right">
-              <button className="btn-primary" onClick={() => setCardModal(null)}>
-                Chiudi
-              </button>
-            </div>
+          <div className="modal-footer__right">
+            <button className="btn-primary" onClick={closeCardModal}>
+              Chiudi
+            </button>
           </div>
         </div>
-      </div>
+      </AccessibleDialogSurface>
     );
   }
 
   function renderFarmaciModal() {
     return (
-      <div className="modal-overlay" onClick={() => setCardModal(null)}>
-        <div className="modal-box modal-box--edit-card" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-header">
-            <div>
-              <h3 className="modal-title">Farmaci Attivi</h3>
-              <p className="modal-subtitle">{patientLabel}</p>
-            </div>
-            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}>
-              <IcoX />
-            </button>
-          </div>
-          <div className="modal-body">
-            <div className="ec-modal-list">
-              {farmaciAttivi.length === 0 && <p className="cr-empty">Nessun farmaco attivo.</p>}
-              {farmaciAttivi.map((f) => (
-                <div key={f.id} className="ec-modal-item">
-                  <div className="ec-modal-item__main">
-                    <span className="ec-modal-item__title">{f.nome}</span>
-                    <span className="ec-modal-item__sub">{f.dose}</span>
-                    <span className="ec-modal-item__sub">{f.frequenza}</span>
-                    {f.via && <span className="badge badge--gray">{f.via}</span>}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="cr-empty" style={{ marginTop: 4 }}>
-              Per aggiungere o modificare farmaci usa la sezione completa.
+      <AccessibleDialogSurface
+        labelledBy="patient-farmaci-dialog-title"
+        describedBy="patient-farmaci-dialog-description"
+        onClose={closeCardModal}
+        className="modal-box--edit-card"
+      >
+        <div className="modal-header">
+          <div>
+            <h3 className="modal-title" id="patient-farmaci-dialog-title">
+              Farmaci Attivi
+            </h3>
+            <p className="modal-subtitle" id="patient-farmaci-dialog-description">
+              {patientLabel}
             </p>
           </div>
-          <div className="modal-footer">
-            <div className="modal-footer__left">
-              <button
-                className="btn-secondary"
-                onClick={() => {
-                  setCardModal(null);
-                  switchGroup('clinica');
-                  switchTab('terapia-farmacologica');
-                }}
-              >
-                Apri Terapia Farmacologica
-              </button>
-            </div>
-            <div className="modal-footer__right">
-              <button className="btn-primary" onClick={() => setCardModal(null)}>
-                Chiudi
-              </button>
-            </div>
+          <button
+            type="button"
+            className="icon-btn icon-btn--sm"
+            onClick={closeCardModal}
+            aria-label="Chiudi"
+            data-dialog-initial-focus
+          >
+            <IcoX />
+          </button>
+        </div>
+        <div className="modal-body">
+          <div className="ec-modal-list">
+            {farmaciAttivi.length === 0 && <p className="cr-empty">Nessun farmaco attivo.</p>}
+            {farmaciAttivi.map((f) => (
+              <div key={f.id} className="ec-modal-item">
+                <div className="ec-modal-item__main">
+                  <span className="ec-modal-item__title">{f.nome}</span>
+                  <span className="ec-modal-item__sub">{f.dose}</span>
+                  <span className="ec-modal-item__sub">{f.frequenza}</span>
+                  {f.via && <span className="badge badge--gray">{f.via}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="cr-empty" style={{ marginTop: 4 }}>
+            Per aggiungere o modificare farmaci usa la sezione completa.
+          </p>
+        </div>
+        <div className="modal-footer">
+          <div className="modal-footer__left">
+            <button
+              className="btn-secondary"
+              onClick={() => {
+                setCardModal(null);
+                switchGroup('clinica');
+                switchTab('terapia-farmacologica');
+              }}
+            >
+              Apri Terapia Farmacologica
+            </button>
+          </div>
+          <div className="modal-footer__right">
+            <button className="btn-primary" onClick={closeCardModal}>
+              Chiudi
+            </button>
           </div>
         </div>
-      </div>
+      </AccessibleDialogSurface>
     );
   }
 
   function renderParametriModal() {
     const vitali = cartella.parametriVitali.slice(0, 8);
     return (
-      <div className="modal-overlay" onClick={() => setCardModal(null)}>
-        <div className="modal-box modal-box--edit-card" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-header">
-            <div>
-              <h3 className="modal-title">Parametri Vitali</h3>
-              <p className="modal-subtitle">{patientLabel}</p>
-            </div>
-            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}>
-              <IcoX />
-            </button>
+      <AccessibleDialogSurface
+        labelledBy="patient-parametri-dialog-title"
+        describedBy="patient-parametri-dialog-description"
+        onClose={closeCardModal}
+        className="modal-box--edit-card"
+        dismissible={!saving}
+      >
+        <div className="modal-header">
+          <div>
+            <h3 className="modal-title" id="patient-parametri-dialog-title">
+              Parametri Vitali
+            </h3>
+            <p className="modal-subtitle" id="patient-parametri-dialog-description">
+              {patientLabel}
+            </p>
           </div>
-          <div className="modal-body">
-            <div className="ec-modal-list">
-              {vitali.length === 0 && <p className="cr-empty">Nessun parametro rilevato.</p>}
-              {vitali.map((v) => (
-                <div key={v.id} className={`ec-modal-item`}>
-                  <div className="ec-modal-item__main">
-                    <span className="ec-modal-item__title">{v.etichetta}</span>
-                    <span className="ec-modal-item__sub">
-                      {v.valore} {v.unita}
-                    </span>
-                    <span
-                      className={`badge ${STATO_VITALE_CLASS[v.stato]?.replace('vital-card--', 'badge--') ?? 'badge--gray'}`}
-                    >
-                      {v.stato}
-                    </span>
-                    <span className="ec-modal-item__sub">{fmtDate(v.rilevato)}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {modalVitaleShow ? (
-              <div className="ec-modal-add-form">
-                <div className="op-form-grid">
-                  <div className="form-field">
-                    <label className="form-label">Parametro *</label>
-                    <input
-                      className="form-input"
-                      placeholder="es. Pressione sistolica"
-                      value={vitaleForm.etichetta ?? ''}
-                      onChange={(e) => setVitaleForm((p) => ({ ...p, etichetta: e.target.value }))}
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Valore *</label>
-                    <input
-                      className="form-input"
-                      value={vitaleForm.valore ?? ''}
-                      onChange={(e) => setVitaleForm((p) => ({ ...p, valore: e.target.value }))}
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Unità</label>
-                    <input
-                      className="form-input"
-                      placeholder="mmHg, bpm…"
-                      value={vitaleForm.unita ?? ''}
-                      onChange={(e) => setVitaleForm((p) => ({ ...p, unita: e.target.value }))}
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Stato</label>
-                    <select
-                      className="form-select"
-                      value={vitaleForm.stato ?? 'normale'}
-                      onChange={(e) =>
-                        setVitaleForm((p) => ({
-                          ...p,
-                          stato: e.target.value as VitaleItem['stato'],
-                        }))
-                      }
-                    >
-                      <option value="normale">Normale</option>
-                      <option value="attenzione">Attenzione</option>
-                      <option value="critico">Critico</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="ec-modal-add-form__actions">
-                  <button
-                    className="btn-secondary btn-sm"
-                    onClick={() => {
-                      setModalVitaleShow(false);
-                      setVitaleForm({});
-                    }}
-                    disabled={saving}
+          <button
+            type="button"
+            className="icon-btn icon-btn--sm"
+            onClick={closeCardModal}
+            aria-label="Chiudi"
+            data-dialog-initial-focus
+            disabled={saving}
+          >
+            <IcoX />
+          </button>
+        </div>
+        <div className="modal-body">
+          <div className="ec-modal-list">
+            {vitali.length === 0 && <p className="cr-empty">Nessun parametro rilevato.</p>}
+            {vitali.map((v) => (
+              <div key={v.id} className={`ec-modal-item`}>
+                <div className="ec-modal-item__main">
+                  <span className="ec-modal-item__title">{v.etichetta}</span>
+                  <span className="ec-modal-item__sub">
+                    {v.valore} {v.unita}
+                  </span>
+                  <span
+                    className={`badge ${STATO_VITALE_CLASS[v.stato]?.replace('vital-card--', 'badge--') ?? 'badge--gray'}`}
                   >
-                    Annulla
-                  </button>
-                  <button
-                    className="btn-success btn-sm"
-                    onClick={addVitaleFromModal}
-                    disabled={saving}
-                  >
-                    <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
-                  </button>
+                    {v.stato}
+                  </span>
+                  <span className="ec-modal-item__sub">{fmtDate(v.rilevato)}</span>
                 </div>
               </div>
-            ) : (
-              <button className="btn-secondary btn-sm" onClick={() => setModalVitaleShow(true)}>
-                <IcoPlus /> Aggiungi rilevazione
-              </button>
-            )}
+            ))}
           </div>
-          <div className="modal-footer">
-            <div className="modal-footer__left">
-              <button
-                className="btn-secondary"
-                onClick={() => {
-                  setCardModal(null);
-                  switchGroup('clinica');
-                  switchTab('parametri');
-                }}
-              >
-                Apri sezione completa
-              </button>
+          {modalVitaleShow ? (
+            <div className="ec-modal-add-form">
+              <div className="op-form-grid">
+                <div className="form-field">
+                  <label className="form-label">Parametro *</label>
+                  <input
+                    className="form-input"
+                    placeholder="es. Pressione sistolica"
+                    value={vitaleForm.etichetta ?? ''}
+                    onChange={(e) => setVitaleForm((p) => ({ ...p, etichetta: e.target.value }))}
+                  />
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Valore *</label>
+                  <input
+                    className="form-input"
+                    value={vitaleForm.valore ?? ''}
+                    onChange={(e) => setVitaleForm((p) => ({ ...p, valore: e.target.value }))}
+                  />
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Unità</label>
+                  <input
+                    className="form-input"
+                    placeholder="mmHg, bpm…"
+                    value={vitaleForm.unita ?? ''}
+                    onChange={(e) => setVitaleForm((p) => ({ ...p, unita: e.target.value }))}
+                  />
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Stato</label>
+                  <select
+                    className="form-select"
+                    value={vitaleForm.stato ?? 'normale'}
+                    onChange={(e) =>
+                      setVitaleForm((p) => ({
+                        ...p,
+                        stato: e.target.value as VitaleItem['stato'],
+                      }))
+                    }
+                  >
+                    <option value="normale">Normale</option>
+                    <option value="attenzione">Attenzione</option>
+                    <option value="critico">Critico</option>
+                  </select>
+                </div>
+              </div>
+              <div className="ec-modal-add-form__actions">
+                <button
+                  className="btn-secondary btn-sm"
+                  onClick={() => {
+                    setModalVitaleShow(false);
+                    setVitaleForm({});
+                  }}
+                  disabled={saving}
+                >
+                  Annulla
+                </button>
+                <button
+                  className="btn-success btn-sm"
+                  onClick={addVitaleFromModal}
+                  disabled={saving}
+                >
+                  <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
+                </button>
+              </div>
             </div>
-            <div className="modal-footer__right">
-              <button className="btn-primary" onClick={() => setCardModal(null)}>
-                Chiudi
-              </button>
-            </div>
+          ) : (
+            <button className="btn-secondary btn-sm" onClick={() => setModalVitaleShow(true)}>
+              <IcoPlus /> Aggiungi rilevazione
+            </button>
+          )}
+        </div>
+        <div className="modal-footer">
+          <div className="modal-footer__left">
+            <button
+              className="btn-secondary"
+              onClick={() => {
+                setCardModal(null);
+                switchGroup('clinica');
+                switchTab('parametri');
+              }}
+            >
+              Apri sezione completa
+            </button>
+          </div>
+          <div className="modal-footer__right">
+            <button className="btn-primary" onClick={closeCardModal} disabled={saving}>
+              Chiudi
+            </button>
           </div>
         </div>
-      </div>
+      </AccessibleDialogSurface>
     );
   }
 
   function renderConsegneModal() {
     return (
-      <div className="modal-overlay" onClick={() => setCardModal(null)}>
-        <div className="modal-box modal-box--edit-card" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-header">
-            <div>
-              <h3 className="modal-title">Consegne Paziente</h3>
-              <p className="modal-subtitle">{patientLabel}</p>
-            </div>
-            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}>
-              <IcoX />
-            </button>
+      <AccessibleDialogSurface
+        labelledBy="patient-consegne-dialog-title"
+        describedBy="patient-consegne-dialog-description"
+        onClose={closeCardModal}
+        className="modal-box--edit-card"
+      >
+        <div className="modal-header">
+          <div>
+            <h3 className="modal-title" id="patient-consegne-dialog-title">
+              Consegne Paziente
+            </h3>
+            <p className="modal-subtitle" id="patient-consegne-dialog-description">
+              {patientLabel}
+            </p>
           </div>
-          <div className="modal-body">
-            <div className="ec-modal-list">
-              {mieConsegne.length === 0 && <p className="cr-empty">Nessuna consegna.</p>}
-              {mieConsegne.slice(0, 8).map((c) => (
-                <div key={c.id} className="ec-modal-item">
-                  <div className="ec-modal-item__main">
-                    <span
-                      className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}
-                    >
-                      {c.priorita}
-                    </span>
-                    <span className="ec-modal-item__title">{c.note}</span>
-                    <span className={`stato-pill stato-pill--consegna-${c.stato}`}>
-                      {c.stato.replace('_', ' ')}
-                    </span>
-                  </div>
-                  {c.stato !== 'completata' && (
-                    <button
-                      className="btn-secondary btn-sm"
-                      onClick={() =>
-                        onUpdateConsegnaStato(
-                          c.id,
-                          c.stato === 'aperta' ? 'in_corso' : 'completata',
-                        )
-                      }
-                    >
-                      {c.stato === 'aperta' ? 'Prendi' : 'Chiudi'}
-                    </button>
-                  )}
+          <button
+            type="button"
+            className="icon-btn icon-btn--sm"
+            onClick={closeCardModal}
+            aria-label="Chiudi"
+            data-dialog-initial-focus
+          >
+            <IcoX />
+          </button>
+        </div>
+        <div className="modal-body">
+          <div className="ec-modal-list">
+            {mieConsegne.length === 0 && <p className="cr-empty">Nessuna consegna.</p>}
+            {mieConsegne.slice(0, 8).map((c) => (
+              <div key={c.id} className="ec-modal-item">
+                <div className="ec-modal-item__main">
+                  <span
+                    className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}
+                  >
+                    {c.priorita}
+                  </span>
+                  <span className="ec-modal-item__title">{c.note}</span>
+                  <span className={`stato-pill stato-pill--consegna-${c.stato}`}>
+                    {c.stato.replace('_', ' ')}
+                  </span>
                 </div>
-              ))}
-            </div>
-            {modalConsegnaShow ? (
-              <div className="ec-modal-add-form">
-                <div className="op-form-grid">
-                  <div className="form-field">
-                    <label className="form-label">Tipo</label>
-                    <select
-                      className="form-select"
-                      value={modalConsegnaForm.tipo}
-                      onChange={(e) =>
-                        setModalConsegnaForm((p) => ({ ...p, tipo: e.target.value }))
-                      }
-                    >
-                      {TIPO_CONSEGNA_OPTIONS.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Priorità</label>
-                    <select
-                      className="form-select"
-                      value={modalConsegnaForm.priorita}
-                      onChange={(e) =>
-                        setModalConsegnaForm((p) => ({
-                          ...p,
-                          priorita: e.target.value as PrioritaConsegna,
-                        }))
-                      }
-                    >
-                      {PRIORITA_OPTIONS.map((p) => (
-                        <option key={p} value={p}>
-                          {p.charAt(0).toUpperCase() + p.slice(1)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="form-field" style={{ marginTop: 4 }}>
-                  <label className="form-label">Note *</label>
-                  <textarea
-                    className="form-input"
-                    rows={2}
-                    value={modalConsegnaForm.note}
-                    onChange={(e) => setModalConsegnaForm((p) => ({ ...p, note: e.target.value }))}
-                  />
-                </div>
-                <div className="ec-modal-add-form__actions">
+                {c.stato !== 'completata' && (
                   <button
                     className="btn-secondary btn-sm"
-                    onClick={() => {
-                      setModalConsegnaShow(false);
-                      setModalConsegnaForm({
-                        tipo: 'Monitoraggio',
-                        priorita: 'normale',
-                        note: '',
-                        oraScadenza: '',
-                      });
-                    }}
+                    onClick={() =>
+                      onUpdateConsegnaStato(c.id, c.stato === 'aperta' ? 'in_corso' : 'completata')
+                    }
                   >
-                    Annulla
+                    {c.stato === 'aperta' ? 'Prendi' : 'Chiudi'}
                   </button>
-                  <button className="btn-success btn-sm" onClick={salvaConsegnaDaModal}>
-                    <IcoCheck /> Salva
-                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+          {modalConsegnaShow ? (
+            <div className="ec-modal-add-form">
+              <div className="op-form-grid">
+                <div className="form-field">
+                  <label className="form-label">Tipo</label>
+                  <select
+                    className="form-select"
+                    value={modalConsegnaForm.tipo}
+                    onChange={(e) => setModalConsegnaForm((p) => ({ ...p, tipo: e.target.value }))}
+                  >
+                    {TIPO_CONSEGNA_OPTIONS.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Priorità</label>
+                  <select
+                    className="form-select"
+                    value={modalConsegnaForm.priorita}
+                    onChange={(e) =>
+                      setModalConsegnaForm((p) => ({
+                        ...p,
+                        priorita: e.target.value as PrioritaConsegna,
+                      }))
+                    }
+                  >
+                    {PRIORITA_OPTIONS.map((p) => (
+                      <option key={p} value={p}>
+                        {p.charAt(0).toUpperCase() + p.slice(1)}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
-            ) : (
-              <button className="btn-secondary btn-sm" onClick={() => setModalConsegnaShow(true)}>
-                <IcoPlus /> Aggiungi consegna
-              </button>
-            )}
+              <div className="form-field" style={{ marginTop: 4 }}>
+                <label className="form-label">Note *</label>
+                <textarea
+                  className="form-input"
+                  rows={2}
+                  value={modalConsegnaForm.note}
+                  onChange={(e) => setModalConsegnaForm((p) => ({ ...p, note: e.target.value }))}
+                />
+              </div>
+              <div className="ec-modal-add-form__actions">
+                <button
+                  className="btn-secondary btn-sm"
+                  onClick={() => {
+                    setModalConsegnaShow(false);
+                    setModalConsegnaForm({
+                      tipo: 'Monitoraggio',
+                      priorita: 'normale',
+                      note: '',
+                      oraScadenza: '',
+                    });
+                  }}
+                >
+                  Annulla
+                </button>
+                <button className="btn-success btn-sm" onClick={salvaConsegnaDaModal}>
+                  <IcoCheck /> Salva
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button className="btn-secondary btn-sm" onClick={() => setModalConsegnaShow(true)}>
+              <IcoPlus /> Aggiungi consegna
+            </button>
+          )}
+        </div>
+        <div className="modal-footer">
+          <div className="modal-footer__left">
+            <button
+              className="btn-secondary"
+              onClick={() => {
+                setCardModal(null);
+                switchGroup('panoramica');
+                switchTab('consegne');
+              }}
+            >
+              Apri sezione completa
+            </button>
           </div>
-          <div className="modal-footer">
-            <div className="modal-footer__left">
-              <button
-                className="btn-secondary"
-                onClick={() => {
-                  setCardModal(null);
-                  switchGroup('panoramica');
-                  switchTab('consegne');
-                }}
-              >
-                Apri sezione completa
-              </button>
-            </div>
-            <div className="modal-footer__right">
-              <button className="btn-primary" onClick={() => setCardModal(null)}>
-                Chiudi
-              </button>
-            </div>
+          <div className="modal-footer__right">
+            <button className="btn-primary" onClick={closeCardModal}>
+              Chiudi
+            </button>
           </div>
         </div>
-      </div>
+      </AccessibleDialogSurface>
     );
   }
 
   function renderAllergieModal() {
     return (
-      <div className="modal-overlay" onClick={() => setCardModal(null)}>
-        <div className="modal-box modal-box--edit-card" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-header">
-            <div>
-              <h3 className="modal-title">Allergie e Intolleranze</h3>
-              <p className="modal-subtitle">{patientLabel}</p>
-            </div>
-            <button className="icon-btn icon-btn--sm" onClick={() => setCardModal(null)}>
-              <IcoX />
+      <AccessibleDialogSurface
+        labelledBy="patient-allergie-dialog-title"
+        describedBy="patient-allergie-dialog-description"
+        onClose={closeCardModal}
+        className="modal-box--edit-card"
+      >
+        <div className="modal-header">
+          <div>
+            <h3 className="modal-title" id="patient-allergie-dialog-title">
+              Allergie e Intolleranze
+            </h3>
+            <p className="modal-subtitle" id="patient-allergie-dialog-description">
+              {patientLabel}
+            </p>
+          </div>
+          <button
+            type="button"
+            className="icon-btn icon-btn--sm"
+            onClick={closeCardModal}
+            aria-label="Chiudi"
+            data-dialog-initial-focus
+          >
+            <IcoX />
+          </button>
+        </div>
+        <div className="modal-body">
+          <AllergiesEditor
+            mode="patient-chart"
+            value={cartella.allergie ?? []}
+            onChange={(list) => upd({ allergie: list })}
+            status={cartella.allergieStatus}
+            onStatusChange={(s) => upd({ allergieStatus: s })}
+            operatoreNome={operatoreNome}
+          />
+        </div>
+        <div className="modal-footer">
+          <div className="modal-footer__right">
+            <button className="btn-primary" onClick={closeCardModal}>
+              Chiudi
             </button>
           </div>
-          <div className="modal-body">
-            <AllergiesEditor
-              mode="patient-chart"
-              value={cartella.allergie ?? []}
-              onChange={(list) => upd({ allergie: list })}
-              status={cartella.allergieStatus}
-              onStatusChange={(s) => upd({ allergieStatus: s })}
-              operatoreNome={operatoreNome}
-            />
-          </div>
-          <div className="modal-footer">
-            <div className="modal-footer__right">
-              <button className="btn-primary" onClick={() => setCardModal(null)}>
-                Chiudi
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
+      </AccessibleDialogSurface>
     );
   }
 
   function renderCameraModal() {
     const form = cameraEditing ? cameraModalForm : cartella;
     return (
-      <div
-        className="modal-overlay"
-        onClick={() => {
-          setCardModal(null);
-          setCameraEditing(false);
-        }}
+      <AccessibleDialogSurface
+        labelledBy="patient-camera-dialog-title"
+        describedBy="patient-camera-dialog-description"
+        onClose={closeCardModal}
+        className="modal-box--edit-card"
+        dismissible={!saving}
       >
-        <div className="modal-box modal-box--edit-card" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-header">
-            <div>
-              <h3 className="modal-title">Camera e Assegnazione</h3>
-              <p className="modal-subtitle">{patientLabel}</p>
-            </div>
-            <button
-              className="icon-btn icon-btn--sm"
-              onClick={() => {
-                setCardModal(null);
-                setCameraEditing(false);
-              }}
-            >
-              <IcoX />
-            </button>
+        <div className="modal-header">
+          <div>
+            <h3 className="modal-title" id="patient-camera-dialog-title">
+              Camera e Assegnazione
+            </h3>
+            <p className="modal-subtitle" id="patient-camera-dialog-description">
+              {patientLabel}
+            </p>
           </div>
-          <div className="modal-body">
-            {!cameraEditing ? (
-              <div className="ec-modal-list">
-                <div className="ec-modal-item">
-                  <div className="ec-modal-item__main">
-                    <span className="ec-modal-item__title">Camera</span>
-                    <span className="ec-modal-item__sub">{cartella.cameraNumero ?? '—'}</span>
-                  </div>
-                </div>
-                <div className="ec-modal-item">
-                  <div className="ec-modal-item__main">
-                    <span className="ec-modal-item__title">Letto</span>
-                    <span className="ec-modal-item__sub">{cartella.lettoNumero ?? '—'}</span>
-                  </div>
-                </div>
-                <div className="ec-modal-item">
-                  <div className="ec-modal-item__main">
-                    <span className="ec-modal-item__title">Reparto</span>
-                    <span className="ec-modal-item__sub">{cartella.repartoRicovero ?? '—'}</span>
-                  </div>
-                </div>
-                <div className="ec-modal-item">
-                  <div className="ec-modal-item__main">
-                    <span className="ec-modal-item__title">Stato ricovero</span>
-                    <span className="ec-modal-item__sub">
-                      {cartella.statoRicovero.replace('_', ' ')}
-                    </span>
-                  </div>
-                </div>
-                {canManageRooms && (
-                  <button
-                    className="btn-secondary btn-sm"
-                    style={{ marginTop: 4 }}
-                    onClick={() => {
-                      setCameraModalForm({
-                        cameraNumero: cartella.cameraNumero,
-                        lettoNumero: cartella.lettoNumero,
-                        repartoRicovero: cartella.repartoRicovero,
-                        statoRicovero: cartella.statoRicovero,
-                      });
-                      setCameraEditing(true);
-                    }}
-                  >
-                    <IcoEdit /> Modifica assegnazione
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="op-form-grid">
-                <RoomDataNotice />
-                <div className="form-field">
-                  <label className="form-label">Camera</label>
-                  <select
-                    className="form-select"
-                    disabled={!roomDataReady}
-                    value={form.cameraNumero ?? ''}
-                    onChange={(e) => {
-                      const cam = camere.find((c) => c.numero === e.target.value);
-                      setCameraModalForm((p) => ({
-                        ...p,
-                        cameraNumero: e.target.value,
-                        repartoRicovero: cam?.reparto ?? p.repartoRicovero,
-                      }));
-                    }}
-                  >
-                    <option value="">— Nessuna —</option>
-                    {camereAssegnabili.map((c) => (
-                      <option key={c.id} value={c.numero}>
-                        {c.numero} — {c.reparto}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Letto</label>
-                  <input
-                    className="form-input"
-                    value={cameraModalForm.lettoNumero ?? ''}
-                    onChange={(e) =>
-                      setCameraModalForm((p) => ({ ...p, lettoNumero: e.target.value }))
-                    }
-                  />
-                </div>
-                <div className="form-field">
-                  <label className="form-label">Stato ricovero</label>
-                  <select
-                    className="form-select"
-                    value={cameraModalForm.statoRicovero ?? 'ambulatoriale'}
-                    onChange={(e) =>
-                      setCameraModalForm((p) => ({
-                        ...p,
-                        statoRicovero: e.target.value as CartellaPaziente['statoRicovero'],
-                      }))
-                    }
-                  >
-                    <option value="ricoverato">Ricoverato</option>
-                    <option value="ambulatoriale">Ambulatoriale</option>
-                    <option value="day_hospital">Day Hospital</option>
-                    <option value="dimesso">Dimesso</option>
-                  </select>
+          <button
+            type="button"
+            className="icon-btn icon-btn--sm"
+            onClick={closeCardModal}
+            aria-label="Chiudi"
+            data-dialog-initial-focus
+            disabled={saving}
+          >
+            <IcoX />
+          </button>
+        </div>
+        <div className="modal-body">
+          {!cameraEditing ? (
+            <div className="ec-modal-list">
+              <div className="ec-modal-item">
+                <div className="ec-modal-item__main">
+                  <span className="ec-modal-item__title">Camera</span>
+                  <span className="ec-modal-item__sub">{cartella.cameraNumero ?? '—'}</span>
                 </div>
               </div>
-            )}
-          </div>
-          <div className="modal-footer">
-            <div className="modal-footer__left" />
-            <div className="modal-footer__right">
-              {cameraEditing ? (
-                <>
-                  <button
-                    className="btn-secondary"
-                    onClick={() => setCameraEditing(false)}
-                    disabled={saving}
-                  >
-                    Annulla
-                  </button>
-                  <button
-                    className="btn-success"
-                    onClick={saveCameraFromModal}
-                    disabled={saving || !roomDataReady}
-                  >
-                    <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
-                  </button>
-                </>
-              ) : (
-                <button className="btn-primary" onClick={() => setCardModal(null)}>
-                  Chiudi
+              <div className="ec-modal-item">
+                <div className="ec-modal-item__main">
+                  <span className="ec-modal-item__title">Letto</span>
+                  <span className="ec-modal-item__sub">{cartella.lettoNumero ?? '—'}</span>
+                </div>
+              </div>
+              <div className="ec-modal-item">
+                <div className="ec-modal-item__main">
+                  <span className="ec-modal-item__title">Reparto</span>
+                  <span className="ec-modal-item__sub">{cartella.repartoRicovero ?? '—'}</span>
+                </div>
+              </div>
+              <div className="ec-modal-item">
+                <div className="ec-modal-item__main">
+                  <span className="ec-modal-item__title">Stato ricovero</span>
+                  <span className="ec-modal-item__sub">
+                    {cartella.statoRicovero.replace('_', ' ')}
+                  </span>
+                </div>
+              </div>
+              {canManageRooms && (
+                <button
+                  className="btn-secondary btn-sm"
+                  style={{ marginTop: 4 }}
+                  onClick={() => {
+                    setCameraModalForm({
+                      cameraNumero: cartella.cameraNumero,
+                      lettoNumero: cartella.lettoNumero,
+                      repartoRicovero: cartella.repartoRicovero,
+                      statoRicovero: cartella.statoRicovero,
+                    });
+                    setCameraEditing(true);
+                  }}
+                >
+                  <IcoEdit /> Modifica assegnazione
                 </button>
               )}
             </div>
+          ) : (
+            <div className="op-form-grid">
+              <RoomDataNotice />
+              <div className="form-field">
+                <label className="form-label">Camera</label>
+                <select
+                  className="form-select"
+                  disabled={!roomDataReady}
+                  value={form.cameraNumero ?? ''}
+                  onChange={(e) => {
+                    const cam = camere.find((c) => c.numero === e.target.value);
+                    setCameraModalForm((p) => ({
+                      ...p,
+                      cameraNumero: e.target.value,
+                      repartoRicovero: cam?.reparto ?? p.repartoRicovero,
+                    }));
+                  }}
+                >
+                  <option value="">— Nessuna —</option>
+                  {camereAssegnabili.map((c) => (
+                    <option key={c.id} value={c.numero}>
+                      {c.numero} — {c.reparto}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-field">
+                <label className="form-label">Letto</label>
+                <input
+                  className="form-input"
+                  value={cameraModalForm.lettoNumero ?? ''}
+                  onChange={(e) =>
+                    setCameraModalForm((p) => ({ ...p, lettoNumero: e.target.value }))
+                  }
+                />
+              </div>
+              <div className="form-field">
+                <label className="form-label">Stato ricovero</label>
+                <select
+                  className="form-select"
+                  value={cameraModalForm.statoRicovero ?? 'ambulatoriale'}
+                  onChange={(e) =>
+                    setCameraModalForm((p) => ({
+                      ...p,
+                      statoRicovero: e.target.value as CartellaPaziente['statoRicovero'],
+                    }))
+                  }
+                >
+                  <option value="ricoverato">Ricoverato</option>
+                  <option value="ambulatoriale">Ambulatoriale</option>
+                  <option value="day_hospital">Day Hospital</option>
+                  <option value="dimesso">Dimesso</option>
+                </select>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="modal-footer">
+          <div className="modal-footer__left" />
+          <div className="modal-footer__right">
+            {cameraEditing ? (
+              <>
+                <button
+                  className="btn-secondary"
+                  onClick={() => setCameraEditing(false)}
+                  disabled={saving}
+                >
+                  Annulla
+                </button>
+                <button
+                  className="btn-success"
+                  onClick={saveCameraFromModal}
+                  disabled={saving || !roomDataReady}
+                >
+                  <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
+                </button>
+              </>
+            ) : (
+              <button className="btn-primary" onClick={closeCardModal}>
+                Chiudi
+              </button>
+            )}
           </div>
         </div>
-      </div>
+      </AccessibleDialogSurface>
     );
   }
 
