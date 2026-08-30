@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { IcoAI, IcoX } from '../../icons';
 import { AnswerView, type AssistantNav } from './AIAssistantButton';
 import { useAgnosChat, type AgnosTurn } from './agnos/useAgnosChat';
@@ -7,6 +7,11 @@ import { useSpeechOutput } from './agnos/useSpeechOutput';
 import { AgnosBrief } from './agnos/AgnosBrief';
 import { navChipLabel } from './agnos/agnosNav';
 import { spokenAssistantSummary } from './agnos/assistantFeedback';
+import {
+  AGNOS_TURN_WINDOW,
+  agnosHistoryWindow,
+  revealPreviousAgnosTurns,
+} from './agnos/agnosHistory';
 
 // 015 — chatbot unificato (testo + voce): read answers (with sources) +
 // CRU write actions with preview/confirm. Replaces AIAssistantButton as THE
@@ -61,6 +66,7 @@ export function AgnosPanel({
   const [open, setOpen] = useState(false);
   const [voiceConsent, setVoiceConsent] = useState(false);
   const [input, setInput] = useState('');
+  const [visibleTurnCount, setVisibleTurnCount] = useState(AGNOS_TURN_WINDOW);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   /** true se il testo in input proviene da dettatura (anche dopo modifica: FR-016 → channel:'voce'). */
@@ -109,20 +115,25 @@ export function AgnosPanel({
     bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight });
   }, [turns, busy]);
 
-  // TTS: legge una sola volta ogni turno Agnos risolto (esiti, read sintetiche, rifiuti).
-  const spokenRef = useRef(new Set<number>());
+  // TTS: every state transition affects the newest assistant turn. Inspect only that turn instead
+  // of rescanning the entire conversation after every patch/append.
+  const lastSpokenIndexRef = useRef(-1);
   const speak = tts.speak;
   useEffect(() => {
-    let toSpeak: string | null = null;
-    turns.forEach((t, i) => {
-      if (spokenRef.current.has(i)) return;
-      const text = spokenTextFor(t);
-      if (text === null) return;
-      spokenRef.current.add(i); // marcato anche a toggle spento: niente arretrati alla riattivazione
-      toSpeak = text;
-    });
-    if (toSpeak) speak(toSpeak);
+    const latestIndex = turns.length - 1;
+    if (latestIndex <= lastSpokenIndexRef.current) return;
+    const latest = turns[latestIndex];
+    const text = latest ? spokenTextFor(latest) : null;
+    if (text === null) return;
+    // Mark even while TTS is disabled: enabling it later must not replay historical PHI.
+    lastSpokenIndexRef.current = latestIndex;
+    speak(text);
   }, [turns, speak]);
+
+  const visibleHistory = useMemo(
+    () => agnosHistoryWindow(turns, visibleTurnCount),
+    [turns, visibleTurnCount],
+  );
 
   function handleClose() {
     voice.stop();
@@ -138,6 +149,7 @@ export function AgnosPanel({
     const channel = dictatedRef.current ? ('voce' as const) : ('testo' as const);
     dictatedRef.current = false;
     setInput('');
+    setVisibleTurnCount(AGNOS_TURN_WINDOW);
     void sendCommand(text, channel);
   }
 
@@ -252,17 +264,35 @@ export function AgnosPanel({
             onNavigate={onNavigate}
             formatNavLabel={formatNavLabel}
           />
-          {turns.map((t, i) => (
+          {visibleHistory.hiddenCount > 0 && (
+            <div className="ai-asst__scope agnos-history-control" role="status">
+              <span>
+                Cronologia precedente non visualizzata ({visibleHistory.hiddenCount} turni).
+              </span>
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                onClick={() => setVisibleTurnCount(revealPreviousAgnosTurns)}
+              >
+                Mostra i precedenti
+              </button>
+            </div>
+          )}
+          {visibleHistory.items.map(({ turn: t, index: i }) => (
             <TurnView
               key={i}
               turn={t}
               isPending={pending?.turnIndex === i}
               busy={busy}
               onConfirm={() => {
+                setVisibleTurnCount(AGNOS_TURN_WINDOW);
                 void confirmPending();
               }}
               onEdit={handleEdit}
-              onCancel={cancelPending}
+              onCancel={() => {
+                setVisibleTurnCount(AGNOS_TURN_WINDOW);
+                cancelPending();
+              }}
               onNavigate={onNavigate}
               formatNavLabel={formatNavLabel}
             />
