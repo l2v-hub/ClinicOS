@@ -1,6 +1,11 @@
 import { prisma } from '../lib/prisma.js';
 import express, { Router } from 'express';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
+import {
+  LegacyIntakeApplyInputError,
+  applyLegacyIntakeDocument,
+  parseLegacyIntakeApplyInput,
+} from '../intake/legacy-apply.js';
 
 const router = Router();
 
@@ -144,29 +149,37 @@ router.post('/discharge-letter/extract', async (req, res) => {
 // ── POST /patient-intake/discharge-letter/apply ──
 // Links document to a patient after creation
 router.post('/discharge-letter/apply', async (req, res) => {
-  const { documentId, patientId } = req.body as {
-    documentId: string;
-    patientId: string;
-  };
-
-  if (!documentId || !patientId) {
-    res.status(400).json({ error: 'documentId e patientId sono obbligatori' });
-    return;
+  let input;
+  try {
+    input = parseLegacyIntakeApplyInput(req.body);
+  } catch (error) {
+    if (error instanceof LegacyIntakeApplyInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    throw error;
   }
 
   try {
-    const doc = await prisma.patientIntakeDocument.update({
-      where: { id: documentId },
-      data: {
-        patientId,
-        status: 'applied',
-      },
+    const outcome = await prisma.$transaction((tx) => applyLegacyIntakeDocument(tx, input));
+    if (outcome === 'unavailable') {
+      res.status(409).json({ error: 'Documento o paziente non applicabile' });
+      return;
+    }
+    res.status(200).json({
+      documentId: input.documentId,
+      patientId: input.patientId,
+      status: 'applied',
     });
-
-    res.status(200).json({ documentId: doc.id, patientId, status: 'applied' });
   } catch (error) {
+    const code = error && typeof error === 'object' ? (error as { code?: string }).code : undefined;
+    if (code === 'P2003' || code === 'P2025') {
+      res.status(409).json({ error: 'Documento o paziente non applicabile' });
+      return;
+    }
     console.error('POST /patient-intake/discharge-letter/apply error:', error);
     res.status(500).json({ error: 'Errore durante il collegamento del documento' });
+    return;
   }
 });
 
