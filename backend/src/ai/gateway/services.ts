@@ -4,7 +4,11 @@
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/prisma.js';
-import { getNarrativeSections } from '../sections/patient-narrative.js';
+import {
+  NARRATIVE_SECTION_KEYS,
+  NARRATIVE_TITLES,
+  type NarrativeSectionKey,
+} from '../sections/patient-narrative.js';
 import {
   AI_PATIENT_DOCUMENT_LIMIT,
   listPatientDocumentsForAi,
@@ -87,6 +91,24 @@ import {
 const nowIso = () => new Date().toISOString();
 const displayName = (p: { firstName: string; lastName: string }) =>
   `${p.lastName} ${p.firstName}`.trim();
+
+export const MAX_GATEWAY_NARRATIVE_TEXT = 4096;
+
+interface GatewayNarrativeSectionRow {
+  id: string;
+  sectionKey: NarrativeSectionKey;
+  reviewStatus: string;
+  displayText: string;
+  contentTruncated: boolean;
+}
+
+interface GatewayNarrativeSection {
+  sectionKey: NarrativeSectionKey;
+  title: string;
+  displayText: string;
+  reviewStatus: string;
+  contentTruncated: boolean;
+}
 
 interface PatientSearchRow {
   id: string;
@@ -547,29 +569,57 @@ export async function getPatientAllergies(
 export async function getPatientNarrativeSectionsG(
   patientId: string,
   ctx: UserContext,
-): Promise<SourcedResult<unknown[]>> {
+): Promise<SourcedResult<GatewayNarrativeSection[]> & { truncated: boolean }> {
   assertTenant(ctx);
   assertPatientAllowed(ctx, patientId);
-  const sections = await getNarrativeSections(patientId);
-  const present = sections.filter((s) => (s.displayText ?? '').trim().length > 0);
-  const refs = present.map((s) =>
-    narrativeSource(
-      patientId,
-      s.sectionKey,
-      `${patientId}:${s.sectionKey}`,
-      s.displayText,
-      undefined,
-    ),
-  );
+
+  // This gateway is an AI minimisation boundary, not the clinical editor API. Keep the selected
+  // narrative inside PostgreSQL and project only the bounded display text required for an answer;
+  // annotations, source metadata and the two full text variants must never enter the Node process.
+  const rows = await prisma.$queryRaw<GatewayNarrativeSectionRow[]>(Prisma.sql`
+    SELECT section."id", section."sectionKey", section."reviewStatus",
+      LEFT(display."text", ${MAX_GATEWAY_NARRATIVE_TEXT}) AS "displayText",
+      char_length(display."text") > ${MAX_GATEWAY_NARRATIVE_TEXT} AS "contentTruncated"
+    FROM "PatientNarrativeSection" section
+    CROSS JOIN LATERAL (
+      SELECT CASE
+        WHEN btrim(COALESCE(section."reviewedText", '')) <> '' THEN section."reviewedText"
+        ELSE COALESCE(section."originalText", '')
+      END AS "text"
+    ) display
+    WHERE section."patientId" = ${patientId}
+      AND section."sectionKey" IN (${Prisma.join(NARRATIVE_SECTION_KEYS)})
+      AND btrim(display."text") <> ''
+  `);
+  const byKey = new Map(rows.map((row) => [row.sectionKey, row]));
+  const data = NARRATIVE_SECTION_KEYS.flatMap((sectionKey) => {
+    const row = byKey.get(sectionKey);
+    return row
+      ? [
+          {
+            sectionKey,
+            title: NARRATIVE_TITLES[sectionKey],
+            displayText: row.displayText,
+            reviewStatus: row.reviewStatus,
+            contentTruncated: row.contentTruncated,
+          },
+        ]
+      : [];
+  });
+  const refs = data.map((section) => {
+    const row = byKey.get(section.sectionKey)!;
+    return narrativeSource(patientId, section.sectionKey, row.id, section.displayText, undefined);
+  });
+  const truncated = data.some((section) => section.contentTruncated);
   gatewayAudit(
     ctx,
     'get_patient_narrative_sections',
     [patientId],
-    present.length,
-    present.length ? 'ok' : 'empty',
+    data.length,
+    data.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: present, sourceRefs: refs };
+  return { data, sourceRefs: refs, truncated };
 }
 
 export async function getPatientVitalSigns(

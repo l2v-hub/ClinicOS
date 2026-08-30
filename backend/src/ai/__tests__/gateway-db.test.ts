@@ -4,6 +4,8 @@ import { prisma } from '../../lib/prisma.js';
 import {
   correlate,
   getCrossPatientVitalSigns,
+  getPatientNarrativeSectionsG,
+  MAX_GATEWAY_NARRATIVE_TEXT,
   searchClinicalSections,
   searchDocuments,
   searchPatients,
@@ -90,6 +92,7 @@ before(async () => {
       patientId: legacyId,
       sectionKey: 'ANAMNESIS',
       originalText: 'Il paziente beve caffè ogni mattina.',
+      reviewedText: `Il paziente beve caffè ogni mattina. ${'dato-clinico '.repeat(500)}`,
     },
   });
   await prisma.patientDocument.create({
@@ -151,6 +154,20 @@ test('gateway narrative/document/correlation SQL is accent-insensitive and bound
     ),
     [legacyId],
   );
+
+  const narrative = await getPatientNarrativeSectionsG(legacyId, globalContext);
+  const anamnesis = narrative.data.find((section) => section.sectionKey === 'ANAMNESIS');
+  assert.equal(narrative.truncated, true);
+  assert.equal(anamnesis?.contentTruncated, true);
+  assert.equal(anamnesis?.displayText.length, MAX_GATEWAY_NARRATIVE_TEXT);
+  assert.equal(narrative.sourceRefs[0]?.exactText, anamnesis?.displayText);
+  assert.deepEqual(Object.keys(anamnesis ?? {}).sort(), [
+    'contentTruncated',
+    'displayText',
+    'reviewStatus',
+    'sectionKey',
+    'title',
+  ]);
 });
 
 test('cross-vitals applies the patient ACL in SQL before the cap', async () => {
