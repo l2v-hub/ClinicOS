@@ -877,15 +877,41 @@ patientAssignmentRouter.delete('/:patientId/room-assignments/:assignmentId', asy
   const { patientId, assignmentId } = req.params;
 
   try {
-    const existing = await prisma.patientRoomAssignment.findFirst({
+    const lockTarget = await prisma.patientRoomAssignment.findFirst({
       where: { id: assignmentId, patientId },
+      select: { bedId: true, roomId: true },
     });
-    if (!existing) {
+    if (!lockTarget) {
       res.status(404).json({ error: 'Assegnazione non trovata' });
       return;
     }
 
-    await prisma.patientRoomAssignment.delete({ where: { id: assignmentId } });
+    const deleted = await prisma.$transaction(async (tx) => {
+      // Room → bed → patient is the same deterministic order used by create/update. It also
+      // serializes this delete with cascading room/bed deletion, so a concurrent cascade becomes
+      // an idempotent not-found result instead of a Prisma P2025 surfaced as HTTP 500.
+      for (const lockKey of assignmentLockKeys(patientId, lockTarget.bedId, lockTarget.roomId)) {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      }
+
+      const existing = await tx.patientRoomAssignment.findFirst({
+        where: { id: assignmentId, patientId },
+        select: { id: true },
+      });
+      if (!existing) return false;
+
+      // `deleteMany` keeps the endpoint race-safe even against a cascade outside this advisory
+      // lock protocol (for example a separately authorized patient removal between read/delete).
+      const result = await tx.patientRoomAssignment.deleteMany({
+        where: { id: assignmentId, patientId },
+      });
+      return result.count === 1;
+    });
+    if (!deleted) {
+      res.status(404).json({ error: 'Assegnazione non trovata' });
+      return;
+    }
+
     console.log(`DELETE /patients/${patientId}/room-assignments/${assignmentId} → deleted`);
     res.status(204).send();
   } catch (error) {

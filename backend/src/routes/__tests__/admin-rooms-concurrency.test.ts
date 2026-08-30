@@ -14,7 +14,7 @@ import assert from 'node:assert/strict';
 import express from 'express';
 import type { Server } from 'node:http';
 import { prisma } from '../../lib/prisma.js';
-import { patientAssignmentRouter } from '../admin-rooms.js';
+import { adminRouter, patientAssignmentRouter } from '../admin-rooms.js';
 
 let server: Server;
 let base = '';
@@ -23,6 +23,7 @@ const AUTH_HEADERS = { 'X-Operator-Id': 'test-manager', 'X-Operator-Role': 'mana
 before(async () => {
   const app = express();
   app.use(express.json());
+  app.use('/admin', adminRouter);
   app.use('/patients', patientAssignmentRouter);
   await new Promise<void>((resolve) => {
     server = app.listen(0, () => {
@@ -407,6 +408,113 @@ test('admin-rooms: aggiunta letto rispetta il limite complessivo sotto lock stan
     assert.equal(response.status, 409);
     assert.equal(await prisma.bed.count({ where: { roomId: room.id } }), 8);
   } finally {
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test('admin-rooms: doppia DELETE assegnazione concorrente produce 204 e 404, mai 500', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-ASG-DEL-${Date.now()}`, tipo: 'singola' },
+  });
+  const bed = await prisma.bed.create({ data: { roomId: room.id, label: 'A' } });
+  const patient = await makePatient('ASG-DEL');
+  const assignment = await prisma.patientRoomAssignment.create({
+    data: {
+      patientId: patient.id,
+      roomId: room.id,
+      bedId: bed.id,
+      startDate: '2019-05-01',
+      endDate: '2019-05-02',
+    },
+  });
+
+  try {
+    const remove = () =>
+      fetch(`${base}/patients/${patient.id}/room-assignments/${assignment.id}`, {
+        method: 'DELETE',
+        headers: AUTH_HEADERS,
+      });
+    const responses = await Promise.all([remove(), remove()]);
+
+    assert.deepEqual(responses.map((response) => response.status).sort(), [204, 404]);
+    assert.equal(await prisma.patientRoomAssignment.count({ where: { id: assignment.id } }), 0);
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test('admin-rooms: DELETE assegnazione concorrente con DELETE letto non produce 500', async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-ASG-BED-DEL-${Date.now()}`, tipo: 'singola' },
+  });
+  const bed = await prisma.bed.create({ data: { roomId: room.id, label: 'A' } });
+  const patient = await makePatient('ASG-BED-DEL');
+  const assignment = await prisma.patientRoomAssignment.create({
+    data: {
+      patientId: patient.id,
+      roomId: room.id,
+      bedId: bed.id,
+      startDate: '2019-05-01',
+      endDate: '2019-05-02',
+    },
+  });
+
+  try {
+    const [assignmentResponse, bedResponse] = await Promise.all([
+      fetch(`${base}/patients/${patient.id}/room-assignments/${assignment.id}`, {
+        method: 'DELETE',
+        headers: AUTH_HEADERS,
+      }),
+      fetch(`${base}/admin/beds/${bed.id}`, { method: 'DELETE', headers: AUTH_HEADERS }),
+    ]);
+
+    assert.ok([204, 404].includes(assignmentResponse.status));
+    assert.equal(bedResponse.status, 204);
+    assert.notEqual(assignmentResponse.status, 500);
+    assert.notEqual(bedResponse.status, 500);
+  } finally {
+    await prisma.patientRoomAssignment
+      .deleteMany({ where: { patientId: patient.id } })
+      .catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
+    await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
+  }
+});
+
+test("admin-rooms: DELETE con patientId diverso resta 404 e non rimuove l'assegnazione", async () => {
+  const room = await prisma.room.create({
+    data: { numero: `TEST-ASG-SCOPE-${Date.now()}`, tipo: 'singola' },
+  });
+  const bed = await prisma.bed.create({ data: { roomId: room.id, label: 'A' } });
+  const patient = await makePatient('ASG-SCOPE-A');
+  const otherPatient = await makePatient('ASG-SCOPE-B');
+  const assignment = await prisma.patientRoomAssignment.create({
+    data: {
+      patientId: patient.id,
+      roomId: room.id,
+      bedId: bed.id,
+      startDate: '2031-05-01',
+    },
+  });
+
+  try {
+    const response = await fetch(
+      `${base}/patients/${otherPatient.id}/room-assignments/${assignment.id}`,
+      { method: 'DELETE', headers: AUTH_HEADERS },
+    );
+    assert.equal(response.status, 404);
+    assert.ok(await prisma.patientRoomAssignment.findUnique({ where: { id: assignment.id } }));
+  } finally {
+    await prisma.patientRoomAssignment.deleteMany({ where: { id: assignment.id } }).catch(() => {});
+    await prisma.patient.delete({ where: { id: patient.id } }).catch(() => {});
+    await prisma.patient.delete({ where: { id: otherPatient.id } }).catch(() => {});
     await prisma.bed.deleteMany({ where: { roomId: room.id } }).catch(() => {});
     await prisma.room.delete({ where: { id: room.id } }).catch(() => {});
   }
