@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { CartellaPaziente, EsameClinicoRecord, Paziente } from '../../../types';
 import {
@@ -34,32 +34,18 @@ function SectionPhotos({
   documentType,
   operatorId,
   operatorRole,
+  documents,
+  onDocumentsChanged,
 }: {
   patientId: string;
   documentType: string;
   operatorId?: string;
   operatorRole?: string;
+  documents: SectionDocMeta[];
+  onDocumentsChanged: () => void;
 }) {
-  const [docs, setDocs] = useState<SectionDocMeta[]>([]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-
-  function reload() {
-    documentAuthHeaders(patientId, operatorId, operatorRole)
-      .then((headers) => fetch(`${API_URL}/patients/${patientId}/documents`, { headers }))
-      .then((r) => (r.ok ? r.json() : { documents: [] }))
-      .then((d) =>
-        setDocs(
-          (Array.isArray(d.documents) ? d.documents : []).filter(
-            (x: SectionDocMeta) => x.documentType === documentType,
-          ),
-        ),
-      )
-      .catch(() => {
-        /* none */
-      });
-  }
-  useEffect(reload, [patientId, documentType, operatorId, operatorRole]);
 
   async function onFile(e: ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
@@ -77,7 +63,7 @@ function SectionPhotos({
         headers: await documentAuthHeaders(patientId, operatorId, operatorRole),
       });
       if (!r.ok) throw new Error(String(r.status));
-      reload();
+      onDocumentsChanged();
     } catch {
       setErr('Caricamento non riuscito');
     } finally {
@@ -126,7 +112,7 @@ function SectionPhotos({
           {err}
         </span>
       )}
-      {docs.length > 0 && (
+      {documents.length > 0 && (
         <ul
           className="section-photos__list"
           style={{
@@ -138,7 +124,7 @@ function SectionPhotos({
             gap: 8,
           }}
         >
-          {docs.map((d) => (
+          {documents.map((d) => (
             <li key={d.id}>
               <button type="button" className="srev-chip" onClick={() => openDoc(d)}>
                 {d.mimeType.includes('pdf') ? '📄' : '🖼️'} {d.originalName}
@@ -439,6 +425,58 @@ export function EsamiConsulenzeTab({
   operatoreId,
   operatoreRole,
 }: Props) {
+  const [documentRefresh, setDocumentRefresh] = useState(0);
+  const documentScope = `${paziente.id}\u0000${operatoreId ?? ''}\u0000${operatoreRole ?? ''}`;
+  const [documentState, setDocumentState] = useState<{
+    scope: string;
+    documents: SectionDocMeta[];
+  }>({ scope: '', documents: [] });
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void (async () => {
+      try {
+        const headers = await documentAuthHeaders(paziente.id, operatoreId, operatoreRole);
+        if (controller.signal.aborted) return;
+        const response = await fetch(`${API_URL}/patients/${paziente.id}/documents`, {
+          headers,
+          signal: controller.signal,
+        });
+        const data = response.ok ? await response.json() : { documents: [] };
+        if (controller.signal.aborted) return;
+        setDocumentState({
+          scope: documentScope,
+          documents: Array.isArray(data.documents) ? data.documents : [],
+        });
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        if (!controller.signal.aborted) {
+          setDocumentState({ scope: documentScope, documents: [] });
+        }
+      }
+    })();
+    return () => controller.abort();
+  }, [documentRefresh, documentScope, operatoreId, operatoreRole, paziente.id]);
+
+  const documentsByType = useMemo(() => {
+    const documents = documentState.scope === documentScope ? documentState.documents : [];
+    const grouped: Record<'esame' | 'rx' | 'consulenza', SectionDocMeta[]> = {
+      esame: [],
+      rx: [],
+      consulenza: [],
+    };
+    for (const document of documents) {
+      if (Object.hasOwn(grouped, document.documentType)) {
+        grouped[document.documentType as keyof typeof grouped].push(document);
+      }
+    }
+    return grouped;
+  }, [documentScope, documentState.documents, documentState.scope]);
+
+  function reloadDocuments() {
+    setDocumentRefresh((current) => current + 1);
+  }
+
   return (
     <div className="cr-tab-content">
       <div style={{ marginBottom: 8 }}>
@@ -462,6 +500,8 @@ export function EsamiConsulenzeTab({
         documentType="esame"
         operatorId={operatoreId}
         operatorRole={operatoreRole}
+        documents={documentsByType.esame}
+        onDocumentsChanged={reloadDocuments}
       />
 
       <div style={{ marginTop: 16 }}>
@@ -477,6 +517,8 @@ export function EsamiConsulenzeTab({
           documentType="rx"
           operatorId={operatoreId}
           operatorRole={operatoreRole}
+          documents={documentsByType.rx}
+          onDocumentsChanged={reloadDocuments}
         />
       </div>
 
@@ -493,6 +535,8 @@ export function EsamiConsulenzeTab({
           documentType="consulenza"
           operatorId={operatoreId}
           operatorRole={operatoreRole}
+          documents={documentsByType.consulenza}
+          onDocumentsChanged={reloadDocuments}
         />
       </div>
     </div>
