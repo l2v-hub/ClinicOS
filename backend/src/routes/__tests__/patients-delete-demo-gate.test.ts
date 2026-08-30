@@ -5,8 +5,7 @@
 // (rischio: DELETE /patients/:id disponibile ovunque senza opt-in esplicito). Ora il default
 // e' invertito: la cancellazione fisica funziona SOLO con ALLOW_PATIENT_DELETE=true esplicito.
 // Allo stesso modo, /patients/seed e /patients/demo-setup — che creano/sovrascrivono dati
-// paziente — rispondono 403 quando NODE_ENV === 'production', indipendentemente dagli header
-// operatore (quel gate e' header-based e spoofabile, non e' una vera difesa da solo).
+// paziente — richiedono un ruolo admin/manager e restano disabilitati in produzione.
 
 import { test, before, after, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
@@ -18,6 +17,7 @@ let server: Server;
 let base = '';
 
 const OPERATOR_HEADERS = { 'X-Operator-Id': 'test-operatore', 'X-Operator-Role': 'operatore' };
+const MANAGER_HEADERS = { 'X-Operator-Id': 'test-manager', 'X-Operator-Role': 'manager' };
 
 before(async () => {
   const app = express();
@@ -112,19 +112,41 @@ test('AC4: POST /patients/demo-setup in produzione fallisce chiuso senza Entra c
   assert.ok(body.error);
 });
 
-test("AC4: POST /patients/seed con NODE_ENV diverso da production non e' bloccato dal gate", async () => {
+test('AC5: un operatore non puo eseguire il seed fuori produzione', async () => {
   process.env.NODE_ENV = 'test';
   const res = await fetch(`${base}/patients/seed`, { method: 'POST', headers: OPERATOR_HEADERS });
-  // Il gate NODE_ENV non deve bloccarla: puo' comunque fallire piu' avanti (es. 500 se il DB
-  // non e' raggiungibile in questo ambiente) — cio' che conta e' che non sia 403.
-  assert.notEqual(res.status, 403);
+  assert.equal(res.status, 403);
 });
 
-test("AC4: POST /patients/demo-setup con NODE_ENV diverso da production non e' bloccato dal gate", async () => {
+test('AC5: un operatore non puo eseguire il demo setup fuori produzione', async () => {
   process.env.NODE_ENV = 'development';
   const res = await fetch(`${base}/patients/demo-setup`, {
     method: 'POST',
     headers: OPERATOR_HEADERS,
   });
+  assert.equal(res.status, 403);
+});
+
+test("AC6: un manager raggiunge l'handler seed fuori produzione", async () => {
+  process.env.NODE_ENV = 'test';
+  const res = await fetch(`${base}/patients/seed`, { method: 'POST', headers: MANAGER_HEADERS });
+  // In assenza di DATABASE_URL l'handler puo rispondere 500: il contratto qui e' che RBAC non lo
+  // blocchi e che solo il gestore autorizzato possa raggiungere Prisma.
   assert.notEqual(res.status, 403);
+});
+
+test("AC6: un manager raggiunge l'handler demo setup fuori produzione", async () => {
+  process.env.NODE_ENV = 'development';
+  const res = await fetch(`${base}/patients/demo-setup`, {
+    method: 'POST',
+    headers: MANAGER_HEADERS,
+  });
+  assert.notEqual(res.status, 403);
+});
+
+test('AC7: entrambe le route demo dichiarano esplicitamente RBAC admin/manager', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(new URL('../patients.ts', import.meta.url), 'utf8');
+  assert.match(source, /router\.post\('\/seed', requireRole\('admin', 'manager'\)/);
+  assert.match(source, /router\.post\('\/demo-setup', requireRole\('admin', 'manager'\)/);
 });

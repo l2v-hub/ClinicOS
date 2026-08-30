@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
-import { requireOperator, type AuthedRequest } from '../ai/auth.js';
+import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 import {
   PatientPageInputError,
   decodePatientPageCursor,
@@ -284,7 +284,7 @@ router.get('/:id', requirePatientScope, async (req, res) => {
   }
 });
 
-router.post('/seed', async (_req, res) => {
+router.post('/seed', requireRole('admin', 'manager'), async (_req, res) => {
   if (process.env.NODE_ENV === 'production') {
     res.status(403).json({ error: 'Endpoint di seed/demo non disponibile in produzione' });
     return;
@@ -320,7 +320,7 @@ router.post('/seed', async (_req, res) => {
 });
 // ── POST /patients/demo-setup — create or update Fabio Forlano demo patient ──
 
-router.post('/demo-setup', async (_req, res) => {
+router.post('/demo-setup', requireRole('admin', 'manager'), async (_req, res) => {
   if (process.env.NODE_ENV === 'production') {
     res.status(403).json({ error: 'Endpoint di seed/demo non disponibile in produzione' });
     return;
