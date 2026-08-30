@@ -135,7 +135,7 @@ test('operator directory and administration responses are private and never cach
   assert.equal(unauthenticatedDirectory.status, 401);
   assert.equal(unauthenticatedDirectory.headers.get('cache-control'), 'private, no-store');
 
-  for (const path of ['/operators', '/operators/schedules']) {
+  for (const path of ['/operators', '/operators/schedules', '/operators/directory/schedules']) {
     const forbiddenResponse = await fetch(`${base}${path}`, { headers: OPERATOR_HEADERS });
     assert.equal(forbiddenResponse.status, 403);
     assert.equal(forbiddenResponse.headers.get('cache-control'), 'private, no-store');

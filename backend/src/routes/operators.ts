@@ -21,8 +21,7 @@ operatorsRouter.use((_req, res, next) => {
 // directory is intentionally minimal; full profiles, notes, schedules and all writes are admin-only.
 operatorsRouter.use(requireOperator);
 operatorsRouter.use((req, res, next) => {
-  const isOperationalDirectory =
-    req.method === 'GET' && (req.path === '/directory' || req.path === '/directory/schedules');
+  const isOperationalDirectory = req.method === 'GET' && req.path === '/directory';
   if (isOperationalDirectory) {
     next();
     return;
@@ -138,7 +137,8 @@ operatorsRouter.get('/directory', async (_req, res) => {
   }
 });
 
-// GET /operators/directory/schedules — shifts are operational; private admin notes are omitted.
+// GET /operators/directory/schedules — facility-wide staffing remains admin/manager-only;
+// private schedule notes are omitted from this compatibility response.
 operatorsRouter.get('/directory/schedules', async (_req, res) => {
   try {
     const rows = await prisma.operatorSchedule.findMany();
