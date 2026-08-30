@@ -210,7 +210,11 @@ aiJobsRouter.post('/:id/retry', extractionCostGuard, async (req, res) => {
 aiJobsRouter.post('/:id/confirm', async (req, res) => {
   try {
     const payload = (req.body ?? {}) as ConfirmPayload;
-    const result = await confirmJob(String(req.params.id), payload);
+    const result = await confirmJob(
+      String(req.params.id),
+      payload,
+      (req as AuthedRequest).operator!,
+    );
     if (result.status === 'duplicate') {
       return res.status(409).json(result); // client re-submits with confirmDuplicate:true
     }

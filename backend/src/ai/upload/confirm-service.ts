@@ -118,12 +118,46 @@ async function audit(jobId: string, action: string, patientId?: string, detail?:
   }
 }
 
+type PrismaTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
+
+async function resolveRegisteredById(
+  tx: PrismaTx,
+  candidateId: string | null,
+  actorId: string,
+): Promise<string> {
+  const ids = [...new Set([actorId, candidateId].filter((id): id is string => Boolean(id)))];
+  const operators = await tx.operator.findMany({
+    where: { id: { in: ids } },
+    select: { id: true },
+  });
+  const validIds = new Set(operators.map(({ id }) => id));
+  if (!validIds.has(actorId)) {
+    throw new AiExtractionError('config', 'Operatore autenticato non valido');
+  }
+  return candidateId && validIds.has(candidateId) ? candidateId : actorId;
+}
+
+async function backfillPatientOwnership(
+  patientId: string,
+  candidateId: string | null,
+  actorId: string,
+): Promise<void> {
+  await prisma.$transaction(async (tx) => {
+    const registeredById = await resolveRegisteredById(tx, candidateId, actorId);
+    await tx.patient.updateMany({
+      where: { id: patientId, registeredById: null },
+      data: { registeredById },
+    });
+  });
+}
+
 // ── Shared materialization helper ─────────────────────────────────────────────
 // Called by both confirmJob and confirmDraft inside a prisma.$transaction.
 // Creates patient + cartella + (optional) narrative + (optional) linked documents.
 // Returns the created Patient row.
 interface MaterializeArgs {
   patient: ConfirmPatient;
+  registeredById: string;
   cartellaData: Record<string, unknown>;
   narrative: DischargeNarrativeDraft | null;
   /** When provided, links source documents from this import job to the new patient. */
@@ -132,16 +166,15 @@ interface MaterializeArgs {
   therapies?: TherapyCreateInput[];
 }
 
-type PrismaTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
-
 async function materializePatient(
   tx: PrismaTx,
-  { patient: p, cartellaData, narrative, jobId, therapies }: MaterializeArgs,
+  { patient: p, registeredById, cartellaData, narrative, jobId, therapies }: MaterializeArgs,
 ) {
   const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
   const created = await tx.patient.create({
     data: {
       medicalRecordNumber: mrn(),
+      registeredById,
       firstName: p.firstName.trim(),
       lastName: p.lastName.trim(),
       dateOfBirth: dob,
@@ -186,6 +219,7 @@ export async function confirmDraft(
   if (draft.status === 'confirmed' && draft.confirmedPatientId) {
     const existing = await prisma.patient.findUnique({ where: { id: draft.confirmedPatientId } });
     if (existing) {
+      await backfillPatientOwnership(existing.id, draft.createdById, actor.id);
       return {
         status: 'idempotent',
         patient: {
@@ -287,8 +321,10 @@ export async function confirmDraft(
 
   try {
     const created = await prisma.$transaction(async (tx) => {
+      const registeredById = await resolveRegisteredById(tx, draft.createdById, actor.id);
       const pat = await materializePatient(tx, {
         patient: p,
+        registeredById,
         cartellaData,
         narrative,
         jobId: draft.importJobId ?? undefined,
@@ -334,7 +370,11 @@ export async function confirmDraft(
   }
 }
 
-export async function confirmJob(jobId: string, payload: ConfirmPayload): Promise<ConfirmResult> {
+export async function confirmJob(
+  jobId: string,
+  payload: ConfirmPayload,
+  actor: ClinicalActor,
+): Promise<ConfirmResult> {
   const job = await prisma.importJob.findUnique({ where: { id: jobId } });
   if (!job) throw new AiExtractionError('config', 'Job non trovato');
 
@@ -342,6 +382,7 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
   if (job.status === 'confirmed' && job.createdPatientId) {
     const existing = await prisma.patient.findUnique({ where: { id: job.createdPatientId } });
     if (existing) {
+      await backfillPatientOwnership(existing.id, job.createdById, actor.id);
       return {
         status: 'idempotent',
         patient: {
@@ -478,9 +519,17 @@ export async function confirmJob(jobId: string, payload: ConfirmPayload): Promis
         _importedFromJob: jobId,
       };
 
+      const registeredById = await resolveRegisteredById(tx, job.createdById, actor.id);
+
       // REQ-029: faithful narrative persisted when present.
       // REQ-035 v2: permanently link imported source documents to the patient.
-      const patient = await materializePatient(tx, { patient: p, cartellaData, narrative, jobId });
+      const patient = await materializePatient(tx, {
+        patient: p,
+        registeredById,
+        cartellaData,
+        narrative,
+        jobId,
+      });
 
       await tx.importJob.update({
         where: { id: jobId },

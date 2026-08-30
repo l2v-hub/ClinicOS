@@ -2,11 +2,24 @@
 // TDD Task 2: confirmDraft must persist therapies + carry vitals/pain into Cartella.data.
 // Uses node:test / node:assert — same pattern as seed-draft-from-import.test.ts.
 
-import { test } from 'node:test';
+import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createDraft } from '../draft-service.js';
 import { confirmDraft } from '../../ai/upload/confirm-service.js';
 import { prisma } from '../../lib/prisma.js';
+import { createTestOperator } from '../../test-support/operator-fixture.js';
+
+const TEST_OPERATOR_ID = 'TEST-OWNER-DRAFT-THERAPY';
+let cleanupOperator: () => Promise<void>;
+
+before(async () => {
+  cleanupOperator = await createTestOperator(
+    TEST_OPERATOR_ID,
+    'test-owner-draft-therapy@clinicos.test',
+  );
+});
+
+after(async () => cleanupOperator());
 
 // ---------------------------------------------------------------------------
 // Shared fixtures
@@ -75,7 +88,7 @@ test('confirmDraft: persists therapies + vitals/pain into Cartella.data', async 
         },
         therapies: THERAPIES,
       },
-      { id: 'op-test', name: 'Operatore Test' },
+      { id: TEST_OPERATOR_ID, name: 'Operatore Test' },
     );
 
     // 1. Status must be 'created'.

@@ -4,12 +4,25 @@
 // enforces: REQ-026 allergy-conflict block + BUG-051 section-loss block.
 // Same node:test / node:assert pattern as seed-draft-from-import.test.ts.
 
-import { test } from 'node:test';
+import { after, before, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { seedDraftFromImport } from '../draft-service.js';
 import { confirmDraft } from '../../ai/upload/confirm-service.js';
 import { prisma } from '../../lib/prisma.js';
 import type { DischargeNarrativeDraft } from '../../ai/sections/narrative.js';
+import { createTestOperator } from '../../test-support/operator-fixture.js';
+
+const TEST_OPERATOR_ID = 'TEST-OWNER-DRAFT-GUARDS';
+let cleanupOperator: () => Promise<void>;
+
+before(async () => {
+  cleanupOperator = await createTestOperator(
+    TEST_OPERATOR_ID,
+    'test-owner-draft-guards@clinicos.test',
+  );
+});
+
+after(async () => cleanupOperator());
 
 const NARRATIVE: DischargeNarrativeDraft = {
   schemaVersion: 'clinicos-discharge-narrative-v1',
@@ -72,7 +85,7 @@ test('confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConf
   try {
     // 1) Without override → hard block with the REQ-026 message.
     await assert.rejects(
-      () => confirmDraft(draft.id, { patient: PATIENT }, { id: 'op-test' }),
+      () => confirmDraft(draft.id, { patient: PATIENT }, { id: TEST_OPERATOR_ID }),
       (err: Error) => {
         assert.ok(
           err.message.includes('allergie contrastanti'),
@@ -90,7 +103,7 @@ test('confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConf
     const res = await confirmDraft(
       draft.id,
       { patient: PATIENT, confirmAllergyConflict: true },
-      { id: 'op-test' },
+      { id: TEST_OPERATOR_ID },
     );
     assert.equal(res.status, 'created', `Expected created, got: ${res.status}`);
     assert.ok(res.patient?.id, 'created patient must have an id');
