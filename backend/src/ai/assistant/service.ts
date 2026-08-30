@@ -635,7 +635,7 @@ async function dispatch(
     }
     case 'correlate_structured_data': {
       const r = await svc.correlate(args as never, ctx);
-      return { data: r.data, sourceRefs: r.sourceRefs };
+      return r;
     }
     case 'query_appointments_today':
       return await appointmentsToday(ctx, env);

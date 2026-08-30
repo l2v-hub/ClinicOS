@@ -1130,12 +1130,12 @@ export async function searchDocuments(
 export async function correlate(
   input: CorrelateInput,
   ctx: UserContext,
-): Promise<SourcedResult<PatientSearchResult[]>> {
+): Promise<SourcedResult<PatientSearchResult[]> & { truncated: boolean }> {
   assertTenant(ctx);
   const validated = validateCorrelateInput(input);
   if (ctx.permittedPatientIds?.length === 0) {
     gatewayAudit(ctx, 'correlate_structured_data', [], 0, 'empty', nowIso());
-    return { data: [], sourceRefs: [] };
+    return { data: [], sourceRefs: [], truncated: false };
   }
   const patients = await searchCorrelatedPatientRows(validated, ctx);
   const patientIds = patients.map((patient) => patient.id);
@@ -1162,14 +1162,34 @@ export async function correlate(
             id: string;
             patientId: string;
             sectionKey: string;
-            originalText: string | null;
-            reviewedText: string | null;
+            excerpt: string;
+            contentTruncated: boolean;
           }>
         >(Prisma.sql`
           SELECT DISTINCT ON (section."patientId")
             section."id", section."patientId", section."sectionKey",
-            section."originalText", section."reviewedText"
+            (CASE WHEN hit."startPosition" > 1 THEN '…' ELSE '' END)
+              || btrim(substring(hit."text" from hit."startPosition" for hit."excerptLength"))
+              || (CASE WHEN hit."endPosition" < char_length(hit."text") THEN '…' ELSE '' END)
+              AS "excerpt",
+            (hit."startPosition" > 1 OR hit."endPosition" < char_length(hit."text"))
+              AS "contentTruncated"
           FROM "PatientNarrativeSection" section
+          CROSS JOIN LATERAL (
+            SELECT source."text", source."matchPosition",
+              GREATEST(1, source."matchPosition" - 120) AS "startPosition",
+              240 + ${validated.sectionContains.text.length} AS "excerptLength",
+              GREATEST(1, source."matchPosition" - 120)
+                + 240 + ${validated.sectionContains.text.length} - 1
+                AS "endPosition"
+            FROM (
+              SELECT COALESCE(section."reviewedText", section."originalText", '') AS "text",
+                strpos(
+                  ${normalizedSql(Prisma.sql`COALESCE(section."reviewedText", section."originalText", '')`)},
+                  ${normalizeSearchText(validated.sectionContains.text)}
+                ) AS "matchPosition"
+            ) source
+          ) hit
           WHERE section."patientId" IN (${Prisma.join(patientIds)})
             ${
               validated.sectionContains.sectionKey
@@ -1196,6 +1216,7 @@ export async function correlate(
   const sectionByPatient = new Map(sections.map((row) => [row.patientId, row]));
   const out: PatientSearchResult[] = [];
   const allRefs: SourceReference[] = [];
+  let truncated = false;
   for (const p of patients) {
     const matching: string[] = [];
     const refs: SourceReference[] = [];
@@ -1231,16 +1252,9 @@ export async function correlate(
     if (validated.sectionContains) {
       const hit = sectionByPatient.get(p.id);
       if (!hit) continue;
-      const text = (hit.reviewedText ?? hit.originalText) || '';
       matching.push('section');
-      refs.push(
-        narrativeSource(
-          p.id,
-          hit.sectionKey,
-          hit.id,
-          excerptAround(text, validated.sectionContains.text),
-        ),
-      );
+      refs.push(narrativeSource(p.id, hit.sectionKey, hit.id, hit.excerpt));
+      truncated ||= hit.contentTruncated;
     }
     if (matching.length === 0) continue;
     out.push({
@@ -1260,7 +1274,7 @@ export async function correlate(
     out.length ? 'ok' : 'empty',
     nowIso(),
   );
-  return { data: out, sourceRefs: allRefs };
+  return { data: out, sourceRefs: allRefs, truncated };
 }
 
 /** Resolve a NARRATIVE_SECTION source back to its exact stored text. */
