@@ -6,9 +6,12 @@ import { useEffect, useRef, useState } from 'react';
 // the original file. State (file index, page, zoom, rotation, mode) is kept across renders.
 
 export interface PreviewDoc {
+  id?: string;
   name: string;
   type: string; // mime type
-  url: string; // object URL of the uploaded file
+  url: string; // object URL of the uploaded file; empty until a remote document is requested
+  loading?: boolean;
+  error?: string;
 }
 
 interface Props {
@@ -16,11 +19,18 @@ interface Props {
   ocrText?: string;
   /** Controlled jump target (REQ-032 §6 "Vai alla fonte"): {fileName, page}. */
   sourceTarget?: { fileName?: string; page?: number } | null;
+  /** Optional lazy loader used by authenticated remote document collections. */
+  onRequestDocument?: (documentId: string) => void;
 }
 
 type Mode = 'document' | 'ocr';
 
-export function DocumentPreview({ documents, ocrText = '', sourceTarget }: Props) {
+export function DocumentPreview({
+  documents,
+  ocrText = '',
+  sourceTarget,
+  onRequestDocument,
+}: Props) {
   const [idx, setIdx] = useState(0);
   const [mode, setMode] = useState<Mode>('document');
   const [zoom, setZoom] = useState(1);
@@ -36,6 +46,10 @@ export function DocumentPreview({ documents, ocrText = '', sourceTarget }: Props
     !!doc && (doc.type === 'application/pdf' || doc.name.toLowerCase().endsWith('.pdf'));
   const isImage = !!doc && doc.type.startsWith('image/');
 
+  useEffect(() => {
+    if (doc?.id && !doc.url && !doc.loading && !doc.error) onRequestDocument?.(doc.id);
+  }, [doc?.error, doc?.id, doc?.loading, doc?.url, onRequestDocument]);
+
   // Source link: switch to the named file + page (REQ-032 §6).
   useEffect(() => {
     if (!sourceTarget?.fileName) return;
@@ -43,8 +57,8 @@ export function DocumentPreview({ documents, ocrText = '', sourceTarget }: Props
     if (found >= 0) {
       setIdx(found);
       setMode('document');
+      if (found === idx && sourceTarget.page) setPage(sourceTarget.page);
     }
-    if (sourceTarget.page) setPage(sourceTarget.page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sourceTarget]);
 
@@ -52,8 +66,13 @@ export function DocumentPreview({ documents, ocrText = '', sourceTarget }: Props
   useEffect(() => {
     setZoom(1);
     setRotation(0);
-    setPage(1);
+    setPage(
+      sourceTarget?.fileName === documents[idx]?.name && sourceTarget.page ? sourceTarget.page : 1,
+    );
     setPan({ x: 0, y: 0 });
+    // The selected source target is read only when the file index changes; a source-target change
+    // is handled by the effect above, which selects the corresponding file first.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx]);
 
   if (documents.length === 0) {
@@ -210,6 +229,15 @@ export function DocumentPreview({ documents, ocrText = '', sourceTarget }: Props
             fileName={doc?.name}
             page={isPdf ? page : undefined}
           />
+        ) : !doc.url ? (
+          <div className="doc-preview__unsupported" role={doc.error ? 'alert' : 'status'}>
+            <p>{doc.error ?? 'Caricamento documento…'}</p>
+            {doc.error && doc.id && onRequestDocument && (
+              <button className="srev-chip" onClick={() => onRequestDocument(doc.id!)}>
+                Riprova
+              </button>
+            )}
+          </div>
         ) : isPdf ? (
           <iframe
             key={`${doc.url}-${page}`}
