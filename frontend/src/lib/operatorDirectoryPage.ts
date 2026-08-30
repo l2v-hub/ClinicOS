@@ -6,8 +6,11 @@ export interface OperatorDirectoryPageInfo {
 export interface OperatorDirectorySummary {
   total: number;
   active: number;
+  matching: number;
   appointmentsToday: number;
 }
+
+export type OperatorDirectoryStatus = 'all' | 'active' | 'inactive';
 
 export interface OperatorDirectoryPage<T> {
   items: T[];
@@ -24,10 +27,12 @@ export function buildOperatorDirectoryPageUrl(
   admin: boolean,
   cursor?: string | null,
   q?: string,
+  status: OperatorDirectoryStatus = 'all',
 ): string {
   const params = new URLSearchParams({ limit: '100' });
   if (cursor) params.set('cursor', cursor);
   if (q?.trim()) params.set('q', q.trim());
+  if (admin && status !== 'all') params.set('status', status);
   return `${apiUrl}${admin ? '/operators/page' : '/operators/directory/page'}?${params}`;
 }
 
@@ -51,8 +56,10 @@ export function parseOperatorDirectoryPage<T>(value: unknown): OperatorDirectory
     if (
       !nonNegativeInteger(summary.total) ||
       !nonNegativeInteger(summary.active) ||
+      !nonNegativeInteger(summary.matching) ||
       !nonNegativeInteger(summary.appointmentsToday) ||
-      summary.active > summary.total
+      summary.active > summary.total ||
+      summary.matching > summary.total
     ) {
       throw new Error('invalid operator directory page');
     }
@@ -63,6 +70,7 @@ export function parseOperatorDirectoryPage<T>(value: unknown): OperatorDirectory
       ? {
           total: summary.total as number,
           active: summary.active as number,
+          matching: summary.matching as number,
           appointmentsToday: summary.appointmentsToday as number,
         }
       : null,

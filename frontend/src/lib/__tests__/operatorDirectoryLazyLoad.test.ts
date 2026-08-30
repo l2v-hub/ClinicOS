@@ -32,11 +32,17 @@ test('operator directory reads are abortable, session-safe, cached and retryable
   assert.match(source, /loadOperatorDirectory\(true\)/);
 });
 
-test('navigation and logout abort obsolete operator directory requests', () => {
-  assert.match(
-    source,
-    /if \(!needsOperatorDirectory\)[\s\S]*operatorDirectoryAbortRef\.current\.abort/,
-  );
+test('navigation resets filtered directory state and logout aborts obsolete requests', () => {
+  const navigationReset = source.split('if (!needsOperatorDirectory) {')[1]?.split('return;')[0];
+  assert.ok(navigationReset);
+  assert.match(navigationReset, /operatorDirectoryRequestRef\.current \+= 1/);
+  assert.match(navigationReset, /operatorDirectoryAbortRef\.current\?\.abort\(\)/);
+  assert.match(navigationReset, /operatorDirectoryQueryRef\.current = ''/);
+  assert.match(navigationReset, /operatorDirectoryStatusRef\.current = 'all'/);
+  assert.match(navigationReset, /setOperatori\(\[\]\)/);
+  assert.match(navigationReset, /setOperatorDirectoryPageInfo/);
+  assert.match(navigationReset, /setOperatorDirectorySummary\(null\)/);
+  assert.match(navigationReset, /setOperatorDirectoryLoadState\('idle'\)/);
   const logout = source.split('function handleLogout()')[1]?.split('// ── Operatori CRUD')[0];
   assert.ok(logout);
   assert.match(logout, /operatorDirectoryRequestRef\.current \+= 1/);

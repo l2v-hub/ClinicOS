@@ -127,10 +127,17 @@ async function appointmentsTodayForOperator(operatorId: string): Promise<number>
   return prisma.appointment.count({ where: { operatorId, scheduledAt: todayRange() } });
 }
 
-function operatorPageWhere(q?: string, includeEmail = false): Prisma.OperatorWhereInput {
-  if (!q) return {};
+function operatorPageWhere(
+  q?: string,
+  includeEmail = false,
+  status?: 'active' | 'inactive',
+): Prisma.OperatorWhereInput {
+  const statusWhere: Prisma.OperatorWhereInput | undefined = status
+    ? { user: { is: { isActive: status === 'active' } } }
+    : undefined;
+  if (!q) return statusWhere ?? {};
   const contains = { contains: q, mode: 'insensitive' as const };
-  return {
+  const searchWhere: Prisma.OperatorWhereInput = {
     OR: [
       { user: { is: { fullName: contains } } },
       { department: contains },
@@ -139,6 +146,7 @@ function operatorPageWhere(q?: string, includeEmail = false): Prisma.OperatorWhe
       ...(includeEmail ? [{ user: { is: { email: contains } } }] : []),
     ],
   };
+  return statusWhere ? { AND: [searchWhere, statusWhere] } : searchWhere;
 }
 
 function operatorCursorWhere(position?: {
@@ -158,6 +166,9 @@ function operatorCursorWhere(position?: {
 operatorsRouter.get('/directory/page', async (req, res) => {
   try {
     const input = parseOperatorPageQuery(req.query as Record<string, unknown>);
+    if (input.status) {
+      throw new OperatorPageInputError('status non supportato dalla directory operativa');
+    }
     const position = input.cursor
       ? decodeOperatorPageCursor(input.cursor, { q: input.q })
       : undefined;
@@ -246,13 +257,14 @@ operatorsRouter.get('/page', async (req, res) => {
   try {
     const input = parseOperatorPageQuery(req.query as Record<string, unknown>);
     const position = input.cursor
-      ? decodeOperatorPageCursor(input.cursor, { q: input.q })
+      ? decodeOperatorPageCursor(input.cursor, { q: input.q, status: input.status })
       : undefined;
     const cursorWhere = operatorCursorWhere(position);
     const scheduledAt = todayRange();
-    const baseWhere = operatorPageWhere(input.q, true);
+    const summaryWhere = operatorPageWhere(input.q, true);
+    const baseWhere = operatorPageWhere(input.q, true, input.status);
     const activeWhere: Prisma.OperatorWhereInput = {
-      AND: [baseWhere, { user: { is: { isActive: true } } }],
+      AND: [summaryWhere, { user: { is: { isActive: true } } }],
     };
     const [rows, summary] = await Promise.all([
       prisma.operator.findMany({
@@ -272,7 +284,7 @@ operatorsRouter.get('/page', async (req, res) => {
       input.cursor
         ? Promise.resolve(null)
         : Promise.all([
-            prisma.operator.count({ where: baseWhere }),
+            prisma.operator.count({ where: summaryWhere }),
             prisma.operator.count({ where: activeWhere }),
             prisma.appointment.count({
               where: { scheduledAt, operator: { is: activeWhere } },
@@ -280,6 +292,12 @@ operatorsRouter.get('/page', async (req, res) => {
           ]).then(([total, active, appointmentsToday]) => ({
             total,
             active,
+            matching:
+              input.status === 'active'
+                ? active
+                : input.status === 'inactive'
+                  ? total - active
+                  : total,
             appointmentsToday,
           })),
     ]);
@@ -291,7 +309,10 @@ operatorsRouter.get('/page', async (req, res) => {
       summary,
       pageInfo: {
         hasMore,
-        nextCursor: hasMore && last ? encodeOperatorPageCursor(last, { q: input.q }) : null,
+        nextCursor:
+          hasMore && last
+            ? encodeOperatorPageCursor(last, { q: input.q, status: input.status })
+            : null,
       },
     });
   } catch (error) {

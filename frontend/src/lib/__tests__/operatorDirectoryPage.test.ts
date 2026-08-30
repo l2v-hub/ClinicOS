@@ -16,18 +16,26 @@ test('operator directory URL selects the bounded role-specific page and cursor',
     buildOperatorDirectoryPageUrl('https://api.example', false, 'next/value', '  mario rossi '),
     'https://api.example/operators/directory/page?limit=100&cursor=next%2Fvalue&q=mario+rossi',
   );
+  assert.equal(
+    buildOperatorDirectoryPageUrl('https://api.example', true, null, '  mario rossi ', 'inactive'),
+    'https://api.example/operators/page?limit=100&q=mario+rossi&status=inactive',
+  );
+  assert.equal(
+    buildOperatorDirectoryPageUrl('https://api.example', false, null, '', 'inactive'),
+    'https://api.example/operators/directory/page?limit=100',
+  );
 });
 
 test('operator directory pages require coherent page metadata', () => {
   assert.deepEqual(
     parseOperatorDirectoryPage({
       items: [{ id: 'one' }],
-      summary: { total: 12, active: 10, appointmentsToday: 4 },
+      summary: { total: 12, active: 10, matching: 2, appointmentsToday: 4 },
       pageInfo: { hasMore: false, nextCursor: null },
     }),
     {
       items: [{ id: 'one' }],
-      summary: { total: 12, active: 10, appointmentsToday: 4 },
+      summary: { total: 12, active: 10, matching: 2, appointmentsToday: 4 },
       pageInfo: { hasMore: false, nextCursor: null },
     },
   );
@@ -45,7 +53,7 @@ test('operator directory pages require coherent page metadata', () => {
   assert.throws(() =>
     parseOperatorDirectoryPage({
       items: [],
-      summary: { total: 1, active: 2, appointmentsToday: 0 },
+      summary: { total: 1, active: 2, matching: 1, appointmentsToday: 0 },
       pageInfo: { hasMore: false, nextCursor: null },
     }),
   );
@@ -85,6 +93,8 @@ test('management search and append retry are wired to the server page contract',
   );
   assert.match(app, /if \(!cursor\) setOperatorDirectorySummary\(page\.summary\)/);
   assert.match(app, /onSearch=\{searchOperatorDirectory\}/);
+  assert.match(app, /onStatusChange=\{filterOperatorDirectoryByStatus\}/);
   assert.match(management, /onSearch\?\.\(ricerca\.trim\(\)\)/);
-  assert.match(management, /count=\{summary\?\.total \?\? operatori\.length\}/);
+  assert.match(management, /onStatusChange\?\./);
+  assert.match(management, /count=\{summary\?\.matching \?\? operatori\.length\}/);
 });

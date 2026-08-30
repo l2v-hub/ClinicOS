@@ -9,28 +9,53 @@ import {
 } from '../page-query.js';
 
 test('operator pages default to 50 and cap every response request at 100', () => {
-  assert.deepEqual(parseOperatorPageQuery({}), { limit: 50, q: undefined, cursor: undefined });
+  assert.deepEqual(parseOperatorPageQuery({}), {
+    limit: 50,
+    q: undefined,
+    status: undefined,
+    cursor: undefined,
+  });
   assert.equal(parseOperatorPageQuery({ limit: '1000' }).limit, 100);
   for (const limit of ['0', '-1', '1.5', 'nan']) {
     assert.throws(() => parseOperatorPageQuery({ limit }), OperatorPageInputError);
   }
   assert.throws(() => parseOperatorPageQuery({ q: 'x'.repeat(81) }), OperatorPageInputError);
+  assert.equal(parseOperatorPageQuery({ status: 'active' }).status, 'active');
+  assert.equal(parseOperatorPageQuery({ status: 'inactive' }).status, 'inactive');
+  for (const status of ['all', 'attivo', 'disabled']) {
+    assert.throws(() => parseOperatorPageQuery({ status }), OperatorPageInputError);
+  }
+  assert.throws(() => parseOperatorPageQuery({ status: ['active'] }), OperatorPageInputError);
 });
 
 test('operator cursor is canonical and bound to the active search', () => {
   const position = { createdAt: new Date('2026-08-30T10:00:00.000Z'), id: 'operator-1' };
-  const cursor = encodeOperatorPageCursor(position, { q: 'rossi' });
-  assert.deepEqual(decodeOperatorPageCursor(cursor, { q: 'rossi' }), position);
-  assert.throws(() => decodeOperatorPageCursor(cursor, { q: 'bianchi' }), OperatorPageInputError);
+  const cursor = encodeOperatorPageCursor(position, { q: 'rossi', status: 'active' });
+  assert.deepEqual(decodeOperatorPageCursor(cursor, { q: 'rossi', status: 'active' }), position);
   assert.throws(
-    () => decodeOperatorPageCursor('not+base64', { q: 'rossi' }),
+    () => decodeOperatorPageCursor(cursor, { q: 'bianchi', status: 'active' }),
+    OperatorPageInputError,
+  );
+  assert.throws(() => decodeOperatorPageCursor(cursor, { q: 'rossi' }), OperatorPageInputError);
+  assert.throws(
+    () => decodeOperatorPageCursor(cursor, { q: 'rossi', status: 'inactive' }),
+    OperatorPageInputError,
+  );
+  assert.throws(
+    () => decodeOperatorPageCursor('not+base64', { q: 'rossi', status: 'active' }),
     OperatorPageInputError,
   );
   const nonCanonicalDate = Buffer.from(
-    JSON.stringify({ v: 1, createdAt: '2026-08-30', id: 'operator-1', q: 'rossi' }),
+    JSON.stringify({
+      v: 1,
+      createdAt: '2026-08-30',
+      id: 'operator-1',
+      q: 'rossi',
+      status: 'active',
+    }),
   ).toString('base64url');
   assert.throws(
-    () => decodeOperatorPageCursor(nonCanonicalDate, { q: 'rossi' }),
+    () => decodeOperatorPageCursor(nonCanonicalDate, { q: 'rossi', status: 'active' }),
     OperatorPageInputError,
   );
 });
@@ -45,4 +70,11 @@ test('both roster page routes use stable keyset windows and a 101-row sentinel',
   );
   assert.match(source, /operatorsRouter\.get\('\/directory\/page'/);
   assert.match(source, /operatorsRouter\.get\('\/page'/);
+  assert.match(
+    source,
+    /decodeOperatorPageCursor\(input\.cursor, \{ q: input\.q, status: input\.status \}\)/,
+  );
+  assert.match(source, /operatorPageWhere\(input\.q, true, input\.status\)/);
+  assert.match(source, /status non supportato dalla directory operativa/);
+  assert.match(source, /matching:[\s\S]*input\.status === 'active'[\s\S]*total - active/);
 });

@@ -4,11 +4,16 @@ import { OPERATOR_COLOR_PALETTE } from '../../types';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoSearch, IcoChevronRight } from '../../icons';
 import { ClinicalTable } from '../operator/cartella/ClinicalTable';
 import type { ColumnDef } from '../operator/cartella/ClinicalTable';
+import type {
+  OperatorDirectoryStatus,
+  OperatorDirectorySummary,
+} from '../../lib/operatorDirectoryPage';
 
 interface OperatorManagementProps {
   operatori: Operatore[];
-  summary?: { total: number; active: number; appointmentsToday: number } | null;
+  summary?: OperatorDirectorySummary | null;
   onSearch?: (query: string) => void;
+  onStatusChange?: (status: OperatorDirectoryStatus) => void;
   onAdd: (
     op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>,
   ) => void;
@@ -136,6 +141,7 @@ export function OperatorManagement({
   operatori,
   summary = null,
   onSearch,
+  onStatusChange,
   onAdd,
   onUpdate,
   onToggleStato,
@@ -395,7 +401,10 @@ export function OperatorManagement({
             <button
               key={s}
               className={`filter-chip${filtroStato === s ? ' active' : ''}`}
-              onClick={() => setFiltroStato(s)}
+              onClick={() => {
+                setFiltroStato(s);
+                onStatusChange?.(s === 'attivo' ? 'active' : s === 'inattivo' ? 'inactive' : 'all');
+              }}
             >
               {s === 'tutti' ? 'Tutti' : s === 'attivo' ? 'Attivi' : 'Inattivi'}
             </button>
@@ -406,7 +415,7 @@ export function OperatorManagement({
       {/* Table wrapped in collapsible ClinicalTable */}
       <ClinicalTable<Operatore>
         title="Operatori"
-        count={summary?.total ?? operatori.length}
+        count={summary?.matching ?? operatori.length}
         countLabel="operatori"
         columns={operatoriColumns(ruoloLabel, apriModifica, onToggleStato)}
         data={filtrati}

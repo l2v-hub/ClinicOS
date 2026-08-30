@@ -10,6 +10,7 @@ import {
   mergeOperatorDirectoryPages,
   parseOperatorDirectoryPage,
   type OperatorDirectoryPageInfo,
+  type OperatorDirectoryStatus,
   type OperatorDirectorySummary,
 } from './lib/operatorDirectoryPage';
 import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';
@@ -314,6 +315,7 @@ export default function App() {
   const operatorDirectoryAbortRef = useRef<AbortController | null>(null);
   const operatorDirectoryLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const operatorDirectoryQueryRef = useRef('');
+  const operatorDirectoryStatusRef = useRef<OperatorDirectoryStatus>('all');
   const patientConsegneRequestRef = useRef(0);
   const patientConsegneAbortRef = useRef<AbortController | null>(null);
   const patientConsegnePageInfoRef = useRef<ConsegnaPageInfo>({
@@ -1109,7 +1111,12 @@ export default function App() {
   }, []);
 
   const loadOperatorDirectory = useCallback(
-    async (force = false, cursor: string | null = null, q = operatorDirectoryQueryRef.current) => {
+    async (
+      force = false,
+      cursor: string | null = null,
+      q = operatorDirectoryQueryRef.current,
+      status = operatorDirectoryStatusRef.current,
+    ) => {
       if (!utente) return;
       if (!force && !cursor && operatorDirectoryLoadStateRef.current === 'ready') return;
       if (operatorDirectoryLoadStateRef.current === 'loading' && !force) return;
@@ -1124,8 +1131,10 @@ export default function App() {
       setOperatorDirectoryLoadError(null);
       setOperatorDirectoryRetryCursor(null);
       const normalizedQuery = q.trim();
+      const normalizedStatus = utente.ruolo === 'admin' ? status : 'all';
       if (!cursor) {
         operatorDirectoryQueryRef.current = normalizedQuery;
+        operatorDirectoryStatusRef.current = normalizedStatus;
         setOperatorDirectoryPageInfo({ hasMore: false, nextCursor: null });
       }
 
@@ -1136,6 +1145,7 @@ export default function App() {
             utente.ruolo === 'admin',
             cursor,
             operatorDirectoryQueryRef.current,
+            operatorDirectoryStatusRef.current,
           ),
           {
             headers: operatorHeaders(),
@@ -1187,7 +1197,13 @@ export default function App() {
   );
 
   const searchOperatorDirectory = useCallback(
-    (q: string) => loadOperatorDirectory(true, null, q),
+    (q: string) => loadOperatorDirectory(true, null, q, operatorDirectoryStatusRef.current),
+    [loadOperatorDirectory],
+  );
+
+  const filterOperatorDirectoryByStatus = useCallback(
+    (status: OperatorDirectoryStatus) =>
+      loadOperatorDirectory(true, null, operatorDirectoryQueryRef.current, status),
     [loadOperatorDirectory],
   );
 
@@ -1257,18 +1273,29 @@ export default function App() {
   const needsOperatorDirectory = !!utente && OPERATOR_DIRECTORY_NAV_KEYS.has(navKey);
   useEffect(() => {
     if (!needsOperatorDirectory) {
-      if (operatorDirectoryAbortRef.current) {
-        operatorDirectoryRequestRef.current += 1;
-        operatorDirectoryAbortRef.current.abort();
-        operatorDirectoryAbortRef.current = null;
-        operatorDirectoryLoadStateRef.current = 'idle';
-        setOperatorDirectoryLoadState('idle');
-      }
+      operatorDirectoryRequestRef.current += 1;
+      operatorDirectoryAbortRef.current?.abort();
+      operatorDirectoryAbortRef.current = null;
+      operatorDirectoryLoadStateRef.current = 'idle';
+      operatorDirectoryQueryRef.current = '';
+      operatorDirectoryStatusRef.current = 'all';
+      setOperatori([]);
+      setOperatorDirectoryLoadState('idle');
+      setOperatorDirectoryLoadError(null);
+      setOperatorDirectoryRetryCursor(null);
+      setOperatorDirectoryPageInfo({ hasMore: false, nextCursor: null });
+      setOperatorDirectorySummary(null);
       return;
     }
     const nextQuery = navKey === 'gestione-operatori' ? operatorDirectoryQueryRef.current : '';
-    const force = operatorDirectoryQueryRef.current !== nextQuery;
-    const timer = window.setTimeout(() => void loadOperatorDirectory(force, null, nextQuery), 0);
+    const nextStatus = navKey === 'gestione-operatori' ? operatorDirectoryStatusRef.current : 'all';
+    const force =
+      operatorDirectoryQueryRef.current !== nextQuery ||
+      operatorDirectoryStatusRef.current !== nextStatus;
+    const timer = window.setTimeout(
+      () => void loadOperatorDirectory(force, null, nextQuery, nextStatus),
+      0,
+    );
     return () => window.clearTimeout(timer);
   }, [needsOperatorDirectory, navKey, loadOperatorDirectory]);
 
@@ -1555,6 +1582,7 @@ export default function App() {
     operatorDirectoryAbortRef.current = null;
     operatorDirectoryLoadStateRef.current = 'idle';
     operatorDirectoryQueryRef.current = '';
+    operatorDirectoryStatusRef.current = 'all';
     setOperatori([]);
     setOperatorDirectoryLoadState('idle');
     setOperatorDirectoryLoadError(null);
@@ -1595,8 +1623,13 @@ export default function App() {
         return;
       }
       const created = (await res.json()) as OperatoreApi;
-      if (operatorDirectoryQueryRef.current) {
-        await loadOperatorDirectory(true, null, operatorDirectoryQueryRef.current);
+      if (operatorDirectoryQueryRef.current || operatorDirectoryStatusRef.current !== 'all') {
+        await loadOperatorDirectory(
+          true,
+          null,
+          operatorDirectoryQueryRef.current,
+          operatorDirectoryStatusRef.current,
+        );
       } else {
         setOperatori((prev) => [...prev, decorateOperatore(created, prev.length, op.colore)]);
         setOperatorDirectorySummary((previous) =>
@@ -1605,6 +1638,7 @@ export default function App() {
                 ...previous,
                 total: previous.total + 1,
                 active: previous.active + (created.stato === 'attivo' ? 1 : 0),
+                matching: previous.matching + 1,
                 appointmentsToday:
                   previous.appointmentsToday +
                   (created.stato === 'attivo' ? created.appuntamentiOggi : 0),
@@ -1632,8 +1666,13 @@ export default function App() {
         return;
       }
       const saved = (await res.json()) as OperatoreApi;
-      if (operatorDirectoryQueryRef.current) {
-        await loadOperatorDirectory(true, null, operatorDirectoryQueryRef.current);
+      if (operatorDirectoryQueryRef.current || operatorDirectoryStatusRef.current !== 'all') {
+        await loadOperatorDirectory(
+          true,
+          null,
+          operatorDirectoryQueryRef.current,
+          operatorDirectoryStatusRef.current,
+        );
         showToast('Operatore aggiornato');
         return;
       }
@@ -2630,6 +2669,7 @@ export default function App() {
                       operatori={operatori}
                       summary={operatorDirectorySummary}
                       onSearch={searchOperatorDirectory}
+                      onStatusChange={filterOperatorDirectoryByStatus}
                       onAdd={addOperatore}
                       onUpdate={updateOperatore}
                       onToggleStato={toggleStatoOperatore}
