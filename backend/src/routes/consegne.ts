@@ -28,6 +28,18 @@ function visibleWhere(id: string, actor: Operator): Prisma.ConsegnaWhereInput {
   };
 }
 
+export function atomicConsegnaUpdateWhere(
+  id: string,
+  actor: Operator,
+  changesContent: boolean,
+): Prisma.ConsegnaWhereInput {
+  if (privileged(actor)) return { id };
+  // Content is author-only. Status-only updates may also be performed by the current assignee.
+  // Keeping that permission inside the UPDATE predicate closes the gap between the pre-read and
+  // the write if an administrator reassigns the handover concurrently.
+  return changesContent ? { id, creatoDaId: actor.id } : visibleWhere(id, actor);
+}
+
 function notFound(res: Response): void {
   res.status(404).json({ error: 'Consegna non trovata' });
 }
@@ -88,11 +100,8 @@ consegneRouter.put('/:id', async (req: AuthedRequest, res) => {
     const isAuthor = existing.creatoDaId === actor.id;
     const isAssignee = existing.operatoreAssegnatoId === actor.id;
     const contentFields = ['priorita', 'tipo', 'note', 'scadenza', 'oraScadenza'];
-    if (
-      !isPrivileged &&
-      Object.keys(patch).some((key) => contentFields.includes(key)) &&
-      !isAuthor
-    ) {
+    const changesContent = Object.keys(patch).some((key) => contentFields.includes(key));
+    if (!isPrivileged && changesContent && !isAuthor) {
       notFound(res);
       return;
     }
@@ -118,7 +127,7 @@ consegneRouter.put('/:id', async (req: AuthedRequest, res) => {
       }
     }
 
-    const data: Prisma.ConsegnaUpdateInput = {
+    const data: Prisma.ConsegnaUpdateManyMutationInput = {
       ...(patch.priorita !== undefined ? { priorita: patch.priorita } : {}),
       ...(patch.stato !== undefined ? { stato: patch.stato } : {}),
       ...(patch.tipo !== undefined ? { tipo: patch.tipo } : {}),
@@ -132,7 +141,19 @@ consegneRouter.put('/:id', async (req: AuthedRequest, res) => {
           }
         : {}),
     };
-    res.status(200).json(await prisma.consegna.update({ where: { id }, data }));
+    const updated = await prisma.$transaction(async (tx) => {
+      const result = await tx.consegna.updateMany({
+        where: atomicConsegnaUpdateWhere(id, actor, changesContent),
+        data,
+      });
+      if (result.count === 0) return null;
+      return tx.consegna.findUnique({ where: { id } });
+    });
+    if (!updated) {
+      notFound(res);
+      return;
+    }
+    res.status(200).json(updated);
   } catch (error) {
     if (badRequest(res, error)) return;
     console.error('PUT /consegne/:id error:', error);
@@ -157,7 +178,13 @@ consegneRouter.delete('/:id', async (req: AuthedRequest, res) => {
       notFound(res);
       return;
     }
-    await prisma.consegna.delete({ where: { id: existing.id } });
+    const deleted = await prisma.consegna.deleteMany({
+      where: privileged(actor) ? { id: existing.id } : { id: existing.id, creatoDaId: actor.id },
+    });
+    if (deleted.count === 0) {
+      notFound(res);
+      return;
+    }
     res.status(204).send();
   } catch (error) {
     console.error('DELETE /consegne/:id error:', error);
