@@ -31,6 +31,8 @@ interface AdminDashboardProps {
   onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   clinicalOverview?: ClinicalOverview | null;
+  clinicalOverviewState: 'loading' | 'ready' | 'error';
+  onRetryClinicalOverview: () => void;
 }
 
 function WorkloadBar({ value, max, color }: { value: number; max: number; color?: string }) {
@@ -57,6 +59,8 @@ export function AdminDashboard({
   onOpenConsegneAperte,
   onSelectPaziente,
   clinicalOverview = null,
+  clinicalOverviewState,
+  onRetryClinicalOverview,
 }: AdminDashboardProps) {
   const attivi = operatori.filter((o) => o.stato === 'attivo');
   const urgenti = consegneOverview?.urgentPreview ?? [];
@@ -69,6 +73,8 @@ export function AdminDashboard({
   const critici = clinicalOverview?.critici ?? 0;
   const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
   const dimessi = clinicalOverview?.dimessi ?? 0;
+  const clinicalOverviewReady = clinicalOverviewState === 'ready' && clinicalOverview !== null;
+  const overviewValue = (value: number): number | string => (clinicalOverviewReady ? value : '—');
   const consegneAperte = consegneOverview?.summary.open;
   const consegneInCorso = consegneOverview?.summary.inProgress;
 
@@ -105,6 +111,18 @@ export function AdminDashboard({
               ? 'Aggiornamento consegne non riuscito: sono mostrati gli ultimi dati disponibili.'
               : 'Riepilogo consegne non disponibile. Apri Consegne per riprovare.'}
           </span>
+        </div>
+      )}
+      {clinicalOverviewState === 'error' && (
+        <div className="coverage-alert" role="alert">
+          <IcoWarning />
+          <span>
+            <strong>Riepilogo clinico non disponibile.</strong> I valori non verificati sono
+            indicati con un trattino.
+          </span>
+          <button className="link-btn" type="button" onClick={onRetryClinicalOverview}>
+            Riprova <IcoArrow />
+          </button>
         </div>
       )}
       {camereLoadState === 'error' && (
@@ -197,7 +215,9 @@ export function AdminDashboard({
       <div className="stats-grid">
         <div className="stat-card stat-card--blue">
           <div className="stat-card__label">Totale Pazienti</div>
-          <div className="stat-card__value">{loadingPazienti ? '—' : totalePazienti}</div>
+          <div className="stat-card__value">
+            {loadingPazienti || clinicalOverviewState !== 'ready' ? '—' : totalePazienti}
+          </div>
           <button className="stat-card__action" onClick={() => onNavigate('pazienti')}>
             Vedi pazienti <IcoArrow />
           </button>
@@ -241,76 +261,86 @@ export function AdminDashboard({
       </div>
 
       {/* Clinical KPIs */}
-      {clinicalOverview !== null && (
-        <>
-          <div className="section-header" style={{ marginTop: 28, marginBottom: 12 }}>
-            <h3 className="section-header__title">
-              <span className="section-header__ico">
-                <IcoActivity />
-              </span>
-              Situazione Clinica
-            </h3>
-          </div>
-          <div className="kpi-alert-grid">
-            <div
-              className={`kpi-alert-card${critici > 0 ? ' kpi-alert-card--red' : ' kpi-alert-card--green'}`}
-            >
-              <span className="kpi-alert-card__val">{critici}</span>
-              <span className="kpi-alert-card__lbl">
-                <IcoActivity /> Parametri critici
-              </span>
-            </div>
-            <div
-              className={`kpi-alert-card${rischiAlti > 0 ? ' kpi-alert-card--amber' : ' kpi-alert-card--green'}`}
-            >
-              <span className="kpi-alert-card__val">{rischiAlti}</span>
-              <span className="kpi-alert-card__lbl">
-                <IcoShield /> Rischi alti/critici
-              </span>
-            </div>
-            <div className="kpi-alert-card kpi-alert-card--blue">
-              <span className="kpi-alert-card__val">
-                {overviewAvailable ? `${consegneInCorso}/${consegneAperte}` : '—'}
-              </span>
-              <span className="kpi-alert-card__lbl">
-                <IcoConsegne /> Consegne in corso
-              </span>
-            </div>
-            <div className="kpi-alert-card kpi-alert-card--green">
-              <span className="kpi-alert-card__val">{dimessi}</span>
-              <span className="kpi-alert-card__lbl">Dimessi in archivio</span>
-            </div>
-            <div
-              className={`kpi-alert-card${
-                somministrazioni.inCorso
-                  ? ' kpi-alert-card--blue'
-                  : somministrazioni.inRitardo > 0
-                    ? ' kpi-alert-card--red'
-                    : ' kpi-alert-card--green'
-              }`}
-              role="button"
-              tabIndex={0}
-              onClick={() => onNavigate('agenda-admin')}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  onNavigate('agenda-admin');
-                }
-              }}
-              title="Vai a Agenda"
-            >
-              <span className="kpi-alert-card__val">
-                {somministrazioni.inCorso
-                  ? '—'
-                  : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`}
-              </span>
-              <span className="kpi-alert-card__lbl">
-                <IcoPill /> Somministrazioni in ritardo
-              </span>
-            </div>
-          </div>
-        </>
-      )}
+      <div className="section-header" style={{ marginTop: 28, marginBottom: 12 }}>
+        <h3 className="section-header__title">
+          <span className="section-header__ico">
+            <IcoActivity />
+          </span>
+          Situazione Clinica
+        </h3>
+      </div>
+      <div className="kpi-alert-grid" aria-busy={clinicalOverviewState === 'loading'}>
+        <div
+          className={`kpi-alert-card${
+            !clinicalOverviewReady
+              ? ' kpi-alert-card--blue'
+              : critici > 0
+                ? ' kpi-alert-card--red'
+                : ' kpi-alert-card--green'
+          }`}
+        >
+          <span className="kpi-alert-card__val">{overviewValue(critici)}</span>
+          <span className="kpi-alert-card__lbl">
+            <IcoActivity /> Parametri critici
+          </span>
+        </div>
+        <div
+          className={`kpi-alert-card${
+            !clinicalOverviewReady
+              ? ' kpi-alert-card--blue'
+              : rischiAlti > 0
+                ? ' kpi-alert-card--amber'
+                : ' kpi-alert-card--green'
+          }`}
+        >
+          <span className="kpi-alert-card__val">{overviewValue(rischiAlti)}</span>
+          <span className="kpi-alert-card__lbl">
+            <IcoShield /> Rischi alti/critici
+          </span>
+        </div>
+        <div className="kpi-alert-card kpi-alert-card--blue">
+          <span className="kpi-alert-card__val">
+            {overviewAvailable ? `${consegneInCorso}/${consegneAperte}` : '—'}
+          </span>
+          <span className="kpi-alert-card__lbl">
+            <IcoConsegne /> Consegne in corso
+          </span>
+        </div>
+        <div
+          className={`kpi-alert-card kpi-alert-card--${clinicalOverviewReady ? 'green' : 'blue'}`}
+        >
+          <span className="kpi-alert-card__val">{overviewValue(dimessi)}</span>
+          <span className="kpi-alert-card__lbl">Dimessi in archivio</span>
+        </div>
+        <div
+          className={`kpi-alert-card${
+            somministrazioni.inCorso
+              ? ' kpi-alert-card--blue'
+              : somministrazioni.inRitardo > 0
+                ? ' kpi-alert-card--red'
+                : ' kpi-alert-card--green'
+          }`}
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate('agenda-admin')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onNavigate('agenda-admin');
+            }
+          }}
+          title="Vai a Agenda"
+        >
+          <span className="kpi-alert-card__val">
+            {somministrazioni.inCorso
+              ? '—'
+              : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`}
+          </span>
+          <span className="kpi-alert-card__lbl">
+            <IcoPill /> Somministrazioni in ritardo
+          </span>
+        </div>
+      </div>
 
       {/* Occupancy section */}
       <div className="section-header" style={{ marginTop: 32 }}>

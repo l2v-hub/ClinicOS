@@ -2510,6 +2510,8 @@ export default function App() {
                       onOpenConsegneAperte={openConsegneAperte}
                       onSelectPaziente={goToPazienteByNome}
                       clinicalOverview={clinicalOverview}
+                      clinicalOverviewState={clinicalOverviewState}
+                      onRetryClinicalOverview={() => void loadClinicalOverview()}
                     />
                   )}
                   {isAdmin && navKey === 'gestione-operatori' && (
