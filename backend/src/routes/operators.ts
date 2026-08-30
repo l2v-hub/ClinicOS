@@ -8,6 +8,7 @@ import {
   operatorScheduleListQuery,
   parseOperatorScheduleInput,
 } from '../operators/schedule-contract.js';
+import { MAX_OPERATOR_DIRECTORY, boundOperatorDirectory } from '../operators/directory-window.js';
 
 // Fase 1b: real CRUD for the admin "Gestione Operatori" screen (was a client-side mock).
 // An "operatore" in the UI is a User (identity: fullName/email/isActive) + an Operator row
@@ -49,7 +50,7 @@ type OperatorWithUser = {
   ruolo: string | null;
   qualifica: string | null;
   user: { email: string; fullName: string; isActive: boolean };
-  _count?: { registeredPatients: number };
+  _count?: { registeredPatients?: number; appointments?: number };
 };
 
 export const OPERATOR_DIRECTORY_SELECT = {
@@ -95,17 +96,6 @@ function todayRange(): { gte: Date; lte: Date } {
   return { gte: from, lte: to };
 }
 
-// Aggregato per l'elenco (un solo round-trip per N operatori). Per il singolo operatore usare
-// `appointmentsTodayForOperator`: il groupBy scandisce gli appuntamenti di tutta la clinica.
-async function appointmentsTodayByOperator(): Promise<Map<string, number>> {
-  const rows = await prisma.appointment.groupBy({
-    by: ['operatorId'],
-    where: { scheduledAt: todayRange() },
-    _count: { _all: true },
-  });
-  return new Map(rows.map((r) => [r.operatorId, r._count._all]));
-}
-
 async function appointmentsTodayForOperator(operatorId: string): Promise<number> {
   return prisma.appointment.count({ where: { operatorId, scheduledAt: todayRange() } });
 }
@@ -113,15 +103,22 @@ async function appointmentsTodayForOperator(operatorId: string): Promise<number>
 // GET /operators/directory — minimum fields needed by agendas and clinical collaboration.
 operatorsRouter.get('/directory', async (_req, res) => {
   try {
-    const [operators, apptToday] = await Promise.all([
-      prisma.operator.findMany({
-        select: OPERATOR_DIRECTORY_SELECT,
-        orderBy: { createdAt: 'asc' },
-      }),
-      appointmentsTodayByOperator(),
-    ]);
+    const scheduledAt = todayRange();
+    const operators = await prisma.operator.findMany({
+      select: {
+        ...OPERATOR_DIRECTORY_SELECT,
+        _count: { select: { appointments: { where: { scheduledAt } } } },
+      },
+      orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      take: MAX_OPERATOR_DIRECTORY + 1,
+    });
+    const window = boundOperatorDirectory(operators);
+    if (window.overflow) {
+      res.status(409).json({ error: 'Directory oltre il limite: usare la ricerca paginata' });
+      return;
+    }
     res.status(200).json(
-      operators.map((op) => {
+      window.items.map((op) => {
         const { nome, cognome } = splitFullName(op.user.fullName);
         return {
           id: op.id,
@@ -134,7 +131,7 @@ operatorsRouter.get('/directory', async (_req, res) => {
           stato: op.user.isActive ? 'attivo' : 'inattivo',
           qualifica: op.qualifica ?? '',
           pazientiAssegnati: 0,
-          appuntamentiOggi: apptToday.get(op.id) ?? 0,
+          appuntamentiOggi: op._count.appointments,
         };
       }),
     );
@@ -166,14 +163,26 @@ operatorsRouter.get('/directory/schedules', async (_req, res) => {
 // GET /operators
 operatorsRouter.get('/', async (_req, res) => {
   try {
-    const [operators, apptToday] = await Promise.all([
-      prisma.operator.findMany({
-        select: OPERATOR_ADMIN_SELECT,
-        orderBy: { createdAt: 'asc' },
-      }),
-      appointmentsTodayByOperator(),
-    ]);
-    res.status(200).json(operators.map((op) => toOperatore(op, apptToday.get(op.id) ?? 0)));
+    const scheduledAt = todayRange();
+    const operators = await prisma.operator.findMany({
+      select: {
+        ...OPERATOR_ADMIN_SELECT,
+        _count: {
+          select: {
+            registeredPatients: true,
+            appointments: { where: { scheduledAt } },
+          },
+        },
+      },
+      orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      take: MAX_OPERATOR_DIRECTORY + 1,
+    });
+    const window = boundOperatorDirectory(operators);
+    if (window.overflow) {
+      res.status(409).json({ error: 'Directory oltre il limite: usare la ricerca paginata' });
+      return;
+    }
+    res.status(200).json(window.items.map((op) => toOperatore(op, op._count.appointments)));
   } catch (error) {
     console.error('GET /operators error:', error);
     res.status(500).json({ error: 'Errore nel recupero operatori' });
