@@ -9,6 +9,12 @@ import {
   parseOperatorScheduleInput,
 } from '../operators/schedule-contract.js';
 import { MAX_OPERATOR_DIRECTORY, boundOperatorDirectory } from '../operators/directory-window.js';
+import {
+  OperatorPageInputError,
+  decodeOperatorPageCursor,
+  encodeOperatorPageCursor,
+  parseOperatorPageQuery,
+} from '../operators/page-query.js';
 
 // Fase 1b: real CRUD for the admin "Gestione Operatori" screen (was a client-side mock).
 // An "operatore" in the UI is a User (identity: fullName/email/isActive) + an Operator row
@@ -29,7 +35,8 @@ operatorsRouter.use((_req, res, next) => {
 // directory is intentionally minimal; full profiles, notes, schedules and all writes are admin-only.
 operatorsRouter.use(requireOperator);
 operatorsRouter.use((req, res, next) => {
-  const isOperationalDirectory = req.method === 'GET' && req.path === '/directory';
+  const isOperationalDirectory =
+    req.method === 'GET' && (req.path === '/directory' || req.path === '/directory/page');
   if (isOperationalDirectory) {
     next();
     return;
@@ -45,16 +52,18 @@ function splitFullName(fullName: string): { nome: string; cognome: string } {
 
 type OperatorWithUser = {
   id: string;
+  createdAt: Date;
   department: string | null;
-  phone: string | null;
+  phone?: string | null;
   ruolo: string | null;
   qualifica: string | null;
-  user: { email: string; fullName: string; isActive: boolean };
+  user: { email?: string; fullName: string; isActive: boolean };
   _count?: { registeredPatients?: number; appointments?: number };
 };
 
 export const OPERATOR_DIRECTORY_SELECT = {
   id: true,
+  createdAt: true,
   department: true,
   ruolo: true,
   qualifica: true,
@@ -63,6 +72,7 @@ export const OPERATOR_DIRECTORY_SELECT = {
 
 export const OPERATOR_ADMIN_SELECT = {
   id: true,
+  createdAt: true,
   department: true,
   phone: true,
   ruolo: true,
@@ -78,12 +88,29 @@ function toOperatore(op: OperatorWithUser, appuntamentiOggi: number) {
     nome,
     cognome,
     ruolo: op.ruolo ?? 'medico',
-    email: op.user.email,
+    email: op.user.email ?? '',
     telefono: op.phone ?? '',
     reparto: op.department ?? '',
     stato: op.user.isActive ? 'attivo' : 'inattivo',
     qualifica: op.qualifica ?? '',
     pazientiAssegnati: op._count?.registeredPatients ?? 0,
+    appuntamentiOggi,
+  };
+}
+
+function toDirectoryOperatore(op: OperatorWithUser, appuntamentiOggi: number) {
+  const { nome, cognome } = splitFullName(op.user.fullName);
+  return {
+    id: op.id,
+    nome,
+    cognome,
+    ruolo: op.ruolo ?? 'medico',
+    email: '',
+    telefono: '',
+    reparto: op.department ?? '',
+    stato: op.user.isActive ? 'attivo' : 'inattivo',
+    qualifica: op.qualifica ?? '',
+    pazientiAssegnati: 0,
     appuntamentiOggi,
   };
 }
@@ -99,6 +126,73 @@ function todayRange(): { gte: Date; lte: Date } {
 async function appointmentsTodayForOperator(operatorId: string): Promise<number> {
   return prisma.appointment.count({ where: { operatorId, scheduledAt: todayRange() } });
 }
+
+function operatorPageWhere(q?: string, includeEmail = false): Prisma.OperatorWhereInput {
+  if (!q) return {};
+  const contains = { contains: q, mode: 'insensitive' as const };
+  return {
+    OR: [
+      { user: { is: { fullName: contains } } },
+      { department: contains },
+      { ruolo: contains },
+      { qualifica: contains },
+      ...(includeEmail ? [{ user: { is: { email: contains } } }] : []),
+    ],
+  };
+}
+
+function operatorCursorWhere(position?: {
+  createdAt: Date;
+  id: string;
+}): Prisma.OperatorWhereInput | undefined {
+  if (!position) return undefined;
+  return {
+    OR: [
+      { createdAt: { gt: position.createdAt } },
+      { createdAt: position.createdAt, id: { gt: position.id } },
+    ],
+  };
+}
+
+// GET /operators/directory/page — bounded keyset directory for operational selectors.
+operatorsRouter.get('/directory/page', async (req, res) => {
+  try {
+    const input = parseOperatorPageQuery(req.query as Record<string, unknown>);
+    const position = input.cursor
+      ? decodeOperatorPageCursor(input.cursor, { q: input.q })
+      : undefined;
+    const cursorWhere = operatorCursorWhere(position);
+    const scheduledAt = todayRange();
+    const rows = await prisma.operator.findMany({
+      where: cursorWhere
+        ? { AND: [operatorPageWhere(input.q), cursorWhere] }
+        : operatorPageWhere(input.q),
+      select: {
+        ...OPERATOR_DIRECTORY_SELECT,
+        _count: { select: { appointments: { where: { scheduledAt } } } },
+      },
+      orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      take: input.limit + 1,
+    });
+    const hasMore = rows.length > input.limit;
+    const pageRows = rows.slice(0, input.limit);
+    const last = pageRows.at(-1);
+    res.status(200).json({
+      items: pageRows.map((op) => toDirectoryOperatore(op, op._count.appointments)),
+      pageInfo: {
+        hasMore,
+        nextCursor: hasMore && last ? encodeOperatorPageCursor(last, { q: input.q }) : null,
+      },
+    });
+  } catch (error) {
+    if (error instanceof OperatorPageInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    console.error('GET /operators/directory/page error:', error);
+    res.status(500).json({ error: 'Errore nel recupero directory operatori' });
+  }
+});
 
 // GET /operators/directory — minimum fields needed by agendas and clinical collaboration.
 operatorsRouter.get('/directory', async (_req, res) => {
@@ -119,20 +213,7 @@ operatorsRouter.get('/directory', async (_req, res) => {
     }
     res.status(200).json(
       window.items.map((op) => {
-        const { nome, cognome } = splitFullName(op.user.fullName);
-        return {
-          id: op.id,
-          nome,
-          cognome,
-          ruolo: op.ruolo ?? 'medico',
-          email: '',
-          telefono: '',
-          reparto: op.department ?? '',
-          stato: op.user.isActive ? 'attivo' : 'inattivo',
-          qualifica: op.qualifica ?? '',
-          pazientiAssegnati: 0,
-          appuntamentiOggi: op._count.appointments,
-        };
+        return toDirectoryOperatore(op, op._count.appointments);
       }),
     );
   } catch (error) {
@@ -161,6 +242,68 @@ operatorsRouter.get('/directory/schedules', async (_req, res) => {
 });
 
 // GET /operators
+operatorsRouter.get('/page', async (req, res) => {
+  try {
+    const input = parseOperatorPageQuery(req.query as Record<string, unknown>);
+    const position = input.cursor
+      ? decodeOperatorPageCursor(input.cursor, { q: input.q })
+      : undefined;
+    const cursorWhere = operatorCursorWhere(position);
+    const scheduledAt = todayRange();
+    const baseWhere = operatorPageWhere(input.q, true);
+    const activeWhere: Prisma.OperatorWhereInput = {
+      AND: [baseWhere, { user: { is: { isActive: true } } }],
+    };
+    const [rows, summary] = await Promise.all([
+      prisma.operator.findMany({
+        where: cursorWhere ? { AND: [baseWhere, cursorWhere] } : baseWhere,
+        select: {
+          ...OPERATOR_ADMIN_SELECT,
+          _count: {
+            select: {
+              registeredPatients: true,
+              appointments: { where: { scheduledAt } },
+            },
+          },
+        },
+        orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+        take: input.limit + 1,
+      }),
+      input.cursor
+        ? Promise.resolve(null)
+        : Promise.all([
+            prisma.operator.count({ where: baseWhere }),
+            prisma.operator.count({ where: activeWhere }),
+            prisma.appointment.count({
+              where: { scheduledAt, operator: { is: activeWhere } },
+            }),
+          ]).then(([total, active, appointmentsToday]) => ({
+            total,
+            active,
+            appointmentsToday,
+          })),
+    ]);
+    const hasMore = rows.length > input.limit;
+    const pageRows = rows.slice(0, input.limit);
+    const last = pageRows.at(-1);
+    res.status(200).json({
+      items: pageRows.map((op) => toOperatore(op, op._count.appointments)),
+      summary,
+      pageInfo: {
+        hasMore,
+        nextCursor: hasMore && last ? encodeOperatorPageCursor(last, { q: input.q }) : null,
+      },
+    });
+  } catch (error) {
+    if (error instanceof OperatorPageInputError) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    console.error('GET /operators/page error:', error);
+    res.status(500).json({ error: 'Errore nel recupero operatori' });
+  }
+});
+
 operatorsRouter.get('/', async (_req, res) => {
   try {
     const scheduledAt = todayRange();

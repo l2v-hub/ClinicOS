@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Operatore, RuoloOperatore, StatoOperatore } from '../../types';
 import { OPERATOR_COLOR_PALETTE } from '../../types';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoSearch, IcoChevronRight } from '../../icons';
@@ -7,6 +7,8 @@ import type { ColumnDef } from '../operator/cartella/ClinicalTable';
 
 interface OperatorManagementProps {
   operatori: Operatore[];
+  summary?: { total: number; active: number; appointmentsToday: number } | null;
+  onSearch?: (query: string) => void;
   onAdd: (
     op: Omit<Operatore, 'id' | 'pazientiAssegnati' | 'appuntamentiOggi' | 'iniziali'>,
   ) => void;
@@ -132,6 +134,8 @@ function operatoriColumns(
 
 export function OperatorManagement({
   operatori,
+  summary = null,
+  onSearch,
   onAdd,
   onUpdate,
   onToggleStato,
@@ -141,11 +145,22 @@ export function OperatorManagement({
   const [formAperto, setFormAperto] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState(FORM_VUOTO);
+  const searchMounted = useRef(false);
+
+  useEffect(() => {
+    if (!searchMounted.current) {
+      searchMounted.current = true;
+      return;
+    }
+    const timer = window.setTimeout(() => onSearch?.(ricerca.trim()), 300);
+    return () => window.clearTimeout(timer);
+  }, [ricerca, onSearch]);
 
   const filtrati = operatori.filter((op) => {
-    const match = `${op.nome} ${op.cognome} ${op.reparto} ${op.email}`
-      .toLowerCase()
-      .includes(ricerca.toLowerCase());
+    const match =
+      `${op.nome} ${op.cognome} ${op.reparto} ${op.email} ${op.ruolo} ${op.qualifica ?? ''}`
+        .toLowerCase()
+        .includes(ricerca.toLowerCase());
     const statoMatch = filtroStato === 'tutti' || op.stato === filtroStato;
     return match && statoMatch;
   });
@@ -208,8 +223,8 @@ export function OperatorManagement({
         <div>
           <h2 className="view-header__title">Gestione Operatori</h2>
           <p className="view-header__sub">
-            {operatori.filter((o) => o.stato === 'attivo').length} attivi su {operatori.length}{' '}
-            totali
+            {summary?.active ?? operatori.filter((o) => o.stato === 'attivo').length} attivi su{' '}
+            {summary?.total ?? operatori.length} totali
           </p>
         </div>
         <button className="btn-success" onClick={apriNuovo}>
@@ -391,7 +406,7 @@ export function OperatorManagement({
       {/* Table wrapped in collapsible ClinicalTable */}
       <ClinicalTable<Operatore>
         title="Operatori"
-        count={operatori.length}
+        count={summary?.total ?? operatori.length}
         countLabel="operatori"
         columns={operatoriColumns(ruoloLabel, apriModifica, onToggleStato)}
         data={filtrati}

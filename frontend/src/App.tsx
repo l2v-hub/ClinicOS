@@ -5,6 +5,13 @@ import { API_URL } from './config';
 import { clearCachedGet } from './lib/cachedFetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
 import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
+import {
+  buildOperatorDirectoryPageUrl,
+  mergeOperatorDirectoryPages,
+  parseOperatorDirectoryPage,
+  type OperatorDirectoryPageInfo,
+  type OperatorDirectorySummary,
+} from './lib/operatorDirectoryPage';
 import { setCurrentOperator, operatorHeaders } from './lib/operatorSession';
 import { acquireApiToken } from './lib/entraAuth';
 import {
@@ -306,6 +313,7 @@ export default function App() {
   const operatorDirectoryRequestRef = useRef(0);
   const operatorDirectoryAbortRef = useRef<AbortController | null>(null);
   const operatorDirectoryLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const operatorDirectoryQueryRef = useRef('');
   const patientConsegneRequestRef = useRef(0);
   const patientConsegneAbortRef = useRef<AbortController | null>(null);
   const patientConsegnePageInfoRef = useRef<ConsegnaPageInfo>({
@@ -344,6 +352,13 @@ export default function App() {
     'idle' | 'loading' | 'ready' | 'error'
   >('idle');
   const [operatorDirectoryLoadError, setOperatorDirectoryLoadError] = useState<string | null>(null);
+  const [operatorDirectoryRetryCursor, setOperatorDirectoryRetryCursor] = useState<string | null>(
+    null,
+  );
+  const [operatorDirectoryPageInfo, setOperatorDirectoryPageInfo] =
+    useState<OperatorDirectoryPageInfo>({ hasMore: false, nextCursor: null });
+  const [operatorDirectorySummary, setOperatorDirectorySummary] =
+    useState<OperatorDirectorySummary | null>(null);
   const [consegne, setConsegne] = useState<Consegna[]>([]);
   const [patientConsegne, setPatientConsegne] = useState<Consegna[]>([]);
   const [patientConsegneSummary, setPatientConsegneSummary] = useState<ConsegnaSummary | null>(
@@ -1094,10 +1109,10 @@ export default function App() {
   }, []);
 
   const loadOperatorDirectory = useCallback(
-    async (force = false) => {
+    async (force = false, cursor: string | null = null, q = operatorDirectoryQueryRef.current) => {
       if (!utente) return;
-      if (!force && operatorDirectoryLoadStateRef.current === 'ready') return;
-      if (operatorDirectoryLoadStateRef.current === 'loading') return;
+      if (!force && !cursor && operatorDirectoryLoadStateRef.current === 'ready') return;
+      if (operatorDirectoryLoadStateRef.current === 'loading' && !force) return;
 
       const sessionEpoch = sessionEpochRef.current;
       const request = ++operatorDirectoryRequestRef.current;
@@ -1107,16 +1122,30 @@ export default function App() {
       operatorDirectoryLoadStateRef.current = 'loading';
       setOperatorDirectoryLoadState('loading');
       setOperatorDirectoryLoadError(null);
+      setOperatorDirectoryRetryCursor(null);
+      const normalizedQuery = q.trim();
+      if (!cursor) {
+        operatorDirectoryQueryRef.current = normalizedQuery;
+        setOperatorDirectoryPageInfo({ hasMore: false, nextCursor: null });
+      }
 
       try {
-        const path = utente.ruolo === 'admin' ? '/operators' : '/operators/directory';
-        const response = await fetch(`${API_URL}${path}`, {
-          headers: operatorHeaders(),
-          signal: controller.signal,
-        });
+        const response = await fetch(
+          buildOperatorDirectoryPageUrl(
+            API_URL,
+            utente.ruolo === 'admin',
+            cursor,
+            operatorDirectoryQueryRef.current,
+          ),
+          {
+            headers: operatorHeaders(),
+            signal: controller.signal,
+          },
+        );
         if (!response.ok) throw new Error(`operator directory unavailable: ${response.status}`);
-        const data = (await response.json()) as Omit<Operatore, 'iniziali' | 'colore'>[];
-        if (!Array.isArray(data)) throw new Error('invalid operator directory response');
+        const page = parseOperatorDirectoryPage<Omit<Operatore, 'iniziali' | 'colore'>>(
+          await response.json(),
+        );
         if (
           controller.signal.aborted ||
           sessionEpoch !== sessionEpochRef.current ||
@@ -1124,13 +1153,17 @@ export default function App() {
         ) {
           return;
         }
-        setOperatori(
-          data.map((row, index) => ({
+        setOperatori((previous) => {
+          const base = cursor ? previous : [];
+          const decorated = page.items.map((row, index) => ({
             ...row,
             iniziali: `${row.nome[0] ?? ''}${row.cognome[0] ?? ''}`.toUpperCase(),
-            colore: OPERATOR_COLOR_PALETTE[index % OPERATOR_COLOR_PALETTE.length],
-          })),
-        );
+            colore: OPERATOR_COLOR_PALETTE[(base.length + index) % OPERATOR_COLOR_PALETTE.length],
+          }));
+          return mergeOperatorDirectoryPages(base, decorated);
+        });
+        setOperatorDirectoryPageInfo(page.pageInfo);
+        if (!cursor) setOperatorDirectorySummary(page.summary);
         operatorDirectoryLoadStateRef.current = 'ready';
         setOperatorDirectoryLoadState('ready');
       } catch (error) {
@@ -1142,6 +1175,7 @@ export default function App() {
           operatorDirectoryLoadStateRef.current = 'error';
           setOperatorDirectoryLoadState('error');
           setOperatorDirectoryLoadError('Directory operatori non disponibile. Riprova.');
+          setOperatorDirectoryRetryCursor(cursor);
         }
       } finally {
         if (request === operatorDirectoryRequestRef.current) {
@@ -1150,6 +1184,11 @@ export default function App() {
       }
     },
     [utente],
+  );
+
+  const searchOperatorDirectory = useCallback(
+    (q: string) => loadOperatorDirectory(true, null, q),
+    [loadOperatorDirectory],
   );
 
   const loadClinicalOverview = useCallback(async () => {
@@ -1227,9 +1266,11 @@ export default function App() {
       }
       return;
     }
-    const timer = window.setTimeout(() => void loadOperatorDirectory(), 0);
+    const nextQuery = navKey === 'gestione-operatori' ? operatorDirectoryQueryRef.current : '';
+    const force = operatorDirectoryQueryRef.current !== nextQuery;
+    const timer = window.setTimeout(() => void loadOperatorDirectory(force, null, nextQuery), 0);
     return () => window.clearTimeout(timer);
-  }, [needsOperatorDirectory, loadOperatorDirectory]);
+  }, [needsOperatorDirectory, navKey, loadOperatorDirectory]);
 
   // Facility occupancy contains patient identity and is not session-bootstrap data. Only admins
   // load it, on the two screens that consume it; RoomsManagement owns its separate abortable feed.
@@ -1513,9 +1554,13 @@ export default function App() {
     operatorDirectoryAbortRef.current?.abort();
     operatorDirectoryAbortRef.current = null;
     operatorDirectoryLoadStateRef.current = 'idle';
+    operatorDirectoryQueryRef.current = '';
     setOperatori([]);
     setOperatorDirectoryLoadState('idle');
     setOperatorDirectoryLoadError(null);
+    setOperatorDirectoryRetryCursor(null);
+    setOperatorDirectoryPageInfo({ hasMore: false, nextCursor: null });
+    setOperatorDirectorySummary(null);
     setSchedules([]);
     window.history.replaceState({}, '', '#/login');
     setNavKey('login');
@@ -1550,7 +1595,23 @@ export default function App() {
         return;
       }
       const created = (await res.json()) as OperatoreApi;
-      setOperatori((prev) => [...prev, decorateOperatore(created, prev.length, op.colore)]);
+      if (operatorDirectoryQueryRef.current) {
+        await loadOperatorDirectory(true, null, operatorDirectoryQueryRef.current);
+      } else {
+        setOperatori((prev) => [...prev, decorateOperatore(created, prev.length, op.colore)]);
+        setOperatorDirectorySummary((previous) =>
+          previous
+            ? {
+                ...previous,
+                total: previous.total + 1,
+                active: previous.active + (created.stato === 'attivo' ? 1 : 0),
+                appointmentsToday:
+                  previous.appointmentsToday +
+                  (created.stato === 'attivo' ? created.appuntamentiOggi : 0),
+              }
+            : null,
+        );
+      }
       showToast('Operatore creato');
     } catch {
       showToast("Impossibile creare l'operatore");
@@ -1558,6 +1619,7 @@ export default function App() {
   }
 
   async function updateOperatore(id: string, updates: Partial<Operatore>) {
+    const previousOperator = operatori.find((operator) => operator.id === id);
     try {
       const res = await fetch(`${API_URL}/operators/${id}`, {
         method: 'PUT',
@@ -1570,11 +1632,34 @@ export default function App() {
         return;
       }
       const saved = (await res.json()) as OperatoreApi;
+      if (operatorDirectoryQueryRef.current) {
+        await loadOperatorDirectory(true, null, operatorDirectoryQueryRef.current);
+        showToast('Operatore aggiornato');
+        return;
+      }
       setOperatori((prev) =>
         prev.map((o, i) =>
           o.id === id ? decorateOperatore(saved, i, updates.colore ?? o.colore) : o,
         ),
       );
+      if (previousOperator) {
+        const previousContribution =
+          previousOperator.stato === 'attivo' ? previousOperator.appuntamentiOggi : 0;
+        const savedContribution = saved.stato === 'attivo' ? saved.appuntamentiOggi : 0;
+        setOperatorDirectorySummary((previous) =>
+          previous
+            ? {
+                ...previous,
+                active:
+                  previous.active +
+                  (saved.stato === 'attivo' ? 1 : 0) -
+                  (previousOperator.stato === 'attivo' ? 1 : 0),
+                appointmentsToday:
+                  previous.appointmentsToday + savedContribution - previousContribution,
+              }
+            : null,
+        );
+      }
       showToast('Operatore aggiornato');
     } catch {
       showToast("Impossibile aggiornare l'operatore");
@@ -2488,9 +2573,34 @@ export default function App() {
                         <button
                           type="button"
                           className="btn-secondary"
-                          onClick={() => void loadOperatorDirectory(true)}
+                          onClick={() =>
+                            void loadOperatorDirectory(
+                              !operatorDirectoryRetryCursor,
+                              operatorDirectoryRetryCursor,
+                            )
+                          }
                         >
                           Riprova
+                        </button>
+                      </div>
+                    )}
+                  {needsOperatorDirectory &&
+                    operatori.length > 0 &&
+                    operatorDirectoryPageInfo.hasMore &&
+                    operatorDirectoryPageInfo.nextCursor && (
+                      <div className="cdt__pagination" role="status">
+                        <span>{operatori.length} operatori caricati</span>
+                        <button
+                          type="button"
+                          className="btn-ghost-outline"
+                          disabled={operatorDirectoryLoadState === 'loading'}
+                          onClick={() =>
+                            void loadOperatorDirectory(false, operatorDirectoryPageInfo.nextCursor)
+                          }
+                        >
+                          {operatorDirectoryLoadState === 'loading'
+                            ? 'Caricamento…'
+                            : 'Carica altri operatori'}
                         </button>
                       </div>
                     )}
@@ -2498,6 +2608,7 @@ export default function App() {
                   {isAdmin && navKey === 'admin-dashboard' && (
                     <AdminDashboard
                       operatori={operatori}
+                      operatorSummary={operatorDirectorySummary}
                       consegneOverview={consegneOverview}
                       consegneOverviewState={consegneOverviewState}
                       camere={camere}
@@ -2517,6 +2628,8 @@ export default function App() {
                   {isAdmin && navKey === 'gestione-operatori' && (
                     <OperatorManagement
                       operatori={operatori}
+                      summary={operatorDirectorySummary}
+                      onSearch={searchOperatorDirectory}
                       onAdd={addOperatore}
                       onUpdate={updateOperatore}
                       onToggleStato={toggleStatoOperatore}

@@ -18,6 +18,7 @@ import '../operator/cartella/AvvisoAnomalieFarmaci.css';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
+  operatorSummary?: { total: number; active: number; appointmentsToday: number } | null;
   consegneOverview: ConsegnaOverview | null;
   consegneOverviewState: 'loading' | 'ready' | 'error';
   camere: Camera[];
@@ -47,6 +48,7 @@ function WorkloadBar({ value, max, color }: { value: number; max: number; color?
 
 export function AdminDashboard({
   operatori,
+  operatorSummary = null,
   consegneOverview,
   consegneOverviewState,
   camere,
@@ -63,6 +65,11 @@ export function AdminDashboard({
   onRetryClinicalOverview,
 }: AdminDashboardProps) {
   const attivi = operatori.filter((o) => o.stato === 'attivo');
+  const operatorTotal = operatorSummary?.total ?? operatori.length;
+  const activeOperatorTotal = operatorSummary?.active ?? attivi.length;
+  const appointmentsTodayTotal =
+    operatorSummary?.appointmentsToday ??
+    attivi.reduce((sum, operator) => sum + operator.appuntamentiOggi, 0);
   const urgenti = consegneOverview?.urgentPreview ?? [];
   const overviewAvailable = consegneOverview !== null;
   const urgentCount = consegneOverview?.summary.urgentOpen;
@@ -225,8 +232,8 @@ export function AdminDashboard({
         <div className="stat-card stat-card--teal">
           <div className="stat-card__label">Operatori Attivi</div>
           <div className="stat-card__value">
-            {attivi.length}
-            <span style={{ fontSize: 16, color: 'var(--text-muted)' }}>/{operatori.length}</span>
+            {activeOperatorTotal}
+            <span style={{ fontSize: 16, color: 'var(--text-muted)' }}>/{operatorTotal}</span>
           </div>
           <button className="stat-card__action" onClick={() => onNavigate('gestione-operatori')}>
             Gestisci <IcoArrow />
@@ -234,9 +241,7 @@ export function AdminDashboard({
         </div>
         <div className="stat-card stat-card--indigo">
           <div className="stat-card__label">Appuntamenti Oggi</div>
-          <div className="stat-card__value">
-            {attivi.reduce((s, o) => s + o.appuntamentiOggi, 0)}
-          </div>
+          <div className="stat-card__value">{appointmentsTodayTotal}</div>
           <button className="stat-card__action" onClick={() => onNavigate('agenda-admin')}>
             Agenda <IcoArrow />
           </button>
