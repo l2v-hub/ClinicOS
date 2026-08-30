@@ -77,6 +77,13 @@ function assertCanManage(actor: AppointmentActor, assigneeOperatorId: string): v
   }
 }
 
+export function atomicAppointmentWriteWhere(
+  id: string,
+  actor: AppointmentActor,
+): Prisma.AppointmentWhereInput {
+  return canManageAnyAppointment(actor.role) ? { id } : { id, operatorId: actor.operatorId };
+}
+
 export interface UpdateAppointmentPatch {
   data?: string;
   ora?: string;
@@ -422,8 +429,8 @@ export async function updateAppointment(
       }
     }
 
-    return tx.appointment.update({
-      where: { id },
+    const updated = await tx.appointment.updateMany({
+      where: atomicAppointmentWriteWhere(id, actor),
       data: {
         scheduledAt,
         operatorId,
@@ -432,8 +439,21 @@ export async function updateAppointment(
         ...(patch.note !== undefined ? { notes: patch.note } : {}),
         ...(patch.stato !== undefined ? { status: STATUS_TO_DB[patch.stato] ?? 'SCHEDULED' } : {}),
       },
+    });
+    if (updated.count !== 1) {
+      const currentOwner = await tx.appointment.findUnique({
+        where: { id },
+        select: { operatorId: true },
+      });
+      if (!currentOwner) throw new AppointmentNotFoundError(`Appuntamento non trovato: ${id}`);
+      throw new AppointmentForbiddenError();
+    }
+    const updatedRow = await tx.appointment.findUnique({
+      where: { id },
       select: APPOINTMENT_SELECT,
     });
+    if (!updatedRow) throw new AppointmentNotFoundError(`Appuntamento non trovato: ${id}`);
+    return updatedRow;
   });
   return toDTO(row);
 }
@@ -454,6 +474,16 @@ export async function uiOnlyDeleteAppointment(
   });
   if (!existing) return false;
   assertCanManage(actor, existing.operatorId);
-  await prisma.appointment.delete({ where: { id } });
-  return true;
+  return prisma.$transaction(async (tx) => {
+    const deleted = await tx.appointment.deleteMany({
+      where: atomicAppointmentWriteWhere(id, actor),
+    });
+    if (deleted.count === 1) return true;
+    const currentOwner = await tx.appointment.findUnique({
+      where: { id },
+      select: { operatorId: true },
+    });
+    if (!currentOwner) return false;
+    throw new AppointmentForbiddenError();
+  });
 }
