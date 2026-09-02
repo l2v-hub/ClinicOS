@@ -8150,28 +8150,6 @@ textarea.form-input {
   font-size: 10px;
   opacity: 0.7;
 }
-.cdt__filter {
-  margin-top: 4px;
-}
-.cdt__filter-input,
-.cdt__filter-select {
-  width: 100%;
-  font-size: 11px;
-  padding: 3px 6px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-}
-.cdt__filter-input::placeholder {
-  color: var(--text-xmuted);
-}
-.cdt__filter-input:focus,
-.cdt__filter-select:focus {
-  outline: none;
-  border-color: var(--blue);
-  background: var(--surface);
-}
 .cdt__empty {
   text-align: center;
   padding: 32px 16px;

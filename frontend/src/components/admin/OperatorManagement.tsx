@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Operatore, RuoloOperatore, StatoOperatore } from '../../types';
 import { OPERATOR_COLOR_PALETTE } from '../../types';
-import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoSearch, IcoChevronRight } from '../../icons';
+import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoChevronRight } from '../../icons';
 import { ClinicalTable } from '../operator/cartella/ClinicalTable';
 import type { ColumnDef } from '../operator/cartella/ClinicalTable';
+import { TableFilters } from '../shared/TableFilters';
+import type { TableFilterField } from '../shared/TableFilters';
 import { OperatorFormPanel } from './OperatorFormPanel';
 import { EMPTY_OPERATOR_FORM } from './operatorFormModel';
 import type {
@@ -23,6 +25,19 @@ interface OperatorManagementProps {
   onToggleStato: (id: string) => void;
 }
 
+const OPERATOR_FILTER_FIELDS: TableFilterField[] = [
+  { key: 'query', label: 'Cerca operatore', type: 'text' },
+  {
+    key: 'status',
+    label: 'Stato',
+    type: 'select',
+    options: [
+      { value: 'attivo', label: 'Attivi' },
+      { value: 'inattivo', label: 'Inattivi' },
+    ],
+  },
+];
+
 function operatoriColumns(
   ruoloLabel: Record<RuoloOperatore, string>,
   apriModifica: (op: Operatore) => void,
@@ -33,8 +48,6 @@ function operatoriColumns(
       key: 'cognome',
       label: 'Operatore',
       sortable: true,
-      filterable: true,
-      filterType: 'text',
       render: (_v, op) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div className="op-avatar-sm" style={{ background: op.colore }}>
@@ -50,13 +63,6 @@ function operatoriColumns(
       key: 'ruolo',
       label: 'Ruolo',
       sortable: true,
-      filterable: true,
-      filterType: 'select',
-      options: [
-        { value: 'medico', label: 'Medico' },
-        { value: 'infermiere', label: 'Infermiere' },
-        { value: 'coordinatore', label: 'Coordinatore' },
-      ],
       render: (_v, op) => (
         <span className="cell--muted">
           {ruoloLabel[op.ruolo]}
@@ -68,8 +74,6 @@ function operatoriColumns(
       key: 'reparto',
       label: 'Reparto',
       sortable: true,
-      filterable: true,
-      filterType: 'text',
       render: (v) => <span className="cell--muted">{v}</span>,
     },
     {
@@ -92,12 +96,6 @@ function operatoriColumns(
       key: 'stato',
       label: 'Stato',
       sortable: true,
-      filterable: true,
-      filterType: 'select',
-      options: [
-        { value: 'attivo', label: 'Attivo' },
-        { value: 'inattivo', label: 'Inattivo' },
-      ],
       render: (v) => <span className={`stato-pill stato-pill--${v}`}>{v}</span>,
     },
     {
@@ -212,6 +210,23 @@ export function OperatorManagement({
     coordinatore: 'Coordinatore',
   };
 
+  function setOperatorFilter(key: string, value: string) {
+    if (key === 'query') {
+      setRicerca(value);
+      return;
+    }
+
+    const stato = value === 'attivo' || value === 'inattivo' ? value : 'tutti';
+    setFiltroStato(stato);
+    onStatusChange?.(stato === 'attivo' ? 'active' : stato === 'inattivo' ? 'inactive' : 'all');
+  }
+
+  function clearOperatorFilters() {
+    setRicerca('');
+    setFiltroStato('tutti');
+    onStatusChange?.('all');
+  }
+
   return (
     <div className="op-management">
       <div className="view-header">
@@ -243,41 +258,6 @@ export function OperatorManagement({
         />
       )}
 
-      {/* Toolbar */}
-      <div className="toolbar">
-        <div className="search-wrap">
-          <span className="search-wrap__ico">
-            <IcoSearch />
-          </span>
-          <input
-            className="search-input"
-            type="search"
-            placeholder="Cerca per nome, reparto, email…"
-            value={ricerca}
-            onChange={(e) => setRicerca(e.target.value)}
-          />
-          {ricerca && (
-            <button className="search-clear-btn" onClick={() => setRicerca('')}>
-              <IcoX />
-            </button>
-          )}
-        </div>
-        <div className="filter-chips">
-          {(['tutti', 'attivo', 'inattivo'] as const).map((s) => (
-            <button
-              key={s}
-              className={`filter-chip${filtroStato === s ? ' active' : ''}`}
-              onClick={() => {
-                setFiltroStato(s);
-                onStatusChange?.(s === 'attivo' ? 'active' : s === 'inattivo' ? 'inactive' : 'all');
-              }}
-            >
-              {s === 'tutti' ? 'Tutti' : s === 'attivo' ? 'Attivi' : 'Inattivi'}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Table wrapped in collapsible ClinicalTable */}
       <ClinicalTable<Operatore>
         title="Operatori"
@@ -286,6 +266,20 @@ export function OperatorManagement({
         columns={operatoriColumns(ruoloLabel, apriModifica, onToggleStato)}
         data={filtrati}
         emptyMessage="Nessun operatore trovato."
+        filterBar={
+          <TableFilters
+            tableLabel="Operatori"
+            fields={OPERATOR_FILTER_FIELDS}
+            values={{
+              query: ricerca,
+              status: filtroStato === 'tutti' ? '' : filtroStato,
+            }}
+            resultCount={filtrati.length}
+            totalCount={summary?.total ?? operatori.length}
+            onChange={setOperatorFilter}
+            onClear={clearOperatorFilters}
+          />
+        }
       />
 
       {/* Card list mobile */}

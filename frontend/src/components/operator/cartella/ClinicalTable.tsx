@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- legacy generic table accepts heterogeneous clinical DTOs */
 import { useState, useMemo } from 'react';
 import { ClinicalTableSection } from './shared';
+import { TableFilters } from '../../shared/TableFilters';
+import type { TableFilterField } from '../../shared/TableFilters';
 
 export interface ColumnDef<T = any> {
   key: string;
@@ -9,6 +11,7 @@ export interface ColumnDef<T = any> {
   filterable?: boolean;
   filterType?: 'text' | 'select' | 'date';
   options?: { value: string; label: string }[];
+  filterValue?: (row: T) => unknown;
   render?: (value: any, row: T) => React.ReactNode;
   width?: string;
   align?: 'left' | 'center' | 'right';
@@ -32,6 +35,8 @@ interface ClinicalTableProps<T extends Record<string, any> = Record<string, any>
   pageSize?: number;
   /** Disable local sorting when `data` is only one server page. */
   disableSorting?: boolean;
+  /** Optional controlled filter bar for server-backed or domain-specific table searches. */
+  filterBar?: React.ReactNode;
 }
 
 type SortDir = 'asc' | 'desc' | null;
@@ -71,7 +76,7 @@ function filterRows<T extends Record<string, any>>(
     for (const col of columns) {
       const fv = filters[col.key];
       if (!fv) continue;
-      const rv = String(row[col.key] ?? '');
+      const rv = String(col.filterValue ? col.filterValue(row) : (row[col.key] ?? ''));
       if (col.filterType === 'select' || col.filterType === 'date') {
         if (rv !== fv) return false;
       } else {
@@ -97,15 +102,21 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
   noWrapper = false,
   pageSize,
   disableSorting = false,
+  filterBar,
 }: ClinicalTableProps<T>) {
   const [sort, setSort] = useState<SortState>({ key: '', dir: null });
   const [filters, setFilters] = useState<Record<string, string>>({});
-  const [showFilters, setShowFilters] = useState(false);
   const [perPage, setPerPage] = useState<number>(pageSize ?? 0);
   const [rawPage, setPage] = useState(1);
 
-  const filterableCount = columns.filter((c) => c.filterable).length;
-  const activeFilterCount = Object.values(filters).filter(Boolean).length;
+  const filterFields: TableFilterField[] = columns
+    .filter((column) => column.filterable)
+    .map((column) => ({
+      key: column.key,
+      label: column.label,
+      type: column.filterType,
+      options: column.options,
+    }));
 
   function handleSort(key: string) {
     setSort((prev) => {
@@ -118,6 +129,12 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
 
   function setFilter(key: string, value: string) {
     setFilters((prev) => ({ ...prev, [key]: value }));
+    setPage(1);
+  }
+
+  function clearFilters() {
+    setFilters({});
+    setPage(1);
   }
 
   const displayData = useMemo(() => {
@@ -138,167 +155,130 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
     return displayData.slice(start, start + perPage);
   }, [displayData, paginate, page, perPage]);
 
-  const filterBtn =
-    filterableCount > 0 ? (
-      <button
-        className="btn-secondary btn-sm"
-        onClick={() => setShowFilters((v) => !v)}
-        style={{ position: 'relative' }}
-      >
-        Filtri{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}
-      </button>
-    ) : null;
-
-  const sectionActions = (
-    <>
-      {filterBtn}
-      {actions}
-    </>
-  );
-
   const tableContent = (
-    <div className="clinicos-table-wrap">
-      <table className="clinicos-table">
-        <thead>
-          <tr>
-            {columns.map((col) => (
-              <th
-                key={col.key}
-                style={{
-                  ...(col.width ? { width: col.width } : {}),
-                  ...(col.align ? { textAlign: col.align } : {}),
+    <div className="cdt">
+      {filterBar ??
+        (filterFields.length > 0 ? (
+          <TableFilters
+            tableLabel={title}
+            fields={filterFields}
+            values={filters}
+            resultCount={totalRows}
+            totalCount={data.length}
+            onChange={setFilter}
+            onClear={clearFilters}
+          />
+        ) : null)}
+      <div className="clinicos-table-wrap">
+        <table className="clinicos-table">
+          <thead>
+            <tr>
+              {columns.map((col) => (
+                <th
+                  key={col.key}
+                  style={{
+                    ...(col.width ? { width: col.width } : {}),
+                    ...(col.align ? { textAlign: col.align } : {}),
+                  }}
+                >
+                  <div className="cdt__th-inner">
+                    {col.sortable && !disableSorting ? (
+                      <button
+                        type="button"
+                        className="cdt__sort-btn"
+                        onClick={() => handleSort(col.key)}
+                      >
+                        {col.label}
+                        <span className="cdt__sort-icon">
+                          {sort.key === col.key && sort.dir === 'asc'
+                            ? '▲'
+                            : sort.key === col.key && sort.dir === 'desc'
+                              ? '▼'
+                              : '⇅'}
+                        </span>
+                      </button>
+                    ) : (
+                      col.label
+                    )}
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {pageData.length === 0 ? (
+              <tr>
+                <td colSpan={columns.length}>
+                  <div className="cdt__empty">{emptyMessage}</div>
+                </td>
+              </tr>
+            ) : (
+              pageData.map((row, idx) => (
+                <tr
+                  key={row[keyField] ?? idx}
+                  className={
+                    `${rowClassName ? rowClassName(row) : ''}${onRowClick ? ' row--clickable' : ''}`.trim() ||
+                    undefined
+                  }
+                  onClick={onRowClick ? () => onRowClick(row) : undefined}
+                >
+                  {columns.map((col) => (
+                    <td key={col.key} style={col.align ? { textAlign: col.align } : undefined}>
+                      {col.render ? col.render(row[col.key], row) : (row[col.key] ?? '')}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+        {paginate && (
+          <div className="cdt__pagination">
+            <label className="cdt__pagesize">
+              Righe
+              <select
+                value={perPage}
+                onChange={(e) => {
+                  setPerPage(Number(e.target.value));
+                  setPage(1);
                 }}
               >
-                <div className="cdt__th-inner">
-                  {col.sortable && !disableSorting ? (
-                    <button
-                      type="button"
-                      className="cdt__sort-btn"
-                      onClick={() => handleSort(col.key)}
-                    >
-                      {col.label}
-                      <span className="cdt__sort-icon">
-                        {sort.key === col.key && sort.dir === 'asc'
-                          ? '▲'
-                          : sort.key === col.key && sort.dir === 'desc'
-                            ? '▼'
-                            : '⇅'}
-                      </span>
-                    </button>
-                  ) : (
-                    col.label
-                  )}
-                  {col.filterable && showFilters && (
-                    <div className="cdt__filter">
-                      {col.filterType === 'select' ? (
-                        <select
-                          className="cdt__filter-select"
-                          value={filters[col.key] ?? ''}
-                          onChange={(e) => setFilter(col.key, e.target.value)}
-                        >
-                          <option value="">Tutti</option>
-                          {(col.options ?? []).map((o) => (
-                            <option key={o.value} value={o.value}>
-                              {o.label}
-                            </option>
-                          ))}
-                        </select>
-                      ) : col.filterType === 'date' ? (
-                        <input
-                          type="date"
-                          className="cdt__filter-input"
-                          value={filters[col.key] ?? ''}
-                          onChange={(e) => setFilter(col.key, e.target.value)}
-                        />
-                      ) : (
-                        <input
-                          type="text"
-                          className="cdt__filter-input"
-                          placeholder="Filtra…"
-                          value={filters[col.key] ?? ''}
-                          onChange={(e) => setFilter(col.key, e.target.value)}
-                        />
-                      )}
-                    </div>
-                  )}
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {pageData.length === 0 ? (
-            <tr>
-              <td colSpan={columns.length}>
-                <div className="cdt__empty">{emptyMessage}</div>
-              </td>
-            </tr>
-          ) : (
-            pageData.map((row, idx) => (
-              <tr
-                key={row[keyField] ?? idx}
-                className={
-                  `${rowClassName ? rowClassName(row) : ''}${onRowClick ? ' row--clickable' : ''}`.trim() ||
-                  undefined
-                }
-                onClick={onRowClick ? () => onRowClick(row) : undefined}
-              >
-                {columns.map((col) => (
-                  <td key={col.key} style={col.align ? { textAlign: col.align } : undefined}>
-                    {col.render ? col.render(row[col.key], row) : (row[col.key] ?? '')}
-                  </td>
+                {[10, 25, 50, 100].map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
                 ))}
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-      {paginate && (
-        <div className="cdt__pagination">
-          <label className="cdt__pagesize">
-            Righe
-            <select
-              value={perPage}
-              onChange={(e) => {
-                setPerPage(Number(e.target.value));
-                setPage(1);
-              }}
-            >
-              {[10, 25, 50, 100].map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </label>
-          <span className="cdt__pageinfo">
-            {totalRows === 0
-              ? '0 elementi'
-              : `${(page - 1) * perPage + 1}–${Math.min(page * perPage, totalRows)} di ${totalRows}`}
-          </span>
-          <div className="cdt__pagenav">
-            <button
-              type="button"
-              className="btn-secondary btn-sm"
-              disabled={page <= 1}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-            >
-              ‹
-            </button>
-            <span className="cdt__pagecur">
-              Pagina {page} di {totalPages}
+              </select>
+            </label>
+            <span className="cdt__pageinfo">
+              {totalRows === 0
+                ? '0 elementi'
+                : `${(page - 1) * perPage + 1}–${Math.min(page * perPage, totalRows)} di ${totalRows}`}
             </span>
-            <button
-              type="button"
-              className="btn-secondary btn-sm"
-              disabled={page >= totalPages}
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            >
-              ›
-            </button>
+            <div className="cdt__pagenav">
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                ‹
+              </button>
+              <span className="cdt__pagecur">
+                Pagina {page} di {totalPages}
+              </span>
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              >
+                ›
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 
@@ -312,7 +292,7 @@ export function ClinicalTable<T extends Record<string, any> = Record<string, any
       count={count}
       countLabel={countLabel}
       defaultOpen={defaultOpen}
-      actions={sectionActions}
+      actions={actions}
     >
       {tableContent}
     </ClinicalTableSection>
