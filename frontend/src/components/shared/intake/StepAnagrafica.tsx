@@ -2,7 +2,14 @@
 // Mirrors the field set of NewPatientModal's TabAnagrafica + referente section.
 // No fetches here — the parent IntakeWorkspace owns patchDraft.
 
-import { cloneElement, isValidElement, useId, type ReactElement, type ReactNode } from 'react';
+import {
+  cloneElement,
+  isValidElement,
+  useId,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 
 import {
   deriveAutoCFUpdate,
@@ -41,16 +48,67 @@ interface StepAnagraficaProps {
   submitAttempted?: boolean;
 }
 
-function NpmCard({ title, desc, children }: { title: string; desc?: string; children: ReactNode }) {
-  return (
-    <div className="npm-card">
-      <div className="npm-card__head">
-        <span className="npm-card__title">{title}</span>
+function NpmCard({
+  title,
+  desc,
+  status,
+  statusTone = 'optional',
+  collapsible = false,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  desc?: string;
+  status?: string;
+  statusTone?: 'complete' | 'progress' | 'error' | 'optional';
+  collapsible?: boolean;
+  defaultOpen?: boolean;
+  children: ReactNode;
+}) {
+  const titleId = useId();
+  const [expanded, setExpanded] = useState(defaultOpen);
+  const header = (
+    <>
+      <span className="npm-card__head-copy">
+        <h3 className="npm-card__title" id={titleId}>
+          {title}
+        </h3>
         {desc && <span className="npm-card__desc">{desc}</span>}
-      </div>
-      {children}
-    </div>
+      </span>
+      {status && (
+        <span className={`npm-card__status npm-card__status--${statusTone}`}>{status}</span>
+      )}
+    </>
   );
+
+  if (collapsible) {
+    return (
+      <details
+        className="npm-card npm-card--intake-section npm-card--collapsible"
+        open={expanded}
+        onToggle={(event) => setExpanded(event.currentTarget.open)}
+      >
+        <summary className="npm-card__head npm-card__summary">
+          {header}
+          <span className="npm-card__chevron" aria-hidden="true">
+            ⌄
+          </span>
+        </summary>
+        <div className="npm-card__body">{children}</div>
+      </details>
+    );
+  }
+
+  return (
+    <section className="npm-card npm-card--intake-section" aria-labelledby={titleId}>
+      <div className="npm-card__head">{header}</div>
+      <div className="npm-card__body">{children}</div>
+    </section>
+  );
+}
+
+function filledCount(value: AnagraficaData, keys: Array<keyof AnagraficaData>): number {
+  return keys.filter((key) => String(value[key] ?? '').trim()).length;
 }
 
 function NpmField({
@@ -167,10 +225,35 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
       ? 'Codice fiscale non valido (16 caratteri, carattere di controllo)'
       : 'Codice fiscale obbligatorio: completa i dati di nascita oppure inseriscilo manualmente';
 
+  const requiredCompleted =
+    Number(Boolean(value.firstName?.trim())) +
+    Number(Boolean(value.lastName?.trim())) +
+    Number(Boolean(value.dateOfBirth)) +
+    Number(isValidCF(value.codiceFiscale ?? ''));
+  const contactsCompleted = filledCount(value, [
+    'phone',
+    'email',
+    'address',
+    'comune',
+    'provincia',
+    'cap',
+  ]);
+  const referenceCompleted = filledCount(value, [
+    'referenteNome',
+    'referenteRelazione',
+    'referenteTelefono',
+    'emergencyContact',
+  ]);
+
   return (
     <>
-      <NpmCard title="Dati personali" desc="Informazioni identificative del paziente">
-        <div className="npm-grid">
+      <NpmCard
+        title="Dati personali"
+        desc="Identità e dati necessari alla registrazione"
+        status={requiredCompleted === 4 ? 'Completo' : `${requiredCompleted}/4 obbligatori`}
+        statusTone={requiredCompleted === 4 ? 'complete' : submitAttempted ? 'error' : 'progress'}
+      >
+        <div className="npm-grid npm-grid--identity">
           <NpmField label="Nome" required error={errors.firstName}>
             <input
               className={`npm-input${errors.firstName ? ' npm-input--error' : ''}`}
@@ -260,8 +343,15 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
         </div>
       </NpmCard>
 
-      <NpmCard title="Recapiti" desc="Contatti e indirizzo di residenza">
-        <div className="npm-grid">
+      <NpmCard
+        title="Recapiti"
+        desc="Contatti e indirizzo di residenza"
+        status={contactsCompleted > 0 ? `${contactsCompleted}/6 compilati` : 'Facoltativo'}
+        statusTone={contactsCompleted > 0 ? 'progress' : 'optional'}
+        collapsible
+        defaultOpen={contactsCompleted > 0}
+      >
+        <div className="npm-grid npm-grid--contacts">
           <NpmField label="Telefono">
             <input
               type="tel"
@@ -322,7 +412,14 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
         </div>
       </NpmCard>
 
-      <NpmCard title="Referente / Familiare" desc="Persona di riferimento e contatti d'emergenza">
+      <NpmCard
+        title="Referente / Familiare"
+        desc="Persona di riferimento e contatti d'emergenza"
+        status={referenceCompleted > 0 ? `${referenceCompleted}/4 compilati` : 'Facoltativo'}
+        statusTone={referenceCompleted > 0 ? 'progress' : 'optional'}
+        collapsible
+        defaultOpen={referenceCompleted > 0}
+      >
         <div className="npm-grid">
           <NpmField label="Nome e cognome referente">
             <input

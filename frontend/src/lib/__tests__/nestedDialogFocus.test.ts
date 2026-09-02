@@ -26,6 +26,10 @@ test('patient intake participates in the shared dialog stack and protects submis
   assert.match(intake, /closeOnOverlay=\{false\}/);
   assert.match(intake, /surfaceClassName="modal-card"/);
   assert.match(intake, /id="patient-intake-dialog-title"/);
+  assert.match(intake, /data-testid="patient-intake-step-summary"/);
   assert.match(intake, /data-dialog-initial-focus/);
+  assert.match(intake, /window\.requestAnimationFrame/);
+  assert.match(intake, /querySelector<HTMLElement>\('\[aria-invalid="true"\]'\)/);
+  assert.match(intake, /focus\(\{ preventScroll: true \}\)/);
   assert.doesNotMatch(intake, /className="modal-overlay"/);
 });

@@ -18,6 +18,7 @@ const step = readFileSync(
   new URL('../../components/shared/intake/StepAnagrafica.tsx', import.meta.url),
   'utf8',
 );
+const intakeStyles = readFileSync(new URL('../../app-additions.css', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../../App.tsx', import.meta.url), 'utf8');
 
 test('patient list exposes the canonical fiscal identity and never shows MRN', () => {
@@ -62,4 +63,26 @@ test('new-patient wizard auto-fills CF without assuming a sex or overwriting pro
   assert.match(step, /role="alert"/);
   assert.doesNotMatch(step, />Calcola<\/button>/);
   assert.match(app, /key !== 'pazienteId' && key !== 'codiceFiscale'/);
+});
+
+test('new-patient wizard keeps required identity visible and progressively discloses optional data', () => {
+  assert.match(step, /npm-grid npm-grid--identity/);
+  assert.match(step, /npm-grid npm-grid--contacts/);
+  assert.match(step, /<details/);
+  assert.match(step, /npm-card--collapsible/);
+  assert.match(step, /open=\{expanded\}/);
+  assert.match(step, /onToggle=/);
+  assert.match(step, /4 obbligatori/);
+  assert.match(step, /Facoltativo/);
+});
+
+test('patient intake uses a compact responsive layout without reducing touch targets', () => {
+  assert.match(intakeStyles, /\.import-modal--intake \{[\s\S]*?max-width: 1180px/);
+  assert.match(
+    intakeStyles,
+    /\.import-modal--intake \.npm-grid--identity,[\s\S]*?repeat\(3, minmax\(0, 1fr\)\)/,
+  );
+  assert.match(intakeStyles, /\.import-modal--intake \.npm-input \{[\s\S]*?min-height: 44px/);
+  assert.match(intakeStyles, /\.import-modal--intake \.npm-card__status--complete/);
+  assert.match(intakeStyles, /@media \(max-width: 640px\)[\s\S]*?grid-template-columns: 1fr/);
 });

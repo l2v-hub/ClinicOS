@@ -1,5 +1,5 @@
-// BUG-074: verify the intake popup stays large and only the inner body scrolls.
-// header + stepper + footer pinned; body overflow-y auto; page behind does not move.
+// Verify the compact intake popup keeps navigation pinned and discloses optional data.
+// Only the inner body may scroll; the page behind must not move.
 // Synthetic local DB only — no prod, no PHI. Screenshots to the out dir.
 import { chromium } from 'playwright';
 import { resolve } from 'node:path';
@@ -37,23 +37,47 @@ try {
   await check(await stepper.isVisible(), 'stepper visible');
   await check(await footer.isVisible(), 'footer visible');
 
-  // Popup large: width close to 96vw, height close to 94vh.
+  // Compact desktop shell: bounded for scanability, while preserving a tall workspace.
   const dlgBox = await dialog.locator('.import-modal--intake').boundingBox();
-  await check(dlgBox.height >= 0.9 * 768, `popup tall (${Math.round(dlgBox.height)}px of 768)`);
-  await check(dlgBox.width >= 0.9 * 1366, `popup wide (${Math.round(dlgBox.width)}px of 1366)`);
+  await check(dlgBox.height >= 700, `popup tall (${Math.round(dlgBox.height)}px of 768)`);
+  await check(
+    dlgBox.width >= 1100 && dlgBox.width <= 1182,
+    `popup width bounded (${Math.round(dlgBox.width)}px)`,
+  );
+
+  const contacts = page.locator('details').filter({ hasText: /^Recapiti/ });
+  const reference = page.locator('details').filter({ hasText: /^Referente \/ Familiare/ });
+  await check((await contacts.getAttribute('open')) === null, 'optional contacts start collapsed');
+  await check(
+    (await reference.getAttribute('open')) === null,
+    'optional contact person starts collapsed',
+  );
+  await check(
+    await page.getByText('0/4 obbligatori', { exact: true }).isVisible(),
+    'required progress visible',
+  );
 
   const m = await body.evaluate((el) => ({
     scrollHeight: el.scrollHeight,
     clientHeight: el.clientHeight,
     overflowY: getComputedStyle(el).overflowY,
   }));
-  await check(
-    m.scrollHeight > m.clientHeight,
-    `body scrollable (scrollH ${m.scrollHeight} > clientH ${m.clientHeight})`,
-  );
   await check(/auto|scroll/.test(m.overflowY), `body overflowY=${m.overflowY}`);
 
-  // record geometry, then scroll body to the bottom
+  // Expanding optional sections makes the body scrollable without moving the shell.
+  await contacts.getByText('Recapiti', { exact: true }).click();
+  await reference.getByText('Referente / Familiare', { exact: true }).click();
+  await page.waitForTimeout(100);
+  const expandedMetrics = await body.evaluate((el) => ({
+    scrollHeight: el.scrollHeight,
+    clientHeight: el.clientHeight,
+  }));
+  await check(
+    expandedMetrics.scrollHeight > expandedMetrics.clientHeight,
+    `expanded body scrollable (scrollH ${expandedMetrics.scrollHeight} > clientH ${expandedMetrics.clientHeight})`,
+  );
+
+  // Record geometry, then scroll body to the bottom.
   const pageYBefore = await page.evaluate(() => window.scrollY);
   const footY0 = (await footer.boundingBox()).y;
   const headY0 = (await header.boundingBox()).y;

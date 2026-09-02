@@ -389,6 +389,11 @@ export function IntakeWorkspace({
       // Gate: require Nome + Cognome + Data di nascita before advancing
       if (!anagraficaValid()) {
         setSubmitAttempted(true);
+        window.requestAnimationFrame(() => {
+          const firstInvalid = bodyRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]');
+          firstInvalid?.focus({ preventScroll: true });
+          firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
         return;
       }
     }
@@ -414,10 +419,13 @@ export function IntakeWorkspace({
       className="import-modal import-modal--intake"
     >
       <header className="import-modal__head" data-testid="patient-intake-header">
-        <h2 id="patient-intake-dialog-title">
-          Nuovo paziente
-          {operatoreNome ? ` — ${operatoreNome}` : ''}
-        </h2>
+        <div className="intake-dialog__title-group">
+          <h2 id="patient-intake-dialog-title">Nuovo paziente</h2>
+          <p data-testid="patient-intake-step-summary">
+            {STEPS[step - 1]} · Passaggio {step} di {STEPS.length}
+            {operatoreNome ? ` · ${operatoreNome}` : ''}
+          </p>
+        </div>
         <button
           type="button"
           className="icon-btn"
