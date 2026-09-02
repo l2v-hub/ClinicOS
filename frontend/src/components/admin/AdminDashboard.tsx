@@ -1,5 +1,13 @@
 import type { Operatore, Camera, ClinicalOverview, ConsegnaOverview, NavKey } from '../../types';
-import { IcoArrow, IcoOperatori, IcoConsegne, IcoCalendar, IcoBed, IcoClock } from '../../icons';
+import {
+  IcoArrow,
+  IcoOperatori,
+  IcoConsegne,
+  IcoCalendar,
+  IcoBed,
+  IcoClock,
+  IcoUser,
+} from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
 import { DashboardNotificationCenter } from '../operator/DashboardNotificationCenter';
 import { buildDashboardNotificationSections } from '../operator/buildDashboardNotificationSections';
@@ -324,9 +332,13 @@ export function AdminDashboard({
             style={{ borderTop: `3px solid ${op.colore}` }}
           >
             <div className="op-workload-card__header">
-              <div className="op-avatar-sm" style={{ background: op.colore }}>
-                {op.iniziali}
-              </div>
+              <span
+                className="dashboard-person-icon"
+                style={{ color: op.colore }}
+                aria-hidden="true"
+              >
+                <IcoUser />
+              </span>
               <div className="op-workload-card__info">
                 <span className="op-workload-card__name">
                   {op.cognome} {op.nome}
@@ -383,9 +395,13 @@ export function AdminDashboard({
             style={{ borderTop: `3px solid ${op.colore}` }}
           >
             <div className="agenda-summary-card__header">
-              <div className="op-avatar-sm" style={{ background: op.colore }}>
-                {op.iniziali}
-              </div>
+              <span
+                className="dashboard-person-icon"
+                style={{ color: op.colore }}
+                aria-hidden="true"
+              >
+                <IcoUser />
+              </span>
               <span className="agenda-summary-card__name">
                 {op.cognome} {op.nome}
               </span>

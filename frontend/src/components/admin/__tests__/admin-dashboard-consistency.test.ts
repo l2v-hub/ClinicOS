@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const dashboard = readFileSync(new URL('../AdminDashboard.tsx', import.meta.url), 'utf8');
+const appStyles = readFileSync(new URL('../../../App.css', import.meta.url), 'utf8');
 const adminKpis = readFileSync(new URL('../AdminDashboardKpiBands.tsx', import.meta.url), 'utf8');
 const sharedKpis = readFileSync(
   new URL('../../shared/DashboardKpiBand.tsx', import.meta.url),
@@ -74,4 +75,18 @@ test('shared KPI layout has equal card geometry and responsive no-overflow grids
   assert.match(sharedStyles, /@media \(max-width: 700px\)[\s\S]*?repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(sharedStyles, /\.dashboard-kpi-card:focus-visible/);
   assert.doesNotMatch(sharedStyles, /overflow-x:\s*(auto|scroll)/);
+});
+
+test('dashboard people use a simple semantic icon instead of unreadable initials tiles', () => {
+  assert.match(dashboard, /import[\s\S]*IcoUser[\s\S]*from '\.\.\/\.\.\/icons'/);
+  assert.equal((dashboard.match(/className="dashboard-person-icon"/g) ?? []).length, 2);
+  assert.equal((dashboard.match(/<IcoUser \/>/g) ?? []).length, 2);
+  assert.match(dashboard, /className="dashboard-person-icon"[\s\S]*aria-hidden="true"/);
+  assert.doesNotMatch(dashboard, /className="op-avatar-sm"[\s\S]*\{op\.iniziali\}/);
+  assert.match(appStyles, /\.dashboard-person-icon\s*\{[^}]*width:\s*32px[^}]*height:\s*32px/s);
+  assert.match(appStyles, /\.dashboard-person-icon svg\s*\{[^}]*width:\s*24px[^}]*height:\s*24px/s);
+  assert.doesNotMatch(
+    appStyles,
+    /\.dashboard-person-icon\s*\{[^}]*(?:background|border-radius)\s*:/s,
+  );
 });

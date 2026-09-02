@@ -3457,6 +3457,21 @@ body {
   flex-shrink: 0;
 }
 
+.dashboard-person-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  flex-shrink: 0;
+}
+
+.dashboard-person-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
 /* Status pills */
 .stato-pill {
   display: inline-block;
