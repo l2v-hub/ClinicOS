@@ -47,13 +47,27 @@ export interface AnomalieReparto {
   pazienti: { patientId: string; nome: string; esito: AnomaliePaziente }[];
   /** true finche' la verifica non e' conclusa: nessun conteggio va presentato come definitivo. */
   inCorso: boolean;
+  /** true quando una o piu' fonti AIFA non hanno risposto: il conteggio puo' essere parziale. */
+  verificaIncompleta: boolean;
+  /** true quando le terapie di reparto non sono leggibili: non dichiarare zero anomalie. */
+  fallito: boolean;
 }
 
-const VUOTO: AnomalieReparto = { perPaziente: new Map(), pazienti: [], inCorso: true };
+const VUOTO: AnomalieReparto = {
+  perPaziente: new Map(),
+  pazienti: [],
+  inCorso: true,
+  verificaIncompleta: false,
+  fallito: false,
+};
 
 /** Data di oggi in formato ISO, come la vuole `/therapy-slots`. */
 function oggi(): string {
-  return new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 /**
@@ -120,18 +134,26 @@ export function useAnomalieReparto(attivo = true): AnomalieReparto {
   const risoluzioni = useRisoluzioniFarmaco(righe);
 
   return useMemo(() => {
-    if (fallito) return { perPaziente: new Map(), pazienti: [], inCorso: false };
+    if (fallito)
+      return {
+        perPaziente: new Map(),
+        pazienti: [],
+        inCorso: false,
+        verificaIncompleta: false,
+        fallito: true,
+      };
     if (slots === null) return VUOTO;
 
     const trova = (nome: string, dosaggio?: string | null) =>
       trovaRisoluzione(risoluzioni, nome, dosaggio);
 
     const perPaziente = new Map<string, AnomaliePaziente>();
-    let inCorso = false;
+    const inCorso = righe.length > 0 && risoluzioni.size === 0;
+    let verificaIncompleta = false;
 
     for (const [patientId, proprie] of righePerPaziente) {
       const esito = anomalieDi(proprie, trova);
-      if (esito.verificaIncompleta) inCorso = true;
+      if (esito.verificaIncompleta && !inCorso) verificaIncompleta = true;
       if (esito.totale > 0) perPaziente.set(patientId, esito);
     }
 
@@ -144,8 +166,8 @@ export function useAnomalieReparto(attivo = true): AnomalieReparto {
       // Prima chi ha piu' farmaci da sanare: e' l'ordine in cui conviene lavorarli.
       .sort((a, b) => b.esito.totale - a.esito.totale || a.nome.localeCompare(b.nome));
 
-    return { perPaziente, pazienti, inCorso };
-  }, [fallito, slots, righePerPaziente, risoluzioni, nomi]);
+    return { perPaziente, pazienti, inCorso, verificaIncompleta, fallito: false };
+  }, [fallito, slots, righe.length, righePerPaziente, risoluzioni, nomi]);
 }
 
 /** Anomalie di un singolo paziente dalla mappa di reparto. */

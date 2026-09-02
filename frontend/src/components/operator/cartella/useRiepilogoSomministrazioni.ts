@@ -40,6 +40,8 @@ export interface RiepilogoSomministrazioni {
   ritardi: RitardoPaziente[];
   /** true finche' il caricamento non e' concluso: nessun conteggio va presentato come definitivo. */
   inCorso: boolean;
+  /** true quando la fonte reparto non e' leggibile: non equivale a un conteggio pari a zero. */
+  fallito: boolean;
 }
 
 const VUOTO: RiepilogoSomministrazioni = {
@@ -50,10 +52,15 @@ const VUOTO: RiepilogoSomministrazioni = {
   inRitardo: 0,
   ritardi: [],
   inCorso: true,
+  fallito: false,
 };
 
 function oggi(): string {
-  return new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 /** Minuti da mezzanotte, robusto a ore non zero-paddate ("8:30" oltre a "08:30"). NaN se il
@@ -91,7 +98,7 @@ export function useRiepilogoSomministrazioni(attivo = true): RiepilogoSomministr
     };
   }, [attivo]);
 
-  if (fallito) return { ...VUOTO, inCorso: false };
+  if (fallito) return { ...VUOTO, inCorso: false, fallito: true };
   if (slots === null) return VUOTO;
 
   const soglia = minutiCorrenti();
@@ -136,5 +143,5 @@ export function useRiepilogoSomministrazioni(attivo = true): RiepilogoSomministr
     .map((p) => ({ ...p, voci: [...p.voci].sort((a, b) => b.minutiRitardo - a.minutiRitardo) }))
     .sort((a, b) => b.voci[0].minutiRitardo - a.voci[0].minutiRitardo);
 
-  return { totale, daFare, fatte, nonErogate, inRitardo, ritardi, inCorso: false };
+  return { totale, daFare, fatte, nonErogate, inRitardo, ritardi, inCorso: false, fallito: false };
 }

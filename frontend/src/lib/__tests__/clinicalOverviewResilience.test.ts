@@ -7,6 +7,14 @@ const dashboard = readFileSync(
   new URL('../../components/operator/OperatorDashboard.tsx', import.meta.url),
   'utf8',
 );
+const notificationCenter = readFileSync(
+  new URL('../../components/operator/DashboardNotificationCenter.tsx', import.meta.url),
+  'utf8',
+);
+const notificationDetails = readFileSync(
+  new URL('../../components/operator/buildDashboardNotificationSections.tsx', import.meta.url),
+  'utf8',
+);
 const adminDashboard = readFileSync(
   new URL('../../components/admin/AdminDashboard.tsx', import.meta.url),
   'utf8',
@@ -23,9 +31,11 @@ test('clinical overview owns an abortable retry without reloading unrelated dash
 test('operator dashboard never presents unavailable clinical metrics as verified zeroes', () => {
   assert.match(dashboard, /clinicalOverviewState: 'loading' \| 'ready' \| 'error'/);
   assert.match(dashboard, /clinicalOverviewReady \? value : '—'/);
-  assert.match(dashboard, /Riepilogo clinico non disponibile/);
-  assert.match(dashboard, /role="alert"/);
-  assert.match(dashboard, /onClick=\{onRetryClinicalOverview\}/);
+  assert.match(notificationDetails, /Riepilogo clinico non disponibile/);
+  assert.match(notificationDetails, /tone: 'warning'/);
+  assert.match(dashboard, /<DashboardNotificationCenter/);
+  assert.match(notificationCenter, /AccessibleDialogSurface/);
+  assert.match(notificationDetails, /onClick=\{onRetryClinicalOverview\}/);
   assert.match(dashboard, /aria-busy=\{clinicalOverviewState === 'loading'\}/);
   assert.doesNotMatch(
     dashboard,

@@ -13,12 +13,11 @@ import {
 } from '../../icons';
 import type { NavKey } from '../../types';
 import { PageHeader } from '../shared/PageHeader';
-import { MAX_DASHBOARD_DELAY_ITEMS } from '../shared/dashboardAlertLimits';
-import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
-import { MAX_ANOMALIE_NEL_RIEPILOGO, messaggioAnomalieCompatto } from './cartella/anomalieFarmaco';
 import { useAnomalieReparto } from './cartella/useAnomalieReparto';
 import { useRiepilogoSomministrazioni } from './cartella/useRiepilogoSomministrazioni';
-import './cartella/AvvisoAnomalieFarmaci.css';
+import { DashboardNotificationCenter } from './DashboardNotificationCenter';
+import { buildDashboardNotificationSections } from './buildDashboardNotificationSections';
+import { buildDashboardNotificationCounts } from './dashboardNotificationModel';
 
 interface OperatorDashboardProps {
   utente: UtenteApp;
@@ -44,8 +43,6 @@ const STATO_LABEL: Record<string, string> = {
   annullato: 'Annullato',
 };
 
-const MAX_DASHBOARD_ANOMALY_PATIENTS = 3;
-
 export function OperatorDashboard({
   utente,
   consegneOverview,
@@ -69,7 +66,6 @@ export function OperatorDashboard({
   // AC8: pazienti con farmaci fuori anagrafica. Stessa richiesta di reparto della lista pazienti.
   const anomalie = useAnomalieReparto();
   const somministrazioni = useRiepilogoSomministrazioni();
-  const anomalieVisibili = anomalie.pazienti.slice(0, MAX_DASHBOARD_ANOMALY_PATIENTS);
 
   // Clinical KPIs from the constant-size server aggregate.
   const critici = clinicalOverview?.critici ?? 0;
@@ -97,6 +93,28 @@ export function OperatorDashboard({
     year: 'numeric',
   });
 
+  const notificationCounts = buildDashboardNotificationCounts({
+    delayedPatients: somministrazioni.ritardi.length,
+    urgentHandovers: urgentCount ?? 0,
+    drugAnomalyPatients: anomalie.pazienti.length,
+    deliveryOverviewFailed: consegneOverviewState === 'error',
+    clinicalOverviewFailed: clinicalOverviewState === 'error',
+    administrationsFailed: somministrazioni.fallito,
+    drugVerificationFailed: anomalie.fallito || anomalie.verificaIncompleta,
+  });
+  const notificationSections = buildDashboardNotificationSections({
+    somministrazioni,
+    anomalie,
+    urgentCount,
+    consegneOverviewState,
+    clinicalOverviewState,
+    overviewAvailable,
+    onNavigate,
+    onOpenConsegneAperte,
+    onSelectPaziente,
+    onRetryClinicalOverview,
+  });
+
   return (
     <div className="operator-dashboard">
       <PageHeader
@@ -110,155 +128,16 @@ export function OperatorDashboard({
         }
       />
 
-      {/* Alert urgente */}
-      {consegneOverviewState === 'error' && (
-        <div className="coverage-alert" role="alert">
-          <IcoWarning />
-          <span>
-            {overviewAvailable
-              ? 'Aggiornamento consegne non riuscito: sono mostrati gli ultimi dati disponibili.'
-              : 'Riepilogo consegne non disponibile. Apri Consegne per riprovare.'}
-          </span>
-        </div>
-      )}
-      {clinicalOverviewState === 'error' && (
-        <div className="coverage-alert" role="alert">
-          <IcoWarning />
-          <span>
-            <strong>Riepilogo clinico non disponibile.</strong> I valori non verificati sono
-            indicati con un trattino.
-          </span>
-          <button className="link-btn" type="button" onClick={onRetryClinicalOverview}>
-            Riprova <IcoArrow />
-          </button>
-        </div>
-      )}
-      {urgentCount !== undefined && urgentCount > 0 && (
-        <div className="coverage-alert">
-          <IcoWarning />
-          <span>
-            <strong>
-              {urgentCount} consegn{urgentCount === 1 ? 'a urgente' : 'e urgenti'} in attesa
-            </strong>{' '}
-            — richiede attenzione immediata
-          </span>
-          <button className="link-btn" onClick={() => onNavigate('consegne')}>
-            Vedi <IcoArrow />
-          </button>
-        </div>
-      )}
-
-      {/* Pazienti con somministrazioni in ritardo: urgenza clinica reale, resta in rosso. */}
-      {somministrazioni.ritardi.length > 0 && (
-        <div className="coverage-alert" role="alert">
-          <IcoWarning />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <strong>
-              {somministrazioni.ritardi.length} pazient
-              {somministrazioni.ritardi.length === 1 ? 'e' : 'i'} con somministrazioni in ritardo
-            </strong>{' '}
-            — richiede attenzione immediata
-            <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>
-              {somministrazioni.ritardi.slice(0, 3).map((p) => (
-                <li key={p.patientId}>
-                  <button
-                    type="button"
-                    className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
-                    onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
-                  >
-                    <span className="anomalie-reparto__contenuto">
-                      <span className="anomalie-reparto__nome">{p.nome}</span>
-                      <span className="anomalie-reparto__farmaci-lista">
-                        {p.voci.slice(0, MAX_DASHBOARD_DELAY_ITEMS).map((v, index) => (
-                          <span
-                            className="anomalie-reparto__farmaco"
-                            key={`${v.farmacoNome}-${index}`}
-                          >
-                            <strong>{v.farmacoNome}</strong>
-                            <span>
-                              {v.scheduledTime} · +{v.minutiRitardo} min
-                            </span>
-                          </span>
-                        ))}
-                        {p.voci.length > MAX_DASHBOARD_DELAY_ITEMS && (
-                          <span className="anomalie-reparto__altre-voci">
-                            +{p.voci.length - MAX_DASHBOARD_DELAY_ITEMS} altri farmaci
-                          </span>
-                        )}
-                      </span>
-                    </span>
-                    <span className="badge badge--red">+{p.voci[0].minutiRitardo} min</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            {somministrazioni.ritardi.length > 3 && (
-              <button
-                className="link-btn"
-                style={{ marginTop: 8 }}
-                onClick={() => onNavigate('agenda-operatore')}
-              >
-                Mostra altri {somministrazioni.ritardi.length - 3} pazienti <IcoArrow />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* AC8: pazienti con farmaci fuori anagrafica, come lavoro di reparto da smaltire.
-          Compare solo se ce n'è: un riquadro vuoto su ogni cruscotto diventa arredamento. */}
-      {anomalie.pazienti.length > 0 && (
-        <div className="coverage-alert coverage-alert--amber">
-          <IcoWarning />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <strong>
-              {anomalie.pazienti.length} pazient
-              {anomalie.pazienti.length === 1 ? 'e' : 'i'} con farmaci non in anagrafica
-            </strong>{' '}
-            — da correggere in terapia
-            <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>
-              {anomalieVisibili.map((p) => (
-                <li key={p.patientId}>
-                  <button
-                    type="button"
-                    className="anomalie-reparto__riga"
-                    onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
-                    aria-label={`Apri ${p.nome}. ${messaggioAnomalieCompatto(p.esito)}`}
-                  >
-                    <span className="anomalie-reparto__contenuto">
-                      <span className="anomalie-reparto__nome">{p.nome}</span>
-                      <span className="anomalie-reparto__farmaci-lista" aria-hidden="true">
-                        {p.esito.anomalie.slice(0, MAX_ANOMALIE_NEL_RIEPILOGO).map((a) => (
-                          <span className="anomalie-reparto__farmaco" key={a.farmacoNome}>
-                            <strong>{a.farmacoNome}</strong>
-                          </span>
-                        ))}
-                        {p.esito.anomalie.length > MAX_ANOMALIE_NEL_RIEPILOGO && (
-                          <span className="anomalie-reparto__altre-voci">
-                            +{p.esito.anomalie.length - MAX_ANOMALIE_NEL_RIEPILOGO} altri farmaci
-                          </span>
-                        )}
-                      </span>
-                    </span>
-                    <IndicatoreAnomalie esito={p.esito} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-            {anomalie.pazienti.length > MAX_DASHBOARD_ANOMALY_PATIENTS && (
-              <button
-                type="button"
-                className="link-btn"
-                style={{ marginTop: 8 }}
-                onClick={() => onNavigate('pazienti')}
-              >
-                Apri lista pazienti · {anomalie.pazienti.length - MAX_DASHBOARD_ANOMALY_PATIENTS}{' '}
-                non mostrati <IcoArrow />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      <DashboardNotificationCenter
+        counts={notificationCounts}
+        sections={notificationSections}
+        loading={
+          somministrazioni.inCorso ||
+          anomalie.inCorso ||
+          consegneOverviewState === 'loading' ||
+          clinicalOverviewState === 'loading'
+        }
+      />
 
       {/* Clinical KPI band — banda alert clinici in cima */}
       <div className="kpi-alert-grid" aria-busy={clinicalOverviewState === 'loading'}>
