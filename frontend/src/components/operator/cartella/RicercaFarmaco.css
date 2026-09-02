@@ -172,25 +172,11 @@
 /* ── Pagina dedicata ────────────────────────────────────────────────────────────────────── */
 
 .page-anagrafica-farmaci {
-  padding: 24px 28px;
-}
-
-.page-anagrafica-farmaci__testa h1 {
-  margin: 0 0 6px;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.page-anagrafica-farmaci__testa p {
-  margin: 0;
-  max-width: 68ch;
-  font-size: 13px;
-  color: var(--text-muted);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .page-anagrafica-farmaci__corpo {
-  margin-top: 16px;
   border: 1px solid var(--border);
   border-radius: var(--card-radius, 14px);
   background: var(--surface);

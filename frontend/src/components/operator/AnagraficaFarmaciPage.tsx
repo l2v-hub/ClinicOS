@@ -8,6 +8,7 @@
 // su cui riconoscere la formulazione, quindi la chiedera' all'operatore invece di sceglierne una.
 
 import { useState } from 'react';
+import { PageHeader } from '../shared/PageHeader';
 import { RicercaFarmaco } from './cartella/RicercaFarmaco';
 import { VisoreDocumentoFarmaco } from './cartella/VisoreDocumentoFarmaco';
 import type { DocumentoFarmaco, FarmacoTrovato } from './cartella/farmacoDocumento';
@@ -21,14 +22,10 @@ export function AnagraficaFarmaciPage() {
 
   return (
     <div className="page-anagrafica-farmaci">
-      <header className="page-anagrafica-farmaci__testa">
-        <h1>Anagrafica farmaci</h1>
-        <p>
-          Ricerca per nome commerciale o principio attivo nell'anagrafica AIFA. I documenti
-          ufficiali — Riassunto delle Caratteristiche del Prodotto e Foglietto Illustrativo — si
-          aprono qui dentro, senza scaricare file.
-        </p>
-      </header>
+      <PageHeader
+        breadcrumb={[{ label: 'ClinicOS' }, { label: 'Farmaci' }]}
+        title="Anagrafica farmaci"
+      />
 
       <div className="page-anagrafica-farmaci__corpo">
         <RicercaFarmaco
