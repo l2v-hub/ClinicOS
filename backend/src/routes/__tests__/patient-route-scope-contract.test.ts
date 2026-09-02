@@ -53,7 +53,7 @@ test('bounded patient roster projects and searches the canonical fiscal identity
   assert.match(route, /typeof rawInput\.q !== 'string' \|\| !rawInput\.q\.trim\(\)/);
   assert.match(route, /const exactFiscalCode = \/\^\[A-Z0-9\]\{16\}\$\//);
   assert.match(route, /\? \{ codiceFiscale: exactFiscalCode \}/);
-  assert.doesNotMatch(route, /codiceFiscale: \{ contains: token, mode: 'insensitive'/);
+  assert.match(route, /codiceFiscale:\s*\{\s*contains: token\.replace/);
   assert.doesNotMatch(route, /medicalRecordNumber: \{ contains: token/);
   assert.match(route, /medicalRecordNumber: true,\s*codiceFiscale: true/);
   assert.match(route, /prisma\.\$transaction\(async \(tx\)/);

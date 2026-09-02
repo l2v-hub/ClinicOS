@@ -11,6 +11,7 @@ const run = `${Date.now()}${Math.random().toString(36).slice(2)}`;
 const actorA = `op-a-${run}`;
 const actorB = `op-b-${run}`;
 const patientId = `patient-${run}`;
+const foreignPatientId = `patient-foreign-${run}`;
 const foreignId = `handover-foreign-${run}`;
 const legacyId = `handover-legacy-${run}`;
 const headers = (id: string, role = 'operatore') => ({
@@ -41,14 +42,25 @@ before(async () => {
       { id: actorB, userId: `user-b-${run}` },
     ],
   });
-  await prisma.patient.create({
-    data: {
-      id: patientId,
-      medicalRecordNumber: `MRN-${run}`,
-      firstName: 'Carla',
-      lastName: 'Rossi',
-      dateOfBirth: new Date('1980-01-01T00:00:00.000Z'),
-    },
+  await prisma.patient.createMany({
+    data: [
+      {
+        id: patientId,
+        medicalRecordNumber: `MRN-${run}`,
+        firstName: 'Carla',
+        lastName: 'Rossi',
+        dateOfBirth: new Date('1980-01-01T00:00:00.000Z'),
+        registeredById: actorA,
+      },
+      {
+        id: foreignPatientId,
+        medicalRecordNumber: `MRN-FOREIGN-${run}`,
+        firstName: 'Fiorella',
+        lastName: 'Segreta',
+        dateOfBirth: new Date('1985-02-02T00:00:00.000Z'),
+        registeredById: actorB,
+      },
+    ],
   });
   await prisma.consegna.createMany({
     data: [
@@ -102,8 +114,10 @@ before(async () => {
 });
 
 after(async () => {
-  await prisma.consegna.deleteMany({ where: { id: { contains: run } } });
-  await prisma.patient.deleteMany({ where: { id: patientId } });
+  await prisma.consegna.deleteMany({
+    where: { pazienteId: { in: [patientId, foreignPatientId] } },
+  });
+  await prisma.patient.deleteMany({ where: { id: { in: [patientId, foreignPatientId] } } });
   await prisma.operator.deleteMany({ where: { id: { in: [actorA, actorB] } } });
   await prisma.user.deleteMany({ where: { id: { in: [`user-a-${run}`, `user-b-${run}`] } } });
   await new Promise<void>((resolve) => server.close(() => resolve()));
@@ -210,6 +224,45 @@ test('consegne writes derive identities and reject IDOR or spoofed fields', asyn
   assert.equal(created.creatoDA, 'Ada Autrice');
   assert.equal(created.operatoreAssegnatoId, actorB);
   assert.equal(created.operatoreAssegnato, 'Bruno Assegnato');
+
+  const foreignAttempt = await fetch(`${base}/consegne`, {
+    method: 'POST',
+    headers: { ...headers(actorA), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      pazienteId: foreignPatientId,
+      note: 'Tentativo fuori perimetro',
+      scadenza: '2026-08-29',
+    }),
+  });
+  const missingAttempt = await fetch(`${base}/consegne`, {
+    method: 'POST',
+    headers: { ...headers(actorA), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      pazienteId: `missing-${run}`,
+      note: 'Tentativo inesistente',
+      scadenza: '2026-08-29',
+    }),
+  });
+  assert.equal(foreignAttempt.status, 404);
+  assert.equal(missingAttempt.status, 404);
+  assert.deepEqual(await foreignAttempt.json(), await missingAttempt.json());
+  assert.equal(
+    await prisma.consegna.count({
+      where: { pazienteId: foreignPatientId, creatoDaId: actorA },
+    }),
+    0,
+  );
+
+  const managerCreate = await fetch(`${base}/consegne`, {
+    method: 'POST',
+    headers: { ...headers('manager-test', 'manager'), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      pazienteId: foreignPatientId,
+      note: 'Consegna autorizzata dal manager',
+      scadenza: '2026-08-29',
+    }),
+  });
+  assert.equal(managerCreate.status, 201);
 
   const assignedStatus = await fetch(`${base}/consegne/${created.id}`, {
     method: 'PUT',

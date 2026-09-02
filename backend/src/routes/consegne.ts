@@ -6,7 +6,7 @@ import { ConsegnaInputError, isSafeConsegnaId, parseConsegnaFeedQuery } from '..
 import { loadConsegnaFeed, loadConsegnaOverview } from '../consegne/read-service.js';
 import { parseConsegnaCreateBody, parseConsegnaPatchBody } from '../consegne/write-validation.js';
 import { prisma } from '../lib/prisma.js';
-import { createConsegna } from '../services/consegna-service.js';
+import { ConsegnaPatientNotFoundError, createConsegna } from '../services/consegna-service.js';
 
 const consegneRouter = Router();
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
@@ -44,6 +44,10 @@ function notFound(res: Response): void {
   res.status(404).json({ error: 'Consegna non trovata' });
 }
 
+function patientNotFound(res: Response): void {
+  res.status(404).json({ error: 'Paziente non trovato', code: 'patient_not_found' });
+}
+
 function badRequest(res: Response, error: unknown): boolean {
   if (!(error instanceof ConsegnaInputError)) return false;
   res.status(400).json({ error: error.message });
@@ -75,6 +79,10 @@ consegneRouter.post('/', async (req: AuthedRequest, res) => {
     const input = parseConsegnaCreateBody(req.body);
     res.status(201).json(await createConsegna(input, req.operator!));
   } catch (error) {
+    if (error instanceof ConsegnaPatientNotFoundError) {
+      patientNotFound(res);
+      return;
+    }
     if (badRequest(res, error)) return;
     console.error('POST /consegne error:', error);
     res.status(500).json({ error: 'Errore durante creazione consegna' });

@@ -7,6 +7,10 @@ process.env.DATABASE_URL ||= 'postgresql://test:test@127.0.0.1:9/clinicos_contra
 
 const { atomicConsegnaUpdateWhere } = await import('../consegne.js');
 const routeSource = readFileSync(new URL('../consegne.ts', import.meta.url), 'utf8');
+const serviceSource = readFileSync(
+  new URL('../../services/consegna-service.ts', import.meta.url),
+  'utf8',
+);
 
 test('atomic update predicates preserve the current field-level authorization policy', () => {
   assert.deepEqual(
@@ -35,4 +39,18 @@ test('handover writes cannot fall back to an unconditional id-only mutation', ()
   assert.match(routeSource, /if \(deleted\.count === 0\)/);
   assert.doesNotMatch(routeSource, /prisma\.consegna\.update\(\{\s*where: \{ id \}, data/);
   assert.doesNotMatch(routeSource, /prisma\.consegna\.delete\(\{\s*where: \{ id:/);
+});
+
+test('handover creation resolves the patient inside the authenticated scope', () => {
+  assert.match(serviceSource, /patient\.findFirst\(\{/);
+  assert.match(
+    serviceSource,
+    /where: \{ id: input\.pazienteId, \.\.\.patientScopeWhere\(actor\) \}/,
+  );
+  assert.doesNotMatch(
+    serviceSource,
+    /patient\.findUnique\(\{\s*where: \{ id: input\.pazienteId \}/,
+  );
+  assert.match(routeSource, /error instanceof ConsegnaPatientNotFoundError/);
+  assert.match(routeSource, /code: 'patient_not_found'/);
 });

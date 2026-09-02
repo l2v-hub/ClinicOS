@@ -71,6 +71,7 @@ before(async () => {
         medicalRecordNumber: `${suffix}-mrn-a`,
         firstName: 'Paziente',
         lastName: 'A',
+        codiceFiscale: 'TSTPZA70A01H501A',
         dateOfBirth: new Date('1970-01-01'),
         registeredById: operatorAId,
       },
@@ -80,6 +81,7 @@ before(async () => {
         medicalRecordNumber: `${suffix}-mrn-b`,
         firstName: 'Paziente',
         lastName: 'B',
+        codiceFiscale: 'TSTPZB70A01H501B',
         dateOfBirth: new Date('1970-01-01'),
         registeredById: operatorBId,
       },
@@ -137,6 +139,45 @@ after(async () => {
   else process.env.AUTH_MODE = originalAuthMode;
   if (originalNodeEnv === undefined) delete process.env.NODE_ENV;
   else process.env.NODE_ENV = originalNodeEnv;
+});
+
+test('patient search matches names and partial fiscal codes without escaping operator scope', async () => {
+  async function search(query: string, operatorId: string, role = 'operatore') {
+    const response = await fetch(`${base}/patients/page/search`, {
+      method: 'POST',
+      headers: {
+        ...headers(operatorId, role),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ q: query, limit: '10' }),
+    });
+    assert.equal(response.status, 200);
+    return (await response.json()) as { items: Array<{ id: string; codiceFiscale: string }> };
+  }
+
+  const ownByName = await search('Paziente A', operatorAId);
+  assert.deepEqual(
+    ownByName.items.map((patient) => patient.id),
+    [patientAId],
+  );
+
+  const ownByPartialFiscalCode = await search('TSTPZA70', operatorAId);
+  assert.deepEqual(
+    ownByPartialFiscalCode.items.map((patient) => patient.id),
+    [patientAId],
+  );
+  assert.equal(ownByPartialFiscalCode.items[0]?.codiceFiscale, 'TSTPZA70A01H501A');
+
+  const foreignByName = await search('Paziente B', operatorAId);
+  const foreignByFiscalCode = await search('TSTPZB70', operatorAId);
+  assert.deepEqual(foreignByName.items, []);
+  assert.deepEqual(foreignByFiscalCode.items, []);
+
+  const managerResult = await search('TSTPZB70', managerId, 'manager');
+  assert.deepEqual(
+    managerResult.items.map((patient) => patient.id),
+    [patientBId],
+  );
 });
 
 test('ordinary operator cannot access another patient clinical resources', async () => {

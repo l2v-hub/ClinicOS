@@ -6,12 +6,20 @@ import { prisma } from '../lib/prisma.js';
 import type { Operator } from '../ai/auth.js';
 import type { ConsegnaCreateInput } from '../consegne/write-validation.js';
 import { ConsegnaInputError } from '../consegne/query.js';
+import { patientScopeWhere } from '../patients/patient-scope.js';
+
+export class ConsegnaPatientNotFoundError extends Error {
+  constructor() {
+    super('Paziente non trovato');
+    this.name = 'ConsegnaPatientNotFoundError';
+  }
+}
 
 /** Shared authoritative creation path for UI and Agnos. */
 export async function createConsegna(input: ConsegnaCreateInput, actor: Operator) {
   const [patient, assignee, author] = await Promise.all([
-    prisma.patient.findUnique({
-      where: { id: input.pazienteId },
+    prisma.patient.findFirst({
+      where: { id: input.pazienteId, ...patientScopeWhere(actor) },
       select: { id: true, firstName: true, lastName: true },
     }),
     input.operatoreAssegnatoId
@@ -25,7 +33,8 @@ export async function createConsegna(input: ConsegnaCreateInput, actor: Operator
       select: { user: { select: { fullName: true } } },
     }),
   ]);
-  if (!patient) throw new ConsegnaInputError('Paziente non disponibile');
+  // Missing and out-of-scope patients intentionally share the same non-enumerating outcome.
+  if (!patient) throw new ConsegnaPatientNotFoundError();
   if (input.operatoreAssegnatoId && !assignee) {
     throw new ConsegnaInputError('Operatore assegnato non disponibile');
   }

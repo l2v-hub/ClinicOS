@@ -65,6 +65,16 @@ async function sendPatientPage(
               OR: [
                 { lastName: { contains: token, mode: 'insensitive' as const } },
                 { firstName: { contains: token, mode: 'insensitive' as const } },
+                ...(token.replace(/[^A-Z0-9]/gi, '')
+                  ? [
+                      {
+                        codiceFiscale: {
+                          contains: token.replace(/[^A-Z0-9]/gi, '').toUpperCase(),
+                          mode: 'insensitive' as const,
+                        },
+                      },
+                    ]
+                  : []),
               ],
             })),
           }),
