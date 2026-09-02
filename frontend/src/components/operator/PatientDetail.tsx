@@ -57,6 +57,7 @@ import {
 } from './PatientDetailLazyTabs';
 import { ClinicalSectionLoading } from './ClinicalSectionLoading';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
+import './PatientRecordData.css';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

@@ -15,6 +15,10 @@ const topNavStyles = readFileSync(
   'utf8',
 );
 const appStyles = readFileSync(new URL('../../app-additions.css', import.meta.url), 'utf8');
+const dataStyles = readFileSync(
+  new URL('../../components/operator/PatientRecordData.css', import.meta.url),
+  'utf8',
+);
 
 test('patient record exposes a labelled two-level navigation and controlled tab panel', () => {
   assert.match(patientDetail, /ariaLabel="Aree della cartella paziente"/);
@@ -63,4 +67,34 @@ test('overview is three columns on wide screens, two on tablet and one on phone'
     topNavStyles,
     /\.top-nav--level3 \.top-nav__item\.is-active::after\s*\{[\s\S]*?background: #2f6bed/,
   );
+});
+
+test('patient record applies one screen-only contract to cards, key-value rows and tables', () => {
+  assert.match(patientDetail, /import '\.\/PatientRecordData\.css'/);
+  assert.match(dataStyles, /@media screen/);
+  assert.match(dataStyles, /--patient-data-row-height: 46px/);
+  assert.match(
+    dataStyles,
+    /:is\(\.clinical-card, \.cts, \.cr-profilo-group, \.narrative-section\)/,
+  );
+  assert.match(dataStyles, /\.patient-record-view \.pic-row\s*\{[\s\S]*?grid-template-columns/);
+  for (const tableClass of [
+    'clinicos-table',
+    'parametri-modulo-table',
+    'braden-modulo-table',
+    'med-modulo-table',
+    'med-followup-table',
+  ]) {
+    assert.match(dataStyles, new RegExp(`\\.${tableClass}`));
+  }
+});
+
+test('patient record data contract keeps tablet overflow local and stacks key-value rows on phones', () => {
+  assert.match(dataStyles, /\.clinicos-table-wrap\s*\{[\s\S]*?overflow-x: auto/);
+  assert.match(dataStyles, /:is\(\.fm, \.modulo-content\)\s*\{[\s\S]*?overflow-x: auto/);
+  assert.match(
+    dataStyles,
+    /@media \(max-width: 768px\)[\s\S]*?grid-template-columns: minmax\(0, 1fr\)/,
+  );
+  assert.match(dataStyles, /:focus-visible/);
 });

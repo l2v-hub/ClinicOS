@@ -1,0 +1,415 @@
+/* Unified screen contract for structured data inside the patient record.
+   Print forms intentionally keep their dedicated A4 rules from print-forms.css. */
+@media screen {
+  .patient-record-view {
+    --patient-data-radius: 12px;
+    --patient-data-header-height: 46px;
+    --patient-data-row-height: 46px;
+    --patient-data-cell-x: 14px;
+    --patient-data-header-bg: #f5f7fb;
+    --patient-data-label-bg: #fafbfd;
+    --patient-data-border: var(--border, #e6ebf2);
+  }
+
+  /* One surface and one header treatment for every clinical section. */
+  .patient-record-view :is(.clinical-card, .cts, .cr-profilo-group, .narrative-section) {
+    background: var(--surface, #fff);
+    border: 1px solid var(--patient-data-border);
+    border-radius: var(--patient-data-radius);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    overflow: hidden;
+  }
+
+  .patient-record-view .clinical-card + .clinical-card {
+    margin-top: 12px;
+  }
+
+  .patient-record-view :is(.clinical-card__header, .cts__header) {
+    width: 100%;
+    min-height: var(--patient-data-header-height);
+    height: auto;
+    padding: 7px var(--patient-data-cell-x);
+    background: var(--patient-data-header-bg);
+    border: 0;
+    border-bottom: 1px solid var(--patient-data-border);
+    color: var(--text, #16202e);
+  }
+
+  .patient-record-view .clinical-card__title,
+  .patient-record-view .cts__title {
+    margin: 0;
+    color: var(--text, #16202e);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-transform: none;
+  }
+
+  .patient-record-view :is(.clinical-card__actions, .cts__header-right) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .patient-record-view .clinical-card__edit,
+  .patient-record-view .cts__header-right .btn-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 5px 10px;
+    border: 1px solid #cfd9ea;
+    border-radius: 8px;
+    background: var(--surface, #fff);
+    color: var(--blue, #2f6bed);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .patient-record-view .clinical-card__edit:hover,
+  .patient-record-view .cts__header-right .btn-sm:hover {
+    border-color: #9cb8f4;
+    background: var(--indigo-bg, #eef3fe);
+  }
+
+  .patient-record-view .clinical-card__toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .patient-record-view .clinical-card__toggle:hover {
+    background: var(--hover, #f7f9fc);
+  }
+
+  .patient-record-view .clinical-card__content-inner:has(> :is(.cr-form-section, .pic-edit-form)) {
+    padding: 0;
+  }
+
+  .patient-record-view .clinical-card .cr-form-section {
+    gap: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .patient-record-view .pic-edit-form {
+    gap: 12px;
+    padding: 16px;
+    background: #fbfcfe;
+  }
+
+  /* Canonical key/value data row used by intake, profile and legacy summaries. */
+  .patient-record-view .pic-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 34%) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+    min-height: var(--patient-data-row-height);
+    padding: 0;
+    border-bottom: 1px solid var(--divider, #f0f3f8);
+    font-size: 13.5px;
+  }
+
+  .patient-record-view .pic-row:last-child {
+    border-bottom: 0;
+  }
+
+  .patient-record-view .pic-row__lbl,
+  .patient-record-view .pic-row__val {
+    display: flex;
+    min-width: 0;
+    padding: 10px var(--patient-data-cell-x);
+    align-items: center;
+  }
+
+  .patient-record-view .pic-row__lbl {
+    background: var(--patient-data-label-bg);
+    color: var(--text-muted, #5a6b80);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  .patient-record-view .pic-row__val {
+    justify-content: flex-end;
+    margin: 0;
+    color: var(--text, #16202e);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .patient-record-view .pic-row .inline-edit__value {
+    align-self: center;
+    justify-self: end;
+    min-height: 34px;
+    margin: 5px 8px;
+    padding: 5px 8px;
+  }
+
+  .patient-record-view .pic-row--editing {
+    align-items: stretch;
+    padding: 0;
+    background: #fbfcfe;
+  }
+
+  .patient-record-view .pic-row--editing .inline-edit__control {
+    padding: 6px 8px;
+  }
+
+  /* Profile data follows the same label/value hierarchy without nested-card shadows. */
+  .patient-record-view .cr-profilo-grid {
+    gap: 12px;
+  }
+
+  .patient-record-view .cr-profilo-group {
+    padding: 0;
+    gap: 0;
+  }
+
+  .patient-record-view .cr-profilo-group__title {
+    min-height: 42px;
+    margin: 0;
+    padding: 12px var(--patient-data-cell-x);
+    background: var(--patient-data-header-bg);
+    border-bottom: 1px solid var(--patient-data-border);
+    color: var(--text, #16202e);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .patient-record-view .cr-profilo-row {
+    display: grid;
+    grid-template-columns: minmax(120px, 42%) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+    min-height: 42px;
+    border-bottom: 1px solid var(--divider, #f0f3f8);
+    font-size: 13px;
+  }
+
+  .patient-record-view .cr-profilo-row:last-child {
+    border-bottom: 0;
+  }
+
+  .patient-record-view .cr-profilo-row > :is(span:first-child, strong) {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: 9px var(--patient-data-cell-x);
+  }
+
+  .patient-record-view .cr-profilo-row > span:first-child {
+    background: var(--patient-data-label-bg);
+    color: var(--text-muted, #5a6b80);
+    font-weight: 600;
+  }
+
+  .patient-record-view .cr-profilo-row > strong {
+    justify-content: flex-end;
+    color: var(--text, #16202e);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  /* Narrative and list-like records share the same restrained chrome. */
+  .patient-record-view :is(.cr-item-row, .diario-card) {
+    border: 1px solid var(--patient-data-border);
+    border-radius: var(--patient-data-radius);
+    background: var(--surface, #fff);
+    box-shadow: none;
+  }
+
+  .patient-record-view .cr-legacy-anamnesi-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 34%) minmax(0, 1fr);
+    gap: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--divider, #f0f3f8);
+  }
+
+  .patient-record-view .cr-legacy-anamnesi-row__label,
+  .patient-record-view .cr-legacy-anamnesi-row__value {
+    margin: 0;
+    padding: 10px var(--patient-data-cell-x);
+  }
+
+  .patient-record-view .cr-legacy-anamnesi-row__label {
+    background: var(--patient-data-label-bg);
+    font-size: 12.5px;
+    letter-spacing: 0.01em;
+    text-transform: none;
+  }
+
+  /* Every semantic and module table receives the same screen-only table contract. */
+  .patient-record-view
+    :is(
+      .clinicos-table,
+      .parametri-modulo-table,
+      .braden-modulo-table,
+      .med-modulo-table,
+      .med-followup-table
+    ) {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--patient-data-border);
+    border-radius: var(--patient-data-radius);
+    background: var(--surface, #fff);
+    color: var(--text, #16202e);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    overflow: hidden;
+  }
+
+  .patient-record-view
+    :is(
+      .clinicos-table,
+      .parametri-modulo-table,
+      .braden-modulo-table,
+      .med-modulo-table,
+      .med-followup-table
+    )
+    thead
+    th {
+    min-height: 42px;
+    padding: 10px var(--patient-data-cell-x);
+    background: var(--patient-data-header-bg);
+    border: 0;
+    border-bottom: 1px solid var(--patient-data-border);
+    color: var(--text-muted, #5a6b80);
+    font-family: var(--font-ui);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .patient-record-view
+    :is(
+      .clinicos-table,
+      .parametri-modulo-table,
+      .braden-modulo-table,
+      .med-modulo-table,
+      .med-followup-table
+    )
+    tbody
+    td {
+    min-height: var(--patient-data-row-height);
+    height: auto;
+    padding: 10px var(--patient-data-cell-x);
+    border: 0;
+    border-bottom: 1px solid var(--divider, #f0f3f8);
+    background: var(--surface, #fff);
+    color: var(--text, #16202e);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .patient-record-view
+    :is(
+      .clinicos-table,
+      .parametri-modulo-table,
+      .braden-modulo-table,
+      .med-modulo-table,
+      .med-followup-table
+    )
+    tbody
+    tr:nth-child(even):not(.totale-row)
+    > td {
+    background: #fbfcfe;
+  }
+
+  .patient-record-view
+    :is(
+      .clinicos-table,
+      .parametri-modulo-table,
+      .braden-modulo-table,
+      .med-modulo-table,
+      .med-followup-table
+    )
+    tbody
+    tr:not(.totale-row):hover
+    > td {
+    background: var(--indigo-bg, #eef3fe);
+  }
+
+  .patient-record-view
+    :is(
+      .clinicos-table,
+      .parametri-modulo-table,
+      .braden-modulo-table,
+      .med-modulo-table,
+      .med-followup-table
+    )
+    tbody
+    tr:last-child
+    > td {
+    border-bottom: 0;
+  }
+
+  .patient-record-view .clinicos-table-wrap {
+    margin-bottom: 12px;
+    border: 0;
+    border-radius: var(--patient-data-radius);
+    box-shadow: none;
+    overflow-x: auto;
+    scrollbar-gutter: stable;
+  }
+
+  .patient-record-view :is(.fm, .modulo-content, .clinical-card__content-inner) {
+    max-width: 100%;
+  }
+
+  .patient-record-view :is(.fm, .modulo-content) {
+    overflow-x: auto;
+    scrollbar-gutter: stable;
+  }
+
+  .patient-record-view
+    :is(
+      .clinical-card__header,
+      .cts__header,
+      .clinical-card__edit,
+      .clinical-card__toggle,
+      .cdt__sort-btn
+    ):focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--blue, #2f6bed) 30%, transparent);
+    outline-offset: -2px;
+  }
+
+  @media (max-width: 768px) {
+    .patient-record-view {
+      --patient-data-cell-x: 12px;
+    }
+
+    .patient-record-view .pic-row,
+    .patient-record-view .cr-profilo-row,
+    .patient-record-view .cr-legacy-anamnesi-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .patient-record-view .pic-row__val,
+    .patient-record-view .cr-profilo-row > strong {
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    .patient-record-view .pic-row .inline-edit__value {
+      justify-self: stretch;
+      margin: 5px 8px;
+    }
+
+    .patient-record-view
+      :is(.parametri-modulo-table, .braden-modulo-table, .med-modulo-table, .med-followup-table) {
+      min-width: 680px;
+    }
+  }
+}
