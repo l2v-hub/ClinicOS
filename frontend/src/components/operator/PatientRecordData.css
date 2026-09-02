@@ -390,6 +390,27 @@
     scrollbar-gutter: stable;
   }
 
+  /* Horizontal rails stay available to touch, trackpads and keyboard-focused controls,
+     but do not add a second visual hierarchy made of native scrollbar tracks. */
+  .patient-record-view
+    :is(.top-nav__items, .clinicos-table-wrap, .parametri-grid-wrapper, .fm, .modulo-content) {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .patient-record-view
+    :is(
+      .top-nav__items,
+      .clinicos-table-wrap,
+      .parametri-grid-wrapper,
+      .fm,
+      .modulo-content
+    )::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
   .patient-record-view
     :is(
       .clinical-card__header,

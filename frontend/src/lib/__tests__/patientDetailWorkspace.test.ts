@@ -107,6 +107,11 @@ test('patient record data contract keeps tablet overflow local and stacks key-va
   assert.match(dataStyles, /:is\(\.fm, \.modulo-content\)\s*\{[\s\S]*?overflow-x: auto/);
   assert.match(
     dataStyles,
+    /:is\([\s\S]*?\.top-nav__items,[\s\S]*?\.clinicos-table-wrap,[\s\S]*?\.parametri-grid-wrapper,[\s\S]*?scrollbar-width: none/,
+  );
+  assert.match(dataStyles, /::-webkit-scrollbar\s*\{[\s\S]*?display: none[\s\S]*?height: 0/);
+  assert.match(
+    dataStyles,
     /@media \(max-width: 768px\)[\s\S]*?grid-template-columns: minmax\(0, 1fr\)/,
   );
   assert.match(dataStyles, /:focus-visible/);
