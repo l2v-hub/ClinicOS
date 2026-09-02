@@ -51,6 +51,7 @@ test('suggestions use native buttons and prefill instead of sending immediately'
   const panel = readFileSync(new URL('../AgnosPanel.tsx', import.meta.url), 'utf8');
   assert.match(component, /<button[\s\S]*?type="button"/);
   assert.match(component, /aria-describedby="agnos-suggestions-help"/);
+  assert.doesNotMatch(component, /aria-pressed/);
   assert.match(component, /onClick=\{\(\) => onSelect\(prompt\.text\)\}/);
   assert.match(panel, /setInput\(text\)/);
   assert.doesNotMatch(component, /sendCommand/);

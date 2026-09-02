@@ -10517,7 +10517,7 @@ textarea.form-input {
     box-shadow 120ms ease;
 }
 .agnos-suggestions__button:hover:not(:disabled),
-.agnos-suggestions__button[aria-pressed='true'] {
+.agnos-suggestions__button[data-selected='true'] {
   border-color: var(--primary, var(--blue));
   background: var(--blue-dim);
   box-shadow: 0 2px 8px rgba(15, 95, 215, 0.1);

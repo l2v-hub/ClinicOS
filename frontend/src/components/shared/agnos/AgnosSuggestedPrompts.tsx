@@ -36,7 +36,7 @@ export function AgnosSuggestedPrompts({
                 className="agnos-suggestions__button"
                 disabled={disabled}
                 aria-describedby="agnos-suggestions-help"
-                aria-pressed={selectedText.trim() === prompt.text}
+                data-selected={selectedText.trim() === prompt.text || undefined}
                 onClick={() => onSelect(prompt.text)}
               >
                 <span>{prompt.text}</span>
