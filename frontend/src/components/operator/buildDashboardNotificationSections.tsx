@@ -22,6 +22,7 @@ interface BuildDashboardNotificationSectionsInput {
   onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   onRetryClinicalOverview: () => void;
+  agendaNav?: NavKey;
 }
 
 export function buildDashboardNotificationSections({
@@ -35,6 +36,7 @@ export function buildDashboardNotificationSections({
   onOpenConsegneAperte,
   onSelectPaziente,
   onRetryClinicalOverview,
+  agendaNav = 'agenda-operatore',
 }: BuildDashboardNotificationSectionsInput): DashboardNotificationSection[] {
   const sections: DashboardNotificationSection[] = [];
   const ritardiVisibili = somministrazioni.ritardi.slice(0, MAX_DASHBOARD_NOTIFICATION_PATIENTS);
@@ -93,7 +95,7 @@ export function buildDashboardNotificationSections({
           <button
             type="button"
             className="btn-secondary dashboard-notification-section__action"
-            onClick={() => onNavigate('agenda-operatore')}
+            onClick={() => onNavigate(agendaNav)}
           >
             Apri Agenda <IcoArrow />
           </button>
@@ -228,7 +230,7 @@ export function buildDashboardNotificationSections({
         <button
           type="button"
           className="btn-secondary dashboard-notification-section__action"
-          onClick={() => onNavigate('agenda-operatore')}
+          onClick={() => onNavigate(agendaNav)}
         >
           Apri Agenda <IcoArrow />
         </button>

@@ -47,15 +47,16 @@ test('dashboard anomaly worklist is bounded in both dimensions', () => {
   );
 });
 
-test('operator and admin delay alerts share a bounded item layout', () => {
+test('operator and admin reuse the same bounded notification details', () => {
   assert.match(alertLimits, /MAX_DASHBOARD_DELAY_ITEMS = 3/);
-  for (const source of [notificationDetails, adminDashboard]) {
-    assert.match(source, /p\.voci\.slice\(0, MAX_DASHBOARD_DELAY_ITEMS\)/);
-    assert.match(source, /p\.voci\.length - MAX_DASHBOARD_DELAY_ITEMS/);
-    assert.match(source, /className="anomalie-reparto__farmaci-lista"/);
-  }
-  assert.match(adminDashboard, /import '\.\.\/operator\/cartella\/AvvisoAnomalieFarmaci\.css'/);
-  assert.doesNotMatch(adminDashboard, /p\.voci\s*\.map\(/);
+  assert.match(notificationDetails, /p\.voci\.slice\(0, MAX_DASHBOARD_DELAY_ITEMS\)/);
+  assert.match(notificationDetails, /p\.voci\.length - MAX_DASHBOARD_DELAY_ITEMS/);
+  assert.match(notificationDetails, /className="anomalie-reparto__farmaci-lista"/);
+  assert.match(adminDashboard, /<DashboardNotificationCenter/);
+  assert.match(adminDashboard, /buildDashboardNotificationSections/);
+  assert.match(adminDashboard, /agendaNav: 'agenda-admin'/);
+  assert.doesNotMatch(adminDashboard, /somministrazioni\.ritardi\.slice/);
+  assert.doesNotMatch(adminDashboard, /className="coverage-alert"/);
 });
 
 test('patient, drug chips and compact count have explicit visual hierarchy', () => {

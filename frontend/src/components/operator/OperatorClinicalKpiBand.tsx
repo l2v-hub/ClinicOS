@@ -1,15 +1,9 @@
-import type { ReactNode } from 'react';
+import { IcoActivity, IcoBed, IcoPill, IcoShield, IcoWarning } from '../../icons';
 import {
-  IcoActivity,
-  IcoBed,
-  IcoCheck,
-  IcoChevronRight,
-  IcoPill,
-  IcoShield,
-  IcoWarning,
-} from '../../icons';
-
-type KpiTone = 'critical' | 'attention' | 'positive' | 'info' | 'unknown';
+  DashboardKpiBand,
+  type DashboardKpiItem,
+  type DashboardKpiTone,
+} from '../shared/DashboardKpiBand';
 
 interface Props {
   loading: boolean;
@@ -29,28 +23,16 @@ interface Props {
   onOpenAgenda: () => void;
 }
 
-interface KpiItem {
-  id: string;
-  label: string;
-  value: string | number;
-  spokenValue?: string;
-  status: string;
-  tone: KpiTone;
-  icon: ReactNode;
-  onOpen: () => void;
-  actionLabel: string;
-}
-
 function clinicalItem(
   ready: boolean,
   loading: boolean,
   value: number,
-  options: Omit<KpiItem, 'value' | 'tone' | 'status'> & {
-    attentionTone: KpiTone;
+  options: Omit<DashboardKpiItem, 'value' | 'tone' | 'status'> & {
+    attentionTone: DashboardKpiTone;
     clearStatus: string;
     attentionStatus: string;
   },
-): KpiItem {
+): DashboardKpiItem {
   if (!ready) {
     return {
       ...options,
@@ -83,7 +65,7 @@ export function OperatorClinicalKpiBand({
     somministrazioni.inCorso || somministrazioni.fallito
       ? '—'
       : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`;
-  const administrationTone: KpiTone = somministrazioni.fallito
+  const administrationTone: DashboardKpiTone = somministrazioni.fallito
     ? 'attention'
     : somministrazioni.inCorso
       ? 'unknown'
@@ -91,7 +73,7 @@ export function OperatorClinicalKpiBand({
         ? 'critical'
         : 'positive';
 
-  const items: KpiItem[] = [
+  const items: DashboardKpiItem[] = [
     clinicalItem(clinicalReady, loading, critici, {
       id: 'parametri',
       label: 'Parametri critici',
@@ -158,34 +140,5 @@ export function OperatorClinicalKpiBand({
     },
   ];
 
-  return (
-    <section
-      className="operator-clinical-kpis"
-      aria-label="Quadro clinico operativo"
-      aria-busy={loading}
-    >
-      {items.map((item) => (
-        <button
-          type="button"
-          className={`operator-clinical-kpi operator-clinical-kpi--${item.tone}`}
-          onClick={item.onOpen}
-          key={item.id}
-          aria-label={`${item.label}: ${item.spokenValue ?? item.value}. ${item.status}. ${item.actionLabel}`}
-        >
-          <span className="operator-clinical-kpi__icon" aria-hidden="true">
-            {item.icon}
-          </span>
-          <span className="operator-clinical-kpi__value">{item.value}</span>
-          <span className="operator-clinical-kpi__label">{item.label}</span>
-          <span className="operator-clinical-kpi__status">
-            {item.tone === 'positive' && <IcoCheck />}
-            {item.status}
-          </span>
-          <span className="operator-clinical-kpi__arrow" aria-hidden="true">
-            <IcoChevronRight />
-          </span>
-        </button>
-      ))}
-    </section>
-  );
+  return <DashboardKpiBand label="Quadro clinico operativo" items={items} loading={loading} />;
 }

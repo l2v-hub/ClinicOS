@@ -1,20 +1,12 @@
 import type { Operatore, Camera, ClinicalOverview, ConsegnaOverview, NavKey } from '../../types';
-import {
-  IcoArrow,
-  IcoWarning,
-  IcoOperatori,
-  IcoConsegne,
-  IcoCalendar,
-  IcoBed,
-  IcoActivity,
-  IcoShield,
-  IcoClock,
-  IcoPill,
-} from '../../icons';
+import { IcoArrow, IcoOperatori, IcoConsegne, IcoCalendar, IcoBed, IcoClock } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
-import { MAX_DASHBOARD_DELAY_ITEMS } from '../shared/dashboardAlertLimits';
+import { DashboardNotificationCenter } from '../operator/DashboardNotificationCenter';
+import { buildDashboardNotificationSections } from '../operator/buildDashboardNotificationSections';
+import { buildDashboardNotificationCounts } from '../operator/dashboardNotificationModel';
+import { useAnomalieReparto } from '../operator/cartella/useAnomalieReparto';
 import { useRiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoSomministrazioni';
-import '../operator/cartella/AvvisoAnomalieFarmaci.css';
+import { AdminDashboardKpiBands } from './AdminDashboardKpiBands';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -75,13 +67,13 @@ export function AdminDashboard({
   const urgentCount = consegneOverview?.summary.urgentOpen;
   const maxPazienti = Math.max(...operatori.map((o) => o.pazientiAssegnati), 1);
   const somministrazioni = useRiepilogoSomministrazioni();
+  const anomalie = useAnomalieReparto();
 
   // Clinical KPIs
   const critici = clinicalOverview?.critici ?? 0;
   const rischiAlti = clinicalOverview?.rischiAlti ?? 0;
   const dimessi = clinicalOverview?.dimessi ?? 0;
   const clinicalOverviewReady = clinicalOverviewState === 'ready' && clinicalOverview !== null;
-  const overviewValue = (value: number): number | string => (clinicalOverviewReady ? value : '—');
   const consegneAperte = consegneOverview?.summary.open;
   const consegneInCorso = consegneOverview?.summary.inProgress;
 
@@ -93,6 +85,56 @@ export function AdminDashboard({
     totaleLetti.length > 0 ? Math.round((lettiOccupati / totaleLetti.length) * 100) : 0;
   const camereOccupate = camere.filter((c) => c.letti.every((l) => l.stato === 'occupato')).length;
   const roomSnapshotAvailable = camereLoadState === 'ready' || camere.length > 0;
+
+  const baseNotificationCounts = buildDashboardNotificationCounts({
+    delayedPatients: somministrazioni.ritardi.length,
+    urgentHandovers: urgentCount ?? 0,
+    drugAnomalyPatients: anomalie.pazienti.length,
+    deliveryOverviewFailed: consegneOverviewState === 'error',
+    clinicalOverviewFailed: clinicalOverviewState === 'error',
+    administrationsFailed: somministrazioni.fallito,
+    drugVerificationFailed: anomalie.fallito || anomalie.verificaIncompleta,
+  });
+  const roomWarningCount = camereLoadState === 'error' ? 1 : 0;
+  const notificationCounts = {
+    ...baseNotificationCounts,
+    warning: baseNotificationCounts.warning + roomWarningCount,
+    total: baseNotificationCounts.total + roomWarningCount,
+  };
+  const notificationSections = buildDashboardNotificationSections({
+    somministrazioni,
+    anomalie,
+    urgentCount,
+    consegneOverviewState,
+    clinicalOverviewState,
+    overviewAvailable,
+    onNavigate,
+    onOpenConsegneAperte,
+    onSelectPaziente,
+    onRetryClinicalOverview,
+    agendaNav: 'agenda-admin',
+  });
+
+  if (camereLoadState === 'error') {
+    notificationSections.push({
+      id: 'occupazione-non-disponibile',
+      tone: 'warning',
+      count: 1,
+      title: 'Occupazione struttura non aggiornata',
+      summary: roomSnapshotAvailable
+        ? 'Sono mostrati gli ultimi dati disponibili.'
+        : (camereLoadError ?? 'I dati delle camere non sono disponibili.'),
+      content: (
+        <button
+          type="button"
+          className="btn-secondary dashboard-notification-section__action"
+          onClick={onRetryCamere}
+        >
+          Riprova <IcoArrow />
+        </button>
+      ),
+    });
+  }
 
   const todayStr = new Date().toLocaleDateString('it-IT', {
     weekday: 'long',
@@ -109,243 +151,39 @@ export function AdminDashboard({
         subtitle={todayStr}
       />
 
-      {/* Alert urgenti */}
-      {consegneOverviewState === 'error' && (
-        <div className="coverage-alert" role="alert">
-          <IcoWarning />
-          <span>
-            {overviewAvailable
-              ? 'Aggiornamento consegne non riuscito: sono mostrati gli ultimi dati disponibili.'
-              : 'Riepilogo consegne non disponibile. Apri Consegne per riprovare.'}
-          </span>
-        </div>
-      )}
-      {clinicalOverviewState === 'error' && (
-        <div className="coverage-alert" role="alert">
-          <IcoWarning />
-          <span>
-            <strong>Riepilogo clinico non disponibile.</strong> I valori non verificati sono
-            indicati con un trattino.
-          </span>
-          <button className="link-btn" type="button" onClick={onRetryClinicalOverview}>
-            Riprova <IcoArrow />
-          </button>
-        </div>
-      )}
-      {camereLoadState === 'error' && (
-        <div className="coverage-alert" role="alert">
-          <IcoWarning />
-          <span>
-            {roomSnapshotAvailable
-              ? 'Aggiornamento occupazione non riuscito: sono mostrati gli ultimi dati disponibili.'
-              : (camereLoadError ?? 'Occupazione camere non disponibile.')}
-          </span>
-          <button type="button" className="link-btn" onClick={onRetryCamere}>
-            Riprova <IcoArrow />
-          </button>
-        </div>
-      )}
-      {urgentCount !== undefined && urgentCount > 0 && (
-        <div className="coverage-alert">
-          <IcoWarning />
-          <span>
-            <strong>
-              {urgentCount} consegn
-              {urgentCount === 1 ? 'a urgente aperta' : 'e urgenti aperte'}
-            </strong>{' '}
-            — richiedono attenzione immediata
-          </span>
-          <button className="link-btn" onClick={() => onNavigate('consegne')}>
-            Vedi <IcoArrow />
-          </button>
-        </div>
-      )}
+      <DashboardNotificationCenter
+        counts={notificationCounts}
+        sections={notificationSections}
+        loading={
+          somministrazioni.inCorso ||
+          anomalie.inCorso ||
+          consegneOverviewState === 'loading' ||
+          clinicalOverviewState === 'loading' ||
+          camereLoadState === 'idle' ||
+          camereLoadState === 'loading'
+        }
+      />
 
-      {/* Pazienti con somministrazioni in ritardo: urgenza clinica reale, resta in rosso. */}
-      {somministrazioni.ritardi.length > 0 && (
-        <div className="coverage-alert" role="alert">
-          <IcoWarning />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <strong>
-              {somministrazioni.ritardi.length} pazient
-              {somministrazioni.ritardi.length === 1 ? 'e' : 'i'} con somministrazioni in ritardo
-            </strong>{' '}
-            — richiede attenzione immediata
-            <ul className="anomalie-reparto__lista" style={{ marginTop: 8 }}>
-              {somministrazioni.ritardi.slice(0, 5).map((p) => (
-                <li key={p.patientId}>
-                  <button
-                    type="button"
-                    className="anomalie-reparto__riga anomalie-reparto__riga--rosso"
-                    onClick={() => onSelectPaziente?.(p.nome, p.patientId)}
-                  >
-                    <span className="anomalie-reparto__contenuto">
-                      <span className="anomalie-reparto__nome">{p.nome}</span>
-                      <span className="anomalie-reparto__farmaci-lista">
-                        {p.voci.slice(0, MAX_DASHBOARD_DELAY_ITEMS).map((v, index) => (
-                          <span
-                            className="anomalie-reparto__farmaco"
-                            key={`${v.farmacoNome}-${index}`}
-                          >
-                            <strong>{v.farmacoNome}</strong>
-                            <span>
-                              {v.scheduledTime} · +{v.minutiRitardo} min
-                            </span>
-                          </span>
-                        ))}
-                        {p.voci.length > MAX_DASHBOARD_DELAY_ITEMS && (
-                          <span className="anomalie-reparto__altre-voci">
-                            +{p.voci.length - MAX_DASHBOARD_DELAY_ITEMS} altri farmaci
-                          </span>
-                        )}
-                      </span>
-                    </span>
-                    <span className="badge badge--red">+{p.voci[0].minutiRitardo} min</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            {somministrazioni.ritardi.length > 5 && (
-              <button
-                className="link-btn"
-                style={{ marginTop: 8 }}
-                onClick={() => onNavigate('agenda-admin')}
-              >
-                +{somministrazioni.ritardi.length - 5} altre <IcoArrow />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Stat cards */}
-      <div className="stats-grid">
-        <div className="stat-card stat-card--blue">
-          <div className="stat-card__label">Totale Pazienti</div>
-          <div className="stat-card__value">
-            {loadingPazienti || clinicalOverviewState !== 'ready' ? '—' : totalePazienti}
-          </div>
-          <button className="stat-card__action" onClick={() => onNavigate('pazienti')}>
-            Vedi pazienti <IcoArrow />
-          </button>
-        </div>
-        <div className="stat-card stat-card--teal">
-          <div className="stat-card__label">Operatori Attivi</div>
-          <div className="stat-card__value">
-            {activeOperatorTotal}
-            <span style={{ fontSize: 16, color: 'var(--text-muted)' }}>/{operatorTotal}</span>
-          </div>
-          <button className="stat-card__action" onClick={() => onNavigate('gestione-operatori')}>
-            Gestisci <IcoArrow />
-          </button>
-        </div>
-        <div className="stat-card stat-card--indigo">
-          <div className="stat-card__label">Appuntamenti Oggi</div>
-          <div className="stat-card__value">{appointmentsTodayTotal}</div>
-          <button className="stat-card__action" onClick={() => onNavigate('agenda-admin')}>
-            Agenda <IcoArrow />
-          </button>
-        </div>
-        <div className="stat-card stat-card--emerald">
-          <div className="stat-card__label">Consegne Aperte</div>
-          <div
-            className="stat-card__value"
-            style={urgentCount !== undefined && urgentCount > 0 ? { color: 'var(--red)' } : {}}
-          >
-            {consegneOverviewState === 'loading' && !overviewAvailable
-              ? '—'
-              : (consegneAperte ?? '—')}
-          </div>
-          <button
-            className="stat-card__action"
-            onClick={() => (onOpenConsegneAperte ? onOpenConsegneAperte() : onNavigate('consegne'))}
-          >
-            Vedi tutte <IcoArrow />
-          </button>
-        </div>
-      </div>
-
-      {/* Clinical KPIs */}
-      <div className="section-header" style={{ marginTop: 28, marginBottom: 12 }}>
-        <h3 className="section-header__title">
-          <span className="section-header__ico">
-            <IcoActivity />
-          </span>
-          Situazione Clinica
-        </h3>
-      </div>
-      <div className="kpi-alert-grid" aria-busy={clinicalOverviewState === 'loading'}>
-        <div
-          className={`kpi-alert-card${
-            !clinicalOverviewReady
-              ? ' kpi-alert-card--blue'
-              : critici > 0
-                ? ' kpi-alert-card--red'
-                : ' kpi-alert-card--green'
-          }`}
-        >
-          <span className="kpi-alert-card__val">{overviewValue(critici)}</span>
-          <span className="kpi-alert-card__lbl">
-            <IcoActivity /> Parametri critici
-          </span>
-        </div>
-        <div
-          className={`kpi-alert-card${
-            !clinicalOverviewReady
-              ? ' kpi-alert-card--blue'
-              : rischiAlti > 0
-                ? ' kpi-alert-card--amber'
-                : ' kpi-alert-card--green'
-          }`}
-        >
-          <span className="kpi-alert-card__val">{overviewValue(rischiAlti)}</span>
-          <span className="kpi-alert-card__lbl">
-            <IcoShield /> Rischi alti/critici
-          </span>
-        </div>
-        <div className="kpi-alert-card kpi-alert-card--blue">
-          <span className="kpi-alert-card__val">
-            {overviewAvailable ? `${consegneInCorso}/${consegneAperte}` : '—'}
-          </span>
-          <span className="kpi-alert-card__lbl">
-            <IcoConsegne /> Consegne in corso
-          </span>
-        </div>
-        <div
-          className={`kpi-alert-card kpi-alert-card--${clinicalOverviewReady ? 'green' : 'blue'}`}
-        >
-          <span className="kpi-alert-card__val">{overviewValue(dimessi)}</span>
-          <span className="kpi-alert-card__lbl">Dimessi in archivio</span>
-        </div>
-        <div
-          className={`kpi-alert-card${
-            somministrazioni.inCorso
-              ? ' kpi-alert-card--blue'
-              : somministrazioni.inRitardo > 0
-                ? ' kpi-alert-card--red'
-                : ' kpi-alert-card--green'
-          }`}
-          role="button"
-          tabIndex={0}
-          onClick={() => onNavigate('agenda-admin')}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              onNavigate('agenda-admin');
-            }
-          }}
-          title="Vai a Agenda"
-        >
-          <span className="kpi-alert-card__val">
-            {somministrazioni.inCorso
-              ? '—'
-              : `${somministrazioni.inRitardo}/${somministrazioni.daFare}`}
-          </span>
-          <span className="kpi-alert-card__lbl">
-            <IcoPill /> Somministrazioni in ritardo
-          </span>
-        </div>
-      </div>
+      <AdminDashboardKpiBands
+        loadingPazienti={loadingPazienti}
+        totalePazienti={totalePazienti}
+        activeOperatorTotal={activeOperatorTotal}
+        operatorTotal={operatorTotal}
+        appointmentsTodayTotal={appointmentsTodayTotal}
+        consegneAperte={consegneAperte}
+        consegneInCorso={consegneInCorso}
+        urgentCount={urgentCount}
+        consegneOverviewState={consegneOverviewState}
+        overviewAvailable={overviewAvailable}
+        clinicalOverviewState={clinicalOverviewState}
+        clinicalOverviewReady={clinicalOverviewReady}
+        critici={critici}
+        rischiAlti={rischiAlti}
+        dimessi={dimessi}
+        somministrazioni={somministrazioni}
+        onNavigate={onNavigate}
+        onOpenConsegneAperte={onOpenConsegneAperte}
+      />
 
       {/* Occupancy section */}
       <div className="section-header" style={{ marginTop: 32 }}>

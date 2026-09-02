@@ -19,8 +19,16 @@ const operatorKpis = readFileSync(
   new URL('../../components/operator/OperatorClinicalKpiBand.tsx', import.meta.url),
   'utf8',
 );
+const sharedKpis = readFileSync(
+  new URL('../../components/shared/DashboardKpiBand.tsx', import.meta.url),
+  'utf8',
+);
 const adminDashboard = readFileSync(
   new URL('../../components/admin/AdminDashboard.tsx', import.meta.url),
+  'utf8',
+);
+const adminKpis = readFileSync(
+  new URL('../../components/admin/AdminDashboardKpiBands.tsx', import.meta.url),
   'utf8',
 );
 
@@ -41,21 +49,22 @@ test('operator dashboard never presents unavailable clinical metrics as verified
   assert.match(dashboard, /<DashboardNotificationCenter/);
   assert.match(notificationCenter, /AccessibleDialogSurface/);
   assert.match(notificationDetails, /onClick=\{onRetryClinicalOverview\}/);
-  assert.match(operatorKpis, /aria-busy=\{loading\}/);
+  assert.match(operatorKpis, /<DashboardKpiBand[\s\S]*loading=\{loading\}/);
+  assert.match(sharedKpis, /aria-busy=\{loading\}/);
   assert.match(operatorKpis, /somministrazioni\.inCorso \|\| somministrazioni\.fallito/);
   assert.doesNotMatch(dashboard, /loadingPazienti|totalePazienti/);
 });
 
 test('admin dashboard shares the same explicit unavailable-data and recovery contract', () => {
   assert.match(adminDashboard, /clinicalOverviewState: 'loading' \| 'ready' \| 'error'/);
-  assert.match(adminDashboard, /clinicalOverviewReady \? value : '—'/);
-  assert.match(adminDashboard, /Riepilogo clinico non disponibile/);
-  assert.match(adminDashboard, /onClick=\{onRetryClinicalOverview\}/);
-  assert.match(adminDashboard, /aria-busy=\{clinicalOverviewState === 'loading'\}/);
+  assert.match(adminDashboard, /buildDashboardNotificationSections/);
+  assert.match(adminDashboard, /onRetryClinicalOverview/);
+  assert.match(adminDashboard, /<DashboardNotificationCenter/);
+  assert.match(adminDashboard, /<AdminDashboardKpiBands/);
+  assert.match(adminKpis, /if \(!ready\)/);
+  assert.match(adminKpis, /value: '—'/);
+  assert.match(adminKpis, /clinicalOverviewState === 'loading'/);
   assert.doesNotMatch(adminDashboard, /\{clinicalOverview !== null && \([\s\S]*Situazione Clinica/);
-  assert.match(
-    adminDashboard,
-    /loadingPazienti \|\| clinicalOverviewState !== 'ready' \? '—' : totalePazienti/,
-  );
+  assert.match(adminKpis, /value: loadingPazienti \? '—' : totalePazienti/);
   assert.match(app, /<AdminDashboard[\s\S]*clinicalOverviewState=\{clinicalOverviewState\}/);
 });

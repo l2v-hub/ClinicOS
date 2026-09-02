@@ -4,7 +4,11 @@ import test from 'node:test';
 
 const dashboard = readFileSync(new URL('../OperatorDashboard.tsx', import.meta.url), 'utf8');
 const kpis = readFileSync(new URL('../OperatorClinicalKpiBand.tsx', import.meta.url), 'utf8');
-const styles = readFileSync(new URL('../OperatorDashboard.css', import.meta.url), 'utf8');
+const sharedKpis = readFileSync(
+  new URL('../../shared/DashboardKpiBand.tsx', import.meta.url),
+  'utf8',
+);
+const styles = readFileSync(new URL('../../shared/DashboardKpiBand.css', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../../../App.tsx', import.meta.url), 'utf8');
 
 test('operator first view contains notifications then the compact clinical band', () => {
@@ -35,7 +39,8 @@ test('header patient action reuses the canonical secondary button', () => {
 });
 
 test('clinical snapshot uses five native compact value cards', () => {
-  assert.match(kpis, /type="button"/);
+  assert.match(kpis, /<DashboardKpiBand/);
+  assert.match(sharedKpis, /type="button"/);
   assert.equal((kpis.match(/id: '/g) ?? []).length, 5);
   for (const label of [
     'Parametri critici',
@@ -48,13 +53,13 @@ test('clinical snapshot uses five native compact value cards', () => {
   }
   assert.match(kpis, /somministrazioni\.inCorso \|\| somministrazioni\.fallito/);
   assert.match(kpis, /status: loading \? 'Aggiornamento…' : 'Dato non disponibile'/);
-  assert.match(kpis, /\$\{item\.actionLabel\}/);
+  assert.match(sharedKpis, /\$\{item\.actionLabel\}/);
   assert.match(kpis, /\$\{somministrazioni\.inRitardo\} su \$\{somministrazioni\.daFare\} da fare/);
 });
 
 test('compact clinical cards stay scoped and responsive without horizontal scrolling', () => {
-  assert.match(styles, /\.operator-clinical-kpis\s*\{[\s\S]*?repeat\(5, minmax\(0, 1fr\)\)/);
-  assert.match(styles, /\.operator-clinical-kpi\s*\{[\s\S]*?min-height: 102px/);
+  assert.match(styles, /\.dashboard-kpi-band--5\s*\{[\s\S]*?repeat\(5, minmax\(0, 1fr\)\)/);
+  assert.match(styles, /\.dashboard-kpi-card\s*\{[\s\S]*?min-height: 102px/);
   assert.match(styles, /@media \(max-width: 1040px\)[\s\S]*?repeat\(3, minmax\(0, 1fr\)\)/);
   assert.match(styles, /@media \(max-width: 700px\)[\s\S]*?repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(styles, /outline: 2px solid var\(--blue\)/);
