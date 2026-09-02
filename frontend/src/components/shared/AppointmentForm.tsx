@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { Appuntamento, Operatore, Paziente, TipoIntervento } from '../../types';
 import { IcoX, IcoCheck, IcoPlus } from '../../icons';
-import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
+import { PatientCombobox } from './PatientCombobox';
 
 interface AppointmentFormProps {
   data: string;
@@ -59,17 +59,10 @@ export function AppointmentForm({
     cameraId: appuntamento?.cameraId ?? '',
   });
 
-  const [pazienteSearch, setPazienteSearch] = useState(appuntamento?.pazienteNome ?? '');
-  const [showPazSearch, setShowPazSearch] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Paziente | null>(null);
   // SPEC-015 US4 (FR-018): visible saving state + explicit error (e.g. slot conflict 409).
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-
-  const patientSearch = usePatientDirectorySearch(pazienteSearch, {
-    enabled: !isEdit && showPazSearch,
-    limit: 6,
-  });
-  const pazientiFiltrati: Paziente[] = patientSearch.results;
 
   const operatoreSelezionato = operatori.find((o) => o.id === form.operatoreId);
 
@@ -94,14 +87,19 @@ export function AppointmentForm({
     }
   }
 
-  function selectPaziente(p: Paziente) {
-    setForm((f) => ({ ...f, pazienteId: p.id, pazienteNome: `${p.lastName}, ${p.firstName}` }));
-    setPazienteSearch(`${p.lastName}, ${p.firstName}`);
-    setShowPazSearch(false);
+  function selectPaziente(patient: Paziente | null) {
+    setSelectedPatient(patient);
+    setForm((current) => ({
+      ...current,
+      pazienteId: patient?.id ?? '',
+      pazienteNome: patient ? `${patient.lastName}, ${patient.firstName}` : '',
+    }));
   }
 
   useEffect(() => {
     if (isEdit) return; // in modifica i valori vengono dall'appuntamento, non dalla cella cliccata
+    // The open dialog follows the calendar cell if the parent changes its selected slot.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setForm((f) => ({ ...f, data, ora, operatoreId }));
   }, [data, ora, operatoreId, isEdit]);
 
@@ -136,49 +134,16 @@ export function AppointmentForm({
             <p className="apt-form-readonly">{appuntamento.pazienteNome ?? '—'}</p>
           </div>
         ) : (
-          <div className="form-field">
-            <label className="form-label">Paziente</label>
-            <div style={{ position: 'relative' }}>
-              <input
-                className="form-input"
-                value={pazienteSearch}
-                onChange={(e) => {
-                  setPazienteSearch(e.target.value);
-                  setShowPazSearch(true);
-                  setForm((f) => ({ ...f, pazienteId: '', pazienteNome: '' }));
-                }}
-                onFocus={() => setShowPazSearch(true)}
-                placeholder="Cerca paziente per nome o MRN…"
-                maxLength={80}
-              />
-              {showPazSearch && pazientiFiltrati.length > 0 && (
-                <div className="search-dropdown">
-                  {pazientiFiltrati.map((p) => (
-                    <button
-                      key={p.id}
-                      className="search-dropdown__item"
-                      onClick={() => selectPaziente(p)}
-                    >
-                      <span className="search-dropdown__name">
-                        {p.lastName}, {p.firstName}
-                      </span>
-                      <span className="search-dropdown__mrn">{p.medicalRecordNumber}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-              {showPazSearch && patientSearch.loading && (
-                <p className="search-dropdown__status" role="status">
-                  Ricerca in corso…
-                </p>
-              )}
-              {showPazSearch && patientSearch.error && (
-                <p className="search-dropdown__status" role="alert">
-                  {patientSearch.error}
-                </p>
-              )}
-            </div>
+          <div>
+            <PatientCombobox
+              inputId="appointment-patient"
+              label="Paziente"
+              selected={selectedPatient}
+              onChange={selectPaziente}
+              disabled={saving}
+            />
             <button
+              type="button"
               className="link-btn"
               style={{ marginTop: 4, fontSize: 12 }}
               onClick={onNewPatient}

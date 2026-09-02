@@ -1,0 +1,194 @@
+.consegne-page .handover-editor {
+  max-width: 1040px;
+  margin: 0 auto 20px;
+  padding: 0;
+  overflow: visible;
+  border-radius: 9px;
+  box-shadow: 0 1px 4px rgba(20, 39, 72, 0.08);
+}
+
+.handover-editor__header {
+  min-height: 68px;
+  margin: 0;
+  padding: 13px 16px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border);
+  border-radius: 9px 9px 0 0;
+  background: var(--surface-raised);
+}
+
+.handover-editor__eyebrow,
+.handover-editor__section > legend {
+  color: var(--text-xmuted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.65px;
+  text-transform: uppercase;
+}
+
+.handover-editor__eyebrow {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.handover-editor__intro {
+  margin: 3px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.handover-editor__body {
+  padding: 0 16px;
+}
+
+.handover-editor__section {
+  min-width: 0;
+  margin: 0;
+  padding: 14px 0 16px;
+  border: 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.handover-editor__section--last {
+  border-bottom: 0;
+}
+
+.handover-editor__section > legend {
+  width: 100%;
+  padding: 0 0 9px;
+}
+
+.handover-editor__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.handover-editor__field--patient {
+  grid-column: span 7;
+  min-width: 0;
+}
+
+.handover-editor__field--assignee {
+  grid-column: span 5;
+}
+
+.handover-editor__field--third {
+  grid-column: span 3;
+}
+
+.handover-editor .form-field,
+.handover-editor .form-input,
+.handover-editor .form-select {
+  min-width: 0;
+}
+
+.handover-editor .form-input,
+.handover-editor .form-select {
+  width: 100%;
+}
+
+.handover-editor__optional-label {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.handover-editor__notes {
+  min-height: 86px;
+  resize: vertical;
+}
+
+.handover-editor__counter {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-xmuted);
+  font-size: 10.5px;
+  text-align: right;
+}
+
+.handover-editor__actions {
+  min-height: 62px;
+  align-items: center;
+  margin: 0;
+  padding: 9px 16px;
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 9px 9px;
+  background: var(--surface-raised);
+}
+
+.handover-editor__required-note,
+.handover-editor__error {
+  margin: 0 auto 0 0;
+  font-size: 11px;
+}
+
+.handover-editor__required-note {
+  color: var(--text-muted);
+}
+
+.handover-editor__required-note > span {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.handover-editor__error {
+  color: var(--red);
+}
+
+@media (max-width: 900px) {
+  .handover-editor__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .handover-editor__field--patient {
+    grid-column: 1 / -1;
+  }
+
+  .handover-editor__field--assignee,
+  .handover-editor__field--third {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 639px) {
+  .handover-editor__header,
+  .handover-editor__body,
+  .handover-editor__actions {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .handover-editor__intro {
+    max-width: 34ch;
+  }
+
+  .handover-editor__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .handover-editor__field--patient,
+  .handover-editor__field--assignee,
+  .handover-editor__field--third {
+    grid-column: 1;
+  }
+
+  .handover-editor__actions {
+    flex-wrap: wrap;
+  }
+
+  .handover-editor__required-note,
+  .handover-editor__error {
+    width: 100%;
+  }
+
+  .handover-editor__actions .btn-secondary,
+  .handover-editor__actions .btn-success {
+    min-height: 44px;
+    flex: 1;
+    justify-content: center;
+  }
+}

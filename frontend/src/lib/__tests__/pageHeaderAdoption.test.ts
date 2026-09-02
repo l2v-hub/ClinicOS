@@ -10,6 +10,10 @@ const consegne = readFileSync(
   new URL('../../components/operator/ConsegnePage.tsx', import.meta.url),
   'utf8',
 );
+const consegnaCreateForm = readFileSync(
+  new URL('../../components/operator/ConsegnaCreateForm.tsx', import.meta.url),
+  'utf8',
+);
 const notes = readFileSync(
   new URL('../../components/shared/NotesPage.tsx', import.meta.url),
   'utf8',
@@ -37,7 +41,8 @@ test('handover and notes use the same canonical heading hierarchy', () => {
 test('header creation actions expose their controlled panel state', () => {
   assert.match(consegne, /aria-expanded=\{formAperto\}/);
   assert.match(consegne, /aria-controls="nuova-consegna-panel"/);
-  assert.match(consegne, /id="nuova-consegna-panel"/);
+  assert.match(consegne, /<ConsegnaCreateForm/);
+  assert.match(consegnaCreateForm, /id="nuova-consegna-panel"/);
   assert.match(notes, /aria-expanded=\{formAperto\}/);
   assert.match(notes, /aria-controls="nuova-nota-panel"/);
   assert.match(notes, /id="nuova-nota-panel"/);

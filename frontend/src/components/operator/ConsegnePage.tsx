@@ -3,7 +3,6 @@ import type {
   Consegna,
   ConsegnaSummary,
   Operatore,
-  Paziente,
   NewConsegnaInput,
   PrioritaConsegna,
   StatoConsegna,
@@ -11,10 +10,9 @@ import type {
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoEdit, IcoClock } from '../../icons';
 import { InlineEditableField } from '../shared/InlineEditableField';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
-import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
 import type { ConsegnaFeedQuery } from '../../lib/consegneFeed';
-import { localIsoDate } from '../../lib/appointmentRange';
 import { PageHeader } from '../shared/PageHeader';
+import { ConsegnaCreateForm } from './ConsegnaCreateForm';
 
 interface ConsegnePageProps {
   consegne: Consegna[];
@@ -49,6 +47,7 @@ const TIPO_OPTIONS = [
   'Rivalutazione',
   'Altro',
 ];
+
 const PRIORITA_LABEL: Record<PrioritaConsegna, string> = {
   normale: 'Normale',
   alta: 'Alta',
@@ -58,16 +57,6 @@ const STATO_LABEL: Record<StatoConsegna, string> = {
   aperta: 'Aperta',
   in_corso: 'In corso',
   completata: 'Completata',
-};
-
-const FORM_VUOTO = {
-  pazienteId: '',
-  pazienteNome: '',
-  tipo: 'Monitoraggio',
-  priorita: 'normale' as PrioritaConsegna,
-  note: '',
-  oraScadenza: '',
-  operatoreAssegnatoId: '',
 };
 
 export function ConsegnePage({
@@ -96,14 +85,6 @@ export function ConsegnePage({
   const [filtroPriorita, setFiltroPriorita] = useState<'tutte' | PrioritaConsegna>('tutte');
   const [ricerca, setRicerca] = useState('');
   const [formAperto, setFormAperto] = useState(false);
-  const [form, setForm] = useState(FORM_VUOTO);
-  const [showPazSearch, setShowPazSearch] = useState(false);
-  const [savingCreate, setSavingCreate] = useState(false);
-  const [createError, setCreateError] = useState<string | null>(null);
-  const patientSearch = usePatientDirectorySearch(form.pazienteNome, {
-    enabled: formAperto && showPazSearch,
-    limit: 6,
-  });
 
   useEffect(() => {
     const timer = window.setTimeout(
@@ -128,37 +109,6 @@ export function ConsegnePage({
 
   const filtrate = consegne;
 
-  function selectPaziente(p: Paziente) {
-    setForm((current) => ({
-      ...current,
-      pazienteId: p.id,
-      pazienteNome: `${p.lastName}, ${p.firstName}`,
-    }));
-    setShowPazSearch(false);
-  }
-
-  async function salva() {
-    if (!form.pazienteId || !form.note.trim() || savingCreate) return;
-    setSavingCreate(true);
-    setCreateError(null);
-    const ok = await onAdd({
-      pazienteId: form.pazienteId,
-      priorita: form.priorita,
-      tipo: form.tipo,
-      note: form.note,
-      scadenza: localIsoDate(),
-      oraScadenza: form.oraScadenza || undefined,
-      operatoreAssegnatoId: form.operatoreAssegnatoId || null,
-    });
-    setSavingCreate(false);
-    if (!ok) {
-      setCreateError('Creazione non riuscita. Verifica i dati e riprova.');
-      return;
-    }
-    setFormAperto(false);
-    setForm(FORM_VUOTO);
-  }
-
   const urgenti = filtrate.filter((c) => c.priorita === 'urgente' && c.stato !== 'completata');
   const altre = filtrate.filter((c) => !(c.priorita === 'urgente' && c.stato !== 'completata'));
 
@@ -178,157 +128,20 @@ export function ConsegnePage({
             className="btn-success"
             aria-expanded={formAperto}
             aria-controls="nuova-consegna-panel"
-            onClick={() => {
-              setCreateError(null);
-              setFormAperto((v) => !v);
-            }}
+            onClick={() => setFormAperto((open) => !open)}
           >
             <IcoPlus /> Nuova consegna
           </button>
         }
       />
 
-      {/* Form */}
       {formAperto && (
-        <div id="nuova-consegna-panel" className="op-form-panel">
-          <div className="op-form-panel__header">
-            <h3 className="op-form-panel__title">Nuova Consegna</h3>
-            <button className="icon-btn" onClick={() => setFormAperto(false)}>
-              <IcoX />
-            </button>
-          </div>
-          <div className="op-form-grid">
-            <div className="form-field">
-              <label className="form-label">Paziente *</label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  className="form-input"
-                  value={form.pazienteNome}
-                  onChange={(e) => {
-                    setForm((p) => ({ ...p, pazienteId: '', pazienteNome: e.target.value }));
-                    setShowPazSearch(true);
-                  }}
-                  onFocus={() => setShowPazSearch(true)}
-                  placeholder="Cerca paziente per nome o MRN…"
-                  maxLength={80}
-                />
-                {showPazSearch && patientSearch.results.length > 0 && (
-                  <div className="search-dropdown">
-                    {patientSearch.results.map((p) => (
-                      <button
-                        type="button"
-                        key={p.id}
-                        className="search-dropdown__item"
-                        onClick={() => selectPaziente(p)}
-                      >
-                        <span className="search-dropdown__name">
-                          {p.lastName}, {p.firstName}
-                        </span>
-                        <span className="search-dropdown__mrn">{p.medicalRecordNumber}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {showPazSearch && patientSearch.loading && (
-                  <p className="search-dropdown__status" role="status">
-                    Ricerca in corso…
-                  </p>
-                )}
-                {showPazSearch && patientSearch.error && (
-                  <p className="search-dropdown__status" role="alert">
-                    {patientSearch.error}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="form-field">
-              <label className="form-label">Tipo</label>
-              <select
-                className="form-select"
-                value={form.tipo}
-                onChange={(e) => setForm((p) => ({ ...p, tipo: e.target.value }))}
-              >
-                {TIPO_OPTIONS.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-field">
-              <label className="form-label">Priorità</label>
-              <select
-                className="form-select"
-                value={form.priorita}
-                onChange={(e) =>
-                  setForm((p) => ({ ...p, priorita: e.target.value as PrioritaConsegna }))
-                }
-              >
-                <option value="normale">Normale</option>
-                <option value="alta">Alta</option>
-                <option value="urgente">Urgente</option>
-              </select>
-            </div>
-            <div className="form-field">
-              <label className="form-label">Ora scadenza</label>
-              <input
-                className="form-input"
-                type="time"
-                value={form.oraScadenza}
-                onChange={(e) => setForm((p) => ({ ...p, oraScadenza: e.target.value }))}
-              />
-            </div>
-            {isAdmin && (
-              <div className="form-field">
-                <label className="form-label">Assegnata a</label>
-                <select
-                  className="form-select"
-                  value={form.operatoreAssegnatoId}
-                  onChange={(e) => setForm((p) => ({ ...p, operatoreAssegnatoId: e.target.value }))}
-                >
-                  <option value="">Non assegnata</option>
-                  {operatori
-                    .filter((o) => o.stato === 'attivo')
-                    .map((o) => (
-                      <option key={o.id} value={o.id}>
-                        {o.cognome} {o.nome}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            )}
-          </div>
-          <div className="form-field" style={{ marginTop: 8 }}>
-            <label className="form-label">Note *</label>
-            <textarea
-              className="form-input"
-              rows={3}
-              value={form.note}
-              onChange={(e) => setForm((p) => ({ ...p, note: e.target.value }))}
-              placeholder="Istruzioni per il prossimo operatore…"
-            />
-          </div>
-          <div className="op-form-panel__actions">
-            {createError && (
-              <p className="inline-edit__error" role="alert">
-                {createError}
-              </p>
-            )}
-            <button
-              className="btn-secondary"
-              onClick={() => {
-                setCreateError(null);
-                setFormAperto(false);
-              }}
-              disabled={savingCreate}
-            >
-              Annulla
-            </button>
-            <button className="btn-success" onClick={salva} disabled={savingCreate}>
-              <IcoCheck /> {savingCreate ? 'Creazione…' : 'Crea consegna'}
-            </button>
-          </div>
-        </div>
+        <ConsegnaCreateForm
+          operatori={operatori}
+          isAdmin={isAdmin}
+          onAdd={onAdd}
+          onClose={() => setFormAperto(false)}
+        />
       )}
 
       {/* Toolbar */}

@@ -3734,54 +3734,8 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   APPOINTMENT FORM — patient search + operator preview
+   APPOINTMENT FORM — operator preview
 ═══════════════════════════════════════════════════════════════════════════ */
-
-.search-dropdown {
-  position: absolute;
-  top: calc(100% + 2px);
-  left: 0;
-  right: 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
-  z-index: 200;
-  overflow: hidden;
-}
-
-.search-dropdown__item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  padding: 9px 12px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.1s;
-  border-bottom: 1px solid var(--divider);
-}
-
-.search-dropdown__item:last-child {
-  border-bottom: none;
-}
-.search-dropdown__item:hover {
-  background: var(--hover);
-}
-
-.search-dropdown__name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-}
-.search-dropdown__mrn {
-  font-size: 11.5px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-}
 
 .apt-operator-preview {
   display: flex;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import type { Nota, PrioritaNota, StatoNota, Operatore, Paziente } from '../../types';
 import type { NotesMailboxQuery } from '../../lib/notesMailbox';
-import { usePatientDirectorySearch } from '../../lib/usePatientDirectorySearch';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoMessage } from '../../icons';
 import { InlineEditableField } from './InlineEditableField';
 import { PageHeader } from './PageHeader';
+import { PatientCombobox } from './PatientCombobox';
 
 interface NotesPageProps {
   note: Nota[];
@@ -75,14 +75,9 @@ export function NotesPage({
   const [ricerca, setRicerca] = useState('');
   const [formAperto, setFormAperto] = useState(false);
   const [form, setForm] = useState(FORM_VUOTO);
-  const [pazienteSearch, setPazienteSearch] = useState('');
-  const [showPazSearch, setShowPazSearch] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Paziente | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const patientSearch = usePatientDirectorySearch(pazienteSearch, {
-    enabled: formAperto && showPazSearch,
-    limit: 6,
-  });
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -102,17 +97,18 @@ export function NotesPage({
       })),
   ];
 
-  function selectPaziente(patient: Paziente) {
-    const name = `${patient.lastName}, ${patient.firstName}`;
-    setForm((current) => ({ ...current, pazienteId: patient.id, pazienteNome: name }));
-    setPazienteSearch(name);
-    setShowPazSearch(false);
+  function selectPaziente(patient: Paziente | null) {
+    setSelectedPatient(patient);
+    setForm((current) => ({
+      ...current,
+      pazienteId: patient?.id ?? '',
+      pazienteNome: patient ? `${patient.lastName}, ${patient.firstName}` : '',
+    }));
   }
 
   function resetForm() {
     setForm(FORM_VUOTO);
-    setPazienteSearch('');
-    setShowPazSearch(false);
+    setSelectedPatient(null);
     setSaveError(null);
   }
 
@@ -232,51 +228,13 @@ export function NotesPage({
                 <option value="urgente">Urgente</option>
               </select>
             </div>
-            <div className="form-field">
-              <label className="form-label">Paziente (opzionale)</label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  className="form-input"
-                  value={pazienteSearch}
-                  onChange={(event) => {
-                    setPazienteSearch(event.target.value);
-                    setShowPazSearch(true);
-                    setForm((current) => ({ ...current, pazienteId: '', pazienteNome: '' }));
-                  }}
-                  onFocus={() => setShowPazSearch(true)}
-                  placeholder="Cerca per nome o MRN…"
-                  maxLength={80}
-                  disabled={saving}
-                />
-                {showPazSearch && patientSearch.results.length > 0 && (
-                  <div className="search-dropdown">
-                    {patientSearch.results.map((patient) => (
-                      <button
-                        key={patient.id}
-                        type="button"
-                        className="search-dropdown__item"
-                        onClick={() => selectPaziente(patient)}
-                      >
-                        <span className="search-dropdown__name">
-                          {patient.lastName}, {patient.firstName}
-                        </span>
-                        <span className="search-dropdown__mrn">{patient.medicalRecordNumber}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {showPazSearch && patientSearch.loading && (
-                  <p className="search-dropdown__status" role="status">
-                    Ricerca in corso…
-                  </p>
-                )}
-                {showPazSearch && patientSearch.error && (
-                  <p className="search-dropdown__status" role="alert">
-                    {patientSearch.error}
-                  </p>
-                )}
-              </div>
-            </div>
+            <PatientCombobox
+              inputId="note-patient"
+              label="Paziente (opzionale)"
+              selected={selectedPatient}
+              onChange={selectPaziente}
+              disabled={saving}
+            />
           </div>
           <div className="form-field" style={{ marginTop: 8 }}>
             <label className="form-label">Messaggio *</label>
