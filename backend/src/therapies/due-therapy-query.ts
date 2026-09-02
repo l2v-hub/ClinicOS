@@ -73,6 +73,9 @@ export async function findTherapiesDue(
         p."lastName",
         band.fascia,
         COALESCE(schedule.time, band."defaultTime") AS "scheduledTime",
+        schedule."quantityNumerator",
+        schedule."quantityDenominator",
+        schedule."administrationUnit",
         COALESCE(room.numero, cartella.data->>'cameraNumero', 'Non assegnato') AS room,
         COALESCE(room."bedLabel", cartella.data->>'lettoNumero', 'Non assegnato') AS bed
       FROM "PatientTherapy" pt
