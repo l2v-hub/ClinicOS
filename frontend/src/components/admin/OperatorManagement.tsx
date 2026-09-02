@@ -4,6 +4,8 @@ import { OPERATOR_COLOR_PALETTE } from '../../types';
 import { IcoPlus, IcoEdit, IcoCheck, IcoX, IcoSearch, IcoChevronRight } from '../../icons';
 import { ClinicalTable } from '../operator/cartella/ClinicalTable';
 import type { ColumnDef } from '../operator/cartella/ClinicalTable';
+import { OperatorFormPanel } from './OperatorFormPanel';
+import { EMPTY_OPERATOR_FORM } from './operatorFormModel';
 import type {
   OperatorDirectoryStatus,
   OperatorDirectorySummary,
@@ -20,19 +22,6 @@ interface OperatorManagementProps {
   onUpdate: (id: string, updates: Partial<Operatore>) => void;
   onToggleStato: (id: string) => void;
 }
-
-const FORM_VUOTO = {
-  nome: '',
-  cognome: '',
-  ruolo: 'medico' as RuoloOperatore,
-  email: '',
-  telefono: '',
-  reparto: '',
-  stato: 'attivo' as StatoOperatore,
-  qualifica: '',
-  colore: OPERATOR_COLOR_PALETTE[0],
-  note: '',
-};
 
 function operatoriColumns(
   ruoloLabel: Record<RuoloOperatore, string>,
@@ -150,7 +139,7 @@ export function OperatorManagement({
   const [filtroStato, setFiltroStato] = useState<'tutti' | StatoOperatore>('tutti');
   const [formAperto, setFormAperto] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState(FORM_VUOTO);
+  const [form, setForm] = useState(EMPTY_OPERATOR_FORM);
   const searchMounted = useRef(false);
 
   useEffect(() => {
@@ -176,8 +165,8 @@ export function OperatorManagement({
     // Pick next unused color
     const usedColors = operatori.map((o) => o.colore);
     const nextColor =
-      OPERATOR_COLOR_PALETTE.find((c) => !usedColors.includes(c)) ?? OPERATOR_COLOR_PALETTE[0];
-    setForm({ ...FORM_VUOTO, colore: nextColor });
+      OPERATOR_COLOR_PALETTE.find((c) => !usedColors.includes(c)) ?? EMPTY_OPERATOR_FORM.colore;
+    setForm({ ...EMPTY_OPERATOR_FORM, colore: nextColor });
     setFormAperto(true);
   }
 
@@ -208,13 +197,13 @@ export function OperatorManagement({
     }
     setFormAperto(false);
     setEditId(null);
-    setForm(FORM_VUOTO);
+    setForm(EMPTY_OPERATOR_FORM);
   }
 
   function annulla() {
     setFormAperto(false);
     setEditId(null);
-    setForm(FORM_VUOTO);
+    setForm(EMPTY_OPERATOR_FORM);
   }
 
   const ruoloLabel: Record<RuoloOperatore, string> = {
@@ -233,148 +222,25 @@ export function OperatorManagement({
             {summary?.total ?? operatori.length} totali
           </p>
         </div>
-        <button className="btn-success" onClick={apriNuovo}>
+        <button
+          className="btn-success"
+          onClick={apriNuovo}
+          aria-expanded={formAperto}
+          aria-controls="operator-form-panel"
+        >
           <IcoPlus /> Nuovo Operatore
         </button>
       </div>
 
       {/* Form */}
       {formAperto && (
-        <div className="op-form-panel">
-          <div className="op-form-panel__header">
-            <h3 className="op-form-panel__title">
-              {editId ? 'Modifica Operatore' : 'Nuovo Operatore'}
-            </h3>
-            <button className="icon-btn" onClick={annulla}>
-              <IcoX />
-            </button>
-          </div>
-          <div className="op-form-grid">
-            <div className="form-field">
-              <label className="form-label">Nome *</label>
-              <input
-                className="form-input"
-                value={form.nome}
-                onChange={(e) => setForm((p) => ({ ...p, nome: e.target.value }))}
-                placeholder="Nome"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Cognome *</label>
-              <input
-                className="form-input"
-                value={form.cognome}
-                onChange={(e) => setForm((p) => ({ ...p, cognome: e.target.value }))}
-                placeholder="Cognome"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Ruolo</label>
-              <select
-                className="form-select"
-                value={form.ruolo}
-                onChange={(e) =>
-                  setForm((p) => ({ ...p, ruolo: e.target.value as RuoloOperatore }))
-                }
-              >
-                <option value="medico">Medico</option>
-                <option value="infermiere">Infermiere</option>
-                <option value="coordinatore">Coordinatore</option>
-              </select>
-            </div>
-            <div className="form-field">
-              <label className="form-label">Qualifica</label>
-              <input
-                className="form-input"
-                value={form.qualifica}
-                onChange={(e) => setForm((p) => ({ ...p, qualifica: e.target.value }))}
-                placeholder="Es. OSS, Fisioterapista, Specialista…"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Reparto</label>
-              <input
-                className="form-input"
-                value={form.reparto}
-                onChange={(e) => setForm((p) => ({ ...p, reparto: e.target.value }))}
-                placeholder="Reparto"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Email *</label>
-              <input
-                className="form-input"
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-                placeholder="email@clinicos.it"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Telefono</label>
-              <input
-                className="form-input"
-                value={form.telefono}
-                onChange={(e) => setForm((p) => ({ ...p, telefono: e.target.value }))}
-                placeholder="+39 02 …"
-              />
-            </div>
-            <div className="form-field">
-              <label className="form-label">Stato</label>
-              <select
-                className="form-select"
-                value={form.stato}
-                onChange={(e) =>
-                  setForm((p) => ({ ...p, stato: e.target.value as StatoOperatore }))
-                }
-              >
-                <option value="attivo">Attivo</option>
-                <option value="inattivo">Inattivo</option>
-              </select>
-            </div>
-
-            {/* Color picker */}
-            <div className="form-field">
-              <label className="form-label">Colore operatore</label>
-              <div className="color-picker">
-                {OPERATOR_COLOR_PALETTE.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    className={`color-swatch${form.colore === c ? ' selected' : ''}`}
-                    style={{ background: c }}
-                    onClick={() => setForm((p) => ({ ...p, colore: c }))}
-                    title={c}
-                  />
-                ))}
-                <input
-                  type="color"
-                  className="color-custom-input"
-                  value={form.colore}
-                  onChange={(e) => setForm((p) => ({ ...p, colore: e.target.value }))}
-                  title="Colore personalizzato"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="form-field" style={{ marginTop: 8 }}>
-            <label className="form-label">Note</label>
-            <input
-              className="form-input"
-              value={form.note}
-              onChange={(e) => setForm((p) => ({ ...p, note: e.target.value }))}
-              placeholder="Note sull'operatore…"
-            />
-          </div>
-          <div className="op-form-panel__actions">
-            <button className="btn-secondary" onClick={annulla}>
-              Annulla
-            </button>
-            <button className="btn-success" onClick={salva}>
-              <IcoCheck /> {editId ? 'Salva modifiche' : 'Crea operatore'}
-            </button>
-          </div>
-        </div>
+        <OperatorFormPanel
+          value={form}
+          editMode={Boolean(editId)}
+          onChange={setForm}
+          onCancel={annulla}
+          onSubmit={salva}
+        />
       )}
 
       {/* Toolbar */}
