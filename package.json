@@ -68,7 +68,8 @@
   "author": "ClinicOS Team",
   "license": "MIT",
   "overrides": {
-    "deepmerge-ts": "8.0.2"
+    "deepmerge-ts": "8.0.2",
+    "mysql2": "3.24.3"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",

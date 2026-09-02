@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CartellaPaziente, ParametriMensili, ParametroGiorno } from '../../types';
 import { IcoSearch, IcoX, IcoMessage } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
@@ -147,6 +147,8 @@ function RigaPaziente({
   const [riga, setRiga] = useState<RigaEditabile>(initialRiga);
   const [saving, setSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const noteButtonRef = useRef<HTMLButtonElement>(null);
+  const patientName = `${paziente.firstName} ${paziente.lastName}`;
 
   const hasSavedNote = Boolean(
     (existing?.note && existing.note.trim().length > 0) ||
@@ -227,6 +229,7 @@ function RigaPaziente({
       <input
         className="qe-row__input qe-row__input--wide"
         placeholder="PA"
+        aria-label={`PA per ${patientName}`}
         inputMode="text"
         value={riga.pa}
         onChange={(e) => update('pa', e.target.value)}
@@ -235,6 +238,7 @@ function RigaPaziente({
       <input
         className={'qe-row__input' + (spo2Critico(riga.spo2) ? ' qe-row__input--critico' : '')}
         placeholder="SpO2 %"
+        aria-label={`SpO2 per ${patientName}`}
         inputMode="decimal"
         value={riga.spo2}
         onChange={(e) => update('spo2', e.target.value)}
@@ -244,6 +248,7 @@ function RigaPaziente({
       <input
         className="qe-row__input"
         placeholder="FC bpm"
+        aria-label={`Frequenza cardiaca per ${patientName}`}
         inputMode="decimal"
         value={riga.fc}
         onChange={(e) => update('fc', e.target.value)}
@@ -254,6 +259,7 @@ function RigaPaziente({
           'qe-row__input' + (tempAttenzione(riga.temperatura) ? ' qe-row__input--attenzione' : '')
         }
         placeholder="TC °C"
+        aria-label={`Temperatura corporea per ${patientName}`}
         inputMode="decimal"
         value={riga.temperatura}
         onChange={(e) => update('temperatura', e.target.value)}
@@ -263,6 +269,7 @@ function RigaPaziente({
       <input
         className="qe-row__input"
         placeholder="DTX"
+        aria-label={`Glicemia DTX per ${patientName}`}
         inputMode="decimal"
         value={riga.dtx}
         onChange={(e) => update('dtx', e.target.value)}
@@ -271,6 +278,7 @@ function RigaPaziente({
       <input
         className="qe-row__input qe-row__input--wide"
         placeholder="Evac."
+        aria-label={`Evacuazione per ${patientName}`}
         inputMode="text"
         value={riga.evacuazione}
         onChange={(e) => update('evacuazione', e.target.value)}
@@ -278,11 +286,11 @@ function RigaPaziente({
       />
 
       <button
+        ref={noteButtonRef}
         type="button"
         className={'qe-row__note-btn' + (hasSavedNote ? ' qe-row__note-btn--has-note' : '')}
-        aria-label={isNoteOpen ? 'Chiudi note' : 'Apri note'}
+        aria-label={`${isNoteOpen ? 'Chiudi' : 'Apri'} note per ${patientName}`}
         aria-expanded={isNoteOpen}
-        tabIndex={isNoteOpen ? 0 : -1}
         onClick={() => onToggleNote(!isNoteOpen)}
         title="Note"
       >
@@ -297,6 +305,7 @@ function RigaPaziente({
         className="qe-row__save"
         disabled={saving}
         aria-busy={saving}
+        aria-label={`Salva parametri per ${patientName}`}
         onClick={handleSave}
       >
         {saving ? '...' : 'Salva'}
@@ -308,9 +317,14 @@ function RigaPaziente({
             value={riga.note}
             rows={2}
             placeholder="Note rapide"
+            aria-label={`Note rapide per ${patientName}`}
             onChange={(e) => update('note', e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Escape') onToggleNote(false);
+              if (e.key === 'Escape') {
+                e.preventDefault();
+                onToggleNote(false);
+                window.requestAnimationFrame(() => noteButtonRef.current?.focus());
+              }
             }}
           />
         </div>
@@ -337,8 +351,12 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const pageRequestGuard = useRef(createLatestRequestGuard());
-  const pazienti = items.map((item) => item.patient);
-  const cartelle = items.map((item) => item.cartella as CartellaPaziente);
+  const pazienti = useMemo(() => items.map((item) => item.patient), [items]);
+  const cartellePerPaziente = useMemo(
+    () =>
+      new Map(items.map((item) => [item.patient.id, item.cartella as CartellaPaziente] as const)),
+    [items],
+  );
 
   useEffect(() => {
     const guard = pageRequestGuard.current;
@@ -415,7 +433,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   }
 
   function getCartella(pazienteId: string): CartellaPaziente {
-    return cartelle.find((c) => c.pazienteId === pazienteId) ?? createEmptyCartella(pazienteId);
+    return cartellePerPaziente.get(pazienteId) ?? createEmptyCartella(pazienteId);
   }
 
   async function salvaRiga(pazienteId: string, riga: RigaEditabile) {
@@ -494,6 +512,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
             className="search-input"
             type="search"
             placeholder="Cerca per nome, MRN, camera…"
+            aria-label="Cerca paziente per nome, MRN o camera"
             value={ricerca}
             onChange={(e) => setRicerca(e.target.value)}
           />

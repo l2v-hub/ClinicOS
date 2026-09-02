@@ -25,6 +25,29 @@ test('multi-patient parameters uses one bounded page instead of cartella fan-out
   assert.doesNotMatch(parametersSource, /Promise\.all/);
   assert.match(parametersSource, /pageRequestGuard/);
   assert.match(parametersSource, /guard\.isCurrent\(request\)/);
+  assert.match(parametersSource, /cartellePerPaziente = useMemo/);
+  assert.match(parametersSource, /cartellePerPaziente\.get\(pazienteId\)/);
+  assert.doesNotMatch(parametersSource, /cartelle\.find/);
+});
+
+test('multi-patient quick entry exposes every action and field to assistive technology', () => {
+  for (const accessibleName of [
+    /aria-label={`PA per \$\{patientName\}`}/,
+    /aria-label={`SpO2 per \$\{patientName\}`}/,
+    /aria-label={`Frequenza cardiaca per \$\{patientName\}`}/,
+    /aria-label={`Temperatura corporea per \$\{patientName\}`}/,
+    /aria-label={`Glicemia DTX per \$\{patientName\}`}/,
+    /aria-label={`Evacuazione per \$\{patientName\}`}/,
+    /aria-label={`Salva parametri per \$\{patientName\}`}/,
+    /aria-label="Cerca paziente per nome, MRN o camera"/,
+  ]) {
+    assert.match(parametersSource, accessibleName);
+  }
+  assert.doesNotMatch(parametersSource, /tabIndex=\{isNoteOpen \? 0 : -1\}/);
+  assert.match(
+    parametersSource,
+    /requestAnimationFrame\(\(\) => noteButtonRef\.current\?\.focus\(\)\)/,
+  );
 });
 
 test('directory search rejects a stale response even when fetch ignores abort', () => {
