@@ -95,17 +95,10 @@ const DOLORE_OPTS: InlineOption[] = [
   { value: 'assente', label: 'Assente' },
   { value: 'presente', label: 'Presente' },
 ];
-
-function Row({ label, value }: { label: string; value: string | boolean | number | undefined }) {
-  if (!value && value !== 0 && value !== false) return null;
-  const display = value === true ? 'Sì' : value === false ? 'No' : (value ?? '—');
-  return (
-    <div className="pic-row">
-      <span className="pic-row__lbl">{label}</span>
-      <span className="pic-row__val">{String(display)}</span>
-    </div>
-  );
-}
+const BOOLEAN_OPTS: InlineOption[] = [
+  { value: 'true', label: 'Sì' },
+  { value: 'false', label: 'No' },
+];
 
 function RowAlways({
   label,
@@ -290,9 +283,18 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
 
   const datiView = (
     <div className="cr-form-section">
-      <RowAlways
-        label="Data / Ora"
-        value={`${safePic.dataIngresso.split('-').reverse().join('/')} ${safePic.oraIngresso}`}
+      <InlineEditableField
+        label="Data presa in carico"
+        type="date"
+        value={safePic.dataIngresso}
+        display={safePic.dataIngresso.split('-').reverse().join('/')}
+        onSave={(v) => saveField({ dataIngresso: v })}
+      />
+      <InlineEditableField
+        label="Ora presa in carico"
+        type="time"
+        value={safePic.oraIngresso}
+        onSave={(v) => saveField({ oraIngresso: v })}
       />
       <InlineEditableField
         label="Provenienza"
@@ -327,11 +329,17 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         placeholder="Nome operatore…"
         onSave={(v) => saveField({ operatoreResponsabile: v })}
       />
-      <RowAlways
-        label="Camera / Letto"
-        value={
-          safePic.camera ? `${safePic.camera}${safePic.letto ? ' — ' + safePic.letto : ''}` : '—'
-        }
+      <InlineEditableField
+        label="Camera"
+        value={safePic.camera ?? ''}
+        placeholder="es. 12"
+        onSave={(v) => saveField({ camera: v })}
+      />
+      <InlineEditableField
+        label="Letto / posto"
+        value={safePic.letto ?? ''}
+        placeholder="es. A"
+        onSave={(v) => saveField({ letto: v })}
       />
       <InlineEditableField
         label="Motivo ingresso"
@@ -782,30 +790,54 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
 
   const docsView = (
     <div className="cr-form-section">
-      <Row label="Documenti ricevuti" value={safePic.documentiRicevuti} />
-      {safePic.documentiMancanti && (
-        <div
-          className="pic-row"
-          style={{ background: '#FEF2F2', borderRadius: 4, padding: '4px 8px' }}
-        >
-          <span className="pic-row__lbl" style={{ color: '#B91C1C' }}>
-            Documenti mancanti
-          </span>
-          <span className="pic-row__val" style={{ color: '#B91C1C' }}>
-            {safePic.documentiMancanti}
-          </span>
-        </div>
-      )}
-      <RowAlways label="Materiale consegnato" value={safePic.materialeConsegnato} />
-      <RowAlways label="Operatore" value={safePic.operatore} />
-      <Row label="Sigla" value={safePic.sigla} />
+      <InlineEditableField
+        label="Documenti ricevuti"
+        type="textarea"
+        value={safePic.documentiRicevuti ?? ''}
+        placeholder="Elenco documenti ricevuti all'ingresso…"
+        onSave={(v) => saveField({ documentiRicevuti: v })}
+      />
+      <InlineEditableField
+        label="Documenti mancanti"
+        type="textarea"
+        value={safePic.documentiMancanti ?? ''}
+        placeholder="Documenti ancora da richiedere…"
+        tone={safePic.documentiMancanti ? 'danger' : 'default'}
+        onSave={(v) => saveField({ documentiMancanti: v })}
+      />
+      <InlineEditableField
+        label="Materiale consegnato"
+        type="select"
+        options={BOOLEAN_OPTS}
+        value={String(safePic.materialeConsegnato)}
+        display={safePic.materialeConsegnato ? 'Sì' : 'No'}
+        onSave={(v) => saveField({ materialeConsegnato: v === 'true' })}
+      />
+      <InlineEditableField
+        label="Operatore"
+        value={safePic.operatore ?? ''}
+        placeholder="Nome operatore…"
+        onSave={(v) => saveField({ operatore: v })}
+      />
+      <InlineEditableField
+        label="Sigla"
+        value={safePic.sigla ?? ''}
+        placeholder="es. M.F."
+        onSave={(v) => saveField({ sigla: v })}
+      />
       <RowAlways
         label="Compilato il"
         value={
           safePic.compilatoAt ? new Date(safePic.compilatoAt).toLocaleDateString('it-IT') : '—'
         }
       />
-      {safePic.note && <RowAlways label="Note" value={safePic.note} />}
+      <InlineEditableField
+        label="Note"
+        type="textarea"
+        value={safePic.note ?? ''}
+        placeholder="Note libere…"
+        onSave={(v) => saveField({ note: v })}
+      />
     </div>
   );
 

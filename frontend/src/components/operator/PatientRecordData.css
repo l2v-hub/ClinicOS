@@ -142,6 +142,23 @@
     overflow-wrap: anywhere;
   }
 
+  .patient-record-view
+    .inline-edit-row:is(:hover, :focus-visible)
+    > :is(.pic-row__lbl, .pic-row__val) {
+    background: var(--indigo-bg, #eef3fe);
+  }
+
+  .patient-record-view .pic-row--danger > :is(.pic-row__lbl, .pic-row__val) {
+    background: #fef2f2;
+    color: #b42318;
+  }
+
+  .patient-record-view
+    .pic-row--danger:is(:hover, :focus-visible)
+    > :is(.pic-row__lbl, .pic-row__val) {
+    background: #fee4e2;
+  }
+
   .patient-record-view .pic-row .inline-edit__value {
     align-self: center;
     justify-self: end;
@@ -379,6 +396,7 @@
       .cts__header,
       .clinical-card__edit,
       .clinical-card__toggle,
+      .inline-edit-row,
       .cdt__sort-btn
     ):focus-visible {
     outline: 3px solid color-mix(in srgb, var(--blue, #2f6bed) 30%, transparent);

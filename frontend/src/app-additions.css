@@ -512,6 +512,47 @@
   border-bottom: 1px solid var(--divider);
   font-size: 14px;
 }
+.inline-edit-row {
+  width: 100%;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.inline-edit-row:hover,
+.inline-edit-row:focus-visible {
+  background: var(--c-primary-soft, #eef4ff);
+  outline: none;
+}
+.inline-edit-row:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--c-primary, #2f6bed);
+}
+.inline-edit-row:disabled {
+  cursor: default;
+}
+.inline-edit-row:disabled:hover {
+  background: transparent;
+}
+.inline-edit-row:hover .inline-edit__pencil,
+.inline-edit-row:focus-visible .inline-edit__pencil {
+  opacity: 0.85;
+}
+.pic-row--danger {
+  background: #fef2f2;
+}
+.pic-row--danger .pic-row__lbl,
+.pic-row--danger .pic-row__val {
+  color: #b42318;
+}
+.pic-row--danger:hover,
+.pic-row--danger:focus-visible {
+  background: #fee4e2;
+}
 .pic-row:last-child {
   border-bottom: none;
 }

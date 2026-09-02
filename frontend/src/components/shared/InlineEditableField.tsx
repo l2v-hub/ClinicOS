@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { IcoSave, IcoX, IcoEdit } from '../../icons';
 
-export type InlineFieldType = 'text' | 'textarea' | 'select' | 'number';
+export type InlineFieldType = 'text' | 'textarea' | 'select' | 'number' | 'date' | 'time';
 
 export interface InlineOption {
   value: string;
@@ -9,7 +9,7 @@ export interface InlineOption {
 }
 
 interface Props {
-  /** Field label (left column). Static, never editable. */
+  /** Field label shown in the left column. The whole row opens the editor. */
   label: string;
   /** Raw editable value. */
   value: string;
@@ -26,6 +26,8 @@ interface Props {
    * (no label column), for long free-text cards like Anamnesi.
    */
   variant?: 'row' | 'block';
+  /** Optional semantic emphasis for important rows. */
+  tone?: 'default' | 'danger';
   /**
    * Persist the new value. Return false (or throw) to signal failure:
    * the field stays in edit mode and shows an error.
@@ -36,7 +38,7 @@ interface Props {
 
 /**
  * Uniform inline-editable label→value row.
- * Click the value to edit; a floppy/Salva icon persists via onSave.
+ * Click anywhere on the row to edit; a floppy/Salva icon persists via onSave.
  * On failure the field stays editable and shows an error (value is never lost).
  */
 export function InlineEditableField({
@@ -48,6 +50,7 @@ export function InlineEditableField({
   placeholder,
   emptyText = '—',
   variant = 'row',
+  tone = 'default',
   onSave,
   disabled = false,
 }: Props) {
@@ -55,12 +58,11 @@ export function InlineEditableField({
   const [draft, setDraft] = useState(value);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const errorId = useId();
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null>(null);
-
-  // Keep draft in sync when the underlying value changes while not editing.
-  useEffect(() => {
-    if (!editing) setDraft(value);
-  }, [value, editing]);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const restoreFocusRef = useRef(false);
 
   useEffect(() => {
     if (editing && inputRef.current) {
@@ -75,16 +77,26 @@ export function InlineEditableField({
     }
   }, [editing]);
 
+  useEffect(() => {
+    if (!editing && restoreFocusRef.current) {
+      restoreFocusRef.current = false;
+      triggerRef.current?.focus();
+    }
+  }, [editing]);
+
   function startEdit() {
     if (disabled) return;
     setDraft(value);
     setError(null);
+    setStatus(null);
+    restoreFocusRef.current = true;
     setEditing(true);
   }
 
   function cancel() {
     setDraft(value);
     setError(null);
+    setStatus(null);
     setEditing(false);
   }
 
@@ -97,6 +109,7 @@ export function InlineEditableField({
       if (ok === false) {
         setError('Salvataggio non riuscito. Riprova.');
       } else {
+        setStatus(`${label} salvato`);
         setEditing(false);
       }
     } catch {
@@ -107,7 +120,8 @@ export function InlineEditableField({
   }
 
   function onKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Enter' && type !== 'textarea') {
+    const saveTextarea = type === 'textarea' && e.key === 'Enter' && (e.ctrlKey || e.metaKey);
+    if ((e.key === 'Enter' && type !== 'textarea') || saveTextarea) {
       e.preventDefault();
       void save();
     } else if (e.key === 'Escape') {
@@ -117,12 +131,15 @@ export function InlineEditableField({
   }
 
   const isBlock = variant === 'block';
+  const toneClass = tone === 'danger' ? ' pic-row--danger' : '';
 
   if (editing) {
     return (
       <div
         className={
-          isBlock ? 'inline-edit-block inline-edit-block--editing' : 'pic-row pic-row--editing'
+          isBlock
+            ? 'inline-edit-block inline-edit-block--editing'
+            : `pic-row pic-row--editing${toneClass}`
         }
       >
         {!isBlock && <span className="pic-row__lbl">{label}</span>}
@@ -137,6 +154,8 @@ export function InlineEditableField({
               value={draft}
               placeholder={placeholder}
               disabled={saving}
+              aria-invalid={!!error}
+              aria-describedby={error ? errorId : undefined}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
             />
@@ -148,6 +167,8 @@ export function InlineEditableField({
               className="form-input inline-edit__input"
               value={draft}
               disabled={saving}
+              aria-invalid={!!error}
+              aria-describedby={error ? errorId : undefined}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
             >
@@ -162,11 +183,13 @@ export function InlineEditableField({
               ref={(el) => {
                 inputRef.current = el;
               }}
-              type={type === 'number' ? 'number' : 'text'}
+              type={type === 'number' || type === 'date' || type === 'time' ? type : 'text'}
               className="form-input inline-edit__input"
               value={draft}
               placeholder={placeholder}
               disabled={saving}
+              aria-invalid={!!error}
+              aria-describedby={error ? errorId : undefined}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
             />
@@ -194,7 +217,11 @@ export function InlineEditableField({
             </button>
           </div>
         </div>
-        {error && <span className="inline-edit__error">{error}</span>}
+        {error && (
+          <span id={errorId} className="inline-edit__error" role="alert">
+            {error}
+          </span>
+        )}
       </div>
     );
   }
@@ -206,6 +233,7 @@ export function InlineEditableField({
     return (
       <div className="inline-edit-block">
         <button
+          ref={triggerRef}
           type="button"
           className={`inline-edit-block__value inline-edit__value${isEmpty ? ' inline-edit__value--empty' : ''}`}
           onClick={startEdit}
@@ -220,27 +248,35 @@ export function InlineEditableField({
             </span>
           )}
         </button>
+        <span className="sr-only" role="status" aria-live="polite">
+          {status}
+        </span>
       </div>
     );
   }
 
   return (
-    <div className="pic-row">
+    <button
+      ref={triggerRef}
+      type="button"
+      className={`pic-row inline-edit-row${isEmpty ? ' inline-edit-row--empty' : ''}${toneClass}`}
+      onClick={startEdit}
+      disabled={disabled}
+      title={disabled ? undefined : `Modifica ${label}`}
+      aria-label={`Modifica ${label}`}
+    >
       <span className="pic-row__lbl">{label}</span>
-      <button
-        type="button"
-        className={`pic-row__val inline-edit__value${isEmpty ? ' inline-edit__value--empty' : ''}`}
-        onClick={startEdit}
-        disabled={disabled}
-        title={disabled ? undefined : 'Clicca per modificare'}
-      >
+      <span className={`pic-row__val${isEmpty ? ' inline-edit__value--empty' : ''}`}>
         <span>{isEmpty ? emptyText : text}</span>
         {!disabled && (
           <span className="inline-edit__pencil" aria-hidden="true">
             <IcoEdit />
           </span>
         )}
-      </button>
-    </div>
+      </span>
+      <span className="sr-only" role="status" aria-live="polite">
+        {status}
+      </span>
+    </button>
   );
 }
