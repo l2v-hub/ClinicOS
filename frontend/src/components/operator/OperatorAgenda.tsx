@@ -57,7 +57,6 @@ const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {
   return `${String(h).padStart(2, '0')}:${m}`;
 });
 const HOUR_SLOTS = TIME_SLOTS.filter((_, i) => i % 2 === 0);
-const TOTAL_AVAIL_MIN = 11 * 60;
 
 function addDays(d: Date, n: number): Date {
   const r = new Date(d);
@@ -259,20 +258,6 @@ export function OperatorAgenda({
     for (const a of todayApts) map.set(a.ora, a);
     return map;
   }, [todayApts]);
-  const completati = todayApts.filter((a) => a.stato === 'completato').length;
-  const usedMin = todayApts.reduce((s, a) => s + (a.durata ?? 30), 0);
-  const pct = Math.min(100, Math.round((usedMin / TOTAL_AVAIL_MIN) * 100));
-  const occLabel =
-    pct < 30 ? 'Basso' : pct < 60 ? 'Bilanciato' : pct < 85 ? 'Alto' : 'Sovraccarico';
-  const occClass =
-    pct < 30
-      ? 'agt-occ--low'
-      : pct < 60
-        ? 'agt-occ--balanced'
-        : pct < 85
-          ? 'agt-occ--high'
-          : 'agt-occ--overloaded';
-
   // Extract activeSlot OUTSIDE JSX — avoids React Compiler IIFE caching bug
   const activeSlot = selectedTherapySlotId
     ? ((therapySlots ?? []).find((s) => s.id === selectedTherapySlotId) ?? null)
@@ -347,7 +332,9 @@ export function OperatorAgenda({
         appuntamenti={rangeApts}
       />
 
-      <AgendaLegend />
+      {/* Nella vista giornaliera ogni evento espone già lo stato: la legenda duplicava i badge.
+          Resta utile nelle viste aggregate, dove gli stati sono rappresentati da indicatori compatti. */}
+      {view !== 'giornaliero' && <AgendaLegend />}
 
       {loadingAppuntamenti && <div className="empty-state-card">Caricamento agenda…</div>}
       {!loadingAppuntamenti && appointmentLoadError && (
@@ -385,23 +372,6 @@ export function OperatorAgenda({
         </div>
       )}
 
-      {/* ── Occupancy strip (daily) ── */}
-      {!loadingAppuntamenti && !appointmentLoadError && view === 'giornaliero' && (
-        <div className="agt-occ-strip">
-          <div className="agt-occ-row">
-            <span className="agt-occ-stats">
-              {completati}/{todayApts.length} completati · {usedMin} min su {TOTAL_AVAIL_MIN} min
-              disponibili
-            </span>
-            <span className={`agt-occ-label ${occClass}`}>{occLabel}</span>
-            <span className="agt-occ-pct">{pct}%</span>
-          </div>
-          <div className="agt-occ-track">
-            <div className="agt-occ-fill" style={{ width: `${pct}%`, background: opColor }} />
-          </div>
-        </div>
-      )}
-
       {/* ── DAILY VIEW ── */}
       {!loadingAppuntamenti && !appointmentLoadError && view === 'giornaliero' && (
         <div className="agt-day-wrap">
@@ -427,9 +397,18 @@ export function OperatorAgenda({
                 {/* Regular time slot */}
                 <div
                   className={`agt-slot${isHour ? ' agt-slot--hour' : ' agt-slot--half'}${slotApt ? ' agt-slot--occ' : ' agt-slot--free'}`}
+                  role={!slotApt ? 'button' : undefined}
+                  tabIndex={!slotApt ? 0 : undefined}
+                  aria-label={!slotApt ? `Crea appuntamento alle ${ora}` : undefined}
                   onClick={() => {
                     if (apt) setSelectedAptId(isSelected ? null : apt.id);
                     else if (!slotApt) setAptForm({ data: todayStr, ora });
+                  }}
+                  onKeyDown={(event) => {
+                    if (!slotApt && (event.key === 'Enter' || event.key === ' ')) {
+                      event.preventDefault();
+                      setAptForm({ data: todayStr, ora });
+                    }
                   }}
                 >
                   <span className="agt-slot__time">{isHour ? ora : ''}</span>

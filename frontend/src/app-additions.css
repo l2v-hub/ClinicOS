@@ -999,40 +999,13 @@
   flex-shrink: 0;
 }
 
-/* ── Occupancy strip ── */
-.agt-occ-strip {
-  padding: 6px 20px 6px;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-
-.agt-occ-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.agt-occ-stats {
-  font-size: 12px;
-  color: var(--text-muted);
-  flex: 1;
-}
-
-.agt-occ-pct {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text);
-}
-
+/* Gli indicatori di carico restano disponibili nell'agenda amministratore. */
 .agt-occ-label {
   font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 10px;
 }
-
 .agt-occ--low {
   background: #e7f7f0;
   color: #0e8a63;
@@ -1049,14 +1022,12 @@
   background: var(--red-bg);
   color: var(--red);
 }
-
 .agt-occ-track {
   height: 5px;
   background: var(--divider);
   border-radius: 3px;
   overflow: hidden;
 }
-
 .agt-occ-fill {
   height: 100%;
   border-radius: 3px;
@@ -1123,42 +1094,48 @@
 
 /* ── Appointment card — status-aware backgrounds ── */
 .agt-apt-card {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-left: 4px solid transparent;
-  border-radius: 7px;
-  padding: 5px 9px;
+  border: 1px solid var(--border);
+  border-left: 5px solid transparent;
+  border-radius: 9px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   gap: 3px;
-  min-height: 56px;
+  min-height: 62px;
   cursor: pointer;
   transition:
     box-shadow 0.12s,
     filter 0.12s;
   width: 100%;
-  background: #eef3fe; /* default: scheduled */
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(16, 32, 54, 0.08);
 }
 
 /* Status-specific backgrounds (applied via data-stato or class on ancestor) */
 .agt-apt-card--programmato {
-  background: #eef3fe;
+  background: #e7efff;
+  border-color: #b9ccf5;
   border-left-color: #2f6bed;
 }
 .agt-apt-card--in_corso {
-  background: #fdf3e2;
+  background: #fff0cf;
+  border-color: #e8c078;
   border-left-color: #c77700;
 }
 .agt-apt-card--completato {
-  background: #eaf8f1;
+  background: #e3f5eb;
+  border-color: #addbc4;
   border-left-color: #2ead6b;
 }
 .agt-apt-card--annullato {
-  background: #f4f5f7;
+  background: #eceff3;
+  border-color: #cfd5dd;
   border-left-color: #b85c5c;
-  opacity: 0.75;
+  opacity: 1;
 }
 .agt-apt-card--urgent {
-  background: #fdf3e2;
+  background: #fff0cf;
+  border-color: #e8c078;
   border-left-color: #c77700;
 }
 
@@ -1263,6 +1240,13 @@
   border-left-color: #9db7d5;
 }
 
+.agt-slot--free:focus-visible {
+  background: #eef3fe;
+  border-left-color: var(--blue);
+  outline: 3px solid rgba(47, 107, 237, 0.28);
+  outline-offset: -3px;
+}
+
 /* Free slot content — visible at rest (not hidden until hover) */
 .agt-free-slot {
   flex: 1;
@@ -1270,8 +1254,8 @@
   align-items: center;
   gap: 8px;
   padding: 0 14px;
-  color: #3a5f85;
-  opacity: 0.55;
+  color: #64748b;
+  opacity: 1;
   transition: opacity 0.12s;
 }
 
@@ -1315,8 +1299,8 @@
 
 /* Occupied slot */
 .agt-slot--occ {
-  background: transparent;
-  padding: 5px 10px 5px 0;
+  background: var(--surface);
+  padding: 6px 10px 6px 0;
   align-items: center;
 }
 
@@ -1737,28 +1721,40 @@
 
 /* ── Therapy Slots ── */
 .agt-therapy-slot {
-  display: flex;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  width: 100%;
+  padding: 10px 12px;
   margin: 2px 0;
-  background: #f6f2fe;
-  border: 1px solid #e4dafa;
-  border-left: 5px solid var(--purple);
-  border-radius: 8px;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  appearance: none;
+  background: #f0eaff;
+  border: 1px solid #c9baf2;
+  border-left: 6px solid var(--purple);
+  border-radius: 9px;
   cursor: pointer;
-  min-height: 52px;
+  min-height: 58px;
   transition:
     box-shadow 0.15s,
     transform 0.1s;
 }
 .agt-therapy-slot:hover {
-  box-shadow: 0 2px 8px rgba(108, 75, 209, 0.15);
+  background: #ebe2ff;
+  border-color: #aa92e8;
+  box-shadow: 0 3px 10px rgba(108, 75, 209, 0.2);
   transform: translateY(-1px);
 }
+.agt-therapy-slot:focus-visible {
+  outline: 3px solid rgba(47, 107, 237, 0.3);
+  outline-offset: 2px;
+}
 .agt-therapy-slot__icon {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1772,29 +1768,52 @@
   height: 16px;
 }
 .agt-therapy-slot__label {
-  font-weight: 600;
-  font-size: 13px;
-  color: var(--purple);
+  min-width: 0;
+  font-weight: 750;
+  font-size: 13.5px;
+  color: #4e2ba7;
 }
 .agt-therapy-slot__ora {
   font-weight: 500;
   opacity: 0.75;
 }
-.agt-therapy-slot__count {
-  font-size: 12px;
-  color: var(--purple);
-  margin-left: auto;
+.agt-therapy-slot__summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
 }
-.agt-therapy-slot__progress {
-  font-size: 11px;
-  color: var(--purple);
-  background: rgba(108, 75, 209, 0.1);
-  padding: 2px 8px;
-  border-radius: 10px;
+.agt-therapy-slot__status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.agt-therapy-slot__status--pending {
+  color: #fff;
+  background: #5b35c4;
+}
+.agt-therapy-slot__status--missed {
+  color: #fff;
+  background: var(--red);
+}
+.agt-therapy-slot__status--completed {
+  color: #fff;
+  background: #0e8a63;
+}
+.agt-therapy-slot__empty {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 650;
 }
 .agt-therapy-slot--completed {
-  background: linear-gradient(135deg, #e7f7f0 0%, #e7f7f0 100%);
-  border-color: #6ee7b7;
+  background: #e3f5eb;
+  border-color: #addbc4;
   border-left-color: #16a37b;
 }
 .agt-therapy-slot--completed .agt-therapy-slot__icon {
@@ -1803,12 +1822,15 @@
 .agt-therapy-slot--completed .agt-therapy-slot__label {
   color: #0e8a63;
 }
-.agt-therapy-slot--completed .agt-therapy-slot__count {
-  color: #16a37b;
-}
-.agt-therapy-slot--completed .agt-therapy-slot__progress {
-  background: rgba(5, 150, 105, 0.1);
-  color: #16a37b;
+@media (max-width: 600px) {
+  .agt-therapy-slot {
+    grid-template-columns: 32px minmax(0, 1fr);
+  }
+
+  .agt-therapy-slot__summary {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
 }
 
 /* Fascia terapia nella griglia admin: e' un evento di reparto, non di un singolo
@@ -1899,8 +1921,14 @@
   border-radius: 4px;
   background: #f0ecfc;
   color: #6c4bd1;
+  appearance: none;
+  border: 1px solid #c9baf2;
   cursor: pointer;
   margin-bottom: 2px;
+}
+.agt-week-therapy-dot:focus-visible {
+  outline: 3px solid rgba(47, 107, 237, 0.3);
+  outline-offset: 2px;
 }
 .agt-week-therapy-dot svg {
   width: 12px;
