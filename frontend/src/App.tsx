@@ -2813,8 +2813,6 @@ export default function App() {
                       consegneOverview={consegneOverview}
                       consegneOverviewState={consegneOverviewState}
                       agenda={agendaOggi}
-                      totalePazienti={clinicalOverview?.totalPatients ?? 0}
-                      loadingPazienti={loadingClinicalOverview}
                       onNavigate={navigate}
                       onOpenConsegneAperte={openConsegneAperte}
                       onSelectPaziente={goToPazienteByNome}
