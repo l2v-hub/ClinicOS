@@ -34,6 +34,7 @@ test('inline editor supports compact date/time and keyboard save or cancel', () 
   );
   assert.match(inlineEditor, /e\.key === 'Escape'[\s\S]*?cancel\(\)/);
   assert.match(inlineEditor, /type === 'textarea'[\s\S]*?e\.ctrlKey \|\| e\.metaKey/);
+  assert.match(inlineEditor, /supportsTextSelection[\s\S]*?includes\(input\.type\)/);
   assert.match(inlineEditor, /aria-invalid=\{!!error\}/);
   assert.match(inlineEditor, /role="alert"/);
 });

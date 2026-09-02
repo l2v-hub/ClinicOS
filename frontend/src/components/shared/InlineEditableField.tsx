@@ -67,13 +67,15 @@ export function InlineEditableField({
 
   useEffect(() => {
     if (editing && inputRef.current) {
-      inputRef.current.focus();
-      if (
-        inputRef.current instanceof HTMLInputElement ||
-        inputRef.current instanceof HTMLTextAreaElement
-      ) {
-        const len = inputRef.current.value.length;
-        inputRef.current.setSelectionRange?.(len, len);
+      const input = inputRef.current;
+      input.focus();
+      const supportsTextSelection =
+        input instanceof HTMLTextAreaElement ||
+        (input instanceof HTMLInputElement &&
+          ['text', 'search', 'tel', 'url', 'password'].includes(input.type));
+      if (supportsTextSelection) {
+        const len = input.value.length;
+        input.setSelectionRange(len, len);
       }
     }
   }, [editing]);
