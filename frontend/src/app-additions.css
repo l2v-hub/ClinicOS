@@ -8102,52 +8102,24 @@ textarea.form-input {
 
 /* ── Terapia Farmacologica sub-tabs ── */
 .tf-subtabs {
-  display: flex;
-  gap: 0;
-  border-bottom: 2px solid #e5e7eb;
   margin-bottom: 0;
-  padding: 0 16px;
-  overflow-x: auto;
+  min-width: 0;
 }
-.tf-subtab {
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  padding: 8px 14px;
-  min-height: 44px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted, #6b7280);
-  cursor: pointer;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition:
-    color 0.15s,
-    border-color 0.15s;
+.tf-subtabs .top-nav {
+  margin-inline: 0;
 }
-.tf-subtab:hover {
-  color: var(--c-primary, #2f6bed);
+.tf-subtabs .top-nav--level3 {
+  margin-top: 0;
+  padding-inline: 16px;
+  background: #fff;
 }
-.tf-subtab--active {
-  color: var(--c-primary, #2f6bed);
-  border-bottom-color: var(--c-primary, #2f6bed);
-  font-weight: 600;
+.tf-subtabs .top-nav__items {
+  overscroll-behavior-inline: contain;
 }
-.tf-subtab__badge {
-  background: var(--c-neutral, #6b7280);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 10px;
-  min-width: 16px;
-  text-align: center;
-}
-.tf-subtab--active .tf-subtab__badge {
-  background: var(--c-primary, #2f6bed);
+@media (max-width: 768px) {
+  .tf-subtabs .top-nav--level3 {
+    padding-inline: 12px;
+  }
 }
 
 /* ── ClinicalTable (CDT) ──────────────────────────────────────── */

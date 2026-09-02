@@ -19,6 +19,10 @@ const dataStyles = readFileSync(
   new URL('../../components/operator/PatientRecordData.css', import.meta.url),
   'utf8',
 );
+const therapyTab = readFileSync(
+  new URL('../../components/operator/cartella/TerapiaFarmacologicaTab.tsx', import.meta.url),
+  'utf8',
+);
 
 test('patient record exposes a labelled two-level navigation and controlled tab panel', () => {
   assert.match(patientDetail, /ariaLabel="Aree della cartella paziente"/);
@@ -39,6 +43,15 @@ test('top navigation follows the keyboard tab pattern with one focusable active 
   assert.match(topNav, /event\.key === 'End'/);
   assert.match(topNav, /aria-controls=\{panelId\}/);
   assert.match(topNavStyles, /\.top-nav__item:focus-visible\s*\{/);
+});
+
+test('therapy sections reuse the canonical contextual navigation', () => {
+  assert.match(therapyTab, /<TopNav[\s\S]*?variant="level3"/);
+  assert.match(therapyTab, /ariaLabel="Sezioni della terapia farmacologica"/);
+  assert.match(therapyTab, /activeKey=\{subTab\}/);
+  assert.doesNotMatch(therapyTab, /className=\{`tf-subtab/);
+  assert.match(appStyles, /\.tf-subtabs \.top-nav--level3\s*\{[\s\S]*?background: #fff/);
+  assert.match(appStyles, /@media \(max-width: 768px\)[\s\S]*?\.tf-subtabs \.top-nav--level3/);
 });
 
 test('overview removes duplicated KPI tiles and uses semantic operational sections', () => {

@@ -24,6 +24,7 @@ import {
 } from './therapyDose';
 import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import { TopNav, type TopNavItem } from '../../navigation/TopNav';
 import { useRisoluzioniFarmaco, trovaRisoluzione, etichettaDocumento } from './farmacoRiferimento';
 import type { DocumentoFarmaco, FarmacoTrovato } from './farmacoRiferimento';
 import { VisoreDocumentoFarmaco } from './VisoreDocumentoFarmaco';
@@ -696,15 +697,15 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   // ── Sub-tab nav ────────────────────────────────────────────────────────────────
 
-  const SUB_TABS: { id: SubTab; label: string; count?: number }[] = [
-    { id: 'attivi', label: 'Farmaci attivi', count: therapySummary?.active ?? attive.length },
-    { id: 'programmazione', label: 'Programmazione' },
-    { id: 'giornaliere', label: 'Somministrazioni giornaliere' },
-    { id: 'storico', label: 'Storico', count: history.length },
+  const SUB_TABS: TopNavItem[] = [
+    { key: 'attivi', label: 'Farmaci attivi', badge: therapySummary?.active ?? attive.length },
+    { key: 'programmazione', label: 'Programmazione' },
+    { key: 'giornaliere', label: 'Somministrazioni giornaliere' },
+    { key: 'storico', label: 'Storico', badge: history.length },
     {
-      id: 'sospese',
+      key: 'sospese',
       label: 'Sospese/concluse',
-      count: therapySummary?.inactive ?? inattive.length,
+      badge: therapySummary?.inactive ?? inattive.length,
     },
   ];
 
@@ -1439,23 +1440,19 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
         {/* Sub-tab navigation — Feature 010 (FR-013): clinical sub-menu gap */}
         <div className="tf-subtabs" style={{ marginTop: 'var(--clinical-submenu-gap, 16px)' }}>
-          {SUB_TABS.map((st) => (
-            <button
-              key={st.id}
-              className={`tf-subtab${subTab === st.id ? ' tf-subtab--active' : ''}`}
+          <TopNav
+            variant="level3"
+            items={SUB_TABS}
+            activeKey={subTab}
+            onChange={(nextSubTab) => {
               // L'errore appartiene alla schermata che l'ha prodotto: senza azzerarlo, un errore
               // di salvataggio resta appeso in cima mentre si legge lo Storico.
-              onClick={() => {
-                setError('');
-                setSubTab(st.id);
-              }}
-            >
-              {st.label}
-              {st.count !== undefined && st.count > 0 && (
-                <span className="tf-subtab__badge">{st.count}</span>
-              )}
-            </button>
-          ))}
+              setError('');
+              setSubTab(nextSubTab as SubTab);
+            }}
+            ariaLabel="Sezioni della terapia farmacologica"
+            idPrefix="therapy-section"
+          />
         </div>
 
         {/* ── Sub-tab: Farmaci attivi ── */}
