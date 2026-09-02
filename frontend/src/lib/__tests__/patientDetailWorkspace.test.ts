@@ -48,7 +48,7 @@ test('top navigation follows the keyboard tab pattern with one focusable active 
   assert.match(topNavStyles, /\.top-nav__item:focus-visible\s*\{/);
   assert.match(
     topNavStyles,
-    /\.top-nav--section-grid \.top-nav__items\s*\{[\s\S]*?display: grid[\s\S]*?repeat\(auto-fit, minmax\(128px, 1fr\)\)[\s\S]*?overflow: visible/,
+    /\.top-nav--section-grid \.top-nav__items\s*\{[\s\S]*?display: grid[\s\S]*?repeat\(auto-fit, minmax\(120px, 1fr\)\)[\s\S]*?overflow: visible/,
   );
   assert.match(
     topNavStyles,
