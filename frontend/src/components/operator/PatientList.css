@@ -29,6 +29,18 @@
   table-layout: fixed;
 }
 
+.patient-roster > caption.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .patient-roster th {
   height: var(--operational-table-header-h);
   padding: 0 var(--operational-table-cell-px);
@@ -74,11 +86,26 @@
 }
 
 .patient-roster tbody tr {
+  cursor: pointer;
   transition: background 0.14s ease;
 }
 
 .patient-roster tbody tr:hover {
   background: color-mix(in srgb, var(--blue) 4%, var(--surface));
+}
+
+.patient-roster tbody tr:focus-visible {
+  background: color-mix(in srgb, var(--blue) 8%, var(--surface));
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+}
+
+.patient-roster tbody tr:active {
+  background: color-mix(in srgb, var(--blue) 11%, var(--surface));
+}
+
+.patient-roster tbody tr:has(.patient-roster__empty) {
+  cursor: default;
 }
 
 .patient-roster__identity {

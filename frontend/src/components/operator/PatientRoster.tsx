@@ -215,8 +215,24 @@ export function PatientRoster({
               patients.map((patient) => {
                 const summary = summaryMap.get(patient.id);
                 const state = summary?.statoRicovero;
+                const openLabel = `Apri cartella di ${patient.firstName} ${patient.lastName}`;
                 return (
-                  <tr key={patient.id}>
+                  <tr
+                    key={patient.id}
+                    className="patient-roster__row"
+                    tabIndex={0}
+                    aria-label={openLabel}
+                    onClick={(event) => {
+                      if ((event.target as HTMLElement).closest('button')) return;
+                      onSelect(patient);
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.target !== event.currentTarget) return;
+                      if (event.key !== 'Enter' && event.key !== ' ') return;
+                      event.preventDefault();
+                      onSelect(patient);
+                    }}
+                  >
                     <td>
                       <div className="patient-roster__identity">
                         <span className="patient-roster__avatar" aria-hidden="true">
@@ -267,7 +283,7 @@ export function PatientRoster({
                         type="button"
                         className="patient-roster__open"
                         onClick={() => onSelect(patient)}
-                        aria-label={`Apri cartella di ${patient.firstName} ${patient.lastName}`}
+                        aria-label={openLabel}
                       >
                         <IcoChevronRight />
                       </button>
