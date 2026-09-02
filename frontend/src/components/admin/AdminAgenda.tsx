@@ -44,7 +44,6 @@ const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {
   return `${String(h).padStart(2, '0')}:${m}`;
 });
 const HOUR_SLOTS = TIME_SLOTS.filter((_, i) => i % 2 === 0);
-const TOTAL_AVAIL_MIN = 11 * 60;
 
 function addDays(d: Date, n: number): Date {
   const r = new Date(d);
@@ -90,13 +89,6 @@ const TIPO_LABEL: Record<string, string> = {
   altro: 'Altro',
 };
 
-function occInfo(pct: number): { label: string; cls: string } {
-  if (pct < 30) return { label: 'Basso', cls: 'agt-occ--low' };
-  if (pct < 60) return { label: 'Bilanciato', cls: 'agt-occ--balanced' };
-  if (pct < 85) return { label: 'Alto', cls: 'agt-occ--high' };
-  return { label: 'Sovraccarico', cls: 'agt-occ--overloaded' };
-}
-
 export function AdminAgenda({
   operatori,
   appuntamenti,
@@ -131,6 +123,11 @@ export function AdminAgenda({
   const [selectedTherapySlotId, setSelectedTherapySlotId] = useState<string | null>(null);
   const [editingApt, setEditingApt] = useState<Appuntamento | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const attivi = useMemo(() => operatori.filter((o) => o.stato === 'attivo'), [operatori]);
+  const filtroOpIdEffettivo =
+    filtroOpId === 'tutti' || attivi.some((operatore) => operatore.id === filtroOpId)
+      ? filtroOpId
+      : 'tutti';
 
   useEffect(() => {
     const days =
@@ -142,9 +139,9 @@ export function AdminAgenda({
     onLoadAppointments?.(
       isoDate(days[0]),
       isoDate(days[days.length - 1]),
-      filtroOpId === 'tutti' ? undefined : filtroOpId,
+      filtroOpIdEffettivo === 'tutti' ? undefined : filtroOpIdEffettivo,
     );
-  }, [filtroOpId, onLoadAppointments, refDate, view]);
+  }, [filtroOpIdEffettivo, onLoadAppointments, refDate, view]);
 
   const therapySlotsMap = useMemo(() => {
     const map = new Map<string, TherapySlot>();
@@ -155,15 +152,23 @@ export function AdminAgenda({
     ? ((therapySlots ?? []).find((s) => s.id === selectedTherapySlotId) ?? null)
     : null;
 
-  const attivi = operatori.filter((o) => o.stato === 'attivo');
-  const visibili = filtroOpId === 'tutti' ? attivi : attivi.filter((o) => o.id === filtroOpId);
+  const visibili =
+    filtroOpIdEffettivo === 'tutti' ? attivi : attivi.filter((o) => o.id === filtroOpIdEffettivo);
+
+  function changeOperatorFilter(operatorId: string) {
+    setSelectedAptId(null);
+    setSelectedTherapySlotId(null);
+    setFiltroOpId((current) => (current === operatorId ? 'tutti' : operatorId));
+  }
 
   function getApts(data: string, opId?: string): Appuntamento[] {
     return appuntamenti
       .filter(
         (a) =>
           a.data === data &&
-          (opId ? a.operatoreId === opId : filtroOpId === 'tutti' || a.operatoreId === filtroOpId),
+          (opId
+            ? a.operatoreId === opId
+            : filtroOpIdEffettivo === 'tutti' || a.operatoreId === filtroOpIdEffettivo),
       )
       .sort((a, b) => a.ora.localeCompare(b.ora));
   }
@@ -226,7 +231,7 @@ export function AdminAgenda({
       (a) =>
         a.data >= from &&
         a.data <= to &&
-        (filtroOpId === 'tutti' || a.operatoreId === filtroOpId) &&
+        (filtroOpIdEffettivo === 'tutti' || a.operatoreId === filtroOpIdEffettivo) &&
         matchStato(a, filtroStato),
     ).length;
   }
@@ -245,9 +250,11 @@ export function AdminAgenda({
     const to = isoDate(days[days.length - 1]);
     return appuntamenti.filter(
       (a) =>
-        a.data >= from && a.data <= to && (filtroOpId === 'tutti' || a.operatoreId === filtroOpId),
+        a.data >= from &&
+        a.data <= to &&
+        (filtroOpIdEffettivo === 'tutti' || a.operatoreId === filtroOpIdEffettivo),
     );
-  }, [appuntamenti, view, refDate, filtroOpId]);
+  }, [appuntamenti, view, refDate, filtroOpIdEffettivo]);
 
   // Indice per lookup O(1) nella griglia giornaliera (operatore x slot orario). Senza,
   // ogni cella richiamava getApts() e rifiltrava/riordinava l'intero array `appuntamenti`
@@ -312,30 +319,31 @@ export function AdminAgenda({
         </div>
       </div>
 
-      {/* ── Operator filter chips ── */}
-      <div className="agt-filter-row">
-        <button
-          className={`agt-filter-chip${filtroOpId === 'tutti' ? ' active' : ''}`}
-          onClick={() => setFiltroOpId('tutti')}
-        >
-          Tutti gli operatori
-        </button>
-        {attivi.map((op) => (
+      {/* Nelle viste aggregate, dove non esistono colonne operatore, resta un filtro compatto. */}
+      {(view !== 'giornaliero' || loadingAppuntamenti || appointmentLoadError) && (
+        <div className="agt-filter-row" role="group" aria-label="Filtra agenda per operatore">
           <button
-            key={op.id}
-            className={`agt-filter-chip${filtroOpId === op.id ? ' active' : ''}`}
-            style={
-              filtroOpId === op.id
-                ? { borderColor: op.colore, background: op.colore + '18', color: op.colore }
-                : {}
-            }
-            onClick={() => setFiltroOpId(filtroOpId === op.id ? 'tutti' : op.id)}
+            type="button"
+            className={`agt-filter-chip${filtroOpIdEffettivo === 'tutti' ? ' active' : ''}`}
+            onClick={() => changeOperatorFilter('tutti')}
+            aria-pressed={filtroOpIdEffettivo === 'tutti'}
           >
-            <span className="agt-op-dot" style={{ background: op.colore }} />
-            {op.cognome}
+            Tutti gli operatori
           </button>
-        ))}
-      </div>
+          {attivi.map((op) => (
+            <button
+              type="button"
+              key={op.id}
+              className={`agt-filter-chip${filtroOpIdEffettivo === op.id ? ' active' : ''}`}
+              onClick={() => changeOperatorFilter(op.id)}
+              aria-pressed={filtroOpIdEffettivo === op.id}
+            >
+              <span className="agt-op-dot" style={{ background: op.colore }} />
+              {op.cognome}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* ── Appointment status filter chips ── */}
       <AgendaStatoFilterRow
@@ -418,13 +426,20 @@ export function AdminAgenda({
               {/* Column headers */}
               <div className="agt-admin-corner" />
               {visibili.map((op) => {
-                const opApts = getApts(todayStr, op.id);
-                const usedMin = opApts.reduce((s, a) => s + (a.durata ?? 30), 0);
-                const pct = Math.min(100, Math.round((usedMin / TOTAL_AVAIL_MIN) * 100));
-                const occ = occInfo(pct);
-                const completati = opApts.filter((a) => a.stato === 'completato').length;
+                const selected = filtroOpIdEffettivo === op.id;
                 return (
-                  <div key={op.id} className="agt-col-hdr">
+                  <button
+                    type="button"
+                    key={op.id}
+                    className={`agt-col-hdr${selected ? ' is-selected' : ''}`}
+                    onClick={() => changeOperatorFilter(op.id)}
+                    aria-pressed={selected}
+                    aria-label={
+                      selected
+                        ? `Mostra tutti gli operatori, ora è selezionato ${op.cognome} ${op.nome}`
+                        : `Mostra solo l'agenda di ${op.cognome} ${op.nome}`
+                    }
+                  >
                     <div className="agt-col-hdr__top">
                       <span className="agt-op-dot" style={{ background: op.colore }} />
                       <span className="agt-col-hdr__name">
@@ -432,19 +447,7 @@ export function AdminAgenda({
                       </span>
                     </div>
                     <span className="agt-col-hdr__role">{op.reparto}</span>
-                    <div className="agt-col-hdr__occ-row">
-                      <span className={`agt-occ-label ${occ.cls}`}>{occ.label}</span>
-                      <span className="agt-col-hdr__counts">
-                        {completati}/{opApts.length} · {pct}%
-                      </span>
-                    </div>
-                    <div className="agt-occ-track">
-                      <div
-                        className="agt-occ-fill"
-                        style={{ width: `${pct}%`, background: op.colore }}
-                      />
-                    </div>
-                  </div>
+                  </button>
                 );
               })}
 
@@ -578,7 +581,8 @@ export function AdminAgenda({
                     (a) => a.ora === ora || a.ora === ora.replace(':00', ':30'),
                   );
                   const apts = cellApts.filter((a) => matchStato(a, filtroStato));
-                  const defOpId = filtroOpId !== 'tutti' ? filtroOpId : (attivi[0]?.id ?? '');
+                  const defOpId =
+                    filtroOpIdEffettivo !== 'tutti' ? filtroOpIdEffettivo : (attivi[0]?.id ?? '');
                   return (
                     <div
                       key={`${dStr}-${ora}`}

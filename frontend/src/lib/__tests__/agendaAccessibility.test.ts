@@ -27,6 +27,35 @@ test('daily agenda stays task-focused instead of rendering dashboard occupancy m
   assert.doesNotMatch(operatorAgenda, /agt-occ-strip|TOTAL_AVAIL_MIN|occLabel|occClass/);
   assert.doesNotMatch(operatorAgenda, /min su .* min disponibili|Sovraccarico/);
   assert.match(operatorAgenda, /view !== 'giornaliero' && <AgendaLegend \/>/);
+
+  const adminAgenda = sources[1];
+  assert.doesNotMatch(
+    adminAgenda,
+    /TOTAL_AVAIL_MIN|occInfo|agt-col-hdr__occ-row|agt-col-hdr__counts|agt-occ-track/,
+  );
+  assert.match(
+    adminAgenda,
+    /view !== 'giornaliero' \|\| loadingAppuntamenti \|\| appointmentLoadError/,
+  );
+  assert.match(adminAgenda, /aria-label="Filtra agenda per operatore"/);
+  assert.match(
+    adminAgenda,
+    /<button[\s\S]*?className={`agt-col-hdr\$\{selected \? ' is-selected' : ''\}`}[\s\S]*?aria-pressed=\{selected\}/,
+  );
+  assert.match(adminAgenda, /Mostra solo l'agenda di/);
+  assert.match(adminAgenda, /Mostra tutti gli operatori, ora è selezionato/);
+  assert.match(adminAgenda, /function changeOperatorFilter[\s\S]*?setSelectedAptId\(null\)/);
+  assert.match(adminAgenda, /const filtroOpIdEffettivo =[\s\S]*?attivi\.some/);
+  assert.match(adminAgenda, /filtroOpIdEffettivo === 'tutti' \? undefined : filtroOpIdEffettivo/);
+});
+
+test('admin daily operator selectors are compact, keyboard-visible native buttons', () => {
+  assert.match(
+    agendaStyles,
+    /\.agt-col-hdr\s*\{[\s\S]*?min-height:\s*52px;[\s\S]*?padding:\s*6px 10px;[\s\S]*?cursor:\s*pointer/,
+  );
+  assert.match(agendaStyles, /\.agt-col-hdr\.is-selected\s*\{/);
+  assert.match(agendaStyles, /\.agt-col-hdr:focus-visible\s*\{/);
 });
 
 test('therapy work is one native action with a prominent non-repeated pending state', () => {
