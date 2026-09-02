@@ -5,6 +5,7 @@ interface PatientCompactHeaderProps {
   cartella: CartellaPaziente | null;
   onBack: () => void;
   backLabel?: string;
+  onPrint?: () => void;
   onInvioPS?: () => void;
 }
 
@@ -19,6 +20,7 @@ export default function PatientCompactHeader({
   cartella,
   onBack,
   backLabel,
+  onPrint,
   onInvioPS,
 }: PatientCompactHeaderProps) {
   const fullName = `${paziente.lastName}, ${paziente.firstName}`.trim().replace(/^,\s*/, '');
@@ -83,8 +85,9 @@ export default function PatientCompactHeader({
 
       <div className="patient-compact-header__actions no-print">
         <button
+          type="button"
           className="btn-secondary btn-sm"
-          onClick={() => window.print()}
+          onClick={onPrint}
           title="Stampa scheda"
         >
           Stampa scheda

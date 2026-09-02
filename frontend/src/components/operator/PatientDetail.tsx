@@ -32,6 +32,7 @@ import { TopNav } from '../navigation/TopNav';
 import { AvvisoAnomalieFarmaci } from './cartella/AvvisoAnomalieFarmaci';
 import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
 import PatientCompactHeader from './PatientCompactHeader';
+import PatientRecordPrintDialog from './PatientRecordPrintDialog';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
 import { deriveAllergySummary } from '../../lib/allergyStatusModel';
@@ -376,6 +377,7 @@ export function PatientDetail({
 
   // Invio in PS modal
   const [showInvioPS, setShowInvioPS] = useState(false);
+  const [showPrintDialog, setShowPrintDialog] = useState(false);
 
   useEffect(() => {
     if (initialTabPatientRef.current === paziente.id) {
@@ -416,6 +418,7 @@ export function PatientDetail({
     setCameraEditing(false);
     setCameraModalForm({});
     setShowInvioPS(false);
+    setShowPrintDialog(false);
     lastTabByGroup.current = {};
   }, [paziente.id]);
 
@@ -2615,6 +2618,7 @@ export function PatientDetail({
         cartella={cartella}
         onBack={onBack}
         backLabel={backLabel}
+        onPrint={() => setShowPrintDialog(true)}
         onInvioPS={() => setShowInvioPS(true)}
       />
 
@@ -2867,6 +2871,14 @@ export function PatientDetail({
       {cardModal === 'consegne' && renderConsegneModal()}
       {cardModal === 'allergie' && renderAllergieModal()}
       {cardModal === 'camera' && renderCameraModal()}
+      {showPrintDialog && (
+        <PatientRecordPrintDialog
+          paziente={paziente}
+          cartella={cartella}
+          consegne={mieConsegne}
+          onClose={() => setShowPrintDialog(false)}
+        />
+      )}
       {showInvioPS && (
         <Suspense fallback={<ClinicalSectionLoading />}>
           <InvioPSModal
