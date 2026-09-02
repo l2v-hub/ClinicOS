@@ -19,17 +19,17 @@ test('available beds exclude exact overlaps in PostgreSQL without loading assign
 
 test('assignment POST and PUT apply the exact database overlap predicate before materializing', () => {
   const postBlock = source
-    .split("patientAssignmentRouter.post('/:patientId/room-assignments'")[1]
+    .split("patientAssignmentRouter.post(\n  '/:patientId/room-assignments'")[1]
     ?.split('// PUT /patients/:patientId/room-assignments/:assignmentId')[0];
   const putBlock = source
-    .split("patientAssignmentRouter.put('/:patientId/room-assignments/:assignmentId'")[1]
+    .split("patientAssignmentRouter.put(\n  '/:patientId/room-assignments/:assignmentId'")[1]
     ?.split('// DELETE /patients/:patientId/room-assignments/:assignmentId')[0];
   assert.ok(postBlock);
   assert.ok(putBlock);
   assert.match(postBlock, /bedId, \.\.\.assignmentOverlapFilter\(startDate, endDate\)/);
   assert.match(postBlock, /patientId, \.\.\.assignmentOverlapFilter\(startDate, endDate\)/);
   assert.match(putBlock, /AND: \[/);
-  assert.match(putBlock, /\{ OR: \[\{ patientId \}, \{ bedId: existing\.bedId \}\] \}/);
+  assert.match(putBlock, /\{ OR: \[\{ patientId \}, \{ bedId: candidateBedId \}\] \}/);
   assert.match(putBlock, /assignmentOverlapFilter\(existing\.startDate, candidateEndDate\)/);
   assert.match(putBlock, /select: \{ patientId: true, bedId: true \}/);
   assert.doesNotMatch(postBlock, /rangesOverlap/);

@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   assignmentLockKeys,
+  assignmentMoveLockKeys,
   assignmentOverlapFilter,
   bedWriteLockKeys,
   isIsoDate,
@@ -56,6 +57,11 @@ test('assignment inputs reject malformed dates, long notes and non-object bodies
   );
   assert.equal(parseAssignmentUpdate({ endDate: '29/08/2026' }).ok, false);
   assert.equal(parseAssignmentUpdate({ endDate: '' }).ok, false);
+  assert.equal(parseAssignmentUpdate({ bedId: '' }).ok, false);
+  assert.deepEqual(parseAssignmentUpdate({ bedId: '  bed-2  ' }), {
+    ok: true,
+    value: { bedId: 'bed-2', endDate: undefined, note: undefined },
+  });
   assert.equal(parseAssignmentUpdate([]).ok, false);
 });
 
@@ -65,6 +71,14 @@ test('assignment advisory locks are prefixed and deterministic', () => {
     'bed:bed-a',
     'patient:patient-z',
   ]);
+  assert.deepEqual(
+    assignmentMoveLockKeys('patient-z', [
+      { roomId: 'room-z', bedId: 'bed-z' },
+      { roomId: 'room-a', bedId: 'bed-a' },
+      { roomId: 'room-z', bedId: 'bed-z' },
+    ]),
+    ['room:room-a', 'room:room-z', 'bed:bed-a', 'bed:bed-z', 'patient:patient-z'],
+  );
   assert.deepEqual(bedWriteLockKeys('room-x', 'bed-a'), ['room:room-x', 'bed:bed-a']);
   assert.deepEqual(roomWriteLockKeys('room-x', ['bed-z', 'bed-a', 'bed-z']), [
     'room:room-x',

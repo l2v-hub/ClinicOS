@@ -83,6 +83,15 @@ export function assignmentLockKeys(patientId: string, bedId: string, roomId: str
   return [`room:${roomId}`, `bed:${bedId}`, `patient:${patientId}`];
 }
 
+export function assignmentMoveLockKeys(
+  patientId: string,
+  locations: Array<{ bedId: string; roomId: string }>,
+): string[] {
+  const roomKeys = [...new Set(locations.map(({ roomId }) => `room:${roomId}`))].sort();
+  const bedKeys = [...new Set(locations.map(({ bedId }) => `bed:${bedId}`))].sort();
+  return [...roomKeys, ...bedKeys, `patient:${patientId}`];
+}
+
 /**
  * Exact overlap predicate for an existing assignment against a validated candidate interval.
  * `null` end dates are positive infinity; ISO dates retain chronological ordering as strings.
@@ -237,11 +246,15 @@ export function parseAssignmentCreate(value: unknown): Result<{
 }
 
 export function parseAssignmentUpdate(value: unknown): Result<{
+  bedId?: string;
   endDate?: string | null;
   note?: string;
 }> {
   const body = bodyRecord(value);
   if (!body.ok) return body;
+  const bedId = boundedString(body.value.bedId, 'bedId', 128, { trim: true });
+  if (!bedId.ok) return bedId;
+  if (bedId.value !== undefined && bedId.value.length === 0) return fail('Campo bedId non valido');
   let endDate: string | null | undefined;
   if (body.value.endDate !== undefined) {
     if (body.value.endDate === null) endDate = null;
@@ -250,5 +263,5 @@ export function parseAssignmentUpdate(value: unknown): Result<{
   }
   const note = boundedString(body.value.note, 'note', MAX_ROOM_NOTE_LENGTH);
   if (!note.ok) return note;
-  return { ok: true, value: { endDate, note: note.value } };
+  return { ok: true, value: { bedId: bedId.value, endDate, note: note.value } };
 }

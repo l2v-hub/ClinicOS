@@ -15,6 +15,7 @@ import {
 } from './room-read-model.js';
 import {
   assignmentLockKeys,
+  assignmentMoveLockKeys,
   assignmentOverlapFilter,
   bedWriteLockKeys,
   MAX_ROOM_BEDS,
@@ -57,7 +58,7 @@ adminRouter.use(requireOperator);
 adminRouter.use(requireAdmin);
 patientAssignmentRouter.use(requireOperator);
 patientAssignmentRouter.use('/:patientId/room-assignments', (req, res, next) => {
-  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+  if (req.method === 'DELETE') {
     requireAdmin(req, res, next);
     return;
   }
@@ -618,212 +619,292 @@ patientAssignmentRouter.get(
 );
 
 // POST /patients/:patientId/room-assignments
-patientAssignmentRouter.post('/:patientId/room-assignments', async (req: AuthedRequest, res) => {
-  const patientIdParam = req.params.patientId;
-  const patientId = Array.isArray(patientIdParam) ? patientIdParam[0] : patientIdParam;
-  const input = parseAssignmentCreate(req.body);
-  if (!input.ok) {
-    res.status(400).json({ error: input.error });
-    return;
-  }
-  const { bedId, startDate, endDate, note } = input.value;
-
-  try {
-    // Validate patient
-    const patient = await prisma.patient.findUnique({
-      where: { id: patientId },
-      select: { id: true },
-    });
-    if (!patient) {
-      res.status(404).json({ error: 'Paziente non trovato' });
+patientAssignmentRouter.post(
+  '/:patientId/room-assignments',
+  (req, res, next) => {
+    const input = parseAssignmentCreate(req.body);
+    if (!input.ok) {
+      res.status(400).json({ error: input.error });
       return;
     }
+    res.locals.assignmentCreate = input.value;
+    next();
+  },
+  requirePatientScope,
+  async (req: AuthedRequest, res) => {
+    const patientIdParam = req.params.patientId;
+    const patientId = Array.isArray(patientIdParam) ? patientIdParam[0] : patientIdParam;
+    const { bedId, startDate, endDate, note } = res.locals.assignmentCreate as {
+      bedId: string;
+      startDate: string;
+      endDate: string | null;
+      note: string;
+    };
 
-    // Validate bed
-    const bed = await prisma.bed.findUnique({
-      where: { id: bedId },
-      select: { id: true, roomId: true, stato: true },
-    });
-    if (!bed) {
-      res.status(404).json({ error: 'Letto non trovato' });
-      return;
-    }
-
-    if (bed.stato === 'manutenzione') {
-      res.status(409).json({ error: 'Il letto è in manutenzione' });
-      return;
-    }
-
-    // Overlap check + close-active-assignment + create are one atomic unit: without a lock, two
-    // concurrent requests for the same bed can both pass the overlap check before either commits.
-    // Prefixed bed + patient locks are acquired in deterministic order. This serializes both
-    // callers contending for one bed and callers moving the same patient to different beds.
-    const assignment = await prisma.$transaction(async (tx) => {
-      for (const lockKey of assignmentLockKeys(patientId, bedId, bed.roomId)) {
-        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
-      }
-
-      const lockedBed = await tx.bed.findUnique({
-        where: { id: bedId },
-        select: { id: true, roomId: true, stato: true },
-      });
-      if (!lockedBed) throw new BedUnavailableError('Il letto non è più disponibile');
-      if (lockedBed.stato === 'manutenzione') {
-        throw new BedUnavailableError('Il letto è in manutenzione');
-      }
-
-      // Check for overlapping assignments on this bed
-      const existingBedAssignment = await tx.patientRoomAssignment.findFirst({
-        where: { bedId, ...assignmentOverlapFilter(startDate, endDate) },
+    try {
+      // Validate patient
+      const patient = await prisma.patient.findUnique({
+        where: { id: patientId },
         select: { id: true },
       });
-      if (existingBedAssignment) {
-        throw new BedOverlapError('Il letto è già occupato nel periodo indicato');
+      if (!patient) {
+        res.status(404).json({ error: 'Paziente non trovato' });
+        return;
       }
 
-      // A patient lock alone is not sufficient: finite scheduled stays can overlap too. A prior
-      // open stay may be closed for a real move; every other overlap is an explicit conflict.
-      const patientAssignments = await tx.patientRoomAssignment.findMany({
-        where: { patientId, ...assignmentOverlapFilter(startDate, endDate) },
-        select: { id: true, startDate: true, endDate: true },
+      // Validate bed
+      const bed = await prisma.bed.findUnique({
+        where: { id: bedId },
+        select: { id: true, roomId: true, stato: true, room: { select: { stato: true } } },
       });
-      const closableOpen = patientAssignments.filter(
-        (assignment) => assignment.endDate === null && assignment.startDate < startDate,
-      );
-      if (patientAssignments.length !== closableOpen.length) {
-        throw new PatientOverlapError('Il paziente ha già un’assegnazione nel periodo indicato');
-      }
-      if (closableOpen.length > 0) {
-        await tx.patientRoomAssignment.updateMany({
-          where: { id: { in: closableOpen.map((assignment) => assignment.id) } },
-          data: { endDate: previousIsoDate(startDate) },
-        });
+      if (!bed) {
+        res.status(404).json({ error: 'Letto non trovato' });
+        return;
       }
 
-      return tx.patientRoomAssignment.create({
-        data: {
-          patientId,
-          roomId: lockedBed.roomId,
-          bedId,
-          startDate,
-          endDate,
-          note,
-          createdById: authoritativeAssignmentActor(req.operator!),
-        },
-        select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
-      });
-    });
-
-    console.log(`POST /patients/${patientId}/room-assignments → created id=${assignment.id}`);
-    res.status(201).json(assignment);
-  } catch (error) {
-    if (error instanceof BedUnavailableError) {
-      res.status(409).json({ error: error.message, code: 'bed_unavailable' });
-      return;
-    }
-    if (error instanceof BedOverlapError) {
-      res.status(409).json({ error: error.message });
-      return;
-    }
-    if (error instanceof PatientOverlapError) {
-      res.status(409).json({ error: error.message, code: 'patient_assignment_overlap' });
-      return;
-    }
-    console.error('POST /patients/:patientId/room-assignments error:', error);
-    res.status(500).json({ error: 'Errore durante creazione assegnazione stanza' });
-  }
-});
-
-// PUT /patients/:patientId/room-assignments/:assignmentId
-patientAssignmentRouter.put('/:patientId/room-assignments/:assignmentId', async (req, res) => {
-  const { patientId, assignmentId } = req.params;
-  const input = parseAssignmentUpdate(req.body);
-  if (!input.ok) {
-    res.status(400).json({ error: input.error });
-    return;
-  }
-  const body = input.value;
-
-  try {
-    const lockTarget = await prisma.patientRoomAssignment.findFirst({
-      where: { id: assignmentId, patientId },
-      select: { bedId: true, roomId: true },
-    });
-    if (!lockTarget) {
-      res.status(404).json({ error: 'Assegnazione non trovata' });
-      return;
-    }
-
-    const assignment = await prisma.$transaction(async (tx) => {
-      for (const lockKey of assignmentLockKeys(patientId, lockTarget.bedId, lockTarget.roomId)) {
-        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      if (bed.stato === 'manutenzione' || bed.room.stato !== 'attiva') {
+        res.status(409).json({ error: 'Il letto o la camera non sono disponibili' });
+        return;
       }
 
-      // Re-read after acquiring both locks: a concurrent POST may have closed this stay while
-      // waiting, and the candidate interval must be based on the committed value.
-      const existing = await tx.patientRoomAssignment.findFirst({
-        where: { id: assignmentId, patientId },
-      });
-      if (!existing) return null;
-
-      const candidateEndDate = body.endDate !== undefined ? body.endDate : existing.endDate;
-      const range = validateDateRange(existing.startDate, candidateEndDate);
-      if (!range.ok) throw new InvalidAssignmentRangeError(range.error);
-
-      if (body.endDate !== undefined) {
-        const candidates = await tx.patientRoomAssignment.findMany({
-          where: {
-            id: { not: assignmentId },
-            AND: [
-              { OR: [{ patientId }, { bedId: existing.bedId }] },
-              assignmentOverlapFilter(existing.startDate, candidateEndDate),
-            ],
-          },
-          select: { patientId: true, bedId: true },
-        });
-        if (candidates.some((candidate) => candidate.patientId === patientId)) {
-          throw new PatientOverlapError('Il paziente ha già un’assegnazione nel periodo indicato');
+      // Overlap check + close-active-assignment + create are one atomic unit: without a lock, two
+      // concurrent requests for the same bed can both pass the overlap check before either commits.
+      // Prefixed bed + patient locks are acquired in deterministic order. This serializes both
+      // callers contending for one bed and callers moving the same patient to different beds.
+      const assignment = await prisma.$transaction(async (tx) => {
+        for (const lockKey of assignmentLockKeys(patientId, bedId, bed.roomId)) {
+          await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
         }
-        if (candidates.some((candidate) => candidate.bedId === existing.bedId)) {
+
+        const lockedBed = await tx.bed.findUnique({
+          where: { id: bedId },
+          select: { id: true, roomId: true, stato: true, room: { select: { stato: true } } },
+        });
+        if (!lockedBed) throw new BedUnavailableError('Il letto non è più disponibile');
+        if (lockedBed.stato === 'manutenzione' || lockedBed.room.stato !== 'attiva') {
+          throw new BedUnavailableError('Il letto o la camera non sono disponibili');
+        }
+
+        // Check for overlapping assignments on this bed
+        const existingBedAssignment = await tx.patientRoomAssignment.findFirst({
+          where: { bedId, ...assignmentOverlapFilter(startDate, endDate) },
+          select: { id: true },
+        });
+        if (existingBedAssignment) {
           throw new BedOverlapError('Il letto è già occupato nel periodo indicato');
         }
-      }
 
-      const updates: Record<string, unknown> = {};
-      for (const [key, value] of Object.entries(body)) {
-        if (value !== undefined) updates[key] = value;
-      }
+        // A patient lock alone is not sufficient: finite scheduled stays can overlap too. A prior
+        // open stay may be closed for a real move; every other overlap is an explicit conflict.
+        const patientAssignments = await tx.patientRoomAssignment.findMany({
+          where: { patientId, ...assignmentOverlapFilter(startDate, endDate) },
+          select: { id: true, startDate: true, endDate: true },
+        });
+        const closableOpen = patientAssignments.filter(
+          (assignment) => assignment.endDate === null && assignment.startDate < startDate,
+        );
+        if (patientAssignments.length !== closableOpen.length) {
+          throw new PatientOverlapError('Il paziente ha già un’assegnazione nel periodo indicato');
+        }
+        if (closableOpen.length > 0) {
+          await tx.patientRoomAssignment.updateMany({
+            where: { id: { in: closableOpen.map((assignment) => assignment.id) } },
+            data: { endDate: previousIsoDate(startDate) },
+          });
+        }
 
-      return tx.patientRoomAssignment.update({
-        where: { id: assignmentId },
-        data: updates,
-        select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
+        return tx.patientRoomAssignment.create({
+          data: {
+            patientId,
+            roomId: lockedBed.roomId,
+            bedId,
+            startDate,
+            endDate,
+            note,
+            createdById: authoritativeAssignmentActor(req.operator!),
+          },
+          select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
+        });
       });
-    });
-    if (!assignment) {
-      res.status(404).json({ error: 'Assegnazione non trovata' });
-      return;
-    }
 
-    console.log(`PUT /patients/${patientId}/room-assignments/${assignmentId} → updated`);
-    res.status(200).json(assignment);
-  } catch (error) {
-    if (error instanceof InvalidAssignmentRangeError) {
-      res.status(400).json({ error: error.message });
+      console.log(`POST /patients/${patientId}/room-assignments → created id=${assignment.id}`);
+      res.status(201).json(assignment);
+    } catch (error) {
+      if (error instanceof BedUnavailableError) {
+        res.status(409).json({ error: error.message, code: 'bed_unavailable' });
+        return;
+      }
+      if (error instanceof BedOverlapError) {
+        res.status(409).json({ error: error.message });
+        return;
+      }
+      if (error instanceof PatientOverlapError) {
+        res.status(409).json({ error: error.message, code: 'patient_assignment_overlap' });
+        return;
+      }
+      console.error('POST /patients/:patientId/room-assignments error:', error);
+      res.status(500).json({ error: 'Errore durante creazione assegnazione stanza' });
+    }
+  },
+);
+
+// PUT /patients/:patientId/room-assignments/:assignmentId
+patientAssignmentRouter.put(
+  '/:patientId/room-assignments/:assignmentId',
+  (req, res, next) => {
+    const input = parseAssignmentUpdate(req.body);
+    if (!input.ok) {
+      res.status(400).json({ error: input.error });
       return;
     }
-    if (error instanceof BedOverlapError) {
-      res.status(409).json({ error: error.message, code: 'bed_overlap' });
-      return;
+    res.locals.assignmentUpdate = input.value;
+    next();
+  },
+  requirePatientScope,
+  async (req, res) => {
+    const patientIdParam = req.params.patientId;
+    const assignmentIdParam = req.params.assignmentId;
+    const patientId = Array.isArray(patientIdParam) ? patientIdParam[0] : patientIdParam;
+    const assignmentId = Array.isArray(assignmentIdParam)
+      ? assignmentIdParam[0]
+      : assignmentIdParam;
+    const body = res.locals.assignmentUpdate as {
+      bedId?: string;
+      endDate?: string | null;
+      note?: string;
+    };
+
+    try {
+      const lockTarget = await prisma.patientRoomAssignment.findFirst({
+        where: { id: assignmentId, patientId },
+        select: { bedId: true, roomId: true },
+      });
+      if (!lockTarget) {
+        res.status(404).json({ error: 'Assegnazione non trovata' });
+        return;
+      }
+
+      const requestedBed = body.bedId
+        ? await prisma.bed.findUnique({
+            where: { id: body.bedId },
+            select: { id: true, roomId: true, stato: true, room: { select: { stato: true } } },
+          })
+        : null;
+      if (body.bedId && !requestedBed) {
+        res.status(404).json({ error: 'Letto non trovato' });
+        return;
+      }
+      if (
+        requestedBed &&
+        (requestedBed.stato === 'manutenzione' || requestedBed.room.stato !== 'attiva')
+      ) {
+        res.status(409).json({
+          error: 'Il letto o la camera non sono disponibili',
+          code: 'bed_unavailable',
+        });
+        return;
+      }
+
+      const assignment = await prisma.$transaction(async (tx) => {
+        const lockKeys = assignmentMoveLockKeys(patientId, [
+          { bedId: lockTarget.bedId, roomId: lockTarget.roomId },
+          ...(requestedBed ? [{ bedId: requestedBed.id, roomId: requestedBed.roomId }] : []),
+        ]);
+        for (const lockKey of lockKeys) {
+          await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+        }
+
+        // Re-read after acquiring both locks: a concurrent POST may have closed this stay while
+        // waiting, and the candidate interval must be based on the committed value.
+        const existing = await tx.patientRoomAssignment.findFirst({
+          where: { id: assignmentId, patientId },
+        });
+        if (!existing) return null;
+
+        const lockedRequestedBed = body.bedId
+          ? await tx.bed.findUnique({
+              where: { id: body.bedId },
+              select: { id: true, roomId: true, stato: true, room: { select: { stato: true } } },
+            })
+          : null;
+        if (body.bedId && !lockedRequestedBed) {
+          throw new BedUnavailableError('Il letto non è più disponibile');
+        }
+        if (
+          lockedRequestedBed &&
+          (lockedRequestedBed.stato === 'manutenzione' ||
+            lockedRequestedBed.room.stato !== 'attiva')
+        ) {
+          throw new BedUnavailableError('Il letto o la camera non sono disponibili');
+        }
+
+        const candidateEndDate = body.endDate !== undefined ? body.endDate : existing.endDate;
+        const range = validateDateRange(existing.startDate, candidateEndDate);
+        if (!range.ok) throw new InvalidAssignmentRangeError(range.error);
+
+        if (body.endDate !== undefined || body.bedId !== undefined) {
+          const candidateBedId = lockedRequestedBed?.id ?? existing.bedId;
+          const candidates = await tx.patientRoomAssignment.findMany({
+            where: {
+              id: { not: assignmentId },
+              AND: [
+                { OR: [{ patientId }, { bedId: candidateBedId }] },
+                assignmentOverlapFilter(existing.startDate, candidateEndDate),
+              ],
+            },
+            select: { patientId: true, bedId: true },
+          });
+          if (candidates.some((candidate) => candidate.patientId === patientId)) {
+            throw new PatientOverlapError(
+              'Il paziente ha già un’assegnazione nel periodo indicato',
+            );
+          }
+          if (candidates.some((candidate) => candidate.bedId === candidateBedId)) {
+            throw new BedOverlapError('Il letto è già occupato nel periodo indicato');
+          }
+        }
+
+        const updates: Record<string, unknown> = {};
+        for (const [key, value] of Object.entries(body)) {
+          if (value !== undefined) updates[key] = value;
+        }
+        if (lockedRequestedBed) updates.roomId = lockedRequestedBed.roomId;
+
+        return tx.patientRoomAssignment.update({
+          where: { id: assignmentId },
+          data: updates,
+          select: PATIENT_ROOM_ASSIGNMENT_READ_SELECT,
+        });
+      });
+      if (!assignment) {
+        res.status(404).json({ error: 'Assegnazione non trovata' });
+        return;
+      }
+
+      console.log(`PUT /patients/${patientId}/room-assignments/${assignmentId} → updated`);
+      res.status(200).json(assignment);
+    } catch (error) {
+      if (error instanceof BedUnavailableError) {
+        res.status(409).json({ error: error.message, code: 'bed_unavailable' });
+        return;
+      }
+      if (error instanceof InvalidAssignmentRangeError) {
+        res.status(400).json({ error: error.message });
+        return;
+      }
+      if (error instanceof BedOverlapError) {
+        res.status(409).json({ error: error.message, code: 'bed_overlap' });
+        return;
+      }
+      if (error instanceof PatientOverlapError) {
+        res.status(409).json({ error: error.message, code: 'patient_assignment_overlap' });
+        return;
+      }
+      console.error('PUT /patients/:patientId/room-assignments/:assignmentId error:', error);
+      res.status(500).json({ error: 'Errore durante aggiornamento assegnazione' });
     }
-    if (error instanceof PatientOverlapError) {
-      res.status(409).json({ error: error.message, code: 'patient_assignment_overlap' });
-      return;
-    }
-    console.error('PUT /patients/:patientId/room-assignments/:assignmentId error:', error);
-    res.status(500).json({ error: 'Errore durante aggiornamento assegnazione' });
-  }
-});
+  },
+);
 
 // DELETE /patients/:patientId/room-assignments/:assignmentId
 patientAssignmentRouter.delete('/:patientId/room-assignments/:assignmentId', async (req, res) => {

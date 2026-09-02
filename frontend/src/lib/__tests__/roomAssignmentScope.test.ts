@@ -53,8 +53,9 @@ test('App does not download facility rooms during ordinary login bootstrap', () 
   assert.doesNotMatch(bootstrap, /loadCamere\(\)/);
   assert.match(
     appSource,
-    /utente\?\.ruolo === 'admin'[\s\S]+navKey === 'admin-dashboard'[\s\S]+navKey === 'dettaglio-paziente'/,
+    /patientRoomScope[\s\S]+pazienteSelezionato\?\.id[\s\S]+navKey === 'admin-dashboard'/,
   );
+  assert.match(appSource, /patients\/\$\{encodeURIComponent\(patientId\)\}\/room-options/);
 });
 
 test('navigation-scoped room reads reject stale responses and expose a retryable state', () => {
@@ -70,7 +71,15 @@ test('room consumers never present a failed load as zero occupancy or an empty a
   assert.match(dashboardSource, /roomSnapshotAvailable/);
   assert.match(dashboardSource, /Caricamento occupazione struttura/);
   assert.match(dashboardSource, />\s*Riprova\s*<IcoArrow/);
-  assert.match(patientDetailSource, /canManageRooms && \(\s*<button[\s\S]+Modifica assegnazione/);
+  assert.match(patientDetailSource, /canAssignRooms && \(\s*<button[\s\S]+Modifica assegnazione/);
   assert.match(patientDetailSource, /disabled=\{!roomDataReady\}/);
   assert.match(patientDetailSource, /<RoomDataNotice \/>/);
+});
+
+test('patient assignment editor uses dependent labelled selects and an exact bed id', () => {
+  assert.match(patientDetailSource, /htmlFor="patient-room-ward"/);
+  assert.match(patientDetailSource, /htmlFor="patient-room-number"/);
+  assert.match(patientDetailSource, /htmlFor="patient-room-bed"/);
+  assert.match(patientDetailSource, /setCameraModalBedId\(e\.target\.value\)/);
+  assert.match(patientDetailSource, /onAssignCamera\(paziente\.id, cam, cameraModalBedId/);
 });

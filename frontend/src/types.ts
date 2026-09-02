@@ -235,6 +235,8 @@ export type TipoCamera = 'singola' | 'doppia';
 export interface Letto {
   id: string;
   numero: number;
+  /** Etichetta persistita dal backend (es. "A" o "12"). */
+  label?: string;
   stato: StatoLetto;
   pazienteId?: string;
   pazienteNome?: string;

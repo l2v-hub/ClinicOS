@@ -168,11 +168,11 @@ test('operator reads select only the User fields required by each response', () 
   }
 });
 
-test('operator cannot change patient room assignments', async () => {
+test('operator room assignment writes still require valid input before patient scope', async () => {
   const response = await fetch(`${base}/patients/patient-other/room-assignments`, {
     method: 'POST',
     headers: OPERATOR_HEADERS,
-    body: JSON.stringify({ bedId: 'bed-other', startDate: '2026-08-29' }),
+    body: JSON.stringify({ bedId: '', startDate: '2026-08-29' }),
   });
-  assert.equal(response.status, 403);
+  assert.equal(response.status, 400);
 });

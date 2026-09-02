@@ -10,6 +10,7 @@ import narrativeRouter from '../narrative-sections.js';
 import therapyRouter from '../patient-therapies.js';
 import patientsRouter from '../patients.js';
 import { patientAssignmentRouter } from '../admin-rooms.js';
+import patientRoomOptionsRouter from '../patient-room-options.js';
 
 const suffix = `clinical-scope-${Date.now()}`;
 let server: Server;
@@ -21,6 +22,9 @@ let patientAId = '';
 let patientBId = '';
 let createdPatientId = '';
 let therapyBId = '';
+let roomId = '';
+let bedAId = '';
+let bedBId = '';
 const originalAuthMode = process.env.AUTH_MODE;
 const originalNodeEnv = process.env.NODE_ENV;
 
@@ -89,6 +93,18 @@ before(async () => {
   ]);
   patientAId = patientA.id;
   patientBId = patientB.id;
+  const room = await prisma.room.create({
+    data: {
+      numero: `${suffix}-room`,
+      tipo: 'doppia',
+      reparto: 'Medicina test',
+      beds: { create: [{ label: 'A' }, { label: 'B' }] },
+    },
+    include: { beds: { orderBy: { label: 'asc' } } },
+  });
+  roomId = room.id;
+  bedAId = room.beds[0].id;
+  bedBId = room.beds[1].id;
   await prisma.cartella.create({
     data: {
       patientId: patientAId,
@@ -116,6 +132,7 @@ before(async () => {
   app.use(express.json());
   app.use('/patients', therapyRouter);
   app.use('/patients', narrativeRouter);
+  app.use('/patients', patientRoomOptionsRouter);
   app.use('/patients', patientAssignmentRouter);
   app.use('/patients', patientsRouter);
   app.use('/ai/actions', actionsRouter);
@@ -134,6 +151,7 @@ after(async () => {
   await prisma.patient.deleteMany({
     where: { id: { in: [patientAId, patientBId, createdPatientId].filter(Boolean) } },
   });
+  await prisma.room.deleteMany({ where: { id: roomId } });
   await prisma.user.deleteMany({ where: { email: { startsWith: suffix } } });
   if (originalAuthMode === undefined) delete process.env.AUTH_MODE;
   else process.env.AUTH_MODE = originalAuthMode;
@@ -325,6 +343,77 @@ test('own patient access works and client authorship is ignored', async () => {
     where: { patientId_sectionKey: { patientId: patientAId, sectionKey: 'ALLERGIES' } },
   });
   assert.equal(stored.updatedBy, operatorAId);
+});
+
+test('operator can list safe placement options and assign or move only an own patient', async () => {
+  const optionsResponse = await fetch(`${base}/patients/${patientAId}/room-options`, {
+    headers: headers(operatorAId),
+  });
+  assert.equal(optionsResponse.status, 200, await optionsResponse.clone().text());
+  assert.equal(optionsResponse.headers.get('cache-control'), 'private, no-store');
+  const optionsText = await optionsResponse.text();
+  assert.doesNotMatch(optionsText, /firstName|lastName|codiceFiscale/);
+
+  const createResponse = await fetch(`${base}/patients/${patientAId}/room-assignments`, {
+    method: 'POST',
+    headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ bedId: bedAId, startDate: '2032-01-01' }),
+  });
+  assert.equal(createResponse.status, 201, await createResponse.clone().text());
+  const assignment = (await createResponse.json()) as { id: string };
+  assert.equal(
+    (await prisma.patientRoomAssignment.findUniqueOrThrow({ where: { id: assignment.id } }))
+      .createdById,
+    operatorAId,
+  );
+
+  const moveResponse = await fetch(
+    `${base}/patients/${patientAId}/room-assignments/${assignment.id}`,
+    {
+      method: 'PUT',
+      headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bedId: bedBId }),
+    },
+  );
+  assert.equal(moveResponse.status, 200, await moveResponse.clone().text());
+  assert.equal(
+    (await prisma.patientRoomAssignment.findUniqueOrThrow({ where: { id: assignment.id } })).bedId,
+    bedBId,
+  );
+
+  for (const [path, method] of [
+    [`/${patientBId}/room-options`, 'GET'],
+    [`/${patientBId}/room-assignments`, 'POST'],
+  ] as const) {
+    const response = await fetch(`${base}/patients${path}`, {
+      method,
+      headers: { ...headers(operatorAId), 'Content-Type': 'application/json' },
+      body:
+        method === 'POST' ? JSON.stringify({ bedId: bedAId, startDate: '2032-01-01' }) : undefined,
+    });
+    assert.equal(response.status, 404, `${method} ${path}: ${await response.text()}`);
+  }
+});
+
+test('assignment rejects a bed whose room is inactive', async () => {
+  const inactiveRoom = await prisma.room.create({
+    data: {
+      numero: `${suffix}-inactive`,
+      stato: 'inattiva',
+      beds: { create: [{ label: 'A' }] },
+    },
+    include: { beds: true },
+  });
+  try {
+    const response = await fetch(`${base}/patients/${patientBId}/room-assignments`, {
+      method: 'POST',
+      headers: { ...headers(managerId, 'manager'), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bedId: inactiveRoom.beds[0].id, startDate: '2032-02-01' }),
+    });
+    assert.equal(response.status, 409, await response.text());
+  } finally {
+    await prisma.room.delete({ where: { id: inactiveRoom.id } });
+  }
 });
 
 test('manager retains global access while missing and unauthorized patients share 404', async () => {

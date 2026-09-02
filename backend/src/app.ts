@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import { adminRouter as adminRoomsRouter, patientAssignmentRouter } from './routes/admin-rooms.js';
+import patientRoomOptionsRouter from './routes/patient-room-options.js';
 import patientTherapiesRouter from './routes/patient-therapies.js';
 import patientsRouter from './routes/patients.js';
 import appointmentsRouter from './routes/appointments.js';
@@ -172,6 +173,7 @@ app.use('/admin', adminRoomsRouter);
 // dopo, una richiesta in modalita' entra (Bearer JWT, senza header X-Operator-Id) prenderebbe
 // 401 dal gate generico di un router precedente prima di raggiungere il proprio gate corretto.
 app.use('/patients', patientDocumentsRouter);
+app.use('/patients', patientRoomOptionsRouter);
 app.use('/patients', patientAssignmentRouter);
 app.use('/patients', patientTherapiesRouter);
 app.use('/patients', patientDiaryRouter);

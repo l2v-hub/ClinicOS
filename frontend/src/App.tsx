@@ -332,6 +332,7 @@ export default function App() {
   const camereRequestSequenceRef = useRef(0);
   const camereAbortControllerRef = useRef<AbortController | null>(null);
   const camereLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const camereScopeRef = useRef<string | null>(null);
   const schedulesRequestSequenceRef = useRef(0);
   const schedulesAbortControllerRef = useRef<AbortController | null>(null);
   const schedulesLoadStateRef = useRef<'idle' | 'loading' | 'ready' | 'error'>('idle');
@@ -975,9 +976,11 @@ export default function App() {
 
   // ── Load rooms (camere + letti con occupazione reale) ───────────────────────
 
-  const loadCamere = useCallback(async (force = false) => {
+  const loadCamere = useCallback(async (force = false, patientId?: string) => {
+    const requestedScope = patientId ? `patient:${patientId}` : 'facility';
     if (
       !force &&
+      camereScopeRef.current === requestedScope &&
       (camereLoadStateRef.current === 'loading' || camereLoadStateRef.current === 'ready')
     ) {
       return;
@@ -987,14 +990,20 @@ export default function App() {
     camereAbortControllerRef.current?.abort();
     const controller = new AbortController();
     camereAbortControllerRef.current = controller;
+    camereScopeRef.current = requestedScope;
     camereLoadStateRef.current = 'loading';
     setCamereLoadState('loading');
     setCamereLoadError(null);
     try {
-      const response = await fetch(`${API_URL}/admin/rooms`, {
-        headers: operatorHeaders(),
-        signal: controller.signal,
-      });
+      const response = await fetch(
+        patientId
+          ? `${API_URL}/patients/${encodeURIComponent(patientId)}/room-options`
+          : `${API_URL}/admin/rooms`,
+        {
+          headers: operatorHeaders(),
+          signal: controller.signal,
+        },
+      );
       if (!response.ok) throw new Error(`rooms_${response.status}`);
       const rooms = (await response.json()) as Array<{
         id: string;
@@ -1008,7 +1017,8 @@ export default function App() {
           id: string;
           label: string;
           stato: string;
-          assignments: Array<{
+          availability?: 'available' | 'occupied' | 'current' | 'maintenance';
+          assignments?: Array<{
             patientId: string;
             patient: { firstName: string; lastName: string };
           }>;
@@ -1035,19 +1045,23 @@ export default function App() {
             const numericLabel = Number.parseInt(bed.label, 10);
             return {
               id: bed.id,
+              label: bed.label,
               numero:
                 alphaIndex >= 0
                   ? alphaIndex + 1
                   : Number.isInteger(numericLabel) && numericLabel > 0
                     ? numericLabel
                     : index + 1,
-              stato: (bed.assignments.length > 0
+              stato: (bed.availability === 'occupied' ||
+              bed.availability === 'current' ||
+              (bed.assignments?.length ?? 0) > 0
                 ? 'occupato'
-                : bed.stato === 'manutenzione'
+                : bed.availability === 'maintenance' || bed.stato === 'manutenzione'
                   ? 'manutenzione'
                   : 'libero') as Camera['letti'][0]['stato'],
-              pazienteId: bed.assignments[0]?.patientId,
-              pazienteNome: bed.assignments[0]?.patient
+              pazienteId:
+                bed.availability === 'current' ? patientId : bed.assignments?.[0]?.patientId,
+              pazienteNome: bed.assignments?.[0]?.patient
                 ? `${bed.assignments[0].patient.lastName}, ${bed.assignments[0].patient.firstName}`
                 : undefined,
             };
@@ -1323,12 +1337,15 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [needsOperatorDirectory, navKey, loadOperatorDirectory]);
 
-  // Facility occupancy contains patient identity and is not session-bootstrap data. Only admins
-  // load it, on the two screens that consume it; RoomsManagement owns its separate abortable feed.
+  // Facility occupancy contains patient identity and remains confined to the admin dashboard.
+  // Patient detail pages instead use
+  // a patient-scoped availability model without other occupants' identities.
   useEffect(() => {
+    const patientRoomScope = navKey === 'dettaglio-paziente' ? pazienteSelezionato?.id : undefined;
     const needsRooms =
-      utente?.ruolo === 'admin' &&
-      (navKey === 'admin-dashboard' || navKey === 'dettaglio-paziente');
+      Boolean(utente) &&
+      (patientRoomScope !== undefined ||
+        (utente?.ruolo === 'admin' && navKey === 'admin-dashboard'));
     if (!needsRooms) {
       if (camereAbortControllerRef.current) {
         camereRequestSequenceRef.current += 1;
@@ -1340,9 +1357,9 @@ export default function App() {
       camereLoadStateRef.current = 'idle';
       return;
     }
-    const timer = window.setTimeout(() => void loadCamere(), 0);
+    const timer = window.setTimeout(() => void loadCamere(false, patientRoomScope), 0);
     return () => window.clearTimeout(timer);
-  }, [utente, navKey, loadCamere]);
+  }, [utente, navKey, pazienteSelezionato?.id, loadCamere]);
 
   // Weekly schedules are an admin-only, potentially growing dataset. Fetch them only while the
   // schedule page is active; abort on navigation/session changes and revalidate on every return.
@@ -1458,6 +1475,7 @@ export default function App() {
     camereAbortControllerRef.current?.abort();
     camereAbortControllerRef.current = null;
     camereLoadStateRef.current = 'idle';
+    camereScopeRef.current = null;
     schedulesRequestSequenceRef.current += 1;
     schedulesAbortControllerRef.current?.abort();
     schedulesAbortControllerRef.current = null;
@@ -1550,6 +1568,7 @@ export default function App() {
     camereAbortControllerRef.current?.abort();
     camereAbortControllerRef.current = null;
     camereLoadStateRef.current = 'idle';
+    camereScopeRef.current = null;
     schedulesRequestSequenceRef.current += 1;
     schedulesAbortControllerRef.current?.abort();
     schedulesAbortControllerRef.current = null;
@@ -2059,7 +2078,7 @@ export default function App() {
   async function syncCameraAssignment(
     pazienteId: string,
     cameraNumero?: string,
-    lettoNumero?: string,
+    bedId?: string,
   ): Promise<{ ok: boolean; lettoLabel?: string }> {
     try {
       const today = localIsoDate();
@@ -2072,6 +2091,10 @@ export default function App() {
       const assignments: Array<{ id: string; bedId: string; endDate: string | null }> = assignRes.ok
         ? await assignRes.json()
         : [];
+      if (!assignRes.ok) {
+        showToast('Impossibile verificare l’assegnazione attuale');
+        return { ok: false };
+      }
       const active = assignments.find((a) => a.endDate === null || a.endDate >= today);
 
       // Camera rimossa → chiudi l'assegnazione attiva
@@ -2082,13 +2105,13 @@ export default function App() {
             headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
             body: JSON.stringify({ endDate: today }),
           });
-          void loadCamere(true);
+          void loadCamere(true, pazienteId);
         }
         return { ok: true };
       }
 
-      // The admin-only detail view already owns a guarded room snapshot. Reuse it here instead
-      // of downloading the facility-wide occupancy (and patient identities) a second time.
+      // The patient detail owns a scoped room snapshot that exposes availability without
+      // revealing the identities assigned to other beds.
       const room = camere.find((candidate) => candidate.numero === cameraNumero);
       if (!room) {
         showToast(`Camera ${cameraNumero} non trovata`);
@@ -2097,45 +2120,45 @@ export default function App() {
 
       const isFree = (bed: Camera['letti'][number]) =>
         bed.stato !== 'manutenzione' && (bed.stato === 'libero' || bed.pazienteId === pazienteId);
-      const wanted = (lettoNumero ?? '').trim().toUpperCase();
-      const alphaIndex = 'ABCDEFGH'.indexOf(wanted);
-      const wantedNumber = /^\d+$/.test(wanted)
-        ? Number.parseInt(wanted, 10)
-        : alphaIndex >= 0
-          ? alphaIndex + 1
-          : undefined;
-      let bed = room.letti.find((candidate) => candidate.numero === wantedNumber);
-      if (bed && !isFree(bed)) {
-        showToast(`Letto ${wanted} già occupato nella camera ${cameraNumero}`);
+      if (!bedId) {
+        showToast('Seleziona un letto per completare l’assegnazione');
         return { ok: false };
       }
-      if (!bed) bed = room.letti.find(isFree);
+      const bed = room.letti.find((candidate) => candidate.id === bedId);
+      if (bed && !isFree(bed)) {
+        showToast(`Il letto selezionato nella camera ${cameraNumero} non è più disponibile`);
+        return { ok: false };
+      }
       if (!bed) {
-        showToast(`Camera ${cameraNumero} occupata: nessun letto libero`);
+        showToast('Il letto selezionato non appartiene alla camera indicata');
         return { ok: false };
       }
 
       if (active && active.bedId === bed.id) {
         return {
           ok: true,
-          lettoLabel: 'ABCDEFGH'[bed.numero - 1] ?? String(bed.numero),
+          lettoLabel: bed.label ?? 'ABCDEFGH'[bed.numero - 1] ?? String(bed.numero),
         };
       }
 
-      const res = await fetch(`${API_URL}/patients/${pazienteId}/room-assignments`, {
-        method: 'POST',
+      const assignmentUrl = active
+        ? `${API_URL}/patients/${pazienteId}/room-assignments/${active.id}`
+        : `${API_URL}/patients/${pazienteId}/room-assignments`;
+      const res = await fetch(assignmentUrl, {
+        method: active ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify({ bedId: bed.id, startDate: today }),
+        body: JSON.stringify(active ? { bedId: bed.id } : { bedId: bed.id, startDate: today }),
       });
       if (!res.ok) {
         const err = (await res.json().catch(() => null)) as { error?: string } | null;
         showToast(err?.error ?? 'Impossibile assegnare la camera');
+        if (res.status === 409) void loadCamere(true, pazienteId);
         return { ok: false };
       }
-      void loadCamere(true);
+      void loadCamere(true, pazienteId);
       return {
         ok: true,
-        lettoLabel: 'ABCDEFGH'[bed.numero - 1] ?? String(bed.numero),
+        lettoLabel: bed.label ?? 'ABCDEFGH'[bed.numero - 1] ?? String(bed.numero),
       };
     } catch {
       showToast('Impossibile assegnare la camera');
@@ -2909,8 +2932,8 @@ export default function App() {
                       camere={camere}
                       camereLoadState={camereLoadState}
                       camereLoadError={camereLoadError}
-                      onRetryCamere={() => void loadCamere(true)}
-                      canManageRooms={isAdmin}
+                      onRetryCamere={() => void loadCamere(true, pazienteSelezionato.id)}
+                      canAssignRooms
                       onBack={() => goBack('pazienti')}
                       backLabel={NAV_LABELS[prevNavKeyRef.current ?? 'pazienti']}
                       onAddConsegna={addConsegna}
