@@ -69,6 +69,14 @@ test('facility read bounds and write attribution are server authoritative', () =
   assert.doesNotMatch(routeSource, /body\.createdById/);
 });
 
+test('room write authorization cannot intercept unrelated patient POST routes', () => {
+  assert.match(
+    routeSource,
+    /patientAssignmentRouter\.use\('\/:patientId\/room-assignments', \(req, res, next\) =>/,
+  );
+  assert.doesNotMatch(routeSource, /patientAssignmentRouter\.use\(\(req, res, next\) =>/);
+});
+
 test('patient assignment windows never expose more than their documented bounds', () => {
   const rows = Array.from({ length: 101 }, (_, index) => ({ id: `assignment-${index}` }));
 

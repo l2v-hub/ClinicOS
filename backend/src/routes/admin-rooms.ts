@@ -56,7 +56,7 @@ adminRouter.use(requireOperator);
 // services and do not need this route.
 adminRouter.use(requireAdmin);
 patientAssignmentRouter.use(requireOperator);
-patientAssignmentRouter.use((req, res, next) => {
+patientAssignmentRouter.use('/:patientId/room-assignments', (req, res, next) => {
   if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
     requireAdmin(req, res, next);
     return;
