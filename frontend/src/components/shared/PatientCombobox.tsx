@@ -114,10 +114,11 @@ export function PatientCombobox({
           aria-autocomplete="list"
           aria-haspopup="listbox"
           aria-expanded={open && ready}
-          aria-controls={open && ready ? listboxId : undefined}
+          aria-controls={open && ready && results.length > 0 ? listboxId : undefined}
           aria-activedescendant={activeOptionId}
           aria-describedby={describedBy}
           aria-invalid={Boolean(query.trim() && !selected)}
+          aria-required={required}
           autoComplete="off"
           value={query}
           onChange={(event) => {

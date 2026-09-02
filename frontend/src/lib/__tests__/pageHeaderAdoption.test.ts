@@ -18,6 +18,10 @@ const notes = readFileSync(
   new URL('../../components/shared/NotesPage.tsx', import.meta.url),
   'utf8',
 );
+const noteCreateForm = readFileSync(
+  new URL('../../components/shared/NoteCreateForm.tsx', import.meta.url),
+  'utf8',
+);
 const operatorAgenda = readFileSync(
   new URL('../../components/operator/OperatorAgenda.tsx', import.meta.url),
   'utf8',
@@ -45,7 +49,8 @@ test('header creation actions expose their controlled panel state', () => {
   assert.match(consegnaCreateForm, /id="nuova-consegna-panel"/);
   assert.match(notes, /aria-expanded=\{formAperto\}/);
   assert.match(notes, /aria-controls="nuova-nota-panel"/);
-  assert.match(notes, /id="nuova-nota-panel"/);
+  assert.match(notes, /<NoteCreateForm/);
+  assert.match(noteCreateForm, /id="nuova-nota-panel"/);
 });
 
 test('operator agenda uses the canonical heading while preserving accessible controls', () => {

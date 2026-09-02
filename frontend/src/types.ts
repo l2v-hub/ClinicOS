@@ -310,6 +310,14 @@ export interface Nota {
   createdAt: string;
 }
 
+/** Only fields the client is authorized to choose when creating a note. */
+export interface NewNotaInput {
+  destinatarioId: string;
+  pazienteId?: string;
+  priorita: PrioritaNota;
+  messaggio: string;
+}
+
 // ── Clinical (mock) ────────────────────────────────────────────────────────────
 
 export type StatoClinico = 'attivo' | 'risolto' | 'monitoraggio';

@@ -1,0 +1,203 @@
+.notes-page .note-editor {
+  max-width: 1040px;
+  margin: 0 auto 20px;
+  padding: 0;
+  overflow: visible;
+  border-radius: 9px;
+  box-shadow: 0 1px 4px rgba(20, 39, 72, 0.08);
+}
+
+.note-editor__header {
+  min-height: 68px;
+  margin: 0;
+  padding: 13px 16px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border);
+  border-radius: 9px 9px 0 0;
+  background: var(--surface-raised);
+}
+
+.note-editor__eyebrow,
+.note-editor__section > legend {
+  color: var(--text-xmuted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.65px;
+  text-transform: uppercase;
+}
+
+.note-editor__eyebrow {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.note-editor__intro {
+  max-width: 70ch;
+  margin: 3px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.note-editor__body {
+  padding: 0 16px;
+}
+
+.note-editor__section {
+  min-width: 0;
+  margin: 0;
+  padding: 14px 0 16px;
+  border: 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.note-editor__section--last {
+  border-bottom: 0;
+}
+
+.note-editor__section > legend {
+  width: 100%;
+  padding: 0 0 9px;
+}
+
+.note-editor__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+.note-editor__field--recipient {
+  grid-column: span 5;
+}
+
+.note-editor__field--patient {
+  grid-column: span 7;
+  min-width: 0;
+}
+
+.note-editor__field--priority {
+  grid-column: span 3;
+}
+
+.note-editor__field--message {
+  grid-column: span 9;
+}
+
+.note-editor .form-field,
+.note-editor .form-input,
+.note-editor .form-select {
+  min-width: 0;
+}
+
+.note-editor .form-input,
+.note-editor .form-select {
+  width: 100%;
+}
+
+.note-editor__helper {
+  display: block;
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.note-editor__message {
+  min-height: 86px;
+  resize: vertical;
+}
+
+.note-editor__counter {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-xmuted);
+  font-size: 10.5px;
+  text-align: right;
+}
+
+.note-editor__actions {
+  min-height: 62px;
+  align-items: center;
+  margin: 0;
+  padding: 9px 16px;
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 9px 9px;
+  background: var(--surface-raised);
+}
+
+.note-editor__required-note,
+.note-editor__error {
+  margin: 0 auto 0 0;
+  font-size: 11px;
+}
+
+.note-editor__required-note {
+  color: var(--text-muted);
+}
+
+.note-editor__required-note > span {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.note-editor__error {
+  color: var(--red);
+}
+
+@media (max-width: 900px) {
+  .note-editor__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .note-editor__field--recipient,
+  .note-editor__field--priority {
+    grid-column: span 1;
+  }
+
+  .note-editor__field--patient,
+  .note-editor__field--message {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 639px) {
+  .note-editor__header,
+  .note-editor__body,
+  .note-editor__actions {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .note-editor__intro {
+    max-width: 34ch;
+  }
+
+  .note-editor__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .note-editor__field--recipient,
+  .note-editor__field--patient,
+  .note-editor__field--priority,
+  .note-editor__field--message {
+    grid-column: 1;
+  }
+
+  .note-editor__actions {
+    flex-wrap: wrap;
+  }
+
+  .note-editor__required-note,
+  .note-editor__error {
+    width: 100%;
+  }
+
+  .note-editor__actions .btn-secondary,
+  .note-editor__actions .btn-success {
+    min-height: 44px;
+    flex: 1;
+    justify-content: center;
+  }
+}

@@ -51,6 +51,7 @@ import type {
   ScheduleOperatore,
   SlotAgenda,
   Nota,
+  NewNotaInput,
   StatoNota,
   CartellaPaziente,
   ClinicalOverview,
@@ -2216,7 +2217,7 @@ export default function App() {
 
   // ── Note / Messaggi CRUD (API-persisted) ──────────────────────────────────
 
-  async function addNota(n: Omit<Nota, 'id' | 'createdAt'>): Promise<boolean> {
+  async function addNota(n: NewNotaInput): Promise<boolean> {
     try {
       const res = await fetch(`${API_URL}/notes`, {
         method: 'POST',
@@ -2802,7 +2803,6 @@ export default function App() {
                     <NotesPage
                       note={note}
                       utenteId={utenteId}
-                      utenteNome={utente.nome}
                       isAdmin={isAdmin}
                       operatori={operatori}
                       loading={loadingNotes}

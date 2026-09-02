@@ -23,7 +23,7 @@ const appointmentForm = readFileSync(
   'utf8',
 );
 const notesPage = readFileSync(
-  new URL('../../components/shared/NotesPage.tsx', import.meta.url),
+  new URL('../../components/shared/NoteCreateForm.tsx', import.meta.url),
   'utf8',
 );
 
@@ -42,6 +42,7 @@ test('patient picker is an accessible listbox with fiscal code always visible', 
   assert.match(combobox, /role="combobox"/);
   assert.match(combobox, /aria-autocomplete="list"/);
   assert.match(combobox, /aria-activedescendant=\{activeOptionId\}/);
+  assert.match(combobox, /aria-required=\{required\}/);
   assert.match(combobox, /role="listbox"/);
   assert.match(combobox, /role="option"/);
   assert.match(combobox, /CF \{patientFiscalCode\(patient\)\}/);

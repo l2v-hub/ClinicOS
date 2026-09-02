@@ -1,22 +1,21 @@
-import { useEffect, useState } from 'react';
-import type { Nota, PrioritaNota, StatoNota, Operatore, Paziente } from '../../types';
+import { useEffect, useRef, useState } from 'react';
+import type { NewNotaInput, Nota, PrioritaNota, StatoNota, Operatore } from '../../types';
 import type { NotesMailboxQuery } from '../../lib/notesMailbox';
 import { IcoPlus, IcoCheck, IcoX, IcoSearch, IcoMessage } from '../../icons';
 import { InlineEditableField } from './InlineEditableField';
+import { NoteCreateForm } from './NoteCreateForm';
 import { PageHeader } from './PageHeader';
-import { PatientCombobox } from './PatientCombobox';
 
 interface NotesPageProps {
   note: Nota[];
   utenteId: string;
-  utenteNome: string;
   isAdmin: boolean;
   operatori: Operatore[];
   loading: boolean;
   loadError: string | null;
   unreadCount: number;
   hasMore: boolean;
-  onAdd: (n: Omit<Nota, 'id' | 'createdAt'>) => Promise<boolean>;
+  onAdd: (note: NewNotaInput) => Promise<boolean>;
   onUpdate: (id: string, patch: Partial<Nota>) => void | Promise<boolean>;
   onUpdateStato: (id: string, stato: StatoNota) => void;
   onQueryChange: (query: NotesMailboxQuery) => void | Promise<void>;
@@ -45,19 +44,9 @@ const STATO_LABEL: Record<StatoNota, string> = {
   risolta: 'Risolta',
 };
 
-const FORM_VUOTO = {
-  destinatarioId: 'tutti',
-  destinatarioNome: 'Tutti gli operatori',
-  pazienteId: '',
-  pazienteNome: '',
-  priorita: 'normale' as PrioritaNota,
-  messaggio: '',
-};
-
 export function NotesPage({
   note,
   utenteId,
-  utenteNome,
   isAdmin,
   operatori,
   loading,
@@ -74,10 +63,7 @@ export function NotesPage({
   const [filtro, setFiltro] = useState<UiFilter>('tutte');
   const [ricerca, setRicerca] = useState('');
   const [formAperto, setFormAperto] = useState(false);
-  const [form, setForm] = useState(FORM_VUOTO);
-  const [selectedPatient, setSelectedPatient] = useState<Paziente | null>(null);
-  const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
+  const newNoteTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -86,55 +72,9 @@ export function NotesPage({
     return () => window.clearTimeout(timer);
   }, [filtro, onQueryChange, ricerca]);
 
-  const destinatari = [
-    { id: 'tutti', nome: 'Tutti gli operatori' },
-    { id: 'admin', nome: 'Amministrazione' },
-    ...operatori
-      .filter((operatore) => operatore.stato === 'attivo' && operatore.id !== utenteId)
-      .map((operatore) => ({
-        id: operatore.id,
-        nome: `${operatore.cognome} ${operatore.nome}`,
-      })),
-  ];
-
-  function selectPaziente(patient: Paziente | null) {
-    setSelectedPatient(patient);
-    setForm((current) => ({
-      ...current,
-      pazienteId: patient?.id ?? '',
-      pazienteNome: patient ? `${patient.lastName}, ${patient.firstName}` : '',
-    }));
-  }
-
-  function resetForm() {
-    setForm(FORM_VUOTO);
-    setSelectedPatient(null);
-    setSaveError(null);
-  }
-
-  async function salva() {
-    if (!form.messaggio.trim() || saving) return;
-    const dest = destinatari.find((item) => item.id === form.destinatarioId) ?? destinatari[0];
-    setSaving(true);
-    setSaveError(null);
-    const saved = await onAdd({
-      autoreId: utenteId,
-      autoreNome: utenteNome,
-      destinatarioId: dest.id,
-      destinatarioNome: dest.nome,
-      pazienteId: form.pazienteId || undefined,
-      pazienteNome: form.pazienteNome || undefined,
-      priorita: form.priorita,
-      messaggio: form.messaggio.trim(),
-      stato: 'non_letta',
-    });
-    setSaving(false);
-    if (!saved) {
-      setSaveError('Invio non riuscito. Controlla i dati e riprova.');
-      return;
-    }
+  function closeNewNote() {
     setFormAperto(false);
-    resetForm();
+    window.requestAnimationFrame(() => newNoteTriggerRef.current?.focus());
   }
 
   function fmtTime(iso: string): string {
@@ -162,11 +102,12 @@ export function NotesPage({
         }
         actions={
           <button
+            ref={newNoteTriggerRef}
             type="button"
             className="btn-success"
             aria-expanded={formAperto}
             aria-controls="nuova-nota-panel"
-            onClick={() => setFormAperto((open) => !open)}
+            onClick={() => (formAperto ? closeNewNote() : setFormAperto(true))}
           >
             <IcoPlus /> Nuova nota
           </button>
@@ -174,104 +115,13 @@ export function NotesPage({
       />
 
       {formAperto && (
-        <div id="nuova-nota-panel" className="op-form-panel">
-          <div className="op-form-panel__header">
-            <h3 className="op-form-panel__title">Nuova nota / messaggio</h3>
-            <button
-              className="icon-btn"
-              aria-label="Chiudi nuova nota"
-              onClick={() => setFormAperto(false)}
-              disabled={saving}
-            >
-              <IcoX />
-            </button>
-          </div>
-          <div className="op-form-grid">
-            <div className="form-field">
-              <label className="form-label">Destinatario</label>
-              <select
-                className="form-select"
-                value={form.destinatarioId}
-                onChange={(event) => {
-                  const dest =
-                    destinatari.find((item) => item.id === event.target.value) ?? destinatari[0];
-                  setForm((current) => ({
-                    ...current,
-                    destinatarioId: dest.id,
-                    destinatarioNome: dest.nome,
-                  }));
-                }}
-                disabled={saving}
-              >
-                {destinatari.map((dest) => (
-                  <option key={dest.id} value={dest.id}>
-                    {dest.nome}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-field">
-              <label className="form-label">Priorità</label>
-              <select
-                className="form-select"
-                value={form.priorita}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    priorita: event.target.value as PrioritaNota,
-                  }))
-                }
-                disabled={saving}
-              >
-                <option value="normale">Normale</option>
-                <option value="alta">Alta</option>
-                <option value="urgente">Urgente</option>
-              </select>
-            </div>
-            <PatientCombobox
-              inputId="note-patient"
-              label="Paziente (opzionale)"
-              selected={selectedPatient}
-              onChange={selectPaziente}
-              disabled={saving}
-            />
-          </div>
-          <div className="form-field" style={{ marginTop: 8 }}>
-            <label className="form-label">Messaggio *</label>
-            <textarea
-              className="form-input"
-              rows={3}
-              value={form.messaggio}
-              onChange={(event) =>
-                setForm((current) => ({ ...current, messaggio: event.target.value }))
-              }
-              placeholder="Scrivi il messaggio…"
-              maxLength={4000}
-              disabled={saving}
-            />
-          </div>
-          {saveError && (
-            <p className="form-error" role="alert">
-              {saveError}
-            </p>
-          )}
-          <div className="op-form-panel__actions">
-            <button
-              className="btn-secondary"
-              onClick={() => setFormAperto(false)}
-              disabled={saving}
-            >
-              Annulla
-            </button>
-            <button
-              className="btn-success"
-              onClick={() => void salva()}
-              disabled={saving || !form.messaggio.trim()}
-            >
-              <IcoCheck /> {saving ? 'Invio…' : 'Invia'}
-            </button>
-          </div>
-        </div>
+        <NoteCreateForm
+          key="new-note"
+          utenteId={utenteId}
+          operatori={operatori}
+          onAdd={onAdd}
+          onClose={closeNewNote}
+        />
       )}
 
       <div className="toolbar">
