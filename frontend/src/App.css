@@ -5107,6 +5107,20 @@ textarea.form-input {
   background: var(--surface, #fff);
   box-sizing: border-box;
 }
+.qe-row__field {
+  display: block;
+  width: var(--qe-input-w-narrow);
+  min-width: 0;
+}
+.qe-row__field--wide {
+  width: var(--qe-input-w-wide);
+}
+.qe-row__field .qe-row__input {
+  width: 100%;
+}
+.qe-row__mobile-label {
+  display: none;
+}
 .qe-row__input--wide {
   width: var(--qe-input-w-wide);
 }
@@ -5155,6 +5169,12 @@ textarea.form-input {
 .qe-progress__count {
   font-weight: 700;
   color: var(--text);
+}
+.qe-refresh-status {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 .qe-row__note-btn {
   min-width: 36px;
@@ -5255,6 +5275,93 @@ textarea.form-input {
 @media (max-width: 1180px) {
   .qe-row {
     grid-template-columns: 180px repeat(6, auto) auto auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .qe-section .cts__body {
+    overflow-x: hidden;
+  }
+
+  .qe-list,
+  .qe-row {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .qe-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 14px 12px;
+  }
+
+  .qe-row--header {
+    display: none;
+  }
+
+  .qe-row__patient {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    padding-bottom: 2px;
+  }
+
+  .qe-row__patient > div:last-child {
+    min-width: 0;
+  }
+
+  .qe-row__name,
+  .qe-row__room {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .qe-row__name {
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  .qe-row__field,
+  .qe-row__field--wide {
+    width: 100%;
+  }
+
+  .qe-row__mobile-label {
+    display: block;
+    margin: 0 0 5px 2px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .qe-row .qe-row__input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .qe-row__note-btn,
+  .qe-row__save {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+  }
+
+  .qe-row__note-btn {
+    height: 44px;
+  }
+
+  .qe-progress,
+  .qe-refresh-status {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .qe-progress__bar {
+    flex: 1;
   }
 }
 /* ───── end 011 ───── */

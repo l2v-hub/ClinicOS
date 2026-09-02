@@ -12,6 +12,7 @@ const parametersApiSource = readFileSync(
   new URL('../patientParametersPage.ts', import.meta.url),
   'utf8',
 );
+const appCss = readFileSync(new URL('../../App.css', import.meta.url), 'utf8');
 
 test('App login has no unbounded patient roster state or request', () => {
   assert.doesNotMatch(appSource, /useState<Paziente\[\]>/);
@@ -48,6 +49,25 @@ test('multi-patient quick entry exposes every action and field to assistive tech
     parametersSource,
     /requestAnimationFrame\(\(\) => noteButtonRef\.current\?\.focus\(\)\)/,
   );
+});
+
+test('multi-patient refresh keeps the previous roster visible and announces progress', () => {
+  assert.match(parametersSource, /function updateRicerca[\s\S]*setLoading\(true\)/);
+  assert.match(parametersSource, /onChange=\{\(e\) => updateRicerca\(e\.target\.value\)\}/);
+  assert.match(parametersSource, /loading && pazienti\.length === 0/);
+  assert.match(parametersSource, /className="qe-list" aria-busy=\{loading\}/);
+  assert.match(parametersSource, /Aggiornamento elenco…/);
+  assert.match(parametersSource, /disabled=\{loadingMore \|\| loading\}/);
+  assert.doesNotMatch(parametersSource, /setItems\(\[\]\)/);
+});
+
+test('multi-patient mobile layout is a labelled two-column card without horizontal scroll', () => {
+  assert.match(parametersSource, /className="qe-row__mobile-label"/);
+  assert.match(parametersSource, /className="qe-section"/);
+  assert.match(appCss, /@media \(max-width: 768px\)/);
+  assert.match(appCss, /\.qe-section \.cts__body\s*\{\s*overflow-x: hidden/);
+  assert.match(appCss, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+  assert.match(appCss, /\.qe-row__mobile-label\s*\{\s*display: block/);
 });
 
 test('directory search rejects a stale response even when fetch ignores abort', () => {

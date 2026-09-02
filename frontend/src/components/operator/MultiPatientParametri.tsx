@@ -226,64 +226,82 @@ function RigaPaziente({
         </div>
       </div>
 
-      <input
-        className="qe-row__input qe-row__input--wide"
-        placeholder="PA"
-        aria-label={`PA per ${patientName}`}
-        inputMode="text"
-        value={riga.pa}
-        onChange={(e) => update('pa', e.target.value)}
-        onKeyDown={onEnter}
-      />
-      <input
-        className={'qe-row__input' + (spo2Critico(riga.spo2) ? ' qe-row__input--critico' : '')}
-        placeholder="SpO2 %"
-        aria-label={`SpO2 per ${patientName}`}
-        inputMode="decimal"
-        value={riga.spo2}
-        onChange={(e) => update('spo2', e.target.value)}
-        onKeyDown={onEnter}
-        title={spo2Critico(riga.spo2) ? 'SpO2 sotto soglia (<92)' : undefined}
-      />
-      <input
-        className="qe-row__input"
-        placeholder="FC bpm"
-        aria-label={`Frequenza cardiaca per ${patientName}`}
-        inputMode="decimal"
-        value={riga.fc}
-        onChange={(e) => update('fc', e.target.value)}
-        onKeyDown={onEnter}
-      />
-      <input
-        className={
-          'qe-row__input' + (tempAttenzione(riga.temperatura) ? ' qe-row__input--attenzione' : '')
-        }
-        placeholder="TC °C"
-        aria-label={`Temperatura corporea per ${patientName}`}
-        inputMode="decimal"
-        value={riga.temperatura}
-        onChange={(e) => update('temperatura', e.target.value)}
-        onKeyDown={onEnter}
-        title={tempAttenzione(riga.temperatura) ? 'Temperatura ≥ 37,5 °C' : undefined}
-      />
-      <input
-        className="qe-row__input"
-        placeholder="DTX"
-        aria-label={`Glicemia DTX per ${patientName}`}
-        inputMode="decimal"
-        value={riga.dtx}
-        onChange={(e) => update('dtx', e.target.value)}
-        onKeyDown={onEnter}
-      />
-      <input
-        className="qe-row__input qe-row__input--wide"
-        placeholder="Evac."
-        aria-label={`Evacuazione per ${patientName}`}
-        inputMode="text"
-        value={riga.evacuazione}
-        onChange={(e) => update('evacuazione', e.target.value)}
-        onKeyDown={onEnter}
-      />
+      <label className="qe-row__field qe-row__field--wide">
+        <span className="qe-row__mobile-label">PA</span>
+        <input
+          className="qe-row__input qe-row__input--wide"
+          placeholder="PA"
+          aria-label={`PA per ${patientName}`}
+          inputMode="text"
+          value={riga.pa}
+          onChange={(e) => update('pa', e.target.value)}
+          onKeyDown={onEnter}
+        />
+      </label>
+      <label className="qe-row__field">
+        <span className="qe-row__mobile-label">SpO2</span>
+        <input
+          className={'qe-row__input' + (spo2Critico(riga.spo2) ? ' qe-row__input--critico' : '')}
+          placeholder="SpO2 %"
+          aria-label={`SpO2 per ${patientName}`}
+          inputMode="decimal"
+          value={riga.spo2}
+          onChange={(e) => update('spo2', e.target.value)}
+          onKeyDown={onEnter}
+          title={spo2Critico(riga.spo2) ? 'SpO2 sotto soglia (<92)' : undefined}
+        />
+      </label>
+      <label className="qe-row__field">
+        <span className="qe-row__mobile-label">FC</span>
+        <input
+          className="qe-row__input"
+          placeholder="FC bpm"
+          aria-label={`Frequenza cardiaca per ${patientName}`}
+          inputMode="decimal"
+          value={riga.fc}
+          onChange={(e) => update('fc', e.target.value)}
+          onKeyDown={onEnter}
+        />
+      </label>
+      <label className="qe-row__field">
+        <span className="qe-row__mobile-label">TC</span>
+        <input
+          className={
+            'qe-row__input' + (tempAttenzione(riga.temperatura) ? ' qe-row__input--attenzione' : '')
+          }
+          placeholder="TC °C"
+          aria-label={`Temperatura corporea per ${patientName}`}
+          inputMode="decimal"
+          value={riga.temperatura}
+          onChange={(e) => update('temperatura', e.target.value)}
+          onKeyDown={onEnter}
+          title={tempAttenzione(riga.temperatura) ? 'Temperatura ≥ 37,5 °C' : undefined}
+        />
+      </label>
+      <label className="qe-row__field">
+        <span className="qe-row__mobile-label">DTX</span>
+        <input
+          className="qe-row__input"
+          placeholder="DTX"
+          aria-label={`Glicemia DTX per ${patientName}`}
+          inputMode="decimal"
+          value={riga.dtx}
+          onChange={(e) => update('dtx', e.target.value)}
+          onKeyDown={onEnter}
+        />
+      </label>
+      <label className="qe-row__field qe-row__field--wide">
+        <span className="qe-row__mobile-label">Evacuazione</span>
+        <input
+          className="qe-row__input qe-row__input--wide"
+          placeholder="Evac."
+          aria-label={`Evacuazione per ${patientName}`}
+          inputMode="text"
+          value={riga.evacuazione}
+          onChange={(e) => update('evacuazione', e.target.value)}
+          onKeyDown={onEnter}
+        />
+      </label>
 
       <button
         ref={noteButtonRef}
@@ -364,9 +382,6 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     const normalizedQuery = ricerca.trim() || undefined;
     const controller = new AbortController();
     const timer = window.setTimeout(() => {
-      setLoading(true);
-      setLoadingMore(false);
-      setPageError(null);
       fetchPatientParametersPage(
         API_URL,
         { q: normalizedQuery, limit: 25, month: meseCorrente().mese, year: meseCorrente().anno },
@@ -384,7 +399,6 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
         .catch((error: unknown) => {
           if ((error as { name?: string }).name !== 'AbortError') {
             if (!guard.isCurrent(request)) return;
-            setItems([]);
             setPageError('Impossibile caricare i parametri. Riprova.');
           }
         })
@@ -399,8 +413,15 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     };
   }, [ricerca]);
 
+  function updateRicerca(value: string) {
+    setLoading(true);
+    setLoadingMore(false);
+    setPageError(null);
+    setRicerca(value);
+  }
+
   async function loadMore() {
-    if (!nextCursor || loadingMore) return;
+    if (!nextCursor || loadingMore || loading) return;
     const guard = pageRequestGuard.current;
     const request = guard.start();
     const cursor = nextCursor;
@@ -514,19 +535,19 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
             placeholder="Cerca per nome, MRN, camera…"
             aria-label="Cerca paziente per nome, MRN o camera"
             value={ricerca}
-            onChange={(e) => setRicerca(e.target.value)}
+            onChange={(e) => updateRicerca(e.target.value)}
           />
           {ricerca && (
             <button
               className="search-clear-btn"
-              onClick={() => setRicerca('')}
+              onClick={() => updateRicerca('')}
               aria-label="Cancella"
             >
               <IcoX />
             </button>
           )}
         </div>
-        {!loading && totaleRilevabili > 0 && (
+        {totaleRilevabili > 0 && (
           <div
             className="qe-progress"
             aria-label={`${rilevatiOggi} di ${totaleRilevabili} pazienti caricati rilevati oggi`}
@@ -540,9 +561,14 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
             </span>
           </div>
         )}
+        {loading && pazienti.length > 0 && (
+          <span className="qe-refresh-status" role="status" aria-live="polite">
+            Aggiornamento elenco…
+          </span>
+        )}
       </div>
 
-      {loading ? (
+      {loading && pazienti.length === 0 ? (
         <div className="empty-state-card" style={{ textAlign: 'center', padding: '48px 32px' }}>
           <p style={{ color: 'var(--text-muted)' }}>Caricamento pazienti…</p>
         </div>
@@ -559,54 +585,56 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           <p style={{ color: 'var(--text-muted)' }}>Nessun paziente in elenco.</p>
         </div>
       ) : (
-        <ClinicalTableSection title="Parametri" count={filtrati.length} countLabel="pazienti">
-          <div className="qe-list">
-            {/* Column headers */}
-            <div className="qe-row qe-row--header" role="presentation" aria-hidden="true">
-              <div className="qe-row__patient">
-                <span className="qe-row__col-label">Paziente</span>
+        <div className="qe-section">
+          <ClinicalTableSection title="Parametri" count={filtrati.length} countLabel="pazienti">
+            <div className="qe-list" aria-busy={loading}>
+              {/* Column headers */}
+              <div className="qe-row qe-row--header" role="presentation" aria-hidden="true">
+                <div className="qe-row__patient">
+                  <span className="qe-row__col-label">Paziente</span>
+                </div>
+                <span className="qe-row__col-label qe-row__col-label--wide">PA</span>
+                <span className="qe-row__col-label">SpO2</span>
+                <span className="qe-row__col-label">FC</span>
+                <span className="qe-row__col-label">TC</span>
+                <span className="qe-row__col-label">DTX</span>
+                <span className="qe-row__col-label qe-row__col-label--wide">Evac.</span>
+                <span className="qe-row__col-label">Note</span>
+                <span className="qe-row__col-label">Salva</span>
               </div>
-              <span className="qe-row__col-label qe-row__col-label--wide">PA</span>
-              <span className="qe-row__col-label">SpO2</span>
-              <span className="qe-row__col-label">FC</span>
-              <span className="qe-row__col-label">TC</span>
-              <span className="qe-row__col-label">DTX</span>
-              <span className="qe-row__col-label qe-row__col-label--wide">Evac.</span>
-              <span className="qe-row__col-label">Note</span>
-              <span className="qe-row__col-label">Salva</span>
+              {filtrati.map((paziente) => (
+                <RigaPaziente
+                  key={`${paziente.id}:${JSON.stringify(getParametroOggi(getCartella(paziente.id)))}`}
+                  paziente={paziente}
+                  cartella={getCartella(paziente.id)}
+                  operatoreNome={operatoreNome}
+                  isNoteOpen={noteOpenForPazienteId === paziente.id}
+                  onToggleNote={(open: boolean) =>
+                    setNoteOpenForPazienteId(open ? paziente.id : null)
+                  }
+                  onClickPaziente={() => onSelectPaziente(paziente.id)}
+                  onSalva={salvaRiga}
+                />
+              ))}
             </div>
-            {filtrati.map((paziente) => (
-              <RigaPaziente
-                key={`${paziente.id}:${JSON.stringify(getParametroOggi(getCartella(paziente.id)))}`}
-                paziente={paziente}
-                cartella={getCartella(paziente.id)}
-                operatoreNome={operatoreNome}
-                isNoteOpen={noteOpenForPazienteId === paziente.id}
-                onToggleNote={(open: boolean) =>
-                  setNoteOpenForPazienteId(open ? paziente.id : null)
-                }
-                onClickPaziente={() => onSelectPaziente(paziente.id)}
-                onSalva={salvaRiga}
-              />
-            ))}
-          </div>
-          {pageError && (
-            <p className="qe-row__error" role="alert">
-              {pageError}
-            </p>
-          )}
-          {hasMore && (
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => void loadMore()}
-              disabled={loadingMore}
-              style={{ marginTop: 16 }}
-            >
-              {loadingMore ? 'Caricamento…' : 'Carica altri 25 pazienti'}
-            </button>
-          )}
-        </ClinicalTableSection>
+            {pageError && (
+              <p className="qe-row__error" role="alert">
+                {pageError}
+              </p>
+            )}
+            {hasMore && (
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => void loadMore()}
+                disabled={loadingMore || loading}
+                style={{ marginTop: 16 }}
+              >
+                {loadingMore ? 'Caricamento…' : 'Carica altri 25 pazienti'}
+              </button>
+            )}
+          </ClinicalTableSection>
+        </div>
       )}
     </div>
   );
