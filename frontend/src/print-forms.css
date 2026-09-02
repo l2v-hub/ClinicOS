@@ -156,6 +156,63 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
+/* Invio PS is a paper document, so its screen preview should read as a full
+   A4 sheet rather than inheriting the generic 600px modal. The surrounding
+   viewport scrolls while the document keeps its portrait proportions. */
+.invio-ps-box {
+  width: min(1080px, calc(100vw - 40px));
+  max-width: 1080px;
+  height: min(940px, calc(100svh - 32px));
+  max-height: calc(100svh - 32px);
+}
+
+.invio-ps-box .modal-header {
+  flex: 0 0 auto;
+}
+
+.invio-ps-body {
+  align-items: center;
+  padding: 24px;
+  overflow: auto;
+  background: #dfe4eb;
+}
+
+.invio-ps-doc.fm {
+  box-sizing: border-box;
+  width: min(794px, 100%);
+  min-height: 1123px;
+  max-width: 794px;
+  margin: 0 auto;
+  padding: 40px 44px 52px;
+  border-color: #b8c1ce;
+  box-shadow: 0 16px 42px rgba(15, 31, 52, 0.2);
+  page: invio-ps-sheet;
+}
+
+@media (max-width: 840px) {
+  .invio-ps-box {
+    width: calc(100vw - 20px);
+    height: calc(100svh - 20px);
+    max-height: calc(100svh - 20px);
+  }
+
+  .invio-ps-body {
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .invio-ps-doc.fm {
+    width: 100%;
+    min-height: calc((100vw - 68px) * 297 / 210);
+    padding: 28px 26px 36px;
+  }
+}
+
+@page invio-ps-sheet {
+  size: A4 portrait;
+  margin: 12mm 14mm;
+}
+
 /* Title bar */
 .fm-title {
   text-align: center;
@@ -572,6 +629,7 @@
 
 .fm--landscape {
   max-width: 1060px;
+  page: landscape-sheet;
 }
 
 .parametri-modulo-wrap {
@@ -627,7 +685,7 @@
     box-shadow: none;
     padding: 0;
   }
-  @page {
+  @page landscape-sheet {
     size: A4 landscape;
     margin: 10mm 12mm;
   }
