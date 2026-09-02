@@ -38,7 +38,9 @@ interface AdminAgendaProps {
   onLoadTherapySlots?: (date: string) => void;
 }
 
-const TIME_SLOTS = Array.from({ length: 22 }, (_, i) => {
+// Mezz'ore operative dalle 08:00 alle 20:00 incluse: la densita' della griglia
+// permette di leggere l'intera giornata senza trasformarla in un lungo elenco.
+const TIME_SLOTS = Array.from({ length: 25 }, (_, i) => {
   const h = Math.floor(i / 2) + 8;
   const m = i % 2 === 0 ? '00' : '30';
   return `${String(h).padStart(2, '0')}:${m}`;
@@ -538,7 +540,7 @@ export function AdminAgenda({
                 );
               })}
 
-              {/* Fasce fuori dal range orario della griglia (sera 20:00, notte 22:00) */}
+              {/* Fasce fuori dal range orario della griglia (per esempio la notte alle 22:00) */}
               {(therapySlots ?? [])
                 .filter((ts) => !TIME_SLOTS.includes(ts.ora))
                 .map((ts) => (

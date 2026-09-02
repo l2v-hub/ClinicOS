@@ -52,10 +52,24 @@ test('daily agenda stays task-focused instead of rendering dashboard occupancy m
 test('admin daily operator selectors are compact, keyboard-visible native buttons', () => {
   assert.match(
     agendaStyles,
-    /\.agt-col-hdr\s*\{[\s\S]*?min-height:\s*52px;[\s\S]*?padding:\s*6px 10px;[\s\S]*?cursor:\s*pointer/,
+    /\.agt-col-hdr\s*\{[\s\S]*?min-height:\s*48px;[\s\S]*?padding:\s*6px 10px;[\s\S]*?cursor:\s*pointer/,
   );
   assert.match(agendaStyles, /\.agt-col-hdr\.is-selected\s*\{/);
   assert.match(agendaStyles, /\.agt-col-hdr:focus-visible\s*\{/);
+});
+
+test('admin daily grid covers the working day with compact half-hour rows', () => {
+  const adminAgenda = sources[1];
+  assert.match(adminAgenda, /Array\.from\(\{ length: 25 \}/);
+  assert.match(
+    agendaStyles,
+    /\.agt-admin-time\s*\{[\s\S]*?min-height:\s*22px;[\s\S]*?\.agt-admin-time\.hour\s*\{[\s\S]*?min-height:\s*22px/,
+  );
+  assert.match(
+    agendaStyles,
+    /\.agt-admin-cell\s*\{[\s\S]*?min-height:\s*22px;[\s\S]*?\.agt-admin-cell\.hour\s*\{[\s\S]*?min-height:\s*22px/,
+  );
+  assert.match(agendaStyles, /\.agt-admin-grid \.agt-therapy-slot\s*\{[\s\S]*?min-height:\s*44px/);
 });
 
 test('therapy work is one native action with a prominent non-repeated pending state', () => {
