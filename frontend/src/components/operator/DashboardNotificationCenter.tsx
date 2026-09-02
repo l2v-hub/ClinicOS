@@ -42,6 +42,8 @@ export function DashboardNotificationCenter({ counts, sections, loading = false 
     preferredDashboardNotificationTone(counts),
   );
   const leadingTone = preferredDashboardNotificationTone(counts);
+  const hasAlarms = !loading && counts.alarm > 0;
+  const alarmLabel = `${counts.alarm} ${counts.alarm === 1 ? 'allarme' : 'allarmi'} da gestire`;
   const activeSections = sections.filter(
     (section) => section.tone === activeTone && section.count > 0,
   );
@@ -60,18 +62,29 @@ export function DashboardNotificationCenter({ counts, sections, loading = false 
         aria-label="Centro notifiche dashboard"
         aria-busy={loading}
       >
-        <div className="dashboard-notification-bar__intro" aria-live="polite">
+        <div
+          className="dashboard-notification-bar__intro"
+          aria-live={hasAlarms ? 'assertive' : 'polite'}
+          aria-atomic="true"
+        >
           <span className="dashboard-notification-bar__icon" aria-hidden="true">
             <IcoAlert />
           </span>
+          {hasAlarms && (
+            <span className="dashboard-notification-bar__total" aria-hidden="true">
+              {counts.alarm}
+            </span>
+          )}
           <span className="dashboard-notification-bar__copy">
-            <strong>Segnalazioni operative</strong>
+            <strong>{hasAlarms ? alarmLabel : 'Segnalazioni operative'}</strong>
             <span>
               {loading
                 ? 'Aggiornamento in corso…'
-                : counts.total > 0
-                  ? 'Controlla le categorie per priorità'
-                  : 'Nessuna segnalazione aperta'}
+                : hasAlarms
+                  ? 'Priorità alta · richiede verifica immediata'
+                  : counts.total > 0
+                    ? 'Controlla le categorie per priorità'
+                    : 'Nessuna segnalazione aperta'}
             </span>
           </span>
         </div>

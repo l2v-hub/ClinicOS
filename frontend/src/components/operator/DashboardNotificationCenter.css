@@ -23,7 +23,12 @@
 }
 
 .dashboard-notification-bar--alarm {
-  border-left-color: var(--red);
+  background: linear-gradient(90deg, var(--red-bg) 0%, var(--surface) 58%);
+  border: 2px solid var(--red);
+  border-left-width: 5px;
+  box-shadow:
+    0 5px 18px rgba(194, 34, 55, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55);
 }
 
 .dashboard-notification-bar--warning {
@@ -82,6 +87,20 @@
   height: 18px;
 }
 
+.dashboard-notification-bar--alarm .dashboard-notification-bar__icon {
+  width: 42px;
+  height: 42px;
+  flex-basis: 42px;
+  color: #fff;
+  background: var(--red);
+  box-shadow: 0 3px 10px rgba(194, 34, 55, 0.24);
+}
+
+.dashboard-notification-bar--alarm .dashboard-notification-bar__icon svg {
+  width: 21px;
+  height: 21px;
+}
+
 .dashboard-notification-bar__copy {
   display: grid;
   min-width: 0;
@@ -101,18 +120,29 @@
   white-space: nowrap;
 }
 
+.dashboard-notification-bar--alarm .dashboard-notification-bar__copy strong {
+  color: var(--red);
+  font-size: 15px;
+}
+
+.dashboard-notification-bar--alarm .dashboard-notification-bar__copy > span {
+  color: #8f1d2d;
+  font-weight: 600;
+}
+
 .dashboard-notification-bar__total {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 28px;
-  height: 28px;
-  padding: 0 8px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 9px;
   color: #fff;
   background: var(--red);
   border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 3px 10px rgba(194, 34, 55, 0.22);
 }
 
 .dashboard-notification-bar--warning .dashboard-notification-bar__total {
@@ -181,6 +211,19 @@
   background: var(--red-bg);
 }
 
+.dashboard-notification-bar--alarm .dashboard-notification-chip--alarm {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+  box-shadow: 0 3px 10px rgba(194, 34, 55, 0.18);
+}
+
+.dashboard-notification-bar--alarm .dashboard-notification-chip--alarm strong {
+  color: var(--red);
+  background: #fff;
+  font-size: 13px;
+}
+
 .dashboard-notification-chip--warning strong,
 .dashboard-notification-tab--warning strong {
   color: var(--amber);
@@ -212,6 +255,18 @@
 
 .dashboard-notification-bar__open:hover {
   background: var(--indigo-bg);
+}
+
+.dashboard-notification-bar--alarm .dashboard-notification-bar__open {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+  box-shadow: 0 3px 10px rgba(194, 34, 55, 0.18);
+}
+
+.dashboard-notification-bar--alarm .dashboard-notification-bar__open:hover {
+  background: #a91f33;
+  border-color: #a91f33;
 }
 
 .dashboard-notification-bar__open svg {
