@@ -10451,6 +10451,98 @@ textarea.form-input {
   min-width: 0;
 }
 
+/* Suggested questions are actions, not passive chips: every label is complete and keyboard-visible. */
+.agnos-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-raised, #fff);
+}
+.agnos-suggestions__header h2,
+.agnos-suggestions__group h3,
+.agnos-suggestions__header p {
+  margin: 0;
+}
+.agnos-suggestions__header h2 {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+}
+.agnos-suggestions__header p {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.agnos-suggestions__group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.agnos-suggestions__group h3 {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.agnos-suggestions__list {
+  display: grid;
+  gap: 7px;
+}
+.agnos-suggestions__button {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--primary, var(--blue)) 28%, var(--border));
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--primary, var(--blue)) 5%, #fff);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+.agnos-suggestions__button:hover:not(:disabled),
+.agnos-suggestions__button[aria-pressed='true'] {
+  border-color: var(--primary, var(--blue));
+  background: var(--blue-dim);
+  box-shadow: 0 2px 8px rgba(15, 95, 215, 0.1);
+}
+.agnos-suggestions__button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary, var(--blue)) 28%, transparent);
+  outline-offset: 2px;
+  border-color: var(--primary, var(--blue));
+}
+.agnos-suggestions__button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.agnos-suggestions__arrow {
+  flex: 0 0 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--primary, var(--blue));
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+}
+
 /* Le etichette composte possono superare la larghezza del pannello. */
 .ai-asst__actions .srev-chip {
   max-width: 100%;

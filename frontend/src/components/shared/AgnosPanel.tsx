@@ -7,6 +7,7 @@ import { useSpeechOutput } from './agnos/useSpeechOutput';
 import { AgnosBrief } from './agnos/AgnosBrief';
 import { navChipLabel } from './agnos/agnosNav';
 import { spokenAssistantSummary } from './agnos/assistantFeedback';
+import { AgnosSuggestedPrompts } from './agnos/AgnosSuggestedPrompts';
 import {
   AGNOS_TURN_WINDOW,
   agnosHistoryWindow,
@@ -153,6 +154,12 @@ export function AgnosPanel({
     void sendCommand(text, channel);
   }
 
+  function prefillSuggestedQuestion(text: string) {
+    dictatedRef.current = false;
+    setInput(text);
+    inputRef.current?.focus();
+  }
+
   function handleEdit() {
     const original = dismissPendingForEdit();
     if (original !== null) {
@@ -264,6 +271,15 @@ export function AgnosPanel({
             onNavigate={onNavigate}
             formatNavLabel={formatNavLabel}
           />
+          {turns.length === 0 && !pending && (
+            <AgnosSuggestedPrompts
+              operatorRole={operatorRole}
+              hasCurrentPatient={!!currentPatientId}
+              selectedText={input}
+              disabled={busy || voice.listening}
+              onSelect={prefillSuggestedQuestion}
+            />
+          )}
           {visibleHistory.hiddenCount > 0 && (
             <div className="ai-asst__scope agnos-history-control" role="status">
               <span>
