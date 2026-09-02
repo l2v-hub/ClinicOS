@@ -12,6 +12,10 @@ const operators = readFileSync(
   new URL('../../admin/OperatorManagement.tsx', import.meta.url),
   'utf8',
 );
+const operatorStyles = readFileSync(
+  new URL('../../admin/OperatorManagement.css', import.meta.url),
+  'utf8',
+);
 const therapy = readFileSync(
   new URL('../../operator/cartella/TerapiaFarmacologicaTab.tsx', import.meta.url),
   'utf8',
@@ -49,6 +53,10 @@ test('operator directory uses the shared controlled filters without duplicate to
   assert.match(operators, /onStatusChange\?\./);
   assert.match(operators, /clearOperatorFilters/);
   assert.doesNotMatch(operators, /className="toolbar"|IcoSearch|filterable: true/);
+  assert.match(
+    operatorStyles,
+    /@media \(max-width: 900px\)[\s\S]*\.op-management \.cts \.clinicos-table-wrap\s*\{[^}]*display:\s*none/s,
+  );
 });
 
 test('responsive filter layout uses touch-sized controls and never requests horizontal scrolling', () => {
