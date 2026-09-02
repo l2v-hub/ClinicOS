@@ -3326,7 +3326,7 @@
 
 .rooms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
   gap: 14px;
 }
 
@@ -3506,6 +3506,12 @@
   color: var(--text-muted);
   font-size: 10.5px;
   font-weight: 500;
+}
+
+@media (max-width: 760px) {
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .letto-note {
