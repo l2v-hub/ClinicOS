@@ -17,11 +17,40 @@ export function buildPatientPageUrl(apiUrl: string, filters: PatientPageFilters)
   const requestedLimit = Number.isFinite(filters.limit) ? Math.trunc(filters.limit as number) : 50;
   const limit = Math.min(100, Math.max(1, requestedLimit));
   const params = new URLSearchParams({ limit: String(limit) });
-  const q = filters.q?.trim();
-  if (q) params.set('q', q);
   if (filters.sex) params.set('sex', filters.sex);
   if (filters.cursor) params.set('cursor', filters.cursor);
   return `${apiUrl}/patients/page?${params.toString()}`;
+}
+
+export function buildPatientPageRequest(
+  apiUrl: string,
+  filters: PatientPageFilters,
+): { url: string; init: RequestInit } {
+  const q = filters.q?.trim();
+  if (!q) return { url: buildPatientPageUrl(apiUrl, filters), init: {} };
+
+  const requestedLimit = Number.isFinite(filters.limit) ? Math.trunc(filters.limit as number) : 50;
+  const limit = Math.min(100, Math.max(1, requestedLimit));
+  const body: Record<string, string> = { q, limit: String(limit) };
+  if (filters.sex) body.sex = filters.sex;
+  if (filters.cursor) body.cursor = filters.cursor;
+  return {
+    url: `${apiUrl}/patients/page/search`,
+    init: {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    },
+  };
+}
+
+function patientPageFetchInit(
+  request: ReturnType<typeof buildPatientPageRequest>,
+  options: { headers: HeadersInit; signal?: AbortSignal },
+): RequestInit {
+  const headers = new Headers(options.headers);
+  new Headers(request.init.headers).forEach((value, key) => headers.set(key, value));
+  return { ...request.init, headers, signal: options.signal };
 }
 
 export function mergePatientPage(
@@ -41,10 +70,8 @@ export async function fetchPatientPageWithSummary(
   options: { headers: HeadersInit; signal?: AbortSignal; fetcher?: typeof fetch },
 ): Promise<{ page: PatientPageResponse; summary: ClinicalSummaryEntry[] }> {
   const fetcher = options.fetcher ?? fetch;
-  const pageResponse = await fetcher(buildPatientPageUrl(apiUrl, filters), {
-    headers: options.headers,
-    signal: options.signal,
-  });
+  const request = buildPatientPageRequest(apiUrl, filters);
+  const pageResponse = await fetcher(request.url, patientPageFetchInit(request, options));
   if (!pageResponse.ok) throw new Error('Impossibile caricare la pagina pazienti');
   const page = (await pageResponse.json()) as PatientPageResponse;
   if (
@@ -75,10 +102,8 @@ export async function fetchPatientPage(
   options: { headers: HeadersInit; signal?: AbortSignal; fetcher?: typeof fetch },
 ): Promise<PatientPageResponse> {
   const fetcher = options.fetcher ?? fetch;
-  const response = await fetcher(buildPatientPageUrl(apiUrl, filters), {
-    headers: options.headers,
-    signal: options.signal,
-  });
+  const request = buildPatientPageRequest(apiUrl, filters);
+  const response = await fetcher(request.url, patientPageFetchInit(request, options));
   if (!response.ok) throw new Error('Impossibile cercare i pazienti');
   const page = (await response.json()) as PatientPageResponse;
   if (

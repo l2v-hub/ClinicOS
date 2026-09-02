@@ -63,6 +63,9 @@ interface AnagraficaData {
   dateOfBirth?: string;
   sex?: string;
   codiceFiscale?: string;
+  comuneNascita?: string;
+  provinciaNascita?: string;
+  codiceFiscaleOrigine?: 'auto' | 'manual' | 'import';
   phone?: string;
   email?: string;
   address?: string;

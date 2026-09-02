@@ -1,0 +1,372 @@
+.patient-roster-wrap {
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+}
+
+.patient-roster-status {
+  margin-bottom: 10px;
+  padding: 9px 12px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 650;
+  background: var(--indigo-bg);
+  border: 1px solid color-mix(in srgb, var(--blue) 22%, var(--border));
+  border-radius: 10px;
+}
+
+.patient-roster-status--warning {
+  color: var(--amber-dark, #8a5700);
+  background: var(--amber-bg);
+  border-color: color-mix(in srgb, var(--amber) 35%, var(--border));
+}
+
+.patient-roster {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.patient-roster th {
+  height: 42px;
+  padding: 0 16px;
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+  font-size: 11.5px;
+  font-weight: 750;
+  letter-spacing: 0.35px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.patient-roster th:nth-child(1) {
+  width: 25%;
+}
+
+.patient-roster th:nth-child(2) {
+  width: 19%;
+}
+
+.patient-roster th:nth-child(3) {
+  width: 15%;
+}
+
+.patient-roster th:nth-child(4) {
+  width: auto;
+}
+
+.patient-roster th:nth-child(5) {
+  width: 116px;
+}
+
+.patient-roster td {
+  min-height: 68px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--divider);
+  vertical-align: middle;
+}
+
+.patient-roster tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.patient-roster tbody tr {
+  transition: background 0.14s ease;
+}
+
+.patient-roster tbody tr:hover {
+  background: color-mix(in srgb, var(--blue) 4%, var(--surface));
+}
+
+.patient-roster__identity {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  background: transparent;
+  border: 0;
+}
+
+.patient-roster__identity > span:last-child {
+  min-width: 0;
+}
+
+.patient-roster__identity strong,
+.patient-roster__identity small {
+  display: block;
+}
+
+.patient-roster__identity strong {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.patient-roster__identity small {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.patient-roster__avatar,
+.patient-card__avatar {
+  display: inline-flex;
+  flex: 0 0 40px;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+  background: var(--indigo-bg);
+  border-radius: 11px;
+}
+
+.patient-fiscal-code {
+  display: inline-block;
+  max-width: 100%;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.25px;
+  white-space: nowrap;
+}
+
+.patient-fiscal-code--missing {
+  color: var(--amber-dark, #8a5700);
+  font-family: var(--font-ui);
+  font-size: 11.5px;
+  font-weight: 650;
+  white-space: normal;
+}
+
+.patient-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
+
+.patient-signals .alert-chip,
+.patient-signals .indicatore-anomalie,
+.patient-signal {
+  min-height: 24px;
+  padding: 3px 8px;
+  font-size: 10.5px;
+  line-height: 1.15;
+}
+
+.patient-signal {
+  display: inline-flex;
+  align-items: center;
+  color: var(--blue);
+  font-weight: 750;
+  background: var(--indigo-bg);
+  border-radius: 999px;
+}
+
+.patient-signal--warning {
+  color: var(--amber-dark, #8a5700);
+  background: var(--amber-bg);
+}
+
+.patient-signals__empty {
+  color: var(--text-muted);
+  font-size: 11.5px;
+}
+
+.patient-roster__action-heading,
+.patient-roster__actions {
+  text-align: right !important;
+}
+
+.patient-roster__actions {
+  padding-inline: 8px !important;
+  white-space: nowrap;
+}
+
+.patient-roster__open,
+.patient-roster__delete,
+.patient-card__open,
+.patient-card__delete {
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--blue);
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.patient-roster__open:hover,
+.patient-card__open:hover {
+  background: var(--indigo-bg);
+}
+
+.patient-roster__delete {
+  color: var(--red);
+}
+
+.patient-roster__delete:hover,
+.patient-card__delete:hover {
+  background: var(--red-bg);
+}
+
+.patient-roster__open:focus-visible,
+.patient-roster__delete:focus-visible,
+.patient-card__open:focus-visible,
+.patient-card__delete:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.patient-roster__open svg,
+.patient-roster__delete svg {
+  width: 17px;
+  height: 17px;
+}
+
+.patient-roster__empty {
+  height: 88px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.patient-card-grid {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .patient-roster-wrap {
+    display: none;
+  }
+
+  .patient-card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .patient-card-grid__state {
+    grid-column: 1 / -1;
+    min-height: 88px;
+    padding: 32px 20px;
+    color: var(--text-muted);
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .patient-card {
+    min-width: 0;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .patient-card__head {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .patient-card__identity {
+    min-width: 0;
+  }
+
+  .patient-card__identity strong,
+  .patient-card__identity span {
+    display: block;
+  }
+
+  .patient-card__identity strong {
+    overflow: hidden;
+    color: var(--text);
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .patient-card__identity span {
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+
+  .patient-card__open {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 0 7px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .patient-card__open svg {
+    width: 14px;
+  }
+
+  .patient-card__fiscal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 5px 12px;
+    margin-top: 13px;
+    padding: 10px 0;
+    border-block: 1px solid var(--divider);
+  }
+
+  .patient-card__fiscal > span:first-child {
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .patient-card__context {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 11px;
+  }
+
+  .patient-card__delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 9px;
+    padding: 0 8px;
+    color: var(--red);
+    font-size: 11.5px;
+  }
+
+  .patient-card__delete svg {
+    width: 15px;
+  }
+}
+
+@media (max-width: 680px) {
+  .patient-card-grid {
+    grid-template-columns: 1fr;
+  }
+}

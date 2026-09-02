@@ -47,12 +47,20 @@ test('AC1: GET /patients/settings senza header operatore risponde 401', async ()
 });
 
 test('loop 3: pagina e overview pazienti restano dietro requireOperator', async () => {
-  const [page, parametersPage, overview] = await Promise.all([
+  const [page, search, parametersPage, overview] = await Promise.all([
     fetch(`${base}/patients/page`),
+    fetch(`${base}/patients/page/search`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: 'RSSMRA80A01H501U' }),
+    }),
     fetch(`${base}/patients/parameters/page`),
     fetch(`${base}/patients/clinical-summary/overview`),
   ]);
   assert.equal(page.status, 401);
+  assert.equal(page.headers.get('cache-control'), 'private, no-store');
+  assert.equal(search.status, 401);
+  assert.equal(search.headers.get('cache-control'), 'private, no-store');
   assert.equal(parametersPage.status, 401);
   assert.equal(overview.status, 401);
 });
@@ -60,8 +68,30 @@ test('loop 3: pagina e overview pazienti restano dietro requireOperator', async 
 test('loop 3: input non validi sono respinti prima di interrogare il database', async () => {
   const headers = { 'X-Operator-Id': 'test-operatore', 'X-Operator-Role': 'operatore' };
   const patientIds = Array.from({ length: 101 }, (_, index) => `patient-${index}`).join(',');
-  const [badLimit, badParametersLimit, badPeriod, badCursor, oversizedSummary] = await Promise.all([
+  const [
+    badLimit,
+    getSearch,
+    badSearch,
+    blankSearch,
+    missingSearchBody,
+    badParametersLimit,
+    badPeriod,
+    badCursor,
+    oversizedSummary,
+  ] = await Promise.all([
     fetch(`${base}/patients/page?limit=10foo`, { headers }),
+    fetch(`${base}/patients/page?q=RSSMRA80A01H501U`, { headers }),
+    fetch(`${base}/patients/page/search`, {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: 'x'.repeat(81) }),
+    }),
+    fetch(`${base}/patients/page/search`, {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: '   ' }),
+    }),
+    fetch(`${base}/patients/page/search`, { method: 'POST', headers }),
     fetch(`${base}/patients/parameters/page?limit=0`, { headers }),
     fetch(`${base}/patients/parameters/page?month=13&year=2026`, { headers }),
     fetch(`${base}/patients/page?cursor=not-base64!`, { headers }),
@@ -69,6 +99,11 @@ test('loop 3: input non validi sono respinti prima di interrogare il database', 
   ]);
   assert.equal(badLimit.status, 400);
   assert.equal(badLimit.headers.get('cache-control'), 'private, no-store');
+  assert.equal(getSearch.status, 400);
+  assert.equal(badSearch.status, 400);
+  assert.equal(badSearch.headers.get('cache-control'), 'private, no-store');
+  assert.equal(blankSearch.status, 400);
+  assert.equal(missingSearchBody.status, 400);
   assert.equal(badParametersLimit.status, 400);
   assert.equal(badPeriod.status, 400);
   assert.equal(badCursor.status, 400);
@@ -152,4 +187,5 @@ test('AC2: ruolo non ammesso resta 403 (non un generico errore 401/500)', async 
     headers: { 'X-Operator-Id': 'test-intruso', 'X-Operator-Role': 'ospite' },
   });
   assert.equal(res.status, 403);
+  assert.equal(res.headers.get('cache-control'), 'private, no-store');
 });

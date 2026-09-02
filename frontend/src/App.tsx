@@ -2032,7 +2032,7 @@ export default function App() {
 
     // Persist to backend; return success so callers (e.g. inline edit) can react to failure.
     const dataToSave = Object.fromEntries(
-      Object.entries(updated).filter(([key]) => key !== 'pazienteId'),
+      Object.entries(updated).filter(([key]) => key !== 'pazienteId' && key !== 'codiceFiscale'),
     );
     try {
       const r = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
@@ -2142,20 +2142,30 @@ export default function App() {
     }
   }
 
-  async function updatePaziente(id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) {
-    setPazienteSelezionato((current) =>
-      current?.id === id ? { ...current, ...updates } : current,
-    );
+  async function updatePaziente(
+    id: string,
+    updates: Partial<Pick<Paziente, 'email' | 'phone' | 'codiceFiscale'>>,
+  ): Promise<boolean> {
     try {
       const res = await fetch(`${API_URL}/patients/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
         body: JSON.stringify(updates),
       });
-      if (res.ok) showToast('Dati paziente aggiornati');
-      else showToast('Impossibile aggiornare il paziente');
+      if (!res.ok) {
+        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        showToast(body?.error ?? 'Impossibile aggiornare il paziente');
+        return false;
+      }
+      const updated = (await res.json()) as Paziente;
+      setPazienteSelezionato((current) =>
+        current?.id === id ? { ...current, ...updated } : current,
+      );
+      showToast('Dati paziente aggiornati');
+      return true;
     } catch {
       showToast('Impossibile aggiornare il paziente');
+      return false;
     }
   }
 
@@ -2191,9 +2201,9 @@ export default function App() {
       });
       if (request !== patientNavigationSequenceRef.current) return;
       if (exact.length === 1 && !page.hasMore) selectPaziente(exact[0]);
-      else if (page.hasMore) showToast('Ricerca non univoca: usa il codice MRN del paziente');
+      else if (page.hasMore) showToast('Ricerca non univoca: usa il codice fiscale del paziente');
       else if (exact.length > 1)
-        showToast('Più pazienti hanno questo nome: usa la ricerca per MRN');
+        showToast('Più pazienti hanno questo nome: usa la ricerca per codice fiscale');
       else showToast('Paziente non trovato');
     } catch {
       if (request === patientNavigationSequenceRef.current) {
@@ -2536,7 +2546,7 @@ export default function App() {
             title="Cerca (Ctrl+K)"
           >
             <IcoSearch />
-            <span className="topbar-search__ph">Cerca paziente, camera, MRN…</span>
+            <span className="topbar-search__ph">Cerca paziente, camera, codice fiscale…</span>
             <kbd className="topbar-search__kbd">/</kbd>
           </button>
           {utente && (
@@ -2570,7 +2580,7 @@ export default function App() {
                   ref={searchRef}
                   className="search-modal__input"
                   type="search"
-                  placeholder="Cerca paziente per nome o MRN…"
+                  placeholder="Cerca paziente per nome o codice fiscale…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   maxLength={80}
@@ -2603,7 +2613,9 @@ export default function App() {
                           <span className="search-result__name">
                             {p.lastName}, {p.firstName}
                           </span>
-                          <span className="search-result__mrn">{p.medicalRecordNumber}</span>
+                          <span className="search-result__cf">
+                            {p.codiceFiscale ?? 'Codice fiscale non disponibile'}
+                          </span>
                         </div>
                       </button>
                     </li>

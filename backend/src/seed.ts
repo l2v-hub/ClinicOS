@@ -175,6 +175,7 @@ async function main() {
       {
         id: 'SEED-PAZ-001',
         medicalRecordNumber: 'MRN-DEMO-001',
+        codiceFiscale: 'FRRMRA48C15F205N',
         firstName: 'Mario',
         lastName: 'Ferrioli',
         dateOfBirth: dob(1948, 3, 15),
@@ -190,6 +191,7 @@ async function main() {
       {
         id: 'SEED-PAZ-002',
         medicalRecordNumber: 'MRN-DEMO-002',
+        codiceFiscale: 'MRTNNA55L62F205I',
         firstName: 'Anna',
         lastName: 'Martini',
         dateOfBirth: dob(1955, 7, 22),
@@ -205,6 +207,7 @@ async function main() {
       {
         id: 'SEED-PAZ-003',
         medicalRecordNumber: 'MRN-DEMO-003',
+        codiceFiscale: 'BSSGRG42S03L219O',
         firstName: 'Giorgio',
         lastName: 'Bassi',
         dateOfBirth: dob(1942, 11, 3),
@@ -220,6 +223,7 @@ async function main() {
       {
         id: 'SEED-PAZ-004',
         medicalRecordNumber: 'MRN-DEMO-004',
+        codiceFiscale: 'LMBTRS61E48A944N',
         firstName: 'Teresa',
         lastName: 'Lombardi',
         dateOfBirth: dob(1961, 5, 8),
@@ -235,6 +239,7 @@ async function main() {
       {
         id: 'SEED-PAZ-005',
         medicalRecordNumber: 'MRN-DEMO-005',
+        codiceFiscale: 'NRECRL38P27H501U',
         firstName: 'Carlo',
         lastName: 'Neri',
         dateOfBirth: dob(1938, 9, 27),
@@ -250,6 +255,7 @@ async function main() {
       {
         id: 'SEED-PAZ-006',
         medicalRecordNumber: 'MRN-DEMO-006',
+        codiceFiscale: 'GTTLCU70B54D612J',
         firstName: 'Lucia',
         lastName: 'Gatti',
         dateOfBirth: dob(1970, 2, 14),
@@ -265,6 +271,7 @@ async function main() {
       {
         id: 'SEED-PAZ-007',
         medicalRecordNumber: 'MRN-DEMO-007',
+        codiceFiscale: 'MNCRRT58T01F205I',
         firstName: 'Roberto',
         lastName: 'Mancini',
         dateOfBirth: dob(1958, 12, 1),
@@ -280,6 +287,7 @@ async function main() {
       {
         id: 'SEED-PAZ-008',
         medicalRecordNumber: 'MRN-DEMO-008',
+        codiceFiscale: 'MRTLNE85H70F205A',
         firstName: 'Elena',
         lastName: 'Moretti',
         dateOfBirth: dob(1985, 6, 30),
@@ -299,6 +307,7 @@ async function main() {
         update: {
           firstName: p.firstName,
           lastName: p.lastName,
+          codiceFiscale: p.codiceFiscale,
           phone: p.phone,
           email: p.email,
           address: p.address,

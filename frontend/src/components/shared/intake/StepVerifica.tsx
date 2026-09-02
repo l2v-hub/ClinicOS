@@ -3,6 +3,7 @@
 // Shows a readonly summary of collected data and a "Crea paziente" confirm button.
 
 import { IcoCheck } from '../../../icons';
+import { isValidCF } from '../../../lib/codiceFiscale';
 
 interface AnagraficaData {
   firstName?: string;
@@ -62,6 +63,8 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
   if (!a.firstName?.trim()) missingDemo.push('Nome');
   if (!a.lastName?.trim()) missingDemo.push('Cognome');
   if (!a.dateOfBirth) missingDemo.push('Data di nascita');
+  if (!isValidCF(typeof a.codiceFiscale === 'string' ? a.codiceFiscale : ''))
+    missingDemo.push('Codice fiscale valido');
 
   const checklist: Array<{ label: string; ok: boolean }> = [
     {

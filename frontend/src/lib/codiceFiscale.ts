@@ -31,6 +31,13 @@ export interface ComputeCFInput {
 
 export type ComputeCFResult = { ok: true; cf: string } | { ok: false; error: string };
 
+export type FiscalCodeOrigin = 'auto' | 'manual' | 'import';
+
+export type AutoCFDecision =
+  | { kind: 'apply'; cf: string }
+  | { kind: 'clear'; reason: 'incomplete' | 'invalid' }
+  | { kind: 'preserve'; reason: 'manual' | 'import' | 'unchanged' | 'incomplete' | 'invalid' };
+
 export function computeCF(input: ComputeCFInput): ComputeCFResult {
   const nome = input.nome.trim();
   const cognome = input.cognome.trim();
@@ -65,4 +72,42 @@ export function computeCF(input: ComputeCFInput): ComputeCFResult {
       error: `Comune di nascita "${comune}" non riconosciuto: verificare il nome o inserire il CF manualmente`,
     };
   }
+}
+
+/**
+ * Decide se il wizard puo' aggiornare il CF senza distruggere un valore autoritativo.
+ * Un CF digitato o importato non viene mai sovrascritto; un valore generato viene invece
+ * ricalcolato quando cambiano i dati di origine e rimosso se quei dati diventano incoerenti.
+ */
+export function deriveAutoCFUpdate(
+  input: ComputeCFInput,
+  currentCF: string,
+  origin?: FiscalCodeOrigin,
+): AutoCFDecision {
+  const current = normalizeCF(currentCF);
+  if (current && origin === 'manual') return { kind: 'preserve', reason: 'manual' };
+  if (current && origin === 'import') return { kind: 'preserve', reason: 'import' };
+  // Un valore preesistente senza provenienza viene trattato come autoritativo (draft legacy).
+  if (current && origin !== 'auto') return { kind: 'preserve', reason: 'manual' };
+
+  const complete =
+    Boolean(input.nome.trim()) &&
+    Boolean(input.cognome.trim()) &&
+    Boolean(input.dataNascita) &&
+    (input.sesso === 'M' || input.sesso === 'F') &&
+    Boolean(input.comuneNascita.trim());
+  if (!complete) {
+    return current && origin === 'auto'
+      ? { kind: 'clear', reason: 'incomplete' }
+      : { kind: 'preserve', reason: 'incomplete' };
+  }
+
+  const result = computeCF(input);
+  if (!result.ok) {
+    return current && origin === 'auto'
+      ? { kind: 'clear', reason: 'invalid' }
+      : { kind: 'preserve', reason: 'invalid' };
+  }
+  if (current === result.cf) return { kind: 'preserve', reason: 'unchanged' };
+  return { kind: 'apply', cf: result.cf };
 }

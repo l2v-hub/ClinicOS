@@ -166,6 +166,11 @@ interface MaterializeArgs {
   therapies?: TherapyCreateInput[];
 }
 
+function withoutCanonicalPatientIdentity(data: Record<string, unknown>): Record<string, unknown> {
+  const { codiceFiscale: _legacyIdentity, ...clinicalData } = data;
+  return clinicalData;
+}
+
 async function materializePatient(
   tx: PrismaTx,
   { patient: p, registeredById, cartellaData, narrative, jobId, therapies }: MaterializeArgs,
@@ -188,7 +193,9 @@ async function materializePatient(
     },
   });
 
-  await tx.cartella.create({ data: { patientId: created.id, data: cartellaData as object } });
+  await tx.cartella.create({
+    data: { patientId: created.id, data: withoutCanonicalPatientIdentity(cartellaData) as object },
+  });
 
   if (therapies?.length) {
     for (const t of therapies) {
@@ -445,11 +452,13 @@ export async function confirmJob(
     if (!existing) throw new AiExtractionError('config', 'Paziente esistente non trovato');
     const updated = await prisma.$transaction(async (tx) => {
       const cur = await tx.cartella.findUnique({ where: { patientId: existing.id } });
-      const merged = mergeCartella((cur?.data as Record<string, unknown>) ?? {}, {
-        ...(payload.cartella ?? {}),
-        ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}),
-        _lastImportJob: jobId,
-      });
+      const merged = mergeCartella(
+        withoutCanonicalPatientIdentity((cur?.data as Record<string, unknown>) ?? {}),
+        {
+          ...withoutCanonicalPatientIdentity(payload.cartella ?? {}),
+          _lastImportJob: jobId,
+        },
+      );
       await tx.cartella.upsert({
         where: { patientId: existing.id },
         create: { patientId: existing.id, data: merged as object },

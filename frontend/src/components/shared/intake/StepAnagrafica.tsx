@@ -2,8 +2,14 @@
 // Mirrors the field set of NewPatientModal's TabAnagrafica + referente section.
 // No fetches here — the parent IntakeWorkspace owns patchDraft.
 
-import { useState } from 'react';
-import { computeCF, isValidCF } from '../../../lib/codiceFiscale';
+import { cloneElement, isValidElement, useId, type ReactElement, type ReactNode } from 'react';
+
+import {
+  deriveAutoCFUpdate,
+  isValidCF,
+  normalizeCF,
+  type FiscalCodeOrigin,
+} from '../../../lib/codiceFiscale';
 
 interface AnagraficaData {
   firstName?: string;
@@ -13,6 +19,9 @@ interface AnagraficaData {
   codiceFiscale?: string;
   /** #294: comune di nascita — usato solo per calcolare il CF quando non digitato. */
   comuneNascita?: string;
+  provinciaNascita?: string;
+  /** Metadato locale del draft: non viene inviato al record Patient. */
+  codiceFiscaleOrigine?: FiscalCodeOrigin;
   phone?: string;
   email?: string;
   address?: string;
@@ -32,25 +41,7 @@ interface StepAnagraficaProps {
   submitAttempted?: boolean;
 }
 
-function field(
-  value: AnagraficaData,
-  onChange: (v: AnagraficaData) => void,
-  key: keyof AnagraficaData,
-) {
-  return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    onChange({ ...value, [key]: e.target.value });
-  };
-}
-
-function NpmCard({
-  title,
-  desc,
-  children,
-}: {
-  title: string;
-  desc?: string;
-  children: React.ReactNode;
-}) {
+function NpmCard({ title, desc, children }: { title: string; desc?: string; children: ReactNode }) {
   return (
     <div className="npm-card">
       <div className="npm-card__head">
@@ -75,24 +66,96 @@ function NpmField({
   hint?: string;
   span2?: boolean;
   error?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
+  const inputId = useId();
+  const descriptionId = `${inputId}-description`;
+  const control = isValidElement(children)
+    ? cloneElement(
+        children as ReactElement<{
+          id?: string;
+          'aria-invalid'?: boolean;
+          'aria-describedby'?: string;
+          'aria-required'?: boolean;
+        }>,
+        {
+          id: inputId,
+          'aria-invalid': error ? true : undefined,
+          'aria-describedby': error || hint ? descriptionId : undefined,
+          'aria-required': required ? true : undefined,
+        },
+      )
+    : children;
+
   return (
     <div className={`npm-field${span2 ? ' npm-span-2' : ''}${error ? ' npm-field--error' : ''}`}>
-      <label className="npm-label">
+      <label className="npm-label" htmlFor={inputId}>
         {label}
         {required && <span className="npm-required"> *</span>}
       </label>
-      {children}
-      {error && <span className="npm-field-error">{error}</span>}
-      {!error && hint && <span className="npm-hint">{hint}</span>}
+      {control}
+      {error && (
+        <span id={descriptionId} className="npm-field-error" role="alert">
+          {error}
+        </span>
+      )}
+      {!error && hint && (
+        <span id={descriptionId} className="npm-hint">
+          {hint}
+        </span>
+      )}
     </div>
   );
 }
 
 export function StepAnagrafica({ value, onChange, submitAttempted = false }: StepAnagraficaProps) {
-  const f = (key: keyof AnagraficaData) => field(value, onChange, key);
-  const [cfComputeError, setCfComputeError] = useState<string | null>(null);
+  const sourceKeys = new Set<keyof AnagraficaData>([
+    'firstName',
+    'lastName',
+    'dateOfBirth',
+    'sex',
+    'comuneNascita',
+    'provinciaNascita',
+  ]);
+
+  const f =
+    (key: keyof AnagraficaData) =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+      const raw = event.target.value;
+      if (key === 'codiceFiscale') {
+        const codiceFiscale = raw.toUpperCase();
+        onChange({
+          ...value,
+          codiceFiscale,
+          codiceFiscaleOrigine: codiceFiscale.trim() ? 'manual' : undefined,
+        });
+        return;
+      }
+
+      const next: AnagraficaData = { ...value, [key]: raw };
+      if (sourceKeys.has(key)) {
+        const decision = deriveAutoCFUpdate(
+          {
+            nome: next.firstName ?? '',
+            cognome: next.lastName ?? '',
+            sesso: next.sex ?? '',
+            dataNascita: next.dateOfBirth ?? '',
+            comuneNascita: next.comuneNascita ?? '',
+            provinciaNascita: next.provinciaNascita,
+          },
+          next.codiceFiscale ?? '',
+          next.codiceFiscaleOrigine,
+        );
+        if (decision.kind === 'apply') {
+          next.codiceFiscale = decision.cf;
+          next.codiceFiscaleOrigine = 'auto';
+        } else if (decision.kind === 'clear') {
+          next.codiceFiscale = '';
+          next.codiceFiscaleOrigine = undefined;
+        }
+      }
+      onChange(next);
+    };
 
   const errors: Partial<Record<keyof AnagraficaData, string>> = {};
   if (submitAttempted && !value.firstName?.trim()) errors.firstName = 'Nome obbligatorio';
@@ -102,23 +165,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
   if (submitAttempted && !isValidCF(value.codiceFiscale ?? ''))
     errors.codiceFiscale = value.codiceFiscale?.trim()
       ? 'Codice fiscale non valido (16 caratteri, carattere di controllo)'
-      : 'Codice fiscale obbligatorio: digitalo o usa "Calcola"';
-
-  function calcolaCF() {
-    const r = computeCF({
-      nome: value.firstName ?? '',
-      cognome: value.lastName ?? '',
-      sesso: value.sex ?? 'M',
-      dataNascita: value.dateOfBirth ?? '',
-      comuneNascita: value.comuneNascita ?? '',
-    });
-    if (r.ok) {
-      setCfComputeError(null);
-      onChange({ ...value, codiceFiscale: r.cf });
-    } else {
-      setCfComputeError(r.error);
-    }
-  }
+      : 'Codice fiscale obbligatorio: completa i dati di nascita oppure inseriscilo manualmente';
 
   return (
     <>
@@ -150,11 +197,11 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               onChange={f('dateOfBirth')}
             />
           </NpmField>
-          <NpmField label="Sesso">
-            <select className="npm-input npm-select" value={value.sex ?? 'M'} onChange={f('sex')}>
+          <NpmField label="Sesso" hint="Necessario per il calcolo automatico del codice fiscale">
+            <select className="npm-input npm-select" value={value.sex ?? ''} onChange={f('sex')}>
+              <option value="">— Seleziona —</option>
               <option value="M">Maschio</option>
               <option value="F">Femmina</option>
-              <option value="—">Non specificato</option>
             </select>
           </NpmField>
           <NpmField label="Comune di nascita" hint="Usato per calcolare il CF">
@@ -165,32 +212,51 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
               placeholder="Roma"
             />
           </NpmField>
+          <NpmField label="Provincia di nascita" hint="Sigla provincia; EE per l'estero">
+            <input
+              className="npm-input"
+              value={value.provinciaNascita ?? ''}
+              onChange={f('provinciaNascita')}
+              placeholder="MI"
+              maxLength={2}
+              style={{ textTransform: 'uppercase' }}
+            />
+          </NpmField>
           <NpmField
             label="Codice fiscale"
             required
             span2
-            error={errors.codiceFiscale ?? cfComputeError ?? undefined}
-            hint="Digitalo, oppure compila sesso + data + comune di nascita e premi Calcola"
+            error={errors.codiceFiscale}
+            hint={
+              value.codiceFiscaleOrigine === 'auto'
+                ? 'Calcolato automaticamente dai dati anagrafici; puoi correggerlo manualmente'
+                : 'Si compila automaticamente con nome, cognome, sesso, data e luogo di nascita'
+            }
           >
-            <div style={{ display: 'flex', gap: 8 }}>
-              <input
-                className={`npm-input npm-mono${errors.codiceFiscale ? ' npm-input--error' : ''}`}
-                value={value.codiceFiscale ?? ''}
-                onChange={f('codiceFiscale')}
-                placeholder="RSSMRA80A01H501U"
-                maxLength={16}
-                style={{ textTransform: 'uppercase', flex: 1 }}
-              />
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={calcolaCF}
-                title="Calcola il codice fiscale dai dati inseriti"
-              >
-                Calcola
-              </button>
-            </div>
+            <input
+              className={`npm-input npm-mono${errors.codiceFiscale ? ' npm-input--error' : ''}`}
+              value={value.codiceFiscale ?? ''}
+              onChange={f('codiceFiscale')}
+              onBlur={(event) => {
+                const normalized = normalizeCF(event.target.value);
+                if (normalized !== event.target.value) {
+                  onChange({ ...value, codiceFiscale: normalized, codiceFiscaleOrigine: 'manual' });
+                }
+              }}
+              placeholder="RSSMRA80A01H501U"
+              maxLength={16}
+              autoComplete="off"
+              spellCheck={false}
+              style={{ textTransform: 'uppercase' }}
+            />
           </NpmField>
+          <span className="sr-only" role="status" aria-live="polite">
+            {value.codiceFiscaleOrigine === 'auto'
+              ? `Codice fiscale compilato automaticamente: ${value.codiceFiscale}`
+              : !value.codiceFiscale
+                ? 'Codice fiscale automatico non disponibile'
+                : ''}
+          </span>
         </div>
       </NpmCard>
 

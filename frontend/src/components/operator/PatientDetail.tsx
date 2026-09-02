@@ -85,7 +85,10 @@ interface PatientDetailProps {
     pazienteId: string,
     updates: Partial<CartellaPaziente>,
   ) => void | Promise<boolean>;
-  onUpdatePaziente: (id: string, updates: Partial<Pick<Paziente, 'email' | 'phone'>>) => void;
+  onUpdatePaziente: (
+    id: string,
+    updates: Partial<Pick<Paziente, 'email' | 'phone' | 'codiceFiscale'>>,
+  ) => Promise<boolean>;
   onAssignCamera: (
     pazienteId: string,
     cameraNumero?: string,
@@ -311,7 +314,7 @@ export function PatientDetail({
   // Profilo edit
   const [editProfilo, setEditProfilo] = useState(false);
   const [profiloForm, setProfiloForm] = useState<
-    Partial<CartellaPaziente & Pick<Paziente, 'email' | 'phone'>>
+    Partial<CartellaPaziente & Pick<Paziente, 'email' | 'phone' | 'codiceFiscale'>>
   >({});
   // Feature 010: L3 sub-tabs for Profilo (FR-005)
   const [profiloL3, setProfiloL3] = useState<
@@ -594,7 +597,7 @@ export function PatientDetail({
 
   // Profilo
   async function saveProfiloHandler() {
-    const { email, phone, ...cartellaUpdates } = profiloForm;
+    const { email, phone, codiceFiscale, ...cartellaUpdates } = profiloForm;
     // Issue #128: se la camera cambia, crea/chiude l'assegnazione letto reale
     const cam = cartellaUpdates.cameraNumero || undefined;
     if (cam !== (cartella.cameraNumero || undefined)) {
@@ -605,7 +608,14 @@ export function PatientDetail({
         ? (res.lettoLabel ?? cartellaUpdates.lettoNumero)
         : undefined;
     }
-    if (email !== undefined || phone !== undefined) onUpdatePaziente(paziente.id, { email, phone });
+    if (email !== undefined || phone !== undefined || codiceFiscale !== undefined) {
+      const patientSaved = await onUpdatePaziente(paziente.id, {
+        email,
+        phone,
+        codiceFiscale,
+      });
+      if (!patientSaved) return;
+    }
     const ok = await updConEsito(cartellaUpdates);
     if (ok) setEditProfilo(false);
   }
@@ -1589,7 +1599,7 @@ export function PatientDetail({
                 onClick={() => {
                   setProfiloForm({
                     indirizzo: cartella.indirizzo,
-                    codiceFiscale: cartella.codiceFiscale,
+                    codiceFiscale: paziente.codiceFiscale ?? cartella.codiceFiscale,
                     contattoEmergenzaNome: cartella.contattoEmergenzaNome,
                     contattoEmergenzaTel: cartella.contattoEmergenzaTel,
                     contattoEmergenzaRel: cartella.contattoEmergenzaRel,
@@ -1818,11 +1828,9 @@ export function PatientDetail({
                       </div>
                       <div className="cr-profilo-row">
                         <span>Codice Fiscale</span>
-                        <strong className="cr-mono">{cartella.codiceFiscale ?? '—'}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>MRN</span>
-                        <strong className="cr-mono">{paziente.medicalRecordNumber}</strong>
+                        <strong className="cr-mono">
+                          {paziente.codiceFiscale ?? cartella.codiceFiscale ?? '—'}
+                        </strong>
                       </div>
                     </div>
                   )}

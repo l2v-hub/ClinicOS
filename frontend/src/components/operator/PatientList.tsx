@@ -1,26 +1,17 @@
-import { useState, useEffect, useMemo, useCallback, useRef, memo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { API_URL } from '../../config';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
-import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
-import { useAnomalieReparto, anomalieDelPaziente } from './cartella/useAnomalieReparto';
-import type { AnomaliePaziente } from './cartella/anomalieFarmaco';
+import { useAnomalieReparto } from './cartella/useAnomalieReparto';
 import type { Paziente, ClinicalSummaryEntry } from '../../types';
-import {
-  IcoSearch,
-  IcoX,
-  IcoChevronRight,
-  IcoAlert,
-  IcoPlus,
-  IcoTrash,
-  IcoUser,
-} from '../../icons';
+import { IcoSearch, IcoX, IcoPlus, IcoUser } from '../../icons';
 import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
-import { ClinicalTable } from './cartella/ClinicalTable';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
 import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { fetchPatientPageWithSummary, mergePatientPage } from '../../lib/patientPage';
+import { PatientRoster } from './PatientRoster';
+import './PatientList.css';
 
 interface PatientListProps {
   totalPatients: number;
@@ -48,100 +39,6 @@ const STATO_RICOVERO_LABEL: Record<string, string> = {
   day_hospital: 'Day Hospital',
   dimesso: 'Dimesso',
 };
-
-/** Stato clinico sintetico per la lista (dati reali cartella, nessuna chiamata extra). */
-function statoClinicoBadges(c?: ClinicalSummaryEntry) {
-  if (!c) return null;
-  return {
-    statoRicovero: c.statoRicovero,
-    critico: c.hasCriticalVitals || c.hasHighRisk,
-    allergie: c.allergieCount,
-  };
-}
-
-function calcAge(dob: string): number {
-  const today = new Date();
-  const birth = new Date(dob);
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-  return age;
-}
-
-// Riga card mobile estratta e memoizzata: evita il ri-render completo delle righe
-// a ogni keystroke del filtro (SPEC-015 US5 / T029).
-const PatientListCard = memo(function PatientListCard({
-  p,
-  hasConsegnaAperta,
-  badges,
-  anomalie,
-  deleteEnabled,
-  deleting,
-  onSelect,
-  onDelete,
-}: {
-  p: Paziente;
-  hasConsegnaAperta: boolean;
-  badges: ReturnType<typeof statoClinicoBadges>;
-  anomalie: AnomaliePaziente;
-  deleteEnabled: boolean;
-  deleting: boolean;
-  onSelect: (p: Paziente) => void;
-  onDelete: (p: Paziente, e: React.MouseEvent) => void;
-}) {
-  return (
-    <div className="pt-list-card" onClick={() => onSelect(p)}>
-      <div className="pt-list-card__avatar op-avatar-sm" aria-hidden="true">
-        {p.firstName[0]}
-        {p.lastName[0]}
-      </div>
-      <div className="pt-list-card__info">
-        <span className="pt-list-card__name">
-          {p.lastName}, {p.firstName}
-          {badges && badges.allergie > 0 && (
-            <span className="alert-chip alert-chip--amber">⚠ Allergie</span>
-          )}
-          {p.sex === 'M' && <span className="sex-badge sex-badge--m">M</span>}
-          {p.sex === 'F' && <span className="sex-badge sex-badge--f">F</span>}
-          <IndicatoreAnomalie esito={anomalie} />
-        </span>
-        <span className="pt-list-card__meta">
-          <span className="mrn-tag">{p.medicalRecordNumber}</span> · {calcAge(p.dateOfBirth)} anni
-        </span>
-        {badges && (
-          <span className="pt-list-card__badges">
-            {badges.statoRicovero && (
-              <span className={`stato-pill stato-pill--ricovero-${badges.statoRicovero}`}>
-                {STATO_RICOVERO_LABEL[badges.statoRicovero] ?? badges.statoRicovero}
-              </span>
-            )}
-            {badges.critico && <span className="alert-chip alert-chip--red">Critico</span>}
-          </span>
-        )}
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        {hasConsegnaAperta && (
-          <span className="consegna-alert-dot">
-            <IcoAlert />
-          </span>
-        )}
-        {deleteEnabled && (
-          <button
-            className="pt-delete-btn"
-            title="Elimina paziente (test)"
-            disabled={deleting}
-            onClick={(e) => onDelete(p, e)}
-          >
-            <IcoTrash />
-          </button>
-        )}
-        <span className="pt-list-card__chevron">
-          <IcoChevronRight />
-        </span>
-      </div>
-    </div>
-  );
-});
 
 export function PatientList({
   totalPatients,
@@ -291,13 +188,13 @@ export function PatientList({
     }
   }, [pendingDelete, onDeleted, loadPage]);
 
-  const { consegneAperteMap, consegneAperte } = useMemo(() => {
+  const consegneAperteMap = useMemo(() => {
     const map = new Map(
       clinicalSummary
         .filter((entry) => entry.consegneAperte > 0)
         .map((entry) => [entry.patientId, entry.consegneAperte]),
     );
-    return { consegneAperteMap: map, consegneAperte: new Set(map.keys()) };
+    return map;
   }, [clinicalSummary]);
 
   const filtratiBase = pazienti;
@@ -393,7 +290,8 @@ export function PatientList({
           <input
             className="search-input"
             type="search"
-            placeholder="Cerca per nome o MRN…"
+            placeholder="Cerca per nome o codice fiscale…"
+            aria-label="Cerca paziente per nome o codice fiscale"
             maxLength={80}
             value={ricerca}
             onChange={(e) => {
@@ -414,11 +312,13 @@ export function PatientList({
             </button>
           )}
         </div>
-        <div className="filter-chips">
+        <div className="filter-chips" role="group" aria-label="Filtra pazienti per sesso">
           {(['tutti', 'M', 'F'] as const).map((s) => (
             <button
               key={s}
+              type="button"
               className={`filter-chip${filtroSesso === s ? ' active' : ''}`}
+              aria-pressed={filtroSesso === s}
               onClick={() => {
                 setFiltroStatoRicovero('tutti');
                 setFiltroSesso(s);
@@ -429,9 +329,15 @@ export function PatientList({
           ))}
         </div>
         {statiPresenti.length > 0 && (
-          <div className="filter-chips" aria-label="Stati nei risultati caricati">
+          <div
+            className="filter-chips"
+            role="group"
+            aria-label="Filtra per stato di ricovero nei risultati caricati"
+          >
             <button
+              type="button"
               className={`filter-chip${filtroStatoRicovero === 'tutti' ? ' active' : ''}`}
+              aria-pressed={filtroStatoRicovero === 'tutti'}
               onClick={() => setFiltroStatoRicovero('tutti')}
             >
               Tutti gli stati caricati
@@ -439,7 +345,9 @@ export function PatientList({
             {statiPresenti.map((s) => (
               <button
                 key={s}
+                type="button"
                 className={`filter-chip${filtroStatoRicovero === s ? ' active' : ''}`}
+                aria-pressed={filtroStatoRicovero === s}
                 onClick={() => setFiltroStatoRicovero(s)}
               >
                 {STATO_RICOVERO_LABEL[s]}
@@ -484,179 +392,17 @@ export function PatientList({
       {/* Tabella + card, sempre aperte (niente sezione collassabile) */}
       {(loading || pazienti.length > 0) && (
         <>
-          {/* Tabella desktop — shared ClinicalTable */}
-          <div className="table-wrap table-wrap--desktop">
-            <ClinicalTable<Paziente>
-              title="Pazienti"
-              noWrapper
-              keyField="id"
-              data={loading ? [] : filtrati}
-              onRowClick={onSelect}
-              emptyMessage={loading ? 'Caricamento…' : 'Nessun paziente trovato'}
-              columns={[
-                {
-                  key: 'lastName',
-                  label: 'Paziente',
-                  sortable: true,
-                  render: (_v, p) => {
-                    const b = statoClinicoBadges(summaryMap.get(p.id));
-                    return (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div className="op-avatar-sm" aria-hidden="true">
-                          {p.firstName[0]}
-                          {p.lastName[0]}
-                        </div>
-                        <div>
-                          <div className="cell--name">
-                            {p.lastName}, {p.firstName}
-                            {b && b.allergie > 0 && (
-                              <span
-                                className="alert-chip alert-chip--amber"
-                                title={`${b.allergie} allergie documentate`}
-                              >
-                                ⚠ Allergie
-                              </span>
-                            )}
-                            {p.sex === 'M' && <span className="sex-badge sex-badge--m">M</span>}
-                            {p.sex === 'F' && <span className="sex-badge sex-badge--f">F</span>}
-                            {/* AC6: farmaci in terapia che l'anagrafica non riconosce. Una sola
-                                richiesta /therapy-slots copre tutto il reparto (AC11). */}
-                            <IndicatoreAnomalie esito={anomalieDelPaziente(anomalie, p.id)} />
-                          </div>
-                          <div className="cell--muted" style={{ fontSize: 12 }}>
-                            {calcAge(p.dateOfBirth)} anni
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  },
-                },
-                {
-                  key: 'statoClinico',
-                  label: 'Stato clinico',
-                  render: (_v, p) => {
-                    const s = statoClinicoBadges(summaryMap.get(p.id));
-                    if (!s)
-                      return (
-                        <span className="cell--muted" style={{ fontSize: 11 }}>
-                          —
-                        </span>
-                      );
-                    return (
-                      <div
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}
-                      >
-                        {s.statoRicovero && (
-                          <span className={`stato-pill stato-pill--ricovero-${s.statoRicovero}`}>
-                            {STATO_RICOVERO_LABEL[s.statoRicovero] ?? s.statoRicovero}
-                          </span>
-                        )}
-                        {s.critico && <span className="alert-chip alert-chip--red">Critico</span>}
-                      </div>
-                    );
-                  },
-                },
-                {
-                  key: 'medicalRecordNumber',
-                  label: 'MRN',
-                  sortable: true,
-                  render: (_v, p) => <span className="mrn-tag">{p.medicalRecordNumber}</span>,
-                },
-                {
-                  key: 'dateOfBirth',
-                  label: 'Data di nascita',
-                  sortable: true,
-                  filterType: 'date',
-                  render: (_v, p) => (
-                    <span className="cell--muted">
-                      {new Date(p.dateOfBirth).toLocaleDateString('it-IT')}
-                    </span>
-                  ),
-                },
-                {
-                  key: 'cameraLetto',
-                  label: 'Camera / Letto',
-                  render: () => (
-                    <span className="cell--muted" style={{ fontSize: 12 }}>
-                      --
-                    </span>
-                  ),
-                },
-                {
-                  key: 'contatti',
-                  label: 'Contatti',
-                  render: (_v, p) => (
-                    <div className="cell--muted" style={{ fontSize: 12 }}>
-                      <div>{p.email ?? '--'}</div>
-                      <div>{p.phone ?? '--'}</div>
-                    </div>
-                  ),
-                },
-                {
-                  key: 'consegne',
-                  label: 'Consegne',
-                  align: 'center',
-                  render: (_v, p) =>
-                    consegneAperteMap.has(p.id) ? (
-                      <span
-                        className="consegna-priorita-badge consegna-priorita-badge--alta"
-                        title={`${consegneAperteMap.get(p.id)} consegne aperte`}
-                      >
-                        {consegneAperteMap.get(p.id)}
-                      </span>
-                    ) : (
-                      <span style={{ color: 'var(--text-xmuted)', fontSize: 11 }}>—</span>
-                    ),
-                },
-                ...(deleteEnabled
-                  ? [
-                      {
-                        key: 'elimina',
-                        label: '',
-                        align: 'center' as const,
-                        render: (_v: unknown, p: Paziente) => (
-                          <button
-                            className="pt-delete-btn"
-                            title="Elimina paziente (test)"
-                            disabled={deletingId === p.id}
-                            onClick={(e) => handleDelete(p, e)}
-                          >
-                            <IcoTrash />
-                          </button>
-                        ),
-                      },
-                    ]
-                  : []),
-                {
-                  key: 'chevron',
-                  label: '',
-                  align: 'right',
-                  render: () => (
-                    <span className="row-chevron">
-                      <IcoChevronRight />
-                    </span>
-                  ),
-                },
-              ]}
-            />
-          </div>
-
-          {/* Card list mobile */}
-          <div className="pt-card-list">
-            {filtrati.map((p) => (
-              <PatientListCard
-                key={p.id}
-                p={p}
-                hasConsegnaAperta={consegneAperte.has(p.id)}
-                badges={statoClinicoBadges(summaryMap.get(p.id))}
-                anomalie={anomalieDelPaziente(anomalie, p.id)}
-                deleteEnabled={deleteEnabled}
-                deleting={deletingId === p.id}
-                onSelect={onSelect}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
+          <PatientRoster
+            patients={loading ? [] : filtrati}
+            loading={loading}
+            summaryMap={summaryMap}
+            consegneAperteMap={consegneAperteMap}
+            anomalie={anomalie}
+            deleteEnabled={deleteEnabled}
+            deletingId={deletingId}
+            onSelect={onSelect}
+            onDelete={handleDelete}
+          />
           {hasMore && nextCursor && (
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
               <button
@@ -691,8 +437,8 @@ export function PatientList({
           pendingDelete ? (
             <>
               Verranno rimossi anche <strong>cartella e dati clinici</strong> di{' '}
-              {pendingDelete.lastName}, {pendingDelete.firstName} (
-              {pendingDelete.medicalRecordNumber}). Azione di test, non reversibile.
+              {pendingDelete.lastName}, {pendingDelete.firstName} (codice fiscale:{' '}
+              {pendingDelete.codiceFiscale ?? 'non disponibile'}). Azione di test, non reversibile.
             </>
           ) : null
         }

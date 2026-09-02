@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
-import { Router } from 'express';
+import { Router, type Response } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 import {
@@ -28,17 +28,21 @@ const router = Router();
 
 // Gate minimo (header-based, non IdP): dati anagrafici/clinici reali, richiedono un
 // operatore identificato in lettura e scrittura. Vedi backend/src/ai/auth.ts.
-router.use(requireOperator);
 router.use((_req, res, next) => {
   res.setHeader('Cache-Control', 'private, no-store');
   next();
 });
+router.use(requireOperator);
 
-// Contratto scalabile per tutti i consumer di elenco; il roster legacy e' dismesso sotto.
-router.get('/page', async (req, res) => {
+async function sendPatientPage(
+  req: AuthedRequest,
+  res: Response,
+  rawInput: Record<string, unknown>,
+  routeLabel: string,
+) {
   try {
-    const actor = (req as AuthedRequest).operator!;
-    const input = parsePatientPageQuery(req.query as Record<string, unknown>);
+    const actor = req.operator!;
+    const input = parsePatientPageQuery(rawInput);
     const filters = { q: input.q, sex: input.sex };
     const position = input.cursor ? decodePatientPageCursor(input.cursor, filters) : undefined;
     const searchTokens =
@@ -46,19 +50,24 @@ router.get('/page', async (req, res) => {
         ?.split(/[,\s]+/)
         .filter(Boolean)
         .slice(0, 5) ?? [];
+    const normalizedFiscalQuery = input.q?.replace(/\s+/g, '').toUpperCase() ?? '';
+    const exactFiscalCode = /^[A-Z0-9]{16}$/.test(normalizedFiscalQuery)
+      ? normalizedFiscalQuery
+      : undefined;
 
     const baseWhere = {
       ...patientScopeWhere(actor),
       ...(input.sex && { sex: input.sex }),
-      ...(searchTokens.length > 0 && {
-        AND: searchTokens.map((token) => ({
-          OR: [
-            { lastName: { contains: token, mode: 'insensitive' as const } },
-            { firstName: { contains: token, mode: 'insensitive' as const } },
-            { medicalRecordNumber: { contains: token, mode: 'insensitive' as const } },
-          ],
-        })),
-      }),
+      ...(exactFiscalCode
+        ? { codiceFiscale: exactFiscalCode }
+        : searchTokens.length > 0 && {
+            AND: searchTokens.map((token) => ({
+              OR: [
+                { lastName: { contains: token, mode: 'insensitive' as const } },
+                { firstName: { contains: token, mode: 'insensitive' as const } },
+              ],
+            })),
+          }),
     };
     const cursorWhere = position
       ? {
@@ -81,6 +90,7 @@ router.get('/page', async (req, res) => {
       select: {
         id: true,
         medicalRecordNumber: true,
+        codiceFiscale: true,
         firstName: true,
         lastName: true,
         dateOfBirth: true,
@@ -108,9 +118,38 @@ router.get('/page', async (req, res) => {
       res.status(400).json({ error: error.message });
       return;
     }
-    console.error('GET /patients/page error:', error);
+    console.error(`${routeLabel} error:`, error);
     res.status(500).json({ error: 'Errore nel recupero della pagina pazienti' });
   }
+}
+
+// Contratto scalabile per tutti i consumer di elenco; il roster legacy e' dismesso sotto.
+// Le ricerche testuali usano POST per evitare che identificativi personali finiscano in URL,
+// cronologia e log infrastrutturali. GET resta per paginazione e filtri non identificativi.
+router.get('/page', async (req, res) => {
+  if (Object.prototype.hasOwnProperty.call(req.query, 'q')) {
+    res.status(400).json({ error: 'Usa POST /patients/page/search per la ricerca testuale' });
+    return;
+  }
+  await sendPatientPage(
+    req as AuthedRequest,
+    res,
+    req.query as Record<string, unknown>,
+    'GET /patients/page',
+  );
+});
+
+router.post('/page/search', async (req, res) => {
+  if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+    res.status(400).json({ error: 'Payload ricerca non valido' });
+    return;
+  }
+  const rawInput = req.body as Record<string, unknown>;
+  if (typeof rawInput.q !== 'string' || !rawInput.q.trim()) {
+    res.status(400).json({ error: 'q e obbligatorio per la ricerca testuale' });
+    return;
+  }
+  await sendPatientPage(req as AuthedRequest, res, rawInput, 'POST /patients/page/search');
 });
 
 // Bounded projection for the multi-patient vital-sign editor. Unlike the legacy roster + one
@@ -1117,7 +1156,19 @@ router.patch('/:id', requirePatientScope, async (req, res) => {
   }
 
   try {
-    const patient = await prisma.patient.update({ where: { id }, data: updates });
+    const patient = await prisma.$transaction(async (tx) => {
+      const updatedPatient = await tx.patient.update({ where: { id }, data: updates });
+      if (typeof updates.codiceFiscale === 'string') {
+        // Patient e' la sola fonte autorevole dell'identita'. La rimozione atomica della
+        // vecchia copia JSON non riscrive il blob clinico e non perde sezioni concorrenti.
+        await tx.$executeRaw`
+          UPDATE "Cartella"
+          SET "data" = "data" - 'codiceFiscale'
+          WHERE "patientId" = ${id}
+        `;
+      }
+      return updatedPatient;
+    });
     console.log(`PATCH /patients/${id} → aggiornato`);
     res.status(200).json(patient);
   } catch (error: unknown) {
@@ -1219,10 +1270,11 @@ router.put('/:id/cartella', requirePatientScope, async (req, res) => {
       return;
     }
 
+    const { codiceFiscale: _legacyIdentity, ...clinicalData } = data as Record<string, unknown>;
     const cartella = await prisma.cartella.upsert({
       where: { patientId: id },
-      create: { patientId: id, data: data as object },
-      update: { data: data as object },
+      create: { patientId: id, data: clinicalData as object },
+      update: { data: clinicalData as object },
     });
 
     console.log(`PUT /patients/${id}/cartella → salvata`);
