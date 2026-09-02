@@ -62,6 +62,7 @@ test('note writes are bounded, reject unknown fields and ignore legacy actor lab
     },
   );
   assert.deepEqual(parseNotePatchBody({ stato: 'letta' }), { stato: 'letta' });
+  assert.throws(() => parseNoteCreateBody({ messaggio: 'destinatario mancante' }), NotesInputError);
   assert.throws(() => parseNoteCreateBody({ messaggio: 'x', extra: true }), NotesInputError);
   assert.throws(() => parseNoteCreateBody({ messaggio: 'x'.repeat(4_001) }), NotesInputError);
   assert.throws(() => parseNotePatchBody({}), NotesInputError);

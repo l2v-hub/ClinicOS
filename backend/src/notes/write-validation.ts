@@ -63,7 +63,7 @@ function requiredMessage(value: unknown): string {
 }
 
 function destination(value: unknown): string {
-  const id = value === undefined ? 'tutti' : value;
+  const id = value;
   if (typeof id !== 'string' || !isSafeNoteId(id)) {
     throw new NotesInputError('destinatarioId non valido');
   }

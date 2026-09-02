@@ -11,6 +11,7 @@ import {
   parseNotesListQuery,
 } from '../notes/query.js';
 import { parseNoteCreateBody, parseNotePatchBody } from '../notes/write-validation.js';
+import { patientScopeWhere } from '../patients/patient-scope.js';
 
 const noteRouter = Router();
 const PRIVILEGED_ROLES = new Set(['admin', 'manager']);
@@ -30,6 +31,13 @@ const NOTE_SELECT = {
 } satisfies Prisma.NotaSelect;
 type NoteRow = Prisma.NotaGetPayload<{ select: typeof NOTE_SELECT }>;
 type NoteRowWithRecipientState = NoteRow & { recipientStates?: Array<{ stato: string }> };
+
+class NotePatientNotFoundError extends Error {
+  constructor() {
+    super('Paziente non trovato');
+    this.name = 'NotePatientNotFoundError';
+  }
+}
 
 // Le note possono contenere dati clinici: nessuna risposta, inclusi errori di auth, è cacheabile.
 noteRouter.use((_req, res, next) => {
@@ -154,6 +162,10 @@ function notFound(res: Response): void {
   res.status(404).json({ error: 'Nota non trovata' });
 }
 
+function patientNotFound(res: Response): void {
+  res.status(404).json({ error: 'Paziente non trovato', code: 'patient_not_found' });
+}
+
 function badRequest(res: Response, error: unknown): boolean {
   if (!(error instanceof NotesInputError)) return false;
   res.status(400).json({ error: error.message });
@@ -180,13 +192,17 @@ async function resolveDestination(id: string): Promise<{ id: string; name: strin
   return { id: operator.id, name: operator.user.fullName };
 }
 
-async function resolvePatient(id: string | null): Promise<{ id: string; name: string } | null> {
+async function resolvePatient(
+  id: string | null,
+  actor: Operator,
+): Promise<{ id: string; name: string } | null> {
   if (!id) return null;
-  const patient = await prisma.patient.findUnique({
-    where: { id },
+  const patient = await prisma.patient.findFirst({
+    where: { id, ...patientScopeWhere(actor) },
     select: { id: true, firstName: true, lastName: true },
   });
-  if (!patient) throw new NotesInputError('Paziente non disponibile');
+  // Missing and out-of-scope patients intentionally share one non-enumerating outcome.
+  if (!patient) throw new NotePatientNotFoundError();
   return { id: patient.id, name: `${patient.lastName}, ${patient.firstName}` };
 }
 
@@ -303,7 +319,7 @@ noteRouter.post('/', async (req: AuthedRequest, res) => {
     const [authorName, destination, patient] = await Promise.all([
       resolveAuthorName(actor),
       resolveDestination(input.destinatarioId),
-      resolvePatient(input.pazienteId),
+      resolvePatient(input.pazienteId, actor),
     ]);
     const nota = await prisma.nota.create({
       data: {
@@ -321,6 +337,10 @@ noteRouter.post('/', async (req: AuthedRequest, res) => {
     });
     res.status(201).json(nota);
   } catch (error) {
+    if (error instanceof NotePatientNotFoundError) {
+      patientNotFound(res);
+      return;
+    }
     if (badRequest(res, error)) return;
     console.error('POST /notes error:', error);
     res.status(500).json({ error: 'Errore durante creazione nota' });
@@ -368,7 +388,7 @@ noteRouter.put('/:id', async (req: AuthedRequest, res) => {
 
     const [destination, patient] = await Promise.all([
       patch.destinatarioId !== undefined ? resolveDestination(patch.destinatarioId) : null,
-      patch.pazienteId !== undefined ? resolvePatient(patch.pazienteId) : null,
+      patch.pazienteId !== undefined ? resolvePatient(patch.pazienteId, actor) : null,
     ]);
     const data: Prisma.NotaUpdateInput = {
       ...(destination
@@ -396,6 +416,10 @@ noteRouter.put('/:id', async (req: AuthedRequest, res) => {
       : await update;
     res.status(200).json(nota);
   } catch (error) {
+    if (error instanceof NotePatientNotFoundError) {
+      patientNotFound(res);
+      return;
+    }
     if (badRequest(res, error)) return;
     console.error('PUT /notes/:id error:', error);
     res.status(500).json({ error: 'Errore durante aggiornamento nota' });
