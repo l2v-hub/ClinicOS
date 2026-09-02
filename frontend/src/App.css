@@ -131,15 +131,19 @@
   --card-border-color: var(--border-subtle);
   --card-bg: var(--surface, #fff);
   --card-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.04);
-  --qe-row-h: 56px;
   --qe-row-vpad: 12px;
-  --qe-row-hpad: 22px;
   --qe-input-h: 44px;
   --qe-input-w-narrow: 64px;
   --qe-input-w-wide: 96px;
   --qe-patient-col-w: 220px;
   --qe-row-gap: 12px;
   --qe-divider-color: var(--divider);
+  /* Contratto visivo condiviso dalle tabelle operative (Pazienti, Parametri, ...). */
+  --operational-table-radius: 12px;
+  --operational-table-header-h: 42px;
+  --operational-table-row-min-h: 68px;
+  --operational-table-cell-px: 16px;
+  --operational-table-header-fs: 11.5px;
 }
 
 /* ── Base reset ───────────────────────────────────────────────────────────── */
@@ -5039,6 +5043,13 @@ textarea.form-input {
 /* ───── end 010 ───── */
 
 /* ───── 011 PARAMETRI QUICK-ENTRY ───── */
+.qe-table-surface {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--operational-table-radius);
+  box-shadow: var(--shadow-card);
+}
 .qe-list {
   display: flex;
   flex-direction: column;
@@ -5050,17 +5061,17 @@ textarea.form-input {
   grid-template-columns: var(--qe-patient-col-w) repeat(6, auto) auto auto;
   gap: var(--qe-row-gap);
   align-items: center;
-  min-height: var(--qe-row-h);
-  padding: var(--qe-row-vpad) var(--qe-row-hpad);
+  min-height: var(--operational-table-row-min-h);
+  padding: var(--qe-row-vpad) var(--operational-table-cell-px);
   border-bottom: 1px solid var(--qe-divider-color);
   box-sizing: border-box;
   transition: background 120ms ease-out;
 }
-.qe-row:not(.qe-row--header):nth-child(even) {
-  background: #fcfdff;
+.qe-row:last-child {
+  border-bottom: 0;
 }
-.qe-row:hover {
-  background: var(--hover);
+.qe-row:not(.qe-row--header):hover {
+  background: color-mix(in srgb, var(--blue) 4%, var(--surface));
 }
 .qe-row__patient {
   display: flex;
@@ -5068,6 +5079,11 @@ textarea.form-input {
   gap: 8px;
   overflow: hidden;
   cursor: pointer;
+}
+.qe-row__patient:focus-visible {
+  border-radius: 9px;
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }
 .qe-row__avatar {
   width: 40px;
@@ -5083,7 +5099,7 @@ textarea.form-input {
   flex: 0 0 40px;
 }
 .qe-row__name {
-  font-weight: 700;
+  font-weight: 750;
   font-size: 14px;
   color: var(--text-strong, currentColor);
   white-space: nowrap;
@@ -5091,8 +5107,8 @@ textarea.form-input {
   text-overflow: ellipsis;
 }
 .qe-row__room {
-  font-size: 12px;
-  color: var(--text-soft, currentColor);
+  font-size: 11.5px;
+  color: var(--text-muted);
   white-space: nowrap;
 }
 .qe-row__input {
@@ -5250,13 +5266,14 @@ textarea.form-input {
 }
 .qe-row__error {
   grid-column: 1 / -1;
-  padding: 4px 0 0;
+  margin: 0;
+  padding: 10px var(--operational-table-cell-px);
   color: #dc2626;
   font-size: 12px;
 }
 .qe-row--header {
-  min-height: 0;
-  padding: 14px var(--qe-row-hpad);
+  min-height: var(--operational-table-header-h);
+  padding: 0 var(--operational-table-cell-px);
   background: var(--surface-raised);
   border-bottom: 1px solid var(--qe-divider-color);
 }
@@ -5264,10 +5281,10 @@ textarea.form-input {
   background: var(--surface-raised);
 }
 .qe-row__col-label {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--operational-table-header-fs);
+  font-weight: 750;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.35px;
   color: var(--text-muted);
   width: var(--qe-input-w-narrow);
   text-align: left;
@@ -5280,6 +5297,12 @@ textarea.form-input {
   font-weight: 500;
   margin-left: 4px;
 }
+.qe-load-more {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  border-top: 1px solid var(--divider);
+}
 
 @media (max-width: 1180px) {
   .qe-row {
@@ -5288,7 +5311,7 @@ textarea.form-input {
 }
 
 @media (max-width: 768px) {
-  .qe-section .cts__body {
+  .qe-table-surface {
     overflow-x: hidden;
   }
 

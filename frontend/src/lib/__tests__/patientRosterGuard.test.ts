@@ -66,6 +66,23 @@ test('multi-patient quick entry reuses the ClinicOS form and action design syste
   assert.match(appCss, /\.qe-row__input:focus-visible[\s\S]*box-shadow: var\(--shadow-focus\)/);
 });
 
+test('a single parameters table is always visible and uses the operational table contract', () => {
+  assert.doesNotMatch(parametersSource, /ClinicalTableSection|cts__/);
+  assert.match(parametersSource, /className="qe-section qe-table-surface"/);
+  assert.match(parametersSource, /Inserimento parametri per \$\{filtrati\.length\} pazienti/);
+  assert.match(appCss, /--operational-table-radius: 12px/);
+  assert.match(
+    appCss,
+    /\.qe-table-surface\s*\{[\s\S]*border-radius: var\(--operational-table-radius\)/,
+  );
+  assert.match(appCss, /\.qe-row\s*\{[\s\S]*min-height: var\(--operational-table-row-min-h\)/);
+  assert.match(appCss, /\.qe-row--header\s*\{[\s\S]*var\(--operational-table-header-h\)/);
+  assert.match(
+    appCss,
+    /\.qe-row__patient:focus-visible\s*\{[\s\S]*outline: 2px solid var\(--blue\)/,
+  );
+});
+
 test('multi-patient refresh keeps the previous roster visible and announces progress', () => {
   assert.match(parametersSource, /function updateRicerca[\s\S]*setLoading\(true\)/);
   assert.match(parametersSource, /onChange=\{\(e\) => updateRicerca\(e\.target\.value\)\}/);
@@ -78,9 +95,9 @@ test('multi-patient refresh keeps the previous roster visible and announces prog
 
 test('multi-patient mobile layout is a labelled two-column card without horizontal scroll', () => {
   assert.match(parametersSource, /className="qe-row__mobile-label"/);
-  assert.match(parametersSource, /className="qe-section"/);
+  assert.match(parametersSource, /className="qe-section qe-table-surface"/);
   assert.match(appCss, /@media \(max-width: 768px\)/);
-  assert.match(appCss, /\.qe-section \.cts__body\s*\{\s*overflow-x: hidden/);
+  assert.match(appCss, /\.qe-table-surface\s*\{\s*overflow-x: hidden/);
   assert.match(appCss, /grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(appCss, /\.qe-row__mobile-label\s*\{\s*display: block/);
 });

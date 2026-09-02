@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CartellaPaziente, ParametriMensili, ParametroGiorno } from '../../types';
 import { IcoSearch, IcoX, IcoMessage } from '../../icons';
 import { PageHeader } from '../shared/PageHeader';
-import { ClinicalTableSection } from './cartella/shared';
 import { comparePazienti } from '../../lib/patientSort';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
@@ -591,56 +590,58 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           <p style={{ color: 'var(--text-muted)' }}>Nessun paziente in elenco.</p>
         </div>
       ) : (
-        <div className="qe-section">
-          <ClinicalTableSection title="Parametri" count={filtrati.length} countLabel="pazienti">
-            <div className="qe-list" aria-busy={loading}>
-              {/* Column headers */}
-              <div className="qe-row qe-row--header" role="presentation" aria-hidden="true">
-                <div className="qe-row__patient">
-                  <span className="qe-row__col-label">Paziente</span>
-                </div>
-                <span className="qe-row__col-label qe-row__col-label--wide">PA · mmHg</span>
-                <span className="qe-row__col-label">SpO₂ · %</span>
-                <span className="qe-row__col-label">FC · bpm</span>
-                <span className="qe-row__col-label">TC · °C</span>
-                <span className="qe-row__col-label">DTX</span>
-                <span className="qe-row__col-label qe-row__col-label--wide">Evacuazione</span>
-                <span className="qe-row__col-label">Note</span>
-                <span className="qe-row__col-label">Salva</span>
+        <section
+          className="qe-section qe-table-surface"
+          aria-label={`Inserimento parametri per ${filtrati.length} pazienti`}
+        >
+          <div className="qe-list" aria-busy={loading}>
+            {/* Intestazione statica: il collasso è riservato alle viste con più tabelle. */}
+            <div className="qe-row qe-row--header" role="presentation" aria-hidden="true">
+              <div className="qe-row__patient">
+                <span className="qe-row__col-label">Paziente</span>
               </div>
-              {filtrati.map((paziente) => (
-                <RigaPaziente
-                  key={`${paziente.id}:${JSON.stringify(getParametroOggi(getCartella(paziente.id)))}`}
-                  paziente={paziente}
-                  cartella={getCartella(paziente.id)}
-                  operatoreNome={operatoreNome}
-                  isNoteOpen={noteOpenForPazienteId === paziente.id}
-                  onToggleNote={(open: boolean) =>
-                    setNoteOpenForPazienteId(open ? paziente.id : null)
-                  }
-                  onClickPaziente={() => onSelectPaziente(paziente.id)}
-                  onSalva={salvaRiga}
-                />
-              ))}
+              <span className="qe-row__col-label qe-row__col-label--wide">PA · mmHg</span>
+              <span className="qe-row__col-label">SpO₂ · %</span>
+              <span className="qe-row__col-label">FC · bpm</span>
+              <span className="qe-row__col-label">TC · °C</span>
+              <span className="qe-row__col-label">DTX</span>
+              <span className="qe-row__col-label qe-row__col-label--wide">Evacuazione</span>
+              <span className="qe-row__col-label">Note</span>
+              <span className="qe-row__col-label">Salva</span>
             </div>
-            {pageError && (
-              <p className="qe-row__error" role="alert">
-                {pageError}
-              </p>
-            )}
-            {hasMore && (
+            {filtrati.map((paziente) => (
+              <RigaPaziente
+                key={`${paziente.id}:${JSON.stringify(getParametroOggi(getCartella(paziente.id)))}`}
+                paziente={paziente}
+                cartella={getCartella(paziente.id)}
+                operatoreNome={operatoreNome}
+                isNoteOpen={noteOpenForPazienteId === paziente.id}
+                onToggleNote={(open: boolean) =>
+                  setNoteOpenForPazienteId(open ? paziente.id : null)
+                }
+                onClickPaziente={() => onSelectPaziente(paziente.id)}
+                onSalva={salvaRiga}
+              />
+            ))}
+          </div>
+          {pageError && (
+            <p className="qe-row__error" role="alert">
+              {pageError}
+            </p>
+          )}
+          {hasMore && (
+            <div className="qe-load-more">
               <button
                 type="button"
-                className="btn-secondary"
+                className="btn-ghost-outline"
                 onClick={() => void loadMore()}
                 disabled={loadingMore || loading}
-                style={{ marginTop: 16 }}
               >
                 {loadingMore ? 'Caricamento…' : 'Carica altri 25 pazienti'}
               </button>
-            )}
-          </ClinicalTableSection>
-        </div>
+            </div>
+          )}
+        </section>
       )}
     </div>
   );
