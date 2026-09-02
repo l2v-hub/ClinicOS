@@ -1796,7 +1796,6 @@ export function PatientDetail({
                 <TopNav
                   variant="level3"
                   ariaLabel="Sezioni del profilo paziente"
-                  visualLabel="Dettagli profilo"
                   items={[
                     { key: 'anagrafica', label: 'Anagrafica' },
                     { key: 'contatti', label: 'Contatti' },
