@@ -23,6 +23,13 @@ export const ROOM_PATIENT_SELECT = {
   id: true,
   firstName: true,
   lastName: true,
+  registeredBy: {
+    select: {
+      id: true,
+      ruolo: true,
+      user: { select: { fullName: true } },
+    },
+  },
 } as const;
 
 export const ROOM_ASSIGNMENT_OCCUPANT_SELECT = {

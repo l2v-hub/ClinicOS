@@ -16,6 +16,7 @@ export async function getFacilityOccupancy(
                SELECT 1
                FROM "PatientRoomAssignment" assignment
                WHERE assignment."bedId" = bed."id"
+                 AND assignment."startDate" <= ${today}
                  AND (assignment."endDate" IS NULL OR assignment."endDate" >= ${today})
              ) AS occupied
       FROM "Bed" bed

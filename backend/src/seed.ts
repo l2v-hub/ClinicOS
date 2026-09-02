@@ -308,6 +308,7 @@ async function main() {
           firstName: p.firstName,
           lastName: p.lastName,
           codiceFiscale: p.codiceFiscale,
+          registeredById: p.registeredById,
           phone: p.phone,
           email: p.email,
           address: p.address,
@@ -319,7 +320,99 @@ async function main() {
     }
     console.log(`  ✓  patients upserted:  ${patientsData.length}`);
 
-    // ── 4. Clinical Records ───────────────────────────────────────────────────
+    // ── 4. Rooms, beds and explicit current placements ─────────────────────
+    // The demo roster represents patients currently cared for in the facility. Occupancy must
+    // therefore come from the same normalized source used by the application, never from therapy
+    // rows or display-only cartella fields. Fixed IDs keep the seed repeatable.
+    const today = new Date().toISOString().slice(0, 10);
+    const roomsData = [
+      {
+        id: 'SEED-ROOM-101',
+        numero: '101',
+        tipo: 'doppia' as const,
+        piano: '1°',
+        reparto: 'Reparto A — Medicina Interna',
+      },
+      {
+        id: 'SEED-ROOM-201',
+        numero: '201',
+        tipo: 'doppia' as const,
+        piano: '2°',
+        reparto: 'Reparto B — Chirurgia',
+      },
+      {
+        id: 'SEED-ROOM-301',
+        numero: '301',
+        tipo: 'doppia' as const,
+        piano: '3°',
+        reparto: 'Riabilitazione',
+      },
+      {
+        id: 'SEED-ROOM-102',
+        numero: '102',
+        tipo: 'doppia' as const,
+        piano: '1°',
+        reparto: 'Reparto A — Medicina Interna',
+      },
+    ];
+    const bedsData = roomsData.flatMap((room) =>
+      ['A', 'B'].map((label) => ({
+        id: `SEED-BED-${room.numero}-${label}`,
+        roomId: room.id,
+        label,
+      })),
+    );
+
+    for (const room of roomsData) {
+      await prisma.room.upsert({
+        where: { id: room.id },
+        update: {
+          numero: room.numero,
+          tipo: room.tipo,
+          piano: room.piano,
+          reparto: room.reparto,
+          stato: 'attiva',
+        },
+        create: { ...room, stato: 'attiva' },
+      });
+    }
+    for (const bed of bedsData) {
+      await prisma.bed.upsert({
+        where: { id: bed.id },
+        update: { roomId: bed.roomId, label: bed.label, stato: 'libero' },
+        create: { ...bed, stato: 'libero' },
+      });
+    }
+
+    const placementsData = patientsData.map((patient, index) => ({
+      id: `SEED-PLACEMENT-${String(index + 1).padStart(3, '0')}`,
+      patientId: patient.id,
+      bedId: bedsData[index].id,
+      roomId: bedsData[index].roomId,
+      startDate: today,
+      createdById: patient.registeredById,
+      note: 'Assegnazione dimostrativa esplicita',
+    }));
+    for (const placement of placementsData) {
+      await prisma.patientRoomAssignment.upsert({
+        where: { id: placement.id },
+        update: {
+          patientId: placement.patientId,
+          bedId: placement.bedId,
+          roomId: placement.roomId,
+          startDate: placement.startDate,
+          endDate: null,
+          createdById: placement.createdById,
+          note: placement.note,
+        },
+        create: placement,
+      });
+    }
+    console.log(
+      `  ✓  facility upserted:    ${roomsData.length} rooms, ${bedsData.length} beds, ${placementsData.length} placements`,
+    );
+
+    // ── 5. Clinical Records ───────────────────────────────────────────────────
     const recordsData = [
       {
         id: 'SEED-CR-001',
@@ -407,7 +500,7 @@ async function main() {
     }
     console.log(`  ✓  clinical records upserted: ${recordsData.length}`);
 
-    // ── 5. Clinical Notes ─────────────────────────────────────────────────────
+    // ── 6. Clinical Notes ─────────────────────────────────────────────────────
     const notesData = [
       {
         id: 'SEED-CN-001',
@@ -497,7 +590,7 @@ async function main() {
       });
     }
 
-    // ── 6. Appointments ───────────────────────────────────────────────────────
+    // ── 7. Appointments ───────────────────────────────────────────────────────
     const appointmentsData = [
       {
         id: 'SEED-APP-001',
@@ -559,8 +652,7 @@ async function main() {
       });
     }
 
-    // ── 7. Patient Therapies ─────────────────────────────────────────────────
-    const today = new Date().toISOString().slice(0, 10);
+    // ── 8. Patient Therapies ─────────────────────────────────────────────────
 
     const therapiesData = [
       // Mario Ferrioli - SEED-PAZ-001
@@ -868,6 +960,11 @@ async function main() {
     const totNote = await prisma.clinicalNote.count();
     const totAppuntamenti = await prisma.appointment.count();
     const totTherapies = await prisma.patientTherapy.count();
+    const totRooms = await prisma.room.count();
+    const totBeds = await prisma.bed.count();
+    const activePlacements = await prisma.patientRoomAssignment.count({
+      where: { startDate: { lte: today }, OR: [{ endDate: null }, { endDate: { gte: today } }] },
+    });
 
     console.log(`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -877,6 +974,8 @@ async function main() {
   • Note cliniche:         ${totNote}
   • Appuntamenti:          ${totAppuntamenti}
   • Terapie:               ${totTherapies}
+  • Camere / letti:        ${totRooms} / ${totBeds}
+  • Posti occupati:        ${activePlacements}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 `);
   } finally {

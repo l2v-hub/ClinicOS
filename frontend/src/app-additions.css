@@ -3480,6 +3480,34 @@
   white-space: nowrap;
 }
 
+.letto-paziente--link {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 4px 2px;
+  min-height: 44px;
+  min-width: 0;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  line-height: 1.25;
+}
+
+.letto-paziente--link:hover span,
+.letto-paziente--link:focus-visible span {
+  color: var(--blue);
+  text-decoration: underline;
+}
+
+.letto-paziente--link small {
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
 .letto-note {
   font-size: 11px;
   color: var(--text-muted);

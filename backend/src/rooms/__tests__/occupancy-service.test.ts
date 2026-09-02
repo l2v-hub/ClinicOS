@@ -55,6 +55,7 @@ test('admin and assistant share one aggregate-only occupancy query', () => {
   assert.match(service, /SELECT COUNT\(\*\) FROM "Room"/);
   assert.match(service, /EXISTS \(/);
   assert.match(service, /SELECT 1[\s\S]+?FROM "PatientRoomAssignment"/);
+  assert.match(service, /assignment\."startDate" <= \$\{today\}/);
   assert.match(service, /COUNT\(\*\) FILTER \(WHERE occupied\)/);
   assert.match(service, /WHERE NOT occupied AND "stato" IS DISTINCT FROM 'manutenzione'/);
   assert.doesNotMatch(service, /patientId|createdById|note/);

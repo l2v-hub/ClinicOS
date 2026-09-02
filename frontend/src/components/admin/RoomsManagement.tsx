@@ -13,7 +13,12 @@ interface AssignmentAPI {
   patientId: string;
   startDate: string;
   endDate: string | null;
-  patient: { firstName: string; lastName: string };
+  patient: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    registeredBy: { id: string; ruolo: string | null; user: { fullName: string } } | null;
+  };
 }
 
 interface BedAPI {
@@ -75,7 +80,9 @@ const FORM_CAMERA_VUOTO = {
 
 function bedIsOccupied(bed: BedAPI): boolean {
   const today = new Date().toISOString().slice(0, 10);
-  return bed.assignments.some((a) => a.endDate === null || a.endDate >= today);
+  return bed.assignments.some(
+    (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),
+  );
 }
 
 function bedStatoDisplay(bed: BedAPI): StatoLetto {
@@ -84,11 +91,13 @@ function bedStatoDisplay(bed: BedAPI): StatoLetto {
   return 'libero';
 }
 
-function bedPatientName(bed: BedAPI): string | null {
+function activeBedAssignment(bed: BedAPI): AssignmentAPI | null {
   const today = new Date().toISOString().slice(0, 10);
-  const active = bed.assignments.find((a) => a.endDate === null || a.endDate >= today);
-  if (!active) return null;
-  return `${active.patient.lastName}, ${active.patient.firstName}`;
+  return (
+    bed.assignments.find(
+      (a) => a.startDate <= today && (a.endDate === null || a.endDate >= today),
+    ) ?? null
+  );
 }
 
 async function fetchFacilityData(signal?: AbortSignal) {
@@ -673,14 +682,30 @@ export function RoomsManagement() {
                 <div className="letti-list">
                   {lettiVisibili(room).map((bed) => {
                     const stato = bedStatoDisplay(bed);
-                    const patientName = bedPatientName(bed);
+                    const activeAssignment = activeBedAssignment(bed);
+                    const patientName = activeAssignment
+                      ? `${activeAssignment.patient.lastName}, ${activeAssignment.patient.firstName}`
+                      : null;
+                    const operatorName = activeAssignment?.patient.registeredBy?.user.fullName;
                     return (
                       <div key={bed.id} className={`letto-row ${STATO_LETTO_CLASS[stato]}`}>
                         <span className="letto-num">{bed.label}</span>
                         <span className={`letto-stato-badge letto-stato--${stato}`}>
                           {STATO_LETTO_LABEL[stato]}
                         </span>
-                        {patientName && <span className="letto-paziente">{patientName}</span>}
+                        {patientName && activeAssignment && (
+                          <button
+                            type="button"
+                            className="letto-paziente letto-paziente--link"
+                            onClick={() => {
+                              window.location.hash = `/dettaglio-paziente/${activeAssignment.patientId}`;
+                            }}
+                            aria-label={`Apri la scheda di ${activeAssignment.patient.firstName} ${activeAssignment.patient.lastName}`}
+                          >
+                            <span>{patientName}</span>
+                            {operatorName && <small>Operatore: {operatorName}</small>}
+                          </button>
+                        )}
                         {bed.note && <span className="letto-note">{bed.note}</span>}
                         <button
                           className="icon-btn icon-btn--sm"

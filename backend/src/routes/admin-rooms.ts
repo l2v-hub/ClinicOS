@@ -70,6 +70,7 @@ patientAssignmentRouter.use('/:patientId/room-assignments', (req, res, next) => 
 // superiore sulla data iniziale e impedisce di materializzare assegnazioni future non pertinenti.
 function activeAssignmentFilter(from = new Date().toISOString().slice(0, 10)) {
   return {
+    startDate: { lte: from },
     OR: [{ endDate: null }, { endDate: { gte: from } }],
   };
 }

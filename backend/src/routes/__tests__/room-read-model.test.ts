@@ -20,7 +20,17 @@ const routeSource = readFileSync(
 );
 
 test('facility occupancy exposes only the minimum patient identity', () => {
-  assert.deepEqual(Object.keys(ROOM_PATIENT_SELECT).sort(), ['firstName', 'id', 'lastName']);
+  assert.deepEqual(Object.keys(ROOM_PATIENT_SELECT).sort(), [
+    'firstName',
+    'id',
+    'lastName',
+    'registeredBy',
+  ]);
+  assert.deepEqual(Object.keys(ROOM_PATIENT_SELECT.registeredBy.select).sort(), [
+    'id',
+    'ruolo',
+    'user',
+  ]);
   assert.deepEqual(
     Object.keys(ROOM_ASSIGNMENT_OCCUPANT_SELECT).sort(),
     ['endDate', 'id', 'patient', 'patientId', 'startDate'].sort(),
