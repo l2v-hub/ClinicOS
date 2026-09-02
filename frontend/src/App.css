@@ -5098,14 +5098,28 @@ textarea.form-input {
 .qe-row__input {
   width: var(--qe-input-w-narrow);
   height: var(--qe-input-h);
-  padding: 0 8px;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
-  border: 1.5px solid #e1e8f2;
-  border-radius: 10px;
+  min-height: var(--qe-input-h);
+  padding: 0 10px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: left;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   background: var(--surface, #fff);
   box-sizing: border-box;
+  box-shadow: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+}
+.qe-row__input::placeholder {
+  color: var(--text-xmuted);
+  font-weight: 400;
+  opacity: 1;
 }
 .qe-row__field {
   display: block;
@@ -5125,9 +5139,9 @@ textarea.form-input {
   width: var(--qe-input-w-wide);
 }
 .qe-row__input:focus-visible {
-  outline: 2px solid var(--primary, var(--blue));
-  outline-offset: 2px;
+  outline: none;
   border-color: var(--primary, var(--blue));
+  box-shadow: var(--shadow-focus);
 }
 /* Evidenza automatica soglie cliniche (rosso = alert clinico, ambra = attenzione) */
 .qe-row__input--critico {
@@ -5177,20 +5191,14 @@ textarea.form-input {
   white-space: nowrap;
 }
 .qe-row__note-btn {
-  min-width: 36px;
-  height: 36px;
-  padding: 0 8px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 10px;
-  background: transparent;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
+  min-width: 72px;
+  height: var(--qe-input-h);
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
   justify-content: center;
-  gap: 4px;
-  font-size: 13px;
-  color: var(--text-soft, currentColor);
-  white-space: nowrap;
+  gap: 6px;
+  color: var(--text-muted);
+  box-shadow: none;
 }
 .qe-row__note-btn-ico {
   display: inline-flex;
@@ -5207,15 +5215,14 @@ textarea.form-input {
 }
 .qe-row__save {
   height: var(--qe-input-h);
-  padding: 0 12px;
-  font-size: 13px;
-  font-weight: 800;
-  border: none;
-  border-radius: 10px;
-  background: var(--primary, var(--blue));
-  color: #fff;
-  cursor: pointer;
-  min-width: 56px;
+  min-width: 72px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  justify-content: center;
+  box-shadow: none;
+}
+.qe-row__save:hover {
+  box-shadow: none;
 }
 .qe-row__save[disabled] {
   opacity: 0.6;
@@ -5225,15 +5232,17 @@ textarea.form-input {
   grid-column: 1 / -1;
   padding: 8px 0 0;
 }
-.qe-row__note-input textarea {
+.qe-row__note-textarea {
   width: 100%;
   box-sizing: border-box;
   resize: vertical;
-  min-height: 56px;
-  padding: 6px 8px;
+  min-height: 72px;
+  height: auto;
+  padding: 10px 12px;
   font-size: 14px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 4px;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   background: var(--surface, #fff);
 }
 .qe-row--has-note-open {
@@ -5256,9 +5265,9 @@ textarea.form-input {
 }
 .qe-row__col-label {
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--text-muted);
   width: var(--qe-input-w-narrow);
   text-align: left;
@@ -5330,9 +5339,9 @@ textarea.form-input {
     display: block;
     margin: 0 0 5px 2px;
     color: var(--text-muted);
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.04em;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
   }
 

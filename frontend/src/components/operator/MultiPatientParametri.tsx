@@ -220,17 +220,17 @@ function RigaPaziente({
         <div className="qe-row__avatar">{initials}</div>
         <div style={{ overflow: 'hidden' }}>
           <div className="qe-row__name">
-            {paziente.lastName}, {paziente.firstName}
+            {paziente.firstName} {paziente.lastName}
           </div>
           <div className="qe-row__room">{cameraInfo}</div>
         </div>
       </div>
 
       <label className="qe-row__field qe-row__field--wide">
-        <span className="qe-row__mobile-label">PA</span>
+        <span className="qe-row__mobile-label">PA · mmHg</span>
         <input
-          className="qe-row__input qe-row__input--wide"
-          placeholder="PA"
+          className="form-input qe-row__input qe-row__input--wide"
+          placeholder="120/80"
           aria-label={`PA per ${patientName}`}
           inputMode="text"
           value={riga.pa}
@@ -239,10 +239,12 @@ function RigaPaziente({
         />
       </label>
       <label className="qe-row__field">
-        <span className="qe-row__mobile-label">SpO2</span>
+        <span className="qe-row__mobile-label">SpO₂ · %</span>
         <input
-          className={'qe-row__input' + (spo2Critico(riga.spo2) ? ' qe-row__input--critico' : '')}
-          placeholder="SpO2 %"
+          className={
+            'form-input qe-row__input' + (spo2Critico(riga.spo2) ? ' qe-row__input--critico' : '')
+          }
+          placeholder="98"
           aria-label={`SpO2 per ${patientName}`}
           inputMode="decimal"
           value={riga.spo2}
@@ -252,10 +254,10 @@ function RigaPaziente({
         />
       </label>
       <label className="qe-row__field">
-        <span className="qe-row__mobile-label">FC</span>
+        <span className="qe-row__mobile-label">FC · bpm</span>
         <input
-          className="qe-row__input"
-          placeholder="FC bpm"
+          className="form-input qe-row__input"
+          placeholder="72"
           aria-label={`Frequenza cardiaca per ${patientName}`}
           inputMode="decimal"
           value={riga.fc}
@@ -264,12 +266,13 @@ function RigaPaziente({
         />
       </label>
       <label className="qe-row__field">
-        <span className="qe-row__mobile-label">TC</span>
+        <span className="qe-row__mobile-label">TC · °C</span>
         <input
           className={
-            'qe-row__input' + (tempAttenzione(riga.temperatura) ? ' qe-row__input--attenzione' : '')
+            'form-input qe-row__input' +
+            (tempAttenzione(riga.temperatura) ? ' qe-row__input--attenzione' : '')
           }
-          placeholder="TC °C"
+          placeholder="36,5"
           aria-label={`Temperatura corporea per ${patientName}`}
           inputMode="decimal"
           value={riga.temperatura}
@@ -279,10 +282,10 @@ function RigaPaziente({
         />
       </label>
       <label className="qe-row__field">
-        <span className="qe-row__mobile-label">DTX</span>
+        <span className="qe-row__mobile-label">DTX · mg/dL</span>
         <input
-          className="qe-row__input"
-          placeholder="DTX"
+          className="form-input qe-row__input"
+          placeholder="110"
           aria-label={`Glicemia DTX per ${patientName}`}
           inputMode="decimal"
           value={riga.dtx}
@@ -293,8 +296,8 @@ function RigaPaziente({
       <label className="qe-row__field qe-row__field--wide">
         <span className="qe-row__mobile-label">Evacuazione</span>
         <input
-          className="qe-row__input qe-row__input--wide"
-          placeholder="Evac."
+          className="form-input qe-row__input qe-row__input--wide"
+          placeholder="Esito"
           aria-label={`Evacuazione per ${patientName}`}
           inputMode="text"
           value={riga.evacuazione}
@@ -306,7 +309,9 @@ function RigaPaziente({
       <button
         ref={noteButtonRef}
         type="button"
-        className={'qe-row__note-btn' + (hasSavedNote ? ' qe-row__note-btn--has-note' : '')}
+        className={
+          'btn-secondary qe-row__note-btn' + (hasSavedNote ? ' qe-row__note-btn--has-note' : '')
+        }
         aria-label={`${isNoteOpen ? 'Chiudi' : 'Apri'} note per ${patientName}`}
         aria-expanded={isNoteOpen}
         onClick={() => onToggleNote(!isNoteOpen)}
@@ -320,7 +325,7 @@ function RigaPaziente({
 
       <button
         type="button"
-        className="qe-row__save"
+        className="btn-success qe-row__save"
         disabled={saving}
         aria-busy={saving}
         aria-label={`Salva parametri per ${patientName}`}
@@ -332,6 +337,7 @@ function RigaPaziente({
       {isNoteOpen && (
         <div className="qe-row__note-input">
           <textarea
+            className="form-input qe-row__note-textarea"
             value={riga.note}
             rows={2}
             placeholder="Note rapide"
@@ -593,12 +599,12 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
                 <div className="qe-row__patient">
                   <span className="qe-row__col-label">Paziente</span>
                 </div>
-                <span className="qe-row__col-label qe-row__col-label--wide">PA</span>
-                <span className="qe-row__col-label">SpO2</span>
-                <span className="qe-row__col-label">FC</span>
-                <span className="qe-row__col-label">TC</span>
+                <span className="qe-row__col-label qe-row__col-label--wide">PA · mmHg</span>
+                <span className="qe-row__col-label">SpO₂ · %</span>
+                <span className="qe-row__col-label">FC · bpm</span>
+                <span className="qe-row__col-label">TC · °C</span>
                 <span className="qe-row__col-label">DTX</span>
-                <span className="qe-row__col-label qe-row__col-label--wide">Evac.</span>
+                <span className="qe-row__col-label qe-row__col-label--wide">Evacuazione</span>
                 <span className="qe-row__col-label">Note</span>
                 <span className="qe-row__col-label">Salva</span>
               </div>

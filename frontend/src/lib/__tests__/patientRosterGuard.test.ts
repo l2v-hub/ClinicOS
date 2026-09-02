@@ -51,6 +51,21 @@ test('multi-patient quick entry exposes every action and field to assistive tech
   );
 });
 
+test('multi-patient quick entry reuses the ClinicOS form and action design system', () => {
+  assert.match(parametersSource, /className="form-input qe-row__input qe-row__input--wide"/);
+  assert.match(parametersSource, /'form-input qe-row__input'/);
+  assert.match(parametersSource, /'btn-secondary qe-row__note-btn'/);
+  assert.match(parametersSource, /className="btn-success qe-row__save"/);
+  assert.match(parametersSource, /className="form-input qe-row__note-textarea"/);
+  assert.match(parametersSource, /PA · mmHg/);
+  assert.match(parametersSource, /SpO₂ · %/);
+  assert.match(parametersSource, /TC · °C/);
+  assert.doesNotMatch(parametersSource, /\{paziente\.lastName\}, \{paziente\.firstName\}/);
+  assert.match(appCss, /\.qe-row__input[\s\S]*font-family: var\(--font-ui\)/);
+  assert.match(appCss, /\.qe-row__input[\s\S]*font-size: 14px/);
+  assert.match(appCss, /\.qe-row__input:focus-visible[\s\S]*box-shadow: var\(--shadow-focus\)/);
+});
+
 test('multi-patient refresh keeps the previous roster visible and announces progress', () => {
   assert.match(parametersSource, /function updateRicerca[\s\S]*setLoading\(true\)/);
   assert.match(parametersSource, /onChange=\{\(e\) => updateRicerca\(e\.target\.value\)\}/);
