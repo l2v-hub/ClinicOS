@@ -1,3 +1,4 @@
+import { useRef, type KeyboardEvent } from 'react';
 import './TopNav.css';
 
 export interface TopNavItem {
@@ -13,39 +14,87 @@ interface TopNavProps {
   activeKey: string;
   onChange: (key: string) => void;
   ariaLabel?: string;
+  /** Visible hierarchy label: makes the relationship between the two tab levels explicit. */
+  visualLabel?: string;
+  /** Stable prefix used to connect tabs to the controlled panel. */
+  idPrefix?: string;
+  panelId?: string;
 }
 
 /**
- * Single horizontal navigation component for the Left-Top-Top pattern.
- * Same visual model for level 2 and level 3, differentiated only by hierarchy
- * (size / weight / underline thickness / padding). No pills, no per-item borders,
- * no per-page custom styling.
+ * Single keyboard-accessible navigation component for the Left-Top-Top pattern.
+ * Level 2 is the primary area rail; level 3 is a quieter contextual underline rail.
  */
-export function TopNav({ variant, items, activeKey, onChange, ariaLabel }: TopNavProps) {
+export function TopNav({
+  variant,
+  items,
+  activeKey,
+  onChange,
+  ariaLabel,
+  visualLabel,
+  idPrefix,
+  panelId,
+}: TopNavProps) {
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  function moveFocus(event: KeyboardEvent<HTMLButtonElement>, currentIndex: number) {
+    let nextIndex: number | null = null;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = (currentIndex + 1) % items.length;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = (currentIndex - 1 + items.length) % items.length;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = items.length - 1;
+    }
+
+    if (nextIndex === null) return;
+    event.preventDefault();
+    const nextItem = items[nextIndex];
+    onChange(nextItem.key);
+    tabRefs.current[nextIndex]?.focus();
+  }
+
   return (
     <nav
       className={`top-nav top-nav--${variant}`}
       role="tablist"
       aria-label={ariaLabel ?? (variant === 'level2' ? 'Sezioni principali' : 'Sotto-sezioni')}
     >
-      {items.map((item) => {
-        const active = activeKey === item.key;
-        return (
-          <button
-            key={item.key}
-            type="button"
-            role="tab"
-            aria-selected={active}
-            className={`top-nav__item${active ? ' is-active' : ''}`}
-            onClick={() => onChange(item.key)}
-          >
-            {item.label}
-            {(item.badge ?? 0) > 0 && (
-              <span className="top-nav__badge">{item.badge! > 99 ? '99+' : item.badge}</span>
-            )}
-          </button>
-        );
-      })}
+      {visualLabel && (
+        <span className="top-nav__context-label" aria-hidden="true">
+          {visualLabel}
+        </span>
+      )}
+      <div className="top-nav__items">
+        {items.map((item, index) => {
+          const active = activeKey === item.key;
+          const tabId = idPrefix ? `${idPrefix}-${item.key}` : undefined;
+          return (
+            <button
+              key={item.key}
+              ref={(element) => {
+                tabRefs.current[index] = element;
+              }}
+              type="button"
+              role="tab"
+              id={tabId}
+              aria-selected={active}
+              aria-controls={panelId}
+              tabIndex={active ? 0 : -1}
+              className={`top-nav__item${active ? ' is-active' : ''}`}
+              onClick={() => onChange(item.key)}
+              onKeyDown={(event) => moveFocus(event, index)}
+            >
+              {item.label}
+              {(item.badge ?? 0) > 0 && (
+                <span className="top-nav__badge">{item.badge! > 99 ? '99+' : item.badge}</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
     </nav>
   );
 }
