@@ -19,6 +19,8 @@ interface TopNavProps {
   /** Stable prefix used to connect tabs to the controlled panel. */
   idPrefix?: string;
   panelId?: string;
+  /** Optional layout modifier for a specific navigation placement. */
+  className?: string;
 }
 
 /**
@@ -34,6 +36,7 @@ export function TopNav({
   visualLabel,
   idPrefix,
   panelId,
+  className,
 }: TopNavProps) {
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -58,7 +61,7 @@ export function TopNav({
 
   return (
     <nav
-      className={`top-nav top-nav--${variant}`}
+      className={`top-nav top-nav--${variant}${className ? ` ${className}` : ''}`}
       role="tablist"
       aria-label={ariaLabel ?? (variant === 'level2' ? 'Sezioni principali' : 'Sotto-sezioni')}
     >

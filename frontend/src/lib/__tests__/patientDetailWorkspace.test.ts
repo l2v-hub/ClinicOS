@@ -27,7 +27,8 @@ const therapyTab = readFileSync(
 test('patient record exposes a labelled two-level navigation and controlled tab panel', () => {
   assert.match(patientDetail, /ariaLabel="Aree della cartella paziente"/);
   assert.match(patientDetail, /visualLabel="Aree cartella"/);
-  assert.match(patientDetail, /visualLabel=\{`\$\{grp\.label\} · contenuti`\}/);
+  assert.match(patientDetail, /className="top-nav--section-grid"/);
+  assert.doesNotMatch(patientDetail, /visualLabel=\{`\$\{grp\.label\} · contenuti`\}/);
   assert.match(patientDetail, /ariaLabel="Sezioni del profilo paziente"/);
   assert.doesNotMatch(patientDetail, /visualLabel="Dettagli profilo"/);
   assert.match(patientDetail, /ariaLabel="Filtra il diario per autore"/);
@@ -36,6 +37,8 @@ test('patient record exposes a labelled two-level navigation and controlled tab 
 });
 
 test('top navigation follows the keyboard tab pattern with one focusable active tab', () => {
+  assert.match(topNav, /className\?: string/);
+  assert.match(topNav, /className \? ` \$\{className\}` : ''/);
   assert.match(topNav, /tabIndex=\{active \? 0 : -1\}/);
   assert.match(topNav, /event\.key === 'ArrowRight'/);
   assert.match(topNav, /event\.key === 'ArrowLeft'/);
@@ -43,6 +46,14 @@ test('top navigation follows the keyboard tab pattern with one focusable active 
   assert.match(topNav, /event\.key === 'End'/);
   assert.match(topNav, /aria-controls=\{panelId\}/);
   assert.match(topNavStyles, /\.top-nav__item:focus-visible\s*\{/);
+  assert.match(
+    topNavStyles,
+    /\.top-nav--section-grid \.top-nav__items\s*\{[\s\S]*?display: grid[\s\S]*?repeat\(auto-fit, minmax\(128px, 1fr\)\)[\s\S]*?overflow: visible/,
+  );
+  assert.match(
+    topNavStyles,
+    /\.top-nav--section-grid \.top-nav__item\s*\{[\s\S]*?white-space: normal[\s\S]*?text-wrap: balance/,
+  );
 });
 
 test('therapy sections reuse the canonical contextual navigation', () => {

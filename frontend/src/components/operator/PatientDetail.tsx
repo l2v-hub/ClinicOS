@@ -2702,8 +2702,8 @@ export function PatientDetail({
         return (
           <TopNav
             variant="level3"
+            className="top-nav--section-grid"
             ariaLabel={`Sezioni di ${grp.label}`}
-            visualLabel={`${grp.label} · contenuti`}
             idPrefix="patient-secondary"
             panelId="patient-tab-panel"
             items={grp.tabs.map((t) => ({

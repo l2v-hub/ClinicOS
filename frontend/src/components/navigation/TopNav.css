@@ -139,6 +139,53 @@
   background: #2f6bed;
 }
 
+/* Patient-record section rail: every destination remains visible without horizontal scrolling.
+   It is a quieter surface than L2 and wraps naturally on tablet instead of clipping labels. */
+.top-nav--section-grid {
+  min-height: 52px;
+  margin-top: 8px;
+  padding: 6px 8px;
+  border: 1px solid #d8e0ea;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16, 32, 54, 0.05);
+}
+
+.top-nav--section-grid .top-nav__items {
+  flex: 1 1 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 4px 8px;
+  overflow: visible;
+  width: 100%;
+  padding: 0;
+}
+
+.top-nav--section-grid .top-nav__item {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 8px 9px;
+  border-radius: 7px;
+  line-height: 1.25;
+  white-space: normal;
+  text-wrap: balance;
+}
+
+.top-nav--section-grid .top-nav__item:hover {
+  background: #f3f6fb;
+}
+
+.top-nav--section-grid .top-nav__item.is-active {
+  background: #eef4ff;
+}
+
+.top-nav--section-grid .top-nav__item::after {
+  right: 8px;
+  bottom: 2px;
+  left: 8px;
+}
+
 .top-nav__badge {
   min-width: 20px;
   padding: 2px 6px;
@@ -181,10 +228,20 @@
   .top-nav--level3 {
     padding-inline: 4px;
   }
+
+  .top-nav--section-grid {
+    flex-direction: row;
+    margin-inline: 16px;
+    padding: 6px;
+  }
 }
 
 @media (max-width: 600px) {
   .top-nav {
+    margin-inline: 12px;
+  }
+
+  .top-nav--section-grid {
     margin-inline: 12px;
   }
 
