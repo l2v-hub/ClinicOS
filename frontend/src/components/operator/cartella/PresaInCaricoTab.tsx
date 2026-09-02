@@ -284,17 +284,14 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
   const datiView = (
     <div className="cr-form-section">
       <InlineEditableField
-        label="Data presa in carico"
-        type="date"
-        value={safePic.dataIngresso}
-        display={safePic.dataIngresso.split('-').reverse().join('/')}
-        onSave={(v) => saveField({ dataIngresso: v })}
-      />
-      <InlineEditableField
-        label="Ora presa in carico"
-        type="time"
-        value={safePic.oraIngresso}
-        onSave={(v) => saveField({ oraIngresso: v })}
+        label="Data / Ora"
+        type="datetime-local"
+        value={`${safePic.dataIngresso}T${safePic.oraIngresso}`}
+        display={`${safePic.dataIngresso.split('-').reverse().join('/')} ${safePic.oraIngresso}`}
+        onSave={(v) => {
+          const [dataIngresso = '', oraIngresso = ''] = v.split('T');
+          return saveField({ dataIngresso, oraIngresso });
+        }}
       />
       <InlineEditableField
         label="Provenienza"
@@ -330,16 +327,13 @@ export function PresaInCaricoTab({ cartella, paziente, onUpdate, operatoreNome }
         onSave={(v) => saveField({ operatoreResponsabile: v })}
       />
       <InlineEditableField
-        label="Camera"
-        value={safePic.camera ?? ''}
-        placeholder="es. 12"
-        onSave={(v) => saveField({ camera: v })}
-      />
-      <InlineEditableField
-        label="Letto / posto"
-        value={safePic.letto ?? ''}
-        placeholder="es. A"
-        onSave={(v) => saveField({ letto: v })}
+        label="Camera / Letto"
+        value={[safePic.camera, safePic.letto].filter(Boolean).join(' / ')}
+        placeholder="es. 12 / A"
+        onSave={(v) => {
+          const [camera = '', ...lettoParts] = v.split('/');
+          return saveField({ camera: camera.trim(), letto: lettoParts.join('/').trim() });
+        }}
       />
       <InlineEditableField
         label="Motivo ingresso"

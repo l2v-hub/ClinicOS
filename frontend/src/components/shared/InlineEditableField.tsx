@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { IcoSave, IcoX, IcoEdit } from '../../icons';
 
-export type InlineFieldType = 'text' | 'textarea' | 'select' | 'number' | 'date' | 'time';
+export type InlineFieldType =
+  'text' | 'textarea' | 'select' | 'number' | 'date' | 'time' | 'datetime-local';
 
 export interface InlineOption {
   value: string;
@@ -183,7 +184,11 @@ export function InlineEditableField({
               ref={(el) => {
                 inputRef.current = el;
               }}
-              type={type === 'number' || type === 'date' || type === 'time' ? type : 'text'}
+              type={
+                type === 'number' || type === 'date' || type === 'time' || type === 'datetime-local'
+                  ? type
+                  : 'text'
+              }
               className="form-input inline-edit__input"
               value={draft}
               placeholder={placeholder}

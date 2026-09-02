@@ -30,7 +30,7 @@ test('inline key-value editing uses one accessible whole-row trigger', () => {
 test('inline editor supports compact date/time and keyboard save or cancel', () => {
   assert.match(
     inlineEditor,
-    /InlineFieldType = 'text' \| 'textarea' \| 'select' \| 'number' \| 'date' \| 'time'/,
+    /InlineFieldType =\s*[\s\S]*?'date'[\s\S]*?'time'[\s\S]*?'datetime-local'/,
   );
   assert.match(inlineEditor, /e\.key === 'Escape'[\s\S]*?cancel\(\)/);
   assert.match(inlineEditor, /type === 'textarea'[\s\S]*?e\.ctrlKey \|\| e\.metaKey/);
@@ -40,10 +40,6 @@ test('inline editor supports compact date/time and keyboard save or cancel', () 
 
 test('presa in carico exposes direct editing for fields previously locked behind the long form', () => {
   for (const field of [
-    'dataIngresso',
-    'oraIngresso',
-    'camera',
-    'letto',
     'documentiRicevuti',
     'documentiMancanti',
     'materialeConsegnato',
@@ -53,7 +49,9 @@ test('presa in carico exposes direct editing for fields previously locked behind
   ]) {
     assert.match(intake, new RegExp(`onSave=\\{\\(v\\) => saveField\\(\\{ ${field}:`));
   }
-  assert.match(intake, /label="Data presa in carico"[\s\S]*?type="date"/);
-  assert.match(intake, /label="Ora presa in carico"[\s\S]*?type="time"/);
+  assert.match(intake, /label="Data \/ Ora"[\s\S]*?type="datetime-local"/);
+  assert.match(intake, /saveField\(\{ dataIngresso, oraIngresso \}\)/);
+  assert.match(intake, /label="Camera \/ Letto"[\s\S]*?v\.split\('\/'\)/);
+  assert.match(intake, /saveField\(\{ camera: camera\.trim\(\), letto:/);
   assert.match(intake, /tone=\{safePic\.documentiMancanti \? 'danger' : 'default'\}/);
 });
