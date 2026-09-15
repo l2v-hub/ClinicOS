@@ -27,3 +27,10 @@ agent-team
 .wt-*
 **/.env
 **/.env.*.local
+requirements
+e2e
+.openclode
+.mcp.json
+*.ps1
+*.sh
+wsl
