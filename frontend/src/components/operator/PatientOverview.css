@@ -64,6 +64,41 @@
   overflow-wrap: anywhere;
 }
 
+/* Keep the complete narrative in the diagnosis dialog, with a bounded overview. */
+.patient-record-view .cr-tab-content--overview .cr-riepilogo-card--diagnosi {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 10rem;
+}
+
+.patient-record-view .cr-riepilogo-card--diagnosi .cr-compact-list {
+  min-height: 0;
+  overflow: hidden;
+  gap: 4px;
+}
+
+.patient-record-view .cr-riepilogo-card--diagnosi .cr-compact-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: start;
+  flex-shrink: 0;
+}
+
+.patient-record-view .cr-riepilogo-card--diagnosi .cr-compact-item__main {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  line-height: 1.35;
+}
+
+.patient-record-view
+  .cr-riepilogo-card--diagnosi
+  .cr-compact-item:only-child
+  .cr-compact-item__main {
+  -webkit-line-clamp: 3;
+}
+
 .patient-record-view .cr-tab-content--overview .cr-compact-item--farmaco {
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.65fr);
   align-items: start;
