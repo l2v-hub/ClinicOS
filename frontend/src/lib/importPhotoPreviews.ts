@@ -14,6 +14,13 @@ export interface UploadedDocument {
   logicalDoc?: string | null;
 }
 
+export function isImportPhotoReplacement(files: File[]): boolean {
+  return (
+    files.length === 1 &&
+    (files[0].type.startsWith('image/') || files[0].type === 'application/pdf')
+  );
+}
+
 // The upload API returns one outcome per input, in input order. Filenames are not unique.
 export class ImportPreviewSession {
   generation = 0;

@@ -1,8 +1,12 @@
-import { useId, useState } from 'react';
+import { lazy, Suspense, useEffect, useId, useState } from 'react';
 import { IcoImage } from '../../icons';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
 import type { PreviewDoc } from './DocumentPreview';
 import './ImportPhotoPreview.css';
+
+const PdfCanvasPreview = lazy(() =>
+  import('./PdfCanvasPreview').then((module) => ({ default: module.PdfCanvasPreview })),
+);
 
 interface Props {
   name: string;
@@ -15,7 +19,25 @@ export function ImportPhotoPreview({ name, document, onClose, onRetake }: Props)
   const titleId = useId();
   const [zoomed, setZoomed] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [pdfFile, setPdfFile] = useState<Blob | null>(null);
+  const isPdf = document?.type === 'application/pdf';
   const available = !!document?.url && !failed;
+  useEffect(() => {
+    if (!isPdf || !document?.url) return;
+    const controller = new AbortController();
+    setPdfFile(null);
+    setFailed(false);
+    void fetch(document.url, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error('PDF unavailable');
+        const blob = await response.blob();
+        if (!controller.signal.aborted) setPdfFile(blob);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setFailed(true);
+      });
+    return () => controller.abort();
+  }, [isPdf, document?.url]);
   return (
     <AccessibleDialogSurface
       labelledBy={titleId}
@@ -27,7 +49,7 @@ export function ImportPhotoPreview({ name, document, onClose, onRetake }: Props)
           <IcoImage />
         </span>
         <div>
-          <h3 id={titleId}>Foto caricata</h3>
+          <h3 id={titleId}>{isPdf ? 'Documento PDF' : 'Foto caricata'}</h3>
           <p title={name}>{name}</p>
         </div>
         <button
@@ -50,11 +72,19 @@ export function ImportPhotoPreview({ name, document, onClose, onRetake }: Props)
         </button>
       </header>
       <div
-        className="import-photo-preview__stage"
-        tabIndex={available && zoomed ? 0 : undefined}
-        aria-label="Immagine caricata"
+        className={`import-photo-preview__stage${isPdf ? ' import-photo-preview__stage--pdf' : ''}`}
+        tabIndex={!isPdf && available && zoomed ? 0 : undefined}
+        aria-label={isPdf ? 'PDF caricato' : 'Immagine caricata'}
       >
-        {available ? (
+        {available && isPdf ? (
+          <Suspense fallback={<p role="status">Preparazione anteprima PDF…</p>}>
+            {pdfFile ? (
+              <PdfCanvasPreview file={pdfFile} name={name} />
+            ) : (
+              <p role="status">Caricamento PDF…</p>
+            )}
+          </Suspense>
+        ) : available ? (
           <div
             className="import-photo-preview__canvas"
             style={{ width: zoomed ? '200%' : '100%', height: zoomed ? '200%' : '100%' }}
@@ -69,23 +99,30 @@ export function ImportPhotoPreview({ name, document, onClose, onRetake }: Props)
         ) : (
           <p role="status">
             {failed
-              ? 'Questa immagine non è visualizzabile nel browser. Il file caricato è conservato.'
+              ? 'Questo documento non è visualizzabile nel browser. Il file caricato è conservato.'
               : 'Anteprima non disponibile per questo file nella sessione corrente. Il file caricato è conservato.'}
           </p>
         )}
       </div>
       <footer className="import-photo-preview__footer">
-        <button
-          type="button"
-          className="btn-secondary"
-          disabled={!available}
-          aria-pressed={zoomed}
-          onClick={() => setZoomed((value) => !value)}
-        >
-          {zoomed ? 'Adatta alla finestra' : 'Ingrandisci'}
-        </button>
+        {!isPdf && (
+          <button
+            type="button"
+            className="btn-secondary"
+            disabled={!available}
+            aria-pressed={zoomed}
+            onClick={() => setZoomed((value) => !value)}
+          >
+            {zoomed ? 'Adatta alla finestra' : 'Ingrandisci'}
+          </button>
+        )}
+        {isPdf && document?.url && (
+          <a className="btn-secondary" href={document.url} download={name}>
+            Scarica PDF
+          </a>
+        )}
         <button type="button" className="btn-secondary" onClick={onRetake}>
-          Rifai foto
+          {isPdf ? 'Ripeti scansione' : 'Rifai foto'}
         </button>
         <button type="button" className="btn-primary" onClick={onClose}>
           Chiudi anteprima

@@ -1,0 +1,41 @@
+.document-pdf-preview {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+.document-pdf-preview__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.document-pdf-preview__stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  padding: 16px;
+  background: #edf0f4;
+}
+.document-pdf-preview__stage canvas {
+  display: block;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0 2px 12px #20334e24;
+}
+.document-pdf-preview__stage canvas[data-ready='false'] {
+  visibility: hidden;
+}
+.document-pdf-preview__accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

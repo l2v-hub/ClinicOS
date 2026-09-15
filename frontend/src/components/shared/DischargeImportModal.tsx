@@ -13,6 +13,7 @@ import { DocumentPreview } from './DocumentPreview';
 import { IcoImage } from '../../icons';
 import {
   finishPhotoReplacement,
+  isImportPhotoReplacement,
   useImportPreviews,
   type UploadOutcome,
 } from '../../lib/importPhotoPreviews';
@@ -212,8 +213,10 @@ export function DischargeImportModal({
   async function sendFiles(files: FileList | File[] | null, replacingId: string | null = null) {
     if (!files || files.length === 0) return;
     const inputFiles = Array.from(files);
-    if (replacingId && (inputFiles.length !== 1 || !inputFiles[0].type.startsWith('image/'))) {
-      setError('Per rifare la foto seleziona una sola immagine. La foto originale è conservata.');
+    if (replacingId && !isImportPhotoReplacement(inputFiles)) {
+      setError(
+        'Per sostituire la scansione seleziona una sola immagine o un PDF. L’originale è conservato.',
+      );
       return;
     }
     const generation = session.generation;
@@ -731,7 +734,7 @@ export function DischargeImportModal({
                 ref={replacementInput}
                 type="file"
                 hidden
-                accept="image/*"
+                accept=".pdf,application/pdf,image/*"
                 onChange={(e) => {
                   void sendFiles(e.target.files, retakeId.current);
                   e.target.value = '';
@@ -749,6 +752,7 @@ export function DischargeImportModal({
             )}
             <CameraCapture
               open={cameraOpen}
+              outputFormat="pdf"
               onClose={() => setCameraOpen(false)}
               onCapture={(file) => {
                 setCameraOpen(false);
@@ -814,13 +818,15 @@ export function DischargeImportModal({
                     >
                       ↓
                     </button>
-                    {d.mimeType.startsWith('image/') && (
+                    {(d.mimeType.startsWith('image/') || d.mimeType === 'application/pdf') && (
                       <button
                         className="icon-btn import-photo-action"
                         disabled={busy}
                         onClick={() => setPreviewId(d.id)}
-                        aria-label={`Visualizza foto: ${d.filename}`}
-                        title="Visualizza foto"
+                        aria-label={`Visualizza ${d.mimeType === 'application/pdf' ? 'PDF' : 'foto'}: ${d.filename}`}
+                        title={
+                          d.mimeType === 'application/pdf' ? 'Visualizza PDF' : 'Visualizza foto'
+                        }
                       >
                         <IcoImage />
                       </button>

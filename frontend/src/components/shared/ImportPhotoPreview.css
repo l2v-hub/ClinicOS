@@ -67,6 +67,17 @@
   padding: 24px;
   color: var(--muted, #5a6b80);
 }
+.import-photo-preview__stage--pdf {
+  display: flex;
+  flex-direction: column;
+}
+.import-photo-preview__footer > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-height: 44px;
+}
 .import-photo-preview__canvas img {
   display: block;
   width: 100%;
