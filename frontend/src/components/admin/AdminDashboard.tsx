@@ -15,6 +15,7 @@ import { buildDashboardNotificationCounts } from '../operator/dashboardNotificat
 import { useAnomalieReparto } from '../operator/cartella/useAnomalieReparto';
 import { useRiepilogoSomministrazioni } from '../operator/cartella/useRiepilogoSomministrazioni';
 import { AdminDashboardKpiBands } from './AdminDashboardKpiBands';
+import { DashboardTherapyDeadlines } from '../shared/DashboardTherapyDeadlines';
 
 interface AdminDashboardProps {
   operatori: Operatore[];
@@ -191,6 +192,12 @@ export function AdminDashboard({
         somministrazioni={somministrazioni}
         onNavigate={onNavigate}
         onOpenConsegneAperte={onOpenConsegneAperte}
+      />
+
+      <DashboardTherapyDeadlines
+        summary={somministrazioni}
+        onOpenAgenda={() => onNavigate('agenda-admin')}
+        onSelectPaziente={onSelectPaziente}
       />
 
       {/* Occupancy section */}

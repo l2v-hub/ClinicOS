@@ -145,6 +145,22 @@ const PATIENT_DOCUMENT_PUBLIC_SELECT = {
   createdAt: true,
 } satisfies Prisma.PatientDocumentSelect;
 
+/** Reclassify only the named patient's file; bytes and original filename are immutable here. */
+export async function updatePatientDocumentType(
+  patientId: string,
+  documentId: string,
+  documentType: string,
+): Promise<PublicPatientDocument | null> {
+  const where = { id: documentId, patientId };
+  const updated = await prisma.patientDocument.updateMany({ where, data: { documentType } });
+  if (updated.count !== 1) return null;
+  const row = await prisma.patientDocument.findFirst({
+    where,
+    select: PATIENT_DOCUMENT_PUBLIC_SELECT,
+  });
+  return row ? { ...row, createdAt: row.createdAt.toISOString() } : null;
+}
+
 /** Bounded document metadata page for the patient (never includes the base64 bytes). */
 export async function listPatientDocuments(
   patientId: string,

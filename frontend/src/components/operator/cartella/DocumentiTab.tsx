@@ -1,74 +1,39 @@
-import { useState } from 'react';
-import { IcoCheck } from '../../../icons';
-import type {
-  CartellaPaziente,
-  DocumentoConsegnato,
-  TipoDocumento,
-  StatoDocumento,
-  Paziente,
-} from '../../../types';
-import { uid, todayStr, fmtDate, PrintButton, ClinicalTableSection } from './shared';
-import { ImportedDocumentsList } from './ImportedDocumentsList';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { CartellaPaziente, DocumentoConsegnato, Paziente } from '../../../types';
+import {
+  ARCHIVE_CATEGORIES,
+  buildDocumentArchive,
+  DOCUMENT_TYPE_LABELS,
+  filterDocumentArchive,
+  type ArchiveCategory,
+  type ArchiveEntry,
+} from '../../../lib/patientDocumentArchive';
+import { useDocumentArchive } from '../../../lib/useDocumentArchive';
+import { ClinicalTableSection, PrintButton, fmtDate } from './shared';
+import { ArchiveDocumentForm, DOCUMENT_STATUS_LABELS } from './ArchiveDocumentForm';
+import { PatientArchivePreview } from './PatientArchivePreview';
+import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import './PatientDocumentArchive.css';
 
 interface Props {
   cartella: CartellaPaziente;
   paziente: Paziente;
-  onUpdate: (updates: Partial<CartellaPaziente>) => void;
+  onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   operatoreNome: string;
   operatoreId?: string;
   operatoreRole?: string;
 }
 
-const TIPO_LABEL: Record<TipoDocumento, string> = {
-  documento_identita: 'Documento di identità',
-  tessera_sanitaria: 'Tessera sanitaria',
-  consenso_privacy: 'Consenso privacy',
-  consenso_trattamento: 'Consenso trattamento',
-  invio_centro_medico: 'Invio centro medico',
-  lettera_dimissione: 'Lettera di dimissione',
-  referto: 'Referto',
-  prescrizione: 'Prescrizione',
-  delega: 'Delega',
-  liberatoria_uscita: 'Liberatoria di uscita',
-  consenso_contenzioni: 'Consenso contenzioni',
-  documentazione_medicazioni: 'Documentazione medicazioni',
-  consenso_informato: 'Consenso informato',
-  privacy: 'Informativa privacy',
-  regolamento: 'Regolamento struttura',
-  carta_servizi: 'Carta dei servizi',
-  modulo_allergie: 'Modulo allergie',
-  piano_terapeutico: 'Piano terapeutico',
-  altro: 'Altro',
-};
+export function DocumentiTab(props: Props) {
+  return (
+    <DocumentArchiveWorkspace
+      key={`${props.paziente.id}|${props.operatoreId}|${props.operatoreRole}`}
+      {...props}
+    />
+  );
+}
 
-const STATO_LABEL: Record<StatoDocumento, string> = {
-  ricevuto: 'Ricevuto',
-  mancante: 'Mancante',
-  da_verificare: 'Da verificare',
-  firmato: 'Firmato',
-  scaduto: 'Scaduto',
-};
-
-const STATO_BADGE: Record<StatoDocumento, string> = {
-  ricevuto: 'badge--blue',
-  mancante: 'badge--red',
-  da_verificare: 'badge--amber',
-  firmato: 'badge--green',
-  scaduto: 'badge--gray',
-};
-
-const EMPTY_FORM = {
-  tipo: 'documento_identita' as TipoDocumento,
-  descrizione: '',
-  dataConsegna: todayStr(),
-  scadenza: '',
-  provenienza: '',
-  firmatoDA: 'paziente',
-  stato: 'ricevuto' as StatoDocumento,
-  note: '',
-};
-
-export function DocumentiTab({
+function DocumentArchiveWorkspace({
   cartella,
   paziente,
   onUpdate,
@@ -76,106 +41,89 @@ export function DocumentiTab({
   operatoreId,
   operatoreRole,
 }: Props) {
-  const allDocs = cartella.documentiConsegnati ?? [];
-  const docs = allDocs.filter((d) => !d.archiviato);
-  const archived = allDocs.filter((d) => d.archiviato);
-
-  const [showAdd, setShowAdd] = useState(false);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState({ ...EMPTY_FORM });
-  const [showArchived, setShowArchived] = useState(false);
-
-  function set(f: Partial<typeof form>) {
-    setForm((p) => ({ ...p, ...f }));
-  }
-
-  function handleSave() {
-    const saved: DocumentoConsegnato = {
-      id: editId ?? uid(),
-      tipo: form.tipo,
-      descrizione: form.descrizione || TIPO_LABEL[form.tipo],
-      dataConsegna: form.dataConsegna,
-      scadenza: form.scadenza || undefined,
-      provenienza: form.provenienza || undefined,
-      firmatoDA: form.firmatoDA,
-      stato: form.stato,
-      operatore: operatoreNome,
-      note: form.note,
+  const archive = useDocumentArchive(paziente.id, operatoreId, operatoreRole);
+  const records = cartella.documentiConsegnati ?? [];
+  const entries = useMemo(
+    () => buildDocumentArchive(records, archive.documents),
+    [records, archive.documents],
+  );
+  const [category, setCategory] = useState<ArchiveCategory | 'tutti'>('tutti');
+  const [query, setQuery] = useState('');
+  const [archived, setArchived] = useState(false);
+  const [visible, setVisible] = useState(25);
+  const [form, setForm] = useState<{ key: string; entry: ArchiveEntry | null } | null>(null);
+  const [preview, setPreview] = useState<ArchiveEntry | null>(null);
+  const [removing, setRemoving] = useState<ArchiveEntry | null>(null);
+  const [saving, setSaving] = useState(false);
+  const busy = useRef(false);
+  const alive = useRef(true);
+  const [error, setError] = useState('');
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
     };
-    onUpdate({
-      documentiConsegnati: editId
-        ? allDocs.map((d) => (d.id === editId ? saved : d))
-        : [saved, ...allDocs],
-    });
-    setShowAdd(false);
-    setEditId(null);
-    setForm({ ...EMPTY_FORM });
+  }, []);
+  const filtered = filterDocumentArchive(entries, category, query, archived);
+  const activeEntries = entries.filter((entry) => entry.archived === archived);
+  const complete = archive.status === 'ready';
+  const openForm = (entry: ArchiveEntry | null) => {
+    setError('');
+    setForm({ key: crypto.randomUUID(), entry });
+  };
+  async function update(recordsToSave: DocumentoConsegnato[]) {
+    if (busy.current || form) return;
+    busy.current = true;
+    setSaving(true);
+    setError('');
+    try {
+      const ok = await onUpdate({ documentiConsegnati: recordsToSave });
+      if (ok === false) throw new Error('Salvataggio non riuscito. Riprova.');
+      if (alive.current) setRemoving(null);
+    } catch {
+      if (alive.current) setError('Salvataggio non riuscito. Riprova.');
+    } finally {
+      busy.current = false;
+      if (alive.current) setSaving(false);
+    }
   }
-
-  function startEdit(d: DocumentoConsegnato) {
-    setForm({
-      tipo: d.tipo,
-      descrizione: d.descrizione,
-      dataConsegna: d.dataConsegna,
-      scadenza: d.scadenza ?? '',
-      provenienza: d.provenienza ?? '',
-      firmatoDA: d.firmatoDA,
-      stato: d.stato ?? 'ricevuto',
-      note: d.note,
-    });
-    setEditId(d.id);
-    setShowAdd(true);
+  function setArchivedEntry(entry: ArchiveEntry) {
+    const record: DocumentoConsegnato = entry.record ?? {
+      id: crypto.randomUUID(),
+      tipo: entry.type,
+      descrizione: entry.title,
+      dataConsegna: entry.date,
+      stato: 'ricevuto',
+      firmatoDA: 'non_firmato',
+      operatore: operatoreNome,
+      note: '',
+      patientDocumentId: entry.document?.id,
+    };
+    void update([
+      { ...record, archiviato: !entry.archived },
+      ...records.filter((item) => item.id !== record.id),
+    ]);
   }
-
-  function handleArchive(id: string) {
-    onUpdate({
-      documentiConsegnati: allDocs.map((d) => (d.id === id ? { ...d, archiviato: true } : d)),
-    });
-  }
-
-  function handleDelete(id: string) {
-    onUpdate({ documentiConsegnati: allDocs.filter((d) => d.id !== id) });
-  }
-
-  function handleRestore(id: string) {
-    onUpdate({
-      documentiConsegnati: allDocs.map((d) => (d.id === id ? { ...d, archiviato: false } : d)),
-    });
-  }
-
-  const mancanti = docs.filter((d) => d.stato === 'mancante');
-  const daVerificare = docs.filter((d) => d.stato === 'da_verificare');
-
   return (
-    <div className="cr-tab-content">
-      <ImportedDocumentsList
-        patientId={paziente.id}
-        operatorId={operatoreId}
-        operatorRole={operatoreRole}
-      />
-      {/* Print header */}
+    <div className="cr-tab-content patient-document-archive">
       <div className="print-only print-form-header">
-        <div className="print-form-header__title">DOCUMENTI PAZIENTE</div>
-        <div className="print-form-header__patient">
-          Paziente: {paziente.lastName} {paziente.firstName} — Tessera:{' '}
-          {paziente.medicalRecordNumber}
+        <div className="print-form-header__title">ARCHIVIO DOCUMENTI</div>
+        <div>
+          {paziente.lastName} {paziente.firstName}
         </div>
       </div>
-
       <ClinicalTableSection
-        title="Documenti Paziente"
-        count={docs.length}
+        title="Documenti paziente"
+        count={complete ? entries.length : undefined}
         countLabel="documenti"
         actions={
           <>
-            <PrintButton label="Stampa elenco" />
+            <PrintButton label="Stampa documenti visibili" />
             <button
+              type="button"
               className="btn-sm"
-              onClick={() => {
-                setEditId(null);
-                setForm({ ...EMPTY_FORM });
-                setShowAdd(true);
-              }}
+              disabled={!complete || !!form || saving}
+              onClick={() => openForm(null)}
             >
               + Aggiungi
             </button>
@@ -183,342 +131,240 @@ export function DocumentiTab({
         }
       >
         <div className="cts__body--padded">
-          {/* Alert banners */}
-          {mancanti.length > 0 && (
-            <div
-              style={{
-                background: '#FEF2F2',
-                border: '1px solid #FCA5A5',
-                borderRadius: 6,
-                padding: '8px 12px',
-                marginBottom: 10,
-                fontSize: '13px',
-                color: '#B91C1C',
-              }}
-            >
-              <strong>Documenti mancanti ({mancanti.length}):</strong>{' '}
-              {mancanti.map((d) => d.descrizione).join(', ')}
-            </div>
+          {form && (
+            <ArchiveDocumentForm
+              key={form.key}
+              initial={form.entry}
+              records={records}
+              patientId={paziente.id}
+              operatorId={operatoreId}
+              operatorRole={operatoreRole}
+              operatorName={operatoreNome}
+              onPersist={(next) => onUpdate({ documentiConsegnati: next })}
+              onStored={archive.remember}
+              onClose={() => setForm(null)}
+            />
           )}
-          {daVerificare.length > 0 && (
-            <div
-              style={{
-                background: '#FDF3E2',
-                border: '1px solid #C77700',
-                borderRadius: 6,
-                padding: '8px 12px',
-                marginBottom: 10,
-                fontSize: '13px',
-                color: '#92400E',
-              }}
-            >
-              <strong>Da verificare ({daVerificare.length}):</strong>{' '}
-              {daVerificare.map((d) => d.descrizione).join(', ')}
-            </div>
-          )}
-
-          {/* Form */}
-          {showAdd && (
-            <div className="cr-inline-form">
-              <div className="cr-form-section__title">
-                {editId ? 'Modifica documento' : 'Nuovo documento'}
-              </div>
-              <div className="form-row-2col">
-                <div className="form-row">
-                  <label className="form-label">Tipo documento</label>
-                  <select
-                    className="form-input"
-                    value={form.tipo}
-                    onChange={(e) => set({ tipo: e.target.value as TipoDocumento })}
-                  >
-                    {(Object.entries(TIPO_LABEL) as [TipoDocumento, string][]).map(([k, v]) => (
-                      <option key={k} value={k}>
-                        {v}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-row">
-                  <label className="form-label">Stato</label>
-                  <select
-                    className="form-input"
-                    value={form.stato}
-                    onChange={(e) => set({ stato: e.target.value as StatoDocumento })}
-                  >
-                    {(Object.entries(STATO_LABEL) as [StatoDocumento, string][]).map(([k, v]) => (
-                      <option key={k} value={k}>
-                        {v}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="form-row-2col">
-                <div className="form-row">
-                  <label className="form-label">Data ricezione</label>
-                  <input
-                    type="date"
-                    className="form-input"
-                    value={form.dataConsegna}
-                    onChange={(e) => set({ dataConsegna: e.target.value })}
-                  />
-                </div>
-                <div className="form-row">
-                  <label className="form-label">Scadenza</label>
-                  <input
-                    type="date"
-                    className="form-input"
-                    value={form.scadenza}
-                    onChange={(e) => set({ scadenza: e.target.value })}
-                  />
-                </div>
-              </div>
-              <div className="form-row-2col">
-                <div className="form-row">
-                  <label className="form-label">Provenienza</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={form.provenienza}
-                    onChange={(e) => set({ provenienza: e.target.value })}
-                    placeholder="es. paziente, familiare, centro medico…"
-                  />
-                </div>
-                <div className="form-row">
-                  <label className="form-label">Firmato da</label>
-                  <select
-                    className="form-input"
-                    value={form.firmatoDA}
-                    onChange={(e) => set({ firmatoDA: e.target.value })}
-                  >
-                    <option value="paziente">Paziente</option>
-                    <option value="tutore">Tutore</option>
-                    <option value="familiare">Familiare</option>
-                    <option value="non_firmato">Non firmato</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-row">
-                <label className="form-label">Descrizione (opzionale)</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={form.descrizione}
-                  onChange={(e) => set({ descrizione: e.target.value })}
-                  placeholder={TIPO_LABEL[form.tipo]}
-                />
-              </div>
-              <div className="form-row">
-                <label className="form-label">Note</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={form.note}
-                  onChange={(e) => set({ note: e.target.value })}
-                />
-              </div>
-              <div
-                style={{
-                  fontSize: '12px',
-                  color: '#6B7280',
-                  padding: '6px 0',
-                  borderTop: '1px solid #e5e7eb',
-                  marginTop: 4,
+          <div className="patient-document-archive__filters no-print">
+            <label>
+              Cerca nell’archivio
+              <input
+                className="form-input"
+                type="search"
+                maxLength={120}
+                placeholder="Descrizione, nome file, provenienza…"
+                value={query}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setVisible(25);
+                }}
+              />
+            </label>
+            <label>
+              Mostra
+              <select
+                className="form-input"
+                value={archived ? 'archiviati' : 'correnti'}
+                onChange={(event) => {
+                  setArchived(event.target.value === 'archiviati');
+                  setVisible(25);
                 }}
               >
-                📎 Allegato: funzione di upload disponibile in una versione futura.
-              </div>
-              <div className="cr-inline-form__actions">
-                <button
-                  className="btn-secondary btn-sm"
-                  onClick={() => {
-                    setShowAdd(false);
-                    setEditId(null);
-                  }}
-                >
-                  Annulla
-                </button>
-                <button className="btn-success btn-sm" onClick={handleSave}>
-                  <IcoCheck /> Salva
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Active documents list */}
-          {docs.length === 0 && !showAdd ? (
-            <p className="cr-empty">Nessun documento registrato.</p>
-          ) : (
-            <div className="doc-list">
-              {docs.map((d) => {
-                const stato = d.stato ?? 'ricevuto';
-                const isMancante = stato === 'mancante';
-                const isDaVer = stato === 'da_verificare';
-                return (
-                  <div
-                    key={d.id}
-                    className="doc-item"
-                    style={
-                      isMancante
-                        ? { borderLeft: '3px solid #EF4444', background: '#FFF5F5' }
-                        : isDaVer
-                          ? { borderLeft: '3px solid #C77700', background: '#FFFDF0' }
-                          : undefined
-                    }
-                  >
-                    <div className="doc-item__icon">📄</div>
-                    <div className="doc-item__body">
-                      <div className="doc-item__title">{d.descrizione}</div>
-                      <div className="doc-item__meta">
-                        <span className={`badge ${STATO_BADGE[stato]}`}>{STATO_LABEL[stato]}</span>
-                        <span className="badge badge--gray">{TIPO_LABEL[d.tipo]}</span>
-                        <span className="cr-meta">{fmtDate(d.dataConsegna)}</span>
-                        {d.provenienza && <span className="cr-meta">da: {d.provenienza}</span>}
-                        {d.scadenza && (
-                          <span
-                            className="cr-meta"
-                            style={{
-                              color: new Date(d.scadenza) < new Date() ? '#EF4444' : undefined,
-                            }}
-                          >
-                            scad: {fmtDate(d.scadenza)}
-                          </span>
-                        )}
-                        <span className="cr-meta">firmato: {d.firmatoDA}</span>
-                        <span className="cr-meta">op: {d.operatore}</span>
-                      </div>
-                      {d.note && (
-                        <div className="cr-meta" style={{ marginTop: 4 }}>
-                          {d.note}
-                        </div>
-                      )}
-                    </div>
-                    <div style={{ display: 'flex', gap: 4, flexShrink: 0 }} className="no-print">
-                      <button
-                        className="icon-btn icon-btn--sm icon-btn--edit"
-                        onClick={() => startEdit(d)}
-                        title="Modifica"
-                      >
-                        <svg
-                          width="13"
-                          height="13"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        >
-                          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                        </svg>
-                      </button>
-                      <button
-                        className="icon-btn icon-btn--sm"
-                        onClick={() => handleArchive(d.id)}
-                        title="Archivia"
-                      >
-                        <svg
-                          width="13"
-                          height="13"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        >
-                          <polyline points="21 8 21 21 3 21 3 8" />
-                          <rect x="1" y="3" width="22" height="5" />
-                          <line x1="10" y1="12" x2="14" y2="12" />
-                        </svg>
-                      </button>
-                      <button
-                        className="icon-btn icon-btn--sm icon-btn--danger"
-                        onClick={() => handleDelete(d.id)}
-                        title="Elimina"
-                      >
-                        <svg
-                          width="13"
-                          height="13"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        >
-                          <line x1="18" y1="6" x2="6" y2="18" />
-                          <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Archived documents */}
-          {archived.length > 0 && (
-            <div style={{ marginTop: 16 }} className="no-print">
+                <option value="correnti">Documenti correnti</option>
+                <option value="archiviati">Documenti archiviati</option>
+              </select>
+            </label>
+            <button
+              type="button"
+              className="btn-secondary btn-sm"
+              disabled={archive.status === 'loading' || !!form || saving}
+              onClick={archive.reload}
+            >
+              Aggiorna archivio
+            </button>
+          </div>
+          <nav
+            className="patient-document-archive__categories no-print"
+            aria-label="Tipologie documenti"
+          >
+            {[{ id: 'tutti', label: 'Tutti' }, ...ARCHIVE_CATEGORIES].map((item) => (
               <button
-                className="btn-secondary btn-sm"
-                onClick={() => setShowArchived((v) => !v)}
-                style={{ marginBottom: 8 }}
+                type="button"
+                key={item.id}
+                className={`patient-document-archive__category${category === item.id ? ' is-selected' : ''}`}
+                aria-pressed={category === item.id}
+                onClick={() => {
+                  setCategory(item.id as ArchiveCategory | 'tutti');
+                  setVisible(25);
+                }}
               >
-                {showArchived ? '▲' : '▼'} Archivio ({archived.length})
+                {item.label}
+                {complete && (
+                  <span>
+                    {item.id === 'tutti'
+                      ? activeEntries.length
+                      : filterDocumentArchive(entries, item.id as ArchiveCategory, '', archived)
+                          .length}
+                  </span>
+                )}
               </button>
-              {showArchived && (
-                <div className="doc-list" style={{ opacity: 0.65 }}>
-                  {archived.map((d) => {
-                    const stato = d.stato ?? 'ricevuto';
-                    return (
-                      <div key={d.id} className="doc-item">
-                        <div className="doc-item__icon">🗃️</div>
-                        <div className="doc-item__body">
-                          <div className="doc-item__title">{d.descrizione}</div>
-                          <div className="doc-item__meta">
-                            <span className={`badge ${STATO_BADGE[stato]}`}>
-                              {STATO_LABEL[stato]}
-                            </span>
-                            <span className="badge badge--gray">{TIPO_LABEL[d.tipo]}</span>
-                            <span className="cr-meta">{fmtDate(d.dataConsegna)}</span>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-                          <button
-                            className="btn-secondary btn-sm"
-                            onClick={() => handleRestore(d.id)}
-                            title="Ripristina"
-                          >
-                            Ripristina
-                          </button>
-                          <button
-                            className="icon-btn icon-btn--sm icon-btn--danger"
-                            onClick={() => handleDelete(d.id)}
-                            title="Elimina"
-                          >
-                            <svg
-                              width="13"
-                              height="13"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                            >
-                              <line x1="18" y1="6" x2="6" y2="18" />
-                              <line x1="6" y1="6" x2="18" y2="18" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+            ))}
+          </nav>
+          {archive.status === 'loading' && <p role="status">Caricamento dell’archivio completo…</p>}
+          {archive.status === 'error' && (
+            <div className="patient-archive__error" role="alert">
+              <p>Impossibile caricare tutti i file. Le schede visibili sono un elenco parziale.</p>
+              <button
+                type="button"
+                className="btn-secondary btn-sm"
+                disabled={!!form || saving}
+                onClick={archive.reload}
+              >
+                Riprova archivio
+              </button>
             </div>
+          )}
+          {error && (
+            <p role="alert" className="patient-archive__error">
+              {error}
+            </p>
+          )}
+          {complete && (
+            <p className="patient-document-archive__summary" role="status">
+              {filtered.length} {filtered.length === 1 ? 'documento trovato' : 'documenti trovati'}
+            </p>
+          )}
+          {complete && filtered.length === 0 && (
+            <p className="cr-empty">
+              {query || category !== 'tutti'
+                ? 'Nessun documento corrisponde alla ricerca.'
+                : 'Nessun documento in questa sezione.'}
+            </p>
+          )}
+          {archive.status !== 'loading' && (
+            <ul className="patient-document-archive__list">
+              {filtered.slice(0, visible).map((entry) => (
+                <li key={entry.id} className="patient-document-archive__item">
+                  <div className="patient-document-archive__file-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                      <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                      <path d="M14 3v6h6M8 13h8M8 17h6" />
+                    </svg>
+                  </div>
+                  <div className="patient-document-archive__details">
+                    <button
+                      type="button"
+                      className="patient-document-archive__title"
+                      onClick={() => setPreview(entry)}
+                    >
+                      {entry.title}
+                    </button>
+                    <div className="patient-document-archive__meta">
+                      <span className="badge badge--blue">{DOCUMENT_TYPE_LABELS[entry.type]}</span>
+                      <span>{fmtDate(entry.date)}</span>
+                      <span>
+                        {DOCUMENT_STATUS_LABELS[entry.record?.stato ?? 'ricevuto'] ??
+                          'Da verificare'}
+                      </span>
+                    </div>
+                    {entry.document ? (
+                      <p>
+                        {entry.document.originalName} ·{' '}
+                        {(entry.document.sizeBytes / 1024 / 1024).toFixed(1)} MB
+                      </p>
+                    ) : (
+                      <p>
+                        {entry.unavailable ? 'Allegato non disponibile' : 'Nessun file allegato'}
+                      </p>
+                    )}
+                    {entry.record?.provenienza && <p>Provenienza: {entry.record.provenienza}</p>}
+                    {entry.record?.scadenza && <p>Scadenza: {fmtDate(entry.record.scadenza)}</p>}
+                    {entry.record?.firmatoDA && entry.record.firmatoDA !== 'non_firmato' && (
+                      <p>Firmato da: {entry.record.firmatoDA}</p>
+                    )}
+                    {entry.record?.operatore && <p>Registrato da: {entry.record.operatore}</p>}
+                    {entry.record?.note && (
+                      <p className="patient-document-archive__notes">{entry.record.note}</p>
+                    )}
+                  </div>
+                  <div className="patient-document-archive__actions no-print">
+                    <button
+                      type="button"
+                      className="btn-secondary btn-sm"
+                      onClick={() => setPreview(entry)}
+                    >
+                      {entry.document ? 'Visualizza' : 'Dettagli'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-secondary btn-sm"
+                      disabled={!complete || !!form || saving}
+                      onClick={() => openForm(entry)}
+                    >
+                      Modifica dettagli
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-secondary btn-sm"
+                      disabled={!complete || !!form || saving}
+                      onClick={() => setArchivedEntry(entry)}
+                    >
+                      {entry.archived ? 'Ripristina' : 'Archivia'}
+                    </button>
+                    {entry.record && (
+                      <button
+                        type="button"
+                        className="patient-document-archive__remove"
+                        disabled={!complete || !!form || saving}
+                        onClick={() => setRemoving(entry)}
+                      >
+                        Rimuovi scheda
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          {filtered.length > visible && (
+            <button
+              type="button"
+              className="btn-secondary btn-sm no-print"
+              onClick={() => setVisible((value) => value + 25)}
+            >
+              Mostra altri documenti ({visible} di {filtered.length})
+            </button>
           )}
         </div>
       </ClinicalTableSection>
+      {preview && (
+        <PatientArchivePreview
+          key={preview.id}
+          patientId={paziente.id}
+          operatorId={operatoreId}
+          operatorRole={operatoreRole}
+          document={preview.document}
+          title={preview.title}
+          unavailable={preview.unavailable}
+          onClose={() => setPreview(null)}
+        />
+      )}
+      {removing && (
+        <ConfirmDialog
+          open
+          title="Rimuovi scheda documento"
+          message={
+            removing.document
+              ? 'Rimuovere i dettagli della scheda? Il file originale rimane nell’archivio.'
+              : 'Rimuovere questa registrazione?'
+          }
+          confirmLabel="Rimuovi scheda"
+          onConfirm={() =>
+            void update(records.filter((record) => record.id !== removing.record?.id))
+          }
+          onCancel={() => setRemoving(null)}
+        />
+      )}
     </div>
   );
 }

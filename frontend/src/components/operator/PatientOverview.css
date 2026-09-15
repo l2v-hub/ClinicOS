@@ -1,0 +1,160 @@
+/* Compact overview only; full clinical editors and handoff cards keep their layout. */
+.patient-record-view .cr-tab-content--overview {
+  gap: 12px;
+}
+
+.patient-record-view .cr-overview-section {
+  padding: 12px;
+}
+
+.patient-record-view .cr-overview-section__header {
+  margin-bottom: 8px;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-riepilogo-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 10px;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-riepilogo-card {
+  gap: 4px;
+  padding: 10px 12px 4px;
+  border-left-width: 3px;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-riepilogo-card__title {
+  min-height: 24px;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-overview-count {
+  grid-column: auto;
+  justify-self: end;
+  min-height: 22px;
+  max-width: 130px;
+  padding: 2px 6px;
+  font-size: 10.5px;
+  overflow-wrap: anywhere;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-empty {
+  margin: 2px 0;
+  font-size: 12.5px;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-overview-action {
+  min-height: 44px;
+  margin-top: 0;
+  padding: 5px 0;
+  font-weight: 700;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-compact-item {
+  gap: 4px 6px;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-compact-item__main {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-compact-item__sub {
+  overflow-wrap: anywhere;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-compact-item--farmaco {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.65fr);
+  align-items: start;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-compact-item__dose {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.patient-record-view .cr-tab-content--overview .cr-compact-item--farmaco .cr-compact-item__sub {
+  grid-column: 1 / -1;
+}
+
+.patient-record-view .cr-riepilogo-card--allergie .cr-compact-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.patient-record-view .cr-riepilogo-card--allergie .cr-compact-item__main {
+  grid-column: 1 / -1;
+}
+
+.cr-overview-handoffs {
+  display: grid;
+  gap: 6px;
+  margin: 2px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cr-overview-handoff + .cr-overview-handoff {
+  padding-top: 6px;
+  border-top: 1px solid var(--border, #e3e9f1);
+}
+
+.cr-overview-handoff .consegna-card__top {
+  gap: 6px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.cr-overview-handoff__note {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  margin: 2px 0 0;
+  color: var(--text-muted, #65778c);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.cr-overview-placement {
+  display: grid;
+  gap: 3px;
+  margin: 2px 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.cr-overview-placement > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cr-overview-placement dt {
+  color: var(--text-muted, #65778c);
+}
+
+.cr-overview-placement dd {
+  margin: 0;
+  font-weight: 500;
+  text-align: right;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .patient-record-view .cr-overview-section {
+    padding: 10px;
+  }
+
+  .patient-record-view .cr-tab-content--overview .cr-riepilogo-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .patient-record-view .cr-tab-content--overview .cr-overview-count {
+    max-width: 104px;
+  }
+}

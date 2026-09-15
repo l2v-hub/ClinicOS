@@ -22,11 +22,24 @@ import json
 import os
 import urllib.error
 import urllib.request
+from urllib.parse import urlsplit
 
-from ..errors import ProviderUnavailableError, RuntimeError_, ErrorKind
+from ..errors import RuntimeError_, ErrorKind
+from ..mistral_config import resolve_mistral_connection
 from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
+from .ocr_errors import ocr_http_error
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise RuntimeError_(ErrorKind.CONFIG, "[AI_CONFIG] Il servizio OCR ha restituito un redirect inatteso.")
+
+
+def _open_ocr(req, timeout):
+    # Never forward provider credentials to a redirect destination.
+    return urllib.request.build_opener(_NoRedirect()).open(req, timeout=timeout)
 
 
 def _data_uri(att: Attachment) -> tuple[str, str]:
@@ -65,36 +78,31 @@ class _MistralOcrRunner:
         self._timeout = timeout_seconds
 
     def _endpoint_key(self) -> tuple[str, str]:
-        url = (os.environ.get("MISTRAL_OCR_URL") or "").strip()
-        key = (os.environ.get("MISTRAL_API_KEY") or "").strip()
-        if not url or not key:
-            raise ProviderUnavailableError("MISTRAL_OCR_URL / MISTRAL_API_KEY non configurati")
-        return url, key
+        return resolve_mistral_connection(os.environ)
 
     def _post(self, url: str, key: str, body: dict) -> dict:
         data = json.dumps(body).encode("utf-8")
         req = urllib.request.Request(url, data=data, method="POST")
         req.add_header("Content-Type", "application/json")
         req.add_header("Accept", "application/json")
-        # Azure AI Foundry serverless accepts either; send both, harmless.
-        req.add_header("Authorization", f"Bearer {key}")
-        req.add_header("api-key", key)
+        if (urlsplit(url).hostname or "").endswith((".services.ai.azure.com", ".cognitiveservices.azure.com")):
+            req.add_header("api-key", key)
+        else:
+            req.add_header("Authorization", f"Bearer {key}")
         try:
-            with urllib.request.urlopen(req, timeout=self._timeout) as resp:
+            with _open_ocr(req, timeout=self._timeout) as resp:
                 raw = resp.read().decode("utf-8")
         except urllib.error.HTTPError as ex:
-            detail = ""
-            try:
-                detail = ex.read().decode("utf-8")[:200]
-            except Exception:
-                pass
-            if ex.code in (401, 403):
-                raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"Mistral OCR auth {ex.code}: {detail}") from ex
-            if ex.code == 429:
-                raise RuntimeError_(ErrorKind.RATE_LIMIT, f"Mistral OCR 429: {detail}") from ex
-            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"Mistral OCR {ex.code}: {detail}") from ex
+            status = ex.code
+            ex.close()
+            raise ocr_http_error(status) from None
         except urllib.error.URLError as ex:
-            raise RuntimeError_(ErrorKind.PROVIDER_UNAVAILABLE, f"Mistral OCR irraggiungibile: {ex}") from ex
+            kind = ErrorKind.TIMEOUT if isinstance(ex.reason, TimeoutError) else ErrorKind.PROVIDER_UNAVAILABLE
+            raise RuntimeError_(kind, "[AI_TIMEOUT] Tempo limite OCR." if kind == ErrorKind.TIMEOUT else "[AI_PROVIDER] Servizio OCR irraggiungibile.") from ex
+        except TimeoutError as ex:
+            raise RuntimeError_(ErrorKind.TIMEOUT, "[AI_TIMEOUT] Tempo limite OCR.") from ex
+        except UnicodeDecodeError:
+            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, "[AI_PROVIDER] Risposta OCR non valida.") from None
         try:
             return json.loads(raw)
         except json.JSONDecodeError as ex:
@@ -102,7 +110,7 @@ class _MistralOcrRunner:
             # grezzo (non un RuntimeError_) e il fallback generico in app.py la marcava
             # "failed" (terminale) invece di un errore retryable come gli altri fallimenti
             # provider — un job OCR Mistral perdeva cosi' il retry automatico.
-            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"Mistral OCR risposta non valida: {str(ex)[:200]}") from ex
+            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, "[AI_PROVIDER] Risposta OCR non valida.") from ex
 
     def _ocr_once(self, url: str, key: str, att: Attachment, schema: object | None) -> tuple[str, dict]:
         doc_type, uri = _data_uri(att)
@@ -117,13 +125,19 @@ class _MistralOcrRunner:
                 "json_schema": {"name": "clinicos_extraction", "schema": schema, "strict": False},
             }
         res = self._post(url, key, body)
-        pages = res.get("pages") or []
-        markdown = "\n\n".join(str(p.get("markdown") or p.get("text") or "") for p in pages).strip()
+        pages = res.get("pages") if isinstance(res, dict) else None
+        if not isinstance(pages, list) or any(not isinstance(p, dict) for p in pages):
+            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, "[AI_PROVIDER] Risposta OCR senza pagine valide.")
+        texts = [p.get("markdown") or p.get("text") or "" for p in pages]
+        if any(not isinstance(text, str) for text in texts):
+            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, "[AI_PROVIDER] Formato testo OCR non valido.")
+        markdown = "\n\n".join(texts).strip()
         annotation = res.get("document_annotation")
         struct: dict = {}
         if isinstance(annotation, str) and annotation.strip():
             try:
-                struct = json.loads(annotation)
+                parsed = json.loads(annotation)
+                struct = parsed if isinstance(parsed, dict) else {}
             except json.JSONDecodeError:
                 struct = {}
         elif isinstance(annotation, dict):
@@ -131,6 +145,8 @@ class _MistralOcrRunner:
         return markdown, struct
 
     async def _run(self, schema: object | None, attachments: list[Attachment]) -> tuple[str, dict]:
+        if not attachments:
+            raise RuntimeError_(ErrorKind.CAPABILITY, "[AI_INPUT] Mistral OCR richiede documenti allegati; per estrarre dal solo testo configurare un modello LLM separato.")
         url, key = self._endpoint_key()
 
         def _call() -> tuple[str, dict]:
@@ -138,11 +154,20 @@ class _MistralOcrRunner:
             struct: dict = {}
             for att in attachments:
                 md, st = self._ocr_once(url, key, att, schema)
-                if md:
-                    md_parts.append(md)
+                # Every supplied document must be read. Otherwise the backend may
+                # discard all attachments after OCR and silently lose a document.
+                # Blank pages inside an otherwise readable PDF remain permitted.
+                if not md:
+                    raise RuntimeError_(ErrorKind.SCHEMA_VALIDATION, "[AI_EMPTY] Un documento non ha restituito testo OCR leggibile.")
+                if schema is not None and _is_json_schema(schema) and not st:
+                    raise RuntimeError_(ErrorKind.SCHEMA_VALIDATION, "[AI_EMPTY] Un documento non ha restituito l'estrazione strutturata richiesta.")
+                md_parts.append(md)
                 if st:
                     struct = _merge_struct(struct, st)
-            return "\n\n".join(md_parts).strip(), struct
+            markdown = "\n\n".join(md_parts).strip()
+            if not markdown:
+                raise RuntimeError_(ErrorKind.SCHEMA_VALIDATION, "[AI_EMPTY] Nessun testo leggibile nei documenti OCR.")
+            return markdown, struct
 
         try:
             return await asyncio.wait_for(asyncio.to_thread(_call), timeout=self._timeout + 30)
@@ -156,13 +181,12 @@ class _MistralOcrRunner:
 
     async def run_structured(self, prompt: str, schema: object, attachments: list[Attachment]) -> str:
         # rawText-only schema (transcription pass) -> return the OCR markdown, no annotation.
-        if not _is_json_schema(schema):
+        if not _is_json_schema(schema) or set(schema.get("properties", {})) == {"rawText"}:
             markdown, _ = await self._run(None, attachments)
             return json.dumps({"rawText": markdown})
         markdown, struct = await self._run(schema, attachments)
         if not struct:
-            # Annotation empty: surface the transcription so the operator can still work.
-            struct = {}
+            raise RuntimeError_(ErrorKind.SCHEMA_VALIDATION, "[AI_EMPTY] Il servizio OCR non ha restituito l'estrazione strutturata richiesta.")
         return json.dumps(struct)
 
 

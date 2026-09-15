@@ -59,6 +59,7 @@ const JOB_DEFAULTS = {
 };
 
 const PATIENT = {
+  phone: '+39 333 000 0000',
   firstName: 'Giulia',
   lastName: 'Bianchi',
   dateOfBirth: '1962-07-14',

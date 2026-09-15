@@ -29,6 +29,7 @@ test('confirmDraft creates patient transactionally + is idempotent', async () =>
       firstName: 'IntakeMock',
       lastName: 'Sintetico',
       dateOfBirth: '1970-01-01',
+      phone: '+39 333 000 0000',
       codiceFiscale: 'NTKSNT70A01H501G',
     },
     cartella: { statoRicovero: 'ricoverato' },
@@ -61,6 +62,7 @@ test('confirmDraft falls back to the authenticated operator when a legacy owner 
         firstName: 'LegacyOwner',
         lastName: 'Fallback',
         dateOfBirth: '1972-02-02',
+        phone: '+39 333 000 0000',
         codiceFiscale: 'LGCFLB72B02H501R',
       },
       confirmDuplicate: true,
@@ -96,6 +98,7 @@ test('confirmJob assigns a legacy ownerless job to the authenticated operator', 
         firstName: 'OwnerlessJob',
         lastName: 'Fallback',
         dateOfBirth: '1973-03-03',
+        phone: '+39 333 000 0000',
         codiceFiscale: 'WNRJFL73C03H501Y',
       },
       confirmDuplicate: true,
@@ -121,6 +124,7 @@ test('confirmDraft: blocks a missing CF and a duplicate CF (not forcible)', asyn
     firstName: 'IntakeMock',
     lastName: 'Sintetico',
     dateOfBirth: '1970-01-01',
+    phone: '+39 333 000 0000',
   };
 
   // 1) Missing CF → hard block, nothing persisted.
@@ -158,6 +162,7 @@ test('confirmDraft: blocks a missing CF and a duplicate CF (not forcible)', asyn
             firstName: 'Altro',
             lastName: 'Omonimo',
             dateOfBirth: '1980-05-05',
+            phone: '+39 333 000 0000',
             codiceFiscale: ` ${cf.toLowerCase()} `, // normalization must still match
           },
           confirmDuplicate: true,

@@ -36,12 +36,14 @@ import PatientRecordPrintDialog from './PatientRecordPrintDialog';
 import { ClinicalTableSection } from './cartella/shared';
 import { AllergiesEditor } from './sections/AllergiesEditor';
 import { deriveAllergySummary } from '../../lib/allergyStatusModel';
+import { PATIENT_PHONE_MAX_LENGTH, validatePatientPhone } from '../../lib/patientPhone';
 import {
   assignableBeds,
   assignableRooms,
   assignableWards,
   bedDisplayLabel,
   currentPatientPlacement,
+  patientPlacementValues,
   isValidBedSelection,
 } from '../../lib/roomAssignmentModel';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
@@ -66,6 +68,7 @@ import {
 import { ClinicalSectionLoading } from './ClinicalSectionLoading';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
 import './PatientRecordData.css';
+import './PatientOverview.css';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -94,6 +97,7 @@ interface PatientDetailProps {
   onUpdateCartella: (
     pazienteId: string,
     updates: Partial<CartellaPaziente>,
+    options?: { optimistic?: boolean },
   ) => void | Promise<boolean>;
   onUpdatePaziente: (
     id: string,
@@ -323,6 +327,10 @@ export function PatientDetail({
 
   // Profilo edit
   const [editProfilo, setEditProfilo] = useState(false);
+  const [profiloPhoneError, setProfiloPhoneError] = useState<string | null>(null);
+  const [profiloSaveError, setProfiloSaveError] = useState<string | null>(null);
+  const [profiloSaving, setProfiloSaving] = useState(false);
+  const profiloPhoneRef = useRef<HTMLInputElement>(null);
   const [profiloForm, setProfiloForm] = useState<
     Partial<CartellaPaziente & Pick<Paziente, 'email' | 'phone' | 'codiceFiscale'>>
   >({});
@@ -450,6 +458,15 @@ export function PatientDetail({
   // Issue #128: proponi solo camere con almeno un letto libero (o già occupate da questo paziente)
   const currentPlacement = currentPatientPlacement(camere, paziente.id);
   const roomDataReady = camereLoadState === 'ready';
+  const placementValues = patientPlacementValues(currentPlacement, cartella);
+  const placementPending =
+    canAssignRooms && !roomDataReady
+      ? camereLoadState === 'error'
+        ? 'Non disponibile'
+        : 'In verifica'
+      : undefined;
+  const roomLabel = placementValues.room ?? placementPending ?? 'Non assegnata';
+  const bedLabel = placementValues.bed ?? placementPending ?? 'Non assegnato';
 
   function RoomDataNotice() {
     if (!canAssignRooms || roomDataReady) return null;
@@ -608,17 +625,34 @@ export function PatientDetail({
 
   // Profilo
   async function saveProfiloHandler() {
+    if (profiloSaving || saving) return;
     const { email, phone, codiceFiscale, ...cartellaUpdates } = profiloForm;
-    if (email !== undefined || phone !== undefined || codiceFiscale !== undefined) {
+    const validated = validatePatientPhone(phone);
+    setProfiloPhoneError(validated.ok ? null : validated.error);
+    setProfiloSaveError(null);
+    if (!validated.ok) {
+      profiloPhoneRef.current?.focus();
+      return;
+    }
+    setProfiloSaving(true);
+    try {
       const patientSaved = await onUpdatePaziente(paziente.id, {
         email,
-        phone,
+        phone: validated.phone,
         codiceFiscale,
       });
-      if (!patientSaved) return;
+      if (!patientSaved) {
+        setProfiloSaveError('Salvataggio non riuscito. Verifica i dati e riprova.');
+        return;
+      }
+      const ok = await updConEsito(cartellaUpdates);
+      if (ok) setEditProfilo(false);
+      else setProfiloSaveError('Salvataggio del profilo incompleto. Riprova.');
+    } catch {
+      setProfiloSaveError('Salvataggio non riuscito. Riprova.');
+    } finally {
+      setProfiloSaving(false);
     }
-    const ok = await updConEsito(cartellaUpdates);
-    if (ok) setEditProfilo(false);
   }
 
   // Consegna
@@ -1185,10 +1219,8 @@ export function PatientDetail({
         cameraModalForm.cameraNumero,
         cameraModalBedId || undefined,
       );
-    const displayedRoom = currentPlacement?.room.numero ?? cartella.cameraNumero;
-    const displayedBed = currentPlacement
-      ? bedDisplayLabel(currentPlacement.bed)
-      : cartella.lettoNumero;
+    const displayedRoom = placementValues.room;
+    const displayedBed = placementValues.bed;
     const displayedWard = currentPlacement?.room.reparto ?? cartella.repartoRicovero;
     return (
       <AccessibleDialogSurface
@@ -1224,13 +1256,13 @@ export function PatientDetail({
               <div className="ec-modal-item">
                 <div className="ec-modal-item__main">
                   <span className="ec-modal-item__title">Camera</span>
-                  <span className="ec-modal-item__sub">{displayedRoom ?? '—'}</span>
+                  <span className="ec-modal-item__sub">{roomLabel}</span>
                 </div>
               </div>
               <div className="ec-modal-item">
                 <div className="ec-modal-item__main">
                   <span className="ec-modal-item__title">Letto</span>
-                  <span className="ec-modal-item__sub">{displayedBed ?? '—'}</span>
+                  <span className="ec-modal-item__sub">{bedLabel}</span>
                 </div>
               </div>
               <div className="ec-modal-item">
@@ -1558,12 +1590,9 @@ export function PatientDetail({
               {consegneAperte.length === 0 ? (
                 <p className="cr-empty">Nessuna consegna aperta.</p>
               ) : (
-                <div className="consegne-list consegne-list--mini">
+                <ul className="cr-overview-handoffs">
                   {consegneAperte.slice(0, 3).map((c) => (
-                    <div
-                      key={c.id}
-                      className={`consegna-card consegna-card--mini consegna-card--${c.priorita}`}
-                    >
+                    <li key={c.id} className="cr-overview-handoff">
                       <div className="consegna-card__top">
                         <span
                           className={`consegna-priorita-badge consegna-priorita-badge--${c.priorita}`}
@@ -1572,10 +1601,10 @@ export function PatientDetail({
                         </span>
                         <span className="consegna-tipo">{c.tipo}</span>
                       </div>
-                      <p className="consegna-note consegna-note--clamp">{c.note}</p>
-                    </div>
+                      <p className="cr-overview-handoff__note">{c.note}</p>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
               <button
                 type="button"
@@ -1628,26 +1657,21 @@ export function PatientDetail({
             <article className="cr-riepilogo-card cr-riepilogo-card--degenza">
               <h4 className="cr-riepilogo-card__title">
                 <IcoBed /> Degenza
-                <span className="cr-overview-count">
-                  {cartella.cameraNumero ?? 'Non assegnata'}
-                </span>
               </h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <div className="cr-compact-item">
-                  <span className="cr-compact-item__main">Camera</span>
-                  <span className="cr-compact-item__sub">{cartella.cameraNumero ?? '—'}</span>
+              <dl className="cr-overview-placement">
+                <div>
+                  <dt>Camera</dt>
+                  <dd>{roomLabel}</dd>
                 </div>
-                <div className="cr-compact-item">
-                  <span className="cr-compact-item__main">Letto</span>
-                  <span className="cr-compact-item__sub">{cartella.lettoNumero ?? '—'}</span>
+                <div>
+                  <dt>Letto</dt>
+                  <dd>{bedLabel}</dd>
                 </div>
-                <div className="cr-compact-item">
-                  <span className="cr-compact-item__main">Stato</span>
-                  <span className="cr-compact-item__sub">
-                    {cartella.statoRicovero.replace('_', ' ')}
-                  </span>
+                <div>
+                  <dt>Stato</dt>
+                  <dd>{cartella.statoRicovero.replace('_', ' ')}</dd>
                 </div>
-              </div>
+              </dl>
               <button
                 type="button"
                 className="cr-overview-action"
@@ -1676,7 +1700,7 @@ export function PatientDetail({
                 className="btn-sm"
                 onClick={() => {
                   setProfiloForm({
-                    indirizzo: cartella.indirizzo,
+                    indirizzo: cartella.indirizzo?.trim() || paziente.address || '',
                     codiceFiscale: paziente.codiceFiscale ?? cartella.codiceFiscale,
                     contattoEmergenzaNome: cartella.contattoEmergenzaNome,
                     contattoEmergenzaTel: cartella.contattoEmergenzaTel,
@@ -1692,6 +1716,8 @@ export function PatientDetail({
                     email: paziente.email ?? '',
                     phone: paziente.phone ?? '',
                   });
+                  setProfiloPhoneError(null);
+                  setProfiloSaveError(null);
                   setEditProfilo(true);
                 }}
               >
@@ -1705,8 +1731,13 @@ export function PatientDetail({
               <InlineForm
                 onSave={saveProfiloHandler}
                 onCancel={() => setEditProfilo(false)}
-                saving={saving}
+                saving={saving || profiloSaving}
               >
+                {profiloSaveError && (
+                  <p className="form-error" role="alert">
+                    {profiloSaveError}
+                  </p>
+                )}
                 <div className="op-form-grid">
                   <div className="form-field">
                     <label className="form-label">Email</label>
@@ -1718,12 +1749,35 @@ export function PatientDetail({
                     />
                   </div>
                   <div className="form-field">
-                    <label className="form-label">Telefono</label>
+                    <label className="form-label" htmlFor="patient-profile-phone">
+                      Telefono (obbligatorio)
+                    </label>
                     <input
+                      ref={profiloPhoneRef}
+                      id="patient-profile-phone"
                       className="form-input"
+                      type="tel"
+                      autoComplete="tel"
+                      required
+                      maxLength={PATIENT_PHONE_MAX_LENGTH}
+                      aria-invalid={!!profiloPhoneError}
+                      aria-describedby={
+                        profiloPhoneError ? 'patient-profile-phone-error' : undefined
+                      }
                       value={profiloForm.phone ?? ''}
-                      onChange={(e) => setProfiloForm((p) => ({ ...p, phone: e.target.value }))}
+                      onChange={(e) => {
+                        setProfiloForm((p) => ({ ...p, phone: e.target.value }));
+                        if (profiloPhoneError) {
+                          const validated = validatePatientPhone(e.target.value);
+                          setProfiloPhoneError(validated.ok ? null : validated.error);
+                        }
+                      }}
                     />
+                    {profiloPhoneError && (
+                      <span id="patient-profile-phone-error" className="form-error" role="alert">
+                        {profiloPhoneError}
+                      </span>
+                    )}
                   </div>
                   <div className="form-field">
                     <label className="form-label">Indirizzo</label>
@@ -1892,15 +1946,17 @@ export function PatientDetail({
                       <div className="cr-profilo-group__title">Contatti</div>
                       <div className="cr-profilo-row">
                         <span>Email</span>
-                        <strong>{paziente.email ?? '—'}</strong>
+                        <strong>{paziente.email?.trim() || 'Non indicata'}</strong>
                       </div>
                       <div className="cr-profilo-row">
                         <span>Telefono</span>
-                        <strong>{paziente.phone ?? '—'}</strong>
+                        <strong>{paziente.phone?.trim() || 'Da completare · obbligatorio'}</strong>
                       </div>
                       <div className="cr-profilo-row">
                         <span>Indirizzo</span>
-                        <strong>{cartella.indirizzo ?? '—'}</strong>
+                        <strong>
+                          {cartella.indirizzo?.trim() || paziente.address?.trim() || 'Non indicato'}
+                        </strong>
                       </div>
                     </div>
                   )}
@@ -1939,8 +1995,7 @@ export function PatientDetail({
                       <div className="cr-profilo-row">
                         <span>Camera / Letto</span>
                         <strong>
-                          {cartella.cameraNumero ?? '—'}{' '}
-                          {cartella.lettoNumero ? `/ L.${cartella.lettoNumero}` : ''}
+                          {roomLabel} / {bedLabel}
                         </strong>
                       </div>
                       <div className="cr-profilo-row">
@@ -2819,7 +2874,9 @@ export function PatientDetail({
               <DocumentiTab
                 cartella={cartella}
                 paziente={paziente}
-                onUpdate={upd}
+                onUpdate={(updates) =>
+                  onUpdateCartella(cartella.pazienteId, updates, { optimistic: false })
+                }
                 operatoreNome={operatoreNome}
                 operatoreId={operatoreId}
                 operatoreRole={operatoreRole}

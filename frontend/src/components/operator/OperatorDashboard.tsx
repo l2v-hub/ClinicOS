@@ -6,6 +6,7 @@ import { useAnomalieReparto } from './cartella/useAnomalieReparto';
 import { useRiepilogoSomministrazioni } from './cartella/useRiepilogoSomministrazioni';
 import { DashboardNotificationCenter } from './DashboardNotificationCenter';
 import { OperatorClinicalKpiBand } from './OperatorClinicalKpiBand';
+import { DashboardTherapyDeadlines } from '../shared/DashboardTherapyDeadlines';
 import { buildDashboardNotificationSections } from './buildDashboardNotificationSections';
 import { buildDashboardNotificationCounts } from './dashboardNotificationModel';
 import './OperatorDashboard.css';
@@ -128,6 +129,12 @@ export function OperatorDashboard({
         onOpenParametri={() => onNavigate('parametri-multipaziente')}
         onOpenPazienti={() => onNavigate('pazienti')}
         onOpenAgenda={() => onNavigate('agenda-operatore')}
+      />
+
+      <DashboardTherapyDeadlines
+        summary={somministrazioni}
+        onOpenAgenda={() => onNavigate('agenda-operatore')}
+        onSelectPaziente={onSelectPaziente}
       />
 
       {/* Prossimo appuntamento */}

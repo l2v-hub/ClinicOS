@@ -7,6 +7,7 @@ import {
   assignableWards,
   bedDisplayLabel,
   currentPatientPlacement,
+  patientPlacementValues,
   isValidBedSelection,
 } from '../roomAssignmentModel';
 
@@ -45,6 +46,42 @@ const rooms: Camera[] = [
     letti: [{ id: 'bed-hidden', numero: 1, label: 'A', stato: 'libero' }],
   },
 ];
+
+test('placement display prefers the current assigned bed over stale cartella labels', () => {
+  const placement = currentPatientPlacement(rooms, 'patient-1');
+  assert.deepEqual(patientPlacementValues(placement, { cameraNumero: '99', lettoNumero: 'Z' }), {
+    room: '12',
+    bed: 'A',
+  });
+  const customized = { ...placement!, bed: { ...placement!.bed, label: ' 12-B ' } };
+  assert.equal(patientPlacementValues(customized, {}).bed, '12-B');
+});
+
+test('placement display preserves valid cartella labels when current room data is absent', () => {
+  assert.deepEqual(
+    patientPlacementValues(undefined, { cameraNumero: ' 204 ', lettoNumero: ' 3 ' }),
+    {
+      room: '204',
+      bed: '3',
+    },
+  );
+  assert.deepEqual(patientPlacementValues(undefined, { cameraNumero: '18', lettoNumero: ' ' }), {
+    room: '18',
+    bed: undefined,
+  });
+});
+
+test('empty placement values stay absent rather than becoming blank or saved fallback labels', () => {
+  for (const value of [undefined, null, '', '   ']) {
+    assert.deepEqual(
+      patientPlacementValues(undefined, { cameraNumero: value, lettoNumero: value } as any),
+      {
+        room: undefined,
+        bed: undefined,
+      },
+    );
+  }
+});
 
 test('dependent room choices expose only active rooms with a usable bed', () => {
   assert.deepEqual(assignableWards(rooms, 'patient-1'), ['Chirurgia', 'Medicina']);

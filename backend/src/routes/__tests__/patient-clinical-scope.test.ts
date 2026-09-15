@@ -540,6 +540,7 @@ test('manager reads globally and patient creation binds ownership to the authent
     body: JSON.stringify({
       firstName: 'Nuovo',
       lastName: 'Scoped',
+      phone: '+39 333 000 0000',
       dateOfBirth: '1980-01-01',
       codiceFiscale,
       registeredById: operatorBId,

@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { AccessibleDialogSurface } from './AccessibleDialogSurface';
+import './CameraCapture.css';
 
 // BUG-052: real in-app camera capture, distinct from file import. Uses getUserMedia (rear camera
 // preferred), shows a live preview, lets the operator Scatta → Usa foto / Ripeti / Annulla, and
@@ -23,28 +25,41 @@ function stamp(): string {
 }
 
 export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Props) {
+  const titleId = useId();
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const blobRef = useRef<Blob | null>(null);
+  const photoUrlRef = useRef<string | null>(null);
+  const generationRef = useRef(0);
+  const capturingRef = useRef(false);
   const [phase, setPhase] = useState<Phase>('requesting');
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [restart, setRestart] = useState(0);
+  const [ready, setReady] = useState(false);
+  const [capturing, setCapturing] = useState(false);
 
   function stopStream() {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
   }
 
+  function clearPhoto() {
+    if (photoUrlRef.current) URL.revokeObjectURL(photoUrlRef.current);
+    photoUrlRef.current = null;
+    blobRef.current = null;
+  }
+
   // Acquire the camera whenever the modal opens or a retake is requested.
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
+    generationRef.current++;
+    capturingRef.current = false;
+    setCapturing(false);
+    setReady(false);
     setPhase('requesting');
-    if (photoUrl) {
-      URL.revokeObjectURL(photoUrl);
-      setPhotoUrl(null);
-    }
-    blobRef.current = null;
+    clearPhoto();
+    setPhotoUrl(null);
     const md = navigator.mediaDevices;
     if (!md?.getUserMedia) {
       setPhase('unavailable');
@@ -74,7 +89,9 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
       });
     return () => {
       cancelled = true;
+      generationRef.current++;
       stopStream();
+      clearPhoto();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, restart]);
@@ -91,39 +108,57 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
     }
   }, [phase]);
 
-  // Clean up object URL + stream on unmount / close.
-  useEffect(
-    () => () => {
-      stopStream();
-      if (photoUrl) URL.revokeObjectURL(photoUrl);
-    },
-    [photoUrl],
-  );
-
   if (!open) return null;
 
   function capture() {
     const v = videoRef.current;
-    if (!v) return;
-    const w = v.videoWidth || 1280,
-      h = v.videoHeight || 720;
-    const canvas = document.createElement('canvas');
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.drawImage(v, 0, 0, w, h);
-    canvas.toBlob(
-      (blob) => {
-        if (!blob) return;
-        blobRef.current = blob;
-        setPhotoUrl(URL.createObjectURL(blob));
-        stopStream();
-        setPhase('preview');
-      },
-      'image/jpeg',
-      0.92,
+    if (!v || v.readyState < 2 || !v.videoWidth || !v.videoHeight || capturingRef.current) return;
+    const generation = generationRef.current;
+    capturingRef.current = true;
+    setCapturing(true);
+    const scale = Math.min(
+      1,
+      Math.sqrt(12_000_000 / (v.videoWidth * v.videoHeight)),
+      4096 / Math.max(v.videoWidth, v.videoHeight),
     );
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(v.videoWidth * scale));
+    canvas.height = Math.max(1, Math.round(v.videoHeight * scale));
+    const fail = () => {
+      if (generation !== generationRef.current) return;
+      capturingRef.current = false;
+      setCapturing(false);
+      stopStream();
+      setPhase('unavailable');
+    };
+    try {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        fail();
+        return;
+      }
+      ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob(
+        (blob) => {
+          if (generation !== generationRef.current) return;
+          if (!blob) {
+            fail();
+            return;
+          }
+          capturingRef.current = false;
+          setCapturing(false);
+          blobRef.current = blob;
+          photoUrlRef.current = URL.createObjectURL(blob);
+          setPhotoUrl(photoUrlRef.current);
+          stopStream();
+          setPhase('preview');
+        },
+        'image/jpeg',
+        0.92,
+      );
+    } catch {
+      fail();
+    }
   }
 
   function usePhoto() {
@@ -134,16 +169,29 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
   }
 
   function close() {
+    generationRef.current++;
     stopStream();
+    clearPhoto();
     onClose();
   }
 
   return (
-    <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Scatta foto">
-      <div className="modal-card camera-capture" data-testid="camera-capture">
+    <AccessibleDialogSurface
+      labelledBy={titleId}
+      onClose={close}
+      surfaceClassName="modal-card camera-capture"
+      closeOnOverlay={false}
+    >
+      <div data-testid="camera-capture">
         <header className="import-modal__head">
-          <h3>Scatta foto</h3>
-          <button className="btn-ghost" onClick={close} aria-label="Chiudi">
+          <h3 id={titleId}>Scatta foto</h3>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={close}
+            aria-label="Chiudi"
+            data-dialog-initial-focus
+          >
             ✕
           </button>
         </header>
@@ -163,12 +211,21 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
               playsInline
               muted
               data-testid="camera-live"
+              onLoadedData={(event) =>
+                setReady(event.currentTarget.videoWidth > 0 && event.currentTarget.videoHeight > 0)
+              }
+              onEmptied={() => setReady(false)}
             />
             <div className="camera-capture__actions">
-              <button className="btn-primary" onClick={capture} data-testid="camera-shoot">
-                Scatta
+              <button
+                className="btn-primary"
+                onClick={capture}
+                data-testid="camera-shoot"
+                disabled={!ready || capturing}
+              >
+                {capturing ? 'Acquisizione…' : 'Scatta'}
               </button>
-              <button className="btn-ghost" onClick={close}>
+              <button type="button" className="btn-secondary" onClick={close}>
                 Annulla
               </button>
             </div>
@@ -194,7 +251,7 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
               >
                 Ripeti
               </button>
-              <button className="btn-ghost" onClick={close}>
+              <button type="button" className="btn-secondary" onClick={close}>
                 Annulla
               </button>
             </div>
@@ -220,7 +277,7 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
               >
                 Apri importazione
               </button>
-              <button className="btn-ghost" onClick={close}>
+              <button type="button" className="btn-secondary" onClick={close}>
                 Annulla
               </button>
             </div>
@@ -240,13 +297,13 @@ export function CameraCapture({ open, onClose, onCapture, onFallbackImport }: Pr
               >
                 Seleziona un’immagine dal dispositivo
               </button>
-              <button className="btn-ghost" onClick={close}>
+              <button type="button" className="btn-secondary" onClick={close}>
                 Annulla
               </button>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </AccessibleDialogSurface>
   );
 }

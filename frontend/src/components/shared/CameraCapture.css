@@ -1,0 +1,21 @@
+.modal-card.camera-capture {
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: 16px 0;
+  padding: 16px;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.camera-capture .import-modal__head {
+  margin-bottom: 12px;
+}
+
+.camera-capture .import-modal__head h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.camera-capture .camera-capture__actions button {
+  min-height: 42px;
+}

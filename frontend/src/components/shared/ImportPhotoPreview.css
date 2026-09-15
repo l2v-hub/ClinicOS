@@ -1,0 +1,107 @@
+.import-photo-preview {
+  width: min(960px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  height: min(820px, calc(100dvh - 48px));
+  max-height: calc(100dvh - 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 18px;
+  color: var(--text, #16202e);
+  background: var(--surface, #fff);
+}
+.import-photo-preview__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.import-photo-preview__header > div {
+  flex: 1;
+  min-width: 0;
+}
+.import-photo-preview__header h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+.import-photo-preview__header p {
+  margin: 0;
+  color: var(--muted, #5a6b80);
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+.import-photo-preview__icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  color: var(--blue, #2f6bed);
+  background: #edf3ff;
+}
+.import-photo-preview__icon svg {
+  width: 22px;
+  height: 22px;
+}
+.import-photo-preview__header .icon-btn svg,
+.import-modal__ctrls .import-photo-action svg {
+  width: 19px;
+  height: 19px;
+}
+.import-modal__ctrls .import-photo-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue, #2f6bed);
+}
+.import-photo-preview__stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--border, #e6ebf2);
+  border-radius: 12px;
+  background: #f3f5f9;
+}
+.import-photo-preview__stage > p {
+  padding: 24px;
+  color: var(--muted, #5a6b80);
+}
+.import-photo-preview__canvas img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.import-photo-preview__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.import-photo-preview__footer > :last-child {
+  margin-left: auto;
+}
+.import-photo-preview button:focus-visible,
+.import-photo-preview__stage:focus-visible,
+.import-modal__ctrls .import-photo-action:focus-visible {
+  outline: 2px solid var(--blue, #2f6bed);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .import-photo-preview {
+    width: calc(100vw - 20px);
+    max-width: calc(100vw - 20px);
+    height: calc(100dvh - 24px);
+    max-height: calc(100dvh - 24px);
+    padding: 14px;
+    gap: 12px;
+  }
+  .import-photo-preview__footer > button {
+    flex: 1;
+    min-height: 44px;
+  }
+  .import-photo-preview__footer > :last-child {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+}

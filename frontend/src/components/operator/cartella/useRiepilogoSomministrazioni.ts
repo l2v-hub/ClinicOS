@@ -1,147 +1,101 @@
-// Riepilogo delle somministrazioni di oggi in tutto il reparto, per le dashboard Admin e
-// Operatore. Stessa fonte dati di useAnomalieReparto (GET /therapy-slots?date=), stesso TTL di
-// cache: chiamare entrambi gli hook nello stesso componente non raddoppia la richiesta di rete
-// (cachedGetJson deduplica per URL).
-//
-// LIMITE, da dichiarare e non nascondere: la rotta e' reparto-wide, non filtrata per operatore
-// (nessuna vera assegnazione paziente-operatore esiste nel modello dati attuale — vedi la nota
-// nel commento di useAnomalieReparto.ts per lo stesso limite sulle anomalie). "In ritardo" e'
-// quindi un dato di TUTTO il reparto, non solo dei pazienti di chi guarda.
-
-import { useEffect, useState } from 'react';
+// Fonte autorizzata dal backend: pazienti accessibili all'operatore corrente.
+// I GET di oggi sono condivisi con le anomalie tramite cachedGetJson; domani serve
+// al riepilogo delle prossime scadenze, mentre i KPI restano riferiti solo a oggi.
+import { useCallback, useEffect, useState } from 'react';
 import { API_URL } from '../../../config';
-import { cachedGetJson } from '../../../lib/cachedFetch';
+import { readDashboardTherapyDay } from '../../../lib/dashboardTherapyRead';
+import {
+  summarizeDashboardTherapies,
+  therapyCalendar,
+  type DashboardTherapySummary,
+} from '../../../lib/dashboardTherapies';
 import type { TherapySlot } from '../../../types';
 
-const TTL_MS = 60 * 1000;
+export type { RitardoVoce, RitardoPaziente } from '../../../lib/dashboardTherapies';
 
-export interface RitardoVoce {
-  farmacoNome: string;
-  scheduledTime: string;
-  minutiRitardo: number;
-}
-
-export interface RitardoPaziente {
-  patientId: string;
-  nome: string;
-  voci: RitardoVoce[];
-}
-
-export interface RiepilogoSomministrazioni {
-  totale: number;
-  daFare: number;
-  fatte: number;
-  nonErogate: number;
-  /** Sottoinsieme di `daFare` il cui orario programmato e' gia' passato. */
-  inRitardo: number;
-  /** Pazienti con almeno una dose in ritardo, ordinati per ritardo massimo decrescente
-   * (non per numero di dosi: un paziente con una dose sola ma molto in ritardo e' piu' urgente
-   * di uno con piu' dosi lievemente in ritardo). */
-  ritardi: RitardoPaziente[];
-  /** true finche' il caricamento non e' concluso: nessun conteggio va presentato come definitivo. */
+export interface RiepilogoSomministrazioni extends DashboardTherapySummary {
   inCorso: boolean;
-  /** true quando la fonte reparto non e' leggibile: non equivale a un conteggio pari a zero. */
   fallito: boolean;
+  domaniInCorso: boolean;
+  domaniFallito: boolean;
+  aggiornamentoInCorso: boolean;
+  aggiorna: () => void;
 }
 
-const VUOTO: RiepilogoSomministrazioni = {
-  totale: 0,
-  daFare: 0,
-  fatte: 0,
-  nonErogate: 0,
-  inRitardo: 0,
-  ritardi: [],
-  inCorso: true,
-  fallito: false,
-};
-
-function oggi(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+interface DayState {
+  date: string;
+  slots: TherapySlot[] | null;
+  failed: boolean;
+  refreshing: boolean;
 }
 
-/** Minuti da mezzanotte, robusto a ore non zero-paddate ("8:30" oltre a "08:30"). NaN se il
- * formato non e' riconoscibile: un orario illeggibile non deve mai contare come "in ritardo"
- * (falso negativo piu' sicuro di un crash o di un falso allarme). */
-function minutiDaMezzanotte(orario: string): number {
-  const m = orario.match(/^(\d{1,2}):(\d{2})$/);
-  if (!m) return Number.NaN;
-  return Number(m[1]) * 60 + Number(m[2]);
-}
-
-function minutiCorrenti(): number {
-  const now = new Date();
-  return now.getHours() * 60 + now.getMinutes();
-}
+const emptyDay = (date: string): DayState => ({
+  date,
+  slots: null,
+  failed: false,
+  refreshing: true,
+});
 
 export function useRiepilogoSomministrazioni(attivo = true): RiepilogoSomministrazioni {
-  const [slots, setSlots] = useState<TherapySlot[] | null>(null);
-  const [fallito, setFallito] = useState(false);
+  const [now, setNow] = useState(() => new Date());
+  const [revision, setRevision] = useState(0);
+  const { oggi, domani } = therapyCalendar(now);
+  const [today, setToday] = useState<DayState>(() => emptyDay(oggi));
+  const [tomorrow, setTomorrow] = useState<DayState>(() => emptyDay(domani));
+  const aggiorna = useCallback(() => {
+    setNow(new Date());
+    setRevision((value) => value + 1);
+  }, []);
 
   useEffect(() => {
     if (!attivo) return;
-    let annullato = false;
-
-    void cachedGetJson<TherapySlot[]>(`${API_URL}/therapy-slots?date=${oggi()}`, TTL_MS)
-      .then((dati) => {
-        if (!annullato) setSlots(Array.isArray(dati) ? dati : []);
-      })
-      .catch(() => {
-        if (!annullato) setFallito(true);
-      });
-
-    return () => {
-      annullato = true;
+    const refreshVisible = () => {
+      if (document.visibilityState !== 'hidden') aggiorna();
     };
-  }, [attivo]);
+    const timer = window.setInterval(refreshVisible, 60_000);
+    window.addEventListener('focus', refreshVisible);
+    document.addEventListener('visibilitychange', refreshVisible);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('focus', refreshVisible);
+      document.removeEventListener('visibilitychange', refreshVisible);
+    };
+  }, [attivo, aggiorna]);
 
-  if (fallito) return { ...VUOTO, inCorso: false, fallito: true };
-  if (slots === null) return VUOTO;
-
-  const soglia = minutiCorrenti();
-  let totale = 0;
-  let daFare = 0;
-  let fatte = 0;
-  let nonErogate = 0;
-  let inRitardo = 0;
-  const ritardiPerPaziente = new Map<string, RitardoPaziente>();
-
-  for (const slot of slots) {
-    for (const paziente of slot.patients ?? []) {
-      for (const a of paziente.administrations ?? []) {
-        totale++;
-        if (a.status === 'administered') fatte++;
-        else if (a.status === 'not_administered') nonErogate++;
-        else {
-          daFare++;
-          const minutiSlot = minutiDaMezzanotte(a.scheduledTime);
-          if (!Number.isNaN(minutiSlot) && minutiSlot < soglia) {
-            inRitardo++;
-            const voce: RitardoVoce = {
-              farmacoNome: a.drugName,
-              scheduledTime: a.scheduledTime,
-              minutiRitardo: soglia - minutiSlot,
-            };
-            const esistente = ritardiPerPaziente.get(paziente.patientId);
-            if (esistente) esistente.voci.push(voce);
-            else
-              ritardiPerPaziente.set(paziente.patientId, {
-                patientId: paziente.patientId,
-                nome: `${paziente.lastName} ${paziente.firstName}`.trim(),
-                voci: [voce],
-              });
-          }
-        }
-      }
+  useEffect(() => {
+    if (!attivo) return;
+    let cancelled = false;
+    for (const [date, setDay] of [
+      [oggi, setToday],
+      [domani, setTomorrow],
+    ] as const) {
+      setDay((current) =>
+        current.date === date ? { ...current, refreshing: true } : emptyDay(date),
+      );
+      // Rilettura fresca al mount/refresh, con dedup delle richieste già in volo.
+      void readDashboardTherapyDay(`${API_URL}/therapy-slots?date=${date}`)
+        .then((slots) => {
+          if (!cancelled) setDay({ date, slots, failed: false, refreshing: false });
+        })
+        .catch(() => {
+          if (!cancelled) setDay({ date, slots: null, failed: true, refreshing: false });
+        });
     }
-  }
+    return () => {
+      cancelled = true;
+    };
+  }, [attivo, oggi, domani, revision]);
 
-  const ritardi = [...ritardiPerPaziente.values()]
-    .map((p) => ({ ...p, voci: [...p.voci].sort((a, b) => b.minutiRitardo - a.minutiRitardo) }))
-    .sort((a, b) => b.voci[0].minutiRitardo - a.voci[0].minutiRitardo);
-
-  return { totale, daFare, fatte, nonErogate, inRitardo, ritardi, inCorso: false, fallito: false };
+  // Al cambio giorno non etichettare come odierne risposte del giorno precedente.
+  const current = today.date === oggi && attivo ? today : emptyDay(oggi);
+  const next = tomorrow.date === domani && attivo ? tomorrow : emptyDay(domani);
+  return {
+    ...summarizeDashboardTherapies(current.slots ?? [], next.slots ?? [], now),
+    inCorso: current.slots === null && !current.failed,
+    fallito: current.failed,
+    domaniInCorso: next.slots === null && !next.failed,
+    domaniFallito: next.failed,
+    aggiornamentoInCorso: current.refreshing || next.refreshing,
+    aggiorna,
+  };
 }

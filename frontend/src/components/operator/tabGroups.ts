@@ -51,7 +51,7 @@ export const TAB_GROUPS: TabGroupDef[] = [
     label: 'Clinica',
     tabs: [
       { id: 'presa-in-carico', label: 'Presa in Carico' },
-      { id: 'sezioni-narrative', label: 'Sezioni Cliniche (testo)' },
+      { id: 'sezioni-narrative', label: 'Sezioni cliniche' },
       { id: 'diagnosi', label: 'Diagnosi' },
       { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
       { id: 'parametri', label: 'Parametri Vitali' },

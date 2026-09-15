@@ -1,4 +1,4 @@
-import type { Camera, Letto } from '../types';
+import type { Camera, CartellaPaziente, Letto } from '../types';
 
 export function bedDisplayLabel(bed: Letto): string {
   return bed.label?.trim() || 'ABCDEFGH'[bed.numero - 1] || String(bed.numero);
@@ -45,6 +45,18 @@ export function currentPatientPlacement(
     if (bed) return { room, bed };
   }
   return undefined;
+}
+
+/** Display values only: never store fallback labels as a room or bed assignment. */
+export function patientPlacementValues(
+  placement: ReturnType<typeof currentPatientPlacement>,
+  cartella: Pick<CartellaPaziente, 'cameraNumero' | 'lettoNumero'>,
+): { room?: string; bed?: string } {
+  const clean = (value: unknown) =>
+    typeof value === 'string' ? value.trim() || undefined : undefined;
+  return placement
+    ? { room: clean(placement.room.numero), bed: clean(bedDisplayLabel(placement.bed)) }
+    : { room: clean(cartella.cameraNumero), bed: clean(cartella.lettoNumero) };
 }
 
 export function isValidBedSelection(

@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { Router, type Response } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
+import { validatePatientPhone } from '../lib/patient-phone.js';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 import {
   PatientPageInputError,
@@ -1047,6 +1048,11 @@ router.post('/', async (req, res) => {
   }
 
   // #294: il CF è la chiave univoca del paziente — obbligatorio e formalmente valido.
+  const phoneValidation = validatePatientPhone(body.phone);
+  if (!phoneValidation.ok) {
+    res.status(400).json({ error: phoneValidation.error });
+    return;
+  }
   const codiceFiscale = normalizeCodiceFiscale(body.codiceFiscale);
   if (!isValidCodiceFiscale(codiceFiscale)) {
     res.status(400).json({
@@ -1073,7 +1079,7 @@ router.post('/', async (req, res) => {
     codiceFiscale,
     ...(body.sex !== undefined && { sex: body.sex }),
     ...(body.email !== undefined && { email: body.email }),
-    ...(body.phone !== undefined && { phone: body.phone }),
+    phone: phoneValidation.phone,
     ...(body.address !== undefined && { address: body.address }),
     ...(body.emergencyContactName !== undefined && {
       emergencyContactName: body.emergencyContactName,
@@ -1138,6 +1144,15 @@ router.patch('/:id', requirePatientScope, async (req, res) => {
     if (req.body[key] !== undefined) {
       updates[key] = key === 'dateOfBirth' ? new Date(req.body[key]) : req.body[key];
     }
+  }
+
+  if (Object.prototype.hasOwnProperty.call(req.body, 'phone')) {
+    const phoneValidation = validatePatientPhone(req.body.phone);
+    if (!phoneValidation.ok) {
+      res.status(400).json({ error: phoneValidation.error });
+      return;
+    }
+    updates.phone = phoneValidation.phone;
   }
 
   // #294: CF aggiornabile solo con un valore valido; mai azzerabile da qui.

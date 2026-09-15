@@ -24,6 +24,12 @@ import {
 } from '../sections/index.js';
 import { filterRepeatedHeaders } from '../sections/header-filter.js';
 import { AiExtractionError } from '../types.js';
+import {
+  classifyImportFailure,
+  importRuntimeError,
+  requireOcrText,
+  safeImportError,
+} from './import-failure.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
 
@@ -191,11 +197,7 @@ async function runtimeCreateJob(
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new AiExtractionError(
-      'provider_error',
-      `Runtime createJob failed: ${res.status} ${text}`,
-    );
+    throw importRuntimeError(`Runtime createJob HTTP ${res.status}`);
   }
   const json = (await res.json()) as { job_id: string };
   return json.job_id;
@@ -210,8 +212,7 @@ async function runtimeRunJob(runtimeJobId: string, mode: 'extraction' | 'ocr' = 
     body: JSON.stringify({ mode }),
   });
   if (!res.ok && res.status !== 202) {
-    const text = await res.text().catch(() => '');
-    throw new AiExtractionError('provider_error', `Runtime runJob failed: ${res.status} ${text}`);
+    throw importRuntimeError(`Runtime runJob HTTP ${res.status}`);
   }
 }
 
@@ -219,16 +220,11 @@ async function runtimeRunJob(runtimeJobId: string, mode: 'extraction' | 'ocr' = 
 async function runtimeGetJob(runtimeJobId: string): Promise<RuntimeJobStatus> {
   const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}`);
   if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new AiExtractionError('provider_error', `Runtime getJob failed: ${res.status} ${text}`);
+    throw importRuntimeError(`Runtime getJob HTTP ${res.status}`);
   }
   const j = (await res.json()) as RuntimeJobStatus & { error?: unknown };
-  // The runtime returns a normalized error OBJECT {kind,message}; coerce to a string
-  // so it can be stored (job.error is a String column) and shown to the operator.
-  if (j.error && typeof j.error === 'object') {
-    const e = j.error as { kind?: string; message?: string };
-    j.error = `[${e.kind ?? 'error'}] ${e.message ?? ''}`.trim();
-  }
+  // Only allowlisted diagnostics cross the runtime boundary; legacy providers may echo input.
+  if (j.error) j.error = safeImportError(j.error);
   return j as RuntimeJobStatus;
 }
 
@@ -236,11 +232,7 @@ async function runtimeGetJob(runtimeJobId: string): Promise<RuntimeJobStatus> {
 async function runtimeGetResult(runtimeJobId: string): Promise<RuntimeJobResult> {
   const res = await runtimeFetch(`/v1/document-jobs/${runtimeJobId}/result`);
   if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new AiExtractionError(
-      'provider_error',
-      `Runtime getResult failed: ${res.status} ${text}`,
-    );
+    throw importRuntimeError(`Runtime getResult HTTP ${res.status}`);
   }
   return res.json() as Promise<RuntimeJobResult>;
 }
@@ -302,7 +294,7 @@ const TRANSCRIBE_SCHEMA = {
   additionalProperties: false,
 };
 
-async function runtimeTranscribe(
+export async function runtimeTranscribe(
   jobId: string,
   documents: Array<{ id: string; filename: string; mimeType: string; data: Buffer }>,
 ): Promise<string> {
@@ -317,12 +309,12 @@ async function runtimeTranscribe(
     const s = await runtimeGetJob(rid);
     const { jobStatus, isTerminal } = mapRuntimeStatus(s.status);
     if (isTerminal) {
-      if (jobStatus !== 'review_ready') return '';
+      if (jobStatus !== 'review_ready') throw importRuntimeError(s.error);
       const r = await runtimeGetResult(rid);
-      return String((r.data as { rawText?: unknown } | null)?.rawText ?? '');
+      return requireOcrText(r.data);
     }
   }
-  return '';
+  throw new AiExtractionError('timeout', '[AI_TIMEOUT] Tempo limite della trascrizione OCR.');
 }
 
 // Focused second pass for the clinical LISTS (REQ-015 tuning). gemma omits these from
@@ -626,7 +618,7 @@ export async function getJob(jobId: string): Promise<PublicJob | null> {
     maxTotalBytes: job.maxTotalBytes,
     totalBytes: job.totalBytes,
     fileCount: job.documents.filter((d) => d.status === 'uploaded').length,
-    error: job.error,
+    error: job.error ? safeImportError(job.error) : null,
     model: job.model,
     expiresAt: job.expiresAt.toISOString(),
     createdAt: job.createdAt.toISOString(),
@@ -854,12 +846,8 @@ export async function runJob(jobId: string): Promise<void> {
     //    testo costa una frazione rispetto alle immagini.
     let rawText = '';
     if (process.env.AI_OCR_TRANSCRIPTION !== 'false') {
-      try {
-        await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
-        rawText = await runtimeTranscribe(jobId, docFiles);
-      } catch {
-        /* trascrizione best-effort: se fallisce si estrae dalle sole immagini, come prima */
-      }
+      await setState(jobId, 'waiting_for_model', { stage: 'transcribing' });
+      rawText = await runtimeTranscribe(jobId, docFiles);
     }
     // Con una trascrizione sostanziosa le immagini diventano ridondanti e si possono omettere
     // (meno token, import piu' veloce). Se l'OCR ha reso poco o nulla si torna alle immagini,
@@ -896,10 +884,14 @@ export async function runJob(jobId: string): Promise<void> {
       const rStatus = await runtimeGetJob(runtimeJobId);
       const { jobStatus, isTerminal } = mapRuntimeStatus(rStatus.status);
 
-      await setState(jobId, jobStatus, {
-        stage: rStatus.stage ?? null,
-        ...(rStatus.model ? { model: rStatus.model } : {}),
-      });
+      // Publish terminal states together with their result/error below. Otherwise a
+      // client can stop polling before the diagnostic or review data is persisted.
+      if (!isTerminal) {
+        await setState(jobId, jobStatus, {
+          stage: rStatus.stage ?? null,
+          ...(rStatus.model ? { model: rStatus.model } : {}),
+        });
+      }
 
       if (isTerminal) {
         if (jobStatus === 'review_ready') {
@@ -1021,12 +1013,14 @@ export async function runJob(jobId: string): Promise<void> {
           });
         } else {
           // failed / retryable_error
-          const retryable = jobStatus === 'retryable_error';
+          const retryable = classifyImportFailure(rStatus.error).retryable;
           await setState(jobId, retryable ? 'retryable_error' : 'failed', {
             stage: 'error',
-            error: rStatus.error ?? 'Extraction failed',
+            error: safeImportError(rStatus.error),
           });
-          await recordAudit(jobId, 'process_failed', { detail: rStatus.error ?? jobStatus });
+          await recordAudit(jobId, 'process_failed', {
+            detail: classifyImportFailure(rStatus.error).code,
+          });
         }
         return;
       }
@@ -1036,15 +1030,12 @@ export async function runJob(jobId: string): Promise<void> {
     await setState(jobId, 'retryable_error', { stage: 'error', error: 'Runtime timeout' });
     await recordAudit(jobId, 'process_failed', { detail: 'timeout' });
   } catch (err) {
-    const kind = err instanceof AiExtractionError ? err.kind : 'provider_error';
-    const message = err instanceof Error ? err.message : 'Errore elaborazione';
-    const retryable =
-      kind === 'timeout' || kind === 'provider_error' || kind === 'provider_unavailable';
-    await setState(jobId, retryable ? 'retryable_error' : 'failed', {
+    const failure = classifyImportFailure(err);
+    await setState(jobId, failure.retryable ? 'retryable_error' : 'failed', {
       stage: 'error',
-      error: `[${kind}] ${message}`,
+      error: safeImportError(err),
     });
-    await recordAudit(jobId, 'process_failed', { detail: kind });
+    await recordAudit(jobId, 'process_failed', { detail: failure.code });
   }
 }
 

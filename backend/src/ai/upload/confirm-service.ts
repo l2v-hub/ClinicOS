@@ -18,6 +18,13 @@ import {
   type ClinicalActor,
 } from '../../therapies/clinical-actor.js';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../../lib/codice-fiscale.js';
+import { validatePatientPhone } from '../../lib/patient-phone.js';
+
+function requirePatientPhone(raw: unknown): string {
+  const result = validatePatientPhone(raw);
+  if (!result.ok) throw new AiExtractionError('config', result.error);
+  return result.phone;
+}
 
 // #294: il CF è la chiave univoca del paziente. Ogni conferma che CREA un paziente
 // esige un CF valido e libero. Un match sul CF è un duplicato certo, non forzabile
@@ -292,6 +299,7 @@ export async function confirmDraft(
   }
 
   // #294: CF obbligatorio, valido e libero prima di creare; normalizzato per la persistenza.
+  p.phone = requirePatientPhone(p.phone);
   p.codiceFiscale = await requireFreeCodiceFiscale(p.codiceFiscale);
 
   // Duplicate detection (same as confirmJob).
@@ -485,6 +493,7 @@ export async function confirmJob(
   }
 
   // #294: CF obbligatorio, valido e libero prima di creare; normalizzato per la persistenza.
+  p.phone = requirePatientPhone(p.phone);
   p.codiceFiscale = await requireFreeCodiceFiscale(p.codiceFiscale);
 
   // Fallback heuristic duplicate detection by name + date of birth (CF exact-match

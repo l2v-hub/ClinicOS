@@ -4,6 +4,7 @@
 
 import { IcoCheck } from '../../../icons';
 import { isValidCF } from '../../../lib/codiceFiscale';
+import { validatePatientPhone } from '../../../lib/patientPhone';
 
 interface AnagraficaData {
   firstName?: string;
@@ -65,6 +66,7 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
   if (!a.dateOfBirth) missingDemo.push('Data di nascita');
   if (!isValidCF(typeof a.codiceFiscale === 'string' ? a.codiceFiscale : ''))
     missingDemo.push('Codice fiscale valido');
+  if (!validatePatientPhone(a.phone).ok) missingDemo.push('Telefono valido');
 
   const checklist: Array<{ label: string; ok: boolean }> = [
     {

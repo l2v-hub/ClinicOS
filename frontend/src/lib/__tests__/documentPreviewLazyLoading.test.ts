@@ -10,10 +10,7 @@ const preview = readFileSync(
   new URL('../../components/shared/DocumentPreview.tsx', import.meta.url),
   'utf8',
 );
-const dischargeImport = readFileSync(
-  new URL('../../components/shared/DischargeImportModal.tsx', import.meta.url),
-  'utf8',
-);
+const dischargeImport = readFileSync(new URL('../importPhotoPreviews.ts', import.meta.url), 'utf8');
 
 test('patient source panel fetches one selected document instead of the whole collection', () => {
   assert.doesNotMatch(sourcePanel, /Promise\.all\s*\(/);

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { isValidCF } from '../../../lib/codiceFiscale';
+import { validatePatientPhone } from '../../../lib/patientPhone';
 import { createDraft, getDraft, patchDraft, confirmDraft } from './intakeDraftApi';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
@@ -297,12 +298,20 @@ export function IntakeWorkspace({
       a?.firstName?.trim() &&
       a?.lastName?.trim() &&
       a?.dateOfBirth &&
-      isValidCF(a?.codiceFiscale ?? '')
+      isValidCF(a?.codiceFiscale ?? '') &&
+      validatePatientPhone(a?.phone).ok
     );
   }
 
   async function handleConfirm(force = false, allergyConflictOverride = false) {
     if (!draftId) return;
+    const phoneValidation = validatePatientPhone(data.anagrafica?.phone);
+    if (!phoneValidation.ok) {
+      setSubmitAttempted(true);
+      setSubmitError(phoneValidation.error);
+      setStep(1);
+      return;
+    }
     // #235: acceptance gate — demographics + therapy must be explicitly accepted.
     if (!acceptanceComplete()) {
       setSubmitAttempted(true);
@@ -323,7 +332,7 @@ export function IntakeWorkspace({
       dateOfBirth: a.dateOfBirth ?? '',
       ...(a.sex !== undefined && { sex: a.sex }),
       ...(a.codiceFiscale !== undefined && { codiceFiscale: a.codiceFiscale }),
-      ...(a.phone !== undefined && { phone: a.phone }),
+      phone: phoneValidation.phone,
       ...(a.email !== undefined && { email: a.email }),
       ...(a.address !== undefined && { address: a.address }),
       ...(a.emergencyContactName !== undefined && { emergencyContactName: a.emergencyContactName }),

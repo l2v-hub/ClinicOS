@@ -42,6 +42,14 @@ export function cachedGetJson<T>(url: string, ttlMs: number = DEFAULT_TTL_MS): P
   return request as Promise<T>;
 }
 
+/** Expire only the timed-out request, never a newer read started after invalidation. */
+export function expireCachedGet(url: string, expected: Promise<unknown>): void {
+  if (inflight.get(url) !== expected) return;
+  urlGenerations.set(url, (urlGenerations.get(url) ?? 0) + 1);
+  inflight.delete(url);
+  cache.delete(url);
+}
+
 /** Invalida tutte le voci di cache il cui URL inizia col prefisso (es. dopo una POST/PATCH). */
 export function invalidateCachedGet(prefix: string): void {
   for (const key of [...cache.keys()]) if (key.startsWith(prefix)) cache.delete(key);

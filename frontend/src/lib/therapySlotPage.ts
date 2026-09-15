@@ -93,6 +93,12 @@ function parseSlot(value: unknown): TherapySlot {
   };
 }
 
+/** Complete legacy response: malformed data must never look like an empty clinical agenda. */
+export function parseTherapySlots(value: unknown): TherapySlot[] {
+  if (!Array.isArray(value)) throw new Error('invalid therapy slots');
+  return value.map(parseSlot);
+}
+
 export function parseTherapySlotPage(value: unknown): TherapySlotPageResponse {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('invalid therapy page');

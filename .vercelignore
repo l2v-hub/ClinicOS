@@ -11,3 +11,19 @@ memory
 dist
 frontend/dist
 frontend/node_modules
+
+# Development evidence and tooling are not frontend deployment inputs.
+artifacts
+docs
+qa-evidence
+mockup
+design_handoff_restyle
+clinicos-ai-runtime
+.agents
+.swarm
+.ruflo
+agent-team
+.worktrees
+.wt-*
+**/.env
+**/.env.*.local

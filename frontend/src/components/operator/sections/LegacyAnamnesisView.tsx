@@ -32,7 +32,7 @@ export function LegacyAnamnesisView({
           </p>
         )}
         <p className="cr-legacy-anamnesi-note">
-          Compilata in presa in carico; per aggiornamenti usare le Sezioni Cliniche (testo).
+          Compilata in presa in carico; per aggiornamenti usare le Sezioni cliniche.
         </p>
       </div>
     </ClinicalTableSection>

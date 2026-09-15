@@ -30,8 +30,14 @@ export default function PatientCompactHeader({
   const hasAllergie =
     cartella?.allergie && Array.isArray(cartella.allergie) && cartella.allergie.length > 0;
 
-  const meta: string[] = [];
-  if (paziente.medicalRecordNumber) meta.push(paziente.medicalRecordNumber);
+  const codiceFiscale = (
+    paziente.codiceFiscale?.trim() ||
+    cartella?.codiceFiscale?.trim() ||
+    ''
+  ).toUpperCase();
+  const meta = [
+    codiceFiscale ? `Codice fiscale: ${codiceFiscale}` : 'Codice fiscale non disponibile',
+  ];
   if (age || sex) meta.push([age, sex].filter(Boolean).join(' · '));
 
   const backTitle = backLabel ? `Torna a ${backLabel}` : 'Torna alla lista';
@@ -75,7 +81,11 @@ export default function PatientCompactHeader({
         {meta.length > 0 && (
           <div className="patient-compact-header__meta-row">
             {meta.map((m, i) => (
-              <span key={i} className="patient-compact-header__meta">
+              <span
+                key={i}
+                className="patient-compact-header__meta"
+                style={i === 0 ? { whiteSpace: 'normal', overflowWrap: 'anywhere' } : undefined}
+              >
                 {m}
               </span>
             ))}

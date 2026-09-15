@@ -9,7 +9,15 @@ import {
   assertNoLegacyImportArrays,
   type NarrativeDraft,
 } from './sections/deriveSections';
-import { DocumentPreview, type PreviewDoc } from './DocumentPreview';
+import { DocumentPreview } from './DocumentPreview';
+import { IcoImage } from '../../icons';
+import {
+  finishPhotoReplacement,
+  useImportPreviews,
+  type UploadOutcome,
+} from '../../lib/importPhotoPreviews';
+import { ImportPhotoPreview } from './ImportPhotoPreview';
+import { importFailureMessage } from '../../lib/importFailure';
 import { CameraCapture } from './CameraCapture';
 import { createDraftFromImport, patchDraft } from './intake/intakeDraftApi';
 import { IntakeWorkspace } from './intake/IntakeWorkspace';
@@ -59,14 +67,11 @@ const STAGE_LABEL: Record<string, string> = {
   uploading_files: 'Caricamento documenti…',
   model_processing: 'Analisi AI in corso…',
   validating: 'Validazione risposta…',
+  transcribing: 'Lettura dei documenti…',
+  ocr_running: 'Estrazione dei dati…',
   completed: 'Completato',
   error: 'Errore',
 };
-interface Outcome {
-  filename: string;
-  status: string;
-  message?: string;
-}
 
 interface Props {
   open: boolean;
@@ -103,7 +108,7 @@ export function DischargeImportModal({
       headers: { ...opHeaders, ...((opts.headers as Record<string, string>) ?? {}) },
     });
   const [job, setJob] = useState<Job | null>(null);
-  const [outcomes, setOutcomes] = useState<Outcome[]>([]);
+  const [outcomes, setOutcomes] = useState<UploadOutcome[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'upload' | 'review' | 'workspace'>('upload');
@@ -112,7 +117,10 @@ export function DischargeImportModal({
   const [importDraftId, setImportDraftId] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   // REQ-032: wide two-panel review workspace state.
-  const [previews, setPreviews] = useState<PreviewDoc[]>([]);
+  const { previews, session, acceptFiles, removePreview } = useImportPreviews(open);
+  const [previewId, setPreviewId] = useState<string | null>(null);
+  const retakeId = useRef<string | null>(null);
+  const replacementInput = useRef<HTMLInputElement>(null);
   const [layout, setLayout] = useState<'5050' | 'doc' | 'data'>('5050');
   const [paneTab, setPaneTab] = useState<'doc' | 'data'>('doc'); // tablet/mobile single-pane
   const [sourceTarget, setSourceTarget] = useState<{ fileName?: string; page?: number } | null>(
@@ -123,7 +131,6 @@ export function DischargeImportModal({
 
   useEffect(() => {
     if (!open) {
-      previews.forEach((p) => URL.revokeObjectURL(p.url));
       // Closing the modal intentionally resets its complete local workflow state in one effect.
       /* eslint-disable react-hooks/set-state-in-effect */
       setJob(null);
@@ -133,7 +140,9 @@ export function DischargeImportModal({
       /* eslint-enable react-hooks/set-state-in-effect */
       setProposal(null);
       setProcessing(false);
-      setPreviews([]);
+      setPreviewId(null);
+      retakeId.current = null;
+      setBusy(false);
       setLayout('5050');
       setPaneTab('doc');
       setSourceTarget(null);
@@ -180,9 +189,9 @@ export function DischargeImportModal({
         } else if (['failed', 'retryable_error', 'cancelled'].includes(j.status)) {
           setProcessing(false);
           setError(
-            j.status === 'retryable_error'
-              ? 'Errore temporaneo durante l’elaborazione. I documenti sono conservati: puoi riprovare.'
-              : 'Elaborazione non riuscita. Puoi compilare manualmente o riprovare senza perdere i file.',
+            j.status === 'cancelled'
+              ? 'Elaborazione annullata.'
+              : importFailureMessage(j.error, j.id),
           );
         }
       } catch {
@@ -200,52 +209,84 @@ export function DischargeImportModal({
 
   if (!open) return null;
 
-  async function sendFiles(files: FileList | File[] | null) {
+  async function sendFiles(files: FileList | File[] | null, replacingId: string | null = null) {
     if (!files || files.length === 0) return;
+    const inputFiles = Array.from(files);
+    if (replacingId && (inputFiles.length !== 1 || !inputFiles[0].type.startsWith('image/'))) {
+      setError('Per rifare la foto seleziona una sola immagine. La foto originale è conservata.');
+      return;
+    }
+    const generation = session.generation;
+    const isCurrent = () => generation === session.generation;
     setBusy(true);
     setError(null);
     try {
       const fd = new FormData();
-      Array.from(files).forEach((f) => fd.append('files', f));
-      // REQ-032: keep object URLs so the review can preview the real documents (session-only).
-      const added: PreviewDoc[] = Array.from(files).map((f) => ({
-        name: f.name,
-        type: f.type,
-        url: URL.createObjectURL(f),
-      }));
-      setPreviews((prev) => [...prev, ...added]);
+      inputFiles.forEach((f) => fd.append('files', f));
       const url = job ? `${JOBS_URL}/${job.id}/files` : JOBS_URL;
       const res = await apiFetch(url, { method: 'POST', body: fd });
       const data = await res.json();
+      if (!isCurrent()) return;
       if (!res.ok) {
         setError(data.error || 'Upload non riuscito');
         return;
       }
-      setJob(data.job ?? data);
+      const uploadedJob: Job = data.job ?? data;
+      setJob(uploadedJob);
       if (data.outcomes) setOutcomes(data.outcomes);
+      const added = acceptFiles(inputFiles, data.outcomes ?? [], uploadedJob.documents);
+      if (replacingId && added.length === 1 && added[0].id) {
+        try {
+          const replaced = await finishPhotoReplacement(
+            `${JOBS_URL}/${uploadedJob.id}`,
+            uploadedJob,
+            replacingId,
+            added[0].id,
+            apiFetch,
+            setJob,
+            isCurrent,
+          );
+          if (replaced) removePreview(replacingId);
+        } catch {
+          if (isCurrent())
+            setError(
+              'La nuova foto è caricata, ma la sostituzione non è completa. Controlla i file prima di proseguire.',
+            );
+        }
+      }
     } catch {
-      setError('Errore di rete durante l’upload');
+      if (isCurrent()) setError('Errore di rete durante l’upload');
     } finally {
-      setBusy(false);
-      if (fileInput.current) fileInput.current.value = '';
+      if (isCurrent()) {
+        setBusy(false);
+        if (fileInput.current) fileInput.current.value = '';
+      }
     }
   }
 
   async function removeDoc(docId: string) {
     if (!job) return;
+    const generation = session.generation;
     setBusy(true);
     try {
       const res = await apiFetch(`${JOBS_URL}/${job.id}/files/${docId}`, { method: 'DELETE' });
       const data = await res.json();
-      if (res.ok) setJob(data);
+      if (generation !== session.generation) return;
+      if (res.ok) {
+        setJob(data);
+        removePreview(docId);
+      } else setError(data.error || 'Rimozione non riuscita. Il file è conservato.');
+    } catch {
+      if (generation === session.generation)
+        setError('Errore di rete durante la rimozione. Controlla i file prima di proseguire.');
     } finally {
-      setBusy(false);
+      if (generation === session.generation) setBusy(false);
     }
   }
 
-  // REQ-014: rifare una singola foto = rimuovi + riapri fotocamera.
-  async function retake(docId: string) {
-    await removeDoc(docId);
+  function retake(docId: string) {
+    setPreviewId(null);
+    retakeId.current = docId;
     setCameraOpen(true);
   }
 
@@ -670,7 +711,10 @@ export function DischargeImportModal({
               <button
                 className="btn-secondary"
                 disabled={busy}
-                onClick={() => setCameraOpen(true)}
+                onClick={() => {
+                  retakeId.current = null;
+                  setCameraOpen(true);
+                }}
                 data-testid="scatta-foto"
               >
                 Scatta foto
@@ -683,17 +727,36 @@ export function DischargeImportModal({
                 accept=".pdf,.doc,.docx,.txt,image/*"
                 onChange={(e) => sendFiles(e.target.files)}
               />
+              <input
+                ref={replacementInput}
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={(e) => {
+                  void sendFiles(e.target.files, retakeId.current);
+                  e.target.value = '';
+                }}
+              />
             </div>
+            {previewId && job?.documents.find((d) => d.id === previewId) && (
+              <ImportPhotoPreview
+                key={previewId}
+                name={job.documents.find((d) => d.id === previewId)!.filename}
+                document={previews.find((p) => p.id === previewId)}
+                onClose={() => setPreviewId(null)}
+                onRetake={() => retake(previewId)}
+              />
+            )}
             <CameraCapture
               open={cameraOpen}
               onClose={() => setCameraOpen(false)}
               onCapture={(file) => {
                 setCameraOpen(false);
-                void sendFiles([file]);
+                void sendFiles([file], retakeId.current);
               }}
               onFallbackImport={() => {
                 setCameraOpen(false);
-                fileInput.current?.click();
+                (retakeId.current ? replacementInput : fileInput).current?.click();
               }}
             />
 
@@ -701,7 +764,11 @@ export function DischargeImportModal({
               {count}/{maxFiles} elementi · {fmtMB(totalBytes)} / {fmtMB(maxTotalBytes)} totali
             </p>
 
-            {error && <p className="import-modal__error">{error}</p>}
+            {error && (
+              <p className="import-modal__error" role="alert">
+                {error}
+              </p>
+            )}
             {rejected.length > 0 && (
               <ul className="import-modal__rejected">
                 {rejected.map((o, i) => (
@@ -749,13 +816,13 @@ export function DischargeImportModal({
                     </button>
                     {d.mimeType.startsWith('image/') && (
                       <button
-                        className="icon-btn"
+                        className="icon-btn import-photo-action"
                         disabled={busy}
-                        onClick={() => retake(d.id)}
-                        aria-label="Rifai foto"
-                        title="Rifai foto"
+                        onClick={() => setPreviewId(d.id)}
+                        aria-label={`Visualizza foto: ${d.filename}`}
+                        title="Visualizza foto"
                       >
-                        📷
+                        <IcoImage />
                       </button>
                     )}
                     <button

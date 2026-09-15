@@ -13,7 +13,12 @@ import {
   listPatientDocuments,
   getPatientDocumentContent,
   createPatientDocument,
+  updatePatientDocumentType,
 } from '../ai/upload/patient-documents.js';
+import {
+  documentContentDisposition,
+  parsePatientDocumentType,
+} from '../ai/upload/patient-document-types.js';
 import {
   decodePatientDocumentCursor,
   PATIENT_DOCUMENT_PAGE_DEFAULT,
@@ -40,7 +45,6 @@ const ALLOWED_MIME = new Set([
   'image/heif',
   'application/pdf',
 ]);
-const ALLOWED_DOC_TYPES = new Set(['esame', 'rx', 'consulenza', 'allegato']);
 
 // HEIC/HEIF share the ISOBMFF ('ftyp') container; either family may be declared for either brand.
 const MIME_FAMILY: Record<string, string> = { 'image/heif': 'image/heic' };
@@ -175,8 +179,13 @@ router.post(
         res.status(415).json({ error: 'Il contenuto del file non corrisponde al tipo dichiarato' });
         return;
       }
-      const raw = typeof req.body?.documentType === 'string' ? req.body.documentType.trim() : '';
-      const documentType = ALLOWED_DOC_TYPES.has(raw) ? raw : 'allegato';
+      const documentType = parsePatientDocumentType(req.body?.documentType, true);
+      if (!documentType) {
+        res
+          .status(400)
+          .json({ error: 'Tipologia documento non valida', code: 'invalid_document_type' });
+        return;
+      }
       const document = await createPatientDocument(
         String(req.params.patientId),
         file,
@@ -189,6 +198,41 @@ router.post(
         return;
       }
       res.status(500).json({ error: 'Errore nel salvataggio del documento' });
+    }
+  },
+);
+
+router.patch(
+  '/:patientId/documents/:documentId',
+  requirePatientDocumentAccess,
+  async (req, res) => {
+    const body = req.body;
+    const documentType = parsePatientDocumentType(body?.documentType);
+    if (
+      !body ||
+      typeof body !== 'object' ||
+      Array.isArray(body) ||
+      Object.keys(body).some((key) => key !== 'documentType') ||
+      !documentType
+    ) {
+      res
+        .status(400)
+        .json({ error: 'Tipologia documento non valida', code: 'invalid_document_type' });
+      return;
+    }
+    try {
+      const document = await updatePatientDocumentType(
+        String(req.params.patientId),
+        String(req.params.documentId),
+        documentType,
+      );
+      if (!document) {
+        res.status(404).json({ error: 'Documento non trovato' });
+        return;
+      }
+      res.status(200).json({ document });
+    } catch {
+      res.status(500).json({ error: 'Errore nel salvataggio della tipologia' });
     }
   },
 );
@@ -242,10 +286,8 @@ router.get(
         return;
       }
       res.setHeader('Content-Type', doc.mimeType || 'application/octet-stream');
-      res.setHeader(
-        'Content-Disposition',
-        `inline; filename="${doc.originalName.replace(/"/g, '')}"`,
-      );
+      res.setHeader('Content-Disposition', documentContentDisposition(doc.originalName));
+      res.setHeader('X-Content-Type-Options', 'nosniff');
       res.setHeader('Cache-Control', 'private, no-store');
       res.status(200).send(doc.buffer);
     } catch {

@@ -11,6 +11,7 @@ import { operatorHeaders } from '../../../lib/operatorSession';
 import { loadMedicationAdministrationPage } from '../../../lib/medicationAdministrationPages';
 import { ClinicalTableSection, LoadingState } from './shared';
 import { LoadErrorState } from './LoadErrorState';
+import { PatientTherapyCalendar } from './PatientTherapyCalendar';
 import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
 import {
@@ -71,7 +72,7 @@ const STATO_ORDER: Record<string, number> = { attiva: 0, sospesa: 1, conclusa: 2
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type SubTab = 'attivi' | 'programmazione' | 'giornaliere' | 'storico' | 'sospese';
+type SubTab = 'attivi' | 'programmazione' | 'calendario' | 'giornaliere' | 'storico' | 'sospese';
 
 interface MedAdmin {
   id: string;
@@ -700,6 +701,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
   const SUB_TABS: TopNavItem[] = [
     { key: 'attivi', label: 'Farmaci attivi', badge: therapySummary?.active ?? attive.length },
     { key: 'programmazione', label: 'Programmazione' },
+    { key: 'calendario', label: 'Calendario' },
     { key: 'giornaliere', label: 'Somministrazioni giornaliere' },
     { key: 'storico', label: 'Storico', badge: history.length },
     {
@@ -1322,26 +1324,30 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   return (
     <div className="cr-tab-content">
-      <AvvisoAnomalieFarmaci
-        esito={anomalie}
-        ambito={
-          nextTherapyCursor
-            ? 'risultati caricati (verifica parziale)'
-            : therapyFiltersActive
-              ? 'tutti i risultati filtrati'
-              : 'tutte le terapie in cartella'
-        }
-      />
-      {nextTherapyCursor && (
-        <div className="alert alert--info" role="status">
-          Verifica anagrafica parziale: carica le altre terapie prima di considerare completo il
-          controllo delle anomalie.
-        </div>
+      {subTab !== 'calendario' && (
+        <>
+          <AvvisoAnomalieFarmaci
+            esito={anomalie}
+            ambito={
+              nextTherapyCursor
+                ? 'risultati caricati (verifica parziale)'
+                : therapyFiltersActive
+                  ? 'tutti i risultati filtrati'
+                  : 'tutte le terapie in cartella'
+            }
+          />
+          {nextTherapyCursor && (
+            <div className="alert alert--info" role="status">
+              Verifica anagrafica parziale: carica le altre terapie prima di considerare completo il
+              controllo delle anomalie.
+            </div>
+          )}
+        </>
       )}
 
       <ClinicalTableSection
         title="Terapia Farmacologica"
-        count={therapySummary?.active ?? attive.length}
+        count={subTab === 'calendario' ? undefined : (therapySummary?.active ?? attive.length)}
         countLabel={therapyFiltersActive ? 'farmaci attivi nei risultati' : 'farmaci attivi'}
         actions={
           <button className="btn-sm" onClick={openAdd}>
@@ -1349,68 +1355,74 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
           </button>
         }
       >
-        <div className="cts__body--padded" aria-label="Filtri terapie">
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'end' }}>
-            <label style={{ minWidth: 220, flex: '1 1 220px' }}>
-              <span className="form-label">Cerca farmaco</span>
-              <input
-                className="form-input"
-                value={therapyFilterDraft.q ?? ''}
-                maxLength={80}
-                placeholder="Almeno 2 caratteri"
-                onChange={(event) =>
-                  setTherapyFilterDraft((current) => ({
-                    ...current,
-                    q: event.target.value || undefined,
-                  }))
-                }
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') applyTherapyFilters();
-                }}
-              />
-            </label>
-            <label style={{ minWidth: 170 }}>
-              <span className="form-label">Tipo</span>
-              <select
-                className="form-input"
-                value={therapyFilterDraft.tipo ?? ''}
-                onChange={(event) =>
-                  setTherapyFilterDraft((current) => ({
-                    ...current,
-                    tipo: (event.target.value || undefined) as TherapyListType | undefined,
-                  }))
-                }
-              >
-                <option value="">Tutti</option>
-                <option value="periodica">Periodica</option>
-                <option value="una_tantum">Una tantum</option>
-                <option value="al_bisogno">Al bisogno</option>
-              </select>
-            </label>
-            <label style={{ minWidth: 170 }}>
-              <span className="form-label">Data inizio</span>
-              <input
-                className="form-input"
-                type="date"
-                value={therapyFilterDraft.data ?? ''}
-                onChange={(event) =>
-                  setTherapyFilterDraft((current) => ({
-                    ...current,
-                    data: event.target.value || undefined,
-                  }))
-                }
-              />
-            </label>
-            <button type="button" className="btn-primary btn-sm" onClick={applyTherapyFilters}>
-              Applica filtri
-            </button>
-            {therapyFiltersActive && (
-              <button type="button" className="btn-secondary btn-sm" onClick={clearTherapyFilters}>
-                Azzera
+        {subTab !== 'calendario' && (
+          <div className="cts__body--padded" aria-label="Filtri terapie">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'end' }}>
+              <label style={{ minWidth: 220, flex: '1 1 220px' }}>
+                <span className="form-label">Cerca farmaco</span>
+                <input
+                  className="form-input"
+                  value={therapyFilterDraft.q ?? ''}
+                  maxLength={80}
+                  placeholder="Almeno 2 caratteri"
+                  onChange={(event) =>
+                    setTherapyFilterDraft((current) => ({
+                      ...current,
+                      q: event.target.value || undefined,
+                    }))
+                  }
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') applyTherapyFilters();
+                  }}
+                />
+              </label>
+              <label style={{ minWidth: 170 }}>
+                <span className="form-label">Tipo</span>
+                <select
+                  className="form-input"
+                  value={therapyFilterDraft.tipo ?? ''}
+                  onChange={(event) =>
+                    setTherapyFilterDraft((current) => ({
+                      ...current,
+                      tipo: (event.target.value || undefined) as TherapyListType | undefined,
+                    }))
+                  }
+                >
+                  <option value="">Tutti</option>
+                  <option value="periodica">Periodica</option>
+                  <option value="una_tantum">Una tantum</option>
+                  <option value="al_bisogno">Al bisogno</option>
+                </select>
+              </label>
+              <label style={{ minWidth: 170 }}>
+                <span className="form-label">Data inizio</span>
+                <input
+                  className="form-input"
+                  type="date"
+                  value={therapyFilterDraft.data ?? ''}
+                  onChange={(event) =>
+                    setTherapyFilterDraft((current) => ({
+                      ...current,
+                      data: event.target.value || undefined,
+                    }))
+                  }
+                />
+              </label>
+              <button type="button" className="btn-primary btn-sm" onClick={applyTherapyFilters}>
+                Applica filtri
               </button>
-            )}
+              {therapyFiltersActive && (
+                <button
+                  type="button"
+                  className="btn-secondary btn-sm"
+                  onClick={clearTherapyFilters}
+                >
+                  Azzera
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         {error && (
           <div
             role="alert"
@@ -1543,6 +1555,10 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               </>
             )}
           </div>
+        )}
+
+        {subTab === 'calendario' && (
+          <PatientTherapyCalendar key={paziente.id} patientId={paziente.id} />
         )}
 
         {/* ── Sub-tab: Somministrazioni giornaliere ── */}

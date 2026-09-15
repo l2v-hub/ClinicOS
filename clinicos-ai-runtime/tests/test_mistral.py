@@ -32,14 +32,14 @@ def _runner():
 
 class TestPostErrorClassification(unittest.TestCase):
     def test_malformed_json_body_is_classified_provider_error_not_raw_exception(self):
-        with mock.patch("urllib.request.urlopen", lambda req, timeout=None: _Resp(b"not json")):
+        with mock.patch("clinicos_ai.models.providers.mistral._open_ocr", lambda req, timeout=None: _Resp(b"not json")):
             with self.assertRaises(RuntimeError_) as ctx:
                 _runner()._post("https://example.test/ocr", "chiave-di-test", {"model": "x"})
         self.assertEqual(ctx.exception.kind, ErrorKind.PROVIDER_ERROR)
 
     def test_valid_json_body_is_parsed(self):
         payload = json.dumps({"pages": []}).encode()
-        with mock.patch("urllib.request.urlopen", lambda req, timeout=None: _Resp(payload)):
+        with mock.patch("clinicos_ai.models.providers.mistral._open_ocr", lambda req, timeout=None: _Resp(payload)):
             out = _runner()._post("https://example.test/ocr", "chiave-di-test", {"model": "x"})
         self.assertEqual(out, {"pages": []})
 
@@ -49,7 +49,7 @@ class TestPostErrorClassification(unittest.TestCase):
                 "https://example.test/ocr", 429, "Too Many Requests", {}, io.BytesIO(b"{}")
             )
 
-        with mock.patch("urllib.request.urlopen", _raise):
+        with mock.patch("clinicos_ai.models.providers.mistral._open_ocr", _raise):
             with self.assertRaises(RuntimeError_) as ctx:
                 _runner()._post("https://example.test/ocr", "chiave-di-test", {"model": "x"})
         self.assertEqual(ctx.exception.kind, ErrorKind.RATE_LIMIT)

@@ -32,6 +32,7 @@ from ..errors import ProviderUnavailableError, RuntimeError_, ErrorKind
 from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
+from .ocr_errors import ocr_http_error
 
 API_VERSION = "2024-11-30"
 
@@ -122,8 +123,7 @@ class _DocIntelRunner:
             if status == "succeeded":
                 return pulisci_markdown((data.get("analyzeResult") or {}).get("content") or "")
             if status in ("failed", "canceled"):
-                detail = str(data.get("error") or "analisi non riuscita")[:200]
-                raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"Document Intelligence: {detail}")
+                raise RuntimeError_(ErrorKind.PROVIDER_ERROR, "[AI_PROVIDER] Analisi OCR non riuscita.")
             time.sleep(1.0)
         raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s")
 
@@ -147,27 +147,26 @@ class _DocIntelRunner:
             budget = self._timeout * 2 + 30
             parts = await asyncio.wait_for(
                 asyncio.gather(*(_one(a) for a in attachments)), timeout=budget)
-            return "\n\n".join(p for p in parts if p.strip())
+            if any(not p.strip() for p in parts):
+                raise RuntimeError_(ErrorKind.SCHEMA_VALIDATION,
+                                    "[AI_EMPTY] Un documento non ha restituito testo OCR leggibile.")
+            return "\n\n".join(parts)
         except RuntimeError_:
             raise
         except asyncio.TimeoutError as ex:
             raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
         except urllib.error.HTTPError as ex:
-            detail = ""
-            try:
-                detail = ex.read().decode("utf-8", "replace")[:200]
-            except Exception:  # pragma: no cover - corpo non leggibile
-                pass
-            kind = ErrorKind.RATE_LIMIT if ex.code == 429 else ErrorKind.PROVIDER_ERROR
-            raise RuntimeError_(kind, f"Document Intelligence: HTTP {ex.code} {detail}") from ex
+            status = ex.code
+            ex.close()
+            raise ocr_http_error(status) from None
         except urllib.error.URLError as ex:
             if isinstance(getattr(ex, "reason", None), TimeoutError):
                 raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
             raise RuntimeError_(ErrorKind.PROVIDER_ERROR,
-                                f"Document Intelligence: {str(ex.reason)[:200]}") from ex
+                                "[AI_PROVIDER] Servizio OCR irraggiungibile.") from ex
         except Exception as ex:
             raise RuntimeError_(ErrorKind.PROVIDER_ERROR,
-                                f"Document Intelligence: {str(ex)[:200]}") from ex
+                                "[AI_PROVIDER] Risposta OCR non valida.") from ex
 
 
 def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) -> BuiltModel:  # noqa: ARG001

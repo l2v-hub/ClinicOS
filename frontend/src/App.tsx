@@ -2,7 +2,8 @@ import { Component, lazy, Suspense, useState, useEffect, useRef, useCallback } f
 import type { ReactNode } from 'react';
 import './App.css';
 import { API_URL } from './config';
-import { clearCachedGet } from './lib/cachedFetch';
+import { CartellaWriteQueue, mergeCartellaPatch } from './lib/cartellaWriteQueue';
+import { clearCachedGet, invalidateCachedGet } from './lib/cachedFetch';
 import { fetchPatientById, fetchPatientPage } from './lib/patientPage';
 import { usePatientDirectorySearch } from './lib/usePatientDirectorySearch';
 import {
@@ -420,6 +421,7 @@ export default function App() {
     focusId: string | null;
   }>({ filtro: 'tutte', focusId: null });
   const [cartelle, setCartelle] = useState<CartellaPaziente[]>([]);
+  const cartellaWrites = useRef(new CartellaWriteQueue<CartellaPaziente>());
   // Le dashboard consumano un aggregato di dimensione costante, indipendente dal roster.
   const [clinicalOverview, setClinicalOverview] = useState<ClinicalOverview | null>(null);
   const [clinicalOverviewState, setClinicalOverviewState] = useState<'loading' | 'ready' | 'error'>(
@@ -2039,34 +2041,56 @@ export default function App() {
   async function updateCartella(
     pazienteId: string,
     updates: Partial<CartellaPaziente>,
+    options?: { optimistic?: boolean },
   ): Promise<boolean> {
+    const documentSaveEpoch = sessionEpochRef.current;
     const existing =
       cartelle.find((c) => c.pazienteId === pazienteId) ?? createDefaultCartella(pazienteId);
     const updated = { ...existing, ...updates };
 
     // Optimistic update
-    setCartelle((prev) => {
-      const idx = prev.findIndex((c) => c.pazienteId === pazienteId);
-      return idx >= 0 ? prev.map((c, i) => (i === idx ? updated : c)) : [...prev, updated];
-    });
+    const applyUpdate = () =>
+      setCartelle((prev) => {
+        const idx = prev.findIndex((c) => c.pazienteId === pazienteId);
+        return idx >= 0
+          ? prev.map((c, i) => (i === idx ? mergeCartellaPatch(c, existing, updates) : c))
+          : [...prev, updated];
+      });
+    if (options?.optimistic !== false) applyUpdate();
 
     // Persist to backend; return success so callers (e.g. inline edit) can react to failure.
-    const dataToSave = Object.fromEntries(
-      Object.entries(updated).filter(([key]) => key !== 'pazienteId' && key !== 'codiceFiscale'),
-    );
+    const headers = { 'Content-Type': 'application/json', ...operatorHeaders() };
     try {
-      const r = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', ...operatorHeaders() },
-        body: JSON.stringify({ data: dataToSave }),
-      });
-      if (r.ok) {
+      const ok = await cartellaWrites.current.enqueue(
+        `${documentSaveEpoch}:${pazienteId}`,
+        existing,
+        updates,
+        async (snapshot) => {
+          if (documentSaveEpoch !== sessionEpochRef.current) return false;
+          const data = Object.fromEntries(
+            Object.entries(snapshot).filter(
+              ([key]) => key !== 'pazienteId' && key !== 'codiceFiscale',
+            ),
+          );
+          const response = await fetch(`${API_URL}/patients/${pazienteId}/cartella`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify({ data }),
+          });
+          return response.ok && documentSaveEpoch === sessionEpochRef.current;
+        },
+        mergeCartellaPatch,
+      );
+      if (documentSaveEpoch !== sessionEpochRef.current) return false;
+      if (ok) {
+        if (options?.optimistic === false) applyUpdate();
         showToast('Dati salvati correttamente');
         return true;
       }
       showToast('Impossibile salvare i dati');
       return false;
     } catch {
+      if (documentSaveEpoch !== sessionEpochRef.current) return false;
       showToast('Impossibile salvare i dati');
       return false;
     }
@@ -2397,6 +2421,8 @@ export default function App() {
     } catch {
       showToast('Errore di rete');
       loadTherapySlots(info.date);
+    } finally {
+      invalidateCachedGet(`${API_URL}/therapy-slots`);
     }
   }
 
@@ -2460,6 +2486,8 @@ export default function App() {
     } catch {
       showToast('Errore di rete');
       loadTherapySlots(info.date);
+    } finally {
+      invalidateCachedGet(`${API_URL}/therapy-slots`);
     }
   }
 

@@ -42,6 +42,7 @@ export interface Paziente {
   codiceFiscale?: string | null;
   email: string | null;
   phone: string | null;
+  address?: string | null;
 }
 
 // ── Patient (local/new) ────────────────────────────────────────────────────────
@@ -631,6 +632,9 @@ export interface PresaInCarico {
 // ── Documenti Consegnati ───────────────────────────────────────────────────────
 
 export type TipoDocumento =
+  | 'consulenza'
+  | 'esame'
+  | 'rx'
   | 'documento_identita'
   | 'tessera_sanitaria'
   | 'consenso_privacy'
@@ -665,6 +669,8 @@ export interface DocumentoConsegnato {
   provenienza?: string;
   scadenza?: string;
   archiviato?: boolean;
+  /** Authenticated PatientDocument id; never a public file URL. */
+  patientDocumentId?: string;
 }
 
 // ── Diario Clinico ─────────────────────────────────────────────────────────────

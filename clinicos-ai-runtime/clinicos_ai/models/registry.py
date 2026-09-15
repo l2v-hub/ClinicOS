@@ -54,6 +54,17 @@ class ModelRegistry:
         return specs
 
     def has_credentials(self, provider: str) -> bool:
+        if provider == "mistral":
+            # An explicit Mistral key remains valid for existing custom endpoints. Azure
+            # fallback is permitted only after checking the configured destination host.
+            if (self._env.get("MISTRAL_API_KEY") or "").strip():
+                return True
+            from .mistral_config import resolve_mistral_connection
+            try:
+                resolve_mistral_connection(self._env)
+                return True
+            except RuntimeError_:
+                return False
         keys = PROVIDER_CREDENTIAL_ENV.get(provider)
         if keys is None:
             return False

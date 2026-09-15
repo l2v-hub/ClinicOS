@@ -244,6 +244,19 @@ class TestRunner(unittest.TestCase):
 
         self.assertEqual(self._run(fake, []), "")
 
+    def test_un_allegato_vuoto_non_diventa_una_trascrizione_parziale(self):
+        from clinicos_ai.models.providers.azure_docintel import _DocIntelRunner
+
+        atts = [Attachment("a.png", "image/png", b"a"), Attachment("b.png", "image/png", b"b")]
+        for empty_id in (b"a", b"b"):
+            def fake_analyze(_self, att, endpoint, key):
+                return " " if att.data == empty_id else "TESTO SINTETICO " * 30
+
+            with mock.patch.object(_DocIntelRunner, "_analyze_one", fake_analyze), self.assertRaises(RuntimeError_) as caught:
+                self._run(None, atts)
+            self.assertEqual(caught.exception.kind, ErrorKind.SCHEMA_VALIDATION)
+            self.assertIn("AI_EMPTY", caught.exception.message)
+
 
 class _FakeRunner:
     def __init__(self, text):

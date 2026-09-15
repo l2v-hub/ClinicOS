@@ -17,6 +17,7 @@ import {
   normalizeCF,
   type FiscalCodeOrigin,
 } from '../../../lib/codiceFiscale';
+import { PATIENT_PHONE_MAX_LENGTH, validatePatientPhone } from '../../../lib/patientPhone';
 
 interface AnagraficaData {
   firstName?: string;
@@ -219,6 +220,8 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
   if (submitAttempted && !value.firstName?.trim()) errors.firstName = 'Nome obbligatorio';
   if (submitAttempted && !value.lastName?.trim()) errors.lastName = 'Cognome obbligatorio';
   if (submitAttempted && !value.dateOfBirth) errors.dateOfBirth = 'Data di nascita obbligatoria';
+  const phoneValidation = validatePatientPhone(value.phone);
+  if (submitAttempted && !phoneValidation.ok) errors.phone = phoneValidation.error;
   // #294: CF obbligatorio — digitato valido oppure calcolato dai dati.
   if (submitAttempted && !isValidCF(value.codiceFiscale ?? ''))
     errors.codiceFiscale = value.codiceFiscale?.trim()
@@ -345,17 +348,17 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
 
       <NpmCard
         title="Recapiti"
-        desc="Contatti e indirizzo di residenza"
-        status={contactsCompleted > 0 ? `${contactsCompleted}/6 compilati` : 'Facoltativo'}
-        statusTone={contactsCompleted > 0 ? 'progress' : 'optional'}
-        collapsible
-        defaultOpen={contactsCompleted > 0}
+        desc="Telefono obbligatorio; email e indirizzo facoltativi"
+        status={phoneValidation.ok ? `${contactsCompleted}/6 compilati` : 'Telefono da completare'}
+        statusTone={phoneValidation.ok ? 'complete' : submitAttempted ? 'error' : 'progress'}
       >
         <div className="npm-grid npm-grid--contacts">
-          <NpmField label="Telefono">
+          <NpmField label="Telefono" required error={errors.phone}>
             <input
               type="tel"
-              className="npm-input"
+              required
+              maxLength={PATIENT_PHONE_MAX_LENGTH}
+              className={`npm-input${errors.phone ? ' npm-input--error' : ''}`}
               value={value.phone ?? ''}
               onChange={f('phone')}
               placeholder="+39 333 000 0000"

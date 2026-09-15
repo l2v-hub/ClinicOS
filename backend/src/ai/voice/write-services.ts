@@ -4,6 +4,7 @@
 
 import { randomUUID } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
+import { validatePatientPhone } from '../../lib/patient-phone.js';
 import { parseDiaryCreateBody } from '../../patients/diary-write-validation.js';
 import { asCartella, type VitalItem } from '../gateway/filters.js';
 import {
@@ -15,7 +16,7 @@ import {
 } from '../sections/patient-narrative.js';
 import { createAppointment, updateAppointment } from '../../services/appointment-service.js';
 import { createConsegna as createConsegnaService } from '../../services/consegna-service.js';
-import type { VoiceWriter, WriteMeta } from './execute.js';
+import { VoiceError, type VoiceWriter, type WriteMeta } from './execute.js';
 
 const DEMOGRAPHIC_FIELDS = new Set([
   'phone',
@@ -60,6 +61,11 @@ export const prismaVoiceWriter: VoiceWriter = {
   async updateDemographics(patientId, field, value, _meta) {
     if (!DEMOGRAPHIC_FIELDS.has(field))
       throw new Error(`Campo anagrafico non consentito: ${field}`);
+    if (field === 'phone') {
+      const validated = validatePatientPhone(value);
+      if (!validated.ok) throw new VoiceError('not_executable', validated.error);
+      value = validated.phone;
+    }
     await prisma.patient.update({ where: { id: patientId }, data: { [field]: value } });
     return patientId;
   },

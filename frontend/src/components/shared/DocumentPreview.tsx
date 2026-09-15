@@ -21,6 +21,7 @@ interface Props {
   sourceTarget?: { fileName?: string; page?: number } | null;
   /** Optional lazy loader used by authenticated remote document collections. */
   onRequestDocument?: (documentId: string) => void;
+  showOcr?: boolean;
 }
 
 type Mode = 'document' | 'ocr';
@@ -30,6 +31,7 @@ export function DocumentPreview({
   ocrText = '',
   sourceTarget,
   onRequestDocument,
+  showOcr = true,
 }: Props) {
   const [idx, setIdx] = useState(0);
   const [mode, setMode] = useState<Mode>('document');
@@ -145,12 +147,14 @@ export function DocumentPreview({
           >
             Documento originale
           </button>
-          <button
-            className={`srev-chip${mode === 'ocr' ? ' is-on' : ''}`}
-            onClick={() => setMode('ocr')}
-          >
-            Testo riconosciuto
-          </button>
+          {showOcr && (
+            <button
+              className={`srev-chip${mode === 'ocr' ? ' is-on' : ''}`}
+              onClick={() => setMode('ocr')}
+            >
+              Testo riconosciuto
+            </button>
+          )}
         </div>
         {mode === 'document' && (
           <div className="doc-preview__zoom">

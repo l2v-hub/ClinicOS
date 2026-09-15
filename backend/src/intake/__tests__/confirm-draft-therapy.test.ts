@@ -26,6 +26,7 @@ after(async () => cleanupOperator());
 // ---------------------------------------------------------------------------
 
 const PATIENT = {
+  phone: '+39 333 000 0000',
   firstName: 'Anna',
   lastName: 'Bianchi',
   dateOfBirth: '1960-01-01',

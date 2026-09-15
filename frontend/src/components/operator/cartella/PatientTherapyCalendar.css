@@ -1,0 +1,161 @@
+.patient-therapy-calendar {
+  padding: 16px;
+  min-width: 0;
+}
+.patient-therapy-calendar__toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.patient-therapy-calendar__toolbar .agt-today-btn {
+  min-height: 44px;
+}
+.patient-therapy-calendar__toolbar .agt-nav-btn {
+  font-size: 26px;
+}
+.patient-therapy-calendar__date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.patient-therapy-calendar__date .form-input {
+  width: 160px;
+  min-height: 44px;
+}
+.patient-therapy-calendar__heading {
+  margin: 18px 0 10px;
+}
+.patient-therapy-calendar__heading h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 650;
+  text-transform: capitalize;
+}
+.patient-therapy-calendar__heading p {
+  margin: 4px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.patient-therapy-calendar__message,
+.patient-therapy-calendar__count {
+  margin: 14px 0;
+  font-size: 13px;
+}
+.patient-therapy-calendar__timeline {
+  position: relative;
+  max-height: 560px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overscroll-behavior-y: contain;
+}
+.patient-therapy-calendar__timeline:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+.patient-therapy-calendar__timeline .agt-slot {
+  min-height: 48px;
+}
+.patient-therapy-calendar__timeline .agt-slot__time {
+  width: 60px;
+  padding: 14px 8px;
+}
+.patient-therapy-calendar__events {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 4px 8px 4px 0;
+  list-style: none;
+}
+.patient-therapy-calendar .patient-therapy-calendar__event {
+  grid-template-columns: 32px minmax(0, 1fr);
+  cursor: default;
+}
+.patient-therapy-calendar .patient-therapy-calendar__event:hover {
+  background: #f0eaff;
+  border-color: #c9baf2;
+  border-left-color: var(--purple);
+  box-shadow: none;
+  transform: none;
+}
+.patient-therapy-calendar__medication {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.patient-therapy-calendar__event-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+.patient-therapy-calendar__event-title time {
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: #4e2ba7;
+}
+.patient-therapy-calendar__medication p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.patient-therapy-calendar__unscheduled {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.patient-therapy-calendar__unscheduled h4 {
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+.patient-therapy-calendar__unscheduled h4 span {
+  font-weight: 400;
+}
+.patient-therapy-calendar__unscheduled ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.patient-therapy-calendar__unscheduled li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 8px 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.patient-therapy-calendar__unscheduled li + li {
+  border-top: 1px solid var(--border);
+}
+.patient-therapy-calendar__unscheduled p {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--text-muted);
+}
+@media (max-width: 600px) {
+  .patient-therapy-calendar {
+    padding: 12px 8px;
+  }
+  .patient-therapy-calendar__toolbar {
+    gap: 8px;
+  }
+  .patient-therapy-calendar__timeline {
+    max-height: 480px;
+  }
+  .patient-therapy-calendar__timeline .agt-slot__time {
+    width: 48px;
+    padding-inline: 6px;
+  }
+  .patient-therapy-calendar .patient-therapy-calendar__event {
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 7px;
+    padding: 8px;
+    border-left-width: 4px;
+  }
+  .patient-therapy-calendar__event .agt-therapy-slot__icon {
+    width: 24px;
+    height: 28px;
+  }
+}
