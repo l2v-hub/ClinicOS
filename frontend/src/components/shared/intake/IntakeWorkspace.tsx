@@ -7,9 +7,7 @@ import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
 import { StepClinica } from './StepClinica';
 import { StepVerifica } from './StepVerifica';
-import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
-import { FRACTION_PRESETS } from '../../operator/cartella/therapyDose';
-import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
+import { buildIntakeTherapyReview } from './intakeTherapies';
 import { buildConfirmCartella } from './confirmCartella';
 import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 
@@ -18,6 +16,12 @@ import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 // click "Avanti" in piu' per attraversare uno step vuoto. Va reintrodotto qui quando F5 sara'
 // pronto, non prima.
 const STEPS = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Verifica'] as const;
+
+function editableDraftPatch(data: Record<string, unknown>) {
+  return Object.fromEntries(
+    Object.entries(data).filter(([key]) => !['_narrative', '_sections'].includes(key)),
+  );
+}
 
 // #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
 // dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
@@ -88,50 +92,6 @@ interface DraftData {
   [key: string]: unknown;
 }
 
-// ── Therapy mapper ─────────────────────────────────────────────────────────────
-// Mirrors TerapiaFarmacologicaTab.formToPayload minus patientId.
-// Produces a TherapyCreateInput object suitable for the confirmDraft payload.
-function therapyFormToInput(f: TherapyFormValue, operatoreNome?: string): Record<string, unknown> {
-  const allowed = FRACTION_PRESETS.filter((p) => f.allowedFractions.includes(p.key)).map(
-    (p) => p.key,
-  );
-  const schedules =
-    f.tipo === 'periodica'
-      ? f.schedules
-          .filter((s) => /^\d{1,2}:\d{2}$/.test(s.time))
-          .map((s) => ({
-            time: s.time,
-            quantityNumerator: s.quantityNumerator,
-            quantityDenominator: s.quantityDenominator,
-            administrationUnit: s.administrationUnit,
-          }))
-      : [];
-  return {
-    farmacoNome: f.farmacoNome,
-    dataInizio: f.dataInizio,
-    ...(f.tipo === 'periodica' && f.dataFine ? { dataFine: f.dataFine } : {}),
-    viaSomministrazione: f.viaSomministrazione,
-    tipo: f.tipo,
-    stato: f.stato,
-    ...(f.commercialStrengthValue.trim()
-      ? { commercialStrengthValue: Number(f.commercialStrengthValue) }
-      : {}),
-    ...(f.commercialStrengthUnit ? { commercialStrengthUnit: f.commercialStrengthUnit } : {}),
-    ...(f.pharmaceuticalForm ? { pharmaceuticalForm: f.pharmaceuticalForm } : {}),
-    allowedFractions: allowed.length ? allowed.join(',') : '1',
-    schedules,
-    ...(f.prescrittore ? { prescrittore: f.prescrittore } : {}),
-    ...(operatoreNome ? { operatoreInseritore: operatoreNome } : {}),
-    ...(f.note ? { note: f.note } : {}),
-    ...(f.tipo === 'una_tantum' && f.dataSomministrazione
-      ? { dataSomministrazione: f.dataSomministrazione }
-      : {}),
-    ...(f.tipo === 'una_tantum' && f.orarioSomministrazione
-      ? { orarioSomministrazione: f.orarioSomministrazione }
-      : {}),
-  };
-}
-
 interface IntakeWorkspaceProps {
   open: boolean;
   onClose: () => void;
@@ -182,7 +142,14 @@ export function IntakeWorkspace({
 
   // Debounce timer ref for patchDraft calls
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const saveQueueRef = useRef<Promise<unknown>>(Promise.resolve());
   const bodyRef = useRef<HTMLDivElement | null>(null);
+  useEffect(
+    () => () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    },
+    [],
+  );
 
   // Create draft on first open (or load an existing import draft).
   // Guard conditions ensure we fetch exactly once per (open, draft target):
@@ -191,6 +158,7 @@ export function IntakeWorkspace({
   //    (so reopening for a *different* import draft re-loads the correct one).
   useEffect(() => {
     if (!open) {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
       setStep(importDraftId ? 3 : 1);
       setDraftId(null);
       setError(null);
@@ -259,6 +227,16 @@ export function IntakeWorkspace({
   const isLast = step === STEPS.length;
 
   /** Update a top-level section key and debounce-patch the draft */
+  function persistDraft(next: DraftData) {
+    const id = draftId!;
+    const patch = editableDraftPatch(next);
+    const saving = saveQueueRef.current
+      .catch(() => undefined)
+      .then(() => patchDraft(id, patch, op));
+    saveQueueRef.current = saving;
+    return saving;
+  }
+
   function updateSection(key: keyof DraftData, value: unknown) {
     const next = { ...data, [key]: value };
     setData(next);
@@ -267,7 +245,7 @@ export function IntakeWorkspace({
     if (debounceRef.current) clearTimeout(debounceRef.current);
     setSaveState('saving');
     debounceRef.current = setTimeout(() => {
-      patchDraft(draftId, { [key]: value }, op)
+      persistDraft(next)
         .then(() => setSaveState('saved'))
         .catch((err: unknown) => {
           // #234: no longer swallowed — surface an error state (no PHI in the log).
@@ -320,6 +298,12 @@ export function IntakeWorkspace({
       );
       return;
     }
+    const therapyReview = buildIntakeTherapyReview(data, operatoreNome);
+    const invalid = therapyReview.filter((t) => t.issues.length > 0);
+    if (invalid.length) {
+      setSubmitError(invalid.map((t) => `Terapia ${t.index}: ${t.issues.join('; ')}.`).join(' '));
+      return;
+    }
     setSubmitting(true);
     setSubmitError(null);
     setDuplicateWarn(false);
@@ -344,18 +328,7 @@ export function IntakeWorkspace({
     // #265: extracted pure mapper (unit-tested) — carries allergieStatus into the cartella.
     const cartella = buildConfirmCartella(data);
 
-    // Structured therapies to persist = manual TherapyFormValue rows + #156 discharge-detected rows
-    // (edited in the "Terapie rilevate" table, data.terapiaImport). Both map to TherapyCreateInput.
-    const manualTherapies =
-      Array.isArray(data.terapia) && (data.terapia as TherapyFormValue[]).length > 0
-        ? (data.terapia as TherapyFormValue[]).map((f) => therapyFormToInput(f, operatoreNome))
-        : [];
-    const importedTherapies = Array.isArray(data.terapiaImport)
-      ? (data.terapiaImport as DischargeTherapyRow[])
-          .filter((r) => (r.farmacoNome || '').trim())
-          .map((r) => dischargeRowToTherapyInput(r, operatoreNome))
-      : [];
-    const allTherapies = [...manualTherapies, ...importedTherapies];
+    const allTherapies = therapyReview.map((t) => t.input);
 
     const payload = {
       patient,
@@ -366,6 +339,9 @@ export function IntakeWorkspace({
     };
 
     try {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      await persistDraft(data);
+      setSaveState('saved');
       const res = await confirmDraft(draftId, payload, op);
       if (res.status === 'created' || res.status === 'idempotent') {
         const moduleTabId = selectedModuleId ? MODULE_TO_TAB_ID[selectedModuleId] : undefined;
@@ -592,6 +568,10 @@ export function IntakeWorkspace({
                   error={allergyConflictWarn ? null : submitError}
                   onConfirm={() => void handleConfirm(false)}
                   onUpdateSection={updateSection}
+                  onReviewTherapies={() => {
+                    setSubmitError(null);
+                    setStep(3);
+                  }}
                 />
               </div>
             )}

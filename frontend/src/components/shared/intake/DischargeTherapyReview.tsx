@@ -6,6 +6,7 @@
 // confirm path (dischargeRowToTherapyInput) reads them.
 
 import { useEffect, useState } from 'react';
+import { buildIntakeTherapyReview, therapyInputIssues } from './intakeTherapies';
 import {
   TherapyFormFields,
   type TherapyFormValue,
@@ -48,7 +49,8 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
   }
 
   if (!Array.isArray(rows) || rows.length === 0) return null;
-  const daVerificare = rows.filter((r) => r.stato === 'da_verificare').length;
+  const review = buildIntakeTherapyReview({ terapiaImport: rows });
+  const daVerificare = review.filter((r) => r.issues.length > 0).length;
 
   return (
     <section
@@ -78,8 +80,10 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
           data-farmaco={r.farmacoNome}
         >
           <div className="discharge-therapy-review__item-head">
-            <strong>{forms[i]?.farmacoNome || r.farmacoNome || 'Farmaco'}</strong>
-            {r.stato === 'da_verificare' ? (
+            <strong>
+              {i + 1}. {forms[i]?.farmacoNome || r.farmacoNome || 'Farmaco da indicare'}
+            </strong>
+            {review[i].issues.length > 0 ? (
               <span className="discharge-therapy-review__badge is-verify">da verificare</span>
             ) : (
               <span className="discharge-therapy-review__badge is-ok">ok</span>
@@ -95,6 +99,9 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
               ✕
             </button>
           </div>
+          {review[i].issues.length > 0 && (
+            <p className="discharge-therapy-review__alert">{review[i].issues.join('; ')}.</p>
+          )}
           {r.originalText && (
             <blockquote
               className="discharge-therapy-review__original"
@@ -111,6 +118,24 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
                 onChange={(v) => updateForm(i, v)}
                 operatoreNome={operatoreNome}
               />
+              {review[i].requiresSourceReview && (
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  disabled={therapyInputIssues(review[i].input).length > 0}
+                  onClick={() =>
+                    onChange(
+                      rows.map((row, idx) =>
+                        idx === i
+                          ? therapyFormToDischargeRow(forms[i], { ...row, stato: 'ok' })
+                          : row,
+                      ),
+                    )
+                  }
+                >
+                  Ho verificato questa terapia
+                </button>
+              )}
             </div>
           )}
         </article>

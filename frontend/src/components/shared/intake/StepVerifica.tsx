@@ -5,6 +5,7 @@
 import { IcoCheck } from '../../../icons';
 import { isValidCF } from '../../../lib/codiceFiscale';
 import { validatePatientPhone } from '../../../lib/patientPhone';
+import { buildIntakeTherapyReview } from './intakeTherapies';
 
 interface AnagraficaData {
   firstName?: string;
@@ -21,6 +22,7 @@ interface StepVerificaProps {
   onConfirm: () => void;
   /** #235: toggle acceptance flags in draft.data._accepted (autosaved by the parent). */
   onUpdateSection: (key: string, value: unknown) => void;
+  onReviewTherapies?: () => void;
 }
 
 function countFilled(value: unknown): boolean {
@@ -31,7 +33,14 @@ function countFilled(value: unknown): boolean {
   return true;
 }
 
-export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: StepVerificaProps) {
+export function StepVerifica({
+  data,
+  busy,
+  error,
+  onConfirm,
+  onUpdateSection,
+  onReviewTherapies,
+}: StepVerificaProps) {
   const a = (data.anagrafica ?? {}) as AnagraficaData;
 
   // #281: recap reale di cosa verrà creato (non solo l'elenco dei nomi-sezione)
@@ -39,12 +48,8 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
     ? (data.allergie as Array<{ allergene?: string; gravita?: string }>)
     : [];
   const allergieStatus = data.allergieStatus as string | undefined;
-  const terapieImport = Array.isArray(data.terapiaImport)
-    ? (data.terapiaImport as Array<{ farmacoNome?: string; orari?: string[]; stato?: string }>)
-    : [];
-  const terapieManuali = Array.isArray(data.terapia)
-    ? (data.terapia as Array<{ farmacoNome?: string; schedules?: Array<{ orario?: string }> }>)
-    : [];
+  const therapies = buildIntakeTherapyReview(data);
+  const invalidTherapies = therapies.filter((t) => t.issues.length > 0);
   const anamnesi = (data.anamnesi ?? {}) as { patologicaProssima?: string };
   const diagnosi = Array.isArray(data.diagnosi)
     ? (data.diagnosi as Array<{ descrizione?: string }>)
@@ -77,6 +82,10 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
     },
     { label: 'Accetta anagrafica', ok: demoAccepted },
     { label: 'Accetta terapia', ok: therapyAccepted },
+    ...invalidTherapies.map((t) => ({
+      label: `Terapia ${t.index}: ${t.issues.join('; ')}`,
+      ok: false,
+    })),
   ];
   const canCreate = checklist.every((c) => c.ok);
 
@@ -155,28 +164,19 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
 
       <section className="step-verifica__section">
         <h4 className="step-verifica__section-title">
-          Terapie che verranno create ({terapieImport.length + terapieManuali.length})
+          Terapie che verranno create ({therapies.length})
         </h4>
-        {terapieImport.length + terapieManuali.length === 0 ? (
+        {therapies.length === 0 ? (
           <p className="cr-empty">Nessuna terapia da inserire.</p>
         ) : (
           <ul className="step-verifica__filled-list">
-            {terapieImport.map((t, i) => (
-              <li key={`imp-${i}`}>
-                {t.farmacoNome || '—'}
-                {t.orari?.length ? ` — ore ${t.orari.join(', ')}` : ''}
-                {t.stato === 'da_verificare' ? ' ⚠ da verificare' : ''}
-              </li>
-            ))}
-            {terapieManuali.map((t, i) => (
-              <li key={`man-${i}`}>
-                {t.farmacoNome || '—'}
-                {t.schedules?.length
-                  ? ` — ore ${t.schedules
-                      .map((s) => s.orario)
-                      .filter(Boolean)
-                      .join(', ')}`
-                  : ''}
+            {therapies.map((t) => (
+              <li key={t.index} data-testid={`intake-therapy-${t.index}`}>
+                {t.index}. {t.name}
+                {t.times.length ? ` — ore ${t.times.join(', ')}` : ''}
+                {t.issues.length > 0 && (
+                  <p className="import-modal__error">{t.issues.join('; ')}.</p>
+                )}
               </li>
             ))}
           </ul>
@@ -194,11 +194,21 @@ export function StepVerifica({ data, busy, error, onConfirm, onUpdateSection }: 
             }
           />
           <span>
-            {terapieImport.length + terapieManuali.length > 0
+            {therapies.length > 0
               ? 'Confermo di aver revisionato la terapia'
               : 'Confermo: nessuna terapia da inserire'}
           </span>
         </label>
+        {therapies.length > 0 && onReviewTherapies && (
+          <button
+            type="button"
+            className="btn-secondary"
+            disabled={busy}
+            onClick={onReviewTherapies}
+          >
+            {invalidTherapies.length ? 'Correggi terapie' : 'Rivedi terapie'}
+          </button>
+        )}
       </section>
 
       {(anamnesi.patologicaProssima?.trim() || diagnosi.length > 0) && (

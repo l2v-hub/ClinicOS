@@ -13,7 +13,7 @@ import {
   type ScheduleInput,
 } from '../lib/therapy-dose.js';
 import type { PatientTherapy, TherapySchedule } from '@prisma/client';
-import { assertTherapyScalarInput } from './input-validation.js';
+import { assertTherapyScalarInput, TherapyInputError } from './input-validation.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -106,21 +106,27 @@ function deriveDosaggio(
  * required field is absent so the caller can map it to an HTTP 400 or
  * roll back the surrounding transaction.
  */
-export async function createTherapyInTx(
-  tx: PrismaTx,
-  patientId: string,
-  input: TherapyCreateInput,
-): Promise<PatientTherapyWithSchedules> {
+export function validateTherapyCreateInput(input: TherapyCreateInput) {
   assertTherapyScalarInput(input as unknown as Record<string, unknown>);
   const farmacoNome = typeof input.farmacoNome === 'string' ? input.farmacoNome.trim() : '';
   const dataInizio = typeof input.dataInizio === 'string' ? input.dataInizio : '';
 
   if (!farmacoNome || !dataInizio) {
-    throw new Error('Campi obbligatori: farmacoNome, dataInizio');
+    throw new TherapyInputError('Campi obbligatori: farmacoNome, dataInizio');
   }
 
   const dates = normalizeTherapyDateRange(dataInizio, input.dataFine);
   if (input.schedules !== undefined) assertValidSchedulesInput(input.schedules);
+  return dates;
+}
+
+export async function createTherapyInTx(
+  tx: PrismaTx,
+  patientId: string,
+  input: TherapyCreateInput,
+): Promise<PatientTherapyWithSchedules> {
+  const dates = validateTherapyCreateInput(input);
+  const farmacoNome = input.farmacoNome.trim();
 
   const schedules: ScheduleInput[] = normalizeSchedules(input.schedules);
 

@@ -19,6 +19,10 @@ import {
 } from '../../therapies/clinical-actor.js';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../../lib/codice-fiscale.js';
 import { validatePatientPhone } from '../../lib/patient-phone.js';
+import {
+  validateConfirmTherapies,
+  isTherapyValidationError,
+} from '../../intake/confirm-therapies.js';
 
 function requirePatientPhone(raw: unknown): string {
   const result = validatePatientPhone(raw);
@@ -246,6 +250,7 @@ export async function confirmDraft(
     }
   }
 
+  validateConfirmTherapies(payload.therapies);
   const p = payload.patient;
   if (!p?.firstName?.trim() || !p?.lastName?.trim() || !p?.dateOfBirth?.trim()) {
     throw new AiExtractionError('config', 'Nome, cognome e data di nascita sono obbligatori');
@@ -374,7 +379,12 @@ export async function confirmDraft(
         draft.importJobId,
         'confirm_failed',
         undefined,
-        err instanceof Error ? err.message.slice(0, 120) : 'error',
+        isTherapyValidationError(err) ? 'therapy_validation_failed' : 'transaction_failed',
+      );
+    if (isTherapyValidationError(err))
+      throw new AiExtractionError(
+        'config',
+        `Dati terapia non validi: ${err.message}. Correggi le terapie nello step Clinica.`,
       );
     throw err instanceof AiExtractionError
       ? err

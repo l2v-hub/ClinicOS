@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { CampoFarmaco } from './CampoFarmaco';
 import {
   FRACTION_PRESETS,
@@ -14,7 +14,22 @@ import {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const VIA_OPTIONS = ['orale', 'IM', 'SC', 'IV', 'sublinguale', 'topico', 'al bisogno'];
+export const VIA_OPTIONS = [
+  'orale',
+  'IM',
+  'SC',
+  'IV',
+  'sublinguale',
+  'topico',
+  'al bisogno',
+  'transdermica',
+  'inalatoria',
+  'rettale',
+  'oftalmica',
+  'otologica',
+  'nasale',
+  'vaginale',
+];
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -91,6 +106,7 @@ interface TherapyFormFieldsProps {
 }
 
 export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
+  const typeGroupId = useId();
   const [customQty, setCustomQty] = useState<Record<number, string>>({});
 
   const update = (patch: Partial<TherapyFormValue>) => onChange({ ...value, ...patch });
@@ -161,6 +177,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
             });
           }}
         >
+          <option value="">Seleziona forma</option>
           {PHARMA_FORMS.map((v) => (
             <option key={v} value={v}>
               {v}
@@ -187,6 +204,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
             value={value.commercialStrengthUnit}
             onChange={(e) => update({ commercialStrengthUnit: e.target.value })}
           >
+            <option value="">Unità</option>
             {STRENGTH_UNITS.map((v) => (
               <option key={v} value={v}>
                 {v}
@@ -232,6 +250,9 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           value={value.viaSomministrazione}
           onChange={(e) => update({ viaSomministrazione: e.target.value })}
         >
+          {!VIA_OPTIONS.includes(value.viaSomministrazione) && (
+            <option value={value.viaSomministrazione}>Seleziona via</option>
+          )}
           {VIA_OPTIONS.map((v) => (
             <option key={v} value={v}>
               {v}
@@ -257,7 +278,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           <label>
             <input
               type="radio"
-              name="tf-tipo"
+              name={typeGroupId}
               value="periodica"
               checked={value.tipo === 'periodica'}
               onChange={() => update({ tipo: 'periodica' })}
@@ -267,7 +288,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           <label>
             <input
               type="radio"
-              name="tf-tipo"
+              name={typeGroupId}
               value="una_tantum"
               checked={value.tipo === 'una_tantum'}
               onChange={() => update({ tipo: 'una_tantum' })}
@@ -277,7 +298,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           <label>
             <input
               type="radio"
-              name="tf-tipo"
+              name={typeGroupId}
               value="al_bisogno"
               checked={value.tipo === 'al_bisogno'}
               onChange={() => update({ tipo: 'al_bisogno' })}
@@ -356,6 +377,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                       value={s.administrationUnit}
                       onChange={(e) => updateSchedule(i, { administrationUnit: e.target.value })}
                     >
+                      <option value="">Seleziona unità</option>
                       {ADMIN_UNITS.map((u) => (
                         <option key={u} value={u}>
                           {u}
@@ -470,8 +492,10 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                   onClick={() =>
                     update({
                       giorniSettimana: on
-                        ? value.giorniSettimana.filter((x) => x !== w.n)
-                        : [...value.giorniSettimana, w.n].sort((a, b) => a - b),
+                        ? value.giorniSettimana.filter((x) => x !== w.n && x >= 1 && x <= 7)
+                        : [...value.giorniSettimana.filter((x) => x >= 1 && x <= 7), w.n].sort(
+                            (a, b) => a - b,
+                          ),
                     })
                   }
                 >

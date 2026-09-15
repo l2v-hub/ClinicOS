@@ -1,7 +1,4 @@
-// #156: shared types + mapping for therapies detected in a discharge letter (draft.data.terapiaImport).
-// The backend parser (parse-discharge-therapy.ts) produces these rows; the intake review table edits
-// them; on confirm they are mapped to the same TherapyCreateInput shape the manual editor sends.
-
+// Raw OCR fields remain alongside the complete, operator-reviewed form in the draft.
 import { emptyTherapyForm, type TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
 import {
   ADMIN_UNITS,
@@ -9,6 +6,7 @@ import {
   formatFraction,
   parseQuantity,
 } from '../../operator/cartella/therapyDose';
+import { therapyFormToInput } from './therapyFormPayload';
 
 export interface DischargeTherapyRow {
   farmacoNome: string;
@@ -23,74 +21,9 @@ export interface DischargeTherapyRow {
   note: string;
   originalText: string;
   stato: 'ok' | 'da_verificare';
+  reviewedTherapy?: TherapyFormValue;
 }
 
-const VIA_MAP: Record<string, string> = {
-  OS: 'orale',
-  IM: 'intramuscolo',
-  EV: 'endovena',
-  SC: 'sottocute',
-  SL: 'sublinguale',
-  TD: 'transdermica',
-  INAL: 'inalatoria',
-  TOP: 'topica',
-  RETT: 'rettale',
-  OFT: 'oftalmica',
-  OTO: 'otologica',
-  NAS: 'nasale',
-  VAG: 'vaginale',
-};
-
-function mapVia(v: string): string {
-  return VIA_MAP[(v || '').toUpperCase()] ?? 'orale';
-}
-
-function todayIso(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
-/** Map one detected discharge-therapy row → TherapyCreateInput-compatible object for confirmDraft.
- *  orari → schedules; forma → pharmaceuticalForm; classe/giorni/quantità/originalText/verify-flag
- *  are preserved in `note` (the schema has no weekday field). dataInizio falls back to today. */
-export function dischargeRowToTherapyInput(
-  r: DischargeTherapyRow,
-  operatoreNome?: string,
-): Record<string, unknown> {
-  const orari = Array.isArray(r.orari) ? r.orari.filter((t) => /^\d{1,2}:\d{2}$/.test(t)) : [];
-  const giorni = Array.isArray(r.giorni) ? r.giorni : [];
-  const note = [
-    r.note?.trim() || '',
-    r.classe ? `Classe ${r.classe}` : '',
-    giorni.length ? `Giorni: ${giorni.join(' ')}` : '',
-    r.quantita ? `Quantità: ${r.quantita}` : '',
-    r.stato === 'da_verificare' ? '[DA VERIFICARE]' : '',
-    r.originalText ? `Origine: ${r.originalText}` : '',
-  ]
-    .filter(Boolean)
-    .join(' — ');
-  return {
-    farmacoNome: (r.farmacoNome || '').trim(),
-    dataInizio: r.dataInizio && r.dataInizio.trim() ? r.dataInizio : todayIso(),
-    viaSomministrazione: mapVia(r.viaSomministrazione),
-    tipo: 'periodica',
-    stato: 'attiva',
-    ...(r.forma ? { pharmaceuticalForm: r.forma } : {}),
-    allowedFractions: '1',
-    schedules: orari.map((time) => ({
-      time,
-      quantityNumerator: 1,
-      quantityDenominator: 1,
-      administrationUnit: '',
-    })),
-    ...(operatoreNome ? { operatoreInseritore: operatoreNome } : {}),
-    ...(note ? { note } : {}),
-  };
-}
-
-// #280 — Bridge the RAW discharge row ↔ the REAL manual therapy form (TherapyFormValue), so the
-// import review reuses the exact same editor instead of a divergent raw-input table.
-
-// Route code (parser output, e.g. "OS"/"IM"/"EV") → the value shown in the manual form's Via select.
 const CODE_TO_FORM_VIA: Record<string, string> = {
   OS: 'orale',
   IM: 'IM',
@@ -99,28 +32,22 @@ const CODE_TO_FORM_VIA: Record<string, string> = {
   IV: 'IV',
   SL: 'sublinguale',
   TOP: 'topico',
+  TD: 'transdermica',
+  INAL: 'inalatoria',
+  RETT: 'rettale',
+  OFT: 'oftalmica',
+  OTO: 'otologica',
+  NAS: 'nasale',
+  VAG: 'vaginale',
 };
-// Inverse: form Via value → route code that `dischargeRowToTherapyInput`'s `mapVia` understands.
-const FORM_VIA_TO_CODE: Record<string, string> = {
-  orale: 'OS',
-  IM: 'IM',
-  SC: 'SC',
-  IV: 'EV',
-  sublinguale: 'SL',
-  topico: 'TOP',
-};
-
-// ISO weekday (1=Lun … 7=Dom) ↔ the Italian abbreviations the parser emits in `giorni`.
-const DAY_ABBR: ReadonlyArray<string> = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
-function dayToIso(d: string): number | null {
-  const idx = DAY_ABBR.findIndex((x) => x.toLowerCase() === (d || '').trim().toLowerCase());
-  return idx >= 0 ? idx + 1 : null;
+const DAY_ABBR = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+function dayToIso(d: string): number {
+  // Keep an invalid marker instead of turning an unknown restriction into every day.
+  return DAY_ABBR.findIndex((x) => x.toLowerCase() === (d || '').trim().toLowerCase()) + 1;
 }
 
-// Map the free-text pharmaceutical form (e.g. "CPR RIV", "SCIR") to a manual-form PHARMA_FORMS value.
 function mapForma(raw: string): string | null {
-  const f = (raw || '').toLowerCase();
-  if (!f.trim()) return null;
+  const f = (raw || '').trim().toLowerCase();
   if (/\bcpr\b|compress/.test(f)) return 'compressa';
   if (/\bcps\b|\bcp\b|capsul/.test(f)) return 'capsula';
   if (/scir|siropp|sciropp/.test(f)) return 'sciroppo';
@@ -133,7 +60,41 @@ function mapForma(raw: string): string | null {
   return PHARMA_FORMS.includes(f) ? f : null;
 }
 
-// Parse a raw dosage string ("500 MGR", "10MG", "1GR") → { value, unit } in manual-form vocab.
+const UNIT_ALIASES: Record<string, string> = {
+  cpr: 'compressa',
+  compressa: 'compressa',
+  compresse: 'compressa',
+  cps: 'capsula',
+  capsula: 'capsula',
+  capsule: 'capsula',
+  bust: 'bustina',
+  bustina: 'bustina',
+  bustine: 'bustina',
+  fl: 'fiala',
+  fiala: 'fiala',
+  fiale: 'fiala',
+  gtt: 'gocce',
+  goccia: 'gocce',
+  gocce: 'gocce',
+  ml: 'ml',
+  puff: 'puff',
+  unità: 'unità',
+  unita: 'unità',
+  ui: 'unità',
+};
+function parseAdministration(raw: string, forma: string | null) {
+  const match = (raw || '').trim().match(/^(\d+(?:[.,]\d+)?(?:\s*\/\s*\d+)?)\s*([^\d]*)$/u);
+  const qty = match ? parseQuantity(match[1].replace(/\s/g, '')) : null;
+  const explicitUnit = match?.[2].trim().toLowerCase().replace(/\.$/, '') ?? '';
+  // Syrup/bottle/cream is a pharmaceutical form, not an administration quantity.
+  const unit = explicitUnit
+    ? (UNIT_ALIASES[explicitUnit] ?? '')
+    : forma && ADMIN_UNITS.includes(forma)
+      ? forma
+      : '';
+  return { num: qty?.num ?? 0, den: qty?.den ?? 1, unit };
+}
+
 const DOSE_UNIT_MAP: Record<string, string> = {
   MGR: 'mg',
   MG: 'mg',
@@ -143,104 +104,83 @@ const DOSE_UNIT_MAP: Record<string, string> = {
   UI: 'UI',
   ML: 'ml',
 };
-function parseDosaggio(raw: string): { value: string; unit: string } | null {
-  const m = (raw || '').match(/(\d+(?:[.,]\d+)?)\s*(MGR|MCG|MG|GR|G|UI|ML)/i);
-  if (!m) return null;
-  const unit = DOSE_UNIT_MAP[m[2].toUpperCase()];
-  if (!unit) return null;
-  return { value: m[1].replace(',', '.'), unit };
+function parseDosaggio(raw: string) {
+  // Compound strengths must stay raw: "20mg/ml" is not "20mg".
+  const m = (raw || '').trim().match(/^(\d+(?:[.,]\d+)?)\s*(MGR|MCG|MG|GR|G|UI|ML)$/i);
+  return m ? { value: m[1].replace(',', '.'), unit: DOSE_UNIT_MAP[m[2].toUpperCase()] } : null;
 }
 
-/** #280 — Prefill the REAL manual therapy form from a raw discharge row. Whatever cannot be mapped
- *  to a structured field is kept in `note` so nothing extracted is lost. Unrecognized values fall
- *  back to `emptyTherapyForm()` defaults. */
+/** Legacy imports leave unknown clinical values blank for explicit correction. */
 export function dischargeRowToTherapyForm(r: DischargeTherapyRow): TherapyFormValue {
-  const base = emptyTherapyForm();
-
-  const via =
-    CODE_TO_FORM_VIA[(r.viaSomministrazione || '').toUpperCase()] ?? base.viaSomministrazione;
+  if (r.reviewedTherapy) return structuredClone(r.reviewedTherapy);
   const forma = mapForma(r.forma);
   const dose = parseDosaggio(r.dosaggio);
-
-  // Quantity per administration, parsed from the leading number/fraction of `quantita` ("1/2 Dosi").
-  const qty = parseQuantity((r.quantita || '').split(/\s+/)[0] ?? '') ?? { num: 1, den: 1 };
-  const administrationUnit =
-    forma && ADMIN_UNITS.includes(forma) ? forma : base.schedules[0].administrationUnit;
-
-  const times = Array.isArray(r.orari) ? r.orari.filter((t) => /^\d{1,2}:\d{2}$/.test(t)) : [];
-  const schedules =
-    times.length > 0
-      ? times.map((time) => ({
-          time,
-          quantityNumerator: qty.num,
-          quantityDenominator: qty.den,
-          administrationUnit,
-        }))
-      : [
-          {
-            ...base.schedules[0],
-            quantityNumerator: qty.num,
-            quantityDenominator: qty.den,
-            administrationUnit,
-          },
-        ];
-
-  const giorniSettimana = Array.isArray(r.giorni)
-    ? (r.giorni.map(dayToIso).filter((n): n is number => n != null) as number[]).sort(
-        (a, b) => a - b,
-      )
-    : [];
-
-  // Keep in `note` only what has NO structured home (raw dosage when un-parseable, plus any existing
-  // note). Classe/giorni/quantità/origine are re-appended by dischargeRowToTherapyInput at save —
-  // do NOT duplicate them here.
-  const noteParts = [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '']
-    .filter(Boolean)
-    .join(' — ');
-
+  const qty = parseAdministration(r.quantita, forma);
+  const times = Array.isArray(r.orari) && r.orari.length ? r.orari : [''];
   return {
-    ...base,
+    ...emptyTherapyForm(),
     farmacoNome: (r.farmacoNome || '').trim(),
-    pharmaceuticalForm: forma ?? base.pharmaceuticalForm,
-    commercialStrengthValue: dose ? dose.value : base.commercialStrengthValue,
-    commercialStrengthUnit: dose ? dose.unit : base.commercialStrengthUnit,
-    viaSomministrazione: via,
-    dataInizio: r.dataInizio && r.dataInizio.trim() ? r.dataInizio : base.dataInizio,
-    schedules,
-    giorniSettimana,
-    note: noteParts,
+    pharmaceuticalForm: forma ?? '',
+    commercialStrengthValue: dose?.value ?? '',
+    commercialStrengthUnit: dose?.unit ?? '',
+    viaSomministrazione:
+      CODE_TO_FORM_VIA[(r.viaSomministrazione || '').toUpperCase()] ?? r.viaSomministrazione ?? '',
+    dataInizio: r.dataInizio?.trim() ?? '',
+    dataSomministrazione: '',
+    schedules: times.map((time) => ({
+      time: /^\d:\d{2}$/.test(time) ? `0${time}` : time,
+      quantityNumerator: qty.num,
+      quantityDenominator: qty.den,
+      administrationUnit: qty.unit,
+    })),
+    giorniSettimana: Array.isArray(r.giorni) ? r.giorni.map(dayToIso).sort((a, b) => a - b) : [],
+    note: [r.note?.trim() || '', !dose && r.dosaggio ? `Dosaggio: ${r.dosaggio}` : '']
+      .filter(Boolean)
+      .join(' — '),
   };
 }
 
-/** #280 — Inverse of dischargeRowToTherapyForm: fold the form values back into the raw draft row so
- *  `dischargeRowToTherapyInput` (unchanged) reads the operator's edits at confirm. `originalText` and
- *  `classe` are preserved from `base`; `stato` becomes 'ok' since reaching here means the operator
- *  interacted with (i.e. reviewed) the form. */
 export function therapyFormToDischargeRow(
   v: TherapyFormValue,
   base: DischargeTherapyRow,
 ): DischargeTherapyRow {
-  const times = v.schedules.map((s) => s.time).filter((t) => /^\d{1,2}:\d{2}$/.test(t));
   const first = v.schedules[0];
-  const quantita = first
-    ? `${formatFraction(first.quantityNumerator, first.quantityDenominator)} ${first.administrationUnit}`.trim()
-    : base.quantita;
-  const dosaggio = v.commercialStrengthValue.trim()
-    ? `${v.commercialStrengthValue} ${v.commercialStrengthUnit}`.trim()
-    : base.dosaggio;
-
   return {
     ...base,
-    farmacoNome: (v.farmacoNome || '').trim(),
-    forma: v.pharmaceuticalForm || base.forma,
-    dosaggio,
-    viaSomministrazione: FORM_VIA_TO_CODE[v.viaSomministrazione] ?? base.viaSomministrazione,
-    quantita,
-    orari: times,
-    giorni: v.giorniSettimana.map((n) => DAY_ABBR[n - 1]).filter(Boolean),
-    dataInizio: v.dataInizio || base.dataInizio,
+    reviewedTherapy: structuredClone(v),
+    farmacoNome: v.farmacoNome.trim(),
+    forma: v.pharmaceuticalForm,
+    dosaggio: v.commercialStrengthValue.trim()
+      ? `${v.commercialStrengthValue} ${v.commercialStrengthUnit}`.trim()
+      : '',
+    viaSomministrazione: v.viaSomministrazione,
+    quantita: first
+      ? `${formatFraction(first.quantityNumerator, first.quantityDenominator)} ${first.administrationUnit}`.trim()
+      : '',
+    orari: v.schedules.map((s) => s.time),
+    giorni: v.giorniSettimana.map((n) => DAY_ABBR[n - 1] ?? ''),
+    dataInizio: v.dataInizio,
     note: v.note,
-    // originalText & classe intentionally preserved from base.
-    stato: 'ok',
+    // Editing one field is not an acknowledgement of ambiguous OCR source text.
+    stato: base.stato,
+  };
+}
+
+export function dischargeRowToTherapyInput(
+  r: DischargeTherapyRow,
+  operatoreNome?: string,
+): Record<string, unknown> {
+  const input = therapyFormToInput(dischargeRowToTherapyForm(r), operatoreNome);
+  const note = [
+    input.note,
+    r.classe ? `Classe ${r.classe}` : '',
+    r.originalText ? `Origine: ${r.originalText}` : '',
+  ]
+    .filter(Boolean)
+    .join(' — ');
+  return {
+    ...input,
+    ...(!r.reviewedTherapy && r.dosaggio ? { dosaggio: r.dosaggio } : {}),
+    ...(note ? { note } : {}),
   };
 }
