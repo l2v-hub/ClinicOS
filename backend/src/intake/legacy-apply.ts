@@ -1,3 +1,11 @@
+import {
+  LEGACY_ARCHIVE_SELECT,
+  LegacyDocumentArchiveError,
+  persistLegacyIntakeDocument,
+  type LegacyArchiveClient,
+  type LegacyArchiveSource,
+} from './legacy-document-archive.js';
+
 export class LegacyIntakeApplyInputError extends Error {
   constructor(message: string) {
     super(message);
@@ -10,7 +18,7 @@ export interface LegacyIntakeApplyInput {
   patientId: string;
 }
 
-interface LegacyIntakeApplyClient {
+interface LegacyIntakeApplyClient extends LegacyArchiveClient {
   patient: {
     findUnique(input: {
       where: { id: string };
@@ -18,6 +26,10 @@ interface LegacyIntakeApplyClient {
     }): Promise<{ id: string } | null>;
   };
   patientIntakeDocument: {
+    findFirst(input: {
+      where: { id: string; status: 'applied'; patientId: string };
+      select: typeof LEGACY_ARCHIVE_SELECT;
+    }): Promise<LegacyArchiveSource | null>;
     updateMany(input: {
       where: { id: string; status: 'extracted'; patientId: null };
       data: { patientId: string; status: 'applied' };
@@ -58,5 +70,12 @@ export async function applyLegacyIntakeDocument(
     where: { id: input.documentId, status: 'extracted', patientId: null },
     data: { patientId: input.patientId, status: 'applied' },
   });
-  return result.count === 1 ? 'applied' : 'unavailable';
+  if (result.count !== 1) return 'unavailable';
+  const source = await client.patientIntakeDocument.findFirst({
+    where: { id: input.documentId, status: 'applied', patientId: input.patientId },
+    select: LEGACY_ARCHIVE_SELECT,
+  });
+  if (!source) throw new LegacyDocumentArchiveError();
+  await persistLegacyIntakeDocument(client, source, input.patientId);
+  return 'applied';
 }

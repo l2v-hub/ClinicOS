@@ -36,6 +36,15 @@ function fakeClient(
         },
       },
       patientIntakeDocument: {
+        async findFirst() {
+          return {
+            id: 'document-1',
+            fileName: 'synthetic.pdf',
+            fileType: 'application/pdf',
+            fileData: Buffer.from('%PDF-1.4 synthetic legacy').toString('base64'),
+            createdAt: new Date('2026-01-01T00:00:00Z'),
+          };
+        },
         async updateMany(input: {
           where: { id: string; status: 'extracted'; patientId: null };
           data: { patientId: string; status: 'applied' };
@@ -47,6 +56,11 @@ function fakeClient(
           document.status = input.data.status;
           document.patientId = input.data.patientId;
           return { count: 1 };
+        },
+      },
+      patientDocument: {
+        async upsert(input: { create: { patientId: string } }) {
+          return { patientId: input.create.patientId };
         },
       },
     },

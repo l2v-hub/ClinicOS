@@ -20,39 +20,6 @@
 .patient-document-archive__filters select {
   min-height: 42px;
 }
-.patient-document-archive__categories {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
-}
-.patient-document-archive__category {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 10px;
-  min-height: 38px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text-muted);
-  font: inherit;
-  font-size: 12px;
-  cursor: pointer;
-}
-.patient-document-archive__category span {
-  font-size: 11px;
-  border-radius: 6px;
-  background: var(--bg);
-  padding: 2px 5px;
-}
-.patient-document-archive__category.is-selected {
-  background: #edf4ff;
-  border-color: #a8c7ff;
-  color: #174da7;
-  font-weight: 650;
-}
 .patient-document-archive__summary {
   color: var(--text-muted);
   font-size: 12px;

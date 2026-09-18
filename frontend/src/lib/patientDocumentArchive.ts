@@ -34,8 +34,9 @@ export const ARCHIVE_CATEGORIES = [
   {
     id: 'terapie',
     label: 'Terapie',
-    types: ['prescrizione', 'piano_terapeutico', 'documentazione_medicazioni'],
+    types: ['prescrizione', 'piano_terapeutico'],
   },
+  { id: 'medicazioni', label: 'Medicazioni', types: ['documentazione_medicazioni'] },
   {
     id: 'dimissioni',
     label: 'Dimissioni e invii',
@@ -57,9 +58,20 @@ export const ARCHIVE_CATEGORIES = [
       'modulo_allergie',
     ],
   },
-  { id: 'altro', label: 'Altri', types: ['altro'] },
+  { id: 'altro', label: 'Altri documenti', types: ['altro'] },
 ] as const;
 export type ArchiveCategory = (typeof ARCHIVE_CATEGORIES)[number]['id'];
+export type ArchiveStatus = boolean | 'tutti';
+export interface ArchiveFolder {
+  category: ArchiveCategory | 'tutti';
+  type?: TipoDocumento;
+}
+export function archiveFolderLabel(folder: ArchiveFolder): string {
+  if (folder.type) return DOCUMENT_TYPE_LABELS[folder.type];
+  return (
+    ARCHIVE_CATEGORIES.find((item) => item.id === folder.category)?.label ?? 'Tutti i documenti'
+  );
+}
 
 export function normalizeDocumentType(type: string): TipoDocumento {
   if (type === 'discharge_import') return 'lettera_dimissione';
@@ -134,12 +146,14 @@ export function filterDocumentArchive(
   entries: ArchiveEntry[],
   category: ArchiveCategory | 'tutti',
   query: string,
-  archived: boolean,
+  archived: ArchiveStatus,
+  type?: TipoDocumento,
 ): ArchiveEntry[] {
   const term = searchable(query.trim());
   return entries.filter(
     (entry) =>
-      entry.archived === archived &&
+      (archived === 'tutti' || entry.archived === archived) &&
+      (!type || entry.type === type) &&
       (category === 'tutti' || documentCategory(entry.type) === category) &&
       (!term ||
         searchable(

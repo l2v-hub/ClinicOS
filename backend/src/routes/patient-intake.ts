@@ -6,6 +6,7 @@ import {
   applyLegacyIntakeDocument,
   parseLegacyIntakeApplyInput,
 } from '../intake/legacy-apply.js';
+import { LegacyDocumentArchiveError } from '../intake/legacy-document-archive.js';
 
 const router = Router();
 
@@ -172,12 +173,16 @@ router.post('/discharge-letter/apply', async (req, res) => {
       status: 'applied',
     });
   } catch (error) {
+    if (error instanceof LegacyDocumentArchiveError) {
+      res.status(409).json({ error: error.message });
+      return;
+    }
     const code = error && typeof error === 'object' ? (error as { code?: string }).code : undefined;
     if (code === 'P2003' || code === 'P2025') {
       res.status(409).json({ error: 'Documento o paziente non applicabile' });
       return;
     }
-    console.error('POST /patient-intake/discharge-letter/apply error:', error);
+    console.error('POST /patient-intake/discharge-letter/apply failed');
     res.status(500).json({ error: 'Errore durante il collegamento del documento' });
     return;
   }

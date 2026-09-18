@@ -28,6 +28,7 @@ export const DOCUMENT_STATUS_LABELS: Record<StatoDocumento, string> = {
 
 export function ArchiveDocumentForm({
   initial,
+  defaultType,
   records,
   patientId,
   operatorId,
@@ -38,6 +39,7 @@ export function ArchiveDocumentForm({
   onClose,
 }: {
   initial: ArchiveEntry | null;
+  defaultType?: TipoDocumento;
   records: DocumentoConsegnato[];
   patientId: string;
   operatorId?: string;
@@ -49,7 +51,7 @@ export function ArchiveDocumentForm({
 }) {
   const [form, setForm] = useState<DocumentoConsegnato>(() => ({
     id: initial?.record?.id ?? crypto.randomUUID(),
-    tipo: initial?.type ?? 'documento_identita',
+    tipo: initial?.type ?? defaultType ?? 'documento_identita',
     descrizione: initial?.record?.descrizione ?? '',
     dataConsegna: initial?.date ?? localIsoDate(),
     stato: initial?.record?.stato ?? 'ricevuto',

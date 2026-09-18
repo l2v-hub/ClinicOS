@@ -5,13 +5,13 @@
 // removes the documents and their bytes — there is no separate storage to clean up.
 
 import type { Prisma } from '@prisma/client';
-import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { prisma } from '../../lib/prisma.js';
 import {
   encodePatientDocumentCursor,
   type DecodedPatientDocumentCursor,
 } from './patient-document-cursor.js';
+export { persistImportDocuments } from './import-document-archive.js';
 
 export interface PublicPatientDocument {
   id: string;
@@ -42,48 +42,6 @@ export interface PatientDocumentPage {
   total: number | null;
   sourceMatch: PublicPatientDocument | null;
   pageInfo: { loadedCount: number; hasMore: boolean; nextCursor: string | null };
-}
-
-/**
- * Copy a job's uploaded files into permanent PatientDocument rows, inside the patient-create
- * transaction. Best-effort per file: a missing file on disk is skipped (never blocks the import).
- */
-export async function persistImportDocuments(
-  tx: Prisma.TransactionClient,
-  patientId: string,
-  jobId: string,
-  createdById?: string,
-): Promise<number> {
-  const docs = await tx.importDocument.findMany({
-    where: { jobId, status: 'uploaded' },
-    orderBy: { sortOrder: 'asc' },
-  });
-  let saved = 0;
-  for (const d of docs) {
-    try {
-      // BUG-049: prefer the durable in-DB copy; fall back to disk for jobs created before the
-      // dataBase64 column existed. Only skip if neither source has the bytes.
-      let dataBase64 = d.dataBase64 ?? null;
-      if (!dataBase64) dataBase64 = (await readFile(d.storagePath)).toString('base64');
-      await tx.patientDocument.create({
-        data: {
-          patientId,
-          importJobId: jobId,
-          originalName: d.filename,
-          mimeType: d.mimeType,
-          sizeBytes: d.sizeBytes,
-          sha256: d.sha256,
-          dataBase64,
-          sortOrder: d.sortOrder,
-          ...(createdById ? { createdById } : {}),
-        },
-      });
-      saved++;
-    } catch {
-      /* neither DB bytes nor on-disk file available — skip; never block patient creation */
-    }
-  }
-  return saved;
 }
 
 /**

@@ -5,7 +5,9 @@ import {
   buildDocumentArchive,
   DOCUMENT_TYPE_LABELS,
   filterDocumentArchive,
-  type ArchiveCategory,
+  archiveFolderLabel,
+  type ArchiveFolder,
+  type ArchiveStatus,
   type ArchiveEntry,
 } from '../../../lib/patientDocumentArchive';
 import { useDocumentArchive } from '../../../lib/useDocumentArchive';
@@ -13,7 +15,9 @@ import { ClinicalTableSection, PrintButton, fmtDate } from './shared';
 import { ArchiveDocumentForm, DOCUMENT_STATUS_LABELS } from './ArchiveDocumentForm';
 import { PatientArchivePreview } from './PatientArchivePreview';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
+import { PatientArchiveTree } from './PatientArchiveTree';
 import './PatientDocumentArchive.css';
+import './PatientArchiveTree.css';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -47,9 +51,9 @@ function DocumentArchiveWorkspace({
     () => buildDocumentArchive(records, archive.documents),
     [records, archive.documents],
   );
-  const [category, setCategory] = useState<ArchiveCategory | 'tutti'>('tutti');
+  const [folder, setFolder] = useState<ArchiveFolder>({ category: 'tutti' });
   const [query, setQuery] = useState('');
-  const [archived, setArchived] = useState(false);
+  const [archived, setArchived] = useState<ArchiveStatus>('tutti');
   const [visible, setVisible] = useState(25);
   const [form, setForm] = useState<{ key: string; entry: ArchiveEntry | null } | null>(null);
   const [preview, setPreview] = useState<ArchiveEntry | null>(null);
@@ -64,8 +68,13 @@ function DocumentArchiveWorkspace({
       alive.current = false;
     };
   }, []);
-  const filtered = filterDocumentArchive(entries, category, query, archived);
-  const activeEntries = entries.filter((entry) => entry.archived === archived);
+  const filtered = filterDocumentArchive(entries, folder.category, query, archived, folder.type);
+  const folderEntries = filterDocumentArchive(entries, 'tutti', query, archived);
+  const selectFolder = (next: ArchiveFolder) => {
+    setFolder(next);
+    setVisible(25);
+  };
+  const selectedCategory = ARCHIVE_CATEGORIES.find((item) => item.id === folder.category);
   const complete = archive.status === 'ready';
   const openForm = (entry: ArchiveEntry | null) => {
     setError('');
@@ -135,6 +144,7 @@ function DocumentArchiveWorkspace({
             <ArchiveDocumentForm
               key={form.key}
               initial={form.entry}
+              defaultType={folder.type ?? selectedCategory?.types[0]}
               records={records}
               patientId={paziente.id}
               operatorId={operatoreId}
@@ -164,14 +174,17 @@ function DocumentArchiveWorkspace({
               Mostra
               <select
                 className="form-input"
-                value={archived ? 'archiviati' : 'correnti'}
+                value={archived === 'tutti' ? 'tutti' : archived ? 'archiviati' : 'correnti'}
                 onChange={(event) => {
-                  setArchived(event.target.value === 'archiviati');
+                  setArchived(
+                    event.target.value === 'tutti' ? 'tutti' : event.target.value === 'archiviati',
+                  );
                   setVisible(25);
                 }}
               >
+                <option value="tutti">Tutti i documenti</option>
                 <option value="correnti">Documenti correnti</option>
-                <option value="archiviati">Documenti archiviati</option>
+                <option value="archiviati">Documenti nello storico</option>
               </select>
             </label>
             <button
@@ -183,158 +196,192 @@ function DocumentArchiveWorkspace({
               Aggiorna archivio
             </button>
           </div>
-          <nav
-            className="patient-document-archive__categories no-print"
-            aria-label="Tipologie documenti"
-          >
-            {[{ id: 'tutti', label: 'Tutti' }, ...ARCHIVE_CATEGORIES].map((item) => (
-              <button
-                type="button"
-                key={item.id}
-                className={`patient-document-archive__category${category === item.id ? ' is-selected' : ''}`}
-                aria-pressed={category === item.id}
-                onClick={() => {
-                  setCategory(item.id as ArchiveCategory | 'tutti');
-                  setVisible(25);
-                }}
-              >
-                {item.label}
-                {complete && (
-                  <span>
-                    {item.id === 'tutti'
-                      ? activeEntries.length
-                      : filterDocumentArchive(entries, item.id as ArchiveCategory, '', archived)
-                          .length}
-                  </span>
-                )}
-              </button>
-            ))}
-          </nav>
-          {archive.status === 'loading' && <p role="status">Caricamento dell’archivio completo…</p>}
-          {archive.status === 'error' && (
-            <div className="patient-archive__error" role="alert">
-              <p>Impossibile caricare tutti i file. Le schede visibili sono un elenco parziale.</p>
-              <button
-                type="button"
-                className="btn-secondary btn-sm"
-                disabled={!!form || saving}
-                onClick={archive.reload}
-              >
-                Riprova archivio
-              </button>
-            </div>
-          )}
-          {error && (
-            <p role="alert" className="patient-archive__error">
-              {error}
-            </p>
-          )}
-          {complete && (
-            <p className="patient-document-archive__summary" role="status">
-              {filtered.length} {filtered.length === 1 ? 'documento trovato' : 'documenti trovati'}
-            </p>
-          )}
-          {complete && filtered.length === 0 && (
-            <p className="cr-empty">
-              {query || category !== 'tutti'
-                ? 'Nessun documento corrisponde alla ricerca.'
-                : 'Nessun documento in questa sezione.'}
-            </p>
-          )}
-          {archive.status !== 'loading' && (
-            <ul className="patient-document-archive__list">
-              {filtered.slice(0, visible).map((entry) => (
-                <li key={entry.id} className="patient-document-archive__item">
-                  <div className="patient-document-archive__file-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                      <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
-                      <path d="M14 3v6h6M8 13h8M8 17h6" />
-                    </svg>
-                  </div>
-                  <div className="patient-document-archive__details">
-                    <button
-                      type="button"
-                      className="patient-document-archive__title"
-                      onClick={() => setPreview(entry)}
-                    >
-                      {entry.title}
-                    </button>
-                    <div className="patient-document-archive__meta">
-                      <span className="badge badge--blue">{DOCUMENT_TYPE_LABELS[entry.type]}</span>
-                      <span>{fmtDate(entry.date)}</span>
-                      <span>
-                        {DOCUMENT_STATUS_LABELS[entry.record?.stato ?? 'ricevuto'] ??
-                          'Da verificare'}
-                      </span>
-                    </div>
-                    {entry.document ? (
-                      <p>
-                        {entry.document.originalName} ·{' '}
-                        {(entry.document.sizeBytes / 1024 / 1024).toFixed(1)} MB
-                      </p>
-                    ) : (
-                      <p>
-                        {entry.unavailable ? 'Allegato non disponibile' : 'Nessun file allegato'}
-                      </p>
-                    )}
-                    {entry.record?.provenienza && <p>Provenienza: {entry.record.provenienza}</p>}
-                    {entry.record?.scadenza && <p>Scadenza: {fmtDate(entry.record.scadenza)}</p>}
-                    {entry.record?.firmatoDA && entry.record.firmatoDA !== 'non_firmato' && (
-                      <p>Firmato da: {entry.record.firmatoDA}</p>
-                    )}
-                    {entry.record?.operatore && <p>Registrato da: {entry.record.operatore}</p>}
-                    {entry.record?.note && (
-                      <p className="patient-document-archive__notes">{entry.record.note}</p>
-                    )}
-                  </div>
-                  <div className="patient-document-archive__actions no-print">
-                    <button
-                      type="button"
-                      className="btn-secondary btn-sm"
-                      onClick={() => setPreview(entry)}
-                    >
-                      {entry.document ? 'Visualizza' : 'Dettagli'}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn-secondary btn-sm"
-                      disabled={!complete || !!form || saving}
-                      onClick={() => openForm(entry)}
-                    >
-                      Modifica dettagli
-                    </button>
-                    <button
-                      type="button"
-                      className="btn-secondary btn-sm"
-                      disabled={!complete || !!form || saving}
-                      onClick={() => setArchivedEntry(entry)}
-                    >
-                      {entry.archived ? 'Ripristina' : 'Archivia'}
-                    </button>
-                    {entry.record && (
-                      <button
-                        type="button"
-                        className="patient-document-archive__remove"
-                        disabled={!complete || !!form || saving}
-                        onClick={() => setRemoving(entry)}
-                      >
-                        Rimuovi scheda
-                      </button>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-          {filtered.length > visible && (
-            <button
-              type="button"
-              className="btn-secondary btn-sm no-print"
-              onClick={() => setVisible((value) => value + 25)}
+          <p className="patient-document-archive__intro">
+            Qui trovi tutti i file e le foto salvati per il paziente, anche da esami, medicazioni e
+            importazioni.
+          </p>
+          <div className="patient-document-archive__workspace">
+            <PatientArchiveTree
+              entries={folderEntries}
+              selected={folder}
+              complete={complete}
+              onSelect={selectFolder}
+            />
+            <section
+              className="patient-document-archive__results"
+              aria-label="Contenuto della cartella"
             >
-              Mostra altri documenti ({visible} di {filtered.length})
-            </button>
-          )}
+              <nav className="patient-document-archive__path" aria-label="Percorso documenti">
+                <button type="button" onClick={() => selectFolder({ category: 'tutti' })}>
+                  Documenti
+                </button>
+                {selectedCategory && (
+                  <>
+                    <span aria-hidden="true">/</span>
+                    <button
+                      type="button"
+                      onClick={() => selectFolder({ category: selectedCategory.id })}
+                    >
+                      {selectedCategory.label}
+                    </button>
+                  </>
+                )}
+                {folder.type && (
+                  <>
+                    <span aria-hidden="true">/</span>
+                    <span aria-current="location">{DOCUMENT_TYPE_LABELS[folder.type]}</span>
+                  </>
+                )}
+              </nav>
+              <h3 className="patient-document-archive__folder-title">
+                {archiveFolderLabel(folder)}
+              </h3>
+              {archive.status === 'loading' && (
+                <p role="status">Caricamento dell’archivio completo…</p>
+              )}
+              {archive.status === 'error' && (
+                <div className="patient-archive__error" role="alert">
+                  <p>
+                    Impossibile caricare tutti i file. Le schede visibili sono un elenco parziale.
+                  </p>
+                  <button
+                    type="button"
+                    className="btn-secondary btn-sm"
+                    disabled={!!form || saving}
+                    onClick={archive.reload}
+                  >
+                    Riprova archivio
+                  </button>
+                </div>
+              )}
+              {error && (
+                <p role="alert" className="patient-archive__error">
+                  {error}
+                </p>
+              )}
+              {complete && (
+                <p className="patient-document-archive__summary" role="status">
+                  {filtered.length}{' '}
+                  {filtered.length === 1 ? 'documento trovato' : 'documenti trovati'}
+                </p>
+              )}
+              {complete && filtered.length === 0 && (
+                <p className="cr-empty">
+                  {query || folder.category !== 'tutti'
+                    ? 'Nessun documento corrisponde alla ricerca.'
+                    : 'Nessun documento in questa cartella.'}
+                </p>
+              )}
+              {archive.status !== 'loading' && (
+                <ul className="patient-document-archive__list">
+                  {filtered.slice(0, visible).map((entry) => (
+                    <li key={entry.id} className="patient-document-archive__item">
+                      <div className="patient-document-archive__file-icon" aria-hidden="true">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        >
+                          <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                          <path d="M14 3v6h6M8 13h8M8 17h6" />
+                        </svg>
+                      </div>
+                      <div className="patient-document-archive__details">
+                        <button
+                          type="button"
+                          className="patient-document-archive__title"
+                          onClick={() => setPreview(entry)}
+                        >
+                          {entry.title}
+                        </button>
+                        <div className="patient-document-archive__meta">
+                          <span className="badge badge--blue">
+                            {DOCUMENT_TYPE_LABELS[entry.type]}
+                          </span>
+                          {entry.archived && <span className="badge">Storico</span>}
+                          <span>{fmtDate(entry.date)}</span>
+                          <span>
+                            {DOCUMENT_STATUS_LABELS[entry.record?.stato ?? 'ricevuto'] ??
+                              'Da verificare'}
+                          </span>
+                        </div>
+                        {entry.document ? (
+                          <p>
+                            {entry.document.originalName} ·{' '}
+                            {(entry.document.sizeBytes / 1024 / 1024).toFixed(1)} MB
+                          </p>
+                        ) : (
+                          <p>
+                            {entry.unavailable
+                              ? 'Allegato non disponibile'
+                              : 'Nessun file allegato'}
+                          </p>
+                        )}
+                        {entry.record?.provenienza && (
+                          <p>Provenienza: {entry.record.provenienza}</p>
+                        )}
+                        {entry.record?.scadenza && (
+                          <p>Scadenza: {fmtDate(entry.record.scadenza)}</p>
+                        )}
+                        {entry.record?.firmatoDA && entry.record.firmatoDA !== 'non_firmato' && (
+                          <p>Firmato da: {entry.record.firmatoDA}</p>
+                        )}
+                        {entry.record?.operatore && <p>Registrato da: {entry.record.operatore}</p>}
+                        {entry.record?.note && (
+                          <p className="patient-document-archive__notes">{entry.record.note}</p>
+                        )}
+                      </div>
+                      <div className="patient-document-archive__actions no-print">
+                        <button
+                          type="button"
+                          className="btn-secondary btn-sm"
+                          onClick={() => setPreview(entry)}
+                        >
+                          {entry.document ? 'Visualizza' : 'Dettagli'}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary btn-sm"
+                          disabled={!complete || !!form || saving}
+                          onClick={() => openForm(entry)}
+                        >
+                          Modifica dettagli
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary btn-sm"
+                          disabled={!complete || !!form || saving}
+                          onClick={() => setArchivedEntry(entry)}
+                        >
+                          {entry.archived ? 'Ripristina' : 'Sposta nello storico'}
+                        </button>
+                        {entry.record && (
+                          <button
+                            type="button"
+                            className="patient-document-archive__remove"
+                            disabled={!complete || !!form || saving}
+                            onClick={() => setRemoving(entry)}
+                          >
+                            Rimuovi scheda
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {filtered.length > visible && (
+                <button
+                  type="button"
+                  className="btn-secondary btn-sm no-print"
+                  onClick={() => setVisible((value) => value + 25)}
+                >
+                  Mostra altri documenti ({visible} di {filtered.length})
+                </button>
+              )}
+            </section>
+          </div>
         </div>
       </ClinicalTableSection>
       {preview && (
