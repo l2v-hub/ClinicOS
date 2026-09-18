@@ -1,3 +1,4 @@
+import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import type {
   Paziente,
@@ -1043,6 +1044,7 @@ export function PatientDetail({
                     {c.priorita}
                   </span>
                   <span className="ec-modal-item__title">{c.note}</span>
+                  <ConsegnaTimestamp createdAt={c.createdAt} />
                   <span className={`stato-pill stato-pill--consegna-${c.stato}`}>
                     {c.stato.replace('_', ' ')}
                   </span>
@@ -1601,6 +1603,7 @@ export function PatientDetail({
                         </span>
                         <span className="consegna-tipo">{c.tipo}</span>
                       </div>
+                      <ConsegnaTimestamp createdAt={c.createdAt} />
                       <p className="cr-overview-handoff__note">{c.note}</p>
                     </li>
                   ))}
@@ -2632,6 +2635,7 @@ export function PatientDetail({
                           {c.stato.replace('_', ' ')}
                         </span>
                       </div>
+                      <ConsegnaTimestamp createdAt={c.createdAt} />
                       <p className="consegna-note">{c.note}</p>
                       <div className="consegna-card__footer">
                         <span className="consegna-assegnato">→ {c.operatoreAssegnato}</span>
@@ -2912,10 +2916,15 @@ export function PatientDetail({
             )}
             {tab === 'medicazioni' && (
               <MedicazioniTab
+                key={paziente.id}
                 cartella={cartella}
                 paziente={paziente}
-                onUpdate={upd}
+                onUpdate={(updates) =>
+                  onUpdateCartella(cartella.pazienteId, updates, { optimistic: false })
+                }
                 operatoreNome={operatoreNome}
+                operatoreId={operatoreId}
+                operatoreRole={operatoreRole}
               />
             )}
             {tab === 'contenzioni' && (

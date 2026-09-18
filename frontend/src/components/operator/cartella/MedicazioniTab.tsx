@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IcoCheck } from '../../../icons';
 import type {
   CartellaPaziente,
@@ -9,12 +9,16 @@ import type {
 } from '../../../types';
 import { uid, todayStr, nowISO, fmtDate, PrintButton, ClinicalTableSection } from './shared';
 import { ClinicalTable } from './ClinicalTable';
+import { ClinicalAttachments } from './ClinicalAttachments';
+import { attachDressingDocument } from '../../../lib/clinicalAttachments';
 
 interface Props {
   cartella: CartellaPaziente;
   paziente: Paziente;
-  onUpdate: (updates: Partial<CartellaPaziente>) => void;
+  onUpdate: (updates: Partial<CartellaPaziente>) => void | Promise<boolean>;
   operatoreNome: string;
+  operatoreId?: string;
+  operatoreRole?: string;
 }
 
 const ESSUDATO_LABEL: Record<EssudatoLivello, string> = {
@@ -685,20 +689,36 @@ function FollowUpSection({
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: Props) {
+export function MedicazioniTab({
+  cartella,
+  paziente,
+  onUpdate,
+  operatoreNome,
+  operatoreId,
+  operatoreRole,
+}: Props) {
   const meds = cartella.medicazioniFerite ?? [];
+  const medsRef = useRef(meds);
+  medsRef.current = meds;
   const [showAdd, setShowAdd] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [modulo, setModulo] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
+  const savingRef = useRef(false);
 
   function set(f: Partial<typeof form>) {
     setForm((p) => ({ ...p, ...f }));
   }
 
-  function handleSave() {
-    if (!form.sede) return;
+  async function handleSave() {
+    if (!form.sede.trim() || savingRef.current) return;
+    savingRef.current = true;
+    setSaving(true);
+    setSaveError('');
     const record: MedicazioneRecord = {
+      ...meds.find((m) => m.id === editId),
       id: editId ?? uid(),
       data: form.data,
       dataFine: form.dataFine || undefined,
@@ -717,19 +737,29 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
       sigla: form.sigla || undefined,
       operatore: operatoreNome,
       note: form.note,
-      createdAt: nowISO(),
+      createdAt: meds.find((m) => m.id === editId)?.createdAt ?? nowISO(),
     };
-    onUpdate({
-      medicazioniFerite: editId
-        ? meds.map((m) => (m.id === editId ? record : m))
-        : [record, ...meds],
-    });
-    setShowAdd(false);
-    setEditId(null);
-    setForm({ ...EMPTY_FORM });
+    try {
+      const ok = await onUpdate({
+        medicazioniFerite: editId
+          ? meds.map((m) => (m.id === editId ? record : m))
+          : [record, ...meds],
+      });
+      if (ok === false) throw new Error('save_failed');
+      setShowAdd(false);
+      setEditId(null);
+      setForm({ ...EMPTY_FORM, data: todayStr() });
+    } catch {
+      setSaveError('Salvataggio non riuscito. Le modifiche sono conservate: riprova.');
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
+    }
   }
 
   function startEdit(m: MedicazioneRecord) {
+    if (savingRef.current) return;
+    setSaveError('');
     setForm({
       data: m.data,
       dataFine: m.dataFine ?? '',
@@ -778,9 +808,11 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
               </button>
               <button
                 className="btn-sm"
+                disabled={saving}
                 onClick={() => {
                   setEditId(null);
-                  setForm({ ...EMPTY_FORM });
+                  setForm({ ...EMPTY_FORM, data: todayStr() });
+                  setSaveError('');
                   setShowAdd(true);
                 }}
               >
@@ -795,6 +827,8 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                 <div className="cr-form-section__title">
                   {editId ? 'Modifica medicazione' : 'Nuova medicazione'}
                 </div>
+                {!editId && <p className="cr-meta">Salva la medicazione per allegare le foto.</p>}
+                {saveError && <p role="alert">{saveError}</p>}
 
                 {/* Date + sede */}
                 <div className="form-row-3col">
@@ -1010,6 +1044,7 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                 <div className="cr-inline-form__actions">
                   <button
                     className="btn-secondary btn-sm"
+                    disabled={saving}
                     onClick={() => {
                       setShowAdd(false);
                       setEditId(null);
@@ -1017,8 +1052,12 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                   >
                     Annulla
                   </button>
-                  <button className="btn-success btn-sm" onClick={handleSave}>
-                    <IcoCheck /> Salva
+                  <button
+                    className="btn-success btn-sm"
+                    disabled={saving}
+                    onClick={() => void handleSave()}
+                  >
+                    <IcoCheck /> {saving ? 'Salvataggio…' : 'Salva'}
                   </button>
                 </div>
               </div>
@@ -1131,6 +1170,22 @@ export function MedicazioniTab({ cartella, paziente, onUpdate, operatoreNome }: 
                       <span className="cr-meta">Operatore: {m.operatore}</span>
                       {m.sigla && <span className="cr-meta"> — Sigla: {m.sigla}</span>}
                     </div>
+                    <ClinicalAttachments
+                      patientId={paziente.id}
+                      operatorId={operatoreId}
+                      operatorRole={operatoreRole}
+                      documentType="documentazione_medicazioni"
+                      cameraFormat="jpeg"
+                      documents={(m.patientDocumentIds ?? []).map((id, index) => ({
+                        id,
+                        originalName: `Foto medicazione ${index + 1}`,
+                      }))}
+                      onDocumentCreated={async (document) => {
+                        const records = attachDressingDocument(medsRef.current, m.id, document.id);
+                        if (!records) return false;
+                        return await onUpdate({ medicazioniFerite: records });
+                      }}
+                    />
                     <FollowUpSection
                       med={m}
                       onSave={(updated) =>

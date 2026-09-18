@@ -777,6 +777,7 @@ export interface MedicazioneRecord {
   note: string;
   createdAt: string;
   followUps?: FollowUpMedicazione[];
+  patientDocumentIds?: string[];
 }
 
 // ── Contenzione / Protezione ───────────────────────────────────────────────────

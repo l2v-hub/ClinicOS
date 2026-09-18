@@ -67,6 +67,8 @@ const UNIT_ALIASES: Record<string, string> = {
   cps: 'capsula',
   capsula: 'capsula',
   capsule: 'capsula',
+  cerotto: 'cerotto',
+  cerotti: 'cerotto',
   bust: 'bustina',
   bustina: 'bustina',
   bustine: 'bustina',

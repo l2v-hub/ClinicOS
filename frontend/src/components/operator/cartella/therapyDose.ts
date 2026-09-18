@@ -21,6 +21,7 @@ export const FRACTION_PRESETS: { key: string; label: string; num: number; den: n
 export const ADMIN_UNITS = [
   'compressa',
   'capsula',
+  'cerotto',
   'ml',
   'gocce',
   'unità',
@@ -29,6 +30,21 @@ export const ADMIN_UNITS = [
   'puff',
 ];
 export const DIVISIBLE_UNITS = new Set(['compressa']); // tablet is the only inherently splittable form
+
+export function isPatchUnit(unit: string): boolean {
+  return /^cerott[oi]$/i.test(unit.trim());
+}
+
+export function hasDividedPatch(schedules: ScheduleRow[]): boolean {
+  return schedules.some(
+    (s) => isPatchUnit(s.administrationUnit) && s.quantityNumerator % s.quantityDenominator !== 0,
+  );
+}
+
+/** Only counted forms have an unambiguous administration unit. */
+export function administrationUnitForForm(form: string): string {
+  return ADMIN_UNITS.includes(form) ? form : '';
+}
 
 export const PHARMA_FORMS = [
   'compressa',

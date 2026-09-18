@@ -159,3 +159,24 @@ test('therapy dates are real ISO calendar dates and cannot run backwards', () =>
     );
   }
 });
+
+test('patch doses must be whole while exact fractions for other units remain valid', () => {
+  for (const administrationUnit of ['cerotto', 'Cerotti', ' cerotto ']) {
+    const schedule = {
+      time: '08:00',
+      administrationUnit,
+      quantityNumerator: 1,
+      quantityDenominator: 2,
+    };
+    assert.throws(() => assertValidSchedulesInput([schedule]), /cerotti non possono essere divisi/);
+    assert.doesNotThrow(() => assertValidSchedulesInput([{ ...schedule, quantityNumerator: 2 }]));
+    assert.doesNotThrow(() => assertValidSchedulesInput([{ ...schedule, quantityDenominator: 1 }]));
+  }
+  for (const administrationUnit of ['compressa', 'ml']) {
+    assert.doesNotThrow(() =>
+      assertValidSchedulesInput([
+        { time: '08:00', administrationUnit, quantityNumerator: 1, quantityDenominator: 2 },
+      ]),
+    );
+  }
+});

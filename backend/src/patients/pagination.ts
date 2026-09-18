@@ -22,7 +22,8 @@ export interface PatientPageQuery extends PatientPageFilters {
 }
 
 interface PatientPageCursorPayload extends PatientPagePosition, PatientPageFilters {
-  v: 1;
+  // v1 used raw names; resuming it with folded ordering could omit patients.
+  v: 2;
 }
 
 const MAX_CURSOR_LENGTH = 1024;
@@ -86,7 +87,7 @@ export function encodePatientPageCursor(
   filters: PatientPageFilters,
 ): string {
   const payload: PatientPageCursorPayload = {
-    v: 1,
+    v: 2,
     ...position,
     ...normalizedFilters(filters),
   };
@@ -118,7 +119,7 @@ export function decodePatientPageCursor(
   const value = payload as Partial<PatientPageCursorPayload>;
   const positionFields = [value.lastName, value.firstName, value.id];
   if (
-    value.v !== 1 ||
+    value.v !== 2 ||
     positionFields.some(
       (field) =>
         typeof field !== 'string' || field.length === 0 || field.length > MAX_POSITION_FIELD_LENGTH,

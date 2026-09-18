@@ -2,6 +2,7 @@ import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields
 import { VIA_OPTIONS } from '../../operator/cartella/TherapyFormFields';
 import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
 import { therapyFormToInput } from './therapyFormPayload';
+import { isPatchUnit } from '../../operator/cartella/therapyDose';
 
 const hasText = (v: unknown): v is string => typeof v === 'string' && !!v.trim();
 const validTime = (v: unknown): v is string =>
@@ -58,6 +59,13 @@ export function therapyInputIssues(input: Record<string, unknown>): string[] {
         issues.push(`Orario ${index + 1}: indica una quantità valida`);
       if (!s || !hasText(s.administrationUnit) || s.administrationUnit.length > 64)
         issues.push(`Orario ${index + 1}: scegli l’unità di somministrazione`);
+      if (
+        s &&
+        hasText(s.administrationUnit) &&
+        isPatchUnit(s.administrationUnit) &&
+        s.quantityNumerator % s.quantityDenominator !== 0
+      )
+        issues.push(`Orario ${index + 1}: i cerotti non possono essere divisi`);
       const key = `${String(s?.time).padStart(5, '0')}|${String(s?.administrationUnit).trim()}`;
       if (seen.has(key)) issues.push(`Orario ${index + 1}: elimina l’orario duplicato`);
       seen.add(key);

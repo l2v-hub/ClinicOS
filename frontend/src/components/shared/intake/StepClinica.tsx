@@ -65,7 +65,10 @@ export function StepClinica({
   importedFields = [],
   narrative,
 }: StepClinicaProps) {
-  const sections = intakeSections();
+  // Keep manual additions next to the imported drugs, before the other clinical sections.
+  const sections = intakeSections().sort(
+    (a, b) => Number(b.sectionKey === 'terapia') - Number(a.sectionKey === 'terapia'),
+  );
   const [showSource, setShowSource] = useState<Record<string, boolean>>({});
 
   const narrativeData = narrative as NarrativeData | undefined;
@@ -89,11 +92,27 @@ export function StepClinica({
 
   return (
     <>
+      {typeof data._terapiaText === 'string' && data._terapiaText.trim() && (
+        <details className="step-clinica__section" data-testid="therapy-source-comparison">
+          <summary>Confronta con il testo completo della terapia</summary>
+          <p className="form-hint">
+            Controlla che tutti i farmaci del documento siano presenti. Puoi aggiungere quelli
+            mancanti con «Aggiungi farmaco».
+          </p>
+          <pre
+            className="discharge-therapy-review__original"
+            style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}
+          >
+            {data._terapiaText}
+          </pre>
+        </details>
+      )}
       {terapiaImport.length > 0 && (
         <div className="step-clinica__section">
           <DischargeTherapyReview
             rows={terapiaImport}
             onChange={(v) => onUpdateSection('terapiaImport', v)}
+            operatoreNome={operatoreNome}
           />
         </div>
       )}

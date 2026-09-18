@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { ChangeEvent } from 'react';
+import { ClinicalAttachments as SectionPhotos } from './ClinicalAttachments';
 import type { CartellaPaziente, EsameClinicoRecord, Paziente } from '../../../types';
 import {
   uid,
@@ -10,132 +10,11 @@ import {
   InlineForm,
   EmptyState,
 } from './shared';
-import { API_URL } from '../../../config';
-import { documentAuthHeaders } from '../../../lib/entraAuth';
 import { usePatientDocuments } from '../../../lib/usePatientDocuments';
 import type { PatientDocumentMeta } from '../../../lib/patientDocumentsPage';
 import { LoadErrorState } from './LoadErrorState';
 
-// #246: photo/scan attachments for exams/RX/consultations. Uses the device camera on mobile
-// (capture="environment") or a file picker on desktop; bytes are stored on PatientDocument.
-// #246: explicit demo-only scope headers accompany every /documents call. They are falsifiable
-// QA hints, not secure authentication. The content endpoint is opened via a gated blob
-// fetch (a plain <a href>/<img src> cannot attach custom headers).
 type SectionDocMeta = PatientDocumentMeta;
-
-// #260: gli header sono costruiti da documentAuthHeaders — Bearer Entra verificato quando la
-// SPA è configurata (VITE_ENTRA_*), altrimenti gli header demo espliciti di #246 (invariati).
-
-function SectionPhotos({
-  patientId,
-  documentType,
-  operatorId,
-  operatorRole,
-  documents,
-  metadataLoading,
-  onDocumentCreated,
-}: {
-  patientId: string;
-  documentType: string;
-  operatorId?: string;
-  operatorRole?: string;
-  documents: SectionDocMeta[];
-  metadataLoading: boolean;
-  onDocumentCreated: (document?: SectionDocMeta) => void;
-}) {
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-
-  async function onFile(e: ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0];
-    e.target.value = '';
-    if (!f) return;
-    setBusy(true);
-    setErr(null);
-    try {
-      const fd = new FormData();
-      fd.append('file', f);
-      fd.append('documentType', documentType);
-      const r = await fetch(`${API_URL}/patients/${patientId}/documents`, {
-        method: 'POST',
-        body: fd,
-        headers: await documentAuthHeaders(patientId, operatorId, operatorRole),
-      });
-      if (!r.ok) throw new Error(String(r.status));
-      const result = (await r.json()) as { document?: SectionDocMeta };
-      onDocumentCreated(result.document?.id ? result.document : undefined);
-    } catch {
-      setErr('Caricamento non riuscito');
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function openDoc(d: SectionDocMeta) {
-    try {
-      const r = await fetch(`${API_URL}/patients/${patientId}/documents/${d.id}/content`, {
-        headers: await documentAuthHeaders(patientId, operatorId, operatorRole),
-      });
-      if (!r.ok) throw new Error(String(r.status));
-      const blob = await r.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      window.open(objectUrl, '_blank', 'noreferrer');
-      setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
-    } catch {
-      setErr('Apertura documento non riuscita');
-    }
-  }
-
-  return (
-    <div className="section-photos" data-testid={`photos-${documentType}`}>
-      <label
-        className={`btn-secondary btn-sm ${busy || metadataLoading ? 'is-busy' : ''}`}
-        style={{ cursor: busy || metadataLoading ? 'default' : 'pointer' }}
-      >
-        {metadataLoading ? 'Caricamento allegati…' : '📷 Aggiungi foto/allegato'}
-        <input
-          type="file"
-          accept="image/*,application/pdf"
-          capture="environment"
-          hidden
-          disabled={busy || metadataLoading}
-          onChange={onFile}
-        />
-      </label>
-      {busy && (
-        <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--c-muted,#667085)' }}>
-          Caricamento…
-        </span>
-      )}
-      {err && (
-        <span role="alert" style={{ marginLeft: 8, fontSize: 12, color: 'var(--red,#DC2626)' }}>
-          {err}
-        </span>
-      )}
-      {documents.length > 0 && (
-        <ul
-          className="section-photos__list"
-          style={{
-            listStyle: 'none',
-            padding: 0,
-            margin: '8px 0 0',
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 8,
-          }}
-        >
-          {documents.map((d) => (
-            <li key={d.id}>
-              <button type="button" className="srev-chip" onClick={() => openDoc(d)}>
-                {d.mimeType.includes('pdf') ? '📄' : '🖼️'} {d.originalName}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
 
 interface Props {
   cartella: CartellaPaziente;

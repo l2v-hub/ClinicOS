@@ -4,12 +4,8 @@ import { Router, type Response } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
 import { validatePatientPhone } from '../lib/patient-phone.js';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
-import {
-  PatientPageInputError,
-  decodePatientPageCursor,
-  encodePatientPageCursor,
-  parsePatientPageQuery,
-} from '../patients/pagination.js';
+import { PatientPageInputError } from '../patients/pagination.js';
+import { loadPatientIdentityPage } from '../patients/identity-page.js';
 import { PatientSummaryInputError, parsePatientSummaryIds } from '../patients/summary-query.js';
 import { loadPatientParametersPage } from '../patients/parameters-page.js';
 import {
@@ -42,88 +38,7 @@ async function sendPatientPage(
   routeLabel: string,
 ) {
   try {
-    const actor = req.operator!;
-    const input = parsePatientPageQuery(rawInput);
-    const filters = { q: input.q, sex: input.sex };
-    const position = input.cursor ? decodePatientPageCursor(input.cursor, filters) : undefined;
-    const searchTokens =
-      input.q
-        ?.split(/[,\s]+/)
-        .filter(Boolean)
-        .slice(0, 5) ?? [];
-    const normalizedFiscalQuery = input.q?.replace(/\s+/g, '').toUpperCase() ?? '';
-    const exactFiscalCode = /^[A-Z0-9]{16}$/.test(normalizedFiscalQuery)
-      ? normalizedFiscalQuery
-      : undefined;
-
-    const baseWhere = {
-      ...patientScopeWhere(actor),
-      ...(input.sex && { sex: input.sex }),
-      ...(exactFiscalCode
-        ? { codiceFiscale: exactFiscalCode }
-        : searchTokens.length > 0 && {
-            AND: searchTokens.map((token) => ({
-              OR: [
-                { lastName: { contains: token, mode: 'insensitive' as const } },
-                { firstName: { contains: token, mode: 'insensitive' as const } },
-                ...(token.replace(/[^A-Z0-9]/gi, '')
-                  ? [
-                      {
-                        codiceFiscale: {
-                          contains: token.replace(/[^A-Z0-9]/gi, '').toUpperCase(),
-                          mode: 'insensitive' as const,
-                        },
-                      },
-                    ]
-                  : []),
-              ],
-            })),
-          }),
-    };
-    const cursorWhere = position
-      ? {
-          OR: [
-            { lastName: { gt: position.lastName } },
-            { lastName: position.lastName, firstName: { gt: position.firstName } },
-            {
-              lastName: position.lastName,
-              firstName: position.firstName,
-              id: { gt: position.id },
-            },
-          ],
-        }
-      : undefined;
-
-    const rows = await prisma.patient.findMany({
-      where: cursorWhere ? { AND: [baseWhere, cursorWhere] } : baseWhere,
-      orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }, { id: 'asc' }],
-      take: input.limit + 1,
-      select: {
-        id: true,
-        medicalRecordNumber: true,
-        codiceFiscale: true,
-        firstName: true,
-        lastName: true,
-        dateOfBirth: true,
-        sex: true,
-        email: true,
-        phone: true,
-      },
-    });
-    const hasMore = rows.length > input.limit;
-    const items = hasMore ? rows.slice(0, input.limit) : rows;
-    const last = items.at(-1);
-    res.status(200).json({
-      items,
-      hasMore,
-      nextCursor:
-        hasMore && last
-          ? encodePatientPageCursor(
-              { lastName: last.lastName, firstName: last.firstName, id: last.id },
-              filters,
-            )
-          : null,
-    });
+    res.status(200).json(await loadPatientIdentityPage(rawInput, req.operator!));
   } catch (error) {
     if (error instanceof PatientPageInputError) {
       res.status(400).json({ error: error.message });
@@ -165,7 +80,7 @@ router.post('/page/search', async (req, res) => {
 
 // Bounded projection for the multi-patient vital-sign editor. Unlike the legacy roster + one
 // cartella request per patient, this returns at most 25 identities and only the JSON fields the
-// screen renders. It deliberately shares the signed cursor/filter contract with /patients/page.
+// screen renders. It shares the versioned cursor/filter contract with /patients/page.
 router.get('/parameters/page', async (req, res) => {
   try {
     const actor = (req as AuthedRequest).operator!;

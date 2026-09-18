@@ -13,6 +13,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { StepVerifica } from '../StepVerifica';
 Object.assign(globalThis, { React });
 import { assertValidSchedulesInput } from '../../../../../../backend/src/lib/therapy-dose';
+import { emptyTherapyForm } from '../../../operator/cartella/TherapyFormFields';
+import { applyTherapyFormChange } from '../../../operator/cartella/therapyFormChange';
+import { ADMIN_UNITS, DIVISIBLE_UNITS } from '../../../operator/cartella/therapyDose';
+import { TherapyIntakeEditor } from '../../../operator/sections/TherapyIntakeEditor';
+import { StepClinica } from '../StepClinica';
 
 const row: DischargeTherapyRow = {
   farmacoNome: 'Farmaco sintetico',
@@ -214,4 +219,89 @@ test('ambiguous OCR source stays flagged through edits until explicitly reviewed
     stato: 'ok',
   });
   assert.deepEqual(buildIntakeTherapyReview({ terapiaImport: [accepted] })[0].issues, []);
+});
+
+test('patch singular/plural and counted form import survive confirmation and reload', () => {
+  assert.ok(ADMIN_UNITS.includes('cerotto'));
+  assert.ok(!DIVISIBLE_UNITS.has('cerotto'));
+  for (const quantita of ['1 cerotto', '2 cerotti', '1']) {
+    const imported = { ...row, forma: 'cerotto transdermico', viaSomministrazione: 'TD', quantita };
+    const form = dischargeRowToTherapyForm(imported);
+    assert.equal(form.pharmaceuticalForm, 'cerotto');
+    assert.ok(form.schedules.every((s) => s.administrationUnit === 'cerotto'));
+    const input = dischargeRowToTherapyInput(
+      JSON.parse(JSON.stringify(therapyFormToDischargeRow(form, imported))),
+    );
+    assert.deepEqual(therapyInputIssues(input), []);
+    assert.doesNotThrow(() => assertValidSchedulesInput(input.schedules));
+    assert.deepEqual(input.schedules, form.schedules);
+  }
+});
+
+test('AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities', () => {
+  const form = emptyTherapyForm();
+  form.schedules.push({
+    ...form.schedules[0],
+    time: '20:00',
+    administrationUnit: 'ml',
+    quantityNumerator: 5,
+  });
+  const changed = applyTherapyFormChange(form, {
+    farmacoNome: 'Cerotto sintetico',
+    pharmaceuticalForm: 'cerotto',
+  });
+  assert.equal(changed.schedules[0].administrationUnit, 'cerotto');
+  assert.equal(changed.schedules[1].administrationUnit, 'ml');
+  assert.equal(changed.schedules[1].quantityNumerator, 5);
+  assert.equal(form.schedules[0].administrationUnit, 'compressa');
+  const liquid = applyTherapyFormChange(form, { pharmaceuticalForm: 'sciroppo' });
+  assert.equal(liquid.schedules[0].administrationUnit, '');
+  assert.equal(liquid.schedules[1].administrationUnit, 'ml');
+  const fractional = dischargeRowToTherapyForm(row);
+  const patch = applyTherapyFormChange(fractional, { pharmaceuticalForm: 'cerotto' });
+  assert.equal(patch.schedules[0].quantityDenominator, 2, 'never silently round a dose');
+  assert.match(
+    therapyInputIssues(therapyFormToInput(patch)).join(),
+    /cerotti non possono essere divisi/,
+  );
+  assert.throws(() => assertValidSchedulesInput(therapyFormToInput(patch).schedules), /cerotti/);
+});
+
+test('three manual additions and an incomplete row remain alongside imports across draft reload and review', () => {
+  const manual = ['Alfa sintetico', 'Beta sintetico', 'Gamma sintetico'].map((farmacoNome) => ({
+    ...dischargeRowToTherapyForm(row),
+    farmacoNome,
+  }));
+  manual[1].schedules[0].time = '09:15';
+  const data = JSON.parse(
+    JSON.stringify({ terapiaImport: [row], terapia: [...manual, emptyTherapyForm()] }),
+  );
+  const review = buildIntakeTherapyReview(data);
+  assert.equal(review.length, 5);
+  assert.deepEqual(
+    review.map((r) => r.name),
+    [row.farmacoNome, ...manual.map((m) => m.farmacoNome), 'Farmaco da indicare'],
+  );
+  assert.deepEqual(review[2].times, ['09:15', '20:00']);
+  assert.ok(review.slice(0, 4).every((r) => !r.issues.length));
+  assert.match(review[4].issues.join(), /nome del farmaco/);
+  const markup = renderToStaticMarkup(
+    createElement(TherapyIntakeEditor, { value: data.terapia, onChange() {} }),
+  );
+  assert.equal((markup.match(/data-testid="manual-therapy-row"/g) ?? []).length, 4);
+  assert.match(markup, /Aggiungi farmaco/);
+  assert.match(markup, /da completare/);
+});
+
+test('intake keeps complete therapy source available next to manual additions', () => {
+  const source = 'Farmaco sintetico — istruzioni da verificare\n\nTesto sorgente residuo';
+  const markup = renderToStaticMarkup(
+    createElement(StepClinica, {
+      data: { terapiaImport: [row], _terapiaText: source },
+      onUpdateSection() {},
+    }),
+  );
+  assert.match(markup, /Confronta con il testo completo della terapia/);
+  assert.ok(markup.includes(source));
+  assert.ok(markup.indexOf('manual-therapy-editor') < markup.indexOf('Allergie'));
 });

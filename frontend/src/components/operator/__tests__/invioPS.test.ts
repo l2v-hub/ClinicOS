@@ -1,224 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-
-// ── Inline types (avoid React/browser imports) ────────────────────────────────
-
-interface Paziente {
-  id: string;
-  medicalRecordNumber: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  sex: string | null;
-  email: string | null;
-  phone: string | null;
-}
-
-interface AllergiaItem {
-  id: string;
-  allergene: string;
-  reazione: string;
-  gravita: 'lieve' | 'moderata' | 'grave';
-}
-
-interface Diagnosi {
-  descrizione: string;
-  stato: 'attiva' | 'risolta' | 'monitoraggio' | 'sospetta';
-}
-
-interface CartellaPaziente {
-  pazienteId: string;
-  cameraNumero?: string;
-  lettoNumero?: string;
-  diabetico?: boolean;
-  ipertensione?: boolean;
-  terapiaTriturata?: boolean;
-  patologiaIngresso?: string;
-  statoRicovero: 'ricoverato' | 'ambulatoriale' | 'day_hospital' | 'dimesso';
-  dimissione?: {
-    data: string;
-    ora: string;
-    condizioni: 'buone' | 'discrete' | 'scadenti' | 'stabili';
-    autonomiaResidua: string;
-    pianoCuraConsegnato: boolean;
-    istruzioni: string;
-    controlliProgrammati: string;
-    personaAccompagna: string;
-    mezzoTrasporto: string;
-    destinazione: 'domicilio' | 'altra_struttura' | 'hospice' | 'ospedale';
-    materialeConsegnato: string;
-    operatore: string;
-    note: string;
-    compilatoAt: string;
-  };
-  // Minimal required fields for CartellaPaziente
-  anamnesi: Record<string, unknown>;
-  diagnosi: Diagnosi[];
-  terapie: unknown[];
-  farmaci: unknown[];
-  allergie: AllergiaItem[];
-  noteClinica: unknown[];
-  visite: unknown[];
-  parametriVitali: unknown[];
-  interventi: unknown[];
-  pianoCura: Record<string, unknown>;
-  indicatoriRischio: unknown[];
-  documentiConsegnati: unknown[];
-  diarioInfermieristico: unknown[];
-  diarioMedico: unknown[];
-  medicazioniFerite: unknown[];
-  contenzioni: unknown[];
-  valutazioniBraden: unknown[];
-}
-
-interface PatientTherapyAPI {
-  id: string;
-  patientId: string;
-  farmacoNome: string;
-  dosaggio: string;
-  viaSomministrazione: string;
-  tipo: 'periodica' | 'una_tantum';
-  stato: 'attiva' | 'sospesa' | 'conclusa';
-  dataInizio: string;
-  dataFine: string | null;
-  fasceMattina: boolean;
-  fascePranzo: boolean;
-  fascePomeriggio: boolean;
-  fasceSera: boolean;
-  fasceNotte: boolean;
-  orarioSpecifico: string | null;
-  prescrittore: string | null;
-  operatoreInseritore: string | null;
-  note: string | null;
-  dataSomministrazione: string | null;
-  orarioSomministrazione: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// ── Inline buildInvioPSModel (mirrors the real implementation to avoid tsx/ESM issues) ──
-
-const FASCE_LABELS: { boolKey: keyof PatientTherapyAPI; label: string }[] = [
-  { boolKey: 'fasceMattina', label: 'Mattina' },
-  { boolKey: 'fascePranzo', label: 'Pranzo' },
-  { boolKey: 'fascePomeriggio', label: 'Pomeriggio' },
-  { boolKey: 'fasceSera', label: 'Sera' },
-  { boolKey: 'fasceNotte', label: 'Notte' },
-];
-
-function fmtDate(iso: string): string {
-  if (!iso) return '—';
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return '—';
-  return d.toLocaleDateString('it-IT');
-}
-
-function calcAge(dob: string): string {
-  if (!dob) return '';
-  const years = Math.floor((Date.now() - new Date(dob).getTime()) / 31557600000);
-  return years > 0 ? `${years} anni` : '';
-}
-
-function buildInvioPSModel(
-  paziente: Paziente,
-  cartella: CartellaPaziente,
-  therapies: PatientTherapyAPI[],
-) {
-  const cognomeNome = `${paziente.lastName} ${paziente.firstName}`.trim();
-
-  const allergie = (cartella.allergie || [])
-    .map((a) => {
-      const reazione = a.reazione ? ` (${a.reazione})` : '';
-      return { testo: `${a.allergene}${reazione}`.trim(), grave: a.gravita === 'grave' };
-    })
-    .filter((a) => a.testo);
-
-  const diagnosi = (cartella.diagnosi || [])
-    .filter((d) => d.stato === 'attiva' || d.stato === 'monitoraggio')
-    .map((d) => d.descrizione)
-    .filter(Boolean);
-
-  const condizioniCroniche: string[] = [];
-  if (cartella.diabetico) condizioniCroniche.push('Diabete');
-  if (cartella.ipertensione) condizioniCroniche.push('Ipertensione');
-  if (cartella.terapiaTriturata) condizioniCroniche.push('Terapia triturata');
-
-  const patient = {
-    cognomeNome,
-    mrn: paziente.medicalRecordNumber || '—',
-    dataNascita: fmtDate(paziente.dateOfBirth || ''),
-    sesso: paziente.sex || '—',
-    dataStampa: new Date().toLocaleDateString('it-IT'),
-    allergie,
-    diagnosi,
-    condizioniCroniche,
-    patologiaIngresso: cartella.patologiaIngresso || '',
-  };
-
-  const age = calcAge(paziente.dateOfBirth || '');
-  if (age) {
-    patient.sesso = `${patient.sesso} · ${age}`;
-  }
-
-  let dimissione: {
-    data: string;
-    ora: string;
-    condizioni: string;
-    destinazione: string;
-    autonomiaResidua: string;
-    istruzioni: string;
-    controlliProgrammati: string;
-    personaAccompagna: string;
-    mezzoTrasporto: string;
-    materialeConsegnato: string;
-    note: string;
-  } | null = null;
-
-  if (cartella.dimissione) {
-    const d = cartella.dimissione;
-    const DEST_LABELS: Record<string, string> = {
-      domicilio: 'Domicilio',
-      altra_struttura: 'Altra struttura',
-      hospice: 'Hospice',
-      ospedale: 'Ospedale',
-    };
-    dimissione = {
-      data: fmtDate(d.data),
-      ora: d.ora || '—',
-      condizioni: d.condizioni || '—',
-      destinazione: DEST_LABELS[d.destinazione] ?? d.destinazione ?? '—',
-      autonomiaResidua: d.autonomiaResidua || '—',
-      istruzioni: d.istruzioni || '—',
-      controlliProgrammati: d.controlliProgrammati || '—',
-      personaAccompagna: d.personaAccompagna || '—',
-      mezzoTrasporto: d.mezzoTrasporto || '—',
-      materialeConsegnato: d.materialeConsegnato || '—',
-      note: d.note || '',
-    };
-  }
-
-  const terapie = therapies
-    .filter((t) => t.stato === 'attiva')
-    .map((t) => {
-      const fasceLabelList = FASCE_LABELS.filter((f) => t[f.boolKey] === true).map((f) => f.label);
-      const fasce = t.orarioSpecifico
-        ? t.orarioSpecifico
-        : fasceLabelList.length > 0
-          ? fasceLabelList.join(', ')
-          : '—';
-      return {
-        id: t.id,
-        farmaco: t.farmacoNome,
-        dose: t.dosaggio,
-        via: t.viaSomministrazione,
-        fasce,
-        stato: t.stato,
-      };
-    });
-
-  return { patient, dimissione, terapie };
-}
-
+import { buildInvioPSModel } from '../invioPSModel';
+import type { Paziente, CartellaPaziente, PatientTherapyAPI, Diagnosi } from '../../../types';
 // ── Test fixtures ──────────────────────────────────────────────────────────────
 
 const PAZIENTE: Paziente = {
@@ -238,7 +21,17 @@ function makeCartella(overrides: Partial<CartellaPaziente> = {}): CartellaPazien
     statoRicovero: 'ricoverato',
     cameraNumero: '12',
     lettoNumero: 'A',
-    anamnesi: {},
+    anamnesi: {
+      fisiologica: '',
+      patologicaRemota: '',
+      patologicaProssima: '',
+      familiare: '',
+      lavorativa: '',
+      abitudini: '',
+      note: '',
+      updatedAt: '',
+      operatore: '',
+    },
     diagnosi: [],
     terapie: [],
     farmaci: [],
@@ -247,7 +40,13 @@ function makeCartella(overrides: Partial<CartellaPaziente> = {}): CartellaPazien
     visite: [],
     parametriVitali: [],
     interventi: [],
-    pianoCura: {},
+    pianoCura: {
+      obiettivi: '',
+      interventiPrevisti: '',
+      notePianificazione: '',
+      dataAggiornamento: '',
+      operatore: '',
+    },
     indicatoriRischio: [],
     documentiConsegnati: [],
     diarioInfermieristico: [],
@@ -381,8 +180,22 @@ test('(c) orarioSpecifico takes priority over fasce labels', () => {
 test('(d) allergie mapped with testo and grave flag', () => {
   const cartella = makeCartella({
     allergie: [
-      { id: 'a1', allergene: 'Penicillina', reazione: 'Shock anafilattico', gravita: 'grave' },
-      { id: 'a2', allergene: 'Lattosio', reazione: '', gravita: 'lieve' },
+      {
+        id: 'a1',
+        allergene: 'Penicillina',
+        reazione: 'Shock anafilattico',
+        gravita: 'grave',
+        documentato: '',
+        documentatoDa: '',
+      },
+      {
+        id: 'a2',
+        allergene: 'Lattosio',
+        reazione: '',
+        gravita: 'lieve',
+        documentato: '',
+        documentatoDa: '',
+      },
     ],
   });
   const model = buildInvioPSModel(PAZIENTE, cartella, []);
@@ -404,7 +217,7 @@ test('(d) only attive/monitoraggio diagnosi appear', () => {
       { descrizione: 'Scompenso cardiaco', stato: 'attiva' },
       { descrizione: 'Frattura femore', stato: 'monitoraggio' },
       { descrizione: 'Polmonite risolta', stato: 'risolta' },
-    ],
+    ] as Diagnosi[],
   });
   const model = buildInvioPSModel(PAZIENTE, cartella, []);
   assert.deepEqual(model.patient.diagnosi, ['Scompenso cardiaco', 'Frattura femore']);
@@ -423,4 +236,54 @@ test('(d) no camera field on model anymore', () => {
     [],
   );
   assert.equal('camera' in model.patient, false);
+});
+
+test('PS separates current/discharge diagnoses, explicit comorbidities and saved prior history', () => {
+  const cartella = makeCartella();
+  cartella.anamnesi.patologicaRemota = 'Pregressa colecistectomia. Nega diabete.';
+  cartella.anamnesi.patologicaProssima = 'Storia generica non classificata';
+  cartella.diagnosi = [
+    { descrizione: 'Trauma recente', stato: 'attiva', tipo: 'principale' },
+    { descrizione: 'Ipertensione', stato: 'attiva', tipo: 'comorbidita' },
+  ] as Diagnosi[];
+  cartella.ipertensione = true;
+  cartella.terapiaTriturata = true;
+  cartella.anamnesi.note = 'Nota manuale di assistenza';
+  const before = structuredClone(cartella);
+  const patient = buildInvioPSModel(PAZIENTE, cartella, []).patient;
+  assert.deepEqual(patient.diagnosi, ['Trauma recente']);
+  assert.deepEqual(patient.patologiePregresse, [
+    'Pregressa colecistectomia. Nega diabete.',
+    'Ipertensione',
+  ]);
+  assert.deepEqual(patient.condizioniCroniche, []);
+  assert.deepEqual(patient.noteAssistenziali, ['Nota manuale di assistenza', 'Terapia triturata']);
+  assert.equal(JSON.stringify(patient).includes('Storia generica'), false);
+  assert.deepEqual(cartella, before, 'projection never mutates stored/manual/source content');
+});
+
+test('PS exact deduplication preserves distinct admission findings and negations', () => {
+  const cartella = makeCartella({
+    patologiaIngresso: '  TRAUMA RECENTE ',
+    diagnosi: [
+      {
+        descrizione: '## Diagnosi di dimissione:\nTrauma recente',
+        stato: 'attiva',
+        tipo: 'principale',
+      },
+      { descrizione: 'Trauma recente', stato: 'attiva', tipo: 'secondaria' },
+      { descrizione: 'Nega dispnea', stato: 'monitoraggio', tipo: 'secondaria' },
+      { descrizione: 'Dispnea da valutare', stato: 'attiva', tipo: 'secondaria' },
+    ] as Diagnosi[],
+  });
+  const patient = buildInvioPSModel(PAZIENTE, cartella, []).patient;
+  assert.equal(patient.patologiaIngresso, '');
+  assert.equal(patient.diagnosi.length, 3);
+  assert.ok(patient.diagnosi.includes('Nega dispnea'));
+  assert.ok(patient.diagnosi.includes('Dispnea da valutare'));
+  cartella.patologiaIngresso = 'Trauma recente con nuova cefalea';
+  assert.equal(
+    buildInvioPSModel(PAZIENTE, cartella, []).patient.patologiaIngresso,
+    'Trauma recente con nuova cefalea',
+  );
 });

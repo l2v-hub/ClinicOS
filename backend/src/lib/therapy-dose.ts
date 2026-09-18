@@ -105,6 +105,13 @@ export function assertValidSchedulesInput(raw: unknown): void {
     ) {
       throw new InvalidTherapySchedulesError('Unità di somministrazione non valida');
     }
+    if (
+      typeof value.administrationUnit === 'string' &&
+      /^cerott[oi]$/i.test(value.administrationUnit.trim()) &&
+      Number(value.quantityNumerator ?? 1) % Number(value.quantityDenominator ?? 1) !== 0
+    ) {
+      throw new InvalidTherapySchedulesError('I cerotti non possono essere divisi');
+    }
   }
 }
 

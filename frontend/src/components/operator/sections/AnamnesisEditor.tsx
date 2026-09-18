@@ -5,37 +5,16 @@ import { nowISO, fmtDateTime, ClinicalTableSection } from '../cartella/shared';
 import { IcoCheck } from '../../../icons';
 import { ClinicalCard } from '../../shared/ClinicalCard';
 import { InlineEditableField } from '../../shared/InlineEditableField';
+import { legacyPastHistoryProposal, previousClinicalText } from '../../../lib/clinicalHistory';
 
 type ASection = { id: string; key: string; label: string; rows?: number; placeholder?: string };
 const SECTIONS: ASection[] = [
-  {
-    id: 'patologicaProssima',
-    key: 'patologicaProssima',
-    label: 'Anamnesi generale',
-    rows: 5,
-    placeholder: 'Motivo del ricovero, storia recente della malattia…',
-  },
   {
     id: 'patologicaRemota',
     key: 'patologicaRemota',
     label: 'Patologie note e interventi pregressi',
     rows: 4,
     placeholder: 'Patologie croniche, interventi chirurgici, ricoveri precedenti…',
-  },
-  // BUG-054 (#92): "Anamnesi familiare" and "Contesto lavorativo e sociale" removed from intake.
-  {
-    id: 'fisiologica',
-    key: 'fisiologica',
-    label: 'Stato funzionale',
-    rows: 3,
-    placeholder: 'Condizioni basali, autonomia, funzioni vitali di base…',
-  },
-  {
-    id: 'abitudini',
-    key: 'abitudini',
-    label: 'Abitudini e stile di vita',
-    rows: 3,
-    placeholder: 'Fumo, alcol, attività fisica, alimentazione…',
   },
   {
     id: 'note',
@@ -61,6 +40,8 @@ export function AnamnesisEditor({
   // I draft intake possono non avere la chiave anamnesi (manuale: sempre; import: quando il
   // documento non contiene anamnesi) — l'editor deve tollerare value assente (#127).
   const anamnesi = value ?? {};
+  const previous = previousClinicalText(anamnesi);
+  const historyProposal = legacyPastHistoryProposal(anamnesi);
 
   function startCardEdit(cardId: string) {
     setDraft({ ...anamnesi });
@@ -169,9 +150,39 @@ export function AnamnesisEditor({
                     }
                   />
                 )}
+                {key === 'patologicaRemota' && historyProposal && !isEditing && (
+                  <details className="cr-legacy-anamnesi-row">
+                    <summary>Estratto dalla fonte da verificare</summary>
+                    <p style={{ whiteSpace: 'pre-wrap' }}>{historyProposal}</p>
+                    {!readOnly && (
+                      <button
+                        type="button"
+                        className="btn-secondary btn-sm"
+                        onClick={() => {
+                          setDraft({ ...anamnesi, patologicaRemota: historyProposal });
+                          setEditingCard('patologicaRemota');
+                        }}
+                      >
+                        Rivedi e salva nelle patologie pregresse
+                      </button>
+                    )}
+                  </details>
+                )}
               </ClinicalCard>
             );
           })}
+
+          {previous.length > 0 && (
+            <details className="cr-legacy-anamnesi-row" data-testid="previous-clinical-text">
+              <summary>Testo clinico precedente e fonte</summary>
+              {previous.map(({ label, value: text }) => (
+                <div key={label}>
+                  <strong>{label}</strong>
+                  <p style={{ whiteSpace: 'pre-wrap' }}>{text}</p>
+                </div>
+              ))}
+            </details>
+          )}
 
           {!!anamnesi.updatedAt && !editingCard && (
             <p className="cr-update-info">

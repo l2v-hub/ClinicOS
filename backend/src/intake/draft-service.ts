@@ -4,6 +4,7 @@ import { parseDischargeTherapy } from './parse-discharge-therapy.js';
 import type { Operator } from '../ai/auth.js';
 import { canAccessOwnedResource } from '../ai/ownership-policy.js';
 import { AiExtractionError } from '../ai/types.js';
+import { hasClinicalPassage, importedPastHistory, splitPastHistory } from './clinical-history.js';
 
 // ── Allergene sanitation (import seeding) ────────────────────────────────────
 // CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
@@ -104,7 +105,7 @@ export interface SeedDraftFromImportOpts {
  * Build the `data` object for an import-seeded intake draft.
  * Shapes match what the intake workspace editors actually read:
  *   - anagrafica: flat demographics object (IntakeWorkspace / StepAnagrafica)
- *   - anamnesi:   Record<string,unknown> with `patologicaProssima` (AnamnesisEditor)
+ *   - anamnesi:   supported prior history plus lossless legacy/source text
  *   - diagnosi:   Diagnosi[] single-item array (DiagnosisEditor)
  *   - allergie:   AllergiaItem[] single-item array (AllergiesEditor)
  *   - _narrative: lossless copy for confirmDraft (confirm-service reads draft.data._narrative)
@@ -130,18 +131,24 @@ export function buildImportDraftData(
   };
   seeded.anagrafica = anagrafica;
 
-  // 2. Anamnesi — AnamnesisEditor reads value as Record<string,unknown> with named sub-keys.
-  //    `patologicaProssima` is "Anamnesi generale" (first field), the best fit for narrative text.
-  if (narrative.anamnesisText) {
-    seeded.anamnesi = { patologicaProssima: narrative.anamnesisText };
+  // Keep the full source for review; populate prior history only from explicit labels.
+  const pastHistory = importedPastHistory(narrative, rawSections);
+  if (narrative.anamnesisText || pastHistory) {
+    seeded.anamnesi = {
+      ...(narrative.anamnesisText ? { patologicaProssima: narrative.anamnesisText } : {}),
+      ...(pastHistory ? { patologicaRemota: pastHistory } : {}),
+    };
   }
 
   // 3. Diagnosi — DiagnosisEditor reads value as Diagnosi[].
-  if (narrative.diagnosisText) {
+  // A past-history heading accidentally grouped under diagnosis remains accessible in
+  // both the retained history and immutable source, but is not seeded as active disease.
+  const diagnosisText = splitPastHistory(narrative.diagnosisText ?? '').remaining;
+  if (hasClinicalPassage(diagnosisText)) {
     seeded.diagnosi = [
       {
         id: crypto.randomUUID(),
-        descrizione: narrative.diagnosisText,
+        descrizione: diagnosisText,
         tipo: 'principale',
         stato: 'attiva',
         dataInsorgenza: '',

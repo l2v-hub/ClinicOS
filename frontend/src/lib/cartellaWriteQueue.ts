@@ -1,4 +1,5 @@
 import type { CartellaPaziente } from '../types';
+import { mergeMedicazioni } from './mergeMedicazioni';
 
 /** Reconcile record IDs so a form reopened during a pending save cannot erase that save. */
 export function mergeCartellaPatch(
@@ -6,7 +7,14 @@ export function mergeCartellaPatch(
   initial: CartellaPaziente,
   patch: Partial<CartellaPaziente>,
 ): CartellaPaziente {
-  if (!patch.documentiConsegnati) return { ...latest, ...patch };
+  const merged = { ...latest, ...patch };
+  if (patch.medicazioniFerite)
+    merged.medicazioniFerite = mergeMedicazioni(
+      latest.medicazioniFerite ?? [],
+      initial.medicazioniFerite ?? [],
+      patch.medicazioniFerite,
+    );
+  if (!patch.documentiConsegnati) return merged;
   const before = new Map((initial.documentiConsegnati ?? []).map((item) => [item.id, item]));
   const after = new Map(patch.documentiConsegnati.map((item) => [item.id, item]));
   const records = new Map((latest.documentiConsegnati ?? []).map((item) => [item.id, item]));
@@ -15,7 +23,7 @@ export function mergeCartellaPatch(
     if (!before.has(id) || JSON.stringify(before.get(id)) !== JSON.stringify(item))
       records.set(id, item);
   }
-  return { ...latest, ...patch, documentiConsegnati: [...records.values()] };
+  return { ...merged, documentiConsegnati: [...records.values()] };
 }
 
 /** Full-record PUTs must include earlier successful edits from other open sections. */

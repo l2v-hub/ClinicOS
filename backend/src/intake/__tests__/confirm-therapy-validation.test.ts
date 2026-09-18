@@ -245,3 +245,51 @@ test('confirmation remains operator-gated and owner-scoped', async () => {
   assert.equal((await confirm()).status, 404);
   assert.equal(calls.patientWrites, 0);
 });
+
+test('one imported and three manual therapies persist in order including whole patches', async () => {
+  const therapies = [
+    'Importata sintetica',
+    'Alfa sintetico',
+    'Beta sintetico',
+    'Gamma sintetico',
+  ].map((farmacoNome) => ({ ...therapy, farmacoNome }));
+  therapies[2] = {
+    ...therapies[2],
+    pharmaceuticalForm: 'cerotto',
+    viaSomministrazione: 'transdermica',
+    allowedFractions: '1',
+    schedules: [
+      {
+        time: '09:15',
+        quantityNumerator: 1,
+        quantityDenominator: 1,
+        administrationUnit: 'cerotto',
+      },
+    ],
+  };
+  assert.equal((await confirm(JSON.parse(JSON.stringify(therapies)))).status, 201);
+  assert.deepEqual(
+    state.therapies.map((t: any) => t.farmacoNome),
+    therapies.map((t) => t.farmacoNome),
+  );
+  assert.equal(state.therapies[2].schedules[0].administrationUnit, 'cerotto');
+  assert.equal(state.therapies[2].schedules[0].time, '09:15');
+  assert.equal(state.therapies[2].allowedFractions, '1');
+  assert.equal(calls.patientWrites, 1);
+  assert.equal(calls.therapyWrites, 4);
+});
+
+test('a divided patch in the final row rejects the entire confirmation before writes', async () => {
+  const dividedPatch = {
+    ...therapy,
+    pharmaceuticalForm: 'cerotto',
+    viaSomministrazione: 'transdermica',
+    schedules: [{ ...therapy.schedules[0], administrationUnit: 'cerotto' }],
+  };
+  const response = await confirm([therapy, therapy, therapy, dividedPatch]);
+  assert.equal(response.status, 400);
+  assert.match(((await response.json()) as { error: string }).error, /^Terapia 4:.*cerotti/);
+  assert.deepEqual(calls, { transactions: 0, patientWrites: 0, therapyWrites: 0 });
+  assert.deepEqual(state.therapies, []);
+  assert.equal(state.draft.status, 'draft');
+});

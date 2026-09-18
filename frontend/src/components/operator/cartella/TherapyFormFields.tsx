@@ -9,8 +9,12 @@ import {
   formatFraction,
   parseQuantity,
   computeEquivalent,
+  administrationUnitForForm,
+  hasDividedPatch,
+  isPatchUnit,
   type ScheduleRow,
 } from './therapyDose';
+import { applyTherapyFormChange } from './therapyFormChange';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -109,7 +113,8 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
   const typeGroupId = useId();
   const [customQty, setCustomQty] = useState<Record<number, string>>({});
 
-  const update = (patch: Partial<TherapyFormValue>) => onChange({ ...value, ...patch });
+  const update = (patch: Partial<TherapyFormValue>) =>
+    onChange(applyTherapyFormChange(value, patch));
 
   const strengthNum = value.commercialStrengthValue.trim()
     ? Number(value.commercialStrengthValue)
@@ -131,9 +136,8 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           quantityNumerator: 1,
           quantityDenominator: 1,
           administrationUnit:
-            value.pharmaceuticalForm && ADMIN_UNITS.includes(value.pharmaceuticalForm)
-              ? value.pharmaceuticalForm
-              : 'compressa',
+            value.schedules.at(-1)?.administrationUnit ||
+            administrationUnitForForm(value.pharmaceuticalForm),
         },
       ],
     });
@@ -160,22 +164,9 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
         <label>Forma farmaceutica</label>
         <select
           className="form-select"
+          aria-label="Forma farmaceutica"
           value={value.pharmaceuticalForm}
-          onChange={(e) => {
-            const pf = e.target.value;
-            update({
-              pharmaceuticalForm: pf,
-              schedules: value.schedules.map((s) =>
-                ADMIN_UNITS.includes(s.administrationUnit) &&
-                PHARMA_FORMS.includes(s.administrationUnit)
-                  ? {
-                      ...s,
-                      administrationUnit: ADMIN_UNITS.includes(pf) ? pf : s.administrationUnit,
-                    }
-                  : s,
-              ),
-            });
-          }}
+          onChange={(e) => update({ pharmaceuticalForm: e.target.value })}
         >
           <option value="">Seleziona forma</option>
           {PHARMA_FORMS.map((v) => (
@@ -213,36 +204,38 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           </select>
         </div>
       </div>
-      <div className="form-group form-group--full">
-        <label>
-          Frazioni consentite{' '}
-          <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>
-            (la divisibilità va abilitata dall'operatore)
-          </span>
-        </label>
-        <div className="fraction-allow">
-          {FRACTION_PRESETS.map((p) => {
-            const active = value.allowedFractions.includes(p.key);
-            const isWhole = p.key === '1';
-            return (
-              <button
-                key={p.key}
-                type="button"
-                className={`frac-toggle${active ? ' frac-toggle--on' : ''}${isWhole ? ' frac-toggle--locked' : ''}`}
-                disabled={isWhole}
-                title={
-                  isWhole
-                    ? 'Dose intera sempre disponibile'
-                    : `${active ? 'Disabilita' : 'Abilita'} ${p.key}`
-                }
-                onClick={() => toggleAllowedFraction(p.key)}
-              >
-                {p.label} <span className="frac-toggle__sub">{p.key}</span>
-              </button>
-            );
-          })}
+      {!isPatchUnit(value.pharmaceuticalForm) && (
+        <div className="form-group form-group--full">
+          <label>
+            Frazioni consentite{' '}
+            <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>
+              (la divisibilità va abilitata dall'operatore)
+            </span>
+          </label>
+          <div className="fraction-allow">
+            {FRACTION_PRESETS.map((p) => {
+              const active = value.allowedFractions.includes(p.key);
+              const isWhole = p.key === '1';
+              return (
+                <button
+                  key={p.key}
+                  type="button"
+                  className={`frac-toggle${active ? ' frac-toggle--on' : ''}${isWhole ? ' frac-toggle--locked' : ''}`}
+                  disabled={isWhole}
+                  title={
+                    isWhole
+                      ? 'Dose intera sempre disponibile'
+                      : `${active ? 'Disabilita' : 'Abilita'} ${p.key}`
+                  }
+                  onClick={() => toggleAllowedFraction(p.key)}
+                >
+                  {p.label} <span className="frac-toggle__sub">{p.key}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
       <div className="form-group">
         <label>Via somministrazione</label>
         <select
@@ -369,11 +362,13 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                     <input
                       className="form-input sched-row__time"
                       type="time"
+                      aria-label={`Orario ${i + 1}`}
                       value={s.time}
                       onChange={(e) => updateSchedule(i, { time: e.target.value })}
                     />
                     <select
                       className="form-select sched-row__unit"
+                      aria-label={`Unità orario ${i + 1}`}
                       value={s.administrationUnit}
                       onChange={(e) => updateSchedule(i, { administrationUnit: e.target.value })}
                     >
@@ -433,8 +428,9 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                       <input
                         className="form-input qty-chip__other"
                         type="number"
-                        min="0"
-                        step="any"
+                        min={isPatchUnit(s.administrationUnit) ? '1' : '0'}
+                        step={isPatchUnit(s.administrationUnit) ? '1' : 'any'}
+                        aria-label={`Quantità orario ${i + 1}`}
                         placeholder="Quantità"
                         value={
                           s.quantityDenominator === 1
@@ -468,6 +464,11 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
             <button type="button" className="btn-secondary btn-sm" onClick={addSchedule}>
               + Aggiungi orario
             </button>
+            {hasDividedPatch(value.schedules) && (
+              <p className="form-hint" role="alert">
+                I cerotti non possono essere divisi: indica una quantità intera.
+              </p>
+            )}
           </div>
         </div>
       )}

@@ -48,8 +48,15 @@ test('patient page cursor round-trips and is bound to normalized filters', () =>
 });
 
 test('patient page cursor rejects malformed, oversized and incomplete payloads', () => {
-  const incomplete = Buffer.from(JSON.stringify({ v: 1, id: 'patient-1' })).toString('base64url');
+  const incomplete = Buffer.from(JSON.stringify({ v: 2, id: 'patient-1' })).toString('base64url');
   for (const cursor of ['not-base64!', 'a'.repeat(1025), incomplete]) {
     assert.throws(() => decodePatientPageCursor(cursor, {}), PatientPageInputError);
   }
+});
+
+test('patient page rejects cursors from the previous raw-name ordering', () => {
+  const legacy = Buffer.from(
+    JSON.stringify({ v: 1, lastName: 'Rossi', firstName: 'Anna', id: 'patient-1' }),
+  ).toString('base64url');
+  assert.throws(() => decodePatientPageCursor(legacy, {}), PatientPageInputError);
 });

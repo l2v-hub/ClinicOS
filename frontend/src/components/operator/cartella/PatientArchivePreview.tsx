@@ -19,7 +19,7 @@ export function PatientArchivePreview({
   patientId: string;
   operatorId?: string;
   operatorRole?: string;
-  document?: PatientDocumentMeta;
+  document?: Pick<PatientDocumentMeta, 'id' | 'originalName'>;
   file?: File | null;
   title: string;
   unavailable?: boolean;

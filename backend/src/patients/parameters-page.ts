@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
 import { patientScopeWhere } from './patient-scope.js';
+import { patientAlphabeticalAfter, patientAlphabeticalOrder } from './alphabetical-order.js';
 import {
   PatientPageInputError,
   decodePatientPageCursor,
@@ -98,11 +99,7 @@ export async function loadPatientParametersPage(
     }
   }
   if (position) {
-    predicates.push(Prisma.sql`(
-      p."lastName" > ${position.lastName} OR
-      (p."lastName" = ${position.lastName} AND p."firstName" > ${position.firstName}) OR
-      (p."lastName" = ${position.lastName} AND p."firstName" = ${position.firstName} AND p."id" > ${position.id})
-    )`);
+    predicates.push(patientAlphabeticalAfter(position));
   }
 
   const whereSql = predicates.length
@@ -156,7 +153,7 @@ export async function loadPatientParametersPage(
     FROM "Patient" p
     LEFT JOIN "Cartella" c ON c."patientId" = p."id"
     ${whereSql}
-    ORDER BY p."lastName" ASC, p."firstName" ASC, p."id" ASC
+    ORDER BY ${patientAlphabeticalOrder}
     LIMIT ${limit + 1}
   `);
 

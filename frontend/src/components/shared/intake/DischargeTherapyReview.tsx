@@ -5,7 +5,6 @@
 // extracted text alongside for comparison; edits fold back into the raw row so the unchanged
 // confirm path (dischargeRowToTherapyInput) reads them.
 
-import { useEffect, useState } from 'react';
 import { buildIntakeTherapyReview, therapyInputIssues } from './intakeTherapies';
 import {
   TherapyFormFields,
@@ -24,19 +23,10 @@ interface Props {
 }
 
 export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props) {
-  // Full-fidelity local form state (one TherapyFormValue per row): deriving the form from the raw
-  // row on every render would be lossy (row ⇄ form is not a perfect round-trip).
-  const [forms, setForms] = useState<TherapyFormValue[]>(() => rows.map(dischargeRowToTherapyForm));
-
-  // Re-seed only if the row count changes from OUTSIDE. Una rimozione fatta qui aggiorna
-  // insieme forms e rows, quindi al render successivo le lunghezze coincidono e le modifiche
-  // gia' apportate alle altre righe non vengono perse.
-  useEffect(() => {
-    setForms((prev) => (prev.length === rows.length ? prev : rows.map(dischargeRowToTherapyForm)));
-  }, [rows]);
+  // reviewedTherapy holds the full form; the parent draft remains the only source of truth.
+  const forms = rows.map(dischargeRowToTherapyForm);
 
   function updateForm(i: number, next: TherapyFormValue) {
-    setForms((prev) => prev.map((f, idx) => (idx === i ? next : f)));
     onChange(rows.map((r, idx) => (idx === i ? therapyFormToDischargeRow(next, r) : r)));
   }
 
@@ -44,7 +34,6 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
   // (sospesi durante il ricovero, citati nell'anamnesi, letti male). Potendoli solo correggere
   // l'operatore sarebbe costretto a salvarli comunque: qui si eliminano.
   function rimuoviRiga(i: number) {
-    setForms((prev) => prev.filter((_, idx) => idx !== i));
     onChange(rows.filter((_, idx) => idx !== i));
   }
 

@@ -50,7 +50,7 @@ export function StepVerifica({
   const allergieStatus = data.allergieStatus as string | undefined;
   const therapies = buildIntakeTherapyReview(data);
   const invalidTherapies = therapies.filter((t) => t.issues.length > 0);
-  const anamnesi = (data.anamnesi ?? {}) as { patologicaProssima?: string };
+  const anamnesi = (data.anamnesi ?? {}) as { patologicaRemota?: string; note?: string };
   const diagnosi = Array.isArray(data.diagnosi)
     ? (data.diagnosi as Array<{ descrizione?: string }>)
     : [];
@@ -211,14 +211,20 @@ export function StepVerifica({
         )}
       </section>
 
-      {(anamnesi.patologicaProssima?.trim() || diagnosi.length > 0) && (
+      {(anamnesi.patologicaRemota?.trim() || anamnesi.note?.trim() || diagnosi.length > 0) && (
         <section className="step-verifica__section">
           <h4 className="step-verifica__section-title">Anamnesi e diagnosi</h4>
           <dl className="step-verifica__dl">
-            {anamnesi.patologicaProssima?.trim() && (
+            {anamnesi.patologicaRemota?.trim() && (
               <div className="step-verifica__row">
-                <dt>Anamnesi</dt>
-                <dd>{excerpt(anamnesi.patologicaProssima)}</dd>
+                <dt>Patologie note e interventi pregressi</dt>
+                <dd>{excerpt(anamnesi.patologicaRemota)}</dd>
+              </div>
+            )}
+            {anamnesi.note?.trim() && (
+              <div className="step-verifica__row">
+                <dt>Note aggiuntive</dt>
+                <dd>{excerpt(anamnesi.note)}</dd>
               </div>
             )}
             {diagnosi.map((d, i) => (

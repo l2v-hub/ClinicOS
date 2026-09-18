@@ -8,6 +8,7 @@
 
 import type { DischargeNarrativeDraft } from './narrative.js';
 import { NARRATIVE_SCHEMA_VERSION } from './narrative.js';
+import { isPastHistoryHeading } from '../../intake/clinical-history.js';
 
 type DraftTextField =
   | 'diagnosisText'
@@ -143,6 +144,9 @@ function headingField(
     headingText = t;
   }
   const lower = headingText.toLowerCase().replace(/[:#]/g, '').trim();
+  // Prior conditions / procedures belong to history, even if their heading contains
+  // "interventi". Current-admission procedures keep their separate canonical section.
+  if (isPastHistoryHeading(lower)) return { field: 'anamnesisText', heading: headingText };
   for (const a of ALIASES) {
     // L'etichetta deve APRIRE il titolo. Se la parola chiave compare a meta' riga e'
     // contenuto clinico, non un'intestazione.

@@ -1,3 +1,4 @@
+import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { useEffect, useState } from 'react';
 import type {
   Consegna,
@@ -343,6 +344,7 @@ function ConsegnaCard({
           <span className="consegna-paziente">{c.pazienteNome}</span>
         )}
       </div>
+      <ConsegnaTimestamp createdAt={c.createdAt} />
       <div className="consegna-note">
         {canEditContent ? (
           <InlineEditableField

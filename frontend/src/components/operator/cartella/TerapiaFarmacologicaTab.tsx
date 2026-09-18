@@ -21,6 +21,7 @@ import {
   computeEquivalent,
   scheduleLabel,
   parseAllowedFractions,
+  hasDividedPatch,
   type ScheduleRow,
 } from './therapyDose';
 import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
@@ -574,6 +575,10 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   const handleSave = async () => {
     if (!form.farmacoNome.trim() || !form.dataInizio) return;
+    if (form.tipo === 'periodica' && hasDividedPatch(form.schedules)) {
+      setError('I cerotti non possono essere divisi: indica una quantità intera.');
+      return;
+    }
     if (form.tipo === 'periodica' && !form.schedules.some((s) => /^\d{1,2}:\d{2}$/.test(s.time))) {
       setError('Aggiungi almeno un orario di somministrazione.');
       return;
