@@ -42,25 +42,19 @@
 }
 
 .ricerca-farmaco__criterio {
-  display: flex;
-  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
 }
 
-/* Pillole blu piene per la voce attiva: stessa grammatica della L2/L3 dell'app. */
-.ricerca-farmaco__criterio button {
-  padding: 5px 12px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: #fff;
-  font-size: 12px;
-  color: var(--text-muted);
-  cursor: pointer;
+.ricerca-farmaco__criterio .filter-chip:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }
 
-.ricerca-farmaco__criterio button.is-attivo {
-  border-color: var(--blue);
-  background: var(--blue);
-  color: #fff;
+@media (max-width: 767px) {
+  .ricerca-farmaco__criterio .filter-chip {
+    min-height: 44px;
+  }
 }
 
 .ricerca-farmaco__esiti {

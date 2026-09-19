@@ -104,7 +104,11 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
         />
       </div>
 
-      <div className="ricerca-farmaco__criterio" role="group" aria-label="Criterio di ricerca">
+      <div
+        className="filter-chips ricerca-farmaco__criterio"
+        role="group"
+        aria-label="Criterio di ricerca"
+      >
         {(
           [
             ['nome', 'Nome commerciale'],
@@ -114,7 +118,7 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
           <button
             key={valore}
             type="button"
-            className={criterio === valore ? 'is-attivo' : undefined}
+            className={`filter-chip${criterio === valore ? ' active' : ''}`}
             aria-pressed={criterio === valore}
             onClick={() => setCriterio(valore)}
           >
