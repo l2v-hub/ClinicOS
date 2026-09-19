@@ -31,7 +31,7 @@ export function TurnView({
   if (turn.role === 'utente') {
     return (
       <div className="ai-asst__turn agnos-turn agnos-turn--utente">
-        {turn.channel === 'voce' && <span className="agnos-transcript-label">Richiesta vocale verificata</span>}
+        {turn.channel === 'voce' && <span className="agnos-transcript-label">Ho capito · trascrizione vocale</span>}
         <div className="ai-asst__q">{turn.text}</div>
       </div>
     );

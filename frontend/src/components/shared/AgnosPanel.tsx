@@ -22,9 +22,8 @@ import {
 // CRU write actions with preview/confirm. Replaces AIAssistantButton as THE
 // assistant entry point (same FAB affordance). Delete is never executable:
 // l'assistente rifiuta e rimanda al comando dell'interfaccia.
-// US3: dictation drops the transcript INTO the text field (editable before
-// send, FR-016) and the command travels with channel:'voce' through the SAME
-// plan/execute path as typed text. Optional TTS reads the replies aloud.
+// Dictation prepares a proposal with channel:'voce' through the same plan/execute
+// path as typed text. The operator reviews/edits the proposal before explicit save.
 // UI: un solo assistente virtuale. La scelta manuale del sub-agent è sparita —
 // è l'intent a decidere chi risponde (backend `resolveAgent`), così l'operatore
 // che chiede un dato clinico lo ottiene invece di ricevere un rimando.
@@ -71,7 +70,7 @@ export function AgnosPanel({
   onNavigate,
 }: Props) {
   const [open, setOpen] = useState(false);
-  const [voiceConsent, setVoiceConsent] = useState(false);
+  const [consentPrompt, setConsentPrompt] = useState(false);
   const [input, setInput] = useState('');
   const [workspace, setWorkspace] = useState(false);
   const [minimized, setMinimized] = useState(false);
@@ -80,6 +79,10 @@ export function AgnosPanel({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   /** true se il testo in input proviene da dettatura (anche dopo modifica: FR-016 → channel:'voce'). */
   const dictatedRef = useRef(false);
+  const voiceSession = useRef<{ scope: string; draft: string } | null>(null);
+  const scope = JSON.stringify([operatorId, operatorRole, currentPatientId, navKey]);
+  const liveVoiceContext = useRef({ scope, visible: open && !minimized });
+  liveVoiceContext.current = { scope, visible: open && !minimized };
 
   const {
     turns,
@@ -107,18 +110,28 @@ export function AgnosPanel({
 
   const tts = useSpeechOutput();
   const voice = useVoiceInput({
-    consentGranted: voiceConsent,
     onFinalTranscript: (text) => {
-      setInput((prev) => (prev.trim() ? `${prev.trimEnd()} ${text}` : text));
-      dictatedRef.current = true;
-      inputRef.current?.focus();
+      const session = voiceSession.current;
+      voiceSession.current = null;
+      if (!session || session.scope !== liveVoiceContext.current.scope || !liveVoiceContext.current.visible) return;
+      const command = [session.draft.trim(), text.trim()].filter(Boolean).join(' ');
+      if (!command) return;
+      // Planning is read-only. Only confirmPending can execute the displayed proposal.
+      if (busy || pending?.uncertain) { setInput(command); dictatedRef.current = true; return; }
+      setInput(''); dictatedRef.current = false;
+      setVisibleTurnCount(AGNOS_TURN_WINDOW);
+      void sendCommand(command, 'voce');
     },
   });
+  useEffect(() => { if (!voice.active) voiceSession.current = null; }, [voice.active]);
   const cancelVoice = voice.cancel;
   const stopSpeech = tts.stop;
   useEffect(() => {
-    cancelVoice(); stopSpeech(); setInput(''); dictatedRef.current = false;
-  }, [currentPatientId, operatorId, operatorRole, cancelVoice, stopSpeech]);
+    voiceSession.current = null;
+    cancelVoice(); stopSpeech(); setConsentPrompt(false); setInput(''); dictatedRef.current = false;
+  }, [scope, cancelVoice, stopSpeech]);
+  const revokeVoiceConsent = voice.revokeConsent;
+  useEffect(() => { revokeVoiceConsent(); }, [operatorId, operatorRole, revokeVoiceConsent]);
 
   useEffect(() => {
     // `forceOpen` is an external imperative signal, so mirroring it is intentional.
@@ -133,8 +146,16 @@ export function AgnosPanel({
     wasOpenRef.current = open;
   }, [open]);
   useEffect(() => {
-    bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight });
-  }, [turns, busy]);
+    const body = bodyRef.current;
+    if (!body) return;
+    const requests = body.querySelectorAll('.agnos-turn--utente');
+    const latestRequest = requests.item(requests.length - 1);
+    // Keep what was understood visible alongside the proposal, including after automatic dictation.
+    const reviewing = phase === 'planning' || phase === 'approval';
+    body.scrollTo({ top: reviewing && latestRequest
+      ? body.scrollTop + latestRequest.getBoundingClientRect().top - body.getBoundingClientRect().top
+      : body.scrollHeight });
+  }, [turns, busy, phase]);
 
   // TTS: every state transition affects the newest assistant turn. Inspect only that turn instead
   // of rescanning the entire conversation after every patch/append.
@@ -157,22 +178,28 @@ export function AgnosPanel({
     [turns, visibleTurnCount],
   );
 
-  function handleClose() {
+  function cancelDictation() {
+    voiceSession.current = null;
+    setConsentPrompt(false);
     voice.cancel();
+  }
+
+  function handleClose() {
+    cancelDictation();
     tts.stop(); // FR-017: chiusura pannello = stop riproduzione
     setOpen(false);
     onClose?.();
   }
 
   function showPage() {
-    voice.cancel();
+    cancelDictation();
     tts.stop();
     setMinimized(true);
   }
 
   function send() {
     const text = input.trim();
-    if (!text || busy || voice.active || pending?.uncertain) return;
+    if (!text || busy || voiceSession.current || consentPrompt || pending?.uncertain) return;
     tts.stop(); // FR-017: nuovo invio interrompe la riproduzione
     const channel = dictatedRef.current ? ('voce' as const) : ('testo' as const);
     dictatedRef.current = false;
@@ -196,13 +223,22 @@ export function AgnosPanel({
     }
   }
 
+  function startDictation(grantConsent = false) {
+    if (busy || pending?.uncertain || !liveVoiceContext.current.visible || voiceSession.current) return;
+    setConsentPrompt(false);
+    tts.stop();
+    voiceSession.current = { scope, draft: input };
+    if (grantConsent) void voice.grantConsentAndStart();
+    else void voice.start();
+  }
+
   function toggleMic() {
-    if (voice.active) {
-      voice.stop();
-      return;
-    }
-    tts.stop(); // non ascoltare e parlare insieme
-    void voice.start();
+    if (voice.active) { voice.stop(); return; }
+    // A completed error/silence session has no result callback; allow a fresh attempt.
+    voiceSession.current = null;
+    if (busy || pending?.uncertain) return;
+    if (!voice.consentGranted) { setConsentPrompt(true); return; }
+    startDictation();
   }
 
   const scopeLabel = currentPatientId
@@ -307,7 +343,7 @@ export function AgnosPanel({
               operatorRole={operatorRole}
               hasCurrentPatient={!!currentPatientId}
               selectedText={input}
-              disabled={busy || voice.active}
+              disabled={busy || voice.active || consentPrompt}
               onSelect={prefillSuggestedQuestion}
             />
           )}
@@ -330,11 +366,12 @@ export function AgnosPanel({
               key={i}
               turn={t}
               isPending={pending?.turnIndex === i}
-              busy={busy}
+              busy={busy || voice.active || consentPrompt}
               navigationReady={pending?.navigationReady === true}
               destination={pending?.turnIndex === i ? pending.navigation?.label : undefined}
               onOpenPage={() => { void retryNavigation().then((opened) => { if (opened) showPage(); }); }}
               onConfirm={() => {
+                if (voiceSession.current || consentPrompt) return;
                 setVisibleTurnCount(AGNOS_TURN_WINDOW);
                 void confirmPending();
               }}
@@ -350,8 +387,10 @@ export function AgnosPanel({
         </div>
 
         <AgnosComposer inputRef={inputRef} input={input} dictated={dictatedRef.current}
-          busy={busy || pending?.uncertain === true} voice={voice} tts={tts} consent={voiceConsent}
-          onConsent={setVoiceConsent} onInput={(value) => {
+          busy={busy || pending?.uncertain === true} voice={voice} tts={tts} consentPrompt={consentPrompt}
+          onAcceptConsent={() => startDictation(true)} onDismissConsent={() => setConsentPrompt(false)}
+          onCancelVoice={cancelDictation} onRevokeConsent={() => { cancelDictation(); voice.revokeConsent(); }}
+          onInput={(value) => {
             setInput(value); if (!value.trim()) dictatedRef.current = false;
           }} onSend={send} onMic={toggleMic} />
       </aside>

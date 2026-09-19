@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createVoiceStartGate } from './voiceStartGate';
 
-// The browser may use a remote speech service. Only the reviewed transcript is sent to ClinicOS.
+// The browser may use a remote speech service. Consent covers transcription and automatic planning.
 export type VoicePhase = 'idle' | 'starting' | 'listening' | 'processing';
 type SR = {
   lang: string; interimResults: boolean; continuous: boolean;
@@ -21,8 +21,9 @@ export function voiceErrorMessage(error?: string) {
   if (error === 'network') return 'Il servizio vocale non risponde. Riprova oppure scrivi la richiesta.';
   return 'Non riesco ad acquisire la voce. Riprova oppure scrivi la richiesta.';
 }
-interface UseVoiceInputOptions { onFinalTranscript: (text: string) => void; consentGranted: boolean }
-export function useVoiceInput({ onFinalTranscript, consentGranted }: UseVoiceInputOptions) {
+interface UseVoiceInputOptions { onFinalTranscript: (text: string) => void }
+export function useVoiceInput({ onFinalTranscript }: UseVoiceInputOptions) {
+  const [consentGranted, setConsentGranted] = useState(false);
   const [phase, setPhase] = useState<VoicePhase>('idle');
   const [interimText, setInterimText] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +31,7 @@ export function useVoiceInput({ onFinalTranscript, consentGranted }: UseVoiceInp
   const textRef = useRef('');
   const failedRef = useRef(false);
   const onFinalRef = useRef(onFinalTranscript); onFinalRef.current = onFinalTranscript;
-  const consentRef = useRef(consentGranted); consentRef.current = consentGranted;
+  const consentRef = useRef(false);
   const gate = useRef(createVoiceStartGate());
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clearTimer = () => { if (timer.current) clearTimeout(timer.current); timer.current = null; };
@@ -101,7 +102,15 @@ export function useVoiceInput({ onFinalTranscript, consentGranted }: UseVoiceInp
     timer.current = setTimeout(stop, 60_000);
     try { rec.start(); } catch { failedRef.current = true; setError(voiceErrorMessage()); finish(rec); }
   }, [stop]);
-  useEffect(() => { if (!consentGranted) cancel(); }, [consentGranted, cancel]);
+  // Called only by the explicit consent button; update the fence before starting in this gesture.
+  const grantConsentAndStart = useCallback(() => {
+    consentRef.current = true; setConsentGranted(true);
+    return start();
+  }, [start]);
+  const revokeConsent = useCallback(() => {
+    consentRef.current = false; setConsentGranted(false); cancel();
+  }, [cancel]);
   useEffect(() => () => cancel(), [cancel]);
-  return { supported, phase, active: phase !== 'idle', listening: phase === 'listening', interimText, error, start, stop, cancel };
+  return { supported, phase, active: phase !== 'idle', listening: phase === 'listening', interimText, error,
+    consentGranted, grantConsentAndStart, revokeConsent, start, stop, cancel };
 }

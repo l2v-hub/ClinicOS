@@ -14,7 +14,13 @@
 .agnos-compose-actions button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
 .agnos-compose-help { margin: 0; padding: 0 12px 8px; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
 .agnos-compose .agnos-compose-help { padding: 0; }
-.agnos-panel .agnos-voice-consent { margin: 0; font-size: 11px; padding: 6px 12px max(8px, env(safe-area-inset-bottom)); }
+.agnos-panel .agnos-voice-consent { padding: 0 14px max(8px, env(safe-area-inset-bottom)); }
+.agnos-voice-consent .link-btn { font-size: 12px; min-height: 28px; }
+.agnos-consent-prompt { padding: 16px; border-top: 1px solid var(--border); background: #f3f7fd; font-size: 13px; line-height: 1.5; }
+.agnos-consent-prompt > strong { display: block; font-size: 15px; color: var(--text); }
+.agnos-consent-prompt p { margin: 8px 0 12px; }
+.agnos-composer { max-height: 65%; overflow-y: auto; overscroll-behavior: contain; }
+.agnos-consent-prompt .agnos-compose-actions { flex-wrap: wrap; }
 .agnos-workflow-status { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; background: #eef4ff; border-bottom: 1px solid var(--border); color: #244676; font-size: 13px; line-height: 1.4; }
 .agnos-workflow-status > span:not(.agnos-workflow-spinner) { flex: 1 1 220px; }
 .agnos-workflow-status[data-phase='error'] { background: #fff7e8; color: #76501c; }
