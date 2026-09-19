@@ -139,8 +139,8 @@
   background: #2f6bed;
 }
 
-/* Patient-record section rail: every destination remains visible without horizontal scrolling.
-   It is a quieter surface than L2 and wraps naturally on tablet instead of clipping labels. */
+/* Patient-record section rail: content-sized tabs wrap without horizontal scrolling.
+   Keep destinations compact even when an area contains only a few short labels. */
 .top-nav--section-grid {
   min-height: 52px;
   margin-top: 8px;
@@ -153,8 +153,9 @@
 
 .top-nav--section-grid .top-nav__items {
   flex: 1 1 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
   gap: 4px 8px;
   overflow: visible;
   width: 100%;
@@ -162,14 +163,16 @@
 }
 
 .top-nav--section-grid .top-nav__item {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   min-width: 0;
-  min-height: 46px;
-  padding: 8px 9px;
+  min-height: 44px;
+  padding: 8px 12px;
   border-radius: 7px;
   line-height: 1.25;
   white-space: normal;
   text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
 .top-nav--section-grid .top-nav__item:hover {
