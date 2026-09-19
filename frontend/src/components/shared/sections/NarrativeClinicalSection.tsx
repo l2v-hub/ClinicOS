@@ -189,6 +189,7 @@ export function NarrativeClinicalSection(props: NarrativeClinicalSectionProps) {
       ) : (
         <>
           <SemanticTaggedText
+            formatMarkdown
             rawText={displayText}
             annotations={toAnnotations(annotations)}
             sourceTitle={src || undefined}

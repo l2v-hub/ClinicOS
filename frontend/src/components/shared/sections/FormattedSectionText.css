@@ -1,0 +1,62 @@
+.section-markdown {
+  max-width: 92ch;
+  min-width: 0;
+  line-height: 1.75;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.section-markdown > * {
+  margin: 0 0 16px;
+}
+
+.section-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.section-markdown :is(h4, h5, h6) {
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.section-markdown > :first-child {
+  margin-top: 0;
+}
+
+.section-markdown p,
+.section-markdown li > div {
+  white-space: pre-wrap;
+  min-width: 0;
+}
+
+.section-markdown ul {
+  list-style: disc outside;
+  padding-left: 24px;
+}
+
+.section-markdown li {
+  margin-bottom: 8px;
+}
+
+.section-markdown li:last-child {
+  margin-bottom: 0;
+}
+
+.section-markdown__numbered {
+  padding-left: 0;
+  list-style: none;
+}
+
+.section-markdown__numbered > li {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 10px;
+}
+
+.section-markdown__number {
+  font-variant-numeric: tabular-nums;
+}
