@@ -93,6 +93,7 @@ model Patient {
   diaryEntries              PatientDiaryEntry[]
   narrativeSections         PatientNarrativeSection[]
   documents                 PatientDocument[]
+  parameterReadings         PatientParameterReading[]
 
   @@index([lastName, firstName])
   @@index([registeredById])
@@ -155,6 +156,22 @@ model Cartella {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+}
+
+// Immutable grouped vital observations. Legacy whole-cartella PUTs cannot replace this archive.
+model PatientParameterReading {
+  id               String   @id @default(uuid())
+  patientId        String
+  requestId        String
+  measuredAt       DateTime @db.Timestamptz(3)
+  values           Json
+  authorOperatorId String
+  authorName       String
+  createdAt        DateTime @default(now()) @db.Timestamptz(3)
+  patient          Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, requestId])
+  @@index([patientId, measuredAt, id])
 }
 
 model ClinicalRecord {

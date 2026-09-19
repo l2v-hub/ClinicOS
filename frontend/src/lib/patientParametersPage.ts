@@ -10,7 +10,7 @@ export interface PatientParametersPageItem {
   cartella: Pick<
     CartellaPaziente,
     'pazienteId' | 'parametriMensili' | 'cameraNumero' | 'lettoNumero'
-  >;
+  > & { readingCount?: number; lastReadingAt?: string | null };
 }
 
 export interface PatientParametersPageResponse {
@@ -21,13 +21,21 @@ export interface PatientParametersPageResponse {
 
 export function buildPatientParametersPageUrl(
   apiUrl: string,
-  filters: { q?: string; cursor?: string; limit?: number; month?: number; year?: number },
+  filters: {
+    q?: string;
+    cursor?: string;
+    limit?: number;
+    month?: number;
+    year?: number;
+    date?: string;
+  },
 ): string {
   const requested = Number.isFinite(filters.limit) ? Math.trunc(filters.limit as number) : 25;
   const params = new URLSearchParams({ limit: String(Math.min(25, Math.max(1, requested))) });
   const now = new Date();
   params.set('month', String(filters.month ?? now.getMonth() + 1));
   params.set('year', String(filters.year ?? now.getFullYear()));
+  if (filters.date) params.set('date', filters.date);
   const q = filters.q?.trim();
   if (q) params.set('q', q);
   if (filters.cursor) params.set('cursor', filters.cursor);
@@ -36,7 +44,14 @@ export function buildPatientParametersPageUrl(
 
 export async function fetchPatientParametersPage(
   apiUrl: string,
-  filters: { q?: string; cursor?: string; limit?: number; month?: number; year?: number },
+  filters: {
+    q?: string;
+    cursor?: string;
+    limit?: number;
+    month?: number;
+    year?: number;
+    date?: string;
+  },
   options: { headers: HeadersInit; signal?: AbortSignal; fetcher?: typeof fetch },
 ): Promise<PatientParametersPageResponse> {
   const response = await (options.fetcher ?? fetch)(

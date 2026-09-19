@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import type { Operator } from '../ai/auth.js';
 import { prisma } from '../lib/prisma.js';
 import { patientScopeWhere } from './patient-scope.js';
+import { facilityToday, parameterDate, ParameterReadingError } from './parameter-reading-input.js';
 import { patientAlphabeticalAfter, patientAlphabeticalOrder } from './alphabetical-order.js';
 import {
   PatientPageInputError,
@@ -22,16 +23,23 @@ interface ParameterPageRow {
   parametriMensili: unknown;
   cameraNumero: string | null;
   lettoNumero: string | null;
+  readingCount: number;
+  lastReadingAt: Date | null;
 }
 
 export interface PatientParametersPage {
   items: Array<{
-    patient: Omit<ParameterPageRow, 'parametriMensili' | 'cameraNumero' | 'lettoNumero'>;
+    patient: Omit<
+      ParameterPageRow,
+      'parametriMensili' | 'cameraNumero' | 'lettoNumero' | 'readingCount' | 'lastReadingAt'
+    >;
     cartella: {
       pazienteId: string;
       parametriMensili: unknown[];
       cameraNumero?: string;
       lettoNumero?: string;
+      readingCount: number;
+      lastReadingAt: string | null;
     };
   }>;
   hasMore: boolean;
@@ -72,6 +80,14 @@ export async function loadPatientParametersPage(
 ): Promise<PatientParametersPage> {
   const input = parsePatientPageQuery(query);
   const { month, year } = period(query);
+  let readingDate: string;
+  try {
+    readingDate = query.date === undefined ? facilityToday() : parameterDate(query.date);
+  } catch (error) {
+    throw new PatientPageInputError(
+      error instanceof ParameterReadingError ? error.message : 'Data non valida',
+    );
+  }
   const limit = Math.min(input.limit, MAX_PARAMETERS_PAGE);
   const filters = { q: input.q, sex: input.sex };
   const position = input.cursor ? decodePatientPageCursor(input.cursor, filters) : undefined;
@@ -149,7 +165,13 @@ export async function loadPatientParametersPage(
           AND month_entry->>'anno' = ${String(year)}
       ), '[]'::jsonb) AS "parametriMensili",
       c."data"->>'cameraNumero' AS "cameraNumero",
-      c."data"->>'lettoNumero' AS "lettoNumero"
+      c."data"->>'lettoNumero' AS "lettoNumero",
+      (SELECT count(*)::int FROM "PatientParameterReading" r WHERE r."patientId" = p."id"
+        AND r."measuredAt" >= (${readingDate}::date::timestamp AT TIME ZONE 'Europe/Rome')
+        AND r."measuredAt" < ((${readingDate}::date + 1)::timestamp AT TIME ZONE 'Europe/Rome')) AS "readingCount",
+      (SELECT max(r."measuredAt") AT TIME ZONE 'UTC' FROM "PatientParameterReading" r WHERE r."patientId" = p."id"
+        AND r."measuredAt" >= (${readingDate}::date::timestamp AT TIME ZONE 'Europe/Rome')
+        AND r."measuredAt" < ((${readingDate}::date + 1)::timestamp AT TIME ZONE 'Europe/Rome')) AS "lastReadingAt"
     FROM "Patient" p
     LEFT JOIN "Cartella" c ON c."patientId" = p."id"
     ${whereSql}
@@ -161,15 +183,26 @@ export async function loadPatientParametersPage(
   const visible = hasMore ? rows.slice(0, limit) : rows;
   const last = visible.at(-1);
   return {
-    items: visible.map(({ parametriMensili, cameraNumero, lettoNumero, ...patient }) => ({
-      patient,
-      cartella: {
-        pazienteId: patient.id,
-        parametriMensili: Array.isArray(parametriMensili) ? parametriMensili : [],
-        ...(cameraNumero && { cameraNumero }),
-        ...(lettoNumero && { lettoNumero }),
-      },
-    })),
+    items: visible.map(
+      ({
+        parametriMensili,
+        cameraNumero,
+        lettoNumero,
+        readingCount,
+        lastReadingAt,
+        ...patient
+      }) => ({
+        patient,
+        cartella: {
+          pazienteId: patient.id,
+          readingCount,
+          lastReadingAt: lastReadingAt?.toISOString() ?? null,
+          parametriMensili: Array.isArray(parametriMensili) ? parametriMensili : [],
+          ...(cameraNumero && { cameraNumero }),
+          ...(lettoNumero && { lettoNumero }),
+        },
+      }),
+    ),
     hasMore,
     nextCursor:
       hasMore && last

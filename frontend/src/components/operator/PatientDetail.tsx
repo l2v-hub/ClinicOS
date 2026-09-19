@@ -64,10 +64,10 @@ import {
   ScalaBradenTab,
   ScalaTinettiTab,
   TherapyEditor,
-  VitalSignsEditor,
 } from './PatientDetailLazyTabs';
 import { ClinicalSectionLoading } from './ClinicalSectionLoading';
 import { AccessibleDialogSurface } from '../shared/AccessibleDialogSurface';
+import { PatientVitalSignsView } from './PatientVitalSignsView';
 import './PatientRecordData.css';
 import './PatientOverview.css';
 
@@ -291,7 +291,10 @@ export function PatientDetail({
   useEffect(() => {
     if (!initialTab || navigationRequestId === undefined) return;
     setTab(initialTab);
-    setActiveGroup(TAB_GROUPS.find((group) => group.tabs.some((item) => item.id === initialTab))?.id ?? 'panoramica');
+    setActiveGroup(
+      TAB_GROUPS.find((group) => group.tabs.some((item) => item.id === initialTab))?.id ??
+        'panoramica',
+    );
   }, [initialTab, navigationRequestId]);
   // AC5: anomalie di terapia del paziente. Passa dalla stessa richiesta di reparto che alimenta
   // la lista pazienti, quindi aprire una cartella non aggiunge chiamate.
@@ -2864,14 +2867,13 @@ export function PatientDetail({
             )}
             {tab === 'note' && renderNote()}
             {tab === 'parametri' && (
-              <VitalSignsEditor
-                mode="patient-chart"
+              <PatientVitalSignsView
+                key={`${paziente.id}:${operatoreId}`}
+                operatoreId={operatoreId}
                 cartella={cartella}
                 paziente={paziente}
                 onUpdate={upd}
                 operatoreNome={operatoreNome}
-                value={undefined as never}
-                onChange={() => {}}
               />
             )}
             {tab === 'consegne' && renderConsegne()}
@@ -2908,7 +2910,11 @@ export function PatientDetail({
                   allergie={cartella.allergie ?? []}
                 />
                 <NarrativeSectionsTab
-                  key={assistantSectionRefresh?.actionType === 'update_narrative_section' ? assistantSectionRefresh.version : 'narrative'}
+                  key={
+                    assistantSectionRefresh?.actionType === 'update_narrative_section'
+                      ? assistantSectionRefresh.version
+                      : 'narrative'
+                  }
                   patientId={paziente.id}
                   operatoreId={operatoreId}
                   operatoreRole={operatoreRole}
@@ -2917,7 +2923,11 @@ export function PatientDetail({
             )}
             {tab === 'diario' && (
               <DiarioPazienteTab
-                key={assistantSectionRefresh?.actionType === 'add_diary_note' ? assistantSectionRefresh.version : 'diary'}
+                key={
+                  assistantSectionRefresh?.actionType === 'add_diary_note'
+                    ? assistantSectionRefresh.version
+                    : 'diary'
+                }
                 pazienteId={paziente.id}
                 operatoreNome={operatoreNome}
                 legacyInfermieristico={cartella.diarioInfermieristico}

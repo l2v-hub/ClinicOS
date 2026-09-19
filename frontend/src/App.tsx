@@ -374,7 +374,10 @@ export default function App() {
   // patient is created from the intake wizard with a module card selected in step 4).
   const [pendingModuleTab, setPendingModuleTab] = useState<TabId | undefined>(undefined);
   const [patientTabRequest, setPatientTabRequest] = useState(0);
-  const [assistantSectionRefresh, setAssistantSectionRefresh] = useState({ actionType: '', version: 0 });
+  const [assistantSectionRefresh, setAssistantSectionRefresh] = useState({
+    actionType: '',
+    version: 0,
+  });
 
   // Mock state
   const [operatori, setOperatori] = useState<Operatore[]>([]);
@@ -567,14 +570,20 @@ export default function App() {
   // la sezione citata. Le destinazioni di reparto (agenda, consegne, terapie di oggi) non hanno
   // alcun paziente: vanno gestite prima.
   async function agnosNavigate(n: AssistantNav, signal?: AbortSignal): Promise<boolean> {
-    return navigateAgnosTarget(n, {
-      isAdmin, navigate, openPatient: selectPazienteById,
-      openConsegne: (recordId) => {
-        setConsegneView({ filtro: 'tutte', focusId: recordId ?? null });
-        setMobileNavOpen(false);
-        pushNav('consegne');
+    return navigateAgnosTarget(
+      n,
+      {
+        isAdmin,
+        navigate,
+        openPatient: selectPazienteById,
+        openConsegne: (recordId) => {
+          setConsegneView({ filtro: 'tutte', focusId: recordId ?? null });
+          setMobileNavOpen(false);
+          pushNav('consegne');
+        },
       },
-    }, signal);
+      signal,
+    );
   }
   const goBack = useCallback(
     (fallbackKey?: NavKey) => {
@@ -2968,8 +2977,11 @@ export default function App() {
                   {!isAdmin && navKey === 'anagrafica-farmaci' && <AnagraficaFarmaciPage />}
                   {!isAdmin && navKey === 'parametri-multipaziente' && (
                     <MultiPatientParametri
+                      key={utenteId}
                       operatoreNome={utente.nome}
-                      onSelectPaziente={(patientId) => void selectPazienteById(patientId)}
+                      onSelectPaziente={(patientId) =>
+                        void selectPazienteById(patientId, 'parametri')
+                      }
                     />
                   )}
                   {!isAdmin && navKey === 'agenda-operatore' && (
@@ -3034,11 +3046,18 @@ export default function App() {
                 const sessionEpoch = sessionEpochRef.current;
                 if (info.patientId) await loadCartella(info.patientId);
                 if (sessionEpoch !== sessionEpochRef.current) return;
-                setAssistantSectionRefresh((value) => ({ actionType: info.actionType ?? '', version: value.version + 1 }));
+                setAssistantSectionRefresh((value) => ({
+                  actionType: info.actionType ?? '',
+                  version: value.version + 1,
+                }));
                 if (info.actionType === 'update_patient_demographics' && info.patientId) {
-                  const patient = await fetchPatientById(API_URL, info.patientId, { headers: operatorHeaders() });
+                  const patient = await fetchPatientById(API_URL, info.patientId, {
+                    headers: operatorHeaders(),
+                  });
                   if (sessionEpoch === sessionEpochRef.current) {
-                    setPazienteSelezionato((current) => current?.id === patient.id ? patient : current);
+                    setPazienteSelezionato((current) =>
+                      current?.id === patient.id ? patient : current,
+                    );
                   }
                 }
                 // SPEC-015 US4: un'azione Agnos sull'agenda aggiorna subito la lista appuntamenti (FR-020)

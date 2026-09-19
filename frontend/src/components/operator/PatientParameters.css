@@ -1,0 +1,223 @@
+.parameter-entry-clock {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 20px;
+  align-items: center;
+  margin: 0 0 20px;
+  padding: 18px 22px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.parameter-entry-clock > span {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.parameter-entry-clock time {
+  grid-row: 1 / 3;
+  grid-column: 1;
+  font-size: clamp(36px, 5vw, 54px);
+  font-weight: 750;
+  line-height: 1.1;
+  color: var(--blue);
+  font-variant-numeric: tabular-nums;
+}
+.parameter-entry-clock > span:first-child {
+  grid-column: 2;
+  font-weight: 650;
+  color: var(--text);
+}
+.parameter-entry-patient {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+}
+.parameter-entry-patient__text {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+.parameter-entry-last {
+  font-size: 11px;
+  color: var(--blue);
+}
+.parameter-entry-result {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text);
+  padding: 6px 0;
+}
+.parameter-entry-row .qe-row__note-btn svg {
+  width: 15px;
+  height: 15px;
+}
+.parameter-entry-help {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 16px 0;
+}
+.parameter-entry-progress {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.parameter-history {
+  min-width: 0;
+}
+.parameter-history-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: end;
+  margin: 20px 0;
+}
+.parameter-history-toolbar > div {
+  flex: 1 1 240px;
+}
+.parameter-history-toolbar h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+.parameter-history-toolbar p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.parameter-history-toolbar label {
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+}
+.parameter-history-error {
+  color: var(--red);
+  padding: 12px;
+  background: var(--surface);
+}
+.parameter-history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.parameter-history-day {
+  font-size: 14px;
+  margin: 22px 0 10px;
+  color: var(--text-muted);
+}
+.parameter-history-reading {
+  display: grid;
+  grid-template-columns: 135px minmax(0, 1fr);
+  gap: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 10px;
+  background: var(--surface);
+}
+.parameter-history-stamp {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  overflow-wrap: anywhere;
+}
+.parameter-history-stamp time {
+  font-size: 24px;
+  color: var(--blue);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+.parameter-history-stamp span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.parameter-history-reading dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+  margin: 0;
+}
+.parameter-history-reading dt {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+.parameter-history-reading dd {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.parameter-history-reading dd small {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.parameter-history-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+.parameter-history-legacy {
+  margin: 24px 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 13px;
+}
+.parameter-history-legacy summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+.parameter-history-legacy ul {
+  padding-left: 18px;
+}
+.parameter-history-legacy li {
+  padding: 10px 0;
+  overflow-wrap: anywhere;
+}
+.parameter-history-legacy li p {
+  white-space: pre-wrap;
+  margin: 6px 0;
+}
+@media (max-width: 768px) {
+  .parameter-entry-clock {
+    padding: 16px;
+    column-gap: 14px;
+  }
+  .parameter-entry-clock > span {
+    font-size: 12px;
+  }
+  .parameter-entry-progress {
+    width: 100%;
+  }
+  .parameter-entry-row .qe-row__input {
+    min-height: 44px;
+  }
+  .parameter-history-reading {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    gap: 16px;
+  }
+  .parameter-history-stamp {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .parameter-history-toolbar .form-input {
+    min-height: 44px;
+    max-width: 100%;
+  }
+  .parameter-history-toolbar button {
+    min-height: 44px;
+  }
+}

@@ -8,6 +8,7 @@ import { PatientPageInputError } from '../patients/pagination.js';
 import { loadPatientIdentityPage } from '../patients/identity-page.js';
 import { PatientSummaryInputError, parsePatientSummaryIds } from '../patients/summary-query.js';
 import { loadPatientParametersPage } from '../patients/parameters-page.js';
+import { parameterReadingsRouter } from './patient-parameter-readings.js';
 import {
   PatientParametersInputError,
   PatientParametersNotFoundError,
@@ -30,6 +31,7 @@ router.use((_req, res, next) => {
   next();
 });
 router.use(requireOperator);
+router.use(parameterReadingsRouter);
 
 async function sendPatientPage(
   req: AuthedRequest,
