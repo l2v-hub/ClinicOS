@@ -17,6 +17,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { IcoX } from '../../../icons';
+import { API_URL } from '../../../config';
+import { caricaDocumentoFarmaco, ErroreCaricamentoDocumento } from './caricaDocumentoFarmaco';
 import './VisoreDocumentoFarmaco.css';
 import {
   dividiInBlocchi,
@@ -57,6 +59,7 @@ interface PaginaPdf {
   getViewport: (opts: { scale: number }) => Viewport;
   render: (opts: { canvasContext: CanvasRenderingContext2D; viewport: Viewport }) => {
     promise: Promise<void>;
+    cancel: () => void;
   };
 }
 
@@ -70,7 +73,7 @@ interface Viewport {
 type Stato =
   | { fase: 'carico' }
   | { fase: 'pronto'; documento: Documento }
-  | { fase: 'errore'; fonteIrraggiungibile: boolean; messaggio: string };
+  | { fase: 'errore'; messaggio: string };
 
 interface Props {
   documento: DocumentoFarmaco;
@@ -84,12 +87,21 @@ export function VisoreDocumentoFarmaco({ documento, prescrizione, onChiudi }: Pr
   const [bloccoScelto, setBloccoScelto] = useState<number | null>(null);
   /** true quando la formulazione l'ha scelta l'operatore, non l'abbinamento automatico. */
   const [scegliaOperatore, setScegliaOperatore] = useState(false);
+  const [tentativo, setTentativo] = useState(0);
   const contenitore = useRef<HTMLDivElement | null>(null);
+  const erroreRendering = useCallback(() => setStato({
+    fase: 'errore', messaggio: 'Non è stato possibile visualizzare il PDF. Riprova a caricare il documento.',
+  }), []);
 
   // ── Caricamento e analisi ────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     let annullato = false;
+    const controller = new AbortController();
+    let loadingTask: { destroy: () => Promise<void> } | undefined;
+    setStato({ fase: 'carico' });
+    setBloccoScelto(null);
+    setScegliaOperatore(false);
 
     async function carica() {
       try {
@@ -100,16 +112,17 @@ export function VisoreDocumentoFarmaco({ documento, prescrizione, onChiudi }: Pr
           import.meta.url,
         ).toString();
 
-        const risposta = await fetch(documento.href);
-        if (!risposta.ok) {
-          throw Object.assign(new Error(`AIFA ha risposto ${risposta.status}`), { fonte: true });
-        }
-        const dati = new Uint8Array(await risposta.arrayBuffer());
+        if (annullato) return;
+        // The backend retrieves the exact official PDF without weakening browser CSP.
+        const dati = await caricaDocumentoFarmaco(documento, API_URL, controller.signal);
         if (annullato) return;
 
-        const pdf = await pdfjs.getDocument({ data: dati }).promise;
+        const task = pdfjs.getDocument({ data: dati });
+        loadingTask = task;
+        const pdf = await task.promise;
         const frammenti: FrammentoTesto[] = [];
         for (let p = 1; p <= pdf.numPages; p++) {
+          if (annullato) return;
           const contenuto = await (await pdf.getPage(p)).getTextContent();
           for (const item of contenuto.items) {
             if (!('str' in item) || !item.str.trim()) continue;
@@ -133,12 +146,10 @@ export function VisoreDocumentoFarmaco({ documento, prescrizione, onChiudi }: Pr
         setBloccoScelto(scegliBlocco(blocchi, prescrizione));
       } catch (errore) {
         if (annullato) return;
-        const fonte = (errore as { fonte?: boolean }).fonte === true || errore instanceof TypeError;
         setStato({
           fase: 'errore',
-          // Un TypeError da `fetch` e' rete o CORS: la fonte, non il documento.
-          fonteIrraggiungibile: fonte,
-          messaggio: errore instanceof Error ? errore.message : 'errore sconosciuto',
+          messaggio: errore instanceof ErroreCaricamentoDocumento
+            ? errore.message : 'Non è stato possibile visualizzare il PDF. Riprova a caricare il documento.',
         });
       }
     }
@@ -146,8 +157,10 @@ export function VisoreDocumentoFarmaco({ documento, prescrizione, onChiudi }: Pr
     void carica();
     return () => {
       annullato = true;
+      controller.abort();
+      void loadingTask?.destroy().catch(() => undefined);
     };
-  }, [documento.href, prescrizione]);
+  }, [documento.href, documento.tipo, prescrizione, tentativo]);
 
   useEffect(() => {
     function chiudiConEsc(e: KeyboardEvent) {
@@ -269,19 +282,15 @@ export function VisoreDocumentoFarmaco({ documento, prescrizione, onChiudi }: Pr
 
         <div className="visore-farmaco__corpo" ref={contenitore}>
           {stato.fase === 'carico' && (
-            <p className="visore-farmaco__stato">Caricamento del documento ufficiale…</p>
+            <p className="visore-farmaco__stato" role="status">Caricamento del documento ufficiale…</p>
           )}
 
           {stato.fase === 'errore' && (
-            <div className="visore-farmaco__stato visore-farmaco__stato--errore">
-              <p>
-                {stato.fonteIrraggiungibile
-                  ? 'La banca dati AIFA non risponde in questo momento. Il documento esiste: è la fonte a non essere raggiungibile.'
-                  : `Il documento non è leggibile: ${stato.messaggio}.`}
-              </p>
-              <a href={documento.href} target="_blank" rel="noopener noreferrer">
-                Riprova aprendo il documento direttamente su AIFA
-              </a>
+            <div className="visore-farmaco__stato visore-farmaco__stato--errore" role="alert">
+              <p>{stato.messaggio}</p>
+              <button type="button" className="btn-secondary" onClick={() => setTentativo((n) => n + 1)}>
+                Riprova
+              </button>
             </div>
           )}
 
@@ -292,6 +301,7 @@ export function VisoreDocumentoFarmaco({ documento, prescrizione, onChiudi }: Pr
                 pdf={pronto.pdf}
                 numero={numero}
                 evidenziati={evidenzePerPagina.get(numero) ?? NESSUNA_EVIDENZA}
+                onErrore={erroreRendering}
               />
             ))}
         </div>
@@ -381,10 +391,12 @@ function PaginaRenderizzata({
   pdf,
   numero,
   evidenziati,
+  onErrore,
 }: {
   pdf: Documento['pdf'];
   numero: number;
   evidenziati: RettangoloEvidenziato[];
+  onErrore: () => void;
 }) {
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const [misure, setMisure] = useState<{ larghezza: number; altezza: number } | null>(null);
@@ -392,6 +404,7 @@ function PaginaRenderizzata({
 
   useEffect(() => {
     let annullato = false;
+    let rendering: ReturnType<PaginaPdf['render']> | undefined;
 
     void (async () => {
       const pagina = await pdf.getPage(numero);
@@ -402,7 +415,8 @@ function PaginaRenderizzata({
       canvas.current.height = viewport.height;
       const contesto = canvas.current.getContext('2d');
       if (!contesto) return;
-      await pagina.render({ canvasContext: contesto, viewport }).promise;
+      rendering = pagina.render({ canvasContext: contesto, viewport });
+      await rendering.promise;
       if (annullato) return;
 
       setMisure({ larghezza: viewport.width, altezza: viewport.height });
@@ -428,18 +442,19 @@ function PaginaRenderizzata({
           };
         }),
       );
-    })();
+    })().catch(() => { if (!annullato) onErrore(); });
 
     return () => {
       annullato = true;
+      rendering?.cancel();
     };
-  }, [pdf, numero, evidenziati]);
+  }, [pdf, numero, evidenziati, onErrore]);
 
   return (
     <div className="visore-farmaco__pagina-blocco" data-pagina={numero}>
       <div
         className="visore-farmaco__tela"
-        style={misure ? { width: misure.larghezza, height: misure.altezza } : undefined}
+        style={misure ? { width: misure.larghezza } : undefined}
       >
         <canvas ref={canvas} />
         {rettangoli.map((r, i) => (
@@ -448,10 +463,10 @@ function PaginaRenderizzata({
             className="visore-farmaco__evidenza"
             data-sezione={r.numero}
             style={{
-              left: r.sinistra,
-              top: r.alto,
-              width: r.larghezza,
-              height: r.altezza,
+              left: misure ? `${r.sinistra / misure.larghezza * 100}%` : 0,
+              top: misure ? `${r.alto / misure.altezza * 100}%` : 0,
+              width: misure ? `${r.larghezza / misure.larghezza * 100}%` : 0,
+              height: misure ? `${r.altezza / misure.altezza * 100}%` : 0,
             }}
           />
         ))}

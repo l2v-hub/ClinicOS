@@ -19,6 +19,16 @@
   border-bottom: 1px solid var(--border);
 }
 
+.visore-farmaco__testa > div {
+  min-width: 0;
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.visore-farmaco__testa > button {
+  flex-shrink: 0;
+}
+
 .visore-farmaco__titolo {
   margin: 0 0 6px;
   font-size: 16px;
@@ -44,10 +54,13 @@
   align-items: center;
   gap: 8px;
   font-size: 12px;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .visore-farmaco__select {
-  max-width: 420px;
+  max-width: min(420px, 100%);
+  min-width: 0;
   padding: 4px 8px;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -150,13 +163,14 @@
   color: var(--text);
 }
 
-.visore-farmaco__stato--errore a {
-  color: var(--blue);
+.visore-farmaco__stato--errore button {
+  margin-top: 12px;
 }
 
 .visore-farmaco__pagina-blocco {
   margin: 0 auto 20px;
   width: fit-content;
+  max-width: 100%;
 }
 
 .visore-farmaco__tela {
@@ -165,6 +179,7 @@
   border-radius: 4px;
   background: #fff;
   overflow: hidden;
+  max-width: 100%;
 }
 
 .visore-farmaco__tela canvas {

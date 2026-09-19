@@ -8,6 +8,7 @@
 // Anagrafica pubblica: nessun dato di paziente passa di qui.
 
 import { Router } from 'express';
+import { creaRouterDocumentoFarmaco } from './farmaci-documento.js';
 import { requireOperator, type AuthedRequest } from '../ai/auth.js';
 import { medicationSearchGlobalRateLimit, medicationSearchRateLimit } from '../ai/rate-limit.js';
 import { prisma } from '../lib/prisma.js';
@@ -27,6 +28,7 @@ import {
 // La SCRITTURA resta protetta: `/ricarica` scarica ~82 MB di CSV e sostituisce l'intera
 // anagrafica, quindi aperta sarebbe un vettore di abuso verso il backend.
 const farmaciRouter = Router();
+farmaciRouter.use('/documento', creaRouterDocumentoFarmaco());
 
 const RUOLI_PRIVILEGIATI = new Set(['admin', 'manager']);
 export const MAX_FARMACI_QUERY_LENGTH = 80;
