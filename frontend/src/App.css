@@ -2887,13 +2887,14 @@ body {
 
 .demo-mode-chip {
   position: fixed;
-  right: 18px;
+  right: 84px;
   bottom: 18px;
-  z-index: 950;
+  z-index: 89;
+  pointer-events: none;
   display: flex;
   align-items: center;
   gap: 8px;
-  max-width: calc(100vw - 36px);
+  max-width: calc(100vw - 102px);
   padding: 8px 12px;
   border: 1px solid #e2b93b;
   border-radius: 999px;
