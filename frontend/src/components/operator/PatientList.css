@@ -58,6 +58,50 @@
   width: 25%;
 }
 
+.patient-roster__sort {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.patient-roster__sort:hover,
+.patient-roster th[aria-sort] .patient-roster__sort {
+  color: var(--blue);
+}
+
+.patient-roster__sort:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.patient-roster__sort-arrow {
+  flex-shrink: 0;
+  font-size: 15px;
+}
+.patient-roster-order {
+  margin-bottom: 10px;
+}
+.patient-roster-order__status {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.patient-roster-order__mobile {
+  display: none;
+}
+
 .patient-roster th:nth-child(2) {
   width: 19%;
 }
@@ -278,6 +322,37 @@
 }
 
 @media (max-width: 1023px) {
+  .patient-list-view .toolbar .filter-chips {
+    max-width: 100%;
+  }
+
+  .patient-list-view .toolbar .search-wrap {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .patient-roster-order__mobile {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .patient-roster-order__mobile label {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .patient-roster-order__mobile select {
+    flex: 1;
+    min-width: 125px;
+    width: auto;
+    min-height: 44px;
+  }
+  .patient-roster-order__mobile button {
+    min-height: 44px;
+  }
+
   .patient-roster-wrap {
     display: none;
   }

@@ -11,6 +11,11 @@ import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { fetchPatientPageWithSummary, mergePatientPage } from '../../lib/patientPage';
 import { PatientRoster } from './PatientRoster';
+import {
+  ADMISSION_LABELS as STATO_RICOVERO_LABEL,
+  sortPatientRoster,
+  type PatientRosterSort,
+} from '../../lib/patientRosterSort';
 import './PatientList.css';
 
 interface PatientListProps {
@@ -33,13 +38,6 @@ interface PatientListProps {
   operatorRole?: string;
 }
 
-const STATO_RICOVERO_LABEL: Record<string, string> = {
-  ricoverato: 'Ricoverato',
-  ambulatoriale: 'Ambulatoriale',
-  day_hospital: 'Day Hospital',
-  dimesso: 'Dimesso',
-};
-
 export function PatientList({
   totalPatients,
   ricerca,
@@ -59,6 +57,7 @@ export function PatientList({
   const [hasMore, setHasMore] = useState(false);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [pageError, setPageError] = useState('');
+  const [sort, setSort] = useState<PatientRosterSort>({ field: 'patient', direction: 'asc' });
   const requestSequence = useRef(0);
 
   const summaryMap = useMemo(
@@ -225,6 +224,15 @@ export function PatientList({
         ? filtratiBase
         : filtratiBase.filter((p) => summaryMap.get(p.id)?.statoRicovero === filtroStatoRicovero),
     [filtratiBase, filtroStatoRicovero, summaryMap],
+  );
+  const ordinati = useMemo(
+    () =>
+      sortPatientRoster(filtrati, sort, {
+        summaryMap,
+        consegneAperteMap,
+        anomalies: anomalie.perPaziente,
+      }),
+    [filtrati, sort, summaryMap, consegneAperteMap, anomalie.perPaziente],
   );
 
   return (
@@ -393,7 +401,10 @@ export function PatientList({
       {(loading || pazienti.length > 0) && (
         <>
           <PatientRoster
-            patients={loading ? [] : filtrati}
+            patients={loading ? [] : ordinati}
+            sort={sort}
+            onSortChange={setSort}
+            hasMore={hasMore}
             loading={loading}
             summaryMap={summaryMap}
             consegneAperteMap={consegneAperteMap}

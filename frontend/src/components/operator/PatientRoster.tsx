@@ -3,13 +3,13 @@ import type { ClinicalSummaryEntry, Paziente } from '../../types';
 import { IcoChevronRight, IcoTrash } from '../../icons';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
 import { anomalieDelPaziente, type AnomalieReparto } from './cartella/useAnomalieReparto';
-
-const STATO_RICOVERO_LABEL: Record<string, string> = {
-  ricoverato: 'Ricoverato',
-  ambulatoriale: 'Ambulatoriale',
-  day_hospital: 'Day Hospital',
-  dimesso: 'Dimesso',
-};
+import {
+  ADMISSION_LABELS as STATO_RICOVERO_LABEL,
+  PATIENT_SORT_LABELS,
+  togglePatientSort,
+  type PatientRosterSort,
+  type PatientSortField,
+} from '../../lib/patientRosterSort';
 
 function calcAge(dob: string): number {
   const today = new Date();
@@ -77,6 +77,9 @@ function PatientSignals({
 
 interface PatientRosterProps {
   patients: Paziente[];
+  sort: PatientRosterSort;
+  onSortChange: (sort: PatientRosterSort) => void;
+  hasMore: boolean;
   loading: boolean;
   summaryMap: ReadonlyMap<string, ClinicalSummaryEntry>;
   consegneAperteMap: ReadonlyMap<string, number>;
@@ -164,6 +167,9 @@ const PatientCard = memo(function PatientCard({
 
 export function PatientRoster({
   patients,
+  sort,
+  onSortChange,
+  hasMore,
   loading,
   summaryMap,
   consegneAperteMap,
@@ -173,8 +179,65 @@ export function PatientRoster({
   onSelect,
   onDelete,
 }: PatientRosterProps) {
+  const ariaSort = (field: PatientSortField) =>
+    sort.field === field
+      ? sort.direction === 'asc'
+        ? ('ascending' as const)
+        : ('descending' as const)
+      : undefined;
+  const sortButton = (field: PatientSortField, label: string) => {
+    const next = togglePatientSort(sort, field);
+    const action = `Ordina per ${label.toLowerCase()} in ordine ${next.direction === 'asc' ? 'crescente' : 'decrescente'}`;
+    return (
+      <button
+        type="button"
+        className="patient-roster__sort"
+        aria-label={action}
+        title={field === 'signals' ? `${action} · Numero di segnalazioni disponibili` : action}
+        onClick={() => onSortChange(next)}
+      >
+        {label}
+        <span aria-hidden="true" className="patient-roster__sort-arrow">
+          {sort.field === field ? (sort.direction === 'asc' ? '↑' : '↓') : '↕'}
+        </span>
+      </button>
+    );
+  };
   return (
     <>
+      <div className="patient-roster-order">
+        <div className="patient-roster-order__mobile">
+          <label htmlFor="patient-sort-field">Ordina per</label>
+          <select
+            id="patient-sort-field"
+            className="form-input"
+            value={sort.field}
+            onChange={(event) =>
+              onSortChange({ field: event.target.value as PatientSortField, direction: 'asc' })
+            }
+          >
+            {Object.entries(PATIENT_SORT_LABELS).map(([field, label]) => (
+              <option key={field} value={field}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            className="btn-secondary"
+            aria-label={`Imposta ordine ${sort.direction === 'asc' ? 'decrescente' : 'crescente'}`}
+            onClick={() => onSortChange(togglePatientSort(sort, sort.field))}
+          >
+            {sort.direction === 'asc' ? '↑ Crescente' : '↓ Decrescente'}
+          </button>
+        </div>
+        <span className="patient-roster-order__status" role="status" aria-live="polite">
+          {PATIENT_SORT_LABELS[sort.field]}:{' '}
+          {sort.direction === 'asc' ? 'crescente' : 'decrescente'}
+          {sort.field === 'signals' ? ' · Numero di segnalazioni disponibili' : ''}
+          {hasMore ? ' · Nei pazienti caricati' : ''}
+        </span>
+      </div>
       {(anomalie.inCorso || anomalie.fallito || anomalie.verificaIncompleta) && (
         <div
           className={`patient-roster-status${
@@ -193,10 +256,18 @@ export function PatientRoster({
           <caption className="sr-only">Elenco pazienti caricati</caption>
           <thead>
             <tr>
-              <th scope="col">Paziente</th>
-              <th scope="col">Codice fiscale</th>
-              <th scope="col">Ricovero</th>
-              <th scope="col">Segnalazioni</th>
+              <th scope="col" aria-sort={ariaSort('patient')}>
+                {sortButton('patient', 'Paziente')}
+              </th>
+              <th scope="col" aria-sort={ariaSort('fiscalCode')}>
+                {sortButton('fiscalCode', 'Codice fiscale')}
+              </th>
+              <th scope="col" aria-sort={ariaSort('admission')}>
+                {sortButton('admission', 'Ricovero')}
+              </th>
+              <th scope="col" aria-sort={ariaSort('signals')}>
+                {sortButton('signals', 'Segnalazioni')}
+              </th>
               <th scope="col" className="patient-roster__action-heading">
                 Azione
               </th>
