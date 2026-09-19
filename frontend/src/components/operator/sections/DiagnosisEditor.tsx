@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { Diagnosi } from '../../../types';
 import type { SectionProps } from './types';
 import { IcoEdit, IcoX } from '../../../icons';
+import { DiagnosisText } from './DiagnosisText';
+import './DiagnosisEditor.css';
 import {
   uid,
   todayStr,
@@ -18,19 +20,51 @@ const STATO_DIAG_CLASS: Record<string, string> = {
   sospetta: 'badge--gray',
 };
 
+function DescriptionField({ value, onChange, invalid }: {
+  value: string;
+  onChange: (value: string) => void;
+  invalid: boolean;
+}) {
+  const id = useId();
+  return (
+    <div className="form-field diagnosis-description">
+      <label className="form-label" htmlFor={id}>Descrizione *</label>
+      <textarea
+        id={id}
+        className="form-input diagnosis-description__input"
+        rows={8}
+        required
+        value={value}
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? `${id}-error` : undefined}
+        onChange={(event) => onChange(event.target.value)}
+      />
+      {invalid && <p id={`${id}-error`} className="diagnosis-error" role="alert">Inserisci la descrizione della diagnosi.</p>}
+      {value.trim() && (
+        <details className="diagnosis-preview">
+          <summary>Anteprima formattata</summary>
+          <DiagnosisText text={value} />
+        </details>
+      )}
+    </div>
+  );
+}
+
 function ItemRow({
   onEdit,
   onDelete,
   children,
+  readOnly,
 }: {
   onEdit: () => void;
   onDelete: () => void;
   children: React.ReactNode;
+  readOnly?: boolean;
 }) {
   return (
-    <div className="cr-item-row">
+    <div className="cr-item-row diagnosis-item">
       <div className="cr-item-row__content">{children}</div>
-      <div className="cr-item-row__actions">
+      {!readOnly && <div className="cr-item-row__actions">
         <button className="icon-btn icon-btn--sm icon-btn--edit" onClick={onEdit} title="Modifica">
           <IcoEdit />
         </button>
@@ -41,7 +75,7 @@ function ItemRow({
         >
           <IcoX />
         </button>
-      </div>
+      </div>}
     </div>
   );
 }
@@ -57,13 +91,14 @@ export function DiagnosisEditor({
   const [showAddDiag, setShowAddDiag] = useState(false);
   const [editDiagId, setEditDiagId] = useState<string | null>(null);
   const [diagForm, setDiagForm] = useState<Partial<Diagnosi>>({});
+  const [invalidDescription, setInvalidDescription] = useState(false);
 
   function saveDiagnosi(next: Diagnosi[]) {
-    onChange(next);
+    if (!readOnly) onChange(next);
   }
 
   function addDiagnosi() {
-    if (!diagForm.descrizione) return;
+    if (!diagForm.descrizione?.trim()) { setInvalidDescription(true); return; }
     saveDiagnosi([
       {
         id: uid(),
@@ -83,6 +118,7 @@ export function DiagnosisEditor({
   }
 
   function updateDiagnosi(id: string) {
+    if (!diagForm.descrizione?.trim()) { setInvalidDescription(true); return; }
     saveDiagnosi(list.map((d) => (d.id === id ? { ...d, ...diagForm } : d)));
     setEditDiagId(null);
     setDiagForm({});
@@ -103,6 +139,7 @@ export function DiagnosisEditor({
             className="btn-sm"
             onClick={() => {
               setDiagForm({});
+              setInvalidDescription(false);
               setShowAddDiag(true);
             }}
           >
@@ -120,15 +157,12 @@ export function DiagnosisEditor({
               setDiagForm({});
             }}
           >
+            <DescriptionField
+              value={diagForm.descrizione ?? ''}
+              invalid={invalidDescription}
+              onChange={(descrizione) => { setDiagForm((p) => ({ ...p, descrizione })); setInvalidDescription(false); }}
+            />
             <div className="op-form-grid">
-              <div className="form-field">
-                <label className="form-label">Descrizione *</label>
-                <input
-                  className="form-input"
-                  value={diagForm.descrizione ?? ''}
-                  onChange={(e) => setDiagForm((p) => ({ ...p, descrizione: e.target.value }))}
-                />
-              </div>
               <div className="form-field">
                 <label className="form-label">Codice ICD</label>
                 <input
@@ -178,21 +212,21 @@ export function DiagnosisEditor({
                 />
               </div>
             </div>
-            <div className="form-field" style={{ marginTop: 8 }}>
-              <label className="form-label">Note</label>
+            <label className="form-field">
+              <span className="form-label">Note aggiuntive (facoltative)</span>
               <textarea
                 className="form-input"
                 rows={2}
                 value={diagForm.note ?? ''}
                 onChange={(e) => setDiagForm((p) => ({ ...p, note: e.target.value }))}
               />
-            </div>
+            </label>
           </InlineForm>
         )}
         <div className="cr-list">
           {list.length === 0 && <p className="cr-empty">Nessuna diagnosi registrata.</p>}
           {list.map((d) =>
-            editDiagId === d.id ? (
+            !readOnly && editDiagId === d.id ? (
               <InlineForm
                 key={d.id}
                 onSave={() => updateDiagnosi(d.id)}
@@ -201,15 +235,12 @@ export function DiagnosisEditor({
                   setDiagForm({});
                 }}
               >
+                <DescriptionField
+                  value={diagForm.descrizione ?? ''}
+                  invalid={invalidDescription}
+                  onChange={(descrizione) => { setDiagForm((p) => ({ ...p, descrizione })); setInvalidDescription(false); }}
+                />
                 <div className="op-form-grid">
-                  <div className="form-field">
-                    <label className="form-label">Descrizione</label>
-                    <input
-                      className="form-input"
-                      value={diagForm.descrizione ?? ''}
-                      onChange={(e) => setDiagForm((p) => ({ ...p, descrizione: e.target.value }))}
-                    />
-                  </div>
                   <div className="form-field">
                     <label className="form-label">Codice ICD</label>
                     <input
@@ -260,33 +291,35 @@ export function DiagnosisEditor({
                     />
                   </div>
                 </div>
-                <div className="form-field" style={{ marginTop: 8 }}>
-                  <label className="form-label">Note</label>
+                <label className="form-field">
+                  <span className="form-label">Note aggiuntive (facoltative)</span>
                   <textarea
                     className="form-input"
                     rows={2}
                     value={diagForm.note ?? ''}
                     onChange={(e) => setDiagForm((p) => ({ ...p, note: e.target.value }))}
                   />
-                </div>
+                </label>
               </InlineForm>
             ) : (
               <ItemRow
                 key={d.id}
+                readOnly={readOnly}
                 onEdit={() => {
                   setEditDiagId(d.id);
                   setDiagForm({ ...d });
+                  setInvalidDescription(false);
                 }}
                 onDelete={() => deleteDiagnosi(d.id)}
               >
                 <div className="cr-diag-row">
                   <div className="cr-diag-main">
-                    <span className="cr-diag-desc">{d.descrizione}</span>
                     {d.codiceICD && <span className="cr-mono cr-icd">{d.codiceICD}</span>}
                     <span className={`badge ${STATO_DIAG_CLASS[d.stato]}`}>{d.stato}</span>
                     <span className="badge badge--gray">{d.tipo}</span>
                   </div>
-                  {d.note && <p className="cr-diag-note">{d.note}</p>}
+                  <DiagnosisText text={d.descrizione} />
+                  {d.note && <div className="diagnosis-notes"><span className="form-label">Note aggiuntive</span><DiagnosisText text={d.note} /></div>}
                   <span className="cr-diag-meta">
                     {fmtDate(d.dataInsorgenza)} · {d.operatore}
                     {d.dataRisoluzione ? ` → risolta ${fmtDate(d.dataRisoluzione)}` : ''}

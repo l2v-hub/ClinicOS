@@ -1,0 +1,99 @@
+.diagnosis-description {
+  min-width: 0;
+}
+
+textarea.diagnosis-description__input {
+  width: 100%;
+  min-height: 200px;
+  line-height: 1.65;
+  resize: vertical;
+}
+
+.diagnosis-preview {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: 10px 12px;
+}
+
+.diagnosis-preview summary {
+  cursor: pointer;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.diagnosis-preview[open] summary {
+  margin-bottom: 12px;
+}
+
+.diagnosis-text {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.diagnosis-text > * {
+  margin: 0 0 12px;
+}
+
+.diagnosis-text > :last-child {
+  margin-bottom: 0;
+}
+
+.diagnosis-text h4 {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: inherit;
+}
+
+.diagnosis-text ul {
+  list-style: none;
+  padding-left: 8px;
+}
+
+.diagnosis-text li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.diagnosis-text__marker {
+  flex-shrink: 0;
+}
+
+.diagnosis-notes {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 8px;
+}
+
+.diagnosis-notes > .form-label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.diagnosis-error {
+  margin: 0;
+  color: var(--text);
+  font-size: 13px;
+}
+
+@media (max-width: 480px) {
+  .diagnosis-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .diagnosis-item > .cr-item-row__actions {
+    order: -1;
+    align-self: flex-end;
+    padding-top: 0;
+  }
+}
