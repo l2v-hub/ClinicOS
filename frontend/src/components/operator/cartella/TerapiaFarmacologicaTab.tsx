@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { Paziente, PatientTherapyAPI, TherapySlot } from '../../../types';
 import { API_URL } from '../../../config';
+import { IcoCheck } from '../../../icons';
 import { cachedGetJson, invalidateCachedGet } from '../../../lib/cachedFetch';
 import {
   loadTherapyPage,
@@ -845,6 +846,12 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               <path d="M8 13h8M8 17h5" />
             </svg>
           </button>
+        )}
+        {(risoluzione?.stato === 'trovato' || risoluzione?.stato === 'senza-documento') && (
+          <span className="farmaco-trovato" title="Farmaco presente nell'anagrafica AIFA">
+            <span aria-hidden="true"><IcoCheck /></span>
+            Trovato in AIFA
+          </span>
         )}
         {(risoluzione?.stato === 'non-trovato' || risoluzione?.stato === 'senza-documento') && (
           <button

@@ -178,6 +178,29 @@
 
 /* ── Indicatore sulla riga di terapia ───────────────────────────────────────────────────── */
 
+.farmaco-trovato {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 3px 0 0 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--emerald-bg);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.farmaco-trovato svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+  color: var(--teal);
+}
+
 /* Non e' un errore: e' un'informazione mancante su cui l'operatore puo' agire. Percio' ambra
    e non rosso, che in ClinicOS e' riservato agli allarmi clinici.
    E' anche l'unico segnale, riga per riga, che un farmaco non risulta in anagrafica: a 10px
