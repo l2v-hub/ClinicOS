@@ -113,6 +113,11 @@ export async function listParameterReadings(
     "measuredAt" >= (${filters.date}::date::timestamp AT TIME ZONE 'Europe/Rome')
     AND "measuredAt" < ((${filters.date}::date + 1)::timestamp AT TIME ZONE 'Europe/Rome')
   `);
+  if (filters.month)
+    predicates.push(Prisma.sql`
+      "measuredAt" >= (${filters.month + '-01'}::date::timestamp AT TIME ZONE 'Europe/Rome')
+      AND "measuredAt" < ((${filters.month + '-01'}::date + interval '1 month')::timestamp AT TIME ZONE 'Europe/Rome')
+    `);
   if (position)
     predicates.push(
       Prisma.sql`("measuredAt", "id") < (${position.measuredAt}::timestamptz, ${position.id})`,

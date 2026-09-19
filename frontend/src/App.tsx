@@ -118,6 +118,11 @@ const PatientDetail = lazy(() =>
 const ConsegnePage = lazy(() =>
   import('./components/operator/ConsegnePage').then((module) => ({ default: module.ConsegnePage })),
 );
+const TherapyRoundsPage = lazy(() =>
+  import('./components/operator/TherapyRoundsPage').then((module) => ({
+    default: module.TherapyRoundsPage,
+  })),
+);
 const OperatorAgenda = lazy(() =>
   import('./components/operator/OperatorAgenda').then((module) => ({
     default: module.OperatorAgenda,
@@ -198,6 +203,7 @@ const NAV_LABELS: Record<NavKey, string> = {
   'dettaglio-paziente': 'Scheda Paziente',
   consegne: 'Consegne',
   'agenda-operatore': 'Agenda',
+  terapie: 'Terapia',
   'parametri-multipaziente': 'Parametri',
   'anagrafica-farmaci': 'Anagrafica farmaci',
   'ai-assistant': 'Assistente ClinicOS',
@@ -720,10 +726,6 @@ export default function App() {
     },
     [],
   );
-
-  const retryTherapySlots = useCallback(() => {
-    void loadTherapySlots(therapyDateRef.current);
-  }, [loadTherapySlots]);
 
   const loadMoreTherapySlots = useCallback(() => {
     if (!therapyPageInfo.nextCursor || loadingMoreTherapySlots) return;
@@ -1377,10 +1379,10 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [utente, navKey, loadSchedules]);
 
-  // The clinical therapy feed is potentially large and is needed only inside the agenda.
-  // Keying the load to navigation also covers browser back/forward and a direct agenda hash.
+  // Load the clinical feed only on the dedicated therapy page.
+  // Navigation also covers browser back/forward and a direct therapy hash.
   useEffect(() => {
-    if (!utente || (navKey !== 'agenda-operatore' && navKey !== 'agenda-admin')) return;
+    if (!utente || navKey !== 'terapie') return;
     void loadTherapySlots();
   }, [utente, navKey, loadTherapySlots]);
 
@@ -2801,15 +2803,6 @@ export default function App() {
                       onLoadAppointments={loadAppointmentRange}
                       onAddPaziente={() => {}}
                       onSelectPaziente={goToPazienteByNome}
-                      therapySlots={therapySlots}
-                      loadingTherapySlots={loadingTherapySlots}
-                      therapyLoadError={therapyLoadError}
-                      therapyLoadMoreError={therapyLoadMoreError}
-                      therapyPageInfo={therapyPageInfo}
-                      loadingMoreTherapySlots={loadingMoreTherapySlots}
-                      onRetryTherapySlots={retryTherapySlots}
-                      onLoadMoreTherapySlots={loadMoreTherapySlots}
-                      onLoadTherapySlots={loadTherapySlots}
                     />
                   )}
                   {isAdmin && navKey === 'posti-letto' && <RoomsManagement />}
@@ -2825,6 +2818,21 @@ export default function App() {
                   )}
 
                   {/* ── SHARED ── */}
+                  {navKey === 'terapie' && (
+                    <TherapyRoundsPage
+                      slots={therapySlots}
+                      loading={loadingTherapySlots}
+                      error={therapyLoadError}
+                      pageInfo={therapyPageInfo}
+                      loadingMore={loadingMoreTherapySlots}
+                      loadMoreError={therapyLoadMoreError}
+                      onLoad={loadTherapySlots}
+                      onLoadMore={loadMoreTherapySlots}
+                      readOnly={isAdmin}
+                      onConfirm={confirmTherapy}
+                      onNotAdministered={notAdministeredTherapy}
+                    />
+                  )}
                   {navKey === 'consegne' && (
                     <ConsegnePage
                       consegne={consegne}
@@ -2998,17 +3006,6 @@ export default function App() {
                       onRetryAppointments={retryAppointmentRange}
                       onLoadAppointments={loadAppointmentRange}
                       onSelectPaziente={goToPazienteByNome}
-                      therapySlots={therapySlots}
-                      loadingTherapySlots={loadingTherapySlots}
-                      therapyLoadError={therapyLoadError}
-                      therapyLoadMoreError={therapyLoadMoreError}
-                      therapyPageInfo={therapyPageInfo}
-                      loadingMoreTherapySlots={loadingMoreTherapySlots}
-                      onRetryTherapySlots={retryTherapySlots}
-                      onLoadMoreTherapySlots={loadMoreTherapySlots}
-                      onConfirmTherapy={confirmTherapy}
-                      onNotAdministeredTherapy={notAdministeredTherapy}
-                      onLoadTherapySlots={loadTherapySlots}
                     />
                   )}
                 </>

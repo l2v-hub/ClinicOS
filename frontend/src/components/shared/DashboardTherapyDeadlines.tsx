@@ -6,7 +6,7 @@ import './DashboardTherapyDeadlines.css';
 
 interface Props {
   summary: RiepilogoSomministrazioni;
-  onOpenAgenda: () => void;
+  onOpenTherapy: () => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
 }
 
@@ -92,7 +92,7 @@ function DeadlineList({
   );
 }
 
-export function DashboardTherapyDeadlines({ summary, onOpenAgenda, onSelectPaziente }: Props) {
+export function DashboardTherapyDeadlines({ summary, onOpenTherapy, onSelectPaziente }: Props) {
   const titleId = useId();
   const { prossime, scadute, senzaOrario } = summary;
   const complete = !summary.domaniInCorso && !summary.domaniFallito;
@@ -114,8 +114,8 @@ export function DashboardTherapyDeadlines({ summary, onOpenAgenda, onSelectPazie
           >
             {summary.aggiornamentoInCorso ? 'Aggiornamento…' : 'Aggiorna'}
           </button>
-          <button type="button" className="link-btn" onClick={onOpenAgenda}>
-            Apri agenda <IcoArrow />
+          <button type="button" className="link-btn" onClick={onOpenTherapy}>
+            Apri terapia <IcoArrow />
           </button>
         </div>
       </header>

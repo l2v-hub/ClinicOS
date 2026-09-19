@@ -6,6 +6,11 @@ import { API_URL } from '../../../config';
 import { facilityLocalMinute, formatFacilityLocalMinute } from '../../../lib/facilityTime';
 import { operatorHeaders } from '../../../lib/operatorSession';
 
+type DiaryFeedEntry = DiarioPazienteEntry & {
+  sourceType?: 'diary' | 'consegna';
+  sourceId?: string;
+};
+
 // ── Constants ──────────────────────────────────────────────────────────────────
 
 const AUTHOR_TYPE_LABELS: Record<DiarioAuthorType, string> = {
@@ -239,13 +244,7 @@ export function DiarioPazienteTab({
   useEffect(() => {
     const controller = new AbortController();
     const request = ++readSequenceRef.current;
-    const timer = window.setTimeout(
-      () =>
-        void fetchEntries(controller.signal, request, {
-          silent: refreshVersion > 0,
-        }),
-      0,
-    );
+    const timer = window.setTimeout(() => void fetchEntries(controller.signal, request), 0);
     return () => {
       window.clearTimeout(timer);
       controller.abort();
@@ -374,10 +373,19 @@ export function DiarioPazienteTab({
   function isLegacy(entry: DiarioPazienteEntry): boolean {
     return entry.patientId === '';
   }
+  // A newly visible handover must not hide the older Cartella diary records.
+  const additionalLegacy = entries.some((entry) => !isLegacy(entry))
+    ? convertLegacyEntries(legacyInfermieristico, legacyMedico).filter(
+        (entry) =>
+          (!filterBy || filterBy === 'tutti' || entry.authorType === filterBy) &&
+          !entries.some((current) => current.id === entry.id),
+      )
+    : [];
+  const [legacyVisible, setLegacyVisible] = useState(50);
 
   // ── Diario a card: render helper per una voce ────────────────────────────────
 
-  function renderDiarioCard(row: DiarioPazienteEntry) {
+  function renderDiarioCard(row: DiaryFeedEntry) {
     return (
       <div key={row.id} className={`diario-card diario-card--${row.authorType}`}>
         <div className="diario-card__head">
@@ -389,7 +397,7 @@ export function DiarioPazienteTab({
           </span>
           <span className={`badge ${STATUS_BADGE[row.status]}`}>{STATUS_LABELS[row.status]}</span>
           <span className="diario-card__time">{fmtDT(row.entryDateTime)}</span>
-          {!isLegacy(row) && (
+          {!isLegacy(row) && row.sourceType !== 'consegna' && (
             <div className="diario-card__actions">
               <button
                 className="icon-btn icon-btn--sm icon-btn--edit"
@@ -437,6 +445,11 @@ export function DiarioPazienteTab({
         <div className="diario-card__author">{row.authorName}</div>
         {row.title && <div className="diario-card__title">{row.title}</div>}
         <div className="diario-card__content">{row.content}</div>
+        {row.sourceType === 'consegna' && (
+          <small className="form-hint">
+            Consegna registrata · gestibile dalla sezione Consegne
+          </small>
+        )}
       </div>
     );
   }
@@ -581,6 +594,7 @@ export function DiarioPazienteTab({
       {/* Error message */}
       {error && (
         <div
+          role="alert"
           style={{
             padding: '8px 12px',
             borderRadius: 6,
@@ -591,6 +605,12 @@ export function DiarioPazienteTab({
           }}
         >
           {error}
+          <button
+            className="btn-secondary btn-sm"
+            onClick={() => setRefreshVersion((version) => version + 1)}
+          >
+            Riprova caricamento
+          </button>
         </div>
       )}
       {notice && (
@@ -632,7 +652,7 @@ export function DiarioPazienteTab({
         {/* Diario a card (una card per voce, border-left colore ruolo) */}
         {loading ? (
           <LoadingState />
-        ) : entries.length === 0 ? (
+        ) : error ? null : entries.length === 0 ? (
           <EmptyState msg="Nessuna voce nel diario." />
         ) : (
           <>
@@ -657,6 +677,20 @@ export function DiarioPazienteTab({
               </div>
             )}
           </>
+        )}
+        {!loading && additionalLegacy.length > 0 && (
+          <details>
+            <summary>Registrazioni precedenti ({additionalLegacy.length})</summary>
+            {additionalLegacy.slice(0, legacyVisible).map(renderDiarioCard)}
+            {additionalLegacy.length > legacyVisible && (
+              <button
+                className="btn-secondary btn-sm"
+                onClick={() => setLegacyVisible((count) => count + 50)}
+              >
+                Mostra altre registrazioni precedenti
+              </button>
+            )}
+          </details>
         )}
       </ClinicalTableSection>
 

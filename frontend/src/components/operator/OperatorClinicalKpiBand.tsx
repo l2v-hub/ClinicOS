@@ -20,7 +20,7 @@ interface Props {
   };
   onOpenParametri: () => void;
   onOpenPazienti: () => void;
-  onOpenAgenda: () => void;
+  onOpenTherapy: () => void;
 }
 
 function clinicalItem(
@@ -59,7 +59,7 @@ export function OperatorClinicalKpiBand({
   somministrazioni,
   onOpenParametri,
   onOpenPazienti,
-  onOpenAgenda,
+  onOpenTherapy,
 }: Props) {
   const administrationValue =
     somministrazioni.inCorso || somministrazioni.fallito
@@ -135,8 +135,8 @@ export function OperatorClinicalKpiBand({
             : 'Terapie puntuali',
       tone: administrationTone,
       icon: <IcoPill />,
-      onOpen: onOpenAgenda,
-      actionLabel: 'Apri agenda operatore',
+      onOpen: onOpenTherapy,
+      actionLabel: 'Apri terapia',
     },
   ];
 

@@ -54,7 +54,7 @@ test('operator and admin reuse the same bounded notification details', () => {
   assert.match(notificationDetails, /className="anomalie-reparto__farmaci-lista"/);
   assert.match(adminDashboard, /<DashboardNotificationCenter/);
   assert.match(adminDashboard, /buildDashboardNotificationSections/);
-  assert.match(adminDashboard, /agendaNav: 'agenda-admin'/);
+  assert.match(adminDashboard, /therapyNav: 'terapie'/);
   assert.doesNotMatch(adminDashboard, /somministrazioni\.ritardi\.slice/);
   assert.doesNotMatch(adminDashboard, /className="coverage-alert"/);
 });

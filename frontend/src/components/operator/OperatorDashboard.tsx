@@ -128,12 +128,12 @@ export function OperatorDashboard({
         somministrazioni={somministrazioni}
         onOpenParametri={() => onNavigate('parametri-multipaziente')}
         onOpenPazienti={() => onNavigate('pazienti')}
-        onOpenAgenda={() => onNavigate('agenda-operatore')}
+        onOpenTherapy={() => onNavigate('terapie')}
       />
 
       <DashboardTherapyDeadlines
         summary={somministrazioni}
-        onOpenAgenda={() => onNavigate('agenda-operatore')}
+        onOpenTherapy={() => onNavigate('terapie')}
         onSelectPaziente={onSelectPaziente}
       />
 

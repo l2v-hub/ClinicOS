@@ -98,6 +98,7 @@ export function parseParameterReading(value: unknown): ParameterReadingInput {
 export interface ReadingFilters {
   patientId: string;
   date?: string;
+  month?: string;
 }
 export interface ReadingPosition {
   measuredAt: string;
@@ -109,6 +110,13 @@ export function encodeReadingCursor(position: ReadingPosition, filters: ReadingF
 export function parseReadingQuery(patientId: string, query: Record<string, unknown>) {
   const date =
     query.date === undefined || query.date === '' ? undefined : parameterDate(query.date);
+  const month = query.month === undefined || query.month === '' ? undefined : query.month;
+  if (
+    month !== undefined &&
+    (typeof month !== 'string' || !/^20\d{2}-(0[1-9]|1[0-2])$/.test(month))
+  )
+    throw new ParameterReadingError('Mese non valido');
+  if (date && month) throw new ParameterReadingError('Scegli una giornata oppure un mese');
   if (
     query.limit !== undefined &&
     (typeof query.limit !== 'string' || !/^\d{1,3}$/.test(query.limit))
@@ -116,7 +124,11 @@ export function parseReadingQuery(patientId: string, query: Record<string, unkno
     throw new ParameterReadingError('Limite non valido');
   const limit = query.limit === undefined ? 50 : Number(query.limit);
   if (limit < 1 || limit > 100) throw new ParameterReadingError('Limite non valido');
-  const filters = { patientId, ...(date && { date }) };
+  const filters: ReadingFilters = {
+    patientId,
+    ...(date && { date }),
+    ...(month && { month: month as string }),
+  };
   let position: ReadingPosition | undefined;
   if (query.cursor !== undefined) {
     try {
@@ -131,6 +143,7 @@ export function parseReadingQuery(patientId: string, query: Record<string, unkno
         decoded.v !== 1 ||
         decoded.patientId !== patientId ||
         decoded.date !== date ||
+        decoded.month !== month ||
         !UUID.test(decoded.id) ||
         !ISO_INSTANT.test(decoded.measuredAt) ||
         new Date(decoded.measuredAt).toISOString() !== decoded.measuredAt

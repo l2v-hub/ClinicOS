@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
 import { DocumentScanFrame } from './DocumentScanFrame';
+import { acquireDocumentCamera, prepareNativeCameraPhoto } from '../../lib/cameraAcquisition';
 import {
   initialScanCrop,
   scanCaptureGeometry,
@@ -37,6 +38,7 @@ export function CameraCapture({
   const scanning = outputFormat === 'pdf';
   const titleId = useId();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const nativeInputRef = useRef<HTMLInputElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const blobRef = useRef<Blob | null>(null);
   const photoUrlRef = useRef<string | null>(null);
@@ -69,7 +71,7 @@ export function CameraCapture({
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    generationRef.current++;
+    const generation = ++generationRef.current;
     capturingRef.current = false;
     confirmingRef.current = false;
     setCapturing(false);
@@ -80,20 +82,13 @@ export function CameraCapture({
     clearPhoto();
     setPhotoUrl(null);
     const md = navigator.mediaDevices;
-    if (!md?.getUserMedia) {
-      setPhase('unavailable');
-      return;
-    }
-    md.getUserMedia({
-      video: {
-        facingMode: { ideal: 'environment' },
-        width: { ideal: 2560 },
-        height: { ideal: 1920 },
-      },
-      audio: false,
-    })
+    const request =
+      typeof md?.getUserMedia === 'function'
+        ? acquireDocumentCamera(md, () => cancelled || generation !== generationRef.current)
+        : Promise.reject(new DOMException('Camera unavailable', 'NotFoundError'));
+    request
       .then((stream) => {
-        if (cancelled) {
+        if (cancelled || generation !== generationRef.current) {
           stream.getTracks().forEach((t) => t.stop());
           return;
         }
@@ -105,7 +100,7 @@ export function CameraCapture({
         setPhase('live');
       })
       .catch((err: unknown) => {
-        if (cancelled) return;
+        if (cancelled || generation !== generationRef.current) return;
         const name = (err as { name?: string })?.name;
         setPhase(
           name === 'NotAllowedError' || name === 'SecurityError' || name === 'PermissionDeniedError'
@@ -135,6 +130,27 @@ export function CameraCapture({
   }, [phase]);
 
   if (!open) return null;
+
+  async function useNativePhoto(file: File) {
+    const generation = ++generationRef.current;
+    stopStream();
+    clearPhoto();
+    setConversionError('');
+    setPhase('requesting');
+    try {
+      const photo = await prepareNativeCameraPhoto(file);
+      if (generation !== generationRef.current) return;
+      blobRef.current = photo.blob;
+      imageSizeRef.current = { width: photo.width, height: photo.height };
+      photoUrlRef.current = URL.createObjectURL(photo.blob);
+      setPhotoUrl(photoUrlRef.current);
+      setPhase('preview');
+    } catch {
+      if (generation !== generationRef.current) return;
+      setConversionError('Foto non leggibile. Riprova con una foto JPEG o PNG di massimo 30 MB.');
+      setPhase('unavailable');
+    }
+  }
 
   function capture() {
     const v = videoRef.current;
@@ -255,6 +271,19 @@ export function CameraCapture({
       closeOnOverlay={false}
     >
       <div data-testid="camera-capture">
+        <input
+          ref={nativeInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          hidden
+          aria-label="Foto dalla fotocamera del dispositivo"
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            event.target.value = '';
+            if (file) void useNativePhoto(file);
+          }}
+        />
         <header className="import-modal__head">
           <h3 id={titleId}>{scanning ? 'Scansiona documento' : 'Scatta foto'}</h3>
           <button
@@ -267,6 +296,15 @@ export function CameraCapture({
             ✕
           </button>
         </header>
+        {phase !== 'preview' && (
+          <button
+            type="button"
+            className="btn-secondary btn-sm"
+            onClick={() => nativeInputRef.current?.click()}
+          >
+            Usa fotocamera del dispositivo
+          </button>
+        )}
 
         {phase === 'requesting' && (
           <p className="camera-capture__msg" data-testid="camera-requesting">
@@ -409,8 +447,19 @@ export function CameraCapture({
 
         {phase === 'unavailable' && (
           <div className="camera-capture__msg" data-testid="camera-unavailable">
-            <p>Fotocamera non disponibile.</p>
+            <p>
+              Anteprima della fotocamera non disponibile. Puoi riprovare o usare la fotocamera del
+              dispositivo.
+            </p>
+            {conversionError && <p role="alert">{conversionError}</p>}
             <div className="camera-capture__actions">
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => setRestart((n) => n + 1)}
+              >
+                Riprova
+              </button>
               <button
                 className="btn-primary"
                 onClick={() => {

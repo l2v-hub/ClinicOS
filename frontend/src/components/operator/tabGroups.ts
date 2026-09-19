@@ -11,6 +11,7 @@
 export type TabId =
   | 'riepilogo'
   | 'profilo'
+  | 'contatti'
   | 'diagnosi'
   | 'terapia-farmacologica'
   | 'note'
@@ -39,24 +40,23 @@ export interface TabGroupDef {
 export const TAB_GROUPS: TabGroupDef[] = [
   {
     id: 'panoramica',
-    label: 'Panoramica',
+    label: 'Raccolta dati ingresso',
     tabs: [
-      { id: 'riepilogo', label: 'Riepilogo' },
-      { id: 'profilo', label: 'Profilo' },
-      { id: 'consegne', label: 'Consegne' },
+      { id: 'profilo', label: 'Anagrafica' },
+      { id: 'contatti', label: 'Contatti' },
+      { id: 'presa-in-carico', label: 'Presa in carico' },
     ],
   },
   {
     id: 'clinica',
     label: 'Clinica',
     tabs: [
-      { id: 'presa-in-carico', label: 'Presa in Carico' },
-      { id: 'sezioni-narrative', label: 'Sezioni cliniche' },
       { id: 'diagnosi', label: 'Diagnosi' },
       { id: 'terapia-farmacologica', label: 'Terapia Farmacologica' },
+      { id: 'consegne', label: 'Consegne' },
       { id: 'parametri', label: 'Parametri Vitali' },
-      { id: 'note', label: 'Note & Visite' },
-      { id: 'esami-consulenze', label: 'Esami & Consulenze' },
+      { id: 'esami-consulenze', label: 'Esami e consulenze' },
+      { id: 'note', label: 'Note e visite' },
     ],
   },
   {
@@ -84,9 +84,22 @@ export const TAB_GROUPS: TabGroupDef[] = [
 ];
 
 export function tabLabel(id: TabId): string | undefined {
+  if (id === 'sezioni-narrative') return 'Sezioni cliniche';
+  id = resolvePatientTab(id);
   for (const g of TAB_GROUPS) {
     const t = g.tabs.find((x) => x.id === id);
     if (t) return t.label;
   }
   return undefined;
+}
+
+/** Preserve existing dashboard/Agnos destinations after reorganizing the chart. */
+export function resolvePatientTab(id?: TabId): TabId {
+  if (!id || id === 'riepilogo') return 'profilo';
+  return id === 'sezioni-narrative' ? 'diagnosi' : id;
+}
+
+export function patientTabGroup(id?: TabId): TabGroup {
+  const tab = resolvePatientTab(id);
+  return TAB_GROUPS.find((group) => group.tabs.some((item) => item.id === tab))?.id ?? 'panoramica';
 }

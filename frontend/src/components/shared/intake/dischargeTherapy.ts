@@ -1,8 +1,9 @@
 // Raw OCR fields remain alongside the complete, operator-reviewed form in the draft.
 import { emptyTherapyForm, type TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
 import {
-  ADMIN_UNITS,
   PHARMA_FORMS,
+  administrationUnitForForm,
+  isInhalerForm,
   formatFraction,
   parseQuantity,
 } from '../../operator/cartella/therapyDose';
@@ -48,6 +49,7 @@ function dayToIso(d: string): number {
 
 function mapForma(raw: string): string | null {
   const f = (raw || '').trim().toLowerCase();
+  if (isInhalerForm(f)) return 'inalatore';
   if (/\bcpr\b|compress/.test(f)) return 'compressa';
   if (/\bcps\b|\bcp\b|capsul/.test(f)) return 'capsula';
   if (/scir|siropp|sciropp/.test(f)) return 'sciroppo';
@@ -91,9 +93,7 @@ function parseAdministration(raw: string, forma: string | null) {
   // Syrup/bottle/cream is a pharmaceutical form, not an administration quantity.
   const unit = explicitUnit
     ? (UNIT_ALIASES[explicitUnit] ?? '')
-    : forma && ADMIN_UNITS.includes(forma)
-      ? forma
-      : '';
+    : administrationUnitForForm(forma ?? '');
   return { num: qty?.num ?? 0, den: qty?.den ?? 1, unit };
 }
 

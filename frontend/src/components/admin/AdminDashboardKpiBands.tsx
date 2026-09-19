@@ -211,8 +211,8 @@ export function AdminDashboardKpiBands({
             ? 'critical'
             : 'positive',
       icon: <IcoPill />,
-      onOpen: () => onNavigate('agenda-admin'),
-      actionLabel: 'Apri agenda amministratore',
+      onOpen: () => onNavigate('terapie'),
+      actionLabel: 'Apri terapia',
     },
   ];
 

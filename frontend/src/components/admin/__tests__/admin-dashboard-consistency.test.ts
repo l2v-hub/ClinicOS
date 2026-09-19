@@ -26,8 +26,8 @@ test('admin first view uses the shared compact notification center', () => {
   assert.ok(kpiIndex > notificationIndex);
   assert.match(dashboard, /buildDashboardNotificationCounts/);
   assert.match(dashboard, /buildDashboardNotificationSections/);
-  assert.match(dashboard, /agendaNav: 'agenda-admin'/);
-  assert.match(details, /agendaNav = 'agenda-operatore'/);
+  assert.match(dashboard, /therapyNav: 'terapie'/);
+  assert.match(details, /therapyNav = 'terapie'/);
   assert.doesNotMatch(dashboard, /className="coverage-alert"/);
   assert.doesNotMatch(dashboard, /className="stats-grid"/);
   assert.doesNotMatch(dashboard, /className="stat-card/);

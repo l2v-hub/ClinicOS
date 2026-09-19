@@ -87,3 +87,19 @@ test('history cursors bind patient/date and paging remains bounded', () => {
   }
   assert.throws(() => parseReadingQuery('patient-b', { date: filters.date, cursor }));
 });
+
+test('monthly history validates the month and binds pagination to that month', () => {
+  const filters = { patientId: 'patient-a', month: '2026-09' };
+  const cursor = encodeReadingCursor({ id: requestId, measuredAt }, filters);
+  assert.deepEqual(parseReadingQuery('patient-a', { month: '2026-09', cursor }).filters, filters);
+  for (const query of [
+    { month: '2026-13' },
+    { month: '2026-9' },
+    { month: '2026-09', date: '2026-09-19' },
+    { month: ['2026-09'] },
+    { month: '2026-10', cursor },
+    { cursor },
+  ]) {
+    assert.throws(() => parseReadingQuery('patient-a', query));
+  }
+});

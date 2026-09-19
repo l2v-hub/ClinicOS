@@ -48,7 +48,13 @@ import {
   isValidBedSelection,
 } from '../../lib/roomAssignmentModel';
 import { DiagnosisEditor } from './sections/DiagnosisEditor';
-import { TAB_GROUPS, type TabGroup, type TabId } from './tabGroups';
+import {
+  TAB_GROUPS,
+  resolvePatientTab,
+  patientTabGroup,
+  type TabGroup,
+  type TabId,
+} from './tabGroups';
 import {
   AnamnesisEditor,
   ContenzioniTab,
@@ -262,7 +268,6 @@ export function PatientDetail({
   consegneHasMore,
   onLoadMoreConsegne,
   onRetryConsegne,
-  operatori,
   camere,
   camereLoadState,
   camereLoadError,
@@ -282,19 +287,13 @@ export function PatientDetail({
   navigationRequestId,
   assistantSectionRefresh,
 }: PatientDetailProps) {
-  const [tab, setTab] = useState<TabId>(initialTab ?? 'riepilogo');
-  const [activeGroup, setActiveGroup] = useState<TabGroup>(() => {
-    const target = initialTab ?? 'riepilogo';
-    return TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === target))?.id ?? 'panoramica';
-  });
+  const [tab, setTab] = useState<TabId>(resolvePatientTab(initialTab));
+  const [activeGroup, setActiveGroup] = useState<TabGroup>(() => patientTabGroup(initialTab));
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
   useEffect(() => {
     if (!initialTab || navigationRequestId === undefined) return;
-    setTab(initialTab);
-    setActiveGroup(
-      TAB_GROUPS.find((group) => group.tabs.some((item) => item.id === initialTab))?.id ??
-        'panoramica',
-    );
+    setTab(resolvePatientTab(initialTab));
+    setActiveGroup(patientTabGroup(initialTab));
   }, [initialTab, navigationRequestId]);
   // AC5: anomalie di terapia del paziente. Passa dalla stessa richiesta di reparto che alimenta
   // la lista pazienti, quindi aprire una cartella non aggiunge chiamate.
@@ -313,14 +312,11 @@ export function PatientDetail({
   const lastTabByGroup = useRef<Partial<Record<TabGroup, TabId>>>({});
 
   function switchTab(tabId: TabId) {
-    setTab(tabId);
-    // Deriva il gruppo dal tab stesso invece di fidarsi dello stato `activeGroup`: alcuni
-    // call site (es. "Apri Terapia Farmacologica" da un'altra scheda) chiamano switchGroup()
-    // e switchTab() in sequenza nello stesso handler — `activeGroup` nella closure resta il
-    // valore del render precedente finche' React non riapplica gli state update, quindi
-    // fidarsi di quella variabile qui scriverebbe la memoria sotto il gruppo sbagliato.
-    const owningGroup = TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === tabId))?.id;
-    if (owningGroup) lastTabByGroup.current[owningGroup] = tabId;
+    const target = resolvePatientTab(tabId);
+    const group = patientTabGroup(target);
+    setTab(target);
+    setActiveGroup(group);
+    lastTabByGroup.current[group] = target;
   }
 
   function switchGroup(groupId: TabGroup) {
@@ -348,9 +344,6 @@ export function PatientDetail({
     Partial<CartellaPaziente & Pick<Paziente, 'email' | 'phone' | 'codiceFiscale'>>
   >({});
   // Feature 010: L3 sub-tabs for Profilo (FR-005)
-  const [profiloL3, setProfiloL3] = useState<
-    'anagrafica' | 'contatti' | 'emergenza' | 'assegnazione'
-  >('anagrafica');
 
   // Rischi
   const [showAddRisk, setShowAddRisk] = useState(false);
@@ -417,10 +410,8 @@ export function PatientDetail({
       return;
     }
     initialTabPatientRef.current = paziente.id;
-    setTab('riepilogo');
-    setActiveGroup(
-      TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === 'riepilogo'))?.id ?? 'panoramica',
-    );
+    setTab('profilo');
+    setActiveGroup('panoramica');
     setDiarioFilter('tutti');
     // Nessuno di questi 22 stati e' collegato al paziente.id per progettazione — un form/modale
     // rimasto aperto dopo il cambio paziente resterebbe agganciato al paziente sbagliato. Due in
@@ -430,7 +421,6 @@ export function PatientDetail({
     // il paziente sbagliato senza che l'operatore se ne accorga.
     setEditProfilo(false);
     setProfiloForm({});
-    setProfiloL3('anagrafica');
     setShowAddRisk(false);
     setEditRiskId(null);
     setRiskForm({});
@@ -1702,11 +1692,10 @@ export function PatientDetail({
   }
 
   function renderProfilo() {
-    const op = operatori.find((o) => o.id === cartella.operatoreId);
     return (
       <div className="cr-tab-content">
         <ClinicalTableSection
-          title="Dati e Contatti"
+          title={tab === 'contatti' ? 'Contatti' : 'Anagrafica'}
           actions={
             editProfilo ? undefined : (
               // Salva/Annulla in modifica sono gia' resi dal footer di InlineForm sotto — un
@@ -1812,94 +1801,6 @@ export function PatientDetail({
                       }
                     />
                   </div>
-                  <div className="form-field">
-                    <label className="form-label">Contatto emergenza (nome)</label>
-                    <input
-                      className="form-input"
-                      value={profiloForm.contattoEmergenzaNome ?? ''}
-                      onChange={(e) =>
-                        setProfiloForm((p) => ({ ...p, contattoEmergenzaNome: e.target.value }))
-                      }
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Contatto emergenza (tel)</label>
-                    <input
-                      className="form-input"
-                      value={profiloForm.contattoEmergenzaTel ?? ''}
-                      onChange={(e) =>
-                        setProfiloForm((p) => ({ ...p, contattoEmergenzaTel: e.target.value }))
-                      }
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Relazione</label>
-                    <input
-                      className="form-input"
-                      value={profiloForm.contattoEmergenzaRel ?? ''}
-                      onChange={(e) =>
-                        setProfiloForm((p) => ({ ...p, contattoEmergenzaRel: e.target.value }))
-                      }
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Medico curante</label>
-                    <input
-                      className="form-input"
-                      value={profiloForm.medicoCurante ?? ''}
-                      onChange={(e) =>
-                        setProfiloForm((p) => ({ ...p, medicoCurante: e.target.value }))
-                      }
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Operatore assegnato</label>
-                    <select
-                      className="form-select"
-                      value={profiloForm.operatoreId ?? ''}
-                      onChange={(e) =>
-                        setProfiloForm((p) => ({ ...p, operatoreId: e.target.value }))
-                      }
-                    >
-                      <option value="">— Nessuno —</option>
-                      {operatori
-                        .filter((o) => o.stato === 'attivo')
-                        .map((o) => (
-                          <option key={o.id} value={o.id}>
-                            {o.cognome} {o.nome}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Stato ricovero</label>
-                    <select
-                      className="form-select"
-                      value={profiloForm.statoRicovero ?? 'ambulatoriale'}
-                      onChange={(e) =>
-                        setProfiloForm((p) => ({
-                          ...p,
-                          statoRicovero: e.target.value as CartellaPaziente['statoRicovero'],
-                        }))
-                      }
-                    >
-                      <option value="ricoverato">Ricoverato</option>
-                      <option value="ambulatoriale">Ambulatoriale</option>
-                      <option value="day_hospital">Day Hospital</option>
-                      <option value="dimesso">Dimesso</option>
-                    </select>
-                  </div>
-                  <div className="form-field">
-                    <label className="form-label">Data ricovero</label>
-                    <input
-                      className="form-input"
-                      type="date"
-                      value={profiloForm.dataRicovero ?? ''}
-                      onChange={(e) =>
-                        setProfiloForm((p) => ({ ...p, dataRicovero: e.target.value }))
-                      }
-                    />
-                  </div>
                 </div>
                 <div className="form-field" style={{ marginTop: 8 }}>
                   <label className="form-label">Note generali</label>
@@ -1915,21 +1816,8 @@ export function PatientDetail({
               </InlineForm>
             ) : (
               <>
-                {/* Feature 010: L3 sub-tabs (FR-005) */}
-                <TopNav
-                  variant="level3"
-                  ariaLabel="Sezioni del profilo paziente"
-                  items={[
-                    { key: 'anagrafica', label: 'Anagrafica' },
-                    { key: 'contatti', label: 'Contatti' },
-                    { key: 'emergenza', label: 'Contatto emergenza' },
-                    { key: 'assegnazione', label: 'Assegnazione clinica' },
-                  ]}
-                  activeKey={profiloL3}
-                  onChange={(id) => setProfiloL3(id as typeof profiloL3)}
-                />
                 <div className="cr-profilo-grid" style={{ marginTop: 12 }}>
-                  {profiloL3 === 'anagrafica' && (
+                  {tab === 'profilo' && (
                     <div className="cr-profilo-group">
                       <div className="cr-profilo-group__title">Anagrafica</div>
                       <div className="cr-profilo-row">
@@ -1956,7 +1844,7 @@ export function PatientDetail({
                       </div>
                     </div>
                   )}
-                  {profiloL3 === 'contatti' && (
+                  {tab === 'contatti' && (
                     <div className="cr-profilo-group">
                       <div className="cr-profilo-group__title">Contatti</div>
                       <div className="cr-profilo-row">
@@ -1973,60 +1861,6 @@ export function PatientDetail({
                           {cartella.indirizzo?.trim() || paziente.address?.trim() || 'Non indicato'}
                         </strong>
                       </div>
-                    </div>
-                  )}
-                  {profiloL3 === 'emergenza' && (
-                    <div className="cr-profilo-group">
-                      <div className="cr-profilo-group__title">Contatto emergenza</div>
-                      <div className="cr-profilo-row">
-                        <span>Nome</span>
-                        <strong>{cartella.contattoEmergenzaNome ?? '—'}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Telefono</span>
-                        <strong>{cartella.contattoEmergenzaTel ?? '—'}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Relazione</span>
-                        <strong>{cartella.contattoEmergenzaRel ?? '—'}</strong>
-                      </div>
-                    </div>
-                  )}
-                  {profiloL3 === 'assegnazione' && (
-                    <div className="cr-profilo-group">
-                      <div className="cr-profilo-group__title">Assegnazione clinica</div>
-                      <div className="cr-profilo-row">
-                        <span>Stato</span>
-                        <span
-                          className={`stato-pill stato-pill--${cartella.statoRicovero === 'ricoverato' ? 'attivo' : 'inattivo'}`}
-                        >
-                          {cartella.statoRicovero.replace('_', ' ')}
-                        </span>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Reparto</span>
-                        <strong>{cartella.repartoRicovero ?? '—'}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Camera / Letto</span>
-                        <strong>
-                          {roomLabel} / {bedLabel}
-                        </strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Operatore</span>
-                        <strong>{op ? `${op.cognome} ${op.nome}` : '—'}</strong>
-                      </div>
-                      <div className="cr-profilo-row">
-                        <span>Medico curante</span>
-                        <strong>{cartella.medicoCurante ?? '—'}</strong>
-                      </div>
-                      {cartella.dataRicovero && (
-                        <div className="cr-profilo-row">
-                          <span>Data ricovero</span>
-                          <strong>{fmtDate(cartella.dataRicovero)}</strong>
-                        </div>
-                      )}
                     </div>
                   )}
                   {cartella.noteGenerali && (
@@ -2854,7 +2688,7 @@ export function PatientDetail({
         >
           <Suspense fallback={<ClinicalSectionLoading />}>
             {tab === 'riepilogo' && renderRiepilogo()}
-            {tab === 'profilo' && renderProfilo()}
+            {(tab === 'profilo' || tab === 'contatti') && renderProfilo()}
             {tab === 'diagnosi' && renderDiagnosi()}
             {tab === 'terapia-farmacologica' && (
               <TherapyEditor
@@ -2897,12 +2731,25 @@ export function PatientDetail({
                 operatoreRole={operatoreRole}
               />
             )}
-            {tab === 'sezioni-narrative' && (
+            {(tab === 'diagnosi' || tab === 'sezioni-narrative') && (
               <>
                 {/* #278: anamnesi strutturata modificabile — stesso cast Anamnesi ⇄
                   Record<string, unknown> già usato in patientSections.ts */}
+                <ClinicalTableSection title="Allergie e intolleranze">
+                  <div className="cts__body--padded">
+                    <AllergiesEditor
+                      mode="patient-chart"
+                      value={cartella.allergie ?? []}
+                      status={cartella.allergieStatus}
+                      onStatusChange={(status) => upd({ allergieStatus: status })}
+                      operatoreNome={operatoreNome}
+                      onChange={(list) => upd({ allergie: list })}
+                    />
+                  </div>
+                </ClinicalTableSection>
                 <AnamnesisEditor
                   mode="patient-chart"
+                  showAllergySummary={false}
                   value={cartella.anamnesi as unknown as Record<string, unknown>}
                   onChange={(v) => upd({ anamnesi: v as unknown as Anamnesi })}
                   readOnly={false}

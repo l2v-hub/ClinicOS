@@ -156,3 +156,21 @@ test('history fetch and entry page pass date and cursor with bounded limit and a
     /date=2026-09-19/,
   );
 });
+
+test('monthly fetch keeps the month when loading the next page', async () => {
+  await fetchParameterReadings(
+    '/api',
+    'p1',
+    { month: '2026-09', cursor: 'next' },
+    {
+      headers: {},
+      fetcher: (async (url) => {
+        assert.equal(
+          String(url),
+          '/api/patients/p1/parameter-readings?limit=50&month=2026-09&cursor=next',
+        );
+        return Response.json({ readings: [], hasMore: false, nextCursor: null });
+      }) as typeof fetch,
+    },
+  );
+});

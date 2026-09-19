@@ -2,12 +2,8 @@ import { prisma } from '../lib/prisma.js';
 import { Router } from 'express';
 import { requireOperator, type AuthedRequest, type Operator } from '../ai/auth.js';
 import { requirePatientScope } from '../patients/access.js';
-import {
-  DiaryPageInputError,
-  decodeDiaryPageCursor,
-  encodeDiaryPageCursor,
-  parseDiaryPageQuery,
-} from '../patients/diary-pagination.js';
+import { DiaryPageInputError } from '../patients/diary-pagination.js';
+import { loadPatientDiary } from '../patients/diary-read-service.js';
 import {
   DiaryWriteInputError,
   parseDiaryCreateBody,
@@ -57,47 +53,16 @@ router.get('/:patientId/diary', async (req, res) => {
   const { patientId } = req.params;
 
   try {
-    const input = parseDiaryPageQuery(req.query as Record<string, unknown>);
-    const filters = { authorType: input.authorType, from: input.from, to: input.to };
-    const position = input.cursor ? decodeDiaryPageCursor(input.cursor, filters) : undefined;
-    const baseWhere = {
+    const page = await loadPatientDiary(
       patientId,
-      ...(input.authorType ? { authorType: input.authorType } : {}),
-      ...(input.from || input.to
-        ? {
-            entryDateTime: {
-              ...(input.from ? { gte: input.from } : {}),
-              ...(input.to ? { lte: input.to + 'T23:59:59.999' } : {}),
-            },
-          }
-        : {}),
-    };
-    const cursorWhere = position
-      ? {
-          OR: [
-            { entryDateTime: { lt: position.entryDateTime } },
-            { entryDateTime: position.entryDateTime, id: { lt: position.id } },
-          ],
-        }
-      : undefined;
-    const rows = await prisma.patientDiaryEntry.findMany({
-      where: { AND: [baseWhere, ...(cursorWhere ? [cursorWhere] : [])] },
-      orderBy: [{ entryDateTime: 'desc' }, { id: 'desc' }],
-      take: input.limit + 1,
-      ...(input.offset !== undefined && { skip: input.offset }),
-    });
-    const hasMore = rows.length > input.limit;
-    const entries = hasMore ? rows.slice(0, input.limit) : rows;
-    const last = entries.at(-1);
-    res.status(200).json({
-      entries,
-      loadedCount: entries.length,
-      hasMore,
-      nextCursor:
-        hasMore && last
-          ? encodeDiaryPageCursor({ entryDateTime: last.entryDateTime, id: last.id }, filters)
-          : null,
-    });
+      req.query as Record<string, unknown>,
+      (req as AuthedRequest).operator!,
+    );
+    if (!page) {
+      res.status(404).json({ error: 'Paziente non trovato' });
+      return;
+    }
+    res.status(200).json(page);
   } catch (error) {
     if (error instanceof DiaryPageInputError) {
       res.status(400).json({ error: error.message });

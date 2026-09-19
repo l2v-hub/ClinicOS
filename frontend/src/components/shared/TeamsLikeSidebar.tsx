@@ -35,6 +35,7 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
       { key: 'admin-dashboard', label: 'Dashboard', icon: <IcoDashboard /> },
       { key: 'gestione-operatori', label: 'Operatori', icon: <IcoOperatori /> },
       { key: 'agenda-admin', label: 'Agenda', icon: <IcoCalendar /> },
+      { key: 'terapie', label: 'Terapia', icon: <IcoPill /> },
       { key: 'posti-letto', label: 'Posti Letto', icon: <IcoBed /> },
       { key: 'orari-operatori', label: 'Orari', icon: <IcoClock /> },
       { key: 'consegne', label: 'Consegne', icon: <IcoConsegne /> },
@@ -49,6 +50,7 @@ function getNavItems(utente: UtenteApp, unreadNotes: number): NavItem[] {
     { key: 'anagrafica-farmaci', label: 'Farmaci', icon: <IcoPill /> },
     { key: 'consegne', label: 'Consegne', icon: <IcoConsegne /> },
     { key: 'agenda-operatore', label: 'Agenda', icon: <IcoCalendar /> },
+    { key: 'terapie', label: 'Terapia', icon: <IcoPill /> },
     { key: 'note', label: 'Note', icon: <IcoMessage />, badge: unreadNotes },
     { key: 'ai-assistant', label: 'Assistente', icon: <IcoAI /> },
   ];

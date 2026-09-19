@@ -17,15 +17,14 @@ import { ClinicalTable } from './ClinicalTable';
 import type { ColumnDef } from './ClinicalTable';
 import {
   FRACTION_PRESETS,
-  ADMIN_UNITS,
   formatFraction,
   computeEquivalent,
   scheduleLabel,
   parseAllowedFractions,
   hasDividedPatch,
-  type ScheduleRow,
 } from './therapyDose';
 import { TherapyFormFields, emptyTherapyForm, type TherapyFormValue } from './TherapyFormFields';
+import { schedulesFromTherapy } from './therapyFormRestore';
 import { ConfirmDialog } from '../../shared/ConfirmDialog';
 import { TopNav, type TopNavItem } from '../../navigation/TopNav';
 import { useRisoluzioniFarmaco, trovaRisoluzione, etichettaDocumento } from './farmacoRiferimento';
@@ -106,47 +105,6 @@ function todayStr(): string {
 }
 
 const emptyForm = emptyTherapyForm;
-
-// Build editable schedule rows from a loaded therapy: prefer structured schedules,
-// else synthesize from legacy orarioSpecifico, else from fascia booleans.
-function schedulesFromTherapy(t: PatientTherapyAPI): ScheduleRow[] {
-  const unit =
-    t.pharmaceuticalForm && ADMIN_UNITS.includes(t.pharmaceuticalForm)
-      ? t.pharmaceuticalForm
-      : 'compressa';
-  if (t.schedules && t.schedules.length) {
-    return t.schedules
-      .map((s) => ({
-        time: s.time,
-        quantityNumerator: s.quantityNumerator,
-        quantityDenominator: s.quantityDenominator,
-        administrationUnit: s.administrationUnit || unit,
-      }))
-      .sort((a, b) => a.time.localeCompare(b.time));
-  }
-  const times: string[] = [];
-  if (t.orarioSpecifico)
-    times.push(
-      ...t.orarioSpecifico
-        .split(',')
-        .map((s) => s.trim())
-        .filter(Boolean),
-    );
-  if (!times.length) {
-    if (t.fasceMattina) times.push('08:00');
-    if (t.fascePranzo) times.push('12:00');
-    if (t.fascePomeriggio) times.push('16:00');
-    if (t.fasceSera) times.push('20:00');
-    if (t.fasceNotte) times.push('22:00');
-  }
-  if (!times.length) times.push('08:00');
-  return times.map((time) => ({
-    time,
-    quantityNumerator: 1,
-    quantityDenominator: 1,
-    administrationUnit: unit,
-  }));
-}
 
 function therapyToForm(t: PatientTherapyAPI): TherapyForm {
   return {
@@ -849,7 +807,9 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         )}
         {(risoluzione?.stato === 'trovato' || risoluzione?.stato === 'senza-documento') && (
           <span className="farmaco-trovato" title="Farmaco presente nell'anagrafica AIFA">
-            <span aria-hidden="true"><IcoCheck /></span>
+            <span aria-hidden="true">
+              <IcoCheck />
+            </span>
             Trovato in AIFA
           </span>
         )}

@@ -43,7 +43,18 @@ export function hasDividedPatch(schedules: ScheduleRow[]): boolean {
 
 /** Only counted forms have an unambiguous administration unit. */
 export function administrationUnitForForm(form: string): string {
+  if (form === 'inalatore') return 'puff';
   return ADMIN_UNITS.includes(form) ? form : '';
+}
+
+/** Recognize inhaler formulations without treating every inhaled liquid as a puff. */
+export function isInhalerForm(raw: string): boolean {
+  const form = raw.trim().toLowerCase().replace(/\s+/g, ' ');
+  // These forms keep their own explicit administration unit (ml, fiala, capsula, ...).
+  if (/nebul|nasal|oromucos|cutane|capsul|fial/.test(form)) return false;
+  if (/\binalator[ei]\b/.test(form)) return true;
+  const inhaled = /\b(?:inalazion[ei]|inalatori[aoe])\b/.test(form);
+  return inhaled && /\b(?:polver[ei]|pressurizzat[aeio]|spray)\b/.test(form);
 }
 
 export const PHARMA_FORMS = [
@@ -54,6 +65,7 @@ export const PHARMA_FORMS = [
   'flacone',
   'bustina',
   'gocce',
+  'inalatore',
   'cerotto',
   'crema',
 ];

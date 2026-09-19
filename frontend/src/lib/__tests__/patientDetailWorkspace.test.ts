@@ -29,7 +29,7 @@ test('patient record exposes a labelled two-level navigation and controlled tab 
   assert.match(patientDetail, /visualLabel="Aree cartella"/);
   assert.match(patientDetail, /className="top-nav--section-grid"/);
   assert.doesNotMatch(patientDetail, /visualLabel=\{`\$\{grp\.label\} · contenuti`\}/);
-  assert.match(patientDetail, /ariaLabel="Sezioni del profilo paziente"/);
+  assert.doesNotMatch(patientDetail, /ariaLabel="Sezioni del profilo paziente"/);
   assert.doesNotMatch(patientDetail, /visualLabel="Dettagli profilo"/);
   assert.match(patientDetail, /ariaLabel="Filtra il diario per autore"/);
   assert.match(patientDetail, /id="patient-tab-panel"[\s\S]*?role="tabpanel"/);
@@ -48,7 +48,7 @@ test('top navigation follows the keyboard tab pattern with one focusable active 
   assert.match(topNavStyles, /\.top-nav__item:focus-visible\s*\{/);
   assert.match(
     topNavStyles,
-    /\.top-nav--section-grid \.top-nav__items\s*\{[\s\S]*?display: grid[\s\S]*?repeat\(auto-fit, minmax\(120px, 1fr\)\)[\s\S]*?overflow: visible/,
+    /\.top-nav--section-grid \.top-nav__items\s*\{[\s\S]*?display: flex[\s\S]*?flex-wrap: wrap[\s\S]*?overflow: visible/,
   );
   assert.match(
     topNavStyles,

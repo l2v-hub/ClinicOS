@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../../config';
 import { IcoSearch } from '../../../icons';
 import { testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
-import { PHARMA_FORMS } from './therapyDose';
+import { PHARMA_FORMS, isInhalerForm } from './therapyDose';
 import { normalizza } from './farmacoCorrispondenza';
 import './CampoFarmaco.css';
 const LIMITE = 12;
@@ -39,6 +39,7 @@ interface Props {
 /** Riconduce la forma AIFA («Compressa effervescente») a una delle forme della maschera. */
 export function formaDellaMaschera(formaAifa: string | null | undefined): string | undefined {
   if (!formaAifa) return undefined;
+  if (isInhalerForm(formaAifa)) return 'inalatore';
   const n = normalizza(formaAifa);
   // L'ordine conta: «soluzione per infusione» deve dare fiala, non flacone, e va controllato
   // prima di parole piu' generiche.

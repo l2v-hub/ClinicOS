@@ -555,7 +555,7 @@ export function OperatorAgenda({
               </Fragment>
             ))}
           </div>
-          <p className="agt-empty-note">Le terapie sono disponibili nella vista Giorno.</p>
+          <p className="agt-empty-note">Le somministrazioni sono nella pagina Terapia.</p>
           {aptsInRange(getWeekDays(refDate)) === 0 && (
             <p className="agt-empty-note">Nessun appuntamento in questa settimana.</p>
           )}

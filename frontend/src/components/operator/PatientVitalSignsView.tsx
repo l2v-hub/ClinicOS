@@ -25,7 +25,8 @@ export function PatientVitalSignsView({
         variant="level3"
         items={[
           { key: 'history', label: 'Storico rilevazioni' },
-          { key: 'grid', label: 'Griglia mensile' },
+          { key: 'month', label: 'Mensile' },
+          { key: 'grid', label: 'Griglia precedente' },
         ]}
         activeKey={view}
         onChange={setView}
@@ -34,17 +35,18 @@ export function PatientVitalSignsView({
         panelId="vital-panel"
       />
       <div id="vital-panel" role="tabpanel" aria-labelledby={`vital-view-${view}`}>
-        {view === 'history' ? (
+        {view === 'history' || view === 'month' ? (
           <PatientParameterHistory
-            key={`${paziente.id}:${operatoreId}`}
+            key={`${view}:${paziente.id}:${operatoreId}`}
             patientId={paziente.id}
             cartella={cartella}
+            mode={view === 'month' ? 'month' : 'history'}
           />
         ) : (
           <>
             <p className="parameter-entry-help">
-              Griglia e registrazioni precedenti. Le nuove rilevazioni della compilazione rapida
-              sono in «Storico rilevazioni».
+              Griglia delle registrazioni precedenti, ancora modificabile. Le nuove rilevazioni,
+              complete di data e ora, sono nello storico e nella vista Mensile.
             </p>
             <VitalSignsEditor
               mode="patient-chart"

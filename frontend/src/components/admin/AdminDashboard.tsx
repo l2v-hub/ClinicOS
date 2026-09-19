@@ -121,7 +121,7 @@ export function AdminDashboard({
     onOpenConsegneAperte,
     onSelectPaziente,
     onRetryClinicalOverview,
-    agendaNav: 'agenda-admin',
+    therapyNav: 'terapie',
   });
 
   if (camereLoadState === 'error') {
@@ -196,7 +196,7 @@ export function AdminDashboard({
 
       <DashboardTherapyDeadlines
         summary={somministrazioni}
-        onOpenAgenda={() => onNavigate('agenda-admin')}
+        onOpenTherapy={() => onNavigate('terapie')}
         onSelectPaziente={onSelectPaziente}
       />
 

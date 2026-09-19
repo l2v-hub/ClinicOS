@@ -22,7 +22,7 @@ interface BuildDashboardNotificationSectionsInput {
   onOpenConsegneAperte?: () => void;
   onSelectPaziente?: (nome: string, patientId?: string) => void;
   onRetryClinicalOverview: () => void;
-  agendaNav?: NavKey;
+  therapyNav?: NavKey;
 }
 
 export function buildDashboardNotificationSections({
@@ -36,7 +36,7 @@ export function buildDashboardNotificationSections({
   onOpenConsegneAperte,
   onSelectPaziente,
   onRetryClinicalOverview,
-  agendaNav = 'agenda-operatore',
+  therapyNav = 'terapie',
 }: BuildDashboardNotificationSectionsInput): DashboardNotificationSection[] {
   const sections: DashboardNotificationSection[] = [];
   const ritardiVisibili = somministrazioni.ritardi.slice(0, MAX_DASHBOARD_NOTIFICATION_PATIENTS);
@@ -95,9 +95,9 @@ export function buildDashboardNotificationSections({
           <button
             type="button"
             className="btn-secondary dashboard-notification-section__action"
-            onClick={() => onNavigate(agendaNav)}
+            onClick={() => onNavigate(therapyNav)}
           >
-            Apri Agenda <IcoArrow />
+            Apri Terapia <IcoArrow />
           </button>
         </>
       ),
@@ -225,14 +225,14 @@ export function buildDashboardNotificationSections({
       tone: 'warning',
       count: 1,
       title: 'Somministrazioni non verificabili',
-      summary: 'Il conteggio dei ritardi non è disponibile. Apri Agenda per aggiornare i dati.',
+      summary: 'Il conteggio dei ritardi non è disponibile. Apri Terapia per aggiornare i dati.',
       content: (
         <button
           type="button"
           className="btn-secondary dashboard-notification-section__action"
-          onClick={() => onNavigate(agendaNav)}
+          onClick={() => onNavigate(therapyNav)}
         >
-          Apri Agenda <IcoArrow />
+          Apri Terapia <IcoArrow />
         </button>
       ),
     });

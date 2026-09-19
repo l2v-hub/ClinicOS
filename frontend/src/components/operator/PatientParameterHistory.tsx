@@ -11,15 +11,19 @@ import {
 } from '../../lib/patientParameterReadings';
 import { facilityLocalMinute } from '../../lib/facilityTime';
 import './PatientParameters.css';
+import { PatientParameterMonthTable } from './PatientParameterMonthTable';
 
 export function PatientParameterHistory({
   patientId,
   cartella,
+  mode = 'history',
 }: {
   patientId: string;
   cartella: CartellaPaziente;
+  mode?: 'history' | 'month';
 }) {
   const [date, setDate] = useState('');
+  const [month, setMonth] = useState(() => facilityLocalMinute().slice(0, 7));
   const [readings, setReadings] = useState<PatientParameterReading[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,8 +34,11 @@ export function PatientParameterHistory({
   const moreRequest = useRef<AbortController | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const legacy = useMemo(
-    () => legacyParameterEntries(cartella).filter((item) => !date || item.date === date),
-    [cartella, date],
+    () =>
+      legacyParameterEntries(cartella).filter((item) =>
+        mode === 'month' ? item.date.startsWith(month) : !date || item.date === date,
+      ),
+    [cartella, date, month, mode],
   );
   useEffect(() => {
     const version = ++generation.current;
@@ -43,12 +50,10 @@ export function PatientParameterHistory({
     setReadings([]);
     setCursor(null);
     setLegacyLimit(25);
-    void fetchParameterReadings(
-      API_URL,
-      patientId,
-      { date },
-      { headers: operatorHeaders(), signal: controller.signal },
-    )
+    void fetchParameterReadings(API_URL, patientId, mode === 'month' ? { month } : { date }, {
+      headers: operatorHeaders(),
+      signal: controller.signal,
+    })
       .then((page) => {
         if (version === generation.current) {
           setReadings(page.readings);
@@ -66,7 +71,7 @@ export function PatientParameterHistory({
       moreRequest.current?.abort();
       ++generation.current;
     };
-  }, [patientId, date, revision]);
+  }, [patientId, date, month, mode, revision]);
   async function more() {
     if (!cursor || loading || moreRequest.current) return;
     const version = generation.current;
@@ -78,7 +83,7 @@ export function PatientParameterHistory({
       const page = await fetchParameterReadings(
         API_URL,
         patientId,
-        { date, cursor },
+        { ...(mode === 'month' ? { month } : { date }), cursor },
         { headers: operatorHeaders(), signal: controller.signal },
       );
       if (version !== generation.current) return;
@@ -95,32 +100,44 @@ export function PatientParameterHistory({
     }
   }
   return (
-    <section className="parameter-history" aria-label="Storico parametri vitali">
+    <section
+      className="parameter-history"
+      aria-label={mode === 'month' ? 'Parametri vitali mensili' : 'Storico parametri vitali'}
+    >
       <header className="parameter-history-toolbar">
         <div>
-          <h3>Rilevazioni registrate</h3>
-          <p>Data, ora e operatore di ogni salvataggio · dalla più recente</p>
+          <h3>{mode === 'month' ? 'Rilevazioni del mese' : 'Rilevazioni registrate'}</h3>
+          <p>
+            Data, ora e operatore di ogni salvataggio · dalla più recente. Ogni rilevazione resta
+            distinta.
+          </p>
         </div>
         <label>
-          Giornata
+          {mode === 'month' ? 'Mese' : 'Giornata'}
           <input
-            type="date"
+            type={mode === 'month' ? 'month' : 'date'}
             className="form-input"
-            value={date}
-            min="2000-01-01"
-            max="2099-12-31"
-            onChange={(event) => setDate(event.target.value)}
+            value={mode === 'month' ? month : date}
+            min={mode === 'month' ? '2000-01' : '2000-01-01'}
+            max={mode === 'month' ? '2099-12' : '2099-12-31'}
+            onChange={(event) =>
+              mode === 'month'
+                ? setMonth(event.target.value || facilityLocalMinute().slice(0, 7))
+                : setDate(event.target.value)
+            }
           />
         </label>
-        <button
-          className="btn-secondary btn-sm"
-          onClick={() => {
-            setDate('');
-            setRevision((value) => value + 1);
-          }}
-        >
-          Tutte le giornate
-        </button>
+        {mode !== 'month' && (
+          <button
+            className="btn-secondary btn-sm"
+            onClick={() => {
+              setDate('');
+              setRevision((value) => value + 1);
+            }}
+          >
+            Tutte le giornate
+          </button>
+        )}
         <button className="btn-secondary btn-sm" onClick={() => setRevision((value) => value + 1)}>
           Aggiorna
         </button>
@@ -139,51 +156,63 @@ export function PatientParameterHistory({
       )}
       {!loading && !error && readings.length === 0 && (
         <p className="cr-empty">
-          Nessuna rilevazione {date ? 'in questa giornata' : 'registrata dalla compilazione rapida'}
+          {legacy.length > 0 ? 'Nessuna nuova rilevazione' : 'Nessuna rilevazione'}{' '}
+          {mode === 'month'
+            ? 'in questo mese'
+            : date
+              ? 'in questa giornata'
+              : 'registrata dalla compilazione rapida'}
           .
         </p>
       )}
-      <ol className="parameter-history-list">
-        {readings.map((reading, index) => {
-          const localDay = facilityLocalMinute(new Date(reading.measuredAt)).slice(0, 10);
-          const firstOfDay =
-            index === 0 ||
-            facilityLocalMinute(new Date(readings[index - 1].measuredAt)).slice(0, 10) !== localDay;
-          return (
-            <li key={reading.id} className="parameter-history-entry">
-              {firstOfDay && (
-                <h4 className="parameter-history-day">{localDay.split('-').reverse().join('/')}</h4>
-              )}
-              <article
-                className="parameter-history-reading"
-                aria-label={`Rilevazione ${readingTime(reading.measuredAt)}`}
-              >
-                <div className="parameter-history-stamp">
-                  <time dateTime={reading.measuredAt}>
-                    {readingTime(reading.measuredAt).slice(-5)}
-                  </time>
-                  <span>{reading.authorName}</span>
-                </div>
-                <dl>
-                  {PARAMETER_FIELDS.filter((field) => reading.values[field.key]).map((field) => (
-                    <div key={field.key}>
-                      <dt>{field.label}</dt>
-                      <dd>
-                        {reading.values[field.key]} <small>{field.unit}</small>
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                {reading.values.note && (
-                  <p className="parameter-history-note">
-                    <strong>Note</strong> {reading.values.note}
-                  </p>
+      {mode === 'month' ? (
+        <PatientParameterMonthTable readings={readings} />
+      ) : (
+        <ol className="parameter-history-list">
+          {readings.map((reading, index) => {
+            const localDay = facilityLocalMinute(new Date(reading.measuredAt)).slice(0, 10);
+            const firstOfDay =
+              index === 0 ||
+              facilityLocalMinute(new Date(readings[index - 1].measuredAt)).slice(0, 10) !==
+                localDay;
+            return (
+              <li key={reading.id} className="parameter-history-entry">
+                {firstOfDay && (
+                  <h4 className="parameter-history-day">
+                    {localDay.split('-').reverse().join('/')}
+                  </h4>
                 )}
-              </article>
-            </li>
-          );
-        })}
-      </ol>
+                <article
+                  className="parameter-history-reading"
+                  aria-label={`Rilevazione ${readingTime(reading.measuredAt)}`}
+                >
+                  <div className="parameter-history-stamp">
+                    <time dateTime={reading.measuredAt}>
+                      {readingTime(reading.measuredAt).slice(-5)}
+                    </time>
+                    <span>{reading.authorName}</span>
+                  </div>
+                  <dl>
+                    {PARAMETER_FIELDS.filter((field) => reading.values[field.key]).map((field) => (
+                      <div key={field.key}>
+                        <dt>{field.label}</dt>
+                        <dd>
+                          {reading.values[field.key]} <small>{field.unit}</small>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                  {reading.values.note && (
+                    <p className="parameter-history-note">
+                      <strong>Note</strong> {reading.values.note}
+                    </p>
+                  )}
+                </article>
+              </li>
+            );
+          })}
+        </ol>
+      )}
       {cursor && (
         <button
           className="btn-secondary"

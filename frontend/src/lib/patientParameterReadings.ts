@@ -130,11 +130,12 @@ export async function saveParameterReading(
 export async function fetchParameterReadings(
   apiUrl: string,
   patientId: string,
-  filters: { date?: string; cursor?: string },
+  filters: { date?: string; month?: string; cursor?: string },
   options: FetchOptions,
 ): Promise<ParameterReadingsPage> {
   const params = new URLSearchParams({ limit: '50' });
   if (filters.date) params.set('date', filters.date);
+  if (filters.month) params.set('month', filters.month);
   if (filters.cursor) params.set('cursor', filters.cursor);
   const response = await (options.fetcher ?? fetch)(
     `${apiUrl}/patients/${encodeURIComponent(patientId)}/parameter-readings?${params}`,

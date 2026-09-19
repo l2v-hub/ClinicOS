@@ -311,6 +311,7 @@ export function ArchiveDocumentForm({
       {cameraOpen && (
         <CameraCapture
           open
+          outputFormat="pdf"
           onClose={() => setCameraOpen(false)}
           onCapture={(photo) => {
             setCameraOpen(false);

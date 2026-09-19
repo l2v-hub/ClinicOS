@@ -25,7 +25,10 @@ const SECTIONS: ASection[] = [
   },
 ];
 
-type AnamnesisEditorProps = SectionProps<Record<string, unknown>> & { allergie?: AllergiaItem[] };
+type AnamnesisEditorProps = SectionProps<Record<string, unknown>> & {
+  allergie?: AllergiaItem[];
+  showAllergySummary?: boolean;
+};
 
 export function AnamnesisEditor({
   value,
@@ -33,6 +36,7 @@ export function AnamnesisEditor({
   readOnly,
   operatoreNome,
   allergie = [],
+  showAllergySummary = true,
 }: AnamnesisEditorProps) {
   const [editingCard, setEditingCard] = useState<string | null>(null);
   const [draft, setDraft] = useState<Record<string, unknown>>({});
@@ -65,39 +69,41 @@ export function AnamnesisEditor({
       <ClinicalTableSection title="Anamnesi">
         <div className="cts__body--padded">
           {/* Allergie — read-only ClinicalCard (no onEdit: allergies are managed via the dedicated modal flow elsewhere in the app, not inline) */}
-          <ClinicalCard title="Allergie" defaultExpanded={true}>
-            <div
-              className={
-                hasAllergie
-                  ? allergieGravi.length > 0
-                    ? 'cr-anamnesi-card cr-anamnesi-card--allergie-grave'
-                    : 'cr-anamnesi-card cr-anamnesi-card--allergie'
-                  : 'cr-anamnesi-card'
-              }
-            >
-              {hasAllergie ? (
-                <div className="cr-anamnesi-allergie-list">
-                  {allergie.map((al, i) => (
-                    <div key={i} className="cr-anamnesi-allergia">
-                      <span className="cr-anamnesi-allergia__nome">{al.allergene}</span>
-                      {al.reazione && (
-                        <span className="cr-anamnesi-allergia__reazione">{al.reazione}</span>
-                      )}
-                      <span
-                        className={`badge ${al.gravita === 'grave' ? 'badge--red' : al.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}
-                      >
-                        {al.gravita}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="cr-anamnesi-card__text muted">
-                  Nessuna allergia registrata. Gestisci dal tab Diagnosi.
-                </p>
-              )}
-            </div>
-          </ClinicalCard>
+          {showAllergySummary && (
+            <ClinicalCard title="Allergie" defaultExpanded={true}>
+              <div
+                className={
+                  hasAllergie
+                    ? allergieGravi.length > 0
+                      ? 'cr-anamnesi-card cr-anamnesi-card--allergie-grave'
+                      : 'cr-anamnesi-card cr-anamnesi-card--allergie'
+                    : 'cr-anamnesi-card'
+                }
+              >
+                {hasAllergie ? (
+                  <div className="cr-anamnesi-allergie-list">
+                    {allergie.map((al, i) => (
+                      <div key={i} className="cr-anamnesi-allergia">
+                        <span className="cr-anamnesi-allergia__nome">{al.allergene}</span>
+                        {al.reazione && (
+                          <span className="cr-anamnesi-allergia__reazione">{al.reazione}</span>
+                        )}
+                        <span
+                          className={`badge ${al.gravita === 'grave' ? 'badge--red' : al.gravita === 'moderata' ? 'badge--amber' : 'badge--gray'}`}
+                        >
+                          {al.gravita}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="cr-anamnesi-card__text muted">
+                    Nessuna allergia registrata. Gestisci dal tab Diagnosi.
+                  </p>
+                )}
+              </div>
+            </ClinicalCard>
+          )}
 
           {/* Sezioni anamnesi modificabili — ognuna in una ClinicalCard */}
           {SECTIONS.map(({ id, key, label, rows = 4, placeholder }) => {

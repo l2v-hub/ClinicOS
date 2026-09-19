@@ -166,6 +166,52 @@
   overflow-wrap: anywhere;
   font-size: 14px;
 }
+.parameter-month-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+.parameter-month-table {
+  min-width: 660px;
+}
+.parameter-month-table caption {
+  text-align: left;
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 0 0 12px;
+}
+.parameter-month-table th,
+.parameter-month-table td {
+  vertical-align: top;
+}
+.parameter-month-table th[scope='row'] {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.parameter-month-table dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+}
+.parameter-month-table dl > div {
+  display: flex;
+  gap: 5px;
+  white-space: nowrap;
+}
+.parameter-month-table dt {
+  color: var(--text-muted);
+}
+.parameter-month-table dd {
+  margin: 0;
+  font-weight: 600;
+}
+.parameter-month-note {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 120px;
+  max-width: 320px;
+}
 .parameter-history-legacy {
   margin: 24px 0;
   padding: 16px;

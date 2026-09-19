@@ -9,10 +9,15 @@ test('patient diary route is scoped, no-store and bounded by default', async () 
   const source = await readFile(routeUrl, 'utf8');
   assert.match(source, /Cache-Control', 'private, no-store'/);
   assert.match(source, /router\.use\('\/:patientId\/diary', requirePatientScope\)/);
-  assert.match(source, /take: input\.limit \+ 1/);
-  assert.match(source, /orderBy: \[\{ entryDateTime: 'desc' \}, \{ id: 'desc' \}\]/);
-  assert.match(source, /const hasMore = rows\.length > input\.limit/);
-  assert.match(source, /loadedCount: entries\.length/);
+  assert.match(source, /loadPatientDiary\(\s*patientId/);
+  const reader = await readFile(
+    new URL('../../patients/diary-read-service.ts', import.meta.url),
+    'utf8',
+  );
+  assert.match(reader, /LIMIT \$\{input\.limit \+ 1\}/);
+  assert.match(reader, /ORDER BY "entryDateTime" DESC, "id" DESC/);
+  assert.match(reader, /const hasMore = rows\.length > input\.limit/);
+  assert.match(reader, /loadedCount: entries\.length/);
 });
 
 test('patient diary authorship is server authoritative on create and immutable on update', async () => {
