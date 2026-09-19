@@ -115,6 +115,8 @@ interface PatientDetailProps {
    * instead of the default 'riepilogo'. Consumed once per mount/patient — subsequent patient
    * switches while this component stays mounted still reset to the default tab. */
   initialTab?: TabId;
+  navigationRequestId?: number;
+  assistantSectionRefresh?: { actionType: string; version: number };
   /** #246: operator role, forwarded to the document-upload endpoints' auth gate (X-Operator-Role). */
   operatoreRole?: string;
 }
@@ -277,6 +279,8 @@ export function PatientDetail({
   operatoreId,
   operatoreRole,
   initialTab,
+  navigationRequestId,
+  assistantSectionRefresh,
 }: PatientDetailProps) {
   const [tab, setTab] = useState<TabId>(initialTab ?? 'riepilogo');
   const [activeGroup, setActiveGroup] = useState<TabGroup>(() => {
@@ -284,6 +288,11 @@ export function PatientDetail({
     return TAB_GROUPS.find((g) => g.tabs.some((t) => t.id === target))?.id ?? 'panoramica';
   });
   const [diarioFilter, setDiarioFilter] = useState<string>('tutti');
+  useEffect(() => {
+    if (!initialTab || navigationRequestId === undefined) return;
+    setTab(initialTab);
+    setActiveGroup(TAB_GROUPS.find((group) => group.tabs.some((item) => item.id === initialTab))?.id ?? 'panoramica');
+  }, [initialTab, navigationRequestId]);
   // AC5: anomalie di terapia del paziente. Passa dalla stessa richiesta di reparto che alimenta
   // la lista pazienti, quindi aprire una cartella non aggiunge chiamate.
   const anomalieReparto = useAnomalieReparto();
@@ -2899,6 +2908,7 @@ export function PatientDetail({
                   allergie={cartella.allergie ?? []}
                 />
                 <NarrativeSectionsTab
+                  key={assistantSectionRefresh?.actionType === 'update_narrative_section' ? assistantSectionRefresh.version : 'narrative'}
                   patientId={paziente.id}
                   operatoreId={operatoreId}
                   operatoreRole={operatoreRole}
@@ -2907,6 +2917,7 @@ export function PatientDetail({
             )}
             {tab === 'diario' && (
               <DiarioPazienteTab
+                key={assistantSectionRefresh?.actionType === 'add_diary_note' ? assistantSectionRefresh.version : 'diary'}
                 pazienteId={paziente.id}
                 operatoreNome={operatoreNome}
                 legacyInfermieristico={cartella.diarioInfermieristico}

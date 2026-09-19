@@ -16,6 +16,10 @@ export function navTabId(nav: Pick<AssistantNav, 'type' | 'sectionKey'>): TabId 
   // strutturato invece che sul testo citato.
   if (nav.sectionKey) return 'sezioni-narrative';
   switch (nav.type) {
+    case 'open_profile':
+      return 'profilo';
+    case 'open_diary':
+      return 'diario';
     case 'open_section':
       return 'sezioni-narrative';
     case 'open_therapy':

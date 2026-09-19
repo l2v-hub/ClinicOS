@@ -74,7 +74,7 @@ import { createDefaultCartella } from './mockData';
 import { Login } from './components/Login';
 import type { TabId } from './components/operator/tabGroups';
 import type { AssistantNav } from './components/shared/AIAssistantButton';
-import { navTabId } from './components/shared/agnos/agnosNav';
+import { navigateAgnosTarget } from './components/shared/agnos/agnosActionNavigation';
 import TeamsLikeSidebar from './components/shared/TeamsLikeSidebar';
 
 import { IcoAI, IcoSearch, IcoX } from './icons';
@@ -373,6 +373,8 @@ export default function App() {
   // #243: "Moduli" tab to land on when opening pazienteSelezionato (set only right after a
   // patient is created from the intake wizard with a module card selected in step 4).
   const [pendingModuleTab, setPendingModuleTab] = useState<TabId | undefined>(undefined);
+  const [patientTabRequest, setPatientTabRequest] = useState(0);
+  const [assistantSectionRefresh, setAssistantSectionRefresh] = useState({ actionType: '', version: 0 });
 
   // Mock state
   const [operatori, setOperatori] = useState<Operatore[]>([]);
@@ -539,20 +541,24 @@ export default function App() {
     // Reset on every selection (not just when a module is passed) so a stale target from a
     // previous intake-created patient never leaks into an unrelated navigation.
     setPendingModuleTab(moduleTabId);
+    setPatientTabRequest((value) => value + 1);
   }
 
-  async function selectPazienteById(patientId: string, moduleTabId?: TabId) {
+  async function selectPazienteById(patientId: string, moduleTabId?: TabId, signal?: AbortSignal) {
     const request = ++patientNavigationSequenceRef.current;
     try {
       const patient = await fetchPatientById(API_URL, patientId, {
         headers: operatorHeaders(),
+        signal,
       });
-      if (request !== patientNavigationSequenceRef.current) return;
+      if (signal?.aborted || request !== patientNavigationSequenceRef.current) return false;
       selectPaziente(patient, moduleTabId);
+      return true;
     } catch {
-      if (request === patientNavigationSequenceRef.current) {
+      if (!signal?.aborted && request === patientNavigationSequenceRef.current) {
         showToast('Paziente non disponibile o non autorizzato');
       }
+      return false;
     }
   }
 
@@ -560,34 +566,16 @@ export default function App() {
   // paziente — leggerne solo l'id faceva atterrare ogni azione sulla scheda generica, perdendo
   // la sezione citata. Le destinazioni di reparto (agenda, consegne, terapie di oggi) non hanno
   // alcun paziente: vanno gestite prima.
-  async function agnosNavigate(n: AssistantNav) {
-    if (n.type === 'open_agenda') {
-      navigate(isAdmin ? 'agenda-admin' : 'agenda-operatore');
-      return;
-    }
-    if (n.type === 'open_therapies_today') {
-      // Lo stato delle somministrazioni di oggi a livello di reparto vive nella dashboard
-      // (useRiepilogoSomministrazioni): non esiste una schermata terapie facility-wide.
-      navigate(isAdmin ? 'admin-dashboard' : 'operator-dashboard');
-      return;
-    }
-    if (n.type === 'open_beds') {
-      // RoomsManagement è montata solo per admin: un operatore atterrerebbe su una pagina vuota.
-      navigate(isAdmin ? 'posti-letto' : 'operator-dashboard');
-      return;
-    }
-    if (n.type === 'open_consegne' && !n.patientId) {
-      // navigate('consegne') azzera filtro e focus: qui la consegna citata va evidenziata.
-      setConsegneView({ filtro: 'tutte', focusId: n.recordId ?? null });
-      setMobileNavOpen(false);
-      pushNav('consegne');
-      return;
-    }
-    if (n.patientId) {
-      await selectPazienteById(n.patientId, navTabId(n));
-    }
+  async function agnosNavigate(n: AssistantNav, signal?: AbortSignal): Promise<boolean> {
+    return navigateAgnosTarget(n, {
+      isAdmin, navigate, openPatient: selectPazienteById,
+      openConsegne: (recordId) => {
+        setConsegneView({ filtro: 'tutte', focusId: recordId ?? null });
+        setMobileNavOpen(false);
+        pushNav('consegne');
+      },
+    }, signal);
   }
-
   const goBack = useCallback(
     (fallbackKey?: NavKey) => {
       if (historyDepth.current > 0) {
@@ -2972,6 +2960,8 @@ export default function App() {
                       operatoreNome={utente.nome}
                       operatoreId={utenteId}
                       initialTab={pendingModuleTab}
+                      navigationRequestId={patientTabRequest}
+                      assistantSectionRefresh={assistantSectionRefresh}
                       operatoreRole={utente?.ruolo}
                     />
                   )}
@@ -3026,7 +3016,7 @@ export default function App() {
             }
           >
             <AgnosPanel
-              key={aiOpenTrigger}
+              openRequestId={aiOpenTrigger}
               forceOpen={aiOpen}
               onClose={() => setAiOpen(false)}
               operatorId={utente?.id}
@@ -3040,14 +3030,23 @@ export default function App() {
                   ? `${pazienteSelezionato.lastName ?? ''} ${pazienteSelezionato.firstName ?? ''}`.trim()
                   : undefined
               }
-              onExecuted={(info) => {
-                if (pazienteSelezionato) loadCartella(pazienteSelezionato.id);
+              onExecuted={async (info) => {
+                const sessionEpoch = sessionEpochRef.current;
+                if (info.patientId) await loadCartella(info.patientId);
+                if (sessionEpoch !== sessionEpochRef.current) return;
+                setAssistantSectionRefresh((value) => ({ actionType: info.actionType ?? '', version: value.version + 1 }));
+                if (info.actionType === 'update_patient_demographics' && info.patientId) {
+                  const patient = await fetchPatientById(API_URL, info.patientId, { headers: operatorHeaders() });
+                  if (sessionEpoch === sessionEpochRef.current) {
+                    setPazienteSelezionato((current) => current?.id === patient.id ? patient : current);
+                  }
+                }
                 // SPEC-015 US4: un'azione Agnos sull'agenda aggiorna subito la lista appuntamenti (FR-020)
                 if (
                   info?.actionType === 'create_appointment' ||
                   info?.actionType === 'update_appointment'
                 )
-                  void loadAppuntamenti(appointmentRangeRef.current);
+                  await loadAppuntamenti(appointmentRangeRef.current);
                 // Agnos invalidates the same bounded feed/overview/patient read models as the UI.
                 if (info?.actionType === 'create_consegna') refreshConsegnaViews();
               }}
@@ -3058,9 +3057,7 @@ export default function App() {
                   ? `${patient.lastName ?? ''} ${patient.firstName ?? ''}`.trim()
                   : undefined;
               }}
-              onNavigate={(nav) => {
-                void agnosNavigate(nav);
-              }}
+              onNavigate={agnosNavigate}
             />
           </Suspense>
         </LazyLoadBoundary>

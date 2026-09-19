@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { IcoAI, IcoX } from '../../icons';
-import { AnswerView, type AssistantNav } from './AIAssistantButton';
-import { useAgnosChat, type AgnosTurn } from './agnos/useAgnosChat';
+import type { AssistantNav } from './AIAssistantButton';
+import { useAgnosChat, type AgnosTurn, type AgnosExecution } from './agnos/useAgnosChat';
+import { TurnView } from './agnos/AgnosTurnView';
+import { SpeakerIcon } from './agnos/AgnosVoiceIcons';
+import { AgnosComposer } from './agnos/AgnosComposer';
+import './agnos/AgnosWorkflow.css';
 import { useVoiceInput } from './agnos/useVoiceInput';
 import { useSpeechOutput } from './agnos/useSpeechOutput';
 import { AgnosBrief } from './agnos/AgnosBrief';
@@ -27,6 +31,7 @@ import {
 
 interface Props {
   forceOpen?: boolean;
+  openRequestId?: number;
   onClose?: () => void;
   operatorId?: string;
   operatorRole?: string;
@@ -38,8 +43,8 @@ interface Props {
   /** Nome del paziente bersaglio di un'azione di navigazione, per comporre l'etichetta del chip. */
   resolvePatientName?: (id: string) => string | undefined;
   /** SPEC-015 US4: actionType dell'azione eseguita, per refresh mirato (cartella vs agenda). */
-  onExecuted?: (info: { actionType?: string }) => void;
-  onNavigate?: (nav: AssistantNav) => void;
+  onExecuted?: (info: AgnosExecution) => void | Promise<void>;
+  onNavigate?: (nav: AssistantNav, signal?: AbortSignal) => Promise<boolean>;
 }
 
 /** Testo da leggere per un turno Agnos risolto (esiti, rifiuti, errori, read); null = non leggere. */
@@ -53,6 +58,7 @@ function spokenTextFor(turn: AgnosTurn): string | null {
 
 export function AgnosPanel({
   forceOpen,
+  openRequestId,
   onClose,
   operatorId,
   operatorRole,
@@ -67,6 +73,8 @@ export function AgnosPanel({
   const [open, setOpen] = useState(false);
   const [voiceConsent, setVoiceConsent] = useState(false);
   const [input, setInput] = useState('');
+  const [workspace, setWorkspace] = useState(false);
+  const [minimized, setMinimized] = useState(false);
   const [visibleTurnCount, setVisibleTurnCount] = useState(AGNOS_TURN_WINDOW);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -77,10 +85,13 @@ export function AgnosPanel({
     turns,
     pending,
     busy,
+    phase,
+    statusText,
     sendCommand,
     confirmPending,
     cancelPending,
     dismissPendingForEdit,
+    retryNavigation,
   } = useAgnosChat({
     operatorId,
     operatorRole,
@@ -88,6 +99,10 @@ export function AgnosPanel({
     currentPatientId,
     navKey,
     onExecuted,
+    onNavigate: async (nav, signal) => {
+      setWorkspace(true);
+      return await onNavigate?.(nav, signal) ?? false;
+    },
   });
 
   const tts = useSpeechOutput();
@@ -99,12 +114,17 @@ export function AgnosPanel({
       inputRef.current?.focus();
     },
   });
+  const cancelVoice = voice.cancel;
+  const stopSpeech = tts.stop;
+  useEffect(() => {
+    cancelVoice(); stopSpeech(); setInput(''); dictatedRef.current = false;
+  }, [currentPatientId, operatorId, operatorRole, cancelVoice, stopSpeech]);
 
   useEffect(() => {
     // `forceOpen` is an external imperative signal, so mirroring it is intentional.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (forceOpen) setOpen(true);
-  }, [forceOpen]);
+    if (forceOpen) { setOpen(true); setMinimized(false); }
+  }, [forceOpen, openRequestId]);
   // Il pannello non si smonta più alla chiusura: la messa a fuoco alla riapertura va rifatta a
   // mano, altrimenti un dialog che resta nel DOM riapre senza dare il focus a nulla.
   const wasOpenRef = useRef(false);
@@ -119,6 +139,7 @@ export function AgnosPanel({
   // TTS: every state transition affects the newest assistant turn. Inspect only that turn instead
   // of rescanning the entire conversation after every patch/append.
   const lastSpokenIndexRef = useRef(-1);
+  useEffect(() => { lastSpokenIndexRef.current = -1; }, [operatorId, operatorRole]);
   const speak = tts.speak;
   useEffect(() => {
     const latestIndex = turns.length - 1;
@@ -128,8 +149,8 @@ export function AgnosPanel({
     if (text === null) return;
     // Mark even while TTS is disabled: enabling it later must not replay historical PHI.
     lastSpokenIndexRef.current = latestIndex;
-    speak(text);
-  }, [turns, speak]);
+    if (open && !minimized) speak(text);
+  }, [turns, speak, open, minimized]);
 
   const visibleHistory = useMemo(
     () => agnosHistoryWindow(turns, visibleTurnCount),
@@ -137,15 +158,21 @@ export function AgnosPanel({
   );
 
   function handleClose() {
-    voice.stop();
+    voice.cancel();
     tts.stop(); // FR-017: chiusura pannello = stop riproduzione
     setOpen(false);
     onClose?.();
   }
 
+  function showPage() {
+    voice.cancel();
+    tts.stop();
+    setMinimized(true);
+  }
+
   function send() {
     const text = input.trim();
-    if (!text || busy || voice.listening) return;
+    if (!text || busy || voice.active || pending?.uncertain) return;
     tts.stop(); // FR-017: nuovo invio interrompe la riproduzione
     const channel = dictatedRef.current ? ('voce' as const) : ('testo' as const);
     dictatedRef.current = false;
@@ -170,19 +197,13 @@ export function AgnosPanel({
   }
 
   function toggleMic() {
-    if (voice.listening) {
+    if (voice.active) {
       voice.stop();
       return;
     }
     tts.stop(); // non ascoltare e parlare insieme
     void voice.start();
   }
-
-  // Interim visibile: mentre ascolta, il campo mostra testo esistente + trascrizione parziale.
-  const displayValue =
-    voice.listening && voice.interimText
-      ? `${input.trim() ? `${input.trimEnd()} ` : ''}${voice.interimText}`
-      : input;
 
   const scopeLabel = currentPatientId
     ? `Paziente corrente: ${currentPatientName ?? currentPatientId}`
@@ -199,23 +220,27 @@ export function AgnosPanel({
       <button
         type="button"
         className="ai-fab"
-        onClick={() => setOpen(true)}
+        onClick={() => { setOpen(true); setMinimized(false); }}
         aria-label="Assistente virtuale ClinicOS"
         title="Assistente virtuale ClinicOS"
       >
         <IcoAI />
       </button>
 
-      {open && <div className="ai-drawer__scrim" onClick={handleClose} />}
+      {open && !workspace && !minimized && <div className="ai-drawer__scrim" onClick={handleClose} />}
+      {open && minimized && <div className="agnos-workflow-dock" role="status">
+        <span>{statusText || 'Assistente in attesa'}</span>
+        <button className="btn-primary" onClick={() => setMinimized(false)}>Torna all’assistente</button>
+      </div>}
       {/* AC6: il pannello resta montato anche da chiuso, così la conversazione sopravvive alla
           navigazione. `inert` è ciò che lo toglie dal tab order e dagli screen reader ora che
           non è più lo smontaggio a farlo. */}
       <aside
-        className="ai-drawer agnos-panel"
+        className={`ai-drawer agnos-panel${workspace ? ' agnos-panel--workspace' : ''}${minimized ? ' agnos-panel--minimized' : ''}`}
         role="dialog"
         aria-label="Assistente virtuale ClinicOS"
-        aria-hidden={!open}
-        inert={!open ? true : undefined}
+        aria-hidden={!open || minimized}
+        inert={!open || minimized ? true : undefined}
       >
         <header className="ai-drawer__header">
           <div className="ai-drawer__title">
@@ -246,6 +271,7 @@ export function AgnosPanel({
                 title={tts.enabled ? 'Disattiva lettura vocale' : 'Attiva lettura vocale'}
               >
                 <SpeakerIcon muted={!tts.enabled} />
+                <span>Leggi risposte</span>
               </button>
             )}
             <button type="button" className="icon-btn" onClick={handleClose} aria-label="Chiudi">
@@ -257,11 +283,16 @@ export function AgnosPanel({
         <div className="ai-asst__scope" aria-label="Perimetro">
           {scopeLabel}
         </div>
+        {statusText && <div className="agnos-workflow-status" data-phase={phase} role="status" aria-live="polite" aria-busy={busy}>
+          {busy && <span className="agnos-workflow-spinner" aria-hidden="true" />}
+          <span>{statusText}</span>
+          {workspace && <button className="link-btn" type="button" onClick={showPage}>Mostra pagina</button>}
+        </div>}
 
         <div className="ai-drawer__body ai-asst__body" ref={bodyRef}>
           {/* AC7: il brief NON è un turno — niente lettura TTS, niente conferma, niente indice. */}
-          <AgnosBrief
-            active={open}
+          <div hidden={turns.length > 0}><AgnosBrief
+            active={open && turns.length === 0}
             kind={operatorRole === 'admin' ? 'facility' : 'operator'}
             operatorId={operatorId}
             operatorRole={operatorRole}
@@ -270,13 +301,13 @@ export function AgnosPanel({
             showHint={turns.length === 0}
             onNavigate={onNavigate}
             formatNavLabel={formatNavLabel}
-          />
+          /></div>
           {turns.length === 0 && !pending && (
             <AgnosSuggestedPrompts
               operatorRole={operatorRole}
               hasCurrentPatient={!!currentPatientId}
               selectedText={input}
-              disabled={busy || voice.listening}
+              disabled={busy || voice.active}
               onSelect={prefillSuggestedQuestion}
             />
           )}
@@ -300,6 +331,9 @@ export function AgnosPanel({
               turn={t}
               isPending={pending?.turnIndex === i}
               busy={busy}
+              navigationReady={pending?.navigationReady === true}
+              destination={pending?.turnIndex === i ? pending.navigation?.label : undefined}
+              onOpenPage={() => { void retryNavigation().then((opened) => { if (opened) showPage(); }); }}
               onConfirm={() => {
                 setVisibleTurnCount(AGNOS_TURN_WINDOW);
                 void confirmPending();
@@ -309,268 +343,18 @@ export function AgnosPanel({
                 setVisibleTurnCount(AGNOS_TURN_WINDOW);
                 cancelPending();
               }}
-              onNavigate={onNavigate}
+              onNavigate={(nav) => { setWorkspace(true); void onNavigate?.(nav); }}
               formatNavLabel={formatNavLabel}
             />
           ))}
         </div>
 
-        {(voice.listening || voice.error || tts.speaking) && (
-          <div className="agnos-voicebar">
-            {voice.listening && (
-              <span className="agnos-voice-status" aria-live="polite">
-                <span className="agnos-voice-status__dot" /> Sto ascoltando… parla pure
-              </span>
-            )}
-            {voice.error && (
-              <span className="agnos-voice-error" role="alert">
-                {voice.error}
-              </span>
-            )}
-            {tts.speaking && (
-              <button
-                type="button"
-                className="btn-secondary agnos-stop-speech"
-                onClick={tts.stop}
-                aria-label="Interrompi la lettura vocale"
-              >
-                ■ Interrompi lettura
-              </button>
-            )}
-          </div>
-        )}
-
-        {voice.supported && (
-          <label className="agnos-voice-consent">
-            <input
-              type="checkbox"
-              checked={voiceConsent}
-              onChange={(event) => {
-                setVoiceConsent(event.target.checked);
-                if (!event.target.checked) voice.stop();
-              }}
-            />
-            <span>
-              Consento la dettatura. Il browser può elaborare l’audio tramite un servizio vocale
-              remoto; ClinicOS riceve solo la trascrizione, modificabile prima dell’invio.
-            </span>
-          </label>
-        )}
-
-        <form
-          className="ai-asst__compose agnos-compose"
-          onSubmit={(e) => {
-            e.preventDefault();
-            send();
-          }}
-        >
-          <textarea
-            ref={inputRef}
-            className="agnos-input"
-            rows={2}
-            value={displayValue}
-            onChange={(e) => {
-              setInput(e.target.value);
-              if (!e.target.value.trim()) dictatedRef.current = false; // campo svuotato: si riparte dal testo
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                send();
-              }
-            }}
-            placeholder={voice.listening ? 'Sto ascoltando…' : 'Scrivi una domanda o un comando…'}
-            aria-label="Comando per l’assistente virtuale"
-            disabled={busy}
-            readOnly={voice.listening}
-          />
-          {voice.supported && (
-            <button
-              type="button"
-              className={`icon-btn agnos-mic${voice.listening ? ' agnos-mic--listening' : ''}`}
-              onClick={toggleMic}
-              disabled={busy || !voiceConsent}
-              aria-pressed={voice.listening}
-              aria-label={voice.listening ? 'Interrompi ascolto' : 'Detta un comando'}
-              title={voice.listening ? 'Interrompi ascolto' : 'Detta un comando'}
-            >
-              <MicIcon />
-            </button>
-          )}
-          <button
-            type="submit"
-            className="btn-primary ai-asst__send"
-            disabled={busy || voice.listening || !input.trim()}
-          >
-            Invia
-          </button>
-        </form>
+        <AgnosComposer inputRef={inputRef} input={input} dictated={dictatedRef.current}
+          busy={busy || pending?.uncertain === true} voice={voice} tts={tts} consent={voiceConsent}
+          onConsent={setVoiceConsent} onInput={(value) => {
+            setInput(value); if (!value.trim()) dictatedRef.current = false;
+          }} onSend={send} onMic={toggleMic} />
       </aside>
     </>
-  );
-}
-
-interface TurnViewProps {
-  turn: AgnosTurn;
-  isPending: boolean;
-  busy: boolean;
-  onConfirm: () => void;
-  onEdit: () => void;
-  onCancel: () => void;
-  onNavigate?: (nav: AssistantNav) => void;
-  formatNavLabel?: (nav: AssistantNav) => string;
-}
-
-function TurnView({
-  turn,
-  isPending,
-  busy,
-  onConfirm,
-  onEdit,
-  onCancel,
-  onNavigate,
-  formatNavLabel,
-}: TurnViewProps) {
-  if (turn.role === 'utente') {
-    return (
-      <div className="ai-asst__turn agnos-turn agnos-turn--utente">
-        <div className="ai-asst__q">{turn.text}</div>
-      </div>
-    );
-  }
-  return (
-    <div className="ai-asst__turn agnos-turn agnos-turn--agnos">
-      {turn.status === 'attesa' && (
-        <div className="ai-asst__a ai-asst__muted" aria-live="polite">
-          L’assistente sta elaborando…
-        </div>
-      )}
-      {turn.status === 'errore' && (
-        <div className="ai-asst__a ai-asst__error" role="alert">
-          {turn.text}
-        </div>
-      )}
-      {turn.status === 'rifiuto' && (
-        <div className="agnos-refusal" role="alert">
-          <div>{turn.text}</div>
-          <span className="agnos-refusal__hint">
-            Per questa operazione usa il comando nell’interfaccia.
-          </span>
-        </div>
-      )}
-      {turn.status === 'successo' && <div className="voice-done">✓ {turn.text}</div>}
-      {turn.read && (
-        <AnswerView answer={turn.read} onNavigate={onNavigate} formatNavLabel={formatNavLabel} />
-      )}
-      {turn.preview && (
-        <div
-          className={`voice-preview agnos-preview${turn.status === 'annullato' ? ' agnos-preview--annullata' : ''}`}
-          role="group"
-          aria-label="Operazione proposta"
-        >
-          <div className="voice-preview__title">{turn.preview.title}</div>
-          {turn.preview.patientName && (
-            <div className="voice-preview__patient">
-              Paziente: <strong>{turn.preview.patientName}</strong>
-            </div>
-          )}
-          {turn.preview.lines.length > 0 && (
-            <dl className="voice-preview__lines">
-              {turn.preview.lines.map((l, i) => (
-                <div key={i} className="voice-preview__row">
-                  <dt>{l.label}</dt>
-                  <dd>{l.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-          {turn.preview.warnings.map((w, i) => (
-            <p key={i} className="voice-warn">
-              ⚠ {w}
-            </p>
-          ))}
-          {turn.preview.ambiguities.map((a, i) => (
-            <p key={i} className="voice-amb">
-              ⛔ {a}
-            </p>
-          ))}
-
-          {turn.status === 'in-conferma' && isPending && (
-            <div className="voice-actions">
-              <button
-                type="button"
-                className="btn-primary"
-                disabled={!turn.preview.canExecute || busy}
-                onClick={onConfirm}
-              >
-                {busy ? 'Salvataggio…' : 'Conferma e salva'}
-              </button>
-              <button type="button" className="btn-secondary" disabled={busy} onClick={onEdit}>
-                Modifica
-              </button>
-              <button type="button" className="btn-secondary" disabled={busy} onClick={onCancel}>
-                Annulla
-              </button>
-            </div>
-          )}
-          {turn.status === 'eseguito' && (
-            <div className="agnos-preview__stato agnos-preview__stato--ok">✓ Eseguita</div>
-          )}
-          {turn.status === 'annullato' && <div className="agnos-preview__stato">Annullata</div>}
-        </div>
-      )}
-      {!turn.status && !turn.read && !turn.preview && turn.text && (
-        <div className="ai-asst__a">{turn.text}</div>
-      )}
-    </div>
-  );
-}
-
-function MicIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="9" y="2" width="6" height="12" rx="3" />
-      <path d="M5 10v1a7 7 0 0 0 14 0v-1" />
-      <line x1="12" y1="19" x2="12" y2="22" />
-    </svg>
-  );
-}
-
-function SpeakerIcon({ muted }: { muted?: boolean }) {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-      {muted ? (
-        <>
-          <line x1="16" y1="9" x2="22" y2="15" />
-          <line x1="22" y1="9" x2="16" y2="15" />
-        </>
-      ) : (
-        <>
-          <path d="M15.5 8.5a5 5 0 0 1 0 7" />
-          <path d="M18.5 5.5a9 9 0 0 1 0 13" />
-        </>
-      )}
-    </svg>
   );
 }

@@ -1,33 +1,22 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../../config';
-import type { AssistantAnswer } from '../AIAssistantButton';
+import type { AssistantAnswer, AssistantNav } from '../AIAssistantButton';
 import { operatorHeaders } from '../../../lib/operatorSession';
-
-// 015 AGNOS — unified chatbot (read + CRU write actions, delete escluso).
-// Contract: specs/015-agnos-unified-cru/contracts/agnos-api.md
-//   POST /ai/actions/plan    { text, channel:'testo'|'voce', currentPatientId }
-//   POST /ai/actions/execute { text, channel:'testo'|'voce', patientId, idempotencyKey, confirmed:true }
-// The plan is ALWAYS re-derived server-side from the text; the client only
-// carries the original text + a client-generated idempotencyKey (created at
-// preview time, so retrying "Conferma" never duplicates the write).
-// US3: a dictated command flows through the SAME path with channel:'voce';
-// the channel is captured at plan time and re-sent unchanged at execute time.
+import { navigationScope, readActionNavigation, writeActionNavigation } from './agnosActionNavigation';
+import { createAgnosRequestGate } from './agnosRequestGate';
 
 export type AgnosChannel = 'testo' | 'voce';
-
-/** Sub-agent che ha risposto: lo decide il backend dall'intent, la chat non lo sceglie più. */
 export type AgnosAgent = 'facility' | 'clinical';
-
 export interface AgnosPreview {
   title: string;
   patientName?: string;
   lines: Array<{ label: string; value: string }>;
+  diff?: { current: string; proposed: string; resulting: string };
   warnings: string[];
   ambiguities: string[];
   canExecute: boolean;
   refusal?: string;
 }
-
 export interface AgnosPlan {
   actionType: string;
   kind?: string;
@@ -35,65 +24,51 @@ export interface AgnosPlan {
   requiresConfirmation?: boolean;
   refusalReason?: string;
 }
-
-export type AgnosTurnStatus =
-  'attesa' | 'errore' | 'rifiuto' | 'in-conferma' | 'eseguito' | 'annullato' | 'successo';
-
+export type AgnosTurnStatus = 'attesa' | 'errore' | 'rifiuto' | 'in-conferma' | 'eseguito' | 'annullato' | 'successo';
 export interface AgnosTurn {
   role: 'utente' | 'agnos';
   text?: string;
+  channel?: AgnosChannel;
   read?: AssistantAnswer;
   preview?: AgnosPreview;
   plan?: AgnosPlan;
   status?: AgnosTurnStatus;
 }
-
 export interface AgnosPending {
-  /** Original command text — re-sent to /execute (plan re-derived server-side). */
   text: string;
-  /** Canale di origine del comando ('voce' se dettato): riusato invariato all'execute. */
   channel: AgnosChannel;
   patientId: string | null;
-  /** Generated at preview time so a retried confirm is deduped server-side. */
   idempotencyKey: string;
-  /** Index of the agnos turn holding the preview card. */
   turnIndex: number;
+  actionType?: string;
+  navigation: AssistantNav | null;
+  navigationReady: boolean;
+  canExecute: boolean;
+  uncertain?: boolean;
 }
-
-/** Identità dell'operatore chiamante: header, non verificati — il backend li usa per ordinare la
- *  coda operatore, mai per allargare un permesso. */
-export interface AgnosOperatorIdentity {
-  operatorId?: string;
-  operatorRole?: string;
-  operatorName?: string;
-}
-
+export interface AgnosOperatorIdentity { operatorId?: string; operatorRole?: string; operatorName?: string }
 export function buildAgnosHeaders(id: AgnosOperatorIdentity): Record<string, string> {
-  // operatorHeaders carries the Entra bearer resolved at login. Declarative X-Operator fields are
-  // retained for demo mode/display context but never replace the bearer in AUTH_MODE=entra.
-  const h: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...operatorHeaders(),
-  };
+  const h: Record<string, string> = { 'Content-Type': 'application/json', ...operatorHeaders() };
   if (id.operatorId) h['X-Operator-Id'] = id.operatorId;
   if (id.operatorRole) h['X-Operator-Role'] = id.operatorRole;
   if (id.operatorName) h['X-Operator-Name'] = id.operatorName;
   return h;
 }
-
+export interface AgnosExecution { actionType?: string; patientId?: string | null }
 interface UseAgnosChatOptions extends AgnosOperatorIdentity {
   currentPatientId?: string;
-  /** Rotta corrente della UI: contesto additivo, il backend lo ignora finché non lo legge. */
   navKey?: string;
-  /** SPEC-015 US4: receives the executed actionType so the app can refresh the right data
-   *  (cartella for clinical writes, agenda for create/update_appointment). */
-  onExecuted?: (info: { actionType?: string }) => void;
+  onExecuted?: (info: AgnosExecution) => void | Promise<void>;
+  onNavigate?: (nav: AssistantNav, signal?: AbortSignal) => Promise<boolean>;
 }
-
-interface ApiError {
-  error?: { kind?: string; message?: string };
+export type AgnosPhase = 'idle' | 'planning' | 'navigating' | 'approval' | 'executing' | 'success' | 'error';
+interface ApiError { error?: { kind?: string; message?: string } }
+const PRE_WRITE_DENIALS = new Set(['feature_disabled', 'writes_disabled', 'not_in_catalog', 'delete_forbidden',
+  'not_executable', 'ambiguous', 'confirmation_required', 'slot_conflict', 'unauthorized', 'forbidden',
+  'tenant_isolation', 'cross_patient_disabled', 'not_found', 'bad_request']);
+export function isDefinitiveAgnosDenial(status: number, data: ApiError | null): boolean {
+  return status >= 400 && status < 500 && PRE_WRITE_DENIALS.has(data?.error?.kind ?? '');
 }
-
 const ERROR_KIND_LABEL: Record<string, string> = {
   feature_disabled: 'Le azioni AI sono disabilitate.',
   not_in_catalog: 'Azione non prevista dal catalogo dell’assistente.',
@@ -102,217 +77,242 @@ const ERROR_KIND_LABEL: Record<string, string> = {
   ambiguous: 'Il comando è ambiguo: riformulalo con più dettagli.',
   confirmation_required: 'L’operazione richiede conferma esplicita.',
 };
-
-/** Contract sends lines as [label, value] tuples; be tolerant of {label,value} too. */
-function normalizeLines(raw: unknown): Array<{ label: string; value: string }> {
-  if (!Array.isArray(raw)) return [];
-  return raw.map((l) => {
-    if (Array.isArray(l)) return { label: String(l[0] ?? ''), value: String(l[1] ?? '') };
-    const o = l as { label?: unknown; value?: unknown };
-    return { label: String(o?.label ?? ''), value: String(o?.value ?? '') };
-  });
-}
-
 function errorMessage(data: ApiError | undefined, fallback: string): string {
   const kind = data?.error?.kind;
   return data?.error?.message || (kind && ERROR_KIND_LABEL[kind]) || fallback;
 }
-
-function markCancelled(t: AgnosTurn[], index: number): AgnosTurn[] {
-  return t.map((x, i) =>
-    i === index && x.status === 'in-conferma' ? { ...x, status: 'annullato' as const } : x,
-  );
+export function normalizeAgnosPreview(raw: Partial<AgnosPreview> & { lines?: unknown }): AgnosPreview {
+  const lines = Array.isArray(raw.lines) ? raw.lines.map((line) => {
+    if (Array.isArray(line)) return { label: String(line[0] ?? ''), value: String(line[1] ?? '') };
+    const value = line as { label?: unknown; value?: unknown } | null;
+    return { label: String(value?.label ?? ''), value: String(value?.value ?? '') };
+  }) : [];
+  const strings = (value: unknown): string[] => Array.isArray(value) ? value.filter((x): x is string => typeof x === 'string') : [];
+  const diff = raw.diff && ['current', 'proposed', 'resulting'].every((key) => typeof raw.diff?.[key as keyof typeof raw.diff] === 'string')
+    ? raw.diff : undefined;
+  const ambiguities = strings(raw.ambiguities);
+  return { title: raw.title || 'Operazione proposta', patientName: raw.patientName, lines, diff,
+    warnings: strings(raw.warnings), ambiguities,
+    canExecute: raw.canExecute === true && ambiguities.length === 0 && (lines.length > 0 || !!diff?.proposed) };
 }
+const markCancelled = (turns: AgnosTurn[], index: number) => turns.map((turn, i) =>
+  i === index && turn.status === 'in-conferma' ? { ...turn, status: 'annullato' as const } : turn);
+const contextKey = (options: Pick<UseAgnosChatOptions, 'operatorId' | 'operatorRole' | 'currentPatientId' | 'navKey'>) =>
+  JSON.stringify([options.operatorId, options.operatorRole, options.currentPatientId, options.navKey]);
 
-export function useAgnosChat({
-  operatorId,
-  operatorRole,
-  operatorName,
-  currentPatientId,
-  navKey,
-  onExecuted,
-}: UseAgnosChatOptions) {
+export function useAgnosChat(options: UseAgnosChatOptions) {
   const [turns, setTurns] = useState<AgnosTurn[]>([]);
   const [pending, setPending] = useState<AgnosPending | null>(null);
-  const [busy, setBusy] = useState(false);
+  const [phase, setPhase] = useState<AgnosPhase>('idle');
+  const [statusText, setStatusText] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const gate = useRef(createAgnosRequestGate());
+  const live = useRef(options);
+  live.current = options;
+  const turnsRef = useRef(turns); turnsRef.current = turns;
+  const pendingRef = useRef(pending); pendingRef.current = pending;
+  const phaseRef = useRef(phase); phaseRef.current = phase;
+  const currentContext = contextKey(options);
+  const previousContext = useRef(currentContext);
+  const previousActor = useRef(JSON.stringify([options.operatorId, options.operatorRole]));
+  const expectedContext = useRef<string | null>(null);
+  const setProposal = (value: AgnosPending | null) => { pendingRef.current = value; setPending(value); };
+  const setStage = (value: AgnosPhase, text: string) => { phaseRef.current = value; setPhase(value); setStatusText(text); };
+  const patchTurn = (index: number, patch: Partial<AgnosTurn>) =>
+    setTurns((list) => list.map((turn, i) => i === index ? { ...turn, ...patch } : turn));
 
-  const headers = useCallback(
-    () => buildAgnosHeaders({ operatorId, operatorRole, operatorName }),
-    [operatorId, operatorRole, operatorName],
-  );
+  useEffect(() => {
+    if (previousContext.current === currentContext) return;
+    previousContext.current = currentContext;
+    if (expectedContext.current === currentContext) { expectedContext.current = null; return; }
+    const wasSaving = phaseRef.current === 'executing';
+    gate.current.cancel(); expectedContext.current = null;
+    const proposal = pendingRef.current;
+    setTurns((list) => (proposal ? markCancelled(list, proposal.turnIndex) : list).map((turn) =>
+      turn.status === 'attesa' ? { ...turn, status: 'annullato', text: 'Richiesta annullata: contesto cambiato.' } : turn));
+    setProposal(null);
+    const actor = JSON.stringify([options.operatorId, options.operatorRole]);
+    if (previousActor.current !== actor) { setTurns([]); previousActor.current = actor; }
+    setError(null);
+    setStage(wasSaving ? 'error' : 'idle', wasSaving
+      ? 'Contesto cambiato durante il salvataggio. Verifica l’esito nella pagina del paziente.'
+      : 'Contesto cambiato. Le proposte precedenti sono state annullate.');
+  }, [currentContext, options.operatorId, options.operatorRole]);
+  useEffect(() => () => gate.current.cancel(), []);
 
-  /** Patch the agnos turn at `index` (used to resolve the loading placeholder). */
-  const patchTurn = useCallback((index: number, patch: Partial<AgnosTurn>) => {
-    setTurns((t) => t.map((x, i) => (i === index ? { ...x, ...patch } : x)));
-  }, []);
+  async function navigateTo(nav: AssistantNav, request: { token: number; signal: AbortSignal }) {
+    const { token, signal } = request;
+    const snapshot = live.current;
+    const expected = contextKey({ ...snapshot, ...navigationScope(nav, snapshot.operatorRole) });
+    expectedContext.current = expected;
+    setStage('navigating', `Apro ${nav.label}…`);
+    try {
+      signal.throwIfAborted();
+      const opened = await snapshot.onNavigate?.(nav, signal);
+      signal.throwIfAborted();
+      if (!gate.current.current(token)) return false;
+      if (!opened) throw new Error('Pagina non disponibile');
+      return true;
+    } catch {
+      if (gate.current.current(token)) {
+        expectedContext.current = null;
+        setStage('error', 'Non riesco ad aprire la pagina richiesta. Riprova prima di confermare.');
+      }
+      return false;
+    }
+  }
 
   const cancelPending = useCallback(() => {
-    if (!pending) return;
-    const idx = pending.turnIndex;
-    setTurns((t) => [
-      ...markCancelled(t, idx),
-      { role: 'agnos', text: 'Operazione annullata. Nessun dato è stato salvato.' },
-    ]);
-    setPending(null);
-    setError(null);
-  }, [pending]);
+    if (gate.current.busy) return;
+    const proposal = pendingRef.current;
+    if (!proposal) return;
+    setTurns((list) => [...markCancelled(list, proposal.turnIndex),
+      { role: 'agnos', text: proposal.uncertain
+        ? 'Conferma chiusa. Verifica nella pagina del paziente l’esito del tentativo precedente.'
+        : 'Operazione annullata. Nessun dato è stato salvato.' }]);
+    setProposal(null); setError(null); setStage('idle', 'Proposta annullata.');
+  }, []);
 
-  const sendCommand = useCallback(
-    async (rawText: string, channel: AgnosChannel = 'testo') => {
-      const text = rawText.trim();
-      if (!text || busy) return;
-      setBusy(true);
-      setError(null);
-      // A new command supersedes any preview still waiting for confirmation.
-      // `busy` guards concurrency, so the closure state is the current state.
-      const base = pending ? markCancelled(turns, pending.turnIndex) : turns;
-      if (pending) setPending(null);
-      const agnosIndex = base.length + 1;
-      setTurns([...base, { role: 'utente', text }, { role: 'agnos', status: 'attesa' }]);
-      try {
-        const res = await fetch(`${API_URL}/ai/actions/plan`, {
-          method: 'POST',
-          headers: headers(),
-          // Nessun `agent`: è l'intent a decidere chi risponde (backend `resolveAgent`), così una
-          // domanda clinica dell'operatore viene servita invece di essere rimandata a un'altra chat.
-          body: JSON.stringify({ text, channel, currentPatientId, navKey }),
-        });
-        const data = (await res.json()) as ApiError & {
-          plan?: AgnosPlan;
-          preview?: (Omit<AgnosPreview, 'lines'> & { lines?: unknown }) | null;
-          read?: AssistantAnswer | null;
-        };
-        if (!res.ok) {
-          const msg = errorMessage(data, 'Comando non interpretabile.');
-          setError(msg);
-          patchTurn(agnosIndex, { status: 'errore', text: msg });
-          return;
-        }
-        const plan = data.plan;
-        const refused =
-          !!plan &&
-          (plan.actionType === 'refused_delete' ||
-            plan.actionType === 'refused_forbidden' ||
-            plan.actionType.startsWith('refuse'));
-        const refusalText = data.preview?.refusal || (refused ? plan?.refusalReason : undefined);
-        if (refusalText || refused) {
-          patchTurn(agnosIndex, {
-            status: 'rifiuto',
-            plan,
-            text:
-              refusalText ||
-              'L’assistente non può eseguire questa operazione: usa il comando nell’interfaccia.',
-          });
-          return;
-        }
-        if (data.read) {
-          patchTurn(agnosIndex, { status: undefined, read: data.read, plan });
-          return;
-        }
-        if (data.preview) {
-          const preview: AgnosPreview = {
-            title: data.preview.title,
-            patientName: data.preview.patientName,
-            lines: normalizeLines(data.preview.lines),
-            warnings: data.preview.warnings ?? [],
-            ambiguities: data.preview.ambiguities ?? [],
-            canExecute: data.preview.canExecute === true,
-          };
-          patchTurn(agnosIndex, { status: 'in-conferma', preview, plan });
-          setPending({
-            text,
-            channel,
-            patientId: plan?.patientId ?? currentPatientId ?? null,
-            idempotencyKey: crypto.randomUUID(),
-            turnIndex: agnosIndex,
-          });
-          return;
-        }
-        const msg = 'Risposta non riconosciuta dal servizio assistente.';
-        setError(msg);
-        patchTurn(agnosIndex, { status: 'errore', text: msg });
-      } catch {
-        const msg = 'Errore di rete: comando non inviato.';
-        setError(msg);
-        patchTurn(agnosIndex, { status: 'errore', text: msg });
-      } finally {
-        setBusy(false);
-      }
-    },
-    [busy, turns, pending, currentPatientId, navKey, headers, patchTurn],
-  );
-
-  const confirmPending = useCallback(async () => {
-    if (!pending || busy) return;
-    setBusy(true);
-    setError(null);
-    const { text, channel, patientId, idempotencyKey, turnIndex } = pending;
+  async function sendCommand(rawText: string, channel: AgnosChannel = 'testo') {
+    const text = rawText.trim();
+    if (!text) return;
+    if (pendingRef.current?.uncertain) {
+      setStage('error', 'Verifica prima l’esito riprovando la conferma della stessa richiesta.'); return;
+    }
+    const request = gate.current.begin();
+    if (!request) return;
+    const snapshot = live.current;
+    setStage('planning', 'Sto interpretando la richiesta…'); setError(null);
+    const old = pendingRef.current;
+    const base = old ? markCancelled(turnsRef.current, old.turnIndex) : turnsRef.current;
+    setProposal(null);
+    const index = base.length + 1;
+    setTurns([...base, { role: 'utente', text, channel }, { role: 'agnos', status: 'attesa' }]);
     try {
-      const res = await fetch(`${API_URL}/ai/actions/execute`, {
-        method: 'POST',
-        headers: headers(),
-        // L'esecuzione confermata di un comando dettato resta channel:'voce'.
-        body: JSON.stringify({
-          text,
-          channel,
-          patientId,
-          navKey,
-          idempotencyKey,
-          confirmed: true,
-        }),
+      const res = await fetch(`${API_URL}/ai/actions/plan`, {
+        method: 'POST', headers: buildAgnosHeaders(snapshot), signal: request.signal,
+        body: JSON.stringify({ text, channel, currentPatientId: snapshot.currentPatientId, navKey: snapshot.navKey }),
       });
-      const data = (await res.json()) as ApiError & {
-        ok?: boolean;
-        message?: string;
-        deduped?: boolean;
-        actionType?: string;
-      };
-      if (!res.ok || !data.ok) {
-        const msg = errorMessage(data, 'Operazione non salvata.');
-        setError(msg);
-        setTurns((t) => [...t, { role: 'agnos', status: 'errore', text: msg }]);
+      const data = await res.json() as ApiError & { plan?: AgnosPlan; preview?: AgnosPreview; read?: AssistantAnswer };
+      request.signal.throwIfAborted();
+      if (!gate.current.current(request.token)) return;
+      if (!res.ok) throw new Error(errorMessage(data, 'Comando non interpretabile.'));
+      const plan = data.plan;
+      if (data.preview?.refusal || plan?.actionType.startsWith('refus')) {
+        patchTurn(index, { status: 'rifiuto', plan, text: data.preview?.refusal || plan?.refusalReason || 'Azione non consentita.' });
+        setStage('idle', 'Questa operazione non può essere eseguita dall’assistente.'); return;
+      }
+      if (data.read) {
+        patchTurn(index, { status: undefined, read: data.read, plan });
+        const nav = readActionNavigation(text, data.read);
+        if (nav && !await navigateTo(nav, request)) return;
+        if (gate.current.current(request.token)) setStage('success', nav ? `Pagina aperta: ${nav.label}.` : 'Risposta pronta.');
         return;
       }
-      setTurns((t) => [
-        ...t.map((x, i) => (i === turnIndex ? { ...x, status: 'eseguito' as const } : x)),
-        {
-          role: 'agnos',
-          status: 'successo',
-          text: data.deduped
-            ? 'Operazione già registrata (nessun duplicato).'
-            : data.message || 'Salvato.',
-        },
-      ]);
-      setPending(null);
-      onExecuted?.({ actionType: data.actionType });
-    } catch {
-      const msg = 'Errore di rete: l’operazione non è stata salvata.';
-      setError(msg);
-      setTurns((t) => [...t, { role: 'agnos', status: 'errore', text: msg }]);
-    } finally {
-      setBusy(false);
+      if (!data.preview) throw new Error('Risposta non riconosciuta dal servizio assistente.');
+      const preview = normalizeAgnosPreview(data.preview);
+      if (plan?.actionType === 'update_narrative_section' && !preview.diff?.proposed.trim()) preview.canExecute = false;
+      const navigation = writeActionNavigation(plan);
+      patchTurn(index, { status: 'in-conferma', preview, plan });
+      const proposal: AgnosPending = {
+        text, channel, patientId: plan?.patientId ?? null, idempotencyKey: crypto.randomUUID(), turnIndex: index,
+        actionType: plan?.actionType, navigation, navigationReady: false, canExecute: preview.canExecute,
+      };
+      setProposal(proposal);
+      if (!navigation) { setStage('error', 'Destinazione non disponibile. Modifica la richiesta prima di confermare.'); return; }
+      if (!preview.canExecute) { setStage('approval', 'Completa o correggi i dati della proposta. Nessun dato salvato.'); return; }
+      if (await navigateTo(navigation, request) && gate.current.current(request.token)) {
+        setProposal({ ...proposal, navigationReady: true });
+        setStage('approval', `Pagina aperta: ${navigation.label}. Controlla i dati e conferma per salvarli.`);
+      }
+    } catch (cause) {
+      if (!gate.current.current(request.token)) return;
+      const message = request.signal.aborted ? 'La risposta tarda ad arrivare. Riprova la richiesta.'
+        : cause instanceof Error ? cause.message : 'Non riesco a interpretare la richiesta. Riprova.';
+      patchTurn(index, { status: 'errore', text: message }); setError(message); setStage('error', message);
+    } finally { gate.current.finish(request.token); }
+  }
+
+  async function retryNavigation() {
+    const proposal = pendingRef.current;
+    if (!proposal?.navigation) return false;
+    const request = gate.current.begin(); if (!request) return false;
+    setProposal({ ...proposal, navigationReady: false });
+    let opened = false;
+    if (await navigateTo(proposal.navigation, request) && gate.current.current(request.token)) {
+      setProposal({ ...proposal, navigationReady: true });
+      setStage('approval', `Pagina aperta: ${proposal.navigation.label}. Controlla i dati e conferma per salvarli.`);
+      opened = true;
     }
-  }, [pending, busy, navKey, headers, onExecuted]);
+    gate.current.finish(request.token);
+    return opened;
+  }
 
-  /** "Modifica": drop the pending preview without the cancel message; caller refills the input. */
+  async function confirmPending() {
+    const proposal = pendingRef.current;
+    if (!proposal?.canExecute || !proposal.navigationReady || !proposal.navigation) return;
+    const snapshot = live.current;
+    const destination = navigationScope(proposal.navigation, snapshot.operatorRole);
+    if (snapshot.currentPatientId !== destination.currentPatientId || snapshot.navKey !== destination.navKey) {
+      setProposal({ ...proposal, navigationReady: false });
+      setStage('error', 'Riapri la pagina della proposta prima di confermare.'); return;
+    }
+    const request = gate.current.begin(45_000); if (!request) return;
+    // The operator may have changed tabs within the same chart while reviewing.
+    // Reopen the exact section before sending the approved write.
+    if (!await navigateTo(proposal.navigation, request)) {
+      if (gate.current.current(request.token)) setProposal({ ...proposal, navigationReady: false });
+      gate.current.finish(request.token); return;
+    }
+    setStage('executing', 'Sto salvando i dati approvati…'); setError(null);
+    const { text, channel, patientId, idempotencyKey, turnIndex } = proposal;
+    let saved = false;
+    try {
+      // Original text + target + same retry identity. The server still derives/authorizes the plan.
+      const res = await fetch(`${API_URL}/ai/actions/execute`, {
+        method: 'POST', headers: buildAgnosHeaders(snapshot), signal: request.signal,
+        body: JSON.stringify({ text, channel, patientId, navKey: snapshot.navKey, idempotencyKey, confirmed: true }),
+      });
+      const data = await res.json() as ApiError & { ok?: boolean; message?: string; deduped?: boolean; actionType?: string };
+      request.signal.throwIfAborted();
+      if (!gate.current.current(request.token)) return;
+      if (!res.ok || data?.ok !== true) {
+        // A server/proxy failure can arrive after the write committed. Only a
+        // recognized pre-write denial is evidence that this attempt did not save.
+        if (!isDefinitiveAgnosDenial(res.status, data)) throw new Error('Uncertain write result');
+        const message = errorMessage(data, 'Operazione non completata. Controlla la proposta.');
+        setTurns((list) => [...list, { role: 'agnos', status: 'errore', text: message }]);
+        setError(message); setStage('error', message); return;
+      }
+      saved = true;
+      patchTurn(turnIndex, { status: 'eseguito' }); setProposal(null);
+      const message = data.deduped ? 'Operazione già registrata, senza duplicati.' : data.message || 'Dati salvati.';
+      setTurns((list) => [...list, { role: 'agnos', status: 'successo', text: message }]);
+      setStage('executing', 'Dati salvati. Aggiorno la pagina…');
+      await snapshot.onExecuted?.({ actionType: data.actionType ?? proposal.actionType, patientId });
+      if (gate.current.current(request.token)) setStage('success', 'Dati salvati. Puoi controllare il risultato nella pagina aperta.');
+    } catch {
+      if (!gate.current.current(request.token)) return;
+      if (!saved) setProposal({ ...proposal, uncertain: true });
+      const message = saved ? 'Dati salvati. Aggiorna la pagina per verificare il risultato.'
+        : 'Non riesco a verificare l’esito del salvataggio. Riprova la conferma della stessa richiesta e verifica il risultato.';
+      setTurns((list) => [...list, { role: 'agnos', status: 'errore', text: message }]);
+      setError(message); setStage('error', message);
+    } finally { gate.current.finish(request.token); }
+  }
+
   const dismissPendingForEdit = useCallback((): { text: string; channel: AgnosChannel } | null => {
-    if (!pending) return null;
-    const { text, channel, turnIndex } = pending;
-    setTurns((t) => markCancelled(t, turnIndex));
-    setPending(null);
-    setError(null);
-    return { text, channel };
-  }, [pending]);
+    if (gate.current.busy) return null;
+    const proposal = pendingRef.current; if (!proposal) return null;
+    if (proposal.uncertain) {
+      setStage('error', 'Verifica prima l’esito riprovando la conferma della stessa richiesta.');
+      return null;
+    }
+    setTurns((list) => markCancelled(list, proposal.turnIndex));
+    setProposal(null); setError(null); setStage('idle', 'Modifica la richiesta e inviala di nuovo.');
+    return { text: proposal.text, channel: proposal.channel };
+  }, []);
 
-  return {
-    turns,
-    pending,
-    busy,
-    error,
-    sendCommand,
-    confirmPending,
-    cancelPending,
-    dismissPendingForEdit,
-  };
+  return { turns, pending, phase, statusText, busy: ['planning', 'navigating', 'executing'].includes(phase), error,
+    sendCommand, confirmPending, cancelPending, dismissPendingForEdit, retryNavigation };
 }

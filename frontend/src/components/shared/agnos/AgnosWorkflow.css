@@ -1,0 +1,46 @@
+.agnos-panel { height: 100dvh; max-width: 100%; }
+.agnos-panel > header, .agnos-panel > .ai-asst__scope,
+.agnos-workflow-status, .agnos-composer { flex-shrink: 0; }
+.agnos-panel .ai-drawer__body { min-height: 0; overscroll-behavior: contain; }
+.agnos-panel .ai-drawer__header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 12px; }
+.agnos-panel .ai-drawer__title { min-width: 0; }
+.agnos-panel .agnos-tts { width: 64px; height: auto; min-height: 48px; display: flex; flex-direction: column; gap: 2px; padding: 4px; }
+.agnos-panel .agnos-tts span { font-size: 10px; line-height: 1.15; font-weight: 600; }
+.agnos-panel .agnos-tts svg { width: 18px; height: 18px; }
+.agnos-panel .agnos-compose { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px 14px; }
+.agnos-compose-label { font-size: 13px; font-weight: 650; color: var(--text); }
+.agnos-panel .agnos-input { width: 100%; min-height: 76px; max-height: 150px; flex: auto; line-height: 1.45; }
+.agnos-compose-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.agnos-compose-actions button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
+.agnos-compose-help { margin: 0; padding: 0 12px 8px; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+.agnos-compose .agnos-compose-help { padding: 0; }
+.agnos-panel .agnos-voice-consent { margin: 0; font-size: 11px; padding: 6px 12px max(8px, env(safe-area-inset-bottom)); }
+.agnos-workflow-status { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; background: #eef4ff; border-bottom: 1px solid var(--border); color: #244676; font-size: 13px; line-height: 1.4; }
+.agnos-workflow-status > span:not(.agnos-workflow-spinner) { flex: 1 1 220px; }
+.agnos-workflow-status[data-phase='error'] { background: #fff7e8; color: #76501c; }
+.agnos-workflow-status .link-btn { font-size: 12px; min-height: 32px; }
+.agnos-workflow-spinner { width: 14px; height: 14px; flex: 0 0 14px; border: 2px solid #cbdaf2; border-top-color: #316dda; border-radius: 50%; animation: agnos-spin 900ms linear infinite; }
+.agnos-transcript-label { align-self: flex-end; font-size: 11px; color: var(--text-muted); }
+.agnos-proposed-text { padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: white; }
+.agnos-proposed-text p, .agnos-preview .voice-preview__row dd { white-space: pre-wrap; overflow-wrap: anywhere; }
+.agnos-proposed-text p { margin: 8px 0 12px; line-height: 1.5; }
+.agnos-proposed-text summary { cursor: pointer; color: var(--blue); margin-bottom: 12px; }
+.agnos-approval-hint { font-size: 13px; line-height: 1.45; margin: 12px 0 8px; }
+.agnos-panel .voice-actions { flex-wrap: wrap; }
+.agnos-workflow-dock { position: fixed; bottom: max(52px, env(safe-area-inset-bottom)); right: 12px; z-index: 202; max-width: min(440px, calc(100vw - 24px)); padding: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; background: white; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 20px #10284726; font-size: 13px; }
+.agnos-workflow-dock span { flex: 1 1 190px; }
+@keyframes agnos-spin { to { transform: rotate(360deg); } }
+@media (min-width: 1100px) {
+  .app-shell:has(.agnos-panel--workspace[aria-hidden='false']) .main-area-clean { margin-right: 420px; }
+}
+@media (max-width: 1099px) {
+  .agnos-panel--workspace { top: auto; bottom: 0; height: 76dvh; border-radius: 16px 16px 0 0; }
+}
+@media (max-width: 480px) {
+  .agnos-panel .ai-drawer__icon { display: none; }
+  .agnos-panel .assistant-id__sub { font-size: 10px; }
+  .agnos-panel .agnos-compose { padding: 8px 12px; }
+  .agnos-panel .agnos-input { min-height: 64px; }
+}
+@media (prefers-reduced-motion: reduce) { .agnos-workflow-spinner { animation: none; } }
+@media print { .agnos-workflow-dock { display: none !important; } }
