@@ -43,6 +43,7 @@
   .agnos-panel--workspace { top: auto; bottom: 0; height: 76dvh; border-radius: 16px 16px 0 0; }
 }
 @media (max-width: 480px) {
+  .agnos-panel--workspace { top: 0; height: 100dvh; border-radius: 0; }
   .agnos-panel .ai-drawer__icon { display: none; }
   .agnos-panel .assistant-id__sub { font-size: 10px; }
   .agnos-panel .agnos-compose { padding: 8px 12px; }
