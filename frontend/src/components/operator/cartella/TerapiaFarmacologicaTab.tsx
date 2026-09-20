@@ -14,6 +14,7 @@ import { ClinicalTableSection, LoadingState } from './shared';
 import { LoadErrorState } from './LoadErrorState';
 import { PatientTherapyCalendar } from './PatientTherapyCalendar';
 import { ClinicalTable } from './ClinicalTable';
+import { AdministrationStatus } from './AdministrationStatus';
 import type { ColumnDef } from './ClinicalTable';
 import {
   FRACTION_PRESETS,
@@ -1109,17 +1110,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         { value: 'not_administered', label: 'Non erogata' },
         { value: 'pending', label: 'Da erogare' },
       ],
-      render: (v: string) => (
-        <span
-          className={`badge ${v === 'administered' ? 'badge--green' : v === 'not_administered' ? 'badge--red' : 'badge--amber'}`}
-        >
-          {v === 'administered'
-            ? 'Erogata'
-            : v === 'not_administered'
-              ? 'Non erogata'
-              : 'Da erogare'}
-        </span>
-      ),
+      render: (v: string) => <AdministrationStatus status={v} />,
     },
     {
       key: 'administeredBy',
@@ -1189,13 +1180,7 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         { value: 'erogata', label: 'Erogata' },
         { value: 'non_erogata', label: 'Non erogata' },
       ],
-      render: (v: string) => (
-        <span
-          className={`badge ${v === 'erogata' ? 'badge--green' : v === 'non_erogata' ? 'badge--red' : 'badge--amber'}`}
-        >
-          {v === 'erogata' ? 'Erogata' : v === 'non_erogata' ? 'Non erogata' : 'Da erogare'}
-        </span>
-      ),
+      render: (v: string) => <AdministrationStatus status={v} />,
     },
     {
       key: 'operatoreNome',

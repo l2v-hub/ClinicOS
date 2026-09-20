@@ -1,0 +1,40 @@
+.administration-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: max-content;
+  min-height: 26px;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.administration-status > svg {
+  flex: 0 0 14px;
+}
+
+.administration-status--pending {
+  color: #925b0c;
+  background: #fff8e8;
+  border-color: #efdbb1;
+}
+
+.administration-status--completed {
+  color: #176749;
+  background: #edf8f2;
+  border-color: #c9e6d7;
+}
+
+.administration-status--not-given {
+  color: #a12b3b;
+  background: #fff1f3;
+  border-color: #f0cdd3;
+}
