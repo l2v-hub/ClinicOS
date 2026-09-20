@@ -2,19 +2,15 @@ import { useId, useState } from 'react';
 import { CampoFarmaco } from './CampoFarmaco';
 import {
   FRACTION_PRESETS,
-  ADMIN_UNITS,
-  DIVISIBLE_UNITS,
   PHARMA_FORMS,
   STRENGTH_UNITS,
-  formatFraction,
-  parseQuantity,
-  computeEquivalent,
-  administrationUnitForForm,
-  hasDividedPatch,
   isPatchUnit,
   type ScheduleRow,
 } from './therapyDose';
 import { applyTherapyFormChange } from './therapyFormChange';
+import { TherapyScheduleEditor } from './TherapyScheduleEditor';
+import { TherapyFormPreview } from './TherapyFormPreview';
+import './TherapyFormFields.css';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -101,435 +97,328 @@ export function emptyTherapyForm(): TherapyFormValue {
   };
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
 interface TherapyFormFieldsProps {
   value: TherapyFormValue;
   onChange: (next: TherapyFormValue) => void;
   operatoreNome?: string;
 }
 
-export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
-  const typeGroupId = useId();
-  const [customQty, setCustomQty] = useState<Record<number, string>>({});
+const THERAPY_TYPES = [
+  { value: 'periodica', label: 'Periodica', hint: 'A orari e giorni stabiliti' },
+  { value: 'una_tantum', label: 'Una tantum', hint: 'Una sola somministrazione' },
+  { value: 'al_bisogno', label: 'Al bisogno', hint: 'Secondo le indicazioni' },
+] as const;
 
+export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
+  const id = useId();
+  // Keep pending custom quantities across changes of therapy type.
+  const [customQty, setCustomQty] = useState<Record<number, string>>({});
   const update = (patch: Partial<TherapyFormValue>) =>
     onChange(applyTherapyFormChange(value, patch));
-
-  const strengthNum = value.commercialStrengthValue.trim()
-    ? Number(value.commercialStrengthValue)
-    : null;
-
-  const updateSchedule = (idx: number, patch: Partial<ScheduleRow>) =>
-    onChange({
-      ...value,
-      schedules: value.schedules.map((s, i) => (i === idx ? { ...s, ...patch } : s)),
-    });
-
-  const addSchedule = () =>
-    onChange({
-      ...value,
-      schedules: [
-        ...value.schedules,
-        {
-          time: '18:00',
-          quantityNumerator: 1,
-          quantityDenominator: 1,
-          administrationUnit:
-            value.schedules.at(-1)?.administrationUnit ||
-            administrationUnitForForm(value.pharmaceuticalForm),
-        },
-      ],
-    });
-
-  const removeSchedule = (idx: number) =>
-    onChange({ ...value, schedules: value.schedules.filter((_, i) => i !== idx) });
-
   const toggleAllowedFraction = (key: string) => {
     if (key === '1') return;
-    const has = value.allowedFractions.includes(key);
     update({
-      allowedFractions: has
+      allowedFractions: value.allowedFractions.includes(key)
         ? value.allowedFractions.filter((k) => k !== key)
         : [...value.allowedFractions, key],
     });
   };
+  const hasFractions =
+    value.allowedFractions.some((key) => key !== '1') ||
+    value.schedules.some((s) => s.quantityDenominator !== 1);
 
   return (
-    <>
-      {/* Ricerca in anagrafica invece del testo libero: il campo libero era la causa a monte
-          dei farmaci che poi non risultano in anagrafica. */}
-      <CampoFarmaco valore={value.farmacoNome} forma={value.pharmaceuticalForm} onCambia={update} />
-      <div className="form-group">
-        <label>Forma farmaceutica</label>
-        <select
-          className="form-select"
-          aria-label="Forma farmaceutica"
-          value={value.pharmaceuticalForm}
-          onChange={(e) => update({ pharmaceuticalForm: e.target.value })}
-        >
-          <option value="">Seleziona forma</option>
-          {PHARMA_FORMS.map((v) => (
-            <option key={v} value={v}>
-              {v}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="form-group">
-        <label>Dosaggio commerciale</label>
-        <div style={{ display: 'flex', gap: 6 }}>
-          <input
-            className="form-input"
-            type="number"
-            min="0"
-            step="any"
-            style={{ flex: 1 }}
-            value={value.commercialStrengthValue}
-            placeholder="es. 100"
-            onChange={(e) => update({ commercialStrengthValue: e.target.value })}
-          />
-          <select
-            className="form-select"
-            style={{ width: 90 }}
-            value={value.commercialStrengthUnit}
-            onChange={(e) => update({ commercialStrengthUnit: e.target.value })}
-          >
-            <option value="">Unità</option>
-            {STRENGTH_UNITS.map((v) => (
-              <option key={v} value={v}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      {!isPatchUnit(value.pharmaceuticalForm) && (
-        <div className="form-group form-group--full">
-          <label>
-            Frazioni consentite{' '}
-            <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>
-              (la divisibilità va abilitata dall'operatore)
-            </span>
-          </label>
-          <div className="fraction-allow">
-            {FRACTION_PRESETS.map((p) => {
-              const active = value.allowedFractions.includes(p.key);
-              const isWhole = p.key === '1';
-              return (
-                <button
-                  key={p.key}
-                  type="button"
-                  className={`frac-toggle${active ? ' frac-toggle--on' : ''}${isWhole ? ' frac-toggle--locked' : ''}`}
-                  disabled={isWhole}
-                  title={
-                    isWhole
-                      ? 'Dose intera sempre disponibile'
-                      : `${active ? 'Disabilita' : 'Abilita'} ${p.key}`
-                  }
-                  onClick={() => toggleAllowedFraction(p.key)}
-                >
-                  {p.label} <span className="frac-toggle__sub">{p.key}</span>
-                </button>
-              );
-            })}
+    <div className="therapy-form">
+      <section className="therapy-form__section" aria-labelledby={`${id}-medicine`}>
+        <h3 id={`${id}-medicine`}>
+          <span aria-hidden="true">1</span> Farmaco
+        </h3>
+        <CampoFarmaco
+          valore={value.farmacoNome}
+          forma={value.pharmaceuticalForm}
+          onCambia={update}
+        />
+        <div className="therapy-form__grid">
+          <div className="form-group">
+            <label htmlFor={`${id}-form`}>Forma farmaceutica</label>
+            <select
+              id={`${id}-form`}
+              className="form-select"
+              value={value.pharmaceuticalForm}
+              onChange={(e) => update({ pharmaceuticalForm: e.target.value })}
+            >
+              <option value="">Seleziona forma</option>
+              {PHARMA_FORMS.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor={`${id}-strength`}>Dosaggio commerciale</label>
+            <div className="therapy-form__strength">
+              <input
+                id={`${id}-strength`}
+                className="form-input"
+                type="number"
+                min="0"
+                step="any"
+                value={value.commercialStrengthValue}
+                placeholder="es. 100"
+                onChange={(e) => update({ commercialStrengthValue: e.target.value })}
+              />
+              <select
+                className="form-select"
+                aria-label="Unità dosaggio commerciale"
+                value={value.commercialStrengthUnit}
+                onChange={(e) => update({ commercialStrengthUnit: e.target.value })}
+              >
+                <option value="">Unità</option>
+                {STRENGTH_UNITS.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor={`${id}-route`}>Via di somministrazione</label>
+            <select
+              id={`${id}-route`}
+              className="form-select"
+              value={value.viaSomministrazione}
+              onChange={(e) => update({ viaSomministrazione: e.target.value })}
+            >
+              {!VIA_OPTIONS.includes(value.viaSomministrazione) && (
+                <option value={value.viaSomministrazione}>Seleziona via</option>
+              )}
+              {VIA_OPTIONS.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
-      )}
-      <div className="form-group">
-        <label>Via somministrazione</label>
-        <select
-          className="form-select"
-          value={value.viaSomministrazione}
-          onChange={(e) => update({ viaSomministrazione: e.target.value })}
-        >
-          {!VIA_OPTIONS.includes(value.viaSomministrazione) && (
-            <option value={value.viaSomministrazione}>Seleziona via</option>
-          )}
-          {VIA_OPTIONS.map((v) => (
-            <option key={v} value={v}>
-              {v}
-            </option>
+      </section>
+
+      <section className="therapy-form__section" aria-labelledby={`${id}-timing`}>
+        <h3 id={`${id}-timing`}>
+          <span aria-hidden="true">2</span> Programmazione
+        </h3>
+        <div className="therapy-form__types" role="group" aria-label="Tipo terapia">
+          {THERAPY_TYPES.map((type) => (
+            <label
+              key={type.value}
+              className={`therapy-form__type${value.tipo === type.value ? ' is-selected' : ''}`}
+            >
+              <input
+                type="radio"
+                name={`${id}-type`}
+                value={type.value}
+                checked={value.tipo === type.value}
+                onChange={() => update({ tipo: type.value })}
+              />
+              <span>
+                <strong>{type.label}</strong>
+                <small>{type.hint}</small>
+              </span>
+            </label>
           ))}
-        </select>
-      </div>
-      <div className="form-group">
-        <label>Stato</label>
-        <select
-          className="form-select"
-          value={value.stato}
-          onChange={(e) => update({ stato: e.target.value as TherapyFormValue['stato'] })}
-        >
-          <option value="attiva">Attiva</option>
-          <option value="sospesa">Sospesa</option>
-          <option value="conclusa">Conclusa</option>
-        </select>
-      </div>
-      <div className="form-group">
-        <label>Tipo terapia</label>
-        <div className="tipo-radio">
-          <label>
-            <input
-              type="radio"
-              name={typeGroupId}
-              value="periodica"
-              checked={value.tipo === 'periodica'}
-              onChange={() => update({ tipo: 'periodica' })}
-            />{' '}
-            Periodica
-          </label>
-          <label>
-            <input
-              type="radio"
-              name={typeGroupId}
-              value="una_tantum"
-              checked={value.tipo === 'una_tantum'}
-              onChange={() => update({ tipo: 'una_tantum' })}
-            />{' '}
-            Una tantum
-          </label>
-          <label>
-            <input
-              type="radio"
-              name={typeGroupId}
-              value="al_bisogno"
-              checked={value.tipo === 'al_bisogno'}
-              onChange={() => update({ tipo: 'al_bisogno' })}
-            />{' '}
-            Al bisogno
-          </label>
         </div>
-      </div>
-      <div className="form-group">
-        <label>Data inizio *</label>
-        <input
-          className="form-input"
-          type="date"
-          value={value.dataInizio}
-          onChange={(e) => update({ dataInizio: e.target.value })}
-        />
-      </div>
-      {value.tipo === 'periodica' && (
-        <div className="form-group">
-          <label>Data fine</label>
-          <input
-            className="form-input"
-            type="date"
-            value={value.dataFine}
-            onChange={(e) => update({ dataFine: e.target.value })}
-          />
-        </div>
-      )}
-      {value.tipo === 'una_tantum' && (
-        <>
+        <div className="therapy-form__grid">
           <div className="form-group">
-            <label>Data somministrazione</label>
+            <label htmlFor={`${id}-start`}>Data inizio *</label>
             <input
+              id={`${id}-start`}
               className="form-input"
               type="date"
-              value={value.dataSomministrazione}
-              onChange={(e) => update({ dataSomministrazione: e.target.value })}
+              value={value.dataInizio}
+              onChange={(e) => update({ dataInizio: e.target.value })}
+            />
+          </div>
+          {value.tipo === 'periodica' && (
+            <div className="form-group">
+              <label htmlFor={`${id}-end`}>
+                Data fine <span className="therapy-form__optional">(facoltativa)</span>
+              </label>
+              <input
+                id={`${id}-end`}
+                className="form-input"
+                type="date"
+                value={value.dataFine}
+                onChange={(e) => update({ dataFine: e.target.value })}
+              />
+            </div>
+          )}
+          {value.tipo === 'una_tantum' && (
+            <>
+              <div className="form-group">
+                <label htmlFor={`${id}-once-date`}>Data somministrazione</label>
+                <input
+                  id={`${id}-once-date`}
+                  className="form-input"
+                  type="date"
+                  value={value.dataSomministrazione}
+                  onChange={(e) => update({ dataSomministrazione: e.target.value })}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor={`${id}-once-time`}>Orario somministrazione</label>
+                <input
+                  id={`${id}-once-time`}
+                  className="form-input"
+                  type="time"
+                  value={value.orarioSomministrazione}
+                  onChange={(e) => update({ orarioSomministrazione: e.target.value })}
+                />
+              </div>
+            </>
+          )}
+          <div className="form-group">
+            <label htmlFor={`${id}-status`}>Stato terapia</label>
+            <select
+              id={`${id}-status`}
+              className="form-select"
+              value={value.stato}
+              onChange={(e) => update({ stato: e.target.value as TherapyFormValue['stato'] })}
+            >
+              <option value="attiva">Attiva</option>
+              <option value="sospesa">Sospesa</option>
+              <option value="conclusa">Conclusa</option>
+            </select>
+          </div>
+        </div>
+        {value.tipo === 'periodica' && (
+          <div className="therapy-form__weekdays">
+            <span className="therapy-form__field-label">Ripeti</span>
+            <div
+              className="weekday-toggle"
+              role="group"
+              aria-label="Giorni della settimana"
+              data-testid="therapy-weekdays"
+            >
+              <button
+                type="button"
+                aria-pressed={value.giorniSettimana.length === 0}
+                className={`btn-sm ${value.giorniSettimana.length === 0 ? 'btn-primary' : 'btn-secondary'}`}
+                onClick={() => update({ giorniSettimana: [] })}
+              >
+                Tutti i giorni
+              </button>
+              {WEEKDAYS.map((w) => {
+                const on = value.giorniSettimana.includes(w.n);
+                return (
+                  <button
+                    type="button"
+                    key={w.n}
+                    aria-pressed={on}
+                    data-testid={`weekday-${w.n}`}
+                    className={`btn-sm ${on ? 'btn-primary' : 'btn-secondary'}`}
+                    onClick={() =>
+                      update({
+                        giorniSettimana: on
+                          ? value.giorniSettimana.filter((x) => x !== w.n && x >= 1 && x <= 7)
+                          : [...value.giorniSettimana.filter((x) => x >= 1 && x <= 7), w.n].sort(
+                              (a, b) => a - b,
+                            ),
+                      })
+                    }
+                  >
+                    {w.l}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </section>
+
+      {value.tipo === 'periodica' && (
+        <section className="therapy-form__section" aria-labelledby={`${id}-doses`}>
+          <h3 id={`${id}-doses`}>
+            <span aria-hidden="true">3</span> Orari e dosi
+          </h3>
+          {!isPatchUnit(value.pharmaceuticalForm) && (
+            <details className="therapy-form__disclosure" open={hasFractions || undefined}>
+              <summary>
+                Divisibilità <span>Frazioni consentite</span>
+              </summary>
+              <div className="therapy-form__disclosure-body">
+                <p className="form-hint">
+                  Abilita solo le frazioni previste dalla prescrizione e consentite per il farmaco.
+                </p>
+                <div className="fraction-allow" role="group" aria-label="Frazioni consentite">
+                  {FRACTION_PRESETS.map((p) => {
+                    const active = value.allowedFractions.includes(p.key);
+                    const isWhole = p.key === '1';
+                    return (
+                      <button
+                        key={p.key}
+                        type="button"
+                        aria-pressed={active}
+                        className={`frac-toggle${active ? ' frac-toggle--on' : ''}${isWhole ? ' frac-toggle--locked' : ''}`}
+                        disabled={isWhole}
+                        title={
+                          isWhole
+                            ? 'Dose intera sempre disponibile'
+                            : `${active ? 'Disabilita' : 'Abilita'} ${p.key}`
+                        }
+                        onClick={() => toggleAllowedFraction(p.key)}
+                      >
+                        {p.label} <span className="frac-toggle__sub">{p.key}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </details>
+          )}
+          <TherapyScheduleEditor
+            value={value}
+            onChange={onChange}
+            customQty={customQty}
+            setCustomQty={setCustomQty}
+          />
+        </section>
+      )}
+
+      <details
+        className="therapy-form__disclosure therapy-form__notes"
+        open={Boolean(value.note || value.prescrittore || value.tipo === 'al_bisogno') || undefined}
+      >
+        <summary>
+          Prescrittore e note{' '}
+          <span>
+            {value.tipo === 'al_bisogno' ? 'Indicazioni al bisogno' : 'Dettagli aggiuntivi'}
+          </span>
+        </summary>
+        <div className="therapy-form__disclosure-body therapy-form__note-grid">
+          <div className="form-group">
+            <label htmlFor={`${id}-prescriber`}>Prescrittore</label>
+            <input
+              id={`${id}-prescriber`}
+              className="form-input"
+              value={value.prescrittore}
+              placeholder="Dr. ..."
+              onChange={(e) => update({ prescrittore: e.target.value })}
             />
           </div>
           <div className="form-group">
-            <label>Orario</label>
-            <input
+            <label htmlFor={`${id}-notes`}>Note e indicazioni</label>
+            <textarea
+              id={`${id}-notes`}
               className="form-input"
-              type="time"
-              value={value.orarioSomministrazione}
-              onChange={(e) => update({ orarioSomministrazione: e.target.value })}
+              rows={3}
+              value={value.note}
+              onChange={(e) => update({ note: e.target.value })}
             />
           </div>
-        </>
-      )}
-      {value.tipo === 'periodica' && (
-        <div className="form-group form-group--full">
-          <label>Orari e quantità per somministrazione</label>
-          <div className="sched-editor">
-            {value.schedules.map((s, i) => {
-              const divisible = DIVISIBLE_UNITS.has(s.administrationUnit);
-              const eq = computeEquivalent(
-                s.quantityNumerator,
-                s.quantityDenominator,
-                strengthNum,
-                value.commercialStrengthUnit,
-              );
-              const presetActive = (num: number, den: number) =>
-                s.quantityNumerator === num && s.quantityDenominator === den;
-              return (
-                <div key={i} className="sched-row">
-                  <div className="sched-row__head">
-                    <input
-                      className="form-input sched-row__time"
-                      type="time"
-                      aria-label={`Orario ${i + 1}`}
-                      value={s.time}
-                      onChange={(e) => updateSchedule(i, { time: e.target.value })}
-                    />
-                    <select
-                      className="form-select sched-row__unit"
-                      aria-label={`Unità orario ${i + 1}`}
-                      value={s.administrationUnit}
-                      onChange={(e) => updateSchedule(i, { administrationUnit: e.target.value })}
-                    >
-                      <option value="">Seleziona unità</option>
-                      {ADMIN_UNITS.map((u) => (
-                        <option key={u} value={u}>
-                          {u}
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      type="button"
-                      className="btn-secondary btn-sm"
-                      title="Rimuovi orario"
-                      onClick={() => removeSchedule(i)}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                  <div className="sched-row__qty">
-                    {divisible ? (
-                      <>
-                        {FRACTION_PRESETS.filter((p) => value.allowedFractions.includes(p.key)).map(
-                          (p) => (
-                            <button
-                              key={p.key}
-                              type="button"
-                              className={`qty-chip${presetActive(p.num, p.den) ? ' qty-chip--on' : ''}`}
-                              onClick={() => {
-                                updateSchedule(i, {
-                                  quantityNumerator: p.num,
-                                  quantityDenominator: p.den,
-                                });
-                                setCustomQty((c) => ({ ...c, [i]: '' }));
-                              }}
-                            >
-                              {p.label}
-                            </button>
-                          ),
-                        )}
-                        <input
-                          className="form-input qty-chip__other"
-                          placeholder="Altro (es. 1/3, 0.5)"
-                          value={customQty[i] ?? ''}
-                          onChange={(e) => setCustomQty((c) => ({ ...c, [i]: e.target.value }))}
-                          onBlur={(e) => {
-                            const parsed = parseQuantity(e.target.value);
-                            if (parsed)
-                              updateSchedule(i, {
-                                quantityNumerator: parsed.num,
-                                quantityDenominator: parsed.den,
-                              });
-                          }}
-                        />
-                      </>
-                    ) : (
-                      <input
-                        className="form-input qty-chip__other"
-                        type="number"
-                        min={isPatchUnit(s.administrationUnit) ? '1' : '0'}
-                        step={isPatchUnit(s.administrationUnit) ? '1' : 'any'}
-                        aria-label={`Quantità orario ${i + 1}`}
-                        placeholder="Quantità"
-                        value={
-                          s.quantityDenominator === 1
-                            ? String(s.quantityNumerator)
-                            : s.quantityNumerator / s.quantityDenominator
-                        }
-                        onChange={(e) => {
-                          const parsed = parseQuantity(e.target.value);
-                          if (parsed)
-                            updateSchedule(i, {
-                              quantityNumerator: parsed.num,
-                              quantityDenominator: parsed.den,
-                            });
-                        }}
-                      />
-                    )}
-                  </div>
-                  <div className="sched-row__resolved">
-                    {s.time} — {formatFraction(s.quantityNumerator, s.quantityDenominator)}{' '}
-                    {s.administrationUnit}
-                    {eq && (
-                      <>
-                        {' '}
-                        — <strong>equivalente a {eq}</strong>
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-            <button type="button" className="btn-secondary btn-sm" onClick={addSchedule}>
-              + Aggiungi orario
-            </button>
-            {hasDividedPatch(value.schedules) && (
-              <p className="form-hint" role="alert">
-                I cerotti non possono essere divisi: indica una quantità intera.
-              </p>
-            )}
-          </div>
         </div>
-      )}
-      {value.tipo === 'periodica' && (
-        <div className="form-group form-group--full">
-          <label>Giorni della settimana</label>
-          <div
-            className="weekday-toggle"
-            role="group"
-            aria-label="Giorni della settimana"
-            data-testid="therapy-weekdays"
-          >
-            {WEEKDAYS.map((w) => {
-              const on = value.giorniSettimana.includes(w.n);
-              return (
-                <button
-                  type="button"
-                  key={w.n}
-                  aria-pressed={on}
-                  data-testid={`weekday-${w.n}`}
-                  className={`btn-sm ${on ? 'btn-primary' : 'btn-secondary'}`}
-                  onClick={() =>
-                    update({
-                      giorniSettimana: on
-                        ? value.giorniSettimana.filter((x) => x !== w.n && x >= 1 && x <= 7)
-                        : [...value.giorniSettimana.filter((x) => x >= 1 && x <= 7), w.n].sort(
-                            (a, b) => a - b,
-                          ),
-                    })
-                  }
-                >
-                  {w.l}
-                </button>
-              );
-            })}
-          </div>
-          <small className="form-hint">
-            {value.giorniSettimana.length === 0
-              ? 'Tutti i giorni'
-              : `Solo: ${value.giorniSettimana.map((n) => WEEKDAYS.find((w) => w.n === n)?.l).join(', ')}`}
-          </small>
-        </div>
-      )}
-      <div className="form-group">
-        <label>Prescrittore</label>
-        <input
-          className="form-input"
-          value={value.prescrittore}
-          placeholder="Dr. ..."
-          onChange={(e) => update({ prescrittore: e.target.value })}
-        />
-      </div>
-      <div className="form-group form-group--full">
-        <label>Note</label>
-        <textarea
-          className="form-input"
-          rows={2}
-          value={value.note}
-          onChange={(e) => update({ note: e.target.value })}
-        />
-      </div>
-    </>
+      </details>
+      <TherapyFormPreview value={value} />
+    </div>
   );
 }

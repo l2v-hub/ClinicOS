@@ -1,0 +1,378 @@
+.therapy-form {
+  container: therapy-form / inline-size;
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--text-primary, #1e293b);
+}
+
+.terapia-sched-form.therapy-form-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+
+.therapy-form-shell__heading h2 {
+  margin: 0 0 4px;
+  font-size: 19px;
+}
+
+.therapy-form-shell__heading p {
+  margin: 0;
+  color: var(--text-muted, #64748b);
+  font-size: 12px;
+}
+
+.therapy-form__section {
+  padding: 16px;
+  border: 1px solid var(--border, #dce3ec);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.therapy-form__section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.therapy-form__section h3 > span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #eef4ff;
+  color: #2458a8;
+  font-size: 12px;
+}
+
+.therapy-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+}
+
+.therapy-form label,
+.therapy-form__field-label {
+  color: var(--text-primary, #344054);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.therapy-form .form-input,
+.therapy-form .form-select,
+.therapy-form .campo-farmaco__input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.therapy-form textarea {
+  resize: vertical;
+}
+.therapy-form__optional {
+  font-weight: 400;
+  color: var(--text-muted, #64748b);
+}
+.therapy-form__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.therapy-form__strength {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 88px;
+  gap: 6px;
+}
+.therapy-form__types {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.therapy-form label.therapy-form__type {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  padding: 10px;
+  min-height: 58px;
+  border: 1px solid var(--border, #dce3ec);
+  border-radius: 8px;
+  cursor: pointer;
+  background: #fff;
+}
+
+.therapy-form__type input {
+  accent-color: #2563b8;
+  margin: 0;
+  flex: 0 0 auto;
+}
+.therapy-form__type strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+}
+.therapy-form__type small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 400;
+  color: #526278;
+}
+.therapy-form label.therapy-form__type.is-selected {
+  background: #eff6ff;
+  border-color: #6095d9;
+}
+.therapy-form__type:focus-within {
+  outline: 2px solid #2563b8;
+  outline-offset: 2px;
+}
+.therapy-form__weekdays {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.therapy-form .weekday-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.therapy-form .weekday-toggle button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.therapy-form__disclosure {
+  border: 1px solid var(--border, #dce3ec);
+  border-radius: 8px;
+  background: #fafbfd;
+  min-width: 0;
+}
+
+.therapy-form__disclosure summary {
+  cursor: pointer;
+  padding: 12px;
+  min-height: 44px;
+  box-sizing: border-box;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.therapy-form__disclosure summary > span {
+  margin-left: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 400;
+}
+.therapy-form__disclosure-body {
+  padding: 0 12px 12px;
+}
+.therapy-form__disclosure-body .form-hint {
+  margin: 0 0 10px;
+}
+.therapy-form__note-grid {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) minmax(0, 2fr);
+  gap: 12px;
+}
+
+.therapy-form .therapy-schedules__row {
+  display: grid;
+  grid-template-columns: 112px minmax(140px, 1fr) 140px 44px;
+  grid-template-areas: 'time quantity unit remove' 'resolved resolved resolved resolved';
+  align-items: start;
+  gap: 8px 12px;
+  padding: 12px;
+}
+
+.therapy-schedules__time {
+  grid-area: time;
+}
+.therapy-schedules__quantity {
+  grid-area: quantity;
+}
+.therapy-schedules__unit {
+  grid-area: unit;
+}
+.therapy-form .therapy-schedules__remove {
+  grid-area: remove;
+  margin-top: 22px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.therapy-form .sched-row__resolved {
+  grid-area: resolved;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.therapy-form .sched-row__qty {
+  gap: 6px;
+}
+.therapy-form .qty-chip__other {
+  flex: 1 1 115px;
+  width: 115px;
+}
+.therapy-form .therapy-schedules__add {
+  align-self: flex-start;
+  min-height: 44px;
+}
+
+.therapy-form__preview {
+  padding: 14px 16px;
+  background: #f0f6fd;
+  border: 1px solid #d7e5f6;
+  border-radius: 10px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.therapy-form__preview h3 {
+  font-size: 12px;
+  color: #47658a;
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+.therapy-form__preview-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+}
+.therapy-form__preview-heading > strong {
+  font-size: 15px;
+}
+.therapy-form__preview-heading > span {
+  color: #526278;
+  font-size: 12px;
+}
+.therapy-form__preview p {
+  margin: 6px 0 0;
+}
+.therapy-form__preview ul {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.therapy-form__preview li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #d7e5f6;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.therapy-form-shell .form-actions.therapy-form-shell__actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 12px 0;
+  border-top: 1px solid var(--border, #dce3ec);
+  background: var(--surface, #fff);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Let the patient panel own scrolling so the form actions stay within reach. */
+.cts:has(.therapy-form-shell),
+.cts__body:has(.therapy-form-shell),
+.cr-tab-content:has(.therapy-form-shell) {
+  overflow: clip;
+}
+
+.therapy-form-shell__actions button {
+  min-height: 44px;
+}
+.therapy-form__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@container therapy-form (max-width: 650px) {
+  .therapy-form__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .therapy-form__types {
+    grid-template-columns: 1fr;
+  }
+  .therapy-form__type small {
+    display: inline;
+    margin-left: 8px;
+  }
+  .therapy-form label.therapy-form__type {
+    min-height: 48px;
+  }
+  .therapy-form .therapy-schedules__row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+    grid-template-areas: 'time unit remove' 'quantity quantity quantity' 'resolved resolved resolved';
+  }
+  .therapy-form__note-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container therapy-form (max-width: 420px) {
+  .therapy-form .therapy-schedules__row {
+    grid-template-columns: minmax(0, 1fr) 44px;
+    grid-template-areas: 'time remove' 'quantity quantity' 'unit unit' 'resolved resolved';
+  }
+  .therapy-form__section {
+    padding: 12px;
+  }
+  .therapy-form__grid {
+    grid-template-columns: 1fr;
+  }
+  .therapy-form__disclosure summary > span {
+    display: block;
+    margin: 4px 0 0 16px;
+  }
+  .therapy-form .campo-farmaco__scelto {
+    flex-wrap: wrap;
+  }
+  .therapy-form .form-input,
+  .therapy-form .form-select,
+  .therapy-form .campo-farmaco__input {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .therapy-form-shell .form-actions .form-hint {
+    flex-basis: 100%;
+  }
+}

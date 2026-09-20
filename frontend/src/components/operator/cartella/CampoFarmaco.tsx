@@ -9,7 +9,7 @@
 // che non e' in anagrafica romperebbe un flusso legittimo. Percio' si puo' usare un nome libero,
 // ma solo con un'azione deliberata, che e' diversa dal digitare e passare avanti.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { API_URL } from '../../../config';
 import { IcoSearch } from '../../../icons';
 import { testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
@@ -59,6 +59,7 @@ export function formaDellaMaschera(formaAifa: string | null | undefined): string
 }
 
 export function CampoFarmaco({ valore, forma, onCambia }: Props) {
+  const fieldId = useId();
   const [query, setQuery] = useState('');
   const [criterio, setCriterio] = useState<Criterio>('nome');
   const [esito, setEsito] = useState<Esito>({ fase: 'inerte' });
@@ -135,7 +136,7 @@ export function CampoFarmaco({ valore, forma, onCambia }: Props) {
   if (valore) {
     return (
       <div className="form-group">
-        <label>Prodotto medicinale *</label>
+        <span className="therapy-form__field-label">Prodotto medicinale *</span>
         <div className={`campo-farmaco__scelto${fuoriAnagrafica ? ' is-fuori-anagrafica' : ''}`}>
           <div>
             <p className="campo-farmaco__nome">{valore}</p>
@@ -160,7 +161,7 @@ export function CampoFarmaco({ valore, forma, onCambia }: Props) {
 
   return (
     <div className="form-group" ref={contenitore}>
-      <label>Prodotto medicinale *</label>
+      <label htmlFor={fieldId}>Prodotto medicinale *</label>
 
       <div className="campo-farmaco__criterio" role="group" aria-label="Criterio di ricerca">
         {(
@@ -184,6 +185,7 @@ export function CampoFarmaco({ valore, forma, onCambia }: Props) {
       <div className="campo-farmaco__campo">
         <IcoSearch />
         <input
+          id={fieldId}
           className="campo-farmaco__input"
           type="search"
           value={query}

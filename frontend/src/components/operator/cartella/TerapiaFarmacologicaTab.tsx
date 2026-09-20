@@ -1322,12 +1322,14 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         count={subTab === 'calendario' ? undefined : (therapySummary?.active ?? attive.length)}
         countLabel={therapyFiltersActive ? 'farmaci attivi nei risultati' : 'farmaci attivi'}
         actions={
-          <button className="btn-sm" onClick={openAdd}>
-            + Aggiungi farmaco
-          </button>
+          !(showForm && subTab === 'programmazione') && (
+            <button className="btn-sm" onClick={openAdd}>
+              + Aggiungi farmaco
+            </button>
+          )
         }
       >
-        {subTab !== 'calendario' && (
+        {subTab !== 'calendario' && !(showForm && subTab === 'programmazione') && (
           <div className="cts__body--padded" aria-label="Filtri terapie">
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'end' }}>
               <label style={{ minWidth: 220, flex: '1 1 220px' }}>
@@ -1477,9 +1479,13 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
         {subTab === 'programmazione' && (
           <div className="cts__body--padded">
             {showForm ? (
-              <div className="terapia-sched-form">
+              <div className="terapia-sched-form therapy-form-shell">
+                <header className="therapy-form-shell__heading">
+                  <h2>{editId ? 'Modifica terapia' : 'Nuova terapia'}</h2>
+                  <p>I campi con * sono obbligatori.</p>
+                </header>
                 <TherapyFormFields value={form} onChange={setForm} operatoreNome={operatoreNome} />
-                <div className="form-actions">
+                <div className="form-actions therapy-form-shell__actions">
                   {campiMancanti && (
                     // Il pulsante disabilitato da solo non dice cosa manca, e il campo mancante
                     // puo' essere fuori schermo in una maschera lunga come questa.
