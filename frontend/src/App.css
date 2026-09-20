@@ -69,8 +69,9 @@
   --red-border: #f6c9ce;
   --purple: #6c4bd1;
 
-  /* Sidebar scura (mockup) */
-  --sidebar-item: #8ea3c4;
+  /* Solid sidebar with readable secondary navigation labels. */
+  --sidebar-bg: #102039;
+  --sidebar-item: #a9b9d2;
   --sidebar-item-active: #ffffff;
   --sidebar-item-active-bg: rgba(255, 255, 255, 0.12);
   --sidebar-item-hover-bg: rgba(255, 255, 255, 0.08);
@@ -159,6 +160,20 @@
   --operational-table-header-fs: 11.5px;
 }
 
+/* Softer screen surfaces; printed documents keep the original white palette. */
+@media screen {
+  :root {
+    --bg: #e4e8ee;
+    --surface: #f8f9fb;
+    --surface-raised: #eef1f5;
+    --border: #d4dce7;
+    --divider: #e2e7ef;
+    --hover: #edf1f6;
+    --text-muted: #52647a;
+    --text-xmuted: #57697e;
+  }
+}
+
 /* ── Base reset ───────────────────────────────────────────────────────────── */
 *,
 *::before,
@@ -180,7 +195,7 @@ body {
   top: 0;
   width: var(--sidebar-w);
   height: 100vh;
-  background: linear-gradient(180deg, var(--navy-mid), var(--navy));
+  background: var(--sidebar-bg);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;

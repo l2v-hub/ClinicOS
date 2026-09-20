@@ -6,8 +6,8 @@
     --patient-data-header-height: 46px;
     --patient-data-row-height: 46px;
     --patient-data-cell-x: 14px;
-    --patient-data-header-bg: #f5f7fb;
-    --patient-data-label-bg: #fafbfd;
+    --patient-data-header-bg: var(--surface-raised, #f3f6fb);
+    --patient-data-label-bg: var(--surface-raised, #f3f6fb);
     --patient-data-border: var(--border, #e6ebf2);
   }
 
@@ -105,7 +105,7 @@
   .patient-record-view .pic-edit-form {
     gap: 12px;
     padding: 16px;
-    background: #fbfcfe;
+    background: var(--surface-raised, #f3f6fb);
   }
 
   /* Canonical key/value data row used by intake, profile and legacy summaries. */
@@ -177,7 +177,7 @@
   .patient-record-view .pic-row--editing {
     align-items: stretch;
     padding: 0;
-    background: #fbfcfe;
+    background: var(--surface-raised, #f3f6fb);
   }
 
   .patient-record-view .pic-row--editing .inline-edit__control {
@@ -348,7 +348,7 @@
     tbody
     tr:nth-child(even):not(.totale-row)
     > td {
-    background: #fbfcfe;
+    background: var(--surface-raised, #f3f6fb);
   }
 
   .patient-record-view
