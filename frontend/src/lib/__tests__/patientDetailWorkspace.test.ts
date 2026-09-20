@@ -31,7 +31,7 @@ test('patient record exposes a labelled two-level navigation and controlled tab 
   assert.doesNotMatch(patientDetail, /visualLabel=\{`\$\{grp\.label\} · contenuti`\}/);
   assert.doesNotMatch(patientDetail, /ariaLabel="Sezioni del profilo paziente"/);
   assert.doesNotMatch(patientDetail, /visualLabel="Dettagli profilo"/);
-  assert.match(patientDetail, /ariaLabel="Filtra il diario per autore"/);
+  assert.match(patientDetail, /aria-label="Filtra il diario per autore"/);
   assert.match(patientDetail, /id="patient-tab-panel"[\s\S]*?role="tabpanel"/);
   assert.match(patientDetail, /aria-labelledby=\{patientPanelLabelledBy\}/);
 });

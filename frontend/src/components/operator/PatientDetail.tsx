@@ -2643,16 +2643,25 @@ export function PatientDetail({
       {(() => {
         if (activeGroup === 'diario') {
           return (
-            <TopNav
-              variant="level3"
-              ariaLabel="Filtra il diario per autore"
-              visualLabel="Filtra per autore"
-              idPrefix="patient-diary-filter"
-              panelId="patient-tab-panel"
-              items={DIARIO_AUTHOR_FILTERS.map((f) => ({ key: f.id, label: f.label }))}
-              activeKey={diarioFilter}
-              onChange={(id) => setDiarioFilter(id)}
-            />
+            <div
+              className="filter-chips patient-diary-filters no-print"
+              role="group"
+              aria-label="Filtra il diario per autore"
+            >
+              {DIARIO_AUTHOR_FILTERS.map((filter) => (
+                <button
+                  key={filter.id}
+                  id={`patient-diary-filter-${filter.id}`}
+                  type="button"
+                  className={`filter-chip${diarioFilter === filter.id ? ' active' : ''}`}
+                  aria-pressed={diarioFilter === filter.id}
+                  aria-controls="patient-tab-panel"
+                  onClick={() => setDiarioFilter(filter.id)}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
           );
         }
         const grp = TAB_GROUPS.find((g) => g.id === activeGroup);

@@ -11,6 +11,13 @@
     --patient-data-border: var(--border, #e6ebf2);
   }
 
+  .patient-diary-filters {
+    align-self: flex-start;
+    max-width: calc(100% - 48px);
+    margin: 0 24px 12px;
+    box-sizing: border-box;
+  }
+
   /* One surface and one header treatment for every clinical section. */
   .patient-record-view :is(.clinical-card, .cts, .cr-profilo-group, .narrative-section) {
     background: var(--surface, #fff);
