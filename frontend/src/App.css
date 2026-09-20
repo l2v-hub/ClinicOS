@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import './app-additions.css';
 @import './clinicos-restyle.css';
+@import './form-controls.css';
 
 /* ── Override Vite #root defaults ─────────────────────────────────────────── */
 #root {
@@ -41,6 +42,18 @@
   --text: #16202e;
   --text-muted: #5a6b80;
   --text-xmuted: #64758a;
+
+  /* Editable fields have their own palette, separate from panel dividers. */
+  --field-bg: #f1f5fb;
+  --field-border: #718198;
+  --field-border-hover: #4f6480;
+  --field-focus: #245bb5;
+  --field-placeholder: #53647a;
+  --field-label: #293e58;
+  --field-disabled-bg: #e6ebf2;
+  --field-disabled-border: #a2afc1;
+  --field-error: #b42318;
+  --field-warning: #946000;
 
   /* Semantic accents */
   --teal: #0d9488;
