@@ -3,6 +3,7 @@ import type { CartellaPaziente, Paziente } from '../../types';
 import { TopNav } from '../navigation/TopNav';
 import { VitalSignsEditor } from './PatientDetailLazyTabs';
 import { PatientParameterHistory } from './PatientParameterHistory';
+import { PatientParameterTrends } from './PatientParameterTrends';
 
 interface Props {
   cartella: CartellaPaziente;
@@ -25,6 +26,7 @@ export function PatientVitalSignsView({
         variant="level3"
         items={[
           { key: 'history', label: 'Storico rilevazioni' },
+          { key: 'trends', label: 'Andamento' },
           { key: 'month', label: 'Mensile' },
           { key: 'grid', label: 'Griglia precedente' },
         ]}
@@ -35,7 +37,9 @@ export function PatientVitalSignsView({
         panelId="vital-panel"
       />
       <div id="vital-panel" role="tabpanel" aria-labelledby={`vital-view-${view}`}>
-        {view === 'history' || view === 'month' ? (
+        {view === 'trends' ? (
+          <PatientParameterTrends key={`${paziente.id}:${operatoreId}`} patientId={paziente.id} />
+        ) : view === 'history' || view === 'month' ? (
           <PatientParameterHistory
             key={`${view}:${paziente.id}:${operatoreId}`}
             patientId={paziente.id}
