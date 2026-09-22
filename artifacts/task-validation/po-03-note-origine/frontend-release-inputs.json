@@ -1,0 +1,2497 @@
+{
+  "commit": "553fa24bcbcfbf20def0dfa96de06cd52684c9bd",
+  "service": "frontend",
+  "output": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications\\artifacts\\task-validation\\po-03-note-origine\\releases\\553fa24bcbcfbf20def0dfa96de06cd52684c9bd-frontend",
+  "exportedAt": "2026-09-22T23:15:02.070Z",
+  "excluded": [
+    "Environment files",
+    "Uncommitted files",
+    "railway.json: preserve configured demo service build/predeploy/start settings"
+  ],
+  "files": [
+    {
+      "path": ".vercelignore",
+      "gitBlob": "d5c8a7e54ed3e156b527aacd50ca53b88fb25faa",
+      "bytes": 405,
+      "sha256": "7331f84367523f4d844d097fac45a591962647a1ce24f1b4734d57504db343dc"
+    },
+    {
+      "path": "frontend/.gitignore",
+      "gitBlob": "7a9d1bcab2765f6e540992c8c510847a67074bac",
+      "bytes": 262,
+      "sha256": "c7e7ad46fbc8f0a594c0b609267daa526db73faac3efd978c096af24e6da8347"
+    },
+    {
+      "path": "frontend/README.md",
+      "gitBlob": "66770dfd093e2db17cbf77daa2886394066498dc",
+      "bytes": 2427,
+      "sha256": "097ea81cb36f7b5c667a06d26023219f58c070ad8c4ee7106f59e728c5053ef2"
+    },
+    {
+      "path": "frontend/design-mockup.html",
+      "gitBlob": "465612594603a09d682c4da4832cbeb50483f02d",
+      "bytes": 351650,
+      "sha256": "cfd8025a92fe7754abbd5cca99e7703bbd829c1b0132b0f9ade7c92126330b4a"
+    },
+    {
+      "path": "frontend/eslint.config.js",
+      "gitBlob": "973e2735707d8ea00586bd38df761afab85965fb",
+      "bytes": 598,
+      "sha256": "6b741f29018d40d828dbc4e621c66615ec3fb687988a862dc01f10b4f2825e3f"
+    },
+    {
+      "path": "frontend/index.html",
+      "gitBlob": "15aab67d30a79e3e6125f238bec6c501d6e2d1a5",
+      "bytes": 794,
+      "sha256": "621be02de40879f3b0825cc938d208c7aec7f3ebe01852c5c08b3b23f04d38cf"
+    },
+    {
+      "path": "frontend/package.json",
+      "gitBlob": "19c77a79c84dd7a3f911f673c071c6bec73a6636",
+      "bytes": 1038,
+      "sha256": "8778ce5a408bdbb75bb809d71e2c3a99a2447a761fe8a674139eeef8e38e0c58"
+    },
+    {
+      "path": "frontend/public/favicon.svg",
+      "gitBlob": "6893eb13237060adc0c968a690149a49faa2d7d3",
+      "bytes": 9522,
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66"
+    },
+    {
+      "path": "frontend/public/icons.svg",
+      "gitBlob": "e9522193d9f796a9748e9ad8c952a5df73c87db9",
+      "bytes": 5031,
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    {
+      "path": "frontend/public/staticwebapp.config.json",
+      "gitBlob": "3d6c222f7d2d3a57759b55d2f30b31bcdefb3132",
+      "bytes": 190,
+      "sha256": "d1c41f830143ba2c51e24de2b971b0b09dfe7ddac9556d8c3cf379d072e4a357"
+    },
+    {
+      "path": "frontend/scripts/req038-evidence.mts",
+      "gitBlob": "ea5deb07e8ee300236bdee0a823accb60e344856",
+      "bytes": 3995,
+      "sha256": "0ea73d5ef95e9410d17696b3b4d5dc3c2265e20d6e71892c02f85fdf94ec2627"
+    },
+    {
+      "path": "frontend/src/App.css",
+      "gitBlob": "e3cb9b9d1e3b3dfe6fa78ac02ab356b4c0e6bfaa",
+      "bytes": 134389,
+      "sha256": "2e3acdbc2663133c205b8b816ce4c68ebc617416b493ee869de6dac9b88b187a"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "gitBlob": "418caa713f2fa6493f326f131a53dd5da3a50cd0",
+      "bytes": 123330,
+      "sha256": "8016683439ae56a24489bdbb397b30760f1c6bf97d774a506528b0d2fba9541d"
+    },
+    {
+      "path": "frontend/src/app-additions.css",
+      "gitBlob": "5b5279224d66b3c7e11781f91f0570c58182a2de",
+      "bytes": 230388,
+      "sha256": "416766160039ca86d5d1027dcfc205840657c448619be3211d43067e08891b17"
+    },
+    {
+      "path": "frontend/src/assets/hero.png",
+      "gitBlob": "02251f4b956c55af2d76fd0788124d7eee2b45eb",
+      "bytes": 13057,
+      "sha256": "881ffbcaafc212e49addad08846a5b82761355fa20624253af3477ba33262c5c"
+    },
+    {
+      "path": "frontend/src/assets/react.svg",
+      "gitBlob": "6c87de9bb3358469122cc991d5cf578927246184",
+      "bytes": 4126,
+      "sha256": "35ef61ed53b323ae94a16a8ec659b3d0af3880698791133f23b084085ab1c2e5"
+    },
+    {
+      "path": "frontend/src/assets/vite.svg",
+      "gitBlob": "5101b674df391399da71c767aa5c976426c9dc7a",
+      "bytes": 8709,
+      "sha256": "5be21acd42eb7b896e517f4e0f0f11eb5c5d9e54fbbcebe9453f033008fcca6f"
+    },
+    {
+      "path": "frontend/src/clinicos-restyle.css",
+      "gitBlob": "1b146470c1c14cfd5cc85d8228be2f8457f64749",
+      "bytes": 1919,
+      "sha256": "c013e8c4cdf7150eabb0475670b20a860acad29bbb8e90e0a08393e7ef2449f0"
+    },
+    {
+      "path": "frontend/src/components/ExpCard.tsx",
+      "gitBlob": "3577fe185f1f04d838a9acce65b4f0eece176565",
+      "bytes": 4057,
+      "sha256": "b224c856ade9a26310f1a22700da0254c4e3ed15b98e8f196ad44b22613b9964"
+    },
+    {
+      "path": "frontend/src/components/Login.tsx",
+      "gitBlob": "825de85921273ef4b45f8551d2f8541b7176154a",
+      "bytes": 2380,
+      "sha256": "e8ae188dbd8632c45b282634db87bcd32d06a50481b38f9fc8a834df11b53a04"
+    },
+    {
+      "path": "frontend/src/components/admin/AdminAgenda.tsx",
+      "gitBlob": "2e8217124e74457691d9f504d35601dac309c497",
+      "bytes": 30861,
+      "sha256": "87c7516dbf531cfa37e99fcce6e294e9b6a53cc5099e91549313f130bea2613f"
+    },
+    {
+      "path": "frontend/src/components/admin/AdminDashboard.tsx",
+      "gitBlob": "2fa5480ddc361080c1b4016755a48decf7c0b725",
+      "bytes": 18028,
+      "sha256": "53c404763b787d48cfac1819b31f08ca69c16e619a95c2366f1ed162536af9d0"
+    },
+    {
+      "path": "frontend/src/components/admin/AdminDashboardKpiBands.tsx",
+      "gitBlob": "640190ac54fc187fa137b3f61a6045c0d2144cae",
+      "bytes": 7371,
+      "sha256": "ea5dbda01b6a55d8d356068206e6838d946b013ac04e9068b0a0fbe84e0a7733"
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorFormPanel.tsx",
+      "gitBlob": "4e6cd07f645d8e55ab71ab881040713ce2f4aa9a",
+      "bytes": 10191,
+      "sha256": "f90cec4a16c2cd38439e58c239848d4050fd29223ca5520092b5ef6f47d74ab5"
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorManagement.css",
+      "gitBlob": "b958b448214c0996387b075bb1fcdc41c44e304c",
+      "bytes": 5301,
+      "sha256": "b658b6ce30d18a9b4b3eca17766ac43f76ab4af1917461fade958eaa180a59c5"
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorManagement.tsx",
+      "gitBlob": "cf59e3bfa82ec9c7c3e444f196231fe9f6baea93",
+      "bytes": 9970,
+      "sha256": "10eba13931d270082177c9f64ae8d7a8680a8acb90274ae9dafaa316723304dc"
+    },
+    {
+      "path": "frontend/src/components/admin/OperatorSchedule.tsx",
+      "gitBlob": "94eafb1a64bd65526d357fb0b88bd3a07d2c6260",
+      "bytes": 11228,
+      "sha256": "44384db43d5e4a1f4df4d0467a557536ecf32a81a6407a083c42879b5e60b39e"
+    },
+    {
+      "path": "frontend/src/components/admin/RoomsManagement.tsx",
+      "gitBlob": "6358205ff93386253581000db63e359d7d93d8d8",
+      "bytes": 26214,
+      "sha256": "d95421fe2854e8071ed3b7c2e718cdcb0833d42e9bd373d785ea42a0fb1473ff"
+    },
+    {
+      "path": "frontend/src/components/admin/__tests__/admin-dashboard-consistency.test.ts",
+      "gitBlob": "fb01d07df8ac7141c33f1ac4c0b6926256915f1e",
+      "bytes": 4466,
+      "sha256": "66a21a8424e451ef8d31fde5260b68a33b4ee09bdfd44532d6a8e263479d51ad"
+    },
+    {
+      "path": "frontend/src/components/admin/__tests__/operator-management-form-contract.test.ts",
+      "gitBlob": "1d60bba7b269b47ad2788cde2fa8547b6c3ab07e",
+      "bytes": 3416,
+      "sha256": "bba5a1142141c7a52d173997aac77151c2c833bc4605c4121670e4dd2dd31357"
+    },
+    {
+      "path": "frontend/src/components/admin/__tests__/operator-schedule-contract.test.ts",
+      "gitBlob": "f16a580971e0c66bf2b3c9855d46228d948501d6",
+      "bytes": 659,
+      "sha256": "f1101338588d5ab5a4fc92e1beb4a7f1476049b7838cd72b41ecee959c4ff3e5"
+    },
+    {
+      "path": "frontend/src/components/admin/operatorFormModel.ts",
+      "gitBlob": "04a1c007bd76da047340b14dfd46ebd744e93f67",
+      "bytes": 592,
+      "sha256": "499f980f27c94b891540bd6d327a102a09f11e28f8eb7983ead6d6fdd22c9de4"
+    },
+    {
+      "path": "frontend/src/components/navigation/AppSidebar.tsx",
+      "gitBlob": "0e1d2a229415d419b40d176831204e917f7daaae",
+      "bytes": 333,
+      "sha256": "0ea1e0bf14b41cdc6f99c9b6fcb5c31c3c8eb20a32b173cb282eac823112b141"
+    },
+    {
+      "path": "frontend/src/components/navigation/PageSecondaryNavigation.tsx",
+      "gitBlob": "28c56f590157c5c0073f263e7e547f89c01f9754",
+      "bytes": 734,
+      "sha256": "c2c8e77f4a017290f69e4ace4603c19b123b1b354a10d1d8309145ce6e6a753a"
+    },
+    {
+      "path": "frontend/src/components/navigation/PageTopNavigation.tsx",
+      "gitBlob": "8c3ccc340fd040e15e0aabcb1ca1e37c2444438b",
+      "bytes": 695,
+      "sha256": "3f6c24f36efe5e0514ba09080ba7110f402b715e3ffd8ffe683ca0d417d4fd63"
+    },
+    {
+      "path": "frontend/src/components/navigation/TopNav.css",
+      "gitBlob": "931fb950f004a1ed58b647e2a88dfcd4c1632370",
+      "bytes": 4980,
+      "sha256": "4d170a84b8fef03678b62c2eb8ed5eb007ac983691a136472f284e1513d41c09"
+    },
+    {
+      "path": "frontend/src/components/navigation/TopNav.tsx",
+      "gitBlob": "52124327cd8fbba29a555826431b6a7cb5de6e88",
+      "bytes": 3214,
+      "sha256": "0e6b02f0d9b8de6e0770db249015386c3d5a6ef2078103d32c1935e38c53f11b"
+    },
+    {
+      "path": "frontend/src/components/operator/AnagraficaFarmaciPage.tsx",
+      "gitBlob": "ed5c00b78ef1bc15c035f014cd9099ec199bd38f",
+      "bytes": 2034,
+      "sha256": "4c628cafa479dfb2027f09164d41b86947c28416a19221bbb841d753549d319a"
+    },
+    {
+      "path": "frontend/src/components/operator/ClinicalSectionLoading.tsx",
+      "gitBlob": "c20c2adfdc2b8d7437709ada883cb6d02ce8153b",
+      "bytes": 262,
+      "sha256": "c46f1577713e3bc069809d300f22aab24c51472fe074794660ef9c658730c832"
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.css",
+      "gitBlob": "be5e5ab43d395800c4a4e4f871f5433b57ba1ada",
+      "bytes": 3482,
+      "sha256": "37636500092cf4b55cecd5cb52ae78bc209b44227954e6c69f6ea80d93c1fd27"
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaCreateForm.tsx",
+      "gitBlob": "8d5311d82b443a4ccc686fd89c20b7793485ff92",
+      "bytes": 9768,
+      "sha256": "7cf85b2fbd63de7a5b2a0ed3df48fb190443be7985795dea7271b2f013de6f1e"
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnaTimestamp.tsx",
+      "gitBlob": "d0e3a9c3c6dcf1c16c31056c50289ea5f6527268",
+      "bytes": 658,
+      "sha256": "9745603fc7f7f3b7ed77d26dbe19cefe2b7a407b26ce288f73404ffe48b405b8"
+    },
+    {
+      "path": "frontend/src/components/operator/ConsegnePage.tsx",
+      "gitBlob": "a2d553a19ba6612954f0a38eed30f84438762474",
+      "bytes": 19316,
+      "sha256": "a6e4400ea23d97dccacad2c8cf0a3790ab0104ce6e1f1e84334e96b576d90dba"
+    },
+    {
+      "path": "frontend/src/components/operator/DashboardNotificationCenter.css",
+      "gitBlob": "98f886886e08e28a1a2d2ab7fb01915299ff0a3b",
+      "bytes": 9347,
+      "sha256": "3c69341116faaa5f7668c7b709885d95c571dd81ef3407abdee7de8e51353f72"
+    },
+    {
+      "path": "frontend/src/components/operator/DashboardNotificationCenter.tsx",
+      "gitBlob": "a3b9ab3dc446c5183ed108b5504862803a442be0",
+      "bytes": 7522,
+      "sha256": "d846cc3cafd127f7cf477f1c9d8007a5ba6fc3dc7bb18bf505294141f261497b"
+    },
+    {
+      "path": "frontend/src/components/operator/InvioPSModal.tsx",
+      "gitBlob": "d37f89ef44e679a0af20fe9d9ae84c6a1521454b",
+      "bytes": 14733,
+      "sha256": "15ba393a6c743535b60cc806d7b7f39f2699f0645f417e6223029b663c7c38d0"
+    },
+    {
+      "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+      "gitBlob": "301817d9f14eee4481e2742b9765f24e00894655",
+      "bytes": 12306,
+      "sha256": "2af74746e5327e64bc65132a8476cf933a8d846920a0f720823b46838dd997eb"
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorAgenda.tsx",
+      "gitBlob": "2f6d7ebaf96b033a533197cfbeb232ea0f4d5064",
+      "bytes": 26459,
+      "sha256": "83b9533408a22919e699998408a4722fb4278f4d394a9c093eeff051efde4084"
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorClinicalKpiBand.tsx",
+      "gitBlob": "56df305d16390e95d36211a6d756583f3322c973",
+      "bytes": 4071,
+      "sha256": "5ed86e3b74cf964f873d3ff422061a150333afc0e24f7412d1d30cab760a4d09"
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorDashboard.css",
+      "gitBlob": "e6e07e99ad88c562819b1b588c3cc79ee79ccd06",
+      "bytes": 123,
+      "sha256": "d463b04e942d408b39baebf7b32b9d54527a74570d7fc31512d5afecca113daa"
+    },
+    {
+      "path": "frontend/src/components/operator/OperatorDashboard.tsx",
+      "gitBlob": "d2e455e08a1895552f656408b5a88928daed71c1",
+      "bytes": 9757,
+      "sha256": "e0c577b547653d7561aa35978dec9217d7c9e0d1545eeb0ff47b818c3f7ab509"
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryClock.tsx",
+      "gitBlob": "da473c03e2705a5dbe571be22a53ea796c0b3db5",
+      "bytes": 982,
+      "sha256": "795ad6690f49c5b56b15daf86b6dea9759dc0461d61418c4feff0be9b05bb03b"
+    },
+    {
+      "path": "frontend/src/components/operator/ParameterEntryRow.tsx",
+      "gitBlob": "35e5ea8c10bfd211cf22e8f88fe3721cf6bc0382",
+      "bytes": 8043,
+      "sha256": "9dafeb17fbd0f25d7a9cbb9113dbcfb07f906d5a32d67a766966c4c155412810"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientCompactHeader.tsx",
+      "gitBlob": "876e428e529920894f94d6a797ddb058eae1be96",
+      "bytes": 3800,
+      "sha256": "0f0f3f9bc74ffec95d256fad2a2b0dab10146a4b7d513a7ac9b0d88fd16f5964"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetail.tsx",
+      "gitBlob": "9cc070f40e4d35aad865e1ab321fdcfda7a2b463",
+      "bytes": 114833,
+      "sha256": "1698b55d1bdebc86a5c089b50dca8bb891f74e4aefda1e703166c71f9389332d"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientDetailLazyTabs.tsx",
+      "gitBlob": "c5d3866be76ef0b41e88516c40552f838598a714",
+      "bytes": 2113,
+      "sha256": "dcfb8f7c6bf56e96b554b692c85aef3153701194f27037a5d81bd7c5e1e8095e"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientIntakeReview.tsx",
+      "gitBlob": "5906b4c406b032e3d87868ad93903a3bd5153a57",
+      "bytes": 2674,
+      "sha256": "4fec0b071b976c2ab3b4fe982d6a9f9adcdd15aa9a051e2ee4c63a594549faa3"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.css",
+      "gitBlob": "1ee8d23ea5c0d9063488540922ca69b2fc2a5eb7",
+      "bytes": 9043,
+      "sha256": "8d60f20b1f6e129d0b34de63e727998032d3f62d31263253f106e3aad9bffae0"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientList.tsx",
+      "gitBlob": "d09c81cc87b6a7aedf8e2a78d47baa621b427302",
+      "bytes": 14483,
+      "sha256": "2fbd4bab5214a2f7c94b091a6d35b0fa9ef804d7038909f27dba8497ba575062"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientOverview.css",
+      "gitBlob": "22c380c137f1ae3552f6af3ad818634310bb8fad",
+      "bytes": 4389,
+      "sha256": "b475a9ce93f096b5729fae9a00a2bd3c7a433ec2140b959dfe19305bc89e3a64"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterEntry.tsx",
+      "gitBlob": "cbe93217435cfd74de619748459d62a272ac34e4",
+      "bytes": 5646,
+      "sha256": "92612b17292affafad49f5df612852fc51052048b0cad7a08cd46450abf32cdf"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterHistory.tsx",
+      "gitBlob": "f96269c231920d51c9e0369cd1018d9b8bba76cb",
+      "bytes": 5059,
+      "sha256": "e11b7fdedcb0897309d18e1ff99bcc32a005b3fd6d4fc4e6b3575bd8f41c559b"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterMonthTable.tsx",
+      "gitBlob": "9a73808bfb99790853437a8b27031f569e4fe356",
+      "bytes": 1738,
+      "sha256": "e5741e3aca63e8a8358850058c846ed7bfccbc407df70b47f3fd28cbea561b6f"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterPeriodFilter.tsx",
+      "gitBlob": "13ba62f828bdbad228f01c1c5b66f473f00b5640",
+      "bytes": 2869,
+      "sha256": "c4ab9754ecd21bfe84ab78a8f4999c180bab9b961d3fe38c55abd05c64b409b4"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterTrendChart.tsx",
+      "gitBlob": "4926684b3f5701572a2e3684c731246d38a026a8",
+      "bytes": 12389,
+      "sha256": "bd3301adaf2a254ded15900d34b2d9f0cdd2fa84c2a7a018206b9320670100fa"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterTrends.css",
+      "gitBlob": "e6fd7e87444842f936e5c83f746654e6191ebb3b",
+      "bytes": 5665,
+      "sha256": "2dfb72f2162764a9421e3fc164eacfd3d7468afcaa53e9e4c795bc13b7448b9b"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterTrends.tsx",
+      "gitBlob": "b7042b8d23adb735cf391509a8a266fe617c43e8",
+      "bytes": 2580,
+      "sha256": "f1ccb33fad4c80c89e353421640132d5e08dd67bcac60c7fd7e2398a8c4b170e"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameterWorkspace.css",
+      "gitBlob": "d281aceae41586663586e0855233dd31e80002e1",
+      "bytes": 4764,
+      "sha256": "c8e31fae1001f67328fb9952c8c35192359821cd96736ec72178faf46e176c7a"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientParameters.css",
+      "gitBlob": "595721cb938e3764482d97167e2987c0bbb3cb1b",
+      "bytes": 5939,
+      "sha256": "b8baf586bb89fbccca67bbe69b907d5d518fbcdb90a4c543b1c0444e6d055129"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRecordData.css",
+      "gitBlob": "9a67dc9e191e35ae0b70663f39e18a8afcb437e9",
+      "bytes": 11784,
+      "sha256": "9a0e5cd24cc5e2340f10cdc31f480772aefa52d2d6ae2a31a35066a76162bfc7"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRecordPrintDialog.tsx",
+      "gitBlob": "b91f124cdc719af23024eec2fd2cf27f34677e54",
+      "bytes": 6861,
+      "sha256": "5fc9e182bb00912bb4b34454c0ce2e1216c616a48df286b6b95f0be7a88f5c1f"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRecordPrintDocument.tsx",
+      "gitBlob": "c15f3cef297ad84ede50dd2ac4686790e6743cde",
+      "bytes": 11803,
+      "sha256": "0a488fe47ea4fbe9431d852deeda105177a1b6c70a5d25902fe4234ee255518e"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientRoster.tsx",
+      "gitBlob": "be7e8454f4de56d0ac965ef5d4cdd494de0591f0",
+      "bytes": 14794,
+      "sha256": "ae35ddcf023d5e28b3e15b4f3a08facb46bc58d6b99b040c43c1e35657412137"
+    },
+    {
+      "path": "frontend/src/components/operator/PatientVitalSignsView.tsx",
+      "gitBlob": "d242a0a1d6926665014ac9e79c05a020621fdaff",
+      "bytes": 6794,
+      "sha256": "c8e9e863535b7458d4f1bd877592faf789646e1a7476cae4a73586d5ab0fbfc4"
+    },
+    {
+      "path": "frontend/src/components/operator/TherapyRoundsPage.tsx",
+      "gitBlob": "f94126f11bf23336cc29936c2d6de4fe70549066",
+      "bytes": 5189,
+      "sha256": "398eeec978e23b077c9bf3e82d7f02d12822ae399fab71168250b1284387b21e"
+    },
+    {
+      "path": "frontend/src/components/operator/TherapySlotModal.tsx",
+      "gitBlob": "606f613e5c3c6f0bb874b260b049e8ae502f8582",
+      "bytes": 12021,
+      "sha256": "876a4b406a7a6330d1110490626492fc35c91f4d880d9a83bdc137bdd5ac0957"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/dashboard-notification-model.test.ts",
+      "gitBlob": "252f31e9f5ab22efe6cea6fc56d747fb35cf7bbc",
+      "bytes": 1432,
+      "sha256": "fd01f2b3d53685e025162028e23456dbad54a18b94dbd0e92d9deb15f8d2be44"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/invioPS.test.ts",
+      "gitBlob": "b69aeddd8d391bc9568c209e66f9b0ddd5ea7afd",
+      "bytes": 10267,
+      "sha256": "ab3b40795797b034f570bb845de5b5777af5e9d456cf828ffbbfc294b3386cc8"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operator-dashboard-anomaly-layout.test.ts",
+      "gitBlob": "8ae26043523188a732b4872bd89e9a92436f2e83",
+      "bytes": 4445,
+      "sha256": "4cb5e7925aa9749ea0855942701772e54ff70cb1e1a7bd0d7768b8f74f7f87df"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/operator-dashboard-first-view.test.ts",
+      "gitBlob": "61eacccf5b777f937dd6dd0e028d219d3383e88f",
+      "bytes": 3161,
+      "sha256": "840e26b005414f76b353a85cbf5dfa5bb81f2528494b73b0b4b5934415311c2e"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/parameterNotes.test.ts",
+      "gitBlob": "b19d72aebbe85832648aa1df112a316fcfa854ad",
+      "bytes": 1585,
+      "sha256": "3df7ee1872a1b592f1eadcbab11a0212c6b7a6b807a0cb56be00576781f7ee83"
+    },
+    {
+      "path": "frontend/src/components/operator/__tests__/patientLoading.test.ts",
+      "gitBlob": "db767f69e53a95a31cc8b7f6138104aae2633125",
+      "bytes": 2905,
+      "sha256": "8eaad4f7928b496076b10b595bbeeec4a7e8ce56839ebbd7dfd41403f9a937ae"
+    },
+    {
+      "path": "frontend/src/components/operator/buildDashboardNotificationSections.tsx",
+      "gitBlob": "0769486ead1ab7546e3dad79e38f23dea0d79bac",
+      "bytes": 9774,
+      "sha256": "461ff2619e884eae6ebd35064365dafba44dae776c1f7aaa025dd9f5ed6760e1"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/AdministrationStatus.css",
+      "gitBlob": "0ec0ecdd4f6ada3be1164661d54e4a30dfbfa3cc",
+      "bytes": 738,
+      "sha256": "ff4a4f301439531d73d3cb9868a039cd1b7461bf4f37e977107a7774587a6664"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/AdministrationStatus.tsx",
+      "gitBlob": "8b6c06076db58afedd7384f0c0f4c1ee00177464",
+      "bytes": 1165,
+      "sha256": "ef554d3df653c61f7f668d20b9112169e0acde87866bc284cb3d694c1faff46a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchiveDocumentForm.tsx",
+      "gitBlob": "3826c14b2b1021ffa7cae44da04fe26e28769ec9",
+      "bytes": 11418,
+      "sha256": "f5616e96aaa843c0b701f2d215ed3f05e6b9158cf721d2600896e2c370d2823a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchivePdfPreview.tsx",
+      "gitBlob": "7861d040ba15ec2cb3b2d41ccf45d728644d1f57",
+      "bytes": 87,
+      "sha256": "67b493600142025f237066df33406cb9fa71764ce47b64938dfc05d42c1e0127"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ArchivePrintDialog.tsx",
+      "gitBlob": "7e3fc8f2067473573277ceddbaef5425f9212332",
+      "bytes": 4232,
+      "sha256": "ef245e6cabf5263e2a1ff8144d33dc72dea17f50a7777350b4b1d4fa36e9a3bd"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.css",
+      "gitBlob": "32e61df2e2b7c66cabc8f60e4d49c9fdafb40a12",
+      "bytes": 4770,
+      "sha256": "04b6faec21a2bfca54b399a161d85f715c3ab181a01c2fb7cc450e41dbf8bf92"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/AvvisoAnomalieFarmaci.tsx",
+      "gitBlob": "d34e75a37054cc8636b6a66e5296572a31e47ea3",
+      "bytes": 3096,
+      "sha256": "b64366ada3cdb793302706df6b76407836f4e90da79a7cd176006e5102e44c14"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/CampoFarmaco.css",
+      "gitBlob": "40c48767c7dfa29ccf094035b65b4333c0e18851",
+      "bytes": 3392,
+      "sha256": "5eb84ae29da464f289fa8e7af89096f3f8e825bb433dc66ffab5541875f8d835"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/CampoFarmaco.tsx",
+      "gitBlob": "4b5a1f8b1ca20f9eb757a0bf9f4eccc8b77a83da",
+      "bytes": 10055,
+      "sha256": "50f03f1d70fce99d166b98c2dbbab6788dbdcbe34d9e4bb33b49d5104fdd672c"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ClinicalAttachments.tsx",
+      "gitBlob": "7878b9e210d288fba9500f3794453ea4fa9ce084",
+      "bytes": 7611,
+      "sha256": "24ac68c52d61b20782184ad2becda1eba3bd1ff57ea87cbd0281562f4832a990"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ClinicalTable.tsx",
+      "gitBlob": "b033d03f876f2563640cdbad9af60c5882b0f122",
+      "bytes": 9354,
+      "sha256": "2b3bfc1d5f0f34fae06eeb68302b0b70938e2e54c12af15214bd6a63a31137ee"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ContenzioniTab.tsx",
+      "gitBlob": "89d5c9e000adcfed49b99f8e782d6b16f408d83a",
+      "bytes": 39345,
+      "sha256": "872a9c473b9f5f9570ad1a1805464750dc4779c6c1e9b00ddf435bf56c60af35"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DiarioPazienteTab.tsx",
+      "gitBlob": "5f0b04dc43463599e87583a0cab87837d5cafe1c",
+      "bytes": 25227,
+      "sha256": "c0dfc5f47e2ab66e99c68099d08607cfbf55179e1abf38a61f9db994f4633433"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DimissioneTab.tsx",
+      "gitBlob": "9e1a525237abef460451de3f6b607b1c8428a236",
+      "bytes": 71060,
+      "sha256": "8d5ab157f82317360ef5a365253c7fdff3188596e928769ae4f39513ed489c20"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/DocumentiTab.tsx",
+      "gitBlob": "a4ab2ee4017effea1ba8028c583bb9afee64b871",
+      "bytes": 19227,
+      "sha256": "68839d5cfde43a17b3c98412d3b307dddcbadb03f7050eb515e6b43ed7687176"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/EsamiConsulenzeTab.tsx",
+      "gitBlob": "3f11fdbd423fd3d3fcb787172cffbc14aa92beb2",
+      "bytes": 13984,
+      "sha256": "d2ada3ec6ae91863d6bfb3b2772f829f19ca53ed20e97a0c1ad6e1e823411436"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ImportedDocumentsList.tsx",
+      "gitBlob": "e47593d1f52a7831d54f097940ce0e3651f6555a",
+      "bytes": 5788,
+      "sha256": "553fb1f7105c23c0c0d4fdbe3362e8d31f0328f467179548f6661860f3f58ecf"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/LoadErrorState.tsx",
+      "gitBlob": "164a116a065c23054ef63280232b15b7a545f297",
+      "bytes": 471,
+      "sha256": "9b384fe3f382b5c8de15238040c6704b630d4bc823ee0270197fa1c79a864cfd"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/MedicazioniTab.tsx",
+      "gitBlob": "9d03d3b10a25c5ce48b6fd632ec3eb3aa50eeffb",
+      "bytes": 43104,
+      "sha256": "7324d78a2aa5e85510cf9d9196626669867bdeaf30c9f76b08f5c737bfafabf7"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/NarrativeSectionsTab.tsx",
+      "gitBlob": "cc7c22cc8815689b662ce2fe532d931c69c08633",
+      "bytes": 6252,
+      "sha256": "a0e38d4638b9e67cdad2c2fddd20b4898b0b6ca5cae4efb9ffa67b56446ee475"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ParametriModuloView.tsx",
+      "gitBlob": "163e11f32e6d7e65faf1773c3b444b5a09218a25",
+      "bytes": 7479,
+      "sha256": "ef7800d703d5d1a44743edb7a38923ca48b40e2b11d2908b3edec7408dbf0251"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ParametriTab.tsx",
+      "gitBlob": "b1d1c7bb785313cf73e45eb6077829a936cee846",
+      "bytes": 22264,
+      "sha256": "720fdb8dddbb0fc9f849df3807ac22e2072e977dca491cdc075fb0d10f820d83"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientArchivePreview.tsx",
+      "gitBlob": "88d97ac8ae55bc3d9b4450ba935e8d202e34a856",
+      "bytes": 4778,
+      "sha256": "b10f98919bfbd03850f526fc6befe7d72c60dae2a0de722fc56797dcdc716ca7"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientArchiveTree.css",
+      "gitBlob": "3adec5e67c437e6297a05150cd686bcd2ad8fd46",
+      "bytes": 3411,
+      "sha256": "3a21035f387dd84854c68abbe7b72f725b81c198f25edeff1092b513aebc6df9"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientArchiveTree.tsx",
+      "gitBlob": "d89624cf053a3d919b1f3ccb40a4bafddd37deed",
+      "bytes": 4162,
+      "sha256": "36d2b19a37e50bbb7d9075a2b599c726029fe684bf234c1e5e6df559e318fec3"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientDocumentArchive.css",
+      "gitBlob": "999c5feedc5dd2c7834363a130745145e579cbc0",
+      "bytes": 7037,
+      "sha256": "527251e7bd4a9486ad87af90f7ce8056bb3e1bdeff62520b0cda9c5a12c21fd9"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapyCalendar.css",
+      "gitBlob": "d509829f015806f0ad3cbb053817a3af8cfdbf3f",
+      "bytes": 3594,
+      "sha256": "2a5028157cd6be6f61017ca707b3a2d9ae4498b6f54d5bc64bcc66751aadccd5"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PatientTherapyCalendar.tsx",
+      "gitBlob": "36090dc49c4afd27e5cb740b0b0dfaaa5a4f3fa9",
+      "bytes": 8603,
+      "sha256": "c362e47880f7ec2104a22f7e8f7cee2eff1a9e1e1fe9788d07c04b53a69127cc"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/PresaInCaricoTab.tsx",
+      "gitBlob": "a4e55cc1a7a572065f815df3e38e9c6b6f6509d5",
+      "bytes": 30822,
+      "sha256": "50d13bc35113ad431abcbe17e074a492a3a7224d0c0f193c539edc9f17b92e91"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/RicercaFarmaco.css",
+      "gitBlob": "355138061508456dee4ec7b887f42fda0d843870",
+      "bytes": 5038,
+      "sha256": "90c387fc2446cc5ab9b4964efbaeb440357b0cc28463eda770bf605b4b172df8"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/RicercaFarmaco.tsx",
+      "gitBlob": "6568c4900bb80b98e6914f8120e47f09414b5704",
+      "bytes": 9223,
+      "sha256": "1cab01daf23618ce4444007af95a9765c64393e87174130303e0df86a8b13cbc"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaBradenTab.tsx",
+      "gitBlob": "006515ca030c3cc4e20356433a6654b8bebd4536",
+      "bytes": 21075,
+      "sha256": "1dc73a88b64de6bd21464ac68d361c3dfcfe911bc34bef29fb362af53e92d96d"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaNRSTab.tsx",
+      "gitBlob": "a564352aee37ca989ca92efdbecc1c69d4331b8d",
+      "bytes": 19049,
+      "sha256": "dc3dcea33210965f5fb440f42f8851d478207331acbffbc62e4dfb7dbf5b094f"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/ScalaTinettiTab.tsx",
+      "gitBlob": "eaafb7541507939956622caf077d8afd014c03fb",
+      "bytes": 26712,
+      "sha256": "5b298f2969dc561402fc2fecc25cc3493d24216bebc3b5ab6cd15ac5d4176b8f"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "gitBlob": "3644d5b5c3be31eb4b245a39782fcd2c817d7225",
+      "bytes": 59239,
+      "sha256": "8f4a0ac7d0571bdee128fdda680636c36b7ec6d341cea008574722dc1114b1a6"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyFormFields.css",
+      "gitBlob": "1c6262b78de7561ba646cee8d100cf91f837e818",
+      "bytes": 7990,
+      "sha256": "e5e815695ab8d0a0c11c9059e6a406c7c092b452dbf950a13c2df46625859e9d"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "gitBlob": "e94d986f8abab2c2edcf8dcad5b1331edcc31fa0",
+      "bytes": 17013,
+      "sha256": "33216778ad6d2031410138ba99d8e73a7c20afd8108448babbe786f7e87ccb9d"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyFormPreview.tsx",
+      "gitBlob": "32dcb6c2cb693c4d3772a8df87fc0d79eba3b569",
+      "bytes": 2657,
+      "sha256": "f597a8e6dcefff12da5da61108aca86581606cf3a45bf21d2c266b6c87f8408a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyScheduleEditor.tsx",
+      "gitBlob": "1cbf4722d589df858012bb5740da5feb8a7b4ff6",
+      "bytes": 8884,
+      "sha256": "59593c356d2987643bceb7db9b97b2068b90b534b95a09c07344b39b85bba79a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/VisoreDocumentoFarmaco.css",
+      "gitBlob": "c2a3ff4380a9606fc6aba3368e24298662c778f7",
+      "bytes": 4223,
+      "sha256": "3a602c2b660a958d69d03a1773bc7d27afb4ee134682bad290d8fae50a17d47a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/VisoreDocumentoFarmaco.tsx",
+      "gitBlob": "f336f7d487ad9ad224fb77dea1abb5e48d710483",
+      "bytes": 18048,
+      "sha256": "79dc5e7819e1c061b97b80e6a3743835f115acd7beed8f34d916f67bfaf28cc7"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/VitaleModal.tsx",
+      "gitBlob": "47ecf1c54ae08ff604dc00c69e45edde5a25b41d",
+      "bytes": 9359,
+      "sha256": "f5854d62e589e3f45cff7aeea94690d8d032c92c2761a1084e0f9ce3f79d7f14"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/anomalieFarmaco.test.ts",
+      "gitBlob": "cf4df7c5b951585ccbb18f573d5de36e2722af33",
+      "bytes": 5075,
+      "sha256": "3746219c0e7e4b8ccb96faf7f8f0f61ac44f863ed1c8a781c4c81498f756a9d8"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/anomalieFarmacoCompatto.test.ts",
+      "gitBlob": "2719ae6dec2589eb4b3768d9d40f998fa0c666ea",
+      "bytes": 1245,
+      "sha256": "1901967d044299935684c9c1efac1bd84a69780d912fee251bb3beb8f2835da9"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/caricaDocumentoFarmaco.test.ts",
+      "gitBlob": "e8595f9cab9630757229b6e0605965fc0e3442af",
+      "bytes": 2286,
+      "sha256": "d802dbbfc5adf7915b575be9b6a354a4d6f4ab403fe07df2ccfd658ebd59bd93"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/esamiSort.test.ts",
+      "gitBlob": "f2a07b5b6f760fec965810e721d9ad6ee8980588",
+      "bytes": 3424,
+      "sha256": "94d520a571ca7fcde708903c0b2bbfd617e02dfd5f28efa64bcf0f9b54d37dc8"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/farmacoDocumento.test.ts",
+      "gitBlob": "592d733cae4d3dadbb5f49064f0331b4f7fdbea2",
+      "bytes": 2792,
+      "sha256": "1dce4faff852fbd3d8b78b401674fc0bda597ebdb5ca2a1c6b6df028a6ab4a3f"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/farmacoRiferimento.test.ts",
+      "gitBlob": "4deb8ec76d3049cf3b9053c1bc9f9ff485918b7b",
+      "bytes": 5082,
+      "sha256": "f84c0d28bba055e30e8e39daf8d967faea1eb4a7db8b57e04aed4fd7e9b8a06a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/inhalerTherapy.test.ts",
+      "gitBlob": "06b6834414041a973309bad739ad4f4a512589a8",
+      "bytes": 8526,
+      "sha256": "f17c3cffa92e56f1b79af02ede8a3767b93347a9c750687741bd0446b8c30b7a"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/rcpStruttura.test.ts",
+      "gitBlob": "f3cb8a61b99f90177ba44685833eb9830411f2cf",
+      "bytes": 7788,
+      "sha256": "1c5e1b4337490b7b3034462cdcf2ca1176940c994886a2b2da2d525d30a9a4e1"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/scaleScoring.test.ts",
+      "gitBlob": "6c558a6d01c4d8c673657a623b99943da0323665",
+      "bytes": 4766,
+      "sha256": "04af5f0aec3cf731b912190f996c19727cbff57e8bf5ce4387e9c89bd715cde8"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/therapyFormPresentation.test.ts",
+      "gitBlob": "5b5f27ad72b10691082c97d49964c318d63546e4",
+      "bytes": 2816,
+      "sha256": "953d6193d7df1a19b4ede5233b2ec8b4df5db331ec7d8cc25ee7833e99c8b2a9"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/anomalieFarmaco.ts",
+      "gitBlob": "98e90a10e062f9f3845f847cac9ef7cd02cdf178",
+      "bytes": 4810,
+      "sha256": "314fbe1a7f7e803795d40128690585aa71b8c69507ec45091d0a1acd5a262ca2"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/caricaDocumentoFarmaco.ts",
+      "gitBlob": "a79cf1d92f5072c9b0cd0b0d695f4c2cb0b5d84b",
+      "bytes": 2203,
+      "sha256": "57067ee90c8abf3edc9b60ee172b7646a8000fa7e3c6a150600f6cb0c6cd5b9f"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/diarioFilters.ts",
+      "gitBlob": "d393e7e940f0b89534f013ff1fa45b334d7db6ae",
+      "bytes": 367,
+      "sha256": "c2e9d4d933ec28c43e639eb36ef0bf547943f843fd196120d7f3c00be97927d0"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/farmacoCorrispondenza.ts",
+      "gitBlob": "36e457fd845f6ec89d79346c52c6e89263325bdb",
+      "bytes": 4159,
+      "sha256": "2ff878023c73e2c3d74820bb372708b7157cf16f0bf001c63aea3bcb540f5cba"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/farmacoDocumento.ts",
+      "gitBlob": "c50b221d5dcc905cc62fb26a6fdd9ba6dfcc295e",
+      "bytes": 6403,
+      "sha256": "80ec924066dc6aa75eaf360d0b7ece770abd3904b4e658839a846bced6e65701"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/farmacoRiferimento.ts",
+      "gitBlob": "4d891aaa3d851b960b57db8fc970fb26c11cea6a",
+      "bytes": 7629,
+      "sha256": "3effb4439c31d0c5edd71becdac14f4bc89656020f229f934b772610d4203460"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/rcpStruttura.ts",
+      "gitBlob": "a073c36ef12cb5c4f18b6339bb074bfe63c11a03",
+      "bytes": 9819,
+      "sha256": "b0c63b8c2c3acf400eb76ffb5ca606841cbda33facfb11e47d5279d001d85694"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/shared.tsx",
+      "gitBlob": "425a72e326ced8a88e9e5688ba0bd55dda349952",
+      "bytes": 5767,
+      "sha256": "5ba73dabe4273c59da538f896b2827a4c1cba1d13f4894433765242f919a74de"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyDose.ts",
+      "gitBlob": "5b6504772f51929ed62ba77b3240bc030742edb2",
+      "bytes": 5185,
+      "sha256": "c5a2efa368d13c8402da48965b707c085302eecf14e186fd737c7d166377d395"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFieldFeedback.tsx",
+      "gitBlob": "7658e93b552997a23c2a8dac450e95fec3d01180",
+      "bytes": 1867,
+      "sha256": "0a801933ac6e5b66d68771ce067c8a9edf4e2c548996aeab2594936f52e27cc8"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFormChange.ts",
+      "gitBlob": "bc99d2c1f6c497d9a1236cbe09bc0a2ea63fa7dc",
+      "bytes": 1082,
+      "sha256": "b7f3da0a564a1a0ac36ba9c41f8880802f1b764307e95798d759309c8a0062b0"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFormRestore.ts",
+      "gitBlob": "8df8ce7d1809d62ee936990aa7314518e8d2591a",
+      "bytes": 1329,
+      "sha256": "f272fd20c4600f22744b2570db1b8f36fab3d234f82d508605c2cfc60fafd0d8"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/useAnomalieReparto.ts",
+      "gitBlob": "14831204d0090d47d0b5b80707f971415a0e5ad5",
+      "bytes": 6479,
+      "sha256": "b08b75568ad878cb9abfdba2cb657de5a0751901a7ad83fa8f83953f8af91a73"
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/useRiepilogoSomministrazioni.ts",
+      "gitBlob": "d683a6393a429dd2fe9b5e4ccee92f6fb63c9999",
+      "bytes": 3588,
+      "sha256": "bfc3dcc7a9c613bae59f1fe407f2029f677c10522c9566c28f8ed75ec7c56b42"
+    },
+    {
+      "path": "frontend/src/components/operator/dashboardNotificationModel.ts",
+      "gitBlob": "53a6941b31e36c1953dce105fe463bb3703a5cf1",
+      "bytes": 1451,
+      "sha256": "3bb955cf3d9ed41e81cb70ce49e90ef46f78c2a6228be9326b8439e9fe0b6ddb"
+    },
+    {
+      "path": "frontend/src/components/operator/invioPSModel.ts",
+      "gitBlob": "a4e405434bbfe14b5b48e8e0ede633554c40268b",
+      "bytes": 6837,
+      "sha256": "b40fd4197e3ab120b07df38e2f3965f4845c6b3847742db11e6fb203b1d1346e"
+    },
+    {
+      "path": "frontend/src/components/operator/patientRecordPrintSections.ts",
+      "gitBlob": "b9d18c87604a06eda00f8c6532307e51b4caccff",
+      "bytes": 785,
+      "sha256": "bca8ec6b1135f9254a31ae544c2849eb6d075605afe489c03cf5641db5575e79"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/AllergiesEditor.tsx",
+      "gitBlob": "bc082c0eb959602cdd3972609ca441fbbd4f5333",
+      "bytes": 8691,
+      "sha256": "4d1484cfe800e121956dda3044e80f2dfb9836bc4e6867297c056ae245184d72"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/AnamnesisEditor.tsx",
+      "gitBlob": "6289e47d31107c4da5f8b05ba95e487ef1d4ec79",
+      "bytes": 7887,
+      "sha256": "dea12c3faeeb71ee941913e3f4671d23e5b93fb943b43011617b088ff6670116"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/DiagnosisEditor.css",
+      "gitBlob": "4751318066f56ad523a6870e485cba61fdd648ad",
+      "bytes": 1546,
+      "sha256": "90edd7308e46582245d1109e56c901e30a73d1dc6cd3bead126e967f914811aa"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/DiagnosisEditor.tsx",
+      "gitBlob": "b867ba70ae95d1b380911b011e517f5dad364a18",
+      "bytes": 12105,
+      "sha256": "9f12962ba52a4709488c2e21ced16dd77e00f1f669dabda9c651247437340242"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/DiagnosisText.tsx",
+      "gitBlob": "f5471debb842355413d56d07c52f44464e53efd1",
+      "bytes": 2447,
+      "sha256": "74c1b16b105c8b9cf5d4380edc015774828b674a0fbbd94e3abeada241ff19b1"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/LegacyAnamnesisView.tsx",
+      "gitBlob": "7e638a825cf172388175c760c213a7b485e4db2a",
+      "bytes": 1691,
+      "sha256": "b121b822bafbee6d352bcb8da1ed1b44aa9625d26bfb3fdc4e8a6be8630205bb"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/PainAssessmentEditor.tsx",
+      "gitBlob": "31a6c5abcbc3a9b0165d8f651b233bbd6b918be8",
+      "bytes": 2151,
+      "sha256": "c643a81ca512e70c41e90ce27036178ecdd6c61e335506c4d8c9efad44596aa0"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/PatientSection.tsx",
+      "gitBlob": "5d62fffbbbcf51a98ebdc0fff22a1fbb69bcb023",
+      "bytes": 594,
+      "sha256": "588ccea0515b66b74d0c56f699259166bb095fc021077d73ba53618a017ec663"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+      "gitBlob": "d996d662a7b5a3e678b43c2eb873a99a6d5d6cb0",
+      "bytes": 1606,
+      "sha256": "ca7393279969260905be31f97a765482c371c9bda997d4ab595b13140137b78d"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+      "gitBlob": "d595351066bae7b3c4ec59852064a30f7263c541",
+      "bytes": 5296,
+      "sha256": "3b3d0ad5b6d857e7ad64253e5f29898f81cf3d6f27da2e854636018d1bd59978"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/VitalSignsEditor.tsx",
+      "gitBlob": "069c79d24939e2944663501f7c387517cfae2943",
+      "bytes": 2862,
+      "sha256": "0335a30cc5b16ce4cb8bf909603d333472bd5cb6771c0de4118d2a14b213fd2e"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/__tests__/DiagnosisText.test.ts",
+      "gitBlob": "fefc9e6be3c81bc0a56c2dad926fa2c34359f65b",
+      "bytes": 2917,
+      "sha256": "e82747099709a727b058fef30b6ce2a7c7418f0c2609ed449bdac3076a5d076c"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/__tests__/patientSections.test.ts",
+      "gitBlob": "740ceeb71561dbef235bd2761597e9f6d736d7dc",
+      "bytes": 738,
+      "sha256": "e6f7426689ef653529b230c1087dc8487fdda1fc2b5b80c1815d7833807d5837"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/__tests__/sectionResolve.test.ts",
+      "gitBlob": "5e8cf21f1a53aee4f9421373b9697897936557ae",
+      "bytes": 362,
+      "sha256": "dd2630118fde37c44e60cce0354d305d501805869ea5a40abc47e2c707a608e7"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/patientSections.ts",
+      "gitBlob": "f8fce288b2894decb530b04520adb0cd3c6021bb",
+      "bytes": 2503,
+      "sha256": "6a20ed83703e77fed01d334bc392af131adf22e7d08910a446c07262b82e60ae"
+    },
+    {
+      "path": "frontend/src/components/operator/sections/types.ts",
+      "gitBlob": "3f4800b59c2aea437350048810c376e6bc1d6f61",
+      "bytes": 734,
+      "sha256": "4721c4029db2b25ef50c8a73d0aee6368ea7a934a0bd03d5d51cdd3c850d3760"
+    },
+    {
+      "path": "frontend/src/components/operator/tabGroups.ts",
+      "gitBlob": "2d910bd487520d3d93edf5154a6bcd01bfa9ba33",
+      "bytes": 3256,
+      "sha256": "c54cdddc1fd7c156b0126093c27610e521673dc8fa3f524af67e8147bc5148ea"
+    },
+    {
+      "path": "frontend/src/components/operator/usePatientListPage.ts",
+      "gitBlob": "f603708d97305edaf16d931fc9d8866385dbeb74",
+      "bytes": 5651,
+      "sha256": "cbce06f842cbba4390cdfc2220713dded4efb25353b6504fafff9ff6860527e2"
+    },
+    {
+      "path": "frontend/src/components/shared/AIAssistantButton.tsx",
+      "gitBlob": "bd46da028f64cd42ada1e3bb951285f8b6f4419d",
+      "bytes": 10410,
+      "sha256": "6d0636f5ffcf3b7bc759f350cc9d0c9d133b716c7c26a0ea40bd479b7c5b8fc7"
+    },
+    {
+      "path": "frontend/src/components/shared/AIImportStatus.tsx",
+      "gitBlob": "cedc5414604a70bd47667965e9aac140d42dfaeb",
+      "bytes": 2692,
+      "sha256": "c51f2a2ea9086e339883ffe091b0b347d68f0324e495a75ffd589437e247f8c6"
+    },
+    {
+      "path": "frontend/src/components/shared/AccessibleDialogSurface.tsx",
+      "gitBlob": "cf7a8532f03871b3063844cf607ce4074af79e5e",
+      "bytes": 3261,
+      "sha256": "a93d1fe3f8e504e7d4c4e164f0a001b95ee0451a030e9fcee97ff2ced86710e2"
+    },
+    {
+      "path": "frontend/src/components/shared/AgendaLegend.tsx",
+      "gitBlob": "7ef29d6a32f3ea0dae396d285dc0c81084e0dedc",
+      "bytes": 671,
+      "sha256": "62bc32a86b4b4b7c7c8f5f3a2f2ad890aa107fe2dccc7c019e5b9d3073e17e4c"
+    },
+    {
+      "path": "frontend/src/components/shared/AgendaStatoFilter.tsx",
+      "gitBlob": "bdae0ee5bf7ad2be0e17a296ebf3a241f2b1336e",
+      "bytes": 1192,
+      "sha256": "7d6492f2744136c93c49c83ed9a15ac361b333585abcf3586d08331cdce3fda2"
+    },
+    {
+      "path": "frontend/src/components/shared/AgnosPanel.tsx",
+      "gitBlob": "3bae9d3d9424209899850e71409f824d69ea966f",
+      "bytes": 16234,
+      "sha256": "8027386b1abf047a0252b5e4a274f6154b28c8f1830764254d736e97ccc1e116"
+    },
+    {
+      "path": "frontend/src/components/shared/AppointmentForm.tsx",
+      "gitBlob": "1fed1df77db8cea8fbda98cea07fdbb1908d52e5",
+      "bytes": 10916,
+      "sha256": "478fe229f6fff3741eb7807e1a7b5528446cebf77a660aa3838dac121588d05a"
+    },
+    {
+      "path": "frontend/src/components/shared/AppuntamentoActions.tsx",
+      "gitBlob": "9078d7ebb10c7447eb5855cbcefe6cc39c9aab4a",
+      "bytes": 1503,
+      "sha256": "7d16b0c3479978f4197491da1816723c11fc18114cf10bc225291c261929bbc8"
+    },
+    {
+      "path": "frontend/src/components/shared/CameraCapture.css",
+      "gitBlob": "4d25836de36021fc5a3761eb26600a40fe1c982e",
+      "bytes": 2266,
+      "sha256": "bcfa6501a30f28b4261e9be77bd11eabeb5e47b02e3ddcfa5392e0c454dec233"
+    },
+    {
+      "path": "frontend/src/components/shared/CameraCapture.tsx",
+      "gitBlob": "1b8f9a613fa9b53da20179784cccdc4c79430618",
+      "bytes": 16334,
+      "sha256": "735312bccee9c25ea218056b9ef17dc9f9c88d22f86c871c4128ed6668c689c6"
+    },
+    {
+      "path": "frontend/src/components/shared/ClinicalCard.tsx",
+      "gitBlob": "ce1e87515c1002e13c5717cb089732164d0afff3",
+      "bytes": 3575,
+      "sha256": "667727d6d4c7d510b097609bf09b01078942284fc45fe22c162d8e9b24e18c6f"
+    },
+    {
+      "path": "frontend/src/components/shared/ConfirmDialog.tsx",
+      "gitBlob": "bc42ccb349975d13f70d475b22914576fd13bdb4",
+      "bytes": 2318,
+      "sha256": "b68d3b306d3d837c62bab8a9730bca1236ce3c93e2f240ba1b04b656240a6b17"
+    },
+    {
+      "path": "frontend/src/components/shared/DashboardKpiBand.css",
+      "gitBlob": "940244aa70ad7ae06a3a407504f30eb662917e18",
+      "bytes": 4276,
+      "sha256": "4f291d1fe1eb319f9ec815fc650831bf4ee264fb9256d3640fd477e624e4311a"
+    },
+    {
+      "path": "frontend/src/components/shared/DashboardKpiBand.tsx",
+      "gitBlob": "ed33086345b8cc731d9e622fdf07f55e2a9eed99",
+      "bytes": 1740,
+      "sha256": "1a6a387c3d014163a6e813b3874b392bc8325e3d15cbe8cdfd6fe313eb3537f4"
+    },
+    {
+      "path": "frontend/src/components/shared/DashboardTherapyDeadlines.css",
+      "gitBlob": "c2611dba1343f618224c3c0ffdbad0c200b21168",
+      "bytes": 3939,
+      "sha256": "23dc99cf2024e5117b5e7ea206abf4f86f55cebd4b8406cdf9ac4ed6f82cbdee"
+    },
+    {
+      "path": "frontend/src/components/shared/DashboardTherapyDeadlines.tsx",
+      "gitBlob": "e40825fa7a96df37a8a475ded94bd3fc60019438",
+      "bytes": 7458,
+      "sha256": "672d90e1c13eb124a3999f6adbd024a52cad2c9f0ce6a06baca9f061c3d13986"
+    },
+    {
+      "path": "frontend/src/components/shared/DemographicsStatus.css",
+      "gitBlob": "9daa8ea2fbeda8b5b4d03c76b1d95bbf74ee01b5",
+      "bytes": 797,
+      "sha256": "06f8394827dc928fe4b426471959c0dfac9e8ac0f607937b7f5cf5b11ee351a0"
+    },
+    {
+      "path": "frontend/src/components/shared/DemographicsStatus.tsx",
+      "gitBlob": "d24b0d95c1367fc3920d0de226587e82b9f2de60",
+      "bytes": 999,
+      "sha256": "52fd1ecc1e1e0a89506a61d93eeba0233c1f517325bcbec0cdc1047f4454887d"
+    },
+    {
+      "path": "frontend/src/components/shared/DialogLoading.tsx",
+      "gitBlob": "f5103b4ccea33d01071843076c8a2321bcd7f908",
+      "bytes": 543,
+      "sha256": "982f59ac4aa4ceafa043ebe571cc449f119e7ad5621aa703220a5167d9da4819"
+    },
+    {
+      "path": "frontend/src/components/shared/DischargeImportModal.tsx",
+      "gitBlob": "f7f33152e6337d09d9534ce71d9b55775058680b",
+      "bytes": 33554,
+      "sha256": "5a323a19ac86c59ff54a3e81dc5dab33dfd3772b91bee683cd44a1b97e5dbb16"
+    },
+    {
+      "path": "frontend/src/components/shared/DocumentPreview.tsx",
+      "gitBlob": "4bdee81cbd94a03b26a8018c2ec0d52e19699ef0",
+      "bytes": 11151,
+      "sha256": "dfb4e7c904b446e8c14893e9440d617ab56646e8d3a074fd64b226f4ecb5cca4"
+    },
+    {
+      "path": "frontend/src/components/shared/DocumentScanFrame.tsx",
+      "gitBlob": "1610f50bcbb3713b5deba3f615817cddf883ca34",
+      "bytes": 3480,
+      "sha256": "2e6106772e8f17fa7c5f18e782ce419b314b6e93ae3baf151e854480113bfa3a"
+    },
+    {
+      "path": "frontend/src/components/shared/DocumentSourcePanel.tsx",
+      "gitBlob": "a1599f5b06fe3e1a492c611bdb8f157a3fba47b8",
+      "bytes": 7408,
+      "sha256": "7c3fd230c9be9cc2fbbbd08bb6d6073f9e76d87cff48a18f1227bf70d180680e"
+    },
+    {
+      "path": "frontend/src/components/shared/ImportPhotoPreview.css",
+      "gitBlob": "4f4a6bf254e2db19bb87e923d94083c3f7f9827a",
+      "bytes": 2613,
+      "sha256": "473b5d1206a28e1084e35e84130bc742e1e61874b8713e22d6d6f7d70800f9b2"
+    },
+    {
+      "path": "frontend/src/components/shared/ImportPhotoPreview.tsx",
+      "gitBlob": "a868367f8e63f86b5d4281d3083d94c499f075c5",
+      "bytes": 4542,
+      "sha256": "5fd465cd5049848d70e8b85a93d360b4f54bef5bbd3354062538db953bd49296"
+    },
+    {
+      "path": "frontend/src/components/shared/ImportReviewFull.tsx",
+      "gitBlob": "31543bde4fe955ca25bd99bff5ce8f98354e1bbb",
+      "bytes": 29585,
+      "sha256": "98f59ce01cecfe5755f23fca2795c55755ab12bd47673257f6f42d143a0b6608"
+    },
+    {
+      "path": "frontend/src/components/shared/InlineEditableField.tsx",
+      "gitBlob": "3473e5686ebeaa47011aafc8515adeb6a6139424",
+      "bytes": 8618,
+      "sha256": "12979c4456d300210b50be5ce889ee65da510fbff71b28ed6d7b759cc9febec6"
+    },
+    {
+      "path": "frontend/src/components/shared/NoteCreateForm.css",
+      "gitBlob": "4cf8dc51d5b7000ae7118bbce8d86ea684c0248e",
+      "bytes": 3481,
+      "sha256": "66aab4cc04dcc95b2a745dac6808c87f78d1393fbdd3d4bef6481f2dfffd7356"
+    },
+    {
+      "path": "frontend/src/components/shared/NoteCreateForm.tsx",
+      "gitBlob": "e4f8ed77a3cc92bb1a93384b6dd260dd449b4d72",
+      "bytes": 8022,
+      "sha256": "be2d9555a787bb37b9d7c5dbeaa2076f5b2c68bd05d9ad4607d9e2a96d33d6c0"
+    },
+    {
+      "path": "frontend/src/components/shared/NotesPage.tsx",
+      "gitBlob": "fa7b2503cc4dfbfb9d30efc6ce52597f100cdab6",
+      "bytes": 8297,
+      "sha256": "4b8cba073dae3c5c8fd71084bf4ff4c015c68d6814ac2ae87463def2b1999c11"
+    },
+    {
+      "path": "frontend/src/components/shared/PageHeader.tsx",
+      "gitBlob": "d925a36c97000ea3fd9427c592c3cc245afa3cd3",
+      "bytes": 1770,
+      "sha256": "e6b1fed0cec356a9d8c2c85035071580681a2700aa275c1ef5c06f65bb3efe62"
+    },
+    {
+      "path": "frontend/src/components/shared/PageShell.tsx",
+      "gitBlob": "c3f28ea3872edcd40107c849d80e6305b008c6cd",
+      "bytes": 777,
+      "sha256": "421e5475783f8cce595167a1f5edd28620d67922c93a77587f2a97f125874c2a"
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.css",
+      "gitBlob": "125fc8486758c813859d2cfd25b59e3eea04a4df",
+      "bytes": 3674,
+      "sha256": "238fcee4aad923c8b14c96879c24bae261f7f0c2abfd6f7c5ab8ab9e88c992be"
+    },
+    {
+      "path": "frontend/src/components/shared/PatientCombobox.tsx",
+      "gitBlob": "81e168d0d2353d715bbd27c15e04ce6fa4484c70",
+      "bytes": 7251,
+      "sha256": "2efe4f709725fb77734f4f9e03781427d458240884527db1c60184ffe6b49234"
+    },
+    {
+      "path": "frontend/src/components/shared/PdfCanvasPreview.css",
+      "gitBlob": "7a4cd085f0999241cc53f9da908c6517e4c6501c",
+      "bytes": 827,
+      "sha256": "fb802d6f6c7cb4eee36be4709bc7fb073c093ef4ce61f2987d4186fbf65e45ef"
+    },
+    {
+      "path": "frontend/src/components/shared/PdfCanvasPreview.tsx",
+      "gitBlob": "4faa6e2ba84ad6cdb7f0401e8b036728a70bc730",
+      "bytes": 5831,
+      "sha256": "5d3ca88b4f9e73aead98e8e2a38e043b5e45feb96f4a426124a64a1e82e748de"
+    },
+    {
+      "path": "frontend/src/components/shared/StatusBadge.tsx",
+      "gitBlob": "d64ed12ebce8fb782f3c99be1a5c5bf105598a01",
+      "bytes": 691,
+      "sha256": "5174dabdd5784e743a4e5a928a2da583f7cca9e32c6a21afe1e78dd36e66ab00"
+    },
+    {
+      "path": "frontend/src/components/shared/TableFilters.css",
+      "gitBlob": "cc71a977500f02400202d232524ca6f231e2ea52",
+      "bytes": 4508,
+      "sha256": "6efbd8f242345f29c6e88db705c16e2bcc98a34c88f013c1bd4f034f41c439a6"
+    },
+    {
+      "path": "frontend/src/components/shared/TableFilters.tsx",
+      "gitBlob": "13e0ce27e7f561cad2e7e97631fb75a760e15957",
+      "bytes": 4635,
+      "sha256": "1e49496a8a3ae85c09bfeca60881edfbcadf092f7790990e3aabcc76919f7e6f"
+    },
+    {
+      "path": "frontend/src/components/shared/TeamsLikeSidebar.tsx",
+      "gitBlob": "6aaa0f003b870265eaea0654fd72293726d56abb",
+      "bytes": 3743,
+      "sha256": "0431baeb61fa5996a6f5e52c8e407077a6e4329e776104b305d7892b076a2c07"
+    },
+    {
+      "path": "frontend/src/components/shared/TherapySlotOverlay.tsx",
+      "gitBlob": "99137d212b77fb25b9165792d63d06e4bc8e94cd",
+      "bytes": 2966,
+      "sha256": "60273d11278b4941bddc1717164723a0f4934b410b926235df94016b7db5d5df"
+    },
+    {
+      "path": "frontend/src/components/shared/__tests__/table-filters-contract.test.ts",
+      "gitBlob": "a78b996f7ae254118dab0d7246788eb30129ed78",
+      "bytes": 3462,
+      "sha256": "3de3d88975c84176c96795e37b9625cec1e649a533b1f313842e4caa698b30d6"
+    },
+    {
+      "path": "frontend/src/components/shared/agendaStato.ts",
+      "gitBlob": "ef09d4a9a658472f9cc9e6fe6a063744224b2fd1",
+      "bytes": 581,
+      "sha256": "7acdc2b1b3fee538ad2131adce963322791c8050a7426aeecc7e1694b0b4c79d"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosBrief.tsx",
+      "gitBlob": "a11bb67f853fd09cc2ceab69dd4d40225fe7926c",
+      "bytes": 13960,
+      "sha256": "27edf5d7811c23b399b8408acd2e3d35a11e85b5a0beb38a6a240f45df676972"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosComposer.tsx",
+      "gitBlob": "8706db9cef33cb275a1a1a635c2be4a27c05484d",
+      "bytes": 4771,
+      "sha256": "3369b9fc712ecabc49c12b20e673784b764ca51b0430bd54deb21e88ff7b7aa6"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosSuggestedPrompts.tsx",
+      "gitBlob": "5878fa05986a0142eae1880df1b98c8aef229dfb",
+      "bytes": 1675,
+      "sha256": "fc9ac0c518852bdfab82351806bb4a995f7b9b2a42452695020cf77ea5dd5f6d"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosTurnView.tsx",
+      "gitBlob": "cebdfdd49c879aef2d652dfafd63dd020dfc0657",
+      "bytes": 5148,
+      "sha256": "36774563fc24594b528a0ae605bcd45ea4b359607204449f5b40b28088d3dc68"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosVoiceIcons.tsx",
+      "gitBlob": "06f6ab4f3c797af98ebc43d7dafc5ffd886d275b",
+      "bytes": 1089,
+      "sha256": "6d8fd52914307a06c858bb1f131750bcb81ca0a74088bf4a0ad93e02ee683620"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/AgnosWorkflow.css",
+      "gitBlob": "8aaa659af2d5e11c932dcce8510add5d55a07e46",
+      "bytes": 4452,
+      "sha256": "264fdad5be0ab19dfe0b5880895c61b5619ca3aa6cc7402ec4b73b02c1f314c5"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/NavChips.tsx",
+      "gitBlob": "94faa246af6979c7b528e0a38e15dd90e3539523",
+      "bytes": 1089,
+      "sha256": "d2bbbb9921c2b65a9c4788903847fb11af7823757b0e902464f56fccf44d19fa"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosActionNavigation.ts",
+      "gitBlob": "fa50b2c3f26cb8d454e43d459aa6ed30e9407862",
+      "bytes": 4575,
+      "sha256": "2a9d573529ab6bccc4fc4d04d12afe215698284fabffab2bb1691c685315c0b9"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosHeaders.test.ts",
+      "gitBlob": "f58d04be35ba7e4e0784d2930c9971ec106952c9",
+      "bytes": 950,
+      "sha256": "a6d4594949558fa9d2a5d1154c0f4c7a4d70676fd62f81025e84233b53b1daa4"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosHistory.test.ts",
+      "gitBlob": "5391d136a7abcc71df1ab2a739d5fc0e8d2f59d6",
+      "bytes": 1676,
+      "sha256": "abec621d0ce2db28cfdf9be71d4862ffdb40094b97a98e0088faa2ae3b608435"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosHistory.ts",
+      "gitBlob": "4b944f5d71431b8024428199b0a944c43887e935",
+      "bytes": 867,
+      "sha256": "2b94f34c2d277359334fa76d08bcdf51bebdade3f83c0ef10a7c7cd047a7c3f9"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosNav.test.ts",
+      "gitBlob": "896b0c39b9d28bfaff450cf02ad428e62d38819b",
+      "bytes": 2508,
+      "sha256": "ee1091636935608b8a2bee555f0d9c1d4aad9aea5a057d3db208a6da08655a47"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosNav.ts",
+      "gitBlob": "8d211fd1dd73170f5c1ec0c5eefb7b153fc6ce3f",
+      "bytes": 2758,
+      "sha256": "6b801a4207555c250758e992c03bfaed1bfa589895c366b597e5e3637f2e4211"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosRequestGate.ts",
+      "gitBlob": "83b0b4c89c6a785c4594186d1870a030e5565d72",
+      "bytes": 875,
+      "sha256": "88a9c3744ee20f3be0a3e432a6868ccab12d8b7dd92f6963f212c2a15d1d6f00"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosSuggestedPrompts.test.ts",
+      "gitBlob": "9a9b3d7c5c755aad7cd8de07e6aa239abbe0cf64",
+      "bytes": 2380,
+      "sha256": "d78df51d05879288779f42839e610865aae12eaeef2c63d7238417c7eac9b311"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosSuggestionModel.ts",
+      "gitBlob": "e6265cfc2d4108640c9ce2aa39e4c0e855dd0aa3",
+      "bytes": 2339,
+      "sha256": "b3eda32f01bf4a617723d32243fa60893f9a314ffe012d9ae41beaeebb00c631"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/agnosWorkflow.test.ts",
+      "gitBlob": "353376a407a12364d68992286a03972cc9e4af53",
+      "bytes": 6179,
+      "sha256": "dfbc061ca0cddcc83689470e2283903166375d8d18dcd0e38540223bda1dde6c"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/assistantFeedback.test.ts",
+      "gitBlob": "1743822e7824a7a7d05cda1ea9e737f45b95d82c",
+      "bytes": 1606,
+      "sha256": "b79d652b6c65bf628c459579b7be1a95f4b8775db917ef7987a46150f44d185b"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/assistantFeedback.ts",
+      "gitBlob": "650db5769cc96a248179494c202f851d05d0e85d",
+      "bytes": 924,
+      "sha256": "795c3285ad076dcf55cf4038a46b21be924c6fb9efc0e61fde9bf0e52d53cc5c"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/useAgnosChat.ts",
+      "gitBlob": "ebabc2988c3a6a03d70bc245b1ea76d7e254d366",
+      "bytes": 18817,
+      "sha256": "483ea218752b82477f6b6c3360585bb6a7679571caf0e530bd4fe6d541a4c602"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/useSpeechOutput.ts",
+      "gitBlob": "db6c5f6b641a87a8730ae9c19b75459dd8546b2e",
+      "bytes": 2664,
+      "sha256": "7db0f5b966a52d40b2e9061f9915fe1183ed6a0e29328b7703a3d77660b59c80"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/useVoiceInput.ts",
+      "gitBlob": "fad9b65f8855b8ee989a4a24b34bf721fdb86d59",
+      "bytes": 6169,
+      "sha256": "6b52b5bef8102b48a10793875c24d1869c70f194d1a987533e4ac08d2595e876"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/voiceStartGate.test.ts",
+      "gitBlob": "2e5ca9de65335f8bfb186ec2192115c467d48e84",
+      "bytes": 719,
+      "sha256": "e7af8caa6bf39da9640fa163d34b080ef39bc6acf6719f28175ba29a74e2ecc9"
+    },
+    {
+      "path": "frontend/src/components/shared/agnos/voiceStartGate.ts",
+      "gitBlob": "85361a362f25ec71f5580dbb3d3fa739e8a64b3d",
+      "bytes": 551,
+      "sha256": "4c41dfb8131181a1fae0aa2ce720af1d72dd8110f657990bcf724f7c95dbdc8c"
+    },
+    {
+      "path": "frontend/src/components/shared/dashboardAlertLimits.ts",
+      "gitBlob": "82344cb5ef42e989e379bbc203c2f65fab06eabc",
+      "bytes": 347,
+      "sha256": "32172296afc5e8de19ba4c1fc5873dde808981599aac659ca888f16d2c1e9182"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/DischargeTherapyReview.tsx",
+      "gitBlob": "8a5cbb695c2ad7f3943b008d959121e4d51fc62a",
+      "bytes": 6414,
+      "sha256": "730f26704b034c519522285a26d600b0b6fc05f78c9ced9f6c80777b2e0b7d8d"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+      "gitBlob": "5079c0a37fa283aef24ed1e16d50b5a0f48caf05",
+      "bytes": 26648,
+      "sha256": "ce657c8ae1ac32518949799fed81bed49a5c3b6fbff6e2eb516a1961000446fd"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepAnagrafica.tsx",
+      "gitBlob": "a3a3902c494b81e15d40a9369218c36d2f7a2002",
+      "bytes": 15847,
+      "sha256": "633c5adc4fc525ab86a543dee8cad4d2fa600dc15a304c66a196f94d528aac7d"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "gitBlob": "cdcaac05937b080a024eb82011118afdcf470ead",
+      "bytes": 8141,
+      "sha256": "19494ddf9ab8ab7e0564fd2c7d6770309c054f05cbdd27b60689276a0fefcd92"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepIngresso.tsx",
+      "gitBlob": "b880a65219f295c341b6f64db18d361b0769c3af",
+      "bytes": 5903,
+      "sha256": "d69bdaa212a2c9c9239b1679a6cb1b203bc8506133c73de5d8ea5c424af912de"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepVerifica.tsx",
+      "gitBlob": "1876479153d331b53d721f540e5eb660dbec21b6",
+      "bytes": 11827,
+      "sha256": "c6d82916be71fc1d42e684891e09fd68426d18dc33a1ea7adbaa7b3ac5a26252"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/confirmCartella.test.ts",
+      "gitBlob": "e04374ac8f16315ea2cb1636ac56cbf36e8d0415",
+      "bytes": 3308,
+      "sha256": "7533917ce9a5080443fd15b98094248625927301a0d4827e20d850aecebc73b5"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/intakeDraftApi.test.ts",
+      "gitBlob": "d198505226fcaf4bd6b70ce8b66f04d2f74cd77c",
+      "bytes": 3378,
+      "sha256": "12bc08643c0f5201570584221260277985144dc23e7bc6813b98c8b87afc7c4d"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/intakeDraftSession.test.ts",
+      "gitBlob": "5bf64deabd04b5079a955874dcdd6fda85526dcd",
+      "bytes": 1847,
+      "sha256": "0f43f74520dfb57277f3fa13703780667c3ca0fb6f749067ea260419d8e46bce"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/progressiveIntake.test.ts",
+      "gitBlob": "cf586b032eee4452e9ab57bedbf2c77508b4c3d0",
+      "bytes": 3917,
+      "sha256": "869fc1199b7122330ce18e2349e894e3181318848a0498356a2f80f4926c8a48"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/therapyConfirmation.test.ts",
+      "gitBlob": "61663de8e786ba7acf36f278afe966d87a19b461",
+      "bytes": 13673,
+      "sha256": "ecfd8b63f0fb661242cb33498de0996c74de63a8937f90c8ff2dfba146036094"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/therapyFieldFeedback.test.ts",
+      "gitBlob": "36a56e59147040e81c2eafa4769ccbaaf6789fd3",
+      "bytes": 11024,
+      "sha256": "54a8e5799cd2ae291dba6e5e8561687ff68b3dc88bbf9f18cf59b6d73c7c3a3c"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/confirmCartella.ts",
+      "gitBlob": "18c340be2b15441e918b8d802f3ee63067f802d2",
+      "bytes": 1951,
+      "sha256": "baba3c458323a374607bb8ca5ce77c967c8719e249da81ffa6711553b292d493"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/dischargeTherapy.ts",
+      "gitBlob": "283786cc38215141466b5f4e4d961ef6988ca40f",
+      "bytes": 6052,
+      "sha256": "14dae0ebffe77f80e28f017956b6e275d4a88bb00ade5fee74b1603a785d8194"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeDraftApi.ts",
+      "gitBlob": "23533ae16961f8af205dcfa829e67433296d6376",
+      "bytes": 4314,
+      "sha256": "b48484c26aff9817e9b35b6f9edc8572ccc06aff710069003f9a667374dde360"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeDraftSession.ts",
+      "gitBlob": "67a7fb64b47cca54994be080c371182992da634d",
+      "bytes": 1288,
+      "sha256": "dcfe8cfe3e79dad461069b808a355dcf4f39562dd74b42790f6d285c47efc3f7"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeTherapies.ts",
+      "gitBlob": "302fa14ff73157a23bc61ef260c8c22d92ec7e14",
+      "bytes": 7355,
+      "sha256": "04e289c7903cadba6a3ab6441e5424272353cf25b7a6b5923df103f0fa37f126"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeTherapyNavigation.ts",
+      "gitBlob": "a1b21be8d8dc9e4f1a74d0ab91153e5ba97869fd",
+      "bytes": 1004,
+      "sha256": "4dfd609df418457dce399da081296d6a9b5e9d67ca7e1d02082611fb576141fe"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/therapyFormPayload.ts",
+      "gitBlob": "51b7e67917fb929aa2201129b12dc48df5024743",
+      "bytes": 1702,
+      "sha256": "88c67decfe3165bfe78f6e7c16cc4de5c90a6d60b1e360cf2c00da660bcf33ff"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/FormattedSectionText.css",
+      "gitBlob": "050d29490a793181e48a32ca799072ee5901d0da",
+      "bytes": 987,
+      "sha256": "67a3c8ca9f8f57e4229c5955ee33f500f5ed1e4fee89671f985179d75e3fe1e2"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/FormattedSectionText.tsx",
+      "gitBlob": "4e9255a714625ebf9627f463bdfe1ff81dc6c1af",
+      "bytes": 3065,
+      "sha256": "34fb9cbee04c5f6dc1836bc9687df9507581e1867cd208df79bc4439d35c23ce"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+      "gitBlob": "cdae67789973465ec33927f692af6eb8aa574738",
+      "bytes": 14857,
+      "sha256": "f830d206b28ad7ba94a5daf794188434e073f7ee8d36048e327abca1a8ea5eea"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/NarrativeClinicalSection.tsx",
+      "gitBlob": "f2a808db5d5b2404fc9bd9019e2614f34e386768",
+      "bytes": 6109,
+      "sha256": "40838102240dd10a7193c0363daf7294131af60da6d39a779504a0627678bb18"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/SemanticTaggedText.tsx",
+      "gitBlob": "b9f3437b71bf3c784ec66e78bb7718343197ba5b",
+      "bytes": 2514,
+      "sha256": "76c9464d9c1cb35b5fdb4842ac2ac5405d40766e94f3b8c02871d418f019138d"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/datePrefix.test.ts",
+      "gitBlob": "68057eeb60c8f4342fc5cd8b64a66f19cab4a193",
+      "bytes": 3533,
+      "sha256": "f0511a360a02a5995f5c4612081933a74e60967aa20cf43e96631b643615028c"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/import-contract.test.ts",
+      "gitBlob": "466da5cfb30cd38f6300a273003109c5ef42c87c",
+      "bytes": 4597,
+      "sha256": "3beb783730aaeaac6e880a59a0e7dee477ee3c152cedf0e98a7e42df16c773b1"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/sectionMarkdown.test.ts",
+      "gitBlob": "c939876a89994b8e03034dc94632cead946e200f",
+      "bytes": 5326,
+      "sha256": "12d6d5cd3920314220f1bb3987b948c64982e93e061519d063769f0c12589517"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/segments.test.ts",
+      "gitBlob": "84e3ed174d5df231bd4b6cd58e5fba0002f0022d",
+      "bytes": 3584,
+      "sha256": "8010330e94b0fb3679c53dd91cb2aa2d75f0f731578ac365d8e628b8177a0105"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/datePrefix.ts",
+      "gitBlob": "064e811f34566fa9c75ea70d163e079b0a10eb76",
+      "bytes": 2616,
+      "sha256": "9ec849a534d644eb4dc279787d827ff0ebedb77711a4fd9bbcd242c7ba51950a"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/deriveSections.ts",
+      "gitBlob": "8011c7b1efc82edfc1dcd87d739d49bd3d0aed57",
+      "bytes": 4740,
+      "sha256": "004b7e9a53e1feffebe099382095ebdc85ceadd3c456e00439c6e49fa51d03b7"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/sectionMapping.ts",
+      "gitBlob": "00525dc08922d89f136bb030de3b848272c083cf",
+      "bytes": 2634,
+      "sha256": "7d3bb9d29e69b619833cd5dce4ef222e2590498af429b046bc68f783a51d8a45"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/sectionMarkdown.ts",
+      "gitBlob": "ccf50e17248c1612f5ab5ef60d61d23b4bc28c88",
+      "bytes": 3154,
+      "sha256": "d50f56ae9b12cecdb105817a31ca7dfca74aeb06357c29b472d61fe06fa312c3"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/segments.ts",
+      "gitBlob": "c9fa5b3defd7dcdafeb6e7668f274046bea51f95",
+      "bytes": 2880,
+      "sha256": "4e62a4a1ebfedaf50d736bf2a0a565fa4b595cb05aed0af78fcadab230fab8f5"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/tagStyles.ts",
+      "gitBlob": "c6ab51d673e3a5a93c5198407cb6e8e187cef359",
+      "bytes": 1538,
+      "sha256": "e79625272e078aac26ec1e7a00cc5ce75d1090bdda084b29e7262e4e7c93fac8"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/types.ts",
+      "gitBlob": "590b5109af41dc858415bc12be39f4a523bd2072",
+      "bytes": 2381,
+      "sha256": "0d3185e16020c6534c22fc41ab118f1d4cd720551cc225984ec4d4b5ddd8c4b3"
+    },
+    {
+      "path": "frontend/src/config.ts",
+      "gitBlob": "38c755b271f1fa78302d4e6ca5e54ac224014f94",
+      "bytes": 1241,
+      "sha256": "cda0d2bdfc5f75e70038741bc3b23a9ee8fe0f725e60ac7813213fe563f6d8f0"
+    },
+    {
+      "path": "frontend/src/design-system/README.md",
+      "gitBlob": "e49e65788104f58e085a64b5205c6a9f5bbc5c8c",
+      "bytes": 13382,
+      "sha256": "f5cd0b348f072ac8d911a12111509c77e7470e052dd9ac34aca282d6a31f3121"
+    },
+    {
+      "path": "frontend/src/form-controls.css",
+      "gitBlob": "722fcf507b615027ffcef32a6f43dbf1d52960d8",
+      "bytes": 3678,
+      "sha256": "1be99c0e6a8f0cba69d207a1e6abbccc984c99f394dae9d7688d412a61ac2035"
+    },
+    {
+      "path": "frontend/src/icons.tsx",
+      "gitBlob": "1a8e094beb13dd9265e2bf85fc7e83de31feec91",
+      "bytes": 14036,
+      "sha256": "1ac200edf72a08fb204a8d8fc0d1b3abae297940bdac77f19eb747ff6849d4b4"
+    },
+    {
+      "path": "frontend/src/index.css",
+      "gitBlob": "067cdac0661b6016c72540fe1c02dd30c4ddc8ca",
+      "bytes": 800,
+      "sha256": "b9831c90d01c8a898cdd01dd43f258392ec2bf06f6498038f1cf201973f34db2"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/accessibleClinicalDialogs.test.ts",
+      "gitBlob": "37b51683bedec50f4020287db0c78142011e2802",
+      "bytes": 2315,
+      "sha256": "841cd84153f58689598a958cba3f53b4beaf6bac5239aa4685ed4b1968793d9d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/agendaAccessibility.test.ts",
+      "gitBlob": "a7a467b769a3f9f33abb9a3b288a5cd3b40d8c5e",
+      "bytes": 4517,
+      "sha256": "87d334841cda6fbcb61097ada7101f549ebafff66d1f94d332b23a3f6530aeb2"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/allergyStatusModel.test.ts",
+      "gitBlob": "8b50a2ad86125857a58969cb30db0f91c85900ae",
+      "bytes": 3976,
+      "sha256": "bf5b4a8c876f1daaab36d4609bfaece474663d8f40723b35c062fb21a7c2d020"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/appointmentDialogAccessibility.test.ts",
+      "gitBlob": "01305b9ef2b943934c8fae6f818e0957ea12ffad",
+      "bytes": 995,
+      "sha256": "c6d4b6cd80cdc8331a5c3328f184a0bf26c449a711161f5a8955e7f6aace27e9"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/appointmentRange.test.ts",
+      "gitBlob": "a9dcf8e19ecbfa357b167fb328ba118c8919f880",
+      "bytes": 1337,
+      "sha256": "8a7cbd8aea9e416a82149e603ed1f5686da629651a1ce2e11be6c4e52504ef15"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/archivePrint.test.ts",
+      "gitBlob": "560120d682264a95fd579436e16a2c470ece9d90",
+      "bytes": 6207,
+      "sha256": "f6e5f650379a0e21148604719b582cca9722548ae4ea8a108651efe5a5e85d0d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/cachedFetch.test.ts",
+      "gitBlob": "44270804323d7b4b6ea3345b3b55373a26b5be70",
+      "bytes": 6230,
+      "sha256": "e314b16296f26eae5aac8bbe979168cddf3cb0d3430b08af0f9d575b716b0fe9"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/cameraAcquisition.test.ts",
+      "gitBlob": "78ffcc4a6018af377bae3775cf5408f557c09a0a",
+      "bytes": 1754,
+      "sha256": "17a81a8576dfd4cbbcccee50817ac3989b2c9dda35817f0225d904692df85db5"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/cartellaWriteQueue.test.ts",
+      "gitBlob": "c98abf5566a69de88bb7929215b3f9502bbe5655",
+      "bytes": 3850,
+      "sha256": "05a507315eb246eddab36dda92edc706b93929a21557756a7c878e3826f9de6a"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/clinicalAttachments.test.ts",
+      "gitBlob": "80839960248d75baf12c9a216afe70ce85dcd621",
+      "bytes": 2469,
+      "sha256": "bbce9491dbdb4c109ffa2827bd9aee39a56c5523eb63142d129408b4bfb3fd90"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/clinicalHistory.test.ts",
+      "gitBlob": "28c294ea635fcfb8acc34d67bf9f287673b48063",
+      "bytes": 4884,
+      "sha256": "36b5ce513e0d0a381c052579dc4891198dc31a8ceb4d6b273611afa12269022a"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/clinicalOverviewResilience.test.ts",
+      "gitBlob": "7c74dcec4961542c39ec72b84d0b607846ea66a8",
+      "bytes": 3358,
+      "sha256": "fa329010138743231c585bee6f76c900cefeb0e5b32ec14e4fe345ed61493ef5"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/codiceFiscale.test.ts",
+      "gitBlob": "19702bfe8aee7561111c24b78f96140d609b66dd",
+      "bytes": 2398,
+      "sha256": "eee8fd6b33772a926e88c600c1f2a59a3b72846da7d30045dcb3c5684970a6da"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/confirmDialogAccessibility.test.ts",
+      "gitBlob": "d8fa25c54702540c0c44aeed7720b514b8b0f51b",
+      "bytes": 1302,
+      "sha256": "c9676601913507eeb1639dabb9bcc13fe509c257161339de6fddf090067faf63"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaFormUxContract.test.ts",
+      "gitBlob": "ffc0d30d167d2bbaedf2ecfb194e2b2d13262f89",
+      "bytes": 2771,
+      "sha256": "e82b9699a514ce2d429266805f8292639160f1f4aa49e21f44674c26402b410d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegnaTimestamp.test.ts",
+      "gitBlob": "ad78e7197e012665c9ef98b0b131173beb7f5d0c",
+      "bytes": 998,
+      "sha256": "d4db95845b13bd01bf636657c24db0cb2eba0e93bde50f82537714ea38f0e388"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegneFeed.test.ts",
+      "gitBlob": "98f5fa99cef6c31d1a139f862691909b0ac7e90a",
+      "bytes": 1078,
+      "sha256": "f472f6f351dd1e5730b2bbcc911067a0e6ee9d55123f76eca810e7a371c478c7"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/consegneReadModelGuard.test.ts",
+      "gitBlob": "100c12f151ccdd0611d1aea0982f57f9f860c4fd",
+      "bytes": 2366,
+      "sha256": "6933bca70374924b1a68f2f8a85d30535e8e7b490ba87e4916514b4ad5e18a8d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/dashboardTherapies.test.ts",
+      "gitBlob": "5a1e8c3dde632cb55127c19c36d4bb9b4b10cb8e",
+      "bytes": 6813,
+      "sha256": "66b1e3491c7ef9eef98213e5073aebbe4960613715253b452b7e1e957966389e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/dashboardTherapyRead.test.ts",
+      "gitBlob": "9bcb5b461e566dfb0e6e6fd59e250e51555220a5",
+      "bytes": 2679,
+      "sha256": "878fd05d296e07eff6b31dee4eac9fd422f3ba92255f34d09b99038cf1d1ea4d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/designTokens.test.ts",
+      "gitBlob": "fe75b48eb618e8ff2f56041cce65b36e4aee9789",
+      "bytes": 3223,
+      "sha256": "ac75259d010183e2fbf90a77c8f700eb2af5a00c60f3197933081dd6fc86e4be"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/diaryPaginationGuard.test.ts",
+      "gitBlob": "4f1240f70bf2c52be351f949ab33369048d63a4f",
+      "bytes": 1499,
+      "sha256": "ae66b7d551ebcb7e8bccba73dfd6a852502a72cfe78a0a59a37ea77e3b455a35"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/documentPreviewLazyLoading.test.ts",
+      "gitBlob": "90c12124a4c98accf360e9e7239a51be7f9c8be2",
+      "bytes": 1971,
+      "sha256": "00a501d6133369bbc9f576b6f12a2a92b6ab0fe043f154d81369d69615331691"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/documentScan.test.ts",
+      "gitBlob": "a330add9be4d8324df20f0b4e2519a77bc48d661",
+      "bytes": 4950,
+      "sha256": "5050def96f2a07c6751ef31d6778713e9436559025cbfa681b70004e2cf59529"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/examDocumentsLoadState.test.ts",
+      "gitBlob": "028c9bbafad8bd9d76a02ae92bee1d2551cda073",
+      "bytes": 1129,
+      "sha256": "5cbc186875702c34e1e0ac88265a173573a7500fda3c7134110fa2ed01bc955d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/examDocumentsSingleFetch.test.ts",
+      "gitBlob": "d35d16c38dadba836744616fccd12793d3805007",
+      "bytes": 1202,
+      "sha256": "e415babfe67df41d641c175b165e4c3f4bb3ca7b90626aeecf677acd72512bae"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/facilityTime.test.ts",
+      "gitBlob": "90d3e837e2d040dceba285d8de51f86b3b395fc1",
+      "bytes": 1695,
+      "sha256": "fbf4d752be1f9eda1a051df727be0a8513cf7741941ef233dc7c17c28c4cef57"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/importFailure.test.ts",
+      "gitBlob": "78140f00bfd023998524713e281556d51ccb4707",
+      "bytes": 1471,
+      "sha256": "c7d2edb8d8f35f7af6f5bfb1c5412ba8db808ace849cc3a74c2e4ad7a0ba161c"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/importPhotoPreviews.test.ts",
+      "gitBlob": "cf48595fd7f0cc09eaa77bd4373bd82e07d021ac",
+      "bytes": 5437,
+      "sha256": "f33641c563967fea5ac9976ecc42fdae2f95edeac4ecd98f616c40282945b71c"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/invioPSPrintLayout.test.ts",
+      "gitBlob": "f90cd5ddaaa273f2c813486d853cd19bf44fe8a1",
+      "bytes": 1349,
+      "sha256": "e96478a3de1b27650b694030f0acf7162afa4fe326ac4b6008b63f834d68a80e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/legacyAnamnesis.test.ts",
+      "gitBlob": "cb5f2629d1a90bfaacf1971cd2ce2bcf1d4a8aee",
+      "bytes": 1797,
+      "sha256": "b96c584932ee46183b6c244177a8d3162ec9fdb22338105ae4985e61e136279a"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/medicationSearchAbort.test.ts",
+      "gitBlob": "e83651c2e28b5b84f4821f1ae10a0962b82dfa6d",
+      "bytes": 774,
+      "sha256": "fd91a2c649a48e1e7a448c4df212c3326284e779999733feca8d7e0606f816df"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/medicazioniConcurrency.test.ts",
+      "gitBlob": "afac9862856ff5c3c13df6136d65db852268d887",
+      "bytes": 3324,
+      "sha256": "7111b76168016f55be7f3e99a8a4c077265d0e6f60b902cfcb864e9586f0e6ce"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/narrativeResilienceGuard.test.ts",
+      "gitBlob": "2220d844f58ee9a4bf9cf7d39d89ed2c657d9c92",
+      "bytes": 1224,
+      "sha256": "beed7208c85a7f1ecebd8c50629e13b80c5c9cbef5c015fa5c3ab72783d0f932"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/nestedDialogFocus.test.ts",
+      "gitBlob": "07cdd47e4cdaa5e491c352c316292ad101592712",
+      "bytes": 1581,
+      "sha256": "891c00fe1663a5f87353e75028153b7e948ff98c6282b4e57f54adcf1038ede1"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/noteFormUxContract.test.ts",
+      "gitBlob": "b911e2a9e1801a14dc82379363dc97f9bac9d1ea",
+      "bytes": 2587,
+      "sha256": "8f24fcd00ed561dac32485a718cd1ec9bfee04fa9337c3ba0e6c0162178ba605"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/notesAppIntegration.test.ts",
+      "gitBlob": "951e3cc74474866f4cbdf42ea0251905a067d80a",
+      "bytes": 964,
+      "sha256": "fdf7983a487bda399819df97e5fc266bc4d9a2ccde777c40a9a84d02e114a52e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/notesMailbox.test.ts",
+      "gitBlob": "4543e07f0b9b52ded09e40c2dec13df728a51dbe",
+      "bytes": 930,
+      "sha256": "bad988e22d138e4772f524ddbd076426337a8fa7aa0948ca802c36fa6453c576"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorDirectoryLazyLoad.test.ts",
+      "gitBlob": "4a314f382ee9a7efc5933b7b2cf9ec4ba303f1c8",
+      "bytes": 2656,
+      "sha256": "d99cf3b5728878327a69aab205776ffd681ce7570a55c7574a0084e48445fcef"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorDirectoryPage.test.ts",
+      "gitBlob": "86e5c760d2a4f22b0fd8dddbfa1e61f56514fc65",
+      "bytes": 3619,
+      "sha256": "65e23b7e2ce819188194d4efb4c8ccc2333bca1e38f26988b3939d8c44dc936a"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorSchedulesLazyLoad.test.ts",
+      "gitBlob": "fd63449e2273dfa86befd281731062f8a6390b18",
+      "bytes": 2303,
+      "sha256": "5dfb83053ede7d86cdb13d6457c6f9176e2613bc02d84e27e3dbd8852a0d53e9"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/operatorSession.test.ts",
+      "gitBlob": "1ccae87bf55f4551d004b23cc5819698beec8c68",
+      "bytes": 660,
+      "sha256": "35fd3bcdf7a017b8b219ae5060dfd90bdccd56b6cfa7947c266619b0d74d0b78"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/pageHeaderAdoption.test.ts",
+      "gitBlob": "66fd71376ab55467c2721bfc96523db36c3baf93",
+      "bytes": 3323,
+      "sha256": "b25adb72cd18eae04170ded4774abe5fbd9992b9e6533d01ce831cdb1c528484"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/parameterEntrySummary.test.ts",
+      "gitBlob": "a21f05715c15dc8f1ae370ad7e88d8597c2897ac",
+      "bytes": 1721,
+      "sha256": "2ce7ab7d3b8fbfc499f168f169e39a1bbc18c10bbdbec66ae2a9b5bc2ac896a5"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientArchiveFolders.test.ts",
+      "gitBlob": "864bbabb380b73bd75ecedd96e6a6d7040cd64b9",
+      "bytes": 3640,
+      "sha256": "1708ec2656c733fe53751d0676a9ed98702b83eb38d6730eb4266577ed09942a"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientChartNavigation.test.ts",
+      "gitBlob": "13ab7b0e2779ca1ccf157a5c2ad28d1d7fbdca37",
+      "bytes": 2598,
+      "sha256": "64906769adbd9e594ad98beb179aeb2e8c5d3880780d9193a7e1f040a1b78a09"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientComboboxModel.test.ts",
+      "gitBlob": "7807be489f7f027d86984c77b8f47a51bbedfa12",
+      "bytes": 1058,
+      "sha256": "d287cac60ddb9a932c901a522c5e5201f9a7d373aca58b403c81beb51d1e6f64"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDemographics.test.ts",
+      "gitBlob": "ca995855dc61af43986959be4d273a7f7918e0f8",
+      "bytes": 3569,
+      "sha256": "69633d382ff3ca680e480f14b5d29e5c432ddfb79e5a5ce44718ad77d5982382"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDetailLazyGuard.test.ts",
+      "gitBlob": "c5e8de132ab9d6193098093ac543ecab27907aae",
+      "bytes": 2993,
+      "sha256": "7c50117b4c1054c861d2a151ebd01b214149d2ffe42546180f37df4282bfa784"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDetailWorkspace.test.ts",
+      "gitBlob": "7f6eb2784f68a0e82180370a31f2c2fb92f32314",
+      "bytes": 5609,
+      "sha256": "82ea12b83dd173fa9a2289edc9262d1e4eb1959f60096a2333b5607a4d25379d"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDocumentArchive.test.ts",
+      "gitBlob": "c5a49723c60357101a7253681568ac6d75807771",
+      "bytes": 12144,
+      "sha256": "9182290cadb85fc814081aecdfad366d04c74f6a48964e10943f009d45e7bc39"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDocumentContentScope.test.ts",
+      "gitBlob": "0e7cf7ddc664dfa857d5fca9955733526d9fb452",
+      "bytes": 2291,
+      "sha256": "1f262e0945181aa2d1961f80de06a20dbf258d29d012b4dc2572c3ca0ef6188f"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientDocumentsPage.test.ts",
+      "gitBlob": "b267f3c25147dcb33db4438ae5d410d900e9bc79",
+      "bytes": 2195,
+      "sha256": "be59940bb80b136a5ca8946f9f103e539704aea6b1b70674afe662bdf48b7d6e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientInlineEditing.test.ts",
+      "gitBlob": "c9e5b6d7a4c8e95e9e065dca4cadb9dd3f925b12",
+      "bytes": 2527,
+      "sha256": "1d0815e96c8721e6a3edbc31f62184961acb361015db4457574fe6408d41890e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts",
+      "gitBlob": "5852cef4c92294f8513299951dd588f2d4b6de97",
+      "bytes": 4163,
+      "sha256": "83ac918ce9f488d20f3b5bec744313ff75298e25a317a49953308098f0513912"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientPage.test.ts",
+      "gitBlob": "6afc43005133f0efd5eae6c877a4792c6deeb113",
+      "bytes": 7277,
+      "sha256": "8f98df6829b6cc707734863d924396bf2e47009766a44ccdafe951223a8c9756"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParameterMonthTable.test.ts",
+      "gitBlob": "fea55c983ea87257ad1c1531e54b999617721c89",
+      "bytes": 1409,
+      "sha256": "0e05f999d5a065342fb62f2f0dbd694e657cbc10eeeacf03b1ef9591bedbebc4"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParameterReadings.test.ts",
+      "gitBlob": "0345dfe1a29867b3d429991c371f47bcfc5f52f0",
+      "bytes": 6048,
+      "sha256": "4ab9bd44ad93c35531c13c6bdbc0a4f7ed1c294e4ba37fe843e506ab67cf842e"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParameterTrends.test.ts",
+      "gitBlob": "253d2db60d9f1be51018bfc230863c7cb92809c5",
+      "bytes": 8338,
+      "sha256": "feecd9f65e742ffcac59003286c1ef5dc8e4b7604e574180d0077dd88e25575f"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParameterWorkspace.test.ts",
+      "gitBlob": "f83fc069e9c88025157b6ba0c2f6acf628763f8e",
+      "bytes": 4183,
+      "sha256": "252bd4befafc47f8fd7c7234e8a3dc99d37ab605cee521ac318cc17957ee5f66"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientParametersPage.test.ts",
+      "gitBlob": "f1f6cad28688842f717ec380704527c1352bd64c",
+      "bytes": 3081,
+      "sha256": "6a112a27b29e7c755d39c21734419f1ee3c5f38a3f6ab0e8fc8023a1a5f07887"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientPhone.test.ts",
+      "gitBlob": "5eb31ba4a48b0e814a875e0a8dc4a39b2b0c5bf1",
+      "bytes": 1389,
+      "sha256": "9eacfbd6e108a5d056187891a784a77632b0d814c95f797d11b39da2d45d4fda"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientRecordPrint.test.ts",
+      "gitBlob": "12ac2695de52ef8540c9c2257e9b4ae80f98de29",
+      "bytes": 4123,
+      "sha256": "e33325253dbd86d16568c6b9c81f760f9add071be27f3c824c7a06a0cbafaa09"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientRosterGuard.test.ts",
+      "gitBlob": "c8ea41fd648dfee652ba8ffc11a2feca6825aff6",
+      "bytes": 6328,
+      "sha256": "08a630c7b72cb8e7154d434a5c6fd715a0fa471e205c77cfe9169a098eac7945"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientRosterSort.test.ts",
+      "gitBlob": "502792235a89aad5f6372afcc0e9ff925b4854e8",
+      "bytes": 5989,
+      "sha256": "0bf89a339b9b2560f3955e8e4cefccc62815b0e1da79cd8c0f7cf4e4df68b8e0"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/patientTherapyCalendar.test.ts",
+      "gitBlob": "5b1b5f7e0b1736af4ce61691274b16ebe6e3fe18",
+      "bytes": 10647,
+      "sha256": "b47046455fa828db59427248ab44df9bae90c53245d1db4304a0c532d208c655"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomAssignmentModel.test.ts",
+      "gitBlob": "3997fda06521da3bcc0d0a169f4e5fd3c1947b21",
+      "bytes": 3426,
+      "sha256": "72473f7438b472b23c33c1abd6fecd6e4707976dc879e49307ed50fb2aef4507"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomAssignmentScope.test.ts",
+      "gitBlob": "89e8fbf538488122c27d9a01cd72766d87947d5d",
+      "bytes": 4017,
+      "sha256": "209e44c71491e0cab3fca5b1c80b3d348b36d9d5b2572fbba02acfbe51028582"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/roomBedDialogAccessibility.test.ts",
+      "gitBlob": "5ec6b4eead26708deab7984620274057aa81f99b",
+      "bytes": 1337,
+      "sha256": "bb3ed59d736b03661c50920c6a400f837fcae49ddb3ff89f38d4374a5811ed4f"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
+      "gitBlob": "5044b7394457e5cf6859087501c8b797537c9a9f",
+      "bytes": 1848,
+      "sha256": "0bd3f98c7de269c635376ffa8b2158872fedd6651d8818623a5044e2095e4b36"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyNavigationGuard.test.ts",
+      "gitBlob": "adee80b96842577cb3f5e1f9b0ac07ed0c51ba61",
+      "bytes": 1257,
+      "sha256": "6db7fc45f53ab90f338d6ab2fca3174bd44e422c9389363f033050f9b7602ee9"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapyPages.test.ts",
+      "gitBlob": "c38f07c971a568c4a4d3693e9a60326f079cd64e",
+      "bytes": 6035,
+      "sha256": "056e319851063723f90d976d9f9e971b84d7caa53994ed81231274505a4a85bf"
+    },
+    {
+      "path": "frontend/src/lib/__tests__/therapySlotPage.test.ts",
+      "gitBlob": "d818c377e165b38258f0fb22a37506d237316fe5",
+      "bytes": 2032,
+      "sha256": "68b4c9570f3c3eec7e8c68655426d7f7568daae2c6815e102d7c9ddd28467ed2"
+    },
+    {
+      "path": "frontend/src/lib/allergyStatusModel.ts",
+      "gitBlob": "8786e05008641260f41ab983a592b7f6f46cc093",
+      "bytes": 2564,
+      "sha256": "871918bf6e0226eb52b453c9d8956664539f3a1a764d47c24a4eff815c7658e6"
+    },
+    {
+      "path": "frontend/src/lib/appointmentRange.ts",
+      "gitBlob": "599e19cfeabae2a6a1c13a78777702a115a78288",
+      "bytes": 795,
+      "sha256": "d36acfad186c1322c966d7293efa58d8bcbfb8ac8737798490a812597d01892c"
+    },
+    {
+      "path": "frontend/src/lib/archivePrint.ts",
+      "gitBlob": "325b92641e49cef92962e144ece4e163980378d6",
+      "bytes": 4353,
+      "sha256": "f3c572941d49656175b833a1e29f5e7fe858cd1df8d0e1b247dd5c8666ce05c6"
+    },
+    {
+      "path": "frontend/src/lib/archivePrintFrame.ts",
+      "gitBlob": "3a637addc0235ff938087459cd174a22690d1c6c",
+      "bytes": 3120,
+      "sha256": "151b0448ed803f0c2c1becbdfc20a569a1a323295843b549635591f0f0fd7fab"
+    },
+    {
+      "path": "frontend/src/lib/cachedFetch.ts",
+      "gitBlob": "88388925aa29b063880513754707212104fee7dc",
+      "bytes": 3096,
+      "sha256": "791951b286059cc18fe95081d400fba0579b6ea16a111a44af148912a162ce19"
+    },
+    {
+      "path": "frontend/src/lib/cameraAcquisition.ts",
+      "gitBlob": "ace4a22ed2abba2603ed113800d5ad9b6619f81d",
+      "bytes": 2164,
+      "sha256": "5b563de2123c95af2f59101ad90357406811a1e5016734f122698e7d47f336fb"
+    },
+    {
+      "path": "frontend/src/lib/cartellaWriteQueue.ts",
+      "gitBlob": "7bab33215492c8cb3bb5da7f1019ae7e67b70b85",
+      "bytes": 2306,
+      "sha256": "51fded7d8dbd208801f1287c51a6a3fdc4f758413812c5ddd004feec2f009b36"
+    },
+    {
+      "path": "frontend/src/lib/clinicalAttachments.ts",
+      "gitBlob": "931f644d387ed6c3b2e4bdc1a1fed115c029051a",
+      "bytes": 1198,
+      "sha256": "830541ebbc04987579f4d99b1eaaa90fc8b09dfe2175457d93ff0931cf543cd0"
+    },
+    {
+      "path": "frontend/src/lib/clinicalHistory.ts",
+      "gitBlob": "bef0b0e2daff4a1fe8cb3e917007b33d3e709608",
+      "bytes": 2804,
+      "sha256": "87ad27b468657eaa5b17d8535cabc1c717f58f40c4f8d1c99dde8412dbb5e0b1"
+    },
+    {
+      "path": "frontend/src/lib/codiceFiscale.ts",
+      "gitBlob": "93c9fa19a388c160ddcf26d371f8a65fe443409c",
+      "bytes": 4040,
+      "sha256": "8af490afcb99e001e0f19b273536c4b6126fa937c05ca19af49ba38131437cfd"
+    },
+    {
+      "path": "frontend/src/lib/consegneFeed.ts",
+      "gitBlob": "f32d9ba641b80d9c26a7599f17308291a31c8adf",
+      "bytes": 1642,
+      "sha256": "829711fa02ad7cb70f3cde852f267f6350ab57dddaf8603a4c5dea09ed33b7cd"
+    },
+    {
+      "path": "frontend/src/lib/dashboardTherapies.ts",
+      "gitBlob": "20c33fcb7069a4102cd7a880b9b88632126d948e",
+      "bytes": 4862,
+      "sha256": "6cfaeccf7de9902c5a8fe2381eb5c6eeb16bd89ddadf6b87041df082dc97ef8d"
+    },
+    {
+      "path": "frontend/src/lib/dashboardTherapyRead.ts",
+      "gitBlob": "93568e0a2886c6ede6e6d98a255dbab1e2b73d1c",
+      "bytes": 699,
+      "sha256": "2e2a9abf8449037b1c913f4662dc2eac7b5204a21e0a237a7abf6f4c86b78ef7"
+    },
+    {
+      "path": "frontend/src/lib/diaryPages.ts",
+      "gitBlob": "64d26a898cc9451d58ec808175867067eeee9249",
+      "bytes": 1977,
+      "sha256": "5bd13f7e3f001f0c990ad7eb3d50c174cfbdc18dd2d50d89c1df61d8b1e9c66c"
+    },
+    {
+      "path": "frontend/src/lib/documentScan.ts",
+      "gitBlob": "057298de6d45d6baa73ce993d2bb3584d62702c3",
+      "bytes": 4751,
+      "sha256": "5dd84edd488e8a9e22c2b325810d50a7fad04100b98b571babd976f8676993fa"
+    },
+    {
+      "path": "frontend/src/lib/entraAuth.ts",
+      "gitBlob": "f7a5ffaccb1467b825d7a8992d8139c9fc455e47",
+      "bytes": 3311,
+      "sha256": "9b0db13c4097cf0e00ddf3aef19918896bc69215acd036c142edb4fcc7b78da9"
+    },
+    {
+      "path": "frontend/src/lib/facilityTime.ts",
+      "gitBlob": "8e01055979e2451679dc86a572e7e5bc375c4b3d",
+      "bytes": 1189,
+      "sha256": "37a5b64f67b4e35696637bfebd9562f9eccf926430cf9c895c787883b6f0b03b"
+    },
+    {
+      "path": "frontend/src/lib/importFailure.ts",
+      "gitBlob": "58ff1a80dd4dc7720eabde12310c30669514fdf0",
+      "bytes": 2941,
+      "sha256": "b58209bc5634f37b80a2eafb93f3c02eed9aea24b0f8b0c2677c5d37a5f36428"
+    },
+    {
+      "path": "frontend/src/lib/importPhotoPreviews.ts",
+      "gitBlob": "1d33bb9f02a864d9b6567a92226d97d4512f3122",
+      "bytes": 4101,
+      "sha256": "81582b0118abf69fab879d39791f722b5f1ded74b960d2bff401323cf6cdd0cb"
+    },
+    {
+      "path": "frontend/src/lib/intakeDemographics.ts",
+      "gitBlob": "6b6f3c3a78b47865b13c40a1bdba5a0e11ed9b64",
+      "bytes": 1577,
+      "sha256": "4d15c0ee14d9a79eeb805b4a603a35e385315496cf88cb7fef8e63de3bf93962"
+    },
+    {
+      "path": "frontend/src/lib/legacyAnamnesis.ts",
+      "gitBlob": "38b5e0fe60f16500d9ca7b439699814bfa04cb60",
+      "bytes": 1980,
+      "sha256": "5606ffb6a35e84318fa07e8f9e5af82049d3dc10656632eaae032ef91ec6cf6b"
+    },
+    {
+      "path": "frontend/src/lib/loadPatientParameterTrends.ts",
+      "gitBlob": "2ab8609abafa59ed6c58548623b345a9323fe5ea",
+      "bytes": 3190,
+      "sha256": "7644cb31c493e168204ce59f039089dff734ce0b4b40b7dd51b02b666745d3ff"
+    },
+    {
+      "path": "frontend/src/lib/medicationAdministrationPages.ts",
+      "gitBlob": "d26d035bfeca78b3a6c448e88d6dd88fc948827f",
+      "bytes": 1211,
+      "sha256": "c69d3e91d6e86ecb82f4b1b488acd6adb3807c74cd4bf5fc7296fc3a546b2b12"
+    },
+    {
+      "path": "frontend/src/lib/mergeMedicazioni.ts",
+      "gitBlob": "3f457330e627386755088682c0e56c10d541e958",
+      "bytes": 2462,
+      "sha256": "6731866a61c66ae964f98bac6c85863e495e2a6b340e6cc03d15e9a37c4a872c"
+    },
+    {
+      "path": "frontend/src/lib/notesMailbox.ts",
+      "gitBlob": "cf8c889b33d2ffe74fec083c1c419e0672c352df",
+      "bytes": 1153,
+      "sha256": "3959883bf0d755c7ee47fd1cc5253a931e98df1d7370c1ecab5dbbc6371a32ba"
+    },
+    {
+      "path": "frontend/src/lib/operatorDirectoryPage.ts",
+      "gitBlob": "ac0a9c4aa4c604549c41c9cc43a6a819512fd127",
+      "bytes": 2846,
+      "sha256": "941a3da07cb78e5a9336240077ca19b78e397cacf0eb29567702bcfafb3a8225"
+    },
+    {
+      "path": "frontend/src/lib/operatorSession.ts",
+      "gitBlob": "cd1aa666fd4421925ba70b2cd51374a33baacfa2",
+      "bytes": 1264,
+      "sha256": "2b76ee3c5206ec54c677d09c4149a26ad27d3ef9e5ae68132b02bef8a87ccb3f"
+    },
+    {
+      "path": "frontend/src/lib/parameterEntrySummary.ts",
+      "gitBlob": "ae631fcf9854a355810c5f2218d552b1530cfa81",
+      "bytes": 1214,
+      "sha256": "3e7db4836a3aa71004b4c155aae7d69043701623e53b7044c40de6a2a216fdce"
+    },
+    {
+      "path": "frontend/src/lib/patientComboboxModel.ts",
+      "gitBlob": "e7433942ccedfd192ca37513c01e71076ac4a011",
+      "bytes": 740,
+      "sha256": "27b45d6247d0e8f5b0b9643c5e543b675a97420ff5d527bbeaf2a4092efa0d7c"
+    },
+    {
+      "path": "frontend/src/lib/patientDemographics.ts",
+      "gitBlob": "eb43087ef78b07c58dd74839519bfbeca327807f",
+      "bytes": 2358,
+      "sha256": "6055ba35bed9d717e2375b6f8cd4f1c447bbf82445d8b88197fc2d1aeab61a29"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchive.ts",
+      "gitBlob": "ab27578dd072cbb0fc214807f0aeb40a05c9e95b",
+      "bytes": 5622,
+      "sha256": "bc2ba2acea5b465f92324501babb16344f894a293d590cba364059cb10dbc985"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentArchiveIO.ts",
+      "gitBlob": "019732e419dc06c42ae188d1d6dee88c56508bf5",
+      "bytes": 8876,
+      "sha256": "c533e82b090a2160527347b1c01f6c28fa86ce96ca00c741d6f35324426cc71b"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentContent.ts",
+      "gitBlob": "ef44cce4327dc83dd6a4e81a75615c5936dd5d3a",
+      "bytes": 1625,
+      "sha256": "56f4c27c32264fef3189a897d60992a973b2e23d775707eb3eff437e334f3544"
+    },
+    {
+      "path": "frontend/src/lib/patientDocumentsPage.ts",
+      "gitBlob": "925cd85030c3c2ddc19cc93ad7e970ee2ed3c7f5",
+      "bytes": 2283,
+      "sha256": "1bb6485459e711f4fc12d19ae50eda7a99ecb3615eb41f847b0de7808431af7d"
+    },
+    {
+      "path": "frontend/src/lib/patientIntakeReview.ts",
+      "gitBlob": "9f82f358091f92e838a46b19562a6e8c0adecbf2",
+      "bytes": 1203,
+      "sha256": "f1405079d3081fdbc1c8bca761748458f45e23b862fd1f38a102baef7588ac2c"
+    },
+    {
+      "path": "frontend/src/lib/patientPage.ts",
+      "gitBlob": "2cbe850e3a352fe6867772881e5bbcd7050c7c93",
+      "bytes": 5554,
+      "sha256": "f697562884f26673cf30adb09bd935befd3e3556e639e202032e1c9c70946cfe"
+    },
+    {
+      "path": "frontend/src/lib/patientParameterReadings.ts",
+      "gitBlob": "3a4a85230f47eed2fe7b9af98de587408a139751",
+      "bytes": 7844,
+      "sha256": "c15404a84cbb938ea0437d63757e59bbde5cd66d7ed7f00b5e5e7c7dc748aaca"
+    },
+    {
+      "path": "frontend/src/lib/patientParameterTrends.ts",
+      "gitBlob": "defcd8155c3655fa23cf92952be352b7904082b9",
+      "bytes": 5446,
+      "sha256": "180218bef95a6b9a55b47fa77fb0c2436b6a429cf779c0b822e9c4a4b963da7f"
+    },
+    {
+      "path": "frontend/src/lib/patientParameterWorkspace.ts",
+      "gitBlob": "426341ea2daf8be4be22d67f02dc003930b6085a",
+      "bytes": 1383,
+      "sha256": "01f9f8c118af0d71bbc904af69f29b8d77eb624d09c494347be4f7fc4a38c84c"
+    },
+    {
+      "path": "frontend/src/lib/patientParametersPage.ts",
+      "gitBlob": "1948d8febde85cc0a19a0b623adca5445af2873b",
+      "bytes": 3647,
+      "sha256": "9388359e794982655c493ddc4940316f6ec9e0633affb9471128e39ef0914020"
+    },
+    {
+      "path": "frontend/src/lib/patientPhone.ts",
+      "gitBlob": "3067d8ccb84ab252a45b6d2731eecd4a9643a0e1",
+      "bytes": 865,
+      "sha256": "8a4fcb9e4d16be9246880e7f055ff5dca26387b4fc884956b22408678c74d007"
+    },
+    {
+      "path": "frontend/src/lib/patientRosterSort.ts",
+      "gitBlob": "12a682b50f3cc70648f8f193129c94225d998d4e",
+      "bytes": 3074,
+      "sha256": "24ccafa09565eaa6ab7bc15f5598e191e9b75891236a232a8a6f49dfe13d050e"
+    },
+    {
+      "path": "frontend/src/lib/patientSort.ts",
+      "gitBlob": "606fa53c098a4309da75da292cae913b5e529a2c",
+      "bytes": 2004,
+      "sha256": "1aa323468def184bab8a5b63ebe4075f836e7545a26f2d2406b54dbfe1e7bcf5"
+    },
+    {
+      "path": "frontend/src/lib/patientTherapyCalendar.ts",
+      "gitBlob": "a4faacc6307189138ad08078ac46420630832347",
+      "bytes": 5900,
+      "sha256": "e76df468d904c05b109cba8dd04ad15183b4cce1fd640b4077f4e67832934ffc"
+    },
+    {
+      "path": "frontend/src/lib/patientTherapyCalendarRead.ts",
+      "gitBlob": "0b96b43fc7e394395c9669d01806cb1c3e7e1a29",
+      "bytes": 5162,
+      "sha256": "9d8a5da9a8e5823606b68e64e1f1d879981dfbe6da2acbcc41fdaf490d250a60"
+    },
+    {
+      "path": "frontend/src/lib/renderArchivePrint.ts",
+      "gitBlob": "594afbd44cb8031c80f2a169391b683d450f65d9",
+      "bytes": 4268,
+      "sha256": "058ef3ad7d29abf310c1169d94e8d15b28e7a10d6c121ca195baf194835e7fef"
+    },
+    {
+      "path": "frontend/src/lib/roomAssignmentModel.ts",
+      "gitBlob": "2e320fa8017be44f0df75746f56e605613158eda",
+      "bytes": 2552,
+      "sha256": "0ad884c114f50f75d8da48cf2d82a55d3ac1afdbb8693619fbb2ff0a76471122"
+    },
+    {
+      "path": "frontend/src/lib/therapyPages.ts",
+      "gitBlob": "9a8e5f989f2328d5fd843a3674f2f15c554091ce",
+      "bytes": 3467,
+      "sha256": "79a013a9123d031757f5d60b45f39bf2c33579de032d847d779f41f581131323"
+    },
+    {
+      "path": "frontend/src/lib/therapySlotPage.ts",
+      "gitBlob": "4f46e8c9601d6d20bf7c99802419a6ea50cc2517",
+      "bytes": 6052,
+      "sha256": "5f1130db77af46e432e05eacc1530ba6dfe20a1467333905d54216f9953c2b36"
+    },
+    {
+      "path": "frontend/src/lib/useDocumentArchive.ts",
+      "gitBlob": "48605a7f401ccafe8df36f3af322a9656518447e",
+      "bytes": 1666,
+      "sha256": "795372d9b6f31decaa5b8c67d948b1d9240a97d807e33568dcee0b1b06a80fab"
+    },
+    {
+      "path": "frontend/src/lib/usePatientDirectorySearch.ts",
+      "gitBlob": "727737d67fa7851df302593b696856a0f5bdfaad",
+      "bytes": 2807,
+      "sha256": "503454e06b2fbb6e77b156c05e76784a4c715d0b835265007d8be148a46fd2a5"
+    },
+    {
+      "path": "frontend/src/lib/usePatientDocuments.ts",
+      "gitBlob": "59d8dedaa9ad2635048b141668715282069b661e",
+      "bytes": 4941,
+      "sha256": "d98990aee82bba5d63ea157c164a12ce3620e14b7fdb79ee7f41dce2ca423418"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "gitBlob": "544666bfa94b28a502f8b1093aa24aa55448faff",
+      "bytes": 263,
+      "sha256": "b1c0090ec2366320c1fdf4f83c534420252e111b9254f9380f71c7eee812f961"
+    },
+    {
+      "path": "frontend/src/mockData.ts",
+      "gitBlob": "16809be4a4474fb9bcde548a9ce27e46ff5cbe2e",
+      "bytes": 27640,
+      "sha256": "6f3d11f0ba5885c35e3988c2fe6984e0a157bb3fab019a6a60274fc41dbfe909"
+    },
+    {
+      "path": "frontend/src/print-forms.css",
+      "gitBlob": "5927034cea11a88e78f6078d8bb854e1b16bec92",
+      "bytes": 23659,
+      "sha256": "92090c8a9480cdd66de9ea1a1ce954ad4203703ac36be6d65d34dac3522c9282"
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "gitBlob": "dd8fef7f94815144864a2d0c250343f264e6d71e",
+      "bytes": 31461,
+      "sha256": "494a87db0f34e0a36c68a91d490ea72cfd5d85aed7fd7c64abc5f016f6b24302"
+    },
+    {
+      "path": "frontend/tsconfig.app.json",
+      "gitBlob": "fd0e76daeb73b9928d9e45ee6f378a4af8655cb2",
+      "bytes": 696,
+      "sha256": "e647dcd5a2953bcf672a6830b2b449452043a68eb97e85684f2ef45ba97b7941"
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "gitBlob": "d32ff682003e0ff5d8a6e6bb3663d4c35a45b116",
+      "bytes": 107,
+      "sha256": "e8d6f7b50828db3953e21c7e92584f9206b3cd2551b4012507372afbb7fe9ce3"
+    },
+    {
+      "path": "frontend/tsconfig.node.json",
+      "gitBlob": "d3c52ea64c6cd6bad118474410f5322f48e257a6",
+      "bytes": 591,
+      "sha256": "90a22c920cbc14624fb4658b58f15c875abf3234224f3933f211849c3ada3242"
+    },
+    {
+      "path": "frontend/vercel.json",
+      "gitBlob": "100b3c8ade6fbbde813c3ec4b7fea01b1e95ff73",
+      "bytes": 1510,
+      "sha256": "e1230079b17c865170dede034031f602eaeeaeb60ba262f6204f3fe6efafb64f"
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "gitBlob": "51444b8e8cae44d1ad1331d472d80d2e2098c6a4",
+      "bytes": 278,
+      "sha256": "3bcf221a47b259f3100f49c0805eb7ab5ed867eab59e8ab0386316ddf2bf1b0b"
+    },
+    {
+      "path": "package-lock.json",
+      "gitBlob": "d6d833e1199638b9db22722fd1efe251fb3e36bf",
+      "bytes": 283383,
+      "sha256": "d8c5764927192a53af62fbc1047dd621815da0b64206c4d13ae989fe18b36300"
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "059755f142b9f0b859cb714a3338cb5203fd59f2",
+      "bytes": 3216,
+      "sha256": "e7d8062faaa67db5dd7544b4c4f063ec1878ffdb232222ff3e21e31456bf30a9"
+    }
+  ]
+}

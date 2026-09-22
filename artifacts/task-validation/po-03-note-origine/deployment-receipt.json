@@ -1,0 +1,25 @@
+{
+  "sourceCommit": "553fa24bcbcfbf20def0dfa96de06cd52684c9bd",
+  "verifiedOn": "2026-09-23",
+  "backend": {
+    "deploymentId": "7303235b-5079-4d1f-9bba-3a4fe6a2825c",
+    "status": "SUCCESS",
+    "url": "https://clinicos-backend-demo.up.railway.app",
+    "healthStatus": 200,
+    "environment": "demo"
+  },
+  "frontend": {
+    "deploymentId": "dpl_6VLuRrg2BomQVTwTYT3CA7EfUA1W",
+    "status": "READY",
+    "url": "https://clinicos-fg03c5pho-lucalavia-2482s-projects.vercel.app",
+    "alias": "clinicos-eosin.vercel.app",
+    "aliasSourceCommitVerified": true
+  },
+  "validation": {
+    "targetedTests": 80,
+    "build": "frontend and backend passed",
+    "browser": "read-only live smoke: profile selection screen rendered after alias deployment",
+    "livePatientMutation": false,
+    "scope": "Operational notes and OCR schedule parser; no historical data rewriting"
+  }
+}
