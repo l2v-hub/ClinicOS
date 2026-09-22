@@ -1,13 +1,15 @@
+import { openManualDraft, clearManualDraft } from './intakeDraftSession';
+import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
 import { useEffect, useRef, useState } from 'react';
-import { isValidCF } from '../../../lib/codiceFiscale';
+import { birthDateValue, type DemographicField } from '../../../lib/patientDemographics';
 import { validatePatientPhone } from '../../../lib/patientPhone';
-import { createDraft, getDraft, patchDraft, confirmDraft } from './intakeDraftApi';
+import { getDraft, patchDraft, confirmPersistedDraft, editableDraftPatch } from './intakeDraftApi';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
 import { StepClinica } from './StepClinica';
 import { StepVerifica } from './StepVerifica';
-import { buildIntakeTherapyReview } from './intakeTherapies';
+import { buildIntakeTherapyReview, prepareIntakeConfirmData } from './intakeTherapies';
 import { buildConfirmCartella } from './confirmCartella';
 import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 
@@ -16,12 +18,6 @@ import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 // click "Avanti" in piu' per attraversare uno step vuoto. Va reintrodotto qui quando F5 sara'
 // pronto, non prima.
 const STEPS = ['Anagrafica', 'Ingresso', 'Clinica', 'Moduli', 'Verifica'] as const;
-
-function editableDraftPatch(data: Record<string, unknown>) {
-  return Object.fromEntries(
-    Object.entries(data).filter(([key]) => !['_narrative', '_sections'].includes(key)),
-  );
-}
 
 // #243: moduli operativi del prodotto (compilabili dalla sezione "Moduli" della scheda paziente
 // dopo la presa in carico). Lista/griglia con stato esplicito, invece di un blocco "in arrivo".
@@ -144,6 +140,17 @@ export function IntakeWorkspace({
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const saveQueueRef = useRef<Promise<unknown>>(Promise.resolve());
   const bodyRef = useRef<HTMLDivElement | null>(null);
+  const submittingRef = useRef(false);
+  const [focusField, setFocusField] = useState<DemographicField | null>(null);
+  useEffect(() => {
+    if (step !== 1 || !focusField) return;
+    const control = bodyRef.current?.querySelector<HTMLElement>(
+      `[data-demographic-field="${focusField}"]`,
+    );
+    control?.focus();
+    control?.scrollIntoView({ block: 'center' });
+    setFocusField(null);
+  }, [step, focusField]);
   useEffect(
     () => () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -171,37 +178,35 @@ export function IntakeWorkspace({
       setSelectedModuleId(null);
       return;
     }
-    if (importDraftId) {
-      // Import path: load the already-created draft and seed data from it.
-      if (draftId === importDraftId) return; // already loaded this draft
-      setLoading(true);
-      setError(null);
-      getDraft(importDraftId, { operatorId, operatorRole })
-        .then((d) => {
-          setDraftId(d.id);
-          if (d.data && typeof d.data === 'object') {
-            setData(d.data as DraftData);
-          }
-          setStep(3);
-        })
-        .catch(() => setError('Impossibile caricare la bozza di importazione. Riprovare.'))
-        .finally(() => setLoading(false));
-    } else {
-      // Manual path: create a fresh draft (only once).
-      if (draftId) return;
-      setLoading(true);
-      setError(null);
-      createDraft('manual', { operatorId, operatorRole })
-        .then((d) => {
-          setDraftId(d.id);
-          // Seed local data from the draft if the server returned any
-          if (d.data && typeof d.data === 'object') {
-            setData(d.data as DraftData);
-          }
-        })
-        .catch(() => setError('Impossibile aprire la bozza. Riprovare.'))
-        .finally(() => setLoading(false));
-    }
+    if (importDraftId ? draftId === importDraftId : Boolean(draftId)) return;
+    let active = true;
+    setLoading(true);
+    setError(null);
+    const request = importDraftId
+      ? getDraft(importDraftId, { operatorId, operatorRole })
+      : openManualDraft({ operatorId, operatorRole });
+    request
+      .then((draft) => {
+        if (!active) return;
+        setLoading(false);
+        if (draft.status === 'confirmed' && draft.confirmedPatientId) {
+          if (!importDraftId) clearManualDraft({ operatorId, operatorRole });
+          onCreated?.(draft.confirmedPatientId);
+          onClose();
+          return;
+        }
+        setDraftId(draft.id);
+        if (draft.data && typeof draft.data === 'object') setData(draft.data as DraftData);
+        setStep(importDraftId ? 3 : 1);
+      })
+      .catch(() => {
+        if (!active) return;
+        setLoading(false);
+        setError('Impossibile aprire la bozza. Riprovare.');
+      });
+    return () => {
+      active = false;
+    };
   }, [open, draftId, importDraftId, operatorId, operatorRole]);
 
   // BUG-074: each phase shares the same scrollable body — reset it to the top when
@@ -269,27 +274,25 @@ export function IntakeWorkspace({
   }
 
   function anagraficaValid(): boolean {
-    const a = data.anagrafica;
-    // #294: il CF è la chiave univoca del paziente — senza CF valido l'anagrafica
-    // non è accettabile (digitato o calcolato nello StepAnagrafica).
-    return !!(
-      a?.firstName?.trim() &&
-      a?.lastName?.trim() &&
-      a?.dateOfBirth &&
-      isValidCF(a?.codiceFiscale ?? '') &&
-      validatePatientPhone(a?.phone).ok
-    );
+    return Object.keys(intakeDemographicErrors(data.anagrafica ?? {})).length === 0;
+  }
+
+  function reviewDemographicField(field: DemographicField) {
+    setFocusField(field);
+    setStep(1);
   }
 
   async function handleConfirm(force = false, allergyConflictOverride = false) {
-    if (!draftId) return;
-    const phoneValidation = validatePatientPhone(data.anagrafica?.phone);
-    if (!phoneValidation.ok) {
+    if (!draftId || submittingRef.current) return;
+    const demographicErrors = intakeDemographicErrors(data.anagrafica ?? {});
+    const firstInvalid = Object.keys(demographicErrors)[0] as DemographicField | undefined;
+    if (firstInvalid) {
       setSubmitAttempted(true);
-      setSubmitError(phoneValidation.error);
-      setStep(1);
+      setSubmitError(demographicErrors[firstInvalid] ?? null);
+      reviewDemographicField(firstInvalid);
       return;
     }
+    const phoneValidation = validatePatientPhone(data.anagrafica?.phone);
     // #235: acceptance gate — demographics + therapy must be explicitly accepted.
     if (!acceptanceComplete()) {
       setSubmitAttempted(true);
@@ -298,12 +301,14 @@ export function IntakeWorkspace({
       );
       return;
     }
-    const therapyReview = buildIntakeTherapyReview(data, operatoreNome);
-    const invalid = therapyReview.filter((t) => t.issues.length > 0);
+    const confirmData = prepareIntakeConfirmData(data);
+    const therapyReview = buildIntakeTherapyReview(confirmData, operatoreNome);
+    const invalid = therapyReview.filter((t) => !t.excluded && t.issues.length > 0);
     if (invalid.length) {
       setSubmitError(invalid.map((t) => `Terapia ${t.index}: ${t.issues.join('; ')}.`).join(' '));
       return;
     }
+    submittingRef.current = true;
     setSubmitting(true);
     setSubmitError(null);
     setDuplicateWarn(false);
@@ -313,10 +318,10 @@ export function IntakeWorkspace({
     const patient = {
       firstName: a.firstName ?? '',
       lastName: a.lastName ?? '',
-      dateOfBirth: a.dateOfBirth ?? '',
+      dateOfBirth: birthDateValue(a.dateOfBirth),
       ...(a.sex !== undefined && { sex: a.sex }),
-      ...(a.codiceFiscale !== undefined && { codiceFiscale: a.codiceFiscale }),
-      phone: phoneValidation.phone,
+      codiceFiscale: a.codiceFiscale?.trim().toUpperCase() || null,
+      phone: phoneValidation.ok ? phoneValidation.phone : null,
       ...(a.email !== undefined && { email: a.email }),
       ...(a.address !== undefined && { address: a.address }),
       ...(a.emergencyContactName !== undefined && { emergencyContactName: a.emergencyContactName }),
@@ -326,9 +331,9 @@ export function IntakeWorkspace({
     };
 
     // #265: extracted pure mapper (unit-tested) — carries allergieStatus into the cartella.
-    const cartella = buildConfirmCartella(data);
+    const cartella = buildConfirmCartella(confirmData);
 
-    const allTherapies = therapyReview.map((t) => t.input);
+    const allTherapies = therapyReview.filter((t) => !t.excluded).map((t) => t.input);
 
     const payload = {
       patient,
@@ -340,11 +345,17 @@ export function IntakeWorkspace({
 
     try {
       if (debounceRef.current) clearTimeout(debounceRef.current);
-      await persistDraft(data);
+      setData(confirmData);
+      const res = await confirmPersistedDraft(
+        draftId,
+        payload,
+        () => persistDraft(confirmData),
+        op,
+      );
       setSaveState('saved');
-      const res = await confirmDraft(draftId, payload, op);
       if (res.status === 'created' || res.status === 'idempotent') {
         const moduleTabId = selectedModuleId ? MODULE_TO_TAB_ID[selectedModuleId] : undefined;
+        if (!importDraftId) clearManualDraft(op);
         onCreated?.(res.patient?.id ?? '', moduleTabId);
         onClose();
       } else if (res.status === 'duplicate') {
@@ -365,13 +376,14 @@ export function IntakeWorkspace({
         setSubmitError(msg || 'Errore durante la creazione del paziente.');
       }
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   }
 
   function handleNext() {
     if (step === 1) {
-      // Gate: require Nome + Cognome + Data di nascita before advancing
+      // Missing optional identity details can be completed on the same patient later.
       if (!anagraficaValid()) {
         setSubmitAttempted(true);
         window.requestAnimationFrame(() => {
@@ -390,6 +402,28 @@ export function IntakeWorkspace({
     setStep((s) => s + 1);
   }
 
+  async function saveAndClose(close = onClose) {
+    if (submittingRef.current) return;
+    if (!draftId || loading || error) {
+      close();
+      return;
+    }
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      await persistDraft(data);
+      setSaveState('saved');
+      close();
+    } catch {
+      setSaveState('error');
+      setSubmitError('Bozza non salvata. Riprova prima di chiudere.');
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
+  }
+
   function handleBack() {
     if (!isFirst) setStep((s) => s - 1);
   }
@@ -397,7 +431,7 @@ export function IntakeWorkspace({
   return (
     <AccessibleDialogSurface
       labelledBy="patient-intake-dialog-title"
-      onClose={onClose}
+      onClose={() => void saveAndClose()}
       dismissible={!submitting}
       closeOnOverlay={false}
       surfaceClassName="modal-card"
@@ -414,7 +448,7 @@ export function IntakeWorkspace({
         <button
           type="button"
           className="icon-btn"
-          onClick={onClose}
+          onClick={() => void saveAndClose()}
           aria-label="Chiudi"
           data-dialog-initial-focus
           disabled={submitting}
@@ -568,6 +602,7 @@ export function IntakeWorkspace({
                   error={allergyConflictWarn ? null : submitError}
                   onConfirm={() => void handleConfirm(false)}
                   onUpdateSection={updateSection}
+                  onReviewDemographics={reviewDemographicField}
                   onReviewTherapies={() => {
                     setSubmitError(null);
                     setStep(3);
@@ -598,15 +633,23 @@ export function IntakeWorkspace({
           {saveState === 'error' && 'Errore salvataggio — riprova'}
         </span>
         {onBackToDocuments ? (
-          <button className="btn-ghost" onClick={onBackToDocuments} disabled={submitting}>
+          <button
+            className="btn-ghost"
+            onClick={() => void saveAndClose(onBackToDocuments)}
+            disabled={submitting}
+          >
             ← Torna ai documenti
           </button>
         ) : (
-          <button className="btn-ghost" onClick={onClose} disabled={submitting}>
-            Annulla
+          <button className="btn-ghost" onClick={() => void saveAndClose()} disabled={submitting}>
+            Salva bozza e chiudi
           </button>
         )}
-        <button className="btn-secondary" onClick={handleBack} disabled={isFirst || loading}>
+        <button
+          className="btn-secondary"
+          onClick={handleBack}
+          disabled={isFirst || loading || submitting}
+        >
           ← Indietro
         </button>
         <button

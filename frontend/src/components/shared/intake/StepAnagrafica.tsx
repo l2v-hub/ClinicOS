@@ -1,3 +1,5 @@
+import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
+import { DemographicsStatus } from '../DemographicsStatus';
 // StepAnagrafica — controlled anagrafica form for the intake wizard.
 // Mirrors the field set of NewPatientModal's TabAnagrafica + referente section.
 // No fetches here — the parent IntakeWorkspace owns patchDraft.
@@ -11,12 +13,7 @@ import {
   type ReactNode,
 } from 'react';
 
-import {
-  deriveAutoCFUpdate,
-  isValidCF,
-  normalizeCF,
-  type FiscalCodeOrigin,
-} from '../../../lib/codiceFiscale';
+import { deriveAutoCFUpdate, normalizeCF, type FiscalCodeOrigin } from '../../../lib/codiceFiscale';
 import { PATIENT_PHONE_MAX_LENGTH, validatePatientPhone } from '../../../lib/patientPhone';
 
 interface AnagraficaData {
@@ -216,23 +213,11 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
       onChange(next);
     };
 
-  const errors: Partial<Record<keyof AnagraficaData, string>> = {};
-  if (submitAttempted && !value.firstName?.trim()) errors.firstName = 'Nome obbligatorio';
-  if (submitAttempted && !value.lastName?.trim()) errors.lastName = 'Cognome obbligatorio';
-  if (submitAttempted && !value.dateOfBirth) errors.dateOfBirth = 'Data di nascita obbligatoria';
+  const errors = submitAttempted ? intakeDemographicErrors(value) : {};
   const phoneValidation = validatePatientPhone(value.phone);
-  if (submitAttempted && !phoneValidation.ok) errors.phone = phoneValidation.error;
-  // #294: CF obbligatorio — digitato valido oppure calcolato dai dati.
-  if (submitAttempted && !isValidCF(value.codiceFiscale ?? ''))
-    errors.codiceFiscale = value.codiceFiscale?.trim()
-      ? 'Codice fiscale non valido (16 caratteri, carattere di controllo)'
-      : 'Codice fiscale obbligatorio: completa i dati di nascita oppure inseriscilo manualmente';
 
   const requiredCompleted =
-    Number(Boolean(value.firstName?.trim())) +
-    Number(Boolean(value.lastName?.trim())) +
-    Number(Boolean(value.dateOfBirth)) +
-    Number(isValidCF(value.codiceFiscale ?? ''));
+    Number(Boolean(value.firstName?.trim())) + Number(Boolean(value.lastName?.trim()));
   const contactsCompleted = filledCount(value, [
     'phone',
     'email',
@@ -250,16 +235,31 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
 
   return (
     <>
+      <DemographicsStatus
+        value={value}
+        onEdit={(field) =>
+          document.querySelector<HTMLElement>(`[data-demographic-field="${field}"]`)?.focus()
+        }
+      />
+      <p className="form-hint">
+        Puoi registrare l’ingresso con nome e cognome e completare in seguito gli altri dati
+        disponibili.
+      </p>
       <NpmCard
         title="Dati personali"
         desc="Identità e dati necessari alla registrazione"
-        status={requiredCompleted === 4 ? 'Completo' : `${requiredCompleted}/4 obbligatori`}
-        statusTone={requiredCompleted === 4 ? 'complete' : submitAttempted ? 'error' : 'progress'}
+        status={
+          requiredCompleted === 2
+            ? 'Dati minimi presenti'
+            : `${requiredCompleted}/2 necessari all’ingresso`
+        }
+        statusTone={requiredCompleted === 2 ? 'complete' : submitAttempted ? 'error' : 'progress'}
       >
         <div className="npm-grid npm-grid--identity">
           <NpmField label="Nome" required error={errors.firstName}>
             <input
               className={`npm-input${errors.firstName ? ' npm-input--error' : ''}`}
+              data-demographic-field="firstName"
               value={value.firstName ?? ''}
               onChange={f('firstName')}
               placeholder="Mario"
@@ -269,16 +269,18 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
           <NpmField label="Cognome" required error={errors.lastName}>
             <input
               className={`npm-input${errors.lastName ? ' npm-input--error' : ''}`}
+              data-demographic-field="lastName"
               value={value.lastName ?? ''}
               onChange={f('lastName')}
               placeholder="Rossi"
               autoComplete="family-name"
             />
           </NpmField>
-          <NpmField label="Data di nascita" required error={errors.dateOfBirth}>
+          <NpmField label="Data di nascita" error={errors.dateOfBirth}>
             <input
               type="date"
               className={`npm-input${errors.dateOfBirth ? ' npm-input--error' : ''}`}
+              data-demographic-field="dateOfBirth"
               value={value.dateOfBirth ?? ''}
               onChange={f('dateOfBirth')}
             />
@@ -310,7 +312,6 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
           </NpmField>
           <NpmField
             label="Codice fiscale"
-            required
             span2
             error={errors.codiceFiscale}
             hint={
@@ -321,6 +322,7 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
           >
             <input
               className={`npm-input npm-mono${errors.codiceFiscale ? ' npm-input--error' : ''}`}
+              data-demographic-field="codiceFiscale"
               value={value.codiceFiscale ?? ''}
               onChange={f('codiceFiscale')}
               onBlur={(event) => {
@@ -348,17 +350,17 @@ export function StepAnagrafica({ value, onChange, submitAttempted = false }: Ste
 
       <NpmCard
         title="Recapiti"
-        desc="Telefono obbligatorio; email e indirizzo facoltativi"
+        desc="Il telefono è necessario per completare la scheda; puoi aggiungerlo dopo l’ingresso"
         status={phoneValidation.ok ? `${contactsCompleted}/6 compilati` : 'Telefono da completare'}
         statusTone={phoneValidation.ok ? 'complete' : submitAttempted ? 'error' : 'progress'}
       >
         <div className="npm-grid npm-grid--contacts">
-          <NpmField label="Telefono" required error={errors.phone}>
+          <NpmField label="Telefono" error={errors.phone}>
             <input
               type="tel"
-              required
               maxLength={PATIENT_PHONE_MAX_LENGTH}
               className={`npm-input${errors.phone ? ' npm-input--error' : ''}`}
+              data-demographic-field="phone"
               value={value.phone ?? ''}
               onChange={f('phone')}
               placeholder="+39 333 000 0000"

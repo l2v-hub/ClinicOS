@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-09-22T22:42:41.7644836Z",
+  "demographicLinkMinHeight": 44,
+  "import": {
+    "schedule": "20:00",
+    "unknownDob": true,
+    "therapyCount": 1,
+    "patientId": "cmud977s10006qwlp7xqcsevb",
+    "archivedDocuments": 1,
+    "excludedRetained": true
+  },
+  "livePatientMutations": 0,
+  "environment": "isolated loopback PGlite and real UI components",
+  "manual": {
+    "samePatientId": "cmud927ig0004qwlpxk4bqvjl",
+    "complete": true,
+    "completedDob": "1970-01-01T00:00:00Z"
+  },
+  "lastReloadConsoleErrors": 0,
+  "viewport": {
+    "mobileDeviceClaim": false,
+    "documentWidth": 390,
+    "width": 390
+  }
+}

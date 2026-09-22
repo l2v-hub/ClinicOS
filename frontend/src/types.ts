@@ -37,9 +37,9 @@ export interface Paziente {
   medicalRecordNumber: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth: string | null;
   sex: string | null;
-  /** #294: chiave univoca del paziente (null solo su record legacy pre-vincolo). */
+  /** Unique fiscal identity when available; incomplete intake keeps it null. */
   codiceFiscale?: string | null;
   email: string | null;
   phone: string | null;
@@ -52,7 +52,7 @@ export interface NuovoPaziente {
   // Anagrafica
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth: string | null;
   sex: string;
   codiceFiscale: string;
   /** #294: comune di nascita — usato solo per calcolare il CF quando non digitato. */

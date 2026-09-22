@@ -2,9 +2,19 @@
 
 import { API_URL } from '../../../config';
 
+export function editableDraftPatch(data: Record<string, unknown>) {
+  return Object.fromEntries(
+    Object.entries(data).filter(
+      ([key]) => !['_narrative', '_sections', '_terapiaText', '_confirmation'].includes(key),
+    ),
+  );
+}
+
 export interface DraftResponse {
   id: string;
   data: Record<string, unknown>;
+  status?: string;
+  confirmedPatientId?: string | null;
 }
 
 export interface ConfirmResponse {
@@ -106,4 +116,23 @@ export async function confirmDraft(
     throw new Error((err as { error?: string }).error ?? `confirmDraft failed: ${res.status}`);
   }
   return res.json() as Promise<ConfirmResponse>;
+}
+
+/** A lost response may follow a committed confirmation, so a retry's autosave can
+ * correctly be refused. Recover by reading the original draft, never by creating one. */
+export async function confirmPersistedDraft(
+  id: string,
+  payload: object,
+  persist: () => Promise<unknown>,
+  op?: OperatorHeaders,
+): Promise<ConfirmResponse> {
+  try {
+    await persist();
+    return await confirmDraft(id, payload, op);
+  } catch (error) {
+    const saved = await getDraft(id, op).catch(() => null);
+    if (saved?.status === 'confirmed' && saved.confirmedPatientId)
+      return { status: 'idempotent', patient: { id: saved.confirmedPatientId } };
+    throw error;
+  }
 }

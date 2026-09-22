@@ -1,3 +1,4 @@
+import { patientAge } from '../../lib/patientDemographics';
 import type {
   Paziente,
   CartellaPaziente,
@@ -69,12 +70,6 @@ export interface InvioPSModel {
 
 // ── Pure model builder (exported for unit testing) ────────────────────────────
 
-function calcAge(dob: string): string {
-  if (!dob) return '';
-  const years = Math.floor((Date.now() - new Date(dob).getTime()) / 31557600000);
-  return years > 0 ? `${years} anni` : '';
-}
-
 function fmtDate(iso: string): string {
   if (!iso) return '—';
   const d = new Date(iso);
@@ -138,7 +133,8 @@ export function buildInvioPSModel(
   };
 
   // Age appended to sesso line for compactness
-  const age = calcAge(paziente.dateOfBirth || '');
+  const years = patientAge(paziente.dateOfBirth);
+  const age = years === null ? '' : `${years} anni`;
   if (age) {
     patient.sesso = `${patient.sesso} · ${age}`;
   }

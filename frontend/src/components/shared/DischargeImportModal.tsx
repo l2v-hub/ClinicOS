@@ -1,3 +1,4 @@
+import { reviewedIdentityPatch } from '../../lib/intakeDemographics';
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
@@ -492,10 +493,8 @@ export function DischargeImportModal({
         const reviewed: Record<string, unknown> = {
           ...(nonEmpty(patient.firstName) ? { firstName: patient.firstName } : {}),
           ...(nonEmpty(patient.lastName) ? { lastName: patient.lastName } : {}),
-          ...(nonEmpty(patient.dateOfBirth) ? { dateOfBirth: patient.dateOfBirth } : {}),
+          ...reviewedIdentityPatch(patient),
           ...(nonEmpty(patient.sex) ? { sex: patient.sex } : {}),
-          ...(nonEmpty(patient.codiceFiscale) ? { codiceFiscale: patient.codiceFiscale } : {}),
-          ...(nonEmpty(patient.phone) ? { phone: patient.phone } : {}),
           ...(nonEmpty(patient.email) ? { email: patient.email } : {}),
           ...(nonEmpty(patient.address) ? { address: patient.address } : {}),
           ...(nonEmpty(patient.emergencyContactName)

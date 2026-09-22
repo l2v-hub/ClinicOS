@@ -22,6 +22,7 @@ export interface DischargeTherapyRow {
   note: string;
   originalText: string;
   stato: 'ok' | 'da_verificare';
+  excludedFromConfirm?: boolean;
   reviewedTherapy?: TherapyFormValue;
 }
 

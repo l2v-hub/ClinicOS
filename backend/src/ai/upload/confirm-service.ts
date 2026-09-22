@@ -1,592 +1,359 @@
-// Transactional, idempotent persistence of a reviewed import (REQ-018).
-//
-// Creates the Patient + Cartella + links the job's documents in ONE transaction,
-// only after explicit confirmation. Detects duplicates, rolls back fully on error,
-// and writes an audit trail linking job ↔ patient ↔ documents. The model never
-// touches the DB — only reviewed, validated data reaches here.
-
+// A draft and its OCR job share one locked, atomic confirmation boundary.
 import { prisma } from '../../lib/prisma.js';
 import { AiExtractionError } from '../types.js';
-import { normalizeDate } from '../extraction-validate.js';
-import { isConfirmBlocked, detectSectionLoss, type SectionsResult } from '../sections/index.js';
-import { persistNarrativeFromDraft, type DischargeNarrativeDraft } from '../sections/index.js';
+import {
+  isConfirmBlocked,
+  detectSectionLoss,
+  persistNarrativeFromDraft,
+  type SectionsResult,
+  type DischargeNarrativeDraft,
+} from '../sections/index.js';
 import { persistImportDocuments } from './patient-documents.js';
-import { getDraft } from '../../intake/draft-service.js';
 import { createTherapyInTx, type TherapyCreateInput } from '../../therapies/therapy-create.js';
 import {
   therapiesWithAuthenticatedActor,
   type ClinicalActor,
 } from '../../therapies/clinical-actor.js';
-import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../../lib/codice-fiscale.js';
-import { validatePatientPhone } from '../../lib/patient-phone.js';
 import {
   validateConfirmTherapies,
   isTherapyValidationError,
 } from '../../intake/confirm-therapies.js';
-
-function requirePatientPhone(raw: unknown): string {
-  const result = validatePatientPhone(raw);
-  if (!result.ok) throw new AiExtractionError('config', result.error);
-  return result.phone;
-}
-
-// #294: il CF è la chiave univoca del paziente. Ogni conferma che CREA un paziente
-// esige un CF valido e libero. Un match sul CF è un duplicato certo, non forzabile
-// con confirmDuplicate (a differenza del match euristico nome+data).
-async function requireFreeCodiceFiscale(raw: unknown): Promise<string> {
-  const cf = normalizeCodiceFiscale(raw);
-  if (!isValidCodiceFiscale(cf)) {
-    throw new AiExtractionError(
-      'config',
-      'Codice fiscale mancante o non valido: inserirlo o calcolarlo nello step Anagrafica prima di confermare.',
-    );
-  }
-  const existing = await prisma.patient.findUnique({ where: { codiceFiscale: cf } });
-  if (existing) {
-    throw new AiExtractionError(
-      'config',
-      `Codice fiscale già presente per il paziente ${existing.lastName} ${existing.firstName} (${existing.medicalRecordNumber}). Usare la modalità "paziente esistente" o correggere il CF.`,
-    );
-  }
-  return cf;
-}
+import { validateDraftTherapySelection } from '../../intake/therapy-selection.js';
+import {
+  normalizePatientIdentity,
+  PatientIdentityInputError,
+} from '../../patients/progressive-identity.js';
+import { patientScopeWhere, hasGlobalPatientScope } from '../../patients/patient-scope.js';
+import { canAccessOwnedResource } from '../ownership-policy.js';
 
 export interface ConfirmPatient {
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth?: string | null;
   sex?: string;
   email?: string;
-  phone?: string;
+  phone?: string | null;
   address?: string;
   emergencyContactName?: string;
   emergencyContactPhone?: string;
-  codiceFiscale?: string;
+  codiceFiscale?: string | null;
 }
-
 export interface ConfirmPayload {
   patient: ConfirmPatient;
-  /** Clinical data (Cartella.data Json) assembled from the reviewed proposal. */
   cartella?: Record<string, unknown>;
   idempotencyKey?: string;
-  /** Proceed even when a likely duplicate exists. */
   confirmDuplicate?: boolean;
-  /** REQ-026: proceed even when allergy information is contradictory (operator override). */
   confirmAllergyConflict?: boolean;
-  /** REQ-021: 'existing' updates an existing patient's cartella instead of creating. */
   mode?: 'new' | 'existing';
   patientId?: string;
-  /** Therapies to persist transactionally alongside the new patient (intake confirm path). */
   therapies?: TherapyCreateInput[];
 }
-
 export interface DuplicateInfo {
   id: string;
   firstName: string;
   lastName: string;
   medicalRecordNumber: string;
 }
-
 export interface ConfirmResult {
   status: 'created' | 'updated' | 'idempotent' | 'duplicate';
-  patient?: { id: string; firstName: string; lastName: string; medicalRecordNumber: string };
+  patient?: DuplicateInfo;
   duplicate?: DuplicateInfo;
 }
+type PrismaTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
+type Actor = ClinicalActor & { role?: string };
+type Data = Record<string, unknown>;
+const asData = (value: unknown): Data =>
+  value && typeof value === 'object' && !Array.isArray(value) ? (value as Data) : {};
+const identity = ({
+  id,
+  firstName,
+  lastName,
+  medicalRecordNumber,
+}: DuplicateInfo): DuplicateInfo => ({ id, firstName, lastName, medicalRecordNumber });
+const fiscalConflict = () =>
+  new AiExtractionError(
+    'config',
+    'Codice fiscale già presente. Correggere il dato oppure usare il percorso per il paziente esistente.',
+  );
+const cleanCartella = (data: Data): Data =>
+  Object.fromEntries(
+    Object.entries(data).filter(([key]) => key !== 'codiceFiscale' && !key.startsWith('_')),
+  );
 
-/** Merge reviewed cartella into an existing one: non-empty scalars win, arrays concat+dedup. */
-function mergeCartella(
-  existing: Record<string, unknown>,
-  incoming: Record<string, unknown>,
-): Record<string, unknown> {
-  const out: Record<string, unknown> = { ...existing };
-  for (const [k, v] of Object.entries(incoming)) {
-    if (Array.isArray(v)) {
-      const prev = Array.isArray(out[k]) ? (out[k] as unknown[]) : [];
-      const seen = new Set(prev.map((x) => JSON.stringify(x)));
-      out[k] = [...prev, ...v.filter((x) => !seen.has(JSON.stringify(x)))];
-    } else if (v && typeof v === 'object') {
-      out[k] = mergeCartella(
-        (out[k] as Record<string, unknown>) ?? {},
-        v as Record<string, unknown>,
-      );
-    } else if (v !== '' && v != null) {
-      out[k] = v;
-    }
+/** Non-empty scalars win; existing clinical arrays are kept and deduplicated. */
+function mergeCartella(existing: Data, incoming: Data): Data {
+  const out = { ...existing };
+  for (const [key, value] of Object.entries(incoming)) {
+    if (Array.isArray(value)) {
+      const previous = Array.isArray(out[key]) ? (out[key] as unknown[]) : [];
+      const seen = new Set(previous.map((x) => JSON.stringify(x)));
+      out[key] = [...previous, ...value.filter((x) => !seen.has(JSON.stringify(x)))];
+    } else if (value && typeof value === 'object')
+      out[key] = mergeCartella(asData(out[key]), asData(value));
+    else if (value !== '' && value != null) out[key] = value;
   }
   return out;
 }
 
-function mrn(): string {
-  // Date.now is fine here (runtime), uniqueness reinforced by the unique constraint + random suffix.
-  return `MRN-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-}
-
-async function audit(jobId: string, action: string, patientId?: string, detail?: string) {
+async function audit(
+  jobId: string | undefined,
+  action: string,
+  patientId?: string,
+  detail?: string,
+) {
+  if (!jobId) return;
   try {
     await prisma.importAudit.create({ data: { jobId, action, patientId, detail } });
   } catch {
-    /* audit must never break the main flow */
+    /* Best effort only; clinical persistence has already committed or rolled back. */
   }
 }
-
-type PrismaTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
 
 async function resolveRegisteredById(
   tx: PrismaTx,
-  candidateId: string | null,
+  ownerId: string | null | undefined,
   actorId: string,
-): Promise<string> {
-  const ids = [...new Set([actorId, candidateId].filter((id): id is string => Boolean(id)))];
+) {
   const operators = await tx.operator.findMany({
-    where: { id: { in: ids } },
+    where: { id: { in: [...new Set([actorId, ownerId].filter((x): x is string => !!x))] } },
     select: { id: true },
   });
-  const validIds = new Set(operators.map(({ id }) => id));
-  if (!validIds.has(actorId)) {
-    throw new AiExtractionError('config', 'Operatore autenticato non valido');
-  }
-  return candidateId && validIds.has(candidateId) ? candidateId : actorId;
+  const ids = new Set(operators.map((x) => x.id));
+  if (!ids.has(actorId)) throw new AiExtractionError('config', 'Operatore autenticato non valido');
+  return ownerId && ids.has(ownerId) ? ownerId : actorId;
 }
 
-async function backfillPatientOwnership(
-  patientId: string,
-  candidateId: string | null,
-  actorId: string,
-): Promise<void> {
-  await prisma.$transaction(async (tx) => {
-    const registeredById = await resolveRegisteredById(tx, candidateId, actorId);
-    await tx.patient.updateMany({
-      where: { id: patientId, registeredById: null },
-      data: { registeredById },
-    });
-  });
-}
-
-// ── Shared materialization helper ─────────────────────────────────────────────
-// Called by both confirmJob and confirmDraft inside a prisma.$transaction.
-// Creates patient + cartella + (optional) narrative + (optional) linked documents.
-// Returns the created Patient row.
-interface MaterializeArgs {
-  patient: ConfirmPatient;
-  registeredById: string;
-  cartellaData: Record<string, unknown>;
-  narrative: DischargeNarrativeDraft | null;
-  /** When provided, links source documents from this import job to the new patient. */
-  jobId?: string;
-  /** Therapies to create transactionally alongside the new patient (intake confirm path only). */
-  therapies?: TherapyCreateInput[];
-}
-
-function withoutCanonicalPatientIdentity(data: Record<string, unknown>): Record<string, unknown> {
-  const { codiceFiscale: _legacyIdentity, ...clinicalData } = data;
-  return clinicalData;
-}
-
-async function materializePatient(
-  tx: PrismaTx,
-  { patient: p, registeredById, cartellaData, narrative, jobId, therapies }: MaterializeArgs,
+function clinicalGuards(
+  resultData: Data,
+  narrative: DischargeNarrativeDraft | null,
+  payload: ConfirmPayload,
 ) {
-  const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
-  const created = await tx.patient.create({
-    data: {
-      medicalRecordNumber: mrn(),
-      registeredById,
-      firstName: p.firstName.trim(),
-      lastName: p.lastName.trim(),
-      dateOfBirth: dob,
-      ...(p.sex ? { sex: p.sex } : {}),
-      ...(p.email ? { email: p.email } : {}),
-      ...(p.phone ? { phone: p.phone } : {}),
-      ...(p.address ? { address: p.address } : {}),
-      ...(p.emergencyContactName ? { emergencyContactName: p.emergencyContactName } : {}),
-      ...(p.emergencyContactPhone ? { emergencyContactPhone: p.emergencyContactPhone } : {}),
-      ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}),
-    },
-  });
-
-  await tx.cartella.create({
-    data: { patientId: created.id, data: withoutCanonicalPatientIdentity(cartellaData) as object },
-  });
-
-  if (therapies?.length) {
-    for (const t of therapies) {
-      await createTherapyInTx(tx, created.id, t);
-    }
-  }
-
-  if (narrative) await persistNarrativeFromDraft(tx, created.id, narrative, jobId ?? null);
-  if (jobId) await persistImportDocuments(tx, created.id, jobId);
-
-  return created;
-}
-
-// ── confirmDraft ───────────────────────────────────────────────────────────────
-// Transactional, idempotent patient creation from a PatientIntakeDraft.
-// If the draft is already confirmed, returns the existing patient (idempotent).
-// On success sets draft status='confirmed', confirmedPatientId, confirmedAt.
-// Full rollback if the transaction throws — draft stays 'draft'.
-export async function confirmDraft(
-  draftId: string,
-  payload: ConfirmPayload,
-  actor: ClinicalActor,
-): Promise<ConfirmResult> {
-  const draft = await getDraft(draftId);
-  if (!draft) throw new AiExtractionError('config', 'Bozza non trovata');
-
-  // Idempotent: already confirmed -> return the same patient.
-  if (draft.status === 'confirmed' && draft.confirmedPatientId) {
-    const existing = await prisma.patient.findUnique({ where: { id: draft.confirmedPatientId } });
-    if (existing) {
-      await backfillPatientOwnership(existing.id, draft.createdById, actor.id);
-      return {
-        status: 'idempotent',
-        patient: {
-          id: existing.id,
-          firstName: existing.firstName,
-          lastName: existing.lastName,
-          medicalRecordNumber: existing.medicalRecordNumber,
-        },
-      };
-    }
-  }
-
-  validateConfirmTherapies(payload.therapies);
-  const p = payload.patient;
-  if (!p?.firstName?.trim() || !p?.lastName?.trim() || !p?.dateOfBirth?.trim()) {
-    throw new AiExtractionError('config', 'Nome, cognome e data di nascita sono obbligatori');
-  }
-  const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
-  if (Number.isNaN(dob.getTime())) {
-    throw new AiExtractionError('config', 'Data di nascita non valida');
-  }
-
-  // Narrative from draft data if present (opt-in; skipped for manual drafts without narrative).
-  const narrative =
-    (draft.data as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
-
-  // ── Clinical-safety guards (parity with confirmJob) ──────────────────────────
-  // Import-seeded drafts carry a linked importJob whose resultData holds the
-  // _sections pass + lossless raw text. Re-run the SAME two hard blocks the old
-  // import path enforces BEFORE the duplicate check / transaction. Manual drafts
-  // (no importJobId) have no narrative/sections and skip these — unchanged.
-  if (draft.importJobId) {
-    const job = await prisma.importJob.findUnique({ where: { id: draft.importJobId } });
-    const resultData = job?.resultData as {
-      _sections?: SectionsResult;
-      cleanedRawText?: string;
-      rawText?: string;
-    } | null;
-
-    // REQ-026: contradictory allergy reading blocks confirmation until operator override.
-    const sections = resultData?._sections;
-    if (isConfirmBlocked(sections) && !payload.confirmAllergyConflict) {
-      await audit(draft.importJobId, 'allergy_conflict_blocked', undefined, 'allergie conflicting');
-      throw new AiExtractionError(
-        'config',
-        'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.',
-      );
-    }
-
-    // BUG-051: clinical text detected in source but lost from the narrative blocks confirm.
-    if (narrative) {
-      const sourceText = resultData?.cleanedRawText?.trim()
-        ? resultData.cleanedRawText
-        : (resultData?.rawText ?? '');
-      const lost = detectSectionLoss(sourceText, narrative);
-      if (lost.length > 0) {
-        await audit(draft.importJobId, 'narrative_content_lost_blocked', undefined, lost.join(','));
-        throw new AiExtractionError(
-          'config',
-          `Importazione bloccata: testo clinico rilevato ma non importato per: ${lost.join(', ')}. Riprocessare i documenti.`,
-        );
-      }
-    }
-  }
-
-  // #294: CF obbligatorio, valido e libero prima di creare; normalizzato per la persistenza.
-  p.phone = requirePatientPhone(p.phone);
-  p.codiceFiscale = await requireFreeCodiceFiscale(p.codiceFiscale);
-
-  // Duplicate detection (same as confirmJob).
-  const dupes = await prisma.patient.findMany({
-    where: {
-      firstName: { equals: p.firstName.trim(), mode: 'insensitive' },
-      lastName: { equals: p.lastName.trim(), mode: 'insensitive' },
-      dateOfBirth: dob,
-    },
-    take: 1,
-  });
-  if (dupes.length > 0 && !payload.confirmDuplicate) {
-    const dup = dupes[0];
-    // Audit: best-effort using linked importJobId if available (ImportAudit FK requires a valid job).
-    if (draft.importJobId)
-      await audit(draft.importJobId, 'duplicate_flagged', dup.id, `draft:${draftId}`);
-    return {
-      status: 'duplicate',
-      duplicate: {
-        id: dup.id,
-        firstName: dup.firstName,
-        lastName: dup.lastName,
-        medicalRecordNumber: dup.medicalRecordNumber,
-      },
-    };
-  }
-
-  const cartellaData: Record<string, unknown> = {
-    ...(payload.cartella ?? {}),
-    ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}),
-    _importedFromDraft: draftId,
-    ...(draft.importJobId ? { _importedFromJob: draft.importJobId } : {}),
-  };
-
-  try {
-    const created = await prisma.$transaction(async (tx) => {
-      const registeredById = await resolveRegisteredById(tx, draft.createdById, actor.id);
-      const pat = await materializePatient(tx, {
-        patient: p,
-        registeredById,
-        cartellaData,
-        narrative,
-        jobId: draft.importJobId ?? undefined,
-        therapies: therapiesWithAuthenticatedActor(payload.therapies, actor),
-      });
-
-      // Mark the draft confirmed within the same transaction for atomicity.
-      await tx.patientIntakeDraft.update({
-        where: { id: draftId },
-        data: { status: 'confirmed', confirmedPatientId: pat.id, confirmedAt: new Date() },
-      });
-
-      return pat;
-    });
-
-    // Best-effort audit: only when a linked import job exists (FK constraint).
-    if (draft.importJobId)
-      await audit(draft.importJobId, 'patient_created', created.id, `draft:${draftId}`);
-
-    return {
-      status: 'created',
-      patient: {
-        id: created.id,
-        firstName: created.firstName,
-        lastName: created.lastName,
-        medicalRecordNumber: created.medicalRecordNumber,
-      },
-    };
-  } catch (err) {
-    if (draft.importJobId)
-      await audit(
-        draft.importJobId,
-        'confirm_failed',
-        undefined,
-        isTherapyValidationError(err) ? 'therapy_validation_failed' : 'transaction_failed',
-      );
-    if (isTherapyValidationError(err))
-      throw new AiExtractionError(
-        'config',
-        `Dati terapia non validi: ${err.message}. Correggi le terapie nello step Clinica.`,
-      );
-    throw err instanceof AiExtractionError
-      ? err
-      : new AiExtractionError(
-          'provider_error',
-          'Errore durante la conferma transazionale della bozza',
-        );
-  }
-}
-
-export async function confirmJob(
-  jobId: string,
-  payload: ConfirmPayload,
-  actor: ClinicalActor,
-): Promise<ConfirmResult> {
-  const job = await prisma.importJob.findUnique({ where: { id: jobId } });
-  if (!job) throw new AiExtractionError('config', 'Job non trovato');
-
-  // Idempotent: already confirmed -> return the same patient, never create twice.
-  if (job.status === 'confirmed' && job.createdPatientId) {
-    const existing = await prisma.patient.findUnique({ where: { id: job.createdPatientId } });
-    if (existing) {
-      await backfillPatientOwnership(existing.id, job.createdById, actor.id);
-      return {
-        status: 'idempotent',
-        patient: {
-          id: existing.id,
-          firstName: existing.firstName,
-          lastName: existing.lastName,
-          medicalRecordNumber: existing.medicalRecordNumber,
-        },
-      };
-    }
-  }
-
-  // REQ-026: allergies are top priority — a contradictory allergy reading blocks the
-  // confirmation until an operator explicitly overrides it. Only triggers when a
-  // sections pass produced a 'conflicting' status; otherwise this is a no-op.
-  const sections = (job.resultData as { _sections?: SectionsResult } | null)?._sections;
-  // REQ-029: faithful narrative draft persisted into PatientNarrativeSection on confirm.
-  const narrative =
-    (job.resultData as { _narrative?: DischargeNarrativeDraft } | null)?._narrative ?? null;
-  if (isConfirmBlocked(sections) && !payload.confirmAllergyConflict) {
-    await audit(jobId, 'allergy_conflict_blocked', undefined, 'allergie conflicting');
+  if (
+    isConfirmBlocked(resultData._sections as SectionsResult | undefined) &&
+    !payload.confirmAllergyConflict
+  )
     throw new AiExtractionError(
       'config',
       'Conferma bloccata: informazioni sulle allergie contrastanti. Verificare e confermare esplicitamente.',
     );
-  }
-
-  // BUG-051: a section detected with non-empty text in the source must never be persisted with
-  // an empty originalText. Block the confirmation rather than silently create empty narrative
-  // blocks (editor opening blank). Checked against the same (header-cleaned) text the draft was
-  // built from. No AI re-run — the operator should reprocess the documents.
   if (narrative) {
-    const rd = job.resultData as { cleanedRawText?: string; rawText?: string } | null;
-    const sourceText = rd?.cleanedRawText?.trim() ? rd.cleanedRawText : (rd?.rawText ?? '');
-    const lost = detectSectionLoss(sourceText, narrative);
-    if (lost.length > 0) {
-      await audit(jobId, 'narrative_content_lost_blocked', undefined, lost.join(','));
+    const raw =
+      typeof resultData.cleanedRawText === 'string' && resultData.cleanedRawText.trim()
+        ? resultData.cleanedRawText
+        : typeof resultData.rawText === 'string'
+          ? resultData.rawText
+          : '';
+    const lost = detectSectionLoss(raw, narrative);
+    if (lost.length)
       throw new AiExtractionError(
         'config',
         `Importazione bloccata: testo clinico rilevato ma non importato per: ${lost.join(', ')}. Riprocessare i documenti.`,
       );
-    }
-  }
-
-  const p = payload.patient;
-  if (!p?.firstName?.trim() || !p?.lastName?.trim() || !p?.dateOfBirth?.trim()) {
-    throw new AiExtractionError('config', 'Nome, cognome e data di nascita sono obbligatori');
-  }
-  // Accept Italian dd/mm/yyyy (what the OCR model often returns) as well as ISO.
-  const dob = new Date(normalizeDate(p.dateOfBirth.trim()));
-  if (Number.isNaN(dob.getTime())) {
-    throw new AiExtractionError('config', 'Data di nascita non valida');
-  }
-
-  await audit(jobId, 'confirm_started');
-
-  // ── REQ-021: update an EXISTING patient's cartella (no new patient created) ──
-  if (payload.mode === 'existing' && payload.patientId) {
-    const existing = await prisma.patient.findUnique({ where: { id: payload.patientId } });
-    if (!existing) throw new AiExtractionError('config', 'Paziente esistente non trovato');
-    const updated = await prisma.$transaction(async (tx) => {
-      const cur = await tx.cartella.findUnique({ where: { patientId: existing.id } });
-      const merged = mergeCartella(
-        withoutCanonicalPatientIdentity((cur?.data as Record<string, unknown>) ?? {}),
-        {
-          ...withoutCanonicalPatientIdentity(payload.cartella ?? {}),
-          _lastImportJob: jobId,
-        },
-      );
-      await tx.cartella.upsert({
-        where: { patientId: existing.id },
-        create: { patientId: existing.id, data: merged as object },
-        update: { data: merged as object },
-      });
-      if (narrative) await persistNarrativeFromDraft(tx, existing.id, narrative, jobId);
-      await persistImportDocuments(tx, existing.id, jobId);
-      await tx.importJob.update({
-        where: { id: jobId },
-        data: { status: 'confirmed', createdPatientId: existing.id, confirmedAt: new Date() },
-      });
-      return existing;
-    });
-    await audit(jobId, 'confirm_committed', updated.id, 'existing patient cartella updated');
-    return {
-      status: 'updated',
-      patient: {
-        id: updated.id,
-        firstName: updated.firstName,
-        lastName: updated.lastName,
-        medicalRecordNumber: updated.medicalRecordNumber,
-      },
-    };
-  }
-
-  // #294: CF obbligatorio, valido e libero prima di creare; normalizzato per la persistenza.
-  p.phone = requirePatientPhone(p.phone);
-  p.codiceFiscale = await requireFreeCodiceFiscale(p.codiceFiscale);
-
-  // Fallback heuristic duplicate detection by name + date of birth (CF exact-match
-  // duplicates are already rejected above as hard conflicts).
-  const dupes = await prisma.patient.findMany({
-    where: {
-      firstName: { equals: p.firstName.trim(), mode: 'insensitive' },
-      lastName: { equals: p.lastName.trim(), mode: 'insensitive' },
-      dateOfBirth: dob,
-    },
-    take: 1,
-  });
-  if (dupes.length > 0 && !payload.confirmDuplicate) {
-    const d = dupes[0];
-    await audit(jobId, 'duplicate_flagged', d.id, 'name+dob match');
-    return {
-      status: 'duplicate',
-      duplicate: {
-        id: d.id,
-        firstName: d.firstName,
-        lastName: d.lastName,
-        medicalRecordNumber: d.medicalRecordNumber,
-      },
-    };
-  }
-
-  // One transaction: patient + cartella + job confirmation. Full rollback on any error.
-  try {
-    const created = await prisma.$transaction(async (tx) => {
-      // Re-check inside the tx to defend against a concurrent double-confirm.
-      const fresh = await tx.importJob.findUnique({ where: { id: jobId } });
-      if (fresh?.status === 'confirmed' && fresh.createdPatientId) {
-        const existing = await tx.patient.findUnique({ where: { id: fresh.createdPatientId } });
-        if (existing) return existing;
-      }
-
-      // Clinical data (cartella shape the app already uses).
-      const cartellaData: Record<string, unknown> = {
-        ...(payload.cartella ?? {}),
-        ...(p.codiceFiscale ? { codiceFiscale: p.codiceFiscale } : {}),
-        _importedFromJob: jobId,
-      };
-
-      const registeredById = await resolveRegisteredById(tx, job.createdById, actor.id);
-
-      // REQ-029: faithful narrative persisted when present.
-      // REQ-035 v2: permanently link imported source documents to the patient.
-      const patient = await materializePatient(tx, {
-        patient: p,
-        registeredById,
-        cartellaData,
-        narrative,
-        jobId,
-      });
-
-      await tx.importJob.update({
-        where: { id: jobId },
-        data: { status: 'confirmed', createdPatientId: patient.id, confirmedAt: new Date() },
-      });
-
-      return patient;
-    });
-
-    await audit(jobId, 'patient_created', created.id);
-    await audit(jobId, 'confirm_committed', created.id, 'transaction committed');
-    return {
-      status: 'created',
-      patient: {
-        id: created.id,
-        firstName: created.firstName,
-        lastName: created.lastName,
-        medicalRecordNumber: created.medicalRecordNumber,
-      },
-    };
-  } catch (err) {
-    await audit(
-      jobId,
-      'confirm_failed',
-      undefined,
-      err instanceof Error ? err.message.slice(0, 120) : 'error',
-    );
-    throw err instanceof AiExtractionError
-      ? err
-      : new AiExtractionError('provider_error', 'Errore durante la conferma transazionale');
   }
 }
+
+async function confirm(
+  target: { draftId?: string; jobId?: string },
+  payload: ConfirmPayload,
+  actor: Actor,
+): Promise<ConfirmResult> {
+  const operator = { ...actor, role: actor.role ?? 'operator' };
+  let jobId = target.jobId;
+  try {
+    const result = await prisma.$transaction(
+      async (tx): Promise<ConfirmResult> => {
+        // The order is always job → draft → patient; autosave only ever locks its draft.
+        if (target.draftId) {
+          const hint = await tx.patientIntakeDraft.findUnique({ where: { id: target.draftId } });
+          if (!hint || !canAccessOwnedResource(operator, hint.createdById))
+            throw new AiExtractionError('not_found', 'Bozza non trovata');
+          jobId = hint.importJobId ?? undefined;
+        }
+        if (jobId)
+          await tx.$queryRaw`SELECT "id" FROM "ImportJob" WHERE "id" = ${jobId} FOR UPDATE`;
+        const job = jobId ? await tx.importJob.findUnique({ where: { id: jobId } }) : null;
+        if (jobId && (!job || !canAccessOwnedResource(operator, job.createdById)))
+          throw new AiExtractionError('not_found', 'Job non trovato');
+        const draftHint = target.draftId
+          ? { id: target.draftId }
+          : jobId
+            ? await tx.patientIntakeDraft.findUnique({
+                where: { importJobId: jobId },
+                select: { id: true },
+              })
+            : null;
+        if (draftHint)
+          await tx.$queryRaw`SELECT "id" FROM "PatientIntakeDraft" WHERE "id" = ${draftHint.id} FOR UPDATE`;
+        const draft = draftHint
+          ? await tx.patientIntakeDraft.findUnique({ where: { id: draftHint.id } })
+          : null;
+        if (draftHint && (!draft || !canAccessOwnedResource(operator, draft.createdById)))
+          throw new AiExtractionError('not_found', 'Bozza non trovata');
+        const registeredById = await resolveRegisteredById(
+          tx,
+          draft?.createdById ?? job?.createdById,
+          actor.id,
+        );
+        if (draft?.confirmedPatientId && job?.createdPatientId && draft.confirmedPatientId !== job.createdPatientId)
+          throw new AiExtractionError('config', 'I riferimenti della precedente conferma non coincidono. Verificare le schede esistenti.');
+        const alreadyId = draft?.confirmedPatientId ?? job?.createdPatientId;
+        if (alreadyId) {
+          const existing = await tx.patient.findUnique({ where: { id: alreadyId } });
+          if (!existing)
+            throw new AiExtractionError(
+              'config',
+              'La conferma fa riferimento a una scheda non disponibile',
+            );
+          if (existing.registeredById && existing.registeredById !== operator.id && !hasGlobalPatientScope(operator.role))
+            throw new AiExtractionError('not_found', 'Paziente non trovato');
+          await tx.patient.updateMany({
+            where: { id: existing.id, registeredById: null },
+            data: { registeredById },
+          });
+          // Reconcile historical confirmations too: both entry points must converge.
+          if (draft && !draft.confirmedPatientId)
+            await tx.patientIntakeDraft.update({
+              where: { id: draft.id },
+              data: { status: 'confirmed', confirmedPatientId: alreadyId, confirmedAt: new Date() },
+            });
+          if (job && !job.createdPatientId)
+            await tx.importJob.update({
+              where: { id: job.id },
+              data: { status: 'confirmed', createdPatientId: alreadyId, confirmedAt: new Date() },
+            });
+          return { status: 'idempotent', patient: identity(existing) };
+        }
+        if (draft && draft.status !== 'draft')
+          throw new AiExtractionError('config', 'La bozza non è più confermabile');
+        const draftData = asData(draft?.data);
+        const jobData = asData(job?.resultData);
+        const narrative = (draftData._narrative ?? jobData._narrative) as
+          DischargeNarrativeDraft | undefined;
+        clinicalGuards(jobData, narrative ?? null, payload);
+        validateConfirmTherapies(payload.therapies);
+        const selection = draft
+          ? validateDraftTherapySelection(draftData, payload.therapies)
+          : null;
+        const therapies = therapiesWithAuthenticatedActor(payload.therapies, actor);
+        let patient;
+        let status: 'created' | 'updated' = 'created';
+        if (payload.mode === 'existing') {
+          if (!job || !payload.patientId)
+            throw new AiExtractionError('config', 'Seleziona il paziente esistente');
+          await tx.$queryRaw`SELECT "id" FROM "Patient" WHERE "id" = ${payload.patientId} FOR UPDATE`;
+          patient = await tx.patient.findFirst({
+            where: { id: payload.patientId, ...patientScopeWhere(operator) },
+          });
+          if (!patient) throw new AiExtractionError('not_found', 'Paziente non trovato');
+          status = 'updated';
+        } else {
+          const p = payload.patient;
+          const canonical = normalizePatientIdentity(asData(p));
+          if (
+            canonical.codiceFiscale &&
+            (await tx.patient.findUnique({
+              where: { codiceFiscale: canonical.codiceFiscale },
+              select: { id: true },
+            }))
+          )
+            throw fiscalConflict();
+          const duplicate = await tx.patient.findFirst({
+            where: {
+              ...patientScopeWhere(operator),
+              firstName: { equals: canonical.firstName, mode: 'insensitive' },
+              lastName: { equals: canonical.lastName, mode: 'insensitive' },
+              ...(canonical.dateOfBirth ? { dateOfBirth: canonical.dateOfBirth } : {}),
+            },
+          });
+          if (duplicate && !payload.confirmDuplicate)
+            return { status: 'duplicate', duplicate: identity(duplicate) };
+          patient = await tx.patient.create({
+            data: {
+              ...canonical,
+              registeredById,
+              medicalRecordNumber: `MRN-${crypto.randomUUID()}`,
+              ...(p.sex ? { sex: p.sex } : {}),
+              ...(p.email ? { email: p.email } : {}),
+              ...(p.address ? { address: p.address } : {}),
+              ...(p.emergencyContactName ? { emergencyContactName: p.emergencyContactName } : {}),
+              ...(p.emergencyContactPhone
+                ? { emergencyContactPhone: p.emergencyContactPhone }
+                : {}),
+            },
+          });
+        }
+        const cartella = {
+          ...cleanCartella(payload.cartella ?? {}),
+          ...(draft ? { _importedFromDraft: draft.id } : {}),
+          ...(job ? { _importedFromJob: job.id } : {}),
+        };
+        const current =
+          status === 'updated'
+            ? await tx.cartella.findUnique({ where: { patientId: patient.id } })
+            : null;
+        const merged = mergeCartella(asData(current?.data), cartella);
+        delete merged.codiceFiscale;
+        await tx.cartella.upsert({
+          where: { patientId: patient.id },
+          create: { patientId: patient.id, data: merged as object },
+          update: { data: merged as object },
+        });
+        const therapyIds: string[] = [];
+        for (const therapy of therapies ?? [])
+          therapyIds.push((await createTherapyInTx(tx, patient.id, therapy)).id);
+        if (narrative) await persistNarrativeFromDraft(tx, patient.id, narrative, jobId ?? null);
+        if (job) await persistImportDocuments(tx, patient.id, job.id);
+        const confirmedAt = new Date();
+        if (draft)
+          await tx.patientIntakeDraft.update({
+            where: { id: draft.id },
+            data: {
+              status: 'confirmed',
+              confirmedPatientId: patient.id,
+              confirmedAt,
+              data: {
+                ...draftData,
+                _confirmation: {
+                  ...selection,
+                  therapyIds,
+                  actorId: actor.id,
+                  confirmedAt: confirmedAt.toISOString(),
+                },
+              } as object,
+            },
+          });
+        if (job)
+          await tx.importJob.update({
+            where: { id: job.id },
+            data: { status: 'confirmed', createdPatientId: patient.id, confirmedAt },
+          });
+        return { status, patient: identity(patient) };
+      },
+      { maxWait: 15000, timeout: 30000 },
+    );
+    await audit(
+      jobId,
+      result.status === 'created' ? 'patient_created' : 'confirm_committed',
+      result.patient?.id,
+      result.status,
+    );
+    return result;
+  } catch (error) {
+    await audit(jobId, 'confirm_failed', undefined, 'transaction_failed');
+    if (error instanceof AiExtractionError) throw error;
+    if (error instanceof PatientIdentityInputError || isTherapyValidationError(error))
+      throw new AiExtractionError('config', error.message);
+    const unique = error as { code?: string; meta?: { target?: string[] } };
+    if (unique.code === 'P2002' && unique.meta?.target?.includes('codiceFiscale'))
+      throw fiscalConflict();
+    throw new AiExtractionError(
+      'provider_error',
+      'Errore durante la conferma transazionale. La bozza è conservata: riprova.',
+    );
+  }
+}
+
+export const confirmDraft = (draftId: string, payload: ConfirmPayload, actor: Actor) =>
+  confirm({ draftId }, payload, actor);
+export const confirmJob = (jobId: string, payload: ConfirmPayload, actor: Actor) =>
+  confirm({ jobId }, payload, actor);

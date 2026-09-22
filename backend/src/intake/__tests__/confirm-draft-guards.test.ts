@@ -72,6 +72,7 @@ test('confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConf
   const job = await prisma.importJob.create({
     data: {
       ...JOB_DEFAULTS,
+      createdById: TEST_OPERATOR_ID,
       status: 'extracted',
       resultData: {
         _narrative: NARRATIVE,
@@ -80,7 +81,7 @@ test('confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConf
     },
   });
 
-  const draft = await seedDraftFromImport(job.id);
+  const draft = await seedDraftFromImport(job.id, { createdById: TEST_OPERATOR_ID });
   let createdPatientId: string | undefined;
 
   try {

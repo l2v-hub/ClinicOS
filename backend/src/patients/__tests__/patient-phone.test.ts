@@ -115,7 +115,7 @@ beforeEach(() => {
       updateMany: async () => ({ count: 0 }),
     },
     patientIntakeDraft: {
-      findUnique: async () => state.draft,
+      findUnique: async ({ where }: any) => (where.importJobId ? null : state.draft),
       findUniqueOrThrow: async () => state.draft,
       update: async ({ data }: any) => {
         Object.assign(state.draft, data);
@@ -133,6 +133,8 @@ beforeEach(() => {
     operator: { findMany: async () => [{ id: actor.id }] },
     cartella: { create: async () => ({}), findUnique: async () => null, upsert: async () => ({}) },
     importDocument: { findMany: async () => [] },
+    patientDocument: { findMany: async () => [] },
+    $queryRaw: async () => [],
   };
   Object.assign(prisma, delegates, {
     $transaction: async (fn: (tx: unknown) => unknown) => {
@@ -187,8 +189,10 @@ test('POST persists a trimmed phone with its leading zero and returns it', async
   assert.equal(calls.writes, 1);
 });
 
-test('PATCH rejects clearing or invalidating phone without a transaction', async () => {
-  for (const phone of invalidPhones.filter((value) => value !== undefined)) {
+test('PATCH rejects malformed supplied phones without a transaction', async () => {
+  for (const phone of invalidPhones.filter(
+    (value) => value != null && value !== '' && value !== '   ',
+  )) {
     const response = await fetch(`${base}/phone-patient`, {
       method: 'PATCH',
       headers,
@@ -228,9 +232,11 @@ test('phone requirement preserves authentication and patient scope checks', asyn
   assert.equal(calls.writes, 0);
 });
 
-test('draft and import confirmation reject missing phone before patient writes', async () => {
+test('draft and import confirmation reject malformed supplied phone without patient writes', async () => {
   for (const confirm of [confirmDraft, confirmJob]) {
-    for (const phone of invalidPhones) {
+    for (const phone of invalidPhones.filter(
+      (value) => value != null && value !== '' && value !== '   ',
+    )) {
       await assert.rejects(
         () => confirm('synthetic-source', { patient: { ...identity, phone } } as any, actor),
         /telefono/i,
@@ -238,7 +244,7 @@ test('draft and import confirmation reject missing phone before patient writes',
     }
   }
   assert.equal(calls.writes, 0);
-  assert.equal(calls.transactions, 0);
+  assert.ok(calls.transactions > 0);
 });
 
 test('draft confirmation persists the phone and permits a legacy idempotent replay', async () => {

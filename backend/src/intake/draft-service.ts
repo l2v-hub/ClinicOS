@@ -49,6 +49,8 @@ export interface CreateDraftOpts {
 }
 
 export async function createDraft(opts: CreateDraftOpts = {}) {
+  if (opts.importJobId)
+    return seedDraftFromImport(opts.importJobId, { createdById: opts.createdById });
   return prisma.patientIntakeDraft.create({
     data: {
       status: 'draft',
@@ -65,7 +67,7 @@ export async function getDraft(id: string) {
 }
 
 export async function patchDraft(id: string, patch: Record<string, unknown>) {
-  for (const immutableKey of ['_narrative', '_sections']) {
+  for (const immutableKey of ['_narrative', '_sections', '_terapiaText', '_confirmation']) {
     if (Object.hasOwn(patch, immutableKey)) {
       throw new AiExtractionError(
         'config',
@@ -73,14 +75,38 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
       );
     }
   }
-  const current = await prisma.patientIntakeDraft.findUniqueOrThrow({ where: { id } });
-  const existingData = (current.data ?? {}) as Record<string, unknown>;
-  const merged: Record<string, unknown> = { ...existingData, ...patch };
-  return prisma.patientIntakeDraft.update({
-    where: { id },
-    data: {
-      data: merged as Parameters<typeof prisma.patientIntakeDraft.update>[0]['data']['data'],
-    },
+  return prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT "id" FROM "PatientIntakeDraft" WHERE "id" = ${id} FOR UPDATE`;
+    const current = await tx.patientIntakeDraft.findUniqueOrThrow({ where: { id } });
+    if (current.status !== 'draft')
+      throw new AiExtractionError(
+        'config',
+        'La bozza è già confermata e non può essere modificata',
+      );
+    const existingData = (current.data ?? {}) as Record<string, unknown>;
+    if (Array.isArray(existingData.terapiaImport) && patch.terapiaImport !== undefined) {
+      const previous = existingData.terapiaImport as Record<string, unknown>[];
+      if (
+        !Array.isArray(patch.terapiaImport) ||
+        patch.terapiaImport.length < previous.length ||
+        previous.some(
+          (row, index) =>
+            row.originalText !==
+            (patch.terapiaImport as Record<string, unknown>[])[index]?.originalText,
+        )
+      )
+        throw new AiExtractionError(
+          'config',
+          'Conserva le righe originali: usa Lascia in bozza per escludere una terapia',
+        );
+    }
+    const merged: Record<string, unknown> = { ...existingData, ...patch };
+    return tx.patientIntakeDraft.update({
+      where: { id },
+      data: {
+        data: merged as Parameters<typeof prisma.patientIntakeDraft.update>[0]['data']['data'],
+      },
+    });
   });
 }
 
@@ -213,56 +239,69 @@ export function buildImportDraftData(
  * Idempotent: if a draft already exists for `jobId`, returns it without creating a second one.
  */
 export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImportOpts = {}) {
-  // Idempotency check: return existing draft for this job.
-  const existing = await prisma.patientIntakeDraft.findFirst({
-    where: { importJobId: jobId },
-  });
-  if (existing) {
-    const allowed = opts.actor
-      ? canAccessOwnedResource(opts.actor, existing.createdById)
-      : (existing.createdById ?? null) === (opts.createdById ?? null);
-    if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
-    return existing;
-  }
-
-  // Load the extraction job.
-  const job = await prisma.importJob.findUniqueOrThrow({ where: { id: jobId } });
-
-  const resultData = job.resultData as Record<string, unknown> | null;
-  const narrative = resultData?._narrative as DischargeNarrativeDraft | undefined;
-
-  if (!narrative) {
-    throw new Error(
-      `importJob ${jobId} has no _narrative in resultData — extraction must complete before seeding a draft`,
-    );
-  }
-
-  const data = buildImportDraftData(narrative, resultData?._sections ?? null);
-
-  try {
-    return await prisma.patientIntakeDraft.create({
-      data: {
-        status: 'draft',
-        source: 'import',
-        importJobId: jobId,
-        createdById: opts.createdById,
-        data: data as Parameters<typeof prisma.patientIntakeDraft.create>[0]['data']['data'],
-      },
-    });
-  } catch (err) {
-    // Concurrency guard: a parallel POST /from-import for the same job may have created
-    // the draft between our findFirst and this create. The @unique on importJobId makes
-    // that a P2002 — re-read and return the existing draft instead of failing.
-    if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2002') {
-      const raced = await prisma.patientIntakeDraft.findFirst({ where: { importJobId: jobId } });
-      if (raced) {
+  return prisma.$transaction(
+    async (tx) => {
+      await tx.$queryRaw`SELECT "id" FROM "ImportJob" WHERE "id" = ${jobId} FOR UPDATE`;
+      const job = await tx.importJob.findUniqueOrThrow({ where: { id: jobId } });
+      const jobAllowed = opts.actor
+        ? canAccessOwnedResource(opts.actor, job.createdById)
+        : (job.createdById ?? null) === (opts.createdById ?? null);
+      if (!jobAllowed) throw new AiExtractionError('not_found', 'Job non trovato');
+      if (job.status === 'confirmed' || job.createdPatientId)
+        throw new AiExtractionError(
+          'config',
+          'Documento già confermato: apri la scheda del paziente per aggiornare i dati.',
+        );
+      // Idempotency check: return existing draft for this job.
+      const existing = await tx.patientIntakeDraft.findFirst({
+        where: { importJobId: jobId },
+      });
+      if (existing) {
         const allowed = opts.actor
-          ? canAccessOwnedResource(opts.actor, raced.createdById)
-          : (raced.createdById ?? null) === (opts.createdById ?? null);
+          ? canAccessOwnedResource(opts.actor, existing.createdById)
+          : (existing.createdById ?? null) === (opts.createdById ?? null);
         if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
-        return raced;
+        return existing;
       }
-    }
-    throw err;
-  }
+
+      const resultData = job.resultData as Record<string, unknown> | null;
+      const narrative = resultData?._narrative as DischargeNarrativeDraft | undefined;
+
+      if (!narrative) {
+        throw new Error(
+          `importJob ${jobId} has no _narrative in resultData — extraction must complete before seeding a draft`,
+        );
+      }
+
+      const data = buildImportDraftData(narrative, resultData?._sections ?? null);
+
+      try {
+        return await tx.patientIntakeDraft.create({
+          data: {
+            status: 'draft',
+            source: 'import',
+            importJobId: jobId,
+            createdById: opts.createdById,
+            data: data as Parameters<typeof prisma.patientIntakeDraft.create>[0]['data']['data'],
+          },
+        });
+      } catch (err) {
+        // Concurrency guard: a parallel POST /from-import for the same job may have created
+        // the draft between our findFirst and this create. The @unique on importJobId makes
+        // that a P2002 — re-read and return the existing draft instead of failing.
+        if (err && typeof err === 'object' && (err as { code?: string }).code === 'P2002') {
+          const raced = await tx.patientIntakeDraft.findFirst({ where: { importJobId: jobId } });
+          if (raced) {
+            const allowed = opts.actor
+              ? canAccessOwnedResource(opts.actor, raced.createdById)
+              : (raced.createdById ?? null) === (opts.createdById ?? null);
+            if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
+            return raced;
+          }
+        }
+        throw err;
+      }
+    },
+    { maxWait: 15000, timeout: 30000 },
+  );
 }

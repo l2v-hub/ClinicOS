@@ -1,0 +1,43 @@
+✔ phone validation rejects absent/malformed inputs and preserves formatted numbers (585.5535ms)
+✔ POST rejects invalid phones before any patient database access (98.3749ms)
+POST /patients → creato id=created-phone-patient nome="Persona Sintetica"
+✔ POST persists a trimmed phone with its leading zero and returns it (3.0925ms)
+✔ PATCH rejects malformed supplied phones without a transaction (13.4484ms)
+PATCH /patients/phone-patient → aggiornato
+PATCH /patients/phone-patient → aggiornato
+✔ PATCH updates phone, while unrelated updates remain possible for legacy patients (3.1755ms)
+✔ phone requirement preserves authentication and patient scope checks (2.8391ms)
+✔ draft and import confirmation reject malformed supplied phone without patient writes (2.7391ms)
+✔ draft confirmation persists the phone and permits a legacy idempotent replay (0.8572ms)
+✔ import confirmation persists phone; existing-patient import leaves missing phone untouched (0.5529ms)
+✔ voice writer rejects invalid phone as a client error and allows unrelated fields (0.3631ms)
+✔ confirmDraft creates patient transactionally + is idempotent (259.3093ms)
+✔ confirmDraft permits a manager to recover a stale legacy owner (25.7601ms)
+✔ confirmJob permits a manager to recover an ownerless legacy job (46.1048ms)
+✔ confirmDraft: accepts a missing CF but blocks a duplicate CF (not forcible) (64.4419ms)
+✔ confirmDraft: BLOCKS on allergy conflict; SUCCEEDS with confirmAllergyConflict (81.2428ms)
+✔ confirmDraft: persists therapies + vitals/pain into Cartella.data (50.2228ms)
+✔ manual and OCR intake preserve unknown DOB/CF/phone and archive source atomically (2844.2039ms)
+✔ supplied malformed values fail with no materialization and no placeholders (135.1645ms)
+✔ concurrent confirms and response replay converge on one identity (44.7745ms)
+✔ draft/job race shares identity, document and confirmation even without CF (36.0732ms)
+PATCH /patients/cmud9g4wi0011c4lpzeg9hqrz → aggiornato
+PATCH /patients/cmud9g4wi0011c4lpzeg9hqrz → aggiornato
+✔ completion preserves patient/document IDs; duplicate CF and malformed updates are atomic (92.5021ms)
+✔ homonyms require review only within actor scope; absent DOB includes known birth dates (40.7018ms)
+✔ scope prevents direct-service and HTTP access, including existing-patient import (17.9676ms)
+✔ selected reviewed therapy is materialized; excluded OCR therapy remains readable and not scheduled (40.1052ms)
+✔ omitting an included or unverified OCR row cannot silently activate or discard it (32.0911ms)
+✔ missing original rolls back identity, job and draft confirmation (18.8176ms)
+✔ an already confirmed import cannot create an editable draft; concurrent seeds converge (59.0591ms)
+✔ job narrative fallback and clinical allergy guards survive a legacy empty linked draft (35.4024ms)
+✔ confirmed replay respects changed patient scope and refuses contradictory legacy references (45.2825ms)
+✔ fiscal uniqueness under concurrent distinct drafts stays global without leaking names (20.3684ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14974.7016

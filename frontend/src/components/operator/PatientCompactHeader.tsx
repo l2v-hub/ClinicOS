@@ -1,3 +1,4 @@
+import { patientAge } from '../../lib/patientDemographics';
 import type { Paziente, CartellaPaziente } from '../../types';
 
 interface PatientCompactHeaderProps {
@@ -7,12 +8,6 @@ interface PatientCompactHeaderProps {
   backLabel?: string;
   onPrint?: () => void;
   onInvioPS?: () => void;
-}
-
-function calcAge(dob: string): string {
-  if (!dob) return '';
-  const years = Math.floor((Date.now() - new Date(dob).getTime()) / 31557600000);
-  return years > 0 ? `${years}a` : '';
 }
 
 export default function PatientCompactHeader({
@@ -25,7 +20,8 @@ export default function PatientCompactHeader({
 }: PatientCompactHeaderProps) {
   const fullName = `${paziente.lastName}, ${paziente.firstName}`.trim().replace(/^,\s*/, '');
   const initials = `${paziente.firstName?.[0] ?? ''}${paziente.lastName?.[0] ?? ''}`.toUpperCase();
-  const age = calcAge(paziente.dateOfBirth || '');
+  const years = patientAge(paziente.dateOfBirth);
+  const age = years === null ? '' : `${years}a`;
   const sex = paziente.sex === 'M' ? 'M' : paziente.sex === 'F' ? 'F' : '';
   const hasAllergie =
     cartella?.allergie && Array.isArray(cartella.allergie) && cartella.allergie.length > 0;

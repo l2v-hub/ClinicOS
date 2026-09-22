@@ -3,8 +3,9 @@
 // Shows a readonly summary of collected data and a "Crea paziente" confirm button.
 
 import { IcoCheck } from '../../../icons';
-import { isValidCF } from '../../../lib/codiceFiscale';
-import { validatePatientPhone } from '../../../lib/patientPhone';
+import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
+import type { DemographicField } from '../../../lib/patientDemographics';
+import { DemographicsStatus } from '../DemographicsStatus';
 import { buildIntakeTherapyReview } from './intakeTherapies';
 
 interface AnagraficaData {
@@ -23,6 +24,7 @@ interface StepVerificaProps {
   /** #235: toggle acceptance flags in draft.data._accepted (autosaved by the parent). */
   onUpdateSection: (key: string, value: unknown) => void;
   onReviewTherapies?: () => void;
+  onReviewDemographics?: (field: DemographicField) => void;
 }
 
 function countFilled(value: unknown): boolean {
@@ -40,6 +42,7 @@ export function StepVerifica({
   onConfirm,
   onUpdateSection,
   onReviewTherapies,
+  onReviewDemographics,
 }: StepVerificaProps) {
   const a = (data.anagrafica ?? {}) as AnagraficaData;
 
@@ -48,7 +51,9 @@ export function StepVerifica({
     ? (data.allergie as Array<{ allergene?: string; gravita?: string }>)
     : [];
   const allergieStatus = data.allergieStatus as string | undefined;
-  const therapies = buildIntakeTherapyReview(data);
+  const review = buildIntakeTherapyReview(data);
+  const therapies = review.filter((row) => !row.excluded);
+  const deferredTherapies = review.filter((row) => row.excluded);
   const invalidTherapies = therapies.filter((t) => t.issues.length > 0);
   const anamnesi = (data.anamnesi ?? {}) as { patologicaRemota?: string; note?: string };
   const diagnosi = Array.isArray(data.diagnosi)
@@ -65,18 +70,12 @@ export function StepVerifica({
   const demoAccepted = accepted.demographics === true;
   const therapyAccepted = accepted.therapy === true;
 
-  const missingDemo: string[] = [];
-  if (!a.firstName?.trim()) missingDemo.push('Nome');
-  if (!a.lastName?.trim()) missingDemo.push('Cognome');
-  if (!a.dateOfBirth) missingDemo.push('Data di nascita');
-  if (!isValidCF(typeof a.codiceFiscale === 'string' ? a.codiceFiscale : ''))
-    missingDemo.push('Codice fiscale valido');
-  if (!validatePatientPhone(a.phone).ok) missingDemo.push('Telefono valido');
+  const missingDemo = Object.values(intakeDemographicErrors(a));
 
   const checklist: Array<{ label: string; ok: boolean }> = [
     {
       label: missingDemo.length
-        ? `Dati anagrafici obbligatori mancanti: ${missingDemo.join(', ')}`
+        ? `Dati anagrafici da correggere: ${missingDemo.join(', ')}`
         : 'Dati anagrafici obbligatori',
       ok: missingDemo.length === 0,
     },
@@ -92,6 +91,7 @@ export function StepVerifica({
   return (
     <div className="step-verifica" data-testid="intake-step-5">
       <h3 className="step-verifica__title">Riepilogo</h3>
+      <DemographicsStatus value={a} onEdit={onReviewDemographics} busy={busy} />
 
       <section className="step-verifica__section">
         <h4 className="step-verifica__section-title">Anagrafica</h4>
@@ -137,7 +137,7 @@ export function StepVerifica({
               onUpdateSection('_accepted', { ...accepted, demographics: e.target.checked })
             }
           />
-          <span>Accetto i dati anagrafici</span>
+          <span>Confermo i dati anagrafici disponibili; i dati mancanti restano da completare</span>
         </label>
       </section>
 
@@ -181,6 +181,17 @@ export function StepVerifica({
             ))}
           </ul>
         )}
+        {deferredTherapies.length > 0 && (
+          <div>
+            <h4>Terapie che restano in bozza ({deferredTherapies.length})</h4>
+            <p>Da verificare; non saranno somministrabili.</p>
+            <ul>
+              {deferredTherapies.map((row) => (
+                <li key={row.index}>{row.name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         {/* #282: la conferma terapia deve essere sbloccabile QUI — prima viveva solo nello step 3
             (Clinica): chi arrivava al riepilogo senza averla spuntata trovava il bottone "Crea
             paziente" disabilitato senza alcun controllo per rimediare. */}
@@ -199,7 +210,7 @@ export function StepVerifica({
               : 'Confermo: nessuna terapia da inserire'}
           </span>
         </label>
-        {therapies.length > 0 && onReviewTherapies && (
+        {review.length > 0 && onReviewTherapies && (
           <button
             type="button"
             className="btn-secondary"

@@ -3,6 +3,14 @@ import { prisma } from '../lib/prisma.js';
 import { Router, type Response } from 'express';
 import { isValidCodiceFiscale, normalizeCodiceFiscale } from '../lib/codice-fiscale.js';
 import { validatePatientPhone } from '../lib/patient-phone.js';
+import {
+  optionalBirthDate,
+  optionalFiscalCode,
+  optionalPatientPhone,
+  patientName,
+  PatientIdentityInputError,
+} from '../patients/progressive-identity.js';
+import { patientIntakeReviewRouter } from './patient-intake-review.js';
 import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js';
 import { PatientPageInputError } from '../patients/pagination.js';
 import { loadPatientIdentityPage } from '../patients/identity-page.js';
@@ -32,6 +40,7 @@ router.use((_req, res, next) => {
 });
 router.use(requireOperator);
 router.use(parameterReadingsRouter);
+router.use(patientIntakeReviewRouter);
 
 async function sendPatientPage(
   req: AuthedRequest,
@@ -988,11 +997,20 @@ router.post('/', async (req, res) => {
     return;
   }
 
+  let birthDate: Date | null;
+  try {
+    birthDate = optionalBirthDate(body.dateOfBirth);
+  } catch (error) {
+    res
+      .status(400)
+      .json({ error: error instanceof Error ? error.message : 'Data di nascita non valida' });
+    return;
+  }
   const buildData = (mrn: string) => ({
     medicalRecordNumber: mrn,
     firstName: body.firstName!.trim(),
     lastName: body.lastName!.trim(),
-    dateOfBirth: new Date(body.dateOfBirth!),
+    dateOfBirth: birthDate,
     codiceFiscale,
     ...(body.sex !== undefined && { sex: body.sex }),
     ...(body.email !== undefined && { email: body.email }),
@@ -1059,32 +1077,39 @@ router.patch('/:id', requirePatientScope, async (req, res) => {
   const updates: Record<string, unknown> = {};
   for (const key of allowed) {
     if (req.body[key] !== undefined) {
-      updates[key] = key === 'dateOfBirth' ? new Date(req.body[key]) : req.body[key];
+      updates[key] = req.body[key];
     }
   }
 
-  if (Object.prototype.hasOwnProperty.call(req.body, 'phone')) {
-    const phoneValidation = validatePatientPhone(req.body.phone);
-    if (!phoneValidation.ok) {
-      res.status(400).json({ error: phoneValidation.error });
-      return;
-    }
-    updates.phone = phoneValidation.phone;
+  try {
+    if (Object.hasOwn(req.body, 'phone')) updates.phone = optionalPatientPhone(req.body.phone);
+    if (Object.hasOwn(req.body, 'dateOfBirth'))
+      updates.dateOfBirth = optionalBirthDate(req.body.dateOfBirth);
+    for (const key of ['firstName', 'lastName'] as const)
+      if (Object.hasOwn(req.body, key)) updates[key] = patientName(req.body[key]);
+  } catch (error) {
+    if (!(error instanceof PatientIdentityInputError)) throw error;
+    res.status(400).json({ error: error.message });
+    return;
   }
 
-  // #294: CF aggiornabile solo con un valore valido; mai azzerabile da qui.
+  // Missing identity remains explicit; a provided value is validated and globally unique.
   if (req.body.codiceFiscale !== undefined) {
-    const cf = normalizeCodiceFiscale(req.body.codiceFiscale);
-    if (!isValidCodiceFiscale(cf)) {
-      res.status(400).json({
-        error: 'Codice fiscale non valido (16 caratteri, carattere di controllo)',
-      });
+    let cf: string | null;
+    try {
+      cf = optionalFiscalCode(req.body.codiceFiscale);
+    } catch (error) {
+      res
+        .status(400)
+        .json({ error: error instanceof Error ? error.message : 'Codice fiscale non valido' });
       return;
     }
-    const other = await prisma.patient.findUnique({
-      where: { codiceFiscale: cf },
-      select: { id: true },
-    });
+    const other = cf
+      ? await prisma.patient.findUnique({
+          where: { codiceFiscale: cf },
+          select: { id: true },
+        })
+      : null;
     if (other && other.id !== id) {
       res.status(409).json({ error: 'Codice fiscale già presente' });
       return;
@@ -1100,7 +1125,7 @@ router.patch('/:id', requirePatientScope, async (req, res) => {
   try {
     const patient = await prisma.$transaction(async (tx) => {
       const updatedPatient = await tx.patient.update({ where: { id }, data: updates });
-      if (typeof updates.codiceFiscale === 'string') {
+      if (Object.hasOwn(updates, 'codiceFiscale')) {
         // Patient e' la sola fonte autorevole dell'identita'. La rimozione atomica della
         // vecchia copia JSON non riscrive il blob clinico e non perde sezioni concorrenti.
         await tx.$executeRaw`

@@ -1,3 +1,5 @@
+import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
+import { DemographicsStatus } from '../DemographicsStatus';
 import { useMemo, useState } from 'react';
 import { SemanticTaggedText } from './SemanticTaggedText';
 import { SECTION_MAP, REVIEW_ORDER, TARGET_AREA_LABEL, allergyStatusLabel } from './sectionMapping';
@@ -110,8 +112,9 @@ export function ImportSectionsReview({
 
   function handleSubmit() {
     setError(null);
-    if (!patient.firstName.trim() || !patient.lastName.trim() || !patient.dateOfBirth.trim()) {
-      setError('Nome, cognome e data di nascita sono obbligatori.');
+    const demographicErrors = Object.values(intakeDemographicErrors(patient));
+    if (demographicErrors.length) {
+      setError(demographicErrors.join('. '));
       return;
     }
     if (allergyNeedsAck && !allergyAck) {
@@ -162,11 +165,17 @@ export function ImportSectionsReview({
           <h3>Anagrafica</h3>
           <span className="srev-area">{TARGET_AREA_LABEL.ANAGRAFICA}</span>
         </header>
+        <DemographicsStatus
+          value={patient}
+          busy={busy}
+          onEdit={(field) => document.getElementById(`import-demographic-${field}`)?.focus()}
+        />
         <div className="srev-anag-grid">
           {ANAG_PREFILL.map(([field, lbl]) => (
             <label key={field} className="srev-field">
               <span>{lbl}</span>
               <input
+                id={`import-demographic-${field}`}
                 type={field === 'dateOfBirth' ? 'date' : 'text'}
                 value={(patient[field] as string) ?? ''}
                 disabled={busy}

@@ -19,7 +19,7 @@ interface PatientIdentityRow {
   codiceFiscale: string | null;
   firstName: string;
   lastName: string;
-  dateOfBirth: Date;
+  dateOfBirth: Date | null;
   sex: string | null;
   email: string | null;
   phone: string | null;

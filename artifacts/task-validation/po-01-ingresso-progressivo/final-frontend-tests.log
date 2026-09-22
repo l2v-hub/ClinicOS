@@ -1,0 +1,92 @@
+(node:37176) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ carries allergieStatus=paziente_nega into the confirmed cartella (1.9623ms)
+✔ carries allergieStatus=assenti into the confirmed cartella (0.4157ms)
+✔ presenti keeps BOTH the status and the allergy list (no data loss) (0.9053ms)
+✔ omits allergieStatus when the operator never selected one (undocumented ≠ false value) (0.4465ms)
+✔ preserves the pre-existing mapping keys unchanged (1.1712ms)
+✔ does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella (0.3439ms)
+(node:37176) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37024) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ autosave excludes immutable source and receipt fields without dropping editable draft content (2.6905ms)
+✔ createDraft POSTs to /intake/drafts (0.6043ms)
+✔ patchDraft PATCHes the draft id (0.3567ms)
+✔ lost confirmation response and refused retry autosave recover the same confirmed patient (1.1176ms)
+✔ failed confirmation remains an error if its draft is still open or cannot be read (1.3918ms)
+(node:37024) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8552) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ manual reopen and timeout retry reuse one draft; simultaneous initializers create only once (2.3787ms)
+(node:8552) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:29032) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ accepted minimal demographics can create patient and missing fields remain actionable (9.863ms)
+✔ unverified imported therapy still blocks confirmation until explicitly excluded (6.9556ms)
+✔ source mapping preserves original indexes after an excluded row (0.5534ms)
+✔ confirmation persists a full review snapshot without certifying or changing original therapy data (0.7959ms)
+(node:29032) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33980) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (4.4454ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (1.1345ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (0.7879ms)
+✔ missing or ambiguous raw quantities never become a default dose (1.1478ms)
+✔ explicit unit takes priority over form and compound strength stays raw (0.3056ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (0.8594ms)
+✔ verification renders real manual times and an actionable indexed blocker (10.2717ms)
+✔ liquid and inhaled quantities keep their explicit unit (0.4675ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (0.4795ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (0.6893ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (1.1133ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (2.9951ms)
+✔ intake keeps complete therapy source available next to manual additions (42.3193ms)
+(node:33980) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22028) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ intake accepts unavailable identity details and records exactly what remains incomplete (1.805ms)
+✔ provided fields remain validated; complete data clears the incomplete status (2.2013ms)
+✔ unknown, malformed and future DOB never produces 1970, Invalid Date, NaN or an invented age (0.5344ms)
+✔ reviewed blanks replace incorrect OCR identity instead of restoring extracted values (0.1954ms)
+✔ retained intake review rejects malformed rows instead of hiding missing clinical data (0.7944ms)
+(node:22028) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37804) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ patient list exposes the canonical fiscal identity and never shows MRN (1.5693ms)
+✔ roster has five operational columns and native accessible actions (0.9593ms)
+✔ tablet and mobile use a compact two-to-one-column card grid (0.4791ms)
+✔ new-patient wizard auto-fills CF without assuming a sex or overwriting provenance (0.2349ms)
+✔ new-patient wizard keeps required identity visible and progressively discloses optional data (0.2528ms)
+✔ patient intake uses a compact responsive layout without reducing touch targets (0.7498ms)
+(node:37804) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:13680) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ patient phone is mandatory, including whitespace and null values (2.6752ms)
+✔ patient phone preserves national/international formatting and leading zeroes (0.548ms)
+✔ patient phone rejects malformed, oversized and non-string inputs (0.2976ms)
+✔ patient phone validation does not invent or infer a country prefix (0.1375ms)
+(node:13680) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 922.7646

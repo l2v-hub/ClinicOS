@@ -115,7 +115,7 @@ interface PatientSearchRow {
   firstName: string;
   lastName: string;
   medicalRecordNumber: string;
-  dateOfBirth: Date;
+  dateOfBirth: Date | null;
 }
 
 function likePattern(value: string): string {
@@ -461,7 +461,7 @@ export async function searchPatients(
     results.push({
       patientId: p.id,
       displayName: displayName(p),
-      dateOfBirth: p.dateOfBirth.toISOString().slice(0, 10),
+      dateOfBirth: p.dateOfBirth?.toISOString().slice(0, 10) ?? null,
       matchingFields: matching,
       sourceRefs: refs,
     });
@@ -494,7 +494,7 @@ export async function getPatientDemographics(
     medicalRecordNumber: p.medicalRecordNumber,
     firstName: p.firstName,
     lastName: p.lastName,
-    dateOfBirth: p.dateOfBirth.toISOString().slice(0, 10),
+    dateOfBirth: p.dateOfBirth?.toISOString().slice(0, 10) ?? null,
     sex: p.sex,
     phone: p.phone,
     address: p.address,
@@ -1364,7 +1364,7 @@ export async function correlate(
     out.push({
       patientId: p.id,
       displayName: displayName(p),
-      dateOfBirth: p.dateOfBirth.toISOString().slice(0, 10),
+      dateOfBirth: p.dateOfBirth?.toISOString().slice(0, 10) ?? null,
       matchingFields: matching,
       sourceRefs: refs,
     });

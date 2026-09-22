@@ -59,6 +59,7 @@ const THERAPIES = [
   {
     farmacoNome: 'Tachipirina',
     dataInizio: '2026-06-29',
+    viaSomministrazione: 'orale',
     schedules: [
       {
         time: '08:00',
@@ -76,7 +77,7 @@ const THERAPIES = [
 // ---------------------------------------------------------------------------
 
 test('confirmDraft: persists therapies + vitals/pain into Cartella.data', async () => {
-  const draft = await createDraft({ source: 'manual' });
+  const draft = await createDraft({ source: 'manual', createdById: TEST_OPERATOR_ID });
 
   try {
     const result = await confirmDraft(

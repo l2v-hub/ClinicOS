@@ -72,7 +72,7 @@ test('new-patient wizard keeps required identity visible and progressively discl
   assert.match(step, /npm-card--collapsible/);
   assert.match(step, /open=\{expanded\}/);
   assert.match(step, /onToggle=/);
-  assert.match(step, /4 obbligatori/);
+  assert.match(step, /2 necessar[i] all’ingresso/);
   assert.match(step, /Facoltativo/);
 });
 

@@ -1,3 +1,4 @@
+import { intakeDemographicErrors } from '../../lib/intakeDemographics';
 import { useMemo, useState } from 'react';
 
 // Full review editor (REQ-015): mirrors the patient record layout. Shows EVERY field
@@ -412,8 +413,17 @@ export function ImportReviewFull({
     const firstName = String(a.nome ?? '').trim(),
       lastName = String(a.cognome ?? '').trim();
     const dateOfBirth = toIsoDate(String(a.dataNascita ?? '').trim());
-    if (!firstName || !lastName || !dateOfBirth) {
-      setError('Nome, cognome e data di nascita sono obbligatori.');
+    const demographicErrors = Object.values(
+      intakeDemographicErrors({
+        firstName,
+        lastName,
+        dateOfBirth,
+        codiceFiscale: c.codiceFiscale,
+        phone: a.telefono,
+      }),
+    );
+    if (demographicErrors.length) {
+      setError(demographicErrors.join('. '));
       return;
     }
     onConfirm(

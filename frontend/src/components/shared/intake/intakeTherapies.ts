@@ -1,12 +1,32 @@
 import type { TherapyFormValue } from '../../operator/cartella/TherapyFormFields';
 import { VIA_OPTIONS } from '../../operator/cartella/TherapyFormFields';
-import { dischargeRowToTherapyInput, type DischargeTherapyRow } from './dischargeTherapy';
+import {
+  dischargeRowToTherapyInput,
+  dischargeRowToTherapyForm,
+  type DischargeTherapyRow,
+} from './dischargeTherapy';
 import { therapyFormToInput } from './therapyFormPayload';
 import { isPatchUnit } from '../../operator/cartella/therapyDose';
 
 const hasText = (v: unknown): v is string => typeof v === 'string' && !!v.trim();
 const validTime = (v: unknown): v is string =>
   typeof v === 'string' && /^([01]?\d|2[0-3]):[0-5]\d$/.test(v);
+
+/** Bind the final payload to the exact full form persisted in its source draft. */
+export function prepareIntakeConfirmData<T extends Record<string, unknown>>(data: T): T {
+  if (!Array.isArray(data.terapiaImport)) return data;
+  return {
+    ...data,
+    terapiaImport: data.terapiaImport.map((row: DischargeTherapyRow) =>
+      row.excludedFromConfirm || row.reviewedTherapy
+        ? row
+        : {
+            ...row,
+            reviewedTherapy: dischargeRowToTherapyForm(row),
+          },
+    ),
+  };
+}
 function validDate(v: unknown): v is string {
   if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
   const d = new Date(`${v}T00:00:00Z`);
@@ -79,9 +99,17 @@ export function buildIntakeTherapyReview(data: Record<string, unknown>, operator
   const manual = Array.isArray(data.terapia) ? data.terapia : [];
   // The index is shared by recap, payload and server error messages.
   return [
-    ...imported.map((row: DischargeTherapyRow) => ({ row, source: 'import' as const })),
-    ...manual.map((row: TherapyFormValue) => ({ row, source: 'manual' as const })),
-  ].map(({ row, source }, i) => {
+    ...imported.map((row: DischargeTherapyRow, sourceIndex) => ({
+      row,
+      sourceIndex,
+      source: 'import' as const,
+    })),
+    ...manual.map((row: TherapyFormValue, sourceIndex) => ({
+      row,
+      sourceIndex,
+      source: 'manual' as const,
+    })),
+  ].map(({ row, source, sourceIndex }, i) => {
     let input: Record<string, unknown>;
     try {
       input =
@@ -104,7 +132,9 @@ export function buildIntakeTherapyReview(data: Record<string, unknown>, operator
     return {
       index: i + 1,
       source,
-      input,
+      input: { ...input, intakeSource: { type: source, index: sourceIndex } },
+      excluded: source === 'import' && (row as DischargeTherapyRow)?.excludedFromConfirm === true,
+      sourceIndex,
       issues,
       requiresSourceReview,
       name: hasText(input.farmacoNome) ? input.farmacoNome : 'Farmaco da indicare',

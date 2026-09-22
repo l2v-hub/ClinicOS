@@ -30,16 +30,18 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
     onChange(rows.map((r, idx) => (idx === i ? therapyFormToDischargeRow(next, r) : r)));
   }
 
-  // L'estrazione propone anche farmaci che non vanno riportati nella terapia del paziente
-  // (sospesi durante il ricovero, citati nell'anamnesi, letti male). Potendoli solo correggere
-  // l'operatore sarebbe costretto a salvarli comunque: qui si eliminano.
-  function rimuoviRiga(i: number) {
-    onChange(rows.filter((_, idx) => idx !== i));
+  // Keep the complete source row in the draft when it is excluded from this confirmation.
+  function toggleDeferred(i: number) {
+    onChange(
+      rows.map((row, index) =>
+        index === i ? { ...row, excludedFromConfirm: !row.excludedFromConfirm } : row,
+      ),
+    );
   }
 
   if (!Array.isArray(rows) || rows.length === 0) return null;
   const review = buildIntakeTherapyReview({ terapiaImport: rows });
-  const daVerificare = review.filter((r) => r.issues.length > 0).length;
+  const daVerificare = review.filter((r) => !r.excluded && r.issues.length > 0).length;
 
   return (
     <section
@@ -72,20 +74,24 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
             <strong>
               {i + 1}. {forms[i]?.farmacoNome || r.farmacoNome || 'Farmaco da indicare'}
             </strong>
-            {review[i].issues.length > 0 ? (
+            {r.excludedFromConfirm ? (
+              <span className="discharge-therapy-review__badge is-verify">
+                Resta in bozza · da verificare
+              </span>
+            ) : review[i].issues.length > 0 ? (
               <span className="discharge-therapy-review__badge is-verify">da verificare</span>
             ) : (
               <span className="discharge-therapy-review__badge is-ok">ok</span>
             )}
             <button
               type="button"
-              className="icon-btn icon-btn--sm icon-btn--danger"
+              className="btn-secondary btn-sm"
               data-testid="discharge-therapy-remove"
-              onClick={() => rimuoviRiga(i)}
+              onClick={() => toggleDeferred(i)}
               title="Non riportare questo farmaco nella terapia"
-              aria-label={`Elimina ${forms[i]?.farmacoNome || r.farmacoNome || 'farmaco'} dalla terapia`}
+              aria-label={`${r.excludedFromConfirm ? 'Reincludi' : 'Lascia in bozza'} ${forms[i]?.farmacoNome || r.farmacoNome || 'farmaco'}`}
             >
-              ✕
+              {r.excludedFromConfirm ? 'Reincludi' : 'Lascia in bozza'}
             </button>
           </div>
           {review[i].issues.length > 0 && (
@@ -100,7 +106,7 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
               {r.originalText}
             </blockquote>
           )}
-          {forms[i] && (
+          {forms[i] && !r.excludedFromConfirm && (
             <div className="ec-modal-add-form">
               <TherapyFormFields
                 value={forms[i]}
@@ -130,8 +136,8 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
         </article>
       ))}
       <p className="discharge-therapy-review__hint">
-        Le righe verranno salvate nella terapia del paziente alla conferma. Elimina con ✕ i farmaci
-        che non vanno riportati.
+        Verranno create solo le terapie incluse e verificate. «Lascia in bozza» conserva la riga
+        originale senza creare una prescrizione somministrabile.
       </p>
     </section>
   );

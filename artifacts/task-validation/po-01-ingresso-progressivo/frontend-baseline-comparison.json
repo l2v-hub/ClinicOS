@@ -1,0 +1,38 @@
+[
+  {
+    "path": "frontend/src/components/shared/agnos/agnosWorkflow.test.ts",
+    "sameAsBaseline": true
+  },
+  {
+    "path": "frontend/src/components/shared/agnos/AgnosTurnView.tsx",
+    "sameAsBaseline": true
+  },
+  {
+    "path": "frontend/src/lib/__tests__/patientRosterGuard.test.ts",
+    "sameAsBaseline": true
+  },
+  {
+    "path": "frontend/src/components/operator/MultiPatientParametri.tsx",
+    "sameAsBaseline": true
+  },
+  {
+    "path": "frontend/src/lib/patientParametersPage.ts",
+    "sameAsBaseline": true
+  },
+  {
+    "path": "frontend/src/App.css",
+    "sameAsBaseline": true
+  },
+  {
+    "path": "frontend/src/lib/__tests__/therapyAgendaDateGuard.test.ts",
+    "sameAsBaseline": true
+  },
+  {
+    "path": "frontend/src/components/operator/OperatorAgenda.tsx",
+    "sameAsBaseline": true
+  },
+  {
+    "path": "frontend/src/components/admin/AdminAgenda.tsx",
+    "sameAsBaseline": true
+  }
+]

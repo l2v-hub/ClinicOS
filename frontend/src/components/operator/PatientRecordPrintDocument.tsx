@@ -1,3 +1,4 @@
+import { formatBirthDate } from '../../lib/patientDemographics';
 import type { ReactNode } from 'react';
 import type {
   CartellaPaziente,
@@ -68,7 +69,7 @@ export default function PatientRecordPrintDocument({
           </div>
           <div>
             <dt>Data di nascita</dt>
-            <dd>{date(paziente.dateOfBirth)}</dd>
+            <dd>{formatBirthDate(paziente.dateOfBirth)}</dd>
           </div>
         </dl>
       </header>

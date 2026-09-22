@@ -1,4 +1,8 @@
 import { memo } from 'react';
+import {
+  birthSummary as patientBirthSummary,
+  incompleteDemographicFields,
+} from '../../lib/patientDemographics';
 import type { ClinicalSummaryEntry, Paziente } from '../../types';
 import { IcoChevronRight, IcoTrash } from '../../icons';
 import { IndicatoreAnomalie } from './cartella/AvvisoAnomalieFarmaci';
@@ -11,19 +15,9 @@ import {
   type PatientSortField,
 } from '../../lib/patientRosterSort';
 
-function calcAge(dob: string): number {
-  const today = new Date();
-  const birth = new Date(dob);
-  let age = today.getFullYear() - birth.getFullYear();
-  const month = today.getMonth() - birth.getMonth();
-  if (month < 0 || (month === 0 && today.getDate() < birth.getDate())) age -= 1;
-  return age;
-}
-
 function birthSummary(patient: Paziente): string {
-  const date = new Date(patient.dateOfBirth).toLocaleDateString('it-IT');
   const sex = patient.sex === 'M' ? 'M' : patient.sex === 'F' ? 'F' : 'Sesso non indicato';
-  return `${date} · ${calcAge(patient.dateOfBirth)} anni · ${sex}`;
+  return `${patientBirthSummary(patient.dateOfBirth)} · ${sex}`;
 }
 
 function FiscalCode({ patient }: { patient: Paziente }) {
@@ -138,6 +132,9 @@ const PatientCard = memo(function PatientCard({
         <div className="patient-card__identity">
           <strong>{fullName}</strong>
           <span>{birthSummary(patient)}</span>
+          {incompleteDemographicFields(patient).length > 0 && (
+            <small>Anagrafica da completare</small>
+          )}
         </div>
         <button
           type="button"
@@ -336,6 +333,9 @@ export function PatientRoster({
                             {patient.lastName}, {patient.firstName}
                           </strong>
                           <small>{birthSummary(patient)}</small>
+                          {incompleteDemographicFields(patient).length > 0 && (
+                            <small>Anagrafica da completare</small>
+                          )}
                         </span>
                       </div>
                     </td>

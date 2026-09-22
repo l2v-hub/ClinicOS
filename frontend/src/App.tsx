@@ -2191,7 +2191,7 @@ export default function App() {
 
   async function updatePaziente(
     id: string,
-    updates: Partial<Pick<Paziente, 'email' | 'phone' | 'codiceFiscale'>>,
+    updates: Partial<Pick<Paziente, 'email' | 'phone' | 'codiceFiscale' | 'dateOfBirth'>>,
   ): Promise<boolean> {
     try {
       const res = await fetch(`${API_URL}/patients/${id}`, {

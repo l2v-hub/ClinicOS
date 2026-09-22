@@ -69,10 +69,9 @@ model Patient {
   medicalRecordNumber   String           @unique
   firstName             String
   lastName              String
-  dateOfBirth           DateTime
+  dateOfBirth           DateTime?
   sex                   String?
-  // #294: unique patient key. Nullable only for legacy/seed rows created before the
-  // constraint; every creation path now requires a valid CF (provided or computed).
+  // Globally unique when known. Intake may leave identity incomplete for later review.
   codiceFiscale         String?          @unique
   email                 String?
   phone                 String?
@@ -508,6 +507,8 @@ model PatientIntakeDraft {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   confirmedAt        DateTime?
+
+  @@index([confirmedPatientId])
 
   @@index([status])
   @@index([createdById])

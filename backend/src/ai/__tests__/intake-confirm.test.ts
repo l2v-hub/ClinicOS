@@ -53,7 +53,7 @@ test('confirmDraft creates patient transactionally + is idempotent', async () =>
   await prisma.patientIntakeDraft.delete({ where: { id: d.id } }).catch(() => {});
 });
 
-test('confirmDraft falls back to the authenticated operator when a legacy owner is stale', async () => {
+test('confirmDraft permits a manager to recover a stale legacy owner', async () => {
   const d = await createDraft({ createdById: 'DELETED-LEGACY-OPERATOR', source: 'manual' });
   const result = await confirmDraft(
     d.id,
@@ -67,7 +67,7 @@ test('confirmDraft falls back to the authenticated operator when a legacy owner 
       },
       confirmDuplicate: true,
     },
-    { id: TEST_OPERATOR_ID },
+    { id: TEST_OPERATOR_ID, role: 'manager' },
   );
 
   assert.equal(result.status, 'created');
@@ -80,7 +80,7 @@ test('confirmDraft falls back to the authenticated operator when a legacy owner 
   await prisma.patientIntakeDraft.delete({ where: { id: d.id } }).catch(() => {});
 });
 
-test('confirmJob assigns a legacy ownerless job to the authenticated operator', async () => {
+test('confirmJob permits a manager to recover an ownerless legacy job', async () => {
   const job = await prisma.importJob.create({
     data: {
       status: 'review_ready',
@@ -103,7 +103,7 @@ test('confirmJob assigns a legacy ownerless job to the authenticated operator', 
       },
       confirmDuplicate: true,
     },
-    { id: TEST_OPERATOR_ID },
+    { id: TEST_OPERATOR_ID, role: 'manager' },
   );
 
   assert.equal(result.status, 'created');
@@ -119,7 +119,7 @@ test('confirmJob assigns a legacy ownerless job to the authenticated operator', 
 
 // #294: il CF è la chiave univoca — la conferma senza CF valido è bloccata; un CF già
 // presente è un duplicato certo, non forzabile con confirmDuplicate.
-test('confirmDraft: blocks a missing CF and a duplicate CF (not forcible)', async () => {
+test('confirmDraft: accepts a missing CF but blocks a duplicate CF (not forcible)', async () => {
   const base = {
     firstName: 'IntakeMock',
     lastName: 'Sintetico',
@@ -127,17 +127,19 @@ test('confirmDraft: blocks a missing CF and a duplicate CF (not forcible)', asyn
     phone: '+39 333 000 0000',
   };
 
-  // 1) Missing CF → hard block, nothing persisted.
+  // Missing CF is explicitly unknown; completing it later keeps the patient identity.
   const d1 = await createDraft({ createdById: TEST_OPERATOR_ID, source: 'manual' });
-  await assert.rejects(
-    () =>
-      confirmDraft(d1.id, { patient: base, confirmDuplicate: true } as any, {
-        id: TEST_OPERATOR_ID,
-      }),
-    (err: Error) => err.message.includes('Codice fiscale mancante o non valido'),
+  const incomplete = await confirmDraft(
+    d1.id,
+    { patient: base, confirmDuplicate: true },
+    { id: TEST_OPERATOR_ID },
   );
-  const afterBlock = await prisma.patientIntakeDraft.findUnique({ where: { id: d1.id } });
-  assert.equal(afterBlock?.status, 'draft');
+  assert.equal(incomplete.status, 'created');
+  assert.equal(
+    (await prisma.patient.findUniqueOrThrow({ where: { id: incomplete.patient!.id } }))
+      .codiceFiscale,
+    null,
+  );
 
   // 2) Duplicate CF → hard conflict even with confirmDuplicate (different name/dob,
   // so only the CF key can flag it).
@@ -147,6 +149,7 @@ test('confirmDraft: blocks a missing CF and a duplicate CF (not forcible)', asyn
     d2.id,
     {
       patient: { ...base, codiceFiscale: cf },
+      confirmDuplicate: true,
     } as any,
     { id: TEST_OPERATOR_ID },
   );
@@ -176,6 +179,7 @@ test('confirmDraft: blocks a missing CF and a duplicate CF (not forcible)', asyn
   const pid = first.patient!.id;
   await prisma.cartella.deleteMany({ where: { patientId: pid } }).catch(() => {});
   await prisma.patient.delete({ where: { id: pid } }).catch(() => {});
+  await prisma.patient.delete({ where: { id: incomplete.patient!.id } });
   for (const draftId of [d1.id, d2.id, d3.id])
     await prisma.patientIntakeDraft.delete({ where: { id: draftId } }).catch(() => {});
 });

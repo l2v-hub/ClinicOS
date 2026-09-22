@@ -1,3 +1,4 @@
+import { formatBirthDate } from '../../../lib/patientDemographics';
 import { useState } from 'react';
 import { IcoCheck } from '../../../icons';
 import type {
@@ -190,9 +191,7 @@ function DimissioneModulo({
         </div>
         <div className="fm-patient-field">
           <span className="fm-patient-field__lbl">Nato/a il</span>
-          <span className="fm-patient-field__val">
-            {new Date(paziente.dateOfBirth).toLocaleDateString('it-IT')}
-          </span>
+          <span className="fm-patient-field__val">{formatBirthDate(paziente.dateOfBirth)}</span>
         </div>
       </div>
 

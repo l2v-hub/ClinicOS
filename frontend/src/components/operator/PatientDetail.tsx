@@ -1,3 +1,7 @@
+import { intakeDemographicErrors } from '../../lib/intakeDemographics';
+import { birthDateValue, birthSummary, type DemographicField } from '../../lib/patientDemographics';
+import { DemographicsStatus } from '../shared/DemographicsStatus';
+import { PatientIntakeReview } from './PatientIntakeReview';
 import { ConsegnaTimestamp } from './ConsegnaTimestamp';
 import { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import type {
@@ -108,7 +112,7 @@ interface PatientDetailProps {
   ) => void | Promise<boolean>;
   onUpdatePaziente: (
     id: string,
-    updates: Partial<Pick<Paziente, 'email' | 'phone' | 'codiceFiscale'>>,
+    updates: Partial<Pick<Paziente, 'email' | 'phone' | 'codiceFiscale' | 'dateOfBirth'>>,
   ) => Promise<boolean>;
   onAssignCamera: (
     pazienteId: string,
@@ -128,15 +132,6 @@ interface PatientDetailProps {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-
-function calcAge(dob: string): number {
-  const today = new Date();
-  const birth = new Date(dob);
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-  return age;
-}
 
 function fmtDate(iso: string): string {
   if (!iso) return '—';
@@ -340,8 +335,17 @@ export function PatientDetail({
   const [profiloSaveError, setProfiloSaveError] = useState<string | null>(null);
   const [profiloSaving, setProfiloSaving] = useState(false);
   const profiloPhoneRef = useRef<HTMLInputElement>(null);
+  const [profiloFieldErrors, setProfiloFieldErrors] = useState<
+    Partial<Record<DemographicField, string>>
+  >({});
+  const [profileFocus, setProfileFocus] = useState<DemographicField | null>(null);
+  useEffect(() => {
+    if (!editProfilo || !profileFocus) return;
+    document.getElementById(`patient-profile-${profileFocus}`)?.focus();
+    setProfileFocus(null);
+  }, [editProfilo, profileFocus]);
   const [profiloForm, setProfiloForm] = useState<
-    Partial<CartellaPaziente & Pick<Paziente, 'email' | 'phone' | 'codiceFiscale'>>
+    Partial<CartellaPaziente & Pick<Paziente, 'email' | 'phone' | 'codiceFiscale' | 'dateOfBirth'>>
   >({});
   // Feature 010: L3 sub-tabs for Profilo (FR-005)
 
@@ -629,20 +633,28 @@ export function PatientDetail({
   // Profilo
   async function saveProfiloHandler() {
     if (profiloSaving || saving) return;
-    const { email, phone, codiceFiscale, ...cartellaUpdates } = profiloForm;
-    const validated = validatePatientPhone(phone);
-    setProfiloPhoneError(validated.ok ? null : validated.error);
+    const { email, phone, codiceFiscale, dateOfBirth, ...cartellaUpdates } = profiloForm;
+    const errors = intakeDemographicErrors({ ...paziente, phone, codiceFiscale, dateOfBirth });
+    if (paziente.phone?.trim() && !phone?.trim())
+      errors.phone = 'Il telefono già registrato non può essere rimosso';
+    if (paziente.codiceFiscale?.trim() && !codiceFiscale?.trim())
+      errors.codiceFiscale = 'Il codice fiscale già registrato non può essere rimosso';
+    setProfiloFieldErrors(errors);
+    setProfiloPhoneError(errors.phone ?? null);
     setProfiloSaveError(null);
-    if (!validated.ok) {
-      profiloPhoneRef.current?.focus();
+    const invalidField = Object.keys(errors)[0] as DemographicField | undefined;
+    if (invalidField) {
+      document.getElementById(`patient-profile-${invalidField}`)?.focus();
       return;
     }
+    const validated = validatePatientPhone(phone);
     setProfiloSaving(true);
     try {
       const patientSaved = await onUpdatePaziente(paziente.id, {
         email,
-        phone: validated.phone,
-        codiceFiscale,
+        ...(validated.ok ? { phone: validated.phone } : {}),
+        ...(codiceFiscale?.trim() ? { codiceFiscale: codiceFiscale.trim().toUpperCase() } : {}),
+        ...(dateOfBirth?.trim() ? { dateOfBirth: birthDateValue(dateOfBirth) } : {}),
       });
       if (!patientSaved) {
         setProfiloSaveError('Salvataggio non riuscito. Verifica i dati e riprova.');
@@ -651,8 +663,10 @@ export function PatientDetail({
       const ok = await updConEsito(cartellaUpdates);
       if (ok) setEditProfilo(false);
       else setProfiloSaveError('Salvataggio del profilo incompleto. Riprova.');
-    } catch {
-      setProfiloSaveError('Salvataggio non riuscito. Riprova.');
+    } catch (error) {
+      setProfiloSaveError(
+        error instanceof Error ? error.message : 'Salvataggio non riuscito. Riprova.',
+      );
     } finally {
       setProfiloSaving(false);
     }
@@ -1691,6 +1705,36 @@ export function PatientDetail({
     );
   }
 
+  function openProfileEditor(field?: DemographicField) {
+    setProfiloForm({
+      indirizzo: cartella.indirizzo?.trim() || paziente.address || '',
+      codiceFiscale: paziente.codiceFiscale ?? cartella.codiceFiscale,
+      contattoEmergenzaNome: cartella.contattoEmergenzaNome,
+      contattoEmergenzaTel: cartella.contattoEmergenzaTel,
+      contattoEmergenzaRel: cartella.contattoEmergenzaRel,
+      medicoCurante: cartella.medicoCurante,
+      operatoreId: cartella.operatoreId,
+      cameraNumero: cartella.cameraNumero,
+      lettoNumero: cartella.lettoNumero,
+      repartoRicovero: cartella.repartoRicovero,
+      statoRicovero: cartella.statoRicovero,
+      dataRicovero: cartella.dataRicovero,
+      noteGenerali: cartella.noteGenerali,
+      email: paziente.email ?? '',
+      phone: paziente.phone ?? '',
+      dateOfBirth: birthDateValue(paziente.dateOfBirth) ?? '',
+    });
+    setProfiloPhoneError(null);
+    setProfiloSaveError(null);
+    setEditProfilo(true);
+    setProfiloFieldErrors({});
+    if (field) {
+      setActiveGroup(patientTabGroup(field === 'phone' ? 'contatti' : 'profilo'));
+      setTab(field === 'phone' ? 'contatti' : 'profilo');
+      setProfileFocus(field);
+    }
+  }
+
   function renderProfilo() {
     return (
       <div className="cr-tab-content">
@@ -1703,26 +1747,7 @@ export function PatientDetail({
               <button
                 className="btn-sm"
                 onClick={() => {
-                  setProfiloForm({
-                    indirizzo: cartella.indirizzo?.trim() || paziente.address || '',
-                    codiceFiscale: paziente.codiceFiscale ?? cartella.codiceFiscale,
-                    contattoEmergenzaNome: cartella.contattoEmergenzaNome,
-                    contattoEmergenzaTel: cartella.contattoEmergenzaTel,
-                    contattoEmergenzaRel: cartella.contattoEmergenzaRel,
-                    medicoCurante: cartella.medicoCurante,
-                    operatoreId: cartella.operatoreId,
-                    cameraNumero: cartella.cameraNumero,
-                    lettoNumero: cartella.lettoNumero,
-                    repartoRicovero: cartella.repartoRicovero,
-                    statoRicovero: cartella.statoRicovero,
-                    dataRicovero: cartella.dataRicovero,
-                    noteGenerali: cartella.noteGenerali,
-                    email: paziente.email ?? '',
-                    phone: paziente.phone ?? '',
-                  });
-                  setProfiloPhoneError(null);
-                  setProfiloSaveError(null);
-                  setEditProfilo(true);
+                  openProfileEditor();
                 }}
               >
                 Modifica
@@ -1754,7 +1779,7 @@ export function PatientDetail({
                   </div>
                   <div className="form-field">
                     <label className="form-label" htmlFor="patient-profile-phone">
-                      Telefono (obbligatorio)
+                      Telefono (necessario per completare la scheda)
                     </label>
                     <input
                       ref={profiloPhoneRef}
@@ -1762,7 +1787,6 @@ export function PatientDetail({
                       className="form-input"
                       type="tel"
                       autoComplete="tel"
-                      required
                       maxLength={PATIENT_PHONE_MAX_LENGTH}
                       aria-invalid={!!profiloPhoneError}
                       aria-describedby={
@@ -1792,14 +1816,49 @@ export function PatientDetail({
                     />
                   </div>
                   <div className="form-field">
-                    <label className="form-label">Codice Fiscale</label>
+                    <label className="form-label" htmlFor="patient-profile-codiceFiscale">
+                      Codice Fiscale
+                    </label>
                     <input
+                      id="patient-profile-codiceFiscale"
+                      aria-invalid={!!profiloFieldErrors.codiceFiscale}
+                      aria-describedby={
+                        profiloFieldErrors.codiceFiscale ? 'patient-profile-cf-error' : undefined
+                      }
                       className="form-input"
                       value={profiloForm.codiceFiscale ?? ''}
                       onChange={(e) =>
                         setProfiloForm((p) => ({ ...p, codiceFiscale: e.target.value }))
                       }
                     />
+                    {profiloFieldErrors.codiceFiscale && (
+                      <span id="patient-profile-cf-error" className="form-error" role="alert">
+                        {profiloFieldErrors.codiceFiscale}
+                      </span>
+                    )}
+                  </div>
+                  <div className="form-field">
+                    <label className="form-label" htmlFor="patient-profile-dateOfBirth">
+                      Data di nascita
+                    </label>
+                    <input
+                      id="patient-profile-dateOfBirth"
+                      className="form-input"
+                      type="date"
+                      value={profiloForm.dateOfBirth ?? ''}
+                      aria-invalid={!!profiloFieldErrors.dateOfBirth}
+                      aria-describedby={
+                        profiloFieldErrors.dateOfBirth ? 'patient-profile-birth-error' : undefined
+                      }
+                      onChange={(event) =>
+                        setProfiloForm((form) => ({ ...form, dateOfBirth: event.target.value }))
+                      }
+                    />
+                    {profiloFieldErrors.dateOfBirth && (
+                      <span id="patient-profile-birth-error" className="form-error" role="alert">
+                        {profiloFieldErrors.dateOfBirth}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="form-field" style={{ marginTop: 8 }}>
@@ -1828,9 +1887,7 @@ export function PatientDetail({
                       </div>
                       <div className="cr-profilo-row">
                         <span>Data nascita</span>
-                        <strong>
-                          {fmtDate(paziente.dateOfBirth)} · {calcAge(paziente.dateOfBirth)} anni
-                        </strong>
+                        <strong>{birthSummary(paziente.dateOfBirth)}</strong>
                       </div>
                       <div className="cr-profilo-row">
                         <span>Sesso</span>
@@ -2578,6 +2635,13 @@ export function PatientDetail({
         backLabel={backLabel}
         onPrint={() => setShowPrintDialog(true)}
         onInvioPS={() => setShowInvioPS(true)}
+      />
+
+      <DemographicsStatus value={paziente} onEdit={openProfileEditor} busy={profiloSaving} />
+      <PatientIntakeReview
+        patientId={paziente.id}
+        operatorId={operatoreId}
+        operatorRole={operatoreRole}
       />
 
       {/* Banda allergie/rischi — sempre visibile sotto l'header, su tutti i tab */}
