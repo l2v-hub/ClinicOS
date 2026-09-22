@@ -1,0 +1,128 @@
+(node:19176) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ #156 AC1/AC2: recognises therapy and yields one row per drug line (6.603ms)
+✔ #156 AC3: KEPPRA structured fields (0.3704ms)
+✔ #156 AC4: multiple times are all extracted (0.2363ms)
+✔ #156 AC5: specific weekdays are captured (0.1722ms)
+✔ #156 AC6: incomplete line kept as da_verificare, original preserved, not dropped (0.7607ms)
+✔ #156 AC3: unusual dosage/quantity and empty class preserved (CETIRIZINA) (0.1767ms)
+✔ #156 AC10: no hardcoding — a DIFFERENT prescription of the same shape parses correctly (0.1582ms)
+✔ #156: every row keeps its original text verbatim (audit/reference) (0.5536ms)
+✔ #156: blank/empty text yields no rows (0.1819ms)
+✔ #274: free-text administration route is captured (per os, endovena, sottocute) (0.3485ms)
+✔ #274: full-word quantity units are captured (compressa/e, fiala/e, capsula/e) (0.1805ms)
+✔ #274: medicinale + quantitativo + via together upgrade the row to ok (0.1076ms)
+✔ #274: parenthesized route codes still work (no regression) (0.1216ms)
+✔ #296 AC2: la prosa dopo righe vuote non diventa righe farmaco (terapia terminata) (0.6348ms)
+✔ #296 AC2: tutto ciò che segue il terminatore è escluso (anche paragrafi successivi) (0.5167ms)
+✔ #296 AC4: più blocchi farmaci separati da righe vuote sono tutti parsati (0.232ms)
+✔ #296 AC4: intestazione iniziale + riga vuota non termina il blocco (0.2457ms)
+✔ #296 AC3: righe atipiche NELLO stesso paragrafo dei farmaci restano da_verificare (no drop) (0.4954ms)
+✔ AC1: ogni variante di intestazione non genera una riga farmaco (0.7457ms)
+✔ AC1: l'intestazione non interrompe l'elenco che la segue (0.4743ms)
+✔ AC2: una riga che prescrive resta un farmaco anche se inizia per "Terapia" (0.1748ms)
+✔ AC2: una riga di prosa clinica che nomina la terapia non viene scartata (0.1349ms)
+✔ AC3: la forma non assorbe la riga; il resto finisce in note e la riga è da verificare (0.2541ms)
+✔ AC4: la via riconosciuta a parole non resta duplicata in note (0.1481ms)
+✔ AC4: note non ripete il nome del farmaco né i campi già mappati (0.0923ms)
+✔ AC4: un nome farmaco con caratteri speciali non rompe la pulizia di note (0.1314ms)
+✔ AC4: una posologia in lettere resta in note senza declassare una riga completa (0.1386ms)
+✔ multi-farmaco AC1: la forma non assorbe il nome del secondo farmaco (0.1725ms)
+✔ multi-farmaco AC2: il secondo farmaco resta leggibile nelle note (0.2918ms)
+✔ multi-farmaco AC3: nessuno split automatico, una riga in ingresso = una in uscita (0.2425ms)
+✔ multi-farmaco AC4: le forme legittime multi-token non regrediscono (0.1746ms)
+✔ AC4: un numero non collocato porta la riga a da_verificare (0.1198ms)
+✔ PO03: the administration list stops before monitoring instructions (0.1253ms)
+✔ PO03: explicit contiguous time lists retain every administration time (1.3225ms)
+✔ PO03: instructions retain their connectors and clock times after the list (0.2758ms)
+✔ PO03: a clock time introduced by clinical prose is not a schedule (0.2236ms)
+✔ PO03: alternatives and intervals remain whole instructions for review (0.2755ms)
+✔ PO03: an inferred form alone cannot turn a monitoring time into a schedule (0.1316ms)
+(node:19176) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:1932) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ carries allergieStatus=paziente_nega into the confirmed cartella (1.0543ms)
+✔ carries allergieStatus=assenti into the confirmed cartella (0.2179ms)
+✔ presenti keeps BOTH the status and the allergy list (no data loss) (0.5437ms)
+✔ omits allergieStatus when the operator never selected one (undocumented ≠ false value) (0.2467ms)
+✔ preserves the pre-existing mapping keys unchanged (0.9723ms)
+✔ does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella (0.216ms)
+(node:1932) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:32568) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ autosave excludes immutable source and receipt fields without dropping editable draft content (2.6894ms)
+✔ createDraft POSTs to /intake/drafts (0.7205ms)
+✔ patchDraft PATCHes the draft id (0.532ms)
+✔ lost confirmation response and refused retry autosave recover the same confirmed patient (1.1927ms)
+✔ failed confirmation remains an error if its draft is still open or cannot be read (1.1647ms)
+(node:32568) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:22632) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ manual reopen and timeout retry reuse one draft; simultaneous initializers create only once (2.8577ms)
+(node:22632) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:37832) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ accepted minimal demographics can create patient and missing fields remain actionable (9.6616ms)
+✔ unverified imported therapy still blocks confirmation until explicitly excluded (6.7867ms)
+✔ source mapping preserves original indexes after an excluded row (0.5321ms)
+✔ confirmation persists a full review snapshot without certifying or changing original therapy data (0.7828ms)
+(node:37832) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:14976) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (3.878ms)
+✔ PO03: operational notes never receive OCR source or class metadata (0.3926ms)
+✔ PO03: reviewed clinical notes and source stay separate across draft reload (0.5729ms)
+✔ PO03: operator-entered source-like wording is preserved without text cleanup (0.2033ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (0.8229ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (0.4522ms)
+✔ missing or ambiguous raw quantities never become a default dose (1.0114ms)
+✔ explicit unit takes priority over form and compound strength stays raw (0.3628ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (1.0932ms)
+✔ verification renders real manual times and an actionable indexed blocker (9.8922ms)
+✔ liquid and inhaled quantities keep their explicit unit (0.4491ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (0.3956ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (0.522ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (0.7334ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (2.3135ms)
+✔ intake keeps complete therapy source available next to manual additions (53.7108ms)
+(node:14976) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3060) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ diagnostics address original source indices despite excluded imports and multiple schedules (4.6403ms)
+✔ invalid drug, dates, route, strength, weekdays and each dose field have described inline errors (15.2874ms)
+✔ a duplicate or invalid second time marks only that time and preserves the other schedule (16.9226ms)
+✔ empty schedules and divided patches expose the correct correction controls (10.5787ms)
+✔ PRN ignores periodic schedules and residual invalid end date/weekdays remain reachable after a type change (6.4324ms)
+✔ one-off data and time blockers identify separate editable fields (4.6842ms)
+✔ summary correction opens the exact manual row through the section registry, even after excluded imports (57.0707ms)
+✔ summary imported source-review action targets the original row and time edits never acknowledge OCR (11.5983ms)
+✔ excluded blockers are absent from correction actions and busy disables remaining actions (1.3117ms)
+(node:3060) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36368) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36368) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ reviewed operational notes persist without the OCR source; monitoring time is not scheduled; replay preserves archive (2174.8496ms)
+ℹ tests 80
+ℹ suites 0
+ℹ pass 80
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13973.7708

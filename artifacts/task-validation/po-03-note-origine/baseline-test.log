@@ -1,0 +1,39 @@
+(node:37280) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./scripts/stub-css-loader.mjs", pathToFileURL("./")); register("./scripts/stub-css-loader.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:37280) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✖ reviewed operational notes persist without the OCR source; monitoring time is not scheduled; replay preserves archive (2264.165ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13874.0939
+
+✖ failing tests:
+
+test at tests\integration\intake-notes-origin.test.mts:1:1324
+✖ reviewed operational notes persist without the OCR source; monitoring time is not scheduled; replay preserves archive (2264.165ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+      '08:00',
+  +   '22:00'
+    ]
+
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\tests\integration\intake-notes-origin.test.mts:29:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '08:00', '22:00' ],
+    expected: [ '08:00' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

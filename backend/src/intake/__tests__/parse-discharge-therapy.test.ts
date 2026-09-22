@@ -370,3 +370,78 @@ test('AC4: un numero non collocato porta la riga a da_verificare', () => {
   assert.match(r.note, /67G\/100ML/i);
   assert.equal(r.stato, 'da_verificare');
 });
+
+test('PO03: the administration list stops before monitoring instructions', () => {
+  const source =
+    'LASIX CPR 25 MG (OS) 1 Cpr ore 08:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)';
+  const parsed = parseTherapyLine(source);
+  assert.deepEqual(parsed.orari, ['08:00']);
+  assert.equal(parsed.note, 'controllare PA alle 22:00');
+  assert.equal(parsed.originalText, source);
+  assert.equal(parsed.stato, 'da_verificare');
+});
+
+test('PO03: explicit contiguous time lists retain every administration time', () => {
+  for (const list of [
+    'ore 08:00 e alle 12:00 ed alle ore 20:00',
+    'ore: 08:00, 12:00, e alle 20:00',
+    'ore 08:00 12:00 20:00',
+    'alle ore 08:00; alle ore 12:00; ore 20:00',
+  ]) {
+    const parsed = parseTherapyLine(`Farmaco CPR 5 MG (OS) 1 Cpr ${list} dopo cena`);
+    assert.deepEqual(parsed.orari, ['08:00', '12:00', '20:00'], list);
+    assert.equal(parsed.note, 'dopo cena', list);
+  }
+});
+
+test('PO03: instructions retain their connectors and clock times after the list', () => {
+  for (const instruction of [
+    'dopo cena e controllare PA alle 22:00',
+    'al bisogno e controllare temperatura alle 22:00',
+    'controllare PA ore 22:00 e rivalutare alle 23:00',
+  ]) {
+    const source = `Farmaco CPR 5 MG (OS) 1 Cpr ore 08:00; ${instruction}`;
+    const parsed = parseTherapyLine(source);
+    assert.deepEqual(parsed.orari, ['08:00']);
+    assert.equal(parsed.note, instruction);
+    assert.equal(parsed.originalText, source);
+    assert.equal(parsed.stato, 'da_verificare');
+  }
+});
+
+test('PO03: a clock time introduced by clinical prose is not a schedule', () => {
+  for (const instruction of [
+    'controllare PA alle ore 22:00',
+    'al bisogno ore 22:00',
+    'dopo cena, rivalutare alle ore 22:00',
+  ]) {
+    const parsed = parseTherapyLine(`Farmaco CPR 5 MG (OS) 1 Cpr; ${instruction}`);
+    assert.deepEqual(parsed.orari, []);
+    assert.equal(parsed.note, instruction);
+    assert.equal(parsed.stato, 'da_verificare');
+  }
+});
+
+test('PO03: alternatives and intervals remain whole instructions for review', () => {
+  for (const instruction of [
+    'ore 08:00 o alle 20:00',
+    'ore 08:00-20:00',
+    'ore 08:00/20:00',
+    'ore 08:00 fino a 20:00',
+    'ore 08:00 fino alle ore 20:00',
+  ]) {
+    const parsed = parseTherapyLine(`Farmaco CPR 5 MG (OS) 1 Cpr ${instruction}`);
+    assert.deepEqual(parsed.orari, []);
+    assert.equal(parsed.note, instruction);
+    assert.equal(parsed.stato, 'da_verificare');
+  }
+});
+
+test('PO03: an inferred form alone cannot turn a monitoring time into a schedule', () => {
+  const source = 'Farmaco controllare PA ore 22:00';
+  const parsed = parseTherapyLine(source);
+  assert.deepEqual(parsed.orari, []);
+  assert.match(parsed.note, /ore 22:00/);
+  assert.equal(parsed.originalText, source);
+  assert.equal(parsed.stato, 'da_verificare');
+});

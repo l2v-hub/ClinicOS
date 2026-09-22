@@ -210,9 +210,33 @@ function talksAboutDrugs(lines: string[]): boolean {
 // parte, e senza toglierla il nome del farmaco diventerebbe "TERAPIA".
 const PREFISSO_TERAPIA = /^(terapi[ae]|tp\.?|td\.?|t\.\s?d\.)\s+(con|a\s+base\s+di)\s+/i;
 
-// Connettori senza valore clinico: si tolgono dal residuo, altrimenti sporcherebbero le Note.
-// "al", "prima", "dopo" NON sono qui: "al mattino" e' posologia e all'operatore serve vederla.
-const CONNETTORI = /\b(e|ed|alle|ore)\b/gi;
+/** Only a contiguous list next to mapped prescription fields is an administration schedule.
+ *  Clinical prose before or after it stays in notes, including its own clock times/connectors. */
+function trovaListaOrari(testo: string, collocato: Uint8Array, primoCampoEsplicito: number) {
+  const primo = testo.match(/\b(?:alle\s+)?ore\b\s*:?\s*(\d{1,2}:\d{2})\b/i);
+  // A name and an inferred form alone do not establish a prescription before the time.
+  if (primo?.index == null || primo.index < primoCampoEsplicito) return null;
+  for (let i = 0; i < primo.index; i++) {
+    if (!collocato[i] && /[\p{L}\p{N}]/u.test(testo[i])) return null;
+  }
+
+  const orari = [primo[1]];
+  let fine = primo.index + primo[0].length;
+  const successivo =
+    /^(?:\s*[,;]\s*(?:(?:e|ed)\s+)?|\s+(?:(?:e|ed)\s+)?)(?:alle\s+)?(?:ore\b\s*:?\s*)?(\d{1,2}:\d{2})\b/i;
+  for (let m = testo.slice(fine).match(successivo); m; m = testo.slice(fine).match(successivo)) {
+    orari.push(m[1]);
+    fine += m[0].length;
+  }
+  // An alternative or range is not a list of doses: retain the whole instruction for review.
+  if (
+    /^\s*(?:[-–—/]\s*|(?:o|oppure|a|fino\s+(?:a|alle))\s+)(?:alle\s+)?(?:ore\b\s*:?\s*)?\d{1,2}:\d{2}\b/i.test(
+      testo.slice(fine),
+    )
+  )
+    return null;
+  return { orari, index: primo.index, length: fine - primo.index };
+}
 
 /** Parse ONE prescription line into a structured row. Fields are extracted independently, so a
  *  malformed segment never corrupts the others; missing structure → stato 'da_verificare'.
@@ -243,15 +267,6 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     marca(m.index, m[0].length);
   }
 
-  const oreIdx = testo.search(/\bore\b/i);
-  const orari: string[] = [];
-  if (oreIdx >= 0) {
-    for (const m of testo.slice(oreIdx).matchAll(/\b(\d{1,2}:\d{2})\b/g)) {
-      orari.push(m[1]);
-      marca(oreIdx + (m.index ?? 0), m[0].length);
-    }
-  }
-
   const via = trovaVia(testo);
   const viaSomministrazione = via?.code ?? '';
   marca(via?.index, via?.length ?? 0);
@@ -276,6 +291,7 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     dopoNome.search(ROUTE_RE),
     doseM ? dopoNome.indexOf(doseM[0]) : -1,
     qtyM ? dopoNome.indexOf(qtyM[0]) : -1,
+    dopoNome.search(/\b(?:alle\s+)?ore\b/i),
     // Una forma farmaceutica non contiene separatori di elenco: da li' in poi la riga sta
     // parlando d'altro, tipicamente di un secondo farmaco. Senza questo taglio
     // "Eutirox, Omeprazolo e Ramipril 1 cpr" finiva con "Omeprazolo" dentro `forma` — un nome
@@ -294,7 +310,13 @@ export function parseTherapyLine(line: string): ParsedTherapyRow {
     .replace(/\s+/g, ' ')
     .trim();
 
-  for (const m of testo.matchAll(CONNETTORI)) marca(m.index, m[0].length);
+  const listaOrari = trovaListaOrari(
+    testo,
+    collocato,
+    Math.min(qtyM?.index ?? Infinity, doseM?.index ?? Infinity, via?.index ?? Infinity),
+  );
+  const orari = listaOrari?.orari ?? [];
+  marca(listaOrari?.index, listaOrari?.length ?? 0);
 
   const frammenti: string[] = [];
   let corrente = '';

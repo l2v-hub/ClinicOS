@@ -174,16 +174,9 @@ export function dischargeRowToTherapyInput(
   operatoreNome?: string,
 ): Record<string, unknown> {
   const input = therapyFormToInput(dischargeRowToTherapyForm(r), operatoreNome);
-  const note = [
-    input.note,
-    r.classe ? `Classe ${r.classe}` : '',
-    r.originalText ? `Origine: ${r.originalText}` : '',
-  ]
-    .filter(Boolean)
-    .join(' — ');
+  // Provenance stays on the imported row and its source document, separate from clinical notes.
   return {
     ...input,
     ...(!r.reviewedTherapy && r.dosaggio ? { dosaggio: r.dosaggio } : {}),
-    ...(note ? { note } : {}),
   };
 }

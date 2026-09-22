@@ -50,6 +50,39 @@ test('import confirmation retains fraction, administration unit and weekdays', (
   assert.equal(payload.commercialStrengthValue, 20);
 });
 
+test('PO03: operational notes never receive OCR source or class metadata', () => {
+  const source = 'Farmaco sintetico CPR 20 MG (OS) 1/2 Cpr ore 08:00 (Classe A)';
+  const imported = { ...row, originalText: source, classe: 'A', note: '' };
+  const input = dischargeRowToTherapyInput(imported);
+  assert.equal(input.note, undefined);
+  assert.equal(imported.originalText, source);
+  assert.equal(imported.classe, 'A');
+});
+
+test('PO03: reviewed clinical notes and source stay separate across draft reload', () => {
+  const source = 'Farmaco sintetico CPR 20 MG (OS) 1/2 Cpr ore 08:00';
+  const imported = { ...row, originalText: source, classe: 'A' };
+  const reviewed = dischargeRowToTherapyForm(imported);
+  reviewed.note = 'Dopo cena; al bisogno. Controllare PA alle 22:00 e avvisare il medico.';
+  reviewed.schedules[0].time = '09:00';
+  const reloaded = JSON.parse(JSON.stringify(therapyFormToDischargeRow(reviewed, imported)));
+  const input = dischargeRowToTherapyInput(reloaded);
+  assert.equal(input.note, reviewed.note);
+  assert.equal(reloaded.originalText, source);
+  assert.equal(reloaded.classe, 'A');
+  assert.equal(dischargeRowToTherapyForm(reloaded).note, reviewed.note);
+  assert.equal((input.schedules as { time: string }[])[0].time, '09:00');
+  const nextImport = { ...imported, originalText: `${source}; nuova indicazione` };
+  assert.equal(dischargeRowToTherapyInput(nextImport).note, undefined);
+  assert.equal(reloaded.originalText, source);
+});
+
+test('PO03: operator-entered source-like wording is preserved without text cleanup', () => {
+  const note = 'Origine: indicazione confermata alle 22:00; non eliminare questa nota.';
+  const input = dischargeRowToTherapyInput({ ...row, note });
+  assert.equal(input.note, note);
+});
+
 test('reviewed schedules, dates, weekdays and status survive JSON draft reload', () => {
   const form = dischargeRowToTherapyForm(row);
   Object.assign(form, {
