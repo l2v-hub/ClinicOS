@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-09-22T21:38:03.326Z",
+  "commit": "c1e1ae637787ca747ff5c7aeba166e56741beade",
+  "url": "https://clinicos-eosin.vercel.app/#/parametri-multipaziente",
+  "browser": "Codex in-app browser",
+  "readOnly": true,
+  "patientWrites": false,
+  "readyObservation": {
+    "alerts": [],
+    "badges": [],
+    "heading": "Registrazione parametri",
+    "noteButtons": 14,
+    "rows": 14,
+    "savedNoteSummaries": 14,
+    "scriptAssets": [
+      "/assets/index-D9xmcXVO.js"
+    ],
+    "unknownNoteSummaries": 0
+  },
+  "notesObservation": {
+    "allSaveButtonsDisabled": true,
+    "errorCount": 0,
+    "historyLinkPresent": true,
+    "noteLabel": "Nota della nuova rilevazione",
+    "notePanelVisible": true,
+    "summary": "0 note salvate oggi"
+  },
+  "historyObservation": {
+    "alertCount": 0,
+    "parameterHistoryPresent": true,
+    "patientRecordPresent": true,
+    "vitalSignsPresent": true
+  },
+  "consoleErrorCount": 0,
+  "limitation": "No saved notes today in the loaded live rows; nonzero badges and draft indicators verified using synthetic local QA fixtures. Live smoke performs no data entry or save. No live timing SLA is inferred from this check."
+}

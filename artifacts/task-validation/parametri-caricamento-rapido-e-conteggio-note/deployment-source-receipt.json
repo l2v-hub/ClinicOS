@@ -1,0 +1,46 @@
+{
+  "commit": "c1e1ae637787ca747ff5c7aeba166e56741beade",
+  "createdAt": "2026-09-22T21:28:55.227Z",
+  "source": "git archive; all bytes verified against ls-tree, files converted by Git attributes restored from original blobs",
+  "excluded": [
+    "railway.json",
+    "local environment files",
+    "local artifacts",
+    "unrelated worktree changes"
+  ],
+  "exports": [
+    {
+      "kind": "backend",
+      "paths": [
+        "backend",
+        "frontend",
+        "prisma",
+        "scripts",
+        "package.json",
+        "package-lock.json",
+        "prisma.config.ts",
+        ".railwayignore",
+        ".gitignore"
+      ],
+      "stage": "C:\\Users\\Claudio\\AppData\\Local\\Temp\\clinicos-parameters-release-c1e1ae63\\backend-source",
+      "verifiedFileCount": 817,
+      "attributeConvertedFilesRestoredFromGitBlobs": [
+        "scripts/process-requirement.ps1"
+      ],
+      "manifestSha256": "d5d1b13acaa16393fc0a80395aaa16432bf728bada34368b0e6f7bed8e47d17b"
+    },
+    {
+      "kind": "frontend",
+      "paths": [
+        "frontend",
+        "package.json",
+        "package-lock.json",
+        ".vercelignore"
+      ],
+      "stage": "C:\\Users\\Claudio\\AppData\\Local\\Temp\\clinicos-parameters-release-c1e1ae63\\frontend-source",
+      "verifiedFileCount": 402,
+      "attributeConvertedFilesRestoredFromGitBlobs": [],
+      "manifestSha256": "8371c24342cb3b4568aa9dbf642be1b166fc2c12be69885ccb72593f3ed51954"
+    }
+  ]
+}

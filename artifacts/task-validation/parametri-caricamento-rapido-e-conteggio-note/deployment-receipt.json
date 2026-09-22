@@ -1,0 +1,45 @@
+{
+  "commit": "c1e1ae637787ca747ff5c7aeba166e56741beade",
+  "checkedAt": "2026-09-22T21:37:16.8620285Z",
+  "backend": {
+    "project": "bddf5d1b-ee83-4362-8238-a79721f795e5",
+    "environment": "demo",
+    "environmentId": "8021987e-8eaa-4bc8-a102-20566db5e6b4",
+    "serviceId": "c000f011-0349-4ea9-9b56-13c625b5767b",
+    "deploymentId": "b37b31b3-4dad-41ea-9a2e-8a773769ebe2",
+    "status": "SUCCESS",
+    "source": "sourceCommit=c1e1ae637787ca747ff5c7aeba166e56741beade",
+    "healthStatus": 200,
+    "url": "https://clinicos-backend-demo.up.railway.app",
+    "imageDigest": "sha256:73f8b3cc8d256d5545bb9c9b568973b342aeb7327fd7f416bd921405ec707025"
+  },
+  "frontend": {
+    "projectId": "prj_6eDFTx8o4IoZhCXr4Sd7LX6dteo6",
+    "deploymentId": "dpl_FrqQEmKJUFrwcuqtGS19qWCyxjQg",
+    "status": "READY",
+    "alias": [
+      "clinicos-lucalavia-2482s-projects.vercel.app"
+    ],
+    "sourceCommit": "c1e1ae637787ca747ff5c7aeba166e56741beade",
+    "url": "clinicos-kmndvijm9-lucalavia-2482s-projects.vercel.app",
+    "verifiedPublicAlias": "clinicos-eosin.vercel.app",
+    "aliasVerification": "GET /v13/deployments/clinicos-eosin.vercel.app resolved to the recorded deployment ID and sourceCommit after promotion"
+  },
+  "configurationChanged": false,
+  "schemaChanged": false,
+  "patientWritesPerformed": false,
+  "liveSmoke": {
+    "result": "PASS",
+    "evidence": "production-smoke.json",
+    "patientRows": 14,
+    "savedNoteSummaries": 14,
+    "consoleErrorCount": 0,
+    "patientWrites": false
+  },
+  "policyDecision": {
+    "decision": "ALLOW",
+    "scope": "Record and push only release evidence for the already-authorized completed deployment",
+    "authority": "release-decision.md and user authorization to publish completed changes",
+    "applicationSourceUnchanged": true
+  }
+}
