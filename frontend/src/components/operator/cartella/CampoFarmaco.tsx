@@ -9,127 +9,66 @@
 // che non e' in anagrafica romperebbe un flusso legittimo. Percio' si puo' usare un nome libero,
 // ma solo con un'azione deliberata, che e' diversa dal digitare e passare avanti.
 
-import { useEffect, useId, useRef, useState } from 'react';
-import { API_URL } from '../../../config';
+import { useId, useRef, useState } from 'react';
+import { useMedicationSearch } from './useMedicationSearch';
+import { SelectedDrugPackage } from './SelectedDrugPackage';
+import { freeTextDrug, selectDrugPackage } from './drugPackageSelection';
+import type { MedicationSearchCriterion } from './medicationSearch';
+import type { TherapyFormValue } from './TherapyFormFields';
 import { IcoSearch } from '../../../icons';
 import { testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
-import { PHARMA_FORMS, isInhalerForm } from './therapyDose';
-import { normalizza } from './farmacoCorrispondenza';
+export { formaDellaMaschera } from './drugPackageSelection';
+
 import type { TherapyFieldAttributes } from './therapyFieldFeedback';
 import './CampoFarmaco.css';
-const LIMITE = 12;
-const ATTESA_MS = 300;
 const MINIMO_CARATTERI = 3;
-
-type Criterio = 'nome' | 'principio-attivo';
-
-type Esito =
-  | { fase: 'inerte' }
-  | { fase: 'cerco' }
-  | { fase: 'trovati'; farmaci: FarmacoTrovato[] }
-  | { fase: 'errore' };
 
 interface Props {
   /** Nome corrente della terapia: stringa vuota su una terapia nuova. */
   valore: string;
   /** Forma farmaceutica corrente, per non sovrascriverla quando la selezione non la determina. */
   forma: string;
-  onCambia: (dati: { farmacoNome: string; pharmaceuticalForm?: string }) => void;
+  drugPackageRef?: string | null;
+  packageDetached?: boolean;
+  onCambia: (dati: Partial<TherapyFormValue>) => void;
   validation?: TherapyFieldAttributes;
 }
 
-/** Riconduce la forma AIFA («Compressa effervescente») a una delle forme della maschera. */
-export function formaDellaMaschera(formaAifa: string | null | undefined): string | undefined {
-  if (!formaAifa) return undefined;
-  if (isInhalerForm(formaAifa)) return 'inalatore';
-  const n = normalizza(formaAifa);
-  // L'ordine conta: «soluzione per infusione» deve dare fiala, non flacone, e va controllato
-  // prima di parole piu' generiche.
-  const regole: [RegExp, string][] = [
-    [/compress|cpr/, 'compressa'],
-    [/capsul/, 'capsula'],
-    [/sciroppo/, 'sciroppo'],
-    [/iniett|infusion|fiala|fiale/, 'fiala'],
-    [/bustin|granulat|polvere/, 'bustina'],
-    [/gocce|goccia/, 'gocce'],
-    [/cerotto|transdermic/, 'cerotto'],
-    [/crema|unguento|pomata|gel/, 'crema'],
-    [/flacone|soluzion|sospension/, 'flacone'],
-  ];
-  const trovata = regole.find(([re]) => re.test(n))?.[1];
-  return trovata && PHARMA_FORMS.includes(trovata) ? trovata : undefined;
-}
-
-export function CampoFarmaco({ valore, forma, onCambia, validation }: Props) {
+export function CampoFarmaco({
+  valore,
+  forma,
+  drugPackageRef,
+  packageDetached,
+  onCambia,
+  validation,
+}: Props) {
   const fieldId = useId();
   const [query, setQuery] = useState('');
-  const [criterio, setCriterio] = useState<Criterio>('nome');
-  const [esito, setEsito] = useState<Esito>({ fase: 'inerte' });
-  /** true quando il nome corrente arriva da una selezione in anagrafica, non da testo libero. */
-  const [daAnagrafica, setDaAnagrafica] = useState(false);
+  const [criterio, setCriterio] = useState<MedicationSearchCriterion>('nome');
+  const search = useMedicationSearch(query, criterio);
+  const [selected, setSelected] = useState<FarmacoTrovato | null>(null);
   const [fuoriAnagrafica, setFuoriAnagrafica] = useState(false);
   const contenitore = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const testo = query.trim();
-    if (testo.length < MINIMO_CARATTERI) {
-      setEsito({ fase: 'inerte' });
-      return;
-    }
-
-    let annullato = false;
-    const controller = new AbortController();
-    setEsito({ fase: 'cerco' });
-    const attesa = setTimeout(() => {
-      const pa = criterio === 'principio-attivo' ? '&pa=1' : '';
-      void fetch(`${API_URL}/farmaci/cerca?q=${encodeURIComponent(testo)}&limite=${LIMITE}${pa}`, {
-        signal: controller.signal,
-      })
-        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-        .then((dati: { esiti?: FarmacoTrovato[] }) => {
-          if (annullato) return;
-          setEsito({ fase: 'trovati', farmaci: Array.isArray(dati.esiti) ? dati.esiti : [] });
-        })
-        .catch((error: unknown) => {
-          if (!annullato && (error as Error)?.name !== 'AbortError') {
-            setEsito({ fase: 'errore' });
-          }
-        });
-    }, ATTESA_MS);
-
-    return () => {
-      annullato = true;
-      clearTimeout(attesa);
-      controller.abort();
-    };
-  }, [query, criterio]);
-
   function seleziona(farmaco: FarmacoTrovato) {
-    const formaMaschera = formaDellaMaschera(farmaco.forma);
-    onCambia({
-      farmacoNome: farmaco.denominazione,
-      // Non si sovrascrive la forma quando l'anagrafica non permette di dedurla.
-      pharmaceuticalForm: formaMaschera ?? forma,
-    });
-    setDaAnagrafica(true);
+    onCambia(selectDrugPackage(farmaco, forma));
+    setSelected(farmaco);
     setFuoriAnagrafica(false);
     setQuery('');
-    setEsito({ fase: 'inerte' });
   }
 
   function usaComunque() {
     const testo = query.trim();
     if (!testo) return;
-    onCambia({ farmacoNome: testo });
-    setDaAnagrafica(false);
+    onCambia(freeTextDrug(testo));
+    setSelected(null);
     setFuoriAnagrafica(true);
     setQuery('');
-    setEsito({ fase: 'inerte' });
   }
 
   function cambiaFarmaco() {
-    onCambia({ farmacoNome: '' });
-    setDaAnagrafica(false);
+    onCambia(freeTextDrug(''));
+    setSelected(null);
     setFuoriAnagrafica(false);
     setQuery('');
   }
@@ -142,13 +81,17 @@ export function CampoFarmaco({ valore, forma, onCambia, validation }: Props) {
         <div className={`campo-farmaco__scelto${fuoriAnagrafica ? ' is-fuori-anagrafica' : ''}`}>
           <div>
             <p className="campo-farmaco__nome">{valore}</p>
-            <p className="campo-farmaco__stato">
-              {daAnagrafica
-                ? 'Selezionato dall’anagrafica AIFA'
-                : fuoriAnagrafica
-                  ? 'Nome libero: non risulta in anagrafica AIFA, comparirà fra le anomalie da sanare'
-                  : 'Nome già presente in terapia: non verificato in questa maschera'}
-            </p>
+            {drugPackageRef ? (
+              <SelectedDrugPackage aic={drugPackageRef} selected={selected} />
+            ) : (
+              <p className="campo-farmaco__stato">
+                {packageDetached
+                  ? 'Confezione AIFA scollegata dopo la modifica della forma: seleziona nuovamente il prodotto.'
+                  : fuoriAnagrafica
+                    ? 'Nome libero: non risulta in anagrafica AIFA, comparirà fra le anomalie da sanare'
+                    : 'Nome già presente in terapia: non verificato in questa maschera'}
+              </p>
+            )}{' '}
           </div>
           <button
             type="button"
@@ -164,7 +107,7 @@ export function CampoFarmaco({ valore, forma, onCambia, validation }: Props) {
   }
 
   const testo = query.trim();
-  const nessunEsito = esito.fase === 'trovati' && esito.farmaci.length === 0;
+  const nessunEsito = search.phase === 'ready' && search.items.length === 0 && !search.nextCursor;
 
   return (
     <div className="form-group" ref={contenitore}>
@@ -175,7 +118,7 @@ export function CampoFarmaco({ valore, forma, onCambia, validation }: Props) {
           [
             ['nome', 'Nome commerciale'],
             ['principio-attivo', 'Principio attivo'],
-          ] as [Criterio, string][]
+          ] as [MedicationSearchCriterion, string][]
         ).map(([v, etichetta]) => (
           <button
             key={v}
@@ -197,6 +140,7 @@ export function CampoFarmaco({ valore, forma, onCambia, validation }: Props) {
           className="campo-farmaco__input"
           type="search"
           value={query}
+          maxLength={80}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={
             criterio === 'nome'
@@ -215,20 +159,21 @@ export function CampoFarmaco({ valore, forma, onCambia, validation }: Props) {
         {testo.length > 0 && testo.length < MINIMO_CARATTERI && (
           <p className="campo-farmaco__nota">Almeno {MINIMO_CARATTERI} caratteri per cercare.</p>
         )}
-        {esito.fase === 'cerco' && <p className="campo-farmaco__nota">Ricerca in corso…</p>}
-        {esito.fase === 'errore' && (
+        {search.phase === 'loading' && <p className="campo-farmaco__nota">Ricerca in corso…</p>}
+        {search.phase === 'error' && (
           <p className="campo-farmaco__nota campo-farmaco__nota--errore">
             L’anagrafica farmaci non risponde. Il farmaco si può inserire come nome libero, ma
             resterà da verificare.
           </p>
         )}
-        {esito.fase === 'trovati' && esito.farmaci.length > 0 && (
+        {search.items.length > 0 && (
           <ul className="campo-farmaco__lista">
-            {esito.farmaci.map((f) => (
+            {search.items.map((f) => (
               <li key={f.aic}>
                 <button type="button" onClick={() => seleziona(f)}>
                   <span className="campo-farmaco__nome">{f.denominazione}</span>
                   <span className="campo-farmaco__dettagli">{testoConfezione(f)}</span>
+                  <span className="campo-farmaco__dettagli">AIC {f.aic}</span>
                   {f.principiAttivi && f.principiAttivi.length > 0 && (
                     <span className="campo-farmaco__pa">
                       {f.principiAttivi.map((p) => p.nome).join(' · ')}
@@ -239,24 +184,39 @@ export function CampoFarmaco({ valore, forma, onCambia, validation }: Props) {
             ))}
           </ul>
         )}
-        {(nessunEsito || esito.fase === 'errore') && testo.length >= MINIMO_CARATTERI && (
-          <div className="campo-farmaco__ripiego">
-            {nessunEsito && (
-              <p className="campo-farmaco__nota">
-                Nessun farmaco corrisponde a «{testo}»
-                {criterio === 'nome' && ' fra i nomi commerciali. Provare per principio attivo.'}
-              </p>
-            )}
-            {/* Galenici ed esteri restano prescrivibili, ma con un gesto deliberato. */}
-            <button type="button" className="campo-farmaco__usa-comunque" onClick={usaComunque}>
-              Usa comunque «{testo}»
-            </button>
-            <p className="campo-farmaco__nota">
-              Da usare per preparati galenici o farmaci esteri. Comparirà fra le anomalie da sanare
-              finché non è ricondotto all’anagrafica.
-            </p>
-          </div>
+        {(search.nextCursor || search.phase === 'error') && (
+          <button
+            type="button"
+            className="campo-farmaco__cambia"
+            disabled={search.phase === 'loading'}
+            onClick={search.phase === 'error' ? search.retry : search.loadMore}
+          >
+            {search.phase === 'error' ? 'Riprova ricerca' : 'Continua ricerca'}
+          </button>
         )}
+        {search.nextCursor && search.items.length === 0 && (
+          <p className="campo-farmaco__nota">La ricerca può proseguire su altre confezioni.</p>
+        )}
+        {(nessunEsito ||
+          (search.phase === 'error' && !search.nextCursor && search.items.length === 0)) &&
+          testo.length >= MINIMO_CARATTERI && (
+            <div className="campo-farmaco__ripiego">
+              {nessunEsito && (
+                <p className="campo-farmaco__nota">
+                  Nessun farmaco corrisponde a «{testo}»
+                  {criterio === 'nome' && ' fra i nomi commerciali. Provare per principio attivo.'}
+                </p>
+              )}
+              {/* Galenici ed esteri restano prescrivibili, ma con un gesto deliberato. */}
+              <button type="button" className="campo-farmaco__usa-comunque" onClick={usaComunque}>
+                Usa comunque «{testo}»
+              </button>
+              <p className="campo-farmaco__nota">
+                Da usare per preparati galenici o farmaci esteri. Comparirà fra le anomalie da
+                sanare finché non è ricondotto all’anagrafica.
+              </p>
+            </div>
+          )}
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ export function therapyFormToInput(
   const allowed = FRACTION_PRESETS.filter((p) => f.allowedFractions?.includes(p.key));
   return {
     farmacoNome: f.farmacoNome,
+    drugPackageRef: f.drugPackageRef || null,
     dataInizio: f.dataInizio,
     ...(f.dataFine ? { dataFine: f.dataFine } : {}),
     viaSomministrazione: f.viaSomministrazione,

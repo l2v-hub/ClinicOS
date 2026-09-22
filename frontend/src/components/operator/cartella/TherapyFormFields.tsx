@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { CampoFarmaco } from './CampoFarmaco';
+import { needsCommercialStrengthReview } from './drugPackageSelection';
 import {
   FRACTION_PRESETS,
   PHARMA_FORMS,
@@ -36,6 +37,10 @@ export const VIA_OPTIONS = [
 
 export interface TherapyFormValue {
   farmacoNome: string;
+  drugPackageRef?: string | null;
+  drugPackageDetached?: boolean;
+  /** Informational reminder when changing a product clears its previous strength. */
+  commercialStrengthNeedsReview?: boolean;
   pharmaceuticalForm: string;
   commercialStrengthValue: string;
   commercialStrengthUnit: string;
@@ -73,6 +78,7 @@ const WEEKDAYS: ReadonlyArray<{ n: number; l: string }> = [
 export function emptyTherapyForm(): TherapyFormValue {
   return {
     farmacoNome: '',
+    drugPackageRef: null,
     pharmaceuticalForm: 'compressa',
     commercialStrengthValue: '',
     commercialStrengthUnit: 'mg',
@@ -139,10 +145,18 @@ export function TherapyFormFields({ value, onChange, issues }: TherapyFormFields
         <CampoFarmaco
           valore={value.farmacoNome}
           forma={value.pharmaceuticalForm}
+          drugPackageRef={value.drugPackageRef}
+          packageDetached={value.drugPackageDetached}
           onCambia={update}
           validation={feedback.attributes('farmacoNome')}
         />
         {feedback.error('farmacoNome')}
+        {value.farmacoNome && needsCommercialStrengthReview(value) && (
+          <p className="form-hint" role="status">
+            Il dosaggio commerciale precedente è stato rimosso: verifica quello del nuovo prodotto.
+            Quantità e orari della prescrizione sono conservati.
+          </p>
+        )}
         <div className="therapy-form__grid">
           <div className="form-group">
             <label htmlFor={`${id}-form`}>Forma farmaceutica</label>

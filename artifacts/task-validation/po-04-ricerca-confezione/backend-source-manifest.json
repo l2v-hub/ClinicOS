@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "task": "PO-04-backend",
+  "baseline": "553fa24bcbcfbf20def0dfa96de06cd52684c9bd",
+  "createdUtc": "2026-09-22T23:32:57.7854687Z",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po04-drug-search",
+  "node": "v26.3.0",
+  "verification": {
+    "focusedFailures": 0,
+    "backendTypecheckExitCode": 0,
+    "focusedTests": 22
+  },
+  "files": [
+    {
+      "path": "backend/src/services/farmaci/query.ts",
+      "sha256": "003eec66addd44d2ff0c32529b37638f222ceb1f31d09f71a511305db99cdbaf",
+      "bytes": 7804,
+      "lines": 206
+    },
+    {
+      "path": "backend/src/services/farmaci/search-index.ts",
+      "sha256": "6b36d825d3501009dab21a540723e65406b6bfa274d32d328cf899ac9ec98dca",
+      "bytes": 1993,
+      "lines": 53
+    },
+    {
+      "path": "backend/src/services/farmaci/search-model.ts",
+      "sha256": "eb4b5227f6e45cbd9cca3745af41a554add9c805f8f7dadbea3a53c1113e32d4",
+      "bytes": 2667,
+      "lines": 91
+    },
+    {
+      "path": "backend/src/services/farmaci/search-page.ts",
+      "sha256": "de0763736deec447628316054840e5095669a56bd2daf52f486038502171b930",
+      "bytes": 6843,
+      "lines": 169
+    },
+    {
+      "path": "backend/src/services/farmaci/ricerca.ts",
+      "sha256": "f580a9c4f926dfd083f97fefc760dc7ff42462bf76b36986109343e8bad2b34d",
+      "bytes": 3617,
+      "lines": 90
+    },
+    {
+      "path": "backend/src/routes/farmaci.ts",
+      "sha256": "d2c0ff49ebac3ce9eff53e56624bf75c30d7479f9cabc5bdfb179972d19eca8d",
+      "bytes": 6207,
+      "lines": 144
+    },
+    {
+      "path": "backend/src/intake/therapy-selection.ts",
+      "sha256": "8764f3439609e48e3032a7ff2ea5af339aae87cbfa1cbf4c26de62b81a303463",
+      "bytes": 4595,
+      "lines": 122
+    },
+    {
+      "path": "backend/src/services/__tests__/farmaci-query.test.ts",
+      "sha256": "64ebdc107f92dd4b3606316514999ac94a9adc97f7308c12d08900358a2a0784",
+      "bytes": 4558,
+      "lines": 115
+    },
+    {
+      "path": "tests/integration/po04-drug-search.test.mts",
+      "sha256": "7dc7aec7fb11e502c888163ef1db1d0762fb5f529ecdae424df1159d19c6e410",
+      "bytes": 9450,
+      "lines": 243
+    }
+  ]
+}

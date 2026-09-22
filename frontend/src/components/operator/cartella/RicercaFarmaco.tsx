@@ -13,23 +13,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { API_URL } from '../../../config';
+import { useMedicationSearch } from './useMedicationSearch';
+import type { MedicationSearchCriterion } from './medicationSearch';
 import { IcoSearch, IcoX } from '../../../icons';
 import { documentoDi, testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
 import type { DocumentoFarmaco } from './farmacoDocumento';
 import './RicercaFarmaco.css';
-
-const LIMITE = 25;
-/** Attesa prima di interrogare il backend: evita una richiesta per ogni tasto premuto. */
-const ATTESA_MS = 300;
-
-type Criterio = 'nome' | 'principio-attivo';
-
-type Esito =
-  | { fase: 'inerte' }
-  | { fase: 'cerco' }
-  | { fase: 'trovati'; farmaci: FarmacoTrovato[] }
-  | { fase: 'errore' };
 
 interface CorpoProps {
   /** Nome da cui partire: il farmaco della riga di terapia che non è stato risolto. */
@@ -40,49 +29,13 @@ interface CorpoProps {
 
 export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProps) {
   const [query, setQuery] = useState(nomeIniziale);
-  const [criterio, setCriterio] = useState<Criterio>('nome');
-  const [esito, setEsito] = useState<Esito>({ fase: 'inerte' });
+  const [criterio, setCriterio] = useState<MedicationSearchCriterion>('nome');
+  const search = useMedicationSearch(query, criterio);
   const campo = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     campo.current?.focus();
   }, []);
-
-  useEffect(() => {
-    const testo = query.trim();
-    // Sotto i tre caratteri ogni ricerca restituirebbe mezza anagrafica: non è un risultato.
-    if (testo.length < 3) {
-      setEsito({ fase: 'inerte' });
-      return;
-    }
-
-    let annullato = false;
-    const controller = new AbortController();
-    setEsito({ fase: 'cerco' });
-
-    const attesa = setTimeout(() => {
-      const pa = criterio === 'principio-attivo' ? '&pa=1' : '';
-      void fetch(`${API_URL}/farmaci/cerca?q=${encodeURIComponent(testo)}&limite=${LIMITE}${pa}`, {
-        signal: controller.signal,
-      })
-        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-        .then((dati: { esiti?: FarmacoTrovato[] }) => {
-          if (annullato) return;
-          setEsito({ fase: 'trovati', farmaci: Array.isArray(dati.esiti) ? dati.esiti : [] });
-        })
-        .catch((error: unknown) => {
-          if (!annullato && (error as Error)?.name !== 'AbortError') {
-            setEsito({ fase: 'errore' });
-          }
-        });
-    }, ATTESA_MS);
-
-    return () => {
-      annullato = true;
-      clearTimeout(attesa);
-      controller.abort();
-    };
-  }, [query, criterio]);
 
   return (
     <div className="ricerca-farmaco">
@@ -92,6 +45,7 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
           ref={campo}
           type="search"
           value={query}
+          maxLength={80}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={
             criterio === 'nome'
@@ -113,7 +67,7 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
           [
             ['nome', 'Nome commerciale'],
             ['principio-attivo', 'Principio attivo'],
-          ] as [Criterio, string][]
+          ] as [MedicationSearchCriterion, string][]
         ).map(([valore, etichetta]) => (
           <button
             key={valore}
@@ -128,28 +82,41 @@ export function RicercaFarmaco({ nomeIniziale = '', onApriDocumento }: CorpoProp
       </div>
 
       <div className="ricerca-farmaco__esiti" aria-live="polite">
-        {esito.fase === 'inerte' && query.trim().length > 0 && query.trim().length < 3 && (
+        {search.phase === 'idle' && query.trim().length > 0 && query.trim().length < 3 && (
           <p className="ricerca-farmaco__nota">Almeno tre caratteri per cercare.</p>
         )}
-        {esito.fase === 'cerco' && <p className="ricerca-farmaco__nota">Ricerca in corso…</p>}
-        {esito.fase === 'errore' && (
+        {search.phase === 'loading' && <p className="ricerca-farmaco__nota">Ricerca in corso…</p>}
+        {search.phase === 'error' && (
           <p className="ricerca-farmaco__nota ricerca-farmaco__nota--errore">
             L'anagrafica non risponde. Se non è mai stata caricata, va importata dalla pagina di
             configurazione: la ricerca non può trovare ciò che non è in archivio.
           </p>
         )}
-        {esito.fase === 'trovati' && esito.farmaci.length === 0 && (
+        {search.phase === 'ready' && search.items.length === 0 && !search.nextCursor && (
           <p className="ricerca-farmaco__nota">
             Nessun farmaco corrisponde a «{query.trim()}»
             {criterio === 'nome' ? ' fra i nomi commerciali. Provare per principio attivo.' : '.'}
           </p>
         )}
-        {esito.fase === 'trovati' && esito.farmaci.length > 0 && (
+        {search.items.length > 0 && (
           <ul className="ricerca-farmaco__lista">
-            {esito.farmaci.map((f) => (
+            {search.items.map((f) => (
               <RigaEsito key={f.aic} farmaco={f} onApriDocumento={onApriDocumento} />
             ))}
           </ul>
+        )}
+        {(search.nextCursor || search.phase === 'error') && (
+          <button
+            type="button"
+            className="ricerca-farmaco__apri"
+            disabled={search.phase === 'loading'}
+            onClick={search.phase === 'error' ? search.retry : search.loadMore}
+          >
+            {search.phase === 'error' ? 'Riprova ricerca' : 'Continua ricerca'}
+          </button>
+        )}
+        {search.nextCursor && search.items.length === 0 && (
+          <p className="ricerca-farmaco__nota">La ricerca può proseguire su altre confezioni.</p>
         )}
       </div>
     </div>
@@ -178,6 +145,7 @@ function RigaEsito({
           )}
         </p>
         <p className="ricerca-farmaco__dettagli">{testoConfezione(farmaco)}</p>
+        <p className="ricerca-farmaco__dettagli">AIC {farmaco.aic}</p>
         {farmaco.principiAttivi && farmaco.principiAttivi.length > 0 && (
           <p className="ricerca-farmaco__pa">
             {farmaco.principiAttivi

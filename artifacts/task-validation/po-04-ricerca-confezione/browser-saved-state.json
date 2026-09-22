@@ -1,0 +1,69 @@
+{
+  "therapies": [
+    {
+      "id": "cmudbbis1000koslpimhh3itn",
+      "patientId": "vitals-qa-anna",
+      "farmacoNome": "TACHIPIRINA",
+      "dosaggio": "1000 mg compressa",
+      "viaSomministrazione": "orale",
+      "tipo": "periodica",
+      "stato": "attiva",
+      "dataInizio": "2026-09-22",
+      "dataFine": null,
+      "fasceMattina": true,
+      "fascePranzo": false,
+      "fascePomeriggio": false,
+      "fasceSera": false,
+      "fasceNotte": false,
+      "orarioSpecifico": "08:00",
+      "prescrittore": null,
+      "operatoreInseritore": "VITALS-QA-OP",
+      "note": null,
+      "dataSomministrazione": null,
+      "orarioSomministrazione": null,
+      "commercialStrengthValue": 1000,
+      "commercialStrengthUnit": "mg",
+      "pharmaceuticalForm": "compressa",
+      "allowedFractions": "1",
+      "drugPackageRef": "012745170",
+      "giorniSettimana": null,
+      "createdAt": "2026-09-22T23:35:53.809Z",
+      "updatedAt": "2026-09-22T23:35:53.809Z",
+      "schedules": [
+        {
+          "id": "cmudbbis3000loslpmbih6392",
+          "therapyId": "cmudbbis1000koslpimhh3itn",
+          "time": "08:00",
+          "fascia": "mattina",
+          "quantityNumerator": 1,
+          "quantityDenominator": 1,
+          "administrationUnit": "compressa",
+          "createdAt": "2026-09-22T23:35:53.809Z",
+          "updatedAt": "2026-09-22T23:35:53.809Z"
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "path": "/api/farmaci/cerca?q=Tachipirina+1000+compresse&limite=25",
+      "time": 1790120135233,
+      "failure": false
+    },
+    {
+      "path": "/api/farmaci/cerca?q=TACHIPIRINA&limite=25",
+      "time": 1790120153865,
+      "failure": false
+    },
+    {
+      "path": "/api/farmaci/cerca?q=TACHIPIRINA&limite=25",
+      "time": 1790120161149,
+      "failure": false
+    },
+    {
+      "path": "/api/farmaci/cerca?q=012745170&limite=1",
+      "time": 1790120161323,
+      "failure": false
+    }
+  ]
+}

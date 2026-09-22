@@ -14,11 +14,11 @@ import { medicationSearchGlobalRateLimit, medicationSearchRateLimit } from '../a
 import { prisma } from '../lib/prisma.js';
 import { importaAnagraficaFarmaci } from '../services/farmaci/import.js';
 import {
-  cercaFarmaci,
-  cercaPerPrincipioAttivo,
+  cercaPaginaFarmaci,
   dosaggiInCommercio,
   invalidaIndice,
 } from '../services/farmaci/ricerca.js';
+import { FarmaciQueryError, parseSearchInput } from '../services/farmaci/query.js';
 
 // Le rotte in LETTURA sono aperte: servono open data AIFA (licenza CC-BY 4.0), gli stessi gia'
 // pubblici su medicinali.aifa.gov.it, e nessun dato di paziente passa di qui. Tenerle dietro
@@ -80,14 +80,24 @@ farmaciRouter.get('/cerca', async (req, res) => {
       error: `Parametro q troppo lungo: massimo ${MAX_FARMACI_QUERY_LENGTH} caratteri`,
     });
   }
-  const limite = Math.min(Number.parseInt(String(req.query.limite ?? ''), 10) || 8, 25);
   try {
+    const input = parseSearchInput(req.query.q, req.query.limite, req.query.cursor);
+    if (req.query.pa !== undefined && !['0', '1', 'false', 'true'].includes(String(req.query.pa)))
+      throw new FarmaciQueryError('Criterio di ricerca non valido');
+    if (
+      Array.isArray(req.query.pa) ||
+      (req.query.pa !== undefined && typeof req.query.pa !== 'string')
+    )
+      throw new FarmaciQueryError('Criterio di ricerca non valido');
     const perPa = req.query.pa === '1' || req.query.pa === 'true';
-    const esiti = perPa
-      ? await cercaPerPrincipioAttivo(q, { limite })
-      : await cercaFarmaci(q, { limite });
-    return res.status(200).json({ query: q, esiti });
+    const page = await cercaPaginaFarmaci(input.q, {
+      limite: input.limit,
+      cursor: input.cursor,
+      perPa,
+    });
+    return res.status(200).json({ query: q, ...page });
   } catch (error) {
+    if (error instanceof FarmaciQueryError) return res.status(400).json({ error: error.message });
     console.error('GET /farmaci/cerca:', error);
     return res.status(500).json({ error: 'Errore nella ricerca' });
   }

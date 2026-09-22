@@ -1,0 +1,93 @@
+{
+  "baseline": "553fa24bcbcfbf20def0dfa96de06cd52684c9bd",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po04-drug-selection",
+  "owner": "/root/po01_frontend_audit",
+  "sourceManifestSha256": "d9a7c42e9f830c2d0819bdac9413c44d65e0c971cd30b76bd7ed5957998107c6",
+  "sources": [
+    {
+      "path": "frontend/src/components/operator/cartella/CampoFarmaco.tsx",
+      "sha256": "113cf191017e3d814ea2ca5e17b0fb5da29060eac0dc9acc5d729566367f82c0",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/RicercaFarmaco.tsx",
+      "sha256": "9fdf7abd33a6af6680e9eb7bc70598b3e7075854823b487ea938b7c5dd73b92d",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/SelectedDrugPackage.tsx",
+      "sha256": "69576a9cf6855b6da2e48caf311f2ea3b4adff5e076f1222feef330a5b4bd114",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "sha256": "82ec1224684c35c19af7d6ed70f7d3f7573fce90a1f764fadbe7e342335e64c2",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+      "sha256": "2fff06be750eceade0eb49268d1c8f4022501ada8eb1d84dda91ef9b852fc0ab",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/drugPackageSelection.test.ts",
+      "sha256": "a461845cf2e2249193baf30778b4a8ed25f23abdd24f4cb140a920571aeab303",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/__tests__/medicationSearch.test.ts",
+      "sha256": "216e297218f9bbd86dea4336205b6dc4679b54f71f82bbd2ad38d8dd2146c19e",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/drugPackageSelection.ts",
+      "sha256": "485bd3ae93fe57a53ead43f818480f3d8c9891a61add9d70ae6970ba5395dbf9",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/medicationSearch.ts",
+      "sha256": "e0b384e49ec3c6072d344b096d010b2d1d33cdf4dd2d211db7f140e5a47ca217",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFormChange.ts",
+      "sha256": "436456416dd4c92e8aca51fa1607abccd3b08ec41fa463f14f890a8027c8e419",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/therapyFormMapping.ts",
+      "sha256": "102e1a6a4df60e1adff1588fefa03dbdd77ae2c0868037b12ef0b5a1341f25b9",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/operator/cartella/useMedicationSearch.ts",
+      "sha256": "3f70590dbd268ea35769f22b521e2cc98924713e5d173ee21c33f439154d7588",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/components/shared/intake/therapyFormPayload.ts",
+      "sha256": "caa27c6bf0579c3ce822ed0590d133f26b13bd5108e4cc18751edf4156445e6c",
+      "deleted": false
+    },
+    {
+      "path": "frontend/src/lib/__tests__/medicationSearchAbort.test.ts",
+      "sha256": null,
+      "deleted": true
+    }
+  ],
+  "unrelated": [
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "runtime": {
+    "node": "v26.3.0",
+    "vite": "8.2.2",
+    "react": "19.2.5"
+  }
+}

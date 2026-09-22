@@ -23,6 +23,7 @@ function checkReviewedForm(source: Row, input: ReviewedInput) {
     'tipo',
     'stato',
     'pharmaceuticalForm',
+    'drugPackageRef',
     'commercialStrengthUnit',
     'dataSomministrazione',
     'orarioSomministrazione',
