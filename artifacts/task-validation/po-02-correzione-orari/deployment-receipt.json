@@ -1,0 +1,21 @@
+{
+  "sourceCommit": "b405c8ffe48b4bd68b4dddfadba1af89c118187b",
+  "verifiedAt": "2026-09-22T23:07:32.8692990Z",
+  "frontend": {
+    "status": "READY",
+    "url": "https://clinicos-ke2jpfzk5-lucalavia-2482s-projects.vercel.app",
+    "deploymentId": "dpl_2ep5Dcp9vTkpEYzWEGvqExQgaJjd",
+    "alias": "clinicos-eosin.vercel.app"
+  },
+  "backend": {
+    "sourceCommit": "6095ce3975fa32dcc49e235f99e5b9dd9a3353ec",
+    "deploymentId": "aa1508a5-540e-4461-8a07-8a37acdbdb8d",
+    "unchanged": true
+  },
+  "validation": {
+    "integrationFrontendTests": 53,
+    "build": "frontend/backend passed",
+    "liveMutation": false,
+    "browser": "exact input focus after excluded row, manual form opening, mobile OCR review; read-only live smoke"
+  }
+}

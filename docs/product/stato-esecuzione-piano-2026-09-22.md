@@ -7,8 +7,8 @@ Baseline: af48e322d3ba99561949f4a7901290e3cace09db. Repository ClinicOS, branch 
 | Attività | Stato | Evidenza / decisione |
 |---|---|---|
 | PO-01 Ingresso progressivo | Pubblicato e verificato | Nome/cognome e operatore di presa in carico obbligatori; CF, nascita e telefono mancanti ammessi all'ingresso, necessari alla completezza; valori forniti validati. Migrazione DOB nullable, nessun valore fittizio. |
-| PO-02 Correzione orari | In corso | Baseline UI 16→20, reload, DB e feed pass; messaggi di campo e riepilogo navigabile in implementazione |
-| PO-03 Note e origine | Da eseguire | Conservazione fonte OCR |
+| PO-02 Correzione orari | Pubblicato e verificato | b405c8ff: 53 test, build, focus desktop/mobile; 16→20 e doppia fascia concordi in bozza/payload/DB/feed. |
+| PO-03 Note e origine | In corso | Riprodotta estrazione errata di un orario di controllo nelle somministrazioni; mapper note e parser in correzione. |
 | PO-04 Ricerca farmaci | Da eseguire | Catalogo esistente, nessun duplicato |
 | PO-05 Scansioni lunghe | Da eseguire | Obiettivo di prova 30 pagine |
 | PO-06 Identità e posto letto | Da eseguire | Componente condiviso |
