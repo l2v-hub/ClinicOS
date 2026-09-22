@@ -16,7 +16,7 @@ const paths = service === 'frontend'
 const entries = git('ls-tree', '-r', '-z', commit, '--', ...paths).toString('utf8').split('\0').filter(Boolean);
 const files = [];
 for (const entry of entries) {
-  const [, kind, blob, path] = /^(\d+) (\w+) ([a-f0-9]+)\t(.+)$/.exec(entry);
+  const [, , kind, blob, path] = /^(\d+) (\w+) ([a-f0-9]+)\t(.+)$/.exec(entry);
   if (kind !== 'blob' || /(^|\/)\.env($|\.)/.test(path)) continue;
   const target = resolve(output, path);
   if (relative(output, target).startsWith('..')) throw new Error('Export path outside target');
@@ -26,6 +26,7 @@ for (const entry of entries) {
   if (!readFileSync(target).equals(bytes)) throw new Error(`Export differs: ${path}`);
   files.push({ path, gitBlob: blob, bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') });
 }
+if (!files.length) throw new Error('Empty release export is never deployable');
 const receipt = { commit, service, output, exportedAt: new Date().toISOString(), excluded: ['Environment files', 'Uncommitted files', 'railway.json: preserve configured demo service build/predeploy/start settings'], files };
 writeFileSync(resolve(base, `${service}-release-inputs.json`), JSON.stringify(receipt, null, 2));
 console.log(JSON.stringify({ commit, service, output, files: files.length }));

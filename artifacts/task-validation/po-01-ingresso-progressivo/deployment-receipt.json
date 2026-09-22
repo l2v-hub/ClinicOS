@@ -1,0 +1,21 @@
+{
+  "sourceCommit": "6095ce3975fa32dcc49e235f99e5b9dd9a3353ec",
+  "verifiedAt": "2026-09-22T22:55:09.4814876Z",
+  "backend": {
+    "deploymentId": "aa1508a5-540e-4461-8a07-8a37acdbdb8d",
+    "url": "https://clinicos-backend-demo.up.railway.app",
+    "migration": "20260923002000_progressive_patient_identity",
+    "migrationStatus": "All migrations have been successfully applied.",
+    "environment": "demo",
+    "status": "SUCCESS",
+    "healthStatus": 200
+  },
+  "frontend": {
+    "deploymentId": "dpl_69jfteh9LV6MGzaGeLbvtmiTFaEX",
+    "url": "clinicos-d3r18149p-lucalavia-2482s-projects.vercel.app",
+    "alias": "clinicos-eosin.vercel.app",
+    "status": "READY"
+  },
+  "scope": "Verified immutable git blob exports; no environment files or unrelated working changes",
+  "smoke": "Read-only dashboard and patients UI; no live patient creation or changes"
+}

@@ -1,0 +1,342 @@
+{
+  "capturedAt": "2026-09-22T22:47:32.8929357Z",
+  "commit": "6095ce3975fa32dcc49e235f99e5b9dd9a3353ec",
+  "files": [
+    {
+      "bytes": 662,
+      "sha256": "86c3993f1f7a71cc019c5817393c394488161e3b784d477358b9f430cd66c8b3",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/browser-evidence.json"
+    },
+    {
+      "bytes": 2326,
+      "sha256": "d26d7d4cf3ddde41525eb18f7d75ee984029cb46f9247b1bde28b13610976e80",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/export-release.mjs"
+    },
+    {
+      "bytes": 433,
+      "sha256": "865908961cbd8bfb81431a052b96d061f139492e0c4c1e0d5dd69c1c2a2bfac8",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/final-backend-build.log"
+    },
+    {
+      "bytes": 3234,
+      "sha256": "ab1623ea6b7c6928102de94866fb529de1967e4d1d0943e1c4a3624fe453eb5b",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/final-backend-tests.log"
+    },
+    {
+      "bytes": 9960,
+      "sha256": "165888ab386d57d944c02e996f1e1828e70e4bfd22b941e8bf6d7d9cf61f6c6a",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/final-build.log"
+    },
+    {
+      "bytes": 9135,
+      "sha256": "8d80761e8fa232cb3c0612c29dc4d9f4615288c07b0d173e672aaef847d9d966",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/final-frontend-tests.log"
+    },
+    {
+      "bytes": 944,
+      "sha256": "2afb4e24ac19ede261a4efb5d638e4ac8a193948e9429db3f909de8dc032cf99",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/frontend-baseline-comparison.json"
+    },
+    {
+      "bytes": 4057,
+      "sha256": "b8b1be075abdeef643013e21f09a36063645746d97e04ec5912c0a0379fa2876",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/frontend-handoff.md"
+    },
+    {
+      "bytes": 6092,
+      "sha256": "1ea5efb8951d7f85246818e1deb15de8d50b741aeff62c476623b8bb36fae8b1",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/frontend-source-manifest.json"
+    },
+    {
+      "bytes": 337,
+      "sha256": "de4dfbda07aee496ad2e48a9ad66fcd9d0451e5e0ad6dc05e67ee2a08b983839",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/preview/index.html"
+    },
+    {
+      "bytes": 3560,
+      "sha256": "251ac79eaba74b29464cbf8da0e05040af461d83f0ee6d4a01e5a21abc1c9306",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/preview/main.tsx"
+    },
+    {
+      "bytes": 3776,
+      "sha256": "4a18ba0cc0a538ab5f52e498095f72e37365f45a523015478657e34e84f2a771",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/preview/server.mjs"
+    },
+    {
+      "bytes": 2780,
+      "sha256": "cbe1bc1cea633333989acfd897ebfda539d7b146b0bb198ebf1918ac8c91bed6",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/qa-report.md"
+    },
+    {
+      "bytes": 1397,
+      "sha256": "0590329d83733086c4c66d15fedbf49c2261b2cd19471b492013f38eec3869bb",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/release-decision.md"
+    },
+    {
+      "bytes": 61117,
+      "sha256": "2d5549d36ff7629eca380314e2e4910a3725b99a538c1316784753ab253563c4",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/screenshots/import-review-desktop.png"
+    },
+    {
+      "bytes": 44028,
+      "sha256": "116c4c83d1d9e0d639ccee6c5ce0049f80c8272f8842ed88cde235d0c5c3d662",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/screenshots/import-review-mobile.png"
+    },
+    {
+      "bytes": 50547,
+      "sha256": "14cc3b4b91502cf3b9c83e622d9c6451ea03a86f6119014c3d89dc305b0757ff",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/screenshots/patient-retained-therapy-mobile.png"
+    },
+    {
+      "bytes": 2942,
+      "sha256": "193b8e81f42c8fadc68f09e1322856bdf089299848164c1a45cfec5f6972d721",
+      "path": "artifacts/task-validation/po-01-ingresso-progressivo/task-contract.md"
+    },
+    {
+      "bytes": 6924,
+      "sha256": "777df4dd15944af5e0e6708694f34410acd0d6d02378aa4145c888873b0c5230",
+      "path": "backend/src/ai/__tests__/intake-confirm.test.ts"
+    },
+    {
+      "bytes": 53793,
+      "sha256": "7dcf69055199dc19dbfb541f95177f4ff1c26c5919ff0e93b99575073418dc84",
+      "path": "backend/src/ai/gateway/services.ts"
+    },
+    {
+      "bytes": 14587,
+      "sha256": "399f7f6c0b96c1171a7a0914594a17ac1d7513dbe6fff09322f7aa5f54582ee0",
+      "path": "backend/src/ai/upload/confirm-service.ts"
+    },
+    {
+      "bytes": 4219,
+      "sha256": "7952efaffce5944040fbb70c921a7dd3d98915a3ebabce3a551f31626b092f08",
+      "path": "backend/src/intake/__tests__/confirm-draft-guards.test.ts"
+    },
+    {
+      "bytes": 4730,
+      "sha256": "171a1724401760e1f932a5aaebeadf1da4f134aa24994ca1c490b142a108594a",
+      "path": "backend/src/intake/__tests__/confirm-draft-therapy.test.ts"
+    },
+    {
+      "bytes": 13214,
+      "sha256": "a43a1214fff44fb09ad0a0fde5bd5039d31d69d3032012a9948eb752d4e62540",
+      "path": "backend/src/intake/draft-service.ts"
+    },
+    {
+      "bytes": 4573,
+      "sha256": "85549cad9168361747ce579161b0e8bd34df83f64d733db0baeb9dbfa5ed32ff",
+      "path": "backend/src/intake/therapy-selection.ts"
+    },
+    {
+      "bytes": 10189,
+      "sha256": "0d095df1516bdee42e552922d398e1877192ed771d0beba3a312a8698e501719",
+      "path": "backend/src/patients/__tests__/patient-phone.test.ts"
+    },
+    {
+      "bytes": 3222,
+      "sha256": "359d0f1eeceed73bafe06abe15714bf4babd1e182f04ec44c3dcde92fc232647",
+      "path": "backend/src/patients/identity-page.ts"
+    },
+    {
+      "bytes": 2373,
+      "sha256": "e660161c1b38eabe3f587aa5c74be64230135ea08bdc28f2bc60cb527fe001f0",
+      "path": "backend/src/patients/progressive-identity.ts"
+    },
+    {
+      "bytes": 1252,
+      "sha256": "bd9e91f89a34a6b903c6ec2f0426edec411dcb72e322656c4f7f14d31c4cac33",
+      "path": "backend/src/routes/patient-intake-review.ts"
+    },
+    {
+      "bytes": 41063,
+      "sha256": "e81bc1f8d1f6709606854ec3a3b8b873463b6bd0933e300d540ca90849d09153",
+      "path": "backend/src/routes/patients.ts"
+    },
+    {
+      "bytes": 32584,
+      "sha256": "2c7e939b414bd0c2052d0e87b819fefb69f8b376808d6834958f10cd51204570",
+      "path": "docs/product/piano-po-feedback-2026-09-22.md"
+    },
+    {
+      "bytes": 21021,
+      "sha256": "dd2f29dcbd53e6a5dbfbde6f8d157f084f838a264f029504c8ff033a8ec15c6d",
+      "path": "docs/product/specifiche-moduli-2026-09-22.md"
+    },
+    {
+      "bytes": 2249,
+      "sha256": "fbaf5054b6da3d253860ae70aa3be47bfdb573ca3782a211736efe87e72d3499",
+      "path": "docs/product/stato-esecuzione-piano-2026-09-22.md"
+    },
+    {
+      "bytes": 123330,
+      "sha256": "8016683439ae56a24489bdbb397b30760f1c6bf97d774a506528b0d2fba9541d",
+      "path": "frontend/src/App.tsx"
+    },
+    {
+      "bytes": 3800,
+      "sha256": "0f0f3f9bc74ffec95d256fad2a2b0dab10146a4b7d513a7ac9b0d88fd16f5964",
+      "path": "frontend/src/components/operator/PatientCompactHeader.tsx"
+    },
+    {
+      "bytes": 114833,
+      "sha256": "1698b55d1bdebc86a5c089b50dca8bb891f74e4aefda1e703166c71f9389332d",
+      "path": "frontend/src/components/operator/PatientDetail.tsx"
+    },
+    {
+      "bytes": 2674,
+      "sha256": "4fec0b071b976c2ab3b4fe982d6a9f9adcdd15aa9a051e2ee4c63a594549faa3",
+      "path": "frontend/src/components/operator/PatientIntakeReview.tsx"
+    },
+    {
+      "bytes": 11803,
+      "sha256": "0a488fe47ea4fbe9431d852deeda105177a1b6c70a5d25902fe4234ee255518e",
+      "path": "frontend/src/components/operator/PatientRecordPrintDocument.tsx"
+    },
+    {
+      "bytes": 14794,
+      "sha256": "ae35ddcf023d5e28b3e15b4f3a08facb46bc58d6b99b040c43c1e35657412137",
+      "path": "frontend/src/components/operator/PatientRoster.tsx"
+    },
+    {
+      "bytes": 71060,
+      "sha256": "8d5ab157f82317360ef5a365253c7fdff3188596e928769ae4f39513ed489c20",
+      "path": "frontend/src/components/operator/cartella/DimissioneTab.tsx"
+    },
+    {
+      "bytes": 6837,
+      "sha256": "b40fd4197e3ab120b07df38e2f3965f4845c6b3847742db11e6fb203b1d1346e",
+      "path": "frontend/src/components/operator/invioPSModel.ts"
+    },
+    {
+      "bytes": 797,
+      "sha256": "06f8394827dc928fe4b426471959c0dfac9e8ac0f607937b7f5cf5b11ee351a0",
+      "path": "frontend/src/components/shared/DemographicsStatus.css"
+    },
+    {
+      "bytes": 999,
+      "sha256": "52fd1ecc1e1e0a89506a61d93eeba0233c1f517325bcbec0cdc1047f4454887d",
+      "path": "frontend/src/components/shared/DemographicsStatus.tsx"
+    },
+    {
+      "bytes": 33554,
+      "sha256": "5a323a19ac86c59ff54a3e81dc5dab33dfd3772b91bee683cd44a1b97e5dbb16",
+      "path": "frontend/src/components/shared/DischargeImportModal.tsx"
+    },
+    {
+      "bytes": 29585,
+      "sha256": "98f59ce01cecfe5755f23fca2795c55755ab12bd47673257f6f42d143a0b6608",
+      "path": "frontend/src/components/shared/ImportReviewFull.tsx"
+    },
+    {
+      "bytes": 5674,
+      "sha256": "0b03887617f375a3b00cbd6e9e0cdab75ca6191c08b3e47a36dabf9634568ebe",
+      "path": "frontend/src/components/shared/intake/DischargeTherapyReview.tsx"
+    },
+    {
+      "bytes": 25872,
+      "sha256": "a1caa735cbf479f9cf61d7458bd1cc802798eecd3336bfc1afc7dab33bcda22b",
+      "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx"
+    },
+    {
+      "bytes": 15847,
+      "sha256": "633c5adc4fc525ab86a543dee8cad4d2fa600dc15a304c66a196f94d528aac7d",
+      "path": "frontend/src/components/shared/intake/StepAnagrafica.tsx"
+    },
+    {
+      "bytes": 11206,
+      "sha256": "cca1f3e4b7f31a3707dc0cb5c0aa8212af68eb5b1c1e0ef39f829a4ff410c617",
+      "path": "frontend/src/components/shared/intake/StepVerifica.tsx"
+    },
+    {
+      "bytes": 3378,
+      "sha256": "12bc08643c0f5201570584221260277985144dc23e7bc6813b98c8b87afc7c4d",
+      "path": "frontend/src/components/shared/intake/__tests__/intakeDraftApi.test.ts"
+    },
+    {
+      "bytes": 1847,
+      "sha256": "0f43f74520dfb57277f3fa13703780667c3ca0fb6f749067ea260419d8e46bce",
+      "path": "frontend/src/components/shared/intake/__tests__/intakeDraftSession.test.ts"
+    },
+    {
+      "bytes": 3917,
+      "sha256": "869fc1199b7122330ce18e2349e894e3181318848a0498356a2f80f4926c8a48",
+      "path": "frontend/src/components/shared/intake/__tests__/progressiveIntake.test.ts"
+    },
+    {
+      "bytes": 6162,
+      "sha256": "26bb15aa14cfbe5d5722e0aea8adbdd352cc7b59bd5c36865051d125d11c6555",
+      "path": "frontend/src/components/shared/intake/dischargeTherapy.ts"
+    },
+    {
+      "bytes": 4314,
+      "sha256": "b48484c26aff9817e9b35b6f9edc8572ccc06aff710069003f9a667374dde360",
+      "path": "frontend/src/components/shared/intake/intakeDraftApi.ts"
+    },
+    {
+      "bytes": 1288,
+      "sha256": "dcfe8cfe3e79dad461069b808a355dcf4f39562dd74b42790f6d285c47efc3f7",
+      "path": "frontend/src/components/shared/intake/intakeDraftSession.ts"
+    },
+    {
+      "bytes": 6065,
+      "sha256": "50c2c337dc437082e1049e897fc0740126e5b542cdf2bf1dd2dd1c1551673d15",
+      "path": "frontend/src/components/shared/intake/intakeTherapies.ts"
+    },
+    {
+      "bytes": 14857,
+      "sha256": "f830d206b28ad7ba94a5daf794188434e073f7ee8d36048e327abca1a8ea5eea",
+      "path": "frontend/src/components/shared/sections/ImportSectionsReview.tsx"
+    },
+    {
+      "bytes": 3569,
+      "sha256": "69633d382ff3ca680e480f14b5d29e5c432ddfb79e5a5ce44718ad77d5982382",
+      "path": "frontend/src/lib/__tests__/patientDemographics.test.ts"
+    },
+    {
+      "bytes": 4163,
+      "sha256": "83ac918ce9f488d20f3b5bec744313ff75298e25a317a49953308098f0513912",
+      "path": "frontend/src/lib/__tests__/patientListIdentityGuard.test.ts"
+    },
+    {
+      "bytes": 1577,
+      "sha256": "4d15c0ee14d9a79eeb805b4a603a35e385315496cf88cb7fef8e63de3bf93962",
+      "path": "frontend/src/lib/intakeDemographics.ts"
+    },
+    {
+      "bytes": 2358,
+      "sha256": "6055ba35bed9d717e2375b6f8cd4f1c447bbf82445d8b88197fc2d1aeab61a29",
+      "path": "frontend/src/lib/patientDemographics.ts"
+    },
+    {
+      "bytes": 1203,
+      "sha256": "f1405079d3081fdbc1c8bca761748458f45e23b862fd1f38a102baef7588ac2c",
+      "path": "frontend/src/lib/patientIntakeReview.ts"
+    },
+    {
+      "bytes": 31461,
+      "sha256": "494a87db0f34e0a36c68a91d490ea72cfd5d85aed7fd7c64abc5f016f6b24302",
+      "path": "frontend/src/types.ts"
+    },
+    {
+      "bytes": 257,
+      "sha256": "dd4a55859a1a603130409161dc58d0f32a126333e44c5e560d84c5a713a19969",
+      "path": "prisma/migrations/20260923002000_progressive_patient_identity/migration.sql"
+    },
+    {
+      "bytes": 28301,
+      "sha256": "93b8cf8f093481dd6e3bd74226a203553619aac4df2749676fa0b3824be5b670",
+      "path": "prisma/schema.prisma"
+    },
+    {
+      "bytes": 784,
+      "sha256": "0e6eac008805fc6e354f2fd541fb848fa11c9ff81785bb71c448692cd710fc23",
+      "path": "tests/integration/intake-legacy-isolated.test.mts"
+    },
+    {
+      "bytes": 17206,
+      "sha256": "202300b5ed6d8ba6bdd9bc4ff72c59c860f24ca607dd5103600de8bc6e396df6",
+      "path": "tests/integration/progressive-intake-db.test.mts"
+    }
+  ],
+  "scope": "PO01 changed source and evidence, working bytes; immutable deployment inputs are separately recorded"
+}
