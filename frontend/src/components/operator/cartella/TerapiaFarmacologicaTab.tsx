@@ -1281,27 +1281,6 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
 
   return (
     <div className="cr-tab-content">
-      {subTab !== 'calendario' && (
-        <>
-          <AvvisoAnomalieFarmaci
-            esito={anomalie}
-            ambito={
-              nextTherapyCursor
-                ? 'risultati caricati (verifica parziale)'
-                : therapyFiltersActive
-                  ? 'tutti i risultati filtrati'
-                  : 'tutte le terapie in cartella'
-            }
-          />
-          {nextTherapyCursor && (
-            <div className="alert alert--info" role="status">
-              Verifica anagrafica parziale: carica le altre terapie prima di considerare completo il
-              controllo delle anomalie.
-            </div>
-          )}
-        </>
-      )}
-
       <ClinicalTableSection
         title="Terapia Farmacologica"
         count={subTab === 'calendario' ? undefined : (therapySummary?.active ?? attive.length)}
@@ -1314,6 +1293,43 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
           )
         }
       >
+        {/* Keep navigation before conditional controls and notices so changing views cannot move it. */}
+        <div className="tf-subtabs" style={{ marginTop: 'var(--clinical-submenu-gap, 16px)' }}>
+          <TopNav
+            variant="level3"
+            items={SUB_TABS}
+            activeKey={subTab}
+            onChange={(nextSubTab) => {
+              // L'errore appartiene alla schermata che l'ha prodotto: senza azzerarlo, un errore
+              // di salvataggio resta appeso in cima mentre si legge lo Storico.
+              setError('');
+              setSubTab(nextSubTab as SubTab);
+            }}
+            ariaLabel="Sezioni della terapia farmacologica"
+            idPrefix="therapy-section"
+          />
+        </div>
+
+        {subTab !== 'calendario' && (
+          <>
+            <AvvisoAnomalieFarmaci
+              esito={anomalie}
+              ambito={
+                nextTherapyCursor
+                  ? 'risultati caricati (verifica parziale)'
+                  : therapyFiltersActive
+                    ? 'tutti i risultati filtrati'
+                    : 'tutte le terapie in cartella'
+              }
+            />
+            {nextTherapyCursor && (
+              <div className="alert alert--info" role="status">
+                Verifica anagrafica parziale: carica le altre terapie prima di considerare completo il
+                controllo delle anomalie.
+              </div>
+            )}
+          </>
+        )}
         {subTab !== 'calendario' && !(showForm && subTab === 'programmazione') && (
           <div className="cts__body--padded" aria-label="Filtri terapie">
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'end' }}>
@@ -1408,23 +1424,6 @@ export function TerapiaFarmacologicaTab({ paziente, operatoreNome }: Props) {
               />
             </div>
           )}
-
-        {/* Sub-tab navigation — Feature 010 (FR-013): clinical sub-menu gap */}
-        <div className="tf-subtabs" style={{ marginTop: 'var(--clinical-submenu-gap, 16px)' }}>
-          <TopNav
-            variant="level3"
-            items={SUB_TABS}
-            activeKey={subTab}
-            onChange={(nextSubTab) => {
-              // L'errore appartiene alla schermata che l'ha prodotto: senza azzerarlo, un errore
-              // di salvataggio resta appeso in cima mentre si legge lo Storico.
-              setError('');
-              setSubTab(nextSubTab as SubTab);
-            }}
-            ariaLabel="Sezioni della terapia farmacologica"
-            idPrefix="therapy-section"
-          />
-        </div>
 
         {/* ── Sub-tab: Farmaci attivi ── */}
         {subTab === 'attivi' &&

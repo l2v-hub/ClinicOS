@@ -1,0 +1,223 @@
+{
+  "baselineCommit": "ec3b8fbeb6319f8b81f7ff9f53c2be711b0e582e",
+  "checkedAt": "2026-09-22T21:44:26.902Z",
+  "baseline": {
+    "programmazione": {
+      "filtersY": 273.234375,
+      "navHeight": 50,
+      "navY": 361.234375,
+      "selected": "Programmazione"
+    },
+    "calendario": {
+      "navHeight": 50,
+      "navY": 181.234375,
+      "selected": "Calendario"
+    },
+    "shiftPixels": 180
+  },
+  "candidate": [
+    {
+      "viewport": "desktop",
+      "docWidth": 1279,
+      "filtersAfterNav": true,
+      "navHeight": 50,
+      "navOffset": 61,
+      "navY": 181.234375,
+      "selected": "Programmazione",
+      "viewportWidth": 1279
+    },
+    {
+      "viewport": "desktop",
+      "docWidth": 1279,
+      "filtersAfterNav": true,
+      "navHeight": 50,
+      "navOffset": 61,
+      "navY": 181.234375,
+      "selected": "Calendario",
+      "viewportWidth": 1279
+    },
+    {
+      "viewport": "desktop",
+      "docWidth": 1294,
+      "filtersAfterNav": true,
+      "navHeight": 50,
+      "navOffset": 61,
+      "navY": 181.234375,
+      "selected": "Somministrazioni giornaliere",
+      "viewportWidth": 1294
+    },
+    {
+      "viewport": "desktop",
+      "docWidth": 1294,
+      "filtersAfterNav": true,
+      "navHeight": 50,
+      "navOffset": 61,
+      "navY": 181.234375,
+      "selected": "Storico",
+      "viewportWidth": 1294
+    },
+    {
+      "viewport": "desktop",
+      "navOffset": 61,
+      "navY": 181.234375,
+      "selected": "Sospese/concluse"
+    },
+    {
+      "viewport": "desktop",
+      "navOffset": 61,
+      "navY": 181.234375,
+      "selected": "Farmaci attivi8"
+    },
+    {
+      "viewport": "desktop",
+      "navOffset": 61,
+      "navY": 181.234375,
+      "selected": "Programmazione"
+    },
+    {
+      "viewport": "mobile",
+      "docWidth": 375,
+      "filtersAfterNav": true,
+      "navHeight": 57,
+      "navOffset": 61,
+      "navY": 225.234375,
+      "selected": "Programmazione",
+      "viewportWidth": 375
+    },
+    {
+      "viewport": "mobile",
+      "docWidth": 375,
+      "filtersAfterNav": true,
+      "navHeight": 57,
+      "navOffset": 61,
+      "navY": 225.234375,
+      "selected": "Calendario",
+      "viewportWidth": 375
+    },
+    {
+      "viewport": "mobile",
+      "docWidth": 375,
+      "filtersAfterNav": true,
+      "navHeight": 57,
+      "navOffset": 61,
+      "navY": 225.234375,
+      "selected": "Somministrazioni giornaliere",
+      "viewportWidth": 375
+    },
+    {
+      "viewport": "mobile",
+      "docWidth": 375,
+      "filtersAfterNav": true,
+      "navHeight": 57,
+      "navOffset": 61,
+      "navY": 225.234375,
+      "selected": "Storico",
+      "viewportWidth": 375
+    },
+    {
+      "viewport": "mobile",
+      "docWidth": 375,
+      "filtersAfterNav": true,
+      "navHeight": 57,
+      "navOffset": 61,
+      "navY": 225.234375,
+      "selected": "Sospese/concluse",
+      "viewportWidth": 375
+    },
+    {
+      "viewport": "mobile",
+      "docWidth": 375,
+      "filtersAfterNav": true,
+      "navHeight": 57,
+      "navOffset": 61,
+      "navY": 225.234375,
+      "selected": "Farmaci attivi8",
+      "viewportWidth": 375
+    }
+  ],
+  "assertions": [
+    {
+      "name": "desktop Programmazione 0",
+      "pass": true
+    },
+    {
+      "name": "desktop Calendario 1",
+      "pass": true
+    },
+    {
+      "name": "desktop Somministrazioni giornaliere 2",
+      "pass": true
+    },
+    {
+      "name": "desktop Storico 3",
+      "pass": true
+    },
+    {
+      "name": "desktop Sospese/concluse 4",
+      "pass": true
+    },
+    {
+      "name": "desktop Farmaci attivi8 5",
+      "pass": true
+    },
+    {
+      "name": "desktop Programmazione 6",
+      "pass": true
+    },
+    {
+      "name": "mobile Programmazione 7",
+      "pass": true
+    },
+    {
+      "name": "mobile Calendario 8",
+      "pass": true
+    },
+    {
+      "name": "mobile Somministrazioni giornaliere 9",
+      "pass": true
+    },
+    {
+      "name": "mobile Storico 10",
+      "pass": true
+    },
+    {
+      "name": "mobile Sospese/concluse 11",
+      "pass": true
+    },
+    {
+      "name": "mobile Farmaci attivi8 12",
+      "pass": true
+    },
+    {
+      "name": "Filter draft preserved across calendar navigation",
+      "pass": true
+    },
+    {
+      "name": "Desktop new therapy form preserves navigation offset",
+      "pass": true
+    },
+    {
+      "name": "Mobile new therapy form preserves navigation offset",
+      "pass": true
+    },
+    {
+      "name": "Calendar failure recovery preserves navigation",
+      "pass": true
+    },
+    {
+      "name": "Empty calendar preserves navigation",
+      "pass": true
+    },
+    {
+      "name": "Synthetic fixture reports no uncaught errors",
+      "pass": true
+    }
+  ],
+  "passed": 19,
+  "notes": [
+    "Synthetic data only; supported CUA browser API.",
+    "Viewport Y checked across tab switches; opening/cancelling a long form can scroll the document to its action button, so form checks compare offset within the clinical section.",
+    "Single component JSX relocation; no data-fetching or editing logic changed."
+  ],
+  "consoleErrorCount": 0
+}

@@ -1,0 +1,56 @@
+{
+  "baseline": "ec3b8fbeb6319f8b81f7ff9f53c2be711b0e582e",
+  "applicationFiles": [
+    {
+      "path": "frontend/src/components/operator/cartella/TerapiaFarmacologicaTab.tsx",
+      "sha256": "8f4a0ac7d0571bdee128fdda680636c36b7ec6d341cea008574722dc1114b1a6",
+      "gitBlob": "3644d5b5c3be31eb4b245a39782fcd2c817d7225"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "task-contract.md",
+      "sha256": "9b2b0e300587b0834ba99709f3976a10c18a5970092a11bba465e9beb06a1eef"
+    },
+    {
+      "path": "validation-report.md",
+      "sha256": "441f71151f2ff332486013c4ab278c339435341495e213e4286f9558f047c130"
+    },
+    {
+      "path": "browser-evidence.json",
+      "sha256": "2ef91cda6d752b4d67807e349955b5e9d256ca590ffed7dd69e684dab5b207f2"
+    },
+    {
+      "path": "preview/index.html",
+      "sha256": "380bdb2d664b274be52b0e215b6483ce91cca975cf9db77d5009398b24c9ae73"
+    },
+    {
+      "path": "preview/preview.tsx",
+      "sha256": "dae429681529f988d35e088d70415dcdd4a7696dd9ba2a8101fc1b7bc0446e6d"
+    },
+    {
+      "path": "screenshots/desktop-programmazione.png",
+      "sha256": "55929685d771ccab295987b0c13f5ae312de9a0e50620657cff00b12d49e9d5d"
+    },
+    {
+      "path": "screenshots/desktop-calendario.png",
+      "sha256": "8f2861714e869666b50fee777a29252d2bffc220f290149ca1c5fa5a11bca24e"
+    },
+    {
+      "path": "screenshots/mobile-programmazione.png",
+      "sha256": "42ff2dfd98760b1343e865eb1d7aeda3796eaf5809ebea275e69b5dd426a0b17"
+    },
+    {
+      "path": "screenshots/mobile-calendario.png",
+      "sha256": "98744b0f4d767df997bb99cfda40e381dc759b1fab2398cc32626c252167512e"
+    }
+  ],
+  "build": {
+    "command": "npm --prefix frontend run build",
+    "exitCode": 0,
+    "modules": 413,
+    "viteSeconds": 9.28,
+    "warning": "Existing shared chunk above 500 kB"
+  },
+  "review": "Root source review, runtime checks and screenshot review"
+}
