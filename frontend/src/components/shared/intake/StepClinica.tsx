@@ -8,6 +8,7 @@ import type { AllergiaItem, AllergyStatus } from '../../../types';
 import { intakeSections } from '../../operator/sections/patientSections';
 import { DischargeTherapyReview } from './DischargeTherapyReview';
 import type { DischargeTherapyRow } from './dischargeTherapy';
+import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
 
 // Maps lowercase intake section keys to the Italian uppercase keys used in sourceReferences.
 const SECTION_KEY_TO_ITALIAN: Record<string, string> = {
@@ -37,6 +38,7 @@ interface StepClinicaProps {
   importedFields?: string[];
   /** The _narrative object from the draft data (has sourceReferences). */
   narrative?: Record<string, unknown>;
+  therapyCorrection?: TherapyCorrectionTarget | null;
 }
 
 /** Inline compare panel for a single import section. */
@@ -64,6 +66,7 @@ export function StepClinica({
   operatoreNome,
   importedFields = [],
   narrative,
+  therapyCorrection,
 }: StepClinicaProps) {
   // Keep manual additions next to the imported drugs, before the other clinical sections.
   const sections = intakeSections().sort(
@@ -143,6 +146,7 @@ export function StepClinica({
             allergie?: AllergiaItem[];
             status?: AllergyStatus;
             onStatusChange?: (s: AllergyStatus) => void;
+            therapyCorrection?: TherapyCorrectionTarget | null;
           }
         >;
 
@@ -190,6 +194,7 @@ export function StepClinica({
               onChange={(v) => onUpdateSection(sectionKey, v)}
               operatoreNome={operatoreNome}
               {...extraProps}
+              therapyCorrection={sectionKey === 'terapia' ? therapyCorrection : undefined}
             />
           </div>
         );

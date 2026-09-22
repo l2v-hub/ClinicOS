@@ -3,10 +3,11 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { resolve, dirname, relative } from 'node:path';
 
-const [commit, service] = process.argv.slice(2);
+const [commit, service, task = 'po-01-ingresso-progressivo'] = process.argv.slice(2);
 if (!/^[a-f0-9]{40}$/.test(commit ?? '') || !['backend', 'frontend'].includes(service)) throw new Error('Explicit immutable commit and backend/frontend target required');
+if (!/^[a-z0-9-]+$/.test(task)) throw new Error('Invalid task artifact folder');
 const root = process.cwd();
-const base = resolve(root, 'artifacts/task-validation/po-01-ingresso-progressivo');
+const base = resolve(root, 'artifacts/task-validation', task);
 const output = resolve(base, 'releases', `${commit}-${service}`);
 if (existsSync(output)) throw new Error('Release export already exists; do not overwrite');
 const git = (...args) => execFileSync('git', args, { cwd: root, maxBuffer: 128 * 1024 * 1024 });

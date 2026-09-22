@@ -1,0 +1,36 @@
+{
+  "id": "ts-sera",
+  "fascia": "sera",
+  "label": "Terapia Sera",
+  "ora": "20:00",
+  "summary": {
+    "total": 1,
+    "administered": 0,
+    "notAdministered": 0,
+    "pending": 1
+  },
+  "patients": [
+    {
+      "patientId": "cmud9tmhu0003iolpnww4vmti",
+      "firstName": "Importazione",
+      "lastName": "Sintetica",
+      "room": "Non assegnato",
+      "bed": "Non assegnato",
+      "administrations": [
+        {
+          "administrationId": null,
+          "therapyId": "cmud9tmik0005iolp8ynquo5q",
+          "drugName": "Lasix sintetico",
+          "dosage": "1 compressa — 25 mg",
+          "quantityLabel": "1 compressa — 25 mg",
+          "route": "orale",
+          "scheduledTime": "20:00",
+          "status": "pending",
+          "administeredAt": null,
+          "administeredBy": null,
+          "notAdministeredReason": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { useId, type Dispatch, type SetStateAction } from 'react';
 import type { TherapyFormValue } from './TherapyFormFields';
+import { therapyFieldFeedback, type TherapyFieldIssue } from './therapyFieldFeedback';
 import {
   ADMIN_UNITS,
   DIVISIBLE_UNITS,
@@ -18,10 +19,12 @@ interface Props {
   onChange: (value: TherapyFormValue) => void;
   customQty: Record<number, string>;
   setCustomQty: Dispatch<SetStateAction<Record<number, string>>>;
+  issues?: readonly TherapyFieldIssue[];
 }
 
-export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty }: Props) {
+export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty, issues }: Props) {
   const id = useId();
+  const feedback = therapyFieldFeedback(id, issues);
   const strengthNum = value.commercialStrengthValue.trim()
     ? Number(value.commercialStrengthValue)
     : null;
@@ -58,7 +61,14 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
   };
 
   return (
-    <div className="sched-editor therapy-schedules">
+    <div
+      className="sched-editor therapy-schedules"
+      tabIndex={-1}
+      role="group"
+      aria-label="Orari e dosi"
+      {...feedback.attributes('schedules')}
+    >
+      {feedback.error('schedules')}
       {value.schedules.length === 0 && (
         <p className="form-hint">Aggiungi un orario e indica la dose da somministrare.</p>
       )}
@@ -76,11 +86,13 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
               <label htmlFor={`${id}-time-${i}`}>Orario {i + 1}</label>
               <input
                 id={`${id}-time-${i}`}
+                {...feedback.attributes('time', i)}
                 className="form-input"
                 type="time"
                 value={s.time}
                 onChange={(e) => updateSchedule(i, { time: e.target.value })}
               />
+              {feedback.error('time', i)}
             </div>
             <div className="form-group therapy-schedules__quantity">
               <label htmlFor={`${id}-quantity-${i}`}>
@@ -113,6 +125,7 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
                     )}
                     <input
                       id={`${id}-quantity-${i}`}
+                      {...feedback.attributes('quantity', i)}
                       className="form-input qty-chip__other"
                       placeholder="Altro: es. 1/3"
                       value={customQty[i] ?? ''}
@@ -130,6 +143,7 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
                 ) : (
                   <input
                     id={`${id}-quantity-${i}`}
+                    {...feedback.attributes('quantity', i)}
                     className="form-input qty-chip__other"
                     type="number"
                     min={isPatchUnit(s.administrationUnit) ? '1' : '0'}
@@ -151,6 +165,7 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
                   />
                 )}
               </div>
+              {feedback.error('quantity', i)}
             </div>
             <div className="form-group therapy-schedules__unit">
               <label htmlFor={`${id}-unit-${i}`}>
@@ -158,6 +173,7 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
               </label>
               <select
                 id={`${id}-unit-${i}`}
+                {...feedback.attributes('administrationUnit', i)}
                 className="form-select"
                 value={s.administrationUnit}
                 onChange={(e) => updateSchedule(i, { administrationUnit: e.target.value })}
@@ -169,6 +185,7 @@ export function TherapyScheduleEditor({ value, onChange, customQty, setCustomQty
                   </option>
                 ))}
               </select>
+              {feedback.error('administrationUnit', i)}
             </div>
             <button
               type="button"

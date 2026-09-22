@@ -10,6 +10,7 @@ import {
 import { applyTherapyFormChange } from './therapyFormChange';
 import { TherapyScheduleEditor } from './TherapyScheduleEditor';
 import { TherapyFormPreview } from './TherapyFormPreview';
+import { therapyFieldFeedback, type TherapyFieldIssue } from './therapyFieldFeedback';
 import './TherapyFormFields.css';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -101,6 +102,7 @@ interface TherapyFormFieldsProps {
   value: TherapyFormValue;
   onChange: (next: TherapyFormValue) => void;
   operatoreNome?: string;
+  issues?: readonly TherapyFieldIssue[];
 }
 
 const THERAPY_TYPES = [
@@ -109,8 +111,9 @@ const THERAPY_TYPES = [
   { value: 'al_bisogno', label: 'Al bisogno', hint: 'Secondo le indicazioni' },
 ] as const;
 
-export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
+export function TherapyFormFields({ value, onChange, issues }: TherapyFormFieldsProps) {
   const id = useId();
+  const feedback = therapyFieldFeedback(id, issues);
   // Keep pending custom quantities across changes of therapy type.
   const [customQty, setCustomQty] = useState<Record<number, string>>({});
   const update = (patch: Partial<TherapyFormValue>) =>
@@ -137,7 +140,9 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
           valore={value.farmacoNome}
           forma={value.pharmaceuticalForm}
           onCambia={update}
+          validation={feedback.attributes('farmacoNome')}
         />
+        {feedback.error('farmacoNome')}
         <div className="therapy-form__grid">
           <div className="form-group">
             <label htmlFor={`${id}-form`}>Forma farmaceutica</label>
@@ -160,6 +165,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
             <div className="therapy-form__strength">
               <input
                 id={`${id}-strength`}
+                {...feedback.attributes('commercialStrengthValue')}
                 className="form-input"
                 type="number"
                 min="0"
@@ -171,6 +177,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
               <select
                 className="form-select"
                 aria-label="Unità dosaggio commerciale"
+                {...feedback.attributes('commercialStrengthUnit')}
                 value={value.commercialStrengthUnit}
                 onChange={(e) => update({ commercialStrengthUnit: e.target.value })}
               >
@@ -182,11 +189,14 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                 ))}
               </select>
             </div>
+            {feedback.error('commercialStrengthValue')}
+            {feedback.error('commercialStrengthUnit')}
           </div>
           <div className="form-group">
             <label htmlFor={`${id}-route`}>Via di somministrazione</label>
             <select
               id={`${id}-route`}
+              {...feedback.attributes('viaSomministrazione')}
               className="form-select"
               value={value.viaSomministrazione}
               onChange={(e) => update({ viaSomministrazione: e.target.value })}
@@ -200,6 +210,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                 </option>
               ))}
             </select>
+            {feedback.error('viaSomministrazione')}
           </div>
         </div>
       </section>
@@ -208,7 +219,13 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
         <h3 id={`${id}-timing`}>
           <span aria-hidden="true">2</span> Programmazione
         </h3>
-        <div className="therapy-form__types" role="group" aria-label="Tipo terapia">
+        <div
+          className="therapy-form__types"
+          role="group"
+          aria-label="Tipo terapia"
+          tabIndex={-1}
+          {...feedback.attributes('tipo')}
+        >
           {THERAPY_TYPES.map((type) => (
             <label
               key={type.value}
@@ -228,29 +245,34 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
             </label>
           ))}
         </div>
+        {feedback.error('tipo')}
         <div className="therapy-form__grid">
           <div className="form-group">
             <label htmlFor={`${id}-start`}>Data inizio *</label>
             <input
               id={`${id}-start`}
+              {...feedback.attributes('dataInizio')}
               className="form-input"
               type="date"
               value={value.dataInizio}
               onChange={(e) => update({ dataInizio: e.target.value })}
             />
+            {feedback.error('dataInizio')}
           </div>
-          {value.tipo === 'periodica' && (
+          {(value.tipo === 'periodica' || issues?.some((issue) => issue.field === 'dataFine')) && (
             <div className="form-group">
               <label htmlFor={`${id}-end`}>
                 Data fine <span className="therapy-form__optional">(facoltativa)</span>
               </label>
               <input
                 id={`${id}-end`}
+                {...feedback.attributes('dataFine')}
                 className="form-input"
                 type="date"
                 value={value.dataFine}
                 onChange={(e) => update({ dataFine: e.target.value })}
               />
+              {feedback.error('dataFine')}
             </div>
           )}
           {value.tipo === 'una_tantum' && (
@@ -259,21 +281,25 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                 <label htmlFor={`${id}-once-date`}>Data somministrazione</label>
                 <input
                   id={`${id}-once-date`}
+                  {...feedback.attributes('dataSomministrazione')}
                   className="form-input"
                   type="date"
                   value={value.dataSomministrazione}
                   onChange={(e) => update({ dataSomministrazione: e.target.value })}
                 />
+                {feedback.error('dataSomministrazione')}
               </div>
               <div className="form-group">
                 <label htmlFor={`${id}-once-time`}>Orario somministrazione</label>
                 <input
                   id={`${id}-once-time`}
+                  {...feedback.attributes('orarioSomministrazione')}
                   className="form-input"
                   type="time"
                   value={value.orarioSomministrazione}
                   onChange={(e) => update({ orarioSomministrazione: e.target.value })}
                 />
+                {feedback.error('orarioSomministrazione')}
               </div>
             </>
           )}
@@ -281,6 +307,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
             <label htmlFor={`${id}-status`}>Stato terapia</label>
             <select
               id={`${id}-status`}
+              {...feedback.attributes('stato')}
               className="form-select"
               value={value.stato}
               onChange={(e) => update({ stato: e.target.value as TherapyFormValue['stato'] })}
@@ -289,9 +316,11 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
               <option value="sospesa">Sospesa</option>
               <option value="conclusa">Conclusa</option>
             </select>
+            {feedback.error('stato')}
           </div>
         </div>
-        {value.tipo === 'periodica' && (
+        {(value.tipo === 'periodica' ||
+          issues?.some((issue) => issue.field === 'giorniSettimana')) && (
           <div className="therapy-form__weekdays">
             <span className="therapy-form__field-label">Ripeti</span>
             <div
@@ -299,6 +328,8 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
               role="group"
               aria-label="Giorni della settimana"
               data-testid="therapy-weekdays"
+              tabIndex={-1}
+              {...feedback.attributes('giorniSettimana')}
             >
               <button
                 type="button"
@@ -332,6 +363,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
                 );
               })}
             </div>
+            {feedback.error('giorniSettimana')}
           </div>
         )}
       </section>
@@ -381,6 +413,7 @@ export function TherapyFormFields({ value, onChange }: TherapyFormFieldsProps) {
             onChange={onChange}
             customQty={customQty}
             setCustomQty={setCustomQty}
+            issues={issues}
           />
         </section>
       )}

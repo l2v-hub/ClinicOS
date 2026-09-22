@@ -10,6 +10,7 @@ import type { IngressoData } from './StepIngresso';
 import { StepClinica } from './StepClinica';
 import { StepVerifica } from './StepVerifica';
 import { buildIntakeTherapyReview, prepareIntakeConfirmData } from './intakeTherapies';
+import { focusTherapyCorrection, type TherapyCorrectionTarget } from './intakeTherapyNavigation';
 import { buildConfirmCartella } from './confirmCartella';
 import { AccessibleDialogSurface } from '../AccessibleDialogSurface';
 
@@ -142,6 +143,16 @@ export function IntakeWorkspace({
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const submittingRef = useRef(false);
   const [focusField, setFocusField] = useState<DemographicField | null>(null);
+  const [therapyCorrection, setTherapyCorrection] = useState<TherapyCorrectionTarget | null>(null);
+  useEffect(() => {
+    if (step !== 3 || !therapyCorrection) return;
+    // Wait for the opened manual form and the step's scroll reset before focusing.
+    const frame = window.requestAnimationFrame(() => {
+      if (bodyRef.current) focusTherapyCorrection(bodyRef.current, therapyCorrection);
+      setTherapyCorrection(null);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [step, therapyCorrection]);
   useEffect(() => {
     if (step !== 1 || !focusField) return;
     const control = bodyRef.current?.querySelector<HTMLElement>(
@@ -176,6 +187,7 @@ export function IntakeWorkspace({
       setDuplicateWarn(false);
       setAllergyConflictWarn(false);
       setSelectedModuleId(null);
+      setTherapyCorrection(null);
       return;
     }
     if (importDraftId ? draftId === importDraftId : Boolean(draftId)) return;
@@ -518,6 +530,7 @@ export function IntakeWorkspace({
                   operatoreNome={operatoreNome}
                   importedFields={(data._importedFields as string[] | undefined) ?? []}
                   narrative={data._narrative as Record<string, unknown> | undefined}
+                  therapyCorrection={therapyCorrection}
                 />
               </div>
             )}
@@ -603,8 +616,9 @@ export function IntakeWorkspace({
                   onConfirm={() => void handleConfirm(false)}
                   onUpdateSection={updateSection}
                   onReviewDemographics={reviewDemographicField}
-                  onReviewTherapies={() => {
+                  onReviewTherapies={(target) => {
                     setSubmitError(null);
+                    setTherapyCorrection(target ?? null);
                     setStep(3);
                   }}
                 />

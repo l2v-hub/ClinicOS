@@ -1,0 +1,29 @@
+[
+  {
+    "activeTag": "INPUT",
+    "description": "Orario 1: indica un’ora valida (00:00–23:59).",
+    "invalid": "true",
+    "rect": {
+      "height": 48,
+      "y": 359
+    },
+    "row": "2. Da verificare",
+    "scenario": "import_after_excluded_row"
+  },
+  {
+    "description": "Indica il nome del farmaco.",
+    "invalid": "true",
+    "placeholder": "Cerca il farmaco — es. Tachipirina",
+    "scenario": "manual_after_excluded_import",
+    "tag": "INPUT"
+  },
+  {
+    "dialogScrollWidth": 390,
+    "dialogWidth": 390,
+    "label": "Verifica della terapia estratta dal documento",
+    "role": "group",
+    "row": "2. Da verificare",
+    "scenario": "mobile_source_review",
+    "width": 390
+  }
+]

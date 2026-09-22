@@ -7,6 +7,8 @@ import {
 } from './dischargeTherapy';
 import { therapyFormToInput } from './therapyFormPayload';
 import { isPatchUnit } from '../../operator/cartella/therapyDose';
+import type { TherapyFieldIssue } from '../../operator/cartella/therapyFieldFeedback';
+import type { IntakeTherapyDiagnostic } from './intakeTherapyNavigation';
 
 const hasText = (v: unknown): v is string => typeof v === 'string' && !!v.trim();
 const validTime = (v: unknown): v is string =>
@@ -34,70 +36,80 @@ function validDate(v: unknown): v is string {
 }
 
 /** Field-only messages: safe for feedback, without copying clinical values into errors. */
-export function therapyInputIssues(input: Record<string, unknown>): string[] {
-  const issues: string[] = [];
-  if (!hasText(input.farmacoNome)) issues.push('Indica il nome del farmaco');
-  if (!validDate(input.dataInizio)) issues.push('Indica una data di inizio valida');
+export function therapyInputDiagnostics(input: Record<string, unknown>): TherapyFieldIssue[] {
+  const issues: TherapyFieldIssue[] = [];
+  const add = (field: TherapyFieldIssue['field'], message: string, scheduleIndex?: number) =>
+    issues.push({ field, message, ...(scheduleIndex === undefined ? {} : { scheduleIndex }) });
+  if (!hasText(input.farmacoNome)) add('farmacoNome', 'Indica il nome del farmaco');
+  if (!validDate(input.dataInizio)) add('dataInizio', 'Indica una data di inizio valida');
   if (
     input.dataFine &&
     (!validDate(input.dataFine) || String(input.dataFine) < String(input.dataInizio))
   )
-    issues.push('La data di fine deve essere valida e non precedere l’inizio');
+    add('dataFine', 'La data di fine deve essere valida e non precedere l’inizio');
   if (!VIA_OPTIONS.includes(String(input.viaSomministrazione)))
-    issues.push('Verifica la via di somministrazione');
+    add('viaSomministrazione', 'Verifica la via di somministrazione');
   if (!['periodica', 'una_tantum', 'al_bisogno'].includes(String(input.tipo)))
-    issues.push('Verifica il tipo di terapia');
+    add('tipo', 'Verifica il tipo di terapia');
   if (!['attiva', 'sospesa', 'conclusa'].includes(String(input.stato)))
-    issues.push('Verifica lo stato della terapia');
-  if (
-    input.commercialStrengthValue !== undefined &&
-    (!Number.isFinite(input.commercialStrengthValue) ||
-      Number(input.commercialStrengthValue) <= 0 ||
-      !hasText(input.commercialStrengthUnit))
-  )
-    issues.push('Verifica dosaggio commerciale e unità');
+    add('stato', 'Verifica lo stato della terapia');
+  if (input.commercialStrengthValue !== undefined) {
+    if (
+      !Number.isFinite(input.commercialStrengthValue) ||
+      Number(input.commercialStrengthValue) <= 0
+    )
+      add('commercialStrengthValue', 'Verifica dosaggio commerciale e unità');
+    if (!hasText(input.commercialStrengthUnit))
+      add('commercialStrengthUnit', 'Verifica dosaggio commerciale e unità');
+  }
   if (input.giorniSettimana && !/^[1-7](,[1-7])*$/.test(String(input.giorniSettimana)))
-    issues.push('Verifica i giorni della settimana');
-  if (
-    input.tipo === 'una_tantum' &&
-    (!validDate(input.dataSomministrazione) || !validTime(input.orarioSomministrazione))
-  )
-    issues.push('Indica data e orario della somministrazione');
+    add('giorniSettimana', 'Verifica i giorni della settimana');
+  if (input.tipo === 'una_tantum') {
+    if (!validDate(input.dataSomministrazione))
+      add('dataSomministrazione', 'Indica data e orario della somministrazione');
+    if (!validTime(input.orarioSomministrazione))
+      add('orarioSomministrazione', 'Indica data e orario della somministrazione');
+  }
   if (input.tipo === 'periodica') {
     const schedules = Array.isArray(input.schedules) ? input.schedules : [];
-    if (!schedules.length || schedules.length > 32) issues.push('Inserisci da 1 a 32 orari');
+    if (!schedules.length || schedules.length > 32) add('schedules', 'Inserisci da 1 a 32 orari');
     const seen = new Set<string>();
     schedules.forEach((s, index) => {
       if (!s || !validTime(s.time))
-        issues.push(`Orario ${index + 1}: indica un’ora valida (00:00–23:59)`);
+        add('time', `Orario ${index + 1}: indica un’ora valida (00:00–23:59)`, index);
       if (
         !s ||
         ![s.quantityNumerator, s.quantityDenominator].every(
           (v) => Number.isSafeInteger(v) && v > 0 && v <= 1000,
         )
       )
-        issues.push(`Orario ${index + 1}: indica una quantità valida`);
+        add('quantity', `Orario ${index + 1}: indica una quantità valida`, index);
       if (!s || !hasText(s.administrationUnit) || s.administrationUnit.length > 64)
-        issues.push(`Orario ${index + 1}: scegli l’unità di somministrazione`);
+        add('administrationUnit', `Orario ${index + 1}: scegli l’unità di somministrazione`, index);
       if (
         s &&
         hasText(s.administrationUnit) &&
         isPatchUnit(s.administrationUnit) &&
         s.quantityNumerator % s.quantityDenominator !== 0
       )
-        issues.push(`Orario ${index + 1}: i cerotti non possono essere divisi`);
+        add('quantity', `Orario ${index + 1}: i cerotti non possono essere divisi`, index);
       const key = `${String(s?.time).padStart(5, '0')}|${String(s?.administrationUnit).trim()}`;
-      if (seen.has(key)) issues.push(`Orario ${index + 1}: elimina l’orario duplicato`);
+      if (seen.has(key)) add('time', `Orario ${index + 1}: elimina l’orario duplicato`, index);
       seen.add(key);
     });
   }
   return issues;
 }
 
+/** Compatibility wrapper for confirmation and callers that only need blocking messages. */
+export function therapyInputIssues(input: Record<string, unknown>): string[] {
+  return [...new Set(therapyInputDiagnostics(input).map((issue) => issue.message))];
+}
+
 export function buildIntakeTherapyReview(data: Record<string, unknown>, operatorName?: string) {
   const imported = Array.isArray(data.terapiaImport) ? data.terapiaImport : [];
   const manual = Array.isArray(data.terapia) ? data.terapia : [];
-  // The index is shared by recap, payload and server error messages.
+  // Display ordinals include excluded rows; correction targets use the original source index.
   return [
     ...imported.map((row: DischargeTherapyRow, sourceIndex) => ({
       row,
@@ -126,9 +138,18 @@ export function buildIntakeTherapyReview(data: Record<string, unknown>, operator
         : schedules.map((s) => s?.time).filter(hasText);
     const requiresSourceReview =
       source === 'import' && (row as DischargeTherapyRow)?.stato === 'da_verificare';
-    const issues = therapyInputIssues(input);
+    const fields = therapyInputDiagnostics(input);
     if (requiresSourceReview)
-      issues.push('Verifica i dati estratti confrontandoli con il documento');
+      fields.push({
+        field: 'sourceReview',
+        message: 'Verifica i dati estratti confrontandoli con il documento',
+      });
+    const diagnostics: IntakeTherapyDiagnostic[] = fields.map((issue) => ({
+      ...issue,
+      type: source,
+      index: sourceIndex,
+    }));
+    const issues = [...new Set(diagnostics.map((issue) => issue.message))];
     return {
       index: i + 1,
       source,
@@ -136,6 +157,7 @@ export function buildIntakeTherapyReview(data: Record<string, unknown>, operator
       excluded: source === 'import' && (row as DischargeTherapyRow)?.excludedFromConfirm === true,
       sourceIndex,
       issues,
+      diagnostics,
       requiresSourceReview,
       name: hasText(input.farmacoNome) ? input.farmacoNome : 'Farmaco da indicare',
       times,

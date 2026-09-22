@@ -15,6 +15,7 @@ import { IcoSearch } from '../../../icons';
 import { testoConfezione, type FarmacoTrovato } from './farmacoDocumento';
 import { PHARMA_FORMS, isInhalerForm } from './therapyDose';
 import { normalizza } from './farmacoCorrispondenza';
+import type { TherapyFieldAttributes } from './therapyFieldFeedback';
 import './CampoFarmaco.css';
 const LIMITE = 12;
 const ATTESA_MS = 300;
@@ -34,6 +35,7 @@ interface Props {
   /** Forma farmaceutica corrente, per non sovrascriverla quando la selezione non la determina. */
   forma: string;
   onCambia: (dati: { farmacoNome: string; pharmaceuticalForm?: string }) => void;
+  validation?: TherapyFieldAttributes;
 }
 
 /** Riconduce la forma AIFA («Compressa effervescente») a una delle forme della maschera. */
@@ -58,7 +60,7 @@ export function formaDellaMaschera(formaAifa: string | null | undefined): string
   return trovata && PHARMA_FORMS.includes(trovata) ? trovata : undefined;
 }
 
-export function CampoFarmaco({ valore, forma, onCambia }: Props) {
+export function CampoFarmaco({ valore, forma, onCambia, validation }: Props) {
   const fieldId = useId();
   const [query, setQuery] = useState('');
   const [criterio, setCriterio] = useState<Criterio>('nome');
@@ -148,7 +150,12 @@ export function CampoFarmaco({ valore, forma, onCambia }: Props) {
                   : 'Nome già presente in terapia: non verificato in questa maschera'}
             </p>
           </div>
-          <button type="button" className="campo-farmaco__cambia" onClick={cambiaFarmaco}>
+          <button
+            type="button"
+            className="campo-farmaco__cambia"
+            onClick={cambiaFarmaco}
+            {...validation}
+          >
             Cambia
           </button>
         </div>
@@ -186,6 +193,7 @@ export function CampoFarmaco({ valore, forma, onCambia }: Props) {
         <IcoSearch />
         <input
           id={fieldId}
+          {...validation}
           className="campo-farmaco__input"
           type="search"
           value={query}

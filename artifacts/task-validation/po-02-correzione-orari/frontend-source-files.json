@@ -1,0 +1,58 @@
+[
+  {
+    "path": "frontend/src/components/operator/cartella/CampoFarmaco.tsx",
+    "sha256": "50f03f1d70fce99d166b98c2dbbab6788dbdcbe34d9e4bb33b49d5104fdd672c"
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/therapyFieldFeedback.tsx",
+    "sha256": "0a801933ac6e5b66d68771ce067c8a9edf4e2c548996aeab2594936f52e27cc8"
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/TherapyFormFields.css",
+    "sha256": "e5e815695ab8d0a0c11c9059e6a406c7c092b452dbf950a13c2df46625859e9d"
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/TherapyFormFields.tsx",
+    "sha256": "33216778ad6d2031410138ba99d8e73a7c20afd8108448babbe786f7e87ccb9d"
+  },
+  {
+    "path": "frontend/src/components/operator/cartella/TherapyScheduleEditor.tsx",
+    "sha256": "59593c356d2987643bceb7db9b97b2068b90b534b95a09c07344b39b85bba79a"
+  },
+  {
+    "path": "frontend/src/components/operator/sections/TherapyEditor.tsx",
+    "sha256": "ca7393279969260905be31f97a765482c371c9bda997d4ab595b13140137b78d"
+  },
+  {
+    "path": "frontend/src/components/operator/sections/TherapyIntakeEditor.tsx",
+    "sha256": "3b3d0ad5b6d857e7ad64253e5f29898f81cf3d6f27da2e854636018d1bd59978"
+  },
+  {
+    "path": "frontend/src/components/shared/intake/__tests__/therapyFieldFeedback.test.ts",
+    "sha256": "54a8e5799cd2ae291dba6e5e8561687ff68b3dc88bbf9f18cf59b6d73c7c3a3c"
+  },
+  {
+    "path": "frontend/src/components/shared/intake/DischargeTherapyReview.tsx",
+    "sha256": "730f26704b034c519522285a26d600b0b6fc05f78c9ced9f6c80777b2e0b7d8d"
+  },
+  {
+    "path": "frontend/src/components/shared/intake/intakeTherapies.ts",
+    "sha256": "04e289c7903cadba6a3ab6441e5424272353cf25b7a6b5923df103f0fa37f126"
+  },
+  {
+    "path": "frontend/src/components/shared/intake/intakeTherapyNavigation.ts",
+    "sha256": "4dfd609df418457dce399da081296d6a9b5e9d67ca7e1d02082611fb576141fe"
+  },
+  {
+    "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+    "sha256": "ce657c8ae1ac32518949799fed81bed49a5c3b6fbff6e2eb516a1961000446fd"
+  },
+  {
+    "path": "frontend/src/components/shared/intake/StepClinica.tsx",
+    "sha256": "19494ddf9ab8ab7e0564fd2c7d6770309c054f05cbdd27b60689276a0fefcd92"
+  },
+  {
+    "path": "frontend/src/components/shared/intake/StepVerifica.tsx",
+    "sha256": "c6d82916be71fc1d42e684891e09fd68426d18dc33a1ea7adbaa7b3ac5a26252"
+  }
+]

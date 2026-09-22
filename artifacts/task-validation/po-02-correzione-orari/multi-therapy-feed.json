@@ -1,0 +1,74 @@
+[
+  {
+    "id": "ts-mattina",
+    "fascia": "mattina",
+    "label": "Terapia Mattina",
+    "ora": "08:00",
+    "summary": {
+      "total": 1,
+      "administered": 0,
+      "notAdministered": 0,
+      "pending": 1
+    },
+    "patients": [
+      {
+        "patientId": "cmud9zhjd00044slpvppgil2s",
+        "firstName": "Doppio",
+        "lastName": "Orario sintetico",
+        "room": "Non assegnato",
+        "bed": "Non assegnato",
+        "administrations": [
+          {
+            "administrationId": null,
+            "therapyId": "cmud9zhl100064slpufmo03nb",
+            "drugName": "Lasix sintetico",
+            "dosage": "1 compressa — 25 mg",
+            "quantityLabel": "1 compressa — 25 mg",
+            "route": "orale",
+            "scheduledTime": "08:00",
+            "status": "pending",
+            "administeredAt": null,
+            "administeredBy": null,
+            "notAdministeredReason": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ts-sera",
+    "fascia": "sera",
+    "label": "Terapia Sera",
+    "ora": "20:00",
+    "summary": {
+      "total": 1,
+      "administered": 0,
+      "notAdministered": 0,
+      "pending": 1
+    },
+    "patients": [
+      {
+        "patientId": "cmud9zhjd00044slpvppgil2s",
+        "firstName": "Doppio",
+        "lastName": "Orario sintetico",
+        "room": "Non assegnato",
+        "bed": "Non assegnato",
+        "administrations": [
+          {
+            "administrationId": null,
+            "therapyId": "cmud9zhl100064slpufmo03nb",
+            "drugName": "Lasix sintetico",
+            "dosage": "1 compressa — 25 mg",
+            "quantityLabel": "1 compressa — 25 mg",
+            "route": "orale",
+            "scheduledTime": "20:00",
+            "status": "pending",
+            "administeredAt": null,
+            "administeredBy": null,
+            "notAdministeredReason": null
+          }
+        ]
+      }
+    ]
+  }
+]

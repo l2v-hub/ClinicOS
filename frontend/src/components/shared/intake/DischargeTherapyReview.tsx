@@ -6,6 +6,8 @@
 // confirm path (dischargeRowToTherapyInput) reads them.
 
 import { buildIntakeTherapyReview, therapyInputIssues } from './intakeTherapies';
+import { useId } from 'react';
+import { therapyFieldFeedback } from '../../operator/cartella/therapyFieldFeedback';
 import {
   TherapyFormFields,
   type TherapyFormValue,
@@ -23,6 +25,7 @@ interface Props {
 }
 
 export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props) {
+  const id = useId();
   // reviewedTherapy holds the full form; the parent draft remains the only source of truth.
   const forms = rows.map(dischargeRowToTherapyForm);
 
@@ -69,6 +72,8 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
           data-testid="discharge-therapy-row"
           data-stato={r.stato}
           data-farmaco={r.farmacoNome}
+          data-therapy-source="import"
+          data-therapy-index={i}
         >
           <div className="discharge-therapy-review__item-head">
             <strong>
@@ -112,24 +117,35 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
                 value={forms[i]}
                 onChange={(v) => updateForm(i, v)}
                 operatoreNome={operatoreNome}
+                issues={review[i].diagnostics}
               />
               {review[i].requiresSourceReview && (
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  disabled={therapyInputIssues(review[i].input).length > 0}
-                  onClick={() =>
-                    onChange(
-                      rows.map((row, idx) =>
-                        idx === i
-                          ? therapyFormToDischargeRow(forms[i], { ...row, stato: 'ok' })
-                          : row,
-                      ),
-                    )
-                  }
+                <div
+                  tabIndex={-1}
+                  role="group"
+                  aria-label="Verifica della terapia estratta dal documento"
+                  {...therapyFieldFeedback(`${id}-${i}`, review[i].diagnostics).attributes(
+                    'sourceReview',
+                  )}
                 >
-                  Ho verificato questa terapia
-                </button>
+                  {therapyFieldFeedback(`${id}-${i}`, review[i].diagnostics).error('sourceReview')}
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    disabled={therapyInputIssues(review[i].input).length > 0}
+                    onClick={() =>
+                      onChange(
+                        rows.map((row, idx) =>
+                          idx === i
+                            ? therapyFormToDischargeRow(forms[i], { ...row, stato: 'ok' })
+                            : row,
+                        ),
+                      )
+                    }
+                  >
+                    Ho verificato questa terapia
+                  </button>
+                </div>
               )}
             </div>
           )}

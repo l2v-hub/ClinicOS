@@ -1,23 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   TherapyFormFields,
   emptyTherapyForm,
   type TherapyFormValue,
 } from '../cartella/TherapyFormFields';
 import { buildIntakeTherapyReview } from '../../shared/intake/intakeTherapies';
+import {
+  focusTherapyCorrection,
+  type TherapyCorrectionTarget,
+} from '../../shared/intake/intakeTherapyNavigation';
 
 /** Rows belong to the intake draft as soon as they are added, including incomplete edits. */
 export function TherapyIntakeEditor({
   value,
   onChange,
   operatoreNome,
+  therapyCorrection,
 }: {
   value: TherapyFormValue[] | undefined;
   onChange: (next: TherapyFormValue[]) => void;
   operatoreNome?: string;
+  therapyCorrection?: TherapyCorrectionTarget | null;
 }) {
   const items = value ?? [];
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingIndex, setEditingIndex] = useState<number | null>(
+    therapyCorrection?.type === 'manual' ? therapyCorrection.index : null,
+  );
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [localCorrection, setLocalCorrection] = useState<TherapyCorrectionTarget | null>(null);
+  useEffect(() => {
+    if (localCorrection && rootRef.current) {
+      focusTherapyCorrection(rootRef.current, localCorrection);
+      setLocalCorrection(null);
+    }
+  }, [localCorrection, editingIndex]);
   const review = buildIntakeTherapyReview({ terapia: items });
 
   function addDrug() {
@@ -33,7 +49,7 @@ export function TherapyIntakeEditor({
   }
 
   return (
-    <div className="cr-list" data-testid="manual-therapy-editor">
+    <div className="cr-list" data-testid="manual-therapy-editor" ref={rootRef}>
       <div className="ec-modal-add-form__actions">
         <strong>Farmaci aggiunti: {items.length}</strong>
         <button className="btn-secondary btn-sm" type="button" onClick={addDrug}>
@@ -48,6 +64,8 @@ export function TherapyIntakeEditor({
           key={index}
           className="discharge-therapy-review__item"
           data-testid="manual-therapy-row"
+          data-therapy-source="manual"
+          data-therapy-index={index}
         >
           <div className="discharge-therapy-review__item-head">
             <strong>
@@ -76,7 +94,22 @@ export function TherapyIntakeEditor({
             </button>
           </div>
           {review[index].issues.length > 0 && (
-            <p className="discharge-therapy-review__alert">{review[index].issues.join('; ')}.</p>
+            <ul className="discharge-therapy-review__alert">
+              {review[index].diagnostics.map((issue, i) => (
+                <li key={i}>
+                  <button
+                    type="button"
+                    className="therapy-correction-link"
+                    onClick={() => {
+                      setEditingIndex(index);
+                      setLocalCorrection(issue);
+                    }}
+                  >
+                    {issue.message}
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
           {editingIndex === index ? (
             <div className="ec-modal-add-form">
@@ -86,6 +119,7 @@ export function TherapyIntakeEditor({
                   onChange(items.map((existing, i) => (i === index ? next : existing)))
                 }
                 operatoreNome={operatoreNome}
+                issues={review[index].diagnostics}
               />
               <div className="ec-modal-add-form__actions">
                 <button

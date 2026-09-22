@@ -1,0 +1,562 @@
+{
+  "patients": [
+    {
+      "id": "vitals-qa-anna",
+      "medicalRecordNumber": "SYNTHETIC-vitals-qa-anna",
+      "firstName": "Anna",
+      "lastName": "Alfa",
+      "dateOfBirth": "1950-01-01T00:00:00Z",
+      "sex": "F",
+      "codiceFiscale": null,
+      "email": null,
+      "phone": "0000000000",
+      "address": null,
+      "emergencyContactName": null,
+      "emergencyContactPhone": null,
+      "registeredById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T00:51:44.393Z",
+      "updatedAt": "2026-09-19T08:00:00Z",
+      "therapies": []
+    },
+    {
+      "id": "vitals-qa-bruno",
+      "medicalRecordNumber": "SYNTHETIC-vitals-qa-bruno",
+      "firstName": "Bruno",
+      "lastName": "Beta",
+      "dateOfBirth": "1950-01-01T00:00:00Z",
+      "sex": "M",
+      "codiceFiscale": null,
+      "email": null,
+      "phone": "0000000000",
+      "address": null,
+      "emergencyContactName": null,
+      "emergencyContactPhone": null,
+      "registeredById": "VITALS-QA-OP",
+      "createdAt": "2026-09-23T00:51:44.396Z",
+      "updatedAt": "2026-09-19T08:00:00Z",
+      "therapies": []
+    },
+    {
+      "id": "vitals-qa-other",
+      "medicalRecordNumber": "SYNTHETIC-vitals-qa-other",
+      "firstName": "Esterno",
+      "lastName": "Gamma",
+      "dateOfBirth": "1950-01-01T00:00:00Z",
+      "sex": "F",
+      "codiceFiscale": null,
+      "email": null,
+      "phone": "0000000000",
+      "address": null,
+      "emergencyContactName": null,
+      "emergencyContactPhone": null,
+      "registeredById": "VITALS-QA-OTHER",
+      "createdAt": "2026-09-23T00:51:44.398Z",
+      "updatedAt": "2026-09-19T08:00:00Z",
+      "therapies": []
+    },
+    {
+      "id": "cmud9tmhu0003iolpnww4vmti",
+      "medicalRecordNumber": "MRN-a07fb314-f15d-404c-b2d8-b520398c81ae",
+      "firstName": "Importazione",
+      "lastName": "Sintetica",
+      "dateOfBirth": null,
+      "sex": null,
+      "codiceFiscale": null,
+      "email": null,
+      "phone": null,
+      "address": null,
+      "emergencyContactName": null,
+      "emergencyContactPhone": null,
+      "registeredById": "VITALS-QA-OP",
+      "createdAt": "2026-09-22T22:53:59.203Z",
+      "updatedAt": "2026-09-22T22:53:59.203Z",
+      "therapies": [
+        {
+          "id": "cmud9tmik0005iolp8ynquo5q",
+          "patientId": "cmud9tmhu0003iolpnww4vmti",
+          "farmacoNome": "Lasix sintetico",
+          "dosaggio": "25 mg compressa",
+          "viaSomministrazione": "orale",
+          "tipo": "periodica",
+          "stato": "attiva",
+          "dataInizio": "2026-09-23",
+          "dataFine": null,
+          "fasceMattina": false,
+          "fascePranzo": false,
+          "fascePomeriggio": false,
+          "fasceSera": true,
+          "fasceNotte": false,
+          "orarioSpecifico": "20:00",
+          "prescrittore": null,
+          "operatoreInseritore": "VITALS-QA-OP",
+          "note": "Origine: Riga sintetica: 25 mg, 1 compressa ore 16:00",
+          "dataSomministrazione": null,
+          "orarioSomministrazione": null,
+          "commercialStrengthValue": 25,
+          "commercialStrengthUnit": "mg",
+          "pharmaceuticalForm": "compressa",
+          "allowedFractions": "1",
+          "drugPackageRef": null,
+          "giorniSettimana": null,
+          "createdAt": "2026-09-22T22:53:59.228Z",
+          "updatedAt": "2026-09-22T22:53:59.228Z",
+          "schedules": [
+            {
+              "id": "cmud9tmiv0006iolpkf1s1796",
+              "therapyId": "cmud9tmik0005iolp8ynquo5q",
+              "time": "20:00",
+              "fascia": "sera",
+              "quantityNumerator": 1,
+              "quantityDenominator": 1,
+              "administrationUnit": "compressa",
+              "createdAt": "2026-09-22T22:53:59.228Z",
+              "updatedAt": "2026-09-22T22:53:59.228Z"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "drafts": [
+    {
+      "id": "cmud9qrhe0002iolpkp1qotiy",
+      "status": "confirmed",
+      "source": "import",
+      "data": {
+        "_accepted": {
+          "therapy": true,
+          "demographics": true
+        },
+        "_narrative": {
+          "boldTags": [],
+          "therapyText": "Fonte OCR sintetica conservata",
+          "sourceReferences": []
+        },
+        "anagrafica": {
+          "lastName": "Sintetica",
+          "firstName": "Importazione"
+        },
+        "_terapiaText": "Fonte OCR sintetica conservata",
+        "_confirmation": {
+          "actorId": "VITALS-QA-OP",
+          "version": 1,
+          "therapyIds": [
+            "cmud9tmik0005iolp8ynquo5q"
+          ],
+          "confirmedAt": "2026-09-22T22:53:59.285Z",
+          "selectedSources": [
+            "import:0"
+          ],
+          "deferredImportIndexes": [
+            1
+          ]
+        },
+        "terapiaImport": [
+          {
+            "note": "",
+            "forma": "compressa",
+            "orari": [
+              "20:00"
+            ],
+            "stato": "ok",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "1 compressa",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Lasix sintetico",
+            "originalText": "Riga sintetica: 25 mg, 1 compressa ore 16:00",
+            "reviewedTherapy": {
+              "note": "",
+              "tipo": "periodica",
+              "stato": "attiva",
+              "dataFine": "",
+              "schedules": [
+                {
+                  "time": "20:00",
+                  "quantityNumerator": 1,
+                  "administrationUnit": "compressa",
+                  "quantityDenominator": 1
+                }
+              ],
+              "dataInizio": "2026-09-23",
+              "farmacoNome": "Lasix sintetico",
+              "prescrittore": "",
+              "giorniSettimana": [],
+              "allowedFractions": [
+                "1"
+              ],
+              "pharmaceuticalForm": "compressa",
+              "viaSomministrazione": "orale",
+              "dataSomministrazione": "",
+              "commercialStrengthUnit": "mg",
+              "orarioSomministrazione": "",
+              "commercialStrengthValue": "25"
+            },
+            "viaSomministrazione": "orale"
+          },
+          {
+            "note": "",
+            "forma": "cpr",
+            "orari": [],
+            "stato": "da_verificare",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Da verificare",
+            "originalText": "Fonte sintetica ambigua",
+            "excludedFromConfirm": true,
+            "viaSomministrazione": "OS"
+          }
+        ]
+      },
+      "importJobId": "cmud9qrgd0000iolpyckmj2zh",
+      "createdById": "VITALS-QA-OP",
+      "confirmedPatientId": "cmud9tmhu0003iolpnww4vmti",
+      "createdAt": "2026-09-22T22:51:45.698Z",
+      "updatedAt": "2026-09-22T22:53:59.286Z",
+      "confirmedAt": "2026-09-22T22:53:59.285Z"
+    }
+  ],
+  "requests": [
+    {
+      "method": "PATCH",
+      "path": "/cmud9qrhe0002iolpkp1qotiy",
+      "body": {
+        "anagrafica": {
+          "lastName": "Sintetica",
+          "firstName": "Importazione"
+        },
+        "terapiaImport": [
+          {
+            "note": "",
+            "forma": "compressa",
+            "orari": [
+              "16:00"
+            ],
+            "stato": "da_verificare",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "1 compressa",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Lasix sintetico",
+            "originalText": "Riga sintetica: 25 mg, 1 compressa ore 16:00",
+            "viaSomministrazione": "orale",
+            "reviewedTherapy": {
+              "farmacoNome": "Lasix sintetico",
+              "pharmaceuticalForm": "compressa",
+              "commercialStrengthValue": "25",
+              "commercialStrengthUnit": "mg",
+              "allowedFractions": [
+                "1"
+              ],
+              "viaSomministrazione": "orale",
+              "tipo": "periodica",
+              "stato": "attiva",
+              "dataInizio": "2026-09-23",
+              "dataFine": "",
+              "schedules": [
+                {
+                  "time": "16:00",
+                  "quantityNumerator": 1,
+                  "quantityDenominator": 1,
+                  "administrationUnit": "compressa"
+                }
+              ],
+              "giorniSettimana": [],
+              "prescrittore": "",
+              "note": "",
+              "dataSomministrazione": "",
+              "orarioSomministrazione": ""
+            }
+          },
+          {
+            "note": "",
+            "forma": "cpr",
+            "orari": [],
+            "stato": "da_verificare",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Da verificare",
+            "originalText": "Fonte sintetica ambigua",
+            "viaSomministrazione": "OS"
+          }
+        ]
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/cmud9qrhe0002iolpkp1qotiy",
+      "body": {
+        "anagrafica": {
+          "lastName": "Sintetica",
+          "firstName": "Importazione"
+        },
+        "terapiaImport": [
+          {
+            "note": "",
+            "forma": "compressa",
+            "orari": [
+              "20:00"
+            ],
+            "stato": "da_verificare",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "1 compressa",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Lasix sintetico",
+            "originalText": "Riga sintetica: 25 mg, 1 compressa ore 16:00",
+            "viaSomministrazione": "orale",
+            "reviewedTherapy": {
+              "farmacoNome": "Lasix sintetico",
+              "pharmaceuticalForm": "compressa",
+              "commercialStrengthValue": "25",
+              "commercialStrengthUnit": "mg",
+              "allowedFractions": [
+                "1"
+              ],
+              "viaSomministrazione": "orale",
+              "tipo": "periodica",
+              "stato": "attiva",
+              "dataInizio": "2026-09-23",
+              "dataFine": "",
+              "schedules": [
+                {
+                  "time": "20:00",
+                  "quantityNumerator": 1,
+                  "quantityDenominator": 1,
+                  "administrationUnit": "compressa"
+                }
+              ],
+              "giorniSettimana": [],
+              "prescrittore": "",
+              "note": "",
+              "dataSomministrazione": "",
+              "orarioSomministrazione": ""
+            }
+          },
+          {
+            "note": "",
+            "forma": "cpr",
+            "orari": [],
+            "stato": "da_verificare",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Da verificare",
+            "originalText": "Fonte sintetica ambigua",
+            "viaSomministrazione": "OS"
+          }
+        ]
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/cmud9qrhe0002iolpkp1qotiy",
+      "body": {
+        "anagrafica": {
+          "lastName": "Sintetica",
+          "firstName": "Importazione"
+        },
+        "terapiaImport": [
+          {
+            "note": "",
+            "forma": "compressa",
+            "orari": [
+              "20:00"
+            ],
+            "stato": "ok",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "1 compressa",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Lasix sintetico",
+            "originalText": "Riga sintetica: 25 mg, 1 compressa ore 16:00",
+            "viaSomministrazione": "orale",
+            "reviewedTherapy": {
+              "farmacoNome": "Lasix sintetico",
+              "pharmaceuticalForm": "compressa",
+              "commercialStrengthValue": "25",
+              "commercialStrengthUnit": "mg",
+              "allowedFractions": [
+                "1"
+              ],
+              "viaSomministrazione": "orale",
+              "tipo": "periodica",
+              "stato": "attiva",
+              "dataInizio": "2026-09-23",
+              "dataFine": "",
+              "schedules": [
+                {
+                  "time": "20:00",
+                  "quantityNumerator": 1,
+                  "quantityDenominator": 1,
+                  "administrationUnit": "compressa"
+                }
+              ],
+              "giorniSettimana": [],
+              "prescrittore": "",
+              "note": "",
+              "dataSomministrazione": "",
+              "orarioSomministrazione": ""
+            }
+          },
+          {
+            "note": "",
+            "forma": "cpr",
+            "orari": [],
+            "stato": "da_verificare",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Da verificare",
+            "originalText": "Fonte sintetica ambigua",
+            "viaSomministrazione": "OS",
+            "excludedFromConfirm": true
+          }
+        ],
+        "_accepted": {
+          "therapy": true
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/cmud9qrhe0002iolpkp1qotiy",
+      "body": {
+        "_accepted": {
+          "therapy": true,
+          "demographics": true
+        },
+        "anagrafica": {
+          "lastName": "Sintetica",
+          "firstName": "Importazione"
+        },
+        "terapiaImport": [
+          {
+            "note": "",
+            "forma": "compressa",
+            "orari": [
+              "20:00"
+            ],
+            "stato": "ok",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "1 compressa",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Lasix sintetico",
+            "originalText": "Riga sintetica: 25 mg, 1 compressa ore 16:00",
+            "reviewedTherapy": {
+              "note": "",
+              "tipo": "periodica",
+              "stato": "attiva",
+              "dataFine": "",
+              "schedules": [
+                {
+                  "time": "20:00",
+                  "quantityNumerator": 1,
+                  "administrationUnit": "compressa",
+                  "quantityDenominator": 1
+                }
+              ],
+              "dataInizio": "2026-09-23",
+              "farmacoNome": "Lasix sintetico",
+              "prescrittore": "",
+              "giorniSettimana": [],
+              "allowedFractions": [
+                "1"
+              ],
+              "pharmaceuticalForm": "compressa",
+              "viaSomministrazione": "orale",
+              "dataSomministrazione": "",
+              "commercialStrengthUnit": "mg",
+              "orarioSomministrazione": "",
+              "commercialStrengthValue": "25"
+            },
+            "viaSomministrazione": "orale"
+          },
+          {
+            "note": "",
+            "forma": "cpr",
+            "orari": [],
+            "stato": "da_verificare",
+            "classe": "",
+            "giorni": [],
+            "dosaggio": "25 mg",
+            "quantita": "",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "Da verificare",
+            "originalText": "Fonte sintetica ambigua",
+            "excludedFromConfirm": true,
+            "viaSomministrazione": "OS"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cmud9qrhe0002iolpkp1qotiy/confirm",
+      "body": {
+        "patient": {
+          "firstName": "Importazione",
+          "lastName": "Sintetica",
+          "dateOfBirth": null,
+          "codiceFiscale": null,
+          "phone": null
+        },
+        "cartella": {
+          "statoRicovero": "ricoverato",
+          "terapiaImportText": "Fonte OCR sintetica conservata"
+        },
+        "confirmDuplicate": false,
+        "therapies": [
+          {
+            "farmacoNome": "Lasix sintetico",
+            "dataInizio": "2026-09-23",
+            "viaSomministrazione": "orale",
+            "tipo": "periodica",
+            "stato": "attiva",
+            "commercialStrengthValue": 25,
+            "commercialStrengthUnit": "mg",
+            "pharmaceuticalForm": "compressa",
+            "allowedFractions": "1",
+            "schedules": [
+              {
+                "time": "20:00",
+                "quantityNumerator": 1,
+                "administrationUnit": "compressa",
+                "quantityDenominator": 1
+              }
+            ],
+            "giorniSettimana": "",
+            "operatoreInseritore": "Operatrice QA",
+            "note": "Origine: Riga sintetica: 25 mg, 1 compressa ore 16:00",
+            "intakeSource": {
+              "type": "import",
+              "index": 0
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "documents": [
+    {
+      "id": "import-cmud9qrh60001iolpiw4hp7lv",
+      "patientId": "cmud9tmhu0003iolpnww4vmti"
+    }
+  ]
+}

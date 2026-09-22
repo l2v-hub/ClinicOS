@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-09-22T22:58:53.637Z",
+  "findings": [
+    {
+      "scenario": "Sintetica",
+      "patientCount": 1,
+      "therapyCount": 1,
+      "draftPayloadDatabaseAndFeedTimes": [
+        "20:00"
+      ],
+      "oldTimeRemoved": true,
+      "originalSourcePreserved": true
+    },
+    {
+      "scenario": "Orario sintetico",
+      "patientCount": 1,
+      "therapyCount": 1,
+      "draftPayloadDatabaseAndFeedTimes": [
+        "08:00",
+        "20:00"
+      ],
+      "oldTimeRemoved": true,
+      "originalSourcePreserved": true
+    }
+  ]
+}

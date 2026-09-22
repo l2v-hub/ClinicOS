@@ -89,6 +89,33 @@
 .therapy-form textarea {
   resize: vertical;
 }
+.therapy-form__error {
+  color: var(--red);
+  font-size: 13px;
+  margin: 5px 0 0;
+}
+
+.therapy-correction-link {
+  background: none;
+  border: 0;
+  color: var(--blue);
+  cursor: pointer;
+  font: inherit;
+  padding: 4px 0;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.therapy-correction-link:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.therapy-form [aria-invalid='true'] {
+  border-color: var(--red);
+}
+
 .therapy-form__optional {
   font-weight: 400;
   color: var(--text-muted, #64748b);

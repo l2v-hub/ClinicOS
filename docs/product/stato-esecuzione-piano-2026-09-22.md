@@ -24,4 +24,3 @@ Baseline: af48e322d3ba99561949f4a7901290e3cace09db. Repository ClinicOS, branch 
 | PO-16 Giro completo | Da eseguire | Collaudo tecnico sintetico; distinguere prove effettuabili da osservazione clinica e dispositivi reali |
 
 Una sola attività applicativa attiva; analisi indipendenti possono procedere in parallelo. Ogni worker scrivente usa un worktree isolato. Root integra, valida e pubblica; nessun test scrive su pazienti del sito. Le ricevute di rilascio identificano commit, sorgenti e deploy. Le convalide cliniche richieste dal piano non vengono inventate né attribuite all'utente.
-

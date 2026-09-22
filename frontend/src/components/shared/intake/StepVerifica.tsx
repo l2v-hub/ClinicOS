@@ -7,6 +7,7 @@ import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
 import type { DemographicField } from '../../../lib/patientDemographics';
 import { DemographicsStatus } from '../DemographicsStatus';
 import { buildIntakeTherapyReview } from './intakeTherapies';
+import type { TherapyCorrectionTarget } from './intakeTherapyNavigation';
 
 interface AnagraficaData {
   firstName?: string;
@@ -23,7 +24,7 @@ interface StepVerificaProps {
   onConfirm: () => void;
   /** #235: toggle acceptance flags in draft.data._accepted (autosaved by the parent). */
   onUpdateSection: (key: string, value: unknown) => void;
-  onReviewTherapies?: () => void;
+  onReviewTherapies?: (target?: TherapyCorrectionTarget) => void;
   onReviewDemographics?: (field: DemographicField) => void;
 }
 
@@ -72,7 +73,7 @@ export function StepVerifica({
 
   const missingDemo = Object.values(intakeDemographicErrors(a));
 
-  const checklist: Array<{ label: string; ok: boolean }> = [
+  const checklist: Array<{ label: string; ok: boolean; target?: TherapyCorrectionTarget }> = [
     {
       label: missingDemo.length
         ? `Dati anagrafici da correggere: ${missingDemo.join(', ')}`
@@ -81,10 +82,13 @@ export function StepVerifica({
     },
     { label: 'Accetta anagrafica', ok: demoAccepted },
     { label: 'Accetta terapia', ok: therapyAccepted },
-    ...invalidTherapies.map((t) => ({
-      label: `Terapia ${t.index}: ${t.issues.join('; ')}`,
-      ok: false,
-    })),
+    ...invalidTherapies.flatMap((t) =>
+      t.diagnostics.map((issue) => ({
+        label: `Terapia ${t.index}: ${issue.message}`,
+        ok: false,
+        target: issue,
+      })),
+    ),
   ];
   const canCreate = checklist.every((c) => c.ok);
 
@@ -215,7 +219,7 @@ export function StepVerifica({
             type="button"
             className="btn-secondary"
             disabled={busy}
-            onClick={onReviewTherapies}
+            onClick={() => onReviewTherapies()}
           >
             {invalidTherapies.length ? 'Correggi terapie' : 'Rivedi terapie'}
           </button>
@@ -268,9 +272,21 @@ export function StepVerifica({
             Da completare prima di creare il paziente
           </h4>
           <ul className="step-verifica__checklist">
-            {checklist.map((c) => (
-              <li key={c.label} className={c.ok ? 'is-ok' : 'is-todo'}>
-                {c.ok ? <IcoCheck /> : <span aria-hidden="true">○</span>} {c.label}
+            {checklist.map((c, i) => (
+              <li key={i} className={c.ok ? 'is-ok' : 'is-todo'}>
+                {c.ok ? <IcoCheck /> : <span aria-hidden="true">○</span>}{' '}
+                {c.target && onReviewTherapies ? (
+                  <button
+                    type="button"
+                    className="therapy-correction-link"
+                    disabled={busy}
+                    onClick={() => onReviewTherapies(c.target)}
+                  >
+                    {c.label}
+                  </button>
+                ) : (
+                  c.label
+                )}
               </li>
             ))}
           </ul>
