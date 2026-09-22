@@ -1,0 +1,28 @@
+{
+  "sourceCommit": "ef562bf51f296153ff0ec51ed6ab620da8e2dc1a",
+  "verifiedOn": "2026-09-23",
+  "backend": {
+    "deploymentId": "e5178be5-3a3b-4fc5-9df3-de0b445bb4ee",
+    "status": "SUCCESS",
+    "url": "https://clinicos-backend-demo.up.railway.app",
+    "healthStatus": 200,
+    "environment": "demo"
+  },
+  "frontend": {
+    "deploymentId": "dpl_Cy9wAnjjxvAC4pqMZH3H2izxX3oZ",
+    "status": "READY",
+    "url": "https://clinicos-8mik3pyuw-lucalavia-2482s-projects.vercel.app",
+    "alias": "clinicos-eosin.vercel.app",
+    "aliasSourceCommitVerified": true
+  },
+  "validation": {
+    "targetedTests": 55,
+    "build": "frontend and backend passed",
+    "browser": "synthetic desktop/mobile, selection/save/reload, pagination failure/retry; read-only live smoke renders profile selection",
+    "liveCatalog": "Both spaced and attached queries find ordinary 1000 mg tablets: 012745170, 012745182 and 012745360; no duplicate AIC",
+    "livePatientMutation": false,
+    "evidence": "production-smoke.json; qa-release-decision.md; browser-evidence.json",
+    "testLogCaveat": "First cumulative command could not initialize farmaci.test.ts without DATABASE_URL; separate loopback-only rerun passed. Nonexistent intake-time-correction.test.mts was not tested."
+  },
+  "authorization": "User approved full PO plan, push and deploy; exact source exported from committed state; unrelated worktree changes excluded"
+}

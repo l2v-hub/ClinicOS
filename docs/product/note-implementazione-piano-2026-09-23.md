@@ -22,6 +22,16 @@ PDF composto per gruppo nell'archivio corrente con riferimenti agli originali im
 
 Collaudo sintetico: 30 pagine e tre lettere da 10; marcatori iniziali/centrali/finali e ordine PDF; errore pagina 17, response loss, restart backend/runtime, sorgenti solo DB, riordino durante elaborazione, retake alla pagina 30, due worker concorrenti, seconda conferma senza duplicati e conflitti clinici preservati. I test con fotocamera sintetica e PGlite non dimostrano comportamento fisico Safari/iOS/Android o isolamento completo PostgreSQL.
 
+## PO-06/07 — Identità e ordine del reparto
+
+Lettura preparatoria: PatientRoster e usePatientListPage leggono `/patients/page` e POST `/patients/page/search` (50/100 righe), poi ordinano localmente; camera assente dal DTO. Parametri usa `/patients/parameters/page?view=entry` (massimo25) con filtro camera server ma ordine alfabetico client; camera/letto dal JSON cartella. Terapia pagina100terapie per ID tramite `/therapy-slots/page`, poi riordina pazienti client; totali già separati. Consegne è un feed cronologico20righe con riepilogo esatto, non un roster: l'ordine del giro va aggiunto al roster PO08 preservando il feed.
+
+PatientIdentity presentazionale condiviso: ID, nome/cognome, identificatore aggiuntivo quando disponibile, posto letto con stati assigned/unassigned/loading/unavailable. Non trasformare errore di caricamento in "non assegnato". Assegnazione attiva Room/Bed/PatientRoomAssignment autorevole; copie cartella soltanto fallback esplicito. Proiezione server in blocco, niente cartella completa o N+1 per paziente. Nome distinguibile dai farmaci e intestazione contestuale durante lo scroll.
+
+PO07 richiede ordine server sull'intero insieme autorizzato prima di limit+1: chiave naturale camera/letto, cognome/nome/ID come spareggio, non assegnati ultimi in entrambe le direzioni. Cursore include criterio/direzione/filtri/reparto e versione; cambio camera invalida pagine. Riutilizzare alphabetical-order.ts e i lettori esistenti mantenendo ricerca POST, scope, abort/epoch, conteggi esatti e bozze Parametri per paziente.
+
+Non esiste preferenza persistente di ordinamento. Reparti attuali sono stringhe Operator.department e Room.reparto; manca l'appartenenza stabile dei pazienti senza assegnazione. Non inferirla dal solo operatore. Definire il minimo contesto reparto/autorizzazione prima dei default e override personali, senza introdurre nuovi accessi. Prove oltre50pazienti, omonimi/accenti, 1A/1B/2A/2B/10A, non assegnati, più reparti, cambio letto e preferenze indipendenti. Preservare i miglioramenti prestazionali già online.
+
 ## PO-10 — Infrastruttura moduli e PAINAD
 
 Le scale legacy sono array del JSON Cartella, sostituito dal PUT completo: inadatto a finali immutabili e concorrenza fra operatori. Record dedicato PatientAssessment giustificato, senza conversione dei dati storici; modello/versione, risposte, data valutazione e registrazione distinte, autore autenticato, stato bozza/finale, versione di modifica, rettifica collegata e snapshot identità. Bozze aggiornabili dal proprietario; finali rettificati tramite nuovo record.

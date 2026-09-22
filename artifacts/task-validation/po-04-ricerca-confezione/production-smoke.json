@@ -1,0 +1,57 @@
+{
+  "verifiedAt": "2026-09-22T23:47:01.813Z",
+  "health": 200,
+  "readOnly": true,
+  "results": [
+    {
+      "query": "Tachipirina 1000 compresse",
+      "elapsedMs": 491,
+      "packages": [
+        {
+          "aic": "012745170",
+          "descrizione": "1000 MG COMPRESSE - 8 COMPRESSE",
+          "forma": "Compressa"
+        },
+        {
+          "aic": "012745182",
+          "descrizione": "1000 MG COMPRESSE - 16 COMPRESSE",
+          "forma": "Compressa"
+        },
+        {
+          "aic": "012745360",
+          "descrizione": "1000 MG COMPRESSE- 24 COMPRESSE IN BLISTER PVC/AL",
+          "forma": "Compressa"
+        }
+      ],
+      "pageInfo": {
+        "hasMore": false,
+        "nextCursor": null
+      }
+    },
+    {
+      "query": "Tachipirina1000 compresse",
+      "elapsedMs": 274,
+      "packages": [
+        {
+          "aic": "012745170",
+          "descrizione": "1000 MG COMPRESSE - 8 COMPRESSE",
+          "forma": "Compressa"
+        },
+        {
+          "aic": "012745182",
+          "descrizione": "1000 MG COMPRESSE - 16 COMPRESSE",
+          "forma": "Compressa"
+        },
+        {
+          "aic": "012745360",
+          "descrizione": "1000 MG COMPRESSE- 24 COMPRESSE IN BLISTER PVC/AL",
+          "forma": "Compressa"
+        }
+      ],
+      "pageInfo": {
+        "hasMore": false,
+        "nextCursor": null
+      }
+    }
+  ]
+}
