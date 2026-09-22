@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-09-22T21:47:34.0641321Z",
+  "commit": "e0b2027cda1ac6f396b0761319df51e894558775",
+  "deploymentId": "dpl_7q3bcNnKxHeeJQEw6RSR8hpAWryd",
+  "projectId": "prj_6eDFTx8o4IoZhCXr4Sd7LX6dteo6",
+  "readyState": "READY",
+  "verifiedAlias": "clinicos-eosin.vercel.app",
+  "url": "clinicos-jqtgd097z-lucalavia-2482s-projects.vercel.app",
+  "backendChanged": false,
+  "policyDecision": "ALLOW publication of the exact verified correction under the existing user authorization; validation-report.md"
+}

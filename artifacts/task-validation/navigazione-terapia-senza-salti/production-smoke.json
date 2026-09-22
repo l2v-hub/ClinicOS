@@ -1,0 +1,49 @@
+{
+  "checkedAt": "2026-09-22T21:48:42.362Z",
+  "commit": "e0b2027cda1ac6f396b0761319df51e894558775",
+  "site": "https://clinicos-eosin.vercel.app",
+  "context": "User-reported patient, clinical therapy section; no patient content recorded",
+  "script": "/assets/index-C9gG6LVd.js",
+  "checks": [
+    {
+      "section": "programmazione",
+      "alertCount": 0,
+      "calendarPresent": false,
+      "filtersAfterNav": true,
+      "navHeight": 50,
+      "navOffset": 66,
+      "navY": 426
+    },
+    {
+      "section": "calendario",
+      "alertCount": 0,
+      "calendarPresent": true,
+      "filtersAfterNav": true,
+      "navHeight": 50,
+      "navOffset": 66,
+      "navY": 426
+    },
+    {
+      "section": "giornaliere",
+      "alertCount": 0,
+      "calendarPresent": false,
+      "filtersAfterNav": true,
+      "navHeight": 50,
+      "navOffset": 66,
+      "navY": 426
+    },
+    {
+      "section": "programmazione",
+      "alertCount": 0,
+      "calendarPresent": false,
+      "filtersAfterNav": true,
+      "navHeight": 50,
+      "navOffset": 66,
+      "navY": 426
+    }
+  ],
+  "verticalShiftPixels": 0,
+  "consoleErrorCount": 0,
+  "patientWrites": false,
+  "result": "PASS"
+}
