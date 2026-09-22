@@ -5,6 +5,8 @@ import { comparePazienti } from '../../lib/patientSort';
 import { API_URL } from '../../config';
 import { operatorHeaders } from '../../lib/operatorSession';
 import { facilityLocalMinute } from '../../lib/facilityTime';
+import { fetchPatientPage } from '../../lib/patientPage';
+import { applySavedParameterSummary, resetParameterDay } from '../../lib/parameterEntrySummary';
 import {
   fetchPatientParametersPage,
   mergePatientParametersPage,
@@ -13,6 +15,7 @@ import {
 import {
   saveParameterReading,
   type ParameterReadingRequest,
+  type SavedParameterReading,
 } from '../../lib/patientParameterReadings';
 import { ParameterEntryRow } from './ParameterEntryRow';
 import { ParameterEntryClock } from './ParameterEntryClock';
@@ -28,12 +31,18 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
   const [items, setItems] = useState<PatientParametersPageItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [summaryLoading, setSummaryLoading] = useState(true);
   const [error, setError] = useState('');
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [revision, setRevision] = useState(0);
   const generation = useRef(0);
   const moreController = useRef<AbortController | null>(null);
   const currentDay = useRef(day);
+  const previousQuery = useRef(query);
+  const loadedDay = useRef(day);
+  const loadedQuery = useRef<string | null>(null);
+  const failedMore = useRef(false);
+  const savedSummaries = useRef(new Map<string, SavedParameterReading['summary']>());
   currentDay.current = day;
   const filters = useMemo(
     () => ({
@@ -42,9 +51,16 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
       date: day,
       month: Number(day.slice(5, 7)),
       year: Number(day.slice(0, 4)),
+      view: 'entry' as const,
     }),
     [query, day],
   );
+
+  function protectSavedSummary(item: PatientParametersPageItem): PatientParametersPageItem {
+    item = { ...item, summaryDate: day };
+    const saved = savedSummaries.current.get(item.patient.id);
+    return saved?.date === day ? applySavedParameterSummary(item, saved) : item;
+  }
 
   useEffect(() => {
     const version = ++generation.current;
@@ -52,25 +68,98 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
     moreController.current?.abort();
     setLoading(true);
     setLoadingMore(false);
+    setSummaryLoading(true);
+    setNextCursor(null);
     setError('');
-    const timer = window.setTimeout(() => {
-      void fetchPatientParametersPage(API_URL, filters, {
-        headers: operatorHeaders(),
-        signal: controller.signal,
-      })
-        .then((page) => {
-          if (version === generation.current) {
-            setItems(page.items);
-            setNextCursor(page.nextCursor);
-          }
-        })
+    failedMore.current = false;
+    if (loadedDay.current !== day) {
+      loadedDay.current = day;
+      setItems((current) => current.map((item) => resetParameterDay(item, day)));
+    }
+    let detailedReady = false;
+    const hadRows = items.length > 0;
+    const load = () => {
+      // Identities and daily metadata are independent. The detailed page remains
+      // authoritative for membership/cursor, including room searches.
+      if (!filters.q) {
+        void fetchPatientPage(
+          API_URL,
+          { limit: 25 },
+          {
+            headers: operatorHeaders(),
+            signal: controller.signal,
+          },
+        )
+          .then((page) => {
+            if (
+              controller.signal.aborted ||
+              version !== generation.current ||
+              detailedReady ||
+              hadRows
+            )
+              return;
+            setItems(
+              page.items.map((patient) => ({
+                patient,
+                cartella: { pazienteId: patient.id, parametriMensili: [] },
+                summaryPending: true,
+              })),
+            );
+            setLoading(false);
+          })
+          .catch(() => {
+            /* The parameter page handles failure and can still supply identities. */
+          });
+      }
+      void (async () => {
+        const sameFilter = loadedQuery.current === (filters.q ?? '');
+        const targetCount = sameFilter ? Math.max(25, items.length) : 25;
+        let refreshed: PatientParametersPageItem[] = [];
+        let cursor: string | undefined;
+        do {
+          const page = await fetchPatientParametersPage(
+            API_URL,
+            { ...filters, cursor },
+            {
+              headers: operatorHeaders(),
+              signal: controller.signal,
+            },
+          );
+          if (controller.signal.aborted || version !== generation.current) return;
+          detailedReady = true;
+          refreshed = mergePatientParametersPage(
+            refreshed,
+            page.items.map(protectSavedSummary),
+            true,
+          );
+          const needsMore = Boolean(page.nextCursor && refreshed.length < targetCount);
+          const snapshot = refreshed;
+          // Do not unmount rows on subsequent pages while refreshing their metadata.
+          setItems((current) =>
+            sameFilter && needsMore
+              ? mergePatientParametersPage(current, snapshot, true)
+              : snapshot.map(protectSavedSummary),
+          );
+          setLoading(false);
+          setNextCursor(page.nextCursor);
+          cursor = needsMore ? page.nextCursor! : undefined;
+        } while (cursor);
+        loadedQuery.current = filters.q ?? '';
+      })()
         .catch((cause) => {
           if (!controller.signal.aborted && version === generation.current) setError(cause.message);
         })
         .finally(() => {
-          if (version === generation.current && !controller.signal.aborted) setLoading(false);
+          if (version === generation.current && !controller.signal.aborted) {
+            setLoading(false);
+            setSummaryLoading(false);
+          }
         });
-    }, 250);
+    };
+    const typing = previousQuery.current !== query;
+    previousQuery.current = query;
+    const timer = typing ? window.setTimeout(load, 250) : undefined;
+    if (!typing) load();
     return () => {
       window.clearTimeout(timer);
       controller.abort();
@@ -93,11 +182,16 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
         { headers: operatorHeaders(), signal: controller.signal },
       );
       if (version !== generation.current) return;
-      setItems((current) => mergePatientParametersPage(current, page.items, true));
+      setItems((current) =>
+        mergePatientParametersPage(current, page.items.map(protectSavedSummary), true),
+      );
       setNextCursor(page.nextCursor);
+      failedMore.current = false;
     } catch {
-      if (!controller.signal.aborted && version === generation.current)
+      if (!controller.signal.aborted && version === generation.current) {
+        failedMore.current = true;
         setError('Impossibile caricare altri pazienti. Riprova.');
+      }
     } finally {
       if (moreController.current === controller) moreController.current = null;
       if (version === generation.current) setLoadingMore(false);
@@ -108,18 +202,14 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
       headers: operatorHeaders(),
     });
     if (summary.date === currentDay.current) {
+      const known = savedSummaries.current.get(patientId);
+      if (!known || known.date !== summary.date || known.count <= summary.count)
+        savedSummaries.current.set(patientId, summary);
       setItems((current) =>
         current.map((item) =>
           item.patient.id !== patientId
             ? item
-            : {
-                ...item,
-                cartella: {
-                  ...item.cartella,
-                  readingCount: summary.count,
-                  lastReadingAt: summary.lastReadingAt,
-                },
-              },
+            : applySavedParameterSummary(item, savedSummaries.current.get(patientId) ?? summary),
         ),
       );
     }
@@ -159,7 +249,11 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           )}
         </div>
         <span className="parameter-entry-progress" role="status">
-          {recorded}/{items.length} pazienti caricati con rilevazioni oggi
+          {summaryLoading
+            ? 'Aggiornamento rilevazioni e note di oggi…'
+            : error
+              ? 'Riepilogo giornaliero non disponibile'
+              : `${recorded}/${items.length} pazienti caricati con rilevazioni oggi`}
         </span>
       </div>
       {loading && <p role="status">Caricamento pazienti…</p>}
@@ -169,7 +263,9 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
           <button
             type="button"
             className="btn-secondary btn-sm"
-            onClick={() => setRevision((value) => value + 1)}
+            onClick={() =>
+              failedMore.current ? void loadMore() : setRevision((value) => value + 1)
+            }
           >
             Riprova caricamento
           </button>
@@ -199,6 +295,9 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
                 room={item.cartella.cameraNumero}
                 bed={item.cartella.lettoNumero}
                 readingCount={item.cartella.readingCount}
+                noteCount={item.cartella.noteCount}
+                summaryPending={item.summaryPending && summaryLoading}
+                summaryUnavailable={item.summaryPending && !summaryLoading}
                 lastReadingAt={item.cartella.lastReadingAt}
                 onOpenHistory={() => onSelectPaziente(item.patient.id)}
                 onSave={(request) => save(item.patient.id, request)}
@@ -210,7 +309,7 @@ export function MultiPatientParametri({ operatoreNome, onSelectPaziente }: Props
               <button
                 type="button"
                 className="btn-secondary"
-                disabled={loading || loadingMore}
+                disabled={loading || loadingMore || summaryLoading}
                 onClick={() => void loadMore()}
               >
                 {loadingMore ? 'Caricamento…' : 'Carica altri 25 pazienti'}

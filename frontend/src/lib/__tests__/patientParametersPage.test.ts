@@ -56,6 +56,23 @@ test('parameters page validates its bounded response and merges by patient id', 
   );
 });
 
+test('entry projection is opt-in and preserves bounded day and room-search filters', () => {
+  const url = new URL(
+    buildPatientParametersPageUrl('https://synthetic.invalid', {
+      q: '101',
+      limit: 100,
+      date: '2026-09-22',
+      month: 9,
+      year: 2026,
+      view: 'entry',
+    }),
+  );
+  assert.equal(url.searchParams.get('view'), 'entry');
+  assert.equal(url.searchParams.get('limit'), '25');
+  assert.equal(url.searchParams.get('date'), '2026-09-22');
+  assert.equal(url.searchParams.get('q'), '101');
+});
+
 test('parameter save uses an encoded id and the bounded PATCH contract', async () => {
   let input = '';
   let init: RequestInit | undefined;

@@ -26,7 +26,7 @@ export interface PatientParameterReading extends ParameterReadingRequest {
 }
 export interface SavedParameterReading {
   reading: PatientParameterReading;
-  summary: { date: string; count: number; lastReadingAt: string | null };
+  summary: { date: string; count: number; noteCount?: number; lastReadingAt: string | null };
 }
 export interface ParameterReadingsPage {
   readings: PatientParameterReading[];
@@ -114,6 +114,10 @@ export async function saveParameterReading(
       !/^20\d{2}-\d{2}-\d{2}$/.test(data.summary.date) ||
       !Number.isInteger(data.summary.count) ||
       data.summary.count < 1 ||
+      (data.summary.noteCount !== undefined &&
+        (!Number.isInteger(data.summary.noteCount) ||
+          data.summary.noteCount < 0 ||
+          data.summary.noteCount > data.summary.count)) ||
       typeof data.summary.lastReadingAt !== 'string' ||
       !Number.isFinite(Date.parse(data.summary.lastReadingAt))
     )

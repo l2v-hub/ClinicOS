@@ -1,0 +1,121 @@
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 413 modules transformed.
+
+(!) outDir C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\artifacts\task-validation\parametri-caricamento-rapido-e-conteggio-note\qa-production is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/index.html                                         0.99 kB │ gzip:   0.55 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/.vite/manifest.json                               28.34 kB │ gzip:   3.41 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/pdf.worker.min-CHFwMXne.mjs             1,262.39 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/OperatorDashboard-CeuW1W3M.css              0.10 kB │ gzip:   0.09 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PdfCanvasPreview-BY-O_bqx.css               0.68 kB │ gzip:   0.37 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/SemanticTaggedText-Cy2K2aEq.css             0.80 kB │ gzip:   0.37 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ClinicalSectionLoading-lbobsqsz.css         1.24 kB │ gzip:   0.54 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/CameraCapture-BZrPNFqj.css                  1.85 kB │ gzip:   0.74 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DischargeImportModal-BrR3bAe2.css           2.16 kB │ gzip:   0.72 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/NotesPage-BONDdHCo.css                      2.83 kB │ gzip:   0.85 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ConsegnePage-Df-KQF84.css                   2.86 kB │ gzip:   0.84 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientCombobox-BeE5Ngv-.css                3.03 kB │ gzip:   0.96 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/farmacoRiferimento-BgKYx-sb.css             3.24 kB │ gzip:   0.99 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/TopNav-DK0-aQXY.css                         3.54 kB │ gzip:   1.12 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/TerapiaFarmacologicaTab-ecOsaZey.css        3.64 kB │ gzip:   1.08 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ClinicalTable-Cjulftmw.css                  3.71 kB │ gzip:   0.99 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/AgnosPanel-Cr90M8t_.css                     3.91 kB │ gzip:   1.33 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/OperatorManagement-DTt4_Y4X.css             4.38 kB │ gzip:   1.20 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientParameters-DVu5hkB2.css              4.84 kB │ gzip:   1.24 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/VisoreDocumentoFarmaco-DDTR8eg1.css         6.04 kB │ gzip:   1.53 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientList-BNQx_C_e.css                    7.37 kB │ gzip:   1.79 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DocumentiTab-DJY500eY.css                   8.61 kB │ gzip:   1.87 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/TherapyEditor-DeBS0ciK.css                  8.65 kB │ gzip:   2.10 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DashboardTherapyDeadlines-zEY-7UA7.css     14.64 kB │ gzip:   2.68 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientDetail-YRxnZBwS.css                 21.04 kB │ gzip:   3.91 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/index-WhmJM_cr.css                        258.46 kB │ gzip:  43.93 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/patientSort-B9MB1BKg.js                     0.34 kB │ gzip:   0.22 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/LoadErrorState-DdCro73t.js                  0.57 kB │ gzip:   0.39 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/facilityTime-CkSdL2FZ.js                    0.62 kB │ gzip:   0.39 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/AnagraficaFarmaciPage-ITAXTaRX.js           0.98 kB │ gzip:   0.55 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ConsegnaTimestamp-CmGkiIFf.js               1.05 kB │ gzip:   0.65 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PageHeader-D3rq9QMb.js                      1.61 kB │ gzip:   0.72 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/clinicalHistory-Dc8Sh74T.js                 1.85 kB │ gzip:   0.87 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PainAssessmentEditor-De6yUuyI.js            1.90 kB │ gzip:   0.98 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/farmacoDocumento-DzyiFi7j.js                1.94 kB │ gzip:   0.96 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/VitalSignsEditor-CAtz5dib.js                2.00 kB │ gzip:   0.99 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/therapyDose-BJM_nIEY.js                     2.06 kB │ gzip:   1.03 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ConfirmDialog-3E4_lOqF.js                   2.20 kB │ gzip:   1.10 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/useAnomalieReparto-CslOhGZ6.js              2.23 kB │ gzip:   1.19 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/AccessibleDialogSurface-gLxbzwaq.js         2.31 kB │ gzip:   1.24 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/usePatientDocuments-Cz5DXofN.js             2.73 kB │ gzip:   1.19 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/renderArchivePrint-CuytDg0_.js              2.77 kB │ gzip:   1.28 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ClinicalCard-DOPpPvgR.js                    2.88 kB │ gzip:   1.53 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/patientTherapyCalendar-7KrnOToL.js          2.95 kB │ gzip:   1.33 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/TopNav-84d0bHM-.js                          3.27 kB │ gzip:   1.67 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PdfCanvasPreview-P9TpaoBu.js                3.71 kB │ gzip:   1.54 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/InlineEditableField-CYQBZgB8.js             4.02 kB │ gzip:   1.40 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/shared-GzDxOkYW.js                          4.10 kB │ gzip:   1.73 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/farmacoRiferimento-rp2AUaqn.js              4.23 kB │ gzip:   1.95 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ClinicalAttachments-CwA3a49z.js             4.30 kB │ gzip:   1.85 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/TherapyRoundsPage-BtYx8w8E.js               4.50 kB │ gzip:   2.16 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/AnamnesisEditor-CZtzm8oI.js                 5.10 kB │ gzip:   2.27 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientParameters-XrdIRx1o.js               5.24 kB │ gzip:   2.53 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/SemanticTaggedText-Bs1hm5pz.js              5.60 kB │ gzip:   2.40 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientCombobox-B0av-4zH.js                 5.91 kB │ gzip:   2.66 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DocumentPreview-p6FYvB9O.js                 6.32 kB │ gzip:   2.42 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/OperatorSchedule-CJ9N_VN4.js                6.87 kB │ gzip:   2.69 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ClinicalTable-BWUFZScY.js                   7.19 kB │ gzip:   2.83 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientArchivePreview-DeS8pKdC.js           8.42 kB │ gzip:   3.62 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/jsx-runtime-C_urxT9I.js                     8.55 kB │ gzip:   3.26 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/AgendaStatoFilter-4VKGwp3k.js               8.81 kB │ gzip:   2.79 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/NarrativeSectionsTab-DMrD5uXs.js            9.02 kB │ gzip:   3.17 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/OperatorDashboard-CYdyd0zT.js              10.61 kB │ gzip:   3.99 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/TherapySlotModal-x7BYMzIi.js               10.71 kB │ gzip:   4.11 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/MultiPatientParametri-dnPSNNf2.js          11.35 kB │ gzip:   4.19 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/NotesPage-Ry27DudD.js                      11.54 kB │ gzip:   4.23 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DiarioPazienteTab-BGMseHWC.js              11.85 kB │ gzip:   4.00 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/CameraCapture-CHkF38nl.js                  13.48 kB │ gzip:   4.96 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/EsamiConsulenzeTab-DV-MiPC3.js             13.67 kB │ gzip:   5.23 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/RoomsManagement-BXJZ5yHY.js                13.93 kB │ gzip:   3.85 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ParametriTab-B4i0YMMk.js                   15.72 kB │ gzip:   5.32 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ScalaNRSTab-BSq8eQbR.js                    16.09 kB │ gzip:   5.32 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/InvioPSModal-D2r3eSj1.js                   16.28 kB │ gzip:   5.03 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ScalaBradenTab-bdxIyfKS.js                 17.35 kB │ gzip:   5.78 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/OperatorAgenda-8VwpoziY.js                 17.45 kB │ gzip:   6.41 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ClinicalSectionLoading-Qw7MlflK.js         17.92 kB │ gzip:   5.57 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/VisoreDocumentoFarmaco-BhPJ1uno.js         18.51 kB │ gzip:   7.14 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/AdminAgenda-bAB16NcF.js                    18.75 kB │ gzip:   6.57 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/OperatorManagement-Bmf-xsuK.js             19.35 kB │ gzip:   6.52 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/AdminDashboard-CDbNahgo.js                 20.31 kB │ gzip:   6.82 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ScalaTinettiTab-AhQHkE6g.js                20.41 kB │ gzip:   6.30 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DashboardTherapyDeadlines-BI6aPFLS.js      23.47 kB │ gzip:   7.50 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ConsegnePage-oPQUKS6V.js                   24.08 kB │ gzip:   7.71 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientList-CmTaYhFv.js                    25.91 kB │ gzip:   9.28 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/MedicazioniTab-DzYhfv0q.js                 26.50 kB │ gzip:   6.90 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DocumentiTab-D8d9D7df.js                   29.33 kB │ gzip:   9.66 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/ContenzioniTab-DDjHZpxF.js                 32.03 kB │ gzip:   8.51 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DischargeImportModal-CodoK7s7.js           35.72 kB │ gzip:  12.84 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PresaInCaricoTab-hVbfgiFO.js               38.23 kB │ gzip:  10.64 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/TerapiaFarmacologicaTab-Dd1GqiYe.js        40.09 kB │ gzip:  11.41 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/TherapyEditor-vAwAGZ4X.js                  40.93 kB │ gzip:  13.57 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/AgnosPanel-DxKbGNOA.js                     47.72 kB │ gzip:  15.29 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/DimissioneTab-BFo3qBgH.js                  59.44 kB │ gzip:  14.45 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/PatientDetail-C16r4Fbu.js                 108.66 kB │ gzip:  26.74 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/pdf-BWoUaJV-.js                           427.30 kB │ gzip: 127.39 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/IntakeWorkspace-BplbpZq-.js               479.71 kB │ gzip: 140.51 kB
+../artifacts/task-validation/parametri-caricamento-rapido-e-conteggio-note/qa-production/assets/index-gQs_AOw2.js                         504.30 kB │ gzip: 140.77 kB
+
+✓ built in 12.47s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[PLUGIN_TIMINGS] Your build spent 97% of 12.5s inside plugin hooks (12.1s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - @rolldown/plugin-babel transform (95%, 11.8s, 219 calls)
+Those rows are 95% of the build; the rest of the 97% is below.
+Not measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:css transform (34 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+

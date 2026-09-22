@@ -25,6 +25,9 @@ interface Props {
   bed?: string;
   lastReadingAt?: string | null;
   readingCount?: number;
+  noteCount?: number;
+  summaryPending?: boolean;
+  summaryUnavailable?: boolean;
   onOpenHistory: () => void;
   onSave: (request: ParameterReadingRequest) => Promise<PatientParameterReading>;
 }
@@ -34,6 +37,9 @@ export function ParameterEntryRow({
   bed,
   lastReadingAt,
   readingCount = 0,
+  noteCount,
+  summaryPending = false,
+  summaryUnavailable = false,
   onOpenHistory,
   onSave,
 }: Props) {
@@ -47,6 +53,16 @@ export function ParameterEntryRow({
   const inFlight = useRef(false);
   const name = `${patient.firstName} ${patient.lastName}`;
   const hasValues = PARAMETER_FIELDS.some((field) => values[field.key]?.trim());
+  const draftNote = Boolean(values.note?.trim());
+  const noteTotal = (noteCount ?? 0) + Number(draftNote);
+  const noteDescription = [
+    noteCount !== undefined
+      ? `${noteCount} note salvate oggi`
+      : summaryPending
+        ? 'Verifica note in corso'
+        : 'Conteggio note non disponibile',
+    ...(draftNote ? ['1 nota da salvare'] : []),
+  ].join(' · ');
   function update(key: keyof ParameterValues, value: string) {
     setValues((previous) => ({ ...previous, [key]: value }));
     setError('');
@@ -95,7 +111,13 @@ export function ParameterEntryRow({
         <span className="parameter-entry-patient__text">
           <span className="qe-row__name">{name}</span>
           <span className="qe-row__room">
-            {room ? `Camera ${room}${bed ? ` · Letto ${bed}` : ''}` : 'Camera non assegnata'}
+            {summaryPending
+              ? 'Caricamento camera…'
+              : summaryUnavailable
+                ? 'Camera non disponibile'
+                : room
+                  ? `Camera ${room}${bed ? ` · Letto ${bed}` : ''}`
+                  : 'Camera non assegnata'}
           </span>
           {lastReadingAt && (
             <span className="parameter-entry-last">
@@ -133,13 +155,23 @@ export function ParameterEntryRow({
       ))}
       <button
         type="button"
-        className={`btn-secondary qe-row__note-btn${values.note ? ' qe-row__note-btn--has-note' : ''}`}
-        aria-label={`${notesOpen ? 'Chiudi' : 'Apri'} note per ${name}`}
+        className={`btn-secondary qe-row__note-btn${noteTotal ? ' qe-row__note-btn--has-note' : ''}`}
+        aria-label={`${notesOpen ? 'Chiudi' : 'Apri'} note per ${name} · ${noteDescription}`}
+        title={noteDescription}
         aria-expanded={notesOpen}
         onClick={() => setNotesOpen((value) => !value)}
       >
         <IcoMessage />
         <span>Note</span>
+        {noteTotal > 0 && (
+          <span
+            className={`parameter-note-count${draftNote ? ' parameter-note-count--draft' : ''}`}
+            aria-hidden="true"
+          >
+            {noteTotal > 99 ? '99+' : noteTotal}
+            {draftNote && '*'}
+          </span>
+        )}
       </button>
       <button
         type="button"
@@ -153,15 +185,27 @@ export function ParameterEntryRow({
       </button>
       {notesOpen && (
         <div className="qe-row__note-input">
-          <textarea
-            className="form-input qe-row__note-textarea"
-            aria-label={`Note per ${name}`}
-            value={values.note ?? ''}
-            disabled={saving || uncertain}
-            maxLength={2000}
-            rows={2}
-            onChange={(event) => update('note', event.target.value)}
-          />
+          <div className="parameter-note-summary">
+            <span>
+              {noteDescription}
+              {draftNote && ' · * include la bozza'}
+            </span>
+            <button type="button" className="link-btn" onClick={onOpenHistory}>
+              Leggi le note nello storico
+            </button>
+          </div>
+          <label className="parameter-note-label">
+            <span>Nota della nuova rilevazione</span>
+            <textarea
+              className="form-input qe-row__note-textarea"
+              aria-label={`Note per ${name}`}
+              value={values.note ?? ''}
+              disabled={saving || uncertain}
+              maxLength={2000}
+              rows={2}
+              onChange={(event) => update('note', event.target.value)}
+            />
+          </label>
         </div>
       )}
       {savedAt && (

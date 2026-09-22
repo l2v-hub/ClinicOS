@@ -57,7 +57,7 @@ test('immutable reading persists grouped values, millisecond instant and server 
   const input = body();
   const first = await createParameterReading(patientId, input, actor);
   assert.equal(first.replayed, false);
-  assert.deepEqual(first.summary, { date: '2026-09-19', count: 1, lastReadingAt: measuredAt });
+  assert.deepEqual(first.summary, { date: '2026-09-19', count: 1, noteCount: 0, lastReadingAt: measuredAt });
   assert.equal(first.reading.authorName, 'Operatrice QA');
   assert.equal(first.reading.authorOperatorId, actor.id);
   assert.equal(first.reading.measuredAt, measuredAt);
@@ -87,7 +87,7 @@ test('HTTP endpoints return 201/200/400/404/409 and Rome-day authoritative summa
   assert.equal(created.status, 201);
   assert.equal(created.headers.get('cache-control'), 'private, no-store');
   const record = await created.json();
-  assert.deepEqual(record.summary, { date: '2026-09-23', count: 1, lastReadingAt: input.measuredAt });
+  assert.deepEqual(record.summary, { date: '2026-09-23', count: 1, noteCount: 0, lastReadingAt: input.measuredAt });
   const replay = await send(input);
   assert.equal(replay.status, 200);
   assert.deepEqual((await replay.json()).summary, record.summary);
@@ -183,6 +183,33 @@ test('daily page stays scoped/bounded and reports counts/latest instant without 
   await assert.rejects(loadPatientParametersPage({ date: '2026-02-30' }, actor));
 });
 
+test('entry projection skips month JSON and counts only saved notes in the selected Rome day', async () => {
+  const filters = { date: '2026-09-24', month: '9', year: '2026' };
+  const input = { ...body('2026-09-23T22:01:00.000Z'), values: { fc: '70', note: '  Nota sintetica  ' } };
+  const first = await createParameterReading(patientId, input, actor);
+  assert.equal(first.summary.noteCount, 1);
+  const retry = await createParameterReading(patientId, input, actor);
+  assert.equal(retry.summary.noteCount, 1);
+  await createParameterReading(patientId, { ...body('2026-09-24T10:00:00.000Z'), values: { fc: '71', note: ' \t\n ' } }, actor);
+  await createParameterReading(patientId, { ...body('2026-09-24T22:00:00.000Z'), values: { fc: '72', note: 'Giorno successivo' } }, actor);
+  const legacy = await loadPatientParametersPage(filters, actor);
+  const entry = await loadPatientParametersPage({ ...filters, view: 'entry' }, actor);
+  assert.deepEqual(entry.items.map(x => x.patient), legacy.items.map(x => x.patient));
+  assert.deepEqual(entry.items.map(x => x.cartella.noteCount), legacy.items.map(x => x.cartella.noteCount));
+  const cartella = entry.items.find(x => x.patient.id === patientId)!.cartella;
+  assert.equal(cartella.readingCount, 2);
+  assert.equal(cartella.noteCount, 1);
+  assert.deepEqual(cartella.parametriMensili, []);
+  assert.ok(legacy.items.find(x => x.patient.id === patientId)!.cartella.parametriMensili.length > 0);
+  assert.ok(Buffer.byteLength(JSON.stringify(entry)) < Buffer.byteLength(JSON.stringify(legacy)));
+  assert.equal(entry.items.some(x => x.patient.id === outsidePatient), false);
+  await assert.rejects(loadPatientParametersPage({ ...filters, view: 'all' }, actor));
+  const response = await fetch(`${api.url}/api/patients/parameters/page?date=2026-09-24&view=entry`, { headers: headers() });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('cache-control'), 'private, no-store');
+  assert.equal((await response.json()).items.find(x => x.patient.id === patientId).cartella.noteCount, 1);
+});
+
 test('lost response can replay via real HTTP; whole-cartella PUT cannot erase the archive', async () => {
   const input = body();
   const endpoint = `${api.url}/api/patients/${patientId}/parameter-readings`;
@@ -209,7 +236,7 @@ test('parameter page caps real result sets at 25 and continues without duplicate
     firstName: `Paziente ${String(index).padStart(2, '0')}`, lastName: 'BoundCase',
     dateOfBirth: new Date('1950-01-01T00:00:00.000Z'), registeredById: actor.id,
   })) });
-  const filters = { q: 'BoundCase', date: '2026-09-19', month: '9', year: '2026', limit: '100' };
+  const filters = { q: 'BoundCase', date: '2026-09-19', month: '9', year: '2026', limit: '100', view: 'entry' };
   const first = await loadPatientParametersPage(filters, actor);
   assert.equal(first.items.length, 25);
   assert.equal(first.hasMore, true);

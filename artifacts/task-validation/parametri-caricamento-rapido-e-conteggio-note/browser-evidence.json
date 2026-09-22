@@ -1,0 +1,232 @@
+{
+  "recordedAt": "2026-09-22T21:22:58.490Z",
+  "baseline": "0f4524043bc0c6c762f48fb1a07a85b111a1c79d",
+  "identityLatencyMs": 500,
+  "dailyLatencyMs": 1600,
+  "measurements": [
+    {
+      "scenario": "baseline-cold",
+      "metrics": {
+        "requestMs": 260,
+        "rowsMs": 1911
+      },
+      "requests": [
+        {
+          "path": "/patients/parameters/page",
+          "method": "GET",
+          "at": 260
+        }
+      ],
+      "errors": [],
+      "selected": ""
+    },
+    {
+      "scenario": "candidate-cold",
+      "metrics": {
+        "requestMs": 5,
+        "rowsMs": 566
+      },
+      "requests": [
+        {
+          "path": "/patients/page",
+          "method": "GET",
+          "at": 5
+        },
+        {
+          "path": "/patients/parameters/page",
+          "method": "GET",
+          "at": 5
+        }
+      ],
+      "errors": [],
+      "selected": ""
+    },
+    {
+      "scenario": "candidate-final-source-save-race",
+      "metrics": {
+        "requestMs": 4,
+        "rowsMs": 536
+      },
+      "requests": [
+        {
+          "path": "/patients/page",
+          "method": "GET",
+          "at": 4
+        },
+        {
+          "path": "/patients/parameters/page",
+          "method": "GET",
+          "at": 4
+        },
+        {
+          "path": "/patients/synthetic-0/parameter-readings",
+          "method": "POST",
+          "at": 978
+        }
+      ],
+      "errors": [],
+      "selected": ""
+    },
+    {
+      "scenario": "candidate-final",
+      "metrics": {
+        "requestMs": 3,
+        "rowsMs": 538
+      },
+      "requests": [
+        {
+          "path": "/patients/page",
+          "method": "GET",
+          "at": 3
+        },
+        {
+          "path": "/patients/parameters/page",
+          "method": "GET",
+          "at": 3
+        }
+      ],
+      "errors": [],
+      "selected": ""
+    }
+  ],
+  "checks": [
+    {
+      "name": "first page has 25 rows",
+      "pass": true
+    },
+    {
+      "name": "saved notes badge uses notes rather than reading count",
+      "pass": true
+    },
+    {
+      "name": "identity rows appear before daily metadata",
+      "pass": true
+    },
+    {
+      "name": "draft note distinguished before save",
+      "pass": true
+    },
+    {
+      "name": "late metadata cannot undo saved note count",
+      "pass": true
+    },
+    {
+      "name": "late metadata cannot undo saved reading count",
+      "pass": true
+    },
+    {
+      "name": "whitespace is not a draft note",
+      "pass": true
+    },
+    {
+      "name": "saved notes plus draft clearly marked",
+      "pass": true
+    },
+    {
+      "name": "closing note editor retains draft badge",
+      "pass": true
+    },
+    {
+      "name": "reopening note editor preserves text",
+      "pass": true
+    },
+    {
+      "name": "saved notes link opens correct patient history",
+      "pass": true
+    },
+    {
+      "name": "saved note count restored after reload",
+      "pass": true
+    },
+    {
+      "name": "uncertain save locks draft for safe retry",
+      "pass": true
+    },
+    {
+      "name": "uncertain save does not claim draft as saved",
+      "pass": true
+    },
+    {
+      "name": "retry verifies one saved note without duplication",
+      "pass": true
+    },
+    {
+      "name": "pagination appends 27 unique patients",
+      "pass": true
+    },
+    {
+      "name": "room search preserved",
+      "pass": true
+    },
+    {
+      "name": "room search returns matching patient",
+      "pass": true
+    },
+    {
+      "name": "summary failure retains usable identity rows",
+      "pass": true
+    },
+    {
+      "name": "failed summary does not fabricate zero notes",
+      "pass": true
+    },
+    {
+      "name": "metadata retry restores saved count and preserves draft",
+      "pass": true
+    },
+    {
+      "name": "metadata retry preserves unsaved text",
+      "pass": true
+    },
+    {
+      "name": "empty search has no stale identity rows",
+      "pass": true
+    },
+    {
+      "name": "identity and metadata failures show error rather than fabricated patients",
+      "pass": true
+    },
+    {
+      "name": "list retry recovers first page",
+      "pass": true
+    },
+    {
+      "name": "late search response cannot replace current Beta results",
+      "pass": true
+    },
+    {
+      "name": "failed next-page retry resumes pagination",
+      "pass": true
+    },
+    {
+      "name": "day rollover failure does not label yesterday notes as today",
+      "pass": true
+    },
+    {
+      "name": "rollover failure retains second-page draft",
+      "pass": true
+    },
+    {
+      "name": "all loaded pages refresh daily metadata",
+      "pass": true
+    },
+    {
+      "name": "refresh of all loaded pages preserves second-page draft",
+      "pass": true
+    },
+    {
+      "name": "refresh keeps both loaded pages",
+      "pass": true
+    },
+    {
+      "name": "new day has fresh counts after successful retry",
+      "pass": true
+    },
+    {
+      "name": "mobile form stays inside viewport",
+      "pass": true
+    }
+  ],
+  "consoleErrors": [],
+  "limit": "Synthetic fixtures and local browser. No production writes. CUA cannot export trace/video. Earlier cold observations retained; candidate-final binds the final pagination implementation."
+}

@@ -1,0 +1,38 @@
+(node:36092) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ saved note count is distinct from reading count and exposed in the accessible action (7.0261ms)
+✔ zero notes has no badge; missing metadata never fabricates zero notes or unassigned room (2.6427ms)
+(node:36092) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33528) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ a late save cannot lower a newer daily snapshot; a newer save enriches an older snapshot (1.1896ms)
+✔ day rollover keeps patient identity but invalidates counts, including on a failed refresh (0.217ms)
+(node:33528) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:24464) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ new readings require measured values; preserve exact time and independent request identities (2.3982ms)
+✔ network retry submits the same immutable request; no whole month PATCH (20.91ms)
+✔ validation failures allow correction, server/parse/conflict failures retain retry identity (2.7572ms)
+✔ legacy history preserves multiple DTX, notes and explicit missing-time labels (2.1658ms)
+✔ history fetch and entry page pass date and cursor with bounded limit and abort signal (1.2223ms)
+✔ monthly fetch keeps the month when loading the next page (0.5776ms)
+(node:24464) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:23824) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ parameters page URL clamps to 25 and binds query/cursor (1.6514ms)
+✔ parameters page validates its bounded response and merges by patient id (19.9847ms)
+✔ entry projection is opt-in and preserves bounded day and room-search filters (0.3184ms)
+✔ parameter save uses an encoded id and the bounded PATCH contract (0.627ms)
+(node:23824) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 393.3684

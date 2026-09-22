@@ -81,9 +81,11 @@ export async function createParameterReading(patientId: string, body: unknown, a
     }
     const date = facilityToday(new Date(input.measuredAt));
     const [summary] = await tx.$queryRaw<
-      Array<{ count: number; lastReadingAt: Date | null }>
+      Array<{ count: number; noteCount: number; lastReadingAt: Date | null }>
     >(Prisma.sql`
-      SELECT count(*)::int AS "count", max("measuredAt") AT TIME ZONE 'UTC' AS "lastReadingAt"
+      SELECT count(*)::int AS "count", max("measuredAt") AT TIME ZONE 'UTC' AS "lastReadingAt",
+        count(*) FILTER (WHERE jsonb_typeof("values"->'note') = 'string'
+          AND btrim("values"->>'note') <> '')::int AS "noteCount"
       FROM "PatientParameterReading" WHERE "patientId" = ${patientId}
       AND "measuredAt" >= (${date}::date::timestamp AT TIME ZONE 'Europe/Rome')
       AND "measuredAt" < ((${date}::date + 1)::timestamp AT TIME ZONE 'Europe/Rome')
@@ -94,6 +96,7 @@ export async function createParameterReading(patientId: string, body: unknown, a
       summary: {
         date,
         count: summary.count,
+        noteCount: summary.noteCount,
         lastReadingAt: summary.lastReadingAt?.toISOString() ?? null,
       },
     };

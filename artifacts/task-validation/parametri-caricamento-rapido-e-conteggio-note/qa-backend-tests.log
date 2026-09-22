@@ -1,0 +1,27 @@
+✔ requires bounded typed values and at least one clinical parameter (5.3889ms)
+✔ rejects invalid time, identity and injected author; accepts canonical UTC save instants (0.3419ms)
+✔ facility day observes Rome midnight and DST transition dates (15.1517ms)
+✔ history cursors bind patient/date and paging remains bounded (1.8351ms)
+✔ monthly history validates the month and binds pagination to that month (0.4234ms)
+✔ migration creates timestamped indexed archive; POST/GET enforce auth and private cache (6119.4834ms)
+✔ immutable reading persists grouped values, millisecond instant and server author; retry is idempotent (263.1705ms)
+✔ HTTP endpoints return 201/200/400/404/409 and Rome-day authoritative summary (93.5903ms)
+✔ out-of-scope access hides existence and author is resolved from the database (45.5249ms)
+✔ concurrent identical requests converge on one row (PGlite multiplexed connections) (60.0477ms)
+✔ concurrent conflicting payloads preserve one accepted observation (20.9033ms)
+✔ stable keyset handles identical instants and excludes new inserts before the cursor (106.3262ms)
+✔ Rome daily history includes exact 23-hour and 25-hour DST boundaries (102.8033ms)
+✔ daily page stays scoped/bounded and reports counts/latest instant without full archive (10.2258ms)
+✔ entry projection skips month JSON and counts only saved notes in the selected Rome day (79.1529ms)
+PUT /patients/vitals-qa-anna/cartella → salvata
+✔ lost response can replay via real HTTP; whole-cartella PUT cannot erase the archive (104.1005ms)
+✔ parameter page caps real result sets at 25 and continues without duplicates (46.1708ms)
+✔ archive survives database shutdown and disk reopen, then reload through production API (11381.0251ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29893.9013

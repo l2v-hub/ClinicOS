@@ -57,6 +57,42 @@
   width: 15px;
   height: 15px;
 }
+.parameter-entry-row .qe-row__note-btn {
+  gap: 5px;
+  padding-inline: 8px;
+}
+.parameter-note-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding-inline: 4px;
+  border-radius: 10px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.parameter-note-count--draft {
+  background: var(--text-muted);
+}
+.parameter-note-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.parameter-note-label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
 .parameter-entry-help {
   color: var(--text-muted);
   font-size: 13px;

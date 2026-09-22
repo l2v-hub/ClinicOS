@@ -24,6 +24,7 @@ interface ParameterPageRow {
   cameraNumero: string | null;
   lettoNumero: string | null;
   readingCount: number;
+  noteCount: number;
   lastReadingAt: Date | null;
 }
 
@@ -31,7 +32,12 @@ export interface PatientParametersPage {
   items: Array<{
     patient: Omit<
       ParameterPageRow,
-      'parametriMensili' | 'cameraNumero' | 'lettoNumero' | 'readingCount' | 'lastReadingAt'
+      | 'parametriMensili'
+      | 'cameraNumero'
+      | 'lettoNumero'
+      | 'readingCount'
+      | 'noteCount'
+      | 'lastReadingAt'
     >;
     cartella: {
       pazienteId: string;
@@ -39,6 +45,7 @@ export interface PatientParametersPage {
       cameraNumero?: string;
       lettoNumero?: string;
       readingCount: number;
+      noteCount: number;
       lastReadingAt: string | null;
     };
   }>;
@@ -79,6 +86,9 @@ export async function loadPatientParametersPage(
   actor: Operator,
 ): Promise<PatientParametersPage> {
   const input = parsePatientPageQuery(query);
+  if (query.view !== undefined && query.view !== 'entry')
+    throw new PatientPageInputError('view non valido');
+  const entryView = query.view === 'entry';
   const { month, year } = period(query);
   let readingDate: string;
   try {
@@ -122,12 +132,22 @@ export async function loadPatientParametersPage(
     ? Prisma.sql`WHERE ${Prisma.join(predicates, ' AND ')}`
     : Prisma.empty;
   const rows = await prisma.$queryRaw<ParameterPageRow[]>(Prisma.sql`
+    WITH page_patients AS MATERIALIZED (
+      SELECT p."id" FROM "Patient" p
+      LEFT JOIN "Cartella" c ON c."patientId" = p."id"
+      ${whereSql}
+      ORDER BY ${patientAlphabeticalOrder}
+      LIMIT ${limit + 1}
+    )
     SELECT
       p."id",
       p."medicalRecordNumber",
       p."firstName",
       p."lastName",
-      COALESCE((
+      ${
+        entryView
+          ? Prisma.sql`'[]'::jsonb`
+          : Prisma.sql`COALESCE((
         SELECT jsonb_agg(jsonb_strip_nulls(jsonb_build_object(
           'id', month_entry->'id',
           'mese', month_entry->'mese',
@@ -163,20 +183,24 @@ export async function loadPatientParametersPage(
         ) AS month_entry
         WHERE month_entry->>'mese' = ${String(month)}
           AND month_entry->>'anno' = ${String(year)}
-      ), '[]'::jsonb) AS "parametriMensili",
+      ), '[]'::jsonb)`
+      } AS "parametriMensili",
       c."data"->>'cameraNumero' AS "cameraNumero",
       c."data"->>'lettoNumero' AS "lettoNumero",
-      (SELECT count(*)::int FROM "PatientParameterReading" r WHERE r."patientId" = p."id"
-        AND r."measuredAt" >= (${readingDate}::date::timestamp AT TIME ZONE 'Europe/Rome')
-        AND r."measuredAt" < ((${readingDate}::date + 1)::timestamp AT TIME ZONE 'Europe/Rome')) AS "readingCount",
-      (SELECT max(r."measuredAt") AT TIME ZONE 'UTC' FROM "PatientParameterReading" r WHERE r."patientId" = p."id"
-        AND r."measuredAt" >= (${readingDate}::date::timestamp AT TIME ZONE 'Europe/Rome')
-        AND r."measuredAt" < ((${readingDate}::date + 1)::timestamp AT TIME ZONE 'Europe/Rome')) AS "lastReadingAt"
-    FROM "Patient" p
+      daily."readingCount", daily."lastReadingAt", daily."noteCount"
+    FROM page_patients selected
+    JOIN "Patient" p ON p."id" = selected."id"
     LEFT JOIN "Cartella" c ON c."patientId" = p."id"
-    ${whereSql}
+    LEFT JOIN LATERAL (
+      SELECT count(*)::int AS "readingCount",
+        max(r."measuredAt") AT TIME ZONE 'UTC' AS "lastReadingAt",
+        count(*) FILTER (WHERE jsonb_typeof(r."values"->'note') = 'string'
+          AND btrim(r."values"->>'note') <> '')::int AS "noteCount"
+      FROM "PatientParameterReading" r WHERE r."patientId" = p."id"
+        AND r."measuredAt" >= (${readingDate}::date::timestamp AT TIME ZONE 'Europe/Rome')
+        AND r."measuredAt" < ((${readingDate}::date + 1)::timestamp AT TIME ZONE 'Europe/Rome')
+    ) daily ON true
     ORDER BY ${patientAlphabeticalOrder}
-    LIMIT ${limit + 1}
   `);
 
   const hasMore = rows.length > limit;
@@ -189,6 +213,7 @@ export async function loadPatientParametersPage(
         cameraNumero,
         lettoNumero,
         readingCount,
+        noteCount,
         lastReadingAt,
         ...patient
       }) => ({
@@ -196,6 +221,7 @@ export async function loadPatientParametersPage(
         cartella: {
           pazienteId: patient.id,
           readingCount,
+          noteCount,
           lastReadingAt: lastReadingAt?.toISOString() ?? null,
           parametriMensili: Array.isArray(parametriMensili) ? parametriMensili : [],
           ...(cameraNumero && { cameraNumero }),

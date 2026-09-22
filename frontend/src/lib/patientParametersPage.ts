@@ -10,7 +10,9 @@ export interface PatientParametersPageItem {
   cartella: Pick<
     CartellaPaziente,
     'pazienteId' | 'parametriMensili' | 'cameraNumero' | 'lettoNumero'
-  > & { readingCount?: number; lastReadingAt?: string | null };
+  > & { readingCount?: number; noteCount?: number; lastReadingAt?: string | null };
+  summaryPending?: boolean;
+  summaryDate?: string;
 }
 
 export interface PatientParametersPageResponse {
@@ -28,6 +30,7 @@ export function buildPatientParametersPageUrl(
     month?: number;
     year?: number;
     date?: string;
+    view?: 'entry';
   },
 ): string {
   const requested = Number.isFinite(filters.limit) ? Math.trunc(filters.limit as number) : 25;
@@ -36,6 +39,7 @@ export function buildPatientParametersPageUrl(
   params.set('month', String(filters.month ?? now.getMonth() + 1));
   params.set('year', String(filters.year ?? now.getFullYear()));
   if (filters.date) params.set('date', filters.date);
+  if (filters.view) params.set('view', filters.view);
   const q = filters.q?.trim();
   if (q) params.set('q', q);
   if (filters.cursor) params.set('cursor', filters.cursor);
@@ -51,6 +55,7 @@ export async function fetchPatientParametersPage(
     month?: number;
     year?: number;
     date?: string;
+    view?: 'entry';
   },
   options: { headers: HeadersInit; signal?: AbortSignal; fetcher?: typeof fetch },
 ): Promise<PatientParametersPageResponse> {
