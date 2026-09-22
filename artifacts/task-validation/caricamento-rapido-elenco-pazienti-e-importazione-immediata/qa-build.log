@@ -1,0 +1,120 @@
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 412 modules transformed.
+
+(!) outDir C:\Workspace\ClinicOSHouse-worktrees\subtle-dashboard-notifications\artifacts\task-validation\caricamento-rapido-elenco-pazienti-e-importazione-immediata\candidate-production is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/index.html                                         0.99 kB │ gzip:   0.55 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/.vite/manifest.json                               28.34 kB │ gzip:   3.40 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/pdf.worker.min-CHFwMXne.mjs             1,262.39 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/OperatorDashboard-CeuW1W3M.css              0.10 kB │ gzip:   0.09 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PdfCanvasPreview-BY-O_bqx.css               0.68 kB │ gzip:   0.37 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/SemanticTaggedText-Cy2K2aEq.css             0.80 kB │ gzip:   0.37 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ClinicalSectionLoading-lbobsqsz.css         1.24 kB │ gzip:   0.54 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/CameraCapture-BZrPNFqj.css                  1.85 kB │ gzip:   0.74 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DischargeImportModal-BrR3bAe2.css           2.16 kB │ gzip:   0.72 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/NotesPage-BONDdHCo.css                      2.83 kB │ gzip:   0.85 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ConsegnePage-Df-KQF84.css                   2.86 kB │ gzip:   0.84 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientCombobox-BeE5Ngv-.css                3.03 kB │ gzip:   0.96 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/farmacoRiferimento-BgKYx-sb.css             3.24 kB │ gzip:   0.99 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/TopNav-DK0-aQXY.css                         3.54 kB │ gzip:   1.12 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/TerapiaFarmacologicaTab-ecOsaZey.css        3.64 kB │ gzip:   1.08 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ClinicalTable-Cjulftmw.css                  3.71 kB │ gzip:   0.99 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/AgnosPanel-Cr90M8t_.css                     3.91 kB │ gzip:   1.33 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientParameters-j__rhSkz.css              4.25 kB │ gzip:   1.11 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/OperatorManagement-DTt4_Y4X.css             4.38 kB │ gzip:   1.20 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/VisoreDocumentoFarmaco-DDTR8eg1.css         6.04 kB │ gzip:   1.53 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientList-BNQx_C_e.css                    7.37 kB │ gzip:   1.79 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DocumentiTab-DJY500eY.css                   8.61 kB │ gzip:   1.87 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/TherapyEditor-DeBS0ciK.css                  8.65 kB │ gzip:   2.10 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DashboardTherapyDeadlines-zEY-7UA7.css     14.64 kB │ gzip:   2.68 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientDetail-YRxnZBwS.css                 21.04 kB │ gzip:   3.91 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/index-WhmJM_cr.css                        258.46 kB │ gzip:  43.93 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/patientSort-B9MB1BKg.js                     0.34 kB │ gzip:   0.22 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/LoadErrorState-Ckl00bux.js                  0.57 kB │ gzip:   0.39 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/facilityTime-CkSdL2FZ.js                    0.62 kB │ gzip:   0.39 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/AnagraficaFarmaciPage-1hKeSd8b.js           0.98 kB │ gzip:   0.55 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ConsegnaTimestamp-ndV4IjrG.js               1.05 kB │ gzip:   0.65 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PageHeader-8GOraCvS.js                      1.61 kB │ gzip:   0.72 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/clinicalHistory-Dc8Sh74T.js                 1.85 kB │ gzip:   0.87 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PainAssessmentEditor-D5KckQbk.js            1.90 kB │ gzip:   0.98 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/farmacoDocumento-DzyiFi7j.js                1.94 kB │ gzip:   0.96 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/VitalSignsEditor-DTBbDHgH.js                2.00 kB │ gzip:   0.99 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/therapyDose-BJM_nIEY.js                     2.06 kB │ gzip:   1.03 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ConfirmDialog-DFDpOubG.js                   2.20 kB │ gzip:   1.10 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/useAnomalieReparto-DTeAbICx.js              2.23 kB │ gzip:   1.19 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/AccessibleDialogSurface-CymwsWDj.js         2.31 kB │ gzip:   1.24 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/usePatientDocuments-Db4m1F1z.js             2.73 kB │ gzip:   1.19 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/renderArchivePrint-BpERnG7Z.js              2.77 kB │ gzip:   1.28 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ClinicalCard-DeGJC0jl.js                    2.88 kB │ gzip:   1.53 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/patientTherapyCalendar-CdqFqIDw.js          2.95 kB │ gzip:   1.33 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/TopNav-DKtWGdnG.js                          3.27 kB │ gzip:   1.67 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PdfCanvasPreview-CxOhN55I.js                3.71 kB │ gzip:   1.54 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/InlineEditableField-DkljhZ1L.js             4.02 kB │ gzip:   1.40 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/shared-BrXM4VFm.js                          4.10 kB │ gzip:   1.73 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/farmacoRiferimento-Bku8RMF4.js              4.23 kB │ gzip:   1.95 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ClinicalAttachments-Ck8rBYA0.js             4.30 kB │ gzip:   1.85 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/TherapyRoundsPage-gfnzMnc2.js               4.50 kB │ gzip:   2.16 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/AnamnesisEditor-ob8bHzAV.js                 5.10 kB │ gzip:   2.27 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientParameters-BgfaUM6Q.js               5.10 kB │ gzip:   2.50 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/SemanticTaggedText-iNG23vF5.js              5.60 kB │ gzip:   2.40 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientCombobox-CatCm9w1.js                 5.91 kB │ gzip:   2.66 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DocumentPreview-CMAhTjHD.js                 6.32 kB │ gzip:   2.42 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/OperatorSchedule-D_xCX0nN.js                6.87 kB │ gzip:   2.69 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ClinicalTable-BXSQeA7k.js                   7.19 kB │ gzip:   2.83 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientArchivePreview-CmyDmaQS.js           8.42 kB │ gzip:   3.62 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/jsx-runtime-C_urxT9I.js                     8.55 kB │ gzip:   3.26 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/AgendaStatoFilter-B3l0PSJ-.js               8.81 kB │ gzip:   2.79 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/MultiPatientParametri-BAFRYVuk.js           8.95 kB │ gzip:   3.38 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/NarrativeSectionsTab-wLQMHFRH.js            9.02 kB │ gzip:   3.17 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/OperatorDashboard-BFjvtCrl.js              10.61 kB │ gzip:   3.99 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/TherapySlotModal-C5FFDo5J.js               10.71 kB │ gzip:   4.11 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/NotesPage-D4C3hz6y.js                      11.54 kB │ gzip:   4.23 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DiarioPazienteTab-P3Wl2C1O.js              11.85 kB │ gzip:   4.00 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/CameraCapture-o_JWCvVo.js                  13.48 kB │ gzip:   4.96 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/EsamiConsulenzeTab-Br70ntGf.js             13.67 kB │ gzip:   5.23 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/RoomsManagement-DunRuopH.js                13.93 kB │ gzip:   3.85 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ParametriTab-B38SEEuj.js                   15.72 kB │ gzip:   5.32 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ScalaNRSTab-DyimnnaR.js                    16.09 kB │ gzip:   5.32 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/InvioPSModal-CYX9ItqP.js                   16.28 kB │ gzip:   5.03 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ScalaBradenTab-DdgAkGgm.js                 17.35 kB │ gzip:   5.78 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/OperatorAgenda-DTgPxRF1.js                 17.45 kB │ gzip:   6.41 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ClinicalSectionLoading-D3X36BQx.js         17.92 kB │ gzip:   5.56 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/VisoreDocumentoFarmaco-ckPpjGor.js         18.51 kB │ gzip:   7.14 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/AdminAgenda-DusejMUv.js                    18.75 kB │ gzip:   6.57 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/OperatorManagement-Di_pDceE.js             19.35 kB │ gzip:   6.52 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/AdminDashboard-DUicicfA.js                 20.31 kB │ gzip:   6.82 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ScalaTinettiTab-CRbrWs_K.js                20.41 kB │ gzip:   6.30 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DashboardTherapyDeadlines-BvZW-XW3.js      23.47 kB │ gzip:   7.50 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ConsegnePage-DRiarZK3.js                   24.08 kB │ gzip:   7.71 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientList-B27sECMf.js                    25.91 kB │ gzip:   9.28 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/MedicazioniTab-DSyCLWk1.js                 26.50 kB │ gzip:   6.90 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DocumentiTab-D54yLp4V.js                   29.33 kB │ gzip:   9.66 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/ContenzioniTab-DGRwsbeo.js                 32.03 kB │ gzip:   8.51 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DischargeImportModal-WQ2bWVpG.js           35.72 kB │ gzip:  12.84 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PresaInCaricoTab-K-jP_RQR.js               38.23 kB │ gzip:  10.64 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/TerapiaFarmacologicaTab-D4KfVXav.js        40.09 kB │ gzip:  11.41 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/TherapyEditor-D17NWGAm.js                  40.93 kB │ gzip:  13.57 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/AgnosPanel-CTRFg519.js                     47.72 kB │ gzip:  15.29 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/DimissioneTab-BeR4yGqL.js                  59.44 kB │ gzip:  14.45 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/PatientDetail-D5KzqMUU.js                 108.66 kB │ gzip:  26.74 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/pdf-CRl1BCiK.js                           427.30 kB │ gzip: 127.39 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/IntakeWorkspace-DTxs0Jsx.js               479.71 kB │ gzip: 140.51 kB
+../artifacts/task-validation/caricamento-rapido-elenco-pazienti-e-importazione-immediata/candidate-production/assets/index-B74gUrVA.js                         504.30 kB │ gzip: 140.75 kB
+
+✓ built in 9.54s
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[PLUGIN_TIMINGS] Your build spent 96% of 9.5s inside plugin hooks (9.1s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - @rolldown/plugin-babel transform (92%, 8.8s, 218 calls)
+Those rows are 92% of the build; the rest of the 96% is below.
+Not measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:css transform (34 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.

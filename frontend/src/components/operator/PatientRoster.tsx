@@ -41,11 +41,13 @@ function PatientSignals({
   summary,
   openHandovers,
   anomalies,
+  summaryLoading,
 }: {
   patient: Paziente;
   summary?: ClinicalSummaryEntry;
   openHandovers: number;
   anomalies: AnomalieReparto;
+  summaryLoading?: boolean;
 }) {
   const patientAnomalies = anomalieDelPaziente(anomalies, patient.id);
   const hasSignals =
@@ -54,7 +56,19 @@ function PatientSignals({
     patientAnomalies.totale > 0 ||
     openHandovers > 0;
 
-  if (!hasSignals) return <span className="patient-signals__empty">Nessuna segnalazione</span>;
+  if (!hasSignals) {
+    const incomplete = !summary || anomalies.fallito || anomalies.verificaIncompleta;
+    const pending = summaryLoading || anomalies.inCorso;
+    return (
+      <span className="patient-signals__empty">
+        {pending
+          ? 'Verifica in corso…'
+          : incomplete
+            ? 'Segnalazioni non disponibili'
+            : 'Nessuna segnalazione'}
+      </span>
+    );
+  }
 
   return (
     <div
@@ -81,6 +95,7 @@ interface PatientRosterProps {
   onSortChange: (sort: PatientRosterSort) => void;
   hasMore: boolean;
   loading: boolean;
+  summaryLoading?: boolean;
   summaryMap: ReadonlyMap<string, ClinicalSummaryEntry>;
   consegneAperteMap: ReadonlyMap<string, number>;
   anomalie: AnomalieReparto;
@@ -95,6 +110,7 @@ const PatientCard = memo(function PatientCard({
   summary,
   openHandovers,
   anomalie,
+  summaryLoading,
   deleteEnabled,
   deleting,
   onSelect,
@@ -104,6 +120,7 @@ const PatientCard = memo(function PatientCard({
   summary?: ClinicalSummaryEntry;
   openHandovers: number;
   anomalie: AnomalieReparto;
+  summaryLoading?: boolean;
   deleteEnabled: boolean;
   deleting: boolean;
   onSelect: (patient: Paziente) => void;
@@ -141,13 +158,16 @@ const PatientCard = memo(function PatientCard({
             {STATO_RICOVERO_LABEL[state] ?? state}
           </span>
         ) : (
-          <span className="patient-signals__empty">Ricovero non disponibile</span>
+          <span className="patient-signals__empty">
+            {summaryLoading ? 'Caricamento ricovero…' : 'Ricovero non disponibile'}
+          </span>
         )}
         <PatientSignals
           patient={patient}
           summary={summary}
           openHandovers={openHandovers}
           anomalies={anomalie}
+          summaryLoading={summaryLoading}
         />
       </div>
       {deleteEnabled && (
@@ -171,6 +191,7 @@ export function PatientRoster({
   onSortChange,
   hasMore,
   loading,
+  summaryLoading,
   summaryMap,
   consegneAperteMap,
   anomalie,
@@ -327,7 +348,9 @@ export function PatientRoster({
                           {STATO_RICOVERO_LABEL[state] ?? state}
                         </span>
                       ) : (
-                        <span className="patient-signals__empty">Non disponibile</span>
+                        <span className="patient-signals__empty">
+                          {summaryLoading ? 'Caricamento…' : 'Non disponibile'}
+                        </span>
                       )}
                     </td>
                     <td>
@@ -336,6 +359,7 @@ export function PatientRoster({
                         summary={summary}
                         openHandovers={consegneAperteMap.get(patient.id) ?? 0}
                         anomalies={anomalie}
+                        summaryLoading={summaryLoading}
                       />
                     </td>
                     <td className="patient-roster__actions">
@@ -380,6 +404,7 @@ export function PatientRoster({
               summary={summaryMap.get(patient.id)}
               openHandovers={consegneAperteMap.get(patient.id) ?? 0}
               anomalie={anomalie}
+              summaryLoading={summaryLoading}
               deleteEnabled={deleteEnabled}
               deleting={deletingId === patient.id}
               onSelect={onSelect}

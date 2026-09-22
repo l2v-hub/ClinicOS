@@ -1,0 +1,275 @@
+{
+  "measuredAt": "2026-09-22T20:56:33.264Z",
+  "baselineCommit": "393e8b4ae909d66d945d474c01bb7669b0d8be3d",
+  "candidateSourceSha256": "8bbe6c94a38d43300d2e682e64e3e789c77831f8bbadac9541a825eb9685b106",
+  "method": "Recursively follow manifest imports only, never dynamicImports. Incremental bytes subtract index.html and its static dependency closure because they are already loaded before navigating to PatientList. Sum file bytes, and sum individual gzip sizes; this is payload size, not browser timing.",
+  "baseline": {
+    "manifestSha256": "bb2eba8385101924c6303ac75e1a684ecd0cf40c2429b8246c7dbc82f8c1d115",
+    "route": "assets/PatientList-CK4KcLw2.js",
+    "dynamicImports": [
+      "_PdfCanvasPreview-Crx6bwfP.js"
+    ],
+    "incrementalJsBytes": 660201,
+    "incrementalGzipBytes": 201680,
+    "allStaticJsBytes": 1173565,
+    "excludedAlreadyLoadedChunks": [
+      {
+        "key": "index.html",
+        "file": "assets/index-mj-92053.js",
+        "bytes": 504807,
+        "gzipBytes": 139672,
+        "sha256": "e0839133e9e0ad66ef23e5726b53fd79735271d97545f4cb05e3d7220acb3069"
+      },
+      {
+        "key": "_jsx-runtime-C_urxT9I.js",
+        "file": "assets/jsx-runtime-C_urxT9I.js",
+        "bytes": 8557,
+        "gzipBytes": 3264,
+        "sha256": "c5ada9bd299829815e6bcf297786623fa9a1b879ef9f60231d90b6b2d4a3f670"
+      }
+    ],
+    "chunks": [
+      {
+        "key": "src/components/operator/PatientList.tsx",
+        "file": "assets/PatientList-CK4KcLw2.js",
+        "bytes": 57403,
+        "gzipBytes": 19655,
+        "sha256": "a2f42ece94016108208a1a5e58bcd3ea8e858daa592e4ae48e0270c146dc5a22"
+      },
+      {
+        "key": "_AccessibleDialogSurface-CMFZ00AR.js",
+        "file": "assets/AccessibleDialogSurface-CMFZ00AR.js",
+        "bytes": 2315,
+        "gzipBytes": 1238,
+        "sha256": "4ee9d42b29bcdd6b21f277b8c659b8e216904c39fa425fcf8d969824bf6e3fb3"
+      },
+      {
+        "key": "_IntakeWorkspace-B53HCil4.js",
+        "file": "assets/IntakeWorkspace-B53HCil4.js",
+        "bytes": 479705,
+        "gzipBytes": 135097,
+        "sha256": "c48822772b20781e9ea67f0fe124c102236b82d4011065c61135efc44f21e421"
+      },
+      {
+        "key": "_ClinicalSectionLoading-8WBqz94B.js",
+        "file": "assets/ClinicalSectionLoading-8WBqz94B.js",
+        "bytes": 17927,
+        "gzipBytes": 5490,
+        "sha256": "b21e23d418138aa99b247d8a0bf5690dcb31af4ede51edaefbf0650732dbc1c2"
+      },
+      {
+        "key": "_shared-BygGM-yH.js",
+        "file": "assets/shared-BygGM-yH.js",
+        "bytes": 4101,
+        "gzipBytes": 1728,
+        "sha256": "7128df7b255a3b9f70e7971612d1717c2b73e900efb11f41f61bcba736ba5609"
+      },
+      {
+        "key": "_AnamnesisEditor-Do1u8Hnd.js",
+        "file": "assets/AnamnesisEditor-Do1u8Hnd.js",
+        "bytes": 5103,
+        "gzipBytes": 2254,
+        "sha256": "b3a9d48a0682d297dae6725c0baa925720608c599414c69eee66ca51e66f0aaf"
+      },
+      {
+        "key": "_ClinicalCard-DMsC8NDX.js",
+        "file": "assets/ClinicalCard-DMsC8NDX.js",
+        "bytes": 2884,
+        "gzipBytes": 1516,
+        "sha256": "1c6e8e11d47fe52e1e5df7ffdbdc76647962eff470c9c7f86930ff3b69339bf5"
+      },
+      {
+        "key": "_InlineEditableField-ZMUPIbud.js",
+        "file": "assets/InlineEditableField-ZMUPIbud.js",
+        "bytes": 4022,
+        "gzipBytes": 1402,
+        "sha256": "6d0442dc89ed680717d0f31d7127349fc4836e9141e01994621b0feebf29fbec"
+      },
+      {
+        "key": "_clinicalHistory-Dc8Sh74T.js",
+        "file": "assets/clinicalHistory-Dc8Sh74T.js",
+        "bytes": 1855,
+        "gzipBytes": 877,
+        "sha256": "d619ba31010d85b762bd8728699a181199f1cadd0eb5c77c7ba5b3f6faae281f"
+      },
+      {
+        "key": "_TherapyEditor-BcPDzrd6.js",
+        "file": "assets/TherapyEditor-BcPDzrd6.js",
+        "bytes": 40930,
+        "gzipBytes": 13525,
+        "sha256": "f74247bfc58d870b1ec6ee3e576d388f5fa082c608b0190702e5fa6d66edd55c"
+      },
+      {
+        "key": "_farmacoDocumento-DzyiFi7j.js",
+        "file": "assets/farmacoDocumento-DzyiFi7j.js",
+        "bytes": 1945,
+        "gzipBytes": 967,
+        "sha256": "a85d947ee84ac02d62eb0e4a5eedc79824b7ddb3e76699f5181bbffc1bb3182c"
+      },
+      {
+        "key": "_therapyDose-BJM_nIEY.js",
+        "file": "assets/therapyDose-BJM_nIEY.js",
+        "bytes": 2061,
+        "gzipBytes": 1031,
+        "sha256": "1e0e67e9bdc2e21a24543716f6c5348c8fbb27b7c65a589787e2f4baa1e4d43b"
+      },
+      {
+        "key": "_VitalSignsEditor-DA43Rm6l.js",
+        "file": "assets/VitalSignsEditor-DA43Rm6l.js",
+        "bytes": 2003,
+        "gzipBytes": 988,
+        "sha256": "ad699d119a9ba2704c6a0a7b3b2bb3f7abc4c1cbac39fcbf8e31971ae9fce5ff"
+      },
+      {
+        "key": "_PainAssessmentEditor-DMm3ms5X.js",
+        "file": "assets/PainAssessmentEditor-DMm3ms5X.js",
+        "bytes": 1904,
+        "gzipBytes": 978,
+        "sha256": "9cd70588423d814647644ce852e25d1907abef2fc0b570ae7252c75968d6be91"
+      },
+      {
+        "key": "_patientSort-B9MB1BKg.js",
+        "file": "assets/patientSort-B9MB1BKg.js",
+        "bytes": 340,
+        "gzipBytes": 221,
+        "sha256": "f5112cb65bf5692923785591356a6c1633f5d6a6ae5c61e6573b9ba63bf44924"
+      },
+      {
+        "key": "_PageHeader-DgO4o-EX.js",
+        "file": "assets/PageHeader-DgO4o-EX.js",
+        "bytes": 1611,
+        "gzipBytes": 714,
+        "sha256": "ac54c2d2c88caabafe12b47f0b971c80914ed3cbf9ffcc35e26727a79c60641a"
+      },
+      {
+        "key": "_farmacoRiferimento-CEu8Pe-A.js",
+        "file": "assets/farmacoRiferimento-CEu8Pe-A.js",
+        "bytes": 4235,
+        "gzipBytes": 1945,
+        "sha256": "3516686deee9a801103d28e4108519f04c8a4bcc2e0624d5b3ef269823774bf1"
+      },
+      {
+        "key": "_useAnomalieReparto-DkrNI6h6.js",
+        "file": "assets/useAnomalieReparto-DkrNI6h6.js",
+        "bytes": 2234,
+        "gzipBytes": 1189,
+        "sha256": "12523bf7e05466e2b456e0071048bdad1edf30ace8fe114b47a18aebd7614976"
+      },
+      {
+        "key": "_ConfirmDialog-Bq8oVhiP.js",
+        "file": "assets/ConfirmDialog-Bq8oVhiP.js",
+        "bytes": 2201,
+        "gzipBytes": 1089,
+        "sha256": "af969a38b96d09e20375b37f055f05319a0a63b3c97e02e3d3934f6c574a1c41"
+      },
+      {
+        "key": "_SemanticTaggedText-CZBnSCkG.js",
+        "file": "assets/SemanticTaggedText-CZBnSCkG.js",
+        "bytes": 5609,
+        "gzipBytes": 2403,
+        "sha256": "2091c59902370b1ed571ab1f35fcbeaa563acb6828af72cf8ac9ab0f47615988"
+      },
+      {
+        "key": "_DocumentPreview-BCHjrNk9.js",
+        "file": "assets/DocumentPreview-BCHjrNk9.js",
+        "bytes": 6325,
+        "gzipBytes": 2419,
+        "sha256": "999b0d3d3135da2797e35882485c97deec03def366349820767c99ff3f8b9f21"
+      },
+      {
+        "key": "_CameraCapture-BmoJN6QG.js",
+        "file": "assets/CameraCapture-BmoJN6QG.js",
+        "bytes": 13488,
+        "gzipBytes": 4954,
+        "sha256": "4219669108cafa96c60a03fd2e8f3287bd77b17e55b01e9511791c2bf4e5f195"
+      }
+    ]
+  },
+  "candidate": {
+    "manifestSha256": "b89fddfd6a1f1666b3e40b2196a868730ea4a39e41dcabbbd1530bd7ac40188f",
+    "route": "assets/PatientList-B27sECMf.js",
+    "dynamicImports": [
+      "src/components/shared/DischargeImportModal.tsx",
+      "src/components/shared/intake/IntakeWorkspace.tsx"
+    ],
+    "incrementalJsBytes": 40793,
+    "incrementalGzipBytes": 16600,
+    "allStaticJsBytes": 553656,
+    "excludedAlreadyLoadedChunks": [
+      {
+        "key": "index.html",
+        "file": "assets/index-B74gUrVA.js",
+        "bytes": 504306,
+        "gzipBytes": 139573,
+        "sha256": "04d63683a683b4a7ecc5ee70bfd6512450f31473b508f67fcbfc75b94777ff90"
+      },
+      {
+        "key": "_jsx-runtime-C_urxT9I.js",
+        "file": "assets/jsx-runtime-C_urxT9I.js",
+        "bytes": 8557,
+        "gzipBytes": 3264,
+        "sha256": "c5ada9bd299829815e6bcf297786623fa9a1b879ef9f60231d90b6b2d4a3f670"
+      }
+    ],
+    "chunks": [
+      {
+        "key": "src/components/operator/PatientList.tsx",
+        "file": "assets/PatientList-B27sECMf.js",
+        "bytes": 25912,
+        "gzipBytes": 9232,
+        "sha256": "05f3ade0ef60e673e199c0ce775afb6506c96de3da8acd4296e6a45d2a75db79"
+      },
+      {
+        "key": "_AccessibleDialogSurface-CymwsWDj.js",
+        "file": "assets/AccessibleDialogSurface-CymwsWDj.js",
+        "bytes": 2315,
+        "gzipBytes": 1240,
+        "sha256": "e12babe5832e200103d5d58143663310e4f0770dab7872b9c12f39be1120e215"
+      },
+      {
+        "key": "_patientSort-B9MB1BKg.js",
+        "file": "assets/patientSort-B9MB1BKg.js",
+        "bytes": 340,
+        "gzipBytes": 221,
+        "sha256": "f5112cb65bf5692923785591356a6c1633f5d6a6ae5c61e6573b9ba63bf44924"
+      },
+      {
+        "key": "_PageHeader-8GOraCvS.js",
+        "file": "assets/PageHeader-8GOraCvS.js",
+        "bytes": 1611,
+        "gzipBytes": 712,
+        "sha256": "e6248ea65a4da4728a0246073e7749a91ff86270623f78127878d8c755c8bf9b"
+      },
+      {
+        "key": "_farmacoRiferimento-Bku8RMF4.js",
+        "file": "assets/farmacoRiferimento-Bku8RMF4.js",
+        "bytes": 4235,
+        "gzipBytes": 1944,
+        "sha256": "1a8c41c1c4371e65e699eb83bb4603ec7f5287a17f37018dec0ed487ca914b3d"
+      },
+      {
+        "key": "_farmacoDocumento-DzyiFi7j.js",
+        "file": "assets/farmacoDocumento-DzyiFi7j.js",
+        "bytes": 1945,
+        "gzipBytes": 967,
+        "sha256": "a85d947ee84ac02d62eb0e4a5eedc79824b7ddb3e76699f5181bbffc1bb3182c"
+      },
+      {
+        "key": "_useAnomalieReparto-DTeAbICx.js",
+        "file": "assets/useAnomalieReparto-DTeAbICx.js",
+        "bytes": 2234,
+        "gzipBytes": 1193,
+        "sha256": "c26e62166e6f57c8acbde8875207c6ea81fed021376819bcba31332052ef8095"
+      },
+      {
+        "key": "_ConfirmDialog-DFDpOubG.js",
+        "file": "assets/ConfirmDialog-DFDpOubG.js",
+        "bytes": 2201,
+        "gzipBytes": 1091,
+        "sha256": "f4f9b0b23c80a360fb2ea97d2e6820e5a3c870e9c1ea7977e4a91263888c2666"
+      }
+    ]
+  },
+  "reductionBytes": 619408,
+  "reductionPercent": 93.82
+}

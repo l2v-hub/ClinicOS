@@ -1,15 +1,15 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { lazy, Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { API_URL } from '../../config';
 import { ConfirmDialog } from '../shared/ConfirmDialog';
 import { useAnomalieReparto } from './cartella/useAnomalieReparto';
-import type { Paziente, ClinicalSummaryEntry } from '../../types';
+import type { Paziente } from '../../types';
 import { IcoSearch, IcoX, IcoPlus, IcoUser } from '../../icons';
-import { IntakeWorkspace } from '../shared/intake/IntakeWorkspace';
+import { DialogLoading } from '../shared/DialogLoading';
+import { usePatientListPage } from './usePatientListPage';
 import { PageHeader } from '../shared/PageHeader';
 import { AIImportStatus } from '../shared/AIImportStatus';
 import { cachedGetJson } from '../../lib/cachedFetch';
 import { operatorHeaders } from '../../lib/operatorSession';
-import { fetchPatientPageWithSummary, mergePatientPage } from '../../lib/patientPage';
 import { PatientRoster } from './PatientRoster';
 import {
   ADMISSION_LABELS as STATO_RICOVERO_LABEL,
@@ -17,6 +17,12 @@ import {
   type PatientRosterSort,
 } from '../../lib/patientRosterSort';
 import './PatientList.css';
+
+const IntakeWorkspace = lazy(() =>
+  import('../shared/intake/IntakeWorkspace').then((module) => ({
+    default: module.IntakeWorkspace,
+  })),
+);
 
 interface PatientListProps {
   totalPatients: number;
@@ -50,15 +56,20 @@ export function PatientList({
   operatorId,
   operatorRole,
 }: PatientListProps) {
-  const [pazienti, setPazienti] = useState<Paziente[]>([]);
-  const [clinicalSummary, setClinicalSummary] = useState<ClinicalSummaryEntry[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
-  const [nextCursor, setNextCursor] = useState<string | null>(null);
-  const [pageError, setPageError] = useState('');
+  const {
+    patients: pazienti,
+    summary: clinicalSummary,
+    loading,
+    loadingMore,
+    hasMore,
+    nextCursor,
+    pageError,
+    summaryLoading,
+    summaryError,
+    loadPage,
+    retrySummary,
+  } = usePatientListPage(ricerca, filtroSesso);
   const [sort, setSort] = useState<PatientRosterSort>({ field: 'patient', direction: 'asc' });
-  const requestSequence = useRef(0);
 
   const summaryMap = useMemo(
     () => new Map(clinicalSummary.map((c) => [c.patientId, c])),
@@ -73,72 +84,6 @@ export function PatientList({
   const [deleteEnabled, setDeleteEnabled] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [settingsError, setSettingsError] = useState('');
-
-  const loadPage = useCallback(
-    async (cursor?: string, append = false, signal?: AbortSignal) => {
-      const requestId = ++requestSequence.current;
-      if (append) setLoadingMore(true);
-      else {
-        setLoading(true);
-        setPageError('');
-        setPazienti([]);
-        setClinicalSummary([]);
-      }
-
-      try {
-        const { page, summary } = await fetchPatientPageWithSummary(
-          API_URL,
-          {
-            q: ricerca,
-            sex: filtroSesso === 'tutti' ? undefined : filtroSesso,
-            cursor,
-            limit: 50,
-          },
-          { headers: operatorHeaders(), signal },
-        );
-
-        if (signal?.aborted || requestId !== requestSequence.current) return;
-        setPazienti((current) => mergePatientPage(current, page.items, append));
-        setClinicalSummary((current) => {
-          if (!append) return summary;
-          const byPatient = new Map(current.map((entry) => [entry.patientId, entry]));
-          summary.forEach((entry) => byPatient.set(entry.patientId, entry));
-          return [...byPatient.values()];
-        });
-        setHasMore(page.hasMore);
-        setNextCursor(page.nextCursor);
-      } catch (error) {
-        if (
-          (error as { name?: string }).name !== 'AbortError' &&
-          requestId === requestSequence.current
-        ) {
-          setPageError((error as Error).message || 'Errore nel caricamento dei pazienti');
-          if (!append) {
-            setHasMore(false);
-            setNextCursor(null);
-          }
-        }
-      } finally {
-        if (requestId === requestSequence.current) {
-          setLoading(false);
-          setLoadingMore(false);
-        }
-      }
-    },
-    [ricerca, filtroSesso],
-  );
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const timer = window.setTimeout(() => {
-      void loadPage(undefined, false, controller.signal);
-    }, 250);
-    return () => {
-      window.clearTimeout(timer);
-      controller.abort();
-      requestSequence.current += 1;
-    };
-  }, [loadPage]);
 
   useEffect(() => {
     cachedGetJson<{ deleteEnabled?: boolean } | null>(`${API_URL}/patients/settings`)
@@ -289,6 +234,20 @@ export function PatientList({
         </div>
       )}
 
+      {summaryError && (
+        <div className="patient-roster-status patient-roster-status--warning" role="status">
+          {summaryError}{' '}
+          <button type="button" className="link-btn" onClick={retrySummary}>
+            Riprova segnalazioni
+          </button>
+        </div>
+      )}
+      {summaryLoading && pazienti.length > 0 && (
+        <p className="patient-roster-status" role="status">
+          Aggiornamento ricoveri e segnalazioni…
+        </p>
+      )}
+
       {/* Toolbar */}
       <div className="toolbar">
         <div className="search-wrap">
@@ -401,11 +360,12 @@ export function PatientList({
       {(loading || pazienti.length > 0) && (
         <>
           <PatientRoster
-            patients={loading ? [] : ordinati}
+            patients={ordinati}
             sort={sort}
             onSortChange={setSort}
             hasMore={hasMore}
             loading={loading}
+            summaryLoading={summaryLoading}
             summaryMap={summaryMap}
             consegneAperteMap={consegneAperteMap}
             anomalie={anomalie}
@@ -429,17 +389,21 @@ export function PatientList({
         </>
       )}
 
-      <IntakeWorkspace
-        open={showModal}
-        onClose={() => setShowModal(false)}
-        onCreated={(patientId, moduleTabId) => {
-          setShowModal(false);
-          if (!patientId) void loadPage(undefined, false);
-          onImported?.(patientId, moduleTabId);
-        }}
-        operatorId={operatorId}
-        operatorRole={operatorRole}
-      />
+      {showModal && (
+        <Suspense fallback={<DialogLoading onClose={() => setShowModal(false)} />}>
+          <IntakeWorkspace
+            open={showModal}
+            onClose={() => setShowModal(false)}
+            onCreated={(patientId, moduleTabId) => {
+              setShowModal(false);
+              if (!patientId) void loadPage(undefined, false);
+              onImported?.(patientId, moduleTabId);
+            }}
+            operatorId={operatorId}
+            operatorRole={operatorRole}
+          />
+        </Suspense>
+      )}
 
       <ConfirmDialog
         open={pendingDelete !== null}

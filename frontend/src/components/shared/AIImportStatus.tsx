@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { API_URL } from '../../config';
-import { DischargeImportModal } from './DischargeImportModal';
+import { DialogLoading } from './DialogLoading';
 import { cachedGetJson } from '../../lib/cachedFetch';
+
+const DischargeImportModal = lazy(() =>
+  import('./DischargeImportModal').then((module) => ({ default: module.DischargeImportModal })),
+);
 
 // REQ-013: surfaces whether the backend AI extraction service is configured and
 // usable, without ever knowing the API key (key is backend-only). Doubles as the
@@ -46,14 +50,12 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
     };
   }, []);
 
-  if (loading) {
-    return <span className="ai-import-badge ai-import-badge--loading">Servizio AI…</span>;
-  }
-
   const available = status?.available === true;
-  const title = available
-    ? `Importa lettera di dimissione (${status?.model})`
-    : `Servizio AI non disponibile${status?.errors?.length ? ': ' + status.errors.join('; ') : ''}`;
+  const title = loading
+    ? 'Importa lettera di dimissione · Verifica disponibilità in corso'
+    : available
+      ? 'Importa lettera di dimissione'
+      : `Servizio AI non disponibile${status?.errors?.length ? ': ' + status.errors.join('; ') : ''}`;
 
   return (
     <>
@@ -61,6 +63,7 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
         type="button"
         className={`btn-secondary ai-import-btn${available ? '' : ' ai-import-btn--disabled'}`}
         disabled={!available}
+        aria-busy={loading}
         title={title}
         aria-label={title}
         onClick={
@@ -75,13 +78,17 @@ export function AIImportStatus({ onStart, onImported, operatorId, operatorRole }
         <span className={`ai-import-dot ${available ? 'is-on' : 'is-off'}`} aria-hidden="true" />
         Importa dimissione
       </button>
-      <DischargeImportModal
-        open={open}
-        onClose={() => setOpen(false)}
-        onImported={onImported}
-        operatorId={operatorId}
-        operatorRole={operatorRole}
-      />
+      {open && (
+        <Suspense fallback={<DialogLoading onClose={() => setOpen(false)} />}>
+          <DischargeImportModal
+            open={open}
+            onClose={() => setOpen(false)}
+            onImported={onImported}
+            operatorId={operatorId}
+            operatorRole={operatorRole}
+          />
+        </Suspense>
+      )}
     </>
   );
 }

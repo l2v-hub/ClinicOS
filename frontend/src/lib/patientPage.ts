@@ -82,18 +82,40 @@ export async function fetchPatientPageWithSummary(
     throw new Error('Risposta pagina pazienti non valida');
   }
 
-  const ids = page.items.map((patient) => patient.id);
-  if (ids.length === 0) return { page, summary: [] };
-
-  const params = new URLSearchParams({ patientIds: ids.join(',') });
-  const summaryResponse = await fetcher(
-    `${apiUrl}/patients/clinical-summary?${params.toString()}`,
-    { headers: options.headers, signal: options.signal },
+  const summary = await fetchPatientClinicalSummary(
+    apiUrl,
+    page.items.map((p) => p.id),
+    options,
   );
-  if (!summaryResponse.ok) throw new Error('Impossibile caricare i badge clinici');
-  const summary = (await summaryResponse.json()) as unknown;
-  if (!Array.isArray(summary)) throw new Error('Risposta riepilogo clinico non valida');
-  return { page, summary: summary as ClinicalSummaryEntry[] };
+  return { page, summary };
+}
+
+/** Optional enrichment, independently retryable. Every request stays bounded to one page. */
+export async function fetchPatientClinicalSummary(
+  apiUrl: string,
+  ids: string[],
+  options: { headers: HeadersInit; signal?: AbortSignal; fetcher?: typeof fetch },
+): Promise<ClinicalSummaryEntry[]> {
+  const uniqueIds = [...new Set(ids)];
+  const result: ClinicalSummaryEntry[] = [];
+  for (let offset = 0; offset < uniqueIds.length; offset += 50) {
+    options.signal?.throwIfAborted();
+    const params = new URLSearchParams({
+      patientIds: uniqueIds.slice(offset, offset + 50).join(','),
+    });
+    const response = await (options.fetcher ?? fetch)(
+      `${apiUrl}/patients/clinical-summary?${params}`,
+      {
+        headers: options.headers,
+        signal: options.signal,
+      },
+    );
+    if (!response.ok) throw new Error('Impossibile caricare i badge clinici');
+    const summary: unknown = await response.json();
+    if (!Array.isArray(summary)) throw new Error('Risposta riepilogo clinico non valida');
+    result.push(...(summary as ClinicalSummaryEntry[]));
+  }
+  return result;
 }
 
 export async function fetchPatientPage(

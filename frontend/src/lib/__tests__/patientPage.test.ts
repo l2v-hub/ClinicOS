@@ -6,6 +6,7 @@ import {
   buildPatientPageRequest,
   fetchPatientById,
   fetchPatientPage,
+  fetchPatientClinicalSummary,
   fetchPatientPageWithSummary,
   mergePatientPage,
 } from '../patientPage';
@@ -141,4 +142,60 @@ test('directory search is one bounded page request without clinical summary or r
   const page = await fetchPatientPage('/api', { q: 'Rossi', limit: 6 }, { headers: {}, fetcher });
   assert.equal(page.items.length, 1);
   assert.deepEqual(calls, ['/api/patients/page/search']);
+});
+
+test('clinical enrichment is independently bounded and deduplicates requested ids', async () => {
+  const calls: string[][] = [];
+  const fetcher = (async (input, init) => {
+    const ids = new URL(String(input), 'http://test').searchParams.get('patientIds')!.split(',');
+    calls.push(ids);
+    assert.equal(new Headers(init?.headers).get('x-test-scope'), 'operator');
+    return new Response(JSON.stringify(ids.map((patientId) => ({ patientId }))));
+  }) as typeof fetch;
+  const ids = Array.from({ length: 52 }, (_, i) => `synthetic-${i}`);
+  const result = await fetchPatientClinicalSummary('/api', [...ids, ids[0]], {
+    headers: { 'x-test-scope': 'operator' },
+    fetcher,
+  });
+  assert.deepEqual(
+    calls.map((batch) => batch.length),
+    [50, 2],
+  );
+  assert.equal(result.length, 52);
+  assert.deepEqual(await fetchPatientClinicalSummary('/api', [], { headers: {}, fetcher }), []);
+  assert.equal(calls.length, 2);
+});
+
+test('summary failure remains an error rather than an empty success', async () => {
+  for (const response of [new Response('{}', { status: 500 }), new Response('{}')]) {
+    await assert.rejects(
+      fetchPatientClinicalSummary('/api', ['synthetic'], {
+        headers: {},
+        fetcher: (async () => response) as typeof fetch,
+      }),
+      /badge clinici|riepilogo clinico/,
+    );
+  }
+});
+
+test('aborting enrichment prevents later batches from being requested', async () => {
+  const controller = new AbortController();
+  let calls = 0;
+  await assert.rejects(
+    fetchPatientClinicalSummary(
+      '/api',
+      Array.from({ length: 51 }, (_, i) => `p-${i}`),
+      {
+        headers: {},
+        signal: controller.signal,
+        fetcher: (async () => {
+          calls++;
+          controller.abort();
+          return new Response('[]');
+        }) as typeof fetch,
+      },
+    ),
+    { name: 'AbortError' },
+  );
+  assert.equal(calls, 1);
 });

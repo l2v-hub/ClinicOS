@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-09-22T20:59:24.043Z",
+  "logs": [],
+  "finalMetrics": {
+    "metrics": {
+      "requestMs": 26,
+      "buttonMs": 42,
+      "buttonWidth": 170,
+      "buttonDisabledInitially": true,
+      "rowsMs": 766,
+      "summaryMs": 1761
+    },
+    "requests": [
+      {
+        "path": "/ai/extraction/status",
+        "method": "GET",
+        "at": 26
+      },
+      {
+        "path": "/patients/page",
+        "method": "GET",
+        "at": 26
+      },
+      {
+        "path": "/therapy-slots",
+        "method": "GET",
+        "at": 26
+      },
+      {
+        "path": "/patients/settings",
+        "method": "GET",
+        "at": 26
+      },
+      {
+        "path": "/patients/clinical-summary",
+        "method": "GET",
+        "at": 745
+      }
+    ],
+    "errors": [],
+    "selected": ""
+  }
+}
