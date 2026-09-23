@@ -1,0 +1,927 @@
+{
+  "sessions": [
+    {
+      "id": "cmude5vlc0000qglpbzcpxj6c",
+      "status": "confirmed",
+      "manifest": {
+        "pages": [
+          {
+            "id": "daebf7d7-8b3b-406c-9cff-22caade924b7",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 0,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 1
+          },
+          {
+            "id": "181ea625-11aa-46c8-985b-e048c89cd375",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 1,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 2
+          },
+          {
+            "id": "1a2af6b2-1335-4fa3-9648-b89a52090004",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 2,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 3
+          },
+          {
+            "id": "d6012930-f490-4bc6-a2bf-b31d2ac214e3",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 3,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 4
+          },
+          {
+            "id": "33fc6959-c31e-4bd3-885a-9b5580fa3721",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 4,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 5
+          },
+          {
+            "id": "554d845c-4cc8-4b93-b938-eacd69b78eb4",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 5,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 6
+          },
+          {
+            "id": "6caf1855-8c91-4c57-91c1-2333b3f548a4",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 6,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 7
+          },
+          {
+            "id": "5990b0fe-e3e9-4bcf-acd0-7da7ce9881fe",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 7,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 8
+          },
+          {
+            "id": "302803bc-23f6-4bd3-a1e4-672fb4f87430",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 8,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 9
+          },
+          {
+            "id": "b7bd672d-9527-4e8e-9231-a00e1478449f",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 9,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 10
+          },
+          {
+            "id": "c720e07a-77b7-4b0a-8800-bdf7fa0bcfba",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 0,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 1
+          },
+          {
+            "id": "1992787b-51a9-4e08-8577-cc2bd9c7db20",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 1,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 2
+          },
+          {
+            "id": "a7fa419e-4a2f-410c-ac46-aa9b38d8e6dd",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 2,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 3
+          },
+          {
+            "id": "ff4afad2-191f-4cd2-be3e-1f8a11bd70ef",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 3,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 4
+          },
+          {
+            "id": "aeb97832-7a07-47ee-8f6a-3e86802dddd0",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 4,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 5
+          },
+          {
+            "id": "00b1468b-f2ee-4cf4-88ee-87d233103cfc",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 5,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 6
+          },
+          {
+            "id": "312ab62b-d89d-4cc4-bbcf-7a5171bc1b44",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 6,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 7
+          },
+          {
+            "id": "41542d59-ed12-48ae-8e18-e5700b8f53dd",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 7,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 8
+          },
+          {
+            "id": "f525238a-f612-43d9-bf0b-8df7ca7772d2",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 8,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 9
+          },
+          {
+            "id": "7ee4f90e-1abb-4c1e-b91a-77efbb213dc4",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 9,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 10
+          },
+          {
+            "id": "d7d9f24f-0ed6-41ee-87fb-6bd948624c61",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 0,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 1
+          },
+          {
+            "id": "cd263171-616f-4f98-a124-58c0846d2279",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 1,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 2
+          },
+          {
+            "id": "a14752c4-7b70-4641-8a0a-78fb1c7a00fb",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 2,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 3
+          },
+          {
+            "id": "b310c1a9-650e-4400-bb35-85033d6f21f9",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 3,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 4
+          },
+          {
+            "id": "3123a588-703b-4fec-89a8-19b8e7ebf086",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 4,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 5
+          },
+          {
+            "id": "a8fc8f2f-94ac-41c3-83fa-5fda606a17ea",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 5,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 6
+          },
+          {
+            "id": "c1d71c36-43eb-4487-9c3f-0c0585cd9d09",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 6,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 7
+          },
+          {
+            "id": "501f17f1-12c3-4a6b-b157-295add753f37",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 7,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 8
+          },
+          {
+            "id": "0ae0ce79-189c-43a3-b342-53c1a14f1b19",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 8,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 9
+          },
+          {
+            "id": "d1ea4892-83d3-4a7c-9631-5dd255a87290",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 9,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 10
+          }
+        ],
+        "groups": [
+          {
+            "id": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "label": "Lettera 1",
+            "sortOrder": 0
+          },
+          {
+            "id": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "label": "Lettera 2",
+            "sortOrder": 1
+          },
+          {
+            "id": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "label": "Lettera 3",
+            "sortOrder": 2
+          }
+        ],
+        "version": 1
+      },
+      "manifestRevision": 5
+    }
+  ],
+  "drafts": [
+    {
+      "id": "cmude98j90016qglp9o1od4dl",
+      "status": "confirmed",
+      "version": 3,
+      "source": "import",
+      "data": {
+        "diagnosi": [
+          {
+            "id": "5a806f85-530b-42ef-93c9-15596cf782a2",
+            "note": "",
+            "tipo": "principale",
+            "stato": "attiva",
+            "createdAt": "2026-09-23T00:58:06.056Z",
+            "operatore": "",
+            "descrizione": "Osservazione sintetica",
+            "dataInsorgenza": ""
+          }
+        ],
+        "_accepted": {
+          "therapy": true,
+          "demographics": true
+        },
+        "_sections": null,
+        "_narrative": {
+          "sex": "F",
+          "email": "",
+          "phone": "",
+          "address": "",
+          "boldTags": [],
+          "lastName": "Sintetica",
+          "warnings": [],
+          "firstName": "",
+          "fiscalCode": "",
+          "dateOfBirth": "",
+          "therapyText": "[Lettera 1]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 08:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 1 · pagina 2\n\n[Lettera 2]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 20:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 2 · pagina 2\n\n[Lettera 3]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 20:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 3 · pagina 2",
+          "placeOfBirth": "",
+          "unmappedText": "",
+          "allergiesText": "",
+          "allergyStatus": "not_documented",
+          "anamnesisText": "",
+          "diagnosisText": "[Lettera 1]\n## DIAGNOSI\nOsservazione sintetica pagina 1. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n## DIAGNOSI\nOsservazione sintetica pagina 2. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 3\n\n## DIAGNOSI\nOsservazione sintetica pagina 3. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 4\n\n## DIAGNOSI\nOsservazione sintetica pagina 4. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 5\n\n## DIAGNOSI\nOsservazione sintetica pagina 5. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 6\n\n## DIAGNOSI\nOsservazione sintetica pagina 6. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 7\n\n## DIAGNOSI\nOsservazione sintetica pagina 7. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 8\n\n## DIAGNOSI\nOsservazione sintetica pagina 8. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 9\n\n## DIAGNOSI\nOsservazione sintetica pagina 9. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 10\n\n## DIAGNOSI\nOsservazione sintetica pagina 10. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n[Lettera 2]\n## DIAGNOSI\nOsservazione sintetica pagina 11. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n## DIAGNOSI\nOsservazione sintetica pagina 12. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 3\n\n## DIAGNOSI\nOsservazione sintetica pagina 13. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 4\n\n## DIAGNOSI\nOsservazione sintetica pagina 14. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 5\n\n## DIAGNOSI\nOsservazione sintetica pagina 15. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 6\n\n## DIAGNOSI\nOsservazione sintetica pagina 16. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 7\n\n## DIAGNOSI\nOsservazione sintetica pagina 17. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 8\n\n## DIAGNOSI\nOsservazione sintetica pagina 18. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 9\n\n## DIAGNOSI\nOsservazione sintetica pagina 19. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 10\n\n## DIAGNOSI\nOsservazione sintetica pagina 20. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n[Lettera 3]\n## DIAGNOSI\nOsservazione sintetica pagina 21. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n## DIAGNOSI\nOsservazione sintetica pagina 22. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 3\n\n## DIAGNOSI\nOsservazione sintetica pagina 23. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 4\n\n## DIAGNOSI\nOsservazione sintetica pagina 24. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 5\n\n## DIAGNOSI\nOsservazione sintetica pagina 25. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 6\n\n## DIAGNOSI\nOsservazione sintetica pagina 26. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 7\n\n## DIAGNOSI\nOsservazione sintetica pagina 27. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 8\n\n## DIAGNOSI\nOsservazione sintetica pagina 28. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 9\n\n## DIAGNOSI\nOsservazione sintetica pagina 29. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 10\n\n## DIAGNOSI\nOsservazione sintetica pagina 30. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.",
+          "schemaVersion": "clinicos-discharge-narrative-v1",
+          "missingSections": [
+            "DIAGNOSI",
+            "ANAMNESI",
+            "DECORSO_OSPEDALIERO",
+            "CONSULENZE",
+            "DIAGNOSTICA_PER_IMMAGINI",
+            "PRESTAZIONI_E_INTERVENTI",
+            "TERAPIA",
+            "CONSIGLI_E_CONTROLLI",
+            "ALLERGIE"
+          ],
+          "sourceReferences": [
+            {
+              "fileId": "2343b67f-4574-4952-bd4d-4e7636798028",
+              "fileName": "Lettera 1",
+              "sectionKey": "DIAGNOSI"
+            },
+            {
+              "fileId": "2343b67f-4574-4952-bd4d-4e7636798028",
+              "fileName": "Lettera 1",
+              "sectionKey": "TERAPIA"
+            },
+            {
+              "fileId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+              "fileName": "Lettera 2",
+              "sectionKey": "DIAGNOSI"
+            },
+            {
+              "fileId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+              "fileName": "Lettera 2",
+              "sectionKey": "TERAPIA"
+            },
+            {
+              "fileId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+              "fileName": "Lettera 3",
+              "sectionKey": "DIAGNOSI"
+            },
+            {
+              "fileId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+              "fileName": "Lettera 3",
+              "sectionKey": "TERAPIA"
+            }
+          ],
+          "consultationsText": "",
+          "hospitalCourseText": "",
+          "adviceAndFollowUpText": "",
+          "imagingDiagnosticsText": "",
+          "proceduresAndInterventionsText": ""
+        },
+        "anagrafica": {
+          "sex": "F",
+          "phone": "",
+          "lastName": "Sintetica",
+          "firstName": "Alba Corretta",
+          "dateOfBirth": "",
+          "codiceFiscale": ""
+        },
+        "_terapiaText": "[Lettera 1]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 08:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 1 · pagina 2\n\n[Lettera 2]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 20:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 2 · pagina 2\n\n[Lettera 3]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 20:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 3 · pagina 2",
+        "_confirmation": {
+          "actorId": "VITALS-QA-OP",
+          "version": 1,
+          "therapyIds": [],
+          "confirmedAt": "2026-09-23T00:58:26.266Z",
+          "selectedSources": [],
+          "deferredImportIndexes": [
+            0,
+            1
+          ]
+        },
+        "_importReview": {
+          "decisions": [
+            {
+              "action": "select",
+              "conflictId": "bf3d9c61b8e57952dad315dfea6005d2d9f0f9bd2e4d391c1d9c2ca94ba8a021",
+              "candidateId": "f1efdfe02152919a07a657997b5b7538d8f4abf02770f7bc25587147717e52a2"
+            },
+            {
+              "action": "defer",
+              "conflictId": "01c99b651b11dd76a881978f7d48bf01ad7eccfab7f438cddc0f5ec49c463ea8"
+            }
+          ],
+          "unresolvedConflictIds": []
+        },
+        "_importSource": {
+          "resultHash": "3e7c91424e1605e00baf424f5fd65ce7f4613c2b10995474743a02ed646534c8",
+          "reviewHash": "c291b33a97f49ec1e5806acfa60a0cd2f6dcf97c19af920934b6670e51b8136f",
+          "groupHashes": {
+            "2343b67f-4574-4952-bd4d-4e7636798028": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de",
+            "540450d2-a918-4b8c-af1e-4f6e30cce3ab": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe",
+            "7f5c435a-e4ff-46ef-add1-2a42447a7728": "c6f6ebcaeb39f5f4401d3c047d2cada34f34a00657f9a524da2624c0ba2c13c8"
+          },
+          "manifestRevision": 5
+        },
+        "terapiaImport": [
+          {
+            "note": "controllare PA alle 22:00",
+            "forma": "CPR",
+            "orari": [
+              "08:00"
+            ],
+            "stato": "da_verificare",
+            "classe": "A",
+            "giorni": [],
+            "dosaggio": "25 MG",
+            "quantita": "1 Cpr",
+            "conflictId": "01c99b651b11dd76a881978f7d48bf01ad7eccfab7f438cddc0f5ec49c463ea8",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "LASIX",
+            "importSource": {
+              "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+              "inputHash": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de"
+            },
+            "originalText": "LASIX CPR 25 MG (OS) 1 Cpr ore 08:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)",
+            "importSources": [
+              {
+                "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+                "inputHash": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de"
+              }
+            ],
+            "sourceOutdated": false,
+            "conflictDeferred": true,
+            "excludedFromConfirm": true,
+            "viaSomministrazione": "OS"
+          },
+          {
+            "note": "controllare PA alle 22:00",
+            "forma": "CPR",
+            "orari": [
+              "20:00"
+            ],
+            "stato": "da_verificare",
+            "classe": "A",
+            "giorni": [],
+            "dosaggio": "25 MG",
+            "quantita": "1 Cpr",
+            "conflictId": "01c99b651b11dd76a881978f7d48bf01ad7eccfab7f438cddc0f5ec49c463ea8",
+            "dataInizio": "2026-09-23",
+            "farmacoNome": "LASIX",
+            "importSource": {
+              "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+              "inputHash": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe"
+            },
+            "originalText": "LASIX CPR 25 MG (OS) 1 Cpr ore 20:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)",
+            "importSources": [
+              {
+                "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+                "inputHash": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe"
+              },
+              {
+                "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+                "inputHash": "c6f6ebcaeb39f5f4401d3c047d2cada34f34a00657f9a524da2624c0ba2c13c8"
+              }
+            ],
+            "sourceOutdated": false,
+            "conflictDeferred": true,
+            "excludedFromConfirm": true,
+            "viaSomministrazione": "OS"
+          }
+        ],
+        "_importSections": true,
+        "_importedFields": [
+          "anagrafica",
+          "diagnosi",
+          "terapiaImport"
+        ],
+        "_importProposals": [],
+        "documentSections": [
+          {
+            "title": "Diagnosi",
+            "rawText": "[Lettera 1]\n## DIAGNOSI\nOsservazione sintetica pagina 1. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n## DIAGNOSI\nOsservazione sintetica pagina 2. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 3\n\n## DIAGNOSI\nOsservazione sintetica pagina 3. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 4\n\n## DIAGNOSI\nOsservazione sintetica pagina 4. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 5\n\n## DIAGNOSI\nOsservazione sintetica pagina 5. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 6\n\n## DIAGNOSI\nOsservazione sintetica pagina 6. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 7\n\n## DIAGNOSI\nOsservazione sintetica pagina 7. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 8\n\n## DIAGNOSI\nOsservazione sintetica pagina 8. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 9\n\n## DIAGNOSI\nOsservazione sintetica pagina 9. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 1 · pagina 10\n\n## DIAGNOSI\nOsservazione sintetica pagina 10. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n[Lettera 2]\n## DIAGNOSI\nOsservazione sintetica pagina 11. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n## DIAGNOSI\nOsservazione sintetica pagina 12. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 3\n\n## DIAGNOSI\nOsservazione sintetica pagina 13. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 4\n\n## DIAGNOSI\nOsservazione sintetica pagina 14. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 5\n\n## DIAGNOSI\nOsservazione sintetica pagina 15. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 6\n\n## DIAGNOSI\nOsservazione sintetica pagina 16. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 7\n\n## DIAGNOSI\nOsservazione sintetica pagina 17. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 8\n\n## DIAGNOSI\nOsservazione sintetica pagina 18. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 9\n\n## DIAGNOSI\nOsservazione sintetica pagina 19. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 2 · pagina 10\n\n## DIAGNOSI\nOsservazione sintetica pagina 20. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n[Lettera 3]\n## DIAGNOSI\nOsservazione sintetica pagina 21. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n## DIAGNOSI\nOsservazione sintetica pagina 22. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 3\n\n## DIAGNOSI\nOsservazione sintetica pagina 23. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 4\n\n## DIAGNOSI\nOsservazione sintetica pagina 24. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 5\n\n## DIAGNOSI\nOsservazione sintetica pagina 25. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 6\n\n## DIAGNOSI\nOsservazione sintetica pagina 26. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 7\n\n## DIAGNOSI\nOsservazione sintetica pagina 27. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 8\n\n## DIAGNOSI\nOsservazione sintetica pagina 28. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 9\n\n## DIAGNOSI\nOsservazione sintetica pagina 29. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.\n\n# Lettera 3 · pagina 10\n\n## DIAGNOSI\nOsservazione sintetica pagina 30. Questo documento serve esclusivamente al collaudo locale della scansione e non contiene dati clinici reali.",
+            "sources": [
+              {
+                "fileId": "2343b67f-4574-4952-bd4d-4e7636798028",
+                "fileName": "Lettera 1"
+              },
+              {
+                "fileId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+                "fileName": "Lettera 2"
+              },
+              {
+                "fileId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+                "fileName": "Lettera 3"
+              }
+            ],
+            "sectionKey": "DISCHARGE_DIAGNOSIS",
+            "targetArea": "CARTELLA",
+            "annotations": [],
+            "reviewStatus": "accepted",
+            "reviewedText": null
+          },
+          {
+            "title": "Anamnesi",
+            "rawText": "",
+            "sources": [],
+            "sectionKey": "ANAMNESIS",
+            "targetArea": "CARTELLA",
+            "annotations": [],
+            "reviewStatus": "accepted",
+            "reviewedText": null
+          },
+          {
+            "title": "Decorso ospedaliero",
+            "rawText": "",
+            "sources": [],
+            "sectionKey": "HOSPITAL_COURSE",
+            "targetArea": "DIARY",
+            "annotations": [],
+            "reviewStatus": "accepted",
+            "reviewedText": null
+          },
+          {
+            "title": "Consulenze",
+            "rawText": "",
+            "sources": [],
+            "sectionKey": "CONSULTATIONS",
+            "targetArea": "DIARY",
+            "annotations": [],
+            "reviewStatus": "accepted",
+            "reviewedText": null
+          },
+          {
+            "title": "Diagnostica per immagini",
+            "rawText": "",
+            "sources": [],
+            "sectionKey": "IMAGING_DIAGNOSTICS",
+            "targetArea": "DIARY",
+            "annotations": [],
+            "reviewStatus": "accepted",
+            "reviewedText": null
+          },
+          {
+            "title": "Prestazioni e interventi",
+            "rawText": "",
+            "sources": [],
+            "sectionKey": "PROCEDURES_AND_INTERVENTIONS",
+            "targetArea": "DIARY",
+            "annotations": [],
+            "reviewStatus": "accepted",
+            "reviewedText": null
+          },
+          {
+            "title": "Terapia domiciliare",
+            "rawText": "[Lettera 1]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 08:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 1 · pagina 2\n\n[Lettera 2]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 20:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 2 · pagina 2\n\n[Lettera 3]\n## TERAPIA ALLA DIMISSIONE\nLASIX CPR 25 MG (OS) 1 Cpr ore 20:00; controllare PA alle 22:00 dal 23/09/2026 (Classe A)\n\n# Lettera 3 · pagina 2",
+            "sources": [
+              {
+                "fileId": "2343b67f-4574-4952-bd4d-4e7636798028",
+                "fileName": "Lettera 1"
+              },
+              {
+                "fileId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+                "fileName": "Lettera 2"
+              },
+              {
+                "fileId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+                "fileName": "Lettera 3"
+              }
+            ],
+            "sectionKey": "DISCHARGE_HOME_THERAPY",
+            "targetArea": "THERAPY",
+            "annotations": [],
+            "reviewStatus": "accepted",
+            "reviewedText": null
+          },
+          {
+            "title": "Consigli e controlli",
+            "rawText": "",
+            "sources": [],
+            "sectionKey": "ADVICE_AND_FOLLOW_UP",
+            "targetArea": "CARTELLA",
+            "annotations": [],
+            "reviewStatus": "accepted",
+            "reviewedText": null
+          }
+        ],
+        "_allergyNarrative": {
+          "status": "not_documented",
+          "rawText": "",
+          "acknowledged": true
+        }
+      },
+      "importJobId": "cmude5vlc0000qglpbzcpxj6c",
+      "createdById": "VITALS-QA-OP",
+      "confirmedPatientId": "cmude9mx5001aqglpzunttv5t",
+      "createdAt": "2026-09-23T00:58:06.069Z",
+      "updatedAt": "2026-09-23T00:58:26.267Z",
+      "confirmedAt": "2026-09-23T00:58:26.266Z"
+    }
+  ],
+  "patients": [
+    {
+      "id": "cmude9mx5001aqglpzunttv5t",
+      "firstName": "Alba Corretta",
+      "lastName": "Sintetica"
+    }
+  ],
+  "documents": [
+    {
+      "id": "import-cmude64uq0001qglpz0ay0fcn",
+      "patientId": "cmude9mx5001aqglpzunttv5t",
+      "originalName": "lettera-1.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 5498704,
+      "sha256": "097461c6cd28c9114bdf829682a39c6d5d182ed718d25e73b17bb0dec724deef",
+      "sourceManifest": {
+        "kind": "original",
+        "version": 1,
+        "documentId": "cmude64uq0001qglpz0ay0fcn",
+        "resultHash": "3e7c91424e1605e00baf424f5fd65ce7f4613c2b10995474743a02ed646534c8",
+        "reviewHash": "c291b33a97f49ec1e5806acfa60a0cd2f6dcf97c19af920934b6670e51b8136f",
+        "groupHashes": {
+          "2343b67f-4574-4952-bd4d-4e7636798028": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de",
+          "540450d2-a918-4b8c-af1e-4f6e30cce3ab": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe",
+          "7f5c435a-e4ff-46ef-add1-2a42447a7728": "c6f6ebcaeb39f5f4401d3c047d2cada34f34a00657f9a524da2624c0ba2c13c8"
+        },
+        "manifestRevision": 5
+      }
+    },
+    {
+      "id": "import-cmude6cxq0004qglp4jajunf8",
+      "patientId": "cmude9mx5001aqglpzunttv5t",
+      "originalName": "lettera-2.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 5493168,
+      "sha256": "dbdb595927e48a0ff6b3c02c0e3fc98a5c5034194fd4d8cac6cef3907343526a",
+      "sourceManifest": {
+        "kind": "original",
+        "version": 1,
+        "documentId": "cmude6cxq0004qglp4jajunf8",
+        "resultHash": "3e7c91424e1605e00baf424f5fd65ce7f4613c2b10995474743a02ed646534c8",
+        "reviewHash": "c291b33a97f49ec1e5806acfa60a0cd2f6dcf97c19af920934b6670e51b8136f",
+        "groupHashes": {
+          "2343b67f-4574-4952-bd4d-4e7636798028": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de",
+          "540450d2-a918-4b8c-af1e-4f6e30cce3ab": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe",
+          "7f5c435a-e4ff-46ef-add1-2a42447a7728": "c6f6ebcaeb39f5f4401d3c047d2cada34f34a00657f9a524da2624c0ba2c13c8"
+        },
+        "manifestRevision": 5
+      }
+    },
+    {
+      "id": "import-cmude6hz90007qglpgoaaxvrj",
+      "patientId": "cmude9mx5001aqglpzunttv5t",
+      "originalName": "lettera-3.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 5503187,
+      "sha256": "4e277a16c52ca49241eb5316354505f7541192e0a381810ccc5555df5ce44e88",
+      "sourceManifest": {
+        "kind": "original",
+        "version": 1,
+        "documentId": "cmude6hz90007qglpgoaaxvrj",
+        "resultHash": "3e7c91424e1605e00baf424f5fd65ce7f4613c2b10995474743a02ed646534c8",
+        "reviewHash": "c291b33a97f49ec1e5806acfa60a0cd2f6dcf97c19af920934b6670e51b8136f",
+        "groupHashes": {
+          "2343b67f-4574-4952-bd4d-4e7636798028": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de",
+          "540450d2-a918-4b8c-af1e-4f6e30cce3ab": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe",
+          "7f5c435a-e4ff-46ef-add1-2a42447a7728": "c6f6ebcaeb39f5f4401d3c047d2cada34f34a00657f9a524da2624c0ba2c13c8"
+        },
+        "manifestRevision": 5
+      }
+    },
+    {
+      "id": "import-group-cmude5vlc0000qglpbzcpxj6c-2343b67f-4574-4952-bd4d-4e7636798028",
+      "patientId": "cmude9mx5001aqglpzunttv5t",
+      "originalName": "Lettera 1.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 5498704,
+      "sha256": "097461c6cd28c9114bdf829682a39c6d5d182ed718d25e73b17bb0dec724deef",
+      "sourceManifest": {
+        "kind": "group",
+        "label": "Lettera 1",
+        "pages": [
+          {
+            "id": "daebf7d7-8b3b-406c-9cff-22caade924b7",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 0,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 1
+          },
+          {
+            "id": "181ea625-11aa-46c8-985b-e048c89cd375",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 1,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 2
+          },
+          {
+            "id": "1a2af6b2-1335-4fa3-9648-b89a52090004",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 2,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 3
+          },
+          {
+            "id": "d6012930-f490-4bc6-a2bf-b31d2ac214e3",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 3,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 4
+          },
+          {
+            "id": "33fc6959-c31e-4bd3-885a-9b5580fa3721",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 4,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 5
+          },
+          {
+            "id": "554d845c-4cc8-4b93-b938-eacd69b78eb4",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 5,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 6
+          },
+          {
+            "id": "6caf1855-8c91-4c57-91c1-2333b3f548a4",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 6,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 7
+          },
+          {
+            "id": "5990b0fe-e3e9-4bcf-acd0-7da7ce9881fe",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 7,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 8
+          },
+          {
+            "id": "302803bc-23f6-4bd3-a1e4-672fb4f87430",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 8,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 9
+          },
+          {
+            "id": "b7bd672d-9527-4e8e-9231-a00e1478449f",
+            "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+            "sortOrder": 9,
+            "documentId": "cmude64uq0001qglpz0ay0fcn",
+            "sourcePageNumber": 10
+          }
+        ],
+        "groupId": "2343b67f-4574-4952-bd4d-4e7636798028",
+        "version": 1,
+        "resultHash": "3e7c91424e1605e00baf424f5fd65ce7f4613c2b10995474743a02ed646534c8",
+        "reviewHash": "c291b33a97f49ec1e5806acfa60a0cd2f6dcf97c19af920934b6670e51b8136f",
+        "groupHashes": {
+          "2343b67f-4574-4952-bd4d-4e7636798028": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de",
+          "540450d2-a918-4b8c-af1e-4f6e30cce3ab": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe",
+          "7f5c435a-e4ff-46ef-add1-2a42447a7728": "c6f6ebcaeb39f5f4401d3c047d2cada34f34a00657f9a524da2624c0ba2c13c8"
+        },
+        "manifestRevision": 5
+      }
+    },
+    {
+      "id": "import-group-cmude5vlc0000qglpbzcpxj6c-540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+      "patientId": "cmude9mx5001aqglpzunttv5t",
+      "originalName": "Lettera 2.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 5493168,
+      "sha256": "dbdb595927e48a0ff6b3c02c0e3fc98a5c5034194fd4d8cac6cef3907343526a",
+      "sourceManifest": {
+        "kind": "group",
+        "label": "Lettera 2",
+        "pages": [
+          {
+            "id": "c720e07a-77b7-4b0a-8800-bdf7fa0bcfba",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 0,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 1
+          },
+          {
+            "id": "1992787b-51a9-4e08-8577-cc2bd9c7db20",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 1,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 2
+          },
+          {
+            "id": "a7fa419e-4a2f-410c-ac46-aa9b38d8e6dd",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 2,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 3
+          },
+          {
+            "id": "ff4afad2-191f-4cd2-be3e-1f8a11bd70ef",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 3,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 4
+          },
+          {
+            "id": "aeb97832-7a07-47ee-8f6a-3e86802dddd0",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 4,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 5
+          },
+          {
+            "id": "00b1468b-f2ee-4cf4-88ee-87d233103cfc",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 5,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 6
+          },
+          {
+            "id": "312ab62b-d89d-4cc4-bbcf-7a5171bc1b44",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 6,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 7
+          },
+          {
+            "id": "41542d59-ed12-48ae-8e18-e5700b8f53dd",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 7,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 8
+          },
+          {
+            "id": "f525238a-f612-43d9-bf0b-8df7ca7772d2",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 8,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 9
+          },
+          {
+            "id": "7ee4f90e-1abb-4c1e-b91a-77efbb213dc4",
+            "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+            "sortOrder": 9,
+            "documentId": "cmude6cxq0004qglp4jajunf8",
+            "sourcePageNumber": 10
+          }
+        ],
+        "groupId": "540450d2-a918-4b8c-af1e-4f6e30cce3ab",
+        "version": 1,
+        "resultHash": "3e7c91424e1605e00baf424f5fd65ce7f4613c2b10995474743a02ed646534c8",
+        "reviewHash": "c291b33a97f49ec1e5806acfa60a0cd2f6dcf97c19af920934b6670e51b8136f",
+        "groupHashes": {
+          "2343b67f-4574-4952-bd4d-4e7636798028": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de",
+          "540450d2-a918-4b8c-af1e-4f6e30cce3ab": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe",
+          "7f5c435a-e4ff-46ef-add1-2a42447a7728": "c6f6ebcaeb39f5f4401d3c047d2cada34f34a00657f9a524da2624c0ba2c13c8"
+        },
+        "manifestRevision": 5
+      }
+    },
+    {
+      "id": "import-group-cmude5vlc0000qglpbzcpxj6c-7f5c435a-e4ff-46ef-add1-2a42447a7728",
+      "patientId": "cmude9mx5001aqglpzunttv5t",
+      "originalName": "Lettera 3.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 5503187,
+      "sha256": "4e277a16c52ca49241eb5316354505f7541192e0a381810ccc5555df5ce44e88",
+      "sourceManifest": {
+        "kind": "group",
+        "label": "Lettera 3",
+        "pages": [
+          {
+            "id": "d7d9f24f-0ed6-41ee-87fb-6bd948624c61",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 0,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 1
+          },
+          {
+            "id": "cd263171-616f-4f98-a124-58c0846d2279",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 1,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 2
+          },
+          {
+            "id": "a14752c4-7b70-4641-8a0a-78fb1c7a00fb",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 2,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 3
+          },
+          {
+            "id": "b310c1a9-650e-4400-bb35-85033d6f21f9",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 3,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 4
+          },
+          {
+            "id": "3123a588-703b-4fec-89a8-19b8e7ebf086",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 4,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 5
+          },
+          {
+            "id": "a8fc8f2f-94ac-41c3-83fa-5fda606a17ea",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 5,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 6
+          },
+          {
+            "id": "c1d71c36-43eb-4487-9c3f-0c0585cd9d09",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 6,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 7
+          },
+          {
+            "id": "501f17f1-12c3-4a6b-b157-295add753f37",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 7,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 8
+          },
+          {
+            "id": "0ae0ce79-189c-43a3-b342-53c1a14f1b19",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 8,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 9
+          },
+          {
+            "id": "d1ea4892-83d3-4a7c-9631-5dd255a87290",
+            "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+            "sortOrder": 9,
+            "documentId": "cmude6hz90007qglpgoaaxvrj",
+            "sourcePageNumber": 10
+          }
+        ],
+        "groupId": "7f5c435a-e4ff-46ef-add1-2a42447a7728",
+        "version": 1,
+        "resultHash": "3e7c91424e1605e00baf424f5fd65ce7f4613c2b10995474743a02ed646534c8",
+        "reviewHash": "c291b33a97f49ec1e5806acfa60a0cd2f6dcf97c19af920934b6670e51b8136f",
+        "groupHashes": {
+          "2343b67f-4574-4952-bd4d-4e7636798028": "3dfcacb82b14b52072f1457f90140e4e95469b54d057251a2ef964526a4992de",
+          "540450d2-a918-4b8c-af1e-4f6e30cce3ab": "793100fd6d37bcdcde41abf50913c0ffe14e4ee5967728bb9f554ede73d18ffe",
+          "7f5c435a-e4ff-46ef-add1-2a42447a7728": "c6f6ebcaeb39f5f4401d3c047d2cada34f34a00657f9a524da2624c0ba2c13c8"
+        },
+        "manifestRevision": 5
+      }
+    }
+  ],
+  "therapies": []
+}

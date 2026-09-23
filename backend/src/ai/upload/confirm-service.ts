@@ -25,6 +25,12 @@ import {
 } from '../../patients/progressive-identity.js';
 import { patientScopeWhere, hasGlobalPatientScope } from '../../patients/patient-scope.js';
 import { canAccessOwnedResource } from '../ownership-policy.js';
+import { ImportSessionError } from './pages/model.js';
+import {
+  preparePageArchive,
+  assertPreparedPageArchive,
+  persistPageArchive,
+} from './pages/archive.js';
 
 export interface ConfirmPatient {
   firstName: string;
@@ -47,6 +53,7 @@ export interface ConfirmPayload {
   mode?: 'new' | 'existing';
   patientId?: string;
   therapies?: TherapyCreateInput[];
+  _importSource?: { manifestRevision: number; resultHash: string };
 }
 export interface DuplicateInfo {
   id: string;
@@ -160,6 +167,7 @@ async function confirm(
   const operator = { ...actor, role: actor.role ?? 'operator' };
   let jobId = target.jobId;
   try {
+    const preparedArchive = await preparePageArchive(target, operator);
     const result = await prisma.$transaction(
       async (tx): Promise<ConfirmResult> => {
         // The order is always job → draft → patient; autosave only ever locks its draft.
@@ -194,8 +202,15 @@ async function confirm(
           draft?.createdById ?? job?.createdById,
           actor.id,
         );
-        if (draft?.confirmedPatientId && job?.createdPatientId && draft.confirmedPatientId !== job.createdPatientId)
-          throw new AiExtractionError('config', 'I riferimenti della precedente conferma non coincidono. Verificare le schede esistenti.');
+        if (
+          draft?.confirmedPatientId &&
+          job?.createdPatientId &&
+          draft.confirmedPatientId !== job.createdPatientId
+        )
+          throw new AiExtractionError(
+            'config',
+            'I riferimenti della precedente conferma non coincidono. Verificare le schede esistenti.',
+          );
         const alreadyId = draft?.confirmedPatientId ?? job?.createdPatientId;
         if (alreadyId) {
           const existing = await tx.patient.findUnique({ where: { id: alreadyId } });
@@ -204,7 +219,11 @@ async function confirm(
               'config',
               'La conferma fa riferimento a una scheda non disponibile',
             );
-          if (existing.registeredById && existing.registeredById !== operator.id && !hasGlobalPatientScope(operator.role))
+          if (
+            existing.registeredById &&
+            existing.registeredById !== operator.id &&
+            !hasGlobalPatientScope(operator.role)
+          )
             throw new AiExtractionError('not_found', 'Paziente non trovato');
           await tx.patient.updateMany({
             where: { id: existing.id, registeredById: null },
@@ -227,6 +246,13 @@ async function confirm(
           throw new AiExtractionError('config', 'La bozza non è più confermabile');
         const draftData = asData(draft?.data);
         const jobData = asData(job?.resultData);
+        if (job && asData(job.manifest).version === 1)
+          assertPreparedPageArchive(
+            job,
+            draft ? draftData : undefined,
+            preparedArchive,
+            payload._importSource,
+          );
         const narrative = (draftData._narrative ?? jobData._narrative) as
           DischargeNarrativeDraft | undefined;
         clinicalGuards(jobData, narrative ?? null, payload);
@@ -302,7 +328,10 @@ async function confirm(
         for (const therapy of therapies ?? [])
           therapyIds.push((await createTherapyInTx(tx, patient.id, therapy)).id);
         if (narrative) await persistNarrativeFromDraft(tx, patient.id, narrative, jobId ?? null);
-        if (job) await persistImportDocuments(tx, patient.id, job.id);
+        if (job) {
+          if (preparedArchive) await persistPageArchive(tx, patient.id, preparedArchive, actor.id);
+          else await persistImportDocuments(tx, patient.id, job.id);
+        }
         const confirmedAt = new Date();
         if (draft)
           await tx.patientIntakeDraft.update({
@@ -340,7 +369,7 @@ async function confirm(
     return result;
   } catch (error) {
     await audit(jobId, 'confirm_failed', undefined, 'transaction_failed');
-    if (error instanceof AiExtractionError) throw error;
+    if (error instanceof AiExtractionError || error instanceof ImportSessionError) throw error;
     if (error instanceof PatientIdentityInputError || isTherapyValidationError(error))
       throw new AiExtractionError('config', error.message);
     const unique = error as { code?: string; meta?: { target?: string[] } };

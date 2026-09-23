@@ -1,0 +1,338 @@
+{
+  "version": 1,
+  "baseline": "ef562bf51f296153ff0ec51ed6ab620da8e2dc1a",
+  "branch": "codex/po05-import-runtime",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po05-import-runtime",
+  "createdAt": "2026-09-23T00:48:14.411Z",
+  "treeHash": "7944c4ce15f6c408a4942bed359d84847b5af833a52b82389a44135f4c0ede78",
+  "sourceFiles": [
+    {
+      "path": "backend/src/ai/upload/confirm-service.ts",
+      "sha256": "c930a5cf2a763ed4e813ba713cd3706502b290542d82f95a711c09471e83e711",
+      "bytes": 15413,
+      "lines": 389
+    },
+    {
+      "path": "backend/src/ai/upload/job-service.ts",
+      "sha256": "7558f09b83e5f46895cf48cdbe77fcf94a5f836dc169bf23c3e875d9bbcee73e",
+      "bytes": 47412,
+      "lines": 1119
+    },
+    {
+      "path": "backend/src/ai/upload/pages/archive.ts",
+      "sha256": "970fdb56217a20f103d9a5791bd08b4929eab79f1a5a6b59a33c15a808471f58",
+      "bytes": 5857,
+      "lines": 184
+    },
+    {
+      "path": "backend/src/ai/upload/pages/cleanup.ts",
+      "sha256": "9299069258b63f99900e6305d9dd17f2daf6ce6967b441984aa3c8fb76e4251e",
+      "bytes": 1830,
+      "lines": 56
+    },
+    {
+      "path": "backend/src/ai/upload/pages/draft-mutations.ts",
+      "sha256": "6622fb851828630dfb1f246d4fad54b164fb31ffdd99b5a1e2ffd048a27e9063",
+      "bytes": 7150,
+      "lines": 185
+    },
+    {
+      "path": "backend/src/ai/upload/pages/draft-source.ts",
+      "sha256": "c6159b5f3e5bbe44f400bbaf0b3e28051270dcac55e3ad3e5bddc3e448dda608",
+      "bytes": 7285,
+      "lines": 185
+    },
+    {
+      "path": "backend/src/ai/upload/pages/inputs.ts",
+      "sha256": "eacb6b0f948acb0a8fb6890b8233475679a9ee7ab836471839ccd4c159c8aedb",
+      "bytes": 1411,
+      "lines": 36
+    },
+    {
+      "path": "backend/src/ai/upload/pages/lifecycle.ts",
+      "sha256": "65eb9c53d2ad6bbea85e4d20b7c39d24065fa4bf5b9d334058630666e1d55853",
+      "bytes": 5487,
+      "lines": 163
+    },
+    {
+      "path": "backend/src/ai/upload/pages/model.ts",
+      "sha256": "3fb9e725311c683f323c6ca31352d1a9ec1a72dbf36fc65d3a8a137ce63c3c5c",
+      "bytes": 3782,
+      "lines": 100
+    },
+    {
+      "path": "backend/src/ai/upload/pages/multipart.ts",
+      "sha256": "0eb8a954fd214efb1a7b507c540259ec42ed2a70f0d9b3b5d395a3ad23f5ab1a",
+      "bytes": 2176,
+      "lines": 79
+    },
+    {
+      "path": "backend/src/ai/upload/pages/pdf.ts",
+      "sha256": "a7cbbb4a7c267878da9a557057af244a772186ead361f1bdf2e9cff43267b359",
+      "bytes": 6368,
+      "lines": 168
+    },
+    {
+      "path": "backend/src/ai/upload/pages/repository.ts",
+      "sha256": "c649891914d779f705a6030dcc43138e5efa4a276ac7245ed2c7e2f3fc9cb46c",
+      "bytes": 9362,
+      "lines": 286
+    },
+    {
+      "path": "backend/src/ai/upload/pages/results.ts",
+      "sha256": "9861678882bd8eedd441a63ca4739faf0e22013635df3c8365cbf5b68094c0cc",
+      "bytes": 8000,
+      "lines": 249
+    },
+    {
+      "path": "backend/src/ai/upload/pages/review.ts",
+      "sha256": "08967c6d73119f7e89bd8aad33bcdf5298a515aa412fd964f0b3410d5353e4f0",
+      "bytes": 4269,
+      "lines": 123
+    },
+    {
+      "path": "backend/src/ai/upload/pages/runtime.ts",
+      "sha256": "424d8d46c3798e9690949fbc2ff710db2e7675e1d0c259e29231a1b0d1d4dae3",
+      "bytes": 6863,
+      "lines": 173
+    },
+    {
+      "path": "backend/src/ai/upload/pages/uploads.ts",
+      "sha256": "6c043fac456b2093cd53fb2058aeb4e40faaa3be402fba3e97d53bfefe77a6d2",
+      "bytes": 10633,
+      "lines": 310
+    },
+    {
+      "path": "backend/src/ai/upload/pages/worker.ts",
+      "sha256": "1bffd6e6b5fb6e13cf714e7c364ec32a886b86e52fee577cfea354a6e85cd94c",
+      "bytes": 10839,
+      "lines": 327
+    },
+    {
+      "path": "backend/src/ai/upload/patient-documents.ts",
+      "sha256": "5a1e873a78e8abecb83da9b6058aebbdf7f731a81dde7f413c8ee3ed2cdf48dd",
+      "bytes": 6878,
+      "lines": 211
+    },
+    {
+      "path": "backend/src/ai/upload/worker.ts",
+      "sha256": "0d7d33e226d04ac02ae2cd21cf88d37fbee52ddd8dcb8d9fde238dcd49089d2a",
+      "bytes": 2710,
+      "lines": 86
+    },
+    {
+      "path": "backend/src/intake/draft-service.ts",
+      "sha256": "1c68f133ab779691c53694162f919c1a9d89eae0e07f19bfd147776fd21a7bf3",
+      "bytes": 15524,
+      "lines": 359
+    },
+    {
+      "path": "backend/src/intake/therapy-selection.ts",
+      "sha256": "2ae172568ade23e118bf0eae3c7900128acdd84b8be33eaaa0cdc0c96b92db39",
+      "bytes": 4853,
+      "lines": 128
+    },
+    {
+      "path": "backend/src/routes/ai-jobs.ts",
+      "sha256": "7812b31bacc195ea553e34a1a4a195da9f98b5485fb2cc58d23cf91a202a77bf",
+      "bytes": 9762,
+      "lines": 255
+    },
+    {
+      "path": "backend/src/routes/import-pages.ts",
+      "sha256": "040422aebb21668e6f3d32e615099b3c80253f4ad5f33cffe7d229ddd39eaedb",
+      "bytes": 7386,
+      "lines": 239
+    },
+    {
+      "path": "backend/src/routes/intake-drafts.ts",
+      "sha256": "58481ff3e98b93f7e211e94e6b19190ce40c54d300e29521962faca643668f57",
+      "bytes": 6132,
+      "lines": 161
+    },
+    {
+      "path": "docs/product/po05-import-session-contract.md",
+      "sha256": "966e29bd2783c30b0fb52a15df4392faebe4a6131c3001bf6e93bb6482198a99",
+      "bytes": 21626,
+      "lines": 209
+    },
+    {
+      "path": "prisma/migrations/20260923010000_import_page_sessions/migration.sql",
+      "sha256": "e33bd0a1f956fe27219c50de6a6987311d17964c444253c43015052cd58d10d5",
+      "bytes": 1897,
+      "lines": 25
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "sha256": "de38c9dc866241b274487019c437fd8b12fb7ecd7e19a551053bc457c74483d5",
+      "bytes": 29686,
+      "lines": 724
+    },
+    {
+      "path": "tests/fixtures/po05-backend.mts",
+      "sha256": "7d4b2b902b9d6f65d5c38117fcb8228ba78709cb682d039f02e8ab560c8caae5",
+      "bytes": 5650,
+      "lines": 177
+    },
+    {
+      "path": "tests/fixtures/po05-postgres.mjs",
+      "sha256": "6e7f2a8515e9ad9d5fdd31d75f873c465ded12faa5fd0ec4cec8824094f043f8",
+      "bytes": 4086,
+      "lines": 72
+    },
+    {
+      "path": "tests/fixtures/po05-runtime-api.mjs",
+      "sha256": "703adc31e7d595c2f3b604fd075f9ff37149355ba1cf4a2dbbe0dfdd43acc818",
+      "bytes": 7250,
+      "lines": 209
+    },
+    {
+      "path": "tests/integration/po05-backend.test.mts",
+      "sha256": "48338388b394f5f39e6b523eed93548244c209c0ba3ddbb761d896bf09af414a",
+      "bytes": 9923,
+      "lines": 275
+    },
+    {
+      "path": "tests/integration/po05-draft-archive.test.mts",
+      "sha256": "d2305db93ce071ffb0dd85b7dac25504d60b285686c9493f211fb56f33990cad",
+      "bytes": 14514,
+      "lines": 377
+    },
+    {
+      "path": "tests/integration/po05-legacy-draft.test.mts",
+      "sha256": "a37dff775202a74db671c6d53dbf587645c17067697ba6657e156944224930bf",
+      "bytes": 572,
+      "lines": 16
+    }
+  ],
+  "testInputs": [
+    {
+      "path": "backend/ai-assets/clinicos-discharge-narrative.schema.json",
+      "sha256": "c4209e62aad42f5149e8e2fde0f81c9d45056e908f7deb548ef84fe8d77de008"
+    },
+    {
+      "path": "backend/ai-assets/clinicos-extraction.it.json",
+      "sha256": "c4ddcaea3689b04c2e1cf0ad2fd01f72cf1c0237feadb0bee272a45301ada316"
+    },
+    {
+      "path": "backend/ai-assets/clinicos-extraction.schema.json",
+      "sha256": "2d7713e93b8f119b637a73e950d35d352bb10d878f0e381f56a15a30a54c1128"
+    },
+    {
+      "path": "backend/ai-assets/clinicos-sections.schema.json",
+      "sha256": "2773ad5fab9899bf8d8ea1068d652bc4c4802abc5a0bf363b5c288799232ac28"
+    },
+    {
+      "path": "backend/ai-assets/extraction-prompt.it.txt",
+      "sha256": "3e662a60aa5f4cba16d1eec3463f1987dcf1e4d21773b2c5ea5a2afb36ac01d8"
+    },
+    {
+      "path": "backend/ai-assets/imola-profile.json",
+      "sha256": "d10b31d7587913ad7ab3b488efde94391cb6881bff2f788942005211c5960a77"
+    },
+    {
+      "path": "backend/src/ai/__tests__/intake-draft.test.ts",
+      "sha256": "e3819f7cfe28d11fd0cdb303fb052457c77cfec12e80a3c494bd9723834dafb3"
+    },
+    {
+      "path": "backend/src/ai/__tests__/merge.test.ts",
+      "sha256": "be4a547d0408d93fd7742d09662527280a14cd8eecc7d8aac4e014322213dd8e"
+    },
+    {
+      "path": "backend/src/ai/__tests__/upload.test.ts",
+      "sha256": "cbe0250794b4542029ef36fa9ad1025166decce7ab8604207e6912a8928ea53c"
+    },
+    {
+      "path": "backend/src/intake/__tests__/confirm-therapy-validation.test.ts",
+      "sha256": "b0e56f9df57246719d48791492ab5b121fa7ade0df3c3bf79aeb2b6f082b6e1f"
+    },
+    {
+      "path": "backend/src/intake/__tests__/legacy-document-archive.test.ts",
+      "sha256": "746506808e4e1812350e845b9ee754ad0b40589aa953dd8284cdac99a7ed43af"
+    },
+    {
+      "path": "backend/src/intake/__tests__/parse-discharge-therapy.test.ts",
+      "sha256": "c3ed1159094c54c421df275bf3bc3b18f6e31cc0e3f73178e5c994bc120c95de"
+    },
+    {
+      "path": "backend/src/intake/__tests__/seed-draft-from-import.test.ts",
+      "sha256": "2abf5d28ce46a9c1ff3bd6a6bf1b9c4f2a7a48a71768f106b108b27812aa9e54"
+    },
+    {
+      "path": "backend/tsconfig.json",
+      "sha256": "5b0683d060aa354aee4eec815420629ed987b40d579eb298a9bd96f89f2b3cde"
+    },
+    {
+      "path": "tests/fixtures/parameter-database.mjs",
+      "sha256": "c14b0d393e74aaeabc0b02fa1fbbd7df00fed3daaf2cb92bb8b480d1859f3851"
+    },
+    {
+      "path": "tests/integration/intake-legacy-isolated.test.mts",
+      "sha256": "1940f17308a8a9bba6662940f177cb9276d9a6e7524631adb9fd33684106e1bb"
+    },
+    {
+      "path": "tests/integration/progressive-intake-db.test.mts",
+      "sha256": "2771e46bcec9ae221ecc14ae893ea97714e10be8989d32139fb10e14453d19cf"
+    }
+  ],
+  "evidenceFiles": [
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/report.md",
+      "sha256": "0a5780a27b2b6be999352d8569fc6425157090e96882d3f2ea54464b0c148cb5"
+    },
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/final-suite.log",
+      "sha256": "2742eb2aa68abe65acc34eb454f8a6b5ff875effbcc027724a16e61933e33c1d"
+    },
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/typecheck-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/schema-validate.log",
+      "sha256": "d25d21ab6f130d6b8d8d7cb0153364adad37244144561e977ccab4c177ba6df0"
+    },
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/baseline-mock.log",
+      "sha256": "97ed6cd4de5fc97aaace80382d0a3eaa1a1b13f8b5aa093ea4e238c12e7209b1"
+    },
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/reproduce-baseline.mjs",
+      "sha256": "843281251fd10cdd81fbf9d0b039caf340b3356bc1e8131c1886b3f9f147a95a"
+    },
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/baseline-confirm.mts",
+      "sha256": "f9c064ce654d7eef4a0f4a73e652ec0883f16fc8581cda64879b8efeef7ff026"
+    },
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/baseline-route.mts",
+      "sha256": "349e112d9e8f2e3b99d50c2f327ba642d24823c8666255eff6c6d5a4bcc7c7aa"
+    },
+    {
+      "path": "artifacts/task-validation/po-05-scansioni-lunghe/backend/baseline-confirm-tests.mts",
+      "sha256": "567859e9e929688970cfd4b0fa8396d5f299b5aab1f265de5d6e7f7621ebf2aa"
+    }
+  ],
+  "excluded": [
+    "run-claude-queue.ps1",
+    "start-claude-team.ps1",
+    "node_modules",
+    "backend/node_modules",
+    "artifacts/**/db/**",
+    "temporary diagnostic files"
+  ],
+  "validation": {
+    "newNativePostgresTests": 13,
+    "regressions": 88,
+    "totalPassing": 101,
+    "typecheck": "pass",
+    "prismaSchema": "pass",
+    "preexistingMockFailures": 5
+  },
+  "authority": {
+    "claim": "PO-05-backend",
+    "claimant": "agent:codex-po05-backend:coder",
+    "decision": "Delegated local implementation authorized by root GO; no deployment, push, commit or external provider action performed.",
+    "policyToolLimitation": "Prior policy API returned invalid-policy-request; this is not a policy denial or a distributed release authority."
+  }
+}

@@ -24,6 +24,9 @@ export interface DischargeTherapyRow {
   stato: 'ok' | 'da_verificare';
   excludedFromConfirm?: boolean;
   reviewedTherapy?: TherapyFormValue;
+  importSource?: { groupId: string; inputHash: string };
+  sourceOutdated?: boolean;
+  sourceReviewHash?: string;
 }
 
 const CODE_TO_FORM_VIA: Record<string, string> = {

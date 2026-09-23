@@ -23,6 +23,7 @@ export interface PublicPatientDocument {
   sortOrder: number;
   importJobId: string | null;
   createdAt: string;
+  sourceManifest?: unknown;
 }
 
 export interface AiPatientDocument {
@@ -92,6 +93,7 @@ export async function createPatientDocument(
 }
 
 const PATIENT_DOCUMENT_PUBLIC_SELECT = {
+  sourceManifest: true,
   id: true,
   originalName: true,
   mimeType: true,

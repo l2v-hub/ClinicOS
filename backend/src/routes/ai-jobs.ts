@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { loadAiConfig } from '../ai/config.js';
 import { AiExtractionError } from '../ai/types.js';
+import { ImportSessionError } from '../ai/upload/pages/model.js';
 import {
   addFiles,
   cancelJob,
@@ -22,6 +23,7 @@ import { requireOperator, requireRole, type AuthedRequest } from '../ai/auth.js'
 import { importRateLimit, extractionCostGuard } from '../ai/rate-limit.js';
 import { recordAudit } from '../ai/audit.js';
 import { requireOwnedImportJob } from '../ai/ownership.js';
+import importPagesRouter from './import-pages.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // AI IMPORT JOBS — mounted at /ai/extraction/jobs (REQ-014)
@@ -43,6 +45,7 @@ const aiJobsRouter = Router();
 // The /sweep maintenance route below also benefits from the gate (operator-only).
 aiJobsRouter.use(requireOperator);
 aiJobsRouter.use(importRateLimit);
+aiJobsRouter.use(importPagesRouter);
 // Every route carrying `:id` is owner-scoped. Admin/manager retain break-glass access;
 // unknown and foreign IDs both resolve to 404 to prevent resource enumeration.
 aiJobsRouter.param('id', requireOwnedImportJob);
@@ -56,6 +59,8 @@ function toIncoming(files: Express.Multer.File[] | undefined): IncomingFile[] {
 }
 
 function handleError(res: import('express').Response, err: unknown) {
+  if (err instanceof ImportSessionError)
+    return res.status(err.status).json({ error: err.message, code: err.code, ...err.details });
   if (err instanceof AiExtractionError) {
     const status = err.kind === 'not_found' ? 404 : err.kind === 'config' ? 400 : 503;
     return res.status(status).json({ error: err.message, kind: err.kind });

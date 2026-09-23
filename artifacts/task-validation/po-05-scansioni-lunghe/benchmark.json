@@ -1,0 +1,229 @@
+{
+  "at": "2026-09-23T00:51:19.435Z",
+  "candidateRoot": "C:\\Workspace\\ClinicOSHouse-worktrees\\subtle-dashboard-notifications",
+  "environment": "Windows, real loopback PostgreSQL; API and synthetic runtime in same Node process",
+  "caveat": "No real provider latency or device capture measured. RSS excludes native PostgreSQL; includes all Node fixture/runtime allocations. Shared process retains previous scenario allocations.",
+  "measurements": [
+    {
+      "scenario": "30-jpeg",
+      "inputBytes": 16483209,
+      "sources": [
+        {
+          "name": "pagina-01.jpg",
+          "bytes": 548213,
+          "sha256": "5022a4eee8292aa5d5e781a18313ebc71cd79489d58760b0e464b5b688d49b69"
+        },
+        {
+          "name": "pagina-02.jpg",
+          "bytes": 549616,
+          "sha256": "20576154c93629e4af8ae7d4ad7ee1c461312ae7e470c66feb020d536f157edb"
+        },
+        {
+          "name": "pagina-03.jpg",
+          "bytes": 550190,
+          "sha256": "81b7e1d6922ad67f703f02950f5f298c24708c99aba0eea6d18f09ea9077b6a9"
+        },
+        {
+          "name": "pagina-04.jpg",
+          "bytes": 549293,
+          "sha256": "6afc472672a512eeff0473c99a0a2b092b3e501fbdc3390b5538218bb5541a81"
+        },
+        {
+          "name": "pagina-05.jpg",
+          "bytes": 549880,
+          "sha256": "551d3feb7c3561391d06188dccaba284bf62cfb91c4d2b0125e82100e1e1e878"
+        },
+        {
+          "name": "pagina-06.jpg",
+          "bytes": 549755,
+          "sha256": "ebe511f7968ab8a64658330bde0960ade17bddb090f0edf62ad2bf5d7990cc1c"
+        },
+        {
+          "name": "pagina-07.jpg",
+          "bytes": 548796,
+          "sha256": "61efc1abfd3ed4725fa3d6b8214e4424404a3a60776948d7630f1b9a5d2b8d58"
+        },
+        {
+          "name": "pagina-08.jpg",
+          "bytes": 549938,
+          "sha256": "0224c99fcf5d0b74240c7b0fa1c188aa123e4bcb5fd49f6de8bd0065b2b20021"
+        },
+        {
+          "name": "pagina-09.jpg",
+          "bytes": 550108,
+          "sha256": "44d5bd8436fcfc851d4ad0d6731ed9178a0bb1c44eb28cdfc5594c19d8333aa7"
+        },
+        {
+          "name": "pagina-10.jpg",
+          "bytes": 548967,
+          "sha256": "085cae073ed4aad22a3135482426969e2bad5f7830d3dcbf89f46bb1731a7771"
+        },
+        {
+          "name": "pagina-11.jpg",
+          "bytes": 548334,
+          "sha256": "b78a403206519b627b73cc9585fca50012f7f6af9435c47f82035c6bd5a093b5"
+        },
+        {
+          "name": "pagina-12.jpg",
+          "bytes": 548556,
+          "sha256": "5e78d019ef4e8bb1ffb5376378ad3088365bae50e222b07218e8a39cf1a5585e"
+        },
+        {
+          "name": "pagina-13.jpg",
+          "bytes": 549460,
+          "sha256": "cf8980f4ef915ce10c0e92755458eb6807744ad9364ec092d026c532beb17f98"
+        },
+        {
+          "name": "pagina-14.jpg",
+          "bytes": 548512,
+          "sha256": "c85ac6ddf4d54127c2800b941a9d1c8fd67e639b84f4e3dff4d2c52911aaf676"
+        },
+        {
+          "name": "pagina-15.jpg",
+          "bytes": 548831,
+          "sha256": "7974a2c4d29ee645e4899cefeba279a92c8b7ab6cf96d757097c235fe39ae227"
+        },
+        {
+          "name": "pagina-16.jpg",
+          "bytes": 549239,
+          "sha256": "12d528e14d6e285e4a22140606fbe959016db5b6b4f71a5f39d0d1bddc79f89e"
+        },
+        {
+          "name": "pagina-17.jpg",
+          "bytes": 548716,
+          "sha256": "e874991d1b98e6663dec51567b20bf3a09aebb744f767543b510dffee864302a"
+        },
+        {
+          "name": "pagina-18.jpg",
+          "bytes": 549164,
+          "sha256": "dcf87e75e7220f8eaf795a90e0917248d9d3b80787640beca15c9b02d11ec66b"
+        },
+        {
+          "name": "pagina-19.jpg",
+          "bytes": 548782,
+          "sha256": "972aeeebf2d199a6683ff6f8e523f521d9a6e2b4b5e8fd92308f183c387949c8"
+        },
+        {
+          "name": "pagina-20.jpg",
+          "bytes": 549623,
+          "sha256": "c2455a66819a2db3d6c10fad8eb4399f6331e0db5a66ffefbf82c3ba64ed8f32"
+        },
+        {
+          "name": "pagina-21.jpg",
+          "bytes": 548723,
+          "sha256": "8bfd6ba478c59e1aa35f6841ec1011c1ba4e604f00dc270fd0e7262bcfe8d88f"
+        },
+        {
+          "name": "pagina-22.jpg",
+          "bytes": 550166,
+          "sha256": "540626313b5fd108f8629a7e6f666229db99efa4680a84d02ff2f728683ed839"
+        },
+        {
+          "name": "pagina-23.jpg",
+          "bytes": 550419,
+          "sha256": "e65c8c2f867bb617584b9ba335aebfad0fb4867c78ef1ed2d8a8e7e1c4fd89ea"
+        },
+        {
+          "name": "pagina-24.jpg",
+          "bytes": 549506,
+          "sha256": "373afaa42aa70e747b95e3c4cc7e81a4d249bc931e0015ff218c423d191fa3b2"
+        },
+        {
+          "name": "pagina-25.jpg",
+          "bytes": 550267,
+          "sha256": "f1039fa721da1cb93794fe09d4e0b786807dee072075955129b05bb19cb62cf5"
+        },
+        {
+          "name": "pagina-26.jpg",
+          "bytes": 550389,
+          "sha256": "d7e2658ec2d120a71a76250ade2ec00f820e0b624f8431fc84c0da2e9b8ee09a"
+        },
+        {
+          "name": "pagina-27.jpg",
+          "bytes": 549387,
+          "sha256": "c2cfaf06805bb798d8e826ac55027bc2260b09d8f6d78b3cdee7ab0802700987"
+        },
+        {
+          "name": "pagina-28.jpg",
+          "bytes": 550341,
+          "sha256": "1ceb045df36ebecae2a97ae3fe35895b0b67e02742f3b27865ede5f1938bc41d"
+        },
+        {
+          "name": "pagina-29.jpg",
+          "bytes": 550223,
+          "sha256": "d8825d01f9006d7703b3a451039ddb911fb81159e986b858abbc9bd28653ad6f"
+        },
+        {
+          "name": "pagina-30.jpg",
+          "bytes": 549815,
+          "sha256": "df52b1e7c399254c078af63f58fe8333e5b4cc54bbed563009d19aa119d94386"
+        }
+      ],
+      "pages": 30,
+      "originals": 30,
+      "groups": 1,
+      "uploadMs": 1934.3192,
+      "processMs": 1563.8779999999988,
+      "metadataMs": 7.574300000000221,
+      "metadataBytes": 19651,
+      "startedUnits": 31,
+      "processStartRss": 205832192,
+      "processPeakRss": 379494400,
+      "rssIncrease": 173662208
+    },
+    {
+      "scenario": "pdf-30-pages",
+      "inputBytes": 16493766,
+      "sources": [
+        {
+          "name": "trenta-pagine.pdf",
+          "bytes": 16493766,
+          "sha256": "09d62f0448bfd2a686fa245bb0575fa71d0ace96f6140bdf743779458d3125f1"
+        }
+      ],
+      "pages": 30,
+      "originals": 1,
+      "groups": 1,
+      "uploadMs": 1150.0707999999995,
+      "processMs": 1649.370500000001,
+      "metadataMs": 6.766200000000026,
+      "metadataBytes": 8987,
+      "startedUnits": 31,
+      "processStartRss": 346734592,
+      "processPeakRss": 517238784,
+      "rssIncrease": 170504192
+    },
+    {
+      "scenario": "3-letters-10-pages",
+      "inputBytes": 16495059,
+      "sources": [
+        {
+          "name": "lettera-1.pdf",
+          "bytes": 5498704,
+          "sha256": "097461c6cd28c9114bdf829682a39c6d5d182ed718d25e73b17bb0dec724deef"
+        },
+        {
+          "name": "lettera-2.pdf",
+          "bytes": 5493168,
+          "sha256": "dbdb595927e48a0ff6b3c02c0e3fc98a5c5034194fd4d8cac6cef3907343526a"
+        },
+        {
+          "name": "lettera-3.pdf",
+          "bytes": 5503187,
+          "sha256": "4e277a16c52ca49241eb5316354505f7541192e0a381810ccc5555df5ce44e88"
+        }
+      ],
+      "pages": 30,
+      "originals": 3,
+      "groups": 3,
+      "uploadMs": 1217.9817000000003,
+      "processMs": 2434.890699999998,
+      "metadataMs": 8.721199999999953,
+      "metadataBytes": 10256,
+      "startedUnits": 33,
+      "processStartRss": 377942016,
+      "processPeakRss": 496828416,
+      "rssIncrease": 118886400
+    }
+  ]
+}

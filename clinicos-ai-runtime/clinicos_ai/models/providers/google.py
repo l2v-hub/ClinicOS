@@ -10,6 +10,7 @@ from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
 from ._common import classify_provider_exception
+from .completion import CompletionMetadataMixin, agent_completion
 
 
 class _GoogleRunner:
@@ -24,7 +25,10 @@ class _GoogleRunner:
             from agno.models.google import Gemini  # gemma + gemini both via Gemini class
         except ImportError as ex:
             raise ProviderUnavailableError(f"Agno/Google SDK non installato: {ex}") from ex
-        model = Gemini(id=self._spec.model_id, temperature=self._temperature)
+        class CompletionGemini(CompletionMetadataMixin, Gemini):
+            pass
+
+        model = CompletionGemini(id=self._spec.model_id, temperature=self._temperature)
         return Agent(model=model, markdown=False, telemetry=False)
 
     async def run(self, prompt: str, attachments: list[Attachment]) -> str:
@@ -48,10 +52,12 @@ class _GoogleRunner:
             if files:
                 kwargs["files"] = files
             resp = agent.run(prompt, **kwargs)
-            return getattr(resp, "content", None) or str(resp)
+            return agent_completion(resp, "Google")
 
         try:
             return await asyncio.wait_for(asyncio.to_thread(_call), timeout=self._timeout)
+        except RuntimeError_:
+            raise
         except asyncio.TimeoutError as ex:
             raise RuntimeError_(ErrorKind.TIMEOUT, f"Timeout {self._timeout}s") from ex
         except Exception as ex:  # normalize provider/SDK errors

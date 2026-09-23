@@ -6,6 +6,7 @@ from ..errors import ProviderUnavailableError, ConfigError
 from ..spec import ModelSpec
 from .base import BuiltModel
 from ._common import make_built
+from .completion import CompletionMetadataMixin
 
 
 def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) -> BuiltModel:  # noqa: ARG001
@@ -18,8 +19,11 @@ def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) 
             from agno.models.openai.like import OpenAILike
         except ImportError as ex:
             raise ProviderUnavailableError(f"Agno OpenAILike non installato: {ex}") from ex
+        class CompletionOpenAILike(CompletionMetadataMixin, OpenAILike):
+            pass
+
         return Agent(
-            model=OpenAILike(id=spec.model_id, base_url=base_url,
+            model=CompletionOpenAILike(id=spec.model_id, base_url=base_url,
                              api_key=os.environ.get("OPENAI_LIKE_API_KEY"), temperature=temperature),
             markdown=False, telemetry=False,
         )

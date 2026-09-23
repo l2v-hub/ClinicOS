@@ -1,0 +1,25 @@
+✔ bounded PDF reader verifies once, preserves deterministic page bytes/order and evicts (9214.9871ms)
+✔ page 17 failure preserves 29 OCR checkpoints; retry performs one page and one extraction (3362.9371ms)
+✔ lost create/run/retry responses and runtime 404 recover without duplicate application units (1743.5606ms)
+✔ attempt mismatch, disguised truncation and invalid extraction schema never complete (639.1701ms)
+✔ only expired leases are reclaimed; concurrent workers claim once and stale run cannot persist (225.8237ms)
+✔ duplicate/rejected replay and identical manifest preserve ready revision, source and token (112.3966ms)
+✔ native PostgreSQL concurrent draft/job confirmations share one patient for legacy and page sessions (14907.6267ms)
+✔ conflict defer cannot prescribe; selecting a candidate never imports the other therapy (452.4363ms)
+✔ refresh preserves edits, makes changed rows stale, CAS/replay protects autosave and proposals add once (148.4102ms)
+✔ reordering equal therapies across groups preserves one reviewed row and creates no proposal (94.9743ms)
+✔ archive binds prepared sources, atomically stores original/group PDFs, replay creates no duplicates (206.1488ms)
+✔ cleanup removes temporary PHI and receipts, preserves draft, and skips active leases (165.9302ms)
+✔ an archive ID collision rolls back patient and document writes inside the confirmation transaction (93.3348ms)
+✔ thirty-page PDF is counted; page replacement at the cap is atomic and replay-safe (14112.8883ms)
+✔ simultaneous uploads use revision CAS on real PostgreSQL; retry does not overwrite the winner (178.2023ms)
+✔ page omission cannot delete a source; foreign operator cannot read metadata or bytes (97.5492ms)
+✔ chunked multipart is bounded by aggregate request bytes before any source is stored (338.6509ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 86137.5775

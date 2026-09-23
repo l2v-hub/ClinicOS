@@ -24,6 +24,7 @@ from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
 from ._common import classify_provider_exception
+from .completion import CompletionMetadataMixin, agent_completion, completion_text, response_reason
 
 
 class _AzureRunner:
@@ -41,7 +42,10 @@ class _AzureRunner:
             from agno.models.azure import AzureOpenAI
         except ImportError as ex:
             raise ProviderUnavailableError(f"Agno/Azure SDK non installato: {ex}") from ex
-        return Agent(model=AzureOpenAI(id=self._spec.model_id, temperature=self._temperature),
+        class CompletionAzure(CompletionMetadataMixin, AzureOpenAI):
+            pass
+
+        return Agent(model=CompletionAzure(id=self._spec.model_id, temperature=self._temperature),
                      markdown=False, telemetry=False)
 
     async def run(self, prompt: str, attachments: list[Attachment]) -> str:
@@ -75,13 +79,7 @@ class _AzureRunner:
             kind = classify_provider_exception(msg)
             raise RuntimeError_(kind, f"Azure: {msg[:200]}") from ex
 
-        # Agno può catturare l'errore provider e restituirlo come RunOutput status=ERROR:
-        # deve emergere come errore reale, non essere restituito come completion (issue #239).
-        status = getattr(resp, "status", None)
-        if status is not None and str(getattr(status, "value", status)).upper() == "ERROR":
-            detail = str(getattr(resp, "content", None) or "provider error")[:200]
-            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"Azure: {detail}")
-        return getattr(resp, "content", None) or str(resp)
+        return agent_completion(resp, "Azure")
 
 
     # --- estrazione vincolata dallo schema -------------------------------------
@@ -144,10 +142,17 @@ class _AzureRunner:
                 headers={"Content-Type": "application/json", "api-key": key})
             with urllib.request.urlopen(req, timeout=self._timeout) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
-            return (data.get("choices") or [{}])[0].get("message", {}).get("content") or ""
+            choice = (data.get("choices") or [{}])[0]
+            message = choice.get("message") or {}
+            if message.get("refusal"):
+                raise RuntimeError_(ErrorKind.OUTPUT_INCOMPLETE, "Il provider ha rifiutato l'estrazione.",
+                                    finish_reason="refusal")
+            return completion_text(message.get("content") or "", response_reason(choice))
 
         try:
             return await asyncio.wait_for(asyncio.to_thread(_call), timeout=self._timeout + 30)
+        except RuntimeError_:
+            raise
         except urllib.error.HTTPError as ex:
             # HTTPError deriva da URLError: va intercettato per primo.
             # Il corpo puo' contenere il messaggio del provider ma mai la chiave: e' negli header.

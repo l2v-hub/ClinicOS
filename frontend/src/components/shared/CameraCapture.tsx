@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { AccessibleDialogSurface } from './AccessibleDialogSurface';
 import { DocumentScanFrame } from './DocumentScanFrame';
+import { CameraCaptureFallback } from './CameraCaptureFallback';
 import { acquireDocumentCamera, prepareNativeCameraPhoto } from '../../lib/cameraAcquisition';
 import {
   initialScanCrop,
@@ -14,19 +15,19 @@ interface Props {
   open: boolean;
   onClose: () => void;
   /** Confirmation returns a JPEG by default, or a cropped one-page PDF for document scanning. */
-  onCapture: (file: File) => void;
+  onCapture: (file: File) => void | Promise<void>;
   outputFormat?: 'jpeg' | 'pdf';
+  continueCapture?: boolean;
+  captureContext?: string;
+  captureDisabled?: boolean;
+  onDiscardCapture?: () => void;
   /** Explicit fallback to the normal file picker (desktop without camera / permission denied). */
   onFallbackImport: () => void;
 }
 
 type Phase = 'requesting' | 'live' | 'preview' | 'denied' | 'unavailable';
 
-function stamp(): string {
-  const d = new Date();
-  const p = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}-${p(d.getHours())}-${p(d.getMinutes())}-${p(d.getSeconds())}`;
-}
+const stamp = () => new Date().toISOString().replace(/[:.]/g, '-');
 
 export function CameraCapture({
   open,
@@ -34,6 +35,10 @@ export function CameraCapture({
   onCapture,
   onFallbackImport,
   outputFormat = 'jpeg',
+  continueCapture = false,
+  captureContext,
+  captureDisabled = false,
+  onDiscardCapture,
 }: Props) {
   const scanning = outputFormat === 'pdf';
   const titleId = useId();
@@ -41,6 +46,7 @@ export function CameraCapture({
   const nativeInputRef = useRef<HTMLInputElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const blobRef = useRef<Blob | null>(null);
+  const preparedFileRef = useRef<File | null>(null);
   const photoUrlRef = useRef<string | null>(null);
   const generationRef = useRef(0);
   const capturingRef = useRef(false);
@@ -65,6 +71,7 @@ export function CameraCapture({
     if (photoUrlRef.current) URL.revokeObjectURL(photoUrlRef.current);
     photoUrlRef.current = null;
     blobRef.current = null;
+    preparedFileRef.current = null;
   }
 
   // Acquire the camera whenever the modal opens or a retake is requested.
@@ -74,6 +81,8 @@ export function CameraCapture({
     const generation = ++generationRef.current;
     capturingRef.current = false;
     confirmingRef.current = false;
+    // Reset controls when acquiring a new external camera stream.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCapturing(false);
     setConfirming(false);
     setConversionError('');
@@ -114,7 +123,6 @@ export function CameraCapture({
       stopStream();
       clearPhoto();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, restart]);
 
   // BUG-067: attach the live stream once the <video> is actually mounted. getUserMedia
@@ -131,7 +139,7 @@ export function CameraCapture({
 
   if (!open) return null;
 
-  async function useNativePhoto(file: File) {
+  async function acceptNativePhoto(file: File) {
     const generation = ++generationRef.current;
     stopStream();
     clearPhoto();
@@ -154,7 +162,15 @@ export function CameraCapture({
 
   function capture() {
     const v = videoRef.current;
-    if (!v || v.readyState < 2 || !v.videoWidth || !v.videoHeight || capturingRef.current) return;
+    if (
+      !v ||
+      v.readyState < 2 ||
+      !v.videoWidth ||
+      !v.videoHeight ||
+      capturingRef.current ||
+      captureDisabled
+    )
+      return;
     const generation = generationRef.current;
     capturingRef.current = true;
     setCapturing(true);
@@ -214,7 +230,7 @@ export function CameraCapture({
     }
   }
 
-  async function usePhoto() {
+  async function confirmPhoto() {
     const blob = blobRef.current;
     if (!blob || confirmingRef.current) return;
     const generation = generationRef.current;
@@ -222,22 +238,27 @@ export function CameraCapture({
     setConfirming(true);
     setConversionError('');
     try {
-      const result = scanning
-        ? await scannedJpegToPdf(blob, imageSizeRef.current.width, imageSizeRef.current.height)
-        : blob;
-      if (generation !== generationRef.current) return;
-      onCapture(
-        new File(
+      if (!preparedFileRef.current) {
+        const result = scanning
+          ? await scannedJpegToPdf(blob, imageSizeRef.current.width, imageSizeRef.current.height)
+          : blob;
+        if (generation !== generationRef.current) return;
+        preparedFileRef.current = new File(
           [result],
           `${scanning ? 'scansione' : 'foto-documento'}-${stamp()}.${scanning ? 'pdf' : 'jpg'}`,
           { type: scanning ? 'application/pdf' : 'image/jpeg' },
-        ),
-      );
-      close();
-    } catch {
+        );
+      }
+      await onCapture(preparedFileRef.current);
+      if (generation !== generationRef.current) return;
+      confirmingRef.current = false;
+      setConfirming(false);
+      if (continueCapture) setRestart((value) => value + 1);
+      else close();
+    } catch (error) {
       if (generation === generationRef.current)
         setConversionError(
-          'Impossibile preparare il PDF. Ripeti la scansione con un ritaglio più piccolo.',
+          error instanceof Error ? error.message : 'Impossibile salvare la pagina. Riprova.',
         );
     } finally {
       if (generation === generationRef.current) {
@@ -257,6 +278,8 @@ export function CameraCapture({
   }
 
   function close() {
+    if (confirmingRef.current) return;
+    onDiscardCapture?.();
     generationRef.current++;
     stopStream();
     clearPhoto();
@@ -269,6 +292,7 @@ export function CameraCapture({
       onClose={close}
       surfaceClassName="modal-card camera-capture"
       closeOnOverlay={false}
+      dismissible={!confirming}
     >
       <div data-testid="camera-capture">
         <input
@@ -281,7 +305,7 @@ export function CameraCapture({
           onChange={(event) => {
             const file = event.target.files?.[0];
             event.target.value = '';
-            if (file) void useNativePhoto(file);
+            if (file) void acceptNativePhoto(file);
           }}
         />
         <header className="import-modal__head">
@@ -290,12 +314,21 @@ export function CameraCapture({
             type="button"
             className="icon-btn"
             onClick={close}
+            disabled={confirming}
             aria-label="Chiudi"
             data-dialog-initial-focus
           >
             ✕
           </button>
         </header>
+        {captureContext && (
+          <p className="camera-capture__hint" role="status">
+            {captureContext}
+          </p>
+        )}
+        {captureDisabled && (
+          <p role="status">Limite pagine raggiunto. Chiudi per rivedere le pagine salvate.</p>
+        )}
         {phase !== 'preview' && (
           <button
             type="button"
@@ -334,7 +367,6 @@ export function CameraCapture({
                   : undefined
               }
             >
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <video
                 ref={videoRef}
                 className="camera-capture__video"
@@ -353,7 +385,7 @@ export function CameraCapture({
               <button
                 type="button"
                 className="btn-secondary camera-capture__reset"
-                disabled={!ready || capturing}
+                disabled={!ready || capturing || captureDisabled}
                 onClick={() => setCrop(initialScanCrop(frameSize.width, frameSize.height))}
               >
                 Ripristina bordo
@@ -364,7 +396,7 @@ export function CameraCapture({
                 className="btn-primary"
                 onClick={capture}
                 data-testid="camera-shoot"
-                disabled={!ready || capturing}
+                disabled={!ready || capturing || captureDisabled}
               >
                 {capturing ? 'Acquisizione…' : scanning ? 'Acquisisci pagina' : 'Scatta'}
               </button>
@@ -398,82 +430,47 @@ export function CameraCapture({
             <div className="camera-capture__actions">
               <button
                 className="btn-primary"
-                onClick={() => void usePhoto()}
+                onClick={() => void confirmPhoto()}
                 data-testid="camera-use"
                 disabled={confirming}
               >
-                {confirming ? 'Preparazione PDF…' : scanning ? 'Usa PDF' : 'Usa foto'}
+                {confirming
+                  ? 'Salvataggio…'
+                  : continueCapture
+                    ? 'Salva e scansiona la prossima'
+                    : scanning
+                      ? 'Usa PDF'
+                      : 'Usa foto'}
               </button>
               <button
                 className="btn-secondary"
-                onClick={() => setRestart((n) => n + 1)}
+                onClick={() => {
+                  onDiscardCapture?.();
+                  setRestart((n) => n + 1);
+                }}
                 data-testid="camera-retake"
                 disabled={confirming}
               >
                 Ripeti
               </button>
-              <button type="button" className="btn-secondary" onClick={close}>
+              <button type="button" className="btn-secondary" onClick={close} disabled={confirming}>
                 Annulla
               </button>
             </div>
           </div>
         )}
 
-        {phase === 'denied' && (
-          <div className="camera-capture__msg" data-testid="camera-denied">
-            <p>
-              Non è possibile accedere alla fotocamera. Controlla i permessi del browser oppure
-              seleziona un’immagine già presente sul dispositivo.
-            </p>
-            <div className="camera-capture__actions">
-              <button className="btn-secondary" onClick={() => setRestart((n) => n + 1)}>
-                Riprova
-              </button>
-              <button
-                className="btn-primary"
-                onClick={() => {
-                  close();
-                  onFallbackImport();
-                }}
-              >
-                Apri importazione
-              </button>
-              <button type="button" className="btn-secondary" onClick={close}>
-                Annulla
-              </button>
-            </div>
-          </div>
-        )}
-
-        {phase === 'unavailable' && (
-          <div className="camera-capture__msg" data-testid="camera-unavailable">
-            <p>
-              Anteprima della fotocamera non disponibile. Puoi riprovare o usare la fotocamera del
-              dispositivo.
-            </p>
-            {conversionError && <p role="alert">{conversionError}</p>}
-            <div className="camera-capture__actions">
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={() => setRestart((n) => n + 1)}
-              >
-                Riprova
-              </button>
-              <button
-                className="btn-primary"
-                onClick={() => {
-                  close();
-                  onFallbackImport();
-                }}
-              >
-                Seleziona un’immagine dal dispositivo
-              </button>
-              <button type="button" className="btn-secondary" onClick={close}>
-                Annulla
-              </button>
-            </div>
-          </div>
+        {(phase === 'denied' || phase === 'unavailable') && (
+          <CameraCaptureFallback
+            phase={phase}
+            error={conversionError}
+            onRestart={() => setRestart((value) => value + 1)}
+            onClose={close}
+            onImport={() => {
+              close();
+              onFallbackImport();
+            }}
+          />
         )}
       </div>
     </AccessibleDialogSurface>

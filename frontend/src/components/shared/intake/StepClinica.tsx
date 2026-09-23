@@ -116,6 +116,9 @@ export function StepClinica({
             rows={terapiaImport}
             onChange={(v) => onUpdateSection('terapiaImport', v)}
             operatoreNome={operatoreNome}
+            sourceResultHash={
+              (data._importSource as { resultHash?: string } | undefined)?.resultHash
+            }
           />
         </div>
       )}

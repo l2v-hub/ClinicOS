@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "owner": "/root/po01_frontend_audit",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po05-scan-ui",
+  "baseline": "ef562bf51f296153ff0ec51ed6ab620da8e2dc1a",
+  "deltaBaseSourceManifestSha256": "5197b7e4c27701cd93d7f9299ed6226064d082a176279922b64ae8afac1a3820",
+  "createdAtUtc": "2026-09-23T00:50:34.1512303Z",
+  "scope": "Only the five listed source/test files after initial PO-05 handoff",
+  "excluded": [
+    "frontend/src/components/shared/import/ImportDocumentsWorkspace.tsx",
+    "frontend/src/components/shared/import/ImportSession.css"
+  ],
+  "files": [
+    {
+      "path": "frontend/src/components/shared/import/importReviewModel.ts",
+      "sha256": "b98952020d8746e6706f0dda53e5ae30400b73e464cd77c7f70b81ce25172fdf",
+      "bytes": 3822,
+      "lines": 91,
+      "previousManifestSha256": "399958b531057862d42250af895c2d7e5e035a700704339b3347d3beba17bc82",
+      "baselineGitBlob": null
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+      "sha256": "080831555cae4fafc8e77ed457de2e67e03d4a7808e838234528899bb72f5c15",
+      "bytes": 9956,
+      "lines": 270,
+      "previousManifestSha256": null,
+      "baselineGitBlob": null
+    },
+    {
+      "path": "frontend/src/components/shared/sections/deriveSections.ts",
+      "sha256": "1aad47618e6abcf7a36d8c311110386e5d911cd15bedf498487ac33eb7917e04",
+      "bytes": 4781,
+      "lines": 150,
+      "previousManifestSha256": null,
+      "baselineGitBlob": "8011c7b1efc82edfc1dcd87d739d49bd3d0aed57"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+      "sha256": "a9d572cacf32c5ea3988a62549484196655a84732bafb181dcbbcc9ff5d24f25",
+      "bytes": 15918,
+      "lines": 429,
+      "previousManifestSha256": "289206861a55ac31b88fd3c8c5747950f8e7679d70418609ea2c9407b3fb248b",
+      "baselineGitBlob": "cdae67789973465ec33927f692af6eb8aa574738"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/types.ts",
+      "sha256": "6f6f4cfe3e9640d3e844eda93f0efef443a2675c47ff1dff327ef7a2e6d49f15",
+      "bytes": 2419,
+      "lines": 99,
+      "previousManifestSha256": null,
+      "baselineGitBlob": "590b5109af41dc858415bc12be39f4a523bd2072"
+    }
+  ]
+}

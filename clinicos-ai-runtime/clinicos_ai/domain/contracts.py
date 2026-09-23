@@ -8,12 +8,15 @@ from __future__ import annotations
 from typing import Any, Literal, Optional
 
 try:
-    from pydantic import BaseModel, Field
+    from pydantic import BaseModel, Field, model_validator
 except ImportError:  # allow importing the package without pydantic (core tests)
     BaseModel = object  # type: ignore
 
     def Field(*_a, **_k):  # type: ignore
         return None
+
+    def model_validator(**_kwargs):  # type: ignore
+        return lambda method: method
 
 
 RuntimeJobStatus = Literal[
@@ -31,17 +34,32 @@ class RuntimeFile(BaseModel):
 
 
 class CreateJobRequest(BaseModel):
-    external_job_id: Optional[str] = None  # ClinicOS job id, for correlation only
+    external_job_id: Optional[str] = Field(default=None, max_length=256)
+    # Supplying both fields opts into unit idempotency. Legacy correlation alone
+    # must still allow distinct OCR/extraction jobs for the same ClinicOS import.
+    input_hash: Optional[str] = Field(default=None, pattern=r"^[a-fA-F0-9]{64}$")
     files: list[RuntimeFile] = Field(default_factory=list)
     # JSON schema + prompt the runtime should target (passed by the backend).
     schema: dict[str, Any] = Field(default_factory=dict)
     prompt: str = ""
+
+    @model_validator(mode="after")
+    def validate_identity(self):
+        if self.input_hash is not None:
+            if not self.external_job_id or not self.external_job_id.strip():
+                raise ValueError("input_hash richiede external_job_id")
+            self.input_hash = self.input_hash.lower()
+        return self
 
 
 class RunRequest(BaseModel):
     # 'extraction' = estrazione+repair col ruolo 'extraction'; 'agent' = agente con tool;
     # 'ocr' = sola trascrizione col ruolo 'ocr' (Document Intelligence: layout + markdown).
     mode: Literal["extraction", "agent", "ocr"] = "extraction"
+
+
+class RetryRequest(BaseModel):
+    expected_attempt: Optional[int] = Field(default=None, ge=0, strict=True)
 
 
 class RuntimeEvent(BaseModel):
@@ -53,6 +71,10 @@ class RuntimeEvent(BaseModel):
 class JobStatusResponse(BaseModel):
     job_id: str
     external_job_id: Optional[str] = None
+    input_hash: Optional[str] = None
+    attempt: int = 0
+    finish_reason: Optional[str] = None
+    truncated: bool = False
     status: RuntimeJobStatus
     stage: Optional[str] = None
     model: Optional[str] = None           # provider:model_id actually used
@@ -68,6 +90,10 @@ class JobResultResponse(BaseModel):
     model: Optional[str] = None
     data: Optional[dict] = None           # validated ClinicOS extraction (or None)
     warnings: list[str] = Field(default_factory=list)
+    input_hash: Optional[str] = None
+    attempt: int = 0
+    finish_reason: Optional[str] = None
+    truncated: bool = False
 
 
 class RuntimeHealth(BaseModel):

@@ -75,12 +75,13 @@ test('assertNoLegacyImportArrays throws on legacy contract, passes on narrative'
 
 test('GUARD: the import modal never renders the legacy ImportReviewFull table', () => {
   const modal = readFileSync(resolve(SHARED, 'DischargeImportModal.tsx'), 'utf8');
+  const review = readFileSync(resolve(SHARED, 'import/ImportReviewWorkspace.tsx'), 'utf8');
   assert.ok(
-    !/<ImportReviewFull/.test(modal),
+    !/<ImportReviewFull/.test(modal + review),
     'DischargeImportModal must not render <ImportReviewFull> (legacy table)',
   );
   assert.ok(
-    /ImportSectionsReview/.test(modal),
+    /<ImportReviewWorkspace/.test(modal) && /<ImportSectionsReview/.test(review),
     'DischargeImportModal must render the narrative review',
   );
 });

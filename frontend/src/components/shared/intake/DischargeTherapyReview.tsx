@@ -22,9 +22,10 @@ interface Props {
   rows: DischargeTherapyRow[];
   onChange: (rows: DischargeTherapyRow[]) => void;
   operatoreNome?: string;
+  sourceResultHash?: string;
 }
 
-export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props) {
+export function DischargeTherapyReview({ rows, onChange, operatoreNome, sourceResultHash }: Props) {
   const id = useId();
   // reviewedTherapy holds the full form; the parent draft remains the only source of truth.
   const forms = rows.map(dischargeRowToTherapyForm);
@@ -102,6 +103,12 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
           {review[i].issues.length > 0 && (
             <p className="discharge-therapy-review__alert">{review[i].issues.join('; ')}.</p>
           )}
+          {r.sourceOutdated && (
+            <p className="discharge-therapy-review__alert" role="alert">
+              La fonte è cambiata. I valori che hai corretto sono conservati: confronta le nuove
+              pagine e mantieni, correggi o lascia in bozza questa terapia.
+            </p>
+          )}
           {r.originalText && (
             <blockquote
               className="discharge-therapy-review__original"
@@ -132,12 +139,21 @@ export function DischargeTherapyReview({ rows, onChange, operatoreNome }: Props)
                   <button
                     type="button"
                     className="btn-secondary"
-                    disabled={therapyInputIssues(review[i].input).length > 0}
+                    disabled={
+                      therapyInputIssues(review[i].input).length > 0 ||
+                      (r.sourceOutdated === true && !sourceResultHash)
+                    }
                     onClick={() =>
                       onChange(
                         rows.map((row, idx) =>
                           idx === i
-                            ? therapyFormToDischargeRow(forms[i], { ...row, stato: 'ok' })
+                            ? therapyFormToDischargeRow(forms[i], {
+                                ...row,
+                                stato: 'ok',
+                                ...(row.sourceOutdated
+                                  ? { sourceOutdated: false, sourceReviewHash: sourceResultHash }
+                                  : {}),
+                              })
                             : row,
                         ),
                       )

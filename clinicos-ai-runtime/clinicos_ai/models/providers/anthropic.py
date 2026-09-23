@@ -4,6 +4,7 @@ from ..errors import ProviderUnavailableError
 from ..spec import ModelSpec
 from .base import BuiltModel
 from ._common import make_built
+from .completion import CompletionMetadataMixin
 
 
 def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) -> BuiltModel:  # noqa: ARG001
@@ -13,5 +14,8 @@ def build(spec: ModelSpec, role: str, temperature: float, timeout_seconds: int) 
             from agno.models.anthropic import Claude
         except ImportError as ex:
             raise ProviderUnavailableError(f"Agno/Anthropic SDK non installato: {ex}") from ex
-        return Agent(model=Claude(id=spec.model_id, temperature=temperature), markdown=False, telemetry=False)
+        class CompletionClaude(CompletionMetadataMixin, Claude):
+            pass
+
+        return Agent(model=CompletionClaude(id=spec.model_id, temperature=temperature), markdown=False, telemetry=False)
     return make_built(spec, build_agent, timeout_seconds, "Anthropic")

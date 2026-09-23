@@ -139,6 +139,7 @@ model PatientDocument {
   sizeBytes    Int
   sha256       String
   dataBase64   String   // base64 file content (persistent, in-DB)
+  sourceManifest Json?
   documentType String   @default("discharge_import")
   sortOrder    Int      @default(0)
   createdById  String?
@@ -499,6 +500,7 @@ model PatientDiaryEntry {
 model PatientIntakeDraft {
   id                 String   @id @default(cuid())
   status             String   @default("draft") // draft | confirmed | abandoned
+  version            Int      @default(0)
   source             String   @default("manual") // manual | import
   data               Json     @default("{}")     // accumulated sections (anagrafica + cartella shape)
   importJobId        String?  @unique             // link to extraction job when source = import (one draft per job)
@@ -534,6 +536,13 @@ model ImportJob {
   maxFiles       Int
   maxTotalBytes  Int
   totalBytes     Int              @default(0)
+  manifest       Json?
+  resultSummary  Json?
+  manifestRevision Int           @default(0)
+  maxPages       Int?
+  runToken       String?
+  runRevision    Int?
+  leaseExpiresAt DateTime?
   error          String?
   resultData     Json?            // populated by extraction (REQ-015)
   model          String?
@@ -548,10 +557,13 @@ model ImportJob {
   updatedAt      DateTime         @updatedAt
   documents      ImportDocument[]
   auditEvents    ImportAudit[]
+  processingUnits ImportProcessingUnit[]
+  mutations      ImportMutation[]
 
   @@index([status])
   @@index([expiresAt])
   @@index([createdPatientId])
+  @@index([status, leaseExpiresAt])
 }
 
 // REQ-018: audit trail linking job ↔ patient ↔ documents. No clinical content.
@@ -579,6 +591,7 @@ model ImportDocument {
   // BUG-049: durable copy of the bytes in the DB so the import file survives Railway's ephemeral
   // filesystem (container restart / sweep) and can still be persisted as a PatientDocument at confirm.
   dataBase64   String?
+  pageCount    Int?
   sortOrder    Int       @default(0)
   logicalDoc   String?   // group multiple photos into one logical document
   // pending|uploading|uploaded|processing|completed|retryable_error|failed|duplicate|rejected
@@ -591,6 +604,40 @@ model ImportDocument {
 
   @@unique([jobId, sha256])
   @@index([jobId])
+}
+
+model ImportProcessingUnit {
+  id             String   @id @default(cuid())
+  jobId          String
+  kind           String
+  unitKey        String
+  inputHash      String
+  status         String   @default("pending")
+  runtimeJobId   String?
+  runtimeAttempt Int      @default(0)
+  outputHash     String?
+  result         Json?
+  errorCode      String?
+  errorMessage   String?
+  updatedAt      DateTime @updatedAt
+  job            ImportJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, kind, unitKey, inputHash])
+  @@index([jobId, status])
+}
+
+model ImportMutation {
+  id                String   @id @default(cuid())
+  jobId             String
+  requestId         String
+  action            String
+  requestHash       String
+  resultingRevision Int
+  outcomes          Json
+  createdAt         DateTime @default(now())
+  job               ImportJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, requestId])
 }
 
 // SPEC-015 (US2): persistent audit of every Agnos AI action (read | create | update | refusal).

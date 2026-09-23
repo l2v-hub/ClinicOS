@@ -10,6 +10,7 @@ from ..errors import RuntimeError_, ErrorKind
 from ..profiles import capabilities_for
 from ..spec import ModelSpec
 from .base import Attachment, BuiltModel
+from .completion import agent_completion
 
 
 def classify_provider_exception(msg: str) -> ErrorKind:
@@ -41,15 +42,7 @@ class _GenericRunner:
             kind = classify_provider_exception(msg)
             raise RuntimeError_(kind, f"{self._label}: {msg[:200]}") from ex
 
-        # Some SDKs (Agno) DON'T raise on a provider error: they capture it and return a
-        # RunOutput with status=ERROR whose content is the error text. Surfacing that as a real
-        # provider error (→ HTTP 502 + sanitized failure log) instead of returning the error string
-        # is what makes an Azure misconfig visible rather than degrading silently (issue #239).
-        status = getattr(resp, "status", None)
-        if status is not None and str(getattr(status, "value", status)).upper() == "ERROR":
-            detail = str(getattr(resp, "content", None) or "provider error")[:200]
-            raise RuntimeError_(ErrorKind.PROVIDER_ERROR, f"{self._label}: {detail}")
-        return getattr(resp, "content", None) or str(resp)
+        return agent_completion(resp, self._label)
 
 
 def make_built(spec: ModelSpec, build_agent: Callable[[], object], timeout_seconds: int, label: str) -> BuiltModel:

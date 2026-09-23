@@ -43,6 +43,7 @@ export interface NarrativeDraft {
   }>;
   sourceReferences?: Array<{
     sectionKey?: string;
+    fileId?: string;
     fileName?: string;
     pageFrom?: number;
     pageTo?: number;
@@ -106,7 +107,7 @@ export function sectionsFromNarrative(draft: NarrativeDraft): SectionsResult {
   const srcFor = (italian: string) =>
     refs
       .filter((r) => r.sectionKey === italian)
-      .map((r) => ({ fileId: r.fileName, pageNumber: r.pageFrom }));
+      .map((r) => ({ fileId: r.fileId, fileName: r.fileName, pageNumber: r.pageFrom }));
 
   const sections: SectionData[] = [];
   for (const f of FIELDS) {

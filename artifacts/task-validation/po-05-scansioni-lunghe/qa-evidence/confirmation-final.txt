@@ -1,0 +1,6 @@
+- main:
+  - heading "Collaudo scansioni" [level=1]
+  - paragraph: Dati sintetici · fotocamera simulata · API e database locali
+  - generic "Controlli del collaudo sintetico"
+  - button "Apri importazione" [active]
+  - status: Importazione confermata · 1

@@ -26,16 +26,20 @@ from ..agents.assistant import run_assistant_plan, run_assistant_compose
 from ..models.errors import RuntimeError_, ErrorKind
 from ..models.env_config import safe_config_summary, llm_health_summary
 from ..models.providers.base import Attachment
+from ..models.providers.completion import completion_text
 from ..models.registry import ModelRegistry
 from ..domain.contracts import (
-    CreateJobRequest, RunRequest, AssistantPlanRequest, AssistantPlanResponse,
+    CreateJobRequest, RunRequest, RetryRequest, AssistantPlanRequest, AssistantPlanResponse,
     AssistantComposeRequest, AssistantComposeResponse,
 )
+from .job_control import can_retry, current_attempt, existing_job
 
 _log = logging.getLogger("clinicos_ai.runtime")
 app = FastAPI(title="ClinicOS AI Runtime", version="1.0.0")
 _REGISTRY = ModelRegistry()
 _JOBS: dict[str, dict] = {}
+_JOB_KEYS: dict[str, str] = {}
+_TASKS: dict[str, asyncio.Task] = {}
 
 # AC2: limita quanti job girano in _process() in parallelo. Un job in eccesso resta
 # status="queued" (gia' impostato da run_job/retry_job prima di schedulare il task) finche'
@@ -66,7 +70,10 @@ def _gc_expired_jobs() -> None:
         and (now - job["finished_at"]) > retention
     ]
     for jid in expired_ids:
-        del _JOBS[jid]
+        job = _JOBS.pop(jid)
+        key = job.get("external_job_id")
+        if _JOB_KEYS.get(key) == jid:
+            _JOB_KEYS.pop(key)
 
 
 @app.on_event("startup")
@@ -90,25 +97,34 @@ def _public(job: dict) -> dict:
     return {
         "job_id": job["id"],
         "external_job_id": job.get("external_job_id"),
+        "input_hash": job.get("input_hash"),
+        "attempt": job.get("attempt", 0),
+        "finish_reason": job.get("finish_reason"),
+        "truncated": job.get("truncated", False),
         "status": job["status"],
         "stage": job.get("stage"),
         "model": job.get("model"),
         "elapsed_seconds": elapsed,
-        "can_retry": job["status"] in ("failed", "retryable_error"),
-        "can_cancel": job["status"] in ("queued", "running", "validating", "repairing"),
+        "can_retry": can_retry(job),
+        "can_cancel": job["status"] in ("created", "queued", "running", "validating", "repairing"),
         "error": job.get("error"),
     }
 
 
-async def _process(job_id: str) -> None:
+async def _process(job_id: str, attempt: int | None = None) -> None:
     # AC2: finche' non c'e' uno slot libero il job resta status="queued" (impostato dal
     # chiamante prima di schedulare il task) — nulla qui sotto viene eseguito prima di
     # acquisire il semaforo, quindi lo stato non passa a "running" fuori turno.
-    async with _CONCURRENCY_SEMAPHORE:
-        job = _JOBS[job_id]
-        job.update(status="running", stage="model_processing", started_at=time.time(), error=None)
-        job["events"].append({"at": time.strftime("%H:%M:%S"), "stage": "running"})
-        try:
+    job = _JOBS.get(job_id)
+    if job is None:
+        return
+    attempt = job.get("attempt", 0) if attempt is None else attempt
+    try:
+        async with _CONCURRENCY_SEMAPHORE:
+            if not current_attempt(_JOBS, job, attempt):
+                return
+            job.update(status="running", stage="model_processing", started_at=time.time(), error=None)
+            job["events"].append({"at": time.strftime("%H:%M:%S"), "stage": "running"})
             attachments = [
                 Attachment(filename=f["filename"], mime_type=f["mime_type"],
                            data=base64.b64decode(f["content_base64"]))
@@ -116,25 +132,64 @@ async def _process(job_id: str) -> None:
             ]
             # AC3: un job che non conclude entro job_max_duration_seconds viene marcato
             # fallito invece di restare "running" a tempo indeterminato.
+            deadline = time.monotonic() + _REGISTRY.config.job_max_duration_seconds
             out = await asyncio.wait_for(
                 run_extraction(_REGISTRY, job["prompt"], job["schema"], attachments,
                                mode=job.get("mode") or "extraction"),
                 timeout=_REGISTRY.config.job_max_duration_seconds,
             )
+            if not current_attempt(_JOBS, job, attempt):
+                return
+            if time.monotonic() >= deadline:
+                raise asyncio.TimeoutError()
+            if out.truncated:
+                raise RuntimeError_(ErrorKind.OUTPUT_TRUNCATED, "Output troncato.",
+                                    finish_reason=out.finish_reason, truncated=True)
+            completion_text("", out.finish_reason)
             job.update(status="review_ready", stage="completed", model=out.model, result=out.data,
-                       warnings=out.warnings, finished_at=time.time())
-        except RuntimeError_ as ex:
-            retryable = ex.kind in (ErrorKind.TIMEOUT, ErrorKind.RATE_LIMIT, ErrorKind.PROVIDER_ERROR,
-                                    ErrorKind.PROVIDER_UNAVAILABLE)
-            job.update(status="retryable_error" if retryable else "failed", stage="error",
-                       error=ex.to_dict(), finished_at=time.time())
-        except asyncio.TimeoutError:
-            job.update(status="failed", stage="error", finished_at=time.time(),
-                       error={"kind": "timeout", "message": "Job superato il tempo massimo consentito"})
-        except Exception as ex:  # pragma: no cover
-            job.update(status="failed", stage="error", finished_at=time.time(),
-                       error={"kind": "provider_error", "message": str(ex)[:200]})
+                       warnings=out.warnings, finish_reason=out.finish_reason,
+                       truncated=False, finished_at=time.time())
+    except asyncio.CancelledError:
+        if current_attempt(_JOBS, job, attempt):
+            job.update(status="cancelled", stage="cancelled", result=None, finished_at=time.time())
+        raise
+    except RuntimeError_ as ex:
+        if not current_attempt(_JOBS, job, attempt):
+            return
+        retryable = ex.kind in (ErrorKind.TIMEOUT, ErrorKind.RATE_LIMIT, ErrorKind.PROVIDER_ERROR,
+                                ErrorKind.PROVIDER_UNAVAILABLE)
+        job.update(status="retryable_error" if retryable else "failed", stage="error", result=None,
+                   error=ex.to_dict(), finish_reason=ex.finish_reason, truncated=ex.truncated,
+                   finished_at=time.time())
+    except asyncio.TimeoutError:
+        if not current_attempt(_JOBS, job, attempt):
+            return
+        job.update(status="failed", stage="error", result=None, finished_at=time.time(),
+                   error={"kind": "timeout", "message": "Job superato il tempo massimo consentito"})
+    except Exception:  # pragma: no cover
+        if not current_attempt(_JOBS, job, attempt):
+            return
+        job.update(status="failed", stage="error", result=None, finished_at=time.time(),
+                   error={"kind": "provider_error", "message": "Elaborazione del provider non riuscita"})
+    if current_attempt(_JOBS, job, attempt):
         job["events"].append({"at": time.strftime("%H:%M:%S"), "stage": job["stage"]})
+
+
+def _schedule(job: dict) -> None:
+    """No await between state transition and registration: one task per attempt."""
+    job.update(status="queued", stage="queued", error=None, finished_at=None, started_at=None,
+               result=None, warnings=[], finish_reason=None, truncated=False,
+               attempt=job.get("attempt", 0) + 1)
+    task = asyncio.create_task(_process(job["id"], job["attempt"]))
+    _TASKS[job["id"]] = task
+
+    def done(completed):
+        if _TASKS.get(job["id"]) is completed:
+            _TASKS.pop(job["id"], None)
+        if not completed.cancelled():
+            completed.exception()
+
+    task.add_done_callback(done)
 
 
 @app.get("/v1/runtime/health")
@@ -145,7 +200,8 @@ def health():
 
 @app.get("/v1/runtime/capabilities")
 def capabilities():
-    return _REGISTRY.public_status()
+    return {**_REGISTRY.public_status(), "document_job_contract_version": 2,
+            "max_upload_bytes": _REGISTRY.config.max_upload_bytes}
 
 
 # issue #239 AC3: health check LLM interno, SECRET-FREE. Mostra provider/deployment selezionati
@@ -200,21 +256,32 @@ async def _document_jobs_route(request: Request, authorization: str | None = Hea
     _auth(authorization)
     max_upload_bytes = _REGISTRY.config.max_upload_bytes
     content_length = request.headers.get("content-length")
-    if content_length is not None and int(content_length) > max_upload_bytes:
+    try:
+        declared_length = int(content_length) if content_length is not None else None
+        if declared_length is not None and declared_length < 0:
+            raise ValueError()
+    except ValueError:
+        raise HTTPException(400, "Content-Length non valido") from None
+    if declared_length is not None and declared_length > max_upload_bytes:
         raise HTTPException(
             413,
             f"Upload troppo grande: {content_length} byte (limite {max_upload_bytes})",
         )
-    raw_body = await request.body()
-    if len(raw_body) > max_upload_bytes:
-        raise HTTPException(
-            413,
-            f"Upload troppo grande: {len(raw_body)} byte (limite {max_upload_bytes})",
-        )
+    raw_body = bytearray()
+    async for chunk in request.stream():
+        received_bytes = len(raw_body) + len(chunk)
+        if received_bytes > max_upload_bytes:
+            # Check before append and stop consuming immediately, including when
+            # Content-Length is absent (HTTP chunked) or underdeclares the body.
+            raise HTTPException(
+                413,
+                f"Upload troppo grande: {received_bytes} byte (limite {max_upload_bytes})",
+            )
+        raw_body.extend(chunk)
     try:
         body = CreateJobRequest.model_validate_json(raw_body)
-    except ValidationError as ex:
-        raise HTTPException(422, str(ex))
+    except ValidationError:
+        raise HTTPException(422, "Richiesta job non valida") from None
     return create_job(body, authorization=authorization)
 
 
@@ -236,13 +303,19 @@ def create_job(body: CreateJobRequest, authorization: str | None = Header(defaul
             413,
             f"Upload troppo grande: {total_upload_bytes} byte (limite {max_upload_bytes})",
         )
+    existing, payload_hash = existing_job(body, _JOBS, _JOB_KEYS)
+    if existing is not None:
+        return _public(existing)
     job_id = str(uuid.uuid4())
     _JOBS[job_id] = {
         "id": job_id, "external_job_id": body.external_job_id, "status": "created", "stage": None,
         "files": [f.model_dump() if hasattr(f, "model_dump") else dict(f) for f in body.files],
         "schema": body.schema, "prompt": body.prompt, "events": [], "started_at": None,
         "finished_at": None,
+        "input_hash": body.input_hash, "payload_hash": payload_hash, "attempt": 0,
     }
+    if body.input_hash is not None:
+        _JOB_KEYS[body.external_job_id] = job_id
     return _public(_JOBS[job_id])
 
 
@@ -254,8 +327,12 @@ async def run_job(job_id: str, _body: RunRequest | None = None, authorization: s
         raise HTTPException(404, "Job non trovato")
     # Il mode arriva col run, non con la create: decide QUALE ruolo esegue il job
     # ('ocr' -> motore di layout, 'extraction' -> modello di estrazione).
-    job.update(status="queued", stage="queued", mode=(_body.mode if _body else "extraction"))
-    asyncio.create_task(_process(job_id))
+    mode = _body.mode if _body else "extraction"
+    if job.get("mode") is not None and job["mode"] != mode:
+        raise HTTPException(409, "Il mode del job non puo' cambiare")
+    if job["status"] == "created":
+        job["mode"] = mode
+        _schedule(job)
     return _public(job)
 
 
@@ -284,27 +361,44 @@ def get_result(job_id: str, authorization: str | None = Header(default=None)):
     if not job:
         raise HTTPException(404, "Job non trovato")
     return {"job_id": job_id, "status": job["status"], "model": job.get("model"),
-            "data": job.get("result"), "warnings": job.get("warnings", [])}
+            "data": job.get("result") if job["status"] == "review_ready" else None,
+            "warnings": job.get("warnings", []), "input_hash": job.get("input_hash"),
+            "attempt": job.get("attempt", 0), "finish_reason": job.get("finish_reason"),
+            "truncated": job.get("truncated", False)}
 
 
 @app.post("/v1/document-jobs/{job_id}/retry", status_code=202)
-async def retry_job(job_id: str, authorization: str | None = Header(default=None)):
+async def retry_job(job_id: str, authorization: str | None = Header(default=None),
+                    _body: RetryRequest | None = None):
     _auth(authorization)
     job = _JOBS.get(job_id)
     if not job:
         raise HTTPException(404, "Job non trovato")
-    if job["status"] not in ("failed", "retryable_error"):
+    expected = _body.expected_attempt if _body else None
+    if expected is not None:
+        if expected > job.get("attempt", 0):
+            raise HTTPException(409, "Tentativo atteso non valido")
+        if expected < job.get("attempt", 0):
+            return _public(job)
+    if job["status"] in ("queued", "running", "validating", "repairing"):
+        return _public(job)
+    if not can_retry(job):
         raise HTTPException(400, f"Job non ritentabile nello stato {job['status']}")
-    job.update(status="queued", stage="queued", error=None, finished_at=None)
-    asyncio.create_task(_process(job_id))
+    _schedule(job)
     return _public(job)
 
 
 @app.post("/v1/document-jobs/{job_id}/cancel")
-def cancel_job(job_id: str, authorization: str | None = Header(default=None)):
+async def cancel_job(job_id: str, authorization: str | None = Header(default=None)):
     _auth(authorization)
     job = _JOBS.get(job_id)
     if not job:
         raise HTTPException(404, "Job non trovato")
-    job.update(status="cancelled", stage="error", finished_at=time.time())
+    if job["status"] in _TERMINAL_STATUSES:
+        return _public(job)
+    job.update(status="cancelled", stage="cancelled", result=None, finished_at=time.time())
+    job["events"].append({"at": time.strftime("%H:%M:%S"), "stage": "cancelled"})
+    task = _TASKS.get(job_id)
+    if task is not None and not task.done():
+        task.cancel()
     return _public(job)

@@ -1,0 +1,35 @@
+{
+  "owner": "/root/po01_frontend_audit",
+  "worktree": "C:/Workspace/ClinicOSHouse-worktrees/po05-scan-ui",
+  "baseline": "ef562bf51f296153ff0ec51ed6ab620da8e2dc1a",
+  "status": "released",
+  "authorization": "Root follow-up GO: fix section source identity/fallback and explicit demographic conflict decisions with manual-state preservation; frontend-only delta after prior handoff",
+  "paths": [
+    "frontend/src/components/shared/sections/deriveSections.ts",
+    "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+    "frontend/src/components/shared/sections/types.ts",
+    "frontend/src/components/shared/import/importReviewModel.ts",
+    "frontend/src/components/shared/import/__tests__/",
+    "frontend/src/components/shared/sections/__tests__/",
+    "artifacts/task-validation/po05-scan-ui/"
+  ],
+  "resources": [],
+  "ports": [],
+  "excluded": [
+    "backend",
+    "schema",
+    "manifests",
+    "lockfiles",
+    "shared Prisma",
+    "browser",
+    "servers",
+    "commit",
+    "push",
+    "deploy"
+  ],
+  "sourceManifestSha256": "2f452e9a5dbad695b41b9305b92f2fba0e26ba4e4d10a28ad821718b9e343811",
+  "receipt": "artifacts/task-validation/po05-scan-ui/delta-validation-receipt.json",
+  "deltaBaseManifestSha256": "5197b7e4c27701cd93d7f9299ed6226064d082a176279922b64ae8afac1a3820",
+  "acquiredAtUtc": "2026-09-23T00:45:38.8569325Z",
+  "releasedAtUtc": "2026-09-23T00:51:35.1161407Z"
+}

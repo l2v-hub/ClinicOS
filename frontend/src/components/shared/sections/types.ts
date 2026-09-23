@@ -38,6 +38,7 @@ export interface SemanticAnnotation {
 
 export interface SourceRange {
   fileId?: string;
+  fileName?: string;
   pageNumber?: number;
   startOffset?: number;
   endOffset?: number;
@@ -93,6 +94,6 @@ export interface ReviewedSection {
   rawText: string;
   reviewedText: string | null;
   annotations: SemanticAnnotation[];
-  sources: { fileName: string; pageNumber?: number }[];
+  sources: { fileName: string; pageNumber?: number; fileId?: string }[];
   reviewStatus: ReviewStatus;
 }

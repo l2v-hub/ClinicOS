@@ -4,7 +4,15 @@ import type { PDFDocumentLoadingTask, PDFDocumentProxy, RenderTask } from 'pdfjs
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
 /** Render original PDF bytes without depending on a browser PDF plugin. */
-export function PdfCanvasPreview({ file, name }: { file: Blob; name: string }) {
+export function PdfCanvasPreview({
+  file,
+  name,
+  pageNumber,
+}: {
+  file: Blob;
+  name: string;
+  pageNumber?: number;
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null);
@@ -18,6 +26,8 @@ export function PdfCanvasPreview({ file, name }: { file: Blob; name: string }) {
   useEffect(() => {
     let active = true;
     let loading: PDFDocumentLoadingTask | undefined;
+    // The PDF.js document lifecycle replaces its prior render state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPdf(null);
     setPage(1);
     setStatus('loading');
@@ -40,6 +50,8 @@ export function PdfCanvasPreview({ file, name }: { file: Blob; name: string }) {
     };
   }, [file, revision]);
 
+  const displayedPage = pageNumber ?? page;
+
   useEffect(() => {
     const node = stage.current;
     if (!node) return;
@@ -53,10 +65,12 @@ export function PdfCanvasPreview({ file, name }: { file: Blob; name: string }) {
     if (!pdf) return;
     let active = true;
     let rendering: RenderTask | undefined;
+    // A new PDF.js render must clear the previous page's accessible text.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStatus('loading');
     setText('');
     void (async () => {
-      const source = await pdf.getPage(page);
+      const source = await pdf.getPage(displayedPage);
       if (!active || !canvas.current) return;
       const natural = source.getViewport({ scale: 1 });
       const fit = Math.max(200, width - 32) / natural.width;
@@ -93,7 +107,7 @@ export function PdfCanvasPreview({ file, name }: { file: Blob; name: string }) {
       active = false;
       rendering?.cancel();
     };
-  }, [pdf, page, zoom, width]);
+  }, [pdf, displayedPage, zoom, width]);
 
   return (
     <div className="document-pdf-preview">
@@ -102,19 +116,19 @@ export function PdfCanvasPreview({ file, name }: { file: Blob; name: string }) {
           type="button"
           className="btn-secondary btn-sm"
           aria-label="Pagina precedente"
-          disabled={!pdf || page <= 1}
+          disabled={pageNumber !== undefined || !pdf || page <= 1}
           onClick={() => setPage((value) => value - 1)}
         >
           ‹
         </button>
         <span>
-          Pagina {page} di {pdf?.numPages ?? '…'}
+          Pagina {displayedPage} di {pdf?.numPages ?? '…'}
         </span>
         <button
           type="button"
           className="btn-secondary btn-sm"
           aria-label="Pagina successiva"
-          disabled={!pdf || page >= pdf.numPages}
+          disabled={pageNumber !== undefined || !pdf || page >= pdf.numPages}
           onClick={() => setPage((value) => value + 1)}
         >
           ›
@@ -161,7 +175,7 @@ export function PdfCanvasPreview({ file, name }: { file: Blob; name: string }) {
           data-ready={status === 'ready'}
           aria-hidden={status !== 'ready'}
           role="img"
-          aria-label={`${name} · pagina ${page}`}
+          aria-label={`${name} · pagina ${displayedPage}`}
         />
         {text && <p className="document-pdf-preview__accessible">{text}</p>}
       </div>

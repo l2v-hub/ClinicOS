@@ -137,7 +137,9 @@ export function buildIntakeTherapyReview(data: Record<string, unknown>, operator
         ? [input.orarioSomministrazione].filter(hasText)
         : schedules.map((s) => s?.time).filter(hasText);
     const requiresSourceReview =
-      source === 'import' && (row as DischargeTherapyRow)?.stato === 'da_verificare';
+      source === 'import' &&
+      ((row as DischargeTherapyRow)?.stato === 'da_verificare' ||
+        (row as DischargeTherapyRow)?.sourceOutdated === true);
     const fields = therapyInputDiagnostics(input);
     if (requiresSourceReview)
       fields.push({

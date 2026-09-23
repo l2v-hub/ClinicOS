@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "decision": "ALLOW_FRONTEND_HANDOFF",
+  "owner": "/root/po01_frontend_audit",
+  "createdAtUtc": "2026-09-23T00:35:16.3698643Z",
+  "sourceManifestSha256": "5197b7e4c27701cd93d7f9299ed6226064d082a176279922b64ae8afac1a3820",
+  "sourceFiles": 32,
+  "focusedTests": {
+    "passed": 121,
+    "failed": 0
+  },
+  "frontendBuild": "pass",
+  "lint": {
+    "errors": 2,
+    "warnings": 2,
+    "baselineIntakeErrors": 2,
+    "baselineIntakeWarnings": 1
+  },
+  "frontendDiffCheck": "pass",
+  "protectedLaunchers": "unchanged",
+  "independentReview": {
+    "owner": "/root/clinical_forms_source_audit",
+    "status": "both network findings closed",
+    "focusedRerunPassed": 12,
+    "realHandlerAndQueueReproductions": "pass"
+  },
+  "evidence": [
+    {
+      "path": "source-manifest.json",
+      "sha256": "5197b7e4c27701cd93d7f9299ed6226064d082a176279922b64ae8afac1a3820"
+    },
+    {
+      "path": "import-regression-tests.log",
+      "sha256": "45eee60e82f3a87b9087a826ee99b4571cf0ea7b34f31dce826446ec75e97664"
+    },
+    {
+      "path": "frontend-build.log",
+      "sha256": "d582f58ed2b26d7b1d3afae7b823f73d83f04bfb27ac8c777188bb7eea481d33"
+    },
+    {
+      "path": "eslint-focused.json",
+      "sha256": "f74c4c714feb60276452270545175db9586d70e644598003eb84e1eb5f6e5146"
+    },
+    {
+      "path": "eslint-intake-baseline.json",
+      "sha256": "46b9422ec3e25e2d75c148a755a58179b1d03a9ee14255642b906064df966083"
+    },
+    {
+      "path": "frontend-tests.log",
+      "sha256": "301083cacdf97494c0d9b5a8588270b17c55fe3905db3f70e2391c623af20647"
+    },
+    {
+      "path": "handoff.md",
+      "sha256": "13e27f7699937062a4e0bf26c4711ba64d8c75d9e2959263f395a5993ac51619"
+    },
+    {
+      "path": "task-contract.md",
+      "sha256": "36478232d2c9b2e91d4b5806be42390ad9247b559f043703086927bd8d8dbbfd"
+    }
+  ],
+  "releaseAuthority": "/root",
+  "remainingIntegration": "Root-owned final three-letter workload, sticky-progress and combined frontend/backend acceptance"
+}

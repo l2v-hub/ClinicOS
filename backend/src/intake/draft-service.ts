@@ -5,6 +5,16 @@ import type { Operator } from '../ai/auth.js';
 import { canAccessOwnedResource } from '../ai/ownership-policy.js';
 import { AiExtractionError } from '../ai/types.js';
 import { hasClinicalPassage, importedPastHistory, splitPastHistory } from './clinical-history.js';
+import { object, renewedExpiry } from '../ai/upload/pages/model.js';
+import { assertCurrentReview, assertDraftSource } from '../ai/upload/pages/review.js';
+import { attachPageDraftSource, pageDraftNarrative } from '../ai/upload/pages/draft-source.js';
+import {
+  IMMUTABLE_DRAFT_FIELDS,
+  assertDraftVersion,
+  draftPatchReceipt,
+  guardPageRows,
+} from '../ai/upload/pages/draft-mutations.js';
+import { saveReceipt } from '../ai/upload/pages/repository.js';
 
 // ── Allergene sanitation (import seeding) ────────────────────────────────────
 // CLINICAL SAFETY: an `allergene` is a CONCISE allergen name, never a clinical narrative. Real
@@ -67,7 +77,7 @@ export async function getDraft(id: string) {
 }
 
 export async function patchDraft(id: string, patch: Record<string, unknown>) {
-  for (const immutableKey of ['_narrative', '_sections', '_terapiaText', '_confirmation']) {
+  for (const immutableKey of IMMUTABLE_DRAFT_FIELDS) {
     if (Object.hasOwn(patch, immutableKey)) {
       throw new AiExtractionError(
         'config',
@@ -75,7 +85,13 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
       );
     }
   }
+  const hint = await prisma.patientIntakeDraft.findUniqueOrThrow({
+    where: { id },
+    select: { importJobId: true },
+  });
   return prisma.$transaction(async (tx) => {
+    if (hint.importJobId)
+      await tx.$queryRaw`SELECT "id" FROM "ImportJob" WHERE "id"=${hint.importJobId} FOR UPDATE`;
     await tx.$queryRaw`SELECT "id" FROM "PatientIntakeDraft" WHERE "id" = ${id} FOR UPDATE`;
     const current = await tx.patientIntakeDraft.findUniqueOrThrow({ where: { id } });
     if (current.status !== 'draft')
@@ -84,6 +100,21 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
         'La bozza è già confermata e non può essere modificata',
       );
     const existingData = (current.data ?? {}) as Record<string, unknown>;
+    const pageSession = !!existingData._importSource;
+    const r = await draftPatchReceipt(tx, current, patch);
+    if (r?.previous) return current;
+    assertDraftVersion(current, patch.expectedDraftVersion, pageSession);
+    const { expectedDraftVersion: _version, requestId: _requestId, ...editable } = patch;
+    const job =
+      pageSession && current.importJobId
+        ? await tx.importJob.findUniqueOrThrow({ where: { id: current.importJobId } })
+        : null;
+    const review =
+      job?.status === 'review_ready' &&
+      object(object(job.resultData)._source).manifestRevision === job.manifestRevision
+        ? object(job.resultData)
+        : undefined;
+    guardPageRows(existingData, editable, review);
     if (Array.isArray(existingData.terapiaImport) && patch.terapiaImport !== undefined) {
       const previous = existingData.terapiaImport as Record<string, unknown>[];
       if (
@@ -100,13 +131,23 @@ export async function patchDraft(id: string, patch: Record<string, unknown>) {
           'Conserva le righe originali: usa Lascia in bozza per escludere una terapia',
         );
     }
-    const merged: Record<string, unknown> = { ...existingData, ...patch };
-    return tx.patientIntakeDraft.update({
+    const merged: Record<string, unknown> = { ...existingData, ...editable };
+    const updated = await tx.patientIntakeDraft.update({
       where: { id },
       data: {
         data: merged as Parameters<typeof prisma.patientIntakeDraft.update>[0]['data']['data'],
+        version: { increment: 1 },
       },
     });
+    if (r && job) {
+      await saveReceipt(tx, job.id, r, 'draft-patch', job.manifestRevision, {
+        draftId: id,
+        version: updated.version,
+      });
+      if (!['cancelled', 'expired', 'confirmed'].includes(job.status))
+        await tx.importJob.update({ where: { id: job.id }, data: { expiresAt: renewedExpiry() } });
+    }
+    return updated;
   });
 }
 
@@ -125,6 +166,7 @@ export async function listDrafts(createdById?: string) {
 export interface SeedDraftFromImportOpts {
   createdById?: string;
   actor?: Operator;
+  sourcePair?: unknown;
 }
 
 /**
@@ -252,6 +294,8 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
           'config',
           'Documento già confermato: apri la scheda del paziente per aggiornare i dati.',
         );
+      const pageResult =
+        object(job.manifest).version === 1 ? assertCurrentReview(job, opts.sourcePair) : null;
       // Idempotency check: return existing draft for this job.
       const existing = await tx.patientIntakeDraft.findFirst({
         where: { importJobId: jobId },
@@ -261,6 +305,7 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
           ? canAccessOwnedResource(opts.actor, existing.createdById)
           : (existing.createdById ?? null) === (opts.createdById ?? null);
         if (!allowed) throw new AiExtractionError('not_found', 'Bozza non trovata');
+        if (pageResult) assertDraftSource(object(existing.data), pageResult);
         return existing;
       }
 
@@ -273,7 +318,13 @@ export async function seedDraftFromImport(jobId: string, opts: SeedDraftFromImpo
         );
       }
 
-      const data = buildImportDraftData(narrative, resultData?._sections ?? null);
+      const seeded = buildImportDraftData(
+        pageResult ? pageDraftNarrative(pageResult) : narrative,
+        resultData?._sections ?? null,
+      );
+      const data = pageResult ? attachPageDraftSource(seeded, pageResult) : seeded;
+      if (pageResult)
+        await tx.importJob.update({ where: { id: jobId }, data: { expiresAt: renewedExpiry() } });
 
       try {
         return await tx.patientIntakeDraft.create({

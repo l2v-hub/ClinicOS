@@ -1,0 +1,638 @@
+{
+  "baseline": "baf37371c7c79847943dc14a6d322777632032c3",
+  "at": "2026-09-23T01:00:38.875Z",
+  "binding": "Baseline commit plus listed source paths, including new files; root CSS and empty-group guard are included",
+  "treeHash": "3601e1d2c15f4aaedacc5df8e95e2fb0aa34b2286c1b924b11cd0577d86ff43b",
+  "files": [
+    {
+      "path": "backend/package.json",
+      "bytes": 1335,
+      "sha256": "0d05ac91f625b3790cb86d56289335347e084b410e83b49bfae6d21db67f1070"
+    },
+    {
+      "path": "backend/src/ai/upload/confirm-service.ts",
+      "bytes": 15413,
+      "sha256": "c930a5cf2a763ed4e813ba713cd3706502b290542d82f95a711c09471e83e711"
+    },
+    {
+      "path": "backend/src/ai/upload/job-service.ts",
+      "bytes": 47412,
+      "sha256": "7558f09b83e5f46895cf48cdbe77fcf94a5f836dc169bf23c3e875d9bbcee73e"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/archive.ts",
+      "bytes": 5857,
+      "sha256": "970fdb56217a20f103d9a5791bd08b4929eab79f1a5a6b59a33c15a808471f58"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/cleanup.ts",
+      "bytes": 1830,
+      "sha256": "9299069258b63f99900e6305d9dd17f2daf6ce6967b441984aa3c8fb76e4251e"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/draft-mutations.ts",
+      "bytes": 7150,
+      "sha256": "6622fb851828630dfb1f246d4fad54b164fb31ffdd99b5a1e2ffd048a27e9063"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/draft-source.ts",
+      "bytes": 7285,
+      "sha256": "c6159b5f3e5bbe44f400bbaf0b3e28051270dcac55e3ad3e5bddc3e448dda608"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/inputs.ts",
+      "bytes": 1411,
+      "sha256": "eacb6b0f948acb0a8fb6890b8233475679a9ee7ab836471839ccd4c159c8aedb"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/lifecycle.ts",
+      "bytes": 5487,
+      "sha256": "65eb9c53d2ad6bbea85e4d20b7c39d24065fa4bf5b9d334058630666e1d55853"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/model.ts",
+      "bytes": 3782,
+      "sha256": "3fb9e725311c683f323c6ca31352d1a9ec1a72dbf36fc65d3a8a137ce63c3c5c"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/multipart.ts",
+      "bytes": 2176,
+      "sha256": "0eb8a954fd214efb1a7b507c540259ec42ed2a70f0d9b3b5d395a3ad23f5ab1a"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/pdf.ts",
+      "bytes": 6368,
+      "sha256": "a7cbbb4a7c267878da9a557057af244a772186ead361f1bdf2e9cff43267b359"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/repository.ts",
+      "bytes": 9362,
+      "sha256": "c649891914d779f705a6030dcc43138e5efa4a276ac7245ed2c7e2f3fc9cb46c"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/results.ts",
+      "bytes": 8000,
+      "sha256": "9861678882bd8eedd441a63ca4739faf0e22013635df3c8365cbf5b68094c0cc"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/review.ts",
+      "bytes": 4269,
+      "sha256": "08967c6d73119f7e89bd8aad33bcdf5298a515aa412fd964f0b3410d5353e4f0"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/runtime.ts",
+      "bytes": 6863,
+      "sha256": "424d8d46c3798e9690949fbc2ff710db2e7675e1d0c259e29231a1b0d1d4dae3"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/uploads.ts",
+      "bytes": 10633,
+      "sha256": "6c043fac456b2093cd53fb2058aeb4e40faaa3be402fba3e97d53bfefe77a6d2"
+    },
+    {
+      "path": "backend/src/ai/upload/pages/worker.ts",
+      "bytes": 10839,
+      "sha256": "1bffd6e6b5fb6e13cf714e7c364ec32a886b86e52fee577cfea354a6e85cd94c"
+    },
+    {
+      "path": "backend/src/ai/upload/patient-documents.ts",
+      "bytes": 6878,
+      "sha256": "5a1e873a78e8abecb83da9b6058aebbdf7f731a81dde7f413c8ee3ed2cdf48dd"
+    },
+    {
+      "path": "backend/src/ai/upload/worker.ts",
+      "bytes": 2710,
+      "sha256": "0d7d33e226d04ac02ae2cd21cf88d37fbee52ddd8dcb8d9fde238dcd49089d2a"
+    },
+    {
+      "path": "backend/src/intake/draft-service.ts",
+      "bytes": 15524,
+      "sha256": "1c68f133ab779691c53694162f919c1a9d89eae0e07f19bfd147776fd21a7bf3"
+    },
+    {
+      "path": "backend/src/intake/therapy-selection.ts",
+      "bytes": 4853,
+      "sha256": "2ae172568ade23e118bf0eae3c7900128acdd84b8be33eaaa0cdc0c96b92db39"
+    },
+    {
+      "path": "backend/src/routes/ai-jobs.ts",
+      "bytes": 9762,
+      "sha256": "7812b31bacc195ea553e34a1a4a195da9f98b5485fb2cc58d23cf91a202a77bf"
+    },
+    {
+      "path": "backend/src/routes/import-pages.ts",
+      "bytes": 7386,
+      "sha256": "040422aebb21668e6f3d32e615099b3c80253f4ad5f33cffe7d229ddd39eaedb"
+    },
+    {
+      "path": "backend/src/routes/intake-drafts.ts",
+      "bytes": 6132,
+      "sha256": "58481ff3e98b93f7e211e94e6b19190ce40c54d300e29521962faca643668f57"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/agents/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/agents/assistant.py",
+      "bytes": 9103,
+      "sha256": "26b8da72ebf4fabff0b2e12d3e327e1c9e70dfc906290ea2220d13765ccd4fdb"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/agents/extraction.py",
+      "bytes": 5130,
+      "sha256": "a073f6edc4eaa1a3fd694d8ce682a3b9957a4c9dcab03606bc9062346d0c8275"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/api/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/api/app.py",
+      "bytes": 19495,
+      "sha256": "78c49d3f94f7bf4837100a51408d2346e93f1369c235988b3da91ea39ea991bd"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/api/job_control.py",
+      "bytes": 1598,
+      "sha256": "a074c4c63ed6657b653a813f04a1d6408e31645441c822e81ce95e09528f8e9a"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/document_profiles/__init__.py",
+      "bytes": 1065,
+      "sha256": "f72beae497697a22cdcebb8270a172567857aa246320b00fbde1c94fe799818e"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/document_profiles/models.py",
+      "bytes": 3801,
+      "sha256": "13e678c2045684ef431a27e66f2ac159fb45620629943671f05a14d49699175b"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/document_profiles/processing.py",
+      "bytes": 6209,
+      "sha256": "9a3fac31a958e37b9492900910dd00e3612768799d14f822ce9354d782075e12"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/document_profiles/registry.py",
+      "bytes": 2654,
+      "sha256": "4cd330160318834b8bf87b0f1d57bfabed4d694d7ad2bc027b92c6a035718a07"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/domain/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/domain/contracts.py",
+      "bytes": 4569,
+      "sha256": "299d335de654dfda987c622e829c051ee1cedd2275d589329b91f2abf6963d32"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/main.py",
+      "bytes": 249,
+      "sha256": "642efc827bc3e8c59e181590ea71b1035a2ef23ce30950068c2e653912242f08"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/capabilities.py",
+      "bytes": 2869,
+      "sha256": "5d9c00f9ff17c1e0f29fd062c0323cd44a860723d049e2d476707aeb9bdc0f8e"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/configuration.py",
+      "bytes": 6340,
+      "sha256": "2e446c0d55fdc63e2fb4de226776def630320aad1f807f6d39167e3566ecf09b"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/env_config.py",
+      "bytes": 12500,
+      "sha256": "6e40db8ca26fcbbeb96893184b9f7e843ca02aad5ee1a0b69e6cc8a3807eec83"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/errors.py",
+      "bytes": 2162,
+      "sha256": "d24fa7349035e02ade815ec4e7277f8df365f309827f9ebafacbf16f84eaddca"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/factory.py",
+      "bytes": 2363,
+      "sha256": "861c8e4fc486fa2e1e365cd888fec8c698957fe4d78a603d835d3eec7a238ab6"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/mistral_config.py",
+      "bytes": 1716,
+      "sha256": "27fdb977647de5edd84e46a65543b630933910ccc70a4a7001918c2d60a22567"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/profiles.py",
+      "bytes": 3098,
+      "sha256": "ad4f749cdb3954f6112e484d4480d55824871cd201c0aec32c88701c3ab49ec0"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/_common.py",
+      "bytes": 2286,
+      "sha256": "ff9f53fdcce223371a9133d4bfd7340a53578424856fb6c2aed4ea9ffbdaf837"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/anthropic.py",
+      "bytes": 964,
+      "sha256": "f279d6c6716237058ad018344817a3e0b23aa2cd13623bc6e8946f3172731045"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/azure.py",
+      "bytes": 9708,
+      "sha256": "d170c2f8e9e36c6c47504fa9ac374196ae156b6457633ff473e9aff072ec627b"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/azure_docintel.py",
+      "bytes": 9063,
+      "sha256": "403a818f4d5c4126ba23809460d10559928ea34e3276d23f08df6e913c2a32a5"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/base.py",
+      "bytes": 804,
+      "sha256": "bb516a739faa3785b7775f44129f57d39d88cfa973fb2d7a7e81e19d0acc3ce9"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/completion.py",
+      "bytes": 4039,
+      "sha256": "1f0f4f23ef31c25f3da68360910c8683bd380521274deadc5e42ecd9d8e25878"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/google.py",
+      "bytes": 2990,
+      "sha256": "c91c84777b3e8e75631f3dd1ebe5c2420e7fbea77ef65848394049034ea1756f"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/mistral.py",
+      "bytes": 9864,
+      "sha256": "25067b9b4afbe914f9f21dfdb7618526668551f886d86c521ac6ccf6c5b6a39d"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/mock.py",
+      "bytes": 1814,
+      "sha256": "b0c517f58a69fdc7c2a7d2dd006dae21103bbffa370a6b5a4647400a1d99c614"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/ocr_errors.py",
+      "bytes": 1028,
+      "sha256": "35802303da4bcde5af60cfed76ace26dc34f720fe817da0337f752d665e04d15"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/openai.py",
+      "bytes": 957,
+      "sha256": "d07960543fd2a53bf72048917e712ede1e611f3d8304f2c17b1b4bcc39cd043b"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/providers/openai_like.py",
+      "bytes": 1379,
+      "sha256": "077522f82b983299603a2afee9292568f37aa268ea13d3ee00c9184662007c70"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/registry.py",
+      "bytes": 5340,
+      "sha256": "8a3810632c803909f2a2da65ec3dbb07870da1488d57e5df0b35c6d1f25d8a39"
+    },
+    {
+      "path": "clinicos-ai-runtime/clinicos_ai/models/spec.py",
+      "bytes": 1887,
+      "sha256": "0276b1f0e4b86f2a25820be4972459f0cec115cbdc1c626f2ffb5fa7ea173946"
+    },
+    {
+      "path": "clinicos-ai-runtime/docs/po05-contract.md",
+      "bytes": 5986,
+      "sha256": "52d388f9b453f4ecb0f8f8ca4dd948305ab141fca0bacba0d3f2503977613560"
+    },
+    {
+      "path": "clinicos-ai-runtime/requirements.txt",
+      "bytes": 320,
+      "sha256": "aba9091d20d91e7e12f9003b9d08d076c15382dc4fa3890a1d37aef800ca0ccf"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_app_limits.py",
+      "bytes": 11366,
+      "sha256": "fd663c02a083b4510946975dc7af01584dec70a65aaf682e20d8928e1f156ed4"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_assistant_plan.py",
+      "bytes": 5751,
+      "sha256": "b792bc1656f4511d6b94d78c014c79bcb778515398e4b92473f800ee0a1332ca"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_azure_gpt5.py",
+      "bytes": 4386,
+      "sha256": "0ebbe122298f9b0979a24f70cd1b56c006e91416c0e2e7ad5c3838bdb0225a5d"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_azure_structured.py",
+      "bytes": 7570,
+      "sha256": "3c02a921faf2bd4150ac7117a429e2f43d5e9221c8b9a19bf0b22f6c9319720a"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_completion_integrity.py",
+      "bytes": 6534,
+      "sha256": "f26f4a05e05485fca788dc5e22e177c6cfa166047adb28c32883c9a13d635317"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_docintel.py",
+      "bytes": 15275,
+      "sha256": "57b30dda408a5b3ebf4fcb65437e51d7554372ca56c81726179f26919e51f1fa"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_document_profiles.py",
+      "bytes": 7022,
+      "sha256": "d0dd6f5d0833ed6e9c3405d41258ea5da418d891ae20e7bd7da7f6d969f06749"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_env_config.py",
+      "bytes": 12439,
+      "sha256": "e3fa180f0251ef3bea0c40a1d268b2fc0ddc9d1854cdcc870bde5d9633980383"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_factory.py",
+      "bytes": 1967,
+      "sha256": "18684b166c0307b6ed4930dd9bfd97b6a77ae7b9c934628904f1f487b8da115e"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_job_recovery.py",
+      "bytes": 12089,
+      "sha256": "5368f81761293352417d44dc99b8e4e80ab3ad74bb266b91d2a7b1fa54508065"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_mistral.py",
+      "bytes": 2517,
+      "sha256": "b03dcb28dd6f7859d3650789770da21b0291e98a10252dd92c71b49c1dae8657"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_mistral_azure.py",
+      "bytes": 9127,
+      "sha256": "dd99ef207ae6d3f1fb3d912e95fa242f3cd2d801fc1176a270fda621410e9174"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_recovery_http.py",
+      "bytes": 9421,
+      "sha256": "91643798821f4cd980096b6b2c359838c8b2f986647d264420d93b35cd35e0db"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_registry.py",
+      "bytes": 5818,
+      "sha256": "ec902eef68e4063efed0d2d8583e3dfeeeff260ff2686ceee421d0b63ec8ec94"
+    },
+    {
+      "path": "clinicos-ai-runtime/tests/test_runner.py",
+      "bytes": 2015,
+      "sha256": "60a6997f2cb6a531625243e5416243bc3560054ba9c2e186205aed784013f2d0"
+    },
+    {
+      "path": "clinicos-ai-runtime/tools/req025_demo.py",
+      "bytes": 2392,
+      "sha256": "99c12dea43725dc6f8b519995a87309e5d3e79466375ece74557a8bc1ce92d54"
+    },
+    {
+      "path": "clinicos-ai-runtime/tools/verify_po05.py",
+      "bytes": 4851,
+      "sha256": "20b0e585fd00e32e01cb5c96250515989034ee49ea0b200faeb927029f2e0e72"
+    },
+    {
+      "path": "docs/product/po05-import-session-contract.md",
+      "bytes": 21626,
+      "sha256": "966e29bd2783c30b0fb52a15df4392faebe4a6131c3001bf6e93bb6482198a99"
+    },
+    {
+      "path": "frontend/src/components/shared/CameraCapture.tsx",
+      "bytes": 16014,
+      "sha256": "135c383cd80b78769a3d0504ed79934f14391f4d03bc65012b7371d0839690d8"
+    },
+    {
+      "path": "frontend/src/components/shared/CameraCaptureFallback.tsx",
+      "bytes": 1212,
+      "sha256": "6715825372e756e47812562b21cbea6c582325857bcd8021eea3fb946060239f"
+    },
+    {
+      "path": "frontend/src/components/shared/DischargeImportModal.tsx",
+      "bytes": 13898,
+      "sha256": "f000b4018990a77aaff7e4fa35e27dbec9a3613de86e40dbbe41b8accfabc121"
+    },
+    {
+      "path": "frontend/src/components/shared/PdfCanvasPreview.tsx",
+      "bytes": 6288,
+      "sha256": "65952f4bdbc17ec2a01637df4cec9eef7099028efd6fecbb1ceddefa0fe5e703"
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportConflictReview.tsx",
+      "bytes": 3698,
+      "sha256": "86b5f5e3a52a4f70ca62b9123baf4ffbc620f6c3b21620fb0f137e310db73240"
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportDocumentsWorkspace.tsx",
+      "bytes": 16410,
+      "sha256": "7c6c5db5304eb1690c2f3bf1191e2cb395f0b90d26a58cdd44bb62bfb6fccd85"
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportPageGrid.tsx",
+      "bytes": 3964,
+      "sha256": "03878848c1bae7ece8c10b03cf79357075d2486219e63b9f21c7028969f6fed8"
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportPageView.tsx",
+      "bytes": 4942,
+      "sha256": "6ed2dbfcaa4ac0baba256d045c83423ef16391764599226b980a5d85fd99cf24"
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+      "bytes": 11624,
+      "sha256": "bb091dde835230b2d295e73cb8adec38a7ebc5cced07efd80b728f1a6e0b6d10"
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportSession.css",
+      "bytes": 4881,
+      "sha256": "f06ca02f85e3642774fe8abae49e9ca995f8e68e84c3a690ed3dcbd421c506bc"
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/fixtures.ts",
+      "bytes": 2408,
+      "sha256": "ab5a4e10621842098ef11fc0b74e67a900272498724980121ebc160c78f8946b"
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importHandoff.test.ts",
+      "bytes": 4710,
+      "sha256": "16721b87cac63768f1ce4a79a24a3c23f4bb0f49650ae6d0ac24c7bb88a31558"
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importReview.test.ts",
+      "bytes": 4474,
+      "sha256": "d4840968f2e82a897bfefd61f50eacc3956bac56f5160c27d50df6a242aa4006"
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importSession.test.ts",
+      "bytes": 6565,
+      "sha256": "9f5288de7cbbd22df33adc0b8027a85d7a1f1f19355ae09077fefae8686d38a4"
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importUpload.test.ts",
+      "bytes": 6632,
+      "sha256": "fec94bb946c44d537784dd1bd49fbb90b729cedae6d1722bf914cca10fb5c073"
+    },
+    {
+      "path": "frontend/src/components/shared/import/importReviewHandoff.ts",
+      "bytes": 2453,
+      "sha256": "3db944ceacc64b86b3fc45fdb2fb69e5d09bb562ef28b1cd8183de10eb30f1a6"
+    },
+    {
+      "path": "frontend/src/components/shared/import/importReviewModel.ts",
+      "bytes": 3822,
+      "sha256": "b98952020d8746e6706f0dda53e5ae30400b73e464cd77c7f70b81ce25172fdf"
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionApi.ts",
+      "bytes": 5138,
+      "sha256": "cb5bf1fc7b4b0919dbfbeda458bc99abef942a1df2866505796d1dded3fa8d10"
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionMemory.ts",
+      "bytes": 2542,
+      "sha256": "d405f5673374a8f650ff7c60cc41373009cb04e559bced6910481f67d8477e54"
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionTypes.ts",
+      "bytes": 5158,
+      "sha256": "9bf9513fc59802b3288f8240f6e5ffef0764223b7452b8bfa99d52618d9f40b2"
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSourceCache.ts",
+      "bytes": 7596,
+      "sha256": "5caa59701239d65689b02ef0a2468c501cbfc73319d88dd2e622ba20e8df893e"
+    },
+    {
+      "path": "frontend/src/components/shared/import/importUploadQueue.ts",
+      "bytes": 4130,
+      "sha256": "40f4386aff55fffb6405da963075a42c0fece81edc3a75e5dd9d76afabe008bf"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/DischargeTherapyReview.tsx",
+      "bytes": 7178,
+      "sha256": "6585aa076a8c75e3f4ba7a0e2f5ef3409c4f63d744b1791b255828522c30f6b2"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/ImportProposalsReview.tsx",
+      "bytes": 2008,
+      "sha256": "d39fa360f21f15b000ead2e9678648a287ee8c53e03d2c81b24cedc39b951d69"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+      "bytes": 30293,
+      "sha256": "b98d6a443cf06439e2a31238832bbd7035d8815ad3231f3e2d11889568cb5d4b"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "bytes": 8272,
+      "sha256": "696c2b993b16bdaf4a9070cac4eedd988c129cf7796a186a5a408b5e57180a01"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/importSessionDraft.test.ts",
+      "bytes": 8284,
+      "sha256": "dac6575e33ff280ec4dfb8ccd915b7033646759330a511af429ead0a87568a63"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/dischargeTherapy.ts",
+      "bytes": 6166,
+      "sha256": "cbb8d409f58e7b0988342a44c7872f5a203846585847d59d6972a94ccde1bfb4"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeDraftApi.ts",
+      "bytes": 9600,
+      "sha256": "17da648e0e0e398031de921a55ac0de514a1e40534dc9f7ca52b8c53963d4248"
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeTherapies.ts",
+      "bytes": 7428,
+      "sha256": "59935d36fc5ce11be0b57fea1a094b056952004f3e7fbbc8c172e532ca238096"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+      "bytes": 15918,
+      "sha256": "a9d572cacf32c5ea3988a62549484196655a84732bafb181dcbbcc9ff5d24f25"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/import-contract.test.ts",
+      "bytes": 4740,
+      "sha256": "0dec0ae5488ebf69cc82fa9409cbb17cefa04a99e920b8e908c44016df2115b9"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/import-source-decisions.test.ts",
+      "bytes": 9956,
+      "sha256": "080831555cae4fafc8e77ed457de2e67e03d4a7808e838234528899bb72f5c15"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/deriveSections.ts",
+      "bytes": 4781,
+      "sha256": "1aad47618e6abcf7a36d8c311110386e5d911cd15bedf498487ac33eb7917e04"
+    },
+    {
+      "path": "frontend/src/components/shared/sections/types.ts",
+      "bytes": 2419,
+      "sha256": "6f6f4cfe3e9640d3e844eda93f0efef443a2675c47ff1dff327ef7a2e6d49f15"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 293274,
+      "sha256": "0d8cd33d7e092b0d81329a2c83436c4d4f5636fa4f27f22c7e74a3838b86d01c"
+    },
+    {
+      "path": "prisma/migrations/20260923010000_import_page_sessions/migration.sql",
+      "bytes": 1897,
+      "sha256": "e33bd0a1f956fe27219c50de6a6987311d17964c444253c43015052cd58d10d5"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "bytes": 29686,
+      "sha256": "de38c9dc866241b274487019c437fd8b12fb7ecd7e19a551053bc457c74483d5"
+    },
+    {
+      "path": "tests/fixtures/po05-backend.mts",
+      "bytes": 5650,
+      "sha256": "7d4b2b902b9d6f65d5c38117fcb8228ba78709cb682d039f02e8ab560c8caae5"
+    },
+    {
+      "path": "tests/fixtures/po05-postgres.mjs",
+      "bytes": 4086,
+      "sha256": "6e7f2a8515e9ad9d5fdd31d75f873c465ded12faa5fd0ec4cec8824094f043f8"
+    },
+    {
+      "path": "tests/fixtures/po05-runtime-api.mjs",
+      "bytes": 7250,
+      "sha256": "703adc31e7d595c2f3b604fd075f9ff37149355ba1cf4a2dbbe0dfdd43acc818"
+    },
+    {
+      "path": "tests/integration/po05-backend.test.mts",
+      "bytes": 9923,
+      "sha256": "48338388b394f5f39e6b523eed93548244c209c0ba3ddbb761d896bf09af414a"
+    },
+    {
+      "path": "tests/integration/po05-draft-archive.test.mts",
+      "bytes": 14514,
+      "sha256": "d2305db93ce071ffb0dd85b7dac25504d60b285686c9493f211fb56f33990cad"
+    },
+    {
+      "path": "tests/integration/po05-http-boundaries.test.mts",
+      "bytes": 10181,
+      "sha256": "f4ac9db9bfa653d6de2328e60a8bab5320617b9586f3a7ea111b8c7e4d4dce10"
+    },
+    {
+      "path": "tests/integration/po05-legacy-draft.test.mts",
+      "bytes": 572,
+      "sha256": "a37dff775202a74db671c6d53dbf587645c17067697ba6657e156944224930bf"
+    }
+  ]
+}

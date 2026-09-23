@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "owner": "/root/po01_frontend_audit",
+  "worktree": "C:\\Workspace\\ClinicOSHouse-worktrees\\po05-scan-ui",
+  "baseline": "ef562bf51f296153ff0ec51ed6ab620da8e2dc1a",
+  "branch": "codex/po05-scan-ui",
+  "sourceIdentity": "Baseline commit plus the listed changed frontend files, including untracked files; raw on-disk SHA256",
+  "createdAtUtc": "2026-09-23T00:33:40.8948964Z",
+  "files": [
+    {
+      "path": "frontend/src/components/shared/CameraCapture.tsx",
+      "sha256": "135c383cd80b78769a3d0504ed79934f14391f4d03bc65012b7371d0839690d8",
+      "bytes": 16014,
+      "lines": 478
+    },
+    {
+      "path": "frontend/src/components/shared/CameraCaptureFallback.tsx",
+      "sha256": "6715825372e756e47812562b21cbea6c582325857bcd8021eea3fb946060239f",
+      "bytes": 1212,
+      "lines": 39
+    },
+    {
+      "path": "frontend/src/components/shared/DischargeImportModal.tsx",
+      "sha256": "f000b4018990a77aaff7e4fa35e27dbec9a3613de86e40dbbe41b8accfabc121",
+      "bytes": 13898,
+      "lines": 415
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/fixtures.ts",
+      "sha256": "ab5a4e10621842098ef11fc0b74e67a900272498724980121ebc160c78f8946b",
+      "bytes": 2408,
+      "lines": 92
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importHandoff.test.ts",
+      "sha256": "16721b87cac63768f1ce4a79a24a3c23f4bb0f49650ae6d0ac24c7bb88a31558",
+      "bytes": 4710,
+      "lines": 121
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importReview.test.ts",
+      "sha256": "d4840968f2e82a897bfefd61f50eacc3956bac56f5160c27d50df6a242aa4006",
+      "bytes": 4474,
+      "lines": 138
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importSession.test.ts",
+      "sha256": "9f5288de7cbbd22df33adc0b8027a85d7a1f1f19355ae09077fefae8686d38a4",
+      "bytes": 6565,
+      "lines": 200
+    },
+    {
+      "path": "frontend/src/components/shared/import/__tests__/importUpload.test.ts",
+      "sha256": "fec94bb946c44d537784dd1bd49fbb90b729cedae6d1722bf914cca10fb5c073",
+      "bytes": 6632,
+      "lines": 205
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportConflictReview.tsx",
+      "sha256": "86b5f5e3a52a4f70ca62b9123baf4ffbc620f6c3b21620fb0f137e310db73240",
+      "bytes": 3698,
+      "lines": 102
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportDocumentsWorkspace.tsx",
+      "sha256": "85dbd4b7cba1dd665e3a7685a22f29434318c473ffa5fbce06cfdcd7568f8644",
+      "bytes": 15917,
+      "lines": 455
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportPageGrid.tsx",
+      "sha256": "03878848c1bae7ece8c10b03cf79357075d2486219e63b9f21c7028969f6fed8",
+      "bytes": 3964,
+      "lines": 110
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportPageView.tsx",
+      "sha256": "6ed2dbfcaa4ac0baba256d045c83423ef16391764599226b980a5d85fd99cf24",
+      "bytes": 4942,
+      "lines": 171
+    },
+    {
+      "path": "frontend/src/components/shared/import/importReviewHandoff.ts",
+      "sha256": "3db944ceacc64b86b3fc45fdb2fb69e5d09bb562ef28b1cd8183de10eb30f1a6",
+      "bytes": 2453,
+      "lines": 62
+    },
+    {
+      "path": "frontend/src/components/shared/import/importReviewModel.ts",
+      "sha256": "399958b531057862d42250af895c2d7e5e035a700704339b3347d3beba17bc82",
+      "bytes": 2827,
+      "lines": 67
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportReviewWorkspace.tsx",
+      "sha256": "bb091dde835230b2d295e73cb8adec38a7ebc5cced07efd80b728f1a6e0b6d10",
+      "bytes": 11624,
+      "lines": 320
+    },
+    {
+      "path": "frontend/src/components/shared/import/ImportSession.css",
+      "sha256": "99339ec3769c2f32a542b0c1b460a23c3ac9133bbe79bee0c93f12899b728694",
+      "bytes": 4439,
+      "lines": 221
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionApi.ts",
+      "sha256": "cb5bf1fc7b4b0919dbfbeda458bc99abef942a1df2866505796d1dded3fa8d10",
+      "bytes": 5138,
+      "lines": 169
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionMemory.ts",
+      "sha256": "d405f5673374a8f650ff7c60cc41373009cb04e559bced6910481f67d8477e54",
+      "bytes": 2542,
+      "lines": 77
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSessionTypes.ts",
+      "sha256": "9bf9513fc59802b3288f8240f6e5ffef0764223b7452b8bfa99d52618d9f40b2",
+      "bytes": 5158,
+      "lines": 184
+    },
+    {
+      "path": "frontend/src/components/shared/import/importSourceCache.ts",
+      "sha256": "5caa59701239d65689b02ef0a2468c501cbfc73319d88dd2e622ba20e8df893e",
+      "bytes": 7596,
+      "lines": 189
+    },
+    {
+      "path": "frontend/src/components/shared/import/importUploadQueue.ts",
+      "sha256": "40f4386aff55fffb6405da963075a42c0fece81edc3a75e5dd9d76afabe008bf",
+      "bytes": 4130,
+      "lines": 131
+    },
+    {
+      "path": "frontend/src/components/shared/intake/__tests__/importSessionDraft.test.ts",
+      "sha256": "a2b43b5ef26139386ba28b43bc2da573d8caeb490834bd45ddf431bdea7874f4",
+      "bytes": 8218,
+      "lines": 219
+    },
+    {
+      "path": "frontend/src/components/shared/intake/dischargeTherapy.ts",
+      "sha256": "cbb8d409f58e7b0988342a44c7872f5a203846585847d59d6972a94ccde1bfb4",
+      "bytes": 6166,
+      "lines": 185
+    },
+    {
+      "path": "frontend/src/components/shared/intake/DischargeTherapyReview.tsx",
+      "sha256": "6585aa076a8c75e3f4ba7a0e2f5ef3409c4f63d744b1791b255828522c30f6b2",
+      "bytes": 7178,
+      "lines": 176
+    },
+    {
+      "path": "frontend/src/components/shared/intake/ImportProposalsReview.tsx",
+      "sha256": "d39fa360f21f15b000ead2e9678648a287ee8c53e03d2c81b24cedc39b951d69",
+      "bytes": 2008,
+      "lines": 61
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeDraftApi.ts",
+      "sha256": "17da648e0e0e398031de921a55ac0de514a1e40534dc9f7ca52b8c53963d4248",
+      "bytes": 9600,
+      "lines": 308
+    },
+    {
+      "path": "frontend/src/components/shared/intake/intakeTherapies.ts",
+      "sha256": "59935d36fc5ce11be0b57fea1a094b056952004f3e7fbbc8c172e532ca238096",
+      "bytes": 7428,
+      "lines": 168
+    },
+    {
+      "path": "frontend/src/components/shared/intake/IntakeWorkspace.tsx",
+      "sha256": "b98d6a443cf06439e2a31238832bbd7035d8815ad3231f3e2d11889568cb5d4b",
+      "bytes": 30293,
+      "lines": 789
+    },
+    {
+      "path": "frontend/src/components/shared/intake/StepClinica.tsx",
+      "sha256": "696c2b993b16bdaf4a9070cac4eedd988c129cf7796a186a5a408b5e57180a01",
+      "bytes": 8272,
+      "lines": 207
+    },
+    {
+      "path": "frontend/src/components/shared/PdfCanvasPreview.tsx",
+      "sha256": "65952f4bdbc17ec2a01637df4cec9eef7099028efd6fecbb1ceddefa0fe5e703",
+      "bytes": 6288,
+      "lines": 184
+    },
+    {
+      "path": "frontend/src/components/shared/sections/__tests__/import-contract.test.ts",
+      "sha256": "0dec0ae5488ebf69cc82fa9409cbb17cefa04a99e920b8e908c44016df2115b9",
+      "bytes": 4740,
+      "lines": 117
+    },
+    {
+      "path": "frontend/src/components/shared/sections/ImportSectionsReview.tsx",
+      "sha256": "289206861a55ac31b88fd3c8c5747950f8e7679d70418609ea2c9407b3fb248b",
+      "bytes": 15035,
+      "lines": 410
+    }
+  ],
+  "protectedUnrelatedFiles": [
+    {
+      "path": "run-claude-queue.ps1",
+      "sha256": "e280791c291971ec64a760ac453a6476bb8f0302b35f71a3f43dc84db99b1008"
+    },
+    {
+      "path": "start-claude-team.ps1",
+      "sha256": "606dc3da172f5f020d3ea757462db1db8a33553ced03aabeb3db0aec69a70b78"
+    }
+  ],
+  "backendContract": {
+    "path": "C:/Workspace/ClinicOSHouse-worktrees/po05-import-runtime/docs/product/po05-import-session-contract.md",
+    "sha256": "1a7cfe757d32f4fd4b10054780af6914ecfcd4968747e944f88c2f1bf4402b2a"
+  }
+}

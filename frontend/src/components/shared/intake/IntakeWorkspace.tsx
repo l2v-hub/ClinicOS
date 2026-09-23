@@ -3,7 +3,14 @@ import { intakeDemographicErrors } from '../../../lib/intakeDemographics';
 import { useEffect, useRef, useState } from 'react';
 import { birthDateValue, type DemographicField } from '../../../lib/patientDemographics';
 import { validatePatientPhone } from '../../../lib/patientPhone';
-import { getDraft, patchDraft, confirmPersistedDraft, editableDraftPatch } from './intakeDraftApi';
+import {
+  getDraft,
+  VersionedDraftSaveQueue,
+  confirmPersistedDraft,
+  decideImportProposal,
+  DraftApiError,
+} from './intakeDraftApi';
+import { ImportProposalsReview, type ImportProposal } from './ImportProposalsReview';
 import { StepAnagrafica } from './StepAnagrafica';
 import { StepIngresso } from './StepIngresso';
 import type { IngressoData } from './StepIngresso';
@@ -100,7 +107,7 @@ interface IntakeWorkspaceProps {
   operatorRole?: string;
   /** When set, skip createDraft and load this existing import draft prefilled at step 3. */
   importDraftId?: string;
-  /** When provided, show a "Torna ai documenti" button in the footer. */
+  /** When provided, return to the import review from the footer. */
   onBackToDocuments?: () => void;
 }
 
@@ -139,7 +146,14 @@ export function IntakeWorkspace({
 
   // Debounce timer ref for patchDraft calls
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const saveQueueRef = useRef<Promise<unknown>>(Promise.resolve());
+  const saveQueueRef = useRef<VersionedDraftSaveQueue | null>(null);
+  const proposalRequestRef = useRef<{
+    id: string;
+    action: 'add' | 'defer';
+    requestId: string;
+    expectedDraftVersion?: number;
+  } | null>(null);
+  const [proposalUncertain, setProposalUncertain] = useState(false);
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const submittingRef = useRef(false);
   const [focusField, setFocusField] = useState<DemographicField | null>(null);
@@ -208,6 +222,10 @@ export function IntakeWorkspace({
           return;
         }
         setDraftId(draft.id);
+        saveQueueRef.current = new VersionedDraftSaveQueue(draft.id, draft.version, {
+          operatorId,
+          operatorRole,
+        });
         if (draft.data && typeof draft.data === 'object') setData(draft.data as DraftData);
         setStep(importDraftId ? 3 : 1);
       })
@@ -245,16 +263,12 @@ export function IntakeWorkspace({
 
   /** Update a top-level section key and debounce-patch the draft */
   function persistDraft(next: DraftData) {
-    const id = draftId!;
-    const patch = editableDraftPatch(next);
-    const saving = saveQueueRef.current
-      .catch(() => undefined)
-      .then(() => patchDraft(id, patch, op));
-    saveQueueRef.current = saving;
-    return saving;
+    if (!saveQueueRef.current) return Promise.reject(new Error('Bozza non disponibile.'));
+    return saveQueueRef.current.save(next);
   }
 
   function updateSection(key: keyof DraftData, value: unknown) {
+    if (submittingRef.current || proposalRequestRef.current) return;
     const next = { ...data, [key]: value };
     setData(next);
 
@@ -264,15 +278,63 @@ export function IntakeWorkspace({
     debounceRef.current = setTimeout(() => {
       persistDraft(next)
         .then(() => setSaveState('saved'))
-        .catch((err: unknown) => {
+        .catch(() => {
           // #234: no longer swallowed — surface an error state (no PHI in the log).
           setSaveState('error');
-          console.error(
-            '[ClinicOS] autosave bozza intake non riuscito:',
-            err instanceof Error ? err.message : 'errore sconosciuto',
-          );
+          console.error('[ClinicOS] autosave bozza intake non riuscito');
         });
     }, 500);
+  }
+
+  async function decideProposal(proposalId: string, action: 'add' | 'defer') {
+    if (!draftId || submittingRef.current) return;
+    const existing = proposalRequestRef.current;
+    if (existing && (existing.id !== proposalId || existing.action !== action)) {
+      setSubmitError(
+        'Riprova prima la decisione in attesa: il server potrebbe averla già salvata.',
+      );
+      return;
+    }
+    submittingRef.current = true;
+    setSubmitting(true);
+    setSubmitError(null);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    try {
+      if (!existing) {
+        await persistDraft(data);
+        proposalRequestRef.current = {
+          id: proposalId,
+          action,
+          requestId: crypto.randomUUID(),
+          expectedDraftVersion: saveQueueRef.current!.version,
+        };
+      }
+      const pending = proposalRequestRef.current!;
+      const saved = await decideImportProposal(
+        draftId,
+        proposalId,
+        {
+          requestId: pending.requestId,
+          expectedDraftVersion: pending.expectedDraftVersion,
+          action,
+        },
+        op,
+      );
+      proposalRequestRef.current = null;
+      setProposalUncertain(false);
+      saveQueueRef.current!.version = saved.version;
+      setData(saved.data as DraftData);
+      setSaveState('saved');
+    } catch (e) {
+      if (e instanceof DraftApiError && e.status < 500) proposalRequestRef.current = null;
+      setProposalUncertain(!!proposalRequestRef.current);
+      setSubmitError(
+        e instanceof Error ? e.message : 'Risposta non ricevuta. Riprova la decisione in attesa.',
+      );
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
   }
 
   function acceptedFlags(): AcceptedFlags {
@@ -282,7 +344,10 @@ export function IntakeWorkspace({
   /** #235: both explicit acceptances required before the patient can be created. */
   function acceptanceComplete(): boolean {
     const acc = acceptedFlags();
-    return acc.demographics === true && acc.therapy === true;
+    const pending =
+      Array.isArray(data._importProposals) &&
+      data._importProposals.some((value: ImportProposal) => value.status === 'pending');
+    return acc.demographics === true && acc.therapy === true && !pending && !proposalUncertain;
   }
 
   function anagraficaValid(): boolean {
@@ -351,6 +416,8 @@ export function IntakeWorkspace({
       patient,
       cartella,
       confirmDuplicate: force,
+      ...((data._importSource as { manifestRevision: number; resultHash: string } | undefined) ??
+        {}),
       ...(allergyConflictOverride ? { confirmAllergyConflict: true } : {}),
       ...(allTherapies.length > 0 ? { therapies: allTherapies } : {}),
     };
@@ -372,13 +439,17 @@ export function IntakeWorkspace({
         onClose();
       } else if (res.status === 'duplicate') {
         setDuplicateWarn(true);
+      } else if (res.code === 'import_review_outdated') {
+        setSubmitError(
+          'Le pagine sono cambiate. Torna ai documenti e scegli «Rivedi le nuove pagine». Le correzioni nella bozza sono conservate.',
+        );
       } else {
-        setSubmitError('Errore imprevisto dal server. Riprovare.');
+        setSubmitError(res.error || 'Errore imprevisto dal server. Riprovare.');
       }
     } catch (err: unknown) {
       // confirmDraft throws on !ok (including 409). Inspect the message to detect duplicates.
       const msg = err instanceof Error ? err.message : String(err);
-      if (msg.toLowerCase().includes('duplicate') || msg.includes('409')) {
+      if (msg.toLowerCase().includes('duplicate')) {
         setDuplicateWarn(true);
       } else if (msg.includes('allergie contrastanti')) {
         // REQ-026: confirm blocked by contradictory allergy reading. Offer an explicit override.
@@ -495,7 +566,29 @@ export function IntakeWorkspace({
       </ol>
 
       {/* Body — the only scrollable region (BUG-074) */}
-      <div className="import-modal__body" data-testid="patient-intake-body" ref={bodyRef}>
+      <div
+        className="import-modal__body"
+        data-testid="patient-intake-body"
+        ref={bodyRef}
+        inert={submitting}
+        aria-busy={submitting}
+      >
+        {proposalUncertain && (
+          <div role="alert" className="import-modal__warning">
+            <p>
+              Risposta non ricevuta. Risolvi la decisione in attesa prima di modificare la bozza.
+            </p>
+            <button
+              className="btn-primary"
+              onClick={() => {
+                const pending = proposalRequestRef.current;
+                if (pending) void decideProposal(pending.id, pending.action);
+              }}
+            >
+              Riprova decisione
+            </button>
+          </div>
+        )}
         {loading && (
           <div className="import-modal__progress" role="status" aria-live="polite">
             <span className="import-modal__spinner" aria-hidden="true" />
@@ -504,7 +597,7 @@ export function IntakeWorkspace({
         )}
         {error && <p className="import-modal__error">{error}</p>}
         {!loading && !error && (
-          <>
+          <div inert={proposalUncertain}>
             {step === 1 && (
               <div data-testid="intake-step-1" data-draft-id={draftId ?? undefined}>
                 <StepAnagrafica
@@ -524,6 +617,15 @@ export function IntakeWorkspace({
             )}
             {step === 3 && (
               <div data-testid="intake-step-3" data-draft-id={draftId ?? undefined}>
+                <ImportProposalsReview
+                  proposals={
+                    Array.isArray(data._importProposals)
+                      ? (data._importProposals as ImportProposal[])
+                      : []
+                  }
+                  busy={submitting}
+                  onDecision={(id, action) => void decideProposal(id, action)}
+                />
                 <StepClinica
                   data={data}
                   onUpdateSection={updateSection}
@@ -624,7 +726,7 @@ export function IntakeWorkspace({
                 />
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
 
@@ -652,7 +754,7 @@ export function IntakeWorkspace({
             onClick={() => void saveAndClose(onBackToDocuments)}
             disabled={submitting}
           >
-            ← Torna ai documenti
+            ← Torna alla revisione
           </button>
         ) : (
           <button className="btn-ghost" onClick={() => void saveAndClose()} disabled={submitting}>

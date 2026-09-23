@@ -29,7 +29,7 @@ interface Props {
   ) => void;
   onBack: () => void;
   /** REQ-032: open the source document/page for a section in the preview panel. */
-  onOpenSource?: (fileName: string, page?: number) => void;
+  onOpenSource?: (fileName: string, page?: number, fileId?: string) => void;
 }
 
 const ANAG_PREFILL: Array<[keyof ConfirmPatient, string]> = [
@@ -58,8 +58,8 @@ export function ImportSectionsReview({
 }: Props) {
   const docName = useMemo(() => {
     const map = new Map(documents.map((d) => [d.id, d.filename]));
-    return (fileId?: string) =>
-      (fileId && map.get(fileId)) || documents[0]?.filename || 'documento';
+    return (fileId?: string, fileName?: string) =>
+      (fileId && map.get(fileId)) || fileName || 'non identificata';
   }, [documents]);
 
   const byKey = useMemo(() => {
@@ -69,7 +69,9 @@ export function ImportSectionsReview({
   }, [sections]);
 
   const demo = (sections.demographics ?? {}) as Record<string, string>;
-  const [patient, setPatient] = useState<ConfirmPatient>({
+  const [patientEdits, setPatientEdits] = useState<Partial<ConfirmPatient>>({});
+  // Untouched fields follow explicit source decisions; a manual edit (including blank) wins.
+  const patient: ConfirmPatient = {
     firstName: demo.firstName ?? '',
     lastName: demo.lastName ?? '',
     dateOfBirth: toIso(demo.dateOfBirth ?? ''),
@@ -78,7 +80,8 @@ export function ImportSectionsReview({
     phone: demo.phone ?? '',
     address: demo.address ?? '',
     codiceFiscale: demo.codiceFiscale ?? '',
-  });
+    ...patientEdits,
+  };
 
   // Per-section review state. Default accepted; the operator can modify/exclude.
   const [status, setStatus] = useState<Record<string, ReviewStatus>>({});
@@ -91,15 +94,36 @@ export function ImportSectionsReview({
   const allergyNeedsAck = allergy.status === 'conflicting' || allergy.status === 'unclear';
   const allergySection = byKey.get('ALLERGIES');
 
-  function sourcesFor(s: SectionData): { fileName: string; pageNumber?: number }[] {
+  function sourcesFor(
+    s: SectionData,
+  ): { fileName: string; pageNumber?: number; fileId?: string }[] {
     const ranges = s.sourceRanges ?? [];
-    if (ranges.length === 0) return [{ fileName: docName(undefined) }];
-    return ranges.map((r) => ({ fileName: docName(r.fileId), pageNumber: r.pageNumber }));
+    return ranges.map((r) => ({
+      fileName: docName(r.fileId, r.fileName),
+      pageNumber: r.pageNumber,
+      fileId: r.fileId,
+    }));
   }
   function sourceLabel(srcs: { fileName: string; pageNumber?: number }[]): string {
+    if (!srcs.length) return 'Fonte non identificata';
     return srcs
       .map((s) => `Fonte: ${s.fileName}${s.pageNumber != null ? ` — pagina ${s.pageNumber}` : ''}`)
       .join(' · ');
+  }
+  function sourceButtons(srcs: ReturnType<typeof sourcesFor>) {
+    if (!onOpenSource) return null;
+    return srcs.map((source, index) => (
+      <button
+        key={`${source.fileId ?? source.fileName}:${source.pageNumber ?? ''}:${index}`}
+        type="button"
+        className="srev-chip srev-chip--inline"
+        disabled={!source.fileId && source.fileName === 'non identificata'}
+        onClick={() => onOpenSource(source.fileName, source.pageNumber, source.fileId)}
+      >
+        Apri fonte: {source.fileName}
+        {source.pageNumber == null ? '' : ` — pagina ${source.pageNumber}`}
+      </button>
+    ));
   }
 
   function setSt(key: string, st: ReviewStatus) {
@@ -179,7 +203,7 @@ export function ImportSectionsReview({
                 type={field === 'dateOfBirth' ? 'date' : 'text'}
                 value={(patient[field] as string) ?? ''}
                 disabled={busy}
-                onChange={(e) => setPatient((p) => ({ ...p, [field]: e.target.value }))}
+                onChange={(e) => setPatientEdits((p) => ({ ...p, [field]: e.target.value }))}
               />
             </label>
           ))}
@@ -221,6 +245,7 @@ export function ImportSectionsReview({
                       ? docName(allergy.sourceFileId)
                       : sourcesFor(allergySection!)[0]?.fileName,
                     allergy.sourcePage ?? sourcesFor(allergySection!)[0]?.pageNumber,
+                    allergy.sourceFileId ?? sourcesFor(allergySection!)[0]?.fileId,
                   )
                 }
               >
@@ -293,8 +318,8 @@ export function ImportSectionsReview({
                   disabled={busy}
                   onClick={() => {
                     setShowSource((p) => ({ ...p, [key]: !p[key] }));
-                    const f = srcs[0];
-                    if (f && onOpenSource) onOpenSource(f.fileName, f.pageNumber);
+                    const f = srcs.length === 1 ? srcs[0] : undefined;
+                    if (f && onOpenSource) onOpenSource(f.fileName, f.pageNumber, f.fileId);
                   }}
                 >
                   {showSource[key] ? 'Nascondi fonte' : 'Confronta con la fonte'}
@@ -330,6 +355,7 @@ export function ImportSectionsReview({
             {(showSource[key] || st === 'modified') && (
               <div className="srev-source-panel">
                 <p className="srev-source">{sourceLabel(srcs)}</p>
+                {sourceButtons(srcs)}
                 {st === 'modified' && (
                   <details>
                     <summary>Testo originale (non sovrascritto)</summary>

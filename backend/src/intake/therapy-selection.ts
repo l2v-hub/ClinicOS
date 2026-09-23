@@ -79,6 +79,11 @@ export function validateDraftTherapySelection(data: Row, inputs: TherapyCreateIn
     if (!source || selected.has(key) || source.excludedFromConfirm === true) throw mismatch();
     selected.add(key);
     if (ref.type === 'import') {
+      if (source.sourceOutdated === true || source.conflictDeferred === true)
+        throw new AiExtractionError(
+          'config',
+          'La fonte della terapia è cambiata o è stata rinviata. Verifica la riga oppure lasciala in bozza.',
+        );
       if (source.stato !== 'ok')
         throw new AiExtractionError(
           'config',

@@ -32,6 +32,7 @@ import {
 } from './import-failure.js';
 import { validateFile, type IncomingFile, type RejectReason } from './validation.js';
 import { removeFile, removeJobDir, storeFile, sweepExpiredDirs } from './storage.js';
+import { expirePageSessions } from './pages/cleanup.js';
 
 export type JobStatus =
   | 'created'
@@ -1099,8 +1100,9 @@ export async function getJobResult(
 /** Sweep expired jobs (DB rows + on-disk dirs). Safe to call periodically. */
 export async function sweepExpiredJobs(): Promise<{ expiredJobs: number; removedDirs: number }> {
   const now = new Date();
+  const pageSessions = await expirePageSessions(now);
   const expired = await prisma.importJob.findMany({
-    where: { expiresAt: { lt: now }, status: { notIn: ['confirmed', 'expired'] } },
+    where: { expiresAt: { lt: now }, status: { notIn: ['confirmed', 'expired'] }, maxPages: null },
     select: { id: true },
   });
   for (const j of expired) {
@@ -1112,5 +1114,5 @@ export async function sweepExpiredJobs(): Promise<{ expiredJobs: number; removed
     });
   }
   const removedDirs = await sweepExpiredDirs();
-  return { expiredJobs: expired.length, removedDirs };
+  return { expiredJobs: expired.length + pageSessions, removedDirs };
 }

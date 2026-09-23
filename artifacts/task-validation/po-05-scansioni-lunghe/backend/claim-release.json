@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"message\": \"Issue PO-05-backend released\",\n  \"reason\": \"Implementation and source-bound validation complete: 101 tests passed, backend typecheck and Prisma validation passed. Handing 33 hashed source files to root for integration; no further writes.\",\n  \"previousClaim\": {\n    \"issueId\": \"PO-05-backend\",\n    \"claimant\": {\n      \"type\": \"agent\",\n      \"agentId\": \"codex-po05-backend\",\n      \"agentType\": \"coder\"\n    },\n    \"claimedAt\": \"2026-09-22T23:50:40.006Z\",\n    \"status\": \"active\",\n    \"statusChangedAt\": \"2026-09-22T23:50:40.006Z\",\n    \"progress\": 0,\n    \"context\": \"Root GO received after PO04 online. Sole writer po05-import-runtime backend/schema/migration/tests + contract. Python worker separate. No manifests/lockfiles/shared Prisma generation, live DB, commit/push/deploy.\"\n  }\n}"
+    }
+  ]
+}

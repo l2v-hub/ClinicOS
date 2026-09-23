@@ -11,6 +11,7 @@
 import { prisma } from '../../lib/prisma.js';
 import { loadAiConfig } from '../config.js';
 import { runJob } from './job-service.js';
+import { runNextPageJob } from './pages/worker.js';
 
 const ORPHAN_STATES = [
   'processing',
@@ -25,23 +26,26 @@ let busy = false;
 
 async function claimAndRun(): Promise<void> {
   if (busy) return; // single-flight worker (AI_MAX_CONCURRENCY=1)
-  const next = await prisma.importJob.findFirst({
-    where: { status: 'queued' },
-    orderBy: { updatedAt: 'asc' },
-    select: { id: true },
-  });
-  if (!next) return;
-  // Atomic claim: only one worker can flip queued -> processing.
-  const claim = await prisma.importJob.updateMany({
-    where: { id: next.id, status: 'queued' },
-    data: { status: 'processing' },
-  });
-  if (claim.count !== 1) return;
   busy = true;
   try {
-    await runJob(next.id); // sets its own states; never throws (errors -> retryable/failed)
-  } catch (e) {
-    console.warn('[ai-worker] runJob error:', e instanceof Error ? e.message.slice(0, 120) : e);
+    if (await runNextPageJob()) return;
+    const next = await prisma.importJob.findFirst({
+      where: { status: 'queued' },
+      orderBy: { updatedAt: 'asc' },
+      select: { id: true },
+    });
+    if (!next) return;
+    // Atomic claim: only one worker can flip queued -> processing.
+    const claim = await prisma.importJob.updateMany({
+      where: { id: next.id, status: 'queued' },
+      data: { status: 'processing' },
+    });
+    if (claim.count !== 1) return;
+    try {
+      await runJob(next.id); // sets its own states; never throws (errors -> retryable/failed)
+    } catch (e) {
+      console.warn('[ai-worker] runJob error:', e instanceof Error ? e.message.slice(0, 120) : e);
+    }
   } finally {
     busy = false;
   }

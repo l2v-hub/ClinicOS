@@ -1,0 +1,205 @@
+(node:14584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ first handoff retains reviewed values after create-response loss and a retry (157.0132ms)
+✔ first handoff retains reviewed values after patch-precommit loss and a retry (5.9867ms)
+✔ first handoff retains reviewed values after patch-response loss and a retry (3.9049ms)
+✔ opening a pre-existing draft never reseeds it from an unrelated review (1.0099ms)
+✔ recovery preserves a concurrently edited draft and refuses a different source (7.5249ms)
+(node:14584) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:36092) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ each current conflict needs an explicit valid decision, including defer; stale/duplicate decisions fail (3.4434ms)
+✔ conflict surface shows both values and sources without a default selection (31.8347ms)
+✔ review still prefers narrative text and persists edited sections separately from source (2.2131ms)
+(node:36092) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ authenticated original cache downloads one immutable document once, cleans URLs and evicts replaced source (136.3795ms)
+✔ failed source fetch can be retried and an oversized original is refused (3.4718ms)
+(node:35940) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ single-flight creation, close/reopen and a new module instance use only opaque IDs/keys (5.6648ms)
+✔ lost creation response reuses its key across reload; failed resume never creates a job (2.4838ms)
+✔ operator scope and storage failure never reuse another actor session (1.5363ms)
+✔ 30 pages in three letters move without changing source identity and with contiguous order (3.4012ms)
+✔ manifest retry preserves request identity and stale revision response supplies authoritative job (77.9818ms)
+✔ stale session retains its ID until explicit new import; terminal, denied and network failures are distinct (4.7985ms)
+(node:35940) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39260) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ uncertain upload retry uses identical metadata, bytes and revision; replay duplicate is accepted (101.0479ms)
+✔ atomic retake at capacity calls replacement only and preserves old page on rejection (4.1799ms)
+✔ revision conflict updates manifest but upload retries only after explicit run with a fresh key (4.099ms)
+✔ double submit shares the running queue and one pending camera File identity (2.2952ms)
+✔ first capture sends the revision returned by group creation before any render effect (4.1516ms)
+(node:39260) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38036) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ carries allergieStatus=paziente_nega into the confirmed cartella (2.3457ms)
+✔ carries allergieStatus=assenti into the confirmed cartella (0.4937ms)
+✔ presenti keeps BOTH the status and the allergy list (no data loss) (1.154ms)
+✔ omits allergieStatus when the operator never selected one (undocumented ≠ false value) (0.4338ms)
+✔ preserves the pre-existing mapping keys unchanged (1.7658ms)
+✔ does not leak wizard-internal keys (_accepted, _narrative, anagrafica) into the cartella (0.4009ms)
+(node:38036) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ draft writes preserve source authority and carry CAS/version, result identity and authenticated actor (92.6169ms)
+✔ outdated source conflict is distinguishable from duplicate-patient confirmation (2.1358ms)
+✔ changed source keeps complete manual therapy values and still requires explicit re-review (11.0102ms)
+✔ lost CAS response recovers exact saved revision without overwriting concurrent edits (41.6285ms)
+✔ receipt replay returning a newer concurrent version cannot advance a stale editor (3.1668ms)
+✔ autosave recovers uncertain A before writing newer B with the advanced CAS version (5.3621ms)
+✔ autosave validation failure can be corrected without replaying the rejected fields (4.8034ms)
+(node:38644) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8092) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8092) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ autosave excludes immutable source and receipt fields without dropping editable draft content (4.2629ms)
+✔ createDraft POSTs to /intake/drafts (10.3988ms)
+✔ patchDraft PATCHes the draft id (0.8902ms)
+✔ lost confirmation response and refused retry autosave recover the same confirmed patient (1.7733ms)
+✔ failed confirmation remains an error if its draft is still open or cannot be read (2.1588ms)
+(node:39444) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ manual reopen and timeout retry reuse one draft; simultaneous initializers create only once (14.7947ms)
+(node:39444) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38044) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ accepted minimal demographics can create patient and missing fields remain actionable (41.3295ms)
+✔ unverified imported therapy still blocks confirmation until explicitly excluded (21.3762ms)
+✔ source mapping preserves original indexes after an excluded row (5.4413ms)
+✔ confirmation persists a full review snapshot without certifying or changing original therapy data (3.7002ms)
+(node:38044) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:27836) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ import confirmation retains fraction, administration unit and weekdays (8.5228ms)
+✔ PO03: operational notes never receive OCR source or class metadata (0.9947ms)
+✔ PO03: reviewed clinical notes and source stay separate across draft reload (1.5999ms)
+✔ PO03: operator-entered source-like wording is preserved without text cleanup (0.5911ms)
+✔ reviewed schedules, dates, weekdays and status survive JSON draft reload (2.4163ms)
+✔ one-off and as-needed reviews keep their type after reload without periodic schedules (1.3842ms)
+✔ missing or ambiguous raw quantities never become a default dose (3.0689ms)
+✔ explicit unit takes priority over form and compound strength stays raw (1.1271ms)
+✔ blank drugs and invalid times stay in the ordered review and cannot confirm (2.7485ms)
+✔ verification renders real manual times and an actionable indexed blocker (28.9457ms)
+✔ liquid and inhaled quantities keep their explicit unit (1.3773ms)
+✔ ambiguous OCR source stays flagged through edits until explicitly reviewed (1.4081ms)
+✔ patch singular/plural and counted form import survive confirmation and reload (2.1894ms)
+✔ AIFA and manual form changes sync matching units but preserve explicit alternatives and quantities (2.1863ms)
+✔ three manual additions and an incomplete row remain alongside imports across draft reload and review (7.1651ms)
+✔ intake keeps complete therapy source available next to manual additions (137.1639ms)
+(node:27836) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:5484) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ diagnostics address original source indices despite excluded imports and multiple schedules (12.2626ms)
+✔ invalid drug, dates, route, strength, weekdays and each dose field have described inline errors (31.4997ms)
+✔ a duplicate or invalid second time marks only that time and preserves the other schedule (45.4529ms)
+✔ empty schedules and divided patches expose the correct correction controls (26.8051ms)
+✔ PRN ignores periodic schedules and residual invalid end date/weekdays remain reachable after a type change (15.9647ms)
+✔ one-off data and time blockers identify separate editable fields (13.5047ms)
+✔ summary correction opens the exact manual row through the section registry, even after excluded imports (142.6594ms)
+✔ summary imported source-review action targets the original row and time edits never acknowledge OCR (27.1705ms)
+✔ excluded blockers are absent from correction actions and busy disables remaining actions (2.9682ms)
+(node:5484) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17900) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ DD/MM/YYYY at the start of a line is a prefix (9.3479ms)
+✔ DD-MM-YYYY and DD.MM.YYYY are recognised (0.61ms)
+✔ two-digit year DD/MM/YY is recognised (0.4741ms)
+✔ textual month is recognised (0.7185ms)
+✔ "In data 09/03/2026" highlights the whole expression (0.5324ms)
+✔ "Il 09/03/2026" at line start highlights the whole expression (0.5139ms)
+✔ date after a bullet item is a prefix (1.0956ms)
+✔ a date INSIDE a sentence is NOT a prefix (0.7289ms)
+✔ page numbers and record numbers are NOT marked (0.6ms)
+✔ multiple date prefixes in one block (new paragraphs) (3.4075ms)
+✔ offsets are exact and slice back to the same text (0.9201ms)
+✔ recalculation after a manual edit reflects the new text (no stale offsets) (0.7875ms)
+✔ render: DATE_PREFIX produces a bold segment, text is never modified (2.1358ms)
+✔ withDatePrefixes does not double-mark a provided overlapping annotation (0.9238ms)
+(node:17900) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39996) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ sectionsFromNarrative maps diagnosisText -> DISCHARGE_DIAGNOSIS block (no diagnoses[]) (3.4407ms)
+✔ all canonical sections kept (even empty, fillable); allergies surfaced first; empty unmapped dropped (0.7075ms)
+✔ assertNoLegacyImportArrays throws on legacy contract, passes on narrative (1.6925ms)
+✔ GUARD: the import modal never renders the legacy ImportReviewFull table (5.0425ms)
+✔ assertNoLegacyImportArrays is a no-op on null/undefined (safe to call eagerly) (0.717ms)
+✔ BUG-050: import-contract assertion is wired into the result-load path (runs in prod) (6.2591ms)
+(node:39996) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:38236) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ effective demographics follows each explicit select/defer and preserves immutable source text (4.8019ms)
+✔ real review keeps untouched demographics current while retaining manual fields and section review (452.2335ms)
+✔ three letter identities remain distinct and compare requires an explicit source when several exist (126.2967ms)
+✔ legacy names remain labels and absent/unknown source identities never become the first original (96.4364ms)
+(node:38236) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:19760) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ formatting is opt-in and default source view keeps literal Markdown and CRLF (24.8543ms)
+✔ CRLF and Unicode source ranges are absolute and do not rewrite source (5.3689ms)
+✔ OCR bullets without spaces and continuation lines become readable lists (10.9794ms)
+✔ negative values, comparison signs and page markers remain visible, not bullets (2.2848ms)
+✔ semantic classes, dates and illegibility keep exact source offsets after Markdown markers (2.781ms)
+✔ valid annotations crossing block boundaries are clipped without losing text or style (1.9316ms)
+✔ wrong offsets are still ignored and semantic style overrides are honored (3.0925ms)
+✔ HTML, resource URLs and unsupported fenced content remain literal and inert (3.3954ms)
+✔ long annotated narratives retain all sections through the last line (517.0619ms)
+(node:19760) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:33384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ no annotations -> single faithful plain segment (3.3399ms)
+✔ segments always reconstruct rawText exactly (no loss, no edit) (0.8435ms)
+✔ DATE annotation produces an exact bold span (0.5562ms)
+✔ SUBSECTION_TITLE bolded (anamnesis subtitles) (0.4319ms)
+✔ wrong-offset annotation is ignored (text still rendered, never mutated) (0.5189ms)
+✔ annotation whose text mismatches its offsets is ignored (0.732ms)
+✔ overlapping annotations: inner one skipped (no double wrap) (0.6718ms)
+✔ illegible markers are highlighted (1.1968ms)
+✔ ALLERGY_CRITICAL carries the critical class (0.6928ms)
+✔ no HTML is produced: literal angle brackets stay as text (0.6287ms)
+(node:33384) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:1780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ initial guide fits portrait and landscape camera images at the A4 ratio (3.2259ms)
+✔ dragged corners are clamped to the image and cannot cross or collapse (2.702ms)
+✔ normalized boundary selects exact source pixels and preserves portrait/landscape orientation (1.5843ms)
+✔ PDF container embeds original binary bytes, correct page ratio and exact xref offsets (13.3211ms)
+✔ PDF conversion rejects incorrect type, dimensions and oversized or invalid image encoding (21.6262ms)
+✔ photo replacement accepts one PDF or image, rejecting other files and multiple inputs (1.4969ms)
+(node:1780) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40900) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:40900) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ same-name files keep their own bytes and IDs across reordering and rejected inputs (101.2395ms)
+✔ missing/misaligned outcomes and unknown IDs do not guess an image by filename (4.492ms)
+✔ duplicate accepted IDs cannot replace a previously linked image (5.0461ms)
+✔ removal revokes only the selected blob; clear revokes remaining blobs and invalidates requests (10.2482ms)
+✔ replacement preserves logical grouping and position before removing the old document (5.7942ms)
+✔ replacement failure before final deletion keeps the original and stops further writes (1.2666ms)
+✔ unaccepted replacement and a closed import session cannot remove the original (1.5806ms)
+ℹ tests 125
+ℹ suites 0
+ℹ pass 125
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4039.4591

@@ -1,0 +1,106 @@
+✖ invalid therapy returns indexed 400 before any transaction or patient write (352.5328ms)
+✖ corrected retry persists precise schedules, actor and weekdays; replay is idempotent (6.0546ms)
+✖ persistence failure rolls back all writes, sanitizes audit, and permits retry (9.4451ms)
+✔ confirmation remains operator-gated and owner-scoped (4.2359ms)
+✖ one imported and three manual therapies persist in order including whole patches (3.2294ms)
+✖ a divided patch in the final row rejects the entire confirmation before writes (2.7124ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 1
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 770.3114
+
+✖ failing tests:
+
+test at artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:1:4346
+✖ invalid therapy returns indexed 400 before any transaction or patient write (352.5328ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 400
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po05-import-runtime\artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:191:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:1:5233
+✖ corrected retry persists precise schedules, actor and weekdays; replay is idempotent (6.0546ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 400
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po05-import-runtime\artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:202:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:1:6066
+✖ persistence failure rolls back all writes, sanitizes audit, and permits retry (9.4451ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 201
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po05-import-runtime\artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:235:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:1:6976
+✖ one imported and three manual therapies persist in order including whole patches (3.2294ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 201
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po05-import-runtime\artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:270:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:1:7855
+✖ a divided patch in the final row rejects the entire confirmation before writes (2.7124ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  503 !== 400
+  
+      at TestContext.<anonymous> (C:\Workspace\ClinicOSHouse-worktrees\po05-import-runtime\artifacts\task-validation\po-05-scansioni-lunghe\backend\baseline-confirm-tests.mts:290:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
