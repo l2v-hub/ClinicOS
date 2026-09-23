@@ -1,0 +1,26 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User requested alignment and has authorized push/deploy",
+  "deploymentId": "dpl_2upmhKPWKX3h6E7j8eDM7SLd9ULc",
+  "status": "READY",
+  "url": "https://clinicos-2kuyophyr-lucalavia-2482s-projects.vercel.app",
+  "alias": "https://clinicos-eosin.vercel.app",
+  "sourceCommit": "fcd26069397ae1427377c9258123c0ba22087dfd",
+  "verifiedAt": "2026-09-23T21:55:09.4448693Z",
+  "backendChanged": false,
+  "productionSmoke": {
+    "at": "2026-09-23T21:55:26.034Z",
+    "geometry": {
+      "catalogLeft": 144,
+      "documentWidth": 1280,
+      "navLeft": 144,
+      "rowLeft": 144,
+      "scrollWidth": 1280,
+      "titleLeft": 144,
+      "viewport": 1280
+    },
+    "console": [],
+    "writeActions": 0
+  },
+  "releaseInputsSha256": "df2b71ec92166b707afeee5705fc6b804e6076dd3984a01712fc77d9f41b3a65"
+}
