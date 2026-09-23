@@ -1,0 +1,79 @@
+{
+  "decision": "ALLOW_RELEASE",
+  "authorization": "User requested diary spacing consistency; standing authorization for commit/push/deploy",
+  "baseline": "769e34a7b415c745017a5fc307579b5ae82cef81",
+  "scope": "One CSS declaration, screen spacing only; frontend-only release",
+  "checks": "Browser geometry1294/768/390: gap8px both sections, no overflow; build/scan PASS; user launchers preserved",
+  "files": [
+    {
+      "path": "frontend/src/components/operator/PatientRecordData.css",
+      "bytes": 11786,
+      "sha256": "84bf089c680c27dc80567ad8bb3cc6af77b9cfe301ef8de57550da3998b8893c"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/validation-report.md",
+      "bytes": 1279,
+      "sha256": "150827b293f38cb034622f991a35126d4e4f23083a5d173d152eda453f342d7e"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/geometry.json",
+      "bytes": 1007,
+      "sha256": "c1f52b18705db83a8b17c6cccf8f9aed08df12166adfcfb063984deb21bb1142"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/desktop.png",
+      "bytes": 35595,
+      "sha256": "2bc360258431e6445608a7367a2ee08e91724c63fd88d324e4b1ff5f3d5f1774"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/tablet.png",
+      "bytes": 30548,
+      "sha256": "0f6d993886454d6888026ead78e7d636174bab9c37254a89449ae7f901c2f235"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/mobile.png",
+      "bytes": 22017,
+      "sha256": "0ccd0c9763f0e3386cbc13bd6c597bfa28fe2e6f6fa88a78da73c352cd8fa367"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/console.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/frontend-build.log",
+      "bytes": 10567,
+      "sha256": "20a8ef1e62bdf910e84fb9fa150535000a3e86a52eca97cb3b29b4504b9a17b6"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/secret-scan.log",
+      "bytes": 72,
+      "sha256": "8611b62922656f38358d94a28292b3c46d2d8df53ac5ba1f79e023123911d155"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/preview-build.log",
+      "bytes": 535,
+      "sha256": "1a6923ef2f8106c9ad31b3a29264f3f5d0cd4a6d9efac07b8cd94640f9917564"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/preview/main.tsx",
+      "bytes": 2641,
+      "sha256": "d5f620161b62a8d4442074e22d1e015708c4233229853c67ed709ceba8590f67"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/preview/index.html",
+      "bytes": 266,
+      "sha256": "e2cf5cfc2ba73e9c9e4b22719983d1019df51239bcef6f9bc60cb267c8cb084a"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/preview/build.mjs",
+      "bytes": 310,
+      "sha256": "55856f1876f24dcb022dcc18d6826282f92e02526a467c799313330850093e5b"
+    },
+    {
+      "path": "artifacts/task-validation/diario-spazio-sottomenu/preview/server.mjs",
+      "bytes": 387,
+      "sha256": "1e0a0f098380164ee629a2811e5aca4c29eb579ccb600cfb27b8a37924f627d2"
+    }
+  ]
+}

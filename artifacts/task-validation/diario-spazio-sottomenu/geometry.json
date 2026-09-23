@@ -1,0 +1,56 @@
+[
+  {
+    "buttonsFit": true,
+    "documentWidth": 1294,
+    "gap": 8,
+    "marginTop": "8px",
+    "scrollWidth": 1294,
+    "section": "Diario",
+    "viewport": 1294
+  },
+  {
+    "buttonsFit": true,
+    "documentWidth": 1294,
+    "gap": 8,
+    "marginTop": "8px",
+    "scrollWidth": 1294,
+    "section": "Clinica",
+    "viewport": 1294
+  },
+  {
+    "buttonsFit": true,
+    "documentWidth": 768,
+    "gap": 8,
+    "marginTop": "8px",
+    "scrollWidth": 768,
+    "section": "Clinica",
+    "viewport": 768
+  },
+  {
+    "buttonsFit": true,
+    "documentWidth": 768,
+    "gap": 8,
+    "marginTop": "8px",
+    "scrollWidth": 768,
+    "section": "Diario",
+    "viewport": 768
+  },
+  {
+    "buttonsFit": true,
+    "documentWidth": 390,
+    "gap": 8,
+    "marginTop": "8px",
+    "scrollWidth": 390,
+    "section": "Diario",
+    "viewport": 390
+  },
+  {
+    "buttonsFit": true,
+    "documentWidth": 390,
+    "gap": 8,
+    "marginTop": "8px",
+    "scrollWidth": 390,
+    "section": "Clinica",
+    "viewport": 390
+  }
+]
