@@ -1,0 +1,35 @@
+{
+  "decision": "ALLOW_RELEASE_VERIFIED",
+  "authorization": "User requested diary spacing consistency and authorized push/deploy",
+  "deploymentId": "dpl_5b3EKhQTt9MZs15Ky7snprukKgKh",
+  "status": "READY",
+  "url": "https://clinicos-8ulpwg0bm-lucalavia-2482s-projects.vercel.app",
+  "alias": "https://clinicos-eosin.vercel.app",
+  "sourceCommit": "ae32bbeba4f30a245b6e5d925d4d68055d1ed796",
+  "verifiedAt": "2026-09-23T22:02:27.4459043Z",
+  "backendChanged": false,
+  "releaseInputsSha256": "941e98b251f393bb77840ec182f83646d612db9b28388dff815dfdfc945d5ea0",
+  "productionSmoke": {
+    "at": "2026-09-23T22:02:45.007Z",
+    "geometry": [
+      {
+        "chipCount": 7,
+        "documentWidth": 1280,
+        "gap": 8,
+        "marginTop": "8px",
+        "role": "group",
+        "scrollWidth": 1280,
+        "section": "Diario",
+        "viewport": 1280
+      },
+      {
+        "gap": 8,
+        "marginTop": "8px",
+        "section": "Clinica",
+        "viewport": 1280
+      }
+    ],
+    "console": [],
+    "writeActions": 0
+  }
+}
